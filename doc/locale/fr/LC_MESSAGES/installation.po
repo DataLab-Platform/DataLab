@@ -1,0 +1,173 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-20 18:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../installation.rst:2
+msgid "Installation"
+msgstr "Installation"
+
+#: ../../installation.rst:5
+msgid "Dependencies"
+msgstr "Dépendances"
+
+#: ../../installation.rst:7
+msgid ""
+"CodraFT requirements are the following *(Note: the Windows installer "
+"package already include all those required libraries as well as Python "
+"itself)*:"
+msgstr ""
+"Les paquets prérequis de CodraFT sont les suivants *(note : l'installeur Windows "
+"intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
+
+#: ../../installation.rst:14
+msgid "Name"
+msgstr "Nom"
+
+#: ../../installation.rst:15
+msgid "Version (min.)"
+msgstr "Version (min.)"
+
+#: ../../installation.rst:16
+msgid "Comment"
+msgstr "Commentaire"
+
+#: ../../installation.rst:17
+msgid "Python language"
+msgstr "Langage Python"
+
+#: ../../installation.rst:18
+msgid "3.7"
+msgstr ""
+
+#: ../../installation.rst:19
+msgid "Python 3.8 is the reference for production release"
+msgstr "Python 3.8 est la référence de la version de production"
+
+#: ../../installation.rst:20
+msgid "PyQt"
+msgstr ""
+
+#: ../../installation.rst:21
+msgid "5.15"
+msgstr ""
+
+#: ../../installation.rst:22
+msgid "Should work with PySide2/PySide6/PyQt6 as well"
+msgstr "PySide2/PySide6/PyQt6 devrait également fonctionner"
+
+#: ../../installation.rst:23
+msgid "QtPy"
+msgstr ""
+
+#: ../../installation.rst:24
+msgid "1.9"
+msgstr ""
+
+#: ../../installation.rst:26
+msgid "h5py"
+msgstr ""
+
+#: ../../installation.rst:27
+msgid "3.0"
+msgstr ""
+
+#: ../../installation.rst:29
+msgid "psutil"
+msgstr ""
+
+#: ../../installation.rst:30
+msgid "5.5"
+msgstr ""
+
+#: ../../installation.rst:32
+msgid "guidata"
+msgstr ""
+
+#: ../../installation.rst:33
+msgid "2.2"
+msgstr ""
+
+#: ../../installation.rst:35
+msgid "guiqwt"
+msgstr ""
+
+#: ../../installation.rst:36
+msgid "4.1"
+msgstr ""
+
+#: ../../installation.rst:38
+msgid "NumPy"
+msgstr ""
+
+#: ../../installation.rst:39
+msgid "1.21"
+msgstr ""
+
+#: ../../installation.rst:41
+msgid "SciPy"
+msgstr ""
+
+#: ../../installation.rst:42
+msgid "1.7"
+msgstr ""
+
+#: ../../installation.rst:44
+msgid "scikit-image"
+msgstr ""
+
+#: ../../installation.rst:45
+msgid "0.18"
+msgstr ""
+
+#: ../../installation.rst:49
+msgid "How to install"
+msgstr "Procédure d'installation"
+
+#: ../../installation.rst:52
+msgid "From the installer:"
+msgstr "Depuis l'installeur :"
+
+#: ../../installation.rst:54
+msgid ""
+"CodraFT is available as a stand-alone application, which does not require"
+" any Python distribution to be installed. Just run the installer and "
+"you're good to go!"
+msgstr ""
+"CodraFT est disponible depuis une application autonome, qui ne nécessite "
+"aucune installation préalable de Python. Exécutez simplement l'installeur"
+" et laissez vous guider !"
+
+#: ../../installation.rst:58
+msgid "The installer package is available in the `Releases`_ section."
+msgstr "L'installeur exécutable est disponible dans la rubrique `Releases`_."
+
+#: ../../installation.rst:64
+msgid "From the source package::"
+msgstr "Depuis le paquet source::"
+
+#: ../../installation.rst:66
+msgid "$ python setup.py install"
+msgstr ""
+
+#: ../../installation.rst:69
+msgid "From the wheel package::"
+msgstr "Depuis le paquet wheel::"
+
+#: ../../installation.rst:71
+msgid "$ pip install --upgrade --no-deps codraft-1.7.0-py2.py3-none-any.whl"
+msgstr ""

@@ -1,0 +1,7 @@
+recursive-include codraft *.png *.svg *.pot *.po *.mo *.dcm *.ui *.bat *.md
+recursive-include doc *.py *.rst *.png *.ico *.pot *.po
+include gettext*.py
+include MANIFEST.in
+include Licence_CeCILL_V2.1-en.txt
+include *.ico
+include *.md

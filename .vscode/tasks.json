@@ -1,0 +1,339 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "gettext - Scan",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "gettext_scan.bat",
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "gettext - Compile",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "gettext.bat",
+                "compile",
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Run Pylint",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "run_pylint.bat",
+                "--disable=fixme",
+                "codraft",
+                "codraft_test_cea"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Run Coverage",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "run_coverage.bat",
+                // "--contains",
+                // "scenario",
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Upgrade environment",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "upgrade_env.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Clean Up",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "clean_up.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "Create executable",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "UNATTENDED": "1",
+                }
+            },
+            "args": [
+                "/c",
+                "build_exe.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Create installer",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "UNATTENDED": "1",
+                    "NSIS_COPYRIGHT_INFO": "Copyright (c) CEA-CODRA 2019-2022",
+                    "NSIS_HELP_LINK": "https://codraft.readthedocs.io/en/latest/",
+                    "NSIS_URLUPDATEINFO": "https://github.com/CODRA-Ingenierie-Informatique/CodraFT/releases",
+                    "NSIS_URLINFOABOUT": "https://github.com/CODRA-Ingenierie-Informatique/CodraFT",
+                }
+            },
+            "args": [
+                "/c",
+                "build_installer.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Build documentation",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHONPATH": "${env:PYTHONPATH_CODRAFT}",
+                    "QT_COLOR_MODE": "light",
+                    "UNATTENDED": "1",
+                }
+            },
+            "args": [
+                "/c",
+                "build_doc.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Build Python packages",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "UNATTENDED": "1",
+                }
+            },
+            "args": [
+                "/c",
+                "build_dist.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Build documentation",
+            ]
+        },
+        {
+            "label": "New release",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "release.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:PYTHON_CODRAFT_RLS}",
+                    "UNATTENDED": "1",
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean Up",
+                "Build Python packages",
+                "Create executable",
+                "Create installer",
+            ]
+        },
+    ]
+}

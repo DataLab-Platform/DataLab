@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   role="img"
+   focusable="false"
+   aria-hidden="true"
+   viewBox="0 0 14 14"
+   version="1.1"
+   id="svg4"
+   sodipodi:docname="chm.svg.2022_03_14_21_06_43.0.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     id="namedview6"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="59.428571"
+     inkscape:cx="6.9915865"
+     inkscape:cy="7.0084135"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <path
+     fill="#e32629"
+     d="M7 1C3.686607 1 1 3.68661 1 7s2.686607 6 6 6 6-2.68661 6-6-2.686607-6-6-6zm4.775893 4.08482l-1.647322.50625c-.16875-.375-.404464-.71786-.704464-1.01786-.3-.3-.642857-.53571-1.017857-.70446l.50625-1.64732c.6375.25446 1.221429.64018 1.722321 1.13839.500893.50357.886608 1.0875 1.141072 1.725zM7 9.57143C5.580357 9.57143 4.428571 8.41964 4.428571 7c0-1.41964 1.151786-2.57143 2.571429-2.57143 1.419643 0 2.571429 1.15179 2.571429 2.57143 0 1.41964-1.151786 2.57143-2.571429 2.57143zM3.3625 3.3625c.500893-.50089 1.084821-.88393 1.722321-1.13839l.50625 1.64732c-.375.16875-.717857.40446-1.017857.70446-.3.3-.535714.64286-.704464 1.01786L2.221429 5.0875c.257142-.64018.642857-1.22411 1.141071-1.725zM2.224107 8.91518l1.647322-.50625c.16875.375.404464.71786.704464 1.01786.3.3.642857.53571 1.017857.70446l-.50625 1.64732c-.6375-.25446-1.221429-.64018-1.722321-1.13839-.500893-.50357-.886608-1.0875-1.141072-1.725zM10.6375 10.6375c-.500893.50089-1.084821.88393-1.722321 1.13839l-.50625-1.64732c.375-.16875.717857-.40446 1.017857-.70446.3-.3.535714-.64286.704464-1.01786l1.647321.50625c-.257142.64018-.642857 1.22411-1.141071 1.725z"
+     id="path2" />
+  <rect
+     style="fill:#0000ff;stroke:#cc3535;stroke-width:0"
+     id="rect845"
+     width="10.483173"
+     height="4.5264425"
+     x="1.6658654"
+     y="4.7451925" />
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:4.42405px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.829511"
+     x="1.8606492"
+     y="8.5985985"
+     id="text1883"><tspan
+       sodipodi:role="line"
+       id="tspan1881"
+       x="1.8606492"
+       y="8.5985985"
+       style="stroke-width:0.829511;fill:#ffffff">CHM</tspan></text>
+</svg>

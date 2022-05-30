@@ -1,0 +1,7 @@
+[run]
+parallel = True
+omit =
+    */codraft/utils/tests.py
+    */codraft/tests/*
+    */guidata/*
+    */guiqwt/*

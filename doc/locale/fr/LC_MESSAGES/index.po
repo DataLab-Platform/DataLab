@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-20 18:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../index.rst:27
+msgid "Contents:"
+msgstr "Table des matières :"
+
+#: ../../index.rst:2
+msgid "CodraFT user guide"
+msgstr ""
+
+#: ../../index.rst:4
+msgid ""
+"CodraFT is a **generic signal and image processing software**. It is "
+"based on Python scientific libraries (such as NumPy, SciPy or OpenCV) and"
+" Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
+"libraries)."
+msgstr ""
+"CodraFT est un **logiciel générique de traitement du signal et de l'image** "
+"basé sur des bibliothèques scientifiques Python (telles que NumPy, SciPy "
+"ou encore OpenCV) et sur les interfaces graphiques Qt (grâce aux "
+"bibliothèques `guidata`_ et `guiqwt`_)."
+
+#: ../../index.rst:11
+msgid "Signal and image visualization in CodraFT"
+msgstr "Visualisation de signaux et d'images dans CodraFT"
+
+#: ../../index.rst:20
+msgid "External resources:"
+msgstr "Ressources externes :"
+
+#: ../../index.rst:17
+msgid "`PyPI`_"
+msgstr ""
+
+#: ../../index.rst:18
+msgid "Python Package Index"
+msgstr "Paquet Python officiel"
+
+#: ../../index.rst:19
+msgid "`GitHub`_"
+msgstr ""
+
+#: ../../index.rst:20
+msgid "Bug reports and feature requests"
+msgstr "Signalement d'anomalies et demandes d'évolutions"
+
+#: ../../index.rst:25
+msgid "Copyrights and licensing:"
+msgstr "Licence et copyrights :"
+
+#: ../../index.rst:23
+msgid "Copyright © 2018 `CEA`_ - `CODRA`_, Pierre Raybaut"
+msgstr ""
+
+#: ../../index.rst:24
+msgid "Licensed under the terms of the `CECILL License`_."
+msgstr "Distribué sous licence `CECILL`_."
+
+#: ../../index.rst:39
+msgid "Indices and tables"
+msgstr "Index et recherche"
+
+#: ../../index.rst:41
+msgid ":ref:`genindex`"
+msgstr ""
+
+#: ../../index.rst:42
+msgid ":ref:`modindex`"
+msgstr ""
+
+#: ../../index.rst:43
+msgid ":ref:`search`"
+msgstr ""

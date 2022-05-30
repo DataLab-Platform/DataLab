@@ -1,0 +1,37 @@
+{
+    "[bat]": {
+        "files.encoding": "cp850",
+    },
+    "editor.rulers": [
+        88
+    ],
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/*.pyo": true
+    },
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "python.defaultInterpreterPath": "${env:PYTHON_CODRAFT_DEV}",
+    "editor.formatOnSave": true,
+    "python.sortImports.args": [
+        "--profile",
+        "black"
+    ],
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        }
+    },
+    "python.linting.pycodestyleArgs": [
+        "--max-line-length=88",
+        "--ignore=E203,W503"
+    ],
+    "python.linting.pycodestyleEnabled": true,
+    "python.formatting.provider": "black",
+    "esbonio.server.enabled": true,
+    "restructuredtext.linter.doc8.extraArgs": [
+        "--ignore=D004"
+    ],
+    "esbonio.sphinx.confDir": "${workspaceFolder}\\doc"
+}
