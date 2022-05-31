@@ -69,7 +69,6 @@
                 "run_pylint.bat",
                 "--disable=fixme",
                 "codraft",
-                "codraft_test_cea"
             ],
             "options": {
                 "cwd": "scripts",
@@ -310,7 +309,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_RLS}",
+                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
                     "UNATTENDED": "1",
                 }
             },

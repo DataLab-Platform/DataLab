@@ -10,7 +10,6 @@ call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
 call %FUNC% GetVersion VERSION
 set ROOTPATH=%SCRIPTPATH%\..\
-cd %ROOTPATH%
 
 set NSIS_DIST_PATH=%ROOTPATH%\dist\%LIBNAME%
 set NSIS_PRODUCT_NAME=%LIBNAME%

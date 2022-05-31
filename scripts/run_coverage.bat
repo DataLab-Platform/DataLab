@@ -13,7 +13,6 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-cd %SCRIPTPATH%\..
 if exist sitecustomize.py ( del /q sitecustomize.py )
 echo import coverage> sitecustomize.py
 echo coverage.process_startup()>> sitecustomize.py

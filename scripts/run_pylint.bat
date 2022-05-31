@@ -13,7 +13,6 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-cd %SCRIPTPATH%\..
 set PYLINT_ARG=%*
 if "%PYLINT_ARG%"=="" set PYLINT_ARG=%MODNAME% --disable=fixme
 python -m pylint --rcfile=%RCFILE% %PYLINT_ARG%

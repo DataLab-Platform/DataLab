@@ -17,7 +17,6 @@ call %FUNC% UseWinPython
 call %FUNC% GetVersion CODRAFT_VERSION
 
 set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%
-cd %SCRIPTPATH%\..\
 @REM Update screenshots
 set QT_COLOR_MODE=light
 set LANG=fr

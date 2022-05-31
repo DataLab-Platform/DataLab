@@ -43,7 +43,12 @@ del _tmp_.txt
 goto:eof
 
 :SetPythonPath
-set PYTHONPATH=%~dp0..;%PYTHONPATH%
+set ORIGINAL_PYTHONPATH=%PYTHONPATH%
+cd %~dp0..
+for /F "tokens=*" %%A in (.env) do (
+    set %%A
+)
+set PYTHONPATH=%PYTHONPATH%;%ORIGINAL_PYTHONPATH%
 goto:eof
 
 :UseWinPython

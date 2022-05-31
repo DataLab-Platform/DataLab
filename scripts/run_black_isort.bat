@@ -13,6 +13,6 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% SetPythonPath
 set PYTHON=%PYTHON_CODRAFT_DEV%
 call %FUNC% UseWinPython
-python -m black %SCRIPTPATH%\..
-python -m isort -m 3 --tc %SCRIPTPATH%\..
+python -m black .
+python -m isort -m 3 --tc .
 call %FUNC% EndOfScript

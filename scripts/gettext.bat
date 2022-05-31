@@ -12,6 +12,5 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
 call %FUNC% GetModName MODNAME
-cd %SCRIPTPATH%\..
 python -c "from guidata.gettext_helpers import do_%1; do_%1('%MODNAME%')"
 call %FUNC% EndOfScript

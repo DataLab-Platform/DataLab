@@ -10,10 +10,9 @@ REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
-cd %SCRIPTPATH%\..\
-if exist MANIFEST ( del /q MANIFEST )
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
+if exist MANIFEST ( del /q MANIFEST )
 python setup.py sdist bdist_wheel --universal
 move /y %MODNAME%\data\*.chm .
 python setup.py build sdist
