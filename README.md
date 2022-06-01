@@ -22,15 +22,11 @@ CodraFT is available as a **stand-alone** application (see for example our all-i
 See [documentation](https://codraft.readthedocs.io/en/latest/) for more details on
 the library and [changelog](CHANGELOG.md) for recent history of changes.
 
-### About Version 2
+### New in CodraFT 2.0
 
-The following major changes were introduced with CodraFT V2:
-
-* Fully automated high-level processing features for internal testing purpose, as well
-as embedding CodraFT in a third-party software
+* New data processing and visualization features (see details in [changelog](CHANGELOG.md))
+* Fully automated high-level processing features for internal testing purpose, as well as embedding CodraFT in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
-* Dropped Python 2 support (CodraFT V1.7, the last release supporting Python 2,
-will still be maintained for critical bug fixes, i.e. without introducing new features)
 
 ### Credits
 

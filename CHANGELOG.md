@@ -1,6 +1,28 @@
+# CodraFT Roadmap #
+
+## Past milestones ##
+
+### CodraFT 2.0 ###
+
+* New data processing and visualization features (see below)
+* Fully automated high-level processing features for internal testing purpose, as well as embedding CodraFT in a third-party software
+* Extensive test suite (unit tests and application tests) with 90% feature coverage
+
+### CodraFT 1.7 ###
+
+* Major redesign
+* Python 3.8 is the new reference
+* Dropped Python 2 support
+
+### CodraFT 1.6 ###
+
+* Last release supporting Python 2
+
+----
+
 # CodraFT Releases #
 
-## Version 2.0.0 ##
+## Version 2.0.1 ##
 
 The following major changes were introduced with CodraFT V2:
 
