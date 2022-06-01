@@ -45,6 +45,8 @@ def test():
             fname = osp.join(tmpdir, "test.h5")
             win.save_to_h5_file(fname)
             # === Removing all objects
+            for panel in win.panels:
+                panel.remove_all_objects()
             # === Reopening previously saved project
             win.open_h5_files([fname], import_all=True, reset_all=True)
             # === Accessing object metadata
