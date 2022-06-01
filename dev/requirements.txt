@@ -1,0 +1,16 @@
+guidata
+guiqwt
+PythonQwt
+scikit-image
+psutil
+pylint
+black
+pycodestyle
+pyinstaller
+sphinx
+sphinx-rtd-theme
+sphinx-intl
+esbonio
+rstcheck
+doc8
+twine
