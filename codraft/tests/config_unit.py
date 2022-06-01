@@ -48,7 +48,7 @@ CONFIGS = (
             OPT_MAX.option: False,
             OPT_POS.option: (10, 10),
             OPT_SIZ.option: (750, 600),
-            OPT_DIR.option: "",
+            OPT_DIR.option: osp.dirname(__file__),
         },
         SEC_CONS.get_name(): {
             OPT_CON.option: False,
@@ -95,28 +95,40 @@ def assert_almost_equal(val1, val2, interval):
 
 def check_conf(conf, name, win, h5files):
     """Check configuration"""
-    print(f"  Checking configuration {name}: ", end="")
-    sec_main = conf[SEC_MAIN.get_name()]
-    sec_cons = conf[SEC_CONS.get_name()]
+    print(f"  Checking configuration {name}: ")
+    sec_main_name = SEC_MAIN.get_name()
+    sec_cons_name = SEC_CONS.get_name()
+    sec_main = conf[sec_main_name]
+    sec_cons = conf[sec_cons_name]
+    print(f"    Checking [{sec_main_name}][{OPT_MAX.option}]: ", end="")
     assert sec_main[OPT_MAX.option] == (win.windowState() == QC.Qt.WindowMaximized)
+    print("OK")
+    print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:
         #  Check position/size only when not maximized
         assert sec_main[OPT_POS.option] == (win.pos().x(), win.pos().y())
         assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
         assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
+        print("OK")
+    else:
+        print("Passed (maximized)")
+    print(f"    Checking [{sec_cons_name}][{OPT_CON.option}]: ", end="")
     assert sec_cons[OPT_CON.option] == (win.console is not None)
+    print("OK")
+    print(f"    Checking [{sec_main_name}][{OPT_DIR.option}]: ", end="")
     if h5files is None:
         assert conf[SEC_MAIN.get_name()][OPT_DIR.option] == OPT_DIR.get()
+        print("OK (written in conf file)")
     else:
         assert OPT_DIR.get() == osp.dirname(h5files[0])
-    print("OK")
+        print("OK (changed to HDF5 file path)")
 
 
 def test():
     """Testing CodraFT configuration file"""
     env = QtTestEnv()
     env.unattended = True
-    h5files = get_test_fnames("*.h5")[:1]
+    h5files = [get_test_fnames("*.h5")[1]]
     print("Testing CodraFT configuration settings:")
     for index, conf in enumerate(CONFIGS):
         name = f"CONFIG{index}"

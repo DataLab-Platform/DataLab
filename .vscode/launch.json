@@ -15,7 +15,21 @@
             "justMyCode": true,
             "env": {
                 // "DEBUG": "1",
-                // "QT_COLOR_MODE": "light",
+                "QT_COLOR_MODE": "light",
+            }
+        },
+        {
+            "name": "Dev: run Test Launcher",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/codraft/tests/__init__.py",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/dev.env",
+            "python": "${env:PYTHON_CODRAFT_DEV}",
+            "justMyCode": true,
+            "env": {
+                // "DEBUG": "1",
+                "QT_COLOR_MODE": "light",
             }
         },
         {
