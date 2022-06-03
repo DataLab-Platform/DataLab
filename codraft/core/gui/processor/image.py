@@ -585,7 +585,7 @@ class ImageProcessor(BaseProcessor):
             ("min(z)", lambda z: z.min()),
             ("max(z)", lambda z: z.max()),
             ("<z>", lambda z: z.mean()),
-            ("Median(z)", lambda z: np.median(z)),
+            ("Median(z)", np.median),
             ("σ(z)", lambda z: z.std()),
             ("Σ(z)", lambda z: z.sum()),
             ("<z>/σ(z)", lambda z: z.mean() / z.std()),

@@ -7,8 +7,8 @@
 CodraFT Dockable widgets
 """
 
-from guidata.qtwidgets import DockableWidget, DockableWidgetMixin
 from guidata.qthelpers import is_dark_mode
+from guidata.qtwidgets import DockableWidget, DockableWidgetMixin
 from guiqwt.plot import ImageWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG

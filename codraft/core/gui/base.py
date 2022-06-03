@@ -19,9 +19,9 @@ import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from guidata.utils import update_dataset
-from guiqwt.label import LegendBoxItem
-from guiqwt.curve import GridItem
 from guiqwt.builder import make
+from guiqwt.curve import GridItem
+from guiqwt.label import LegendBoxItem
 from guiqwt.plot import CurveDialog
 from guiqwt.styles import style_generator
 from guiqwt.tools import HCursorTool, LabelTool, VCursorTool, XCursorTool
@@ -801,7 +801,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         for key, value in obj.metadata.items():
             if ResultShape.match(key, value):
                 mshape = ResultShape.from_metadata_entry(key, value)
-                if not re.match(pfx + "[0-9]{3}[\s]*", mshape.label):
+                if not re.match(pfx + r"[0-9]{3}[\s]*", mshape.label):
                     # Handling additional result (e.g. diameter)
                     for a_key, a_value in obj.metadata.items():
                         if isinstance(a_key, str) and a_key.startswith(mshape.label):
