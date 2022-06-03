@@ -459,6 +459,7 @@ class SignalProcessor(BaseProcessor):
             ("min(y)", lambda xy: xy[1].min()),
             ("max(y)", lambda xy: xy[1].max()),
             ("<y>", lambda xy: xy[1].mean()),
+            ("Median(y)", lambda xy: np.median(xy[1])),
             ("σ(y)", lambda xy: xy[1].std()),
             ("Σ(y)", lambda xy: xy[1].sum()),
             ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
