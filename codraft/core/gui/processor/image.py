@@ -591,5 +591,5 @@ class ImageProcessor(BaseProcessor):
             ("<z>", lambda z: z.mean()),
             ("σ(z)", lambda z: z.std()),
             ("Σ(z)", lambda z: z.sum()),
-            ("SNR(z)", lambda z: z.std() / z.mean()),
+            ("<z>/σ(z)", lambda z: z.mean() / z.std()),
         ]
