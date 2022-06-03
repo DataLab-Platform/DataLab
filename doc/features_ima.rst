@@ -127,6 +127,13 @@ Difference
     .. math::
         z_{2} = z_{1} - z_{0}
 
+Quadratic difference
+    Create a new image which is the quadratic difference of the **two**
+    selected images:
+
+    .. math::
+        z_{2} = \dfrac{z_{1} - z_{0}}{\sqrt{2}}
+
 Product
     Create a new image which is the product of all selected images:
 
@@ -157,13 +164,6 @@ Log10(z+n)
 
     .. math::
         z_{k} = \log_{10}(z_{k-1}+n)
-
-z/√2
-    Create a new image which is the result of a division by √2
-    of each selected image:
-
-    .. math::
-        z_{k} = \dfrac{z_{k-1}}{\sqrt{2}}
 
 Flat-field correction
     Create a new image which is flat-field correction

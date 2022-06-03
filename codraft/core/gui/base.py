@@ -218,7 +218,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         proc = self.processor
         sum_action = self.cra(_("Sum"), proc.compute_sum)
         average_action = self.cra(_("Average"), proc.compute_average)
-        diff_action = self.cra(_("Difference"), proc.compute_difference)
+        diff_action = self.cra(_("Difference"), lambda: proc.compute_difference(False))
+        qdiff_action = self.cra(
+            _("Quadratic difference"), lambda: proc.compute_difference(True)
+        )
         prod_action = self.cra(_("Product"), proc.compute_product)
         div_action = self.cra(_("Division"), proc.compute_division)
         roi_action = self.cra(
@@ -231,12 +234,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         log_action = self.cra("Log10(y)", proc.compute_log10)
         self.actlist_1more += [roi_action, swapaxes_action, abs_action, log_action]
         self.actlist_2more += [sum_action, average_action, prod_action]
-        self.actlist_2 += [diff_action, div_action]
+        self.actlist_2 += [diff_action, qdiff_action, div_action]
         self.operation_end_actions = [roi_action, swapaxes_action]
         return [
             sum_action,
             average_action,
             diff_action,
+            qdiff_action,
             prod_action,
             div_action,
             None,

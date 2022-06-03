@@ -163,10 +163,6 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def compute_divsqrt2(self) -> None:
-        """Compute division by sqrt(2)"""
-        self.compute_11("z/sqrt(2)", lambda z: z / np.sqrt(2.0))
-
     def rotate_arbitrarily(self, param: RotateParam = None) -> None:
         """Rotate data arbitrarily"""
         edit = param is None

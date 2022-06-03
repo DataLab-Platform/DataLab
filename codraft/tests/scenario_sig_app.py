@@ -76,7 +76,10 @@ def test_common_operations(panel):
 
     panel.duplicate_object()
     panel.objlist.select_rows((1, 2))
-    panel.processor.compute_difference()
+    panel.processor.compute_difference(False)
+    panel.remove_object()
+    panel.objlist.select_rows((1, 2))
+    panel.processor.compute_difference(True)
     panel.delete_metadata()
     panel.objlist.select_rows((2, 3))
     panel.remove_object()

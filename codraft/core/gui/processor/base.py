@@ -128,14 +128,18 @@ class BaseProcessor(QC.QObject):
         self.panel.add_object(outobj)
 
     @qt_try_except()
-    def compute_difference(self):
-        """Compute difference"""
+    def compute_difference(self, quad: bool):
+        """Compute (quadratic) difference"""
         rows = self.objlist.get_selected_rows()
         outobj = self.panel.create_object()
         outobj.title = "-".join([f"{self.prefix}{row:03d}" for row in rows])
+        if quad:
+            outobj.title = f"({outobj.title})/sqrt(2)"
         obj0, obj1 = self.objlist.get_sel_object(), self.objlist.get_sel_object(1)
         outobj.copy_data_from(obj0)
         outobj.data -= np.array(obj1.data, dtype=outobj.data.dtype)
+        if quad:
+            outobj.data = outobj.data / np.sqrt(2.0)
         if np.issubdtype(outobj.data.dtype, np.unsignedinteger):
             outobj.data[obj0.data < obj1.data] = 0
         self.panel.add_object(outobj)

@@ -27,7 +27,7 @@ html_logo = latex_logo = "_static/codraft_logo_190.png"
 
 # The full version, including alpha/beta/rc tags
 
-release = os.environ["CODRAFT_VERSION"]
+release = os.environ.get("CODRAFT_VERSION", "")
 
 
 # -- General configuration ---------------------------------------------------

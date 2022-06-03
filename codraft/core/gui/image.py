@@ -106,7 +106,6 @@ class ImageActionHandler(guibase.BaseActionHandler):
         )
         resize_act = self.cra(_("Resize"), triggered=proc.resize_image)
         logp1_act = self.cra("Log10(z+n)", triggered=proc.compute_logp1)
-        divsqrt2_act = self.cra("z/√2", triggered=proc.compute_divsqrt2)
         flatfield_act = self.cra(
             _("Flat-field correction"), triggered=proc.flat_field_correction
         )
@@ -116,7 +115,6 @@ class ImageActionHandler(guibase.BaseActionHandler):
             hflip_act,
             vflip_act,
             logp1_act,
-            divsqrt2_act,
             rot90_act,
             rot270_act,
             rotate_act,
@@ -127,7 +125,6 @@ class ImageActionHandler(guibase.BaseActionHandler):
         roi_actions = self.operation_end_actions
         actions = [
             logp1_act,
-            divsqrt2_act,
             flatfield_act,
             None,
             rotate_menu,

@@ -65,7 +65,6 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     param.n = 1
     panel.processor.compute_logp1(param)
 
-    panel.processor.compute_divsqrt2()
     panel.processor.rotate_90()
     panel.processor.rotate_270()
     panel.processor.flip_horizontally()
