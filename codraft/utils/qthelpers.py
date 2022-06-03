@@ -161,11 +161,12 @@ def qt_app_context(exec_loop=False, enable_logs=True):
         tb_log_fname = Conf.main.traceback_log_path.get()
         Conf.main.traceback_log_available.set(initialize_log_file(tb_log_fname))
         logger = logging.getLogger(__name__)
+        fmt = "[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s"
         logging.basicConfig(
             filename=tb_log_fname,
             filemode="w",
             level=logging.DEBUG,
-            format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s",
+            format=fmt,
             datefmt=DATETIME_FORMAT,
         )
 

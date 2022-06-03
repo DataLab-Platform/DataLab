@@ -39,13 +39,7 @@ from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
 from codraft import __docurl__, __version__
-from codraft.config import (
-    APP_DESC,
-    APP_NAME,
-    TEST_SEGFAULT_ERROR,
-    Conf,
-    _,
-)
+from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.base import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
 from codraft.core.gui.h5io import H5InputOutput
@@ -54,7 +48,7 @@ from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.utils import dephash
-from codraft.utils.logviewer import create_codraft_logviewer_window
+from codraft.utils.logviewer import exec_codraft_logviewer_dialog
 from codraft.utils.qthelpers import (
     QtTestEnv,
     grab_save_window,
@@ -645,8 +639,7 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def show_log_viewer(self):
         """Show error logs"""
-        win = create_codraft_logviewer_window(self)
-        win.show()
+        exec_codraft_logviewer_dialog(self)
 
     @staticmethod
     def test_segfault_error():
