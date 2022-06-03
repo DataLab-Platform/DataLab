@@ -774,6 +774,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     def duplicate_object(self):
         """Duplication signal/image object"""
+        if not self.mainwindow.confirm_memory_state():
+            return
         rows = sorted(self.objlist.get_selected_rows(), reverse=True)
         row = None
         for row in rows:
