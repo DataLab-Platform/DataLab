@@ -139,6 +139,7 @@ Bug fixes:
 * Image:
   * Fixed hard crash when trying to visualize images with NaNs (use case: result of
   any filter on `uint8` image)
+  * Fixed hard crash when using image Z-axis log scale on some images
   * Fixed DICOM support
   * Fixed hard crash in "to_codraft" (cross section item with empty data)
   * Fixed image visualization parameters update from metadata

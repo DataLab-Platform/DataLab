@@ -189,7 +189,7 @@ def set_zaxis_log_state(self, state):
         self._lin_lut_range = self.get_lut_range()
         if self._log_data is None:
             self._log_data = np.array(
-                np.log10(np.abs(self.data) + 1), dtype=np.float64, copy=True
+                np.log10(self.data.clip(1)), dtype=np.float64, copy=True
             )
         self.set_lut_range(
             [guiqwt.image._nanmin(self._log_data), guiqwt.image._nanmax(self._log_data)]
@@ -227,7 +227,7 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
     # --------------------------------------------------------------------------
 
     dest = guiqwt.image._scale_rect(
-        data, src2, self._offscreen, dst_rect, self.lut, self.interpolate
+        data, src2, self._offscreen, dst_rect, self.lut, (guiqwt.image.INTERP_NEAREST,)
     )
     qrect = guiqwt.image.QRectF(
         guiqwt.image.QPointF(dest[0], dest[1]), guiqwt.image.QPointF(dest[2], dest[3])
