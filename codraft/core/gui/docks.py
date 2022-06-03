@@ -8,8 +8,10 @@ CodraFT Dockable widgets
 """
 
 from guidata.qtwidgets import DockableWidget, DockableWidgetMixin
+from guidata.qthelpers import is_dark_mode
 from guiqwt.plot import ImageWidget
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 
@@ -42,6 +44,11 @@ class DockablePlotWidget(DockableWidget):
             pwidget.register_all_curve_tools()
         #  Customizing widget appearances
         plot = pwidget.get_plot()
+        if not is_dark_mode():
+            for widget in (pwidget, plot, self):
+                widget.setBackgroundRole(QG.QPalette.Window)
+                widget.setAutoFillBackground(True)
+                widget.setPalette(QG.QPalette(QC.Qt.white))
         canvas = plot.canvas()
         canvas.setFrameStyle(canvas.Plain | canvas.NoFrame)
 

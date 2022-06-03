@@ -136,6 +136,8 @@ Bug fixes:
 
 * HDF5 file import: converted `bytes` metadata to `str`
 * Added h5py to requirements (setup.py)
+* Plot: reintroduced pure white background in light mode (white background was removed
+  unintentionally when introducing dark mode)
 * Image:
   * "Clean-up data view" feature was accidently removing grid
   * Fixed hard crash when trying to visualize images with NaNs (use case: result of
