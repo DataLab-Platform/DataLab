@@ -308,8 +308,8 @@ class ImageProcessor(BaseProcessor):
 
         def extract_roi_func_obj(image: ImageParam, group: DataSetGroup):
             """Extract ROI function on object"""
-            image.x0 = min([p.x0 for p in group.datasets])
-            image.y0 = min([p.y0 for p in group.datasets])
+            image.x0 += min([p.x0 for p in group.datasets])
+            image.y0 += min([p.y0 for p in group.datasets])
             image.remove_resultshapes()
 
         obj = self.objlist.get_sel_object()

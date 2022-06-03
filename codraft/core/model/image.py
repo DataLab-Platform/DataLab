@@ -160,6 +160,10 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     def copy_data_from(self, other, dtype=None):
         """Copy data from other dataset instance"""
+        self.x0 = other.x0
+        self.y0 = other.y0
+        self.dx = other.dx
+        self.dy = other.dy
         self.metadata = other.metadata.copy()
         self.data = np.array(other.data, copy=True, dtype=dtype)
         self.dicom_template = other.dicom_template
