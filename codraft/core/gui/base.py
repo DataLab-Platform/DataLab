@@ -20,6 +20,7 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from guidata.utils import update_dataset
 from guiqwt.label import LegendBoxItem
+from guiqwt.curve import GridItem
 from guiqwt.builder import make
 from guiqwt.plot import CurveDialog
 from guiqwt.styles import style_generator
@@ -587,7 +588,7 @@ class BaseItemList:
     def cleanup_dataview(self):
         """Clean up data view"""
         for item in self.plot.items[:]:
-            if item not in self and not isinstance(item, LegendBoxItem):
+            if item not in self and not isinstance(item, (LegendBoxItem, GridItem)):
                 self.plot.del_item(item)
 
     def get_current_plot_options(self):

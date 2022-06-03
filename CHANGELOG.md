@@ -137,6 +137,7 @@ Bug fixes:
 * HDF5 file import: converted `bytes` metadata to `str`
 * Added h5py to requirements (setup.py)
 * Image:
+  * "Clean-up data view" feature was accidently removing grid
   * Fixed hard crash when trying to visualize images with NaNs (use case: result of
   any filter on `uint8` image)
   * Fixed hard crash when using image Z-axis log scale on some images
@@ -145,7 +146,7 @@ Bug fixes:
   * Fixed image visualization parameters update from metadata
   * MinEnclosingCircle: fixed sqrt(2) error
 * Signal:
-  * "Clean-up data view" feature was accidently removing legend box
+  * "Clean-up data view" feature was accidently removing legend box and grid
   * Fixed integral (missing initial point)
   * Fixed plotting support for complex data
   * Fixed signal visualization parameters update from metadata
