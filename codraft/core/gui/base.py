@@ -31,7 +31,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
 from codraft.config import APP_NAME, Conf, _
-from codraft.core.model.base import MetadataItem
+from codraft.core.model.base import MetadataItem, ResultShape
 from codraft.core.model.signal import SignalParam
 from codraft.utils.qthelpers import (
     exec_dialog,
@@ -789,8 +789,24 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     def copy_metadata(self):
         """Copy object metadata"""
-        obj = self.objlist.get_sel_object()
-        self.__metadata_clipboard = obj.metadata
+        row = self.objlist.get_selected_rows()[0]
+        obj = self.objlist[row]
+        self.__metadata_clipboard = obj.metadata.copy()
+        pfx = self.objlist.prefix
+        new_pref = f"{pfx}{row:03d}_"
+        for key, value in obj.metadata.items():
+            if ResultShape.match(key, value):
+                mshape = ResultShape.from_metadata_entry(key, value)
+                if not re.match(pfx + "[0-9]{3}[\s]*", mshape.label):
+                    # Handling additional result (e.g. diameter)
+                    for a_key, a_value in obj.metadata.items():
+                        if isinstance(a_key, str) and a_key.startswith(mshape.label):
+                            self.__metadata_clipboard.pop(a_key)
+                            self.__metadata_clipboard[new_pref + a_key] = a_value
+                    mshape.label = new_pref + mshape.label
+                    # Handling result shape
+                    self.__metadata_clipboard.pop(key)
+                    self.__metadata_clipboard[mshape.key] = value
 
     def paste_metadata(self):
         """Paste metadata to selected object(s)"""
