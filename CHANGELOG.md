@@ -145,6 +145,7 @@ Bug fixes:
   * Fixed image visualization parameters update from metadata
   * MinEnclosingCircle: fixed sqrt(2) error
 * Signal:
+  * "Clean-up data view" feature was accidently removing legend box
   * Fixed integral (missing initial point)
   * Fixed plotting support for complex data
   * Fixed signal visualization parameters update from metadata
