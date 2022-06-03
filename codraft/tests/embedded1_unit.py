@@ -198,7 +198,7 @@ class HostWindow(BaseHostWindow):
 
 def test_embedded_feature(klass):
     """Testing embedded feature"""
-    with qt_app_context(exec_loop=True):
+    with qt_app_context(exec_loop=True, enable_logs=False):
         window = klass()
         window.resize(800, 800)
         window.show()

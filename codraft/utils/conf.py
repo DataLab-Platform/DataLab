@@ -10,7 +10,7 @@ CodraFT Configuration utilities
 import os
 import os.path as osp
 
-from guidata.userconfig import NoDefault, UserConfig
+from guidata.userconfig import NoDefault, UserConfig, get_config_dir
 
 CONF = UserConfig({})
 
@@ -63,6 +63,19 @@ class Option:
     def reset(self):
         """Reset configuration option"""
         CONF.remove_option(self.section, self.option)
+
+
+class ConfigPathOption(Option):
+    """Configuration file path configuration option handler"""
+
+    def get(self, default=NoDefault):
+        """Get configuration file path from configuration"""
+        if default is NoDefault:
+            default = ""
+        fname = super().get(default)
+        if osp.basename(fname) != fname:
+            raise ValueError("Invalid configuration file name {fname}")
+        return osp.join(get_config_dir(), osp.basename(fname))
 
 
 class WorkingDirOption(Option):

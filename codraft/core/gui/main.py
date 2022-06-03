@@ -39,7 +39,13 @@ from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
 from codraft import __docurl__, __version__
-from codraft.config import APP_DESC, APP_NAME, Conf, _
+from codraft.config import (
+    APP_DESC,
+    APP_NAME,
+    TEST_SEGFAULT_ERROR,
+    Conf,
+    _,
+)
 from codraft.core.gui.base import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
 from codraft.core.gui.h5io import H5InputOutput
@@ -48,6 +54,7 @@ from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.utils import dephash
+from codraft.utils.logviewer import create_codraft_logviewer_window
 from codraft.utils.qthelpers import (
     QtTestEnv,
     grab_save_window,
@@ -192,6 +199,23 @@ class CodraFTMainWindow(QW.QMainWindow):
                 ]
             )
             QW.QMessageBox.critical(self, APP_NAME, txt)
+
+    def check_for_previous_crash(self):
+        """Check for previous crash"""
+        if Conf.main.faulthandler_log_available.get(
+            False
+        ) or Conf.main.traceback_log_available.get(False):
+            txt = "<br>".join(
+                [
+                    _("Log files were generated during last session."),
+                    "",
+                    _("Do you want to see available log files?"),
+                ]
+            )
+            btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
+            choice = QW.QMessageBox.warning(self, APP_NAME, txt, btns)
+            if choice == QW.QMessageBox.StandardButton.Yes:
+                self.show_log_viewer()
 
     def take_screenshot(self, name):  # pragma: no cover
         """Take main window screenshot"""
@@ -403,6 +427,16 @@ class CodraFTMainWindow(QW.QMainWindow):
             triggered=lambda: os.startfile(get_htmlhelp()),
         )
         chmdoc_action.setVisible(get_htmlhelp() is not None)
+        logv_action = create_action(
+            self,
+            _("Show CodraFT log files..."),
+            icon=get_icon("logs.svg"),
+            triggered=self.show_log_viewer,
+        )
+        errtest_action = create_action(
+            self, "Test segfault/Python error", triggered=self.test_segfault_error
+        )
+        errtest_action.setVisible(TEST_SEGFAULT_ERROR)
         about_action = create_action(
             self,
             _("About..."),
@@ -414,6 +448,9 @@ class CodraFTMainWindow(QW.QMainWindow):
             (
                 onlinedoc_action,
                 chmdoc_action,
+                None,
+                errtest_action,
+                logv_action,
                 None,
                 about_action,
             ),
@@ -605,6 +642,19 @@ class CodraFTMainWindow(QW.QMainWindow):
               , Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
                {_("on")} {platform.system()}""",
         )
+
+    def show_log_viewer(self):
+        """Show error logs"""
+        win = create_codraft_logviewer_window(self)
+        win.show()
+
+    @staticmethod
+    def test_segfault_error():
+        """Generate errors (both fault and traceback)"""
+        import ctypes  # pylint: disable=import-outside-toplevel
+
+        ctypes.string_at(0)
+        raise RuntimeError("!!! Testing RuntimeError !!!")
 
     def show(self):
         """Reimplement QMainWindow method"""

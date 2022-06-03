@@ -22,13 +22,14 @@
 
 # CodraFT Releases #
 
-## Version 2.0.1 ##
+## Version 2.0.2 ##
 
 The following major changes were introduced with CodraFT V2:
 
 * Fully automated high-level processing features for internal testing purpose, as well
 as embedding CodraFT in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
+* Segmentation fault and Python exception logging
 * Dropped Python 2 support (CodraFT V1.7, the last release supporting Python 2,
 will still be maintained for critical bug fixes, i.e. without introducing new features)
 
@@ -77,6 +78,12 @@ New general purpose features:
   * New available memory indicator on main window status bar
   * New warning dialog box when trying to open/create data if available memory is below
   the "available_memory_threshold" defined in CodraFT configuration file (default: 500MB)
+* Error handling:
+  * New integrated log file viewer
+  * New warning dialog box at startup suggesting to view log files when logs were
+  generated during last session
+  * Logging segmentation faults in ".CodraFT_faulthandler.log"
+  * Logging Python exceptions in ".CodraFT_traceback.log"
 * Signal/Image metadata:
   * New copy/paste feature: update object metadata from another one
   * New import/export feature: import-export object metadata (JSON text file) using the

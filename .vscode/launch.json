@@ -15,7 +15,7 @@
             "justMyCode": true,
             "env": {
                 // "DEBUG": "1",
-                "QT_COLOR_MODE": "light",
+                // "QT_COLOR_MODE": "light",
             }
         },
         {
@@ -49,8 +49,9 @@
                 // "1"
             ],
             "env": {
-                "DEBUG": "1",
-                "LANG": "en",
+                // "DEBUG": "1",
+                "TEST_SEGFAULT_ERROR": "1",
+                // "LANG": "en",
                 "QT_COLOR_MODE": "light",
             }
         },

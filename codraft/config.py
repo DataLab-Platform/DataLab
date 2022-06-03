@@ -21,7 +21,7 @@ from codraft.utils import conf, tests
 _ = configtools.get_translation("codraft")
 
 CONF_VERSION = "1.0.0"
-APP_NAME = _("CodraFT")
+APP_NAME = "CodraFT"
 APP_DESC = _(
     """<b>Codra</b> <b>F</b>iltering <b>T</b>ool<br>
 Generic signal and image processing software based on Python and Qt"""
@@ -30,6 +30,10 @@ APP_PATH = osp.dirname(__file__)
 DEBUG = len(os.environ.get("DEBUG", "")) > 0
 if DEBUG:
     print("*** DEBUG mode *** [Reset configuration file, do not redirect std I/O]")
+TEST_SEGFAULT_ERROR = len(os.environ.get("TEST_SEGFAULT_ERROR", "")) > 0
+if TEST_SEGFAULT_ERROR:
+    print('*** TEST_SEGFAULT_ERROR mode *** [Enabling test action in "?" menu]')
+DATETIME_FORMAT = "%d/%m/%Y - %H:%M:%S"
 
 configtools.add_image_module_path("codraft", osp.join("data", "logo"))
 configtools.add_image_module_path("codraft", osp.join("data", "icons"))
@@ -40,6 +44,11 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    traceback_log_path = conf.ConfigPathOption()
+    traceback_log_available = conf.Option()
+    faulthandler_enabled = conf.Option()
+    faulthandler_log_path = conf.ConfigPathOption()
+    faulthandler_log_available = conf.Option()
     window_maximized = conf.Option()
     window_position = conf.Option()
     window_size = conf.Option()
@@ -77,6 +86,13 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     view = ViewSection()
 
 
+def get_old_log_fname(fname):
+    """Return old log fname from current log fname"""
+    return osp.splitext(fname)[0] + ".1.log"
+
+
 Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
+Conf.main.traceback_log_path.set(f".{APP_NAME}_traceback.log")
+Conf.main.faulthandler_log_path.set(f".{APP_NAME}_faulthandler.log")
 
 tests.add_test_module_path("codraft", osp.join("data", "tests"))

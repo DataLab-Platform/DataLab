@@ -8,9 +8,12 @@ CodraFT Qt utilities
 """
 
 import argparse
+import faulthandler
 import functools
+import logging
 import os
 import os.path as osp
+import shutil
 import sys
 import time
 import traceback
@@ -23,7 +26,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from codraft.config import APP_NAME, _
+from codraft.config import APP_NAME, DATETIME_FORMAT, Conf, _, get_old_log_fname
 
 
 class QtTestEnv:
@@ -115,30 +118,97 @@ def close_widgets_and_quit(screenshot=False):
 QAPP_INSTANCE = None
 
 
+def get_log_contents(fname):
+    """Return True if file exists and something was logged in it"""
+    if osp.exists(fname):
+        with open(fname, "r", encoding="utf-8") as fdesc:
+            return fdesc.read().strip()
+    return None
+
+
+def initialize_log_file(fname):
+    """Eventually keep the previous log file
+    Returns True if there was a previous log file"""
+    contents = get_log_contents(fname)
+    if contents:
+        try:
+            shutil.move(fname, get_old_log_fname(fname))
+        except Exception:  # pylint: disable=broad-except
+            pass
+        return True
+    return False
+
+
+def remove_empty_log_file(fname):
+    """Eventually remove empty log files"""
+    if not get_log_contents(fname):
+        try:
+            os.remove(fname)
+        except Exception:  # pylint: disable=broad-except
+            pass
+
+
 @contextmanager
-def qt_app_context(exec_loop=False):
+def qt_app_context(exec_loop=False, enable_logs=True):
     """Context manager handling Qt application creation and persistance"""
     global QAPP_INSTANCE  # pylint: disable=global-statement
     if QAPP_INSTANCE is None:
         QAPP_INSTANCE = guidata.qapplication()
     qttestenv = QtTestEnv()
-    try:
-        yield QAPP_INSTANCE
-    finally:
-        if qttestenv.unattended:  # pragma: no cover
-            if qttestenv.delay > 0:
-                mode = "Screenshot" if qttestenv.screenshot else "Unattended"
-                message = f"{mode} mode (delay: {qttestenv.delay}s)"
-                msec = qttestenv.delay * 1000 - 200
-                for widget in QW.QApplication.instance().topLevelWidgets():
-                    if isinstance(widget, QW.QMainWindow):
-                        widget.statusBar().showMessage(message, msec)
-            QC.QTimer.singleShot(
-                qttestenv.delay * 1000,
-                lambda: close_widgets_and_quit(screenshot=qttestenv.screenshot),
+
+    if enable_logs:
+        # === Create a logger for standard exceptions ----------------------------------
+        tb_log_fname = Conf.main.traceback_log_path.get()
+        Conf.main.traceback_log_available.set(initialize_log_file(tb_log_fname))
+        logger = logging.getLogger(__name__)
+        logging.basicConfig(
+            filename=tb_log_fname,
+            filemode="w",
+            level=logging.DEBUG,
+            format="[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s",
+            datefmt=DATETIME_FORMAT,
+        )
+
+        def custom_excepthook(exc_type, exc_value, exc_traceback):
+            "Custom exception hook"
+            logger.critical(
+                "Unhandled exception", exc_info=(exc_type, exc_value, exc_traceback)
             )
-        if exec_loop:
-            QAPP_INSTANCE.exec()
+            return sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+        sys.excepthook = custom_excepthook
+
+    # === Use faulthandler for other exceptions ------------------------------------
+    fh_log_fname = Conf.main.faulthandler_log_path.get()
+    Conf.main.faulthandler_log_available.set(initialize_log_file(fh_log_fname))
+
+    with open(fh_log_fname, "w", encoding="utf-8") as fh_log_fn:
+        if enable_logs and Conf.main.faulthandler_enabled.get(True):
+            faulthandler.enable(file=fh_log_fn)
+        try:
+            yield QAPP_INSTANCE
+        finally:
+            if qttestenv.unattended:  # pragma: no cover
+                if qttestenv.delay > 0:
+                    mode = "Screenshot" if qttestenv.screenshot else "Unattended"
+                    message = f"{mode} mode (delay: {qttestenv.delay}s)"
+                    msec = qttestenv.delay * 1000 - 200
+                    for widget in QW.QApplication.instance().topLevelWidgets():
+                        if isinstance(widget, QW.QMainWindow):
+                            widget.statusBar().showMessage(message, msec)
+                QC.QTimer.singleShot(
+                    qttestenv.delay * 1000,
+                    lambda: close_widgets_and_quit(screenshot=qttestenv.screenshot),
+                )
+            if exec_loop:
+                QAPP_INSTANCE.exec()
+
+    if enable_logs and Conf.main.faulthandler_enabled.get():
+        faulthandler.disable()
+    remove_empty_log_file(fh_log_fname)
+    if enable_logs:
+        logging.shutdown()
+    remove_empty_log_file(tb_log_fname)
 
 
 def close_dialog_and_quit(widget, screenshot=False):

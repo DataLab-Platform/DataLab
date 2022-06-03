@@ -17,7 +17,9 @@ from codraft.core.gui.main import CodraFTMainWindow
 from codraft.utils.qthelpers import qt_app_context
 
 
-def create(splash=True, console=None, objects=None, h5files=None, size=None):
+def create(
+    splash: bool = True, console: bool = None, objects=None, h5files=None, size=None
+) -> CodraFTMainWindow:
     """Create CodraFT application and return mainwindow instance"""
     if splash:
         # Showing splash screen
@@ -53,6 +55,7 @@ def run(console=None, objects=None, h5files=None, size=None):
             splash=True, console=console, objects=objects, h5files=h5files, size=size
         )
         window.check_dependencies()
+        window.check_for_previous_crash()
 
 
 if __name__ == "__main__":
