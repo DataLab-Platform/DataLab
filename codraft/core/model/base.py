@@ -575,6 +575,8 @@ class ObjectItf(metaclass=ObjectItfMeta):
             try:
                 for item in load_items(JSONReader(self.annotations)):
                     set_plot_item_editable(item, editable)
+                    if isinstance(item, AnnotatedShape):
+                        config_annotated_shape(item, fmt, lbl)
                     yield item
             except json.decoder.JSONDecodeError:
                 pass
