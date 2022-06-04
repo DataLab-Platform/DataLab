@@ -48,12 +48,12 @@ from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.utils import dephash
-from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.utils.qthelpers import (
     QtTestEnv,
     grab_save_window,
     save_restore_stds,
 )
+from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
 
 DATAPATH = get_module_data_path("codraft", "data")

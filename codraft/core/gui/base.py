@@ -617,12 +617,21 @@ class ObjectProp(QW.QWidget):
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), paramclass)
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
+        self.add_prop_layout = QW.QHBoxLayout()
+        playout = self.properties.edit.layout
+        playout.addLayout(
+            self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
+        )
         hlayout = QW.QHBoxLayout()
         hlayout.addWidget(self.properties)
         vlayout = QW.QVBoxLayout()
         vlayout.addLayout(hlayout)
         vlayout.addStretch()
         self.setLayout(vlayout)
+
+    def add_button(self, button):
+        """Add additional button on bottom of properties panel"""
+        self.add_prop_layout.addWidget(button)
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):

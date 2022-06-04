@@ -276,11 +276,16 @@ class ImagePanel(guibase.BasePanel):
 
     def add_geometric_shapes_button(self):
         """Add 'Edit geometric shapes' button"""
-        playout = self.objprop.properties.edit.layout
-        esbtn = QW.QPushButton(get_icon("edit_shapes.svg"), _("Edit Annotations"), self)
-        playout.addWidget(esbtn, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft)
-        esbtn.clicked.connect(self.edit_geometric_shapes)
-        self.acthandler.actlist_1.append(esbtn)
+        btn = QW.QPushButton(get_icon("edit_shapes.svg"), _("Edit Annotations"), self)
+        btn.setToolTip(
+            _(
+                "Edit (add, modify or remove) annotations, "
+                "i.e. arbitrary graphical objects"
+            )
+        )
+        self.objprop.add_button(btn)
+        btn.clicked.connect(self.edit_geometric_shapes)
+        self.acthandler.actlist_1.append(btn)
 
     def edit_geometric_shapes(self):
         """Edit geometric shapes (i.e. user-defined metadata shapes)"""

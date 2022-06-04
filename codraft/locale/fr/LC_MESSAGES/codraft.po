@@ -323,7 +323,12 @@ msgstr "Enregistrer sous"
 msgid "Edit Annotations"
 msgstr "Modifier les annotations"
 
-#: codraft\core\gui\image.py:287
+#: codraft\core\gui\image.py:281
+msgid ""
+"Edit (add, modify or remove) annotations, i.e. arbitrary graphical objects"
+msgstr "Modifier, ajouter ou supprimer des annotations, c.-à-d. des objets graphiques arbitraires"
+
+#: codraft\core\gui\image.py:292
 msgid "Annotations"
 msgstr "Annotations"
 
