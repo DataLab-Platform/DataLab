@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-26 15:00+0200\n"
+"POT-Creation-Date: 2022-06-04 10:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -338,71 +338,91 @@ msgid ""
 "\n"
 msgstr ""
 
+#: ../../features_ima.rst:135
+#, fuzzy
+msgid "Quadratic difference"
+msgstr "Soustraction"
+
+#: ../../features_ima.rst:131
+#, fuzzy
+msgid ""
+"Create a new image which is the quadratic difference of the **two** "
+"selected images:"
+msgstr ""
+"Crée une image à partir de la différence des **deux** images "
+"sélectionnées :"
+
 #: ../../features_ima.rst:134
+msgid ""
+"z_{2} = \\dfrac{z_{1} - z_{0}}{\\sqrt{2}}\n"
+"\n"
+msgstr ""
+
+#: ../../features_ima.rst:141
 msgid "Product"
 msgstr "Produit"
 
-#: ../../features_ima.rst:131
+#: ../../features_ima.rst:138
 msgid "Create a new image which is the product of all selected images:"
 msgstr "Crée une image à partir du produit de toutes les images sélectionnées :"
 
-#: ../../features_ima.rst:133
+#: ../../features_ima.rst:140
 msgid ""
 "z_{M} = \\prod_{k=0}^{M-1}{z_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features_ima.rst:140
+#: ../../features_ima.rst:147
 msgid "Division"
 msgstr "Division"
 
-#: ../../features_ima.rst:137
+#: ../../features_ima.rst:144
 msgid "Create a new image which is the division of the **two** selected images:"
 msgstr "Crée une image à partir de la division des **deux** images sélectionnées :"
 
-#: ../../features_ima.rst:139
+#: ../../features_ima.rst:146
 msgid ""
 "z_{2} = \\dfrac{z_{1}}{z_{0}}\n"
 "\n"
 msgstr ""
 
-#: ../../features_ima.rst:146
+#: ../../features_ima.rst:153
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: ../../features_ima.rst:143
+#: ../../features_ima.rst:150
 msgid "Create a new image which is the absolute value of each selected image:"
 msgstr ""
 "Créee une image à partir de la valeur absolue de chaque image "
 "sélectionnée :"
 
-#: ../../features_ima.rst:145
+#: ../../features_ima.rst:152
 msgid ""
 "z_{k} = |z_{k-1}|\n"
 "\n"
 msgstr ""
 
-#: ../../features_ima.rst:152
+#: ../../features_ima.rst:159
 msgid "Log10(z)"
 msgstr ""
 
-#: ../../features_ima.rst:149
+#: ../../features_ima.rst:156
 msgid "Create a new image which is the base 10 logarithm of each selected image:"
 msgstr ""
 "Crée une image à partir du logarithme base 10 de chaque image "
 "sélectionnée :"
 
-#: ../../features_ima.rst:151
+#: ../../features_ima.rst:158
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features_ima.rst:159
+#: ../../features_ima.rst:166
 msgid "Log10(z+n)"
 msgstr ""
 
-#: ../../features_ima.rst:155
+#: ../../features_ima.rst:162
 msgid ""
 "Create a new image which is the Log10(z+n) of each selected image (avoid "
 "Log10(0) on image background):"
@@ -411,27 +431,9 @@ msgstr ""
 " d'augmentation de la dynamique d'un logarithme en évitant de calculer "
 "Log10(0) sur l'arrière-plan de l'image) :"
 
-#: ../../features_ima.rst:158
-msgid ""
-"z_{k} = \\log_{10}(z_{k-1}+n)\n"
-"\n"
-msgstr ""
-
-#: ../../features_ima.rst:166
-msgid "z/√2"
-msgstr ""
-
-#: ../../features_ima.rst:162
-msgid ""
-"Create a new image which is the result of a division by √2 of each "
-"selected image:"
-msgstr ""
-"Crée une image à partir de la division par √2 de chaque image "
-"sélectionnée."
-
 #: ../../features_ima.rst:165
 msgid ""
-"z_{k} = \\dfrac{z_{k-1}}{\\sqrt{2}}\n"
+"z_{k} = \\log_{10}(z_{k-1}+n)\n"
 "\n"
 msgstr ""
 
@@ -773,3 +775,21 @@ msgstr "Menu \"Affichage\""
 
 #~ msgid "Simple example"
 #~ msgstr "Exemple simple"
+
+#~ msgid "z/√2"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Create a new image which is the"
+#~ " result of a division by √2 of"
+#~ " each selected image:"
+#~ msgstr ""
+#~ "Crée une image à partir de la "
+#~ "division par √2 de chaque image "
+#~ "sélectionnée."
+
+#~ msgid ""
+#~ "z_{k} = \\dfrac{z_{k-1}}{\\sqrt{2}}\n"
+#~ "\n"
+#~ msgstr ""
+

@@ -29,15 +29,15 @@ def exec_image_peak_detection_func(data):
     dt = time.time() - t0
     for x, y in coords:
         items.append(make.marker((x, y)))
-    print(f"Calculation time: {int(dt * 1e3):d} ms\n")
-    print(coords)
+    print(f"Calculation time: {int(dt * 1e3):d} ms")
+    print(f"  => {coords.tolist()}")
     view_image_items(items)
 
 
 def peak2d_test():
     """2D peak detection test"""
     with qt_app_context():
-        exec_image_peak_detection_func(get_peak2d_data())
+        exec_image_peak_detection_func(get_peak2d_data(multi=False))
 
 
 if __name__ == "__main__":

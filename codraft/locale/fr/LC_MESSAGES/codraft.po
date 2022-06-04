@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-03 18:37+0200\n"
+"POT-Creation-Date: 2022-06-04 10:44+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,30 +153,30 @@ msgstr "Permuter les axes X/Y"
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: codraft\core\gui\base.py:254 codraft\core\gui\processor\image.py:399
+#: codraft\core\gui\base.py:254 codraft\core\gui\processor\image.py:413
 #: codraft\core\gui\processor\signal.py:258
 msgid "Thresholding"
 msgstr "Seuillage"
 
-#: codraft\core\gui\base.py:255 codraft\core\gui\processor\image.py:413
+#: codraft\core\gui\base.py:255 codraft\core\gui\processor\image.py:427
 #: codraft\core\gui\processor\signal.py:272
 msgid "Clipping"
 msgstr "Écrêtage"
 
-#: codraft\core\gui\base.py:256 codraft\core\gui\processor\image.py:385
+#: codraft\core\gui\base.py:256 codraft\core\gui\processor\image.py:399
 #: codraft\core\gui\processor\signal.py:237
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
-#: codraft\core\gui\base.py:257 codraft\core\gui\processor\base.py:290
+#: codraft\core\gui\base.py:257 codraft\core\gui\processor\base.py:291
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
-#: codraft\core\gui\base.py:258 codraft\core\gui\processor\base.py:310
+#: codraft\core\gui\base.py:258 codraft\core\gui\processor\base.py:311
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
-#: codraft\core\gui\base.py:259 codraft\core\gui\processor\base.py:324
+#: codraft\core\gui\base.py:259 codraft\core\gui\processor\base.py:325
 msgid "Moving median"
 msgstr "Médiane mobile"
 
@@ -200,7 +200,7 @@ msgstr "Attention : seulement la partie réelles sera tracée"
 msgid "Regions of interest..."
 msgstr "Régions d'intérêt..."
 
-#: codraft\core\gui\base.py:289 codraft\core\gui\processor\base.py:391
+#: codraft\core\gui\base.py:289 codraft\core\gui\processor\base.py:392
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -250,7 +250,7 @@ msgstr "Attention"
 msgid "image"
 msgstr "image"
 
-#: codraft\core\gui\image.py:83 codraft\core\gui\processor\image.py:174
+#: codraft\core\gui\image.py:83 codraft\core\gui\processor\image.py:188
 msgid "Rotation"
 msgstr "Rotation"
 
@@ -274,56 +274,56 @@ msgstr "Rotation inverse de %s"
 msgid "Rotate arbitrarily..."
 msgstr "Rotation arbitraire..."
 
-#: codraft\core\gui\image.py:107 codraft\core\gui\processor\image.py:254
+#: codraft\core\gui\image.py:107 codraft\core\gui\processor\image.py:268
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: codraft\core\gui\image.py:111
+#: codraft\core\gui\image.py:110
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: codraft\core\gui\image.py:145
+#: codraft\core\gui\image.py:142
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: codraft\core\gui\image.py:145 codraft\core\gui\processor\image.py:483
+#: codraft\core\gui\image.py:142 codraft\core\gui\processor\image.py:497
 #: codraft\tests\enclosingcircle_unit.py:35
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: codraft\core\gui\image.py:148
+#: codraft\core\gui\image.py:145
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: codraft\core\gui\image.py:150
+#: codraft\core\gui\image.py:147
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: codraft\core\gui\image.py:153
+#: codraft\core\gui\image.py:150
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: codraft\core\gui\image.py:155
+#: codraft\core\gui\image.py:152
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: codraft\core\gui\image.py:158
+#: codraft\core\gui\image.py:155
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: codraft\core\gui\image.py:160
+#: codraft\core\gui\image.py:157
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
-#: codraft\core\gui\image.py:266 codraft\core\gui\signal.py:217
+#: codraft\core\gui\image.py:263 codraft\core\gui\signal.py:217
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\image.py:283
+#: codraft\core\gui\image.py:280
 msgid "Edit Annotations"
 msgstr "Modifier les annotations"
 
-#: codraft\core\gui\image.py:290
+#: codraft\core\gui\image.py:287
 msgid "Annotations"
 msgstr "Annotations"
 
@@ -527,12 +527,12 @@ msgstr "Seuil"
 msgid "Clipping value"
 msgstr "Valeur d'écrêtage"
 
-#: codraft\core\gui\processor\base.py:208
-#: codraft\core\gui\processor\base.py:251
+#: codraft\core\gui\processor\base.py:209
+#: codraft\core\gui\processor\base.py:252
 msgid "Computing:"
 msgstr "Calcul en cours :"
 
-#: codraft\core\gui\processor\base.py:265
+#: codraft\core\gui\processor\base.py:266
 msgid "Results"
 msgstr "Résultats"
 
@@ -586,51 +586,68 @@ msgstr "Ordre de l'interpolation de type spline"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: codraft\core\gui\processor\image.py:133
+#: codraft\core\gui\processor\image.py:134
 msgid "Neighborhoods size"
 msgstr "Taille du voisinage"
 
-#: codraft\core\gui\processor\image.py:134
+#: codraft\core\gui\processor\image.py:138
+msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
+msgstr ""
+"Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage "
+"maximum/minimum"
+
+#: codraft\core\gui\processor\image.py:143
+msgid "Relative threshold"
+msgstr "Seuil relatif"
+
+#: codraft\core\gui\processor\image.py:147
+msgid ""
+"Detection threshold, relative to difference between data maximum and minimum"
+msgstr ""
+"Seuil de détection, relatif à la différence entre le maximum et le minimum "
+"des données de l'image"
+
+#: codraft\core\gui\processor\image.py:152
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
-#: codraft\core\gui\processor\image.py:141
+#: codraft\core\gui\processor\image.py:159
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: codraft\core\gui\processor\image.py:142
+#: codraft\core\gui\processor\image.py:160
 msgid "Circle"
 msgstr "Cercle"
 
-#: codraft\core\gui\processor\image.py:145
+#: codraft\core\gui\processor\image.py:163
 msgid "Shape"
 msgstr "Forme"
 
-#: codraft\core\gui\processor\image.py:237 codraft\widgets\h5browser.py:436
+#: codraft\core\gui\processor\image.py:251 codraft\widgets\h5browser.py:436
 msgid "Warning:"
 msgstr "Attention :"
 
-#: codraft\core\gui\processor\image.py:239
+#: codraft\core\gui\processor\image.py:253
 msgid "Selected images do not have the same size"
 msgstr "Les images sélectionnées n'ont pas la même taille"
 
-#: codraft\core\gui\processor\image.py:250
+#: codraft\core\gui\processor\image.py:264
 msgid "Destination size:"
 msgstr "Taille de destination :"
 
-#: codraft\core\gui\processor\image.py:351
+#: codraft\core\gui\processor\image.py:365
 msgid "Flat field"
 msgstr "Correction de champ plat"
 
-#: codraft\core\gui\processor\image.py:505
+#: codraft\core\gui\processor\image.py:519
 msgid "MinEnclosingCircle"
 msgstr "CercleMinimum"
 
-#: codraft\core\gui\processor\image.py:534
+#: codraft\core\gui\processor\image.py:548
 msgid "Peaks"
 msgstr "Pics"
 
-#: codraft\core\gui\processor\image.py:584
+#: codraft\core\gui\processor\image.py:598
 msgid "Contour"
 msgstr "Contour"
 
@@ -679,7 +696,7 @@ msgid "Degree"
 msgstr "Degré"
 
 #: codraft\core\gui\processor\signal.py:84
-#: codraft\tests\scenario_sig_app.py:161 codraft\tests\stat_app.py:33
+#: codraft\tests\scenario_sig_app.py:164 codraft\tests\stat_app.py:33
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -728,17 +745,17 @@ msgstr "Dérivée"
 msgid "Integral"
 msgstr "Intégrale"
 
-#: codraft\core\gui\signal.py:69 codraft\tests\scenario_sig_app.py:156
+#: codraft\core\gui\signal.py:69 codraft\tests\scenario_sig_app.py:159
 #: codraft\widgets\fitdialog.py:115
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
-#: codraft\core\gui\signal.py:70 codraft\tests\scenario_sig_app.py:157
+#: codraft\core\gui\signal.py:70 codraft\tests\scenario_sig_app.py:160
 #: codraft\widgets\fitdialog.py:143
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
-#: codraft\core\gui\signal.py:71 codraft\tests\scenario_sig_app.py:158
+#: codraft\core\gui\signal.py:71 codraft\tests\scenario_sig_app.py:161
 #: codraft\widgets\fitdialog.py:171
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
@@ -763,7 +780,7 @@ msgstr "Calcule la largeur à maximum"
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: codraft\core\gui\signal.py:228 codraft\utils\qthelpers.py:307
+#: codraft\core\gui\signal.py:228 codraft\utils\qthelpers.py:313
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 
@@ -1029,7 +1046,7 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 msgid "Test image with peaks"
 msgstr "Image de test avec des pics"
 
-#: codraft\tests\scenario_sig_app.py:123
+#: codraft\tests\scenario_sig_app.py:126
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
@@ -1041,15 +1058,15 @@ msgstr "Journaux de bord de CodraFT"
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 
-#: codraft\utils\qthelpers.py:249
+#: codraft\utils\qthelpers.py:255
 msgid "Cancel"
 msgstr "Annuler"
 
-#: codraft\utils\qthelpers.py:267
+#: codraft\utils\qthelpers.py:273
 msgid "Error:"
 msgstr "Erreur:"
 
-#: codraft\utils\qthelpers.py:305
+#: codraft\utils\qthelpers.py:311
 msgid "%s could not be opened:"
 msgstr "%s n'a pas pu être ouvert:"
 

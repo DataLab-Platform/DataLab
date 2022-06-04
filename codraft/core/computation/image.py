@@ -98,18 +98,23 @@ def distance_matrix(coords: list) -> np.ndarray:
     return np.triu(spt.distance.cdist(coords, coords, "euclidean"))
 
 
-def get_2d_peaks_coords(data: np.ndarray, size: int = None) -> np.ndarray:
+def get_2d_peaks_coords(
+    data: np.ndarray, size: int = None, threshold: float = 0.5
+) -> np.ndarray:
     """Detect peaks in image data, return coordinates.
 
     If neighborhoods size is None, default value is the highest value
-    between 50 pixels and the 1/40th of the smallest image dimension"""
+    between 50 pixels and the 1/40th of the smallest image dimension.
+
+    Detection threshold is relative to difference between data maximum and minimum.
+    """
     if size is None:
         size = max(min(data.shape) // 40, 50)
     data_max = spf.maximum_filter(data, size)
     data_min = spf.minimum_filter(data, size)
     data_diff = data_max - data_min
-    threshold = (data_diff.max() - data_diff.min()) * 0.5
-    diff = (data_max - data_min) > threshold
+    abs_threshold = (data_diff.max() - data_diff.min()) * threshold
+    diff = (data_max - data_min) > abs_threshold
     maxima = data == data_max
     maxima[diff == 0] = 0
     labeled, _num_objects = spi.label(maxima)

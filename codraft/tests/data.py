@@ -90,9 +90,12 @@ class PeakDataParam:
     amp_gauss2d: int = 1900
     mu_noise: int = 845
     sigma_noise: int = 25
+    dx0: float = 0.0
+    dy0: float = 0.0
+    att: float = 1.0
 
 
-def get_peak2d_data(p: PeakDataParam = None, seed=None):
+def get_peak2d_data(p: PeakDataParam = None, seed=None, multi=False):
     """Return a list of NumPy arrays containing images which are relevant for
     testing 2D peak detection or similar image processing features"""
     if p is None:
@@ -101,15 +104,23 @@ def get_peak2d_data(p: PeakDataParam = None, seed=None):
     rng = np.random.default_rng(seed)
     coords = (rng.random((p.n_points, 2)) - 0.5) * 10 * (1 - delta)
     data = rng.normal(p.mu_noise, p.sigma_noise, size=(p.size, p.size))
+    multi_nb = 2 if multi else 1
     for x0, y0 in coords:
-        data += create_2d_gaussian(
-            p.size,
-            np.uint16,
-            x0=x0,
-            y0=y0,
-            sigma=p.sigma_gauss2d,
-            amp=p.amp_gauss2d,
-        )
+        for idx in range(multi_nb):
+            if idx != 0:
+                p.dx0 = 0.08 + rng.random() * 0.08
+                p.dy0 = 0.08 + rng.random() * 0.08
+                p.att = 0.2 + rng.random() * 0.8
+            # if multi:
+            #     print(p)
+            data += create_2d_gaussian(
+                p.size,
+                np.uint16,
+                x0=x0 + p.dx0,
+                y0=y0 + p.dy0,
+                sigma=p.sigma_gauss2d,
+                amp=p.amp_gauss2d / multi_nb * p.att,
+            )
     return data
 
 

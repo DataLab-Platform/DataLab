@@ -130,7 +130,25 @@ class CalibrateParam(DataSet):
 class PeakDetectionParam(DataSet):
     """Peak detection parameters"""
 
-    size = IntItem(_("Neighborhoods size"), default=10, min=1, unit="pixels")
+    size = IntItem(
+        _("Neighborhoods size"),
+        default=10,
+        min=1,
+        unit="pixels",
+        help=_(
+            "Size of the sliding window used in maximum/minimum filtering algorithm"
+        ),
+    )
+    threshold = FloatItem(
+        _("Relative threshold"),
+        default=0.5,
+        min=0.1,
+        max=0.9,
+        help=_(
+            "Detection threshold, relative to difference between "
+            "data maximum and minimum"
+        ),
+    )
     create_rois = BoolItem(_("Create regions of interest"))
 
 
@@ -508,7 +526,7 @@ class ImageProcessor(BaseProcessor):
             """Compute centroid"""
             res = []
             for i_roi in image.iterate_roi_indexes():
-                coords = get_2d_peaks_coords(image.get_data(i_roi), p.size)
+                coords = get_2d_peaks_coords(image.get_data(i_roi), p.size, p.threshold)
                 if coords.size:
                     if image.roi is not None:
                         x0, y0, _x1, _y1 = image.roi[i_roi]
