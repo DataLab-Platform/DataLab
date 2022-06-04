@@ -91,8 +91,18 @@ def get_old_log_fname(fname):
     return osp.splitext(fname)[0] + ".1.log"
 
 
-Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
-Conf.main.traceback_log_path.set(f".{APP_NAME}_traceback.log")
-Conf.main.faulthandler_log_path.set(f".{APP_NAME}_faulthandler.log")
+def initialize():
+    """Initialize application configuration"""
+    Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
+    Conf.main.traceback_log_path.set(f".{APP_NAME}_traceback.log")
+    Conf.main.faulthandler_log_path.set(f".{APP_NAME}_faulthandler.log")
 
+
+def reset():
+    """Reset application configuration"""
+    Conf.reset()
+    initialize()
+
+
+initialize()
 tests.add_test_module_path("codraft", osp.join("data", "tests"))

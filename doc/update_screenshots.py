@@ -7,15 +7,15 @@
 Module for taking CodraFT screenshots
 """
 
+from codraft import config
 from codraft.app import create
-from codraft.config import Conf
 from codraft.tests.data import create_test_image1, create_test_signal1
 from codraft.utils.qthelpers import qt_app_context
 
 
 def take_menu_screenshots():
     """Run the CodraFT application and take screenshots"""
-    Conf.reset()  # Reset configuration (remove configuration file)
+    config.reset()  # Reset configuration (remove configuration file and initialize it)
     sig1 = create_test_signal1()
     ima1 = create_test_image1()
     objects = (sig1, ima1)

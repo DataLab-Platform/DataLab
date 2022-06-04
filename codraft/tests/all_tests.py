@@ -13,7 +13,7 @@ import os.path as osp
 from guidata.guitest import get_tests
 
 import codraft
-from codraft.config import Conf
+from codraft import config
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -29,7 +29,7 @@ def run_all_tests(args="", contains="", timeout=None):
 
 def run():
     """Parse arguments and run tests"""
-    Conf.reset()  # Reset configuration (remove configuration file)
+    config.reset()  # Reset configuration (remove configuration file and initialize it)
     parser = argparse.ArgumentParser(description="Run all test in unattended mode")
     parser.add_argument("--contains", default="")
     parser.add_argument("--timeout", type=int, default=120)
