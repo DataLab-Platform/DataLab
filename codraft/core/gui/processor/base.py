@@ -139,7 +139,7 @@ class BaseProcessor(QC.QObject):
         outobj.copy_data_from(obj0)
         outobj.data -= np.array(obj1.data, dtype=outobj.data.dtype)
         if quad:
-            outobj.data = outobj.data / np.sqrt(2.0)
+            outobj.data = (outobj.data / np.sqrt(2.0)).clip(0)
         if np.issubdtype(outobj.data.dtype, np.unsignedinteger):
             outobj.data[obj0.data < obj1.data] = 0
         self.panel.add_object(outobj)
