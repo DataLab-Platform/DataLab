@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -38,7 +38,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
-from codraft import __docurl__, __version__
+from codraft import __docurl__, __homeurl__, __version__
 from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.base import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
@@ -408,6 +408,12 @@ class CodraFTMainWindow(QW.QMainWindow):
             icon=get_icon("libre-gui-about.svg"),
             triggered=self.about,
         )
+        homepage_action = create_action(
+            self,
+            _("Project home page"),
+            icon=get_icon("libre-gui-globe.svg"),
+            triggered=lambda: webbrowser.open(__homeurl__),
+        )
         onlinedoc_action = create_action(
             self,
             _("Online documentation"),
@@ -423,7 +429,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         chmdoc_action.setVisible(get_htmlhelp() is not None)
         logv_action = create_action(
             self,
-            _("Show CodraFT log files..."),
+            _("Show log files..."),
             icon=get_icon("logs.svg"),
             triggered=self.show_log_viewer,
         )
@@ -446,6 +452,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                 errtest_action,
                 logv_action,
                 None,
+                homepage_action,
                 about_action,
             ),
         )

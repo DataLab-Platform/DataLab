@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -11,8 +11,8 @@ CodraFT is a generic signal and image processing software based on Python scient
 libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (thanks to
 guidata and guiqwt libraries).
 
-CodraFT is Copyright © 2018 CEA-CODRA, Pierre Raybaut, and Licensed under the
-terms of the CeCILL License v2.1.
+CodraFT is Copyright © 2022 CEA-CODRA, Pierre Raybaut, and Licensed under the
+terms of the BSD 3-Clause License or the CeCILL-B License v1.
 """
 
 from distutils.core import setup
@@ -21,7 +21,7 @@ import setuptools  # pylint: disable=unused-import
 from guidata.configtools import get_module_data_path
 from guidata.utils import get_package_data, get_subpackages
 
-from codraft import __docurl__
+from codraft import __docurl__, __homeurl__
 from codraft import __version__ as version
 from codraft.utils import dephash
 
@@ -41,13 +41,14 @@ guidata and guiqwt libraries).
 
 CodraFT stands for "CODRA Filtering Tool".
 
-See `documentation`_ for more details on the library and `changelog`_ for
-recent history of changes.
+See `homepage`_ or `documentation`_ for more details on the library
+and `changelog`_ for recent history of changes.
 
 Copyright © 2018-2022 CODRA, Pierre Raybaut
 Copyright © 2009-2015 CEA, Pierre Raybaut
 Licensed under the terms of the `CECILL License`_.
 
+.. _homepage: {__homeurl__}
 .. _documentation: {__docurl__}
 .. _changelog: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/CHANGELOG.md
 .. _CECILL License: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/Licence_CeCILL_V2.1-en.txt
@@ -122,7 +123,7 @@ setup(
     },
     author="Pierre Raybaut",
     author_email="p.raybaut@codra.fr",
-    url=f"https://github.com/CODRA-Ingenierie-Informatique/{LIBNAME}",
-    license="CeCILL V2",
+    url=__homeurl__,
+    license="BSD",
     classifiers=CLASSIFIERS,
 )

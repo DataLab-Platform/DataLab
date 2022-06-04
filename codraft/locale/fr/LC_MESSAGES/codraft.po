@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # codraft module translation file
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-04 10:44+0200\n"
+"POT-Creation-Date: 2022-06-04 18:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#: codraft\core\gui\base.py:177 codraft\core\gui\base.py:840
+#: codraft\core\gui\base.py:177 codraft\core\gui\base.py:849
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -208,27 +208,27 @@ msgstr "Statistiques"
 msgid "Properties"
 msgstr "Propriétés"
 
-#: codraft\core\gui\base.py:649
+#: codraft\core\gui\base.py:658
 msgid "Add region of interest"
 msgstr "Ajouter une région d'intérêt"
 
-#: codraft\core\gui\base.py:841
+#: codraft\core\gui\base.py:850
 msgid "Do you want to delete all objects from the %s?"
 msgstr "Souhaitez-vous supprimer tous les objects depuis le %s ?"
 
-#: codraft\core\gui\base.py:880 codraft\core\gui\main.py:601
+#: codraft\core\gui\base.py:889 codraft\core\gui\main.py:608
 msgid "Open"
 msgstr "Ouvrir"
 
-#: codraft\core\gui\base.py:908
+#: codraft\core\gui\base.py:917
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\base.py:926
+#: codraft\core\gui\base.py:935
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\base.py:1072 codraft\core\gui\signal.py:122
+#: codraft\core\gui\base.py:1081 codraft\core\gui\signal.py:122
 #: codraft\core\model\base.py:493
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
@@ -242,7 +242,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: codraft\core\gui\h5io.py:104 codraft\core\gui\main.py:161
-#: codraft\core\gui\main.py:588
+#: codraft\core\gui\main.py:595
 msgid "Warning"
 msgstr "Attention"
 
@@ -319,14 +319,16 @@ msgstr "Ajustement d'une forme géométrique à un contour"
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\image.py:280
+#: codraft\core\gui\image.py:279
 msgid "Edit Annotations"
 msgstr "Modifier les annotations"
 
 #: codraft\core\gui\image.py:281
 msgid ""
 "Edit (add, modify or remove) annotations, i.e. arbitrary graphical objects"
-msgstr "Modifier, ajouter ou supprimer des annotations, c.-à-d. des objets graphiques arbitraires"
+msgstr ""
+"Modifier, ajouter ou supprimer des annotations, c.-à-d. des objets "
+"graphiques arbitraires"
 
 #: codraft\core\gui\image.py:292
 msgid "Annotations"
@@ -406,7 +408,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide CodraFT window"
 msgstr "Cacher la fenêtre de CodraFT"
 
-#: codraft\core\gui\main.py:318 codraft\core\gui\main.py:668
+#: codraft\core\gui\main.py:318 codraft\core\gui\main.py:675
 msgid "Quit"
 msgstr "Quitter"
 
@@ -474,31 +476,35 @@ msgstr "Calculs"
 msgid "&View"
 msgstr "&Affichage"
 
-#: codraft\core\gui\main.py:407 codraft\core\gui\main.py:436
+#: codraft\core\gui\main.py:407 codraft\core\gui\main.py:442
 msgid "About..."
 msgstr "À propos..."
 
 #: codraft\core\gui\main.py:413
+msgid "Project home page"
+msgstr "Page d'accueil du projet"
+
+#: codraft\core\gui\main.py:419
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: codraft\core\gui\main.py:419
+#: codraft\core\gui\main.py:425
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: codraft\core\gui\main.py:426
-msgid "Show CodraFT log files..."
-msgstr "Afficher les journaux de bords de CodraFT..."
+#: codraft\core\gui\main.py:432
+msgid "Show log files..."
+msgstr "Afficher les journaux de bords..."
 
-#: codraft\core\gui\main.py:475
+#: codraft\core\gui\main.py:482
 msgid "Console"
 msgstr "Console"
 
-#: codraft\core\gui\main.py:567
+#: codraft\core\gui\main.py:574
 msgid "Save"
 msgstr "Enregistrer"
 
-#: codraft\core\gui\main.py:589
+#: codraft\core\gui\main.py:596
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -506,11 +512,11 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:630
+#: codraft\core\gui\main.py:637
 msgid "About "
 msgstr "À propos de "
 
-#: codraft\core\gui\main.py:669
+#: codraft\core\gui\main.py:676
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "CodraFT?"
@@ -1055,14 +1061,6 @@ msgstr "Image de test avec des pics"
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: codraft\utils\logviewer.py:56
-msgid "CodraFT log files"
-msgstr "Journaux de bord de CodraFT"
-
-#: codraft\utils\logviewer.py:90
-msgid "Log files are currently empty."
-msgstr "Les journaux de bord sont vides."
-
 #: codraft\utils\qthelpers.py:255
 msgid "Cancel"
 msgstr "Annuler"
@@ -1150,6 +1148,14 @@ msgstr "Cocher tout"
 #: codraft\widgets\h5browser.py:465
 msgid "Uncheck all"
 msgstr "Décocher tout"
+
+#: codraft\widgets\logviewer.py:56
+msgid "CodraFT log files"
+msgstr "Journaux de bord de CodraFT"
+
+#: codraft\widgets\logviewer.py:92
+msgid "Log files are currently empty."
+msgstr "Les journaux de bord sont vides."
 
 #: codraft\widgets\signalpeakdialog.py:24
 msgid "Minimum distance:"
