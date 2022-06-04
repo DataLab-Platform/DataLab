@@ -55,7 +55,7 @@ class LogViewerWindow(QW.QDialog):
         super().__init__(parent)
         self.setWindowTitle(_("CodraFT log files"))
         self.setWindowIcon(get_icon("codraft.svg"))
-        tabs = QW.QTabWidget()
+        self.tabs = QW.QTabWidget()
         for fname in fnames:
             if osp.isfile(fname):
                 viewer = LogViewerWidget()
@@ -63,11 +63,16 @@ class LogViewerWindow(QW.QDialog):
                 if not contents.strip():
                     continue
                 viewer.set_data(title, contents)
-                tabs.addTab(viewer, get_icon("logs.svg"), osp.basename(fname))
+                self.tabs.addTab(viewer, get_icon("logs.svg"), osp.basename(fname))
         layout = QW.QVBoxLayout()
-        layout.addWidget(tabs)
+        layout.addWidget(self.tabs)
         self.setLayout(layout)
         self.resize(900, 400)
+
+    @property
+    def is_empty(self):
+        """Return True if there is no log available"""
+        return self.tabs.count() == 0
 
 
 def exec_codraft_logviewer_dialog(parent=None):
@@ -82,13 +87,12 @@ def exec_codraft_logviewer_dialog(parent=None):
         )
         if osp.isfile(fname)
     ]
-    if fnames:
-        dlg = LogViewerWindow(fnames, parent=parent)
-        exec_dialog(dlg)
+    dlg = LogViewerWindow(fnames, parent=parent)
+    if dlg.is_empty:
+        QW.QMessageBox.information(dlg, APP_NAME, _("Log files are currently empty."))
+        dlg.close()
     else:
-        QW.QMessageBox.information(
-            parent, APP_NAME, _("Log files are currently empty.")
-        )
+        exec_dialog(dlg)
 
 
 def test_log_viewer():
