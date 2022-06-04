@@ -154,6 +154,14 @@ def create_test_signal2(size=None, title=None):
     return obj
 
 
+def create_test_signal3(size=None, title=None):
+    """Create test signal (Noised gaussian curve)"""
+    obj = create_test_signal2(size, title)
+    rng = np.random.default_rng()
+    obj.data += rng.normal(10, 1, size=obj.data.shape)
+    return obj
+
+
 def __get_default_size_dtype(size=None, dtype=None):
     """Return default shape and dtype"""
     size = 2000 if size is None else size

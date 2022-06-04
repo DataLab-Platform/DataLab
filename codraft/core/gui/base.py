@@ -10,6 +10,7 @@ CodraFT Base GUI module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import abc
+import dataclasses
 import enum
 import re
 from typing import Callable, List
@@ -19,6 +20,7 @@ import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from guidata.utils import update_dataset
+from guidata.widgets.arrayeditor import ArrayEditor
 from guiqwt.builder import make
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
@@ -743,6 +745,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         )
         self.addWidget(self.objlist)
         self.addWidget(self.objprop)
+        self.add_results_button()
 
     def get_category_actions(self, category):
         """Return actions for category"""
@@ -1103,3 +1106,65 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         if exec_dialog(dlg):
             return dlg.get_object()
         return None
+
+    def add_results_button(self):
+        """Add 'Show results' button"""
+        btn = QW.QPushButton(get_icon("show_results.svg"), _("Show results"), self)
+        btn.setToolTip(_("Show results obtained from previous computations"))
+        self.objprop.add_button(btn)
+        btn.clicked.connect(self.show_results)
+        self.acthandler.actlist_1more.append(btn)
+
+    def show_results(self):
+        """Show results"""
+        rows = self.objlist.get_selected_rows()
+
+        @dataclasses.dataclass
+        class ResultData:
+            """Result data associated to a shapetype"""
+
+            results: List[ResultShape] = None
+            xlabels: List[str] = None
+            ylabels: List[str] = None
+
+        rdatadict = {}
+        for idx, row in enumerate(rows):
+            obj = self.objlist[row]
+            for key, value in obj.metadata.items():
+                if ResultShape.match(key, value):
+                    result = ResultShape.from_metadata_entry(key, value)
+                    rdata = rdatadict.setdefault(
+                        result.shapetype, ResultData([], None, [])
+                    )
+                    title = f"{result.label}"
+                    rdata.results.append(result)
+                    rdata.xlabels = result.xlabels
+                    for _i_row_res in range(result.array.shape[0]):
+                        ylabel = f"{self.PREFIX}{idx:03d}: {result.label}"
+                        rdata.ylabels.append(ylabel)
+        if rdatadict:
+            for rdata in rdatadict.values():
+                dlg = ArrayEditor(self.parent())
+                title = _("Results")
+                dlg.setup_and_check(
+                    np.vstack([result.array for result in rdata.results]),
+                    title,
+                    readonly=True,
+                    xlabels=rdata.xlabels,
+                    ylabels=rdata.ylabels,
+                )
+                dlg.setObjectName(f"{self.PREFIX}_results")
+                dlg.resize(750, 300)
+                exec_dialog(dlg)
+        else:
+            msg = "<br>".join(
+                [
+                    _("No result currently available for this object."),
+                    "",
+                    _(
+                        "This feature shows result arrays as displayed after "
+                        'calling one of the computing feature (see "Compute" menu).'
+                    ),
+                ]
+            )
+            QW.QMessageBox.information(self, APP_NAME, msg)
