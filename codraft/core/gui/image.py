@@ -184,6 +184,7 @@ class ImagePanel(guibase.BasePanel):
     PANEL_STR = "Image Panel"
     PARAMCLASS = ImageParam
     DIALOGCLASS = ImageDialog
+    DIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (
         AnnotatedCircleTool,
         AnnotatedSegmentTool,
@@ -193,7 +194,6 @@ class ImagePanel(guibase.BasePanel):
         LabelTool,
         FreeFormTool,
     )
-    PLOT_TOOLS = ANNOTATION_TOOLS + guibase.BasePanel.PLOT_TOOLS
     PREFIX = "i"
     OPEN_FILTERS = iohandler.get_filters("load", dtype=None)
     H5_PREFIX = "CodraFT_Ima"
@@ -208,7 +208,6 @@ class ImagePanel(guibase.BasePanel):
             self, self.objlist, self.itmlist, self.processor, toolbar
         )
         self.setup_panel()
-        self.add_geometric_shapes_button()
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True):
@@ -273,48 +272,3 @@ class ImagePanel(guibase.BasePanel):
                 kwargs["template"] = obj.dicom_template
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 imwrite(filename, obj.data, **kwargs)
-
-    def add_geometric_shapes_button(self):
-        """Add 'Edit geometric shapes' button"""
-        btn = QW.QPushButton(get_icon("edit_shapes.svg"), _("Edit Annotations"), self)
-        btn.setToolTip(
-            _(
-                "Edit (add, modify or remove) annotations, "
-                "i.e. arbitrary graphical objects"
-            )
-        )
-        self.objprop.add_button(btn)
-        btn.clicked.connect(self.edit_geometric_shapes)
-        self.acthandler.actlist_1.append(btn)
-
-    def edit_geometric_shapes(self):
-        """Edit geometric shapes (i.e. user-defined metadata shapes)"""
-        title = _("Annotations")
-        dlg, obj = self.create_new_dialog_for_selection(
-            title,
-            "user_annotations",
-            self.ROIDIALOGOPTIONS,
-            toolbar=True,
-        )
-        toolbar = QW.QToolBar(title, self)
-        dlg.button_layout.insertWidget(0, toolbar)
-        # dlg.layout().insertWidget(1, toolbar)  # other possible location
-        # dlg.plot_layout.addWidget(toolbar, 1, 0, 1, 1)  # other possible location
-        dlg.add_toolbar(toolbar, id(toolbar))
-        toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
-        for tool in self.ANNOTATION_TOOLS:
-            dlg.add_tool(tool, toolbar_id=id(toolbar))
-        plot = dlg.get_plot()
-        plot.unselect_all()
-        for item in plot.items:
-            item.set_selectable(False)
-        for item in obj.iterate_shape_items(editable=True):
-            plot.add_item(item)
-        if exec_dialog(dlg):
-            items = plot.get_items()
-            rw_items = [item for item in items if not item.is_readonly()]
-            if rw_items:
-                obj.set_annotations_from_items(rw_items)
-            row = self.objlist.get_selected_rows()[0]
-            self.current_item_changed(row)
-            self.SIG_REFRESH_PLOT.emit()

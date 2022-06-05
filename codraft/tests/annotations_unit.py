@@ -27,9 +27,10 @@ def test():
     with codraft_app_context() as win:
         panel = win.imagepanel
         ima = test_data.create_image_with_annotations()
-        orig_metadata = ima.metadata.copy()
         panel.add_object(ima)
-        panel.edit_geometric_shapes()
+        panel.open_separate_view()
+        orig_metadata = ima.metadata.copy()
+        panel.open_separate_view()
         print("Check [geometric shapes] <--> [plot items] conversion:")
         print(f"  Comparing {ANN_KEY}: ", end="")
         # open("before.json", mode="wb").write(orig_metadata[ANN_KEY].encode())

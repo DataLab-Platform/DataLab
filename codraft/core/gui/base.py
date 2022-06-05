@@ -706,7 +706,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     PANEL_STR = ""  # e.g. "Signal Panel"
     PARAMCLASS = SignalParam  # Replaced by the right class in child object
     DIALOGCLASS = CurveDialog  # Idem
-    PLOT_TOOLS = (LabelTool, VCursorTool, HCursorTool, XCursorTool)
+    ANNOTATION_TOOLS = (LabelTool, VCursorTool, HCursorTool, XCursorTool)
+    DIALOGSIZE = (800, 600)
     PREFIX = ""  # e.g. "s"
     OPEN_FILTERS = ""  # Qt file open dialog filters
     H5_PREFIX = ""
@@ -987,11 +988,35 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
         :param list rows: List of row indexes for the objects to be shown in dialog
         """
-        if rows is None:
-            rows = self.objlist.get_selected_rows()
-        dlg = self.create_new_dialog(rows, tools=self.PLOT_TOOLS, name="new_window")
+        title = _("Annotations")
+        rows = self.objlist.get_selected_rows()
+        row = rows[0]
+        obj = self.objlist[row]
+        dlg = self.create_new_dialog(rows, edit=True, name="new_window")
+        width, height = self.DIALOGSIZE
+        dlg.resize(width, height)
         dlg.plot_widget.itemlist.setVisible(True)
-        exec_dialog(dlg)
+        toolbar = QW.QToolBar(title, self)
+        dlg.button_layout.insertWidget(0, toolbar)
+        # dlg.layout().insertWidget(1, toolbar)  # other possible location
+        # dlg.plot_layout.addWidget(toolbar, 1, 0, 1, 1)  # other possible location
+        dlg.add_toolbar(toolbar, id(toolbar))
+        toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
+        for tool in self.ANNOTATION_TOOLS:
+            dlg.add_tool(tool, toolbar_id=id(toolbar))
+        plot = dlg.get_plot()
+        plot.unselect_all()
+        for item in plot.items:
+            item.set_selectable(False)
+        for item in obj.iterate_shape_items(editable=True):
+            plot.add_item(item)
+        if exec_dialog(dlg):
+            items = plot.get_items()
+            rw_items = [item for item in items if not item.is_readonly()]
+            if rw_items:
+                obj.set_annotations_from_items(rw_items)
+            self.current_item_changed(row)
+            self.SIG_REFRESH_PLOT.emit()
 
     def toggle_show_titles(self, state):
         """Toggle show annotations option"""
