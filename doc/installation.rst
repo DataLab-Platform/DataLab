@@ -33,7 +33,7 @@ already include all those required libraries as well as Python itself)*:
       - 2.2
       -
     * - guiqwt
-      - 4.1
+      - 4.2
       -
     * - NumPy
       - 1.21

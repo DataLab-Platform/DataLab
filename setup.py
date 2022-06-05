@@ -110,8 +110,8 @@ setup(
         "SciPy>=1.7",
         "scikit-image>=0.18",
         "psutil>=5.5",
-        "guidata>=2.1",
-        "guiqwt>=4.1",
+        "guidata>=2.2",
+        "guiqwt>=4.2",
         "QtPy>=1.9",
     ],
     entry_points={
