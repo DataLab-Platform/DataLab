@@ -65,6 +65,7 @@ class BaseProcessor(QC.QObject):
     """Object handling data processing: operations, processing, computing"""
 
     SIG_ADD_SHAPE = QC.Signal(int)
+    EDIT_ROI_PARAMS = False
 
     def __init__(self, panel, objlist):
         super().__init__()
@@ -352,6 +353,7 @@ class BaseProcessor(QC.QObject):
             if (
                 QtTestEnv().unattended
                 or roidata.size == 0
+                or not self.EDIT_ROI_PARAMS
                 or roigroup.edit(parent=self.panel)
             ):
                 roidata = obj.params_to_roidata(roigroup)

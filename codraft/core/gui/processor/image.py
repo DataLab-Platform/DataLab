@@ -168,6 +168,8 @@ class ImageProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
+    EDIT_ROI_PARAMS = True
+
     def compute_logp1(self, param: LogP1Param = None) -> None:
         """Compute base 10 logarithm"""
         edit = param is None
