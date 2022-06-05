@@ -26,13 +26,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from codraft.config import (
-    APP_NAME,
-    DATETIME_FORMAT,
-    Conf,
-    _,
-    get_old_log_fname,
-)
+from codraft.config import APP_NAME, DATETIME_FORMAT, Conf, _, get_old_log_fname
 
 
 class QtTestEnv:
@@ -215,7 +209,7 @@ def qt_app_context(exec_loop=False, enable_logs=True):
     remove_empty_log_file(fh_log_fname)
     if enable_logs:
         logging.shutdown()
-    remove_empty_log_file(tb_log_fname)
+        remove_empty_log_file(tb_log_fname)
 
 
 def close_dialog_and_quit(widget, screenshot=False):
