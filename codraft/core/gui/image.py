@@ -24,7 +24,6 @@ from guiqwt.tools import (
     FreeFormTool,
     LabelTool,
 )
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getsavefilename
 
@@ -38,11 +37,7 @@ from codraft.core.model.image import (
     create_image_from_param,
     new_image_param,
 )
-from codraft.utils.qthelpers import (
-    exec_dialog,
-    qt_try_loadsave_file,
-    save_restore_stds,
-)
+from codraft.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
 
 class ImageItemList(guibase.BaseItemList):
@@ -200,6 +195,8 @@ class ImagePanel(guibase.BasePanel):
     ROIDIALOGOPTIONS = dict(show_itemlist=True, show_contrast=False)
     ROIDIALOGCLASS = ImageROIEditor
 
+    # pylint: disable=duplicate-code
+
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = ImageItemList(self, self.objlist, plotwidget)
@@ -220,7 +217,7 @@ class ImagePanel(guibase.BasePanel):
         if not self.mainwindow.confirm_memory_state():
             return
         curobj = self.objlist.get_sel_object(-1)
-        if curobj is not None:  # pylint: disable=duplicate-code
+        if curobj is not None:
             newparam = newparam if newparam is not None else new_image_param()
             newparam.width, newparam.height = curobj.size
             newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)

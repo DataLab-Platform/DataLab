@@ -17,6 +17,8 @@ from contextlib import contextmanager
 
 from guidata.configtools import get_module_data_path
 
+from codraft.utils.env import execenv
+
 TST_PATH = []
 
 
@@ -62,16 +64,16 @@ def try_open_test_data(title, pattern):
         @functools.wraps(func)
         def func_wrapper():
             """Decorator wrapper function"""
-            print(title + ":")
-            print("-" * len(title))
+            execenv.print(title + ":")
+            execenv.print("-" * len(title))
             try:
                 for fname in get_test_fnames(pattern):
-                    print(f"=> Opening: {fname}")
+                    execenv.print(f"=> Opening: {fname}")
                     func(fname)
             except FileNotFoundError:
-                print(f"  No test data available for {pattern}")
+                execenv.print(f"  No test data available for {pattern}")
             finally:
-                print(os.linesep)
+                execenv.print(os.linesep)
 
         return func_wrapper
 

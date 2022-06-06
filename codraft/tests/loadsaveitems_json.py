@@ -26,6 +26,7 @@ import os.path as osp
 
 from guiqwt.tests.loadsaveitems_pickle import IOTest
 
+from codraft.utils.env import execenv
 from codraft.utils.jsonio import JSONReader, JSONWriter
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 
@@ -43,9 +44,9 @@ class JSONTest(IOTest):
         self.create_dialog()
         self.add_items()
         exec_dialog(self.dlg)
-        print("Saving items...", end=" ")
+        execenv.print("Saving items...", end=" ")
         self.save_items()
-        print("OK")
+        execenv.print("OK")
 
     def restore_items(self):
         """Restore plot items"""
@@ -56,7 +57,7 @@ class JSONTest(IOTest):
         """Save plot items"""
         writer = JSONWriter(self.FNAME)
         self.plot.serialize(writer)
-        # print(len(writer.get_json()))
+        # EXECENV.print(len(writer.get_json()))
         writer.save()
 
 

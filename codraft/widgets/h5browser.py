@@ -27,7 +27,7 @@ from qtpy import QtWidgets as QW
 from codraft.config import _
 from codraft.core.io.h5 import H5Importer
 from codraft.core.model.signal import SignalParam
-from codraft.utils.qthelpers import QtTestEnv
+from codraft.utils.env import execenv
 
 
 def get_item_user_text(item):
@@ -429,7 +429,7 @@ class H5BrowserDialog(QW.QDialog):
         """Setup dialog"""
         self.browser.setup(fname)
         if self.browser.tree.is_empty():
-            if not QtTestEnv().unattended:
+            if not execenv.unattended:
                 QW.QMessageBox.warning(
                     self.parent(),
                     self.windowTitle(),

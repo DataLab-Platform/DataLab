@@ -146,6 +146,8 @@ class SignalPanel(guibase.BasePanel):
     H5_PREFIX = "CodraFT_Sig"
     ROIDIALOGCLASS = SignalROIEditor
 
+    # pylint: disable=duplicate-code
+
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = guibase.BaseItemList(self, self.objlist, plotwidget)
@@ -166,7 +168,7 @@ class SignalPanel(guibase.BasePanel):
         if not self.mainwindow.confirm_memory_state():
             return
         curobj = self.objlist.get_sel_object(-1)
-        if curobj is not None:  # pylint: disable=duplicate-code
+        if curobj is not None:
             newparam = newparam if newparam is not None else new_signal_param()
             newparam.size = len(curobj.data)
             newparam.xmin = curobj.x.min()

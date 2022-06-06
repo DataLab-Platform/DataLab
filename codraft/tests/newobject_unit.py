@@ -24,7 +24,8 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import QtTestEnv, qt_app_context
+from codraft.utils.env import execenv
+from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves, view_images
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -32,11 +33,13 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def iterate_signal_creation(data_size: int = 500, non_zero: bool = False):
     """Iterate over all possible signals created from parameters"""
-    print(f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):")
+    execenv.print(
+        f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):"
+    )
     for stype in SignalTypes:
         if non_zero and stype in (SignalTypes.ZEROS,):
             continue
-        print(f"    {stype.value}")
+        execenv.print(f"    {stype.value}")
         newparam = new_signal_param(stype=stype, size=data_size)
         if stype == SignalTypes.UNIFORMRANDOM:
             addparam = UniformRandomParam()
@@ -52,13 +55,15 @@ def iterate_signal_creation(data_size: int = 500, non_zero: bool = False):
 
 def iterate_image_creation(data_size: int = 500, non_zero: bool = False):
     """Iterate over all possible images created from parameters"""
-    print(f"  Iterating over image types (size={data_size}, non_zero={non_zero}):")
+    execenv.print(
+        f"  Iterating over image types (size={data_size}, non_zero={non_zero}):"
+    )
     for itype in ImageTypes:
         if non_zero and itype in (ImageTypes.EMPTY, ImageTypes.ZEROS):
             continue
-        print(f"    {itype.value}")
+        execenv.print(f"    {itype.value}")
         for dtype in ImageDatatypes:
-            print(f"      {dtype.value}")
+            execenv.print(f"      {dtype.value}")
             newparam = new_image_param(
                 itype=itype, dtype=dtype, width=data_size, height=data_size
             )
@@ -82,19 +87,19 @@ def iterate_image_creation(data_size: int = 500, non_zero: bool = False):
 
 def all_combinations_test():
     """Test all combinations for new signal/image feature"""
-    print(f"Testing {all_combinations_test.__name__}:")
-    print(f"  Signal types ({len(SignalTypes)}):")
+    execenv.print(f"Testing {all_combinations_test.__name__}:")
+    execenv.print(f"  Signal types ({len(SignalTypes)}):")
     for signal in iterate_signal_creation():
         assert signal.x is not None and signal.y is not None
-    print(f"  Image types ({len(ImageTypes)}):")
+    execenv.print(f"  Image types ({len(ImageTypes)}):")
     for image in iterate_image_creation():
         assert image.data is not None
-    print(f"{all_combinations_test.__name__} OK")
+    execenv.print(f"{all_combinations_test.__name__} OK")
 
 
 def new_signal_test():
     """Test new signal feature"""
-    edit = not QtTestEnv().unattended
+    edit = not execenv.unattended
     signal = create_signal_from_param(None, edit=edit)
     if signal is not None:
         data = (signal.x, signal.y)
@@ -104,7 +109,7 @@ def new_signal_test():
 def new_image_test():
     """Test new image feature"""
     # Test with no input parameter
-    edit = not QtTestEnv().unattended
+    edit = not execenv.unattended
     image = create_image_from_param(None, edit=edit)
     if image is not None:
         view_images(image.data, name=new_image_test.__name__, title=image.title)

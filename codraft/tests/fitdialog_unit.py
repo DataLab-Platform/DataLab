@@ -15,6 +15,7 @@ import numpy as np
 
 from codraft.core.computation.signal import peak_indexes
 from codraft.tests.data import get_test_fnames
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import get_default_test_name
 from codraft.widgets.fitdialog import multigaussianfit
@@ -30,7 +31,9 @@ def test():
     with qt_app_context():
         x, y = np.loadtxt(get_test_fnames("paracetamol.txt")[0], delimiter=",").T
         peakindexes = peak_indexes(y)
-        print(multigaussianfit(x, y, peakindexes, name=get_default_test_name("00")))
+        execenv.print(
+            multigaussianfit(x, y, peakindexes, name=get_default_test_name("00"))
+        )
 
 
 if __name__ == "__main__":

@@ -20,10 +20,12 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def run_all_tests(args="", contains="", timeout=None):
     """Run all CodraFT tests"""
-    for testmodule in get_tests(codraft):
+    testmodules = get_tests(codraft)
+    tnb = len(testmodules)
+    for idx, testmodule in enumerate(testmodules):
         if not osp.samefile(testmodule.path, __file__) and contains in testmodule.path:
             rpath = osp.relpath(testmodule.path, osp.dirname(codraft.__file__))
-            print(f"===🍺=== Running test [{rpath}]")
+            print(f"===[{(idx+1):02d}/{tnb:02d}]=== 🍺 Running test [{rpath}]")
             testmodule.run(args=args, timeout=timeout)
 
 
@@ -34,7 +36,7 @@ def run():
     parser.add_argument("--contains", default="")
     parser.add_argument("--timeout", type=int, default=240)
     args = parser.parse_args()
-    run_all_tests("--mode unattended", args.contains, args.timeout)
+    run_all_tests("--mode unattended --verbose quiet", args.contains, args.timeout)
 
 
 if __name__ == "__main__":

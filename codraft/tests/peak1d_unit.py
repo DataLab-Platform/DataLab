@@ -15,6 +15,7 @@ from pprint import pprint
 
 import numpy as np
 
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.utils.tests import get_test_fnames
 from codraft.widgets.signalpeakdialog import SignalPeakDetectionDialog
@@ -34,7 +35,7 @@ def test():
         plot.set_axis_limits(plot.xBottom, 16, 30)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
-    print("peaks:")
+    execenv.print("peaks:")
     pprint(dlg.get_peaks())
     pprint(dlg.get_min_dist())
 

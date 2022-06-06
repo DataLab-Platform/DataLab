@@ -44,6 +44,8 @@
             "args": [
                 // "--mode",
                 // "unattended",
+                // "--verbose",
+                // "normal",
                 // "screenshot",
                 // "--delay",
                 // "1"

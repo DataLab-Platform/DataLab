@@ -111,8 +111,6 @@ def get_peak2d_data(p: PeakDataParam = None, seed=None, multi=False):
                 p.dx0 = 0.08 + rng.random() * 0.08
                 p.dy0 = 0.08 + rng.random() * 0.08
                 p.att = 0.2 + rng.random() * 0.8
-            # if multi:
-            #     print(p)
             data += create_2d_gaussian(
                 p.size,
                 np.uint16,

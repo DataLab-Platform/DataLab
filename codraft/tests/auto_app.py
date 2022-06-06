@@ -19,6 +19,7 @@ import os.path as osp
 from codraft.core.gui.processor.base import ClipParam
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_test_image2, create_test_signal1
+from codraft.utils.env import execenv
 from codraft.utils.tests import temporary_directory
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -51,9 +52,9 @@ def test():
             win.open_h5_files([fname], import_all=True, reset_all=True)
             # === Accessing object metadata
             obj = panel.objlist[1]
-            print(f"Image '{obj.title}':")
+            execenv.print(f"Image '{obj.title}':")
             for key, value in obj.metadata.items():
-                print(f'  metadata["{key}"] = {value}')
+                execenv.print(f'  metadata["{key}"] = {value}')
 
 
 if __name__ == "__main__":

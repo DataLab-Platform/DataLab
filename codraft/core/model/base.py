@@ -12,6 +12,7 @@ CodraFT Datasets
 import abc
 import enum
 import json
+import sys
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -383,7 +384,7 @@ class ResultShape:
             item.set_ydiameter(x2, y2, x3, y3)
             item.set_style("plot", "shape/drag")
         else:
-            print(f"Warning: unsupported item {self.shapetype}")
+            print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
         if isinstance(item, AnnotatedShape):
             config_annotated_shape(item, fmt, lbl)

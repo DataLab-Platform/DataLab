@@ -11,6 +11,7 @@ Try and open all HDF5 test data available.
 
 
 from codraft.tests.data import get_test_fnames
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.widgets.h5browser import H5BrowserDialog
 
@@ -21,7 +22,7 @@ def h5browser_test():
     """HDF5 browser test"""
     with qt_app_context():
         for index, fname in enumerate(get_test_fnames("*.h5")):
-            print(f"Opening: {fname}")
+            execenv.print(f"Opening: {fname}")
             dlg = H5BrowserDialog(None, size=(1050, 450))
             dlg.setup(fname)
             dlg.browser.tree.toggle_all(True)

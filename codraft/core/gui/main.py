@@ -47,12 +47,8 @@ from codraft.core.gui.image import ImagePanel
 from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
-from codraft.utils import dephash
-from codraft.utils.qthelpers import (
-    QtTestEnv,
-    grab_save_window,
-    save_restore_stds,
-)
+from codraft.utils import dephash, env
+from codraft.utils import qthelpers as qth
 from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
 
@@ -214,7 +210,7 @@ class CodraFTMainWindow(QW.QMainWindow):
     def take_screenshot(self, name):  # pragma: no cover
         """Take main window screenshot"""
         self.memorystatus.set_demo_mode(True)
-        grab_save_window(self, f"{name}")
+        qth.grab_save_window(self, f"{name}")
         self.memorystatus.set_demo_mode(False)
 
     def take_menu_screenshots(self):  # pragma: no cover
@@ -232,7 +228,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             ):
                 menu = getattr(self, f"{name}_menu")
                 menu.popup(self.pos())
-                grab_save_window(menu, f"{panel.objectName()}_{name}")
+                qth.grab_save_window(menu, f"{panel.objectName()}_{name}")
                 menu.close()
 
     # ------GUI setup
@@ -569,7 +565,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Save to a CodraFT HDF5 file"""
         if filename is None:
             basedir = Conf.main.base_dir.get()
-            with save_restore_stds():
+            with qth.save_restore_stds():
                 filters = f'{_("HDF5 files")} (*.h5)'
                 filename, _filter = getsavefilename(self, _("Save"), basedir, filters)
             if not filename:
@@ -603,7 +599,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                     reset_all = True
         if filenames is None:
             basedir = Conf.main.base_dir.get()
-            with save_restore_stds():
+            with qth.save_restore_stds():
                 filters = f'{_("HDF5 files")} (*.h5)'
                 filenames, _filter = getopenfilenames(self, _("Open"), basedir, filters)
         for filename in filenames:
@@ -669,7 +665,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.__old_size = self.size()
             self.hide()
         else:
-            if not QtTestEnv().unattended and self.__is_modified:
+            if not env.execenv.unattended and self.__is_modified:
                 answer = QW.QMessageBox.warning(
                     self,
                     _("Quit"),
