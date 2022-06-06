@@ -8,25 +8,44 @@ Run all tests in unattended mode
 """
 
 import argparse
+import os
 import os.path as osp
 
 from guidata.guitest import get_tests
 
 import codraft
 from codraft import config
+from codraft.utils.tests import TST_PATH
 
 SHOW = True  # Show test in GUI-based test launcher
 
 
 def run_all_tests(args="", contains="", timeout=None):
     """Run all CodraFT tests"""
-    testmodules = get_tests(codraft)
+    testmodules = [
+        tmod
+        for tmod in get_tests(codraft)
+        if not osp.samefile(tmod.path, __file__) and contains in tmod.path
+    ]
     tnb = len(testmodules)
+    print("*** CodraFT automatic unit tests ***")
+    print("")
+    print("Test parameters:")
+    print(f"  Selected {tnb} tests ({len(get_tests(codraft)) - 1} available)")
+    print("  Test data path:")
+    for path in TST_PATH:
+        print(f"    {path}")
+    print("  Environment:")
+    for vname in ("DATA_CODRAFT", "PYTHONPATH", "DEBUG"):
+        print(f"    {vname}={os.environ.get(vname, '')}")
+    print("")
+    print("Please wait while test scripts are executed (a few minutes).")
+    print("Only error messages will be printed out (no message = test OK).")
+    print("")
     for idx, testmodule in enumerate(testmodules):
-        if not osp.samefile(testmodule.path, __file__) and contains in testmodule.path:
-            rpath = osp.relpath(testmodule.path, osp.dirname(codraft.__file__))
-            print(f"===[{(idx+1):02d}/{tnb:02d}]=== 🍺 Running test [{rpath}]")
-            testmodule.run(args=args, timeout=timeout)
+        rpath = osp.relpath(testmodule.path, osp.dirname(codraft.__file__))
+        print(f"===[{(idx+1):02d}/{tnb:02d}]=== 🍺 Running test [{rpath}]")
+        testmodule.run(args=args, timeout=timeout)
 
 
 def run():
