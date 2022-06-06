@@ -45,7 +45,7 @@
                 // "--mode",
                 // "unattended",
                 // "--verbose",
-                // "normal",
+                // "quiet",
                 // "screenshot",
                 // "--delay",
                 // "1"

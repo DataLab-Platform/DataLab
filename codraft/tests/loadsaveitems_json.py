@@ -28,7 +28,7 @@ from guiqwt.tests.loadsaveitems_pickle import IOTest
 
 from codraft.utils.env import execenv
 from codraft.utils.jsonio import JSONReader, JSONWriter
-from codraft.utils.qthelpers import exec_dialog, qt_app_context
+from codraft.utils.qthelpers import exec_dialog, qt_app_context, save_restore_stds
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -42,9 +42,10 @@ class JSONTest(IOTest):
         """Run test"""
         #  Overrides IOTest method to add "unattended mode" support (see `exec_dialog`)
         self.create_dialog()
-        self.add_items()
+        with save_restore_stds():
+            self.add_items()
         exec_dialog(self.dlg)
-        execenv.print("Saving items...", end=" ")
+        execenv.print("  Saving items...", end=" ")
         self.save_items()
         execenv.print("OK")
 
@@ -71,6 +72,8 @@ if __name__ == "__main__":
     with qt_app_context():
         test = JSONTest()
         remove_test_file()
-        test.run()  # Build items, save items on close
-        test.run()  # Restore items
+        execenv.print("Build items, save items on close")
+        test.run()
+        execenv.print("Restore items")
+        test.run()
         remove_test_file()
