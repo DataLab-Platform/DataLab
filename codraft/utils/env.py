@@ -10,6 +10,7 @@ CodraFT environmnent utilities
 import argparse
 import enum
 import os
+import pprint
 import sys
 
 
@@ -119,7 +120,7 @@ class CodraFTExecEnv:
         os.environ[self.DELAY_ENV] = str(args.delay)
 
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
-        """Print in file only if mode is not unattended or if file is not sys.stdout"""
+        """Print in file, depending on verbosity level"""
         # print(f"unattended={self.unattended} ; verbose={self.verbose} ; ")
         # print(f"screenshot={self.screenshot}; delay={self.delay}")
         if (self.verbose != VerbosityLevels.QUIET.value) and (
@@ -127,6 +128,30 @@ class CodraFTExecEnv:
         ):
             print(*objects, sep=sep, end=end, file=file, flush=flush)
         # TODO: [P4] Eventually add logging here
+
+    def pprint(
+        self,
+        obj,
+        stream=None,
+        indent=1,
+        width=80,
+        depth=None,
+        compact=False,
+        sort_dicts=True,
+    ):
+        """Pretty-print in stream, depending on verbosity level"""
+        if (self.verbose != VerbosityLevels.QUIET.value) and (
+            self.verbose != VerbosityLevels.MINIMAL.value or stream == sys.stderr
+        ):
+            pprint.pprint(
+                obj,
+                stream=stream,
+                indent=indent,
+                width=width,
+                depth=depth,
+                compact=compact,
+                sort_dicts=sort_dicts,
+            )
 
 
 execenv = CodraFTExecEnv()

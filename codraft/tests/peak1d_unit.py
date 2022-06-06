@@ -11,7 +11,6 @@ Testing peak detection dialog box.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from pprint import pprint
 
 import numpy as np
 
@@ -36,8 +35,8 @@ def test():
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
     execenv.print("peaks:")
-    pprint(dlg.get_peaks())
-    pprint(dlg.get_min_dist())
+    execenv.pprint(dlg.get_peaks())
+    execenv.pprint(dlg.get_min_dist())
 
 
 if __name__ == "__main__":
