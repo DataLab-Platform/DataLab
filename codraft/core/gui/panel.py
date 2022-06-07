@@ -47,7 +47,6 @@ from guiqwt.tools import (
     AnnotatedPointTool,
     AnnotatedRectangleTool,
     AnnotatedSegmentTool,
-    FreeFormTool,
     HCursorTool,
     LabelTool,
     VCursorTool,
