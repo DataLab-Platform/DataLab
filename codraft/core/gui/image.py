@@ -114,6 +114,7 @@ class ImageActionHandler(guibase.BaseActionHandler):
             rot270_act,
             rotate_act,
         ]
+        self.actlist_cmenu += [None, hflip_act, vflip_act, rot90_act, rot270_act]
         add_actions(
             rotate_menu, [hflip_act, vflip_act, rot90_act, rot270_act, rotate_act]
         )

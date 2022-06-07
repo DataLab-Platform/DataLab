@@ -71,8 +71,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.actlist_2more = []
         self.actlist_1 = []
         self.actlist_2 = []
+        self.actlist_cmenu = []  # Context menu
         if self.__class__ is not BaseActionHandler:
             self.create_all_actions(toolbar)
+
+    def get_context_menu_actions(self):
+        """Return context menu action list"""
+        return self.actlist_cmenu
 
     def selection_rows_changed(self):
         """Number of selected rows has changed"""
@@ -139,6 +144,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered=self.panel.export_metadata_from_file,
         )
         self.actlist_1more += [save_act]
+        self.actlist_cmenu += [save_act]
         self.actlist_1 += [importmd_act, exportmd_act]
         return [new_act, open_act, save_act, None, importmd_act, exportmd_act]
 
@@ -185,6 +191,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
         self.actlist_1more += [dup_action, del_action, delm_action, pstmeta_action]
+        self.actlist_cmenu += [dup_action, del_action]
         self.actlist_1 += [cpymeta_action]
         return [
             dup_action,
@@ -211,6 +218,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         )
         showlabel_action.setChecked(True)
         self.actlist_1more += [view_action]
+        self.actlist_cmenu = [view_action, None] + self.actlist_cmenu
         return [view_action, showlabel_action]
 
     def create_operation_actions(self):
@@ -291,6 +299,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             icon=get_icon("stats.svg"),
         )
         self.actlist_1 += [defineroi_action, stats_action]
+        self.actlist_cmenu += [None, defineroi_action, stats_action]
         return [defineroi_action, None, stats_action]
 
 
@@ -298,6 +307,7 @@ class SimpleObjectList(QW.QListWidget):
     """Base object handling panel list widget, object (sig/ima) lists"""
 
     SIG_ITEM_DOUBLECLICKED = QC.Signal(int)
+    SIG_CONTEXT_MENU = QC.Signal(QC.QPoint)
 
     def __init__(self, panel, parent=None):
         parent = panel if parent is None else parent
@@ -350,6 +360,10 @@ class SimpleObjectList(QW.QListWidget):
     def item_double_clicked(self, listwidgetitem):
         """Item was double-clicked: open a pop-up plot dialog"""
         self.SIG_ITEM_DOUBLECLICKED.emit(self.row(listwidgetitem))
+
+    def contextMenuEvent(self, event):  # pylint: disable=C0103
+        """Override Qt method"""
+        self.SIG_CONTEXT_MENU.emit(event.globalPos())
 
 
 class GetObjectDialog(QW.QDialog):
@@ -729,6 +743,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.processor = None
         self.acthandler = None
         self.__metadata_clipboard = {}
+        self.context_menu = QW.QMenu()
 
     def setup_panel(self):
         """Setup panel"""
@@ -739,6 +754,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.objlist.SIG_ITEM_DOUBLECLICKED.connect(
             lambda row: self.open_separate_view([row])
         )
+        self.objlist.SIG_CONTEXT_MENU.connect(self.popup_contextmenu)
         self.objprop.properties.SIG_APPLY_BUTTON_CLICKED.connect(
             self.properties_changed
         )
@@ -748,6 +764,15 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     def get_category_actions(self, category):
         """Return actions for category"""
         return self.acthandler.feature_actions[category]
+
+    def popup_contextmenu(self, position: QC.QPoint):
+        """Popup context menu at position"""
+        # Note: For now, this is completely unnecessary to clear context menu everytime,
+        # but implementing it this way could be useful in the future in menu contents
+        # should take into account current object selection
+        self.context_menu.clear()
+        add_actions(self.context_menu, self.acthandler.actlist_cmenu)
+        self.context_menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
     def create_object(self, title=None):
