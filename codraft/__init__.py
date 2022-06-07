@@ -15,12 +15,18 @@ libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (tha
 .. _guiqwt: https://pypi.python.org/pypi/guiqwt
 """
 
+import os
+
 __version__ = "2.0.2"
 __docurl__ = "https://codraft.readthedocs.io/en/latest/"
 __homeurl__ = "https://codra-ingenierie-informatique.github.io/CodraFT/"
 
-import codraft.core.io  # analysis:ignore
-import codraft.patch  # analysis:ignore
+try:
+    import codraft.core.io  # analysis:ignore
+    import codraft.patch  # analysis:ignore
+except ImportError:
+    if not os.environ.get("CODRAFT_DOC"):
+        raise
 
 # Dear (Debian, RPM, ...) package makers, please feel free to customize the
 # following path to module's data (images) and translations:

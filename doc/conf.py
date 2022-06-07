@@ -13,9 +13,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import sys
 
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath(".."))
 
 
 # -- Project information -----------------------------------------------------
@@ -27,7 +27,10 @@ html_logo = latex_logo = "_static/codraft_logo_190.png"
 
 # The full version, including alpha/beta/rc tags
 
-release = os.environ.get("CODRAFT_VERSION", "")
+os.environ["CODRAFT_DOC"] = "1"
+import codraft
+
+release = codraft.__version__
 
 
 # -- General configuration ---------------------------------------------------
