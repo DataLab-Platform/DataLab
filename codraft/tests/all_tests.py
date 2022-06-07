@@ -31,7 +31,7 @@ def run_all_tests(args="", contains="", timeout=None):
     print("*** CodraFT automatic unit tests ***")
     print("")
     print("Test parameters:")
-    print(f"  Selected {tnb} tests ({len(get_tests(codraft)) - 1} available)")
+    print(f"  Selected {tnb} tests ({len(get_tests(codraft)) - 1} total available)")
     print("  Test data path:")
     for path in TST_PATH:
         print(f"    {path}")
