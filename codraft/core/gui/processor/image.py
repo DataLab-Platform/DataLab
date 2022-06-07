@@ -258,9 +258,8 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             original_size = obj0.size
-            plot = self.objlist.plotwidget.get_plot()
             dlg = ResizeDialog(
-                plot,
+                self.plotwidget,
                 new_size=original_size,
                 old_size=original_size,
                 text=_("Destination size:"),

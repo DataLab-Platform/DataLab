@@ -66,10 +66,11 @@ class BaseProcessor(QC.QObject):
     SIG_ADD_SHAPE = QC.Signal(int)
     EDIT_ROI_PARAMS = False
 
-    def __init__(self, panel, objlist):
+    def __init__(self, panel, objlist, plotwidget):
         super().__init__()
         self.panel = panel
         self.objlist = objlist
+        self.plotwidget = plotwidget
         self.prefix = panel.PREFIX
 
     @qt_try_except()

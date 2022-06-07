@@ -570,7 +570,7 @@ class SignalPanel(BasePanel):
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = plotitemlist.SignalItemList(self, self.objlist, plotwidget)
-        self.processor = SignalProcessor(self, self.objlist)
+        self.processor = SignalProcessor(self, self.objlist, plotwidget)
         self.acthandler = actionhandler.SignalActionHandler(
             self, self.objlist, self.itmlist, self.processor, toolbar
         )
@@ -679,7 +679,7 @@ class ImagePanel(BasePanel):
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = plotitemlist.ImageItemList(self, self.objlist, plotwidget)
-        self.processor = ImageProcessor(self, self.objlist)
+        self.processor = ImageProcessor(self, self.objlist, plotwidget)
         self.acthandler = actionhandler.ImageActionHandler(
             self, self.objlist, self.itmlist, self.processor, toolbar
         )
