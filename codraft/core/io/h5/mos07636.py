@@ -171,6 +171,14 @@ class ImageNode(BaseMOS07636Node):
         marge_haute = self.get_scalar(dnames, ancestor=2)
         if marge_haute:
             obj.y0 = marge_haute
+        dnames = ("Parametres_IMG/BinningX", "Parametres_ACQ/BinningX")
+        binning_x = self.get_scalar(dnames, ancestor=2)
+        if binning_x:
+            obj.dx = binning_x
+        dnames = ("Parametres_IMG/BinningY", "Parametres_ACQ/BinningY")
+        binning_y = self.get_scalar(dnames, ancestor=2)
+        if binning_y:
+            obj.dy = binning_y
         return obj
 
 
