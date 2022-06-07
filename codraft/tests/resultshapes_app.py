@@ -9,10 +9,12 @@ Result shapes application test:
   - Create an image with metadata shapes and ROI
   - Further tests to be done manually: check if copy/paste metadata works
 """
+
 import numpy as np
 
-from codraft.app import run
+from codraft.core.gui.processor.signal import FWHMParam
 from codraft.core.model.image import create_image
+from codraft.tests import codraft_app_context
 from codraft.tests import data as test_data
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -32,7 +34,19 @@ def test():
     obj1 = test_data.create_test_image1()
     obj2 = create_image_with_resultshapes()
     obj2.roi = np.array([[10, 10, 60, 400]], int)
-    run(console=False, objects=(obj1, obj2), size=(1200, 550))
+    with codraft_app_context(console=False) as win:
+        panel = win.signalpanel
+        for sig in (test_data.create_test_signal2(), test_data.create_test_signal3()):
+            panel.add_object(sig)
+            panel.processor.compute_fwhm(FWHMParam())
+            panel.processor.compute_fw1e2()
+        panel.objlist.select_rows((0, 1))
+        panel.show_results()
+        win.switch_to_image_panel()
+        panel = win.imagepanel
+        for obj in (obj1, obj2):
+            panel.add_object(obj)
+        panel.show_results()
 
 
 if __name__ == "__main__":
