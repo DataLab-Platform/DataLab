@@ -246,6 +246,7 @@ def to_codraft(cs_plot):
             break
     if win is None or win.objectName() != APP_NAME:
         # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
         from codraft.core.gui import main
 
         # Note : this is the only way to retrieve the CodraFT main window instance

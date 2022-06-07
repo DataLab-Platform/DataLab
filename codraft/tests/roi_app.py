@@ -14,10 +14,9 @@ ROI test:
 
 import numpy as np
 
-from codraft.core.gui.image import ImagePanel
+from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.gui.processor.image import PeakDetectionParam
 from codraft.core.gui.processor.signal import FWHMParam
-from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.signal import SignalParam
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_test_image3, create_test_signal1

@@ -28,7 +28,11 @@ from guiqwt.tests.loadsaveitems_pickle import IOTest
 
 from codraft.utils.env import execenv
 from codraft.utils.jsonio import JSONReader, JSONWriter
-from codraft.utils.qthelpers import exec_dialog, qt_app_context, save_restore_stds
+from codraft.utils.qthelpers import (
+    exec_dialog,
+    qt_app_context,
+    save_restore_stds,
+)
 
 SHOW = True  # Show test in GUI-based test launcher
 

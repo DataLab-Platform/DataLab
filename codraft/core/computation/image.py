@@ -136,6 +136,7 @@ def get_contour_shapes(data: np.ndarray, shape: str = "ellipse") -> np.ndarray:
     """Find iso-valued contours in a 2D array, then fit contours
     with shape ('ellipse' or 'circle')
     Return NumPy array containing coordinates of shapes."""
+    # pylint: disable=too-many-locals
     contours = measure.find_contours(data)
     coords = []
     for contour in contours:

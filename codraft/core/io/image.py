@@ -58,6 +58,9 @@ class SIFFile:
     :ivar m_offset: offset in the .sif file to the actual data
     """
 
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-statements
+
     def __init__(self, filepath):
         self.filepath = filepath
         self.original_filename = None
