@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -17,6 +17,7 @@ libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (tha
 
 __version__ = "2.0.2"
 __docurl__ = "https://codraft.readthedocs.io/en/latest/"
+__homeurl__ = "https://codra-ingenierie-informatique.github.io/CodraFT/"
 
 import codraft.core.io  # analysis:ignore
 import codraft.patch  # analysis:ignore
@@ -27,5 +28,5 @@ DATAPATH = LOCALEPATH = ""
 
 #    Copyright © 2009-2010 CEA
 #    Pierre Raybaut
-#    Licensed under the terms of the CECILL License
+#    Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 #    (see included file `Licence_CeCILL_V2.1-en.txt`)

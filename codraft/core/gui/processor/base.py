@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -22,9 +22,8 @@ from qtpy import QtWidgets as QW
 
 from codraft.config import _
 from codraft.core.model.base import ResultShape
-from codraft.utils.misc import is_complex_dtype, is_integer_dtype
+from codraft.utils import env, misc
 from codraft.utils.qthelpers import (
-    QtTestEnv,
     create_progress_bar,
     exec_dialog,
     qt_try_except,
@@ -65,11 +64,13 @@ class BaseProcessor(QC.QObject):
     """Object handling data processing: operations, processing, computing"""
 
     SIG_ADD_SHAPE = QC.Signal(int)
+    EDIT_ROI_PARAMS = False
 
-    def __init__(self, panel, objlist):
+    def __init__(self, panel, objlist, plotwidget):
         super().__init__()
         self.panel = panel
         self.objlist = objlist
+        self.plotwidget = plotwidget
         self.prefix = panel.PREFIX
 
     @qt_try_except()
@@ -100,7 +101,7 @@ class BaseProcessor(QC.QObject):
         title = ", ".join([f"{self.prefix}{row:03d}" for row in rows])
         outobj.title = f'{_("Average")}({title})'
         original_dtype = self.objlist.get_sel_object().data.dtype
-        new_dtype = complex if is_complex_dtype(original_dtype) else float
+        new_dtype = complex if misc.is_complex_dtype(original_dtype) else float
         for row in rows:
             obj = self.objlist[row]
             if outobj.data is None:
@@ -109,7 +110,7 @@ class BaseProcessor(QC.QObject):
                 outobj.data += np.array(obj.data, dtype=outobj.data.dtype)
                 outobj.update_resultshapes_from(obj)
         outobj.data /= float(len(rows))
-        if is_integer_dtype(original_dtype):
+        if misc.is_integer_dtype(original_dtype):
             outobj.set_data_type(dtype=original_dtype)
         self.panel.add_object(outobj)
 
@@ -350,8 +351,9 @@ class BaseProcessor(QC.QObject):
             obj = self.objlist[row]
             roigroup = obj.roidata_to_params(roidata)
             if (
-                QtTestEnv().unattended
+                env.execenv.unattended
                 or roidata.size == 0
+                or not self.EDIT_ROI_PARAMS
                 or roigroup.edit(parent=self.panel)
             ):
                 roidata = obj.params_to_roidata(roigroup)

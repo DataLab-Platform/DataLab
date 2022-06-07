@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -246,6 +246,7 @@ def to_codraft(cs_plot):
             break
     if win is None or win.objectName() != APP_NAME:
         # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
         from codraft.core.gui import main
 
         # Note : this is the only way to retrieve the CodraFT main window instance

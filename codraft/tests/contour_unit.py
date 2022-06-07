@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -8,7 +8,9 @@ Contour finding test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
+import sys
 import time
 
 from guiqwt.builder import make
@@ -18,6 +20,7 @@ from codraft.core.computation.image import (
     get_contour_shapes,
 )
 from codraft.tests.data import get_peak2d_data
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_image_items
 
@@ -40,11 +43,11 @@ def exec_contour_test(data):
     dt = time.time() - t0
     for x, y in peak_coords:
         items.append(make.marker((x, y)))
-    print(f"Calculation time: {int(dt * 1e3):d} ms\n")
-    print(f"Peak coordinates: {peak_coords}")
+    execenv.print(f"Calculation time: {int(dt * 1e3):d} ms\n", file=sys.stderr)
+    execenv.print(f"Peak coordinates: {peak_coords}")
     for shape in ("circle", "ellipse"):
         coords = get_contour_shapes(data, shape=shape)
-        print(f"Coordinates ({shape}s): {coords}")
+        execenv.print(f"Coordinates ({shape}s): {coords}")
         for shapeargs in coords:
             if shape == "circle":
                 item = make.circle(*shapeargs)

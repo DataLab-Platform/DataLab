@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -11,10 +11,10 @@ Testing peak detection dialog box.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from pprint import pprint
 
 import numpy as np
 
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.utils.tests import get_test_fnames
 from codraft.widgets.signalpeakdialog import SignalPeakDetectionDialog
@@ -34,9 +34,9 @@ def test():
         plot.set_axis_limits(plot.xBottom, 16, 30)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
         exec_dialog(dlg)
-    print("peaks:")
-    pprint(dlg.get_peaks())
-    pprint(dlg.get_min_dist())
+    execenv.print("peaks:")
+    execenv.pprint(dlg.get_peaks())
+    execenv.pprint(dlg.get_min_dist())
 
 
 if __name__ == "__main__":

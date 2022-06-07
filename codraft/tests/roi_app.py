@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -14,13 +14,13 @@ ROI test:
 
 import numpy as np
 
-from codraft.core.gui.image import ImagePanel
+from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.gui.processor.image import PeakDetectionParam
 from codraft.core.gui.processor.signal import FWHMParam
-from codraft.core.gui.signal import SignalPanel
 from codraft.core.model.signal import SignalParam
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_test_image3, create_test_signal1
+from codraft.utils.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -62,22 +62,22 @@ def array_1d_to_str(arr: np.ndarray) -> str:
 
 def print_obj_shapes(obj):
     """Print object and associated ROI array shapes"""
-    print(f"  Accessing object '{obj.title}':")
+    execenv.print(f"  Accessing object '{obj.title}':")
     func = array_1d_to_str if isinstance(obj, SignalParam) else array_2d_to_str
-    print(f"    data: {func(obj.data)}")
+    execenv.print(f"    data: {func(obj.data)}")
     if obj.roi is not None:
         for idx in range(obj.roi.shape[0]):
             roi_data = obj.get_data(idx)
             if isinstance(obj, SignalParam):
                 roi_data = roi_data[1]  # y data
-            print(f"    ROI[{idx}]: {func(roi_data)}")
+            execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
 
 def test():
     """Run ROI unit test scenario"""
     size = 200
     with codraft_app_context() as win:
-        print("ROI application test:")
+        execenv.print("ROI application test:")
         # === Signal ROI extraction test ===
         panel = win.signalpanel
         sig1 = create_test_signal1(size)

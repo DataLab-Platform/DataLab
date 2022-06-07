@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -15,6 +15,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from codraft.config import DEBUG, _
+from codraft.utils.env import execenv
 
 
 class MemoryStatus(QW.QWidget):
@@ -57,7 +58,7 @@ class MemoryStatus(QW.QWidget):
         memok = mem.available > self.__threshold
         self.SIG_MEMORY_ALARM.emit(not memok)
         if DEBUG and not memok:
-            print(f"=== Memory available: {mem.available//(1024**2)} MB ===")
+            execenv.print(f"=== Memory available: {mem.available//(1024**2)} MB ===")
         self.label.setStyleSheet("" if memok else "color: red")
         size = self.label.sizeHint().height()
         self.icon.setPixmap(QG.QPixmap() if memok else self.ko_icon.pixmap(size, size))

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
 CodraFT Qt utilities
 """
 
-import argparse
 import faulthandler
 import functools
 import logging
@@ -33,82 +32,7 @@ from codraft.config import (
     _,
     get_old_log_fname,
 )
-
-
-class QtTestEnv:
-    """Object representing CodraFT test environment"""
-
-    UNATTENDED_ARG = "unattended"
-    SCREENSHOT_ARG = "screenshot"
-    DELAY_ARG = "delay"
-    UNATTENDED_ENV = "CODRAFT_UNATTENDED_TESTS"
-    SCREENSHOT_ENV = "CODRAFT_TAKE_SCREENSHOT"
-    DELAY_ENV = "CODRAFT_DELAY_BEFORE_QUIT"
-
-    def __init__(self):
-        self.parse_args()
-
-    @staticmethod
-    def __get_mode(env):
-        """Get mode value"""
-        return os.environ.get(env) is not None
-
-    @staticmethod
-    def __set_mode(env, value):
-        """Set mode value"""
-        if env in os.environ:
-            os.environ.pop(env)
-        if value:
-            os.environ[env] = "1"
-
-    @property
-    def unattended(self):
-        """Get unattended value"""
-        return self.__get_mode(self.UNATTENDED_ENV)
-
-    @unattended.setter
-    def unattended(self, value):
-        """Set unattended value"""
-        self.__set_mode(self.UNATTENDED_ENV, value)
-
-    @property
-    def screenshot(self):
-        """Get screenshot value"""
-        return self.__get_mode(self.SCREENSHOT_ENV)
-
-    @screenshot.setter
-    def screenshot(self, value):
-        """Set screenshot value"""
-        self.__set_mode(self.SCREENSHOT_ENV, value)
-        if value:  # pragma: no cover
-            self.unattended = value
-
-    @property
-    def delay(self):
-        """Delay (seconds) before quitting application in unattended mode"""
-        try:
-            return int(os.environ.get(self.DELAY_ENV))
-        except (TypeError, ValueError):
-            return 0
-
-    def parse_args(self):
-        """Parse command line arguments"""
-        parser = argparse.ArgumentParser(description="Run ??? test")
-        parser.add_argument(
-            "--mode",
-            choices=[self.UNATTENDED_ARG, self.SCREENSHOT_ARG],
-            required=False,
-        )
-        parser.add_argument("--delay", type=int, default=0, help=self.delay.__doc__)
-        args, _unknown = parser.parse_known_args()
-        self.set_env_from_args(args)
-
-    def set_env_from_args(self, args):
-        """Set appropriate environment variables"""
-        if args.mode is not None:
-            self.unattended = args.mode == self.UNATTENDED_ARG
-            self.screenshot = args.mode == self.SCREENSHOT_ARG
-        os.environ[self.DELAY_ENV] = str(args.delay)
+from codraft.utils.env import execenv
 
 
 def close_widgets_and_quit(screenshot=False):
@@ -160,7 +84,6 @@ def qt_app_context(exec_loop=False, enable_logs=True):
     global QAPP_INSTANCE  # pylint: disable=global-statement
     if QAPP_INSTANCE is None:
         QAPP_INSTANCE = guidata.qapplication()
-    qttestenv = QtTestEnv()
 
     if enable_logs:
         # === Create a logger for standard exceptions ----------------------------------
@@ -195,17 +118,17 @@ def qt_app_context(exec_loop=False, enable_logs=True):
         try:
             yield QAPP_INSTANCE
         finally:
-            if qttestenv.unattended:  # pragma: no cover
-                if qttestenv.delay > 0:
-                    mode = "Screenshot" if qttestenv.screenshot else "Unattended"
-                    message = f"{mode} mode (delay: {qttestenv.delay}s)"
-                    msec = qttestenv.delay * 1000 - 200
+            if execenv.unattended:  # pragma: no cover
+                if execenv.delay > 0:
+                    mode = "Screenshot" if execenv.screenshot else "Unattended"
+                    message = f"{mode} mode (delay: {execenv.delay}s)"
+                    msec = execenv.delay * 1000 - 200
                     for widget in QW.QApplication.instance().topLevelWidgets():
                         if isinstance(widget, QW.QMainWindow):
                             widget.statusBar().showMessage(message, msec)
                 QC.QTimer.singleShot(
-                    qttestenv.delay * 1000,
-                    lambda: close_widgets_and_quit(screenshot=qttestenv.screenshot),
+                    execenv.delay * 1000,
+                    lambda: close_widgets_and_quit(screenshot=execenv.screenshot),
                 )
             if exec_loop:
                 QAPP_INSTANCE.exec()
@@ -215,7 +138,7 @@ def qt_app_context(exec_loop=False, enable_logs=True):
     remove_empty_log_file(fh_log_fname)
     if enable_logs:
         logging.shutdown()
-    remove_empty_log_file(tb_log_fname)
+        remove_empty_log_file(tb_log_fname)
 
 
 def close_dialog_and_quit(widget, screenshot=False):
@@ -230,18 +153,17 @@ def close_dialog_and_quit(widget, screenshot=False):
 def exec_dialog(dlg):
     """Run QDialog Qt execution loop without blocking,
     depending on environment test mode"""
-    qttestenv = QtTestEnv()
-    if qttestenv.unattended:
+    if execenv.unattended:
         QC.QTimer.singleShot(
-            qttestenv.delay * 1000,
-            lambda: close_dialog_and_quit(dlg, screenshot=qttestenv.screenshot),
+            execenv.delay * 1000,
+            lambda: close_dialog_and_quit(dlg, screenshot=execenv.screenshot),
         )
     return dlg.exec()
 
 
 def qt_wait(timeout, except_unattended=True):  # pragma: no cover
     """Freeze GUI during timeout (seconds) while processing Qt events"""
-    if except_unattended and QtTestEnv().unattended:
+    if except_unattended and execenv.unattended:
         return
     start = time.time()
     while time.time() <= start + timeout:

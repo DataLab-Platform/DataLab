@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -8,6 +8,7 @@ Image peak detection test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 import time
 
@@ -15,6 +16,7 @@ from guiqwt.builder import make
 
 from codraft.core.computation.image import get_2d_peaks_coords
 from codraft.tests.data import get_peak2d_data
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_image_items
 
@@ -29,8 +31,8 @@ def exec_image_peak_detection_func(data):
     dt = time.time() - t0
     for x, y in coords:
         items.append(make.marker((x, y)))
-    print(f"Calculation time: {int(dt * 1e3):d} ms")
-    print(f"  => {coords.tolist()}")
+    execenv.print(f"Calculation time: {int(dt * 1e3):d} ms")
+    execenv.print(f"  => {coords.tolist()}")
     view_image_items(items)
 
 

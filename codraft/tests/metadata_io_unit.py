@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -20,17 +20,16 @@ import numpy as np
 
 from codraft.tests import codraft_app_context
 from codraft.tests import data as test_data
-from codraft.utils.qthelpers import QtTestEnv
-from codraft.utils.tests import temporary_directory
+from codraft.utils import tests
+from codraft.utils.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
     """Run image tools test scenario"""
-    qttestenv = QtTestEnv()
-    qttestenv.unattended = True
-    with temporary_directory() as tmpdir:
+    execenv.unattended = True
+    with tests.temporary_directory() as tmpdir:
         fname = osp.join(tmpdir, "test.json")
         with codraft_app_context() as win:
             panel = win.imagepanel
@@ -43,14 +42,14 @@ def test():
             panel.delete_metadata()
             assert len(ima.metadata) == 0
             panel.import_metadata_from_file(fname)
-            print("Check metadata export <--> import features:")
+            execenv.print("Check metadata export <--> import features:")
             for key, value in orig_metadata.items():
-                print(f"  Checking {key} key value...", end="")
+                execenv.print(f"  Checking {key} key value...", end="")
                 if isinstance(value, np.ndarray):
                     assert (value == ima.metadata[key]).all()
                 else:
                     assert value == ima.metadata[key]
-                print("OK")
+                execenv.print("OK")
 
 
 if __name__ == "__main__":

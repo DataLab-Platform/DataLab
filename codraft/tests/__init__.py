@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -14,8 +14,9 @@ from qtpy import QtCore as QC
 
 import codraft.config  # Loading icons
 from codraft.core.gui.main import CodraFTMainWindow
-from codraft.utils.qthelpers import QtTestEnv, grab_save_window, qt_app_context
-from codraft.utils.tests import get_default_test_name, get_output_data_path
+from codraft.utils import env
+from codraft.utils import qthelpers as qth
+from codraft.utils import tests
 
 # TODO: [P2] Documentation: add more screenshots from tests
 # TODO: [P3] Create subpackages "app" & "unit" + add support for subpackages in
@@ -28,7 +29,7 @@ def codraft_app_context(size=None, maximized=False, save=False, console=None):
     if size is None:
         size = 950, 450
 
-    with qt_app_context(exec_loop=True):
+    with qth.qt_app_context(exec_loop=True):
         try:
             win = CodraFTMainWindow(console=console)
             if maximized:
@@ -38,17 +39,17 @@ def codraft_app_context(size=None, maximized=False, save=False, console=None):
                 win.resize(width, height)
                 win.showNormal()
             win.show()
-            win.setObjectName(get_default_test_name())  # screenshot name
+            win.setObjectName(tests.get_default_test_name())  # screenshot name
             yield win
         finally:
             if save:
-                win.save_to_h5_file(get_output_data_path("h5"))
+                win.save_to_h5_file(tests.get_output_data_path("h5"))
 
 
 def take_plotwidget_screenshot(panel, name):
     """Eventually takes plotwidget screenshot (only in screenshot mode)"""
-    if QtTestEnv().screenshot:
-        grab_save_window(panel.itmlist.plotwidget, f"{panel.PREFIX}_{name}")
+    if env.execenv.screenshot:
+        qth.grab_save_window(panel.itmlist.plotwidget, f"{panel.PREFIX}_{name}")
 
 
 def run():

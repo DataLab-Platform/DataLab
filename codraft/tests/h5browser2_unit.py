@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -15,6 +15,7 @@ import numpy as np
 import psutil
 
 from codraft.tests.data import get_test_fnames
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves
 from codraft.widgets.h5browser import H5BrowserDialog
@@ -33,14 +34,14 @@ def memoryleak_test(fname, iterations=20):
             dlg.setup(fname)
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
-            print(i + 1, ":", memdata, "MB")
+            execenv.print(i + 1, ":", memdata, "MB")
             dlg.browser.tree.select_all(True)
             dlg.browser.tree.toggle_all(True)
-            print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
+            execenv.print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
             dlg.show()
             dlg.accept()
             dlg.close()
-            print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
+            execenv.print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
             dlg.cleanup()
         view_curves(
             np.array(memlist),

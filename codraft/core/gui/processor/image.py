@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -168,6 +168,8 @@ class ImageProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
+    EDIT_ROI_PARAMS = True
+
     def compute_logp1(self, param: LogP1Param = None) -> None:
         """Compute base 10 logarithm"""
         edit = param is None
@@ -256,9 +258,8 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             original_size = obj0.size
-            plot = self.objlist.plotwidget.get_plot()
             dlg = ResizeDialog(
-                plot,
+                self.plotwidget,
                 new_size=original_size,
                 old_size=original_size,
                 text=_("Destination size:"),

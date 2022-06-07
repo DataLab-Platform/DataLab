@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -38,21 +38,16 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
-from codraft import __docurl__, __version__
+from codraft import __docurl__, __homeurl__, __version__
 from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
-from codraft.core.gui.base import ActionCategory
+from codraft.core.gui.actionhandler import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
 from codraft.core.gui.h5io import H5InputOutput
-from codraft.core.gui.image import ImagePanel
-from codraft.core.gui.signal import SignalPanel
+from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
-from codraft.utils import dephash
-from codraft.utils.qthelpers import (
-    QtTestEnv,
-    grab_save_window,
-    save_restore_stds,
-)
+from codraft.utils import dephash, env
+from codraft.utils import qthelpers as qth
 from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
 
@@ -148,7 +143,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Return the tuple of implemented panels (signal, image)"""
         return (self.signalpanel, self.imagepanel)
 
-    def set_low_memory_state(self, state):
+    def __set_low_memory_state(self, state):
         """Set memory warning state"""
         self.__memory_warning = state
 
@@ -214,7 +209,7 @@ class CodraFTMainWindow(QW.QMainWindow):
     def take_screenshot(self, name):  # pragma: no cover
         """Take main window screenshot"""
         self.memorystatus.set_demo_mode(True)
-        grab_save_window(self, f"{name}")
+        qth.grab_save_window(self, f"{name}")
         self.memorystatus.set_demo_mode(False)
 
     def take_menu_screenshots(self):  # pragma: no cover
@@ -232,7 +227,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             ):
                 menu = getattr(self, f"{name}_menu")
                 menu.popup(self.pos())
-                grab_save_window(menu, f"{panel.objectName()}_{name}")
+                qth.grab_save_window(menu, f"{panel.objectName()}_{name}")
                 menu.close()
 
     # ------GUI setup
@@ -270,20 +265,20 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Setup main window"""
         self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
         self.memorystatus = MemoryStatus(Conf.main.available_memory_threshold.get(500))
-        self.memorystatus.SIG_MEMORY_ALARM.connect(self.set_low_memory_state)
+        self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
-        self.setup_commmon_actions()
-        curvewidget = self.add_signal_panel()
-        imagewidget = self.add_image_panel()
-        self.add_tabwidget(curvewidget, imagewidget)
-        self.add_menus()
+        self.__setup_commmon_actions()
+        curvewidget = self.__add_signal_panel()
+        imagewidget = self.__add_image_panel()
+        self.__add_tabwidget(curvewidget, imagewidget)
+        self.__add_menus()
         if console:
-            self.setup_console()
+            self.__setup_console()
         # Update selection dependent actions
-        self.update_actions()
+        self.__update_actions()
         self.signal_image_docks[0].raise_()
 
-    def setup_commmon_actions(self):
+    def __setup_commmon_actions(self):
         """Setup common actions"""
         self.openh5_action = create_action(
             self,
@@ -326,7 +321,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             triggered=self.close,
         )
 
-    def add_signal_panel(self):
+    def __add_signal_panel(self):
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
         curveplot_toolbar = self.addToolBar(_("Curve Plotting Toolbar"))
@@ -339,7 +334,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return curvewidget
 
-    def add_image_panel(self):
+    def __add_image_panel(self):
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
         imagevis_toolbar = self.addToolBar(_("Image Visualization Toolbar"))
@@ -366,34 +361,34 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Switch to image panel"""
         self.tabwidget.setCurrentWidget(self.imagepanel)
 
-    def add_tabwidget(self, curvewidget, imagewidget):
+    def __add_tabwidget(self, curvewidget, imagewidget):
         """Setup tabwidget with signals and images"""
         self.tabwidget = DockableTabWidget()
         self.tabwidget.setMaximumWidth(500)
         self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
         self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
-        self._add_dockwidget(self.tabwidget, _("Main panel"))
-        curve_dock = self._add_dockwidget(curvewidget, title=_("Curve panel"))
-        image_dock = self._add_dockwidget(imagewidget, title=_("Image panel"))
+        self.__add_dockwidget(self.tabwidget, _("Main panel"))
+        curve_dock = self.__add_dockwidget(curvewidget, title=_("Curve panel"))
+        image_dock = self.__add_dockwidget(imagewidget, title=_("Image panel"))
         self.tabifyDockWidget(curve_dock, image_dock)
         self.signal_image_docks = curve_dock, image_dock
-        self.tabwidget.currentChanged.connect(self._tab_index_changed)
+        self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(self.switch_to_signal_panel)
         self.imagepanel.SIG_OBJECT_ADDED.connect(self.switch_to_image_panel)
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
 
-    def add_menus(self):
+    def __add_menus(self):
         """Adding menus"""
         self.file_menu = self.menuBar().addMenu(_("File"))
-        self.file_menu.aboutToShow.connect(self._update_file_menu)
+        self.file_menu.aboutToShow.connect(self.__update_file_menu)
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.computing_menu = self.menuBar().addMenu(_("Computing"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
-        self.view_menu.aboutToShow.connect(self._update_view_menu)
+        self.view_menu.aboutToShow.connect(self.__update_view_menu)
         self.help_menu = self.menuBar().addMenu("?")
         for menu in (
             self.edit_menu,
@@ -401,12 +396,18 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.processing_menu,
             self.computing_menu,
         ):
-            menu.aboutToShow.connect(self._update_generic_menu)
+            menu.aboutToShow.connect(self.__update_generic_menu)
         about_action = create_action(
             self,
             _("About..."),
             icon=get_icon("libre-gui-about.svg"),
-            triggered=self.about,
+            triggered=self.__about,
+        )
+        homepage_action = create_action(
+            self,
+            _("Project home page"),
+            icon=get_icon("libre-gui-globe.svg"),
+            triggered=lambda: webbrowser.open(__homeurl__),
         )
         onlinedoc_action = create_action(
             self,
@@ -423,7 +424,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         chmdoc_action.setVisible(get_htmlhelp() is not None)
         logv_action = create_action(
             self,
-            _("Show CodraFT log files..."),
+            _("Show log files..."),
             icon=get_icon("logs.svg"),
             triggered=self.show_log_viewer,
         )
@@ -435,7 +436,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self,
             _("About..."),
             icon=get_icon("libre-gui-about.svg"),
-            triggered=self.about,
+            triggered=self.__about,
         )
         add_actions(
             self.help_menu,
@@ -446,11 +447,12 @@ class CodraFTMainWindow(QW.QMainWindow):
                 errtest_action,
                 logv_action,
                 None,
+                homepage_action,
                 about_action,
             ),
         )
 
-    def setup_console(self):
+    def __setup_console(self):
         """Add an internal console"""
         self.app_proxy = AppProxy(self)
         ns = {
@@ -472,7 +474,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         debug = os.environ.get("DEBUG") == "1"
         self.console = DockableConsole(self, namespace=ns, message=msg, debug=debug)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
-        console_dock = self._add_dockwidget(self.console, _("Console"))
+        console_dock = self.__add_dockwidget(self.console, _("Console"))
         console_dock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.refresh_lists()
@@ -489,7 +491,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.__is_modified = state
         self.setWindowTitle(APP_NAME + ("*" if state else ""))
 
-    def _add_dockwidget(self, child, title):
+    def __add_dockwidget(self, child, title):
         """Add QDockWidget and toggleViewAction"""
         dockwidget, location = child.create_dockwidget(title)
         self.addDockWidget(location, dockwidget)
@@ -500,7 +502,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         for panel in self.panels:
             panel.objlist.refresh_list()
 
-    def update_actions(self):
+    def __update_actions(self):
         """Update selection dependent actions"""
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
@@ -508,13 +510,13 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.signal_toolbar.setVisible(is_signal)
         self.image_toolbar.setVisible(not is_signal)
 
-    def _tab_index_changed(self, index):
+    def __tab_index_changed(self, index):
         """Switch from signal to image mode, or vice-versa"""
         dock = self.signal_image_docks[index]
         dock.raise_()
-        self.update_actions()
+        self.__update_actions()
 
-    def _update_generic_menu(self, menu=None):
+    def __update_generic_menu(self, menu=None):
         """Update menu before showing up -- Generic method"""
         if menu is None:
             menu = self.sender()
@@ -531,10 +533,10 @@ class CodraFTMainWindow(QW.QMainWindow):
         actions = panel.get_category_actions(category)
         add_actions(menu, actions)
 
-    def _update_file_menu(self):
+    def __update_file_menu(self):
         """Update file menu before showing up"""
         self.saveh5_action.setEnabled(self.has_objects())
-        self._update_generic_menu(self.file_menu)
+        self.__update_generic_menu(self.file_menu)
         add_actions(
             self.file_menu,
             [
@@ -547,9 +549,9 @@ class CodraFTMainWindow(QW.QMainWindow):
             ],
         )
 
-    def _update_view_menu(self):
+    def __update_view_menu(self):
         """Update view menu before showing up"""
-        self._update_generic_menu(self.view_menu)
+        self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
 
     # ------Common features
@@ -562,7 +564,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Save to a CodraFT HDF5 file"""
         if filename is None:
             basedir = Conf.main.base_dir.get()
-            with save_restore_stds():
+            with qth.save_restore_stds():
                 filters = f'{_("HDF5 files")} (*.h5)'
                 filename, _filter = getsavefilename(self, _("Save"), basedir, filters)
             if not filename:
@@ -596,7 +598,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                     reset_all = True
         if filenames is None:
             basedir = Conf.main.base_dir.get()
-            with save_restore_stds():
+            with qth.save_restore_stds():
                 filters = f'{_("HDF5 files")} (*.h5)'
                 filenames, _filter = getopenfilenames(self, _("Open"), basedir, filters)
         for filename in filenames:
@@ -623,7 +625,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
     # ------?
-    def about(self):  # pragma: no cover
+    def __about(self):  # pragma: no cover
         """About dialog box"""
         QW.QMessageBox.about(
             self,
@@ -662,7 +664,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.__old_size = self.size()
             self.hide()
         else:
-            if not QtTestEnv().unattended and self.__is_modified:
+            if not env.execenv.unattended and self.__is_modified:
                 answer = QW.QMessageBox.warning(
                     self,
                     _("Quit"),

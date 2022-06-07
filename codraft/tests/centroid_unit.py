@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -15,6 +15,7 @@ Comparing different algorithms for centroid calculation:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 import time
 
@@ -25,6 +26,7 @@ from guiqwt.builder import make
 from codraft.config import _
 from codraft.core.computation.image import get_centroid_fourier
 from codraft.tests.data import get_laser_spot_data
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_image_items
 
@@ -57,7 +59,7 @@ def get_centroid_with_cv2(data):
 def add_xcursor(items, x, y, title):
     """Added X cursor to plot"""
     label = f'{_("Centroid")}[{title}] (x=%s, y=%s)'
-    print(label % (x, y))
+    execenv.print(label % (x, y))
     cursor = make.xcursor(x, y, label=label)
     cursor.setTitle(title)
     items.append(cursor)
@@ -79,9 +81,9 @@ def compare_centroid_funcs(data):
             row, col = func(data)
             dt = time.time() - t0
             add_xcursor(items, col, row, name)
-            print(f"  Calculation time: {int(dt * 1e3):d} ms")
+            execenv.print(f"  Calculation time: {int(dt * 1e3):d} ms")
         except ImportError:
-            print(f"  Unable to compute {name}: missing module")
+            execenv.print(f"  Unable to compute {name}: missing module")
     view_image_items(items)
 
 

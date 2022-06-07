@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -26,8 +26,13 @@ import os.path as osp
 
 from guiqwt.tests.loadsaveitems_pickle import IOTest
 
+from codraft.utils.env import execenv
 from codraft.utils.jsonio import JSONReader, JSONWriter
-from codraft.utils.qthelpers import exec_dialog, qt_app_context
+from codraft.utils.qthelpers import (
+    exec_dialog,
+    qt_app_context,
+    save_restore_stds,
+)
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -41,11 +46,12 @@ class JSONTest(IOTest):
         """Run test"""
         #  Overrides IOTest method to add "unattended mode" support (see `exec_dialog`)
         self.create_dialog()
-        self.add_items()
+        with save_restore_stds():
+            self.add_items()
         exec_dialog(self.dlg)
-        print("Saving items...", end=" ")
+        execenv.print("  Saving items...", end=" ")
         self.save_items()
-        print("OK")
+        execenv.print("OK")
 
     def restore_items(self):
         """Restore plot items"""
@@ -56,7 +62,7 @@ class JSONTest(IOTest):
         """Save plot items"""
         writer = JSONWriter(self.FNAME)
         self.plot.serialize(writer)
-        # print(len(writer.get_json()))
+        # EXECENV.print(len(writer.get_json()))
         writer.save()
 
 
@@ -70,6 +76,8 @@ if __name__ == "__main__":
     with qt_app_context():
         test = JSONTest()
         remove_test_file()
-        test.run()  # Build items, save items on close
-        test.run()  # Restore items
+        execenv.print("Build items, save items on close")
+        test.run()
+        execenv.print("Restore items")
+        test.run()
         remove_test_file()

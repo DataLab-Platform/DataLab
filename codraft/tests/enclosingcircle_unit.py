@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -10,6 +10,7 @@ Testing enclsoing circle function on various test images.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 from guiqwt.builder import make
 
@@ -19,6 +20,7 @@ from codraft.core.computation.image import (
     get_enclosing_circle,
 )
 from codraft.tests.data import get_laser_spot_data
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_image_items
 
@@ -33,7 +35,7 @@ def test_enclosingcircle(data):
     # Computing centroid coordinates
     row, col = get_centroid_fourier(data)
     label = _("Centroid") + " (%d, %d)"
-    print(label % (row, col))
+    execenv.print(label % (row, col))
     cursor = make.xcursor(col, row, label=label)
     cursor.set_resizable(False)
     cursor.set_movable(False)
@@ -45,8 +47,8 @@ def test_enclosingcircle(data):
     circle.set_resizable(False)
     circle.set_movable(False)
     items.append(circle)
-    print(x, y, radius)
-    print("")
+    execenv.print(x, y, radius)
+    execenv.print("")
 
     view_image_items(items)
 

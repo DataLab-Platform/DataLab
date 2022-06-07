@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 
@@ -57,6 +57,9 @@ class SIFFile:
     :ivar filesize: size of the file in bytes
     :ivar m_offset: offset in the .sif file to the actual data
     """
+
+    # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-statements
 
     def __init__(self, filepath):
         self.filepath = filepath

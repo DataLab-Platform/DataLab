@@ -30,6 +30,7 @@ The following major changes were introduced with CodraFT V2:
 as embedding CodraFT in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
 * Segmentation fault and Python exception logging
+* Customizable annotations for both signals and images
 * Dropped Python 2 support (CodraFT V1.7, the last release supporting Python 2,
 will still be maintained for critical bug fixes, i.e. without introducing new features)
 
@@ -55,11 +56,11 @@ scenarios, and enhanced public API for embedding CodraFT into a third-party appl
 New data visualization and processing features:
 
 * Image:
-  * Added "Edit Annotations" button on image properties group box:
-  supports user-defined annotations (points, segments, circles, ellipses, labels,...)
-  which are serialized in image metadata
   * New automatic image contour detection feature returning fitted circle/ellipse
   * New automatic 2D peak detection feature (optionally create ROIs)
+* "View in a new window": added customizable "Annotations" support for both signal
+and image panels - supports user-defined annotations (points, segments, circles,
+ellipses, labels,...) which are serialized in image metadata
 * Added "Graphical object titles" option in "View" menu to show or hide the title
 (or subtitle) of ROIs or any other graphical object
 * Added support for **multiple** Regions of Interest (ROI):
@@ -67,7 +68,7 @@ New data visualization and processing features:
   * Computation result arrays now contains ROI index (first column) and one row per ROI
   * ROI are merged when summing objects (signals or images)
   * ROI can be removed, modified or added at any time
-* Added option "Show annotations" ("View" menu) to show or hide ROI titles or any
+* Added option "Graphical object titles" ("View" menu) to show or hide ROI titles or any
 other geometrical shapes title (or subtitle)
 * New computing "Statistics" feature showing a table with statistics on image/signal
 and eventually regions of interest (min, max, mean, standard deviation, sum, ...)

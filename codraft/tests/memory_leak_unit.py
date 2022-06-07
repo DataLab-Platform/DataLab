@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the CECILL License
+# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see codraft/__init__.py for details)
 
 """
@@ -15,6 +15,7 @@ import numpy as np
 import psutil
 
 from codraft.tests.embedded1_unit import HostWindow
+from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves
 
@@ -38,7 +39,7 @@ def memory_leak_test(iterations=100):
             # QApplication.processEvents()
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
-            print(i + 1, ":", memdata, "MB")
+            execenv.print(i + 1, ":", memdata, "MB")
         view_curves(
             np.array(memlist),
             title="Memory leak test for CodraFT application",
