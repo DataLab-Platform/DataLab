@@ -217,15 +217,15 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        rows = sorted(self.objlist.get_selected_rows(), reverse=True)
+        rows = sorted(self.objlist.get_selected_rows())
         row = None
         for row in rows:
             obj = self.objlist[row]
             objcopy = self.create_object()
             objcopy.title = obj.title
             objcopy.copy_data_from(obj)
-            self.insert_object(objcopy, row=row + 1, refresh=False)
-        self.objlist.refresh_list(new_current_row=row + 1)
+            self.add_object(objcopy, refresh=False)
+        self.objlist.refresh_list(new_current_row=-1)
         self.SIG_REFRESH_PLOT.emit()
 
     def copy_metadata(self):
