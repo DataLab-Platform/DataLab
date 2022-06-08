@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-07 18:01+0200\n"
+"POT-Creation-Date: 2022-06-08 10:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#: codraft\core\gui\actionhandler.py:164 codraft\core\gui\panel.py:274
+#: codraft\core\gui\actionhandler.py:164 codraft\core\gui\panel.py:277
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -350,182 +350,182 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: codraft\core\gui\h5io.py:104 codraft\core\gui\main.py:156
-#: codraft\core\gui\main.py:590
+#: codraft\core\gui\h5io.py:104 codraft\core\gui\main.py:153
+#: codraft\core\gui\main.py:589
 msgid "Warning"
 msgstr "Attention"
 
-#: codraft\core\gui\main.py:157
+#: codraft\core\gui\main.py:154
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: codraft\core\gui\main.py:173
+#: codraft\core\gui\main.py:170
 msgid "Unable to open file"
 msgstr "Impossible d'ouvrir le fichier"
 
-#: codraft\core\gui\main.py:178
+#: codraft\core\gui\main.py:175
 msgid "Invalid dependency:"
 msgstr "Dépendance invalide :"
 
-#: codraft\core\gui\main.py:180
+#: codraft\core\gui\main.py:177
 msgid "Invalid dependencies:"
 msgstr "Dépendances invalides :"
 
-#: codraft\core\gui\main.py:186
+#: codraft\core\gui\main.py:183
 msgid "At least one dependency has been altered."
 msgstr "Au moins une dépendance a été altérée."
 
-#: codraft\core\gui\main.py:187
+#: codraft\core\gui\main.py:184
 msgid "Application may not behave as expected."
 msgstr "L'application n'a pas été qualifiée dans ce référentiel."
 
-#: codraft\core\gui\main.py:199
+#: codraft\core\gui\main.py:198
 msgid "Log files were generated during last session."
 msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
-#: codraft\core\gui\main.py:201
+#: codraft\core\gui\main.py:200
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: codraft\core\gui\main.py:266
+#: codraft\core\gui\main.py:265
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: codraft\core\gui\main.py:285
+#: codraft\core\gui\main.py:284
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: codraft\core\gui\main.py:287
+#: codraft\core\gui\main.py:286
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: codraft\core\gui\main.py:292
+#: codraft\core\gui\main.py:291
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: codraft\core\gui\main.py:294
+#: codraft\core\gui\main.py:293
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: codraft\core\gui\main.py:299
+#: codraft\core\gui\main.py:298
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: codraft\core\gui\main.py:301
+#: codraft\core\gui\main.py:300
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: codraft\core\gui\main.py:304
+#: codraft\core\gui\main.py:303
 msgid "HDF5 I/O Toolbar"
 msgstr "Barre d'outils d'entrées/sorties HDF5"
 
-#: codraft\core\gui\main.py:310
+#: codraft\core\gui\main.py:309
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: codraft\core\gui\main.py:311
+#: codraft\core\gui\main.py:310
 msgid "Hide CodraFT window"
 msgstr "Cacher la fenêtre de CodraFT"
 
-#: codraft\core\gui\main.py:313 codraft\core\gui\main.py:670
+#: codraft\core\gui\main.py:312 codraft\core\gui\main.py:669
 msgid "Quit"
 msgstr "Quitter"
 
-#: codraft\core\gui\main.py:314
+#: codraft\core\gui\main.py:313
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: codraft\core\gui\main.py:326
+#: codraft\core\gui\main.py:325
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: codraft\core\gui\main.py:327
+#: codraft\core\gui\main.py:326
 msgid "Curve Plotting Toolbar"
 msgstr "Barre d'outils d'affichage de courbes"
 
-#: codraft\core\gui\main.py:339
+#: codraft\core\gui\main.py:338
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: codraft\core\gui\main.py:340
+#: codraft\core\gui\main.py:339
 msgid "Image Visualization Toolbar"
 msgstr "Barre d'outils d'affichage d'images"
 
-#: codraft\core\gui\main.py:368
+#: codraft\core\gui\main.py:367
 msgid "Signals"
 msgstr "Signaux"
 
-#: codraft\core\gui\main.py:369
+#: codraft\core\gui\main.py:368
 msgid "Images"
 msgstr "Images"
 
-#: codraft\core\gui\main.py:370
+#: codraft\core\gui\main.py:369
 msgid "Main panel"
 msgstr "Panneau principal"
 
-#: codraft\core\gui\main.py:371
+#: codraft\core\gui\main.py:370
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: codraft\core\gui\main.py:372
+#: codraft\core\gui\main.py:371
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: codraft\core\gui\main.py:384
+#: codraft\core\gui\main.py:383
 msgid "File"
 msgstr "Fichier"
 
-#: codraft\core\gui\main.py:386
+#: codraft\core\gui\main.py:385
 msgid "&Edit"
 msgstr "&Édition"
 
-#: codraft\core\gui\main.py:387
+#: codraft\core\gui\main.py:386
 msgid "Operations"
 msgstr "Opérations"
 
-#: codraft\core\gui\main.py:388
+#: codraft\core\gui\main.py:387
 msgid "Processing"
 msgstr "Traitement"
 
-#: codraft\core\gui\main.py:389
+#: codraft\core\gui\main.py:388
 msgid "Computing"
 msgstr "Calculs"
 
-#: codraft\core\gui\main.py:390
+#: codraft\core\gui\main.py:389
 msgid "&View"
 msgstr "&Affichage"
 
-#: codraft\core\gui\main.py:402 codraft\core\gui\main.py:437
+#: codraft\core\gui\main.py:401 codraft\core\gui\main.py:436
 msgid "About..."
 msgstr "À propos..."
 
-#: codraft\core\gui\main.py:408
+#: codraft\core\gui\main.py:407
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: codraft\core\gui\main.py:414
+#: codraft\core\gui\main.py:413
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: codraft\core\gui\main.py:420
+#: codraft\core\gui\main.py:419
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: codraft\core\gui\main.py:427
+#: codraft\core\gui\main.py:426
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: codraft\core\gui\main.py:477
+#: codraft\core\gui\main.py:476
 msgid "Console"
 msgstr "Console"
 
-#: codraft\core\gui\main.py:569
+#: codraft\core\gui\main.py:568
 msgid "Save"
 msgstr "Enregistrer"
 
-#: codraft\core\gui\main.py:591
+#: codraft\core\gui\main.py:590
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -533,15 +533,15 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:603 codraft\core\gui\panel.py:314
+#: codraft\core\gui\main.py:602 codraft\core\gui\panel.py:317
 msgid "Open"
 msgstr "Ouvrir"
 
-#: codraft\core\gui\main.py:632
+#: codraft\core\gui\main.py:631
 msgid "About "
 msgstr "À propos de "
 
-#: codraft\core\gui\main.py:671
+#: codraft\core\gui\main.py:670
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "CodraFT?"
@@ -549,48 +549,48 @@ msgstr ""
 "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 "
 "avant de quitter CodraFT ?"
 
-#: codraft\core\gui\panel.py:91
+#: codraft\core\gui\panel.py:94
 msgid "Properties"
 msgstr "Propriétés"
 
-#: codraft\core\gui\panel.py:275
+#: codraft\core\gui\panel.py:278
 msgid "Do you want to delete all objects from the %s?"
 msgstr "Souhaitez-vous supprimer tous les objects depuis le %s ?"
 
-#: codraft\core\gui\panel.py:342
+#: codraft\core\gui\panel.py:345
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\panel.py:360
+#: codraft\core\gui\panel.py:363
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\panel.py:415
+#: codraft\core\gui\panel.py:418
 msgid "Annotations"
 msgstr "Annotations"
 
-#: codraft\core\gui\panel.py:530 codraft\core\gui\roieditor.py:106
+#: codraft\core\gui\panel.py:533 codraft\core\gui\roieditor.py:106
 #: codraft\core\model\base.py:494
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: codraft\core\gui\panel.py:560
+#: codraft\core\gui\panel.py:563
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: codraft\core\gui\panel.py:561
+#: codraft\core\gui\panel.py:564
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: codraft\core\gui\panel.py:596 codraft\core\gui\processor\base.py:267
+#: codraft\core\gui\panel.py:599 codraft\core\gui\processor\base.py:267
 msgid "Results"
 msgstr "Résultats"
 
-#: codraft\core\gui\panel.py:610
+#: codraft\core\gui\panel.py:613
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: codraft\core\gui\panel.py:612
+#: codraft\core\gui\panel.py:615
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -598,15 +598,15 @@ msgstr ""
 "Cette fonctionnalité permet d'afficher les tableaux de résultats tels "
 "qu'obtenus après avoir réalisé des calculs (voir menu \"Calculs\")."
 
-#: codraft\core\gui\panel.py:703
+#: codraft\core\gui\panel.py:706
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: codraft\core\gui\panel.py:703 codraft\core\gui\panel.py:803
+#: codraft\core\gui\panel.py:706 codraft\core\gui\panel.py:806
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\panel.py:714 codraft\utils\qthelpers.py:235
+#: codraft\core\gui\panel.py:717 codraft\utils\qthelpers.py:235
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 
@@ -1167,11 +1167,11 @@ msgstr "Cocher tout"
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: codraft\widgets\logviewer.py:56
+#: codraft\widgets\logviewer.py:58
 msgid "CodraFT log files"
 msgstr "Journaux de bord de CodraFT"
 
-#: codraft\widgets\logviewer.py:92
+#: codraft\widgets\logviewer.py:96
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 

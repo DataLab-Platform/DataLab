@@ -48,6 +48,7 @@ from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.utils import dephash, env
 from codraft.utils import qthelpers as qth
+from codraft.utils.env import execenv
 from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
 
@@ -191,7 +192,9 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def check_for_previous_crash(self):
         """Check for previous crash"""
-        if Conf.main.faulthandler_log_available.get(
+        if execenv.unattended:
+            self.show_log_viewer()
+        elif Conf.main.faulthandler_log_available.get(
             False
         ) or Conf.main.traceback_log_available.get(False):
             txt = "<br>".join(

@@ -15,7 +15,8 @@ from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from codraft.config import APP_NAME, Conf, _, get_old_log_fname
-from codraft.utils.qthelpers import exec_dialog, qt_app_context
+from codraft.utils.env import execenv
+from codraft.utils.qthelpers import exec_dialog
 
 
 def get_title_contents(path):
@@ -53,6 +54,7 @@ class LogViewerWindow(QW.QDialog):
 
     def __init__(self, fnames, parent=None):
         super().__init__(parent)
+        self.setObjectName("logviewer")
         self.setWindowTitle(_("CodraFT log files"))
         self.setWindowIcon(get_icon("codraft.svg"))
         self.tabs = QW.QTabWidget()
@@ -89,17 +91,10 @@ def exec_codraft_logviewer_dialog(parent=None):
     ]
     dlg = LogViewerWindow(fnames, parent=parent)
     if dlg.is_empty:
-        QW.QMessageBox.information(dlg, APP_NAME, _("Log files are currently empty."))
+        if not execenv.unattended:
+            QW.QMessageBox.information(
+                dlg, APP_NAME, _("Log files are currently empty.")
+            )
         dlg.close()
     else:
         exec_dialog(dlg)
-
-
-def test_log_viewer():
-    """Test log viewer window"""
-    with qt_app_context():
-        exec_codraft_logviewer_dialog()
-
-
-if __name__ == "__main__":
-    test_log_viewer()
