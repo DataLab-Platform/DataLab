@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/signal/menu/computing.rst:2
+msgid "\"Computing\" menu"
+msgstr "Menu \"Calculs\""
+
+#: ../../features/signal/menu/computing.rst:16
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
+
+#: ../../features/signal/menu/computing.rst:7
+msgid ""
+"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
+"stored as metadata, and thus attached to signal."
+msgstr ""
+"Ouvre une boîte de dialogue pour définir des régions d'intérêt (ROI) "
+"multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
+"sont donc attachées au signal."
+
+#: ../../features/signal/menu/computing.rst:10
+msgid ""
+"ROI definition dialog is exactly the same as ROI extraction (see above): "
+"the ROI is defined by moving the position and adjusting the width of an "
+"horizontal range."
+msgstr ""
+"La boîte de dialogue de définition de ROI est exactement la même que "
+"celle utilisée pour l'extraction de ROI (voir plus haut) : la ROI est "
+"définie est ajustant la position et la largeur de l'échelle horizontale "
+"de sélection."
+
+#: ../../features/signal/menu/computing.rst:16
+msgid "A signal with an ROI."
+msgstr "Un signal avec une ROI."
+
+#: ../../features/signal/menu/computing.rst:24
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: ../../features/signal/menu/computing.rst:19
+msgid "Compute statistics on selected signal and show a summary table."
+msgstr ""
+"Calcule des statistiques sur les signaux sélectionnés et affiche un "
+"tableau récapitulatif."
+
+#: ../../features/signal/menu/computing.rst:23
+msgid ""
+"Example of statistical summary table: each row is associated to an ROI "
+"(the first row gives the statistics for the whole data)."
+msgstr ""
+"Exemple de tableau récapitulatif de statistiques : chaque ligne est "
+"associée à une ROI (à l'exception de la première qui correspond aux "
+"statistiques calculées sur la totalité des données)."
+
+#: ../../features/signal/menu/computing.rst:33
+msgid "Full width at half-maximum"
+msgstr "Largeur à mi-hauteur"
+
+#: ../../features/signal/menu/computing.rst:27
+msgid ""
+"Fit data to a Gaussian, Lorentzian or Voigt model using least-square "
+"method. Then, compute the full width at half-maximum value."
+msgstr ""
+"Réalise l'ajustement des données à une gaussienne, une lorenztienne ou "
+"une courbe de Voigt en utilisant un algorithme de moindres carrés. "
+"Calcule ensuite la largeur à mi-hauteur du modèle d'ajustement."
+
+#: ../../features/signal/menu/computing.rst:33
+msgid "The computed result is displayed as an annotated segment."
+msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
+
+#: ../../features/signal/menu/computing.rst:37
+msgid "Full width at 1/e²"
+msgstr "Largeur à 1/e²"
+
+#: ../../features/signal/menu/computing.rst:36
+msgid ""
+"Fit data to a Gaussian model using least-square method. Then, compute the"
+" full width at 1/e²."
+msgstr ""
+"Réalise l'ajustement des données à une gaussienne en utilisant un "
+"algorithme de moindres carrés. Calcule ensuite la largeur à 1/e² du "
+"modèle d'ajustement."
+
+#: ../../features/signal/menu/computing.rst:39
+msgid ""
+"Computed scalar results are systematically stored as metadata. Metadata "
+"is attached to signal and serialized with it when exporting current "
+"session in a HDF5 file."
+msgstr ""
+"Les résultats de calcul scalaires sont systématiquement stockés dans les "
+"métadonnées. Les métadonnées sont attachées au signal et sérialisées avec"
+" ce dernier par exemple lors de l'export d'une session de CodraFT vers un"
+" fichier HDF5."

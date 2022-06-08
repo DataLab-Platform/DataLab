@@ -1,0 +1,127 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/image/menu/processing.rst:2
+msgid "\"Processing\" menu"
+msgstr "Menu \"Traitement\""
+
+#: ../../features/image/menu/processing.rst:15
+#: ../../features/image/menu/processing.rst:17
+msgid "Linear calibration"
+msgstr "Étalonnage linéaire"
+
+#: ../../features/image/menu/processing.rst:7
+msgid ""
+"Create a new image which is a linear calibration of each selected image "
+"with respect to Z axis:"
+msgstr ""
+"Crée une image à partir de l'étalonnage linéaire (par rapport à l'axe des"
+" Z) de chaque image sélectionnée."
+
+#: ../../features/image/menu/processing.rst:14
+msgid "Parameter"
+msgstr "Paramètre"
+
+#: ../../features/image/menu/processing.rst:16
+msgid "Z-axis"
+msgstr "Axe des Z"
+
+#: ../../features/image/menu/processing.rst:17
+msgid ":math:`z_{1} = a.z_{0} + b`"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:20
+msgid "Thresholding"
+msgstr "Seuillage"
+
+#: ../../features/image/menu/processing.rst:20
+msgid "Apply the thresholding to each selected image."
+msgstr "Applique un seuillage sur chaque image sélectionnée."
+
+#: ../../features/image/menu/processing.rst:23
+msgid "Clipping"
+msgstr "Ecrêtage"
+
+#: ../../features/image/menu/processing.rst:23
+msgid "Apply the clipping to each selected image."
+msgstr "Applique un écrêtage sur chaque image sélectionnée."
+
+#: ../../features/image/menu/processing.rst:27
+msgid "Moving average"
+msgstr "Moyenne mobile"
+
+#: ../../features/image/menu/processing.rst:26
+msgid ""
+"Compute moving average of each selected image (implementation based on "
+"`scipy.ndimage.uniform_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_)."
+msgstr ""
+"Calcule le résultat de la moyenne mobile de chaque image sélectionnée "
+"(implémentation basée sur `scipy.ndimage.uniform_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_)."
+
+#: ../../features/image/menu/processing.rst:31
+msgid "Moving median"
+msgstr "Médiane mobile"
+
+#: ../../features/image/menu/processing.rst:30
+msgid ""
+"Compute moving median of each selected image (implementation based on "
+"`scipy.signal.medfilt "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
+msgstr ""
+"Calcule le résultat de la médiane mobile de chaque image sélectionnée "
+"(implémentation basée sur `scipy.signal.medfilt "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
+
+#: ../../features/image/menu/processing.rst:35
+msgid "Wiener filter"
+msgstr "Filtre de Wiener"
+
+#: ../../features/image/menu/processing.rst:34
+msgid ""
+"Compute Wiener filter of each selected image (implementation based on "
+"`scipy.signal.wiener "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
+msgstr ""
+"Calcule le résultat du filtre de Wiener sur chaque image sélectionnée "
+"(implémentation basée sur `scipy.signal.wiener "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
+
+#: ../../features/image/menu/processing.rst:39
+msgid "FFT"
+msgstr "FFT"
+
+#: ../../features/image/menu/processing.rst:38
+msgid ""
+"Create a new image which is the Fast Fourier Transform (FFT) of each "
+"selected image."
+msgstr ""
+"Crée une image à partir de la transformée de Fourier rapide (FFT) de "
+"chaque image sélectionnée."
+
+#: ../../features/image/menu/processing.rst:41
+msgid "Inverse FFT"
+msgstr "FFT inverse"
+
+#: ../../features/image/menu/processing.rst:42
+msgid "Create a new image which is the inverse FFT of each selected image."
+msgstr ""
+"Crée une image à partir de la transformée de Fourier rapide inverse (FFT "
+"inverse) de chaque image sélectionnée."

@@ -1,0 +1,180 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/signal/menu/operation.rst:2
+msgid "\"Operation\" menu"
+msgstr "Menu \"Opérations\""
+
+#: ../../features/signal/menu/operation.rst:10
+msgid "Sum"
+msgstr "Addition"
+
+#: ../../features/signal/menu/operation.rst:7
+msgid "Create a new signal which is the sum of all selected signals:"
+msgstr "Crée un signal à partir de la somme des signaux sélectionnés :"
+
+#: ../../features/signal/menu/operation.rst:9
+msgid ""
+"y_{M} = \\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:16
+msgid "Average"
+msgstr "Moyenne"
+
+#: ../../features/signal/menu/operation.rst:13
+msgid "Create a new signal which is the average of all selected signals:"
+msgstr "Crée un signal à partir de la moyenne des signaux sélectionnés :"
+
+#: ../../features/signal/menu/operation.rst:15
+msgid ""
+"y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:23
+msgid "Difference"
+msgstr "Soustraction"
+
+#: ../../features/signal/menu/operation.rst:19
+msgid ""
+"Create a new signal which is the difference of the **two** selected "
+"signals:"
+msgstr ""
+"Crée un signal à partir de la différence des **deux** signaux "
+"sélectionnés :"
+
+#: ../../features/signal/menu/operation.rst:22
+msgid ""
+"y_{2} = y_{1} - y_{0}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:29
+msgid "Product"
+msgstr "Produit"
+
+#: ../../features/signal/menu/operation.rst:26
+msgid "Create a new signal which is the product of all selected signals:"
+msgstr "Crée un signal à partir du produit de tous les signaux sélectionnés :"
+
+#: ../../features/signal/menu/operation.rst:28
+msgid ""
+"y_{M} = \\prod_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:35
+msgid "Division"
+msgstr "Division"
+
+#: ../../features/signal/menu/operation.rst:32
+msgid "Create a new signal which is the division of the **two** selected signals:"
+msgstr "Crée un signal à partir de la division des **deux** signaux sélectionnés :"
+
+#: ../../features/signal/menu/operation.rst:34
+msgid ""
+"y_{2} = \\dfrac{y_{1}}{y_{0}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:41
+msgid "Absolute value"
+msgstr "Valeur absolue"
+
+#: ../../features/signal/menu/operation.rst:38
+msgid "Create a new signal which is the absolute value of each selected signal:"
+msgstr ""
+"Crée un signal à partir de la valeur absolue de chaque signal sélectionné"
+" :"
+
+#: ../../features/signal/menu/operation.rst:40
+msgid ""
+"y_{k} = |y_{k-1}|\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:47
+msgid "Log10(y)"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:44
+msgid ""
+"Create a new signal which is the base 10 logarithm of each selected "
+"signal:"
+msgstr ""
+"Crée un signal à partir du logarithme base 10 de chaque signal "
+"sélectionné :"
+
+#: ../../features/signal/menu/operation.rst:46
+msgid ""
+"z_{k} = \\log_{10}(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:57
+msgid "Peak detection"
+msgstr "Détection de pics"
+
+#: ../../features/signal/menu/operation.rst:50
+msgid ""
+"Create a new signal from semi-automatic peak detection of each selected "
+"signal."
+msgstr ""
+"Crée un signal à partir de la détection automatique des pics de chaque "
+"signal sélectionné :"
+
+#: ../../features/signal/menu/operation.rst:55
+msgid ""
+"Peak detection dialog: threshold is adjustable by moving the horizontal "
+"marker, peaks are detected automatically (see vertical markers with "
+"labels indicating peak position)"
+msgstr ""
+"Boîte de dialogue de détection de pics : le seuil de détection est "
+"ajustable en déplaçant le curseur horizontal, les pics sont détectés "
+"automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
+" leur position)"
+
+#: ../../features/signal/menu/operation.rst:65
+msgid "ROI extraction"
+msgstr "Extraction de ROI"
+
+#: ../../features/signal/menu/operation.rst:60
+msgid "Create a new signal from a user-defined Region of Interest (ROI)."
+msgstr ""
+"Crée un signal à partir d'une région d'intérêt (ROI) définie par "
+"l'utilisateur."
+
+#: ../../features/signal/menu/operation.rst:64
+msgid ""
+"ROI extraction dialog: the ROI is defined by moving the position and "
+"adjusting the width of an horizontal range."
+msgstr ""
+"Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
+"définie en ajustant la position et la largeur de l'échelle horizontale de"
+" sélection."
+
+#: ../../features/signal/menu/operation.rst:67
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
+#: ../../features/signal/menu/operation.rst:68
+msgid "Create a new signal which is the result of swapping X/Y data."
+msgstr "Crée un signal à partir des données inversées X/Y du signal sélectionné."

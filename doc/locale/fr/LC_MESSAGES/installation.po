@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 17:58+0200\n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,39 +139,53 @@ msgid "How to install"
 msgstr "Procédure d'installation"
 
 #: ../../installation.rst:52
-msgid "From the installer:"
-msgstr "Depuis l'installeur :"
+msgid "Windows installer:"
+msgstr "Installeur Windows :"
 
 #: ../../installation.rst:54
 msgid ""
-"CodraFT is available as a stand-alone application, which does not require"
-" any Python distribution to be installed. Just run the installer and "
-"you're good to go!"
+"CodraFT is available as a stand-alone application for Windows, which does"
+" not require any Python distribution to be installed. Just run the "
+"installer and you're good to go!"
 msgstr ""
 "CodraFT est disponible depuis une application autonome, qui ne nécessite "
 "aucune installation préalable de Python. Exécutez simplement l'installeur"
 " et laissez vous guider !"
 
-#: ../../installation.rst:58
-msgid "The installer package is available in the `Releases`_ section."
-msgstr "L'installeur exécutable est disponible dans la rubrique `Releases`_."
+#: ../../installation.rst:60
+msgid ""
+"The installer package is available in the `Releases`_ section. It "
+"supports automatic uninstall and upgrade feature (no need to uninstall "
+"CodraFT before runinng the installer of another version of the "
+"application)."
+msgstr "Le programme d'installation peut être téléchargé depuis la pagee `Releases`_. L'installeur prend en charge la fonctionnalité de désinstallation automatique lors d'une mise à jour (il n'est pas utile de désinstaller une version de CodraFT avant d'exécuter l'installeur d'une nouvelle version du logiciel."
 
-#: ../../installation.rst:64
-msgid "From the source package::"
-msgstr "Depuis le paquet source::"
+#: ../../installation.rst:68
+msgid "Wheel package:"
+msgstr "Paquet wheel :"
 
-#: ../../installation.rst:66
-msgid "$ python setup.py install"
-msgstr ""
+#: ../../installation.rst:70
+msgid ""
+"On any operating system, using pip and the Wheel package is the easiest "
+"way to install CodraFT on an existing Python distribution:"
+msgstr "Depuis n'importe quel système d'exploitation, utiliser pip et le paquet Wheel est la méthode la plus simple pour installer CodraFT sur une distribution Python préexistante :"
 
-#: ../../installation.rst:69
-msgid "From the wheel package::"
-msgstr "Depuis le paquet wheel::"
+#: ../../installation.rst:79
+msgid "Source package:"
+msgstr "Paquet source :"
 
-#: ../../installation.rst:71
-msgid "$ pip install --upgrade --no-deps codraft-1.7.0-py2.py3-none-any.whl"
-msgstr ""
+#: ../../installation.rst:81
+msgid "Installing CodraFT directly from the source package is straigthforward:"
+msgstr "Installer CodraFT directement depuis le paquet source n'est guère plus compliqué :"
 
 #~ msgid "4.1"
 #~ msgstr ""
 
+#~ msgid "The installer package is available in the `Releases`_ section."
+#~ msgstr "L'installeur exécutable est disponible dans la rubrique `Releases`_."
+
+#~ msgid "$ python setup.py install"
+#~ msgstr ""
+
+#~ msgid "$ pip install --upgrade --no-deps codraft-1.7.0-py2.py3-none-any.whl"
+#~ msgstr ""

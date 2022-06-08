@@ -1,0 +1,185 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/signal/menu/file.rst:2
+msgid "\"File\" menu"
+msgstr "Menu \"Fichier\""
+
+#: ../../features/signal/menu/file.rst:24
+msgid "New signal"
+msgstr "Nouveau signal"
+
+#: ../../features/signal/menu/file.rst:7
+msgid "Create a new signal from various models:"
+msgstr "Crée un nouveau signal depuis différents modèles :"
+
+#: ../../features/signal/menu/file.rst:13
+msgid "Model"
+msgstr "Modèle"
+
+#: ../../features/signal/menu/file.rst:14
+msgid "Equation"
+msgstr "Equation"
+
+#: ../../features/signal/menu/file.rst:15
+msgid "Zeros"
+msgstr "Zéros"
+
+#: ../../features/signal/menu/file.rst:16
+msgid ":math:`y[i] = 0`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:17
+msgid "Random"
+msgstr "Aléatoire"
+
+#: ../../features/signal/menu/file.rst:18
+msgid ":math:`y[i] \\in [-0.5, 0.5]`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:19
+msgid "Gaussian"
+msgstr "Gaussienne"
+
+#: ../../features/signal/menu/file.rst:20
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:21
+msgid "Lorentzian"
+msgstr "Lorentzienne"
+
+#: ../../features/signal/menu/file.rst:22
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:23
+msgid "Voigt"
+msgstr "Voigt"
+
+#: ../../features/signal/menu/file.rst:24
+msgid ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgstr ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+
+#: ../../features/signal/menu/file.rst:37
+msgid "Open signal"
+msgstr "Ouvrir un signal"
+
+#: ../../features/signal/menu/file.rst:27
+msgid "Create a new signal from the following supported filetypes:"
+msgstr "Crée un signal depuis l'un des types de fichiers pris en charge :"
+
+#: ../../features/signal/menu/file.rst:32
+#: ../../features/signal/menu/file.rst:45
+msgid "File type"
+msgstr "Type de fichier"
+
+#: ../../features/signal/menu/file.rst:33
+#: ../../features/signal/menu/file.rst:46
+msgid "Extensions"
+msgstr "Extensions"
+
+#: ../../features/signal/menu/file.rst:34
+#: ../../features/signal/menu/file.rst:47
+msgid "Text files"
+msgstr "Fichiers texte"
+
+#: ../../features/signal/menu/file.rst:35
+msgid ".txt, .csv"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:36
+msgid "NumPy arrays"
+msgstr "Tableaux NumPy"
+
+#: ../../features/signal/menu/file.rst:37
+msgid ".npy"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:48
+msgid "Save signal"
+msgstr "Enregistrer un signal"
+
+#: ../../features/signal/menu/file.rst:40
+msgid "Save current signal to the following supported filetypes:"
+msgstr ""
+"Enregistre le signal sélectionné dans l'un des types de fichier pris en "
+"charge :"
+
+#: ../../features/signal/menu/file.rst:48
+msgid ".csv"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:51
+msgid "Import metadata into signal"
+msgstr "Importer des métadonnées dans un signal"
+
+#: ../../features/signal/menu/file.rst:51
+msgid "Import metadata from a JSON text file."
+msgstr "Importe des métadonnées depuis un fichier texte JSON."
+
+#: ../../features/signal/menu/file.rst:54
+msgid "Export metadata from signal"
+msgstr "Exporter les métadonnées d'un signal"
+
+#: ../../features/signal/menu/file.rst:54
+msgid "Export metadata to a JSON text file."
+msgstr "Exporte les métadonnées dans un fichier texte JSON."
+
+#: ../../features/signal/menu/file.rst:57
+msgid "Open HDF5 file"
+msgstr "Ouvrir un fichier HDF5"
+
+#: ../../features/signal/menu/file.rst:57
+msgid "Import data from a HDF5 file."
+msgstr "Importer les données d'un fichier HDF5."
+
+#: ../../features/signal/menu/file.rst:60
+msgid "Save to HDF5 file"
+msgstr "Enregistrer un fichier HDF5"
+
+#: ../../features/signal/menu/file.rst:60
+msgid ""
+"Export the whole CodraFT session (all signals and images) into a HDF5 "
+"file."
+msgstr ""
+"Exporter l'ensemble de la session CodraFT (tous les signaux et images) "
+"vers un fichier HDF5."
+
+#: ../../features/signal/menu/file.rst:63
+msgid "Browse HDF5 file"
+msgstr "Explorer un fichier HDF5"
+
+#: ../../features/signal/menu/file.rst:63
+msgid ""
+"Open the :ref:`h5browser` in a new window to browse and import data from "
+"HDF5 file."
+msgstr ""
+"Ouvrir l':ref:`h5browser` dans un nouvelle fenêtre pour explorer et "
+"éventuellement importer des données depuis un fichier HDF5."

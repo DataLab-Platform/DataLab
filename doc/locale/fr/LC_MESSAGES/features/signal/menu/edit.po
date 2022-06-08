@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/signal/menu/edit.rst:2
+msgid "\"Edit\" menu"
+msgstr "Menu \"Edition\""
+
+#: ../../features/signal/menu/edit.rst:7
+msgid "Duplicate"
+msgstr "Dupliquer"
+
+#: ../../features/signal/menu/edit.rst:7
+msgid "Create a new signal which is identical to the currently selected object."
+msgstr "Crée un nouveau signal identique à l'objet sélectionné."
+
+#: ../../features/signal/menu/edit.rst:10
+msgid "Remove"
+msgstr "Supprimer"
+
+#: ../../features/signal/menu/edit.rst:10
+msgid "Remove currently selected signal."
+msgstr "Supprimer le signal sélectionné."
+
+#: ../../features/signal/menu/edit.rst:13
+msgid "Delete all"
+msgstr "Supprimer tout"
+
+#: ../../features/signal/menu/edit.rst:13
+msgid "Delete all signals."
+msgstr "Supprimer tous les signaux."
+
+#: ../../features/signal/menu/edit.rst:16
+msgid "Copy metadata"
+msgstr "Copier les métadonnées"
+
+#: ../../features/signal/menu/edit.rst:16
+msgid "Copy metadata from currently selected image into clipboard."
+msgstr "Copier les métadonnées de l'image sélectionnée vers le presse-papier."
+
+#: ../../features/signal/menu/edit.rst:19
+msgid "Paste metadata"
+msgstr "Coller les métadonnées"
+
+#: ../../features/signal/menu/edit.rst:19
+msgid "Paste metadata from clipboard into selected image."
+msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
+
+#: ../../features/signal/menu/edit.rst:23
+msgid "Delete object metadata"
+msgstr "Supprimer les métadonnées"
+
+#: ../../features/signal/menu/edit.rst:22
+msgid ""
+"Delete metadata from currently selected signal. Metadata contains "
+"additionnal information such as Region of Interest or results of "
+"computations"
+msgstr ""
+"Supprime les métadonnées du signal sélectionné. Les métadonnées "
+"contiennent des informations additionnelles telles que les régions "
+"d'intérêt ou encore des résultats de calcul."

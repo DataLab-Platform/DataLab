@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/image/menu/computing.rst:2
+msgid "\"Computing\" menu"
+msgstr "Menu \"Calculs\""
+
+#: ../../features/image/menu/computing.rst:14
+msgid "Regions of interest"
+msgstr "Régions d'intérêt"
+
+#: ../../features/image/menu/computing.rst:7
+msgid ""
+"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
+"stored as metadata, and thus attached to image."
+msgstr ""
+"Ouvre une boîte de dialogue pour définir des régions d'intérêt (ROI) "
+"multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
+"sont donc attachées à l'image."
+
+#: ../../features/image/menu/computing.rst:10
+msgid "ROI definition dialog is exactly the same as ROI extraction (see above)."
+msgstr ""
+"La boîte de dialogue de définition de ROI est identique à celle utilisée "
+"pour l'extraction de ROI (voir plus haut)."
+
+#: ../../features/image/menu/computing.rst:14
+msgid "An image with ROI."
+msgstr "Une image avec une ROI."
+
+#: ../../features/image/menu/computing.rst:22
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: ../../features/image/menu/computing.rst:17
+msgid "Compute statistics on selected image and show a summary table."
+msgstr ""
+"Calcule des statistiques sur les images sélectionnées et affiche un "
+"tableau récapitulatif."
+
+#: ../../features/image/menu/computing.rst:21
+msgid ""
+"Example of statistical summary table: each row is associated to an ROI "
+"(the first row gives the statistics for the whole data)."
+msgstr ""
+"Exemple de tableau récapitulatif de statistiques : chaque ligne est "
+"associée à une ROI (à l'exception de la première qui correspond aux "
+"statistiques calculées sur la totalité des données)."
+
+#: ../../features/image/menu/computing.rst:27
+msgid "Centroid"
+msgstr "Barycentre"
+
+#: ../../features/image/menu/computing.rst:25
+msgid ""
+"Compute image centroid using a Fourier transform method (as discussed by "
+"`Weisshaar et al. <http://www.mnd-umwelttechnik.fh-"
+"wiesbaden.de/pig/weisshaar_u5.pdf>`_). This method is quite insensitive "
+"to background noise."
+msgstr ""
+"Calcule le barycentre en utilisant une méthode basée sur la transformée "
+"de Fourier (telle que décrite dans `Weisshaar et al. <http://www.mnd-"
+"umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_). Cette méthode "
+"présente l'avantage d'être peu sensible au bruit de fond."
+
+#: ../../features/image/menu/computing.rst:34
+msgid "Minimum enclosing circle center"
+msgstr "Centre du cercle minimum"
+
+#: ../../features/image/menu/computing.rst:30
+msgid ""
+"Compute the circle contour enclosing image values above a threshold level"
+" defined as the half-maximum value."
+msgstr ""
+"Calcule le contour circulaire entourant les valeurs de l'image au-delà "
+"d'un seuil (moitié du maximum de l'image)."
+
+#: ../../features/image/menu/computing.rst:34
+msgid ""
+"This feature requires `OpenCV for Python <https://pypi.org/project"
+"/opencv-python/>`_."
+msgstr ""
+"Cette fonctionnalité requiert `OpenCV pour Python "
+"<https://pypi.org/project/opencv-python/>`_."
+
+#: ../../features/image/menu/computing.rst:41
+msgid "2D peak detection"
+msgstr "Détection de pics 2D"
+
+#: ../../features/image/menu/computing.rst:37
+msgid ""
+"Automatically find peaks on image using a minimum-maximum filter "
+"algorithm."
+msgstr ""
+"Détecte automatiquement des pics sur une image en utilisant un algorithme"
+" basé sur des filtres minimum-maximum."
+
+#: ../../features/image/menu/computing.rst:41
+msgid "Example of 2D peak detection."
+msgstr "Exemple de détection de pics 2D."
+
+#: ../../features/image/menu/computing.rst:48
+msgid "Contour detection"
+msgstr "Détection de contours"
+
+#: ../../features/image/menu/computing.rst:44
+msgid "Automatically extract contours and fit them using a circle or an ellipse."
+msgstr ""
+"Détecte automatiquement les contours et ajuste ces derniers par des "
+"cercles ou des ellipses."
+
+#: ../../features/image/menu/computing.rst:48
+msgid "Example of contour detection."
+msgstr "Exemple de détection de contours."
+
+#: ../../features/image/menu/computing.rst:50
+msgid ""
+"Computed scalar results are systematically stored as metadata. Metadata "
+"is attached to image and serialized with it when exporting current "
+"session in a HDF5 file."
+msgstr ""
+"Les résultats de calcul scalaires sont systématiquement stockés dans les "
+"métadonnées. Les métadonnées sont attachées à l'image et sérialisées avec"
+" cette dernière par exemple lors de l'export d'une session de CodraFT "
+"vers un fichier HDF5."

@@ -29,8 +29,8 @@ Copyrights and licensing:
    :caption: Contents:
 
    overview
-   features_sig
-   features_ima
+   features/signal/index
+   features/image/index
    h5browser
    installation
 

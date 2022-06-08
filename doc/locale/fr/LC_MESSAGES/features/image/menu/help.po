@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-08 10:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/image/menu/help.rst:2
+msgid "\"?\" menu"
+msgstr "Menu \"?\""
+
+#: ../../features/image/menu/help.rst:9
+msgid "Online documentation"
+msgstr "Documentation en ligne"
+
+#: ../../features/image/menu/help.rst:7
+msgid "Open the online documentation (english only):"
+msgstr "Affiche la documentation en ligne (disponible uniquement en anglais) :"
+
+#: ../../features/image/menu/help.rst:14
+msgid "CHM documentation"
+msgstr "Documentation CHM"
+
+#: ../../features/image/menu/help.rst:12
+msgid "Open the CHM documentation (french/english and Windows only):"
+msgstr ""
+"Affiche la documentation au format CHM (français/anglais, sous Windows "
+"uniquement) :"
+
+#: ../../features/image/menu/help.rst:19
+msgid "Show log files"
+msgstr "Afficher les journaux de bords"
+
+#: ../../features/image/menu/help.rst:17
+msgid "Open CodraFT log viewer:"
+msgstr "Affiche l'explorateur de journaux de bord de CodraFT :"
+
+#: ../../features/image/menu/help.rst:23
+msgid "About"
+msgstr "À propos"
+
+#: ../../features/image/menu/help.rst:22
+msgid "Open the \"About CodraFT\" dialog box:"
+msgstr "Affiche la boîte de dialogue \"A propos de CodraFT\""
