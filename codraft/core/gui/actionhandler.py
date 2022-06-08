@@ -163,11 +163,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         delall_action = self.cra(
             _("Delete all"),
             shortcut="Shift+Ctrl+Suppr",
+            icon=get_icon("delete_all.svg"),
             triggered=self.panel.delete_all_objects,
         )
         del_action = self.cra(
             _("Remove"),
-            icon=get_icon("libre-gui-trash.svg"),
+            icon=get_icon("delete.svg"),
             triggered=self.panel.remove_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
