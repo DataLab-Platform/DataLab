@@ -275,7 +275,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         answer = QW.QMessageBox.warning(
             self,
             _("Delete all"),
-            _("Do you want to delete all objects from the %s?") % self.PANEL_STR,
+            _("Do you want to delete all objects (%s)?") % self.PANEL_STR,
             QW.QMessageBox.Yes | QW.QMessageBox.No,
         )
         if answer == QW.QMessageBox.Yes:
@@ -625,7 +625,7 @@ class SignalPanel(BasePanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Signal objects"""
 
-    PANEL_STR = "Signal Panel"
+    PANEL_STR = _("Signal List")
     PARAMCLASS = SignalParam
     DIALOGCLASS = CurveDialog
     PREFIX = "s"
@@ -724,7 +724,7 @@ class ImagePanel(BasePanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Image objects"""
 
-    PANEL_STR = "Image Panel"
+    PANEL_STR = _("Image List")
     PARAMCLASS = ImageParam
     DIALOGCLASS = ImageDialog
     DIALOGSIZE = (800, 800)
