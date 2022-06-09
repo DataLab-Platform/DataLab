@@ -15,12 +15,13 @@
 import os
 import sys
 
-os.environ["CODRAFT_DOC"] = "1"
-import codraft
-
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("."))
+
+os.environ["CODRAFT_DOC"] = "1"
 import genreqs
+
+import codraft
 
 genreqs.generate_requirement_tables()
 
