@@ -10,6 +10,7 @@ releases/
 dependencies*.txt
 *.chm
 .doctrees/
+doc/install_requires.txt
 
 # Created by https://www.gitignore.io/api/python
 

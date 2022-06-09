@@ -15,8 +15,14 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+os.environ["CODRAFT_DOC"] = "1"
+import codraft
 
+sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath("."))
+import genreqs
+
+genreqs.generate_requirement_tables()
 
 # -- Project information -----------------------------------------------------
 
@@ -27,11 +33,7 @@ html_logo = latex_logo = "_static/codraft_logo_190.png"
 
 # The full version, including alpha/beta/rc tags
 
-os.environ["CODRAFT_DOC"] = "1"
-import codraft
-
 release = codraft.__version__
-
 
 # -- General configuration ---------------------------------------------------
 

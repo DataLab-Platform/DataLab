@@ -104,16 +104,6 @@ setup(
             ),
         )
     },
-    install_requires=[
-        "h5py>=3.0",
-        "NumPy>=1.21",
-        "SciPy>=1.7",
-        "scikit-image>=0.18",
-        "psutil>=5.5",
-        "guidata>=2.2",
-        "guiqwt>=4.2",
-        "QtPy>=1.9",
-    ],
     entry_points={
         "gui_scripts": [f"{MODNAME} = {MODNAME}.app:run"],
         "console_scripts": [

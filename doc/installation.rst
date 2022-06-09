@@ -7,43 +7,11 @@ Dependencies
 CodraFT requirements are the following *(Note: the Windows installer package
 already include all those required libraries as well as Python itself)*:
 
-.. list-table::
-    :header-rows: 1
-    :widths: 20, 15, 65
+.. include:: install_requires.txt
 
-    * - Name
-      - Version (min.)
-      - Comment
-    * - Python language
-      - 3.7
-      - Python 3.8 is the reference for production release
-    * - PyQt
-      - 5.15
-      - Should work with PySide2/PySide6/PyQt6 as well
-    * - QtPy
-      - 1.9
-      -
-    * - h5py
-      - 3.0
-      -
-    * - psutil
-      - 5.5
-      -
-    * - guidata
-      - 2.2
-      -
-    * - guiqwt
-      - 4.2
-      -
-    * - NumPy
-      - 1.21
-      -
-    * - SciPy
-      - 1.7
-      -
-    * - scikit-image
-      - 0.18
-      -
+.. note::
+
+    Python 3.8 is the reference for production release
 
 How to install
 --------------
