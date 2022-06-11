@@ -82,10 +82,10 @@ def exec_codraft_logviewer_dialog(parent=None):
     fnames = [
         osp.normpath(fname)
         for fname in (
-            Conf.main.faulthandler_log_path.get(),
             Conf.main.traceback_log_path.get(),
-            get_old_log_fname(Conf.main.faulthandler_log_path.get()),
+            Conf.main.faulthandler_log_path.get(),
             get_old_log_fname(Conf.main.traceback_log_path.get()),
+            get_old_log_fname(Conf.main.faulthandler_log_path.get()),
         )
         if osp.isfile(fname)
     ]
