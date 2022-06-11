@@ -94,7 +94,7 @@ def qt_app_context(exec_loop=False, enable_logs=True):
         logging.basicConfig(
             filename=tb_log_fname,
             filemode="w",
-            level=logging.DEBUG,
+            level=logging.CRITICAL,
             format=fmt,
             datefmt=DATETIME_FORMAT,
         )
