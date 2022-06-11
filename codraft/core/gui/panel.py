@@ -32,7 +32,6 @@ import abc
 import dataclasses
 import os.path as osp
 import re
-import traceback
 from typing import List
 
 import guidata.dataset.qtwidgets as gdq
@@ -317,8 +316,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                     self, _("Open"), basedir, self.OPEN_FILTERS
                 )
         for filename in filenames:
-            Conf.main.base_dir.set(filename)
             with qt_try_loadsave_file(self.parent(), filename, "load"):
+                Conf.main.base_dir.set(filename)
                 self.open_object(filename)
 
     def save_objects(self, filenames: List[str] = None) -> None:
@@ -345,10 +344,10 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                     self, _("Import metadata"), basedir, "*.json"
                 )
         if filename:
-            Conf.main.base_dir.set(filename)
-            row = self.objlist.get_selected_rows()[0]
-            obj = self.objlist[row]
             with qt_try_loadsave_file(self.parent(), filename, "load"):
+                Conf.main.base_dir.set(filename)
+                row = self.objlist.get_selected_rows()[0]
+                obj = self.objlist[row]
                 obj.import_metadata_from_file(filename)
             self.SIG_REFRESH_PLOT.emit()
 
@@ -363,8 +362,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                     self, _("Export metadata"), basedir, "*.json"
                 )
         if filename:
-            Conf.main.base_dir.set(filename)
             with qt_try_loadsave_file(self.parent(), filename, "save"):
+                Conf.main.base_dir.set(filename)
                 obj.export_metadata_to_file(filename)
 
     # ------Serializing/deserializing objects-------------------------------------------
@@ -706,18 +705,9 @@ class SignalPanel(BasePanel):
                     self, _("Save as"), basedir, _("CSV files") + " (*.csv)"
                 )
         if filename:
-            Conf.main.base_dir.set(filename)
-            try:
+            with qt_try_loadsave_file(self.parent(), filename, "save"):
+                Conf.main.base_dir.set(filename)
                 np.savetxt(filename, obj.xydata, delimiter=",")
-            except Exception as msg:  # pylint: disable=broad-except
-                traceback.print_exc()
-                QW.QMessageBox.critical(
-                    self.parent(),
-                    APP_NAME,
-                    (_("%s could not be written:") % osp.basename(filename))
-                    + "\n"
-                    + str(msg),
-                )
 
 
 class ImagePanel(BasePanel):
@@ -810,9 +800,9 @@ class ImagePanel(BasePanel):
                     ),
                 )
         if filename:
-            Conf.main.base_dir.set(filename)
             kwargs = {}
             if osp.splitext(filename)[1].lower() == ".dcm":
                 kwargs["template"] = obj.dicom_template
             with qt_try_loadsave_file(self.parent(), filename, "save"):
+                Conf.main.base_dir.set(filename)
                 imwrite(filename, obj.data, **kwargs)

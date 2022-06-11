@@ -9,7 +9,6 @@ Log viewer test: raise an exception and create a seg fault in CodraFT
 
 
 from codraft.core.gui.main import CodraFTMainWindow
-from codraft.tests import codraft_app_context
 from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 

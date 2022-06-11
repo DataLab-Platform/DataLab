@@ -572,9 +572,10 @@ class CodraFTMainWindow(QW.QMainWindow):
                 filename, _filter = getsavefilename(self, _("Save"), basedir, filters)
             if not filename:
                 return
-        Conf.main.base_dir.set(filename)
-        self.h5inputoutput.save_file(filename)
-        self.set_modified(False)
+        with qth.qt_try_loadsave_file(self.parent(), filename, "save"):
+            Conf.main.base_dir.set(filename)
+            self.h5inputoutput.save_file(filename)
+            self.set_modified(False)
 
     def open_h5_files(
         self,

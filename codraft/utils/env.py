@@ -92,7 +92,7 @@ class CodraFTExecEnv:
 
     def parse_args(self):
         """Parse command line arguments"""
-        parser = argparse.ArgumentParser(description="Run ??? test")
+        parser = argparse.ArgumentParser(description="Run CodraFT test")
         parser.add_argument(
             "--mode",
             choices=[self.UNATTENDED_ARG, self.SCREENSHOT_ARG],
