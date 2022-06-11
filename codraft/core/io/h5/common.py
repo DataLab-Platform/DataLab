@@ -31,6 +31,7 @@ class BaseNode(metaclass=abc.ABCMeta):
         self.children = []
         self.uint32_wng = False
 
+    @property
     def id(self):
         """Return node id"""
         return self.dset.name
@@ -88,6 +89,8 @@ class BaseNode(metaclass=abc.ABCMeta):
     def __process_metadata(self, obj):
         """Process metadata from dataset to obj"""
         obj.metadata = {}
+        obj.metadata["HDF5Path"] = self.h5file.filename
+        obj.metadata["HDF5Dataset"] = self.id
         for key, value in self.dset.attrs.items():
             if isinstance(value, bytes):
                 value = to_string(value)

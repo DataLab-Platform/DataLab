@@ -30,11 +30,6 @@ from codraft.core.model.signal import SignalParam
 from codraft.utils.env import execenv
 
 
-def get_item_user_text(item):
-    """Get QTreeWidgetItem user role string"""
-    return item.data(0, QC.Qt.UserRole)
-
-
 class BaseTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -227,7 +222,7 @@ class H5TreeWidget(BaseTreeWidget):
 
     def get_node(self, item):
         """Get HDF5 dataset associated to item"""
-        node_id = get_item_user_text(item)
+        node_id = item.data(0, QC.Qt.UserRole)
         if node_id:
             return self.h5importer.get(node_id)
         return None
@@ -240,7 +235,7 @@ class H5TreeWidget(BaseTreeWidget):
                 if only_checked_items and item.checkState(0) == 0:
                     continue
                 if item is not self.topLevelItem(0):
-                    node_id = get_item_user_text(item)
+                    node_id = item.data(0, QC.Qt.UserRole)
                     datasets.append(self.h5importer.get(node_id))
         return datasets
 
