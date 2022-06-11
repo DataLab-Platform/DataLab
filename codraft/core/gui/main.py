@@ -579,11 +579,16 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def open_h5_files(
         self,
-        filenames: List[str] = None,
+        h5files: List[str] = None,
         import_all: bool = None,
         reset_all: bool = None,
     ) -> None:
-        """Open a CodraFT HDF5 file or import from any other HDF5 file"""
+        """Open a CodraFT HDF5 file or import from any other HDF5 file
+
+        :param h5files: HDF5 filenames (optionally with dataset name, separated by ":")
+        :param import_all: Import all HDF5 file contents
+        :param reset_all: Delete all CodraFT signals and images before importing data
+        """
         if not self.confirm_memory_state():
             return
         if reset_all is None:
@@ -600,23 +605,32 @@ class CodraFTMainWindow(QW.QMainWindow):
                 )
                 if answer == QW.QMessageBox.Yes:
                     reset_all = True
-        if filenames is None:
+        if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
                 filters = f'{_("HDF5 files")} (*.h5)'
-                filenames, _filter = getopenfilenames(self, _("Open"), basedir, filters)
-        for filename in filenames:
-            Conf.main.base_dir.set(filename)
-            bname = osp.basename(filename)
-            if not osp.isfile(filename):
-                raise IOError(f'File not found "{bname}"')
-            if not filename.endswith(".h5"):
-                raise IOError(f'Invalid HDF5 file "{bname}"')
-            if import_all is None:
-                self.h5inputoutput.import_file(filename, False, reset_all)
+                h5files, _filter = getopenfilenames(self, _("Open"), basedir, filters)
+        for fname_with_dset in h5files:
+            if "," in fname_with_dset:
+                filename, dsetname = fname_with_dset.split(",")
             else:
-                self.h5inputoutput.open_file(filename, import_all, reset_all)
-            reset_all = False
+                filename, dsetname = fname_with_dset, None
+            filename = osp.abspath(osp.normpath(filename))
+            with qth.qt_try_loadsave_file(self, filename, "load"):
+                Conf.main.base_dir.set(filename)
+                bname = osp.basename(filename)
+                if not osp.isfile(filename):
+                    raise IOError(f'File not found "{bname}"')
+                if not filename.endswith(".h5"):
+                    raise IOError(f'Invalid HDF5 file "{bname}"')
+                if import_all is None and dsetname is None:
+                    self.h5inputoutput.import_file(filename, False, reset_all)
+                else:
+                    if dsetname is None:
+                        self.h5inputoutput.open_file(filename, import_all, reset_all)
+                    else:
+                        self.h5inputoutput.import_dataset_from_file(filename, dsetname)
+                reset_all = False
 
     def add_object(self, obj, refresh=True):
         """Add object - signal or image"""

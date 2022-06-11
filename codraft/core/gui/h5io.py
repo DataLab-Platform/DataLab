@@ -13,6 +13,7 @@ from qtpy import QtWidgets as QW
 
 from codraft.config import _
 from codraft.core.io.base import NativeH5Reader, NativeH5Writer
+from codraft.core.io.h5 import H5Importer
 from codraft.core.model.signal import SignalParam
 from codraft.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from codraft.widgets.h5browser import H5BrowserDialog
@@ -64,6 +65,22 @@ class H5InputOutput:
                 progress.close()
             self.import_file(filename, import_all, reset_all)
 
+    def __add_object_from_node(self, node):
+        """Add CodraFT object from h5 node"""
+        obj = node.get_object()
+        self.uint32_wng = self.uint32_wng or node.uint32_wng
+        if isinstance(obj, SignalParam):
+            self.mainwindow.signalpanel.add_object(obj)
+        else:
+            self.mainwindow.imagepanel.add_object(obj)
+
+    def __eventually_show_warnings(self):
+        """Eventually show warnings after everything is imported"""
+        if self.uint32_wng:
+            QW.QMessageBox.warning(
+                self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
+            )
+
     def import_file(self, filename, import_all, reset_all):
         """Import HDF5 file"""
         if self.h5browser is None:
@@ -92,14 +109,18 @@ class H5InputOutput:
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    obj = node.get_object()
-                    self.uint32_wng = self.uint32_wng or node.uint32_wng
-                    if isinstance(obj, SignalParam):
-                        self.mainwindow.signalpanel.add_object(obj)
-                    else:
-                        self.mainwindow.imagepanel.add_object(obj)
+                    self.__add_object_from_node(node)
             self.h5browser.cleanup()
-            if self.uint32_wng:
-                QW.QMessageBox.warning(
-                    self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
-                )
+            self.__eventually_show_warnings()
+
+    def import_dataset_from_file(self, filename, dsetname):
+        """Import dataset from HDF5 file"""
+        h5importer = H5Importer(filename)
+        try:
+            node = h5importer.get(dsetname)
+            self.uint32_wng = False
+            self.__add_object_from_node(node)
+            self.__eventually_show_warnings()
+        except KeyError as exc:
+            raise KeyError(f"Dataset not found: {dsetname}") from exc
+        h5importer.close()

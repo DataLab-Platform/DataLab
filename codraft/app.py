@@ -7,6 +7,8 @@
 CodraFT launcher module
 """
 
+import argparse
+
 from guidata.configtools import get_image_file_path
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -44,11 +46,28 @@ def create(
     return window
 
 
+def parse_args():
+    """Parse command line arguments and run CodraFT"""
+    parser = argparse.ArgumentParser(description="Run CodraFT")
+    parser.add_argument(
+        "--h5",
+        type=str,
+        required=False,
+        help="HDF5 file names (separated by ';') with dataset name (separated by ',')",
+    )
+    args, _unknown = parser.parse_known_args()
+    return args
+
+
 def run(console=None, objects=None, h5files=None, size=None):
     """Run the CodraFT application
 
     Note: this function is an entry point in `setup.py` and therefore
     may not be moved without modifying the package setup script."""
+
+    args = parse_args()
+    if args.h5:
+        h5files = ([] if h5files is None else h5files) + args.h5.split(";")
 
     with qt_app_context(exec_loop=True):
         window = create(
