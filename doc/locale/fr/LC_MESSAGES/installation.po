@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2022-06-14 11:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,115 +34,107 @@ msgstr ""
 "Les paquets prérequis de CodraFT sont les suivants *(note : l'installeur "
 "Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
 
-#: ../../installation.rst:14
+#: ../../install_requires.txt:4
 msgid "Name"
 msgstr "Nom"
 
-#: ../../installation.rst:15
+#: ../../install_requires.txt:5
 msgid "Version (min.)"
 msgstr "Version (min.)"
 
-#: ../../installation.rst:16
-msgid "Comment"
-msgstr "Commentaire"
+#: ../../install_requires.txt:6
+msgid "Python"
+msgstr ""
 
-#: ../../installation.rst:17
-msgid "Python language"
-msgstr "Langage Python"
-
-#: ../../installation.rst:18
+#: ../../install_requires.txt:7
 msgid "3.7"
 msgstr ""
 
-#: ../../installation.rst:19
-msgid "Python 3.8 is the reference for production release"
-msgstr "Python 3.8 est la référence de la version de production"
-
-#: ../../installation.rst:20
+#: ../../install_requires.txt:8
 msgid "PyQt"
 msgstr ""
 
-#: ../../installation.rst:21
+#: ../../install_requires.txt:9
 msgid "5.15"
 msgstr ""
 
-#: ../../installation.rst:22
-msgid "Should work with PySide2/PySide6/PyQt6 as well"
-msgstr "PySide2/PySide6/PyQt6 devrait également fonctionner"
-
-#: ../../installation.rst:23
-msgid "QtPy"
-msgstr ""
-
-#: ../../installation.rst:24
-msgid "1.9"
-msgstr ""
-
-#: ../../installation.rst:26
+#: ../../install_requires.txt:10
 msgid "h5py"
 msgstr ""
 
-#: ../../installation.rst:27
+#: ../../install_requires.txt:11
 msgid "3.0"
 msgstr ""
 
-#: ../../installation.rst:29
-msgid "psutil"
-msgstr ""
-
-#: ../../installation.rst:30
-msgid "5.5"
-msgstr ""
-
-#: ../../installation.rst:32
-msgid "guidata"
-msgstr ""
-
-#: ../../installation.rst:33
-msgid "2.2"
-msgstr ""
-
-#: ../../installation.rst:35
-msgid "guiqwt"
-msgstr ""
-
-#: ../../installation.rst:36
-msgid "4.2"
-msgstr ""
-
-#: ../../installation.rst:38
+#: ../../install_requires.txt:12
 msgid "NumPy"
 msgstr ""
 
-#: ../../installation.rst:39
+#: ../../install_requires.txt:13
 msgid "1.21"
 msgstr ""
 
-#: ../../installation.rst:41
+#: ../../install_requires.txt:14
 msgid "SciPy"
 msgstr ""
 
-#: ../../installation.rst:42
+#: ../../install_requires.txt:15
 msgid "1.7"
 msgstr ""
 
-#: ../../installation.rst:44
+#: ../../install_requires.txt:16
 msgid "scikit-image"
 msgstr ""
 
-#: ../../installation.rst:45
+#: ../../install_requires.txt:17
 msgid "0.18"
 msgstr ""
 
-#: ../../installation.rst:49
+#: ../../install_requires.txt:18
+msgid "psutil"
+msgstr ""
+
+#: ../../install_requires.txt:19
+msgid "5.5"
+msgstr ""
+
+#: ../../install_requires.txt:20
+msgid "guidata"
+msgstr ""
+
+#: ../../install_requires.txt:21
+msgid "2.3"
+msgstr ""
+
+#: ../../install_requires.txt:22
+msgid "guiqwt"
+msgstr ""
+
+#: ../../install_requires.txt:23
+msgid "4.3"
+msgstr ""
+
+#: ../../install_requires.txt:24
+msgid "QtPy"
+msgstr ""
+
+#: ../../install_requires.txt:25
+msgid "1.9"
+msgstr ""
+
+#: ../../installation.rst:14
+msgid "Python 3.8 is the reference for production release"
+msgstr "Python 3.8 est la référence de la version de production"
+
+#: ../../installation.rst:17
 msgid "How to install"
 msgstr "Procédure d'installation"
 
-#: ../../installation.rst:52
+#: ../../installation.rst:20
 msgid "Windows installer:"
 msgstr "Installeur Windows :"
 
-#: ../../installation.rst:54
+#: ../../installation.rst:22
 msgid ""
 "CodraFT is available as a stand-alone application for Windows, which does"
 " not require any Python distribution to be installed. Just run the "
@@ -152,31 +144,41 @@ msgstr ""
 "aucune installation préalable de Python. Exécutez simplement l'installeur"
 " et laissez vous guider !"
 
-#: ../../installation.rst:60
+#: ../../installation.rst:28
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
 "CodraFT before runinng the installer of another version of the "
 "application)."
-msgstr "Le programme d'installation peut être téléchargé depuis la pagee `Releases`_. L'installeur prend en charge la fonctionnalité de désinstallation automatique lors d'une mise à jour (il n'est pas utile de désinstaller une version de CodraFT avant d'exécuter l'installeur d'une nouvelle version du logiciel."
+msgstr ""
+"Le programme d'installation peut être téléchargé depuis la pagee "
+"`Releases`_. L'installeur prend en charge la fonctionnalité de "
+"désinstallation automatique lors d'une mise à jour (il n'est pas utile de"
+" désinstaller une version de CodraFT avant d'exécuter l'installeur d'une "
+"nouvelle version du logiciel."
 
-#: ../../installation.rst:68
+#: ../../installation.rst:36
 msgid "Wheel package:"
 msgstr "Paquet wheel :"
 
-#: ../../installation.rst:70
+#: ../../installation.rst:38
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
 "way to install CodraFT on an existing Python distribution:"
-msgstr "Depuis n'importe quel système d'exploitation, utiliser pip et le paquet Wheel est la méthode la plus simple pour installer CodraFT sur une distribution Python préexistante :"
+msgstr ""
+"Depuis n'importe quel système d'exploitation, utiliser pip et le paquet "
+"Wheel est la méthode la plus simple pour installer CodraFT sur une "
+"distribution Python préexistante :"
 
-#: ../../installation.rst:79
+#: ../../installation.rst:47
 msgid "Source package:"
 msgstr "Paquet source :"
 
-#: ../../installation.rst:81
+#: ../../installation.rst:49
 msgid "Installing CodraFT directly from the source package is straigthforward:"
-msgstr "Installer CodraFT directement depuis le paquet source n'est guère plus compliqué :"
+msgstr ""
+"Installer CodraFT directement depuis le paquet source n'est guère plus "
+"compliqué :"
 
 #~ msgid "4.1"
 #~ msgstr ""
@@ -189,3 +191,19 @@ msgstr "Installer CodraFT directement depuis le paquet source n'est guère plus 
 
 #~ msgid "$ pip install --upgrade --no-deps codraft-1.7.0-py2.py3-none-any.whl"
 #~ msgstr ""
+
+#~ msgid "Comment"
+#~ msgstr "Commentaire"
+
+#~ msgid "Python language"
+#~ msgstr "Langage Python"
+
+#~ msgid "Should work with PySide2/PySide6/PyQt6 as well"
+#~ msgstr "PySide2/PySide6/PyQt6 devrait également fonctionner"
+
+#~ msgid "2.2"
+#~ msgstr ""
+
+#~ msgid "4.2"
+#~ msgstr ""
+

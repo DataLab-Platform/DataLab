@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 18:36+0200\n"
+"POT-Creation-Date: 2022-06-14 11:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,9 +21,48 @@ msgstr ""
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-#: ../../h5browser.rst:8
+#: ../../h5browser.rst:6
 msgid ""
-"The \"HDF5 Browser\" is a modal dialog box allowing to import any 1D and "
-"2D data into CodraFT. When possible, metadata informations are also "
-"imported."
-msgstr "L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer n'importe quelles données à 1 ou 2 dimensions dans CodraFT. Dans certains cas, des métadonnées sont également importées."
+"The \"HDF5 Browser\" is a modal dialog box allowing to import almost any "
+"1D and 2D data into CodraFT workspace (and eventually metadata)."
+msgstr ""
+"L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer"
+" presque n'importe quelles données à 1 ou 2 dimensions dans l'espace de "
+"travail de CodraFT. Dans certains cas, des métadonnées sont également "
+"importées."
+
+#: ../../h5browser.rst:11
+msgid ""
+"Compatible curve or image data are displayed in a hierarchical view on "
+"the left panel, as well as other scalar data (scalar values are just "
+"shown for context purpose and may not be imported into CodraFT "
+"workspace)."
+msgstr ""
+"Les données de type courbe ou image sont affichées sous la forme d'une "
+"vue hiérarchique dans le panneau de gauche, de même que les données "
+"scalaires (les valeurs scalaires sont simplement affichées à titre "
+"d'informations contextuelles et ne peuvent pas être importées dans "
+"l'espace de travail de CodraFT)."
+
+#: ../../h5browser.rst:18
+msgid "The HDF5 browser is fairly simple to use:"
+msgstr "L'explorateur de fichiers HDF5 est très simple à utiliser :"
+
+#: ../../h5browser.rst:16
+msgid "On the left panel, select the curve or image data you want to import"
+msgstr "Dans le panneau de gauche, sélectionner la courbe ou l'image à importer"
+
+#: ../../h5browser.rst:17
+msgid "Selected data is plotted on the right panel"
+msgstr "Les données sélectionnées peuvent être visualisées graphiquement dans le panneau de droite"
+
+#: ../../h5browser.rst:18
+msgid "Click on \"Check all\" if you want to import all compatible data"
+msgstr "Cliquer sur \"Cocher tout\" pour importer toutes les données compatibles"
+
+#: ../../h5browser.rst:19
+msgid "Then validate by clicking on \"OK\""
+msgstr "Valider ensuite en cliquant sur \"OK\""
+
+#~ msgid "It is fairly simple to use:"
+#~ msgstr ""

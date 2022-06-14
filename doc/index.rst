@@ -10,6 +10,11 @@ SciPy or OpenCV) and Qt graphical user interfaces (thanks to
 
     Signal and image visualization in CodraFT
 
+CodraFT features are available not only using the **stand-alone application**
+(easily installed thanks to the Windows installer or the Python package)
+but also by **embedding it into your own application**
+(see the "embedded tests" for detailed examples of how to do so).
+
 External resources:
     .. list-table::
         :widths: 20, 80
@@ -20,8 +25,8 @@ External resources:
           - Bug reports and feature requests
 
 Copyrights and licensing:
-  - Copyright © 2018 `CEA`_ - `CODRA`_, Pierre Raybaut
-  - Licensed under the terms of the `CECILL License`_.
+  - Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut
+  - Licensed under the terms of the `BSD / CeCILL-B License`_.
 
 
 .. toctree::
@@ -48,4 +53,4 @@ Indices and tables
 .. _GitHub: https://github.com/CODRA-Ingenierie-Informatique/CodraFT
 .. _CEA: http://www.cea.fr
 .. _CODRA: https://codra.net/
-.. _CECILL License: http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
+.. _BSD / CeCILL-B License: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/LICENSE

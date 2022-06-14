@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-20 18:36+0200\n"
+"POT-Creation-Date: 2022-06-14 11:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../../index.rst:27
+#: ../../index.rst:32
 msgid "Contents:"
 msgstr "Table des matières :"
 
 #: ../../index.rst:2
 msgid "CodraFT user guide"
-msgstr ""
+msgstr "Manuel utilisateur de CodraFT"
 
 #: ../../index.rst:4
 msgid ""
@@ -32,59 +32,70 @@ msgid ""
 " Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
 "libraries)."
 msgstr ""
-"CodraFT est un **logiciel générique de traitement du signal et de l'image** "
-"basé sur des bibliothèques scientifiques Python (telles que NumPy, SciPy "
-"ou encore OpenCV) et sur les interfaces graphiques Qt (grâce aux "
-"bibliothèques `guidata`_ et `guiqwt`_)."
+"CodraFT est un **logiciel générique de traitement du signal et de "
+"l'image** basé sur des bibliothèques scientifiques Python (telles que "
+"NumPy, SciPy ou encore OpenCV) et sur les interfaces graphiques Qt (grâce"
+" aux bibliothèques `guidata`_ et `guiqwt`_)."
 
 #: ../../index.rst:11
 msgid "Signal and image visualization in CodraFT"
 msgstr "Visualisation de signaux et d'images dans CodraFT"
 
-#: ../../index.rst:20
+#: ../../index.rst:13
+msgid ""
+"CodraFT features are available not only using the **stand-alone "
+"application** (easily installed thanks to the Windows installer or the "
+"Python package) but also by **embedding it into your own application** "
+"(see the \"embedded tests\" for detailed examples of how to do so)."
+msgstr "Les fonctionnalités de CodraFT sont disponibles non seulement depuis une **version autonome de l'application** (qui peut être facilement installée grâce à l'installeur Windows ou au paquet Python) mais aussi en **embarquant CodraFT dans votre propre application** (cf. les tests \"embedded\" pour des exemples détaillés sur la façon de procéder)."
+
+#: ../../index.rst:25
 msgid "External resources:"
 msgstr "Ressources externes :"
 
-#: ../../index.rst:17
+#: ../../index.rst:22
 msgid "`PyPI`_"
 msgstr ""
 
-#: ../../index.rst:18
+#: ../../index.rst:23
 msgid "Python Package Index"
 msgstr "Paquet Python officiel"
 
-#: ../../index.rst:19
+#: ../../index.rst:24
 msgid "`GitHub`_"
 msgstr ""
 
-#: ../../index.rst:20
+#: ../../index.rst:25
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:25
+#: ../../index.rst:30
 msgid "Copyrights and licensing:"
 msgstr "Licence et copyrights :"
 
-#: ../../index.rst:23
-msgid "Copyright © 2018 `CEA`_ - `CODRA`_, Pierre Raybaut"
+#: ../../index.rst:28
+msgid "Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut"
 msgstr ""
 
-#: ../../index.rst:24
-msgid "Licensed under the terms of the `CECILL License`_."
-msgstr "Distribué sous licence `CECILL`_."
+#: ../../index.rst:29
+msgid "Licensed under the terms of the `BSD / CeCILL-B License`_."
+msgstr "Distribué sous licence `BSD / CeCILL-B License`_."
 
-#: ../../index.rst:39
+#: ../../index.rst:44
 msgid "Indices and tables"
 msgstr "Index et recherche"
 
-#: ../../index.rst:41
+#: ../../index.rst:46
 msgid ":ref:`genindex`"
 msgstr ""
 
-#: ../../index.rst:42
+#: ../../index.rst:47
 msgid ":ref:`modindex`"
 msgstr ""
 
-#: ../../index.rst:43
+#: ../../index.rst:48
 msgid ":ref:`search`"
 msgstr ""
+
+#~ msgid "Copyright © 2018 `CEA`_ - `CODRA`_, Pierre Raybaut"
+#~ msgstr ""

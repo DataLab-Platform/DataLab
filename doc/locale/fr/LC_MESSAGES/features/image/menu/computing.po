@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2022-06-14 12:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,7 +99,7 @@ msgstr ""
 "Cette fonctionnalité requiert `OpenCV pour Python "
 "<https://pypi.org/project/opencv-python/>`_."
 
-#: ../../features/image/menu/computing.rst:41
+#: ../../features/image/menu/computing.rst:44
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
@@ -115,21 +115,29 @@ msgstr ""
 msgid "Example of 2D peak detection."
 msgstr "Exemple de détection de pics 2D."
 
-#: ../../features/image/menu/computing.rst:48
+#: ../../features/image/menu/computing.rst:44
+msgid ""
+"See :ref:`ref-to-2d-peak-detection` for more details on algorithm and "
+"associated parameters."
+msgstr ""
+"Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
+"l'algorithme et les paramètres associés."
+
+#: ../../features/image/menu/computing.rst:51
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: ../../features/image/menu/computing.rst:44
+#: ../../features/image/menu/computing.rst:47
 msgid "Automatically extract contours and fit them using a circle or an ellipse."
 msgstr ""
 "Détecte automatiquement les contours et ajuste ces derniers par des "
 "cercles ou des ellipses."
 
-#: ../../features/image/menu/computing.rst:48
+#: ../../features/image/menu/computing.rst:51
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
-#: ../../features/image/menu/computing.rst:50
+#: ../../features/image/menu/computing.rst:53
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to image and serialized with it when exporting current "
@@ -139,3 +147,6 @@ msgstr ""
 "métadonnées. Les métadonnées sont attachées à l'image et sérialisées avec"
 " cette dernière par exemple lors de l'export d'une session de CodraFT "
 "vers un fichier HDF5."
+
+#~ msgid "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
+#~ msgstr "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"

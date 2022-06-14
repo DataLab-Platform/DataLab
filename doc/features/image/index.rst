@@ -16,3 +16,4 @@ Image processing
    menu/computing
    menu/view
    menu/help
+   2d_peak_detection

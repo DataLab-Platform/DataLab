@@ -40,6 +40,9 @@ Minimum enclosing circle center
 
         Example of 2D peak detection.
 
+    .. seealso::
+        See :ref:`ref-to-2d-peak-detection` for more details on algorithm and associated parameters.
+
 Contour detection
     Automatically extract contours and fit them using a circle or an ellipse.
 
