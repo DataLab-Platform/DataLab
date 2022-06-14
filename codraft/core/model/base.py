@@ -16,6 +16,7 @@ import sys
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
+from guidata.jsonio import JSONHandler, JSONReader, JSONWriter
 import numpy as np
 from guiqwt.annotations import (
     AnnotatedCircle,
@@ -28,7 +29,6 @@ from guiqwt.io import load_items, save_items
 from guiqwt.styles import AnnotationParam
 
 from codraft.config import Conf, _
-from codraft.utils.jsonio import JSONHandler, JSONReader, JSONWriter
 from codraft.utils.misc import is_integer_dtype
 
 ROI_KEY = "_roi_"
