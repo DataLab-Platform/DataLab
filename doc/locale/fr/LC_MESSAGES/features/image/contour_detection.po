@@ -1,0 +1,102 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-14 15:11+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/image/contour_detection.rst:4
+msgid "Contour Detection"
+msgstr "Détection de contours"
+
+#: ../../features/image/contour_detection.rst:6
+msgid ""
+"CodraFT provides a \"Contour Detection\" feature which is based on `the "
+"marching cubes algorithm "
+"<https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_."
+msgstr "CodraFT fournit une fonctionnalté de \"Détection de contours\" qui est basée sur l'algorithme des `marching cubes <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_.
+
+#: ../../features/image/contour_detection.rst:11
+msgid "Contour detection parameters."
+msgstr "Paramètres de détection de contours."
+
+#: ../../features/image/contour_detection.rst:17
+msgid "How to use the feature:"
+msgstr "La fonctionnalité s'utilise de la façon suivante :"
+
+#: ../../features/image/contour_detection.rst:14
+msgid "Create or open an image in CodraFT workspace"
+msgstr "Créer ou ouvrir une image dans l'espace de travail de CodraFT"
+
+#: ../../features/image/contour_detection.rst:15
+msgid "Eventually create a ROI around the target area"
+msgstr "Créer éventuellement une ROI autour de la zone cible de l'image"
+
+#: ../../features/image/contour_detection.rst:16
+msgid "Select \"Contour detection\" in \"Computing\" menu"
+msgstr "Sélectionner \"Détection de contours\" dans le menu \"Calculs\""
+
+#: ../../features/image/contour_detection.rst:17
+msgid "Enter parameter \"Shape\" (\"Ellipse\" or \"Circle\")"
+msgstr "Saisir le paramètre \"Forme\" (\"Ellipse\" ou \"Cercle\")"
+
+#: ../../features/image/contour_detection.rst:21
+msgid "Contour detection results (see test \"contour_app.py\")"
+msgstr "Résultats de la détection de contours (cf. test \"contour_app.py\")"
+
+#: ../../features/image/contour_detection.rst:28
+msgid "Results are shown in a table:"
+msgstr "Les résultats sont affichés dans un tableau :"
+
+#: ../../features/image/contour_detection.rst:24
+msgid "Each row is associated to a contour"
+msgstr "Chaque ligne est associée à un contour"
+
+#: ../../features/image/contour_detection.rst:25
+msgid "First column shows the ROI index (0 if no ROI is defined on input image)"
+msgstr "La première colonne contient l'indice de la ROI (0 si aucune ROI n'est définie)"
+
+#: ../../features/image/contour_detection.rst:26
+msgid ""
+"Other columns show contour coordinates: 4 columns for circles "
+"(coordinates of diameter), 8 columns for ellipses (coordinates of "
+"diameters)"
+msgstr "Les colonnes suivantes présentent les coordonnées des contours : 4 colonnes pour les cercles (coordonnées du diamètre) et 8 colonnes pour les ellipses (coordonnées des diamètres)"
+
+#: ../../features/image/contour_detection.rst:32
+msgid "Example of contour detection."
+msgstr "Exemple de détection de contours."
+
+#: ../../features/image/contour_detection.rst:37
+msgid "The contour detection algorithm works in the following way:"
+msgstr "L'algorithme de détection de contours fonctionne de la manière suivante :"
+
+#: ../../features/image/contour_detection.rst:35
+msgid ""
+"First, iso-valued contours are computed (implementation based on "
+"`skimage.measure.find_contours.find_contours <https://scikit-"
+"image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-"
+"contours>`_)"
+msgstr "Tout d'abord, les isocontours sont calculés (l'implémentation est basée sur `skimage.measure.find_contours.find_contours <https://scikit-image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-contours>`_)"
+
+#: ../../features/image/contour_detection.rst:37
+msgid "Then, each contour is fitted to the closest ellipse (or circle)"
+msgstr "Ensuite, chaque contour est ajusté à une ellipse (ou à un cercle)"
+
+#: ../../features/image/contour_detection.rst:39
+msgid ""
+"Feature is based on ``get_contour_shapes`` function from "
+"``codraft.core.computation`` module:"
+msgstr "La fonctionnalité est basée sur la fonction ``get_contour_shapes`` du module ``codraft.core.computation`` :"

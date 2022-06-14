@@ -33,7 +33,7 @@ msgstr "Paramètres de détection de pics 2D."
 
 #: ../../features/image/2d_peak_detection.rst:17
 msgid "How to use the feature:"
-msgstr "Comment utiliser la fonctionnalité :"
+msgstr "La fonctionnalité s'utilise de la façon suivante :"
 
 #: ../../features/image/2d_peak_detection.rst:12
 msgid "Create or open an image in CodraFT workspace"

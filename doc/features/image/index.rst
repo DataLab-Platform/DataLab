@@ -17,3 +17,4 @@ Image processing
    menu/view
    menu/help
    2d_peak_detection
+   contour_detection

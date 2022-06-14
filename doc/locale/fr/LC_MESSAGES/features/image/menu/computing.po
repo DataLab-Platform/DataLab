@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-14 12:38+0200\n"
+"POT-Creation-Date: 2022-06-14 15:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,7 +123,7 @@ msgstr ""
 "Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../features/image/menu/computing.rst:51
+#: ../../features/image/menu/computing.rst:54
 msgid "Contour detection"
 msgstr "Détection de contours"
 
@@ -137,7 +137,16 @@ msgstr ""
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
-#: ../../features/image/menu/computing.rst:53
+#: ../../features/image/menu/computing.rst:54
+#, fuzzy
+msgid ""
+"See :ref:`ref-to-contour-detection` for more details on algorithm and "
+"associated parameters."
+msgstr ""
+"Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
+"l'algorithme et les paramètres associés."
+
+#: ../../features/image/menu/computing.rst:56
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to image and serialized with it when exporting current "
@@ -150,3 +159,4 @@ msgstr ""
 
 #~ msgid "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
 #~ msgstr "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
+

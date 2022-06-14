@@ -50,6 +50,9 @@ Contour detection
 
         Example of contour detection.
 
+    .. seealso::
+        See :ref:`ref-to-contour-detection` for more details on algorithm and associated parameters.
+
 .. note:: Computed scalar results are systematically stored as metadata.
     Metadata is attached to image and serialized with it when exporting
     current session in a HDF5 file.
