@@ -42,9 +42,9 @@
             "python": "${env:PYTHON_CODRAFT_DEV}",
             "justMyCode": false,
             "args": [
-                "--h5",
+                // "--h5",
                 // "C:/Dev/Projets/CodraFT_Test_CEA/codraft_test_cea/data/lmj_cbfx.h5,/A/valeur"
-                "${workspaceFolder}/codraft/data/tests/format_v1.7.h5,/CodraFT_Ima/i002: i002+i004",
+                // "${workspaceFolder}/codraft/data/tests/format_v1.7.h5,/CodraFT_Ima/i002: i002+i004",
                 // "--mode",
                 // "unattended",
                 // "--verbose",
@@ -56,7 +56,7 @@
             "env": {
                 // "DEBUG": "1",
                 // "TEST_SEGFAULT_ERROR": "1",
-                // "LANG": "en",
+                "LANG": "en",
                 "QT_COLOR_MODE": "light",
             }
         },

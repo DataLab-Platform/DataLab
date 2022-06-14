@@ -172,7 +172,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered=self.panel.remove_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
-        self.actlist_1more += [dup_action, del_action, delm_action, pstmeta_action]
+        self.actlist_1more += [
+            dup_action,
+            del_action,
+            delm_action,
+            pstmeta_action,
+            delall_action,
+        ]
         self.actlist_cmenu += [dup_action, del_action]
         self.actlist_1 += [cpymeta_action]
         return [
