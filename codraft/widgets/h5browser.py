@@ -28,6 +28,7 @@ from codraft.config import _
 from codraft.core.io.h5 import H5Importer
 from codraft.core.model.signal import SignalParam
 from codraft.utils.env import execenv
+from codraft.utils.qthelpers import qt_handle_error_message
 
 
 class BaseTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
@@ -363,7 +364,11 @@ class H5Browser(QW.QSplitter):
 
     def update_visual_preview(self, node):
         """Update visual preview widget"""
-        obj = node.get_object()
+        try:
+            obj = node.get_object()
+        except Exception as msg:  # pylint: disable=broad-except
+            qt_handle_error_message(self, msg)
+            return
         if isinstance(obj, SignalParam):
             widget = self.curvewidget
         else:

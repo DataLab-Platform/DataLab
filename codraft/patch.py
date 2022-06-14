@@ -271,14 +271,14 @@ def to_codraft(cs_plot):
         image_plot = image_item.plot()
 
         if isinstance(cs_plot, cs.VerticalCrossSectionPlot):
-            xydata = np.vstack((y, x))
+            signal.set_xydata(y, x)
             xaxis_name = "left"
             xunit = image_plot.get_axis_unit("bottom")
             if xunit:
                 signal.title += " " + xunit
         else:
+            signal.set_xydata(x, y)
             xaxis_name = "bottom"
-            xydata = np.vstack((x, y))
             yunit = image_plot.get_axis_unit("left")
             if yunit:
                 signal.title += " " + yunit
@@ -288,7 +288,6 @@ def to_codraft(cs_plot):
         signal.xlabel = image_plot.get_axis_title(xaxis_name)
         signal.xunit = image_plot.get_axis_unit(xaxis_name)
 
-        signal.xydata = xydata
         win.signalpanel.add_object(signal)
 
     # Show CodraFT main window on top, if not already visible

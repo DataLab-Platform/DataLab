@@ -16,8 +16,8 @@ import sys
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
-from guidata.jsonio import JSONHandler, JSONReader, JSONWriter
 import numpy as np
+from guidata.jsonio import JSONHandler, JSONReader, JSONWriter
 from guiqwt.annotations import (
     AnnotatedCircle,
     AnnotatedEllipse,

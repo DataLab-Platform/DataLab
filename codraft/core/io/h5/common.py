@@ -15,6 +15,7 @@ import os.path as osp
 import h5py
 import numpy as np
 
+from codraft.core.io.conv import data_to_xy
 from codraft.utils.misc import to_string
 
 
@@ -110,11 +111,8 @@ class BaseNode(metaclass=abc.ABCMeta):
         if len(data.shape) == 1:
             obj.set_xydata(np.arange(data.size), data)
         else:
-            for colnb in (2, 3, 4):
-                if data.shape[1] == colnb and data.shape[0] > colnb:
-                    data = data.T
-                    break
-            obj.xydata = np.array(data)
+            x, y, dx, dy = data_to_xy(data)
+            obj.set_xydata(x, y, dx, dy)
 
     def set_image_data(self, obj):
         """Set image data (handles various issues)"""

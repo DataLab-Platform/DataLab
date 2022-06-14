@@ -61,6 +61,7 @@ from codraft.config import APP_NAME, Conf, _
 from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
+from codraft.core.io.conv import data_to_xy
 from codraft.core.model.base import MetadataItem, ResultShape
 from codraft.core.model.image import (
     ImageDatatypes,
@@ -683,17 +684,8 @@ class SignalPanel(BasePanel):
         if len(xydata.shape) == 1:
             signal.set_xydata(np.arange(xydata.size), xydata)
         else:
-            rows, cols = xydata.shape
-            for colnb in (2, 3, 4):
-                if cols == colnb and rows > colnb:
-                    xydata = xydata.T
-                    break
-            if cols == 3:
-                # x, y, dy
-                xarr, yarr, dyarr = xydata
-                signal.set_xydata(xarr, yarr, dx=None, dy=dyarr)
-            else:
-                signal.xydata = xydata
+            x, y, dx, dy = data_to_xy(xydata)
+            signal.set_xydata(x, y, dx, dy)
         self.add_object(signal)
 
     def save_object(self, obj, filename: str = None) -> None:

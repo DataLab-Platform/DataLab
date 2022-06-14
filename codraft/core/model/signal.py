@@ -122,6 +122,9 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         if len(self.xydata) == 2:  # x, y signal
             x, y = self.xydata
             item = make.mcurve(x.real, y.real, label=self.title)
+        elif len(self.xydata) == 3:  # x, y, dy error bar signal
+            x, y, dy = self.xydata
+            item = make.merror(x.real, y.real, dy.real, label=self.title)
         elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
             x, y, dx, dy = self.xydata
             item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
@@ -136,6 +139,9 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         if len(self.xydata) == 2:  # x, y signal
             x, y = self.xydata
             item.set_data(x.real, y.real)
+        elif len(self.xydata) == 3:  # x, y, dy error bar signal
+            x, y, dy = self.xydata
+            item.set_data(x.real, y.real, dy=dy.real)
         elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
             x, y, dx, dy = self.xydata
             item.set_data(x.real, y.real, dx.real, dy.real)
