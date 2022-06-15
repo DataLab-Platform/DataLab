@@ -12,7 +12,7 @@ libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (tha
 guidata and guiqwt libraries).
 
 CodraFT is Copyright © 2022 CEA-CODRA, Pierre Raybaut, and Licensed under the
-terms of the BSD 3-Clause License or the CeCILL-B License v1.
+terms of the BSD 3-Clause License or the CeCILL-B License.
 """
 
 from distutils.core import setup
@@ -33,25 +33,37 @@ LONG_DESCRIPTION = f"""\
 CodraFT: Signal and Image Processing Software
 =============================================
 
+CodraFT is a **generic signal and image processing software**.
+It is based on Python scientific libraries (such as NumPy,
+SciPy or OpenCV) and Qt graphical user interfaces (thanks to
+`guidata`_ and `guiqwt`_ libraries).
+
 .. image:: https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/CodraFT/master/doc/images/dark_light_modes.png
 
-CodraFT is a generic signal and image processing software based on Python scientific
-libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (thanks to
-guidata and guiqwt libraries).
-
 CodraFT stands for "CODRA Filtering Tool".
+
+CodraFT features are available not only using the **stand-alone application**
+(easily installed thanks to the Windows installer or the Python package)
+but also by **embedding it into your own application**
+(see the "embedded tests" for detailed examples of how to do so).
 
 See `homepage`_ or `documentation`_ for more details on the library
 and `changelog`_ for recent history of changes.
 
-Copyright © 2018-2022 CODRA, Pierre Raybaut
-Copyright © 2009-2015 CEA, Pierre Raybaut
-Licensed under the terms of the `CECILL License`_.
+Copyrights and licensing
+------------------------
 
+- Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut
+- Licensed under the terms of the `BSD / CeCILL-B License`_
+
+.. _guidata: https://pypi.python.org/pypi/guidata
+.. _guiqwt: https://pypi.python.org/pypi/guiqwt
 .. _homepage: {__homeurl__}
 .. _documentation: {__docurl__}
 .. _changelog: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/CHANGELOG.md
-.. _CECILL License: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/Licence_CeCILL_V2.1-en.txt
+.. _CEA: http://www.cea.fr
+.. _CODRA: https://codra.net/
+.. _BSD / CeCILL-B License: https://github.com/CODRA-Ingenierie-Informatique/CodraFT/blob/master/LICENSE
 """
 
 KEYWORDS = ""

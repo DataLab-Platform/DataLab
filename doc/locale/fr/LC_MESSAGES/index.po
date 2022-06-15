@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-14 11:04+0200\n"
+"POT-Creation-Date: 2022-06-15 09:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../../index.rst:32
+#: ../../index.rst:29
 msgid "Contents:"
 msgstr "Table des matières :"
 
@@ -47,55 +47,64 @@ msgid ""
 "application** (easily installed thanks to the Windows installer or the "
 "Python package) but also by **embedding it into your own application** "
 "(see the \"embedded tests\" for detailed examples of how to do so)."
-msgstr "Les fonctionnalités de CodraFT sont disponibles non seulement depuis une **version autonome de l'application** (qui peut être facilement installée grâce à l'installeur Windows ou au paquet Python) mais aussi en **embarquant CodraFT dans votre propre application** (cf. les tests \"embedded\" pour des exemples détaillés sur la façon de procéder)."
+msgstr ""
+"Les fonctionnalités de CodraFT sont disponibles non seulement depuis une "
+"**version autonome de l'application** (qui peut être facilement installée"
+" grâce à l'installeur Windows ou au paquet Python) mais aussi en "
+"**embarquant CodraFT dans votre propre application** (cf. les tests "
+"\"embedded\" pour des exemples détaillés sur la façon de procéder)."
 
-#: ../../index.rst:25
+#: ../../index.rst:27
 msgid "External resources:"
 msgstr "Ressources externes :"
 
 #: ../../index.rst:22
-msgid "`PyPI`_"
+msgid "`Home`_"
 msgstr ""
 
 #: ../../index.rst:23
-msgid "Python Package Index"
-msgstr "Paquet Python officiel"
+msgid "CodraFT home page"
+msgstr "Site de CodraFT"
 
 #: ../../index.rst:24
-msgid "`GitHub`_"
+msgid "`PyPI`_"
 msgstr ""
 
 #: ../../index.rst:25
+msgid "Python Package Index"
+msgstr "Paquet Python officiel"
+
+#: ../../index.rst:26
+msgid "`GitHub`_"
+msgstr ""
+
+#: ../../index.rst:27
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:30
-msgid "Copyrights and licensing:"
-msgstr "Licence et copyrights :"
+#: ../../index.rst:40
+msgid "Copyrights and licensing"
+msgstr "Licence et copyrights"
 
-#: ../../index.rst:28
+#: ../../index.rst:42
 msgid "Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut"
 msgstr ""
 
-#: ../../index.rst:29
-msgid "Licensed under the terms of the `BSD / CeCILL-B License`_."
-msgstr "Distribué sous licence `BSD / CeCILL-B License`_."
-
-#: ../../index.rst:44
-msgid "Indices and tables"
-msgstr "Index et recherche"
-
-#: ../../index.rst:46
-msgid ":ref:`genindex`"
-msgstr ""
-
-#: ../../index.rst:47
-msgid ":ref:`modindex`"
-msgstr ""
-
-#: ../../index.rst:48
-msgid ":ref:`search`"
-msgstr ""
+#: ../../index.rst:43
+msgid "Licensed under the terms of the `BSD / CeCILL-B License`_"
+msgstr "Distribué sous licence `BSD / CeCILL-B License`_"
 
 #~ msgid "Copyright © 2018 `CEA`_ - `CODRA`_, Pierre Raybaut"
+#~ msgstr ""
+
+#~ msgid "Indices and tables"
+#~ msgstr "Index et recherche"
+
+#~ msgid ":ref:`genindex`"
+#~ msgstr ""
+
+#~ msgid ":ref:`modindex`"
+#~ msgstr ""
+
+#~ msgid ":ref:`search`"
 #~ msgstr ""

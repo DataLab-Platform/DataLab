@@ -19,37 +19,33 @@ External resources:
     .. list-table::
         :widths: 20, 80
 
+        * - `Home`_
+          - CodraFT home page
         * - `PyPI`_
           - Python Package Index
         * - `GitHub`_
           - Bug reports and feature requests
 
-Copyrights and licensing:
-  - Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut
-  - Licensed under the terms of the `BSD / CeCILL-B License`_.
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   installation
    overview
    features/signal/index
    features/image/index
    h5browser
-   installation
 
+Copyrights and licensing
+------------------------
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+- Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut
+- Licensed under the terms of the `BSD / CeCILL-B License`_
 
 .. _guidata: https://pypi.python.org/pypi/guidata
 .. _guiqwt: https://pypi.python.org/pypi/guiqwt
 .. _PyPI: https://pypi.python.org/pypi/codraft
+.. _Home: https://codra-ingenierie-informatique.github.io/CodraFT/
 .. _GitHub: https://github.com/CODRA-Ingenierie-Informatique/CodraFT
 .. _CEA: http://www.cea.fr
 .. _CODRA: https://codra.net/
