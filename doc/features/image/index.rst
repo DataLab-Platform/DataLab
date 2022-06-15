@@ -18,3 +18,4 @@ Image processing
    menu/help
    2d_peak_detection
    contour_detection
+   annotations
