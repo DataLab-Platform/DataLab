@@ -62,6 +62,11 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowIcon(get_icon("codraft.svg"))
         self.tabs = QW.QTabWidget()
         label = "Informations on current CodraFT installation:"
+        if sys.executable.lower().endswith("codraft.exe"):
+            #  Stand-alone version
+            more_infos = "This is the Stand-alone version of CodraFT"
+        else:
+            more_infos = get_pip_list()
         infos = os.linesep.join(
             [
                 f"CodraFT v{__version__}",
@@ -70,7 +75,7 @@ class InstallConfigViewerWindow(QW.QDialog):
                 f"Platform: {platform.platform()}",
                 f"Python v{sys.version}",
                 "",
-                get_pip_list(),
+                more_infos,
             ]
         )
         viewer = InstallConfigViewerWidget(label, infos, parent=self)
