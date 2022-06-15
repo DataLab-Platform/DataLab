@@ -50,6 +50,8 @@ from guiqwt.tools import (
     AnnotatedSegmentTool,
     HCursorTool,
     LabelTool,
+    RectangleTool,
+    SegmentTool,
     VCursorTool,
     XCursorTool,
 )
@@ -121,7 +123,14 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     PANEL_STR = ""  # e.g. "Signal Panel"
     PARAMCLASS = SignalParam  # Replaced by the right class in child object
     DIALOGCLASS = CurveDialog  # Idem
-    ANNOTATION_TOOLS = (LabelTool, VCursorTool, HCursorTool, XCursorTool)
+    ANNOTATION_TOOLS = (
+        LabelTool,
+        VCursorTool,
+        HCursorTool,
+        XCursorTool,
+        SegmentTool,
+        RectangleTool,
+    )
     DIALOGSIZE = (800, 600)
     PREFIX = ""  # e.g. "s"
     OPEN_FILTERS = ""  # Qt file open dialog filters
