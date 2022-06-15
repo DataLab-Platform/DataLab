@@ -38,7 +38,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
-from codraft import __docurl__, __homeurl__, __version__
+from codraft import __docurl__, __homeurl__, __supporturl__, __version__
 from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.actionhandler import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
@@ -49,6 +49,7 @@ from codraft.core.model.signal import SignalParam
 from codraft.utils import dephash, env
 from codraft.utils import qthelpers as qth
 from codraft.utils.env import execenv
+from codraft.widgets.instconfviewer import exec_codraft_installconfig_dialog
 from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
 
@@ -412,6 +413,12 @@ class CodraFTMainWindow(QW.QMainWindow):
             icon=get_icon("libre-gui-globe.svg"),
             triggered=lambda: webbrowser.open(__homeurl__),
         )
+        issue_action = create_action(
+            self,
+            _("Bug report or feature request"),
+            icon=get_icon("libre-gui-globe.svg"),
+            triggered=lambda: webbrowser.open(__supporturl__),
+        )
         onlinedoc_action = create_action(
             self,
             _("Online documentation"),
@@ -431,6 +438,12 @@ class CodraFTMainWindow(QW.QMainWindow):
             icon=get_icon("logs.svg"),
             triggered=self.show_log_viewer,
         )
+        dep_action = create_action(
+            self,
+            _("About CodraFT installation") + "...",
+            icon=get_icon("logs.svg"),
+            triggered=lambda: exec_codraft_installconfig_dialog(self),
+        )
         errtest_action = create_action(
             self, "Test segfault/Python error", triggered=self.test_segfault_error
         )
@@ -449,8 +462,10 @@ class CodraFTMainWindow(QW.QMainWindow):
                 None,
                 errtest_action,
                 logv_action,
+                dep_action,
                 None,
                 homepage_action,
+                issue_action,
                 about_action,
             ),
         )
@@ -649,12 +664,13 @@ class CodraFTMainWindow(QW.QMainWindow):
             self,
             _("About ") + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}<p>
-              {_("Developped by")} Pierre Raybaut
-              <br>Copyright &copy; 2010 CEA<br>Copyright &copy; 2018 CODRA
-              <p>PythonQwt {qwt_ver}, guidata {guidata_ver}
-              , guiqwt {guiqwt_ver}<br>Python {platform.python_version()}
-              , Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               {_("on")} {platform.system()}""",
+              %s Pierre Raybaut
+              <br>Copyright &copy; 2018-2022 CEA-CODRA
+              <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
+              guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
+              Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
+               %s {platform.system()}"""
+            % (_("Developped by"), _("on")),
         )
 
     def show_log_viewer(self):

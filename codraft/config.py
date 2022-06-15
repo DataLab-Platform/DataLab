@@ -23,8 +23,8 @@ _ = configtools.get_translation("codraft")
 CONF_VERSION = "1.0.0"
 APP_NAME = "CodraFT"
 APP_DESC = _(
-    """<b>Codra</b> <b>F</b>iltering <b>T</b>ool<br>
-Generic signal and image processing software based on Python and Qt"""
+    """CodraFT (<b>Codra</b> <b>F</b>iltering <b>T</b>ool) is a
+generic signal and image processing software based on Python and Qt"""
 )
 APP_PATH = osp.dirname(__file__)
 DEBUG = len(os.environ.get("DEBUG", "")) > 0

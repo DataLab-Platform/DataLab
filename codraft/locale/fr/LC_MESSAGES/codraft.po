@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-15 09:52+0200\n"
+"POT-Creation-Date: 2022-06-15 17:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,11 @@ msgstr ""
 
 #: codraft\config.py:25
 msgid ""
-"<b>Codra</b> <b>F</b>iltering <b>T</b>ool<br>\n"
-"Generic signal and image processing software based on Python and Qt"
+"CodraFT (<b>Codra</b> <b>F</b>iltering <b>T</b>ool) is a\n"
+"generic signal and image processing software based on Python and Qt"
 msgstr ""
-"<b>Codra</b> <b>F</b>iltering <b>T</b>ool<br>\n"
-"Logiciel générique de traitement du signal et de l'image basé sur Python et "
-"Qt"
+"CodraFT (<b>Codra</b> <b>F</b>iltering <b>T</b>ool) est un logiciel "
+"générique de traitement du signal et de l'image basé sur Python et Qt"
 
 #: codraft\core\gui\actionhandler.py:95
 msgid "New %s..."
@@ -350,182 +349,190 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: codraft\core\gui\h5io.py:81 codraft\core\gui\main.py:157
-#: codraft\core\gui\main.py:599
+#: codraft\core\gui\h5io.py:81 codraft\core\gui\main.py:158
+#: codraft\core\gui\main.py:614
 msgid "Warning"
 msgstr "Attention"
 
-#: codraft\core\gui\main.py:158
+#: codraft\core\gui\main.py:159
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: codraft\core\gui\main.py:174
+#: codraft\core\gui\main.py:175
 msgid "Unable to open file"
 msgstr "Impossible d'ouvrir le fichier"
 
-#: codraft\core\gui\main.py:179
+#: codraft\core\gui\main.py:180
 msgid "Invalid dependency:"
 msgstr "Dépendance invalide :"
 
-#: codraft\core\gui\main.py:181
+#: codraft\core\gui\main.py:182
 msgid "Invalid dependencies:"
 msgstr "Dépendances invalides :"
 
-#: codraft\core\gui\main.py:187
+#: codraft\core\gui\main.py:188
 msgid "At least one dependency has been altered."
 msgstr "Au moins une dépendance a été altérée."
 
-#: codraft\core\gui\main.py:188
+#: codraft\core\gui\main.py:189
 msgid "Application may not behave as expected."
 msgstr "L'application n'a pas été qualifiée dans ce référentiel."
 
-#: codraft\core\gui\main.py:202
+#: codraft\core\gui\main.py:203
 msgid "Log files were generated during last session."
 msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
-#: codraft\core\gui\main.py:204
+#: codraft\core\gui\main.py:205
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: codraft\core\gui\main.py:269
+#: codraft\core\gui\main.py:270
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: codraft\core\gui\main.py:288
+#: codraft\core\gui\main.py:289
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: codraft\core\gui\main.py:290
+#: codraft\core\gui\main.py:291
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: codraft\core\gui\main.py:295
+#: codraft\core\gui\main.py:296
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: codraft\core\gui\main.py:297
+#: codraft\core\gui\main.py:298
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: codraft\core\gui\main.py:302
+#: codraft\core\gui\main.py:303
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: codraft\core\gui\main.py:304
+#: codraft\core\gui\main.py:305
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: codraft\core\gui\main.py:307
+#: codraft\core\gui\main.py:308
 msgid "HDF5 I/O Toolbar"
 msgstr "Barre d'outils d'entrées/sorties HDF5"
 
-#: codraft\core\gui\main.py:313
+#: codraft\core\gui\main.py:314
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: codraft\core\gui\main.py:314
+#: codraft\core\gui\main.py:315
 msgid "Hide CodraFT window"
 msgstr "Cacher la fenêtre de CodraFT"
 
-#: codraft\core\gui\main.py:316 codraft\core\gui\main.py:688
+#: codraft\core\gui\main.py:317 codraft\core\gui\main.py:704
 msgid "Quit"
 msgstr "Quitter"
 
-#: codraft\core\gui\main.py:317
+#: codraft\core\gui\main.py:318
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: codraft\core\gui\main.py:329
+#: codraft\core\gui\main.py:330
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: codraft\core\gui\main.py:330
+#: codraft\core\gui\main.py:331
 msgid "Curve Plotting Toolbar"
 msgstr "Barre d'outils d'affichage de courbes"
 
-#: codraft\core\gui\main.py:342
+#: codraft\core\gui\main.py:343
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: codraft\core\gui\main.py:343
+#: codraft\core\gui\main.py:344
 msgid "Image Visualization Toolbar"
 msgstr "Barre d'outils d'affichage d'images"
 
-#: codraft\core\gui\main.py:371
+#: codraft\core\gui\main.py:372
 msgid "Signals"
 msgstr "Signaux"
 
-#: codraft\core\gui\main.py:372
+#: codraft\core\gui\main.py:373
 msgid "Images"
 msgstr "Images"
 
-#: codraft\core\gui\main.py:373
+#: codraft\core\gui\main.py:374
 msgid "Main panel"
 msgstr "Panneau principal"
 
-#: codraft\core\gui\main.py:374
+#: codraft\core\gui\main.py:375
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: codraft\core\gui\main.py:375
+#: codraft\core\gui\main.py:376
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: codraft\core\gui\main.py:387
+#: codraft\core\gui\main.py:388
 msgid "File"
 msgstr "Fichier"
 
-#: codraft\core\gui\main.py:389
+#: codraft\core\gui\main.py:390
 msgid "&Edit"
 msgstr "&Édition"
 
-#: codraft\core\gui\main.py:390
+#: codraft\core\gui\main.py:391
 msgid "Operations"
 msgstr "Opérations"
 
-#: codraft\core\gui\main.py:391
+#: codraft\core\gui\main.py:392
 msgid "Processing"
 msgstr "Traitement"
 
-#: codraft\core\gui\main.py:392
+#: codraft\core\gui\main.py:393
 msgid "Computing"
 msgstr "Calculs"
 
-#: codraft\core\gui\main.py:393
+#: codraft\core\gui\main.py:394
 msgid "&View"
 msgstr "&Affichage"
 
-#: codraft\core\gui\main.py:405 codraft\core\gui\main.py:440
+#: codraft\core\gui\main.py:406 codraft\core\gui\main.py:453
 msgid "About..."
 msgstr "À propos..."
 
-#: codraft\core\gui\main.py:411
+#: codraft\core\gui\main.py:412
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: codraft\core\gui\main.py:417
+#: codraft\core\gui\main.py:418
+msgid "Bug report or feature request"
+msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
+
+#: codraft\core\gui\main.py:424
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: codraft\core\gui\main.py:423
+#: codraft\core\gui\main.py:430
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: codraft\core\gui\main.py:430
+#: codraft\core\gui\main.py:437
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: codraft\core\gui\main.py:480
+#: codraft\core\gui\main.py:443 codraft\widgets\instconfviewer.py:61
+msgid "About CodraFT installation"
+msgstr "Configuration d'installation de CodraFT"
+
+#: codraft\core\gui\main.py:495
 msgid "Console"
 msgstr "Console"
 
-#: codraft\core\gui\main.py:572
+#: codraft\core\gui\main.py:587
 msgid "Save"
 msgstr "Enregistrer"
 
-#: codraft\core\gui\main.py:600
+#: codraft\core\gui\main.py:615
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -533,15 +540,23 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:612 codraft\core\gui\panel.py:326
+#: codraft\core\gui\main.py:627 codraft\core\gui\panel.py:326
 msgid "Open"
 msgstr "Ouvrir"
 
-#: codraft\core\gui\main.py:650
+#: codraft\core\gui\main.py:665
 msgid "About "
 msgstr "À propos de "
 
-#: codraft\core\gui\main.py:689
+#: codraft\core\gui\main.py:673
+msgid "Developped by"
+msgstr "Développé par"
+
+#: codraft\core\gui\main.py:673
+msgid "on"
+msgstr "sous"
+
+#: codraft\core\gui\main.py:705
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "CodraFT?"
@@ -1272,12 +1287,6 @@ msgstr "Mémoire :"
 
 #~ msgid "HDF5 files"
 #~ msgstr "Fichiers HDF5"
-
-#~ msgid "Developped by"
-#~ msgstr "Développé par"
-
-#~ msgid "on"
-#~ msgstr "sous"
 
 #~ msgid "Open image..."
 #~ msgstr "Ouvrir une image..."

@@ -20,6 +20,9 @@ import os
 __version__ = "2.0.2"
 __docurl__ = "https://codraft.readthedocs.io/en/latest/"
 __homeurl__ = "https://codra-ingenierie-informatique.github.io/CodraFT/"
+__supporturl__ = (
+    "https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/new/choose"
+)
 
 try:
     import codraft.core.io  # analysis:ignore
