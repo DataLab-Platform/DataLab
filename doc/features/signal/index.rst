@@ -16,3 +16,4 @@ Signal processing
    menu/computing
    menu/view
    menu/help
+   annotations

@@ -1,0 +1,77 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-15 09:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/signal/annotations.rst:4
+msgid "Annotations (Signals)"
+msgstr "Annotations (Signaux)"
+
+#: ../../features/signal/annotations.rst:6
+msgid ""
+"CodraFT provides an annotation feature for signals (as well as for "
+"images)."
+msgstr "CodraFT dispose d'une fonctionnalité d'annotation pour les signaux (ainsi que pour les images)."
+
+#: ../../features/signal/annotations.rst:17
+msgid "How to use the feature:"
+msgstr "La fonctionnalité s'utilise de la façon suivante :"
+
+#: ../../features/signal/annotations.rst:11
+msgid "Create or open a signal in CodraFT workspace"
+msgstr "Créer ou ouvrir un signal dans l'espace de travail de CodraFT"
+
+#: ../../features/signal/annotations.rst:12
+msgid "Select \"View in a new window\" in \"View\" menu"
+msgstr "Sélectionner \"Voir dans une nouvelle fenêtre\" dans le menu \"Affichage\""
+
+#: ../../features/signal/annotations.rst:13
+msgid "Add annotations (labels, cursors, rectangles and segments)"
+msgstr "Ajouter des annotations (étiquettes, curseurs, rectangles et segments)"
+
+#: ../../features/signal/annotations.rst:14
+msgid "Eventually customize the annotations (right-click, \"Parameters\")"
+msgstr "Personnaliser éventuellement les annotations (clic-droit, \"Paramètres\")"
+
+#: ../../features/signal/annotations.rst:15
+msgid "Validate your changes by clicking on \"OK\" button"
+msgstr "Valider vos changements en cliquant sur le bouton \"OK\""
+
+#: ../../features/signal/annotations.rst:16
+msgid ""
+"That's it: your annotations are now attached to the signal and will be "
+"saved with your CodraFT workspace"
+msgstr ""
+"A présent, les annotations sont attachées au signal et seront ainsi sauvegardées avec l'espace de travail CodraFT."
+
+#: ../../features/signal/annotations.rst:21
+msgid "Example of annotations."
+msgstr "Exemple d'annotations."
+
+#: ../../features/signal/annotations.rst:23
+msgid ""
+"Once the annotations have been added in the separate view (see above), "
+"they are part of the object (signal) metadata (see below)."
+msgstr ""
+"Une fois que les annotations ont été ajoutées dans la fenêtre séparée (cf. ci-dessus), elles sont intégrées aux métadonnées de l'objet signal (cf. ci-desous)."
+
+#: ../../features/signal/annotations.rst:29
+msgid ""
+"Annotations may be copied from a signal to another by using the "
+"\"copy/paste metadata\" features."
+msgstr ""
+"Les annotations peuvent être copiées d'un signal à l'autre en utilisant la fonctionnalité de \"Copier/coller\" des métadonnées."

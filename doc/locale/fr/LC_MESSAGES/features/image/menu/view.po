@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2022-06-15 09:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,3 +20,37 @@ msgstr ""
 #: ../../features/image/menu/view.rst:2
 msgid "\"View\" menu"
 msgstr "Menu \"Affichage\""
+
+#: ../../features/image/menu/view.rst:13
+msgid "View in a new window"
+msgstr "Voir dans une nouvelle fenêtre"
+
+#: ../../features/image/menu/view.rst:7
+msgid "Open a new window to visualize and the selected images."
+msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionées."
+
+#: ../../features/image/menu/view.rst:9
+msgid ""
+"In the separate window, you may visualize your data more comfortably "
+"(e.g., by maximizing the window) and you may also annotate the data."
+msgstr "Dans cette nouvelle fenêtre, la visualisation des données est plus aisée (p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées aux données."
+
+#: ../../features/image/menu/view.rst:13
+msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
+msgstr "Voir :ref:`ref-to-image-annotations` pour plus de détails sur les annotations."
+
+#: ../../features/image/menu/view.rst:16
+msgid "Graphical object titles"
+msgstr "Titres des objets graphiques"
+
+#: ../../features/image/menu/view.rst:16
+msgid "Show/hide titles of computing results or annotations."
+msgstr "Affiche/cache les titres des objets graphiques liés aux résultats de calculs et aux annotations."
+
+#: ../../features/image/menu/view.rst:18
+msgid "Other menu entries"
+msgstr "Autres entrées du menu"
+
+#: ../../features/image/menu/view.rst:19
+msgid "Show/hide panels or toolbars."
+msgstr "Affiche/cache les panneaux et barres d'outils."
