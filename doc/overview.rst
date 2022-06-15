@@ -21,6 +21,7 @@ Signal Image  Feature
 ..     ✓      Aspect ratio (1:1, custom)
 ..     ✓      50+ available colormaps
 ..     ✓      X/Y raw/averaged profiles
+✓      ✓      Annotations
 ====== ====== ==============================
 
 .. figure:: images/multi_gaussian_fit.png

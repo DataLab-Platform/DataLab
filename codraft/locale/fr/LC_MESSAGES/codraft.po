@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-15 09:43+0200\n"
+"POT-Creation-Date: 2022-06-15 09:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#: codraft\core\gui\actionhandler.py:164 codraft\core\gui\panel.py:282
+#: codraft\core\gui\actionhandler.py:164 codraft\core\gui\panel.py:286
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -533,7 +533,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:612 codraft\core\gui\panel.py:322
+#: codraft\core\gui\main.py:612 codraft\core\gui\panel.py:326
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -549,48 +549,48 @@ msgstr ""
 "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 "
 "avant de quitter CodraFT ?"
 
-#: codraft\core\gui\panel.py:92
+#: codraft\core\gui\panel.py:96
 msgid "Properties"
 msgstr "Propriétés"
 
-#: codraft\core\gui\panel.py:283
+#: codraft\core\gui\panel.py:287
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: codraft\core\gui\panel.py:350
+#: codraft\core\gui\panel.py:354
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\panel.py:368
+#: codraft\core\gui\panel.py:372
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\panel.py:423
+#: codraft\core\gui\panel.py:427
 msgid "Annotations"
 msgstr "Annotations"
 
-#: codraft\core\gui\panel.py:538 codraft\core\gui\roieditor.py:106
+#: codraft\core\gui\panel.py:542 codraft\core\gui\roieditor.py:106
 #: codraft\core\model\base.py:494
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: codraft\core\gui\panel.py:568
+#: codraft\core\gui\panel.py:572
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: codraft\core\gui\panel.py:569
+#: codraft\core\gui\panel.py:573
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: codraft\core\gui\panel.py:604 codraft\core\gui\processor\base.py:267
+#: codraft\core\gui\panel.py:608 codraft\core\gui\processor\base.py:267
 msgid "Results"
 msgstr "Résultats"
 
-#: codraft\core\gui\panel.py:618
+#: codraft\core\gui\panel.py:622
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: codraft\core\gui\panel.py:620
+#: codraft\core\gui\panel.py:624
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -598,19 +598,19 @@ msgstr ""
 "Cette fonctionnalité permet d'afficher les tableaux de résultats tels "
 "qu'obtenus après avoir réalisé des calculs (voir menu \"Calculs\")."
 
-#: codraft\core\gui\panel.py:633
+#: codraft\core\gui\panel.py:637
 msgid "Signal List"
 msgstr "Liste des Signaux"
 
-#: codraft\core\gui\panel.py:702
+#: codraft\core\gui\panel.py:706
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: codraft\core\gui\panel.py:702 codraft\core\gui\panel.py:793
+#: codraft\core\gui\panel.py:706 codraft\core\gui\panel.py:797
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\panel.py:714
+#: codraft\core\gui\panel.py:718
 msgid "Image List"
 msgstr "Liste des Images"
 

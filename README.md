@@ -51,7 +51,7 @@ Copyrights and licensing:
 |        |    •   | Aspect ratio (1:1, custom)     |
 |        |    •   | 50+ available colormaps        |
 |        |    •   | X/Y raw/averaged profiles      |
-|        |    •   | User-defined annotations       |
+|    •   |    •   | User-defined annotations       |
 
 ![1D-Peak detection](./doc/images/peak_detection.png)
 
