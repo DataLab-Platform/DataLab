@@ -9,7 +9,7 @@ CodraFT provides an annotation feature for signals (as well as for images).
 
 How to use the feature:
   - Create or open a signal in CodraFT workspace
-  - Select "View in a new window" in "View" menu
+  - Double-click on the signal or select "View in a new window" in "View" menu
   - Add annotations (labels, cursors, rectangles and segments)
   - Eventually customize the annotations (right-click, "Parameters")
   - Validate your changes by clicking on "OK" button

@@ -9,7 +9,7 @@ CodraFT provides an annotation feature for images (as well as for signals).
 
 How to use the feature:
   - Create or open an image in CodraFT workspace
-  - Select "View in a new window" in "View" menu
+  - Double-click on the image or select "View in a new window" in "View" menu
   - Add annotations (labels, rectangles, circles, etc.)
   - Eventually customize the annotations (right-click, "Parameters")
   - Validate your changes by clicking on "OK" button
