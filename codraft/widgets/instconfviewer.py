@@ -13,12 +13,13 @@ import platform
 import sys
 from subprocess import PIPE, Popen
 
-from guidata.configtools import get_icon
+from guidata.configtools import get_icon, get_module_data_path
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from codraft import __version__
 from codraft.config import _
+from codraft.utils import dephash
 from codraft.utils.qthelpers import exec_dialog
 
 
@@ -62,11 +63,21 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowIcon(get_icon("codraft.svg"))
         self.tabs = QW.QTabWidget()
         label = "Informations on current CodraFT installation:"
+        more_infos = ""
+        try:
+            datapath = get_module_data_path("codraft", "data")
+            state = dephash.check_dependencies_hash(datapath)
+            bad_deps = [name for name in state if not state[name]]
+            if bad_deps:
+                more_infos += "Invalid dependencies: "
+                more_infos += ", ".join(bad_deps) + os.linesep * 2
+        except IOError:
+            pass
         if sys.executable.lower().endswith("codraft.exe"):
             #  Stand-alone version
-            more_infos = "This is the Stand-alone version of CodraFT"
+            more_infos += "This is the Stand-alone version of CodraFT"
         else:
-            more_infos = get_pip_list()
+            more_infos += get_pip_list()
         infos = os.linesep.join(
             [
                 f"CodraFT v{__version__}",
