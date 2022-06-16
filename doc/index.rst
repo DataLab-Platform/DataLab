@@ -32,6 +32,7 @@ External resources:
 
    installation
    overview
+   roadmap
    features/signal/index
    features/image/index
    h5browser
