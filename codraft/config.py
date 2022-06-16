@@ -54,6 +54,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     window_size = conf.Option()
     base_dir = conf.WorkingDirOption()
     available_memory_threshold = conf.Option()
+    ignore_dependency_check = conf.Option()
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):

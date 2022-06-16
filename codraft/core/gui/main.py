@@ -165,7 +165,7 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def check_dependencies(self):
         """Check dependencies"""
-        if is_frozen("codraft"):
+        if is_frozen("codraft") or Conf.main.ignore_dependency_check.get(False):
             # No need to check dependencies if CodraFT has been frozen
             return
         try:
@@ -189,7 +189,10 @@ class CodraFTMainWindow(QW.QMainWindow):
                     _("Application may not behave as expected."),
                 ]
             )
-            QW.QMessageBox.critical(self, APP_NAME, txt)
+            btn = QW.QMessageBox.critical(
+                self, APP_NAME, txt, QW.QMessageBox.Ok | QW.QMessageBox.Ignore
+            )
+            Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
 
     def check_for_previous_crash(self):
         """Check for previous crash"""

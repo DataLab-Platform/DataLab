@@ -3,6 +3,16 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
+## Version 2.0.3 ##
+
+Bug fixes:
+
+*
+
+Other changes:
+
+* Added an option to ignore dependency check warning at startup
+
 ## Version 2.0.2 ##
 
 The following major changes were introduced with CodraFT V2:
