@@ -43,7 +43,10 @@ def codraft_app_context(size=None, maximized=False, save=False, console=None):
             yield win
         finally:
             if save:
-                win.save_to_h5_file(tests.get_output_data_path("h5"))
+                try:
+                    win.save_to_h5_file(tests.get_output_data_path("h5"))
+                except PermissionError:
+                    pass
 
 
 def take_plotwidget_screenshot(panel, name):

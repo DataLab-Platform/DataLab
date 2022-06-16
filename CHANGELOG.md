@@ -12,6 +12,7 @@ Bug fixes:
 Other changes:
 
 * Added an option to ignore dependency check warning at startup
+* Ignore when unable to save h5 in ima/sig test scenarios
 
 ## Version 2.0.2 ##
 
