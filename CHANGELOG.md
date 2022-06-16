@@ -7,7 +7,7 @@ for future and past milestones.
 
 Bug fixes:
 
-*
+* Fixed pen.setWidth TypeError on Linux
 
 Other changes:
 

@@ -76,7 +76,7 @@ def select(self):
     if plot is not None:
         plot.blockSignals(True)
     pen = self.curveparam.line.build_pen()
-    pen.setWidth(2.0)
+    pen.setWidth(2)
     self.setPen(pen)
     if plot is not None:
         plot.blockSignals(False)
