@@ -19,13 +19,12 @@ msgstr ""
 
 #: ../../features/general/index.rst:8
 msgid "Contents:"
-msgstr ""
+msgstr "Table des matières :"
 
 #: ../../features/general/index.rst:2
 msgid "General features"
-msgstr ""
+msgstr "Fonctionnalités générales"
 
 #: ../../features/general/index.rst:6
 msgid "CodraFT main window (Ubuntu 22.04)"
-msgstr ""
-
+msgstr "Fenêtre principale de CodraFT (Ubuntu 22.04)"
