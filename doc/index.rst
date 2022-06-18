@@ -33,9 +33,9 @@ External resources:
    installation
    overview
    roadmap
+   features/general/index
    features/signal/index
    features/image/index
-   h5browser
 
 Copyrights and licensing
 ------------------------

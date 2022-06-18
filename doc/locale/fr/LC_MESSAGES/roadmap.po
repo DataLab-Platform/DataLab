@@ -1,0 +1,135 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-18 18:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../roadmap.rst:2
+msgid "Roadmap"
+msgstr ""
+
+#: ../../roadmap.rst:5
+msgid "Future milestones"
+msgstr ""
+
+#: ../../roadmap.rst:8
+msgid "CodraFT 2.1"
+msgstr ""
+
+#: ../../roadmap.rst:10
+msgid "Run computations in a separate process:"
+msgstr ""
+
+#: ../../roadmap.rst:12
+msgid "Execute a \"computing server\" in background, in another process"
+msgstr ""
+
+#: ../../roadmap.rst:13
+msgid ""
+"Define a communication protocol between this process and CodraFT GUI "
+"process based on TCP sockets"
+msgstr ""
+
+#: ../../roadmap.rst:15
+msgid ""
+"For each computation, send pickled data and computing function to the "
+"server and wait for the result"
+msgstr ""
+
+#: ../../roadmap.rst:17
+msgid ""
+"It will then possible to stop any computation at any time by killing the "
+"server process and restarting it (eventually after incrementing the "
+"communication port number)"
+msgstr ""
+
+#: ../../roadmap.rst:21
+msgid ""
+"\"Open in a new window\" feature: add support for multiple separate "
+"windows, thus allowing to visualize for example two images side by side"
+msgstr ""
+
+#: ../../roadmap.rst:24
+msgid "ROI features:"
+msgstr ""
+
+#: ../../roadmap.rst:26
+msgid ""
+"Add an option to extract multiples ROI on either one signal/image "
+"(current behavior) or one signal/image per ROI"
+msgstr ""
+
+#: ../../roadmap.rst:28
+msgid "Images: create ROI using array masks"
+msgstr ""
+
+#: ../../roadmap.rst:29
+msgid "Images: add support for circular ROI"
+msgstr ""
+
+#: ../../roadmap.rst:31
+msgid "Optimize image displaying performance"
+msgstr ""
+
+#: ../../roadmap.rst:34
+msgid "Past milestones"
+msgstr ""
+
+#: ../../roadmap.rst:37
+msgid "CodraFT 2.0"
+msgstr ""
+
+#: ../../roadmap.rst:39
+msgid "New data processing and visualization features (see below)"
+msgstr ""
+
+#: ../../roadmap.rst:41
+msgid ""
+"Fully automated high-level processing features for internal testing "
+"purpose, as well as embedding CodraFT in a third-party software"
+msgstr ""
+
+#: ../../roadmap.rst:44
+#, python-format
+msgid ""
+"Extensive test suite (unit tests and application tests) with 90% feature "
+"coverage"
+msgstr ""
+
+#: ../../roadmap.rst:48
+msgid "CodraFT 1.7"
+msgstr ""
+
+#: ../../roadmap.rst:50
+msgid "Major redesign"
+msgstr ""
+
+#: ../../roadmap.rst:52
+msgid "Python 3.8 is the new reference"
+msgstr ""
+
+#: ../../roadmap.rst:54
+msgid "Dropped Python 2 support"
+msgstr ""
+
+#: ../../roadmap.rst:57
+msgid "CodraFT 1.6"
+msgstr ""
+
+#: ../../roadmap.rst:59
+msgid "Last release supporting Python 2"
+msgstr ""
+

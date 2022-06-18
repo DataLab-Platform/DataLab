@@ -18,6 +18,9 @@ CodraFT 2.1
     server process and restarting it (eventually after incrementing the
     communication port number)
 
+* Add an xmlrpc server to allow external applications controlling
+  CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
+
 * "Open in a new window" feature: add support for multiple separate windows,
   thus allowing to visualize for example two images side by side
 
