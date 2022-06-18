@@ -12,8 +12,6 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-
-@REM CODRAFT_VERSION is used by doc/conf.py to set documentation version
 call %FUNC% GetVersion CODRAFT_VERSION
 
 set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%

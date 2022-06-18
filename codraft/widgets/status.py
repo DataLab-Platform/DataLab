@@ -15,7 +15,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from codraft.config import DEBUG, _
-from codraft.utils.env import execenv
+from codraft.env import execenv
 
 
 class MemoryStatus(QW.QWidget):

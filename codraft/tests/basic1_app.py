@@ -10,7 +10,7 @@ Running application a few times in a row with different entry parameters.
 """
 
 from codraft import app
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 
 SHOW = True  # Show test in GUI-based test launcher

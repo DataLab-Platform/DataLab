@@ -3,6 +3,17 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
+## Version 2.0.4 ##
+
+Bug fixes:
+
+* Centralized argument parsing in CodraFT exec env object, thus avoiding conflicts
+
+Other changes:
+
+* Command line option --h5 is now a positionnal argument (h5)
+* Added command line option --version to show CodraFT version
+
 ## Version 2.0.3 ##
 
 Bug fixes:

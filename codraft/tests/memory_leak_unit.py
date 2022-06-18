@@ -14,8 +14,8 @@ import os
 import numpy as np
 import psutil
 
+from codraft.env import execenv
 from codraft.tests.embedded1_unit import HostWindow
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves
 

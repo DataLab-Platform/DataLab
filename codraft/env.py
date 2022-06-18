@@ -10,6 +10,7 @@ CodraFT environmnent utilities
 import argparse
 import enum
 import os
+import platform
 import pprint
 import sys
 
@@ -35,6 +36,7 @@ class CodraFTExecEnv:
     DELAY_ENV = "CODRAFT_DELAY_BEFORE_QUIT"
 
     def __init__(self):
+        self.h5files = None
         self.parse_args()
 
     @staticmethod
@@ -92,22 +94,44 @@ class CodraFTExecEnv:
 
     def parse_args(self):
         """Parse command line arguments"""
-        parser = argparse.ArgumentParser(description="Run CodraFT test")
+        parser = argparse.ArgumentParser(description="Run CodraFT")
+        parser.add_argument(
+            "h5",
+            nargs="?",
+            type=str,
+            help="HDF5 file names (separated by ';'), "
+            "optionally with dataset name (separated by ',')",
+        )
+        parser.add_argument(
+            "-v", "--version", action="store_true", help="show CodraFT version"
+        )
         parser.add_argument(
             "--mode",
             choices=[self.UNATTENDED_ARG, self.SCREENSHOT_ARG],
             required=False,
+            help="unattended: non-interactive test mode ; "
+            "screenshot: unattended mode, with automatic screenshots",
+        )
+        parser.add_argument(
+            "--" + self.DELAY_ARG,
+            type=int,
+            default=0,
+            help="delay (seconds) before quitting application in unattended mode",
         )
         parser.add_argument(
             "--" + self.VERBOSE_ARG,
             choices=[lvl.value for lvl in VerbosityLevels],
             required=False,
             default=VerbosityLevels.NORMAL.value,
-        )
-        parser.add_argument(
-            "--" + self.DELAY_ARG, type=int, default=0, help=self.delay.__doc__
+            help="verbosity level: for debugging/testing purpose",
         )
         args, _unknown = parser.parse_known_args()
+        if args.h5:
+            self.h5files = args.h5.split(";")
+        if args.version:
+            version = os.environ["CODRAFT_VERSION"]
+            print(f"CodraFT {version} on {platform.system()}")
+            sys.exit()
         self.set_env_from_args(args)
 
     def set_env_from_args(self, args):

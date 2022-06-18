@@ -32,7 +32,7 @@ from codraft.config import (
     _,
     get_old_log_fname,
 )
-from codraft.utils.env import execenv
+from codraft.env import execenv
 
 
 def close_widgets_and_quit(screenshot=False):

@@ -13,9 +13,9 @@ Annotations unit test:
 """
 
 from codraft.core.model.base import ANN_KEY
+from codraft.env import execenv
 from codraft.tests import codraft_app_context
 from codraft.tests import data as test_data
-from codraft.utils.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 

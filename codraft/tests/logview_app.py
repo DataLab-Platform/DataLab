@@ -12,7 +12,7 @@ import subprocess
 import sys
 
 from codraft.app import run
-from codraft.utils.env import execenv
+from codraft.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 

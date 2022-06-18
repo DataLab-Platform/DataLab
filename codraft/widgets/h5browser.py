@@ -27,7 +27,7 @@ from qtpy import QtWidgets as QW
 from codraft.config import _
 from codraft.core.io.h5 import H5Importer
 from codraft.core.model.signal import SignalParam
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import qt_handle_error_message
 
 

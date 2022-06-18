@@ -18,10 +18,10 @@ import os.path as osp
 
 import numpy as np
 
+from codraft.env import execenv
 from codraft.tests import codraft_app_context
 from codraft.tests import data as test_data
 from codraft.utils import tests
-from codraft.utils.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 

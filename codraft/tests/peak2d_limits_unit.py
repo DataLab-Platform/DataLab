@@ -11,9 +11,9 @@ Image peak detection test: testing algorithm limits
 
 
 from codraft.core.computation.image import get_2d_peaks_coords
+from codraft.env import execenv
 from codraft.tests.data import get_peak2d_data
 from codraft.tests.peak2d_unit import exec_image_peak_detection_func
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 
 SHOW = False  # Do not show test in GUI-based test launcher

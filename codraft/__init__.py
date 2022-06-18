@@ -17,12 +17,14 @@ libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (tha
 
 import os
 
-__version__ = "2.0.3"
+__version__ = "2.0.4"
 __docurl__ = "https://codraft.readthedocs.io/en/latest/"
 __homeurl__ = "https://codra-ingenierie-informatique.github.io/CodraFT/"
 __supporturl__ = (
     "https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/new/choose"
 )
+
+os.environ["CODRAFT_VERSION"] = __version__
 
 try:
     import codraft.core.io  # analysis:ignore
@@ -34,8 +36,3 @@ except ImportError:
 # Dear (Debian, RPM, ...) package makers, please feel free to customize the
 # following path to module's data (images) and translations:
 DATAPATH = LOCALEPATH = ""
-
-#    Copyright © 2009-2010 CEA
-#    Pierre Raybaut
-#    Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
-#    (see included file `Licence_CeCILL_V2.1-en.txt`)

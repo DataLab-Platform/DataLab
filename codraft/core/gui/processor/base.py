@@ -20,9 +20,10 @@ from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from codraft import env
 from codraft.config import _
 from codraft.core.model.base import ResultShape
-from codraft.utils import env, misc
+from codraft.utils import misc
 from codraft.utils.qthelpers import (
     create_progress_bar,
     exec_dialog,

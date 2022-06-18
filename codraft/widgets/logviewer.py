@@ -15,7 +15,7 @@ from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from codraft.config import APP_NAME, Conf, _, get_old_log_fname
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import exec_dialog
 
 

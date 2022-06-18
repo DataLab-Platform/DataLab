@@ -17,9 +17,9 @@ CodraFT mainwindow automation test:
 import os.path as osp
 
 from codraft.core.gui.processor.base import ClipParam
+from codraft.env import execenv
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_test_image2, create_test_signal1
-from codraft.utils.env import execenv
 from codraft.utils.tests import temporary_directory
 
 SHOW = True  # Show test in GUI-based test launcher

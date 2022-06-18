@@ -17,7 +17,7 @@ from codraft.core.io.image import (
     imread_scor,
     imread_sif,
 )
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import try_open_test_data
 from codraft.utils.vistools import view_images

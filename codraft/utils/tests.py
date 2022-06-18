@@ -17,7 +17,7 @@ from contextlib import contextmanager
 
 from guidata.configtools import get_module_data_path
 
-from codraft.utils.env import execenv
+from codraft.env import execenv
 
 TST_PATH = []
 

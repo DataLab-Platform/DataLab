@@ -24,7 +24,7 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves, view_images
 

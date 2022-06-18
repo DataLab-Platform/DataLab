@@ -18,9 +18,9 @@ from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.gui.processor.image import PeakDetectionParam
 from codraft.core.gui.processor.signal import FWHMParam
 from codraft.core.model.signal import SignalParam
+from codraft.env import execenv
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_test_image3, create_test_signal1
-from codraft.utils.env import execenv
 
 SHOW = True  # Show test in GUI-based test launcher
 

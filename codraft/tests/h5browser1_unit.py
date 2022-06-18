@@ -10,8 +10,8 @@ Try and open all HDF5 test data available.
 """
 
 
+from codraft.env import execenv
 from codraft.tests.data import get_test_fnames
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.widgets.h5browser import H5BrowserDialog
 

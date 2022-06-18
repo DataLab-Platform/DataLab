@@ -13,8 +13,8 @@ from guidata.guitest import run_testlauncher
 from qtpy import QtCore as QC
 
 import codraft.config  # Loading icons
+from codraft import env
 from codraft.core.gui.main import CodraFTMainWindow
-from codraft.utils import env
 from codraft.utils import qthelpers as qth
 from codraft.utils import tests
 

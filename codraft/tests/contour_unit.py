@@ -19,8 +19,8 @@ from codraft.core.computation.image import (
     get_2d_peaks_coords,
     get_contour_shapes,
 )
+from codraft.env import execenv
 from codraft.tests.data import get_peak2d_data
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_image_items
 

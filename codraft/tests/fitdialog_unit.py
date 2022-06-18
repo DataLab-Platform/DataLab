@@ -14,8 +14,8 @@ Testing the multi-Gaussian fit dialog.
 import numpy as np
 
 from codraft.core.computation.signal import peak_indexes
+from codraft.env import execenv
 from codraft.tests.data import get_test_fnames
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import get_default_test_name
 from codraft.widgets.fitdialog import multigaussianfit

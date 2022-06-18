@@ -16,8 +16,8 @@ from qtpy import QtCore as QC
 
 from codraft import app
 from codraft.config import Conf
+from codraft.env import execenv
 from codraft.utils.conf import CONF
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import get_test_fnames
 

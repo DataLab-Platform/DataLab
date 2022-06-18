@@ -14,7 +14,7 @@ Testing peak detection dialog box.
 
 import numpy as np
 
-from codraft.utils.env import execenv
+from codraft.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.utils.tests import get_test_fnames
 from codraft.widgets.signalpeakdialog import SignalPeakDetectionDialog

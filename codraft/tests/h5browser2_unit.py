@@ -14,8 +14,8 @@ import os
 import numpy as np
 import psutil
 
+from codraft.env import execenv
 from codraft.tests.data import get_test_fnames
-from codraft.utils.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.vistools import view_curves
 from codraft.widgets.h5browser import H5BrowserDialog

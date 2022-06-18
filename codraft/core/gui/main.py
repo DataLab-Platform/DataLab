@@ -38,7 +38,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
-from codraft import __docurl__, __homeurl__, __supporturl__, __version__
+from codraft import __docurl__, __homeurl__, __supporturl__, __version__, env
 from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.actionhandler import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
@@ -46,9 +46,9 @@ from codraft.core.gui.h5io import H5InputOutput
 from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
-from codraft.utils import dephash, env
+from codraft.env import execenv
+from codraft.utils import dephash
 from codraft.utils import qthelpers as qth
-from codraft.utils.env import execenv
 from codraft.widgets.instconfviewer import exec_codraft_installconfig_dialog
 from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
 from codraft.widgets.status import MemoryStatus
