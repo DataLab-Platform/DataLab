@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 10:56+0200\n"
+"POT-Creation-Date: 2022-06-19 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,24 +34,45 @@ msgid "CHM documentation"
 msgstr "Documentation CHM"
 
 #: ../../features/signal/menu/help.rst:12
-msgid "Open the CHM documentation (french/english and Windows only):"
+msgid "Open the CHM documentation (french/english, Windows only):"
 msgstr ""
 "Affiche la documentation au format CHM (français/anglais, sous Windows "
 "uniquement) :"
 
-#: ../../features/signal/menu/help.rst:19
+#: ../../features/image/menu/help.rst:20
 msgid "Show log files"
-msgstr ""
+msgstr "Afficher les journaux de bords"
 
-#: ../../features/signal/menu/help.rst:17
-msgid "Open CodraFT log viewer:"
-msgstr ""
+#: ../../features/image/menu/help.rst:17
+msgid "Open CodraFT log viewer"
+msgstr "Affiche l'explorateur de journaux de bord de CodraFT"
 
-#: ../../features/signal/menu/help.rst:23
+#: ../../features/image/menu/help.rst:20
+msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
+msgstr ""
+"Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
+"journaux de bord."
+
+#: ../../features/image/menu/help.rst:27
+msgid "About CodraFT installation"
+msgstr "Configuration d'installation de CodraFT"
+
+#: ../../features/image/menu/help.rst:23
+msgid ""
+"Show information regarding your CodraFT installation (this is typically "
+"needed for submitting a bug report)."
+msgstr "Affiche des informations sur votre configuration d'installation de CodraFT (particulièrement utile pour signaler des anomalies de manière efficace)."
+
+#: ../../features/image/menu/help.rst:27
+msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
+msgstr ""
+"Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
+"boîte de dialogue."
+
+#: ../../features/signal/menu/help.rst:31
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/signal/menu/help.rst:22
+#: ../../features/signal/menu/help.rst:30
 msgid "Open the \"About CodraFT\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de CodraFT\""
-

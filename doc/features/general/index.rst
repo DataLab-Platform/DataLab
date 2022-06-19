@@ -11,3 +11,5 @@ General features
 
    command
    h5browser
+   logviewer
+   instviewer

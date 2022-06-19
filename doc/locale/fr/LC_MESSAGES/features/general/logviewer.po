@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-19 15:25+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/general/logviewer.rst:4
+msgid "Log viewer"
+msgstr "Journaux de bord"
+
+#: ../../features/general/logviewer.rst:6
+msgid ""
+"Despite countless efforts (unit testing, test coverage, ...), CodraFT "
+"might crash or behave unexpectedly."
+msgstr "Malgré des efforts considérables en matière de tests (tests unitaires, couverture de tests, etc.), CodraFT peut s'arrêter inopinément ou se comporter de façon inattendue."
+
+#: ../../features/general/logviewer.rst:11
+msgid ""
+"For those situations, CodraFT provides two logs (located in your home "
+"directory):"
+msgstr "Pour traiter ce type de situation, CodraFT fournit deux types de journaux de bord (localisés dans votre répertoire utilisateur) :"
+
+#: ../../features/general/logviewer.rst:10
+msgid "\"Traceback log\", for Python exceptions"
+msgstr "\"Traceback log\", pour les exceptions Python"
+
+#: ../../features/general/logviewer.rst:11
+msgid "\"Faulthandler log\", for system failures (e.g. Qt-related crash)"
+msgstr "\"Faulthandler log\", pour les erreurs système (p.ex. crash lié à Qt)"
+
+#: ../../features/general/logviewer.rst:15
+msgid "CodraFT log viewer (see \"?\" menu)"
+msgstr "Journaux de bord CodraFT (voir le menu \"?\")"
+
+#: ../../features/general/logviewer.rst:17
+msgid ""
+"If CodraFT crashed or if any Python exception is raised during its "
+"execution, those log files will be updated accordingly. CodraFT will even"
+" notify that new informations are available in log files at next startup."
+" This is an invitation to submit a bug report."
+msgstr "Lorsque CodraFT s'arrête brutalement en raison d'une erreur système ou si une exception Python est levée durant son exécution, ces journaux de bord sont mis à jour en conséquence. CodraFT notifie même l'utilisateur de la disponibilité de nouvelles informations dans les journaux de bord, lors du prochain démarrage de l'application. Ceci est une invitation à soumettre un rapport d'anomalie."
+
+#: ../../features/general/logviewer.rst:22
+msgid ""
+"Reporting unexpected behavior or any other bug on `GitHub Issues`_ will "
+"be greatly appreciated, especially if those log file contents are "
+"attached to the report (as information on your installation "
+"configuration, see :ref:`ref-to-instviewer`)."
+msgstr "Signaler un comportement inattendu ou tout autre type d'anomalie sur la page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous prenez soin de joindre le contenu des journaux de bord (ainsi que des informations sur votre configuration, cf. :ref:`ref-to-instviewer`)."

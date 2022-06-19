@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-19 15:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/general/instviewer.rst:4
+msgid "About CodraFT installation"
+msgstr "Configuration d'installation de CodraFT"
+
+#: ../../features/general/instviewer.rst:6
+msgid ""
+"Because of the multiple ways of installing CodraFT on your machine, "
+"understanding why the application behaves unexpectedly without any "
+"information on your configuration could be very challenging."
+msgstr "En raison des multiples façons d'installer CodraFT sur votre machine, comprendre l'origine d'un dysfontionnement de l'application sans information sur votre configuration peut s'avérer très difficile."
+
+#: ../../features/general/instviewer.rst:10
+msgid ""
+"That is why CodraFT provides the dialog box \"About CodraFT "
+"installation\"."
+msgstr "C'est pourquoi CodraFT fournit la boîte de dialogue \"Configuration d'installation de CodraFT\"."
+
+#: ../../features/general/instviewer.rst:14
+msgid "About your CodraFT installation (see \"?\" menu)"
+msgstr "Configuration d'installation de CodraFT (voir menu \"?\")"
+
+#: ../../features/general/instviewer.rst:16
+msgid ""
+"Reporting unexpected behavior or any other bug on `GitHub Issues`_ will "
+"be greatly appreciated, especially if above contents are attached to the "
+"report (as well log files, see :ref:`ref-to-logviewer`)."
+msgstr "Signaler un comportement inattendu ou tout autre type d'anomalie sur la page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous prenez soin de joindre les informations ci-dessus (ainsi que les journaux d'historique, cf. :ref:`ref-to-logviewer`)."

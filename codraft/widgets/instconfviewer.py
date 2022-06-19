@@ -62,7 +62,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowTitle(_("About CodraFT installation"))
         self.setWindowIcon(get_icon("codraft.svg"))
         self.tabs = QW.QTabWidget()
-        label = "Informations on current CodraFT installation:"
+        label = "Information on current CodraFT installation:"
         more_infos = ""
         try:
             datapath = get_module_data_path("codraft", "data")
