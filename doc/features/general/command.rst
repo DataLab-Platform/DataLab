@@ -11,21 +11,24 @@ To run CodraFT from the command line, type the following::
 To show help on command line usage, simply run::
 
     $ codraft --help
-    usage: app.py [-h] [-v] [--mode {unattended,screenshot}] [--delay DELAY] [--verbose {quiet,minimal,normal}] [h5]
+    usage: app.py [-h] [-b path] [-v] [--mode {unattended,screenshot}] [--delay DELAY] [--verbose {quiet,minimal,normal}]
+                  [h5]
 
     Run CodraFT
 
     positional arguments:
-    h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
+      h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
 
     optional arguments:
-    -h, --help            show this help message and exit
-    -v, --version         show CodraFT version
-    --mode {unattended,screenshot}
+      -h, --help            show this help message and exit
+      -b path, --h5browser path
+                            path to open with HDF5 browser
+      -v, --version         show CodraFT version
+      --mode {unattended,screenshot}
                             unattended: non-interactive test mode ; screenshot: unattended mode, with automatic
                             screenshots
-    --delay DELAY         delay (seconds) before quitting application in unattended mode
-    --verbose {quiet,minimal,normal}
+      --delay DELAY         delay (seconds) before quitting application in unattended mode
+      --verbose {quiet,minimal,normal}
                             verbosity level: for debugging/testing purpose
 
 Open HDF5 file at startup
@@ -36,6 +39,14 @@ To open HDF5 files, or even import only a specified HDF5 dataset, use the follow
     $ codraft /path/to/file1.h5
     $ codraft /path/to/file1.h5,/path/to/dataset1
     $ codraft /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
+
+Open HDF5 browser at startup
+----------------------------
+
+To open the HDF5 browser at startup, use one of the following commands::
+
+    $ codraft -b /path/to/file1.h5
+    $ codraft --h5browser /path/to/file1.h5
 
 Run unit tests
 --------------

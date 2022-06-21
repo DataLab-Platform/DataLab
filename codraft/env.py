@@ -37,6 +37,7 @@ class CodraFTExecEnv:
 
     def __init__(self):
         self.h5files = None
+        self.h5browser_file = None
         self.parse_args()
 
     @staticmethod
@@ -103,6 +104,14 @@ class CodraFTExecEnv:
             "optionally with dataset name (separated by ',')",
         )
         parser.add_argument(
+            "-b",
+            "--h5browser",
+            required=False,
+            type=str,
+            metavar="path",
+            help="path to open with HDF5 browser",
+        )
+        parser.add_argument(
             "-v", "--version", action="store_true", help="show CodraFT version"
         )
         parser.add_argument(
@@ -128,6 +137,8 @@ class CodraFTExecEnv:
         args, _unknown = parser.parse_known_args()
         if args.h5:
             self.h5files = args.h5.split(";")
+        if args.h5browser:
+            self.h5browser_file = args.h5browser
         if args.version:
             version = os.environ["CODRAFT_VERSION"]
             print(f"CodraFT {version} on {platform.system()}")

@@ -42,6 +42,8 @@ def create(
     if objects is not None:
         for obj in objects:
             window.add_object(obj)
+    if execenv.h5browser_file is not None:
+        window.import_h5_file(execenv.h5browser_file)
     return window
 
 

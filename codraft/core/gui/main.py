@@ -595,6 +595,18 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.h5inputoutput.save_file(filename)
             self.set_modified(False)
 
+    @staticmethod
+    def __check_h5file(filename):
+        """Check HDF5 filename"""
+        filename = osp.abspath(osp.normpath(filename))
+        bname = osp.basename(filename)
+        if not osp.isfile(filename):
+            raise IOError(f'File not found "{bname}"')
+        if not filename.endswith(".h5"):
+            raise IOError(f'Invalid HDF5 file "{bname}"')
+        Conf.main.base_dir.set(filename)
+        return filename
+
     def open_h5_files(
         self,
         h5files: List[str] = None,
@@ -633,22 +645,26 @@ class CodraFTMainWindow(QW.QMainWindow):
                 filename, dsetname = fname_with_dset.split(",")
             else:
                 filename, dsetname = fname_with_dset, None
-            filename = osp.abspath(osp.normpath(filename))
-            with qth.qt_try_loadsave_file(self, filename, "load"):
-                Conf.main.base_dir.set(filename)
-                bname = osp.basename(filename)
-                if not osp.isfile(filename):
-                    raise IOError(f'File not found "{bname}"')
-                if not filename.endswith(".h5"):
-                    raise IOError(f'Invalid HDF5 file "{bname}"')
-                if import_all is None and dsetname is None:
-                    self.h5inputoutput.import_file(filename, False, reset_all)
-                else:
+            if import_all is None and dsetname is None:
+                self.import_h5_file(filename, reset_all)
+            else:
+                with qth.qt_try_loadsave_file(self, filename, "load"):
+                    filename = self.__check_h5file(filename)
                     if dsetname is None:
                         self.h5inputoutput.open_file(filename, import_all, reset_all)
                     else:
                         self.h5inputoutput.import_dataset_from_file(filename, dsetname)
-                reset_all = False
+            reset_all = False
+
+    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
+        """Open CodraFT HDF5 browser to Import HDF5 file
+
+        :param filename: HDF5 filename
+        :param reset_all: Delete all CodraFT signals and images before importing data
+        """
+        with qth.qt_try_loadsave_file(self, filename, "load"):
+            filename = self.__check_h5file(filename)
+            self.h5inputoutput.import_file(filename, False, reset_all)
 
     def add_object(self, obj, refresh=True):
         """Add object - signal or image"""
