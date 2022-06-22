@@ -3,17 +3,19 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.0.4 ##
+## Version 2.1.0 ##
+
+Changes:
+
+* "View in a new window": now opens non-modal dialogs, thus allowing to visualize
+  multiple signals or images in separate windows
+* Command line option --h5 is now a positionnal argument (h5)
+* Added command line option -b (or --h5browser) to browse a HDF5 file at startup
+* Added command line option --version to show CodraFT version
 
 Bug fixes:
 
 * Centralized argument parsing in CodraFT exec env object, thus avoiding conflicts
-
-Other changes:
-
-* Command line option --h5 is now a positionnal argument (h5)
-* Added command line option -b (or --h5browser) to browse a HDF5 file at startup
-* Added command line option --version to show CodraFT version
 
 ## Version 2.0.3 ##
 

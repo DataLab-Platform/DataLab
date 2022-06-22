@@ -12,6 +12,8 @@ Annotations unit test:
   - Check if image annotations are still the same
 """
 
+from qtpy import QtWidgets as QW
+
 from codraft.core.model.base import ANN_KEY
 from codraft.env import execenv
 from codraft.tests import codraft_app_context
@@ -27,9 +29,9 @@ def test():
         panel = win.imagepanel
         ima = test_data.create_image_with_annotations()
         panel.add_object(ima)
-        panel.open_separate_view()
+        panel.open_separate_view().done(QW.QDialog.DialogCode.Accepted)
         orig_metadata = ima.metadata.copy()
-        panel.open_separate_view()
+        panel.open_separate_view().done(QW.QDialog.DialogCode.Accepted)
         execenv.print("Check [geometric shapes] <--> [plot items] conversion:")
         execenv.print(f"  Comparing {ANN_KEY}: ", end="")
         # open("before.json", mode="wb").write(orig_metadata[ANN_KEY].encode())

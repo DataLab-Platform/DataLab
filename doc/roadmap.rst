@@ -4,7 +4,7 @@ Roadmap
 Future milestones
 -----------------
 
-CodraFT 2.1
+CodraFT 2.2
 ^^^^^^^^^^^
 
 * Run computations in a separate process:
@@ -35,6 +35,15 @@ CodraFT 2.1
 
 Past milestones
 ---------------
+
+CodraFT 2.1
+^^^^^^^^^^^
+
+* Minor changes following first public release (v2.0):
+
+  - Non-modal separate view dialogs
+  - New command line option features
+
 
 CodraFT 2.0
 ^^^^^^^^^^^

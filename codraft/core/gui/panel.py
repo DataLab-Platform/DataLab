@@ -78,11 +78,7 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import (
-    exec_dialog,
-    qt_try_loadsave_file,
-    save_restore_stds,
-)
+from codraft.utils.qthelpers import exec_dialog, qt_try_loadsave_file, save_restore_stds
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -154,6 +150,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.acthandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
+        self.__separate_views = {}
 
     def setup_panel(self):
         """Setup panel"""
@@ -271,6 +268,9 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Remove signal/image object"""
         rows = sorted(self.objlist.get_selected_rows(), reverse=True)
         for row in rows:
+            for dlg, obj in self.__separate_views.items():
+                if obj is self.objlist[row]:
+                    dlg.done(QW.QDialog.DialogCode.Rejected)
             del self.objlist[row]
             del self.itmlist[row]
         self.objlist.refresh_list(0)
@@ -292,6 +292,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     def remove_all_objects(self):
         """Remove all signal/image objects"""
+        for dlg in self.__separate_views:
+            dlg.done(QW.QDialog.DialogCode.Rejected)
         self.objlist.remove_all()
         self.itmlist.remove_all()
         self.objlist.refresh_list(0)
@@ -418,14 +420,16 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.SIG_REFRESH_PLOT.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, rows=None):
+    def open_separate_view(self, rows=None) -> QW.QDialog:
         """
         Open separate view for visualizing selected objects
 
         :param list rows: List of row indexes for the objects to be shown in dialog
+        :return: Dialog instance
         """
         title = _("Annotations")
-        rows = self.objlist.get_selected_rows()
+        if rows is None:
+            rows = self.objlist.get_selected_rows()
         row = rows[0]
         obj = self.objlist[row]
         dlg = self.create_new_dialog(rows, edit=True, name="new_window")
@@ -446,13 +450,23 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             item.set_selectable(False)
         for item in obj.iterate_shape_items(editable=True):
             plot.add_item(item)
-        if exec_dialog(dlg):
-            items = plot.get_items()
+        self.__separate_views[dlg] = obj
+        dlg.show()
+        dlg.finished.connect(self.__separate_view_finished)
+        return dlg
+
+    def __separate_view_finished(self, result: int):
+        """Separate view was closed"""
+        dlg = self.sender()
+        if result == QW.QDialog.DialogCode.Accepted:
+            items = dlg.get_plot().get_items()
             rw_items = [item for item in items if not item.is_readonly()]
             if rw_items:
+                obj = self.__separate_views[dlg]
                 obj.set_annotations_from_items(rw_items)
-            self.current_item_changed(row)
-            self.SIG_REFRESH_PLOT.emit()
+                row = self.objlist.get_row(obj)
+                self.current_item_changed(row)
+                self.SIG_REFRESH_PLOT.emit()
 
     def toggle_show_titles(self, state):
         """Toggle show annotations option"""

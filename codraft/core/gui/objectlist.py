@@ -122,6 +122,14 @@ class ObjectList(SimpleObjectList):
         """Set object at row"""
         self._objects[row] = obj
 
+    def __contains__(self, obj):
+        """Return True if list contain obj"""
+        return obj in self._objects
+
+    def get_row(self, obj):
+        """Return row associated to object obj"""
+        return self._objects.index(obj)
+
     def __fix_obj_titles(self, row: int, sign: int) -> None:
         """Fix all object titles before adding (sign==1) or removing (sign==-1)
         an object at row index"""
