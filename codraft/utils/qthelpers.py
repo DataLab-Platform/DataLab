@@ -33,6 +33,7 @@ from codraft.config import (
     get_old_log_fname,
 )
 from codraft.env import execenv
+from codraft.utils.misc import to_string
 
 
 def close_widgets_and_quit(screenshot=False):
@@ -51,8 +52,8 @@ QAPP_INSTANCE = None
 def get_log_contents(fname):
     """Return True if file exists and something was logged in it"""
     if osp.exists(fname):
-        with open(fname, "r", encoding="utf-8") as fdesc:
-            return fdesc.read().strip()
+        with open(fname, "rb") as fdesc:
+            return to_string(fdesc.read()).strip()
     return None
 
 
