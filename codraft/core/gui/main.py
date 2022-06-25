@@ -23,11 +23,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import __version__ as guidata_ver
 from guidata.configtools import get_icon, get_module_data_path, get_module_path
-from guidata.qthelpers import (
-    add_actions,
-    create_action,
-    win32_fix_title_bar_background,
-)
+from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from guiqwt import __version__ as guiqwt_ver
 from guiqwt.builder import make
@@ -581,6 +577,18 @@ class CodraFTMainWindow(QW.QMainWindow):
         for panel in self.panels:
             panel.remove_all_objects()
 
+    @staticmethod
+    def __check_h5file(filename, operation: str):
+        """Check HDF5 filename"""
+        filename = osp.abspath(osp.normpath(filename))
+        bname = osp.basename(filename)
+        if operation == "load" and not osp.isfile(filename):
+            raise IOError(f'File not found "{bname}"')
+        if not filename.endswith(".h5"):
+            raise IOError(f'Invalid HDF5 file "{bname}"')
+        Conf.main.base_dir.set(filename)
+        return filename
+
     def save_to_h5_file(self, filename=None):
         """Save to a CodraFT HDF5 file"""
         if filename is None:
@@ -591,21 +599,9 @@ class CodraFTMainWindow(QW.QMainWindow):
             if not filename:
                 return
         with qth.qt_try_loadsave_file(self.parent(), filename, "save"):
-            Conf.main.base_dir.set(filename)
+            filename = self.__check_h5file(filename, "save")
             self.h5inputoutput.save_file(filename)
             self.set_modified(False)
-
-    @staticmethod
-    def __check_h5file(filename):
-        """Check HDF5 filename"""
-        filename = osp.abspath(osp.normpath(filename))
-        bname = osp.basename(filename)
-        if not osp.isfile(filename):
-            raise IOError(f'File not found "{bname}"')
-        if not filename.endswith(".h5"):
-            raise IOError(f'Invalid HDF5 file "{bname}"')
-        Conf.main.base_dir.set(filename)
-        return filename
 
     def open_h5_files(
         self,
@@ -649,7 +645,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                 self.import_h5_file(filename, reset_all)
             else:
                 with qth.qt_try_loadsave_file(self, filename, "load"):
-                    filename = self.__check_h5file(filename)
+                    filename = self.__check_h5file(filename, "load")
                     if dsetname is None:
                         self.h5inputoutput.open_file(filename, import_all, reset_all)
                     else:
@@ -663,7 +659,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         :param reset_all: Delete all CodraFT signals and images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
-            filename = self.__check_h5file(filename)
+            filename = self.__check_h5file(filename, "load")
             self.h5inputoutput.import_file(filename, False, reset_all)
 
     def add_object(self, obj, refresh=True):
