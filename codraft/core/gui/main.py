@@ -173,16 +173,26 @@ class CodraFTMainWindow(QW.QMainWindow):
             return
         bad_deps = [name for name in state if not state[name]]
         if bad_deps:
-            txt0 = _("Invalid dependency:")
+            txt0 = _("Non-compliant dependency:")
             if len(bad_deps) > 1:
-                txt0 = _("Invalid dependencies:")
+                txt0 = _("Non-compliant dependencies:")
             txt = "<br>".join(
                 [
                     "<u>" + txt0 + "</u> " + ", ".join(bad_deps),
                     "",
                     "",
-                    _("At least one dependency has been altered."),
-                    _("Application may not behave as expected."),
+                    _(
+                        "At least one dependency does not comply with CodraFT "
+                        "qualification standard reference (wrong dependency version "
+                        "has been installed, or dependency source code has been "
+                        "modified, or the application has not yet been qualified "
+                        "on your operating system)."
+                    ),
+                    "",
+                    _(
+                        "This means that application has not been qualified "
+                        "in this context and may not behave as expected."
+                    ),
                 ]
             )
             btn = QW.QMessageBox.critical(
