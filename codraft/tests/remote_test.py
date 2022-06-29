@@ -7,6 +7,10 @@
 Remote server/client test
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
+
+import abc
 import os
 import os.path as osp
 import time
@@ -24,7 +28,7 @@ from codraft.core.model.image import create_image
 from codraft.core.model.signal import create_signal
 from codraft.tests import codraft_app_context
 from codraft.tests.data import create_2d_gaussian, create_test_signal1
-from codraft.utils.qthelpers import qt_app_context
+# from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import temporary_directory
 
 # === Python 2.7 client side:
@@ -64,10 +68,6 @@ class DummyCodraFTWindow:
         """Switch to image panel"""
         print(self.switch_to_image_panel.__doc__)
 
-    def has_objects(self):
-        """Return True if sig/ima panels have any object"""
-        return False
-
     def reset_all(self):
         """Reset all application data"""
         print(self.reset_all.__doc__)
@@ -94,8 +94,44 @@ class DummyCodraFTWindow:
         print(self.add_object.__doc__, obj, refresh)
 
 
-class RPCServerThread(QC.QThread):
-    """XML-RPC server thread"""
+class BaseRPCServer(abc.ABC):
+    """Base XML-RPC server mixin"""
+
+    def __init__(self):
+        self.port = None
+
+    def serve(self):
+        """Start server and serve forever"""
+        with SimpleXMLRPCServer(
+            ("127.0.0.1", 0), logRequests=False, allow_none=True
+        ) as server:
+            server.register_introspection_functions()
+            server.register_function(self.get_version)
+            self.register_functions(server)
+            self.port = server.server_address[1]
+            self.notify_port(self.port)
+            server.serve_forever()
+
+    @staticmethod
+    def get_version():
+        """Return CodraFT version"""
+        return __version__
+
+    @abc.abstractmethod
+    def notify_port(self, port: int):
+        """Notify automatically attributed port"""
+
+    @abc.abstractmethod
+    def register_functions(self, server: SimpleXMLRPCServer):
+        """Register functions"""
+
+
+class RPCServerThreadMeta(type(QC.QThread), abc.ABCMeta):
+    """Mixed metaclass to avoid conflicts"""
+
+
+class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
+    """XML-RPC server QThread"""
 
     SIG_SERVER_PORT = QC.Signal(int)
     SIG_ADD_OBJECT = QC.Signal(object)
@@ -108,7 +144,7 @@ class RPCServerThread(QC.QThread):
 
     def __init__(self, win: CodraFTMainWindow):
         QC.QThread.__init__(self)
-        self.port = None
+        BaseRPCServer.__init__(self)
         self.SIG_ADD_OBJECT.connect(win.add_object)
         self.SIG_SWITCH_TO_SIGNAL_PANEL.connect(win.switch_to_signal_panel)
         self.SIG_SWITCH_TO_IMAGE_PANEL.connect(win.switch_to_image_panel)
@@ -117,20 +153,12 @@ class RPCServerThread(QC.QThread):
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
 
-    def run(self):
-        """Thread execution method"""
-        with SimpleXMLRPCServer(
-            ("127.0.0.1", 0), logRequests=False, allow_none=True
-        ) as server:
-            self.port = server.server_address[1]
-            self.SIG_SERVER_PORT.emit(self.port)
-            self.register_functions(server)
-            server.serve_forever()
+    def notify_port(self, port: int):
+        """Notify automatically attributed port"""
+        self.SIG_SERVER_PORT.emit(port)
 
     def register_functions(self, server: SimpleXMLRPCServer):
         """Register functions"""
-        server.register_introspection_functions()
-        server.register_function(self.get_version)
         server.register_function(self.swith_to_signal_panel)
         server.register_function(self.swith_to_image_panel)
         server.register_function(self.add_signal)
@@ -140,10 +168,9 @@ class RPCServerThread(QC.QThread):
         server.register_function(self.open_h5_files)
         server.register_function(self.import_h5_file)
 
-    @staticmethod
-    def get_version():
-        """Return CodraFT version"""
-        return __version__
+    def run(self):
+        """Thread execution method"""
+        self.serve()
 
     def swith_to_signal_panel(self):
         """Swith to signal panel"""
@@ -233,7 +260,7 @@ def test():
             port = server_thread.port
             print(f"Port: {port}")
             # qapp.exec()
-            s = ServerProxy(f"http://127.0.0.1:{port}")
+            s = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
             print(f"CodraFT version: {s.get_version()}")
             x, y = create_test_signal1().get_data()
             print(s.add_signal("tutu", array_to_rpcbinary(x), array_to_rpcbinary(y)))
