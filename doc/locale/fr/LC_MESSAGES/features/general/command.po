@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-21 18:22+0200\n"
+"POT-Creation-Date: 2022-06-29 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,23 +55,33 @@ msgstr "Ouvrir l'explorateur de fichiers HDF5 au démarrage"
 
 #: ../../features/general/command.rst:46
 msgid "To open the HDF5 browser at startup, use one of the following commands::"
-msgstr "Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une des commandes suivantes::"
+msgstr ""
+"Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une "
+"des commandes suivantes::"
 
 #: ../../features/general/command.rst:52
+msgid "Run CodraFT demo"
+msgstr "Mode démonstration de CodraFT"
+
+#: ../../features/general/command.rst:54
+msgid "To execute CodraFT demo, run the following::"
+msgstr "Pour exécuter le mode de démonstration de CodraFT, taper la commande suivante::"
+
+#: ../../features/general/command.rst:59
 msgid "Run unit tests"
 msgstr "Exécuter les tests unitaires"
 
-#: ../../features/general/command.rst:54
+#: ../../features/general/command.rst:61
 msgid "To execute all CodraFT unit tests, simply run::"
 msgstr ""
 "Pour exécuter l'ensemble des tests unitaires de CodraFT, taper la "
 "commande suivante::"
 
-#: ../../features/general/command.rst:79
+#: ../../features/general/command.rst:86
 msgid "Run interactive tests"
 msgstr "Exécuter les tests interactifs"
 
-#: ../../features/general/command.rst:81
+#: ../../features/general/command.rst:88
 msgid "To execute CodraFT interactive tests, run the following::"
 msgstr ""
 "Pour exécuter les tests interactifs de CodraFT, taper la commande "

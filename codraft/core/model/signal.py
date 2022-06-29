@@ -22,6 +22,7 @@ from guiqwt.styles import update_style_attr
 from codraft.config import Conf, _
 from codraft.core.computation import fit
 from codraft.core.model import base
+from codraft.env import execenv
 
 
 class SignalParam(gdt.DataSet, base.ObjectItf):
@@ -146,6 +147,8 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
             x, y, dx, dy = self.xydata
             item.set_data(x.real, y.real, dx.real, dy.real)
         item.curveparam.label = self.title
+        if execenv.demo_mode:
+            item.curveparam.line.width = 3
         update_style_attr(next(make.style), item.curveparam)
         update_dataset(item.curveparam, self.metadata)
         item.update_params()

@@ -11,6 +11,7 @@ Bug fixes:
 
 Other changes:
 
+* Added demo mode (from command line, simply run: codraft-demo)
 * Command line option --h5 is now a positionnal argument (h5)
 * Added command line option -b (or --h5browser) to browse a HDF5 file at startup
 * Added command line option --version to show CodraFT version

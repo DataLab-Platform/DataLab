@@ -33,10 +33,10 @@ def test():
 
         # === Testing "ZAxisLogTool" ---------------------------------------------------
         lstool = plotwidget.get_tool(ZAxisLogTool)
-        qt_wait(1)
+        qt_wait(1, except_unattended=True)
         for _index in range(2):
             lstool.activate()
-            qt_wait(1)
+            qt_wait(1, except_unattended=True)
 
         # === Testing "to_codraft" -----------------------------------------------------
         plot = plotwidget.plot

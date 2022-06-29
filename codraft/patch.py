@@ -9,10 +9,11 @@ Module patching *guiqwt* to adapt it to CodraFT
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # Allows accessing protecting members, unused arguments, unused variables
-# pylint: disable=W0212,W0613,W0612
+# pylint: disable=W0212,W0613,W0612,E0102
 
 import sys
 
+import guidata.dataset.datatypes
 import guiqwt.curve
 import guiqwt.histogram
 import guiqwt.image
@@ -20,6 +21,7 @@ import guiqwt.plot
 import guiqwt.tools
 import numpy as np
 from guidata.configtools import get_icon
+from guidata.dataset.qtwidgets import DataSetEditDialog, DataSetGroupEditDialog
 from guidata.qthelpers import add_actions, create_action
 from guiqwt import cross_section as cs
 from guiqwt.transitional import QwtLinearScaleEngine
@@ -29,6 +31,7 @@ from qwt import QwtScaleDraw
 
 from codraft.config import APP_NAME, _
 from codraft.core.model.signal import create_signal
+from codraft.utils.qthelpers import exec_dialog
 
 
 def monkeypatch_method(cls, patch_name):
@@ -65,6 +68,34 @@ def monkeypatch_method(cls, patch_name):
         return func
 
     return decorator
+
+
+# TODO: Improve test coverage using the following two patches
+# (sometimes we had to skip DataSet edit method to avoid blocking GUI testing:
+# now it's possible to test those lines without blocking)
+
+#  Patching guidata.dataset.datatypes.DataSet edit methods for automatic GUI testing
+@monkeypatch_method(guidata.dataset.datatypes.DataSet, "DataSet")
+def edit(self, parent=None, apply=None, size=None):
+    """
+    Open a dialog box to edit data set
+        * parent: parent widget (default is None, meaning no parent)
+        * apply: apply callback (default is None)
+        * size: dialog size (QSize object or integer tuple (width, height))
+    """
+    icon = self.get_icon()
+    win = DataSetEditDialog(self, icon=icon, parent=parent, apply=apply, size=size)
+    return exec_dialog(win)
+
+
+#  Patching guidata.dataset.datatypes.DataSet edit methods for automatic GUI testing
+@monkeypatch_method(guidata.dataset.datatypes.DataSetGroup, "DataSetGroup")
+def edit(self, parent=None, apply=None, size=None):
+    """
+    Open a dialog box to edit data set
+    """
+    win = DataSetGroupEditDialog(self, parent=parent, apply=apply)
+    return exec_dialog(win)
 
 
 #  Patching CurveItem's "select" method to avoid showing giant ugly squares
