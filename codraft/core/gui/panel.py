@@ -78,7 +78,11 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import exec_dialog, qt_try_loadsave_file, save_restore_stds
+from codraft.utils.qthelpers import (
+    exec_dialog,
+    qt_try_loadsave_file,
+    save_restore_stds,
+)
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
