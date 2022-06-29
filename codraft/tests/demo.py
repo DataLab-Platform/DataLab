@@ -4,7 +4,7 @@
 # (see codraft/__init__.py for details)
 
 """
-Unit test scenario: CodraFT Demo
+CodraFT Demo
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -15,13 +15,9 @@ from qtpy import QtWidgets as QW
 from codraft.config import _
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.gui.processor.image import ContourShapeParam
-from codraft.core.gui.processor.image import \
-    PeakDetectionParam as Peak2DDetectionParam
+from codraft.core.gui.processor.image import PeakDetectionParam as Peak2DDetectionParam
 from codraft.core.gui.processor.image import RotateParam
-from codraft.core.gui.processor.signal import (
-    PeakDetectionParam,
-    PolynomialFitParam,
-)
+from codraft.core.gui.processor.signal import PeakDetectionParam, PolynomialFitParam
 from codraft.core.model.base import UniformRandomParam
 from codraft.core.model.image import ImageTypes, create_image, new_image_param
 from codraft.core.model.signal import (
@@ -44,9 +40,6 @@ from codraft.tests.roi_app import create_test_image_with_roi
 from codraft.tests.scenario_sig_app import test_common_operations
 from codraft.utils.qthelpers import qt_wait
 from codraft.widgets import fitdialog
-
-SHOW = True  # Show test in GUI-based test launcher
-
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 4
 # DELAY1, DELAY2, DELAY3 = 0, 0, 0
