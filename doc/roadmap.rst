@@ -18,11 +18,10 @@ CodraFT 2.2
     server process and restarting it (eventually after incrementing the
     communication port number)
 
+* New plugin system: API for third-party extensions
+
 * Add an xmlrpc server to allow external applications controlling
   CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
-
-* "Open in a new window" feature: add support for multiple separate windows,
-  thus allowing to visualize for example two images side by side
 
 * ROI features:
 
@@ -39,10 +38,12 @@ Past milestones
 CodraFT 2.1
 ^^^^^^^^^^^
 
-* Minor changes following first public release (v2.0):
+* "Open in a new window" feature: add support for multiple separate windows,
+  thus allowing to visualize for example two images side by side
 
-  - Non-modal separate view dialogs
-  - New command line option features
+* New demo mode
+
+* New command line option features (open/browse HDF5 files at startup)
 
 
 CodraFT 2.0
