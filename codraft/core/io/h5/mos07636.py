@@ -55,6 +55,30 @@ class BaseMOS07636Node(common.BaseNode):
         return self.dset["valeur"][()]
 
     @property
+    def shape_str(self):
+        """Return string representation of node shape, if any"""
+        try:
+            shape = self.data.shape
+            if shape:
+                return " x ".join([str(size) for size in shape])
+        except AttributeError:
+            pass
+        return ""
+
+    @property
+    def dtype_str(self):
+        """Return string representation of node data type, if any"""
+        try:
+            dstr = str(self.data.dtype)
+        except AttributeError:
+            if isinstance(self.data, (str, bytes)):
+                return "string"
+            return str(type(self.data))
+        if dstr.startswith("|S"):
+            return "string"
+        return dstr
+
+    @property
     def description(self):
         """Return node description"""
         desc = utils.process_scalar_value(self.dset, "description", utils.fix_ldata)
