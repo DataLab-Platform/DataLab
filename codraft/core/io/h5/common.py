@@ -11,12 +11,34 @@ CodraFT Common tools for exogenous HDF5 format support
 
 import abc
 import os.path as osp
+from typing import Callable, Dict
 
 import h5py
 import numpy as np
 
 from codraft.core.io.conv import data_to_xy
 from codraft.utils.misc import to_string
+
+
+class H5Importer:
+    """CodraFT HDF5 importer class"""
+
+    def __init__(self, filename):
+        self.h5file = h5py.File(filename)
+        self.__nodes = {}
+        self.root = RootNode(self.h5file)
+        self.__nodes[self.root.id] = self.root.dset
+        self.root.collect_children(self.__nodes)
+        NODE_FACTORY.run_post_triggers(self)
+
+    def get(self, node_id):
+        """Return node associated to id"""
+        return self.__nodes[node_id]
+
+    def close(self):
+        """Close HDF5 file"""
+        self.__nodes = {}
+        self.h5file.close()
 
 
 class BaseNode(metaclass=abc.ABCMeta):
@@ -128,33 +150,44 @@ class NodeFactory:
     """Factory for node classes"""
 
     def __init__(self):
-        self.ignored_datasets = []
-        self.generic_classes = []
-        self.thirdparty_classes = []
+        self.__ignored_datasets = []
+        self.__generic_classes = []
+        self.__thirdparty_classes = []
+        self.__post_triggers = []
 
     def add_ignored_datasets(self, names):
         """Add h5 dataset name to ignore list"""
-        self.ignored_datasets.extend(names)
+        self.__ignored_datasets.extend(names)
+
+    def add_post_trigger(self, callback: Callable):
+        """Add post trigger function, to be called at the end of the collect process.
+        Callbacks take only one argument: H5Importer instance."""
+        self.__post_triggers.append(callback)
 
     def register(self, cls, is_generic=False):
         """Register node class.
         Generic classes are processed after specific classes (as a fallback solution)"""
         if is_generic:
-            self.generic_classes.append(cls)
+            self.__generic_classes.append(cls)
         else:
-            self.thirdparty_classes.append(cls)
+            self.__thirdparty_classes.append(cls)
 
     def get(self, dset):
         """Return node class that matches h5 dataset"""
         for name in dset.name.split("/"):
-            if name in self.ignored_datasets:
+            if name in self.__ignored_datasets:
                 return None
-        for cls in self.thirdparty_classes + self.generic_classes:
+        for cls in self.__thirdparty_classes + self.__generic_classes:
             if cls.match(dset):
                 return cls
         if isinstance(dset, h5py.Group):
             return GroupNode
         return None
+
+    def run_post_triggers(self, importer: H5Importer):
+        """Run post-collect callbacks"""
+        for func in self.__post_triggers:
+            func(importer)
 
 
 NODE_FACTORY = NodeFactory()
@@ -168,16 +201,16 @@ class GroupNode(BaseNode):
         """Icon name associated to node"""
         return "h5group.svg"
 
-    def collect_children(self, node_names):
+    def collect_children(self, node_dict: Dict):
         """Construct tree"""
         for dset in self.dset.values():
             child_cls = NODE_FACTORY.get(dset)
             if child_cls is not None:
                 child = child_cls(self.h5file, dset.name)
-                node_names[child.id] = child
+                node_dict[child.id] = child
                 self.children.append(child)
                 if isinstance(child, GroupNode):
-                    child.collect_children(node_names)
+                    child.collect_children(node_dict)
 
     @property
     def text(self):

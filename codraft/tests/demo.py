@@ -15,9 +15,13 @@ from qtpy import QtWidgets as QW
 from codraft.config import _
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.gui.processor.image import ContourShapeParam
-from codraft.core.gui.processor.image import PeakDetectionParam as Peak2DDetectionParam
+from codraft.core.gui.processor.image import \
+    PeakDetectionParam as Peak2DDetectionParam
 from codraft.core.gui.processor.image import RotateParam
-from codraft.core.gui.processor.signal import PeakDetectionParam, PolynomialFitParam
+from codraft.core.gui.processor.signal import (
+    PeakDetectionParam,
+    PolynomialFitParam,
+)
 from codraft.core.model.base import UniformRandomParam
 from codraft.core.model.image import ImageTypes, create_image, new_image_param
 from codraft.core.model.signal import (
