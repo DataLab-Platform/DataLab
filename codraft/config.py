@@ -74,6 +74,8 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     sig_format = conf.Option()
     ima_format = conf.Option()
     show_label = conf.Option()
+    h5_fname_in_title = conf.Option()
+    h5_fullpath_in_title = conf.Option()
 
 
 # Usage (example): Conf.console.enable.get(True)

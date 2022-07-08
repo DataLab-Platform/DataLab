@@ -16,6 +16,7 @@ from typing import Callable, Dict
 import h5py
 import numpy as np
 
+from codraft.config import Conf
 from codraft.core.io.conv import data_to_xy
 from codraft.utils.misc import to_string
 
@@ -102,7 +103,13 @@ class BaseNode(metaclass=abc.ABCMeta):
     @property
     def object_title(self):
         """Return signal/image object title"""
-        return f"{self.name} ({osp.basename(self.h5file.filename)})"
+        if Conf.view.h5_fullpath_in_title.get(False):
+            title = self.id
+        else:
+            title = self.name
+        if Conf.view.h5_fname_in_title.get(True):
+            title += f" ({osp.basename(self.h5file.filename)})"
+        return title
 
     def set_signal_data(self, obj):
         """Set signal data (handles various issues)"""
