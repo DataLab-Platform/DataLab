@@ -10,6 +10,7 @@ CodraFT HDF5 browser module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import abc
+import os
 import os.path as osp
 
 from guidata.qthelpers import (
@@ -288,8 +289,14 @@ class H5TreeWidget(BaseTreeWidget):
 
     @staticmethod
     def __create_node(node):
+        text = node.text
+        if text:
+            lines = text.splitlines()[:5]
+            if len(lines) == 5:
+                lines += ["[...]"]
+            text = os.linesep.join(lines)
         treeitem = QW.QTreeWidgetItem(
-            [node.name, node.shape_str, node.dtype_str, node.text]
+            [node.name, node.shape_str, node.dtype_str, text]
         )
         treeitem.setData(0, QC.Qt.UserRole, node.id)
         if node.description:
