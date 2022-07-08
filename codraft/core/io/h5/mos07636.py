@@ -8,6 +8,7 @@ CodraFT MOS07636 HDF5 format support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+from guidata.utils import update_dataset
 
 from codraft.core.io.h5 import common, utils
 from codraft.core.model.image import create_image
@@ -31,6 +32,16 @@ class BaseMOS07636Node(common.BaseNode):
         self.xlabel = None
         self.ylabel = None
         self.zlabel = None
+        self.__obj_templates = []
+
+    def add_object_default_values(self, **template):
+        """Add object default values (object template)"""
+        self.__obj_templates.append(template)
+
+    def update_from_object_default_values(self, obj):
+        """Update object (signal/image) from default values (template), if available"""
+        for template in self.__obj_templates:
+            update_dataset(obj, template)
 
     @classmethod
     def match(cls, dset):
@@ -42,6 +53,30 @@ class BaseMOS07636Node(common.BaseNode):
     def data(self):
         """Data associated to node, if available"""
         return self.dset["valeur"][()]
+
+    @property
+    def shape_str(self):
+        """Return string representation of node shape, if any"""
+        try:
+            shape = self.data.shape
+            if shape:
+                return " x ".join([str(size) for size in shape])
+        except AttributeError:
+            pass
+        return ""
+
+    @property
+    def dtype_str(self):
+        """Return string representation of node data type, if any"""
+        try:
+            dstr = str(self.data.dtype)
+        except AttributeError:
+            if isinstance(self.data, (str, bytes)):
+                return "string"
+            return str(type(self.data))
+        if dstr.startswith("|S"):
+            return "string"
+        return dstr
 
     @property
     def description(self):
@@ -60,22 +95,23 @@ class BaseMOS07636Node(common.BaseNode):
             if val is not None:
                 self.metadata[label] = val
 
-    def get_scalar(self, dnames, pname=None, callback=None, ancestor=0):
-        """Try and get value from h5 file using callback"""
-        nameprefix = "/".join(self.dset.name.split("/")[:-ancestor]) + "/"
-        pname = "valeur" if pname is None else pname
-        callback = utils.fix_ndata if callback is None else callback
-        for dname in dnames:
-            dataset = self.h5file.get(nameprefix + dname)
-            if dataset is not None:
-                return utils.process_scalar_value(dataset, pname, callback)
-        return None
-
 
 class ScalarNode(BaseMOS07636Node):
     """Object representing a scalar HDF5 node, according to MOS07636"""
 
     ATTR_PATTERN = ("CLASS", b"ELEMENTAIRE")
+
+    def __init__(self, h5file, dset):
+        super().__init__(h5file, dset)
+        self.xunit = utils.process_scalar_value(self.dset, "unite", self._fix_unit)
+
+    @staticmethod
+    def _fix_unit(scdata):
+        """Fix unit data"""
+        data = scdata[0]
+        if not isinstance(data, bytes):
+            data = data[0]  # Should not be necessary (invalid format)
+        return utils.fix_ldata(data)
 
     @property
     def data(self):
@@ -95,8 +131,9 @@ class ScalarNode(BaseMOS07636Node):
     def text(self):
         """Return node textual representation"""
         text = to_string(self.data)
-        if self.xunit:
-            text += " " + self.xunit
+        suffix = "" if self.xunit is None else " " + self.xunit
+        if not text.endswith(suffix):  # Should not be necessary (invalid format)
+            text += suffix
         return text
 
 
@@ -127,6 +164,7 @@ class SignalNode(BaseMOS07636Node):
             labels=(self.xlabel, self.ylabel),
         )
         self.set_signal_data(obj)
+        self.update_from_object_default_values(obj)
         return obj
 
 
@@ -163,23 +201,60 @@ class ImageNode(BaseMOS07636Node):
         dx, dy = utils.process_xy_values(self.dset, "resolution")
         if dx is not None and dy is not None:
             obj.dx, obj.dy = dx, dy
-        dnames = ("Parametres_IMG/MargeGauche", "Parametres_ACQ/MargeGauche")
-        marge_gauche = self.get_scalar(dnames, ancestor=2)
-        if marge_gauche:
-            obj.x0 = marge_gauche
-        dnames = ("Parametres_IMG/MargeHaute", "Parametres_ACQ/MargeHaute")
-        marge_haute = self.get_scalar(dnames, ancestor=2)
-        if marge_haute:
-            obj.y0 = marge_haute
-        dnames = ("Parametres_IMG/BinningX", "Parametres_ACQ/BinningX")
-        binning_x = self.get_scalar(dnames, ancestor=2)
-        if binning_x:
-            obj.dx = binning_x
-        dnames = ("Parametres_IMG/BinningY", "Parametres_ACQ/BinningY")
-        binning_y = self.get_scalar(dnames, ancestor=2)
-        if binning_y:
-            obj.dy = binning_y
+        self.update_from_object_default_values(obj)
         return obj
 
 
 common.NODE_FACTORY.register(ImageNode)
+
+
+def handle_margins_vimba(importer: common.H5Importer):
+    """Post-collection trigger handling image margins when available (Vimba Cameras)"""
+    try:
+        image = importer.get("/Acquisition/AcquisitionBrute")
+        margegauche = importer.get("/Parametres_ACQ/MargeGauche")
+        margehaute = importer.get("/Parametres_ACQ/MargeHaute")
+        binningx = importer.get("/Parametres_ACQ/BinningX")
+        binningy = importer.get("/Parametres_ACQ/BinningY")
+    except KeyError:
+        return
+    image.add_object_default_values(
+        x0=margegauche.data, y0=margehaute.data, dx=binningx.data, dy=binningy.data
+    )
+
+
+common.NODE_FACTORY.add_post_trigger(handle_margins_vimba)
+
+
+def handle_margins_istar(importer: common.H5Importer):
+    """Post-collection trigger handling image margins when available (IStar Cameras)"""
+    try:
+        image = importer.get("/Entrees/Acquisition/AcquisitionBrute")
+        margegauche = importer.get("/Entrees/Parametres_IMG/MargeGauche")
+        margehaute = importer.get("/Entrees/Parametres_IMG/MargeHaute")
+        binningx = importer.get("/Entrees/Parametres_IMG/BinningX")
+        binningy = importer.get("/Entrees/Parametres_IMG/BinningY")
+    except KeyError:
+        return
+    image.add_object_default_values(
+        x0=margegauche.data, y0=margehaute.data, dx=binningx.data, dy=binningy.data
+    )
+
+
+common.NODE_FACTORY.add_post_trigger(handle_margins_istar)
+
+
+def handle_streakcameratimeaxis(importer: common.H5Importer):
+    """Post-collection trigger handling streak X-axis time conv. when available"""
+    try:
+        image = importer.get("/Acquisition/AcquisitionCorrigee")
+        tempspixel = importer.get("/Acquisition/TempsPixel")
+        offsettemporel = importer.get("/Acquisition/OffsetTemporel")
+    except KeyError:
+        return
+    image.add_object_default_values(
+        x0=offsettemporel.data, dx=tempspixel.data, xunit=tempspixel.xunit
+    )
+
+
+common.NODE_FACTORY.add_post_trigger(handle_streakcameratimeaxis)

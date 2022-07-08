@@ -120,6 +120,7 @@ setup(
         "gui_scripts": [f"{MODNAME} = {MODNAME}.app:run"],
         "console_scripts": [
             f"{MODNAME}-tests = {MODNAME}.tests:run",
+            f"{MODNAME}-demo = {MODNAME}.tests.demo:run",
             f"{MODNAME}-alltests = {MODNAME}.tests.all_tests:run",
         ],
     },

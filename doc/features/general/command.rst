@@ -48,6 +48,13 @@ To open the HDF5 browser at startup, use one of the following commands::
     $ codraft -b /path/to/file1.h5
     $ codraft --h5browser /path/to/file1.h5
 
+Run CodraFT demo
+----------------
+
+To execute CodraFT demo, run the following::
+
+    $ codraft-demo
+
 Run unit tests
 --------------
 

@@ -38,7 +38,14 @@ class CodraFTExecEnv:
     def __init__(self):
         self.h5files = None
         self.h5browser_file = None
+        self.demo_mode = False
         self.parse_args()
+
+    def enable_demo_mode(self, delay: int):
+        """Enable demo mode"""
+        self.demo_mode = True
+        self.unattended = True
+        self.delay = delay
 
     @staticmethod
     def __get_mode(env):
@@ -92,6 +99,11 @@ class CodraFTExecEnv:
             return int(os.environ.get(self.DELAY_ENV))
         except (TypeError, ValueError):
             return 0
+
+    @delay.setter
+    def delay(self, value: int):
+        """Set delay (seconds) before quitting application in unattended mode"""
+        os.environ[self.DELAY_ENV] = str(value)
 
     def parse_args(self):
         """Parse command line arguments"""
@@ -152,7 +164,7 @@ class CodraFTExecEnv:
             self.screenshot = args.mode == self.SCREENSHOT_ARG
         if args.verbose is not None:
             self.verbose = args.verbose
-        os.environ[self.DELAY_ENV] = str(args.delay)
+        self.delay = args.delay
 
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
         """Print in file, depending on verbosity level"""

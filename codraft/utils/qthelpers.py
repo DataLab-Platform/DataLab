@@ -162,7 +162,7 @@ def exec_dialog(dlg):
     return dlg.exec()
 
 
-def qt_wait(timeout, except_unattended=True):  # pragma: no cover
+def qt_wait(timeout, except_unattended=False):  # pragma: no cover
     """Freeze GUI during timeout (seconds) while processing Qt events"""
     if except_unattended and execenv.unattended:
         return
