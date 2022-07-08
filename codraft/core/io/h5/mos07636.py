@@ -11,6 +11,7 @@ CodraFT MOS07636 HDF5 format support
 from guidata.utils import update_dataset
 
 from codraft.core.io.h5 import common, utils
+from codraft.core.model.base import ANN_KEY
 from codraft.core.model.image import create_image
 from codraft.core.model.signal import create_signal
 from codraft.utils.misc import to_string
@@ -33,6 +34,7 @@ class BaseMOS07636Node(common.BaseNode):
         self.ylabel = None
         self.zlabel = None
         self.__obj_templates = []
+        self.__metadata_entries = {}
 
     def add_object_default_values(self, **template):
         """Add object default values (object template)"""
@@ -42,6 +44,10 @@ class BaseMOS07636Node(common.BaseNode):
         """Update object (signal/image) from default values (template), if available"""
         for template in self.__obj_templates:
             update_dataset(obj, template)
+
+    def add_metadata_entry(self, key, value):
+        """Add metadata entry to object"""
+        self.__metadata_entries[key] = value
 
     @classmethod
     def match(cls, dset):
@@ -94,6 +100,7 @@ class BaseMOS07636Node(common.BaseNode):
             val = utils.process_scalar_value(self.dset, label, utils.fix_ldata)
             if val is not None:
                 self.metadata[label] = val
+        self.metadata.update(self.__metadata_entries)
 
 
 class ScalarNode(BaseMOS07636Node):
@@ -208,53 +215,55 @@ class ImageNode(BaseMOS07636Node):
 common.NODE_FACTORY.register(ImageNode)
 
 
-def handle_margins_vimba(importer: common.H5Importer):
+def handle_margins(node: ImageNode, importer: common.H5Importer):
     """Post-collection trigger handling image margins when available (Vimba Cameras)"""
     try:
-        image = importer.get("/Acquisition/AcquisitionBrute")
-        margegauche = importer.get("/Parametres_ACQ/MargeGauche")
-        margehaute = importer.get("/Parametres_ACQ/MargeHaute")
-        binningx = importer.get("/Parametres_ACQ/BinningX")
-        binningy = importer.get("/Parametres_ACQ/BinningY")
+        # Vimba Camera HDF5 / node.id: "/Acquisition/AcquisitionBrute"
+        margegauche = importer.get_relative(node, "/Parametres_ACQ/MargeGauche", 2)
+        margehaute = importer.get_relative(node, "/Parametres_ACQ/MargeHaute", 2)
+        binningx = importer.get_relative(node, "/Parametres_ACQ/BinningX", 2)
+        binningy = importer.get_relative(node, "/Parametres_ACQ/BinningY", 2)
     except KeyError:
-        return
-    image.add_object_default_values(
+        try:
+            # IStar Camera HDF5 / node.id: "/Entrees/Acquisition/AcquisitionBrute"
+            margegauche = importer.get_relative(node, "/Parametres_IMG/MargeGauche", 2)
+            margehaute = importer.get_relative(node, "/Parametres_IMG/MargeHaute", 2)
+            binningx = importer.get_relative(node, "/Parametres_IMG/BinningX", 2)
+            binningy = importer.get_relative(node, "/Parametres_IMG/BinningY", 2)
+        except KeyError:
+            return
+    node.add_object_default_values(
         x0=margegauche.data, y0=margehaute.data, dx=binningx.data, dy=binningy.data
     )
 
 
-common.NODE_FACTORY.add_post_trigger(handle_margins_vimba)
+common.NODE_FACTORY.add_post_trigger(ImageNode, handle_margins)
 
 
-def handle_margins_istar(importer: common.H5Importer):
-    """Post-collection trigger handling image margins when available (IStar Cameras)"""
-    try:
-        image = importer.get("/Entrees/Acquisition/AcquisitionBrute")
-        margegauche = importer.get("/Entrees/Parametres_IMG/MargeGauche")
-        margehaute = importer.get("/Entrees/Parametres_IMG/MargeHaute")
-        binningx = importer.get("/Entrees/Parametres_IMG/BinningX")
-        binningy = importer.get("/Entrees/Parametres_IMG/BinningY")
-    except KeyError:
-        return
-    image.add_object_default_values(
-        x0=margegauche.data, y0=margehaute.data, dx=binningx.data, dy=binningy.data
-    )
-
-
-common.NODE_FACTORY.add_post_trigger(handle_margins_istar)
-
-
-def handle_streakcameratimeaxis(importer: common.H5Importer):
+def handle_streakcameratimeaxis(node: ImageNode, importer: common.H5Importer):
     """Post-collection trigger handling streak X-axis time conv. when available"""
     try:
-        image = importer.get("/Acquisition/AcquisitionCorrigee")
-        tempspixel = importer.get("/Acquisition/TempsPixel")
-        offsettemporel = importer.get("/Acquisition/OffsetTemporel")
+        # Streak Camera HDF5 / node.id: "/Acquisition/AcquisitionCorrigee"
+        tempspixel = importer.get_relative(node, "/TempsPixel", 1)
+        offsettemporel = importer.get_relative(node, "/OffsetTemporel", 1)
     except KeyError:
         return
-    image.add_object_default_values(
-        x0=offsettemporel.data, dx=tempspixel.data, xunit=tempspixel.xunit
-    )
+    if node.id.endswith("AcquisitionCorrigee"):
+        node.add_object_default_values(
+            x0=offsettemporel.data, dx=tempspixel.data, xunit=tempspixel.xunit
+        )
 
 
-common.NODE_FACTORY.add_post_trigger(handle_streakcameratimeaxis)
+common.NODE_FACTORY.add_post_trigger(ImageNode, handle_streakcameratimeaxis)
+
+
+def handle_annotations(node: ImageNode, importer: common.H5Importer):
+    """Post-collection trigger handling annotations when available"""
+    try:
+        annotations = importer.get_relative(node, "/Annotations", 1)
+    except KeyError:
+        return
+    node.add_metadata_entry(ANN_KEY, to_string(annotations.data))
+
+
+common.NODE_FACTORY.add_post_trigger(ImageNode, handle_annotations)

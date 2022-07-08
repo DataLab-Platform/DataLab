@@ -20,27 +20,6 @@ from codraft.core.io.conv import data_to_xy
 from codraft.utils.misc import to_string
 
 
-class H5Importer:
-    """CodraFT HDF5 importer class"""
-
-    def __init__(self, filename):
-        self.h5file = h5py.File(filename)
-        self.__nodes = {}
-        self.root = RootNode(self.h5file)
-        self.__nodes[self.root.id] = self.root.dset
-        self.root.collect_children(self.__nodes)
-        NODE_FACTORY.run_post_triggers(self)
-
-    def get(self, node_id):
-        """Return node associated to id"""
-        return self.__nodes[node_id]
-
-    def close(self):
-        """Close HDF5 file"""
-        self.__nodes = {}
-        self.h5file.close()
-
-
 class BaseNode(metaclass=abc.ABCMeta):
     """Object representing a HDF5 node"""
 
@@ -146,6 +125,39 @@ class BaseNode(metaclass=abc.ABCMeta):
         obj.data = data
 
 
+class H5Importer:
+    """CodraFT HDF5 importer class"""
+
+    def __init__(self, filename):
+        self.h5file = h5py.File(filename)
+        self.__nodes = {}
+        self.root = RootNode(self.h5file)
+        self.__nodes[self.root.id] = self.root.dset
+        self.root.collect_children(self.__nodes)
+        NODE_FACTORY.run_post_triggers(self)
+
+    @property
+    def nodes(self):
+        """Return all nodes"""
+        return self.__nodes.values()
+
+    def get(self, node_id: str):
+        """Return node associated to id"""
+        return self.__nodes[node_id]
+
+    def get_relative(self, node: BaseNode, relpath: str, ancestor: int = 0):
+        """Return node using relative path to another node"""
+        path = "/" + (
+            "/".join(node.id.split("/")[:-ancestor]) + "/" + relpath.strip("/")
+        ).strip("/")
+        return self.__nodes[path]
+
+    def close(self):
+        """Close HDF5 file"""
+        self.__nodes = {}
+        self.h5file.close()
+
+
 class NodeFactory:
     """Factory for node classes"""
 
@@ -153,16 +165,17 @@ class NodeFactory:
         self.__ignored_datasets = []
         self.__generic_classes = []
         self.__thirdparty_classes = []
-        self.__post_triggers = []
+        self.__post_triggers = {}
 
     def add_ignored_datasets(self, names):
         """Add h5 dataset name to ignore list"""
         self.__ignored_datasets.extend(names)
 
-    def add_post_trigger(self, callback: Callable):
+    def add_post_trigger(self, nodecls: BaseNode, callback: Callable):
         """Add post trigger function, to be called at the end of the collect process.
         Callbacks take only one argument: H5Importer instance."""
-        self.__post_triggers.append(callback)
+        triggers = self.__post_triggers.setdefault(nodecls, [])
+        triggers.append(callback)
 
     def register(self, cls, is_generic=False):
         """Register node class.
@@ -186,8 +199,11 @@ class NodeFactory:
 
     def run_post_triggers(self, importer: H5Importer):
         """Run post-collect callbacks"""
-        for func in self.__post_triggers:
-            func(importer)
+        for node in importer.nodes:
+            for nodecls, triggers in self.__post_triggers.items():
+                if isinstance(node, nodecls):
+                    for func in triggers:
+                        func(node, importer)
 
 
 NODE_FACTORY = NodeFactory()
