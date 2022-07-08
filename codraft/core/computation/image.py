@@ -77,20 +77,21 @@ def get_enclosing_circle(data, level=0.5):
     Raise ValueError if no contour was found"""
     if not isinstance(level, float) or level < 0.0 or level > 1.0:
         raise ValueError("Level must be a float between 0. and 1.")
-    try:
-        import cv2  # pylint: disable=import-outside-toplevel
-    except ImportError as exc:
-        raise ImportError("This feature requires OpenCV library") from exc
     data_th = data.copy()
     data_th[data <= data.max() * level] = 0.0
-    data_8bits = np.array(data_th, dtype=np.uint8, copy=True)
-    contours = cv2.findContours(data_8bits, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[
-        -2
-    ]
-    if not contours:
+    contours = measure.find_contours(data_th)
+    model = measure.CircleModel()
+    result = None
+    max_radius = 1.0
+    for contour in contours:
+        if model.estimate(contour):
+            yc, xc, radius = model.params
+            if radius > max_radius:
+                result = (int(xc), int(yc), radius)
+                max_radius = radius
+    if result is None:
         raise ValueError("No contour was found")
-    (x, y), radius = cv2.minEnclosingCircle(max(contours, key=cv2.contourArea))
-    return (int(x), int(y), radius)
+    return result
 
 
 def distance_matrix(coords: list) -> np.ndarray:
