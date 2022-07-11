@@ -18,6 +18,7 @@ from guiqwt.label import ObjectInfo
 from qtpy import QtWidgets as QW
 
 from codraft.config import _
+from codraft.core.model.base import ObjectItf
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
@@ -29,23 +30,33 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     ICON_NAME = None
 
-    def __init__(self, parent: QW.QDialog, roi_items: list, func: Callable):
+    def __init__(self, parent: QW.QDialog, obj: ObjectItf):
         super().__init__(parent)
         self.plot = parent.get_plot()
-        self.plot.SIG_ITEMS_CHANGED.connect(lambda _plot: self.update_roi_titles())
-        self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
-        self.roi_items = roi_items
-        self.update_roi_titles()
-        for roi_item in roi_items:
+        self.obj = obj
+
+        fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
+        self.roi_items = list(obj.iterate_roi_items(fmt, True))
+        self.new_roi_func = lambda: obj.new_roi_item(fmt, True, editable=True)
+
+        for roi_item in self.roi_items:
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
-        self.new_roi_func = func
-        self.add_btn = QW.QPushButton(
+
+        self.setup_widget()
+
+        self.update_roi_titles()
+        self.plot.SIG_ITEMS_CHANGED.connect(lambda _plot: self.update_roi_titles())
+        self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
+
+    def setup_widget(self):
+        """Setup ROI editor widget"""
+        add_btn = QW.QPushButton(
             get_icon(self.ICON_NAME), _("Add region of interest"), self
         )
-        self.add_btn.clicked.connect(self.add_roi)
+        add_btn.clicked.connect(self.add_roi)
         layout = QW.QHBoxLayout()
-        layout.addWidget(self.add_btn)
+        layout.addWidget(add_btn)
         layout.addStretch()
         self.setLayout(layout)
 
@@ -101,12 +112,13 @@ class SignalROIEditor(BaseROIEditor):
 
     ICON_NAME = "signal_roi_new.svg"
 
-    def __init__(self, parent: QW.QDialog, roi_items: list, func: Callable):
-        info = ROIRangeInfo(roi_items)
+    def setup_widget(self):
+        """Setup ROI editor widget"""
+        super().setup_widget()
+        info = ROIRangeInfo(self.roi_items)
         info_label = make.info_label("BL", info, title=_("Regions of interest"))
-        parent.get_plot().add_item(info_label)
+        self.plot.add_item(info_label)
         self.info_label = info_label
-        super().__init__(parent, roi_items, func)
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
