@@ -499,18 +499,18 @@ class ObjectItf(metaclass=ObjectItfMeta):
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data"""
 
-    def get_regions_of_interest(self) -> np.ndarray:
+    @property
+    def roi(self) -> np.ndarray:
         """Return object regions of interest array (one ROI per line)"""
         return self.metadata.get(ROI_KEY)
 
-    def set_regions_of_interest(self, roidata: np.ndarray):
+    @roi.setter
+    def roi(self, roidata: np.ndarray):
         """Set object regions of interest array, using a list or ROI dataset params"""
         if roidata is None and ROI_KEY in self.metadata:
             self.metadata.pop(ROI_KEY)
         else:
             self.metadata[ROI_KEY] = np.array(roidata, int)
-
-    roi = property(get_regions_of_interest, set_regions_of_interest)
 
     @staticmethod
     def make_roi_item(
