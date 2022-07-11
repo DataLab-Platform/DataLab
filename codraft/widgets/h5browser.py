@@ -295,9 +295,7 @@ class H5TreeWidget(BaseTreeWidget):
             if len(lines) == 5:
                 lines += ["[...]"]
             text = os.linesep.join(lines)
-        treeitem = QW.QTreeWidgetItem(
-            [node.name, node.shape_str, node.dtype_str, text]
-        )
+        treeitem = QW.QTreeWidgetItem([node.name, node.shape_str, node.dtype_str, text])
         treeitem.setData(0, QC.Qt.UserRole, node.id)
         if node.description:
             for col in range(treeitem.columnCount()):

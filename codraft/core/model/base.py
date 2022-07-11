@@ -524,6 +524,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         if not editable:
             if isinstance(item, AnnotatedShape):
                 config_annotated_shape(item, fmt, lbl, cmp=editable)
+                item.set_style("plot", "shape/mask")
             item.set_movable(False)
             item.set_resizable(False)
             item.set_readonly(True)

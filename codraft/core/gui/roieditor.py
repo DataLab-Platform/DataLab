@@ -14,6 +14,7 @@ from typing import Callable
 
 from guidata.configtools import get_icon
 from guiqwt.builder import make
+from guiqwt.interfaces import IImageItemType
 from guiqwt.label import ObjectInfo
 from qtpy import QtWidgets as QW
 
@@ -134,6 +135,12 @@ class ImageROIEditor(BaseROIEditor):
     """Image ROI Editor"""
 
     ICON_NAME = "image_roi_new.svg"
+
+    def setup_widget(self):
+        """Setup ROI editor widget"""
+        super().setup_widget()
+        item = self.plot.get_items(item_type=IImageItemType)[0]
+        item.set_mask_visible(False)
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""

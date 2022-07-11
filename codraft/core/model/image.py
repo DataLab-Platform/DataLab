@@ -12,6 +12,7 @@ CodraFT Datasets
 
 import enum
 import re
+import weakref
 from collections import abc
 
 import guidata.dataset.dataitems as gdi
@@ -20,7 +21,7 @@ import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guiqwt.builder import make
-from guiqwt.image import ImageItem
+from guiqwt.image import MaskedImageItem
 
 from codraft.config import Conf, _
 from codraft.core.computation.image import scale_data_to_min_max
@@ -61,6 +62,8 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
     def __init__(self, title=None, comment=None, icon=""):
         gdt.DataSet.__init__(self, title, comment, icon)
         self._dicom_template = None
+        self._maskdata_cache = None
+        self._roidata_cache = None  # weak reference
 
     @property
     def size(self):
@@ -182,22 +185,25 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
     def make_item(self, update_from=None):
         """Make plot item from data"""
         data = self.__viewable_data()
-        item = make.image(
+        item = make.maskedimage(
             data,
+            self.maskdata,
             title=self.title,
             colormap="jet",
             eliminate_outliers=0.1,
             interpolation="nearest",
+            show_mask=True,
         )
         if update_from is not None:
             update_dataset(item.imageparam, update_from.imageparam)
             item.imageparam.update_image(item)
         return item
 
-    def update_item(self, item: ImageItem):
+    def update_item(self, item: MaskedImageItem):
         """Update plot item from data"""
         data = self.__viewable_data()
         item.set_data(data, lut_range=[item.min, item.max])
+        item.set_mask(self.maskdata)
         item.imageparam.label = self.title
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
@@ -284,6 +290,25 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                 yield self.make_roi_item(
                     make_roi_rectangle, coords, f"ROI{index:02d}", fmt, lbl, editable
                 )
+
+    @property
+    def maskdata(self):
+        """Return masked data (areas outside defined regions of interest)"""
+        roi_changed = self._roidata_cache is not None and self._roidata_cache() is None
+        if self.roi is None:
+            if roi_changed:
+                self._roidata_cache = None
+                self._maskdata_cache = None
+        elif roi_changed or self._maskdata_cache is None:
+            mask = np.ones_like(self.data, dtype=bool)
+            for roi_index in range(self.roi.shape[0]):
+                x0, y0, x1, y1 = self.roi[roi_index]
+                roi_mask = np.ones_like(self.data, dtype=bool)
+                roi_mask[y0:y1, x0:x1] = False
+                mask &= roi_mask
+            self._maskdata_cache = mask
+            self._roidata_cache = weakref.ref(self.roi)
+        return self._maskdata_cache
 
 
 def create_image(

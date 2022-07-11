@@ -7,6 +7,7 @@ for future and past milestones.
 
 Changes:
 
+* Image regions of interest are now shown as masks (areas outside ROIs are shaded)
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
 * Added demo mode (from command line, simply run: codraft-demo)
