@@ -16,7 +16,7 @@ import scipy.spatial as spt
 from skimage import measure
 
 
-def scale_data_to_min_max(data, zmin, zmax):
+def scale_data_to_min_max(data: np.ndarray, zmin, zmax):
     """Scale array `data` to fit [zmin, zmax] dynamic range"""
     dmin = data.min()
     dmax = data.max()
@@ -27,7 +27,7 @@ def scale_data_to_min_max(data, zmin, zmax):
     return np.array(fdata, data.dtype)
 
 
-def flatfield(rawdata, flatdata, threshold=None):
+def flatfield(rawdata: np.ndarray, flatdata: np.ndarray, threshold: float = None):
     """Compute flat-field correction"""
     dtemp = np.array(rawdata, dtype=np.float64, copy=True) * flatdata.mean()
     dunif = np.array(flatdata, dtype=np.float64, copy=True)
@@ -38,7 +38,7 @@ def flatfield(rawdata, flatdata, threshold=None):
     return dcorr
 
 
-def get_centroid_fourier(data):
+def get_centroid_fourier(data: np.ndarray):
     """Return image centroid using Fourier algorithm"""
     # Fourier transform method as discussed by Weisshaar et al.
     # (http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf)
@@ -70,7 +70,7 @@ def get_centroid_fourier(data):
     return int(row), int(col)
 
 
-def get_enclosing_circle(data, level=0.5):
+def get_enclosing_circle(data: np.ndarray, level: float = 0.5):
     """Return (x, y, radius) for the circle contour enclosing image
     values above threshold relative level (.5 means FWHM)
 
