@@ -228,7 +228,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         shape = self.data.shape
         xd0, yd0, xd1, yd1 = defaults
         xd0, yd0 = max(0, xd0), max(0, yd0)
-        ymax, xmax = shape[0] - 1, shape[1] - 1
+        ymax, xmax = shape[0], shape[1]
         xd1, yd1 = min(xmax, xd1), min(ymax, yd1)
 
         class ROIParam(gdt.DataSet):

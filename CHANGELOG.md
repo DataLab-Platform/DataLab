@@ -19,6 +19,7 @@ Bug fixes:
 * Image computations now takes into account origin (x0, y0), pixel size (dx, dy) as
   well as regions of interest (related features: centroid, enclosing circle, 2D peak
   detection and contour detection)
+* Image ROI definition dialog: maximum rows and columns were erroneously truncated
 * Centralized argument parsing in CodraFT exec env object, thus avoiding conflicts
 
 ## Version 2.0.3 ##
