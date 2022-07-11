@@ -15,6 +15,7 @@ import os
 import os.path as osp
 
 from guidata import configtools
+from guiqwt.config import CONF as GUIQWT_CONF
 
 from codraft.utils import conf, tests
 
@@ -109,3 +110,38 @@ def reset():
 
 initialize()
 tests.add_test_module_path("codraft", osp.join("data", "tests"))
+
+
+GUIQWT_DEFAULTS = {
+    "plot": {
+        # "antialiasing": False,
+        # "title/font/size": 12,
+        # "title/font/bold": False,
+        # "marker/curve/text/font/size": 8,
+        # "marker/curve/text/font/family": "default",
+        # "marker/curve/text/font/bold": False,
+        # "marker/curve/text/font/italic": False,
+        "marker/curve/text/textcolor": "black",
+        # "marker/curve/text/background_color": "#ffffff",
+        # "marker/curve/text/background_alpha": 0.8,
+        # "marker/cross/text/font/family": "default",
+        # "marker/cross/text/font/size": 8,
+        # "marker/cross/text/font/bold": False,
+        # "marker/cross/text/font/italic": False,
+        "marker/cross/text/textcolor": "black",
+        # "marker/cross/text/background_color": "#ffffff",
+        "marker/cross/text/background_alpha": 0.7,
+        # "marker/cross/line/style": "DashLine",
+        # "marker/cross/line/color": "yellow",
+        # "marker/cross/line/width": 1,
+        # "marker/cursor/text/font/size": 8,
+        # "marker/cursor/text/font/family": "default",
+        # "marker/cursor/text/font/bold": False,
+        # "marker/cursor/text/font/italic": False,
+        # "marker/cursor/text/textcolor": "#ff9393",
+        # "marker/cursor/text/background_color": "#ffffff",
+        # "marker/cursor/text/background_alpha": 0.8,
+    },
+}
+
+GUIQWT_CONF.update_defaults(GUIQWT_DEFAULTS)
