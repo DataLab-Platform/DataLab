@@ -20,6 +20,7 @@ Comparing different algorithms for centroid calculation:
 import time
 
 import numpy as np
+import numpy.ma as ma
 import scipy.ndimage as spi
 from guiqwt.builder import make
 
@@ -40,9 +41,6 @@ def get_centroid_from_moments(data):
     m00 = np.array(data, dtype=float).sum() or 1.0
     m10 = (np.array(imx, dtype=float) * x).sum() / m00
     m01 = (np.array(imy, dtype=float) * y).sum() / m00
-    # x, y = x - m10, y - m01
-    # m20, m02 = (imx * x**2).sum() / m00, (imy * y**2).sum() / m00
-    # m11 = (data * x * y).sum() / m00
     return int(m01), int(m10)
 
 
@@ -58,7 +56,7 @@ def get_centroid_with_cv2(data):
 
 def add_xcursor(items, x, y, title):
     """Added X cursor to plot"""
-    label = f'{_("Centroid")}[{title}] (x=%s, y=%s)'
+    label = "  " + f'{_("Centroid")}[{title}] (x=%s, y=%s)'
     execenv.print(label % (x, y))
     cursor = make.xcursor(x, y, label=label)
     cursor.setTitle(title)
@@ -81,9 +79,9 @@ def compare_centroid_funcs(data):
             row, col = func(data)
             dt = time.time() - t0
             add_xcursor(items, col, row, name)
-            execenv.print(f"  Calculation time: {int(dt * 1e3):d} ms")
+            execenv.print(f"    Calculation time: {int(dt * 1e3):d} ms")
         except ImportError:
-            execenv.print(f"  Unable to compute {name}: missing module")
+            execenv.print(f"    Unable to compute {name}: missing module")
     view_image_items(items)
 
 
@@ -91,7 +89,9 @@ def centroid_test():
     """Centroid test"""
     with qt_app_context():
         for data in get_laser_spot_data():
-            compare_centroid_funcs(data)
+            execenv.print(f"Data[dtype={data.dtype},shape={data.shape}]")
+            # Testing with masked arrays
+            compare_centroid_funcs(data.view(ma.MaskedArray))
 
 
 if __name__ == "__main__":

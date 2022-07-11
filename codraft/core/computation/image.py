@@ -46,13 +46,13 @@ def get_centroid_fourier(data: np.ndarray):
     if rows == 1 or cols == 1:
         return 0, 0
 
-    i = np.matrix(np.arange(0, rows))
-    sin_a = np.sin((i - 1) * 2 * np.pi / (rows - 1))
-    cos_a = np.cos((i - 1) * 2 * np.pi / (rows - 1))
+    i = np.arange(0, rows).reshape(1, rows)
+    sin_a = np.sin((i - 1) * 2 * np.pi / (rows - 1)).T
+    cos_a = np.cos((i - 1) * 2 * np.pi / (rows - 1)).T
 
-    j = np.matrix(np.arange(0, cols)).transpose()
-    sin_b = np.sin((j - 1) * 2 * np.pi / (cols - 1))
-    cos_b = np.cos((j - 1) * 2 * np.pi / (cols - 1))
+    j = np.arange(0, cols).reshape(cols, 1)
+    sin_b = np.sin((j - 1) * 2 * np.pi / (cols - 1)).T
+    cos_b = np.cos((j - 1) * 2 * np.pi / (cols - 1)).T
 
     a = (cos_a * data).sum()
     b = (sin_a * data).sum()
