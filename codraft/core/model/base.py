@@ -182,11 +182,14 @@ class ShapeTypes(enum.Enum):
     POINT = enum.auto()
 
 
-def config_annotated_shape(item: AnnotatedShape, fmt: str, lbl: bool):
+def config_annotated_shape(
+    item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool = False
+):
     """Configurate annotated shape"""
     param = item.annotationparam
     param.format = fmt
     param.show_label = lbl
+    param.show_computations = cmp
     param.update_annotation(item)
 
 
@@ -520,7 +523,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         item = func(*coords, title)
         if not editable:
             if isinstance(item, AnnotatedShape):
-                config_annotated_shape(item, fmt, lbl)
+                config_annotated_shape(item, fmt, lbl, cmp=editable)
             item.set_movable(False)
             item.set_resizable(False)
             item.set_readonly(True)
