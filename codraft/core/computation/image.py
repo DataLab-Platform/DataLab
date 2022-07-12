@@ -10,10 +10,10 @@ CodraFT Computation / Image module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import numpy as np
-import numpy.ma as ma
 import scipy.ndimage as spi
 import scipy.ndimage.filters as spf
 import scipy.spatial as spt
+from numpy import ma
 from skimage import measure
 
 

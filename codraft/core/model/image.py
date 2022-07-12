@@ -14,17 +14,17 @@ import enum
 import re
 import weakref
 from collections import abc
-import numpy.ma as ma
-from skimage import draw
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
+from guiqwt.annotations import AnnotatedCircle
 from guiqwt.builder import make
 from guiqwt.image import MaskedImageItem
-from guiqwt.annotations import AnnotatedCircle
+from numpy import ma
+from skimage import draw
 
 from codraft.config import Conf, _
 from codraft.core.computation.image import scale_data_to_min_max

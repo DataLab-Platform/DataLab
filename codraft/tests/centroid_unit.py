@@ -20,9 +20,9 @@ Comparing different algorithms for centroid calculation:
 import time
 
 import numpy as np
-import numpy.ma as ma
 import scipy.ndimage as spi
 from guiqwt.builder import make
+from numpy import ma
 
 from codraft.config import _
 from codraft.core.computation.image import get_centroid_fourier

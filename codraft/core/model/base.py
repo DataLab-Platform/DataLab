@@ -13,7 +13,6 @@ import abc
 import enum
 import json
 import sys
-from typing import List
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
