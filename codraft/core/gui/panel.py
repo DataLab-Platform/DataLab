@@ -78,11 +78,7 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import (
-    exec_dialog,
-    qt_try_loadsave_file,
-    save_restore_stds,
-)
+from codraft.utils.qthelpers import exec_dialog, qt_try_loadsave_file, save_restore_stds
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -756,6 +752,13 @@ class ImagePanel(BasePanel):
             self, self.objlist, self.itmlist, self.processor, toolbar
         )
         self.setup_panel()
+
+    # ------Refreshing GUI--------------------------------------------------------------
+    def properties_changed(self):
+        """The properties 'Apply' button was clicked: updating signal"""
+        row = self.objlist.currentRow()
+        self.objlist[row].invalidate_maskdata_cache()
+        super().properties_changed()
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True):

@@ -7,7 +7,10 @@ for future and past milestones.
 
 Changes:
 
-* Image regions of interest are now shown as masks (areas outside ROIs are shaded)
+* Image Regions Of Interest (ROI):
+  * ROIs are now shown as masks (areas outside ROIs are shaded)
+  * Added support for circular ROIs
+  * ROIs now take into account pixel size (dx, dy) as well as origin (x0, y0)
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
 * Added demo mode (from command line, simply run: codraft-demo)

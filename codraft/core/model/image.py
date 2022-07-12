@@ -15,6 +15,7 @@ import re
 import weakref
 from collections import abc
 import numpy.ma as ma
+from skimage import draw
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -111,7 +112,7 @@ class RoiDataItem:
         masked_view.mask = maskdata
         return masked_view[y0:y1, x0:x1]
 
-    def apply_mask(self, data: np.ndarray) -> np.ndarray:
+    def apply_mask(self, data: np.ndarray, yxratio: float) -> np.ndarray:
         """Apply ROI to data as a mask and return masked array"""
         roi_mask = np.ones_like(data, dtype=bool)
         x0, y0, x1, y1 = self.get_rect()
@@ -120,13 +121,8 @@ class RoiDataItem:
         else:
             xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
             radius = 0.5 * (x1 - x0)
-            bx = lambda x: min(max(x, 0), data.shape[1] - 1)
-            by = lambda y: min(max(y, 0), data.shape[0] - 1)
-            for x in range(bx(x0), bx(x1)):
-                for y in range(by(y0), by(y1)):
-                    distance = np.sqrt((x - xc) ** 2 + (y - yc) ** 2)
-                    if distance <= radius:
-                        roi_mask[y, x] = False
+            rr, cc = draw.ellipse(yc, xc, radius / yxratio, radius)
+            roi_mask[rr, cc] = False
         return roi_mask
 
     def make_roi_item(self, index: int, fmt: str, lbl: bool, editable: bool = True):
@@ -322,7 +318,6 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         """Return ROI parameters dataset"""
         roidataitem = RoiDataItem(defaults)
 
-        shape = self.data.shape
         xd0, yd0, xd1, yd1 = defaults
 
         def s(name: str, index: int):
@@ -330,10 +325,6 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             return f"{name}<sub>{index}</sub>"
 
         if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
-            xd0, yd0 = max(0, xd0), max(0, yd0)
-            ymax, xmax = shape[0], shape[1]
-            xd1, yd1 = min(xmax, xd1), min(ymax, yd1)
-
             gtitle1 = _("Top left corner")
             gtitle2 = _("Bottom right corner")
 
@@ -349,12 +340,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                     return self.x0, self.y0, self.x1, self.y1
 
                 _tlcorner = gdt.BeginGroup(gtitle1)
-                x0 = gdi.IntItem(s("X", 0), default=xd0, min=-1, max=xmax)
-                y0 = gdi.IntItem(s("Y", 0), default=yd0, min=-1, max=ymax).set_pos(1)
+                x0 = gdi.IntItem(s("X", 0), default=xd0, unit="pixel")
+                y0 = gdi.IntItem(s("Y", 0), default=yd0, unit="pixel").set_pos(1)
                 _e_tlcorner = gdt.EndGroup(gtitle1)
                 _brcorner = gdt.BeginGroup(gtitle2)
-                x1 = gdi.IntItem(s("X", 1), default=xd1, min=-1, max=xmax)
-                y1 = gdi.IntItem(s("Y", 1), default=yd1, min=-1, max=ymax).set_pos(1)
+                x1 = gdi.IntItem(s("X", 1), default=xd1, unit="pixel")
+                y1 = gdi.IntItem(s("Y", 1), default=yd1, unit="pixel").set_pos(1)
                 _e_brcorner = gdt.EndGroup(gtitle2)
 
         else:
@@ -392,10 +383,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                     return self.yc + self.r
 
                 _tlcorner = gdt.BeginGroup(gtitle1)
-                xc = gdi.IntItem(s("X", "C"), default=int(0.5 * (xd0 + xd1)))
-                yc = gdi.IntItem(s("Y", "C"), default=yd0).set_pos(1)
+                xc = gdi.IntItem(
+                    s("X", "C"), default=int(0.5 * (xd0 + xd1)), unit="pixel"
+                )
+                yc = gdi.IntItem(s("Y", "C"), default=yd0, unit="pixel").set_pos(1)
                 _e_tlcorner = gdt.EndGroup(gtitle1)
-                r = gdi.IntItem(_("Radius"), default=int(0.5 * (xd1 - xd0)))
+                r = gdi.IntItem(
+                    _("Radius"), default=int(0.5 * (xd1 - xd0)), unit="pixel"
+                )
 
         return ROIParam(title)
 
@@ -419,14 +414,18 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         indexes = np.array(coords)
         if indexes.size > 0:
             indexes[:, ::2] -= self.x0
+            indexes[:, ::2] /= self.dx
             indexes[:, 1::2] -= self.y0
+            indexes[:, 1::2] /= self.dy
         return np.array(indexes, int)
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
         """Iterate over plot items representing Regions of Interest"""
         if self.roi is not None:
             roicoords = np.array(self.roi, float)
+            roicoords[:, ::2] *= self.dx
             roicoords[:, ::2] += self.x0
+            roicoords[:, 1::2] *= self.dy
             roicoords[:, 1::2] += self.y0
             for index, coords in enumerate(roicoords):
                 roidataitem = RoiDataItem(coords)
@@ -444,11 +443,15 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             mask = np.ones_like(self.data, dtype=bool)
             for roirow in self.roi:
                 roidataitem = RoiDataItem(roirow)
-                roi_mask = roidataitem.apply_mask(self.data)
+                roi_mask = roidataitem.apply_mask(self.data, yxratio=self.dy / self.dx)
                 mask &= roi_mask
             self._maskdata_cache = mask
             self._roidata_cache = weakref.ref(self.roi)
         return self._maskdata_cache
+
+    def invalidate_maskdata_cache(self):
+        """Invalidate mask data cache: force to rebuild it"""
+        self._maskdata_cache = None
 
 
 def create_image(
