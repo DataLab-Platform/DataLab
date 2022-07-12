@@ -485,12 +485,12 @@ class ImageProcessor(BaseProcessor):
         for i_roi in image.iterate_roi_indexes():
             coords = func(image.get_data(i_roi))
             if coords.size:
-                coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
-                coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
                 if image.roi is not None:
                     x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
                     coords[:, ::2] += x0
                     coords[:, 1::2] += y0
+                coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
+                coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
                 idx = np.ones((coords.shape[0], 1)) * i_roi
                 coords = np.hstack([idx, coords])
                 res.append(coords)
