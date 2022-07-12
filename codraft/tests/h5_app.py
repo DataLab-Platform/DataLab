@@ -25,10 +25,10 @@ def test(pattern=None):
     execenv.print("[1] Loading all h5 files at once")
     with qt_app_context(exec_loop=True):
         app.create(h5files=get_test_fnames(pattern))
-    execenv.print("[2] Loading h5 files one by one")
-    for fname in get_test_fnames(pattern):
+    execenv.print("[2] Loading h5 files one by one (only the first 3 files)")
+    for fname in get_test_fnames(pattern)[:3]:
         with qt_app_context(exec_loop=True):
-            execenv.print(f"    Opening: {fname}")
+            execenv.print(f"      Opening: {fname}")
             app.create(h5files=[fname])
 
 
