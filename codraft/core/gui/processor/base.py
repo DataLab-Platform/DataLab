@@ -10,9 +10,8 @@ CodraFT Base Processor GUI module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import abc
-from logging import warning
-from typing import Callable, Dict
 import warnings
+from typing import Callable, Dict
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -266,15 +265,17 @@ class BaseProcessor(QC.QObject):
                     ylabel = f"{name}({self.prefix}{idx:03d}){title_suffix}"
                     ylabels.append(ylabel)
         if results:
-            dlg = ArrayEditor(self.panel.parent())
-            title = _("Results")
-            res = np.vstack([result.array for result in results.values()])
-            dlg.setup_and_check(
-                res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
-            )
-            dlg.setObjectName(f"{self.prefix}_results")
-            dlg.resize(750, 300)
-            exec_dialog(dlg)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                dlg = ArrayEditor(self.panel.parent())
+                title = _("Results")
+                res = np.vstack([result.array for result in results.values()])
+                dlg.setup_and_check(
+                    res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
+                )
+                dlg.setObjectName(f"{self.prefix}_results")
+                dlg.resize(750, 300)
+                exec_dialog(dlg)
         return results
 
     @abc.abstractmethod
@@ -395,10 +396,14 @@ class BaseProcessor(QC.QObject):
                         ylabels[iroi] = obj_t
                     else:
                         ylabels[iroi] = f"{obj_t}|ROI{roi_index:02d}"
-        dlg = ArrayEditor(self.panel.parent())
-        title = _("Statistics")
-        dlg.setup_and_check(res, title, readonly=True, xlabels=xlabels, ylabels=ylabels)
-        dlg.setObjectName(f"{self.prefix}_stats")
-        dlg.setWindowIcon(get_icon("stats.svg"))
-        dlg.resize(750, 300)
-        exec_dialog(dlg)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            dlg = ArrayEditor(self.panel.parent())
+            title = _("Statistics")
+            dlg.setup_and_check(
+                res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
+            )
+            dlg.setObjectName(f"{self.prefix}_stats")
+            dlg.setWindowIcon(get_icon("stats.svg"))
+            dlg.resize(750, 300)
+            exec_dialog(dlg)

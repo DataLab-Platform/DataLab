@@ -32,6 +32,7 @@ import abc
 import dataclasses
 import os.path as osp
 import re
+import warnings
 from typing import List
 
 import guidata.dataset.qtwidgets as gdq
@@ -616,19 +617,21 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                         ylabel = f"{self.PREFIX}{idx:03d}: {result.label}"
                         rdata.ylabels.append(ylabel)
         if rdatadict:
-            for rdata in rdatadict.values():
-                dlg = ArrayEditor(self.parent())
-                title = _("Results")
-                dlg.setup_and_check(
-                    np.vstack([result.array for result in rdata.results]),
-                    title,
-                    readonly=True,
-                    xlabels=rdata.xlabels,
-                    ylabels=rdata.ylabels,
-                )
-                dlg.setObjectName(f"{self.PREFIX}_results")
-                dlg.resize(750, 300)
-                exec_dialog(dlg)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                for rdata in rdatadict.values():
+                    dlg = ArrayEditor(self.parent())
+                    title = _("Results")
+                    dlg.setup_and_check(
+                        np.vstack([result.array for result in rdata.results]),
+                        title,
+                        readonly=True,
+                        xlabels=rdata.xlabels,
+                        ylabels=rdata.ylabels,
+                    )
+                    dlg.setObjectName(f"{self.PREFIX}_results")
+                    dlg.resize(750, 300)
+                    exec_dialog(dlg)
         else:
             msg = "<br>".join(
                 [
