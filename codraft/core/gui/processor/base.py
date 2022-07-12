@@ -10,7 +10,9 @@ CodraFT Base Processor GUI module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import abc
+from logging import warning
 from typing import Callable, Dict
+import warnings
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -382,15 +384,17 @@ class BaseProcessor(QC.QObject):
         xlabels = [None] * nbcal
         obj_t = f"{self.prefix}{row:03d}"
         ylabels = [None] * (roi_nb + 1)
-        with np.errstate(all="ignore"):
-            for iroi, roi_index in enumerate([None] + list(range(roi_nb))):
-                for ical, (label, func) in enumerate(stfuncs):
-                    xlabels[ical] = label
-                    res[iroi, ical] = func(obj.get_data(roi_index=roi_index))
-                if roi_index is None:
-                    ylabels[iroi] = obj_t
-                else:
-                    ylabels[iroi] = f"{obj_t}|ROI{roi_index:02d}"
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", UserWarning)
+            with np.errstate(all="ignore"):
+                for iroi, roi_index in enumerate([None] + list(range(roi_nb))):
+                    for ical, (label, func) in enumerate(stfuncs):
+                        xlabels[ical] = label
+                        res[iroi, ical] = func(obj.get_data(roi_index=roi_index))
+                    if roi_index is None:
+                        ylabels[iroi] = obj_t
+                    else:
+                        ylabels[iroi] = f"{obj_t}|ROI{roi_index:02d}"
         dlg = ArrayEditor(self.panel.parent())
         title = _("Statistics")
         dlg.setup_and_check(res, title, readonly=True, xlabels=xlabels, ylabels=ylabels)
