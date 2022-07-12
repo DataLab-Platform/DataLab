@@ -10,9 +10,10 @@ ROI editor widgets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import abc
-from typing import Callable
 
 from guidata.configtools import get_icon
+from guidata.qthelpers import add_actions, create_action
+from guiqwt.annotations import AnnotatedCircle
 from guiqwt.builder import make
 from guiqwt.interfaces import IImageItemType
 from guiqwt.label import ObjectInfo
@@ -20,6 +21,7 @@ from qtpy import QtWidgets as QW
 
 from codraft.config import _
 from codraft.core.model.base import ObjectItf
+from codraft.core.model.image import RoiDataGeometries
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
@@ -36,14 +38,14 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot = parent.get_plot()
         self.obj = obj
 
-        fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
-        self.roi_items = list(obj.iterate_roi_items(fmt, True))
-        self.new_roi_func = lambda: obj.new_roi_item(fmt, True, editable=True)
+        self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
+        self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
 
         for roi_item in self.roi_items:
             self.plot.add_item(roi_item)
             self.plot.set_active_item(roi_item)
 
+        self.add_btn = None
         self.setup_widget()
 
         self.update_roi_titles()
@@ -52,19 +54,17 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def setup_widget(self):
         """Setup ROI editor widget"""
-        add_btn = QW.QPushButton(
+        self.add_btn = QW.QPushButton(
             get_icon(self.ICON_NAME), _("Add region of interest"), self
         )
-        add_btn.clicked.connect(self.add_roi)
         layout = QW.QHBoxLayout()
-        layout.addWidget(add_btn)
+        layout.addWidget(self.add_btn)
         layout.addStretch()
         self.setLayout(layout)
 
-    def add_roi(self):
-        """Add ROI"""
+    def add_roi_item(self, roi_item):
+        """Add ROI item to plot and refresh titles"""
         self.plot.unselect_all()
-        roi_item = self.new_roi_func()
         self.roi_items.append(roi_item)
         self.update_roi_titles()
         self.plot.add_item(roi_item)
@@ -120,6 +120,12 @@ class SignalROIEditor(BaseROIEditor):
         info_label = make.info_label("BL", info, title=_("Regions of interest"))
         self.plot.add_item(info_label)
         self.info_label = info_label
+        self.add_btn.clicked.connect(self.add_roi)
+
+    def add_roi(self):
+        """Simply add an ROI"""
+        roi_item = self.obj.new_roi_item(self.fmt, True, editable=True)
+        self.add_roi_item(roi_item)
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
@@ -141,6 +147,26 @@ class ImageROIEditor(BaseROIEditor):
         super().setup_widget()
         item = self.plot.get_items(item_type=IImageItemType)[0]
         item.set_mask_visible(False)
+        menu = QW.QMenu()
+        rectact = create_action(
+            self,
+            _("Rectangular ROI"),
+            lambda: self.add_roi(RoiDataGeometries.RECTANGLE),
+            icon=get_icon("rectangle.png"),
+        )
+        circact = create_action(
+            self,
+            _("Circular ROI"),
+            lambda: self.add_roi(RoiDataGeometries.CIRCLE),
+            icon=get_icon("circle.png"),
+        )
+        add_actions(menu, (rectact, circact))
+        self.add_btn.setMenu(menu)
+
+    def add_roi(self, geometry: RoiDataGeometries):
+        """Add new ROI"""
+        item = self.obj.new_roi_item(self.fmt, True, editable=True, geometry=geometry)
+        self.add_roi_item(item)
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
@@ -151,4 +177,7 @@ class ImageROIEditor(BaseROIEditor):
     @staticmethod
     def get_roi_item_coords(roi_item):
         """Return ROI item coords"""
-        return roi_item.get_rect()
+        x0, y0, x1, y1 = roi_item.get_rect()
+        if isinstance(roi_item, AnnotatedCircle):
+            y0 = y1 = 0.5 * (y0 + y1)
+        return x0, y0, x1, y1

@@ -153,10 +153,6 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         update_dataset(item.curveparam, self.metadata)
         item.update_params()
 
-    def roi_indexes_to_coords(self) -> np.ndarray:
-        """Convert ROI indexes to coordinates"""
-        return self.x[self.roi]
-
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes"""
         indexes = np.array(coords, int)
@@ -192,17 +188,15 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
     def new_roi_item(self, fmt, lbl, editable):
         """Return a new ROI item from scratch"""
         coords = self.x.min(), self.x.max()
-        return self.make_roi_item(
+        return base.make_roi_item(
             lambda x, y, _title: make.range(x, y), coords, "ROI", fmt, lbl, editable
         )
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
         """Make plot item representing a Region of Interest"""
-        if self.roi is None:
-            yield self.new_roi_item(fmt, lbl, editable)
-        else:
-            for index, coords in enumerate(self.roi_indexes_to_coords()):
-                yield self.make_roi_item(
+        if self.roi is not None:
+            for index, coords in enumerate(self.x[self.roi]):
+                yield base.make_roi_item(
                     lambda x, y, _title: make.range(x, y),
                     coords,
                     f"ROI{index:02d}",

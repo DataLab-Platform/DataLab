@@ -33,7 +33,7 @@ from codraft.core.gui.processor.base import (
     ThresholdParam,
 )
 from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
-from codraft.core.model.image import ImageParam
+from codraft.core.model.image import ImageParam, RoiDataItem
 from codraft.utils.qthelpers import qt_try_except
 
 
@@ -302,12 +302,11 @@ class ImageProcessor(BaseProcessor):
         def suffix_func(group: DataSetGroup):
             if len(group.datasets) == 1:
                 p = group.datasets[0]
-                return f"x={p.x0:d}:{p.x1:d},y={p.y0:d}:{p.y1:d}"
+                return p.get_suffix()
             return ""
 
         def extract_roi_func(data: np.ndarray, group: DataSetGroup):
             """Extract ROI function on data"""
-            # TODO: [P3] Use masked images instead? (need to adapt ImageParam model)
             if len(group.datasets) == 1:
                 p = group.datasets[0]
                 return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
@@ -489,7 +488,7 @@ class ImageProcessor(BaseProcessor):
                 coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
                 coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
                 if image.roi is not None:
-                    x0, y0, _x1, _y1 = image.roi[i_roi]
+                    x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
                     coords[:, ::2] += x0
                     coords[:, 1::2] += y0
                 idx = np.ones((coords.shape[0], 1)) * i_roi

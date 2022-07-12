@@ -45,7 +45,7 @@ def create_test_image_with_roi(size=None):
     ima = create_test_image3(size)
     dy, dx = ima.size
     roi1 = [dx // 2, dy // 2, dx - 25, dy]
-    roi2 = [dx // 4, dy // 4, dx // 2, dy // 2]
+    roi2 = [dx // 4, dy // 2, dx // 2, dy // 2]
     ima.roi = np.array([roi1, roi2], int)
     return ima
 

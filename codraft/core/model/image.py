@@ -14,6 +14,7 @@ import enum
 import re
 import weakref
 from collections import abc
+import numpy.ma as ma
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -22,6 +23,7 @@ from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guiqwt.builder import make
 from guiqwt.image import MaskedImageItem
+from guiqwt.annotations import AnnotatedCircle
 
 from codraft.config import Conf, _
 from codraft.core.computation.image import scale_data_to_min_max
@@ -31,6 +33,15 @@ from codraft.core.model import base
 def make_roi_rectangle(x0: int, y0: int, x1: int, y1: int, title: str):
     """Make and return the annnotated rectangle associated to ROI"""
     return make.annotated_rectangle(x0, y0, x1, y1, title)
+
+
+def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str):
+    """Make and return the annnotated circle associated to ROI"""
+    item = AnnotatedCircle(x0, y0, x1, y1)
+    item.annotationparam.title = title
+    item.annotationparam.update_annotation(item)
+    item.set_style("plot", "shape/drag")
+    return item
 
 
 def to_builtin(obj):
@@ -51,6 +62,82 @@ def to_builtin(obj):
     if isinstance(obj, np.ndarray):
         return obj
     return None
+
+
+class RoiDataGeometries(enum.Enum):
+    """ROI data geometry types"""
+
+    RECTANGLE = 0
+    CIRCLE = 1
+
+
+class RoiDataItem:
+    """Object representing an image ROI."""
+
+    def __init__(self, data: np.ndarray):
+        self._data = data
+
+    @classmethod
+    def from_image(cls, obj, geometry: RoiDataGeometries):
+        """Construct roi data item from image object: called for making new ROI items"""
+        x0, x1 = obj.x0, obj.size[0] + obj.x0
+        if geometry is RoiDataGeometries.RECTANGLE:
+            y0, y1 = obj.y0, obj.size[1] + obj.y0
+        else:
+            y0 = y1 = 0.5 * (2 * obj.y0 + obj.size[1])
+        coords = x0, y0, x1, y1
+        return cls(coords)
+
+    @property
+    def geometry(self) -> RoiDataGeometries:
+        """ROI geometry"""
+        _x0, y0, _x1, y1 = self._data
+        if y0 == y1:
+            return RoiDataGeometries.CIRCLE
+        return RoiDataGeometries.RECTANGLE
+
+    def get_rect(self):
+        """Get rectangle coordinates"""
+        x0, y0, x1, y1 = self._data
+        if self.geometry is RoiDataGeometries.CIRCLE:
+            y0 -= x1 - x0
+            y1 += x1 - x0
+        return x0, y0, x1, y1
+
+    def get_masked_view(self, data: np.ndarray, maskdata: np.ndarray) -> np.ndarray:
+        """Return masked view for data"""
+        x0, y0, x1, y1 = self.get_rect()
+        masked_view = data.view(ma.MaskedArray)
+        masked_view.mask = maskdata
+        return masked_view[y0:y1, x0:x1]
+
+    def apply_mask(self, data: np.ndarray) -> np.ndarray:
+        """Apply ROI to data as a mask and return masked array"""
+        roi_mask = np.ones_like(data, dtype=bool)
+        x0, y0, x1, y1 = self.get_rect()
+        if self.geometry is RoiDataGeometries.RECTANGLE:
+            roi_mask[y0:y1, x0:x1] = False
+        else:
+            xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
+            radius = 0.5 * (x1 - x0)
+            bx = lambda x: min(max(x, 0), data.shape[1] - 1)
+            by = lambda y: min(max(y, 0), data.shape[0] - 1)
+            for x in range(bx(x0), bx(x1)):
+                for y in range(by(y0), by(y1)):
+                    distance = np.sqrt((x - xc) ** 2 + (y - yc) ** 2)
+                    if distance <= radius:
+                        roi_mask[y, x] = False
+        return roi_mask
+
+    def make_roi_item(self, index: int, fmt: str, lbl: bool, editable: bool = True):
+        """Make ROI plot item"""
+        coords = self._data
+        if self.geometry is RoiDataGeometries.RECTANGLE:
+            func = make_roi_rectangle
+        else:
+            func = make_roi_circle
+        title = "ROI" if index is None else f"ROI{index:02d}"
+        return base.make_roi_item(func, coords, title, fmt, lbl, editable)
 
 
 class ImageParam(gdt.DataSet, base.ObjectItf):
@@ -155,11 +242,13 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
+
+        Returns a masked array.
         """
         if self.roi is None or roi_index is None:
             return self.data
-        x0, y0, x1, y1 = self.roi[roi_index]
-        return self.data[y0:y1, x0:x1]
+        roidataitem = RoiDataItem(self.roi[roi_index])
+        return roidataitem.get_masked_view(self.data, self.maskdata)
 
     def copy_data_from(self, other, dtype=None):
         """Copy data from other dataset instance"""
@@ -231,23 +320,82 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     def get_roi_param(self, title, *defaults):
         """Return ROI parameters dataset"""
+        roidataitem = RoiDataItem(defaults)
+
         shape = self.data.shape
         xd0, yd0, xd1, yd1 = defaults
-        xd0, yd0 = max(0, xd0), max(0, yd0)
-        ymax, xmax = shape[0], shape[1]
-        xd1, yd1 = min(xmax, xd1), min(ymax, yd1)
 
-        class ROIParam(gdt.DataSet):
-            """ROI parameters"""
+        def s(name: str, index: int):
+            """Returns name<sub>index</sub>"""
+            return f"{name}<sub>{index}</sub>"
 
-            _tlcorner = gdt.BeginGroup(_("Top left corner"))
-            x0 = gdi.IntItem("X<sub>0</sub>", default=xd0, min=-1, max=xmax)
-            y0 = gdi.IntItem("Y<sub>0</sub>", default=yd0, min=-1, max=ymax).set_pos(1)
-            _e_tlcorner = gdt.EndGroup(_("Top left corner"))
-            _brcorner = gdt.BeginGroup(_("Bottom right corner"))
-            x1 = gdi.IntItem("X<sub>1</sub>", default=xd1, min=-1, max=xmax)
-            y1 = gdi.IntItem("Y<sub>1</sub>", default=yd1, min=-1, max=ymax).set_pos(1)
-            _e_brcorner = gdt.EndGroup(_("Bottom right corner"))
+        if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
+            xd0, yd0 = max(0, xd0), max(0, yd0)
+            ymax, xmax = shape[0], shape[1]
+            xd1, yd1 = min(xmax, xd1), min(ymax, yd1)
+
+            gtitle1 = _("Top left corner")
+            gtitle2 = _("Bottom right corner")
+
+            class ROIParam(gdt.DataSet):
+                """ROI parameters"""
+
+                def get_suffix(self):
+                    """Get suffix text representation for ROI extraction"""
+                    return f"x={self.x0}:{self.x1},y={self.y0}:{self.y1}"
+
+                def get_coords(self):
+                    """Get ROI coordinates"""
+                    return self.x0, self.y0, self.x1, self.y1
+
+                _tlcorner = gdt.BeginGroup(gtitle1)
+                x0 = gdi.IntItem(s("X", 0), default=xd0, min=-1, max=xmax)
+                y0 = gdi.IntItem(s("Y", 0), default=yd0, min=-1, max=ymax).set_pos(1)
+                _e_tlcorner = gdt.EndGroup(gtitle1)
+                _brcorner = gdt.BeginGroup(gtitle2)
+                x1 = gdi.IntItem(s("X", 1), default=xd1, min=-1, max=xmax)
+                y1 = gdi.IntItem(s("Y", 1), default=yd1, min=-1, max=ymax).set_pos(1)
+                _e_brcorner = gdt.EndGroup(gtitle2)
+
+        else:
+            gtitle1 = _("Center coordinates")
+
+            class ROIParam(gdt.DataSet):
+                """ROI parameters"""
+
+                def get_suffix(self):
+                    """Get suffix text representation for ROI extraction"""
+                    return f"xc={self.xc},yc={self.yc},r={self.r}"
+
+                def get_coords(self):
+                    """Get ROI coordinates"""
+                    return self.x0, self.yc, self.x1, self.yc
+
+                @property
+                def x0(self):
+                    """Return rectangle top left corner X coordinate"""
+                    return self.xc - self.r
+
+                @property
+                def x1(self):
+                    """Return rectangle bottom right corner X coordinate"""
+                    return self.xc + self.r
+
+                @property
+                def y0(self):
+                    """Return rectangle top left corner Y coordinate"""
+                    return self.yc - self.r
+
+                @property
+                def y1(self):
+                    """Return rectangle bottom right corner Y coordinate"""
+                    return self.yc + self.r
+
+                _tlcorner = gdt.BeginGroup(gtitle1)
+                xc = gdi.IntItem(s("X", "C"), default=int(0.5 * (xd0 + xd1)))
+                yc = gdi.IntItem(s("Y", "C"), default=yd0).set_pos(1)
+                _e_tlcorner = gdt.EndGroup(gtitle1)
+                r = gdi.IntItem(_("Radius"), default=int(0.5 * (xd1 - xd0)))
 
         return ROIParam(title)
 
@@ -256,22 +404,15 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         """Convert list of dataset parameters to ROI data"""
         roilist = []
         for roiparam in params.datasets:
-            roilist.append([roiparam.x0, roiparam.y0, roiparam.x1, roiparam.y1])
+            roilist.append(roiparam.get_coords())
         if len(roilist) == 0:
             return None
         return np.array(roilist, int)
 
-    def new_roi_item(self, fmt, lbl, editable):
+    def new_roi_item(self, fmt, lbl, editable, geometry: RoiDataGeometries):
         """Return a new ROI item from scratch"""
-        coords = self.x0, self.y0, self.size[0] + self.x0, self.size[1] + self.y0
-        return self.make_roi_item(make_roi_rectangle, coords, "ROI", fmt, lbl, editable)
-
-    def roi_indexes_to_coords(self) -> np.ndarray:
-        """Convert ROI indexes to coordinates"""
-        coords = np.array(self.roi, float)
-        coords[:, ::2] += self.x0
-        coords[:, 1::2] += self.y0
-        return coords
+        roidataitem = RoiDataItem.from_image(self, geometry)
+        return roidataitem.make_roi_item(None, fmt, lbl, editable)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes"""
@@ -283,13 +424,13 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
         """Iterate over plot items representing Regions of Interest"""
-        if self.roi is None:
-            yield self.new_roi_item(fmt, lbl, editable)
-        else:
-            for index, coords in enumerate(self.roi_indexes_to_coords()):
-                yield self.make_roi_item(
-                    make_roi_rectangle, coords, f"ROI{index:02d}", fmt, lbl, editable
-                )
+        if self.roi is not None:
+            roicoords = np.array(self.roi, float)
+            roicoords[:, ::2] += self.x0
+            roicoords[:, 1::2] += self.y0
+            for index, coords in enumerate(roicoords):
+                roidataitem = RoiDataItem(coords)
+                yield roidataitem.make_roi_item(index, fmt, lbl, editable)
 
     @property
     def maskdata(self):
@@ -301,10 +442,9 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                 self._maskdata_cache = None
         elif roi_changed or self._maskdata_cache is None:
             mask = np.ones_like(self.data, dtype=bool)
-            for roi_index in range(self.roi.shape[0]):
-                x0, y0, x1, y1 = self.roi[roi_index]
-                roi_mask = np.ones_like(self.data, dtype=bool)
-                roi_mask[y0:y1, x0:x1] = False
+            for roirow in self.roi:
+                roidataitem = RoiDataItem(roirow)
+                roi_mask = roidataitem.apply_mask(self.data)
                 mask &= roi_mask
             self._maskdata_cache = mask
             self._roidata_cache = weakref.ref(self.roi)

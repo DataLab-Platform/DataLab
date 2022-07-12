@@ -13,6 +13,7 @@ import abc
 import enum
 import json
 import sys
+from typing import List
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -425,6 +426,19 @@ class ResultShape:
         )
 
 
+def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable: bool):
+    """Make ROI item shape"""
+    item = func(*coords, title)
+    if not editable:
+        if isinstance(item, AnnotatedShape):
+            config_annotated_shape(item, fmt, lbl, cmp=editable)
+            item.set_style("plot", "shape/mask")
+        item.set_movable(False)
+        item.set_resizable(False)
+        item.set_readonly(True)
+    return item
+
+
 class ObjectItfMeta(abc.ABCMeta, gdt.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -477,10 +491,6 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Update plot item from data"""
 
     @abc.abstractmethod
-    def roi_indexes_to_coords(self) -> np.ndarray:
-        """Convert ROI indexes to coordinates"""
-
-    @abc.abstractmethod
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes"""
 
@@ -514,21 +524,6 @@ class ObjectItf(metaclass=ObjectItfMeta):
             self.metadata.pop(ROI_KEY)
         else:
             self.metadata[ROI_KEY] = np.array(roidata, int)
-
-    @staticmethod
-    def make_roi_item(
-        func, coords: list, title: str, fmt: str, lbl: bool, editable: bool
-    ):
-        """Make ROI item shape"""
-        item = func(*coords, title)
-        if not editable:
-            if isinstance(item, AnnotatedShape):
-                config_annotated_shape(item, fmt, lbl, cmp=editable)
-                item.set_style("plot", "shape/mask")
-            item.set_movable(False)
-            item.set_resizable(False)
-            item.set_readonly(True)
-        return item
 
     def add_resultshape(
         self, label: str, shapetype: ShapeTypes, array: np.ndarray
