@@ -12,6 +12,7 @@ Module patching *guiqwt* to adapt it to CodraFT
 # pylint: disable=W0212,W0613,W0612,E0102
 
 import sys
+import warnings
 
 import guidata.dataset.datatypes
 import guiqwt.curve
@@ -119,7 +120,9 @@ def select(self):
 def get_stats(self, x0, y0, x1, y1):
     """Return formatted string with stats on image rectangular area
     (output should be compatible with AnnotatedShape.get_infos)"""
-    txt = self._old_ImageItem_get_stats(x0, y0, x1, y1)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        txt = self._old_ImageItem_get_stats(x0, y0, x1, y1)
     ix0, iy0, ix1, iy1 = self.get_closest_index_rect(x0, y0, x1, y1)
     data = self.data[iy0:iy1, ix0:ix1]
 

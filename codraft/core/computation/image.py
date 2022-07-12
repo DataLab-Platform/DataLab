@@ -10,6 +10,7 @@ CodraFT Computation / Image module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import numpy as np
+import numpy.ma as ma
 import scipy.ndimage as spi
 import scipy.ndimage.filters as spf
 import scipy.spatial as spt
@@ -67,7 +68,15 @@ def get_centroid_fourier(data: np.ndarray):
 
     row = (np.arctan(b / a) + rphi) * (rows - 1) / (2 * np.pi) + 1
     col = (np.arctan(d / c) + cphi) * (cols - 1) / (2 * np.pi) + 1
-    return int(row), int(col)
+    try:
+        row = int(row)
+    except ma.MaskError:
+        row = np.nan
+    try:
+        col = int(col)
+    except ma.MaskError:
+        col = np.nan
+    return row, col
 
 
 def get_enclosing_circle(data: np.ndarray, level: float = 0.5):
