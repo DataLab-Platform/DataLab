@@ -479,11 +479,11 @@ class ImageProcessor(BaseProcessor):
         return apply_10_func_callback(self, orig, func, param)
 
     @staticmethod
-    def __apply_origin_size_roi(image, func) -> np.ndarray:
+    def __apply_origin_size_roi(image, func, *args) -> np.ndarray:
         """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
         res = []
         for i_roi in image.iterate_roi_indexes():
-            coords = func(image.get_data(i_roi))
+            coords = func(image.get_data(i_roi), *args)
             if coords.size:
                 if image.roi is not None:
                     x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
@@ -543,7 +543,9 @@ class ImageProcessor(BaseProcessor):
 
         def peak_detection(image: ImageParam, p: PeakDetectionParam):
             """Compute centroid"""
-            res = self.__apply_origin_size_roi(image, get_2d_peaks_coords)
+            res = self.__apply_origin_size_roi(
+                image, get_2d_peaks_coords, p.size, p.threshold
+            )
             if res is not None:
                 return image.add_resultshape("Peaks", ShapeTypes.POINT, res)
             return None
@@ -584,7 +586,7 @@ class ImageProcessor(BaseProcessor):
 
         def contour_shape(image: ImageParam, p: ContourShapeParam):
             """Compute contour shape fit"""
-            res = self.__apply_origin_size_roi(image, get_contour_shapes)
+            res = self.__apply_origin_size_roi(image, get_contour_shapes, p.shape)
             if res is not None:
                 shape = ShapeTypes.CIRCLE if p.shape == "circle" else ShapeTypes.ELLIPSE
                 return image.add_resultshape("Contour", shape, res)
