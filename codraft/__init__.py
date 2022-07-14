@@ -8,8 +8,8 @@ CodraFT
 =======
 
 CodraFT is a generic signal and image processing software based on Python scientific
-libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (thanks to
-`guidata`_ and `guiqwt`_ libraries).
+libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces
+(thanks to `guidata`_ and `guiqwt`_ libraries).
 
 .. _guidata: https://pypi.python.org/pypi/guidata
 .. _guiqwt: https://pypi.python.org/pypi/guiqwt

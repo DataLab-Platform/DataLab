@@ -28,13 +28,13 @@ msgstr "Manuel utilisateur de CodraFT"
 #: ../../index.rst:4
 msgid ""
 "CodraFT is a **generic signal and image processing software**. It is "
-"based on Python scientific libraries (such as NumPy, SciPy or OpenCV) and"
+"based on Python scientific libraries (such as NumPy, SciPy or scikit-image) and"
 " Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
 "libraries)."
 msgstr ""
 "CodraFT est un **logiciel générique de traitement du signal et de "
 "l'image** basé sur des bibliothèques scientifiques Python (telles que "
-"NumPy, SciPy ou encore OpenCV) et sur les interfaces graphiques Qt (grâce"
+"NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt (grâce"
 " aux bibliothèques `guidata`_ et `guiqwt`_)."
 
 #: ../../index.rst:11

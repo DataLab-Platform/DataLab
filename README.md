@@ -14,7 +14,7 @@ CodraFT is [CODRA](https://codra.net/)'s Filtering Tool.
 ## Overview
 
 CodraFT is a generic signal and image processing software based on Python scientific
-libraries (such as NumPy, SciPy or OpenCV) and Qt graphical user interfaces (thanks to
+libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces (thanks to
 [guidata](https://pypi.python.org/pypi/guidata) and [guiqwt](https://pypi.python.org/pypi/guiqwt) libraries).
 
 CodraFT is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
@@ -119,7 +119,3 @@ python setup.py install
 * [SciPy](https://pypi.org/project/scipy/) (algorithms for scientific computing)
 * [scikit-image](https://pypi.org/project/scikit-image/) (algorithms for image processing)
 * [psutil](https://pypi.org/project/psutil/) (process and system monitoring)
-
-### Other optional modules
-
-* [OpenCV](https://pypi.org/project/opencv-python/) for some image processing features

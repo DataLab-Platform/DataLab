@@ -91,13 +91,6 @@ msgstr ""
 "Calcule le contour circulaire entourant les valeurs de l'image au-delà "
 "d'un seuil (moitié du maximum de l'image)."
 
-#: ../../features/image/menu/computing.rst:34
-msgid ""
-"This feature requires `OpenCV for Python <https://pypi.org/project"
-"/opencv-python/>`_."
-msgstr ""
-"Cette fonctionnalité requiert `OpenCV pour Python "
-"<https://pypi.org/project/opencv-python/>`_."
 
 #: ../../features/image/menu/computing.rst:44
 msgid "2D peak detection"
@@ -159,4 +152,3 @@ msgstr ""
 
 #~ msgid "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
 #~ msgstr "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
-

@@ -30,9 +30,6 @@ Minimum enclosing circle center
     Compute the circle contour enclosing image values above
     a threshold level defined as the half-maximum value.
 
-    .. warning::
-        This feature requires `OpenCV for Python <https://pypi.org/project/opencv-python/>`_.
-
 2D peak detection
     Automatically find peaks on image using a minimum-maximum filter algorithm.
 
