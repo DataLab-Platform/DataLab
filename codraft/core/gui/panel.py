@@ -556,7 +556,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         )
         return dlg, obj
 
-    def get_roi_dialog(self) -> np.ndarray:
+    def get_roi_dialog(self, extract: bool) -> np.ndarray:
         """Get ROI data (array) from specific dialog box"""
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
@@ -565,11 +565,11 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
-        roi_editor = self.ROIDIALOGCLASS(dlg, obj)
+        roi_editor = self.ROIDIALOGCLASS(dlg, obj, extract)
         dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
         if exec_dialog(dlg):
             coords = roi_editor.get_roi_coords()
-            return obj.roi_coords_to_indexes(coords)
+            return obj.roi_coords_to_indexes(coords), roi_editor.singleobj_extraction
         return None
 
     def get_object_dialog(

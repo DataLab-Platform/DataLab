@@ -94,42 +94,56 @@ class SignalProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
-    def extract_roi(self, roidata: np.ndarray = None) -> None:
+    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = False) -> None:
         """Extract Region Of Interest (ROI) from data"""
         if roidata is None:
-            roidata = self.edit_regions_of_interest(update=False)
-            if roidata is None:
+            output = self.edit_regions_of_interest(extract=True)
+            if output is None:
                 return
-
-        def suffix_func(group: DataSetGroup):
-            if len(group.datasets) == 1:
-                p = group.datasets[0]
-                return f"indexes={p.col1:d}:{p.col2:d}"
-            return ""
-
-        def extract_roi_func(x, y, group: DataSetGroup):
-            """Extract ROI function"""
-            # TODO: [P3] Use masked images instead?
-            # (need to adapt SignalParam data model accordingly)
-            xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
-            for p in group.datasets:
-                slice0 = slice(p.col1, p.col2 + 1)
-                xout[slice0], yout[slice0] = x[slice0], y[slice0]
-            nans = np.isnan(xout) | np.isnan(yout)
-            return xout[~nans], yout[~nans]
+            roidata, singleobj = output
+            if roidata is None:
+                # This only happens in unattended mode (forcing QDialog accept)
+                return
 
         obj = self.objlist.get_sel_object()
         group = obj.roidata_to_params(roidata)
 
-        # TODO: [P2] Instead of removing geometric shapes, apply roi extract
-        self.compute_11(
-            "ROI",
-            extract_roi_func,
-            group,
-            suffix=suffix_func,
-            func_obj=lambda obj, _group: obj.remove_resultshapes(),
-            edit=False,
-        )
+        if singleobj:
+
+            def suffix_func(group: DataSetGroup):
+                if len(group.datasets) == 1:
+                    p = group.datasets[0]
+                    return f"indexes={p.col1:d}:{p.col2:d}"
+                return ""
+
+            def extract_roi_func(x, y, group: DataSetGroup):
+                """Extract ROI function"""
+                xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
+                for p in group.datasets:
+                    slice0 = slice(p.col1, p.col2 + 1)
+                    xout[slice0], yout[slice0] = x[slice0], y[slice0]
+                nans = np.isnan(xout) | np.isnan(yout)
+                return xout[~nans], yout[~nans]
+
+            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
+            self.compute_11(
+                "ROI",
+                extract_roi_func,
+                group,
+                suffix=suffix_func,
+                func_obj=lambda obj, _group: obj.remove_resultshapes(),
+                edit=False,
+            )
+        else:
+            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
+            self.compute_1n(
+                [f"ROI{iroi}" for iroi in range(len(group.datasets))],
+                lambda x, y, p: (x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1]),
+                group.datasets,
+                suffix=lambda p: f"indexes={p.col1:d}:{p.col2:d}",
+                func_obj=lambda obj, _group: obj.remove_resultshapes(),
+                edit=False,
+            )
 
     def swap_axes(self):
         """Swap data axes"""

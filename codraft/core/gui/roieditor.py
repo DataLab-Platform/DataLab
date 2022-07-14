@@ -32,11 +32,13 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     """ROI Editor"""
 
     ICON_NAME = None
+    OBJ_NAME = None
 
-    def __init__(self, parent: QW.QDialog, obj: ObjectItf):
+    def __init__(self, parent: QW.QDialog, obj: ObjectItf, extract: bool):
         super().__init__(parent)
         self.plot = parent.get_plot()
         self.obj = obj
+        self.extract = extract
 
         self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
         self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
@@ -46,6 +48,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             self.plot.set_active_item(roi_item)
 
         self.add_btn = None
+        self.singleobj_btn = None
         self.setup_widget()
 
         self.update_roi_titles()
@@ -59,8 +62,22 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         )
         layout = QW.QHBoxLayout()
         layout.addWidget(self.add_btn)
+        if self.extract:
+            self.singleobj_btn = QW.QCheckBox(
+                _("Extract all regions of interest into a single %s object")
+                % self.OBJ_NAME,
+                self,
+            )
+            layout.addWidget(self.singleobj_btn)
         layout.addStretch()
         self.setLayout(layout)
+
+    @property
+    def singleobj_extraction(self):
+        """Return True if a single object extraction has been chosen"""
+        if self.singleobj_btn is None:
+            return None
+        return self.singleobj_btn.isChecked()
 
     def add_roi_item(self, roi_item):
         """Add ROI item to plot and refresh titles"""
@@ -73,6 +90,10 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     @abc.abstractmethod
     def update_roi_titles(self):
         """Update ROI annotation titles"""
+        dlg = self.parent()
+        dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(
+            len(self.roi_items) > 0
+        )
 
     def item_removed(self, item):
         """Item was removed. Since all items are read-only except ROIs...
@@ -112,6 +133,7 @@ class SignalROIEditor(BaseROIEditor):
     """Signal ROI Editor"""
 
     ICON_NAME = "signal_roi_new.svg"
+    OBJ_NAME = _("signal")
 
     def setup_widget(self):
         """Setup ROI editor widget"""
@@ -129,6 +151,7 @@ class SignalROIEditor(BaseROIEditor):
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
+        super().update_roi_titles()
         self.info_label.update_text()
 
     @staticmethod
@@ -141,6 +164,7 @@ class ImageROIEditor(BaseROIEditor):
     """Image ROI Editor"""
 
     ICON_NAME = "image_roi_new.svg"
+    OBJ_NAME = _("image")
 
     def setup_widget(self):
         """Setup ROI editor widget"""
@@ -170,6 +194,7 @@ class ImageROIEditor(BaseROIEditor):
 
     def update_roi_titles(self):
         """Update ROI annotation titles"""
+        super().update_roi_titles()
         for index, roi_item in enumerate(self.roi_items):
             roi_item.annotationparam.title = f"ROI{index:02d}"
             roi_item.annotationparam.update_annotation(roi_item)

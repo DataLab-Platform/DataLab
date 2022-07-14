@@ -292,52 +292,76 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def extract_roi(self, roidata: np.ndarray = None) -> None:
+    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = False) -> None:
         """Extract Region Of Interest (ROI) from data"""
         if roidata is None:
-            roidata = self.edit_regions_of_interest(update=False)
-            if roidata is None:
+            output = self.edit_regions_of_interest(extract=True)
+            if output is None:
                 return
-
-        def suffix_func(group: DataSetGroup):
-            if len(group.datasets) == 1:
-                p = group.datasets[0]
-                return p.get_suffix()
-            return ""
-
-        def extract_roi_func(data: np.ndarray, group: DataSetGroup):
-            """Extract ROI function on data"""
-            if len(group.datasets) == 1:
-                p = group.datasets[0]
-                return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
-            out = np.zeros_like(data)
-            for p in group.datasets:
-                slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
-                out[slice1, slice2] = data[slice1, slice2]
-            x0 = min([p.x0 for p in group.datasets])
-            y0 = min([p.y0 for p in group.datasets])
-            x1 = max([p.x1 for p in group.datasets])
-            y1 = max([p.y1 for p in group.datasets])
-            return out[y0:y1, x0:x1]
-
-        def extract_roi_func_obj(image: ImageParam, group: DataSetGroup):
-            """Extract ROI function on object"""
-            image.x0 += min([p.x0 for p in group.datasets])
-            image.y0 += min([p.y0 for p in group.datasets])
-            image.remove_resultshapes()
+            roidata, singleobj = output
+            if roidata is None:
+                # This only happens in unattended mode (forcing QDialog accept)
+                return
 
         obj = self.objlist.get_sel_object()
         group = obj.roidata_to_params(roidata)
 
-        # TODO: [P2] Instead of removing geometric shapes, apply ROI extract
-        self.compute_11(
-            "ROI",
-            extract_roi_func,
-            group,
-            suffix=suffix_func,
-            func_obj=extract_roi_func_obj,
-            edit=False,
-        )
+        if singleobj:
+
+            def suffix_func(group: DataSetGroup):
+                if len(group.datasets) == 1:
+                    p = group.datasets[0]
+                    return p.get_suffix()
+                return ""
+
+            def extract_roi_func(data: np.ndarray, group: DataSetGroup):
+                """Extract ROI function on data"""
+                if len(group.datasets) == 1:
+                    p = group.datasets[0]
+                    return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+                out = np.zeros_like(data)
+                for p in group.datasets:
+                    slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
+                    out[slice1, slice2] = data[slice1, slice2]
+                x0 = min([p.x0 for p in group.datasets])
+                y0 = min([p.y0 for p in group.datasets])
+                x1 = max([p.x1 for p in group.datasets])
+                y1 = max([p.y1 for p in group.datasets])
+                return out[y0:y1, x0:x1]
+
+            def extract_roi_func_obj(image: ImageParam, group: DataSetGroup):
+                """Extract ROI function on object"""
+                image.x0 += min([p.x0 for p in group.datasets])
+                image.y0 += min([p.y0 for p in group.datasets])
+                image.remove_resultshapes()
+
+            # TODO: [P2] Instead of removing geometric shapes, apply ROI extract
+            self.compute_11(
+                "ROI",
+                extract_roi_func,
+                group,
+                suffix=suffix_func,
+                func_obj=extract_roi_func_obj,
+                edit=False,
+            )
+
+        else:
+
+            def extract_roi_func_obj(image: ImageParam, p: DataSet):
+                """Extract ROI function on object"""
+                image.x0 += p.x0
+                image.y0 += p.y0
+                image.remove_resultshapes()
+
+            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
+            self.compute_1n(
+                [f"ROI{iroi}" for iroi in range(len(group.datasets))],
+                lambda z, p: z.copy()[p.y0 : p.y1, p.x0 : p.x1],
+                group.datasets,
+                suffix=lambda p: p.get_suffix(),
+                func_obj=extract_roi_func_obj,
+                edit=False,
+            )
 
     def swap_axes(self):
         """Swap data axes"""

@@ -11,6 +11,11 @@ Changes:
   * ROIs are now shown as masks (areas outside ROIs are shaded)
   * Added support for circular ROIs
   * ROIs now take into account pixel size (dx, dy) as well as origin (x0, y0)
+* Signal and Image ROIs:
+  * New default extract mode: creating as many signals/images as ROIs (each ROI is
+    extracted into a single signal/image)
+  * The old extract mode (single signal/image output) is still available and may be
+    enabled using the new checkbox added in ROI extraction dialog box
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
 * Added demo mode (from command line, simply run: codraft-demo)

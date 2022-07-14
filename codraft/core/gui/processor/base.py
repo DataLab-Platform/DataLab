@@ -370,10 +370,11 @@ class BaseProcessor(QC.QObject):
         """Compute FFT"""
 
     # ------Computing
-    def edit_regions_of_interest(self, update=True):
+    def edit_regions_of_interest(self, extract=False):
         """Define Region Of Interest (ROI) for computing functions"""
-        roidata = self.panel.get_roi_dialog()
-        if roidata is not None:
+        dlg_output = self.panel.get_roi_dialog(extract=extract)
+        if dlg_output is not None:
+            roidata, singleobj = dlg_output
             row = self.objlist.get_selected_rows()[0]
             obj = self.objlist[row]
             roigroup = obj.roidata_to_params(roidata)
@@ -384,12 +385,12 @@ class BaseProcessor(QC.QObject):
                 or roigroup.edit(parent=self.panel)
             ):
                 roidata = obj.params_to_roidata(roigroup)
-                if update:
-                    obj.roi = roidata
-                    self.SIG_ADD_SHAPE.emit(row)
-                    self.panel.current_item_changed(row)
-                    self.panel.SIG_REFRESH_PLOT.emit()
-                return roidata
+                if extract:
+                    return roidata, singleobj
+                obj.roi = roidata
+                self.SIG_ADD_SHAPE.emit(row)
+                self.panel.current_item_changed(row)
+                self.panel.SIG_REFRESH_PLOT.emit()
         return None
 
     @abc.abstractmethod
