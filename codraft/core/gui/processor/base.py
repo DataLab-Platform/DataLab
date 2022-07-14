@@ -184,13 +184,12 @@ class BaseProcessor(QC.QObject):
         name,
         func,
         param=None,
-        one_param_for_all=True,
         suffix=None,
         func_obj=None,
         edit=True,
     ):
         """Compute 11 function: 1 object in --> 1 object out"""
-        if param is not None and one_param_for_all:
+        if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
         rows = self.objlist.get_selected_rows()
@@ -200,9 +199,6 @@ class BaseProcessor(QC.QObject):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                if param is not None and not one_param_for_all:
-                    if edit and not param.edit(parent=self.panel.parent()):
-                        return
                 orig = self.objlist[row]
                 obj = self.panel.create_object()
                 obj.title = f"{name}({self.prefix}{row:03d})"
@@ -227,13 +223,12 @@ class BaseProcessor(QC.QObject):
         name: str,
         func: Callable,
         param: gdt.DataSet = None,
-        one_param_for_all: bool = True,
         suffix: Callable = None,
         edit: bool = True,
     ) -> Dict[int, ResultShape]:
         """Compute 10 function: 1 object in --> 0 object out
         (the result of this method is stored in original object's metadata)"""
-        if param is not None and one_param_for_all:
+        if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
         rows = self.objlist.get_selected_rows()
@@ -247,9 +242,6 @@ class BaseProcessor(QC.QObject):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                if param is not None and not one_param_for_all:
-                    if edit and not param.edit(parent=self.panel.parent()):
-                        return None
                 orig = self.objlist[row]
                 title = f"{name}{title_suffix}"
                 message = _("Computing:") + " " + title
