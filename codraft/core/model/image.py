@@ -331,6 +331,8 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             class ROIParam(gdt.DataSet):
                 """ROI parameters"""
 
+                geometry = roidataitem.geometry
+
                 def get_suffix(self):
                     """Get suffix text representation for ROI extraction"""
                     return f"x={self.x0}:{self.x1},y={self.y0}:{self.y1}"
@@ -353,6 +355,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
             class ROIParam(gdt.DataSet):
                 """ROI parameters"""
+
+                geometry = roidataitem.geometry
+
+                def get_single_roi(self):
+                    """Get single circular ROI, i.e. after extracting ROI from image"""
+                    return np.array([(0, self.r, self.x1 - self.x0, self.r)], int)
 
                 def get_suffix(self):
                     """Get suffix text representation for ROI extraction"""
