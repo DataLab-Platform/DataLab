@@ -11,7 +11,7 @@ CodraFT Base Processor GUI module
 
 import abc
 import warnings
-from typing import Callable, Dict
+from typing import Callable, Dict, List
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -181,38 +181,69 @@ class BaseProcessor(QC.QObject):
 
     def compute_11(
         self,
-        name,
-        func,
-        param=None,
-        suffix=None,
-        func_obj=None,
-        edit=True,
+        name: str,
+        func: Callable,
+        param: gdt.DataSet = None,
+        suffix: Callable = None,
+        func_obj: Callable = None,
+        edit: bool = True,
     ):
         """Compute 11 function: 1 object in --> 1 object out"""
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
+        self._compute_11_subroutine([name], func, [param], suffix, func_obj)
+
+    def compute_1n(
+        self,
+        names: List,
+        func: Callable,
+        params: List = None,
+        suffix: Callable = None,
+        func_obj: Callable = None,
+        edit: bool = True,
+    ):
+        """Compute 1n function: 1 object in --> n objects out"""
+        if params is not None:
+            group = gdt.DataSetGroup(params, title=_("Parameters"))
+            if edit and not group.edit(parent=self.panel.parent()):
+                return
+        self._compute_11_subroutine(names, func, params, suffix, func_obj)
+
+    def _compute_11_subroutine(
+        self,
+        names: List,
+        func: Callable,
+        params: List,
+        suffix: Callable,
+        func_obj: Callable,
+    ):
+        """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
         rows = self.objlist.get_selected_rows()
-        with create_progress_bar(self.panel, name, max_=len(rows)) as progress:
-            for idx, row in enumerate(rows):
-                progress.setValue(idx)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    break
-                orig = self.objlist[row]
-                obj = self.panel.create_object()
-                obj.title = f"{name}({self.prefix}{row:03d})"
-                if suffix is not None:
-                    obj.title += "|" + suffix(param)
-                obj.copy_data_from(orig)
-                message = _("Computing:") + " " + obj.title
-                self.apply_11_func(obj, orig, func, param, message)
-                if func_obj is not None:
-                    if param is None:
-                        func_obj(obj)
-                    else:
-                        func_obj(obj, param)
-                self.panel.add_object(obj)
+        with create_progress_bar(
+            self.panel, names[0], max_=len(rows) * len(params)
+        ) as progress:
+            for i_row, row in enumerate(rows):
+                for i_param, (param, name) in enumerate(zip(params, names)):
+                    progress.setValue(i_row * i_param)
+                    progress.setLabelText(name)
+                    QW.QApplication.processEvents()
+                    if progress.wasCanceled():
+                        break
+                    orig = self.objlist[row]
+                    obj = self.panel.create_object()
+                    obj.title = f"{name}({self.prefix}{row:03d})"
+                    if suffix is not None:
+                        obj.title += "|" + suffix(param)
+                    obj.copy_data_from(orig)
+                    message = _("Computing:") + " " + obj.title
+                    self.apply_11_func(obj, orig, func, param, message)
+                    if func_obj is not None:
+                        if param is None:
+                            func_obj(obj)
+                        else:
+                            func_obj(obj, param)
+                    self.panel.add_object(obj)
 
     @abc.abstractmethod
     def apply_10_func(self, orig, func, param, message) -> ResultShape:
