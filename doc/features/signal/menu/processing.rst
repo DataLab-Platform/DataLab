@@ -43,8 +43,8 @@ Linear calibration
         * - Y-axis
           - :math:`y_{1} = a.y_{0} + b`
 
-Lorentzian filter
-    Compute 1D-Lorentzian filter of each selected signal
+Gaussian filter
+    Compute 1D-Gaussian filter of each selected signal
     (implementation based on `scipy.ndimage.gaussian_filter1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter1d.html>`_).
 
 Moving average
