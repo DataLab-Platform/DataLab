@@ -11,6 +11,7 @@ CodraFT Image Processor GUI module
 
 
 import numpy as np
+from numpy import ma
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
@@ -626,11 +627,13 @@ class ImageProcessor(BaseProcessor):
 
     def _get_stat_funcs(self):
         """Return statistics functions list"""
+        # Be careful to use systematically functions adapted to masked arrays
+        # (e.g. numpy.ma median, and *not* numpy.median)
         return [
             ("min(z)", lambda z: z.min()),
             ("max(z)", lambda z: z.max()),
             ("<z>", lambda z: z.mean()),
-            ("Median(z)", np.median),
+            ("Median(z)", ma.median),
             ("σ(z)", lambda z: z.std()),
             ("Σ(z)", lambda z: z.sum()),
             ("<z>/σ(z)", lambda z: z.mean() / z.std()),
