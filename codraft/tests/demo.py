@@ -12,7 +12,7 @@ CodraFT Demo
 
 from qtpy import QtWidgets as QW
 
-from codraft.config import _
+from codraft.config import _, reset
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.gui.processor.image import ContourShapeParam
 from codraft.core.gui.processor.image import \
@@ -160,6 +160,7 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 1000) -> None:
 
 def run():
     """Run demo"""
+    reset()  # Reset configuration (remove configuration file and initialize it)
     execenv.enable_demo_mode(DELAY1)
     with codraft_app_context(console=False) as win:
         QW.QMessageBox.information(win, "Demo", "Click OK to start demo")
