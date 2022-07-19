@@ -52,8 +52,6 @@ as embedding CodraFT in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
 * Segmentation fault and Python exception logging
 * Customizable annotations for both signals and images
-* Dropped Python 2 support (CodraFT V1.7, the last release supporting Python 2,
-will still be maintained for critical bug fixes, i.e. without introducing new features)
 
 ### Release key features ###
 
