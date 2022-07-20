@@ -23,6 +23,8 @@ from qtpy import QtWidgets as QW
 
 from codraft import env
 from codraft.config import _
+from codraft.core.gui.objectlist import ObjectList
+from codraft.core.gui.roieditor import ROIEditorData
 from codraft.core.model.base import ResultShape
 from codraft.utils import misc
 from codraft.utils.qthelpers import (
@@ -68,7 +70,7 @@ class BaseProcessor(QC.QObject):
     SIG_ADD_SHAPE = QC.Signal(int)
     EDIT_ROI_PARAMS = False
 
-    def __init__(self, panel, objlist, plotwidget):
+    def __init__(self, panel, objlist: ObjectList, plotwidget):
         super().__init__()
         self.panel = panel
         self.objlist = objlist
@@ -157,6 +159,28 @@ class BaseProcessor(QC.QObject):
         outobj.copy_data_from(obj0)
         outobj.data = outobj.data / np.array(obj1.data, dtype=outobj.data.dtype)
         self.panel.add_object(outobj)
+
+    def _get_roieditordata(
+        self, roidata: np.ndarray = None, singleobj: bool = None
+    ) -> ROIEditorData:
+        """Eventually open ROI Editing Dialog, and return ROI editor data"""
+        # Expected behavior:
+        # -----------------
+        # * If roidata argument is not None, skip the ROI dialog
+        # * If first selected obj has a ROI, use this ROI as default but open
+        #   ROI Editor dialog anyway
+        # * If multiple objs are selected, then apply the first obj ROI to all
+
+        if roidata is None:
+            roieditordata = self.edit_regions_of_interest(extract=True)
+            if roieditordata is not None and roieditordata.roidata is None:
+                # This only happens in unattended mode (forcing QDialog accept)
+                return None
+        else:
+            roieditordata = ROIEditorData()
+            roieditordata.roidata = roidata
+            roieditordata.singleobj = singleobj
+        return roieditordata
 
     @abc.abstractmethod
     def extract_roi(self, roidata: np.ndarray = None) -> None:
@@ -370,28 +394,27 @@ class BaseProcessor(QC.QObject):
         """Compute FFT"""
 
     # ------Computing
-    def edit_regions_of_interest(self, extract=False):
+    def edit_regions_of_interest(self, extract=False) -> ROIEditorData:
         """Define Region Of Interest (ROI) for computing functions"""
-        dlg_output = self.panel.get_roi_dialog(extract=extract)
-        if dlg_output is not None:
-            roidata, singleobj = dlg_output
+        roieditordata = self.panel.get_roi_dialog(extract=extract)
+        if roieditordata is not None:
             row = self.objlist.get_selected_rows()[0]
             obj = self.objlist[row]
-            roigroup = obj.roidata_to_params(roidata)
+            roigroup = obj.roidata_to_params(roieditordata.roidata)
             if (
                 env.execenv.unattended
-                or roidata.size == 0
+                or roieditordata.roidata.size == 0
                 or not self.EDIT_ROI_PARAMS
                 or roigroup.edit(parent=self.panel)
             ):
                 roidata = obj.params_to_roidata(roigroup)
-                if extract:
-                    return roidata, singleobj
-                obj.roi = roidata
-                self.SIG_ADD_SHAPE.emit(row)
-                self.panel.current_item_changed(row)
-                self.panel.SIG_REFRESH_PLOT.emit()
-        return None
+                if roieditordata.modified:
+                    # If ROI has been modified, save ROI (even in "extract mode")
+                    obj.roi = roidata
+                    self.SIG_ADD_SHAPE.emit(row)
+                    self.panel.current_item_changed(row)
+                    self.panel.SIG_REFRESH_PLOT.emit()
+        return roieditordata
 
     @abc.abstractmethod
     def _get_stat_funcs(self):

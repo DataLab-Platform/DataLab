@@ -11,6 +11,7 @@ ROI editor widgets
 
 import abc
 
+import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from guiqwt.annotations import AnnotatedCircle
@@ -19,9 +20,32 @@ from guiqwt.interfaces import IImageItemType
 from guiqwt.label import ObjectInfo
 from qtpy import QtWidgets as QW
 
-from codraft.config import _
+from codraft.config import Conf, _
 from codraft.core.model.base import ObjectItf
 from codraft.core.model.image import RoiDataGeometries
+
+
+class ROIEditorData:
+    """ROI Editor data"""
+
+    def __init__(self, roidata: np.ndarray = None, singleobj: bool = None):
+        self.__singleobj = None
+        self.roidata = roidata
+        self.singleobj = singleobj
+        self.modified = None
+
+    @property
+    def singleobj(self) -> bool:
+        """Return singleobj parameter"""
+        return self.__singleobj
+
+    @singleobj.setter
+    def singleobj(self, value: bool):
+        """Set singleobj parameter"""
+        if value is None:
+            value = Conf.proc.extract_roi_singleobj.get(False)
+        self.__singleobj = value
+        Conf.proc.extract_roi_singleobj.set(value)
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
@@ -36,9 +60,13 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def __init__(self, parent: QW.QDialog, obj: ObjectItf, extract: bool):
         super().__init__(parent)
+        parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
         self.obj = obj
         self.extract = extract
+
+        self.__modified = False
+        self.__data = ROIEditorData()
 
         self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
         self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
@@ -55,6 +83,20 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot.SIG_ITEMS_CHANGED.connect(lambda _plot: self.update_roi_titles())
         self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
 
+    def dialog_accepted(self):
+        """Parent dialog was accepted: updating ROI Editor data"""
+        coords = []
+        for roi_item in self.roi_items:
+            coords.append(list(self.get_roi_item_coords(roi_item)))
+        self.__data.roidata = self.obj.roi_coords_to_indexes(coords)
+        if self.singleobj_btn is not None:
+            self.__data.singleobj = self.singleobj_btn.isChecked()
+        self.__data.modified = self.__modified
+
+    def get_data(self) -> ROIEditorData:
+        """Get ROI Editor data (results of the dialog box)"""
+        return self.__data
+
     def setup_widget(self):
         """Setup ROI editor widget"""
         self.add_btn = QW.QPushButton(
@@ -69,15 +111,9 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
                 self,
             )
             layout.addWidget(self.singleobj_btn)
+            self.singleobj_btn.setChecked(self.__data.singleobj)
         layout.addStretch()
         self.setLayout(layout)
-
-    @property
-    def singleobj_extraction(self):
-        """Return True if a single object extraction has been chosen"""
-        if self.singleobj_btn is None:
-            return None
-        return self.singleobj_btn.isChecked()
 
     def add_roi_item(self, roi_item):
         """Add ROI item to plot and refresh titles"""
@@ -90,6 +126,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     @abc.abstractmethod
     def update_roi_titles(self):
         """Update ROI annotation titles"""
+        self.__modified = True
         dlg = self.parent()
         dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(
             len(self.roi_items) > 0
@@ -106,13 +143,6 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     @abc.abstractmethod
     def get_roi_item_coords(roi_item):
         """Return ROI item coords"""
-
-    def get_roi_coords(self) -> list:
-        """Return list of ROI plot coordinates"""
-        coords = []
-        for roi_item in self.roi_items:
-            coords.append(list(self.get_roi_item_coords(roi_item)))
-        return coords
 
 
 class ROIRangeInfo(ObjectInfo):

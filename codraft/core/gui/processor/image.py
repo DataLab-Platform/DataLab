@@ -293,21 +293,15 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = False) -> None:
+    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = None) -> None:
         """Extract Region Of Interest (ROI) from data"""
-        if roidata is None:
-            output = self.edit_regions_of_interest(extract=True)
-            if output is None:
-                return
-            roidata, singleobj = output
-            if roidata is None:
-                # This only happens in unattended mode (forcing QDialog accept)
-                return
-
+        roieditordata = self._get_roieditordata(roidata, singleobj)
+        if roieditordata is None:
+            return
         obj = self.objlist.get_sel_object()
-        group = obj.roidata_to_params(roidata)
+        group = obj.roidata_to_params(roieditordata.roidata)
 
-        if singleobj:
+        if roieditordata.singleobj:
 
             def suffix_func(group: DataSetGroup):
                 if len(group.datasets) == 1:

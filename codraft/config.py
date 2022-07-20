@@ -76,6 +76,14 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
     h5_fullpath_in_title = conf.Option()
 
 
+class ProcSection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the Processing configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    extract_roi_singleobj = conf.Option()
+
+
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
     Each class attribute is an option (metaclass is automatically affecting
@@ -98,6 +106,7 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     main = MainSection()
     console = ConsoleSection()
     view = ViewSection()
+    proc = ProcSection()
     io = IOSection()
 
 
