@@ -63,7 +63,9 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     ICON_NAME = None
     OBJ_NAME = None
 
-    def __init__(self, parent: QW.QDialog, obj: ObjectItf, extract: bool):
+    def __init__(
+        self, parent: QW.QDialog, obj: ObjectItf, extract: bool, singleobj: bool = None
+    ):
         super().__init__(parent)
         parent.accepted.connect(self.dialog_accepted)
         self.plot = parent.get_plot()
@@ -71,7 +73,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.extract = extract
 
         self.__modified = False
-        self.__data = ROIEditorData()
+        self.__data = ROIEditorData(singleobj=singleobj)
 
         self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
         self.roi_items = list(obj.iterate_roi_items(self.fmt, True))

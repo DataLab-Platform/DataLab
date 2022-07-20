@@ -172,7 +172,9 @@ class BaseProcessor(QC.QObject):
         # * If multiple objs are selected, then apply the first obj ROI to all
 
         if roidata is None:
-            roieditordata = self.edit_regions_of_interest(extract=True)
+            roieditordata = self.edit_regions_of_interest(
+                extract=True, singleobj=singleobj
+            )
             if roieditordata is not None and roieditordata.roidata is None:
                 # This only happens in unattended mode (forcing QDialog accept)
                 return None
@@ -394,9 +396,11 @@ class BaseProcessor(QC.QObject):
         """Compute FFT"""
 
     # ------Computing
-    def edit_regions_of_interest(self, extract=False) -> ROIEditorData:
+    def edit_regions_of_interest(
+        self, extract: bool = False, singleobj: bool = None
+    ) -> ROIEditorData:
         """Define Region Of Interest (ROI) for computing functions"""
-        roieditordata = self.panel.get_roi_dialog(extract=extract)
+        roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
         if roieditordata is not None:
             row = self.objlist.get_selected_rows()[0]
             obj = self.objlist[row]
