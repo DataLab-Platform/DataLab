@@ -73,9 +73,9 @@ class BaseItemList:
         """Make plot item from existing object/item at row"""
         return self.objlist[row].make_item(update_from=self[row])
 
-    def update_item(self, row):
+    def update_item(self, row, ref_item=None):
         """Update plot item associated to data"""
-        self.objlist[row].update_item(self[row])
+        self.objlist[row].update_item(self[row], ref_item=ref_item)
 
     def add_shapes(self, row):
         """Add geometric shape items associated to computed results and annotations"""
@@ -108,6 +108,7 @@ class BaseItemList:
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
         if rows:
+            ref_item = None
             for i_row, row in enumerate(rows):
                 for key in title_keys:
                     title = getattr(self.objlist[row], key, "")
@@ -122,7 +123,9 @@ class BaseItemList:
                 else:
                     if i_row == 0:
                         make.style = style_generator()
-                    self.update_item(row)
+                    self.update_item(row, ref_item=ref_item)
+                    if ref_item is None:
+                        ref_item = item
                 self.plot.set_item_visible(item, True, replot=False)
                 self.plot.set_active_item(item)
                 item.unselect()

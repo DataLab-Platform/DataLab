@@ -284,12 +284,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             item.imageparam.update_image(item)
         return item
 
-    def update_item(self, item: MaskedImageItem):
+    def update_item(self, item: MaskedImageItem, ref_item: MaskedImageItem = None):
         """Update plot item from data"""
         data = self.__viewable_data()
         item.set_data(data, lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
         item.imageparam.label = self.title
+        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
+            item.set_lut_range(ref_item.get_lut_range())
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
             fmt = r"%.1f"

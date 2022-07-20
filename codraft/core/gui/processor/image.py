@@ -11,12 +11,12 @@ CodraFT Image Processor GUI module
 
 
 import numpy as np
-from numpy import ma
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
 from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
+from numpy import ma
 from qtpy import QtWidgets as QW
 
 from codraft.config import APP_NAME, _

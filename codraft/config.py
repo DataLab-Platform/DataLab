@@ -85,6 +85,9 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_format = conf.Option()
     show_label = conf.Option()
 
+    # If True, images are shown with the same LUT range as the first selected image
+    ima_ref_lut_range = conf.Option()
+
 
 # Usage (example): Conf.console.enable.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):

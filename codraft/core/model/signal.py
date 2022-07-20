@@ -135,7 +135,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
             update_dataset(item.curveparam, update_from.curveparam)
         return item
 
-    def update_item(self, item: CurveItem):
+    def update_item(self, item: CurveItem, ref_item: CurveItem = None):
         """Update plot item from data"""
         if len(self.xydata) == 2:  # x, y signal
             x, y = self.xydata
