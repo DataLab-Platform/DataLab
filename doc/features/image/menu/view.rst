@@ -12,8 +12,11 @@ View in a new window
     .. seealso::
         See :ref:`ref-to-image-annotations` for more details on annotations.
 
-Graphical object titles
+Show graphical object titles
     Show/hide titles of computing results or annotations.
+
+Show contrast panel
+    Show/hide contrast adjustment panel.
 
 Other menu entries
     Show/hide panels or toolbars.

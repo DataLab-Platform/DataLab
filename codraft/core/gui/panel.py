@@ -829,3 +829,8 @@ class ImagePanel(BasePanel):
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
                 imwrite(filename, obj.data, **kwargs)
+
+    def toggle_show_contrast(self, state):
+        """Toggle show contrast option"""
+        Conf.view.show_contrast.set(state)
+        self.SIG_REFRESH_PLOT.emit()

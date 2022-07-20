@@ -199,7 +199,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered=self.panel.open_separate_view,
         )
         showlabel_action = self.cra(
-            _("Graphical object titles"),
+            _("Show graphical object titles"),
             icon=get_icon("show_titles.svg"),
             tip=_("Show or hide ROI and other graphical object titles or subtitles"),
             toggled=self.panel.toggle_show_titles,
@@ -359,6 +359,19 @@ class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+
+    def create_view_actions(self):
+        """Create view actions"""
+        base_actions = super().create_view_actions()
+        showcontrast_action = self.cra(
+            _("Show contrast panel"),
+            icon=get_icon("contrast.png"),
+            tip=_("Show or hide contrast adjustment panel"),
+            toggled=self.panel.toggle_show_contrast,
+        )
+        showcontrast_action.setChecked(True)
+        self.actlist_1more += [showcontrast_action]
+        return base_actions + [showcontrast_action]
 
     def create_operation_actions(self):
         """Create operation actions"""

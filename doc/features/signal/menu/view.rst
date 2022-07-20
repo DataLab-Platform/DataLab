@@ -12,5 +12,8 @@ View in a new window
     .. seealso::
         See :ref:`ref-to-signal-annotations` for more details on annotations.
 
+Show graphical object titles
+    Show/hide titles of computing results or annotations.
+
 Other menu entries
     Show/hide panels or toolbars.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 09:29+0200\n"
+"POT-Creation-Date: 2022-07-20 16:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,20 +44,27 @@ msgstr ""
 "Voir :ref:`ref-to-signal-annotations` pour plus de détails sur les "
 "annotations."
 
-#: ../../features/signal/menu/view.rst:15
+#: ../../features/signal/menu/view.rst:16
+msgid "Show graphical object titles"
+msgstr "Afficher les titres des objets graphiques"
+
+#: ../../features/signal/menu/view.rst:16
+msgid "Show/hide titles of computing results or annotations."
+msgstr "Affiche/cache les titres des objets graphiques liés aux résultats de calculs et aux annotations."
+
+#: ../../features/signal/menu/view.rst:18
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/signal/menu/view.rst:16
+#: ../../features/signal/menu/view.rst:19
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#~ msgid "Graphical object titles"
-#~ msgstr "Titres des objets graphiques"
+#~ msgid "Show graphical object titles"
+#~ msgstr "Afficher les titres des objets graphiques"
 
 #~ msgid "Show/hide titles of computing results or annotations."
 #~ msgstr ""
 #~ "Affiche/cache les titres des objets "
 #~ "graphiques liés aux résultats de calculs"
 #~ " et aux annotations."
-

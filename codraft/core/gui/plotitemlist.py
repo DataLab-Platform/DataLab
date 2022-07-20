@@ -16,6 +16,8 @@ from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
 from guiqwt.styles import style_generator
 
+from codraft.config import Conf
+
 
 class BaseItemList:
     """Object handling plot items associated to objects (signals/images)"""
@@ -172,6 +174,11 @@ class SignalItemList(BaseItemList):
 
 class ImageItemList(BaseItemList):
     """Object handling image plot items, plot dialogs, plot options"""
+
+    def refresh_plot(self):
+        """Refresh plot"""
+        super().refresh_plot()
+        self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self):
         """Clean up data view"""

@@ -27,7 +27,7 @@ from codraft.utils import tests
 def codraft_app_context(size=None, maximized=False, save=False, console=None):
     """Context manager handling CodraFT mainwindow creation and Qt event loop"""
     if size is None:
-        size = 950, 450
+        size = 950, 600
 
     with qth.qt_app_context(exec_loop=True):
         try:

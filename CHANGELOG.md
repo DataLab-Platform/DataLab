@@ -16,6 +16,10 @@ Changes:
     extracted into a single signal/image)
   * The old extract mode (single signal/image output) is still available and may be
     enabled using the new checkbox added in ROI extraction dialog box
+* Image visualization:
+  * Added "Show contrast panel" option in toolbar and view menu
+  * By default, contrast panel is now visible
+  * When multiple images are selected, the first image LUT range is applied to all
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
 * Added demo mode (from command line, simply run: codraft-demo)
@@ -80,14 +84,14 @@ New data visualization and processing features:
 * "View in a new window": added customizable "Annotations" support for both signal
 and image panels - supports user-defined annotations (points, segments, circles,
 ellipses, labels,...) which are serialized in image metadata
-* Added "Graphical object titles" option in "View" menu to show or hide the title
+* Added "Show graphical object titles" option in "View" menu to show or hide the title
 (or subtitle) of ROIs or any other graphical object
 * Added support for **multiple** Regions of Interest (ROI):
   * All "Computing" menu features apply to multiple ROIs
   * Computation result arrays now contains ROI index (first column) and one row per ROI
   * ROI are merged when summing objects (signals or images)
   * ROI can be removed, modified or added at any time
-* Added option "Graphical object titles" ("View" menu) to show or hide ROI titles or any
+* Added option "Show graphical object titles" ("View" menu) to show or hide ROI titles or any
 other geometrical shapes title (or subtitle)
 * New computing "Statistics" feature showing a table with statistics on image/signal
 and eventually regions of interest (min, max, mean, standard deviation, sum, ...)
