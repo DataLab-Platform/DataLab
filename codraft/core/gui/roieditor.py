@@ -35,6 +35,11 @@ class ROIEditorData:
         self.modified = None
 
     @property
+    def is_empty(self) -> bool:
+        """Return True if there is no ROI"""
+        return self.roidata is None or self.roidata.size == 0
+
+    @property
     def singleobj(self) -> bool:
         """Return singleobj parameter"""
         return self.__singleobj
@@ -95,7 +100,9 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def get_data(self) -> ROIEditorData:
         """Get ROI Editor data (results of the dialog box)"""
-        return self.__data
+        if not self.__data.is_empty:
+            return self.__data
+        return None
 
     def setup_widget(self):
         """Setup ROI editor widget"""

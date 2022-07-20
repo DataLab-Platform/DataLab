@@ -518,8 +518,9 @@ class ObjectItf(metaclass=ObjectItfMeta):
     @roi.setter
     def roi(self, roidata: np.ndarray):
         """Set object regions of interest array, using a list or ROI dataset params"""
-        if roidata is None and ROI_KEY in self.metadata:
-            self.metadata.pop(ROI_KEY)
+        if roidata is None:
+            if ROI_KEY in self.metadata:
+                self.metadata.pop(ROI_KEY)
         else:
             self.metadata[ROI_KEY] = np.array(roidata, int)
 
