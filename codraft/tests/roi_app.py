@@ -25,19 +25,19 @@ from codraft.tests.data import create_test_image3, create_test_signal1
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_signal_features(panel: SignalPanel):
+def test_signal_features(panel: SignalPanel, singleobj: bool = None):
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(FWHMParam())
     panel.processor.compute_fw1e2()
-    panel.processor.extract_roi()
+    panel.processor.extract_roi(singleobj=singleobj)
 
 
-def test_image_features(panel: ImagePanel):
+def test_image_features(panel: ImagePanel, singleobj: bool = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
     panel.processor.compute_peak_detection(PeakDetectionParam())
-    panel.processor.extract_roi()
+    panel.processor.extract_roi(singleobj=singleobj)
 
 
 def create_test_image_with_roi(size=None):
@@ -85,22 +85,24 @@ def test():
         test_signal_features(panel)
         sig2 = create_test_signal1(size)
         sig2.roi = np.array([[26, 41], [125, 146]], int)
-        panel.add_object(sig2)
-        print_obj_shapes(sig2)
-        panel.processor.edit_regions_of_interest()
-        win.take_screenshot("s_roi_signal")
-        test_signal_features(panel)
+        for singleobj in (False, True):
+            panel.add_object(sig2)
+            print_obj_shapes(sig2)
+            panel.processor.edit_regions_of_interest()
+            win.take_screenshot("s_roi_signal")
+            test_signal_features(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
         ima1 = create_test_image3(size)
         panel.add_object(ima1)
         test_image_features(panel)
         ima2 = create_test_image_with_roi(size)
-        panel.add_object(ima2)
-        print_obj_shapes(ima2)
-        panel.processor.edit_regions_of_interest()
-        win.take_screenshot("i_roi_image")
-        test_image_features(panel)
+        for singleobj in (False, True):
+            panel.add_object(ima2)
+            print_obj_shapes(ima2)
+            panel.processor.edit_regions_of_interest()
+            win.take_screenshot("i_roi_image")
+            test_image_features(panel, singleobj=singleobj)
 
 
 if __name__ == "__main__":
