@@ -15,6 +15,7 @@ import sys
 import warnings
 
 import guidata.dataset.datatypes
+import guiqwt.annotations
 import guiqwt.curve
 import guiqwt.histogram
 import guiqwt.image
@@ -97,6 +98,13 @@ def edit(self, parent=None, apply=None, size=None):
     """
     win = DataSetGroupEditDialog(self, parent=parent, apply=apply)
     return exec_dialog(win)
+
+
+# Patching AnnotatedSegment "get_infos" method for a more compact text
+@monkeypatch_method(guiqwt.annotations.AnnotatedSegment, "AnnotatedSegment")
+def get_infos(self):
+    """Return formatted string with informations on current shape"""
+    return "Δ = " + self.x_to_str(self.get_tr_length())
 
 
 #  Patching CurveItem's "select" method to avoid showing giant ugly squares

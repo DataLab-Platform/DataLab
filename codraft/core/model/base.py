@@ -182,14 +182,13 @@ class ShapeTypes(enum.Enum):
     POINT = enum.auto()
 
 
-def config_annotated_shape(
-    item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool = False
-):
+def config_annotated_shape(item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool = None):
     """Configurate annotated shape"""
     param = item.annotationparam
     param.format = fmt
     param.show_label = lbl
-    param.show_computations = cmp
+    if cmp is not None:
+        param.show_computations = cmp
     param.update_annotation(item)
 
 
