@@ -103,11 +103,11 @@ class BaseNode(metaclass=abc.ABCMeta):
     @property
     def object_title(self):
         """Return signal/image object title"""
-        if Conf.view.h5_fullpath_in_title.get(False):
+        if Conf.io.h5_fullpath_in_title.get(False):
             title = self.id
         else:
             title = self.name
-        if Conf.view.h5_fname_in_title.get(True):
+        if Conf.io.h5_fname_in_title.get(True):
             title += f" ({osp.basename(self.h5file.filename)})"
         return title
 

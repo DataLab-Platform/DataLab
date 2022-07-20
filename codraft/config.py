@@ -67,6 +67,15 @@ class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
     max_line_count = conf.Option()
 
 
+class IOSection(conf.Section, metaclass=conf.SectionMeta):
+    """Class defining the I/O configuration section structure.
+    Each class attribute is an option (metaclass is automatically affecting
+    option names in .INI file based on class attribute names)."""
+
+    h5_fname_in_title = conf.Option()
+    h5_fullpath_in_title = conf.Option()
+
+
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
     Each class attribute is an option (metaclass is automatically affecting
@@ -75,8 +84,6 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     sig_format = conf.Option()
     ima_format = conf.Option()
     show_label = conf.Option()
-    h5_fname_in_title = conf.Option()
-    h5_fullpath_in_title = conf.Option()
 
 
 # Usage (example): Conf.console.enable.get(True)
@@ -88,6 +95,7 @@ class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     main = MainSection()
     console = ConsoleSection()
     view = ViewSection()
+    io = IOSection()
 
 
 def get_old_log_fname(fname):
