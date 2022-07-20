@@ -18,10 +18,11 @@ from codraft.widgets.h5browser import H5BrowserDialog
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def h5browser_test():
+def h5browser_test(pattern=None):
     """HDF5 browser test"""
     with qt_app_context():
-        for index, fname in enumerate(get_test_fnames("*.h5")):
+        fnames = get_test_fnames("*.h5" if pattern is None else pattern)
+        for index, fname in enumerate(fnames):
             execenv.print(f"Opening: {fname}")
             dlg = H5BrowserDialog(None, size=(1050, 450))
             dlg.setup(fname)

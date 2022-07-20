@@ -10,11 +10,11 @@ CodraFT Datasets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
-from copy import deepcopy
 import enum
 import re
 import weakref
 from collections import abc
+from copy import deepcopy
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt

@@ -118,6 +118,8 @@ class ScalarNode(BaseMOS07636Node):
         data = scdata[0]
         if not isinstance(data, bytes):
             data = data[0]  # Should not be necessary (invalid format)
+        if data == b"NULL":
+            return ""
         return utils.fix_ldata(data)
 
     @property

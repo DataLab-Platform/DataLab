@@ -11,6 +11,7 @@ CodraFT Datasets
 # pylint: disable=duplicate-code
 
 from copy import deepcopy
+
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
