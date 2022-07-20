@@ -10,6 +10,7 @@ CodraFT Datasets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from copy import deepcopy
 import enum
 import re
 import weakref
@@ -252,7 +253,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         self.y0 = other.y0
         self.dx = other.dx
         self.dy = other.dy
-        self.metadata = other.metadata.copy()
+        self.metadata = deepcopy(other.metadata)
         self.data = np.array(other.data, copy=True, dtype=dtype)
         self.dicom_template = other.dicom_template
 

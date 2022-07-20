@@ -10,6 +10,7 @@ CodraFT Datasets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from copy import deepcopy
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
@@ -59,7 +60,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         """Copy data from other dataset instance"""
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
-        self.metadata = other.metadata.copy()
+        self.metadata = deepcopy(other.metadata)
         self.xydata = np.array(other.xydata, copy=True, dtype=dtype)
 
     def set_data_type(self, dtype):  # pylint: disable=unused-argument,no-self-use
