@@ -699,7 +699,7 @@ class SignalPanel(BasePanel):
         else:
             for delimiter in ("\t", ",", " ", ";"):
                 try:
-                    xydata = np.loadtxt(filename, delimiter=delimiter, comments="#")
+                    xydata = np.loadtxt(filename, delimiter=delimiter, comments="#", skiprows=1)
                     break
                 except ValueError:
                     continue
