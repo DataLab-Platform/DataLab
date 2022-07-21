@@ -35,6 +35,8 @@ import re
 import warnings
 from typing import List
 
+import sys
+
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
 from guidata.configtools import get_icon
@@ -697,7 +699,7 @@ class SignalPanel(BasePanel):
         else:
             for delimiter in ("\t", ",", " ", ";"):
                 try:
-                    xydata = np.loadtxt(filename, delimiter=delimiter)
+                    xydata = np.loadtxt(filename, delimiter=delimiter, comments="#")
                     break
                 except ValueError:
                     continue
@@ -723,7 +725,9 @@ class SignalPanel(BasePanel):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                np.savetxt(filename, obj.xydata, delimiter=",")
+                np.savetxt(filename, obj.xydata.T, 
+                           header=",".join([obj.xlabel or "X", obj.ylabel or "Y"]), 
+                           delimiter=",", comments="#")
 
 
 class ImagePanel(BasePanel):
