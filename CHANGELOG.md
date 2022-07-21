@@ -3,7 +3,14 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.1.0 ##
+## Version 2.2.0 ##
+
+Changes:
+
+* Signal/image list: added tooltip showing a summary of metadata values (e.g. when
+  importing data from HDF5, this shows HDF5 filename and HDF5 dataset path)
+
+## Version 2.1.1 ##
 
 Changes:
 

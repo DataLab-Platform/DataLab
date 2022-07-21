@@ -12,6 +12,7 @@ CodraFT Datasets
 import abc
 import enum
 import json
+import os
 import sys
 
 import guidata.dataset.dataitems as gdi
@@ -599,3 +600,25 @@ class ObjectItf(metaclass=ObjectItfMeta):
         handler = JSONHandler(filename)
         handler.load()
         self.metadata = handler.get_json_dict()
+
+    def metadata_to_html(self):
+        """Convert metadata to human-readable string"""
+        textlines = []
+        for key, value in self.metadata.items():
+            if len(textlines) > 5:
+                textlines.append("[...]")
+                break
+            if not key.startswith("_"):
+                vlines = str(value).splitlines()
+                if vlines:
+                    text = f"<b>{key}:</b> {vlines[0]}"
+                    if len(vlines) > 1:
+                        text += " [...]"
+                    textlines.append(text)
+        if textlines:
+            prefix = "<i><u>%s:</u> %s</i><br>" % (
+                _("Object metadata"),
+                _("(click on Metadata button for more details)"),
+            )
+            return f"<p style='white-space:pre'>{prefix}{'<br>'.join(textlines)}</p>"
+        return ""

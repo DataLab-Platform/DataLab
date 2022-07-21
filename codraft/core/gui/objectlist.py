@@ -60,12 +60,10 @@ class SimpleObjectList(QW.QListWidget):
         if new_current_row is not None:
             row = new_current_row
         self.clear()
-        self.addItems(
-            [
-                f"{self.prefix}{idx:03d}: {obj.title}"
-                for idx, obj in enumerate(self._objects)
-            ]
-        )
+        for idx, obj in enumerate(self._objects):
+            item = QW.QListWidgetItem(f"{self.prefix}{idx:03d}: {obj.title}", self)
+            item.setToolTip(obj.metadata_to_html())
+            self.addItem(item)
         if row < self.count():
             self.set_current_row(row)
 
