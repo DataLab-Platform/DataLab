@@ -7,6 +7,7 @@
 ##DESCRIPTION=Fine colorless powder. Paracetamol, otherwise known as acetaminophen, is an analgesic and antipyretic.
 ##STATUS=The identification of this mineral is not yet confirmed.
 ##URL=rruff.info/D120007
+Wave Numbers (cm-1), Intensity
 5, 144.95
 5.05, 130.958
 5.1, 138.617
@@ -1007,6 +1008,3 @@
 54.85, 59.1623
 54.9, 61.9758
 ##END=
-
-
-

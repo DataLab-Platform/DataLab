@@ -37,6 +37,7 @@ from typing import List
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
+import pandas
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions
 from guidata.utils import update_dataset
@@ -79,11 +80,7 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import (
-    exec_dialog,
-    qt_try_loadsave_file,
-    save_restore_stds,
-)
+from codraft.utils.qthelpers import exec_dialog, qt_try_loadsave_file, save_restore_stds
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -695,16 +692,11 @@ class SignalPanel(BasePanel):
         if osp.splitext(filename)[1] == ".npy":
             xydata = np.load(filename)
         else:
-            for delimiter in ("\t", ",", " ", ";"):
-                try:
-                    xydata = np.loadtxt(filename, delimiter=delimiter)
-                    break
-                except ValueError:
-                    continue
-            else:
-                raise ValueError
+            xydata_dataframe = pandas.read_csv(filename, comment="#")
+            xydata = xydata_dataframe.to_numpy()
         assert len(xydata.shape) in (1, 2), "Data not supported"
         signal = create_signal(osp.basename(filename))
+        signal.xlabel, signal.ylabel = xydata_dataframe.columns[:2]
         if len(xydata.shape) == 1:
             signal.set_xydata(np.arange(xydata.size), xydata)
         else:
@@ -723,7 +715,13 @@ class SignalPanel(BasePanel):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                np.savetxt(filename, obj.xydata, delimiter=",")
+                np.savetxt(
+                    filename,
+                    obj.xydata.T,
+                    header=",".join([obj.xlabel or "X", obj.ylabel or "Y"]),
+                    delimiter=",",
+                    comments="",
+                )
 
 
 class ImagePanel(BasePanel):
