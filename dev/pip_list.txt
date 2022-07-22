@@ -23,7 +23,7 @@ esbonio                       0.11.2
 future                        0.18.2
 guidata                       2.3.0
 guiqwt                        4.3.0
-h5py                          3.3.0
+h5py                          3.7.0
 idna                          3.3
 imageio                       2.17.0
 imagesize                     1.3.0
@@ -69,7 +69,7 @@ PyQt5-sip                     12.9.0
 pyspellchecker                0.6.3
 pytango                       9.3.3
 python-dateutil               2.8.1
-PythonQwt                     0.10.1
+PythonQwt                     0.10.2
 pytz                          2021.1
 PyWavelets                    1.3.0
 pywin32                       301
