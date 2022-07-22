@@ -110,6 +110,12 @@ class ObjectProp(QW.QWidget):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
+    def update_properties_from(self, param):
+        """Update properties from signal/image dataset"""
+        self.properties.dataset.set_defaults()
+        update_dataset(self.properties.dataset, param)
+        self.properties.get()
+
 
 class BasePanelMeta(type(QW.QSplitter), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
@@ -404,8 +410,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     def current_item_changed(self, row):
         """Current item changed"""
         if row != -1:
-            update_dataset(self.objprop.properties.dataset, self.objlist[row])
-            self.objprop.properties.get()
+            self.objprop.update_properties_from(self.objlist[row])
 
     def selection_changed(self):
         """Signal list: selection changed"""

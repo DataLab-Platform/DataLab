@@ -8,6 +8,7 @@ for future and past milestones.
 Bug fixes:
 
 * [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
+* [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/3) - Wrong units/titles are displayed
 
 ## Version 2.1.1 ##
 
