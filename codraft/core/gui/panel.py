@@ -34,8 +34,7 @@ import os.path as osp
 import re
 import warnings
 from typing import List
-
-import sys
+import pandas
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
@@ -697,16 +696,12 @@ class SignalPanel(BasePanel):
         if osp.splitext(filename)[1] == ".npy":
             xydata = np.load(filename)
         else:
-            for delimiter in ("\t", ",", " ", ";"):
-                try:
-                    xydata = np.loadtxt(filename, delimiter=delimiter, comments="#", skiprows=1)
-                    break
-                except ValueError:
-                    continue
-            else:
-                raise ValueError
+            xydata_dataframe = pandas.read_csv(filename, comment="#")
+            xydata = xydata_dataframe.to_numpy()
         assert len(xydata.shape) in (1, 2), "Data not supported"
         signal = create_signal(osp.basename(filename))
+        signal.xlabel = xydata_dataframe.columns[0]
+        signal.ylabel = xydata_dataframe.columns[1]
         if len(xydata.shape) == 1:
             signal.set_xydata(np.arange(xydata.size), xydata)
         else:
@@ -727,7 +722,8 @@ class SignalPanel(BasePanel):
                 Conf.main.base_dir.set(filename)
                 np.savetxt(filename, obj.xydata.T, 
                            header=",".join([obj.xlabel or "X", obj.ylabel or "Y"]), 
-                           delimiter=",", comments="#")
+                           delimiter=",",
+                           comments="")
 
 
 class ImagePanel(BasePanel):
