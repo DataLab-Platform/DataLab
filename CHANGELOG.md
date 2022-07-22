@@ -3,6 +3,12 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
+## Version 2.1.2 ##
+
+Bug fixes:
+
+* [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
+
 ## Version 2.1.1 ##
 
 Changes:

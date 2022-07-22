@@ -17,7 +17,7 @@ libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interface
 
 import os
 
-__version__ = "2.1.1"
+__version__ = "2.1.2"
 __docurl__ = "https://codraft.readthedocs.io/en/latest/"
 __homeurl__ = "https://codra-ingenierie-informatique.github.io/CodraFT/"
 __supporturl__ = (
