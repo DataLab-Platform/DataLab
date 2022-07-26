@@ -14,5 +14,5 @@ call %FUNC% SetPythonPath
 set PYTHON=%PYTHON_CODRAFT_DEV%
 call %FUNC% UseWinPython
 python -m black .
-python -m isort -m 3 --tc .
+python -m isort --profile black .
 call %FUNC% EndOfScript
