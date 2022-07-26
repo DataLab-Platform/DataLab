@@ -268,39 +268,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             data = np.nan_to_num(data, posinf=0, neginf=0)
         return data
 
-    def make_item(self, update_from=None):
-        """Make plot item from data"""
-        data = self.__viewable_data()
-        item = make.maskedimage(
-            data,
-            self.maskdata,
-            title=self.title,
-            colormap="jet",
-            eliminate_outliers=0.1,
-            interpolation="nearest",
-            show_mask=True,
-        )
-        if update_from is not None:
-            update_dataset(item.imageparam, update_from.imageparam)
-            item.imageparam.update_image(item)
-        return item
-
-    def update_item(self, item: MaskedImageItem, ref_item: MaskedImageItem = None):
-        """Update plot item from data"""
-        print(f"update_item[{self.title}]")
-        data = self.__viewable_data()
-        item.set_data(data, lut_range=[item.min, item.max])
-        item.set_mask(self.maskdata)
-        item.imageparam.label = self.title
-        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
-            item.set_lut_range(ref_item.get_lut_range())
+    def __update_item_params(self, data: np.ndarray, item: MaskedImageItem):
+        """Update plot item parameters"""
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
             fmt = r"%.1f"
             if unit:
                 fmt = r"%.1f (" + unit + ")"
             setattr(item.imageparam, axis + "format", fmt)
-
         # Updating origin and pixel spacing
         has_origin = self.x0 is not None and self.y0 is not None
         has_pixelspacing = self.dx is not None and self.dy is not None
@@ -312,10 +287,37 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                 dx, dy = self.dx, self.dy
             item.imageparam.xmin, item.imageparam.xmax = x0, x0 + dx * data.shape[1]
             item.imageparam.ymin, item.imageparam.ymax = y0, y0 + dy * data.shape[0]
-
         update_dataset(item.imageparam, self.metadata)
         item.imageparam.update_image(item)
 
+    def make_item(self, update_from: MaskedImageItem = None):
+        """Make plot item from data"""
+        data = self.__viewable_data()
+        item = make.maskedimage(
+            data,
+            self.maskdata,
+            title=self.title,
+            colormap="jet",
+            eliminate_outliers=0.1,
+            interpolation="nearest",
+            show_mask=True,
+        )
+        if update_from is None:
+            self.__update_item_params(data, item)
+        else:
+            update_dataset(item.imageparam, update_from.imageparam)
+            item.imageparam.update_image(item)
+        return item
+
+    def update_item(self, item: MaskedImageItem, ref_item: MaskedImageItem = None):
+        """Update plot item from data"""
+        data = self.__viewable_data()
+        item.set_data(data, lut_range=[item.min, item.max])
+        item.set_mask(self.maskdata)
+        item.imageparam.label = self.title
+        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
+            item.set_lut_range(ref_item.get_lut_range())
+        self.__update_item_params(data, item)
         item.plot().update_colormap_axis(item)
 
     def get_roi_param(self, title, *defaults):

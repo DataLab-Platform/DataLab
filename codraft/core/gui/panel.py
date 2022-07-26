@@ -209,10 +209,9 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         return obj
 
     def add_object(self, obj, refresh=True):
-        """Add signal/image object"""
+        """Add signal/image object and return associated plot item"""
         self.objlist.append(obj)
-        row = len(self.objlist) - 1
-        item = self.itmlist.add_item_to_plot(row)
+        item = self.itmlist.append(None)
         if refresh:
             self.objlist.refresh_list(-1)
         self.SIG_OBJECT_ADDED.emit()
