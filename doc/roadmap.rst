@@ -4,7 +4,7 @@ Roadmap
 Future milestones
 -----------------
 
-CodraFT 2.2
+CodraFT 2.3
 ^^^^^^^^^^^
 
 * Run computations in a separate process:
@@ -18,19 +18,28 @@ CodraFT 2.2
     server process and restarting it (eventually after incrementing the
     communication port number)
 
-* New plugin system: API for third-party extensions
-
 * Add an xmlrpc server to allow external applications controlling
   CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
 
-* ROI features:
-
-  - Add an option to extract multiples ROI on either
-    one signal/image (current behavior) or one signal/image per ROI
-  - Images: create ROI using array masks
-  - Images: add support for circular ROI
-
 * Optimize image displaying performance
+
+CodraFT 2.2
+^^^^^^^^^^^
+
+* New plugin system: API for third-party extensions
+
+* Add a macro-command system:
+
+  - New embedded Python editor
+  - Scripts using the same API as high-level applicative test scenarios
+  - Support for macro recording
+
+Other ideas for future releases
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Add support for multichannel timeseries
+
+* Add a "Preferences" dialog box to setup all configurable parameters
 
 Past milestones
 ---------------
@@ -45,6 +54,12 @@ CodraFT 2.1
 
 * New command line option features (open/browse HDF5 files at startup)
 
+* ROI features:
+
+  - Add an option to extract multiples ROI on either
+    one signal/image (current behavior) or one signal/image per ROI
+  - Images: create ROI using array masks
+  - Images: add support for circular ROI
 
 CodraFT 2.0
 ^^^^^^^^^^^
