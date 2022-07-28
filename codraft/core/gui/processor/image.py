@@ -35,7 +35,7 @@ from codraft.core.gui.processor.base import (
 )
 from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
 from codraft.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
-from codraft.utils.qthelpers import qt_try_except
+from codraft.utils.qthelpers import create_progress_bar, qt_try_except
 
 
 class LogP1Param(DataSet):
@@ -150,7 +150,7 @@ class PeakDetectionParam(DataSet):
             "data maximum and minimum"
         ),
     )
-    create_rois = BoolItem(_("Create regions of interest"))
+    create_rois = BoolItem(_("Create regions of interest"), default=True)
 
 
 class ContourShapeParam(DataSet):
@@ -580,27 +580,34 @@ class ImageProcessor(BaseProcessor):
 
         results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
         if param.create_rois:
-            for row, result in results.items():
-                obj = self.objlist[row]
-                dist = distance_matrix(result.data)
-                dist_min = dist[dist != 0].min()
-                assert dist_min > 0
-                radius = int(0.5 * dist_min / np.sqrt(2) - 1)
-                assert radius >= 1
-                roicoords = []
-                ymax, xmax = obj.data.shape
-                for x, y in result.data:
-                    coords = [
-                        max(x - radius, 0),
-                        max(y - radius, 0),
-                        min(x + radius, xmax),
-                        min(y + radius, ymax),
-                    ]
-                    roicoords.append(coords)
-                obj.roi = np.array(roicoords, int)
-                self.SIG_ADD_SHAPE.emit(row)
-                self.panel.current_item_changed(row)
-                self.panel.SIG_REFRESH_PLOT.emit()
+            with create_progress_bar(
+                self.panel, _("Create regions of interest"), max_=len(results)
+            ) as progress:
+                for idx, (row, result) in enumerate(results.items()):
+                    progress.setValue(idx)
+                    QW.QApplication.processEvents()
+                    if progress.wasCanceled():
+                        break
+                    obj = self.objlist[row]
+                    dist = distance_matrix(result.data)
+                    dist_min = dist[dist != 0].min()
+                    assert dist_min > 0
+                    radius = int(0.5 * dist_min / np.sqrt(2) - 1)
+                    assert radius >= 1
+                    roicoords = []
+                    ymax, xmax = obj.data.shape
+                    for x, y in result.data:
+                        coords = [
+                            max(x - radius, 0),
+                            max(y - radius, 0),
+                            min(x + radius, xmax),
+                            min(y + radius, ymax),
+                        ]
+                        roicoords.append(coords)
+                    obj.roi = np.array(roicoords, int)
+                    self.SIG_ADD_SHAPE.emit(row)
+                    self.panel.current_item_changed(row)
+                    self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
     @qt_try_except()
     def compute_contour_shape(self, param: ContourShapeParam = None) -> None:
