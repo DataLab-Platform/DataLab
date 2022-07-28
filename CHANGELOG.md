@@ -12,6 +12,7 @@ Bug fixes:
 * [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/6) - 2D peak detection: GUI freezes when creating ROIs
 * [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
 * [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
+* [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/5) - ROI dialog box: unable to remove all ROIs and validate
 
 Other changes:
 

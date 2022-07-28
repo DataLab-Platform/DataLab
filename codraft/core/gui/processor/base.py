@@ -417,7 +417,7 @@ class BaseProcessor(QC.QObject):
                     obj.roi = roidata
                     self.SIG_ADD_SHAPE.emit(row)
                     self.panel.current_item_changed(row)
-                    self.panel.SIG_UPDATE_PLOT_ITEM.emit(row)
+                    self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
         return roieditordata
 
     @abc.abstractmethod

@@ -71,8 +71,8 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot = parent.get_plot()
         self.obj = obj
         self.extract = extract
+        self.__modified = None
 
-        self.__modified = False
         self.__data = ROIEditorData(singleobj=singleobj)
 
         self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
@@ -87,8 +87,23 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.setup_widget()
 
         self.update_roi_titles()
-        self.plot.SIG_ITEMS_CHANGED.connect(lambda _plot: self.update_roi_titles())
+        self.plot.SIG_ITEMS_CHANGED.connect(lambda _plt: self.update_roi_titles())
         self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
+        self.plot.SIG_RANGE_CHANGED.connect(lambda _rng, _min, _max: self.item_moved())
+        self.plot.SIG_ANNOTATION_CHANGED.connect(lambda _plt: self.item_moved())
+        self.modified = False
+
+    @property
+    def modified(self) -> bool:
+        """Return dialog modified state"""
+        return self.__modified
+
+    @modified.setter
+    def modified(self, value: bool):
+        """Set dialog modified state"""
+        self.__modified = value
+        dlg = self.parent()
+        dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
 
     def dialog_accepted(self):
         """Parent dialog was accepted: updating ROI Editor data"""
@@ -98,13 +113,11 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.__data.roidata = self.obj.roi_coords_to_indexes(coords)
         if self.singleobj_btn is not None:
             self.__data.singleobj = self.singleobj_btn.isChecked()
-        self.__data.modified = self.__modified
+        self.__data.modified = self.modified
 
     def get_data(self) -> ROIEditorData:
         """Get ROI Editor data (results of the dialog box)"""
-        if not self.__data.is_empty:
-            return self.__data
-        return None
+        return self.__data
 
     def setup_widget(self):
         """Setup ROI editor widget"""
@@ -126,6 +139,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def add_roi_item(self, roi_item):
         """Add ROI item to plot and refresh titles"""
+        self.modified = True
         self.plot.unselect_all()
         self.roi_items.append(roi_item)
         self.update_roi_titles()
@@ -135,18 +149,18 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     @abc.abstractmethod
     def update_roi_titles(self):
         """Update ROI annotation titles"""
-        self.__modified = True
-        dlg = self.parent()
-        dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(
-            len(self.roi_items) > 0
-        )
 
     def item_removed(self, item):
         """Item was removed. Since all items are read-only except ROIs...
         this must be an ROI."""
+        self.modified = True
         assert item in self.roi_items
         self.roi_items.remove(item)
         self.update_roi_titles()
+
+    def item_moved(self):
+        """ROI plot item has just been moved"""
+        self.modified = True
 
     @staticmethod
     @abc.abstractmethod
