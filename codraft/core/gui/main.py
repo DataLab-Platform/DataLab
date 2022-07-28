@@ -23,11 +23,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import __version__ as guidata_ver
 from guidata.configtools import get_icon, get_module_data_path, get_module_path
-from guidata.qthelpers import (
-    add_actions,
-    create_action,
-    win32_fix_title_bar_background,
-)
+from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from guiqwt import __version__ as guiqwt_ver
 from guiqwt.builder import make

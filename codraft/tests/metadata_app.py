@@ -4,10 +4,11 @@
 # (see codraft/__init__.py for details)
 
 """
-ROI test:
+Metadata application test:
 
-  - Defining Region of Interest on a signal
-  - Defining Region of Interest on an image
+  - Create signal/image, with ROI
+  - Compute things (adds metadata)
+  - Test metadata delete, copy, paste
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -17,7 +18,6 @@ import numpy as np
 from codraft.core.gui.panel import BasePanel, ImagePanel, SignalPanel
 from codraft.core.gui.processor.image import PeakDetectionParam
 from codraft.core.gui.processor.signal import FWHMParam
-from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
 from codraft.tests import codraft_app_context, roi_app
 from codraft.tests.data import create_test_signal1
@@ -52,7 +52,7 @@ def test():
     """Run ROI unit test scenario"""
     size = 200
     with codraft_app_context() as win:
-        execenv.print("ROI application test:")
+        execenv.print("Metadata application test:")
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_test_signal1(size)

@@ -30,11 +30,7 @@ from codraft.core.computation.signal import (
     xy_fft,
     xy_ifft,
 )
-from codraft.core.gui.processor.base import (
-    BaseProcessor,
-    ClipParam,
-    ThresholdParam,
-)
+from codraft.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from codraft.core.model.base import ResultShape, ShapeTypes
 from codraft.core.model.signal import SignalParam, create_signal
 from codraft.utils.qthelpers import exec_dialog, qt_try_except

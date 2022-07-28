@@ -26,11 +26,7 @@ from codraft.core.gui.processor.image import (
 from codraft.core.model.base import UniformRandomParam
 from codraft.core.model.image import ImageTypes, create_image, new_image_param
 from codraft.tests import codraft_app_context
-from codraft.tests.data import (
-    PeakDataParam,
-    create_test_image1,
-    get_peak2d_data,
-)
+from codraft.tests.data import PeakDataParam, create_test_image1, get_peak2d_data
 from codraft.tests.newobject_unit import iterate_image_creation
 from codraft.tests.scenario_sig_app import test_common_operations
 

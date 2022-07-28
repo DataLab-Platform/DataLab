@@ -25,13 +25,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from codraft.config import (
-    APP_NAME,
-    DATETIME_FORMAT,
-    Conf,
-    _,
-    get_old_log_fname,
-)
+from codraft.config import APP_NAME, DATETIME_FORMAT, Conf, _, get_old_log_fname
 from codraft.env import execenv
 from codraft.utils.misc import to_string
 

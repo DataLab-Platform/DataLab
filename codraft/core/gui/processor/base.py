@@ -27,11 +27,7 @@ from codraft.core.gui.objectlist import ObjectList
 from codraft.core.gui.roieditor import ROIEditorData
 from codraft.core.model.base import ResultShape
 from codraft.utils import misc
-from codraft.utils.qthelpers import (
-    create_progress_bar,
-    exec_dialog,
-    qt_try_except,
-)
+from codraft.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
 
 
 class GaussianParam(gdt.DataSet):

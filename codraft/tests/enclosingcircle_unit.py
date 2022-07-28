@@ -15,10 +15,7 @@ Testing enclsoing circle function on various test images.
 from guiqwt.builder import make
 
 from codraft.config import _
-from codraft.core.computation.image import (
-    get_centroid_fourier,
-    get_enclosing_circle,
-)
+from codraft.core.computation.image import get_centroid_fourier, get_enclosing_circle
 from codraft.env import execenv
 from codraft.tests.data import get_laser_spot_data
 from codraft.utils.qthelpers import qt_app_context

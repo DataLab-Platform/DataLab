@@ -98,9 +98,9 @@ class BaseItemList:
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
 
-    def refresh_plot(self, row: int = None):
+    def refresh_plot(self, only_row: int = None):
         """Refresh plot (if row is not None, refresh only plot associated to row)"""
-        if row is None:
+        if only_row is None:
             rows = self.objlist.get_selected_rows()
             if self._enable_cleanup_dataview and len(rows) == 1:
                 self.cleanup_dataview()
@@ -109,7 +109,7 @@ class BaseItemList:
                 if item is not None:
                     item.hide()
         else:
-            rows = [row]
+            rows = [only_row]
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
         if rows:
@@ -178,9 +178,9 @@ class SignalItemList(BaseItemList):
 class ImageItemList(BaseItemList):
     """Object handling image plot items, plot dialogs, plot options"""
 
-    def refresh_plot(self, row: int = None):
+    def refresh_plot(self, only_row: int = None):
         """Refresh plot (if row is not None, refresh only plot associated to row)"""
-        super().refresh_plot(row)
+        super().refresh_plot(only_row)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self):
