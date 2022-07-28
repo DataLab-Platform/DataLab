@@ -10,6 +10,7 @@ Bug fixes:
 * [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
 * [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/3) - Wrong units/titles are displayed
 * [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/6) - 2D peak detection: GUI freezes when creating ROIs
+* [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
 
 Other changes:
 

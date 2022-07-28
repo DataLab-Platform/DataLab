@@ -607,7 +607,7 @@ class ImageProcessor(BaseProcessor):
                     obj.roi = np.array(roicoords, int)
                     self.SIG_ADD_SHAPE.emit(row)
                     self.panel.current_item_changed(row)
-                    self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
+                    self.panel.SIG_UPDATE_PLOT_ITEM.emit(row)
 
     @qt_try_except()
     def compute_contour_shape(self, param: ContourShapeParam = None) -> None:

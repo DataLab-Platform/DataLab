@@ -309,7 +309,7 @@ class BaseProcessor(QC.QObject):
                 xlabels = result.xlabels
                 self.SIG_ADD_SHAPE.emit(row)
                 self.panel.current_item_changed(row)
-                self.panel.SIG_REFRESH_PLOT.emit()
+                self.panel.SIG_UPDATE_PLOT_ITEM.emit(row)
                 for _i_row_res in range(result.array.shape[0]):
                     ylabel = f"{name}({self.prefix}{idx:03d}){title_suffix}"
                     ylabels.append(ylabel)
@@ -417,7 +417,7 @@ class BaseProcessor(QC.QObject):
                     obj.roi = roidata
                     self.SIG_ADD_SHAPE.emit(row)
                     self.panel.current_item_changed(row)
-                    self.panel.SIG_REFRESH_PLOT.emit()
+                    self.panel.SIG_UPDATE_PLOT_ITEM.emit(row)
         return roieditordata
 
     @abc.abstractmethod

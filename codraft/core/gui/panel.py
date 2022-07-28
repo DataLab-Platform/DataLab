@@ -142,7 +142,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_OBJECT_ADDED = QC.Signal()
     SIG_OBJECT_REMOVED = QC.Signal()
-    SIG_REFRESH_PLOT = QC.Signal()
+    SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to row number
+    SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected rows
     ROIDIALOGOPTIONS = {}
     ROIDIALOGCLASS = roieditor.BaseROIEditor  # Replaced in child object
 
@@ -163,7 +164,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     def setup_panel(self):
         """Setup panel"""
         self.processor.SIG_ADD_SHAPE.connect(self.itmlist.add_shapes)
-        self.SIG_REFRESH_PLOT.connect(self.itmlist.refresh_plot)
+        self.SIG_UPDATE_PLOT_ITEM.connect(self.itmlist.refresh_plot)
+        self.SIG_UPDATE_PLOT_ITEMS.connect(self.itmlist.refresh_plot)
         self.objlist.itemSelectionChanged.connect(self.selection_changed)
         self.objlist.currentRowChanged.connect(self.current_item_changed)
         self.objlist.SIG_ITEM_DOUBLECLICKED.connect(
@@ -239,7 +241,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             objcopy.copy_data_from(obj)
             self.add_object(objcopy, refresh=False)
         self.objlist.refresh_list(new_current_row=-1)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def copy_metadata(self):
         """Copy object metadata"""
@@ -269,7 +271,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         for row in rows:
             obj = self.objlist[row]
             obj.metadata.update(self.__metadata_clipboard)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def remove_object(self):
         """Remove signal/image object"""
@@ -281,7 +283,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             del self.objlist[row]
             del self.itmlist[row]
         self.objlist.refresh_list(0)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
     def delete_all_objects(self):
@@ -304,7 +306,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.objlist.remove_all()
         self.itmlist.remove_all()
         self.objlist.refresh_list(0)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
     def delete_metadata(self):
@@ -313,7 +315,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             self.objlist[row].metadata = {}
             if index == 0:
                 self.current_item_changed(row)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     @abc.abstractmethod
     def new_object(self, newparam=None, addparam=None, edit=True):
@@ -368,7 +370,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                 row = self.objlist.get_selected_rows()[0]
                 obj = self.objlist[row]
                 obj.import_metadata_from_file(filename)
-            self.SIG_REFRESH_PLOT.emit()
+            self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def export_metadata_from_file(self, filename: str = None):
         """Export metadata to file (JSON)"""
@@ -415,7 +417,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Signal list: selection changed"""
         row = self.objlist.currentRow()
         self.objprop.properties.setDisabled(row == -1)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.acthandler.selection_rows_changed()
 
     def properties_changed(self):
@@ -423,7 +425,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         row = self.objlist.currentRow()
         update_dataset(self.objlist[row], self.objprop.properties.dataset)
         self.objlist.refresh_list()
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def open_separate_view(self, rows=None) -> QW.QDialog:
@@ -472,14 +474,14 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                 obj.set_annotations_from_items(rw_items)
                 row = self.objlist.get_row(obj)
                 self.current_item_changed(row)
-                self.SIG_REFRESH_PLOT.emit()
+                self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def toggle_show_titles(self, state):
         """Toggle show annotations option"""
         Conf.view.show_label.set(state)
         for obj in self.objlist:
             obj.metadata[obj.METADATA_LBL] = state
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def create_new_dialog(
         self,
@@ -835,4 +837,4 @@ class ImagePanel(BasePanel):
     def toggle_show_contrast(self, state):
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
-        self.SIG_REFRESH_PLOT.emit()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
