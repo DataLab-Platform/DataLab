@@ -11,6 +11,7 @@ Bug fixes:
 * [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/3) - Wrong units/titles are displayed
 * [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/6) - 2D peak detection: GUI freezes when creating ROIs
 * [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
+* [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
 
 Other changes:
 

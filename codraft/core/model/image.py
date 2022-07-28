@@ -122,7 +122,7 @@ class RoiDataItem:
         else:
             xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
             radius = 0.5 * (x1 - x0)
-            rr, cc = draw.ellipse(yc, xc, radius / yxratio, radius)
+            rr, cc = draw.ellipse(yc, xc, radius / yxratio, radius, shape=data.shape)
             roi_mask[rr, cc] = False
         return roi_mask
 
