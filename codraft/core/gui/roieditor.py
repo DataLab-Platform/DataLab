@@ -91,7 +91,11 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot.SIG_ITEM_REMOVED.connect(self.item_removed)
         self.plot.SIG_RANGE_CHANGED.connect(lambda _rng, _min, _max: self.item_moved())
         self.plot.SIG_ANNOTATION_CHANGED.connect(lambda _plt: self.item_moved())
-        self.modified = False
+
+        #  In "extract mode", the dialog box OK button should always been enabled
+        #  whereas in non-extract mode (when editing ROIs) the OK button is by default
+        #  disabled (until ROI data is modified)
+        self.modified = extract
 
     @property
     def modified(self) -> bool:
