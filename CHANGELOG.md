@@ -13,10 +13,13 @@ Bug fixes:
 * [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
 * [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
 * [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/5) - ROI dialog box: unable to remove all ROIs and validate
+* [Issue #8](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
 
 Other changes:
 
 * Slightly optimized load time: avoid unnecessary refresh when adding objects
+* Signal/image list: added tooltip showing a summary of metadata values (e.g. when
+  importing data from HDF5, this shows HDF5 filename and HDF5 dataset path) - Issue #8
 
 ## Version 2.1.1 ##
 
