@@ -12,8 +12,7 @@ Testing peak detection dialog box.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 
-import numpy as np
-
+from codraft.core.io.signal import read_signal
 from codraft.env import execenv
 from codraft.utils.qthelpers import exec_dialog, qt_app_context
 from codraft.utils.tests import get_test_fnames
@@ -25,11 +24,10 @@ SHOW = True  # Show test in GUI-based test launcher
 def test():
     """Signal peak dialog test"""
     with qt_app_context():
-        data = np.loadtxt(get_test_fnames("paracetamol.txt")[0], delimiter=",")
-        x, y = data.T
+        s = read_signal(get_test_fnames("paracetamol.txt")[0])
         dlg = SignalPeakDetectionDialog()
         dlg.resize(640, 300)
-        dlg.setup_data(x, y)
+        dlg.setup_data(s.x, s.y)
         plot = dlg.get_plot()
         plot.set_axis_limits(plot.xBottom, 16, 30)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix

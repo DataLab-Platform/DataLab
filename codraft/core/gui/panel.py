@@ -66,6 +66,7 @@ from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
 from codraft.core.io.conv import data_to_xy
+from codraft.core.io.signal import read_signal, write_signal
 from codraft.core.model.base import MetadataItem, ResultShape
 from codraft.core.model.image import (
     ImageDatatypes,
@@ -695,19 +696,7 @@ class SignalPanel(BasePanel):
 
     def open_object(self, filename: str) -> None:
         """Open object from file (signal/image)"""
-        if osp.splitext(filename)[1] == ".npy":
-            xydata = np.load(filename)
-        else:
-            xydata_dataframe = pandas.read_csv(filename, comment="#")
-            xydata = xydata_dataframe.to_numpy()
-        assert len(xydata.shape) in (1, 2), "Data not supported"
-        signal = create_signal(osp.basename(filename))
-        signal.xlabel, signal.ylabel = xydata_dataframe.columns[:2]
-        if len(xydata.shape) == 1:
-            signal.set_xydata(np.arange(xydata.size), xydata)
-        else:
-            x, y, dx, dy = data_to_xy(xydata)
-            signal.set_xydata(x, y, dx, dy)
+        signal = read_signal(filename)
         self.add_object(signal)
 
     def save_object(self, obj, filename: str = None) -> None:
@@ -716,18 +705,12 @@ class SignalPanel(BasePanel):
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getsavefilename(  # pylint: disable=duplicate-code
-                    self, _("Save as"), basedir, _("CSV files") + " (*.csv)"
+                    self, _("Save as"), basedir, self.OPEN_FILTERS
                 )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                np.savetxt(
-                    filename,
-                    obj.xydata.T,
-                    header=",".join([obj.xlabel or "X", obj.ylabel or "Y"]),
-                    delimiter=",",
-                    comments="",
-                )
+                write_signal(obj, filename)
 
 
 class ImagePanel(BasePanel):

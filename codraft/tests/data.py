@@ -17,6 +17,7 @@ import numpy as np
 
 from codraft.core.computation import fit
 from codraft.core.io.image import imread_scor
+from codraft.core.io.signal import read_signal
 from codraft.core.model.base import ResultShape, ShapeTypes
 from codraft.core.model.image import create_image
 from codraft.core.model.signal import create_signal
@@ -129,13 +130,12 @@ def __get_default_data_size(size=None):
 
 def create_test_signal1(size=None, title=None):
     """Create test signal (Paracetamol molecule spectrum)"""
+    obj = read_signal(get_test_fnames("paracetamol.txt")[0])
+    if title is not None:
+        obj.title = title
     size = __get_default_data_size(size)
-    data = np.loadtxt(get_test_fnames("paracetamol.txt")[0], delimiter=",")
-    obj = create_signal("Paracetamol" if title is None else title)
-    if size is None:
-        obj.xydata = data.T
-    else:
-        x0, y0 = data.T
+    if size is not None:
+        x0, y0 = obj.xydata
         x1 = np.linspace(x0[0], x0[-1], size)
         y1 = np.interp(x1, x0, y0)
         obj.set_xydata(x1, y1)

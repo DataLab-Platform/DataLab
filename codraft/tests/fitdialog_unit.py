@@ -11,9 +11,8 @@ Testing the multi-Gaussian fit dialog.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 
-import numpy as np
-
 from codraft.core.computation.signal import peak_indexes
+from codraft.core.io.signal import read_signal
 from codraft.env import execenv
 from codraft.tests.data import get_test_fnames
 from codraft.utils.qthelpers import qt_app_context
@@ -29,10 +28,10 @@ SHOW = True  # Show test in GUI-based test launcher
 def test():
     """Test function"""
     with qt_app_context():
-        x, y = np.loadtxt(get_test_fnames("paracetamol.txt")[0], delimiter=",").T
-        peakindexes = peak_indexes(y)
+        s = read_signal(get_test_fnames("paracetamol.txt")[0])
+        peakindexes = peak_indexes(s.y)
         execenv.print(
-            multigaussianfit(x, y, peakindexes, name=get_default_test_name("00"))
+            multigaussianfit(s.x, s.y, peakindexes, name=get_default_test_name("00"))
         )
 
 
