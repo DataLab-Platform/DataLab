@@ -12,6 +12,7 @@ call %FUNC% GetLibName LIBNAME
 cd %SCRIPTPATH%\..\
 
 @REM Removing files/directories related to Python/doc build process
+if exist %LIBNAME%.egg-info ( rmdir /s /q %LIBNAME%.egg-info )
 if exist MANIFEST ( del /q MANIFEST )
 if exist build ( rmdir /s /q build )
 if exist dist ( rmdir /s /q dist )

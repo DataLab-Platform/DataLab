@@ -13,7 +13,8 @@ call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
 if exist MANIFEST ( del /q MANIFEST )
-python setup.py sdist bdist_wheel --universal
+python create_dephash.py
+python setup.py sdist bdist_wheel
 move /y %MODNAME%\data\*.chm .
 python setup.py build sdist
 move /y .\*.chm %MODNAME%\data
