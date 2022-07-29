@@ -84,7 +84,7 @@ rich                          12.2.0
 rstcheck                      5.0.0
 scikit-image                  0.19.2
 scipy                         1.7.0
-setuptools                    57.0.0
+setuptools                    63.2.0
 six                           1.16.0
 snowballstemmer               2.2.0
 Sphinx                        4.5.0
