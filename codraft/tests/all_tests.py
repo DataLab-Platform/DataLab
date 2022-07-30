@@ -20,18 +20,30 @@ from codraft.utils.tests import TST_PATH
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def run_all_tests(args="", contains="", timeout=None):
-    """Run all CodraFT tests"""
-    testmodules = [
+def get_test_modules(package, contains=""):
+    """Return test module list for package"""
+    return [
         tmod
-        for tmod in get_tests(codraft)
-        if not osp.samefile(tmod.path, __file__) and contains in tmod.path
+        for tmod in get_tests(package)
+        if osp.basename(tmod.path) != osp.basename(__file__) and contains in tmod.path
     ]
+
+
+def run_all_tests(args="", contains="", timeout=None, other_package=None):
+    """Run all CodraFT tests"""
+    testmodules = get_test_modules(codraft, contains=contains)
+    testnb = len(get_tests(codraft)) - 1
+    if other_package is not None:
+        testmodules += get_test_modules(other_package, contains=contains)
+        testnb += len(get_tests(other_package)) - 1
     tnb = len(testmodules)
     print("*** CodraFT automatic unit tests ***")
     print("")
     print("Test parameters:")
-    print(f"  Selected {tnb} tests ({len(get_tests(codraft)) - 1} total available)")
+    print(f"  Selected {tnb} tests ({testnb} total available)")
+    if other_package is not None:
+        print("  Additional package:")
+        print(f"    {other_package.__name__}")
     print("  Test data path:")
     for path in TST_PATH:
         print(f"    {path}")
@@ -48,14 +60,19 @@ def run_all_tests(args="", contains="", timeout=None):
         testmodule.run(args=args, timeout=timeout)
 
 
-def run():
+def run(other_package=None):
     """Parse arguments and run tests"""
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     parser = argparse.ArgumentParser(description="Run all test in unattended mode")
     parser.add_argument("--contains", default="")
     parser.add_argument("--timeout", type=int, default=240)
     args = parser.parse_args()
-    run_all_tests("--mode unattended --verbose quiet", args.contains, args.timeout)
+    run_all_tests(
+        "--mode unattended --verbose quiet",
+        args.contains,
+        args.timeout,
+        other_package,
+    )
 
 
 if __name__ == "__main__":
