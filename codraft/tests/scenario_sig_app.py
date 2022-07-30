@@ -25,7 +25,7 @@ from codraft.core.gui.processor.base import (
     ThresholdParam,
 )
 from codraft.core.gui.processor.signal import (
-    CalibrateParam,
+    XYCalibrateParam,
     FWHMParam,
     NormalizeParam,
     PeakDetectionParam,
@@ -60,6 +60,7 @@ def test_compute_11_operations(panel, index):
     panel.processor.compute_fft()
     panel.processor.compute_ifft()
     panel.processor.compute_abs()
+    panel.processor.compute_log10()
     panel.processor.swap_axes()
     panel.processor.swap_axes()
 
@@ -135,7 +136,7 @@ def test_signal_features(win: CodraFTMainWindow, data_size: int = 500) -> None:
         param.method = method
         panel.processor.normalize(param)
 
-    param = CalibrateParam()
+    param = XYCalibrateParam()
     param.a, param.b = 1.2, 0.1
     panel.processor.calibrate(param)
 

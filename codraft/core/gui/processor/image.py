@@ -117,8 +117,8 @@ class FlatFieldParam(BaseProcParam):
     threshold = FloatItem(_("Threshold"), default=0.0)
 
 
-class CalibrateParam(DataSet):
-    """Linear calibration parameters"""
+class ZCalibrateParam(DataSet):
+    """Image linear calibration parameters"""
 
     a = FloatItem("a", default=1.0)
     b = FloatItem("b", default=0.0)
@@ -410,11 +410,11 @@ class ImageProcessor(BaseProcessor):
         return apply_11_func_callback(self, obj, orig, func, param)
 
     @qt_try_except()
-    def calibrate(self, param: CalibrateParam = None) -> None:
+    def calibrate(self, param: ZCalibrateParam = None) -> None:
         """Compute data linear calibration"""
         edit = param is None
         if edit:
-            param = CalibrateParam(_("Linear calibration"), "y = a.x + b")
+            param = ZCalibrateParam(_("Linear calibration"), "y = a.x + b")
         self.compute_11(
             "LinearCal",
             lambda x, p: p.a * x + p.b,

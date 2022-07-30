@@ -22,6 +22,7 @@ from codraft.core.gui.processor.image import (
     PeakDetectionParam,
     ResizeParam,
     RotateParam,
+    ZCalibrateParam,
 )
 from codraft.core.model.base import UniformRandomParam
 from codraft.core.model.image import ImageTypes, create_image, new_image_param
@@ -56,6 +57,10 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     test_common_operations(panel)
+
+    param = ZCalibrateParam()
+    param.a, param.b = 1.2, 0.1
+    panel.processor.calibrate(param)
 
     param = LogP1Param()
     param.n = 1

@@ -58,8 +58,8 @@ class NormalizeParam(DataSet):
     method = ChoiceItem(_("Normalize with respect to"), methods)
 
 
-class CalibrateParam(DataSet):
-    """Calibration parameters"""
+class XYCalibrateParam(DataSet):
+    """Signal calibration parameters"""
 
     axes = (("x", _("X-axis")), ("y", _("Y-axis")))
     axis = ChoiceItem(_("Calibrate"), axes, default="y")
@@ -234,11 +234,11 @@ class SignalProcessor(BaseProcessor):
         self.compute_11("Integral", lambda x, y: (x, spt.cumtrapz(y, x, initial=0.0)))
 
     @qt_try_except()
-    def calibrate(self, param: CalibrateParam = None) -> None:
+    def calibrate(self, param: XYCalibrateParam = None) -> None:
         """Compute data linear calibration"""
         edit = param is None
         if edit:
-            param = CalibrateParam(_("Linear calibration"), "y = a.x + b")
+            param = XYCalibrateParam(_("Linear calibration"), "y = a.x + b")
 
         def func(x, y, p):
             """Compute linear calibration"""
