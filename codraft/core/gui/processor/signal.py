@@ -93,7 +93,7 @@ class SignalProcessor(BaseProcessor):
     def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = None) -> None:
         """Extract Region Of Interest (ROI) from data"""
         roieditordata = self._get_roieditordata(roidata, singleobj)
-        if roieditordata is None:
+        if roieditordata is None or roieditordata.is_empty:
             return
         obj = self.objlist.get_sel_object()
         group = obj.roidata_to_params(roieditordata.roidata)

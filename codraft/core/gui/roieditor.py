@@ -93,6 +93,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.plot.SIG_ANNOTATION_CHANGED.connect(lambda _plt: self.item_moved())
 
         #  In "extract mode", the dialog box OK button should always been enabled
+        #  when at least one ROI is defined,
         #  whereas in non-extract mode (when editing ROIs) the OK button is by default
         #  disabled (until ROI data is modified)
         self.modified = extract
@@ -107,6 +108,9 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         """Set dialog modified state"""
         self.__modified = value
         dlg = self.parent()
+        if self.extract:
+            #  In "extract mode", OK button is enabled when at least one ROI is defined
+            value = value and len(self.roi_items) > 0
         dlg.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(value)
 
     def dialog_accepted(self):
@@ -143,10 +147,10 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def add_roi_item(self, roi_item):
         """Add ROI item to plot and refresh titles"""
-        self.modified = True
         self.plot.unselect_all()
         self.roi_items.append(roi_item)
         self.update_roi_titles()
+        self.modified = True
         self.plot.add_item(roi_item)
         self.plot.set_active_item(roi_item)
 
@@ -157,9 +161,9 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     def item_removed(self, item):
         """Item was removed. Since all items are read-only except ROIs...
         this must be an ROI."""
-        self.modified = True
         assert item in self.roi_items
         self.roi_items.remove(item)
+        self.modified = True
         self.update_roi_titles()
 
     def item_moved(self):
