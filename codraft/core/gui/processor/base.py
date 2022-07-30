@@ -102,8 +102,11 @@ class BaseProcessor(QC.QObject):
         outobj.title = f'{_("Average")}({title})'
         original_dtype = self.objlist.get_sel_object().data.dtype
         new_dtype = complex if misc.is_complex_dtype(original_dtype) else float
+        roilist = []
         for row in rows:
             obj = self.objlist[row]
+            if obj.roi is not None:
+                roilist.append(obj.roi)
             if outobj.data is None:
                 outobj.copy_data_from(obj, dtype=new_dtype)
             else:
@@ -112,6 +115,8 @@ class BaseProcessor(QC.QObject):
         outobj.data /= float(len(rows))
         if misc.is_integer_dtype(original_dtype):
             outobj.set_data_type(dtype=original_dtype)
+        if roilist:
+            outobj.roi = np.vstack(roilist)
         self.panel.add_object(outobj)
 
     @qt_try_except()
