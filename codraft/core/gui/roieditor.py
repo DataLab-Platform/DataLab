@@ -30,7 +30,7 @@ class ROIEditorData:
 
     def __init__(self, roidata: np.ndarray = None, singleobj: bool = None):
         self.__singleobj = None
-        self.roidata = roidata
+        self.roidata = np.array(roidata, dtype=int)
         self.singleobj = singleobj
         self.modified = None
 

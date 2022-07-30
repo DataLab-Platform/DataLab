@@ -175,9 +175,7 @@ class BaseProcessor(QC.QObject):
                 # This only happens in unattended mode (forcing QDialog accept)
                 return None
         else:
-            roieditordata = ROIEditorData()
-            roieditordata.roidata = roidata
-            roieditordata.singleobj = singleobj
+            roieditordata = ROIEditorData(roidata=roidata, singleobj=singleobj)
         return roieditordata
 
     @abc.abstractmethod
