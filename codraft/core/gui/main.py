@@ -145,7 +145,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Set memory warning state"""
         self.__memory_warning = state
 
-    def confirm_memory_state(self):
+    def confirm_memory_state(self):  # pragma: no cover
         """Check memory warning state and eventually show a warning dialog"""
         if self.__memory_warning:
             threshold = Conf.main.available_memory_threshold.get()
@@ -159,7 +159,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             return answer == QW.QMessageBox.Yes
         return True
 
-    def check_dependencies(self):
+    def check_dependencies(self):  # pragma: no cover
         """Check dependencies"""
         if is_frozen("codraft") or Conf.main.ignore_dependency_check.get(False):
             # No need to check dependencies if CodraFT has been frozen
@@ -210,7 +210,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         )
         Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
 
-    def check_for_previous_crash(self):
+    def check_for_previous_crash(self):  # pragma: no cover
         """Check for previous crash"""
         if execenv.unattended:
             self.show_log_viewer()

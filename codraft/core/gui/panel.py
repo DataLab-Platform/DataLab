@@ -180,11 +180,11 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.addWidget(self.objprop)
         self.add_results_button()
 
-    def get_category_actions(self, category):
+    def get_category_actions(self, category):  # pragma: no cover
         """Return actions for category"""
         return self.acthandler.feature_actions[category]
 
-    def __popup_contextmenu(self, position: QC.QPoint):
+    def __popup_contextmenu(self, position: QC.QPoint):  # pragma: no cover
         """Popup context menu at position"""
         # Note: For now, this is completely unnecessary to clear context menu everytime,
         # but implementing it this way could be useful in the future in menu contents
@@ -287,7 +287,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
-    def delete_all_objects(self):
+    def delete_all_objects(self):  # pragma: no cover
         """Confirm before removing all objects"""
         if len(self.objlist) == 0:
             return
@@ -331,7 +331,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Open objects from file (signals/images)"""
         if not self.mainwindow.confirm_memory_state():
             return
-        if filenames is None:
+        if filenames is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filenames, _filter = getopenfilenames(
@@ -345,7 +345,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     def save_objects(self, filenames: List[str] = None) -> None:
         """Save selected objects to file (signal/image)"""
         rows = self.objlist.get_selected_rows()
-        if filenames is None:
+        if filenames is None:  # pragma: no cover
             filenames = [None] * len(rows)
         assert len(filenames) == len(rows)
         for index, row in enumerate(rows):
@@ -359,7 +359,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     def import_metadata_from_file(self, filename: str = None):
         """Import metadata from file (JSON)"""
-        if filename is None:
+        if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filter = getopenfilename(
@@ -377,7 +377,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Export metadata to file (JSON)"""
         row = self.objlist.get_selected_rows()[0]
         obj = self.objlist[row]
-        if filename is None:
+        if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
                 filename, _filt = getsavefilename(
