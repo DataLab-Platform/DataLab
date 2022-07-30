@@ -7,7 +7,6 @@ doctmp/
 *.pyproj
 *.sln
 releases/
-dependencies*.txt
 *.chm
 .doctrees/
 doc/install_requires.txt

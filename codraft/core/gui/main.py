@@ -166,39 +166,49 @@ class CodraFTMainWindow(QW.QMainWindow):
             return
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
+            bad_deps = [name for name in state if not state[name]]
+            if not bad_deps:
+                # Everything is OK
+                return
         except IOError:
-            fname = osp.join(DATAPATH, dephash.DEPFILENAME)
-            txt = _("Unable to open file") + " " + fname
-            QW.QMessageBox.critical(self, APP_NAME, txt)
-            return
-        bad_deps = [name for name in state if not state[name]]
-        if bad_deps:
-            txt0 = _("Non-compliant dependency:")
-            if len(bad_deps) > 1:
-                txt0 = _("Non-compliant dependencies:")
-            txt = "<br>".join(
-                [
-                    "<u>" + txt0 + "</u> " + ", ".join(bad_deps),
-                    "",
-                    "",
-                    _(
-                        "At least one dependency does not comply with CodraFT "
-                        "qualification standard reference (wrong dependency version "
-                        "has been installed, or dependency source code has been "
-                        "modified, or the application has not yet been qualified "
-                        "on your operating system)."
-                    ),
-                    "",
-                    _(
-                        "This means that application has not been qualified "
-                        "in this context and may not behave as expected."
-                    ),
-                ]
-            )
-            btn = QW.QMessageBox.critical(
-                self, APP_NAME, txt, QW.QMessageBox.Ok | QW.QMessageBox.Ignore
-            )
-            Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
+            bad_deps = None
+        txt0 = _("Non-compliant dependency:")
+        if bad_deps is None or len(bad_deps) > 1:
+            txt0 = _("Non-compliant dependencies:")
+        if bad_deps is None:
+            txtlist = [
+                _("CodraFT has not yet been qualified on your operating system."),
+            ]
+        else:
+            txtlist = [
+                "<u>" + txt0 + "</u> " + ", ".join(bad_deps),
+                "",
+                "",
+                _(
+                    "At least one dependency does not comply with CodraFT "
+                    "qualification standard reference (wrong dependency version "
+                    "has been installed, or dependency source code has been "
+                    "modified, or the application has not yet been qualified "
+                    "on your operating system)."
+                ),
+            ]
+        txtlist += [
+            "",
+            _(
+                "This means that the application has not been officially qualified "
+                "in this context and may not behave as expected."
+            ),
+            "",
+            _(
+                "Please click on the Ignore button "
+                "to avoid showing this message at startup."
+            ),
+        ]
+        txt = "<br>".join(txtlist)
+        btn = QW.QMessageBox.information(
+            self, APP_NAME, txt, QW.QMessageBox.Ok | QW.QMessageBox.Ignore
+        )
+        Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
 
     def check_for_previous_crash(self):
         """Check for previous crash"""

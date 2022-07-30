@@ -69,7 +69,7 @@ def get_dependencies_hash(dependencies):
     return {name: get_module_hash(name) for name in dependencies}
 
 
-DEPFILENAME = f"dependencies-py{sys.version_info.major}.txt"
+DEPFILENAME = f"dependencies-py{sys.version_info.major}-{sys.platform}.txt"
 
 
 def check_dependencies_hash(datapath, hash_dict=None):
@@ -86,10 +86,15 @@ def check_dependencies_hash(datapath, hash_dict=None):
 def create_dependencies_file(datapath, dependencies):
     """Create dependencies.txt file"""
     hdict = get_dependencies_hash(dependencies)
-    with open(osp.join(datapath, DEPFILENAME), "wb") as filehandle:
+    path = osp.join(datapath, DEPFILENAME)
+    print("Hash file for Python module dependencies:")
+    with open(path, "wb") as filehandle:
+        print(f"  Opening {path}")
         for name in hdict:
             line = name + ":" + hdict[name] + os.linesep
+            print(f"  Writing: {line}", end="")
             filehandle.write(line.encode("utf-8"))
+        print("  => All done.")
 
 
 if __name__ == "__main__":

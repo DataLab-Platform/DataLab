@@ -70,9 +70,12 @@ class InstallConfigViewerWindow(QW.QDialog):
             bad_deps = [name for name in state if not state[name]]
             if bad_deps:
                 more_infos += "Invalid dependencies: "
-                more_infos += ", ".join(bad_deps) + os.linesep * 2
+                more_infos += ", ".join(bad_deps)
+            else:
+                more_infos += "Dependencies hash file: checked."
         except IOError:
-            pass
+            more_infos += "Unable to open dependencies hash file."
+        more_infos += os.linesep * 2
         if sys.executable.lower().endswith("codraft.exe"):
             #  Stand-alone version
             more_infos += "This is the Stand-alone version of CodraFT"
