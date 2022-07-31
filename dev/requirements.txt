@@ -2,7 +2,6 @@ guidata
 guiqwt
 PythonQwt
 scikit-image
-pandas
 psutil
 pylint
 black

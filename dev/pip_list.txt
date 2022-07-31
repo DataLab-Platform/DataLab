@@ -41,7 +41,6 @@ networkx                      2.8
 numpy                         1.21.0
 opencv-python                 4.5.2.54
 packaging                     21.3
-pandas                        1.4.3
 pathspec                      0.9.0
 pbr                           5.8.1
 pefile                        2021.9.3

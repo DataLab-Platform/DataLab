@@ -17,12 +17,21 @@ from codraft.core.io.image import (
     imread_scor,
     imread_sif,
 )
+from codraft.core.io.signal import read_signal
 from codraft.env import execenv
 from codraft.utils.qthelpers import qt_app_context
 from codraft.utils.tests import try_open_test_data
-from codraft.utils.vistools import view_images
+from codraft.utils.vistools import view_curve_items, view_images
 
 SHOW = True  # Show test in GUI-based test launcher
+
+
+@try_open_test_data("Testing CSV file reader", "*.txt")
+def test_csv(fname=None):
+    """Testing CSV files"""
+    signal = read_signal(fname)
+    execenv.print(signal)
+    view_curve_items([signal.make_item()])
 
 
 @try_open_test_data("Testing SIF file handler", "*.sif")
@@ -52,6 +61,7 @@ def test_scordata(fname=None):
 def io_test():
     """I/O test"""
     with qt_app_context():
+        test_csv()
         test_sif()
         test_fxd()
         test_scordata()

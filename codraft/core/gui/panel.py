@@ -37,7 +37,6 @@ from typing import List
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
-import pandas
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions
 from guidata.utils import update_dataset

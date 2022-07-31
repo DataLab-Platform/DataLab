@@ -82,10 +82,6 @@ msgstr ""
 msgid "1.7"
 msgstr ""
 
-#: ../../install_requires.txt:16
-msgid "pandas"
-msgstr ""
-
 #: ../../install_requires.txt:17
 msgid "1.2"
 msgstr ""
@@ -214,4 +210,3 @@ msgstr ""
 
 #~ msgid "4.2"
 #~ msgstr ""
-

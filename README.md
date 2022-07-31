@@ -120,6 +120,5 @@ python setup.py install
 * [h5py](https://pypi.org/project/h5py/) (interface to the HDF5 data format)
 * [NumPy](https://pypi.org/project/numpy/) (operations on multidimensional arrays)
 * [SciPy](https://pypi.org/project/scipy/) (algorithms for scientific computing)
-* [pandas](https://pandas.pydata.org/) (CSV import and data analysis)
 * [scikit-image](https://pypi.org/project/scikit-image/) (algorithms for image processing)
 * [psutil](https://pypi.org/project/psutil/) (process and system monitoring)
