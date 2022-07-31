@@ -25,6 +25,8 @@ from codraft.core.model.signal import SignalParam, create_signal
 
 # TODO: Add a mechanism to allow extending features to other file formats
 
+HEADER_KEY = "HEADER"
+
 
 def read_signal(filename: str) -> SignalParam:
     """Read CSV or NumPy files, return a signal object (`SignalParam` instance)"""
@@ -42,10 +44,12 @@ def read_signal(filename: str) -> SignalParam:
                 xydata = xydata[~np.isnan(xydata).any(axis=1), :]
                 # Trying to read X,Y titles
                 line0 = delimiter.join([str(val) for val in xydata[0]])
+                header = ""
                 with open(filename, "r", encoding="utf-8") as fdesc:
                     lines = fdesc.readlines()
                     for rawline in lines:
                         if rawline.startswith(comments):
+                            header += rawline
                             continue
                         line = rawline.replace(" ", "")
                         if line == line0:
@@ -65,6 +69,8 @@ def read_signal(filename: str) -> SignalParam:
                         except ValueError:
                             pass
                         break
+                if header:
+                    signal.metadata[HEADER_KEY] = header
                 break
             except ValueError:
                 continue
@@ -95,5 +101,5 @@ def write_signal(obj: SignalParam, filename: str) -> None:
             obj.xydata.T,
             header=delimiter.join([xlabel, ylabel]),
             delimiter=delimiter,
-            comments="",
+            comments=obj.metadata.get(HEADER_KEY, ""),
         )
