@@ -14,12 +14,17 @@ Bug fixes:
 * [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
 * [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/5) - ROI dialog box: unable to remove all ROIs and validate
 * [Issue #8](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
+* Average operation now merges ROI data (i.e. same behavior as sum)
+* Fixed multiple regressions with ROI management (adding, removing ROI, ...)
 
 Other changes:
 
-* Slightly optimized load time: avoid unnecessary refresh when adding objects
+* Optimized load time (especially for images): avoid unnecessary refresh when adding objects
+* Added "Remove regions of interest" entry to "Computing" menu (and context menu)
 * Signal/image list: added tooltip showing a summary of metadata values (e.g. when
   importing data from HDF5, this shows HDF5 filename and HDF5 dataset path) - Issue #8
+* Dependencies hash check: feature is now OS-dependent (+ more explicit messages)
+* Slightly improved test coverage
 
 ## Version 2.1.1 ##
 
