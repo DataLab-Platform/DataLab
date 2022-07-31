@@ -419,6 +419,15 @@ class BaseProcessor(QC.QObject):
                     self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
         return roieditordata
 
+    def delete_regions_of_interest(self):
+        """Delete Regions Of Interest"""
+        for row in self.objlist.get_selected_rows():
+            obj = self.objlist[row]
+            if obj.roi is not None:
+                obj.roi = None
+                self.panel.current_item_changed(row)
+                self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
+
     @abc.abstractmethod
     def _get_stat_funcs(self):
         """Return statistics functions list"""

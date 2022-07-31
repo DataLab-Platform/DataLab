@@ -410,6 +410,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         """Current item changed"""
         if row != -1:
             self.objprop.update_properties_from(self.objlist[row])
+            self.selection_changed()  # for updating object-dependent actions (e.g. roi)
 
     def selection_changed(self):
         """Signal list: selection changed"""

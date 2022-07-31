@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-28 17:04+0200\n"
+"POT-Creation-Date: 2022-07-31 17:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,47 +82,43 @@ msgstr ""
 msgid "1.7"
 msgstr ""
 
-#: ../../install_requires.txt:17
-msgid "1.2"
-msgstr ""
-
-#: ../../install_requires.txt:18
+#: ../../install_requires.txt:16
 msgid "scikit-image"
 msgstr ""
 
-#: ../../install_requires.txt:19
+#: ../../install_requires.txt:17
 msgid "0.18"
 msgstr ""
 
-#: ../../install_requires.txt:20
+#: ../../install_requires.txt:18
 msgid "psutil"
 msgstr ""
 
-#: ../../install_requires.txt:21
+#: ../../install_requires.txt:19
 msgid "5.5"
 msgstr ""
 
-#: ../../install_requires.txt:22
+#: ../../install_requires.txt:20
 msgid "guidata"
 msgstr ""
 
-#: ../../install_requires.txt:23
+#: ../../install_requires.txt:21
 msgid "2.3"
 msgstr ""
 
-#: ../../install_requires.txt:24
+#: ../../install_requires.txt:22
 msgid "guiqwt"
 msgstr ""
 
-#: ../../install_requires.txt:25
+#: ../../install_requires.txt:23
 msgid "4.3"
 msgstr ""
 
-#: ../../install_requires.txt:26
+#: ../../install_requires.txt:24
 msgid "QtPy"
 msgstr ""
 
-#: ../../install_requires.txt:27
+#: ../../install_requires.txt:25
 msgid "1.9"
 msgstr ""
 
@@ -210,3 +206,7 @@ msgstr ""
 
 #~ msgid "4.2"
 #~ msgstr ""
+
+#~ msgid "1.2"
+#~ msgstr ""
+

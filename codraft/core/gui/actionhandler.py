@@ -47,6 +47,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.processor = processor
         self.feature_actions = {}
         self.operation_end_actions = None
+        self.delete_roi_action = None
         # Object selection dependent actions
         self.actlist_1more = []
         self.actlist_2more = []
@@ -62,7 +63,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def selection_rows_changed(self):
         """Number of selected rows has changed"""
-        nbrows = len(self.objlist.get_selected_rows())
+        selrows = self.objlist.get_selected_rows()
+        nbrows = len(selrows)
         for act in self.actlist_1more:
             act.setEnabled(nbrows >= 1)
         for act in self.actlist_2more:
@@ -71,6 +73,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             act.setEnabled(nbrows == 1)
         for act in self.actlist_2:
             act.setEnabled(nbrows == 2)
+        self.delete_roi_action.setEnabled(False)
+        for row in selrows:
+            obj = self.objlist[row]
+            if obj.roi is not None:
+                self.delete_roi_action.setEnabled(True)
+                break
 
     def create_all_actions(self, toolbar):
         """Setup actions, menus, toolbar"""
@@ -277,18 +285,29 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create computing actions"""
         proc = self.processor
         defineroi_action = self.cra(
-            _("Regions of interest..."),
+            _("Edit regions of interest..."),
             triggered=proc.edit_regions_of_interest,
             icon=get_icon("roi.svg"),
+        )
+        self.delete_roi_action = self.cra(
+            _("Remove regions of interest"),
+            triggered=proc.delete_regions_of_interest,
+            icon=get_icon("roi_delete.svg"),
         )
         stats_action = self.cra(
             _("Statistics") + "...",
             triggered=proc.compute_stats,
             icon=get_icon("stats.svg"),
         )
-        self.actlist_1 += [defineroi_action, stats_action]
-        self.actlist_cmenu += [None, defineroi_action, stats_action]
-        return [defineroi_action, None, stats_action]
+        self.actlist_1 += [defineroi_action, self.delete_roi_action, stats_action]
+        self.actlist_cmenu += [
+            None,
+            defineroi_action,
+            self.delete_roi_action,
+            None,
+            stats_action,
+        ]
+        return [defineroi_action, self.delete_roi_action, None, stats_action]
 
 
 class SignalActionHandler(BaseActionHandler):
