@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2022-07-31 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "\"Computing\" menu"
 msgstr "Menu \"Calculs\""
 
 #: ../../features/signal/menu/computing.rst:16
-msgid "Regions of interest"
-msgstr "Régions d'intérêt"
+msgid "Edit regions of interest"
+msgstr "Modifier les régions d'intérêt"
 
 #: ../../features/signal/menu/computing.rst:7
 msgid ""
@@ -49,17 +49,25 @@ msgstr ""
 msgid "A signal with an ROI."
 msgstr "Un signal avec une ROI."
 
-#: ../../features/signal/menu/computing.rst:24
+#: ../../features/signal/menu/computing.rst:19
+msgid "Remove regions of interest"
+msgstr "Supprimer les régions d'intérêt"
+
+#: ../../features/signal/menu/computing.rst:19
+msgid "Remove all defined ROI for selected object(s)."
+msgstr "Supprimer toutes les ROI définies pour l'objet ou les objets sélectionné(s)."
+
+#: ../../features/signal/menu/computing.rst:27
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ../../features/signal/menu/computing.rst:19
+#: ../../features/signal/menu/computing.rst:22
 msgid "Compute statistics on selected signal and show a summary table."
 msgstr ""
 "Calcule des statistiques sur les signaux sélectionnés et affiche un "
 "tableau récapitulatif."
 
-#: ../../features/signal/menu/computing.rst:23
+#: ../../features/signal/menu/computing.rst:26
 msgid ""
 "Example of statistical summary table: each row is associated to an ROI "
 "(the first row gives the statistics for the whole data)."
@@ -68,11 +76,11 @@ msgstr ""
 "associée à une ROI (à l'exception de la première qui correspond aux "
 "statistiques calculées sur la totalité des données)."
 
-#: ../../features/signal/menu/computing.rst:33
+#: ../../features/signal/menu/computing.rst:36
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
-#: ../../features/signal/menu/computing.rst:27
+#: ../../features/signal/menu/computing.rst:30
 msgid ""
 "Fit data to a Gaussian, Lorentzian or Voigt model using least-square "
 "method. Then, compute the full width at half-maximum value."
@@ -81,15 +89,15 @@ msgstr ""
 "une courbe de Voigt en utilisant un algorithme de moindres carrés. "
 "Calcule ensuite la largeur à mi-hauteur du modèle d'ajustement."
 
-#: ../../features/signal/menu/computing.rst:33
+#: ../../features/signal/menu/computing.rst:36
 msgid "The computed result is displayed as an annotated segment."
 msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
 
-#: ../../features/signal/menu/computing.rst:37
+#: ../../features/signal/menu/computing.rst:40
 msgid "Full width at 1/e²"
 msgstr "Largeur à 1/e²"
 
-#: ../../features/signal/menu/computing.rst:36
+#: ../../features/signal/menu/computing.rst:39
 msgid ""
 "Fit data to a Gaussian model using least-square method. Then, compute the"
 " full width at 1/e²."
@@ -98,7 +106,7 @@ msgstr ""
 "algorithme de moindres carrés. Calcule ensuite la largeur à 1/e² du "
 "modèle d'ajustement."
 
-#: ../../features/signal/menu/computing.rst:39
+#: ../../features/signal/menu/computing.rst:42
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to signal and serialized with it when exporting current "

@@ -3,7 +3,7 @@
 
 .. image:: /images/shots/i_computing.png
 
-Regions of interest
+Edit regions of interest
     Open a dialog box to setup multiple Region Of Interests (ROI).
     ROI are stored as metadata, and thus attached to image.
 
@@ -12,6 +12,9 @@ Regions of interest
     .. figure:: /images/shots/i_roi_image.png
 
         An image with ROI.
+
+Remove regions of interest
+    Remove all defined ROI for selected object(s).
 
 Statistics
     Compute statistics on selected image and show a summary table.

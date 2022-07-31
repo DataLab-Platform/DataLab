@@ -3,7 +3,7 @@
 
 .. image:: /images/shots/s_computing.png
 
-Regions of interest
+Edit regions of interest
     Open a dialog box to setup multiple Region Of Interests (ROI).
     ROI are stored as metadata, and thus attached to signal.
 
@@ -14,6 +14,9 @@ Regions of interest
     .. figure:: /images/shots/s_roi_signal.png
 
         A signal with an ROI.
+
+Remove regions of interest
+    Remove all defined ROI for selected object(s).
 
 Statistics
     Compute statistics on selected signal and show a summary table.

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-14 15:11+0200\n"
+"POT-Creation-Date: 2022-07-31 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,8 +22,8 @@ msgid "\"Computing\" menu"
 msgstr "Menu \"Calculs\""
 
 #: ../../features/image/menu/computing.rst:14
-msgid "Regions of interest"
-msgstr "Régions d'intérêt"
+msgid "Edit regions of interest"
+msgstr "Modifier les régions d'intérêt"
 
 #: ../../features/image/menu/computing.rst:7
 msgid ""
@@ -44,17 +44,25 @@ msgstr ""
 msgid "An image with ROI."
 msgstr "Une image avec une ROI."
 
-#: ../../features/image/menu/computing.rst:22
+#: ../../features/image/menu/computing.rst:17
+msgid "Remove regions of interest"
+msgstr "Supprimer les régions d'intérêt"
+
+#: ../../features/image/menu/computing.rst:17
+msgid "Remove all defined ROI for selected object(s)."
+msgstr "Supprimer toutes les ROI définies pour l'objet ou les objets sélectionné(s)."
+
+#: ../../features/image/menu/computing.rst:25
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ../../features/image/menu/computing.rst:17
+#: ../../features/image/menu/computing.rst:20
 msgid "Compute statistics on selected image and show a summary table."
 msgstr ""
 "Calcule des statistiques sur les images sélectionnées et affiche un "
 "tableau récapitulatif."
 
-#: ../../features/image/menu/computing.rst:21
+#: ../../features/image/menu/computing.rst:24
 msgid ""
 "Example of statistical summary table: each row is associated to an ROI "
 "(the first row gives the statistics for the whole data)."
@@ -63,11 +71,11 @@ msgstr ""
 "associée à une ROI (à l'exception de la première qui correspond aux "
 "statistiques calculées sur la totalité des données)."
 
-#: ../../features/image/menu/computing.rst:27
+#: ../../features/image/menu/computing.rst:30
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: ../../features/image/menu/computing.rst:25
+#: ../../features/image/menu/computing.rst:28
 msgid ""
 "Compute image centroid using a Fourier transform method (as discussed by "
 "`Weisshaar et al. <http://www.mnd-umwelttechnik.fh-"
@@ -83,14 +91,13 @@ msgstr ""
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: ../../features/image/menu/computing.rst:30
+#: ../../features/image/menu/computing.rst:33
 msgid ""
 "Compute the circle contour enclosing image values above a threshold level"
 " defined as the half-maximum value."
 msgstr ""
 "Calcule le contour circulaire entourant les valeurs de l'image au-delà "
 "d'un seuil (moitié du maximum de l'image)."
-
 
 #: ../../features/image/menu/computing.rst:44
 msgid "2D peak detection"
