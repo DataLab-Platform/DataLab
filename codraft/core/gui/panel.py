@@ -64,7 +64,6 @@ from codraft.config import APP_NAME, Conf, _
 from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
-from codraft.core.io.conv import data_to_xy
 from codraft.core.io.signal import read_signal, write_signal
 from codraft.core.model.base import MetadataItem, ResultShape
 from codraft.core.model.image import (
@@ -76,7 +75,6 @@ from codraft.core.model.image import (
 )
 from codraft.core.model.signal import (
     SignalParam,
-    create_signal,
     create_signal_from_param,
     new_signal_param,
 )

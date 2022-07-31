@@ -8,6 +8,8 @@
 CodraFT Signal I/O module
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+
 import os.path as osp
 
 import numpy as np
@@ -39,7 +41,7 @@ def read_signal(filename: str) -> SignalParam:
                 xydata = xydata[~np.isnan(xydata).any(axis=1), :]
                 # Trying to read X,Y titles
                 line0 = delimiter.join([str(val) for val in xydata[0]])
-                with open(filename, "r") as fdesc:
+                with open(filename, "r", encoding="utf-8") as fdesc:
                     lines = fdesc.readlines()
                     for rawline in lines:
                         if rawline.startswith(comments):
