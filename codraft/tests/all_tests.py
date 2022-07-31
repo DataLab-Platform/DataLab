@@ -14,7 +14,7 @@ import os.path as osp
 from guidata.guitest import get_tests
 
 import codraft
-from codraft import config
+from codraft import __version__, config
 from codraft.utils.tests import TST_PATH
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -37,7 +37,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
         testmodules += get_test_modules(other_package, contains=contains)
         testnb += len(get_tests(other_package)) - 1
     tnb = len(testmodules)
-    print("*** CodraFT automatic unit tests ***")
+    print(f"*** CodraFT v{__version__} automatic unit tests ***")
     print("")
     print("Test parameters:")
     print(f"  Selected {tnb} tests ({testnb} total available)")
