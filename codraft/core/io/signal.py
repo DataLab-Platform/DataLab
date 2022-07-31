@@ -11,6 +11,7 @@ CodraFT Signal I/O module
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import os.path as osp
+import re
 
 import numpy as np
 from codraft.core.io.conv import data_to_xy
@@ -50,7 +51,17 @@ def read_signal(filename: str) -> SignalParam:
                         if line == line0:
                             break
                         try:
-                            signal.xlabel, signal.ylabel = line.split(delimiter)
+                            xlabel, ylabel = rawline.split(delimiter)
+                            signal.xlabel = xlabel.strip()
+                            signal.ylabel = ylabel.strip()
+                            # Trying to parse X,Y units
+                            pattern = r"([\S ]*) \(([\S]*)\)"  # Matching "Label (unit)"
+                            match = re.match(pattern, signal.xlabel)
+                            if match is not None:
+                                signal.xlabel, signal.xunit = match.groups()
+                            match = re.match(pattern, signal.ylabel)
+                            if match is not None:
+                                signal.ylabel, signal.yunit = match.groups()
                         except ValueError:
                             pass
                         break
@@ -73,10 +84,16 @@ def write_signal(obj: SignalParam, filename: str) -> None:
     if osp.splitext(filename)[1] == ".npy":
         np.save(filename, obj.xydata.T)
     else:
+        xlabel, ylabel = obj.xlabel or "X", obj.ylabel or "Y"
+        if obj.xunit:
+            xlabel += f" ({obj.xunit})"
+        if obj.yunit:
+            ylabel += f" ({obj.yunit})"
+        delimiter = ","
         np.savetxt(
             filename,
             obj.xydata.T,
-            header=",".join([obj.xlabel or "X", obj.ylabel or "Y"]),
-            delimiter=",",
+            header=delimiter.join([xlabel, ylabel]),
+            delimiter=delimiter,
             comments="",
         )
