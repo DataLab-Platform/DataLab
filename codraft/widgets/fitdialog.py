@@ -194,18 +194,18 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
     the fitting parameters"""
     params = []
     for index, i0 in enumerate(peak_indexes):
-        iprev = 0
-        inext = len(x) - 1
-        if i0 != 0:
-            iprev = i0 - 1
-        if i0 < inext:
-            inext = i0 + 1
-        dx = x[inext] - x[iprev]
-        dy = np.max(y[iprev:inext]) - np.min(y[iprev:inext])
+        istart = 0
+        iend = len(x) - 1
+        if index > 0:
+            istart = (peak_indexes[index - 1] + i0) // 2
+        if index < len(peak_indexes) - 1:
+            iend = (peak_indexes[index + 1] + i0) // 2
+        dx = 0.5 * (x[iend] - x[istart])
+        dy = np.max(y[istart:iend]) - np.min(y[istart:iend])
         stri = f"{index + 1:02d}"
         params += [
-            FitParam(("A") + stri, y[i0], 0.0, dy * 1.2),
-            FitParam("σ" + stri, dx * 0.8, dx * 0.02, dx),
+            FitParam(("A") + stri, y[i0], 0.0, dy * 2),
+            FitParam("σ" + stri, dx / 10, dx / 100, dx),
         ]
 
     params.append(

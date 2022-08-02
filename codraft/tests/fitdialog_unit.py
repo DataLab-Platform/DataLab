@@ -21,9 +21,6 @@ from codraft.widgets.fitdialog import multigaussianfit
 
 SHOW = True  # Show test in GUI-based test launcher
 
-# TODO: [P2] Check out curve fit parameters in GUI
-#  (min/max values appear to be incorrect)
-
 
 def test():
     """Test function"""
