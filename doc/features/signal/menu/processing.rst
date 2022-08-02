@@ -69,7 +69,7 @@ FFT
 Inverse FFT
     Create a new signal which is the inverse FFT of each selected signal.
 
-Lorentzian, Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
+Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
     Open an interactive curve fitting tool in a modal dialog box.
 
     .. list-table::
