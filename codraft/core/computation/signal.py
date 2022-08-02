@@ -171,6 +171,6 @@ def peak_indexes(y, thres=0.3, min_dist=1, thres_abs=False):
 def xpeak(x, y):
     """Return default peak X-position (assuming a single peak)"""
     peaks = peak_indexes(y)
-    if peaks.size:
+    if peaks.size == 1:
         return x[peaks[0]]
     return np.average(x, weights=y)

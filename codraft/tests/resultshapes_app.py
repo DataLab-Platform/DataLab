@@ -36,7 +36,8 @@ def test():
     obj2.roi = np.array([[10, 10, 60, 400]], int)
     with codraft_app_context(console=False) as win:
         panel = win.signalpanel
-        for sig in (test_data.create_test_signal2(), test_data.create_test_signal3()):
+        for noised in (False, True):
+            sig = test_data.create_test_signal2(noised=noised)
             panel.add_object(sig)
             panel.processor.compute_fwhm(FWHMParam())
             panel.processor.compute_fw1e2()

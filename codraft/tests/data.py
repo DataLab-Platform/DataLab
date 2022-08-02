@@ -24,6 +24,32 @@ from codraft.core.model.signal import create_signal
 from codraft.utils.tests import get_test_fnames
 
 
+def add_gaussian_noise(
+    data: np.ndarray, mu: float = 0.0, sigma: float = 0.1, seed: int = 1
+) -> None:
+    """Add Gaussian (Normal-law) random noise to data"""
+    rng = np.random.default_rng(seed)
+    data += rng.normal(mu, sigma, size=data.shape)
+
+
+def create_1d_gaussian(
+    size,
+    amp: float = 50.0,
+    sigma: float = 2.0,
+    x0: float = 0.0,
+    y0: float = 0.0,
+    noise_mu: float = 0.0,
+    noise_sigma: float = 0.0,
+    seed: int = 1,
+):
+    """Create Gaussian curve data (optionally noised, if noise_sigma != 0.0)"""
+    x = np.linspace(-10, 10, size)
+    y = fit.GaussianModel.func(x, amp, sigma, x0, y0)
+    if noise_sigma:
+        add_gaussian_noise(y, mu=noise_mu, sigma=noise_sigma, seed=seed)
+    return x, y
+
+
 def create_test_2d_data(size, dtype):
     """Creating 2D test data"""
     x, y = np.meshgrid(np.linspace(0, 10, size), np.linspace(0, 10, size))
@@ -142,21 +168,13 @@ def create_test_signal1(size=None, title=None):
     return obj
 
 
-def create_test_signal2(size=None, title=None):
-    """Create test signal (Gaussian curve)"""
+def create_test_signal2(size=None, title=None, noised=False):
+    """Create test signal (Gaussian curve, optionally noised)"""
     size = __get_default_data_size(size)
-    obj = create_signal("Gaussienne" if title is None else title)
-    x = np.linspace(-10, 10, size)
-    y = fit.GaussianModel.func(x, 500.0, 2.0, 0.0, 0.0)
+    default_title = "Gaussian curve" + (" with noise" if noised else "")
+    obj = create_signal(default_title if title is None else title)
+    x, y = create_1d_gaussian(size=size, noise_sigma=5.0 if noised else 0.0)
     obj.set_xydata(x, y)
-    return obj
-
-
-def create_test_signal3(size=None, title=None):
-    """Create test signal (Noised gaussian curve)"""
-    obj = create_test_signal2(size, title)
-    rng = np.random.default_rng()
-    obj.data += rng.normal(10, 1, size=obj.data.shape)
     return obj
 
 
