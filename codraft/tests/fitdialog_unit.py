@@ -5,14 +5,11 @@
 
 """Curve fitting dialog test
 
-Testing the multi-Gaussian fit dialog.
+Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-import numpy as np
-
-from codraft.config import _
 from codraft.core.computation.signal import peak_indexes
 from codraft.core.io.signal import read_signal
 from codraft.env import execenv

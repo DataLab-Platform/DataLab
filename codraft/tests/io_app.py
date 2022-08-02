@@ -21,50 +21,52 @@ from codraft.utils.tests import get_test_fnames, temporary_directory
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test():
-    """Run image tools test scenario"""
+def __test_io_features(title, panel, pattern, getreadfunc=None, getwritefunc=None):
+    """ "Test I/O features"""
+    execenv.print(f"  {title}:")
     with temporary_directory() as tmpdir:
         # os.startfile(tmpdir)
-        with codraft_app_context() as win:
-            execenv.print("I/O application test:")
-
-            # === Testing Signal I/O ---------------------------------------------------
-            execenv.print("  Signals:")
-            panel = win.signalpanel
-            fnames = get_test_fnames("curve_formats/*.*")
-            execenv.print("    Opening:")
-            for fname in fnames:
-                execenv.print(f"      {fname}")
-                panel.open_object(fname)
-            panel.objlist.select_all_rows()
-            execenv.print(f"    Saving")
-            panel.save_objects(
-                [osp.join(tmpdir, osp.basename(name)) for name in fnames]
-            )
-
-            # === Testing Image I/O ----------------------------------------------------
-            execenv.print("  Images:")
-            panel = win.imagepanel
-            fnames = get_test_fnames("image_formats/*.*")
-            execenv.print("    Opening:")
-            for fname in fnames:
+        fnames = get_test_fnames(pattern)
+        execenv.print("    Opening:")
+        for fname in fnames:
+            if getreadfunc is not None:
                 try:
-                    iohandler.get_readfunc(osp.splitext(fname)[1])
+                    getreadfunc(osp.splitext(fname)[1])
                 except RuntimeError:
                     execenv.print(f"      Skipping {fname}")
                     continue
-                execenv.print(f"      {fname}")
-                panel.open_object(fname)
-            execenv.print(f"    Saving:")
-            for row, fname in enumerate(fnames):
-                panel.objlist.set_current_row(row)
+            execenv.print(f"      {fname}")
+            panel.open_object(fname)
+        execenv.print("    Saving:")
+        for row, fname in enumerate(fnames):
+            panel.objlist.set_current_row(row)
+            if getwritefunc is not None:
                 try:
-                    iohandler.get_writefunc(osp.splitext(fname)[1])
+                    getwritefunc(osp.splitext(fname)[1])
                 except RuntimeError:
                     execenv.print(f"      Skipping {fname}")
                     continue
-                execenv.print(f"      {fname}")
-                panel.save_objects([osp.join(tmpdir, osp.basename(fname))])
+            path = osp.join(tmpdir, osp.basename(fname))
+            execenv.print(f"      {path}")
+            panel.save_objects([path])
+
+
+def test():
+    """Run image tools test scenario"""
+    with codraft_app_context() as win:
+        execenv.print("I/O application test:")
+
+        # === Testing Signal I/O ---------------------------------------------------
+        __test_io_features("Signals", win.signalpanel, "curve_formats/*.*")
+
+        # === Testing Image I/O ----------------------------------------------------
+        __test_io_features(
+            "Images",
+            win.imagepanel,
+            "image_formats/*.*",
+            getreadfunc=iohandler.get_readfunc,
+            getwritefunc=iohandler.get_writefunc,
+        )
 
 
 if __name__ == "__main__":
