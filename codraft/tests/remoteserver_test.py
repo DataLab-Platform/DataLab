@@ -11,38 +11,23 @@ Remote server/client test
 # pylint: disable=duplicate-code
 
 import abc
-import os
-import os.path as osp
+import functools
 import time
 from io import BytesIO
 from typing import List
-from xmlrpc.client import Binary, ServerProxy
+from xmlrpc.client import Binary
 from xmlrpc.server import SimpleXMLRPCServer
 
 import numpy as np
+from guidata.dataset import datatypes as gdt
 from qtpy import QtCore as QC
 
 from codraft import __version__
+from codraft.config import Conf
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.model.image import create_image
 from codraft.core.model.signal import create_signal
 from codraft.tests import codraft_app_context
-from codraft.tests.data import create_2d_gaussian, create_test_signal1
-
-# from codraft.utils.qthelpers import qt_app_context
-from codraft.utils.tests import temporary_directory
-
-# === Python 2.7 client side:
-# import xmlrpclib
-# import numpy as np
-# def array_to_binary(data):
-#     """Convert NumPy array to XML-RPC Binary object, with shape and dtype"""
-#     dbytes = BytesIO()
-#     np.save(dbytes, data, allow_pickle=False)
-#     return xmlrpc.Binary(dbytes.getvalue())
-# s = xmlrpclib.ServerProxy("http://127.0.0.1:8000")
-# data = np.array([[3, 4, 5], [7, 8, 0]], dtype=np.uint16)
-# s.add_image("toto", array_to_binary(data))
 
 
 def array_to_rpcbinary(data: np.ndarray) -> Binary:
@@ -127,6 +112,23 @@ class BaseRPCServer(abc.ABC):
         """Register functions"""
 
 
+def remote_call(func):
+    """Decorator for method calling CodraFT main window remotely"""
+
+    @functools.wraps(func)
+    def method_wrapper(*args, **kwargs):
+        """Decorator wrapper function"""
+        self = args[0]  # extracting 'self' from method arguments
+        self.is_ready = False
+        output = func(*args, **kwargs)
+        while not self.is_ready:
+            QC.QCoreApplication.processEvents()
+            time.sleep(0.05)
+        return output
+
+    return method_wrapper
+
+
 class RPCServerThreadMeta(type(QC.QThread), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -142,10 +144,14 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
     SIG_SAVE_TO_H5 = QC.Signal(str)
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
     SIG_IMPORT_H5 = QC.Signal(str, bool)
+    SIG_CALC = QC.Signal(str, object)
 
     def __init__(self, win: CodraFTMainWindow):
         QC.QThread.__init__(self)
         BaseRPCServer.__init__(self)
+        self.is_ready = True
+        self.win = win
+        win.SIG_READY.connect(self.codraft_is_ready)
         self.SIG_ADD_OBJECT.connect(win.add_object)
         self.SIG_SWITCH_TO_SIGNAL_PANEL.connect(win.switch_to_signal_panel)
         self.SIG_SWITCH_TO_IMAGE_PANEL.connect(win.switch_to_image_panel)
@@ -153,6 +159,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
+        self.SIG_CALC.connect(win.calc)
 
     def notify_port(self, port: int):
         """Notify automatically attributed port"""
@@ -160,35 +167,45 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
 
     def register_functions(self, server: SimpleXMLRPCServer):
         """Register functions"""
-        server.register_function(self.swith_to_signal_panel)
-        server.register_function(self.swith_to_image_panel)
+        server.register_function(self.switch_to_signal_panel)
+        server.register_function(self.switch_to_image_panel)
         server.register_function(self.add_signal)
         server.register_function(self.add_image)
         server.register_function(self.reset_all)
         server.register_function(self.save_to_h5_file)
         server.register_function(self.open_h5_files)
         server.register_function(self.import_h5_file)
+        server.register_function(self.calc)
 
     def run(self):
         """Thread execution method"""
         self.serve()
 
-    def swith_to_signal_panel(self):
-        """Swith to signal panel"""
+    def codraft_is_ready(self):
+        """Called when CodraFT is ready to process new requests"""
+        self.is_ready = True
+
+    @remote_call
+    def switch_to_signal_panel(self):
+        """Switch to signal panel"""
         self.SIG_SWITCH_TO_SIGNAL_PANEL.emit()
 
-    def swith_to_image_panel(self):
-        """Swith to image panel"""
+    @remote_call
+    def switch_to_image_panel(self):
+        """Switch to image panel"""
         self.SIG_SWITCH_TO_IMAGE_PANEL.emit()
 
+    @remote_call
     def reset_all(self):
         """Reset all application data"""
         self.SIG_RESET_ALL.emit()
 
+    @remote_call
     def save_to_h5_file(self, filename: str):
         """Save to a CodraFT HDF5 file"""
         self.SIG_SAVE_TO_H5.emit(filename)
 
+    @remote_call
     def open_h5_files(
         self,
         h5files: List[str] = None,
@@ -198,10 +215,12 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         """Open a CodraFT HDF5 file or import from any other HDF5 file"""
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
+    @remote_call
     def import_h5_file(self, filename: str, reset_all: bool = None):
         """Open CodraFT HDF5 browser to Import HDF5 file"""
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
+    @remote_call
     def add_signal(
         self,
         title: str,
@@ -223,6 +242,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         self.SIG_ADD_OBJECT.emit(signal)
         return True
 
+    @remote_call
     def add_image(
         self,
         title: str,
@@ -233,7 +253,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         xlabel: str = None,
         ylabel: str = None,
         zlabel: str = None,
-    ):
+    ):  # pylint: disable=too-many-arguments
         """Add image data to CodraFT"""
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
@@ -246,33 +266,24 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         self.SIG_ADD_OBJECT.emit(image)
         return True
 
+    @remote_call
+    def calc(self, name: str, param: gdt.DataSet = None):
+        """Call compute function `name` in current panel's processor"""
+        self.SIG_CALC.emit(name, param)
+
 
 def test():
-    """Remote server/client test"""
-    with temporary_directory() as tmpdir:
-        fname = osp.join(tmpdir, osp.basename("remote_test.h5"))
-        win = DummyCodraFTWindow()
-        # with qt_app_context() as qapp:
-        with codraft_app_context(console=False) as win:
-            server_thread = RPCServerThread(win)
-            server_thread.start()
-            while server_thread.port is None:
-                time.sleep(0.1)
-            port = server_thread.port
-            print(f"Port: {port}")
-            # qapp.exec()
-            s = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
-            print(f"CodraFT version: {s.get_version()}")
-            x, y = create_test_signal1().get_data()
-            print(s.add_signal("tutu", array_to_rpcbinary(x), array_to_rpcbinary(y)))
-            z = create_2d_gaussian(2000, np.uint16)
-            print(s.add_image("toto", array_to_rpcbinary(z)))
-            s.save_to_h5_file(fname)
-            s.reset_all()
-            s.open_h5_files([fname], True, False)
-            s.import_h5_file(fname, True)
-            print(s.system.listMethods())
-        os.remove(fname)
+    """Remote server test"""
+    # win = DummyCodraFTWindow()
+    # with qt_app_context() as qapp:
+    with codraft_app_context(console=False) as win:
+        server_thread = RPCServerThread(win)
+        server_thread.start()
+        while server_thread.port is None:
+            time.sleep(0.1)
+        port = server_thread.port
+        Conf.main.rpc_server_port.set(port)
+        print(f"Port: {port}")
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ CodraFT main window
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+import functools
 import locale
 import os
 import os.path as osp
@@ -23,6 +24,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import __version__ as guidata_ver
 from guidata.configtools import get_icon, get_module_data_path, get_module_path
+from guidata.dataset import datatypes as gdt
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from guiqwt import __version__ as guiqwt_ver
@@ -79,10 +81,33 @@ def is_frozen(module_name):
     return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
 
 
+def remote_controlled(func):
+    """Decorator for remote-controlled methods"""
+
+    @functools.wraps(func)
+    def method_wrapper(*args, **kwargs):
+        """Decorator wrapper function"""
+        win = args[0]  # extracting 'self' from method arguments
+        already_busy = not win.ready_flag
+        win.ready_flag = False
+        try:
+            output = func(*args, **kwargs)
+        finally:
+            if not already_busy:
+                win.SIG_READY.emit()
+                win.ready_flag = True
+            QW.QApplication.processEvents()
+        return output
+
+    return method_wrapper
+
+
 class CodraFTMainWindow(QW.QMainWindow):
     """CodraFT main window"""
 
     __instance = None
+
+    SIG_READY = QC.Signal()
 
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
@@ -99,6 +124,8 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("codraft.svg"))
         self.__restore_pos_and_size()
+
+        self.ready_flag = True
 
         self.hide_on_close = hide_on_close
         self.__old_size = None
@@ -376,13 +403,28 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return imagewidget
 
+    @remote_controlled
     def switch_to_signal_panel(self):
         """Switch to signal panel"""
         self.tabwidget.setCurrentWidget(self.signalpanel)
 
+    @remote_controlled
     def switch_to_image_panel(self):
         """Switch to image panel"""
         self.tabwidget.setCurrentWidget(self.imagepanel)
+
+    @remote_controlled
+    def calc(self, name: str, param: gdt.DataSet = None):
+        """Call compute function `name` in current panel's processor"""
+        panel = self.tabwidget.currentWidget()
+        funcname = f"compute_{name}"
+        func = getattr(panel.processor, funcname, None)
+        if func is None:
+            raise ValueError(f"Unknown function {funcname}")
+        if param is None:
+            func()
+        else:
+            func(param)
 
     def __add_tabwidget(self, curvewidget, imagewidget):
         """Setup tabwidget with signals and images"""
@@ -592,6 +634,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
 
     # ------Common features
+    @remote_controlled
     def reset_all(self):
         """Reset all application data"""
         for panel in self.panels:
@@ -609,6 +652,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         Conf.main.base_dir.set(filename)
         return filename
 
+    @remote_controlled
     def save_to_h5_file(self, filename=None):
         """Save to a CodraFT HDF5 file"""
         if filename is None:
@@ -623,6 +667,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.h5inputoutput.save_file(filename)
             self.set_modified(False)
 
+    @remote_controlled
     def open_h5_files(
         self,
         h5files: List[str] = None,
@@ -672,6 +717,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                         self.h5inputoutput.import_dataset_from_file(filename, dsetname)
             reset_all = False
 
+    @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
         """Open CodraFT HDF5 browser to Import HDF5 file
 
@@ -682,6 +728,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             filename = self.__check_h5file(filename, "load")
             self.h5inputoutput.import_file(filename, False, reset_all)
 
+    @remote_controlled
     def add_object(self, obj, refresh=True):
         """Add object - signal or image"""
         if self.confirm_memory_state():
