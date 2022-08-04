@@ -8,21 +8,11 @@ Log viewer test
 """
 
 import os.path as osp
-import subprocess
-import sys
 
 from codraft.app import run
-from codraft.env import execenv
+from codraft.utils.tests import exec_script
 
 SHOW = True  # Show test in GUI-based test launcher
-
-
-def exec_script(path):
-    """Run test script"""
-    command = [sys.executable, '"' + path + '"']
-    stderr = subprocess.DEVNULL if execenv.unattended else None
-    with subprocess.Popen(" ".join(command), shell=True, stderr=stderr) as proc:
-        proc.wait()
 
 
 if __name__ == "__main__":

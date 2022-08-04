@@ -29,6 +29,8 @@ from codraft.core.model.image import create_image
 from codraft.core.model.signal import create_signal
 from codraft.tests import codraft_app_context
 
+SHOW = False  # Do not show test in GUI-based test launcher
+
 
 def array_to_rpcbinary(data: np.ndarray) -> Binary:
     """Convert NumPy array to XML-RPC Binary object, with shape and dtype"""

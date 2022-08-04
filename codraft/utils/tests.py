@@ -11,6 +11,7 @@ import functools
 import os
 import os.path as osp
 import pathlib
+import subprocess
 import sys
 import tempfile
 from contextlib import contextmanager
@@ -109,3 +110,12 @@ def temporary_directory():
             tmp.cleanup()
         except (PermissionError, RecursionError):
             pass
+
+
+def exec_script(path, wait=True):  # pylint: disable=consider-using-with
+    """Run test script"""
+    command = [sys.executable, '"' + path + '"']
+    stderr = subprocess.DEVNULL if execenv.unattended else None
+    proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr)
+    if wait:
+        proc.wait()
