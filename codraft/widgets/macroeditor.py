@@ -61,6 +61,12 @@ class MacroEditorWidget(QW.QTabWidget):
         # TODO: Add action "Import from file..."
         # TODO: Add action "Export to file..."
         # TODO: Add action "Remove"
+
+        # XXX: Macros should be executed in a separate process: access to CodraFT
+        # is provided by the 'remote_controlling' feature (see corresponding branch).
+        # So, macros should be Python scripts similar to "remoteclient_test.py".
+        # Connection to the XML-RPC server should be simplified (to a single line).
+
         add_button = create_toolbutton(
             self,
             icon=get_icon("libre-gui-add.svg"),
