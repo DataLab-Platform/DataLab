@@ -452,11 +452,18 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     DEFAULT_FMT = "s"  # This is overriden in children classes
     CONF_FMT = Conf.view.sig_format  # This is overriden in children classes
+    VALID_DTYPES = ()
 
     @property
     @abc.abstractmethod
     def data(self):
         """Data"""
+
+    def check_data(self):
+        """Check if data is valid, raise an exception if that's not the case"""
+        if self.data is not None:
+            if self.data.dtype not in self.VALID_DTYPES:
+                raise TypeError(f"Unsupported data type: {self.data.dtype}")
 
     def iterate_roi_indexes(self):
         """Iterate over object ROI indexes ([0] if there is no ROI)"""

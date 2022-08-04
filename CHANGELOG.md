@@ -3,6 +3,16 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
+## Version 2.1.3 ##
+
+Bug fixes:
+
+* [Issue #16](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/16) - Embedding CodraFT: "add_object" method call with invalid data should lead to app crash
+  * Panel's `add_object` method (public API): check data type before adding object to
+panel - this prevents CodraFT from crashing when trying to plot invalid data type
+afterwards
+  * Now handling exceptions in `add_object` and `insert_object` methods
+
 ## Version 2.1.2 ##
 
 Bug fixes:

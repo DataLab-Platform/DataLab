@@ -78,7 +78,12 @@ from codraft.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from codraft.utils.qthelpers import exec_dialog, qt_try_loadsave_file, save_restore_stds
+from codraft.utils.qthelpers import (
+    exec_dialog,
+    qt_try_except,
+    qt_try_loadsave_file,
+    save_restore_stds,
+)
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -208,8 +213,10 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         obj.title = title
         return obj
 
+    @qt_try_except()
     def add_object(self, obj, refresh=True):
         """Add signal/image object and return associated plot item"""
+        obj.check_data()
         self.objlist.append(obj)
         item = self.itmlist.append(None)
         if refresh:
@@ -218,8 +225,10 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         return item
 
     # TODO: [P2] New feature: move objects up/down
+    @qt_try_except()
     def insert_object(self, obj, row, refresh=True):
         """Insert signal/image object after row"""
+        obj.check_data()
         self.objlist.insert(row, obj)
         self.itmlist.insert(row)
         if refresh:

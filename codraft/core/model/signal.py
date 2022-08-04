@@ -32,6 +32,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
 
     CONF_FMT = Conf.view.sig_format
     DEFAULT_FMT = ".3f"
+    VALID_DTYPES = (np.float32, np.float64)
 
     _tabs = gdt.BeginTabGroup("all")
 
