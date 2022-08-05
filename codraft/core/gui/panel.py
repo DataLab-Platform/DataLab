@@ -324,6 +324,10 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         :param bool edit: Open a dialog box to edit parameters (default: True)
         """
 
+    @abc.abstractmethod
+    def open_object(self, filename: str) -> None:
+        """Open object from file (signal/image)"""
+
     def open_objects(self, filenames: List[str] = None) -> None:
         """Open objects from file (signals/images)"""
         if not self.mainwindow.confirm_memory_state():

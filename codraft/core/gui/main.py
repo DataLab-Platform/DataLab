@@ -417,9 +417,11 @@ class CodraFTMainWindow(QW.QMainWindow):
     def calc(self, name: str, param: gdt.DataSet = None):
         """Call compute function `name` in current panel's processor"""
         panel = self.tabwidget.currentWidget()
-        funcname = f"compute_{name}"
-        func = getattr(panel.processor, funcname, None)
-        if func is None:
+        for funcname in (name, f"compute_{name}"):
+            func = getattr(panel.processor, funcname, None)
+            if func is not None:
+                break
+        else:
             raise ValueError(f"Unknown function {funcname}")
         if param is None:
             func()
@@ -738,6 +740,12 @@ class CodraFTMainWindow(QW.QMainWindow):
                 self.imagepanel.add_object(obj, refresh=refresh)
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
+
+    @remote_controlled
+    def open_object(self, filename: str) -> None:
+        """Open object from file in current panel (signal/image)"""
+        panel = self.tabwidget.currentWidget()
+        panel.open_object(filename)
 
     # ------?
     def __about(self):  # pragma: no cover

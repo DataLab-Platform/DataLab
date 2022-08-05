@@ -12,6 +12,7 @@ Remote server/client test
 
 import abc
 import functools
+import importlib
 import time
 from io import BytesIO
 from typing import List
@@ -20,6 +21,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 
 import numpy as np
 from guidata.dataset import datatypes as gdt
+from guidata.jsonio import JSONReader
 from qtpy import QtCore as QC
 
 from codraft import __version__
@@ -139,7 +141,9 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
     """XML-RPC server QThread"""
 
     SIG_SERVER_PORT = QC.Signal(int)
+    SIG_CLOSE_APP = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
+    SIG_OPEN_OBJECT = QC.Signal(str)
     SIG_SWITCH_TO_SIGNAL_PANEL = QC.Signal()
     SIG_SWITCH_TO_IMAGE_PANEL = QC.Signal()
     SIG_RESET_ALL = QC.Signal()
@@ -154,7 +158,9 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         self.is_ready = True
         self.win = win
         win.SIG_READY.connect(self.codraft_is_ready)
+        self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_ADD_OBJECT.connect(win.add_object)
+        self.SIG_OPEN_OBJECT.connect(win.open_object)
         self.SIG_SWITCH_TO_SIGNAL_PANEL.connect(win.switch_to_signal_panel)
         self.SIG_SWITCH_TO_IMAGE_PANEL.connect(win.switch_to_image_panel)
         self.SIG_RESET_ALL.connect(win.reset_all)
@@ -169,6 +175,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
 
     def register_functions(self, server: SimpleXMLRPCServer):
         """Register functions"""
+        server.register_function(self.close_application)
         server.register_function(self.switch_to_signal_panel)
         server.register_function(self.switch_to_image_panel)
         server.register_function(self.add_signal)
@@ -177,6 +184,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         server.register_function(self.save_to_h5_file)
         server.register_function(self.open_h5_files)
         server.register_function(self.import_h5_file)
+        server.register_function(self.open_object)
         server.register_function(self.calc)
 
     def run(self):
@@ -186,6 +194,10 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
     def codraft_is_ready(self):
         """Called when CodraFT is ready to process new requests"""
         self.is_ready = True
+
+    def close_application(self):
+        """Close CodraFT application"""
+        self.SIG_CLOSE_APP.emit()
 
     @remote_call
     def switch_to_signal_panel(self):
@@ -221,6 +233,11 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
     def import_h5_file(self, filename: str, reset_all: bool = None):
         """Open CodraFT HDF5 browser to Import HDF5 file"""
         self.SIG_IMPORT_H5.emit(filename, reset_all)
+
+    @remote_call
+    def open_object(self, filename: str) -> None:
+        """Open object from file in current panel (signal/image)"""
+        self.SIG_OPEN_OBJECT.emit(filename)
 
     @remote_call
     def add_signal(
@@ -269,9 +286,19 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         return True
 
     @remote_call
-    def calc(self, name: str, param: gdt.DataSet = None):
+    def calc(self, name: str, param_data: List[str] = None):
         """Call compute function `name` in current panel's processor"""
+        if param_data is None:
+            param = None
+        else:
+            param_module, param_clsname, param_json = param_data
+            mod = importlib.__import__(param_module, fromlist=[param_clsname])
+            klass = getattr(mod, param_clsname)
+            param = klass()
+            reader = JSONReader(param_json)
+            param.deserialize(reader)
         self.SIG_CALC.emit(name, param)
+        return True
 
 
 def test():
