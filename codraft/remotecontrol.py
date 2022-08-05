@@ -4,11 +4,8 @@
 # (see codraft/__init__.py for details)
 
 """
-Remote server/client test
+CodraFT remote controlling utilities
 """
-
-# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-# pylint: disable=duplicate-code
 
 import abc
 import functools
@@ -16,22 +13,21 @@ import importlib
 import time
 from io import BytesIO
 from typing import List
-from xmlrpc.client import Binary
+from xmlrpc.client import Binary, ServerProxy
 from xmlrpc.server import SimpleXMLRPCServer
 
 import numpy as np
 from guidata.dataset import datatypes as gdt
-from guidata.jsonio import JSONReader
 from qtpy import QtCore as QC
 
 from codraft import __version__
-from codraft.config import Conf
-from codraft.core.gui.main import CodraFTMainWindow
+from codraft.config import Conf, initialize
+from codraft.core.io.base import NativeJSONReader, NativeJSONWriter
 from codraft.core.model.image import create_image
-from codraft.core.model.signal import create_signal
-from codraft.tests import codraft_app_context
+from codraft.core.model.signal import SignalParam, create_signal
 
-SHOW = False  # Do not show test in GUI-based test launcher
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 
 def array_to_rpcbinary(data: np.ndarray) -> Binary:
@@ -47,41 +43,24 @@ def rpcbinary_to_array(binary: Binary) -> np.ndarray:
     return np.load(dbytes, allow_pickle=False)
 
 
-class DummyCodraFTWindow:
-    """Dummy CodraFT window, for test only"""
+def dataset_to_json(param: gdt.DataSet) -> List[str]:
+    """Convert guidata DataSet to JSON data"""
+    writer = NativeJSONWriter()
+    param.serialize(writer)
+    param_json = writer.get_json()
+    klass = param.__class__
+    return [klass.__module__, klass.__name__, param_json]
 
-    def switch_to_signal_panel(self):
-        """Switch to signal panel"""
-        print(self.switch_to_signal_panel.__doc__)
 
-    def switch_to_image_panel(self):
-        """Switch to image panel"""
-        print(self.switch_to_image_panel.__doc__)
-
-    def reset_all(self):
-        """Reset all application data"""
-        print(self.reset_all.__doc__)
-
-    def save_to_h5_file(self, filename=None):
-        """Save to a CodraFT HDF5 file"""
-        print(self.save_to_h5_file.__doc__, filename)
-
-    def open_h5_files(
-        self,
-        h5files: List[str] = None,
-        import_all: bool = None,
-        reset_all: bool = None,
-    ) -> None:
-        """Open a CodraFT HDF5 file or import from any other HDF5 file"""
-        print(self.open_h5_files.__doc__, h5files, import_all, reset_all)
-
-    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
-        """Open CodraFT HDF5 browser to Import HDF5 file"""
-        print(self.import_h5_file.__doc__, filename, reset_all)
-
-    def add_object(self, obj, refresh=True):
-        """Add object - signal or image"""
-        print(self.add_object.__doc__, obj, refresh)
+def json_to_dataset(param_data: List[str]) -> gdt.DataSet:
+    """Convert JSON data to guidata DataSet"""
+    param_module, param_clsname, param_json = param_data
+    mod = importlib.__import__(param_module, fromlist=[param_clsname])
+    klass = getattr(mod, param_clsname)
+    param = klass()
+    reader = NativeJSONReader(param_json)
+    param.deserialize(reader)
+    return param
 
 
 class BaseRPCServer(abc.ABC):
@@ -133,11 +112,11 @@ def remote_call(func):
     return method_wrapper
 
 
-class RPCServerThreadMeta(type(QC.QThread), abc.ABCMeta):
+class RemoteServerMeta(type(QC.QThread), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
+class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
     """XML-RPC server QThread"""
 
     SIG_SERVER_PORT = QC.Signal(int)
@@ -152,7 +131,7 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
     SIG_IMPORT_H5 = QC.Signal(str, bool)
     SIG_CALC = QC.Signal(str, object)
 
-    def __init__(self, win: CodraFTMainWindow):
+    def __init__(self, win):
         QC.QThread.__init__(self)
         BaseRPCServer.__init__(self)
         self.is_ready = True
@@ -186,6 +165,8 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         server.register_function(self.import_h5_file)
         server.register_function(self.open_object)
         server.register_function(self.calc)
+        server.register_function(self.get_object_list)
+        server.register_function(self.get_object)
 
     def run(self):
         """Thread execution method"""
@@ -291,29 +272,160 @@ class RPCServerThread(QC.QThread, BaseRPCServer, metaclass=RPCServerThreadMeta):
         if param_data is None:
             param = None
         else:
-            param_module, param_clsname, param_json = param_data
-            mod = importlib.__import__(param_module, fromlist=[param_clsname])
-            klass = getattr(mod, param_clsname)
-            param = klass()
-            reader = JSONReader(param_json)
-            param.deserialize(reader)
+            param = json_to_dataset(param_data)
         self.SIG_CALC.emit(name, param)
         return True
 
+    def get_object_list(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.win.get_object_list()
 
-def test():
-    """Remote server test"""
-    # win = DummyCodraFTWindow()
-    # with qt_app_context() as qapp:
-    with codraft_app_context(console=False) as win:
-        server_thread = RPCServerThread(win)
-        server_thread.start()
-        while server_thread.port is None:
-            time.sleep(0.1)
-        port = server_thread.port
-        Conf.main.rpc_server_port.set(port)
-        print(f"Port: {port}")
+    def get_object(self, index: str) -> List[str]:
+        """Get object (signal/image) at index for current panel"""
+        return dataset_to_json(self.win.get_object(index))
 
 
-if __name__ == "__main__":
-    test()
+# === Python 2.7 client side:
+# import xmlrpclib
+# import numpy as np
+# def array_to_binary(data):
+#     """Convert NumPy array to XML-RPC Binary object, with shape and dtype"""
+#     dbytes = BytesIO()
+#     np.save(dbytes, data, allow_pickle=False)
+#     return xmlrpc.Binary(dbytes.getvalue())
+# s = xmlrpclib.ServerProxy("http://127.0.0.1:8000")
+# data = np.array([[3, 4, 5], [7, 8, 0]], dtype=np.uint16)
+# s.add_image("toto", array_to_binary(data))
+
+
+class RemoteClient:
+    """Object representing a proxy/client to CodraFT XML-RPC server"""
+
+    def __init__(self):
+        self.port = None
+        self.serverproxy = None
+
+    def connect(self, port=None):
+        """Connect to CodraFT XML-RPC server"""
+        if port is None:
+            initialize()
+            port = Conf.main.rpc_server_port.get()
+        self.port = port
+        self.serverproxy = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
+        self.get_version()  # Will raise a ConnectionRefusedError if connection failed
+
+    # === Following methods should match the register functions in XML-RPC server
+
+    def get_version(self):
+        """Return CodraFT version"""
+        return self.serverproxy.get_version()
+
+    def close_application(self):
+        """Close CodraFT application"""
+        self.serverproxy.close_application()
+
+    def switch_to_signal_panel(self):
+        """Switch to signal panel"""
+        self.serverproxy.switch_to_signal_panel()
+
+    def switch_to_image_panel(self):
+        """Switch to image panel"""
+        self.serverproxy.switch_to_image_panel()
+
+    def reset_all(self):
+        """Reset all application data"""
+        self.serverproxy.reset_all()
+
+    def save_to_h5_file(self, filename: str):
+        """Save to a CodraFT HDF5 file"""
+        self.serverproxy.save_to_h5_file(filename)
+
+    def open_h5_files(
+        self,
+        h5files: List[str] = None,
+        import_all: bool = None,
+        reset_all: bool = None,
+    ):
+        """Open a CodraFT HDF5 file or import from any other HDF5 file"""
+        self.serverproxy.open_h5_files(h5files, import_all, reset_all)
+
+    def import_h5_file(self, filename: str, reset_all: bool = None):
+        """Open CodraFT HDF5 browser to Import HDF5 file"""
+        self.serverproxy.import_h5_file(filename, reset_all)
+
+    def open_object(self, filename: str) -> None:
+        """Open object from file in current panel (signal/image)"""
+        self.serverproxy.open_object(filename)
+
+    def add_signal(
+        self,
+        title: str,
+        xdata: np.ndarray,
+        ydata: np.ndarray,
+        xunit: str = None,
+        yunit: str = None,
+        xlabel: str = None,
+        ylabel: str = None,
+    ):
+        """Add signal data to CodraFT"""
+        xbinary = array_to_rpcbinary(xdata)
+        ybinary = array_to_rpcbinary(ydata)
+        p = self.serverproxy
+        return p.add_signal(title, xbinary, ybinary, xunit, yunit, xlabel, ylabel)
+
+    def add_image(
+        self,
+        title: str,
+        data: np.ndarray,
+        xunit: str = None,
+        yunit: str = None,
+        zunit: str = None,
+        xlabel: str = None,
+        ylabel: str = None,
+        zlabel: str = None,
+    ):  # pylint: disable=too-many-arguments
+        """Add image data to CodraFT"""
+        zbinary = array_to_rpcbinary(data)
+        p = self.serverproxy
+        return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
+
+    def calc(self, name: str, param: gdt.DataSet = None):
+        """Call compute function `name` in current panel's processor"""
+        p = self.serverproxy
+        if param is None:
+            return p.calc(name)
+        return p.calc(name, dataset_to_json(param))
+
+    def add_object(self, obj):
+        """Add object to CodraFT"""
+        p = self.serverproxy
+        if isinstance(obj, SignalParam):
+            p.add_signal(
+                obj.title,
+                array_to_rpcbinary(obj.x),
+                array_to_rpcbinary(obj.y),
+                obj.xunit,
+                obj.yunit,
+                obj.xlabel,
+                obj.ylabel,
+            )
+        else:
+            p.add_image(
+                obj.title,
+                array_to_rpcbinary(obj.data),
+                obj.xunit,
+                obj.yunit,
+                obj.zunit,
+                obj.xlabel,
+                obj.ylabel,
+                obj.zlabel,
+            )
+
+    def get_object_list(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.serverproxy.get_object_list()
+
+    def get_object(self, index: str):
+        """Get object (signal/image) at index for current panel"""
+        param_data = self.serverproxy.get_object(index)
+        return json_to_dataset(param_data)

@@ -7,14 +7,13 @@
 Log viewer test
 """
 
-import os.path as osp
-
 from codraft.app import run
+from codraft.tests import logview_error
 from codraft.utils.tests import exec_script
 
 SHOW = True  # Show test in GUI-based test launcher
 
 
 if __name__ == "__main__":
-    exec_script(osp.join(osp.dirname(__file__), "logview_error.py"))
+    exec_script(logview_error.__file__)
     run()

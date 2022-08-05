@@ -112,10 +112,11 @@ def temporary_directory():
             pass
 
 
-def exec_script(path, wait=True):  # pylint: disable=consider-using-with
+def exec_script(path, wait=True):
     """Run test script"""
     command = [sys.executable, '"' + path + '"']
     stderr = subprocess.DEVNULL if execenv.unattended else None
+    # pylint: disable=consider-using-with
     proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr)
     if wait:
         proc.wait()

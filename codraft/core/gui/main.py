@@ -45,6 +45,7 @@ from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
+from codraft.remotecontrol import RemoteServer
 from codraft.utils import dephash
 from codraft.utils import qthelpers as qth
 from codraft.widgets.instconfviewer import exec_codraft_installconfig_dialog
@@ -108,6 +109,8 @@ class CodraFTMainWindow(QW.QMainWindow):
     __instance = None
 
     SIG_READY = QC.Signal()
+    SIG_SEND_OBJECT = QC.Signal(object)
+    SIG_SEND_OBJECTLIST = QC.Signal(object)
 
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
@@ -158,11 +161,34 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.__is_modified = None
         self.set_modified(False)
 
+        # Starting XML-RPC server thread
+        self.remote_server = RemoteServer(self)
+        if Conf.main.rpc_server_enabled.get(True):
+            self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
+            self.remote_server.start()
+
         # Setup actions and menus
         if console is None:
             console = Conf.console.enable.get(True)
         self.setup(console)
 
+    # ------API related to XML-RPC remote control
+    @staticmethod
+    def xmlrpc_server_started(port):
+        """XML-RPC server has started, writing comm port in configuration file"""
+        Conf.main.rpc_server_port.set(port)
+
+    def get_object_list(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        panel = self.tabwidget.currentWidget()
+        return panel.objlist.get_titles()
+
+    def get_object(self, index: str):
+        """Get object (signal/image) at index for current panel"""
+        panel = self.tabwidget.currentWidget()
+        return panel.objlist[index]
+
+    # ------Misc.
     @property
     def panels(self):
         """Return the tuple of implemented panels (signal, image)"""
@@ -750,6 +776,11 @@ class CodraFTMainWindow(QW.QMainWindow):
     # ------?
     def __about(self):  # pragma: no cover
         """About dialog box"""
+        if self.remote_server.port is None:
+            xrpcstate = _("not started")
+        else:
+            xrpcstate = _("started (port %s)") % self.remote_server.port
+        xml_rpc = _("XML-RPC server: ") + xrpcstate
         QW.QMessageBox.about(
             self,
             _("About ") + APP_NAME,
@@ -759,7 +790,7 @@ class CodraFTMainWindow(QW.QMainWindow):
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               %s {platform.system()}"""
+               %s {platform.system()}<br><br>{xml_rpc}"""
             % (_("Developped by"), _("on")),
         )
 
