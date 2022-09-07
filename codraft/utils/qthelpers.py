@@ -259,10 +259,24 @@ def grab_save_window(widget: QW.QWidget, name: str) -> None:  # pragma: no cover
 
 @contextmanager
 def save_restore_stds():
-    """Save/restore standard I/O while calling Qt open/save dialogs"""
+    """Save/restore standard I/O before/after doing some things
+    (e.g. calling Qt open/save dialogs)"""
     saved_in, saved_out, saved_err = sys.stdin, sys.stdout, sys.stderr
     sys.stdout = None
     try:
         yield
     finally:
         sys.stdin, sys.stdout, sys.stderr = saved_in, saved_out, saved_err
+
+
+@contextmanager
+def block_signals(widget: QW.QWidget, enable: bool):
+    """Eventually block/unblock widget Qt signals before/after doing some things
+    (enable: True if feature is enabled)"""
+    if enable:
+        widget.blockSignals(True)
+    try:
+        yield
+    finally:
+        if enable:
+            widget.blockSignals(False)

@@ -33,7 +33,7 @@ from qwt import QwtScaleDraw
 
 from codraft.config import APP_NAME, _
 from codraft.core.model.signal import create_signal
-from codraft.utils.qthelpers import exec_dialog
+from codraft.utils.qthelpers import block_signals, exec_dialog
 
 
 def monkeypatch_method(cls, patch_name):
@@ -113,13 +113,10 @@ def select(self):
     """Select item"""
     self.selected = True
     plot = self.plot()
-    if plot is not None:
-        plot.blockSignals(True)
-    pen = self.curveparam.line.build_pen()
-    pen.setWidth(2)
-    self.setPen(pen)
-    if plot is not None:
-        plot.blockSignals(False)
+    with block_signals(widget=plot, enable=plot is not None):
+        pen = self.curveparam.line.build_pen()
+        pen.setWidth(2)
+        self.setPen(pen)
     self.invalidate_plot()
 
 

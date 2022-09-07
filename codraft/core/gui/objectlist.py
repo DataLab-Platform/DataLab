@@ -10,9 +10,12 @@ Object (signal/image) list widgets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import re
+from typing import Tuple
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+
+from codraft.utils.qthelpers import block_signals
 
 
 class SimpleObjectList(QW.QListWidget):
@@ -40,7 +43,7 @@ class SimpleObjectList(QW.QListWidget):
         """Get all objects"""
         return self._objects
 
-    def set_current_row(self, row, extend=False):
+    def set_current_row(self, row, extend=False, refresh=True):
         """Set list widget current row"""
         if row < 0:
             row += self.count()
@@ -48,7 +51,8 @@ class SimpleObjectList(QW.QListWidget):
             command = QC.QItemSelectionModel.Select
         else:
             command = QC.QItemSelectionModel.ClearAndSelect
-        self.setCurrentRow(row, command)
+        with block_signals(widget=self, enable=not refresh):
+            self.setCurrentRow(row, command)
 
     def refresh_list(self, new_current_row=None):
         """
@@ -183,10 +187,10 @@ class ObjectList(SimpleObjectList):
         """Remove all objects"""
         self._objects = []
 
-    def select_rows(self, rows):
+    def select_rows(self, rows: Tuple):
         """Select multiple list widget rows"""
         for index, row in enumerate(sorted(rows)):
-            self.set_current_row(row, extend=index != 0)
+            self.set_current_row(row, extend=index != 0, refresh=row == len(rows) - 1)
 
     def select_all_rows(self):
         """Select all widget rows"""
