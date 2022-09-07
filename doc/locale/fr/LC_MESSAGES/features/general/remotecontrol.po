@@ -1,0 +1,103 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, CODRA - Pierre Raybaut
+# This file is distributed under the same license as the CodraFT package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: CodraFT \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-07 17:45+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/general/remotecontrol.rst:2
+msgid "Remote controlling"
+msgstr "Contrôle à distance"
+
+#: ../../features/general/remotecontrol.rst:4
+msgid ""
+"CodraFT may be controlled remotely using the `XML-RPC`_ protocol which is"
+" natively supported by Python. Remote controlling allows to access "
+"CodraFT main features from a separate process."
+msgstr "CodraFT peut être contrôlé à distance grâce au protocole `XML-RPC`_ qui est nativement pris en charge par Python. Le pilotage à distance permet d'accéder aux fonctionnalités principales de CodraFT depuis un processus séparé."
+
+#: ../../features/general/remotecontrol.rst:18
+msgid "Supported features are the following:"
+msgstr "Les fonctionnalités prises en charge sont les suivantes :"
+
+#: ../../features/general/remotecontrol.rst:9
+msgid "Switch to signal or image panel"
+msgstr "Basculement vers le panneau signal ou image"
+
+#: ../../features/general/remotecontrol.rst:10
+msgid "Remove all signals and images"
+msgstr "Suppression de tous les signaux et images"
+
+#: ../../features/general/remotecontrol.rst:11
+msgid "Save current session to a HDF5 file"
+msgstr "Enregistrement de la session en cours dans un fichier HDF5"
+
+#: ../../features/general/remotecontrol.rst:12
+msgid "Open HDF5 files into current session"
+msgstr "Ouverture de fichers HDF5 dans la session en cours"
+
+#: ../../features/general/remotecontrol.rst:13
+msgid "Browse HDF5 file"
+msgstr "Exploration d'un fichier HDF5"
+
+#: ../../features/general/remotecontrol.rst:14
+msgid "Open a signal or an image from file"
+msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
+
+#: ../../features/general/remotecontrol.rst:15
+msgid "Add a signal"
+msgstr "Ajout d'un signal"
+
+#: ../../features/general/remotecontrol.rst:16
+msgid "Add an image"
+msgstr "Ajout d'une image"
+
+#: ../../features/general/remotecontrol.rst:17
+msgid "Get object list"
+msgstr "Récupération de la liste des objets"
+
+#: ../../features/general/remotecontrol.rst:18
+msgid "Run calculation with parameters"
+msgstr "Exécution d'un calcul avec des paramètres"
+
+#: ../../features/general/remotecontrol.rst:22
+msgid ""
+"Some examples are provided to help implementing such a communication "
+"between your application and CodraFT:"
+msgstr "Des exemples d'utilisation du contrôle à distance sont fournis afin d'aider à l'implémentation de la communication entre votre application et CodraFT :"
+
+#: ../../features/general/remotecontrol.rst:21
+msgid "See ``codraft.tests.remoteclient_app`` module"
+msgstr "Voir ``codraft.tests.remoteclient_app`` module"
+
+#: ../../features/general/remotecontrol.rst:22
+msgid "See ``codraft.tests.remoteclient_unit`` module"
+msgstr "Voir ``codraft.tests.remoteclient_unit`` module"
+
+#: ../../features/general/remotecontrol.rst:26
+msgid ""
+"Screenshot of remote client application test "
+"(``codraft.tests.remoteclient_app``)"
+msgstr "Copie d'écran du test applicatif du contrôle à distance (``codraft.tests.remoteclient_app``)"
+
+#: ../../features/general/remotecontrol.rst:28
+msgid ""
+"When using Python 3, you may directly use the `RemoteClient` class as in "
+"examples cited above."
+msgstr "Avec Python 3, il est possible d'utiliser directement la classe `RemoteClient` comme dans les exemples précités."
+
+#: ../../features/general/remotecontrol.rst:31
+msgid "Here is a Python 2.7 reimplementation of this class:"
+msgstr "Voici de plus un exemple de réimplementation de cette classe en Python 2.7 :"
