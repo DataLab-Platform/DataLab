@@ -286,16 +286,37 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
 
 # === Python 2.7 client side:
-# import xmlrpclib
+#
+# # See doc/codraft_remotecontrol_py27.py for an almost complete Python 2.7
+# # implementation of RemoteClient class
+#
+# import io
+# from xmlrpclib import ServerProxy, Binary
 # import numpy as np
 # def array_to_binary(data):
 #     """Convert NumPy array to XML-RPC Binary object, with shape and dtype"""
-#     dbytes = BytesIO()
+#     dbytes = io.BytesIO()
 #     np.save(dbytes, data, allow_pickle=False)
-#     return xmlrpc.Binary(dbytes.getvalue())
-# s = xmlrpclib.ServerProxy("http://127.0.0.1:8000")
+#     return Binary(dbytes.getvalue())
+# s = ServerProxy("http://127.0.0.1:8000")
 # data = np.array([[3, 4, 5], [7, 8, 0]], dtype=np.uint16)
 # s.add_image("toto", array_to_binary(data))
+
+
+class CodraFTConnectionError(Exception):
+    """Error when trying to connect to CodraFT XML-RPC server"""
+
+
+def get_codraft_xmlrpc_port():
+    """Return CodraFT current XML-RPC port"""
+    #  The following is valid only when using Python 3.8+ with CodraFT installed on the
+    #  client side. In any other situation, please use the `get_codraft_xmlrpc_port`
+    #  function from doc/codraft_remotecontrol_py27.py.
+    initialize()
+    try:
+        return Conf.main.rpc_server_port.get()
+    except RuntimeError:
+        raise CodraFTConnectionError("CodraFT has not yet been executed")
 
 
 class RemoteClient:
@@ -308,11 +329,13 @@ class RemoteClient:
     def connect(self, port=None):
         """Connect to CodraFT XML-RPC server"""
         if port is None:
-            initialize()
-            port = Conf.main.rpc_server_port.get()
+            port = get_codraft_xmlrpc_port()
         self.port = port
         self.serverproxy = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
-        self.get_version()  # Will raise a ConnectionRefusedError if connection failed
+        try:
+            self.get_version()
+        except ConnectionRefusedError:
+            raise CodraFTConnectionError("CodraFT is currently not running")
 
     # === Following methods should match the register functions in XML-RPC server
 

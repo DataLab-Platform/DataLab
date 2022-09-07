@@ -18,7 +18,7 @@ import numpy as np
 from codraft import app
 from codraft.core.gui.processor.signal import XYCalibrateParam
 from codraft.env import execenv
-from codraft.remotecontrol import RemoteClient
+from codraft.remotecontrol import CodraFTConnectionError, RemoteClient
 from codraft.tests.data import create_2d_gaussian, create_test_signal1
 from codraft.utils.tests import exec_script, temporary_directory
 
@@ -59,10 +59,10 @@ def test():
         try:
             remote.connect()
             break
-        except ConnectionRefusedError:
-            time.sleep(.5)
+        except CodraFTConnectionError:
+            time.sleep(0.5)
     else:
-        raise ConnectionRefusedError("Unable to connect to CodraFT")
+        raise CodraFTConnectionError("Unable to connect to CodraFT")
     execenv.print(f"OK (port: {remote.port})")
     execenv.print("Executing multiple commands...", end="")
     multiple_commands(remote)

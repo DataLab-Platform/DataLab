@@ -15,7 +15,7 @@ from random import randint
 
 from codraft import app
 from codraft.config import _
-from codraft.remotecontrol import RemoteClient
+from codraft.remotecontrol import CodraFTConnectionError, RemoteClient
 from codraft.tests import embedded1_unit
 from codraft.tests.logview_app import exec_script
 from codraft.tests.remoteclient_unit import multiple_commands
@@ -40,7 +40,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
                 self.host.log("  List of exposed methods:")
                 for name in self.codraft.serverproxy.system.listMethods():
                     self.host.log(f"    {name}")
-            except ConnectionRefusedError:
+            except CodraFTConnectionError:
                 self.codraft = None
                 self.host.log("🔥 Connection refused 🔥 (server is not ready?)")
 
