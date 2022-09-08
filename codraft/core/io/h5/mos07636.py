@@ -9,6 +9,7 @@ CodraFT MOS07636 HDF5 format support
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 from guidata.utils import update_dataset
+from h5py import Group
 
 from codraft.core.io.h5 import common, utils
 from codraft.core.model.base import ANN_KEY
@@ -58,7 +59,10 @@ class BaseMOS07636Node(common.BaseNode):
     @property
     def data(self):
         """Data associated to node, if available"""
-        return self.dset["valeur"][()]
+        if isinstance(self.dset, Group):
+            return self.dset["valeur"][()]
+        #  This is not a valid dataset according to MOS07636!
+        return self.dset[()]
 
     @property
     def shape_str(self):
@@ -87,19 +91,24 @@ class BaseMOS07636Node(common.BaseNode):
     @property
     def description(self):
         """Return node description"""
-        desc = utils.process_scalar_value(self.dset, "description", utils.fix_ldata)
-        if desc is not None:
-            return desc
+        if isinstance(self.dset, Group):
+            desc = utils.process_scalar_value(self.dset, "description", utils.fix_ldata)
+            if desc is not None:
+                return desc
         return super().description
 
     def create_object(self):
         """Create native object, if supported"""
-        self.xunit, self.yunit, self.zunit = utils.process_label(self.dset, "unite")
-        self.xlabel, self.ylabel, self.zlabel = utils.process_label(self.dset, "label")
+        if isinstance(self.dset, Group):
+            self.xunit, self.yunit, self.zunit = utils.process_label(self.dset, "unite")
+            self.xlabel, self.ylabel, self.zlabel = utils.process_label(
+                self.dset, "label"
+            )
         for label in ("description", "source"):
-            val = utils.process_scalar_value(self.dset, label, utils.fix_ldata)
-            if val is not None:
-                self.metadata[label] = val
+            if isinstance(self.dset, Group):
+                val = utils.process_scalar_value(self.dset, label, utils.fix_ldata)
+                if val is not None:
+                    self.metadata[label] = val
         self.metadata.update(self.__metadata_entries)
 
 
@@ -110,7 +119,8 @@ class ScalarNode(BaseMOS07636Node):
 
     def __init__(self, h5file, dset):
         super().__init__(h5file, dset)
-        self.xunit = utils.process_scalar_value(self.dset, "unite", self._fix_unit)
+        if isinstance(self.dset, Group):
+            self.xunit = utils.process_scalar_value(self.dset, "unite", self._fix_unit)
 
     @staticmethod
     def _fix_unit(scdata):
