@@ -142,7 +142,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     CONF_FMT = Conf.view.ima_format
     DEFAULT_FMT = ".1f"
-    VALID_DTYPES = (np.uint8, np.uint16, np.int16, np.float32, np.float64)
+    VALID_DTYPES = (np.uint8, np.uint16, np.int16, np.int32, np.float32, np.float64)
 
     def __init__(self, title=None, comment=None, icon=""):
         gdt.DataSet.__init__(self, title, comment, icon)
