@@ -10,7 +10,7 @@ Module providing CodraFT Macro editor widget
 import os.path as osp
 
 from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action, create_toolbutton
+from guidata.qthelpers import add_actions, create_action
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -128,15 +128,31 @@ class MacroEditorWidget(QW.QTabWidget):
         self.setCornerWidget(menu_button)
         self.add_macro(rename=False)
 
+    def get_macro(self, index: int = None):
+        """Return macro at index (if index is None, return current macro)"""
+        if index is None:
+            index = self.currentIndex()
+        for macro in self.__macros.values():
+            if self.widget(index) is macro.editor:
+                return macro
+
     def run_macro(self):
         """Run current macro"""
         # XXX: Macros should be executed in a separate process: access to CodraFT
         # is provided by the 'remote_controlling' feature (see corresponding branch).
         # So, macros should be Python scripts similar to "remoteclient_test.py".
         # Connection to the XML-RPC server should be simplified (to a single line).
+        #
+        # Important: an environment variable must contained current CodraFT session
+        # XML-RPC server port number (e.g. "CODRAFT_XMLRPC_PORT"). This allows to
+        # handle the case of multiple instances of CodraFT running at the same time
+        # (each macro will then control the right instance of CodraFT, the one from
+        # which it was executed)
+        macro = self.get_macro()
 
     def stop_macro(self):
         """Stop current macro"""
+        macro = self.get_macro()
 
     def add_macro(self, name: str = None, rename: bool = True):
         """Add macro, optionally with name"""
@@ -146,16 +162,8 @@ class MacroEditorWidget(QW.QTabWidget):
         if rename:
             self.rename_macro(index)
 
-    def get_macro(self, index: int):
-        """Return macro at index"""
-        for macro in self.__macros.values():
-            if self.widget(index) is macro.editor:
-                return macro
-
     def rename_macro(self, index: int = None):
         """Rename macro"""
-        if index is None:
-            index = self.currentIndex()
         macro = self.get_macro(index)
         name, valid = QW.QInputDialog.getText(
             self,
@@ -170,9 +178,11 @@ class MacroEditorWidget(QW.QTabWidget):
 
     def export_macro_to_file(self):
         """Export macro to file"""
+        macro = self.get_macro()
 
     def import_macro_from_file(self):
         """Import macro from file"""
+        macro = self.get_macro()
 
     def remove_macro(self, index: int = None):
         """Remove macro"""
