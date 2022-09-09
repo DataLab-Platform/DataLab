@@ -7,11 +7,21 @@ for future and past milestones.
 
 Bug fixes:
 
+* Panel's object list `select_rows` method: fixed plot refresh behavior in case of
+multiple selection (refresh widget only once)
+* LMJ-formatted HDF5 file: now reading invalid compound datasets
 * [Issue #16](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/16) - Embedding CodraFT: "add_object" method call with invalid data should lead to app crash
   * Panel's `add_object` method (public API): check data type before adding object to
 panel - this prevents CodraFT from crashing when trying to plot invalid data type
 afterwards
   * Now handling exceptions in `add_object` and `insert_object` methods
+* Multigaussian curve fitting: fixed default fit parameters
+* Improved I/O application test with respect to unsupported filetypes
+
+Other changes:
+
+* Images: added support for `numpy.int32` datatype
+* Added unit tests for all curve fitting dialogs
 
 ## Version 2.1.2 ##
 
