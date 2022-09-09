@@ -25,11 +25,11 @@ from codraft.core.gui.processor.base import (
     ThresholdParam,
 )
 from codraft.core.gui.processor.signal import (
-    XYCalibrateParam,
     FWHMParam,
     NormalizeParam,
     PeakDetectionParam,
     PolynomialFitParam,
+    XYCalibrateParam,
 )
 from codraft.core.model.base import UniformRandomParam
 from codraft.core.model.signal import (
@@ -131,6 +131,9 @@ def test_signal_features(win: CodraFTMainWindow, data_size: int = 500) -> None:
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     test_common_operations(panel)
+
+    win.add_object(create_test_signal1(data_size))
+
     param = NormalizeParam()
     for _name, method in param.methods:
         param.method = method
