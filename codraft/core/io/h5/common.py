@@ -42,7 +42,7 @@ class BaseNode(metaclass=abc.ABCMeta):
     @property
     def name(self):
         """Return node name, constructed from dataset name"""
-        return self.dset.name.split("/")[-1]
+        return to_string(self.dset.name).split("/")[-1]
 
     @property
     def data(self):
@@ -194,7 +194,7 @@ class NodeFactory:
 
     def get(self, dset):
         """Return node class that matches h5 dataset"""
-        for name in dset.name.split("/"):
+        for name in to_string(dset.name).split("/"):
             if name in self.__ignored_datasets:
                 return None
         for cls in self.__thirdparty_classes + self.__generic_classes:

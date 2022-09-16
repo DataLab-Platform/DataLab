@@ -29,6 +29,7 @@ from codraft.config import _
 from codraft.core.io.h5 import H5Importer
 from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
+from codraft.utils.misc import to_string
 from codraft.utils.qthelpers import qt_handle_error_message
 
 
@@ -289,7 +290,7 @@ class H5TreeWidget(BaseTreeWidget):
 
     @staticmethod
     def __create_node(node):
-        text = node.text
+        text = to_string(node.text)
         if text:
             lines = text.splitlines()[:5]
             if len(lines) == 5:

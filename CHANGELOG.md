@@ -3,6 +3,12 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
+## Version 2.1.4 ##
+
+Bug fixes:
+
+* HDF5 import/browser features: added support for non-ASCII dataset names
+
 ## Version 2.1.3 ##
 
 Bug fixes:
