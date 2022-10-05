@@ -22,9 +22,20 @@ from codraft.config import _
 # ==============================================================================
 # SIF I/O functions
 # ==============================================================================
+# Original code:
+# --------------
 # Zhenpeng Zhou <zhenp3ngzhou cir{a} gmail dot com>
 # Copyright 2017 Zhenpeng Zhou
 # Licensed under MIT License Terms
+#
+# Changes:
+# -------
+# * Calculating header length using the line beginning with "Counts"
+# * Calculating wavelenght info line number using line starting with "65538 "
+# * Handling wavelenght info line ending with "NM"
+# * Calculating data offset by detecting the first line containing NUL character after
+#   header
+#
 class SIFFile:
     """
     A class that reads the contents and metadata of an Andor .sif file.
@@ -127,11 +138,13 @@ class SIFFile:
     def _read_header(self, filepath):
         """Read SIF file header"""
         with open(filepath, "rb") as sif_file:
-            headerlen = 32
-            spool = 0
+            i_wavelength_info = None
+            headerlen = None
             i = 0
-            while i < headerlen + spool:
-                line = sif_file.readline().strip()
+            self.m_offset = 0
+            while True:
+                raw_line = sif_file.readline()
+                line = raw_line.strip()
                 if i == 0:
                     if line != b"Andor Technology Multi-Channel File":
                         sif_file.close()
@@ -151,43 +164,45 @@ class SIFFile:
                     self.model = line.decode("utf-8")
                 elif i == 5:
                     self.original_filename = line.decode("utf-8")
-                elif i == 7:
-                    tokens = line.split()
-                    if len(tokens) >= 1 and tokens[0] == "Spooled":
-                        spool = 1
-                if i == 9:
+                if i_wavelength_info is None and i > 7:
+                    if line.startswith(b"65538 ") and len(line) == 17:
+                        i_wavelength_info = i + 1
+                if i_wavelength_info is not None and i == i_wavelength_info:
                     wavelength_info = line.split()
                     self.center_wavelength = float(wavelength_info[3])
                     self.grating = float(wavelength_info[6])
-                    self.grating_blaze = float(wavelength_info[7])
-                #            if i == 19:
-                #                self.wavelength_coefficients = [float(num) for num
-                #                                                in line.split()][::-1]
-                if 7 < i < headerlen - 12:
-                    if len(line) == 17 and line[0:6] == b"65539 ":
-                        # and line[7] == b'x01' and line[8] == b'x20' \
-                        # and line[9] == b'x00':
-                        headerlen = i + 12
-                if i == headerlen - 2:
-                    if line[:12] == b"Pixel number":
-                        line = line[12:]
-                    tokens = line.split()
-                    if len(tokens) < 6:
-                        raise Exception("Not able to read stacksize.")
-                    self.yres = int(tokens[2])
-                    self.xres = int(tokens[3])
-                    self.stacksize = int(tokens[5])
-                elif i == headerlen - 1:
-                    tokens = line.split()
-                    if len(tokens) < 7:
-                        raise Exception("Not able to read Image dimensions.")
-                    self.left = int(tokens[1])
-                    self.top = int(tokens[2])
-                    self.right = int(tokens[3])
-                    self.bottom = int(tokens[4])
-                    self.xbin = int(tokens[5])
-                    self.ybin = int(tokens[6])
+                    blaze = wavelength_info[7]
+                    if blaze.endswith(b"NM"):
+                        blaze = blaze[:-2]
+                    self.grating_blaze = float(blaze)
+                if headerlen is None:
+                    if line.startswith(b"Counts"):
+                        headerlen = i + 3
+                else:
+                    if i == headerlen - 2:
+                        if line[:12] == b"Pixel number":
+                            line = line[12:]
+                        tokens = line.split()
+                        if len(tokens) < 6:
+                            raise Exception("Not able to read stacksize.")
+                        self.yres = int(tokens[2])
+                        self.xres = int(tokens[3])
+                        self.stacksize = int(tokens[5])
+                    elif i == headerlen - 1:
+                        tokens = line.split()
+                        if len(tokens) < 7:
+                            raise Exception("Not able to read Image dimensions.")
+                        self.left = int(tokens[1])
+                        self.top = int(tokens[2])
+                        self.right = int(tokens[3])
+                        self.bottom = int(tokens[4])
+                        self.xbin = int(tokens[5])
+                        self.ybin = int(tokens[6])
+                    elif i >= headerlen:
+                        if b"\x00" in line:
+                            break
                 i += 1
+                self.m_offset += len(raw_line)
 
         width = self.right - self.left + 1
         mod = width % self.xbin
@@ -198,10 +213,6 @@ class SIFFile:
 
         self.filesize = os.path.getsize(filepath)
         self.datasize = self.width * self.height * 4 * self.stacksize
-        self.m_offset = self.filesize - self.datasize - 8
-
-    #        self.x_axis = np.polyval(self.wavelength_coefficients,
-    #                                 np.arange(self.left, self.right + 1))
 
     def read_all(self):
         """
