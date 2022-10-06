@@ -17,6 +17,7 @@ import numpy as np
 from guiqwt.io import _imread_pil, _imwrite_pil, iohandler
 
 from codraft.config import _
+from codraft.utils.misc import to_string
 
 
 # ==============================================================================
@@ -161,9 +162,9 @@ class SIFFile:
                     self.vertical_shift_speed = float(tokens[41])
                     self.pre_amp_gain = float(tokens[43])
                 elif i == 3:
-                    self.model = line.decode("utf-8")
+                    self.model = to_string(line)
                 elif i == 5:
-                    self.original_filename = line.decode("utf-8")
+                    self.original_filename = to_string(line)
                 if i_wavelength_info is None and i > 7:
                     if line.startswith(b"65538 ") and len(line) == 17:
                         i_wavelength_info = i + 1
