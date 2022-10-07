@@ -42,6 +42,14 @@ set /p %1=<_tmp_.txt
 del _tmp_.txt
 goto:eof
 
+:GetVersionWithoutAlphaBeta
+call:GetModName MODNAME
+call:SetPythonPath
+echo import %MODNAME%;ver=%MODNAME%.__version__;print(ver.split("b")[0] if "b" in ver else ver.split("a")[0] if "a" in ver else ver) | python > _tmp_.txt
+set /p %1=<_tmp_.txt
+del _tmp_.txt
+goto:eof
+
 :SetPythonPath
 set ORIGINAL_PYTHONPATH=%PYTHONPATH%
 cd %~dp0..

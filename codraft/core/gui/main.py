@@ -159,6 +159,39 @@ class CodraFTMainWindow(QW.QMainWindow):
             return answer == QW.QMessageBox.Yes
         return True
 
+    def check_stable_release(self):  # pragma: no cover
+        """Check if this is a stable release"""
+        if __version__.replace(".", "").isdigit():
+            # This is a stable release
+            return
+        if "b" in __version__:
+            # This is a beta release
+            rel = _(
+                "This software is in the <b>beta stage</b> of its release cycle. "
+                "The focus of beta testing is providing a feature complete "
+                "software for users interested in trying new features before "
+                "the final release. However, <u>beta software may not behave as "
+                "expected and will probably have more bugs or performance issues "
+                "than completed software</u>."
+            )
+        else:
+            # This is an alpha release
+            rel = _(
+                "This software is in the <b>alpha stage</b> of its release cycle. "
+                "The focus of alpha testing is providing an incomplete software "
+                "for early testing of specific features by users. "
+                "Please note that <u>alpha software was not thoroughly tested</u> "
+                "by the developer before it is released."
+            )
+        txtlist = [
+            f"<b>{APP_NAME}</b> v{__version__}:",
+            "",
+            _("<i>This is not a stable release.</i>"),
+            "",
+            rel,
+        ]
+        QW.QMessageBox.warning(self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok)
+
     def check_dependencies(self):  # pragma: no cover
         """Check dependencies"""
         if is_frozen("codraft") or Conf.main.ignore_dependency_check.get(False):
@@ -695,6 +728,7 @@ class CodraFTMainWindow(QW.QMainWindow):
     # ------?
     def __about(self):  # pragma: no cover
         """About dialog box"""
+        self.check_stable_release()
         QW.QMessageBox.about(
             self,
             _("About ") + APP_NAME,
