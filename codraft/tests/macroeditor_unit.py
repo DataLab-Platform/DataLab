@@ -7,8 +7,8 @@
 Macro editor test
 """
 
+from codraft.core.gui.macroeditor import DockableMacroEditor
 from codraft.utils.qthelpers import qt_app_context
-from codraft.widgets.macroeditor import MacroEditorWidget
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -16,7 +16,7 @@ SHOW = True  # Show test in GUI-based test launcher
 def test_macro_editor():
     """Test dep viewer window"""
     with qt_app_context(exec_loop=True):
-        widget = MacroEditorWidget()
+        widget = DockableMacroEditor()
         widget.show()
 
 

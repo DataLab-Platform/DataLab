@@ -16,6 +16,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from codraft.config import _
+from codraft.core.gui.docks import DockableTabWidget
 
 UNTITLED_NB = 0
 
@@ -45,7 +46,7 @@ class Macro(QC.QObject):
         return f"untitled{UNTITLED_NB:2d}"
 
 
-class MacroEditorWidget(QW.QTabWidget):
+class DockableMacroEditor(DockableTabWidget):
     """Macro editor widget"""
 
     def __init__(self, parent: QW.QWidget = None):
@@ -120,12 +121,19 @@ class MacroEditorWidget(QW.QTabWidget):
             None,
             rem_act,
         )
+
+        toolbar = QW.QToolBar(_("Macro editor toolbar"), self)
+        add_actions(toolbar, [run_act, stp_act, None])
+
         menu_button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", self)
         menu_button.setFlat(True)
         menu = QW.QMenu()
         menu_button.setMenu(menu)
         add_actions(menu, actions)
-        self.setCornerWidget(menu_button)
+
+        toolbar.addWidget(menu_button)
+        self.setCornerWidget(toolbar)
+
         self.add_macro(rename=False)
 
     def get_macro(self, index: int = None):

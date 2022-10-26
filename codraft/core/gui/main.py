@@ -39,6 +39,7 @@ from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.actionhandler import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
 from codraft.core.gui.h5io import H5InputOutput
+from codraft.core.gui.macroeditor import DockableMacroEditor
 from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
@@ -107,6 +108,8 @@ class CodraFTMainWindow(QW.QMainWindow):
 
         self.console = None
         self.app_proxy = None
+        self.macro_editor = None
+
         self.signal_toolbar = None
         self.image_toolbar = None
         self.signalpanel = None
@@ -300,6 +303,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         # Update selection dependent actions
         self.__update_actions()
         self.signal_image_docks[0].raise_()
+        self.__add_macroeditor()
 
     def __setup_commmon_actions(self):
         """Setup common actions"""
@@ -516,6 +520,14 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.refresh_lists()
         )
+
+    def __add_macroeditor(self):
+        """Setup macro editor"""
+        self.macro_editor = DockableMacroEditor()
+        macro_dock = self.__add_dockwidget(self.macro_editor, _("Macro editor"))
+        sig_dock, ima_dock = self.signal_image_docks
+        self.tabifyDockWidget(ima_dock, macro_dock)
+        sig_dock.raise_()
 
     # ------GUI refresh
     def has_objects(self):
