@@ -9,6 +9,7 @@ CodraFT main window
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+import functools
 import locale
 import os
 import os.path as osp
@@ -23,6 +24,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import __version__ as guidata_ver
 from guidata.configtools import get_icon, get_module_data_path, get_module_path
+from guidata.dataset import datatypes as gdt
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from guiqwt import __version__ as guiqwt_ver
@@ -44,6 +46,7 @@ from codraft.core.gui.panel import ImagePanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
+from codraft.remotecontrol import RemoteServer
 from codraft.utils import dephash
 from codraft.utils import qthelpers as qth
 from codraft.widgets.instconfviewer import exec_codraft_installconfig_dialog
@@ -80,10 +83,35 @@ def is_frozen(module_name):
     return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
 
 
+def remote_controlled(func):
+    """Decorator for remote-controlled methods"""
+
+    @functools.wraps(func)
+    def method_wrapper(*args, **kwargs):
+        """Decorator wrapper function"""
+        win = args[0]  # extracting 'self' from method arguments
+        already_busy = not win.ready_flag
+        win.ready_flag = False
+        try:
+            output = func(*args, **kwargs)
+        finally:
+            if not already_busy:
+                win.SIG_READY.emit()
+                win.ready_flag = True
+            QW.QApplication.processEvents()
+        return output
+
+    return method_wrapper
+
+
 class CodraFTMainWindow(QW.QMainWindow):
     """CodraFT main window"""
 
     __instance = None
+
+    SIG_READY = QC.Signal()
+    SIG_SEND_OBJECT = QC.Signal(object)
+    SIG_SEND_OBJECTLIST = QC.Signal(object)
 
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
@@ -100,6 +128,8 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("codraft.svg"))
         self.__restore_pos_and_size()
+
+        self.ready_flag = True
 
         self.hide_on_close = hide_on_close
         self.__old_size = None
@@ -134,11 +164,34 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.__is_modified = None
         self.set_modified(False)
 
+        # Starting XML-RPC server thread
+        self.remote_server = RemoteServer(self)
+        if Conf.main.rpc_server_enabled.get(True):
+            self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
+            self.remote_server.start()
+
         # Setup actions and menus
         if console is None:
             console = Conf.console.enable.get(True)
         self.setup(console)
 
+    # ------API related to XML-RPC remote control
+    @staticmethod
+    def xmlrpc_server_started(port):
+        """XML-RPC server has started, writing comm port in configuration file"""
+        Conf.main.rpc_server_port.set(port)
+
+    def get_object_list(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        panel = self.tabwidget.currentWidget()
+        return panel.objlist.get_titles()
+
+    def get_object(self, index: str):
+        """Get object (signal/image) at index for current panel"""
+        panel = self.tabwidget.currentWidget()
+        return panel.objlist[index]
+
+    # ------Misc.
     @property
     def panels(self):
         """Return the tuple of implemented panels (signal, image)"""
@@ -380,13 +433,30 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return imagewidget
 
+    @remote_controlled
     def switch_to_signal_panel(self):
         """Switch to signal panel"""
         self.tabwidget.setCurrentWidget(self.signalpanel)
 
+    @remote_controlled
     def switch_to_image_panel(self):
         """Switch to image panel"""
         self.tabwidget.setCurrentWidget(self.imagepanel)
+
+    @remote_controlled
+    def calc(self, name: str, param: gdt.DataSet = None):
+        """Call compute function `name` in current panel's processor"""
+        panel = self.tabwidget.currentWidget()
+        for funcname in (name, f"compute_{name}"):
+            func = getattr(panel.processor, funcname, None)
+            if func is not None:
+                break
+        else:
+            raise ValueError(f"Unknown function {funcname}")
+        if param is None:
+            func()
+        else:
+            func(param)
 
     def __add_tabwidget(self, curvewidget, imagewidget):
         """Setup tabwidget with signals and images"""
@@ -604,6 +674,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
 
     # ------Common features
+    @remote_controlled
     def reset_all(self):
         """Reset all application data"""
         for panel in self.panels:
@@ -621,6 +692,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         Conf.main.base_dir.set(filename)
         return filename
 
+    @remote_controlled
     def save_to_h5_file(self, filename=None):
         """Save to a CodraFT HDF5 file"""
         if filename is None:
@@ -635,6 +707,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.h5inputoutput.save_file(filename)
             self.set_modified(False)
 
+    @remote_controlled
     def open_h5_files(
         self,
         h5files: List[str] = None,
@@ -684,6 +757,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                         self.h5inputoutput.import_dataset_from_file(filename, dsetname)
             reset_all = False
 
+    @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
         """Open CodraFT HDF5 browser to Import HDF5 file
 
@@ -694,6 +768,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             filename = self.__check_h5file(filename, "load")
             self.h5inputoutput.import_file(filename, False, reset_all)
 
+    @remote_controlled
     def add_object(self, obj, refresh=True):
         """Add object - signal or image"""
         if self.confirm_memory_state():
@@ -704,9 +779,20 @@ class CodraFTMainWindow(QW.QMainWindow):
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
+    @remote_controlled
+    def open_object(self, filename: str) -> None:
+        """Open object from file in current panel (signal/image)"""
+        panel = self.tabwidget.currentWidget()
+        panel.open_object(filename)
+
     # ------?
     def __about(self):  # pragma: no cover
         """About dialog box"""
+        if self.remote_server.port is None:
+            xrpcstate = _("not started")
+        else:
+            xrpcstate = _("started (port %s)") % self.remote_server.port
+        xml_rpc = _("XML-RPC server: ") + xrpcstate
         QW.QMessageBox.about(
             self,
             _("About ") + APP_NAME,
@@ -716,7 +802,7 @@ class CodraFTMainWindow(QW.QMainWindow):
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               %s {platform.system()}"""
+               %s {platform.system()}<br><br>{xml_rpc}"""
             % (_("Developped by"), _("on")),
         )
 

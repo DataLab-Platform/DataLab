@@ -40,6 +40,10 @@ class SimpleObjectList(QW.QListWidget):
         """Get all objects"""
         return self._objects
 
+    def get_titles(self):
+        """Get object titles as diplayed in QListWidget"""
+        return [self.item(row).text() for row in range(self.count())]
+
     def set_current_row(self, row, extend=False):
         """Set list widget current row"""
         if row < 0:
