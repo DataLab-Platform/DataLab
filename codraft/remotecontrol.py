@@ -25,6 +25,7 @@ from codraft.config import Conf, initialize
 from codraft.core.io.base import NativeJSONReader, NativeJSONWriter
 from codraft.core.model.image import create_image
 from codraft.core.model.signal import SignalParam, create_signal
+from codraft.env import execenv
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
@@ -336,6 +337,20 @@ class RemoteClient:
             self.get_version()
         except ConnectionRefusedError:
             raise CodraFTConnectionError("CodraFT is currently not running")
+
+    def try_and_connect(self, port=None, timeout=5):
+        """Try (10 times over timeout in s.) and connect to CodraFT XML-RPC server"""
+        execenv.print("Connecting to CodraFT XML-RPC server...", end="")
+        retries = 10
+        for _index in range(retries):
+            try:
+                self.connect(port=port)
+                break
+            except CodraFTConnectionError:
+                time.sleep(timeout / retries)
+        else:
+            raise CodraFTConnectionError("Unable to connect to CodraFT")
+        execenv.print(f"OK (port: {self.port})")
 
     # === Following methods should match the register functions in XML-RPC server
 
