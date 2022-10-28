@@ -33,14 +33,17 @@ import dataclasses
 import os.path as osp
 import re
 import warnings
-from typing import List
+from typing import Iterator, List
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
-from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions
+from guidata.config import CONF
+from guidata.configtools import get_font, get_icon
+from guidata.qthelpers import add_actions, create_action, is_dark_mode
+from guidata.qtwidgets import DockableWidgetMixin
 from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
+from guidata.widgets.console.shell import PythonShellWidget
 from guiqwt.io import imread, imwrite, iohandler
 from guiqwt.plot import CurveDialog, ImageDialog
 from guiqwt.tools import (
@@ -61,7 +64,8 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
 from codraft.config import APP_NAME, Conf, _
-from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
+from codraft.core.gui import ObjItf, actionhandler, objectlist, plotitemlist, roieditor
+from codraft.core.gui.macroeditor import Macro
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
 from codraft.core.io.signal import read_signal, write_signal
@@ -115,11 +119,77 @@ class ObjectProp(QW.QWidget):
         self.properties.get()
 
 
-class BasePanelMeta(type(QW.QSplitter), abc.ABCMeta):
+class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
+class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
+    """Object defining CodraFT panel interface, based on a vertical QSplitter widget
+
+    A panel handle an object list (objects are signals, images, macros, ...).
+    Each object must implement ``codraft.core.gui.ObjItf`` interface
+    """
+
+    PREFIX = ""  # e.g. "s"
+    H5_PREFIX = ""
+    SIG_OBJECT_ADDED = QC.Signal()
+    SIG_OBJECT_REMOVED = QC.Signal()
+
+    @abc.abstractmethod
+    def __init__(self, parent):
+        super().__init__(QC.Qt.Vertical, parent)
+        self.setObjectName(self.PREFIX)
+
+    @property
+    @abc.abstractmethod
+    def object_number(self):
+        """Return object number"""
+
+    @abc.abstractmethod
+    def object_iterator(self) -> Iterator[ObjItf]:
+        """Iterate over objects handled by panel"""
+
+    @abc.abstractmethod
+    def create_object(self, title=None) -> ObjItf:
+        """Create and return object
+
+        :param str title: Title of the object
+        """
+
+    @abc.abstractmethod
+    def add_object(self, obj, refresh=True) -> ObjItf:
+        """Add object
+
+        :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
+        self.SIG_OBJECT_ADDED.emit()
+        return obj
+
+    @abc.abstractmethod
+    def remove_all_objects(self):
+        """Remove all objects"""
+        self.SIG_OBJECT_REMOVED.emit()
+
+    def serialize_to_hdf5(self, writer):
+        """Serialize objects to a HDF5 file"""
+        with writer.group(self.H5_PREFIX):
+            for idx, obj in enumerate(self.object_iterator()):
+                title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
+                name = f"{self.PREFIX}{idx:03d}: {title}"
+                with writer.group(name):
+                    obj.serialize(writer)
+
+    def deserialize_from_hdf5(self, reader):
+        """Deserialize objects from a HDF5 file"""
+        with reader.group(self.H5_PREFIX):
+            for name in reader.h5.get(self.H5_PREFIX, []):
+                obj = self.create_object()
+                with reader.group(name):
+                    obj.deserialize(reader)
+                    self.add_object(obj)
+                    QW.QApplication.processEvents()
+
+
+class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
@@ -134,12 +204,8 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         RectangleTool,
     )
     DIALOGSIZE = (800, 600)
-    PREFIX = ""  # e.g. "s"
     OPEN_FILTERS = ""  # Qt file open dialog filters
-    H5_PREFIX = ""
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
-    SIG_OBJECT_ADDED = QC.Signal()
-    SIG_OBJECT_REMOVED = QC.Signal()
     SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to row number
     SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected rows
     ROIDIALOGOPTIONS = {}
@@ -147,8 +213,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     @abc.abstractmethod
     def __init__(self, parent, plotwidget, toolbar):
-        super().__init__(QC.Qt.Vertical, parent)
-        self.setObjectName(self.PREFIX)
+        super().__init__(parent)
         self.mainwindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objlist = objectlist.ObjectList(self)
@@ -159,6 +224,54 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.context_menu = QW.QMenu()
         self.__separate_views = {}
 
+    # ------AbstractPanel interface-----------------------------------------------------
+    @property
+    def object_number(self):
+        """Return object number"""
+        return len(self.objlist)
+
+    def object_iterator(self) -> Iterator[ObjItf]:
+        """Iterate over objects handled by panel"""
+        return iter(self.objlist)
+
+    def remove_all_objects(self):
+        """Remove all objects"""
+        for dlg in self.__separate_views:
+            dlg.done(QW.QDialog.DialogCode.Rejected)
+        self.objlist.remove_all()
+        self.itmlist.remove_all()
+        self.objlist.refresh_list(0)
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
+        super().remove_all_objects()
+
+    def create_object(self, title=None):
+        """Create object (signal or image)
+
+        :param str title: Title of the object
+        """
+        # TODO: [P2] Add default signal/image visualization settings
+        # 1. Initialize here (at object creation) metadata with default settings
+        #    (see guiqwt.styles.CurveParam and ImageParam for inspiration)
+        # 2. Add a dialog box to edit default settings in main window
+        #    (use a guidata dataset with only a selection of items from guiqwt.styles
+        #     classes)
+        # 3. Update all active objects when settings were changed
+        # 4. Persist settings in .INI configuration file
+        obj = self.PARAMCLASS(title=title)
+        obj.title = title
+        return obj
+
+    def add_object(self, obj, refresh=True) -> ObjItf:
+        """Add object
+
+        :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
+        self.objlist.append(obj)
+        self.itmlist.append(None)
+        if refresh:
+            self.objlist.refresh_list(-1)
+        return super().add_object(obj, refresh=refresh)
+
+    # ---- Signal/Image Panel API ------------------------------------------------------
     def setup_panel(self):
         """Setup panel"""
         self.processor.SIG_ADD_SHAPE.connect(self.itmlist.add_shapes)
@@ -191,31 +304,6 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.context_menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def create_object(self, title=None):
-        """Create object (signal or image)
-
-        :param str title: Title of the object
-        """
-        # TODO: [P2] Add default signal/image visualization settings
-        # 1. Initialize here (at object creation) metadata with default settings
-        #    (see guiqwt.styles.CurveParam and ImageParam for inspiration)
-        # 2. Add a dialog box to edit default settings in main window
-        #    (use a guidata dataset with only a selection of items from guiqwt.styles
-        #     classes)
-        # 3. Update all active objects when settings were changed
-        # 4. Persist settings in .INI configuration file
-        obj = self.PARAMCLASS(title=title)
-        obj.title = title
-        return obj
-
-    def add_object(self, obj, refresh=True):
-        """Add signal/image object and return associated plot item"""
-        self.objlist.append(obj)
-        item = self.itmlist.append(None)
-        if refresh:
-            self.objlist.refresh_list(-1)
-        self.SIG_OBJECT_ADDED.emit()
-        return item
 
     # TODO: [P2] New feature: move objects up/down
     def insert_object(self, obj, row, refresh=True):
@@ -286,7 +374,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
 
     def delete_all_objects(self):  # pragma: no cover
         """Confirm before removing all objects"""
-        if len(self.objlist) == 0:
+        if self.object_number == 0:
             return
         answer = QW.QMessageBox.warning(
             self,
@@ -296,16 +384,6 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         )
         if answer == QW.QMessageBox.Yes:
             self.remove_all_objects()
-
-    def remove_all_objects(self):
-        """Remove all signal/image objects"""
-        for dlg in self.__separate_views:
-            dlg.done(QW.QDialog.DialogCode.Rejected)
-        self.objlist.remove_all()
-        self.itmlist.remove_all()
-        self.objlist.refresh_list(0)
-        self.SIG_UPDATE_PLOT_ITEMS.emit()
-        self.SIG_OBJECT_REMOVED.emit()
 
     def delete_metadata(self):
         """Delete object metadata"""
@@ -388,26 +466,6 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
                 obj.export_metadata_to_file(filename)
-
-    # ------Serializing/deserializing objects-------------------------------------------
-    def serialize_to_hdf5(self, writer):
-        """Serialize objects to a HDF5 file"""
-        with writer.group(self.H5_PREFIX):
-            for idx, obj in enumerate(self.objlist):
-                title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-                name = f"{self.PREFIX}{idx:03d}: {title}"
-                with writer.group(name):
-                    obj.serialize(writer)
-
-    def deserialize_from_hdf5(self, reader):
-        """Deserialize objects from a HDF5 file"""
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                obj = self.PARAMCLASS()
-                with reader.group(name):
-                    obj.deserialize(reader)
-                    self.add_object(obj)
-                    QW.QApplication.processEvents()
 
     # ------Refreshing GUI--------------------------------------------------------------
     def current_item_changed(self, row):
@@ -651,7 +709,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             QW.QMessageBox.information(self, APP_NAME, msg)
 
 
-class SignalPanel(BasePanel):
+class SignalPanel(BaseDataPanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Signal objects"""
 
@@ -715,7 +773,7 @@ class SignalPanel(BasePanel):
                 write_signal(obj, filename)
 
 
-class ImagePanel(BasePanel):
+class ImagePanel(BaseDataPanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Image objects"""
 
@@ -823,3 +881,294 @@ class ImagePanel(BasePanel):
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
+
+
+class MacroTabs(QW.QTabWidget):
+    """Macro tabwidget"""
+
+    SIG_CONTEXT_MENU = QC.Signal(QC.QPoint)
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setTabsClosable(True)
+        self.setMovable(True)
+
+    def contextMenuEvent(self, event):  # pylint: disable=C0103
+        """Override Qt method"""
+        self.SIG_CONTEXT_MENU.emit(event.globalPos())
+
+
+class MacroPanel(AbstractPanel, DockableWidgetMixin):
+    """Macro manager widget"""
+
+    LOCATION = QC.Qt.LeftDockWidgetArea
+
+    PREFIX = "m"
+    H5_PREFIX = "CodraFT_Mac"
+
+    SIG_OBJECT_MODIFIED = QC.Signal()
+
+    def __init__(self, parent: QW.QWidget = None):
+        super().__init__(parent)
+        self.setWindowTitle(_("Macro manager"))
+        self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
+        self.setOrientation(QC.Qt.Vertical)
+
+        self.context_menu = QW.QMenu()
+
+        self.console = PythonShellWidget(self)
+        self.console.set_light_background(not is_dark_mode())
+        self.console.setMaximumBlockCount(5000)
+        font = get_font(CONF, "console")
+        font.setPointSize(10)
+        self.console.set_font(font)
+        self.console.write(_("-***- Macro Console -***-"), prompt=True)
+
+        self.tabwidget = MacroTabs(self)
+        self.tabwidget.tabBarDoubleClicked.connect(self.rename_macro)
+        self.tabwidget.tabCloseRequested.connect(self.remove_macro)
+        self.tabwidget.currentChanged.connect(self.current_macro_changed)
+
+        for widget in (self.tabwidget, self.console):
+            self.addWidget(widget)
+
+        self.run_action = None
+        self.stop_action = None
+        self.obj_actions = []  # Object-dependent actions
+        self.__macros = {}
+
+        # TODO: Add action "Import from file..."
+        # TODO: Add action "Export to file..."
+
+        self.setup_actions()
+
+    # ------AbstractPanel interface-----------------------------------------------------
+    @property
+    def object_number(self):
+        """Return object number"""
+        return len(self.__macros)
+
+    def object_iterator(self) -> Iterator[ObjItf]:
+        """Iterate over objects handled by panel"""
+        return iter(self.__macros.values())
+
+    def remove_all_objects(self):
+        """Remove all objects"""
+        while self.tabwidget.count() > 0:
+            self.tabwidget.removeTab(0)
+        super().remove_all_objects()
+
+    def create_object(self, title=None):
+        """Create object
+
+        :param str title: Title of the object
+        """
+        macro = Macro(self.console, title)
+        macro.objectNameChanged.connect(self.macro_name_changed)
+        macro.STARTED.connect(
+            lambda orig_macro=macro: self.macro_state_changed(orig_macro, True)
+        )
+        macro.FINISHED.connect(
+            lambda orig_macro=macro: self.macro_state_changed(orig_macro, False)
+        )
+        macro.MODIFIED.connect(self.macro_contents_changed)
+        return macro
+
+    def add_object(self, obj: Macro, refresh: bool = True) -> ObjItf:
+        """Add object
+
+        :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
+        self.tabwidget.addTab(obj.editor, obj.title)
+        self.__macros[id(obj)] = obj
+        return super().add_object(obj, refresh=refresh)
+
+    # ---- Macro panel API -------------------------------------------------------------
+    def setup_actions(self):
+        """Setup macro menu actions"""
+        self.run_action = create_action(
+            self,
+            _("Run macro"),
+            icon=get_icon("libre-camera-flash-on.svg"),
+            triggered=self.run_macro,
+            shortcut="Ctrl+F5",
+        )
+        self.stop_action = create_action(
+            self,
+            _("Stop macro"),
+            icon=get_icon("libre-camera-flash-off.svg"),
+            triggered=self.stop_macro,
+            shortcut="Shift+F5",
+        )
+        self.stop_action.setDisabled(True)
+        add_act = create_action(
+            self,
+            _("New macro"),
+            icon=get_icon("libre-gui-add.svg"),
+            triggered=self.add_macro,
+        )
+        ren_act = create_action(
+            self,
+            _("Rename macro"),
+            icon=get_icon("libre-gui-pencil.svg"),
+            triggered=self.rename_macro,
+        )
+        exp_act = create_action(
+            self,
+            _("Export macro to file"),
+            icon=get_icon("libre-gui-export.svg"),
+            triggered=self.export_macro_to_file,
+        )
+        imp_act = create_action(
+            self,
+            _("Import macro from file"),
+            icon=get_icon("libre-gui-import.svg"),
+            triggered=self.import_macro_from_file,
+        )
+        rem_act = create_action(
+            self,
+            _("Remove macro"),
+            icon=get_icon("libre-gui-action-delete.svg"),
+            triggered=self.remove_macro,
+        )
+        actions = (
+            self.run_action,
+            self.stop_action,
+            None,
+            add_act,
+            ren_act,
+            exp_act,
+            imp_act,
+            None,
+            rem_act,
+        )
+        self.obj_actions += [
+            self.run_action,
+            self.stop_action,
+            ren_act,
+            exp_act,
+            rem_act,
+        ]
+
+        self.tabwidget.SIG_CONTEXT_MENU.connect(self.__popup_contextmenu)
+
+        toolbar = QW.QToolBar(_("Macro editor toolbar"), self)
+        menu_button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", self)
+        menu_button.setFlat(True)
+        menu_button.setMenu(self.context_menu)
+        toolbar.addWidget(menu_button)
+        self.tabwidget.setCornerWidget(toolbar)
+
+        add_actions(toolbar, [self.run_action, self.stop_action, None])
+        add_actions(self.context_menu, actions)
+
+    def __popup_contextmenu(self, position: QC.QPoint):  # pragma: no cover
+        """Popup context menu at position"""
+        not_empty = self.tabwidget.count() > 0
+        for action in self.obj_actions:
+            action.setEnabled(not_empty)
+        if not_empty:
+            self.current_macro_changed()
+        self.context_menu.popup(position)
+
+    def get_macro(self, index: int = None) -> Macro:
+        """Return macro at index (if index is None, return current macro)"""
+        if index is None:
+            index = self.tabwidget.currentIndex()
+        for macro in self.__macros.values():
+            if self.tabwidget.widget(index) is macro.editor:
+                return macro
+        return None
+
+    def current_macro_changed(self, index: int = None):  # pylint: disable=W0613
+        """Current macro has changed"""
+        macro = self.get_macro()
+        if macro is not None:
+            state = macro.is_running()
+            self.macro_state_changed(macro, state)
+
+    def macro_contents_changed(self):
+        """One of the macro contents has changed"""
+        self.SIG_OBJECT_MODIFIED.emit()
+
+    def run_macro(self):
+        """Run current macro"""
+        # XXX: Macros should be executed in a separate process: access to CodraFT
+        # is provided by the 'remote_controlling' feature (see corresponding branch).
+        # So, macros should be Python scripts similar to "remoteclient_test.py".
+        # Connection to the XML-RPC server should be simplified (to a single line).
+        #
+        # Important: an environment variable must contained current CodraFT session
+        # XML-RPC server port number (e.g. "CODRAFT_XMLRPC_PORT"). This allows to
+        # handle the case of multiple instances of CodraFT running at the same time
+        # (each macro will then control the right instance of CodraFT, the one from
+        # which it was executed)
+        macro = self.get_macro()
+        macro.run()
+
+    def stop_macro(self):
+        """Stop current macro"""
+        macro = self.get_macro()
+        macro.kill()
+
+    def macro_state_changed(self, orig_macro: Macro, state: bool):
+        """Macro state has changed (True: started, False: stopped)"""
+        macro = self.get_macro()
+        if macro is orig_macro:
+            self.run_action.setEnabled(not state)
+            self.stop_action.setEnabled(state)
+
+    def add_macro(self, name: str = None, rename: bool = True) -> Macro:
+        """Add macro, optionally with name"""
+        macro = self.create_object(name)
+        self.add_object(macro)
+        if rename:
+            self.rename_macro()
+        return macro
+
+    def macro_name_changed(self, name):
+        """Macro name has been changed"""
+        index = self.indexOf(self.tabwidget)
+        self.tabwidget.setTabText(index, name)
+
+    def rename_macro(self, index: int = None):
+        """Rename macro"""
+        macro = self.get_macro(index)
+        name, valid = QW.QInputDialog.getText(
+            self,
+            _("Rename"),
+            _("New title:"),
+            QW.QLineEdit.Normal,
+            macro.objectName(),
+        )
+        if valid:
+            macro.setObjectName(name)
+            if index is not None:
+                self.tabwidget.setCurrentIndex(index)
+
+    def export_macro_to_file(self):
+        """Export macro to file"""
+        raise NotImplementedError
+
+    def import_macro_from_file(self):
+        """Import macro from file"""
+        raise NotImplementedError
+
+    def remove_macro(self, index: int = None):
+        """Remove macro"""
+        if index is None:
+            index = self.tabwidget.currentIndex()
+        txt = "<br>".join(
+            [
+                _(
+                    "When closed, the macro is <u>permanently destroyed</u>, "
+                    "unless it has been exported first."
+                ),
+                "",
+                _("Do you want to continue?"),
+            ]
+        )
+        btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
+        choice = QW.QMessageBox.warning(self, self.windowTitle(), txt, btns)
+        if choice == QW.QMessageBox.StandardButton.Yes:
+            self.tabwidget.removeTab(index)
+            self.SIG_OBJECT_REMOVED.emit()

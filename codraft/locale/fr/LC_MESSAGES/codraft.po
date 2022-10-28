@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-07-31 17:32+0200\n"
+"POT-Creation-Date: 2022-10-28 11:54+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,7 +94,7 @@ msgstr "Supprimer les métadonnées"
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#: codraft\core\gui\actionhandler.py:172 codraft\core\gui\panel.py:293
+#: codraft\core\gui\actionhandler.py:172 codraft\core\gui\panel.py:379
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -361,30 +361,68 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: codraft\core\gui\h5io.py:81 codraft\core\gui\main.py:154
-#: codraft\core\gui\main.py:645
+#: codraft\core\gui\h5io.py:81 codraft\core\gui\main.py:209
+#: codraft\core\gui\main.py:728
 msgid "Warning"
 msgstr "Attention"
 
-#: codraft\core\gui\main.py:155
+#: codraft\core\gui\macroeditor.py:49
+msgid "Macro simple example"
+msgstr "Exemple simple de macro"
+
+#: codraft\core\gui\macroeditor.py:83 codraft\core\model\image.py:219
+#: codraft\core\model\image.py:536 codraft\core\model\signal.py:39
+#: codraft\core\model\signal.py:45 codraft\core\model\signal.py:267
+msgid "Untitled"
+msgstr "Sans titre"
+
+#: codraft\core\gui\macroeditor.py:147
+msgid "# ==> Unable to run '%s' macro"
+msgstr "# ==> Impossible d'exécuter la macro '%s'"
+
+#: codraft\core\gui\macroeditor.py:149
+msgid "Error"
+msgstr "Erreur"
+
+#: codraft\core\gui\macroeditor.py:149
+msgid "Macro Python interpreter failed to start!"
+msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
+
+#: codraft\core\gui\macroeditor.py:152
+msgid "# ==> Running '%s' macro..."
+msgstr "# ==> Exécution de la macro '%s'..."
+
+#: codraft\core\gui\macroeditor.py:164
+msgid "Terminating '%s' macro"
+msgstr "Arrêt de la macro '%s'"
+
+#: codraft\core\gui\macroeditor.py:170
+msgid "# <== '%s' macro has finished"
+msgstr "# <== La macro '%s' a terminé son exécution"
+
+#: codraft\core\gui\macroeditor.py:184
+msgid "-***- Macro Console -***-"
+msgstr "-***- Console des macros -***-"
+
+#: codraft\core\gui\main.py:210
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: codraft\core\gui\main.py:175
+#: codraft\core\gui\main.py:230
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: codraft\core\gui\main.py:177
+#: codraft\core\gui\main.py:232
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: codraft\core\gui\main.py:180
+#: codraft\core\gui\main.py:235
 msgid "CodraFT has not yet been qualified on your operating system."
 msgstr "CodraFT n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: codraft\core\gui\main.py:187
+#: codraft\core\gui\main.py:242
 msgid ""
 "At least one dependency does not comply with CodraFT qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -396,7 +434,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: codraft\core\gui\main.py:197
+#: codraft\core\gui\main.py:252
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -404,166 +442,166 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: codraft\core\gui\main.py:202
+#: codraft\core\gui\main.py:257
 msgid ""
 "Please click on the Ignore button to avoid showing this message at startup."
 msgstr ""
 "Cliquer sur le bouton Ignorer pour éviter d'afficher ce message à chaque "
 "démarrage."
 
-#: codraft\core\gui\main.py:222
+#: codraft\core\gui\main.py:277
 msgid "Log files were generated during last session."
 msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
-#: codraft\core\gui\main.py:224
+#: codraft\core\gui\main.py:279
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: codraft\core\gui\main.py:289
+#: codraft\core\gui\main.py:345
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: codraft\core\gui\main.py:308
+#: codraft\core\gui\main.py:359 codraft\core\gui\panel.py:911
+msgid "Macro manager"
+msgstr "Gestionnaire de macros"
+
+#: codraft\core\gui\main.py:371
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: codraft\core\gui\main.py:310
+#: codraft\core\gui\main.py:373
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: codraft\core\gui\main.py:315
+#: codraft\core\gui\main.py:378
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: codraft\core\gui\main.py:317
+#: codraft\core\gui\main.py:380
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: codraft\core\gui\main.py:322
+#: codraft\core\gui\main.py:385
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: codraft\core\gui\main.py:324
+#: codraft\core\gui\main.py:387
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: codraft\core\gui\main.py:327
+#: codraft\core\gui\main.py:390
 msgid "HDF5 I/O Toolbar"
 msgstr "Barre d'outils d'entrées/sorties HDF5"
 
-#: codraft\core\gui\main.py:333
+#: codraft\core\gui\main.py:396
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: codraft\core\gui\main.py:334
+#: codraft\core\gui\main.py:397
 msgid "Hide CodraFT window"
 msgstr "Cacher la fenêtre de CodraFT"
 
-#: codraft\core\gui\main.py:336 codraft\core\gui\main.py:739
+#: codraft\core\gui\main.py:399 codraft\core\gui\main.py:835
 msgid "Quit"
 msgstr "Quitter"
 
-#: codraft\core\gui\main.py:337
+#: codraft\core\gui\main.py:400
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: codraft\core\gui\main.py:349
+#: codraft\core\gui\main.py:412
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: codraft\core\gui\main.py:350
+#: codraft\core\gui\main.py:413
 msgid "Curve Plotting Toolbar"
 msgstr "Barre d'outils d'affichage de courbes"
 
-#: codraft\core\gui\main.py:362
+#: codraft\core\gui\main.py:425
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: codraft\core\gui\main.py:363
+#: codraft\core\gui\main.py:426
 msgid "Image Visualization Toolbar"
 msgstr "Barre d'outils d'affichage d'images"
 
-#: codraft\core\gui\main.py:391
+#: codraft\core\gui\main.py:470
 msgid "Signals"
 msgstr "Signaux"
 
-#: codraft\core\gui\main.py:392
+#: codraft\core\gui\main.py:471
 msgid "Images"
 msgstr "Images"
 
-#: codraft\core\gui\main.py:393
-msgid "Main panel"
-msgstr "Panneau principal"
-
-#: codraft\core\gui\main.py:394
+#: codraft\core\gui\main.py:476
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: codraft\core\gui\main.py:395
+#: codraft\core\gui\main.py:477
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: codraft\core\gui\main.py:407
+#: codraft\core\gui\main.py:486
 msgid "File"
 msgstr "Fichier"
 
-#: codraft\core\gui\main.py:409
+#: codraft\core\gui\main.py:488
 msgid "&Edit"
 msgstr "&Édition"
 
-#: codraft\core\gui\main.py:410
+#: codraft\core\gui\main.py:489
 msgid "Operations"
 msgstr "Opérations"
 
-#: codraft\core\gui\main.py:411
+#: codraft\core\gui\main.py:490
 msgid "Processing"
 msgstr "Traitement"
 
-#: codraft\core\gui\main.py:412
+#: codraft\core\gui\main.py:491
 msgid "Computing"
 msgstr "Calculs"
 
-#: codraft\core\gui\main.py:413
+#: codraft\core\gui\main.py:492
 msgid "&View"
 msgstr "&Affichage"
 
-#: codraft\core\gui\main.py:425 codraft\core\gui\main.py:472
+#: codraft\core\gui\main.py:504 codraft\core\gui\main.py:551
 msgid "About..."
 msgstr "À propos..."
 
-#: codraft\core\gui\main.py:431
+#: codraft\core\gui\main.py:510
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: codraft\core\gui\main.py:437
+#: codraft\core\gui\main.py:516
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: codraft\core\gui\main.py:443
+#: codraft\core\gui\main.py:522
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: codraft\core\gui\main.py:449
+#: codraft\core\gui\main.py:528
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: codraft\core\gui\main.py:456
+#: codraft\core\gui\main.py:535
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: codraft\core\gui\main.py:462 codraft\widgets\instconfviewer.py:62
+#: codraft\core\gui\main.py:541 codraft\widgets\instconfviewer.py:62
 msgid "About CodraFT installation"
 msgstr "Configuration d'installation de CodraFT"
 
-#: codraft\core\gui\main.py:514
+#: codraft\core\gui\main.py:593
 msgid "Console"
 msgstr "Console"
 
-#: codraft\core\gui\main.py:618
+#: codraft\core\gui\main.py:700
 msgid "Save"
 msgstr "Enregistrer"
 
-#: codraft\core\gui\main.py:646
+#: codraft\core\gui\main.py:729
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -571,23 +609,35 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:658 codraft\core\gui\panel.py:335
+#: codraft\core\gui\main.py:741 codraft\core\gui\panel.py:415
 msgid "Open"
 msgstr "Ouvrir"
 
-#: codraft\core\gui\main.py:700
+#: codraft\core\gui\main.py:790
+msgid "not started"
+msgstr "non démarré"
+
+#: codraft\core\gui\main.py:792
+msgid "started (port %s)"
+msgstr "démarré (port %s)"
+
+#: codraft\core\gui\main.py:793
+msgid "XML-RPC server: "
+msgstr "Serveur XML-RPC : "
+
+#: codraft\core\gui\main.py:796
 msgid "About "
 msgstr "À propos de "
 
-#: codraft\core\gui\main.py:708
+#: codraft\core\gui\main.py:804
 msgid "Developped by"
 msgstr "Développé par"
 
-#: codraft\core\gui\main.py:708
+#: codraft\core\gui\main.py:804
 msgid "on"
 msgstr "sous"
 
-#: codraft\core\gui\main.py:740
+#: codraft\core\gui\main.py:836
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "CodraFT?"
@@ -595,48 +645,48 @@ msgstr ""
 "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 "
 "avant de quitter CodraFT ?"
 
-#: codraft\core\gui\panel.py:92
+#: codraft\core\gui\panel.py:94
 msgid "Properties"
 msgstr "Propriétés"
 
-#: codraft\core\gui\panel.py:294
+#: codraft\core\gui\panel.py:380
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: codraft\core\gui\panel.py:363
+#: codraft\core\gui\panel.py:443
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\panel.py:381
+#: codraft\core\gui\panel.py:461
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\panel.py:437
+#: codraft\core\gui\panel.py:497
 msgid "Annotations"
 msgstr "Annotations"
 
-#: codraft\core\gui\panel.py:563 codraft\core\gui\roieditor.py:205
+#: codraft\core\gui\panel.py:623 codraft\core\gui\roieditor.py:205
 #: codraft\core\model\base.py:505
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: codraft\core\gui\panel.py:587
+#: codraft\core\gui\panel.py:647
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: codraft\core\gui\panel.py:588
+#: codraft\core\gui\panel.py:648
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: codraft\core\gui\panel.py:625 codraft\core\gui\processor\base.py:319
+#: codraft\core\gui\panel.py:685 codraft\core\gui\processor\base.py:319
 msgid "Results"
 msgstr "Résultats"
 
-#: codraft\core\gui\panel.py:639
+#: codraft\core\gui\panel.py:699
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: codraft\core\gui\panel.py:641
+#: codraft\core\gui\panel.py:701
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -644,17 +694,69 @@ msgstr ""
 "Cette fonctionnalité permet d'afficher les tableaux de résultats tels "
 "qu'obtenus après avoir réalisé des calculs (voir menu \"Calculs\")."
 
-#: codraft\core\gui\panel.py:654
+#: codraft\core\gui\panel.py:714
 msgid "Signal List"
 msgstr "Liste des Signaux"
 
-#: codraft\core\gui\panel.py:706 codraft\core\gui\panel.py:804
+#: codraft\core\gui\panel.py:766 codraft\core\gui\panel.py:864
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\panel.py:718
+#: codraft\core\gui\panel.py:778
 msgid "Image List"
 msgstr "Liste des Images"
+
+#: codraft\core\gui\panel.py:983
+msgid "Run macro"
+msgstr "Exécuter la macro"
+
+#: codraft\core\gui\panel.py:990
+msgid "Stop macro"
+msgstr "Arrêter la macro"
+
+#: codraft\core\gui\panel.py:998
+msgid "New macro"
+msgstr "Nouvelle macro"
+
+#: codraft\core\gui\panel.py:1004
+msgid "Rename macro"
+msgstr "Renommer la macro"
+
+#: codraft\core\gui\panel.py:1010
+msgid "Export macro to file"
+msgstr "Exporter la macro vers un fichier"
+
+#: codraft\core\gui\panel.py:1016
+msgid "Import macro from file"
+msgstr "Importer la macro depuis un fichier"
+
+#: codraft\core\gui\panel.py:1022
+msgid "Remove macro"
+msgstr "Supprimer la macro"
+
+#: codraft\core\gui\panel.py:1047
+msgid "Macro editor toolbar"
+msgstr "Barre d'outils des macros"
+
+#: codraft\core\gui\panel.py:1132
+msgid "Rename"
+msgstr "Renommer"
+
+#: codraft\core\gui\panel.py:1133
+msgid "New title:"
+msgstr "Nouveau titre :"
+
+#: codraft\core\gui\panel.py:1156
+msgid ""
+"When closed, the macro is <u>permanently destroyed</u>, unless it has been "
+"exported first."
+msgstr ""
+"Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, "
+"sauf si elle a été exportée au préalable."
+
+#: codraft\core\gui\panel.py:1161
+msgid "Do you want to continue?"
+msgstr "Souhaitez-vous vraiment continuer ?"
 
 #: codraft\core\gui\processor\base.py:42 codraft\core\gui\processor\base.py:48
 msgid "Size of the moving window"
@@ -958,12 +1060,6 @@ msgstr "Titres et unités"
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: codraft\core\model\image.py:219 codraft\core\model\image.py:536
-#: codraft\core\model\signal.py:39 codraft\core\model\signal.py:45
-#: codraft\core\model\signal.py:267
-msgid "Untitled"
-msgstr "Sans titre"
-
 #: codraft\core\model\image.py:222 codraft\core\model\image.py:226
 #: codraft\core\model\image.py:230 codraft\core\model\image.py:536
 #: codraft\core\model\signal.py:48 codraft\core\model\signal.py:52
@@ -1110,41 +1206,41 @@ msgstr "Traiter le signal"
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: codraft\tests\embedded1_unit.py:84
+#: codraft\tests\embedded1_unit.py:94
 msgid "Host application"
 msgstr "Application hôte"
 
-#: codraft\tests\embedded1_unit.py:108
-msgid "This the host application, which embeds CodraFT."
-msgstr "Ceci est une application embarquant CodraFT."
-
-#: codraft\tests\embedded1_unit.py:110
-msgid "Open CodraFT"
-msgstr "Ouvrir CodraFT"
-
-#: codraft\tests\embedded1_unit.py:111
-msgid "Import signal from CodraFT"
-msgstr "Importer un signal depuis CodraFT"
-
-#: codraft\tests\embedded1_unit.py:112
-msgid "Import image from CodraFT"
-msgstr "Importer une image depuis CodraFT"
-
-#: codraft\tests\embedded1_unit.py:113
+#: codraft\tests\embedded1_unit.py:122
 msgid "Add signal objects"
 msgstr "Ajouter des objets signaux"
 
-#: codraft\tests\embedded1_unit.py:114
+#: codraft\tests\embedded1_unit.py:123
 msgid "Add image objects"
 msgstr "Ajouter des objets images"
 
-#: codraft\tests\embedded1_unit.py:115
+#: codraft\tests\embedded1_unit.py:124
 msgid "Remove all objects"
 msgstr "Supprimer tous les objets"
 
-#: codraft\tests\embedded1_unit.py:116
+#: codraft\tests\embedded1_unit.py:125
 msgid "Close CodraFT"
 msgstr "Fermer CodraFT"
+
+#: codraft\tests\embedded1_unit.py:173
+msgid "This the host application, which embeds CodraFT."
+msgstr "Ceci est une application embarquant CodraFT."
+
+#: codraft\tests\embedded1_unit.py:174
+msgid "Open CodraFT"
+msgstr "Ouvrir CodraFT"
+
+#: codraft\tests\embedded1_unit.py:194
+msgid "Import signal from CodraFT"
+msgstr "Importer un signal depuis CodraFT"
+
+#: codraft\tests\embedded1_unit.py:195
+msgid "Import image from CodraFT"
+msgstr "Importer une image depuis CodraFT"
 
 #: codraft\tests\flatfield_app.py:29 codraft\tests\stat_app.py:43
 msgid "Raw data (2D-Gaussian)"
@@ -1157,6 +1253,26 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 #: codraft\tests\peak2d_app.py:28
 msgid "Test image with peaks"
 msgstr "Image de test avec des pics"
+
+#: codraft\tests\remoteclient_app.py:29
+msgid "This the client application, which connects to CodraFT."
+msgstr "Ceci l'application cliente, qui se connecte à CodraFT."
+
+#: codraft\tests\remoteclient_app.py:30
+msgid "Connect to CodraFT"
+msgstr "Se connecter à CodraFT"
+
+#: codraft\tests\remoteclient_app.py:50
+msgid "Execute multiple commands"
+msgstr "Exécuter des commandes multiples"
+
+#: codraft\tests\remoteclient_app.py:51
+msgid "Get object list"
+msgstr "Obtenir la liste des objets"
+
+#: codraft\tests\remoteclient_app.py:52
+msgid "Get object"
+msgstr "Obtenir un objet"
 
 #: codraft\utils\qthelpers.py:172
 msgid "Cancel"
@@ -1270,6 +1386,9 @@ msgstr "Détection de pics 1D"
 msgid "Memory:"
 msgstr "Mémoire :"
 
+#~ msgid "Main panel"
+#~ msgstr "Panneau principal"
+
 #~ msgid "Unable to open file"
 #~ msgstr "Impossible d'ouvrir le fichier"
 
@@ -1323,9 +1442,6 @@ msgstr "Mémoire :"
 
 #~ msgid "Last column index"
 #~ msgstr "Indice de la dernière colonne"
-
-#~ msgid "New image"
-#~ msgstr "Nouvelle image"
 
 #~ msgid "New signal"
 #~ msgstr "Nouveau signal"
@@ -1562,9 +1678,6 @@ msgstr "Mémoire :"
 #~ msgid "Move to front"
 #~ msgstr "Déplacer vers le premier plan"
 
-#~ msgid "Do you really want to remove this item?"
-#~ msgstr "Souhaitez-vous vraiment supprimer cet objet ?"
-
 #~ msgid "Do you really want to remove selected items?"
 #~ msgstr "Souhaitez-vous vraiment supprimer les objets sélectionnés ?"
 
@@ -1620,9 +1733,6 @@ msgstr "Mémoire :"
 #~ msgstr ""
 #~ "La fonction 'savefig' ne prend en charge que les formats suivants:\n"
 #~ "%s"
-
-#~ msgid "Error"
-#~ msgstr "Erreur"
 
 #~ msgid "Range"
 #~ msgstr "Intervalle"

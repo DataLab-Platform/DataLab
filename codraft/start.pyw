@@ -10,6 +10,14 @@ Simple signal and image processing application based on guiqwt and guidata
 Starter
 """
 
-from codraft.app import run
+import sys
 
-run()
+if len(sys.argv) > 1 and sys.argv[1] == "-c":
+    # ----------------------------------------------------------------------------------
+    # Macro command execution for the standalone version of CodraFT
+    exec(sys.argv[2])
+    # ----------------------------------------------------------------------------------
+else:
+    from codraft.app import run
+
+    run()

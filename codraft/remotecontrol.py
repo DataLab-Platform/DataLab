@@ -80,6 +80,7 @@ class BaseRPCServer(abc.ABC):
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
+            execenv.port = self.port
             server.serve_forever()
 
     @staticmethod
@@ -316,8 +317,8 @@ def get_codraft_xmlrpc_port():
     initialize()
     try:
         return Conf.main.rpc_server_port.get()
-    except RuntimeError:
-        raise CodraFTConnectionError("CodraFT has not yet been executed")
+    except RuntimeError as exc:
+        raise CodraFTConnectionError("CodraFT has not yet been executed") from exc
 
 
 class RemoteClient:
@@ -330,13 +331,15 @@ class RemoteClient:
     def connect(self, port=None):
         """Connect to CodraFT XML-RPC server"""
         if port is None:
-            port = get_codraft_xmlrpc_port()
+            port = execenv.port
+            if port is None:
+                port = get_codraft_xmlrpc_port()
         self.port = port
         self.serverproxy = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
         try:
             self.get_version()
-        except ConnectionRefusedError:
-            raise CodraFTConnectionError("CodraFT is currently not running")
+        except ConnectionRefusedError as exc:
+            raise CodraFTConnectionError("CodraFT is currently not running") from exc
 
     def try_and_connect(self, port=None, timeout=5):
         """Try (10 times over timeout in s.) and connect to CodraFT XML-RPC server"""

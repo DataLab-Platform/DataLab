@@ -39,10 +39,9 @@ from qwt import __version__ as qwt_ver
 from codraft import __docurl__, __homeurl__, __supporturl__, __version__, env
 from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
 from codraft.core.gui.actionhandler import ActionCategory
-from codraft.core.gui.docks import DockablePlotWidget, DockableTabWidget
+from codraft.core.gui.docks import DockablePlotWidget
 from codraft.core.gui.h5io import H5InputOutput
-from codraft.core.gui.macroeditor import DockableMacroEditor
-from codraft.core.gui.panel import ImagePanel, SignalPanel
+from codraft.core.gui.panel import BaseDataPanel, ImagePanel, MacroPanel, SignalPanel
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
@@ -138,7 +137,7 @@ class CodraFTMainWindow(QW.QMainWindow):
 
         self.console = None
         self.app_proxy = None
-        self.macro_editor = None
+        self.macropanel = None
 
         self.signal_toolbar = None
         self.image_toolbar = None
@@ -195,7 +194,7 @@ class CodraFTMainWindow(QW.QMainWindow):
     @property
     def panels(self):
         """Return the tuple of implemented panels (signal, image)"""
-        return (self.signalpanel, self.imagepanel)
+        return (self.signalpanel, self.imagepanel, self.macropanel)
 
     def __set_low_memory_state(self, state):
         """Set memory warning state"""
@@ -294,20 +293,21 @@ class CodraFTMainWindow(QW.QMainWindow):
     def take_menu_screenshots(self):  # pragma: no cover
         """Take menu screenshots"""
         for panel in self.panels:
-            self.tabwidget.setCurrentWidget(panel)
-            for name in (
-                "file",
-                "edit",
-                "view",
-                "operation",
-                "processing",
-                "computing",
-                "help",
-            ):
-                menu = getattr(self, f"{name}_menu")
-                menu.popup(self.pos())
-                qth.grab_save_window(menu, f"{panel.objectName()}_{name}")
-                menu.close()
+            if isinstance(panel, BaseDataPanel):
+                self.tabwidget.setCurrentWidget(panel)
+                for name in (
+                    "file",
+                    "edit",
+                    "view",
+                    "operation",
+                    "processing",
+                    "computing",
+                    "help",
+                ):
+                    menu = getattr(self, f"{name}_menu")
+                    menu.popup(self.pos())
+                    qth.grab_save_window(menu, f"{panel.objectName()}_{name}")
+                    menu.close()
 
     # ------GUI setup
     def __restore_pos_and_size(self):
@@ -347,16 +347,22 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
         self.__setup_commmon_actions()
-        curvewidget = self.__add_signal_panel()
-        imagewidget = self.__add_image_panel()
-        self.__add_tabwidget(curvewidget, imagewidget)
+        self.tabwidget = QW.QTabWidget()
+        self.__add_signal_image_panels()
+        self.__setup_central_widget()
         self.__add_menus()
         if console:
             self.__setup_console()
         # Update selection dependent actions
         self.__update_actions()
+        self.macropanel = MacroPanel()
+        macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
+        self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
         self.signal_image_docks[0].raise_()
-        self.__add_macroeditor()
+        for panel in self.panels:
+            panel.SIG_OBJECT_ADDED.connect(self.set_modified)
+            panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
+        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
 
     def __setup_commmon_actions(self):
         """Setup common actions"""
@@ -458,23 +464,22 @@ class CodraFTMainWindow(QW.QMainWindow):
         else:
             func(param)
 
-    def __add_tabwidget(self, curvewidget, imagewidget):
-        """Setup tabwidget with signals and images"""
-        self.tabwidget = DockableTabWidget()
+    def __setup_central_widget(self):
+        """Setup central widget (main panel)"""
         self.tabwidget.setMaximumWidth(500)
         self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
         self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
-        self.__add_dockwidget(self.tabwidget, _("Main panel"))
-        curve_dock = self.__add_dockwidget(curvewidget, title=_("Curve panel"))
-        image_dock = self.__add_dockwidget(imagewidget, title=_("Image panel"))
-        self.tabifyDockWidget(curve_dock, image_dock)
-        self.signal_image_docks = curve_dock, image_dock
+        self.setCentralWidget(self.tabwidget)
+
+    def __add_signal_image_panels(self):
+        """Add signal and image panels"""
+        cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Curve panel"))
+        idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image panel"))
+        self.tabifyDockWidget(cdock, idock)
+        self.signal_image_docks = cdock, idock
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(self.switch_to_signal_panel)
         self.imagepanel.SIG_OBJECT_ADDED.connect(self.switch_to_image_panel)
-        for panel in self.panels:
-            panel.SIG_OBJECT_ADDED.connect(self.set_modified)
-            panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
 
     def __add_menus(self):
         """Adding menus"""
@@ -591,18 +596,10 @@ class CodraFTMainWindow(QW.QMainWindow):
             lambda txt: self.refresh_lists()
         )
 
-    def __add_macroeditor(self):
-        """Setup macro editor"""
-        self.macro_editor = DockableMacroEditor()
-        macro_dock = self.__add_dockwidget(self.macro_editor, _("Macro editor"))
-        sig_dock, ima_dock = self.signal_image_docks
-        self.tabifyDockWidget(ima_dock, macro_dock)
-        sig_dock.raise_()
-
     # ------GUI refresh
     def has_objects(self):
         """Return True if sig/ima panels have any object"""
-        return sum([len(panel.objlist) for panel in self.panels]) > 0
+        return sum([panel.object_number for panel in self.panels]) > 0
 
     def set_modified(self, state=True):
         """Set mainwindow modified state"""
@@ -619,7 +616,8 @@ class CodraFTMainWindow(QW.QMainWindow):
     def refresh_lists(self):
         """Refresh signal/image lists"""
         for panel in self.panels:
-            panel.objlist.refresh_list()
+            if isinstance(panel, BaseDataPanel):
+                panel.objlist.refresh_list()
 
     def __update_actions(self):
         """Update selection dependent actions"""

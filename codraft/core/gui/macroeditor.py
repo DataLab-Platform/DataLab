@@ -7,208 +7,167 @@
 Module providing CodraFT Macro editor widget
 """
 
-import os.path as osp
+import os
+import sys
+import time
 
-from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
+from guidata.userconfigio import BaseIOHandler
 from guidata.widgets.codeeditor import CodeEditor
+from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from codraft.config import _
-from codraft.core.gui.docks import DockableTabWidget
+from codraft.core.gui import ObjItf
+from codraft.env import execenv
 
 UNTITLED_NB = 0
 
 
-class Macro(QC.QObject):
+class Macro(QC.QObject, ObjItf):
     """Object representing a macro: editor, path, open/save actions, etc."""
 
-    MACRO_SAMPLE_PATH = osp.join(osp.dirname(__file__), "macrosample.py")
+    STARTED = QC.Signal()
+    FINISHED = QC.Signal()
+    MODIFIED = QC.Signal()
+    MACRO_TITLE = _("Macro simple example")
+    MACRO_SAMPLE = f"""# {MACRO_TITLE}
 
-    def __init__(self, tabwidget: QW.QTabWidget, name: str = None):
+import numpy as np
+
+from codraft.remotecontrol import RemoteClient
+
+remote = RemoteClient()
+remote.try_and_connect()
+
+z = np.random.rand(20, 20)
+remote.add_image("toto", z)
+
+print("All done!")
+"""
+
+    def __init__(self, console: PythonShellWidget, name: str = None):
         super().__init__()
-        self.tabwidget = tabwidget
+        self.console = console
         self.setObjectName(self.get_untitled_title() if name is None else name)
         self.editor = CodeEditor(language="python")
-        self.editor.set_text_from_file(self.MACRO_SAMPLE_PATH)
-        self.objectNameChanged.connect(self.name_changed)
+        self.editor.setPlainText(self.MACRO_SAMPLE)
+        self.editor.modificationChanged.connect(self.modification_changed)
+        self.process = None
 
-    def name_changed(self, name):
-        """Macro name has been changed"""
-        index = self.tabwidget.indexOf(self.editor)
-        self.tabwidget.setTabText(index, name)
+    @property
+    def title(self):
+        """Return object title"""
+        return self.objectName()
 
-    def get_untitled_title(self):
+    def serialize(self, writer: BaseIOHandler):
+        """Serialize this macro"""
+        with writer.group("name"):
+            writer.write(self.objectName())
+        with writer.group("contents"):
+            writer.write(self.editor.toPlainText())
+
+    def deserialize(self, reader: BaseIOHandler):
+        """Deserialize this macro"""
+        with reader.group("name"):
+            self.setObjectName(reader.read_any())
+        with reader.group("contents"):
+            self.editor.setPlainText(reader.read_any())
+
+    @staticmethod
+    def get_untitled_title():
         """Increment untitled number and return untitled macro title"""
-        global UNTITLED_NB
+        global UNTITLED_NB  # pylint: disable=global-statement
         UNTITLED_NB += 1
-        return f"untitled{UNTITLED_NB:2d}"
+        untitled = _("Untitled")
+        return f"{untitled} {UNTITLED_NB:02d}"
 
+    def modification_changed(self, state: bool):
+        """Method called when macro's editor modification state changed"""
+        if state:
+            self.MODIFIED.emit()
 
-class DockableMacroEditor(DockableTabWidget):
-    """Macro editor widget"""
+    @staticmethod
+    def transcode(bytearr):
+        """Transcode bytes to locale str"""
+        locale_codec = QC.QTextCodec.codecForLocale()
+        return locale_codec.toUnicode(bytearr.data())
 
-    def __init__(self, parent: QW.QWidget = None):
-        super().__init__(parent)
-        self.setWindowTitle(_("Macro editor"))
-        self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
-        self.setTabsClosable(True)
-        self.setMovable(True)
-        self.tabBarDoubleClicked.connect(self.rename_macro)
-        self.tabCloseRequested.connect(self.remove_macro)
+    def get_stdout(self):
+        """Return standard output str"""
+        self.process.setReadChannel(QC.QProcess.StandardOutput)
+        bytearr = QC.QByteArray()
+        while self.process.bytesAvailable():
+            bytearr += self.process.readAllStandardOutput()
+        return self.transcode(bytearr)
 
-        self.__macros = {}
+    def get_stderr(self):
+        """Return standard error str"""
+        self.process.setReadChannel(QC.QProcess.StandardError)
+        bytearr = QC.QByteArray()
+        while self.process.bytesAvailable():
+            bytearr += self.process.readAllStandardError()
+        return self.transcode(bytearr)
 
-        # TODO: Add action "Import from file..."
-        # TODO: Add action "Export to file..."
+    def write_output(self):
+        """Write text as standard output"""
+        self.console.write(self.get_stdout())
 
-        self.setup_actions()
+    def write_error(self):
+        """Write text as standard error"""
+        self.console.write_error(self.get_stderr())
 
-    def setup_actions(self):
-        """Setup macro menu actions"""
-        run_act = create_action(
-            self,
-            _("Run macro"),
-            icon=get_icon("libre-camera-flash-on.svg"),
-            triggered=self.run_macro,
+    def print(self, text, error=False, eol_before=True):
+        """Print text in console, with line separator"""
+        msg = f"---({time.ctime()})---[{text}]{os.linesep}"
+        if eol_before:
+            msg = os.linesep + msg
+        self.console.write(msg, error=error, prompt=not error)
+
+    def run(self):
+        """Run macro"""
+        self.process = QC.QProcess()
+        text = self.editor.toPlainText()
+        code = os.linesep.join(text.splitlines(False)).replace('"', "'")
+        env = QC.QProcessEnvironment()
+        env.insert(execenv.XMLRPCPORT_ENV, str(execenv.port))
+        sysenv = env.systemEnvironment()
+        for key in sysenv.keys():
+            env.insert(key, sysenv.value(key))
+        # env = [str(_path) for _path in self.process.systemEnvironment()]
+        self.process.readyReadStandardOutput.connect(self.write_output)
+        self.process.readyReadStandardError.connect(self.write_error)
+        self.process.finished.connect(self.finished)
+        self.process.setProcessEnvironment(env)
+        args = ["-c", code]
+        self.process.start(sys.executable, args)
+        running = self.process.waitForStarted(3000)
+        name = self.objectName()
+        if not running:
+            self.print(_("# ==> Unable to run '%s' macro") % name, error=True)
+            QW.QMessageBox.critical(
+                self, _("Error"), _("Macro Python interpreter failed to start!")
+            )
+        else:
+            self.print(_("# ==> Running '%s' macro...") % name)
+            self.STARTED.emit()
+
+    def is_running(self) -> bool:
+        """Is macro running?"""
+        if self.process is not None:
+            return self.process.state() == QC.QProcess.Running
+        return False
+
+    def kill(self):
+        """Kill process associated to macro"""
+        if self.process is not None:
+            self.print(_("Terminating '%s' macro") % self.objectName(), error=True)
+            self.process.kill()
+
+    def finished(self, exit_code, exit_status):  # pylint: disable=unused-argument
+        """Process has finished"""
+        self.print(
+            _("# <== '%s' macro has finished") % self.objectName(), eol_before=False
         )
-        stp_act = create_action(
-            self,
-            _("Stop macro"),
-            icon=get_icon("libre-camera-flash-off.svg"),
-            triggered=self.stop_macro,
-        )
-        stp_act.setDisabled(True)
-        add_act = create_action(
-            self,
-            _("New macro"),
-            icon=get_icon("libre-gui-add.svg"),
-            triggered=self.add_macro,
-        )
-        ren_act = create_action(
-            self,
-            _("Rename macro"),
-            icon=get_icon("libre-gui-pencil.svg"),
-            triggered=self.rename_macro,
-        )
-        exp_act = create_action(
-            self,
-            _("Export macro to file"),
-            icon=get_icon("libre-gui-export.svg"),
-            triggered=self.export_macro_to_file,
-        )
-        imp_act = create_action(
-            self,
-            _("Import macro from file"),
-            icon=get_icon("libre-gui-import.svg"),
-            triggered=self.import_macro_from_file,
-        )
-        rem_act = create_action(
-            self,
-            _("Remove macro"),
-            icon=get_icon("libre-gui-action-delete.svg"),
-            triggered=self.remove_macro,
-        )
-        actions = (
-            run_act,
-            stp_act,
-            None,
-            add_act,
-            ren_act,
-            exp_act,
-            imp_act,
-            None,
-            rem_act,
-        )
-
-        toolbar = QW.QToolBar(_("Macro editor toolbar"), self)
-        add_actions(toolbar, [run_act, stp_act, None])
-
-        menu_button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", self)
-        menu_button.setFlat(True)
-        menu = QW.QMenu()
-        menu_button.setMenu(menu)
-        add_actions(menu, actions)
-
-        toolbar.addWidget(menu_button)
-        self.setCornerWidget(toolbar)
-
-        self.add_macro(rename=False)
-
-    def get_macro(self, index: int = None):
-        """Return macro at index (if index is None, return current macro)"""
-        if index is None:
-            index = self.currentIndex()
-        for macro in self.__macros.values():
-            if self.widget(index) is macro.editor:
-                return macro
-
-    def run_macro(self):
-        """Run current macro"""
-        # XXX: Macros should be executed in a separate process: access to CodraFT
-        # is provided by the 'remote_controlling' feature (see corresponding branch).
-        # So, macros should be Python scripts similar to "remoteclient_test.py".
-        # Connection to the XML-RPC server should be simplified (to a single line).
-        #
-        # Important: an environment variable must contained current CodraFT session
-        # XML-RPC server port number (e.g. "CODRAFT_XMLRPC_PORT"). This allows to
-        # handle the case of multiple instances of CodraFT running at the same time
-        # (each macro will then control the right instance of CodraFT, the one from
-        # which it was executed)
-        macro = self.get_macro()
-
-    def stop_macro(self):
-        """Stop current macro"""
-        macro = self.get_macro()
-
-    def add_macro(self, name: str = None, rename: bool = True):
-        """Add macro, optionally with name"""
-        macro = Macro(self, name)
-        index = self.addTab(macro.editor, macro.objectName())
-        self.__macros[id(macro)] = macro
-        if rename:
-            self.rename_macro(index)
-
-    def rename_macro(self, index: int = None):
-        """Rename macro"""
-        macro = self.get_macro(index)
-        name, valid = QW.QInputDialog.getText(
-            self,
-            _("Rename"),
-            _("New title:"),
-            QW.QLineEdit.Normal,
-            macro.objectName(),
-        )
-        if valid:
-            macro.setObjectName(name)
-            self.setCurrentIndex(index)
-
-    def export_macro_to_file(self):
-        """Export macro to file"""
-        macro = self.get_macro()
-
-    def import_macro_from_file(self):
-        """Import macro from file"""
-        macro = self.get_macro()
-
-    def remove_macro(self, index: int = None):
-        """Remove macro"""
-        if index is None:
-            index = self.currentIndex()
-        txt = "<br>".join(
-            [
-                _(
-                    "When closed, the macro is <u>permanently destroyed</u>, "
-                    "unless it has been exported first."
-                ),
-                "",
-                _("Do you want to continue?"),
-            ]
-        )
-        btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
-        choice = QW.QMessageBox.warning(self, self.windowTitle(), txt, btns)
-        if choice == QW.QMessageBox.StandardButton.Yes:
-            self.removeTab(index)
-            if self.count() == 0:
-                self.add_macro()
+        self.FINISHED.emit()
+        self.process = None
