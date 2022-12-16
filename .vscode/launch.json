@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dev: run CodraFT",
+            "name": "Run CodraFT",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/codraft/app.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/dev.env",
-            "python": "${env:PYTHON_CODRAFT_DEV}",
+            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 "DEBUG": "1",
@@ -20,13 +20,13 @@
             }
         },
         {
-            "name": "Dev: run Test Launcher",
+            "name": "Run Test Launcher",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/codraft/tests/__init__.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/dev.env",
-            "python": "${env:PYTHON_CODRAFT_DEV}",
+            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 // "DEBUG": "1",
@@ -34,13 +34,13 @@
             }
         },
         {
-            "name": "Dev: run current file",
+            "name": "Run current file",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/dev.env",
-            "python": "${env:PYTHON_CODRAFT_DEV}",
+            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
                 // "--h5browser",
@@ -63,13 +63,13 @@
             }
         },
         {
-            "name": "Dev: run H5browser",
+            "name": "Run H5browser",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/codraft_test_cea/tests/h5browser1_test.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/dev.env",
-            "python": "${env:PYTHON_CODRAFT_DEV}",
+            "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
                 "DEBUG": "1",
@@ -79,33 +79,6 @@
                 // "--mode",
                 // "unattended",
             ],
-        },
-        {
-            "name": "Debug: run current file",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "python": "${env:PYTHON_CODRAFT_RLS}",
-            "env": {
-                "DEBUG": "1",
-            }
-        },
-        {
-            "name": "Release: current file",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "python": "${env:PYTHON_CODRAFT_RLS}",
-        },
-        {
-            "name": "Release: run CodraFT",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/codraft/app.py",
-            "console": "integratedTerminal",
-            "python": "${env:PYTHON_CODRAFT_RLS}",
         },
     ]
 }
