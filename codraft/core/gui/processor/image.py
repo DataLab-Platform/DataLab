@@ -124,7 +124,22 @@ class ZCalibrateParam(DataSet):
     b = FloatItem("b", default=0.0)
 
 
-class PeakDetectionParam(DataSet):
+class GenericDetectionParam(DataSet):
+    """Generic detection parameters"""
+
+    threshold = FloatItem(
+        _("Relative threshold"),
+        default=0.5,
+        min=0.1,
+        max=0.9,
+        help=_(
+            "Detection threshold, relative to difference between "
+            "data maximum and minimum"
+        ),
+    )
+
+
+class PeakDetectionParam(GenericDetectionParam):
     """Peak detection parameters"""
 
     size = IntItem(
@@ -136,27 +151,16 @@ class PeakDetectionParam(DataSet):
             "Size of the sliding window used in maximum/minimum filtering algorithm"
         ),
     )
-    threshold = FloatItem(
-        _("Relative threshold"),
-        default=0.5,
-        min=0.1,
-        max=0.9,
-        help=_(
-            "Detection threshold, relative to difference between "
-            "data maximum and minimum"
-        ),
-    )
     create_rois = BoolItem(_("Create regions of interest"), default=True)
 
 
-class ContourShapeParam(DataSet):
+class ContourShapeParam(GenericDetectionParam):
     """Contour shape parameters"""
 
     shapes = (
         ("ellipse", _("Ellipse")),
         ("circle", _("Circle")),
     )
-
     shape = ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
@@ -611,7 +615,9 @@ class ImageProcessor(BaseProcessor):
 
         def contour_shape(image: ImageParam, p: ContourShapeParam):
             """Compute contour shape fit"""
-            res = self.__apply_origin_size_roi(image, get_contour_shapes, p.shape)
+            res = self.__apply_origin_size_roi(
+                image, get_contour_shapes, p.shape, p.threshold
+            )
             if res is not None:
                 shape = ShapeTypes.CIRCLE if p.shape == "circle" else ShapeTypes.ELLIPSE
                 return image.add_resultshape("Contour", shape, res)
