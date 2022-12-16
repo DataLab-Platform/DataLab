@@ -79,15 +79,20 @@ def get_centroid_fourier(data: np.ndarray):
     return row, col
 
 
+def get_absolute_level(data: np.ndarray, level: float):
+    """Return absolute level"""
+    if not isinstance(level, float) or level < 0.0 or level > 1.0:
+        raise ValueError("Level must be a float between 0. and 1.")
+    return (float(np.nanmin(data)) + float(np.nanmax(data))) * level
+
+
 def get_enclosing_circle(data: np.ndarray, level: float = 0.5):
     """Return (x, y, radius) for the circle contour enclosing image
     values above threshold relative level (.5 means FWHM)
 
     Raise ValueError if no contour was found"""
-    if not isinstance(level, float) or level < 0.0 or level > 1.0:
-        raise ValueError("Level must be a float between 0. and 1.")
     data_th = data.copy()
-    data_th[data <= data.max() * level] = 0.0
+    data_th[data <= get_absolute_level(data, level)] = 0.0
     contours = measure.find_contours(data_th)
     model = measure.CircleModel()
     result = None
@@ -109,22 +114,22 @@ def distance_matrix(coords: list) -> np.ndarray:
 
 
 def get_2d_peaks_coords(
-    data: np.ndarray, size: int = None, threshold: float = 0.5
+    data: np.ndarray, size: int = None, level: float = 0.5
 ) -> np.ndarray:
     """Detect peaks in image data, return coordinates.
 
     If neighborhoods size is None, default value is the highest value
     between 50 pixels and the 1/40th of the smallest image dimension.
 
-    Detection threshold is relative to difference between data maximum and minimum.
+    Detection threshold level is relative to difference
+    between data maximum and minimum values.
     """
     if size is None:
         size = max(min(data.shape) // 40, 50)
     data_max = spf.maximum_filter(data, size)
     data_min = spf.minimum_filter(data, size)
     data_diff = data_max - data_min
-    abs_threshold = (data_diff.max() - data_diff.min()) * threshold
-    diff = (data_max - data_min) > abs_threshold
+    diff = (data_max - data_min) > get_absolute_level(data_diff, level)
     maxima = data == data_max
     maxima[diff == 0] = 0
     labeled, _num_objects = spi.label(maxima)
@@ -142,13 +147,15 @@ def get_2d_peaks_coords(
     return np.array(coords)
 
 
-def get_contour_shapes(data: np.ndarray, shape: str = "ellipse") -> np.ndarray:
-    """Find iso-valued contours in a 2D array, then fit contours
-    with shape ('ellipse' or 'circle')
+def get_contour_shapes(
+    data: np.ndarray, shape: str = "ellipse", level: float = 0.5
+) -> np.ndarray:
+    """Find iso-valued contours in a 2D array, above relative level (.5 means FWHM),
+    then fit contours with shape ('ellipse' or 'circle')
+
     Return NumPy array containing coordinates of shapes."""
     # pylint: disable=too-many-locals
-    level = (float(np.nanmin(data)) + float(np.nanmax(data))) / 2.0
-    contours = measure.find_contours(data, level=level)
+    contours = measure.find_contours(data, level=get_absolute_level(data, level))
     coords = []
     for contour in contours:
         if shape == "circle":
