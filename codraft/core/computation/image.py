@@ -147,7 +147,8 @@ def get_contour_shapes(data: np.ndarray, shape: str = "ellipse") -> np.ndarray:
     with shape ('ellipse' or 'circle')
     Return NumPy array containing coordinates of shapes."""
     # pylint: disable=too-many-locals
-    contours = measure.find_contours(data)
+    level = (float(np.nanmin(data)) + float(np.nanmax(data))) / 2.0
+    contours = measure.find_contours(data, level=level)
     coords = []
     for contour in contours:
         if shape == "circle":
