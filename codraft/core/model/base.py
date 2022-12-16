@@ -200,6 +200,16 @@ def set_plot_item_editable(item, state):
     item.set_readonly(not state)
 
 
+# TODO: [P0] Replace 'array' by 'datalist', a list of NumPy arrays
+# With this new data model, the old 'array' attribute row (each row is a result) is
+# replaced by an element of the new 'datalist' attribute. So, when this change is done,
+# each 'datalist' element is a result. This means that each result no longer has to be
+# an array with the same number of columns: in other words, each result may be an
+# arbitrary NumPy array, with an arbitrary shape. This is the opportunity to introduce
+# a new ShapeTypes type (e.g. FREEFORM) represented by an AnnotatedPolygon (new class
+# to be written using AnnotatedRectangle as a model). This also has been made possible
+# due to a recent change in CodraFT HDF5 (de)serialization which now accepts nested
+# lists or dictionnaries.
 class ResultShape:
     """Object representing a geometrical shape serializable in signal/image metadata.
 
