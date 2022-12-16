@@ -17,6 +17,9 @@ from codraft import __version__
 H5_VERSION = "CodraFT_Version"
 
 
+LIST_LENGTH_STR = "__list_length__"
+
+
 class NativeH5Writer(HDF5Writer):
     """CodraFT signal/image objects HDF5 guidata Dataset Writer class,
     supporting dictionary serialization"""
@@ -32,10 +35,21 @@ class NativeH5Writer(HDF5Writer):
         group = self.get_parent_group()
         dict_group = group.create_group(self.option[-1])
         for key, value in val.items():
-            try:
-                dict_group.attrs[key] = value
-            except TypeError:
-                pass
+            if isinstance(value, dict):
+                with self.group(key):
+                    self.write_dict(value)
+            elif isinstance(value, list):
+                with self.group(key):
+                    with self.group(LIST_LENGTH_STR):
+                        self.write(len(value))
+                    for index, i_val in enumerate(value):
+                        with self.group("elt" + str(index)):
+                            self.write(i_val)
+            else:
+                try:
+                    dict_group.attrs[key] = value
+                except TypeError:
+                    pass
 
 
 class NativeH5Reader(HDF5Reader):
@@ -53,6 +67,17 @@ class NativeH5Reader(HDF5Reader):
         dict_val = {}
         for key, value in dict_group.attrs.items():
             dict_val[key] = value
+        for key in dict_group:
+            with self.group(key):
+                if "__list_length__" in dict_group[key].attrs:
+                    with self.group(LIST_LENGTH_STR):
+                        list_len = self.read()
+                    dict_val[key] = [
+                        dict_group[key]["elt" + str(index)][:]
+                        for index in range(list_len)
+                    ]
+                else:
+                    dict_val[key] = self.read_dict()
         return dict_val
 
 
