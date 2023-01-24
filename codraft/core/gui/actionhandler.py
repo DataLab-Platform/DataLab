@@ -450,6 +450,19 @@ class ImageActionHandler(BaseActionHandler):
         ]
         return base_actions + actions + roi_actions
 
+    def create_processing_actions(self):
+        """Create processing actions"""
+        base_actions = super().create_processing_actions()
+        proc = self.processor
+        denoise_tv_chamb_action = self.cra(
+            _("Total variation denoising"), proc.compute_tv_chambolle
+        )
+        actions = [
+            denoise_tv_chamb_action,
+        ]
+        self.actlist_1more += actions
+        return base_actions + [None] + actions
+
     def create_computing_actions(self):
         """Create computing actions"""
         base_actions = super().create_computing_actions()

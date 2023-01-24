@@ -5,6 +5,12 @@ for future and past milestones.
 
 ## Version 2.2.0a1 (in progress...) ##
 
+New features:
+
+* Image processing:
+  * Added Total variation denoising algorithm (TV Chambolle)
+* Added support for XYZ image files
+
 Bug fixes:
 
 * HDF5 import/browser features: added support for non-ASCII dataset names
@@ -19,7 +25,6 @@ Bug fixes:
 Other changes:
 
 * Alpha/beta release: fixed installer, added warning
-* Images: added support for XYZ image files
 
 ## Version 2.1.3 ##
 

@@ -40,3 +40,7 @@ FFT
 
 Inverse FFT
     Create a new image which is the inverse FFT of each selected image.
+
+Total variation denoising
+    Denoise image using Total Variation algorithm
+    (implementation based on `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)

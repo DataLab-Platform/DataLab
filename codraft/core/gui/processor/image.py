@@ -18,6 +18,7 @@ from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
+from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
@@ -122,6 +123,39 @@ class ZCalibrateParam(DataSet):
 
     a = FloatItem("a", default=1.0)
     b = FloatItem("b", default=0.0)
+
+
+class TVChambolleParam(DataSet):
+    """Total Variation denoising parameters"""
+
+    weight = FloatItem(
+        _("Denoising weight"),
+        default=0.1,
+        min=0,
+        nonzero=True,
+        help=_(
+            "The greater weight, the more denoising "
+            "(at the expense of fidelity to input)."
+        ),
+    )
+    eps = FloatItem(
+        "Epsilon",
+        default=0.0002,
+        min=0,
+        nonzero=True,
+        help=_(
+            "Relative difference of the value of the cost function that "
+            "determines the stop criterion. The algorithm stops when: "
+            "(E_(n-1) - E_n) < eps * E_0"
+        ),
+    )
+    max_num_iter = IntItem(
+        _("Max. iterations"),
+        default=200,
+        min=0,
+        nonzero=True,
+        help=_("Maximal number of iterations used for the optimization"),
+    )
 
 
 class GenericDetectionParam(DataSet):
@@ -484,6 +518,22 @@ class ImageProcessor(BaseProcessor):
     def compute_wiener(self):
         """Compute Wiener filter"""
         self.compute_11("WienerFilter", sps.wiener)
+
+    @qt_try_except()
+    def compute_tv_chambolle(self, param: TVChambolleParam = None) -> None:
+        """Compute TV Chambolle"""
+        edit = param is None
+        if edit:
+            param = TVChambolleParam(_("Total variation denoising"))
+        self.compute_11(
+            "TV_Chambolle",
+            lambda x, p: denoise_tv_chambolle(
+                x, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+            ),
+            param,
+            suffix=lambda p: f"weight={p.weight},eps={p.eps},maxn={p.max_num_iter}",
+            edit=edit,
+        )
 
     # ------Image Computing
     def apply_10_func(self, orig, func, param, message) -> ResultShape:

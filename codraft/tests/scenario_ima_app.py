@@ -22,6 +22,7 @@ from codraft.core.gui.processor.image import (
     PeakDetectionParam,
     ResizeParam,
     RotateParam,
+    TVChambolleParam,
     ZCalibrateParam,
 )
 from codraft.core.model.base import UniformRandomParam
@@ -61,6 +62,9 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     param = ZCalibrateParam()
     param.a, param.b = 1.2, 0.1
     panel.processor.calibrate(param)
+
+    param = TVChambolleParam()
+    panel.processor.compute_tv_chambolle(param)
 
     param = LogP1Param()
     param.n = 1
