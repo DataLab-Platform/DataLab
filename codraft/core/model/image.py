@@ -307,7 +307,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             self.maskdata,
             title=self.title,
             colormap="jet",
-            eliminate_outliers=0.1,
+            eliminate_outliers=Conf.view.ima_eliminate_outliers.get(0.1),
             interpolation="nearest",
             show_mask=True,
         )
@@ -502,6 +502,21 @@ def create_image(
     if labels is not None:
         image.xlabel, image.ylabel, image.zlabel = labels
     image.metadata = {} if metadata is None else metadata
+    # Default visualization settings
+    for name, opt in (
+        ("colormap", Conf.view.ima_def_colormap),
+        ("interpolation", Conf.view.ima_def_interpolation),
+    ):
+        defval = opt.get(None)
+        if defval is not None:
+            image.metadata[name] = defval
+    # TODO: [P2] Add default signal/image visualization settings
+    # 1. Add signal visualization settings?
+    # 2. Add more image visualization settings?
+    # 3. Add a dialog box to edit default settings in main window
+    #    (use a guidata dataset with only a selection of items from guiqwt.styles
+    #     classes)
+    # 4. Update all active objects when settings were changed
     return image
 
 

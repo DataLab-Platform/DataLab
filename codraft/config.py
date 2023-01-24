@@ -89,13 +89,24 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    # String formatting for shape legends
     sig_format = conf.Option()
     ima_format = conf.Option()
+
     show_label = conf.Option()
     show_contrast = conf.Option()
 
     # If True, images are shown with the same LUT range as the first selected image
     ima_ref_lut_range = conf.Option()
+
+    # Default visualization settings at item creation
+    # (e.g. see `ImageParam.make_item` in codraft/core/model/image.py)
+    ima_eliminate_outliers = conf.Option()
+
+    # Default visualization settings, persisted in object metadata
+    # (e.g. see `create_image` in codraft/core/model/image.py)
+    ima_def_colormap = conf.Option()
+    ima_def_interpolation = conf.Option()
 
 
 # Usage (example): Conf.console.enable.get(True)
