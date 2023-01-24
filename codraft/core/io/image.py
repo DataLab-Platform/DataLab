@@ -392,12 +392,23 @@ def imread_fxd(filename):
     return fxd_file.data
 
 
+def imread_xyz(filename):
+    """Open XYZ file image and return a NumPy array"""
+    with open(filename, "rb") as fdesc:
+        cols = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
+        rows = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
+        arr = np.fromfile(fdesc, dtype=np.uint16, count=cols * rows)
+        arr = arr.reshape((rows, cols))
+    return np.fliplr(arr)
+
+
 # ==============================================================================
 # Registering I/O functions
 # ==============================================================================
 iohandler.add(_("Andor SIF files"), "*.sif", read_func=imread_sif)
 iohandler.add(_("SPIRICON files"), "*.scor-data", read_func=imread_scor)
 iohandler.add(_("FXD files"), "*.fxd", read_func=imread_fxd)
+iohandler.add(_("XYZ files"), "*.xyz", read_func=imread_xyz)
 iohandler.add(
     _("Bitmap images"),
     "*.bmp",

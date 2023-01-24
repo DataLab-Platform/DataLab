@@ -3,7 +3,7 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.1.4a1 (in progress...) ##
+## Version 2.2.0a1 (in progress...) ##
 
 Bug fixes:
 
@@ -19,6 +19,7 @@ Bug fixes:
 Other changes:
 
 * Alpha/beta release: fixed installer, added warning
+* Images: added support for XYZ image files
 
 ## Version 2.1.3 ##
 
