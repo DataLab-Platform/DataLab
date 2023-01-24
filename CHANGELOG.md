@@ -3,11 +3,22 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.1.4 ##
+## Version 2.1.4a1 (in progress...) ##
 
 Bug fixes:
 
 * HDF5 import/browser features: added support for non-ASCII dataset names
+* ANDOR SIF files:
+  * Fixed compatibility issues for various SIF files
+  * Fixed unicode error
+* Image Contour detection:
+  * Fixed level default value for 8-bit data
+  * Added missing "level" parameter
+* Dev/VSCode: simplified `launch.json` and fixed environment variable substitution issue
+
+Other changes:
+
+* Alpha/beta release: fixed installer, added warning
 
 ## Version 2.1.3 ##
 
