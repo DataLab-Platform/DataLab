@@ -44,3 +44,7 @@ Inverse FFT
 Total variation denoising
     Denoise image using Total Variation algorithm
     (implementation based on `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)
+
+Bilateral filter denoising
+    Denoise image using bilateral filter
+    (implementation based on `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)

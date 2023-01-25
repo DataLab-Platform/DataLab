@@ -18,6 +18,7 @@ Testing the following:
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.gui.processor.image import (
     ContourShapeParam,
+    DenoiseBilateralParam,
     DenoiseTVParam,
     LogP1Param,
     PeakDetectionParam,
@@ -65,6 +66,9 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
 
     param = DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
+
+    param = DenoiseBilateralParam()
+    panel.processor.compute_denoise_bilateral(param)
 
     param = LogP1Param()
     param.n = 1

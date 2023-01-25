@@ -18,7 +18,7 @@ from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
-from skimage.restoration import denoise_tv_chambolle
+from skimage.restoration import denoise_bilateral, denoise_tv_chambolle
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
@@ -155,6 +155,42 @@ class DenoiseTVParam(DataSet):
         min=0,
         nonzero=True,
         help=_("Maximal number of iterations used for the optimization"),
+    )
+
+
+class DenoiseBilateralParam(DataSet):
+    """Bilateral filter denoising parameters"""
+
+    sigma_spatial = FloatItem(
+        "σ<sub>spatial</sub>",
+        default=1.0,
+        min=0,
+        nonzero=True,
+        help=_(
+            "Standard deviation for range distance. "
+            "A larger value results in averaging of pixels "
+            "with larger spatial differences."
+        ),
+    )
+    bins = IntItem(
+        _("Bins"),
+        default=10000,
+        min=0,
+        nonzero=True,
+        help=_(
+            "Number of discrete values for Gaussian weights of color filtering. "
+            "A larger value results in improved accuracy."
+        ),
+    )
+    modes = ("constant", "edge", "symmetric", "reflect", "wrap")
+    mode = ChoiceItem(_("Mode"), zip(modes, modes), default="constant")
+    cval = FloatItem(
+        "cval",
+        default=0,
+        help=_(
+            "Used in conjunction with mode ‘constant’, "
+            "the value outside the image boundaries."
+        ),
     )
 
 
@@ -521,7 +557,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_denoise_tv(self, param: DenoiseTVParam = None) -> None:
-        """Compute TV Chambolle"""
+        """Compute Denoise TV Chambolle"""
         edit = param is None
         if edit:
             param = DenoiseTVParam(_("Total variation denoising"))
@@ -532,6 +568,23 @@ class ImageProcessor(BaseProcessor):
             ),
             param,
             suffix=lambda p: f"weight={p.weight},eps={p.eps},maxn={p.max_num_iter}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_denoise_bilateral(self, param: DenoiseBilateralParam = None) -> None:
+        """Compute Denoise bilateral"""
+        edit = param is None
+        if edit:
+            param = DenoiseBilateralParam(_("Bilateral filtering"))
+        self.compute_11(
+            "DenoiseBilateral",
+            lambda x, p: denoise_bilateral(
+                x, sigma_spatial=p.sigma_spatial, bins=p.bins, mode=p.mode, cval=p.cval
+            ),
+            param,
+            suffix=lambda p: f"σspatial={p.sigma_spatial},bins={p.bins},mode={p.mode},"
+            f"cval={p.cval}",
             edit=edit,
         )
 

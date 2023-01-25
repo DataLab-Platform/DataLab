@@ -454,12 +454,13 @@ class ImageActionHandler(BaseActionHandler):
         """Create processing actions"""
         base_actions = super().create_processing_actions()
         proc = self.processor
-        denoise_tv_chamb_action = self.cra(
+        denoise_tv_action = self.cra(
             _("Total variation denoising"), proc.compute_denoise_tv
         )
-        actions = [
-            denoise_tv_chamb_action,
-        ]
+        denoise_bilateral_action = self.cra(
+            _("Bilateral filter denoising"), proc.compute_denoise_bilateral
+        )
+        actions = [denoise_tv_action, denoise_bilateral_action]
         self.actlist_1more += actions
         return base_actions + [None] + actions
 

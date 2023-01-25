@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 12:15+0100\n"
+"POT-Creation-Date: 2023-01-25 10:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -126,7 +126,7 @@ msgstr ""
 "Crée une image à partir de la transformée de Fourier rapide inverse (FFT "
 "inverse) de chaque image sélectionnée."
 
-#: ../../features/image/menu/processing.rst:45
+#: ../../features/image/menu/processing.rst:46
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
@@ -136,4 +136,20 @@ msgid ""
 "`skimage.restoration.denoise_tv_chambolle <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
 "chambolle>`_)"
-msgstr "Calcule le résultat d'un débruitage par filtrage variationnel selon l'algorithme de Chambolle (implémentation basée sur `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par filtrage variationnel selon "
+"l'algorithme de Chambolle (implémentation basée sur "
+"`skimage.restoration.denoise_tv_chambolle <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
+"chambolle>`_)"
+
+#: ../../features/image/menu/processing.rst:49
+msgid "Bilateral filter denoising"
+msgstr "Filtrage bilatéral (débruitage)"
+
+#: ../../features/image/menu/processing.rst:49
+msgid ""
+"Denoise image using bilateral filter (implementation based on "
+"`skimage.restoration.denoise_bilateral <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
+msgstr "Calcule le résultat d'un débruitage par filtrage bilatéral (implémentation basée sur `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
