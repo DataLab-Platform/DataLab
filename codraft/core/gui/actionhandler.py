@@ -479,7 +479,16 @@ class ImageActionHandler(BaseActionHandler):
         blacktophat_act = self.cra(_("Black Top-Hat (disk)"), proc.compute_black_tophat)
         erosion_act = self.cra(_("Erosion (disk)"), proc.compute_erosion)
         dilation_act = self.cra(_("Dilation (disk)"), proc.compute_dilation)
-        morph_actions = [whitetophat_act, blacktophat_act, erosion_act, dilation_act]
+        opening_act = self.cra(_("Opening (disk)"), proc.compute_opening)
+        closing_act = self.cra(_("Closing (disk)"), proc.compute_closing)
+        morph_actions = [
+            whitetophat_act,
+            blacktophat_act,
+            erosion_act,
+            dilation_act,
+            opening_act,
+            closing_act,
+        ]
         self.actlist_1more += denoise_actions + morph_actions
         return base_actions + [None] + denoise_actions + [None] + morph_actions
 

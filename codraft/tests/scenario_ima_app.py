@@ -81,6 +81,8 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_black_tophat(param)
     panel.processor.compute_erosion(param)
     panel.processor.compute_dilation(param)
+    panel.processor.compute_opening(param)
+    panel.processor.compute_closing(param)
 
     param = LogP1Param()
     param.n = 1

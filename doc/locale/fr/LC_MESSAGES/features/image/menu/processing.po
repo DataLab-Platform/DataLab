@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 17:55+0100\n"
+"POT-Creation-Date: 2023-01-25 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -218,22 +218,52 @@ msgstr ""
 
 #: ../../features/image/menu/processing.rst:70
 msgid "Erosion (disk)"
-msgstr "Erosion (ouverture circulaire)"
+msgstr "Erosion (disque)"
 
 #: ../../features/image/menu/processing.rst:69
 msgid ""
 "Perform morphological erosion on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.erosion <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
-msgstr "Calcule le résultat d'une érosion de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+msgstr ""
+"Calcule le résultat d'une érosion de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.morphology.erosion <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
 
-#: ../../features/image/menu/processing.rst:73
+#: ../../features/image/menu/processing.rst:74
 msgid "Dilation (disk)"
-msgstr "Dilatation (ouverture circulaire)"
+msgstr "Dilatation (disque)"
 
 #: ../../features/image/menu/processing.rst:73
 msgid ""
 "Perform morphological dilation on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.dilation <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
-msgstr "Calcule le résultat d'une dilatation de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+msgstr ""
+"Calcule le résultat d'une dilatation de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.morphology.dilation <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+
+#: ../../features/image/menu/processing.rst:78
+msgid "Opening (disk)"
+msgstr "Ouverture (disque)"
+
+#: ../../features/image/menu/processing.rst:77
+msgid ""
+"Perform morphological opening on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.opening <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
+msgstr "Calcule le résultat d'une ouverture morphologique de l'image, avec une forme circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
+
+#: ../../features/image/menu/processing.rst:81
+msgid "Closing (disk)"
+msgstr "Fermeture (disque)"
+
+#: ../../features/image/menu/processing.rst:81
+msgid ""
+"Perform morphological closing on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.closing <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
+msgstr "Calcule le résultat d'une fermeture morphologique de l'image, avec une forme circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"

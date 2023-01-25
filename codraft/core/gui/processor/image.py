@@ -682,65 +682,53 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    @qt_try_except()
-    def compute_white_tophat(self, param: MorphologyParam = None) -> None:
-        """Compute White Top-Hat"""
+    def _morph(self, param, func, title, name):
+        """Compute morphological transform"""
         edit = param is None
         if edit:
-            param = MorphologyParam(_("White Top-Hat"))
+            param = MorphologyParam(title)
 
         self.compute_11(
-            "WhiteTopHatDisk",
-            lambda x, p: morphology.white_tophat(x, morphology.disk(p.radius)),
+            name,
+            lambda x, p: func(x, morphology.disk(p.radius)),
             param,
             suffix=lambda p: f"radius={p.radius}",
             edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_white_tophat(self, param: MorphologyParam = None) -> None:
+        """Compute White Top-Hat"""
+        self._morph(
+            param, morphology.white_tophat, _("White Top-Hat"), "WhiteTopHatDisk"
         )
 
     @qt_try_except()
     def compute_black_tophat(self, param: MorphologyParam = None) -> None:
         """Compute Black Top-Hat"""
-        edit = param is None
-        if edit:
-            param = MorphologyParam(_("Black Top-Hat"))
-
-        self.compute_11(
-            "BlackTopHatDisk",
-            lambda x, p: morphology.black_tophat(x, morphology.disk(p.radius)),
-            param,
-            suffix=lambda p: f"radius={p.radius}",
-            edit=edit,
+        self._morph(
+            param, morphology.black_tophat, _("Black Top-Hat"), "BlackTopHatDisk"
         )
 
     @qt_try_except()
     def compute_erosion(self, param: MorphologyParam = None) -> None:
         """Compute Erosion"""
-        edit = param is None
-        if edit:
-            param = MorphologyParam(_("Erosion"))
-
-        self.compute_11(
-            "ErosionDisk",
-            lambda x, p: morphology.erosion(x, morphology.disk(p.radius)),
-            param,
-            suffix=lambda p: f"radius={p.radius}",
-            edit=edit,
-        )
+        self._morph(param, morphology.erosion, _("Erosion"), "ErosionDisk")
 
     @qt_try_except()
     def compute_dilation(self, param: MorphologyParam = None) -> None:
         """Compute Dilation"""
-        edit = param is None
-        if edit:
-            param = MorphologyParam(_("Dilation"))
+        self._morph(param, morphology.dilation, _("Dilation"), "DilationDisk")
 
-        self.compute_11(
-            "DilationDisk",
-            lambda x, p: morphology.dilation(x, morphology.disk(p.radius)),
-            param,
-            suffix=lambda p: f"radius={p.radius}",
-            edit=edit,
-        )
+    @qt_try_except()
+    def compute_opening(self, param: MorphologyParam = None) -> None:
+        """Compute morphological opening"""
+        self._morph(param, morphology.opening, _("Opening"), "OpeningDisk")
+
+    @qt_try_except()
+    def compute_closing(self, param: MorphologyParam = None) -> None:
+        """Compute morphological closing"""
+        self._morph(param, morphology.closing, _("Closing"), "ClosingDisk")
 
     # ------Image Computing
     def apply_10_func(self, orig, func, param, message) -> ResultShape:

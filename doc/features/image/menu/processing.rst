@@ -72,3 +72,11 @@ Erosion (disk)
 Dilation (disk)
     Perform morphological dilation on an image, using a disk footprint
     (implementation based on `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)
+
+Opening (disk)
+    Perform morphological opening on an image, using a disk footprint
+    (implementation based on `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)
+
+Closing (disk)
+    Perform morphological closing on an image, using a disk footprint
+    (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-25 17:55+0100\n"
+"POT-Creation-Date: 2023-01-25 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -343,51 +343,59 @@ msgstr "Débruitage Top-Hat"
 
 #: codraft\core\gui\actionhandler.py:478
 msgid "White Top-Hat (disk)"
-msgstr "Top-Hat (ouverture circulaire)"
+msgstr "Top-Hat (disque)"
 
 #: codraft\core\gui\actionhandler.py:479
 msgid "Black Top-Hat (disk)"
-msgstr "Top-Hat dual (ouverture circulaire)"
+msgstr "Top-Hat dual (disque)"
 
 #: codraft\core\gui\actionhandler.py:480
 msgid "Erosion (disk)"
-msgstr "Erosion (ouverture circulaire)"
+msgstr "Erosion (disque)"
 
 #: codraft\core\gui\actionhandler.py:481
 msgid "Dilation (disk)"
-msgstr "Dilatation (ouverture circulaire)"
+msgstr "Dilatation (disque)"
 
-#: codraft\core\gui\actionhandler.py:492
+#: codraft\core\gui\actionhandler.py:482
+msgid "Opening (disk)"
+msgstr "Ouverture (disque)"
+
+#: codraft\core\gui\actionhandler.py:483
+msgid "Closing (disk)"
+msgstr "Fermeture (disque)"
+
+#: codraft\core\gui\actionhandler.py:501
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: codraft\core\gui\actionhandler.py:492
-#: codraft\core\gui\processor\image.py:796
+#: codraft\core\gui\actionhandler.py:501
+#: codraft\core\gui\processor\image.py:780
 #: codraft\tests\enclosingcircle_unit.py:34
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: codraft\core\gui\actionhandler.py:495
+#: codraft\core\gui\actionhandler.py:504
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:497
+#: codraft\core\gui\actionhandler.py:506
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:500
+#: codraft\core\gui\actionhandler.py:509
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:502
+#: codraft\core\gui\actionhandler.py:511
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:505
+#: codraft\core\gui\actionhandler.py:514
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: codraft\core\gui\actionhandler.py:507
+#: codraft\core\gui\actionhandler.py:516
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
@@ -906,7 +914,7 @@ msgstr ""
 "maximum/minimum"
 
 #: codraft\core\gui\processor\image.py:260
-#: codraft\core\gui\processor\image.py:841
+#: codraft\core\gui\processor\image.py:825
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
@@ -950,31 +958,39 @@ msgstr "Filtre bilatéral"
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
-#: codraft\core\gui\processor\image.py:690
+#: codraft\core\gui\processor\image.py:702
 msgid "White Top-Hat"
 msgstr "Top-Hat"
 
-#: codraft\core\gui\processor\image.py:705
+#: codraft\core\gui\processor\image.py:707
 msgid "Black Top-Hat"
 msgstr "Top-Hat dual"
 
-#: codraft\core\gui\processor\image.py:720
+#: codraft\core\gui\processor\image.py:712
 msgid "Erosion"
 msgstr "Erosion"
 
-#: codraft\core\gui\processor\image.py:735
+#: codraft\core\gui\processor\image.py:717
 msgid "Dilation"
 msgstr "Dilatation"
 
-#: codraft\core\gui\processor\image.py:817
+#: codraft\core\gui\processor\image.py:722
+msgid "Opening"
+msgstr "Ouverture"
+
+#: codraft\core\gui\processor\image.py:727
+msgid "Closing"
+msgstr "Fermeture"
+
+#: codraft\core\gui\processor\image.py:801
 msgid "MinEnclosingCircle"
 msgstr "CercleMinimum"
 
-#: codraft\core\gui\processor\image.py:838
+#: codraft\core\gui\processor\image.py:822
 msgid "Peaks"
 msgstr "Pics"
 
-#: codraft\core\gui\processor\image.py:886
+#: codraft\core\gui\processor\image.py:870
 msgid "Contour"
 msgstr "Contour"
 

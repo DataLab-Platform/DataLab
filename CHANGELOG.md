@@ -18,6 +18,8 @@ New features:
     * Black Top-Hat
     * Erosion
     * Dilation
+    * Opening
+    * Closing
 * Added support for XYZ image files
 
 Bug fixes:
