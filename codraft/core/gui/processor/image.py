@@ -18,7 +18,7 @@ from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
-from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
+from skimage.restoration import denoise_tv_chambolle
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
@@ -125,7 +125,7 @@ class ZCalibrateParam(DataSet):
     b = FloatItem("b", default=0.0)
 
 
-class TVChambolleParam(DataSet):
+class DenoiseTVParam(DataSet):
     """Total Variation denoising parameters"""
 
     weight = FloatItem(
@@ -520,11 +520,11 @@ class ImageProcessor(BaseProcessor):
         self.compute_11("WienerFilter", sps.wiener)
 
     @qt_try_except()
-    def compute_tv_chambolle(self, param: TVChambolleParam = None) -> None:
+    def compute_denoise_tv(self, param: DenoiseTVParam = None) -> None:
         """Compute TV Chambolle"""
         edit = param is None
         if edit:
-            param = TVChambolleParam(_("Total variation denoising"))
+            param = DenoiseTVParam(_("Total variation denoising"))
         self.compute_11(
             "TV_Chambolle",
             lambda x, p: denoise_tv_chambolle(
