@@ -454,18 +454,22 @@ class ImageActionHandler(BaseActionHandler):
         """Create processing actions"""
         base_actions = super().create_processing_actions()
         proc = self.processor
-        denoise_tv_action = self.cra(
+        denoise_tv_act = self.cra(
             _("Total variation denoising"), proc.compute_denoise_tv
         )
-        denoise_bilateral_action = self.cra(
+        denoise_bilateral_act = self.cra(
             _("Bilateral filter denoising"), proc.compute_denoise_bilateral
         )
-        denoise_wavelet_action = self.cra(
+        denoise_wavelet_act = self.cra(
             _("Wavelet denoising"), proc.compute_denoise_wavelet
         )
-        actions = [denoise_tv_action, denoise_bilateral_action, denoise_wavelet_action]
-        self.actlist_1more += actions
-        return base_actions + [None] + actions
+        denoise_actions = [denoise_tv_act, denoise_bilateral_act, denoise_wavelet_act]
+        whitetophat_act = self.cra(
+            _("White Top-Hat (disk)"), proc.compute_white_tophat
+        )
+        morph_actions = [whitetophat_act]
+        self.actlist_1more += denoise_actions + morph_actions
+        return base_actions + [None] + denoise_actions + [None] + morph_actions
 
     def create_computing_actions(self):
         """Create computing actions"""

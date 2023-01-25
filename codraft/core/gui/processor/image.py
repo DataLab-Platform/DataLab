@@ -19,6 +19,7 @@ from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
+from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
 from codraft.config import APP_NAME, _
@@ -194,6 +195,12 @@ class DenoiseWaveletParam(DataSet):
     mode = ChoiceItem(_("Mode"), zip(_modelist, _modelist), default="soft")
     _methlist = ("BayesShrink", "VisuShrink")
     method = ChoiceItem(_("Method"), zip(_methlist, _methlist), default="VisuShrink")
+
+
+class WhiteTopHatParam(DataSet):
+    """White Top-Hat parameters"""
+
+    radius = IntItem(_("Radius"), default=1, min=1, help=_("Footprint (disk) radius."))
 
 
 class GenericDetectionParam(DataSet):
@@ -605,6 +612,26 @@ class ImageProcessor(BaseProcessor):
             ),
             param,
             suffix=lambda p: f"wavelet={p.wavelet},mode={p.mode},method={p.method}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_white_tophat(self, param: WhiteTopHatParam = None) -> None:
+        """Compute White Top-Hat"""
+        edit = param is None
+        if edit:
+            param = WhiteTopHatParam(_("White Top-Hat"))
+
+        def whitetophatdisk(data: np.ndarray, radius: float) -> np.ndarray:
+            """Perform white Top-Hat transform with circular footprint"""
+            footprint = morphology.disk(radius)
+            return data - morphology.white_tophat(data, footprint)
+
+        self.compute_11(
+            "WhiteTopHatDisk",
+            lambda x, p: whitetophatdisk(x, radius=p.radius),
+            param,
+            suffix=lambda p: f"radius={p.radius}",
             edit=edit,
         )
 

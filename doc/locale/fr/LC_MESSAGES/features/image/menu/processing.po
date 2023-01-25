@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 10:42+0100\n"
+"POT-Creation-Date: 2023-01-25 11:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -158,7 +158,7 @@ msgstr ""
 "://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-"
 "bilateral>`_)"
 
-#: ../../features/image/menu/processing.rst:53
+#: ../../features/image/menu/processing.rst:54
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
@@ -168,4 +168,17 @@ msgid ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
 msgstr ""
-"Calcule le résultat d'un débruitage par ondelettes (implémentation basée sur `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+"Calcule le résultat d'un débruitage par ondelettes (implémentation basée "
+"sur `skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+
+#: ../../features/image/menu/processing.rst:57
+msgid "White Top-Hat (disk)"
+msgstr "Top-Hat (disque)"
+
+#: ../../features/image/menu/processing.rst:57
+msgid ""
+"Perform white top hat of an image, using a disk footprint (implementation"
+" based on `skimage.morphology.white_tophat <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+msgstr "Calcule le résultat d'un Top-Hat de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"

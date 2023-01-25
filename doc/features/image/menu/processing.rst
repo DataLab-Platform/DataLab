@@ -52,3 +52,7 @@ Bilateral filter denoising
 Wavelet denoising
     Perform wavelet denoising on image
     (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
+
+White Top-Hat (disk)
+    Perform white top hat of an image, using a disk footprint
+    (implementation based on `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)
