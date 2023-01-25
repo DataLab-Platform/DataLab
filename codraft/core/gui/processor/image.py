@@ -24,6 +24,8 @@ from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
+    BINNING_OPERATIONS,
+    binning,
     distance_matrix,
     flatfield,
     get_2d_peaks_coords,
@@ -114,6 +116,29 @@ class ResizeParam(DataSet):
     ).set_prop("display", active=prop)
 
 
+class BinningParam(DataSet):
+    """Binning parameters"""
+
+    binning_x = IntItem(
+        _("Cluster size (X)"),
+        default=2,
+        min=2,
+        help=_("Number of adjacent pixels to be combined together along X-axis."),
+    )
+    binning_y = IntItem(
+        _("Cluster size (Y)"),
+        default=2,
+        min=2,
+        help=_("Number of adjacent pixels to be combined together along Y-axis."),
+    )
+    _operations = BINNING_OPERATIONS
+    operation = ChoiceItem(
+        _("Operation"),
+        list(zip(_operations, _operations)),
+        default=_operations[0],
+    )
+
+
 class FlatFieldParam(BaseProcParam):
     """Flat-field parameters"""
 
@@ -175,7 +200,7 @@ class DenoiseBilateralParam(DataSet):
         ),
     )
     _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = ChoiceItem(_("Mode"), zip(_modelist, _modelist), default="constant")
+    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="constant")
     cval = FloatItem(
         "cval",
         default=0,
@@ -190,11 +215,13 @@ class DenoiseWaveletParam(DataSet):
     """Wavelet denoising parameters"""
 
     _wavelist = pywt.wavelist()
-    wavelet = ChoiceItem(_("Wavelet"), zip(_wavelist, _wavelist), default="sym9")
+    wavelet = ChoiceItem(_("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9")
     _modelist = ("soft", "hard")
-    mode = ChoiceItem(_("Mode"), zip(_modelist, _modelist), default="soft")
+    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
     _methlist = ("BayesShrink", "VisuShrink")
-    method = ChoiceItem(_("Method"), zip(_methlist, _methlist), default="VisuShrink")
+    method = ChoiceItem(
+        _("Method"), list(zip(_methlist, _methlist)), default="VisuShrink"
+    )
 
 
 class TopHatParam(DataSet):
@@ -322,7 +349,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj: obj.remove_resultshapes(),
         )
 
-    def resize_image(self, param: ResizeParam = None) -> None:
+    def resize(self, param: ResizeParam = None) -> None:
         """Resize image"""
         obj0 = self.objlist.get_sel_object(0)
         for obj in self.objlist.get_sel_objects():
@@ -368,6 +395,31 @@ class ImageProcessor(BaseProcessor):
             ),
             param,
             suffix=lambda p: f"zoom={p.zoom:.3f}",
+            func_obj=func_obj,
+            edit=edit,
+        )
+
+    def rebin(self, param: BinningParam = None) -> None:
+        """Binning image"""
+        edit = param is None
+        if edit:
+            param = BinningParam(_("Binning"))
+
+        def func_obj(obj, param):
+            """Binning function"""
+            if obj.dx is not None and obj.dy is not None:
+                obj.dx *= param.binning_x
+                obj.dy *= param.binning_y
+            # TODO: [P2] Instead of removing geometric shapes, apply zoom
+            obj.remove_resultshapes()
+
+        self.compute_11(
+            "PixelBinning",
+            lambda x, p: binning(
+                x, binning_x=p.binning_x, binning_y=p.binning_y, operation=p.operation
+            ),
+            param,
+            suffix=lambda p: f"{p.binning_x}x{p.binning_y},{p.operation}",
             func_obj=func_obj,
             edit=edit,
         )

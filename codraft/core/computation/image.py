@@ -28,6 +28,35 @@ def scale_data_to_min_max(data: np.ndarray, zmin, zmax):
     return np.array(fdata, data.dtype)
 
 
+BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
+
+
+def binning(
+    data: np.ndarray, binning_x: int, binning_y: int, operation: str
+) -> np.ndarray:
+    """Perform image pixel binning"""
+    ny, nx = data.shape
+    shape = (ny // binning_y, binning_y, nx // binning_x, binning_x)
+    try:
+        bdata = data[: ny - ny % binning_y, : nx - nx % binning_x].reshape(shape)
+    except ValueError as err:
+        raise ValueError(f"Binning is not a multiple of image dimensions") from err
+    if operation == "sum":
+        bdata = bdata.sum(axis=(-1, 1))
+    elif operation == "average":
+        bdata = bdata.mean(axis=(-1, 1))
+    elif operation == "median":
+        bdata = ma.median(bdata, axis=(-1, 1))
+    elif operation == "min":
+        bdata = bdata.min(axis=(-1, 1))
+    elif operation == "max":
+        bdata = bdata.max(axis=(-1, 1))
+    else:
+        valid = ", ".join(BINNING_OPERATIONS)
+        raise ValueError(f"Invalid operation {operation} (valid values: {valid})")
+    return bdata
+
+
 def flatfield(rawdata: np.ndarray, flatdata: np.ndarray, threshold: float = None):
     """Compute flat-field correction"""
     dtemp = np.array(rawdata, dtype=np.float64, copy=True) * flatdata.mean()

@@ -420,7 +420,8 @@ class ImageActionHandler(BaseActionHandler):
         rotate_act = self.cra(
             _("Rotate arbitrarily..."), triggered=proc.rotate_arbitrarily
         )
-        resize_act = self.cra(_("Resize"), triggered=proc.resize_image)
+        resize_act = self.cra(_("Resize"), triggered=proc.resize)
+        binning_act = self.cra(_("Pixel binning"), triggered=proc.rebin)
         logp1_act = self.cra("Log10(z+n)", triggered=proc.compute_logp1)
         flatfield_act = self.cra(
             _("Flat-field correction"), triggered=proc.flat_field_correction
@@ -428,6 +429,7 @@ class ImageActionHandler(BaseActionHandler):
         self.actlist_2 += [flatfield_act]
         self.actlist_1more += [
             resize_act,
+            binning_act,
             hflip_act,
             vflip_act,
             logp1_act,
@@ -447,6 +449,7 @@ class ImageActionHandler(BaseActionHandler):
             rotate_menu,
             None,
             resize_act,
+            binning_act,
         ]
         return base_actions + actions + roi_actions
 

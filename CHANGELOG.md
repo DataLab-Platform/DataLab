@@ -8,6 +8,7 @@ for future and past milestones.
 New features:
 
 * Image processing:
+  * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added Total variation denoising filter (TV Chambolle)
   * Added Bilateral filter (denoising)
   * Added Wavelet denoising filter

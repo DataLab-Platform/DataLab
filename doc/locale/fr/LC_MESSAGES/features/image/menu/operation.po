@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2023-01-25 16:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,17 +66,15 @@ msgid ""
 msgstr ""
 
 #: ../../features/image/menu/operation.rst:29
-#, fuzzy
 msgid "Quadratic difference"
-msgstr "Soustraction"
+msgstr "Soustraction quadratique"
 
 #: ../../features/image/menu/operation.rst:25
-#, fuzzy
 msgid ""
 "Create a new image which is the quadratic difference of the **two** "
 "selected images:"
 msgstr ""
-"Crée une image à partir de la différence des **deux** images "
+"Crée une image à partir de la différence quadratique des **deux** images "
 "sélectionnées :"
 
 #: ../../features/image/menu/operation.rst:28
@@ -237,17 +235,28 @@ msgstr ""
 "Crée une image qui est le résultat du redimensionnement de chaque image "
 "sélectionnée."
 
-#: ../../features/image/menu/operation.rst:100
+#: ../../features/image/menu/operation.rst:97
+msgid "Pixel binning"
+msgstr "Binning"
+
+#: ../../features/image/menu/operation.rst:95
+msgid ""
+"Combine clusters of adjacent pixels, throughout the image, into single "
+"pixels. The result can be the sum, average, median, minimum, or maximum "
+"value of the cluster."
+msgstr "Regroupe des pixels adjacents de l'image en un seul pixel (somme, moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
+
+#: ../../features/image/menu/operation.rst:105
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/image/menu/operation.rst:95
+#: ../../features/image/menu/operation.rst:100
 msgid "Create a new image from a user-defined Region of Interest."
 msgstr ""
 "Crée une image à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/image/menu/operation.rst:99
+#: ../../features/image/menu/operation.rst:104
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the size of a rectangle shape."
@@ -255,11 +264,11 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
 
-#: ../../features/image/menu/operation.rst:102
+#: ../../features/image/menu/operation.rst:107
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/image/menu/operation.rst:103
+#: ../../features/image/menu/operation.rst:108
 msgid "Create a new image which is the result of swapping X/Y data."
 msgstr ""
 "Créee une image à partir des données inversées X/Y de l'image "

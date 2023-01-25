@@ -97,7 +97,7 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
 
     param = ResizeParam()
     param.zoom = 1.3
-    panel.processor.resize_image(param)
+    panel.processor.resize(param)
 
     n = data_size // 10
     panel.processor.extract_roi([[n, n, data_size - n, data_size - n]])

@@ -91,6 +91,11 @@ Rotation
 Resize
     Create a new image which is a resized version of each selected image.
 
+Pixel binning
+    Combine clusters of adjacent pixels, throughout the image,
+    into single pixels. The result can be the sum, average, median, minimum,
+    or maximum value of the cluster.
+
 ROI extraction
     Create a new image from a user-defined Region of Interest.
 
