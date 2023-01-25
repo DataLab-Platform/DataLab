@@ -224,7 +224,7 @@ class DenoiseWaveletParam(DataSet):
     )
 
 
-class TopHatParam(DataSet):
+class MorphologyParam(DataSet):
     """White Top-Hat parameters"""
 
     radius = IntItem(_("Radius"), default=1, min=1, help=_("Footprint (disk) radius."))
@@ -668,11 +668,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_denoise_tophat(self, param: TopHatParam = None) -> None:
+    def compute_denoise_tophat(self, param: MorphologyParam = None) -> None:
         """Denoise using White Top-Hat"""
         edit = param is None
         if edit:
-            param = TopHatParam(_("Denoise / Top-Hat"))
+            param = MorphologyParam(_("Denoise / Top-Hat"))
 
         self.compute_11(
             "DenoiseWhiteTopHat",
@@ -683,11 +683,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_white_tophat(self, param: TopHatParam = None) -> None:
+    def compute_white_tophat(self, param: MorphologyParam = None) -> None:
         """Compute White Top-Hat"""
         edit = param is None
         if edit:
-            param = TopHatParam(_("White Top-Hat"))
+            param = MorphologyParam(_("White Top-Hat"))
 
         self.compute_11(
             "WhiteTopHatDisk",
@@ -698,15 +698,45 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_black_tophat(self, param: TopHatParam = None) -> None:
+    def compute_black_tophat(self, param: MorphologyParam = None) -> None:
         """Compute Black Top-Hat"""
         edit = param is None
         if edit:
-            param = TopHatParam(_("Black Top-Hat"))
+            param = MorphologyParam(_("Black Top-Hat"))
 
         self.compute_11(
             "BlackTopHatDisk",
             lambda x, p: morphology.black_tophat(x, morphology.disk(p.radius)),
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_erosion(self, param: MorphologyParam = None) -> None:
+        """Compute Erosion"""
+        edit = param is None
+        if edit:
+            param = MorphologyParam(_("Erosion"))
+
+        self.compute_11(
+            "ErosionDisk",
+            lambda x, p: morphology.erosion(x, morphology.disk(p.radius)),
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_dilation(self, param: MorphologyParam = None) -> None:
+        """Compute Dilation"""
+        edit = param is None
+        if edit:
+            param = MorphologyParam(_("Dilation"))
+
+        self.compute_11(
+            "DilationDisk",
+            lambda x, p: morphology.dilation(x, morphology.disk(p.radius)),
             param,
             suffix=lambda p: f"radius={p.radius}",
             edit=edit,

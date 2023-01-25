@@ -64,3 +64,11 @@ White Top-Hat (disk)
 Black Top-Hat (disk)
     Perform black top hat transform of an image, using a disk footprint
     (implementation based on `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)
+
+Erosion (disk)
+    Perform morphological erosion on an image, using a disk footprint
+    (implementation based on `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)
+
+Dilation (disk)
+    Perform morphological dilation on an image, using a disk footprint
+    (implementation based on `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)

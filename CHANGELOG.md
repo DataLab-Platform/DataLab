@@ -13,8 +13,11 @@ New features:
   * Added Bilateral filter (denoising)
   * Added Wavelet denoising filter
   * Added white Top-Hat denoising filter
-  * Added white Top-Hat transform (disk footprint)
-  * Added black Top-Hat transform (disk footprint)
+  * Added morphological transforms (disk footprint):
+    * White Top-Hat
+    * Black Top-Hat
+    * Erosion
+    * Dilation
 * Added support for XYZ image files
 
 Bug fixes:

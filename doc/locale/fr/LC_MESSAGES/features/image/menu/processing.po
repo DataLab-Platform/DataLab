@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 14:59+0100\n"
+"POT-Creation-Date: 2023-01-25 17:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -180,7 +180,9 @@ msgstr "Débruitage par Top-Hat"
 msgid ""
 "Denoise image by subtracting its white top hat transform (using a disk "
 "footprint)"
-msgstr "Débruitage de l'image par soustraction de la transformée Top-Hat avec ouverture circulaire de rayon paramétrable
+msgstr ""
+"Débruitage de l'image par soustraction de la transformée Top-Hat avec "
+"ouverture circulaire de rayon paramétrabl"
 
 #: ../../features/image/menu/processing.rst:62
 msgid "White Top-Hat (disk)"
@@ -198,7 +200,7 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
 
-#: ../../features/image/menu/processing.rst:65
+#: ../../features/image/menu/processing.rst:66
 msgid "Black Top-Hat (disk)"
 msgstr "Top-Hat dual (disque)"
 
@@ -213,3 +215,25 @@ msgstr ""
 "circulaire (disque) de rayon paramétrable (implémentation basée sur "
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
+
+#: ../../features/image/menu/processing.rst:70
+msgid "Erosion (disk)"
+msgstr "Erosion (ouverture circulaire)"
+
+#: ../../features/image/menu/processing.rst:69
+msgid ""
+"Perform morphological erosion on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.erosion <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+msgstr "Calcule le résultat d'une érosion de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+
+#: ../../features/image/menu/processing.rst:73
+msgid "Dilation (disk)"
+msgstr "Dilatation (ouverture circulaire)"
+
+#: ../../features/image/menu/processing.rst:73
+msgid ""
+"Perform morphological dilation on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.dilation <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+msgstr "Calcule le résultat d'une dilatation de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
