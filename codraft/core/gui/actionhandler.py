@@ -460,7 +460,10 @@ class ImageActionHandler(BaseActionHandler):
         denoise_bilateral_action = self.cra(
             _("Bilateral filter denoising"), proc.compute_denoise_bilateral
         )
-        actions = [denoise_tv_action, denoise_bilateral_action]
+        denoise_wavelet_action = self.cra(
+            _("Wavelet denoising"), proc.compute_denoise_wavelet
+        )
+        actions = [denoise_tv_action, denoise_bilateral_action, denoise_wavelet_action]
         self.actlist_1more += actions
         return base_actions + [None] + actions
 

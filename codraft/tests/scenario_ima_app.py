@@ -20,6 +20,7 @@ from codraft.core.gui.processor.image import (
     ContourShapeParam,
     DenoiseBilateralParam,
     DenoiseTVParam,
+    DenoiseWaveletParam,
     LogP1Param,
     PeakDetectionParam,
     ResizeParam,
@@ -69,6 +70,9 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
 
     param = DenoiseBilateralParam()
     panel.processor.compute_denoise_bilateral(param)
+
+    param = DenoiseWaveletParam()
+    panel.processor.compute_denoise_wavelet(param)
 
     param = LogP1Param()
     param.n = 1

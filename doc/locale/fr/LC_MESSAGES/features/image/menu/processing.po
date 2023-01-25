@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 10:15+0100\n"
+"POT-Creation-Date: 2023-01-25 10:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,7 +143,7 @@ msgstr ""
 "image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
 "chambolle>`_)"
 
-#: ../../features/image/menu/processing.rst:49
+#: ../../features/image/menu/processing.rst:50
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
@@ -152,4 +152,20 @@ msgid ""
 "Denoise image using bilateral filter (implementation based on "
 "`skimage.restoration.denoise_bilateral <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
-msgstr "Calcule le résultat d'un débruitage par filtrage bilatéral (implémentation basée sur `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par filtrage bilatéral "
+"(implémentation basée sur `skimage.restoration.denoise_bilateral <https"
+"://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-"
+"bilateral>`_)"
+
+#: ../../features/image/menu/processing.rst:53
+msgid "Wavelet denoising"
+msgstr "Débruitage par ondelettes"
+
+#: ../../features/image/menu/processing.rst:53
+msgid ""
+"Perform wavelet denoising on image (implementation based on "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par ondelettes (implémentation basée sur `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"

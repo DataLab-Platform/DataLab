@@ -10,6 +10,7 @@ New features:
 * Image processing:
   * Added Total variation denoising algorithm (TV Chambolle)
   * Added Bilateral filter denoising algorithm
+  * Added Wavelet denoising algorithm
 * Added support for XYZ image files
 
 Bug fixes:

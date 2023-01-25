@@ -11,6 +11,7 @@ CodraFT Image Processor GUI module
 
 
 import numpy as np
+import pywt
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
@@ -18,7 +19,7 @@ from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
-from skimage.restoration import denoise_bilateral, denoise_tv_chambolle
+from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
@@ -172,18 +173,8 @@ class DenoiseBilateralParam(DataSet):
             "with larger spatial differences."
         ),
     )
-    bins = IntItem(
-        _("Bins"),
-        default=10000,
-        min=0,
-        nonzero=True,
-        help=_(
-            "Number of discrete values for Gaussian weights of color filtering. "
-            "A larger value results in improved accuracy."
-        ),
-    )
-    modes = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = ChoiceItem(_("Mode"), zip(modes, modes), default="constant")
+    _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
+    mode = ChoiceItem(_("Mode"), zip(_modelist, _modelist), default="constant")
     cval = FloatItem(
         "cval",
         default=0,
@@ -192,6 +183,17 @@ class DenoiseBilateralParam(DataSet):
             "the value outside the image boundaries."
         ),
     )
+
+
+class DenoiseWaveletParam(DataSet):
+    """Wavelet denoising parameters"""
+
+    _wavelist = pywt.wavelist()
+    wavelet = ChoiceItem(_("Wavelet"), zip(_wavelist, _wavelist), default="sym9")
+    _modelist = ("soft", "hard")
+    mode = ChoiceItem(_("Mode"), zip(_modelist, _modelist), default="soft")
+    _methlist = ("BayesShrink", "VisuShrink")
+    method = ChoiceItem(_("Method"), zip(_methlist, _methlist), default="VisuShrink")
 
 
 class GenericDetectionParam(DataSet):
@@ -557,7 +559,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_denoise_tv(self, param: DenoiseTVParam = None) -> None:
-        """Compute Denoise TV Chambolle"""
+        """Compute Total Variation denoising"""
         edit = param is None
         if edit:
             param = DenoiseTVParam(_("Total variation denoising"))
@@ -573,18 +575,36 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_denoise_bilateral(self, param: DenoiseBilateralParam = None) -> None:
-        """Compute Denoise bilateral"""
+        """Compute bilateral filter denoising"""
         edit = param is None
         if edit:
             param = DenoiseBilateralParam(_("Bilateral filtering"))
         self.compute_11(
             "DenoiseBilateral",
             lambda x, p: denoise_bilateral(
-                x, sigma_spatial=p.sigma_spatial, bins=p.bins, mode=p.mode, cval=p.cval
+                x, sigma_spatial=p.sigma_spatial, mode=p.mode, cval=p.cval
             ),
             param,
-            suffix=lambda p: f"σspatial={p.sigma_spatial},bins={p.bins},mode={p.mode},"
-            f"cval={p.cval}",
+            suffix=lambda p: f"σspatial={p.sigma_spatial},mode={p.mode},cval={p.cval}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_denoise_wavelet(self, param: DenoiseWaveletParam = None) -> None:
+        """Compute Wavelet denoising"""
+        edit = param is None
+        if edit:
+            param = DenoiseWaveletParam(_("Wavelet denoising"))
+        self.compute_11(
+            "DenoiseWavelet",
+            lambda x, p: denoise_wavelet(
+                x,
+                wavelet=p.wavelet,
+                mode=p.mode,
+                method=p.method,
+            ),
+            param,
+            suffix=lambda p: f"wavelet={p.wavelet},mode={p.mode},method={p.method}",
             edit=edit,
         )
 

@@ -48,3 +48,7 @@ Total variation denoising
 Bilateral filter denoising
     Denoise image using bilateral filter
     (implementation based on `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)
+
+Wavelet denoising
+    Perform wavelet denoising on image
+    (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
