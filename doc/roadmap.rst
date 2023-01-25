@@ -4,7 +4,7 @@ Roadmap
 Future milestones
 -----------------
 
-CodraFT 2.3
+CodraFT 2.4
 ^^^^^^^^^^^
 
 * Run computations in a separate process:
@@ -18,12 +18,13 @@ CodraFT 2.3
     server process and restarting it (eventually after incrementing the
     communication port number)
 
-* Add an xmlrpc server to allow external applications controlling
-  CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
+* Run computations in a separate process (alternative solution):
+
+  - Use an IPython kernel to provide the same features as described above
 
 * Optimize image displaying performance
 
-CodraFT 2.2
+CodraFT 2.3
 ^^^^^^^^^^^
 
 * New plugin system: API for third-party extensions
@@ -33,6 +34,15 @@ CodraFT 2.2
   - New embedded Python editor
   - Scripts using the same API as high-level applicative test scenarios
   - Support for macro recording
+
+* Add an xmlrpc server to allow external applications controlling
+  CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
+
+CodraFT 2.2
+^^^^^^^^^^^
+
+* Add new image processing features: denoising, ...
+* Add default image visualization settings in .INI configuration file
 
 Other ideas for future releases
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
