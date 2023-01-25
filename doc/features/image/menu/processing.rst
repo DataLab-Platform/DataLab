@@ -53,6 +53,14 @@ Wavelet denoising
     Perform wavelet denoising on image
     (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
 
+White Top-Hat denoising
+    Denoise image by subtracting its white top hat transform
+    (using a disk footprint)
+
 White Top-Hat (disk)
-    Perform white top hat of an image, using a disk footprint
+    Perform white top hat transform of an image, using a disk footprint
     (implementation based on `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)
+
+Black Top-Hat (disk)
+    Perform black top hat transform of an image, using a disk footprint
+    (implementation based on `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)

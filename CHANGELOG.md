@@ -8,10 +8,12 @@ for future and past milestones.
 New features:
 
 * Image processing:
-  * Added Total variation denoising algorithm (TV Chambolle)
-  * Added Bilateral filter denoising algorithm
-  * Added Wavelet denoising algorithm
-  * Added white Top-Hat algorithm (disk footprint)
+  * Added Total variation denoising filter (TV Chambolle)
+  * Added Bilateral filter (denoising)
+  * Added Wavelet denoising filter
+  * Added white Top-Hat denoising filter
+  * Added white Top-Hat transform (disk footprint)
+  * Added black Top-Hat transform (disk footprint)
 * Added support for XYZ image files
 
 Bug fixes:

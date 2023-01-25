@@ -25,7 +25,7 @@ from codraft.core.gui.processor.image import (
     PeakDetectionParam,
     ResizeParam,
     RotateParam,
-    WhiteTopHatParam,
+    TopHatParam,
     ZCalibrateParam,
 )
 from codraft.core.model.base import UniformRandomParam
@@ -75,8 +75,10 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     param = DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
-    param = WhiteTopHatParam()
+    param = TopHatParam()
+    panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
+    panel.processor.compute_black_tophat(param)
 
     param = LogP1Param()
     param.n = 1

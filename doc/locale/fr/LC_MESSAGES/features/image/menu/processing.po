@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 11:59+0100\n"
+"POT-Creation-Date: 2023-01-25 14:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,13 +172,44 @@ msgstr ""
 "sur `skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
 
-#: ../../features/image/menu/processing.rst:57
-msgid "White Top-Hat (disk)"
-msgstr "Top-Hat (disque)"
+#: ../../features/image/menu/processing.rst:58
+msgid "White Top-Hat denoising"
+msgstr "Débruitage par Top-Hat"
 
 #: ../../features/image/menu/processing.rst:57
 msgid ""
-"Perform white top hat of an image, using a disk footprint (implementation"
-" based on `skimage.morphology.white_tophat <https://scikit-"
+"Denoise image by subtracting its white top hat transform (using a disk "
+"footprint)"
+msgstr "Débruitage de l'image par soustraction de la transformée Top-Hat avec ouverture circulaire de rayon paramétrable
+
+#: ../../features/image/menu/processing.rst:62
+msgid "White Top-Hat (disk)"
+msgstr "Top-Hat (disque)"
+
+#: ../../features/image/menu/processing.rst:61
+msgid ""
+"Perform white top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.white_tophat <https"
+"://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
-msgstr "Calcule le résultat d'un Top-Hat de l'image, avec une ouverture circulaire (disque) de rayon paramétrable (implémentation basée sur `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+msgstr ""
+"Calcule le résultat d'un Top-Hat de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+
+#: ../../features/image/menu/processing.rst:65
+msgid "Black Top-Hat (disk)"
+msgstr "Top-Hat dual (disque)"
+
+#: ../../features/image/menu/processing.rst:65
+msgid ""
+"Perform black top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.black_tophat <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
+msgstr ""
+"Calcule le résultat d'un Top-Hat dual de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"

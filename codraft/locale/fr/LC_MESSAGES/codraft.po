@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-25 11:59+0100\n"
+"POT-Creation-Date: 2023-01-25 15:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -334,40 +334,48 @@ msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
 #: codraft\core\gui\actionhandler.py:467
+msgid "White Top-Hat denoising"
+msgstr "Débruitage Top-Hat"
+
+#: codraft\core\gui\actionhandler.py:475
 msgid "White Top-Hat (disk)"
 msgstr "Top-Hat (ouverture circulaire)"
 
-#: codraft\core\gui\actionhandler.py:485
+#: codraft\core\gui\actionhandler.py:476
+msgid "Black Top-Hat (disk)"
+msgstr "Top-Hat dual (ouverture circulaire)"
+
+#: codraft\core\gui\actionhandler.py:487
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: codraft\core\gui\actionhandler.py:485
-#: codraft\core\gui\processor\image.py:689
+#: codraft\core\gui\actionhandler.py:487
+#: codraft\core\gui\processor\image.py:714
 #: codraft\tests\enclosingcircle_unit.py:34
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: codraft\core\gui\actionhandler.py:488
+#: codraft\core\gui\actionhandler.py:490
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:490
+#: codraft\core\gui\actionhandler.py:492
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:493
+#: codraft\core\gui\actionhandler.py:495
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:495
+#: codraft\core\gui\actionhandler.py:497
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:498
+#: codraft\core\gui\actionhandler.py:500
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: codraft\core\gui\actionhandler.py:500
+#: codraft\core\gui\actionhandler.py:502
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
@@ -820,6 +828,7 @@ msgstr ""
 "moyenner des pixels séparés par de grandes distances."
 
 #: codraft\core\gui\processor\image.py:182
+#, fuzzy
 msgid ""
 "Used in conjunction with mode constant, the value outside the image "
 "boundaries."
@@ -865,7 +874,7 @@ msgstr ""
 "maximum/minimum"
 
 #: codraft\core\gui\processor\image.py:233
-#: codraft\core\gui\processor\image.py:734
+#: codraft\core\gui\processor\image.py:759
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
@@ -902,18 +911,26 @@ msgid "Bilateral filtering"
 msgstr "Filtre bilatéral"
 
 #: codraft\core\gui\processor\image.py:623
+msgid "Denoise / Top-Hat"
+msgstr "Débruitage Top-Hat"
+
+#: codraft\core\gui\processor\image.py:638
 msgid "White Top-Hat"
 msgstr "Top-Hat"
 
-#: codraft\core\gui\processor\image.py:710
+#: codraft\core\gui\processor\image.py:653
+msgid "Black Top-Hat"
+msgstr "Top-Hat dual"
+
+#: codraft\core\gui\processor\image.py:735
 msgid "MinEnclosingCircle"
 msgstr "CercleMinimum"
 
-#: codraft\core\gui\processor\image.py:731
+#: codraft\core\gui\processor\image.py:756
 msgid "Peaks"
 msgstr "Pics"
 
-#: codraft\core\gui\processor\image.py:779
+#: codraft\core\gui\processor\image.py:804
 msgid "Contour"
 msgstr "Contour"
 

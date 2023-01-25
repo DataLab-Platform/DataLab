@@ -463,11 +463,18 @@ class ImageActionHandler(BaseActionHandler):
         denoise_wavelet_act = self.cra(
             _("Wavelet denoising"), proc.compute_denoise_wavelet
         )
-        denoise_actions = [denoise_tv_act, denoise_bilateral_act, denoise_wavelet_act]
-        whitetophat_act = self.cra(
-            _("White Top-Hat (disk)"), proc.compute_white_tophat
+        denoise_tophat_act = self.cra(
+            _("White Top-Hat denoising"), proc.compute_denoise_tophat
         )
-        morph_actions = [whitetophat_act]
+        denoise_actions = [
+            denoise_tv_act,
+            denoise_bilateral_act,
+            denoise_wavelet_act,
+            denoise_tophat_act,
+        ]
+        whitetophat_act = self.cra(_("White Top-Hat (disk)"), proc.compute_white_tophat)
+        blacktophat_act = self.cra(_("Black Top-Hat (disk)"), proc.compute_black_tophat)
+        morph_actions = [whitetophat_act, blacktophat_act]
         self.actlist_1more += denoise_actions + morph_actions
         return base_actions + [None] + denoise_actions + [None] + morph_actions
 

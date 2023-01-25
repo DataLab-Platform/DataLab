@@ -197,7 +197,7 @@ class DenoiseWaveletParam(DataSet):
     method = ChoiceItem(_("Method"), zip(_methlist, _methlist), default="VisuShrink")
 
 
-class WhiteTopHatParam(DataSet):
+class TopHatParam(DataSet):
     """White Top-Hat parameters"""
 
     radius = IntItem(_("Radius"), default=1, min=1, help=_("Footprint (disk) radius."))
@@ -616,20 +616,45 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_white_tophat(self, param: WhiteTopHatParam = None) -> None:
+    def compute_denoise_tophat(self, param: TopHatParam = None) -> None:
+        """Denoise using White Top-Hat"""
+        edit = param is None
+        if edit:
+            param = TopHatParam(_("Denoise / Top-Hat"))
+
+        self.compute_11(
+            "DenoiseWhiteTopHat",
+            lambda x, p: x - morphology.white_tophat(x, morphology.disk(p.radius)),
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_white_tophat(self, param: TopHatParam = None) -> None:
         """Compute White Top-Hat"""
         edit = param is None
         if edit:
-            param = WhiteTopHatParam(_("White Top-Hat"))
-
-        def whitetophatdisk(data: np.ndarray, radius: float) -> np.ndarray:
-            """Perform white Top-Hat transform with circular footprint"""
-            footprint = morphology.disk(radius)
-            return data - morphology.white_tophat(data, footprint)
+            param = TopHatParam(_("White Top-Hat"))
 
         self.compute_11(
             "WhiteTopHatDisk",
-            lambda x, p: whitetophatdisk(x, radius=p.radius),
+            lambda x, p: morphology.white_tophat(x, morphology.disk(p.radius)),
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_black_tophat(self, param: TopHatParam = None) -> None:
+        """Compute Black Top-Hat"""
+        edit = param is None
+        if edit:
+            param = TopHatParam(_("Black Top-Hat"))
+
+        self.compute_11(
+            "BlackTopHatDisk",
+            lambda x, p: morphology.black_tophat(x, morphology.disk(p.radius)),
             param,
             suffix=lambda p: f"radius={p.radius}",
             edit=edit,
