@@ -173,6 +173,7 @@ GUIQWT_DEFAULTS = {
         # "marker/cursor/text/textcolor": "#ff9393",
         # "marker/cursor/text/background_color": "#ffffff",
         # "marker/cursor/text/background_alpha": 0.8,
+        "shape/drag/symbol/marker": "NoSymbol",
         "shape/mask/symbol/size": 5,
         "shape/mask/sel_symbol/size": 8,
     },
