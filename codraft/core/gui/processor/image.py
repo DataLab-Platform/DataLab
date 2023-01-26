@@ -16,12 +16,13 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
 from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
+from guiqwt.histogram import hist_range_threshold
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
-from skimage import morphology
-from skimage.feature import canny
+from skimage import exposure, feature, morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
+from skimage.util.dtype import dtype_range
 
 from codraft.config import APP_NAME, _
 from codraft.core.computation.image import (
@@ -39,6 +40,57 @@ from codraft.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdP
 from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
 from codraft.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from codraft.utils.qthelpers import create_progress_bar, qt_try_except
+
+
+class RescaleIntensityParam(DataSet):
+    """Intensity rescaling parameters"""
+
+    _dtype_list = ["image", "dtype"] + [
+        dtype.__name__
+        for dtype in dtype_range.keys()
+        if dtype in ImageParam.VALID_DTYPES
+    ]
+    in_range = ChoiceItem(
+        _("Input range"),
+        list(zip(_dtype_list, _dtype_list)),
+        default="image",
+        help=_(
+            "Min and max intensity values of input image ('image' refers to input "
+            "image min/max levels, 'dtype' refers to input image data type range)."
+        ),
+    )
+    out_range = ChoiceItem(
+        _("Output range"),
+        list(zip(_dtype_list, _dtype_list)),
+        default="dtype",
+        help=_(
+            "Min and max intensity values of output image  ('image' refers to input "
+            "image min/max levels, 'dtype' refers to input image data type range).."
+        ),
+    )
+
+
+class EqualizeHistParam(DataSet):
+    """Histogram equalization parameters"""
+
+    nbins = IntItem(
+        _("Number of bins"),
+        min=1,
+        default=256,
+        help=_("Number of bins for image histogram."),
+    )
+
+
+class EqualizeAdaptHistParam(EqualizeHistParam):
+    """Adaptive histogram equalization parameters"""
+
+    clip_limit = FloatItem(
+        _("Clipping limit"),
+        default=0.01,
+        min=0.0,
+        max=1.0,
+        help=_("Clipping limit (higher values give more contrast)."),
+    )
 
 
 class LogP1Param(DataSet):
@@ -636,6 +688,52 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
+    @qt_try_except()
+    def rescale_intensity(self, param: RescaleIntensityParam = None) -> None:
+        """Rescale image intensity levels"""
+        edit = param is None
+        if edit:
+            param = RescaleIntensityParam(_("Rescale intensity"))
+        self.compute_11(
+            "RescaleIntensity",
+            lambda x, p: exposure.rescale_intensity(
+                x, in_range=p.in_range, out_range=p.out_range
+            ),
+            param,
+            suffix=lambda p: f"in_range={p.in_range},out_range={p.out_range}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def equalize_hist(self, param: EqualizeHistParam = None) -> None:
+        """Histogram equalization"""
+        edit = param is None
+        if edit:
+            param = EqualizeHistParam(_("Histogram equalization"))
+        self.compute_11(
+            "EqualizeHist",
+            lambda x, p: exposure.equalize_hist(x, nbins=p.nbins),
+            param,
+            suffix=lambda p: f"nbins={p.nbins}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def equalize_adapthist(self, param: EqualizeAdaptHistParam = None) -> None:
+        """Adaptive histogram equalization"""
+        edit = param is None
+        if edit:
+            param = EqualizeAdaptHistParam(_("Adaptive histogram equalization"))
+        self.compute_11(
+            "EqualizeAdaptHist",
+            lambda x, p: exposure.equalize_adapthist(
+                x, clip_limit=p.clip_limit, nbins=p.nbins
+            ),
+            param,
+            suffix=lambda p: f"clip_limit={p.clip_limit},nbins={p.nbins}",
+            edit=edit,
+        )
+
     @staticmethod
     def func_gaussian_filter(x, p):  # pylint: disable=arguments-differ
         """Compute gaussian filter"""
@@ -790,7 +888,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(
             "Canny",
             lambda x, p: np.array(
-                canny(
+                feature.canny(
                     x,
                     sigma=p.sigma,
                     low_threshold=p.low_threshold,

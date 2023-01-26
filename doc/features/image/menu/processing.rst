@@ -41,45 +41,60 @@ FFT
 Inverse FFT
     Create a new image which is the inverse FFT of each selected image.
 
-Total variation denoising
-    Denoise image using Total Variation algorithm
-    (implementation based on `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)
+Exposure
+    Intensity rescaling
+        Stretch or shrink image intensity levels
+        (implementation based on `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)
 
-Bilateral filter denoising
-    Denoise image using bilateral filter
-    (implementation based on `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)
+    Histogram equalization
+        Equalize image histogram levels
+        (implementation based on `skimage.exposure.equalize_hist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)
 
-Wavelet denoising
-    Perform wavelet denoising on image
-    (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
+    Adaptive histogram equalization
+        Equalize image histogram levels using Contrast Limited Adaptive Histogram Equalization (CLAHE) algorithm
+        (implementation based on `skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)
 
-White Top-Hat denoising
-    Denoise image by subtracting its white top hat transform
-    (using a disk footprint)
+Restoration
+    Total variation denoising
+        Denoise image using Total Variation algorithm
+        (implementation based on `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)
 
-White Top-Hat (disk)
-    Perform white top hat transform of an image, using a disk footprint
-    (implementation based on `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)
+    Bilateral filter denoising
+        Denoise image using bilateral filter
+        (implementation based on `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)
 
-Black Top-Hat (disk)
-    Perform black top hat transform of an image, using a disk footprint
-    (implementation based on `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)
+    Wavelet denoising
+        Perform wavelet denoising on image
+        (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
 
-Erosion (disk)
-    Perform morphological erosion on an image, using a disk footprint
-    (implementation based on `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)
+    White Top-Hat denoising
+        Denoise image by subtracting its white top hat transform
+        (using a disk footprint)
 
-Dilation (disk)
-    Perform morphological dilation on an image, using a disk footprint
-    (implementation based on `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)
+Morphology
+    White Top-Hat (disk)
+        Perform white top hat transform of an image, using a disk footprint
+        (implementation based on `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)
 
-Opening (disk)
-    Perform morphological opening on an image, using a disk footprint
-    (implementation based on `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)
+    Black Top-Hat (disk)
+        Perform black top hat transform of an image, using a disk footprint
+        (implementation based on `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)
 
-Closing (disk)
-    Perform morphological closing on an image, using a disk footprint
-    (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
+    Erosion (disk)
+        Perform morphological erosion on an image, using a disk footprint
+        (implementation based on `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)
+
+    Dilation (disk)
+        Perform morphological dilation on an image, using a disk footprint
+        (implementation based on `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)
+
+    Opening (disk)
+        Perform morphological opening on an image, using a disk footprint
+        (implementation based on `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)
+
+    Closing (disk)
+        Perform morphological closing on an image, using a disk footprint
+        (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
 
 Canny filter
     Perform edge filtering on an image, using the Canny algorithm

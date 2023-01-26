@@ -22,6 +22,9 @@ New features:
     * Closing
   * Added Canny filter (edge detection)
   * Added circle Hough transform (circle detection)
+  * Added image intensity levels rescaling
+  * Added histogram equalization
+  * Added adaptative histogram equalization
 * Added support for XYZ image files
 
 Bug fixes:

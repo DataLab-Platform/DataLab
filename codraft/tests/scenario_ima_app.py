@@ -22,9 +22,12 @@ from codraft.core.gui.processor.image import (
     DenoiseBilateralParam,
     DenoiseTVParam,
     DenoiseWaveletParam,
+    EqualizeAdaptHistParam,
+    EqualizeHistParam,
     LogP1Param,
     MorphologyParam,
     PeakDetectionParam,
+    RescaleIntensityParam,
     ResizeParam,
     RotateParam,
     ZCalibrateParam,
@@ -75,6 +78,15 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
 
     param = DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
+
+    param = RescaleIntensityParam()
+    panel.processor.rescale_intensity(param)
+
+    param = EqualizeHistParam()
+    panel.processor.equalize_hist(param)
+
+    param = EqualizeAdaptHistParam()
+    panel.processor.equalize_adapthist(param)
 
     param = MorphologyParam()
     panel.processor.compute_denoise_tophat(param)

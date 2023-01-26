@@ -457,6 +457,14 @@ class ImageActionHandler(BaseActionHandler):
         """Create processing actions"""
         base_actions = super().create_processing_actions()
         proc = self.processor
+        rescaleint_act = self.cra(_("Intensity rescaling"), proc.rescale_intensity)
+        equalize_act = self.cra(_("Histogram equalization"), proc.equalize_hist)
+        equalizeadapt_act = self.cra(
+            _("Adaptive histogram equalization"), proc.equalize_adapthist
+        )
+        exp_actions = [rescaleint_act, equalize_act, equalizeadapt_act]
+        exp_menu = QW.QMenu(_("Exposure"))
+        add_actions(exp_menu, exp_actions)
         denoise_tv_act = self.cra(
             _("Total variation denoising"), proc.compute_denoise_tv
         )
@@ -469,12 +477,14 @@ class ImageActionHandler(BaseActionHandler):
         denoise_tophat_act = self.cra(
             _("White Top-Hat denoising"), proc.compute_denoise_tophat
         )
-        denoise_actions = [
+        rest_actions = [
             denoise_tv_act,
             denoise_bilateral_act,
             denoise_wavelet_act,
             denoise_tophat_act,
         ]
+        rest_menu = QW.QMenu(_("Restoration"))
+        add_actions(rest_menu, rest_actions)
         whitetophat_act = self.cra(_("White Top-Hat (disk)"), proc.compute_white_tophat)
         blacktophat_act = self.cra(_("Black Top-Hat (disk)"), proc.compute_black_tophat)
         erosion_act = self.cra(_("Erosion (disk)"), proc.compute_erosion)
@@ -489,15 +499,15 @@ class ImageActionHandler(BaseActionHandler):
             opening_act,
             closing_act,
         ]
+        morph_menu = QW.QMenu(_("Morphology"))
+        add_actions(morph_menu, morph_actions)
         canny_act = self.cra(_("Canny filter"), proc.compute_canny)
         misc_actions = [canny_act]
-        self.actlist_1more += denoise_actions + morph_actions + misc_actions
+        self.actlist_1more += exp_actions + rest_actions + morph_actions + misc_actions
         return (
             base_actions
             + [None]
-            + denoise_actions
-            + [None]
-            + morph_actions
+            + [exp_menu, rest_menu, morph_menu]
             + [None]
             + misc_actions
         )
