@@ -56,6 +56,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     base_dir = conf.WorkingDirOption()
     available_memory_threshold = conf.Option()
     ignore_dependency_check = conf.Option()
+    current_tab = conf.Option()
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):

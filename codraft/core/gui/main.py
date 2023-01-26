@@ -333,6 +333,10 @@ class CodraFTMainWindow(QW.QMainWindow):
         # Update selection dependent actions
         self.__update_actions()
         self.signal_image_docks[0].raise_()
+        # Restoring current tab from last session
+        tab_idx = Conf.main.current_tab.get(None)
+        if tab_idx is not None:
+            self.tabwidget.setCurrentIndex(tab_idx)
 
     def __setup_commmon_actions(self):
         """Setup common actions"""
@@ -800,4 +804,8 @@ class CodraFTMainWindow(QW.QMainWindow):
                     pass
             self.reset_all()
             self.__save_pos_and_size()
+
+            # Saving current tab for next session
+            Conf.main.current_tab.set(self.tabwidget.currentIndex())
+
             event.accept()
