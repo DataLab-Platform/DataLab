@@ -33,6 +33,7 @@ from codraft.core.computation.image import (
     get_centroid_fourier,
     get_contour_shapes,
     get_enclosing_circle,
+    get_hough_circle_peaks,
 )
 from codraft.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
@@ -243,13 +244,13 @@ class CannyParam(DataSet):
     )
     low_threshold = FloatItem(
         _("Low threshold"),
-        default=.1,
+        default=0.1,
         min=0,
         help=_("Lower bound for hysteresis thresholding (linking edges)."),
     )
     high_threshold = FloatItem(
         _("High threshold"),
-        default=.9,
+        default=0.9,
         min=0,
         help=_("Upper bound for hysteresis thresholding (linking edges)."),
     )
@@ -309,6 +310,14 @@ class ContourShapeParam(GenericDetectionParam):
         ("circle", _("Circle")),
     )
     shape = ChoiceItem(_("Shape"), shapes, default="ellipse")
+
+
+class HoughCircleParam(DataSet):
+    """Circle Hough transform parameters"""
+
+    min_radius = IntItem(_("Radius<sub>min</sub>"), min=0, nonzero=True)
+    max_radius = IntItem(_("Radius<sub>max</sub>"), min=0, nonzero=True)
+    min_distance = IntItem(_("Minimal distance"), min=0)
 
 
 class ImageProcessor(BaseProcessor):
@@ -941,6 +950,29 @@ class ImageProcessor(BaseProcessor):
         if edit:
             param = ContourShapeParam()
         self.compute_10(_("Contour"), contour_shape, param, edit=edit)
+
+    @qt_try_except()
+    def compute_hough_circle_peaks(self, param: HoughCircleParam = None) -> None:
+        """Compute peak detection based on a circle Hough transform"""
+
+        def contour_shape(image: ImageParam, p: HoughCircleParam):
+            """Compute contour shape fit"""
+            res = self.__apply_origin_size_roi(
+                image,
+                get_hough_circle_peaks,
+                p.min_radius,
+                p.max_radius,
+                None,
+                p.min_distance,
+            )
+            if res is not None:
+                return image.add_resultshape("Circles", ShapeTypes.CIRCLE, res)
+            return None
+
+        edit = param is None
+        if edit:
+            param = HoughCircleParam()
+        self.compute_10(_("Circles"), contour_shape, param, edit=edit)
 
     def _get_stat_funcs(self):
         """Return statistics functions list"""

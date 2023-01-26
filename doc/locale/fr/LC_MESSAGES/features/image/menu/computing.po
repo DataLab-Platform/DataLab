@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-31 17:31+0200\n"
+"POT-Creation-Date: 2023-01-26 12:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,9 @@ msgstr "Supprimer les régions d'intérêt"
 
 #: ../../features/image/menu/computing.rst:17
 msgid "Remove all defined ROI for selected object(s)."
-msgstr "Supprimer toutes les ROI définies pour l'objet ou les objets sélectionné(s)."
+msgstr ""
+"Supprimer toutes les ROI définies pour l'objet ou les objets "
+"sélectionné(s)."
 
 #: ../../features/image/menu/computing.rst:25
 msgid "Statistics"
@@ -157,5 +159,13 @@ msgstr ""
 " cette dernière par exemple lors de l'export d'une session de CodraFT "
 "vers un fichier HDF5."
 
-#~ msgid "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
-#~ msgstr "Example, parameters, algorithm: :ref:`ref-to-2d-peak-detection`"
+#: ../../features/image/menu/computing.rst:61
+msgid "Circle Hough transform"
+msgstr "Transformée de Hough circulaire"
+
+#: ../../features/image/menu/computing.rst:61
+msgid ""
+"Detect circular shapes using circle Hough transform (implementation based"
+" on `skimage.transform.hough_circle_peaks <https://scikit-"
+"image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)."
+msgstr "Détection de formes circulaires à partir d'une tranformée de Hough (implémentation basée sur `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"

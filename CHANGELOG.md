@@ -21,6 +21,7 @@ New features:
     * Opening
     * Closing
   * Added Canny filter (edge detection)
+  * Added circle Hough transform (circle detection)
 * Added support for XYZ image files
 
 Bug fixes:

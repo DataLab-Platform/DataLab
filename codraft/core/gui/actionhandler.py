@@ -525,5 +525,11 @@ class ImageActionHandler(BaseActionHandler):
             proc.compute_contour_shape,
             tip=_("Compute contour shape fit"),
         )
-        self.actlist_1more += [cent_act, encl_act, peak_act, contour_act]
-        return base_actions + [cent_act, encl_act, peak_act, contour_act]
+        hough_circle_act = self.cra(
+            _("Circle Hough transform"),
+            proc.compute_hough_circle_peaks,
+            tip=_("Detect circular shapes using circle Hough transform."),
+        )
+        actions = [cent_act, encl_act, peak_act, contour_act, hough_circle_act]
+        self.actlist_1more += actions
+        return base_actions + actions

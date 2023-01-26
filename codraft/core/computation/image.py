@@ -14,7 +14,7 @@ import scipy.ndimage as spi
 import scipy.ndimage.filters as spf
 import scipy.spatial as spt
 from numpy import ma
-from skimage import measure
+from skimage import measure, transform
 
 
 def scale_data_to_min_max(data: np.ndarray, zmin, zmax):
@@ -208,3 +208,24 @@ def get_contour_shapes(
         else:
             raise NotImplementedError(f"Invalid contour model {model}")
     return np.array(coords)
+
+
+def get_hough_circle_peaks(
+    data: np.ndarray,
+    min_radius: float = None,
+    max_radius: float = None,
+    nb_radius: int = None,
+    min_distance: int = 1,
+) -> np.ndarray:
+    """Detect peaks in image from circle Hough transform, return circle coordinates."""
+    assert min_radius is not None and max_radius is not None and max_radius > min_radius
+    if nb_radius is None:
+        nb_radius = max_radius - min_radius + 1
+    hough_radii = np.arange(
+        min_radius, max_radius + 1, (max_radius - min_radius + 1) // nb_radius
+    )
+    hough_res = transform.hough_circle(data, hough_radii)
+    _accums, cx, cy, radii = transform.hough_circle_peaks(
+        hough_res, hough_radii, min_xdistance=min_distance, min_ydistance=min_distance
+    )
+    return np.vstack([cx - radii, cy, cx + radii, cy]).T

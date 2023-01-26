@@ -56,3 +56,7 @@ Contour detection
 .. note:: Computed scalar results are systematically stored as metadata.
     Metadata is attached to image and serialized with it when exporting
     current session in a HDF5 file.
+
+Circle Hough transform
+    Detect circular shapes using circle Hough transform
+    (implementation based on `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_).
