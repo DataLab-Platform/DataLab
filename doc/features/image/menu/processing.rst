@@ -80,3 +80,7 @@ Opening (disk)
 Closing (disk)
     Perform morphological closing on an image, using a disk footprint
     (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
+
+Canny filter
+    Perform edge filtering on an image, using the Canny algorithm
+    (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)

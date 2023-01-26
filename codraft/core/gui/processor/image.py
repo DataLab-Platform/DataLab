@@ -20,6 +20,7 @@ from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
 from skimage import morphology
+from skimage.feature import canny
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
 from codraft.config import APP_NAME, _
@@ -205,7 +206,7 @@ class DenoiseBilateralParam(DataSet):
         "cval",
         default=0,
         help=_(
-            "Used in conjunction with mode ‘constant’, "
+            "Used in conjunction with mode 'constant', "
             "the value outside the image boundaries."
         ),
     )
@@ -228,6 +229,46 @@ class MorphologyParam(DataSet):
     """White Top-Hat parameters"""
 
     radius = IntItem(_("Radius"), default=1, min=1, help=_("Footprint (disk) radius."))
+
+
+class CannyParam(DataSet):
+    """Canny filter parameters"""
+
+    sigma = FloatItem(
+        "Sigma",
+        default=1.0,
+        min=0,
+        nonzero=True,
+        help=_("Standard deviation of the Gaussian filter."),
+    )
+    low_threshold = FloatItem(
+        _("Low threshold"),
+        default=.1,
+        min=0,
+        help=_("Lower bound for hysteresis thresholding (linking edges)."),
+    )
+    high_threshold = FloatItem(
+        _("High threshold"),
+        default=.9,
+        min=0,
+        help=_("Upper bound for hysteresis thresholding (linking edges)."),
+    )
+    use_quantiles = BoolItem(
+        _("Use quantiles"),
+        default=True,
+        help=_(
+            "If True then treat low_threshold and high_threshold as quantiles "
+            "of the edge magnitude image, rather than absolute edge magnitude "
+            "values. If True then the thresholds must be in the range [0, 1]."
+        ),
+    )
+    _modelist = ("reflect", "constant", "nearest", "mirror", "wrap")
+    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="constant")
+    cval = FloatItem(
+        "cval",
+        default=0.0,
+        help=_("Value to fill past edges of input if mode is constant."),
+    )
 
 
 class GenericDetectionParam(DataSet):
@@ -729,6 +770,34 @@ class ImageProcessor(BaseProcessor):
     def compute_closing(self, param: MorphologyParam = None) -> None:
         """Compute morphological closing"""
         self._morph(param, morphology.closing, _("Closing"), "ClosingDisk")
+
+    @qt_try_except()
+    def compute_canny(self, param: CannyParam = None) -> None:
+        """Denoise using White Top-Hat"""
+        edit = param is None
+        if edit:
+            param = CannyParam(_("Canny filter"))
+
+        self.compute_11(
+            "Canny",
+            lambda x, p: np.array(
+                canny(
+                    x,
+                    sigma=p.sigma,
+                    low_threshold=p.low_threshold,
+                    high_threshold=p.high_threshold,
+                    use_quantiles=p.use_quantiles,
+                    mode=p.mode,
+                    cval=p.cval,
+                ),
+                dtype=np.uint8,
+            ),
+            param,
+            suffix=lambda p: f"sigma={p.sigma},low_threshold={p.low_threshold},"
+            f"high_threshold={p.high_threshold},use_quantiles={p.use_quantiles},"
+            f"mode={p.mode},cval={p.cval}",
+            edit=edit,
+        )
 
     # ------Image Computing
     def apply_10_func(self, orig, func, param, message) -> ResultShape:

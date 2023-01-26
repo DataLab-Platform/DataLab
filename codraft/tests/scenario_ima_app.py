@@ -17,6 +17,7 @@ Testing the following:
 
 from codraft.core.gui.main import CodraFTMainWindow
 from codraft.core.gui.processor.image import (
+    CannyParam,
     ContourShapeParam,
     DenoiseBilateralParam,
     DenoiseTVParam,
@@ -83,6 +84,9 @@ def test_image_features(win: CodraFTMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_dilation(param)
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
+
+    param = CannyParam()
+    panel.processor.compute_canny(param)
 
     param = LogP1Param()
     param.n = 1

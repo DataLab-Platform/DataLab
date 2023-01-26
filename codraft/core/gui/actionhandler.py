@@ -489,8 +489,18 @@ class ImageActionHandler(BaseActionHandler):
             opening_act,
             closing_act,
         ]
-        self.actlist_1more += denoise_actions + morph_actions
-        return base_actions + [None] + denoise_actions + [None] + morph_actions
+        canny_act = self.cra(_("Canny filter"), proc.compute_canny)
+        misc_actions = [canny_act]
+        self.actlist_1more += denoise_actions + morph_actions + misc_actions
+        return (
+            base_actions
+            + [None]
+            + denoise_actions
+            + [None]
+            + morph_actions
+            + [None]
+            + misc_actions
+        )
 
     def create_computing_actions(self):
         """Create computing actions"""

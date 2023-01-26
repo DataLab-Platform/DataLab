@@ -20,6 +20,7 @@ New features:
     * Dilation
     * Opening
     * Closing
+  * Added Canny filter (edge detection)
 * Added support for XYZ image files
 
 Bug fixes:
