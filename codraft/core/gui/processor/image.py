@@ -16,7 +16,6 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
 from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
-from guiqwt.histogram import hist_range_threshold
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
@@ -31,6 +30,7 @@ from codraft.core.computation.image import (
     distance_matrix,
     flatfield,
     get_2d_peaks_coords,
+    get_blob_doh,
     get_centroid_fourier,
     get_contour_shapes,
     get_enclosing_circle,
@@ -370,6 +370,61 @@ class HoughCircleParam(DataSet):
     min_radius = IntItem(_("Radius<sub>min</sub>"), min=0, nonzero=True)
     max_radius = IntItem(_("Radius<sub>max</sub>"), min=0, nonzero=True)
     min_distance = IntItem(_("Minimal distance"), min=0)
+
+
+class BlobDOHParam(DataSet):
+    """Blob detection using Determinant of Hessian method"""
+
+    min_sigma = FloatItem(
+        "σ<sub>min</sub>",
+        default=1.0,
+        min=0,
+        nonzero=True,
+        help=_(
+            "The minimum standard deviation for Gaussian Kernel used to compute "
+            "Hessian matrix. Keep this low to detect smaller blobs."
+        ),
+    )
+    max_sigma = FloatItem(
+        "σ<sub>max</sub>",
+        default=30.0,
+        min=0,
+        nonzero=True,
+        help=_(
+            "The maximum standard deviation for Gaussian Kernel used to compute "
+            "Hessian matrix. Keep this high to detect larger blobs."
+        ),
+    )
+    threshold_rel = FloatItem(
+        _("Relative threshold"),
+        default=0.2,
+        min=0.0,
+        max=1.0,
+        help=_(
+            "Minimum intensity of peaks, calculated as "
+            "max(doh_space) * threshold_rel, where doh_space refers to the stack "
+            "of Determinant-of-Hessian (DoH) images computed internally."
+        ),
+    )
+    overlap = FloatItem(
+        _("Overlap"),
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        help=_(
+            "If the area of two blobs overlaps by a fraction greater "
+            "than threshold, the smaller blob is eliminated."
+        ),
+    )
+    log_scale = BoolItem(
+        _("Log scale"),
+        default=False,
+        help=_(
+            "If set intermediate values of standard deviations are interpolated "
+            "using a logarithmic scale to the base 10. "
+            "If not, linear interpolation is used."
+        ),
+    )
 
 
 class ImageProcessor(BaseProcessor):
@@ -1071,6 +1126,29 @@ class ImageProcessor(BaseProcessor):
         if edit:
             param = HoughCircleParam()
         self.compute_10(_("Circles"), contour_shape, param, edit=edit)
+
+    @qt_try_except()
+    def compute_blob_doh(self, param: BlobDOHParam = None) -> None:
+        """Compute blob detection using Determinant of Hessian method"""
+
+        def contour_shape(image: ImageParam, p: BlobDOHParam):
+            """Compute contour shape fit"""
+            res = self.__apply_origin_size_roi(
+                image,
+                get_blob_doh,
+                p.min_sigma,
+                p.max_sigma,
+                p.overlap,
+                p.log_scale,
+            )
+            if res is not None:
+                return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
+            return None
+
+        edit = param is None
+        if edit:
+            param = BlobDOHParam()
+        self.compute_10(_("Blobs"), contour_shape, param, edit=edit)
 
     def _get_stat_funcs(self):
         """Return statistics functions list"""

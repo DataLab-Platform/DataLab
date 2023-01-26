@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 12:24+0100\n"
+"POT-Creation-Date: 2023-01-26 16:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,7 @@ msgstr ""
 " cette dernière par exemple lors de l'export d'une session de CodraFT "
 "vers un fichier HDF5."
 
-#: ../../features/image/menu/computing.rst:61
+#: ../../features/image/menu/computing.rst:62
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
@@ -168,4 +168,19 @@ msgid ""
 "Detect circular shapes using circle Hough transform (implementation based"
 " on `skimage.transform.hough_circle_peaks <https://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)."
-msgstr "Détection de formes circulaires à partir d'une tranformée de Hough (implémentation basée sur `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
+msgstr ""
+"Détection de formes circulaires à partir d'une tranformée de Hough "
+"(implémentation basée sur `skimage.transform.hough_circle_peaks <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
+
+#: ../../features/image/menu/computing.rst:65
+msgid "Blob detection (DOH)"
+msgstr "Détection de taches (hessien)"
+
+#: ../../features/image/menu/computing.rst:65
+msgid ""
+"Detect blobs using Determinant of Hessian (DOH) method (implementation "
+"based on `skimage.feature.blob_doh <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
+msgstr "Détection de taches basée sur la méthode du discriminant hessien (implementation basée sur `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."

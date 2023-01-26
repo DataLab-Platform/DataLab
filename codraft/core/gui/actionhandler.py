@@ -538,8 +538,20 @@ class ImageActionHandler(BaseActionHandler):
         hough_circle_act = self.cra(
             _("Circle Hough transform"),
             proc.compute_hough_circle_peaks,
-            tip=_("Detect circular shapes using circle Hough transform."),
+            tip=_("Detect circular shapes using circle Hough transform"),
         )
-        actions = [cent_act, encl_act, peak_act, contour_act, hough_circle_act]
+        blob_doh_act = self.cra(
+            _("Blob detection (DOH)"),
+            proc.compute_blob_doh,
+            tip=_("Detect blobs using Determinant of Hessian (DOH) method"),
+        )
+        actions = [
+            cent_act,
+            encl_act,
+            peak_act,
+            contour_act,
+            hough_circle_act,
+            blob_doh_act,
+        ]
         self.actlist_1more += actions
         return base_actions + actions

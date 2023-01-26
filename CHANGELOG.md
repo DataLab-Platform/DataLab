@@ -25,6 +25,7 @@ New features:
   * Added image intensity levels rescaling
   * Added histogram equalization
   * Added adaptative histogram equalization
+  * Added blob detection using Determinant of Hessian method
 * Added support for XYZ image files
 
 Bug fixes:

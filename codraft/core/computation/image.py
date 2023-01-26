@@ -14,7 +14,7 @@ import scipy.ndimage as spi
 import scipy.ndimage.filters as spf
 import scipy.spatial as spt
 from numpy import ma
-from skimage import measure, transform
+from skimage import feature, measure, transform
 
 
 def scale_data_to_min_max(data: np.ndarray, zmin, zmax):
@@ -228,4 +228,27 @@ def get_hough_circle_peaks(
     _accums, cx, cy, radii = transform.hough_circle_peaks(
         hough_res, hough_radii, min_xdistance=min_distance, min_ydistance=min_distance
     )
+    return np.vstack([cx - radii, cy, cx + radii, cy]).T
+
+
+def get_blob_doh(
+    data,
+    min_sigma=1,
+    max_sigma=30,
+    overlap=0.5,
+    log_scale=False,
+    threshold_rel=0.2,
+):
+    """Finds blobs in the given grayscale image"""
+    blobs_doh = feature.blob_doh(
+        data,
+        min_sigma=min_sigma,
+        max_sigma=max_sigma,
+        num_sigma=int(max_sigma - min_sigma + 1),
+        threshold=None,
+        threshold_rel=threshold_rel,
+        overlap=overlap,
+        log_scale=log_scale,
+    )
+    cy, cx, radii = blobs_doh.T
     return np.vstack([cx - radii, cy, cx + radii, cy]).T
