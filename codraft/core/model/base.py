@@ -580,7 +580,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Iterate over computing items encoded in metadata (if any)"""
         setdef = self.metadata.setdefault
         fmt = setdef(self.METADATA_FMT, "%" + self.CONF_FMT.get(self.DEFAULT_FMT))
-        lbl = setdef(self.METADATA_LBL, Conf.view.show_label.get(True))
+        lbl = setdef(self.METADATA_LBL, Conf.view.show_label.get(False))
         for key, value in self.metadata.items():
             if key == ROI_KEY:
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)

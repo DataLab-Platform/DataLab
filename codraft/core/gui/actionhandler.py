@@ -212,7 +212,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             tip=_("Show or hide ROI and other graphical object titles or subtitles"),
             toggled=self.panel.toggle_show_titles,
         )
-        showlabel_action.setChecked(True)
+        showlabel_action.setChecked(False)
         self.actlist_1more += [view_action]
         self.actlist_cmenu = [view_action, None] + self.actlist_cmenu
         return [view_action, showlabel_action]
