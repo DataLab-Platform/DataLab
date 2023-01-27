@@ -41,15 +41,15 @@ from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
 from codraft.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from codraft.utils.qthelpers import create_progress_bar, qt_try_except
 
+VALID_DTYPES_STRLIST = [
+    dtype.__name__ for dtype in dtype_range.keys() if dtype in ImageParam.VALID_DTYPES
+]
+
 
 class RescaleIntensityParam(DataSet):
     """Intensity rescaling parameters"""
 
-    _dtype_list = ["image", "dtype"] + [
-        dtype.__name__
-        for dtype in dtype_range.keys()
-        if dtype in ImageParam.VALID_DTYPES
-    ]
+    _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
     in_range = ChoiceItem(
         _("Input range"),
         list(zip(_dtype_list, _dtype_list)),
@@ -190,6 +190,12 @@ class BinningParam(DataSet):
         _("Operation"),
         list(zip(_operations, _operations)),
         default=_operations[0],
+    )
+    _dtype_list = ["dtype"] + VALID_DTYPES_STRLIST
+    dtype_str = ChoiceItem(
+        _("Data type"),
+        list(zip(_dtype_list, _dtype_list)),
+        help=_("Output image data type."),
     )
 
 
@@ -559,8 +565,12 @@ class ImageProcessor(BaseProcessor):
     def rebin(self, param: BinningParam = None) -> None:
         """Binning image"""
         edit = param is None
+        input_dtype_str = str(self.objlist.get_sel_object(0).data.dtype)
         if edit:
             param = BinningParam(_("Binning"))
+            param.dtype_str = input_dtype_str
+        if param.dtype_str is None:
+            param.dtype_str = input_dtype_str
 
         def func_obj(obj, param):
             """Binning function"""
@@ -573,7 +583,11 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(
             "PixelBinning",
             lambda x, p: binning(
-                x, binning_x=p.binning_x, binning_y=p.binning_y, operation=p.operation
+                x,
+                binning_x=p.binning_x,
+                binning_y=p.binning_y,
+                operation=p.operation,
+                dtype=p.dtype_str,
             ),
             param,
             suffix=lambda p: f"{p.binning_x}x{p.binning_y},{p.operation}",

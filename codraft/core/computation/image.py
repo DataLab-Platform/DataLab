@@ -32,7 +32,7 @@ BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
 
 
 def binning(
-    data: np.ndarray, binning_x: int, binning_y: int, operation: str
+    data: np.ndarray, binning_x: int, binning_y: int, operation: str, dtype=None
 ) -> np.ndarray:
     """Perform image pixel binning"""
     ny, nx = data.shape
@@ -42,7 +42,7 @@ def binning(
     except ValueError as err:
         raise ValueError(f"Binning is not a multiple of image dimensions") from err
     if operation == "sum":
-        bdata = bdata.sum(axis=(-1, 1))
+        bdata = np.array(bdata, dtype=np.float64).sum(axis=(-1, 1))
     elif operation == "average":
         bdata = bdata.mean(axis=(-1, 1))
     elif operation == "median":
@@ -54,7 +54,7 @@ def binning(
     else:
         valid = ", ".join(BINNING_OPERATIONS)
         raise ValueError(f"Invalid operation {operation} (valid values: {valid})")
-    return bdata
+    return np.array(bdata, dtype=data.dtype if dtype is None else np.dtype(dtype))
 
 
 def flatfield(rawdata: np.ndarray, flatdata: np.ndarray, threshold: float = None):
