@@ -197,6 +197,11 @@ class BinningParam(DataSet):
         list(zip(_dtype_list, _dtype_list)),
         help=_("Output image data type."),
     )
+    change_pixel_size = BoolItem(
+        _("Change pixel size"),
+        default=False,
+        help=_("Change pixel size so that overall image size remains the same."),
+    )
 
 
 class FlatFieldParam(BaseProcParam):
@@ -576,13 +581,14 @@ class ImageProcessor(BaseProcessor):
         if param.dtype_str is None:
             param.dtype_str = input_dtype_str
 
-        def func_obj(obj, param):
+        def func_obj(obj: ImageParam, param: BinningParam):
             """Binning function"""
-            if obj.dx is not None and obj.dy is not None:
-                obj.dx *= param.binning_x
-                obj.dy *= param.binning_y
-            # TODO: [P2] Instead of removing geometric shapes, apply zoom
-            obj.remove_resultshapes()
+            if param.change_pixel_size:
+                if obj.dx is not None and obj.dy is not None:
+                    obj.dx *= param.binning_x
+                    obj.dy *= param.binning_y
+                # TODO: [P2] Instead of removing geometric shapes, apply zoom
+                obj.remove_resultshapes()
 
         self.compute_11(
             "PixelBinning",
@@ -594,7 +600,8 @@ class ImageProcessor(BaseProcessor):
                 dtype=p.dtype_str,
             ),
             param,
-            suffix=lambda p: f"{p.binning_x}x{p.binning_y},{p.operation}",
+            suffix=lambda p: f"{p.binning_x}x{p.binning_y},{p.operation},"
+            f"change_pixel_size={p.change_pixel_size}",
             func_obj=func_obj,
             edit=edit,
         )
@@ -980,20 +987,6 @@ class ImageProcessor(BaseProcessor):
         )
 
     # ------Image Computing
-    def apply_10_func(self, orig, func, param, message) -> ResultShape:
-        """Apply 10 function: 1 object in --> 0 object out (scalar result)"""
-
-        # (self is used by @qt_try_except)
-        # pylint: disable=unused-argument
-        @qt_try_except(message)
-        def apply_10_func_callback(self, orig, func, param):
-            """Apply 10 function cb: 1 object in --> 0 object out (scalar result)"""
-            if param is None:
-                return func(orig)
-            return func(orig, param)
-
-        return apply_10_func_callback(self, orig, func, param)
-
     @staticmethod
     def __apply_origin_size_roi(image, func, *args) -> np.ndarray:
         """Exec computation taking into account image x0, y0, dx, dy and ROIs"""

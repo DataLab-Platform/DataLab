@@ -377,20 +377,6 @@ class SignalProcessor(BaseProcessor):
                 )
 
     # ------Signal Computing
-    def apply_10_func(self, orig, func, param, message) -> ResultShape:
-        """Apply 10 function: 1 object in --> 0 object out (scalar result)"""
-
-        # (self is used by @qt_try_except)
-        # pylint: disable=unused-argument
-        @qt_try_except(message)
-        def apply_10_func_callback(self, orig, func, param):
-            """Apply 10 function cb: 1 object in --> 0 object out (scalar result)"""
-            if param is None:
-                return func(orig)
-            return func(orig, param)
-
-        return apply_10_func_callback(self, orig, func, param)
-
     @qt_try_except()
     def compute_fwhm(self, param: FWHMParam = None) -> None:
         """Compute FWHM"""
