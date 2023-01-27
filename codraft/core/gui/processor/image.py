@@ -253,6 +253,7 @@ class DenoiseBilateralParam(DataSet):
         default=1.0,
         min=0,
         nonzero=True,
+        unit="pixels",
         help=_(
             "Standard deviation for range distance. "
             "A larger value results in averaging of pixels "
@@ -296,6 +297,7 @@ class CannyParam(DataSet):
     sigma = FloatItem(
         "Sigma",
         default=1.0,
+        unit="pixels",
         min=0,
         nonzero=True,
         help=_("Standard deviation of the Gaussian filter."),
@@ -373,8 +375,8 @@ class ContourShapeParam(GenericDetectionParam):
 class HoughCircleParam(DataSet):
     """Circle Hough transform parameters"""
 
-    min_radius = IntItem(_("Radius<sub>min</sub>"), min=0, nonzero=True)
-    max_radius = IntItem(_("Radius<sub>max</sub>"), min=0, nonzero=True)
+    min_radius = IntItem(_("Radius<sub>min</sub>"), unit="pixels", min=0, nonzero=True)
+    max_radius = IntItem(_("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True)
     min_distance = IntItem(_("Minimal distance"), min=0)
 
 
@@ -384,6 +386,7 @@ class BlobDOHParam(DataSet):
     min_sigma = FloatItem(
         "σ<sub>min</sub>",
         default=1.0,
+        unit="pixels",
         min=0,
         nonzero=True,
         help=_(
@@ -394,6 +397,7 @@ class BlobDOHParam(DataSet):
     max_sigma = FloatItem(
         "σ<sub>max</sub>",
         default=30.0,
+        unit="pixels",
         min=0,
         nonzero=True,
         help=_(
