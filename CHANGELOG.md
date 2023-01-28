@@ -7,6 +7,7 @@ for future and past milestones.
 
 New features:
 
+* Added "Computing parameters" group box to show last result input parameters
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added Total variation denoising filter (TV Chambolle)

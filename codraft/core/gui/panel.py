@@ -65,7 +65,7 @@ from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
 from codraft.core.io.signal import read_signal, write_signal
-from codraft.core.model.base import MetadataItem, ResultShape
+from codraft.core.model.base import MetadataItem, ObjectItf, ResultShape
 from codraft.core.model.image import (
     ImageDatatypes,
     ImageParam,
@@ -104,20 +104,46 @@ class ObjectProp(QW.QWidget):
         )
         hlayout = QW.QHBoxLayout()
         hlayout.addWidget(self.properties)
+        param_layout = QW.QVBoxLayout()
+        self.param_label = QW.QLabel()
+        self.param_label.setTextFormat(QC.Qt.RichText)
+        self.param_label.setTextInteractionFlags(
+            QC.Qt.TextBrowserInteraction | QC.Qt.TextSelectableByKeyboard
+        )
+        self.param_label.setAlignment(QC.Qt.AlignTop)
+        param_scroll = QW.QScrollArea()
+        param_scroll.setWidgetResizable(True)
+        param_scroll.setWidget(self.param_label)
+        param_layout.addWidget(param_scroll)
+        self.param_group = QW.QGroupBox(_("Computing parameters"))
+        self.param_group.setLayout(param_layout)
         vlayout = QW.QVBoxLayout()
         vlayout.addLayout(hlayout)
-        vlayout.addStretch()
+        vlayout.addWidget(self.param_group)
         self.setLayout(vlayout)
 
     def add_button(self, button):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
-    def update_properties_from(self, param):
+    def set_param_label(self, param: ObjectItf):
+        """Set computing parameters label"""
+        text = ""
+        for key, value in param.metadata.items():
+            if key.endswith("Param") and isinstance(value, str):
+                if text:
+                    text += "<br><br>"
+                lines = value.splitlines(False)
+                lines[0] = f"<b>{lines[0]}</b>"
+                text += "<br>".join(lines)
+        self.param_label.setText(text)
+
+    def update_properties_from(self, param: ObjectItf):
         """Update properties from signal/image dataset"""
         self.properties.dataset.set_defaults()
         update_dataset(self.properties.dataset, param)
         self.properties.get()
+        self.set_param_label(param)
 
 
 class BasePanelMeta(type(QW.QSplitter), abc.ABCMeta):
