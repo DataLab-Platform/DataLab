@@ -1119,8 +1119,8 @@ class ImageProcessor(BaseProcessor):
     def compute_hough_circle_peaks(self, param: HoughCircleParam = None) -> None:
         """Compute peak detection based on a circle Hough transform"""
 
-        def contour_shape(image: ImageParam, p: HoughCircleParam):
-            """Compute contour shape fit"""
+        def hough_circles(image: ImageParam, p: HoughCircleParam):
+            """Compute Hough circles"""
             res = self.__apply_origin_size_roi(
                 image,
                 get_hough_circle_peaks,
@@ -1136,14 +1136,14 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             param = HoughCircleParam()
-        self.compute_10(_("Circles"), contour_shape, param, edit=edit)
+        self.compute_10(_("Circles"), hough_circles, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_doh(self, param: BlobDOHParam = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
 
-        def contour_shape(image: ImageParam, p: BlobDOHParam):
-            """Compute contour shape fit"""
+        def blobs(image: ImageParam, p: BlobDOHParam):
+            """Compute blobs"""
             res = self.__apply_origin_size_roi(
                 image,
                 get_blob_doh,
@@ -1159,7 +1159,7 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             param = BlobDOHParam()
-        self.compute_10(_("Blobs"), contour_shape, param, edit=edit)
+        self.compute_10(_("Blobs"), blobs, param, edit=edit)
 
     def _get_stat_funcs(self):
         """Return statistics functions list"""
