@@ -63,6 +63,20 @@
             }
         },
         {
+            "name": "Profile current file",
+            "type": "python",
+            "request": "launch",
+            "module": "cProfile",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/dev.env",
+            "python": "${config:python.defaultInterpreterPath}",
+            "args": [
+                "-o",
+                "${file}.prof",
+                "${file}"
+            ],
+        },
+        {
             "name": "Run H5browser",
             "type": "python",
             "request": "launch",
