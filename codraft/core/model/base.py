@@ -62,7 +62,7 @@ class MetadataItem(gdt.DataItem):
         if value_was_none:
             value = {}
         editor.setup(value)
-        if editor.exec_():
+        if editor.exec():
             return editor.get_value()
         if value_was_none:
             return None
