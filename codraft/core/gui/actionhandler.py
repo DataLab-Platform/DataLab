@@ -14,6 +14,7 @@ These actions point to CodraFT panels, processors, objectlist, ...
 
 import abc
 import enum
+from typing import List
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -21,6 +22,12 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from codraft.config import _
+from codraft.core.gui.panel import BasePanel, ImagePanel
+from codraft.core.gui.plotitemlist import BaseItemList
+from codraft.core.gui.processor.base import BaseProcessor
+from codraft.core.gui.processor.image import ImageProcessor
+from codraft.core.gui.processor.signal import SignalProcessor
+from codraft.core.model.base import ObjectItf
 from codraft.widgets import fitdialog
 
 
@@ -40,11 +47,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     OBJECT_STR = ""  # e.g. "signal"
 
-    def __init__(self, panel, objlist, itmlist, processor, toolbar):
-        self.panel = panel
-        self.objlist = objlist
-        self.itmlist = itmlist
-        self.processor = processor
+    def __init__(self, panel, itmlist, proc, toolbar):
         self.feature_actions = {}
         self.operation_end_actions = None
         self.delete_roi_action = None
@@ -55,16 +58,15 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.actlist_2 = []
         self.actlist_cmenu = []  # Context menu
         if self.__class__ is not BaseActionHandler:
-            self.create_all_actions(toolbar)
+            self.create_all_actions(toolbar, panel, itmlist, proc)
 
     def get_context_menu_actions(self):
         """Return context menu action list"""
         return self.actlist_cmenu
 
-    def selection_rows_changed(self):
+    def selection_rows_changed(self, selected_objects: List[ObjectItf]):
         """Number of selected rows has changed"""
-        selrows = self.objlist.get_selected_rows()
-        nbrows = len(selrows)
+        nbrows = len(selected_objects)
         for act in self.actlist_1more:
             act.setEnabled(nbrows >= 1)
         for act in self.actlist_2more:
@@ -74,110 +76,114 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         for act in self.actlist_2:
             act.setEnabled(nbrows == 2)
         self.delete_roi_action.setEnabled(False)
-        for row in selrows:
-            obj = self.objlist[row]
+        for obj in selected_objects:
             if obj.roi is not None:
                 self.delete_roi_action.setEnabled(True)
                 break
 
-    def create_all_actions(self, toolbar):
+    def create_all_actions(
+        self,
+        toolbar: QW.QToolBar,
+        panel: BasePanel,
+        itmlist: BaseItemList,
+        proc: BaseProcessor,
+    ):
         """Setup actions, menus, toolbar"""
-        featact = self.feature_actions
-        featact[ActionCategory.FILE] = file_act = self.create_file_actions()
-        featact[ActionCategory.EDIT] = edit_act = self.create_edit_actions()
-        featact[ActionCategory.VIEW] = view_act = self.create_view_actions()
-        featact[ActionCategory.OPERATION] = self.create_operation_actions()
-        featact[ActionCategory.PROCESSING] = self.create_processing_actions()
-        featact[ActionCategory.COMPUTING] = self.create_computing_actions()
+        fac = self.feature_actions
+        fac[ActionCategory.FILE] = file_act = self.create_file_actions(panel)
+        fac[ActionCategory.EDIT] = edit_act = self.create_edit_actions(panel, itmlist)
+        fac[ActionCategory.VIEW] = view_act = self.create_view_actions(panel)
+        fac[ActionCategory.OPERATION] = self.create_operation_actions(proc)
+        fac[ActionCategory.PROCESSING] = self.create_processing_actions(proc)
+        fac[ActionCategory.COMPUTING] = self.create_computing_actions(proc)
         add_actions(toolbar, file_act + [None] + edit_act + [None] + view_act)
 
-    def cra(
-        self, title, triggered=None, toggled=None, shortcut=None, icon=None, tip=None
-    ):
+    @staticmethod
+    def cra(title, triggered=None, toggled=None, shortcut=None, icon=None, tip=None):
         """Create action convenience method"""
-        return create_action(self.panel, title, triggered, toggled, shortcut, icon, tip)
+        return create_action(None, title, triggered, toggled, shortcut, icon, tip)
 
-    def create_file_actions(self):
+    def create_file_actions(self, panel: BasePanel):
         """Create file actions"""
         new_act = self.cra(
             _("New %s...") % self.OBJECT_STR,
             icon=get_icon(f"new_{self.OBJECT_STR}.svg"),
             tip=_("Create new %s") % self.OBJECT_STR,
-            triggered=self.panel.new_object,
+            triggered=panel.new_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.New),
         )
         open_act = self.cra(
             _("Open %s...") % self.OBJECT_STR,
             icon=get_icon("libre-gui-import.svg"),
             tip=_("Open %s") % self.OBJECT_STR,
-            triggered=self.panel.open_objects,
+            triggered=panel.open_objects,
             shortcut=QG.QKeySequence(QG.QKeySequence.Open),
         )
         save_act = self.cra(
             _("Save %s...") % self.OBJECT_STR,
             icon=get_icon("libre-gui-export.svg"),
             tip=_("Save selected %s") % self.OBJECT_STR,
-            triggered=self.panel.save_objects,
+            triggered=panel.save_objects,
             shortcut=QG.QKeySequence(QG.QKeySequence.Save),
         )
         importmd_act = self.cra(
             _("Import metadata into %s...") % self.OBJECT_STR,
             icon=get_icon("metadata_import.svg"),
             tip=_("Import metadata into %s") % self.OBJECT_STR,
-            triggered=self.panel.import_metadata_from_file,
+            triggered=panel.import_metadata_from_file,
         )
         exportmd_act = self.cra(
             _("Export metadata from %s...") % self.OBJECT_STR,
             icon=get_icon("metadata_export.svg"),
             tip=_("Export selected %s metadata") % self.OBJECT_STR,
-            triggered=self.panel.export_metadata_from_file,
+            triggered=panel.export_metadata_from_file,
         )
         self.actlist_1more += [save_act]
         self.actlist_cmenu += [save_act]
         self.actlist_1 += [importmd_act, exportmd_act]
         return [new_act, open_act, save_act, None, importmd_act, exportmd_act]
 
-    def create_edit_actions(self):
+    def create_edit_actions(self, panel: BasePanel, itmlist: BaseItemList):
         """Create edit actions"""
         dup_action = self.cra(
             _("Duplicate"),
             icon=get_icon("libre-gui-copy.svg"),
-            triggered=self.panel.duplicate_object,
+            triggered=panel.duplicate_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.Copy),
         )
         cpymeta_action = self.cra(
             _("Copy metadata"),
             icon=get_icon("metadata_copy.svg"),
-            triggered=self.panel.copy_metadata,
+            triggered=panel.copy_metadata,
         )
         pstmeta_action = self.cra(
             _("Paste metadata"),
             icon=get_icon("metadata_paste.svg"),
-            triggered=self.panel.paste_metadata,
+            triggered=panel.paste_metadata,
         )
         cleanup_action = self.cra(
             _("Clean up data view"),
             icon=get_icon("libre-tools-vacuum-cleaner.svg"),
             tip=_("Clean up data view before updating plotting panels"),
-            toggled=self.itmlist.toggle_cleanup_dataview,
+            toggled=itmlist.toggle_cleanup_dataview,
         )
         cleanup_action.setChecked(True)
         delm_action = self.cra(
             _("Delete object metadata"),
             icon=get_icon("metadata_delete.svg"),
             tip=_("Delete all that is contained in object metadata"),
-            triggered=self.panel.delete_metadata,
+            triggered=panel.delete_metadata,
         )
         delall_action = self.cra(
             _("Delete all"),
             shortcut="Shift+Ctrl+Suppr",
             icon=get_icon("delete_all.svg"),
-            triggered=self.panel.delete_all_objects,
+            triggered=panel.delete_all_objects,
         )
         del_action = self.cra(
             _("Remove"),
             icon=get_icon("delete.svg"),
-            triggered=self.panel.remove_object,
+            triggered=panel.remove_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
         self.actlist_1more += [
@@ -199,27 +205,26 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             delm_action,
         ]
 
-    def create_view_actions(self):
+    def create_view_actions(self, panel: BasePanel):
         """Create view actions"""
         view_action = self.cra(
             _("View in a new window"),
             icon=get_icon("libre-gui-binoculars.svg"),
-            triggered=self.panel.open_separate_view,
+            triggered=panel.open_separate_view,
         )
         showlabel_action = self.cra(
             _("Show graphical object titles"),
             icon=get_icon("show_titles.svg"),
             tip=_("Show or hide ROI and other graphical object titles or subtitles"),
-            toggled=self.panel.toggle_show_titles,
+            toggled=panel.toggle_show_titles,
         )
         showlabel_action.setChecked(False)
         self.actlist_1more += [view_action]
         self.actlist_cmenu = [view_action, None] + self.actlist_cmenu
         return [view_action, showlabel_action]
 
-    def create_operation_actions(self):
+    def create_operation_actions(self, proc: BaseProcessor):
         """Create operation actions"""
-        proc = self.processor
         sum_action = self.cra(_("Sum"), proc.compute_sum)
         average_action = self.cra(_("Average"), proc.compute_average)
         diff_action = self.cra(_("Difference"), lambda: proc.compute_difference(False))
@@ -252,9 +257,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             log_action,
         ]
 
-    def create_processing_actions(self):
+    def create_processing_actions(self, proc: BaseProcessor):
         """Create processing actions"""
-        proc = self.processor
         threshold_action = self.cra(_("Thresholding"), proc.compute_threshold)
         clip_action = self.cra(_("Clipping"), proc.compute_clip)
         lincal_action = self.cra(_("Linear calibration"), proc.calibrate)
@@ -281,9 +285,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         return actions
 
     @abc.abstractmethod
-    def create_computing_actions(self):
+    def create_computing_actions(self, proc: BaseProcessor):
         """Create computing actions"""
-        proc = self.processor
         defineroi_action = self.cra(
             _("Edit regions of interest..."),
             triggered=proc.edit_regions_of_interest,
@@ -315,10 +318,9 @@ class SignalActionHandler(BaseActionHandler):
 
     OBJECT_STR = _("signal")
 
-    def create_operation_actions(self):
+    def create_operation_actions(self, proc: SignalProcessor):
         """Create operation actions"""
-        base_actions = super().create_operation_actions()
-        proc = self.processor
+        base_actions = super().create_operation_actions(proc)
         peakdetect_action = self.cra(
             _("Peak detection"),
             proc.detect_peaks,
@@ -328,10 +330,9 @@ class SignalActionHandler(BaseActionHandler):
         roi_actions = self.operation_end_actions
         return base_actions + [None, peakdetect_action, None] + roi_actions
 
-    def create_processing_actions(self):
+    def create_processing_actions(self, proc: SignalProcessor):
         """Create processing actions"""
-        base_actions = super().create_processing_actions()
-        proc = self.processor
+        base_actions = super().create_processing_actions(proc)
         normalize_action = self.cra(_("Normalize"), proc.normalize)
         deriv_action = self.cra(_("Derivative"), proc.compute_derivative)
         integ_action = self.cra(_("Integral"), proc.compute_integral)
@@ -356,10 +357,9 @@ class SignalActionHandler(BaseActionHandler):
         self.actlist_1more += actions1 + actions2
         return actions1 + [None] + base_actions + [None] + actions2
 
-    def create_computing_actions(self):
+    def create_computing_actions(self, proc: SignalProcessor):
         """Create computing actions"""
-        base_actions = super().create_computing_actions()
-        proc = self.processor
+        base_actions = super().create_computing_actions(proc)
         fwhm_action = self.cra(
             _("Full width at half-maximum"),
             triggered=proc.compute_fwhm,
@@ -379,24 +379,23 @@ class ImageActionHandler(BaseActionHandler):
 
     OBJECT_STR = _("image")
 
-    def create_view_actions(self):
+    def create_view_actions(self, panel: ImagePanel):
         """Create view actions"""
-        base_actions = super().create_view_actions()
+        base_actions = super().create_view_actions(panel)
         showcontrast_action = self.cra(
             _("Show contrast panel"),
             icon=get_icon("contrast.png"),
             tip=_("Show or hide contrast adjustment panel"),
-            toggled=self.panel.toggle_show_contrast,
+            toggled=panel.toggle_show_contrast,
         )
         showcontrast_action.setChecked(True)
         self.actlist_1more += [showcontrast_action]
         return base_actions + [showcontrast_action]
 
-    def create_operation_actions(self):
+    def create_operation_actions(self, proc: ImageProcessor):
         """Create operation actions"""
-        base_actions = super().create_operation_actions()
-        proc = self.processor
-        rotate_menu = QW.QMenu(_("Rotation"), self.panel)
+        base_actions = super().create_operation_actions(proc)
+        rotate_menu = QW.QMenu(_("Rotation"))
         hflip_act = self.cra(
             _("Flip horizontally"),
             triggered=proc.flip_horizontally,
@@ -453,10 +452,9 @@ class ImageActionHandler(BaseActionHandler):
         ]
         return base_actions + actions + roi_actions
 
-    def create_processing_actions(self):
+    def create_processing_actions(self, proc: ImageProcessor):
         """Create processing actions"""
-        base_actions = super().create_processing_actions()
-        proc = self.processor
+        base_actions = super().create_processing_actions(proc)
         rescaleint_act = self.cra(_("Intensity rescaling"), proc.rescale_intensity)
         equalize_act = self.cra(_("Histogram equalization"), proc.equalize_hist)
         equalizeadapt_act = self.cra(
@@ -512,10 +510,9 @@ class ImageActionHandler(BaseActionHandler):
             + misc_actions
         )
 
-    def create_computing_actions(self):
+    def create_computing_actions(self, proc: ImageProcessor):
         """Create computing actions"""
-        base_actions = super().create_computing_actions()
-        proc = self.processor
+        base_actions = super().create_computing_actions(proc)
         # TODO: [P3] Add "Create ROI grid..." action to create a regular grid or ROIs
         cent_act = self.cra(
             _("Centroid"), proc.compute_centroid, tip=_("Compute image centroid")

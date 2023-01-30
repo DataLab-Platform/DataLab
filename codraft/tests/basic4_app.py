@@ -11,7 +11,7 @@ then open CodraFT to show it.
 """
 
 
-from skimage.data import human_mitosis
+from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 
 from codraft.core.model.image import create_image
 from codraft.tests import codraft_app_context

@@ -448,7 +448,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         row = self.objlist.currentRow()
         self.objprop.properties.setDisabled(row == -1)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
-        self.acthandler.selection_rows_changed()
+        self.acthandler.selection_rows_changed(self.objlist.get_sel_objects())
 
     def properties_changed(self):
         """The properties 'Apply' button was clicked: updating signal"""
@@ -697,7 +697,7 @@ class SignalPanel(BasePanel):
         self.itmlist = plotitemlist.SignalItemList(self, self.objlist, plotwidget)
         self.processor = SignalProcessor(self, self.objlist, plotwidget)
         self.acthandler = actionhandler.SignalActionHandler(
-            self, self.objlist, self.itmlist, self.processor, toolbar
+            self, self.itmlist, self.processor, toolbar
         )
         self.setup_panel()
 
@@ -771,7 +771,7 @@ class ImagePanel(BasePanel):
         self.itmlist = plotitemlist.ImageItemList(self, self.objlist, plotwidget)
         self.processor = ImageProcessor(self, self.objlist, plotwidget)
         self.acthandler = actionhandler.ImageActionHandler(
-            self, self.objlist, self.itmlist, self.processor, toolbar
+            self, self.itmlist, self.processor, toolbar
         )
         self.setup_panel()
 

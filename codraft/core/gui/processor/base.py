@@ -270,7 +270,6 @@ class BaseProcessor(QC.QObject):
                             func_obj(obj, param)
                     self.panel.add_object(obj)
 
-    @abc.abstractmethod
     def apply_10_func(self, orig, func, param, message) -> ResultShape:
         """Apply 10 function: 1 object in --> 0 object out (scalar result)"""
 
@@ -343,6 +342,16 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def calibrate(self, param=None) -> None:
         """Compute data linear calibration"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_threshold(self, param: ThresholdParam = None) -> None:
+        """Compute threshold clipping"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_clip(self, param: ClipParam = None) -> None:
+        """Compute maximum data clipping"""
 
     @staticmethod
     @abc.abstractmethod

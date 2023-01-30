@@ -37,12 +37,12 @@ from codraft.core.computation.image import (
     get_hough_circle_peaks,
 )
 from codraft.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
-from codraft.core.model.base import BaseProcParam, ResultShape, ShapeTypes
+from codraft.core.model.base import BaseProcParam, ShapeTypes
 from codraft.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from codraft.utils.qthelpers import create_progress_bar, qt_try_except
 
 VALID_DTYPES_STRLIST = [
-    dtype.__name__ for dtype in dtype_range.keys() if dtype in ImageParam.VALID_DTYPES
+    dtype.__name__ for dtype in dtype_range if dtype in ImageParam.VALID_DTYPES
 ]
 
 

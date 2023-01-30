@@ -40,7 +40,7 @@ def binning(
     try:
         bdata = data[: ny - ny % binning_y, : nx - nx % binning_x].reshape(shape)
     except ValueError as err:
-        raise ValueError(f"Binning is not a multiple of image dimensions") from err
+        raise ValueError("Binning is not a multiple of image dimensions") from err
     if operation == "sum":
         bdata = np.array(bdata, dtype=np.float64).sum(axis=(-1, 1))
     elif operation == "average":

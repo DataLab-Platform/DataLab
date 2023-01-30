@@ -15,7 +15,6 @@ import time
 from guiqwt.builder import make
 from numpy import ma
 
-from codraft.config import _
 from codraft.core.computation.image import BINNING_OPERATIONS, binning
 from codraft.env import execenv
 from codraft.tests.data import get_laser_spot_data
