@@ -83,9 +83,18 @@ class BaseItemList:
         """Add geometric shape items associated to computed results and annotations"""
         obj = self.objlist[row]
         if obj.metadata:
-            for item in obj.iterate_shape_items(editable=False):
-                self.plot.add_item(item)
-                self.__shapeitems.append(item)
+            # Performance optimization: block `guiqwt.baseplot.BasePlot` signals,
+            # add all items except the last one, unblock signals, then add the last one
+            # (this avoids some unnecessary refresh process by guiqwt)
+            items = list(obj.iterate_shape_items(editable=False))
+            if items:
+                block = self.plot.blockSignals(True)
+                for item in items[:-1]:
+                    self.plot.add_item(item)
+                    self.__shapeitems.append(item)
+                self.plot.blockSignals(block)
+                self.plot.add_item(items[-1])
+                self.__shapeitems.append(items[-1])
 
     def remove_all(self):
         """Remove all plot items"""
@@ -151,9 +160,15 @@ class BaseItemList:
 
     def cleanup_dataview(self):
         """Clean up data view"""
-        for item in self.plot.items[:]:
-            if item not in self and not isinstance(item, (LegendBoxItem, GridItem)):
-                self.plot.del_item(item)
+        # Performance optimization: using `baseplot.BasePlot.del_items` instead of
+        # `baseplot.BasePlot.del_item` (avoid emitting unnecessary signals)
+        self.plot.del_items(
+            [
+                item
+                for item in self.plot.items[:]
+                if item not in self and not isinstance(item, (LegendBoxItem, GridItem))
+            ]
+        )
 
     def get_current_plot_options(self):
         """

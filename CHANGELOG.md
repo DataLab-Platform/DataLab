@@ -43,6 +43,7 @@ Bug fixes:
 Other changes:
 
 * Alpha/beta release: fixed installer, added warning
+* Plot cleanup and shape management: greatly optimized performance
 
 ## Version 2.1.3 ##
 
