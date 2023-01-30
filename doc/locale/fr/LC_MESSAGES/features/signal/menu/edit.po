@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2023-01-30 12:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,7 +61,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata from clipboard into selected image."
 msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
 
-#: ../../features/signal/menu/edit.rst:23
+#: ../../features/signal/menu/edit.rst:24
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
@@ -74,3 +74,13 @@ msgstr ""
 "Supprime les métadonnées du signal sélectionné. Les métadonnées "
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
+
+#: ../../features/signal/menu/edit.rst:27
+msgid "Copy titles to clipboard"
+msgstr "Copier les titres dans le presse-papier"
+
+#: ../../features/signal/menu/edit.rst:27
+msgid ""
+"Copy all signal titles to clipboard as a multiline text. This text may be"
+" used for reproducing a processing chain, for example."
+msgstr "Copie les titres de tous les signaux dans le presse-papier, sous la forme d'un texte multiligne. Ce texte peut être ensuite utilisé pour reproduire une chaîne de traitement, par exemple."

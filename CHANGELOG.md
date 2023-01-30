@@ -8,6 +8,7 @@ for future and past milestones.
 New features:
 
 * Added "Computing parameters" group box to show last result input parameters
+* Added "Copy titles to clipboard" feature in "Edit" menu
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added Total variation denoising filter (TV Chambolle)

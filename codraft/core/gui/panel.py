@@ -30,6 +30,7 @@ Signal and Image Panel widgets relie on components:
 
 import abc
 import dataclasses
+import os
 import os.path as osp
 import re
 import warnings
@@ -341,6 +342,16 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
             if index == 0:
                 self.current_item_changed(row)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
+
+    def copy_titles_to_clipboard(self):
+        """Copy object titles to clipboard (for reproducibility)"""
+        text = os.linesep.join(
+            [
+                f"{self.PREFIX}{idx:03d}: {obj.title}"
+                for idx, obj in enumerate(self.objlist)
+            ]
+        )
+        QW.QApplication.clipboard().setText(text)
 
     @abc.abstractmethod
     def new_object(self, newparam=None, addparam=None, edit=True):

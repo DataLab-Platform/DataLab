@@ -186,12 +186,16 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered=panel.remove_object,
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
+        cpytitles_action = self.cra(
+            _("Copy titles to clipboard"), triggered=panel.copy_titles_to_clipboard
+        )
         self.actlist_1more += [
             dup_action,
             del_action,
             delm_action,
             pstmeta_action,
             delall_action,
+            cpytitles_action,
         ]
         self.actlist_cmenu += [dup_action, del_action]
         self.actlist_1 += [cpymeta_action]
@@ -203,6 +207,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             cpymeta_action,
             pstmeta_action,
             delm_action,
+            None,
+            cpytitles_action,
         ]
 
     def create_view_actions(self, panel: BasePanel):

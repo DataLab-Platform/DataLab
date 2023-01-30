@@ -22,3 +22,7 @@ Delete object metadata
     Delete metadata from currently selected signal.
     Metadata contains additionnal information such as Region of Interest
     or results of computations
+
+Copy titles to clipboard
+    Copy all signal titles to clipboard as a multiline text.
+    This text may be used for reproducing a processing chain, for example.
