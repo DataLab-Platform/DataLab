@@ -32,6 +32,7 @@ New features:
 
 Bug fixes:
 
+* After removing object(s) (signal/image), the previous object in the list is selected
 * HDF5 import/browser features: added support for non-ASCII dataset names
 * ANDOR SIF files:
   * Fixed compatibility issues for various SIF files

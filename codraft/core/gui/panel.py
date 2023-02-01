@@ -308,7 +308,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
                     dlg.done(QW.QDialog.DialogCode.Rejected)
             del self.objlist[row]
             del self.itmlist[row]
-        self.objlist.refresh_list(0)
+        self.objlist.refresh_list(max(0, rows[-1] - 1))
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
