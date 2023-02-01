@@ -338,7 +338,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     def delete_metadata(self):
         """Delete object metadata"""
         for index, row in enumerate(self.objlist.get_selected_rows()):
-            self.objlist[row].metadata = {}
+            self.objlist[row].reset_metadata_to_defaults()
             if index == 0:
                 self.current_item_changed(row)
         self.SIG_UPDATE_PLOT_ITEMS.emit()

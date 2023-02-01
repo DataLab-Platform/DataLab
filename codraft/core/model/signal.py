@@ -238,7 +238,10 @@ def create_signal(
         signal.xunit, signal.yunit = units
     if labels is not None:
         signal.xlabel, signal.ylabel = labels
-    signal.metadata = {} if metadata is None else metadata
+    if metadata is None:
+        signal.reset_metadata_to_defaults()
+    else:
+        signal.metadata = metadata
     return signal
 
 

@@ -169,10 +169,29 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         if stored_val is not None:
             self.metadata[key] = stored_val
 
+    def reset_metadata_to_defaults(self):
+        """Reset metadata to default values"""
+        base.ObjectItf.reset_metadata_to_defaults(self)
+        # Default visualization settings
+        for name, opt in (
+            ("colormap", Conf.view.ima_def_colormap),
+            ("interpolation", Conf.view.ima_def_interpolation),
+        ):
+            defval = opt.get(None)
+            if defval is not None:
+                self.metadata[name] = defval
+        # TODO: [P2] Add default signal/image visualization settings
+        # 1. Add signal visualization settings?
+        # 2. Add more image visualization settings?
+        # 3. Add a dialog box to edit default settings in main window
+        #    (use a guidata dataset with only a selection of items from guiqwt.styles
+        #     classes)
+        # 4. Update all active objects when settings were changed
+
     def set_metadata_from(self, obj):
         """Set metadata from object: dict-like (only string keys are considered)
         or any other object (iterating over supported attributes)"""
-        self.metadata = {}
+        self.reset_metadata_to_defaults()
         ptn = r"__[\S_]*__$"
         if isinstance(obj, abc.Mapping):
             for key, value in obj.items():
@@ -501,22 +520,10 @@ def create_image(
         image.xunit, image.yunit, image.zunit = units
     if labels is not None:
         image.xlabel, image.ylabel, image.zlabel = labels
-    image.metadata = {} if metadata is None else metadata
-    # Default visualization settings
-    for name, opt in (
-        ("colormap", Conf.view.ima_def_colormap),
-        ("interpolation", Conf.view.ima_def_interpolation),
-    ):
-        defval = opt.get(None)
-        if defval is not None:
-            image.metadata[name] = defval
-    # TODO: [P2] Add default signal/image visualization settings
-    # 1. Add signal visualization settings?
-    # 2. Add more image visualization settings?
-    # 3. Add a dialog box to edit default settings in main window
-    #    (use a guidata dataset with only a selection of items from guiqwt.styles
-    #     classes)
-    # 4. Update all active objects when settings were changed
+    if metadata is None:
+        image.reset_metadata_to_defaults()
+    else:
+        image.metadata = metadata
     return image
 
 
