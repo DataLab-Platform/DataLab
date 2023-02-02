@@ -59,6 +59,7 @@ def run(console=None, objects=None, h5files=None, size=None):
         window = create(
             splash=True, console=console, objects=objects, h5files=h5files, size=size
         )
+        QW.QApplication.processEvents()
         window.check_stable_release()
         window.check_dependencies()
         window.check_for_previous_crash()
