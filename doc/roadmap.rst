@@ -29,6 +29,12 @@ CodraFT 2.3
 
 * New plugin system: API for third-party extensions
 
+   - Objective #1: a plugin must be manageable using a single Python script, which
+     includes an extension of `ImageProcessor`, `ActionHandler` and new file format
+     support
+   - Objective #2: plugins must be simply stored in a folder wich defaults to the
+     user directory (same folder as ".CodraFT.ini" configuration file)
+
 * Add a macro-command system:
 
   - New embedded Python editor
