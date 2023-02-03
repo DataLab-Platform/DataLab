@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-30 12:15+0100\n"
+"POT-Creation-Date: 2023-02-03 09:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,7 +702,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:695 codraft\core\gui\panel.py:372
+#: codraft\core\gui\main.py:695 codraft\core\gui\panel.py:377
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -738,40 +738,40 @@ msgstr "Paramètres de calcul"
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: codraft\core\gui\panel.py:400
+#: codraft\core\gui\panel.py:405
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\panel.py:418
+#: codraft\core\gui\panel.py:423
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\panel.py:474
+#: codraft\core\gui\panel.py:479
 msgid "Annotations"
 msgstr "Annotations"
 
-#: codraft\core\gui\panel.py:600 codraft\core\gui\roieditor.py:205
+#: codraft\core\gui\panel.py:605 codraft\core\gui\roieditor.py:205
 #: codraft\core\model\base.py:522
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: codraft\core\gui\panel.py:624
+#: codraft\core\gui\panel.py:629
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: codraft\core\gui\panel.py:625
+#: codraft\core\gui\panel.py:630
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: codraft\core\gui\panel.py:662 codraft\core\gui\processor\base.py:331
+#: codraft\core\gui\panel.py:667 codraft\core\gui\processor\base.py:331
 msgid "Results"
 msgstr "Résultats"
 
-#: codraft\core\gui\panel.py:676
+#: codraft\core\gui\panel.py:681
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: codraft\core\gui\panel.py:678
+#: codraft\core\gui\panel.py:683
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -779,15 +779,15 @@ msgstr ""
 "Cette fonctionnalité permet d'afficher les tableaux de résultats tels "
 "qu'obtenus après avoir réalisé des calculs (voir menu \"Calculs\")."
 
-#: codraft\core\gui\panel.py:691
+#: codraft\core\gui\panel.py:696
 msgid "Signal List"
 msgstr "Liste des Signaux"
 
-#: codraft\core\gui\panel.py:743 codraft\core\gui\panel.py:841
+#: codraft\core\gui\panel.py:748 codraft\core\gui\panel.py:846
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\panel.py:755
+#: codraft\core\gui\panel.py:760
 msgid "Image List"
 msgstr "Liste des Images"
 
@@ -930,7 +930,7 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: codraft\core\gui\processor\image.py:196 codraft\core\model\image.py:568
+#: codraft\core\gui\processor\image.py:196 codraft\core\model\image.py:575
 msgid "Data type"
 msgstr "Type de données"
 
@@ -1001,7 +1001,7 @@ msgstr "Méthode"
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
-#: codraft\core\gui\processor\image.py:296 codraft\core\model\image.py:415
+#: codraft\core\gui\processor\image.py:296 codraft\core\model\image.py:434
 msgid "Radius"
 msgstr "Rayon"
 
@@ -1245,14 +1245,14 @@ msgstr "énergie"
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:230
-#: codraft\core\model\image.py:233 codraft\core\model\signal.py:48
+#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:249
+#: codraft\core\model\image.py:252 codraft\core\model\signal.py:48
 #: codraft\core\model\signal.py:51
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:234
-#: codraft\core\model\image.py:237 codraft\core\model\signal.py:52
+#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:253
+#: codraft\core\model\image.py:256 codraft\core\model\signal.py:52
 #: codraft\core\model\signal.py:55
 msgid "Y-axis"
 msgstr "Axe des Y"
@@ -1346,133 +1346,133 @@ msgstr "Ecart-type de la distribution normale"
 msgid "Annotation"
 msgstr "Annotation"
 
-#: codraft\core\model\base.py:635
+#: codraft\core\model\base.py:639
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: codraft\core\model\base.py:636
+#: codraft\core\model\base.py:640
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#: codraft\core\model\image.py:211 codraft\core\model\image.py:214
+#: codraft\core\model\image.py:230 codraft\core\model\image.py:233
 #: codraft\core\model\signal.py:39 codraft\core\model\signal.py:43
 msgid "Data and metadata"
 msgstr "Données et métadonnées"
 
-#: codraft\core\model\image.py:212 codraft\core\model\signal.py:41
+#: codraft\core\model\image.py:231 codraft\core\model\signal.py:41
 msgid "Data"
 msgstr "Données"
 
-#: codraft\core\model\image.py:213 codraft\core\model\signal.py:42
+#: codraft\core\model\image.py:232 codraft\core\model\signal.py:42
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: codraft\core\model\image.py:216 codraft\core\model\image.py:225
+#: codraft\core\model\image.py:235 codraft\core\model\image.py:244
 msgid "Origin and pixel spacing"
 msgstr "Origine et taille des pixels"
 
-#: codraft\core\model\image.py:217 codraft\core\model\image.py:220
+#: codraft\core\model\image.py:236 codraft\core\model\image.py:239
 msgid "Origin"
 msgstr "Origine"
 
-#: codraft\core\model\image.py:221 codraft\core\model\image.py:224
+#: codraft\core\model\image.py:240 codraft\core\model\image.py:243
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: codraft\core\model\image.py:227 codraft\core\model\image.py:243
+#: codraft\core\model\image.py:246 codraft\core\model\image.py:262
 #: codraft\core\model\signal.py:45 codraft\core\model\signal.py:57
 msgid "Titles and units"
 msgstr "Titres et unités"
 
-#: codraft\core\model\image.py:228
+#: codraft\core\model\image.py:247
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: codraft\core\model\image.py:228 codraft\core\model\image.py:560
+#: codraft\core\model\image.py:247 codraft\core\model\image.py:567
 #: codraft\core\model\signal.py:40 codraft\core\model\signal.py:46
-#: codraft\core\model\signal.py:268
+#: codraft\core\model\signal.py:271
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: codraft\core\model\image.py:231 codraft\core\model\image.py:235
-#: codraft\core\model\image.py:239 codraft\core\model\image.py:560
+#: codraft\core\model\image.py:250 codraft\core\model\image.py:254
+#: codraft\core\model\image.py:258 codraft\core\model\image.py:567
 #: codraft\core\model\signal.py:49 codraft\core\model\signal.py:53
-#: codraft\core\model\signal.py:268
+#: codraft\core\model\signal.py:271
 msgid "Title"
 msgstr "Titre"
 
-#: codraft\core\model\image.py:232 codraft\core\model\image.py:236
-#: codraft\core\model\image.py:240 codraft\core\model\signal.py:50
+#: codraft\core\model\image.py:251 codraft\core\model\image.py:255
+#: codraft\core\model\image.py:259 codraft\core\model\signal.py:50
 #: codraft\core\model\signal.py:54
 msgid "Unit"
 msgstr "Unité"
 
-#: codraft\core\model\image.py:238 codraft\core\model\image.py:241
+#: codraft\core\model\image.py:257 codraft\core\model\image.py:260
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: codraft\core\model\image.py:343
+#: codraft\core\model\image.py:362
 msgid "Top left corner"
 msgstr "Coin supérieur gauche"
 
-#: codraft\core\model\image.py:344
+#: codraft\core\model\image.py:363
 msgid "Bottom right corner"
 msgstr "Coin inférieur droit"
 
-#: codraft\core\model\image.py:369
+#: codraft\core\model\image.py:388
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: codraft\core\model\image.py:550 codraft\core\model\signal.py:248
+#: codraft\core\model\image.py:557 codraft\core\model\signal.py:251
 msgid "zeros"
 msgstr "zéros"
 
-#: codraft\core\model\image.py:551
+#: codraft\core\model\image.py:558
 msgid "empty"
 msgstr "vide"
 
-#: codraft\core\model\image.py:552 codraft\core\model\signal.py:249
+#: codraft\core\model\image.py:559 codraft\core\model\signal.py:252
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: codraft\core\model\image.py:553 codraft\core\model\signal.py:252
+#: codraft\core\model\image.py:560 codraft\core\model\signal.py:255
 msgid "random (uniform law)"
 msgstr "aléatoire (distribution uniforme)"
 
-#: codraft\core\model\image.py:554 codraft\core\model\signal.py:253
+#: codraft\core\model\image.py:561 codraft\core\model\signal.py:256
 msgid "random (normal law)"
 msgstr "aléatoire (distribution normale)"
 
-#: codraft\core\model\image.py:562
+#: codraft\core\model\image.py:569
 msgid "Height"
 msgstr "Hauteur"
 
-#: codraft\core\model\image.py:562
+#: codraft\core\model\image.py:569
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: codraft\core\model\image.py:565
+#: codraft\core\model\image.py:572
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: codraft\core\model\image.py:565
+#: codraft\core\model\image.py:572
 msgid "Width"
 msgstr "Largeur"
 
-#: codraft\core\model\image.py:570 codraft\core\model\signal.py:274
+#: codraft\core\model\image.py:577 codraft\core\model\signal.py:277
 #: codraft\widgets\h5browser.py:207
 msgid "Type"
 msgstr "Type"
 
-#: codraft\core\model\image.py:578
+#: codraft\core\model\image.py:585
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: codraft\core\model\image.py:636
+#: codraft\core\model\image.py:643
 msgid "New 2D-gaussian image"
 msgstr "Nouvelle gaussienne 2D"
 
-#: codraft\core\model\image.py:659
+#: codraft\core\model\image.py:666
 msgid "Image"
 msgstr "Image"
 
@@ -1488,35 +1488,35 @@ msgstr "Indice du premier point"
 msgid "Last point index"
 msgstr "Indice du dernier point"
 
-#: codraft\core\model\signal.py:250
+#: codraft\core\model\signal.py:253
 msgid "lorentzian"
 msgstr "lorentzienne"
 
-#: codraft\core\model\signal.py:272
+#: codraft\core\model\signal.py:275
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: codraft\core\model\signal.py:272 codraft\widgets\h5browser.py:207
+#: codraft\core\model\signal.py:275 codraft\widgets\h5browser.py:207
 msgid "Size"
 msgstr "Taille"
 
-#: codraft\core\model\signal.py:282
+#: codraft\core\model\signal.py:285
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: codraft\core\model\signal.py:327
+#: codraft\core\model\signal.py:330
 msgid "Signal"
 msgstr "Signal"
 
-#: codraft\core\model\signal.py:340
+#: codraft\core\model\signal.py:343
 msgid "New gaussian function"
 msgstr "Nouvelle gaussienne"
 
-#: codraft\core\model\signal.py:347
+#: codraft\core\model\signal.py:350
 msgid "New lorentzian function"
 msgstr "Nouvelle lorentzienne"
 
-#: codraft\core\model\signal.py:354
+#: codraft\core\model\signal.py:357
 msgid "New Voigt function"
 msgstr "Nouvelle courbe de Voigt"
 

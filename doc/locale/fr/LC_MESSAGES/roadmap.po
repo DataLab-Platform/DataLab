@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 10:15+0100\n"
+"POT-Creation-Date: 2023-02-03 09:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,133 +77,146 @@ msgid "New plugin system: API for third-party extensions"
 msgstr ""
 
 #: ../../roadmap.rst:32
-msgid "Add a macro-command system:"
-msgstr ""
-
-#: ../../roadmap.rst:34
-msgid "New embedded Python editor"
+msgid ""
+"Objective #1: a plugin must be manageable using a single Python script, "
+"which includes an extension of `ImageProcessor`, `ActionHandler` and new "
+"file format support"
 msgstr ""
 
 #: ../../roadmap.rst:35
-msgid "Scripts using the same API as high-level applicative test scenarios"
-msgstr ""
-
-#: ../../roadmap.rst:36
-msgid "Support for macro recording"
+msgid ""
+"Objective #2: plugins must be simply stored in a folder wich defaults to "
+"the user directory (same folder as \".CodraFT.ini\" configuration file)"
 msgstr ""
 
 #: ../../roadmap.rst:38
+msgid "Add a macro-command system:"
+msgstr ""
+
+#: ../../roadmap.rst:40
+msgid "New embedded Python editor"
+msgstr ""
+
+#: ../../roadmap.rst:41
+msgid "Scripts using the same API as high-level applicative test scenarios"
+msgstr ""
+
+#: ../../roadmap.rst:42
+msgid "Support for macro recording"
+msgstr ""
+
+#: ../../roadmap.rst:44
 msgid ""
 "Add an xmlrpc server to allow external applications controlling CodraFT "
 "main features (open a signal or an image, open a HDF5 file, etc.)"
 msgstr ""
 
-#: ../../roadmap.rst:42
+#: ../../roadmap.rst:48
 msgid "CodraFT 2.2"
 msgstr ""
 
-#: ../../roadmap.rst:44
+#: ../../roadmap.rst:50
 msgid "Add new image processing features: denoising, ..."
 msgstr ""
 
-#: ../../roadmap.rst:45
+#: ../../roadmap.rst:51
 msgid "Add default image visualization settings in .INI configuration file"
 msgstr ""
 
-#: ../../roadmap.rst:48
+#: ../../roadmap.rst:54
 msgid "Other ideas for future releases"
 msgstr ""
 
-#: ../../roadmap.rst:50
+#: ../../roadmap.rst:56
 msgid "Add support for multichannel timeseries"
 msgstr ""
 
-#: ../../roadmap.rst:52
+#: ../../roadmap.rst:58
 msgid "Add a \"Preferences\" dialog box to setup all configurable parameters"
 msgstr ""
 
-#: ../../roadmap.rst:55
+#: ../../roadmap.rst:61
 msgid "Past milestones"
 msgstr ""
 
-#: ../../roadmap.rst:58
+#: ../../roadmap.rst:64
 msgid "CodraFT 2.1"
 msgstr ""
 
-#: ../../roadmap.rst:60
+#: ../../roadmap.rst:66
 msgid ""
 "\"Open in a new window\" feature: add support for multiple separate "
 "windows, thus allowing to visualize for example two images side by side"
 msgstr ""
 
-#: ../../roadmap.rst:63
+#: ../../roadmap.rst:69
 msgid "New demo mode"
 msgstr ""
 
-#: ../../roadmap.rst:65
+#: ../../roadmap.rst:71
 msgid "New command line option features (open/browse HDF5 files at startup)"
 msgstr ""
 
-#: ../../roadmap.rst:67
+#: ../../roadmap.rst:73
 msgid "ROI features:"
 msgstr ""
 
-#: ../../roadmap.rst:69
+#: ../../roadmap.rst:75
 msgid ""
 "Add an option to extract multiples ROI on either one signal/image "
 "(current behavior) or one signal/image per ROI"
 msgstr ""
 
-#: ../../roadmap.rst:71
+#: ../../roadmap.rst:77
 msgid "Images: create ROI using array masks"
 msgstr ""
 
-#: ../../roadmap.rst:72
+#: ../../roadmap.rst:78
 msgid "Images: add support for circular ROI"
 msgstr ""
 
-#: ../../roadmap.rst:75
+#: ../../roadmap.rst:81
 msgid "CodraFT 2.0"
 msgstr ""
 
-#: ../../roadmap.rst:77
+#: ../../roadmap.rst:83
 msgid "New data processing and visualization features (see below)"
 msgstr ""
 
-#: ../../roadmap.rst:79
+#: ../../roadmap.rst:85
 msgid ""
 "Fully automated high-level processing features for internal testing "
 "purpose, as well as embedding CodraFT in a third-party software"
 msgstr ""
 
-#: ../../roadmap.rst:82
+#: ../../roadmap.rst:88
 #, python-format
 msgid ""
 "Extensive test suite (unit tests and application tests) with 90% feature "
 "coverage"
 msgstr ""
 
-#: ../../roadmap.rst:86
+#: ../../roadmap.rst:92
 msgid "CodraFT 1.7"
 msgstr ""
 
-#: ../../roadmap.rst:88
+#: ../../roadmap.rst:94
 msgid "Major redesign"
 msgstr ""
 
-#: ../../roadmap.rst:90
+#: ../../roadmap.rst:96
 msgid "Python 3.8 is the new reference"
 msgstr ""
 
-#: ../../roadmap.rst:92
+#: ../../roadmap.rst:98
 msgid "Dropped Python 2 support"
 msgstr ""
 
-#: ../../roadmap.rst:95
+#: ../../roadmap.rst:101
 msgid "CodraFT 1.6"
 msgstr ""
 
-#: ../../roadmap.rst:97
+#: ../../roadmap.rst:103
 msgid "Last release supporting Python 2"
 msgstr ""
 
