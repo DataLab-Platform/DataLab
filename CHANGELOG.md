@@ -32,7 +32,13 @@ New features:
 
 Bug fixes:
 
+* Plot cleanup and shape management: greatly optimized performance
 * After removing object(s) (signal/image), the previous object in the list is selected
+
+## Version 2.1.4 ##
+
+Bug fixes:
+
 * HDF5 import/browser features: added support for non-ASCII dataset names
 * ANDOR SIF files:
   * Fixed compatibility issues for various SIF files
@@ -45,7 +51,6 @@ Bug fixes:
 Other changes:
 
 * Alpha/beta release: fixed installer, added warning
-* Plot cleanup and shape management: greatly optimized performance
 
 ## Version 2.1.3 ##
 
