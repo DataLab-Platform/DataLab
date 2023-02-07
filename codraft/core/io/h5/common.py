@@ -91,7 +91,7 @@ class BaseNode(metaclass=abc.ABCMeta):
 
     def __process_metadata(self, obj):
         """Process metadata from dataset to obj"""
-        obj.metadata = {}
+        obj.reset_metadata_to_defaults()
         obj.metadata["HDF5Path"] = self.h5file.filename
         obj.metadata["HDF5Dataset"] = self.id
         for key, value in self.dset.attrs.items():
