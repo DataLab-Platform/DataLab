@@ -14,10 +14,9 @@ import os.path as osp
 import re
 
 import numpy as np
+
 from codraft.core.io.conv import data_to_xy
-
 from codraft.core.model.signal import SignalParam, create_signal
-
 
 # ==============================================================================
 # Signal I/O functions
@@ -30,7 +29,8 @@ HEADER_KEY = "HEADER"
 
 def read_signal(filename: str) -> SignalParam:
     """Read CSV or NumPy files, return a signal object (`SignalParam` instance)"""
-    signal = create_signal(osp.basename(filename))
+    reducepath = osp.relpath(filename, osp.join(osp.dirname(filename), osp.pardir))
+    signal = create_signal(reducepath)
     if osp.splitext(filename)[1] == ".npy":
         xydata = np.load(filename)
     else:

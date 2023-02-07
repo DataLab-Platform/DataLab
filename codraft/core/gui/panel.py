@@ -817,17 +817,16 @@ class ImagePanel(BasePanel):
     def open_object(self, filename: str) -> None:
         """Open object from file (signal/image)"""
         data = imread(filename, to_grayscale=False)
+        reducepath = osp.relpath(filename, osp.join(osp.dirname(filename), osp.pardir))
         if filename.lower().endswith(".sif") and len(data.shape) == 3:
             for idx in range(data.shape[0]):
-                image = create_image(
-                    osp.basename(filename) + "_Im" + str(idx), data[idx, ::]
-                )
+                image = create_image(reducepath + "_Im" + str(idx), data[idx, ::])
                 self.add_object(image)
         else:
             if data.ndim == 3:
                 # Converting to grayscale
                 data = data[..., :4].mean(axis=2)
-            image = create_image(osp.basename(filename), data)
+            image = create_image(reducepath, data)
             if osp.splitext(filename)[1].lower() == ".dcm":
                 from pydicom import dicomio  # pylint: disable=C0415,E0401
 
