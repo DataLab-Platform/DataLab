@@ -425,6 +425,12 @@ class ImageActionHandler(BaseActionHandler):
         rotate_act = self.cra(
             _("Rotate arbitrarily..."), triggered=proc.rotate_arbitrarily
         )
+        dist_act = self.cra(
+            _("Distribute on a grid..."), triggered=proc.distribute_on_grid
+        )
+        resetpos_act = self.cra(
+            _("Reset image positions"), triggered=proc.reset_positions
+        )
         resize_act = self.cra(_("Resize"), triggered=proc.resize)
         binning_act = self.cra(_("Pixel binning"), triggered=proc.rebin)
         logp1_act = self.cra("Log10(z+n)", triggered=proc.compute_logp1)
@@ -432,6 +438,7 @@ class ImageActionHandler(BaseActionHandler):
             _("Flat-field correction"), triggered=proc.flat_field_correction
         )
         self.actlist_2 += [flatfield_act]
+        self.actlist_2more += [dist_act, resetpos_act]
         self.actlist_1more += [
             resize_act,
             binning_act,
@@ -452,6 +459,8 @@ class ImageActionHandler(BaseActionHandler):
             flatfield_act,
             None,
             rotate_menu,
+            dist_act,
+            resetpos_act,
             None,
             resize_act,
             binning_act,

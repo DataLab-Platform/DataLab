@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 16:49+0100\n"
+"POT-Creation-Date: 2023-02-08 17:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -226,37 +226,55 @@ msgstr ""
 "l'image sélectionnée."
 
 #: ../../features/image/menu/operation.rst:92
+msgid "Distribute on a grid"
+msgstr "Distribuer sur une grille"
+
+#: ../../features/image/menu/operation.rst:92
+msgid "Distribute selected images on a regular grid."
+msgstr "Distribuer les images sélectionnées sur une grille régulière."
+
+#: ../../features/image/menu/operation.rst:95
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions"
+
+#: ../../features/image/menu/operation.rst:95
+msgid "Reset selected image positions to first image (x0, y0) coordinates."
+msgstr "Réinitialiser les positions des images sélectionnées sur les coordonnées (x0, y0) de la première image."
+
+#: ../../features/image/menu/operation.rst:98
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: ../../features/image/menu/operation.rst:92
+#: ../../features/image/menu/operation.rst:98
 msgid "Create a new image which is a resized version of each selected image."
 msgstr ""
 "Crée une image qui est le résultat du redimensionnement de chaque image "
 "sélectionnée."
 
-#: ../../features/image/menu/operation.rst:97
+#: ../../features/image/menu/operation.rst:103
 msgid "Pixel binning"
 msgstr "Binning"
 
-#: ../../features/image/menu/operation.rst:95
+#: ../../features/image/menu/operation.rst:101
 msgid ""
 "Combine clusters of adjacent pixels, throughout the image, into single "
 "pixels. The result can be the sum, average, median, minimum, or maximum "
 "value of the cluster."
-msgstr "Regroupe des pixels adjacents de l'image en un seul pixel (somme, moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
+msgstr ""
+"Regroupe des pixels adjacents de l'image en un seul pixel (somme, "
+"moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
 
-#: ../../features/image/menu/operation.rst:105
+#: ../../features/image/menu/operation.rst:111
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/image/menu/operation.rst:100
+#: ../../features/image/menu/operation.rst:106
 msgid "Create a new image from a user-defined Region of Interest."
 msgstr ""
 "Crée une image à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/image/menu/operation.rst:104
+#: ../../features/image/menu/operation.rst:110
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the size of a rectangle shape."
@@ -264,11 +282,11 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
 
-#: ../../features/image/menu/operation.rst:107
+#: ../../features/image/menu/operation.rst:113
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/image/menu/operation.rst:108
+#: ../../features/image/menu/operation.rst:114
 msgid "Create a new image which is the result of swapping X/Y data."
 msgstr ""
 "Créee une image à partir des données inversées X/Y de l'image "

@@ -15,7 +15,13 @@ import pywt
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
-from guidata.dataset.datatypes import DataSet, DataSetGroup, ValueProp
+from guidata.dataset.datatypes import (
+    DataSet,
+    DataSetGroup,
+    FuncProp,
+    GetAttrProp,
+    ValueProp,
+)
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
@@ -137,6 +143,24 @@ class RotateParam(DataSet):
         max=5,
         help=_("Spline interpolation order"),
     ).set_prop("display", active=prop)
+
+
+class GridParam(DataSet):
+    """Grid parameters"""
+
+    _prop = GetAttrProp("direction")
+    _directions = (("col", _("columns")), ("row", _("rows")))
+    direction = ChoiceItem(_("Distribute over"), _directions, radio=True).set_prop(
+        "display", store=_prop
+    )
+    cols = IntItem(_("Columns"), default=1, nonzero=True).set_prop(
+        "display", active=FuncProp(_prop, lambda x: x == "col")
+    )
+    rows = IntItem(_("Rows"), default=1, nonzero=True).set_prop(
+        "display", active=FuncProp(_prop, lambda x: x == "row")
+    )
+    colspac = FloatItem(_("Column spacing"), default=0.0, min=0.0)
+    rowspac = FloatItem(_("Row spacing"), default=0.0, min=0.0)
 
 
 class ResizeParam(DataSet):
@@ -520,6 +544,60 @@ class ImageProcessor(BaseProcessor):
             np.flipud,
             func_obj=lambda obj: obj.remove_resultshapes(),
         )
+
+    def distribute_on_grid(self, param: GridParam = None) -> None:
+        """Distribute images on a grid"""
+        title = _("Distribute on grid")
+        edit = param is None
+        if edit:
+            param = GridParam(title)
+            if not param.edit(parent=self.panel.parent()):
+                return
+        rows = self.objlist.get_selected_rows()
+        g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
+        with create_progress_bar(self.panel, title, max_=len(rows)) as progress:
+            for i_row, row in enumerate(rows):
+                progress.setValue(i_row)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    break
+                obj = self.objlist[row]
+                if i_row == 0:
+                    x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
+                else:
+                    obj.x0, obj.y0 = x0, y0
+                    # TODO: [P2] Instead of removing geometric shapes, apply translation
+                    obj.remove_resultshapes()
+                if param.direction == "row":
+                    # Distributing images over rows
+                    sign = np.sign(param.rows)
+                    g_row = (g_row + sign) % param.rows
+                    y0 += (obj.dy * obj.data.shape[0] + param.rowspac) * sign
+                    if g_row == 0:
+                        g_col += 1
+                        x0 += obj.dx * obj.data.shape[1] + param.colspac
+                        y0 = y0_0
+                else:
+                    # Distributing images over columns
+                    sign = np.sign(param.cols)
+                    g_col = (g_col + sign) % param.cols
+                    x0 += (obj.dx * obj.data.shape[1] + param.colspac) * sign
+                    if g_col == 0:
+                        g_row += 1
+                        x0 = x0_0
+                        y0 += obj.dy * obj.data.shape[0] + param.rowspac
+        self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
+
+    def reset_positions(self) -> None:
+        """Reset image positions"""
+        x0_0, y0_0 = 0.0, 0.0
+        for i_row, row in enumerate(self.objlist.get_selected_rows()):
+            obj = self.objlist[row]
+            if i_row == 0:
+                x0_0, y0_0 = obj.x0, obj.y0
+            else:
+                obj.x0, obj.y0 = x0_0, y0_0
+        self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def resize(self, param: ResizeParam = None) -> None:
         """Resize image"""

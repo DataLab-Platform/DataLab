@@ -11,6 +11,7 @@ New features:
 * Added "Copy titles to clipboard" feature in "Edit" menu
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
+  * Added "Distribute on a grid" and "Reset image positions" in operation menu
   * Added Total variation denoising filter (TV Chambolle)
   * Added Bilateral filter (denoising)
   * Added Wavelet denoising filter

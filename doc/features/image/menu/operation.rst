@@ -88,6 +88,12 @@ Rotation
     Create a new image which is the result of rotating (90°, 270° or
     arbitrary angle) or flipping (horizontally or vertically) data.
 
+Distribute on a grid
+    Distribute selected images on a regular grid.
+
+Reset image positions
+    Reset selected image positions to first image (x0, y0) coordinates.
+
 Resize
     Create a new image which is a resized version of each selected image.
 
