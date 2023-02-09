@@ -10,7 +10,6 @@ CodraFT unit tests
 from contextlib import contextmanager
 
 from guidata.guitest import run_testlauncher
-from qtpy import QtCore as QC
 
 import codraft.config  # Loading icons
 from codraft import env

@@ -188,6 +188,7 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         self.mainwindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objlist = objectlist.ObjectList(self)
+        self.objlist.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
         self.itmlist = None
         self.processor = None
         self.acthandler = None
@@ -368,6 +369,15 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
     @abc.abstractmethod
     def open_object(self, filename: str) -> None:
         """Open object from file (signal/image)"""
+
+    def handle_dropped_files(self, filenames: List[str] = None) -> None:
+        """Handle dropped files"""
+        h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
+        other_fnames = list(set(filenames) - set(h5_fnames))
+        if h5_fnames:
+            self.mainwindow.open_h5_files(h5_fnames, import_all=True)
+        if other_fnames:
+            self.open_objects(other_fnames)
 
     def open_objects(self, filenames: List[str] = None) -> None:
         """Open objects from file (signals/images)"""

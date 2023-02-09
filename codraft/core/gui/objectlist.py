@@ -13,8 +13,10 @@ import re
 from typing import Tuple
 
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from codraft.config import _
 from codraft.utils.qthelpers import block_signals
 
 
@@ -108,9 +110,45 @@ class GetObjectDialog(QW.QDialog):
 class ObjectList(SimpleObjectList):
     """Object handling panel list widget, object (sig/ima) lists"""
 
+    SIG_IMPORT_FILES = QC.Signal(list)
+
     def __init__(self, panel):
         super().__init__(panel)
         self.setSelectionMode(QW.QListWidget.ExtendedSelection)
+        self.setAcceptDrops(True)
+
+    def paintEvent(self, event):  # pylint: disable=C0103
+        """Reimplement Qt method"""
+        super().paintEvent(event)
+        if self.model() and self.model().rowCount(self.rootIndex()) > 0:
+            return
+        painter = QG.QPainter(self.viewport())
+        painter.drawText(self.rect(), QC.Qt.AlignCenter, _("Drag files here to open"))
+
+    def dropEvent(self, event):  # pylint: disable=C0103
+        """Reimplement Qt method"""
+        if event.mimeData().hasUrls():
+            fnames = [url.toLocalFile() for url in event.mimeData().urls()]
+            self.SIG_IMPORT_FILES.emit(fnames)
+            event.setDropAction(QC.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragEnterEvent(self, event):  # pylint: disable=C0103
+        """Reimplement Qt method"""
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):  # pylint: disable=C0103
+        """Reimplement Qt method"""
+        if event.mimeData().hasUrls():
+            event.setDropAction(QC.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
 
     def __len__(self):
         """Return number of objects"""

@@ -529,6 +529,7 @@ class ImageActionHandler(BaseActionHandler):
         """Create computing actions"""
         base_actions = super().create_computing_actions(proc)
         # TODO: [P3] Add "Create ROI grid..." action to create a regular grid or ROIs
+        #            (maybe reuse/derive from `core.gui.processor.image.GridParam`)
         cent_act = self.cra(
             _("Centroid"), proc.compute_centroid, tip=_("Compute image centroid")
         )
