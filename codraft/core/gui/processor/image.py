@@ -1171,7 +1171,7 @@ class ImageProcessor(BaseProcessor):
                         roicoords.append(coords)
                     obj.roi = np.array(roicoords, int)
                     self.SIG_ADD_SHAPE.emit(row)
-                    self.panel.current_item_changed(row)
+                    self.panel.selection_changed()
                     self.panel.SIG_UPDATE_PLOT_ITEM.emit(row)
 
     @qt_try_except()

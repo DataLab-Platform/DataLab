@@ -33,6 +33,7 @@ New features:
 
 Bug fixes:
 
+* Signal/Image panels: drastically improved performance when selecting objects
 * Plot cleanup and shape management: greatly optimized performance
 * After removing object(s) (signal/image), the previous object in the list is selected
 
