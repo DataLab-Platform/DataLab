@@ -187,7 +187,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
         )
         cpytitles_action = self.cra(
-            _("Copy titles to clipboard"), triggered=panel.copy_titles_to_clipboard
+            _("Copy titles to clipboard"),
+            icon=get_icon("copy_titles.svg"),
+            triggered=panel.copy_titles_to_clipboard,
         )
         self.actlist_1more += [
             dup_action,
