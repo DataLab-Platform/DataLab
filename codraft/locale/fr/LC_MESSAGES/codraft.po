@@ -1719,6 +1719,10 @@ msgstr "Cocher tout"
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
+#: codraft\widgets\logviewer.py:28
+msgid "Contents of file"
+msgstr "Contenu du fichier"
+
 #: codraft\widgets\logviewer.py:58
 msgid "CodraFT log files"
 msgstr "Journaux de bord de CodraFT"

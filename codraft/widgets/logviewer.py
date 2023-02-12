@@ -25,7 +25,7 @@ def get_title_contents(path):
         contents = fdesc.read()
     pathobj = Path(path)
     uri_path = pathobj.absolute().as_uri()
-    text = f'Contents of file <a href="{uri_path}">{path}</a>:'
+    text = f'{_("Contents of file")} <a href="{uri_path}">{path}</a>:'
     return text, contents
 
 
@@ -57,7 +57,7 @@ class LogViewerWindow(QW.QDialog):
         self.setObjectName("logviewer")
         self.setWindowTitle(_("CodraFT log files"))
         self.setWindowIcon(get_icon("codraft.svg"))
-        self.tabs = QW.QTabWidget()
+        self.tabs = QW.QTabWidget(self)
         for fname in fnames:
             if osp.isfile(fname):
                 viewer = LogViewerWidget()
