@@ -603,9 +603,17 @@ class ImageProcessor(BaseProcessor):
                 if i_row == 0:
                     x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
                 else:
-                    obj.x0, obj.y0 = x0, y0
-                    # TODO: [P2] Instead of removing geometric shapes, apply translation
-                    obj.remove_resultshapes()
+                    delta_x0, delta_y0 = x0 - obj.x0, y0 - obj.y0
+                    obj.x0 += delta_x0
+                    obj.y0 += delta_y0
+
+                    # pylint: disable=unused-argument
+                    def translate_coords(obj, orig, coords):
+                        """Apply translation to coords"""
+                        coords[:, ::2] += delta_x0
+                        coords[:, 1::2] += delta_y0
+
+                    obj.transform_shapes(None, translate_coords)
                 if param.direction == "row":
                     # Distributing images over rows
                     sign = np.sign(param.rows)
@@ -634,7 +642,17 @@ class ImageProcessor(BaseProcessor):
             if i_row == 0:
                 x0_0, y0_0 = obj.x0, obj.y0
             else:
-                obj.x0, obj.y0 = x0_0, y0_0
+                delta_x0, delta_y0 = x0_0 - obj.x0, y0_0 - obj.y0
+                obj.x0 += delta_x0
+                obj.y0 += delta_y0
+
+                # pylint: disable=unused-argument
+                def translate_coords(obj, orig, coords):
+                    """Apply translation to coords"""
+                    coords[:, ::2] += delta_x0
+                    coords[:, 1::2] += delta_y0
+
+                obj.transform_shapes(None, translate_coords)
         self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def resize(self, param: ResizeParam = None) -> None:
