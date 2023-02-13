@@ -626,13 +626,14 @@ class ObjectItf(metaclass=ObjectItfMeta):
             except json.decoder.JSONDecodeError:
                 pass
 
-    def remove_resultshapes(self):
+    def remove_all_shapes(self):
         """Remove metadata shapes and ROIs"""
         for key, value in list(self.metadata.items()):
             resultshape = ResultShape.from_metadata_entry(key, value)
             if resultshape is not None or key == ROI_KEY:
                 # Metadata entry is a metadata shape or a ROI
                 self.metadata.pop(key)
+        self.metadata.pop(ANN_KEY)
 
     def reset_metadata_to_defaults(self):
         """Reset metadata to default values"""

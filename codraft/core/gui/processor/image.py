@@ -157,6 +157,7 @@ def rotate_obj_coords(
             dy1 = y1 - orig.yc
             dx2, dy2 = vector_rotation(-angle * np.pi / 180.0, dx1, dy1)
             coords[row, col : col + 2] = dx2 + obj.xc, dy2 + obj.yc
+    obj.roi = None
 
 
 class GridParam(DataSet):
@@ -562,6 +563,7 @@ class ImageProcessor(BaseProcessor):
         def hflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
             """Apply HFlip to coords"""
             coords[:, ::2] = obj.x0 + obj.dx * obj.data.shape[1] - coords[:, ::2]
+            obj.roi = None
 
         self.compute_11(
             "HFlip",
@@ -576,6 +578,7 @@ class ImageProcessor(BaseProcessor):
         def vflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
             """Apply VFlip to coords"""
             coords[:, 1::2] = obj.y0 + obj.dy * obj.data.shape[0] - coords[:, 1::2]
+            obj.roi = None
 
         self.compute_11(
             "VFlip",
@@ -687,7 +690,7 @@ class ImageProcessor(BaseProcessor):
             if obj.dx is not None and obj.dy is not None:
                 obj.dx, obj.dy = obj.dx / param.zoom, obj.dy / param.zoom
             # TODO: [P2] Instead of removing geometric shapes, apply zoom
-            obj.remove_resultshapes()
+            obj.remove_all_shapes()
 
         self.compute_11(
             "Zoom",
@@ -723,7 +726,7 @@ class ImageProcessor(BaseProcessor):
                     obj.dx *= param.binning_x
                     obj.dy *= param.binning_y
                 # TODO: [P2] Instead of removing geometric shapes, apply zoom
-                obj.remove_resultshapes()
+                obj.remove_all_shapes()
 
         self.compute_11(
             "PixelBinning",
@@ -778,6 +781,7 @@ class ImageProcessor(BaseProcessor):
                 """Extract ROI function on object"""
                 image.x0 += min([p.x0 for p in group.datasets])
                 image.y0 += min([p.y0 for p in group.datasets])
+                image.roi = None
 
             self.compute_11(
                 "ROI",
@@ -795,6 +799,7 @@ class ImageProcessor(BaseProcessor):
                 """Extract ROI function on object"""
                 image.x0 += p.x0
                 image.y0 += p.y0
+                image.roi = None
                 if p.geometry is RoiDataGeometries.CIRCLE:
                     # Circular ROI
                     image.roi = p.get_single_roi()
@@ -813,7 +818,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(
             "SwapAxes",
             lambda z: z.T,
-            func_obj=lambda obj, _orig: obj.remove_resultshapes(),
+            func_obj=lambda obj, _orig: obj.remove_all_shapes(),
         )
 
     def compute_abs(self):
