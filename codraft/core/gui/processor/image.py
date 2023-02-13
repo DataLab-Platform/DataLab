@@ -22,6 +22,7 @@ from guidata.dataset.datatypes import (
     GetAttrProp,
     ValueProp,
 )
+from guiqwt.geometry import vector_rotation
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
@@ -126,7 +127,7 @@ class RotateParam(DataSet):
     )
     reshape = BoolItem(
         _("Reshape the output array"),
-        default=True,
+        default=False,
         help=_(
             "Reshape the output array "
             "so that the input array is "
@@ -143,6 +144,19 @@ class RotateParam(DataSet):
         max=5,
         help=_("Spline interpolation order"),
     ).set_prop("display", active=prop)
+
+
+def rotate_obj_coords(
+    angle: float, obj: ImageParam, orig: ImageParam, coords: np.ndarray
+) -> None:
+    """Apply rotation to coords associated to image obj"""
+    for row in range(coords.shape[0]):
+        for col in range(0, coords.shape[1], 2):
+            x1, y1 = coords[row, col : col + 2]
+            dx1 = x1 - orig.xc
+            dy1 = y1 - orig.yc
+            dx2, dy2 = vector_rotation(-angle * np.pi / 180.0, dx1, dy1)
+            coords[row, col : col + 2] = dx2 + obj.xc, dy2 + obj.yc
 
 
 class GridParam(DataSet):
@@ -491,7 +505,13 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             param = RotateParam(_("Rotation"))
-        # TODO: [P2] Instead of removing geometric shapes, apply rotation
+
+        def rotate_xy(
+            obj: ImageParam, orig: ImageParam, coords: np.ndarray, p: RotateParam
+        ) -> None:
+            """Apply rotation to coords"""
+            rotate_obj_coords(p.angle, obj, orig, coords)
+
         self.compute_11(
             "Rotate",
             lambda x, p: spi.rotate(
@@ -505,44 +525,62 @@ class ImageProcessor(BaseProcessor):
             ),
             param,
             suffix=lambda p: f"α={p.angle:.3f}°, mode='{p.mode}'",
-            func_obj=lambda obj, _param: obj.remove_resultshapes(),
+            func_obj=lambda obj, orig, p: obj.transform_shapes(orig, rotate_xy, p),
             edit=edit,
         )
 
     def rotate_90(self):
         """Rotate data 90°"""
-        # TODO: [P2] Instead of removing geometric shapes, apply 90° rotation
+
+        def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+            """Apply rotation to coords"""
+            rotate_obj_coords(90.0, obj, orig, coords)
+
         self.compute_11(
             "Rotate90",
             np.rot90,
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
         )
 
     def rotate_270(self):
         """Rotate data 270°"""
-        # TODO: [P2] Instead of removing geometric shapes, apply 270° rotation
+
+        def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+            """Apply rotation to coords"""
+            rotate_obj_coords(270.0, obj, orig, coords)
+
         self.compute_11(
             "Rotate270",
             lambda x: np.rot90(x, 3),
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
         )
 
     def flip_horizontally(self):
         """Flip data horizontally"""
-        # TODO: [P2] Instead of removing geometric shapes, apply horizontal flip
+
+        # pylint: disable=unused-argument
+        def hflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+            """Apply HFlip to coords"""
+            coords[:, ::2] = obj.x0 + obj.dx * obj.data.shape[1] - coords[:, ::2]
+
         self.compute_11(
             "HFlip",
             np.fliplr,
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, hflip_coords),
         )
 
     def flip_vertically(self):
         """Flip data vertically"""
-        # TODO: [P2] Instead of removing geometric shapes, apply vertical flip
+
+        # pylint: disable=unused-argument
+        def vflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+            """Apply VFlip to coords"""
+            coords[:, 1::2] = obj.y0 + obj.dy * obj.data.shape[0] - coords[:, 1::2]
+
         self.compute_11(
             "VFlip",
             np.flipud,
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, vflip_coords),
         )
 
     def distribute_on_grid(self, param: GridParam = None) -> None:
@@ -626,7 +664,7 @@ class ImageProcessor(BaseProcessor):
             param = ResizeParam(_("Resize"))
             param.zoom = dlg.get_zoom()
 
-        def func_obj(obj, param):
+        def func_obj(obj, orig, param):  # pylint: disable=unused-argument
             """Zooming function"""
             if obj.dx is not None and obj.dy is not None:
                 obj.dx, obj.dy = obj.dx / param.zoom, obj.dy / param.zoom
@@ -659,7 +697,8 @@ class ImageProcessor(BaseProcessor):
         if param.dtype_str is None:
             param.dtype_str = input_dtype_str
 
-        def func_obj(obj: ImageParam, param: BinningParam):
+        # pylint: disable=unused-argument
+        def func_obj(obj: ImageParam, orig: ImageParam, param: BinningParam):
             """Binning function"""
             if param.change_pixel_size:
                 if obj.dx is not None and obj.dy is not None:
@@ -715,7 +754,9 @@ class ImageProcessor(BaseProcessor):
                 y1 = max([p.y1 for p in group.datasets])
                 return out[y0:y1, x0:x1]
 
-            def extract_roi_func_obj(image: ImageParam, group: DataSetGroup):
+            def extract_roi_func_obj(
+                image: ImageParam, orig: ImageParam, group: DataSetGroup
+            ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += min([p.x0 for p in group.datasets])
                 image.y0 += min([p.y0 for p in group.datasets])
@@ -733,7 +774,8 @@ class ImageProcessor(BaseProcessor):
 
         else:
 
-            def extract_roi_func_obj(image: ImageParam, p: DataSet):
+            # pylint: disable=unused-argument
+            def extract_roi_func_obj(image: ImageParam, orig: ImageParam, p: DataSet):
                 """Extract ROI function on object"""
                 image.x0 += p.x0
                 image.y0 += p.y0
@@ -757,7 +799,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(
             "SwapAxes",
             lambda z: z.T,
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, _orig: obj.remove_resultshapes(),
         )
 
     def compute_abs(self):

@@ -656,18 +656,14 @@ class BasePanel(QW.QSplitter, metaclass=BasePanelMeta):
         rdatadict = {}
         for idx, row in enumerate(rows):
             obj = self.objlist[row]
-            for key, value in obj.metadata.items():
-                if ResultShape.match(key, value):
-                    result = ResultShape.from_metadata_entry(key, value)
-                    rdata = rdatadict.setdefault(
-                        result.shapetype, ResultData([], None, [])
-                    )
-                    title = f"{result.label}"
-                    rdata.results.append(result)
-                    rdata.xlabels = result.xlabels
-                    for _i_row_res in range(result.array.shape[0]):
-                        ylabel = f"{self.PREFIX}{idx:03d}: {result.label}"
-                        rdata.ylabels.append(ylabel)
+            for result in obj.iterate_resultshapes():
+                rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
+                title = f"{result.label}"
+                rdata.results.append(result)
+                rdata.xlabels = result.xlabels
+                for _i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{self.PREFIX}{idx:03d}: {result.label}"
+                    rdata.ylabels.append(ylabel)
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)

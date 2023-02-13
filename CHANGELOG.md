@@ -30,7 +30,14 @@ New features:
   * Added histogram equalization
   * Added adaptative histogram equalization
   * Added blob detection using Determinant of Hessian method
-* Added support for XYZ image files
+  * Added support for XYZ image files
+  * Result shapes and annotations are now transformed (instead of removed) when
+    executing one of the following operations:
+    * Rotation (arbitrary angle, +90°, -90°)
+    * Symetry (vertical/horizontal)
+* All shapes: removed shape drag symbols, so that background image is no longer
+  masked by small-sized shapes
+* At startup, restoring last current panel (image or signal panel)
 
 Bug fixes:
 

@@ -263,6 +263,16 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     _e_tabs = gdt.EndTabGroup("all")
 
+    @property
+    def xc(self):
+        """Return image center X-axis coordinate"""
+        return self.x0 + 0.5 * self.data.shape[1] * self.dx
+
+    @property
+    def yc(self):
+        """Return image center Y-axis coordinate"""
+        return self.y0 + 0.5 * self.data.shape[0] * self.dy
+
     def get_data(self, roi_index: int = None) -> np.ndarray:
         """
         Return original data (if ROI is not defined or `roi_index` is None),

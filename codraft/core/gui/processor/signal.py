@@ -121,7 +121,7 @@ class SignalProcessor(BaseProcessor):
                 extract_roi_func,
                 group,
                 suffix=suffix_func,
-                func_obj=lambda obj, _group: obj.remove_resultshapes(),
+                func_obj=lambda obj, _orig, _group: obj.remove_resultshapes(),
                 edit=False,
             )
         else:
@@ -131,7 +131,7 @@ class SignalProcessor(BaseProcessor):
                 lambda x, y, p: (x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1]),
                 group.datasets,
                 suffix=lambda p: f"indexes={p.col1:d}:{p.col2:d}",
-                func_obj=lambda obj, _group: obj.remove_resultshapes(),
+                func_obj=lambda obj, _orig, _group: obj.remove_resultshapes(),
                 edit=False,
             )
 
@@ -140,7 +140,7 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(
             "SwapAxes",
             lambda x, y: (y, x),
-            func_obj=lambda obj: obj.remove_resultshapes(),
+            func_obj=lambda obj, _orig: obj.remove_resultshapes(),
         )
 
     def compute_abs(self):
@@ -168,7 +168,9 @@ class SignalProcessor(BaseProcessor):
             indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
             return x[indexes], y[indexes]
 
-        def func_obj(obj, param):  # pylint: disable=unused-argument
+        def func_obj(
+            obj: SignalParam, orig: SignalParam, param: PeakDetectionParam
+        ):  # pylint: disable=unused-argument
             """Customize signal object"""
             obj.metadata["curvestyle"] = "Sticks"
 

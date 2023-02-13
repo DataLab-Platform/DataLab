@@ -265,9 +265,9 @@ class BaseProcessor(QC.QObject):
                     self.apply_11_func(obj, orig, func, param, message)
                     if func_obj is not None:
                         if param is None:
-                            func_obj(obj)
+                            func_obj(obj, orig)
                         else:
-                            func_obj(obj, param)
+                            func_obj(obj, orig, param)
                     self.panel.add_object(obj)
 
     def apply_10_func(self, orig, func, param, message) -> ResultShape:

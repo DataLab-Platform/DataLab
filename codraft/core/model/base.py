@@ -549,12 +549,41 @@ class ObjectItf(metaclass=ObjectItfMeta):
         mshape.add_to(self)
         return mshape
 
-    def update_resultshapes_from(self, other):
-        """Update geometric shape from another object (merge metadata)"""
+    def iterate_resultshapes(self):
+        """Iterate over object result shapes"""
         for key, value in self.metadata.items():
             if ResultShape.match(key, value):
-                mshape = ResultShape.from_metadata_entry(key, value)
-                mshape.merge_with(self, other)
+                yield ResultShape.from_metadata_entry(key, value)
+
+    def update_resultshapes_from(self, other):
+        """Update geometric shape from another object (merge metadata)"""
+        for mshape in self.iterate_resultshapes():
+            mshape.merge_with(self, other)
+
+    def transform_shapes(self, orig, func, param=None):
+        """Apply transform function to result shape / annotations coordinates"""
+
+        def transform(coords: np.ndarray):
+            """Transform coordinates"""
+            if param is None:
+                func(self, orig, coords)
+            else:
+                func(self, orig, coords, param)
+
+        for mshape in self.iterate_resultshapes():
+            transform(mshape.data)
+        if self.annotations:
+            items = []
+            try:
+                for item in load_items(JSONReader(self.annotations)):
+                    if isinstance(item, AnnotatedShape):
+                        transform(item.shape.points)
+                        item.set_label_position()
+                    items.append(item)
+            except json.decoder.JSONDecodeError:
+                pass
+            if items:
+                self.set_annotations_from_items(items)
 
     @abc.abstractmethod
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
