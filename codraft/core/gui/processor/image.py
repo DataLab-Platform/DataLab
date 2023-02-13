@@ -778,9 +778,7 @@ class ImageProcessor(BaseProcessor):
                 """Extract ROI function on object"""
                 image.x0 += min([p.x0 for p in group.datasets])
                 image.y0 += min([p.y0 for p in group.datasets])
-                image.remove_resultshapes()
 
-            # TODO: [P2] Instead of removing geometric shapes, apply ROI extract
             self.compute_11(
                 "ROI",
                 extract_roi_func,
@@ -797,12 +795,10 @@ class ImageProcessor(BaseProcessor):
                 """Extract ROI function on object"""
                 image.x0 += p.x0
                 image.y0 += p.y0
-                image.remove_resultshapes()
                 if p.geometry is RoiDataGeometries.CIRCLE:
                     # Circular ROI
                     image.roi = p.get_single_roi()
 
-            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
             self.compute_1n(
                 [f"ROI{iroi}" for iroi in range(len(group.datasets))],
                 lambda z, p: z.copy()[p.y0 : p.y1, p.x0 : p.x1],
