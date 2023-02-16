@@ -633,7 +633,8 @@ class ObjectItf(metaclass=ObjectItfMeta):
             if resultshape is not None or key == ROI_KEY:
                 # Metadata entry is a metadata shape or a ROI
                 self.metadata.pop(key)
-        self.metadata.pop(ANN_KEY)
+        if ANN_KEY in self.metadata:
+            self.metadata.pop(ANN_KEY)
 
     def reset_metadata_to_defaults(self):
         """Reset metadata to default values"""
