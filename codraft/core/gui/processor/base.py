@@ -11,12 +11,13 @@ CodraFT Base Processor GUI module
 
 import abc
 import warnings
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Tuple
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 from guidata.configtools import get_icon
+from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -65,6 +66,7 @@ class BaseProcessor(QC.QObject):
 
     SIG_ADD_SHAPE = QC.Signal(int)
     EDIT_ROI_PARAMS = False
+    PARAM_DEFAULTS: Dict[str, gdt.DataSet] = {}
 
     def __init__(self, panel, objlist: ObjectList, plotwidget):
         super().__init__()
@@ -72,6 +74,23 @@ class BaseProcessor(QC.QObject):
         self.objlist = objlist
         self.plotwidget = plotwidget
         self.prefix = panel.PREFIX
+
+    def init_param(
+        self,
+        param: gdt.DataSet,
+        paramclass: gdt.DataSet,
+        title: str,
+        comment: str = None,
+    ) -> Tuple[bool, gdt.DataSet]:
+        """Initialize processing parameters"""
+        edit = param is None
+        if edit:
+            param = paramclass(title, comment)
+            pdefaults = self.PARAM_DEFAULTS.get(paramclass.__name__)
+            if pdefaults is not None:
+                update_dataset(param, pdefaults)
+            self.PARAM_DEFAULTS[paramclass.__name__] = param
+        return edit, param
 
     @qt_try_except()
     def compute_sum(self):
@@ -361,9 +380,7 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_gaussian(self, param: GaussianParam = None) -> None:
         """Compute gaussian filter"""
-        edit = param is None
-        if edit:
-            param = GaussianParam(_("Gaussian filter"))
+        edit, param = self.init_param(param, GaussianParam, _("Gaussian filter"))
         func = self.func_gaussian_filter
         self.compute_11(
             "GaussianFilter",
@@ -381,9 +398,7 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_moving_average(self, param: MovingAverageParam = None) -> None:
         """Compute moving average"""
-        edit = param is None
-        if edit:
-            param = MovingAverageParam(_("Moving average"))
+        edit, param = self.init_param(param, MovingAverageParam, _("Moving average"))
         func = self.func_moving_average
         self.compute_11("MovAvg", func, param, suffix=lambda p: f"n={p.n}", edit=edit)
 
@@ -395,9 +410,7 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_moving_median(self, param: MovingMedianParam = None) -> None:
         """Compute moving median"""
-        edit = param is None
-        if edit:
-            param = MovingMedianParam(_("Moving median"))
+        edit, param = self.init_param(param, MovingMedianParam, _("Moving median"))
         func = self.func_moving_median
         self.compute_11("MovMed", func, param, suffix=lambda p: f"n={p.n}", edit=edit)
 

@@ -14,6 +14,10 @@ New features:
 * Added support for dropping files on signal/image list widget
 * Added "Computing parameters" group box to show last result input parameters
 * Added "Copy titles to clipboard" feature in "Edit" menu
+* Signal and image processing:
+  * For every single processing feature (operation, processing and computing menus),
+    the entered parameters (dialog boxes) are stored in cache to be used as defaults
+    the next time the feature is used
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added "Distribute on a grid" and "Reset image positions" in operation menu

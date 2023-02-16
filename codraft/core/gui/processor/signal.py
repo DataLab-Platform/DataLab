@@ -154,12 +154,11 @@ class SignalProcessor(BaseProcessor):
     def detect_peaks(self, param: PeakDetectionParam = None) -> None:
         """Detect peaks from data"""
         obj = self.objlist.get_sel_object()
-        edit = param is None
+        edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
             dlg.setup_data(obj.x, obj.y)
             if exec_dialog(dlg):
-                param = PeakDetectionParam(_("Peak detection"))
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
 
@@ -214,9 +213,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def normalize(self, param: NormalizeParam = None) -> None:
         """Normalize data"""
-        edit = param is None
-        if edit:
-            param = NormalizeParam(_("Normalize"))
+        edit, param = self.init_param(param, NormalizeParam, _("Normalize"))
 
         def func(x, y, p):
             return (x, normalize(y, p.method))
@@ -238,9 +235,9 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def calibrate(self, param: XYCalibrateParam = None) -> None:
         """Compute data linear calibration"""
-        edit = param is None
-        if edit:
-            param = XYCalibrateParam(_("Linear calibration"), "y = a.x + b")
+        edit, param = self.init_param(
+            param, XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
+        )
 
         def func(x, y, p):
             """Compute linear calibration"""
@@ -259,9 +256,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_threshold(self, param: ThresholdParam = None) -> None:
         """Compute threshold clipping"""
-        edit = param is None
-        if edit:
-            param = ThresholdParam(_("Thresholding"))
+        edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
         self.compute_11(
             "Threshold",
             lambda x, y, p: (x, np.clip(y, p.value, y.max())),
@@ -273,9 +268,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_clip(self, param: ClipParam = None) -> None:
         """Compute maximum data clipping"""
-        edit = param is None
-        if edit:
-            param = ClipParam(_("Clipping"))
+        edit, param = self.init_param(param, ClipParam, _("Clipping"))
         self.compute_11(
             "Clip",
             lambda x, y, p: (x, np.clip(y, y.min(), p.value)),
@@ -325,9 +318,7 @@ class SignalProcessor(BaseProcessor):
     def compute_polyfit(self, param: PolynomialFitParam = None) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
-        edit = param is None
-        if edit:
-            param = PolynomialFitParam(txt)
+        edit, param = self.init_param(param, PolynomialFitParam, txt)
         if not edit or param.edit(self):
             dlgfunc = fitdialog.polynomialfit
             self.compute_fit(
@@ -408,9 +399,7 @@ class SignalProcessor(BaseProcessor):
                 res.append([i_roi, x0, y0, x1, y1])
             return signal.add_resultshape(title, ShapeTypes.SEGMENT, np.array(res))
 
-        edit = param is None
-        if edit:
-            param = FWHMParam(title)
+        edit, param = self.init_param(param, FWHMParam, title)
         self.compute_10(title, fwhm, param, edit=edit)
 
     @qt_try_except()

@@ -627,9 +627,7 @@ class ImageProcessor(BaseProcessor):
 
     def compute_logp1(self, param: LogP1Param = None) -> None:
         """Compute base 10 logarithm"""
-        edit = param is None
-        if edit:
-            param = LogP1Param("Log10(z+n)")
+        edit, param = self.init_param(param, LogP1Param, "Log10(z+n)")
         self.compute_11(
             "Log10(z+n)",
             lambda z, p: np.log10(z + p.n),
@@ -640,9 +638,7 @@ class ImageProcessor(BaseProcessor):
 
     def rotate_arbitrarily(self, param: RotateParam = None) -> None:
         """Rotate data arbitrarily"""
-        edit = param is None
-        if edit:
-            param = RotateParam(_("Rotation"))
+        edit, param = self.init_param(param, RotateParam, "Rotate")
 
         def rotate_xy(
             obj: ImageParam, orig: ImageParam, coords: np.ndarray, p: RotateParam
@@ -726,11 +722,9 @@ class ImageProcessor(BaseProcessor):
     def distribute_on_grid(self, param: GridParam = None) -> None:
         """Distribute images on a grid"""
         title = _("Distribute on grid")
-        edit = param is None
-        if edit:
-            param = GridParam(title)
-            if not param.edit(parent=self.panel.parent()):
-                return
+        edit, param = self.init_param(param, GridParam, title)
+        if edit and not param.edit(parent=self.panel.parent()):
+            return
         rows = self.objlist.get_selected_rows()
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(rows)) as progress:
@@ -808,7 +802,7 @@ class ImageProcessor(BaseProcessor):
                     + _("Selected images do not have the same size"),
                 )
 
-        edit = param is None
+        edit, param = self.init_param(param, ResizeParam, _("Resize"))
         if edit:
             original_size = obj0.size
             dlg = ResizeDialog(
@@ -819,7 +813,6 @@ class ImageProcessor(BaseProcessor):
             )
             if not dlg.exec():
                 return
-            param = ResizeParam(_("Resize"))
             param.zoom = dlg.get_zoom()
 
         def func_obj(obj, orig, param):  # pylint: disable=unused-argument
@@ -849,8 +842,8 @@ class ImageProcessor(BaseProcessor):
         """Binning image"""
         edit = param is None
         input_dtype_str = str(self.objlist.get_sel_object(0).data.dtype)
+        edit, param = self.init_param(param, BinningParam, _("Binning"))
         if edit:
-            param = BinningParam(_("Binning"))
             param.dtype_str = input_dtype_str
         if param.dtype_str is None:
             param.dtype_str = input_dtype_str
@@ -969,11 +962,10 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def flat_field_correction(self, param: FlatFieldParam = None) -> None:
         """Compute flat field correction"""
-        edit = param is None
+        edit, param = self.init_param(param, FlatFieldParam, _("Flat field"))
         rawdata = self.objlist.get_sel_object().data
         flatdata = self.objlist.get_sel_object(1).data
         if edit:
-            param = FlatFieldParam(_("Flat field"))
             param.set_from_datatype(rawdata.dtype)
         if not edit or param.edit(self.panel.parent()):
             rows = self.objlist.get_selected_rows()
@@ -1005,9 +997,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def calibrate(self, param: ZCalibrateParam = None) -> None:
         """Compute data linear calibration"""
-        edit = param is None
-        if edit:
-            param = ZCalibrateParam(_("Linear calibration"), "y = a.x + b")
+        edit, param = self.init_param(
+            param, ZCalibrateParam, _("Linear calibration"), "y = a.x + b"
+        )
         self.compute_11(
             "LinearCal",
             lambda x, p: p.a * x + p.b,
@@ -1019,9 +1011,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_threshold(self, param: ThresholdParam = None) -> None:
         """Compute threshold clipping"""
-        edit = param is None
-        if edit:
-            param = ThresholdParam(_("Thresholding"))
+        edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
         self.compute_11(
             "Threshold",
             lambda x, p: np.clip(x, p.value, x.max()),
@@ -1033,9 +1023,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_clip(self, param: ClipParam = None) -> None:
         """Compute maximum data clipping"""
-        edit = param is None
-        if edit:
-            param = ClipParam(_("Clipping"))
+        edit, param = self.init_param(param, ClipParam, _("Clipping"))
         self.compute_11(
             "Clip",
             lambda x, p: np.clip(x, x.min(), p.value),
@@ -1047,9 +1035,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def rescale_intensity(self, param: RescaleIntensityParam = None) -> None:
         """Rescale image intensity levels"""
-        edit = param is None
-        if edit:
-            param = RescaleIntensityParam(_("Rescale intensity"))
+        edit, param = self.init_param(
+            param, RescaleIntensityParam, _("Rescale intensity")
+        )
         self.compute_11(
             "RescaleIntensity",
             lambda x, p: exposure.rescale_intensity(
@@ -1063,9 +1051,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def equalize_hist(self, param: EqualizeHistParam = None) -> None:
         """Histogram equalization"""
-        edit = param is None
-        if edit:
-            param = EqualizeHistParam(_("Histogram equalization"))
+        edit, param = self.init_param(
+            param, EqualizeHistParam, _("Histogram equalization")
+        )
         self.compute_11(
             "EqualizeHist",
             lambda x, p: exposure.equalize_hist(x, nbins=p.nbins),
@@ -1077,9 +1065,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def equalize_adapthist(self, param: EqualizeAdaptHistParam = None) -> None:
         """Adaptive histogram equalization"""
-        edit = param is None
-        if edit:
-            param = EqualizeAdaptHistParam(_("Adaptive histogram equalization"))
+        edit, param = self.init_param(
+            param, EqualizeAdaptHistParam, _("Adaptive histogram equalization")
+        )
         self.compute_11(
             "EqualizeAdaptHist",
             lambda x, p: exposure.equalize_adapthist(
@@ -1123,9 +1111,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_tv(self, param: DenoiseTVParam = None) -> None:
         """Compute Total Variation denoising"""
-        edit = param is None
-        if edit:
-            param = DenoiseTVParam(_("Total variation denoising"))
+        edit, param = self.init_param(
+            param, DenoiseTVParam, _("Total variation denoising")
+        )
         self.compute_11(
             "TV_Chambolle",
             lambda x, p: denoise_tv_chambolle(
@@ -1139,9 +1127,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_bilateral(self, param: DenoiseBilateralParam = None) -> None:
         """Compute bilateral filter denoising"""
-        edit = param is None
-        if edit:
-            param = DenoiseBilateralParam(_("Bilateral filtering"))
+        edit, param = self.init_param(
+            param, DenoiseBilateralParam, _("Bilateral filtering")
+        )
         self.compute_11(
             "DenoiseBilateral",
             lambda x, p: denoise_bilateral(
@@ -1155,9 +1143,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_wavelet(self, param: DenoiseWaveletParam = None) -> None:
         """Compute Wavelet denoising"""
-        edit = param is None
-        if edit:
-            param = DenoiseWaveletParam(_("Wavelet denoising"))
+        edit, param = self.init_param(
+            param, DenoiseWaveletParam, _("Wavelet denoising")
+        )
         self.compute_11(
             "DenoiseWavelet",
             lambda x, p: denoise_wavelet(
@@ -1174,10 +1162,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_tophat(self, param: MorphologyParam = None) -> None:
         """Denoise using White Top-Hat"""
-        edit = param is None
-        if edit:
-            param = MorphologyParam(_("Denoise / Top-Hat"))
-
+        edit, param = self.init_param(param, MorphologyParam, _("Denoise / Top-Hat"))
         self.compute_11(
             "DenoiseWhiteTopHat",
             lambda x, p: x - morphology.white_tophat(x, morphology.disk(p.radius)),
@@ -1188,10 +1173,7 @@ class ImageProcessor(BaseProcessor):
 
     def _morph(self, param, func, title, name):
         """Compute morphological transform"""
-        edit = param is None
-        if edit:
-            param = MorphologyParam(title)
-
+        edit, param = self.init_param(param, MorphologyParam, title)
         self.compute_11(
             name,
             lambda x, p: func(x, morphology.disk(p.radius)),
@@ -1237,10 +1219,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_canny(self, param: CannyParam = None) -> None:
         """Denoise using White Top-Hat"""
-        edit = param is None
-        if edit:
-            param = CannyParam(_("Canny filter"))
-
+        edit, param = self.init_param(param, CannyParam, _("Canny filter"))
         self.compute_11(
             "Canny",
             lambda x, p: np.array(
@@ -1335,10 +1314,9 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("Peaks", ShapeTypes.POINT, res)
             return None
 
-        edit = param is None
+        edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             data = self.objlist.get_sel_object().data
-            param = PeakDetectionParam()
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
@@ -1386,9 +1364,7 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("Contour", shape, res)
             return None
 
-        edit = param is None
-        if edit:
-            param = ContourShapeParam()
+        edit, param = self.init_param(param, ContourShapeParam, _("Contour"))
         self.compute_10(_("Contour"), contour_shape, param, edit=edit)
 
     @qt_try_except()
@@ -1409,9 +1385,7 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("Circles", ShapeTypes.CIRCLE, res)
             return None
 
-        edit = param is None
-        if edit:
-            param = HoughCircleParam()
+        edit, param = self.init_param(param, HoughCircleParam, _("Circles"))
         self.compute_10(_("Circles"), hough_circles, param, edit=edit)
 
     @qt_try_except()
@@ -1432,9 +1406,7 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
             return None
 
-        edit = param is None
-        if edit:
-            param = BlobDOHParam()
+        edit, param = self.init_param(param, BlobDOHParam, _("Blobs"))
         self.compute_10(_("Blobs"), blobs, param, edit=edit)
 
     @qt_try_except()
@@ -1469,9 +1441,7 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
             return None
 
-        edit = param is None
-        if edit:
-            param = BlobOpenCVParam()
+        edit, param = self.init_param(param, BlobOpenCVParam, _("Blobs"))
         self.compute_10(_("Blobs"), blobs, param, edit=edit)
 
     def _get_stat_funcs(self):
