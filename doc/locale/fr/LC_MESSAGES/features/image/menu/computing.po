@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CodraFT \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 16:23+0100\n"
+"POT-Creation-Date: 2023-02-16 09:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
 
-#: ../../features/image/menu/computing.rst:65
+#: ../../features/image/menu/computing.rst:66
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
@@ -183,4 +183,17 @@ msgid ""
 "Detect blobs using Determinant of Hessian (DOH) method (implementation "
 "based on `skimage.feature.blob_doh <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
-msgstr "Détection de taches basée sur la méthode du discriminant hessien (implementation basée sur `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
+msgstr ""
+"Détection de taches basée sur la méthode du discriminant hessien "
+"(implementation basée sur `skimage.feature.blob_doh <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
+
+#: ../../features/image/menu/computing.rst:68
+msgid "Blob detection (OpenCV)"
+msgstr "Détection de taches (OpenCV)"
+
+#: ../../features/image/menu/computing.rst:69
+msgid ""
+"Detect blobs using OpenCV implementation of `SimpleBlobDetector "
+"<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+msgstr "Détection de taches basée sur l'implémentation OpenCV de `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."

@@ -64,3 +64,6 @@ Circle Hough transform
 Blob detection (DOH)
     Detect blobs using Determinant of Hessian (DOH) method
     (implementation based on `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_).
+
+Blob detection (OpenCV)
+    Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.

@@ -5,6 +5,10 @@ for future and past milestones.
 
 ## Version 2.2.0a1 (in progress...) ##
 
+New dependencies:
+
+* [opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)
+
 New features:
 
 * Added support for dropping files on signal/image list widget
@@ -30,6 +34,7 @@ New features:
   * Added histogram equalization
   * Added adaptative histogram equalization
   * Added blob detection using Determinant of Hessian method
+  * Added blob detection using OpenCV
   * Added support for XYZ image files
   * Result shapes and annotations are now transformed (instead of removed) when
     executing one of the following operations:

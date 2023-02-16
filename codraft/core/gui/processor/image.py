@@ -35,9 +35,10 @@ from codraft.core.computation.image import (
     BINNING_OPERATIONS,
     binning,
     distance_matrix,
+    find_blobs_doh,
+    find_blobs_opencv,
     flatfield,
     get_2d_peaks_coords,
-    get_blob_doh,
     get_centroid_fourier,
     get_contour_shapes,
     get_enclosing_circle,
@@ -479,6 +480,142 @@ class BlobDOHParam(DataSet):
             "If not, linear interpolation is used."
         ),
     )
+
+
+class BlobOpenCVParam(DataSet):
+    """Blob detection using OpenCV"""
+
+    min_threshold = FloatItem(
+        _("Min. threshold"),
+        default=10.0,
+        min=0.0,
+        help=_(
+            "The minimum threshold between local maxima and minima. "
+            "This parameter does not affect the quality of the blobs, "
+            "only the quantity. Lower thresholds result in larger "
+            "numbers of blobs."
+        ),
+    )
+    max_threshold = FloatItem(
+        _("Max. threshold"),
+        default=200.0,
+        min=0.0,
+        help=_(
+            "The maximum threshold between local maxima and minima. "
+            "This parameter does not affect the quality of the blobs, "
+            "only the quantity. Lower thresholds result in larger "
+            "numbers of blobs."
+        ),
+    )
+    min_repeatability = IntItem(
+        _("Min. repeatability"),
+        default=2,
+        min=1,
+        help=_(
+            "The minimum number of times a blob needs to be detected "
+            "in a sequence of images to be considered valid."
+        ),
+    )
+    min_dist_between_blobs = FloatItem(
+        _("Min. distance between blobs"),
+        default=10.0,
+        min=0.0,
+        help=_(
+            "The minimum distance between two blobs. If blobs are found "
+            "closer together than this distance, the smaller blob is removed."
+        ),
+    )
+    _prop_col = ValueProp(False)
+    filter_by_color = BoolItem(
+        _("Filter by color"),
+        default=True,
+        help=_("If true, the image is filtered by color instead of intensity."),
+    ).set_prop("display", store=_prop_col)
+    blob_color = IntItem(
+        _("Blob color"),
+        default=0,
+        help=_(
+            "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
+        ),
+    ).set_prop("display", active=_prop_col)
+    _prop_area = ValueProp(False)
+    filter_by_area = BoolItem(
+        _("Filter by area"),
+        default=True,
+        help=_("If true, the image is filtered by blob area."),
+    ).set_prop("display", store=_prop_area)
+    min_area = FloatItem(
+        _("Min. area"),
+        default=25.0,
+        min=0.0,
+        help=_("The minimum blob area."),
+    ).set_prop("display", active=_prop_area)
+    max_area = FloatItem(
+        _("Max. area"),
+        default=500.0,
+        min=0.0,
+        help=_("The maximum blob area."),
+    ).set_prop("display", active=_prop_area)
+    _prop_circ = ValueProp(False)
+    filter_by_circularity = BoolItem(
+        _("Filter by circularity"),
+        default=False,
+        help=_("If true, the image is filtered by blob circularity."),
+    ).set_prop("display", store=_prop_circ)
+    min_circularity = FloatItem(
+        _("Min. circularity"),
+        default=0.8,
+        min=0.0,
+        max=1.0,
+        help=_("The minimum circularity of the blobs."),
+    ).set_prop("display", active=_prop_circ)
+    max_circularity = FloatItem(
+        _("Max. circularity"),
+        default=1.0,
+        min=0.0,
+        max=1.0,
+        help=_("The maximum circularity of the blobs."),
+    ).set_prop("display", active=_prop_circ)
+    _prop_iner = ValueProp(False)
+    filter_by_inertia = BoolItem(
+        _("Filter by inertia"),
+        default=False,
+        help=_("If true, the image is filtered by blob inertia."),
+    ).set_prop("display", store=_prop_iner)
+    min_inertia_ratio = FloatItem(
+        _("Min. inertia ratio"),
+        default=0.6,
+        min=0.0,
+        max=1.0,
+        help=_("The minimum inertia ratio of the blobs."),
+    ).set_prop("display", active=_prop_iner)
+    max_inertia_ratio = FloatItem(
+        _("Max. inertia ratio"),
+        default=1.0,
+        min=0.0,
+        max=1.0,
+        help=_("The maximum inertia ratio of the blobs."),
+    ).set_prop("display", active=_prop_iner)
+    _prop_conv = ValueProp(False)
+    filter_by_convexity = BoolItem(
+        _("Filter by convexity"),
+        default=False,
+        help=_("If true, the image is filtered by blob convexity."),
+    ).set_prop("display", store=_prop_conv)
+    min_convexity = FloatItem(
+        _("Min. convexity"),
+        default=0.8,
+        min=0.0,
+        max=1.0,
+        help=_("The minimum convexity of the blobs."),
+    ).set_prop("display", active=_prop_conv)
+    max_convexity = FloatItem(
+        _("Max. convexity"),
+        default=1.0,
+        min=0.0,
+        max=1.0,
+        help=_("The maximum convexity of the blobs."),
+    ).set_prop("display", active=_prop_conv)
 
 
 class ImageProcessor(BaseProcessor):
@@ -1285,7 +1422,7 @@ class ImageProcessor(BaseProcessor):
             """Compute blobs"""
             res = self.__apply_origin_size_roi(
                 image,
-                get_blob_doh,
+                find_blobs_doh,
                 p.min_sigma,
                 p.max_sigma,
                 p.overlap,
@@ -1298,6 +1435,43 @@ class ImageProcessor(BaseProcessor):
         edit = param is None
         if edit:
             param = BlobDOHParam()
+        self.compute_10(_("Blobs"), blobs, param, edit=edit)
+
+    @qt_try_except()
+    def compute_blob_opencv(self, param: BlobOpenCVParam = None) -> None:
+        """Compute blob detection using OpenCV"""
+
+        def blobs(image: ImageParam, p: BlobOpenCVParam):
+            """Compute blobs"""
+            res = self.__apply_origin_size_roi(
+                image,
+                find_blobs_opencv,
+                p.min_threshold,
+                p.max_threshold,
+                p.min_repeatability,
+                p.min_dist_between_blobs,
+                p.filter_by_color,
+                p.blob_color,
+                p.filter_by_area,
+                p.min_area,
+                p.max_area,
+                p.filter_by_circularity,
+                p.min_circularity,
+                p.max_circularity,
+                p.filter_by_inertia,
+                p.min_inertia_ratio,
+                p.max_inertia_ratio,
+                p.filter_by_convexity,
+                p.min_convexity,
+                p.max_convexity,
+            )
+            if res is not None:
+                return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
+            return None
+
+        edit = param is None
+        if edit:
+            param = BlobOpenCVParam()
         self.compute_10(_("Blobs"), blobs, param, edit=edit)
 
     def _get_stat_funcs(self):

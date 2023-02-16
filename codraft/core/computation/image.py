@@ -9,12 +9,13 @@ CodraFT Computation / Image module
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+import cv2
 import numpy as np
 import scipy.ndimage as spi
 import scipy.ndimage.filters as spf
 import scipy.spatial as spt
 from numpy import ma
-from skimage import feature, measure, transform
+from skimage import exposure, feature, measure, transform
 
 
 def scale_data_to_min_max(data: np.ndarray, zmin, zmax):
@@ -231,16 +232,38 @@ def get_hough_circle_peaks(
     return np.vstack([cx - radii, cy, cx + radii, cy]).T
 
 
-def get_blob_doh(
-    data,
-    min_sigma=1,
-    max_sigma=30,
-    overlap=0.5,
-    log_scale=False,
-    threshold_rel=0.2,
-):
-    """Finds blobs in the given grayscale image"""
-    blobs_doh = feature.blob_doh(
+def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:
+    """Convert blobs to coordinates"""
+    cy, cx, radii = blobs.T
+    coords = np.vstack([cx - radii, cy, cx + radii, cy]).T
+    return coords
+
+
+def find_blobs_doh(
+    data: np.ndarray,
+    min_sigma: float = 1,
+    max_sigma: float = 30,
+    overlap: float = 0.5,
+    log_scale: bool = False,
+    threshold_rel: float = 0.2,
+) -> np.ndarray:
+    """
+    Finds blobs in the given grayscale image using the Determinant of Hessian
+    (DoH) method.
+
+    Args:
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap ratio between blobs.
+        log_scale: Whether to detect blobs on a log scale.
+        threshold_rel: The threshold relative to the maximum intensity value.
+
+    Returns:
+        An array of blob coordinates and radii, with shape (N, 4).
+    """
+    # Use scikit-image's Determinant of Hessian (DoH) method to detect blobs
+    blobs = feature.blob_doh(
         data,
         min_sigma=min_sigma,
         max_sigma=max_sigma,
@@ -250,5 +273,112 @@ def get_blob_doh(
         overlap=overlap,
         log_scale=log_scale,
     )
-    cy, cx, radii = blobs_doh.T
-    return np.vstack([cx - radii, cy, cx + radii, cy]).T
+    return __blobs_to_coords(blobs)
+
+
+def remove_overlapping_disks(coords: np.ndarray) -> np.ndarray:
+    """Remove overlapping disks among coordinates"""
+    # Get the radii of each disk from the coordinates
+    radii = coords[:, 2]
+    # Calculate the distance between the center of each pair of disks
+    dist = np.sqrt(np.sum((coords[:, None, :2] - coords[:, :2]) ** 2, axis=-1))
+    # Create a boolean mask where the distance between the centers
+    # is less than the sum of the radii
+    mask = dist < (radii[:, None] + radii)
+    # Find the indices of overlapping disks
+    overlapping_indices = np.argwhere(mask)
+    # Remove the smaller disk from each overlapping pair
+    for i, j in overlapping_indices:
+        if i != j:
+            if radii[i] < radii[j]:
+                coords[i] = [np.nan, np.nan, np.nan]
+            else:
+                coords[j] = [np.nan, np.nan, np.nan]
+    # Remove rows with NaN values
+    coords = coords[~np.isnan(coords).any(axis=1)]
+    return coords
+
+
+def find_blobs_opencv(
+    data: np.ndarray,
+    min_threshold: float = None,
+    max_threshold: float = None,
+    min_repeatability: int = None,
+    min_dist_between_blobs: float = None,
+    filter_by_color: bool = None,
+    blob_color: int = None,
+    filter_by_area: bool = None,
+    min_area: float = None,
+    max_area: float = None,
+    filter_by_circularity: bool = None,
+    min_circularity: float = None,
+    max_circularity: float = None,
+    filter_by_inertia: bool = None,
+    min_inertia_ratio: float = None,
+    max_inertia_ratio: float = None,
+    filter_by_convexity: bool = None,
+    min_convexity: float = None,
+    max_convexity: float = None,
+) -> np.ndarray:
+    """
+    Finds blobs in the given grayscale image using OpenCV's SimpleBlobDetector.
+
+    Args:
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap ratio between blobs.
+        log_scale: Whether to detect blobs on a log scale.
+        threshold_rel: The threshold relative to the maximum intensity value.
+
+    Returns:
+        An array of blob coordinates and radii, with shape (N, 4).
+    """
+    params = cv2.SimpleBlobDetector_Params()
+    if min_threshold is not None:
+        params.minThreshold = min_threshold
+    if max_threshold is not None:
+        params.maxThreshold = max_threshold
+    if min_repeatability is not None:
+        params.minRepeatability = min_repeatability
+    if min_dist_between_blobs is not None:
+        params.minDistBetweenBlobs = min_dist_between_blobs
+    if filter_by_color is not None:
+        params.filterByColor = filter_by_color
+    if blob_color is not None:
+        params.blobColor = blob_color
+    if filter_by_area is not None:
+        params.filterByArea = filter_by_area
+    if min_area is not None:
+        params.minArea = min_area
+    if max_area is not None:
+        params.maxArea = max_area
+    if filter_by_circularity is not None:
+        params.filterByCircularity = filter_by_circularity
+    if min_circularity is not None:
+        params.minCircularity = min_circularity
+    if max_circularity is not None:
+        params.maxCircularity = max_circularity
+    if filter_by_inertia is not None:
+        params.filterByInertia = filter_by_inertia
+    if min_inertia_ratio is not None:
+        params.minInertiaRatio = min_inertia_ratio
+    if max_inertia_ratio is not None:
+        params.maxInertiaRatio = max_inertia_ratio
+    if filter_by_convexity is not None:
+        params.filterByConvexity = filter_by_convexity
+    if min_convexity is not None:
+        params.minConvexity = min_convexity
+    if max_convexity is not None:
+        params.maxConvexity = max_convexity
+    detector = cv2.SimpleBlobDetector_create(params)
+    image = exposure.rescale_intensity(data, out_range=np.uint8)
+    keypoints = detector.detect(image)
+    if keypoints:
+        coords = cv2.KeyPoint_convert(keypoints)
+        radii = 0.5 * np.array([kp.size for kp in keypoints])
+        blobs = np.vstack([coords[:, 1], coords[:, 0], radii]).T
+        blobs = remove_overlapping_disks(blobs)
+    else:
+        blobs = np.array([]).reshape((0, 3))
+    return __blobs_to_coords(blobs)

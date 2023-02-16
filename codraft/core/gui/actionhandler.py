@@ -560,6 +560,11 @@ class ImageActionHandler(BaseActionHandler):
             proc.compute_blob_doh,
             tip=_("Detect blobs using Determinant of Hessian (DOH) method"),
         )
+        blob_opencv_act = self.cra(
+            _("Blob detection (OpenCV)"),
+            proc.compute_blob_opencv,
+            tip=_("Detect blobs using OpenCV SimpleBlobDetector"),
+        )
         actions = [
             cent_act,
             encl_act,
@@ -567,6 +572,7 @@ class ImageActionHandler(BaseActionHandler):
             contour_act,
             hough_circle_act,
             blob_doh_act,
+            blob_opencv_act,
         ]
         self.actlist_1more += actions
         return base_actions + actions

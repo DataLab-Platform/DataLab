@@ -2,6 +2,7 @@ guidata
 guiqwt
 PythonQwt
 scikit-image
+opencv-python
 psutil
 pylint
 black
