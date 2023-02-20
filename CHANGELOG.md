@@ -3,7 +3,7 @@
 See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.2.0a1 (in progress...) ##
+## Version 2.3.0a1 (in progress...) ##
 
 New dependencies:
 
@@ -11,6 +11,7 @@ New dependencies:
 
 New features:
 
+* Signal/Image panels: drastically improved performance when selecting objects
 * Added support for dropping files on signal/image list widget
 * Added "Computing parameters" group box to show last result input parameters
 * Added "Copy titles to clipboard" feature in "Edit" menu
@@ -39,20 +40,23 @@ New features:
   * Added adaptative histogram equalization
   * Added blob detection using Determinant of Hessian method
   * Added blob detection using OpenCV
-  * Added support for XYZ image files
   * Result shapes and annotations are now transformed (instead of removed) when
     executing one of the following operations:
     * Rotation (arbitrary angle, +90°, -90°)
     * Symetry (vertical/horizontal)
+
+## Version 2.2.0 ##
+
+New features:
+
+* Images: added support for XYZ image files
 * All shapes: removed shape drag symbols, so that background image is no longer
   masked by small-sized shapes
 * At startup, restoring last current panel (image or signal panel)
-
-Bug fixes:
-
-* Signal/Image panels: drastically improved performance when selecting objects
 * Plot cleanup and shape management: greatly optimized performance
 * After removing object(s) (signal/image), the previous object in the list is selected
+* Added default image visualization settings in .INI configuration file
+* Using guiqwt v4.3.2: fixed pixel position (first pixel is centered at (0,0) coords)
 
 ## Version 2.1.4 ##
 
