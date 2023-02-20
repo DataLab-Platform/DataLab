@@ -333,8 +333,6 @@ class BaseProcessor(QC.QObject):
                 result = self.apply_10_func(orig, func, param, message)
                 if result is None:
                     continue
-                if param is not None:
-                    orig.metadata[f"{name}Param"] = str(param)
                 results[row] = result
                 xlabels = result.xlabels
                 self.SIG_ADD_SHAPE.emit(row)

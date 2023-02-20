@@ -1311,7 +1311,7 @@ class ImageProcessor(BaseProcessor):
                 image, get_2d_peaks_coords, p.size, p.threshold
             )
             if res is not None:
-                return image.add_resultshape("Peaks", ShapeTypes.POINT, res)
+                return image.add_resultshape("Peaks", ShapeTypes.POINT, res, p)
             return None
 
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
@@ -1361,7 +1361,7 @@ class ImageProcessor(BaseProcessor):
             )
             if res is not None:
                 shape = ShapeTypes.CIRCLE if p.shape == "circle" else ShapeTypes.ELLIPSE
-                return image.add_resultshape("Contour", shape, res)
+                return image.add_resultshape("Contour", shape, res, p)
             return None
 
         edit, param = self.init_param(param, ContourShapeParam, _("Contour"))
@@ -1382,10 +1382,10 @@ class ImageProcessor(BaseProcessor):
                 p.min_distance,
             )
             if res is not None:
-                return image.add_resultshape("Circles", ShapeTypes.CIRCLE, res)
+                return image.add_resultshape("Circles", ShapeTypes.CIRCLE, res, p)
             return None
 
-        edit, param = self.init_param(param, HoughCircleParam, _("Circles"))
+        edit, param = self.init_param(param, HoughCircleParam, _("Hough circles"))
         self.compute_10(_("Circles"), hough_circles, param, edit=edit)
 
     @qt_try_except()
@@ -1401,9 +1401,10 @@ class ImageProcessor(BaseProcessor):
                 p.max_sigma,
                 p.overlap,
                 p.log_scale,
+                p.threshold_rel,
             )
             if res is not None:
-                return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
+                return image.add_resultshape("BlobsDOH", ShapeTypes.CIRCLE, res, p)
             return None
 
         edit, param = self.init_param(param, BlobDOHParam, _("Blobs"))
@@ -1438,7 +1439,7 @@ class ImageProcessor(BaseProcessor):
                 p.max_convexity,
             )
             if res is not None:
-                return image.add_resultshape("Blobs", ShapeTypes.CIRCLE, res)
+                return image.add_resultshape("BlobsOpenCV", ShapeTypes.CIRCLE, res, p)
             return None
 
         edit, param = self.init_param(param, BlobOpenCVParam, _("Blobs"))

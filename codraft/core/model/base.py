@@ -542,11 +542,17 @@ class ObjectItf(metaclass=ObjectItfMeta):
             self.metadata[ROI_KEY] = np.array(roidata, int)
 
     def add_resultshape(
-        self, label: str, shapetype: ShapeTypes, array: np.ndarray
+        self,
+        label: str,
+        shapetype: ShapeTypes,
+        array: np.ndarray,
+        param: gdt.DataSet = None,
     ) -> ResultShape:
         """Add geometric shape as metadata entry, and return ResultShape instance"""
         mshape = ResultShape(shapetype, array, label)
         mshape.add_to(self)
+        if param is not None:
+            self.metadata[f"{label}Param"] = str(param)
         return mshape
 
     def iterate_resultshapes(self):

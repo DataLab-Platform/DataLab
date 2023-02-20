@@ -397,7 +397,9 @@ class SignalProcessor(BaseProcessor):
                 )
                 x0, y0, x1, y1 = FitModel.half_max_segment(amp, sigma, mu, base)
                 res.append([i_roi, x0, y0, x1, y1])
-            return signal.add_resultshape(title, ShapeTypes.SEGMENT, np.array(res))
+            return signal.add_resultshape(
+                title, ShapeTypes.SEGMENT, np.array(res), param
+            )
 
         edit, param = self.init_param(param, FWHMParam, title)
         self.compute_10(title, fwhm, param, edit=edit)
