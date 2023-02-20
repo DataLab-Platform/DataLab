@@ -550,29 +550,35 @@ class ImageActionHandler(BaseActionHandler):
             proc.compute_contour_shape,
             tip=_("Compute contour shape fit"),
         )
-        hough_circle_act = self.cra(
+        hough_act = self.cra(
             _("Circle Hough transform"),
             proc.compute_hough_circle_peaks,
             tip=_("Detect circular shapes using circle Hough transform"),
+        )
+        blob_dog_act = self.cra(
+            _("Blob detection (DOG)"),
+            proc.compute_blob_dog,
+            tip=_("Detect blobs using Difference of Gaussian (DOG) method"),
         )
         blob_doh_act = self.cra(
             _("Blob detection (DOH)"),
             proc.compute_blob_doh,
             tip=_("Detect blobs using Determinant of Hessian (DOH) method"),
         )
+        blob_log_act = self.cra(
+            _("Blob detection (LOG)"),
+            proc.compute_blob_log,
+            tip=_("Detect blobs using Laplacian of Gaussian (LOG) method"),
+        )
         blob_opencv_act = self.cra(
             _("Blob detection (OpenCV)"),
             proc.compute_blob_opencv,
             tip=_("Detect blobs using OpenCV SimpleBlobDetector"),
         )
-        actions = [
-            cent_act,
-            encl_act,
-            peak_act,
-            contour_act,
-            hough_circle_act,
-            blob_doh_act,
-            blob_opencv_act,
-        ]
-        self.actlist_1more += actions
-        return base_actions + actions
+        blob_menu = QW.QMenu(_("Blob detection"))
+        blob_actions = [blob_dog_act, blob_doh_act, blob_log_act, blob_opencv_act]
+        add_actions(blob_menu, blob_actions)
+        other_actions = [cent_act, encl_act, peak_act, contour_act, hough_act]
+        self.actlist_1more += other_actions + blob_actions
+        alist = [cent_act, encl_act, None, peak_act, contour_act, hough_act, blob_menu]
+        return base_actions + alist

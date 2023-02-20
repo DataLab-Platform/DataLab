@@ -239,6 +239,42 @@ def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:
     return coords
 
 
+def find_blobs_dog(
+    data: np.ndarray,
+    min_sigma: float = 1,
+    max_sigma: float = 30,
+    overlap: float = 0.5,
+    threshold_rel: float = 0.2,
+    exclude_border: bool = True,
+) -> np.ndarray:
+    """
+    Finds blobs in the given grayscale image using the Difference of Gaussians
+    (DoG) method.
+
+    Args:
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap ratio between blobs.
+        log_scale: Whether to detect blobs on a log scale.
+        threshold_rel: The threshold relative to the maximum intensity value.
+        exclude_border: Whether to exclude blobs that are near the image border.
+
+    Returns:
+        An array of blob coordinates and radii, with shape (N, 4).
+    """
+    # Use scikit-image's Difference of Gaussians (DoG) method
+    blobs = feature.blob_dog(
+        data,
+        min_sigma=min_sigma,
+        max_sigma=max_sigma,
+        overlap=overlap,
+        threshold_rel=threshold_rel,
+        exclude_border=exclude_border,
+    )
+    return __blobs_to_coords(blobs)
+
+
 def find_blobs_doh(
     data: np.ndarray,
     min_sigma: float = 1,
@@ -272,6 +308,47 @@ def find_blobs_doh(
         threshold_rel=threshold_rel,
         overlap=overlap,
         log_scale=log_scale,
+    )
+    return __blobs_to_coords(blobs)
+
+
+def find_blobs_log(
+    data: np.ndarray,
+    min_sigma: float = 1,
+    max_sigma: float = 30,
+    overlap: float = 0.5,
+    log_scale: bool = False,
+    threshold_rel: float = 0.2,
+    exclude_border: bool = True,
+) -> np.ndarray:
+    """
+    Finds blobs in the given grayscale image using the Laplacian of Gaussian
+    (LoG) method.
+
+    Args:
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap ratio between blobs.
+        log_scale: Whether to detect blobs on a log scale.
+        threshold_rel: The threshold relative to the maximum intensity value.
+        exclude_border: Whether to exclude blobs that are too close to the
+            border.
+
+    Returns:
+        An array of blob coordinates and radii, with shape (N, 4).
+    """
+    # Use scikit-image's Laplacian of Gaussian (LoG) method to detect blobs
+    blobs = feature.blob_log(
+        data,
+        min_sigma=min_sigma,
+        max_sigma=max_sigma,
+        num_sigma=int(max_sigma - min_sigma + 1),
+        threshold=None,
+        threshold_rel=threshold_rel,
+        overlap=overlap,
+        log_scale=log_scale,
+        exclude_border=exclude_border,
     )
     return __blobs_to_coords(blobs)
 

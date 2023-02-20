@@ -35,7 +35,9 @@ from codraft.core.computation.image import (
     BINNING_OPERATIONS,
     binning,
     distance_matrix,
+    find_blobs_dog,
     find_blobs_doh,
+    find_blobs_log,
     find_blobs_opencv,
     flatfield,
     get_2d_peaks_coords,
@@ -425,8 +427,8 @@ class HoughCircleParam(DataSet):
     min_distance = IntItem(_("Minimal distance"), min=0)
 
 
-class BlobDOHParam(DataSet):
-    """Blob detection using Determinant of Hessian method"""
+class BaseBlobParam(DataSet):
+    """Base class for blob detection parameters"""
 
     min_sigma = FloatItem(
         "σ<sub>min</sub>",
@@ -435,8 +437,8 @@ class BlobDOHParam(DataSet):
         min=0,
         nonzero=True,
         help=_(
-            "The minimum standard deviation for Gaussian Kernel used to compute "
-            "Hessian matrix. Keep this low to detect smaller blobs."
+            "The minimum standard deviation for Gaussian Kernel. "
+            "Keep this low to detect smaller blobs."
         ),
     )
     max_sigma = FloatItem(
@@ -446,8 +448,8 @@ class BlobDOHParam(DataSet):
         min=0,
         nonzero=True,
         help=_(
-            "The maximum standard deviation for Gaussian Kernel used to compute "
-            "Hessian matrix. Keep this high to detect larger blobs."
+            "The maximum standard deviation for Gaussian Kernel. "
+            "Keep this high to detect larger blobs."
         ),
     )
     threshold_rel = FloatItem(
@@ -455,11 +457,7 @@ class BlobDOHParam(DataSet):
         default=0.2,
         min=0.0,
         max=1.0,
-        help=_(
-            "Minimum intensity of peaks, calculated as "
-            "max(doh_space) * threshold_rel, where doh_space refers to the stack "
-            "of Determinant-of-Hessian (DoH) images computed internally."
-        ),
+        help=_("Minimum intensity of blobs."),
     )
     overlap = FloatItem(
         _("Overlap"),
@@ -467,10 +465,25 @@ class BlobDOHParam(DataSet):
         min=0.0,
         max=1.0,
         help=_(
-            "If the area of two blobs overlaps by a fraction greater "
-            "than threshold, the smaller blob is eliminated."
+            "If two blobs overlap by a fraction greater than this value, the "
+            "smaller blob is eliminated."
         ),
     )
+
+
+class BlobDOGParam(BaseBlobParam):
+    """Blob detection using Difference of Gaussian method"""
+
+    exclude_border = BoolItem(
+        _("Exclude border"),
+        default=True,
+        help=_("If True, exclude blobs from the border of the image."),
+    )
+
+
+class BlobDOHParam(BaseBlobParam):
+    """Blob detection using Determinant of Hessian method"""
+
     log_scale = BoolItem(
         _("Log scale"),
         default=False,
@@ -479,6 +492,16 @@ class BlobDOHParam(DataSet):
             "using a logarithmic scale to the base 10. "
             "If not, linear interpolation is used."
         ),
+    )
+
+
+class BlobLOGParam(BlobDOHParam):
+    """Blob detection using Laplacian of Gaussian method"""
+
+    exclude_border = BoolItem(
+        _("Exclude border"),
+        default=True,
+        help=_("If True, exclude blobs from the border of the image."),
     )
 
 
@@ -1389,6 +1412,28 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Circles"), hough_circles, param, edit=edit)
 
     @qt_try_except()
+    def compute_blob_dog(self, param: BlobDOGParam = None) -> None:
+        """Compute blob detection using Difference of Gaussian method"""
+
+        def blobs(image: ImageParam, p: BlobDOGParam):
+            """Compute blobs"""
+            res = self.__apply_origin_size_roi(
+                image,
+                find_blobs_dog,
+                p.min_sigma,
+                p.max_sigma,
+                p.overlap,
+                p.threshold_rel,
+                p.exclude_border,
+            )
+            if res is not None:
+                return image.add_resultshape("BlobsDOG", ShapeTypes.CIRCLE, res, p)
+            return None
+
+        edit, param = self.init_param(param, BlobDOGParam, _("Blob detection (DOG)"))
+        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+
+    @qt_try_except()
     def compute_blob_doh(self, param: BlobDOHParam = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
 
@@ -1407,8 +1452,31 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("BlobsDOH", ShapeTypes.CIRCLE, res, p)
             return None
 
-        edit, param = self.init_param(param, BlobDOHParam, _("Blobs"))
-        self.compute_10(_("Blobs"), blobs, param, edit=edit)
+        edit, param = self.init_param(param, BlobDOHParam, _("Blob detection (DOH)"))
+        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+
+    @qt_try_except()
+    def compute_blob_log(self, param: BlobLOGParam = None) -> None:
+        """Compute blob detection using Laplacian of Gaussian method"""
+
+        def blobs(image: ImageParam, p: BlobLOGParam):
+            """Compute blobs"""
+            res = self.__apply_origin_size_roi(
+                image,
+                find_blobs_log,
+                p.min_sigma,
+                p.max_sigma,
+                p.overlap,
+                p.log_scale,
+                p.threshold_rel,
+                p.exclude_border,
+            )
+            if res is not None:
+                return image.add_resultshape("BlobsLOG", ShapeTypes.CIRCLE, res, p)
+            return None
+
+        edit, param = self.init_param(param, BlobLOGParam, _("Blob detection (LOG)"))
+        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_opencv(self, param: BlobOpenCVParam = None) -> None:
@@ -1442,8 +1510,10 @@ class ImageProcessor(BaseProcessor):
                 return image.add_resultshape("BlobsOpenCV", ShapeTypes.CIRCLE, res, p)
             return None
 
-        edit, param = self.init_param(param, BlobOpenCVParam, _("Blobs"))
-        self.compute_10(_("Blobs"), blobs, param, edit=edit)
+        edit, param = self.init_param(
+            param, BlobOpenCVParam, _("Blob detection (OpenCV)")
+        )
+        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
     def _get_stat_funcs(self):
         """Return statistics functions list"""

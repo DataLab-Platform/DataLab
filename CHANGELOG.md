@@ -38,8 +38,11 @@ New features:
   * Added image intensity levels rescaling
   * Added histogram equalization
   * Added adaptative histogram equalization
-  * Added blob detection using Determinant of Hessian method
-  * Added blob detection using OpenCV
+  * Added blob detection methods:
+    * Difference of Gaussian
+    * Determinant of Hessian method
+    * Laplacian of Gaussian
+    * Blob detection using OpenCV
   * Result shapes and annotations are now transformed (instead of removed) when
     executing one of the following operations:
     * Rotation (arbitrary angle, +90°, -90°)
