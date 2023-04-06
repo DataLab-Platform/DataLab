@@ -8,7 +8,7 @@ CodraFT Dockable widgets
 """
 
 from guidata.qthelpers import is_dark_mode
-from guidata.qtwidgets import DockableWidget, DockableWidgetMixin
+from guidata.qtwidgets import DockableWidget
 from guiqwt.plot import ImageWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -57,9 +57,3 @@ class DockablePlotWidget(DockableWidget):
         """DockWidget visibility has changed"""
         DockableWidget.visibility_changed(self, enable)
         self.toolbar.setVisible(enable)
-
-
-class DockableTabWidget(QW.QTabWidget, DockableWidgetMixin):
-    """Docked tab widget"""
-
-    LOCATION = QC.Qt.LeftDockWidgetArea

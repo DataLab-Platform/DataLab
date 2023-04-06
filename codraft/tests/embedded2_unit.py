@@ -19,7 +19,7 @@ SHOW = True  # Show test in GUI-based test launcher
 class HostWindow(embedded1_unit.BaseHostWindow):
     """Test main view"""
 
-    def open_codraft(self):
+    def init_codraft(self):
         """Open CodraFT test"""
         if self.codraft is None:
             self.codraft = CodraFTMainWindow(console=False, hide_on_close=True)

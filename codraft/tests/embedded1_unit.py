@@ -10,6 +10,8 @@ CodraFT main window is destroyed when closing application.
 It is rebuilt from scratch when reopening application.
 """
 
+import abc
+
 from guidata.qthelpers import get_std_icon
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtCore as QC
@@ -17,6 +19,7 @@ from qtpy import QtWidgets as QW
 
 from codraft.config import _
 from codraft.core.gui.main import CodraFTMainWindow
+from codraft.core.model.signal import SignalParam
 from codraft.tests import data as test_data
 from codraft.utils.qthelpers import qt_app_context
 
@@ -61,15 +64,22 @@ class HostWidget(QW.QWidget):
             btn.setIcon(get_std_icon(icon))
         btn.clicked.connect(slot)
         self.add_widget(btn, spacing_before=spacing_before)
+        return btn
 
     def add_stretch(self):
         """Add stretch to button box"""
         self.button_layout.addStretch()
 
 
-class BaseHostWindow(QW.QMainWindow):
-    """Main window"""
+class AbstractClientWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
+    """Mixed metaclass to avoid conflicts"""
 
+
+class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
+    """Abstract client window, to embed CodraFT or connect to it"""
+
+    PURPOSE = None
+    INIT_BUTTON_LABEL = None
     SIG_TITLES = ("Oscilloscope", "Digitizer", "Radiometer", "Voltmeter", "Sensor")
     IMA_TITLES = (
         "Camera",
@@ -105,19 +115,20 @@ class BaseHostWindow(QW.QMainWindow):
 
     def setup_window(self):
         """Setup window"""
-        self.host.add_label(_("This the host application, which embeds CodraFT."))
+        self.host.add_label(self.PURPOSE)
         add_btn = self.host.add_button
-        add_btn(_("Open CodraFT"), self.open_codraft, 10, "DialogApplyButton")
-        add_btn(_("Import signal from CodraFT"), self.import_signal, 10, "ArrowLeft")
-        add_btn(_("Import image from CodraFT"), self.import_image, 0, "ArrowLeft")
+        add_btn(self.INIT_BUTTON_LABEL, self.init_codraft, 10, "DialogApplyButton")
+        self.add_additional_buttons()
         add_btn(_("Add signal objects"), self.add_signals, 10, "CommandLink")
         add_btn(_("Add image objects"), self.add_images, 0, "CommandLink")
         add_btn(_("Remove all objects"), self.remove_all, 5, "MessageBoxWarning")
         add_btn(_("Close CodraFT"), self.close_codraft, 10, "DialogCloseButton")
 
-    def open_codraft(self):
+    def add_additional_buttons(self):
+        """Add additional buttons"""
+
+    def init_codraft(self):
         """Open CodraFT test"""
-        raise NotImplementedError
 
     def close_codraft(self):
         """Close CodraFT window"""
@@ -125,6 +136,63 @@ class BaseHostWindow(QW.QMainWindow):
             self.host.log("=> Closed CodraFT")
             self.codraft.close()
             self.codraft = None
+
+    @abc.abstractmethod
+    def add_object(self, obj):
+        """Add object to CodraFT"""
+
+    def add_signals(self):
+        """Add signals to CodraFT"""
+        if self.codraft is not None:
+            for func in (test_data.create_test_signal1, test_data.create_test_signal2):
+                obj = func(title=self.sigtitle)
+                self.add_object(obj)
+                self.host.log(f"Added signal: {obj.title}")
+
+    def add_images(self):
+        """Add images to CodraFT"""
+        if self.codraft is not None:
+            size = 2000
+            for func in (
+                test_data.create_test_image1,
+                test_data.create_test_image2,
+                test_data.create_test_image3,
+            ):
+                obj = func(size, title=self.imatitle)
+                self.add_object(obj)
+                self.host.log(f"Added image: {obj.title}")
+
+    @abc.abstractmethod
+    def remove_all(self):
+        """Remove all objects from CodraFT"""
+
+
+class BaseHostWindow(AbstractClientWindow):
+    """Base host window, embedding CodraFT"""
+
+    PURPOSE = _("This the host application, which embeds CodraFT.")
+    INIT_BUTTON_LABEL = _("Open CodraFT")
+
+    def add_object(self, obj):
+        """Add object to CodraFT"""
+        if isinstance(obj, SignalParam):
+            self.codraft.signalpanel.add_object(obj)
+        else:
+            self.codraft.imagepanel.add_object(obj)
+
+    def remove_all(self):
+        """Remove all objects from CodraFT"""
+        if self.codraft is not None:
+            for panel in self.codraft.panels:
+                objn = len(panel.objlist)
+                panel.remove_all_objects()
+                self.host.log(f"Removed {objn} objects from {panel.PANEL_STR}")
+
+    def add_additional_buttons(self):
+        """Add additional buttons"""
+        add_btn = self.host.add_button
+        add_btn(_("Import signal from CodraFT"), self.import_signal, 10, "ArrowLeft")
+        add_btn(_("Import image from CodraFT"), self.import_image, 0, "ArrowLeft")
 
     def import_object(self, panel, title):
         """Import object from CodraFT"""
@@ -146,40 +214,11 @@ class BaseHostWindow(QW.QMainWindow):
         if self.codraft is not None:
             self.import_object(self.codraft.imagepanel, self.sender().text())
 
-    def add_signals(self):
-        """Add signals to CodraFT"""
-        if self.codraft is not None:
-            for func in (test_data.create_test_signal1, test_data.create_test_signal2):
-                obj = func(title=self.sigtitle)
-                self.codraft.signalpanel.add_object(obj)
-                self.host.log(f"Added signal: {obj.title}")
-
-    def add_images(self):
-        """Add images to CodraFT"""
-        if self.codraft is not None:
-            size = 2000
-            for func in (
-                test_data.create_test_image1,
-                test_data.create_test_image2,
-                test_data.create_test_image3,
-            ):
-                obj = func(size, title=self.imatitle)
-                self.codraft.imagepanel.add_object(obj)
-                self.host.log(f"Added image: {obj.title}")
-
-    def remove_all(self):
-        """Remove all objects from CodraFT"""
-        if self.codraft is not None:
-            for panel in self.codraft.panels:
-                objn = len(panel.objlist)
-                panel.remove_all_objects()
-                self.host.log(f"Removed {objn} objects from {panel.PANEL_STR}")
-
 
 class HostWindow(BaseHostWindow):
     """Test main view"""
 
-    def open_codraft(self):
+    def init_codraft(self):
         """Open CodraFT test"""
         if self.codraft is None:
             self.codraft = CodraFTMainWindow(console=False)
@@ -193,7 +232,7 @@ class HostWindow(BaseHostWindow):
                 self.host.log("=> Shown CodraFT window")
             except RuntimeError:
                 self.codraft = None
-                self.open_codraft()
+                self.init_codraft()
 
 
 def test_embedded_feature(klass):

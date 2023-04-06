@@ -10,6 +10,7 @@ CodraFT Base I/O common module (native HDF5 format)
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 from guidata.hdf5io import HDF5Reader, HDF5Writer
+from guidata.jsonio import JSONReader, JSONWriter
 
 from codraft import __version__
 
@@ -78,3 +79,17 @@ class NativeH5Reader(HDF5Reader):
                 else:
                     dict_val[key] = self.read_dict()
         return dict_val
+
+
+class NativeJSONWriter(JSONWriter):
+    """CodraFT signal/image objects JSON guidata Dataset Writer class,
+    supporting dictionary serialization"""
+
+    write_dict = JSONWriter.write_any
+
+
+class NativeJSONReader(JSONReader):
+    """CodraFT signal/image objects JSON guidata Dataset Reader class,
+    supporting dictionary deserialization"""
+
+    read_dict = JSONReader.read_any

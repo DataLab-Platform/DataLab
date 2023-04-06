@@ -30,10 +30,12 @@ class CodraFTExecEnv:
     VERBOSE_ARG = "verbose"
     SCREENSHOT_ARG = "screenshot"
     DELAY_ARG = "delay"
+    XMLRPCPORT_ARG = "port"
     UNATTENDED_ENV = "CODRAFT_UNATTENDED_TESTS"
     VERBOSE_ENV = "CODRAFT_VERBOSITY_LEVEL"
     SCREENSHOT_ENV = "CODRAFT_TAKE_SCREENSHOT"
     DELAY_ENV = "CODRAFT_DELAY_BEFORE_QUIT"
+    XMLRPCPORT_ENV = "CODRAFT_XMLRPC_PORT"
 
     def __init__(self):
         self.h5files = None
@@ -105,8 +107,26 @@ class CodraFTExecEnv:
         """Set delay (seconds) before quitting application in unattended mode"""
         os.environ[self.DELAY_ENV] = str(value)
 
+    @property
+    def port(self):
+        """XML-RPC port number"""
+        try:
+            return int(os.environ.get(self.XMLRPCPORT_ENV))
+        except (TypeError, ValueError):
+            return None
+
+    @port.setter
+    def port(self, value: int):
+        """Set XML-RPC port number"""
+        os.environ[self.XMLRPCPORT_ENV] = str(value)
+
     def parse_args(self):
         """Parse command line arguments"""
+
+        # <!> WARNING <!>
+        # Do not add an option '-c' to avoid any conflict with macro command
+        # execution mecanism used with CodraFT standalone version (see start.pyw)
+
         parser = argparse.ArgumentParser(description="Run CodraFT")
         parser.add_argument(
             "h5",
@@ -140,6 +160,12 @@ class CodraFTExecEnv:
             help="delay (seconds) before quitting application in unattended mode",
         )
         parser.add_argument(
+            "--" + self.XMLRPCPORT_ARG,
+            type=int,
+            default=None,
+            help="XML-RPC port number",
+        )
+        parser.add_argument(
             "--" + self.VERBOSE_ARG,
             choices=[lvl.value for lvl in VerbosityLevels],
             required=False,
@@ -165,6 +191,8 @@ class CodraFTExecEnv:
         if args.verbose is not None:
             self.verbose = args.verbose
         self.delay = args.delay
+        if args.port is not None:
+            self.port = args.port
 
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
         """Print in file, depending on verbosity level"""

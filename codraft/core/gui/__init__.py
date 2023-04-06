@@ -18,3 +18,24 @@ This module handles all GUI features which are specific to CodraFT:
   * core.gui.docks: handles CodraFT dockwidgets
   * core.gui.h5io: handles HDF5 browser widget and related features
 """
+
+import abc
+
+from guidata.userconfigio import BaseIOHandler
+
+
+class ObjItf:
+    """Interface for objects handled by panels"""
+
+    @property
+    @abc.abstractmethod
+    def title(self) -> str:
+        """Object title"""
+
+    @abc.abstractmethod
+    def serialize(self, writer: BaseIOHandler):
+        """Serialize this object"""
+
+    @abc.abstractmethod
+    def deserialize(self, reader: BaseIOHandler):
+        """Deserialize this object"""

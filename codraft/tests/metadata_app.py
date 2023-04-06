@@ -15,7 +15,7 @@ Metadata application test:
 
 import numpy as np
 
-from codraft.core.gui.panel import BasePanel, ImagePanel, SignalPanel
+from codraft.core.gui.panel import BaseDataPanel, ImagePanel, SignalPanel
 from codraft.core.gui.processor.image import PeakDetectionParam
 from codraft.core.gui.processor.signal import FWHMParam
 from codraft.env import execenv
@@ -38,7 +38,7 @@ def test_image_features(panel: ImagePanel):
     panel.processor.compute_peak_detection(PeakDetectionParam())
 
 
-def test_metadata_features(panel: BasePanel):
+def test_metadata_features(panel: BaseDataPanel):
     """Test all metadata features"""
     panel.duplicate_object()
     panel.delete_metadata()

@@ -30,7 +30,7 @@ def memory_leak_test(iterations=100):
         mainview.show()
         memlist = []
         for i in range(iterations):
-            mainview.open_codraft()
+            mainview.init_codraft()
             mainview.codraft.close()
             # mainview.codraft.destroy()
             # mainview.codraft = None

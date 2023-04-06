@@ -22,7 +22,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from codraft.config import _
-from codraft.core.gui.panel import BasePanel, ImagePanel
+from codraft.core.gui.panel import BaseDataPanel, ImagePanel
 from codraft.core.gui.plotitemlist import BaseItemList
 from codraft.core.gui.processor.base import BaseProcessor
 from codraft.core.gui.processor.image import ImageProcessor
@@ -84,7 +84,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def create_all_actions(
         self,
         toolbar: QW.QToolBar,
-        panel: BasePanel,
+        panel: BaseDataPanel,
         itmlist: BaseItemList,
         proc: BaseProcessor,
     ):
@@ -103,7 +103,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create action convenience method"""
         return create_action(None, title, triggered, toggled, shortcut, icon, tip)
 
-    def create_file_actions(self, panel: BasePanel):
+    def create_file_actions(self, panel: BaseDataPanel):
         """Create file actions"""
         new_act = self.cra(
             _("New %s...") % self.OBJECT_STR,
@@ -143,7 +143,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.actlist_1 += [importmd_act, exportmd_act]
         return [new_act, open_act, save_act, None, importmd_act, exportmd_act]
 
-    def create_edit_actions(self, panel: BasePanel, itmlist: BaseItemList):
+    def create_edit_actions(self, panel: BaseDataPanel, itmlist: BaseItemList):
         """Create edit actions"""
         dup_action = self.cra(
             _("Duplicate"),
@@ -213,7 +213,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             cpytitles_action,
         ]
 
-    def create_view_actions(self, panel: BasePanel):
+    def create_view_actions(self, panel: BaseDataPanel):
         """Create view actions"""
         view_action = self.cra(
             _("View in a new window"),

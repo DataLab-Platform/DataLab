@@ -11,5 +11,6 @@ General features
 
    command
    h5browser
+   remotecontrol
    logviewer
    instviewer

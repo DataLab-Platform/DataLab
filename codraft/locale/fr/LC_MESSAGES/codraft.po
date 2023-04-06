@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-02-20 14:58+0100\n"
+"POT-Creation-Date: 2022-07-31 17:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,81 +24,81 @@ msgstr ""
 "CodraFT (<b>Codra</b> <b>F</b>iltering <b>T</b>ool) est un logiciel "
 "générique de traitement du signal et de l'image basé sur Python et Qt"
 
-#: codraft\core\gui\actionhandler.py:109
+#: codraft\core\gui\actionhandler.py:103
 msgid "New %s..."
 msgstr "Nouvel objet %s..."
 
-#: codraft\core\gui\actionhandler.py:111
+#: codraft\core\gui\actionhandler.py:105
 msgid "Create new %s"
 msgstr "Créer un nouvel objet %s"
 
-#: codraft\core\gui\actionhandler.py:116
+#: codraft\core\gui\actionhandler.py:110
 msgid "Open %s..."
 msgstr "Ouvrir un objet %s..."
 
-#: codraft\core\gui\actionhandler.py:118
+#: codraft\core\gui\actionhandler.py:112
 msgid "Open %s"
 msgstr "Ouvrir un objet %s"
 
-#: codraft\core\gui\actionhandler.py:123
+#: codraft\core\gui\actionhandler.py:117
 msgid "Save %s..."
 msgstr "Enregistrer un objet %s..."
 
-#: codraft\core\gui\actionhandler.py:125
+#: codraft\core\gui\actionhandler.py:119
 msgid "Save selected %s"
 msgstr "Enregistrer l'objet %s sélectionné"
 
-#: codraft\core\gui\actionhandler.py:130
+#: codraft\core\gui\actionhandler.py:124
 msgid "Import metadata into %s..."
 msgstr "Importer les métadonnées dans l'objet %s..."
 
-#: codraft\core\gui\actionhandler.py:132
+#: codraft\core\gui\actionhandler.py:126
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: codraft\core\gui\actionhandler.py:136
+#: codraft\core\gui\actionhandler.py:130
 msgid "Export metadata from %s..."
 msgstr "Exporter les métadonnées de l'objet %s..."
 
-#: codraft\core\gui\actionhandler.py:138
+#: codraft\core\gui\actionhandler.py:132
 msgid "Export selected %s metadata"
 msgstr "Exporter les métadonnées de l'objet %s sélectionné"
 
-#: codraft\core\gui\actionhandler.py:149
+#: codraft\core\gui\actionhandler.py:143
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: codraft\core\gui\actionhandler.py:155
+#: codraft\core\gui\actionhandler.py:149
 msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
-#: codraft\core\gui\actionhandler.py:160
+#: codraft\core\gui\actionhandler.py:154
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: codraft\core\gui\actionhandler.py:165
+#: codraft\core\gui\actionhandler.py:159
 msgid "Clean up data view"
 msgstr "Nettoyer l'aperçu de signaux/images"
 
-#: codraft\core\gui\actionhandler.py:167
+#: codraft\core\gui\actionhandler.py:161
 msgid "Clean up data view before updating plotting panels"
 msgstr ""
 "Nettoyer le panneaux de visualisation avant d'afficher une nouvelle courbe/"
 "image"
 
-#: codraft\core\gui\actionhandler.py:172
+#: codraft\core\gui\actionhandler.py:166
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: codraft\core\gui\actionhandler.py:174
+#: codraft\core\gui\actionhandler.py:168
 msgid "Delete all that is contained in object metadata"
 msgstr "Supprimer toutes les métadonnées liées à l'objet"
 
-#: codraft\core\gui\actionhandler.py:178 codraft\core\gui\panel.py:325
+#: codraft\core\gui\actionhandler.py:172 codraft\core\gui\panel.py:293
 msgid "Delete all"
 msgstr "Supprimer tout"
 
-#: codraft\core\gui\actionhandler.py:184
+#: codraft\core\gui\actionhandler.py:178
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -110,210 +110,211 @@ msgstr "Copier les titres dans le presse-papier"
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
-#: codraft\core\gui\actionhandler.py:224
+#: codraft\core\gui\actionhandler.py:210
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: codraft\core\gui\actionhandler.py:226
+#: codraft\core\gui\actionhandler.py:212
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr ""
 "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et "
 "autres objets graphiques"
 
-#: codraft\core\gui\actionhandler.py:236
+#: codraft\core\gui\actionhandler.py:223
 msgid "Sum"
 msgstr "Addition"
 
-#: codraft\core\gui\actionhandler.py:237
+#: codraft\core\gui\actionhandler.py:224
 msgid "Average"
 msgstr "Moyenne"
 
-#: codraft\core\gui\actionhandler.py:238
+#: codraft\core\gui\actionhandler.py:225
 msgid "Difference"
 msgstr "Soustraction"
 
-#: codraft\core\gui\actionhandler.py:240
+#: codraft\core\gui\actionhandler.py:227
 msgid "Quadratic difference"
 msgstr "Soustraction quadratique"
 
-#: codraft\core\gui\actionhandler.py:242
+#: codraft\core\gui\actionhandler.py:229
 msgid "Product"
 msgstr "Produit"
 
-#: codraft\core\gui\actionhandler.py:243
+#: codraft\core\gui\actionhandler.py:230
 msgid "Division"
 msgstr "Division"
 
-#: codraft\core\gui\actionhandler.py:245
+#: codraft\core\gui\actionhandler.py:232
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: codraft\core\gui\actionhandler.py:249
+#: codraft\core\gui\actionhandler.py:236
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: codraft\core\gui\actionhandler.py:250
+#: codraft\core\gui\actionhandler.py:237
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: codraft\core\gui\actionhandler.py:270
-#: codraft\core\gui\processor\image.py:1037
-#: codraft\core\gui\processor\signal.py:259
+#: codraft\core\gui\actionhandler.py:258
+#: codraft\core\gui\processor\image.py:431
+#: codraft\core\gui\processor\signal.py:262
 msgid "Thresholding"
 msgstr "Seuillage"
 
-#: codraft\core\gui\actionhandler.py:271
-#: codraft\core\gui\processor\image.py:1049
-#: codraft\core\gui\processor\signal.py:271
+#: codraft\core\gui\actionhandler.py:259
+#: codraft\core\gui\processor\image.py:445
+#: codraft\core\gui\processor\signal.py:276
 msgid "Clipping"
 msgstr "Écrêtage"
 
-#: codraft\core\gui\actionhandler.py:272
-#: codraft\core\gui\processor\image.py:1024
-#: codraft\core\gui\processor\signal.py:239
+#: codraft\core\gui\actionhandler.py:260
+#: codraft\core\gui\processor\image.py:417
+#: codraft\core\gui\processor\signal.py:241
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
-#: codraft\core\gui\actionhandler.py:273 codraft\core\gui\processor\base.py:381
+#: codraft\core\gui\actionhandler.py:261 codraft\core\gui\processor\base.py:344
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
-#: codraft\core\gui\actionhandler.py:274 codraft\core\gui\processor\base.py:399
+#: codraft\core\gui\actionhandler.py:262 codraft\core\gui\processor\base.py:364
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
-#: codraft\core\gui\actionhandler.py:275 codraft\core\gui\processor\base.py:411
+#: codraft\core\gui\actionhandler.py:263 codraft\core\gui\processor\base.py:378
 msgid "Moving median"
 msgstr "Médiane mobile"
 
-#: codraft\core\gui\actionhandler.py:276
+#: codraft\core\gui\actionhandler.py:264
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-#: codraft\core\gui\actionhandler.py:277
+#: codraft\core\gui\actionhandler.py:265
 msgid "FFT"
 msgstr "FFT"
 
-#: codraft\core\gui\actionhandler.py:278
+#: codraft\core\gui\actionhandler.py:266
 msgid "Inverse FFT"
 msgstr "FFT inverse"
 
-#: codraft\core\gui\actionhandler.py:280
+#: codraft\core\gui\actionhandler.py:268
 msgid "Warning: only real part is plotted"
 msgstr "Attention : seulement la partie réelles sera tracée"
 
-#: codraft\core\gui\actionhandler.py:299
+#: codraft\core\gui\actionhandler.py:288
 msgid "Edit regions of interest..."
 msgstr "Modifier les régions d'intérêt..."
 
-#: codraft\core\gui\actionhandler.py:304
+#: codraft\core\gui\actionhandler.py:293
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: codraft\core\gui\actionhandler.py:309 codraft\core\gui\processor\base.py:494
+#: codraft\core\gui\actionhandler.py:298 codraft\core\gui\processor\base.py:461
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: codraft\core\gui\actionhandler.py:327 codraft\core\gui\roieditor.py:199
+#: codraft\core\gui\actionhandler.py:316 codraft\core\gui\roieditor.py:199
 msgid "signal"
 msgstr "signal"
 
-#: codraft\core\gui\actionhandler.py:333
-#: codraft\core\gui\processor\image.py:1340
-#: codraft\core\gui\processor\signal.py:157
+#: codraft\core\gui\actionhandler.py:323
+#: codraft\core\gui\processor\signal.py:162
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: codraft\core\gui\actionhandler.py:344
-#: codraft\core\gui\processor\signal.py:216
+#: codraft\core\gui\actionhandler.py:335
+#: codraft\core\gui\processor\signal.py:217
 msgid "Normalize"
 msgstr "Normaliser"
 
-#: codraft\core\gui\actionhandler.py:345
+#: codraft\core\gui\actionhandler.py:336
 msgid "Derivative"
 msgstr "Dérivée"
 
-#: codraft\core\gui\actionhandler.py:346
+#: codraft\core\gui\actionhandler.py:337
 msgid "Integral"
 msgstr "Intégrale"
 
-#: codraft\core\gui\actionhandler.py:347
-#: codraft\core\gui\processor\signal.py:320
+#: codraft\core\gui\actionhandler.py:338
+#: codraft\core\gui\processor\signal.py:325
 msgid "Polynomial fit"
 msgstr "Ajustement polynomial"
 
-#: codraft\core\gui\actionhandler.py:348
-#: codraft\core\gui\processor\signal.py:366 codraft\widgets\fitdialog.py:234
+#: codraft\core\gui\actionhandler.py:339
+#: codraft\core\gui\processor\signal.py:373 codraft\widgets\fitdialog.py:234
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
 
-#: codraft\core\gui\actionhandler.py:354 codraft\tests\demo.py:78
-#: codraft\tests\scenario_sig_app.py:163 codraft\widgets\fitdialog.py:115
+#: codraft\core\gui\actionhandler.py:345 codraft\tests\demo.py:78
+#: codraft\tests\scenario_sig_app.py:160 codraft\widgets\fitdialog.py:115
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
-#: codraft\core\gui\actionhandler.py:355 codraft\tests\scenario_sig_app.py:164
+#: codraft\core\gui\actionhandler.py:346 codraft\tests\scenario_sig_app.py:161
 #: codraft\widgets\fitdialog.py:143
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
-#: codraft\core\gui\actionhandler.py:356 codraft\tests\scenario_sig_app.py:165
+#: codraft\core\gui\actionhandler.py:347 codraft\tests\scenario_sig_app.py:162
 #: codraft\widgets\fitdialog.py:171
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
-#: codraft\core\gui\actionhandler.py:372
+#: codraft\core\gui\actionhandler.py:364
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
-#: codraft\core\gui\actionhandler.py:374
+#: codraft\core\gui\actionhandler.py:366
 msgid "Compute Full Width at Half-Maximum (FWHM)"
 msgstr "Calcule la largeur à mi-hauteur (LMH)"
 
-#: codraft\core\gui\actionhandler.py:377
+#: codraft\core\gui\actionhandler.py:369
 msgid "Full width at"
 msgstr "Largeur à "
 
-#: codraft\core\gui\actionhandler.py:379
+#: codraft\core\gui\actionhandler.py:371
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: codraft\core\gui\actionhandler.py:388 codraft\core\gui\roieditor.py:230
+#: codraft\core\gui\actionhandler.py:380 codraft\core\gui\roieditor.py:230
 msgid "image"
 msgstr "image"
 
-#: codraft\core\gui\actionhandler.py:394
+#: codraft\core\gui\actionhandler.py:386
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
 
-#: codraft\core\gui\actionhandler.py:396
+#: codraft\core\gui\actionhandler.py:388
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
-#: codraft\core\gui\actionhandler.py:406
+#: codraft\core\gui\actionhandler.py:399
+#: codraft\core\gui\processor\image.py:187
 msgid "Rotation"
 msgstr "Rotation"
 
-#: codraft\core\gui\actionhandler.py:408
+#: codraft\core\gui\actionhandler.py:401
 msgid "Flip horizontally"
 msgstr "Symétrie horizontale"
 
-#: codraft\core\gui\actionhandler.py:413
+#: codraft\core\gui\actionhandler.py:406
 msgid "Flip vertically"
 msgstr "Symétrie verticale"
 
-#: codraft\core\gui\actionhandler.py:418
+#: codraft\core\gui\actionhandler.py:411
 msgid "Rotate %s right"
 msgstr "Rotation directe de %s"
 
-#: codraft\core\gui\actionhandler.py:423
+#: codraft\core\gui\actionhandler.py:416
 msgid "Rotate %s left"
 msgstr "Rotation inverse de %s"
 
-#: codraft\core\gui\actionhandler.py:428
+#: codraft\core\gui\actionhandler.py:421
 msgid "Rotate arbitrarily..."
 msgstr "Rotation arbitraire..."
 
+#: codraft\core\gui\actionhandler.py:423
 #: codraft\core\gui\actionhandler.py:431
 msgid "Distribute on a grid..."
 msgstr "Distribuer sur une grille..."
@@ -412,33 +413,33 @@ msgstr "Filtre de Canny"
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: codraft\core\gui\actionhandler.py:536
-#: codraft\core\gui\processor\image.py:1304
+#: codraft\core\gui\actionhandler.py:459
+#: codraft\core\gui\processor\image.py:535
 #: codraft\tests\enclosingcircle_unit.py:34
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: codraft\core\gui\actionhandler.py:539
+#: codraft\core\gui\actionhandler.py:462
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:541
+#: codraft\core\gui\actionhandler.py:464
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: codraft\core\gui\actionhandler.py:544
+#: codraft\core\gui\actionhandler.py:467
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:546
+#: codraft\core\gui\actionhandler.py:469
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: codraft\core\gui\actionhandler.py:549
+#: codraft\core\gui\actionhandler.py:472
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: codraft\core\gui\actionhandler.py:551
+#: codraft\core\gui\actionhandler.py:474
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
@@ -504,11 +505,49 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: codraft\core\gui\h5io.py:81 codraft\core\gui\main.py:154
-#: codraft\core\gui\main.py:682
+#: codraft\core\gui\main.py:645
 msgid "Warning"
 msgstr "Attention"
 
-#: codraft\core\gui\main.py:155
+#: codraft\core\gui\macroeditor.py:49
+msgid "Macro simple example"
+msgstr "Exemple simple de macro"
+
+#: codraft\core\gui\macroeditor.py:83 codraft\core\model\image.py:219
+#: codraft\core\model\image.py:536 codraft\core\model\signal.py:39
+#: codraft\core\model\signal.py:45 codraft\core\model\signal.py:267
+msgid "Untitled"
+msgstr "Sans titre"
+
+#: codraft\core\gui\macroeditor.py:147
+msgid "# ==> Unable to run '%s' macro"
+msgstr "# ==> Impossible d'exécuter la macro '%s'"
+
+#: codraft\core\gui\macroeditor.py:149
+msgid "Error"
+msgstr "Erreur"
+
+#: codraft\core\gui\macroeditor.py:149
+msgid "Macro Python interpreter failed to start!"
+msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
+
+#: codraft\core\gui\macroeditor.py:152
+msgid "# ==> Running '%s' macro..."
+msgstr "# ==> Exécution de la macro '%s'..."
+
+#: codraft\core\gui\macroeditor.py:164
+msgid "Terminating '%s' macro"
+msgstr "Arrêt de la macro '%s'"
+
+#: codraft\core\gui\macroeditor.py:170
+msgid "# <== '%s' macro has finished"
+msgstr "# <== La macro '%s' a terminé son exécution"
+
+#: codraft\core\gui\macroeditor.py:184
+msgid "-***- Macro Console -***-"
+msgstr "-***- Console des macros -***-"
+
+#: codraft\core\gui\main.py:210
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
@@ -556,11 +595,11 @@ msgstr "Dépendance non-conforme :"
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: codraft\core\gui\main.py:213
+#: codraft\core\gui\main.py:180
 msgid "CodraFT has not yet been qualified on your operating system."
 msgstr "CodraFT n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: codraft\core\gui\main.py:220
+#: codraft\core\gui\main.py:187
 msgid ""
 "At least one dependency does not comply with CodraFT qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -572,7 +611,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: codraft\core\gui\main.py:230
+#: codraft\core\gui\main.py:197
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -580,90 +619,94 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: codraft\core\gui\main.py:235
+#: codraft\core\gui\main.py:202
 msgid ""
 "Please click on the Ignore button to avoid showing this message at startup."
 msgstr ""
 "Cliquer sur le bouton Ignorer pour éviter d'afficher ce message à chaque "
 "démarrage."
 
-#: codraft\core\gui\main.py:255
+#: codraft\core\gui\main.py:222
 msgid "Log files were generated during last session."
 msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
-#: codraft\core\gui\main.py:257
+#: codraft\core\gui\main.py:224
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: codraft\core\gui\main.py:322
+#: codraft\core\gui\main.py:289
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: codraft\core\gui\main.py:345
+#: codraft\core\gui\main.py:359 codraft\core\gui\panel.py:911
+msgid "Macro manager"
+msgstr "Gestionnaire de macros"
+
+#: codraft\core\gui\main.py:371
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: codraft\core\gui\main.py:347
+#: codraft\core\gui\main.py:310
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: codraft\core\gui\main.py:352
+#: codraft\core\gui\main.py:315
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: codraft\core\gui\main.py:354
+#: codraft\core\gui\main.py:317
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: codraft\core\gui\main.py:359
+#: codraft\core\gui\main.py:322
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: codraft\core\gui\main.py:361
+#: codraft\core\gui\main.py:324
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: codraft\core\gui\main.py:364
+#: codraft\core\gui\main.py:327
 msgid "HDF5 I/O Toolbar"
 msgstr "Barre d'outils d'entrées/sorties HDF5"
 
-#: codraft\core\gui\main.py:370
+#: codraft\core\gui\main.py:333
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: codraft\core\gui\main.py:371
+#: codraft\core\gui\main.py:334
 msgid "Hide CodraFT window"
 msgstr "Cacher la fenêtre de CodraFT"
 
-#: codraft\core\gui\main.py:373 codraft\core\gui\main.py:777
+#: codraft\core\gui\main.py:336 codraft\core\gui\main.py:739
 msgid "Quit"
 msgstr "Quitter"
 
-#: codraft\core\gui\main.py:374
+#: codraft\core\gui\main.py:337
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: codraft\core\gui\main.py:386
+#: codraft\core\gui\main.py:349
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: codraft\core\gui\main.py:387
+#: codraft\core\gui\main.py:350
 msgid "Curve Plotting Toolbar"
 msgstr "Barre d'outils d'affichage de courbes"
 
-#: codraft\core\gui\main.py:399
+#: codraft\core\gui\main.py:362
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: codraft\core\gui\main.py:400
+#: codraft\core\gui\main.py:363
 msgid "Image Visualization Toolbar"
 msgstr "Barre d'outils d'affichage d'images"
 
-#: codraft\core\gui\main.py:428
+#: codraft\core\gui\main.py:391
 msgid "Signals"
 msgstr "Signaux"
 
-#: codraft\core\gui\main.py:429
+#: codraft\core\gui\main.py:392
 msgid "Images"
 msgstr "Images"
 
@@ -675,71 +718,71 @@ msgstr "Panneau principal"
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: codraft\core\gui\main.py:432
+#: codraft\core\gui\main.py:395
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: codraft\core\gui\main.py:444
+#: codraft\core\gui\main.py:407
 msgid "File"
 msgstr "Fichier"
 
-#: codraft\core\gui\main.py:446
+#: codraft\core\gui\main.py:409
 msgid "&Edit"
 msgstr "&Édition"
 
-#: codraft\core\gui\main.py:447
+#: codraft\core\gui\main.py:410
 msgid "Operations"
 msgstr "Opérations"
 
-#: codraft\core\gui\main.py:448
+#: codraft\core\gui\main.py:411
 msgid "Processing"
 msgstr "Traitement"
 
-#: codraft\core\gui\main.py:449
+#: codraft\core\gui\main.py:412
 msgid "Computing"
 msgstr "Calculs"
 
-#: codraft\core\gui\main.py:450
+#: codraft\core\gui\main.py:413
 msgid "&View"
 msgstr "&Affichage"
 
-#: codraft\core\gui\main.py:462 codraft\core\gui\main.py:509
+#: codraft\core\gui\main.py:425 codraft\core\gui\main.py:472
 msgid "About..."
 msgstr "À propos..."
 
-#: codraft\core\gui\main.py:468
+#: codraft\core\gui\main.py:431
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: codraft\core\gui\main.py:474
+#: codraft\core\gui\main.py:437
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: codraft\core\gui\main.py:480
+#: codraft\core\gui\main.py:443
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: codraft\core\gui\main.py:486
+#: codraft\core\gui\main.py:449
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: codraft\core\gui\main.py:493
+#: codraft\core\gui\main.py:456
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: codraft\core\gui\main.py:499 codraft\widgets\instconfviewer.py:62
+#: codraft\core\gui\main.py:462 codraft\widgets\instconfviewer.py:62
 msgid "About CodraFT installation"
 msgstr "Configuration d'installation de CodraFT"
 
-#: codraft\core\gui\main.py:551
+#: codraft\core\gui\main.py:514
 msgid "Console"
 msgstr "Console"
 
-#: codraft\core\gui\main.py:655
+#: codraft\core\gui\main.py:618
 msgid "Save"
 msgstr "Enregistrer"
 
-#: codraft\core\gui\main.py:683
+#: codraft\core\gui\main.py:646
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -747,23 +790,35 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: codraft\core\gui\main.py:695 codraft\core\gui\panel.py:390
+#: codraft\core\gui\main.py:658 codraft\core\gui\panel.py:335
 msgid "Open"
 msgstr "Ouvrir"
 
-#: codraft\core\gui\main.py:738
+#: codraft\core\gui\main.py:790
+msgid "not started"
+msgstr "non démarré"
+
+#: codraft\core\gui\main.py:792
+msgid "started (port %s)"
+msgstr "démarré (port %s)"
+
+#: codraft\core\gui\main.py:793
+msgid "XML-RPC server: "
+msgstr "Serveur XML-RPC : "
+
+#: codraft\core\gui\main.py:796
 msgid "About "
 msgstr "À propos de "
 
-#: codraft\core\gui\main.py:746
+#: codraft\core\gui\main.py:708
 msgid "Developped by"
 msgstr "Développé par"
 
-#: codraft\core\gui\main.py:746
+#: codraft\core\gui\main.py:708
 msgid "on"
 msgstr "sous"
 
-#: codraft\core\gui\main.py:778
+#: codraft\core\gui\main.py:740
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "CodraFT?"
@@ -787,40 +842,40 @@ msgstr "Paramètres de calcul"
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: codraft\core\gui\panel.py:418
+#: codraft\core\gui\panel.py:363
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
-#: codraft\core\gui\panel.py:436
+#: codraft\core\gui\panel.py:381
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
-#: codraft\core\gui\panel.py:489
+#: codraft\core\gui\panel.py:437
 msgid "Annotations"
 msgstr "Annotations"
 
-#: codraft\core\gui\panel.py:614 codraft\core\gui\roieditor.py:205
-#: codraft\core\model\base.py:522
+#: codraft\core\gui\panel.py:563 codraft\core\gui\roieditor.py:205
+#: codraft\core\model\base.py:505
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: codraft\core\gui\panel.py:638
+#: codraft\core\gui\panel.py:587
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: codraft\core\gui\panel.py:639
+#: codraft\core\gui\panel.py:588
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: codraft\core\gui\panel.py:672 codraft\core\gui\processor\base.py:348
+#: codraft\core\gui\panel.py:625 codraft\core\gui\processor\base.py:319
 msgid "Results"
 msgstr "Résultats"
 
-#: codraft\core\gui\panel.py:686
+#: codraft\core\gui\panel.py:639
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: codraft\core\gui\panel.py:688
+#: codraft\core\gui\panel.py:641
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -828,38 +883,90 @@ msgstr ""
 "Cette fonctionnalité permet d'afficher les tableaux de résultats tels "
 "qu'obtenus après avoir réalisé des calculs (voir menu \"Calculs\")."
 
-#: codraft\core\gui\panel.py:701
+#: codraft\core\gui\panel.py:654
 msgid "Signal List"
 msgstr "Liste des Signaux"
 
-#: codraft\core\gui\panel.py:753 codraft\core\gui\panel.py:850
+#: codraft\core\gui\panel.py:706 codraft\core\gui\panel.py:804
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: codraft\core\gui\panel.py:765
+#: codraft\core\gui\panel.py:718
 msgid "Image List"
 msgstr "Liste des Images"
 
-#: codraft\core\gui\processor\base.py:43 codraft\core\gui\processor\base.py:49
+#: codraft\core\gui\panel.py:983
+msgid "Run macro"
+msgstr "Exécuter la macro"
+
+#: codraft\core\gui\panel.py:990
+msgid "Stop macro"
+msgstr "Arrêter la macro"
+
+#: codraft\core\gui\panel.py:998
+msgid "New macro"
+msgstr "Nouvelle macro"
+
+#: codraft\core\gui\panel.py:1004
+msgid "Rename macro"
+msgstr "Renommer la macro"
+
+#: codraft\core\gui\panel.py:1010
+msgid "Export macro to file"
+msgstr "Exporter la macro vers un fichier"
+
+#: codraft\core\gui\panel.py:1016
+msgid "Import macro from file"
+msgstr "Importer la macro depuis un fichier"
+
+#: codraft\core\gui\panel.py:1022
+msgid "Remove macro"
+msgstr "Supprimer la macro"
+
+#: codraft\core\gui\panel.py:1047
+msgid "Macro editor toolbar"
+msgstr "Barre d'outils des macros"
+
+#: codraft\core\gui\panel.py:1132
+msgid "Rename"
+msgstr "Renommer"
+
+#: codraft\core\gui\panel.py:1133
+msgid "New title:"
+msgstr "Nouveau titre :"
+
+#: codraft\core\gui\panel.py:1156
+msgid ""
+"When closed, the macro is <u>permanently destroyed</u>, unless it has been "
+"exported first."
+msgstr ""
+"Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, "
+"sauf si elle a été exportée au préalable."
+
+#: codraft\core\gui\panel.py:1161
+msgid "Do you want to continue?"
+msgstr "Souhaitez-vous vraiment continuer ?"
+
+#: codraft\core\gui\processor\base.py:42 codraft\core\gui\processor\base.py:48
 msgid "Size of the moving window"
 msgstr "Taille de la fenêtre glissante"
 
-#: codraft\core\gui\processor\base.py:55
-#: codraft\core\gui\processor\image.py:252
+#: codraft\core\gui\processor\base.py:54
+#: codraft\core\gui\processor\image.py:117
 #: codraft\core\gui\processor\signal.py:44
 msgid "Threshold"
 msgstr "Seuil"
 
-#: codraft\core\gui\processor\base.py:61
+#: codraft\core\gui\processor\base.py:60
 msgid "Clipping value"
 msgstr "Valeur d'écrêtage"
 
-#: codraft\core\gui\processor\base.py:252
+#: codraft\core\gui\processor\base.py:233
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: codraft\core\gui\processor\base.py:283
-#: codraft\core\gui\processor\base.py:332
+#: codraft\core\gui\processor\base.py:264
+#: codraft\core\gui\processor\base.py:303
 msgid "Computing:"
 msgstr "Calcul en cours :"
 
@@ -901,26 +1008,17 @@ msgstr "Nombre de classes de l'histogramme des niveaux de l'image."
 msgid "Clipping limit"
 msgstr "Écrêtage limite"
 
-#: codraft\core\gui\processor\image.py:102
-msgid "Clipping limit (higher values give more contrast)."
-msgstr ""
-"Écrêtage limite (plus la valeur est élevée, plus le contraste est fort)."
 
-#: codraft\core\gui\processor\image.py:120
-#: codraft\core\gui\processor\image.py:192
-#: codraft\core\gui\processor\image.py:311
-#: codraft\core\gui\processor\image.py:328
-#: codraft\core\gui\processor\image.py:374
 msgid "Mode"
 msgstr "Mode"
 
-#: codraft\core\gui\processor\image.py:123
-#: codraft\core\gui\processor\image.py:195
+#: codraft\core\gui\processor\image.py:54
+#: codraft\core\gui\processor\image.py:94
 msgid "cval"
 msgstr "cval"
 
-#: codraft\core\gui\processor\image.py:125
-#: codraft\core\gui\processor\image.py:197
+#: codraft\core\gui\processor\image.py:56
+#: codraft\core\gui\processor\image.py:96
 msgid ""
 "Value used for points outside the boundaries of the input if mode is "
 "'constant'"
@@ -928,11 +1026,11 @@ msgstr ""
 "Valeur utilisée pour les points situés en dehors des frontières de l'image "
 "d'origine (si le mode est 'constant')"
 
-#: codraft\core\gui\processor\image.py:132
+#: codraft\core\gui\processor\image.py:63
 msgid "Reshape the output array"
 msgstr "Redimensionner l'image de destination"
 
-#: codraft\core\gui\processor\image.py:134
+#: codraft\core\gui\processor\image.py:65
 msgid ""
 "Reshape the output array so that the input array is contained completely in "
 "the output"
@@ -940,18 +1038,18 @@ msgstr ""
 "Redimensionner l'image de destination de sorte qu'elle puisse contenir la "
 "totalité de l'image source"
 
-#: codraft\core\gui\processor\image.py:140
-#: codraft\core\gui\processor\image.py:203
+#: codraft\core\gui\processor\image.py:71
+#: codraft\core\gui\processor\image.py:102
 msgid "Prefilter the input image"
 msgstr "Prétraitement de l'image d'origine (spline)"
 
-#: codraft\core\gui\processor\image.py:144
-#: codraft\core\gui\processor\image.py:207
+#: codraft\core\gui\processor\image.py:75
+#: codraft\core\gui\processor\image.py:106
 msgid "Order"
 msgstr "Ordre"
 
-#: codraft\core\gui\processor\image.py:148
-#: codraft\core\gui\processor\image.py:211
+#: codraft\core\gui\processor\image.py:79
+#: codraft\core\gui\processor\image.py:110
 msgid "Spline interpolation order"
 msgstr "Ordre de l'interpolation de type spline"
 
@@ -1006,8 +1104,10 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 #: codraft\core\gui\processor\image.py:232
 msgid "Operation"
 msgstr "Opération"
+msgid "Neighborhoods size"
+msgstr "Taille du voisinage"
 
-#: codraft\core\gui\processor\image.py:238 codraft\core\model\image.py:585
+#: codraft\core\gui\processor\image.py:135
 msgid "Data type"
 msgstr "Type de données"
 
@@ -1151,15 +1251,15 @@ msgstr ""
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
-#: codraft\core\gui\processor\image.py:416
+#: codraft\core\gui\processor\image.py:156
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: codraft\core\gui\processor\image.py:417
+#: codraft\core\gui\processor\image.py:157
 msgid "Circle"
 msgstr "Cercle"
 
-#: codraft\core\gui\processor\image.py:419
+#: codraft\core\gui\processor\image.py:160
 msgid "Shape"
 msgstr "Forme"
 
@@ -1316,7 +1416,6 @@ msgstr "Aire min."
 msgid "The minimum blob area."
 msgstr "L'aire minimale des taches."
 
-#: codraft\core\gui\processor\image.py:577
 msgid "Max. area"
 msgstr "Aire max."
 
@@ -1408,7 +1507,7 @@ msgstr "Attention :"
 msgid "Selected images do not have the same size"
 msgstr "Les images sélectionnées n'ont pas la même taille"
 
-#: codraft\core\gui\processor\image.py:835
+#: codraft\core\gui\processor\image.py:262
 msgid "Destination size:"
 msgstr "Taille de destination :"
 
@@ -1460,12 +1559,11 @@ msgstr "Fermeture"
 msgid "MinEnclosingCircle"
 msgstr "CercleMinimum"
 
-#: codraft\core\gui\processor\image.py:1345
+#: codraft\core\gui\processor\image.py:577
 msgid "Peaks"
 msgstr "Pics"
 
-#: codraft\core\gui\processor\image.py:1390
-#: codraft\core\gui\processor\image.py:1391
+#: codraft\core\gui\processor\image.py:623
 msgid "Contour"
 msgstr "Contour"
 
@@ -1501,15 +1599,15 @@ msgstr "énergie"
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:249
-#: codraft\core\model\image.py:252 codraft\core\model\signal.py:48
-#: codraft\core\model\signal.py:51
+#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:221
+#: codraft\core\model\image.py:224 codraft\core\model\signal.py:47
+#: codraft\core\model\signal.py:50
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:253
-#: codraft\core\model\image.py:256 codraft\core\model\signal.py:52
-#: codraft\core\model\signal.py:55
+#: codraft\core\gui\processor\signal.py:64 codraft\core\model\image.py:225
+#: codraft\core\model\image.py:228 codraft\core\model\signal.py:51
+#: codraft\core\model\signal.py:54
 msgid "Y-axis"
 msgstr "Axe des Y"
 
@@ -1522,7 +1620,7 @@ msgid "Degree"
 msgstr "Degré"
 
 #: codraft\core\gui\processor\signal.py:80 codraft\tests\demo.py:81
-#: codraft\tests\scenario_sig_app.py:168 codraft\tests\stat_app.py:33
+#: codraft\tests\scenario_sig_app.py:165 codraft\tests\stat_app.py:33
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -1534,11 +1632,11 @@ msgstr "Lorentzienne"
 msgid "Fit type"
 msgstr "Type d'ajustement"
 
-#: codraft\core\gui\processor\signal.py:376
+#: codraft\core\gui\processor\signal.py:397
 msgid "FWHM"
 msgstr "LMH"
 
-#: codraft\core\gui\processor\signal.py:410
+#: codraft\core\gui\processor\signal.py:431
 msgid "FW"
 msgstr "LH"
 
@@ -1558,15 +1656,15 @@ msgstr "ROI rectangulaire"
 msgid "Circular ROI"
 msgstr "ROI circulaire"
 
-#: codraft\core\io\image.py:408
+#: codraft\core\io\image.py:386
 msgid "Andor SIF files"
 msgstr "Fichiers SIF Andor"
 
-#: codraft\core\io\image.py:409
+#: codraft\core\io\image.py:387
 msgid "SPIRICON files"
 msgstr "Fichiers SPIRICON"
 
-#: codraft\core\io\image.py:410
+#: codraft\core\io\image.py:388
 msgid "FXD files"
 msgstr "Fichiers FXD"
 
@@ -1598,49 +1696,49 @@ msgstr "Moyenne de la distribution normale"
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: codraft\core\model\base.py:382 codraft\core\model\base.py:391
+#: codraft\core\model\base.py:372 codraft\core\model\base.py:381
 msgid "Annotation"
 msgstr "Annotation"
 
-#: codraft\core\model\base.py:676
+#: codraft\core\model\base.py:618
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: codraft\core\model\base.py:677
+#: codraft\core\model\base.py:619
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#: codraft\core\model\image.py:230 codraft\core\model\image.py:233
-#: codraft\core\model\signal.py:39 codraft\core\model\signal.py:43
+#: codraft\core\model\image.py:202 codraft\core\model\image.py:205
+#: codraft\core\model\signal.py:38 codraft\core\model\signal.py:42
 msgid "Data and metadata"
 msgstr "Données et métadonnées"
 
-#: codraft\core\model\image.py:231 codraft\core\model\signal.py:41
+#: codraft\core\model\image.py:203 codraft\core\model\signal.py:40
 msgid "Data"
 msgstr "Données"
 
-#: codraft\core\model\image.py:232 codraft\core\model\signal.py:42
+#: codraft\core\model\image.py:204 codraft\core\model\signal.py:41
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: codraft\core\model\image.py:235 codraft\core\model\image.py:244
+#: codraft\core\model\image.py:207 codraft\core\model\image.py:216
 msgid "Origin and pixel spacing"
 msgstr "Origine et taille des pixels"
 
-#: codraft\core\model\image.py:236 codraft\core\model\image.py:239
+#: codraft\core\model\image.py:208 codraft\core\model\image.py:211
 msgid "Origin"
 msgstr "Origine"
 
-#: codraft\core\model\image.py:240 codraft\core\model\image.py:243
+#: codraft\core\model\image.py:212 codraft\core\model\image.py:215
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: codraft\core\model\image.py:246 codraft\core\model\image.py:262
-#: codraft\core\model\signal.py:45 codraft\core\model\signal.py:57
+#: codraft\core\model\image.py:218 codraft\core\model\image.py:234
+#: codraft\core\model\signal.py:44 codraft\core\model\signal.py:56
 msgid "Titles and units"
 msgstr "Titres et unités"
 
-#: codraft\core\model\image.py:247
+#: codraft\core\model\image.py:219
 msgid "Image title"
 msgstr "Titre de l'image"
 
@@ -1650,137 +1748,145 @@ msgstr "Titre de l'image"
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: codraft\core\model\image.py:250 codraft\core\model\image.py:254
-#: codraft\core\model\image.py:258 codraft\core\model\image.py:577
-#: codraft\core\model\signal.py:49 codraft\core\model\signal.py:53
-#: codraft\core\model\signal.py:271
+#: codraft\core\model\image.py:222 codraft\core\model\image.py:226
+#: codraft\core\model\image.py:230 codraft\core\model\image.py:536
+#: codraft\core\model\signal.py:48 codraft\core\model\signal.py:52
+#: codraft\core\model\signal.py:267
 msgid "Title"
 msgstr "Titre"
 
-#: codraft\core\model\image.py:251 codraft\core\model\image.py:255
-#: codraft\core\model\image.py:259 codraft\core\model\signal.py:50
-#: codraft\core\model\signal.py:54
+#: codraft\core\model\image.py:223 codraft\core\model\image.py:227
+#: codraft\core\model\image.py:231 codraft\core\model\signal.py:49
+#: codraft\core\model\signal.py:53
 msgid "Unit"
 msgstr "Unité"
 
-#: codraft\core\model\image.py:257 codraft\core\model\image.py:260
+#: codraft\core\model\image.py:229 codraft\core\model\image.py:232
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: codraft\core\model\image.py:372
+#: codraft\core\model\image.py:334
 msgid "Top left corner"
 msgstr "Coin supérieur gauche"
 
-#: codraft\core\model\image.py:373
+#: codraft\core\model\image.py:335
 msgid "Bottom right corner"
 msgstr "Coin inférieur droit"
 
-#: codraft\core\model\image.py:398
+#: codraft\core\model\image.py:360
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: codraft\core\model\image.py:567 codraft\core\model\signal.py:251
+#: codraft\core\model\image.py:406
+msgid "Radius"
+msgstr "Rayon"
+
+#: codraft\core\model\image.py:526 codraft\core\model\signal.py:247
 msgid "zeros"
 msgstr "zéros"
 
-#: codraft\core\model\image.py:568
+#: codraft\core\model\image.py:527
 msgid "empty"
 msgstr "vide"
 
-#: codraft\core\model\image.py:569 codraft\core\model\signal.py:252
+#: codraft\core\model\image.py:528 codraft\core\model\signal.py:248
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: codraft\core\model\image.py:570 codraft\core\model\signal.py:255
+#: codraft\core\model\image.py:529 codraft\core\model\signal.py:251
 msgid "random (uniform law)"
 msgstr "aléatoire (distribution uniforme)"
 
-#: codraft\core\model\image.py:571 codraft\core\model\signal.py:256
+#: codraft\core\model\image.py:530 codraft\core\model\signal.py:252
 msgid "random (normal law)"
 msgstr "aléatoire (distribution normale)"
 
-#: codraft\core\model\image.py:579
+#: codraft\core\model\image.py:538
 msgid "Height"
 msgstr "Hauteur"
 
-#: codraft\core\model\image.py:579
+#: codraft\core\model\image.py:538
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: codraft\core\model\image.py:582
+#: codraft\core\model\image.py:541
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: codraft\core\model\image.py:582
+#: codraft\core\model\image.py:541
 msgid "Width"
 msgstr "Largeur"
 
-#: codraft\core\model\image.py:587 codraft\core\model\signal.py:277
-#: codraft\widgets\h5browser.py:207
+#: codraft\core\model\image.py:544
+msgid "Data type"
+msgstr "Type de données"
+
+#: codraft\core\model\image.py:546 codraft\core\model\signal.py:273
+#: codraft\widgets\h5browser.py:206
 msgid "Type"
 msgstr "Type"
 
-#: codraft\core\model\image.py:595
+#: codraft\core\model\image.py:554
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: codraft\core\model\image.py:653
+#: codraft\core\model\image.py:612
 msgid "New 2D-gaussian image"
 msgstr "Nouvelle gaussienne 2D"
 
-#: codraft\core\model\image.py:676
+#: codraft\core\model\image.py:635
 msgid "Image"
 msgstr "Image"
 
-#: codraft\core\model\signal.py:40 codraft\core\model\signal.py:46
+#: codraft\core\model\signal.py:39 codraft\core\model\signal.py:45
 msgid "Signal title"
 msgstr "Titre du signal"
 
-#: codraft\core\model\signal.py:176
+#: codraft\core\model\signal.py:175
 msgid "First point index"
 msgstr "Indice du premier point"
 
-#: codraft\core\model\signal.py:177
+#: codraft\core\model\signal.py:176
 msgid "Last point index"
 msgstr "Indice du dernier point"
 
-#: codraft\core\model\signal.py:253
+#: codraft\core\model\signal.py:249
 msgid "lorentzian"
 msgstr "lorentzienne"
 
-#: codraft\core\model\signal.py:275
+#: codraft\core\model\signal.py:271
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: codraft\core\model\signal.py:275 codraft\widgets\h5browser.py:207
+#: codraft\core\model\signal.py:271 codraft\widgets\h5browser.py:206
 msgid "Size"
 msgstr "Taille"
 
-#: codraft\core\model\signal.py:285
+#: codraft\core\model\signal.py:281
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: codraft\core\model\signal.py:330
+#: codraft\core\model\signal.py:326
 msgid "Signal"
 msgstr "Signal"
 
-#: codraft\core\model\signal.py:343
+#: codraft\core\model\signal.py:339
 msgid "New gaussian function"
 msgstr "Nouvelle gaussienne"
 
-#: codraft\core\model\signal.py:350
+#: codraft\core\model\signal.py:346
 msgid "New lorentzian function"
 msgstr "Nouvelle lorentzienne"
 
-#: codraft\core\model\signal.py:357
+#: codraft\core\model\signal.py:353
 msgid "New Voigt function"
 msgstr "Nouvelle courbe de Voigt"
 
-#: codraft\patch.py:160
+#: codraft\patch.py:163
 msgid "Z-Axis logarithmic scale"
 msgstr "Axe Z en échelle logarithmique"
 
-#: codraft\patch.py:342
+#: codraft\patch.py:345
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -1824,6 +1930,18 @@ msgstr "Supprimer tous les objets"
 msgid "Close CodraFT"
 msgstr "Fermer CodraFT"
 
+msgid "This the host application, which embeds CodraFT."
+msgstr "Ceci est une application embarquant CodraFT."
+
+msgid "Open CodraFT"
+msgstr "Ouvrir CodraFT"
+
+msgid "Import signal from CodraFT"
+msgstr "Importer un signal depuis CodraFT"
+
+msgid "Import image from CodraFT"
+msgstr "Importer une image depuis CodraFT"
+
 #: codraft\tests\flatfield_app.py:29 codraft\tests\stat_app.py:43
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
@@ -1835,6 +1953,26 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 #: codraft\tests\peak2d_app.py:28
 msgid "Test image with peaks"
 msgstr "Image de test avec des pics"
+
+#: codraft\tests\remoteclient_app.py:29
+msgid "This the client application, which connects to CodraFT."
+msgstr "Ceci l'application cliente, qui se connecte à CodraFT."
+
+#: codraft\tests\remoteclient_app.py:30
+msgid "Connect to CodraFT"
+msgstr "Se connecter à CodraFT"
+
+#: codraft\tests\remoteclient_app.py:50
+msgid "Execute multiple commands"
+msgstr "Exécuter des commandes multiples"
+
+#: codraft\tests\remoteclient_app.py:51
+msgid "Get object list"
+msgstr "Obtenir la liste des objets"
+
+#: codraft\tests\remoteclient_app.py:52
+msgid "Get object"
+msgstr "Obtenir un objet"
 
 #: codraft\utils\qthelpers.py:172
 msgid "Cancel"
@@ -1880,51 +2018,51 @@ msgstr "Moyenne"
 msgid "Y0"
 msgstr "Y0"
 
-#: codraft\widgets\h5browser.py:71
+#: codraft\widgets\h5browser.py:70
 msgid "Collapse all"
 msgstr "Replier tout"
 
-#: codraft\widgets\h5browser.py:76
+#: codraft\widgets\h5browser.py:75
 msgid "Expand all"
 msgstr "Déplier tout"
 
-#: codraft\widgets\h5browser.py:80
+#: codraft\widgets\h5browser.py:79
 msgid "Restore"
 msgstr "Restaurer"
 
-#: codraft\widgets\h5browser.py:81
+#: codraft\widgets\h5browser.py:80
 msgid "Restore original tree layout"
 msgstr "Restaurer l'organisation initiale de l'arbre"
 
-#: codraft\widgets\h5browser.py:87
+#: codraft\widgets\h5browser.py:86
 msgid "Collapse selection"
 msgstr "Replier la sélection"
 
-#: codraft\widgets\h5browser.py:93
+#: codraft\widgets\h5browser.py:92
 msgid "Expand selection"
 msgstr "Déplier la sélection"
 
-#: codraft\widgets\h5browser.py:204 codraft\widgets\h5browser.py:400
+#: codraft\widgets\h5browser.py:203 codraft\widgets\h5browser.py:399
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-#: codraft\widgets\h5browser.py:207
+#: codraft\widgets\h5browser.py:206
 msgid "Name"
 msgstr "Nom"
 
-#: codraft\widgets\h5browser.py:207
+#: codraft\widgets\h5browser.py:206
 msgid "Textual preview"
 msgstr "Aperçu textuel"
 
-#: codraft\widgets\h5browser.py:444
+#: codraft\widgets\h5browser.py:443
 msgid "No supported data available in HDF5 file."
 msgstr "Ce fichier HDF5 ne contient aucune donnée prise en charge."
 
-#: codraft\widgets\h5browser.py:464
+#: codraft\widgets\h5browser.py:463
 msgid "Check all"
 msgstr "Cocher tout"
 
-#: codraft\widgets\h5browser.py:471
+#: codraft\widgets\h5browser.py:470
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
@@ -2020,6 +2158,9 @@ msgstr "Mémoire :"
 #~ msgid "Row"
 #~ msgstr "Ligne"
 
+#~ msgid "Column"
+#~ msgstr "Colonne"
+
 #~ msgid "Define ROI"
 #~ msgstr "Définir une ROI"
 
@@ -2098,8 +2239,14 @@ msgstr "Mémoire :"
 #~ msgid "pixels"
 #~ msgstr "pixels"
 
+#~ msgid "Intensity"
+#~ msgstr "Intensité"
+
 #~ msgid "lsb"
 #~ msgstr "lsb"
+
+#~ msgid "Enclosing circle"
+#~ msgstr "Cercle minimum"
 
 #~ msgid "Visual preview"
 #~ msgstr "Aperçu graphique"
@@ -2209,8 +2356,14 @@ msgstr "Mémoire :"
 #~ msgid "Auto-refresh"
 #~ msgstr "Rafraîchissement automatique"
 
+#~ msgid "Lock scales"
+#~ msgstr "Synchroniser les échelles"
+
 #~ msgid "Lock scales to main plot axes"
 #~ msgstr "Synchroniser les échelles à celles du canevas"
+
+#~ msgid "Per image cross-section"
+#~ msgstr "Un profil par image"
 
 #~ msgid ""
 #~ "Enable the per-image cross-section mode, which works directly on image "
@@ -2278,6 +2431,9 @@ msgstr "Mémoire :"
 
 #~ msgid "Select maximum level on image"
 #~ msgstr "Sélectionne le niveau maximum de l'image"
+
+#~ msgid "Full range"
+#~ msgstr "Pleine échelle"
 
 #~ msgid "Scale the image's display range according to data range"
 #~ msgstr "Adapte l'échelle d'affichage des niveaux de l'image aux données"
@@ -2761,11 +2917,20 @@ msgstr "Mémoire :"
 #~ msgid "θ (°)"
 #~ msgstr "θ (°)"
 
+#~ msgid "Bins"
+#~ msgstr "Classes"
+
+#~ msgid "Number of bins"
+#~ msgstr "Nombre de classes"
+
 #~ msgid "Y-axis scale"
 #~ msgstr "Échelle en y"
 
 #~ msgid "X-axis bins"
 #~ msgstr "Classes en x"
+
+#~ msgid "Number of bins along x-axis"
+#~ msgstr "Nombre de classes le long de l'axe des abscisses"
 
 #~ msgid "Y-axis bins"
 #~ msgstr "Classes en y"
@@ -2846,6 +3011,9 @@ msgstr "Mémoire :"
 #~ msgid "Arrow angle (°)"
 #~ msgstr "Angle de la flèche (°)"
 
+#~ msgid "Arrow size (%)"
+#~ msgstr "Taille de la flèche (%)"
+
 #~ msgid "Line (X-Axis)"
 #~ msgstr "Trait (axes des x)"
 
@@ -2879,6 +3047,9 @@ msgstr "Mémoire :"
 #~ msgid "Fill"
 #~ msgstr "Remplissage"
 
+#~ msgid "Fill color"
+#~ msgstr "Couleur de remplissage"
+
 #~ msgid "Shade"
 #~ msgstr "Ombre"
 
@@ -2906,6 +3077,9 @@ msgstr "Mémoire :"
 #~ msgid "uniform filter"
 #~ msgstr "filtre uniforme"
 
+#~ msgid "median filter"
+#~ msgstr "filtre médian"
+
 #~ msgid "maximum filter"
 #~ msgstr "filtre maximum"
 
@@ -2914,6 +3088,9 @@ msgstr "Mémoire :"
 
 #~ msgid "Example dialog box"
 #~ msgstr "Exemple de boîte de dialogue"
+
+#~ msgid "Filter parameters"
+#~ msgstr "Paramètres du filtre"
 
 #~ msgid "z-axis scale label"
 #~ msgstr "Échelle en z"
@@ -3011,6 +3188,9 @@ msgstr "Mémoire :"
 #~ msgid "untitled"
 #~ msgstr "sanstitre"
 
+#~ msgid "Copy to clipboard"
+#~ msgstr "Copier dans le presse-papier"
+
 #~ msgid "Rectangle snapshot"
 #~ msgstr "Capture rectangulaire"
 
@@ -3087,6 +3267,9 @@ msgstr "Mémoire :"
 #~ "('pan')\n"
 #~ "  - clique droit + déplacement souris : agrandissement ('zoom')"
 
+#~ msgid "Export"
+#~ msgstr "Exporter"
+
 #~ msgid "Text file"
 #~ msgstr "Fichier texte"
 
@@ -3141,6 +3324,9 @@ msgstr "Mémoire :"
 #~ msgid "Rotate & Crop"
 #~ msgstr "Rotation & rognage"
 
+#~ msgid "Method"
+#~ msgstr "Méthode"
+
 #~ msgid "Conjugate Gradient"
 #~ msgstr "Gradient conjugué"
 
@@ -3161,6 +3347,9 @@ msgstr "Mémoire :"
 
 #~ msgid "Logarithmic"
 #~ msgstr "logarithmique"
+
+#~ msgid "Curve fitting parameter"
+#~ msgstr "Paramètre d'ajustement"
 
 #~ msgid "Edit '%s' fit parameter properties"
 #~ msgstr "Modifier les propriétés du paramètre d'ajustement '%s'"

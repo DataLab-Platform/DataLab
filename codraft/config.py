@@ -45,6 +45,8 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    rpc_server_enabled = conf.Option()
+    rpc_server_port = conf.Option()
     traceback_log_path = conf.ConfigPathOption()
     traceback_log_available = conf.Option()
     faulthandler_enabled = conf.Option()
