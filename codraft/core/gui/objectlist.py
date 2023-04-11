@@ -44,6 +44,7 @@ class SimpleObjectList(QW.QListWidget):
     def get_objects(self):
         """Get all objects"""
         return self._objects
+
     def get_titles(self):
         """Get object titles as diplayed in QListWidget"""
         return [self.item(row).text() for row in range(self.count())]

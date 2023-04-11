@@ -20,12 +20,18 @@ from contextlib import contextmanager
 from datetime import datetime
 
 import guidata
-from guidata.configtools import get_module_data_path
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from codraft.config import APP_NAME, DATETIME_FORMAT, Conf, _, get_old_log_fname
+from codraft.config import (
+    APP_NAME,
+    DATETIME_FORMAT,
+    SHOTPATH,
+    Conf,
+    _,
+    get_old_log_fname,
+)
 from codraft.env import execenv
 from codraft.utils.misc import to_string
 
@@ -89,7 +95,7 @@ def qt_app_context(exec_loop=False, enable_logs=True):
         logging.basicConfig(
             filename=tb_log_fname,
             filemode="w",
-            level=logging.CRITICAL,
+            level=logging.ERROR,
             format=fmt,
             datefmt=DATETIME_FORMAT,
         )
@@ -134,6 +140,20 @@ def qt_app_context(exec_loop=False, enable_logs=True):
     if enable_logs:
         logging.shutdown()
         remove_empty_log_file(tb_log_fname)
+
+
+@contextmanager
+def try_or_log_error(context: str) -> None:
+    """Try to execute a function and log an error message if it fails"""
+    try:
+        yield
+    except Exception:  # pylint: disable=broad-except
+        traceback.print_exc()
+        logger = logging.getLogger(__name__)
+        logger.error("Error in %s", context, exc_info=traceback.format_exc())
+        Conf.main.traceback_log_available.set(True)
+    finally:
+        pass
 
 
 def close_dialog_and_quit(widget, screenshot=False):
@@ -238,11 +258,6 @@ def qt_try_loadsave_file(widget: QW.QWidget, filename: str, operation: str):
         QW.QMessageBox.critical(widget, APP_NAME, message)
     finally:
         pass
-
-
-SHOTPATH = osp.join(
-    get_module_data_path("codraft"), os.pardir, "doc", "images", "shots"
-)
 
 
 def grab_save_window(widget: QW.QWidget, name: str) -> None:  # pragma: no cover

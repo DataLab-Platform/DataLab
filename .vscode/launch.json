@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/codraft/app.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/dev.env",
+            "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
@@ -25,7 +25,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/codraft/tests/__init__.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/dev.env",
+            "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {
@@ -39,7 +39,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/dev.env",
+            "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
@@ -68,7 +68,7 @@
             "request": "launch",
             "module": "cProfile",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/dev.env",
+            "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "args": [
                 "-o",
@@ -82,7 +82,7 @@
             "request": "launch",
             "program": "${workspaceFolder}/codraft_test_cea/tests/h5browser1_test.py",
             "console": "integratedTerminal",
-            "envFile": "${workspaceFolder}/dev.env",
+            "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": true,
             "env": {

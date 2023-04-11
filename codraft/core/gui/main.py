@@ -16,6 +16,7 @@ import os.path as osp
 import platform
 import sys
 import time
+import traceback
 import webbrowser
 from typing import List
 
@@ -23,7 +24,7 @@ import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata import __version__ as guidata_ver
-from guidata.configtools import get_icon, get_module_data_path, get_module_path
+from guidata.configtools import get_icon
 from guidata.dataset import datatypes as gdt
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
@@ -37,7 +38,15 @@ from qtpy.compat import getopenfilenames, getsavefilename
 from qwt import __version__ as qwt_ver
 
 from codraft import __docurl__, __homeurl__, __supporturl__, __version__, env
-from codraft.config import APP_DESC, APP_NAME, TEST_SEGFAULT_ERROR, Conf, _
+from codraft.config import (
+    APP_DESC,
+    APP_NAME,
+    DATAPATH,
+    IS_FROZEN,
+    TEST_SEGFAULT_ERROR,
+    Conf,
+    _,
+)
 from codraft.core.gui.actionhandler import ActionCategory
 from codraft.core.gui.docks import DockablePlotWidget
 from codraft.core.gui.h5io import H5InputOutput
@@ -45,14 +54,11 @@ from codraft.core.gui.panel import BaseDataPanel, ImagePanel, MacroPanel, Signal
 from codraft.core.model.image import ImageParam
 from codraft.core.model.signal import SignalParam
 from codraft.env import execenv
+from codraft.plugins import PluginBase, PluginRegistry, discover_plugins
 from codraft.remotecontrol import RemoteServer
 from codraft.utils import dephash
 from codraft.utils import qthelpers as qth
-from codraft.widgets.instconfviewer import exec_codraft_installconfig_dialog
-from codraft.widgets.logviewer import exec_codraft_logviewer_dialog
-from codraft.widgets.status import MemoryStatus
-
-DATAPATH = get_module_data_path("codraft", "data")
+from codraft.widgets import instconfviewer, logviewer, status
 
 
 def get_htmlhelp():
@@ -73,13 +79,6 @@ class AppProxy:
         self.win = win
         self.s = self.win.signalpanel.objlist
         self.i = self.win.imagepanel.objlist
-
-
-def is_frozen(module_name):
-    """Test if module has been frozen (py2exe/cx_Freeze)"""
-    datapath = get_module_path(module_name)
-    parentdir = osp.normpath(osp.join(datapath, osp.pardir))
-    return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
 
 
 def remote_controlled(func):
@@ -157,6 +156,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.operation_menu = None
         self.processing_menu = None
         self.computing_menu = None
+        self.plugins_menu = None
         self.view_menu = None
         self.help_menu = None
 
@@ -249,7 +249,7 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def check_dependencies(self):  # pragma: no cover
         """Check dependencies"""
-        if is_frozen("codraft") or Conf.main.ignore_dependency_check.get(False):
+        if IS_FROZEN or Conf.main.ignore_dependency_check.get(False):
             # No need to check dependencies if CodraFT has been frozen
             return
         try:
@@ -307,7 +307,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         ) or Conf.main.traceback_log_available.get(False):
             txt = "<br>".join(
                 [
-                    _("Log files were generated during last session."),
+                    logviewer.get_log_prompt_message(),
                     "",
                     _("Do you want to see available log files?"),
                 ]
@@ -375,31 +375,55 @@ class CodraFTMainWindow(QW.QMainWindow):
 
     def setup(self, console):
         """Setup main window"""
-        self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
-        self.memorystatus = MemoryStatus(Conf.main.available_memory_threshold.get(500))
-        self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
-        self.statusBar().addPermanentWidget(self.memorystatus)
+        self.__register_plugins()
+        self.__configure_statusbar()
         self.__setup_commmon_actions()
-        self.tabwidget = QW.QTabWidget()
         self.__add_signal_image_panels()
+        self.__create_plugins_actions()
         self.__setup_central_widget()
         self.__add_menus()
         if console:
             self.__setup_console()
-        # Update selection dependent actions
         self.__update_actions()
-        self.macropanel = MacroPanel()
-        macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
-        self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
-        self.signal_image_docks[0].raise_()
-        for panel in self.panels:
-            panel.SIG_OBJECT_ADDED.connect(self.set_modified)
-            panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
-        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
-        # Restoring current tab from last session
-        tab_idx = Conf.main.current_tab.get(None)
-        if tab_idx is not None:
-            self.tabwidget.setCurrentIndex(tab_idx)
+        self.__add_macro_panel()
+        self.__configure_panels()
+
+    def __register_plugins(self):
+        """Register plugins"""
+        with qth.try_or_log_error("Discovering plugins"):
+            # Discovering plugins
+            discover_plugins()
+        for plugin_class in PluginRegistry.get_plugin_classes():
+            with qth.try_or_log_error(f"Instantiating plugin {plugin_class.__name__}"):
+                # Instantiating plugin
+                plugin: PluginBase = plugin_class.get_instance()
+            with qth.try_or_log_error(f"Registering plugin {plugin.info.name}"):
+                # Registering plugin
+                plugin.register(self)
+
+    def __create_plugins_actions(self):
+        """Create plugins actions"""
+        with self.signalpanel.acthandler.new_category(ActionCategory.PLUGINS):
+            with self.imagepanel.acthandler.new_category(ActionCategory.PLUGINS):
+                for plugin in PluginRegistry.get_plugin_instances():
+                    with qth.try_or_log_error(f"Create actions for {plugin.info.name}"):
+                        plugin.create_actions()
+
+    def __unregister_plugins(self):
+        """Unregister plugins"""
+        for plugin_class in PluginRegistry.get_plugin_classes():
+            # Unregistering plugin
+            plugin: PluginBase = plugin_class.get_instance()
+            with qth.try_or_log_error(f"Unregistering plugin {plugin.info.name}"):
+                plugin.unregister()
+
+    def __configure_statusbar(self):
+        """Configure status bar"""
+        self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
+        threshold = Conf.main.available_memory_threshold.get(500)
+        self.memorystatus = status.MemoryStatus(threshold)
+        self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
+        self.statusBar().addPermanentWidget(self.memorystatus)
 
     def __setup_commmon_actions(self):
         """Setup common actions"""
@@ -476,40 +500,9 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return imagewidget
 
-    @remote_controlled
-    def switch_to_signal_panel(self):
-        """Switch to signal panel"""
-        self.tabwidget.setCurrentWidget(self.signalpanel)
-
-    @remote_controlled
-    def switch_to_image_panel(self):
-        """Switch to image panel"""
-        self.tabwidget.setCurrentWidget(self.imagepanel)
-
-    @remote_controlled
-    def calc(self, name: str, param: gdt.DataSet = None):
-        """Call compute function `name` in current panel's processor"""
-        panel = self.tabwidget.currentWidget()
-        for funcname in (name, f"compute_{name}"):
-            func = getattr(panel.processor, funcname, None)
-            if func is not None:
-                break
-        else:
-            raise ValueError(f"Unknown function {funcname}")
-        if param is None:
-            func()
-        else:
-            func(param)
-
-    def __setup_central_widget(self):
-        """Setup central widget (main panel)"""
-        self.tabwidget.setMaximumWidth(500)
-        self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
-        self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
-        self.setCentralWidget(self.tabwidget)
-
     def __add_signal_image_panels(self):
         """Add signal and image panels"""
+        self.tabwidget = QW.QTabWidget()
         cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Curve panel"))
         idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image panel"))
         self.tabifyDockWidget(cdock, idock)
@@ -517,6 +510,15 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(self.switch_to_signal_panel)
         self.imagepanel.SIG_OBJECT_ADDED.connect(self.switch_to_image_panel)
+        for panel in (self.signalpanel, self.imagepanel):
+            panel.setup_panel()
+
+    def __setup_central_widget(self):
+        """Setup central widget (main panel)"""
+        self.tabwidget.setMaximumWidth(500)
+        self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
+        self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
+        self.setCentralWidget(self.tabwidget)
 
     def __add_menus(self):
         """Adding menus"""
@@ -526,6 +528,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.computing_menu = self.menuBar().addMenu(_("Computing"))
+        self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
         self.view_menu.aboutToShow.connect(self.__update_view_menu)
         self.help_menu = self.menuBar().addMenu("?")
@@ -534,6 +537,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.operation_menu,
             self.processing_menu,
             self.computing_menu,
+            self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
         about_action = create_action(
@@ -577,7 +581,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self,
             _("About CodraFT installation") + "...",
             icon=get_icon("logs.svg"),
-            triggered=lambda: exec_codraft_installconfig_dialog(self),
+            triggered=lambda: instconfviewer.exec_codraft_installconfig_dialog(self),
         )
         errtest_action = create_action(
             self, "Test segfault/Python error", triggered=self.test_segfault_error
@@ -633,6 +637,50 @@ class CodraFTMainWindow(QW.QMainWindow):
             lambda txt: self.refresh_lists()
         )
 
+    def __add_macro_panel(self):
+        """Add macro panel"""
+        self.macropanel = MacroPanel()
+        macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
+        self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
+        self.signal_image_docks[0].raise_()
+
+    def __configure_panels(self):
+        """Configure panels"""
+        for panel in self.panels:
+            panel.SIG_OBJECT_ADDED.connect(self.set_modified)
+            panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
+        self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        # Restoring current tab from last session
+        tab_idx = Conf.main.current_tab.get(None)
+        if tab_idx is not None:
+            self.tabwidget.setCurrentIndex(tab_idx)
+
+    # ------Remote control
+    @remote_controlled
+    def switch_to_signal_panel(self):
+        """Switch to signal panel"""
+        self.tabwidget.setCurrentWidget(self.signalpanel)
+
+    @remote_controlled
+    def switch_to_image_panel(self):
+        """Switch to image panel"""
+        self.tabwidget.setCurrentWidget(self.imagepanel)
+
+    @remote_controlled
+    def calc(self, name: str, param: gdt.DataSet = None):
+        """Call compute function `name` in current panel's processor"""
+        panel = self.tabwidget.currentWidget()
+        for funcname in (name, f"compute_{name}"):
+            func = getattr(panel.processor, funcname, None)
+            if func is not None:
+                break
+        else:
+            raise ValueError(f"Unknown function {funcname}")
+        if param is None:
+            func()
+        else:
+            func(param)
+
     # ------GUI refresh
     def has_objects(self):
         """Return True if sig/ima panels have any object"""
@@ -663,6 +711,9 @@ class CodraFTMainWindow(QW.QMainWindow):
         panel.selection_changed()
         self.signal_toolbar.setVisible(is_signal)
         self.image_toolbar.setVisible(not is_signal)
+        if self.plugins_menu is not None:
+            plugin_actions = panel.get_category_actions(ActionCategory.PLUGINS)
+            self.plugins_menu.setEnabled(len(plugin_actions) > 0)
 
     def __tab_index_changed(self, index):
         """Switch from signal to image mode, or vice-versa"""
@@ -683,6 +734,7 @@ class CodraFTMainWindow(QW.QMainWindow):
             self.operation_menu: ActionCategory.OPERATION,
             self.processing_menu: ActionCategory.PROCESSING,
             self.computing_menu: ActionCategory.COMPUTING,
+            self.plugins_menu: ActionCategory.PLUGINS,
         }[menu]
         actions = panel.get_category_actions(category)
         add_actions(menu, actions)
@@ -819,6 +871,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         """Open object from file in current panel (signal/image)"""
         panel = self.tabwidget.currentWidget()
         panel.open_object(filename)
+
     # ------?
     def __about(self):  # pragma: no cover
         """About dialog box"""
@@ -828,6 +881,7 @@ class CodraFTMainWindow(QW.QMainWindow):
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
         xml_rpc = _("XML-RPC server: ") + xrpcstate
+        pinfos = PluginRegistry.get_plugin_infos()
         QW.QMessageBox.about(
             self,
             _("About ") + APP_NAME,
@@ -837,13 +891,13 @@ class CodraFTMainWindow(QW.QMainWindow):
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               %s {platform.system()}<br><br>{xml_rpc}"""
+               %s {platform.system()}<br><br>{xml_rpc}<br><br>{pinfos}"""
             % (_("Developped by"), _("on")),
         )
 
     def show_log_viewer(self):
         """Show error logs"""
-        exec_codraft_logviewer_dialog(self)
+        logviewer.exec_codraft_logviewer_dialog(self)
 
     @staticmethod
     def test_segfault_error():
@@ -899,6 +953,7 @@ class CodraFTMainWindow(QW.QMainWindow):
                     pass
             self.reset_all()
             self.__save_pos_and_size()
+            self.__unregister_plugins()
 
             # Saving current tab for next session
             Conf.main.current_tab.set(self.tabwidget.currentIndex())

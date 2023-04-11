@@ -13,12 +13,12 @@ import platform
 import sys
 from subprocess import PIPE, Popen
 
-from guidata.configtools import get_icon, get_module_data_path
+from guidata.configtools import get_icon
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from codraft import __version__
-from codraft.config import _
+from codraft.config import DATAPATH, _
 from codraft.utils import dephash
 from codraft.utils.qthelpers import exec_dialog
 
@@ -65,8 +65,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         label = "Information on current CodraFT installation:"
         more_infos = ""
         try:
-            datapath = get_module_data_path("codraft", "data")
-            state = dephash.check_dependencies_hash(datapath)
+            state = dephash.check_dependencies_hash(DATAPATH)
             bad_deps = [name for name in state if not state[name]]
             if bad_deps:
                 more_infos += "Invalid dependencies: "

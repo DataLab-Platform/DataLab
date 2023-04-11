@@ -7,10 +7,7 @@
 Create dependencies hash
 """
 
-from guidata.configtools import get_module_data_path
-
+from codraft.config import DATAPATH
 from codraft.utils import dephash
 
-dephash.create_dependencies_file(
-    get_module_data_path("codraft", "data"), ("guidata", "guiqwt")
-)
+dephash.create_dependencies_file(DATAPATH, ("guidata", "guiqwt"))

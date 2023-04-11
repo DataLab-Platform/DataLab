@@ -33,7 +33,7 @@ def memory_leak_test(iterations=100):
             mainview.init_codraft()
             mainview.codraft.close()
             # mainview.codraft.destroy()
-            # mainview.codraft = None
+            mainview.codraft = None
             # QApplication.processEvents()
             # import time; time.sleep(2)
             # QApplication.processEvents()

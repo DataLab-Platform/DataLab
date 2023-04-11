@@ -28,13 +28,15 @@ Signal and Image Panel widgets relie on components:
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 import abc
 import dataclasses
 import os
 import os.path as osp
 import re
 import warnings
-from typing import Iterator, List
+from typing import TYPE_CHECKING, Iterator, List
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
@@ -65,12 +67,12 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
 from codraft.config import APP_NAME, Conf, _
-from codraft.core.gui import ObjItf, actionhandler, objectlist, plotitemlist, roieditor
+from codraft.core.gui import actionhandler, objectlist, plotitemlist, roieditor
 from codraft.core.gui.macroeditor import Macro
 from codraft.core.gui.processor.image import ImageProcessor
 from codraft.core.gui.processor.signal import SignalProcessor
 from codraft.core.io.signal import read_signal, write_signal
-from codraft.core.model.base import MetadataItem, ObjectItf, ResultShape
+from codraft.core.model.base import MetadataItem, ResultShape
 from codraft.core.model.image import (
     ImageDatatypes,
     ImageParam,
@@ -89,6 +91,10 @@ from codraft.utils.qthelpers import (
     qt_try_loadsave_file,
     save_restore_stds,
 )
+
+if TYPE_CHECKING:
+    from codraft.core.gui import ObjItf
+    from codraft.core.model.base import ObjectItf
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -256,7 +262,7 @@ class BaseDataPanel(AbstractPanel):
         self.objlist.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
         self.itmlist = None
         self.processor = None
-        self.acthandler = None
+        self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
         self.__separate_views = {}
@@ -313,6 +319,7 @@ class BaseDataPanel(AbstractPanel):
     # ---- Signal/Image Panel API ------------------------------------------------------
     def setup_panel(self):
         """Setup panel"""
+        self.acthandler.create_all_actions()
         self.processor.SIG_ADD_SHAPE.connect(self.itmlist.add_shapes)
         self.SIG_UPDATE_PLOT_ITEM.connect(self.itmlist.refresh_plot)
         self.SIG_UPDATE_PLOT_ITEMS.connect(self.itmlist.refresh_plot)
@@ -328,9 +335,9 @@ class BaseDataPanel(AbstractPanel):
         self.addWidget(self.objprop)
         self.add_results_button()
 
-    def get_category_actions(self, category):  # pragma: no cover
+    def get_category_actions(self, category) -> List[QW.QAction]:  # pragma: no cover
         """Return actions for category"""
-        return self.acthandler.feature_actions[category]
+        return self.acthandler.feature_actions.get(category, [])
 
     def __popup_contextmenu(self, position: QC.QPoint):  # pragma: no cover
         """Popup context menu at position"""
@@ -338,7 +345,8 @@ class BaseDataPanel(AbstractPanel):
         # but implementing it this way could be useful in the future in menu contents
         # should take into account current object selection
         self.context_menu.clear()
-        add_actions(self.context_menu, self.acthandler.actlist_cmenu)
+        actions = self.get_category_actions(actionhandler.ActionCategory.CONTEXT_MENU)
+        add_actions(self.context_menu, actions)
         self.context_menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
@@ -725,7 +733,10 @@ class BaseDataPanel(AbstractPanel):
         btn.setToolTip(_("Show results obtained from previous computations"))
         self.objprop.add_button(btn)
         btn.clicked.connect(self.show_results)
-        self.acthandler.actlist_1more.append(btn)
+        self.acthandler.add_action(
+            btn,
+            select_condition=actionhandler.SelectCond.at_least_one,
+        )
 
     def show_results(self):
         """Show results"""
@@ -801,7 +812,6 @@ class SignalPanel(BaseDataPanel):
         self.acthandler = actionhandler.SignalActionHandler(
             self, self.itmlist, self.processor, toolbar
         )
-        self.setup_panel()
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True):
@@ -875,7 +885,6 @@ class ImagePanel(BaseDataPanel):
         self.acthandler = actionhandler.ImageActionHandler(
             self, self.itmlist, self.processor, toolbar
         )
-        self.setup_panel()
 
     # ------Refreshing GUI--------------------------------------------------------------
     def properties_changed(self):
@@ -1193,6 +1202,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.add_object(macro)
         if rename:
             self.rename_macro()
+        self.current_macro_changed()
         return macro
 
     def macro_name_changed(self, name):

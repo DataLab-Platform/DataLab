@@ -19,25 +19,45 @@ from guiqwt.config import CONF as GUIQWT_CONF
 
 from codraft.utils import conf, tests
 
-_ = configtools.get_translation("codraft")
-
 CONF_VERSION = "1.0.0"
+
 APP_NAME = "CodraFT"
+MOD_NAME = APP_NAME.lower()
+_ = configtools.get_translation(MOD_NAME)
+
 APP_DESC = _(
     """CodraFT (<b>Codra</b> <b>F</b>iltering <b>T</b>ool) is a
 generic signal and image processing software based on Python and Qt"""
 )
 APP_PATH = osp.dirname(__file__)
+
 DEBUG = len(os.environ.get("DEBUG", "")) > 0
 if DEBUG:
     print("*** DEBUG mode *** [Reset configuration file, do not redirect std I/O]")
+
 TEST_SEGFAULT_ERROR = len(os.environ.get("TEST_SEGFAULT_ERROR", "")) > 0
 if TEST_SEGFAULT_ERROR:
     print('*** TEST_SEGFAULT_ERROR mode *** [Enabling test action in "?" menu]')
 DATETIME_FORMAT = "%d/%m/%Y - %H:%M:%S"
 
-configtools.add_image_module_path("codraft", osp.join("data", "logo"))
-configtools.add_image_module_path("codraft", osp.join("data", "icons"))
+
+configtools.add_image_module_path(MOD_NAME, osp.join("data", "logo"))
+configtools.add_image_module_path(MOD_NAME, osp.join("data", "icons"))
+
+DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
+SHOTPATH = osp.join(
+    configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
+)
+
+
+def is_frozen(module_name):
+    """Test if module has been frozen (py2exe/cx_Freeze)"""
+    datapath = configtools.get_module_path(module_name)
+    parentdir = osp.normpath(osp.join(datapath, osp.pardir))
+    return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
+
+
+IS_FROZEN = is_frozen(MOD_NAME)
 
 
 class MainSection(conf.Section, metaclass=conf.SectionMeta):
@@ -144,7 +164,7 @@ def reset():
 
 
 initialize()
-tests.add_test_module_path("codraft", osp.join("data", "tests"))
+tests.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 GUIQWT_DEFAULTS = {

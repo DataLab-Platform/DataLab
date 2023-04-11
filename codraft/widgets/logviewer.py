@@ -9,6 +9,7 @@ Module providing a log viewer widget, a log viewer window and CodraFT's log view
 
 import os.path as osp
 from pathlib import Path
+from typing import List, Optional
 
 from guidata.configtools import get_icon
 from guidata.widgets.codeeditor import CodeEditor
@@ -19,10 +20,23 @@ from codraft.env import execenv
 from codraft.utils.qthelpers import exec_dialog
 
 
+def read_text_file(path: str) -> str:
+    """Read text file using multiple encodings"""
+    encodings = ["utf-8", "latin1", "cp1252", "utf-16", "utf-32", "ascii"]
+    for encoding in encodings:
+        try:
+            with open(path, "r", encoding=encoding) as fdesc:
+                return fdesc.read()
+        except UnicodeDecodeError:
+            pass
+    raise UnicodeDecodeError(
+        "Unable to read file using the following encodings: {}".format(encodings)
+    )
+
+
 def get_title_contents(path):
     """Get title and contents for log filename"""
-    with open(path, "r", encoding="utf-8") as fdesc:
-        contents = fdesc.read()
+    contents = read_text_file(path)
     pathobj = Path(path)
     uri_path = pathobj.absolute().as_uri()
     text = f'{_("Contents of file")} <a href="{uri_path}">{path}</a>:'
@@ -77,18 +91,30 @@ class LogViewerWindow(QW.QDialog):
         return self.tabs.count() == 0
 
 
+def get_log_filenames() -> List[str]:
+    """Return log filenames"""
+    return [
+        Conf.main.traceback_log_path.get(),
+        Conf.main.faulthandler_log_path.get(),
+        get_old_log_fname(Conf.main.traceback_log_path.get()),
+        get_old_log_fname(Conf.main.faulthandler_log_path.get()),
+    ]
+
+
+def get_log_prompt_message() -> Optional[str]:
+    """Return prompt message for log files, i.e. a message informing the user
+    whether log files were generated during last session or current session."""
+    avail = [osp.isfile(fname) for fname in get_log_filenames()]
+    if avail[0] or avail[1]:
+        return _("Log files were generated during current session.")
+    elif avail[2] or avail[3]:
+        return _("Log files were generated during last session.")
+    return None
+
+
 def exec_codraft_logviewer_dialog(parent=None):
     """View CodraFT logs"""
-    fnames = [
-        osp.normpath(fname)
-        for fname in (
-            Conf.main.traceback_log_path.get(),
-            Conf.main.faulthandler_log_path.get(),
-            get_old_log_fname(Conf.main.traceback_log_path.get()),
-            get_old_log_fname(Conf.main.faulthandler_log_path.get()),
-        )
-        if osp.isfile(fname)
-    ]
+    fnames = [osp.normpath(fname) for fname in get_log_filenames() if osp.isfile(fname)]
     dlg = LogViewerWindow(fnames, parent=parent)
     if dlg.is_empty:
         if not execenv.unattended:
