@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-08 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -26,5 +26,5 @@ msgid "Image processing"
 msgstr "Traitement d'image"
 
 #: ../../features_ima.rst:6
-msgid "CodraFT main window: Image processing view"
-msgstr "Fenêtre principale de CodraFT - Traitement d'image"
+msgid "CobraDataLab main window: Image processing view"
+msgstr "Fenêtre principale de CobraDataLab - Traitement d'image"

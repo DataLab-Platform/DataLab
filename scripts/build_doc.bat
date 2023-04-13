@@ -12,7 +12,7 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-call %FUNC% GetVersion CODRAFT_VERSION
+call %FUNC% GetVersion CDL_VERSION
 
 set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%
 @REM Update screenshots

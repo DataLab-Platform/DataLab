@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-03 09:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -26,7 +26,7 @@ msgid "Future milestones"
 msgstr ""
 
 #: ../../roadmap.rst:8
-msgid "CodraFT 2.4"
+msgid "CobraDataLab 2.4"
 msgstr ""
 
 #: ../../roadmap.rst:10
@@ -39,7 +39,7 @@ msgstr ""
 
 #: ../../roadmap.rst:13
 msgid ""
-"Define a communication protocol between this process and CodraFT GUI "
+"Define a communication protocol between this process and CobraDataLab GUI "
 "process based on TCP sockets"
 msgstr ""
 
@@ -69,7 +69,7 @@ msgid "Optimize image displaying performance"
 msgstr ""
 
 #: ../../roadmap.rst:28
-msgid "CodraFT 2.3"
+msgid "CobraDataLab 2.3"
 msgstr ""
 
 #: ../../roadmap.rst:30
@@ -86,7 +86,7 @@ msgstr ""
 #: ../../roadmap.rst:35
 msgid ""
 "Objective #2: plugins must be simply stored in a folder wich defaults to "
-"the user directory (same folder as \".CodraFT.ini\" configuration file)"
+"the user directory (same folder as \".CobraDataLab.ini\" configuration file)"
 msgstr ""
 
 #: ../../roadmap.rst:38
@@ -107,12 +107,12 @@ msgstr ""
 
 #: ../../roadmap.rst:44
 msgid ""
-"Add an xmlrpc server to allow external applications controlling CodraFT "
+"Add an xmlrpc server to allow external applications controlling CobraDataLab "
 "main features (open a signal or an image, open a HDF5 file, etc.)"
 msgstr ""
 
 #: ../../roadmap.rst:48
-msgid "CodraFT 2.2"
+msgid "CobraDataLab 2.2"
 msgstr ""
 
 #: ../../roadmap.rst:50
@@ -140,7 +140,7 @@ msgid "Past milestones"
 msgstr ""
 
 #: ../../roadmap.rst:64
-msgid "CodraFT 2.1"
+msgid "CobraDataLab 2.1"
 msgstr ""
 
 #: ../../roadmap.rst:66
@@ -176,7 +176,7 @@ msgid "Images: add support for circular ROI"
 msgstr ""
 
 #: ../../roadmap.rst:81
-msgid "CodraFT 2.0"
+msgid "CobraDataLab 2.0"
 msgstr ""
 
 #: ../../roadmap.rst:83
@@ -186,7 +186,7 @@ msgstr ""
 #: ../../roadmap.rst:85
 msgid ""
 "Fully automated high-level processing features for internal testing "
-"purpose, as well as embedding CodraFT in a third-party software"
+"purpose, as well as embedding CobraDataLab in a third-party software"
 msgstr ""
 
 #: ../../roadmap.rst:88
@@ -197,7 +197,7 @@ msgid ""
 msgstr ""
 
 #: ../../roadmap.rst:92
-msgid "CodraFT 1.7"
+msgid "CobraDataLab 1.7"
 msgstr ""
 
 #: ../../roadmap.rst:94
@@ -213,10 +213,9 @@ msgid "Dropped Python 2 support"
 msgstr ""
 
 #: ../../roadmap.rst:101
-msgid "CodraFT 1.6"
+msgid "CobraDataLab 1.6"
 msgstr ""
 
 #: ../../roadmap.rst:103
 msgid "Last release supporting Python 2"
 msgstr ""
-

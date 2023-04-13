@@ -35,3 +35,15 @@ if exist coverage.xml ( del /q coverage.xml )
 if exist htmlcov ( rmdir /s /q htmlcov )
 del /q .coverage.* 1>nul 2>&1
 if exist sitecustomize.py ( del /q sitecustomize.py )
+
+@REM Removing files/directories related to NSIS installer
+if exist nsis\images\temp.png ( del /q nsis\images\temp.png )
+if exist nsis\images\win.bmp ( del /q nsis\images\win.bmp )
+if exist nsis\images\banner.bmp ( del /q nsis\images\banner.bmp )
+if exist nsis\icons\install-*.png ( del /q nsis\icons\install-*.png )
+if exist nsis\icons\uninstall-*.png ( del /q nsis\icons\uninstall-*.png )
+if exist nsis\icons\install.ico ( del /q nsis\icons\install.ico )
+if exist nsis\icons\uninstall.ico ( del /q nsis\icons\uninstall.ico )
+
+@REM Removing files/directories related to PyInstaller
+if exist resources\%LIBNAME%.ico ( del /q resources\%LIBNAME%.ico )

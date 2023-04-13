@@ -25,8 +25,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Installation information**
-- CodraFT installation type ["Python package" or "stand-alone Windows version"]
-- Copy/paste here the contents of "About CodraFT installation..." window (Menu "?")
+
+- CobraDataLab installation type ["Python package" or "stand-alone Windows version"]
+- Copy/paste here the contents of "About CobraDataLab installation..." window (Menu "?")
 
 **Additional context**
 Add any other context about the problem here.

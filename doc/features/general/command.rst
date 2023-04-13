@@ -1,20 +1,20 @@
 Command line features
 =====================
 
-Run CodraFT
------------
+Run CobraDataLab
+----------------
 
-To run CodraFT from the command line, type the following::
+To run CobraDataLab from the command line, type the following::
 
-    $ codraft
+    $ cdl
 
 To show help on command line usage, simply run::
 
-    $ codraft --help
+    $ cdl --help
     usage: app.py [-h] [-b path] [-v] [--mode {unattended,screenshot}] [--delay DELAY] [--verbose {quiet,minimal,normal}]
                   [h5]
 
-    Run CodraFT
+    Run CobraDataLab
 
     positional arguments:
       h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
@@ -23,7 +23,7 @@ To show help on command line usage, simply run::
       -h, --help            show this help message and exit
       -b path, --h5browser path
                             path to open with HDF5 browser
-      -v, --version         show CodraFT version
+      -v, --version         show CobraDataLab version
       --mode {unattended,screenshot}
                             unattended: non-interactive test mode ; screenshot: unattended mode, with automatic
                             screenshots
@@ -36,39 +36,39 @@ Open HDF5 file at startup
 
 To open HDF5 files, or even import only a specified HDF5 dataset, use the following::
 
-    $ codraft /path/to/file1.h5
-    $ codraft /path/to/file1.h5,/path/to/dataset1
-    $ codraft /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
+    $ cdl /path/to/file1.h5
+    $ cdl /path/to/file1.h5,/path/to/dataset1
+    $ cdl /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
 
 Open HDF5 browser at startup
 ----------------------------
 
 To open the HDF5 browser at startup, use one of the following commands::
 
-    $ codraft -b /path/to/file1.h5
-    $ codraft --h5browser /path/to/file1.h5
+    $ cdl -b /path/to/file1.h5
+    $ cdl --h5browser /path/to/file1.h5
 
-Run CodraFT demo
-----------------
+Run CobraDataLab demo
+---------------------
 
-To execute CodraFT demo, run the following::
+To execute CobraDataLab demo, run the following::
 
-    $ codraft-demo
+    $ cdl-demo
 
 Run unit tests
 --------------
 
-To execute all CodraFT unit tests, simply run::
+To execute all CobraDataLab unit tests, simply run::
 
-    $ codraft-alltests
-    *** CodraFT automatic unit tests ***
+    $ cdl-alltests
+    *** CobraDataLab automatic unit tests ***
 
     Test parameters:
     Selected 39 tests (39 total available)
     Test data path:
-        C:\Dev\Projets\CodraFT\codraft\data\tests
+        C:\Dev\Projets\CobraDataLab\cdl\data\tests
     Environment:
-        DATA_CODRAFT=C:\Dev\Projets\CodraFT_data\
+        DATA_CDL=C:\Dev\Projets\CDL_data\
         PYTHONPATH=.
         DEBUG=
 
@@ -85,8 +85,8 @@ To execute all CodraFT unit tests, simply run::
 Run interactive tests
 ---------------------
 
-To execute CodraFT interactive tests, run the following::
+To execute CobraDataLab interactive tests, run the following::
 
-    $ codraft-tests
+    $ cdl-tests
 
 .. image:: /images/interactive_tests.png

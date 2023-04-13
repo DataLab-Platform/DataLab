@@ -1,9 +1,9 @@
 General features
 ================
 
-.. figure:: /images/codraft_linux.png
+.. figure:: /images/cdl_linux.png
 
-    CodraFT main window (Ubuntu 22.04)
+    CobraDataLab main window (Ubuntu 22.04)
 
 .. toctree::
    :maxdepth: 2

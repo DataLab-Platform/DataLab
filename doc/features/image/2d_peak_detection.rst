@@ -3,7 +3,7 @@
 2D Peak Detection
 =================
 
-CodraFT provides a "2D Peak Detection" feature which is based on a
+CobraDataLab provides a "2D Peak Detection" feature which is based on a
 minimum-maximum filter algorithm.
 
 .. figure:: /images/2d_peak_detection/peak2d_app_param.png
@@ -11,7 +11,7 @@ minimum-maximum filter algorithm.
     2D peak detection parameters.
 
 How to use the feature:
-  - Create or open an image in CodraFT workspace
+  - Create or open an image in CobraDataLab workspace
   - Select "2d peak detection" in "Computing" menu
   - Enter parameters "Neighborhoods size" and "Relative threhold"
   - Check "Create regions of interest" if you want a ROI defined for each
@@ -47,7 +47,7 @@ The 2d peak detection parameters are the following:
   - "Relative threshold": detection threshold
 
 Feature is based on ``get_2d_peaks_coords`` function
-from ``codraft.core.computation`` module:
+from ``cdl.core.computation`` module:
 
-  .. literalinclude:: ../../../codraft/core/computation/image.py
+  .. literalinclude:: ../../../cdl/core/computation/image.py
      :pyobject: get_2d_peaks_coords

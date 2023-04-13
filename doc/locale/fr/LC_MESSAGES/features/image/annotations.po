@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-15 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -23,10 +23,10 @@ msgstr "Annotations (Images)"
 
 #: ../../features/image/annotations.rst:6
 msgid ""
-"CodraFT provides an annotation feature for images (as well as for "
+"CobraDataLab provides an annotation feature for images (as well as for "
 "signals)."
 msgstr ""
-"CodraFT dispose d'une fonctionnalité d'annotation pour les images (ainsi "
+"CobraDataLab dispose d'une fonctionnalité d'annotation pour les images (ainsi "
 "que pour les signaux)."
 
 #: ../../features/image/annotations.rst:17
@@ -34,8 +34,8 @@ msgid "How to use the feature:"
 msgstr "La fonctionnalité s'utilise de la façon suivante :"
 
 #: ../../features/image/annotations.rst:11
-msgid "Create or open an image in CodraFT workspace"
-msgstr "Créer ou ouvrir une image dans l'espace de travail de CodraFT"
+msgid "Create or open an image in CobraDataLab workspace"
+msgstr "Créer ou ouvrir une image dans l'espace de travail de CobraDataLab"
 
 #: ../../features/image/annotations.rst:12
 msgid ""
@@ -58,10 +58,10 @@ msgstr "Valider vos changements en cliquant sur le bouton \"OK\""
 #: ../../features/image/annotations.rst:16
 msgid ""
 "That's it: your annotations are now attached to the image and will be "
-"saved with your CodraFT workspace"
+"saved with your CobraDataLab workspace"
 msgstr ""
 "A présent, les annotations sont attachées à l'image et seront ainsi "
-"sauvegardées avec l'espace de travail CodraFT."
+"sauvegardées avec l'espace de travail CobraDataLab."
 
 #: ../../features/image/annotations.rst:21
 msgid "Example of annotations."

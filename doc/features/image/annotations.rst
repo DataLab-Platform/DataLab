@@ -3,18 +3,18 @@
 Annotations (Images)
 ====================
 
-CodraFT provides an annotation feature for images (as well as for signals).
+CobraDataLab provides an annotation feature for images (as well as for signals).
 
 .. image:: /images/annotations/view_menu_entry.png
 
 How to use the feature:
-  - Create or open an image in CodraFT workspace
+  - Create or open an image in CobraDataLab workspace
   - Double-click on the image or select "View in a new window" in "View" menu
   - Add annotations (labels, rectangles, circles, etc.)
   - Eventually customize the annotations (right-click, "Parameters")
   - Validate your changes by clicking on "OK" button
   - That's it: your annotations are now attached to the image
-    and will be saved with your CodraFT workspace
+    and will be saved with your CobraDataLab workspace
 
 .. figure:: /images/annotations/image_annotations1.png
 

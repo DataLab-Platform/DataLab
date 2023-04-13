@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 12:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"

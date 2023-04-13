@@ -15,7 +15,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                 }
             },
             "group": {
@@ -44,7 +44,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                 }
             },
             "group": {
@@ -68,13 +68,13 @@
                 "/c",
                 "run_pylint.bat",
                 "--disable=fixme",
-                "codraft",
+                "cdl",
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                 }
             },
             "group": {
@@ -104,7 +104,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                 }
             },
             "group": {
@@ -132,7 +132,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                 }
             },
             "group": {
@@ -179,7 +179,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                     "UNATTENDED": "1",
                 }
             },
@@ -208,12 +208,12 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                     "UNATTENDED": "1",
                     "NSIS_COPYRIGHT_INFO": "Copyright (c) CEA-CODRA 2019-2022",
-                    "NSIS_HELP_LINK": "https://codraft.readthedocs.io/en/latest/",
-                    "NSIS_URLUPDATEINFO": "https://github.com/CODRA-Ingenierie-Informatique/CodraFT/releases",
-                    "NSIS_URLINFOABOUT": "https://github.com/CODRA-Ingenierie-Informatique/CodraFT",
+                    "NSIS_HELP_LINK": "https://cdl.readthedocs.io/en/latest/",
+                    "NSIS_URLUPDATEINFO": "https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/releases",
+                    "NSIS_URLINFOABOUT": "https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab",
                 }
             },
             "args": [
@@ -241,8 +241,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
-                    "PYTHONPATH": "${env:PYTHONPATH_CODRAFT}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHONPATH": "${env:PYTHONPATH_CDL}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1",
                 }
@@ -272,7 +272,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                     "UNATTENDED": "1",
                 }
             },
@@ -309,7 +309,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CODRAFT_DEV}",
+                    "PYTHON": "${env:PYTHON_CDL_DEV}",
                     "UNATTENDED": "1",
                 }
             },

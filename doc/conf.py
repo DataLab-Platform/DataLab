@@ -18,23 +18,23 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 sys.path.insert(0, os.path.abspath("."))
 
-os.environ["CODRAFT_DOC"] = "1"
+os.environ["CDL_DOC"] = "1"
 import genreqs
 
-import codraft
+import cdl
 
 genreqs.generate_requirement_tables()
 
 # -- Project information -----------------------------------------------------
 
-project = "CodraFT"
+project = "CobraDataLab"
 author = "Pierre Raybaut"
-copyright = "2022, CODRA - " + author
-html_logo = latex_logo = "_static/codraft_logo_190.png"
+copyright = "2023, Codra - " + author
+html_logo = latex_logo = "_static/CobraDataLab-title.png"
 
 # The full version, including alpha/beta/rc tags
 
-release = codraft.__version__
+release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
 

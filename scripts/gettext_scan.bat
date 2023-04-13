@@ -5,7 +5,7 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-call %FUNC% GetVersion CODRAFT_VERSION
+call %FUNC% GetVersion CDL_VERSION
 
 cd %SCRIPTPATH%\..\doc
 sphinx-build . locale\pot -b gettext

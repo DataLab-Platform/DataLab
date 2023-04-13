@@ -5,7 +5,7 @@ import re
 
 
 def generate_requirement_tables():
-    """Generate CodraFT install requirements RST table.
+    """Generate CobraDataLab install requirements RST table.
     This table is inserted into 'installation.rst' when
     building documentation"""
     path = osp.dirname(__file__)
@@ -19,7 +19,7 @@ def generate_requirement_tables():
         "    * - Name",
         "      - Version (min.)",
     ]
-    ireq = ["Python>=3.7", "PyQt=5.15"] + ireq
+    ireq = ["Python>=3.8", "PyQt=5.15"] + ireq
     for req in ireq:
         mod, _comp, ver = re.split("(>=|<=|=|<|>)", req)
         requirements.append("    * - " + mod)

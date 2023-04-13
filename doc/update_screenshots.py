@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 #
 # Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
-# (see codraft/__init__.py for details)
+# (see cdl/__init__.py for details)
 
 """
-Module for taking CodraFT screenshots
+Module for taking CobraDataLab screenshots
 """
 
-from codraft import config
-from codraft.app import create
-from codraft.tests.data import create_test_image1, create_test_signal1
-from codraft.utils.qthelpers import qt_app_context
+from cdl import config
+from cdl.app import create
+from cdl.tests.data import create_test_image1, create_test_signal1
+from cdl.utils.qthelpers import qt_app_context
 
 
 def take_menu_screenshots():
-    """Run the CodraFT application and take screenshots"""
+    """Run the CobraDataLab application and take screenshots"""
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     sig1 = create_test_signal1()
     ima1 = create_test_image1()

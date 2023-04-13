@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-08 09:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -166,10 +166,10 @@ msgstr "Enregistrer un fichier HDF5"
 
 #: ../../features/signal/menu/file.rst:60
 msgid ""
-"Export the whole CodraFT session (all signals and images) into a HDF5 "
+"Export the whole CobraDataLab session (all signals and images) into a HDF5 "
 "file."
 msgstr ""
-"Exporter l'ensemble de la session CodraFT (tous les signaux et images) "
+"Exporter l'ensemble de la session CobraDataLab (tous les signaux et images) "
 "vers un fichier HDF5."
 
 #: ../../features/signal/menu/file.rst:63

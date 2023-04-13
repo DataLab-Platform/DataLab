@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-15 09:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -22,13 +22,13 @@ msgid "Overview"
 msgstr "Aperçu des fonctionnalités"
 
 #: ../../overview.rst:4
-msgid "This page presents briefly CodraFT key features."
-msgstr "Cette page présente brièvement les fonctionnalités principales de CodraFT."
+msgid "This page presents briefly CobraDataLab key features."
+msgstr "Cette page présente brièvement les fonctionnalités principales de CobraDataLab."
 
 #: ../../overview.rst:8
-msgid "CodraFT supports dark and light mode depending on your OS settings"
+msgid "CobraDataLab supports dark and light mode depending on your OS settings"
 msgstr ""
-"CodraFT propose un mode sombre et un mode clair, selon le paramétrage de "
+"CobraDataLab propose un mode sombre et un mode clair, selon le paramétrage de "
 "votre système d'exploitation."
 
 #: ../../overview.rst:11
@@ -185,5 +185,5 @@ msgstr "Centre du cercle minimum"
 #~ msgid "Image processing"
 #~ msgstr "Traitement d'image"
 
-#~ msgid "Signal and image visualization in CodraFT"
-#~ msgstr "Visualisation de signaux et d'images dans CodraFT"
+#~ msgid "Signal and image visualization in CobraDataLab"
+#~ msgstr "Visualisation de signaux et d'images dans CobraDataLab"

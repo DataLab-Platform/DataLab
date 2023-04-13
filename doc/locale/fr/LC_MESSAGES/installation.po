@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-16 09:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -27,11 +27,11 @@ msgstr "Dépendances"
 
 #: ../../installation.rst:7
 msgid ""
-"CodraFT requirements are the following *(Note: the Windows installer "
+"CobraDataLab requirements are the following *(Note: the Windows installer "
 "package already include all those required libraries as well as Python "
 "itself)*:"
 msgstr ""
-"Les paquets prérequis de CodraFT sont les suivants *(note : l'installeur "
+"Les paquets prérequis de CobraDataLab sont les suivants *(note : l'installeur "
 "Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
 
 #: ../../install_requires.txt:4
@@ -144,11 +144,11 @@ msgstr "Installeur Windows :"
 
 #: ../../installation.rst:22
 msgid ""
-"CodraFT is available as a stand-alone application for Windows, which does"
+"CobraDataLab is available as a stand-alone application for Windows, which does"
 " not require any Python distribution to be installed. Just run the "
 "installer and you're good to go!"
 msgstr ""
-"CodraFT est disponible depuis une application autonome, qui ne nécessite "
+"CobraDataLab est disponible depuis une application autonome, qui ne nécessite "
 "aucune installation préalable de Python. Exécutez simplement l'installeur"
 " et laissez vous guider !"
 
@@ -156,13 +156,13 @@ msgstr ""
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
-"CodraFT before runinng the installer of another version of the "
+"CobraDataLab before runinng the installer of another version of the "
 "application)."
 msgstr ""
 "Le programme d'installation peut être téléchargé depuis la pagee "
 "`Releases`_. L'installeur prend en charge la fonctionnalité de "
 "désinstallation automatique lors d'une mise à jour (il n'est pas utile de"
-" désinstaller une version de CodraFT avant d'exécuter l'installeur d'une "
+" désinstaller une version de CobraDataLab avant d'exécuter l'installeur d'une "
 "nouvelle version du logiciel."
 
 #: ../../installation.rst:36
@@ -172,10 +172,10 @@ msgstr "Paquet wheel :"
 #: ../../installation.rst:38
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
-"way to install CodraFT on an existing Python distribution:"
+"way to install CobraDataLab on an existing Python distribution:"
 msgstr ""
 "Depuis n'importe quel système d'exploitation, utiliser pip et le paquet "
-"Wheel est la méthode la plus simple pour installer CodraFT sur une "
+"Wheel est la méthode la plus simple pour installer CobraDataLab sur une "
 "distribution Python préexistante :"
 
 #: ../../installation.rst:47
@@ -183,9 +183,9 @@ msgid "Source package:"
 msgstr "Paquet source :"
 
 #: ../../installation.rst:49
-msgid "Installing CodraFT directly from the source package is straigthforward:"
+msgid "Installing CobraDataLab directly from the source package is straigthforward:"
 msgstr ""
-"Installer CodraFT directement depuis le paquet source n'est guère plus "
+"Installer CobraDataLab directement depuis le paquet source n'est guère plus "
 "compliqué :"
 
 #~ msgid "4.1"
@@ -197,7 +197,7 @@ msgstr ""
 #~ msgid "$ python setup.py install"
 #~ msgstr ""
 
-#~ msgid "$ pip install --upgrade --no-deps codraft-1.7.0-py2.py3-none-any.whl"
+#~ msgid "$ pip install --upgrade --no-deps cdl-1.7.0-py2.py3-none-any.whl"
 #~ msgstr ""
 
 #~ msgid "Comment"
@@ -217,4 +217,3 @@ msgstr ""
 
 #~ msgid "1.2"
 #~ msgstr ""
-

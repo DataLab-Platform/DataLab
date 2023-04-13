@@ -14,19 +14,19 @@ CHM documentation
     .. image:: /images/shots/doc_chm.png
 
 Show log files
-    Open CodraFT log viewer
+    Open CobraDataLab log viewer
 
     .. seealso::
         See :ref:`ref-to-logviewer` for more details on log viewer.
 
-About CodraFT installation
-    Show information regarding your CodraFT installation (this
+About CobraDataLab installation
+    Show information regarding your CobraDataLab installation (this
     is typically needed for submitting a bug report).
 
     .. seealso::
         See :ref:`ref-to-instviewer` for more details on this dialog box.
 
 About
-    Open the "About CodraFT" dialog box:
+    Open the "About CobraDataLab" dialog box:
 
     .. image:: /images/shots/about.png

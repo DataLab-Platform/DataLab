@@ -1,41 +1,39 @@
-![CodraFT - CODRA's Filtering Tool](./doc/images/codraft_banner.png)
+![CobraDataLab - CODRA's Filtering Tool](./doc/images/CobraDataLab-banner.png)
 
-[![license](https://img.shields.io/pypi/l/codraft.svg)](./LICENSE)
-[![pypi version](https://img.shields.io/pypi/v/codraft.svg)](https://pypi.org/project/codraft/)
-[![PyPI status](https://img.shields.io/pypi/status/codraft.svg)](https://github.com/CODRA-Ingenierie-Informatique/CodraFT)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/codraft.svg)](https://pypi.python.org/pypi/codraft/)
+[![license](https://img.shields.io/pypi/l/CobraDataLab.svg)](./LICENSE)
+[![pypi version](https://img.shields.io/pypi/v/CobraDataLab.svg)](https://pypi.org/project/cdl/)
+[![PyPI status](https://img.shields.io/pypi/status/CobraDataLab.svg)](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/CobraDataLab.svg)](https://pypi.python.org/pypi/cdl/)
 
-CodraFT is [CODRA](https://codra.net/)'s Filtering Tool.
+CobraDataLab is developed by [Codra](https://codra.net/).
 
-![CodraFT - CODRA's Filtering Tool](./doc/images/dark_light_modes.png)
+![CobraDataLab](./doc/images/dark_light_modes.png)
 
 ----
 
 ## Overview
 
-CodraFT is a generic signal and image processing software based on Python scientific
+CobraDataLab is a generic signal and image processing software based on Python scientific
 libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces (thanks to
 [guidata](https://pypi.python.org/pypi/guidata) and [guiqwt](https://pypi.python.org/pypi/guiqwt) libraries).
 
-CodraFT stands for "CODRA Filtering Tool".
+CobraDataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
 
-CodraFT is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
-
-See [home page](https://codra-ingenierie-informatique.github.io/CodraFT/) and
-[documentation](https://codraft.readthedocs.io/en/latest/) for more details on
+See [home page](https://codra-ingenierie-informatique.github.io/CobraDataLab/) and
+[documentation](https://cdl.readthedocs.io/en/latest/) for more details on
 the library and [changelog](CHANGELOG.md) for recent history of changes.
 
-### New in CodraFT 2.0
+### New in CobraDataLab 2.0
 
 * New data processing and visualization features (see details in [changelog](CHANGELOG.md))
-* Fully automated high-level processing features for internal testing purpose, as well as embedding CodraFT in a third-party software
+* Fully automated high-level processing features for internal testing purpose, as well as embedding CobraDataLab in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
 
 ### Credits
 
 Copyrights and licensing:
 
-* Copyright © 2018-2022 [CEA](http://www.cea.fr)-[CODRA](https://codra.net/), Pierre Raybaut
+* Copyright © 2018-2023 [CEA](http://www.cea.fr)-[Codra](https://codra.net/), Pierre Raybaut
 * Licensed under the terms of the BSD 3-Clause or the CeCILL-B License. See ``Licence_CeCILL_V2.1-en.txt``.
 
 ----
@@ -95,10 +93,10 @@ Copyrights and licensing:
 
 ### From the installer
 
-CodraFT is available as a stand-alone application, which does not require any Python
+CobraDataLab is available as a stand-alone application, which does not require any Python
 distribution to be installed. Just run the installer and you're good to go!
 
-The installer package is available in the [Releases](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/releases) section.
+The installer package is available in the [Releases](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/releases) section.
 
 ### From the source package
 
@@ -112,7 +110,7 @@ python setup.py install
 
 ### Requirements
 
-* Python 3.7+ (reference is Python 3.8)
+* Python 3.8+
 * [PyQt5](https://pypi.python.org/pypi/PyQt5) (Python Qt bindings)
 * [QtPy](https://pypi.org/project/QtPy/) (abstraction layer for Python-Qt binding libraries)
 * [guidata](https://pypi.python.org/pypi/guidata) (set of tools for automatic GUI generation)

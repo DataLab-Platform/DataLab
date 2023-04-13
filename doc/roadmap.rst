@@ -4,14 +4,14 @@ Roadmap
 Future milestones
 -----------------
 
-CodraFT 2.4
-^^^^^^^^^^^
+CobraDataLab 2.0
+^^^^^^^^^^^^^^^^
 
 * Run computations in a separate process:
 
   - Execute a "computing server" in background, in another process
   - Define a communication protocol between this process and
-    CodraFT GUI process based on TCP sockets
+    CobraDataLab GUI process based on TCP sockets
   - For each computation, send pickled data and computing function
     to the server and wait for the result
   - It will then possible to stop any computation at any time by killing the
@@ -22,10 +22,23 @@ CodraFT 2.4
 
   - Use an IPython kernel to provide the same features as described above
 
+
+Other ideas for future releases
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Add support for multichannel timeseries
+
+* Add a "Preferences" dialog box to setup all configurable parameters
+
+Past milestones
+---------------
+
+CobraDataLab 1.0
+^^^^^^^^^^^^^^^^
+
 * Optimize image displaying performance
 
-CodraFT 2.3
-^^^^^^^^^^^
+* Add new image processing features: denoising, ...
 
 * New plugin system: API for third-party extensions
 
@@ -33,7 +46,8 @@ CodraFT 2.3
      which includes an extension of `ImageProcessor`, `ActionHandler`
      and new file format support
    - Objective #2: plugins must be simply stored in a folder wich defaults
-     to the user directory (same folder as ".CodraFT.ini" configuration file)
+     to the user directory (same folder as ".CobraDataLab.ini" configuration
+     file)
 
 * Add a macro-command system:
 
@@ -42,23 +56,13 @@ CodraFT 2.3
   - Support for macro recording
 
 * Add an xmlrpc server to allow external applications controlling
-  CodraFT main features (open a signal or an image, open a HDF5 file, etc.)
+  CobraDataLab main features (open a signal or an image, open a HDF5 file,
+  etc.)
 
 CodraFT 2.2
 ^^^^^^^^^^^
 
-* Add new image processing features: denoising, ...
 * Add default image visualization settings in .INI configuration file
-
-Other ideas for future releases
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Add support for multichannel timeseries
-
-* Add a "Preferences" dialog box to setup all configurable parameters
-
-Past milestones
----------------
 
 CodraFT 2.1
 ^^^^^^^^^^^
@@ -83,7 +87,7 @@ CodraFT 2.0
 * New data processing and visualization features (see below)
 
 * Fully automated high-level processing features for internal testing purpose,
-  as well as embedding CodraFT in a third-party software
+  as well as embedding CobraDataLab in a third-party software
 
 * Extensive test suite (unit tests and application tests)
   with 90% feature coverage

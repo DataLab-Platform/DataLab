@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-14 12:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -23,9 +23,9 @@ msgstr "Détection de pics 2D"
 
 #: ../../features/image/2d_peak_detection.rst:4
 msgid ""
-"CodraFT provides a \"2D Peak Detection\" feature which is based on a "
+"CobraDataLab provides a \"2D Peak Detection\" feature which is based on a "
 "minimum-maximum filter algorithm."
-msgstr "CodraFT fournit une fonctionnalté de \"Détection de pics 2D\" qui est basée sur un algorithme de filtrage minimum-maximum."
+msgstr "CobraDataLab fournit une fonctionnalté de \"Détection de pics 2D\" qui est basée sur un algorithme de filtrage minimum-maximum."
 
 #: ../../features/image/2d_peak_detection.rst:9
 msgid "2D peak detection parameters."
@@ -36,8 +36,8 @@ msgid "How to use the feature:"
 msgstr "La fonctionnalité s'utilise de la façon suivante :"
 
 #: ../../features/image/2d_peak_detection.rst:12
-msgid "Create or open an image in CodraFT workspace"
-msgstr "Créer ou ouvrir une image dans l'espace de travail de CodraFT"
+msgid "Create or open an image in CobraDataLab workspace"
+msgstr "Créer ou ouvrir une image dans l'espace de travail de CobraDataLab"
 
 #: ../../features/image/2d_peak_detection.rst:13
 msgid "Select \"2d peak detection\" in \"Computing\" menu"
@@ -127,5 +127,5 @@ msgstr "\"Seuil relatif\": seuil de détection"
 #: ../../features/image/2d_peak_detection.rst:47
 msgid ""
 "Feature is based on ``get_2d_peaks_coords`` function from "
-"``codraft.core.computation`` module:"
-msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``codraft.core.computation`` :"
+"``cdl.core.computation`` module:"
+msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``cdl.core.computation`` :"

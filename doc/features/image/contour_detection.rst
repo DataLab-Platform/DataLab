@@ -3,7 +3,7 @@
 Contour Detection
 =================
 
-CodraFT provides a "Contour Detection" feature which is based on
+CobraDataLab provides a "Contour Detection" feature which is based on
 `the marching cubes algorithm <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_.
 
 .. figure:: /images/contour_detection/contour_app_param.png
@@ -11,7 +11,7 @@ CodraFT provides a "Contour Detection" feature which is based on
     Contour detection parameters.
 
 How to use the feature:
-  - Create or open an image in CodraFT workspace
+  - Create or open an image in CobraDataLab workspace
   - Eventually create a ROI around the target area
   - Select "Contour detection" in "Computing" menu
   - Enter parameter "Shape" ("Ellipse" or "Circle")
@@ -37,7 +37,7 @@ The contour detection algorithm works in the following way:
   - Then, each contour is fitted to the closest ellipse (or circle)
 
 Feature is based on ``get_contour_shapes`` function
-from ``codraft.core.computation`` module:
+from ``cdl.core.computation`` module:
 
-  .. literalinclude:: ../../../codraft/core/computation/image.py
+  .. literalinclude:: ../../../cdl/core/computation/image.py
      :pyobject: get_contour_shapes

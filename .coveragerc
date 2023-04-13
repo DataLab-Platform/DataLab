@@ -1,7 +1,7 @@
 [run]
 parallel = True
 omit =
-    */codraft/utils/tests.py
-    */codraft/tests/*
+    */cdl/utils/tests.py
+    */cdl/tests/*
     */guidata/*
     */guiqwt/*

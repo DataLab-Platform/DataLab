@@ -1,11 +1,11 @@
 Overview
 ========
 
-This page presents briefly CodraFT key features.
+This page presents briefly CobraDataLab key features.
 
 .. figure:: images/dark_light_modes.png
 
-    CodraFT supports dark and light mode depending on your OS settings
+    CobraDataLab supports dark and light mode depending on your OS settings
 
 Data visualization key features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

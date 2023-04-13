@@ -1,9 +1,9 @@
-# CodraFT Releases #
+# CobraDataLab Releases #
 
-See CodraFT [roadmap page](https://codraft.readthedocs.io/en/latest/roadmap.html)
+See CobraDataLab [roadmap page](https://cdl.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## Version 2.3.0a1 (in progress...) ##
+## CobraDataLab Version 1.0.0 ##
 
 New dependencies:
 
@@ -48,7 +48,7 @@ New features:
     * Rotation (arbitrary angle, +90°, -90°)
     * Symetry (vertical/horizontal)
 
-## Version 2.2.0 ##
+## CodraFT Version 2.2.0 ##
 
 New features:
 
@@ -61,7 +61,7 @@ New features:
 * Added default image visualization settings in .INI configuration file
 * Using guiqwt v4.3.2: fixed pixel position (first pixel is centered at (0,0) coords)
 
-## Version 2.1.4 ##
+## CodraFT Version 2.1.4 ##
 
 Bug fixes:
 
@@ -78,16 +78,16 @@ Other changes:
 
 * Alpha/beta release: fixed installer, added warning
 
-## Version 2.1.3 ##
+## CodraFT Version 2.1.3 ##
 
 Bug fixes:
 
 * Panel's object list `select_rows` method: fixed plot refresh behavior in case of
 multiple selection (refresh widget only once)
 * LMJ-formatted HDF5 file: now reading invalid compound datasets
-* [Issue #16](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/16) - Embedding CodraFT: "add_object" method call with invalid data should lead to app crash
+* [Issue #16](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/16) - Embedding CobraDataLab: "add_object" method call with invalid data should lead to app crash
   * Panel's `add_object` method (public API): check data type before adding object to
-panel - this prevents CodraFT from crashing when trying to plot invalid data type
+panel - this prevents CobraDataLab from crashing when trying to plot invalid data type
 afterwards
   * Now handling exceptions in `add_object` and `insert_object` methods
 * Multigaussian curve fitting: fixed default fit parameters
@@ -98,17 +98,17 @@ Other changes:
 * Images: added support for `numpy.int32` datatype
 * Added unit tests for all curve fitting dialogs
 
-## Version 2.1.2 ##
+## CodraFT Version 2.1.2 ##
 
 Bug fixes:
 
-* [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
-* [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/3) - Wrong units/titles are displayed
-* [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/6) - 2D peak detection: GUI freezes when creating ROIs
-* [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
-* [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
-* [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/5) - ROI dialog box: unable to remove all ROIs and validate
-* [Issue #8](https://github.com/CODRA-Ingenierie-Informatique/CodraFT/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
+* [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
+* [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/3) - Wrong units/titles are displayed
+* [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/6) - 2D peak detection: GUI freezes when creating ROIs
+* [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
+* [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
+* [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/5) - ROI dialog box: unable to remove all ROIs and validate
+* [Issue #8](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
 * Average operation now merges ROI data (i.e. same behavior as sum)
 * Fixed multiple regressions with ROI management (adding, removing ROI, ...)
 
@@ -121,7 +121,7 @@ Other changes:
 * Dependencies hash check: feature is now OS-dependent (+ more explicit messages)
 * Slightly improved test coverage
 
-## Version 2.1.1 ##
+## CodraFT Version 2.1.1 ##
 
 Changes:
 
@@ -140,10 +140,10 @@ Changes:
   * When multiple images are selected, the first image LUT range is applied to all
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
-* Added demo mode (from command line, simply run: codraft-demo)
+* Added demo mode (from command line, simply run: cdl-demo)
 * Command line option --h5 is now a positionnal argument (h5)
 * Added command line option -b (or --h5browser) to browse a HDF5 file at startup
-* Added command line option --version to show CodraFT version
+* Added command line option --version to show CobraDataLab version
 
 Bug fixes:
 
@@ -151,9 +151,9 @@ Bug fixes:
   well as regions of interest (related features: centroid, enclosing circle, 2D peak
   detection and contour detection)
 * Image ROI definition dialog: maximum rows and columns were erroneously truncated
-* Centralized argument parsing in CodraFT exec env object, thus avoiding conflicts
+* Centralized argument parsing in CobraDataLab exec env object, thus avoiding conflicts
 
-## Version 2.0.3 ##
+## CodraFT Version 2.0.3 ##
 
 Bug fixes:
 
@@ -165,12 +165,12 @@ Other changes:
 * Installation configuration viewer: added info on dependency check result
 * Ignore when unable to save h5 in ima/sig test scenarios
 
-## Version 2.0.2 ##
+## CodraFT Version 2.0.2 ##
 
-The following major changes were introduced with CodraFT V2:
+The following major changes were introduced with CobraDataLab V2:
 
 * Fully automated high-level processing features for internal testing purpose, as well
-as embedding CodraFT in a third-party software
+as embedding CobraDataLab in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
 * Segmentation fault and Python exception logging
 * Customizable annotations for both signals and images
@@ -188,7 +188,7 @@ as embedding CodraFT in a third-party software
   |    •   |   •   | "Statistics" computing feature                         |
 
 * Automation of high-level processing features: added fully automated high-level test
-scenarios, and enhanced public API for embedding CodraFT into a third-party application
+scenarios, and enhanced public API for embedding CobraDataLab into a third-party application
 * Test Driven Development with high quality standards
 (pylint score >= 9.8/10, test coverage >= 90%)
 
@@ -219,20 +219,20 @@ New general purpose features:
 * Memory management:
   * New available memory indicator on main window status bar
   * New warning dialog box when trying to open/create data if available memory is below
-  the "available_memory_threshold" defined in CodraFT configuration file (default: 500MB)
+  the "available_memory_threshold" defined in CobraDataLab configuration file (default: 500MB)
 * Error handling:
   * New integrated log file viewer
   * New warning dialog box at startup suggesting to view log files when logs were
   generated during last session
-  * Logging segmentation faults in ".CodraFT_faulthandler.log"
-  * Logging Python exceptions in ".CodraFT_traceback.log"
+  * Logging segmentation faults in ".CDL_faulthandler.log"
+  * Logging Python exceptions in ".CDL_traceback.log"
 * Signal/Image metadata:
   * New copy/paste feature: update object metadata from another one
   * New import/export feature: import-export object metadata (JSON text file) using the
   new "Import metadata into" / "Export metadata from" entries in "File" menu
 * HDF5 browser feature: complete redesign (better compatibility, evolutive design, ...)
 * Added support for multiple HDF5 files opening at once
-* Added `.CodraFT.ini` configuration file (user home directory):
+* Added `.CobraDataLab.ini` configuration file (user home directory):
   * New configuration file entry: current working directory
   * New configuration file entry: current main window size and position
   * New configuration file entry: embedded Python console enable state
@@ -271,7 +271,7 @@ Other changes (on existing features):
   * Peak detection: added minimal distance parameter
   * Fit dialog / plot: do auto scale at startup
   * Peak detection dialog: preselect horizontal cursor at startup
-* `codraft.core.gui` code refactoring: added subpackage `core.gui.processor`
+* `cdl.core.gui` code refactoring: added subpackage `core.gui.processor`
 * Added "Browse HDF5" action to main window ("Open HDF5" now imports all data)
 
 Bug fixes:
@@ -295,7 +295,7 @@ Bug fixes:
   * Fixed plotting support for complex data
   * Fixed signal visualization parameters update from metadata
 
-## Version 1.7.2 ##
+## CodraFT Version 1.7.2 ##
 
 Bug fixes:
 
@@ -314,7 +314,7 @@ Other changes:
 * Added more infos on uninstaller registry keys
 * Added documentation on key features
 
-## Version 1.7.1 ##
+## CodraFT Version 1.7.1 ##
 
 Added first page of documentation (there is a beginning to everything...).
 
@@ -323,7 +323,7 @@ Bug fixes:
 * Cross section tool was working only on first image in item list
 * Separate view was broken since major refactoring
 
-## Version 1.7.0 ##
+## CodraFT Version 1.7.0 ##
 
 New features:
 
@@ -337,7 +337,7 @@ New features:
 * Switched from cx_Freeze to pyinstaller for generating the stand-alone version
 * Improved pylint score up to 9.90/10 with strict quality criteria
 
-## Version 1.6.0 ##
+## CodraFT Version 1.6.0 ##
 
 New features:
 
@@ -345,7 +345,7 @@ New features:
   has been altered (i.e. the application has not been qualified in this context)
 * Added py3compat (since QtPy is dropping Python 3 support)
 
-## Version 1.5.0 ##
+## CodraFT Version 1.5.0 ##
 
 New features:
 
@@ -358,7 +358,7 @@ New features:
 
 Bug fixes:
 
-* Fixed cross section retrieval feature: in stand-alone mode, a new CodraFT
+* Fixed cross section retrieval feature: in stand-alone mode, a new CobraDataLab
   window was created (that is not the expected behavior).
 
 * Fixed crash when enabling cross sections on main window (needs PythonQwt 0.9.2).
@@ -371,7 +371,7 @@ Bug fixes:
 
   * Fixed critical bug when clicking on "Check all".
 
-## Version 1.4.4 ##
+## CodraFT Version 1.4.4 ##
 
 New experimental features:
 
@@ -385,14 +385,14 @@ New minor features:
 
 * Added contrast test (following issues with "eliminate_outliers")
 
-## Version 1.4.3 ##
+## CodraFT Version 1.4.3 ##
 
 New minor features:
 
 * New test script for global application test (test_app.py).
-* Improved CodraFT launcher (app.py).
+* Improved CobraDataLab launcher (app.py).
 
-## Version 1.4.2 ##
+## CodraFT Version 1.4.2 ##
 
 New minor features:
 
@@ -406,7 +406,7 @@ Bug fixes:
 
 * LMJ-formatted HDF5 file support: fixed truncated units.
 
-## Version 1.4.1 ##
+## CodraFT Version 1.4.1 ##
 
 Bug fixes:
 
@@ -414,7 +414,7 @@ Bug fixes:
   which is not the expected behavior ("utf-8" is the expected
   encoding for ensuring better compatibility).
 
-## Version 1.4.0 ##
+## CodraFT Version 1.4.0 ##
 
 New features:
 
@@ -425,9 +425,9 @@ New features:
 
 Bug fixes:
 
-* Fixed LMJ-formatted HDF5 file support in CodraFT data import feature.
+* Fixed LMJ-formatted HDF5 file support in CobraDataLab data import feature.
 
-## Version 1.3.1 ##
+## CodraFT Version 1.3.1 ##
 
 Bug fixes:
 
@@ -435,14 +435,14 @@ Bug fixes:
 
 * Z-axis logscale feature: freeing memory when mode is off.
 
-* CodraFTMainWindow.get_instance: create instance if it doesn't already exist.
+* CDLMainWindow.get_instance: create instance if it doesn't already exist.
 
-* to_codraft: show CodraFT main window on top, if not already visible.
+* to_codraft: show CobraDataLab main window on top, if not already visible.
 
 * Patch/guiqwt.histogram: removing histogram curve (if necessary)
   when image item has been removed.
 
-## Version 1.3.0 ##
+## CodraFT Version 1.3.0 ##
 
 New features:
 
@@ -453,28 +453,28 @@ Bug fixes:
 
 * Fixed image levels "Log scale" feature for Python 3 compatibility.
 
-## Version 1.2.2 ##
+## CodraFT Version 1.2.2 ##
 
 New features:
 
 * Added "Delete all" entry to "Edit" menu: this removes all objects (signals or
   images) from current view.
 
-* Added an option "hide_on_close" to CodraFTMainWindow class constructor
-  (default value is False): when set to True, CodraFT main window will simply
+* Added an option "hide_on_close" to CDLMainWindow class constructor
+  (default value is False): when set to True, CobraDataLab main window will simply
   hide when "Close" button is clicked, which is the expected behavior when
-  embedding CodraFT in another application.
+  embedding CobraDataLab in another application.
 
 Bug fixes:
 
 * The memory leak fix in app.py was accidentally commented before commit.
 
-## Version 1.2.1 ##
+## CodraFT Version 1.2.1 ##
 
 Bug fixes:
 
-* When quitting CodraFT, objects were not deleted: this was causing a memory
-  leak when embedding CodraFT in another Qt window.
+* When quitting CobraDataLab, objects were not deleted: this was causing a memory
+  leak when embedding CobraDataLab in another Qt window.
 
 * When canceling HDF5 import dialog box after selecting at least one signal or
   image, the progress bar was shown even if no data was being imported.
@@ -482,7 +482,7 @@ Bug fixes:
 * When closing HDF5 import dialog box, preview signal/image widgets were not
   deleted, hence causing another memory leak.
 
-## Version 1.2.0 ##
+## CodraFT Version 1.2.0 ##
 
 New features:
 
@@ -511,22 +511,22 @@ Bug fixes:
   of 2% to avoid display bug for noise background images for example (i.e.
   images with high contrast and very narrow histogram levels)
 
-## Version 1.1.2 ##
+## CodraFT Version 1.1.2 ##
 
 Bug fixes:
 
 * When the X/Y Cross Section widget is embedded into a main window other than
-  CodraFT's, clicking on the "Process signal" button will send the signal to
-  CodraFT's signal panel for further processing, as expected.
+  CobraDataLab's, clicking on the "Process signal" button will send the signal to
+  CobraDataLab's signal panel for further processing, as expected.
 
-## Version 1.1.1 ##
+## CodraFT Version 1.1.1 ##
 
 Bug fixes:
 
 * Fixed a bug leading to "None" titles when importing signals/images from HDF5
-  files created outside CodraFT.
+  files created outside CobraDataLab.
 
-## Version 1.1.0 ##
+## CodraFT Version 1.1.0 ##
 
 New features:
 
@@ -539,14 +539,14 @@ New features:
 Bug fixes:
 
 * Fixed a critical bug when opening HDF5 file (bug from "guidata" package).
-  Now guidata is patched inside CodraFT to take into account the unusual/risky
+  Now guidata is patched inside CobraDataLab to take into account the unusual/risky
   PyQt patch from Taurus package (PyQt API is set to 2 for QString objects and
   instead of raising an ImportError when importing QString from PyQt4.QtCore,
   QString still exists and is replaced by "str"...).
 
 * Images:
 
-  * Centroid feature: coordinates were mixed up in CodraFT application.
+  * Centroid feature: coordinates were mixed up in CobraDataLab application.
 
 * Signals:
 
@@ -555,12 +555,12 @@ Bug fixes:
   * FWHM and FW1/e²: fixed amplitude computation for input fit parameters
       and output results
 
-## Version 1.0.0 ##
+## CodraFT Version 1.0.0 ##
 
 Copyright © 2018 Codra, Pierre Raybaut, licensed under the terms of the
 CECILL License v2.1.
 
-First release of `CodraFT`.
+First release of `CobraDataLab`.
 
 New features:
 

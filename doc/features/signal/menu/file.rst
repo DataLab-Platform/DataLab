@@ -57,7 +57,7 @@ Open HDF5 file
     Import data from a HDF5 file.
 
 Save to HDF5 file
-    Export the whole CodraFT session (all signals and images) into a HDF5 file.
+    Export the whole CobraDataLab session (all signals and images) into a HDF5 file.
 
 Browse HDF5 file
     Open the :ref:`h5browser` in a new window to browse and import data

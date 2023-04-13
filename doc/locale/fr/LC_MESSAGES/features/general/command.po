@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-29 12:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -22,13 +22,13 @@ msgid "Command line features"
 msgstr "Ligne de commande"
 
 #: ../../features/general/command.rst:5
-msgid "Run CodraFT"
-msgstr "Exécuter CodraFT"
+msgid "Run CobraDataLab"
+msgstr "Exécuter CobraDataLab"
 
 #: ../../features/general/command.rst:7
-msgid "To run CodraFT from the command line, type the following::"
+msgid "To run CobraDataLab from the command line, type the following::"
 msgstr ""
-"Pour exécuter CodraFT depuis la ligne de commande, taper la commande "
+"Pour exécuter CobraDataLab depuis la ligne de commande, taper la commande "
 "suivante::"
 
 #: ../../features/general/command.rst:11
@@ -60,21 +60,21 @@ msgstr ""
 "des commandes suivantes::"
 
 #: ../../features/general/command.rst:52
-msgid "Run CodraFT demo"
-msgstr "Mode démonstration de CodraFT"
+msgid "Run CobraDataLab demo"
+msgstr "Mode démonstration de CobraDataLab"
 
 #: ../../features/general/command.rst:54
-msgid "To execute CodraFT demo, run the following::"
-msgstr "Pour exécuter le mode de démonstration de CodraFT, taper la commande suivante::"
+msgid "To execute CobraDataLab demo, run the following::"
+msgstr "Pour exécuter le mode de démonstration de CobraDataLab, taper la commande suivante::"
 
 #: ../../features/general/command.rst:59
 msgid "Run unit tests"
 msgstr "Exécuter les tests unitaires"
 
 #: ../../features/general/command.rst:61
-msgid "To execute all CodraFT unit tests, simply run::"
+msgid "To execute all CobraDataLab unit tests, simply run::"
 msgstr ""
-"Pour exécuter l'ensemble des tests unitaires de CodraFT, taper la "
+"Pour exécuter l'ensemble des tests unitaires de CobraDataLab, taper la "
 "commande suivante::"
 
 #: ../../features/general/command.rst:86
@@ -82,7 +82,7 @@ msgid "Run interactive tests"
 msgstr "Exécuter les tests interactifs"
 
 #: ../../features/general/command.rst:88
-msgid "To execute CodraFT interactive tests, run the following::"
+msgid "To execute CobraDataLab interactive tests, run the following::"
 msgstr ""
-"Pour exécuter les tests interactifs de CodraFT, taper la commande "
+"Pour exécuter les tests interactifs de CobraDataLab, taper la commande "
 "suivante::"

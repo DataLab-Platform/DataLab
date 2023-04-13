@@ -3,7 +3,7 @@ Image processing
 
 .. figure:: /images/shots/i_simple_example.png
 
-    CodraFT main window: Image processing view
+    CobraDataLab main window: Image processing view
 
 .. toctree::
    :maxdepth: 2

@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CodraFT package.
+# This file is distributed under the same license as the CobraDataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CodraFT \n"
+"Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-15 09:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -22,36 +22,36 @@ msgid "Contents:"
 msgstr "Table des matières :"
 
 #: ../../index.rst:2
-msgid "CodraFT user guide"
-msgstr "Manuel utilisateur de CodraFT"
+msgid "CobraDataLab user guide"
+msgstr "Manuel utilisateur de CobraDataLab"
 
 #: ../../index.rst:4
 msgid ""
-"CodraFT is a **generic signal and image processing software**. It is "
+"CobraDataLab is a **generic signal and image processing software**. It is "
 "based on Python scientific libraries (such as NumPy, SciPy or scikit-image) and"
 " Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
 "libraries)."
 msgstr ""
-"CodraFT est un **logiciel générique de traitement du signal et de "
+"CobraDataLab est un **logiciel générique de traitement du signal et de "
 "l'image** basé sur des bibliothèques scientifiques Python (telles que "
 "NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt (grâce"
 " aux bibliothèques `guidata`_ et `guiqwt`_)."
 
 #: ../../index.rst:11
-msgid "Signal and image visualization in CodraFT"
-msgstr "Visualisation de signaux et d'images dans CodraFT"
+msgid "Signal and image visualization in CobraDataLab"
+msgstr "Visualisation de signaux et d'images dans CobraDataLab"
 
 #: ../../index.rst:13
 msgid ""
-"CodraFT features are available not only using the **stand-alone "
+"CobraDataLab features are available not only using the **stand-alone "
 "application** (easily installed thanks to the Windows installer or the "
 "Python package) but also by **embedding it into your own application** "
 "(see the \"embedded tests\" for detailed examples of how to do so)."
 msgstr ""
-"Les fonctionnalités de CodraFT sont disponibles non seulement depuis une "
+"Les fonctionnalités de CobraDataLab sont disponibles non seulement depuis une "
 "**version autonome de l'application** (qui peut être facilement installée"
 " grâce à l'installeur Windows ou au paquet Python) mais aussi en "
-"**embarquant CodraFT dans votre propre application** (cf. les tests "
+"**embarquant CobraDataLab dans votre propre application** (cf. les tests "
 "\"embedded\" pour des exemples détaillés sur la façon de procéder)."
 
 #: ../../index.rst:27
@@ -63,8 +63,8 @@ msgid "`Home`_"
 msgstr ""
 
 #: ../../index.rst:23
-msgid "CodraFT home page"
-msgstr "Site de CodraFT"
+msgid "CobraDataLab home page"
+msgstr "Site de CobraDataLab"
 
 #: ../../index.rst:24
 msgid "`PyPI`_"
