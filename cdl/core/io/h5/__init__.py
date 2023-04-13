@@ -9,5 +9,5 @@ CobraDataLab HDF5 importer module
 """
 
 # Registering dynamic I/O features:
-from cdl.core.io.h5 import generic, mos07636  # pylint: disable=W0611
+from cdl.core.io.h5 import generic  # pylint: disable=W0611
 from cdl.core.io.h5.common import H5Importer  # pylint: disable=W0611
