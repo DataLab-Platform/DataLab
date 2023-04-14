@@ -750,6 +750,7 @@ class ImageProcessor(BaseProcessor):
             return
         rows = self.objlist.get_selected_rows()
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
+        delta_x0, delta_y0 = 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(rows)) as progress:
             for i_row, row in enumerate(rows):
                 progress.setValue(i_row)
@@ -794,6 +795,7 @@ class ImageProcessor(BaseProcessor):
     def reset_positions(self) -> None:
         """Reset image positions"""
         x0_0, y0_0 = 0.0, 0.0
+        delta_x0, delta_y0 = 0.0, 0.0
         for i_row, row in enumerate(self.objlist.get_selected_rows()):
             obj = self.objlist[row]
             if i_row == 0:
@@ -947,8 +949,9 @@ class ImageProcessor(BaseProcessor):
 
         else:
 
-            # pylint: disable=unused-argument
-            def extract_roi_func_obj(image: ImageParam, orig: ImageParam, p: DataSet):
+            def extract_roi_func_obj(
+                image: ImageParam, orig: ImageParam, p: DataSet
+            ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += p.x0
                 image.y0 += p.y0

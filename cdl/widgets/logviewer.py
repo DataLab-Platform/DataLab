@@ -30,7 +30,7 @@ def read_text_file(path: str) -> str:
         except UnicodeDecodeError:
             pass
     raise UnicodeDecodeError(
-        "Unable to read file using the following encodings: {}".format(encodings)
+        f"Unable to read file using the following encodings: {encodings}"
     )
 
 
@@ -107,7 +107,7 @@ def get_log_prompt_message() -> Optional[str]:
     avail = [osp.isfile(fname) for fname in get_log_filenames()]
     if avail[0] or avail[1]:
         return _("Log files were generated during current session.")
-    elif avail[2] or avail[3]:
+    if avail[2] or avail[3]:
         return _("Log files were generated during last session.")
     return None
 

@@ -18,6 +18,7 @@ import time
 import traceback
 from contextlib import contextmanager
 from datetime import datetime
+from typing import Generator
 
 import guidata
 from qtpy import QtCore as QC
@@ -73,7 +74,9 @@ def remove_empty_log_file(fname):
 
 
 @contextmanager
-def qt_app_context(exec_loop=False, enable_logs=True):
+def qt_app_context(
+    exec_loop=False, enable_logs=True
+) -> Generator[QW.QApplication, None, None]:
     """Context manager handling Qt application creation and persistance"""
     global QAPP_INSTANCE  # pylint: disable=global-statement
     if QAPP_INSTANCE is None:
@@ -136,7 +139,7 @@ def qt_app_context(exec_loop=False, enable_logs=True):
 
 
 @contextmanager
-def try_or_log_error(context: str) -> None:
+def try_or_log_error(context: str) -> Generator[None, None, None]:
     """Try to execute a function and log an error message if it fails"""
     try:
         yield
@@ -180,7 +183,9 @@ def qt_wait(timeout, except_unattended=False):  # pragma: no cover
 
 
 @contextmanager
-def create_progress_bar(parent, label, max_):
+def create_progress_bar(
+    parent, label, max_
+) -> Generator[QW.QProgressDialog, None, None]:
     """Create modal progress bar"""
     prog = QW.QProgressDialog(label, _("Cancel"), 0, max_, parent, QC.Qt.SplashScreen)
     prog.setWindowModality(QC.Qt.WindowModal)
@@ -235,7 +240,9 @@ def qt_try_except(message=None):
 
 
 @contextmanager
-def qt_try_loadsave_file(widget: QW.QWidget, filename: str, operation: str):
+def qt_try_loadsave_file(
+    widget: QW.QWidget, filename: str, operation: str
+) -> Generator[str, None, None]:
     """Try and open file (operation: "load" or "save")"""
     if operation == "load":
         text = _("%s could not be opened:")
@@ -266,7 +273,7 @@ def grab_save_window(widget: QW.QWidget, name: str) -> None:  # pragma: no cover
 
 
 @contextmanager
-def save_restore_stds():
+def save_restore_stds() -> Generator[None, None, None]:
     """Save/restore standard I/O before/after doing some things
     (e.g. calling Qt open/save dialogs)"""
     saved_in, saved_out, saved_err = sys.stdin, sys.stdout, sys.stderr
@@ -278,7 +285,7 @@ def save_restore_stds():
 
 
 @contextmanager
-def block_signals(widget: QW.QWidget, enable: bool):
+def block_signals(widget: QW.QWidget, enable: bool) -> Generator[None, None, None]:
     """Eventually block/unblock widget Qt signals before/after doing some things
     (enable: True if feature is enabled)"""
     if enable:

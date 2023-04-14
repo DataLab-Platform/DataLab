@@ -7,7 +7,7 @@
 Macro editor test
 """
 
-from cdl.core.gui.panel import MacroPanel
+from cdl.core.gui.panel import macro
 from cdl.utils.qthelpers import qt_app_context
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -16,7 +16,7 @@ SHOW = True  # Show test in GUI-based test launcher
 def test_macro_editor():
     """Test dep viewer window"""
     with qt_app_context(exec_loop=True):
-        widget = MacroPanel()
+        widget = macro.MacroPanel()
         widget.resize(800, 600)
         widget.show()
 

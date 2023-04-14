@@ -15,7 +15,7 @@
             "justMyCode": true,
             "env": {
                 // "DEBUG": "1",
-                "LANG": "fr",
+                // "LANG": "fr",
                 "QT_COLOR_MODE": "light",
             }
         },

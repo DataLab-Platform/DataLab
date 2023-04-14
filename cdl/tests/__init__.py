@@ -8,6 +8,7 @@ CobraDataLab unit tests
 """
 
 from contextlib import contextmanager
+from typing import Generator
 
 from guidata.guitest import run_testlauncher
 
@@ -23,7 +24,9 @@ from cdl.utils import tests
 
 
 @contextmanager
-def cdl_app_context(size=None, maximized=False, save=False, console=None):
+def cdl_app_context(
+    size=None, maximized=False, save=False, console=None
+) -> Generator[CDLMainWindow, None, None]:
     """Context manager handling CobraDataLab mainwindow creation and Qt event loop"""
     if size is None:
         size = 950, 600

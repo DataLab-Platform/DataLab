@@ -16,8 +16,7 @@ import dataclasses
 import numpy as np
 
 from cdl.core.computation import fit
-from cdl.core.io.image import imread_scor
-from cdl.core.io.signal import read_signal
+from cdl.core.io import read_image, read_signal
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.image import create_image
 from cdl.core.model.signal import create_signal
@@ -103,7 +102,7 @@ def get_laser_spot_data():
     znoise = create_2d_random(2000, np.uint16)
     zgauss = create_2d_gaussian(2000, np.uint16, x0=2.0, y0=-3.0)
     return [zgauss + znoise] + [
-        imread_scor(fname) for fname in get_test_fnames("*.scor-data")
+        read_image(fname).data for fname in get_test_fnames("*.scor-data")
     ]
 
 

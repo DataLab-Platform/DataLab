@@ -23,8 +23,9 @@ from qtpy import QtWidgets as QW
 from cdl.config import MOD_NAME, Conf, _
 
 if TYPE_CHECKING:
-    import cdl.core.gui.main as main
-    import cdl.core.gui.panel as panel
+    from cdl.core.gui import main
+    from cdl.core.gui.panel.image import ImagePanel
+    from cdl.core.gui.panel.signal import SignalPanel
 
 
 PLUGIN_PYTHONPATH = Conf.get_path("plugins")
@@ -60,7 +61,7 @@ class PluginRegistry(type):
     def get_plugin(cls, name_or_class) -> Optional[PluginBase]:
         """Return plugin instance"""
         for plugin in cls._plugin_instances:
-            if plugin.info.name == name_or_class or plugin.__class__ == name_or_class:
+            if name_or_class in (plugin.info.name, plugin.__class__):
                 return plugin
         return None
 
@@ -70,6 +71,11 @@ class PluginRegistry(type):
         if plugin.info.name in [plug.info.name for plug in cls._plugin_instances]:
             raise ValueError(f"Plugin {plugin.info.name} already registered")
         cls._plugin_instances.append(plugin)
+
+    @classmethod
+    def unregister_plugin(cls, plugin: PluginBase):
+        """Unregister plugin"""
+        cls._plugin_instances.remove(plugin)
 
     @classmethod
     def get_plugin_infos(cls) -> str:
@@ -115,12 +121,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             raise ValueError(f"Plugin info not set for {self.__class__.__name__}")
 
     @property
-    def signalpanel(self) -> panel.SignalPanel:
+    def signalpanel(self) -> SignalPanel:
         """Return signal panel"""
         return self.main.signalpanel
 
     @property
-    def imagepanel(self) -> panel.ImagePanel:
+    def imagepanel(self) -> ImagePanel:
         """Return image panel"""
         return self.main.imagepanel
 
@@ -169,16 +175,15 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Unregister plugin"""
         if not self._is_registered:
             return
+        PluginRegistry.unregister_plugin(self)
         self._is_registered = False
         self.unregister_hooks()
 
     def register_hooks(self):
         """Register plugin hooks"""
-        pass
 
     def unregister_hooks(self):
         """Unregister plugin hooks"""
-        pass
 
     @abc.abstractmethod
     def create_actions(self):

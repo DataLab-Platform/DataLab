@@ -17,7 +17,7 @@ from __future__ import annotations  # To be removed when dropping Python <=3.9 s
 import abc
 import enum
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, List
+from typing import TYPE_CHECKING, Callable, Generator, List
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -38,6 +38,7 @@ class SelectCond:
     """Signal or image select conditions"""
 
     @staticmethod
+    # pylint: disable=unused-argument
     def always(selected_objects: List[ObjectItf]) -> bool:
         """Always true"""
         return True
@@ -106,7 +107,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.__actions = {}
 
     @contextmanager
-    def new_category(self, category: ActionCategory):
+    def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
         """Context manager for creating a new menu"""
         self.__category_in_progress = category
         try:
@@ -115,7 +116,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.__category_in_progress = None
 
     @contextmanager
-    def new_menu(self, title: str):
+    def new_menu(self, title: str) -> Generator[None, None, None]:
         """Context manager for creating a new menu"""
         menu = QW.QMenu(title)
         self.__submenu_in_progress = True
@@ -186,6 +187,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         pos: int = None,
         sep: bool = False,
     ):
+        """Add action to list of actions
+
+        param action: action to add
+        param category: action category
+        param pos: add action to menu at this position
+        param sep: add separator before action in menu
+        (or after if pos is positive)
+
+        If category is None, action is added to the current category.
+        If pos is None, action is added at the end of the list.
+        """
         if category is None:
             if self.__submenu_in_progress:
                 category = ActionCategory.SUBMENU

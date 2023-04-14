@@ -139,14 +139,14 @@ class ObjectList(SimpleObjectList):
         else:
             event.ignore()
 
-    def dragEnterEvent(self, event):  # pylint: disable=C0103
+    def dragEnterEvent(self, event):  # pylint: disable=C0103,R0201
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
             event.accept()
         else:
             event.ignore()
 
-    def dragMoveEvent(self, event):  # pylint: disable=C0103
+    def dragMoveEvent(self, event):  # pylint: disable=C0103,R0201
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
             event.setDropAction(QC.Qt.CopyAction)

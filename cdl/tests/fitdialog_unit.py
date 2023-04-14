@@ -11,7 +11,7 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 from cdl.core.computation.signal import peak_indexes
-from cdl.core.io.signal import read_signal
+from cdl.core.io import read_signal
 from cdl.env import execenv
 from cdl.tests.data import create_1d_gaussian, get_test_fnames
 from cdl.utils.qthelpers import qt_app_context

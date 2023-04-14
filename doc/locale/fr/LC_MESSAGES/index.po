@@ -1,6 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# This file is distributed under the same license as the CobraDataLab
+# package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
@@ -8,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 09:29+0200\n"
+"POT-Creation-Date: 2023-04-14 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../../index.rst:29
+#: ../../index.rst:30
 msgid "Contents:"
 msgstr "Table des matières :"
 
@@ -27,15 +28,15 @@ msgstr "Manuel utilisateur de CobraDataLab"
 
 #: ../../index.rst:4
 msgid ""
-"CobraDataLab is a **generic signal and image processing software**. It is "
-"based on Python scientific libraries (such as NumPy, SciPy or scikit-image) and"
-" Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
-"libraries)."
+"CobraDataLab is a **generic signal and image processing software**. It is"
+" based on Python scientific libraries (such as NumPy, SciPy or scikit-"
+"image) and Qt graphical user interfaces (thanks to `guidata`_ and "
+"`guiqwt`_ libraries)."
 msgstr ""
 "CobraDataLab est un **logiciel générique de traitement du signal et de "
 "l'image** basé sur des bibliothèques scientifiques Python (telles que "
-"NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt (grâce"
-" aux bibliothèques `guidata`_ et `guiqwt`_)."
+"NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt "
+"(grâce aux bibliothèques `guidata`_ et `guiqwt`_)."
 
 #: ../../index.rst:11
 msgid "Signal and image visualization in CobraDataLab"
@@ -48,49 +49,49 @@ msgid ""
 "Python package) but also by **embedding it into your own application** "
 "(see the \"embedded tests\" for detailed examples of how to do so)."
 msgstr ""
-"Les fonctionnalités de CobraDataLab sont disponibles non seulement depuis une "
-"**version autonome de l'application** (qui peut être facilement installée"
-" grâce à l'installeur Windows ou au paquet Python) mais aussi en "
-"**embarquant CobraDataLab dans votre propre application** (cf. les tests "
-"\"embedded\" pour des exemples détaillés sur la façon de procéder)."
+"Les fonctionnalités de CobraDataLab sont disponibles non seulement depuis"
+" une **version autonome de l'application** (qui peut être facilement "
+"installée grâce à l'installeur Windows ou au paquet Python) mais aussi en"
+" **embarquant CobraDataLab dans votre propre application** (cf. les tests"
+" \"embedded\" pour des exemples détaillés sur la façon de procéder)."
 
-#: ../../index.rst:27
+#: ../../index.rst:28
 msgid "External resources:"
 msgstr "Ressources externes :"
 
-#: ../../index.rst:22
+#: ../../index.rst:23
 msgid "`Home`_"
 msgstr ""
 
-#: ../../index.rst:23
+#: ../../index.rst:24
 msgid "CobraDataLab home page"
 msgstr "Site de CobraDataLab"
 
-#: ../../index.rst:24
+#: ../../index.rst:25
 msgid "`PyPI`_"
 msgstr ""
 
-#: ../../index.rst:25
+#: ../../index.rst:26
 msgid "Python Package Index"
 msgstr "Paquet Python officiel"
 
-#: ../../index.rst:26
+#: ../../index.rst:27
 msgid "`GitHub`_"
 msgstr ""
 
-#: ../../index.rst:27
+#: ../../index.rst:28
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:40
+#: ../../index.rst:42
 msgid "Copyrights and licensing"
 msgstr "Licence et copyrights"
 
-#: ../../index.rst:42
-msgid "Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut"
+#: ../../index.rst:44
+msgid "Copyright © 2022 `CEA`_ - `Codra`_, Pierre Raybaut"
 msgstr ""
 
-#: ../../index.rst:43
+#: ../../index.rst:45
 msgid "Licensed under the terms of the `BSD / CeCILL-B License`_"
 msgstr "Distribué sous licence `BSD / CeCILL-B License`_"
 
@@ -108,3 +109,7 @@ msgstr "Distribué sous licence `BSD / CeCILL-B License`_"
 
 #~ msgid ":ref:`search`"
 #~ msgstr ""
+
+#~ msgid "Copyright © 2022 `CEA`_ - `CODRA`_, Pierre Raybaut"
+#~ msgstr ""
+

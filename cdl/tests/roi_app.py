@@ -14,7 +14,7 @@ ROI test:
 
 import numpy as np
 
-from cdl.core.gui.panel import ImagePanel, SignalPanel
+from cdl.core.gui.panel import image, signal
 from cdl.core.gui.processor.image import PeakDetectionParam
 from cdl.core.gui.processor.signal import FWHMParam
 from cdl.core.model.signal import SignalParam
@@ -25,14 +25,14 @@ from cdl.tests.data import create_test_image3, create_test_signal1
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_signal_features(panel: SignalPanel, singleobj: bool = None):
+def test_signal_features(panel: signal, singleobj: bool = None):
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(FWHMParam())
     panel.processor.compute_fw1e2()
     panel.processor.extract_roi(singleobj=singleobj)
 
 
-def test_image_features(panel: ImagePanel, singleobj: bool = None):
+def test_image_features(panel: image, singleobj: bool = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()

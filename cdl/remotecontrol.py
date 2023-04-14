@@ -22,7 +22,7 @@ from qtpy import QtCore as QC
 
 from cdl import __version__
 from cdl.config import Conf, initialize
-from cdl.core.io.base import NativeJSONReader, NativeJSONWriter
+from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
 from cdl.core.model.image import create_image
 from cdl.core.model.signal import SignalParam, create_signal
 from cdl.env import execenv
@@ -311,9 +311,9 @@ class CDLConnectionError(Exception):
 
 def get_cdl_xmlrpc_port():
     """Return CobraDataLab current XML-RPC port"""
-    #  The following is valid only when using Python 3.8+ with CobraDataLab installed on the
-    #  client side. In any other situation, please use the `get_cdl_xmlrpc_port`
-    #  function from doc/cdl_remotecontrol_py27.py.
+    #  The following is valid only when using Python 3.8+ with CobraDataLab
+    #  installed on the client side. In any other situation, please use the
+    #  `get_cdl_xmlrpc_port` function from doc/cdl_remotecontrol_py27.py.
     initialize()
     try:
         return Conf.main.rpc_server_port.get()
@@ -342,7 +342,8 @@ class RemoteClient:
             raise CDLConnectionError("CobraDataLab is currently not running") from exc
 
     def try_and_connect(self, port=None, timeout=5):
-        """Try (10 times over timeout in s.) and connect to CobraDataLab XML-RPC server"""
+        """Try (10 times over timeout in s.)
+        and connect to CobraDataLab XML-RPC server"""
         execenv.print("Connecting to CobraDataLab XML-RPC server...", end="")
         retries = 10
         for _index in range(retries):

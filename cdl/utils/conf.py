@@ -23,7 +23,7 @@ class AppUserConfig(UserConfig):
             os.makedirs(app_config_dir)
         return osp.join(app_config_dir, basename)
 
-    def filename(self):
+    def filename(self) -> str:
         """Return configuration file name"""
         return self.get_path(f"{self.name}.ini")
 
@@ -35,12 +35,12 @@ class Configuration:
     """Configuration file"""
 
     @classmethod
-    def initialize(cls, name, version, load):
+    def initialize(cls, name: str, version: str, load: bool) -> None:
         """Initialize configuration"""
         CONF.set_application(name, version, load=load)
 
     @classmethod
-    def reset(cls):
+    def reset(cls) -> None:
         """Reset configuration"""
         global CONF  # pylint: disable=global-statement
         CONF.cleanup()  # Remove configuration file
@@ -56,12 +56,12 @@ class Section:
     """Configuration section"""
 
     @classmethod
-    def set_name(cls, section):
+    def set_name(cls, section: str) -> None:
         """Set section name"""
         cls._name = section
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         """Return section name"""
         return cls._name
 

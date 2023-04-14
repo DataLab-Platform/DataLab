@@ -16,7 +16,6 @@ import os.path as osp
 import platform
 import sys
 import time
-import traceback
 import webbrowser
 from typing import List
 
@@ -50,7 +49,7 @@ from cdl.config import (
 from cdl.core.gui.actionhandler import ActionCategory
 from cdl.core.gui.docks import DockablePlotWidget
 from cdl.core.gui.h5io import H5InputOutput
-from cdl.core.gui.panel import BaseDataPanel, ImagePanel, MacroPanel, SignalPanel
+from cdl.core.gui.panel import base, image, macro, signal
 from cdl.core.model.image import ImageParam
 from cdl.core.model.signal import SignalParam
 from cdl.env import execenv
@@ -326,7 +325,7 @@ class CDLMainWindow(QW.QMainWindow):
     def take_menu_screenshots(self):  # pragma: no cover
         """Take menu screenshots"""
         for panel in self.panels:
-            if isinstance(panel, BaseDataPanel):
+            if isinstance(panel, base.BaseDataPanel):
                 self.tabwidget.setCurrentWidget(panel)
                 for name in (
                     "file",
@@ -409,7 +408,8 @@ class CDLMainWindow(QW.QMainWindow):
                     with qth.try_or_log_error(f"Create actions for {plugin.info.name}"):
                         plugin.create_actions()
 
-    def __unregister_plugins(self):
+    @staticmethod
+    def __unregister_plugins():
         """Unregister plugins"""
         for plugin in PluginRegistry.get_plugins():
             # Unregistering plugin
@@ -474,7 +474,7 @@ class CDLMainWindow(QW.QMainWindow):
         curvewidget = DockablePlotWidget(self, CurveWidget, curveplot_toolbar)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
-        self.signalpanel = SignalPanel(
+        self.signalpanel = signal.SignalPanel(
             self, curvewidget.plotwidget, self.signal_toolbar
         )
         self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
@@ -485,7 +485,9 @@ class CDLMainWindow(QW.QMainWindow):
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
         imagevis_toolbar = self.addToolBar(_("Image Visualization Toolbar"))
         imagewidget = DockablePlotWidget(self, ImageWidget, imagevis_toolbar)
-        self.imagepanel = ImagePanel(self, imagewidget.plotwidget, self.image_toolbar)
+        self.imagepanel = image.ImagePanel(
+            self, imagewidget.plotwidget, self.image_toolbar
+        )
         # -----------------------------------------------------------------------------
         # # Before eventually disabling the "peritem" mode by default, wait for the
         # # guiqwt bug to be fixed (peritem mode is not compatible with multiple image
@@ -638,7 +640,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     def __add_macro_panel(self):
         """Add macro panel"""
-        self.macropanel = MacroPanel()
+        self.macropanel = macro.MacroPanel()
         macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
         self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
         self.signal_image_docks[0].raise_()
@@ -700,7 +702,7 @@ class CDLMainWindow(QW.QMainWindow):
     def refresh_lists(self):
         """Refresh signal/image lists"""
         for panel in self.panels:
-            if isinstance(panel, BaseDataPanel):
+            if isinstance(panel, base.BaseDataPanel):
                 panel.objlist.refresh_list()
 
     def __update_actions(self):
@@ -804,7 +806,7 @@ class CDLMainWindow(QW.QMainWindow):
 
         :param h5files: HDF5 filenames (optionally with dataset name, separated by ":")
         :param import_all: Import all HDF5 file contents
-        :param reset_all: Delete all CobraDataLab signals and images before importing data
+        :param reset_all: Delete all CobraDataLab signals/images before importing data
         """
         if not self.confirm_memory_state():
             return
@@ -848,7 +850,7 @@ class CDLMainWindow(QW.QMainWindow):
         """Open CobraDataLab HDF5 browser to Import HDF5 file
 
         :param filename: HDF5 filename
-        :param reset_all: Delete all CobraDataLab signals and images before importing data
+        :param reset_all: Delete all CobraDataLab signals/images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
             filename = self.__check_h5file(filename, "load")

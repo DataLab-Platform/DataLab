@@ -23,11 +23,11 @@ See [home page](https://codra-ingenierie-informatique.github.io/CobraDataLab/) a
 [documentation](https://cdl.readthedocs.io/en/latest/) for more details on
 the library and [changelog](CHANGELOG.md) for recent history of changes.
 
-### New in CobraDataLab 2.0
+### New in CobraDataLab 1.0
 
 * New data processing and visualization features (see details in [changelog](CHANGELOG.md))
 * Fully automated high-level processing features for internal testing purpose, as well as embedding CobraDataLab in a third-party software
-* Extensive test suite (unit tests and application tests) with 90% feature coverage
+* Extensive test suite (unit tests and application tests) with >80% feature coverage
 
 ### Credits
 

@@ -277,7 +277,7 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
 # ==============================================================================
 #  Cross section : add a button to send curve to CobraDataLab's signal panel
 # ==============================================================================
-def to_codraft(cs_plot):
+def to_cdl(cs_plot):
     """Send cross section curve to CobraDataLab's signal list"""
     win = None
     for win in QApplication.topLevelWidgets():
@@ -341,7 +341,7 @@ def add_actions_to_toolbar(self):
         self,
         _("Process signal"),
         icon=get_icon("to_signal.svg"),
-        triggered=lambda: to_codraft(self.cs_plot),
+        triggered=lambda: to_cdl(self.cs_plot),
     )
     add_actions(self.toolbar, (to_codraft_ac, None))
     self._old_XCrossSection_add_actions_to_toolbar()

@@ -12,7 +12,7 @@ Testing peak detection dialog box.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 
-from cdl.core.io.signal import read_signal
+from cdl.core.io import read_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import exec_dialog, qt_app_context
 from cdl.utils.tests import get_test_fnames

@@ -15,7 +15,9 @@ Metadata application test:
 
 import numpy as np
 
-from cdl.core.gui.panel import BaseDataPanel, ImagePanel, SignalPanel
+from cdl.core.gui.panel.base import BaseDataPanel
+from cdl.core.gui.panel.image import ImagePanel
+from cdl.core.gui.panel.signal import SignalPanel
 from cdl.core.gui.processor.image import PeakDetectionParam
 from cdl.core.gui.processor.signal import FWHMParam
 from cdl.env import execenv

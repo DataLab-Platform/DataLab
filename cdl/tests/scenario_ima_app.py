@@ -89,9 +89,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.processor.equalize_adapthist(param)
 
     param = MorphologyParam()
+    param.radius = 10
     panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
     panel.processor.compute_black_tophat(param)
+    param.radius = 1
     panel.processor.compute_erosion(param)
     panel.processor.compute_dilation(param)
     panel.processor.compute_opening(param)
@@ -99,6 +101,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
 
     param = CannyParam()
     panel.processor.compute_canny(param)
+    panel.add_object(ima1)
 
     param = LogP1Param()
     param.n = 1

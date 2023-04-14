@@ -1,6 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# This file is distributed under the same license as the CobraDataLab
+# package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
@@ -8,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 09:18+0100\n"
+"POT-Creation-Date: 2023-04-14 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,12 +28,13 @@ msgstr "Dépendances"
 
 #: ../../installation.rst:7
 msgid ""
-"CobraDataLab requirements are the following *(Note: the Windows installer "
-"package already include all those required libraries as well as Python "
+"CobraDataLab requirements are the following *(Note: the Windows installer"
+" package already include all those required libraries as well as Python "
 "itself)*:"
 msgstr ""
-"Les paquets prérequis de CobraDataLab sont les suivants *(note : l'installeur "
-"Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
+"Les paquets prérequis de CobraDataLab sont les suivants *(note : "
+"l'installeur Windows intègre déjà l'ensemble de ces dépendances, ainsi "
+"que Python)* :"
 
 #: ../../install_requires.txt:4
 msgid "Name"
@@ -47,7 +49,7 @@ msgid "Python"
 msgstr ""
 
 #: ../../install_requires.txt:7
-msgid "3.7"
+msgid "3.8"
 msgstr ""
 
 #: ../../install_requires.txt:8
@@ -130,29 +132,29 @@ msgstr ""
 msgid "1.9"
 msgstr ""
 
-#: ../../installation.rst:14
+#: ../../installation.rst:15
 msgid "Python 3.8 is the reference for production release"
 msgstr "Python 3.8 est la référence de la version de production"
 
-#: ../../installation.rst:17
+#: ../../installation.rst:18
 msgid "How to install"
 msgstr "Procédure d'installation"
 
-#: ../../installation.rst:20
+#: ../../installation.rst:21
 msgid "Windows installer:"
 msgstr "Installeur Windows :"
 
-#: ../../installation.rst:22
+#: ../../installation.rst:23
 msgid ""
-"CobraDataLab is available as a stand-alone application for Windows, which does"
-" not require any Python distribution to be installed. Just run the "
+"CobraDataLab is available as a stand-alone application for Windows, which"
+" does not require any Python distribution to be installed. Just run the "
 "installer and you're good to go!"
 msgstr ""
-"CobraDataLab est disponible depuis une application autonome, qui ne nécessite "
-"aucune installation préalable de Python. Exécutez simplement l'installeur"
-" et laissez vous guider !"
+"CobraDataLab est disponible depuis une application autonome, qui ne "
+"nécessite aucune installation préalable de Python. Exécutez simplement "
+"l'installeur et laissez vous guider !"
 
-#: ../../installation.rst:28
+#: ../../installation.rst:29
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
@@ -162,14 +164,14 @@ msgstr ""
 "Le programme d'installation peut être téléchargé depuis la pagee "
 "`Releases`_. L'installeur prend en charge la fonctionnalité de "
 "désinstallation automatique lors d'une mise à jour (il n'est pas utile de"
-" désinstaller une version de CobraDataLab avant d'exécuter l'installeur d'une "
-"nouvelle version du logiciel."
+" désinstaller une version de CobraDataLab avant d'exécuter l'installeur "
+"d'une nouvelle version du logiciel."
 
-#: ../../installation.rst:36
+#: ../../installation.rst:38
 msgid "Wheel package:"
 msgstr "Paquet wheel :"
 
-#: ../../installation.rst:38
+#: ../../installation.rst:40
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
 "way to install CobraDataLab on an existing Python distribution:"
@@ -178,15 +180,17 @@ msgstr ""
 "Wheel est la méthode la plus simple pour installer CobraDataLab sur une "
 "distribution Python préexistante :"
 
-#: ../../installation.rst:47
+#: ../../installation.rst:49
 msgid "Source package:"
 msgstr "Paquet source :"
 
-#: ../../installation.rst:49
-msgid "Installing CobraDataLab directly from the source package is straigthforward:"
+#: ../../installation.rst:51
+msgid ""
+"Installing CobraDataLab directly from the source package is "
+"straigthforward:"
 msgstr ""
-"Installer CobraDataLab directement depuis le paquet source n'est guère plus "
-"compliqué :"
+"Installer CobraDataLab directement depuis le paquet source n'est guère "
+"plus compliqué :"
 
 #~ msgid "4.1"
 #~ msgstr ""
@@ -217,3 +221,7 @@ msgstr ""
 
 #~ msgid "1.2"
 #~ msgstr ""
+
+#~ msgid "3.7"
+#~ msgstr ""
+

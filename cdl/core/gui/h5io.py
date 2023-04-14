@@ -12,15 +12,16 @@ import os.path as osp
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from cdl.core.io.base import NativeH5Reader, NativeH5Writer
 from cdl.core.io.h5 import H5Importer
+from cdl.core.io.native import NativeH5Reader, NativeH5Writer
 from cdl.core.model.signal import SignalParam
 from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
 
 
 class H5InputOutput:
-    """Object handling HDF5 file open/save into/from CobraDataLab data model/main window"""
+    """Object handling HDF5 file open/save
+    into/from CobraDataLab data model/main window"""
 
     def __init__(self, mainwindow):
         self.mainwindow = mainwindow

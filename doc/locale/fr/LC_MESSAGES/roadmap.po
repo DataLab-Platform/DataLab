@@ -1,6 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# This file is distributed under the same license as the CobraDataLab
+# package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
@@ -8,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CobraDataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-03 09:29+0100\n"
+"POT-Creation-Date: 2023-04-14 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +27,7 @@ msgid "Future milestones"
 msgstr ""
 
 #: ../../roadmap.rst:8
-msgid "CobraDataLab 2.4"
+msgid "CobraDataLab 2.0"
 msgstr ""
 
 #: ../../roadmap.rst:10
@@ -39,8 +40,8 @@ msgstr ""
 
 #: ../../roadmap.rst:13
 msgid ""
-"Define a communication protocol between this process and CobraDataLab GUI "
-"process based on TCP sockets"
+"Define a communication protocol between this process and CobraDataLab GUI"
+" process based on TCP sockets"
 msgstr ""
 
 #: ../../roadmap.rst:15
@@ -64,158 +65,179 @@ msgstr ""
 msgid "Use an IPython kernel to provide the same features as described above"
 msgstr ""
 
-#: ../../roadmap.rst:25
+#: ../../roadmap.rst:27
+msgid "Other ideas for future releases"
+msgstr ""
+
+#: ../../roadmap.rst:29
+msgid "Add support for multichannel timeseries"
+msgstr ""
+
+#: ../../roadmap.rst:31
+msgid "Add a \"Preferences\" dialog box to setup all configurable parameters"
+msgstr ""
+
+#: ../../roadmap.rst:34
+msgid "Past milestones"
+msgstr ""
+
+#: ../../roadmap.rst:37
+msgid "CobraDataLab 1.0"
+msgstr ""
+
+#: ../../roadmap.rst:39
 msgid "Optimize image displaying performance"
 msgstr ""
 
-#: ../../roadmap.rst:28
-msgid "CobraDataLab 2.3"
+#: ../../roadmap.rst:41
+msgid "Add new image processing features: denoising, ..."
 msgstr ""
 
-#: ../../roadmap.rst:30
+#: ../../roadmap.rst:43
 msgid "New plugin system: API for third-party extensions"
 msgstr ""
 
-#: ../../roadmap.rst:32
+#: ../../roadmap.rst:45
 msgid ""
 "Objective #1: a plugin must be manageable using a single Python script, "
 "which includes an extension of `ImageProcessor`, `ActionHandler` and new "
 "file format support"
 msgstr ""
 
-#: ../../roadmap.rst:35
+#: ../../roadmap.rst:48
 msgid ""
 "Objective #2: plugins must be simply stored in a folder wich defaults to "
-"the user directory (same folder as \".CobraDataLab.ini\" configuration file)"
+"the user directory (same folder as \".CobraDataLab.ini\" configuration "
+"file)"
 msgstr ""
 
-#: ../../roadmap.rst:38
+#: ../../roadmap.rst:52
 msgid "Add a macro-command system:"
 msgstr ""
 
-#: ../../roadmap.rst:40
+#: ../../roadmap.rst:54
 msgid "New embedded Python editor"
 msgstr ""
 
-#: ../../roadmap.rst:41
+#: ../../roadmap.rst:55
 msgid "Scripts using the same API as high-level applicative test scenarios"
 msgstr ""
 
-#: ../../roadmap.rst:42
+#: ../../roadmap.rst:56
 msgid "Support for macro recording"
 msgstr ""
 
-#: ../../roadmap.rst:44
+#: ../../roadmap.rst:58
 msgid ""
-"Add an xmlrpc server to allow external applications controlling CobraDataLab "
-"main features (open a signal or an image, open a HDF5 file, etc.)"
+"Add an xmlrpc server to allow external applications controlling "
+"CobraDataLab main features (open a signal or an image, open a HDF5 file, "
+"etc.)"
 msgstr ""
 
-#: ../../roadmap.rst:48
-msgid "CobraDataLab 2.2"
+#: ../../roadmap.rst:63
+msgid "CodraFT 2.2"
 msgstr ""
 
-#: ../../roadmap.rst:50
-msgid "Add new image processing features: denoising, ..."
-msgstr ""
-
-#: ../../roadmap.rst:51
+#: ../../roadmap.rst:65
 msgid "Add default image visualization settings in .INI configuration file"
 msgstr ""
 
-#: ../../roadmap.rst:54
-msgid "Other ideas for future releases"
+#: ../../roadmap.rst:68
+msgid "CodraFT 2.1"
 msgstr ""
 
-#: ../../roadmap.rst:56
-msgid "Add support for multichannel timeseries"
-msgstr ""
-
-#: ../../roadmap.rst:58
-msgid "Add a \"Preferences\" dialog box to setup all configurable parameters"
-msgstr ""
-
-#: ../../roadmap.rst:61
-msgid "Past milestones"
-msgstr ""
-
-#: ../../roadmap.rst:64
-msgid "CobraDataLab 2.1"
-msgstr ""
-
-#: ../../roadmap.rst:66
+#: ../../roadmap.rst:70
 msgid ""
 "\"Open in a new window\" feature: add support for multiple separate "
 "windows, thus allowing to visualize for example two images side by side"
 msgstr ""
 
-#: ../../roadmap.rst:69
+#: ../../roadmap.rst:73
 msgid "New demo mode"
 msgstr ""
 
-#: ../../roadmap.rst:71
+#: ../../roadmap.rst:75
 msgid "New command line option features (open/browse HDF5 files at startup)"
 msgstr ""
 
-#: ../../roadmap.rst:73
+#: ../../roadmap.rst:77
 msgid "ROI features:"
 msgstr ""
 
-#: ../../roadmap.rst:75
+#: ../../roadmap.rst:79
 msgid ""
 "Add an option to extract multiples ROI on either one signal/image "
 "(current behavior) or one signal/image per ROI"
 msgstr ""
 
-#: ../../roadmap.rst:77
+#: ../../roadmap.rst:81
 msgid "Images: create ROI using array masks"
 msgstr ""
 
-#: ../../roadmap.rst:78
+#: ../../roadmap.rst:82
 msgid "Images: add support for circular ROI"
 msgstr ""
 
-#: ../../roadmap.rst:81
-msgid "CobraDataLab 2.0"
+#: ../../roadmap.rst:85
+msgid "CodraFT 2.0"
 msgstr ""
 
-#: ../../roadmap.rst:83
+#: ../../roadmap.rst:87
 msgid "New data processing and visualization features (see below)"
 msgstr ""
 
-#: ../../roadmap.rst:85
+#: ../../roadmap.rst:89
 msgid ""
 "Fully automated high-level processing features for internal testing "
 "purpose, as well as embedding CobraDataLab in a third-party software"
 msgstr ""
 
-#: ../../roadmap.rst:88
+#: ../../roadmap.rst:92
 #, python-format
 msgid ""
 "Extensive test suite (unit tests and application tests) with 90% feature "
 "coverage"
 msgstr ""
 
-#: ../../roadmap.rst:92
-msgid "CobraDataLab 1.7"
-msgstr ""
-
-#: ../../roadmap.rst:94
-msgid "Major redesign"
-msgstr ""
-
 #: ../../roadmap.rst:96
-msgid "Python 3.8 is the new reference"
+msgid "CodraFT 1.7"
 msgstr ""
 
 #: ../../roadmap.rst:98
+msgid "Major redesign"
+msgstr ""
+
+#: ../../roadmap.rst:100
+msgid "Python 3.8 is the new reference"
+msgstr ""
+
+#: ../../roadmap.rst:102
 msgid "Dropped Python 2 support"
 msgstr ""
 
-#: ../../roadmap.rst:101
-msgid "CobraDataLab 1.6"
+#: ../../roadmap.rst:105
+msgid "CodraFT 1.6"
 msgstr ""
 
-#: ../../roadmap.rst:103
+#: ../../roadmap.rst:107
 msgid "Last release supporting Python 2"
 msgstr ""
+
+#~ msgid "CobraDataLab 2.4"
+#~ msgstr ""
+
+#~ msgid "CobraDataLab 2.3"
+#~ msgstr ""
+
+#~ msgid "CobraDataLab 2.2"
+#~ msgstr ""
+
+#~ msgid "CobraDataLab 2.1"
+#~ msgstr ""
+
+#~ msgid "CobraDataLab 1.7"
+#~ msgstr ""
+
+#~ msgid "CobraDataLab 1.6"
+#~ msgstr ""
+

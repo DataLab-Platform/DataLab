@@ -7,6 +7,8 @@
 CobraDataLab Miscelleneous utilities
 """
 
+import os.path as osp
+
 import numpy as np
 
 
@@ -31,3 +33,8 @@ def is_integer_dtype(dtype):
 def is_complex_dtype(dtype):
     """Return True if data type is a complex type"""
     return issubclass(np.dtype(dtype).type, complex)
+
+
+def reduce_path(filename: str) -> str:
+    """Reduce a file path to a relative path"""
+    return osp.relpath(filename, osp.join(osp.dirname(filename), osp.pardir))

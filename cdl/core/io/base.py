@@ -4,92 +4,159 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Base I/O common module (native HDF5 format)
+CobraDataLab Common tools for signal and image io support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from guidata.hdf5io import HDF5Reader, HDF5Writer
-from guidata.jsonio import JSONReader, JSONWriter
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
 
-from cdl import __version__
+import dataclasses
+import enum
+import os.path as osp
+import re
+from typing import List
 
-H5_VERSION = "CDL_Version"
-
-
-LIST_LENGTH_STR = "__list_length__"
-
-
-class NativeH5Writer(HDF5Writer):
-    """CobraDataLab signal/image objects HDF5 guidata Dataset Writer class,
-    supporting dictionary serialization"""
-
-    def __init__(self, filename):
-        super().__init__(filename)
-        self.h5[H5_VERSION] = __version__
-
-    def write_dict(self, val):
-        """Write dictionary to h5 file"""
-        # Keys must be strings
-        # Values must be h5py supported data types
-        group = self.get_parent_group()
-        dict_group = group.create_group(self.option[-1])
-        for key, value in val.items():
-            if isinstance(value, dict):
-                with self.group(key):
-                    self.write_dict(value)
-            elif isinstance(value, list):
-                with self.group(key):
-                    with self.group(LIST_LENGTH_STR):
-                        self.write(len(value))
-                    for index, i_val in enumerate(value):
-                        with self.group("elt" + str(index)):
-                            self.write(i_val)
-            else:
-                try:
-                    dict_group.attrs[key] = value
-                except TypeError:
-                    pass
+from cdl.config import _
+from cdl.core.model.base import ObjectItf
 
 
-class NativeH5Reader(HDF5Reader):
-    """CobraDataLab signal/image objects HDF5 guidata dataset Writer class,
-    supporting dictionary deserialization"""
+class IOAction(enum.Enum):
+    """I/O action type"""
 
-    def __init__(self, filename):
-        super().__init__(filename)
-        self.version = self.h5[H5_VERSION]
-
-    def read_dict(self):
-        """Read dictionary from h5 file"""
-        group = self.get_parent_group()
-        dict_group = group[self.option[-1]]
-        dict_val = {}
-        for key, value in dict_group.attrs.items():
-            dict_val[key] = value
-        for key in dict_group:
-            with self.group(key):
-                if "__list_length__" in dict_group[key].attrs:
-                    with self.group(LIST_LENGTH_STR):
-                        list_len = self.read()
-                    dict_val[key] = [
-                        dict_group[key]["elt" + str(index)][:]
-                        for index in range(list_len)
-                    ]
-                else:
-                    dict_val[key] = self.read_dict()
-        return dict_val
+    LOAD = enum.auto()
+    SAVE = enum.auto()
 
 
-class NativeJSONWriter(JSONWriter):
-    """CobraDataLab signal/image objects JSON guidata Dataset Writer class,
-    supporting dictionary serialization"""
+class BaseIORegistry(type):
+    """Metaclass for registering I/O handler classes"""
 
-    write_dict = JSONWriter.write_any
+    _io_format_instances: List[FormatBase] = []
+
+    def __init__(cls, name, bases, attrs):
+        super().__init__(name, bases, attrs)
+        if not name.endswith("FormatBase"):
+            cls._io_format_instances.append(cls())
+
+    @classmethod
+    def get_formats(cls) -> List[FormatBase]:
+        """Return I/O format handlers"""
+        return cls._io_format_instances
+
+    @classmethod
+    def get_all_filters(cls, action: IOAction) -> str:
+        """Return all file filters for Qt file dialog"""
+        extlist = []  # file extension list
+        for fmt in cls.get_formats():
+            fmt: FormatBase
+            if not fmt.info.readable and action == IOAction.LOAD:
+                continue
+            if not fmt.info.writeable and action == IOAction.SAVE:
+                continue
+            extlist.extend(fmt.extlist)
+        return f"{_('All supported files')} ({'*.' + ' *.'.join(extlist)})"
+
+    @classmethod
+    def get_filters(cls, action: IOAction) -> str:
+        """Return file filters for Qt file dialog"""
+        flist = []  # file filter list
+        flist.append(cls.get_all_filters(action))
+        for fmt in cls.get_formats():
+            fmt: FormatBase
+            flist.append(fmt.get_filter(action))
+        return "\n".join(flist)
+
+    @classmethod
+    def get_read_filters(cls) -> str:
+        """Return file filters for Qt open file dialog"""
+        return cls.get_filters(IOAction.LOAD)
+
+    @classmethod
+    def get_write_filters(cls) -> str:
+        """Return file filters for Qt save file dialog"""
+        return cls.get_filters(IOAction.SAVE)
+
+    @classmethod
+    def get_format(cls, filename: str, action: IOAction) -> FormatBase:
+        """Return format handler for filename"""
+        for fmt in cls.get_formats():
+            fmt: FormatBase
+            if osp.splitext(filename)[1][1:] in fmt.extlist:
+                if not fmt.info.readable and action == IOAction.LOAD:
+                    continue
+                if not fmt.info.writeable and action == IOAction.SAVE:
+                    continue
+                return fmt
+        raise NotImplementedError(
+            f"{filename} is not supported for {action.name.lower()}"
+        )
+
+    @classmethod
+    def read(cls, filename: str) -> ObjectItf:
+        """Read data from file, return native object (signal or image).
+
+        If file data type is not supported, raise NotImplementedError."""
+        fmt = cls.get_format(filename, IOAction.LOAD)
+        return fmt.read(filename)
+
+    @classmethod
+    def write(cls, filename: str, obj: ObjectItf) -> None:
+        """Write data to file from native object (signal or image).
+
+        If file data type is not supported, raise NotImplementedError."""
+        fmt = cls.get_format(filename, IOAction.SAVE)
+        fmt.write(filename, obj)
 
 
-class NativeJSONReader(JSONReader):
-    """CobraDataLab signal/image objects JSON guidata Dataset Reader class,
-    supporting dictionary deserialization"""
+def get_file_extensions(string):
+    """Return a list of file extensions in a string"""
+    pattern = r"\S+\.[\w-]+"
+    matches = re.findall(pattern, string)
+    return [match.split(".")[-1] for match in matches]
 
-    read_dict = JSONReader.read_any
+
+@dataclasses.dataclass
+class FormatInfo:
+    """Format info"""
+
+    name: str = None  # e.g. "Foobar camera image files"
+    extensions: str = None  # e.g. "*.foobar *.fb"
+    readable: bool = False  # True if format can be read
+    writeable: bool = False  # True if format can be written
+
+
+class FormatBase:
+    """Object representing a data file io"""
+
+    FORMAT_INFO: FormatInfo = None
+
+    def __init__(self):
+        self.info = self.FORMAT_INFO
+        if self.info is None:
+            raise ValueError(f"Format info not set for {self.__class__.__name__}")
+        if self.info.name is None:
+            raise ValueError(f"Format name not set for {self.__class__.__name__}")
+        if self.info.extensions is None:
+            raise ValueError(f"Format extensions not set for {self.__class__.__name__}")
+        if not self.info.readable and not self.info.writeable:
+            raise ValueError(f"Format {self.info.name} is not readable nor writeable")
+        self.extlist = get_file_extensions(self.info.extensions)
+        if not self.extlist:
+            raise ValueError(f"Invalid format extensions for {self.__class__.__name__}")
+
+    def get_filter(self, action: IOAction) -> str:
+        """Return file filter for Qt file dialog"""
+        assert action in (IOAction.LOAD, IOAction.SAVE)
+        if action == IOAction.LOAD and not self.info.readable:
+            return ""
+        if action == IOAction.SAVE and not self.info.writeable:
+            return ""
+        return f"{self.info.name} ({self.info.extensions})"
+
+    def read(self, filename: str) -> ObjectItf:
+        """Read data from file, return one or more objects"""
+        raise NotImplementedError(f"Reading from {self.info.name} is not supported")
+
+    def write(self, filename: str, obj: ObjectItf) -> None:
+        """Write data to file"""
+        raise NotImplementedError(f"Writing to {self.info.name} is not supported")
