@@ -476,9 +476,9 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         """Convert ROI coordinates to indexes"""
         indexes = np.array(coords)
         if indexes.size > 0:
-            indexes[:, ::2] -= self.x0
+            indexes[:, ::2] -= self.x0 + 0.5 * self.dx
             indexes[:, ::2] /= self.dx
-            indexes[:, 1::2] -= self.y0
+            indexes[:, 1::2] -= self.y0 + 0.5 * self.dy
             indexes[:, 1::2] /= self.dy
         return np.array(indexes, int)
 
@@ -487,9 +487,9 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         if self.roi is not None:
             roicoords = np.array(self.roi, float)
             roicoords[:, ::2] *= self.dx
-            roicoords[:, ::2] += self.x0
+            roicoords[:, ::2] += self.x0 - 0.5 * self.dx
             roicoords[:, 1::2] *= self.dy
-            roicoords[:, 1::2] += self.y0
+            roicoords[:, 1::2] += self.y0 - 0.5 * self.dy
             for index, coords in enumerate(roicoords):
                 roidataitem = RoiDataItem(coords)
                 yield roidataitem.make_roi_item(index, fmt, lbl, editable)
