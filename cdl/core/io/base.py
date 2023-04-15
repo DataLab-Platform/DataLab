@@ -81,7 +81,7 @@ class BaseIORegistry(type):
         """Return format handler for filename"""
         for fmt in cls.get_formats():
             fmt: FormatBase
-            if osp.splitext(filename)[1][1:] in fmt.extlist:
+            if osp.splitext(filename)[1][1:].lower() in fmt.extlist:
                 if not fmt.info.readable and action == IOAction.LOAD:
                     continue
                 if not fmt.info.writeable and action == IOAction.SAVE:
@@ -112,7 +112,7 @@ def get_file_extensions(string):
     """Return a list of file extensions in a string"""
     pattern = r"\S+\.[\w-]+"
     matches = re.findall(pattern, string)
-    return [match.split(".")[-1] for match in matches]
+    return [match.split(".")[-1].lower() for match in matches]
 
 
 @dataclasses.dataclass
