@@ -63,7 +63,7 @@ class ImagePanel(BaseDataPanel):
         )
 
     # ------Refreshing GUI--------------------------------------------------------------
-    def properties_changed(self):
+    def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: updating signal"""
         row = self.objlist.currentRow()
         self.objlist[row].invalidate_maskdata_cache()
@@ -78,7 +78,7 @@ class ImagePanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return
-        curobj = self.objlist.get_sel_object(-1)
+        curobj: ImageParam = self.objlist.get_sel_object(-1)
         if curobj is not None:
             newparam = newparam if newparam is not None else new_image_param()
             newparam.width, newparam.height = curobj.size
@@ -89,7 +89,7 @@ class ImagePanel(BaseDataPanel):
         if image is not None:
             self.add_object(image)
 
-    def toggle_show_contrast(self, state):
+    def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
         self.SIG_UPDATE_PLOT_ITEMS.emit()

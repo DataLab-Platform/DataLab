@@ -43,7 +43,6 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions
 from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
-from guiqwt.plot import CurveDialog
 from guiqwt.tools import (
     HCursorTool,
     LabelTool,
@@ -60,7 +59,6 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectlist, roieditor
 from cdl.core.io.base import IOAction
 from cdl.core.model.base import MetadataItem, ResultShape
-from cdl.core.model.signal import SignalParam
 from cdl.utils.qthelpers import (
     exec_dialog,
     qt_try_except,
@@ -69,6 +67,8 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:
+    from guiqwt.plot import CurveDialog, ImageDialog
+
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
     from cdl.core.gui.plotitemlist import BaseItemList
@@ -76,6 +76,8 @@ if TYPE_CHECKING:
     from cdl.core.io.base import BaseIORegistry
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
     from cdl.core.model.base import ObjectItf, ShapeTypes
+    from cdl.core.model.image import ImageParam
+    from cdl.core.model.signal import SignalParam
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -84,7 +86,7 @@ gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
 class ObjectProp(QW.QWidget):
     """Object handling panel properties"""
 
-    def __init__(self, panel, paramclass):
+    def __init__(self, panel: BaseDataPanel, paramclass: SignalParam | ImageParam):
         super().__init__(panel)
         self.paramclass = paramclass
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), paramclass)
@@ -217,8 +219,8 @@ class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
-    PARAMCLASS = SignalParam  # Replaced by the right class in child object
-    DIALOGCLASS = CurveDialog  # Idem
+    PARAMCLASS: SignalParam | ImageParam = None  # Replaced in child object
+    DIALOGCLASS: CurveDialog | ImageDialog = None  # Idem
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
@@ -233,7 +235,7 @@ class BaseDataPanel(AbstractPanel):
     SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to row number
     SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected rows
     ROIDIALOGOPTIONS = {}
-    ROIDIALOGCLASS = roieditor.BaseROIEditor  # Replaced in child object
+    ROIDIALOGCLASS: roieditor.BaseROIEditor = None  # Replaced in child object
 
     @abc.abstractmethod
     def __init__(self, parent, plotwidget, toolbar):
@@ -646,7 +648,8 @@ class BaseDataPanel(AbstractPanel):
                 dlg.add_tool(tool)
         plot = dlg.get_plot()
         for row in rows:
-            item = self.itmlist.make_item_from_existing(row)
+            obj = self.objlist[row]
+            item = obj.make_item(update_from=self.itmlist[row])
             item.set_readonly(True)
             plot.add_item(item, z=0)
         plot.set_active_item(item)

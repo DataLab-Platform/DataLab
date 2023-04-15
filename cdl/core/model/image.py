@@ -10,18 +10,21 @@ CobraDataLab Datasets
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 import enum
 import re
 import weakref
 from collections import abc
 from copy import deepcopy
+from typing import Iterator, Optional
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
-from guiqwt.annotations import AnnotatedCircle
+from guiqwt.annotations import AnnotatedCircle, AnnotatedRectangle
 from guiqwt.builder import make
 from guiqwt.image import MaskedImageItem
 from numpy import ma
@@ -32,12 +35,14 @@ from cdl.core.computation.image import scale_data_to_min_max
 from cdl.core.model import base
 
 
-def make_roi_rectangle(x0: int, y0: int, x1: int, y1: int, title: str):
+def make_roi_rectangle(
+    x0: int, y0: int, x1: int, y1: int, title: str
+) -> AnnotatedRectangle:
     """Make and return the annnotated rectangle associated to ROI"""
     return make.annotated_rectangle(x0, y0, x1, y1, title)
 
 
-def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str):
+def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> AnnotatedCircle:
     """Make and return the annnotated circle associated to ROI"""
     item = AnnotatedCircle(x0, y0, x1, y1)
     item.annotationparam.title = title
@@ -46,7 +51,7 @@ def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str):
     return item
 
 
-def to_builtin(obj):
+def to_builtin(obj) -> Optional[object]:
     """Convert an object implementing a numeric value or collection
     into the corresponding builtin/NumPy type.
 
@@ -80,7 +85,7 @@ class RoiDataItem:
         self._data = data
 
     @classmethod
-    def from_image(cls, obj, geometry: RoiDataGeometries):
+    def from_image(cls, obj, geometry: RoiDataGeometries) -> RoiDataItem:
         """Construct roi data item from image object: called for making new ROI items"""
         x0, x1 = obj.x0, obj.size[0] + obj.x0
         if geometry is RoiDataGeometries.RECTANGLE:
@@ -98,7 +103,7 @@ class RoiDataItem:
             return RoiDataGeometries.CIRCLE
         return RoiDataGeometries.RECTANGLE
 
-    def get_rect(self):
+    def get_rect(self) -> tuple[int, int, int, int]:
         """Get rectangle coordinates"""
         x0, y0, x1, y1 = self._data
         if self.geometry is RoiDataGeometries.CIRCLE:
@@ -159,17 +164,17 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         self._roidata_cache = None  # weak reference
 
     @property
-    def size(self):
+    def size(self) -> tuple[int, int]:
         """Returns (width, height)"""
         return self.data.shape[1], self.data.shape[0]
 
-    def __add_metadata(self, key, value):
+    def __add_metadata(self, key, value) -> None:
         """Add value to metadata if value can be converted into builtin/NumPy type"""
         stored_val = to_builtin(value)
         if stored_val is not None:
             self.metadata[key] = stored_val
 
-    def reset_metadata_to_defaults(self):
+    def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         base.ObjectItf.reset_metadata_to_defaults(self)
         # Default visualization settings
@@ -188,7 +193,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         #     classes)
         # 4. Update all active objects when settings were changed
 
-    def set_metadata_from(self, obj):
+    def set_metadata_from(self, obj) -> None:
         """Set metadata from object: dict-like (only string keys are considered)
         or any other object (iterating over supported attributes)"""
         self.reset_metadata_to_defaults()
@@ -306,7 +311,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             data = np.nan_to_num(data, posinf=0, neginf=0)
         return data
 
-    def __update_item_params(self, data: np.ndarray, item: MaskedImageItem):
+    def __update_item_params(self, item: MaskedImageItem):
         """Update plot item parameters"""
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
@@ -323,8 +328,9 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                 x0, y0 = self.x0, self.y0
             if has_pixelspacing:
                 dx, dy = self.dx, self.dy
-            item.imageparam.xmin, item.imageparam.xmax = x0, x0 + dx * data.shape[1]
-            item.imageparam.ymin, item.imageparam.ymax = y0, y0 + dy * data.shape[0]
+            shape = self.data.shape
+            item.imageparam.xmin, item.imageparam.xmax = x0, x0 + dx * shape[1]
+            item.imageparam.ymin, item.imageparam.ymax = y0, y0 + dy * shape[0]
         update_dataset(item.imageparam, self.metadata)
         item.imageparam.update_image(item)
 
@@ -341,21 +347,26 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             show_mask=True,
         )
         if update_from is None:
-            self.__update_item_params(data, item)
+            self.__update_item_params(item)
         else:
             update_dataset(item.imageparam, update_from.imageparam)
             item.imageparam.update_image(item)
         return item
 
-    def update_item(self, item: MaskedImageItem, ref_item: MaskedImageItem = None):
+    def update_item(
+        self,
+        item: MaskedImageItem,
+        ref_item: MaskedImageItem = None,
+        data_changed: bool = True,
+    ) -> None:
         """Update plot item from data"""
-        data = self.__viewable_data()
-        item.set_data(data, lut_range=[item.min, item.max])
+        if data_changed:
+            item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
         item.imageparam.label = self.title
         if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
             item.set_lut_range(ref_item.get_lut_range())
-        self.__update_item_params(data, item)
+        self.__update_item_params(item)
         item.plot().update_colormap_axis(item)
 
     def get_roi_param(self, title, *defaults):
@@ -471,7 +482,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             indexes[:, 1::2] /= self.dy
         return np.array(indexes, int)
 
-    def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
+    def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True) -> Iterator:
         """Iterate over plot items representing Regions of Interest"""
         if self.roi is not None:
             roicoords = np.array(self.roi, float)
@@ -484,7 +495,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
                 yield roidataitem.make_roi_item(index, fmt, lbl, editable)
 
     @property
-    def maskdata(self):
+    def maskdata(self) -> np.ndarray:
         """Return masked data (areas outside defined regions of interest)"""
         roi_changed = self._roidata_cache is not None and self._roidata_cache() is None
         if self.roi is None:
@@ -501,18 +512,18 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             self._roidata_cache = weakref.ref(self.roi)
         return self._maskdata_cache
 
-    def invalidate_maskdata_cache(self):
+    def invalidate_maskdata_cache(self) -> None:
         """Invalidate mask data cache: force to rebuild it"""
         self._maskdata_cache = None
 
 
 def create_image(
-    title,
-    data: np.ndarray = None,
-    metadata: dict = None,
-    units: tuple = None,
-    labels: tuple = None,
-):
+    title: str,
+    data: Optional[np.ndarray] = None,
+    metadata: Optional[dict] = None,
+    units: Optional[tuple] = None,
+    labels: Optional[tuple] = None,
+) -> ImageParam:
     """Create a new Image object
 
     :param str title: image title
@@ -587,7 +598,13 @@ class ImageParamNew(gdt.DataSet):
     type = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
 
 
-def new_image_param(title=None, itype=None, height=None, width=None, dtype=None):
+def new_image_param(
+    title: Optional[str] = None,
+    itype: Optional[ImageTypes] = None,
+    height: Optional[int] = None,
+    width: Optional[int] = None,
+    dtype: Optional[ImageDatatypes] = None,
+) -> ImageParamNew:
     """Create a new Image dataset instance.
 
     :param str title: dataset title (default: None, uses default title)"""

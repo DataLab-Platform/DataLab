@@ -386,7 +386,14 @@ class H5Browser(QW.QSplitter):
         plot.set_active_item(item)
         item.unselect()
         plot.do_autoscale()
+
+        # FIXME: This is strange: why do we need to update the item here?
+        #        It reveals a design flaw in the way we handle items: we should
+        #        not have to update the item just after adding it to the plot.
+        #        The `make_item` method should return an item that is ready to
+        #        be added to the plot.
         obj.update_item(item)
+
         self.stack.setCurrentWidget(widget)
 
 

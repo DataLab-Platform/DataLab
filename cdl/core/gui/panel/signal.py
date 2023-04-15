@@ -10,7 +10,8 @@
 from guiqwt.plot import CurveDialog
 
 from cdl.config import _
-from cdl.core.gui import actionhandler, plotitemlist, roieditor
+from cdl.core.gui import plotitemlist, roieditor
+from cdl.core.gui.actionhandler import SignalActionHandler
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
@@ -38,10 +39,8 @@ class SignalPanel(BaseDataPanel):
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = plotitemlist.SignalItemList(self, self.objlist, plotwidget)
-        self.processor = SignalProcessor(self, self.objlist, plotwidget)
-        self.acthandler = actionhandler.SignalActionHandler(
-            self, self.itmlist, self.processor, toolbar
-        )
+        self.processor = proc = SignalProcessor(self, self.objlist, plotwidget)
+        self.acthandler = SignalActionHandler(self, self.itmlist, proc, toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True):
@@ -52,7 +51,7 @@ class SignalPanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return
-        curobj = self.objlist.get_sel_object(-1)
+        curobj: SignalParam = self.objlist.get_sel_object(-1)
         if curobj is not None:
             newparam = newparam if newparam is not None else new_signal_param()
             newparam.size = len(curobj.data)

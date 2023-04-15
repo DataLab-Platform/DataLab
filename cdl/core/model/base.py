@@ -502,7 +502,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Make plot item from data"""
 
     @abc.abstractmethod
-    def update_item(self, item, ref_item=None):
+    def update_item(self, item, ref_item=None, data_changed: bool = True) -> None:
         """Update plot item from data"""
 
     @abc.abstractmethod

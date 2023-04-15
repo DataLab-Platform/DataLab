@@ -11,6 +11,13 @@ These classes handle guiqwt plot items for signal and image panels.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
+import hashlib
+from typing import TYPE_CHECKING, List
+from weakref import WeakKeyDictionary
+
+import numpy as np
 from guiqwt.builder import make
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
@@ -18,11 +25,29 @@ from guiqwt.styles import style_generator
 
 from cdl.config import Conf
 
+if TYPE_CHECKING:
+    from guiqwt.plot import CurveWidget, ImageWidget
+
+    from cdl.core.gui.objectlist import ObjectList
+    from cdl.core.gui.panel.base import BaseDataPanel
+    from cdl.core.model.image import ImageParam
+    from cdl.core.model.signal import SignalParam
+
+
+def calc_data_hash(obj: SignalParam | ImageParam) -> str:
+    """Calculate a hash for a SignalParam | ImageParam object's data"""
+    return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
+
 
 class BaseItemList:
     """Object handling plot items associated to objects (signals/images)"""
 
-    def __init__(self, panel, objlist, plotwidget):
+    def __init__(
+        self,
+        panel: BaseDataPanel,
+        objlist: ObjectList,
+        plotwidget: CurveWidget | ImageWidget,
+    ):
         self._enable_cleanup_dataview = True
         self.panel = panel
         self.objlist = objlist
@@ -30,12 +55,15 @@ class BaseItemList:
         self.plot = plotwidget.get_plot()
         self.__plotitems = []  # plot items associated to objects (sig/ima)
         self.__shapeitems = []
+        self.__cached_hashes: WeakKeyDictionary[
+            SignalParam | ImageParam, List[int]
+        ] = WeakKeyDictionary()
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Return number of items"""
         return len(self.__plotitems)
 
-    def __getitem__(self, row):
+    def __getitem__(self, row: int):
         """Return item at row"""
         return self.__plotitems[row]
 
@@ -59,25 +87,6 @@ class BaseItemList:
     def insert(self, row):
         """Insert object at row index"""
         self.__plotitems.insert(row, None)
-
-    def add_item_to_plot(self, row):
-        """Add plot item to plot"""
-        item = self.objlist[row].make_item()
-        item.set_readonly(True)
-        if row < len(self):
-            self[row] = item
-        else:
-            self.append(item)
-        self.plot.add_item(item)
-        return item
-
-    def make_item_from_existing(self, row):
-        """Make plot item from existing object/item at row"""
-        return self.objlist[row].make_item(update_from=self[row])
-
-    def update_item(self, row, ref_item=None):
-        """Update plot item associated to data"""
-        self.objlist[row].update_item(self[row], ref_item=ref_item)
 
     def add_shapes(self, row):
         """Add geometric shape items associated to computed results and annotations"""
@@ -107,6 +116,28 @@ class BaseItemList:
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
 
+    def __add_item_to_plot(self, row):
+        """Make plot item and add it to plot"""
+        obj = self.objlist[row]
+        self.__cached_hashes[obj] = calc_data_hash(obj)
+        item = obj.make_item()
+        item.set_readonly(True)
+        if row < len(self):
+            self[row] = item
+        else:
+            self.append(item)
+        self.plot.add_item(item)
+        return item
+
+    def __update_item_on_plot(self, row, ref_item):
+        """Update plot item"""
+        obj = self.objlist[row]
+        cached_hash = self.__cached_hashes.get(obj)
+        new_hash = calc_data_hash(obj)
+        data_changed = cached_hash is None or cached_hash != new_hash
+        self.__cached_hashes[obj] = new_hash
+        obj.update_item(self[row], ref_item=ref_item, data_changed=data_changed)
+
     def refresh_plot(self, only_row: int = None):
         """Refresh plot (if row is not None, refresh only plot associated to row)"""
         if only_row is None:
@@ -124,8 +155,9 @@ class BaseItemList:
         if rows:
             ref_item = None
             for i_row, row in enumerate(rows):
+                obj = self.objlist[row]
                 for key in title_keys:
-                    title = getattr(self.objlist[row], key, "")
+                    title = getattr(obj, key, "")
                     value = titles_dict.get(key)
                     if value is None:
                         titles_dict[key] = title
@@ -133,11 +165,11 @@ class BaseItemList:
                         titles_dict[key] = ""
                 item = self[row]
                 if item is None:
-                    item = self.add_item_to_plot(row)
+                    item = self.__add_item_to_plot(row)
                 else:
                     if i_row == 0:
                         make.style = style_generator()
-                    self.update_item(row, ref_item=ref_item)
+                    self.__update_item_on_plot(row, ref_item=ref_item)
                     if ref_item is None:
                         ref_item = item
                 self.plot.set_item_visible(item, True, replot=False)

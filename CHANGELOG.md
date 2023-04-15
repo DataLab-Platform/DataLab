@@ -11,7 +11,9 @@ New dependencies:
 
 New features:
 
-* Signal/Image panels: drastically improved performance when selecting objects
+* Signal/Image panels:
+  * Drastically improved performance when selecting objects
+  * Optimized performance when showing large images
 * Added support for dropping files on signal/image list widget
 * Added "Computing parameters" group box to show last result input parameters
 * Added "Copy titles to clipboard" feature in "Edit" menu
