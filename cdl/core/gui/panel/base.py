@@ -35,7 +35,7 @@ import dataclasses
 import os
 import re
 import warnings
-from typing import TYPE_CHECKING, Iterator, List
+from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
@@ -58,7 +58,7 @@ from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectlist, roieditor
-from cdl.core.io.base import BaseIORegistry, IOAction
+from cdl.core.io.base import IOAction
 from cdl.core.model.base import MetadataItem, ResultShape
 from cdl.core.model.signal import SignalParam
 from cdl.utils.qthelpers import (
@@ -70,7 +70,12 @@ from cdl.utils.qthelpers import (
 
 if TYPE_CHECKING:
     from cdl.core.gui import ObjItf
-    from cdl.core.model.base import ObjectItf
+    from cdl.core.gui.main import CDLMainWindow
+    from cdl.core.gui.plotitemlist import BaseItemList
+    from cdl.core.gui.processor.base import BaseProcessor
+    from cdl.core.io.base import BaseIORegistry
+    from cdl.core.io.native import NativeH5Reader, NativeH5Writer
+    from cdl.core.model.base import ObjectItf, ShapeTypes
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -86,7 +91,7 @@ class ObjectProp(QW.QWidget):
         self.properties.SIG_APPLY_BUTTON_CLICKED.connect(panel.properties_changed)
         self.properties.setEnabled(False)
         self.add_prop_layout = QW.QHBoxLayout()
-        playout = self.properties.edit.layout
+        playout: QW.QGridLayout = self.properties.edit.layout
         playout.addLayout(
             self.add_prop_layout, playout.rowCount() - 1, 0, 1, 1, QC.Qt.AlignLeft
         )
@@ -188,7 +193,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         """Remove all objects"""
         self.SIG_OBJECT_REMOVED.emit()
 
-    def serialize_to_hdf5(self, writer):
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize objects to a HDF5 file"""
         with writer.group(self.H5_PREFIX):
             for idx, obj in enumerate(self.object_iterator()):
@@ -197,7 +202,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
                 with writer.group(name):
                     obj.serialize(writer)
 
-    def deserialize_from_hdf5(self, reader):
+    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
         """Deserialize objects from a HDF5 file"""
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
@@ -223,7 +228,7 @@ class BaseDataPanel(AbstractPanel):
         RectangleTool,
     )
     DIALOGSIZE = (800, 600)
-    IO_REGISTRY = BaseIORegistry  # Replaced by the right class in child object
+    IO_REGISTRY: BaseIORegistry = None  # Replaced by the right class in child object
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to row number
     SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected rows
@@ -233,20 +238,20 @@ class BaseDataPanel(AbstractPanel):
     @abc.abstractmethod
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent)
-        self.mainwindow = parent
+        self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objlist = objectlist.ObjectList(self)
         self.objlist.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
-        self.itmlist = None
-        self.processor = None
+        self.itmlist: BaseItemList = None
+        self.processor: BaseProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
-        self.__separate_views = {}
+        self.__separate_views: Dict[QW.QDialog, ObjectItf] = {}
 
     # ------AbstractPanel interface-----------------------------------------------------
     @property
-    def object_number(self):
+    def object_number(self) -> int:
         """Return object number"""
         return len(self.objlist)
 
@@ -254,7 +259,7 @@ class BaseDataPanel(AbstractPanel):
         """Iterate over objects handled by panel"""
         return iter(self.objlist)
 
-    def remove_all_objects(self):
+    def remove_all_objects(self) -> None:
         """Remove all objects"""
         for dlg in self.__separate_views:
             dlg.done(QW.QDialog.DialogCode.Rejected)
@@ -264,7 +269,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         super().remove_all_objects()
 
-    def create_object(self, title=None):
+    def create_object(self, title: Optional[str] = None) -> ObjItf:
         """Create object (signal or image)
 
         :param str title: Title of the object
@@ -282,7 +287,7 @@ class BaseDataPanel(AbstractPanel):
         return obj
 
     @qt_try_except()
-    def add_object(self, obj, refresh=True) -> ObjItf:
+    def add_object(self, obj: ObjectItf, refresh: bool = True) -> ObjItf:
         """Add object
 
         :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
@@ -294,7 +299,7 @@ class BaseDataPanel(AbstractPanel):
         return super().add_object(obj, refresh=refresh)
 
     # ---- Signal/Image Panel API ------------------------------------------------------
-    def setup_panel(self):
+    def setup_panel(self) -> None:
         """Setup panel"""
         self.acthandler.create_all_actions()
         self.processor.SIG_ADD_SHAPE.connect(self.itmlist.add_shapes)
@@ -312,11 +317,13 @@ class BaseDataPanel(AbstractPanel):
         self.addWidget(self.objprop)
         self.add_results_button()
 
-    def get_category_actions(self, category) -> List[QW.QAction]:  # pragma: no cover
+    def get_category_actions(
+        self, category: actionhandler.ActionCategory
+    ) -> List[QW.QAction]:  # pragma: no cover
         """Return actions for category"""
         return self.acthandler.feature_actions.get(category, [])
 
-    def __popup_contextmenu(self, position: QC.QPoint):  # pragma: no cover
+    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
         """Popup context menu at position"""
         # Note: For now, this is completely unnecessary to clear context menu everytime,
         # but implementing it this way could be useful in the future in menu contents
@@ -330,7 +337,7 @@ class BaseDataPanel(AbstractPanel):
 
     # TODO: [P2] New feature: move objects up/down
     @qt_try_except()
-    def insert_object(self, obj, row, refresh=True):
+    def insert_object(self, obj: ObjectItf, row: int, refresh: bool = True) -> None:
         """Insert signal/image object after row"""
         obj.check_data()
         self.objlist.insert(row, obj)
@@ -339,7 +346,7 @@ class BaseDataPanel(AbstractPanel):
             self.objlist.refresh_list(new_current_row=row + 1)
         self.SIG_OBJECT_ADDED.emit()
 
-    def duplicate_object(self):
+    def duplicate_object(self) -> None:
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
@@ -354,7 +361,7 @@ class BaseDataPanel(AbstractPanel):
         self.objlist.refresh_list(new_current_row=-1)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def copy_metadata(self):
+    def copy_metadata(self) -> None:
         """Copy object metadata"""
         row = self.objlist.get_selected_rows()[0]
         obj = self.objlist[row]
@@ -375,7 +382,7 @@ class BaseDataPanel(AbstractPanel):
                     self.__metadata_clipboard.pop(key)
                     self.__metadata_clipboard[mshape.key] = value
 
-    def paste_metadata(self):
+    def paste_metadata(self) -> None:
         """Paste metadata to selected object(s)"""
         rows = sorted(self.objlist.get_selected_rows(), reverse=True)
         row = None
@@ -384,7 +391,7 @@ class BaseDataPanel(AbstractPanel):
             obj.metadata.update(self.__metadata_clipboard)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def remove_object(self):
+    def remove_object(self) -> None:
         """Remove signal/image object"""
         rows = sorted(self.objlist.get_selected_rows(), reverse=True)
         for row in rows:
@@ -397,7 +404,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
-    def delete_all_objects(self):  # pragma: no cover
+    def delete_all_objects(self) -> None:  # pragma: no cover
         """Confirm before removing all objects"""
         if self.object_number == 0:
             return
@@ -410,7 +417,7 @@ class BaseDataPanel(AbstractPanel):
         if answer == QW.QMessageBox.Yes:
             self.remove_all_objects()
 
-    def delete_metadata(self):
+    def delete_metadata(self) -> None:
         """Delete object metadata"""
         for index, row in enumerate(self.objlist.get_selected_rows()):
             self.objlist[row].reset_metadata_to_defaults()
@@ -418,7 +425,7 @@ class BaseDataPanel(AbstractPanel):
                 self.selection_changed()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def copy_titles_to_clipboard(self):
+    def copy_titles_to_clipboard(self) -> None:
         """Copy object titles to clipboard (for reproducibility)"""
         text = os.linesep.join(
             [
@@ -491,7 +498,7 @@ class BaseDataPanel(AbstractPanel):
             obj = self.objlist[row]
             self.save_object(obj, filename)
 
-    def import_metadata_from_file(self, filename: str = None):
+    def import_metadata_from_file(self, filename: str = None) -> None:
         """Import metadata from file (JSON)"""
         if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
@@ -507,7 +514,7 @@ class BaseDataPanel(AbstractPanel):
                 obj.import_metadata_from_file(filename)
             self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def export_metadata_from_file(self, filename: str = None):
+    def export_metadata_from_file(self, filename: str = None) -> None:
         """Export metadata to file (JSON)"""
         row = self.objlist.get_selected_rows()[0]
         obj = self.objlist[row]
@@ -522,28 +529,8 @@ class BaseDataPanel(AbstractPanel):
                 Conf.main.base_dir.set(filename)
                 obj.export_metadata_to_file(filename)
 
-    # ------Serializing/deserializing objects-------------------------------------------
-    def serialize_to_hdf5(self, writer):
-        """Serialize objects to a HDF5 file"""
-        with writer.group(self.H5_PREFIX):
-            for idx, obj in enumerate(self.objlist):
-                title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-                name = f"{self.PREFIX}{idx:03d}: {title}"
-                with writer.group(name):
-                    obj.serialize(writer)
-
-    def deserialize_from_hdf5(self, reader):
-        """Deserialize objects from a HDF5 file"""
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                obj = self.PARAMCLASS()
-                with reader.group(name):
-                    obj.deserialize(reader)
-                    self.add_object(obj)
-                    QW.QApplication.processEvents()
-
     # ------Refreshing GUI--------------------------------------------------------------
-    def selection_changed(self):
+    def selection_changed(self) -> None:
         """Signal list: selection changed"""
         row = self.objlist.currentRow()
         sel_objs = self.objlist.get_sel_objects()
@@ -553,7 +540,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.acthandler.selection_rows_changed(sel_objs)
 
-    def properties_changed(self):
+    def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: updating signal"""
         row = self.objlist.currentRow()
         update_dataset(self.objlist[row], self.objprop.properties.dataset)
@@ -561,7 +548,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, rows=None) -> QW.QDialog:
+    def open_separate_view(self, rows: Optional[List[int]] = None) -> QW.QDialog:
         """
         Open separate view for visualizing selected objects
 
@@ -596,7 +583,7 @@ class BaseDataPanel(AbstractPanel):
         dlg.finished.connect(self.__separate_view_finished)
         return dlg
 
-    def __separate_view_finished(self, result: int):
+    def __separate_view_finished(self, result: int) -> None:
         """Separate view was closed"""
         dlg = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
@@ -608,7 +595,7 @@ class BaseDataPanel(AbstractPanel):
                 self.selection_changed()
                 self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def toggle_show_titles(self, state):
+    def toggle_show_titles(self, state: bool) -> None:
         """Toggle show annotations option"""
         Conf.view.show_label.set(state)
         for obj in self.objlist:
@@ -715,7 +702,7 @@ class BaseDataPanel(AbstractPanel):
             return dlg.get_object()
         return None
 
-    def add_results_button(self):
+    def add_results_button(self) -> None:
         """Add 'Show results' button"""
         btn = QW.QPushButton(get_icon("show_results.svg"), _("Show results"), self)
         btn.setToolTip(_("Show results obtained from previous computations"))
@@ -726,7 +713,7 @@ class BaseDataPanel(AbstractPanel):
             select_condition=actionhandler.SelectCond.at_least_one,
         )
 
-    def show_results(self):
+    def show_results(self) -> None:
         """Show results"""
         rows = self.objlist.get_selected_rows()
 
@@ -738,7 +725,7 @@ class BaseDataPanel(AbstractPanel):
             xlabels: List[str] = None
             ylabels: List[str] = None
 
-        rdatadict = {}
+        rdatadict: Dict[ShapeTypes, ResultData] = {}
         for idx, row in enumerate(rows):
             obj = self.objlist[row]
             for result in obj.iterate_resultshapes():
