@@ -539,7 +539,7 @@ class BaseDataPanel(AbstractPanel):
         if not sel_objs:
             row = -1
         self.objprop.update_properties_from(self.objlist[row] if row != -1 else None)
-        self.SIG_UPDATE_PLOT_ITEMS.emit()
+        self.itmlist.refresh_plot(just_show=True)
         self.acthandler.selection_rows_changed(sel_objs)
 
     def properties_changed(self) -> None:

@@ -353,19 +353,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
             item.imageparam.update_image(item)
         return item
 
-    def update_item(
-        self,
-        item: MaskedImageItem,
-        ref_item: MaskedImageItem = None,
-        data_changed: bool = True,
-    ) -> None:
+    def update_item(self, item: MaskedImageItem, data_changed: bool = True) -> None:
         """Update plot item from data"""
         if data_changed:
             item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
         item.imageparam.label = self.title
-        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
-            item.set_lut_range(ref_item.get_lut_range())
         self.__update_item_params(item)
         item.plot().update_colormap_axis(item)
 

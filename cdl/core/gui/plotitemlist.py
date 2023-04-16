@@ -26,7 +26,9 @@ from guiqwt.styles import style_generator
 from cdl.config import Conf
 
 if TYPE_CHECKING:
-    from guiqwt.plot import CurveWidget, ImageWidget
+    from guiqwt.curve import CurveItem
+    from guiqwt.image import MaskedImageItem
+    from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget
 
     from cdl.core.gui.objectlist import ObjectList
     from cdl.core.gui.panel.base import BaseDataPanel
@@ -128,17 +130,37 @@ class BaseItemList:
         self.plot.add_item(item)
         return item
 
-    def __update_item_on_plot(self, row, ref_item):
-        """Update plot item"""
-        obj = self.objlist[row]
-        cached_hash = self.__cached_hashes.get(obj)
-        new_hash = calc_data_hash(obj)
-        data_changed = cached_hash is None or cached_hash != new_hash
-        self.__cached_hashes[obj] = new_hash
-        obj.update_item(self[row], ref_item=ref_item, data_changed=data_changed)
+    def __update_item_on_plot(
+        self, row: int, ref_item: CurveItem | MaskedImageItem, just_show: bool = False
+    ) -> None:
+        """Update plot item.
 
-    def refresh_plot(self, only_row: int = None):
-        """Refresh plot (if row is not None, refresh only plot associated to row)"""
+        param int row: row index
+        param ref_item: reference item
+        param bool just_show: if True, only show the item (do not update it,
+        except regarding the reference item)"""
+        if not just_show:
+            obj = self.objlist[row]
+            cached_hash = self.__cached_hashes.get(obj)
+            new_hash = calc_data_hash(obj)
+            data_changed = cached_hash is None or cached_hash != new_hash
+            self.__cached_hashes[obj] = new_hash
+            obj.update_item(self[row], data_changed=data_changed)
+        self.update_item_according_to_ref_item(self[row], ref_item)
+
+    @staticmethod
+    def update_item_according_to_ref_item(
+        item: MaskedImageItem, ref_item: MaskedImageItem
+    ) -> None:  # pylint: disable=unused-argument
+        """Update plot item according to reference item"""
+        #  For now, nothing to do here: it's only used for images (contrast)
+
+    def refresh_plot(self, only_row: int = None, just_show: bool = False) -> None:
+        """Refresh plot.
+
+        param int only_row: if not None, only refresh the item at this row
+        param bool just_show: if True, only show the item(s) (do not update it/them)
+        """
         if only_row is None:
             rows = self.objlist.get_selected_rows()
             if len(rows) == 1:
@@ -168,7 +190,9 @@ class BaseItemList:
                 else:
                     if i_row == 0:
                         make.style = style_generator()
-                    self.__update_item_on_plot(row, ref_item=ref_item)
+                    self.__update_item_on_plot(
+                        row, ref_item=ref_item, just_show=just_show
+                    )
                     if ref_item is None:
                         ref_item = item
                 self.plot.set_item_visible(item, True, replot=False)
@@ -220,9 +244,23 @@ class SignalItemList(BaseItemList):
 class ImageItemList(BaseItemList):
     """Object handling image plot items, plot dialogs, plot options"""
 
-    def refresh_plot(self, only_row: int = None):
-        """Refresh plot (if row is not None, refresh only plot associated to row)"""
-        super().refresh_plot(only_row)
+    @staticmethod
+    def update_item_according_to_ref_item(
+        item: MaskedImageItem, ref_item: MaskedImageItem
+    ) -> None:
+        """Update plot item according to reference item"""
+        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
+            item.set_lut_range(ref_item.get_lut_range())
+            plot: ImagePlot = item.plot()
+            plot.update_colormap_axis(item)
+
+    def refresh_plot(self, only_row: int = None, just_show: bool = False) -> None:
+        """Refresh plot.
+
+        param int only_row: if not None, only refresh the item at this row
+        param bool just_show: if True, only show the item(s) (do not update it/them)
+        """
+        super().refresh_plot(only_row=only_row, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self):
