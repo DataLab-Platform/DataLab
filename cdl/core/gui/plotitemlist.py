@@ -48,7 +48,6 @@ class BaseItemList:
         objlist: ObjectList,
         plotwidget: CurveWidget | ImageWidget,
     ):
-        self._enable_cleanup_dataview = True
         self.panel = panel
         self.objlist = objlist
         self.plotwidget = plotwidget
@@ -142,7 +141,7 @@ class BaseItemList:
         """Refresh plot (if row is not None, refresh only plot associated to row)"""
         if only_row is None:
             rows = self.objlist.get_selected_rows()
-            if self._enable_cleanup_dataview and len(rows) == 1:
+            if len(rows) == 1:
                 self.cleanup_dataview()
             self.remove_all_shape_items()
             for item in self:
@@ -185,10 +184,6 @@ class BaseItemList:
         tdict["yunit"] = (tdict["yunit"], tdict.pop("zunit"))
         self.plot.set_titles(**titles_dict)
         self.plot.do_autoscale()
-
-    def toggle_cleanup_dataview(self, state):
-        """Toggle clean up data view option"""
-        self._enable_cleanup_dataview = state
 
     def cleanup_dataview(self):
         """Clean up data view"""

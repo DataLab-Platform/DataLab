@@ -350,15 +350,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
                 toolbar_sep=True,
             )
-        # TODO: Add cleanup_action to edit menu???
-        # cleanup_action = self.new_action(
-        #     _("Clean up data view"),
-        #     icon=get_icon("libre-tools-vacuum-cleaner.svg"),
-        #     tip=_("Clean up data view before updating plotting panels"),
-        #     toggled=self.itmlist.toggle_cleanup_dataview,
-        #     select_condition=SelectCond.always,
-        # )
-        # cleanup_action.setChecked(True)
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
