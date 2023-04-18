@@ -93,7 +93,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         super().__init__()
         self.setWindowTitle(_("Host application"))
         self.setWindowIcon(get_std_icon("ComputerIcon"))
-        self.cdl = None
+        self.cdl: CDLMainWindow = None
         self.host = HostWidget(self)
         self.setCentralWidget(self.host)
         self.setup_window()

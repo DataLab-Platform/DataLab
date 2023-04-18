@@ -28,7 +28,7 @@ from cdl.config import _
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
-    from cdl.core.gui.panel import BaseDataPanel
+    from cdl.core.gui.panel.base import BaseDataPanel
     from cdl.core.gui.plotitemlist import BaseItemList
     from cdl.core.gui.processor.base import BaseProcessor
     from cdl.core.model.base import ObjectItf
@@ -92,12 +92,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def __init__(
         self,
         panel: BaseDataPanel,
-        itmlist: BaseItemList,
         proc: BaseProcessor,
         toolbar: QW.QToolBar,
     ):
         self.panel = panel
-        self.itmlist = itmlist
         self.proc = proc
         self.toolbar = toolbar
         self.feature_actions = {}

@@ -40,7 +40,7 @@ class SignalPanel(BaseDataPanel):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = plotitemlist.SignalItemList(self, self.objlist, plotwidget)
         self.processor = proc = SignalProcessor(self, self.objlist, plotwidget)
-        self.acthandler = SignalActionHandler(self, self.itmlist, proc, toolbar)
+        self.acthandler = SignalActionHandler(self, proc, toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True):

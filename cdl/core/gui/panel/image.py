@@ -57,10 +57,8 @@ class ImagePanel(BaseDataPanel):
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
         self.itmlist = plotitemlist.ImageItemList(self, self.objlist, plotwidget)
-        self.processor = ImageProcessor(self, self.objlist, plotwidget)
-        self.acthandler = actionhandler.ImageActionHandler(
-            self, self.itmlist, self.processor, toolbar
-        )
+        self.processor = proc = ImageProcessor(self, self.objlist, plotwidget)
+        self.acthandler = actionhandler.ImageActionHandler(self, proc, toolbar)
 
     # ------Refreshing GUI--------------------------------------------------------------
     def properties_changed(self) -> None:
