@@ -29,7 +29,7 @@ def test():
         size = 200
         ima = create_test_image3(size)
         panel.add_object(ima)
-        plotwidget = panel.itmlist.plotwidget
+        plotwidget = panel.plothandler.plotwidget
 
         # === Testing "ZAxisLogTool" ---------------------------------------------------
         lstool = plotwidget.get_tool(ZAxisLogTool)

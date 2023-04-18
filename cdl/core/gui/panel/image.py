@@ -18,7 +18,7 @@ from guiqwt.tools import (
 )
 
 from cdl.config import Conf, _
-from cdl.core.gui import actionhandler, plotitemlist, roieditor
+from cdl.core.gui import actionhandler, plothandler, roieditor
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.processor.image import ImageProcessor
 from cdl.core.io.image import ImageIORegistry
@@ -56,7 +56,7 @@ class ImagePanel(BaseDataPanel):
 
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
-        self.itmlist = plotitemlist.ImageItemList(self, self.objlist, plotwidget)
+        self.plothandler = plothandler.ImagePlotHandler(self, self.objlist, plotwidget)
         self.processor = proc = ImageProcessor(self, self.objlist, plotwidget)
         self.acthandler = actionhandler.ImageActionHandler(self, proc, toolbar)
 

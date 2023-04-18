@@ -54,7 +54,7 @@ def cdl_app_context(
 def take_plotwidget_screenshot(panel, name):
     """Eventually takes plotwidget screenshot (only in screenshot mode)"""
     if env.execenv.screenshot:
-        qth.grab_save_window(panel.itmlist.plotwidget, f"{panel.PREFIX}_{name}")
+        qth.grab_save_window(panel.plothandler.plotwidget, f"{panel.PREFIX}_{name}")
 
 
 def run():

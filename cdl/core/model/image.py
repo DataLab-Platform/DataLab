@@ -18,6 +18,7 @@ import weakref
 from collections import abc
 from copy import deepcopy
 from typing import Iterator, Optional
+from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -159,6 +160,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     def __init__(self, title=None, comment=None, icon=""):
         gdt.DataSet.__init__(self, title, comment, icon)
+        self.uuid = str(uuid4())
         self._dicom_template = None
         self._maskdata_cache = None
         self._roidata_cache = None  # weak reference

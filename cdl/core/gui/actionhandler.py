@@ -29,7 +29,7 @@ from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
     from cdl.core.gui.panel.base import BaseDataPanel
-    from cdl.core.gui.plotitemlist import BaseItemList
+    from cdl.core.gui.plothandler import BasePlotHandler
     from cdl.core.gui.processor.base import BaseProcessor
     from cdl.core.model.base import ObjectItf
 

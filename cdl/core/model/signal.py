@@ -11,6 +11,7 @@ CobraDataLab Datasets
 # pylint: disable=duplicate-code
 
 from copy import deepcopy
+from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -57,6 +58,10 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
     _e_unitsg = gdt.EndGroup(_("Titles and units"))
 
     _e_tabs = gdt.EndTabGroup("all")
+
+    def __init__(self, title=None, comment=None, icon=""):
+        gdt.DataSet.__init__(self, title, comment, icon)
+        self.uuid = str(uuid4())
 
     def copy_data_from(self, other, dtype=None):
         """Copy data from other dataset instance"""

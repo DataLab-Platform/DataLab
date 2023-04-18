@@ -208,6 +208,13 @@ class ObjectList(SimpleObjectList):
         """Return an iterator over objects"""
         yield from self._objects
 
+    def get_object_from_uuid(self, oid: str):
+        """Return object from its uuid"""
+        for obj in self:
+            if obj.uuid == oid:
+                return obj
+        raise ValueError(f"Object with uuid {oid} not found")
+
     def get_sel_object(self, position: int = 0) -> ObjectItf:
         """
         Return currently selected object
@@ -248,4 +255,9 @@ class ObjectList(SimpleObjectList):
 
     def get_selected_rows(self) -> List[int]:
         """Return selected rows"""
+        # XXX: Is it still needed? (following adoption of uuids instead of row indexes)
         return [index.row() for index in self.selectionModel().selectedRows()]
+
+    def get_selected_oids(self) -> List[str]:
+        """Return selected objects uuids"""
+        return [self[idx.row()].uuid for idx in self.selectionModel().selectedRows()]

@@ -14,7 +14,7 @@ These classes handle guiqwt plot items for signal and image panels.
 from __future__ import annotations  # To be removed when dropping Python <=3.9 support
 
 import hashlib
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
 from weakref import WeakKeyDictionary
 
 import numpy as np
@@ -41,7 +41,7 @@ def calc_data_hash(obj: SignalParam | ImageParam) -> str:
     return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
 
 
-class BaseItemList:
+class BasePlotHandler:
     """Object handling plot items associated to objects (signals/images)"""
 
     def __init__(
@@ -54,7 +54,10 @@ class BaseItemList:
         self.objlist = objlist
         self.plotwidget = plotwidget
         self.plot = plotwidget.get_plot()
-        self.__plotitems = []  # plot items associated to objects (sig/ima)
+
+        # Plot items: key = object uuid, value = plot item
+        self.__plotitems: Dict[str, CurveItem | MaskedImageItem] = {}
+
         self.__shapeitems = []
         self.__cached_hashes: WeakKeyDictionary[
             SignalParam | ImageParam, List[int]
@@ -64,34 +67,38 @@ class BaseItemList:
         """Return number of items"""
         return len(self.__plotitems)
 
-    def __getitem__(self, row: int):
-        """Return item at row"""
-        return self.__plotitems[row]
+    def __getitem__(self, oid: str):
+        """Return item associated to object uuid"""
+        return self.__plotitems[oid]
 
-    def __setitem__(self, row, item):
-        """Set item at row"""
-        self.__plotitems[row] = item
+    def get(self, key, default=None):
+        """Return item associated to object uuid.
+        If the key is not found, default is returned if given,
+        otherwise None is returned."""
+        return self.__plotitems.get(key, default)
 
-    def __delitem__(self, row):
-        """Del item at row"""
-        item = self.__plotitems.pop(row)
+    def __setitem__(self, oid: str, item: CurveItem | MaskedImageItem):
+        """Set item associated to object uuid"""
+        self.__plotitems[oid] = item
+
+    def __delitem__(self, oid: str):
+        """Del item associated to object uuid"""
+        item = self.__plotitems.pop(oid)
         self.plot.del_item(item)
 
-    def __iter__(self):
-        """Return an iterator over items"""
-        yield from self.__plotitems
+    def __iter__(self) -> Iterator[str]:
+        """Return an iterator over plothandler values (plot items)"""
+        return iter(self.__plotitems.values())
 
-    def append(self, item):
-        """Append item"""
-        self.__plotitems.append(item)
+    def remove_all(self):
+        """Remove all plot items"""
+        self.__plotitems = {}
+        self.plot.del_all_items()
 
-    def insert(self, row):
-        """Insert object at row index"""
-        self.__plotitems.insert(row, None)
-
-    def add_shapes(self, row):
-        """Add geometric shape items associated to computed results and annotations"""
-        obj = self.objlist[row]
+    def add_shapes(self, oid: str):
+        """Add geometric shape items associated to computed results and annotations,
+        for the object with the given uuid"""
+        obj = self.objlist.get_object_from_uuid(oid)
         if obj.metadata:
             # Performance optimization: block `guiqwt.baseplot.BasePlot` signals,
             # add all items except the last one, unblock signals, then add the last one
@@ -106,47 +113,43 @@ class BaseItemList:
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
 
-    def remove_all(self):
-        """Remove all plot items"""
-        self.__plotitems = []
-        self.plot.del_all_items()
-
     def remove_all_shape_items(self):
         """Remove all geometric shapes associated to result items"""
         if set(self.__shapeitems).issubset(set(self.plot.items)):
             self.plot.del_items(self.__shapeitems)
         self.__shapeitems = []
 
-    def __add_item_to_plot(self, row):
-        """Make plot item and add it to plot"""
-        obj = self.objlist[row]
+    def __add_item_to_plot(self, oid: str) -> CurveItem | MaskedImageItem:
+        """Make plot item and add it to plot
+
+        param str oid: object uuid
+        return: plot item
+        rtype: CurveItem | MaskedImageItem"""
+        obj = self.objlist.get_object_from_uuid(oid)
         self.__cached_hashes[obj] = calc_data_hash(obj)
-        item = obj.make_item()
+        item: CurveItem | MaskedImageItem = obj.make_item()
         item.set_readonly(True)
-        if row < len(self):
-            self[row] = item
-        else:
-            self.append(item)
+        self[oid] = item
         self.plot.add_item(item)
         return item
 
     def __update_item_on_plot(
-        self, row: int, ref_item: CurveItem | MaskedImageItem, just_show: bool = False
+        self, oid: str, ref_item: CurveItem | MaskedImageItem, just_show: bool = False
     ) -> None:
         """Update plot item.
 
-        param int row: row index
+        param str oid: object uuid
         param ref_item: reference item
         param bool just_show: if True, only show the item (do not update it,
         except regarding the reference item)"""
         if not just_show:
-            obj = self.objlist[row]
+            obj = self.objlist.get_object_from_uuid(oid)
             cached_hash = self.__cached_hashes.get(obj)
             new_hash = calc_data_hash(obj)
             data_changed = cached_hash is None or cached_hash != new_hash
             self.__cached_hashes[obj] = new_hash
-            obj.update_item(self[row], data_changed=data_changed)
-        self.update_item_according_to_ref_item(self[row], ref_item)
+            obj.update_item(self[oid], data_changed=data_changed)
+        self.update_item_according_to_ref_item(self[oid], ref_item)
 
     @staticmethod
     def update_item_according_to_ref_item(
@@ -155,28 +158,31 @@ class BaseItemList:
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
 
-    def refresh_plot(self, only_row: int = None, just_show: bool = False) -> None:
+    def refresh_plot(
+        self, only_oid: Optional[str] = None, just_show: Optional[bool] = False
+    ) -> None:
         """Refresh plot.
 
-        param int only_row: if not None, only refresh the item at this row
+        param str only_oid: if not None, only refresh the item associated
+        to this object uuid
         param bool just_show: if True, only show the item(s) (do not update it/them)
         """
-        if only_row is None:
-            rows = self.objlist.get_selected_rows()
-            if len(rows) == 1:
+        if only_oid is None:
+            oids = self.objlist.get_selected_oids()
+            if len(oids) == 1:
                 self.cleanup_dataview()
             self.remove_all_shape_items()
             for item in self:
                 if item is not None:
                     item.hide()
         else:
-            rows = [only_row]
+            oids = [only_oid]
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
-        if rows:
+        if oids:
             ref_item = None
-            for i_row, row in enumerate(rows):
-                obj = self.objlist[row]
+            for i_obj, oid in enumerate(oids):
+                obj = self.objlist.get_object_from_uuid(oid)
                 for key in title_keys:
                     title = getattr(obj, key, "")
                     value = titles_dict.get(key)
@@ -184,21 +190,21 @@ class BaseItemList:
                         titles_dict[key] = title
                     elif value != title:
                         titles_dict[key] = ""
-                item = self[row]
+                item = self.get(oid)
                 if item is None:
-                    item = self.__add_item_to_plot(row)
+                    item = self.__add_item_to_plot(oid)
                 else:
-                    if i_row == 0:
+                    if i_obj == 0:
                         make.style = style_generator()
                     self.__update_item_on_plot(
-                        row, ref_item=ref_item, just_show=just_show
+                        oid, ref_item=ref_item, just_show=just_show
                     )
                     if ref_item is None:
                         ref_item = item
                 self.plot.set_item_visible(item, True, replot=False)
                 self.plot.set_active_item(item)
                 item.unselect()
-                self.add_shapes(row)
+                self.add_shapes(oid)
             self.plot.replot()
         else:
             for key in title_keys:
@@ -235,13 +241,13 @@ class BaseItemList:
         )
 
 
-class SignalItemList(BaseItemList):
+class SignalPlotHandler(BasePlotHandler):
     """Object handling signal plot items, plot dialogs, plot options"""
 
     # Nothing specific to signals, as of today
 
 
-class ImageItemList(BaseItemList):
+class ImagePlotHandler(BasePlotHandler):
     """Object handling image plot items, plot dialogs, plot options"""
 
     @staticmethod
@@ -254,13 +260,16 @@ class ImageItemList(BaseItemList):
             plot: ImagePlot = item.plot()
             plot.update_colormap_axis(item)
 
-    def refresh_plot(self, only_row: int = None, just_show: bool = False) -> None:
+    def refresh_plot(
+        self, only_oid: Optional[str] = None, just_show: Optional[bool] = False
+    ) -> None:
         """Refresh plot.
 
-        param int only_row: if not None, only refresh the item at this row
+        param str only_oid: if not None, only refresh the item associated
+        to this object uuid
         param bool just_show: if True, only show the item(s) (do not update it/them)
         """
-        super().refresh_plot(only_row=only_row, just_show=just_show)
+        super().refresh_plot(only_oid=only_oid, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self):

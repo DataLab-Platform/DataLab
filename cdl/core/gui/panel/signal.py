@@ -10,7 +10,7 @@
 from guiqwt.plot import CurveDialog
 
 from cdl.config import _
-from cdl.core.gui import plotitemlist, roieditor
+from cdl.core.gui import plothandler, roieditor
 from cdl.core.gui.actionhandler import SignalActionHandler
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.processor.signal import SignalProcessor
@@ -38,7 +38,7 @@ class SignalPanel(BaseDataPanel):
 
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
-        self.itmlist = plotitemlist.SignalItemList(self, self.objlist, plotwidget)
+        self.plothandler = plothandler.SignalPlotHandler(self, self.objlist, plotwidget)
         self.processor = proc = SignalProcessor(self, self.objlist, plotwidget)
         self.acthandler = SignalActionHandler(self, proc, toolbar)
 

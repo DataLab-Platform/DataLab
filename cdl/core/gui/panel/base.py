@@ -16,7 +16,7 @@ Signal and Image Panel widgets relie on components:
   * `core.gui.panel.actionhandler.SignalActionHandler` or `ImageActionHandler`:
   classes handling Qt actions
 
-  * `core.gui.panel.plotitemlist.SignalItemList` or `ImageItemList`:
+  * `core.gui.panel.plothandler.SignalPlotHandler` or `ImagePlotHandler`:
   classes handling guiqwt plot items
 
   * `core.gui.panel.processor.signal.SignalProcessor` or
@@ -68,10 +68,11 @@ from cdl.utils.qthelpers import (
 
 if TYPE_CHECKING:
     from guiqwt.plot import CurveDialog, ImageDialog
+    from guiqwt.tools import GuiTool
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
-    from cdl.core.gui.plotitemlist import BaseItemList
+    from cdl.core.gui.plothandler import BasePlotHandler
     from cdl.core.gui.processor.base import BaseProcessor
     from cdl.core.io.base import BaseIORegistry
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
@@ -232,8 +233,8 @@ class BaseDataPanel(AbstractPanel):
     DIALOGSIZE = (800, 600)
     IO_REGISTRY: BaseIORegistry = None  # Replaced by the right class in child object
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
-    SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to row number
-    SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected rows
+    SIG_UPDATE_PLOT_ITEM = QC.Signal(int)  # Update plot item associated to uuid
+    SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected objs
     ROIDIALOGOPTIONS = {}
     ROIDIALOGCLASS: roieditor.BaseROIEditor = None  # Replaced in child object
 
@@ -244,7 +245,7 @@ class BaseDataPanel(AbstractPanel):
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objlist = objectlist.ObjectList(self)
         self.objlist.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
-        self.itmlist: BaseItemList = None
+        self.plothandler: BasePlotHandler = None
         self.processor: BaseProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
@@ -266,7 +267,7 @@ class BaseDataPanel(AbstractPanel):
         for dlg in self.__separate_views:
             dlg.done(QW.QDialog.DialogCode.Rejected)
         self.objlist.remove_all()
-        self.itmlist.remove_all()
+        self.plothandler.remove_all()
         self.objlist.refresh_list(0)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         super().remove_all_objects()
@@ -295,7 +296,6 @@ class BaseDataPanel(AbstractPanel):
         :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
         obj.check_data()
         self.objlist.append(obj)
-        self.itmlist.append(None)
         if refresh:
             self.objlist.refresh_list(-1)
         return super().add_object(obj, refresh=refresh)
@@ -304,9 +304,9 @@ class BaseDataPanel(AbstractPanel):
     def setup_panel(self) -> None:
         """Setup panel"""
         self.acthandler.create_all_actions()
-        self.processor.SIG_ADD_SHAPE.connect(self.itmlist.add_shapes)
-        self.SIG_UPDATE_PLOT_ITEM.connect(self.itmlist.refresh_plot)
-        self.SIG_UPDATE_PLOT_ITEMS.connect(self.itmlist.refresh_plot)
+        self.processor.SIG_ADD_SHAPE.connect(self.plothandler.add_shapes)
+        self.SIG_UPDATE_PLOT_ITEM.connect(self.plothandler.refresh_plot)
+        self.SIG_UPDATE_PLOT_ITEMS.connect(self.plothandler.refresh_plot)
         self.objlist.itemSelectionChanged.connect(self.selection_changed)
         self.objlist.SIG_ITEM_DOUBLECLICKED.connect(
             lambda row: self.open_separate_view([row])
@@ -343,7 +343,6 @@ class BaseDataPanel(AbstractPanel):
         """Insert signal/image object after row"""
         obj.check_data()
         self.objlist.insert(row, obj)
-        self.itmlist.insert(row)
         if refresh:
             self.objlist.refresh_list(new_current_row=row + 1)
         self.SIG_OBJECT_ADDED.emit()
@@ -400,8 +399,8 @@ class BaseDataPanel(AbstractPanel):
             for dlg, obj in self.__separate_views.items():
                 if obj is self.objlist[row]:
                     dlg.done(QW.QDialog.DialogCode.Rejected)
+            del self.plothandler[self.objlist[row].uuid]
             del self.objlist[row]
-            del self.itmlist[row]
         self.objlist.refresh_list(max(0, rows[-1] - 1))
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
@@ -539,7 +538,7 @@ class BaseDataPanel(AbstractPanel):
         if not sel_objs:
             row = -1
         self.objprop.update_properties_from(self.objlist[row] if row != -1 else None)
-        self.itmlist.refresh_plot(just_show=True)
+        self.plothandler.refresh_plot(just_show=True)
         self.acthandler.selection_rows_changed(sel_objs)
 
     def properties_changed(self) -> None:
@@ -565,7 +564,7 @@ class BaseDataPanel(AbstractPanel):
         dlg = self.create_new_dialog(rows, edit=True, name="new_window")
         width, height = self.DIALOGSIZE
         dlg.resize(width, height)
-        dlg.plot_widget.itemlist.setVisible(True)
+        dlg.get_itemlist_panel().show()
         toolbar = QW.QToolBar(title, self)
         dlg.button_layout.insertWidget(0, toolbar)
         # dlg.layout().insertWidget(1, toolbar)  # other possible location
@@ -606,14 +605,14 @@ class BaseDataPanel(AbstractPanel):
 
     def create_new_dialog(
         self,
-        rows,
-        edit=False,
-        toolbar=True,
-        title=None,
-        tools=None,
-        name=None,
-        options=None,
-    ):
+        rows: List[int],
+        edit: bool = False,
+        toolbar: bool = True,
+        title: str = None,
+        tools: List[GuiTool] = None,
+        name: str = None,
+        options: dict = None,
+    ) -> CurveDialog | ImageDialog:
         """
         Create new pop-up signal/image plot dialog
 
@@ -631,10 +630,10 @@ class BaseDataPanel(AbstractPanel):
             title = f"{title} - {APP_NAME}"
         else:
             title = APP_NAME
-        plot_options = self.itmlist.get_current_plot_options()
+        plot_options = self.plothandler.get_current_plot_options()
         if options is not None:
             plot_options.update(options)
-        dlg = self.DIALOGCLASS(
+        dlg: CurveDialog | ImageDialog = self.DIALOGCLASS(
             parent=self,
             wintitle=title,
             edit=edit,
@@ -649,7 +648,7 @@ class BaseDataPanel(AbstractPanel):
         plot = dlg.get_plot()
         for row in rows:
             obj = self.objlist[row]
-            item = obj.make_item(update_from=self.itmlist[row])
+            item = obj.make_item(update_from=self.plothandler[obj.uuid])
             item.set_readonly(True)
             plot.add_item(item, z=0)
         plot.set_active_item(item)
