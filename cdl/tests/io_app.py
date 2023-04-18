@@ -43,7 +43,7 @@ def __test_func(
             execenv.print("OK")
         execenv.print("    Saving:")
         for row, fname in enumerate(fnames):
-            panel.objlist.set_current_row(row)
+            panel.objhandler.set_current_row(row)
             path = osp.join(tmpdir, osp.basename(fname))
             execenv.print(f"      {path}: ", end="")
             try:

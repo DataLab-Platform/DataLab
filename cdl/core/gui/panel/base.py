@@ -11,7 +11,7 @@ Signal and Image Panel widgets relie on components:
   * `ObjectProp`: widget handling signal/image properties
   using a guidata DataSet
 
-  * `core.gui.panel.objectlist.ObjectList`: widget handling signal/image list
+  * `core.gui.panel.objecthandler.ObjectHandler`: widget handling signal/image list
 
   * `core.gui.panel.actionhandler.SignalActionHandler` or `ImageActionHandler`:
   classes handling Qt actions
@@ -56,7 +56,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
 from cdl.config import APP_NAME, Conf, _
-from cdl.core.gui import actionhandler, objectlist, roieditor
+from cdl.core.gui import actionhandler, objecthandler, roieditor
 from cdl.core.io.base import IOAction
 from cdl.core.model.base import MetadataItem, ResultShape
 from cdl.utils.qthelpers import (
@@ -243,8 +243,8 @@ class BaseDataPanel(AbstractPanel):
         super().__init__(parent)
         self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
-        self.objlist = objectlist.ObjectList(self)
-        self.objlist.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
+        self.objhandler = objecthandler.ObjectHandler(self)
+        self.objhandler.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
         self.plothandler: BasePlotHandler = None
         self.processor: BaseProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
@@ -256,19 +256,19 @@ class BaseDataPanel(AbstractPanel):
     @property
     def object_number(self) -> int:
         """Return object number"""
-        return len(self.objlist)
+        return len(self.objhandler)
 
     def object_iterator(self) -> Iterator[ObjItf]:
         """Iterate over objects handled by panel"""
-        return iter(self.objlist)
+        return iter(self.objhandler)
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
         for dlg in self.__separate_views:
             dlg.done(QW.QDialog.DialogCode.Rejected)
-        self.objlist.remove_all()
+        self.objhandler.remove_all()
         self.plothandler.remove_all()
-        self.objlist.refresh_list(0)
+        self.objhandler.refresh_list(0)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         super().remove_all_objects()
 
@@ -295,9 +295,9 @@ class BaseDataPanel(AbstractPanel):
 
         :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
         obj.check_data()
-        self.objlist.append(obj)
+        self.objhandler.append(obj)
         if refresh:
-            self.objlist.refresh_list(-1)
+            self.objhandler.refresh_list(-1)
         return super().add_object(obj, refresh=refresh)
 
     # ---- Signal/Image Panel API ------------------------------------------------------
@@ -307,15 +307,15 @@ class BaseDataPanel(AbstractPanel):
         self.processor.SIG_ADD_SHAPE.connect(self.plothandler.add_shapes)
         self.SIG_UPDATE_PLOT_ITEM.connect(self.plothandler.refresh_plot)
         self.SIG_UPDATE_PLOT_ITEMS.connect(self.plothandler.refresh_plot)
-        self.objlist.itemSelectionChanged.connect(self.selection_changed)
-        self.objlist.SIG_ITEM_DOUBLECLICKED.connect(
+        self.objhandler.itemSelectionChanged.connect(self.selection_changed)
+        self.objhandler.SIG_ITEM_DOUBLECLICKED.connect(
             lambda row: self.open_separate_view([row])
         )
-        self.objlist.SIG_CONTEXT_MENU.connect(self.__popup_contextmenu)
+        self.objhandler.SIG_CONTEXT_MENU.connect(self.__popup_contextmenu)
         self.objprop.properties.SIG_APPLY_BUTTON_CLICKED.connect(
             self.properties_changed
         )
-        self.addWidget(self.objlist)
+        self.addWidget(self.objhandler)
         self.addWidget(self.objprop)
         self.add_results_button()
 
@@ -342,32 +342,32 @@ class BaseDataPanel(AbstractPanel):
     def insert_object(self, obj: ObjectItf, row: int, refresh: bool = True) -> None:
         """Insert signal/image object after row"""
         obj.check_data()
-        self.objlist.insert(row, obj)
+        self.objhandler.insert(row, obj)
         if refresh:
-            self.objlist.refresh_list(new_current_row=row + 1)
+            self.objhandler.refresh_list(new_current_row=row + 1)
         self.SIG_OBJECT_ADDED.emit()
 
     def duplicate_object(self) -> None:
         """Duplication signal/image object"""
         if not self.mainwindow.confirm_memory_state():
             return
-        rows = sorted(self.objlist.get_selected_rows())
+        rows = sorted(self.objhandler.get_selected_rows())
         row = None
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             objcopy = self.create_object()
             objcopy.title = obj.title
             objcopy.copy_data_from(obj)
             self.add_object(objcopy, refresh=False)
-        self.objlist.refresh_list(new_current_row=-1)
+        self.objhandler.refresh_list(new_current_row=-1)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
-        row = self.objlist.get_selected_rows()[0]
-        obj = self.objlist[row]
+        row = self.objhandler.get_selected_rows()[0]
+        obj = self.objhandler[row]
         self.__metadata_clipboard = obj.metadata.copy()
-        pfx = self.objlist.prefix
+        pfx = self.objhandler.prefix
         new_pref = f"{pfx}{row:03d}_"
         for key, value in obj.metadata.items():
             if ResultShape.match(key, value):
@@ -385,23 +385,23 @@ class BaseDataPanel(AbstractPanel):
 
     def paste_metadata(self) -> None:
         """Paste metadata to selected object(s)"""
-        rows = sorted(self.objlist.get_selected_rows(), reverse=True)
+        rows = sorted(self.objhandler.get_selected_rows(), reverse=True)
         row = None
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             obj.metadata.update(self.__metadata_clipboard)
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def remove_object(self) -> None:
         """Remove signal/image object"""
-        rows = sorted(self.objlist.get_selected_rows(), reverse=True)
+        rows = sorted(self.objhandler.get_selected_rows(), reverse=True)
         for row in rows:
             for dlg, obj in self.__separate_views.items():
-                if obj is self.objlist[row]:
+                if obj is self.objhandler[row]:
                     dlg.done(QW.QDialog.DialogCode.Rejected)
-            del self.plothandler[self.objlist[row].uuid]
-            del self.objlist[row]
-        self.objlist.refresh_list(max(0, rows[-1] - 1))
+            del self.plothandler[self.objhandler[row].uuid]
+            del self.objhandler[row]
+        self.objhandler.refresh_list(max(0, rows[-1] - 1))
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
@@ -420,8 +420,8 @@ class BaseDataPanel(AbstractPanel):
 
     def delete_metadata(self) -> None:
         """Delete object metadata"""
-        for index, row in enumerate(self.objlist.get_selected_rows()):
-            self.objlist[row].reset_metadata_to_defaults()
+        for index, row in enumerate(self.objhandler.get_selected_rows()):
+            self.objhandler[row].reset_metadata_to_defaults()
             if index == 0:
                 self.selection_changed()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
@@ -431,7 +431,7 @@ class BaseDataPanel(AbstractPanel):
         text = os.linesep.join(
             [
                 f"{self.PREFIX}{idx:03d}: {obj.title}"
-                for idx, obj in enumerate(self.objlist)
+                for idx, obj in enumerate(self.objhandler)
             ]
         )
         QW.QApplication.clipboard().setText(text)
@@ -490,13 +490,13 @@ class BaseDataPanel(AbstractPanel):
 
     def save_objects(self, filenames: List[str] = None) -> None:
         """Save selected objects to file (signal/image)"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(rows)
         assert len(filenames) == len(rows)
         for index, row in enumerate(rows):
             filename = filenames[index]
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             self.save_object(obj, filename)
 
     def import_metadata_from_file(self, filename: str = None) -> None:
@@ -510,15 +510,15 @@ class BaseDataPanel(AbstractPanel):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                row = self.objlist.get_selected_rows()[0]
-                obj = self.objlist[row]
+                row = self.objhandler.get_selected_rows()[0]
+                obj = self.objhandler[row]
                 obj.import_metadata_from_file(filename)
             self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def export_metadata_from_file(self, filename: str = None) -> None:
         """Export metadata to file (JSON)"""
-        row = self.objlist.get_selected_rows()[0]
-        obj = self.objlist[row]
+        row = self.objhandler.get_selected_rows()[0]
+        obj = self.objhandler[row]
         if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
@@ -533,19 +533,19 @@ class BaseDataPanel(AbstractPanel):
     # ------Refreshing GUI--------------------------------------------------------------
     def selection_changed(self) -> None:
         """Signal list: selection changed"""
-        row = self.objlist.currentRow()
-        sel_objs = self.objlist.get_sel_objects()
+        row = self.objhandler.currentRow()
+        sel_objs = self.objhandler.get_sel_objects()
         if not sel_objs:
             row = -1
-        self.objprop.update_properties_from(self.objlist[row] if row != -1 else None)
+        self.objprop.update_properties_from(self.objhandler[row] if row != -1 else None)
         self.plothandler.refresh_plot(just_show=True)
         self.acthandler.selection_rows_changed(sel_objs)
 
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: updating signal"""
-        row = self.objlist.currentRow()
-        update_dataset(self.objlist[row], self.objprop.properties.dataset)
-        self.objlist.refresh_list()
+        row = self.objhandler.currentRow()
+        update_dataset(self.objhandler[row], self.objprop.properties.dataset)
+        self.objhandler.refresh_list()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
@@ -558,9 +558,9 @@ class BaseDataPanel(AbstractPanel):
         """
         title = _("Annotations")
         if rows is None:
-            rows = self.objlist.get_selected_rows()
+            rows = self.objhandler.get_selected_rows()
         row = rows[0]
-        obj = self.objlist[row]
+        obj = self.objhandler[row]
         dlg = self.create_new_dialog(rows, edit=True, name="new_window")
         width, height = self.DIALOGSIZE
         dlg.resize(width, height)
@@ -599,7 +599,7 @@ class BaseDataPanel(AbstractPanel):
     def toggle_show_titles(self, state: bool) -> None:
         """Toggle show annotations option"""
         Conf.view.show_label.set(state)
-        for obj in self.objlist:
+        for obj in self.objhandler:
             obj.metadata[obj.METADATA_LBL] = state
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
@@ -626,7 +626,7 @@ class BaseDataPanel(AbstractPanel):
         """
         if title is not None or len(rows) == 1:
             if title is None:
-                title = self.objlist.get_sel_object().title
+                title = self.objhandler.get_sel_object().title
             title = f"{title} - {APP_NAME}"
         else:
             title = APP_NAME
@@ -647,7 +647,7 @@ class BaseDataPanel(AbstractPanel):
                 dlg.add_tool(tool)
         plot = dlg.get_plot()
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             item = obj.make_item(update_from=self.plothandler[obj.uuid])
             item.set_readonly(True)
             plot.add_item(item, z=0)
@@ -667,8 +667,8 @@ class BaseDataPanel(AbstractPanel):
         :param list tools: List of plot tools
         :return: tuple (dialog, current_object)
         """
-        row = self.objlist.get_selected_rows()[0]
-        obj = self.objlist[row]
+        row = self.objhandler.get_selected_rows()[0]
+        obj = self.objhandler[row]
         dlg = self.create_new_dialog(
             [row],
             edit=True,
@@ -697,9 +697,9 @@ class BaseDataPanel(AbstractPanel):
 
     def get_object_dialog(
         self, parent: QW.QWidget, title: str
-    ) -> objectlist.GetObjectDialog:
+    ) -> objecthandler.GetObjectDialog:
         """Get object dialog"""
-        dlg = objectlist.GetObjectDialog(parent, self, title)
+        dlg = objecthandler.GetObjectDialog(parent, self, title)
         if exec_dialog(dlg):
             return dlg.get_object()
         return None
@@ -717,7 +717,7 @@ class BaseDataPanel(AbstractPanel):
 
     def show_results(self) -> None:
         """Show results"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
 
         @dataclasses.dataclass
         class ResultData:
@@ -729,7 +729,7 @@ class BaseDataPanel(AbstractPanel):
 
         rdatadict: Dict[ShapeTypes, ResultData] = {}
         for idx, row in enumerate(rows):
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             for result in obj.iterate_resultshapes():
                 rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
                 title = f"{result.label}"

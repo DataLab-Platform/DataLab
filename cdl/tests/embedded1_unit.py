@@ -184,7 +184,7 @@ class BaseHostWindow(AbstractClientWindow):
         """Remove all objects from CobraDataLab"""
         if self.cdl is not None:
             for panel in self.cdl.panels:
-                objn = len(panel.objlist)
+                objn = len(panel.objhandler)
                 panel.remove_all_objects()
                 self.host.log(f"Removed {objn} objects from {panel.PANEL_STR}")
 

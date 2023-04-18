@@ -95,7 +95,7 @@ class SignalProcessor(BaseProcessor):
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
             return
-        obj = self.objlist.get_sel_object()
+        obj = self.objhandler.get_sel_object()
         group = obj.roidata_to_params(roieditordata.roidata)
 
         if roieditordata.singleobj:
@@ -153,7 +153,7 @@ class SignalProcessor(BaseProcessor):
 
     def detect_peaks(self, param: PeakDetectionParam = None) -> None:
         """Detect peaks from data"""
-        obj = self.objlist.get_sel_object()
+        obj = self.objhandler.get_sel_object()
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
@@ -310,7 +310,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
         """Compute fitting curve"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         for row in rows:
             self.__row_compute_fit(row, name, fitdlgfunc)
 
@@ -330,7 +330,7 @@ class SignalProcessor(BaseProcessor):
 
     def __row_compute_fit(self, row, name, fitdlgfunc):
         """Curve fitting computing sub-method"""
-        obj = self.objlist[row]
+        obj = self.objhandler[row]
         output = fitdlgfunc(obj.x, obj.y, parent=self.panel.parent())
         if output is not None:
             y, params = output
@@ -347,16 +347,16 @@ class SignalProcessor(BaseProcessor):
             # Creating new plot item
             self.panel.add_object(signal, refresh=False)
             # Refreshing list
-            self.objlist.refresh_list(-1)
+            self.objhandler.refresh_list(-1)
 
     @qt_try_except()
     def compute_multigaussianfit(self):
         """Compute multi-Gaussian fitting curve"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         fitdlgfunc = fitdialog.multigaussianfit
         for row in rows:
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             dlg.setup_data(obj.x, obj.y)
             if exec_dialog(dlg):
                 # Computing x, y

@@ -11,7 +11,7 @@ This module handles all GUI features which are specific to CobraDataLab (CDL):
   * core.gui.main: handles CDL main window which relies on signal and image panels
   * core.gui.panel: handles CDL signal and image panels, relying on:
     * core.gui.actionhandler
-    * core.gui.objectlist
+    * core.gui.objecthandler
     * core.gui.plothandler
     * core.gui.roieditor
     * core.gui.processor

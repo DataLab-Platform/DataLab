@@ -35,7 +35,7 @@ def test():
         addp.vmax = 5
         panel.new_object(i1p, addparam=addp, edit=False)
 
-        panel.objlist.select_rows((0, 1))
+        panel.objhandler.select_rows((0, 1))
         ffp = FlatFieldParam()
         ffp.threshold = 80
         panel.processor.flat_field_correction(ffp)

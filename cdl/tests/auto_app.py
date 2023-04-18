@@ -51,7 +51,7 @@ def test():
             # === Reopening previously saved project
             win.open_h5_files([fname], import_all=True, reset_all=True)
             # === Accessing object metadata
-            obj = win.imagepanel.objlist[1]
+            obj = win.imagepanel.objhandler[1]
             execenv.print(f"Image '{obj.title}':")
             for key, value in obj.metadata.items():
                 execenv.print(f'  metadata["{key}"] = {value}')

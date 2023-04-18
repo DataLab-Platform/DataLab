@@ -51,8 +51,8 @@ def test_compute_11_operations(panel, index):
     """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
-    assert len(panel.objlist) >= index - 1
-    panel.objlist.select_rows((index,))
+    assert len(panel.objhandler) >= index - 1
+    panel.objhandler.select_rows((index,))
     panel.processor.compute_gaussian(GaussianParam())
     panel.processor.compute_moving_average(MovingAverageParam())
     panel.processor.compute_moving_median(MovingMedianParam())
@@ -73,26 +73,26 @@ def test_common_operations(panel):
     First signal/image is supposed to be always the same (reference)
     Second signal/image is the tested object
     """
-    assert len(panel.objlist) == 2
+    assert len(panel.objhandler) == 2
 
     panel.duplicate_object()
-    panel.objlist.select_rows((1, 2))
+    panel.objhandler.select_rows((1, 2))
     panel.processor.compute_difference(False)
     panel.remove_object()
-    panel.objlist.select_rows((1, 2))
+    panel.objhandler.select_rows((1, 2))
     panel.processor.compute_difference(True)
     panel.delete_metadata()
-    panel.objlist.select_rows((2, 3))
+    panel.objhandler.select_rows((2, 3))
     panel.remove_object()
 
-    panel.objlist.select_rows((0, 1))
+    panel.objhandler.select_rows((0, 1))
     panel.processor.compute_sum()
-    panel.objlist.select_rows((0, 1))
+    panel.objhandler.select_rows((0, 1))
     panel.processor.compute_sum()
-    panel.objlist.select_rows((0, 1))
+    panel.objhandler.select_rows((0, 1))
     panel.processor.compute_product()
 
-    obj = panel.objlist[-1]
+    obj = panel.objhandler[-1]
     param = ThresholdParam()
     param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
     panel.processor.compute_threshold(param)
@@ -100,9 +100,9 @@ def test_common_operations(panel):
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
-    panel.objlist.select_rows((2, 6))
+    panel.objhandler.select_rows((2, 6))
     panel.processor.compute_division()
-    panel.objlist.select_rows((0, 1, 2))
+    panel.objhandler.select_rows((0, 1, 2))
     panel.processor.compute_average()
 
     test_compute_11_operations(panel, 1)
@@ -123,7 +123,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     win.add_object(sig1)
 
     # Add new signal based on s0
-    panel.objlist.set_current_row(0)
+    panel.objhandler.set_current_row(0)
     newparam = new_signal_param(_("Random function"), stype=SignalTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.vmin = 0
@@ -151,8 +151,8 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     panel.processor.compute_multigaussianfit()
 
-    panel.objlist.set_current_row(-3)
-    sig = panel.objlist.get_sel_object()
+    panel.objhandler.set_current_row(-3)
+    sig = panel.objhandler.get_sel_object()
     i1 = data_size // 10
     i2 = len(sig.y) - i1
     panel.processor.extract_roi([[i1, i2]])

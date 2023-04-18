@@ -57,7 +57,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.add_object(ima1)
 
     # Add new image based on i0
-    panel.objlist.set_current_row(0)
+    panel.objhandler.set_current_row(0)
     newparam = new_image_param(itype=ImageTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)

@@ -38,8 +38,10 @@ class SignalPanel(BaseDataPanel):
 
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
-        self.plothandler = plothandler.SignalPlotHandler(self, self.objlist, plotwidget)
-        self.processor = proc = SignalProcessor(self, self.objlist, plotwidget)
+        self.plothandler = plothandler.SignalPlotHandler(
+            self, self.objhandler, plotwidget
+        )
+        self.processor = proc = SignalProcessor(self, self.objhandler, plotwidget)
         self.acthandler = SignalActionHandler(self, proc, toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
@@ -51,7 +53,7 @@ class SignalPanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return
-        curobj: SignalParam = self.objlist.get_sel_object(-1)
+        curobj: SignalParam = self.objhandler.get_sel_object(-1)
         if curobj is not None:
             newparam = newparam if newparam is not None else new_signal_param()
             newparam.size = len(curobj.data)

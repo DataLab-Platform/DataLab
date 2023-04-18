@@ -56,15 +56,17 @@ class ImagePanel(BaseDataPanel):
 
     def __init__(self, parent, plotwidget, toolbar):
         super().__init__(parent, plotwidget, toolbar)
-        self.plothandler = plothandler.ImagePlotHandler(self, self.objlist, plotwidget)
-        self.processor = proc = ImageProcessor(self, self.objlist, plotwidget)
+        self.plothandler = plothandler.ImagePlotHandler(
+            self, self.objhandler, plotwidget
+        )
+        self.processor = proc = ImageProcessor(self, self.objhandler, plotwidget)
         self.acthandler = actionhandler.ImageActionHandler(self, proc, toolbar)
 
     # ------Refreshing GUI--------------------------------------------------------------
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: updating signal"""
-        row = self.objlist.currentRow()
-        self.objlist[row].invalidate_maskdata_cache()
+        row = self.objhandler.currentRow()
+        self.objhandler[row].invalidate_maskdata_cache()
         super().properties_changed()
 
     # ------Creating, adding, removing objects------------------------------------------
@@ -76,7 +78,7 @@ class ImagePanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return
-        curobj: ImageParam = self.objlist.get_sel_object(-1)
+        curobj: ImageParam = self.objhandler.get_sel_object(-1)
         if curobj is not None:
             newparam = newparam if newparam is not None else new_image_param()
             newparam.width, newparam.height = curobj.size

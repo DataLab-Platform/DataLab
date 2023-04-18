@@ -41,11 +41,11 @@ class SimpleObjectList(QW.QListWidget):
         self._objects: List[ObjectItf] = []  # signals or images
         self.itemDoubleClicked.connect(self.item_double_clicked)
 
-    def init_from(self, objlist: SimpleObjectList) -> None:
+    def init_from(self, sobjlist: SimpleObjectList) -> None:
         """Init from another SimpleObjectList, without making copies of objects"""
-        self._objects = objlist.get_objects()
+        self._objects = sobjlist.get_objects()
         self.refresh_list()
-        self.setCurrentRow(objlist.currentRow())
+        self.setCurrentRow(sobjlist.currentRow())
 
     def get_objects(self) -> List[ObjectItf]:
         """Get all objects"""
@@ -102,24 +102,24 @@ class GetObjectDialog(QW.QDialog):
         self.setWindowTitle(title)
         self.setLayout(QW.QVBoxLayout())
 
-        self.objlist = SimpleObjectList(panel, parent=parent)
-        self.objlist.init_from(panel.objlist)
-        self.objlist.SIG_ITEM_DOUBLECLICKED.connect(lambda row: self.accept())
-        self.layout().addWidget(self.objlist)
+        self.sobjlist = SimpleObjectList(panel, parent=parent)
+        self.sobjlist.init_from(panel.objhandler)
+        self.sobjlist.SIG_ITEM_DOUBLECLICKED.connect(lambda row: self.accept())
+        self.layout().addWidget(self.sobjlist)
 
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
-        bbox.button(QW.QDialogButtonBox.Ok).setEnabled(self.objlist.count() > 0)
+        bbox.button(QW.QDialogButtonBox.Ok).setEnabled(self.sobjlist.count() > 0)
         self.layout().addSpacing(10)
         self.layout().addWidget(bbox)
 
     def get_object(self) -> ObjectItf:
         """Return current object"""
-        return self.objlist.get_objects()[self.objlist.currentRow()]
+        return self.sobjlist.get_objects()[self.sobjlist.currentRow()]
 
 
-class ObjectList(SimpleObjectList):
+class ObjectHandler(SimpleObjectList):
     """Object handling panel list widget, object (sig/ima) lists"""
 
     SIG_IMPORT_FILES = QC.Signal(list)

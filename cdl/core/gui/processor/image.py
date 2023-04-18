@@ -748,7 +748,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, GridParam, title)
         if edit and not param.edit(parent=self.panel.parent()):
             return
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
         delta_x0, delta_y0 = 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(rows)) as progress:
@@ -757,7 +757,7 @@ class ImageProcessor(BaseProcessor):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                obj = self.objlist[row]
+                obj = self.objhandler[row]
                 if i_row == 0:
                     x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
                 else:
@@ -796,8 +796,8 @@ class ImageProcessor(BaseProcessor):
         """Reset image positions"""
         x0_0, y0_0 = 0.0, 0.0
         delta_x0, delta_y0 = 0.0, 0.0
-        for i_row, row in enumerate(self.objlist.get_selected_rows()):
-            obj = self.objlist[row]
+        for i_row, row in enumerate(self.objhandler.get_selected_rows()):
+            obj = self.objhandler[row]
             if i_row == 0:
                 x0_0, y0_0 = obj.x0, obj.y0
             else:
@@ -816,8 +816,8 @@ class ImageProcessor(BaseProcessor):
 
     def resize(self, param: ResizeParam = None) -> None:
         """Resize image"""
-        obj0 = self.objlist.get_sel_object(0)
-        for obj in self.objlist.get_sel_objects():
+        obj0 = self.objhandler.get_sel_object(0)
+        for obj in self.objhandler.get_sel_objects():
             if obj.size != obj0.size:
                 QW.QMessageBox.warning(
                     self.panel.parent(),
@@ -866,7 +866,7 @@ class ImageProcessor(BaseProcessor):
     def rebin(self, param: BinningParam = None) -> None:
         """Binning image"""
         edit = param is None
-        input_dtype_str = str(self.objlist.get_sel_object(0).data.dtype)
+        input_dtype_str = str(self.objhandler.get_sel_object(0).data.dtype)
         edit, param = self.init_param(param, BinningParam, _("Binning"))
         if edit:
             param.dtype_str = input_dtype_str
@@ -904,7 +904,7 @@ class ImageProcessor(BaseProcessor):
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
             return
-        obj = self.objlist.get_sel_object()
+        obj = self.objhandler.get_sel_object()
         group = obj.roidata_to_params(roieditordata.roidata)
 
         if roieditordata.singleobj:
@@ -989,12 +989,12 @@ class ImageProcessor(BaseProcessor):
     def flat_field_correction(self, param: FlatFieldParam = None) -> None:
         """Compute flat field correction"""
         edit, param = self.init_param(param, FlatFieldParam, _("Flat field"))
-        rawdata = self.objlist.get_sel_object().data
-        flatdata = self.objlist.get_sel_object(1).data
+        rawdata = self.objhandler.get_sel_object().data
+        flatdata = self.objhandler.get_sel_object(1).data
         if edit:
             param.set_from_datatype(rawdata.dtype)
         if not edit or param.edit(self.panel.parent()):
-            rows = self.objlist.get_selected_rows()
+            rows = self.objhandler.get_selected_rows()
             robj = self.panel.create_object()
             robj.title = (
                 "FlatField("
@@ -1342,7 +1342,7 @@ class ImageProcessor(BaseProcessor):
 
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
-            data = self.objlist.get_sel_object().data
+            data = self.objhandler.get_sel_object().data
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
@@ -1355,7 +1355,7 @@ class ImageProcessor(BaseProcessor):
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    obj = self.objlist[row]
+                    obj = self.objhandler[row]
                     dist = distance_matrix(result.data)
                     dist_min = dist[dist != 0].min()
                     assert dist_min > 0

@@ -793,7 +793,7 @@ msgstr ""
 "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 "
 "avant de quitter CobraDataLab ?"
 
-#: cdl\core\gui\objectlist.py:130
+#: cdl\core\gui\objecthandler.py:130
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 

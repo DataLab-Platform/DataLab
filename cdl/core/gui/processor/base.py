@@ -24,7 +24,7 @@ from qtpy import QtWidgets as QW
 
 from cdl import env
 from cdl.config import _
-from cdl.core.gui.objectlist import ObjectList
+from cdl.core.gui.objecthandler import ObjectHandler
 from cdl.core.gui.roieditor import ROIEditorData
 from cdl.core.model.base import ResultShape
 from cdl.utils import misc
@@ -68,10 +68,10 @@ class BaseProcessor(QC.QObject):
     EDIT_ROI_PARAMS = False
     PARAM_DEFAULTS: Dict[str, gdt.DataSet] = {}
 
-    def __init__(self, panel, objlist: ObjectList, plotwidget):
+    def __init__(self, panel, objhandler: ObjectHandler, plotwidget):
         super().__init__()
         self.panel = panel
-        self.objlist = objlist
+        self.objhandler = objhandler
         self.plotwidget = plotwidget
         self.prefix = panel.PREFIX
 
@@ -95,12 +95,12 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_sum(self):
         """Compute sum"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         outobj = self.panel.create_object()
         outobj.title = "+".join([f"{self.prefix}{row:03d}" for row in rows])
         roilist = []
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             if obj.roi is not None:
                 roilist.append(obj.roi)
             if outobj.data is None:
@@ -115,15 +115,15 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_average(self):
         """Compute average"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         outobj = self.panel.create_object()
         title = ", ".join([f"{self.prefix}{row:03d}" for row in rows])
         outobj.title = f'{_("Average")}({title})'
-        original_dtype = self.objlist.get_sel_object().data.dtype
+        original_dtype = self.objhandler.get_sel_object().data.dtype
         new_dtype = complex if misc.is_complex_dtype(original_dtype) else float
         roilist = []
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             if obj.roi is not None:
                 roilist.append(obj.roi)
             if outobj.data is None:
@@ -141,11 +141,11 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_product(self):
         """Compute product"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         outobj = self.panel.create_object()
         outobj.title = "*".join([f"{self.prefix}{row:03d}" for row in rows])
         for row in rows:
-            obj = self.objlist[row]
+            obj = self.objhandler[row]
             if outobj.data is None:
                 outobj.copy_data_from(obj)
             else:
@@ -155,12 +155,12 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_difference(self, quad: bool):
         """Compute (quadratic) difference"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         outobj = self.panel.create_object()
         outobj.title = "-".join([f"{self.prefix}{row:03d}" for row in rows])
         if quad:
             outobj.title = f"({outobj.title})/sqrt(2)"
-        obj0, obj1 = self.objlist.get_sel_object(), self.objlist.get_sel_object(1)
+        obj0, obj1 = self.objhandler.get_sel_object(), self.objhandler.get_sel_object(1)
         outobj.copy_data_from(obj0)
         outobj.data -= np.array(obj1.data, dtype=outobj.data.dtype)
         if quad:
@@ -172,10 +172,10 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_division(self):
         """Compute division"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         outobj = self.panel.create_object()
         outobj.title = "/".join([f"{self.prefix}{row:03d}" for row in rows])
-        obj0, obj1 = self.objlist.get_sel_object(), self.objlist.get_sel_object(1)
+        obj0, obj1 = self.objhandler.get_sel_object(), self.objhandler.get_sel_object(1)
         outobj.copy_data_from(obj0)
         outobj.data = outobj.data / np.array(obj1.data, dtype=outobj.data.dtype)
         self.panel.add_object(outobj)
@@ -263,7 +263,7 @@ class BaseProcessor(QC.QObject):
         func_obj: Callable,
     ):
         """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         with create_progress_bar(
             self.panel, names[0], max_=len(rows) * len(params)
         ) as progress:
@@ -274,7 +274,7 @@ class BaseProcessor(QC.QObject):
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    orig = self.objlist[row]
+                    orig = self.objhandler[row]
                     obj = self.panel.create_object()
                     obj.title = f"{name}({self.prefix}{row:03d})"
                     if suffix is not None:
@@ -316,7 +316,7 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
-        rows = self.objlist.get_selected_rows()
+        rows = self.objhandler.get_selected_rows()
         with create_progress_bar(self.panel, name, max_=len(rows)) as progress:
             results = {}
             xlabels = None
@@ -327,7 +327,7 @@ class BaseProcessor(QC.QObject):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                orig = self.objlist[row]
+                orig = self.objhandler[row]
                 title = f"{name}{title_suffix}"
                 message = _("Computing:") + " " + title
                 result = self.apply_10_func(orig, func, param, message)
@@ -435,8 +435,8 @@ class BaseProcessor(QC.QObject):
         """Define Region Of Interest (ROI) for computing functions"""
         roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
         if roieditordata is not None:
-            row = self.objlist.get_selected_rows()[0]
-            obj = self.objlist[row]
+            row = self.objhandler.get_selected_rows()[0]
+            obj = self.objhandler[row]
             roigroup = obj.roidata_to_params(roieditordata.roidata)
             if (
                 env.execenv.unattended
@@ -455,8 +455,8 @@ class BaseProcessor(QC.QObject):
 
     def delete_regions_of_interest(self):
         """Delete Regions Of Interest"""
-        for row in self.objlist.get_selected_rows():
-            obj = self.objlist[row]
+        for row in self.objhandler.get_selected_rows():
+            obj = self.objhandler[row]
             if obj.roi is not None:
                 obj.roi = None
                 self.panel.selection_changed()
@@ -469,8 +469,8 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_stats(self):
         """Compute data statistics"""
-        row = self.objlist.get_selected_rows()[0]
-        obj = self.objlist.get_sel_object()
+        row = self.objhandler.get_selected_rows()[0]
+        obj = self.objhandler.get_sel_object()
         stfuncs = self._get_stat_funcs()
         nbcal = len(stfuncs)
         roi_nb = 0 if obj.roi is None else obj.roi.shape[0]

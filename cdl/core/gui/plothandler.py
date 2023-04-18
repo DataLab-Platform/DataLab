@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from guiqwt.image import MaskedImageItem
     from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget
 
-    from cdl.core.gui.objectlist import ObjectList
+    from cdl.core.gui.objecthandler import ObjectHandler
     from cdl.core.gui.panel.base import BaseDataPanel
     from cdl.core.model.image import ImageParam
     from cdl.core.model.signal import SignalParam
@@ -47,11 +47,11 @@ class BasePlotHandler:
     def __init__(
         self,
         panel: BaseDataPanel,
-        objlist: ObjectList,
+        objhandler: ObjectHandler,
         plotwidget: CurveWidget | ImageWidget,
     ):
         self.panel = panel
-        self.objlist = objlist
+        self.objhandler = objhandler
         self.plotwidget = plotwidget
         self.plot = plotwidget.get_plot()
 
@@ -98,7 +98,7 @@ class BasePlotHandler:
     def add_shapes(self, oid: str):
         """Add geometric shape items associated to computed results and annotations,
         for the object with the given uuid"""
-        obj = self.objlist.get_object_from_uuid(oid)
+        obj = self.objhandler.get_object_from_uuid(oid)
         if obj.metadata:
             # Performance optimization: block `guiqwt.baseplot.BasePlot` signals,
             # add all items except the last one, unblock signals, then add the last one
@@ -125,7 +125,7 @@ class BasePlotHandler:
         param str oid: object uuid
         return: plot item
         rtype: CurveItem | MaskedImageItem"""
-        obj = self.objlist.get_object_from_uuid(oid)
+        obj = self.objhandler.get_object_from_uuid(oid)
         self.__cached_hashes[obj] = calc_data_hash(obj)
         item: CurveItem | MaskedImageItem = obj.make_item()
         item.set_readonly(True)
@@ -143,7 +143,7 @@ class BasePlotHandler:
         param bool just_show: if True, only show the item (do not update it,
         except regarding the reference item)"""
         if not just_show:
-            obj = self.objlist.get_object_from_uuid(oid)
+            obj = self.objhandler.get_object_from_uuid(oid)
             cached_hash = self.__cached_hashes.get(obj)
             new_hash = calc_data_hash(obj)
             data_changed = cached_hash is None or cached_hash != new_hash
@@ -168,7 +168,7 @@ class BasePlotHandler:
         param bool just_show: if True, only show the item(s) (do not update it/them)
         """
         if only_oid is None:
-            oids = self.objlist.get_selected_oids()
+            oids = self.objhandler.get_selected_oids()
             if len(oids) == 1:
                 self.cleanup_dataview()
             self.remove_all_shape_items()
@@ -182,7 +182,7 @@ class BasePlotHandler:
         if oids:
             ref_item = None
             for i_obj, oid in enumerate(oids):
-                obj = self.objlist.get_object_from_uuid(oid)
+                obj = self.objhandler.get_object_from_uuid(oid)
                 for key in title_keys:
                     title = getattr(obj, key, "")
                     value = titles_dict.get(key)

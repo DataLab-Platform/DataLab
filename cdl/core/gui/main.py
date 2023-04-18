@@ -9,6 +9,8 @@ CobraDataLab main window
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 import functools
 import locale
 import os
@@ -74,10 +76,10 @@ class AppProxy:
     """Proxy to CobraDataLab application: object used from the embedded console
     to access CobraDataLab internal objects"""
 
-    def __init__(self, win):
+    def __init__(self, win: CDLMainWindow):
         self.win = win
-        self.s = self.win.signalpanel.objlist
-        self.i = self.win.imagepanel.objlist
+        self.s = self.win.signalpanel.objhandler
+        self.i = self.win.imagepanel.objhandler
 
 
 def remote_controlled(func):
@@ -182,12 +184,12 @@ class CDLMainWindow(QW.QMainWindow):
     def get_object_list(self) -> List[str]:
         """Get object (signal/image) list for current panel"""
         panel = self.tabwidget.currentWidget()
-        return panel.objlist.get_titles()
+        return panel.objhandler.get_titles()
 
     def get_object(self, index: str):
         """Get object (signal/image) at index for current panel"""
         panel = self.tabwidget.currentWidget()
-        return panel.objlist[index]
+        return panel.objhandler[index]
 
     # ------Misc.
     @property
@@ -703,7 +705,7 @@ class CDLMainWindow(QW.QMainWindow):
         """Refresh signal/image lists"""
         for panel in self.panels:
             if isinstance(panel, base.BaseDataPanel):
-                panel.objlist.refresh_list()
+                panel.objhandler.refresh_list()
 
     def __update_actions(self):
         """Update selection dependent actions"""
