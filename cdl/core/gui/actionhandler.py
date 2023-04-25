@@ -4,10 +4,33 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Action handler module
+DataLab Action handler module
+-----------------------------
 
 This module handles all application actions (menus, toolbars, context menu).
-These actions point to CobraDataLab panels, processors, objecthandler, ...
+These actions point to DataLab panels, processors, objecthandler, ...
+
+.. autosummary::
+    :toctree:
+
+    SelectCond
+    ActionCategory
+    SignalActionHandler
+    ImageActionHandler
+
+.. autoclass:: SelectCond
+    :members:
+
+.. autoclass:: ActionCategory
+    :members:
+
+.. autoclass:: SignalActionHandler
+    :members:
+    :inherited-members:
+
+.. autoclass:: ImageActionHandler
+    :members:
+    :inherited-members:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -17,10 +40,11 @@ from __future__ import annotations  # To be removed when dropping Python <=3.9 s
 import abc
 import enum
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Generator, List
+from typing import TYPE_CHECKING, Callable, Dict, Generator, List
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
+from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
@@ -28,43 +52,83 @@ from cdl.config import _
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:
-    from cdl.core.gui.panel.base import BaseDataPanel
-    from cdl.core.gui.plothandler import BasePlotHandler
-    from cdl.core.gui.processor.base import BaseProcessor
-    from cdl.core.model.base import ObjectItf
+    from cdl.core.gui.objectmodel import ObjectGroup
+    from cdl.core.gui.panel.image import ImagePanel
+    from cdl.core.gui.panel.signal import SignalPanel
+    from cdl.core.model.image import ImageParam
+    from cdl.core.model.signal import SignalParam
 
 
 class SelectCond:
     """Signal or image select conditions"""
 
     @staticmethod
+    def __compat_groups(selected_groups: List[ObjectGroup], min_len: int = 1) -> bool:
+        """Check if groups are compatible"""
+        return (
+            len(selected_groups) >= min_len
+            and all(len(group) == len(selected_groups[0]) for group in selected_groups)
+            and all(len(group) > 0 for group in selected_groups)
+        )
+
+    @staticmethod
     # pylint: disable=unused-argument
-    def always(selected_objects: List[ObjectItf]) -> bool:
+    def always(
+        selected_groups: List[ObjectGroup],
+        selected_objects: List[SignalParam | ImageParam],
+    ) -> bool:
         """Always true"""
         return True
 
     @staticmethod
-    def exactly_one(selected_objects: List[ObjectItf]) -> bool:
+    def exactly_one(
+        selected_groups: List[ObjectGroup],
+        selected_objects: List[SignalParam | ImageParam],
+    ) -> bool:
         """Exactly one signal or image is selected"""
-        return len(selected_objects) == 1
+        return len(selected_groups) == 0 and len(selected_objects) == 1
 
     @staticmethod
-    def exactly_two(selected_objects: List[ObjectItf]) -> bool:
-        """Exactly two signals or images are selected"""
-        return len(selected_objects) == 2
+    # pylint: disable=unused-argument
+    def exactly_one_group(
+        selected_groups: List[ObjectGroup],
+        selected_objects: List[SignalParam | ImageParam],
+    ) -> bool:
+        """Exactly one group is selected"""
+        return len(selected_groups) == 1
 
     @staticmethod
-    def at_least_one(selected_objects: List[ObjectItf]) -> bool:
+    # pylint: disable=unused-argument
+    def at_least_one_group_or_one_object(
+        sel_groups: List[ObjectGroup],
+        sel_objects: List[SignalParam | ImageParam],
+    ) -> bool:
+        """At least one group or one signal or image is selected"""
+        return len(sel_objects) >= 1 or len(sel_groups) >= 1
+
+    @staticmethod
+    # pylint: disable=unused-argument
+    def at_least_one(
+        sel_groups: List[ObjectGroup],
+        sel_objects: List[SignalParam | ImageParam],
+    ) -> bool:
         """At least one signal or image is selected"""
-        return len(selected_objects) >= 1
+        return len(sel_objects) >= 1 or SelectCond.__compat_groups(sel_groups, 1)
 
     @staticmethod
-    def at_least_two(selected_objects: List[ObjectItf]) -> bool:
+    def at_least_two(
+        sel_groups: List[ObjectGroup],
+        sel_objects: List[SignalParam | ImageParam],
+    ) -> bool:
         """At least two signals or images are selected"""
-        return len(selected_objects) >= 2
+        return len(sel_objects) >= 2 or SelectCond.__compat_groups(sel_groups, 2)
 
     @staticmethod
-    def with_roi(selected_objects: List[ObjectItf]) -> bool:
+    # pylint: disable=unused-argument
+    def with_roi(
+        selected_groups: List[ObjectGroup],
+        selected_objects: List[SignalParam | ImageParam],
+    ) -> bool:
         """At least one signal or image has a ROI"""
         return any(obj.roi is not None for obj in selected_objects)
 
@@ -91,18 +155,16 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def __init__(
         self,
-        panel: BaseDataPanel,
-        proc: BaseProcessor,
+        panel: SignalPanel | ImagePanel,
         toolbar: QW.QToolBar,
     ):
         self.panel = panel
-        self.proc = proc
         self.toolbar = toolbar
         self.feature_actions = {}
         self.operation_end_actions = None
         self.__category_in_progress: ActionCategory = None
         self.__submenu_in_progress = False
-        self.__actions = {}
+        self.__actions: Dict[Callable, List[QW.QAction]] = {}
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
@@ -165,7 +227,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         If select_condition is None, action is enabled if at least one object
         is selected.
         """
-        action = create_action(None, title, triggered, toggled, shortcut, icon, tip)
+        action = create_action(
+            self.panel, title, triggered, toggled, shortcut, icon, tip
+        )
         self.add_action(action, select_condition)
         self.add_to_action_list(action, None, position, separator)
         if context_menu_pos is not None:
@@ -215,11 +279,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 pos += 1
             actionlist.insert(pos, None)
 
-    def add_action(
-        self,
-        action: QW.QAction,
-        select_condition: Callable = None,
-    ):
+    def add_action(self, action: QW.QAction, select_condition: Callable = None):
         """Add action to list of actions
 
         param action: action to add
@@ -232,12 +292,16 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             select_condition = SelectCond.at_least_one
         self.__actions.setdefault(select_condition, []).append(action)
 
-    def selection_rows_changed(self, selected_objects: List[ObjectItf]):
-        """Number of selected rows has changed"""
+    def selected_objects_changed(
+        self,
+        selected_groups: List[ObjectGroup],
+        selected_objects: List[SignalParam | ImageParam],
+    ):
+        """Update actions based on selected objects"""
         for cond, actlist in self.__actions.items():
             if cond is not None:
                 for act in actlist:
-                    act.setEnabled(cond(selected_objects))
+                    act.setEnabled(cond(selected_groups, selected_objects))
 
     def create_all_actions(self):
         """Create all actions"""
@@ -297,10 +361,28 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
+                _("New group..."),
+                icon=get_icon("new_group.svg"),
+                triggered=self.panel.new_group,
+                select_condition=SelectCond.always,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Rename group..."),
+                icon=get_icon("rename_group.svg"),
+                triggered=self.panel.rename_group,
+                select_condition=SelectCond.exactly_one_group,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Duplicate"),
                 icon=get_icon("libre-gui-copy.svg"),
+                separator=True,
                 triggered=self.panel.duplicate_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Copy),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
@@ -309,6 +391,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon=get_icon("delete.svg"),
                 triggered=self.panel.remove_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
@@ -373,81 +456,87 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Sum"),
-                triggered=self.proc.compute_sum,
+                triggered=self.panel.processor.compute_sum,
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
                 _("Average"),
-                triggered=self.proc.compute_average,
+                triggered=self.panel.processor.compute_average,
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
                 _("Difference"),
-                triggered=lambda: self.proc.compute_difference(False),
-                select_condition=SelectCond.exactly_two,
+                triggered=lambda: self.panel.processor.compute_difference(
+                    quadratic=False
+                ),
+                select_condition=SelectCond.at_least_one,
             )
             self.new_action(
                 _("Quadratic difference"),
-                triggered=lambda: self.proc.compute_difference(True),
-                select_condition=SelectCond.exactly_two,
+                triggered=lambda: self.panel.processor.compute_difference(
+                    quadratic=True
+                ),
+                select_condition=SelectCond.at_least_one,
             )
             self.new_action(
                 _("Product"),
-                triggered=self.proc.compute_product,
+                triggered=self.panel.processor.compute_product,
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
                 _("Division"),
-                triggered=self.proc.compute_division,
-                select_condition=SelectCond.exactly_two,
+                triggered=self.panel.processor.compute_division,
+                select_condition=SelectCond.at_least_one,
             )
-            self.new_action(_("Absolute value"), triggered=self.proc.compute_abs)
-            self.new_action("Log10(y)", triggered=self.proc.compute_log10)
+            self.new_action(
+                _("Absolute value"), triggered=self.panel.processor.compute_abs
+            )
+            self.new_action("Log10(y)", triggered=self.panel.processor.compute_log10)
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
                 _("Thresholding"),
-                triggered=self.proc.compute_threshold,
+                triggered=self.panel.processor.compute_threshold,
             )
             self.new_action(
                 _("Clipping"),
-                triggered=self.proc.compute_clip,
+                triggered=self.panel.processor.compute_clip,
             )
             self.new_action(
                 _("Linear calibration"),
-                triggered=self.proc.calibrate,
+                triggered=self.panel.processor.compute_calibration,
             )
             self.new_action(
                 _("Gaussian filter"),
-                triggered=self.proc.compute_gaussian,
+                triggered=self.panel.processor.compute_gaussian,
             )
             self.new_action(
                 _("Moving average"),
-                triggered=self.proc.compute_moving_average,
+                triggered=self.panel.processor.compute_moving_average,
             )
             self.new_action(
                 _("Moving median"),
-                triggered=self.proc.compute_moving_median,
+                triggered=self.panel.processor.compute_moving_median,
             )
             self.new_action(
                 _("Wiener filter"),
-                triggered=self.proc.compute_wiener,
+                triggered=self.panel.processor.compute_wiener,
             )
             self.new_action(
                 _("FFT"),
-                triggered=self.proc.compute_fft,
+                triggered=self.panel.processor.compute_fft,
                 tip=_("Warning: only real part is plotted"),
             )
             self.new_action(
                 _("Inverse FFT"),
-                triggered=self.proc.compute_ifft,
+                triggered=self.panel.processor.compute_ifft,
                 tip=_("Warning: only real part is plotted"),
             )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
                 _("Edit regions of interest..."),
-                triggered=self.proc.edit_regions_of_interest,
+                triggered=self.panel.processor.edit_regions_of_interest,
                 icon=get_icon("roi.svg"),
                 select_condition=SelectCond.exactly_one,
                 context_menu_pos=-1,
@@ -455,7 +544,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Remove regions of interest"),
-                triggered=self.proc.delete_regions_of_interest,
+                triggered=self.panel.processor.delete_regions_of_interest,
                 icon=get_icon("roi_delete.svg"),
                 select_condition=SelectCond.with_roi,
                 context_menu_pos=-1,
@@ -463,9 +552,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Statistics") + "...",
                 separator=True,
-                triggered=self.proc.compute_stats,
+                triggered=self.panel.processor.compute_stats,
                 icon=get_icon("stats.svg"),
-                select_condition=SelectCond.exactly_one,
                 context_menu_pos=-1,
                 context_menu_sep=True,
             )
@@ -475,10 +563,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("ROI extraction"),
-                triggered=self.proc.extract_roi,
+                triggered=self.panel.processor.extract_roi,
                 icon=get_icon(f"{self.OBJECT_STR}_roi.svg"),
             )
-            self.new_action(_("Swap X/Y axes"), triggered=self.proc.swap_axes)
+            self.new_action(
+                _("Swap X/Y axes"), triggered=self.panel.processor.swap_axes
+            )
 
 
 class SignalActionHandler(BaseActionHandler):
@@ -489,16 +579,20 @@ class SignalActionHandler(BaseActionHandler):
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(_("Normalize"), triggered=self.proc.normalize)
-            self.new_action(_("Derivative"), triggered=self.proc.compute_derivative)
-            self.new_action(_("Integral"), triggered=self.proc.compute_integral)
+            self.new_action(_("Normalize"), triggered=self.panel.processor.normalize)
+            self.new_action(
+                _("Derivative"), triggered=self.panel.processor.compute_derivative
+            )
+            self.new_action(
+                _("Integral"), triggered=self.panel.processor.compute_integral
+            )
 
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Peak detection"),
-                triggered=self.proc.detect_peaks,
+                triggered=self.panel.processor.detect_peaks,
                 icon=get_icon("peak_detect.svg"),
             )
 
@@ -506,7 +600,7 @@ class SignalActionHandler(BaseActionHandler):
             """Create curve fitting action"""
             return self.new_action(
                 title,
-                triggered=lambda: self.proc.compute_fit(title, fitdlgfunc),
+                triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
             )
 
         with self.new_category(ActionCategory.PROCESSING):
@@ -516,22 +610,22 @@ class SignalActionHandler(BaseActionHandler):
                 cra_fit(_("Voigt fit"), fitdialog.voigtfit)
                 self.new_action(
                     _("Polynomial fit"),
-                    triggered=self.proc.compute_polyfit,
+                    triggered=self.panel.processor.compute_polyfit,
                 )
                 self.new_action(
                     _("Multi-Gaussian fit"),
-                    triggered=self.proc.compute_multigaussianfit,
+                    triggered=self.panel.processor.compute_multigaussianfit,
                 )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
                 _("Full width at half-maximum"),
-                triggered=self.proc.compute_fwhm,
+                triggered=self.panel.processor.compute_fwhm,
                 tip=_("Compute Full Width at Half-Maximum (FWHM)"),
             )
             self.new_action(
                 _("Full width at") + " 1/e²",
-                triggered=self.proc.compute_fw1e2,
+                triggered=self.panel.processor.compute_fw1e2,
                 tip=_("Compute Full Width at Maximum") + "/e²",
             )
 
@@ -558,172 +652,174 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 "Log10(z+n)",
-                triggered=self.proc.compute_logp1,
+                triggered=self.panel.processor.compute_logp1,
             )
             self.new_action(
                 _("Flat-field correction"),
-                triggered=self.proc.flat_field_correction,
-                select_condition=SelectCond.exactly_two,
+                triggered=self.panel.processor.flat_field_correction,
+                select_condition=SelectCond.at_least_one,
             )
 
             with self.new_menu(_("Rotation")):
                 self.new_action(
                     _("Flip horizontally"),
-                    triggered=self.proc.flip_horizontally,
+                    triggered=self.panel.processor.flip_horizontally,
                     icon=get_icon("flip_horizontally.svg"),
                     context_menu_pos=-1,
                     context_menu_sep=True,
                 )
                 self.new_action(
                     _("Flip vertically"),
-                    triggered=self.proc.flip_vertically,
+                    triggered=self.panel.processor.flip_vertically,
                     icon=get_icon("flip_vertically.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s right")
                     % "90°",  # pylint: disable=consider-using-f-string
-                    triggered=self.proc.rotate_270,
+                    triggered=self.panel.processor.rotate_270,
                     icon=get_icon("rotate_right.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s left")
                     % "90°",  # pylint: disable=consider-using-f-string
-                    triggered=self.proc.rotate_90,
+                    triggered=self.panel.processor.rotate_90,
                     icon=get_icon("rotate_left.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate arbitrarily..."),
-                    triggered=self.proc.rotate_arbitrarily,
+                    triggered=self.panel.processor.rotate_arbitrarily,
                 )
 
             self.new_action(
                 _("Distribute on a grid..."),
-                triggered=self.proc.distribute_on_grid,
+                triggered=self.panel.processor.distribute_on_grid,
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
                 _("Reset image positions"),
-                triggered=self.proc.reset_positions,
+                triggered=self.panel.processor.reset_positions,
                 select_condition=SelectCond.at_least_two,
             )
 
             self.new_action(
                 _("Resize"),
-                triggered=self.proc.resize,
+                triggered=self.panel.processor.resize,
                 separator=True,
             )
-            self.new_action(_("Pixel binning"), triggered=self.proc.rebin)
+            self.new_action(_("Pixel binning"), triggered=self.panel.processor.rebin)
 
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Exposure")):
                 self.new_action(
                     _("Intensity rescaling"),
-                    triggered=self.proc.rescale_intensity,
+                    triggered=self.panel.processor.rescale_intensity,
                 )
                 self.new_action(
                     _("Histogram equalization"),
-                    triggered=self.proc.equalize_hist,
+                    triggered=self.panel.processor.equalize_hist,
                 )
                 self.new_action(
                     _("Adaptive histogram equalization"),
-                    triggered=self.proc.equalize_adapthist,
+                    triggered=self.panel.processor.equalize_adapthist,
                 )
             with self.new_menu(_("Restoration")):
                 self.new_action(
                     _("Total variation denoising"),
-                    triggered=self.proc.compute_denoise_tv,
+                    triggered=self.panel.processor.compute_denoise_tv,
                 )
                 self.new_action(
                     _("Bilateral filter denoising"),
-                    triggered=self.proc.compute_denoise_bilateral,
+                    triggered=self.panel.processor.compute_denoise_bilateral,
                 )
                 self.new_action(
                     _("Wavelet denoising"),
-                    triggered=self.proc.compute_denoise_wavelet,
+                    triggered=self.panel.processor.compute_denoise_wavelet,
                 )
                 self.new_action(
                     _("White Top-Hat denoising"),
-                    triggered=self.proc.compute_denoise_tophat,
+                    triggered=self.panel.processor.compute_denoise_tophat,
                 )
             with self.new_menu(_("Morphology")):
                 self.new_action(
                     _("White Top-Hat (disk)"),
-                    triggered=self.proc.compute_white_tophat,
+                    triggered=self.panel.processor.compute_white_tophat,
                 )
                 self.new_action(
                     _("Black Top-Hat (disk)"),
-                    triggered=self.proc.compute_black_tophat,
+                    triggered=self.panel.processor.compute_black_tophat,
                 )
                 self.new_action(
                     _("Erosion (disk)"),
-                    triggered=self.proc.compute_erosion,
+                    triggered=self.panel.processor.compute_erosion,
                 )
                 self.new_action(
                     _("Dilation (disk)"),
-                    triggered=self.proc.compute_dilation,
+                    triggered=self.panel.processor.compute_dilation,
                 )
                 self.new_action(
                     _("Opening (disk)"),
-                    triggered=self.proc.compute_opening,
+                    triggered=self.panel.processor.compute_opening,
                 )
                 self.new_action(
                     _("Closing (disk)"),
-                    triggered=self.proc.compute_closing,
+                    triggered=self.panel.processor.compute_closing,
                 )
 
-            self.new_action(_("Canny filter"), triggered=self.proc.compute_canny)
+            self.new_action(
+                _("Canny filter"), triggered=self.panel.processor.compute_canny
+            )
 
         with self.new_category(ActionCategory.COMPUTING):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
             # or ROIs (maybe reuse/derive from `core.gui.processor.image.GridParam`)
             self.new_action(
                 _("Centroid"),
-                triggered=self.proc.compute_centroid,
+                triggered=self.panel.processor.compute_centroid,
                 tip=_("Compute image centroid"),
             )
             self.new_action(
                 _("Minimum enclosing circle center"),
-                triggered=self.proc.compute_enclosing_circle,
+                triggered=self.panel.processor.compute_enclosing_circle,
                 tip=_("Compute smallest enclosing circle center"),
             )
             self.new_action(
                 _("2D peak detection"),
                 separator=True,
-                triggered=self.proc.compute_peak_detection,
+                triggered=self.panel.processor.compute_peak_detection,
                 tip=_("Compute automatic 2D peak detection"),
             )
             self.new_action(
                 _("Contour detection"),
-                triggered=self.proc.compute_contour_shape,
+                triggered=self.panel.processor.compute_contour_shape,
                 tip=_("Compute contour shape fit"),
             )
             self.new_action(
                 _("Circle Hough transform"),
-                triggered=self.proc.compute_hough_circle_peaks,
+                triggered=self.panel.processor.compute_hough_circle_peaks,
                 tip=_("Detect circular shapes using circle Hough transform"),
             )
 
             with self.new_menu(_("Blob detection")):
                 self.new_action(
                     _("Blob detection (DOG)"),
-                    triggered=self.proc.compute_blob_dog,
+                    triggered=self.panel.processor.compute_blob_dog,
                     tip=_("Detect blobs using Difference of Gaussian (DOG) method"),
                 )
                 self.new_action(
                     _("Blob detection (DOH)"),
-                    triggered=self.proc.compute_blob_doh,
+                    triggered=self.panel.processor.compute_blob_doh,
                     tip=_("Detect blobs using Determinant of Hessian (DOH) method"),
                 )
                 self.new_action(
                     _("Blob detection (LOG)"),
-                    triggered=self.proc.compute_blob_log,
+                    triggered=self.panel.processor.compute_blob_log,
                     tip=_("Detect blobs using Laplacian of Gaussian (LOG) method"),
                 )
                 self.new_action(
                     _("Blob detection (OpenCV)"),
-                    triggered=self.proc.compute_blob_opencv,
+                    triggered=self.panel.processor.compute_blob_opencv,
                     tip=_("Detect blobs using OpenCV SimpleBlobDetector"),
                 )

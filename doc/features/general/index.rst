@@ -3,7 +3,7 @@ General features
 
 .. figure:: /images/cdl_linux.png
 
-    CobraDataLab main window (Ubuntu 22.04)
+    DataLab main window (Ubuntu 22.04)
 
 .. toctree::
    :maxdepth: 2

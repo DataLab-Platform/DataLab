@@ -7,7 +7,7 @@
 Basic application launcher test 4
 
 Create an image object from Scikit-image human mitosis sample,
-then open CobraDataLab to show it.
+then open DataLab to show it.
 """
 
 

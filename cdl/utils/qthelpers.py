@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Qt utilities
+DataLab Qt utilities
 """
 
 import faulthandler

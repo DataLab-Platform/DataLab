@@ -4,7 +4,7 @@
 # Pierre Raybaut
 
 """
-Module providing CobraDataLab Installation configuration widget
+Module providing DataLab Installation configuration widget
 """
 
 import locale
@@ -59,10 +59,10 @@ class InstallConfigViewerWindow(QW.QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setObjectName("dependencies")
-        self.setWindowTitle(_("About CobraDataLab installation"))
-        self.setWindowIcon(get_icon("CobraDataLab.svg"))
+        self.setWindowTitle(_("About DataLab installation"))
+        self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget()
-        label = "Information on current CobraDataLab installation:"
+        label = "Information on current DataLab installation:"
         more_infos = ""
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
@@ -77,12 +77,12 @@ class InstallConfigViewerWindow(QW.QDialog):
         more_infos += os.linesep * 2
         if sys.executable.lower().endswith("cdl.exe"):
             #  Stand-alone version
-            more_infos += "This is the Stand-alone version of CobraDataLab"
+            more_infos += "This is the Stand-alone version of DataLab"
         else:
             more_infos += get_pip_list()
         infos = os.linesep.join(
             [
-                f"CobraDataLab v{__version__}",
+                f"DataLab v{__version__}",
                 "",
                 f"Machine type: {platform.machine()}",
                 f"Platform: {platform.platform()}",
@@ -99,6 +99,6 @@ class InstallConfigViewerWindow(QW.QDialog):
 
 
 def exec_cdl_installconfig_dialog(parent=None):
-    """View CobraDataLab installation configuration"""
+    """View DataLab installation configuration"""
     dlg = InstallConfigViewerWindow(parent=parent)
     exec_dialog(dlg)

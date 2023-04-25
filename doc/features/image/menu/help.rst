@@ -14,19 +14,19 @@ CHM documentation
     .. image:: /images/shots/doc_chm.png
 
 Show log files
-    Open CobraDataLab log viewer
+    Open DataLab log viewer
 
     .. seealso::
         See :ref:`ref-to-logviewer` for more details on log viewer.
 
-About CobraDataLab installation
-    Show information regarding your CobraDataLab installation (this
+About DataLab installation
+    Show information regarding your DataLab installation (this
     is typically needed for submitting a bug report).
 
     .. seealso::
         See :ref:`ref-to-instviewer` for more details on this dialog box.
 
 About
-    Open the "About CobraDataLab" dialog box:
+    Open the "About DataLab" dialog box:
 
     .. image:: /images/shots/about.png

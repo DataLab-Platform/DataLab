@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab mainwindow automation test:
+DataLab mainwindow automation test:
 
   - Saving current project (h5 file)
   - Removing all objects
@@ -51,7 +51,7 @@ def test():
             # === Reopening previously saved project
             win.open_h5_files([fname], import_all=True, reset_all=True)
             # === Accessing object metadata
-            obj = win.imagepanel.objhandler[1]
+            obj = win.imagepanel.objmodel.get_groups()[0][1]
             execenv.print(f"Image '{obj.title}':")
             for key, value in obj.metadata.items():
                 execenv.print(f'  metadata["{key}"] = {value}')

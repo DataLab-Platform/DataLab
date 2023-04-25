@@ -6,7 +6,7 @@
 """
 Image tools test
 
-Simple image dialog for testing all image tools available in CobraDataLab
+Simple image dialog for testing all image tools available in DataLab
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

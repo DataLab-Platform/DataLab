@@ -4,7 +4,7 @@ Installation
 Dependencies
 ------------
 
-CobraDataLab requirements are the following *(Note: the Windows installer
+DataLab requirements are the following *(Note: the Windows installer
 package already include all those required libraries as well as Python
 itself)*:
 
@@ -20,7 +20,7 @@ How to install
 Windows installer:
 ^^^^^^^^^^^^^^^^^^
 
-CobraDataLab is available as a stand-alone application for Windows,
+DataLab is available as a stand-alone application for Windows,
 which does not require any Python distribution to be installed.
 Just run the installer and you're good to go!
 
@@ -28,27 +28,27 @@ Just run the installer and you're good to go!
 
 The installer package is available in the `Releases`_ section.
 It supports automatic uninstall and upgrade feature (no need to uninstall
-CobraDataLab before runinng the installer of another version of the
+DataLab before runinng the installer of another version of the
 application).
 
-.. _Releases: https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/releases
+.. _Releases: https://github.com/Codra-Ingenierie-Informatique/DataLab/releases
 
 
 Wheel package:
 ^^^^^^^^^^^^^^
 
 On any operating system, using pip and the Wheel package is the easiest way to
-install CobraDataLab on an existing Python distribution:
+install DataLab on an existing Python distribution:
 
 .. code-block:: console
 
-    $ pip install --upgrade CobraDataLab-2.0.2-py2.py3-none-any.whl
+    $ pip install --upgrade DataLab-2.0.2-py2.py3-none-any.whl
 
 
 Source package:
 ^^^^^^^^^^^^^^^
 
-Installing CobraDataLab directly from the source package is straigthforward:
+Installing DataLab directly from the source package is straigthforward:
 
 .. code-block:: console
 

@@ -3,11 +3,13 @@
 # Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
 # (see cdl/__init__.py for details)
 
-"""CobraDataLab Macro Panel"""
+"""DataLab Macro Panel"""
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from typing import Iterator
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
+from typing import TYPE_CHECKING, Dict, List
 
 from guidata.config import CONF
 from guidata.configtools import get_font, get_icon
@@ -18,9 +20,11 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from cdl.core.gui import ObjItf
 from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.panel.base import AbstractPanel
+
+if TYPE_CHECKING:
+    from cdl.core.io.native import NativeH5Reader, NativeH5Writer
 
 
 class MacroTabs(QW.QTabWidget):
@@ -28,7 +32,7 @@ class MacroTabs(QW.QTabWidget):
 
     SIG_CONTEXT_MENU = QC.Signal(QC.QPoint)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setTabsClosable(True)
         self.setMovable(True)
@@ -42,13 +46,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     """Macro manager widget"""
 
     LOCATION = QC.Qt.LeftDockWidgetArea
+    PANEL_STR = _("Macro panel")
 
-    PREFIX = "m"
-    H5_PREFIX = "CDL_Mac"
+    H5_PREFIX = "DataLab_Mac"
 
     SIG_OBJECT_MODIFIED = QC.Signal()
 
-    def __init__(self, parent: QW.QWidget = None):
+    def __init__(self, parent: QW.QWidget = None) -> None:
         super().__init__(parent)
         self.setWindowTitle(_("Macro manager"))
         self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
@@ -74,8 +78,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         self.run_action = None
         self.stop_action = None
-        self.obj_actions = []  # Object-dependent actions
-        self.__macros = {}
+        self.obj_actions: List[QW.QAction] = []  # Object-dependent actions
+        self.__macros: Dict[str, Macro] = {}
 
         # TODO: Add action "Import from file..."
         # TODO: Add action "Export to file..."
@@ -84,21 +88,17 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     # ------AbstractPanel interface-----------------------------------------------------
     @property
-    def object_number(self):
+    def object_number(self) -> int:
         """Return object number"""
         return len(self.__macros)
 
-    def object_iterator(self) -> Iterator[ObjItf]:
-        """Iterate over objects handled by panel"""
-        return iter(self.__macros.values())
-
-    def remove_all_objects(self):
+    def remove_all_objects(self) -> None:
         """Remove all objects"""
         while self.tabwidget.count() > 0:
             self.tabwidget.removeTab(0)
         super().remove_all_objects()
 
-    def create_object(self, title=None):
+    def create_object(self, title=None) -> Macro:
         """Create object
         :param str title: Title of the object
         """
@@ -113,15 +113,21 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         macro.MODIFIED.connect(self.macro_contents_changed)
         return macro
 
-    def add_object(self, obj: Macro, refresh: bool = True) -> ObjItf:
+    def add_object(self, obj: Macro) -> None:
         """Add object
         :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
         self.tabwidget.addTab(obj.editor, obj.title)
-        self.__macros[id(obj)] = obj
-        return super().add_object(obj, refresh=refresh)
+        self.__macros[obj.uuid] = obj
+        self.SIG_OBJECT_ADDED.emit()
+
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
+        """Serialize whole panel to a HDF5 file"""
+        with writer.group(self.H5_PREFIX):
+            for obj in self.__macros.values():
+                self.serialize_object_to_hdf5(obj, writer)
 
     # ---- Macro panel API -------------------------------------------------------------
-    def setup_actions(self):
+    def setup_actions(self) -> None:
         """Setup macro menu actions"""
         self.run_action = create_action(
             self,
@@ -199,7 +205,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         add_actions(toolbar, [self.run_action, self.stop_action, None])
         add_actions(self.context_menu, actions)
 
-    def __popup_contextmenu(self, position: QC.QPoint):  # pragma: no cover
+    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
         """Popup context menu at position"""
         not_empty = self.tabwidget.count() > 0
         for action in self.obj_actions:
@@ -217,38 +223,38 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 return macro
         return None
 
-    def current_macro_changed(self, index: int = None):  # pylint: disable=W0613
+    def current_macro_changed(self, index: int = None) -> None:  # pylint: disable=W0613
         """Current macro has changed"""
         macro = self.get_macro()
         if macro is not None:
             state = macro.is_running()
             self.macro_state_changed(macro, state)
 
-    def macro_contents_changed(self):
+    def macro_contents_changed(self) -> None:
         """One of the macro contents has changed"""
         self.SIG_OBJECT_MODIFIED.emit()
 
     def run_macro(self):
         """Run current macro"""
-        # XXX: Macros should be executed in a separate process: access to CobraDataLab
+        # XXX: Macros should be executed in a separate process: access to DataLab
         # is provided by the 'remote_controlling' feature (see corresponding branch).
         # So, macros should be Python scripts similar to "remoteclient_test.py".
         # Connection to the XML-RPC server should be simplified (to a single line).
         #
-        # Important: an environment variable must contained current CobraDataLab session
+        # Important: an environment variable must contained current DataLab session
         # XML-RPC server port number (e.g. "CDL_XMLRPC_PORT"). This allows to
-        # handle the case of multiple instances of CobraDataLab running at the same time
-        # (each macro will then control the right instance of CobraDataLab, the one from
+        # handle the case of multiple instances of DataLab running at the same time
+        # (each macro will then control the right instance of DataLab, the one from
         # which it was executed)
         macro = self.get_macro()
         macro.run()
 
-    def stop_macro(self):
+    def stop_macro(self) -> None:
         """Stop current macro"""
         macro = self.get_macro()
         macro.kill()
 
-    def macro_state_changed(self, orig_macro: Macro, state: bool):
+    def macro_state_changed(self, orig_macro: Macro, state: bool) -> None:
         """Macro state has changed (True: started, False: stopped)"""
         macro = self.get_macro()
         if macro is orig_macro:
@@ -264,12 +270,12 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.current_macro_changed()
         return macro
 
-    def macro_name_changed(self, name):
+    def macro_name_changed(self, name) -> None:
         """Macro name has been changed"""
         index = self.indexOf(self.tabwidget)
         self.tabwidget.setTabText(index, name)
 
-    def rename_macro(self, index: int = None):
+    def rename_macro(self, index: int = None) -> None:
         """Rename macro"""
         macro = self.get_macro(index)
         name, valid = QW.QInputDialog.getText(
@@ -284,15 +290,15 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             if index is not None:
                 self.tabwidget.setCurrentIndex(index)
 
-    def export_macro_to_file(self):
+    def export_macro_to_file(self) -> None:
         """Export macro to file"""
         raise NotImplementedError
 
-    def import_macro_from_file(self):
+    def import_macro_from_file(self) -> None:
         """Import macro from file"""
         raise NotImplementedError
 
-    def remove_macro(self, index: int = None):
+    def remove_macro(self, index: int = None) -> None:
         """Remove macro"""
         if index is None:
             index = self.tabwidget.currentIndex()

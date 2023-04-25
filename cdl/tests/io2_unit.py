@@ -6,7 +6,7 @@
 """
 I/O test
 
-Testing CobraDataLab specific formats.
+Testing DataLab specific formats.
 """
 
 import os.path as osp

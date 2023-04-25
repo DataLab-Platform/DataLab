@@ -4,10 +4,10 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab
+DataLab
 ============
 
-CobraDataLab is a generic signal and image processing software based on Python
+DataLab is a generic signal and image processing software based on Python
 scientific libraries (such as NumPy, SciPy or scikit-image) and Qt graphical
 user interfaces (thanks to `guidata`_ and `guiqwt`_ libraries).
 
@@ -19,9 +19,9 @@ import os
 
 __version__ = "1.0.0"
 __docurl__ = "https://cdl.readthedocs.io/en/latest/"
-__homeurl__ = "https://codra-ingenierie-informatique.github.io/CobraDataLab/"
+__homeurl__ = "https://codra-ingenierie-informatique.github.io/DataLab/"
 __supporturl__ = (
-    "https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/new/choose"
+    "https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose"
 )
 
 os.environ["CDL_VERSION"] = __version__

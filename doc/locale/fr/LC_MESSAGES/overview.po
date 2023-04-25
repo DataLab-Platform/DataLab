@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CobraDataLab \n"
+"Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-15 09:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -22,13 +22,13 @@ msgid "Overview"
 msgstr "Aperçu des fonctionnalités"
 
 #: ../../overview.rst:4
-msgid "This page presents briefly CobraDataLab key features."
-msgstr "Cette page présente brièvement les fonctionnalités principales de CobraDataLab."
+msgid "This page presents briefly DataLab key features."
+msgstr "Cette page présente brièvement les fonctionnalités principales de DataLab."
 
 #: ../../overview.rst:8
-msgid "CobraDataLab supports dark and light mode depending on your OS settings"
+msgid "DataLab supports dark and light mode depending on your OS settings"
 msgstr ""
-"CobraDataLab propose un mode sombre et un mode clair, selon le paramétrage de "
+"DataLab propose un mode sombre et un mode clair, selon le paramétrage de "
 "votre système d'exploitation."
 
 #: ../../overview.rst:11
@@ -185,5 +185,5 @@ msgstr "Centre du cercle minimum"
 #~ msgid "Image processing"
 #~ msgstr "Traitement d'image"
 
-#~ msgid "Signal and image visualization in CobraDataLab"
-#~ msgstr "Visualisation de signaux et d'images dans CobraDataLab"
+#~ msgid "Signal and image visualization in DataLab"
+#~ msgstr "Visualisation de signaux et d'images dans DataLab"

@@ -7,7 +7,7 @@
 Basic application launcher test 2
 
 Create signal and image objects (with circles, rectangles, segments and markers),
-then open CobraDataLab to show them.
+then open DataLab to show them.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

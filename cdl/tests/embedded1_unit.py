@@ -6,7 +6,7 @@
 """
 Application embedded test 1
 
-CobraDataLab main window is destroyed when closing application.
+DataLab main window is destroyed when closing application.
 It is rebuilt from scratch when reopening application.
 """
 
@@ -76,7 +76,7 @@ class AbstractClientWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
 
 
 class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
-    """Abstract client window, to embed CobraDataLab or connect to it"""
+    """Abstract client window, to embed DataLab or connect to it"""
 
     PURPOSE = None
     INIT_BUTTON_LABEL = None
@@ -122,27 +122,27 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         add_btn(_("Add signal objects"), self.add_signals, 10, "CommandLink")
         add_btn(_("Add image objects"), self.add_images, 0, "CommandLink")
         add_btn(_("Remove all objects"), self.remove_all, 5, "MessageBoxWarning")
-        add_btn(_("Close CobraDataLab"), self.close_cdl, 10, "DialogCloseButton")
+        add_btn(_("Close DataLab"), self.close_cdl, 10, "DialogCloseButton")
 
     def add_additional_buttons(self):
         """Add additional buttons"""
 
     def init_cdl(self):
-        """Open CobraDataLab test"""
+        """Open DataLab test"""
 
     def close_cdl(self):
-        """Close CobraDataLab window"""
+        """Close DataLab window"""
         if self.cdl is not None:
-            self.host.log("=> Closed CobraDataLab")
+            self.host.log("=> Closed DataLab")
             self.cdl.close()
             self.cdl = None
 
     @abc.abstractmethod
     def add_object(self, obj):
-        """Add object to CobraDataLab"""
+        """Add object to DataLab"""
 
     def add_signals(self):
-        """Add signals to CobraDataLab"""
+        """Add signals to DataLab"""
         if self.cdl is not None:
             for func in (test_data.create_test_signal1, test_data.create_test_signal2):
                 obj = func(title=self.sigtitle)
@@ -150,7 +150,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
                 self.host.log(f"Added signal: {obj.title}")
 
     def add_images(self):
-        """Add images to CobraDataLab"""
+        """Add images to DataLab"""
         if self.cdl is not None:
             size = 2000
             for func in (
@@ -164,42 +164,39 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
 
     @abc.abstractmethod
     def remove_all(self):
-        """Remove all objects from CobraDataLab"""
+        """Remove all objects from DataLab"""
 
 
 class BaseHostWindow(AbstractClientWindow):
-    """Base host window, embedding CobraDataLab"""
+    """Base host window, embedding DataLab"""
 
-    PURPOSE = _("This the host application, which embeds CobraDataLab.")
-    INIT_BUTTON_LABEL = _("Open CobraDataLab")
+    PURPOSE = _("This the host application, which embeds DataLab.")
+    INIT_BUTTON_LABEL = _("Open DataLab")
 
     def add_object(self, obj):
-        """Add object to CobraDataLab"""
+        """Add object to DataLab"""
         if isinstance(obj, SignalParam):
             self.cdl.signalpanel.add_object(obj)
         else:
             self.cdl.imagepanel.add_object(obj)
 
     def remove_all(self):
-        """Remove all objects from CobraDataLab"""
+        """Remove all objects from DataLab"""
         if self.cdl is not None:
             for panel in self.cdl.panels:
-                objn = len(panel.objhandler)
                 panel.remove_all_objects()
-                self.host.log(f"Removed {objn} objects from {panel.PANEL_STR}")
+                self.host.log(f"Removed objects from {panel.PANEL_STR}")
 
     def add_additional_buttons(self):
         """Add additional buttons"""
         add_btn = self.host.add_button
-        add_btn(
-            _("Import signal from CobraDataLab"), self.import_signal, 10, "ArrowLeft"
-        )
-        add_btn(_("Import image from CobraDataLab"), self.import_image, 0, "ArrowLeft")
+        add_btn(_("Import signal from DataLab"), self.import_signal, 10, "ArrowLeft")
+        add_btn(_("Import image from DataLab"), self.import_image, 0, "ArrowLeft")
 
     def import_object(self, panel, title):
-        """Import object from CobraDataLab"""
+        """Import object from DataLab"""
         self.host.log(f"get_object_dialog ({title}):")
-        obj = panel.get_object_dialog(self.host, title)
+        obj = panel.get_object_dialog(title, parent=self.host)
         if obj is not None:
             self.host.log(f"  -> {obj.title}:")
             self.host.log(str(obj))
@@ -207,12 +204,12 @@ class BaseHostWindow(AbstractClientWindow):
             self.host.log("  -> canceled")
 
     def import_signal(self):
-        """Import signal from CobraDataLab"""
+        """Import signal from DataLab"""
         if self.cdl is not None:
             self.import_object(self.cdl.signalpanel, self.sender().text())
 
     def import_image(self):
-        """Import image from CobraDataLab"""
+        """Import image from DataLab"""
         if self.cdl is not None:
             self.import_object(self.cdl.imagepanel, self.sender().text())
 
@@ -221,17 +218,17 @@ class HostWindow(BaseHostWindow):
     """Test main view"""
 
     def init_cdl(self):
-        """Open CobraDataLab test"""
+        """Open DataLab test"""
         if self.cdl is None:
             self.cdl = CDLMainWindow(console=False)
             self.cdl.setAttribute(QC.Qt.WA_DeleteOnClose, True)
             self.cdl.show()
-            self.host.log("✨Initialized CobraDataLab window")
+            self.host.log("✨Initialized DataLab window")
         else:
             try:
                 self.cdl.show()
                 self.cdl.raise_()
-                self.host.log("=> Shown CobraDataLab window")
+                self.host.log("=> Shown DataLab window")
             except RuntimeError:
                 self.cdl = None
                 self.init_cdl()

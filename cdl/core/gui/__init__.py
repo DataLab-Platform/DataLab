@@ -4,9 +4,9 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab core.gui module
+DataLab core.gui module
 
-This module handles all GUI features which are specific to CobraDataLab (CDL):
+This module handles all GUI features which are specific to DataLab (CDL):
 
   * core.gui.main: handles CDL main window which relies on signal and image panels
   * core.gui.panel: handles CDL signal and image panels, relying on:
@@ -26,6 +26,11 @@ from guidata.userconfigio import BaseIOHandler
 
 class ObjItf:
     """Interface for objects handled by panels"""
+
+    @property
+    @abc.abstractmethod
+    def short_id(self) -> str:
+        """Object short id"""
 
     @property
     @abc.abstractmethod

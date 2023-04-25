@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Native I/O module (native HDF5/JSON formats)
+DataLab Native I/O module (native HDF5/JSON formats)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -21,7 +21,7 @@ LIST_LENGTH_STR = "__list_length__"
 
 
 class NativeH5Writer(HDF5Writer):
-    """CobraDataLab signal/image objects HDF5 guidata Dataset Writer class,
+    """DataLab signal/image objects HDF5 guidata Dataset Writer class,
     supporting dictionary serialization"""
 
     def __init__(self, filename):
@@ -53,7 +53,7 @@ class NativeH5Writer(HDF5Writer):
 
 
 class NativeH5Reader(HDF5Reader):
-    """CobraDataLab signal/image objects HDF5 guidata dataset Writer class,
+    """DataLab signal/image objects HDF5 guidata dataset Writer class,
     supporting dictionary deserialization"""
 
     def __init__(self, filename):
@@ -82,14 +82,14 @@ class NativeH5Reader(HDF5Reader):
 
 
 class NativeJSONWriter(JSONWriter):
-    """CobraDataLab signal/image objects JSON guidata Dataset Writer class,
+    """DataLab signal/image objects JSON guidata Dataset Writer class,
     supporting dictionary serialization"""
 
     write_dict = JSONWriter.write_any
 
 
 class NativeJSONReader(JSONReader):
-    """CobraDataLab signal/image objects JSON guidata Dataset Reader class,
+    """DataLab signal/image objects JSON guidata Dataset Reader class,
     supporting dictionary deserialization"""
 
     read_dict = JSONReader.read_any

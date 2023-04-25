@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CobraDataLab \n"
+"Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-07 17:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -23,10 +23,10 @@ msgstr "Contrôle à distance"
 
 #: ../../features/general/remotecontrol.rst:4
 msgid ""
-"CobraDataLab may be controlled remotely using the `XML-RPC`_ protocol which is"
+"DataLab may be controlled remotely using the `XML-RPC`_ protocol which is"
 " natively supported by Python. Remote controlling allows to access "
-"CobraDataLab main features from a separate process."
-msgstr "CobraDataLab peut être contrôlé à distance grâce au protocole `XML-RPC`_ qui est nativement pris en charge par Python. Le pilotage à distance permet d'accéder aux fonctionnalités principales de CobraDataLab depuis un processus séparé."
+"DataLab main features from a separate process."
+msgstr "DataLab peut être contrôlé à distance grâce au protocole `XML-RPC`_ qui est nativement pris en charge par Python. Le pilotage à distance permet d'accéder aux fonctionnalités principales de DataLab depuis un processus séparé."
 
 #: ../../features/general/remotecontrol.rst:18
 msgid "Supported features are the following:"
@@ -75,8 +75,8 @@ msgstr "Exécution d'un calcul avec des paramètres"
 #: ../../features/general/remotecontrol.rst:22
 msgid ""
 "Some examples are provided to help implementing such a communication "
-"between your application and CobraDataLab:"
-msgstr "Des exemples d'utilisation du contrôle à distance sont fournis afin d'aider à l'implémentation de la communication entre votre application et CobraDataLab :"
+"between your application and DataLab:"
+msgstr "Des exemples d'utilisation du contrôle à distance sont fournis afin d'aider à l'implémentation de la communication entre votre application et DataLab :"
 
 #: ../../features/general/remotecontrol.rst:21
 msgid "See ``cdl.tests.remoteclient_app`` module"

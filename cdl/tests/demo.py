@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Demo
+DataLab Demo
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -55,7 +55,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     sig1 = create_test_signal1(data_size)
     win.add_object(sig1)
 
-    panel.objhandler.set_current_row(0)
+    panel.objview.set_current_object(sig1)
     newparam = new_signal_param(_("Random function"), stype=SignalTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.vmin = 0
@@ -99,7 +99,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
 
     qt_wait(DELAY2)
 
-    panel.objhandler.set_current_row(0)
+    panel.objview.set_current_object(ima1)
     newparam = new_image_param(itype=ImageTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)

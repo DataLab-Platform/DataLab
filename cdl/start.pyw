@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab, the Codra Filtering Tool
+DataLab, the Codra Filtering Tool
 Simple signal and image processing application based on guiqwt and guidata
 
 Starter
@@ -14,7 +14,7 @@ import sys
 
 if len(sys.argv) > 1 and sys.argv[1] == "-c":
     # ----------------------------------------------------------------------------------
-    # Macro command execution for the standalone version of CobraDataLab
+    # Macro command execution for the standalone version of DataLab
     exec(sys.argv[2])
     # ----------------------------------------------------------------------------------
 else:

@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab I/O signal functions
+DataLab I/O signal functions
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

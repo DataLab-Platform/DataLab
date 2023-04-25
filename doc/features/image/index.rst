@@ -3,7 +3,7 @@ Image processing
 
 .. figure:: /images/shots/i_simple_example.png
 
-    CobraDataLab main window: Image processing view
+    DataLab main window: Image processing view
 
 .. toctree::
    :maxdepth: 2

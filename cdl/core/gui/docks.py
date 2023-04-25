@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Dockable widgets
+DataLab Dockable widgets
 """
 
 from guidata.configtools import get_image_file_path
@@ -29,7 +29,7 @@ class DockablePlotWidget(DockableWidget):
         layout.addWidget(self.plotwidget, 0, 0)
         self.setLayout(layout)
         self.watermark = QW.QLabel()
-        original_image = QG.QPixmap(get_image_file_path("CobraDataLab-watermark.png"))
+        original_image = QG.QPixmap(get_image_file_path("DataLab-watermark.png"))
         self.watermark.setPixmap(original_image)
         layout.addWidget(self.watermark, 0, 0, QC.Qt.AlignCenter)
         self.setup()

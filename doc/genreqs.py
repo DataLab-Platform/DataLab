@@ -5,7 +5,7 @@ import re
 
 
 def generate_requirement_tables():
-    """Generate CobraDataLab install requirements RST table.
+    """Generate DataLab install requirements RST table.
     This table is inserted into 'installation.rst' when
     building documentation"""
     path = osp.dirname(__file__)

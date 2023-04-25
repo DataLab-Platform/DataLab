@@ -1,7 +1,7 @@
 ﻿/*
 
-Script d'installation de WinPython-CODRA
-Copyright (C) 2022 CEA / CODRA
+Script d'installation de WinPython-Codra
+Copyright (C) 2022 CEA / Codra
 
 */
 

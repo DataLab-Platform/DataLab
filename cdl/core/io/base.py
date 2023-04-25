@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Common tools for signal and image io support
+DataLab Common tools for signal and image io support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

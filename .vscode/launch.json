@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run CobraDataLab",
+            "name": "Run DataLab",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/cdl/app.py",

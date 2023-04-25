@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CobraDataLab \n"
+"Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-18 18:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -24,25 +24,25 @@ msgstr "Explorateur HDF5"
 #: ../../h5browser.rst:6
 msgid ""
 "The \"HDF5 Browser\" is a modal dialog box allowing to import almost any "
-"1D and 2D data into CobraDataLab workspace (and eventually metadata)."
+"1D and 2D data into DataLab workspace (and eventually metadata)."
 msgstr ""
 "L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer"
 " presque n'importe quelles données à 1 ou 2 dimensions dans l'espace de "
-"travail de CobraDataLab. Dans certains cas, des métadonnées sont également "
+"travail de DataLab. Dans certains cas, des métadonnées sont également "
 "importées."
 
 #: ../../h5browser.rst:11
 msgid ""
 "Compatible curve or image data are displayed in a hierarchical view on "
 "the left panel, as well as other scalar data (scalar values are just "
-"shown for context purpose and may not be imported into CobraDataLab "
+"shown for context purpose and may not be imported into DataLab "
 "workspace)."
 msgstr ""
 "Les données de type courbe ou image sont affichées sous la forme d'une "
 "vue hiérarchique dans le panneau de gauche, de même que les données "
 "scalaires (les valeurs scalaires sont simplement affichées à titre "
 "d'informations contextuelles et ne peuvent pas être importées dans "
-"l'espace de travail de CobraDataLab)."
+"l'espace de travail de DataLab)."
 
 #: ../../h5browser.rst:18
 msgid "The HDF5 browser is fairly simple to use:"

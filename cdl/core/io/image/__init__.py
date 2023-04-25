@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab image I/O features
+DataLab image I/O features
 """
 
 import cdl.core.io.image.formats  # pylint: disable=unused-import

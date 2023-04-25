@@ -4,11 +4,14 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Image Processor GUI module
+DataLab Image Processor GUI module
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
+from typing import Callable, List, Optional, Tuple
 
 import numpy as np
 import pywt
@@ -50,6 +53,8 @@ from cdl.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from cdl.core.model.base import BaseProcParam, ShapeTypes
 from cdl.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
+
+Obj = ImageParam
 
 VALID_DTYPES_STRLIST = [
     dtype.__name__ for dtype in dtype_range if dtype in ImageParam.VALID_DTYPES
@@ -748,16 +753,15 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, GridParam, title)
         if edit and not param.edit(parent=self.panel.parent()):
             return
-        rows = self.objhandler.get_selected_rows()
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
         g_row, g_col, x0, y0, x0_0, y0_0 = 0, 0, 0.0, 0.0, 0.0, 0.0
         delta_x0, delta_y0 = 0.0, 0.0
-        with create_progress_bar(self.panel, title, max_=len(rows)) as progress:
-            for i_row, row in enumerate(rows):
+        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+            for i_row, obj in enumerate(objs):
                 progress.setValue(i_row)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                obj = self.objhandler[row]
                 if i_row == 0:
                     x0_0, y0_0 = x0, y0 = obj.x0, obj.y0
                 else:
@@ -796,8 +800,8 @@ class ImageProcessor(BaseProcessor):
         """Reset image positions"""
         x0_0, y0_0 = 0.0, 0.0
         delta_x0, delta_y0 = 0.0, 0.0
-        for i_row, row in enumerate(self.objhandler.get_selected_rows()):
-            obj = self.objhandler[row]
+        objs = self.panel.objview.get_sel_objects(include_groups=True)
+        for i_row, obj in enumerate(objs):
             if i_row == 0:
                 x0_0, y0_0 = obj.x0, obj.y0
             else:
@@ -816,8 +820,8 @@ class ImageProcessor(BaseProcessor):
 
     def resize(self, param: ResizeParam = None) -> None:
         """Resize image"""
-        obj0 = self.objhandler.get_sel_object(0)
-        for obj in self.objhandler.get_sel_objects():
+        obj0 = self.panel.objview.get_sel_objects()[0]
+        for obj in self.panel.objview.get_sel_objects():
             if obj.size != obj0.size:
                 QW.QMessageBox.warning(
                     self.panel.parent(),
@@ -866,7 +870,7 @@ class ImageProcessor(BaseProcessor):
     def rebin(self, param: BinningParam = None) -> None:
         """Binning image"""
         edit = param is None
-        input_dtype_str = str(self.objhandler.get_sel_object(0).data.dtype)
+        input_dtype_str = str(self.panel.objview.get_sel_objects()[0].data.dtype)
         edit, param = self.init_param(param, BinningParam, _("Binning"))
         if edit:
             param.dtype_str = input_dtype_str
@@ -904,7 +908,7 @@ class ImageProcessor(BaseProcessor):
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
             return
-        obj = self.objhandler.get_sel_object()
+        obj = self.panel.objview.get_sel_objects()[0]
         group = obj.roidata_to_params(roieditordata.roidata)
 
         if roieditordata.singleobj:
@@ -986,23 +990,23 @@ class ImageProcessor(BaseProcessor):
         self.compute_11("Log10", np.log10)
 
     @qt_try_except()
-    def flat_field_correction(self, param: FlatFieldParam = None) -> None:
+    def flat_field_correction(
+        self, obj2: Optional[Obj] = None, param: FlatFieldParam = None
+    ) -> None:
         """Compute flat field correction"""
         edit, param = self.init_param(param, FlatFieldParam, _("Flat field"))
-        rawdata = self.objhandler.get_sel_object().data
-        flatdata = self.objhandler.get_sel_object(1).data
         if edit:
-            param.set_from_datatype(rawdata.dtype)
-        if not edit or param.edit(self.panel.parent()):
-            rows = self.objhandler.get_selected_rows()
-            robj = self.panel.create_object()
-            robj.title = (
-                "FlatField("
-                + (",".join([f"{self.prefix}{row:03d}" for row in rows]))
-                + f",threshold={param.threshold})"
-            )
-            robj.data = flatfield(rawdata, flatdata, param.threshold)
-            self.panel.add_object(robj)
+            obj = self.panel.objview.get_sel_objects()[0]
+            param.set_from_datatype(obj.data.dtype)
+        self.compute_n1n(
+            _("FlatField"),
+            obj2,
+            _("flat field image"),
+            func=lambda raw, flat, p: flatfield(raw, flat, p.threshold),
+            param=param,
+            suffix=lambda p: "threshold={p.threshold}",
+            edit=edit,
+        )
 
     # ------Image Processing
     def apply_11_func(self, obj, orig, func, param, message):
@@ -1021,7 +1025,7 @@ class ImageProcessor(BaseProcessor):
         return apply_11_func_callback(self, obj, orig, func, param)
 
     @qt_try_except()
-    def calibrate(self, param: ZCalibrateParam = None) -> None:
+    def compute_calibration(self, param: ZCalibrateParam = None) -> None:
         """Compute data linear calibration"""
         edit, param = self.init_param(
             param, ZCalibrateParam, _("Linear calibration"), "y = a.x + b"
@@ -1342,7 +1346,7 @@ class ImageProcessor(BaseProcessor):
 
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
-            data = self.objhandler.get_sel_object().data
+            data = self.panel.objview.get_sel_objects()[0].data
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
@@ -1350,12 +1354,12 @@ class ImageProcessor(BaseProcessor):
             with create_progress_bar(
                 self.panel, _("Create regions of interest"), max_=len(results)
             ) as progress:
-                for idx, (row, result) in enumerate(results.items()):
+                for idx, (oid, result) in enumerate(results.items()):
                     progress.setValue(idx)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    obj = self.objhandler[row]
+                    obj = self.panel.objmodel[oid]
                     dist = distance_matrix(result.data)
                     dist_min = dist[dist != 0].min()
                     assert dist_min > 0
@@ -1518,7 +1522,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
-    def _get_stat_funcs(self):
+    def _get_stat_funcs(self) -> List[Tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
         # Be careful to use systematically functions adapted to masked arrays
         # (e.g. numpy.ma median, and *not* numpy.median)

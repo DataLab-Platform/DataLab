@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab signal I/O features
+DataLab signal I/O features
 """
 
 import cdl.core.io.signal.formats  # pylint: disable=unused-import

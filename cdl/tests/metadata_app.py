@@ -44,9 +44,9 @@ def test_metadata_features(panel: BaseDataPanel):
     """Test all metadata features"""
     panel.duplicate_object()
     panel.delete_metadata()
-    panel.objhandler.set_current_row(-2)
+    panel.objview.select_nums([-2])
     panel.copy_metadata()
-    panel.objhandler.set_current_row(-1)
+    panel.objview.select_nums([-1])
     panel.paste_metadata()
 
 

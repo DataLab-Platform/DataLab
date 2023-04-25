@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Miscelleneous utilities
+DataLab Miscelleneous utilities
 """
 
 import os.path as osp

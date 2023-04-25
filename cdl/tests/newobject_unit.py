@@ -11,6 +11,8 @@ Testing functions related to signal/image creation.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from typing import Generator
+
 from cdl.core.model.base import NormalRandomParam, UniformRandomParam
 from cdl.core.model.image import (
     Gauss2DParam,
@@ -20,6 +22,7 @@ from cdl.core.model.image import (
     new_image_param,
 )
 from cdl.core.model.signal import (
+    SignalParam,
     SignalTypes,
     create_signal_from_param,
     new_signal_param,
@@ -31,7 +34,9 @@ from cdl.utils.vistools import view_curves, view_images
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def iterate_signal_creation(data_size: int = 500, non_zero: bool = False):
+def iterate_signal_creation(
+    data_size: int = 500, non_zero: bool = False
+) -> Generator[SignalParam, None, None]:
     """Iterate over all possible signals created from parameters"""
     execenv.print(
         f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):"

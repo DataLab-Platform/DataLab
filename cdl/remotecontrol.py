@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab remote controlling utilities
+DataLab remote controlling utilities
 """
 
 import abc
@@ -85,7 +85,7 @@ class BaseRPCServer(abc.ABC):
 
     @staticmethod
     def get_version():
-        """Return CobraDataLab version"""
+        """Return DataLab version"""
         return __version__
 
     @abc.abstractmethod
@@ -98,7 +98,7 @@ class BaseRPCServer(abc.ABC):
 
 
 def remote_call(func):
-    """Decorator for method calling CobraDataLab main window remotely"""
+    """Decorator for method calling DataLab main window remotely"""
 
     @functools.wraps(func)
     def method_wrapper(*args, **kwargs):
@@ -167,19 +167,20 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         server.register_function(self.import_h5_file)
         server.register_function(self.open_object)
         server.register_function(self.calc)
-        server.register_function(self.get_object_list)
-        server.register_function(self.get_object)
+        server.register_function(self.get_object_titles)
+        server.register_function(self.get_object_uuids)
+        server.register_function(self.get_object_from_uuid)
 
     def run(self):
         """Thread execution method"""
         self.serve()
 
     def cdl_is_ready(self):
-        """Called when CobraDataLab is ready to process new requests"""
+        """Called when DataLab is ready to process new requests"""
         self.is_ready = True
 
     def close_application(self):
-        """Close CobraDataLab application"""
+        """Close DataLab application"""
         self.SIG_CLOSE_APP.emit()
 
     @remote_call
@@ -199,7 +200,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     @remote_call
     def save_to_h5_file(self, filename: str):
-        """Save to a CobraDataLab HDF5 file"""
+        """Save to a DataLab HDF5 file"""
         self.SIG_SAVE_TO_H5.emit(filename)
 
     @remote_call
@@ -209,12 +210,12 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         import_all: bool = None,
         reset_all: bool = None,
     ):
-        """Open a CobraDataLab HDF5 file or import from any other HDF5 file"""
+        """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
     def import_h5_file(self, filename: str, reset_all: bool = None):
-        """Open CobraDataLab HDF5 browser to Import HDF5 file"""
+        """Open DataLab HDF5 browser to Import HDF5 file"""
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
     @remote_call
@@ -233,7 +234,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         xlabel: str = None,
         ylabel: str = None,
     ):
-        """Add signal data to CobraDataLab"""
+        """Add signal data to DataLab"""
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
         signal = create_signal(title, xdata, ydata)
@@ -256,7 +257,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         ylabel: str = None,
         zlabel: str = None,
     ):  # pylint: disable=too-many-arguments
-        """Add image data to CobraDataLab"""
+        """Add image data to DataLab"""
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
         image.xunit = xunit
@@ -278,13 +279,17 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CALC.emit(name, param)
         return True
 
-    def get_object_list(self) -> List[str]:
+    def get_object_titles(self) -> List[str]:
         """Get object (signal/image) list for current panel"""
-        return self.win.get_object_list()
+        return self.win.get_object_titles()
 
-    def get_object(self, index: str) -> List[str]:
-        """Get object (signal/image) at index for current panel"""
-        return dataset_to_json(self.win.get_object(index))
+    def get_object_uuids(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.win.get_object_uuids()
+
+    def get_object_from_uuid(self, oid: str) -> List[str]:
+        """Get object (signal/image) from uuid"""
+        return dataset_to_json(self.win.get_object_from_uuid(oid))
 
 
 # === Python 2.7 client side:
@@ -306,30 +311,30 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
 
 class CDLConnectionError(Exception):
-    """Error when trying to connect to CobraDataLab XML-RPC server"""
+    """Error when trying to connect to DataLab XML-RPC server"""
 
 
 def get_cdl_xmlrpc_port():
-    """Return CobraDataLab current XML-RPC port"""
-    #  The following is valid only when using Python 3.8+ with CobraDataLab
+    """Return DataLab current XML-RPC port"""
+    #  The following is valid only when using Python 3.8+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  `get_cdl_xmlrpc_port` function from doc/cdl_remotecontrol_py27.py.
     initialize()
     try:
         return Conf.main.rpc_server_port.get()
     except RuntimeError as exc:
-        raise CDLConnectionError("CobraDataLab has not yet been executed") from exc
+        raise CDLConnectionError("DataLab has not yet been executed") from exc
 
 
 class RemoteClient:
-    """Object representing a proxy/client to CobraDataLab XML-RPC server"""
+    """Object representing a proxy/client to DataLab XML-RPC server"""
 
     def __init__(self):
         self.port = None
         self.serverproxy = None
 
     def connect(self, port=None):
-        """Connect to CobraDataLab XML-RPC server"""
+        """Connect to DataLab XML-RPC server"""
         if port is None:
             port = execenv.port
             if port is None:
@@ -339,12 +344,12 @@ class RemoteClient:
         try:
             self.get_version()
         except ConnectionRefusedError as exc:
-            raise CDLConnectionError("CobraDataLab is currently not running") from exc
+            raise CDLConnectionError("DataLab is currently not running") from exc
 
     def try_and_connect(self, port=None, timeout=5):
         """Try (10 times over timeout in s.)
-        and connect to CobraDataLab XML-RPC server"""
-        execenv.print("Connecting to CobraDataLab XML-RPC server...", end="")
+        and connect to DataLab XML-RPC server"""
+        execenv.print("Connecting to DataLab XML-RPC server...", end="")
         retries = 10
         for _index in range(retries):
             try:
@@ -353,17 +358,17 @@ class RemoteClient:
             except CDLConnectionError:
                 time.sleep(timeout / retries)
         else:
-            raise CDLConnectionError("Unable to connect to CobraDataLab")
+            raise CDLConnectionError("Unable to connect to DataLab")
         execenv.print(f"OK (port: {self.port})")
 
     # === Following methods should match the register functions in XML-RPC server
 
     def get_version(self):
-        """Return CobraDataLab version"""
+        """Return DataLab version"""
         return self.serverproxy.get_version()
 
     def close_application(self):
-        """Close CobraDataLab application"""
+        """Close DataLab application"""
         self.serverproxy.close_application()
 
     def switch_to_signal_panel(self):
@@ -379,7 +384,7 @@ class RemoteClient:
         self.serverproxy.reset_all()
 
     def save_to_h5_file(self, filename: str):
-        """Save to a CobraDataLab HDF5 file"""
+        """Save to a DataLab HDF5 file"""
         self.serverproxy.save_to_h5_file(filename)
 
     def open_h5_files(
@@ -388,11 +393,11 @@ class RemoteClient:
         import_all: bool = None,
         reset_all: bool = None,
     ):
-        """Open a CobraDataLab HDF5 file or import from any other HDF5 file"""
+        """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.serverproxy.open_h5_files(h5files, import_all, reset_all)
 
     def import_h5_file(self, filename: str, reset_all: bool = None):
-        """Open CobraDataLab HDF5 browser to Import HDF5 file"""
+        """Open DataLab HDF5 browser to Import HDF5 file"""
         self.serverproxy.import_h5_file(filename, reset_all)
 
     def open_object(self, filename: str) -> None:
@@ -409,7 +414,7 @@ class RemoteClient:
         xlabel: str = None,
         ylabel: str = None,
     ):
-        """Add signal data to CobraDataLab"""
+        """Add signal data to DataLab"""
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
         p = self.serverproxy
@@ -426,7 +431,7 @@ class RemoteClient:
         ylabel: str = None,
         zlabel: str = None,
     ):  # pylint: disable=too-many-arguments
-        """Add image data to CobraDataLab"""
+        """Add image data to DataLab"""
         zbinary = array_to_rpcbinary(data)
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
@@ -439,7 +444,7 @@ class RemoteClient:
         return p.calc(name, dataset_to_json(param))
 
     def add_object(self, obj):
-        """Add object to CobraDataLab"""
+        """Add object to DataLab"""
         p = self.serverproxy
         if isinstance(obj, SignalParam):
             p.add_signal(
@@ -463,11 +468,15 @@ class RemoteClient:
                 obj.zlabel,
             )
 
-    def get_object_list(self) -> List[str]:
+    def get_object_titles(self) -> List[str]:
         """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_list()
+        return self.serverproxy.get_object_titles()
 
-    def get_object(self, index: str):
-        """Get object (signal/image) at index for current panel"""
-        param_data = self.serverproxy.get_object(index)
+    def get_object_uuids(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.serverproxy.get_object_uuids()
+
+    def get_object_from_uuid(self, oid: str):
+        """Get object (signal/image) from its UUID"""
+        param_data = self.serverproxy.get_object_from_uuid(oid)
         return json_to_dataset(param_data)

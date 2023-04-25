@@ -4,14 +4,16 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Datasets
+DataLab Datasets
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 from copy import deepcopy
-from uuid import uuid4
+from typing import TYPE_CHECKING
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -27,10 +29,14 @@ from cdl.core.computation import fit
 from cdl.core.model import base
 from cdl.env import execenv
 
+if TYPE_CHECKING:
+    from qtpy import QtWidgets as QW
+
 
 class SignalParam(gdt.DataSet, base.ObjectItf):
     """Signal dataset"""
 
+    PREFIX = "s"
     CONF_FMT = Conf.view.sig_format
     DEFAULT_FMT = ".3f"
     VALID_DTYPES = (np.float32, np.float64, np.complex128)
@@ -61,7 +67,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
 
     def __init__(self, title=None, comment=None, icon=""):
         gdt.DataSet.__init__(self, title, comment, icon)
-        self.uuid = str(uuid4())
+        base.ObjectItf.__init__(self)
 
     def copy_data_from(self, other, dtype=None):
         """Copy data from other dataset instance"""
@@ -305,7 +311,12 @@ def new_signal_param(title=None, stype=None, xmin=None, xmax=None, size=None):
 SIG_NB = 0
 
 
-def create_signal_from_param(newparam, addparam=None, edit=False, parent=None):
+def create_signal_from_param(
+    newparam: SignalParamNew,
+    addparam: gdt.DataSet = None,
+    edit: bool = False,
+    parent: QW.QWidget = None,
+) -> SignalParam:
     """Create a new Signal object from a dialog box.
 
     :param SignalParamNew param: new signal parameters

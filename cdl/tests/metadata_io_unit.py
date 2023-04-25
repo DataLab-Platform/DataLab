@@ -7,7 +7,7 @@
 Metadata import/export unit test:
 
   - Create an image with annotations and result shapes
-  - Add the image to CobraDataLab
+  - Add the image to DataLab
   - Export image metadata to file (JSON)
   - Delete image metadata
   - Import image metadata from previous file

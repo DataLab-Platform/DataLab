@@ -17,9 +17,9 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Testing CobraDataLab app launcher"""
+    """Testing DataLab app launcher"""
     with qt_app_context(exec_loop=True):
-        execenv.print("Opening CobraDataLab with no argument")
+        execenv.print("Opening DataLab with no argument")
         app.create()
 
 

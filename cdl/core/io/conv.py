@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab I/O conversion functions
+DataLab I/O conversion functions
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -16,7 +16,7 @@ import numpy as np
 
 def data_to_xy(data: np.ndarray) -> List[np.ndarray]:
     """Convert 2-D array into a list of 1-D array data (x, y, dx, dy).
-    This is useful for importing data and creating a CobraDataLab signal with it."""
+    This is useful for importing data and creating a DataLab signal with it."""
     rows, cols = data.shape
     for colnb in (2, 3, 4):
         if cols == colnb and rows > colnb:

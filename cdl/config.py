@@ -7,7 +7,7 @@
 cdl.config
 ----------
 
-The `config` module handles `CobraDataLab` configuration
+The `config` module handles `DataLab` configuration
 (options, images and icons).
 """
 
@@ -21,14 +21,11 @@ from cdl.utils import conf, tests
 
 CONF_VERSION = "1.0.0"
 
-APP_NAME = "CobraDataLab"
+APP_NAME = "DataLab"
 MOD_NAME = "cdl"
 _ = configtools.get_translation(MOD_NAME)
 
-APP_DESC = _(
-    """CobraDataLab is a generic signal and image processing software
-based on Python and Qt"""
-)
+APP_DESC = _("""DataLab is a generic signal and image processing platform""")
 APP_PATH = osp.dirname(__file__)
 
 DEBUG = len(os.environ.get("DEBUG", "")) > 0
@@ -134,7 +131,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
 
 # Usage (example): Conf.console.enable.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):
-    """Class defining CobraDataLab configuration structure.
+    """Class defining DataLab configuration structure.
     Each class attribute is a section (metaclass is automatically affecting
     section names in .INI file based on class attribute names)."""
 

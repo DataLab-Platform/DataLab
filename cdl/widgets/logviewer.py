@@ -4,7 +4,7 @@
 # Pierre Raybaut
 
 """
-Module providing a log viewer widget, a log viewer window and CobraDataLab's log viewer
+Module providing a log viewer widget, a log viewer window and DataLab's log viewer
 """
 
 import os.path as osp
@@ -69,8 +69,8 @@ class LogViewerWindow(QW.QDialog):
     def __init__(self, fnames, parent=None):
         super().__init__(parent)
         self.setObjectName("logviewer")
-        self.setWindowTitle(_("CobraDataLab log files"))
-        self.setWindowIcon(get_icon("CobraDataLab.svg"))
+        self.setWindowTitle(_("DataLab log files"))
+        self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
         for fname in fnames:
             if osp.isfile(fname):
@@ -113,7 +113,7 @@ def get_log_prompt_message() -> Optional[str]:
 
 
 def exec_cdl_logviewer_dialog(parent=None):
-    """View CobraDataLab logs"""
+    """View DataLab logs"""
     fnames = [osp.normpath(fname) for fname in get_log_filenames() if osp.isfile(fname)]
     dlg = LogViewerWindow(fnames, parent=parent)
     if dlg.is_empty:

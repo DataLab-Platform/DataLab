@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab main window
+DataLab main window
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -19,7 +19,7 @@ import platform
 import sys
 import time
 import webbrowser
-from typing import List
+from typing import TYPE_CHECKING, List
 
 import numpy as np
 import scipy.ndimage as spi
@@ -61,25 +61,31 @@ from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
 from cdl.widgets import instconfviewer, logviewer, status
 
+if TYPE_CHECKING:
+    from cdl.core.gui.panel.base import BaseDataPanel
+    from cdl.core.gui.panel.image import ImagePanel
+    from cdl.core.gui.panel.macro import MacroPanel
+    from cdl.core.gui.panel.signal import SignalPanel
+
 
 def get_htmlhelp():
     """Return HTML Help documentation link adapted to locale, if it exists"""
     if os.name == "nt":
         for suffix in ("_" + locale.getlocale()[0][:2], ""):
-            path = osp.join(DATAPATH, f"CobraDataLab{suffix}.chm")
+            path = osp.join(DATAPATH, f"DataLab{suffix}.chm")
             if osp.isfile(path):
                 return path
     return None
 
 
 class AppProxy:
-    """Proxy to CobraDataLab application: object used from the embedded console
-    to access CobraDataLab internal objects"""
+    """Proxy to DataLab application: object used from the embedded console
+    to access DataLab internal objects"""
 
     def __init__(self, win: CDLMainWindow):
         self.win = win
-        self.s = self.win.signalpanel.objhandler
-        self.i = self.win.imagepanel.objhandler
+        self.s = self.win.signalpanel.objmodel
+        self.i = self.win.imagepanel.objmodel
 
 
 def remote_controlled(func):
@@ -104,7 +110,7 @@ def remote_controlled(func):
 
 
 class CDLMainWindow(QW.QMainWindow):
-    """CobraDataLab main window"""
+    """DataLab main window"""
 
     __instance = None
 
@@ -125,7 +131,7 @@ class CDLMainWindow(QW.QMainWindow):
         super().__init__()
         win32_fix_title_bar_background(self)
         self.setObjectName(APP_NAME)
-        self.setWindowIcon(get_icon("CobraDataLab.svg"))
+        self.setWindowIcon(get_icon("DataLab.svg"))
         self.__restore_pos_and_size()
 
         self.ready_flag = True
@@ -137,29 +143,29 @@ class CDLMainWindow(QW.QMainWindow):
 
         self.console = None
         self.app_proxy = None
-        self.macropanel = None
+        self.macropanel: MacroPanel = None
 
-        self.signal_toolbar = None
-        self.image_toolbar = None
-        self.signalpanel = None
-        self.imagepanel = None
-        self.tabwidget = None
+        self.signal_toolbar: QW.QToolBar = None
+        self.image_toolbar: QW.QToolBar = None
+        self.signalpanel: SignalPanel = None
+        self.imagepanel: ImagePanel = None
+        self.tabwidget: QW.QTabWidget = None
         self.signal_image_docks = None
         self.h5inputoutput = H5InputOutput(self)
 
-        self.openh5_action = None
-        self.saveh5_action = None
-        self.browseh5_action = None
-        self.quit_action = None
+        self.openh5_action: QW.QAction = None
+        self.saveh5_action: QW.QAction = None
+        self.browseh5_action: QW.QAction = None
+        self.quit_action: QW.QAction = None
 
-        self.file_menu = None
-        self.edit_menu = None
-        self.operation_menu = None
-        self.processing_menu = None
-        self.computing_menu = None
-        self.plugins_menu = None
-        self.view_menu = None
-        self.help_menu = None
+        self.file_menu: QW.QMenu = None
+        self.edit_menu: QW.QMenu = None
+        self.operation_menu: QW.QMenu = None
+        self.processing_menu: QW.QMenu = None
+        self.computing_menu: QW.QMenu = None
+        self.plugins_menu: QW.QMenu = None
+        self.view_menu: QW.QMenu = None
+        self.help_menu: QW.QMenu = None
 
         self.__is_modified = None
         self.set_modified(False)
@@ -181,15 +187,25 @@ class CDLMainWindow(QW.QMainWindow):
         """XML-RPC server has started, writing comm port in configuration file"""
         Conf.main.rpc_server_port.set(port)
 
-    def get_object_list(self) -> List[str]:
-        """Get object (signal/image) list for current panel"""
+    def __get_current_basedatapanel(self) -> BaseDataPanel:
+        """Return the current BaseDataPanel,
+        or the signal panel if macro panel is active"""
         panel = self.tabwidget.currentWidget()
-        return panel.objhandler.get_titles()
+        if not isinstance(panel, BaseDataPanel):
+            panel = self.signalpanel
+        return panel
 
-    def get_object(self, index: str):
-        """Get object (signal/image) at index for current panel"""
-        panel = self.tabwidget.currentWidget()
-        return panel.objhandler[index]
+    def get_object_titles(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.__get_current_basedatapanel().objmodel.get_object_titles()
+
+    def get_object_uuids(self) -> List[str]:
+        """Get object (signal/image) list for current panel"""
+        return self.__get_current_basedatapanel().objmodel.get_object_ids()
+
+    def get_object_from_uuid(self, oid: str):
+        """Get object (signal/image) from uuid"""
+        return self.__get_current_basedatapanel().objmodel[oid]
 
     # ------Misc.
     @property
@@ -251,7 +267,7 @@ class CDLMainWindow(QW.QMainWindow):
     def check_dependencies(self):  # pragma: no cover
         """Check dependencies"""
         if IS_FROZEN or Conf.main.ignore_dependency_check.get(False):
-            # No need to check dependencies if CobraDataLab has been frozen
+            # No need to check dependencies if DataLab has been frozen
             return
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
@@ -266,7 +282,7 @@ class CDLMainWindow(QW.QMainWindow):
             txt0 = _("Non-compliant dependencies:")
         if bad_deps is None:
             txtlist = [
-                _("CobraDataLab has not yet been qualified on your operating system."),
+                _("DataLab has not yet been qualified on your operating system."),
             ]
         else:
             txtlist = [
@@ -274,7 +290,7 @@ class CDLMainWindow(QW.QMainWindow):
                 "",
                 "",
                 _(
-                    "At least one dependency does not comply with CobraDataLab "
+                    "At least one dependency does not comply with DataLab "
                     "qualification standard reference (wrong dependency version "
                     "has been installed, or dependency source code has been "
                     "modified, or the application has not yet been qualified "
@@ -456,7 +472,7 @@ class CDLMainWindow(QW.QMainWindow):
         # Quit action for "File menu" (added when populating menu on demand)
         if self.hide_on_close:
             quit_text = _("Hide window")
-            quit_tip = _("Hide CobraDataLab window")
+            quit_tip = _("Hide DataLab window")
         else:
             quit_text = _("Quit")
             quit_tip = _("Quit application")
@@ -582,7 +598,7 @@ class CDLMainWindow(QW.QMainWindow):
         )
         dep_action = create_action(
             self,
-            _("About CobraDataLab installation") + "...",
+            _("About DataLab installation") + "...",
             icon=get_icon("logs.svg"),
             triggered=lambda: instconfviewer.exec_cdl_installconfig_dialog(self),
         )
@@ -637,7 +653,7 @@ class CDLMainWindow(QW.QMainWindow):
         console_dock = self.__add_dockwidget(self.console, _("Console"))
         console_dock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
-            lambda txt: self.refresh_lists()
+            lambda txt: self.repopulate_panel_trees()
         )
 
     def __add_macro_panel(self):
@@ -701,11 +717,11 @@ class CDLMainWindow(QW.QMainWindow):
         self.addDockWidget(location, dockwidget)
         return dockwidget
 
-    def refresh_lists(self):
-        """Refresh signal/image lists"""
+    def repopulate_panel_trees(self):
+        """Repopulate all panel trees"""
         for panel in self.panels:
             if isinstance(panel, base.BaseDataPanel):
-                panel.objhandler.refresh_list()
+                panel.objview.populate_tree()
 
     def __update_actions(self):
         """Update selection dependent actions"""
@@ -784,7 +800,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     @remote_controlled
     def save_to_h5_file(self, filename=None):
-        """Save to a CobraDataLab HDF5 file"""
+        """Save to a DataLab HDF5 file"""
         if filename is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
@@ -804,11 +820,11 @@ class CDLMainWindow(QW.QMainWindow):
         import_all: bool = None,
         reset_all: bool = None,
     ) -> None:
-        """Open a CobraDataLab HDF5 file or import from any other HDF5 file
+        """Open a DataLab HDF5 file or import from any other HDF5 file
 
         :param h5files: HDF5 filenames (optionally with dataset name, separated by ":")
         :param import_all: Import all HDF5 file contents
-        :param reset_all: Delete all CobraDataLab signals/images before importing data
+        :param reset_all: Delete all DataLab signals/images before importing data
         """
         if not self.confirm_memory_state():
             return
@@ -849,10 +865,10 @@ class CDLMainWindow(QW.QMainWindow):
 
     @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
-        """Open CobraDataLab HDF5 browser to Import HDF5 file
+        """Open DataLab HDF5 browser to Import HDF5 file
 
         :param filename: HDF5 filename
-        :param reset_all: Delete all CobraDataLab signals/images before importing data
+        :param reset_all: Delete all DataLab signals/images before importing data
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
             filename = self.__check_h5file(filename, "load")
@@ -890,7 +906,7 @@ class CDLMainWindow(QW.QMainWindow):
             _("About ") + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}<p>
               %s Pierre Raybaut
-              <br>Copyright &copy; 2018-2022 CEA-CODRA
+              <br>Copyright &copy; 2018-2022 CEA-Codra
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
@@ -929,7 +945,7 @@ class CDLMainWindow(QW.QMainWindow):
                     _("Quit"),
                     _(
                         "Do you want to save all signals and images "
-                        "to an HDF5 file before quitting CobraDataLab?"
+                        "to an HDF5 file before quitting DataLab?"
                     ),
                     QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
                 )

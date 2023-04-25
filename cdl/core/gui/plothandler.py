@@ -4,9 +4,23 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Plot item list classes
+DataLab Plot item list classes
+------------------------------
 
 These classes handle guiqwt plot items for signal and image panels.
+
+.. autosummary::
+
+    SignalPlotHandler
+    ImagePlotHandler
+
+.. autoclass:: SignalPlotHandler
+    :members:
+    :inherited-members:
+
+.. autoclass:: ImagePlotHandler
+    :members:
+    :inherited-members:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -30,7 +44,6 @@ if TYPE_CHECKING:
     from guiqwt.image import MaskedImageItem
     from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget
 
-    from cdl.core.gui.objecthandler import ObjectHandler
     from cdl.core.gui.panel.base import BaseDataPanel
     from cdl.core.model.image import ImageParam
     from cdl.core.model.signal import SignalParam
@@ -47,11 +60,9 @@ class BasePlotHandler:
     def __init__(
         self,
         panel: BaseDataPanel,
-        objhandler: ObjectHandler,
         plotwidget: CurveWidget | ImageWidget,
-    ):
+    ) -> None:
         self.panel = panel
-        self.objhandler = objhandler
         self.plotwidget = plotwidget
         self.plot = plotwidget.get_plot()
 
@@ -67,38 +78,40 @@ class BasePlotHandler:
         """Return number of items"""
         return len(self.__plotitems)
 
-    def __getitem__(self, oid: str):
+    def __getitem__(self, oid: str) -> CurveItem | MaskedImageItem:
         """Return item associated to object uuid"""
         return self.__plotitems[oid]
 
-    def get(self, key, default=None):
+    def get(
+        self, key: str, default: Optional[CurveItem | MaskedImageItem] = None
+    ) -> Optional[CurveItem | MaskedImageItem]:
         """Return item associated to object uuid.
         If the key is not found, default is returned if given,
         otherwise None is returned."""
         return self.__plotitems.get(key, default)
 
-    def __setitem__(self, oid: str, item: CurveItem | MaskedImageItem):
+    def __setitem__(self, oid: str, item: CurveItem | MaskedImageItem) -> None:
         """Set item associated to object uuid"""
         self.__plotitems[oid] = item
-
-    def __delitem__(self, oid: str):
-        """Del item associated to object uuid"""
-        item = self.__plotitems.pop(oid)
-        self.plot.del_item(item)
 
     def __iter__(self) -> Iterator[str]:
         """Return an iterator over plothandler values (plot items)"""
         return iter(self.__plotitems.values())
 
-    def remove_all(self):
-        """Remove all plot items"""
-        self.__plotitems = {}
-        self.plot.del_all_items()
+    def remove_item(self, oid: str) -> None:
+        """Remove plot item associated to object uuid"""
+        item = self.__plotitems.pop(oid)
+        self.plot.del_item(item)
 
-    def add_shapes(self, oid: str):
+    def clear(self) -> None:
+        """Clear plot items"""
+        self.__plotitems = {}
+        self.cleanup_dataview()
+
+    def add_shapes(self, oid: str) -> None:
         """Add geometric shape items associated to computed results and annotations,
         for the object with the given uuid"""
-        obj = self.objhandler.get_object_from_uuid(oid)
+        obj = self.panel.objmodel[oid]
         if obj.metadata:
             # Performance optimization: block `guiqwt.baseplot.BasePlot` signals,
             # add all items except the last one, unblock signals, then add the last one
@@ -113,7 +126,7 @@ class BasePlotHandler:
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
 
-    def remove_all_shape_items(self):
+    def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""
         if set(self.__shapeitems).issubset(set(self.plot.items)):
             self.plot.del_items(self.__shapeitems)
@@ -125,7 +138,7 @@ class BasePlotHandler:
         param str oid: object uuid
         return: plot item
         rtype: CurveItem | MaskedImageItem"""
-        obj = self.objhandler.get_object_from_uuid(oid)
+        obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
         item: CurveItem | MaskedImageItem = obj.make_item()
         item.set_readonly(True)
@@ -143,7 +156,7 @@ class BasePlotHandler:
         param bool just_show: if True, only show the item (do not update it,
         except regarding the reference item)"""
         if not just_show:
-            obj = self.objhandler.get_object_from_uuid(oid)
+            obj = self.panel.objmodel[oid]
             cached_hash = self.__cached_hashes.get(obj)
             new_hash = calc_data_hash(obj)
             data_changed = cached_hash is None or cached_hash != new_hash
@@ -168,7 +181,7 @@ class BasePlotHandler:
         param bool just_show: if True, only show the item(s) (do not update it/them)
         """
         if only_oid is None:
-            oids = self.objhandler.get_selected_oids()
+            oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
             if len(oids) == 1:
                 self.cleanup_dataview()
             self.remove_all_shape_items()
@@ -182,7 +195,7 @@ class BasePlotHandler:
         if oids:
             ref_item = None
             for i_obj, oid in enumerate(oids):
-                obj = self.objhandler.get_object_from_uuid(oid)
+                obj = self.panel.objmodel[oid]
                 for key in title_keys:
                     title = getattr(obj, key, "")
                     value = titles_dict.get(key)
@@ -215,7 +228,7 @@ class BasePlotHandler:
         self.plot.set_titles(**titles_dict)
         self.plot.do_autoscale()
 
-    def cleanup_dataview(self):
+    def cleanup_dataview(self) -> None:
         """Clean up data view"""
         # Performance optimization: using `baseplot.BasePlot.del_items` instead of
         # `baseplot.BasePlot.del_item` (avoid emitting unnecessary signals)
@@ -227,7 +240,7 @@ class BasePlotHandler:
             ]
         )
 
-    def get_current_plot_options(self):
+    def get_current_plot_options(self) -> dict:
         """
         Return standard signal/image plot options
 
@@ -272,13 +285,13 @@ class ImagePlotHandler(BasePlotHandler):
         super().refresh_plot(only_oid=only_oid, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
-    def cleanup_dataview(self):
+    def cleanup_dataview(self) -> None:
         """Clean up data view"""
         for widget in (self.plotwidget.xcsw, self.plotwidget.ycsw):
             widget.hide()
         super().cleanup_dataview()
 
-    def get_current_plot_options(self):
+    def get_current_plot_options(self) -> dict:
         """
         Return standard signal/image plot options
 

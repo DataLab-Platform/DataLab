@@ -1,9 +1,9 @@
-# CobraDataLab Releases #
+# DataLab Releases #
 
-See CobraDataLab [roadmap page](https://cdl.readthedocs.io/en/latest/roadmap.html)
+See DataLab [roadmap page](https://cdl.readthedocs.io/en/latest/roadmap.html)
 for future and past milestones.
 
-## CobraDataLab Version 1.0.0 ##
+## DataLab Version 1.0.0 ##
 
 New dependencies:
 
@@ -12,6 +12,8 @@ New dependencies:
 New features:
 
 * Signal/Image panels:
+  * Added support for groups: signals and images can be grouped together, and
+    operations can be applied to all objects in a group, or between groups
   * Drastically improved performance when selecting objects
   * Optimized performance when showing large images
 * Added support for dropping files on signal/image list widget
@@ -87,9 +89,9 @@ Bug fixes:
 * Panel's object list `select_rows` method: fixed plot refresh behavior in case of
 multiple selection (refresh widget only once)
 * LMJ-formatted HDF5 file: now reading invalid compound datasets
-* [Issue #16](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/16) - Embedding CobraDataLab: "add_object" method call with invalid data should lead to app crash
+* [Issue #16](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/16) - Embedding DataLab: "add_object" method call with invalid data should lead to app crash
   * Panel's `add_object` method (public API): check data type before adding object to
-panel - this prevents CobraDataLab from crashing when trying to plot invalid data type
+panel - this prevents DataLab from crashing when trying to plot invalid data type
 afterwards
   * Now handling exceptions in `add_object` and `insert_object` methods
 * Multigaussian curve fitting: fixed default fit parameters
@@ -104,13 +106,13 @@ Other changes:
 
 Bug fixes:
 
-* [Pull Request #2](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
-* [Issue #3](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/3) - Wrong units/titles are displayed
-* [Issue #6](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/6) - 2D peak detection: GUI freezes when creating ROIs
-* [Issue #4](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
-* [Issue #7](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
-* [Issue #5](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/5) - ROI dialog box: unable to remove all ROIs and validate
-* [Issue #8](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
+* [Pull Request #2](https://github.com/Codra-Ingenierie-Informatique/DataLab/pull/2) - Load / Save conventional CSVs, by [@aanastasiou](https://github.com/aanastasiou)
+* [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Wrong units/titles are displayed
+* [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 2D peak detection: GUI freezes when creating ROIs
+* [Issue #4](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/4) - Processing multiple images/signals: avoid unnecessary time-consuming plot updates
+* [Issue #7](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/7) - Image/Circular ROI: IndexError when circle exceeds the image size
+* [Issue #5](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/5) - ROI dialog box: unable to remove all ROIs and validate
+* [Issue #8](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/8) - HDF5 import: unable to easily distinguish datasets with the same name but different path
 * Average operation now merges ROI data (i.e. same behavior as sum)
 * Fixed multiple regressions with ROI management (adding, removing ROI, ...)
 
@@ -145,7 +147,7 @@ Changes:
 * Added demo mode (from command line, simply run: cdl-demo)
 * Command line option --h5 is now a positionnal argument (h5)
 * Added command line option -b (or --h5browser) to browse a HDF5 file at startup
-* Added command line option --version to show CobraDataLab version
+* Added command line option --version to show DataLab version
 
 Bug fixes:
 
@@ -153,7 +155,7 @@ Bug fixes:
   well as regions of interest (related features: centroid, enclosing circle, 2D peak
   detection and contour detection)
 * Image ROI definition dialog: maximum rows and columns were erroneously truncated
-* Centralized argument parsing in CobraDataLab exec env object, thus avoiding conflicts
+* Centralized argument parsing in DataLab exec env object, thus avoiding conflicts
 
 ## CodraFT Version 2.0.3 ##
 
@@ -169,10 +171,10 @@ Other changes:
 
 ## CodraFT Version 2.0.2 ##
 
-The following major changes were introduced with CobraDataLab V2:
+The following major changes were introduced with DataLab V2:
 
 * Fully automated high-level processing features for internal testing purpose, as well
-as embedding CobraDataLab in a third-party software
+as embedding DataLab in a third-party software
 * Extensive test suite (unit tests and application tests) with 90% feature coverage
 * Segmentation fault and Python exception logging
 * Customizable annotations for both signals and images
@@ -190,7 +192,7 @@ as embedding CobraDataLab in a third-party software
   |    •   |   •   | "Statistics" computing feature                         |
 
 * Automation of high-level processing features: added fully automated high-level test
-scenarios, and enhanced public API for embedding CobraDataLab into a third-party application
+scenarios, and enhanced public API for embedding DataLab into a third-party application
 * Test Driven Development with high quality standards
 (pylint score >= 9.8/10, test coverage >= 90%)
 
@@ -221,7 +223,7 @@ New general purpose features:
 * Memory management:
   * New available memory indicator on main window status bar
   * New warning dialog box when trying to open/create data if available memory is below
-  the "available_memory_threshold" defined in CobraDataLab configuration file (default: 500MB)
+  the "available_memory_threshold" defined in DataLab configuration file (default: 500MB)
 * Error handling:
   * New integrated log file viewer
   * New warning dialog box at startup suggesting to view log files when logs were
@@ -234,7 +236,7 @@ New general purpose features:
   new "Import metadata into" / "Export metadata from" entries in "File" menu
 * HDF5 browser feature: complete redesign (better compatibility, evolutive design, ...)
 * Added support for multiple HDF5 files opening at once
-* Added `.CobraDataLab.ini` configuration file (user home directory):
+* Added `.DataLab.ini` configuration file (user home directory):
   * New configuration file entry: current working directory
   * New configuration file entry: current main window size and position
   * New configuration file entry: embedded Python console enable state
@@ -360,7 +362,7 @@ New features:
 
 Bug fixes:
 
-* Fixed cross section retrieval feature: in stand-alone mode, a new CobraDataLab
+* Fixed cross section retrieval feature: in stand-alone mode, a new DataLab
   window was created (that is not the expected behavior).
 
 * Fixed crash when enabling cross sections on main window (needs PythonQwt 0.9.2).
@@ -392,7 +394,7 @@ New minor features:
 New minor features:
 
 * New test script for global application test (test_app.py).
-* Improved CobraDataLab launcher (app.py).
+* Improved DataLab launcher (app.py).
 
 ## CodraFT Version 1.4.2 ##
 
@@ -427,7 +429,7 @@ New features:
 
 Bug fixes:
 
-* Fixed LMJ-formatted HDF5 file support in CobraDataLab data import feature.
+* Fixed LMJ-formatted HDF5 file support in DataLab data import feature.
 
 ## CodraFT Version 1.3.1 ##
 
@@ -439,7 +441,7 @@ Bug fixes:
 
 * CDLMainWindow.get_instance: create instance if it doesn't already exist.
 
-* to_codraft: show CobraDataLab main window on top, if not already visible.
+* to_codraft: show DataLab main window on top, if not already visible.
 
 * Patch/guiqwt.histogram: removing histogram curve (if necessary)
   when image item has been removed.
@@ -463,9 +465,9 @@ New features:
   images) from current view.
 
 * Added an option "hide_on_close" to CDLMainWindow class constructor
-  (default value is False): when set to True, CobraDataLab main window will simply
+  (default value is False): when set to True, DataLab main window will simply
   hide when "Close" button is clicked, which is the expected behavior when
-  embedding CobraDataLab in another application.
+  embedding DataLab in another application.
 
 Bug fixes:
 
@@ -475,8 +477,8 @@ Bug fixes:
 
 Bug fixes:
 
-* When quitting CobraDataLab, objects were not deleted: this was causing a memory
-  leak when embedding CobraDataLab in another Qt window.
+* When quitting DataLab, objects were not deleted: this was causing a memory
+  leak when embedding DataLab in another Qt window.
 
 * When canceling HDF5 import dialog box after selecting at least one signal or
   image, the progress bar was shown even if no data was being imported.
@@ -518,15 +520,15 @@ Bug fixes:
 Bug fixes:
 
 * When the X/Y Cross Section widget is embedded into a main window other than
-  CobraDataLab's, clicking on the "Process signal" button will send the signal to
-  CobraDataLab's signal panel for further processing, as expected.
+  DataLab's, clicking on the "Process signal" button will send the signal to
+  DataLab's signal panel for further processing, as expected.
 
 ## CodraFT Version 1.1.1 ##
 
 Bug fixes:
 
 * Fixed a bug leading to "None" titles when importing signals/images from HDF5
-  files created outside CobraDataLab.
+  files created outside DataLab.
 
 ## CodraFT Version 1.1.0 ##
 
@@ -541,14 +543,14 @@ New features:
 Bug fixes:
 
 * Fixed a critical bug when opening HDF5 file (bug from "guidata" package).
-  Now guidata is patched inside CobraDataLab to take into account the unusual/risky
+  Now guidata is patched inside DataLab to take into account the unusual/risky
   PyQt patch from Taurus package (PyQt API is set to 2 for QString objects and
   instead of raising an ImportError when importing QString from PyQt4.QtCore,
   QString still exists and is replaced by "str"...).
 
 * Images:
 
-  * Centroid feature: coordinates were mixed up in CobraDataLab application.
+  * Centroid feature: coordinates were mixed up in DataLab application.
 
 * Signals:
 
@@ -562,7 +564,7 @@ Bug fixes:
 Copyright © 2018 Codra, Pierre Raybaut, licensed under the terms of the
 CECILL License v2.1.
 
-First release of `CobraDataLab`.
+First release of `DataLab`.
 
 New features:
 

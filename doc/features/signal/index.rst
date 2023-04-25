@@ -3,7 +3,7 @@ Signal processing
 
 .. figure:: /images/shots/s_simple_example.png
 
-    CobraDataLab main window: Signal processing view
+    DataLab main window: Signal processing view
 
 .. toctree::
    :maxdepth: 2

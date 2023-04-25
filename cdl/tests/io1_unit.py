@@ -6,7 +6,7 @@
 """
 I/O test
 
-Testing CobraDataLab specific formats.
+Testing DataLab specific formats.
 """
 
 from cdl.core.io import read_signal

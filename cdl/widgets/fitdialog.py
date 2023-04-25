@@ -54,7 +54,7 @@ def guifit(
     win.set_data(x, y, fitfunc, fitparams, fitargs, fitkwargs)
     win.autofit()  # TODO: [P3] make this optional
     if parent is None:
-        win.setWindowIcon(get_icon("CobraDataLab.svg"))
+        win.setWindowIcon(get_icon("DataLab.svg"))
     if winsize is not None:
         win.resize(*winsize)
     if winpos is not None:

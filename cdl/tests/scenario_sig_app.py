@@ -15,8 +15,12 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
+from cdl.core.gui.panel.image import ImagePanel
+from cdl.core.gui.panel.signal import SignalPanel
 from cdl.core.gui.processor.base import (
     ClipParam,
     GaussianParam,
@@ -47,12 +51,12 @@ from cdl.widgets import fitdialog
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_compute_11_operations(panel, index):
+def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> None:
     """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
-    assert len(panel.objhandler) >= index - 1
-    panel.objhandler.select_rows((index,))
+    assert len(panel.objmodel) >= index - 1
+    panel.objview.select_nums((index,))
     panel.processor.compute_gaussian(GaussianParam())
     panel.processor.compute_moving_average(MovingAverageParam())
     panel.processor.compute_moving_median(MovingMedianParam())
@@ -65,7 +69,7 @@ def test_compute_11_operations(panel, index):
     panel.processor.swap_axes()
 
 
-def test_common_operations(panel):
+def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     """Test operations common to signal/image
 
     Requires that two (and only two) signals/images are created/added to panel
@@ -73,26 +77,26 @@ def test_common_operations(panel):
     First signal/image is supposed to be always the same (reference)
     Second signal/image is the tested object
     """
-    assert len(panel.objhandler) == 2
+    assert len(panel.objmodel) == 2
 
     panel.duplicate_object()
-    panel.objhandler.select_rows((1, 2))
-    panel.processor.compute_difference(False)
+    panel.objview.select_nums((1, 2))
+    panel.processor.compute_difference(quadratic=False)
     panel.remove_object()
-    panel.objhandler.select_rows((1, 2))
-    panel.processor.compute_difference(True)
+    panel.objview.select_nums((1, 2))
+    panel.processor.compute_difference(quadratic=True)
     panel.delete_metadata()
-    panel.objhandler.select_rows((2, 3))
+    panel.objview.select_nums((2, 3))
     panel.remove_object()
 
-    panel.objhandler.select_rows((0, 1))
+    panel.objview.select_nums((0, 1))
     panel.processor.compute_sum()
-    panel.objhandler.select_rows((0, 1))
+    panel.objview.select_nums((0, 1))
     panel.processor.compute_sum()
-    panel.objhandler.select_rows((0, 1))
+    panel.objview.select_nums((0, 1))
     panel.processor.compute_product()
 
-    obj = panel.objhandler[-1]
+    obj = panel.objmodel.get_groups()[0][-1]
     param = ThresholdParam()
     param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
     panel.processor.compute_threshold(param)
@@ -100,9 +104,9 @@ def test_common_operations(panel):
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
-    panel.objhandler.select_rows((2, 6))
+    panel.objview.select_nums((2, 6))
     panel.processor.compute_division()
-    panel.objhandler.select_rows((0, 1, 2))
+    panel.objview.select_nums((0, 1, 2))
     panel.processor.compute_average()
 
     test_compute_11_operations(panel, 1)
@@ -123,7 +127,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     win.add_object(sig1)
 
     # Add new signal based on s0
-    panel.objhandler.set_current_row(0)
+    panel.objview.set_current_object(sig1)
     newparam = new_signal_param(_("Random function"), stype=SignalTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.vmin = 0
@@ -141,7 +145,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     param = XYCalibrateParam()
     param.a, param.b = 1.2, 0.1
-    panel.processor.calibrate(param)
+    panel.processor.compute_calibration(param)
 
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
@@ -151,8 +155,8 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     panel.processor.compute_multigaussianfit()
 
-    panel.objhandler.set_current_row(-3)
-    sig = panel.objhandler.get_sel_object()
+    panel.objview.select_nums([-3])
+    sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
     panel.processor.extract_roi([[i1, i2]])
@@ -181,7 +185,8 @@ def test():
     """Run signal unit test scenario 1"""
     with cdl_app_context(save=True) as win:
         test_signal_features(win)
-        win.signalpanel.open_separate_view((0, 1, 2, 6))
+        oids = win.signalpanel.objmodel.get_object_ids()
+        win.signalpanel.open_separate_view(oids[:3])
 
 
 if __name__ == "__main__":

@@ -210,10 +210,10 @@
                 "env": {
                     "PYTHON": "${env:PYTHON_CDL_DEV}",
                     "UNATTENDED": "1",
-                    "NSIS_COPYRIGHT_INFO": "Copyright (c) CEA-CODRA 2019-2022",
+                    "NSIS_COPYRIGHT_INFO": "Copyright (c) CEA-Codra 2019-2022",
                     "NSIS_HELP_LINK": "https://cdl.readthedocs.io/en/latest/",
-                    "NSIS_URLUPDATEINFO": "https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/releases",
-                    "NSIS_URLINFOABOUT": "https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab",
+                    "NSIS_URLUPDATEINFO": "https://github.com/Codra-Ingenierie-Informatique/DataLab/releases",
+                    "NSIS_URLINFOABOUT": "https://github.com/Codra-Ingenierie-Informatique/DataLab",
                 }
             },
             "args": [

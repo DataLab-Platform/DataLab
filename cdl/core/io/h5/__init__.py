@@ -5,7 +5,7 @@
 
 
 """
-CobraDataLab HDF5 importer module
+DataLab HDF5 importer module
 """
 
 # Registering dynamic I/O features:

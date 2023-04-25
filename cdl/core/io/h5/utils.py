@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Utilities for exogenous HDF5 format support
+DataLab Utilities for exogenous HDF5 format support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -81,7 +81,7 @@ def process_xy_values(dset, name):
 
 
 def is_supported_num_dtype(data):
-    """Return True if data type is a numerical type supported by CobraDataLab"""
+    """Return True if data type is a numerical type supported by DataLab"""
     return data.dtype.name.startswith(("int", "uint", "float", "complex"))
 
 

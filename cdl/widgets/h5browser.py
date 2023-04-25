@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab HDF5 browser module
+DataLab HDF5 browser module
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -12,6 +12,7 @@ CobraDataLab HDF5 browser module
 import abc
 import os
 import os.path as osp
+from typing import List
 
 from guidata.qthelpers import (
     add_actions,
@@ -40,7 +41,7 @@ class BaseTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
 class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
     """One-column tree widget with context menu, ..."""
 
-    def __init__(self, parent):
+    def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
         self.setItemsExpandable(True)
         self.itemActivated.connect(self.activated)
@@ -57,14 +58,22 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         self.item_selection_changed()
 
     @abc.abstractmethod
-    def activated(self, item):
+    def activated(self, item: QW.QTreeWidgetItem) -> None:
         """Double-click event"""
 
     @abc.abstractmethod
-    def clicked(self, item):
+    def clicked(self, item: QW.QTreeWidgetItem) -> None:
         """Item was clicked"""
 
-    def setup_common_actions(self):
+    @abc.abstractmethod
+    def get_actions_from_items(
+        self, items: List[QW.QTreeWidgetItem]
+    ) -> List[QW.QAction]:
+        """Get actions from item"""
+        # Right here: add other actions if necessary (reimplement this method)
+        return []
+
+    def setup_common_actions(self) -> List[QW.QAction]:
         """Setup context menu common actions"""
         self.collapse_all_action = create_action(
             self,
@@ -103,7 +112,7 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
             self.expand_selection_action,
         ]
 
-    def update_menu(self):
+    def update_menu(self) -> None:
         """Update context menu"""
         self.menu.clear()
         items = self.selectedItems()
@@ -113,31 +122,20 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         actions += self.common_actions
         add_actions(self.menu, actions)
 
-    def get_actions_from_items(self, items):  # pylint: disable=W0613,R0201
-        """Get actions from item"""
-        # Right here: add other actions if necessary (reimplement this method)
-        return []
-
-    def restore(self):
+    def restore(self) -> None:
         """Restore tree state"""
         self.collapseAll()
         for item in self.get_top_level_items():
             self.expandItem(item)
 
-    def is_item_expandable(self, item):  # pylint: disable=W0613,R0201
-        """To be reimplemented in child class
-        See example in project explorer widget"""
-        return True  # pragma: no cover
-
-    def __expand_item(self, item):  # pragma: no cover
+    def __expand_item(self, item: QW.QTreeWidgetItem) -> None:  # pragma: no cover
         """Expand item tree branch"""
-        if self.is_item_expandable(item):
-            self.expandItem(item)
-            for index in range(item.childCount()):
-                child = item.child(index)
-                self.__expand_item(child)
+        self.expandItem(item)
+        for index in range(item.childCount()):
+            child = item.child(index)
+            self.__expand_item(child)
 
-    def expand_selection(self):  # pragma: no cover
+    def expand_selection(self) -> None:  # pragma: no cover
         """Expand selection"""
         items = self.selectedItems()
         if not items:
@@ -147,14 +145,14 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         if items:
             self.scrollToItem(items[0])
 
-    def __collapse_item(self, item):  # pragma: no cover
+    def __collapse_item(self, item: QW.QTreeWidgetItem) -> None:  # pragma: no cover
         """Collapse item tree branch"""
         self.collapseItem(item)
         for index in range(item.childCount()):
             child = item.child(index)
             self.__collapse_item(child)
 
-    def collapse_selection(self):  # pragma: no cover
+    def collapse_selection(self) -> None:  # pragma: no cover
         """Collapse selection"""
         items = self.selectedItems()
         if not items:
@@ -164,21 +162,21 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         if items:
             self.scrollToItem(items[0])
 
-    def item_selection_changed(self):
+    def item_selection_changed(self) -> None:
         """Item selection has changed"""
         is_selection = len(self.selectedItems()) > 0
         self.expand_selection_action.setEnabled(is_selection)
         self.collapse_selection_action.setEnabled(is_selection)
 
-    def get_top_level_items(self):
+    def get_top_level_items(self) -> List[QW.QTreeWidgetItem]:
         """Iterate over top level items"""
         return [self.topLevelItem(_i) for _i in range(self.topLevelItemCount())]
 
-    def get_items(self):
+    def get_items(self) -> List[QW.QTreeWidgetItem]:
         """Return items (excluding top level items)"""
         itemlist = []
 
-        def add_to_itemlist(item):
+        def add_to_itemlist(item: QW.QTreeWidgetItem):
             for index in range(item.childCount()):
                 citem = item.child(index)
                 itemlist.append(citem)
@@ -188,7 +186,11 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
             add_to_itemlist(tlitem)
         return itemlist
 
-    def contextMenuEvent(self, event):
+    def find_all_items(self):
+        """Find all items"""
+        return self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive)
+
+    def contextMenuEvent(self, event: QG.QContextMenuEvent) -> None:
         """Override Qt method"""
         self.update_menu()
         self.menu.popup(event.globalPos())
@@ -251,20 +253,13 @@ class H5TreeWidget(BaseTreeWidget):
         """Click event"""
         self.activated(item)
 
-    def find_all_items(self):
-        """Find all items"""
-        return self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive)
+    def get_actions_from_items(self, items):  # pylint: disable=W0613,R0201
+        """Get actions from item"""
+        return []
 
     def is_empty(self):
         """Return True if tree is empty"""
         return len(self.find_all_items()) == 1
-
-    def get_item_from_id(self, item_id):
-        """Return QListWidgetItem from id"""
-        for item in self.find_all_items():
-            if id(item) == item_id:
-                return item
-        return None
 
     def is_any_item_checked(self):
         """Return True if any item is checked"""

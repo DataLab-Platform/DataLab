@@ -1,32 +1,32 @@
-![CobraDataLab - CODRA's Filtering Tool](./doc/images/CobraDataLab-banner.png)
+![DataLab](./doc/images/DataLab-banner.png)
 
-[![license](https://img.shields.io/pypi/l/CobraDataLab.svg)](./LICENSE)
-[![pypi version](https://img.shields.io/pypi/v/CobraDataLab.svg)](https://pypi.org/project/cdl/)
-[![PyPI status](https://img.shields.io/pypi/status/CobraDataLab.svg)](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/CobraDataLab.svg)](https://pypi.python.org/pypi/cdl/)
+[![license](https://img.shields.io/pypi/l/DataLab.svg)](./LICENSE)
+[![pypi version](https://img.shields.io/pypi/v/DataLab.svg)](https://pypi.org/project/cdl/)
+[![PyPI status](https://img.shields.io/pypi/status/DataLab.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/DataLab.svg)](https://pypi.python.org/pypi/cdl/)
 
-CobraDataLab is developed by [Codra](https://codra.net/).
+DataLab is developed by [Codra](https://codra.net/).
 
-![CobraDataLab](./doc/images/dark_light_modes.png)
+![DataLab](./doc/images/dark_light_modes.png)
 
 ----
 
 ## Overview
 
-CobraDataLab is a generic signal and image processing software based on Python scientific
+DataLab is a generic signal and image processing software based on Python scientific
 libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces (thanks to
 [guidata](https://pypi.python.org/pypi/guidata) and [guiqwt](https://pypi.python.org/pypi/guiqwt) libraries).
 
-CobraDataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
+DataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
 
-See [home page](https://codra-ingenierie-informatique.github.io/CobraDataLab/) and
+See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 [documentation](https://cdl.readthedocs.io/en/latest/) for more details on
 the library and [changelog](CHANGELOG.md) for recent history of changes.
 
-### New in CobraDataLab 1.0
+### New in DataLab 1.0
 
 * New data processing and visualization features (see details in [changelog](CHANGELOG.md))
-* Fully automated high-level processing features for internal testing purpose, as well as embedding CobraDataLab in a third-party software
+* Fully automated high-level processing features for internal testing purpose, as well as embedding DataLab in a third-party software
 * Extensive test suite (unit tests and application tests) with >80% feature coverage
 
 ### Credits
@@ -93,10 +93,10 @@ Copyrights and licensing:
 
 ### From the installer
 
-CobraDataLab is available as a stand-alone application, which does not require any Python
+DataLab is available as a stand-alone application, which does not require any Python
 distribution to be installed. Just run the installer and you're good to go!
 
-The installer package is available in the [Releases](https://github.com/CODRA-Ingenierie-Informatique/CobraDataLab/releases) section.
+The installer package is available in the [Releases](https://github.com/Codra-Ingenierie-Informatique/DataLab/releases) section.
 
 ### From the source package
 

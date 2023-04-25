@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab unit tests
+DataLab unit tests
 """
 
 from contextlib import contextmanager
@@ -15,6 +15,8 @@ from guidata.guitest import run_testlauncher
 import cdl.config  # Loading icons
 from cdl import env
 from cdl.core.gui.main import CDLMainWindow
+from cdl.core.gui.panel.image import ImagePanel
+from cdl.core.gui.panel.signal import SignalPanel
 from cdl.utils import qthelpers as qth
 from cdl.utils import tests
 
@@ -27,7 +29,7 @@ from cdl.utils import tests
 def cdl_app_context(
     size=None, maximized=False, save=False, console=None
 ) -> Generator[CDLMainWindow, None, None]:
-    """Context manager handling CobraDataLab mainwindow creation and Qt event loop"""
+    """Context manager handling DataLab mainwindow creation and Qt event loop"""
     if size is None:
         size = 950, 600
 
@@ -51,14 +53,15 @@ def cdl_app_context(
                     pass
 
 
-def take_plotwidget_screenshot(panel, name):
+def take_plotwidget_screenshot(panel: SignalPanel | ImagePanel, name: str):
     """Eventually takes plotwidget screenshot (only in screenshot mode)"""
     if env.execenv.screenshot:
-        qth.grab_save_window(panel.plothandler.plotwidget, f"{panel.PREFIX}_{name}")
+        prefix = panel.PARAMCLASS.PREFIX
+        qth.grab_save_window(panel.plothandler.plotwidget, f"{prefix}_{name}")
 
 
 def run():
-    """Run CobraDataLab test launcher"""
+    """Run DataLab test launcher"""
     run_testlauncher(cdl)
 
 

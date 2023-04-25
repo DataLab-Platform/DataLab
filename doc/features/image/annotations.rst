@@ -3,18 +3,18 @@
 Annotations (Images)
 ====================
 
-CobraDataLab provides an annotation feature for images (as well as for signals).
+DataLab provides an annotation feature for images (as well as for signals).
 
 .. image:: /images/annotations/view_menu_entry.png
 
 How to use the feature:
-  - Create or open an image in CobraDataLab workspace
+  - Create or open an image in DataLab workspace
   - Double-click on the image or select "View in a new window" in "View" menu
   - Add annotations (labels, rectangles, circles, etc.)
   - Eventually customize the annotations (right-click, "Parameters")
   - Validate your changes by clicking on "OK" button
   - That's it: your annotations are now attached to the image
-    and will be saved with your CobraDataLab workspace
+    and will be saved with your DataLab workspace
 
 .. figure:: /images/annotations/image_annotations1.png
 

@@ -44,14 +44,14 @@ def multiple_commands(remote: RemoteClient):
 
         param = XYCalibrateParam()
         param.a, param.b = 1.2, 0.1
-        remote.calc("calibrate", param)
+        remote.calc("compute_calibration", param)
 
         time.sleep(2)  # Avoid permission error when trying to clean-up temporary files
 
 
 def test():
     """Remote client test"""
-    execenv.print("Launching CobraDataLab in a separate process")
+    execenv.print("Launching DataLab in a separate process")
     exec_script(app.__file__, wait=False)
     remote = RemoteClient()
     remote.try_and_connect()

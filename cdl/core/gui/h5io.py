@@ -4,10 +4,13 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab HDF5 open/save module
+DataLab HDF5 open/save module
 """
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 import os.path as osp
+from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
@@ -18,31 +21,33 @@ from cdl.core.model.signal import SignalParam
 from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
 
+if TYPE_CHECKING:
+    from cdl.core.gui.main import CDLMainWindow
+    from cdl.core.io.h5.common import BaseNode
+
 
 class H5InputOutput:
     """Object handling HDF5 file open/save
-    into/from CobraDataLab data model/main window"""
+    into/from DataLab data model/main window"""
 
-    def __init__(self, mainwindow):
+    def __init__(self, mainwindow: CDLMainWindow) -> None:
         self.mainwindow = mainwindow
-        self.h5browser = None
-        self.uint32_wng = None
-        self.progressbar = None
-        self.lmj_metadata = None
+        self.h5browser: H5BrowserDialog = None
+        self.uint32_wng: bool = None
 
     @staticmethod
-    def __progbartitle(fname):
+    def __progbartitle(fname: str) -> str:
         """Return progress bar title"""
         return _("Loading data from %s...") % osp.basename(fname)
 
-    def save_file(self, filename):
-        """Save all signals and images from CobraDataLab model into a HDF5 file"""
+    def save_file(self, filename: str) -> None:
+        """Save all signals and images from DataLab model into a HDF5 file"""
         writer = NativeH5Writer(filename)
         for panel in self.mainwindow.panels:
             panel.serialize_to_hdf5(writer)
         writer.close()
 
-    def open_file(self, filename, import_all, reset_all):
+    def open_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
         """Open HDF5 file"""
         progress = None
         try:
@@ -61,13 +66,13 @@ class H5InputOutput:
             reader.close()
         except KeyError:
             if progress is not None:
-                # KeyError was encoutered when deserializing datasets (CobraDataLab data
+                # KeyError was encoutered when deserializing datasets (DataLab data
                 # model is not compatible with this version)
                 progress.close()
             self.import_file(filename, import_all, reset_all)
 
-    def __add_object_from_node(self, node):
-        """Add CobraDataLab object from h5 node"""
+    def __add_object_from_node(self, node: BaseNode) -> None:
+        """Add DataLab object from h5 node"""
         obj = node.get_object()
         self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalParam):
@@ -75,14 +80,14 @@ class H5InputOutput:
         else:
             self.mainwindow.imagepanel.add_object(obj)
 
-    def __eventually_show_warnings(self):
+    def __eventually_show_warnings(self) -> None:
         """Eventually show warnings after everything is imported"""
         if self.uint32_wng:
             QW.QMessageBox.warning(
                 self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
             )
 
-    def import_file(self, filename, import_all, reset_all):
+    def import_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
         """Import HDF5 file"""
         if self.h5browser is None:
             self.h5browser = H5BrowserDialog(self.mainwindow)
@@ -114,7 +119,7 @@ class H5InputOutput:
             self.h5browser.cleanup()
             self.__eventually_show_warnings()
 
-    def import_dataset_from_file(self, filename, dsetname):
+    def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
         """Import dataset from HDF5 file"""
         h5importer = H5Importer(filename)
         try:

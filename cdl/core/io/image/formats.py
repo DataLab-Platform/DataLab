@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab I/O image formats
+DataLab I/O image formats
 """
 
 import os.path as osp

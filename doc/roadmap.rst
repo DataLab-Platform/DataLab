@@ -4,14 +4,14 @@ Roadmap
 Future milestones
 -----------------
 
-CobraDataLab 2.0
+DataLab 2.0
 ^^^^^^^^^^^^^^^^
 
 * Run computations in a separate process:
 
   - Execute a "computing server" in background, in another process
   - Define a communication protocol between this process and
-    CobraDataLab GUI process based on TCP sockets
+    DataLab GUI process based on TCP sockets
   - For each computation, send pickled data and computing function
     to the server and wait for the result
   - It will then possible to stop any computation at any time by killing the
@@ -33,7 +33,7 @@ Other ideas for future releases
 Past milestones
 ---------------
 
-CobraDataLab 1.0
+DataLab 1.0
 ^^^^^^^^^^^^^^^^
 
 * Optimize image displaying performance
@@ -46,7 +46,7 @@ CobraDataLab 1.0
      which includes an extension of `ImageProcessor`, `ActionHandler`
      and new file format support
    - Objective #2: plugins must be simply stored in a folder wich defaults
-     to the user directory (same folder as ".CobraDataLab.ini" configuration
+     to the user directory (same folder as ".DataLab.ini" configuration
      file)
 
 * Add a macro-command system:
@@ -56,7 +56,7 @@ CobraDataLab 1.0
   - Support for macro recording
 
 * Add an xmlrpc server to allow external applications controlling
-  CobraDataLab main features (open a signal or an image, open a HDF5 file,
+  DataLab main features (open a signal or an image, open a HDF5 file,
   etc.)
 
 CodraFT 2.2
@@ -87,7 +87,7 @@ CodraFT 2.0
 * New data processing and visualization features (see below)
 
 * Fully automated high-level processing features for internal testing purpose,
-  as well as embedding CobraDataLab in a third-party software
+  as well as embedding DataLab in a third-party software
 
 * Extensive test suite (unit tests and application tests)
   with 90% feature coverage

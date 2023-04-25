@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-Module for taking CobraDataLab screenshots
+Module for taking DataLab screenshots
 """
 
 from cdl import config
@@ -14,7 +14,7 @@ from cdl.utils.qthelpers import qt_app_context
 
 
 def take_menu_screenshots():
-    """Run the CobraDataLab application and take screenshots"""
+    """Run the DataLab application and take screenshots"""
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     sig1 = create_test_signal1()
     ima1 = create_test_image1()

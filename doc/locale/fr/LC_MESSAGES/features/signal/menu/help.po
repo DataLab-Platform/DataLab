@@ -1,12 +1,12 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab package.
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CobraDataLab \n"
+"Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-19 15:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -44,8 +44,8 @@ msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
 #: ../../features/image/menu/help.rst:17
-msgid "Open CobraDataLab log viewer"
-msgstr "Affiche l'explorateur de journaux de bord de CobraDataLab"
+msgid "Open DataLab log viewer"
+msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
 #: ../../features/image/menu/help.rst:20
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
@@ -54,14 +54,14 @@ msgstr ""
 "journaux de bord."
 
 #: ../../features/image/menu/help.rst:27
-msgid "About CobraDataLab installation"
-msgstr "Configuration d'installation de CobraDataLab"
+msgid "About DataLab installation"
+msgstr "Configuration d'installation de DataLab"
 
 #: ../../features/image/menu/help.rst:23
 msgid ""
-"Show information regarding your CobraDataLab installation (this is typically "
+"Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
-msgstr "Affiche des informations sur votre configuration d'installation de CobraDataLab (particulièrement utile pour signaler des anomalies de manière efficace)."
+msgstr "Affiche des informations sur votre configuration d'installation de DataLab (particulièrement utile pour signaler des anomalies de manière efficace)."
 
 #: ../../features/image/menu/help.rst:27
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
@@ -74,5 +74,5 @@ msgid "About"
 msgstr "À propos"
 
 #: ../../features/signal/menu/help.rst:30
-msgid "Open the \"About CobraDataLab\" dialog box:"
-msgstr "Affiche la boîte de dialogue \"A propos de CobraDataLab\""
+msgid "Open the \"About DataLab\" dialog box:"
+msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""

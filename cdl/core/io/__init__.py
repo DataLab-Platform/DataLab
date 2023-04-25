@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab I/O module
+DataLab I/O module
 """
 
 from __future__ import annotations  # To be removed when dropping Python <=3.9 support

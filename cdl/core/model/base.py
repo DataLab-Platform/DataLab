@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Datasets
+DataLab Datasets
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -13,6 +13,7 @@ import abc
 import enum
 import json
 import sys
+from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -208,7 +209,7 @@ def set_plot_item_editable(item, state):
 # arbitrary NumPy array, with an arbitrary shape. This is the opportunity to introduce
 # a new ShapeTypes type (e.g. FREEFORM) represented by an AnnotatedPolygon (new class
 # to be written using AnnotatedRectangle as a model). This also has been made possible
-# due to a recent change in CobraDataLab HDF5 (de)serialization which now accepts nested
+# due to a recent change in DataLab HDF5 (de)serialization which now accepts nested
 # lists or dictionnaries.
 class ResultShape:
     """Object representing a geometrical shape serializable in signal/image metadata.
@@ -454,6 +455,8 @@ class ObjectItfMeta(abc.ABCMeta, gdt.DataSetMeta):
 class ObjectItf(metaclass=ObjectItfMeta):
     """Object (signal/image) interface"""
 
+    PREFIX = ""  # This is overriden in children classes
+
     metadata = {}  # This is overriden in children classes with a gdi.DictItem instance
 
     # Metadata dictionary keys for special properties:
@@ -463,6 +466,19 @@ class ObjectItf(metaclass=ObjectItfMeta):
     DEFAULT_FMT = "s"  # This is overriden in children classes
     CONF_FMT = Conf.view.sig_format  # This is overriden in children classes
     VALID_DTYPES = ()
+
+    def __init__(self):
+        self.uuid = str(uuid4())
+        self.__onb = 0
+
+    def set_object_number(self, onb: int):
+        """Set object number (used for short ID)"""
+        self.__onb = onb
+
+    @property
+    def short_id(self):
+        """Short object ID"""
+        return f"{self.PREFIX}{self.__onb:03d}"
 
     @property
     @abc.abstractmethod

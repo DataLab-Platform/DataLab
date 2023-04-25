@@ -4,12 +4,13 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Signal Processor GUI module
+DataLab Signal Processor GUI module
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import re
+from typing import Callable, List, Tuple
 
 import numpy as np
 import scipy.integrate as spt
@@ -95,7 +96,7 @@ class SignalProcessor(BaseProcessor):
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
             return
-        obj = self.objhandler.get_sel_object()
+        obj = self.panel.objview.get_sel_objects()[0]
         group = obj.roidata_to_params(roieditordata.roidata)
 
         if roieditordata.singleobj:
@@ -153,7 +154,7 @@ class SignalProcessor(BaseProcessor):
 
     def detect_peaks(self, param: PeakDetectionParam = None) -> None:
         """Detect peaks from data"""
-        obj = self.objhandler.get_sel_object()
+        obj = self.panel.objview.get_sel_objects()[0]
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
@@ -233,7 +234,7 @@ class SignalProcessor(BaseProcessor):
         self.compute_11("Integral", lambda x, y: (x, spt.cumtrapz(y, x, initial=0.0)))
 
     @qt_try_except()
-    def calibrate(self, param: XYCalibrateParam = None) -> None:
+    def compute_calibration(self, param: XYCalibrateParam = None) -> None:
         """Compute data linear calibration"""
         edit, param = self.init_param(
             param, XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
@@ -310,9 +311,8 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
         """Compute fitting curve"""
-        rows = self.objhandler.get_selected_rows()
-        for row in rows:
-            self.__row_compute_fit(row, name, fitdlgfunc)
+        for obj in self.panel.objview.get_sel_objects():
+            self.__row_compute_fit(obj, name, fitdlgfunc)
 
     @qt_try_except()
     def compute_polyfit(self, param: PolynomialFitParam = None) -> None:
@@ -328,9 +328,10 @@ class SignalProcessor(BaseProcessor):
                 ),
             )
 
-    def __row_compute_fit(self, row, name, fitdlgfunc):
+    def __row_compute_fit(
+        self, obj: SignalParam, name: str, fitdlgfunc: Callable
+    ) -> None:
         """Curve fitting computing sub-method"""
-        obj = self.objhandler[row]
         output = fitdlgfunc(obj.x, obj.y, parent=self.panel.parent())
         if output is not None:
             y, params = output
@@ -345,24 +346,20 @@ class SignalProcessor(BaseProcessor):
             # Creating new signal
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=results)
             # Creating new plot item
-            self.panel.add_object(signal, refresh=False)
-            # Refreshing list
-            self.objhandler.refresh_list(-1)
+            self.panel.add_object(signal)
 
     @qt_try_except()
     def compute_multigaussianfit(self):
         """Compute multi-Gaussian fitting curve"""
-        rows = self.objhandler.get_selected_rows()
         fitdlgfunc = fitdialog.multigaussianfit
-        for row in rows:
+        for obj in self.panel.objview.get_sel_objects():
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
-            obj = self.objhandler[row]
             dlg.setup_data(obj.x, obj.y)
             if exec_dialog(dlg):
                 # Computing x, y
                 peaks = dlg.get_peak_indexes()
                 self.__row_compute_fit(
-                    row,
+                    obj,
                     _("Multi-Gaussian fit"),
                     lambda x, y, peaks=peaks, parent=self.panel.parent(): fitdlgfunc(
                         x, y, peaks, parent=parent
@@ -436,7 +433,7 @@ class SignalProcessor(BaseProcessor):
 
         self.compute_10(title, fw1e2)
 
-    def _get_stat_funcs(self):
+    def _get_stat_funcs(self) -> List[Tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
         return [
             ("min(y)", lambda xy: xy[1].min()),

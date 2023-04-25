@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab environmnent utilities
+DataLab environmnent utilities
 """
 
 import argparse
@@ -24,7 +24,7 @@ class VerbosityLevels(enum.Enum):
 
 
 class CDLExecEnv:
-    """Object representing CobraDataLab test environment"""
+    """Object representing DataLab test environment"""
 
     UNATTENDED_ARG = "unattended"
     VERBOSE_ARG = "verbose"
@@ -125,9 +125,9 @@ class CDLExecEnv:
 
         # <!> WARNING <!>
         # Do not add an option '-c' to avoid any conflict with macro command
-        # execution mecanism used with CobraDataLab standalone version (see start.pyw)
+        # execution mecanism used with DataLab standalone version (see start.pyw)
 
-        parser = argparse.ArgumentParser(description="Run CobraDataLab")
+        parser = argparse.ArgumentParser(description="Run DataLab")
         parser.add_argument(
             "h5",
             nargs="?",
@@ -144,7 +144,7 @@ class CDLExecEnv:
             help="path to open with HDF5 browser",
         )
         parser.add_argument(
-            "-v", "--version", action="store_true", help="show CobraDataLab version"
+            "-v", "--version", action="store_true", help="show DataLab version"
         )
         parser.add_argument(
             "--mode",
@@ -179,7 +179,7 @@ class CDLExecEnv:
             self.h5browser_file = args.h5browser
         if args.version:
             version = os.environ["CDL_VERSION"]
-            print(f"CobraDataLab {version} on {platform.system()}")
+            print(f"DataLab {version} on {platform.system()}")
             sys.exit()
         self.set_env_from_args(args)
 

@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Computation / Image module
+DataLab Computation / Image module
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

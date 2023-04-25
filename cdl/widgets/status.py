@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab main window status bar widgets
+DataLab main window status bar widgets
 """
 
 

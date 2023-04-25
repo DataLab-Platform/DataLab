@@ -26,8 +26,8 @@ If applicable, add screenshots to help explain your problem.
 
 **Installation information**
 
-- CobraDataLab installation type ["Python package" or "stand-alone Windows version"]
-- Copy/paste here the contents of "About CobraDataLab installation..." window (Menu "?")
+- DataLab installation type ["Python package" or "stand-alone Windows version"]
+- Copy/paste here the contents of "About DataLab installation..." window (Menu "?")
 
 **Additional context**
 Add any other context about the problem here.

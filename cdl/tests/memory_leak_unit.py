@@ -6,7 +6,7 @@
 """
 Memory leak test
 
-CobraDataLab application memory leak test.
+DataLab application memory leak test.
 """
 
 import os
@@ -42,7 +42,7 @@ def memory_leak_test(iterations=100):
             execenv.print(i + 1, ":", memdata, "MB")
         view_curves(
             np.array(memlist),
-            title="Memory leak test for CobraDataLab application",
+            title="Memory leak test for DataLab application",
             ylabel="Memory (MB)",
         )
 

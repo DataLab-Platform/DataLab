@@ -56,7 +56,7 @@ class SignalPeakDetectionDialog(CurveDialog):
         super().__init__(wintitle=_("Signal peak detection"), edit=True, parent=parent)
         self.setObjectName("peakdetection")
         if parent is None:
-            self.setWindowIcon(get_icon("CobraDataLab.svg"))
+            self.setWindowIcon(get_icon("DataLab.svg"))
         self.peaks = None
         self.peak_indexes = None
         self.in_x = None

@@ -1,8 +1,8 @@
 Remote controlling
 ==================
 
-CobraDataLab may be controlled remotely using the `XML-RPC`_ protocol which is
-natively supported by Python. Remote controlling allows to access CobraDataLab
+DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
+natively supported by Python. Remote controlling allows to access DataLab
 main features from a separate process.
 
 Supported features are the following:
@@ -17,7 +17,7 @@ Supported features are the following:
   - Get object list
   - Run calculation with parameters
 
-Some examples are provided to help implementing such a communication between your application and CobraDataLab:
+Some examples are provided to help implementing such a communication between your application and DataLab:
   - See ``cdl.tests.remoteclient_app`` module
   - See ``cdl.tests.remoteclient_unit`` module
 

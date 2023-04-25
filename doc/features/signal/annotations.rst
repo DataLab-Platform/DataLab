@@ -3,18 +3,18 @@
 Annotations (Signals)
 =====================
 
-CobraDataLab provides an annotation feature for signals (as well as for images).
+DataLab provides an annotation feature for signals (as well as for images).
 
 .. image:: /images/annotations/view_menu_entry.png
 
 How to use the feature:
-  - Create or open a signal in CobraDataLab workspace
+  - Create or open a signal in DataLab workspace
   - Double-click on the signal or select "View in a new window" in "View" menu
   - Add annotations (labels, cursors, rectangles and segments)
   - Eventually customize the annotations (right-click, "Parameters")
   - Validate your changes by clicking on "OK" button
   - That's it: your annotations are now attached to the signal
-    and will be saved with your CobraDataLab workspace
+    and will be saved with your DataLab workspace
 
 .. figure:: /images/annotations/signal_annotations1.png
 

@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-Module patching *guidata* and *guiqwt* to adapt it to CobraDataLab
+Module patching *guidata* and *guiqwt* to adapt it to DataLab
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -275,10 +275,10 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
 
 
 # ==============================================================================
-#  Cross section : add a button to send curve to CobraDataLab's signal panel
+#  Cross section : add a button to send curve to DataLab's signal panel
 # ==============================================================================
 def to_cdl(cs_plot):
-    """Send cross section curve to CobraDataLab's signal list"""
+    """Send cross section curve to DataLab's signal list"""
     win = None
     for win in QApplication.topLevelWidgets():
         if isinstance(win, QMainWindow):
@@ -288,7 +288,7 @@ def to_cdl(cs_plot):
         # pylint: disable=cyclic-import
         from cdl.core.gui import main
 
-        # Note : this is the only way to retrieve the CobraDataLab main window instance
+        # Note : this is the only way to retrieve the DataLab main window instance
         # when the CrossSectionItem object is embedded into an image widget
         # parented to another main window.
         win = main.CDLMainWindow.get_instance()
@@ -329,7 +329,7 @@ def to_cdl(cs_plot):
 
         win.signalpanel.add_object(signal)
 
-    # Show CobraDataLab main window on top, if not already visible
+    # Show DataLab main window on top, if not already visible
     win.show()
     win.raise_()
 

@@ -32,6 +32,7 @@ def __test_func(
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern)
         execenv.print("    Opening:")
+        objs = []
         for fname in fnames:
             execenv.print(f"      {fname}: ", end="")
             try:
@@ -39,11 +40,11 @@ def __test_func(
             except NotImplementedError:
                 execenv.print("Skipped (not supported)")
                 continue
-            panel.open_object(fname)
+            objs.append(panel.open_object(fname))
             execenv.print("OK")
         execenv.print("    Saving:")
-        for row, fname in enumerate(fnames):
-            panel.objhandler.set_current_row(row)
+        for fname, obj in zip(fnames, objs):
+            panel.objview.set_current_object(obj)
             path = osp.join(tmpdir, osp.basename(fname))
             execenv.print(f"      {path}: ", end="")
             try:

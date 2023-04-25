@@ -4,12 +4,13 @@
 # Pierre Raybaut
 
 """
-Module providing CobraDataLab Macro editor widget
+Module providing DataLab Macro editor widget
 """
 
 import os
 import sys
 import time
+from uuid import uuid4
 
 from guidata.userconfigio import BaseIOHandler
 from guidata.widgets.codeeditor import CodeEditor
@@ -26,6 +27,8 @@ UNTITLED_NB = 0
 
 class Macro(QC.QObject, ObjItf):
     """Object representing a macro: editor, path, open/save actions, etc."""
+
+    PREFIX = "m"
 
     STARTED = QC.Signal()
     FINISHED = QC.Signal()
@@ -46,8 +49,9 @@ remote.add_image("toto", z)
 print("All done!")
 """
 
-    def __init__(self, console: PythonShellWidget, name: str = None):
+    def __init__(self, console: PythonShellWidget, name: str = None) -> None:
         super().__init__()
+        self.uuid = str(uuid4())
         self.console = console
         self.setObjectName(self.get_untitled_title() if name is None else name)
         self.editor = CodeEditor(language="python")
@@ -56,18 +60,23 @@ print("All done!")
         self.process = None
 
     @property
-    def title(self):
+    def short_id(self):
+        """Short macro ID"""
+        return self.PREFIX + self.uuid[:3]
+
+    @property
+    def title(self) -> str:
         """Return object title"""
         return self.objectName()
 
-    def serialize(self, writer: BaseIOHandler):
+    def serialize(self, writer: BaseIOHandler) -> None:
         """Serialize this macro"""
         with writer.group("name"):
             writer.write(self.objectName())
         with writer.group("contents"):
             writer.write(self.editor.toPlainText())
 
-    def deserialize(self, reader: BaseIOHandler):
+    def deserialize(self, reader: BaseIOHandler) -> None:
         """Deserialize this macro"""
         with reader.group("name"):
             self.setObjectName(reader.read_any())
@@ -75,25 +84,25 @@ print("All done!")
             self.editor.setPlainText(reader.read_any())
 
     @staticmethod
-    def get_untitled_title():
+    def get_untitled_title() -> str:
         """Increment untitled number and return untitled macro title"""
         global UNTITLED_NB  # pylint: disable=global-statement
         UNTITLED_NB += 1
         untitled = _("Untitled")
         return f"{untitled} {UNTITLED_NB:02d}"
 
-    def modification_changed(self, state: bool):
+    def modification_changed(self, state: bool) -> None:
         """Method called when macro's editor modification state changed"""
         if state:
             self.MODIFIED.emit()
 
     @staticmethod
-    def transcode(bytearr):
+    def transcode(bytearr) -> str:
         """Transcode bytes to locale str"""
         locale_codec = QC.QTextCodec.codecForLocale()
         return locale_codec.toUnicode(bytearr.data())
 
-    def get_stdout(self):
+    def get_stdout(self) -> str:
         """Return standard output str"""
         self.process.setReadChannel(QC.QProcess.StandardOutput)
         bytearr = QC.QByteArray()
@@ -101,7 +110,7 @@ print("All done!")
             bytearr += self.process.readAllStandardOutput()
         return self.transcode(bytearr)
 
-    def get_stderr(self):
+    def get_stderr(self) -> str:
         """Return standard error str"""
         self.process.setReadChannel(QC.QProcess.StandardError)
         bytearr = QC.QByteArray()
@@ -109,22 +118,22 @@ print("All done!")
             bytearr += self.process.readAllStandardError()
         return self.transcode(bytearr)
 
-    def write_output(self):
+    def write_output(self) -> None:
         """Write text as standard output"""
         self.console.write(self.get_stdout())
 
-    def write_error(self):
+    def write_error(self) -> None:
         """Write text as standard error"""
         self.console.write_error(self.get_stderr())
 
-    def print(self, text, error=False, eol_before=True):
+    def print(self, text, error=False, eol_before=True) -> None:
         """Print text in console, with line separator"""
         msg = f"---({time.ctime()})---[{text}]{os.linesep}"
         if eol_before:
             msg = os.linesep + msg
         self.console.write(msg, error=error, prompt=not error)
 
-    def run(self):
+    def run(self) -> None:
         """Run macro"""
         self.process = QC.QProcess()
         text = self.editor.toPlainText()
@@ -158,13 +167,15 @@ print("All done!")
             return self.process.state() == QC.QProcess.Running
         return False
 
-    def kill(self):
+    def kill(self) -> None:
         """Kill process associated to macro"""
         if self.process is not None:
             self.print(_("Terminating '%s' macro") % self.objectName(), error=True)
             self.process.kill()
 
-    def finished(self, exit_code, exit_status):  # pylint: disable=unused-argument
+    def finished(
+        self, exit_code, exit_status
+    ) -> None:  # pylint: disable=unused-argument
         """Process has finished"""
         self.print(
             _("# <== '%s' macro has finished") % self.objectName(), eol_before=False

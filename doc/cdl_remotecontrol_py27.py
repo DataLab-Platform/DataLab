@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab remote controlling class for Python 2.7
+DataLab remote controlling class for Python 2.7
 """
 
 import io
@@ -27,33 +27,33 @@ def array_to_rpcbinary(data):
 
 
 class CDLConnectionError(Exception):
-    """Error when trying to connect to CobraDataLab XML-RPC server"""
+    """Error when trying to connect to DataLab XML-RPC server"""
 
     pass
 
 
 def get_cdl_xmlrpc_port():
-    """Return CobraDataLab current XML-RPC port"""
+    """Return DataLab current XML-RPC port"""
     if sys.platform == "win32" and "HOME" in os.environ:
         os.environ.pop("HOME")  # Avoid getting old WinPython settings dir
-    fname = osp.join(get_config_dir(), ".CobraDataLab", "CobraDataLab.ini")
+    fname = osp.join(get_config_dir(), ".DataLab", "DataLab.ini")
     ini = cp.ConfigParser()
     ini.read(fname)
     try:
         return ini.get("main", "rpc_server_port")
     except (cp.NoSectionError, cp.NoOptionError):
-        raise CDLConnectionError("CobraDataLab has not yet been executed")
+        raise CDLConnectionError("DataLab has not yet been executed")
 
 
 class RemoteClient(object):
-    """Object representing a proxy/client to CobraDataLab XML-RPC server"""
+    """Object representing a proxy/client to DataLab XML-RPC server"""
 
     def __init__(self):
         self.port = None
         self.serverproxy = None
 
     def connect(self, port=None):
-        """Connect to CobraDataLab XML-RPC server"""
+        """Connect to DataLab XML-RPC server"""
         if port is None:
             port = get_cdl_xmlrpc_port()
         self.port = port
@@ -62,14 +62,14 @@ class RemoteClient(object):
         try:
             self.get_version()
         except socket.error:
-            raise CDLConnectionError("CobraDataLab is currently not running")
+            raise CDLConnectionError("DataLab is currently not running")
 
     def get_version(self):
-        """Return CobraDataLab version"""
+        """Return DataLab version"""
         return self.serverproxy.get_version()
 
     def close_application(self):
-        """Close CobraDataLab application"""
+        """Close DataLab application"""
         self.serverproxy.close_application()
 
     def switch_to_signal_panel(self):
@@ -85,15 +85,15 @@ class RemoteClient(object):
         self.serverproxy.reset_all()
 
     def save_to_h5_file(self, filename):
-        """Save to a CobraDataLab HDF5 file"""
+        """Save to a DataLab HDF5 file"""
         self.serverproxy.save_to_h5_file(filename)
 
     def open_h5_files(self, h5files, import_all, reset_all):
-        """Open a CobraDataLab HDF5 file or import from any other HDF5 file"""
+        """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.serverproxy.open_h5_files(h5files, import_all, reset_all)
 
     def import_h5_file(self, filename, reset_all):
-        """Open CobraDataLab HDF5 browser to Import HDF5 file"""
+        """Open DataLab HDF5 browser to Import HDF5 file"""
         self.serverproxy.import_h5_file(filename, reset_all)
 
     def open_object(self, filename):
@@ -103,7 +103,7 @@ class RemoteClient(object):
     def add_signal(
         self, title, xdata, ydata, xunit=None, yunit=None, xlabel=None, ylabel=None
     ):
-        """Add signal data to CobraDataLab"""
+        """Add signal data to DataLab"""
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
         p = self.serverproxy
@@ -120,18 +120,22 @@ class RemoteClient(object):
         ylabel=None,
         zlabel=None,
     ):
-        """Add image data to CobraDataLab"""
+        """Add image data to DataLab"""
         zbinary = array_to_rpcbinary(data)
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
-    def get_object_list(self):
+    def get_object_titles(self):
         """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_list()
+        return self.serverproxy.get_object_titles()
+
+    def get_object_uuids(self):
+        """Get object (signal/image) list for current panel"""
+        return self.serverproxy.get_object_uuids()
 
 
 def test_remote_client():
-    """CobraDataLab Remote Client test"""
+    """DataLab Remote Client test"""
     cdl = RemoteClient()
     cdl.connect()
     data = np.array([[3, 4, 5], [7, 8, 0]], dtype=np.uint16)

@@ -3,7 +3,7 @@
 2D Peak Detection
 =================
 
-CobraDataLab provides a "2D Peak Detection" feature which is based on a
+DataLab provides a "2D Peak Detection" feature which is based on a
 minimum-maximum filter algorithm.
 
 .. figure:: /images/2d_peak_detection/peak2d_app_param.png
@@ -11,7 +11,7 @@ minimum-maximum filter algorithm.
     2D peak detection parameters.
 
 How to use the feature:
-  - Create or open an image in CobraDataLab workspace
+  - Create or open an image in DataLab workspace
   - Select "2d peak detection" in "Computing" menu
   - Enter parameters "Neighborhoods size" and "Relative threhold"
   - Check "Create regions of interest" if you want a ROI defined for each

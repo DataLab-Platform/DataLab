@@ -6,7 +6,7 @@
 """
 Application embedded test 2
 
-CobraDataLab main window is simply hidden when closing application.
+DataLab main window is simply hidden when closing application.
 It is shown and raised above other windows when reopening application.
 """
 
@@ -20,20 +20,20 @@ class HostWindow(embedded1_unit.BaseHostWindow):
     """Test main view"""
 
     def init_cdl(self):
-        """Open CobraDataLab test"""
+        """Open DataLab test"""
         if self.cdl is None:
             self.cdl = CDLMainWindow(console=False, hide_on_close=True)
-            self.host.log("✨ Initialized CobraDataLab window")
+            self.host.log("✨ Initialized DataLab window")
             self.cdl.show()
         else:
             self.cdl.show()
             self.cdl.raise_()
-        self.host.log("=> Shown CobraDataLab window")
+        self.host.log("=> Shown DataLab window")
 
     def close_cdl(self):
-        """Close CobraDataLab window"""
+        """Close DataLab window"""
         if self.cdl is not None:
-            self.host.log("=> Closed CobraDataLab")
+            self.host.log("=> Closed DataLab")
             self.cdl.close()
 
 

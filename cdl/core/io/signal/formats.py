@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab I/O signal formats
+DataLab I/O signal formats
 """
 
 import numpy as np

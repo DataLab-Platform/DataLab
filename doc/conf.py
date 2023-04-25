@@ -27,10 +27,10 @@ genreqs.generate_requirement_tables()
 
 # -- Project information -----------------------------------------------------
 
-project = "CobraDataLab"
+project = "DataLab"
 author = "Pierre Raybaut"
 copyright = "2023, Codra - " + author
-html_logo = latex_logo = "_static/CobraDataLab-title.png"
+html_logo = latex_logo = "_static/DataLab-title.png"
 
 # The full version, including alpha/beta/rc tags
 

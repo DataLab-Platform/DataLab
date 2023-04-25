@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Visualization tools (based on guiqwt)
+DataLab Visualization tools (based on guiqwt)
 """
 
 import guiqwt.image
@@ -35,7 +35,7 @@ def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None):
     name, title = get_name_title(name, title)
     win = guiqwt.plot.CurveDialog(
         edit=False,
-        icon=get_icon("CobraDataLab.svg"),
+        icon=get_icon("DataLab.svg"),
         toolbar=True,
         wintitle=title,
         options=dict(xlabel=xlabel, ylabel=ylabel),
@@ -75,7 +75,7 @@ def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None):
     name, title = get_name_title(name, title)
     win = guiqwt.plot.ImageDialog(
         edit=False,
-        icon=get_icon("CobraDataLab.svg"),
+        icon=get_icon("DataLab.svg"),
         toolbar=True,
         wintitle=title,
         options=dict(xlabel=xlabel, ylabel=ylabel),

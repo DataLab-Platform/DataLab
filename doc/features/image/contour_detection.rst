@@ -3,7 +3,7 @@
 Contour Detection
 =================
 
-CobraDataLab provides a "Contour Detection" feature which is based on
+DataLab provides a "Contour Detection" feature which is based on
 `the marching cubes algorithm <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_.
 
 .. figure:: /images/contour_detection/contour_app_param.png
@@ -11,7 +11,7 @@ CobraDataLab provides a "Contour Detection" feature which is based on
     Contour detection parameters.
 
 How to use the feature:
-  - Create or open an image in CobraDataLab workspace
+  - Create or open an image in DataLab workspace
   - Eventually create a ROI around the target area
   - Select "Contour detection" in "Computing" menu
   - Enter parameter "Shape" ("Ellipse" or "Circle")

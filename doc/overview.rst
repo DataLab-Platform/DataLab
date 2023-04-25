@@ -1,11 +1,11 @@
 Overview
 ========
 
-This page presents briefly CobraDataLab key features.
+This page presents briefly DataLab key features.
 
 .. figure:: images/dark_light_modes.png
 
-    CobraDataLab supports dark and light mode depending on your OS settings
+    DataLab supports dark and light mode depending on your OS settings
 
 Data visualization key features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -1,10 +1,10 @@
-Setting up CobraDataLab development environment
+Setting up DataLab development environment
 ==========================================
 
 Python distribution
 -------------------
 
-CobraDataLab requires the following :
+DataLab requires the following :
 
 * Python 3.8.10 (e.g. WinPython)
 
@@ -17,7 +17,7 @@ Installing all required packages :
 Test data
 ---------
 
-CobraDataLab test data are located in different folders, depending on their nature or origin.
+DataLab test data are located in different folders, depending on their nature or origin.
 
 Required data for unit tests are located in "cdl\data\tests" (public data).
 

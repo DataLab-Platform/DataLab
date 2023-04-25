@@ -57,7 +57,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.add_object(ima1)
 
     # Add new image based on i0
-    panel.objhandler.set_current_row(0)
+    panel.objview.set_current_object(ima1)
     newparam = new_image_param(itype=ImageTypes.UNIFORMRANDOM)
     addparam = UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
@@ -68,7 +68,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
 
     param = ZCalibrateParam()
     param.a, param.b = 1.2, 0.1
-    panel.processor.calibrate(param)
+    panel.processor.compute_calibration(param)
 
     param = DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
@@ -143,7 +143,8 @@ def test():
     """Run image unit test scenario 1"""
     with cdl_app_context(save=True) as win:
         test_image_features(win)
-        win.imagepanel.open_separate_view((0, 1, 2, 3))
+        oids = win.imagepanel.objmodel.get_object_ids()
+        win.imagepanel.open_separate_view(oids[:4])
 
 
 if __name__ == "__main__":

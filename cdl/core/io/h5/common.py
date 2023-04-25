@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Common tools for exogenous HDF5 format support
+DataLab Common tools for exogenous HDF5 format support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -133,7 +133,7 @@ class BaseNode(metaclass=abc.ABCMeta):
 
 
 class H5Importer:
-    """CobraDataLab HDF5 importer class"""
+    """DataLab HDF5 importer class"""
 
     def __init__(self, filename):
         self.h5file = h5py.File(filename)

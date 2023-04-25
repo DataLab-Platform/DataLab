@@ -30,14 +30,14 @@ def get_test_modules(package, contains=""):
 
 
 def run_all_tests(args="", contains="", timeout=None, other_package=None):
-    """Run all CobraDataLab tests"""
+    """Run all DataLab tests"""
     testmodules = get_test_modules(cdl, contains=contains)
     testnb = len(get_tests(cdl)) - 1
     if other_package is not None:
         testmodules += get_test_modules(other_package, contains=contains)
         testnb += len(get_tests(other_package)) - 1
     tnb = len(testmodules)
-    print(f"*** CobraDataLab v{__version__} automatic unit tests ***")
+    print(f"*** DataLab v{__version__} automatic unit tests ***")
     print("")
     print("Test parameters:")
     print(f"  Selected {tnb} tests ({testnb} total available)")

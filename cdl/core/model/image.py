@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Datasets
+DataLab Datasets
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -17,8 +17,7 @@ import re
 import weakref
 from collections import abc
 from copy import deepcopy
-from typing import Iterator, Optional
-from uuid import uuid4
+from typing import TYPE_CHECKING, Iterator, Optional
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -34,6 +33,9 @@ from skimage import draw
 from cdl.config import Conf, _
 from cdl.core.computation.image import scale_data_to_min_max
 from cdl.core.model import base
+
+if TYPE_CHECKING:
+    from qtpy import QtWidgets as QW
 
 
 def make_roi_rectangle(
@@ -146,6 +148,7 @@ class RoiDataItem:
 class ImageParam(gdt.DataSet, base.ObjectItf):
     """Image dataset"""
 
+    PREFIX = "i"
     CONF_FMT = Conf.view.ima_format
     DEFAULT_FMT = ".1f"
     VALID_DTYPES = (
@@ -160,7 +163,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     def __init__(self, title=None, comment=None, icon=""):
         gdt.DataSet.__init__(self, title, comment, icon)
-        self.uuid = str(uuid4())
+        base.ObjectItf.__init__(self)
         self._dicom_template = None
         self._maskdata_cache = None
         self._roidata_cache = None  # weak reference
@@ -635,7 +638,12 @@ class Gauss2DParam(gdt.DataSet):
     y0 = gdi.FloatItem("Y0", default=0).set_pos(col=0, colspan=1)
 
 
-def create_image_from_param(newparam, addparam=None, edit=False, parent=None):
+def create_image_from_param(
+    newparam: ImageParamNew,
+    addparam: gdt.DataSet = None,
+    edit: bool = False,
+    parent: QW.QWidget = None,
+) -> ImageParam:
     """Create a new Image object from dialog box.
 
     :param ImageParamNew param: new image parameters

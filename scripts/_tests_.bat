@@ -2,7 +2,7 @@
 REM ======================================================
 REM Generic Python Installer build script
 REM ------------------------------------------
-REM Copyright (c) 2021 CODRA
+REM Copyright (c) 2021 Codra
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetLibName LIBNAME

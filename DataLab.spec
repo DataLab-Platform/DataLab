@@ -37,7 +37,7 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='CobraDataLab',
+          name='DataLab',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
@@ -46,7 +46,7 @@ exe = EXE(pyz,
           disable_windowed_traceback=False,
           target_arch=None,
           codesign_identity=None,
-          entitlements_file=None , icon='resources\\CobraDataLab.ico')
+          entitlements_file=None , icon='resources\\DataLab.ico')
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -54,4 +54,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='CobraDataLab')
+               name='DataLab')

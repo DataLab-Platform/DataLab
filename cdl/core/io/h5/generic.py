@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Generic HDF5 format support
+DataLab Generic HDF5 format support
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

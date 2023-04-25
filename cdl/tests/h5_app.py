@@ -18,7 +18,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test(pattern=None):
-    """Testing CobraDataLab app launcher"""
+    """Testing DataLab app launcher"""
     if pattern is None:
         pattern = "*.h5"
     execenv.print("HDF5 import test scenario:")

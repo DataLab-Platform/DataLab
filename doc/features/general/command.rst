@@ -1,10 +1,10 @@
 Command line features
 =====================
 
-Run CobraDataLab
+Run DataLab
 ----------------
 
-To run CobraDataLab from the command line, type the following::
+To run DataLab from the command line, type the following::
 
     $ cdl
 
@@ -14,7 +14,7 @@ To show help on command line usage, simply run::
     usage: app.py [-h] [-b path] [-v] [--mode {unattended,screenshot}] [--delay DELAY] [--verbose {quiet,minimal,normal}]
                   [h5]
 
-    Run CobraDataLab
+    Run DataLab
 
     positional arguments:
       h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
@@ -23,7 +23,7 @@ To show help on command line usage, simply run::
       -h, --help            show this help message and exit
       -b path, --h5browser path
                             path to open with HDF5 browser
-      -v, --version         show CobraDataLab version
+      -v, --version         show DataLab version
       --mode {unattended,screenshot}
                             unattended: non-interactive test mode ; screenshot: unattended mode, with automatic
                             screenshots
@@ -48,25 +48,25 @@ To open the HDF5 browser at startup, use one of the following commands::
     $ cdl -b /path/to/file1.h5
     $ cdl --h5browser /path/to/file1.h5
 
-Run CobraDataLab demo
+Run DataLab demo
 ---------------------
 
-To execute CobraDataLab demo, run the following::
+To execute DataLab demo, run the following::
 
     $ cdl-demo
 
 Run unit tests
 --------------
 
-To execute all CobraDataLab unit tests, simply run::
+To execute all DataLab unit tests, simply run::
 
     $ cdl-alltests
-    *** CobraDataLab automatic unit tests ***
+    *** DataLab automatic unit tests ***
 
     Test parameters:
     Selected 39 tests (39 total available)
     Test data path:
-        C:\Dev\Projets\CobraDataLab\cdl\data\tests
+        C:\Dev\Projets\DataLab\cdl\data\tests
     Environment:
         DATA_CDL=C:\Dev\Projets\CDL_data\
         PYTHONPATH=.
@@ -85,7 +85,7 @@ To execute all CobraDataLab unit tests, simply run::
 Run interactive tests
 ---------------------
 
-To execute CobraDataLab interactive tests, run the following::
+To execute DataLab interactive tests, run the following::
 
     $ cdl-tests
 

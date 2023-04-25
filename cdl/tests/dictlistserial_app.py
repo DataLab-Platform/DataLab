@@ -55,9 +55,9 @@ def test():
             win.reset_all()
             win.open_h5_files([fname], import_all=True)
             execenv.print("Dictionary/List (de)serialization: ", end="")
-            assert __compare_metadata(
-                image.metadata, panel.objhandler[0].metadata.copy()
-            )
+            oids = panel.objmodel.get_object_ids()
+            first_image = panel.objmodel[oids[0]]
+            assert __compare_metadata(image.metadata, first_image.metadata.copy())
             execenv.print("OK")
 
 

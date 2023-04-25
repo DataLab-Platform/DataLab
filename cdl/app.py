@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab launcher module
+DataLab launcher module
 """
 
 from guidata.configtools import get_image_file_path
@@ -21,10 +21,10 @@ from cdl.utils.qthelpers import qt_app_context
 def create(
     splash: bool = True, console: bool = None, objects=None, h5files=None, size=None
 ) -> CDLMainWindow:
-    """Create CobraDataLab application and return mainwindow instance"""
+    """Create DataLab application and return mainwindow instance"""
     if splash:
         # Showing splash screen
-        pixmap = QG.QPixmap(get_image_file_path("CobraDataLab-title.png"))
+        pixmap = QG.QPixmap(get_image_file_path("DataLab-Splash.png"))
         splashscreen = QW.QSplashScreen(pixmap, QC.Qt.WindowStaysOnTopHint)
         splashscreen.show()
     window = CDLMainWindow(console=console)
@@ -48,7 +48,7 @@ def create(
 
 
 def run(console=None, objects=None, h5files=None, size=None):
-    """Run the CobraDataLab application
+    """Run the DataLab application
 
     Note: this function is an entry point in `setup.py` and therefore
     may not be moved without modifying the package setup script."""

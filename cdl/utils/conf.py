@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-CobraDataLab Configuration utilities
+DataLab Configuration utilities
 """
 
 import os

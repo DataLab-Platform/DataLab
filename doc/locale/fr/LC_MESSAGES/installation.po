@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, CODRA - Pierre Raybaut
-# This file is distributed under the same license as the CobraDataLab
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab
 # package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: CobraDataLab \n"
+"Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-14 18:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -28,11 +28,11 @@ msgstr "Dépendances"
 
 #: ../../installation.rst:7
 msgid ""
-"CobraDataLab requirements are the following *(Note: the Windows installer"
+"DataLab requirements are the following *(Note: the Windows installer"
 " package already include all those required libraries as well as Python "
 "itself)*:"
 msgstr ""
-"Les paquets prérequis de CobraDataLab sont les suivants *(note : "
+"Les paquets prérequis de DataLab sont les suivants *(note : "
 "l'installeur Windows intègre déjà l'ensemble de ces dépendances, ainsi "
 "que Python)* :"
 
@@ -146,11 +146,11 @@ msgstr "Installeur Windows :"
 
 #: ../../installation.rst:23
 msgid ""
-"CobraDataLab is available as a stand-alone application for Windows, which"
+"DataLab is available as a stand-alone application for Windows, which"
 " does not require any Python distribution to be installed. Just run the "
 "installer and you're good to go!"
 msgstr ""
-"CobraDataLab est disponible depuis une application autonome, qui ne "
+"DataLab est disponible depuis une application autonome, qui ne "
 "nécessite aucune installation préalable de Python. Exécutez simplement "
 "l'installeur et laissez vous guider !"
 
@@ -158,13 +158,13 @@ msgstr ""
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
-"CobraDataLab before runinng the installer of another version of the "
+"DataLab before runinng the installer of another version of the "
 "application)."
 msgstr ""
 "Le programme d'installation peut être téléchargé depuis la pagee "
 "`Releases`_. L'installeur prend en charge la fonctionnalité de "
 "désinstallation automatique lors d'une mise à jour (il n'est pas utile de"
-" désinstaller une version de CobraDataLab avant d'exécuter l'installeur "
+" désinstaller une version de DataLab avant d'exécuter l'installeur "
 "d'une nouvelle version du logiciel."
 
 #: ../../installation.rst:38
@@ -174,10 +174,10 @@ msgstr "Paquet wheel :"
 #: ../../installation.rst:40
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
-"way to install CobraDataLab on an existing Python distribution:"
+"way to install DataLab on an existing Python distribution:"
 msgstr ""
 "Depuis n'importe quel système d'exploitation, utiliser pip et le paquet "
-"Wheel est la méthode la plus simple pour installer CobraDataLab sur une "
+"Wheel est la méthode la plus simple pour installer DataLab sur une "
 "distribution Python préexistante :"
 
 #: ../../installation.rst:49
@@ -186,10 +186,10 @@ msgstr "Paquet source :"
 
 #: ../../installation.rst:51
 msgid ""
-"Installing CobraDataLab directly from the source package is "
+"Installing DataLab directly from the source package is "
 "straigthforward:"
 msgstr ""
-"Installer CobraDataLab directement depuis le paquet source n'est guère "
+"Installer DataLab directement depuis le paquet source n'est guère "
 "plus compliqué :"
 
 #~ msgid "4.1"
@@ -224,4 +224,3 @@ msgstr ""
 
 #~ msgid "3.7"
 #~ msgstr ""
-

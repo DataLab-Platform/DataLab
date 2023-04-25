@@ -4,7 +4,7 @@
 # (see cdl/__init__.py for details)
 
 """
-Log viewer test: raise an exception and create a seg fault in CobraDataLab
+Log viewer test: raise an exception and create a seg fault in DataLab
 """
 
 
@@ -16,7 +16,7 @@ SHOW = False  # Do not show test in GUI-based test launcher
 
 
 def error():
-    """Raise an exception and create a seg fault in CobraDataLab"""
+    """Raise an exception and create a seg fault in DataLab"""
     execenv.unattended = True
     with qt_app_context(exec_loop=True):
         win = CDLMainWindow()
