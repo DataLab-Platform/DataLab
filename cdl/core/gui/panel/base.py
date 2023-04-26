@@ -217,6 +217,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         with writer.group(self.get_serializable_name(obj)):
             obj.serialize(writer)
 
+    # pylint: disable=unused-argument
     def deserialize_objects_from_hdf5(self, reader: NativeH5Reader, name: str) -> None:
         """Deserialize objects from a HDF5 file"""
         obj = self.create_object()
@@ -568,7 +569,7 @@ class BaseDataPanel(AbstractPanel):
         :param list(str) filenames: File names
         :return: List of objects"""
         if not self.mainwindow.confirm_memory_state():
-            return
+            return []
         if filenames is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             filters = self.IO_REGISTRY.get_filters(IOAction.LOAD)

@@ -44,7 +44,6 @@ from typing import TYPE_CHECKING, Callable, Dict, Generator, List
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
-from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 

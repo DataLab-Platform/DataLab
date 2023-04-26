@@ -77,7 +77,7 @@ class ImagePanel(BaseDataPanel):
         :param bool edit: Open a dialog box to edit parameters (default: True)
         :return: New object"""
         if not self.mainwindow.confirm_memory_state():
-            return
+            return None
         curobj: ImageParam = self.objview.get_current_object()
         if curobj is not None:
             newparam = newparam if newparam is not None else new_image_param()

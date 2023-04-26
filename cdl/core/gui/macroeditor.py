@@ -173,9 +173,8 @@ print("All done!")
             self.print(_("Terminating '%s' macro") % self.objectName(), error=True)
             self.process.kill()
 
-    def finished(
-        self, exit_code, exit_status
-    ) -> None:  # pylint: disable=unused-argument
+    # pylint: disable=unused-argument
+    def finished(self, exit_code, exit_status) -> None:
         """Process has finished"""
         self.print(
             _("# <== '%s' macro has finished") % self.objectName(), eol_before=False

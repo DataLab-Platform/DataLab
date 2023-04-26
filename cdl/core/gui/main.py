@@ -879,9 +879,9 @@ class CDLMainWindow(QW.QMainWindow):
         """Add object - signal or image"""
         if self.confirm_memory_state():
             if isinstance(obj, SignalParam):
-                self.signalpanel.add_object(obj, refresh=refresh)
+                self.signalpanel.add_object(obj)
             elif isinstance(obj, ImageParam):
-                self.imagepanel.add_object(obj, refresh=refresh)
+                self.imagepanel.add_object(obj)
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")
 

@@ -40,7 +40,6 @@ a container for SignalParam and ImageParam instances.
 
 from __future__ import annotations  # To be removed when dropping Python <=3.9 support
 
-import re
 from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
 from uuid import uuid4
 
@@ -203,7 +202,7 @@ class ObjectModel:
         """Return object ids in group"""
         for group in self._groups:
             if group.uuid == group_id:
-                return group._objects
+                return group.get_object_ids()
         raise KeyError(f"Group with uuid '{group_id}' not found")
 
     def remove_group(self, group: ObjectGroup) -> None:

@@ -146,8 +146,9 @@ class SimpleObjectTree(QW.QTreeWidget):
             return selected_item.data(0, QC.Qt.UserRole)
         return selected_item.parent().data(0, QC.Qt.UserRole)
 
+    @staticmethod
     def __update_item(
-        self, item: QW.QTreeWidgetItem, obj: SignalParam | ImageParam | ObjectGroup
+        item: QW.QTreeWidgetItem, obj: SignalParam | ImageParam | ObjectGroup
     ) -> None:
         """Update item"""
         item.setText(0, f"{obj.short_id}: {obj.title}")
