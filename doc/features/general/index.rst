@@ -1,9 +1,9 @@
 General features
 ================
 
-.. figure:: /images/cdl_linux.png
+.. figure:: /images/DataLab-Screenshot-Image.png
 
-    DataLab main window (Ubuntu 22.04)
+    DataLab main window
 
 .. toctree::
    :maxdepth: 2

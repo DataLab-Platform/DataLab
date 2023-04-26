@@ -7,7 +7,7 @@
 
 DataLab is developed by [Codra](https://codra.net/).
 
-![DataLab](./doc/images/dark_light_modes.png)
+![DataLab](./doc/images/DataLab-Screenshot.png)
 
 ----
 

@@ -9,6 +9,10 @@ copy DataLab-Splash.png ..\cdl\data\logo
 %INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdl\data\logo\DataLab-Watermark.png" -w 300
 %INKSCAPE_PATH% "DataLab-Banner.svg" -o "DataLab-Banner.png" -w 364
 copy DataLab-Banner.png ..\doc\images
+%INKSCAPE_PATH% "DataLab-Screenshot.svg" -o "DataLab-Screenshot.png" -w 1180
+copy DataLab-Screenshot.png ..\doc\images
+%INKSCAPE_PATH% "DataLab-Overview.svg" -o "DataLab-Overview.png" -w 1180
+copy DataLab-Overview.png ..\doc\images
 
 @REM Generating icon
 for %%s in (16 24 32 48 128 256) do (

@@ -6,7 +6,7 @@ It is based on Python scientific libraries (such as NumPy,
 SciPy or scikit-image) and Qt graphical user interfaces
 (thanks to `guidata`_ and `guiqwt`_ libraries).
 
-.. figure:: images/panorama.png
+.. figure:: images/DataLab-Overview.png
 
     Signal and image visualization in DataLab
 
