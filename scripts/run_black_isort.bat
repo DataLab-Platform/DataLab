@@ -11,7 +11,7 @@ setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetLibName LIBNAME
 call %FUNC% SetPythonPath
-set PYTHON=%PYTHON_CDL_DEV%
+set PYTHON=%CDL_PYTHONEXE%
 call %FUNC% UseWinPython
 python -m black .
 python -m isort --profile black .

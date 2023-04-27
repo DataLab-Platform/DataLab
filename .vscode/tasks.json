@@ -15,7 +15,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                 }
             },
             "group": {
@@ -44,7 +44,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                 }
             },
             "group": {
@@ -74,7 +74,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                 }
             },
             "group": {
@@ -104,7 +104,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                 }
             },
             "group": {
@@ -132,7 +132,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                 }
             },
             "group": {
@@ -179,7 +179,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                 }
             },
@@ -208,7 +208,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                     "NSIS_COPYRIGHT_INFO": "Copyright (c) CEA-Codra 2019-2022",
                     "NSIS_HELP_LINK": "https://cdl.readthedocs.io/en/latest/",
@@ -241,8 +241,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
-                    "PYTHONPATH": "${env:PYTHONPATH_CDL}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHONPATH": "${env:CDL_PYTHONPATH}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1",
                 }
@@ -272,7 +272,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                 }
             },
@@ -309,7 +309,7 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "PYTHON": "${env:PYTHON_CDL_DEV}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                 }
             },

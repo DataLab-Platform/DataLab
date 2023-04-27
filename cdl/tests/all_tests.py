@@ -48,7 +48,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     for path in TST_PATH:
         print(f"    {path}")
     print("  Environment:")
-    for vname in ("DATA_CDL", "PYTHONPATH", "DEBUG"):
+    for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
         print(f"    {vname}={os.environ.get(vname, '')}")
     print("")
     print("Please wait while test scripts are executed (a few minutes).")

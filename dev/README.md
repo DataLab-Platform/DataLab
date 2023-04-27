@@ -21,7 +21,7 @@ DataLab test data are located in different folders, depending on their nature or
 
 Required data for unit tests are located in "cdl\data\tests" (public data).
 
-A second folder %DATA_CDL% (optional) may be defined for additional tests which are
+A second folder %CDL_DATA% (optional) may be defined for additional tests which are
 still under development (or for confidential data).
 
 Specific environment variables
@@ -43,13 +43,11 @@ Visual Studio Code configuration used in `launch.json` and `tasks.json`
 
     @REM Development PYTHONPATH (needed if new required features have been added in
     @REM development version of dependencies like guidata and guiqwt, for example)
-    set PYTHONPATH_CDL=C:\dev\libre\guidata;C:\dev\libre\guiqwt
+    set CDL_PYTHONPATH=C:\dev\libre\guidata;C:\dev\libre\guiqwt
     @REM Development environment
-    set PYTHON_CDL_DEV=C:\C2OIQ-DevCDL\python-3.8.10.amd64\python.exe
+    set CDL_PYTHONEXE=C:\C2OIQ-DevCDL\python-3.8.10.amd64\python.exe
     @REM Folder containing additional working test data
-    set DATA_CDL=C:\Dev\Projets\CDL_data
-    @REM Release environment
-    set PYTHON_CDL_RLS=C:\C2OIQ\python-3.8.10.amd64\python.exe
+    set CDL_DATA=C:\Dev\Projets\CDL_data
 
 Other requirements
 ------------------

@@ -68,7 +68,7 @@ To execute all DataLab unit tests, simply run::
     Test data path:
         C:\Dev\Projets\DataLab\cdl\data\tests
     Environment:
-        DATA_CDL=C:\Dev\Projets\CDL_data\
+        CDL_DATA=C:\Dev\Projets\CDL_data\
         PYTHONPATH=.
         DEBUG=
 

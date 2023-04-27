@@ -228,8 +228,8 @@ New general purpose features:
   * New integrated log file viewer
   * New warning dialog box at startup suggesting to view log files when logs were
   generated during last session
-  * Logging segmentation faults in ".CDL_faulthandler.log"
-  * Logging Python exceptions in ".CDL_traceback.log"
+  * Logging segmentation faults in ".DataLab_faulthandler.log"
+  * Logging Python exceptions in ".DataLabL_traceback.log"
 * Signal/Image metadata:
   * New copy/paste feature: update object metadata from another one
   * New import/export feature: import-export object metadata (JSON text file) using the

@@ -12,7 +12,7 @@
     },
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
-    "python.defaultInterpreterPath": "${env:PYTHON_CDL_DEV}",
+    "python.defaultInterpreterPath": "${env:CDL_PYTHONEXE}",
     "editor.formatOnSave": true,
     "python.sortImports.args": [
         "--profile",
