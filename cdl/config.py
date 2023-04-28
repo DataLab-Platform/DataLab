@@ -85,6 +85,8 @@ class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
 
     enable = conf.Option()
     max_line_count = conf.Option()
+    external_editor_path = conf.Option()
+    external_editor_args = conf.Option()
 
 
 class IOSection(conf.Section, metaclass=conf.SectionMeta):
@@ -152,6 +154,8 @@ def initialize():
     Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
     Conf.main.traceback_log_path.set(f".{APP_NAME}_traceback.log")
     Conf.main.faulthandler_log_path.set(f".{APP_NAME}_faulthandler.log")
+    Conf.console.external_editor_path.set("code")
+    Conf.console.external_editor_args.set("-g {path}:{line_number}")
 
 
 def reset():

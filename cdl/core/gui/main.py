@@ -16,6 +16,8 @@ import locale
 import os
 import os.path as osp
 import platform
+import re
+import subprocess
 import sys
 import time
 import webbrowser
@@ -650,11 +652,23 @@ class CDLMainWindow(QW.QMainWindow):
         debug = os.environ.get("DEBUG") == "1"
         self.console = DockableConsole(self, namespace=ns, message=msg, debug=debug)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
+        self.console.go_to_error.connect(self.__go_to_error)
         console_dock = self.__add_dockwidget(self.console, _("Console"))
         console_dock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
+
+    def __go_to_error(self, text):
+        """Go to error"""
+        pattern = r'File "(.+)", line (\d+),'
+        match = re.search(pattern, text)
+        if match:
+            path = match.group(1)
+            line_number = match.group(2)
+            fdict = {"path": path, "line_number": line_number}
+            args = Conf.console.external_editor_args.get().format(**fdict).split(" ")
+            subprocess.run([Conf.console.external_editor_path.get()] + args, shell=True)
 
     def __add_macro_panel(self):
         """Add macro panel"""

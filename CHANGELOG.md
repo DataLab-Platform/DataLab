@@ -51,6 +51,8 @@ New features:
     executing one of the following operations:
     * Rotation (arbitrary angle, +90°, -90°)
     * Symetry (vertical/horizontal)
+* Console: added configurable external editor (default: VSCode) to follow the
+  traceback links to the source code
 
 ## CodraFT Version 2.2.0 ##
 
