@@ -4,10 +4,10 @@
 # (see cdl/__init__.py for details)
 
 """
-DataLab, the Codra Filtering Tool
-Simple signal and image processing application based on guiqwt and guidata
+DataLab
+=======
 
-Starter
+Starter script for DataLab.
 """
 
 import sys

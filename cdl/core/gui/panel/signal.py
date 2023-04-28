@@ -63,4 +63,5 @@ class SignalPanel(BaseDataPanel):
         )
         if signal is None:
             return None
-        return self.add_object(signal)
+        self.add_object(signal)
+        return signal

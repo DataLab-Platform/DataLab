@@ -88,7 +88,7 @@ class ObjectGroup:
 
     def __getitem__(self, index: int) -> SignalParam | ImageParam:
         """Return object at index"""
-        return self.model.get_object(self._objects[index])
+        return self.model[self._objects[index]]
 
     def __contains__(self, obj: SignalParam | ImageParam) -> bool:
         """Return True if obj is in group"""
@@ -145,6 +145,10 @@ class ObjectModel:
     def __getitem__(self, uuid: str) -> SignalParam | ImageParam:
         """Return object with uuid"""
         return self._objects[uuid]
+
+    def __iter__(self) -> Iterator[SignalParam | ImageParam]:
+        """Iterate over objects"""
+        return iter(self._objects.values())
 
     def __repr__(self) -> str:
         """Return object representation"""

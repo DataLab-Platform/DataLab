@@ -191,7 +191,7 @@ class CDLMainWindow(QW.QMainWindow):
         """Return the current BaseDataPanel,
         or the signal panel if macro panel is active"""
         panel = self.tabwidget.currentWidget()
-        if not isinstance(panel, BaseDataPanel):
+        if not isinstance(panel, base.BaseDataPanel):
             panel = self.signalpanel
         return panel
 

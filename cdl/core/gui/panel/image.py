@@ -88,7 +88,8 @@ class ImagePanel(BaseDataPanel):
         )
         if image is None:
             return None
-        return self.add_object(image)
+        self.add_object(image)
+        return image
 
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""

@@ -252,9 +252,10 @@ class GetObjectDialog(QW.QDialog):
         bbox.accepted.connect(self.accept)
         bbox.rejected.connect(self.reject)
         self.ok_btn = bbox.button(QW.QDialogButtonBox.Ok)
-        self.ok_btn.setEnabled(False)
         vlayout.addSpacing(10)
         vlayout.addWidget(bbox)
+        # Update OK button state:
+        self.current_object_changed()
 
     def get_object(self) -> SignalParam | ImageParam:
         """Return current object"""
@@ -368,15 +369,18 @@ class ObjectView(SimpleObjectTree):
     def select_nums(self, obj_nums: List[int], group_num: int = 0) -> None:
         """Select multiple objects by their numbers"""
         uuids = [self.objmodel.get_groups()[group_num][num].uuid for num in obj_nums]
+        self.clearSelection()
         for uuid in uuids:
             self.set_current_item_id(uuid, extend=True)
 
     def select_objects(self, objs: List[SignalParam | ImageParam]) -> None:
         """Select multiple objects"""
+        self.clearSelection()
         for obj in objs:
             self.set_current_item_id(obj.uuid, extend=True)
 
     def select_groups(self, groups: List[ObjectGroup]) -> None:
         """Select multiple groups"""
+        self.clearSelection()
         for group in groups:
             self.set_current_item_id(group.uuid, extend=True)

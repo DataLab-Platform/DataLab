@@ -7,6 +7,8 @@
 DataLab unit tests
 """
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 from contextlib import contextmanager
 from typing import Generator
 

@@ -7,12 +7,14 @@
 DataLab remote controlling utilities
 """
 
+from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+
 import abc
 import functools
 import importlib
 import time
 from io import BytesIO
-from typing import List
+from typing import TYPE_CHECKING, List
 from xmlrpc.client import Binary, ServerProxy
 from xmlrpc.server import SimpleXMLRPCServer
 
@@ -23,9 +25,12 @@ from qtpy import QtCore as QC
 from cdl import __version__
 from cdl.config import Conf, initialize
 from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
-from cdl.core.model.image import create_image
+from cdl.core.model.image import ImageParam, create_image
 from cdl.core.model.signal import SignalParam, create_signal
 from cdl.env import execenv
+
+if TYPE_CHECKING:
+    from cdl.core.gui.main import CDLMainWindow
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
@@ -133,7 +138,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
     SIG_IMPORT_H5 = QC.Signal(str, bool)
     SIG_CALC = QC.Signal(str, object)
 
-    def __init__(self, win):
+    def __init__(self, win: CDLMainWindow) -> None:
         QC.QThread.__init__(self)
         BaseRPCServer.__init__(self)
         self.is_ready = True
@@ -150,11 +155,11 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
         self.SIG_CALC.connect(win.calc)
 
-    def notify_port(self, port: int):
+    def notify_port(self, port: int) -> None:
         """Notify automatically attributed port"""
         self.SIG_SERVER_PORT.emit(port)
 
-    def register_functions(self, server: SimpleXMLRPCServer):
+    def register_functions(self, server: SimpleXMLRPCServer) -> None:
         """Register functions"""
         server.register_function(self.close_application)
         server.register_function(self.switch_to_signal_panel)
@@ -171,35 +176,35 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         server.register_function(self.get_object_uuids)
         server.register_function(self.get_object_from_uuid)
 
-    def run(self):
+    def run(self) -> None:
         """Thread execution method"""
         self.serve()
 
-    def cdl_is_ready(self):
+    def cdl_is_ready(self) -> None:
         """Called when DataLab is ready to process new requests"""
         self.is_ready = True
 
-    def close_application(self):
+    def close_application(self) -> None:
         """Close DataLab application"""
         self.SIG_CLOSE_APP.emit()
 
     @remote_call
-    def switch_to_signal_panel(self):
+    def switch_to_signal_panel(self) -> None:
         """Switch to signal panel"""
         self.SIG_SWITCH_TO_SIGNAL_PANEL.emit()
 
     @remote_call
-    def switch_to_image_panel(self):
+    def switch_to_image_panel(self) -> None:
         """Switch to image panel"""
         self.SIG_SWITCH_TO_IMAGE_PANEL.emit()
 
     @remote_call
-    def reset_all(self):
+    def reset_all(self) -> None:
         """Reset all application data"""
         self.SIG_RESET_ALL.emit()
 
     @remote_call
-    def save_to_h5_file(self, filename: str):
+    def save_to_h5_file(self, filename: str) -> None:
         """Save to a DataLab HDF5 file"""
         self.SIG_SAVE_TO_H5.emit(filename)
 
@@ -209,12 +214,12 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         h5files: List[str] = None,
         import_all: bool = None,
         reset_all: bool = None,
-    ):
+    ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
-    def import_h5_file(self, filename: str, reset_all: bool = None):
+    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
         """Open DataLab HDF5 browser to Import HDF5 file"""
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
@@ -233,7 +238,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         yunit: str = None,
         xlabel: str = None,
         ylabel: str = None,
-    ):
+    ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab"""
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
@@ -256,7 +261,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         xlabel: str = None,
         ylabel: str = None,
         zlabel: str = None,
-    ):  # pylint: disable=too-many-arguments
+    ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab"""
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
@@ -270,7 +275,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         return True
 
     @remote_call
-    def calc(self, name: str, param_data: List[str] = None):
+    def calc(self, name: str, param_data: List[str] = None) -> bool:
         """Call compute function `name` in current panel's processor"""
         if param_data is None:
             param = None
@@ -329,11 +334,11 @@ def get_cdl_xmlrpc_port():
 class RemoteClient:
     """Object representing a proxy/client to DataLab XML-RPC server"""
 
-    def __init__(self):
-        self.port = None
-        self.serverproxy = None
+    def __init__(self) -> None:
+        self.port: str = None
+        self.serverproxy: ServerProxy = None
 
-    def connect(self, port=None):
+    def connect(self, port: str = None) -> None:
         """Connect to DataLab XML-RPC server"""
         if port is None:
             port = execenv.port
@@ -346,7 +351,7 @@ class RemoteClient:
         except ConnectionRefusedError as exc:
             raise CDLConnectionError("DataLab is currently not running") from exc
 
-    def try_and_connect(self, port=None, timeout=5):
+    def try_and_connect(self, port: str = None, timeout: int = 5) -> None:
         """Try (10 times over timeout in s.)
         and connect to DataLab XML-RPC server"""
         execenv.print("Connecting to DataLab XML-RPC server...", end="")
@@ -363,27 +368,27 @@ class RemoteClient:
 
     # === Following methods should match the register functions in XML-RPC server
 
-    def get_version(self):
+    def get_version(self) -> str:
         """Return DataLab version"""
         return self.serverproxy.get_version()
 
-    def close_application(self):
+    def close_application(self) -> None:
         """Close DataLab application"""
         self.serverproxy.close_application()
 
-    def switch_to_signal_panel(self):
+    def switch_to_signal_panel(self) -> None:
         """Switch to signal panel"""
         self.serverproxy.switch_to_signal_panel()
 
-    def switch_to_image_panel(self):
+    def switch_to_image_panel(self) -> None:
         """Switch to image panel"""
         self.serverproxy.switch_to_image_panel()
 
-    def reset_all(self):
+    def reset_all(self) -> None:
         """Reset all application data"""
         self.serverproxy.reset_all()
 
-    def save_to_h5_file(self, filename: str):
+    def save_to_h5_file(self, filename: str) -> None:
         """Save to a DataLab HDF5 file"""
         self.serverproxy.save_to_h5_file(filename)
 
@@ -392,11 +397,11 @@ class RemoteClient:
         h5files: List[str] = None,
         import_all: bool = None,
         reset_all: bool = None,
-    ):
+    ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.serverproxy.open_h5_files(h5files, import_all, reset_all)
 
-    def import_h5_file(self, filename: str, reset_all: bool = None):
+    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
         """Open DataLab HDF5 browser to Import HDF5 file"""
         self.serverproxy.import_h5_file(filename, reset_all)
 
@@ -436,14 +441,14 @@ class RemoteClient:
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
-    def calc(self, name: str, param: gdt.DataSet = None):
+    def calc(self, name: str, param: gdt.DataSet = None) -> gdt.DataSet:
         """Call compute function `name` in current panel's processor"""
         p = self.serverproxy
         if param is None:
             return p.calc(name)
         return p.calc(name, dataset_to_json(param))
 
-    def add_object(self, obj):
+    def add_object(self, obj: SignalParam | ImageParam):
         """Add object to DataLab"""
         p = self.serverproxy
         if isinstance(obj, SignalParam):
@@ -476,7 +481,7 @@ class RemoteClient:
         """Get object (signal/image) list for current panel"""
         return self.serverproxy.get_object_uuids()
 
-    def get_object_from_uuid(self, oid: str):
+    def get_object_from_uuid(self, oid: str) -> SignalParam | ImageParam:
         """Get object (signal/image) from its UUID"""
         param_data = self.serverproxy.get_object_from_uuid(oid)
         return json_to_dataset(param_data)

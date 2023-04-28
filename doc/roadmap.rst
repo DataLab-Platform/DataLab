@@ -5,7 +5,7 @@ Future milestones
 -----------------
 
 DataLab 2.0
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 * Run computations in a separate process:
 
@@ -24,7 +24,7 @@ DataLab 2.0
 
 
 Other ideas for future releases
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Add support for multichannel timeseries
 
@@ -34,7 +34,7 @@ Past milestones
 ---------------
 
 DataLab 1.0
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^
 
 * Optimize image displaying performance
 
