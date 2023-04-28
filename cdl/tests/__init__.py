@@ -9,6 +9,7 @@ DataLab unit tests
 
 from __future__ import annotations  # To be removed when dropping Python <=3.9 support
 
+import os
 from contextlib import contextmanager
 from typing import Generator
 
@@ -49,8 +50,10 @@ def cdl_app_context(
             yield win
         finally:
             if save:
+                path = tests.get_output_data_path("h5")
                 try:
-                    win.save_to_h5_file(tests.get_output_data_path("h5"))
+                    os.remove(path)
+                    win.save_to_h5_file(path)
                 except PermissionError:
                     pass
 
