@@ -19,12 +19,12 @@ from cdl.env import execenv
 
 
 class MemoryStatus(QW.QWidget):
-    """
-    Memory status widget
+    """Memory status widget.
 
-    :param int threshold: available memory thresold (MB)
-    :param int delay: update interval (s)
-    :param QWidget parent: parent widget
+    Args:
+        threshold (int): available memory thresold (MB)
+        delay (int): update interval (s)
+        parent (QWidget): parent widget
     """
 
     SIG_MEMORY_ALARM = QC.Signal(bool)

@@ -288,7 +288,11 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
 
-        Returns a masked array.
+        Args:
+            roi_index (int): ROI index
+
+        Returns:
+            numpy.ndarray: masked data
         """
         if self.roi is None or roi_index is None:
             return self.data
@@ -296,7 +300,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         return roidataitem.get_masked_view(self.data, self.maskdata)
 
     def copy_data_from(self, other, dtype=None):
-        """Copy data from other dataset instance"""
+        """Copy data from other dataset instance.
+
+        Args:
+            other (ObjectItf): other dataset instance
+            dtype (numpy.dtype): data type
+        """
         self.x0 = other.x0
         self.y0 = other.y0
         self.dx = other.dx
@@ -306,7 +315,11 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         self.dicom_template = other.dicom_template
 
     def set_data_type(self, dtype):
-        """Change data type"""
+        """Change data type.
+
+        Args:
+            dtype (numpy.dtype): data type
+        """
         self.data = np.array(self.data, dtype=dtype)
 
     def __viewable_data(self):
@@ -340,7 +353,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         item.imageparam.update_image(item)
 
     def make_item(self, update_from: MaskedImageItem = None):
-        """Make plot item from data"""
+        """Make plot item from data.
+
+        Args:
+            update_from (ObjectItf): update
+
+        Returns:
+            PlotItem: plot item
+        """
         data = self.__viewable_data()
         item = make.maskedimage(
             data,
@@ -359,7 +379,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         return item
 
     def update_item(self, item: MaskedImageItem, data_changed: bool = True) -> None:
-        """Update plot item from data"""
+        """Update plot item from data.
+
+        Args:
+            item (PlotItem): plot item
+            data_changed (bool): if True, data has changed
+        """
         if data_changed:
             item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
@@ -368,7 +393,12 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         item.plot().update_colormap_axis(item)
 
     def get_roi_param(self, title, *defaults):
-        """Return ROI parameters dataset"""
+        """Return ROI parameters dataset.
+
+        Args:
+            title (str): title
+            *defaults: default values
+        """
         roidataitem = RoiDataItem(defaults)
 
         xd0, yd0, xd1, yd1 = defaults
@@ -457,7 +487,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
     @staticmethod
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
-        """Convert list of dataset parameters to ROI data"""
+        """Convert ROI dataset group to ROI array data.
+
+        Args:
+            params (DataSetGroup): ROI dataset group
+
+        Returns:
+            numpy.ndarray: ROI array data
+        """
         roilist = []
         for roiparam in params.datasets:
             roilist.append(roiparam.get_coords())
@@ -471,7 +508,14 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         return roidataitem.make_roi_item(None, fmt, lbl, editable)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes"""
+        """Convert ROI coordinates to indexes.
+
+        Args:
+            coords (list): coordinates
+
+        Returns:
+            numpy.ndarray: indexes
+        """
         indexes = np.array(coords)
         if indexes.size > 0:
             indexes[:, ::2] -= self.x0 + 0.5 * self.dx
@@ -481,7 +525,16 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         return np.array(indexes, int)
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True) -> Iterator:
-        """Iterate over plot items representing Regions of Interest"""
+        """Make plot item representing a Region of Interest.
+
+        Args:
+            fmt (str): format string
+            lbl (bool): if True, add label
+            editable (bool): if True, ROI is editable
+
+        Yields:
+            PlotItem: plot item
+        """
         if self.roi is not None:
             roicoords = np.array(self.roi, float)
             roicoords[:, ::2] *= self.dx
@@ -524,11 +577,15 @@ def create_image(
 ) -> ImageParam:
     """Create a new Image object
 
-    :param str title: image title
-    :param numpy.ndarray data: image data
-    :param dict metadata: image metadata
-    :param tuple units: X, Y, Z units (tuple of strings)
-    :param tuple labels: X, Y, Z labels (tuple of strings)
+    Args:
+        title (str): image title
+        data (numpy.ndarray): image data
+        metadata (dict): image metadata
+        units (tuple): X, Y, Z units (tuple of strings)
+        labels (tuple): X, Y, Z labels (tuple of strings)
+
+    Returns:
+        ImageParam: image object
     """
     assert isinstance(title, str)
     assert data is None or isinstance(data, np.ndarray)
@@ -605,7 +662,16 @@ def new_image_param(
 ) -> ImageParamNew:
     """Create a new Image dataset instance.
 
-    :param str title: dataset title (default: None, uses default title)"""
+    Args:
+        title (str): dataset title (default: None, uses default title)
+        itype (ImageTypes): image type (default: None, uses default type)
+        height (int): image height (default: None, uses default height)
+        width (int): image width (default: None, uses default width)
+        dtype (ImageDatatypes): image data type (default: None, uses default data type)
+
+    Returns:
+        ImageParamNew: new image dataset instance
+    """
     if title is None:
         title = _("Untitled image")
     param = ImageParamNew(title=title, icon=get_icon("new_image.svg"))
@@ -646,10 +712,14 @@ def create_image_from_param(
 ) -> ImageParam:
     """Create a new Image object from dialog box.
 
-    :param ImageParamNew param: new image parameters
-    :param guidata.dataset.datatypes.DataSet addparam: additional parameters
-    :param bool edit: Open a dialog box to edit parameters (default: False)
-    :param QWidget parent: parent widget
+    Args:
+        newparam (ImageParamNew): new image parameters
+        addparam (DataSet): additional parameters
+        edit (bool): Open a dialog box to edit parameters (default: False)
+        parent (QWidget): parent widget
+
+    Returns:
+        ImageParam: new image object
     """
     global IMG_NB  # pylint: disable=global-statement
     if newparam is None:

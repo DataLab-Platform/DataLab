@@ -21,7 +21,7 @@ import subprocess
 import sys
 import time
 import webbrowser
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional, Tuple, Union
 
 import numpy as np
 import scipy.ndimage as spi
@@ -191,36 +191,63 @@ class CDLMainWindow(QW.QMainWindow):
 
     def __get_current_basedatapanel(self) -> BaseDataPanel:
         """Return the current BaseDataPanel,
-        or the signal panel if macro panel is active"""
+        or the signal panel if macro panel is active
+
+        Returns:
+            BaseDataPanel: current panel
+        """
         panel = self.tabwidget.currentWidget()
         if not isinstance(panel, base.BaseDataPanel):
             panel = self.signalpanel
         return panel
 
     def get_object_titles(self) -> List[str]:
-        """Get object (signal/image) list for current panel"""
+        """Get object (signal/image) list for current panel
+
+        Returns:
+            List[str]: list of object titles
+        """
         return self.__get_current_basedatapanel().objmodel.get_object_titles()
 
     def get_object_uuids(self) -> List[str]:
-        """Get object (signal/image) list for current panel"""
+        """Get object (signal/image) list for current panel
+
+        Returns:
+            List[str]: list of object uuids
+        """
         return self.__get_current_basedatapanel().objmodel.get_object_ids()
 
-    def get_object_from_uuid(self, oid: str):
-        """Get object (signal/image) from uuid"""
+    def get_object_from_uuid(self, oid: str) -> Union[SignalParam, ImageParam]:
+        """Get object (signal/image) from uuid
+
+        Args:
+            oid (str): object uuid
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+        """
         return self.__get_current_basedatapanel().objmodel[oid]
 
     # ------Misc.
     @property
-    def panels(self):
-        """Return the tuple of implemented panels (signal, image)"""
+    def panels(self) -> Tuple[SignalPanel, ImagePanel, MacroPanel]:
+        """Return the tuple of implemented panels (signal, image)
+
+        Returns:
+            Tuple[SignalPanel, ImagePanel, MacroPanel]: tuple of panels
+        """
         return (self.signalpanel, self.imagepanel, self.macropanel)
 
-    def __set_low_memory_state(self, state):
+    def __set_low_memory_state(self, state: bool) -> None:
         """Set memory warning state"""
         self.__memory_warning = state
 
-    def confirm_memory_state(self):  # pragma: no cover
-        """Check memory warning state and eventually show a warning dialog"""
+    def confirm_memory_state(self) -> bool:  # pragma: no cover
+        """Check memory warning state and eventually show a warning dialog
+
+        Returns:
+            bool: True if memory state is ok
+        """
         if self.__memory_warning:
             threshold = Conf.main.available_memory_threshold.get()
             answer = QW.QMessageBox.critical(
@@ -233,7 +260,7 @@ class CDLMainWindow(QW.QMainWindow):
             return answer == QW.QMessageBox.Yes
         return True
 
-    def check_stable_release(self):  # pragma: no cover
+    def check_stable_release(self) -> None:  # pragma: no cover
         """Check if this is a stable release"""
         if __version__.replace(".", "").isdigit():
             # This is a stable release
@@ -266,7 +293,7 @@ class CDLMainWindow(QW.QMainWindow):
         ]
         QW.QMessageBox.warning(self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok)
 
-    def check_dependencies(self):  # pragma: no cover
+    def check_dependencies(self) -> None:  # pragma: no cover
         """Check dependencies"""
         if IS_FROZEN or Conf.main.ignore_dependency_check.get(False):
             # No need to check dependencies if DataLab has been frozen
@@ -317,7 +344,7 @@ class CDLMainWindow(QW.QMainWindow):
         )
         Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
 
-    def check_for_previous_crash(self):  # pragma: no cover
+    def check_for_previous_crash(self) -> None:  # pragma: no cover
         """Check for previous crash"""
         if execenv.unattended:
             self.show_log_viewer()
@@ -336,13 +363,13 @@ class CDLMainWindow(QW.QMainWindow):
             if choice == QW.QMessageBox.StandardButton.Yes:
                 self.show_log_viewer()
 
-    def take_screenshot(self, name):  # pragma: no cover
+    def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""
         self.memorystatus.set_demo_mode(True)
         qth.grab_save_window(self, f"{name}")
         self.memorystatus.set_demo_mode(False)
 
-    def take_menu_screenshots(self):  # pragma: no cover
+    def take_menu_screenshots(self) -> None:  # pragma: no cover
         """Take menu screenshots"""
         for panel in self.panels:
             if isinstance(panel, base.BaseDataPanel):
@@ -362,7 +389,7 @@ class CDLMainWindow(QW.QMainWindow):
                     menu.close()
 
     # ------GUI setup
-    def __restore_pos_and_size(self):
+    def __restore_pos_and_size(self) -> None:
         """Restore main window position and size from configuration"""
         pos = Conf.main.window_position.get(None)
         if pos is not None:
@@ -382,7 +409,7 @@ class CDLMainWindow(QW.QMainWindow):
                 posy = min(max(posy, 0), sgeo.height() - height)
                 self.move(QC.QPoint(posx, posy))
 
-    def __save_pos_and_size(self):
+    def __save_pos_and_size(self) -> None:
         """Save main window position and size to configuration"""
         is_maximized = self.windowState() == QC.Qt.WindowMaximized
         Conf.main.window_maximized.set(is_maximized)
@@ -392,8 +419,12 @@ class CDLMainWindow(QW.QMainWindow):
             pos = self.pos()
             Conf.main.window_position.set((pos.x(), pos.y()))
 
-    def setup(self, console):
-        """Setup main window"""
+    def setup(self, console: bool = False) -> None:
+        """Setup main window
+
+        Args:
+            console: True to setup console
+        """
         self.__register_plugins()
         self.__configure_statusbar()
         self.__setup_commmon_actions()
@@ -407,7 +438,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.__add_macro_panel()
         self.__configure_panels()
 
-    def __register_plugins(self):
+    def __register_plugins(self) -> None:
         """Register plugins"""
         with qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
@@ -420,7 +451,7 @@ class CDLMainWindow(QW.QMainWindow):
                 # Registering plugin
                 plugin.register(self)
 
-    def __create_plugins_actions(self):
+    def __create_plugins_actions(self) -> None:
         """Create plugins actions"""
         with self.signalpanel.acthandler.new_category(ActionCategory.PLUGINS):
             with self.imagepanel.acthandler.new_category(ActionCategory.PLUGINS):
@@ -429,14 +460,14 @@ class CDLMainWindow(QW.QMainWindow):
                         plugin.create_actions()
 
     @staticmethod
-    def __unregister_plugins():
+    def __unregister_plugins() -> None:
         """Unregister plugins"""
         for plugin in PluginRegistry.get_plugins():
             # Unregistering plugin
             with qth.try_or_log_error(f"Unregistering plugin {plugin.info.name}"):
                 plugin.unregister()
 
-    def __configure_statusbar(self):
+    def __configure_statusbar(self) -> None:
         """Configure status bar"""
         self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
         threshold = Conf.main.available_memory_threshold.get(500)
@@ -444,7 +475,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
 
-    def __setup_commmon_actions(self):
+    def __setup_commmon_actions(self) -> None:
         """Setup common actions"""
         self.openh5_action = create_action(
             self,
@@ -487,7 +518,7 @@ class CDLMainWindow(QW.QMainWindow):
             triggered=self.close,
         )
 
-    def __add_signal_panel(self):
+    def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
         curveplot_toolbar = self.addToolBar(_("Curve Plotting Toolbar"))
@@ -500,7 +531,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return curvewidget
 
-    def __add_image_panel(self):
+    def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
         imagevis_toolbar = self.addToolBar(_("Image Visualization Toolbar"))
@@ -521,7 +552,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return imagewidget
 
-    def __add_signal_image_panels(self):
+    def __add_signal_image_panels(self) -> None:
         """Add signal and image panels"""
         self.tabwidget = QW.QTabWidget()
         cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Curve panel"))
@@ -534,14 +565,14 @@ class CDLMainWindow(QW.QMainWindow):
         for panel in (self.signalpanel, self.imagepanel):
             panel.setup_panel()
 
-    def __setup_central_widget(self):
+    def __setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
         self.tabwidget.setMaximumWidth(500)
         self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
         self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
         self.setCentralWidget(self.tabwidget)
 
-    def __add_menus(self):
+    def __add_menus(self) -> None:
         """Adding menus"""
         self.file_menu = self.menuBar().addMenu(_("File"))
         self.file_menu.aboutToShow.connect(self.__update_file_menu)
@@ -630,7 +661,7 @@ class CDLMainWindow(QW.QMainWindow):
             ),
         )
 
-    def __setup_console(self):
+    def __setup_console(self) -> None:
         """Add an internal console"""
         self.app_proxy = AppProxy(self)
         ns = {
@@ -659,7 +690,7 @@ class CDLMainWindow(QW.QMainWindow):
             lambda txt: self.repopulate_panel_trees()
         )
 
-    def __go_to_error(self, text):
+    def __go_to_error(self, text: str) -> None:
         """Go to error"""
         pattern = r'File "(.+)", line (\d+),'
         match = re.search(pattern, text)
@@ -670,14 +701,14 @@ class CDLMainWindow(QW.QMainWindow):
             args = Conf.console.external_editor_args.get().format(**fdict).split(" ")
             subprocess.run([Conf.console.external_editor_path.get()] + args, shell=True)
 
-    def __add_macro_panel(self):
+    def __add_macro_panel(self) -> None:
         """Add macro panel"""
         self.macropanel = macro.MacroPanel()
         macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
         self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
         self.signal_image_docks[0].raise_()
 
-    def __configure_panels(self):
+    def __configure_panels(self) -> None:
         """Configure panels"""
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
@@ -690,18 +721,26 @@ class CDLMainWindow(QW.QMainWindow):
 
     # ------Remote control
     @remote_controlled
-    def switch_to_signal_panel(self):
+    def switch_to_signal_panel(self) -> None:
         """Switch to signal panel"""
         self.tabwidget.setCurrentWidget(self.signalpanel)
 
     @remote_controlled
-    def switch_to_image_panel(self):
+    def switch_to_image_panel(self) -> None:
         """Switch to image panel"""
         self.tabwidget.setCurrentWidget(self.imagepanel)
 
     @remote_controlled
-    def calc(self, name: str, param: gdt.DataSet = None):
-        """Call compute function `name` in current panel's processor"""
+    def calc(self, name: str, param: gdt.DataSet = None) -> None:
+        """Call compute function `name` in current panel's processor
+
+        Args:
+            name (str): function name
+            param (DataSet): optional parameters (default: None)
+
+        Raises:
+            ValueError: unknown function
+        """
         panel = self.tabwidget.currentWidget()
         for funcname in (name, f"compute_{name}"):
             func = getattr(panel.processor, funcname, None)
@@ -715,29 +754,29 @@ class CDLMainWindow(QW.QMainWindow):
             func(param)
 
     # ------GUI refresh
-    def has_objects(self):
+    def has_objects(self) -> bool:
         """Return True if sig/ima panels have any object"""
         return sum([panel.object_number for panel in self.panels]) > 0
 
-    def set_modified(self, state=True):
+    def set_modified(self, state: bool = True) -> None:
         """Set mainwindow modified state"""
         state = state and self.has_objects()
         self.__is_modified = state
         self.setWindowTitle(APP_NAME + ("*" if state else ""))
 
-    def __add_dockwidget(self, child, title):
+    def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
         """Add QDockWidget and toggleViewAction"""
         dockwidget, location = child.create_dockwidget(title)
         self.addDockWidget(location, dockwidget)
         return dockwidget
 
-    def repopulate_panel_trees(self):
+    def repopulate_panel_trees(self) -> None:
         """Repopulate all panel trees"""
         for panel in self.panels:
             if isinstance(panel, base.BaseDataPanel):
                 panel.objview.populate_tree()
 
-    def __update_actions(self):
+    def __update_actions(self) -> None:
         """Update selection dependent actions"""
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
@@ -748,13 +787,13 @@ class CDLMainWindow(QW.QMainWindow):
             plugin_actions = panel.get_category_actions(ActionCategory.PLUGINS)
             self.plugins_menu.setEnabled(len(plugin_actions) > 0)
 
-    def __tab_index_changed(self, index):
+    def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
         dock = self.signal_image_docks[index]
         dock.raise_()
         self.__update_actions()
 
-    def __update_generic_menu(self, menu=None):
+    def __update_generic_menu(self, menu: Optional[QW.QMenu] = None) -> None:
         """Update menu before showing up -- Generic method"""
         if menu is None:
             menu = self.sender()
@@ -772,7 +811,7 @@ class CDLMainWindow(QW.QMainWindow):
         actions = panel.get_category_actions(category)
         add_actions(menu, actions)
 
-    def __update_file_menu(self):
+    def __update_file_menu(self) -> None:
         """Update file menu before showing up"""
         self.saveh5_action.setEnabled(self.has_objects())
         self.__update_generic_menu(self.file_menu)
@@ -788,20 +827,20 @@ class CDLMainWindow(QW.QMainWindow):
             ],
         )
 
-    def __update_view_menu(self):
+    def __update_view_menu(self) -> None:
         """Update view menu before showing up"""
         self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
 
     # ------Common features
     @remote_controlled
-    def reset_all(self):
+    def reset_all(self) -> None:
         """Reset all application data"""
         for panel in self.panels:
             panel.remove_all_objects()
 
     @staticmethod
-    def __check_h5file(filename, operation: str):
+    def __check_h5file(filename: str, operation: str) -> str:
         """Check HDF5 filename"""
         filename = osp.abspath(osp.normpath(filename))
         bname = osp.basename(filename)
@@ -813,8 +852,15 @@ class CDLMainWindow(QW.QMainWindow):
         return filename
 
     @remote_controlled
-    def save_to_h5_file(self, filename=None):
-        """Save to a DataLab HDF5 file"""
+    def save_to_h5_file(self, filename=None) -> None:
+        """Save to a DataLab HDF5 file
+
+        Args:
+            filename (str): HDF5 filename. If None, a file dialog is opened.
+
+        Raises:
+            IOError: if filename is invalid or file cannot be saved.
+        """
         if filename is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
@@ -834,11 +880,15 @@ class CDLMainWindow(QW.QMainWindow):
         import_all: bool = None,
         reset_all: bool = None,
     ) -> None:
-        """Open a DataLab HDF5 file or import from any other HDF5 file
+        """Open a DataLab HDF5 file or import from any other HDF5 file.
 
-        :param h5files: HDF5 filenames (optionally with dataset name, separated by ":")
-        :param import_all: Import all HDF5 file contents
-        :param reset_all: Delete all DataLab signals/images before importing data
+        Args:
+            h5files: HDF5 filenames (optionally with dataset name, separated by ":")
+            import_all (bool): Import all datasets from HDF5 files
+            reset_all (bool): Reset all application data before importing
+
+        Returns:
+            None
         """
         if not self.confirm_memory_state():
             return
@@ -879,18 +929,30 @@ class CDLMainWindow(QW.QMainWindow):
 
     @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
-        """Open DataLab HDF5 browser to Import HDF5 file
+        """Import HDF5 file into DataLab
 
-        :param filename: HDF5 filename
-        :param reset_all: Delete all DataLab signals/images before importing data
+        Args:
+            filename (str): HDF5 filename (optionally with dataset name,
+            separated by ":")
+            reset_all (bool): Delete all DataLab signals/images before importing data
+
+        Returns:
+            None
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
             filename = self.__check_h5file(filename, "load")
             self.h5inputoutput.import_file(filename, False, reset_all)
 
     @remote_controlled
-    def add_object(self, obj, refresh=True):
-        """Add object - signal or image"""
+    def add_object(self, obj: Union[SignalParam, ImageParam]) -> None:
+        """Add object - signal or image
+
+        Args:
+            obj (SignalParam or ImageParam): object to add (signal or image)
+
+        Returns:
+            None
+        """
         if self.confirm_memory_state():
             if isinstance(obj, SignalParam):
                 self.signalpanel.add_object(obj)
@@ -901,12 +963,19 @@ class CDLMainWindow(QW.QMainWindow):
 
     @remote_controlled
     def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image)"""
+        """Open object from file in current panel (signal/image)
+
+        Args:
+            filename (str): HDF5 filename
+
+        Returns:
+            None
+        """
         panel = self.tabwidget.currentWidget()
         panel.open_object(filename)
 
     # ------?
-    def __about(self):  # pragma: no cover
+    def __about(self) -> None:  # pragma: no cover
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:
@@ -928,19 +997,19 @@ class CDLMainWindow(QW.QMainWindow):
             % (_("Developped by"), _("on")),
         )
 
-    def show_log_viewer(self):
+    def show_log_viewer(self) -> None:
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)
 
     @staticmethod
-    def test_segfault_error():
+    def test_segfault_error() -> None:
         """Generate errors (both fault and traceback)"""
         import ctypes  # pylint: disable=import-outside-toplevel
 
         ctypes.string_at(0)
         raise RuntimeError("!!! Testing RuntimeError !!!")
 
-    def show(self):
+    def show(self) -> None:
         """Reimplement QMainWindow method"""
         super().show()
         if self.__old_size is not None:

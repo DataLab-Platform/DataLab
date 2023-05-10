@@ -148,7 +148,12 @@ class ActionCategory(enum.Enum):
 
 
 class BaseActionHandler(metaclass=abc.ABCMeta):
-    """Object handling panel GUI interactions: actions, menus, ..."""
+    """Object handling panel GUI interactions: actions, menus, ...
+
+    Args:
+        panel: Panel to handle
+        toolbar: Toolbar to add actions to
+    """
 
     OBJECT_STR = ""  # e.g. "signal"
 
@@ -167,7 +172,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
-        """Context manager for creating a new menu"""
+        """Context manager for creating a new menu.
+
+        Args:
+            category: Action category
+
+        Yields:
+            None
+        """
         self.__category_in_progress = category
         try:
             yield
@@ -176,7 +188,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     @contextmanager
     def new_menu(self, title: str) -> Generator[None, None, None]:
-        """Context manager for creating a new menu"""
+        """Context manager for creating a new menu.
+
+        Args:
+            title: Menu title
+
+        Yields:
+            None
+        """
         menu = QW.QMenu(title)
         self.__submenu_in_progress = True
         try:
@@ -202,29 +221,34 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         toolbar_pos: int = None,
         toolbar_sep: bool = False,
     ):
-        """Create new action and add it to list of actions
+        """Create new action and add it to list of actions.
 
-        param title: action title
-        param position: add action to menu at this position
-        param separator: add separator before action in menu
-        (or after if pos is positive)
-        param triggered: triggered callback
-        param toggled: toggled callback
-        param shortcut: shortcut
-        param icon: icon
-        param tip: tooltip
-        param select_condition: condition to enable action
-        param context_menu_pos: add action to context menu at this position
-        param context_menu_sep: add separator before action in context menu
-        (or after if context_menu_pos is positive)
-        param toolbar_pos: add action to toolbar at this position
-        param toolbar_sep: add separator before action in toolbar
-        (or after if toolbar_pos is positive)
+        Args:
+            title (str): action title
+            position (int, optional): add action to menu at this position.
+                Defaults to None.
+            separator (bool, optional): add separator before action in menu
+                (or after if pos is positive). Defaults to False.
+            triggered (Callable, optional): triggered callback. Defaults to None.
+            toggled (Callable, optional): toggled callback. Defaults to None.
+            shortcut (QW.QShortcut, optional): shortcut. Defaults to None.
+            icon (QG.QIcon, optional): icon. Defaults to None.
+            tip (str, optional): tooltip. Defaults to None.
+            select_condition (Callable, optional): condition to enable action.
+                Defaults to None. If None, action is enabled if at least one
+                object is selected.
+            context_menu_pos (int, optional): add action to context menu at this
+                position. Defaults to None.
+            context_menu_sep (bool, optional): add separator before action in
+                context menu (or after if context_menu_pos is positive).
+                Defaults to False.
+            toolbar_pos (int, optional): add action to toolbar at this position.
+                Defaults to None.
+            toolbar_sep (bool, optional): add separator before action in toolbar
+                (or after if toolbar_pos is positive). Defaults to False.
 
-        return: new action
-
-        If select_condition is None, action is enabled if at least one object
-        is selected.
+        Returns:
+            QW.QAction: new action
         """
         action = create_action(
             self.panel, title, triggered, toggled, shortcut, icon, tip
@@ -247,17 +271,18 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         category: ActionCategory = None,
         pos: int = None,
         sep: bool = False,
-    ):
-        """Add action to list of actions
+    ) -> None:
+        """Add action to list of actions.
 
-        param action: action to add
-        param category: action category
-        param pos: add action to menu at this position
-        param sep: add separator before action in menu
-        (or after if pos is positive)
-
-        If category is None, action is added to the current category.
-        If pos is None, action is added at the end of the list.
+        Args:
+            action (QW.QAction): action to add
+            category (ActionCategory, optional): action category. Defaults to None.
+                If None, action is added to the current category.
+            pos (int, optional): add action to menu at this position.
+                Defaults to None.
+                If None, action is added at the end of the list.
+            sep (bool, optional): add separator before action in menu
+                (or after if pos is positive). Defaults to False.
         """
         if category is None:
             if self.__submenu_in_progress:
@@ -278,14 +303,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 pos += 1
             actionlist.insert(pos, None)
 
-    def add_action(self, action: QW.QAction, select_condition: Callable = None):
-        """Add action to list of actions
+    def add_action(self, action: QW.QAction, select_condition: Callable = None) -> None:
+        """Add action to list of actions.
 
-        param action: action to add
-        param select_condition: condition to enable action
-
-        If select_condition is None, action is enabled if at least one object
-        is selected.
+        Args:
+            action (QW.QAction): action to add
+            select_condition (Callable, optional): condition to enable action.
+                Defaults to None. If None, action is enabled if at least one
+                object is selected.
         """
         if select_condition is None:
             select_condition = SelectCond.at_least_one
@@ -295,8 +320,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self,
         selected_groups: List[ObjectGroup],
         selected_objects: List[SignalParam | ImageParam],
-    ):
-        """Update actions based on selected objects"""
+    ) -> None:
+        """Update actions based on selected objects.
+
+        Args:
+            selected_groups (List[ObjectGroup]): selected groups
+            selected_objects (List[SignalParam | ImageParam]): selected objects
+        """
         for cond, actlist in self.__actions.items():
             if cond is not None:
                 for act in actlist:

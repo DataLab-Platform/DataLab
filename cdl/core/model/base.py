@@ -13,6 +13,7 @@ import abc
 import enum
 import json
 import sys
+from typing import Iterable
 from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
@@ -219,10 +220,14 @@ class ResultShape:
 
     ROI index is starting at 0 (or is simply 0 if there is no ROI).
 
-    :param ShapeTypes shapetype: shape type
-    :param np.ndarray array: shape coordinates (multiple shapes: one shape per row),
-    first column is ROI index (0 if there is no ROI)
-    :param str label: shape label
+    Args:
+        shapetype: shape type
+        array: shape coordinates (multiple shapes: one shape per row),
+            first column is ROI index (0 if there is no ROI)
+        label: shape label
+
+    Raises:
+        AssertionError: invalid argument
     """
 
     def __init__(self, shapetype: ShapeTypes, array: np.ndarray, label: str = ""):
@@ -351,17 +356,30 @@ class ResultShape:
         assert len(self.array.shape) == 2
         assert self.array.shape[1] == self.data_colnb + 1
 
-    def iterate_plot_items(self, fmt: str, lbl: bool):
-        """Iterate over metadata shape plot items
+    def iterate_plot_items(self, fmt: str, lbl: bool) -> Iterable:
+        """Iterate over metadata shape plot items.
 
-        :param str fmt: numeric format (e.g. "%.3f")
-        :param bool lbl: if True, show shape labels
+        Args:
+            fmt (str): numeric format (e.g. "%.3f")
+            lbl (bool): if True, show shape labels
+
+        Yields:
+            PlotItem: plot item
         """
         for args in self.data:
             yield self.create_plot_item(args, fmt, lbl)
 
     def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool):
-        """Make plot item"""
+        """Make plot item.
+
+        Args:
+            args (np.ndarray): shape data
+            fmt (str): numeric format (e.g. "%.3f")
+            lbl (bool): if True, show shape labels
+
+        Returns:
+            PlotItem: plot item
+        """
         if self.shapetype is ShapeTypes.MARKER:
             item = self.make_marker_item(args, fmt)
         elif self.shapetype is ShapeTypes.POINT:
@@ -436,7 +454,19 @@ class ResultShape:
 
 
 def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable: bool):
-    """Make ROI item shape"""
+    """Make ROI item shape.
+
+    Args:
+        func (function): function to create ROI item
+        coords (list): coordinates
+        title (str): title
+        fmt (str): numeric format (e.g. "%.3f")
+        lbl (bool): if True, show shape labels
+        editable (bool): if True, make shape editable
+
+    Returns:
+        PlotItem: plot item
+    """
     item = func(*coords, title)
     if not editable:
         if isinstance(item, AnnotatedShape):
@@ -472,7 +502,11 @@ class ObjectItf(metaclass=ObjectItfMeta):
         self.__onb = 0
 
     def set_object_number(self, onb: int):
-        """Set object number (used for short ID)"""
+        """Set object number (used for short ID).
+
+        Args:
+            onb (int): object number
+        """
         self.__onb = onb
 
     @property
@@ -503,34 +537,80 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
+
+        Args:
+            roi_index (int): ROI index
+
+        Returns:
+            numpy.ndarray: data
         """
 
     @abc.abstractmethod
     def copy_data_from(self, other, dtype=None):
-        """Copy data from other dataset instance"""
+        """Copy data from other dataset instance.
+
+        Args:
+            other (ObjectItf): other dataset instance
+            dtype (numpy.dtype): data type
+        """
 
     @abc.abstractmethod
     def set_data_type(self, dtype):
-        """Change data type"""
+        """Change data type.
+
+        Args:
+            dtype (numpy.dtype): data type
+        """
 
     @abc.abstractmethod
     def make_item(self, update_from=None):
-        """Make plot item from data"""
+        """Make plot item from data.
+
+        Args:
+            update_from (ObjectItf): update
+
+        Returns:
+            PlotItem: plot item
+        """
 
     @abc.abstractmethod
     def update_item(self, item, data_changed: bool = True) -> None:
-        """Update plot item from data"""
+        """Update plot item from data.
+
+        Args:
+            item (PlotItem): plot item
+            data_changed (bool): if True, data has changed
+        """
 
     @abc.abstractmethod
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes"""
+        """Convert ROI coordinates to indexes.
+
+        Args:
+            coords (list): coordinates
+
+        Returns:
+            numpy.ndarray: indexes
+        """
 
     @abc.abstractmethod
     def get_roi_param(self, title, *defaults):
-        """Return ROI parameters dataset"""
+        """Return ROI parameters dataset.
+
+        Args:
+            title (str): title
+            *defaults: default values
+        """
 
     def roidata_to_params(self, roidata: np.ndarray) -> gdt.DataSetGroup:
-        """Convert ROI array data to ROI dataset group"""
+        """Convert ROI array data to ROI dataset group.
+
+        Args:
+            roidata (numpy.ndarray): ROI array data
+
+        Returns:
+            DataSetGroup: ROI dataset group
+        """
         roi_params = []
         for index, parameters in enumerate(roidata):
             roi_param = self.get_roi_param(f"ROI{index:02d}", *parameters)
@@ -541,16 +621,31 @@ class ObjectItf(metaclass=ObjectItfMeta):
     @staticmethod
     @abc.abstractmethod
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
-        """Convert ROI dataset group to ROI array data"""
+        """Convert ROI dataset group to ROI array data.
+
+        Args:
+            params (DataSetGroup): ROI dataset group
+
+        Returns:
+            numpy.ndarray: ROI array data
+        """
 
     @property
     def roi(self) -> np.ndarray:
-        """Return object regions of interest array (one ROI per line)"""
+        """Return object regions of interest array (one ROI per line).
+
+        Returns:
+            numpy.ndarray: regions of interest array
+        """
         return self.metadata.get(ROI_KEY)
 
     @roi.setter
     def roi(self, roidata: np.ndarray):
-        """Set object regions of interest array, using a list or ROI dataset params"""
+        """Set object regions of interest array, using a list or ROI dataset params.
+
+        Args:
+            roidata (numpy.ndarray): regions of interest array
+        """
         if roidata is None:
             if ROI_KEY in self.metadata:
                 self.metadata.pop(ROI_KEY)
@@ -564,7 +659,17 @@ class ObjectItf(metaclass=ObjectItfMeta):
         array: np.ndarray,
         param: gdt.DataSet = None,
     ) -> ResultShape:
-        """Add geometric shape as metadata entry, and return ResultShape instance"""
+        """Add geometric shape as metadata entry, and return ResultShape instance.
+
+        Args:
+            label (str): label
+            shapetype (ShapeTypes): shape type
+            array (numpy.ndarray): array
+            param (DataSet): parameters
+
+        Returns:
+            ResultShape: result shape
+        """
         mshape = ResultShape(shapetype, array, label)
         mshape.add_to(self)
         if param is not None:
@@ -572,18 +677,32 @@ class ObjectItf(metaclass=ObjectItfMeta):
         return mshape
 
     def iterate_resultshapes(self):
-        """Iterate over object result shapes"""
+        """Iterate over object result shapes.
+
+        Yields:
+            ResultShape: result shape
+        """
         for key, value in self.metadata.items():
             if ResultShape.match(key, value):
                 yield ResultShape.from_metadata_entry(key, value)
 
     def update_resultshapes_from(self, other):
-        """Update geometric shape from another object (merge metadata)"""
+        """Update geometric shape from another object (merge metadata).
+
+        Args:
+            other (ObjectItf): other object
+        """
         for mshape in self.iterate_resultshapes():
             mshape.merge_with(self, other)
 
     def transform_shapes(self, orig, func, param=None):
-        """Apply transform function to result shape / annotations coordinates"""
+        """Apply transform function to result shape / annotations coordinates.
+
+        Args:
+            orig (ObjectItf): original object
+            func (callable): transform function
+            param (object): transform function parameter
+        """
 
         def transform(coords: np.ndarray):
             """Transform coordinates"""
@@ -609,9 +728,18 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     @abc.abstractmethod
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
-        """Make plot item representing a Region of Interest"""
+        """Make plot item representing a Region of Interest.
 
-    def __set_annotations(self, annotations: str):
+        Args:
+            fmt (str): format string
+            lbl (bool): if True, add label
+            editable (bool): if True, ROI is editable
+
+        Yields:
+            PlotItem: plot item
+        """
+
+    def __set_annotations(self, annotations: str) -> None:
         """Set object annotations (JSON string describing annotation plot items)"""
         self.metadata[ANN_KEY] = annotations
 
@@ -621,14 +749,25 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     annotations = property(__get_annotations, __set_annotations)
 
-    def set_annotations_from_items(self, items: list):
-        """Set object annotations (annotation plot items)"""
+    def set_annotations_from_items(self, items: list) -> None:
+        """Set object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+        """
         writer = JSONWriter(None)
         save_items(writer, items)
         self.annotations = writer.get_json(indent=4)
 
     def iterate_shape_items(self, editable: bool = False):
-        """Iterate over computing items encoded in metadata (if any)"""
+        """Iterate over computing items encoded in metadata (if any).
+
+        Args:
+            editable (bool): if True, ROI is editable
+
+        Yields:
+            PlotItem: plot item
+        """
         setdef = self.metadata.setdefault
         fmt = setdef(self.METADATA_FMT, "%" + self.CONF_FMT.get(self.DEFAULT_FMT))
         lbl = setdef(self.METADATA_LBL, Conf.view.show_label.get(False))
@@ -648,7 +787,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
             except json.decoder.JSONDecodeError:
                 pass
 
-    def remove_all_shapes(self):
+    def remove_all_shapes(self) -> None:
         """Remove metadata shapes and ROIs"""
         for key, value in list(self.metadata.items()):
             resultshape = ResultShape.from_metadata_entry(key, value)
@@ -658,24 +797,36 @@ class ObjectItf(metaclass=ObjectItfMeta):
         if ANN_KEY in self.metadata:
             self.metadata.pop(ANN_KEY)
 
-    def reset_metadata_to_defaults(self):
+    def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         self.metadata = {}
 
-    def export_metadata_to_file(self, filename):
-        """Export object metadata to file (JSON)"""
+    def export_metadata_to_file(self, filename: str) -> None:
+        """Export object metadata to file (JSON).
+
+        Args:
+            filename (str): filename
+        """
         handler = JSONHandler(filename)
         handler.set_json_dict(self.metadata)
         handler.save()
 
-    def import_metadata_from_file(self, filename):
-        """Import object metadata from file (JSON)"""
+    def import_metadata_from_file(self, filename: str) -> None:
+        """Import object metadata from file (JSON).
+
+        Args:
+            filename (str): filename
+        """
         handler = JSONHandler(filename)
         handler.load()
         self.metadata = handler.get_json_dict()
 
-    def metadata_to_html(self):
-        """Convert metadata to human-readable string"""
+    def metadata_to_html(self) -> str:
+        """Convert metadata to human-readable string.
+
+        Returns:
+            str: HTML string
+        """
         textlines = []
         for key, value in self.metadata.items():
             if len(textlines) > 5:

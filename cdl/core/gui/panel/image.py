@@ -70,12 +70,16 @@ class ImagePanel(BaseDataPanel):
 
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(self, newparam=None, addparam=None, edit=True) -> ImageParam:
-        """Create a new object (signal/image).
+        """Create a new object (image).
 
-        :param guidata.dataset.DataSet newparam: new object parameters
-        :param guidata.dataset.datatypes.DataSet addparam: additional parameters
-        :param bool edit: Open a dialog box to edit parameters (default: True)
-        :return: New object"""
+        Args:
+            newparam (DataSet): new object parameters
+            addparam (DataSet): additional parameters
+            edit (bool): Open a dialog box to edit parameters (default: True)
+
+        Returns:
+            New object
+        """
         if not self.mainwindow.confirm_memory_state():
             return None
         curobj: ImageParam = self.objview.get_current_object()

@@ -99,8 +99,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         super().remove_all_objects()
 
     def create_object(self, title=None) -> Macro:
-        """Create object
-        :param str title: Title of the object
+        """Create object.
+
+        Args:
+            title (str): Title of the object
+
+        Returns:
+            Macro: Macro object
         """
         macro = Macro(self.console, title)
         macro.objectNameChanged.connect(self.macro_name_changed)
@@ -114,8 +119,11 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         return macro
 
     def add_object(self, obj: Macro) -> None:
-        """Add object
-        :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
+        """Add object.
+
+        Args:
+            obj (Macro): Macro object
+        """
         self.tabwidget.addTab(obj.editor, obj.title)
         self.__macros[obj.uuid] = obj
         self.SIG_OBJECT_ADDED.emit()

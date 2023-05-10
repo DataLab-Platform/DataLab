@@ -157,11 +157,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         item.setData(0, QC.Qt.UserRole, obj.uuid)
 
     def populate_tree(self) -> None:
-        """
-        Populate tree with objects
-
-        :param new_current_oid: New oid (if None, new current oid is unchanged)
-        """
+        """Populate tree with objects"""
         uuid = self.get_current_item_id()
         with block_signals(widget=self, enable=True):
             self.clear()

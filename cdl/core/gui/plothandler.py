@@ -133,11 +133,14 @@ class BasePlotHandler:
         self.__shapeitems = []
 
     def __add_item_to_plot(self, oid: str) -> CurveItem | MaskedImageItem:
-        """Make plot item and add it to plot
+        """Make plot item and add it to plot.
 
-        param str oid: object uuid
-        return: plot item
-        rtype: CurveItem | MaskedImageItem"""
+        Args:
+            oid (str): object uuid
+
+        Returns:
+            CurveItem | MaskedImageItem: plot item
+        """
         obj = self.panel.objmodel[oid]
         self.__cached_hashes[obj] = calc_data_hash(obj)
         item: CurveItem | MaskedImageItem = obj.make_item()
@@ -151,10 +154,12 @@ class BasePlotHandler:
     ) -> None:
         """Update plot item.
 
-        param str oid: object uuid
-        param ref_item: reference item
-        param bool just_show: if True, only show the item (do not update it,
-        except regarding the reference item)"""
+        Args:
+            oid (str): object uuid
+            ref_item (CurveItem | MaskedImageItem): reference item
+            just_show (bool, optional): if True, only show the item (do not update it,
+                except regarding the reference item). Defaults to False.
+        """
         if not just_show:
             obj = self.panel.objmodel[oid]
             cached_hash = self.__cached_hashes.get(obj)
@@ -176,9 +181,11 @@ class BasePlotHandler:
     ) -> None:
         """Refresh plot.
 
-        param str only_oid: if not None, only refresh the item associated
-        to this object uuid
-        param bool just_show: if True, only show the item(s) (do not update it/them)
+        Args:
+            only_oid (str, optional): if not None, only refresh the item associated
+                to this object uuid. Defaults to None.
+            just_show (bool, optional): if True, only show the item (do not update it,
+                except regarding the reference item). Defaults to False.
         """
         if only_oid is None:
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
@@ -278,9 +285,11 @@ class ImagePlotHandler(BasePlotHandler):
     ) -> None:
         """Refresh plot.
 
-        param str only_oid: if not None, only refresh the item associated
-        to this object uuid
-        param bool just_show: if True, only show the item(s) (do not update it/them)
+        Args:
+            only_oid (str, optional): if not None, only refresh the item associated
+                to this object uuid. Defaults to None.
+            just_show (bool, optional): if True, only show the item (do not update it,
+                except regarding the reference item). Defaults to False.
         """
         super().refresh_plot(only_oid=only_oid, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))

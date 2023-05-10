@@ -191,7 +191,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def create_object(self, title=None) -> ObjItf:
         """Create and return object
 
-        :param str title: Title of the object
+        Args:
+            title: object title
         """
 
     @abc.abstractmethod
@@ -294,7 +295,11 @@ class BaseDataPanel(AbstractPanel):
     def create_object(self, title: Optional[str] = None) -> SignalParam | ImageParam:
         """Create object (signal or image)
 
-        :param str title: Title of the object
+        Args:
+            title: object title
+
+        Returns:
+            SignalParam or ImageParam object
         """
         # TODO: [P2] Add default signal/image visualization settings
         # 1. Initialize here (at object creation) metadata with default settings
@@ -309,10 +314,13 @@ class BaseDataPanel(AbstractPanel):
         return obj
 
     @qt_try_except()
-    def add_object(self, obj: SignalParam | ImageParam, group_id: str = None):
+    def add_object(self, obj: SignalParam | ImageParam, group_id: str = None) -> None:
         """Add object
 
-        :param bool refresh: Refresh object list (e.g. listwidget for signals/images)"""
+        Args:
+            obj: SignalParam or ImageParam object
+            group_id: group id
+        """
         if group_id is None:
             group_id = self.objview.get_current_group_id()
             if group_id is None:
@@ -519,18 +527,26 @@ class BaseDataPanel(AbstractPanel):
     ) -> SignalParam | ImageParam:
         """Create a new object (signal/image).
 
-        :param guidata.dataset.DataSet newparam: new object parameters
-        :param guidata.dataset.datatypes.DataSet addparam: additional parameters
-        :param bool edit: Open a dialog box to edit parameters (default: True)
-        :return: New object"""
+        Args:
+            newparam (DataSet): new object parameters
+            addparam (DataSet): additional parameters
+            edit (bool): Open a dialog box to edit parameters (default: True)
+
+        Returns:
+            New object
+        """
 
     def open_object(
         self, filename: str
     ) -> Union[SignalParam | ImageParam, List[SignalParam | ImageParam]]:
         """Open object from file (signal/image), add it to DataLab and return it.
 
-        :param str filename: File name
-        :return: Object or list of objects"""
+        Args:
+            filename (str): file name
+
+        Returns:
+            New object or list of new objects
+        """
         obj_or_objlist = self.IO_REGISTRY.read(filename)
         if not isinstance(obj_or_objlist, list):
             obj_or_objlist = [obj_or_objlist]
@@ -553,7 +569,14 @@ class BaseDataPanel(AbstractPanel):
                 self.IO_REGISTRY.write(filename, obj)
 
     def handle_dropped_files(self, filenames: List[str] = None) -> None:
-        """Handle dropped files"""
+        """Handle dropped files
+
+        Args:
+            filenames (list(str)): File names
+
+        Returns:
+            None
+        """
         h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
         other_fnames = list(set(filenames) - set(h5_fnames))
         if h5_fnames:
@@ -566,8 +589,12 @@ class BaseDataPanel(AbstractPanel):
     ) -> List[SignalParam | ImageParam]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
-        :param list(str) filenames: File names
-        :return: List of objects"""
+        Args:
+            filenames (list(str)): File names
+
+        Returns:
+            List of new objects
+        """
         if not self.mainwindow.confirm_memory_state():
             return []
         if filenames is None:  # pragma: no cover
@@ -585,7 +612,12 @@ class BaseDataPanel(AbstractPanel):
     def save_objects(self, filenames: List[str] = None) -> None:
         """Save selected objects to file (signal/image).
 
-        :param list(str) filenames: File names"""
+        Args:
+            filenames (list(str)): File names
+
+        Returns:
+            None
+        """
         objs = self.objview.get_sel_objects(include_groups=True)
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(objs)
@@ -595,7 +627,14 @@ class BaseDataPanel(AbstractPanel):
             self.save_object(obj, filename)
 
     def import_metadata_from_file(self, filename: str = None) -> None:
-        """Import metadata from file (JSON)"""
+        """Import metadata from file (JSON).
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            None
+        """
         if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():
@@ -610,7 +649,14 @@ class BaseDataPanel(AbstractPanel):
             self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def export_metadata_from_file(self, filename: str = None) -> None:
-        """Export metadata to file (JSON)"""
+        """Export metadata to file (JSON).
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            None
+        """
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
@@ -644,8 +690,11 @@ class BaseDataPanel(AbstractPanel):
         """
         Open separate view for visualizing selected objects
 
-        :param list oids: List of object IDs to visualize (default: selected objects)
-        :return: Dialog instance
+        Args:
+            oids (list(str)): Object IDs
+
+        Returns:
+            QDialog instance
         """
         title = _("Annotations")
         if oids is None:
@@ -703,16 +752,19 @@ class BaseDataPanel(AbstractPanel):
         name: str = None,
         options: dict = None,
     ) -> CurveDialog | ImageDialog:
-        """
-        Create new pop-up signal/image plot dialog
+        """Create new pop-up signal/image plot dialog.
 
-        :param list oids: List of uuids for the objects to be shown in dialog
-        :param bool edit: If True, show "OK" and "Cancel" buttons
-        :param bool toolbar: If True, add toolbar
-        :param str title: Title of the dialog box
-        :param list tools: List of plot tools
-        :param str name: Name of the widget (used as screenshot basename)
-        :param dict options: Plot options
+        Args:
+            oids (list(str)): Object IDs
+            edit (bool): Edit mode
+            toolbar (bool): Show toolbar
+            title (str): Dialog title
+            tools (list(GuiTool)): List of tools to add to the toolbar
+            name (str): Dialog name
+            options (dict): Plot options
+
+        Returns:
+            QDialog instance
         """
         if title is not None or len(oids) == 1:
             if title is None:
@@ -748,14 +800,17 @@ class BaseDataPanel(AbstractPanel):
     def create_new_dialog_for_selection(
         self, title, name, options=None, toolbar=False, tools=None
     ):
-        """
-        Create new pop-up dialog for the currently selected signal/image
+        """Create new pop-up dialog for the currently selected signal/image.
 
-        :param str title: Title of the dialog box
-        :param str name: Name of the widget (used as screenshot basename)
-        :param dict options: Plot options
-        :param list tools: List of plot tools
-        :return: tuple (dialog, current_object)
+        Args:
+            title (str): Dialog title
+            name (str): Dialog name
+            options (dict): Plot options
+            toolbar (bool): Show toolbar
+            tools (list(GuiTool)): List of tools to add to the toolbar
+
+        Returns:
+            QDialog instance, selected object
         """
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         dlg = self.create_new_dialog(
@@ -770,7 +825,15 @@ class BaseDataPanel(AbstractPanel):
         return dlg, obj
 
     def get_roi_dialog(self, extract: bool, singleobj: bool) -> roieditor.ROIEditorData:
-        """Get ROI data (array) from specific dialog box"""
+        """Get ROI data (array) from specific dialog box.
+
+        Args:
+            extract (bool): Extract ROI from data
+            singleobj (bool): Single object
+
+        Returns:
+            ROI data
+        """
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
         dlg, obj = self.create_new_dialog_for_selection(roi_s, "roi_dialog", options)
@@ -787,7 +850,15 @@ class BaseDataPanel(AbstractPanel):
     def get_object_dialog(
         self, title: str, parent: Optional[QW.QWidget] = None
     ) -> objectview.GetObjectDialog:
-        """Get object dialog"""
+        """Get object dialog.
+
+        Args:
+            title (str): Dialog title
+            parent (QWidget): Parent widget
+
+        Returns:
+            GetObjectDialog instance
+        """
         parent = self if parent is None else parent
         dlg = objectview.GetObjectDialog(parent, self, title)
         if exec_dialog(dlg):

@@ -70,14 +70,23 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         base.ObjectItf.__init__(self)
 
     def copy_data_from(self, other, dtype=None):
-        """Copy data from other dataset instance"""
+        """Copy data from other dataset instance.
+
+        Args:
+            other (ObjectItf): other dataset instance
+            dtype (numpy.dtype): data type
+        """
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
         self.metadata = deepcopy(other.metadata)
         self.xydata = np.array(other.xydata, copy=True, dtype=dtype)
 
     def set_data_type(self, dtype):  # pylint: disable=unused-argument,no-self-use
-        """Change data type"""
+        """Change data type.
+
+        Args:
+            dtype (numpy.dtype): data type
+        """
         raise RuntimeError("Setting data type is not support for signals")
 
     def set_xydata(self, x, y, dx=None, dy=None):
@@ -126,6 +135,12 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
+
+        Args:
+            roi_index (int): ROI index
+
+        Returns:
+            numpy.ndarray: data
         """
         if self.roi is None or roi_index is None:
             return self.x, self.y
@@ -133,7 +148,14 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         return self.x[i1:i2], self.y[i1:i2]
 
     def make_item(self, update_from=None):
-        """Make plot item from data"""
+        """Make plot item from data.
+
+        Args:
+            update_from (ObjectItf): update
+
+        Returns:
+            PlotItem: plot item
+        """
         if len(self.xydata) == 2:  # x, y signal
             x, y = self.xydata
             item = make.mcurve(x.real, y.real, label=self.title)
@@ -150,7 +172,12 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         return item
 
     def update_item(self, item: CurveItem, data_changed: bool = True) -> None:
-        """Update plot item from data"""
+        """Update plot item from data.
+
+        Args:
+            item (PlotItem): plot item
+            data_changed (bool): if True, data has changed
+        """
         if data_changed:
             if len(self.xydata) == 2:  # x, y signal
                 x, y = self.xydata
@@ -169,7 +196,14 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         item.update_params()
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
-        """Convert ROI coordinates to indexes"""
+        """Convert ROI coordinates to indexes.
+
+        Args:
+            coords (list): coordinates
+
+        Returns:
+            numpy.ndarray: indexes
+        """
         indexes = np.array(coords, int)
         for row in range(indexes.shape[0]):
             for col in range(indexes.shape[1]):
@@ -178,7 +212,12 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         return indexes
 
     def get_roi_param(self, title, *defaults):
-        """Return ROI parameters dataset"""
+        """Return ROI parameters dataset.
+
+        Args:
+            title (str): title
+            *defaults: default values
+        """
         imax = len(self.x) - 1
         i0, i1 = defaults
 
@@ -192,7 +231,14 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
 
     @staticmethod
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
-        """Convert list of dataset parameters to ROI data"""
+        """Convert ROI dataset group to ROI array data.
+
+        Args:
+            params (DataSetGroup): ROI dataset group
+
+        Returns:
+            numpy.ndarray: ROI array data
+        """
         roilist = []
         for roiparam in params.datasets:
             roilist.append([roiparam.col1, roiparam.col2])
@@ -208,7 +254,16 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         )
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
-        """Make plot item representing a Region of Interest"""
+        """Make plot item representing a Region of Interest.
+
+        Args:
+            fmt (str): format string
+            lbl (bool): if True, add label
+            editable (bool): if True, ROI is editable
+
+        Yields:
+            PlotItem: plot item
+        """
         if self.roi is not None:
             for index, coords in enumerate(self.x[self.roi]):
                 yield base.make_roi_item(
@@ -231,16 +286,20 @@ def create_signal(
     units: tuple = None,
     labels: tuple = None,
 ) -> SignalParam:
-    """Create a new Signal object
+    """Create a new Signal object.
 
-    :param str title: signal title
-    :param numpy.ndarray x: X data
-    :param numpy.ndarray y: Y data
-    :param numpy.ndarray dx: dX data (optional: error bars)
-    :param numpy.ndarray dy: dY data (optional: error bars)
-    :param dict metadata: signal metadata
-    :param tuple units: X, Y units (tuple of strings)
-    :param tuple labels: X, Y labels (tuple of strings)
+    Args:
+        title (str): signal title
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        dx (numpy.ndarray): dX data (optional: error bars)
+        dy (numpy.ndarray): dY data (optional: error bars)
+        metadata (dict): signal metadata
+        units (tuple): X, Y units (tuple of strings)
+        labels (tuple): X, Y labels (tuple of strings)
+
+    Returns:
+        SignalParam: signal object
     """
     assert isinstance(title, str)
     signal = SignalParam()
@@ -292,7 +351,16 @@ class SignalParamNew(gdt.DataSet):
 def new_signal_param(title=None, stype=None, xmin=None, xmax=None, size=None):
     """Create a new Signal dataset instance.
 
-    :param str title: dataset title (default: None, uses default title)"""
+    Args:
+        title (str): dataset title (default: None, uses default title)
+        stype (str): signal type (default: None, uses default type)
+        xmin (float): X min (default: None, uses default value)
+        xmax (float): X max (default: None, uses default value)
+        size (int): signal size (default: None, uses default value)
+
+    Returns:
+        SignalParamNew: new signal dataset instance
+    """
     if title is None:
         title = _("Untitled signal")
     param = SignalParamNew(title=title, icon=get_icon("new_signal.svg"))
@@ -319,10 +387,14 @@ def create_signal_from_param(
 ) -> SignalParam:
     """Create a new Signal object from a dialog box.
 
-    :param SignalParamNew param: new signal parameters
-    :param guidata.dataset.datatypes.DataSet addparam: additional parameters
-    :param bool edit: Open a dialog box to edit parameters (default: False)
-    :param QWidget parent: parent widget
+    Args:
+        newparam (SignalParamNew): new signal parameters
+        addparam (DataSet): additional parameters
+        edit (bool): Open a dialog box to edit parameters (default: False)
+        parent (QWidget): parent widget
+
+    Returns:
+        SignalParam: signal object
     """
     global SIG_NB  # pylint: disable=global-statement
     if newparam is None:
