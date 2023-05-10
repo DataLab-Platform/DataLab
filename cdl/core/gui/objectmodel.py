@@ -38,7 +38,7 @@ a container for SignalParam and ImageParam instances.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
 from uuid import uuid4

@@ -7,7 +7,7 @@
 DataLab image I/O registry
 """
 
-from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+from __future__ import annotations
 
 import abc
 from typing import List, Optional

@@ -7,7 +7,7 @@
 DataLab HDF5 open/save module
 """
 
-from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+from __future__ import annotations
 
 import os.path as osp
 from typing import TYPE_CHECKING

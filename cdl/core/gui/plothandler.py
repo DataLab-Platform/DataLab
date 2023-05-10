@@ -25,7 +25,7 @@ These classes handle guiqwt plot items for signal and image panels.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from __future__ import annotations  # To be removed when dropping Python <=3.9 support
+from __future__ import annotations
 
 import hashlib
 from typing import TYPE_CHECKING, Dict, Iterator, List, Optional

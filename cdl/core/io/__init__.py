@@ -7,8 +7,6 @@
 DataLab I/O module
 """
 
-from __future__ import annotations  # To be removed when dropping Python <=3.9 support
-
 # Registering dynamic I/O features:
 import cdl.core.io.h5  # pylint: disable=unused-import
 import cdl.core.io.image  # pylint: disable=unused-import
