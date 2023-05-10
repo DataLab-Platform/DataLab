@@ -30,6 +30,6 @@ examples cited above.
 
 Here is a Python 2.7 reimplementation of this class:
 
-.. literalinclude:: ../../cdl_remotecontrol_py27.py
+.. literalinclude:: ../../remotecontrol_py27.py
 
 .. _XML-RPC: https://docs.python.org/3/library/xmlrpc.html

@@ -299,7 +299,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
 # === Python 2.7 client side:
 #
-# # See doc/cdl_remotecontrol_py27.py for an almost complete Python 2.7
+# # See doc/remotecontrol_py27.py for an almost complete Python 2.7
 # # implementation of RemoteClient class
 #
 # import io
@@ -323,7 +323,7 @@ def get_cdl_xmlrpc_port():
     """Return DataLab current XML-RPC port"""
     #  The following is valid only when using Python 3.8+ with DataLab
     #  installed on the client side. In any other situation, please use the
-    #  `get_cdl_xmlrpc_port` function from doc/cdl_remotecontrol_py27.py.
+    #  `get_cdl_xmlrpc_port` function from doc/remotecontrol_py27.py.
     initialize()
     try:
         return Conf.main.rpc_server_port.get()
