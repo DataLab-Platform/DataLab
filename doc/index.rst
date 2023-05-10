@@ -41,8 +41,8 @@ External resources:
 Copyrights and licensing
 ------------------------
 
-- Copyright © 2022 `CEA`_ - `Codra`_, Pierre Raybaut
-- Licensed under the terms of the `BSD / CeCILL-B License`_
+- Copyright © 2023 `CEA`_ - `Codra`_, Pierre Raybaut
+- Licensed under the terms of the `BSD 3-Clause`_
 
 .. _guidata: https://pypi.python.org/pypi/guidata
 .. _guiqwt: https://pypi.python.org/pypi/guiqwt
@@ -51,4 +51,4 @@ Copyrights and licensing
 .. _GitHub: https://github.com/Codra-Ingenierie-Informatique/DataLab
 .. _CEA: http://www.cea.fr
 .. _Codra: https://codra.net/
-.. _BSD / CeCILL-B License: https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/master/LICENSE
+.. _BSD 3-Clause: https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/master/LICENSE

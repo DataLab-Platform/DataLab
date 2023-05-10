@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
-# (see cdl/__init__.py for details)
+# Licensed under the terms of the BSD 3-Clause
+# (see cdl/LICENSE for details)
 
 """
 DataLab Qt utilities

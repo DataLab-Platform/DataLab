@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
-# (see cdl/__init__.py for details)
+# Licensed under the terms of the BSD 3-Clause
+# (see cdl/LICENSE for details)
 
 """
 Module patching *guidata* and *guiqwt* to adapt it to DataLab
@@ -75,6 +75,7 @@ def monkeypatch_method(cls, patch_name):
 # TODO: Improve test coverage using the following two patches
 # (sometimes we had to skip DataSet edit method to avoid blocking GUI testing:
 # now it's possible to test those lines without blocking)
+
 
 #  Patching guidata.dataset.datatypes.DataSet edit methods for automatic GUI testing
 @monkeypatch_method(guidata.dataset.datatypes.DataSet, "DataSet")

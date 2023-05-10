@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 # cdl module translation file
-# Licensed under the terms of the CECILL License
-# (see cdl/__init__.py for details)
 #
 msgid ""
 msgstr ""

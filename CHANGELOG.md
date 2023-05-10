@@ -563,10 +563,7 @@ Bug fixes:
 
 ## CodraFT Version 1.0.0 ##
 
-Copyright © 2018 Codra, Pierre Raybaut, licensed under the terms of the
-CECILL License v2.1.
-
-First release of `DataLab`.
+First release of `CodraFT`.
 
 New features:
 

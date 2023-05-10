@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Licensed under the terms of the BSD 3-Clause or the CeCILL-B License
-# (see cdl/__init__.py for details)
+# Licensed under the terms of the BSD 3-Clause
+# (see cdl/LICENSE for details)
 
 """Curve fitting dialog test
 
@@ -24,7 +24,6 @@ SHOW = True  # Show test in GUI-based test launcher
 def test():
     """Test function"""
     with qt_app_context():
-
         # Multi-gaussian curve fitting test
         s = read_signal(get_test_fnames("paracetamol.txt")[0])
         peakidx = peak_indexes(s.y)

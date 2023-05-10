@@ -33,8 +33,9 @@ the library and [changelog](CHANGELOG.md) for recent history of changes.
 
 Copyrights and licensing:
 
-* Copyright © 2018-2023 [CEA](http://www.cea.fr)-[Codra](https://codra.net/), Pierre Raybaut
-* Licensed under the terms of the BSD 3-Clause or the CeCILL-B License. See ``Licence_CeCILL_V2.1-en.txt``.
+* Copyright © 2023 [CEA](http://www.cea.fr), [Codra](https://codra.net/),
+  [Pierre Raybaut](https://github.com/PierreRaybaut).
+* Licensed under the terms of the BSD 3-Clause (see [LICENSE](LICENSE)).
 
 ----
 
