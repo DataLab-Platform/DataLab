@@ -9,31 +9,53 @@ DataLab Computation / Signal module
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import numpy as np
 
 
 # ----- Filtering functions ----------------------------------------------------
-def moving_average(y, n):
-    """Compute moving average"""
+def moving_average(y: np.ndarray, n: int) -> np.ndarray:
+    """Compute moving average.
+
+    Args:
+        y (np.ndarray): Input array
+        n (int): Window size
+
+    Returns:
+        np.ndarray: Moving average
+    """
     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
 
 
 # ----- Misc. functions --------------------------------------------------------
-def derivative(x, y):
-    """Compute numerical derivative"""
+def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    """Compute numerical derivative.
+
+    Args:
+        x (np.ndarray): X data
+        y (np.ndarray): Y data
+
+    Returns:
+        np.ndarray: Numerical derivative
+    """
     dy = np.zeros_like(y)
     dy[0:-1] = np.diff(y) / np.diff(x)
     dy[-1] = (y[-1] - y[-2]) / (x[-1] - x[-2])
     return dy
 
 
-def normalize(yin, parameter="maximum"):
-    """
-    Normalize input array *yin* with respect to parameter *parameter*
+def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
+    """Normalize input array to a given parameter.
 
-    Support values for *parameter*:
-        'maximum' (default), 'amplitude', 'sum', 'energy'
+    Args:
+        yin (np.ndarray): Input array
+        parameter (str, optional): Normalization parameter. Defaults to "maximum".
+            Supported values: 'maximum', 'amplitude', 'sum', 'energy'
+
+    Returns:
+        np.ndarray: Normalized array
     """
     axis = len(yin.shape) - 1
     if parameter == "maximum":
@@ -56,22 +78,54 @@ def normalize(yin, parameter="maximum"):
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 
-def xy_fft(x, y):
-    """Compute FFT on X,Y data"""
+def xy_fft(
+    x: np.ndarray, y: np.ndarray, shift: bool = True
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute FFT on X,Y data.
+
+    Args:
+        x (np.ndarray): X data
+        y (np.ndarray): Y data
+        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
+            Defaults to True.
+
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X,Y data
+    """
     y1 = np.fft.fft(y)
-    x1 = np.fft.fftshift(np.fft.fftfreq(x.shape[-1], d=x[1] - x[0]))
+    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
+    if shift:
+        x1 = np.fft.fftshift(x1)
+        y1 = np.fft.fftshift(y1)
     return x1, y1
 
 
-def xy_ifft(x, y):
-    """Compute iFFT on X,Y data"""
+def xy_ifft(
+    x: np.ndarray, y: np.ndarray, shift: bool = True
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute iFFT on X,Y data.
+
+    Args:
+        x (np.ndarray): X data
+        y (np.ndarray): Y data
+        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
+            Defaults to True.
+
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X,Y data
+    """
+    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
+    if shift:
+        x1 = np.fft.ifftshift(x1)
+        y = np.fft.ifftshift(y)
     y1 = np.fft.ifft(y)
-    x1 = np.fft.fftshift(np.fft.fftfreq(x.shape[-1], d=x[1] - x[0]))
-    return x1, y1
+    return x1, y1.real
 
 
 # ----- Peak detection functions -----------------------------------------------
-def peak_indexes(y, thres=0.3, min_dist=1, thres_abs=False):
+def peak_indexes(
+    y, thres: float = 0.3, min_dist: int = 1, thres_abs: bool = False
+) -> np.ndarray:
     #  Copyright (c) 2014 Lucas Hermann Negri
     #  Unmodified code snippet from PeakUtils 1.3.0
     """Peak detection routine.
@@ -104,8 +158,6 @@ def peak_indexes(y, thres=0.3, min_dist=1, thres_abs=False):
 
     if not thres_abs:
         thres = thres * (np.max(y) - np.min(y)) + np.min(y)
-
-    min_dist = int(min_dist)
 
     # compute first order difference
     dy = np.diff(y)
@@ -168,8 +220,16 @@ def peak_indexes(y, thres=0.3, min_dist=1, thres_abs=False):
     return peaks
 
 
-def xpeak(x, y):
-    """Return default peak X-position (assuming a single peak)"""
+def xpeak(x: np.ndarray, y: np.ndarray) -> float:
+    """Return default peak X-position (assuming a single peak).
+
+    Args:
+        x (np.ndarray): X data
+        y (np.ndarray): Y data
+
+    Returns:
+        float: Peak X-position
+    """
     peaks = peak_indexes(y)
     if peaks.size == 1:
         return x[peaks[0]]

@@ -20,10 +20,10 @@ import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.optimize as spo
 import scipy.signal as sps
-from guidata.dataset.dataitems import ChoiceItem, FloatItem, IntItem
+from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
 from guidata.dataset.datatypes import DataSet, DataSetGroup
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.computation import fit
 from cdl.core.computation.signal import (
     derivative,
@@ -94,6 +94,16 @@ class FWHMParam(DataSet):
     )
 
     fittype = ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+
+
+class FFTParam(DataSet):
+    """FFT parameters"""
+
+    shift = BoolItem(
+        _("Shift"),
+        default=Conf.proc.fft_shift_enabled.get(),
+        help=_("Shift zero frequency to center"),
+    )
 
 
 class SignalProcessor(BaseProcessor):
@@ -319,14 +329,28 @@ class SignalProcessor(BaseProcessor):
         self.compute_11("WienerFilter", lambda x, y: (x, sps.wiener(y)))
 
     @qt_try_except()
-    def compute_fft(self):
+    def compute_fft(self, param: FFTParam | None = None) -> None:
         """Compute iFFT"""
-        self.compute_11("FFT", xy_fft)
+        if param is None:
+            param = FFTParam()
+        self.compute_11(
+            f"FFT",
+            lambda x, y, p: xy_fft(x, y, shift=p.shift),
+            param,
+            edit=False,
+        )
 
     @qt_try_except()
-    def compute_ifft(self):
+    def compute_ifft(self, param: FFTParam | None = None) -> None:
         """Compute FFT"""
-        self.compute_11("iFFT", xy_ifft)
+        if param is None:
+            param = FFTParam()
+        self.compute_11(
+            f"iFFT",
+            lambda x, y, p: xy_ifft(x, y, shift=p.shift),
+            param,
+            edit=False,
+        )
 
     @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):

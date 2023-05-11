@@ -94,8 +94,16 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
-    h5_fname_in_title = conf.Option()
+    # HDF5 file format options
+    # ------------------------
+    # Signal or image title when importing from HDF5 file:
+    # - True: use HDF5 full dataset path in signal or image title
+    # - False: use HDF5 dataset name in signal or image title
     h5_fullpath_in_title = conf.Option()
+    # Signal or image title when importing from HDF5 file:
+    # - True: add HDF5 file name in signal or image title
+    # - False: do not add HDF5 file name in signal or image title
+    h5_fname_in_title = conf.Option()
 
 
 class ProcSection(conf.Section, metaclass=conf.SectionMeta):
@@ -103,7 +111,15 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    # ROI extraction strategy:
+    # - True: extract all ROIs in a single signal or image
+    # - False: extract each ROI in a separate signal or image
     extract_roi_singleobj = conf.Option()
+
+    # FFT shift enabled state for signal processing:
+    # - True: FFT shift is enabled (default)
+    # - False: FFT shift is disabled
+    fft_shift_enabled = conf.Option()
 
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
@@ -152,10 +168,14 @@ def get_old_log_fname(fname):
 def initialize():
     """Initialize application configuration"""
     Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
-    Conf.main.traceback_log_path.set(f".{APP_NAME}_traceback.log")
-    Conf.main.faulthandler_log_path.set(f".{APP_NAME}_faulthandler.log")
-    Conf.console.external_editor_path.set("code")
-    Conf.console.external_editor_args.set("-g {path}:{line_number}")
+
+    # Set default values:
+    # (do not use "set" method here to avoid overwriting user settings in .INI file)
+    Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
+    Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
+    Conf.console.external_editor_path.get("code")
+    Conf.console.external_editor_args.get("-g {path}:{line_number}")
+    Conf.proc.fft_shift_enabled.get(True)
 
 
 def reset():
