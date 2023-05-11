@@ -728,6 +728,7 @@ def create_image_from_param(
     if incr_sig_nb:
         newparam.title = f"{newparam.title} {IMG_NB + 1:d}"
     if not edit or addparam is not None or newparam.edit(parent=parent):
+        prefix = newparam.type.name.lower()
         if incr_sig_nb:
             IMG_NB += 1
         image = create_image(newparam.title)
@@ -757,6 +758,10 @@ def create_image_from_param(
                 / (2.0 * p.sigma**2)
             )
             image.data = np.array(zgauss, dtype=dtype)
+            image.title = (
+                f"{prefix}(a={p.a:g},μ={p.mu:g},σ={p.sigma:g}),"
+                f"x0={p.x0:g},y0={p.y0:g})"
+            )
         elif newparam.type in (ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM):
             pclass = {
                 ImageTypes.UNIFORMRANDOM: base.UniformRandomParam,
@@ -771,8 +776,10 @@ def create_image_from_param(
             if newparam.type == ImageTypes.UNIFORMRANDOM:
                 data = rng.random(shape)
                 image.data = scale_data_to_min_max(data, p.vmin, p.vmax)
+                image.title = f"{prefix}(vmin={p.vmin:g},vmax={p.vmax:g},seed={p.seed})"
             elif newparam.type == ImageTypes.NORMALRANDOM:
                 image.data = rng.normal(p.mu, p.sigma, size=shape)
+                image.title = f"{prefix}(μ={p.mu:g},σ={p.sigma:g},seed={p.seed})"
             else:
                 raise NotImplementedError(f"New param type: {newparam.type.value}")
         return image
