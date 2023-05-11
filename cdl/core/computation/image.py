@@ -9,6 +9,8 @@ DataLab Computation / Image module
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import cv2
 import numpy as np
 import scipy.ndimage as spi
@@ -59,7 +61,7 @@ def binning(
 
 
 def flatfield(
-    rawdata: np.ndarray, flatdata: np.ndarray, threshold: float = None
+    rawdata: np.ndarray, flatdata: np.ndarray, threshold: float | None = None
 ) -> np.ndarray:
     """Compute flat-field correction"""
     dtemp = np.array(rawdata, dtype=np.float64, copy=True) * flatdata.mean()
@@ -146,7 +148,7 @@ def distance_matrix(coords: list) -> np.ndarray:
 
 
 def get_2d_peaks_coords(
-    data: np.ndarray, size: int = None, level: float = 0.5
+    data: np.ndarray, size: int | None = None, level: float = 0.5
 ) -> np.ndarray:
     """Detect peaks in image data, return coordinates.
 
@@ -215,9 +217,9 @@ def get_contour_shapes(
 
 def get_hough_circle_peaks(
     data: np.ndarray,
-    min_radius: float = None,
-    max_radius: float = None,
-    nb_radius: int = None,
+    min_radius: float | None = None,
+    max_radius: float | None = None,
+    nb_radius: int | None = None,
     min_distance: int = 1,
 ) -> np.ndarray:
     """Detect peaks in image from circle Hough transform, return circle coordinates."""
@@ -380,24 +382,24 @@ def remove_overlapping_disks(coords: np.ndarray) -> np.ndarray:
 
 def find_blobs_opencv(
     data: np.ndarray,
-    min_threshold: float = None,
-    max_threshold: float = None,
-    min_repeatability: int = None,
-    min_dist_between_blobs: float = None,
-    filter_by_color: bool = None,
-    blob_color: int = None,
-    filter_by_area: bool = None,
-    min_area: float = None,
-    max_area: float = None,
-    filter_by_circularity: bool = None,
-    min_circularity: float = None,
-    max_circularity: float = None,
-    filter_by_inertia: bool = None,
-    min_inertia_ratio: float = None,
-    max_inertia_ratio: float = None,
-    filter_by_convexity: bool = None,
-    min_convexity: float = None,
-    max_convexity: float = None,
+    min_threshold: float | None = None,
+    max_threshold: float | None = None,
+    min_repeatability: int | None = None,
+    min_dist_between_blobs: float | None = None,
+    filter_by_color: bool | None = None,
+    blob_color: int | None = None,
+    filter_by_area: bool | None = None,
+    min_area: float | None = None,
+    max_area: float | None = None,
+    filter_by_circularity: bool | None = None,
+    min_circularity: float | None = None,
+    max_circularity: float | None = None,
+    filter_by_inertia: bool | None = None,
+    min_inertia_ratio: float | None = None,
+    max_inertia_ratio: float | None = None,
+    filter_by_convexity: bool | None = None,
+    min_convexity: float | None = None,
+    max_convexity: float | None = None,
 ) -> np.ndarray:
     """
     Finds blobs in the given grayscale image using OpenCV's SimpleBlobDetector.

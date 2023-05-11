@@ -7,6 +7,7 @@
 DataLab main window status bar widgets
 """
 
+from __future__ import annotations
 
 import psutil
 from guidata.qthelpers import get_std_icon
@@ -29,7 +30,9 @@ class MemoryStatus(QW.QWidget):
 
     SIG_MEMORY_ALARM = QC.Signal(bool)
 
-    def __init__(self, threshold: int = 500, delay: int = 2, parent: QW.QWidget = None):
+    def __init__(
+        self, threshold: int = 500, delay: int = 2, parent: QW.QWidget | None = None
+    ):
         super().__init__(parent)
         self.demo_mode = False
         self.ko_icon = get_std_icon("MessageBoxWarning")

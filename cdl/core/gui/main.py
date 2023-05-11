@@ -21,7 +21,7 @@ import subprocess
 import sys
 import time
 import webbrowser
-from typing import TYPE_CHECKING, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING
 
 import numpy as np
 import scipy.ndimage as spi
@@ -201,23 +201,23 @@ class CDLMainWindow(QW.QMainWindow):
             panel = self.signalpanel
         return panel
 
-    def get_object_titles(self) -> List[str]:
+    def get_object_titles(self) -> list[str]:
         """Get object (signal/image) list for current panel
 
         Returns:
-            List[str]: list of object titles
+            list[str]: list of object titles
         """
         return self.__get_current_basedatapanel().objmodel.get_object_titles()
 
-    def get_object_uuids(self) -> List[str]:
+    def get_object_uuids(self) -> list[str]:
         """Get object (signal/image) list for current panel
 
         Returns:
-            List[str]: list of object uuids
+            list[str]: list of object uuids
         """
         return self.__get_current_basedatapanel().objmodel.get_object_ids()
 
-    def get_object_from_uuid(self, oid: str) -> Union[SignalParam, ImageParam]:
+    def get_object_from_uuid(self, oid: str) -> SignalParam | ImageParam:
         """Get object (signal/image) from uuid
 
         Args:
@@ -230,11 +230,11 @@ class CDLMainWindow(QW.QMainWindow):
 
     # ------Misc.
     @property
-    def panels(self) -> Tuple[SignalPanel, ImagePanel, MacroPanel]:
+    def panels(self) -> tuple[SignalPanel, ImagePanel, MacroPanel]:
         """Return the tuple of implemented panels (signal, image)
 
         Returns:
-            Tuple[SignalPanel, ImagePanel, MacroPanel]: tuple of panels
+            tuple[SignalPanel, ImagePanel, MacroPanel]: tuple of panels
         """
         return (self.signalpanel, self.imagepanel, self.macropanel)
 
@@ -731,7 +731,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.tabwidget.setCurrentWidget(self.imagepanel)
 
     @remote_controlled
-    def calc(self, name: str, param: gdt.DataSet = None) -> None:
+    def calc(self, name: str, param: gdt.DataSet | None = None) -> None:
         """Call compute function `name` in current panel's processor
 
         Args:
@@ -793,7 +793,7 @@ class CDLMainWindow(QW.QMainWindow):
         dock.raise_()
         self.__update_actions()
 
-    def __update_generic_menu(self, menu: Optional[QW.QMenu] = None) -> None:
+    def __update_generic_menu(self, menu: QW.QMenu | None = None) -> None:
         """Update menu before showing up -- Generic method"""
         if menu is None:
             menu = self.sender()
@@ -876,9 +876,9 @@ class CDLMainWindow(QW.QMainWindow):
     @remote_controlled
     def open_h5_files(
         self,
-        h5files: List[str] = None,
-        import_all: bool = None,
-        reset_all: bool = None,
+        h5files: list[str] | None = None,
+        import_all: bool | None = None,
+        reset_all: bool | None = None,
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file.
 
@@ -928,7 +928,7 @@ class CDLMainWindow(QW.QMainWindow):
             reset_all = False
 
     @remote_controlled
-    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
+    def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
         """Import HDF5 file into DataLab
 
         Args:
@@ -944,7 +944,7 @@ class CDLMainWindow(QW.QMainWindow):
             self.h5inputoutput.import_file(filename, False, reset_all)
 
     @remote_controlled
-    def add_object(self, obj: Union[SignalParam, ImageParam]) -> None:
+    def add_object(self, obj: SignalParam | ImageParam) -> None:
         """Add object - signal or image
 
         Args:

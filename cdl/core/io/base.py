@@ -15,7 +15,6 @@ import dataclasses
 import enum
 import os.path as osp
 import re
-from typing import List
 
 from cdl.config import _
 from cdl.core.model.base import ObjectItf
@@ -31,7 +30,7 @@ class IOAction(enum.Enum):
 class BaseIORegistry(type):
     """Metaclass for registering I/O handler classes"""
 
-    _io_format_instances: List[FormatBase] = []
+    _io_format_instances: list[FormatBase] = []
 
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
@@ -39,7 +38,7 @@ class BaseIORegistry(type):
             cls._io_format_instances.append(cls())
 
     @classmethod
-    def get_formats(cls) -> List[FormatBase]:
+    def get_formats(cls) -> list[FormatBase]:
         """Return I/O format handlers"""
         return cls._io_format_instances
 

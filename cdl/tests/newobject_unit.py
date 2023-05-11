@@ -11,7 +11,9 @@ Testing functions related to signal/image creation.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from typing import Generator
+from __future__ import annotations
+
+from collections.abc import Generator
 
 from cdl.core.model.base import NormalRandomParam, UniformRandomParam
 from cdl.core.model.image import (

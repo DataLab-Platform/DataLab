@@ -40,7 +40,8 @@ a container for SignalParam and ImageParam instances.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
+from collections.abc import Iterator
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 if TYPE_CHECKING:
@@ -56,7 +57,7 @@ class ObjectGroup:
     def __init__(self, title: str, model: ObjectModel) -> None:
         self.model = model
         self.uuid: str = str(uuid4())  # Group uuid
-        self._objects: List[str] = []  # List of object uuids
+        self._objects: list[str] = []  # list of object uuids
         self._title: str = title
         self.__gnb = 0
 
@@ -110,11 +111,11 @@ class ObjectGroup:
         """Clear group"""
         self._objects.clear()
 
-    def get_objects(self) -> List[SignalParam | ImageParam]:
+    def get_objects(self) -> list[SignalParam | ImageParam]:
         """Return objects in group"""
         return self.model.get_objects(self._objects)
 
-    def get_object_ids(self) -> List[str]:
+    def get_object_ids(self) -> list[str]:
         """Return object ids in group"""
         return self._objects
 
@@ -123,10 +124,10 @@ class ObjectModel:
     """Represents a DataLab object model (groups of signals/images)"""
 
     def __init__(self) -> None:
-        # Dict of objects, key is object uuid:
-        self._objects: Dict[str, SignalParam | ImageParam] = {}
-        # List of groups:
-        self._groups: List[ObjectGroup] = []
+        # dict of objects, key is object uuid:
+        self._objects: dict[str, SignalParam | ImageParam] = {}
+        # list of groups:
+        self._groups: list[ObjectGroup] = []
 
     def refresh_short_ids(self) -> None:
         """Refresh short ids of objects"""
@@ -183,7 +184,7 @@ class ObjectModel:
                 return group
         raise KeyError(f"Group with uuid {uuid} not found")
 
-    def get_groups(self, uuids: Optional[List[str]] = None) -> List[ObjectGroup]:
+    def get_groups(self, uuids: list[str] | None = None) -> list[ObjectGroup]:
         """Return groups"""
         if uuids is None:
             return self._groups
@@ -195,14 +196,14 @@ class ObjectModel:
         self._groups.append(group)
         return group
 
-    def get_object_group_id(self, obj: SignalParam | ImageParam) -> Optional[str]:
+    def get_object_group_id(self, obj: SignalParam | ImageParam) -> str | None:
         """Return group id of object"""
         for group in self._groups:
             if obj in group:
                 return group.uuid
         return None
 
-    def get_group_object_ids(self, group_id: str) -> List[str]:
+    def get_group_object_ids(self, group_id: str) -> list[str]:
         """Return object ids in group"""
         for group in self._groups:
             if group.uuid == group_id:
@@ -238,15 +239,15 @@ class ObjectModel:
             if obj in group:
                 group.remove(obj)
 
-    def get_objects(self, uuids: List[str]) -> List[SignalParam | ImageParam]:
+    def get_objects(self, uuids: list[str]) -> list[SignalParam | ImageParam]:
         """Return objects with uuids"""
         return [self._objects[uuid] for uuid in uuids]
 
-    def get_object_ids(self) -> List[str]:
+    def get_object_ids(self) -> list[str]:
         """Return object ids"""
         return list(self._objects.keys())
 
-    def get_object_titles(self) -> List[str]:
+    def get_object_titles(self) -> list[str]:
         """Return object titles"""
         return [obj.title for obj in self._objects.values()]
 

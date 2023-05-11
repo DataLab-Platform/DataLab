@@ -7,6 +7,8 @@
 DataLab Qt utilities
 """
 
+from __future__ import annotations
+
 import faulthandler
 import functools
 import logging
@@ -16,9 +18,9 @@ import shutil
 import sys
 import time
 import traceback
+from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Generator
 
 import guidata
 from qtpy import QtCore as QC

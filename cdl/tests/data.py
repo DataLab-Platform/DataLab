@@ -11,6 +11,8 @@ Functions creating test data: curves, images, ...
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import dataclasses
 
 import numpy as np
@@ -121,7 +123,7 @@ class PeakDataParam:
     att: float = 1.0
 
 
-def get_peak2d_data(p: PeakDataParam = None, seed=None, multi=False):
+def get_peak2d_data(p: PeakDataParam | None = None, seed=None, multi=False):
     """Return a list of NumPy arrays containing images which are relevant for
     testing 2D peak detection or similar image processing features"""
     if p is None:

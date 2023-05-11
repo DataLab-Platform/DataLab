@@ -9,13 +9,14 @@ DataLab I/O signal functions
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import re
-from typing import Tuple
 
 import numpy as np
 
 
-def read_csv(filename: str) -> Tuple[np.ndarray, str, str, str, str, str]:
+def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
     """Read CSV data, and return tuple (xydata, xlabel, xunit, ylabel, yunit, header).
 
     Parameters

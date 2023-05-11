@@ -9,12 +9,12 @@ DataLab I/O conversion functions
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from typing import List
+from __future__ import annotations
 
 import numpy as np
 
 
-def data_to_xy(data: np.ndarray) -> List[np.ndarray]:
+def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
     """Convert 2-D array into a list of 1-D array data (x, y, dx, dy).
     This is useful for importing data and creating a DataLab signal with it."""
     rows, cols = data.shape

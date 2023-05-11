@@ -13,8 +13,9 @@ import abc
 import functools
 import importlib
 import time
+from collections.abc import Callable
 from io import BytesIO
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from xmlrpc.client import Binary, ServerProxy
 from xmlrpc.server import SimpleXMLRPCServer
 
@@ -49,7 +50,7 @@ def rpcbinary_to_array(binary: Binary) -> np.ndarray:
     return np.load(dbytes, allow_pickle=False)
 
 
-def dataset_to_json(param: gdt.DataSet) -> List[str]:
+def dataset_to_json(param: gdt.DataSet) -> list[str]:
     """Convert guidata DataSet to JSON data"""
     writer = NativeJSONWriter()
     param.serialize(writer)
@@ -58,7 +59,7 @@ def dataset_to_json(param: gdt.DataSet) -> List[str]:
     return [klass.__module__, klass.__name__, param_json]
 
 
-def json_to_dataset(param_data: List[str]) -> gdt.DataSet:
+def json_to_dataset(param_data: list[str]) -> gdt.DataSet:
     """Convert JSON data to guidata DataSet"""
     param_module, param_clsname, param_json = param_data
     mod = importlib.__import__(param_module, fromlist=[param_clsname])
@@ -72,10 +73,10 @@ def json_to_dataset(param_data: List[str]) -> gdt.DataSet:
 class BaseRPCServer(abc.ABC):
     """Base XML-RPC server mixin"""
 
-    def __init__(self):
-        self.port = None
+    def __init__(self) -> None:
+        self.port: int = None
 
-    def serve(self):
+    def serve(self) -> None:
         """Start server and serve forever"""
         with SimpleXMLRPCServer(
             ("127.0.0.1", 0), logRequests=False, allow_none=True
@@ -89,20 +90,20 @@ class BaseRPCServer(abc.ABC):
             server.serve_forever()
 
     @staticmethod
-    def get_version():
+    def get_version() -> str:
         """Return DataLab version"""
         return __version__
 
     @abc.abstractmethod
-    def notify_port(self, port: int):
+    def notify_port(self, port: int) -> None:
         """Notify automatically attributed port"""
 
     @abc.abstractmethod
-    def register_functions(self, server: SimpleXMLRPCServer):
+    def register_functions(self, server: SimpleXMLRPCServer) -> None:
         """Register functions"""
 
 
-def remote_call(func):
+def remote_call(func: Callable) -> object:
     """Decorator for method calling DataLab main window remotely"""
 
     @functools.wraps(func)
@@ -211,15 +212,15 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
     @remote_call
     def open_h5_files(
         self,
-        h5files: List[str] = None,
-        import_all: bool = None,
-        reset_all: bool = None,
+        h5files: list[str] | None = None,
+        import_all: bool | None = None,
+        reset_all: bool | None = None,
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
-    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
+    def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
         """Open DataLab HDF5 browser to Import HDF5 file"""
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
@@ -234,10 +235,10 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         title: str,
         xbinary: Binary,
         ybinary: Binary,
-        xunit: str = None,
-        yunit: str = None,
-        xlabel: str = None,
-        ylabel: str = None,
+        xunit: str | None = None,
+        yunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab"""
         xdata = rpcbinary_to_array(xbinary)
@@ -255,12 +256,12 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self,
         title: str,
         zbinary: Binary,
-        xunit: str = None,
-        yunit: str = None,
-        zunit: str = None,
-        xlabel: str = None,
-        ylabel: str = None,
-        zlabel: str = None,
+        xunit: str | None = None,
+        yunit: str | None = None,
+        zunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+        zlabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab"""
         data = rpcbinary_to_array(zbinary)
@@ -275,7 +276,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         return True
 
     @remote_call
-    def calc(self, name: str, param_data: List[str] = None) -> bool:
+    def calc(self, name: str, param_data: list[str] | None = None) -> bool:
         """Call compute function `name` in current panel's processor"""
         if param_data is None:
             param = None
@@ -284,15 +285,15 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CALC.emit(name, param)
         return True
 
-    def get_object_titles(self) -> List[str]:
+    def get_object_titles(self) -> list[str]:
         """Get object (signal/image) list for current panel"""
         return self.win.get_object_titles()
 
-    def get_object_uuids(self) -> List[str]:
+    def get_object_uuids(self) -> list[str]:
         """Get object (signal/image) list for current panel"""
         return self.win.get_object_uuids()
 
-    def get_object_from_uuid(self, oid: str) -> List[str]:
+    def get_object_from_uuid(self, oid: str) -> list[str]:
         """Get object (signal/image) from uuid"""
         return dataset_to_json(self.win.get_object_from_uuid(oid))
 
@@ -338,7 +339,7 @@ class RemoteClient:
         self.port: str = None
         self.serverproxy: ServerProxy = None
 
-    def connect(self, port: str = None) -> None:
+    def connect(self, port: str | None = None) -> None:
         """Connect to DataLab XML-RPC server"""
         if port is None:
             port = execenv.port
@@ -351,7 +352,7 @@ class RemoteClient:
         except ConnectionRefusedError as exc:
             raise CDLConnectionError("DataLab is currently not running") from exc
 
-    def try_and_connect(self, port: str = None, timeout: int = 5) -> None:
+    def try_and_connect(self, port: str | None = None, timeout: int = 5) -> None:
         """Try (10 times over timeout in s.)
         and connect to DataLab XML-RPC server"""
         execenv.print("Connecting to DataLab XML-RPC server...", end="")
@@ -394,14 +395,14 @@ class RemoteClient:
 
     def open_h5_files(
         self,
-        h5files: List[str] = None,
-        import_all: bool = None,
-        reset_all: bool = None,
+        h5files: list[str] | None = None,
+        import_all: bool | None = None,
+        reset_all: bool | None = None,
     ) -> None:
         """Open a DataLab HDF5 file or import from any other HDF5 file"""
         self.serverproxy.open_h5_files(h5files, import_all, reset_all)
 
-    def import_h5_file(self, filename: str, reset_all: bool = None) -> None:
+    def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
         """Open DataLab HDF5 browser to Import HDF5 file"""
         self.serverproxy.import_h5_file(filename, reset_all)
 
@@ -414,11 +415,11 @@ class RemoteClient:
         title: str,
         xdata: np.ndarray,
         ydata: np.ndarray,
-        xunit: str = None,
-        yunit: str = None,
-        xlabel: str = None,
-        ylabel: str = None,
-    ):
+        xunit: str | None = None,
+        yunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+    ) -> bool:  # pylint: disable=too-many-arguments
         """Add signal data to DataLab"""
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
@@ -429,26 +430,26 @@ class RemoteClient:
         self,
         title: str,
         data: np.ndarray,
-        xunit: str = None,
-        yunit: str = None,
-        zunit: str = None,
-        xlabel: str = None,
-        ylabel: str = None,
-        zlabel: str = None,
-    ):  # pylint: disable=too-many-arguments
+        xunit: str | None = None,
+        yunit: str | None = None,
+        zunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+        zlabel: str | None = None,
+    ) -> bool:  # pylint: disable=too-many-arguments
         """Add image data to DataLab"""
         zbinary = array_to_rpcbinary(data)
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
-    def calc(self, name: str, param: gdt.DataSet = None) -> gdt.DataSet:
+    def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
         """Call compute function `name` in current panel's processor"""
         p = self.serverproxy
         if param is None:
             return p.calc(name)
         return p.calc(name, dataset_to_json(param))
 
-    def add_object(self, obj: SignalParam | ImageParam):
+    def add_object(self, obj: SignalParam | ImageParam) -> None:
         """Add object to DataLab"""
         p = self.serverproxy
         if isinstance(obj, SignalParam):
@@ -473,11 +474,11 @@ class RemoteClient:
                 obj.zlabel,
             )
 
-    def get_object_titles(self) -> List[str]:
+    def get_object_titles(self) -> list[str]:
         """Get object (signal/image) list for current panel"""
         return self.serverproxy.get_object_titles()
 
-    def get_object_uuids(self) -> List[str]:
+    def get_object_uuids(self) -> list[str]:
         """Get object (signal/image) list for current panel"""
         return self.serverproxy.get_object_uuids()
 

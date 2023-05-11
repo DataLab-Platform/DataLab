@@ -9,11 +9,13 @@ DataLab Datasets
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import abc
 import enum
 import json
 import sys
-from typing import Iterable
+from collections.abc import Iterable
 from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
@@ -184,7 +186,9 @@ class ShapeTypes(enum.Enum):
     POINT = enum.auto()
 
 
-def config_annotated_shape(item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool = None):
+def config_annotated_shape(
+    item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool | None = None
+):
     """Configurate annotated shape"""
     param = item.annotationparam
     param.format = fmt
@@ -533,7 +537,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
             yield from range(len(self.roi))
 
     @abc.abstractmethod
-    def get_data(self, roi_index: int = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
@@ -657,7 +661,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         label: str,
         shapetype: ShapeTypes,
         array: np.ndarray,
-        param: gdt.DataSet = None,
+        param: gdt.DataSet | None = None,
     ) -> ResultShape:
         """Add geometric shape as metadata entry, and return ResultShape instance.
 

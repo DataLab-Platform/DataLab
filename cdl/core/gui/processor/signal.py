@@ -9,8 +9,11 @@ DataLab Signal Processor GUI module
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import re
-from typing import Callable, List, Tuple
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 import scipy.integrate as spt
@@ -36,6 +39,13 @@ from cdl.core.model.base import ShapeTypes
 from cdl.core.model.signal import SignalParam, create_signal
 from cdl.utils.qthelpers import exec_dialog, qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
+
+if TYPE_CHECKING:
+    from cdl.core.gui.processor.base import (
+        GaussianParam,
+        MovingAverageParam,
+        MovingMedianParam,
+    )
 
 
 class PeakDetectionParam(DataSet):
@@ -91,7 +101,9 @@ class SignalProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
-    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = None) -> None:
+    def extract_roi(
+        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
+    ) -> None:
         """Extract Region Of Interest (ROI) from data"""
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
@@ -136,7 +148,7 @@ class SignalProcessor(BaseProcessor):
                 edit=False,
             )
 
-    def swap_axes(self):
+    def swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(
             "SwapAxes",
@@ -144,15 +156,15 @@ class SignalProcessor(BaseProcessor):
             func_obj=lambda obj, _orig: obj.remove_all_shapes(),
         )
 
-    def compute_abs(self):
+    def compute_abs(self) -> None:
         """Compute absolute value"""
         self.compute_11("Abs", lambda x, y: (x, np.abs(y)))
 
-    def compute_log10(self):
+    def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11("Log10", lambda x, y: (x, np.log10(y)))
 
-    def detect_peaks(self, param: PeakDetectionParam = None) -> None:
+    def detect_peaks(self, param: PeakDetectionParam | None = None) -> None:
         """Detect peaks from data"""
         obj = self.panel.objview.get_sel_objects()[0]
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
@@ -163,14 +175,14 @@ class SignalProcessor(BaseProcessor):
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
 
-        def func(x, y, p):
+        def func(x, y, p) -> tuple[np.ndarray, np.ndarray]:
             """Peak detection"""
             indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
             return x[indexes], y[indexes]
 
         def func_obj(
             obj: SignalParam, orig: SignalParam, param: PeakDetectionParam
-        ):  # pylint: disable=unused-argument
+        ) -> None:  # pylint: disable=unused-argument
             """Customize signal object"""
             obj.metadata["curvestyle"] = "Sticks"
 
@@ -184,7 +196,7 @@ class SignalProcessor(BaseProcessor):
         )
 
     # ------Signal Processing
-    def apply_11_func(self, obj, orig, func, param, message):
+    def apply_11_func(self, obj, orig, func, param, message) -> None:
         """Apply 11 function: 1 object in --> 1 object out"""
 
         # (self is used by @qt_try_except)
@@ -212,7 +224,7 @@ class SignalProcessor(BaseProcessor):
         return apply_11_func_callback(self, obj, orig, func, param)
 
     @qt_try_except()
-    def normalize(self, param: NormalizeParam = None) -> None:
+    def normalize(self, param: NormalizeParam | None = None) -> None:
         """Normalize data"""
         edit, param = self.init_param(param, NormalizeParam, _("Normalize"))
 
@@ -224,23 +236,25 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_derivative(self):
+    def compute_derivative(self) -> None:
         """Compute derivative"""
         self.compute_11("Derivative", lambda x, y: (x, derivative(x, y)))
 
     @qt_try_except()
-    def compute_integral(self):
+    def compute_integral(self) -> None:
         """Compute integral"""
         self.compute_11("Integral", lambda x, y: (x, spt.cumtrapz(y, x, initial=0.0)))
 
     @qt_try_except()
-    def compute_calibration(self, param: XYCalibrateParam = None) -> None:
+    def compute_calibration(self, param: XYCalibrateParam | None = None) -> None:
         """Compute data linear calibration"""
         edit, param = self.init_param(
             param, XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
         )
 
-        def func(x, y, p):
+        def func(
+            x: np.ndarray, y: np.ndarray, p: XYCalibrateParam
+        ) -> tuple[np.ndarray, np.ndarray]:
             """Compute linear calibration"""
             if p.axis == "x":
                 return p.a * x + p.b, y
@@ -255,7 +269,7 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_threshold(self, param: ThresholdParam = None) -> None:
+    def compute_threshold(self, param: ThresholdParam | None = None) -> None:
         """Compute threshold clipping"""
         edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
         self.compute_11(
@@ -267,7 +281,7 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_clip(self, param: ClipParam = None) -> None:
+    def compute_clip(self, param: ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
         edit, param = self.init_param(param, ClipParam, _("Clipping"))
         self.compute_11(
@@ -279,22 +293,28 @@ class SignalProcessor(BaseProcessor):
         )
 
     @staticmethod
-    def func_gaussian_filter(x, y, p):
+    def func_gaussian_filter(
+        x: np.ndarray, y: np.ndarray, p: GaussianParam
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Compute gaussian filter"""
         return (x, spi.gaussian_filter1d(y, p.sigma))
 
     @staticmethod
-    def func_moving_average(x, y, p):
+    def func_moving_average(
+        x: np.ndarray, y: np.ndarray, p: MovingAverageParam
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Moving average computing function"""
         return (x, moving_average(y, p.n))
 
     @staticmethod
-    def func_moving_median(x, y, p):
+    def func_moving_median(
+        x: np.ndarray, y: np.ndarray, p: MovingMedianParam
+    ) -> tuple[np.ndarray, np.ndarray]:
         """Moving median computing function"""
         return (x, sps.medfilt(y, kernel_size=p.n))
 
     @qt_try_except()
-    def compute_wiener(self):
+    def compute_wiener(self) -> None:
         """Compute Wiener filter"""
         self.compute_11("WienerFilter", lambda x, y: (x, sps.wiener(y)))
 
@@ -315,7 +335,7 @@ class SignalProcessor(BaseProcessor):
             self.__row_compute_fit(obj, name, fitdlgfunc)
 
     @qt_try_except()
-    def compute_polyfit(self, param: PolynomialFitParam = None) -> None:
+    def compute_polyfit(self, param: PolynomialFitParam | None = None) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, PolynomialFitParam, txt)
@@ -368,7 +388,7 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Computing
     @qt_try_except()
-    def compute_fwhm(self, param: FWHMParam = None) -> None:
+    def compute_fwhm(self, param: FWHMParam | None = None) -> None:
         """Compute FWHM"""
         title = _("FWHM")
 
@@ -433,7 +453,7 @@ class SignalProcessor(BaseProcessor):
 
         self.compute_10(title, fw1e2)
 
-    def _get_stat_funcs(self) -> List[Tuple[str, Callable[[np.ndarray], float]]]:
+    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
         return [
             ("min(y)", lambda xy: xy[1].min()),

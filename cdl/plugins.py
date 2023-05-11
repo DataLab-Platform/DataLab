@@ -16,7 +16,7 @@ import os
 import os.path as osp
 import pkgutil
 import sys
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
@@ -39,8 +39,8 @@ sys.path.append(PLUGIN_PYTHONPATH)
 class PluginRegistry(type):
     """Metaclass for registering plugins"""
 
-    _plugin_classes: List[PluginBase] = []
-    _plugin_instances: List[PluginBase] = []
+    _plugin_classes: list[PluginBase] = []
+    _plugin_instances: list[PluginBase] = []
 
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
@@ -48,17 +48,17 @@ class PluginRegistry(type):
             cls._plugin_classes.append(cls)
 
     @classmethod
-    def get_plugin_classes(cls) -> List[PluginBase]:
+    def get_plugin_classes(cls) -> list[PluginBase]:
         """Return plugin classes"""
         return cls._plugin_classes
 
     @classmethod
-    def get_plugins(cls) -> List[PluginBase]:
+    def get_plugins(cls) -> list[PluginBase]:
         """Return plugin instances"""
         return cls._plugin_instances
 
     @classmethod
-    def get_plugin(cls, name_or_class) -> Optional[PluginBase]:
+    def get_plugin(cls, name_or_class) -> PluginBase | None:
         """Return plugin instance"""
         for plugin in cls._plugin_instances:
             if name_or_class in (plugin.info.name, plugin.__class__):
@@ -143,7 +143,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         QW.QMessageBox.information(self.main, _("Information"), message)
 
     def ask_yesno(
-        self, message: str, title: Optional[str] = None, cancelable: bool = False
+        self, message: str, title: str | None = None, cancelable: bool = False
     ) -> bool:
         """Ask yes/no question"""
         if title is None:
@@ -190,7 +190,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Create actions"""
 
 
-def discover_plugins() -> List[PluginBase]:
+def discover_plugins() -> list[PluginBase]:
     """Discover plugins using naming convention"""
     return [
         importlib.import_module(name)

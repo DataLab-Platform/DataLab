@@ -7,6 +7,8 @@
 Module providing DataLab Macro editor widget
 """
 
+from __future__ import annotations
+
 import os
 import sys
 import time
@@ -49,7 +51,7 @@ remote.add_image("toto", z)
 print("All done!")
 """
 
-    def __init__(self, console: PythonShellWidget, name: str = None) -> None:
+    def __init__(self, console: PythonShellWidget, name: str | None = None) -> None:
         super().__init__()
         self.uuid = str(uuid4())
         self.console = console

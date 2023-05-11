@@ -9,6 +9,10 @@ DataLab Native I/O module (native HDF5/JSON formats)
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
+from typing import Any
+
 from guidata.hdf5io import HDF5Reader, HDF5Writer
 from guidata.jsonio import JSONReader, JSONWriter
 
@@ -24,11 +28,11 @@ class NativeH5Writer(HDF5Writer):
     """DataLab signal/image objects HDF5 guidata Dataset Writer class,
     supporting dictionary serialization"""
 
-    def __init__(self, filename):
+    def __init__(self, filename: str) -> None:
         super().__init__(filename)
         self.h5[H5_VERSION] = __version__
 
-    def write_dict(self, val):
+    def write_dict(self, val: dict[str, Any]) -> None:
         """Write dictionary to h5 file"""
         # Keys must be strings
         # Values must be h5py supported data types
@@ -56,11 +60,11 @@ class NativeH5Reader(HDF5Reader):
     """DataLab signal/image objects HDF5 guidata dataset Writer class,
     supporting dictionary deserialization"""
 
-    def __init__(self, filename):
+    def __init__(self, filename: str) -> None:
         super().__init__(filename)
         self.version = self.h5[H5_VERSION]
 
-    def read_dict(self):
+    def read_dict(self) -> dict[str, Any]:
         """Read dictionary from h5 file"""
         group = self.get_parent_group()
         dict_group = group[self.option[-1]]

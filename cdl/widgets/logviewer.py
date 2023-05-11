@@ -7,9 +7,10 @@
 Module providing a log viewer widget, a log viewer window and DataLab's log viewer
 """
 
+from __future__ import annotations
+
 import os.path as osp
 from pathlib import Path
-from typing import List, Optional
 
 from guidata.configtools import get_icon
 from guidata.widgets.codeeditor import CodeEditor
@@ -91,7 +92,7 @@ class LogViewerWindow(QW.QDialog):
         return self.tabs.count() == 0
 
 
-def get_log_filenames() -> List[str]:
+def get_log_filenames() -> list[str]:
     """Return log filenames"""
     return [
         Conf.main.traceback_log_path.get(),
@@ -101,7 +102,7 @@ def get_log_filenames() -> List[str]:
     ]
 
 
-def get_log_prompt_message() -> Optional[str]:
+def get_log_prompt_message() -> str | None:
     """Return prompt message for log files, i.e. a message informing the user
     whether log files were generated during last session or current session."""
     avail = [osp.isfile(fname) for fname in get_log_filenames()]

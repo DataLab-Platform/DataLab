@@ -10,7 +10,6 @@ DataLab image I/O registry
 from __future__ import annotations
 
 import abc
-from typing import List, Optional
 
 import numpy as np
 
@@ -22,7 +21,7 @@ from cdl.utils.misc import reduce_path
 class ImageIORegistry(BaseIORegistry):
     """Metaclass for registering image I/O handler classes"""
 
-    _io_format_instances: List[ImageFormatBase] = []
+    _io_format_instances: list[ImageFormatBase] = []
 
 
 class ImageFormatBaseMeta(ImageIORegistry, abc.ABCMeta):
@@ -33,7 +32,7 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
     """Object representing an image file type"""
 
     @staticmethod
-    def create_object(filename: str, index: Optional[int] = None) -> ImageParam:
+    def create_object(filename: str, index: int | None = None) -> ImageParam:
         """Create empty object"""
         name = reduce_path(filename)
         if index is not None:

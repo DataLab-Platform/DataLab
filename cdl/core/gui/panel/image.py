@@ -7,6 +7,10 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from guiqwt.plot import ImageDialog
 from guiqwt.tools import (
     AnnotatedCircleTool,
@@ -30,6 +34,13 @@ from cdl.core.model.image import (
     create_image_from_param,
     new_image_param,
 )
+
+if TYPE_CHECKING:
+    import guidata.dataset.datatypes as gdt
+    from guiqwt.plot import ImageWidget
+    from qtpy import QtWidgets as QW
+
+    from cdl.core.model.image import ImageParamNew
 
 
 class ImagePanel(BaseDataPanel):
@@ -55,7 +66,7 @@ class ImagePanel(BaseDataPanel):
 
     # pylint: disable=duplicate-code
 
-    def __init__(self, parent, plotwidget, toolbar):
+    def __init__(self, parent: QW.QWidget, plotwidget: ImageWidget, toolbar) -> None:
         super().__init__(parent, plotwidget, toolbar)
         self.plothandler = ImagePlotHandler(self, plotwidget)
         self.processor = ImageProcessor(self, plotwidget)
@@ -65,11 +76,17 @@ class ImagePanel(BaseDataPanel):
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: updating signal"""
         obj = self.objview.get_current_object()
-        obj.invalidate_maskdata_cache()
-        super().properties_changed()
+        if obj is not None:
+            obj.invalidate_maskdata_cache()
+            super().properties_changed()
 
     # ------Creating, adding, removing objects------------------------------------------
-    def new_object(self, newparam=None, addparam=None, edit=True) -> ImageParam:
+    def new_object(
+        self,
+        newparam: ImageParamNew | None = None,
+        addparam: gdt.DataSet | None = None,
+        edit: bool = True,
+    ) -> ImageParam | None:
         """Create a new object (image).
 
         Args:

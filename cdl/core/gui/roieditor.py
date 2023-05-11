@@ -9,6 +9,8 @@ ROI editor widgets
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import abc
 
 import numpy as np
@@ -28,7 +30,9 @@ from cdl.core.model.image import RoiDataGeometries
 class ROIEditorData:
     """ROI Editor data"""
 
-    def __init__(self, roidata: np.ndarray = None, singleobj: bool = None):
+    def __init__(
+        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
+    ):
         self.__singleobj = None
         if roidata is not None:
             roidata = np.array(roidata, dtype=int)
@@ -66,7 +70,11 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     OBJ_NAME = None
 
     def __init__(
-        self, parent: QW.QDialog, obj: ObjectItf, extract: bool, singleobj: bool = None
+        self,
+        parent: QW.QDialog,
+        obj: ObjectItf,
+        extract: bool,
+        singleobj: bool | None = None,
     ):
         super().__init__(parent)
         parent.accepted.connect(self.dialog_accepted)

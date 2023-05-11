@@ -9,9 +9,11 @@ DataLab Common tools for exogenous HDF5 format support
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import abc
 import os.path as osp
-from typing import Callable, Dict
+from collections.abc import Callable
 
 import h5py
 import numpy as np
@@ -224,7 +226,7 @@ class GroupNode(BaseNode):
         """Icon name associated to node"""
         return "h5group.svg"
 
-    def collect_children(self, node_dict: Dict):
+    def collect_children(self, node_dict: dict[str, BaseNode]):
         """Construct tree"""
         for dset in self.dset.values():
             child_cls = NODE_FACTORY.get(dset)

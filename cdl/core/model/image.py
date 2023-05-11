@@ -15,9 +15,9 @@ from __future__ import annotations
 import enum
 import re
 import weakref
-from collections import abc
+from collections.abc import ByteString, Iterator, Mapping, Sequence
 from copy import deepcopy
-from typing import TYPE_CHECKING, Iterator, Optional
+from typing import TYPE_CHECKING
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -54,7 +54,7 @@ def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> Annotated
     return item
 
 
-def to_builtin(obj) -> Optional[object]:
+def to_builtin(obj) -> str | int | float | list | dict | np.ndarray | None:
     """Convert an object implementing a numeric value or collection
     into the corresponding builtin/NumPy type.
 
@@ -63,11 +63,11 @@ def to_builtin(obj) -> Optional[object]:
         return int(obj) if int(obj) == float(obj) else float(obj)
     except (TypeError, ValueError):
         pass
-    if isinstance(obj, abc.ByteString):
+    if isinstance(obj, ByteString):
         return str(obj)
-    if isinstance(obj, abc.Sequence):
+    if isinstance(obj, Sequence):
         return str(obj) if len(obj) == len(str(obj)) else list(obj)
-    if isinstance(obj, abc.Mapping):
+    if isinstance(obj, Mapping):
         return dict(obj)
     if isinstance(obj, np.ndarray):
         return obj
@@ -203,7 +203,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         or any other object (iterating over supported attributes)"""
         self.reset_metadata_to_defaults()
         ptn = r"__[\S_]*__$"
-        if isinstance(obj, abc.Mapping):
+        if isinstance(obj, Mapping):
             for key, value in obj.items():
                 if isinstance(key, str) and not re.match(ptn, key):
                     self.__add_metadata(key, value)
@@ -283,7 +283,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         """Return image center Y-axis coordinate"""
         return self.y0 + 0.5 * self.data.shape[0] * self.dy
 
-    def get_data(self, roi_index: int = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
@@ -352,7 +352,7 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
         update_dataset(item.imageparam, self.metadata)
         item.imageparam.update_image(item)
 
-    def make_item(self, update_from: MaskedImageItem = None):
+    def make_item(self, update_from: MaskedImageItem | None = None):
         """Make plot item from data.
 
         Args:
@@ -570,10 +570,10 @@ class ImageParam(gdt.DataSet, base.ObjectItf):
 
 def create_image(
     title: str,
-    data: Optional[np.ndarray] = None,
-    metadata: Optional[dict] = None,
-    units: Optional[tuple] = None,
-    labels: Optional[tuple] = None,
+    data: np.ndarray | None = None,
+    metadata: dict | None = None,
+    units: tuple | None = None,
+    labels: tuple | None = None,
 ) -> ImageParam:
     """Create a new Image object
 
@@ -654,11 +654,11 @@ class ImageParamNew(gdt.DataSet):
 
 
 def new_image_param(
-    title: Optional[str] = None,
-    itype: Optional[ImageTypes] = None,
-    height: Optional[int] = None,
-    width: Optional[int] = None,
-    dtype: Optional[ImageDatatypes] = None,
+    title: str | None = None,
+    itype: ImageTypes | None = None,
+    height: int | None = None,
+    width: int | None = None,
+    dtype: ImageDatatypes | None = None,
 ) -> ImageParamNew:
     """Create a new Image dataset instance.
 
@@ -706,9 +706,9 @@ class Gauss2DParam(gdt.DataSet):
 
 def create_image_from_param(
     newparam: ImageParamNew,
-    addparam: gdt.DataSet = None,
+    addparam: gdt.DataSet | None = None,
     edit: bool = False,
-    parent: QW.QWidget = None,
+    parent: QW.QWidget | None = None,
 ) -> ImageParam:
     """Create a new Image object from dialog box.
 

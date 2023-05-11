@@ -12,7 +12,6 @@ DataLab signal I/O registry
 from __future__ import annotations
 
 import abc
-from typing import List, Optional
 
 import numpy as np
 
@@ -25,7 +24,7 @@ from cdl.utils.misc import reduce_path
 class SignalIORegistry(BaseIORegistry):
     """Metaclass for registering signal I/O handler classes"""
 
-    _io_format_instances: List[SignalFormatBase] = []
+    _io_format_instances: list[SignalFormatBase] = []
 
 
 class SignalFormatBaseMeta(SignalIORegistry, abc.ABCMeta):
@@ -38,7 +37,7 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
     HEADER_KEY = "HEADER"
 
     @staticmethod
-    def create_object(filename: str, index: Optional[int] = None) -> SignalParam:
+    def create_object(filename: str, index: int | None = None) -> SignalParam:
         """Create empty object"""
         name = reduce_path(filename)
         if index is not None:

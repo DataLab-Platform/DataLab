@@ -39,8 +39,9 @@ from __future__ import annotations
 
 import abc
 import enum
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Dict, Generator, List
+from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -62,7 +63,7 @@ class SelectCond:
     """Signal or image select conditions"""
 
     @staticmethod
-    def __compat_groups(selected_groups: List[ObjectGroup], min_len: int = 1) -> bool:
+    def __compat_groups(selected_groups: list[ObjectGroup], min_len: int = 1) -> bool:
         """Check if groups are compatible"""
         return (
             len(selected_groups) >= min_len
@@ -73,16 +74,16 @@ class SelectCond:
     @staticmethod
     # pylint: disable=unused-argument
     def always(
-        selected_groups: List[ObjectGroup],
-        selected_objects: List[SignalParam | ImageParam],
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """Always true"""
         return True
 
     @staticmethod
     def exactly_one(
-        selected_groups: List[ObjectGroup],
-        selected_objects: List[SignalParam | ImageParam],
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """Exactly one signal or image is selected"""
         return len(selected_groups) == 0 and len(selected_objects) == 1
@@ -90,8 +91,8 @@ class SelectCond:
     @staticmethod
     # pylint: disable=unused-argument
     def exactly_one_group(
-        selected_groups: List[ObjectGroup],
-        selected_objects: List[SignalParam | ImageParam],
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """Exactly one group is selected"""
         return len(selected_groups) == 1
@@ -99,8 +100,8 @@ class SelectCond:
     @staticmethod
     # pylint: disable=unused-argument
     def at_least_one_group_or_one_object(
-        sel_groups: List[ObjectGroup],
-        sel_objects: List[SignalParam | ImageParam],
+        sel_groups: list[ObjectGroup],
+        sel_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """At least one group or one signal or image is selected"""
         return len(sel_objects) >= 1 or len(sel_groups) >= 1
@@ -108,16 +109,16 @@ class SelectCond:
     @staticmethod
     # pylint: disable=unused-argument
     def at_least_one(
-        sel_groups: List[ObjectGroup],
-        sel_objects: List[SignalParam | ImageParam],
+        sel_groups: list[ObjectGroup],
+        sel_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """At least one signal or image is selected"""
         return len(sel_objects) >= 1 or SelectCond.__compat_groups(sel_groups, 1)
 
     @staticmethod
     def at_least_two(
-        sel_groups: List[ObjectGroup],
-        sel_objects: List[SignalParam | ImageParam],
+        sel_groups: list[ObjectGroup],
+        sel_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """At least two signals or images are selected"""
         return len(sel_objects) >= 2 or SelectCond.__compat_groups(sel_groups, 2)
@@ -125,8 +126,8 @@ class SelectCond:
     @staticmethod
     # pylint: disable=unused-argument
     def with_roi(
-        selected_groups: List[ObjectGroup],
-        selected_objects: List[SignalParam | ImageParam],
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalParam | ImageParam],
     ) -> bool:
         """At least one signal or image has a ROI"""
         return any(obj.roi is not None for obj in selected_objects)
@@ -168,7 +169,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.operation_end_actions = None
         self.__category_in_progress: ActionCategory = None
         self.__submenu_in_progress = False
-        self.__actions: Dict[Callable, List[QW.QAction]] = {}
+        self.__actions: dict[Callable, list[QW.QAction]] = {}
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
@@ -208,17 +209,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def new_action(
         self,
         title: str,
-        position: int = None,
+        position: int | None = None,
         separator: bool = False,
-        triggered: Callable = None,
-        toggled: Callable = None,
-        shortcut: QW.QShortcut = None,
-        icon: QG.QIcon = None,
-        tip: str = None,
-        select_condition: Callable = None,
-        context_menu_pos: int = None,
+        triggered: Callable | None = None,
+        toggled: Callable | None = None,
+        shortcut: QW.QShortcut | None = None,
+        icon: QG.QIcon | None = None,
+        tip: str | None = None,
+        select_condition: Callable | None = None,
+        context_menu_pos: int | None = None,
         context_menu_sep: bool = False,
-        toolbar_pos: int = None,
+        toolbar_pos: int | None = None,
         toolbar_sep: bool = False,
     ):
         """Create new action and add it to list of actions.
@@ -268,8 +269,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def add_to_action_list(
         self,
         action: QW.QAction,
-        category: ActionCategory = None,
-        pos: int = None,
+        category: ActionCategory | None = None,
+        pos: int | None = None,
         sep: bool = False,
     ) -> None:
         """Add action to list of actions.
@@ -303,7 +304,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 pos += 1
             actionlist.insert(pos, None)
 
-    def add_action(self, action: QW.QAction, select_condition: Callable = None) -> None:
+    def add_action(
+        self, action: QW.QAction, select_condition: Callable | None = None
+    ) -> None:
         """Add action to list of actions.
 
         Args:
@@ -318,14 +321,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     def selected_objects_changed(
         self,
-        selected_groups: List[ObjectGroup],
-        selected_objects: List[SignalParam | ImageParam],
+        selected_groups: list[ObjectGroup],
+        selected_objects: list[SignalParam | ImageParam],
     ) -> None:
         """Update actions based on selected objects.
 
         Args:
-            selected_groups (List[ObjectGroup]): selected groups
-            selected_objects (List[SignalParam | ImageParam]): selected objects
+            selected_groups (list[ObjectGroup]): selected groups
+            selected_objects (list[SignalParam | ImageParam]): selected objects
         """
         for cond, actlist in self.__actions.items():
             if cond is not None:

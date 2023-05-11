@@ -7,6 +7,8 @@
 DataLab launcher module
 """
 
+from __future__ import annotations
+
 from guidata.configtools import get_image_file_path
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -19,7 +21,11 @@ from cdl.utils.qthelpers import qt_app_context
 
 
 def create(
-    splash: bool = True, console: bool = None, objects=None, h5files=None, size=None
+    splash: bool = True,
+    console: bool | None = None,
+    objects=None,
+    h5files=None,
+    size=None,
 ) -> CDLMainWindow:
     """Create DataLab application and return mainwindow instance"""
     if splash:

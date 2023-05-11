@@ -15,6 +15,8 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from __future__ import annotations
+
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel

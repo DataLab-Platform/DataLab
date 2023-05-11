@@ -9,10 +9,11 @@ DataLab HDF5 browser module
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import abc
 import os
 import os.path as osp
-from typing import List
 
 from guidata.qthelpers import (
     add_actions,
@@ -67,13 +68,13 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
 
     @abc.abstractmethod
     def get_actions_from_items(
-        self, items: List[QW.QTreeWidgetItem]
-    ) -> List[QW.QAction]:
+        self, items: list[QW.QTreeWidgetItem]
+    ) -> list[QW.QAction]:
         """Get actions from item"""
         # Right here: add other actions if necessary (reimplement this method)
         return []
 
-    def setup_common_actions(self) -> List[QW.QAction]:
+    def setup_common_actions(self) -> list[QW.QAction]:
         """Setup context menu common actions"""
         self.collapse_all_action = create_action(
             self,
@@ -168,11 +169,11 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         self.expand_selection_action.setEnabled(is_selection)
         self.collapse_selection_action.setEnabled(is_selection)
 
-    def get_top_level_items(self) -> List[QW.QTreeWidgetItem]:
+    def get_top_level_items(self) -> list[QW.QTreeWidgetItem]:
         """Iterate over top level items"""
         return [self.topLevelItem(_i) for _i in range(self.topLevelItemCount())]
 
-    def get_items(self) -> List[QW.QTreeWidgetItem]:
+    def get_items(self) -> list[QW.QTreeWidgetItem]:
         """Return items (excluding top level items)"""
         itemlist = []
 

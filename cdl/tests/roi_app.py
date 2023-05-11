@@ -12,6 +12,8 @@ ROI test:
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import numpy as np
 
 from cdl.core.gui.panel import image, signal
@@ -25,14 +27,14 @@ from cdl.tests.data import create_test_image3, create_test_signal1
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_signal_features(panel: signal, singleobj: bool = None):
+def test_signal_features(panel: signal, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(FWHMParam())
     panel.processor.compute_fw1e2()
     panel.processor.extract_roi(singleobj=singleobj)
 
 
-def test_image_features(panel: image, singleobj: bool = None):
+def test_image_features(panel: image, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()

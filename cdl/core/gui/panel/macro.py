@@ -9,7 +9,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING
 
 from guidata.config import CONF
 from guidata.configtools import get_font, get_icon
@@ -52,7 +52,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     SIG_OBJECT_MODIFIED = QC.Signal()
 
-    def __init__(self, parent: QW.QWidget = None) -> None:
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
         self.setWindowTitle(_("Macro manager"))
         self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
@@ -78,8 +78,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         self.run_action = None
         self.stop_action = None
-        self.obj_actions: List[QW.QAction] = []  # Object-dependent actions
-        self.__macros: Dict[str, Macro] = {}
+        self.obj_actions: list[QW.QAction] = []  # Object-dependent actions
+        self.__macros: dict[str, Macro] = {}
 
         # TODO: Add action "Import from file..."
         # TODO: Add action "Export to file..."
@@ -222,7 +222,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.current_macro_changed()
         self.context_menu.popup(position)
 
-    def get_macro(self, index: int = None) -> Macro:
+    def get_macro(self, index: int | None = None) -> Macro:
         """Return macro at index (if index is None, return current macro)"""
         if index is None:
             index = self.tabwidget.currentIndex()
@@ -231,7 +231,9 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 return macro
         return None
 
-    def current_macro_changed(self, index: int = None) -> None:  # pylint: disable=W0613
+    def current_macro_changed(
+        self, index: int | None = None
+    ) -> None:  # pylint: disable=W0613
         """Current macro has changed"""
         macro = self.get_macro()
         if macro is not None:
@@ -269,7 +271,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.run_action.setEnabled(not state)
             self.stop_action.setEnabled(state)
 
-    def add_macro(self, name: str = None, rename: bool = True) -> Macro:
+    def add_macro(self, name: str | None = None, rename: bool = True) -> Macro:
         """Add macro, optionally with name"""
         macro = self.create_object(name)
         self.add_object(macro)
@@ -283,7 +285,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         index = self.indexOf(self.tabwidget)
         self.tabwidget.setTabText(index, name)
 
-    def rename_macro(self, index: int = None) -> None:
+    def rename_macro(self, index: int | None = None) -> None:
         """Rename macro"""
         macro = self.get_macro(index)
         name, valid = QW.QInputDialog.getText(
@@ -306,7 +308,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Import macro from file"""
         raise NotImplementedError
 
-    def remove_macro(self, index: int = None) -> None:
+    def remove_macro(self, index: int | None = None) -> None:
         """Remove macro"""
         if index is None:
             index = self.tabwidget.currentIndex()

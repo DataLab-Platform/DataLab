@@ -49,7 +49,7 @@ import abc
 import dataclasses
 import re
 import warnings
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
@@ -81,18 +81,21 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:
-    from guiqwt.plot import CurveDialog, ImageDialog
+    import guidata.dataset.datatypes as gdt
+    from guiqwt.plot import CurveDialog, CurveWidget, ImageDialog, ImageWidget
     from guiqwt.tools import GuiTool
+    from qtpy import QtWidgets as QW
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
     from cdl.core.gui.plothandler import BasePlotHandler
     from cdl.core.gui.processor.base import BaseProcessor
-    from cdl.core.io.base import BaseIORegistry
+    from cdl.core.io.image import ImageIORegistry
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
+    from cdl.core.io.signal import SignalIORegistry
     from cdl.core.model.base import ShapeTypes
-    from cdl.core.model.image import ImageParam
-    from cdl.core.model.signal import SignalParam
+    from cdl.core.model.image import ImageParam, ImageParamNew
+    from cdl.core.model.signal import SignalParam, SignalParamNew
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -150,7 +153,7 @@ class ObjectProp(QW.QWidget):
                 text += "<br>".join(lines)
         self.param_label.setText(text)
 
-    def update_properties_from(self, param: SignalParam | ImageParam = None):
+    def update_properties_from(self, param: SignalParam | ImageParam | None = None):
         """Update properties from signal/image dataset"""
         self.properties.setDisabled(param is None)
         if param is None:
@@ -253,15 +256,19 @@ class BaseDataPanel(AbstractPanel):
         RectangleTool,
     )
     DIALOGSIZE = (800, 600)
-    IO_REGISTRY: BaseIORegistry = None  # Replaced by the right class in child object
+    # Replaced by the right class in child object:
+    IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
     SIG_UPDATE_PLOT_ITEM = QC.Signal(str)  # Update plot item associated to uuid
     SIG_UPDATE_PLOT_ITEMS = QC.Signal()  # Update plot items associated to selected objs
     ROIDIALOGOPTIONS = {}
-    ROIDIALOGCLASS: roieditor.BaseROIEditor = None  # Replaced in child object
+    # Replaced in child object:
+    ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
 
     @abc.abstractmethod
-    def __init__(self, parent, plotwidget, toolbar):
+    def __init__(
+        self, parent: QW.QWidget, plotwidget: CurveWidget | ImageWidget, toolbar
+    ) -> None:
         super().__init__(parent)
         self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
@@ -274,7 +281,7 @@ class BaseDataPanel(AbstractPanel):
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
-        self.__separate_views: Dict[QW.QDialog, SignalParam | ImageParam] = {}
+        self.__separate_views: dict[QW.QDialog, SignalParam | ImageParam] = {}
 
     # ------AbstractPanel interface-----------------------------------------------------
     @property
@@ -292,7 +299,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         super().remove_all_objects()
 
-    def create_object(self, title: Optional[str] = None) -> SignalParam | ImageParam:
+    def create_object(self, title: str | None = None) -> SignalParam | ImageParam:
         """Create object (signal or image)
 
         Args:
@@ -314,7 +321,9 @@ class BaseDataPanel(AbstractPanel):
         return obj
 
     @qt_try_except()
-    def add_object(self, obj: SignalParam | ImageParam, group_id: str = None) -> None:
+    def add_object(
+        self, obj: SignalParam | ImageParam, group_id: str | None = None
+    ) -> None:
         """Add object
 
         Args:
@@ -383,7 +392,7 @@ class BaseDataPanel(AbstractPanel):
 
     def get_category_actions(
         self, category: actionhandler.ActionCategory
-    ) -> List[QW.QAction]:  # pragma: no cover
+    ) -> list[QW.QAction]:  # pragma: no cover
         """Return actions for category"""
         return self.acthandler.feature_actions.get(category, [])
 
@@ -400,7 +409,9 @@ class BaseDataPanel(AbstractPanel):
     # ------Creating, adding, removing objects------------------------------------------
 
     # TODO: [P2] New feature: move objects up/down
-    def __duplicate_individual_object(self, oid: str, new_group_id: str = None) -> None:
+    def __duplicate_individual_object(
+        self, oid: str, new_group_id: str | None = None
+    ) -> None:
         """Duplicate individual object"""
         obj = self.objmodel[oid]
         objcopy = self.create_object()
@@ -523,8 +534,11 @@ class BaseDataPanel(AbstractPanel):
 
     @abc.abstractmethod
     def new_object(
-        self, newparam=None, addparam=None, edit=True
-    ) -> SignalParam | ImageParam:
+        self,
+        newparam: SignalParamNew | ImageParamNew | None = None,
+        addparam: gdt.DataSet | None = None,
+        edit: bool = True,
+    ) -> SignalParam | ImageParam | None:
         """Create a new object (signal/image).
 
         Args:
@@ -538,7 +552,7 @@ class BaseDataPanel(AbstractPanel):
 
     def open_object(
         self, filename: str
-    ) -> Union[SignalParam | ImageParam, List[SignalParam | ImageParam]]:
+    ) -> SignalParam | ImageParam | list[SignalParam | ImageParam]:
         """Open object from file (signal/image), add it to DataLab and return it.
 
         Args:
@@ -556,7 +570,7 @@ class BaseDataPanel(AbstractPanel):
             return obj_or_objlist[0]
         return obj_or_objlist
 
-    def save_object(self, obj, filename: str = None) -> None:
+    def save_object(self, obj, filename: str | None = None) -> None:
         """Save object to file (signal/image)"""
         if filename is None:
             basedir = Conf.main.base_dir.get()
@@ -568,7 +582,7 @@ class BaseDataPanel(AbstractPanel):
                 Conf.main.base_dir.set(filename)
                 self.IO_REGISTRY.write(filename, obj)
 
-    def handle_dropped_files(self, filenames: List[str] = None) -> None:
+    def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
         """Handle dropped files
 
         Args:
@@ -585,15 +599,15 @@ class BaseDataPanel(AbstractPanel):
             self.open_objects(other_fnames)
 
     def open_objects(
-        self, filenames: List[str] = None
-    ) -> List[SignalParam | ImageParam]:
+        self, filenames: list[str] | None = None
+    ) -> list[SignalParam | ImageParam]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
             filenames (list(str)): File names
 
         Returns:
-            List of new objects
+            list of new objects
         """
         if not self.mainwindow.confirm_memory_state():
             return []
@@ -609,7 +623,7 @@ class BaseDataPanel(AbstractPanel):
                 objs.append(self.open_object(filename))
         return objs
 
-    def save_objects(self, filenames: List[str] = None) -> None:
+    def save_objects(self, filenames: list[str] | None = None) -> None:
         """Save selected objects to file (signal/image).
 
         Args:
@@ -626,7 +640,7 @@ class BaseDataPanel(AbstractPanel):
             filename = filenames[index]
             self.save_object(obj, filename)
 
-    def import_metadata_from_file(self, filename: str = None) -> None:
+    def import_metadata_from_file(self, filename: str | None = None) -> None:
         """Import metadata from file (JSON).
 
         Args:
@@ -648,7 +662,7 @@ class BaseDataPanel(AbstractPanel):
                 obj.import_metadata_from_file(filename)
             self.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def export_metadata_from_file(self, filename: str = None) -> None:
+    def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
 
         Args:
@@ -686,7 +700,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, oids: Optional[List[str]] = None) -> QW.QDialog:
+    def open_separate_view(self, oids: list[str] | None = None) -> QW.QDialog:
         """
         Open separate view for visualizing selected objects
 
@@ -744,13 +758,13 @@ class BaseDataPanel(AbstractPanel):
 
     def create_new_dialog(
         self,
-        oids: List[str],
+        oids: list[str],
         edit: bool = False,
         toolbar: bool = True,
-        title: str = None,
-        tools: List[GuiTool] = None,
-        name: str = None,
-        options: dict = None,
+        title: str | None = None,
+        tools: list[GuiTool] | None = None,
+        name: str | None = None,
+        options: dict | None = None,
     ) -> CurveDialog | ImageDialog:
         """Create new pop-up signal/image plot dialog.
 
@@ -759,7 +773,7 @@ class BaseDataPanel(AbstractPanel):
             edit (bool): Edit mode
             toolbar (bool): Show toolbar
             title (str): Dialog title
-            tools (list(GuiTool)): List of tools to add to the toolbar
+            tools (list(GuiTool)): list of tools to add to the toolbar
             name (str): Dialog name
             options (dict): Plot options
 
@@ -807,7 +821,7 @@ class BaseDataPanel(AbstractPanel):
             name (str): Dialog name
             options (dict): Plot options
             toolbar (bool): Show toolbar
-            tools (list(GuiTool)): List of tools to add to the toolbar
+            tools (list(GuiTool)): list of tools to add to the toolbar
 
         Returns:
             QDialog instance, selected object
@@ -848,7 +862,7 @@ class BaseDataPanel(AbstractPanel):
         return None
 
     def get_object_dialog(
-        self, title: str, parent: Optional[QW.QWidget] = None
+        self, title: str, parent: QW.QWidget | None = None
     ) -> objectview.GetObjectDialog:
         """Get object dialog.
 
@@ -883,11 +897,11 @@ class BaseDataPanel(AbstractPanel):
         class ResultData:
             """Result data associated to a shapetype"""
 
-            results: List[ResultShape] = None
-            xlabels: List[str] = None
-            ylabels: List[str] = None
+            results: list[ResultShape] = None
+            xlabels: list[str] = None
+            ylabels: list[str] = None
 
-        rdatadict: Dict[ShapeTypes, ResultData] = {}
+        rdatadict: dict[ShapeTypes, ResultData] = {}
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             for result in obj.iterate_resultshapes():

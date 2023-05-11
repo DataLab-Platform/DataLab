@@ -131,7 +131,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
     x = property(__get_x, __set_x)
     y = data = property(__get_y, __set_y)
 
-    def get_data(self, roi_index: int = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
@@ -278,13 +278,13 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
 
 def create_signal(
     title: str,
-    x: np.ndarray = None,
-    y: np.ndarray = None,
-    dx: np.ndarray = None,
-    dy: np.ndarray = None,
-    metadata: dict = None,
-    units: tuple = None,
-    labels: tuple = None,
+    x: np.ndarray | None = None,
+    y: np.ndarray | None = None,
+    dx: np.ndarray | None = None,
+    dy: np.ndarray | None = None,
+    metadata: dict | None = None,
+    units: tuple | None = None,
+    labels: tuple | None = None,
 ) -> SignalParam:
     """Create a new Signal object.
 
@@ -348,7 +348,13 @@ class SignalParamNew(gdt.DataSet):
     type = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices())
 
 
-def new_signal_param(title=None, stype=None, xmin=None, xmax=None, size=None):
+def new_signal_param(
+    title: str | None = None,
+    stype: str | None = None,
+    xmin: float | None = None,
+    xmax: float | None = None,
+    size: int | None = None,
+) -> SignalParamNew:
     """Create a new Signal dataset instance.
 
     Args:
@@ -381,9 +387,9 @@ SIG_NB = 0
 
 def create_signal_from_param(
     newparam: SignalParamNew,
-    addparam: gdt.DataSet = None,
+    addparam: gdt.DataSet | None = None,
     edit: bool = False,
-    parent: QW.QWidget = None,
+    parent: QW.QWidget | None = None,
 ) -> SignalParam:
     """Create a new Signal object from a dialog box.
 

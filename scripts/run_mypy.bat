@@ -13,5 +13,5 @@ call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
-mypy --strict --ignore-missing-imports %MODNAME%
+mypy --strict --ignore-missing-imports --allow-subclassing-any %MODNAME%
 call %FUNC% EndOfScript

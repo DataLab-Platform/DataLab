@@ -37,7 +37,8 @@ This module provides widgets to display object (signal/image) trees.
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Iterator, List, Optional
+from collections.abc import Iterator
+from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
 from qtpy import QtCore as QC
@@ -85,7 +86,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         self.set_current_item_id(sobjlist.get_current_item_id())
 
     def iter_items(
-        self, item: Optional[QW.QTreeWidgetItem] = None
+        self, item: QW.QTreeWidgetItem | None = None
     ) -> Iterator[QW.QTreeWidgetItem]:
         """Recursively iterate over all items"""
         if item is None:
@@ -107,7 +108,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Get actions from item"""
         return []
 
-    def get_current_object(self) -> Optional[SignalParam | ImageParam]:
+    def get_current_object(self) -> SignalParam | ImageParam | None:
         """Return current object"""
         oid = self.get_current_item_id(object_only=True)
         if oid is not None:
@@ -118,7 +119,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Set current object"""
         self.set_current_item_id(obj.uuid)
 
-    def get_current_item_id(self, object_only: bool = False) -> Optional[str]:
+    def get_current_item_id(self, object_only: bool = False) -> str | None:
         """Return current item id"""
         item = self.currentItem()
         if item is not None and (not object_only or item.parent() is not None):
@@ -307,19 +308,19 @@ class ObjectView(SimpleObjectTree):
         else:
             event.ignore()
 
-    def get_sel_group_items(self) -> List[QW.QTreeWidgetItem]:
+    def get_sel_group_items(self) -> list[QW.QTreeWidgetItem]:
         """Return selected group items"""
         return [item for item in self.selectedItems() if item.parent() is None]
 
-    def get_sel_group_uuids(self) -> List[str]:
+    def get_sel_group_uuids(self) -> list[str]:
         """Return selected group uuids"""
         return [item.data(0, QC.Qt.UserRole) for item in self.get_sel_group_items()]
 
-    def get_sel_object_items(self) -> List[QW.QTreeWidgetItem]:
+    def get_sel_object_items(self) -> list[QW.QTreeWidgetItem]:
         """Return selected object items"""
         return [item for item in self.selectedItems() if item.parent() is not None]
 
-    def get_sel_object_uuids(self, include_groups: bool = False) -> List[str]:
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
         If include_groups is True, also return objects from selected groups."""
@@ -336,13 +337,13 @@ class ObjectView(SimpleObjectTree):
 
     def get_sel_objects(
         self, include_groups: bool = False
-    ) -> List[SignalParam | ImageParam]:
+    ) -> list[SignalParam | ImageParam]:
         """Return selected objects.
 
         If include_groups is True, also return objects from selected groups."""
         return [self.objmodel[oid] for oid in self.get_sel_object_uuids(include_groups)]
 
-    def get_sel_groups(self) -> List[ObjectGroup]:
+    def get_sel_groups(self) -> list[ObjectGroup]:
         """Return selected groups"""
         return self.objmodel.get_groups(self.get_sel_group_uuids())
 
@@ -362,20 +363,20 @@ class ObjectView(SimpleObjectTree):
 
         self.SIG_SELECTION_CHANGED.emit()
 
-    def select_nums(self, obj_nums: List[int], group_num: int = 0) -> None:
+    def select_nums(self, obj_nums: list[int], group_num: int = 0) -> None:
         """Select multiple objects by their numbers"""
         uuids = [self.objmodel.get_groups()[group_num][num].uuid for num in obj_nums]
         self.clearSelection()
         for uuid in uuids:
             self.set_current_item_id(uuid, extend=True)
 
-    def select_objects(self, objs: List[SignalParam | ImageParam]) -> None:
+    def select_objects(self, objs: list[SignalParam | ImageParam]) -> None:
         """Select multiple objects"""
         self.clearSelection()
         for obj in objs:
             self.set_current_item_id(obj.uuid, extend=True)
 
-    def select_groups(self, groups: List[ObjectGroup]) -> None:
+    def select_groups(self, groups: list[ObjectGroup]) -> None:
         """Select multiple groups"""
         self.clearSelection()
         for group in groups:

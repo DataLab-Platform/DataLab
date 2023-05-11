@@ -28,7 +28,8 @@ These classes handle guiqwt plot items for signal and image panels.
 from __future__ import annotations
 
 import hashlib
-from typing import TYPE_CHECKING, Dict, Iterator, List, Optional
+from collections.abc import Iterator
+from typing import TYPE_CHECKING
 from weakref import WeakKeyDictionary
 
 import numpy as np
@@ -67,11 +68,11 @@ class BasePlotHandler:
         self.plot = plotwidget.get_plot()
 
         # Plot items: key = object uuid, value = plot item
-        self.__plotitems: Dict[str, CurveItem | MaskedImageItem] = {}
+        self.__plotitems: dict[str, CurveItem | MaskedImageItem] = {}
 
         self.__shapeitems = []
         self.__cached_hashes: WeakKeyDictionary[
-            SignalParam | ImageParam, List[int]
+            SignalParam | ImageParam, list[int]
         ] = WeakKeyDictionary()
 
     def __len__(self) -> int:
@@ -83,8 +84,8 @@ class BasePlotHandler:
         return self.__plotitems[oid]
 
     def get(
-        self, key: str, default: Optional[CurveItem | MaskedImageItem] = None
-    ) -> Optional[CurveItem | MaskedImageItem]:
+        self, key: str, default: CurveItem | MaskedImageItem | None = None
+    ) -> CurveItem | MaskedImageItem | None:
         """Return item associated to object uuid.
         If the key is not found, default is returned if given,
         otherwise None is returned."""
@@ -177,7 +178,7 @@ class BasePlotHandler:
         #  For now, nothing to do here: it's only used for images (contrast)
 
     def refresh_plot(
-        self, only_oid: Optional[str] = None, just_show: Optional[bool] = False
+        self, only_oid: str | None = None, just_show: bool = False
     ) -> None:
         """Refresh plot.
 
@@ -281,7 +282,7 @@ class ImagePlotHandler(BasePlotHandler):
             plot.update_colormap_axis(item)
 
     def refresh_plot(
-        self, only_oid: Optional[str] = None, just_show: Optional[bool] = False
+        self, only_oid: str | None = None, just_show: bool = False
     ) -> None:
         """Refresh plot.
 

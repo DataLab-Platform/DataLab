@@ -7,6 +7,8 @@
 Module providing DataLab Installation configuration widget
 """
 
+from __future__ import annotations
+
 import locale
 import os
 import platform
@@ -23,7 +25,7 @@ from cdl.utils import dephash
 from cdl.utils.qthelpers import exec_dialog
 
 
-def decode_fs_string(string):
+def decode_fs_string(string: bytes) -> str:
     """Convert string from file system charset to unicode"""
     charset = sys.getfilesystemencoding()
     if charset is None:
@@ -31,7 +33,7 @@ def decode_fs_string(string):
     return string.decode(charset)
 
 
-def get_pip_list():
+def get_pip_list() -> str:
     """Get pip list result"""
     command = " ".join([sys.executable, "-m", "pip list"])
     with Popen(command, shell=True, stdout=PIPE, stderr=PIPE) as proc:
@@ -42,7 +44,9 @@ def get_pip_list():
 class InstallConfigViewerWidget(QW.QWidget):
     """Installation configuration widget"""
 
-    def __init__(self, label, contents, parent=None):
+    def __init__(
+        self, label: str, contents: str, parent: QW.QWidget | None = None
+    ) -> None:
         super().__init__(parent)
         self.editor = CodeEditor()
         self.editor.setReadOnly(True)
@@ -56,7 +60,7 @@ class InstallConfigViewerWidget(QW.QWidget):
 class InstallConfigViewerWindow(QW.QDialog):
     """Installation configuration window"""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
         self.setObjectName("dependencies")
         self.setWindowTitle(_("About DataLab installation"))
@@ -98,7 +102,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.resize(800, 500)
 
 
-def exec_cdl_installconfig_dialog(parent=None):
+def exec_cdl_installconfig_dialog(parent: QW.QWidget | None = None) -> None:
     """View DataLab installation configuration"""
     dlg = InstallConfigViewerWindow(parent=parent)
     exec_dialog(dlg)

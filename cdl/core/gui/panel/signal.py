@@ -7,6 +7,10 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from guiqwt.plot import CurveDialog
 
 from cdl.config import _
@@ -22,6 +26,13 @@ from cdl.core.model.signal import (
     new_signal_param,
 )
 
+if TYPE_CHECKING:
+    import guidata.dataset.datatypes as gdt
+    from guiqwt.plot import CurveWidget
+    from qtpy import QtWidgets as QW
+
+    from cdl.core.model.signal import SignalParamNew
+
 
 class SignalPanel(BaseDataPanel):
     """Object handling the item list, the selected item properties and plot,
@@ -36,14 +47,19 @@ class SignalPanel(BaseDataPanel):
 
     # pylint: disable=duplicate-code
 
-    def __init__(self, parent, plotwidget, toolbar):
+    def __init__(self, parent: QW.QWidget, plotwidget: CurveWidget, toolbar) -> None:
         super().__init__(parent, plotwidget, toolbar)
         self.plothandler = SignalPlotHandler(self, plotwidget)
         self.processor = SignalProcessor(self, plotwidget)
         self.acthandler = SignalActionHandler(self, toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
-    def new_object(self, newparam=None, addparam=None, edit=True) -> SignalParam:
+    def new_object(
+        self,
+        newparam: SignalParamNew | None = None,
+        addparam: gdt.DataSet | None = None,
+        edit: bool = True,
+    ) -> SignalParam | None:
         """Create a new object (signal).
 
         Args:

@@ -23,7 +23,8 @@ from __future__ import annotations
 
 import abc
 import warnings
-from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Tuple, Union
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -49,7 +50,7 @@ if TYPE_CHECKING:
     from cdl.core.model.image import ImageParam
     from cdl.core.model.signal import SignalParam
 
-    Obj = Union[SignalParam, ImageParam]
+    Obj = SignalParam | ImageParam
 
 
 class GaussianParam(gdt.DataSet):
@@ -87,7 +88,7 @@ class BaseProcessor(QC.QObject):
 
     SIG_ADD_SHAPE = QC.Signal(str)
     EDIT_ROI_PARAMS = False
-    PARAM_DEFAULTS: Dict[str, gdt.DataSet] = {}
+    PARAM_DEFAULTS: dict[str, gdt.DataSet] = {}
 
     def __init__(
         self, panel: SignalPanel | ImagePanel, plotwidget: CurveWidget | ImageWidget
@@ -101,8 +102,8 @@ class BaseProcessor(QC.QObject):
         param: gdt.DataSet,
         paramclass: gdt.DataSet,
         title: str,
-        comment: str = None,
-    ) -> Tuple[bool, gdt.DataSet]:
+        comment: str | None = None,
+    ) -> tuple[bool, gdt.DataSet]:
         """Initialize processing parameters"""
         edit = param is None
         if edit:
@@ -121,9 +122,9 @@ class BaseProcessor(QC.QObject):
         self,
         name: str,
         func: Callable,
-        param: gdt.DataSet = None,
-        suffix: Callable = None,
-        func_obj: Callable = None,
+        param: gdt.DataSet | None = None,
+        suffix: Callable | None = None,
+        func_obj: Callable | None = None,
         edit: bool = True,
     ):
         """Compute 11 function: 1 object in --> 1 object out"""
@@ -134,11 +135,11 @@ class BaseProcessor(QC.QObject):
 
     def compute_1n(
         self,
-        names: List,
+        names: list,
         func: Callable,
-        params: List = None,
-        suffix: Callable = None,
-        func_obj: Callable = None,
+        params: list | None = None,
+        suffix: Callable | None = None,
+        func_obj: Callable | None = None,
         edit: bool = True,
     ):
         """Compute 1n function: 1 object in --> n objects out"""
@@ -150,9 +151,9 @@ class BaseProcessor(QC.QObject):
 
     def _compute_11_subroutine(
         self,
-        names: List,
+        names: list,
         func: Callable,
-        params: List,
+        params: list,
         suffix: Callable,
         func_obj: Callable,
     ):
@@ -216,10 +217,10 @@ class BaseProcessor(QC.QObject):
         self,
         name: str,
         func: Callable,
-        param: gdt.DataSet = None,
-        suffix: Callable = None,
+        param: gdt.DataSet | None = None,
+        suffix: Callable | None = None,
         edit: bool = True,
-    ) -> Dict[int, ResultShape]:
+    ) -> dict[int, ResultShape]:
         """Compute 10 function: 1 object in --> 0 object out
         (the result of this method is stored in original object's metadata)"""
         if param is not None:
@@ -267,9 +268,9 @@ class BaseProcessor(QC.QObject):
         self,
         name: str,
         func: Callable,
-        param: gdt.DataSet = None,
-        suffix: Callable = None,
-        func_objs: Callable = None,
+        param: gdt.DataSet | None = None,
+        suffix: Callable | None = None,
+        func_objs: Callable | None = None,
         edit: bool = True,
     ):
         """Compute n1 function: N(>=2) objects in --> 1 object out"""
@@ -280,11 +281,11 @@ class BaseProcessor(QC.QObject):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
 
         # [new_objs dictionary] keys: old group id, values: new object
-        new_objs: Dict[str, Obj] = {}
+        new_objs: dict[str, Obj] = {}
         # [old_dtypes dictionary] keys: old group id, values: old data type
-        old_dtypes: Dict[str, np.dtype] = {}
+        old_dtypes: dict[str, np.dtype] = {}
         # [old_objs dictionary] keys: old group id, values: list of old objects
-        old_objs: Dict[str, List[Obj]] = {}
+        old_objs: dict[str, list[Obj]] = {}
 
         with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
             for index, obj in enumerate(objs):
@@ -344,12 +345,12 @@ class BaseProcessor(QC.QObject):
     def compute_n1n(
         self,
         name: str,
-        obj2: Optional[Obj],
+        obj2: Obj | None,
         obj2_name: str,
         func: Callable,
-        param: gdt.DataSet = None,
-        suffix: Callable = None,
-        func_obj: Callable = None,
+        param: gdt.DataSet | None = None,
+        suffix: Callable | None = None,
+        func_obj: Callable | None = None,
         edit: bool = True,
     ):
         """Compute n1n function: N(>=1) objects + 1 object in --> N objects out.
@@ -405,7 +406,7 @@ class BaseProcessor(QC.QObject):
     def compute_average(self):
         """Compute average"""
 
-        def func_objs(new_obj: Obj, old_objs: List[Obj]) -> None:
+        def func_objs(new_obj: Obj, old_objs: list[Obj]) -> None:
             """Finalize average computation"""
             new_obj.data = new_obj.data / float(len(old_objs))
 
@@ -424,8 +425,8 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_difference(
         self,
-        obj2: Optional[Obj] = None,
-        quadratic: Optional[bool] = None,
+        obj2: Obj | None = None,
+        quadratic: bool | None = None,
     ):
         """Compute (quadratic) difference"""
 
@@ -446,7 +447,7 @@ class BaseProcessor(QC.QObject):
         self.compute_n1n(name, obj2, obj2_name, func=func, func_obj=func_obj)
 
     @qt_try_except()
-    def compute_division(self, obj2: Optional[Obj] = None):
+    def compute_division(self, obj2: Obj | None = None):
         """Compute division"""
         self.compute_n1n(
             _("Div"),
@@ -456,7 +457,7 @@ class BaseProcessor(QC.QObject):
         )
 
     def _get_roieditordata(
-        self, roidata: np.ndarray = None, singleobj: bool = None
+        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
     ) -> ROIEditorData:
         """Eventually open ROI Editing Dialog, and return ROI editor data"""
         # Expected behavior:
@@ -478,7 +479,7 @@ class BaseProcessor(QC.QObject):
         return roieditordata
 
     @abc.abstractmethod
-    def extract_roi(self, roidata: np.ndarray = None) -> None:
+    def extract_roi(self, roidata: np.ndarray | None = None) -> None:
         """Extract Region Of Interest (ROI) from data"""
 
     @abc.abstractmethod
@@ -502,12 +503,12 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_threshold(self, param: ThresholdParam = None) -> None:
+    def compute_threshold(self, param: ThresholdParam | None = None) -> None:
         """Compute threshold clipping"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_clip(self, param: ClipParam = None) -> None:
+    def compute_clip(self, param: ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
 
     @staticmethod
@@ -516,7 +517,7 @@ class BaseProcessor(QC.QObject):
         """Compute gaussian filter"""
 
     @qt_try_except()
-    def compute_gaussian(self, param: GaussianParam = None) -> None:
+    def compute_gaussian(self, param: GaussianParam | None = None) -> None:
         """Compute gaussian filter"""
         edit, param = self.init_param(param, GaussianParam, _("Gaussian filter"))
         func = self.func_gaussian_filter
@@ -534,7 +535,7 @@ class BaseProcessor(QC.QObject):
         """Moving average computing function"""
 
     @qt_try_except()
-    def compute_moving_average(self, param: MovingAverageParam = None) -> None:
+    def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
         """Compute moving average"""
         edit, param = self.init_param(param, MovingAverageParam, _("Moving average"))
         func = self.func_moving_average
@@ -546,7 +547,7 @@ class BaseProcessor(QC.QObject):
         """Moving median computing function"""
 
     @qt_try_except()
-    def compute_moving_median(self, param: MovingMedianParam = None) -> None:
+    def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
         """Compute moving median"""
         edit, param = self.init_param(param, MovingMedianParam, _("Moving median"))
         func = self.func_moving_median
@@ -570,7 +571,7 @@ class BaseProcessor(QC.QObject):
     # ------Computing-------------------------------------------------------------------
 
     def edit_regions_of_interest(
-        self, extract: bool = False, singleobj: bool = None
+        self, extract: bool = False, singleobj: bool | None = None
     ) -> ROIEditorData:
         """Define Region Of Interest (ROI) for computing functions"""
         roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
@@ -601,7 +602,7 @@ class BaseProcessor(QC.QObject):
                 self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
     @abc.abstractmethod
-    def _get_stat_funcs(self) -> List[Tuple[str, Callable[[np.ndarray], float]]]:
+    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
 
     @qt_try_except()
@@ -610,8 +611,8 @@ class BaseProcessor(QC.QObject):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         stfuncs = self._get_stat_funcs()
         xlabels = [label for label, _func in stfuncs]
-        ylabels: List[str] = []
-        stats: List[List[float]] = []
+        ylabels: list[str] = []
+        stats: list[list[float]] = []
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", UserWarning)
             with np.errstate(all="ignore"):

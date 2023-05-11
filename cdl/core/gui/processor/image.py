@@ -11,7 +11,8 @@ DataLab Image Processor GUI module
 
 from __future__ import annotations
 
-from typing import Callable, List, Optional, Tuple
+from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pywt
@@ -54,7 +55,14 @@ from cdl.core.model.base import BaseProcParam, ShapeTypes
 from cdl.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
-Obj = ImageParam
+if TYPE_CHECKING:
+    from cdl.core.gui.processor.base import (
+        GaussianParam,
+        MovingAverageParam,
+        MovingMedianParam,
+    )
+
+    Obj = ImageParam
 
 VALID_DTYPES_STRLIST = [
     dtype.__name__ for dtype in dtype_range if dtype in ImageParam.VALID_DTYPES
@@ -653,7 +661,7 @@ class ImageProcessor(BaseProcessor):
 
     EDIT_ROI_PARAMS = True
 
-    def compute_logp1(self, param: LogP1Param = None) -> None:
+    def compute_logp1(self, param: LogP1Param | None = None) -> None:
         """Compute base 10 logarithm"""
         edit, param = self.init_param(param, LogP1Param, "Log10(z+n)")
         self.compute_11(
@@ -664,7 +672,7 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def rotate_arbitrarily(self, param: RotateParam = None) -> None:
+    def rotate_arbitrarily(self, param: RotateParam | None = None) -> None:
         """Rotate data arbitrarily"""
         edit, param = self.init_param(param, RotateParam, "Rotate")
 
@@ -691,7 +699,7 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def rotate_90(self):
+    def rotate_90(self) -> None:
         """Rotate data 90°"""
 
         def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
@@ -704,7 +712,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
         )
 
-    def rotate_270(self):
+    def rotate_270(self) -> None:
         """Rotate data 270°"""
 
         def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
@@ -717,7 +725,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
         )
 
-    def flip_horizontally(self):
+    def flip_horizontally(self) -> None:
         """Flip data horizontally"""
 
         # pylint: disable=unused-argument
@@ -732,7 +740,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, orig: obj.transform_shapes(orig, hflip_coords),
         )
 
-    def flip_vertically(self):
+    def flip_vertically(self) -> None:
         """Flip data vertically"""
 
         # pylint: disable=unused-argument
@@ -747,7 +755,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, orig: obj.transform_shapes(orig, vflip_coords),
         )
 
-    def distribute_on_grid(self, param: GridParam = None) -> None:
+    def distribute_on_grid(self, param: GridParam | None = None) -> None:
         """Distribute images on a grid"""
         title = _("Distribute on grid")
         edit, param = self.init_param(param, GridParam, title)
@@ -818,7 +826,7 @@ class ImageProcessor(BaseProcessor):
                 obj.transform_shapes(None, translate_coords)
         self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def resize(self, param: ResizeParam = None) -> None:
+    def resize(self, param: ResizeParam | None = None) -> None:
         """Resize image"""
         obj0 = self.panel.objview.get_sel_objects()[0]
         for obj in self.panel.objview.get_sel_objects():
@@ -844,7 +852,9 @@ class ImageProcessor(BaseProcessor):
                 return
             param.zoom = dlg.get_zoom()
 
-        def func_obj(obj, orig, param):  # pylint: disable=unused-argument
+        def func_obj(
+            obj, orig: ImageParam, param: ResizeParam
+        ) -> None:  # pylint: disable=unused-argument
             """Zooming function"""
             if obj.dx is not None and obj.dy is not None:
                 obj.dx, obj.dy = obj.dx / param.zoom, obj.dy / param.zoom
@@ -867,7 +877,7 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def rebin(self, param: BinningParam = None) -> None:
+    def rebin(self, param: BinningParam | None = None) -> None:
         """Binning image"""
         edit = param is None
         input_dtype_str = str(self.panel.objview.get_sel_objects()[0].data.dtype)
@@ -903,7 +913,9 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def extract_roi(self, roidata: np.ndarray = None, singleobj: bool = None) -> None:
+    def extract_roi(
+        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
+    ) -> None:
         """Extract Region Of Interest (ROI) from data"""
         roieditordata = self._get_roieditordata(roidata, singleobj)
         if roieditordata is None or roieditordata.is_empty:
@@ -973,7 +985,7 @@ class ImageProcessor(BaseProcessor):
                 edit=False,
             )
 
-    def swap_axes(self):
+    def swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(
             "SwapAxes",
@@ -981,17 +993,17 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, _orig: obj.remove_all_shapes(),
         )
 
-    def compute_abs(self):
+    def compute_abs(self) -> None:
         """Compute absolute value"""
         self.compute_11("Abs", np.abs)
 
-    def compute_log10(self):
+    def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11("Log10", np.log10)
 
     @qt_try_except()
     def flat_field_correction(
-        self, obj2: Optional[Obj] = None, param: FlatFieldParam = None
+        self, obj2: Obj | None = None, param: FlatFieldParam | None = None
     ) -> None:
         """Compute flat field correction"""
         edit, param = self.init_param(param, FlatFieldParam, _("Flat field"))
@@ -1009,7 +1021,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     # ------Image Processing
-    def apply_11_func(self, obj, orig, func, param, message):
+    def apply_11_func(self, obj, orig, func, param, message) -> None:
         """Apply 11 function: 1 object in --> 1 object out"""
 
         # (self is used by @qt_try_except)
@@ -1025,7 +1037,7 @@ class ImageProcessor(BaseProcessor):
         return apply_11_func_callback(self, obj, orig, func, param)
 
     @qt_try_except()
-    def compute_calibration(self, param: ZCalibrateParam = None) -> None:
+    def compute_calibration(self, param: ZCalibrateParam | None = None) -> None:
         """Compute data linear calibration"""
         edit, param = self.init_param(
             param, ZCalibrateParam, _("Linear calibration"), "y = a.x + b"
@@ -1039,7 +1051,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_threshold(self, param: ThresholdParam = None) -> None:
+    def compute_threshold(self, param: ThresholdParam | None = None) -> None:
         """Compute threshold clipping"""
         edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
         self.compute_11(
@@ -1051,7 +1063,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_clip(self, param: ClipParam = None) -> None:
+    def compute_clip(self, param: ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
         edit, param = self.init_param(param, ClipParam, _("Clipping"))
         self.compute_11(
@@ -1063,7 +1075,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def rescale_intensity(self, param: RescaleIntensityParam = None) -> None:
+    def rescale_intensity(self, param: RescaleIntensityParam | None = None) -> None:
         """Rescale image intensity levels"""
         edit, param = self.init_param(
             param, RescaleIntensityParam, _("Rescale intensity")
@@ -1079,7 +1091,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def equalize_hist(self, param: EqualizeHistParam = None) -> None:
+    def equalize_hist(self, param: EqualizeHistParam | None = None) -> None:
         """Histogram equalization"""
         edit, param = self.init_param(
             param, EqualizeHistParam, _("Histogram equalization")
@@ -1093,7 +1105,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def equalize_adapthist(self, param: EqualizeAdaptHistParam = None) -> None:
+    def equalize_adapthist(self, param: EqualizeAdaptHistParam | None = None) -> None:
         """Adaptive histogram equalization"""
         edit, param = self.init_param(
             param, EqualizeAdaptHistParam, _("Adaptive histogram equalization")
@@ -1109,37 +1121,43 @@ class ImageProcessor(BaseProcessor):
         )
 
     @staticmethod
-    def func_gaussian_filter(x, p):  # pylint: disable=arguments-differ
+    def func_gaussian_filter(
+        x: np.ndarray, p: GaussianParam
+    ) -> np.ndarray:  # pylint: disable=arguments-differ
         """Compute gaussian filter"""
         return spi.gaussian_filter(x, p.sigma)
 
     @qt_try_except()
-    def compute_fft(self):
+    def compute_fft(self) -> None:
         """Compute FFT"""
         self.compute_11("FFT", np.fft.fft2)
 
     @qt_try_except()
-    def compute_ifft(self):
+    def compute_ifft(self) -> None:
         "Compute iFFT" ""
         self.compute_11("iFFT", np.fft.ifft2)
 
     @staticmethod
-    def func_moving_average(x, p):  # pylint: disable=arguments-differ
+    def func_moving_average(
+        x: np.ndarray, p: MovingAverageParam
+    ) -> np.ndarray:  # pylint: disable=arguments-differ
         """Moving average computing function"""
         return spi.uniform_filter(x, size=p.n, mode="constant")
 
     @staticmethod
-    def func_moving_median(x, p):  # pylint: disable=arguments-differ
+    def func_moving_median(
+        x: np.ndarray, p: MovingMedianParam
+    ) -> np.ndarray:  # pylint: disable=arguments-differ
         """Moving median computing function"""
         return sps.medfilt(x, kernel_size=p.n)
 
     @qt_try_except()
-    def compute_wiener(self):
+    def compute_wiener(self) -> None:
         """Compute Wiener filter"""
         self.compute_11("WienerFilter", sps.wiener)
 
     @qt_try_except()
-    def compute_denoise_tv(self, param: DenoiseTVParam = None) -> None:
+    def compute_denoise_tv(self, param: DenoiseTVParam | None = None) -> None:
         """Compute Total Variation denoising"""
         edit, param = self.init_param(
             param, DenoiseTVParam, _("Total variation denoising")
@@ -1155,7 +1173,9 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_denoise_bilateral(self, param: DenoiseBilateralParam = None) -> None:
+    def compute_denoise_bilateral(
+        self, param: DenoiseBilateralParam | None = None
+    ) -> None:
         """Compute bilateral filter denoising"""
         edit, param = self.init_param(
             param, DenoiseBilateralParam, _("Bilateral filtering")
@@ -1171,7 +1191,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_denoise_wavelet(self, param: DenoiseWaveletParam = None) -> None:
+    def compute_denoise_wavelet(self, param: DenoiseWaveletParam | None = None) -> None:
         """Compute Wavelet denoising"""
         edit, param = self.init_param(
             param, DenoiseWaveletParam, _("Wavelet denoising")
@@ -1190,7 +1210,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_denoise_tophat(self, param: MorphologyParam = None) -> None:
+    def compute_denoise_tophat(self, param: MorphologyParam | None = None) -> None:
         """Denoise using White Top-Hat"""
         edit, param = self.init_param(param, MorphologyParam, _("Denoise / Top-Hat"))
         self.compute_11(
@@ -1201,7 +1221,9 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
-    def _morph(self, param, func, title, name):
+    def _morph(
+        self, param: MorphologyParam | None, func: Callable, title: str, name: str
+    ) -> None:
         """Compute morphological transform"""
         edit, param = self.init_param(param, MorphologyParam, title)
         self.compute_11(
@@ -1213,41 +1235,41 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_white_tophat(self, param: MorphologyParam = None) -> None:
+    def compute_white_tophat(self, param: MorphologyParam | None = None) -> None:
         """Compute White Top-Hat"""
         self._morph(
             param, morphology.white_tophat, _("White Top-Hat"), "WhiteTopHatDisk"
         )
 
     @qt_try_except()
-    def compute_black_tophat(self, param: MorphologyParam = None) -> None:
+    def compute_black_tophat(self, param: MorphologyParam | None = None) -> None:
         """Compute Black Top-Hat"""
         self._morph(
             param, morphology.black_tophat, _("Black Top-Hat"), "BlackTopHatDisk"
         )
 
     @qt_try_except()
-    def compute_erosion(self, param: MorphologyParam = None) -> None:
+    def compute_erosion(self, param: MorphologyParam | None = None) -> None:
         """Compute Erosion"""
         self._morph(param, morphology.erosion, _("Erosion"), "ErosionDisk")
 
     @qt_try_except()
-    def compute_dilation(self, param: MorphologyParam = None) -> None:
+    def compute_dilation(self, param: MorphologyParam | None = None) -> None:
         """Compute Dilation"""
         self._morph(param, morphology.dilation, _("Dilation"), "DilationDisk")
 
     @qt_try_except()
-    def compute_opening(self, param: MorphologyParam = None) -> None:
+    def compute_opening(self, param: MorphologyParam | None = None) -> None:
         """Compute morphological opening"""
         self._morph(param, morphology.opening, _("Opening"), "OpeningDisk")
 
     @qt_try_except()
-    def compute_closing(self, param: MorphologyParam = None) -> None:
+    def compute_closing(self, param: MorphologyParam | None = None) -> None:
         """Compute morphological closing"""
         self._morph(param, morphology.closing, _("Closing"), "ClosingDisk")
 
     @qt_try_except()
-    def compute_canny(self, param: CannyParam = None) -> None:
+    def compute_canny(self, param: CannyParam | None = None) -> None:
         """Denoise using White Top-Hat"""
         edit, param = self.init_param(param, CannyParam, _("Canny filter"))
         self.compute_11(
@@ -1293,7 +1315,7 @@ class ImageProcessor(BaseProcessor):
         return None
 
     @qt_try_except()
-    def compute_centroid(self):
+    def compute_centroid(self) -> None:
         """Compute image centroid"""
 
         def get_centroid_coords(data: np.ndarray):
@@ -1311,7 +1333,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Centroid"), centroid)
 
     @qt_try_except()
-    def compute_enclosing_circle(self):
+    def compute_enclosing_circle(self) -> None:
         """Compute minimum enclosing circle"""
 
         def get_enclosing_circle_coords(data: np.ndarray):
@@ -1332,7 +1354,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("MinEnclosingCircle"), enclosing_circle)
 
     @qt_try_except()
-    def compute_peak_detection(self, param: PeakDetectionParam = None) -> None:
+    def compute_peak_detection(self, param: PeakDetectionParam | None = None) -> None:
         """Compute 2D peak detection"""
 
         def peak_detection(image: ImageParam, p: PeakDetectionParam):
@@ -1381,7 +1403,7 @@ class ImageProcessor(BaseProcessor):
                     self.panel.SIG_UPDATE_PLOT_ITEM.emit(obj.uuid)
 
     @qt_try_except()
-    def compute_contour_shape(self, param: ContourShapeParam = None) -> None:
+    def compute_contour_shape(self, param: ContourShapeParam | None = None) -> None:
         """Compute contour shape fit"""
 
         def contour_shape(image: ImageParam, p: ContourShapeParam):
@@ -1398,7 +1420,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Contour"), contour_shape, param, edit=edit)
 
     @qt_try_except()
-    def compute_hough_circle_peaks(self, param: HoughCircleParam = None) -> None:
+    def compute_hough_circle_peaks(self, param: HoughCircleParam | None = None) -> None:
         """Compute peak detection based on a circle Hough transform"""
 
         def hough_circles(image: ImageParam, p: HoughCircleParam):
@@ -1419,7 +1441,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Circles"), hough_circles, param, edit=edit)
 
     @qt_try_except()
-    def compute_blob_dog(self, param: BlobDOGParam = None) -> None:
+    def compute_blob_dog(self, param: BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
 
         def blobs(image: ImageParam, p: BlobDOGParam):
@@ -1441,7 +1463,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
     @qt_try_except()
-    def compute_blob_doh(self, param: BlobDOHParam = None) -> None:
+    def compute_blob_doh(self, param: BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
 
         def blobs(image: ImageParam, p: BlobDOHParam):
@@ -1463,7 +1485,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
     @qt_try_except()
-    def compute_blob_log(self, param: BlobLOGParam = None) -> None:
+    def compute_blob_log(self, param: BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
 
         def blobs(image: ImageParam, p: BlobLOGParam):
@@ -1486,7 +1508,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
     @qt_try_except()
-    def compute_blob_opencv(self, param: BlobOpenCVParam = None) -> None:
+    def compute_blob_opencv(self, param: BlobOpenCVParam | None = None) -> None:
         """Compute blob detection using OpenCV"""
 
         def blobs(image: ImageParam, p: BlobOpenCVParam):
@@ -1522,7 +1544,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_10(_("Blob detection"), blobs, param, edit=edit)
 
-    def _get_stat_funcs(self) -> List[Tuple[str, Callable[[np.ndarray], float]]]:
+    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
         # Be careful to use systematically functions adapted to masked arrays
         # (e.g. numpy.ma median, and *not* numpy.median)
