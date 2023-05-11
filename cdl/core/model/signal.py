@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
+import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guiqwt.builder import make
@@ -325,6 +326,13 @@ class SignalTypes(base.Choices):
     VOIGT = "Voigt"
     UNIFORMRANDOM = _("random (uniform law)")
     NORMALRANDOM = _("random (normal law)")
+    SINUS = _("sinus")
+    COSINUS = _("cosinus")
+    SAWTOOTH = _("sawtooth")
+    TRIANGLE = _("triangle")
+    SQUARE = _("square")
+    SINC = _("sinc")
+    STEP = _("step")
 
 
 class GaussLorentzVoigtParam(gdt.DataSet):
@@ -334,6 +342,47 @@ class GaussLorentzVoigtParam(gdt.DataSet):
     ymin = gdi.FloatItem("Ymin", default=0.0).set_pos(col=1)
     sigma = gdi.FloatItem("σ", default=1.0)
     mu = gdi.FloatItem("μ", default=0.0).set_pos(col=1)
+
+
+class FreqUnits(base.Choices):
+    """Frequency units"""
+
+    HZ = "Hz"
+    KHZ = "kHz"
+    MHZ = "MHz"
+    GHZ = "GHz"
+
+    @classmethod
+    def convert_in_hz(cls, value, unit):
+        """Convert value in Hz"""
+        factor = {cls.HZ: 1, cls.KHZ: 1e3, cls.MHZ: 1e6, cls.GHZ: 1e9}.get(unit)
+        if factor is None:
+            raise ValueError(f"Unknown unit: {unit}")
+        return value * factor
+
+
+class PeriodicParam(gdt.DataSet):
+    """Parameters for periodic functions"""
+
+    def get_frequency_in_hz(self):
+        """Return frequency in Hz"""
+        return FreqUnits.convert_in_hz(self.freq, self.freq_unit)
+
+    a = gdi.FloatItem("A", default=1.0)
+    ymin = gdi.FloatItem("Ymin", default=0.0).set_pos(col=1)
+    freq = gdi.FloatItem("Frequency", default=1.0)
+    freq_unit = gdi.ChoiceItem(
+        "Unit", FreqUnits.get_choices(), default=FreqUnits.HZ
+    ).set_pos(col=1)
+    phase = gdi.FloatItem("Phase", default=0.0, unit="°").set_pos(col=1)
+
+
+class StepParam(gdt.DataSet):
+    """Parameters for step function"""
+
+    a1 = gdi.FloatItem("A1", default=0.0)
+    a2 = gdi.FloatItem("A2", default=1.0).set_pos(col=1)
+    x0 = gdi.FloatItem("X0", default=0.0)
 
 
 class SignalParamNew(gdt.DataSet):
@@ -385,6 +434,11 @@ def new_signal_param(
 SIG_NB = 0
 
 
+def triangle_func(xarr: np.ndarray) -> np.ndarray:
+    """Triangle function"""
+    return sps.sawtooth(xarr, width=0.5)
+
+
 def create_signal_from_param(
     newparam: SignalParamNew,
     addparam: gdt.DataSet | None = None,
@@ -409,6 +463,7 @@ def create_signal_from_param(
     if incr_sig_nb:
         newparam.title = f"{newparam.title} {SIG_NB + 1:d}"
     if not edit or addparam is not None or newparam.edit(parent=parent):
+        prefix = newparam.type.name.lower()
         if incr_sig_nb:
             SIG_NB += 1
         signal = create_signal(newparam.title)
@@ -422,37 +477,74 @@ def create_signal_from_param(
                 SignalTypes.NORMALRANDOM: base.NormalRandomParam,
             }[newparam.type]
             if p is None:
-                p = pclass(_("Signal") + " - " + newparam.type.value)
+                p = pclass(_("Signal") + " - " + prefix)
             if edit and not p.edit(parent=parent):
                 return None
             rng = np.random.default_rng(p.seed)
             if newparam.type == SignalTypes.UNIFORMRANDOM:
                 yarr = rng.random((newparam.size,)) * (p.vmax - p.vmin) + p.vmin
+                signal.title = f"{prefix}(vmin={p.vmin:.3g},vmax={p.vmax:.3g})"
             elif newparam.type == SignalTypes.NORMALRANDOM:
                 yarr = rng.normal(p.mu, p.sigma, size=(newparam.size,))
+                signal.title = f"{prefix}(mu={p.mu:.3g},sigma={p.sigma:.3g})"
             else:
-                raise NotImplementedError(f"New param type: {newparam.type.value}")
+                raise NotImplementedError(f"New param type: {prefix}")
             signal.set_xydata(xarr, yarr)
-        elif newparam.type == SignalTypes.GAUSS:
+        elif newparam.type in (
+            SignalTypes.GAUSS,
+            SignalTypes.LORENTZ,
+            SignalTypes.VOIGT,
+        ):
+            func, title = {
+                SignalTypes.GAUSS: (fit.GaussianModel.func, _("Gaussian")),
+                SignalTypes.LORENTZ: (fit.LorentzianModel.func, _("Lorentzian")),
+                SignalTypes.VOIGT: (fit.VoigtModel.func, _("Voigt")),
+            }[newparam.type]
             if p is None:
-                p = GaussLorentzVoigtParam(_("New gaussian function"))
+                p = GaussLorentzVoigtParam(title)
             if edit and not p.edit(parent=parent):
                 return None
-            yarr = fit.GaussianModel.func(xarr, p.a, p.sigma, p.mu, p.ymin)
+            yarr = func(xarr, p.a, p.sigma, p.mu, p.ymin)
             signal.set_xydata(xarr, yarr)
-        elif newparam.type == SignalTypes.LORENTZ:
+            signal.title = (
+                f"{prefix}(a={p.a:.3g},sigma={p.sigma:.3g},"
+                f"mu={p.mu:.3g},ymin={p.ymin:.3g})"
+            )
+        elif newparam.type in (
+            SignalTypes.SINUS,
+            SignalTypes.COSINUS,
+            SignalTypes.SAWTOOTH,
+            SignalTypes.TRIANGLE,
+            SignalTypes.SQUARE,
+            SignalTypes.SINC,
+        ):
+            func, title = {
+                SignalTypes.SINUS: (np.sin, _("New sinusoidal function")),
+                SignalTypes.COSINUS: (np.cos, _("New cosinusoidal function")),
+                SignalTypes.SAWTOOTH: (sps.sawtooth, _("New sawtooth function")),
+                SignalTypes.TRIANGLE: (triangle_func, _("New triangle function")),
+                SignalTypes.SQUARE: (sps.square, _("New square function")),
+                SignalTypes.SINC: (np.sinc, _("New sinc function")),
+            }[newparam.type]
             if p is None:
-                p = GaussLorentzVoigtParam(_("New lorentzian function"))
+                p = PeriodicParam(title)
             if edit and not p.edit(parent=parent):
                 return None
-            yarr = fit.LorentzianModel.func(xarr, p.a, p.sigma, p.mu, p.ymin)
+            freq = p.get_frequency_in_hz()
+            yarr = p.a * func(2 * np.pi * freq * xarr + np.deg2rad(p.phase)) + p.ymin
             signal.set_xydata(xarr, yarr)
-        elif newparam.type == SignalTypes.VOIGT:
+            signal.title = (
+                f"{prefix}(f={p.freq:.3g} {p.freq_unit.name}),"
+                f"a={p.a:.3g},ymin={p.ymin:.3g},phase={p.phase:.3g}°)"
+            )
+        elif newparam.type == SignalTypes.STEP:
             if p is None:
-                p = GaussLorentzVoigtParam(_("New Voigt function"))
+                p = StepParam(_("New step function"))
             if edit and not p.edit(parent=parent):
                 return None
-            yarr = fit.VoigtModel.func(xarr, p.a, p.sigma, p.mu, p.ymin)
+            yarr = np.ones_like(xarr) * p.a1
+            yarr[xarr > p.x0] = p.a2
             signal.set_xydata(xarr, yarr)
+            signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
         return signal
     return None
