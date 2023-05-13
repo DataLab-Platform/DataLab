@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-05-12 12:22+0200\n"
+"POT-Creation-Date: 2023-05-13 16:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -481,7 +481,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:87 cdl\core\gui\main.py:255 cdl\core\gui\main.py:900
+#: cdl\core\gui\h5io.py:87 cdl\core\gui\main.py:336 cdl\core\gui\main.py:992
 #: cdl\plugins.py:135
 msgid "Warning"
 msgstr "Attention"
@@ -520,13 +520,13 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
-#: cdl\core\gui\main.py:256
+#: cdl\core\gui\main.py:337
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: cdl\core\gui\main.py:270
+#: cdl\core\gui\main.py:351
 msgid ""
 "This software is in the <b>beta stage</b> of its release cycle. The focus of "
 "beta testing is providing a feature complete software for users interested "
@@ -542,7 +542,7 @@ msgstr ""
 "fonctionner correctement et présente plus d'anomalies résiduelles et de "
 "problèmes de performance que la version finale</u>."
 
-#: cdl\core\gui\main.py:280
+#: cdl\core\gui\main.py:361
 msgid ""
 "This software is in the <b>alpha stage</b> of its release cycle. The focus "
 "of alpha testing is providing an incomplete software for early testing of "
@@ -556,23 +556,23 @@ msgstr ""
 "Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests "
 "poussés avant sa diffusion</u>."
 
-#: cdl\core\gui\main.py:290
+#: cdl\core\gui\main.py:371
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:309
+#: cdl\core\gui\main.py:390
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: cdl\core\gui\main.py:311
+#: cdl\core\gui\main.py:392
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: cdl\core\gui\main.py:314
+#: cdl\core\gui\main.py:395
 msgid "DataLab has not yet been qualified on your operating system."
 msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: cdl\core\gui\main.py:321
+#: cdl\core\gui\main.py:402
 msgid ""
 "At least one dependency does not comply with DataLab qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -584,7 +584,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: cdl\core\gui\main.py:331
+#: cdl\core\gui\main.py:412
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -592,166 +592,166 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:336
+#: cdl\core\gui\main.py:417
 msgid ""
 "Please click on the Ignore button to avoid showing this message at startup."
 msgstr ""
 "Cliquer sur le bouton Ignorer pour éviter d'afficher ce message à chaque "
 "démarrage."
 
-#: cdl\core\gui\main.py:358
+#: cdl\core\gui\main.py:439
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:472
+#: cdl\core\gui\main.py:553
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:482
+#: cdl\core\gui\main.py:563
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:484
+#: cdl\core\gui\main.py:565
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:489
+#: cdl\core\gui\main.py:570
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:491
+#: cdl\core\gui\main.py:572
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:496
+#: cdl\core\gui\main.py:577
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:498
+#: cdl\core\gui\main.py:579
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:501
+#: cdl\core\gui\main.py:582
 msgid "HDF5 I/O Toolbar"
 msgstr "Barre d'outils d'entrées/sorties HDF5"
 
-#: cdl\core\gui\main.py:507
+#: cdl\core\gui\main.py:588
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:508
+#: cdl\core\gui\main.py:589
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:510 cdl\core\gui\main.py:1030
+#: cdl\core\gui\main.py:591 cdl\core\gui\main.py:1122
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:511
+#: cdl\core\gui\main.py:592
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:523
+#: cdl\core\gui\main.py:604
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: cdl\core\gui\main.py:524
+#: cdl\core\gui\main.py:605
 msgid "Curve Plotting Toolbar"
 msgstr "Barre d'outils d'affichage de courbes"
 
-#: cdl\core\gui\main.py:536
+#: cdl\core\gui\main.py:617
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: cdl\core\gui\main.py:537
+#: cdl\core\gui\main.py:618
 msgid "Image Visualization Toolbar"
 msgstr "Barre d'outils d'affichage d'images"
 
-#: cdl\core\gui\main.py:558
+#: cdl\core\gui\main.py:639
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: cdl\core\gui\main.py:559 cdl\core\gui\panel\image.py:50
+#: cdl\core\gui\main.py:640 cdl\core\gui\panel\image.py:50
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: cdl\core\gui\main.py:571
+#: cdl\core\gui\main.py:654
 msgid "Signals"
 msgstr "Signaux"
 
-#: cdl\core\gui\main.py:572
+#: cdl\core\gui\main.py:655
 msgid "Images"
 msgstr "Images"
 
-#: cdl\core\gui\main.py:577
+#: cdl\core\gui\main.py:660
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:579
+#: cdl\core\gui\main.py:662
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:580
+#: cdl\core\gui\main.py:663
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:581
+#: cdl\core\gui\main.py:664
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:582
+#: cdl\core\gui\main.py:665
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:583
+#: cdl\core\gui\main.py:666
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:584
+#: cdl\core\gui\main.py:667
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:597 cdl\core\gui\main.py:644
+#: cdl\core\gui\main.py:680 cdl\core\gui\main.py:727
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:603
+#: cdl\core\gui\main.py:686
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:609
+#: cdl\core\gui\main.py:692
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:615
+#: cdl\core\gui\main.py:698
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:621
+#: cdl\core\gui\main.py:704
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: cdl\core\gui\main.py:628
+#: cdl\core\gui\main.py:711
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: cdl\core\gui\main.py:634 cdl\widgets\instconfviewer.py:66
+#: cdl\core\gui\main.py:717 cdl\widgets\instconfviewer.py:66
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: cdl\core\gui\main.py:687
+#: cdl\core\gui\main.py:770
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:707 cdl\core\gui\panel\macro.py:57
+#: cdl\core\gui\main.py:790 cdl\core\gui\panel\macro.py:57
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:868
+#: cdl\core\gui\main.py:960
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:901
+#: cdl\core\gui\main.py:993
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -759,39 +759,39 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:913 cdl\core\gui\panel\base.py:618
+#: cdl\core\gui\main.py:1005 cdl\core\gui\panel\base.py:618
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:982
+#: cdl\core\gui\main.py:1074
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:984
+#: cdl\core\gui\main.py:1076
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:985
+#: cdl\core\gui\main.py:1077
 msgid "XML-RPC server: "
 msgstr "Serveur XML-RPC : "
 
-#: cdl\core\gui\main.py:987
+#: cdl\core\gui\main.py:1079
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:990
+#: cdl\core\gui\main.py:1082
 msgid "About "
 msgstr "À propos de "
 
-#: cdl\core\gui\main.py:999
+#: cdl\core\gui\main.py:1091
 msgid "Created by"
 msgstr "Créer par"
 
-#: cdl\core\gui\main.py:999
+#: cdl\core\gui\main.py:1091
 msgid "on"
 msgstr "sous"
 
-#: cdl\core\gui\main.py:1031
+#: cdl\core\gui\main.py:1123
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -799,7 +799,7 @@ msgstr ""
 "Souhaitez-vous enregistrer tous les signaux et images dans un fichier HDF5 "
 "avant de quitter DataLab ?"
 
-#: cdl\core\gui\objectview.py:284
+#: cdl\core\gui\objectview.py:286
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
@@ -1706,19 +1706,19 @@ msgstr "Fichiers texte"
 msgid "DICOM files"
 msgstr "Fichiers DICOM"
 
-#: cdl\core\io\image\formats.py:125
+#: cdl\core\io\image\formats.py:126
 msgid "Andor SIF files"
 msgstr "Fichiers SIF Andor"
 
-#: cdl\core\io\image\formats.py:155
+#: cdl\core\io\image\formats.py:156
 msgid "SPIRICON files"
 msgstr "Fichiers SPIRICON"
 
-#: cdl\core\io\image\formats.py:171
+#: cdl\core\io\image\formats.py:172
 msgid "FXD files"
 msgstr "Fichiers FXD"
 
-#: cdl\core\io\image\formats.py:187
+#: cdl\core\io\image\formats.py:188
 msgid "XYZ files"
 msgstr "Fichiers XYZ"
 
