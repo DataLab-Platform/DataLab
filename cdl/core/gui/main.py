@@ -329,7 +329,7 @@ class CDLMainWindow(QW.QMainWindow):
         Returns:
             bool: True if memory state is ok
         """
-        if self.__memory_warning:
+        if not env.execenv.unattended and self.__memory_warning:
             threshold = Conf.main.available_memory_threshold.get()
             answer = QW.QMessageBox.critical(
                 self,
