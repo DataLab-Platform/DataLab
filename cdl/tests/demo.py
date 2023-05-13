@@ -48,7 +48,7 @@ DELAY1, DELAY2, DELAY3 = 1, 2, 4
 def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     """Testing signal features"""
     panel = win.signalpanel
-    win.switch_to_signal_panel()
+    win.switch_to_panel("signal")
 
     qt_wait(DELAY2)
 
@@ -91,7 +91,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
 def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
     """Testing signal features"""
-    win.switch_to_image_panel()
+    win.switch_to_panel("image")
     panel = win.imagepanel
 
     ima1 = create_test_image2(data_size)

@@ -72,13 +72,9 @@ class RemoteClient(object):
         """Close DataLab application"""
         self.serverproxy.close_application()
 
-    def switch_to_signal_panel(self):
-        """Switch to signal panel"""
-        self.serverproxy.switch_to_signal_panel()
-
-    def switch_to_image_panel(self):
-        """Switch to image panel"""
-        self.serverproxy.switch_to_image_panel()
+    def switch_to_panel(self, panel):
+        """Switch to panel"""
+        self.serverproxy.switch_to_panel(panel)
 
     def reset_all(self):
         """Reset all application data"""
@@ -125,13 +121,21 @@ class RemoteClient(object):
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
-    def get_object_titles(self):
+    def get_object_titles(self, panel=None):
         """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_titles()
+        return self.serverproxy.get_object_titles(panel)
 
-    def get_object_uuids(self):
+    def get_object_by_title(self, title, panel=None):
+        """Get object (signal/image) by title"""
+        return self.serverproxy.get_object_by_title(title, panel)
+
+    def get_object(self, index, group_index=0, panel=None):
+        """Get object (signal/image) by index"""
+        return self.serverproxy.get_object(index, group_index, panel)
+
+    def get_object_uuids(self, panel=None):
         """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_uuids()
+        return self.serverproxy.get_object_uuids(panel)
 
 
 def test_remote_client():

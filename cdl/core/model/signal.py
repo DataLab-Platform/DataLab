@@ -331,7 +331,7 @@ class SignalTypes(base.Choices):
     SAWTOOTH = _("sawtooth")
     TRIANGLE = _("triangle")
     SQUARE = _("square")
-    SINC = _("sinc")
+    SINC = _("cardinal sine")
     STEP = _("step")
 
 
@@ -498,7 +498,7 @@ def create_signal_from_param(
             func, title = {
                 SignalTypes.GAUSS: (fit.GaussianModel.func, _("Gaussian")),
                 SignalTypes.LORENTZ: (fit.LorentzianModel.func, _("Lorentzian")),
-                SignalTypes.VOIGT: (fit.VoigtModel.func, _("Voigt")),
+                SignalTypes.VOIGT: (fit.VoigtModel.func, "Voigt"),
             }[newparam.type]
             if p is None:
                 p = GaussLorentzVoigtParam(title)
@@ -519,12 +519,12 @@ def create_signal_from_param(
             SignalTypes.SINC,
         ):
             func, title = {
-                SignalTypes.SINUS: (np.sin, _("New sinusoidal function")),
-                SignalTypes.COSINUS: (np.cos, _("New cosinusoidal function")),
-                SignalTypes.SAWTOOTH: (sps.sawtooth, _("New sawtooth function")),
-                SignalTypes.TRIANGLE: (triangle_func, _("New triangle function")),
-                SignalTypes.SQUARE: (sps.square, _("New square function")),
-                SignalTypes.SINC: (np.sinc, _("New sinc function")),
+                SignalTypes.SINUS: (np.sin, _("Sinusoid")),
+                SignalTypes.COSINUS: (np.cos, _("Sinusoid")),
+                SignalTypes.SAWTOOTH: (sps.sawtooth, _("Sawtooth function")),
+                SignalTypes.TRIANGLE: (triangle_func, _("Triangle function")),
+                SignalTypes.SQUARE: (sps.square, _("Square function")),
+                SignalTypes.SINC: (np.sinc, _("Cardinal sine")),
             }[newparam.type]
             if p is None:
                 p = PeriodicParam(title)
@@ -539,7 +539,7 @@ def create_signal_from_param(
             )
         elif newparam.type == SignalTypes.STEP:
             if p is None:
-                p = StepParam(_("New step function"))
+                p = StepParam(_("Step function"))
             if edit and not p.edit(parent=parent):
                 return None
             yarr = np.ones_like(xarr) * p.a1

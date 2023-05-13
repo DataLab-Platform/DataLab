@@ -73,7 +73,7 @@ class H5InputOutput:
 
     def __add_object_from_node(self, node: BaseNode) -> None:
         """Add DataLab object from h5 node"""
-        obj = node.get_object()
+        obj = node.get_native_object()
         self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalParam):
             self.mainwindow.signalpanel.add_object(obj)

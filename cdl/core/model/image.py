@@ -741,7 +741,7 @@ def create_image_from_param(
             image.data = np.empty(shape, dtype=dtype)
         elif newparam.type == ImageTypes.GAUSS:
             if p is None:
-                p = Gauss2DParam(_("New 2D-gaussian image"))
+                p = Gauss2DParam(_("2D-gaussian image"))
             if p.a is None:
                 try:
                     p.a = np.iinfo(dtype).max / 2.0

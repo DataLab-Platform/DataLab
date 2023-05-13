@@ -115,7 +115,7 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
 def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     """Testing signal features"""
     panel = win.signalpanel
-    win.switch_to_signal_panel()
+    win.switch_to_panel("signal")
 
     for signal in iterate_signal_creation(data_size, non_zero=True):
         panel.add_object(create_test_signal1(data_size))

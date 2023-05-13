@@ -38,20 +38,50 @@ if TYPE_CHECKING:
 
 
 def array_to_rpcbinary(data: np.ndarray) -> Binary:
-    """Convert NumPy array to XML-RPC Binary object, with shape and dtype"""
+    """Convert NumPy array to XML-RPC Binary object, with shape and dtype.
+
+    The array is converted to a binary string using NumPy's native binary
+    format.
+
+    Args:
+        data: NumPy array to convert
+
+    Returns:
+        XML-RPC Binary object
+    """
     dbytes = BytesIO()
     np.save(dbytes, data, allow_pickle=False)
     return Binary(dbytes.getvalue())
 
 
 def rpcbinary_to_array(binary: Binary) -> np.ndarray:
-    """Convert XML-RPC binary to NumPy array"""
+    """Convert XML-RPC binary to NumPy array.
+
+    Args:
+        binary: XML-RPC Binary object
+
+    Returns:
+        NumPy array
+    """
     dbytes = BytesIO(binary.data)
     return np.load(dbytes, allow_pickle=False)
 
 
 def dataset_to_json(param: gdt.DataSet) -> list[str]:
-    """Convert guidata DataSet to JSON data"""
+    """Convert guidata DataSet to JSON data.
+
+    The JSON data is a list of three elements:
+
+    - The first element is the module name of the DataSet class
+    - The second element is the class name of the DataSet class
+    - The third element is the JSON data of the DataSet instance
+
+    Args:
+        param: guidata DataSet to convert
+
+    Returns:
+        JSON data
+    """
     writer = NativeJSONWriter()
     param.serialize(writer)
     param_json = writer.get_json()
@@ -60,7 +90,14 @@ def dataset_to_json(param: gdt.DataSet) -> list[str]:
 
 
 def json_to_dataset(param_data: list[str]) -> gdt.DataSet:
-    """Convert JSON data to guidata DataSet"""
+    """Convert JSON data to guidata DataSet.
+
+    Args:
+        param_data: JSON data
+
+    Returns:
+        guidata DataSet
+    """
     param_module, param_clsname, param_json = param_data
     mod = importlib.__import__(param_module, fromlist=[param_clsname])
     klass = getattr(mod, param_clsname)
@@ -96,7 +133,15 @@ class BaseRPCServer(abc.ABC):
 
     @abc.abstractmethod
     def notify_port(self, port: int) -> None:
-        """Notify automatically attributed port"""
+        """Notify automatically attributed port.
+
+        This method is called after the server port has been automatically
+        attributed. It is intended to be reimplemented by subclasses to
+        notify the port number to the main window.
+
+        Args:
+            port: Server port number
+        """
 
     @abc.abstractmethod
     def register_functions(self, server: SimpleXMLRPCServer) -> None:
@@ -131,7 +176,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
     SIG_CLOSE_APP = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
     SIG_OPEN_OBJECT = QC.Signal(str)
-    SIG_SWITCH_TO_SIGNAL_PANEL = QC.Signal()
+    SIG_SWITCH_TO_PANEL = QC.Signal(str)
     SIG_SWITCH_TO_IMAGE_PANEL = QC.Signal()
     SIG_RESET_ALL = QC.Signal()
     SIG_SAVE_TO_H5 = QC.Signal(str)
@@ -148,8 +193,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_ADD_OBJECT.connect(win.add_object)
         self.SIG_OPEN_OBJECT.connect(win.open_object)
-        self.SIG_SWITCH_TO_SIGNAL_PANEL.connect(win.switch_to_signal_panel)
-        self.SIG_SWITCH_TO_IMAGE_PANEL.connect(win.switch_to_image_panel)
+        self.SIG_SWITCH_TO_PANEL.connect(win.switch_to_panel)
         self.SIG_RESET_ALL.connect(win.reset_all)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
@@ -157,14 +201,20 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CALC.connect(win.calc)
 
     def notify_port(self, port: int) -> None:
-        """Notify automatically attributed port"""
+        """Notify automatically attributed port.
+
+        This method is called after the server port has been automatically
+        attributed. It notifies the port number to the main window.
+
+        Args:
+            port: Server port number
+        """
         self.SIG_SERVER_PORT.emit(port)
 
     def register_functions(self, server: SimpleXMLRPCServer) -> None:
         """Register functions"""
         server.register_function(self.close_application)
-        server.register_function(self.switch_to_signal_panel)
-        server.register_function(self.switch_to_image_panel)
+        server.register_function(self.switch_to_panel)
         server.register_function(self.add_signal)
         server.register_function(self.add_image)
         server.register_function(self.reset_all)
@@ -174,6 +224,8 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         server.register_function(self.open_object)
         server.register_function(self.calc)
         server.register_function(self.get_object_titles)
+        server.register_function(self.get_object_by_title)
+        server.register_function(self.get_object)
         server.register_function(self.get_object_uuids)
         server.register_function(self.get_object_from_uuid)
 
@@ -190,14 +242,13 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CLOSE_APP.emit()
 
     @remote_call
-    def switch_to_signal_panel(self) -> None:
-        """Switch to signal panel"""
-        self.SIG_SWITCH_TO_SIGNAL_PANEL.emit()
+    def switch_to_panel(self, panel: str) -> None:
+        """Switch to panel.
 
-    @remote_call
-    def switch_to_image_panel(self) -> None:
-        """Switch to image panel"""
-        self.SIG_SWITCH_TO_IMAGE_PANEL.emit()
+        Args:
+            panel (str): Panel name (valid values: 'signal', 'image', 'macro')
+        """
+        self.SIG_SWITCH_TO_PANEL.emit(panel)
 
     @remote_call
     def reset_all(self) -> None:
@@ -206,7 +257,11 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     @remote_call
     def save_to_h5_file(self, filename: str) -> None:
-        """Save to a DataLab HDF5 file"""
+        """Save to a DataLab HDF5 file.
+
+        Args:
+            filename (str): HDF5 file name (with extension .h5)
+        """
         self.SIG_SAVE_TO_H5.emit(filename)
 
     @remote_call
@@ -216,17 +271,33 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         import_all: bool | None = None,
         reset_all: bool | None = None,
     ) -> None:
-        """Open a DataLab HDF5 file or import from any other HDF5 file"""
+        """Open a DataLab HDF5 file or import from any other HDF5 file.
+
+        Args:
+            h5files (list[str], optional): HDF5 file names. Defaults to None.
+            import_all (bool, optional): Import all objects from HDF5 file.
+                Defaults to None.
+            reset_all (bool, optional): Reset all application data. Defaults to None.
+        """
         self.SIG_OPEN_H5.emit(h5files, import_all, reset_all)
 
     @remote_call
     def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
-        """Open DataLab HDF5 browser to Import HDF5 file"""
+        """Open DataLab HDF5 browser to Import HDF5 file.
+
+        Args:
+            filename (str): HDF5 file name
+            reset_all (bool, optional): Reset all application data. Defaults to None.
+        """
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
     @remote_call
     def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image)"""
+        """Open object from file in current panel (signal/image).
+
+        Args:
+            filename (str): File name
+        """
         self.SIG_OPEN_OBJECT.emit(filename)
 
     @remote_call
@@ -240,7 +311,20 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         xlabel: str | None = None,
         ylabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
-        """Add signal data to DataLab"""
+        """Add signal data to DataLab.
+
+        Args:
+            title (str): Signal title
+            xbinary (Binary): X data
+            ybinary (Binary): Y data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+
+        Returns:
+            bool: True if successful
+        """
         xdata = rpcbinary_to_array(xbinary)
         ydata = rpcbinary_to_array(ybinary)
         signal = create_signal(title, xdata, ydata)
@@ -263,7 +347,21 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         ylabel: str | None = None,
         zlabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
-        """Add image data to DataLab"""
+        """Add image data to DataLab.
+
+        Args:
+            title (str): Image title
+            zbinary (Binary): Z data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            zunit (str, optional): Z unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+            zlabel (str, optional): Z label. Defaults to None.
+
+        Returns:
+            bool: True if successful
+        """
         data = rpcbinary_to_array(zbinary)
         image = create_image(title, data)
         image.xunit = xunit
@@ -277,7 +375,16 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     @remote_call
     def calc(self, name: str, param_data: list[str] | None = None) -> bool:
-        """Call compute function `name` in current panel's processor"""
+        """Call compute function `name` in current panel's processor.
+
+        Args:
+            name (str): Compute function name
+            param_data (list[str], optional): Compute function parameters.
+                Defaults to None.
+
+        Returns:
+            bool: True if successful
+        """
         if param_data is None:
             param = None
         else:
@@ -285,17 +392,66 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_CALC.emit(name, param)
         return True
 
-    def get_object_titles(self) -> list[str]:
-        """Get object (signal/image) list for current panel"""
-        return self.win.get_object_titles()
+    def get_object_titles(self, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) list for current panel.
 
-    def get_object_uuids(self) -> list[str]:
-        """Get object (signal/image) list for current panel"""
-        return self.win.get_object_uuids()
+        Args:
+            panel (str, optional): Panel name. Defaults to None.
 
-    def get_object_from_uuid(self, oid: str) -> list[str]:
-        """Get object (signal/image) from uuid"""
-        return dataset_to_json(self.win.get_object_from_uuid(oid))
+        Returns:
+            list[str]: Object titles
+        """
+        return self.win.get_object_titles(panel)
+
+    def get_object_by_title(self, title: str, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) from title.
+
+        Args:
+            title (str): Object title
+            panel (str, optional): Panel name. Defaults to None.
+
+        Returns:
+            list[str]: Object data
+        """
+        return dataset_to_json(self.win.get_object_by_title(title, panel))
+
+    def get_object(
+        self, index: int, group_index: int = 0, panel: str | None = None
+    ) -> list[str]:
+        """Get object (signal/image) from index.
+
+        Args:
+            index (int): Object index
+            group_index (int, optional): Group index. Defaults to 0.
+            panel (str, optional): Panel name. Defaults to None.
+
+        Returns:
+            list[str]: Object data
+        """
+        return dataset_to_json(self.win.get_object(index, group_index, panel))
+
+    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) list for current panel.
+
+        Args:
+            panel (str, optional): Panel name. Defaults to None.
+
+        Returns:
+            list[str]: Object uuids
+        """
+        return self.win.get_object_uuids(panel)
+
+    def get_object_from_uuid(self, oid: str, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) from uuid.
+
+        Args:
+            oid (str): Object uuid
+            panel (str, optional): Panel name. Defaults to None.
+
+        Returns:
+            list[str]: Object data
+        """
+        return dataset_to_json(self.win.get_object_from_uuid(oid, panel))
 
 
 # === Python 2.7 client side:
@@ -333,14 +489,41 @@ def get_cdl_xmlrpc_port():
 
 
 class RemoteClient:
-    """Object representing a proxy/client to DataLab XML-RPC server"""
+    """Object representing a proxy/client to DataLab XML-RPC server.
+    This object is used to call DataLab functions from a Python script.
+
+    Example:
+    >>> from cdl.remotecontrol import RemoteClient
+    >>> datalab = RemoteClient()
+    >>> datalab.connect()
+    >>> datalab.get_version()
+    '1.0.0'
+    >>> datalab.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
+    True
+    >>> datalab.get_object_titles()
+    ['toto']
+    >>> datalab.get_object_by_title("toto")
+    <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+    >>> datalab.get_object(0)
+    <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+    >>> datalab.get_object(0).data
+    array([1., 2., 3.])
+    """
 
     def __init__(self) -> None:
         self.port: str = None
         self.serverproxy: ServerProxy = None
 
-    def connect(self, port: str | None = None) -> None:
-        """Connect to DataLab XML-RPC server"""
+    def __connect_to_server(self, port: str | None = None) -> None:
+        """Connect to DataLab XML-RPC server.
+
+        Args:
+            port (str, optional): XML-RPC port to connect to. If not specified,
+                the port is automatically retrieved from DataLab configuration.
+
+        Raises:
+            CDLConnectionError: DataLab is currently not running
+        """
         if port is None:
             port = execenv.port
             if port is None:
@@ -352,14 +535,30 @@ class RemoteClient:
         except ConnectionRefusedError as exc:
             raise CDLConnectionError("DataLab is currently not running") from exc
 
-    def try_and_connect(self, port: str | None = None, timeout: int = 5) -> None:
-        """Try (10 times over timeout in s.)
-        and connect to DataLab XML-RPC server"""
+    def connect(
+        self, port: str | None = None, timeout: float = 5.0, retries: int = 10
+    ) -> None:
+        """Try to connect to DataLab XML-RPC server.
+
+        Args:
+            port (str, optional): XML-RPC port to connect to. If not specified,
+                the port is automatically retrieved from DataLab configuration.
+            timeout (float, optional): Timeout in seconds. Defaults to 5.0.
+            retries (int, optional): Number of retries. Defaults to 10.
+
+        Raises:
+            CDLConnectionError: Unable to connect to DataLab
+            ValueError: Invalid timeout (must be >= 0.0)
+            ValueError: Invalid number of retries (must be >= 1)
+        """
+        if timeout < 0.0:
+            raise ValueError("timeout must be >= 0.0")
+        if retries < 1:
+            raise ValueError("retries must be >= 1")
         execenv.print("Connecting to DataLab XML-RPC server...", end="")
-        retries = 10
         for _index in range(retries):
             try:
-                self.connect(port=port)
+                self.__connect_to_server(port=port)
                 break
             except CDLConnectionError:
                 time.sleep(timeout / retries)
@@ -370,27 +569,35 @@ class RemoteClient:
     # === Following methods should match the register functions in XML-RPC server
 
     def get_version(self) -> str:
-        """Return DataLab version"""
+        """Return DataLab version.
+
+        Returns:
+            str: DataLab version
+        """
         return self.serverproxy.get_version()
 
     def close_application(self) -> None:
         """Close DataLab application"""
         self.serverproxy.close_application()
 
-    def switch_to_signal_panel(self) -> None:
-        """Switch to signal panel"""
-        self.serverproxy.switch_to_signal_panel()
+    def switch_to_panel(self, panel: str) -> None:
+        """Switch to panel.
 
-    def switch_to_image_panel(self) -> None:
-        """Switch to image panel"""
-        self.serverproxy.switch_to_image_panel()
+        Args:
+            panel (str): Panel name (valid values: "signal", "image", "macro"))
+        """
+        self.serverproxy.switch_to_panel(panel)
 
     def reset_all(self) -> None:
         """Reset all application data"""
         self.serverproxy.reset_all()
 
     def save_to_h5_file(self, filename: str) -> None:
-        """Save to a DataLab HDF5 file"""
+        """Save to a DataLab HDF5 file.
+
+        Args:
+            filename (str): HDF5 file name
+        """
         self.serverproxy.save_to_h5_file(filename)
 
     def open_h5_files(
@@ -399,15 +606,31 @@ class RemoteClient:
         import_all: bool | None = None,
         reset_all: bool | None = None,
     ) -> None:
-        """Open a DataLab HDF5 file or import from any other HDF5 file"""
+        """Open a DataLab HDF5 file or import from any other HDF5 file.
+
+        Args:
+            h5files (list[str], optional): List of HDF5 files to open. Defaults to None.
+            import_all (bool, optional): Import all objects from HDF5 files.
+                Defaults to None.
+            reset_all (bool, optional): Reset all application data. Defaults to None.
+        """
         self.serverproxy.open_h5_files(h5files, import_all, reset_all)
 
     def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
-        """Open DataLab HDF5 browser to Import HDF5 file"""
+        """Open DataLab HDF5 browser to Import HDF5 file.
+
+        Args:
+            filename (str): HDF5 file name
+            reset_all (bool, optional): Reset all application data. Defaults to None.
+        """
         self.serverproxy.import_h5_file(filename, reset_all)
 
     def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image)"""
+        """Open object from file in current panel (signal/image).
+
+        Args:
+            filename (str): File name
+        """
         self.serverproxy.open_object(filename)
 
     def add_signal(
@@ -420,7 +643,34 @@ class RemoteClient:
         xlabel: str | None = None,
         ylabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
-        """Add signal data to DataLab"""
+        """Add signal data to DataLab.
+
+        Args:
+            title (str): Signal title
+            xdata (np.ndarray): X data
+            ydata (np.ndarray): Y data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+
+        Returns:
+            bool: True if signal was added successfully, False otherwise
+
+        Raises:
+            ValueError: Invalid xdata dtype
+            ValueError: Invalid ydata dtype
+        """
+        dtypes = SignalParam.VALID_DTYPES
+        dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
+        if xdata.dtype not in dtypes:
+            raise ValueError(
+                f"xdata dtype must be one of {dtnames}, got {xdata.dtype.name}"
+            )
+        if ydata.dtype not in dtypes:
+            raise ValueError(
+                f"ydata dtype must be one of {dtnames}, got {ydata.dtype.name}"
+            )
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
         p = self.serverproxy
@@ -437,20 +687,84 @@ class RemoteClient:
         ylabel: str | None = None,
         zlabel: str | None = None,
     ) -> bool:  # pylint: disable=too-many-arguments
-        """Add image data to DataLab"""
+        """Add image data to DataLab.
+
+        Args:
+            title (str): Image title
+            data (np.ndarray): Image data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            zunit (str, optional): Z unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+            zlabel (str, optional): Z label. Defaults to None.
+
+        Returns:
+            bool: True if image was added successfully, False otherwise
+
+        Raises:
+            ValueError: Invalid data dtype
+        """
+        dtypes = ImageParam.VALID_DTYPES
+        dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
+        if data.dtype not in dtypes:
+            raise ValueError(
+                f"data dtype must be one of {dtnames}, got {data.dtype.name}"
+            )
         zbinary = array_to_rpcbinary(data)
         p = self.serverproxy
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
     def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
-        """Call compute function `name` in current panel's processor"""
+        """Call compute function `name` in current panel's processor.
+
+        Args:
+            name (str): Compute function name
+            param (gdt.DataSet, optional): Compute function parameter. Defaults to None.
+
+        Returns:
+            gdt.DataSet: Compute function result
+        """
         p = self.serverproxy
         if param is None:
             return p.calc(name)
         return p.calc(name, dataset_to_json(param))
 
+    def __getattr__(self, name: str) -> Callable:
+        """Return compute function `name` in current panel's processor.
+
+        Args:
+            name (str): Compute function name
+
+        Returns:
+            Callable: Compute function
+
+        Raises:
+            AttributeError: If compute function `name` does not exist
+        """
+
+        def compute_func(param: gdt.DataSet | None = None) -> gdt.DataSet:
+            """Compute function.
+
+            Args:
+                param (gdt.DataSet, optional): Compute function parameter.
+                    Defaults to None.
+
+            Returns:
+                gdt.DataSet: Compute function result
+            """
+            return self.calc(name, param)
+
+        if name.startswith("compute_"):
+            return compute_func
+        raise AttributeError(f"DataLab remote client has no method named {name}")
+
     def add_object(self, obj: SignalParam | ImageParam) -> None:
-        """Add object to DataLab"""
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalParam | ImageParam): Signal or image object
+        """
         p = self.serverproxy
         if isinstance(obj, SignalParam):
             p.add_signal(
@@ -474,15 +788,92 @@ class RemoteClient:
                 obj.zlabel,
             )
 
-    def get_object_titles(self) -> list[str]:
-        """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_titles()
+    def get_object_titles(self, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) list for current panel
 
-    def get_object_uuids(self) -> list[str]:
-        """Get object (signal/image) list for current panel"""
-        return self.serverproxy.get_object_uuids()
+        Args:
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
 
-    def get_object_from_uuid(self, oid: str) -> SignalParam | ImageParam:
-        """Get object (signal/image) from its UUID"""
-        param_data = self.serverproxy.get_object_from_uuid(oid)
+        Returns:
+            list[str]: list of object titles
+
+        Raises:
+            ValueError: if panel not found
+        """
+        return self.serverproxy.get_object_titles(panel)
+
+    def get_object_by_title(
+        self, title: str, panel: str | None = None
+    ) -> SignalParam | ImageParam:
+        """Get object (signal/image) from title
+
+        Args:
+            title (str): object
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
+            ValueError: if panel not found
+        """
+        param_data = self.serverproxy.get_object_by_title(title, panel)
+        return json_to_dataset(param_data)
+
+    def get_object(
+        self, index: int, group_index: int = 0, panel: str | None = None
+    ) -> SignalParam | ImageParam:
+        """Get object (signal/image) from index
+
+        Args:
+            index (int): object
+            group_index (int, optional): group index. Defaults to 0.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
+            ValueError: if panel not found
+        """
+        param_data = self.serverproxy.get_object(index, group_index, panel)
+        return json_to_dataset(param_data)
+
+    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) uuid list for current panel
+
+        Args:
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            list[str]: list of object uuids
+
+        Raises:
+            ValueError: if panel not found
+        """
+        return self.serverproxy.get_object_uuids(panel)
+
+    def get_object_from_uuid(
+        self, oid: str, panel: str | None = None
+    ) -> SignalParam | ImageParam:
+        """Get object (signal/image) from uuid
+
+        Args:
+            oid (str): object uuid
+            panel (str | None): panel name (valid values: "signal", "image").
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
+            ValueError: if panel not found
+        """
+        param_data = self.serverproxy.get_object_from_uuid(oid, panel)
         return json_to_dataset(param_data)

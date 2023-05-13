@@ -23,7 +23,7 @@ def take_menu_screenshots():
         window = create(splash=False, objects=objects, size=(800, 300))
         window.take_menu_screenshots()
         window.take_screenshot("i_simple_example")
-        window.switch_to_signal_panel()
+        window.switch_to_panel("signal")
         window.take_screenshot("s_simple_example")
         window.set_modified(False)
         window.close()

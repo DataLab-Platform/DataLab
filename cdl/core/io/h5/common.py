@@ -78,14 +78,14 @@ class BaseNode(metaclass=abc.ABCMeta):
     def match(cls, dset):
         """Return True if h5 dataset match node pattern"""
 
-    def create_object(self):  # pylint: disable=no-self-use
+    def create_native_object(self):  # pylint: disable=no-self-use
         """Create native object, if supported"""
         return None
 
-    def get_object(self):
+    def get_native_object(self):
         """Return native object, if supported"""
         if self.__obj is None:
-            obj = self.create_object()  # pylint: disable=assignment-from-none
+            obj = self.create_native_object()  # pylint: disable=assignment-from-none
             if obj is not None:
                 self.__process_metadata(obj)
             self.__obj = obj

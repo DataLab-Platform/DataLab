@@ -876,7 +876,7 @@ class BaseDataPanel(AbstractPanel):
         parent = self if parent is None else parent
         dlg = objectview.GetObjectDialog(parent, self, title)
         if exec_dialog(dlg):
-            return dlg.get_object()
+            return dlg.get_current_object()
         return None
 
     def add_results_button(self) -> None:

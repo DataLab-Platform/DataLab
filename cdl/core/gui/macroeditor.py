@@ -43,7 +43,7 @@ import numpy as np
 from cdl.remotecontrol import RemoteClient
 
 remote = RemoteClient()
-remote.try_and_connect()
+remote.connect()
 
 z = np.random.rand(20, 20)
 remote.add_image("toto", z)

@@ -201,32 +201,113 @@ class CDLMainWindow(QW.QMainWindow):
             panel = self.signalpanel
         return panel
 
-    def get_object_titles(self) -> list[str]:
+    def __get_specific_panel(self, panel: str | None) -> BaseDataPanel:
+        """Return a specific BaseDataPanel.
+
+        Args:
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            BaseDataPanel: panel
+
+        Raises:
+            ValueError: if panel is unknown
+        """
+        if panel is None:
+            return self.__get_current_basedatapanel()
+        if panel == "signal":
+            return self.signalpanel
+        if panel == "image":
+            return self.imagepanel
+        raise ValueError(f"Unknown panel: {panel}")
+
+    def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel
+
+        Args:
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
 
         Returns:
             list[str]: list of object titles
-        """
-        return self.__get_current_basedatapanel().objmodel.get_object_titles()
 
-    def get_object_uuids(self) -> list[str]:
-        """Get object (signal/image) list for current panel
+        Raises:
+            ValueError: if panel is unknown
+        """
+        return self.__get_specific_panel(panel).objmodel.get_object_titles()
+
+    def get_object_by_title(
+        self, title: str, panel: str | None = None
+    ) -> SignalParam | ImageParam:
+        """Get object (signal/image) from title
+
+        Args:
+            title (str): object
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
+            ValueError: if panel is unknown
+        """
+        return self.__get_specific_panel(panel).objmodel.get_object_by_title(title)
+
+    def get_object(
+        self, index: int, group_index: int = 0, panel: str | None = None
+    ) -> SignalParam | ImageParam:
+        """Get object (signal/image) from index
+
+        Args:
+            index (int): object
+            group_index (int, optional): group index. Defaults to 0.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+
+        Returns:
+            Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
+            ValueError: if panel is unknown
+        """
+        return self.__get_specific_panel(panel).objmodel.get_object(index, group_index)
+
+    def get_object_uuids(self, panel: str | None = None) -> list[str]:
+        """Get object (signal/image) uuid list for current panel
+
+        Args:
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
 
         Returns:
             list[str]: list of object uuids
-        """
-        return self.__get_current_basedatapanel().objmodel.get_object_ids()
 
-    def get_object_from_uuid(self, oid: str) -> SignalParam | ImageParam:
+        Raises:
+            ValueError: if panel is unknown
+        """
+        return self.__get_specific_panel(panel).objmodel.get_object_ids()
+
+    def get_object_from_uuid(
+        self, oid: str, panel: str | None = None
+    ) -> SignalParam | ImageParam:
         """Get object (signal/image) from uuid
 
         Args:
             oid (str): object uuid
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
 
         Returns:
             Union[SignalParam, ImageParam]: object
+
+        Raises:
+            ValueError: if object not found
         """
-        return self.__get_current_basedatapanel().objmodel[oid]
+        return self.__get_specific_panel(panel).objmodel[oid]
 
     # ------Misc.
     @property
@@ -560,8 +641,10 @@ class CDLMainWindow(QW.QMainWindow):
         self.tabifyDockWidget(cdock, idock)
         self.signal_image_docks = cdock, idock
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
-        self.signalpanel.SIG_OBJECT_ADDED.connect(self.switch_to_signal_panel)
-        self.imagepanel.SIG_OBJECT_ADDED.connect(self.switch_to_image_panel)
+        self.signalpanel.SIG_OBJECT_ADDED.connect(
+            lambda: self.switch_to_panel("signal")
+        )
+        self.imagepanel.SIG_OBJECT_ADDED.connect(lambda: self.switch_to_panel("image"))
         for panel in (self.signalpanel, self.imagepanel):
             panel.setup_panel()
 
@@ -721,14 +804,23 @@ class CDLMainWindow(QW.QMainWindow):
 
     # ------Remote control
     @remote_controlled
-    def switch_to_signal_panel(self) -> None:
-        """Switch to signal panel"""
-        self.tabwidget.setCurrentWidget(self.signalpanel)
+    def switch_to_panel(self, panel: str) -> None:
+        """Switch to panel.
 
-    @remote_controlled
-    def switch_to_image_panel(self) -> None:
-        """Switch to image panel"""
-        self.tabwidget.setCurrentWidget(self.imagepanel)
+        Args:
+            panel (str): panel name (valid values: "signal", "image", "macro")
+
+        Raises:
+            ValueError: unknown panel
+        """
+        if panel == "signal":
+            self.tabwidget.setCurrentWidget(self.signalpanel)
+        elif panel == "image":
+            self.tabwidget.setCurrentWidget(self.imagepanel)
+        elif panel == "macro":
+            self.tabwidget.setCurrentWidget(self.macropanel)
+        else:
+            raise ValueError(f"Unknown panel {panel}")
 
     @remote_controlled
     def calc(self, name: str, param: gdt.DataSet | None = None) -> None:
@@ -984,17 +1076,19 @@ class CDLMainWindow(QW.QMainWindow):
             xrpcstate = _("started (port %s)") % self.remote_server.port
         xml_rpc = _("XML-RPC server: ") + xrpcstate
         pinfos = PluginRegistry.get_plugin_infos()
+        dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
         QW.QMessageBox.about(
             self,
             _("About ") + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}<p>
               %s Pierre Raybaut
-              <br>Copyright &copy; 2018-2022 CEA-Codra
+              <br>%s
+              <br>Copyright &copy; 2023 CEA, Codra
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
                %s {platform.system()}<br><br>{xml_rpc}<br><br>{pinfos}"""
-            % (_("Developped by"), _("on")),
+            % (_("Created by"), dev_by, _("on")),
         )
 
     def show_log_viewer(self) -> None:

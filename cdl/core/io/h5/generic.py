@@ -131,7 +131,7 @@ class GenericArrayNode(BaseGenericNode):
     def text(self):
         """Return node textual representation"""
 
-    def create_object(self):
+    def create_native_object(self):
         """Create native object, if supported"""
         if self.is_signal:
             obj = create_signal(self.object_title)

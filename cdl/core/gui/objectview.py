@@ -254,13 +254,15 @@ class GetObjectDialog(QW.QDialog):
         # Update OK button state:
         self.current_object_changed()
 
-    def get_object(self) -> SignalParam | ImageParam:
+    def get_current_object(self) -> SignalParam | ImageParam:
         """Return current object"""
         return self.tree.get_current_object()
 
     def current_object_changed(self) -> None:
         """Item selection has changed"""
-        self.ok_btn.setEnabled(isinstance(self.get_object(), (SignalParam, ImageParam)))
+        self.ok_btn.setEnabled(
+            isinstance(self.get_current_object(), (SignalParam, ImageParam))
+        )
 
 
 class ObjectView(SimpleObjectTree):

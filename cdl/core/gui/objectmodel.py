@@ -239,6 +239,26 @@ class ObjectModel:
             if obj in group:
                 group.remove(obj)
 
+    def get_object(self, index: int, group_index: int = 0) -> SignalParam | ImageParam:
+        """Return object with index.
+
+        Args:
+            index (int): object index
+            group_index (int, optional): group index. Defaults to 0.
+
+        Returns:
+            object with index
+
+        Raises:
+            IndexError: if object with index not found
+        """
+        try:
+            return self._groups[group_index][index]
+        except IndexError:
+            raise IndexError(
+                f"Object with index {index} (group {group_index}) not found"
+            )
+
     def get_objects(self, uuids: list[str]) -> list[SignalParam | ImageParam]:
         """Return objects with uuids"""
         return [self._objects[uuid] for uuid in uuids]
@@ -252,7 +272,17 @@ class ObjectModel:
         return [obj.title for obj in self._objects.values()]
 
     def get_object_by_title(self, title: str) -> SignalParam | ImageParam:
-        """Return object with title"""
+        """Return object with title.
+
+        Args:
+            title: object title
+
+        Returns:
+            object with title
+
+        Raises:
+            KeyError: if object with title not found
+        """
         for obj in self._objects.values():
             if obj.title == title:
                 return obj

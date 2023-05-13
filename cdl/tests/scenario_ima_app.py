@@ -44,7 +44,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     """Testing signal features"""
-    win.switch_to_image_panel()
+    win.switch_to_panel("image")
     panel = win.imagepanel
 
     for image in iterate_image_creation(data_size, non_zero=True):

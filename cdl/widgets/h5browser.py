@@ -367,7 +367,7 @@ class H5Browser(QW.QSplitter):
     def update_visual_preview(self, node):
         """Update visual preview widget"""
         try:
-            obj = node.get_object()
+            obj = node.get_native_object()
         except Exception as msg:  # pylint: disable=broad-except
             qt_handle_error_message(self, msg)
             return

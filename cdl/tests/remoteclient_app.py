@@ -34,7 +34,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         if self.cdl is None:
             self.cdl = RemoteClient()
             try:
-                self.cdl.connect()
+                self.cdl.__connect_to_server()
                 self.host.log("✨ Initialized DataLab connection ✨")
                 self.host.log(f"  Communication port: {self.cdl.port}")
                 self.host.log("  List of exposed methods:")

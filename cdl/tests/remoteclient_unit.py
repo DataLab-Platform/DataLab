@@ -39,7 +39,7 @@ def multiple_commands(remote: RemoteClient):
         remote.reset_all()
         remote.open_h5_files([fname], True, False)
         remote.import_h5_file(fname, True)
-        remote.switch_to_signal_panel()
+        remote.switch_to_panel("signal")
         remote.calc("log10")
 
         param = XYCalibrateParam()
@@ -54,7 +54,7 @@ def test():
     execenv.print("Launching DataLab in a separate process")
     exec_script(app.__file__, wait=False)
     remote = RemoteClient()
-    remote.try_and_connect()
+    remote.connect()
     execenv.print("Executing multiple commands...", end="")
     multiple_commands(remote)
     execenv.print("OK")
