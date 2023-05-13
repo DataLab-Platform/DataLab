@@ -47,6 +47,7 @@ remote.connect()
 
 z = np.random.rand(20, 20)
 remote.add_image("toto", z)
+remote.compute_fft()
 
 print("All done!")
 """
