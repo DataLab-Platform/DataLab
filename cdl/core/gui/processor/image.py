@@ -880,7 +880,8 @@ class ImageProcessor(BaseProcessor):
     def rebin(self, param: BinningParam | None = None) -> None:
         """Binning image"""
         edit = param is None
-        input_dtype_str = str(self.panel.objview.get_sel_objects()[0].data.dtype)
+        obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        input_dtype_str = str(obj0.data.dtype)
         edit, param = self.init_param(param, BinningParam, _("Binning"))
         if edit:
             param.dtype_str = input_dtype_str
