@@ -35,7 +35,11 @@ class BaseIORegistry(type):
     def __init__(cls, name, bases, attrs):
         super().__init__(name, bases, attrs)
         if not name.endswith("FormatBase"):
-            cls._io_format_instances.append(cls())
+            try:
+                cls._io_format_instances.append(cls())
+            except ImportError:
+                # This format is not supported
+                pass
 
     @classmethod
     def get_formats(cls) -> list[FormatBase]:
@@ -122,6 +126,7 @@ class FormatInfo:
     extensions: str = None  # e.g. "*.foobar *.fb"
     readable: bool = False  # True if format can be read
     writeable: bool = False  # True if format can be written
+    requires: list[str] = None  # e.g. ["foobar"] if format requires foobar package
 
 
 class FormatBase:
@@ -142,6 +147,14 @@ class FormatBase:
         self.extlist = get_file_extensions(self.info.extensions)
         if not self.extlist:
             raise ValueError(f"Invalid format extensions for {self.__class__.__name__}")
+        if self.info.requires:
+            for package in self.info.requires:
+                try:
+                    __import__(package)
+                except ImportError:
+                    raise ImportError(
+                        f"Format {self.info.name} requires {package} package"
+                    )
 
     def get_filter(self, action: IOAction) -> str:
         """Return file filter for Qt file dialog"""

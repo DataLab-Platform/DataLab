@@ -110,6 +110,7 @@ class DICOMImageFormat(ImageFormatBase):
         extensions="*.dcm *.dicom",
         readable=True,
         writeable=False,
+        requires=["pydicom"],
     )
 
     @staticmethod
