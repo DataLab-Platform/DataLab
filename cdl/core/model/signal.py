@@ -370,11 +370,11 @@ class PeriodicParam(gdt.DataSet):
 
     a = gdi.FloatItem("A", default=1.0)
     ymin = gdi.FloatItem("Ymin", default=0.0).set_pos(col=1)
-    freq = gdi.FloatItem("Frequency", default=1.0)
+    freq = gdi.FloatItem(_("Frequency"), default=1.0)
     freq_unit = gdi.ChoiceItem(
-        "Unit", FreqUnits.get_choices(), default=FreqUnits.HZ
+        _("Unit"), FreqUnits.get_choices(), default=FreqUnits.HZ
     ).set_pos(col=1)
-    phase = gdi.FloatItem("Phase", default=0.0, unit="°").set_pos(col=1)
+    phase = gdi.FloatItem(_("Phase"), default=0.0, unit="°").set_pos(col=1)
 
 
 class StepParam(gdt.DataSet):
@@ -388,13 +388,16 @@ class StepParam(gdt.DataSet):
 class SignalParamNew(gdt.DataSet):
     """New signal dataset"""
 
-    title = gdi.StringItem(_("Title"), default=_("Untitled"))
+    title = gdi.StringItem(_("Title"))
     xmin = gdi.FloatItem("Xmin", default=-10.0)
     xmax = gdi.FloatItem("Xmax", default=10.0)
     size = gdi.IntItem(
         _("Size"), help=_("Signal size (total number of points)"), min=1, default=500
     )
     type = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices())
+
+
+DEFAULT_TITLE = _("Untitled signal")
 
 
 def new_signal_param(
@@ -416,8 +419,7 @@ def new_signal_param(
     Returns:
         SignalParamNew: new signal dataset instance
     """
-    if title is None:
-        title = _("Untitled signal")
+    title = DEFAULT_TITLE if title is None else title
     param = SignalParamNew(title=title, icon=get_icon("new_signal.svg"))
     param.title = title
     if xmin is not None:
@@ -483,10 +485,12 @@ def create_signal_from_param(
             rng = np.random.default_rng(p.seed)
             if newparam.type == SignalTypes.UNIFORMRANDOM:
                 yarr = rng.random((newparam.size,)) * (p.vmax - p.vmin) + p.vmin
-                signal.title = f"{prefix}(vmin={p.vmin:.3g},vmax={p.vmax:.3g})"
+                if signal.title == DEFAULT_TITLE:
+                    signal.title = f"{prefix}(vmin={p.vmin:.3g},vmax={p.vmax:.3g})"
             elif newparam.type == SignalTypes.NORMALRANDOM:
                 yarr = rng.normal(p.mu, p.sigma, size=(newparam.size,))
-                signal.title = f"{prefix}(mu={p.mu:.3g},sigma={p.sigma:.3g})"
+                if signal.title == DEFAULT_TITLE:
+                    signal.title = f"{prefix}(mu={p.mu:.3g},sigma={p.sigma:.3g})"
             else:
                 raise NotImplementedError(f"New param type: {prefix}")
             signal.set_xydata(xarr, yarr)
@@ -506,10 +510,11 @@ def create_signal_from_param(
                 return None
             yarr = func(xarr, p.a, p.sigma, p.mu, p.ymin)
             signal.set_xydata(xarr, yarr)
-            signal.title = (
-                f"{prefix}(a={p.a:.3g},sigma={p.sigma:.3g},"
-                f"mu={p.mu:.3g},ymin={p.ymin:.3g})"
-            )
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(a={p.a:.3g},sigma={p.sigma:.3g},"
+                    f"mu={p.mu:.3g},ymin={p.ymin:.3g})"
+                )
         elif newparam.type in (
             SignalTypes.SINUS,
             SignalTypes.COSINUS,
@@ -533,10 +538,11 @@ def create_signal_from_param(
             freq = p.get_frequency_in_hz()
             yarr = p.a * func(2 * np.pi * freq * xarr + np.deg2rad(p.phase)) + p.ymin
             signal.set_xydata(xarr, yarr)
-            signal.title = (
-                f"{prefix}(f={p.freq:.3g} {p.freq_unit.name}),"
-                f"a={p.a:.3g},ymin={p.ymin:.3g},phase={p.phase:.3g}°)"
-            )
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(f={p.freq:.3g} {p.freq_unit.value}),"
+                    f"a={p.a:.3g},ymin={p.ymin:.3g},phase={p.phase:.3g}°)"
+                )
         elif newparam.type == SignalTypes.STEP:
             if p is None:
                 p = StepParam(_("Step function"))
@@ -545,6 +551,7 @@ def create_signal_from_param(
             yarr = np.ones_like(xarr) * p.a1
             yarr[xarr > p.x0] = p.a2
             signal.set_xydata(xarr, yarr)
-            signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
+            if signal.title == DEFAULT_TITLE:
+                signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
         return signal
     return None

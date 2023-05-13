@@ -640,7 +640,7 @@ class ImageTypes(base.Choices):
 class ImageParamNew(gdt.DataSet):
     """New image dataset"""
 
-    title = gdi.StringItem(_("Title"), default=_("Untitled"))
+    title = gdi.StringItem(_("Title"))
     height = gdi.IntItem(
         _("Height"), help=_("Image height (total number of rows)"), min=1, default=500
     )
@@ -651,6 +651,9 @@ class ImageParamNew(gdt.DataSet):
         _("Data type"), ImageDatatypes.get_choices(), default=ImageDatatypes.UINT16
     )
     type = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
+
+
+DEFAULT_TITLE = _("Untitled image")
 
 
 def new_image_param(
@@ -672,8 +675,7 @@ def new_image_param(
     Returns:
         ImageParamNew: new image dataset instance
     """
-    if title is None:
-        title = _("Untitled image")
+    title = DEFAULT_TITLE if title is None else title
     param = ImageParamNew(title=title, icon=get_icon("new_image.svg"))
     param.title = title
     if height is not None:
@@ -758,10 +760,11 @@ def create_image_from_param(
                 / (2.0 * p.sigma**2)
             )
             image.data = np.array(zgauss, dtype=dtype)
-            image.title = (
-                f"{prefix}(a={p.a:g},μ={p.mu:g},σ={p.sigma:g}),"
-                f"x0={p.x0:g},y0={p.y0:g})"
-            )
+            if image.title == DEFAULT_TITLE:
+                image.title = (
+                    f"{prefix}(a={p.a:g},μ={p.mu:g},σ={p.sigma:g}),"
+                    f"x0={p.x0:g},y0={p.y0:g})"
+                )
         elif newparam.type in (ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM):
             pclass = {
                 ImageTypes.UNIFORMRANDOM: base.UniformRandomParam,
@@ -776,10 +779,14 @@ def create_image_from_param(
             if newparam.type == ImageTypes.UNIFORMRANDOM:
                 data = rng.random(shape)
                 image.data = scale_data_to_min_max(data, p.vmin, p.vmax)
-                image.title = f"{prefix}(vmin={p.vmin:g},vmax={p.vmax:g},seed={p.seed})"
+                if image.title == DEFAULT_TITLE:
+                    image.title = (
+                        f"{prefix}(vmin={p.vmin:g},vmax={p.vmax:g},seed={p.seed})"
+                    )
             elif newparam.type == ImageTypes.NORMALRANDOM:
                 image.data = rng.normal(p.mu, p.sigma, size=shape)
-                image.title = f"{prefix}(μ={p.mu:g},σ={p.sigma:g},seed={p.seed})"
+                if image.title == DEFAULT_TITLE:
+                    image.title = f"{prefix}(μ={p.mu:g},σ={p.sigma:g},seed={p.seed})"
             else:
                 raise NotImplementedError(f"New param type: {newparam.type.value}")
         return image

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-05-13 16:18+0200\n"
+"POT-Creation-Date: 2023-05-13 18:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -490,33 +490,32 @@ msgstr "Attention"
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:93 cdl\core\model\image.py:257
-#: cdl\core\model\image.py:643 cdl\core\model\signal.py:48
-#: cdl\core\model\signal.py:54 cdl\core\model\signal.py:391
+#: cdl\core\gui\macroeditor.py:94 cdl\core\model\image.py:257
+#: cdl\core\model\signal.py:48 cdl\core\model\signal.py:54
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: cdl\core\gui\macroeditor.py:158
+#: cdl\core\gui\macroeditor.py:159
 msgid "# ==> Unable to run '%s' macro"
 msgstr "# ==> Impossible d'exécuter la macro '%s'"
 
-#: cdl\core\gui\macroeditor.py:160
+#: cdl\core\gui\macroeditor.py:161
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-#: cdl\core\gui\macroeditor.py:160 cdl\plugins.py:139
+#: cdl\core\gui\macroeditor.py:161 cdl\plugins.py:139
 msgid "Error"
 msgstr "Erreur"
 
-#: cdl\core\gui\macroeditor.py:163
+#: cdl\core\gui\macroeditor.py:164
 msgid "# ==> Running '%s' macro..."
 msgstr "# ==> Exécution de la macro '%s'..."
 
-#: cdl\core\gui\macroeditor.py:175
+#: cdl\core\gui\macroeditor.py:176
 msgid "Terminating '%s' macro"
 msgstr "Arrêt de la macro '%s'"
 
-#: cdl\core\gui\macroeditor.py:182
+#: cdl\core\gui\macroeditor.py:183
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
@@ -1644,13 +1643,13 @@ msgstr "Étalonner"
 msgid "Degree"
 msgstr "Degré"
 
-#: cdl\core\gui\processor\signal.py:91 cdl\core\model\signal.py:499
+#: cdl\core\gui\processor\signal.py:91 cdl\core\model\signal.py:503
 #: cdl\tests\demo.py:81 cdl\tests\scenario_sig_app.py:172
 #: cdl\tests\stat_app.py:33
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: cdl\core\gui\processor\signal.py:92 cdl\core\model\signal.py:500
+#: cdl\core\gui\processor\signal.py:92 cdl\core\model\signal.py:504
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
@@ -1801,7 +1800,7 @@ msgstr "Titre"
 
 #: cdl\core\model\image.py:261 cdl\core\model\image.py:265
 #: cdl\core\model\image.py:269 cdl\core\model\signal.py:58
-#: cdl\core\model\signal.py:62
+#: cdl\core\model\signal.py:62 cdl\core\model\signal.py:375
 msgid "Unit"
 msgstr "Unité"
 
@@ -1835,11 +1834,11 @@ msgstr "gaussienne"
 
 #: cdl\core\model\image.py:636 cdl\core\model\signal.py:327
 msgid "random (uniform law)"
-msgstr "aléatoire (distribution uniforme)"
+msgstr "aléatoire (loi uniforme)"
 
 #: cdl\core\model\image.py:637 cdl\core\model\signal.py:328
 msgid "random (normal law)"
-msgstr "aléatoire (distribution normale)"
+msgstr "aléatoire (loi normale)"
 
 #: cdl\core\model\image.py:645
 msgid "Height"
@@ -1862,15 +1861,15 @@ msgstr "Largeur"
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:676
+#: cdl\core\model\image.py:656
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:744
+#: cdl\core\model\image.py:746
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:771
+#: cdl\core\model\image.py:774
 msgid "Image"
 msgstr "Image"
 
@@ -1918,6 +1917,14 @@ msgstr "sinus cardinal"
 msgid "step"
 msgstr "échelon"
 
+#: cdl\core\model\signal.py:373
+msgid "Frequency"
+msgstr "Fréquence"
+
+#: cdl\core\model\signal.py:377
+msgid "Phase"
+msgstr "Phase"
+
 #: cdl\core\model\signal.py:395
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
@@ -1926,35 +1933,35 @@ msgstr "Nombre de points"
 msgid "Size"
 msgstr "Taille"
 
-#: cdl\core\model\signal.py:420
+#: cdl\core\model\signal.py:400
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: cdl\core\model\signal.py:480
+#: cdl\core\model\signal.py:482
 msgid "Signal"
 msgstr "Signal"
 
-#: cdl\core\model\signal.py:522 cdl\core\model\signal.py:523
+#: cdl\core\model\signal.py:527 cdl\core\model\signal.py:528
 msgid "Sinusoid"
 msgstr "Sinusoïde"
 
-#: cdl\core\model\signal.py:524
+#: cdl\core\model\signal.py:529
 msgid "Sawtooth function"
 msgstr "Fontion dents de scie"
 
-#: cdl\core\model\signal.py:525
+#: cdl\core\model\signal.py:530
 msgid "Triangle function"
 msgstr "Fonction triangle"
 
-#: cdl\core\model\signal.py:526
+#: cdl\core\model\signal.py:531
 msgid "Square function"
 msgstr "Fonction carrée"
 
-#: cdl\core\model\signal.py:527
+#: cdl\core\model\signal.py:532
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
-#: cdl\core\model\signal.py:542
+#: cdl\core\model\signal.py:548
 msgid "Step function"
 msgstr "Fonction échelon"
 
