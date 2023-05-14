@@ -99,9 +99,10 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
 
+    ima2 = create_test_image1(data_size)
     param = CannyParam()
     panel.processor.compute_canny(param)
-    panel.add_object(ima1)
+    panel.add_object(ima2)
 
     param = LogP1Param()
     param.n = 1
