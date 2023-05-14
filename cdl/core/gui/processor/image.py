@@ -1373,7 +1373,7 @@ class ImageProcessor(BaseProcessor):
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
-        if results is not None and param.create_rois:
+        if results is not None and param.create_rois and len(results.items()) > 1:
             with create_progress_bar(
                 self.panel, _("Create regions of interest"), max_=len(results)
             ) as progress:
