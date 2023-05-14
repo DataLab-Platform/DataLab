@@ -6,6 +6,7 @@ opencv-python
 psutil
 pylint
 black
+coverage
 pycodestyle
 pyinstaller
 sphinx
