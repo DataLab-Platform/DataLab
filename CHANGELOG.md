@@ -11,15 +11,26 @@ New dependencies:
 
 New features:
 
-* Signal/Image panels:
+* DataLab is a platform:
+  * Added support for plugins
+    * Custom processing features available in the "Plugins" menu
+    * Custom I/O features: new file formats can be added to the standard I/O
+      features for signals and images
+    * Custom HDF5 features: new HDF5 file formats can be added to the standard
+      HDF5 import feature
+    * More features to come...
+  * Added remote control feature: DataLab can be controlled remotely via a
+    TCP/IP connection (see [Remote control](https://cdl.readthedocs.io/en/latest/remote_control.html))
+  * Added macro commands: DataLab can be controlled via a macro file (see
+    [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
+* Signal/Image features:
   * Added support for groups: signals and images can be grouped together, and
     operations can be applied to all objects in a group, or between groups
   * Drastically improved performance when selecting objects
   * Optimized performance when showing large images
-* Added support for dropping files on signal/image list widget
-* Added "Computing parameters" group box to show last result input parameters
-* Added "Copy titles to clipboard" feature in "Edit" menu
-* Signal and image processing:
+  * Added support for dropping files on signal/image panel
+  * Added "Computing parameters" group box to show last result input parameters
+  * Added "Copy titles to clipboard" feature in "Edit" menu
   * For every single processing feature (operation, processing and computing menus),
     the entered parameters (dialog boxes) are stored in cache to be used as defaults
     the next time the feature is used

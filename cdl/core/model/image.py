@@ -42,7 +42,12 @@ def make_roi_rectangle(
     x0: int, y0: int, x1: int, y1: int, title: str
 ) -> AnnotatedRectangle:
     """Make and return the annnotated rectangle associated to ROI"""
-    return make.annotated_rectangle(x0, y0, x1, y1, title)
+    roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
+    param = roi_item.label.labelparam
+    param.anchor = "BL"
+    param.xc, param.yc = 5, -5
+    param.update_label(roi_item.label)
+    return roi_item
 
 
 def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> AnnotatedCircle:
