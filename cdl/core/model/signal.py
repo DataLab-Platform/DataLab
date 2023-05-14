@@ -23,7 +23,7 @@ from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guiqwt.builder import make
 from guiqwt.curve import CurveItem
-from guiqwt.styles import update_style_attr
+from guiqwt.styles import style_generator
 
 from cdl.config import Conf, _
 from cdl.core.computation import fit
@@ -32,6 +32,8 @@ from cdl.env import execenv
 
 if TYPE_CHECKING:
     from qtpy import QtWidgets as QW
+
+CURVE_STYLE = style_generator()
 
 
 class SignalParam(gdt.DataSet, base.ObjectItf):
@@ -148,6 +150,15 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         i1, i2 = self.roi[roi_index, :]
         return self.x[i1:i2], self.y[i1:i2]
 
+    def __update_item_params(self, item: CurveItem) -> None:
+        """Update item parameters.
+
+        Args:
+            item (PlotItem): plot item
+        """
+        update_dataset(item.curveparam, self.metadata)
+        item.update_params()
+
     def make_item(self, update_from=None):
         """Make plot item from data.
 
@@ -159,17 +170,27 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         """
         if len(self.xydata) == 2:  # x, y signal
             x, y = self.xydata
-            item = make.mcurve(x.real, y.real, label=self.title)
+            item = make.mcurve(x.real, y.real, next(CURVE_STYLE), label=self.title)
         elif len(self.xydata) == 3:  # x, y, dy error bar signal
             x, y, dy = self.xydata
-            item = make.merror(x.real, y.real, dy.real, label=self.title)
+            item = make.merror(
+                x.real, y.real, dy.real, next(CURVE_STYLE), label=self.title
+            )
         elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
             x, y, dx, dy = self.xydata
-            item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
+            item = make.merror(
+                x.real, y.real, dx.real, dy.real, next(CURVE_STYLE), label=self.title
+            )
         else:
             raise RuntimeError("data not supported")
-        if update_from is not None:
+        if update_from is None:
+            if execenv.demo_mode:
+                item.curveparam.line.width = 3
+            self.__update_item_params(item)
+            next(make.style)
+        else:
             update_dataset(item.curveparam, update_from.curveparam)
+            item.update_params()
         return item
 
     def update_item(self, item: CurveItem, data_changed: bool = True) -> None:
@@ -190,11 +211,7 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
                 x, y, dx, dy = self.xydata
                 item.set_data(x.real, y.real, dx.real, dy.real)
         item.curveparam.label = self.title
-        if execenv.demo_mode:
-            item.curveparam.line.width = 3
-        update_style_attr(next(make.style), item.curveparam)
-        update_dataset(item.curveparam, self.metadata)
-        item.update_params()
+        self.__update_item_params(item)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes.
