@@ -960,7 +960,7 @@ class CDLMainWindow(QW.QMainWindow):
                 filename, _filter = getsavefilename(self, _("Save"), basedir, filters)
             if not filename:
                 return
-        with qth.qt_try_loadsave_file(self.parent(), filename, "save"):
+        with qth.qt_try_loadsave_file(self, filename, "save"):
             filename = self.__check_h5file(filename, "save")
             self.h5inputoutput.save_file(filename)
             self.set_modified(False)
