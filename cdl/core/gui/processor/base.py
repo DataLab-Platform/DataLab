@@ -166,7 +166,7 @@ class BaseProcessor(QC.QObject):
         ) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, name) in enumerate(zip(params, names)):
-                    progress.setValue(i_row * i_param)
+                    progress.setValue((i_row + 1) * (i_param + 1))
                     progress.setLabelText(name)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
@@ -233,7 +233,7 @@ class BaseProcessor(QC.QObject):
             ylabels = []
             title_suffix = "" if suffix is None else "|" + suffix(param)
             for idx, obj in enumerate(objs):
-                progress.setValue(idx)
+                progress.setValue(idx + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
@@ -289,7 +289,7 @@ class BaseProcessor(QC.QObject):
 
         with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
             for index, obj in enumerate(objs):
-                progress.setValue(index)
+                progress.setValue(index + 1)
                 progress.setLabelText(name)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
@@ -367,7 +367,7 @@ class BaseProcessor(QC.QObject):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
             for index, obj in enumerate(objs):
-                progress.setValue(index)
+                progress.setValue(index + 1)
                 progress.setLabelText(name)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():

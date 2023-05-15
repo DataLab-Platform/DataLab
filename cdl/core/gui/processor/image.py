@@ -766,7 +766,7 @@ class ImageProcessor(BaseProcessor):
         delta_x0, delta_y0 = 0.0, 0.0
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             for i_row, obj in enumerate(objs):
-                progress.setValue(i_row)
+                progress.setValue(i_row + 1)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
@@ -1378,7 +1378,7 @@ class ImageProcessor(BaseProcessor):
                 self.panel, _("Create regions of interest"), max_=len(results)
             ) as progress:
                 for idx, (oid, result) in enumerate(results.items()):
-                    progress.setValue(idx)
+                    progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break

@@ -58,7 +58,7 @@ class H5InputOutput:
                 self.mainwindow, self.__progbartitle(filename), 2
             ) as progress:
                 for idx, panel in enumerate(self.mainwindow.panels):
-                    progress.setValue(idx)
+                    progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
                     panel.deserialize_from_hdf5(reader)
                     if progress.wasCanceled():
@@ -111,7 +111,7 @@ class H5InputOutput:
             ) as progress:
                 self.uint32_wng = False
                 for idx, node in enumerate(nodes):
-                    progress.setValue(idx)
+                    progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
