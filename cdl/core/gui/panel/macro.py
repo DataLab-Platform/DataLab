@@ -87,16 +87,25 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.setup_actions()
 
     # ------AbstractPanel interface-----------------------------------------------------
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
+        """Serialize whole panel to a HDF5 file"""
+        with writer.group(self.H5_PREFIX):
+            for obj in self.__macros.values():
+                self.serialize_object_to_hdf5(obj, writer)
+
+    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
+        """Deserialize whole panel from a HDF5 file"""
+        with reader.group(self.H5_PREFIX):
+            for name in reader.h5.get(self.H5_PREFIX, []):
+                #  Contrary to signal or image panels, macros are not stored
+                #  in a group but directly in the root of the HDF5 file
+                obj = self.deserialize_object_from_hdf5(reader, name)
+                self.add_object(obj)
+
     @property
     def object_number(self) -> int:
         """Return object number"""
         return len(self.__macros)
-
-    def remove_all_objects(self) -> None:
-        """Remove all objects"""
-        while self.tabwidget.count() > 0:
-            self.tabwidget.removeTab(0)
-        super().remove_all_objects()
 
     def create_object(self, title=None) -> Macro:
         """Create object.
@@ -128,11 +137,11 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.__macros[obj.uuid] = obj
         self.SIG_OBJECT_ADDED.emit()
 
-    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
-        """Serialize whole panel to a HDF5 file"""
-        with writer.group(self.H5_PREFIX):
-            for obj in self.__macros.values():
-                self.serialize_object_to_hdf5(obj, writer)
+    def remove_all_objects(self) -> None:
+        """Remove all objects"""
+        while self.tabwidget.count() > 0:
+            self.tabwidget.removeTab(0)
+        super().remove_all_objects()
 
     # ---- Macro panel API -------------------------------------------------------------
     def setup_actions(self) -> None:

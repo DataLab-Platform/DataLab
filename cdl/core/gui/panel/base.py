@@ -185,6 +185,37 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         super().__init__(QC.Qt.Vertical, parent)
         self.setObjectName(self.__class__.__name__[0].lower())
 
+    @staticmethod
+    def get_serializable_name(obj: ObjItf) -> str:
+        """Return serializable name of object"""
+        title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
+        name = f"{obj.short_id}: {title}"
+        return name
+
+    def serialize_object_to_hdf5(
+        self, obj: SignalParam | ImageParam, writer: NativeH5Writer
+    ) -> None:
+        """Serialize object to HDF5 file"""
+        with writer.group(self.get_serializable_name(obj)):
+            obj.serialize(writer)
+
+    def deserialize_object_from_hdf5(
+        self, reader: NativeH5Reader, name: str
+    ) -> SignalParam | ImageParam:
+        """Deserialize object from a HDF5 file"""
+        with reader.group(name):
+            obj = self.create_object()
+            obj.deserialize(reader)
+        return obj
+
+    @abc.abstractmethod
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
+        """Serialize whole panel to a HDF5 file"""
+
+    @abc.abstractmethod
+    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
+        """Deserialize whole panel from a HDF5 file"""
+
     @property
     @abc.abstractmethod
     def object_number(self):
@@ -206,39 +237,6 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def remove_all_objects(self):
         """Remove all objects"""
         self.SIG_OBJECT_REMOVED.emit()
-
-    @staticmethod
-    def get_serializable_name(obj: ObjItf) -> str:
-        """Return serializable name of object"""
-        title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
-        name = f"{obj.short_id}: {title}"
-        return name
-
-    def serialize_object_to_hdf5(
-        self, obj: SignalParam | ImageParam, writer: NativeH5Writer
-    ) -> None:
-        """Serialize object to HDF5 file"""
-        with writer.group(self.get_serializable_name(obj)):
-            obj.serialize(writer)
-
-    # pylint: disable=unused-argument
-    def deserialize_objects_from_hdf5(self, reader: NativeH5Reader, name: str) -> None:
-        """Deserialize objects from a HDF5 file"""
-        obj = self.create_object()
-        obj.deserialize(reader)
-        self.add_object(obj)
-        QW.QApplication.processEvents()
-
-    @abc.abstractmethod
-    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
-        """Serialize whole panel to a HDF5 file"""
-
-    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
-        """Deserialize whole panel from a HDF5 file"""
-        with reader.group(self.H5_PREFIX):
-            for name in reader.h5.get(self.H5_PREFIX, []):
-                with reader.group(name):
-                    self.deserialize_objects_from_hdf5(reader, name)
 
 
 class BaseDataPanel(AbstractPanel):
@@ -284,20 +282,33 @@ class BaseDataPanel(AbstractPanel):
         self.__separate_views: dict[QW.QDialog, SignalParam | ImageParam] = {}
 
     # ------AbstractPanel interface-----------------------------------------------------
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
+        """Serialize whole panel to a HDF5 file"""
+        with writer.group(self.H5_PREFIX):
+            for group in self.objmodel.get_groups():
+                with writer.group(self.get_serializable_name(group)):
+                    with writer.group("title"):
+                        writer.write_str(group.title)
+                    for obj in group.get_objects():
+                        self.serialize_object_to_hdf5(obj, writer)
+
+    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
+        """Deserialize whole panel from a HDF5 file"""
+        with reader.group(self.H5_PREFIX):
+            for name in reader.h5.get(self.H5_PREFIX, []):
+                with reader.group(name):
+                    group = self.add_group("")
+                    with reader.group("title"):
+                        group.set_title(reader.read_str())
+                    for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
+                        obj = self.deserialize_object_from_hdf5(reader, obj_name)
+                        self.add_object(obj, group.uuid, set_current=False)
+                    self.selection_changed()
+
     @property
     def object_number(self) -> int:
         """Return object number"""
         return len(self.objmodel)
-
-    def remove_all_objects(self) -> None:
-        """Remove all objects"""
-        for dlg in self.__separate_views:
-            dlg.done(QW.QDialog.DialogCode.Rejected)
-        self.objmodel.clear()
-        self.plothandler.clear()
-        self.objview.populate_tree()
-        self.SIG_UPDATE_PLOT_ITEMS.emit()
-        super().remove_all_objects()
 
     def create_object(self, title: str | None = None) -> SignalParam | ImageParam:
         """Create object (signal or image)
@@ -322,13 +333,17 @@ class BaseDataPanel(AbstractPanel):
 
     @qt_try_except()
     def add_object(
-        self, obj: SignalParam | ImageParam, group_id: str | None = None
+        self,
+        obj: SignalParam | ImageParam,
+        group_id: str | None = None,
+        set_current: bool = True,
     ) -> None:
         """Add object
 
         Args:
             obj: SignalParam or ImageParam object
             group_id: group id
+            set_current: if True, set the added object as current
         """
         if group_id is None:
             group_id = self.objview.get_current_group_id()
@@ -340,36 +355,18 @@ class BaseDataPanel(AbstractPanel):
                     group_id = self.add_group("").uuid
         obj.check_data()
         self.objmodel.add_object(obj, group_id)
-        self.objview.add_object_item(obj, group_id)
+        self.objview.add_object_item(obj, group_id, set_current=set_current)
         self.SIG_OBJECT_ADDED.emit()
 
-    def add_group(self, title: str) -> objectmodel.ObjectGroup:
-        """Add group"""
-        group = self.objmodel.add_group(title)
-        self.objview.add_group_item(group)
-        return group
-
-    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
-        """Serialize whole panel to a HDF5 file"""
-        with writer.group(self.H5_PREFIX):
-            for group in self.objmodel.get_groups():
-                with writer.group(self.get_serializable_name(group)):
-                    with writer.group("title"):
-                        writer.write_str(group.title)
-                    for obj in group.get_objects():
-                        self.serialize_object_to_hdf5(obj, writer)
-
-    def deserialize_objects_from_hdf5(self, reader: NativeH5Reader, name: str) -> None:
-        """Deserialize objects from a HDF5 file"""
-        group = self.add_group("")
-        with reader.group("title"):
-            group.set_title(reader.read_str())
-        for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
-            obj = self.create_object()
-            with reader.group(obj_name):
-                obj.deserialize(reader)
-            self.add_object(obj, group.uuid)
-            QW.QApplication.processEvents()
+    def remove_all_objects(self) -> None:
+        """Remove all objects"""
+        for dlg in self.__separate_views:
+            dlg.done(QW.QDialog.DialogCode.Rejected)
+        self.objmodel.clear()
+        self.plothandler.clear()
+        self.objview.populate_tree()
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
+        super().remove_all_objects()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
     def setup_panel(self) -> None:
@@ -407,10 +404,15 @@ class BaseDataPanel(AbstractPanel):
         self.context_menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
+    def add_group(self, title: str) -> objectmodel.ObjectGroup:
+        """Add group"""
+        group = self.objmodel.add_group(title)
+        self.objview.add_group_item(group)
+        return group
 
     # TODO: [P2] New feature: move objects up/down
-    def __duplicate_individual_object(
-        self, oid: str, new_group_id: str | None = None
+    def __duplicate_individual_obj(
+        self, oid: str, new_group_id: str | None = None, set_current: bool = True
     ) -> None:
         """Duplicate individual object"""
         obj = self.objmodel[oid]
@@ -419,7 +421,7 @@ class BaseDataPanel(AbstractPanel):
         objcopy.copy_data_from(obj)
         if new_group_id is None:
             new_group_id = self.objmodel.get_object_group_id(obj)
-        self.add_object(objcopy, group_id=new_group_id)
+        self.add_object(objcopy, group_id=new_group_id, set_current=set_current)
 
     def duplicate_object(self) -> None:
         """Duplication signal/image object"""
@@ -427,13 +429,13 @@ class BaseDataPanel(AbstractPanel):
             return
         # Duplicate individual objects (exclusive with respect to groups)
         for oid in self.objview.get_sel_object_uuids():
-            self.__duplicate_individual_object(oid)
+            self.__duplicate_individual_obj(oid, set_current=False)
         # Duplicate groups (exclusive with respect to individual objects)
         for group in self.objview.get_sel_groups():
             new_group = self.add_group(group.title)
             for oid in self.objmodel.get_group_object_ids(group.uuid):
-                self.__duplicate_individual_object(oid, new_group.uuid)
-            self.objview.set_current_item_id(new_group.uuid)
+                self.__duplicate_individual_obj(oid, new_group.uuid, set_current=False)
+        self.selection_changed()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     def copy_metadata(self) -> None:
@@ -480,12 +482,13 @@ class BaseDataPanel(AbstractPanel):
                 if obj_i is obj:
                     dlg.done(QW.QDialog.DialogCode.Rejected)
             self.plothandler.remove_item(obj.uuid)
-            self.objview.remove_item(obj.uuid)
+            self.objview.remove_item(obj.uuid, refresh=False)
             self.objmodel.remove_object(obj)
         for group in sel_groups:
-            self.objview.remove_item(group.uuid)
+            self.objview.remove_item(group.uuid, refresh=False)
             self.objmodel.remove_group(group)
         self.objview.update_tree()
+        self.selection_changed()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.SIG_OBJECT_REMOVED.emit()
 
@@ -562,13 +565,13 @@ class BaseDataPanel(AbstractPanel):
             New object or list of new objects
         """
         obj_or_objlist = self.IO_REGISTRY.read(filename)
-        if not isinstance(obj_or_objlist, list):
-            obj_or_objlist = [obj_or_objlist]
-        for obj in obj_or_objlist:
-            self.add_object(obj)
-        if len(obj_or_objlist) == 1:
-            return obj_or_objlist[0]
-        return obj_or_objlist
+        objs = obj_or_objlist if isinstance(obj_or_objlist, list) else [obj_or_objlist]
+        for obj in objs:
+            self.add_object(obj, refresh=False)
+        self.selection_changed()
+        if len(objs) == 1:
+            return objs[0]
+        return objs
 
     def save_object(self, obj, filename: str | None = None) -> None:
         """Save object to file (signal/image)"""
@@ -685,7 +688,9 @@ class BaseDataPanel(AbstractPanel):
 
     # ------Refreshing GUI--------------------------------------------------------------
     def selection_changed(self) -> None:
-        """Signal list: selection changed"""
+        """Object selection changed: update object properties, refresh plot and update
+        object view.
+        """
         selected_objects = self.objview.get_sel_objects(include_groups=True)
         selected_groups = self.objview.get_sel_groups()
         self.objprop.update_properties_from(self.objview.get_current_object())
@@ -693,7 +698,8 @@ class BaseDataPanel(AbstractPanel):
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
 
     def properties_changed(self) -> None:
-        """The properties 'Apply' button was clicked: updating signal"""
+        """The properties 'Apply' button was clicked: update object properties,
+        refresh plot and update object view."""
         obj = self.objview.get_current_object()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(obj.uuid)

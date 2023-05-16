@@ -126,17 +126,13 @@ class SimpleObjectTree(QW.QTreeWidget):
             return item.data(0, QC.Qt.UserRole)
         return None
 
-    def set_current_item_id(
-        self, uuid: str, extend: bool = False, refresh: bool = True
-    ) -> None:
+    def set_current_item_id(self, uuid: str, extend: bool = False) -> None:
         """Set current item by id"""
+        item = self.get_item_from_id(uuid)
         if extend:
-            command = QC.QItemSelectionModel.Select
+            self.setCurrentItem(item, 0, QC.QItemSelectionModel.Select)
         else:
-            command = QC.QItemSelectionModel.ClearAndSelect
-        with block_signals(widget=self, enable=not refresh):
-            item = self.get_item_from_id(uuid)
-            self.setCurrentItem(item, 0, command)
+            self.setCurrentItem(item)
 
     def get_current_group_id(self) -> str:
         """Return current group ID"""
@@ -190,15 +186,19 @@ class SimpleObjectTree(QW.QTreeWidget):
         group_item.setIcon(0, get_icon("group.svg"))
         self.__update_item(group_item, group)
         self.addTopLevelItem(group_item)
+        group_item.setExpanded(True)
         for obj in group:
             self.__add_to_group_item(obj, group_item)
 
-    def add_object_item(self, obj: SignalParam | ImageParam, group_id: str) -> None:
+    def add_object_item(
+        self, obj: SignalParam | ImageParam, group_id: str, set_current: bool = True
+    ) -> None:
         """Add item"""
         self.objmodel.refresh_short_ids()
         group_item = self.get_item_from_id(group_id)
         self.__add_to_group_item(obj, group_item)
-        self.set_current_item_id(obj.uuid)
+        if set_current:
+            self.set_current_item_id(obj.uuid)
 
     def update_item(self, uuid: str) -> None:
         """Update item"""
@@ -206,16 +206,17 @@ class SimpleObjectTree(QW.QTreeWidget):
         item = self.get_item_from_id(uuid)
         self.__update_item(item, obj_or_group)
 
-    def remove_item(self, oid: str) -> None:
+    def remove_item(self, oid: str, refresh: bool = True) -> None:
         """Remove item"""
         item = self.get_item_from_id(oid)
         if item is not None:
-            if item.parent() is None:
-                #  Group item: remove from tree
-                self.takeTopLevelItem(self.indexOfTopLevelItem(item))
-            else:
-                #  Object item: remove from parent
-                item.parent().removeChild(item)
+            with block_signals(widget=self, enable=not refresh):
+                if item.parent() is None:
+                    #  Group item: remove from tree
+                    self.takeTopLevelItem(self.indexOfTopLevelItem(item))
+                else:
+                    #  Object item: remove from parent
+                    item.parent().removeChild(item)
 
     def item_double_clicked(self, item: QW.QTreeWidgetItem) -> None:
         """Item was double-clicked: open a pop-up plot dialog"""
@@ -350,7 +351,16 @@ class ObjectView(SimpleObjectTree):
         return self.objmodel.get_groups(self.get_sel_group_uuids())
 
     def item_selection_changed(self) -> None:
-        """Item selection has changed"""
+        """Refreshing the selection of objects and groups, emitting the
+        SIG_SELECTION_CHANGED signal which triggers the update of the
+        object properties panel, the plot items and the actions of the
+        toolbar and menu bar.
+
+        This method is called when the user selects or deselects items in the tree.
+        It is also called when the user clicks on an item that was already selected.
+
+        This method emits the SIG_SELECTION_CHANGED signal.
+        """
         # ==> This is a very important design choice <==
         # When a group is selected, all individual objects are deselected, even if
         # they belong to other groups. This is intended to simplify the user experience.
