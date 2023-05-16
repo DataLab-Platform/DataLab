@@ -22,8 +22,7 @@ import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guiqwt.builder import make
-from guiqwt.curve import CurveItem
-from guiqwt.styles import style_generator
+from guiqwt.styles import COLORS, LINESTYLES
 
 from cdl.config import Conf, _
 from cdl.core.computation import fit
@@ -31,9 +30,30 @@ from cdl.core.model import base
 from cdl.env import execenv
 
 if TYPE_CHECKING:
+    from guiqwt.curve import CurveItem
+    from guiqwt.styles import CurveParam
     from qtpy import QtWidgets as QW
 
-CURVE_STYLE = style_generator()
+
+class CurveStyles:
+    """Object to manage curve styles"""
+
+    def style_generator():
+        """Cycling through curve styles"""
+        while True:
+            for linestyle in LINESTYLES.keys():
+                for color in "bgrcmykG":
+                    yield (color, linestyle)
+
+    CURVE_STYLE = style_generator()
+
+    @classmethod
+    def apply_style(cls, curveparam: CurveParam):
+        """Apply style to curve"""
+        color, linestyle = next(cls.CURVE_STYLE)
+        curveparam.line.color = COLORS[color]
+        curveparam.line.style = LINESTYLES[linestyle]
+        curveparam.symbol.marker = "NoSymbol"
 
 
 class SignalParam(gdt.DataSet, base.ObjectItf):
@@ -168,26 +188,23 @@ class SignalParam(gdt.DataSet, base.ObjectItf):
         Returns:
             PlotItem: plot item
         """
-        if len(self.xydata) == 2:  # x, y signal
-            x, y = self.xydata
-            item = make.mcurve(x.real, y.real, next(CURVE_STYLE), label=self.title)
-        elif len(self.xydata) == 3:  # x, y, dy error bar signal
-            x, y, dy = self.xydata
-            item = make.merror(
-                x.real, y.real, dy.real, next(CURVE_STYLE), label=self.title
-            )
-        elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
-            x, y, dx, dy = self.xydata
-            item = make.merror(
-                x.real, y.real, dx.real, dy.real, next(CURVE_STYLE), label=self.title
-            )
+        if len(self.xydata) in (2, 3, 4):
+            if len(self.xydata) == 2:  # x, y signal
+                x, y = self.xydata
+                item = make.mcurve(x.real, y.real, label=self.title)
+            elif len(self.xydata) == 3:  # x, y, dy error bar signal
+                x, y, dy = self.xydata
+                item = make.merror(x.real, y.real, dy.real, label=self.title)
+            elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
+                x, y, dx, dy = self.xydata
+                item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
+            CurveStyles.apply_style(item.curveparam)
         else:
             raise RuntimeError("data not supported")
         if update_from is None:
             if execenv.demo_mode:
                 item.curveparam.line.width = 3
             self.__update_item_params(item)
-            next(make.style)
         else:
             update_dataset(item.curveparam, update_from.curveparam)
             item.update_params()
