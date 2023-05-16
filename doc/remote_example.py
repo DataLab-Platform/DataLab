@@ -10,9 +10,11 @@ Created on Fri May 12 12:28:56 2023
 
 # %% Importing necessary modules
 
-import numpy as np  # NumPy for numerical array computations
+# NumPy for numerical array computations:
+import numpy as np
 
-from cdl.remotecontrol import RemoteClient  # DataLab remote control client
+# DataLab remote control client:
+from cdl.remotecontrol import RemoteClient
 
 # %% Connecting to DataLab current session
 
@@ -26,7 +28,9 @@ datalab.add_image("toto", z)
 
 # %% Executing commands in DataLab (...)
 
-datalab.add_signal("toto", np.array([1.0, 2.0, 3.0]), np.array([4.0, 5.0, -1.0]))
+x = np.array([1.0, 2.0, 3.0])
+y = np.array([4.0, 5.0, -1.0])
+datalab.add_signal("toto", x, y)
 
 # %% Executing commands in DataLab (...)
 
