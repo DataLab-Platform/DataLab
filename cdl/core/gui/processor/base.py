@@ -321,7 +321,7 @@ class BaseProcessor(QC.QObject):
         if grps:
             # (Group exclusive selection)
             # At least one group is selected: create a new group
-            new_gname = f"{name}({','.join([grp.short_id for grp in grps])}"
+            new_gname = f"{name}({','.join([grp.short_id for grp in grps])})"
             new_gid = self.panel.add_group(new_gname).uuid
         else:
             # (Object exclusive selection)
