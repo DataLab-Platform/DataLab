@@ -36,7 +36,6 @@ import numpy as np
 from guiqwt.builder import make
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
-from guiqwt.styles import style_generator
 
 from cdl.config import Conf
 
@@ -215,8 +214,6 @@ class BasePlotHandler:
                 if item is None:
                     item = self.__add_item_to_plot(oid)
                 else:
-                    if i_obj == 0:
-                        make.style = style_generator()
                     self.__update_item_on_plot(
                         oid, ref_item=ref_item, just_show=just_show
                     )
