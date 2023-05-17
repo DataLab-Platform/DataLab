@@ -33,11 +33,12 @@ from typing import TYPE_CHECKING
 from weakref import WeakKeyDictionary
 
 import numpy as np
-from guiqwt.builder import make
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
+from qtpy import QtWidgets as QW
 
-from cdl.config import Conf
+from cdl.config import Conf, _
+from cdl.utils.qthelpers import create_progress_bar
 
 if TYPE_CHECKING:
     from guiqwt.curve import CurveItem
@@ -201,28 +202,34 @@ class BasePlotHandler:
         titles_dict = {}
         if oids:
             ref_item = None
-            for i_obj, oid in enumerate(oids):
-                obj = self.panel.objmodel[oid]
-                for key in title_keys:
-                    title = getattr(obj, key, "")
-                    value = titles_dict.get(key)
-                    if value is None:
-                        titles_dict[key] = title
-                    elif value != title:
-                        titles_dict[key] = ""
-                item = self.get(oid)
-                if item is None:
-                    item = self.__add_item_to_plot(oid)
-                else:
-                    self.__update_item_on_plot(
-                        oid, ref_item=ref_item, just_show=just_show
-                    )
-                    if ref_item is None:
-                        ref_item = item
-                self.plot.set_item_visible(item, True, replot=False)
-                self.plot.set_active_item(item)
-                item.unselect()
-                self.add_shapes(oid)
+            with create_progress_bar(
+                self.panel, _("Creating plot items"), max_=len(oids)
+            ) as progress:
+                for i_obj, oid in enumerate(oids):
+                    progress.setValue(i_obj + 1)
+                    if progress.wasCanceled():
+                        break
+                    obj = self.panel.objmodel[oid]
+                    for key in title_keys:
+                        title = getattr(obj, key, "")
+                        value = titles_dict.get(key)
+                        if value is None:
+                            titles_dict[key] = title
+                        elif value != title:
+                            titles_dict[key] = ""
+                    item = self.get(oid)
+                    if item is None:
+                        item = self.__add_item_to_plot(oid)
+                    else:
+                        self.__update_item_on_plot(
+                            oid, ref_item=ref_item, just_show=just_show
+                        )
+                        if ref_item is None:
+                            ref_item = item
+                    self.plot.set_item_visible(item, True, replot=False)
+                    self.plot.set_active_item(item)
+                    item.unselect()
+                    self.add_shapes(oid)
             self.plot.replot()
         else:
             for key in title_keys:

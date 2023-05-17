@@ -186,7 +186,7 @@ def qt_wait(timeout, except_unattended=False):  # pragma: no cover
 
 @contextmanager
 def create_progress_bar(
-    parent, label, max_
+    parent: QW.QWidget, label: str, max_: int
 ) -> Generator[QW.QProgressDialog, None, None]:
     """Create modal progress bar"""
     prog = QW.QProgressDialog(label, _("Cancel"), 0, max_, parent, QC.Qt.SplashScreen)
