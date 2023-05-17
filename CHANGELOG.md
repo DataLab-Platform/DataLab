@@ -65,6 +65,10 @@ New features:
 * Console: added configurable external editor (default: VSCode) to follow the
   traceback links to the source code
 
+New dependencies:
+
+* [multiprocess](https://pypi.org/project/multiprocess/)
+
 ## CodraFT Version 2.2.0 ##
 
 New features:

@@ -4,6 +4,7 @@ PythonQwt
 scikit-image
 opencv-python
 psutil
+multiprocess
 pylint
 black
 coverage
