@@ -74,6 +74,7 @@ from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
 from cdl.core.model.base import MetadataItem, ResultShape
 from cdl.utils.qthelpers import (
+    create_progress_bar,
     exec_dialog,
     qt_try_except,
     qt_try_loadsave_file,
@@ -706,7 +707,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, oids: list[str] | None = None) -> QW.QDialog:
+    def open_separate_view(self, oids: list[str] | None = None) -> QW.QDialog | None:
         """
         Open separate view for visualizing selected objects
 
@@ -721,6 +722,8 @@ class BaseDataPanel(AbstractPanel):
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[0]]
         dlg = self.create_new_dialog(oids, edit=True, name="new_window")
+        if dlg is None:
+            return None
         width, height = self.DIALOGSIZE
         dlg.resize(width, height)
         dlg.get_itemlist_panel().show()
@@ -771,7 +774,7 @@ class BaseDataPanel(AbstractPanel):
         tools: list[GuiTool] | None = None,
         name: str | None = None,
         options: dict | None = None,
-    ) -> CurveDialog | ImageDialog:
+    ) -> CurveDialog | ImageDialog | None:
         """Create new pop-up signal/image plot dialog.
 
         Args:
@@ -792,9 +795,11 @@ class BaseDataPanel(AbstractPanel):
             title = f"{title} - {APP_NAME}"
         else:
             title = APP_NAME
+
         plot_options = self.plothandler.get_current_plot_options()
         if options is not None:
             plot_options.update(options)
+
         dlg: CurveDialog | ImageDialog = self.DIALOGCLASS(
             parent=self,
             wintitle=title,
@@ -807,19 +812,33 @@ class BaseDataPanel(AbstractPanel):
             for tool in tools:
                 dlg.add_tool(tool)
         plot = dlg.get_plot()
+
         objs = self.objmodel.get_objects(oids)
         dlg.setObjectName(f"{objs[0].PREFIX}_{name}")
-        for obj in objs:
-            item = obj.make_item(update_from=self.plothandler[obj.uuid])
-            item.set_readonly(True)
-            plot.add_item(item, z=0)
+
+        with create_progress_bar(
+            self, _("Creating plot items"), max_=len(objs)
+        ) as progress:
+            for index, obj in enumerate(objs):
+                progress.setValue(index + 1)
+                QW.QApplication.processEvents()
+                if progress.wasCanceled():
+                    return None
+                item = obj.make_item(update_from=self.plothandler[obj.uuid])
+                item.set_readonly(True)
+                plot.add_item(item, z=0)
         plot.set_active_item(item)
         plot.replot()
         return dlg
 
     def create_new_dialog_for_selection(
-        self, title, name, options=None, toolbar=False, tools=None
-    ):
+        self,
+        title: str,
+        name: str,
+        options: dict[str, any] = None,
+        toolbar: bool = False,
+        tools: list[GuiTool] = None,
+    ) -> tuple[QW.QDialog | None, SignalParam | ImageParam]:
         """Create new pop-up dialog for the currently selected signal/image.
 
         Args:
@@ -857,6 +876,8 @@ class BaseDataPanel(AbstractPanel):
         roi_s = _("Regions of interest")
         options = self.ROIDIALOGOPTIONS
         dlg, obj = self.create_new_dialog_for_selection(roi_s, "roi_dialog", options)
+        if dlg is None:
+            return None
         plot = dlg.get_plot()
         plot.unselect_all()
         for item in plot.items:
