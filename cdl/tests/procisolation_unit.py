@@ -4,14 +4,14 @@
 # (see cdl/LICENSE for details)
 
 """
-Multiprocessing unit test
--------------------------
+Process isolation unit test
+---------------------------
 
-Just test if it's possible to run the multiprocessing test from another module. This
+Just test if it's possible to run the process isolation test from another module. This
 may be an issue with the Pool object being global.
 """
 
-from cdl.tests.multiprocess1_unit import test
+from cdl.tests.procisolation1_unit import test
 
 SHOW = True  # Show test in GUI-based test launcher
 

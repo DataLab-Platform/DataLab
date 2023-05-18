@@ -4,8 +4,8 @@
 # (see cdl/LICENSE for details)
 
 """
-Multiprocessing unit test
--------------------------
+Process isolation unit test
+---------------------------
 
 Requires the external package `multiprocess`, which relies on `dill` for serialization.
 
