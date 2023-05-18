@@ -25,6 +25,11 @@ the library and [changelog](CHANGELOG.md) for recent history of changes.
 
 ### New in DataLab 1.0
 
+New key features in DataLab 1.0:
+
+* New process isolation feature to run computations safely in a separate process
+* New remote control features to interact with DataLab from Spyder, Jupyter or any IDE
+* New remote control features to run computations with DataLab from a third-party application
 * New data processing and visualization features (see details in [changelog](CHANGELOG.md))
 * Fully automated high-level processing features for internal testing purpose, as well as embedding DataLab in a third-party software
 * Extensive test suite (unit tests and application tests) with >80% feature coverage
@@ -63,6 +68,9 @@ Copyrights and licensing:
 
 | Signal | Image | Feature                                            |
 |:------:|:-----:|----------------------------------------------------|
+|    •   |   •   | Process isolation (for runnning computations)      |
+|    •   |   •   | Remote control from Jupyter, Spyder or any IDE     |
+|    •   |   •   | Remote control from a third-party application      |
 |    •   |   •   | Multiple ROI support                               |
 |    •   |   •   | Sum, average, difference, product, ...             |
 |    •   |   •   | ROI extraction, Swap X/Y axes                      |

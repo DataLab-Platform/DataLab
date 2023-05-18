@@ -82,13 +82,12 @@ class PluginRegistry(type):
         """Return plugin infos (names, versions, descriptions) in html format"""
         plugins = cls.get_plugins()
         if plugins:
-            html = "<i>" + _("Registered plugins:") + "</i><ul>"
+            html = "<i>" + _("Registered plugins:") + "</i><br>"
             for plugin in plugins:
-                html += f"<li>{plugin.info.name} ({plugin.info.version})"
+                html += f"• {plugin.info.name} ({plugin.info.version})"
                 if plugin.info.description:
                     html += f": {plugin.info.description}"
-                html += "</li>"
-            html += "</ul>"
+                html += "<br>"
         else:
             html = "<i>" + _("No plugins available") + "</i>"
         return html

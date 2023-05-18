@@ -22,9 +22,10 @@ This module defines the base class for data processing GUIs.
 from __future__ import annotations
 
 import abc
+import time
 import warnings
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -32,25 +33,32 @@ import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
+from multiprocess import Pool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.gui.roieditor import ROIEditorData
-from cdl.core.model.base import ResultShape
+from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.utils import misc
-from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
+from cdl.utils.qthelpers import (
+    create_progress_bar,
+    exec_dialog,
+    qt_try_context,
+    qt_try_except,
+)
 
 if TYPE_CHECKING:
     from guiqwt.plot import CurveWidget, ImageWidget
+    from multiprocess.pool import AsyncResult
 
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
     from cdl.core.model.image import ImageParam
     from cdl.core.model.signal import SignalParam
 
-    Obj = SignalParam | ImageParam
+    Obj = Union[SignalParam, ImageParam]
 
 
 class GaussianParam(gdt.DataSet):
@@ -83,6 +91,65 @@ class ClipParam(gdt.DataSet):
     value = gdi.FloatItem(_("Clipping value"))
 
 
+COMPUTATION_TIP = _(
+    "DataLab relies on various libraries to perform the computation. During the "
+    "computation, errors may occur because of the data (e.g. division by zero, "
+    "unexpected data type, etc.) or because of the libraries (e.g. memory error, "
+    "etc.). If you encounter an error, before reporting it, please ensure that "
+    "the computation is correct, by checking the data and the parameters."
+)
+
+
+POOL: Pool = None
+
+
+class Worker:
+    """Multiprocessing worker, to run long-running tasks in a separate process"""
+
+    def __init__(self) -> None:
+        self.asyncresult: AsyncResult = None
+        self.result: Any = None
+
+    @staticmethod
+    def create_pool() -> None:
+        """Create multiprocessing pool"""
+        global POOL
+        # Create a pool with one process
+        POOL = Pool(processes=1)
+
+    @staticmethod
+    def terminate_pool() -> None:
+        """Terminate multiprocessing pool"""
+        global POOL
+        if POOL is not None:
+            POOL.terminate()
+            POOL.join()
+            POOL = None
+
+    def run(self, func: Callable, args: tuple[Any]) -> None:
+        """Run computation"""
+        global POOL
+        assert POOL is not None
+        self.asyncresult = POOL.apply_async(func, args)
+
+    def terminate(self) -> None:
+        """Terminate worker"""
+        # Terminate the process and stop the timer
+        self.terminate_pool()
+        # Recreate the pool for the next computation
+        self.create_pool()
+
+    def is_computation_finished(self) -> bool:
+        """Return True if computation is finished"""
+        return self.asyncresult.ready()
+
+    def get_result(self) -> Any:
+        """Return computation result"""
+        self.result = self.asyncresult.get()
+        self.asyncresult = None
+        return self.result
+
+
 class BaseProcessor(QC.QObject):
     """Object handling data processing: operations, processing, computing"""
 
@@ -96,6 +163,15 @@ class BaseProcessor(QC.QObject):
         super().__init__()
         self.panel = panel
         self.plotwidget = plotwidget
+        self.worker: Worker | None = None
+        if Conf.main.process_isolation_enabled.get():
+            self.worker = Worker()
+            self.worker.create_pool()
+
+    def close(self):
+        """Close processor properly"""
+        if self.worker is not None:
+            self.worker.terminate_pool()
 
     def init_param(
         self,
@@ -115,8 +191,12 @@ class BaseProcessor(QC.QObject):
         return edit, param
 
     @abc.abstractmethod
-    def apply_11_func(self, obj, orig, func, param, message):
-        """Apply 11 function: 1 object in --> 1 object out"""
+    def get_11_func_args(self, orig: Obj, param: gdt.DataSet) -> tuple[Any]:
+        """Get 11 function args: 1 object in --> 1 object out"""
+
+    @abc.abstractmethod
+    def set_11_func_result(self, new_obj: Obj, result: np.ndarray) -> None:
+        """Set 11 function result: 1 object in --> 1 object out"""
 
     def compute_11(
         self,
@@ -166,7 +246,9 @@ class BaseProcessor(QC.QObject):
         ) as progress:
             for i_row, obj in enumerate(objs):
                 for i_param, (param, name) in enumerate(zip(params, names)):
-                    progress.setValue((i_row + 1) * (i_param + 1))
+                    pvalue = (i_row + 1) * (i_param + 1)
+                    pvalue = 0 if pvalue == 1 else pvalue
+                    progress.setValue(pvalue)
                     progress.setLabelText(name)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
@@ -176,8 +258,38 @@ class BaseProcessor(QC.QObject):
                     if suffix is not None:
                         new_obj.title += "|" + suffix(param)
                     new_obj.copy_data_from(obj)
-                    message = _("Computing:") + " " + new_obj.title
-                    self.apply_11_func(new_obj, obj, func, param, message)
+
+                    def wng_func(*args):
+                        """Wrapper function to ignore RuntimeWarning"""
+                        with warnings.catch_warnings():
+                            warnings.simplefilter("ignore", RuntimeWarning)
+                            return func(*args)
+
+                    args = self.get_11_func_args(obj, param)
+
+                    context = _("Computing:") + " " + new_obj.title
+                    if self.worker is None:
+                        with qt_try_context(self.panel, context, COMPUTATION_TIP):
+                            result = wng_func(*args)
+                            self.set_11_func_result(new_obj, result)
+                    else:
+                        self.worker.run(wng_func, args)
+                        while not self.worker.is_computation_finished():
+                            QW.QApplication.processEvents()
+                            time.sleep(0.1)
+                            if progress.wasCanceled():
+                                self.worker.terminate()
+                                break
+                        if not self.worker.is_computation_finished():
+                            break
+                        result = None
+                        with qt_try_context(self.panel, context, COMPUTATION_TIP):
+                            result = self.worker.get_result()
+                            self.set_11_func_result(new_obj, result)
+
+                    if result is None:
+                        continue
+
                     if func_obj is not None:
                         if param is None:
                             func_obj(new_obj, obj)
@@ -199,24 +311,11 @@ class BaseProcessor(QC.QObject):
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)
 
-    def apply_10_func(self, obj, func, param, message) -> ResultShape:
-        """Apply 10 function: 1 object in --> 0 object out (scalar result)"""
-
-        # (self is used by @qt_try_except)
-        # pylint: disable=unused-argument
-        @qt_try_except(message)
-        def apply_10_func_callback(self, obj, func, param):
-            """Apply 10 function cb: 1 object in --> 0 object out (scalar result)"""
-            if param is None:
-                return func(obj)
-            return func(obj, param)
-
-        return apply_10_func_callback(self, obj, func, param)
-
     def compute_10(
         self,
         name: str,
         func: Callable,
+        shapetype: ShapeTypes,
         param: gdt.DataSet | None = None,
         suffix: Callable | None = None,
         edit: bool = True,
@@ -228,26 +327,55 @@ class BaseProcessor(QC.QObject):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
-            results = {}
+            results: dict[int, ResultShape] = {}
             xlabels = None
             ylabels = []
             title_suffix = "" if suffix is None else "|" + suffix(param)
             for idx, obj in enumerate(objs):
-                progress.setValue(idx + 1)
+                pvalue = idx + 1
+                pvalue = 0 if pvalue == 1 else pvalue
+                progress.setValue(pvalue)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
                 title = f"{name}{title_suffix}"
-                message = _("Computing:") + " " + title
-                result = self.apply_10_func(obj, func, param, message)
+
+                args = (obj,) if param is None else (obj, param)
+
+                def wng_func(*args):
+                    """Wrapper function to ignore RuntimeWarning"""
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", RuntimeWarning)
+                        return func(*args)
+
+                context = _("Computing:") + " " + title
+                if self.worker is None:
+                    with qt_try_context(self.panel, context, COMPUTATION_TIP):
+                        result = wng_func(*args)
+                else:
+                    self.worker.run(wng_func, args)
+                    while not self.worker.is_computation_finished():
+                        QW.QApplication.processEvents()
+                        time.sleep(0.1)
+                        if progress.wasCanceled():
+                            self.worker.terminate()
+                            break
+                    if not self.worker.is_computation_finished():
+                        break
+                    result = None
+                    with qt_try_context(self.panel, context, COMPUTATION_TIP):
+                        result = self.worker.get_result()
+
                 if result is None:
                     continue
-                results[obj.uuid] = result
-                xlabels = result.xlabels
+
+                resultshape = obj.add_resultshape(name, shapetype, result, param)
+                results[obj.uuid] = resultshape
+                xlabels = resultshape.xlabels
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 self.panel.selection_changed()
                 self.panel.SIG_UPDATE_PLOT_ITEM.emit(obj.uuid)
-                for _i_row_res in range(result.array.shape[0]):
+                for _i_row_res in range(resultshape.array.shape[0]):
                     ylabel = f"{name}({obj.short_id}){title_suffix}"
                     ylabels.append(ylabel)
         if results:
@@ -255,7 +383,7 @@ class BaseProcessor(QC.QObject):
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([result.array for result in results.values()])
+                res = np.vstack([rshape.array for rshape in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-13 16:16+0200\n"
+"POT-Creation-Date: 2023-05-18 15:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,51 +32,108 @@ msgstr ""
 "d'accéder aux fonctionnalités principales de DataLab depuis un processus "
 "séparé."
 
-#: ../../features/general/remotecontrol.rst:18
+#: ../../features/general/remotecontrol.rst:9
+msgid "From an IDE"
+msgstr "Depuis un IDE"
+
+#: ../../features/general/remotecontrol.rst:11
+msgid ""
+"It is possible to run a Python script from an IDE (e.g. `Spyder`_ or any "
+"other IDE, or even a Jupyter Notebook) that connects to a running DataLab"
+" instance, adds a signal and an image, and then runs calculations. This "
+"is the case of the `RemoteClient` class that is provided in module "
+"``cdl.remote``."
+msgstr "Il est possible d'exécuter un script Python depuis un IDE (par exemple `Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui se connecte à une instance de DataLab en cours d'exécution, ajoute un signal et une image, puis exécute des calculs. C'est le cas de la classe `RemoteClient` qui est fournie dans le module ``cdl.remote``."
+
+#: ../../features/general/remotecontrol.rst:17
+msgid "From a third-party application"
+msgstr "Depuis une application tierce"
+
+#: ../../features/general/remotecontrol.rst:19
+msgid ""
+"It is also possible to connect to a running DataLab instance from a "
+"third-party application, adds a signal and an image, and then runs "
+"calculations. This is the case of the `RemoteClient` class that is "
+"provided in module ``cdl.remote``."
+msgstr "Il est également possible de se connecter à une instance de DataLab en cours d'exécution depuis une application tierce, d'ajouter un signal et une image, puis d'exécuter des calculs. C'est le cas de la classe `RemoteClient` qui est fournie dans le module ``cdl.remote``."
+
+#: ../../features/general/remotecontrol.rst:23
+msgid ""
+"Data (signals and images) may also be exchanged between DataLab and the "
+"remote client application, in both directions."
+msgstr "Les données (signaux et images) peuvent également être échangées entre DataLab et l'application cliente distante, dans les deux sens."
+
+#: ../../features/general/remotecontrol.rst:26
+msgid ""
+"The remote client application may be written in any language that "
+"supports XML-RPC. For example, it is possible to write a remote client "
+"application in Python, Java, C++, C#, etc. The remote client application "
+"may be a graphical application or a command line application."
+msgstr "Le client distant peut être écrit dans n'importe quel langage qui prend en charge XML-RPC. Par exemple, il est possible d'écrire un client distant en Python, Java, C++, C#, etc. Le client distant peut être une application graphique ou une application en ligne de commande."
+
+#: ../../features/general/remotecontrol.rst:31
+msgid ""
+"The remote client application may be run on the same computer as DataLab "
+"or on a different computer. In the latter case, the remote client "
+"application must know the IP address of the computer running DataLab."
+msgstr "Le client distant peut être exécuté sur le même ordinateur que DataLab ou sur un ordinateur différent. Dans ce dernier cas, le client distant doit connaître l'adresse IP de l'ordinateur exécutant DataLab."
+
+#: ../../features/general/remotecontrol.rst:35
+msgid ""
+"The remote client application may be run before or after DataLab. In the "
+"latter case, the remote client application must try to connect to DataLab"
+" until it succeeds."
+msgstr "Le client distant peut être exécuté avant ou après DataLab. Dans ce dernier cas, le client distant doit essayer de se connecter à DataLab jusqu'à ce qu'il réussisse."
+
+#: ../../features/general/remotecontrol.rst:40
+msgid "Supported features"
+msgstr "Fonctionnalités prises en charge"
+
+#: ../../features/general/remotecontrol.rst:42
 msgid "Supported features are the following:"
 msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
-#: ../../features/general/remotecontrol.rst:9
+#: ../../features/general/remotecontrol.rst:44
 msgid "Switch to signal or image panel"
 msgstr "Basculement vers le panneau signal ou image"
 
-#: ../../features/general/remotecontrol.rst:10
+#: ../../features/general/remotecontrol.rst:45
 msgid "Remove all signals and images"
 msgstr "Suppression de tous les signaux et images"
 
-#: ../../features/general/remotecontrol.rst:11
+#: ../../features/general/remotecontrol.rst:46
 msgid "Save current session to a HDF5 file"
 msgstr "Enregistrement de la session en cours dans un fichier HDF5"
 
-#: ../../features/general/remotecontrol.rst:12
+#: ../../features/general/remotecontrol.rst:47
 msgid "Open HDF5 files into current session"
 msgstr "Ouverture de fichers HDF5 dans la session en cours"
 
-#: ../../features/general/remotecontrol.rst:13
+#: ../../features/general/remotecontrol.rst:48
 msgid "Browse HDF5 file"
 msgstr "Exploration d'un fichier HDF5"
 
-#: ../../features/general/remotecontrol.rst:14
+#: ../../features/general/remotecontrol.rst:49
 msgid "Open a signal or an image from file"
 msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
 
-#: ../../features/general/remotecontrol.rst:15
+#: ../../features/general/remotecontrol.rst:50
 msgid "Add a signal"
 msgstr "Ajout d'un signal"
 
-#: ../../features/general/remotecontrol.rst:16
+#: ../../features/general/remotecontrol.rst:51
 msgid "Add an image"
 msgstr "Ajout d'une image"
 
-#: ../../features/general/remotecontrol.rst:17
+#: ../../features/general/remotecontrol.rst:52
 msgid "Get object list"
 msgstr "Récupération de la liste des objets"
 
-#: ../../features/general/remotecontrol.rst:18
+#: ../../features/general/remotecontrol.rst:53
 msgid "Run calculation with parameters"
 msgstr "Exécution d'un calcul avec des paramètres"
 
-#: ../../features/general/remotecontrol.rst:22
+#: ../../features/general/remotecontrol.rst:55
 msgid ""
 "Some examples are provided to help implementing such a communication "
 "between your application and DataLab:"
@@ -85,15 +142,15 @@ msgstr ""
 "d'aider à l'implémentation de la communication entre votre application et"
 " DataLab :"
 
-#: ../../features/general/remotecontrol.rst:21
+#: ../../features/general/remotecontrol.rst:58
 msgid "See module: ``cdl.tests.remoteclient_app``"
 msgstr "Voir le module ``cdl.tests.remoteclient_app``"
 
-#: ../../features/general/remotecontrol.rst:22
+#: ../../features/general/remotecontrol.rst:59
 msgid "See module: ``cdl.tests.remoteclient_unit``"
 msgstr "Voir le module ``cdl.tests.remoteclient_unit``"
 
-#: ../../features/general/remotecontrol.rst:26
+#: ../../features/general/remotecontrol.rst:63
 msgid ""
 "Screenshot of remote client application test "
 "(``cdl.tests.remoteclient_app``)"
@@ -101,7 +158,7 @@ msgstr ""
 "Copie d'écran du test applicatif du contrôle à distance "
 "(``cdl.tests.remoteclient_app``)"
 
-#: ../../features/general/remotecontrol.rst:28
+#: ../../features/general/remotecontrol.rst:65
 msgid ""
 "When using Python 3, you may directly use the `RemoteClient` class as in "
 "examples cited above."
@@ -109,15 +166,19 @@ msgstr ""
 "Avec Python 3, il est possible d'utiliser directement la classe "
 "`RemoteClient` comme dans les exemples précités."
 
-#: ../../features/general/remotecontrol.rst:31
+#: ../../features/general/remotecontrol.rst:68
 msgid ""
 "Here is an example in Python 3 of a script that connects to a running "
 "DataLab instance, adds a signal and an image, and then runs calculations "
 "(the cell structure of the script make it convenient to be used in "
 "`Spyder`_ IDE):"
-msgstr "Voici un exemple d'un script en Python 3 qui se connecte à une instance de DataLab, ajoute un signal et une image, puis exécute des calculs (la structure en cellules du script le rend pratique à utiliser dans l'IDE `Spyder`_):"
+msgstr ""
+"Voici un exemple d'un script en Python 3 qui se connecte à une instance "
+"de DataLab, ajoute un signal et une image, puis exécute des calculs (la "
+"structure en cellules du script le rend pratique à utiliser dans l'IDE "
+"`Spyder`_):"
 
-#: ../../features/general/remotecontrol.rst:37
+#: ../../features/general/remotecontrol.rst:74
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr ""
 "Voici de plus un exemple de réimplementation de cette classe en Python "

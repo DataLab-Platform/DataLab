@@ -1071,15 +1071,26 @@ class CDLMainWindow(QW.QMainWindow):
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:
-            xrpcstate = _("not started")
+            xrpcstate = "<font color='red'>%s</font>" % _("not started")
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
-        xml_rpc = _("XML-RPC server: ") + xrpcstate
+            xrpcstate = "<font color='green'>%s</font>" % xrpcstate
+        if Conf.main.process_isolation_enabled.get():
+            pistate = "<font color='green'>%s</font>" % _("enabled")
+        else:
+            pistate = "<font color='red'>%s</font>" % _("disabled")
+        adv_conf = "<br>".join(
+            [
+                "<i>%s</i>" % _("Advanced configuration:"),
+                "• " + _("XML-RPC server:") + " " + xrpcstate,
+                "• " + _("Process isolation:") + " " + pistate,
+            ]
+        )
         pinfos = PluginRegistry.get_plugin_infos()
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
         QW.QMessageBox.about(
             self,
-            _("About ") + APP_NAME,
+            _("About") + " " + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}<p>
               %s Pierre Raybaut
               <br>%s
@@ -1087,7 +1098,7 @@ class CDLMainWindow(QW.QMainWindow):
               <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
               guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
               Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               %s {platform.system()}<br><br>{xml_rpc}<br><br>{pinfos}"""
+               %s {platform.system()}<br><br>{adv_conf}<br><br>{pinfos}"""
             % (_("Created by"), dev_by, _("on")),
         )
 
@@ -1134,6 +1145,8 @@ class CDLMainWindow(QW.QMainWindow):
                 elif answer == QW.QMessageBox.Cancel:
                     event.ignore()
                     return
+            for panel in self.panels:
+                panel.close()
             if self.console is not None:
                 try:
                     self.console.close()

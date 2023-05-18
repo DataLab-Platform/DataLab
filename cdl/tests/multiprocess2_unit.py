@@ -29,6 +29,8 @@ from qtpy import QtWidgets as QW
 from cdl.tests.data import create_2d_random, create_test_image2
 from cdl.utils.qthelpers import qt_app_context
 
+SHOW = False  # Do not test in GUI-based test launcher
+
 
 class MainWindow(QW.QMainWindow):
     """Multiprocessing test main window"""

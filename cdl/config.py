@@ -62,6 +62,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    process_isolation_enabled = conf.Option()
     rpc_server_enabled = conf.Option()
     rpc_server_port = conf.Option()
     traceback_log_path = conf.ConfigPathOption()
@@ -171,6 +172,7 @@ def initialize():
 
     # Set default values:
     # (do not use "set" method here to avoid overwriting user settings in .INI file)
+    Conf.main.process_isolation_enabled.get(True)
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
     Conf.console.external_editor_path.get("code")

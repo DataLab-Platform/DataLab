@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-14 18:11+0200\n"
+"POT-Creation-Date: 2023-05-18 11:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,13 +28,12 @@ msgstr "Dépendances"
 
 #: ../../installation.rst:7
 msgid ""
-"DataLab requirements are the following *(Note: the Windows installer"
-" package already include all those required libraries as well as Python "
+"DataLab requirements are the following *(Note: the Windows installer "
+"package already include all those required libraries as well as Python "
 "itself)*:"
 msgstr ""
-"Les paquets prérequis de DataLab sont les suivants *(note : "
-"l'installeur Windows intègre déjà l'ensemble de ces dépendances, ainsi "
-"que Python)* :"
+"Les paquets prérequis de DataLab sont les suivants *(note : l'installeur "
+"Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
 
 #: ../../install_requires.txt:4
 msgid "Name"
@@ -109,26 +108,34 @@ msgid "5.5"
 msgstr ""
 
 #: ../../install_requires.txt:22
-msgid "guidata"
+msgid "multiprocess"
 msgstr ""
 
 #: ../../install_requires.txt:23
-msgid "2.3"
+msgid "0.70"
 msgstr ""
 
 #: ../../install_requires.txt:24
-msgid "guiqwt"
+msgid "guidata"
 msgstr ""
 
 #: ../../install_requires.txt:25
-msgid "4.3"
+msgid "2.3"
 msgstr ""
 
 #: ../../install_requires.txt:26
-msgid "QtPy"
+msgid "guiqwt"
 msgstr ""
 
 #: ../../install_requires.txt:27
+msgid "4.3"
+msgstr ""
+
+#: ../../install_requires.txt:28
+msgid "QtPy"
+msgstr ""
+
+#: ../../install_requires.txt:29
 msgid "1.9"
 msgstr ""
 
@@ -146,13 +153,13 @@ msgstr "Installeur Windows :"
 
 #: ../../installation.rst:23
 msgid ""
-"DataLab is available as a stand-alone application for Windows, which"
-" does not require any Python distribution to be installed. Just run the "
+"DataLab is available as a stand-alone application for Windows, which does"
+" not require any Python distribution to be installed. Just run the "
 "installer and you're good to go!"
 msgstr ""
-"DataLab est disponible depuis une application autonome, qui ne "
-"nécessite aucune installation préalable de Python. Exécutez simplement "
-"l'installeur et laissez vous guider !"
+"DataLab est disponible depuis une application autonome, qui ne nécessite "
+"aucune installation préalable de Python. Exécutez simplement l'installeur"
+" et laissez vous guider !"
 
 #: ../../installation.rst:29
 msgid ""
@@ -164,8 +171,8 @@ msgstr ""
 "Le programme d'installation peut être téléchargé depuis la pagee "
 "`Releases`_. L'installeur prend en charge la fonctionnalité de "
 "désinstallation automatique lors d'une mise à jour (il n'est pas utile de"
-" désinstaller une version de DataLab avant d'exécuter l'installeur "
-"d'une nouvelle version du logiciel."
+" désinstaller une version de DataLab avant d'exécuter l'installeur d'une "
+"nouvelle version du logiciel."
 
 #: ../../installation.rst:38
 msgid "Wheel package:"
@@ -185,12 +192,10 @@ msgid "Source package:"
 msgstr "Paquet source :"
 
 #: ../../installation.rst:51
-msgid ""
-"Installing DataLab directly from the source package is "
-"straigthforward:"
+msgid "Installing DataLab directly from the source package is straigthforward:"
 msgstr ""
-"Installer DataLab directement depuis le paquet source n'est guère "
-"plus compliqué :"
+"Installer DataLab directement depuis le paquet source n'est guère plus "
+"compliqué :"
 
 #~ msgid "4.1"
 #~ msgstr ""
@@ -224,3 +229,4 @@ msgstr ""
 
 #~ msgid "3.7"
 #~ msgstr ""
+

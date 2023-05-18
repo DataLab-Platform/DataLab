@@ -30,6 +30,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import APP_NAME, DATETIME_FORMAT, SHOTPATH, Conf, _, get_old_log_fname
 from cdl.env import execenv
 from cdl.utils.misc import to_string
+from cdl.widgets.errormessagebox import ErrorMessageBox
 
 
 def close_widgets_and_quit(screenshot=False):
@@ -199,18 +200,20 @@ def create_progress_bar(
         prog.close()
 
 
-def qt_handle_error_message(widget, message):
+def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):
     """Handles application (QWidget) error message"""
     traceback.print_exc()
     txt = str(message)
     msglines = txt.splitlines()
+    firstline = _("Error:") if context is None else f"%s: {context}" % _("Context")
+    msglines.insert(0, firstline)
     if len(msglines) > 10:
-        txt = os.linesep.join(msglines[:10] + ["..."])
+        msglines = msglines[:10] + ["..."]
     title = widget.window().objectName()
-    QW.QMessageBox.critical(widget, title, _("Error:") + f"\n{txt}")
+    QW.QMessageBox.critical(widget, title, os.linesep.join(msglines))
 
 
-def qt_try_except(message=None):
+def qt_try_except(message=None, context=None):
     """Try...except Qt widget method decorator"""
 
     def qt_try_except_decorator(func):
@@ -230,7 +233,7 @@ def qt_try_except(message=None):
             try:
                 output = func(*args, **kwargs)
             except Exception as msg:  # pylint: disable=broad-except
-                qt_handle_error_message(panel.parent(), msg)
+                qt_handle_error_message(panel.parent(), msg, context)
             finally:
                 panel.SIG_STATUS_MESSAGE.emit("")
                 QW.QApplication.restoreOverrideCursor()
@@ -242,8 +245,20 @@ def qt_try_except(message=None):
 
 
 @contextmanager
+def qt_try_context(parent: QW.QWidget, context: str = None, tip: str = None):
+    """Try...except Qt widget context manager"""
+    try:
+        yield
+    except Exception:  # pylint: disable=broad-except
+        dlg = ErrorMessageBox(parent, context, tip)
+        exec_dialog(dlg)
+    finally:
+        pass
+
+
+@contextmanager
 def qt_try_loadsave_file(
-    widget: QW.QWidget, filename: str, operation: str
+    parent: QW.QWidget, filename: str, operation: str
 ) -> Generator[str, None, None]:
     """Try and open file (operation: "load" or "save")"""
     if operation == "load":
@@ -257,7 +272,7 @@ def qt_try_loadsave_file(
     except Exception as msg:  # pylint: disable=broad-except
         traceback.print_exc()
         message = (text % osp.basename(filename)) + "\n" + str(msg)
-        QW.QMessageBox.critical(widget, APP_NAME, message)
+        QW.QMessageBox.critical(parent, APP_NAME, message)
     finally:
         pass
 

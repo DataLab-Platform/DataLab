@@ -7,24 +7,7 @@ Future milestones
 DataLab 2.0
 ^^^^^^^^^^^
 
-* Run computations in a separate process:
-
-  - Execute a "computing server" in background, in another process
-  - Define a communication protocol between this process and
-    DataLab GUI process based on TCP sockets
-  - For each computation, send pickled data and computing function
-    to the server and wait for the result
-  - It will then possible to stop any computation at any time by killing the
-    server process and restarting it (eventually after incrementing the
-    communication port number)
-
-* Run computations in a separate process (alternative solution):
-
-  - Use an IPython kernel to provide the same features as described above
-
-
-Other ideas for future releases
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Ideas for new features:
 
 * Add support for multichannel timeseries
 
@@ -35,6 +18,15 @@ Past milestones
 
 DataLab 1.0
 ^^^^^^^^^^^
+
+* Run computations in a separate process:
+
+  - Execute a "computing server" in background, in another process
+  - For each computation, send serialized data and computing function
+    to the server and wait for the result
+  - It is then possible to stop any computation at any time by killing the
+    server process and restarting it (eventually after incrementing the
+    communication port number)
 
 * Optimize image displaying performance
 
@@ -55,9 +47,14 @@ DataLab 1.0
   - Scripts using the same API as high-level applicative test scenarios
   - Support for macro recording
 
-* Add an xmlrpc server to allow external applications controlling
-  DataLab main features (open a signal or an image, open a HDF5 file,
-  etc.)
+* Add an xmlrpc server to allow DataLab remote control:
+
+  - Controlling DataLab main features (open a signal or an image,
+    open a HDF5 file, etc.) and processing features
+    (run a computation, etc.)
+  - Take control of DataLab from a third-party software
+  - Run interactive calculations from an IDE
+    (e.g. Spyder or Visual Studio Code)
 
 CodraFT 2.2
 ^^^^^^^^^^^

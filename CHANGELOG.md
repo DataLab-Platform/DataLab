@@ -24,6 +24,9 @@ New features:
   * Added macro commands: DataLab can be controlled via a macro file (see
     [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
 * Signal/Image features:
+  * Added process isolation: each signal/image is processed in a separate
+    process, so that DataLab does not freeze anymore when processing large
+    signals/images
   * Added support for groups: signals and images can be grouped together, and
     operations can be applied to all objects in a group, or between groups
   * Drastically improved performance when selecting objects
@@ -67,7 +70,7 @@ New features:
 
 New dependencies:
 
-* [multiprocess](https://pypi.org/project/multiprocess/)
+* [multiprocess](https://pypi.org/project/multiprocess/) for process isolation support
 
 ## CodraFT Version 2.2.0 ##
 

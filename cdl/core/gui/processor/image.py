@@ -12,20 +12,14 @@ DataLab Image Processor GUI module
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
+import guidata.dataset.dataitems as gdi
+import guidata.dataset.datatypes as gdt
 import numpy as np
 import pywt
 import scipy.ndimage as spi
 import scipy.signal as sps
-from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
-from guidata.dataset.datatypes import (
-    DataSet,
-    DataSetGroup,
-    FuncProp,
-    GetAttrProp,
-    ValueProp,
-)
 from guiqwt.geometry import vector_rotation
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
@@ -69,11 +63,11 @@ VALID_DTYPES_STRLIST = [
 ]
 
 
-class RescaleIntensityParam(DataSet):
+class RescaleIntensityParam(gdt.DataSet):
     """Intensity rescaling parameters"""
 
     _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
-    in_range = ChoiceItem(
+    in_range = gdi.ChoiceItem(
         _("Input range"),
         list(zip(_dtype_list, _dtype_list)),
         default="image",
@@ -82,7 +76,7 @@ class RescaleIntensityParam(DataSet):
             "image min/max levels, 'dtype' refers to input image data type range)."
         ),
     )
-    out_range = ChoiceItem(
+    out_range = gdi.ChoiceItem(
         _("Output range"),
         list(zip(_dtype_list, _dtype_list)),
         default="dtype",
@@ -93,10 +87,10 @@ class RescaleIntensityParam(DataSet):
     )
 
 
-class EqualizeHistParam(DataSet):
+class EqualizeHistParam(gdt.DataSet):
     """Histogram equalization parameters"""
 
-    nbins = IntItem(
+    nbins = gdi.IntItem(
         _("Number of bins"),
         min=1,
         default=256,
@@ -107,7 +101,7 @@ class EqualizeHistParam(DataSet):
 class EqualizeAdaptHistParam(EqualizeHistParam):
     """Adaptive histogram equalization parameters"""
 
-    clip_limit = FloatItem(
+    clip_limit = gdi.FloatItem(
         _("Clipping limit"),
         default=0.01,
         min=0.0,
@@ -116,23 +110,23 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
     )
 
 
-class LogP1Param(DataSet):
+class LogP1Param(gdt.DataSet):
     """Log10 parameters"""
 
-    n = FloatItem("n")
+    n = gdi.FloatItem("n")
 
 
-class RotateParam(DataSet):
+class RotateParam(gdt.DataSet):
     """Rotate parameters"""
 
     boundaries = ("constant", "nearest", "reflect", "wrap")
-    prop = ValueProp(False)
+    prop = gdt.ValueProp(False)
 
-    angle = FloatItem(f"{_('Angle')} (°)")
-    mode = ChoiceItem(
+    angle = gdi.FloatItem(f"{_('Angle')} (°)")
+    mode = gdi.ChoiceItem(
         _("Mode"), list(zip(boundaries, boundaries)), default=boundaries[0]
     )
-    cval = FloatItem(
+    cval = gdi.FloatItem(
         _("cval"),
         default=0.0,
         help=_(
@@ -141,7 +135,7 @@ class RotateParam(DataSet):
             "'constant'"
         ),
     )
-    reshape = BoolItem(
+    reshape = gdi.BoolItem(
         _("Reshape the output array"),
         default=False,
         help=_(
@@ -150,10 +144,10 @@ class RotateParam(DataSet):
             "contained completely in the output"
         ),
     )
-    prefilter = BoolItem(_("Prefilter the input image"), default=True).set_prop(
+    prefilter = gdi.BoolItem(_("Prefilter the input image"), default=True).set_prop(
         "display", store=prop
     )
-    order = IntItem(
+    order = gdi.IntItem(
         _("Order"),
         default=3,
         min=0,
@@ -176,35 +170,35 @@ def rotate_obj_coords(
     obj.roi = None
 
 
-class GridParam(DataSet):
+class GridParam(gdt.DataSet):
     """Grid parameters"""
 
-    _prop = GetAttrProp("direction")
+    _prop = gdt.GetAttrProp("direction")
     _directions = (("col", _("columns")), ("row", _("rows")))
-    direction = ChoiceItem(_("Distribute over"), _directions, radio=True).set_prop(
+    direction = gdi.ChoiceItem(_("Distribute over"), _directions, radio=True).set_prop(
         "display", store=_prop
     )
-    cols = IntItem(_("Columns"), default=1, nonzero=True).set_prop(
-        "display", active=FuncProp(_prop, lambda x: x == "col")
+    cols = gdi.IntItem(_("Columns"), default=1, nonzero=True).set_prop(
+        "display", active=gdt.FuncProp(_prop, lambda x: x == "col")
     )
-    rows = IntItem(_("Rows"), default=1, nonzero=True).set_prop(
-        "display", active=FuncProp(_prop, lambda x: x == "row")
+    rows = gdi.IntItem(_("Rows"), default=1, nonzero=True).set_prop(
+        "display", active=gdt.FuncProp(_prop, lambda x: x == "row")
     )
-    colspac = FloatItem(_("Column spacing"), default=0.0, min=0.0)
-    rowspac = FloatItem(_("Row spacing"), default=0.0, min=0.0)
+    colspac = gdi.FloatItem(_("Column spacing"), default=0.0, min=0.0)
+    rowspac = gdi.FloatItem(_("Row spacing"), default=0.0, min=0.0)
 
 
-class ResizeParam(DataSet):
+class ResizeParam(gdt.DataSet):
     """Resize parameters"""
 
     boundaries = ("constant", "nearest", "reflect", "wrap")
-    prop = ValueProp(False)
+    prop = gdt.ValueProp(False)
 
-    zoom = FloatItem(_("Zoom"))
-    mode = ChoiceItem(
+    zoom = gdi.FloatItem(_("Zoom"))
+    mode = gdi.ChoiceItem(
         _("Mode"), list(zip(boundaries, boundaries)), default=boundaries[0]
     )
-    cval = FloatItem(
+    cval = gdi.FloatItem(
         _("cval"),
         default=0.0,
         help=_(
@@ -213,10 +207,10 @@ class ResizeParam(DataSet):
             "'constant'"
         ),
     )
-    prefilter = BoolItem(_("Prefilter the input image"), default=True).set_prop(
+    prefilter = gdi.BoolItem(_("Prefilter the input image"), default=True).set_prop(
         "display", store=prop
     )
-    order = IntItem(
+    order = gdi.IntItem(
         _("Order"),
         default=3,
         min=0,
@@ -225,34 +219,34 @@ class ResizeParam(DataSet):
     ).set_prop("display", active=prop)
 
 
-class BinningParam(DataSet):
+class BinningParam(gdt.DataSet):
     """Binning parameters"""
 
-    binning_x = IntItem(
+    binning_x = gdi.IntItem(
         _("Cluster size (X)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along X-axis."),
     )
-    binning_y = IntItem(
+    binning_y = gdi.IntItem(
         _("Cluster size (Y)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along Y-axis."),
     )
     _operations = BINNING_OPERATIONS
-    operation = ChoiceItem(
+    operation = gdi.ChoiceItem(
         _("Operation"),
         list(zip(_operations, _operations)),
         default=_operations[0],
     )
     _dtype_list = ["dtype"] + VALID_DTYPES_STRLIST
-    dtype_str = ChoiceItem(
+    dtype_str = gdi.ChoiceItem(
         _("Data type"),
         list(zip(_dtype_list, _dtype_list)),
         help=_("Output image data type."),
     )
-    change_pixel_size = BoolItem(
+    change_pixel_size = gdi.BoolItem(
         _("Change pixel size"),
         default=False,
         help=_("Change pixel size so that overall image size remains the same."),
@@ -262,20 +256,20 @@ class BinningParam(DataSet):
 class FlatFieldParam(BaseProcParam):
     """Flat-field parameters"""
 
-    threshold = FloatItem(_("Threshold"), default=0.0)
+    threshold = gdi.FloatItem(_("Threshold"), default=0.0)
 
 
-class ZCalibrateParam(DataSet):
+class ZCalibrateParam(gdt.DataSet):
     """Image linear calibration parameters"""
 
-    a = FloatItem("a", default=1.0)
-    b = FloatItem("b", default=0.0)
+    a = gdi.FloatItem("a", default=1.0)
+    b = gdi.FloatItem("b", default=0.0)
 
 
-class DenoiseTVParam(DataSet):
+class DenoiseTVParam(gdt.DataSet):
     """Total Variation denoising parameters"""
 
-    weight = FloatItem(
+    weight = gdi.FloatItem(
         _("Denoising weight"),
         default=0.1,
         min=0,
@@ -285,7 +279,7 @@ class DenoiseTVParam(DataSet):
             "(at the expense of fidelity to input)."
         ),
     )
-    eps = FloatItem(
+    eps = gdi.FloatItem(
         "Epsilon",
         default=0.0002,
         min=0,
@@ -296,7 +290,7 @@ class DenoiseTVParam(DataSet):
             "(E_(n-1) - E_n) < eps * E_0"
         ),
     )
-    max_num_iter = IntItem(
+    max_num_iter = gdi.IntItem(
         _("Max. iterations"),
         default=200,
         min=0,
@@ -305,10 +299,10 @@ class DenoiseTVParam(DataSet):
     )
 
 
-class DenoiseBilateralParam(DataSet):
+class DenoiseBilateralParam(gdt.DataSet):
     """Bilateral filter denoising parameters"""
 
-    sigma_spatial = FloatItem(
+    sigma_spatial = gdi.FloatItem(
         "σ<sub>spatial</sub>",
         default=1.0,
         min=0,
@@ -321,8 +315,10 @@ class DenoiseBilateralParam(DataSet):
         ),
     )
     _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="constant")
-    cval = FloatItem(
+    mode = gdi.ChoiceItem(
+        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
+    )
+    cval = gdi.FloatItem(
         "cval",
         default=0,
         help=_(
@@ -332,29 +328,33 @@ class DenoiseBilateralParam(DataSet):
     )
 
 
-class DenoiseWaveletParam(DataSet):
+class DenoiseWaveletParam(gdt.DataSet):
     """Wavelet denoising parameters"""
 
     _wavelist = pywt.wavelist()
-    wavelet = ChoiceItem(_("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9")
+    wavelet = gdi.ChoiceItem(
+        _("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9"
+    )
     _modelist = ("soft", "hard")
-    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
+    mode = gdi.ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
     _methlist = ("BayesShrink", "VisuShrink")
-    method = ChoiceItem(
+    method = gdi.ChoiceItem(
         _("Method"), list(zip(_methlist, _methlist)), default="VisuShrink"
     )
 
 
-class MorphologyParam(DataSet):
+class MorphologyParam(gdt.DataSet):
     """White Top-Hat parameters"""
 
-    radius = IntItem(_("Radius"), default=1, min=1, help=_("Footprint (disk) radius."))
+    radius = gdi.IntItem(
+        _("Radius"), default=1, min=1, help=_("Footprint (disk) radius.")
+    )
 
 
-class CannyParam(DataSet):
+class CannyParam(gdt.DataSet):
     """Canny filter parameters"""
 
-    sigma = FloatItem(
+    sigma = gdi.FloatItem(
         "Sigma",
         default=1.0,
         unit="pixels",
@@ -362,19 +362,19 @@ class CannyParam(DataSet):
         nonzero=True,
         help=_("Standard deviation of the Gaussian filter."),
     )
-    low_threshold = FloatItem(
+    low_threshold = gdi.FloatItem(
         _("Low threshold"),
         default=0.1,
         min=0,
         help=_("Lower bound for hysteresis thresholding (linking edges)."),
     )
-    high_threshold = FloatItem(
+    high_threshold = gdi.FloatItem(
         _("High threshold"),
         default=0.9,
         min=0,
         help=_("Upper bound for hysteresis thresholding (linking edges)."),
     )
-    use_quantiles = BoolItem(
+    use_quantiles = gdi.BoolItem(
         _("Use quantiles"),
         default=True,
         help=_(
@@ -384,18 +384,20 @@ class CannyParam(DataSet):
         ),
     )
     _modelist = ("reflect", "constant", "nearest", "mirror", "wrap")
-    mode = ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="constant")
-    cval = FloatItem(
+    mode = gdi.ChoiceItem(
+        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
+    )
+    cval = gdi.FloatItem(
         "cval",
         default=0.0,
         help=_("Value to fill past edges of input if mode is constant."),
     )
 
 
-class GenericDetectionParam(DataSet):
+class GenericDetectionParam(gdt.DataSet):
     """Generic detection parameters"""
 
-    threshold = FloatItem(
+    threshold = gdi.FloatItem(
         _("Relative threshold"),
         default=0.5,
         min=0.1,
@@ -410,7 +412,7 @@ class GenericDetectionParam(DataSet):
 class PeakDetectionParam(GenericDetectionParam):
     """Peak detection parameters"""
 
-    size = IntItem(
+    size = gdi.IntItem(
         _("Neighborhoods size"),
         default=10,
         min=1,
@@ -419,7 +421,7 @@ class PeakDetectionParam(GenericDetectionParam):
             "Size of the sliding window used in maximum/minimum filtering algorithm"
         ),
     )
-    create_rois = BoolItem(_("Create regions of interest"), default=True)
+    create_rois = gdi.BoolItem(_("Create regions of interest"), default=True)
 
 
 class ContourShapeParam(GenericDetectionParam):
@@ -429,21 +431,25 @@ class ContourShapeParam(GenericDetectionParam):
         ("ellipse", _("Ellipse")),
         ("circle", _("Circle")),
     )
-    shape = ChoiceItem(_("Shape"), shapes, default="ellipse")
+    shape = gdi.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
-class HoughCircleParam(DataSet):
+class HoughCircleParam(gdt.DataSet):
     """Circle Hough transform parameters"""
 
-    min_radius = IntItem(_("Radius<sub>min</sub>"), unit="pixels", min=0, nonzero=True)
-    max_radius = IntItem(_("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True)
-    min_distance = IntItem(_("Minimal distance"), min=0)
+    min_radius = gdi.IntItem(
+        _("Radius<sub>min</sub>"), unit="pixels", min=0, nonzero=True
+    )
+    max_radius = gdi.IntItem(
+        _("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True
+    )
+    min_distance = gdi.IntItem(_("Minimal distance"), min=0)
 
 
-class BaseBlobParam(DataSet):
+class BaseBlobParam(gdt.DataSet):
     """Base class for blob detection parameters"""
 
-    min_sigma = FloatItem(
+    min_sigma = gdi.FloatItem(
         "σ<sub>min</sub>",
         default=1.0,
         unit="pixels",
@@ -454,7 +460,7 @@ class BaseBlobParam(DataSet):
             "Keep this low to detect smaller blobs."
         ),
     )
-    max_sigma = FloatItem(
+    max_sigma = gdi.FloatItem(
         "σ<sub>max</sub>",
         default=30.0,
         unit="pixels",
@@ -465,14 +471,14 @@ class BaseBlobParam(DataSet):
             "Keep this high to detect larger blobs."
         ),
     )
-    threshold_rel = FloatItem(
+    threshold_rel = gdi.FloatItem(
         _("Relative threshold"),
         default=0.2,
         min=0.0,
         max=1.0,
         help=_("Minimum intensity of blobs."),
     )
-    overlap = FloatItem(
+    overlap = gdi.FloatItem(
         _("Overlap"),
         default=0.5,
         min=0.0,
@@ -487,7 +493,7 @@ class BaseBlobParam(DataSet):
 class BlobDOGParam(BaseBlobParam):
     """Blob detection using Difference of Gaussian method"""
 
-    exclude_border = BoolItem(
+    exclude_border = gdi.BoolItem(
         _("Exclude border"),
         default=True,
         help=_("If True, exclude blobs from the border of the image."),
@@ -497,7 +503,7 @@ class BlobDOGParam(BaseBlobParam):
 class BlobDOHParam(BaseBlobParam):
     """Blob detection using Determinant of Hessian method"""
 
-    log_scale = BoolItem(
+    log_scale = gdi.BoolItem(
         _("Log scale"),
         default=False,
         help=_(
@@ -511,17 +517,17 @@ class BlobDOHParam(BaseBlobParam):
 class BlobLOGParam(BlobDOHParam):
     """Blob detection using Laplacian of Gaussian method"""
 
-    exclude_border = BoolItem(
+    exclude_border = gdi.BoolItem(
         _("Exclude border"),
         default=True,
         help=_("If True, exclude blobs from the border of the image."),
     )
 
 
-class BlobOpenCVParam(DataSet):
+class BlobOpenCVParam(gdt.DataSet):
     """Blob detection using OpenCV"""
 
-    min_threshold = FloatItem(
+    min_threshold = gdi.FloatItem(
         _("Min. threshold"),
         default=10.0,
         min=0.0,
@@ -532,7 +538,7 @@ class BlobOpenCVParam(DataSet):
             "numbers of blobs."
         ),
     )
-    max_threshold = FloatItem(
+    max_threshold = gdi.FloatItem(
         _("Max. threshold"),
         default=200.0,
         min=0.0,
@@ -543,7 +549,7 @@ class BlobOpenCVParam(DataSet):
             "numbers of blobs."
         ),
     )
-    min_repeatability = IntItem(
+    min_repeatability = gdi.IntItem(
         _("Min. repeatability"),
         default=2,
         min=1,
@@ -552,7 +558,7 @@ class BlobOpenCVParam(DataSet):
             "in a sequence of images to be considered valid."
         ),
     )
-    min_dist_between_blobs = FloatItem(
+    min_dist_between_blobs = gdi.FloatItem(
         _("Min. distance between blobs"),
         default=10.0,
         min=0.0,
@@ -561,97 +567,121 @@ class BlobOpenCVParam(DataSet):
             "closer together than this distance, the smaller blob is removed."
         ),
     )
-    _prop_col = ValueProp(False)
-    filter_by_color = BoolItem(
+    _prop_col = gdt.ValueProp(False)
+    filter_by_color = gdi.BoolItem(
         _("Filter by color"),
         default=True,
         help=_("If true, the image is filtered by color instead of intensity."),
     ).set_prop("display", store=_prop_col)
-    blob_color = IntItem(
+    blob_color = gdi.IntItem(
         _("Blob color"),
         default=0,
         help=_(
             "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
         ),
     ).set_prop("display", active=_prop_col)
-    _prop_area = ValueProp(False)
-    filter_by_area = BoolItem(
+    _prop_area = gdt.ValueProp(False)
+    filter_by_area = gdi.BoolItem(
         _("Filter by area"),
         default=True,
         help=_("If true, the image is filtered by blob area."),
     ).set_prop("display", store=_prop_area)
-    min_area = FloatItem(
+    min_area = gdi.FloatItem(
         _("Min. area"),
         default=25.0,
         min=0.0,
         help=_("The minimum blob area."),
     ).set_prop("display", active=_prop_area)
-    max_area = FloatItem(
+    max_area = gdi.FloatItem(
         _("Max. area"),
         default=500.0,
         min=0.0,
         help=_("The maximum blob area."),
     ).set_prop("display", active=_prop_area)
-    _prop_circ = ValueProp(False)
-    filter_by_circularity = BoolItem(
+    _prop_circ = gdt.ValueProp(False)
+    filter_by_circularity = gdi.BoolItem(
         _("Filter by circularity"),
         default=False,
         help=_("If true, the image is filtered by blob circularity."),
     ).set_prop("display", store=_prop_circ)
-    min_circularity = FloatItem(
+    min_circularity = gdi.FloatItem(
         _("Min. circularity"),
         default=0.8,
         min=0.0,
         max=1.0,
         help=_("The minimum circularity of the blobs."),
     ).set_prop("display", active=_prop_circ)
-    max_circularity = FloatItem(
+    max_circularity = gdi.FloatItem(
         _("Max. circularity"),
         default=1.0,
         min=0.0,
         max=1.0,
         help=_("The maximum circularity of the blobs."),
     ).set_prop("display", active=_prop_circ)
-    _prop_iner = ValueProp(False)
-    filter_by_inertia = BoolItem(
+    _prop_iner = gdt.ValueProp(False)
+    filter_by_inertia = gdi.BoolItem(
         _("Filter by inertia"),
         default=False,
         help=_("If true, the image is filtered by blob inertia."),
     ).set_prop("display", store=_prop_iner)
-    min_inertia_ratio = FloatItem(
+    min_inertia_ratio = gdi.FloatItem(
         _("Min. inertia ratio"),
         default=0.6,
         min=0.0,
         max=1.0,
         help=_("The minimum inertia ratio of the blobs."),
     ).set_prop("display", active=_prop_iner)
-    max_inertia_ratio = FloatItem(
+    max_inertia_ratio = gdi.FloatItem(
         _("Max. inertia ratio"),
         default=1.0,
         min=0.0,
         max=1.0,
         help=_("The maximum inertia ratio of the blobs."),
     ).set_prop("display", active=_prop_iner)
-    _prop_conv = ValueProp(False)
-    filter_by_convexity = BoolItem(
+    _prop_conv = gdt.ValueProp(False)
+    filter_by_convexity = gdi.BoolItem(
         _("Filter by convexity"),
         default=False,
         help=_("If true, the image is filtered by blob convexity."),
     ).set_prop("display", store=_prop_conv)
-    min_convexity = FloatItem(
+    min_convexity = gdi.FloatItem(
         _("Min. convexity"),
         default=0.8,
         min=0.0,
         max=1.0,
         help=_("The minimum convexity of the blobs."),
     ).set_prop("display", active=_prop_conv)
-    max_convexity = FloatItem(
+    max_convexity = gdi.FloatItem(
         _("Max. convexity"),
         default=1.0,
         min=0.0,
         max=1.0,
         help=_("The maximum convexity of the blobs."),
     ).set_prop("display", active=_prop_conv)
+
+
+def calc_with_osr(image: ImageParam, func: Callable, *args: Any) -> np.ndarray:
+    """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
+    res = []
+    for i_roi in image.iterate_roi_indexes():
+        data_roi = image.get_data(i_roi)
+        if args is None:
+            coords = func(data_roi)
+        else:
+            coords = func(data_roi, *args)
+        if coords.size:
+            if image.roi is not None:
+                x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
+                coords[:, ::2] += x0
+                coords[:, 1::2] += y0
+            coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
+            coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
+            idx = np.ones((coords.shape[0], 1)) * i_roi
+            coords = np.hstack([idx, coords])
+            res.append(coords)
+    if res:
+        return np.vstack(res)
+    return None
 
 
 class ImageProcessor(BaseProcessor):
@@ -926,13 +956,13 @@ class ImageProcessor(BaseProcessor):
 
         if roieditordata.singleobj:
 
-            def suffix_func(group: DataSetGroup):
+            def suffix_func(group: gdt.DataSetGroup):
                 if len(group.datasets) == 1:
                     p = group.datasets[0]
                     return p.get_suffix()
                 return ""
 
-            def extract_roi_func(data: np.ndarray, group: DataSetGroup):
+            def extract_roi_func(data: np.ndarray, group: gdt.DataSetGroup):
                 """Extract ROI function on data"""
                 if len(group.datasets) == 1:
                     p = group.datasets[0]
@@ -948,7 +978,7 @@ class ImageProcessor(BaseProcessor):
                 return out[y0:y1, x0:x1]
 
             def extract_roi_func_obj(
-                image: ImageParam, orig: ImageParam, group: DataSetGroup
+                image: ImageParam, orig: ImageParam, group: gdt.DataSetGroup
             ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += min([p.x0 for p in group.datasets])
@@ -967,7 +997,7 @@ class ImageProcessor(BaseProcessor):
         else:
 
             def extract_roi_func_obj(
-                image: ImageParam, orig: ImageParam, p: DataSet
+                image: ImageParam, orig: ImageParam, p: gdt.DataSet
             ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += p.x0
@@ -1022,20 +1052,15 @@ class ImageProcessor(BaseProcessor):
         )
 
     # ------Image Processing
-    def apply_11_func(self, obj, orig, func, param, message) -> None:
-        """Apply 11 function: 1 object in --> 1 object out"""
+    def get_11_func_args(self, orig: ImageParam, param: gdt.DataSet) -> tuple[Any]:
+        """Get 11 function args: 1 object in --> 1 object out"""
+        if param is None:
+            return (orig.data,)
+        return (orig.data, param)
 
-        # (self is used by @qt_try_except)
-        # pylint: disable=unused-argument
-        @qt_try_except(message)
-        def apply_11_func_callback(self, obj, orig, func, param):
-            """Apply 11 function callback: 1 object in --> 1 object out"""
-            if param is None:
-                obj.data = func(orig.data)
-            else:
-                obj.data = func(orig.data, param)
-
-        return apply_11_func_callback(self, obj, orig, func, param)
+    def set_11_func_result(self, new_obj: ImageParam, result: np.ndarray) -> None:
+        """Set 11 function result: 1 object in --> 1 object out"""
+        new_obj.data = result
 
     @qt_try_except()
     def compute_calibration(self, param: ZCalibrateParam | None = None) -> None:
@@ -1295,49 +1320,26 @@ class ImageProcessor(BaseProcessor):
         )
 
     # ------Image Computing
-    @staticmethod
-    def __apply_origin_size_roi(image, func, *args) -> np.ndarray:
-        """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
-        res = []
-        for i_roi in image.iterate_roi_indexes():
-            coords = func(image.get_data(i_roi), *args)
-            if coords.size:
-                if image.roi is not None:
-                    x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
-                    coords[:, ::2] += x0
-                    coords[:, 1::2] += y0
-                coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
-                coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
-                idx = np.ones((coords.shape[0], 1)) * i_roi
-                coords = np.hstack([idx, coords])
-                res.append(coords)
-        if res:
-            return np.vstack(res)
-        return None
-
     @qt_try_except()
     def compute_centroid(self) -> None:
         """Compute image centroid"""
 
-        def get_centroid_coords(data: np.ndarray):
+        def get_centroid_coords(data: np.ndarray) -> np.ndarray:
             """Return centroid coordinates"""
             y, x = get_centroid_fourier(data)
             return np.array([(x, y)])
 
-        def centroid(image: ImageParam):
+        def centroid(image: ImageParam) -> np.ndarray:
             """Compute centroid"""
-            res = self.__apply_origin_size_roi(image, get_centroid_coords)
-            if res is not None:
-                return image.add_resultshape("Centroid", ShapeTypes.MARKER, res)
-            return None
+            return calc_with_osr(image, get_centroid_coords)
 
-        self.compute_10(_("Centroid"), centroid)
+        self.compute_10("Centroid", centroid, ShapeTypes.MARKER)
 
     @qt_try_except()
     def compute_enclosing_circle(self) -> None:
         """Compute minimum enclosing circle"""
 
-        def get_enclosing_circle_coords(data: np.ndarray):
+        def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
             """Return diameter coords for the circle contour enclosing image
             values above threshold (FWHM)"""
             x, y, r = get_enclosing_circle(data)
@@ -1345,34 +1347,28 @@ class ImageProcessor(BaseProcessor):
 
         def enclosing_circle(image: ImageParam):
             """Compute minimum enclosing circle"""
-            res = self.__apply_origin_size_roi(image, get_enclosing_circle_coords)
-            if res is not None:
-                return image.add_resultshape("MinEnclosCircle", ShapeTypes.CIRCLE, res)
-            return None
+            return calc_with_osr(image, get_enclosing_circle_coords)
 
         # TODO: [P2] Find a way to add the circle to the computing results
         #  as in "enclosingcircle_test.py"
-        self.compute_10(_("MinEnclosingCircle"), enclosing_circle)
+        self.compute_10("MinEnclosCircle", enclosing_circle, ShapeTypes.CIRCLE)
 
     @qt_try_except()
     def compute_peak_detection(self, param: PeakDetectionParam | None = None) -> None:
         """Compute 2D peak detection"""
 
-        def peak_detection(image: ImageParam, p: PeakDetectionParam):
+        def peak_detection(image: ImageParam, p: PeakDetectionParam) -> np.ndarray:
             """Compute centroid"""
-            res = self.__apply_origin_size_roi(
-                image, get_2d_peaks_coords, p.size, p.threshold
-            )
-            if res is not None:
-                return image.add_resultshape("Peaks", ShapeTypes.POINT, res, p)
-            return None
+            return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
 
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             data = self.panel.objview.get_sel_objects()[0].data
             param.size = max(min(data.shape) // 40, 50)
 
-        results = self.compute_10(_("Peaks"), peak_detection, param, edit=edit)
+        results = self.compute_10(
+            _("Peaks"), peak_detection, ShapeTypes.POINT, param, edit=edit
+        )
         if results is not None and param.create_rois and len(results.items()) > 1:
             with create_progress_bar(
                 self.panel, _("Create regions of interest"), max_=len(results)
@@ -1407,26 +1403,21 @@ class ImageProcessor(BaseProcessor):
     def compute_contour_shape(self, param: ContourShapeParam | None = None) -> None:
         """Compute contour shape fit"""
 
-        def contour_shape(image: ImageParam, p: ContourShapeParam):
+        def contour_shape(image: ImageParam, p: ContourShapeParam) -> np.ndarray:
             """Compute contour shape fit"""
-            res = self.__apply_origin_size_roi(
-                image, get_contour_shapes, p.shape, p.threshold
-            )
-            if res is not None:
-                shape = ShapeTypes.CIRCLE if p.shape == "circle" else ShapeTypes.ELLIPSE
-                return image.add_resultshape("Contour", shape, res, p)
-            return None
+            return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
 
         edit, param = self.init_param(param, ContourShapeParam, _("Contour"))
-        self.compute_10(_("Contour"), contour_shape, param, edit=edit)
+        shapetype = ShapeTypes.CIRCLE if param.shape == "circle" else ShapeTypes.ELLIPSE
+        self.compute_10("Contour", contour_shape, shapetype, param, edit=edit)
 
     @qt_try_except()
     def compute_hough_circle_peaks(self, param: HoughCircleParam | None = None) -> None:
         """Compute peak detection based on a circle Hough transform"""
 
-        def hough_circles(image: ImageParam, p: HoughCircleParam):
+        def hough_circles(image: ImageParam, p: HoughCircleParam) -> np.ndarray:
             """Compute Hough circles"""
-            res = self.__apply_origin_size_roi(
+            return calc_with_osr(
                 image,
                 get_hough_circle_peaks,
                 p.min_radius,
@@ -1434,20 +1425,17 @@ class ImageProcessor(BaseProcessor):
                 None,
                 p.min_distance,
             )
-            if res is not None:
-                return image.add_resultshape("Circles", ShapeTypes.CIRCLE, res, p)
-            return None
 
         edit, param = self.init_param(param, HoughCircleParam, _("Hough circles"))
-        self.compute_10(_("Circles"), hough_circles, param, edit=edit)
+        self.compute_10("Circles", hough_circles, ShapeTypes.CIRCLE, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_dog(self, param: BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
 
-        def blobs(image: ImageParam, p: BlobDOGParam):
+        def blobs(image: ImageParam, p: BlobDOGParam) -> np.ndarray:
             """Compute blobs"""
-            res = self.__apply_origin_size_roi(
+            return calc_with_osr(
                 image,
                 find_blobs_dog,
                 p.min_sigma,
@@ -1456,20 +1444,17 @@ class ImageProcessor(BaseProcessor):
                 p.threshold_rel,
                 p.exclude_border,
             )
-            if res is not None:
-                return image.add_resultshape("BlobsDOG", ShapeTypes.CIRCLE, res, p)
-            return None
 
         edit, param = self.init_param(param, BlobDOGParam, _("Blob detection (DOG)"))
-        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+        self.compute_10("BlobsDOG", blobs, ShapeTypes.CIRCLE, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_doh(self, param: BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
 
-        def blobs(image: ImageParam, p: BlobDOHParam):
+        def blobs(image: ImageParam, p: BlobDOHParam) -> np.ndarray:
             """Compute blobs"""
-            res = self.__apply_origin_size_roi(
+            return calc_with_osr(
                 image,
                 find_blobs_doh,
                 p.min_sigma,
@@ -1478,20 +1463,17 @@ class ImageProcessor(BaseProcessor):
                 p.log_scale,
                 p.threshold_rel,
             )
-            if res is not None:
-                return image.add_resultshape("BlobsDOH", ShapeTypes.CIRCLE, res, p)
-            return None
 
         edit, param = self.init_param(param, BlobDOHParam, _("Blob detection (DOH)"))
-        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+        self.compute_10("BlobsDOH", blobs, ShapeTypes.CIRCLE, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_log(self, param: BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
 
-        def blobs(image: ImageParam, p: BlobLOGParam):
+        def blobs(image: ImageParam, p: BlobLOGParam) -> np.ndarray:
             """Compute blobs"""
-            res = self.__apply_origin_size_roi(
+            return calc_with_osr(
                 image,
                 find_blobs_log,
                 p.min_sigma,
@@ -1501,20 +1483,17 @@ class ImageProcessor(BaseProcessor):
                 p.threshold_rel,
                 p.exclude_border,
             )
-            if res is not None:
-                return image.add_resultshape("BlobsLOG", ShapeTypes.CIRCLE, res, p)
-            return None
 
         edit, param = self.init_param(param, BlobLOGParam, _("Blob detection (LOG)"))
-        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+        self.compute_10("BlobsLOG", blobs, ShapeTypes.CIRCLE, param, edit=edit)
 
     @qt_try_except()
     def compute_blob_opencv(self, param: BlobOpenCVParam | None = None) -> None:
         """Compute blob detection using OpenCV"""
 
-        def blobs(image: ImageParam, p: BlobOpenCVParam):
+        def blobs(image: ImageParam, p: BlobOpenCVParam) -> np.ndarray:
             """Compute blobs"""
-            res = self.__apply_origin_size_roi(
+            return calc_with_osr(
                 image,
                 find_blobs_opencv,
                 p.min_threshold,
@@ -1536,14 +1515,11 @@ class ImageProcessor(BaseProcessor):
                 p.min_convexity,
                 p.max_convexity,
             )
-            if res is not None:
-                return image.add_resultshape("BlobsOpenCV", ShapeTypes.CIRCLE, res, p)
-            return None
 
         edit, param = self.init_param(
             param, BlobOpenCVParam, _("Blob detection (OpenCV)")
         )
-        self.compute_10(_("Blob detection"), blobs, param, edit=edit)
+        self.compute_10("BlobsOpenCV", blobs, ShapeTypes.CIRCLE, param, edit=edit)
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

@@ -282,6 +282,11 @@ class BaseDataPanel(AbstractPanel):
         self.context_menu = QW.QMenu()
         self.__separate_views: dict[QW.QDialog, SignalParam | ImageParam] = {}
 
+    def closeEvent(self, event):
+        """Reimplement QMainWindow method"""
+        self.processor.close()
+        super().closeEvent(event)
+
     # ------AbstractPanel interface-----------------------------------------------------
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize whole panel to a HDF5 file"""

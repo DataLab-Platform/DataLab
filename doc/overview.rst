@@ -38,6 +38,9 @@ Data processing key features
 ====== ====== ==================================================
 Signal Image  Feature
 ====== ====== ==================================================
+✓      ✓      Process isolation for running computations
+✓      ✓      Remote control from Jupyter, Spyder or any IDE
+✓      ✓      Remote control from a third-party application
 ✓      ✓      Sum, average, difference, product, ...
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..      Semi-automatic multi-peak detection

@@ -5,7 +5,42 @@ DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
 natively supported by Python. Remote controlling allows to access DataLab
 main features from a separate process.
 
+From an IDE
+^^^^^^^^^^^
+
+It is possible to run a Python script from an IDE (e.g. `Spyder`_ or any
+other IDE, or even a Jupyter Notebook) that connects to a running DataLab
+instance, adds a signal and an image, and then runs calculations. This is
+the case of the `RemoteClient` class that is provided in module ``cdl.remote``.
+
+From a third-party application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+It is also possible to connect to a running DataLab instance from a third-party
+application, adds a signal and an image, and then runs calculations. This is
+the case of the `RemoteClient` class that is provided in module ``cdl.remote``.
+
+Data (signals and images) may also be exchanged between DataLab and the remote
+client application, in both directions.
+
+The remote client application may be written in any language that supports
+XML-RPC. For example, it is possible to write a remote client application in
+Python, Java, C++, C#, etc. The remote client application may be a graphical
+application or a command line application.
+
+The remote client application may be run on the same computer as DataLab or on
+a different computer. In the latter case, the remote client application must
+know the IP address of the computer running DataLab.
+
+The remote client application may be run before or after DataLab. In the latter
+case, the remote client application must try to connect to DataLab until it
+succeeds.
+
+Supported features
+^^^^^^^^^^^^^^^^^^
+
 Supported features are the following:
+
   - Switch to signal or image panel
   - Remove all signals and images
   - Save current session to a HDF5 file
@@ -17,7 +52,9 @@ Supported features are the following:
   - Get object list
   - Run calculation with parameters
 
-Some examples are provided to help implementing such a communication between your application and DataLab:
+Some examples are provided to help implementing such a communication
+between your application and DataLab:
+
   - See module: ``cdl.tests.remoteclient_app``
   - See module: ``cdl.tests.remoteclient_unit``
 

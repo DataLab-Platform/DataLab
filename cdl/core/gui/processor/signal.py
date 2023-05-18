@@ -13,15 +13,15 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
+import guidata.dataset.dataitems as gdi
+import guidata.dataset.datatypes as gdt
 import numpy as np
 import scipy.integrate as spt
 import scipy.ndimage as spi
 import scipy.optimize as spo
 import scipy.signal as sps
-from guidata.dataset.dataitems import BoolItem, ChoiceItem, FloatItem, IntItem
-from guidata.dataset.datatypes import DataSet, DataSetGroup
 
 from cdl.config import Conf, _
 from cdl.core.computation import fit
@@ -48,16 +48,16 @@ if TYPE_CHECKING:
     )
 
 
-class PeakDetectionParam(DataSet):
+class PeakDetectionParam(gdt.DataSet):
     """Peak detection parameters"""
 
-    threshold = IntItem(
+    threshold = gdi.IntItem(
         _("Threshold"), default=30, min=0, max=100, slider=True, unit="%"
     )
-    min_dist = IntItem(_("Minimum distance"), default=1, min=1, unit="points")
+    min_dist = gdi.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
 
 
-class NormalizeParam(DataSet):
+class NormalizeParam(gdt.DataSet):
     """Normalize parameters"""
 
     methods = (
@@ -66,25 +66,25 @@ class NormalizeParam(DataSet):
         (_("sum"), "sum"),
         (_("energy"), "energy"),
     )
-    method = ChoiceItem(_("Normalize with respect to"), methods)
+    method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
 
 
-class XYCalibrateParam(DataSet):
+class XYCalibrateParam(gdt.DataSet):
     """Signal calibration parameters"""
 
     axes = (("x", _("X-axis")), ("y", _("Y-axis")))
-    axis = ChoiceItem(_("Calibrate"), axes, default="y")
-    a = FloatItem("a", default=1.0)
-    b = FloatItem("b", default=0.0)
+    axis = gdi.ChoiceItem(_("Calibrate"), axes, default="y")
+    a = gdi.FloatItem("a", default=1.0)
+    b = gdi.FloatItem("b", default=0.0)
 
 
-class PolynomialFitParam(DataSet):
+class PolynomialFitParam(gdt.DataSet):
     """Polynomial fitting parameters"""
 
-    degree = IntItem(_("Degree"), 3, min=1, max=10, slider=True)
+    degree = gdi.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
 
 
-class FWHMParam(DataSet):
+class FWHMParam(gdt.DataSet):
     """FWHM parameters"""
 
     fittypes = (
@@ -93,13 +93,13 @@ class FWHMParam(DataSet):
         ("VoigtModel", "Voigt"),
     )
 
-    fittype = ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+    fittype = gdi.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
 
 
-class FFTParam(DataSet):
+class FFTParam(gdt.DataSet):
     """FFT parameters"""
 
-    shift = BoolItem(
+    shift = gdi.BoolItem(
         _("Shift"),
         default=Conf.proc.fft_shift_enabled.get(),
         help=_("Shift zero frequency to center"),
@@ -123,13 +123,13 @@ class SignalProcessor(BaseProcessor):
 
         if roieditordata.singleobj:
 
-            def suffix_func(group: DataSetGroup):
+            def suffix_func(group: gdt.DataSetGroup):
                 if len(group.datasets) == 1:
                     p = group.datasets[0]
                     return f"indexes={p.col1:d}:{p.col2:d}"
                 return ""
 
-            def extract_roi_func(x, y, group: DataSetGroup):
+            def extract_roi_func(x, y, group: gdt.DataSetGroup):
                 """Extract ROI function"""
                 xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
                 for p in group.datasets:
@@ -206,32 +206,26 @@ class SignalProcessor(BaseProcessor):
         )
 
     # ------Signal Processing
-    def apply_11_func(self, obj, orig, func, param, message) -> None:
-        """Apply 11 function: 1 object in --> 1 object out"""
+    def get_11_func_args(self, orig: SignalParam, param: gdt.DataSet) -> tuple[Any]:
+        """Get 11 function args: 1 object in --> 1 object out"""
+        data = orig.xydata
+        if len(data) == 2:  # x, y signal
+            x, y = data
+            if param is None:
+                return (x, y)
+            else:
+                return (x, y, param)
+        elif len(data) == 4:  # x, y, dx, dy error bar signal
+            x, y, dx, dy = data
+            if param is None:
+                return (dy,)
+            else:
+                return (dy, param)
+        raise ValueError("Invalid data")
 
-        # (self is used by @qt_try_except)
-        # pylint: disable=unused-argument
-        @qt_try_except(message)
-        def apply_11_func_callback(self, obj, orig, func, param):
-            """Apply 11 function callback: 1 object in --> 1 object out"""
-            data = orig.xydata
-            if len(data) == 2:  # x, y signal
-                x, y = data
-                if param is None:
-                    obj.xydata = func(x, y)
-                else:
-                    obj.xydata = func(x, y, param)
-            elif len(data) == 4:  # x, y, dx, dy error bar signal
-                x, y, dx, dy = data
-                if param is None:
-                    x2, y2 = func(x, y)
-                    _x3, dy2 = func(x, dy)
-                else:
-                    x2, y2 = func(x, y, param)
-                    _x3, dy2 = func(x, dy, param)
-                obj.xydata = x2, y2, dx, dy2
-
-        return apply_11_func_callback(self, obj, orig, func, param)
+    def set_11_func_result(self, new_obj: SignalParam, result: np.ndarray) -> None:
+        """Set 11 function result: 1 object in --> 1 object out"""
+        new_obj.xydata = result
 
     @qt_try_except()
     def normalize(self, param: NormalizeParam | None = None) -> None:
@@ -438,12 +432,10 @@ class SignalProcessor(BaseProcessor):
                 )
                 x0, y0, x1, y1 = FitModel.half_max_segment(amp, sigma, mu, base)
                 res.append([i_roi, x0, y0, x1, y1])
-            return signal.add_resultshape(
-                title, ShapeTypes.SEGMENT, np.array(res), param
-            )
+            return np.array(res)
 
         edit, param = self.init_param(param, FWHMParam, title)
-        self.compute_10(title, fwhm, param, edit=edit)
+        self.compute_10(title, fwhm, ShapeTypes.SEGMENT, param, edit=edit)
 
     @qt_try_except()
     def compute_fw1e2(self):
@@ -473,9 +465,9 @@ class SignalProcessor(BaseProcessor):
                 amplitude = fit.GaussianModel.amplitude(amp, sigma)
                 yhm = amplitude / np.e**2 + base
                 res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
-            return signal.add_resultshape(title, ShapeTypes.SEGMENT, np.array(res))
+            return np.array(res)
 
-        self.compute_10(title, fw1e2)
+        self.compute_10(title, fw1e2, ShapeTypes.SEGMENT)
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""
