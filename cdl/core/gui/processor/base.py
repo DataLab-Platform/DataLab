@@ -434,10 +434,13 @@ class BaseProcessor(QC.QObject):
                     new_obj.copy_data_from(obj, dtype=new_dtype)
                 else:
                     old_objs[old_gid].append(obj)
-                    if param is None:
-                        func(obj.data, new_obj.data)
-                    else:
-                        func(obj.data, new_obj.data, param)
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", RuntimeWarning)
+                        # TODO: Add support for process isolation
+                        if param is None:
+                            func(obj.data, new_obj.data)
+                        else:
+                            func(obj.data, new_obj.data, param)
                     new_obj.update_resultshapes_from(obj)
                 if obj.roi is not None:
                     if new_obj.roi is None:
@@ -509,10 +512,13 @@ class BaseProcessor(QC.QObject):
                 else:
                     new_obj.data = func(obj.data, obj2.data, param)
                 if func_obj is not None:
-                    if param is None:
-                        func_obj(new_obj, obj, obj2)
-                    else:
-                        func_obj(new_obj, obj, obj2, param)
+                    with warnings.catch_warnings():
+                        warnings.simplefilter("ignore", RuntimeWarning)
+                        # TODO: Add support for process isolation
+                        if param is None:
+                            func_obj(new_obj, obj, obj2)
+                        else:
+                            func_obj(new_obj, obj, obj2, param)
                 if suffix is not None:
                     new_obj.title += "|" + suffix(param)
                 group_id = self.panel.objmodel.get_object_group_id(obj)
