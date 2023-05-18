@@ -568,7 +568,7 @@ class BaseDataPanel(AbstractPanel):
         obj_or_objlist = self.IO_REGISTRY.read(filename)
         objs = obj_or_objlist if isinstance(obj_or_objlist, list) else [obj_or_objlist]
         for obj in objs:
-            self.add_object(obj, refresh=False)
+            self.add_object(obj, set_current=obj is objs[-1])
         self.selection_changed()
         if len(objs) == 1:
             return objs[0]
