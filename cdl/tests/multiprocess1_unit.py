@@ -72,7 +72,7 @@ class Worker:
         """Terminate worker"""
         # Terminate the process and stop the timer
         self.terminate_pool()
-        print("Computation cancelled!")
+        execenv.print("Computation cancelled!")
         # Recreate the pool for the next computation
         self.create_pool()
 
@@ -121,7 +121,7 @@ def test(iterations: int = 4) -> None:
                     try:
                         image.data = worker.get_result()
                     except Exception as exc:
-                        print(f"Intercepted exception: {exc}")
+                        execenv.print(f"Intercepted exception: {exc}")
                     win.get_plot().add_item(image.make_item())
                 else:
                     break

@@ -26,6 +26,7 @@ from multiprocess import Pool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_test_image2
 from cdl.utils.qthelpers import qt_app_context
 
@@ -81,7 +82,7 @@ class MainWindow(QW.QMainWindow):
         """
         start_time = time.time()
         result = sps.medfilt(array, 1) + create_2d_random(array.shape[0], array.dtype)
-        print(f"Computation done: delta={time.time() - start_time:.3f} s")
+        execenv.print(f"Computation done: delta={time.time() - start_time:.3f} s")
         return result
 
     def print_time(self, title: str) -> None:
@@ -91,7 +92,7 @@ class MainWindow(QW.QMainWindow):
         Args:
             title (str): The title to print before the time.
         """
-        print(f"{title}: {time.time() - self.start_time:.3f} s")
+        execenv.print(f"{title}: {time.time() - self.start_time:.3f} s")
         self.start_time = time.time()
 
     def start_computation(self) -> None:
@@ -116,7 +117,7 @@ class MainWindow(QW.QMainWindow):
         POOL.terminate()
         POOL.join()
         self.timer.stop()
-        print("Computation cancelled!")
+        execenv.print("Computation cancelled!")
         # Recreate the pool for the next computation
         POOL = Pool(processes=1)
 
