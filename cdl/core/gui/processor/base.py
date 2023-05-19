@@ -507,18 +507,18 @@ class BaseProcessor(QC.QObject):
                 short_ids = (obj.short_id, obj2.short_id)
                 new_obj.title = f'{name}({", ".join(short_ids)})'
                 new_obj.copy_data_from(obj)
-                if param is None:
-                    new_obj.data = func(obj.data, obj2.data)
-                else:
-                    new_obj.data = func(obj.data, obj2.data, param)
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", RuntimeWarning)
+                    # TODO: Add support for process isolation
+                    if param is None:
+                        new_obj.data = func(obj.data, obj2.data)
+                    else:
+                        new_obj.data = func(obj.data, obj2.data, param)
                 if func_obj is not None:
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", RuntimeWarning)
-                        # TODO: Add support for process isolation
-                        if param is None:
-                            func_obj(new_obj, obj, obj2)
-                        else:
-                            func_obj(new_obj, obj, obj2, param)
+                    if param is None:
+                        func_obj(new_obj, obj, obj2)
+                    else:
+                        func_obj(new_obj, obj, obj2, param)
                 if suffix is not None:
                     new_obj.title += "|" + suffix(param)
                 group_id = self.panel.objmodel.get_object_group_id(obj)
