@@ -58,7 +58,7 @@ print("All done!")
         self.console = console
         self.setObjectName(self.get_untitled_title() if name is None else name)
         self.editor = CodeEditor(language="python")
-        self.editor.setPlainText(self.MACRO_SAMPLE)
+        self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
         self.process = None
 
@@ -72,19 +72,28 @@ print("All done!")
         """Return object title"""
         return self.objectName()
 
+    def get_code(self) -> str:
+        """Return code to be executed"""
+        text = self.editor.toPlainText()
+        return os.linesep.join(text.splitlines(False))
+
+    def set_code(self, code: str) -> None:
+        """Set code to be executed"""
+        self.editor.setPlainText(code)
+
     def serialize(self, writer: BaseIOHandler) -> None:
         """Serialize this macro"""
         with writer.group("name"):
             writer.write(self.objectName())
         with writer.group("contents"):
-            writer.write(self.editor.toPlainText())
+            writer.write(self.get_code())
 
     def deserialize(self, reader: BaseIOHandler) -> None:
         """Deserialize this macro"""
         with reader.group("name"):
             self.setObjectName(reader.read_any())
         with reader.group("contents"):
-            self.editor.setPlainText(reader.read_any())
+            self.set_code(reader.read_any())
 
     @staticmethod
     def get_untitled_title() -> str:
@@ -139,8 +148,7 @@ print("All done!")
     def run(self) -> None:
         """Run macro"""
         self.process = QC.QProcess()
-        text = self.editor.toPlainText()
-        code = os.linesep.join(text.splitlines(False)).replace('"', "'")
+        code = self.get_code().replace('"', "'")
         env = QC.QProcessEnvironment()
         env.insert(execenv.XMLRPCPORT_ENV, str(execenv.port))
         sysenv = env.systemEnvironment()

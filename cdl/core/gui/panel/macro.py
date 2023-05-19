@@ -9,6 +9,8 @@
 
 from __future__ import annotations
 
+import os
+import os.path as osp
 from typing import TYPE_CHECKING
 
 from guidata.config import CONF
@@ -18,10 +20,13 @@ from guidata.qtwidgets import DockableWidgetMixin
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilename, getsavefilename
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.panel.base import AbstractPanel
+from cdl.utils.misc import to_string
+from cdl.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
 if TYPE_CHECKING:
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
@@ -52,6 +57,12 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     SIG_OBJECT_MODIFIED = QC.Signal()
 
+    FILE_FILTERS = "%s (*.py)" % _("Python files")
+
+    FILE_HEADER = os.linesep.join(
+        ["# -*- coding: utf-8 -*-", "", '"""DataLab Macro"""', "", ""]
+    )
+
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
         self.setWindowTitle(_("Macro manager"))
@@ -80,9 +91,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.stop_action = None
         self.obj_actions: list[QW.QAction] = []  # Object-dependent actions
         self.__macros: dict[str, Macro] = {}
-
-        # TODO: Add action "Import from file..."
-        # TODO: Add action "Export to file..."
 
         self.setup_actions()
 
@@ -216,19 +224,24 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         menu_button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", self)
         menu_button.setFlat(True)
         menu_button.setMenu(self.context_menu)
+        self.context_menu.aboutToShow.connect(self.__update_actions)
         toolbar.addWidget(menu_button)
         self.tabwidget.setCornerWidget(toolbar)
 
         add_actions(toolbar, [self.run_action, self.stop_action, None])
         add_actions(self.context_menu, actions)
 
-    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
-        """Popup context menu at position"""
+    def __update_actions(self) -> None:
+        """Update actions"""
         not_empty = self.tabwidget.count() > 0
         for action in self.obj_actions:
             action.setEnabled(not_empty)
         if not_empty:
             self.current_macro_changed()
+
+    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
+        """Popup context menu at position"""
+        self.__update_actions()
         self.context_menu.popup(position)
 
     def get_macro(self, index: int | None = None) -> Macro:
@@ -255,16 +268,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def run_macro(self):
         """Run current macro"""
-        # XXX: Macros should be executed in a separate process: access to DataLab
-        # is provided by the 'remote_controlling' feature (see corresponding branch).
-        # So, macros should be Python scripts similar to "remoteclient_test.py".
-        # Connection to the XML-RPC server should be simplified (to a single line).
-        #
-        # Important: an environment variable must contained current DataLab session
-        # XML-RPC server port number (e.g. "CDL_XMLRPC_PORT"). This allows to
-        # handle the case of multiple instances of DataLab running at the same time
-        # (each macro will then control the right instance of DataLab, the one from
-        # which it was executed)
         macro = self.get_macro()
         macro.run()
 
@@ -311,11 +314,35 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def export_macro_to_file(self) -> None:
         """Export macro to file"""
-        raise NotImplementedError
+        code = self.FILE_HEADER + self.get_macro().get_code()
+        basedir = Conf.main.base_dir.get()
+        with save_restore_stds():
+            filename, _filt = getsavefilename(
+                self, _("Save as"), basedir, self.FILE_FILTERS
+            )
+        if filename:
+            with qt_try_loadsave_file(self.parent(), filename, "save"):
+                Conf.main.base_dir.set(filename)
+                with open(filename, "wb") as fdesc:
+                    fdesc.write(code.encode("utf-8"))
 
     def import_macro_from_file(self) -> None:
         """Import macro from file"""
-        raise NotImplementedError
+        basedir = Conf.main.base_dir.get()
+        with save_restore_stds():
+            filename, _filt = getopenfilename(
+                self, _("Open"), basedir, self.FILE_FILTERS
+            )
+        if filename:
+            with qt_try_loadsave_file(self.parent(), filename, "load"):
+                Conf.main.base_dir.set(filename)
+                with open(filename, "rb") as fdesc:
+                    code = to_string(fdesc.read()).strip()
+                header = self.FILE_HEADER.strip()
+                if code.startswith(header):
+                    code = code[len(header) :].strip()
+                macro = self.add_macro(osp.basename(filename), rename=False)
+                macro.set_code(code)
 
     def remove_macro(self, index: int | None = None) -> None:
         """Remove macro"""
