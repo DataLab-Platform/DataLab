@@ -763,6 +763,7 @@ class BaseDataPanel(AbstractPanel):
                 obj.set_annotations_from_items(rw_items)
                 self.selection_changed()
                 self.SIG_UPDATE_PLOT_ITEMS.emit()
+        dlg.deleteLater()
 
     def toggle_show_titles(self, state: bool) -> None:
         """Toggle show annotations option"""

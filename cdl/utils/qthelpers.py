@@ -33,7 +33,7 @@ from cdl.utils.misc import to_string
 from cdl.widgets.errormessagebox import ErrorMessageBox
 
 
-def close_widgets_and_quit(screenshot=False):
+def close_widgets_and_quit(screenshot=False) -> None:
     """Close Qt top level widgets and quit Qt event loop"""
     for widget in QW.QApplication.instance().topLevelWidgets():
         wname = widget.objectName()
@@ -46,7 +46,7 @@ def close_widgets_and_quit(screenshot=False):
 QAPP_INSTANCE = None
 
 
-def get_log_contents(fname):
+def get_log_contents(fname: str) -> str | None:
     """Return True if file exists and something was logged in it"""
     if osp.exists(fname):
         with open(fname, "rb") as fdesc:
@@ -54,7 +54,7 @@ def get_log_contents(fname):
     return None
 
 
-def initialize_log_file(fname):
+def initialize_log_file(fname: str) -> bool:
     """Eventually keep the previous log file
     Returns True if there was a previous log file"""
     contents = get_log_contents(fname)
@@ -67,7 +67,7 @@ def initialize_log_file(fname):
     return False
 
 
-def remove_empty_log_file(fname):
+def remove_empty_log_file(fname: str) -> None:
     """Eventually remove empty log files"""
     if not get_log_contents(fname):
         try:
@@ -164,7 +164,7 @@ def close_dialog_and_quit(widget, screenshot=False):
     # QW.QApplication.instance().quit()
 
 
-def exec_dialog(dlg):
+def exec_dialog(dlg: QW.QDialog) -> int:
     """Run QDialog Qt execution loop without blocking,
     depending on environment test mode"""
     if execenv.unattended:
@@ -172,10 +172,12 @@ def exec_dialog(dlg):
             execenv.delay * 1000,
             lambda: close_dialog_and_quit(dlg, screenshot=execenv.screenshot),
         )
-    return dlg.exec()
+    result = dlg.exec()
+    dlg.deleteLater()
+    return result
 
 
-def qt_wait(timeout, except_unattended=False):  # pragma: no cover
+def qt_wait(timeout, except_unattended=False) -> None:  # pragma: no cover
     """Freeze GUI during timeout (seconds) while processing Qt events"""
     if except_unattended and execenv.unattended:
         return
@@ -198,6 +200,7 @@ def create_progress_bar(
         yield prog
     finally:
         prog.close()
+        prog.deleteLater()
 
 
 def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):

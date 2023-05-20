@@ -19,6 +19,7 @@ from cdl.core.model.base import NormalRandomParam, UniformRandomParam
 from cdl.core.model.image import (
     Gauss2DParam,
     ImageDatatypes,
+    ImageParam,
     ImageTypes,
     create_image_from_param,
     new_image_param,
@@ -37,16 +38,18 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def iterate_signal_creation(
-    data_size: int = 500, non_zero: bool = False
+    data_size: int = 500, non_zero: bool = False, verbose: bool = True
 ) -> Generator[SignalParam, None, None]:
     """Iterate over all possible signals created from parameters"""
-    execenv.print(
-        f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):"
-    )
+    if verbose:
+        execenv.print(
+            f"  Iterating over signal types (size={data_size}, non_zero={non_zero}):"
+        )
     for stype in SignalTypes:
         if non_zero and stype in (SignalTypes.ZEROS,):
             continue
-        execenv.print(f"    {stype.value}")
+        if verbose:
+            execenv.print(f"    {stype.value}")
         newparam = new_signal_param(stype=stype, size=data_size)
         if stype == SignalTypes.UNIFORMRANDOM:
             addparam = UniformRandomParam()
@@ -60,17 +63,22 @@ def iterate_signal_creation(
         yield signal
 
 
-def iterate_image_creation(data_size: int = 500, non_zero: bool = False):
+def iterate_image_creation(
+    data_size: int = 500, non_zero: bool = False, verbose: bool = True
+) -> Generator[ImageParam, None, None]:
     """Iterate over all possible images created from parameters"""
-    execenv.print(
-        f"  Iterating over image types (size={data_size}, non_zero={non_zero}):"
-    )
+    if verbose:
+        execenv.print(
+            f"  Iterating over image types (size={data_size}, non_zero={non_zero}):"
+        )
     for itype in ImageTypes:
         if non_zero and itype in (ImageTypes.EMPTY, ImageTypes.ZEROS):
             continue
-        execenv.print(f"    {itype.value}")
+        if verbose:
+            execenv.print(f"    {itype.value}")
         for dtype in ImageDatatypes:
-            execenv.print(f"      {dtype.value}")
+            if verbose:
+                execenv.print(f"      {dtype.value}")
             newparam = new_image_param(
                 itype=itype, dtype=dtype, width=data_size, height=data_size
             )

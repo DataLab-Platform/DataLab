@@ -47,7 +47,7 @@ from cdl.core.computation.image import (
 from cdl.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from cdl.core.model.base import BaseProcParam, ShapeTypes
 from cdl.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
-from cdl.utils.qthelpers import create_progress_bar, qt_try_except
+from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
 
 if TYPE_CHECKING:
     from cdl.core.gui.processor.base import (
@@ -878,7 +878,7 @@ class ImageProcessor(BaseProcessor):
                 old_size=original_size,
                 text=_("Destination size:"),
             )
-            if not dlg.exec():
+            if not exec_dialog(dlg):
                 return
             param.zoom = dlg.get_zoom()
 

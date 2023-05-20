@@ -18,7 +18,7 @@ from cdl.config import _
 from cdl.core.io.h5 import H5Importer
 from cdl.core.io.native import NativeH5Reader, NativeH5Writer
 from cdl.core.model.signal import SignalParam
-from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
+from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
 
 if TYPE_CHECKING:
@@ -94,7 +94,7 @@ class H5InputOutput:
 
         with qt_try_loadsave_file(self.mainwindow, filename, "load"):
             self.h5browser.setup(filename)
-            if not import_all and not self.h5browser.exec():
+            if not import_all and not exec_dialog(self.h5browser):
                 self.h5browser.cleanup()
                 return
             if import_all:

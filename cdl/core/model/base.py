@@ -34,6 +34,7 @@ from guiqwt.styles import AnnotationParam
 
 from cdl.config import Conf, _
 from cdl.utils.misc import is_integer_dtype
+from cdl.utils.qthelpers import exec_dialog
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -66,7 +67,7 @@ class MetadataItem(gdt.DataItem):
         if value_was_none:
             value = {}
         editor.setup(value)
-        if editor.exec():
+        if exec_dialog(editor):
             return editor.get_value()
         if value_was_none:
             return None

@@ -154,7 +154,6 @@ print("All done!")
         sysenv = env.systemEnvironment()
         for key in sysenv.keys():
             env.insert(key, sysenv.value(key))
-        # env = [str(_path) for _path in self.process.systemEnvironment()]
         self.process.readyReadStandardOutput.connect(self.write_output)
         self.process.readyReadStandardError.connect(self.write_error)
         self.process.finished.connect(self.finished)
