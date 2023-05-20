@@ -60,7 +60,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print(f'  Console: {__get_enabled(Conf.console.enabled)}')
     mem_threshold = Conf.main.available_memory_threshold.get()
     print(f"  Available memory threshold: {mem_threshold:d} MB")
-    print(f"  Ignored dependencies: {Conf.main.ignore_dependency_check.get()}")
+    print(f"  Ignored dependencies: {__get_enabled(Conf.main.ignore_dependency_check)}")
     print("  Processing:")
     if Conf.proc.extract_roi_singleobj:
         roi_extract = "Extract all ROIs in a single signal or image"
