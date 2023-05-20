@@ -754,7 +754,7 @@ class BaseDataPanel(AbstractPanel):
 
     def __separate_view_finished(self, result: int) -> None:
         """Separate view was closed"""
-        dlg = self.sender()
+        dlg: CurveDialog | ImageDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
             items = dlg.get_plot().get_items()
             rw_items = [item for item in items if not item.is_readonly()]
@@ -763,6 +763,7 @@ class BaseDataPanel(AbstractPanel):
                 obj.set_annotations_from_items(rw_items)
                 self.selection_changed()
                 self.SIG_UPDATE_PLOT_ITEMS.emit()
+        self.__separate_views.pop(dlg)
         dlg.deleteLater()
 
     def toggle_show_titles(self, state: bool) -> None:
