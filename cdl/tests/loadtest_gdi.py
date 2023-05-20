@@ -121,7 +121,7 @@ def test_gdi_count(win: CDLMainWindow) -> int | None:
 def load_test():
     """Load test."""
     execenv.unattended = True
-    with cdl_app_context(save=True) as win:
+    with cdl_app_context() as win:
         gdi_count = []
         for iteration in range(10):
             execenv.print(f"Test iteration: {iteration}")

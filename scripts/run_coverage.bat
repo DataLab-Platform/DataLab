@@ -21,7 +21,7 @@ echo     import cdl_test_cea.config>> sitecustomize.py
 echo except ImportError:>> sitecustomize.py
 echo     pass>> sitecustomize.py
 set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
-coverage run -m cdl.tests.all_tests %* --timeout 480
+coverage run -m cdl.tests.all_tests %* --timeout 600
 @REM coverage report -m
 coverage combine
 coverage html

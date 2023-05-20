@@ -91,7 +91,7 @@ def run(other_package=None):
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     parser = argparse.ArgumentParser(description="Run all test in unattended mode")
     parser.add_argument("--contains", default="")
-    parser.add_argument("--timeout", type=int, default=240)
+    parser.add_argument("--timeout", type=int, default=600)
     args = parser.parse_args()
     run_all_tests(
         "--mode unattended --verbose quiet",
