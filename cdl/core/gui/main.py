@@ -180,7 +180,7 @@ class CDLMainWindow(QW.QMainWindow):
 
         # Setup actions and menus
         if console is None:
-            console = Conf.console.enable.get()
+            console = Conf.console.enabled.get()
         self.setup(console)
 
     # ------API related to XML-RPC remote control

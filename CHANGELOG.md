@@ -259,7 +259,7 @@ New general purpose features:
 * Added `.DataLab.ini` configuration file (user home directory):
   * New configuration file entry: current working directory
   * New configuration file entry: current main window size and position
-  * New configuration file entry: embedded Python console enable state
+  * New configuration file entry: embedded Python console enabled state
   * New configuration file entry: available memory alarm threshold
 
 New test-related features:

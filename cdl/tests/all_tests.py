@@ -16,6 +16,7 @@ from guidata.guitest import get_tests
 import cdl
 from cdl import __version__, config
 from cdl.config import Conf
+from cdl.utils.conf import Option
 from cdl.utils.tests import TST_PATH
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -28,6 +29,11 @@ def get_test_modules(package, contains=""):
         for tmod in get_tests(package)
         if osp.basename(tmod.path) != osp.basename(__file__) and contains in tmod.path
     ]
+
+
+def __get_enabled(confopt: Option) -> str:
+    """Return enable state of a configuration option"""
+    return "enabled" if confopt.get() else "disabled"
 
 
 def run_all_tests(args="", contains="", timeout=None, other_package=None):
@@ -49,10 +55,9 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print(f"  Debug: {config.DEBUG}")
     print("")
     print("🔥 DataLab configuration:")
-    print(f"  Process isolation: {Conf.main.process_isolation_enabled.get()}")
-    rpc_server = "enabled" if Conf.main.rpc_server_enabled.get() else "disabled"
-    print(f"  RPC server: {rpc_server}")
-    print(f'  Console: {"enabled" if Conf.console.enable.get() else "disabled"}')
+    print(f"  Process isolation: {__get_enabled(Conf.main.process_isolation_enabled)}")
+    print(f"  RPC server: {__get_enabled(Conf.main.rpc_server_enabled)}")
+    print(f'  Console: {__get_enabled(Conf.console.enabled)}')
     mem_threshold = Conf.main.available_memory_threshold.get()
     print(f"  Available memory threshold: {mem_threshold:d} MB")
     print(f"  Ignored dependencies: {Conf.main.ignore_dependency_check.get()}")
@@ -62,8 +67,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     else:
         roi_extract = "Extract each ROI in a separate signal or image"
     print(f"    {roi_extract}")
-    fftshift_enabled = "enabled" if Conf.proc.fft_shift_enabled.get() else "disabled"
-    print(f"    FFT shift: {fftshift_enabled}")
+    print(f"    FFT shift: {__get_enabled(Conf.proc.fft_shift_enabled)}")
     print("")
     print("🔥 Test parameters:")
     print(f"  ⚡ Selected {tnb} tests ({testnb} total available)")

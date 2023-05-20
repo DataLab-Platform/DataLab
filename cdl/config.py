@@ -84,7 +84,7 @@ class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
-    enable = conf.Option()
+    enabled = conf.Option()
     max_line_count = conf.Option()
     external_editor_path = conf.Option()
     external_editor_args = conf.Option()
@@ -148,7 +148,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_def_interpolation = conf.Option()
 
 
-# Usage (example): Conf.console.enable.get(True)
+# Usage (example): Conf.console.enabled.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     """Class defining DataLab configuration structure.
     Each class attribute is a section (metaclass is automatically affecting
@@ -184,7 +184,7 @@ def initialize():
     Conf.main.available_memory_threshold.get(500)
     Conf.main.ignore_dependency_check.get(False)
     # Console section
-    Conf.console.enable.get(True)
+    Conf.console.enabled.get(True)
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
