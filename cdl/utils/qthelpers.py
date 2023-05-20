@@ -172,8 +172,10 @@ def exec_dialog(dlg: QW.QDialog) -> int:
             execenv.delay * 1000,
             lambda: close_dialog_and_quit(dlg, screenshot=execenv.screenshot),
         )
+    delete_later = not dlg.testAttribute(QC.Qt.WA_DeleteOnClose)
     result = dlg.exec()
-    dlg.deleteLater()
+    if delete_later:
+        dlg.deleteLater()
     return result
 
 
