@@ -15,6 +15,7 @@ from guidata.guitest import get_tests
 
 import cdl
 from cdl import __version__, config
+from cdl.config import Conf
 from cdl.utils.tests import TST_PATH
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -37,17 +38,42 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
         testmodules += get_test_modules(other_package, contains=contains)
         testnb += len(get_tests(other_package)) - 1
     tnb = len(testmodules)
-    print(f"*** DataLab v{__version__} automatic unit tests ***")
+    print("=" * 80)
+    print(f"🚀 DataLab v{__version__} automatic unit tests 🌌")
+    print("=" * 80)
     print("")
-    print("Test parameters:")
-    print(f"  Selected {tnb} tests ({testnb} total available)")
+    print("🔥 DataLab characteristics/environment:")
+    print(f"  Configuration version: {config.CONF_VERSION}")
+    print(f"  Path: {config.APP_PATH}")
+    print(f"  Frozen: {config.IS_FROZEN}")
+    print(f"  Debug: {config.DEBUG}")
+    print("")
+    print("🔥 DataLab configuration:")
+    print(f"  Process isolation: {Conf.main.process_isolation_enabled.get()}")
+    rpc_server = "enabled" if Conf.main.rpc_server_enabled.get() else "disabled"
+    print(f"  RPC server: {rpc_server}")
+    print(f'  Console: {"enabled" if Conf.console.enable.get() else "disabled"}')
+    mem_threshold = Conf.main.available_memory_threshold.get()
+    print(f"  Available memory threshold: {mem_threshold:d} MB")
+    print(f"  Ignored dependencies: {Conf.main.ignore_dependency_check.get()}")
+    print("  Processing:")
+    if Conf.proc.extract_roi_singleobj:
+        roi_extract = "Extract all ROIs in a single signal or image"
+    else:
+        roi_extract = "Extract each ROI in a separate signal or image"
+    print(f"    {roi_extract}")
+    fftshift_enabled = "enabled" if Conf.proc.fft_shift_enabled.get() else "disabled"
+    print(f"    FFT shift: {fftshift_enabled}")
+    print("")
+    print("🔥 Test parameters:")
+    print(f"  ⚡ Selected {tnb} tests ({testnb} total available)")
     if other_package is not None:
         print("  Additional package:")
         print(f"    {other_package.__name__}")
-    print("  Test data path:")
+    print("  ⚡ Test data path:")
     for path in TST_PATH:
         print(f"    {path}")
-    print("  Environment:")
+    print("  ⚡ Environment:")
     for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
         print(f"    {vname}={os.environ.get(vname, '')}")
     print("")

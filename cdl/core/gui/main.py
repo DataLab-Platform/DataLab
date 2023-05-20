@@ -174,13 +174,13 @@ class CDLMainWindow(QW.QMainWindow):
 
         # Starting XML-RPC server thread
         self.remote_server = RemoteServer(self)
-        if Conf.main.rpc_server_enabled.get(True):
+        if Conf.main.rpc_server_enabled.get():
             self.remote_server.SIG_SERVER_PORT.connect(self.xmlrpc_server_started)
             self.remote_server.start()
 
         # Setup actions and menus
         if console is None:
-            console = Conf.console.enable.get(True)
+            console = Conf.console.enable.get()
         self.setup(console)
 
     # ------API related to XML-RPC remote control
@@ -376,7 +376,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     def check_dependencies(self) -> None:  # pragma: no cover
         """Check dependencies"""
-        if IS_FROZEN or Conf.main.ignore_dependency_check.get(False):
+        if IS_FROZEN or Conf.main.ignore_dependency_check.get():
             # No need to check dependencies if DataLab has been frozen
             return
         try:
@@ -551,7 +551,7 @@ class CDLMainWindow(QW.QMainWindow):
     def __configure_statusbar(self) -> None:
         """Configure status bar"""
         self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
-        threshold = Conf.main.available_memory_threshold.get(500)
+        threshold = Conf.main.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)

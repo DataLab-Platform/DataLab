@@ -54,7 +54,7 @@ class ROIEditorData:
     def singleobj(self, value: bool):
         """Set singleobj parameter"""
         if value is None:
-            value = Conf.proc.extract_roi_singleobj.get(False)
+            value = Conf.proc.extract_roi_singleobj.get()
         self.__singleobj = value
         Conf.proc.extract_roi_singleobj.set(value)
 

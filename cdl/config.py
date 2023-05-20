@@ -171,13 +171,28 @@ def initialize():
     Conf.initialize(APP_NAME, CONF_VERSION, load=not DEBUG)
 
     # Set default values:
+    # -------------------
     # (do not use "set" method here to avoid overwriting user settings in .INI file)
+    # Setting here the default values only for the most critical options. The other
+    # options default values are set when used in the application code.
+    #
+    # Main section
     Conf.main.process_isolation_enabled.get(True)
+    Conf.main.rpc_server_enabled.get(True)
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
+    Conf.main.available_memory_threshold.get(500)
+    Conf.main.ignore_dependency_check.get(False)
+    # Console section
+    Conf.console.enable.get(True)
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
+    # IO section
+    Conf.io.h5_fullpath_in_title.get(False)
+    Conf.io.h5_fname_in_title.get(True)
+    # Proc section
     Conf.proc.fft_shift_enabled.get(True)
+    Conf.proc.extract_roi_singleobj.get(False)
 
 
 def reset():
