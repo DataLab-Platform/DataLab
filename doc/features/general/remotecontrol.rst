@@ -62,6 +62,19 @@ between your application and DataLab:
 
     Screenshot of remote client application test (``cdl.tests.remoteclient_app``)
 
+Public API
+^^^^^^^^^^
+
+The public API is the following:
+
+.. automodule:: cdl.remotecontrol
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Examples
+^^^^^^^^
+
 When using Python 3, you may directly use the `RemoteClient` class as in
 examples cited above.
 
