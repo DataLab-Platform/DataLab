@@ -80,16 +80,6 @@ def get_htmlhelp():
     return None
 
 
-class AppProxy:
-    """Proxy to DataLab application: object used from the embedded console
-    to access DataLab internal objects"""
-
-    def __init__(self, win: CDLMainWindow):
-        self.win = win
-        self.s = self.win.signalpanel.objmodel
-        self.i = self.win.imagepanel.objmodel
-
-
 def remote_controlled(func):
     """Decorator for remote-controlled methods"""
 
@@ -144,7 +134,6 @@ class CDLMainWindow(QW.QMainWindow):
         self.memorystatus = None
 
         self.console = None
-        self.app_proxy = None
         self.macropanel: MacroPanel = None
 
         self.signal_toolbar: QW.QToolBar = None
@@ -755,9 +744,8 @@ class CDLMainWindow(QW.QMainWindow):
 
     def __setup_console(self) -> None:
         """Add an internal console"""
-        self.app_proxy = AppProxy(self)
         ns = {
-            "app": self.app_proxy,
+            "cdl": self,
             "np": np,
             "sps": sps,
             "spi": spi,
@@ -767,7 +755,12 @@ class CDLMainWindow(QW.QMainWindow):
             "time": time,
         }
         msg = (
-            "Example: app.s[0] returns signal object #0\n"
+            "Welcome to DataLab console!\n"
+            "---------------------------\n"
+            "You can access the main window with the 'cdl' variable.\n"
+            "Example:\n"
+            "  o = cdl.get_object()  # returns currently selected object\n"
+            "  o.data  # returns object data\n"
             "Modules imported at startup: "
             "os, sys, os.path as osp, time, "
             "numpy as np, scipy.signal as sps, scipy.ndimage as spi"
@@ -1096,19 +1089,15 @@ class CDLMainWindow(QW.QMainWindow):
             ]
         )
         pinfos = PluginRegistry.get_plugin_infos()
+        created_by = _("Created by")
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
+        cpyright = "2023 CEA, Codra"
         QW.QMessageBox.about(
             self,
             _("About") + " " + APP_NAME,
-            f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}<p>
-              %s Pierre Raybaut
-              <br>%s
-              <br>Copyright &copy; 2023 CEA, Codra
-              <p>PythonQwt {qwt_ver}, guidata {guidata_ver},
-              guiqwt {guiqwt_ver}<br>Python {platform.python_version()},
-              Qt {QC.__version__}, PyQt {QC.PYQT_VERSION_STR}
-               %s {platform.system()}<br><br>{adv_conf}<br><br>{pinfos}"""
-            % (_("Created by"), dev_by, _("on")),
+            f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}
+              <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {cpyright}
+              <p>{adv_conf}<br><br>{pinfos}""",
         )
 
     def show_log_viewer(self) -> None:
