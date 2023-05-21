@@ -504,19 +504,19 @@ class RemoteClient:
 
     Example:
     >>> from cdl.remotecontrol import RemoteClient
-    >>> datalab = RemoteClient()
-    >>> datalab.connect()
-    >>> datalab.get_version()
+    >>> cdl = RemoteClient()
+    >>> cdl.connect()
+    >>> cdl.get_version()
     '1.0.0'
-    >>> datalab.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
+    >>> cdl.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
     True
-    >>> datalab.get_object_titles()
+    >>> cdl.get_object_titles()
     ['toto']
-    >>> datalab.get_object_by_title("toto")
+    >>> cdl.get_object_by_title("toto")
     <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
-    >>> datalab.get_object(0)
+    >>> cdl.get_object(0)
     <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
-    >>> datalab.get_object(0).data
+    >>> cdl.get_object(0).data
     array([1., 2., 3.])
     """
 

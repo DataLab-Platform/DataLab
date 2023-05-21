@@ -18,28 +18,28 @@ from cdl.remotecontrol import RemoteClient
 
 # %% Connecting to DataLab current session
 
-datalab = RemoteClient()
-datalab.connect()
+cdl = RemoteClient()
+cdl.connect()
 
 # %% Executing commands in DataLab (...)
 
 z = np.random.rand(20, 20)
-datalab.add_image("toto", z)
+cdl.add_image("toto", z)
 
 # %% Executing commands in DataLab (...)
 
 x = np.array([1.0, 2.0, 3.0])
 y = np.array([4.0, 5.0, -1.0])
-datalab.add_signal("toto", x, y)
+cdl.add_signal("toto", x, y)
 
 # %% Executing commands in DataLab (...)
 
-datalab.compute_derivative()
+cdl.compute_derivative()
 
 # %% Executing commands in DataLab (...)
 
-datalab.switch_to_panel("image")
+cdl.switch_to_panel("image")
 
 # %% Executing commands in DataLab (...)
 
-datalab.compute_fft()
+cdl.compute_fft()
