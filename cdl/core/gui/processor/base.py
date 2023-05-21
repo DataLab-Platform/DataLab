@@ -195,7 +195,9 @@ class BaseProcessor(QC.QObject):
         """Get 11 function args: 1 object in --> 1 object out"""
 
     @abc.abstractmethod
-    def set_11_func_result(self, new_obj: Obj, result: np.ndarray) -> None:
+    def set_11_func_result(
+        self, new_obj: Obj, result: np.ndarray | tuple[np.ndarray]
+    ) -> None:
         """Set 11 function result: 1 object in --> 1 object out"""
 
     def compute_11(
@@ -259,7 +261,7 @@ class BaseProcessor(QC.QObject):
                         new_obj.title += "|" + suffix(param)
                     new_obj.copy_data_from(obj)
 
-                    def wng_func(*args):
+                    def wng_func(*args) -> np.ndarray | tuple[np.ndarray]:
                         """Wrapper function to ignore RuntimeWarning"""
                         with warnings.catch_warnings():
                             warnings.simplefilter("ignore", RuntimeWarning)

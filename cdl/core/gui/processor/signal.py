@@ -223,9 +223,12 @@ class SignalProcessor(BaseProcessor):
                 return (dy, param)
         raise ValueError("Invalid data")
 
-    def set_11_func_result(self, new_obj: SignalParam, result: np.ndarray) -> None:
+    def set_11_func_result(
+        self, new_obj: SignalParam, result: tuple[np.ndarray]
+    ) -> None:
         """Set 11 function result: 1 object in --> 1 object out"""
-        new_obj.xydata = result
+        x, y = result
+        new_obj.set_xydata(x, y)
 
     @qt_try_except()
     def normalize(self, param: NormalizeParam | None = None) -> None:
