@@ -19,7 +19,8 @@ def test():
     with cdl_app_context() as win:
         win.open_h5_files(
             [
-                "C:/Dev/Projets/X-GRID_data/Projets_Oasis/XGRID5/VS000001-blobs_doh_profiling.h5"
+                "C:/Dev/Projets/X-GRID_data/Projets_Oasis/XGRID5/"
+                "VS000001-blobs_doh_profiling.h5"
             ],
             import_all=True,
         )

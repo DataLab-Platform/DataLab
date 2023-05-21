@@ -57,7 +57,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     SIG_OBJECT_MODIFIED = QC.Signal()
 
-    FILE_FILTERS = "%s (*.py)" % _("Python files")
+    FILE_FILTERS = f"{_('Python files')} (*.py)"
 
     FILE_HEADER = os.linesep.join(
         ["# -*- coding: utf-8 -*-", "", '"""DataLab Macro"""', "", ""]
@@ -253,9 +253,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 return macro
         return None
 
-    def current_macro_changed(
-        self, index: int | None = None
-    ) -> None:  # pylint: disable=W0613
+    # pylint: disable=unused-argument
+    def current_macro_changed(self, index: int | None = None) -> None:
         """Current macro has changed"""
         macro = self.get_macro()
         if macro is not None:

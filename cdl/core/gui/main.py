@@ -15,9 +15,6 @@ import functools
 import locale
 import os
 import os.path as osp
-import platform
-import re
-import subprocess
 import sys
 import time
 import webbrowser
@@ -26,19 +23,16 @@ from typing import TYPE_CHECKING
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
-from guidata import __version__ as guidata_ver
 from guidata.configtools import get_icon
 from guidata.dataset import datatypes as gdt
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
-from guiqwt import __version__ as guiqwt_ver
 from guiqwt.builder import make
 from guiqwt.plot import CurveWidget, ImageWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilenames, getsavefilename
-from qwt import __version__ as qwt_ver
 
 from cdl import __docurl__, __homeurl__, __supporturl__, __version__, env
 from cdl.config import (
@@ -61,6 +55,7 @@ from cdl.plugins import PluginBase, PluginRegistry, discover_plugins
 from cdl.remotecontrol import RemoteServer
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
+from cdl.utils.misc import go_to_error
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:
@@ -768,23 +763,12 @@ class CDLMainWindow(QW.QMainWindow):
         debug = os.environ.get("DEBUG") == "1"
         self.console = DockableConsole(self, namespace=ns, message=msg, debug=debug)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
-        self.console.go_to_error.connect(self.__go_to_error)
+        self.console.go_to_error.connect(go_to_error)
         console_dock = self.__add_dockwidget(self.console, _("Console"))
         console_dock.hide()
         self.console.interpreter.widget_proxy.sig_new_prompt.connect(
             lambda txt: self.repopulate_panel_trees()
         )
-
-    def __go_to_error(self, text: str) -> None:
-        """Go to error"""
-        pattern = r'File "(.+)", line (\d+),'
-        match = re.search(pattern, text)
-        if match:
-            path = match.group(1)
-            line_number = match.group(2)
-            fdict = {"path": path, "line_number": line_number}
-            args = Conf.console.external_editor_args.get().format(**fdict).split(" ")
-            subprocess.run([Conf.console.external_editor_path.get()] + args, shell=True)
 
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
@@ -1073,17 +1057,17 @@ class CDLMainWindow(QW.QMainWindow):
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:
-            xrpcstate = "<font color='red'>%s</font>" % _("not started")
+            xrpcstate = f'<font color="red">{_("not started")}</font>'
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
-            xrpcstate = "<font color='green'>%s</font>" % xrpcstate
+            xrpcstate = f"<font color='green'>{xrpcstate}</font>"
         if Conf.main.process_isolation_enabled.get():
-            pistate = "<font color='green'>%s</font>" % _("enabled")
+            pistate = f"<font color='green'>{_('enabled')}</font>"
         else:
-            pistate = "<font color='red'>%s</font>" % _("disabled")
+            pistate = f"<font color='red'>{_('disabled')}</font>"
         adv_conf = "<br>".join(
             [
-                "<i>%s</i>" % _("Advanced configuration:"),
+                "<i>" + _("Advanced configuration:") + "</i>",
                 "• " + _("XML-RPC server:") + " " + xrpcstate,
                 "• " + _("Process isolation:") + " " + pistate,
             ]

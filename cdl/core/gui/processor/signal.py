@@ -190,9 +190,10 @@ class SignalProcessor(BaseProcessor):
             indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
             return x[indexes], y[indexes]
 
+        # pylint: disable=unused-argument
         def func_obj(
             obj: SignalParam, orig: SignalParam, param: PeakDetectionParam
-        ) -> None:  # pylint: disable=unused-argument
+        ) -> None:
             """Customize signal object"""
             obj.metadata["curvestyle"] = "Sticks"
 
@@ -213,14 +214,12 @@ class SignalProcessor(BaseProcessor):
             x, y = data
             if param is None:
                 return (x, y)
-            else:
-                return (x, y, param)
-        elif len(data) == 4:  # x, y, dx, dy error bar signal
-            x, y, dx, dy = data
+            return (x, y, param)
+        if len(data) == 4:  # x, y, dx, dy error bar signal
+            x, y, _dx, dy = data
             if param is None:
                 return (dy,)
-            else:
-                return (dy, param)
+            return (dy, param)
         raise ValueError("Invalid data")
 
     def set_11_func_result(
@@ -331,7 +330,7 @@ class SignalProcessor(BaseProcessor):
         if param is None:
             param = FFTParam()
         self.compute_11(
-            f"FFT",
+            "FFT",
             lambda x, y, p: xy_fft(x, y, shift=p.shift),
             param,
             edit=False,
@@ -343,7 +342,7 @@ class SignalProcessor(BaseProcessor):
         if param is None:
             param = FFTParam()
         self.compute_11(
-            f"iFFT",
+            "iFFT",
             lambda x, y, p: xy_ifft(x, y, shift=p.shift),
             param,
             edit=False,

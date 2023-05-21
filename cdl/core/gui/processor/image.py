@@ -882,9 +882,8 @@ class ImageProcessor(BaseProcessor):
                 return
             param.zoom = dlg.get_zoom()
 
-        def func_obj(
-            obj, orig: ImageParam, param: ResizeParam
-        ) -> None:  # pylint: disable=unused-argument
+        # pylint: disable=unused-argument
+        def func_obj(obj, orig: ImageParam, param: ResizeParam) -> None:
             """Zooming function"""
             if obj.dx is not None and obj.dy is not None:
                 obj.dx, obj.dy = obj.dx / param.zoom, obj.dy / param.zoom
@@ -1147,9 +1146,8 @@ class ImageProcessor(BaseProcessor):
         )
 
     @staticmethod
-    def func_gaussian_filter(
-        x: np.ndarray, p: GaussianParam
-    ) -> np.ndarray:  # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
+    def func_gaussian_filter(x: np.ndarray, p: GaussianParam) -> np.ndarray:
         """Compute gaussian filter"""
         return spi.gaussian_filter(x, p.sigma)
 
@@ -1164,16 +1162,14 @@ class ImageProcessor(BaseProcessor):
         self.compute_11("iFFT", np.fft.ifft2)
 
     @staticmethod
-    def func_moving_average(
-        x: np.ndarray, p: MovingAverageParam
-    ) -> np.ndarray:  # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
+    def func_moving_average(x: np.ndarray, p: MovingAverageParam) -> np.ndarray:
         """Moving average computing function"""
         return spi.uniform_filter(x, size=p.n, mode="constant")
 
     @staticmethod
-    def func_moving_median(
-        x: np.ndarray, p: MovingMedianParam
-    ) -> np.ndarray:  # pylint: disable=arguments-differ
+    # pylint: disable=arguments-differ
+    def func_moving_median(x: np.ndarray, p: MovingMedianParam) -> np.ndarray:
         """Moving median computing function"""
         return sps.medfilt(x, kernel_size=p.n)
 

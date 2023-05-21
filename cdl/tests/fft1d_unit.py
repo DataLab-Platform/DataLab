@@ -8,7 +8,7 @@ Signal FFT unit test.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-
+# pylint: disable=duplicate-code
 
 import numpy as np
 

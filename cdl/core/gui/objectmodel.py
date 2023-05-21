@@ -254,10 +254,10 @@ class ObjectModel:
         """
         try:
             return self._groups[group_index][index]
-        except IndexError:
+        except IndexError as exc:
             raise IndexError(
                 f"Object with index {index} (group {group_index}) not found"
-            )
+            ) from exc
 
     def get_objects(self, uuids: list[str]) -> list[SignalParam | ImageParam]:
         """Return objects with uuids"""

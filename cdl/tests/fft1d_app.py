@@ -15,7 +15,6 @@ from cdl.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
-from cdl.env import execenv
 from cdl.tests import cdl_app_context
 
 SHOW = True  # Show test in GUI-based test launcher

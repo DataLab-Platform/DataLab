@@ -36,6 +36,7 @@ class BaseIORegistry(type):
         super().__init__(name, bases, attrs)
         if not name.endswith("FormatBase"):
             try:
+                #  pylint: disable=no-value-for-parameter
                 cls._io_format_instances.append(cls())
             except ImportError:
                 # This format is not supported
@@ -151,10 +152,10 @@ class FormatBase:
             for package in self.info.requires:
                 try:
                     __import__(package)
-                except ImportError:
+                except ImportError as exc:
                     raise ImportError(
                         f"Format {self.info.name} requires {package} package"
-                    )
+                    ) from exc
 
     def get_filter(self, action: IOAction) -> str:
         """Return file filter for Qt file dialog"""

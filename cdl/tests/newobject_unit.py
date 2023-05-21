@@ -10,6 +10,7 @@ Testing functions related to signal/image creation.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 from __future__ import annotations
 

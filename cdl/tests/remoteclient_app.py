@@ -12,7 +12,6 @@ Remote GUI-based client test
 
 import os
 from contextlib import contextmanager
-from random import randint
 
 from cdl import app
 from cdl.config import _

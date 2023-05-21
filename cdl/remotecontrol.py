@@ -502,22 +502,25 @@ class RemoteClient:
     """Object representing a proxy/client to DataLab XML-RPC server.
     This object is used to call DataLab functions from a Python script.
 
-    Example:
-    >>> from cdl.remotecontrol import RemoteClient
-    >>> cdl = RemoteClient()
-    >>> cdl.connect()
-    >>> cdl.get_version()
-    '1.0.0'
-    >>> cdl.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
-    True
-    >>> cdl.get_object_titles()
-    ['toto']
-    >>> cdl.get_object_by_title("toto")
-    <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
-    >>> cdl.get_object(0)
-    <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
-    >>> cdl.get_object(0).data
-    array([1., 2., 3.])
+    Examples:
+        Here is a simple example of how to use RemoteClient in a Python script
+        or in a Jupyter notebook:
+
+        >>> from cdl.remotecontrol import RemoteClient
+        >>> cdl = RemoteClient()
+        >>> cdl.connect()
+        >>> cdl.get_version()
+        '1.0.0'
+        >>> cdl.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
+        True
+        >>> cdl.get_object_titles()
+        ['toto']
+        >>> cdl.get_object_by_title("toto")
+        <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+        >>> cdl.get_object(0)
+        <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+        >>> cdl.get_object(0).data
+        array([1., 2., 3.])
     """
 
     def __init__(self) -> None:

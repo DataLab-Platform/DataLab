@@ -85,7 +85,6 @@ if TYPE_CHECKING:
     import guidata.dataset.datatypes as gdt
     from guiqwt.plot import CurveDialog, CurveWidget, ImageDialog, ImageWidget
     from guiqwt.tools import GuiTool
-    from qtpy import QtWidgets as QW
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
@@ -333,7 +332,7 @@ class BaseDataPanel(AbstractPanel):
         #     classes)
         # 3. Update all active objects when settings were changed
         # 4. Persist settings in .INI configuration file
-        obj = self.PARAMCLASS(title=title)
+        obj = self.PARAMCLASS(title=title)  # pylint: disable=not-callable
         obj.title = title
         return obj
 
@@ -808,6 +807,7 @@ class BaseDataPanel(AbstractPanel):
         if options is not None:
             plot_options.update(options)
 
+        # pylint: disable=not-callable
         dlg: CurveDialog | ImageDialog = self.DIALOGCLASS(
             parent=self,
             wintitle=title,
@@ -890,6 +890,7 @@ class BaseDataPanel(AbstractPanel):
         plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
+        # pylint: disable=not-callable
         roi_editor = self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
         dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
         if exec_dialog(dlg):

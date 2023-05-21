@@ -18,7 +18,6 @@ serialization, instead of pickle).
 import time
 
 import numpy as np
-import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.configtools import get_icon
 from guiqwt.plot import ImageWidget
@@ -99,7 +98,7 @@ class MainWindow(QW.QMainWindow):
         """
         Starts the computation in a separate process and starts the timer.
         """
-        global POOL
+        global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         if self.result and not self.result.ready():
             self.print_time("Computation already running!")
             return
@@ -112,14 +111,14 @@ class MainWindow(QW.QMainWindow):
         """
         Cancels the computation by terminating the process and stopping the timer.
         """
-        global POOL
+        global POOL  # pylint: disable=global-statement
         # Terminate the process and stop the timer
         POOL.terminate()
         POOL.join()
         self.timer.stop()
         execenv.print("Computation cancelled!")
         # Recreate the pool for the next computation
-        POOL = Pool(processes=1)
+        POOL = Pool(processes=1)  # pylint: disable=not-callable
 
     def check_process(self) -> None:
         """
@@ -165,7 +164,7 @@ def test() -> None:
     Creates a PyQt application context, shows the main window,
     and starts the event loop.
     """
-    global POOL
+    global POOL  # pylint: disable=global-statement,global-variable-not-assigned
     with qt_app_context(exec_loop=True):
         window = MainWindow()
         window.show()
@@ -174,5 +173,5 @@ def test() -> None:
 
 
 if __name__ == "__main__":
-    POOL = Pool(processes=1)
+    POOL = Pool(processes=1)  # pylint: disable=not-callable
     test()

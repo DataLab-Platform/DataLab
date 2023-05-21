@@ -41,7 +41,7 @@ class CurveStyles:
     def style_generator():
         """Cycling through curve styles"""
         while True:
-            for linestyle in LINESTYLES.keys():
+            for linestyle in LINESTYLES:
                 for color in "bgrcmykG":
                     yield (color, linestyle)
 

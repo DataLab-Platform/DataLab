@@ -23,7 +23,7 @@ def test_error_message_box():
         win.show()
         try:
             raise ValueError("Test error message box")
-        except ValueError as err:
+        except ValueError:
             context = "Test_error_message_box." * 5
             tip = "This error may occured when testing the error message box. " * 10
             dlg = ErrorMessageBox(win, context, tip)

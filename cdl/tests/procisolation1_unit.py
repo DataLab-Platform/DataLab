@@ -14,6 +14,7 @@ serialization, instead of pickle).
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
 
 from __future__ import annotations
 
@@ -22,7 +23,6 @@ from collections.abc import Callable
 from typing import Any
 
 import numpy as np
-import scipy.ndimage as spi
 import scipy.signal as sps
 from guiqwt.plot import ImageWindow
 from multiprocess import Pool
@@ -49,14 +49,14 @@ class Worker:
     @staticmethod
     def create_pool() -> None:
         """Create multiprocessing pool"""
-        global POOL
+        global POOL  # pylint: disable=global-statement
         # Create a pool with one process
-        POOL = Pool(processes=1)
+        POOL = Pool(processes=1)  # pylint: disable=not-callable
 
     @staticmethod
     def terminate_pool() -> None:
         """Terminate multiprocessing pool"""
-        global POOL
+        global POOL  # pylint: disable=global-statement
         if POOL is not None:
             POOL.terminate()
             POOL.join()
@@ -64,7 +64,7 @@ class Worker:
 
     def run(self, func: Callable, args: tuple[Any]) -> None:
         """Run computation"""
-        global POOL
+        global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
         self.asyncresult = POOL.apply_async(func, args)
 
@@ -120,7 +120,7 @@ def test(iterations: int = 4) -> None:
                 if worker.is_computation_finished():
                     try:
                         image.data = worker.get_result()
-                    except Exception as exc:
+                    except Exception as exc:  # pylint: disable=broad-except
                         execenv.print(f"Intercepted exception: {exc}")
                     win.get_plot().add_item(image.make_item())
                 else:

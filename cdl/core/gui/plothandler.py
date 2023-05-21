@@ -35,7 +35,6 @@ from weakref import WeakKeyDictionary
 import numpy as np
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
-from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
 from cdl.utils.qthelpers import create_progress_bar

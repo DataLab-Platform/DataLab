@@ -113,14 +113,14 @@ class Worker:
     @staticmethod
     def create_pool() -> None:
         """Create multiprocessing pool"""
-        global POOL
+        global POOL  # pylint: disable=global-statement
         # Create a pool with one process
-        POOL = Pool(processes=1)
+        POOL = Pool(processes=1)  # pylint: disable=not-callable
 
     @staticmethod
     def terminate_pool() -> None:
         """Terminate multiprocessing pool"""
-        global POOL
+        global POOL  # pylint: disable=global-statement
         if POOL is not None:
             POOL.terminate()
             POOL.join()
@@ -128,7 +128,7 @@ class Worker:
 
     def run(self, func: Callable, args: tuple[Any]) -> None:
         """Run computation"""
-        global POOL
+        global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
         self.asyncresult = POOL.apply_async(func, args)
 
