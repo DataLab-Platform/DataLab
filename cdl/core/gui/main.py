@@ -257,24 +257,33 @@ class CDLMainWindow(QW.QMainWindow):
         return self.__get_specific_panel(panel).objmodel.get_object_by_title(title)
 
     def get_object(
-        self, index: int, group_index: int = 0, panel: str | None = None
+        self,
+        index: int | None = None,
+        group_index: int | None = None,
+        panel: str | None = None,
     ) -> SignalParam | ImageParam:
-        """Get object (signal/image) from index
+        """Get object (signal/image) from index.
 
         Args:
-            index (int): object
-            group_index (int, optional): group index. Defaults to 0.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            index (int): Object index in current panel. Defaults to None.
+            group_index (int, optional): Group index. Defaults to None.
+            panel (str, optional): Panel name. Defaults to None.
+
+        If `index` is not specified, returns the currently selected object.
+        If `group_index` is not specified, return an object from the current group.
+        If `panel` is not specified, return an object from the current panel.
 
         Returns:
             Union[SignalParam, ImageParam]: object
 
         Raises:
-            ValueError: if object not found
-            ValueError: if panel is unknown
+            IndexError: if object not found
         """
-        return self.__get_specific_panel(panel).objmodel.get_object(index, group_index)
+        panelw = self.__get_specific_panel(panel)
+        if index is None:
+            return panelw.objview.get_current_object()
+        group_index = 0 if group_index is None else group_index
+        return panelw.objmodel.get_object(index, group_index)
 
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) uuid list for current panel

@@ -18,6 +18,7 @@ from cdl.config import _
 from cdl.core.io.h5 import H5Importer
 from cdl.core.io.native import NativeH5Reader, NativeH5Writer
 from cdl.core.model.signal import SignalParam
+from cdl.env import execenv
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
 
@@ -94,6 +95,9 @@ class H5InputOutput:
 
         with qt_try_loadsave_file(self.mainwindow, filename, "load"):
             self.h5browser.setup(filename)
+            if execenv.unattended:
+                # Unattended mode: import all datasets (for testing)
+                import_all = True
             if not import_all and not exec_dialog(self.h5browser):
                 self.h5browser.cleanup()
                 return

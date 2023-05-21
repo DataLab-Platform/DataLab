@@ -129,7 +129,7 @@ class RemoteClient(object):
         """Get object (signal/image) by title"""
         return self.serverproxy.get_object_by_title(title, panel)
 
-    def get_object(self, index, group_index=0, panel=None):
+    def get_object(self, index=None, group_index=0, panel=None):
         """Get object (signal/image) by index"""
         return self.serverproxy.get_object(index, group_index, panel)
 

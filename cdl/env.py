@@ -31,6 +31,7 @@ class CDLExecEnv:
     SCREENSHOT_ARG = "screenshot"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "port"
+    KEEPMAINWINDOW_ENV = "CDL_KEEP_MAIN_WINDOW"
     UNATTENDED_ENV = "CDL_UNATTENDED_TESTS"
     VERBOSE_ENV = "CDL_VERBOSITY_LEVEL"
     SCREENSHOT_ENV = "CDL_TAKE_SCREENSHOT"
@@ -61,6 +62,11 @@ class CDLExecEnv:
             os.environ.pop(env)
         if value:
             os.environ[env] = "1"
+
+    @property
+    def keep_main_window(self):
+        """Keep main window open after test"""
+        return self.__get_mode(self.KEEPMAINWINDOW_ENV)
 
     @property
     def unattended(self):

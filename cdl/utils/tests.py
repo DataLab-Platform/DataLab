@@ -115,11 +115,22 @@ def temporary_directory() -> Generator[str, None, None]:
             pass
 
 
-def exec_script(path: str, wait: bool = True) -> None:
-    """Run test script"""
+def exec_script(
+    path: str, wait: bool = True, args: str = "", env: dict[str, str] | None = None
+) -> None:
+    """Run test script.
+
+    Args:
+        path: path to script
+        wait: wait for script to finish
+        args: arguments to pass to script
+        env: environment variables to pass to script
+    """
     command = [sys.executable, '"' + path + '"']
+    if args:
+        command.append(args)
     stderr = subprocess.DEVNULL if execenv.unattended else None
     # pylint: disable=consider-using-with
-    proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr)
+    proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr, env=env)
     if wait:
         proc.wait()
