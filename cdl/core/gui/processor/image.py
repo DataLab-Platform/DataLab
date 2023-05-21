@@ -49,7 +49,7 @@ from cdl.core.model.base import BaseProcParam, ShapeTypes
 from cdl.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.processor.base import (
         GaussianParam,
         MovingAverageParam,

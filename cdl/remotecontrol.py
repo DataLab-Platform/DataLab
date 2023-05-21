@@ -30,7 +30,7 @@ from cdl.core.model.image import ImageParam, create_image
 from cdl.core.model.signal import SignalParam, create_signal
 from cdl.env import execenv
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.main import CDLMainWindow
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

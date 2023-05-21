@@ -34,7 +34,7 @@ from cdl.config import Conf, _
 from cdl.core.computation.image import scale_data_to_min_max
 from cdl.core.model import base
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from qtpy import QtWidgets as QW
 
 

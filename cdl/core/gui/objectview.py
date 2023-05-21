@@ -50,7 +50,7 @@ from cdl.core.model.image import ImageParam
 from cdl.core.model.signal import SignalParam
 from cdl.utils.qthelpers import block_signals
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.objectmodel import ObjectGroup, ObjectModel
     from cdl.core.gui.panel.base import BaseDataPanel
 

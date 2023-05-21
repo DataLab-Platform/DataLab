@@ -49,7 +49,7 @@ from cdl.utils.qthelpers import (
     qt_try_except,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.plot import CurveWidget, ImageWidget
     from multiprocess.pool import AsyncResult
 

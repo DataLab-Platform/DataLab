@@ -58,7 +58,7 @@ from cdl.utils import qthelpers as qth
 from cdl.utils.misc import go_to_error
 from cdl.widgets import instconfviewer, logviewer, status
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.base import BaseDataPanel
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.macro import MacroPanel

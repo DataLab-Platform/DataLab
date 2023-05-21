@@ -44,7 +44,7 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.image import ImageParam
     from cdl.core.model.signal import SignalParam
 

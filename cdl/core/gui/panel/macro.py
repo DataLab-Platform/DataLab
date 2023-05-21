@@ -28,7 +28,7 @@ from cdl.core.gui.panel.base import AbstractPanel
 from cdl.utils.misc import to_string
 from cdl.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
 
 

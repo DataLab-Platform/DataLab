@@ -39,7 +39,7 @@ from guiqwt.label import LegendBoxItem
 from cdl.config import Conf, _
 from cdl.utils.qthelpers import create_progress_bar
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.curve import CurveItem
     from guiqwt.image import MaskedImageItem
     from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget

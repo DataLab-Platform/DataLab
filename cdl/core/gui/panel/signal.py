@@ -26,7 +26,7 @@ from cdl.core.model.signal import (
     new_signal_param,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset.datatypes as gdt
     from guiqwt.plot import CurveWidget
     from qtpy import QtWidgets as QW

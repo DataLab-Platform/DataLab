@@ -40,7 +40,7 @@ from cdl.core.model.signal import SignalParam, create_signal
 from cdl.utils.qthelpers import exec_dialog, qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.processor.base import (
         GaussianParam,
         MovingAverageParam,

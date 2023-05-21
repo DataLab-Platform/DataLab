@@ -81,7 +81,7 @@ from cdl.utils.qthelpers import (
     save_restore_stds,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset.datatypes as gdt
     from guiqwt.plot import CurveDialog, CurveWidget, ImageDialog, ImageWidget
     from guiqwt.tools import GuiTool

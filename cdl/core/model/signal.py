@@ -29,7 +29,7 @@ from cdl.core.computation import fit
 from cdl.core.model import base
 from cdl.env import execenv
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.curve import CurveItem
     from guiqwt.styles import CurveParam
     from qtpy import QtWidgets as QW

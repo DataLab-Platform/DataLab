@@ -35,7 +35,7 @@ from cdl.core.model.image import (
     new_image_param,
 )
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset.datatypes as gdt
     from guiqwt.plot import ImageWidget
     from qtpy import QtWidgets as QW
