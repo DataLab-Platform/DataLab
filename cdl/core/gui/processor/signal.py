@@ -36,7 +36,7 @@ from cdl.core.computation.signal import (
 )
 from cdl.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from cdl.core.model.base import ShapeTypes
-from cdl.core.model.signal import SignalParam, create_signal
+from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import exec_dialog, qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
 
@@ -192,7 +192,7 @@ class SignalProcessor(BaseProcessor):
 
         # pylint: disable=unused-argument
         def func_obj(
-            obj: SignalParam, orig: SignalParam, param: PeakDetectionParam
+            obj: SignalObj, orig: SignalObj, param: PeakDetectionParam
         ) -> None:
             """Customize signal object"""
             obj.metadata["curvestyle"] = "Sticks"
@@ -207,7 +207,7 @@ class SignalProcessor(BaseProcessor):
         )
 
     # ------Signal Processing
-    def get_11_func_args(self, orig: SignalParam, param: gdt.DataSet) -> tuple[Any]:
+    def get_11_func_args(self, orig: SignalObj, param: gdt.DataSet) -> tuple[Any]:
         """Get 11 function args: 1 object in --> 1 object out"""
         data = orig.xydata
         if len(data) == 2:  # x, y signal
@@ -222,9 +222,7 @@ class SignalProcessor(BaseProcessor):
             return (dy, param)
         raise ValueError("Invalid data")
 
-    def set_11_func_result(
-        self, new_obj: SignalParam, result: tuple[np.ndarray]
-    ) -> None:
+    def set_11_func_result(self, new_obj: SignalObj, result: tuple[np.ndarray]) -> None:
         """Set 11 function result: 1 object in --> 1 object out"""
         x, y = result
         new_obj.set_xydata(x, y)
@@ -369,7 +367,7 @@ class SignalProcessor(BaseProcessor):
             )
 
     def __row_compute_fit(
-        self, obj: SignalParam, name: str, fitdlgfunc: Callable
+        self, obj: SignalObj, name: str, fitdlgfunc: Callable
     ) -> None:
         """Curve fitting computing sub-method"""
         output = fitdlgfunc(obj.x, obj.y, parent=self.panel.parent())
@@ -412,7 +410,7 @@ class SignalProcessor(BaseProcessor):
         """Compute FWHM"""
         title = _("FWHM")
 
-        def fwhm(signal: SignalParam, param: FWHMParam):
+        def fwhm(signal: SignalObj, param: FWHMParam):
             """Compute FWHM"""
             res = []
             for i_roi in signal.iterate_roi_indexes():
@@ -444,7 +442,7 @@ class SignalProcessor(BaseProcessor):
         """Compute FW at 1/e²"""
         title = _("FW") + "1/e²"
 
-        def fw1e2(signal: SignalParam):
+        def fw1e2(signal: SignalObj):
             """Compute FW at 1/e²"""
             res = []
             for i_roi in signal.iterate_roi_indexes():

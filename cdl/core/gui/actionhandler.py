@@ -55,8 +55,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.objectmodel import ObjectGroup
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
-    from cdl.core.model.image import ImageParam
-    from cdl.core.model.signal import SignalParam
+    from cdl.core.model.image import ImageObj
+    from cdl.core.model.signal import SignalObj
 
 
 class SelectCond:
@@ -75,7 +75,7 @@ class SelectCond:
     # pylint: disable=unused-argument
     def always(
         selected_groups: list[ObjectGroup],
-        selected_objects: list[SignalParam | ImageParam],
+        selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """Always true"""
         return True
@@ -83,7 +83,7 @@ class SelectCond:
     @staticmethod
     def exactly_one(
         selected_groups: list[ObjectGroup],
-        selected_objects: list[SignalParam | ImageParam],
+        selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """Exactly one signal or image is selected"""
         return len(selected_groups) == 0 and len(selected_objects) == 1
@@ -92,7 +92,7 @@ class SelectCond:
     # pylint: disable=unused-argument
     def exactly_one_group(
         selected_groups: list[ObjectGroup],
-        selected_objects: list[SignalParam | ImageParam],
+        selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """Exactly one group is selected"""
         return len(selected_groups) == 1
@@ -101,7 +101,7 @@ class SelectCond:
     # pylint: disable=unused-argument
     def at_least_one_group_or_one_object(
         sel_groups: list[ObjectGroup],
-        sel_objects: list[SignalParam | ImageParam],
+        sel_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """At least one group or one signal or image is selected"""
         return len(sel_objects) >= 1 or len(sel_groups) >= 1
@@ -110,7 +110,7 @@ class SelectCond:
     # pylint: disable=unused-argument
     def at_least_one(
         sel_groups: list[ObjectGroup],
-        sel_objects: list[SignalParam | ImageParam],
+        sel_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """At least one signal or image is selected"""
         return len(sel_objects) >= 1 or SelectCond.__compat_groups(sel_groups, 1)
@@ -118,7 +118,7 @@ class SelectCond:
     @staticmethod
     def at_least_two(
         sel_groups: list[ObjectGroup],
-        sel_objects: list[SignalParam | ImageParam],
+        sel_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """At least two signals or images are selected"""
         return len(sel_objects) >= 2 or SelectCond.__compat_groups(sel_groups, 2)
@@ -127,7 +127,7 @@ class SelectCond:
     # pylint: disable=unused-argument
     def with_roi(
         selected_groups: list[ObjectGroup],
-        selected_objects: list[SignalParam | ImageParam],
+        selected_objects: list[SignalObj | ImageObj],
     ) -> bool:
         """At least one signal or image has a ROI"""
         return any(obj.roi is not None for obj in selected_objects)
@@ -322,13 +322,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def selected_objects_changed(
         self,
         selected_groups: list[ObjectGroup],
-        selected_objects: list[SignalParam | ImageParam],
+        selected_objects: list[SignalObj | ImageObj],
     ) -> None:
         """Update actions based on selected objects.
 
         Args:
             selected_groups (list[ObjectGroup]): selected groups
-            selected_objects (list[SignalParam | ImageParam]): selected objects
+            selected_objects (list[SignalObj | ImageObj]): selected objects
         """
         for cond, actlist in self.__actions.items():
             if cond is not None:

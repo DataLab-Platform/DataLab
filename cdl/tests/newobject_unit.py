@@ -20,13 +20,13 @@ from cdl.core.model.base import NormalRandomParam, UniformRandomParam
 from cdl.core.model.image import (
     Gauss2DParam,
     ImageDatatypes,
-    ImageParam,
+    ImageObj,
     ImageTypes,
     create_image_from_param,
     new_image_param,
 )
 from cdl.core.model.signal import (
-    SignalParam,
+    SignalObj,
     SignalTypes,
     create_signal_from_param,
     new_signal_param,
@@ -40,7 +40,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def iterate_signal_creation(
     data_size: int = 500, non_zero: bool = False, verbose: bool = True
-) -> Generator[SignalParam, None, None]:
+) -> Generator[SignalObj, None, None]:
     """Iterate over all possible signals created from parameters"""
     if verbose:
         execenv.print(
@@ -66,7 +66,7 @@ def iterate_signal_creation(
 
 def iterate_image_creation(
     data_size: int = 500, non_zero: bool = False, verbose: bool = True
-) -> Generator[ImageParam, None, None]:
+) -> Generator[ImageObj, None, None]:
     """Iterate over all possible images created from parameters"""
     if verbose:
         execenv.print(

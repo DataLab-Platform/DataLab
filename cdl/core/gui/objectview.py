@@ -46,8 +46,8 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
-from cdl.core.model.image import ImageParam
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.image import ImageObj
+from cdl.core.model.signal import SignalObj
 from cdl.utils.qthelpers import block_signals
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -108,14 +108,14 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Get actions from item"""
         return []
 
-    def get_current_object(self) -> SignalParam | ImageParam | None:
+    def get_current_object(self) -> SignalObj | ImageObj | None:
         """Return current object"""
         oid = self.get_current_item_id(object_only=True)
         if oid is not None:
             return self.objmodel[oid]
         return None
 
-    def set_current_object(self, obj: SignalParam | ImageParam) -> None:
+    def set_current_object(self, obj: SignalObj | ImageObj) -> None:
         """Set current object"""
         self.set_current_item_id(obj.uuid)
 
@@ -145,11 +145,11 @@ class SimpleObjectTree(QW.QTreeWidget):
 
     @staticmethod
     def __update_item(
-        item: QW.QTreeWidgetItem, obj: SignalParam | ImageParam | ObjectGroup
+        item: QW.QTreeWidgetItem, obj: SignalObj | ImageObj | ObjectGroup
     ) -> None:
         """Update item"""
         item.setText(0, f"{obj.short_id}: {obj.title}")
-        if isinstance(obj, (SignalParam, ImageParam)):
+        if isinstance(obj, (SignalObj, ImageObj)):
             item.setToolTip(0, obj.metadata_to_html())
         item.setData(0, QC.Qt.UserRole, obj.uuid)
 
@@ -172,7 +172,7 @@ class SimpleObjectTree(QW.QTreeWidget):
                 self.__update_item(self.get_item_from_id(obj.uuid), obj)
 
     def __add_to_group_item(
-        self, obj: SignalParam | ImageParam, group_item: QW.QTreeWidgetItem
+        self, obj: SignalObj | ImageObj, group_item: QW.QTreeWidgetItem
     ) -> None:
         """Add object to group item"""
         item = QW.QTreeWidgetItem()
@@ -191,7 +191,7 @@ class SimpleObjectTree(QW.QTreeWidget):
             self.__add_to_group_item(obj, group_item)
 
     def add_object_item(
-        self, obj: SignalParam | ImageParam, group_id: str, set_current: bool = True
+        self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
     ) -> None:
         """Add item"""
         self.objmodel.refresh_short_ids()
@@ -255,14 +255,14 @@ class GetObjectDialog(QW.QDialog):
         # Update OK button state:
         self.current_object_changed()
 
-    def get_current_object(self) -> SignalParam | ImageParam:
+    def get_current_object(self) -> SignalObj | ImageObj:
         """Return current object"""
         return self.tree.get_current_object()
 
     def current_object_changed(self) -> None:
         """Item selection has changed"""
         self.ok_btn.setEnabled(
-            isinstance(self.get_current_object(), (SignalParam, ImageParam))
+            isinstance(self.get_current_object(), (SignalObj, ImageObj))
         )
 
 
@@ -340,7 +340,7 @@ class ObjectView(SimpleObjectTree):
 
     def get_sel_objects(
         self, include_groups: bool = False
-    ) -> list[SignalParam | ImageParam]:
+    ) -> list[SignalObj | ImageObj]:
         """Return selected objects.
 
         If include_groups is True, also return objects from selected groups."""
@@ -382,7 +382,7 @@ class ObjectView(SimpleObjectTree):
         for uuid in uuids:
             self.set_current_item_id(uuid, extend=True)
 
-    def select_objects(self, objs: list[SignalParam | ImageParam]) -> None:
+    def select_objects(self, objs: list[SignalObj | ImageObj]) -> None:
         """Select multiple objects"""
         self.clearSelection()
         for obj in objs:

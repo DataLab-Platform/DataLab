@@ -139,7 +139,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_ref_lut_range = conf.Option()
 
     # Default visualization settings at item creation
-    # (e.g. see `ImageParam.make_item` in cdl/core/model/image.py)
+    # (e.g. see `ImageObj.make_item` in cdl/core/model/image.py)
     ima_eliminate_outliers = conf.Option()
 
     # Default visualization settings, persisted in object metadata

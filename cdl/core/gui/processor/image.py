@@ -46,7 +46,7 @@ from cdl.core.computation.image import (
 )
 from cdl.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
 from cdl.core.model.base import BaseProcParam, ShapeTypes
-from cdl.core.model.image import ImageParam, RoiDataGeometries, RoiDataItem
+from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -56,10 +56,10 @@ if TYPE_CHECKING:  # pragma: no cover
         MovingMedianParam,
     )
 
-    Obj = ImageParam
+    Obj = ImageObj
 
 VALID_DTYPES_STRLIST = [
-    dtype.__name__ for dtype in dtype_range if dtype in ImageParam.VALID_DTYPES
+    dtype.__name__ for dtype in dtype_range if dtype in ImageObj.VALID_DTYPES
 ]
 
 
@@ -157,7 +157,7 @@ class RotateParam(gdt.DataSet):
 
 
 def rotate_obj_coords(
-    angle: float, obj: ImageParam, orig: ImageParam, coords: np.ndarray
+    angle: float, obj: ImageObj, orig: ImageObj, coords: np.ndarray
 ) -> None:
     """Apply rotation to coords associated to image obj"""
     for row in range(coords.shape[0]):
@@ -660,7 +660,7 @@ class BlobOpenCVParam(gdt.DataSet):
     ).set_prop("display", active=_prop_conv)
 
 
-def calc_with_osr(image: ImageParam, func: Callable, *args: Any) -> np.ndarray:
+def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
     """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
     res = []
     for i_roi in image.iterate_roi_indexes():
@@ -707,7 +707,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, RotateParam, "Rotate")
 
         def rotate_xy(
-            obj: ImageParam, orig: ImageParam, coords: np.ndarray, p: RotateParam
+            obj: ImageObj, orig: ImageObj, coords: np.ndarray, p: RotateParam
         ) -> None:
             """Apply rotation to coords"""
             rotate_obj_coords(p.angle, obj, orig, coords)
@@ -732,7 +732,7 @@ class ImageProcessor(BaseProcessor):
     def rotate_90(self) -> None:
         """Rotate data 90°"""
 
-        def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+        def rotate_xy(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply rotation to coords"""
             rotate_obj_coords(90.0, obj, orig, coords)
 
@@ -745,7 +745,7 @@ class ImageProcessor(BaseProcessor):
     def rotate_270(self) -> None:
         """Rotate data 270°"""
 
-        def rotate_xy(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+        def rotate_xy(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply rotation to coords"""
             rotate_obj_coords(270.0, obj, orig, coords)
 
@@ -759,7 +759,7 @@ class ImageProcessor(BaseProcessor):
         """Flip data horizontally"""
 
         # pylint: disable=unused-argument
-        def hflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+        def hflip_coords(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply HFlip to coords"""
             coords[:, ::2] = obj.x0 + obj.dx * obj.data.shape[1] - coords[:, ::2]
             obj.roi = None
@@ -774,7 +774,7 @@ class ImageProcessor(BaseProcessor):
         """Flip data vertically"""
 
         # pylint: disable=unused-argument
-        def vflip_coords(obj: ImageParam, orig: ImageParam, coords: np.ndarray) -> None:
+        def vflip_coords(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply VFlip to coords"""
             coords[:, 1::2] = obj.y0 + obj.dy * obj.data.shape[0] - coords[:, 1::2]
             obj.roi = None
@@ -883,7 +883,7 @@ class ImageProcessor(BaseProcessor):
             param.zoom = dlg.get_zoom()
 
         # pylint: disable=unused-argument
-        def func_obj(obj, orig: ImageParam, param: ResizeParam) -> None:
+        def func_obj(obj, orig: ImageObj, param: ResizeParam) -> None:
             """Zooming function"""
             if obj.dx is not None and obj.dy is not None:
                 obj.dx, obj.dy = obj.dx / param.zoom, obj.dy / param.zoom
@@ -918,7 +918,7 @@ class ImageProcessor(BaseProcessor):
             param.dtype_str = input_dtype_str
 
         # pylint: disable=unused-argument
-        def func_obj(obj: ImageParam, orig: ImageParam, param: BinningParam):
+        def func_obj(obj: ImageObj, orig: ImageObj, param: BinningParam):
             """Binning function"""
             if param.change_pixel_size:
                 if obj.dx is not None and obj.dy is not None:
@@ -977,7 +977,7 @@ class ImageProcessor(BaseProcessor):
                 return out[y0:y1, x0:x1]
 
             def extract_roi_func_obj(
-                image: ImageParam, orig: ImageParam, group: gdt.DataSetGroup
+                image: ImageObj, orig: ImageObj, group: gdt.DataSetGroup
             ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += min([p.x0 for p in group.datasets])
@@ -996,7 +996,7 @@ class ImageProcessor(BaseProcessor):
         else:
 
             def extract_roi_func_obj(
-                image: ImageParam, orig: ImageParam, p: gdt.DataSet
+                image: ImageObj, orig: ImageObj, p: gdt.DataSet
             ):  # pylint: disable=unused-argument
                 """Extract ROI function on object"""
                 image.x0 += p.x0
@@ -1051,13 +1051,13 @@ class ImageProcessor(BaseProcessor):
         )
 
     # ------Image Processing
-    def get_11_func_args(self, orig: ImageParam, param: gdt.DataSet) -> tuple[Any]:
+    def get_11_func_args(self, orig: ImageObj, param: gdt.DataSet) -> tuple[Any]:
         """Get 11 function args: 1 object in --> 1 object out"""
         if param is None:
             return (orig.data,)
         return (orig.data, param)
 
-    def set_11_func_result(self, new_obj: ImageParam, result: np.ndarray) -> None:
+    def set_11_func_result(self, new_obj: ImageObj, result: np.ndarray) -> None:
         """Set 11 function result: 1 object in --> 1 object out"""
         new_obj.data = result
 
@@ -1325,7 +1325,7 @@ class ImageProcessor(BaseProcessor):
             y, x = get_centroid_fourier(data)
             return np.array([(x, y)])
 
-        def centroid(image: ImageParam) -> np.ndarray:
+        def centroid(image: ImageObj) -> np.ndarray:
             """Compute centroid"""
             return calc_with_osr(image, get_centroid_coords)
 
@@ -1341,7 +1341,7 @@ class ImageProcessor(BaseProcessor):
             x, y, r = get_enclosing_circle(data)
             return np.array([[x - r, y, x + r, y]])
 
-        def enclosing_circle(image: ImageParam):
+        def enclosing_circle(image: ImageObj):
             """Compute minimum enclosing circle"""
             return calc_with_osr(image, get_enclosing_circle_coords)
 
@@ -1353,7 +1353,7 @@ class ImageProcessor(BaseProcessor):
     def compute_peak_detection(self, param: PeakDetectionParam | None = None) -> None:
         """Compute 2D peak detection"""
 
-        def peak_detection(image: ImageParam, p: PeakDetectionParam) -> np.ndarray:
+        def peak_detection(image: ImageObj, p: PeakDetectionParam) -> np.ndarray:
             """Compute centroid"""
             return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
 
@@ -1399,7 +1399,7 @@ class ImageProcessor(BaseProcessor):
     def compute_contour_shape(self, param: ContourShapeParam | None = None) -> None:
         """Compute contour shape fit"""
 
-        def contour_shape(image: ImageParam, p: ContourShapeParam) -> np.ndarray:
+        def contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
             """Compute contour shape fit"""
             return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
 
@@ -1411,7 +1411,7 @@ class ImageProcessor(BaseProcessor):
     def compute_hough_circle_peaks(self, param: HoughCircleParam | None = None) -> None:
         """Compute peak detection based on a circle Hough transform"""
 
-        def hough_circles(image: ImageParam, p: HoughCircleParam) -> np.ndarray:
+        def hough_circles(image: ImageObj, p: HoughCircleParam) -> np.ndarray:
             """Compute Hough circles"""
             return calc_with_osr(
                 image,
@@ -1429,7 +1429,7 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_dog(self, param: BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
 
-        def blobs(image: ImageParam, p: BlobDOGParam) -> np.ndarray:
+        def blobs(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
             """Compute blobs"""
             return calc_with_osr(
                 image,
@@ -1448,7 +1448,7 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_doh(self, param: BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
 
-        def blobs(image: ImageParam, p: BlobDOHParam) -> np.ndarray:
+        def blobs(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
             """Compute blobs"""
             return calc_with_osr(
                 image,
@@ -1467,7 +1467,7 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_log(self, param: BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
 
-        def blobs(image: ImageParam, p: BlobLOGParam) -> np.ndarray:
+        def blobs(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
             """Compute blobs"""
             return calc_with_osr(
                 image,
@@ -1487,7 +1487,7 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_opencv(self, param: BlobOpenCVParam | None = None) -> None:
         """Compute blob detection using OpenCV"""
 
-        def blobs(image: ImageParam, p: BlobOpenCVParam) -> np.ndarray:
+        def blobs(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
             """Compute blobs"""
             return calc_with_osr(
                 image,

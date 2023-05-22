@@ -55,10 +55,10 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
-    from cdl.core.model.image import ImageParam
-    from cdl.core.model.signal import SignalParam
+    from cdl.core.model.image import ImageObj
+    from cdl.core.model.signal import SignalObj
 
-    Obj = Union[SignalParam, ImageParam]
+    Obj = Union[SignalObj, ImageObj]
 
 
 class GaussianParam(gdt.DataSet):

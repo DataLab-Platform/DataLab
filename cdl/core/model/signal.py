@@ -56,7 +56,7 @@ class CurveStyles:
         curveparam.symbol.marker = "NoSymbol"
 
 
-class SignalParam(gdt.DataSet, base.ObjectItf):
+class SignalObj(gdt.DataSet, base.ObjectItf):
     """Signal dataset"""
 
     PREFIX = "s"
@@ -320,7 +320,7 @@ def create_signal(
     metadata: dict | None = None,
     units: tuple | None = None,
     labels: tuple | None = None,
-) -> SignalParam:
+) -> SignalObj:
     """Create a new Signal object.
 
     Args:
@@ -334,10 +334,10 @@ def create_signal(
         labels (tuple): X, Y labels (tuple of strings)
 
     Returns:
-        SignalParam: signal object
+        SignalObj: signal object
     """
     assert isinstance(title, str)
-    signal = SignalParam()
+    signal = SignalObj()
     signal.title = title
     signal.set_xydata(x, y, dx=dx, dy=dy)
     if units is not None:
@@ -419,7 +419,7 @@ class StepParam(gdt.DataSet):
     x0 = gdi.FloatItem("X0", default=0.0)
 
 
-class SignalParamNew(gdt.DataSet):
+class NewSignalParam(gdt.DataSet):
     """New signal dataset"""
 
     title = gdi.StringItem(_("Title"))
@@ -440,7 +440,7 @@ def new_signal_param(
     xmin: float | None = None,
     xmax: float | None = None,
     size: int | None = None,
-) -> SignalParamNew:
+) -> NewSignalParam:
     """Create a new Signal dataset instance.
 
     Args:
@@ -451,10 +451,10 @@ def new_signal_param(
         size (int): signal size (default: None, uses default value)
 
     Returns:
-        SignalParamNew: new signal dataset instance
+        NewSignalParam: new signal dataset instance
     """
     title = DEFAULT_TITLE if title is None else title
-    param = SignalParamNew(title=title, icon=get_icon("new_signal.svg"))
+    param = NewSignalParam(title=title, icon=get_icon("new_signal.svg"))
     param.title = title
     if xmin is not None:
         param.xmin = xmin
@@ -476,21 +476,21 @@ def triangle_func(xarr: np.ndarray) -> np.ndarray:
 
 
 def create_signal_from_param(
-    newparam: SignalParamNew,
+    newparam: NewSignalParam,
     addparam: gdt.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
-) -> SignalParam:
+) -> SignalObj:
     """Create a new Signal object from a dialog box.
 
     Args:
-        newparam (SignalParamNew): new signal parameters
+        newparam (NewSignalParam): new signal parameters
         addparam (DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 
     Returns:
-        SignalParam: signal object
+        SignalObj: signal object
     """
     global SIG_NB  # pylint: disable=global-statement
     if newparam is None:

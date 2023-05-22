@@ -19,7 +19,7 @@ import numpy as np
 from cdl.core.gui.panel import image, signal
 from cdl.core.gui.processor.image import PeakDetectionParam
 from cdl.core.gui.processor.signal import FWHMParam
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_image3, create_test_signal1
@@ -65,12 +65,12 @@ def array_1d_to_str(arr: np.ndarray) -> str:
 def print_obj_shapes(obj):
     """Print object and associated ROI array shapes"""
     execenv.print(f"  Accessing object '{obj.title}':")
-    func = array_1d_to_str if isinstance(obj, SignalParam) else array_2d_to_str
+    func = array_1d_to_str if isinstance(obj, SignalObj) else array_2d_to_str
     execenv.print(f"    data: {func(obj.data)}")
     if obj.roi is not None:
         for idx in range(obj.roi.shape[0]):
             roi_data = obj.get_data(idx)
-            if isinstance(obj, SignalParam):
+            if isinstance(obj, SignalObj):
                 roi_data = roi_data[1]  # y data
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 

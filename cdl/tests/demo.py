@@ -22,7 +22,7 @@ from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
 from cdl.core.model.signal import (
     GaussLorentzVoigtParam,
-    SignalParamNew,
+    NewSignalParam,
     SignalTypes,
     create_signal_from_param,
     new_signal_param,
@@ -77,7 +77,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
 
-    newparam = SignalParamNew()
+    newparam = NewSignalParam()
     newparam.title = _("Gaussian")
     newparam.type = SignalTypes.GAUSS
     sig = create_signal_from_param(newparam, GaussLorentzVoigtParam(), edit=False)

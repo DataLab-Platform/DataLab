@@ -48,8 +48,8 @@ from cdl.core.gui.actionhandler import ActionCategory
 from cdl.core.gui.docks import DockablePlotWidget
 from cdl.core.gui.h5io import H5InputOutput
 from cdl.core.gui.panel import base, image, macro, signal
-from cdl.core.model.image import ImageParam
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.image import ImageObj
+from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
 from cdl.plugins import PluginBase, PluginRegistry, discover_plugins
 from cdl.remotecontrol import RemoteServer
@@ -223,7 +223,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     def get_object_by_title(
         self, title: str, panel: str | None = None
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from title
 
         Args:
@@ -232,7 +232,7 @@ class CDLMainWindow(QW.QMainWindow):
                 If None, current panel is used.
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             ValueError: if object not found
@@ -245,7 +245,7 @@ class CDLMainWindow(QW.QMainWindow):
         index: int | None = None,
         group_index: int | None = None,
         panel: str | None = None,
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
         Args:
@@ -258,7 +258,7 @@ class CDLMainWindow(QW.QMainWindow):
         If `panel` is not specified, return an object from the current panel.
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             IndexError: if object not found
@@ -286,7 +286,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     def get_object_from_uuid(
         self, oid: str, panel: str | None = None
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from uuid
 
         Args:
@@ -295,7 +295,7 @@ class CDLMainWindow(QW.QMainWindow):
                 If None, current panel is used.
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             ValueError: if object not found
@@ -1022,19 +1022,19 @@ class CDLMainWindow(QW.QMainWindow):
             self.h5inputoutput.import_file(filename, False, reset_all)
 
     @remote_controlled
-    def add_object(self, obj: SignalParam | ImageParam) -> None:
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
         """Add object - signal or image
 
         Args:
-            obj (SignalParam or ImageParam): object to add (signal or image)
+            obj (SignalObj or ImageObj): object to add (signal or image)
 
         Returns:
             None
         """
         if self.confirm_memory_state():
-            if isinstance(obj, SignalParam):
+            if isinstance(obj, SignalObj):
                 self.signalpanel.add_object(obj)
-            elif isinstance(obj, ImageParam):
+            elif isinstance(obj, ImageObj):
                 self.imagepanel.add_object(obj)
             else:
                 raise TypeError(f"Unsupported object type {type(obj)}")

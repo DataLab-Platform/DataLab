@@ -13,15 +13,15 @@ images and groups.
 The model is based on a hierarchical tree of objects, with two levels:
 
 - The top level is a list of groups (ObjectGroup instances)
-- The second level is a list of objects (SignalParam or ImageParam instances)
+- The second level is a list of objects (SignalObj or ImageObj instances)
 
 The model is implemented by the ObjectModel class.
 
 The ObjectGroup class represents a group of objects. It is a container for
-SignalParam and ImageParam instances.
+SignalObj and ImageObj instances.
 
 The ObjectModel class is a container for ObjectGroup instances, as well as
-a container for SignalParam and ImageParam instances.
+a container for SignalObj and ImageObj instances.
 
 .. autosummary::
     :toctree:
@@ -45,8 +45,8 @@ from typing import TYPE_CHECKING
 from uuid import uuid4
 
 if TYPE_CHECKING:  # pragma: no cover
-    from cdl.core.model.image import ImageParam
-    from cdl.core.model.signal import SignalParam
+    from cdl.core.model.image import ImageObj
+    from cdl.core.model.signal import SignalObj
 
 
 class ObjectGroup:
@@ -79,7 +79,7 @@ class ObjectGroup:
         """Set group title"""
         self._title = title
 
-    def __iter__(self) -> Iterator[SignalParam | ImageParam]:
+    def __iter__(self) -> Iterator[SignalObj | ImageObj]:
         """Iterate over objects in group"""
         return iter(self.model.get_objects(self._objects))
 
@@ -87,23 +87,23 @@ class ObjectGroup:
         """Return number of objects in group"""
         return len(self._objects)
 
-    def __getitem__(self, index: int) -> SignalParam | ImageParam:
+    def __getitem__(self, index: int) -> SignalObj | ImageObj:
         """Return object at index"""
         return self.model[self._objects[index]]
 
-    def __contains__(self, obj: SignalParam | ImageParam) -> bool:
+    def __contains__(self, obj: SignalObj | ImageObj) -> bool:
         """Return True if obj is in group"""
         return obj.uuid in self._objects
 
-    def append(self, obj: SignalParam | ImageParam) -> None:
+    def append(self, obj: SignalObj | ImageObj) -> None:
         """Append object to group"""
         self._objects.append(obj.uuid)
 
-    def insert(self, index: int, obj: SignalParam | ImageParam) -> None:
+    def insert(self, index: int, obj: SignalObj | ImageObj) -> None:
         """Insert object at index"""
         self._objects.insert(index, obj.uuid)
 
-    def remove(self, obj: SignalParam | ImageParam) -> None:
+    def remove(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from group"""
         self._objects.remove(obj.uuid)
 
@@ -111,7 +111,7 @@ class ObjectGroup:
         """Clear group"""
         self._objects.clear()
 
-    def get_objects(self) -> list[SignalParam | ImageParam]:
+    def get_objects(self) -> list[SignalObj | ImageObj]:
         """Return objects in group"""
         return self.model.get_objects(self._objects)
 
@@ -125,7 +125,7 @@ class ObjectModel:
 
     def __init__(self) -> None:
         # dict of objects, key is object uuid:
-        self._objects: dict[str, SignalParam | ImageParam] = {}
+        self._objects: dict[str, SignalObj | ImageObj] = {}
         # list of groups:
         self._groups: list[ObjectGroup] = []
 
@@ -143,11 +143,11 @@ class ObjectModel:
         """Return number of objects"""
         return len(self._objects)
 
-    def __getitem__(self, uuid: str) -> SignalParam | ImageParam:
+    def __getitem__(self, uuid: str) -> SignalObj | ImageObj:
         """Return object with uuid"""
         return self._objects[uuid]
 
-    def __iter__(self) -> Iterator[SignalParam | ImageParam]:
+    def __iter__(self) -> Iterator[SignalObj | ImageObj]:
         """Iterate over objects"""
         return iter(self._objects.values())
 
@@ -168,7 +168,7 @@ class ObjectModel:
         self._objects.clear()
         self._groups.clear()
 
-    def get_object_or_group(self, uuid: str) -> SignalParam | ImageParam | ObjectGroup:
+    def get_object_or_group(self, uuid: str) -> SignalObj | ImageObj | ObjectGroup:
         """Return object or group with uuid"""
         if uuid in self._objects:
             return self._objects[uuid]
@@ -196,7 +196,7 @@ class ObjectModel:
         self._groups.append(group)
         return group
 
-    def get_object_group_id(self, obj: SignalParam | ImageParam) -> str | None:
+    def get_object_group_id(self, obj: SignalObj | ImageObj) -> str | None:
         """Return group id of object"""
         for group in self._groups:
             if obj in group:
@@ -222,7 +222,7 @@ class ObjectModel:
             if remove_obj:
                 del self._objects[obj.uuid]
 
-    def add_object(self, obj: SignalParam | ImageParam, group_id: str) -> None:
+    def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
         self._objects[obj.uuid] = obj
         for group in self._groups:
@@ -232,14 +232,14 @@ class ObjectModel:
         else:
             raise KeyError(f"Group with uuid '{group_id}' not found")
 
-    def remove_object(self, obj: SignalParam | ImageParam) -> None:
+    def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
         del self._objects[obj.uuid]
         for group in self._groups:
             if obj in group:
                 group.remove(obj)
 
-    def get_object(self, index: int, group_index: int = 0) -> SignalParam | ImageParam:
+    def get_object(self, index: int, group_index: int = 0) -> SignalObj | ImageObj:
         """Return object with index.
 
         Args:
@@ -259,7 +259,7 @@ class ObjectModel:
                 f"Object with index {index} (group {group_index}) not found"
             ) from exc
 
-    def get_objects(self, uuids: list[str]) -> list[SignalParam | ImageParam]:
+    def get_objects(self, uuids: list[str]) -> list[SignalObj | ImageObj]:
         """Return objects with uuids"""
         return [self._objects[uuid] for uuid in uuids]
 
@@ -271,7 +271,7 @@ class ObjectModel:
         """Return object titles"""
         return [obj.title for obj in self._objects.values()]
 
-    def get_object_by_title(self, title: str) -> SignalParam | ImageParam:
+    def get_object_by_title(self, title: str) -> SignalObj | ImageObj:
         """Return object with title.
 
         Args:

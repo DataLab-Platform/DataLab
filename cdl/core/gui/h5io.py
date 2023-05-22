@@ -17,7 +17,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
 from cdl.core.io.native import NativeH5Reader, NativeH5Writer
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
@@ -76,7 +76,7 @@ class H5InputOutput:
         """Add DataLab object from h5 node"""
         obj = node.get_native_object()
         self.uint32_wng = self.uint32_wng or node.uint32_wng
-        if isinstance(obj, SignalParam):
+        if isinstance(obj, SignalObj):
             self.mainwindow.signalpanel.add_object(obj)
         else:
             self.mainwindow.imagepanel.add_object(obj)

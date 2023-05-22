@@ -14,7 +14,7 @@ import abc
 import numpy as np
 
 from cdl.core.io.base import BaseIORegistry, FormatBase
-from cdl.core.model.image import ImageParam, create_image
+from cdl.core.model.image import ImageObj, create_image
 from cdl.utils.misc import reduce_path
 
 
@@ -32,14 +32,14 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
     """Object representing an image file type"""
 
     @staticmethod
-    def create_object(filename: str, index: int | None = None) -> ImageParam:
+    def create_object(filename: str, index: int | None = None) -> ImageObj:
         """Create empty object"""
         name = reduce_path(filename)
         if index is not None:
             name += f"_{index}"
         return create_image(name)
 
-    def read(self, filename: str) -> ImageParam:
+    def read(self, filename: str) -> ImageObj:
         """Read data from file, return one or more objects"""
         obj = self.create_object(filename)
         obj.data = self.read_data(filename)

@@ -17,7 +17,7 @@ import numpy as np
 
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.io.conv import data_to_xy
-from cdl.core.model.signal import SignalParam, create_signal
+from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.misc import reduce_path
 
 
@@ -37,14 +37,14 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
     HEADER_KEY = "HEADER"
 
     @staticmethod
-    def create_object(filename: str, index: int | None = None) -> SignalParam:
+    def create_object(filename: str, index: int | None = None) -> SignalObj:
         """Create empty object"""
         name = reduce_path(filename)
         if index is not None:
             name += f"_{index}"
         return create_signal(name)
 
-    def read(self, filename: str) -> SignalParam:
+    def read(self, filename: str) -> SignalObj:
         """Read data from file, return one or more objects"""
         obj = self.create_object(filename)
         xydata = self.read_xydata(filename, obj)
@@ -52,7 +52,7 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
         return obj
 
     @staticmethod
-    def set_signal_xydata(signal: SignalParam, xydata: np.ndarray) -> None:
+    def set_signal_xydata(signal: SignalObj, xydata: np.ndarray) -> None:
         """Set signal xydata"""
         assert isinstance(xydata, np.ndarray), "Data type not supported"
         assert len(xydata.shape) in (1, 2), "Data not supported"
@@ -63,5 +63,5 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
             signal.set_xydata(x, y, dx, dy)
 
     @abc.abstractmethod
-    def read_xydata(self, filename: str, obj: SignalParam) -> np.ndarray:
+    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
         """Read data and metadata from file, write metadata to object, return xydata"""

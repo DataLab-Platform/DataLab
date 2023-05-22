@@ -15,11 +15,11 @@ import cdl.core.io.signal  # pylint: disable=unused-import
 # Other imports:
 from cdl.core.io.image.base import ImageIORegistry
 from cdl.core.io.signal.base import SignalIORegistry
-from cdl.core.model.image import ImageParam
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.image import ImageObj
+from cdl.core.model.signal import SignalObj
 
 
-def read_signal(filename: str) -> SignalParam:
+def read_signal(filename: str) -> SignalObj:
     """
     Read a signal from a file.
 
@@ -36,7 +36,7 @@ def read_signal(filename: str) -> SignalParam:
     return SignalIORegistry.read(filename)
 
 
-def write_signal(filename: str, signal: SignalParam) -> None:
+def write_signal(filename: str, signal: SignalObj) -> None:
     """
     Write a signal to a file.
 
@@ -50,7 +50,7 @@ def write_signal(filename: str, signal: SignalParam) -> None:
     SignalIORegistry.write(filename, signal)
 
 
-def read_image(filename: str) -> ImageParam:
+def read_image(filename: str) -> ImageObj:
     """
     Read an image from a file.
 
@@ -67,7 +67,7 @@ def read_image(filename: str) -> ImageParam:
     return ImageIORegistry.read(filename)
 
 
-def write_image(filename: str, image: ImageParam) -> None:
+def write_image(filename: str, image: ImageObj) -> None:
     """
     Write an image to a file.
 

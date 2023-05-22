@@ -13,7 +13,7 @@ from cdl.config import _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.signal import funcs
 from cdl.core.io.signal.base import SignalFormatBase
-from cdl.core.model.signal import SignalParam
+from cdl.core.model.signal import SignalObj
 
 
 class NumPySignalFormat(SignalFormatBase):
@@ -26,11 +26,11 @@ class NumPySignalFormat(SignalFormatBase):
         writeable=True,
     )  # pylint: disable=duplicate-code
 
-    def read_xydata(self, filename: str, obj: SignalParam) -> np.ndarray:
+    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
         """Read data and metadata from file, write metadata to object, return xydata"""
         return np.load(filename)
 
-    def write(self, filename: str, obj: SignalParam) -> None:
+    def write(self, filename: str, obj: SignalObj) -> None:
         """Write data to file"""
         np.save(filename, obj.xydata.T)
 
@@ -45,7 +45,7 @@ class CSVSignalFormat(SignalFormatBase):
         writeable=True,
     )
 
-    def read_xydata(self, filename: str, obj: SignalParam) -> np.ndarray:
+    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
         """Read data and metadata from file, write metadata to object, return xydata"""
         xydata, xlabel, xunit, ylabel, yunit, header = funcs.read_csv(filename)
         obj.xlabel = xlabel
@@ -56,7 +56,7 @@ class CSVSignalFormat(SignalFormatBase):
             obj.metadata[self.HEADER_KEY] = header
         return xydata
 
-    def write(self, filename: str, obj: SignalParam) -> None:
+    def write(self, filename: str, obj: SignalObj) -> None:
         """Write data to file"""
         funcs.write_csv(
             filename,

@@ -26,8 +26,8 @@ from qtpy import QtCore as QC
 from cdl import __version__
 from cdl.config import Conf, initialize
 from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
-from cdl.core.model.image import ImageParam, create_image
-from cdl.core.model.signal import SignalParam, create_signal
+from cdl.core.model.image import ImageObj, create_image
+from cdl.core.model.signal import SignalObj, create_signal
 from cdl.env import execenv
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -516,9 +516,9 @@ class RemoteClient:
         >>> cdl.get_object_titles()
         ['toto']
         >>> cdl.get_object_by_title("toto")
-        <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> cdl.get_object(0)
-        <cdl.core.model.signal.SignalParam at 0x7f7f1c0b4a90>
+        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> cdl.get_object(0).data
         array([1., 2., 3.])
     """
@@ -674,7 +674,7 @@ class RemoteClient:
             ValueError: Invalid xdata dtype
             ValueError: Invalid ydata dtype
         """
-        dtypes = SignalParam.VALID_DTYPES
+        dtypes = SignalObj.VALID_DTYPES
         dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
         if xdata.dtype not in dtypes:
             raise ValueError(
@@ -718,7 +718,7 @@ class RemoteClient:
         Raises:
             ValueError: Invalid data dtype
         """
-        dtypes = ImageParam.VALID_DTYPES
+        dtypes = ImageObj.VALID_DTYPES
         dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
         if data.dtype not in dtypes:
             raise ValueError(
@@ -772,14 +772,14 @@ class RemoteClient:
             return compute_func
         raise AttributeError(f"DataLab remote client has no method named {name}")
 
-    def add_object(self, obj: SignalParam | ImageParam) -> None:
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
         """Add object to DataLab.
 
         Args:
-            obj (SignalParam | ImageParam): Signal or image object
+            obj (SignalObj | ImageObj): Signal or image object
         """
         p = self.serverproxy
-        if isinstance(obj, SignalParam):
+        if isinstance(obj, SignalObj):
             p.add_signal(
                 obj.title,
                 array_to_rpcbinary(obj.x),
@@ -818,7 +818,7 @@ class RemoteClient:
 
     def get_object_by_title(
         self, title: str, panel: str | None = None
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from title
 
         Args:
@@ -827,7 +827,7 @@ class RemoteClient:
                 If None, current panel is used.
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             ValueError: if object not found
@@ -841,7 +841,7 @@ class RemoteClient:
         index: int | None = None,
         group_index: int | None = None,
         panel: str | None = None,
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
         Args:
@@ -854,7 +854,7 @@ class RemoteClient:
         If `panel` is not specified, return an object from the current panel.
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             IndexError: if object not found
@@ -879,7 +879,7 @@ class RemoteClient:
 
     def get_object_from_uuid(
         self, oid: str, panel: str | None = None
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Get object (signal/image) from uuid
 
         Args:
@@ -887,7 +887,7 @@ class RemoteClient:
             panel (str | None): panel name (valid values: "signal", "image").
 
         Returns:
-            Union[SignalParam, ImageParam]: object
+            Union[SignalObj, ImageObj]: object
 
         Raises:
             ValueError: if object not found

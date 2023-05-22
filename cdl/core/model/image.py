@@ -150,7 +150,7 @@ class RoiDataItem:
         return base.make_roi_item(func, coords, title, fmt, lbl, editable)
 
 
-class ImageParam(gdt.DataSet, base.ObjectItf):
+class ImageObj(gdt.DataSet, base.ObjectItf):
     """Image dataset"""
 
     PREFIX = "i"
@@ -579,7 +579,7 @@ def create_image(
     metadata: dict | None = None,
     units: tuple | None = None,
     labels: tuple | None = None,
-) -> ImageParam:
+) -> ImageObj:
     """Create a new Image object
 
     Args:
@@ -590,11 +590,11 @@ def create_image(
         labels (tuple): X, Y, Z labels (tuple of strings)
 
     Returns:
-        ImageParam: image object
+        ImageObj: image object
     """
     assert isinstance(title, str)
     assert data is None or isinstance(data, np.ndarray)
-    image = ImageParam()
+    image = ImageObj()
     image.title = title
     image.data = data
     if units is not None:
@@ -642,7 +642,7 @@ class ImageTypes(base.Choices):
     NORMALRANDOM = _("random (normal law)")
 
 
-class ImageParamNew(gdt.DataSet):
+class NewImageParam(gdt.DataSet):
     """New image dataset"""
 
     title = gdi.StringItem(_("Title"))
@@ -667,7 +667,7 @@ def new_image_param(
     height: int | None = None,
     width: int | None = None,
     dtype: ImageDatatypes | None = None,
-) -> ImageParamNew:
+) -> NewImageParam:
     """Create a new Image dataset instance.
 
     Args:
@@ -678,10 +678,10 @@ def new_image_param(
         dtype (ImageDatatypes): image data type (default: None, uses default data type)
 
     Returns:
-        ImageParamNew: new image dataset instance
+        NewImageParam: new image dataset instance
     """
     title = DEFAULT_TITLE if title is None else title
-    param = ImageParamNew(title=title, icon=get_icon("new_image.svg"))
+    param = NewImageParam(title=title, icon=get_icon("new_image.svg"))
     param.title = title
     if height is not None:
         param.height = height
@@ -712,21 +712,21 @@ class Gauss2DParam(gdt.DataSet):
 
 
 def create_image_from_param(
-    newparam: ImageParamNew,
+    newparam: NewImageParam,
     addparam: gdt.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
-) -> ImageParam:
+) -> ImageObj:
     """Create a new Image object from dialog box.
 
     Args:
-        newparam (ImageParamNew): new image parameters
+        newparam (NewImageParam): new image parameters
         addparam (DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 
     Returns:
-        ImageParam: new image object
+        ImageObj: new image object
     """
     global IMG_NB  # pylint: disable=global-statement
     if newparam is None:

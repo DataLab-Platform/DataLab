@@ -45,12 +45,12 @@ if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget
 
     from cdl.core.gui.panel.base import BaseDataPanel
-    from cdl.core.model.image import ImageParam
-    from cdl.core.model.signal import SignalParam
+    from cdl.core.model.image import ImageObj
+    from cdl.core.model.signal import SignalObj
 
 
-def calc_data_hash(obj: SignalParam | ImageParam) -> str:
-    """Calculate a hash for a SignalParam | ImageParam object's data"""
+def calc_data_hash(obj: SignalObj | ImageObj) -> str:
+    """Calculate a hash for a SignalObj | ImageObj object's data"""
     return hashlib.sha1(np.ascontiguousarray(obj.data)).hexdigest()
 
 
@@ -71,7 +71,7 @@ class BasePlotHandler:
 
         self.__shapeitems = []
         self.__cached_hashes: WeakKeyDictionary[
-            SignalParam | ImageParam, list[int]
+            SignalObj | ImageObj, list[int]
         ] = WeakKeyDictionary()
 
     def __len__(self) -> int:

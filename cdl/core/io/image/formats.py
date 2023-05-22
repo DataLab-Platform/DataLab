@@ -17,7 +17,7 @@ from cdl.config import _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.image import funcs
 from cdl.core.io.image.base import ImageFormatBase
-from cdl.core.model.image import ImageParam
+from cdl.core.model.image import ImageObj
 
 
 class ClassicsImageFormat(ImageFormatBase):
@@ -35,7 +35,7 @@ class ClassicsImageFormat(ImageFormatBase):
         """Read data and return it"""
         return skimage.io.imread(filename, as_gray=True)
 
-    def write(self, filename: str, obj: ImageParam) -> None:
+    def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""
         skimage.io.imsave(filename, obj.data, check_contrast=False)
 
@@ -55,7 +55,7 @@ class NumPyImageFormat(ImageFormatBase):
         """Read data and return it"""
         return np.load(filename)
 
-    def write(self, filename: str, obj: ImageParam) -> None:
+    def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""
         np.save(filename, obj.data)
 
@@ -80,7 +80,7 @@ class TextImageFormat(ImageFormatBase):
                 continue
         raise ValueError(f"Could not read file {filename} as text file")
 
-    def write(self, filename: str, obj: ImageParam) -> None:
+    def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""
         if obj.data.dtype in (
             np.int8,
@@ -129,7 +129,7 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(self, filename: str) -> ImageParam:
+    def read(self, filename: str) -> ImageObj:
         """Read data from file, return one or more objects"""
         data = self.read_data(filename)
         if len(data.shape) == 3:

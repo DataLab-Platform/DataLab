@@ -30,7 +30,7 @@ from cdl.core.gui.processor.image import ImageProcessor
 from cdl.core.io.image import ImageIORegistry
 from cdl.core.model.image import (
     ImageDatatypes,
-    ImageParam,
+    ImageObj,
     create_image_from_param,
     new_image_param,
 )
@@ -40,7 +40,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.plot import ImageWidget
     from qtpy import QtWidgets as QW
 
-    from cdl.core.model.image import ImageParamNew
+    from cdl.core.model.image import NewImageParam
 
 
 class ImagePanel(BaseDataPanel):
@@ -48,7 +48,7 @@ class ImagePanel(BaseDataPanel):
     specialized for Image objects"""
 
     PANEL_STR = _("Image panel")
-    PARAMCLASS = ImageParam
+    PARAMCLASS = ImageObj
     DIALOGCLASS = ImageDialog
     DIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (
@@ -83,10 +83,10 @@ class ImagePanel(BaseDataPanel):
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(
         self,
-        newparam: ImageParamNew | None = None,
+        newparam: NewImageParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
-    ) -> ImageParam | None:
+    ) -> ImageObj | None:
         """Create a new object (image).
 
         Args:
@@ -99,7 +99,7 @@ class ImagePanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        curobj: ImageParam = self.objview.get_current_object()
+        curobj: ImageObj = self.objview.get_current_object()
         if curobj is not None:
             newparam = newparam if newparam is not None else new_image_param()
             newparam.width, newparam.height = curobj.size

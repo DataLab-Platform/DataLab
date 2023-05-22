@@ -94,8 +94,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
     from cdl.core.io.signal import SignalIORegistry
     from cdl.core.model.base import ShapeTypes
-    from cdl.core.model.image import ImageParam, ImageParamNew
-    from cdl.core.model.signal import SignalParam, SignalParamNew
+    from cdl.core.model.image import ImageObj, NewImageParam
+    from cdl.core.model.signal import NewSignalParam, SignalObj
 
 #  Registering MetadataItem edit widget
 gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
@@ -104,7 +104,7 @@ gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
 class ObjectProp(QW.QWidget):
     """Object handling panel properties"""
 
-    def __init__(self, panel: BaseDataPanel, paramclass: SignalParam | ImageParam):
+    def __init__(self, panel: BaseDataPanel, paramclass: SignalObj | ImageObj):
         super().__init__(panel)
         self.paramclass = paramclass
         self.properties = gdq.DataSetEditGroupBox(_("Properties"), paramclass)
@@ -141,7 +141,7 @@ class ObjectProp(QW.QWidget):
         """Add additional button on bottom of properties panel"""
         self.add_prop_layout.addWidget(button)
 
-    def set_param_label(self, param: SignalParam | ImageParam):
+    def set_param_label(self, param: SignalObj | ImageObj):
         """Set computing parameters label"""
         text = ""
         for key, value in param.metadata.items():
@@ -153,7 +153,7 @@ class ObjectProp(QW.QWidget):
                 text += "<br>".join(lines)
         self.param_label.setText(text)
 
-    def update_properties_from(self, param: SignalParam | ImageParam | None = None):
+    def update_properties_from(self, param: SignalObj | ImageObj | None = None):
         """Update properties from signal/image dataset"""
         self.properties.setDisabled(param is None)
         if param is None:
@@ -193,7 +193,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         return name
 
     def serialize_object_to_hdf5(
-        self, obj: SignalParam | ImageParam, writer: NativeH5Writer
+        self, obj: SignalObj | ImageObj, writer: NativeH5Writer
     ) -> None:
         """Serialize object to HDF5 file"""
         with writer.group(self.get_serializable_name(obj)):
@@ -201,7 +201,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
 
     def deserialize_object_from_hdf5(
         self, reader: NativeH5Reader, name: str
-    ) -> SignalParam | ImageParam:
+    ) -> SignalObj | ImageObj:
         """Deserialize object from a HDF5 file"""
         with reader.group(name):
             obj = self.create_object()
@@ -243,7 +243,7 @@ class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
-    PARAMCLASS: SignalParam | ImageParam = None  # Replaced in child object
+    PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
     DIALOGCLASS: CurveDialog | ImageDialog = None  # Idem
     ANNOTATION_TOOLS = (
         LabelTool,
@@ -279,7 +279,7 @@ class BaseDataPanel(AbstractPanel):
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}
         self.context_menu = QW.QMenu()
-        self.__separate_views: dict[QW.QDialog, SignalParam | ImageParam] = {}
+        self.__separate_views: dict[QW.QDialog, SignalObj | ImageObj] = {}
 
     def closeEvent(self, event):
         """Reimplement QMainWindow method"""
@@ -315,18 +315,18 @@ class BaseDataPanel(AbstractPanel):
         """Return object number"""
         return len(self.objmodel)
 
-    def create_object(self, title: str | None = None) -> SignalParam | ImageParam:
+    def create_object(self, title: str | None = None) -> SignalObj | ImageObj:
         """Create object (signal or image)
 
         Args:
             title: object title
 
         Returns:
-            SignalParam or ImageParam object
+            SignalObj or ImageObj object
         """
         # TODO: [P2] Add default signal/image visualization settings
         # 1. Initialize here (at object creation) metadata with default settings
-        #    (see guiqwt.styles.CurveParam and ImageParam for inspiration)
+        #    (see guiqwt.styles.CurveParam and ImageObj for inspiration)
         # 2. Add a dialog box to edit default settings in main window
         #    (use a guidata dataset with only a selection of items from guiqwt.styles
         #     classes)
@@ -339,14 +339,14 @@ class BaseDataPanel(AbstractPanel):
     @qt_try_except()
     def add_object(
         self,
-        obj: SignalParam | ImageParam,
+        obj: SignalObj | ImageObj,
         group_id: str | None = None,
         set_current: bool = True,
     ) -> None:
         """Add object
 
         Args:
-            obj: SignalParam or ImageParam object
+            obj: SignalObj or ImageObj object
             group_id: group id
             set_current: if True, set the added object as current
         """
@@ -544,10 +544,10 @@ class BaseDataPanel(AbstractPanel):
     @abc.abstractmethod
     def new_object(
         self,
-        newparam: SignalParamNew | ImageParamNew | None = None,
+        newparam: NewSignalParam | NewImageParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
-    ) -> SignalParam | ImageParam | None:
+    ) -> SignalObj | ImageObj | None:
         """Create a new object (signal/image).
 
         Args:
@@ -561,7 +561,7 @@ class BaseDataPanel(AbstractPanel):
 
     def open_object(
         self, filename: str
-    ) -> SignalParam | ImageParam | list[SignalParam | ImageParam]:
+    ) -> SignalObj | ImageObj | list[SignalObj | ImageObj]:
         """Open object from file (signal/image), add it to DataLab and return it.
 
         Args:
@@ -609,7 +609,7 @@ class BaseDataPanel(AbstractPanel):
 
     def open_objects(
         self, filenames: list[str] | None = None
-    ) -> list[SignalParam | ImageParam]:
+    ) -> list[SignalObj | ImageObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
@@ -846,7 +846,7 @@ class BaseDataPanel(AbstractPanel):
         options: dict[str, any] = None,
         toolbar: bool = False,
         tools: list[GuiTool] = None,
-    ) -> tuple[QW.QDialog | None, SignalParam | ImageParam]:
+    ) -> tuple[QW.QDialog | None, SignalObj | ImageObj]:
         """Create new pop-up dialog for the currently selected signal/image.
 
         Args:

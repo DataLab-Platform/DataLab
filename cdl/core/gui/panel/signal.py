@@ -20,18 +20,14 @@ from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.plothandler import SignalPlotHandler
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
-from cdl.core.model.signal import (
-    SignalParam,
-    create_signal_from_param,
-    new_signal_param,
-)
+from cdl.core.model.signal import SignalObj, create_signal_from_param, new_signal_param
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset.datatypes as gdt
     from guiqwt.plot import CurveWidget
     from qtpy import QtWidgets as QW
 
-    from cdl.core.model.signal import SignalParamNew
+    from cdl.core.model.signal import NewSignalParam
 
 
 class SignalPanel(BaseDataPanel):
@@ -39,7 +35,7 @@ class SignalPanel(BaseDataPanel):
     specialized for Signal objects"""
 
     PANEL_STR = _("Signal panel")
-    PARAMCLASS = SignalParam
+    PARAMCLASS = SignalObj
     DIALOGCLASS = CurveDialog
     IO_REGISTRY = SignalIORegistry
     H5_PREFIX = "DataLab_Sig"
@@ -56,10 +52,10 @@ class SignalPanel(BaseDataPanel):
     # ------Creating, adding, removing objects------------------------------------------
     def new_object(
         self,
-        newparam: SignalParamNew | None = None,
+        newparam: NewSignalParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
-    ) -> SignalParam | None:
+    ) -> SignalObj | None:
         """Create a new object (signal).
 
         Args:
@@ -72,7 +68,7 @@ class SignalPanel(BaseDataPanel):
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        curobj: SignalParam = self.objview.get_current_object()
+        curobj: SignalObj = self.objview.get_current_object()
         if curobj is not None:
             newparam = newparam if newparam is not None else new_signal_param()
             newparam.size = len(curobj.data)
