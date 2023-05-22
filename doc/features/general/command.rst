@@ -61,26 +61,45 @@ Run unit tests
 To execute all DataLab unit tests, simply run::
 
     $ cdl-alltests
-    *** DataLab automatic unit tests ***
 
-    Test parameters:
-    Selected 39 tests (39 total available)
-    Test data path:
+    ================================================================================
+    🚀 DataLab v0.9.0 automatic unit tests 🌌
+    ================================================================================
+
+    🔥 DataLab characteristics/environment:
+    Configuration version: 1.0.0
+    Path: C:\Dev\Projets\DataLab\cdl
+    Frozen: False
+    Debug: False
+
+    🔥 DataLab configuration:
+    Process isolation: enabled
+    RPC server: enabled
+    Console: enabled
+    Available memory threshold: 500 MB
+    Ignored dependencies: disabled
+    Processing:
+        Extract all ROIs in a single signal or image
+        FFT shift: enabled
+
+    🔥 Test parameters:
+    ⚡ Selected 51 tests (51 total available)
+    ⚡ Test data path:
         C:\Dev\Projets\DataLab\cdl\data\tests
-    Environment:
-        CDL_DATA=C:\Dev\Projets\CDL_data\
-        PYTHONPATH=.
+    ⚡ Environment:
+        CDL_DATA=C:\Dev\Projets\DataLab_data\
+        PYTHONPATH=.;..\..\Libre\guidata;..\..\Libre\guiqwt
         DEBUG=
 
     Please wait while test scripts are executed (a few minutes).
     Only error messages will be printed out (no message = test OK).
 
-    ===[01/39]=== 🍺 Running test [tests\annotations_app.py]
-    ===[02/39]=== 🍺 Running test [tests\annotations_unit.py]
-    ===[03/39]=== 🍺 Running test [tests\auto_app.py]
-    ===[04/39]=== 🍺 Running test [tests\basic1_app.py]
-    ===[05/39]=== 🍺 Running test [tests\basic2_app.py]
-    ===[06/39]=== 🍺 Running test [tests\basic3_app.py]
+    ===[01/51]=== 🍺 Running test [tests\annotations_app.py]
+    ===[02/51]=== 🍺 Running test [tests\annotations_unit.py]
+    ===[03/51]=== 🍺 Running test [tests\auto_app.py]
+    ===[04/51]=== 🍺 Running test [tests\basic1_app.py]
+    ===[05/51]=== 🍺 Running test [tests\basic2_app.py]
+    ===[06/51]=== 🍺 Running test [tests\basic3_app.py]
 
 Run interactive tests
 ---------------------

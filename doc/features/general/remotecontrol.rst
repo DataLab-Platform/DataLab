@@ -52,6 +52,10 @@ Supported features are the following:
   - Get object list
   - Run calculation with parameters
 
+.. note::
+
+    The signal and image objects are described on this section: :ref:`ref-to-model`.
+
 Some examples are provided to help implementing such a communication
 between your application and DataLab:
 
