@@ -24,7 +24,7 @@ from guiqwt.geometry import vector_rotation
 from guiqwt.widgets.resizedialog import ResizeDialog
 from numpy import ma
 from qtpy import QtWidgets as QW
-from skimage import exposure, feature, morphology
+from skimage import exposure, feature, filters, morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 from skimage.util.dtype import dtype_range
 
@@ -404,6 +404,29 @@ class MorphologyParam(gdt.DataSet):
 
     radius = gdi.IntItem(
         _("Radius"), default=1, min=1, help=_("Footprint (disk) radius.")
+    )
+
+
+class ButterworthParam(gdt.DataSet):
+    """Butterworth filter parameters"""
+
+    cut_off = gdi.FloatItem(
+        _("Cut-off frequency ratio"),
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
+    )
+    high_pass = gdi.BoolItem(
+        _("High-pass filter"),
+        default=False,
+        help=_("If True, apply high-pass filter instead of low-pass."),
+    )
+    order = gdi.IntItem(
+        _("Order"),
+        default=2,
+        min=1,
+        help=_("Order of the Butterworth filter."),
     )
 
 
@@ -1389,6 +1412,19 @@ class ImageProcessor(BaseProcessor):
     def compute_closing(self, param: MorphologyParam | None = None) -> None:
         """Compute morphological closing"""
         self._morph(param, morphology.closing, _("Closing"), "ClosingDisk")
+
+    @qt_try_except()
+    def compute_butterworth(self, param: ButterworthParam | None = None) -> None:
+        """Compute Butterworth filter"""
+        edit, param = self.init_param(param, ButterworthParam, _("Butterworth filter"))
+        self.compute_11(
+            "Butterworth",
+            lambda x, p: filters.butterworth(x, p.cut_off, p.high_pass, p.order),
+            param,
+            suffix=lambda p: f"cut_off={p.cut_off},"
+            "high_pass={p.high_pass},order={p.order}",
+            edit=edit,
+        )
 
     @qt_try_except()
     def compute_canny(self, param: CannyParam | None = None) -> None:

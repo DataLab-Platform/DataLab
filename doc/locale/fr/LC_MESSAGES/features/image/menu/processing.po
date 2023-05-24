@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 19:01+0200\n"
+"POT-Creation-Date: 2023-05-24 20:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -139,7 +139,10 @@ msgid ""
 "Apply gamma correction to each selected image (implementation based on "
 "`skimage.exposure.adjust_gamma <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
-msgstr "Applique une correction gamma sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
+msgstr ""
+"Applique une correction gamma sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_gamma <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
 
 #: ../../features/image/menu/processing.rst:51
 msgid "Logarithmic correction"
@@ -150,7 +153,10 @@ msgid ""
 "Apply logarithmic correction to each selected image (implementation based"
 " on `skimage.exposure.adjust_log <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
-msgstr "Applique une correction logarithmique sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+msgstr ""
+"Applique une correction logarithmique sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_log <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
 
 #: ../../features/image/menu/processing.rst:55
 msgid "Sigmoid correction"
@@ -161,7 +167,11 @@ msgid ""
 "Apply sigmoid correction to each selected image (implementation based on "
 "`skimage.exposure.adjust_sigmoid <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
-msgstr "Applique une correction sigmoïde sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+msgstr ""
+"Applique une correction sigmoïde sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_sigmoid <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
 
 #: ../../features/image/menu/processing.rst:59
 msgid "Histogram equalization"
@@ -367,7 +377,7 @@ msgstr ""
 " `skimage.morphology.closing <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
 
-#: ../../features/image/menu/processing.rst:112
+#: ../../features/image/menu/processing.rst:113
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
@@ -380,3 +390,14 @@ msgstr ""
 "Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
 "Canny (implémentation basée sur `skimage.feature.canny <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
+
+#: ../../features/image/menu/processing.rst:116
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+#: ../../features/image/menu/processing.rst:116
+msgid ""
+"Perform Butterworth filter on an image (implementation based on "
+"`skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+msgstr "Calcule le résultat d'un filtre de Butterworth sur l'image (implémentation basée sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"

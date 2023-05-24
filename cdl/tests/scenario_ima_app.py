@@ -20,6 +20,7 @@ from cdl.core.gui.processor.image import (
     AdjustGammaParam,
     AdjustLogParam,
     AdjustSigmoidParam,
+    ButterworthParam,
     CannyParam,
     ContourShapeParam,
     DenoiseBilateralParam,
@@ -113,6 +114,11 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_dilation(param)
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
+
+    param = ButterworthParam()
+    param.order = 2
+    param.cut_off = 0.5
+    panel.processor.compute_butterworth(param)
 
     ima2 = create_test_image1(data_size)
     param = CannyParam()

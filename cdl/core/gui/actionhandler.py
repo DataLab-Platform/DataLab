@@ -811,7 +811,10 @@ class ImageActionHandler(BaseActionHandler):
                     _("Closing (disk)"),
                     triggered=self.panel.processor.compute_closing,
                 )
-
+            self.new_action(
+                _("Butterworth filter"),
+                triggered=self.panel.processor.compute_butterworth,
+            )
             self.new_action(
                 _("Canny filter"), triggered=self.panel.processor.compute_canny
             )

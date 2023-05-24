@@ -56,6 +56,7 @@ New features:
     * Opening
     * Closing
   * Added Canny filter (edge detection)
+  * Added Butterworth filter
   * Added circle Hough transform (circle detection)
   * Added image intensity levels rescaling
   * Added histogram equalization
