@@ -44,6 +44,10 @@ New features:
   * Added Bilateral filter (denoising)
   * Added Wavelet denoising filter
   * Added white Top-Hat denoising filter
+  * Added exposure processing features:
+    * Gamma correction
+    * Logarithmic correction
+    * Sigmoïd correction
   * Added morphological transforms (disk footprint):
     * White Top-Hat
     * Black Top-Hat

@@ -746,16 +746,28 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Exposure")):
                 self.new_action(
-                    _("Intensity rescaling"),
-                    triggered=self.panel.processor.rescale_intensity,
+                    _("Gamma correction"),
+                    triggered=self.panel.processor.compute_adjust_gamma,
+                )
+                self.new_action(
+                    _("Logarithmic correction"),
+                    triggered=self.panel.processor.compute_adjust_log,
+                )
+                self.new_action(
+                    _("Sigmoid correction"),
+                    triggered=self.panel.processor.compute_adjust_sigmoid,
                 )
                 self.new_action(
                     _("Histogram equalization"),
-                    triggered=self.panel.processor.equalize_hist,
+                    triggered=self.panel.processor.compute_equalize_hist,
                 )
                 self.new_action(
                     _("Adaptive histogram equalization"),
-                    triggered=self.panel.processor.equalize_adapthist,
+                    triggered=self.panel.processor.compute_equalize_adapthist,
+                )
+                self.new_action(
+                    _("Intensity rescaling"),
+                    triggered=self.panel.processor.compute_rescale_intensity,
                 )
             with self.new_menu(_("Restoration")):
                 self.new_action(

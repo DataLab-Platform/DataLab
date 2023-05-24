@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-26 15:11+0100\n"
+"POT-Creation-Date: 2023-05-24 19:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.3\n"
 
 #: ../../features/image/menu/processing.rst:2
 msgid "\"Processing\" menu"
@@ -126,53 +126,98 @@ msgstr ""
 "Crée une image à partir de la transformée de Fourier rapide inverse (FFT "
 "inverse) de chaque image sélectionnée."
 
-#: ../../features/image/menu/processing.rst:55
+#: ../../features/image/menu/processing.rst:67
 msgid "Exposure"
 msgstr "Exposition"
 
 #: ../../features/image/menu/processing.rst:47
-msgid "Intensity rescaling"
-msgstr "Ajustement des niveaux"
+msgid "Gamma correction"
+msgstr "Correction gamma"
 
 #: ../../features/image/menu/processing.rst:46
 msgid ""
-"Stretch or shrink image intensity levels (implementation based on "
-"`skimage.exposure.rescale_intensity <https://scikit-"
-"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
-msgstr "Réduit ou étend la plage de répartition des niveaux de l'image (implémentation basée sur `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+"Apply gamma correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_gamma <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
+msgstr "Applique une correction gamma sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
 
 #: ../../features/image/menu/processing.rst:51
+msgid "Logarithmic correction"
+msgstr "Correction logarithmique"
+
+#: ../../features/image/menu/processing.rst:50
+msgid ""
+"Apply logarithmic correction to each selected image (implementation based"
+" on `skimage.exposure.adjust_log <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+msgstr "Applique une correction logarithmique sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+
+#: ../../features/image/menu/processing.rst:55
+msgid "Sigmoid correction"
+msgstr "Correction sigmoïde"
+
+#: ../../features/image/menu/processing.rst:54
+msgid ""
+"Apply sigmoid correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_sigmoid <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+msgstr "Applique une correction sigmoïde sur chaque image sélectionnée (implémentation basée sur `skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+
+#: ../../features/image/menu/processing.rst:59
 msgid "Histogram equalization"
 msgstr "Egalisation d'histogramme"
 
-#: ../../features/image/menu/processing.rst:50
+#: ../../features/image/menu/processing.rst:58
 msgid ""
 "Equalize image histogram levels (implementation based on "
 "`skimage.exposure.equalize_hist <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
-msgstr "Egalise les niveaux de l'histogramme de l'image (implémentation basée sur `skimage.exposure.equalize_hist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
+msgstr ""
+"Egalise les niveaux de l'histogramme de l'image (implémentation basée sur"
+" `skimage.exposure.equalize_hist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
 
-#: ../../features/image/menu/processing.rst:55
+#: ../../features/image/menu/processing.rst:63
 msgid "Adaptive histogram equalization"
 msgstr "Egalisation d'histogramme adaptative"
 
-#: ../../features/image/menu/processing.rst:54
+#: ../../features/image/menu/processing.rst:62
 msgid ""
 "Equalize image histogram levels using Contrast Limited Adaptive Histogram"
 " Equalization (CLAHE) algorithm (implementation based on "
 "`skimage.exposure.equalize_adapthist <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
-msgstr "Egalise les niveaux de l'histogramme de l'image, en utilisant l'algorithme Contrast Limited Adaptive Histogram Equalization (CLAHE) (implémentation basée sur `skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
+msgstr ""
+"Egalise les niveaux de l'histogramme de l'image, en utilisant "
+"l'algorithme Contrast Limited Adaptive Histogram Equalization (CLAHE) "
+"(implémentation basée sur `skimage.exposure.equalize_adapthist <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
 
-#: ../../features/image/menu/processing.rst:72
+#: ../../features/image/menu/processing.rst:67
+msgid "Intensity rescaling"
+msgstr "Ajustement des niveaux"
+
+#: ../../features/image/menu/processing.rst:66
+msgid ""
+"Stretch or shrink image intensity levels (implementation based on "
+"`skimage.exposure.rescale_intensity <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+msgstr ""
+"Réduit ou étend la plage de répartition des niveaux de l'image "
+"(implémentation basée sur `skimage.exposure.rescale_intensity <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+
+#: ../../features/image/menu/processing.rst:84
 msgid "Restoration"
 msgstr "Restauration"
 
-#: ../../features/image/menu/processing.rst:60
+#: ../../features/image/menu/processing.rst:72
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
-#: ../../features/image/menu/processing.rst:59
+#: ../../features/image/menu/processing.rst:71
 msgid ""
 "Denoise image using Total Variation algorithm (implementation based on "
 "`skimage.restoration.denoise_tv_chambolle <https://scikit-"
@@ -185,11 +230,11 @@ msgstr ""
 "image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
 "chambolle>`_)"
 
-#: ../../features/image/menu/processing.rst:64
+#: ../../features/image/menu/processing.rst:76
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
-#: ../../features/image/menu/processing.rst:63
+#: ../../features/image/menu/processing.rst:75
 msgid ""
 "Denoise image using bilateral filter (implementation based on "
 "`skimage.restoration.denoise_bilateral <https://scikit-"
@@ -200,11 +245,11 @@ msgstr ""
 "://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-"
 "bilateral>`_)"
 
-#: ../../features/image/menu/processing.rst:68
+#: ../../features/image/menu/processing.rst:80
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
-#: ../../features/image/menu/processing.rst:67
+#: ../../features/image/menu/processing.rst:79
 msgid ""
 "Perform wavelet denoising on image (implementation based on "
 "`skimage.restoration.denoise_wavelet <https://scikit-"
@@ -214,11 +259,11 @@ msgstr ""
 "sur `skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
 
-#: ../../features/image/menu/processing.rst:72
+#: ../../features/image/menu/processing.rst:84
 msgid "White Top-Hat denoising"
 msgstr "Débruitage par Top-Hat"
 
-#: ../../features/image/menu/processing.rst:71
+#: ../../features/image/menu/processing.rst:83
 msgid ""
 "Denoise image by subtracting its white top hat transform (using a disk "
 "footprint)"
@@ -226,15 +271,15 @@ msgstr ""
 "Débruitage de l'image par soustraction de la transformée Top-Hat avec "
 "ouverture circulaire de rayon paramétrabl"
 
-#: ../../features/image/menu/processing.rst:97
+#: ../../features/image/menu/processing.rst:109
 msgid "Morphology"
 msgstr "Morphologie"
 
-#: ../../features/image/menu/processing.rst:77
+#: ../../features/image/menu/processing.rst:89
 msgid "White Top-Hat (disk)"
 msgstr "Top-Hat (disque)"
 
-#: ../../features/image/menu/processing.rst:76
+#: ../../features/image/menu/processing.rst:88
 msgid ""
 "Perform white top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.white_tophat <https"
@@ -246,11 +291,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
 
-#: ../../features/image/menu/processing.rst:81
+#: ../../features/image/menu/processing.rst:93
 msgid "Black Top-Hat (disk)"
 msgstr "Top-Hat dual (disque)"
 
-#: ../../features/image/menu/processing.rst:80
+#: ../../features/image/menu/processing.rst:92
 msgid ""
 "Perform black top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.black_tophat <https"
@@ -262,11 +307,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
 
-#: ../../features/image/menu/processing.rst:85
+#: ../../features/image/menu/processing.rst:97
 msgid "Erosion (disk)"
 msgstr "Erosion (disque)"
 
-#: ../../features/image/menu/processing.rst:84
+#: ../../features/image/menu/processing.rst:96
 msgid ""
 "Perform morphological erosion on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.erosion <https://scikit-"
@@ -277,11 +322,11 @@ msgstr ""
 "`skimage.morphology.erosion <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
 
-#: ../../features/image/menu/processing.rst:89
+#: ../../features/image/menu/processing.rst:101
 msgid "Dilation (disk)"
 msgstr "Dilatation (disque)"
 
-#: ../../features/image/menu/processing.rst:88
+#: ../../features/image/menu/processing.rst:100
 msgid ""
 "Perform morphological dilation on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.dilation <https://scikit-"
@@ -292,11 +337,11 @@ msgstr ""
 "`skimage.morphology.dilation <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
 
-#: ../../features/image/menu/processing.rst:93
+#: ../../features/image/menu/processing.rst:105
 msgid "Opening (disk)"
 msgstr "Ouverture (disque)"
 
-#: ../../features/image/menu/processing.rst:92
+#: ../../features/image/menu/processing.rst:104
 msgid ""
 "Perform morphological opening on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.opening <https://scikit-"
@@ -307,11 +352,11 @@ msgstr ""
 " `skimage.morphology.opening <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
 
-#: ../../features/image/menu/processing.rst:97
+#: ../../features/image/menu/processing.rst:109
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-#: ../../features/image/menu/processing.rst:96
+#: ../../features/image/menu/processing.rst:108
 msgid ""
 "Perform morphological closing on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.closing <https://scikit-"
@@ -322,11 +367,11 @@ msgstr ""
 " `skimage.morphology.closing <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
 
-#: ../../features/image/menu/processing.rst:100
+#: ../../features/image/menu/processing.rst:112
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: ../../features/image/menu/processing.rst:100
+#: ../../features/image/menu/processing.rst:112
 msgid ""
 "Perform edge filtering on an image, using the Canny algorithm "
 "(implementation based on `skimage.feature.canny <https://scikit-"

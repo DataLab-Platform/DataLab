@@ -17,6 +17,9 @@ Testing the following:
 
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.processor.image import (
+    AdjustGammaParam,
+    AdjustLogParam,
+    AdjustSigmoidParam,
     CannyParam,
     ContourShapeParam,
     DenoiseBilateralParam,
@@ -79,14 +82,26 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     param = DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
-    param = RescaleIntensityParam()
-    panel.processor.rescale_intensity(param)
+    param = AdjustGammaParam()
+    param.gamma = 0.5
+    panel.processor.compute_adjust_gamma(param)
+
+    param = AdjustLogParam()
+    param.gain = 0.5
+    panel.processor.compute_adjust_log(param)
+
+    param = AdjustSigmoidParam()
+    param.gain = 0.5
+    panel.processor.compute_adjust_sigmoid(param)
 
     param = EqualizeHistParam()
-    panel.processor.equalize_hist(param)
+    panel.processor.compute_equalize_hist(param)
 
     param = EqualizeAdaptHistParam()
-    panel.processor.equalize_adapthist(param)
+    panel.processor.compute_equalize_adapthist(param)
+
+    param = RescaleIntensityParam()
+    panel.processor.compute_rescale_intensity(param)
 
     param = MorphologyParam()
     param.radius = 10

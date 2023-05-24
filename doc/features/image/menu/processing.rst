@@ -42,9 +42,17 @@ Inverse FFT
     Create a new image which is the inverse FFT of each selected image.
 
 Exposure
-    Intensity rescaling
-        Stretch or shrink image intensity levels
-        (implementation based on `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)
+    Gamma correction
+        Apply gamma correction to each selected image
+        (implementation based on `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)
+
+    Logarithmic correction
+        Apply logarithmic correction to each selected image
+        (implementation based on `skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)
+
+    Sigmoid correction
+        Apply sigmoid correction to each selected image
+        (implementation based on `skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)
 
     Histogram equalization
         Equalize image histogram levels
@@ -53,6 +61,10 @@ Exposure
     Adaptive histogram equalization
         Equalize image histogram levels using Contrast Limited Adaptive Histogram Equalization (CLAHE) algorithm
         (implementation based on `skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)
+
+    Intensity rescaling
+        Stretch or shrink image intensity levels
+        (implementation based on `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)
 
 Restoration
     Total variation denoising

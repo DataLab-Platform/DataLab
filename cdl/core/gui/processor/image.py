@@ -63,6 +63,62 @@ VALID_DTYPES_STRLIST = [
 ]
 
 
+class AdjustGammaParam(gdt.DataSet):
+    """Gamma adjustment parameters"""
+
+    gamma = gdi.FloatItem(
+        _("Gamma"),
+        default=1.0,
+        min=0.0,
+        help=_("Gamma correction factor (higher values give more contrast)."),
+    )
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=1.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+
+
+class AdjustLogParam(gdt.DataSet):
+    """Logarithmic adjustment parameters"""
+
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=1.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+    inv = gdi.BoolItem(
+        _("Inverse"),
+        default=False,
+        help=_("If True, apply inverse logarithmic transformation."),
+    )
+
+
+class AdjustSigmoidParam(gdt.DataSet):
+    """Sigmoid adjustment parameters"""
+
+    cutoff = gdi.FloatItem(
+        _("Cutoff"),
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        help=_("Cutoff value (higher values give more contrast)."),
+    )
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=10.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+    inv = gdi.BoolItem(
+        _("Inverse"),
+        default=False,
+        help=_("If True, apply inverse sigmoid transformation."),
+    )
+
+
 class RescaleIntensityParam(gdt.DataSet):
     """Intensity rescaling parameters"""
 
@@ -1100,7 +1156,49 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def rescale_intensity(self, param: RescaleIntensityParam | None = None) -> None:
+    def compute_adjust_gamma(self, param: AdjustGammaParam | None = None) -> None:
+        """Compute gamma correction"""
+        edit, param = self.init_param(param, AdjustGammaParam, _("Gamma correction"))
+        self.compute_11(
+            "Gamma",
+            lambda x, p: exposure.adjust_gamma(x, gamma=p.gamma, gain=p.gain),
+            param,
+            suffix=lambda p: f"γ={p.gamma},gain={p.gain}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_adjust_log(self, param: AdjustLogParam | None = None) -> None:
+        """Compute log correction"""
+        edit, param = self.init_param(param, AdjustLogParam, _("Log correction"))
+        self.compute_11(
+            "Log",
+            lambda x, p: exposure.adjust_log(x, gain=p.gain, inv=p.inv),
+            param,
+            suffix=lambda p: f"gain={p.gain},inv={p.inv}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_adjust_sigmoid(self, param: AdjustSigmoidParam | None = None) -> None:
+        """Compute sigmoid correction"""
+        edit, param = self.init_param(
+            param, AdjustSigmoidParam, _("Sigmoid correction")
+        )
+        self.compute_11(
+            "Sigmoid",
+            lambda x, p: exposure.adjust_sigmoid(
+                x, cutoff=p.cutoff, gain=p.gain, inv=p.inv
+            ),
+            param,
+            suffix=lambda p: f"cutoff={p.cutoff},gain={p.gain},inv={p.inv}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_rescale_intensity(
+        self, param: RescaleIntensityParam | None = None
+    ) -> None:
         """Rescale image intensity levels"""
         edit, param = self.init_param(
             param, RescaleIntensityParam, _("Rescale intensity")
@@ -1116,7 +1214,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def equalize_hist(self, param: EqualizeHistParam | None = None) -> None:
+    def compute_equalize_hist(self, param: EqualizeHistParam | None = None) -> None:
         """Histogram equalization"""
         edit, param = self.init_param(
             param, EqualizeHistParam, _("Histogram equalization")
@@ -1130,7 +1228,9 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def equalize_adapthist(self, param: EqualizeAdaptHistParam | None = None) -> None:
+    def compute_equalize_adapthist(
+        self, param: EqualizeAdaptHistParam | None = None
+    ) -> None:
         """Adaptive histogram equalization"""
         edit, param = self.init_param(
             param, EqualizeAdaptHistParam, _("Adaptive histogram equalization")
