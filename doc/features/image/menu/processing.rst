@@ -113,14 +113,62 @@ Morphology
         (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
 
 Edges
-    Canny filter
-        Perform edge filtering on an image, using the Canny algorithm
-        (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)
+    Roberts filter
+        Perform edge filtering on an image, using the Roberts algorithm
+        (implementation based on `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)
+
+    Prewitt filter
+        Perform edge filtering on an image, using the Prewitt algorithm
+        (implementation based on `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)
+
+    Prewitt filter (horizontal)
+        Find the horizontal edges of an image, using the Prewitt algorithm
+        (implementation based on `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)
+
+    Prewitt filter (vertical)
+        Find the vertical edges of an image, using the Prewitt algorithm
+        (implementation based on `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)
+
+    Sobel filter
+        Perform edge filtering on an image, using the Sobel algorithm
+        (implementation based on `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)
+
+    Sobel filter (horizontal)
+        Find the horizontal edges of an image, using the Sobel algorithm
+        (implementation based on `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)
+
+    Sobel filter (vertical)
+        Find the vertical edges of an image, using the Sobel algorithm
+        (implementation based on `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)
+
+    Scharr filter
+        Perform edge filtering on an image, using the Scharr algorithm
+        (implementation based on `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)
+
+    Scharr filter (horizontal)
+        Find the horizontal edges of an image, using the Scharr algorithm
+        (implementation based on `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)
+
+    Scharr filter (vertical)
+        Find the vertical edges of an image, using the Scharr algorithm
+        (implementation based on `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)
 
     Farid filter
         Perform edge filtering on an image, using the Farid algorithm
         (implementation based on `skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)
 
-    Prewitt filter
-        Perform edge filtering on an image, using the Prewitt algorithm
-        (implementation based on `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)
+    Farid filter (horizontal)
+        Find the horizontal edges of an image, using the Farid algorithm
+        (implementation based on `skimage.filters.farid_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)
+
+    Farid filter (vertical)
+        Find the vertical edges of an image, using the Farid algorithm
+        (implementation based on `skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)
+
+    Laplace filter
+        Perform edge filtering on an image, using the Laplace algorithm
+        (implementation based on `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)
+
+    Canny filter
+        Perform edge filtering on an image, using the Canny algorithm
+        (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)

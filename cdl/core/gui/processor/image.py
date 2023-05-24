@@ -1452,14 +1452,74 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_farid(self) -> None:
-        """Compute Farid filter"""
-        self.compute_11("Farid", filters.farid)
+    def compute_roberts(self) -> None:
+        """Compute Roberts filter"""
+        self.compute_11("Roberts", filters.roberts)
 
     @qt_try_except()
     def compute_prewitt(self) -> None:
         """Compute Prewitt filter"""
         self.compute_11("Prewitt", filters.prewitt)
+
+    @qt_try_except()
+    def compute_prewitt_h(self) -> None:
+        """Compute Prewitt filter (horizontal)"""
+        self.compute_11("Prewitt_H", filters.prewitt_h)
+
+    @qt_try_except()
+    def compute_prewitt_v(self) -> None:
+        """Compute Prewitt filter (vertical)"""
+        self.compute_11("Prewitt_V", filters.prewitt_v)
+
+    @qt_try_except()
+    def compute_sobel(self) -> None:
+        """Compute Sobel filter"""
+        self.compute_11("Sobel", filters.sobel)
+
+    @qt_try_except()
+    def compute_sobel_h(self) -> None:
+        """Compute Sobel filter (horizontal)"""
+        self.compute_11("Sobel_H", filters.sobel_h)
+
+    @qt_try_except()
+    def compute_sobel_v(self) -> None:
+        """Compute Sobel filter (vertical)"""
+        self.compute_11("Sobel_V", filters.sobel_v)
+
+    @qt_try_except()
+    def compute_scharr(self) -> None:
+        """Compute Scharr filter"""
+        self.compute_11("Scharr", filters.scharr)
+
+    @qt_try_except()
+    def compute_scharr_h(self) -> None:
+        """Compute Scharr filter (horizontal)"""
+        self.compute_11("Scharr_H", filters.scharr_h)
+
+    @qt_try_except()
+    def compute_scharr_v(self) -> None:
+        """Compute Scharr filter (vertical)"""
+        self.compute_11("Scharr_V", filters.scharr_v)
+
+    @qt_try_except()
+    def compute_farid(self) -> None:
+        """Compute Farid filter"""
+        self.compute_11("Farid", filters.farid)
+
+    @qt_try_except()
+    def compute_farid_h(self) -> None:
+        """Compute Farid filter (horizontal)"""
+        self.compute_11("Farid_H", filters.farid_h)
+
+    @qt_try_except()
+    def compute_farid_v(self) -> None:
+        """Compute Farid filter (vertical)"""
+        self.compute_11("Farid_V", filters.farid_v)
+
+    @qt_try_except()
+    def compute_laplace(self) -> None:
+        """Compute Laplace filter"""
+        self.compute_11("Laplace", filters.laplace)
 
     # ------Image Computing
     @qt_try_except()

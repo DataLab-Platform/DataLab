@@ -40,14 +40,16 @@ New features:
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added "Distribute on a grid" and "Reset image positions" in operation menu
-  * Added Total variation denoising filter (TV Chambolle)
-  * Added Bilateral filter (denoising)
-  * Added Wavelet denoising filter
-  * Added white Top-Hat denoising filter
+  * Added Butterworth filter
   * Added exposure processing features:
     * Gamma correction
     * Logarithmic correction
     * Sigmoïd correction
+  * Added restoration processing features:
+    * Total variation denoising filter (TV Chambolle)
+    * Bilateral filter (denoising)
+    * Wavelet denoising filter
+    * White Top-Hat denoising filter
   * Added morphological transforms (disk footprint):
     * White Top-Hat
     * Black Top-Hat
@@ -55,8 +57,14 @@ New features:
     * Dilation
     * Opening
     * Closing
-  * Added Canny filter (edge detection)
-  * Added Butterworth filter
+  * Added edge detection features:
+    * Roberts filter
+    * Prewitt filter (vertical, horizontal, both)
+    * Sobel filter (vertical, horizontal, both)
+    * Scharr filter (vertical, horizontal, both)
+    * Farid filter (vertical, horizontal, both)
+    * Laplace filter
+    * Canny filter
   * Added circle Hough transform (circle detection)
   * Added image intensity levels rescaling
   * Added histogram equalization

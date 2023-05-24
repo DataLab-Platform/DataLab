@@ -817,13 +817,67 @@ class ImageActionHandler(BaseActionHandler):
                 )
             with self.new_menu(_("Edges")):
                 self.new_action(
+                    _("Roberts filter"), triggered=self.panel.processor.compute_roberts
+                )
+                self.new_action(
+                    _("Prewitt filter"),
+                    triggered=self.panel.processor.compute_prewitt,
+                    separator=True,
+                )
+                self.new_action(
+                    _("Prewitt filter (horizontal)"),
+                    triggered=self.panel.processor.compute_prewitt_h,
+                )
+                self.new_action(
+                    _("Prewitt filter (vertical)"),
+                    triggered=self.panel.processor.compute_prewitt_v,
+                )
+                self.new_action(
+                    _("Sobel filter"),
+                    triggered=self.panel.processor.compute_sobel,
+                    separator=True,
+                )
+                self.new_action(
+                    _("Sobel filter (horizontal)"),
+                    triggered=self.panel.processor.compute_sobel_h,
+                )
+                self.new_action(
+                    _("Sobel filter (vertical)"),
+                    triggered=self.panel.processor.compute_sobel_v,
+                )
+                self.new_action(
+                    _("Scharr filter"),
+                    triggered=self.panel.processor.compute_scharr,
+                    separator=True,
+                )
+                self.new_action(
+                    _("Scharr filter (horizontal)"),
+                    triggered=self.panel.processor.compute_scharr_h,
+                )
+                self.new_action(
+                    _("Scharr filter (vertical)"),
+                    triggered=self.panel.processor.compute_scharr_v,
+                )
+                self.new_action(
+                    _("Farid filter"),
+                    triggered=self.panel.processor.compute_farid,
+                    separator=True,
+                )
+                self.new_action(
+                    _("Farid filter (horizontal)"),
+                    triggered=self.panel.processor.compute_farid_h,
+                )
+                self.new_action(
+                    _("Farid filter (vertical)"),
+                    triggered=self.panel.processor.compute_farid_v,
+                )
+                self.new_action(
+                    _("Laplace filter"),
+                    triggered=self.panel.processor.compute_laplace,
+                    separator=True,
+                )
+                self.new_action(
                     _("Canny filter"), triggered=self.panel.processor.compute_canny
-                )
-                self.new_action(
-                    _("Farid filter"), triggered=self.panel.processor.compute_farid
-                )
-                self.new_action(
-                    _("Prewitt filter"), triggered=self.panel.processor.compute_prewitt
                 )
 
         with self.new_category(ActionCategory.COMPUTING):

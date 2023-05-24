@@ -125,9 +125,25 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_canny(param)
     panel.add_object(ima2)
 
-    panel.processor.compute_farid()
+    panel.processor.compute_roberts()
 
     panel.processor.compute_prewitt()
+    panel.processor.compute_prewitt_h()
+    panel.processor.compute_prewitt_v()
+
+    panel.processor.compute_sobel()
+    panel.processor.compute_sobel_h()
+    panel.processor.compute_sobel_v()
+
+    panel.processor.compute_scharr()
+    panel.processor.compute_scharr_h()
+    panel.processor.compute_scharr_v()
+
+    panel.processor.compute_farid()
+    panel.processor.compute_farid_h()
+    panel.processor.compute_farid_v()
+
+    panel.processor.compute_laplace()
 
     param = LogP1Param()
     param.n = 1
