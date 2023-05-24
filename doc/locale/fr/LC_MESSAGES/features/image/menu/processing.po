@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 20:45+0200\n"
+"POT-Creation-Date: 2023-05-24 21:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -378,10 +378,28 @@ msgstr ""
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
 
 #: ../../features/image/menu/processing.rst:113
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+#: ../../features/image/menu/processing.rst:112
+msgid ""
+"Perform Butterworth filter on an image (implementation based on "
+"`skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+msgstr ""
+"Calcule le résultat d'un filtre de Butterworth sur l'image "
+"(implémentation basée sur `skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+
+#: ../../features/image/menu/processing.rst:125
+msgid "Edges"
+msgstr "Contours"
+
+#: ../../features/image/menu/processing.rst:118
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: ../../features/image/menu/processing.rst:112
+#: ../../features/image/menu/processing.rst:117
 msgid ""
 "Perform edge filtering on an image, using the Canny algorithm "
 "(implementation based on `skimage.feature.canny <https://scikit-"
@@ -391,13 +409,31 @@ msgstr ""
 "Canny (implémentation basée sur `skimage.feature.canny <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
 
-#: ../../features/image/menu/processing.rst:116
-msgid "Butterworth filter"
-msgstr "Filtre de Butterworth"
+#: ../../features/image/menu/processing.rst:122
+msgid "Farid filter"
+msgstr "Filtre de Farid"
 
-#: ../../features/image/menu/processing.rst:116
+#: ../../features/image/menu/processing.rst:121
 msgid ""
-"Perform Butterworth filter on an image (implementation based on "
-"`skimage.filters.butterworth <https://scikit-"
-"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
-msgstr "Calcule le résultat d'un filtre de Butterworth sur l'image (implémentation basée sur `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+"Perform edge filtering on an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Farid (implémentation basée sur `skimage.filters.farid <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
+
+#: ../../features/image/menu/processing.rst:125
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+#: ../../features/image/menu/processing.rst:125
+msgid ""
+"Perform edge filtering on an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Prewitt (implémentation basée sur `skimage.filters.prewitt <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"

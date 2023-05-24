@@ -1451,6 +1451,16 @@ class ImageProcessor(BaseProcessor):
             edit=edit,
         )
 
+    @qt_try_except()
+    def compute_farid(self) -> None:
+        """Compute Farid filter"""
+        self.compute_11("Farid", filters.farid)
+
+    @qt_try_except()
+    def compute_prewitt(self) -> None:
+        """Compute Prewitt filter"""
+        self.compute_11("Prewitt", filters.prewitt)
+
     # ------Image Computing
     @qt_try_except()
     def compute_centroid(self) -> None:

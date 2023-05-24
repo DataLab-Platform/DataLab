@@ -744,6 +744,10 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(_("Pixel binning"), triggered=self.panel.processor.rebin)
 
         with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Butterworth filter"),
+                triggered=self.panel.processor.compute_butterworth,
+            )
             with self.new_menu(_("Exposure")):
                 self.new_action(
                     _("Gamma correction"),
@@ -811,13 +815,16 @@ class ImageActionHandler(BaseActionHandler):
                     _("Closing (disk)"),
                     triggered=self.panel.processor.compute_closing,
                 )
-            self.new_action(
-                _("Butterworth filter"),
-                triggered=self.panel.processor.compute_butterworth,
-            )
-            self.new_action(
-                _("Canny filter"), triggered=self.panel.processor.compute_canny
-            )
+            with self.new_menu(_("Edges")):
+                self.new_action(
+                    _("Canny filter"), triggered=self.panel.processor.compute_canny
+                )
+                self.new_action(
+                    _("Farid filter"), triggered=self.panel.processor.compute_farid
+                )
+                self.new_action(
+                    _("Prewitt filter"), triggered=self.panel.processor.compute_prewitt
+                )
 
         with self.new_category(ActionCategory.COMPUTING):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid

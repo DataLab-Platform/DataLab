@@ -41,6 +41,10 @@ FFT
 Inverse FFT
     Create a new image which is the inverse FFT of each selected image.
 
+Butterworth filter
+    Perform Butterworth filter on an image
+    (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
+
 Exposure
     Gamma correction
         Apply gamma correction to each selected image
@@ -108,10 +112,15 @@ Morphology
         Perform morphological closing on an image, using a disk footprint
         (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
 
-Butterworth filter
-    Perform Butterworth filter on an image
-    (implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
+Edges
+    Canny filter
+        Perform edge filtering on an image, using the Canny algorithm
+        (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)
 
-Canny filter
-    Perform edge filtering on an image, using the Canny algorithm
-    (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)
+    Farid filter
+        Perform edge filtering on an image, using the Farid algorithm
+        (implementation based on `skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)
+
+    Prewitt filter
+        Perform edge filtering on an image, using the Prewitt algorithm
+        (implementation based on `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)

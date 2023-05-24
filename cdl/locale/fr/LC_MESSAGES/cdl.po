@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-05-24 20:45+0200\n"
+"POT-Creation-Date: 2023-05-24 21:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,17 +141,17 @@ msgstr "Division"
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: cdl\core\gui\actionhandler.py:530 cdl\core\gui\processor\image.py:1171
+#: cdl\core\gui\actionhandler.py:530 cdl\core\gui\processor\image.py:1160
 #: cdl\core\gui\processor\signal.py:278
 msgid "Thresholding"
 msgstr "Seuillage"
 
-#: cdl\core\gui\actionhandler.py:534 cdl\core\gui\processor\image.py:1183
+#: cdl\core\gui\actionhandler.py:534 cdl\core\gui\processor\image.py:1172
 #: cdl\core\gui\processor\signal.py:290
 msgid "Clipping"
 msgstr "Écrêtage"
 
-#: cdl\core\gui\actionhandler.py:538 cdl\core\gui\processor\image.py:1158
+#: cdl\core\gui\actionhandler.py:538 cdl\core\gui\processor\image.py:1147
 #: cdl\core\gui\processor\signal.py:256
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
@@ -220,7 +220,7 @@ msgstr "Dérivée"
 msgid "Integral"
 msgstr "Intégrale"
 
-#: cdl\core\gui\actionhandler.py:626 cdl\core\gui\processor\image.py:1515
+#: cdl\core\gui\actionhandler.py:626 cdl\core\gui\processor\image.py:1506
 #: cdl\core\gui\processor\signal.py:180
 msgid "Peak detection"
 msgstr "Détection de pics"
@@ -317,7 +317,7 @@ msgstr "Distribuer sur une grille..."
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions des images"
 
-#: cdl\core\gui\actionhandler.py:740 cdl\core\gui\processor\image.py:962
+#: cdl\core\gui\actionhandler.py:740 cdl\core\gui\processor\image.py:951
 msgid "Resize"
 msgstr "Redimensionner"
 
@@ -329,7 +329,7 @@ msgstr "Binning"
 msgid "Exposure"
 msgstr "Exposition"
 
-#: cdl\core\gui\actionhandler.py:749 cdl\core\gui\processor\image.py:1195
+#: cdl\core\gui\actionhandler.py:749 cdl\core\gui\processor\image.py:1184
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
@@ -337,15 +337,15 @@ msgstr "Correction gamma"
 msgid "Logarithmic correction"
 msgstr "Correction logarithmique"
 
-#: cdl\core\gui\actionhandler.py:757 cdl\core\gui\processor\image.py:1220
+#: cdl\core\gui\actionhandler.py:757 cdl\core\gui\processor\image.py:1209
 msgid "Sigmoid correction"
 msgstr "Correction sigmoïde"
 
-#: cdl\core\gui\actionhandler.py:761 cdl\core\gui\processor\image.py:1254
+#: cdl\core\gui\actionhandler.py:761 cdl\core\gui\processor\image.py:1243
 msgid "Histogram equalization"
 msgstr "Egalisation d'histogramme"
 
-#: cdl\core\gui\actionhandler.py:765 cdl\core\gui\processor\image.py:1270
+#: cdl\core\gui\actionhandler.py:765 cdl\core\gui\processor\image.py:1259
 msgid "Adaptive histogram equalization"
 msgstr "Egalisation d'histogramme adaptative"
 
@@ -357,7 +357,7 @@ msgstr "Ajustement des niveaux"
 msgid "Restoration"
 msgstr "Restauration"
 
-#: cdl\core\gui\actionhandler.py:774 cdl\core\gui\processor\image.py:1319
+#: cdl\core\gui\actionhandler.py:774 cdl\core\gui\processor\image.py:1308
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
@@ -365,7 +365,7 @@ msgstr "Filtrage variationnel (débruitage)"
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
-#: cdl\core\gui\actionhandler.py:782 cdl\core\gui\processor\image.py:1353
+#: cdl\core\gui\actionhandler.py:782 cdl\core\gui\processor\image.py:1342
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
@@ -401,89 +401,101 @@ msgstr "Ouverture (disque)"
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-#: cdl\core\gui\actionhandler.py:816 cdl\core\gui\processor\image.py:1430
+#: cdl\core\gui\actionhandler.py:815 cdl\core\gui\processor\image.py:1419
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+#: cdl\core\gui\actionhandler.py:818
+msgid "Edges"
+msgstr "Contours"
+
+#: cdl\core\gui\actionhandler.py:820 cdl\core\gui\processor\image.py:1432
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: cdl\core\gui\actionhandler.py:819 cdl\core\gui\processor\image.py:1455
-msgid "Butterworth filter"
-msgstr ""
+#: cdl\core\gui\actionhandler.py:823
+msgid "Farid filter"
+msgstr "Filtre de Farid"
 
-#: cdl\core\gui\actionhandler.py:827 cdl\tests\centroid_unit.py:59
+#: cdl\core\gui\actionhandler.py:826
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+#: cdl\core\gui\actionhandler.py:833 cdl\tests\centroid_unit.py:59
 #: cdl\tests\enclosingcircle_unit.py:34
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: cdl\core\gui\actionhandler.py:829
+#: cdl\core\gui\actionhandler.py:835
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: cdl\core\gui\actionhandler.py:832
+#: cdl\core\gui\actionhandler.py:838
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: cdl\core\gui\actionhandler.py:834
+#: cdl\core\gui\actionhandler.py:840
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: cdl\core\gui\actionhandler.py:837
+#: cdl\core\gui\actionhandler.py:843
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: cdl\core\gui\actionhandler.py:840
+#: cdl\core\gui\actionhandler.py:846
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: cdl\core\gui\actionhandler.py:843
+#: cdl\core\gui\actionhandler.py:849
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: cdl\core\gui\actionhandler.py:845
+#: cdl\core\gui\actionhandler.py:851
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
-#: cdl\core\gui\actionhandler.py:848
+#: cdl\core\gui\actionhandler.py:854
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
-#: cdl\core\gui\actionhandler.py:850
+#: cdl\core\gui\actionhandler.py:856
 msgid "Detect circular shapes using circle Hough transform"
 msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
 
-#: cdl\core\gui\actionhandler.py:853
+#: cdl\core\gui\actionhandler.py:859
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: cdl\core\gui\actionhandler.py:855 cdl\core\gui\processor\image.py:1599
+#: cdl\core\gui\actionhandler.py:861 cdl\core\gui\processor\image.py:1590
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (gaussien)"
 
-#: cdl\core\gui\actionhandler.py:857
+#: cdl\core\gui\actionhandler.py:863
 msgid "Detect blobs using Difference of Gaussian (DOG) method"
 msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
 
-#: cdl\core\gui\actionhandler.py:860 cdl\core\gui\processor\image.py:1618
+#: cdl\core\gui\actionhandler.py:866 cdl\core\gui\processor\image.py:1609
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: cdl\core\gui\actionhandler.py:862
+#: cdl\core\gui\actionhandler.py:868
 msgid "Detect blobs using Determinant of Hessian (DOH) method"
 msgstr "Détection de taches basée sur la méthode du discriminant hessien"
 
-#: cdl\core\gui\actionhandler.py:865 cdl\core\gui\processor\image.py:1638
+#: cdl\core\gui\actionhandler.py:871 cdl\core\gui\processor\image.py:1629
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
-#: cdl\core\gui\actionhandler.py:867
+#: cdl\core\gui\actionhandler.py:873
 msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
 msgstr ""
 "Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
 
-#: cdl\core\gui\actionhandler.py:870 cdl\core\gui\processor\image.py:1671
+#: cdl\core\gui\actionhandler.py:876 cdl\core\gui\processor\image.py:1662
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: cdl\core\gui\actionhandler.py:872
+#: cdl\core\gui\actionhandler.py:878
 msgid "Detect blobs using OpenCV SimpleBlobDetector"
 msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
@@ -1135,7 +1147,7 @@ msgstr "Angle"
 
 #: cdl\core\gui\processor\image.py:183 cdl\core\gui\processor\image.py:255
 #: cdl\core\gui\processor\image.py:375 cdl\core\gui\processor\image.py:395
-#: cdl\core\gui\processor\image.py:444
+#: cdl\core\gui\processor\image.py:467
 msgid "Mode"
 msgstr "Mode"
 
@@ -1168,7 +1180,7 @@ msgid "Prefilter the input image"
 msgstr "Prétraitement de l'image d'origine (spline)"
 
 #: cdl\core\gui\processor\image.py:207 cdl\core\gui\processor\image.py:270
-#: cdl\core\gui\processor\image.py:469
+#: cdl\core\gui\processor\image.py:426
 msgid "Order"
 msgstr "Ordre"
 
@@ -1305,33 +1317,53 @@ msgstr "Rayon de l'ouverture circulaire (disque)."
 msgid "Radius"
 msgstr "Rayon"
 
-#: cdl\core\gui\processor\image.py:419
+#: cdl\core\gui\processor\image.py:414
+msgid "Cut-off frequency ratio"
+msgstr "Fréquence de coupure relative"
+
+#: cdl\core\gui\processor\image.py:418
+msgid "Cut-off frequency ratio (0.0 - 1.0)."
+msgstr "Fréquence de coupure relative (0.0 - 1.0)."
+
+#: cdl\core\gui\processor\image.py:421
+msgid "High-pass filter"
+msgstr "Filtre passe-haut"
+
+#: cdl\core\gui\processor\image.py:423
+msgid "If True, apply high-pass filter instead of low-pass."
+msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
+
+#: cdl\core\gui\processor\image.py:429
+msgid "Order of the Butterworth filter."
+msgstr "Ordre du filtre de Butterworth."
+
+#: cdl\core\gui\processor\image.py:442
 msgid "Standard deviation of the Gaussian filter."
 msgstr "Ecart-type du filtrage gaussien"
 
-#: cdl\core\gui\processor\image.py:422
+#: cdl\core\gui\processor\image.py:445
 msgid "Low threshold"
 msgstr "Seuil bas"
 
-#: cdl\core\gui\processor\image.py:425
+#: cdl\core\gui\processor\image.py:448
 msgid "Lower bound for hysteresis thresholding (linking edges)."
 msgstr ""
 "Borne inférieure pour le seuillage par hystérésis (liaison des contours)."
 
-#: cdl\core\gui\processor\image.py:428
+#: cdl\core\gui\processor\image.py:451
 msgid "High threshold"
 msgstr "Seuil haut"
 
-#: cdl\core\gui\processor\image.py:431
+#: cdl\core\gui\processor\image.py:454
 msgid "Upper bound for hysteresis thresholding (linking edges)."
 msgstr ""
 "Borne supérieure pour le seuillage par hystérésis (liaison des contours)."
 
-#: cdl\core\gui\processor\image.py:434
+#: cdl\core\gui\processor\image.py:457
 msgid "Use quantiles"
 msgstr "Utiliser les quantiles"
 
-#: cdl\core\gui\processor\image.py:436
+#: cdl\core\gui\processor\image.py:459
 msgid ""
 "If True then treat low_threshold and high_threshold as quantiles of the edge "
 "magnitude image, rather than absolute edge magnitude values. If True then "
@@ -1341,96 +1373,60 @@ msgstr ""
 "contours, au lieu de valeurs absolues des contours. Si le réglage est actif, "
 "alors les seuils doivent être compris entre 0 et 1."
 
-#: cdl\core\gui\processor\image.py:449
+#: cdl\core\gui\processor\image.py:472
 msgid "Value to fill past edges of input if mode is constant."
 msgstr "Valeur de remplissage si le mode est constant."
 
-#: cdl\core\gui\processor\image.py:457
-msgid "Cut-off frequency ratio"
-msgstr "Fréquence de coupure relative"
-
-#: cdl\core\gui\processor\image.py:461
-msgid "Cut-off frequency ratio (0.0 - 1.0)."
-msgstr "Fréquence de coupure relative (0.0 - 1.0)."
-
-#: cdl\core\gui\processor\image.py:464
-msgid "High-pass filter"
-msgstr "Filtre passe-haut"
-
-#: cdl\core\gui\processor\image.py:466
-msgid "If True, apply high-pass filter instead of low-pass."
-msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
-
-#: cdl\core\gui\processor\image.py:472
-msgid "Order of the Butterworth filter."
-msgstr "Ordre du filtre de Butterworth."
-
-#: cdl\core\gui\processor\image.py:475
-msgid "Channel axis"
-msgstr "Axe"
-
-#: cdl\core\gui\processor\image.py:478
-msgid "Channel axis (-1 for last axis)."
-msgstr "Axe (-1 pour le dernier axe)."
-
-#: cdl\core\gui\processor\image.py:481
-msgid "Squared Butterworth"
-msgstr "Butterworth au carré"
-
-#: cdl\core\gui\processor\image.py:483
-msgid "If True, square the Butterworth filter."
-msgstr "Si vrai, appliquer un filtre de Butterworth au carré."
-
-#: cdl\core\gui\processor\image.py:491 cdl\core\gui\processor\image.py:565
+#: cdl\core\gui\processor\image.py:480 cdl\core\gui\processor\image.py:554
 msgid "Relative threshold"
 msgstr "Seuil relatif"
 
-#: cdl\core\gui\processor\image.py:495
+#: cdl\core\gui\processor\image.py:484
 msgid ""
 "Detection threshold, relative to difference between data maximum and minimum"
 msgstr ""
 "Seuil de détection, relatif à la différence entre le maximum et le minimum "
 "des données de l'image"
 
-#: cdl\core\gui\processor\image.py:506
+#: cdl\core\gui\processor\image.py:495
 msgid "Neighborhoods size"
 msgstr "Taille du voisinage"
 
-#: cdl\core\gui\processor\image.py:510
+#: cdl\core\gui\processor\image.py:499
 msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
 msgstr ""
 "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage "
 "maximum/minimum"
 
-#: cdl\core\gui\processor\image.py:514 cdl\core\gui\processor\image.py:1525
+#: cdl\core\gui\processor\image.py:503 cdl\core\gui\processor\image.py:1516
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
-#: cdl\core\gui\processor\image.py:521
+#: cdl\core\gui\processor\image.py:510
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: cdl\core\gui\processor\image.py:522
+#: cdl\core\gui\processor\image.py:511
 msgid "Circle"
 msgstr "Cercle"
 
-#: cdl\core\gui\processor\image.py:524
+#: cdl\core\gui\processor\image.py:513
 msgid "Shape"
 msgstr "Forme"
 
-#: cdl\core\gui\processor\image.py:531
+#: cdl\core\gui\processor\image.py:520
 msgid "Radius<sub>min</sub>"
 msgstr "Rayon<sub>min</sub>"
 
-#: cdl\core\gui\processor\image.py:534
+#: cdl\core\gui\processor\image.py:523
 msgid "Radius<sub>max</sub>"
 msgstr "Rayon<sub>max</sub>"
 
-#: cdl\core\gui\processor\image.py:536
+#: cdl\core\gui\processor\image.py:525
 msgid "Minimal distance"
 msgstr "Distance minimale"
 
-#: cdl\core\gui\processor\image.py:548
+#: cdl\core\gui\processor\image.py:537
 msgid ""
 "The minimum standard deviation for Gaussian Kernel. Keep this low to detect "
 "smaller blobs."
@@ -1438,7 +1434,7 @@ msgstr ""
 "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible "
 "pour détecter de petites taches."
 
-#: cdl\core\gui\processor\image.py:559
+#: cdl\core\gui\processor\image.py:548
 msgid ""
 "The maximum standard deviation for Gaussian Kernel. Keep this high to detect "
 "larger blobs."
@@ -1446,15 +1442,15 @@ msgstr ""
 "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée "
 "pour détecter de grandes taches."
 
-#: cdl\core\gui\processor\image.py:569
+#: cdl\core\gui\processor\image.py:558
 msgid "Minimum intensity of blobs."
 msgstr "Intensité minimale des taches."
 
-#: cdl\core\gui\processor\image.py:572
+#: cdl\core\gui\processor\image.py:561
 msgid "Overlap"
 msgstr "Recouvrement"
 
-#: cdl\core\gui\processor\image.py:576
+#: cdl\core\gui\processor\image.py:565
 msgid ""
 "If two blobs overlap by a fraction greater than this value, the smaller blob "
 "is eliminated."
@@ -1462,19 +1458,19 @@ msgstr ""
 "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la "
 "plus petite tache est éliminée."
 
-#: cdl\core\gui\processor\image.py:587 cdl\core\gui\processor\image.py:611
+#: cdl\core\gui\processor\image.py:576 cdl\core\gui\processor\image.py:600
 msgid "Exclude border"
 msgstr "Exclure la bordure"
 
-#: cdl\core\gui\processor\image.py:589 cdl\core\gui\processor\image.py:613
+#: cdl\core\gui\processor\image.py:578 cdl\core\gui\processor\image.py:602
 msgid "If True, exclude blobs from the border of the image."
 msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
 
-#: cdl\core\gui\processor\image.py:597
+#: cdl\core\gui\processor\image.py:586
 msgid "Log scale"
 msgstr "Echelle logarithmique"
 
-#: cdl\core\gui\processor\image.py:599
+#: cdl\core\gui\processor\image.py:588
 msgid ""
 "If set intermediate values of standard deviations are interpolated using a "
 "logarithmic scale to the base 10. If not, linear interpolation is used."
@@ -1482,11 +1478,11 @@ msgstr ""
 "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une "
 "échelle linéaire ou logarithmique."
 
-#: cdl\core\gui\processor\image.py:621
+#: cdl\core\gui\processor\image.py:610
 msgid "Min. threshold"
 msgstr "Seuil min."
 
-#: cdl\core\gui\processor\image.py:624
+#: cdl\core\gui\processor\image.py:613
 msgid ""
 "The minimum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -1496,11 +1492,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\gui\processor\image.py:632
+#: cdl\core\gui\processor\image.py:621
 msgid "Max. threshold"
 msgstr "Seuil max."
 
-#: cdl\core\gui\processor\image.py:635
+#: cdl\core\gui\processor\image.py:624
 msgid ""
 "The maximum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -1510,11 +1506,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\gui\processor\image.py:643
+#: cdl\core\gui\processor\image.py:632
 msgid "Min. repeatability"
 msgstr "Répétabilité min."
 
-#: cdl\core\gui\processor\image.py:646
+#: cdl\core\gui\processor\image.py:635
 msgid ""
 "The minimum number of times a blob needs to be detected in a sequence of "
 "images to be considered valid."
@@ -1522,11 +1518,11 @@ msgstr ""
 "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence "
 "d'images pour être considérée valide."
 
-#: cdl\core\gui\processor\image.py:652
+#: cdl\core\gui\processor\image.py:641
 msgid "Min. distance between blobs"
 msgstr "Distance min. entre taches"
 
-#: cdl\core\gui\processor\image.py:655
+#: cdl\core\gui\processor\image.py:644
 msgid ""
 "The minimum distance between two blobs. If blobs are found closer together "
 "than this distance, the smaller blob is removed."
@@ -1534,202 +1530,202 @@ msgstr ""
 "La distance minimale entre deux taches. Si deux taches sont détectées à une "
 "distance inférieure à celle-ci, alors la plus petite tache est éliminée."
 
-#: cdl\core\gui\processor\image.py:662
+#: cdl\core\gui\processor\image.py:651
 msgid "Filter by color"
 msgstr "Filtrer par couleur"
 
-#: cdl\core\gui\processor\image.py:664
+#: cdl\core\gui\processor\image.py:653
 msgid "If true, the image is filtered by color instead of intensity."
 msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
 
-#: cdl\core\gui\processor\image.py:667
+#: cdl\core\gui\processor\image.py:656
 msgid "Blob color"
 msgstr "Couleur de la tache"
 
-#: cdl\core\gui\processor\image.py:669
+#: cdl\core\gui\processor\image.py:658
 msgid ""
 "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
 msgstr ""
 "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les "
 "taches claires)."
 
-#: cdl\core\gui\processor\image.py:675
+#: cdl\core\gui\processor\image.py:664
 msgid "Filter by area"
 msgstr "Filtrer par aire"
 
-#: cdl\core\gui\processor\image.py:677
+#: cdl\core\gui\processor\image.py:666
 msgid "If true, the image is filtered by blob area."
 msgstr "Si vrai, l'image est filtrée par l'aire des taches."
 
-#: cdl\core\gui\processor\image.py:680
+#: cdl\core\gui\processor\image.py:669
 msgid "Min. area"
 msgstr "Aire min."
 
-#: cdl\core\gui\processor\image.py:683
+#: cdl\core\gui\processor\image.py:672
 msgid "The minimum blob area."
 msgstr "L'aire minimale des taches."
 
-#: cdl\core\gui\processor\image.py:686
+#: cdl\core\gui\processor\image.py:675
 msgid "Max. area"
 msgstr "Aire max."
 
-#: cdl\core\gui\processor\image.py:689
+#: cdl\core\gui\processor\image.py:678
 msgid "The maximum blob area."
 msgstr "L'aire maximale des taches."
 
-#: cdl\core\gui\processor\image.py:693
+#: cdl\core\gui\processor\image.py:682
 msgid "Filter by circularity"
 msgstr "Filtrer par circularité"
 
-#: cdl\core\gui\processor\image.py:695
+#: cdl\core\gui\processor\image.py:684
 msgid "If true, the image is filtered by blob circularity."
 msgstr "Si vrai, l'image est filtrée par la circularité des taches."
 
-#: cdl\core\gui\processor\image.py:698
+#: cdl\core\gui\processor\image.py:687
 msgid "Min. circularity"
 msgstr "Circularité min."
 
-#: cdl\core\gui\processor\image.py:702
+#: cdl\core\gui\processor\image.py:691
 msgid "The minimum circularity of the blobs."
 msgstr "La circularité minimale des taches."
 
-#: cdl\core\gui\processor\image.py:705
+#: cdl\core\gui\processor\image.py:694
 msgid "Max. circularity"
 msgstr "Circularité max."
 
-#: cdl\core\gui\processor\image.py:709
+#: cdl\core\gui\processor\image.py:698
 msgid "The maximum circularity of the blobs."
 msgstr "La circularité maximale des taches."
 
-#: cdl\core\gui\processor\image.py:713
+#: cdl\core\gui\processor\image.py:702
 msgid "Filter by inertia"
 msgstr "Filtrer par inertie"
 
-#: cdl\core\gui\processor\image.py:715
+#: cdl\core\gui\processor\image.py:704
 msgid "If true, the image is filtered by blob inertia."
 msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
 
-#: cdl\core\gui\processor\image.py:718
+#: cdl\core\gui\processor\image.py:707
 msgid "Min. inertia ratio"
 msgstr "Ratio d'inertie min."
 
-#: cdl\core\gui\processor\image.py:722
+#: cdl\core\gui\processor\image.py:711
 msgid "The minimum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie minimal des taches."
 
-#: cdl\core\gui\processor\image.py:725
+#: cdl\core\gui\processor\image.py:714
 msgid "Max. inertia ratio"
 msgstr "Ratio d'inertie max."
 
-#: cdl\core\gui\processor\image.py:729
+#: cdl\core\gui\processor\image.py:718
 msgid "The maximum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie maximal des taches."
 
-#: cdl\core\gui\processor\image.py:733
+#: cdl\core\gui\processor\image.py:722
 msgid "Filter by convexity"
 msgstr "Filtrer par convexité"
 
-#: cdl\core\gui\processor\image.py:735
+#: cdl\core\gui\processor\image.py:724
 msgid "If true, the image is filtered by blob convexity."
 msgstr "Si vrai, l'image est filtrée par la convexité des taches."
 
-#: cdl\core\gui\processor\image.py:738
+#: cdl\core\gui\processor\image.py:727
 msgid "Min. convexity"
 msgstr "Convexité min."
 
-#: cdl\core\gui\processor\image.py:742
+#: cdl\core\gui\processor\image.py:731
 msgid "The minimum convexity of the blobs."
 msgstr "La convexité minimale des taches."
 
-#: cdl\core\gui\processor\image.py:745
+#: cdl\core\gui\processor\image.py:734
 msgid "Max. convexity"
 msgstr "Convexité max."
 
-#: cdl\core\gui\processor\image.py:749
+#: cdl\core\gui\processor\image.py:738
 msgid "The maximum convexity of the blobs."
 msgstr "La convexité maximale des taches."
 
-#: cdl\core\gui\processor\image.py:880
+#: cdl\core\gui\processor\image.py:869
 msgid "Distribute on grid"
 msgstr "Distribuer sur grille"
 
-#: cdl\core\gui\processor\image.py:957 cdl\widgets\h5browser.py:445
+#: cdl\core\gui\processor\image.py:946 cdl\widgets\h5browser.py:445
 msgid "Warning:"
 msgstr "Attention :"
 
-#: cdl\core\gui\processor\image.py:959
+#: cdl\core\gui\processor\image.py:948
 msgid "Selected images do not have the same size"
 msgstr "Les images sélectionnées n'ont pas la même taille"
 
-#: cdl\core\gui\processor\image.py:969
+#: cdl\core\gui\processor\image.py:958
 msgid "Destination size:"
 msgstr "Taille de destination :"
 
-#: cdl\core\gui\processor\image.py:1004
+#: cdl\core\gui\processor\image.py:993
 msgid "Binning"
 msgstr "Binning"
 
-#: cdl\core\gui\processor\image.py:1129
+#: cdl\core\gui\processor\image.py:1118
 msgid "Flat field"
 msgstr "Correction de champ plat"
 
-#: cdl\core\gui\processor\image.py:1134
+#: cdl\core\gui\processor\image.py:1123
 msgid "FlatField"
 msgstr "CorrectionChampPlat"
 
-#: cdl\core\gui\processor\image.py:1136
+#: cdl\core\gui\processor\image.py:1125
 msgid "flat field image"
 msgstr "l'image de champ plat"
 
-#: cdl\core\gui\processor\image.py:1207
+#: cdl\core\gui\processor\image.py:1196
 msgid "Log correction"
 msgstr "Correction logarithmique"
 
-#: cdl\core\gui\processor\image.py:1238
+#: cdl\core\gui\processor\image.py:1227
 msgid "Rescale intensity"
 msgstr "Ajuster les niveaux"
 
-#: cdl\core\gui\processor\image.py:1337
+#: cdl\core\gui\processor\image.py:1326
 msgid "Bilateral filtering"
 msgstr "Filtre bilatéral"
 
-#: cdl\core\gui\processor\image.py:1371
+#: cdl\core\gui\processor\image.py:1360
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
-#: cdl\core\gui\processor\image.py:1397
+#: cdl\core\gui\processor\image.py:1386
 msgid "White Top-Hat"
 msgstr "Top-Hat"
 
-#: cdl\core\gui\processor\image.py:1404
+#: cdl\core\gui\processor\image.py:1393
 msgid "Black Top-Hat"
 msgstr "Top-Hat dual"
 
-#: cdl\core\gui\processor\image.py:1410
+#: cdl\core\gui\processor\image.py:1399
 msgid "Erosion"
 msgstr "Erosion"
 
-#: cdl\core\gui\processor\image.py:1415
+#: cdl\core\gui\processor\image.py:1404
 msgid "Dilation"
 msgstr "Dilatation"
 
-#: cdl\core\gui\processor\image.py:1420
+#: cdl\core\gui\processor\image.py:1409
 msgid "Opening"
 msgstr "Ouverture"
 
-#: cdl\core\gui\processor\image.py:1425
+#: cdl\core\gui\processor\image.py:1414
 msgid "Closing"
 msgstr "Fermeture"
 
-#: cdl\core\gui\processor\image.py:1521
+#: cdl\core\gui\processor\image.py:1512
 msgid "Peaks"
 msgstr "Pics"
 
-#: cdl\core\gui\processor\image.py:1561
+#: cdl\core\gui\processor\image.py:1552
 msgid "Contour"
 msgstr "Contour"
 
-#: cdl\core\gui\processor\image.py:1580
+#: cdl\core\gui\processor\image.py:1571
 msgid "Hough circles"
 msgstr "Cercles de Hough"
 
@@ -2358,6 +2354,18 @@ msgstr "Pics :"
 #: cdl\widgets\status.py:69
 msgid "Memory:"
 msgstr "Mémoire :"
+
+#~ msgid "Channel axis"
+#~ msgstr "Axe"
+
+#~ msgid "Channel axis (-1 for last axis)."
+#~ msgstr "Axe (-1 pour le dernier axe)."
+
+#~ msgid "Squared Butterworth"
+#~ msgstr "Butterworth au carré"
+
+#~ msgid "If True, square the Butterworth filter."
+#~ msgstr "Si vrai, appliquer un filtre de Butterworth au carré."
 
 #~ msgid "on"
 #~ msgstr "sous"
