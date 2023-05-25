@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
+import multiprocess
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
@@ -59,6 +60,9 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.signal import SignalObj
 
     Obj = Union[SignalObj, ImageObj]
+
+
+multiprocess.freeze_support()
 
 
 class GaussianParam(gdt.DataSet):
