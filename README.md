@@ -130,4 +130,3 @@ python setup.py install
 * [scikit-image](https://pypi.org/project/scikit-image/) (algorithms for image processing)
 * [opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)
 * [psutil](https://pypi.org/project/psutil/) (process and system monitoring)
-* [multiprocess](https://pypi.org/project/multiprocess/) (better multiprocessing and multithreading in Python)

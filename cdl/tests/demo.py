@@ -63,12 +63,12 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.new_object(newparam, addparam=addparam, edit=True)
 
     test_common_operations(panel)
-    panel.processor.normalize()
+    panel.processor.compute_normalize()
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
 
     param = PeakDetectionParam()
-    panel.processor.detect_peaks(param)
+    panel.processor.compute_peak_detection(param)
 
     qt_wait(DELAY2)
 
@@ -113,16 +113,16 @@ def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
 
     qt_wait(DELAY3)
 
-    panel.processor.rotate_90()
-    panel.processor.rotate_270()
-    panel.processor.flip_horizontally()
-    panel.processor.flip_vertically()
+    panel.processor.compute_rotate90()
+    panel.processor.compute_rotate270()
+    panel.processor.compute_fliph()
+    panel.processor.compute_flipv()
 
     param = RotateParam()
     param.angle = 5.0
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
-        panel.processor.rotate_arbitrarily(param)
+        panel.processor.compute_rotate(param)
 
     ima1 = create_test_image_with_roi(data_size)
     panel.add_object(ima1)

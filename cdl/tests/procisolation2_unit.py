@@ -6,22 +6,17 @@
 """
 Process isolation unit test
 ---------------------------
-
-Requires the external package `multiprocess`, which relies on `dill` for serialization.
-
-Using third-party multiprocess module, for better versatility (dill is used for
-serialization, instead of pickle).
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 import time
+from multiprocessing import Pool
 
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
 from guiqwt.plot import ImageWidget
-from multiprocess import Pool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 

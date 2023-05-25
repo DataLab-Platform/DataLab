@@ -107,14 +107,6 @@ msgstr ""
 msgid "5.5"
 msgstr ""
 
-#: ../../install_requires.txt:22
-msgid "multiprocess"
-msgstr ""
-
-#: ../../install_requires.txt:23
-msgid "0.70"
-msgstr ""
-
 #: ../../install_requires.txt:24
 msgid "guidata"
 msgstr ""
@@ -229,4 +221,3 @@ msgstr ""
 
 #~ msgid "3.7"
 #~ msgstr ""
-

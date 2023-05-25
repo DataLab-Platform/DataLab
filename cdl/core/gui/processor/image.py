@@ -44,23 +44,88 @@ from cdl.core.computation.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
 )
-from cdl.core.gui.processor.base import BaseProcessor, ClipParam, ThresholdParam
+from cdl.core.gui.processor.base import (
+    BaseProcessor,
+    ClipParam,
+    GaussianParam,
+    MovingAverageParam,
+    MovingMedianParam,
+    ThresholdParam,
+)
 from cdl.core.model.base import BaseProcParam, ShapeTypes
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
 
 if TYPE_CHECKING:  # pragma: no cover
-    from cdl.core.gui.processor.base import (
-        GaussianParam,
-        MovingAverageParam,
-        MovingMedianParam,
-    )
-
     Obj = ImageObj
 
 VALID_DTYPES_STRLIST = [
     dtype.__name__ for dtype in dtype_range if dtype in ImageObj.VALID_DTYPES
 ]
+
+
+def compute_gaussian_filter(data: np.ndarray, p: GaussianParam) -> np.ndarray:
+    """Compute gaussian filter
+
+    Args:
+        data (np.ndarray): input data
+        p (GaussianParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return spi.gaussian_filter(data, sigma=p.sigma)
+
+
+def compute_moving_average(data: np.ndarray, p: MovingAverageParam) -> np.ndarray:
+    """Compute moving average
+
+    Args:
+        data (np.ndarray): input data
+        p (MovingAverageParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return spi.uniform_filter(data, size=p.n, mode="constant")
+
+
+def compute_moving_median(data: np.ndarray, p: MovingMedianParam) -> np.ndarray:
+    """Compute moving median
+
+    Args:
+        data (np.ndarray): input data
+        p (MovingMedianParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return sps.medfilt(data, kernel_size=p.n)
+
+
+def compute_threshold(data: np.ndarray, p: ThresholdParam) -> np.ndarray:
+    """Apply thresholding
+
+    Args:
+        data (np.ndarray): data
+        p (ThresholdParam): parameters
+
+    Returns:
+        np.ndarray: thresholded data
+    """
+    return np.clip(data, p.value, data.max())
+
+
+def compute_clip(data: np.ndarray, p: ClipParam) -> np.ndarray:
+    """Apply clipping
+
+    Args:
+        data (np.ndarray): data
+        p (ClipParam): parameters
+
+    Returns:
+        np.ndarray: clipped data"""
+    return np.clip(data, data.min(), p.value)
 
 
 class AdjustGammaParam(gdt.DataSet):
@@ -80,6 +145,19 @@ class AdjustGammaParam(gdt.DataSet):
     )
 
 
+def compute_adjust_gamma(data: np.ndarray, p: AdjustGammaParam) -> np.ndarray:
+    """Gamma correction
+
+    Args:
+        data (np.ndarray): input data
+        p (AdjustGammaParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.adjust_gamma(data, gamma=p.gamma, gain=p.gain)
+
+
 class AdjustLogParam(gdt.DataSet):
     """Logarithmic adjustment parameters"""
 
@@ -94,6 +172,19 @@ class AdjustLogParam(gdt.DataSet):
         default=False,
         help=_("If True, apply inverse logarithmic transformation."),
     )
+
+
+def compute_adjust_log(data: np.ndarray, p: AdjustLogParam) -> np.ndarray:
+    """Compute log correction
+
+    Args:
+        data (np.ndarray): input data
+        p (AdjustLogParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.adjust_log(data, gain=p.gain, inv=p.inv)
 
 
 class AdjustSigmoidParam(gdt.DataSet):
@@ -117,6 +208,19 @@ class AdjustSigmoidParam(gdt.DataSet):
         default=False,
         help=_("If True, apply inverse sigmoid transformation."),
     )
+
+
+def compute_adjust_sigmoid(data: np.ndarray, p: AdjustSigmoidParam) -> np.ndarray:
+    """Compute sigmoid correction
+
+    Args:
+        data (np.ndarray): input data
+        p (AdjustSigmoidParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.adjust_sigmoid(data, cutoff=p.cutoff, gain=p.gain, inv=p.inv)
 
 
 class RescaleIntensityParam(gdt.DataSet):
@@ -143,6 +247,19 @@ class RescaleIntensityParam(gdt.DataSet):
     )
 
 
+def compute_rescale_intensity(data: np.ndarray, p: RescaleIntensityParam) -> np.ndarray:
+    """Rescale image intensity levels
+
+    Args:
+        data (np.ndarray): input data
+        p (RescaleIntensityParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.rescale_intensity(data, in_range=p.in_range, out_range=p.out_range)
+
+
 class EqualizeHistParam(gdt.DataSet):
     """Histogram equalization parameters"""
 
@@ -152,6 +269,19 @@ class EqualizeHistParam(gdt.DataSet):
         default=256,
         help=_("Number of bins for image histogram."),
     )
+
+
+def compute_equalize_hist(data: np.ndarray, p: EqualizeHistParam) -> np.ndarray:
+    """Histogram equalization
+
+    Args:
+        data (np.ndarray): input data
+        p (EqualizeHistParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.equalize_hist(data, nbins=p.nbins)
 
 
 class EqualizeAdaptHistParam(EqualizeHistParam):
@@ -166,10 +296,38 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
     )
 
 
+def compute_equalize_adapthist(
+    data: np.ndarray, p: EqualizeAdaptHistParam
+) -> np.ndarray:
+    """Adaptive histogram equalization
+
+    Args:
+        data (np.ndarray): input data
+        p (EqualizeAdaptHistParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return exposure.equalize_adapthist(data, clip_limit=p.clip_limit, nbins=p.nbins)
+
+
 class LogP1Param(gdt.DataSet):
     """Log10 parameters"""
 
     n = gdi.FloatItem("n")
+
+
+def log_z_plus_n(data: np.ndarray, p: LogP1Param) -> np.ndarray:
+    """Compute log10(z+n)
+
+    Args:
+        data (np.ndarray): input data
+        p (LogP1Param): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return np.log10(data + p.n)
 
 
 class RotateParam(gdt.DataSet):
@@ -212,10 +370,41 @@ class RotateParam(gdt.DataSet):
     ).set_prop("display", active=prop)
 
 
+def compute_rotate(data: np.ndarray, p: RotateParam) -> np.ndarray:
+    """Rotate data
+
+    Args:
+        data (np.ndarray): input data
+        p (RotateParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return spi.rotate(
+        data,
+        p.angle,
+        reshape=p.reshape,
+        order=p.order,
+        mode=p.mode,
+        cval=p.cval,
+        prefilter=p.prefilter,
+    )
+
+
 def rotate_obj_coords(
     angle: float, obj: ImageObj, orig: ImageObj, coords: np.ndarray
 ) -> None:
-    """Apply rotation to coords associated to image obj"""
+    """Apply rotation to coords associated to image obj
+
+    Args:
+        angle (float): rotation angle (in degrees)
+        obj (ImageObj): image object
+        orig (ImageObj): original image object
+        coords (np.ndarray): coordinates to rotate
+
+    Returns:
+        np.ndarray: output data
+    """
     for row in range(coords.shape[0]):
         for col in range(0, coords.shape[1], 2):
             x1, y1 = coords[row, col : col + 2]
@@ -224,6 +413,18 @@ def rotate_obj_coords(
             dx2, dy2 = vector_rotation(-angle * np.pi / 180.0, dx1, dy1)
             coords[row, col : col + 2] = dx2 + obj.xc, dy2 + obj.yc
     obj.roi = None
+
+
+def rotate270(data: np.ndarray) -> np.ndarray:
+    """Rotate data 270°
+
+    Args:
+        data (np.ndarray): input data
+
+    Returns:
+        np.ndarray: output data
+    """
+    return np.rot90(data, 3)
 
 
 class GridParam(gdt.DataSet):
@@ -275,6 +476,26 @@ class ResizeParam(gdt.DataSet):
     ).set_prop("display", active=prop)
 
 
+def compute_resize(data: np.ndarray, p: ResizeParam) -> np.ndarray:
+    """Zooming function
+
+    Args:
+        data (np.ndarray): input data
+        p (ResizeParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return spi.interpolation.zoom(
+        data,
+        p.zoom,
+        order=p.order,
+        mode=p.mode,
+        cval=p.cval,
+        prefilter=p.prefilter,
+    )
+
+
 class BinningParam(gdt.DataSet):
     """Binning parameters"""
 
@@ -309,10 +530,80 @@ class BinningParam(gdt.DataSet):
     )
 
 
+def compute_binning(data: np.ndarray, param: BinningParam) -> np.ndarray:
+    """Binning function on data
+
+    Args:
+        data (np.ndarray): input data
+        param (BinningParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return binning(
+        data,
+        binning_x=param.binning_x,
+        binning_y=param.binning_y,
+        operation=param.operation,
+        dtype=param.dtype_str,
+    )
+
+
+def extract_multiple_roi(data: np.ndarray, group: gdt.DataSetGroup) -> np.ndarray:
+    """Extract multiple regions of interest from data
+
+    Args:
+        data (np.ndarray): input data
+        group (gdt.DataSetGroup): parameters defining the regions of interest
+
+    Returns:
+        np.ndarray: output data
+    """
+    if len(group.datasets) == 1:
+        p = group.datasets[0]
+        return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+    out = np.zeros_like(data)
+    for p in group.datasets:
+        slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
+        out[slice1, slice2] = data[slice1, slice2]
+    x0 = min([p.x0 for p in group.datasets])
+    y0 = min([p.y0 for p in group.datasets])
+    x1 = max([p.x1 for p in group.datasets])
+    y1 = max([p.y1 for p in group.datasets])
+    return out[y0:y1, x0:x1]
+
+
+def extract_single_roi(data: np.ndarray, p: gdt.DataSet) -> np.ndarray:
+    """Extract single ROI
+
+    Args:
+        data (np.ndarray): data
+        p (gdt.DataSet): ROI parameters
+
+    Returns:
+        np.ndarray: ROI data
+    """
+    return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+
+
 class FlatFieldParam(BaseProcParam):
     """Flat-field parameters"""
 
     threshold = gdi.FloatItem(_("Threshold"), default=0.0)
+
+
+def compute_flatfield(raw: np.ndarray, flat: np.ndarray, p: FlatFieldParam):
+    """Compute flat field correction
+
+    Args:
+        raw (np.ndarray): raw data
+        flat (np.ndarray): flat field data
+        p (FlatFieldParam): flat field parameters
+
+    Returns:
+        np.ndarray: corrected data
+    """
+    return flatfield(raw, flat, p.threshold)
 
 
 class ZCalibrateParam(gdt.DataSet):
@@ -320,6 +611,19 @@ class ZCalibrateParam(gdt.DataSet):
 
     a = gdi.FloatItem("a", default=1.0)
     b = gdi.FloatItem("b", default=0.0)
+
+
+def compute_calibration(data: np.ndarray, param: ZCalibrateParam) -> np.ndarray:
+    """Compute linear calibration
+
+    Args:
+        data (np.ndarray): data to calibrate
+        param (ZCalibrateParam): calibration parameters
+
+    Returns:
+        np.ndarray: calibrated data
+    """
+    return param.a * data + param.b
 
 
 class DenoiseTVParam(gdt.DataSet):
@@ -355,6 +659,21 @@ class DenoiseTVParam(gdt.DataSet):
     )
 
 
+def compute_denoise_tv(data: np.ndarray, p: DenoiseTVParam) -> np.ndarray:
+    """Compute Total Variation denoising
+
+    Args:
+        data (np.ndarray): input data
+        p (DenoiseTVParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return denoise_tv_chambolle(
+        data, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+    )
+
+
 class DenoiseBilateralParam(gdt.DataSet):
     """Bilateral filter denoising parameters"""
 
@@ -384,6 +703,24 @@ class DenoiseBilateralParam(gdt.DataSet):
     )
 
 
+def compute_denoise_bilateral(data: np.ndarray, p: DenoiseBilateralParam) -> np.ndarray:
+    """Compute bilateral filter denoising
+
+    Args:
+        data (np.ndarray): input data
+        p (DenoiseBilateralParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return denoise_bilateral(
+        data,
+        sigma_spatial=p.sigma_spatial,
+        mode=p.mode,
+        cval=p.cval,
+    )
+
+
 class DenoiseWaveletParam(gdt.DataSet):
     """Wavelet denoising parameters"""
 
@@ -399,12 +736,121 @@ class DenoiseWaveletParam(gdt.DataSet):
     )
 
 
+def compute_denoise_wavelet(data: np.ndarray, p: DenoiseWaveletParam) -> np.ndarray:
+    """Compute Wavelet denoising
+
+    Args:
+        data (np.ndarray): input data
+        p (DenoiseWaveletParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return denoise_wavelet(
+        data,
+        wavelet=p.wavelet,
+        mode=p.mode,
+        method=p.method,
+    )
+
+
 class MorphologyParam(gdt.DataSet):
     """White Top-Hat parameters"""
 
     radius = gdi.IntItem(
         _("Radius"), default=1, min=1, help=_("Footprint (disk) radius.")
     )
+
+
+def compute_denoise_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Denoise using White Top-Hat
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return data - morphology.white_tophat(data, morphology.disk(p.radius))
+
+
+def compute_white_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute White Top-Hat
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.white_tophat(data, morphology.disk(p.radius))
+
+
+def compute_black_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute Black Top-Hat
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.black_tophat(data, morphology.disk(p.radius))
+
+
+def compute_erosion(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute Erosion
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.erosion(data, morphology.disk(p.radius))
+
+
+def compute_dilation(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute Dilation
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.dilation(data, morphology.disk(p.radius))
+
+
+def compute_opening(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute morphological opening
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.opening(data, morphology.disk(p.radius))
+
+
+def compute_closing(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+    """Compute morphological closing
+
+    Args:
+        data (np.ndarray): input data
+        p (MorphologyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return morphology.closing(data, morphology.disk(p.radius))
 
 
 class ButterworthParam(gdt.DataSet):
@@ -428,6 +874,19 @@ class ButterworthParam(gdt.DataSet):
         min=1,
         help=_("Order of the Butterworth filter."),
     )
+
+
+def compute_butterworth(data: np.ndarray, p: ButterworthParam) -> np.ndarray:
+    """Compute Butterworth filter
+
+    Args:
+        data (np.ndarray): input data
+        p (ButterworthParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return filters.butterworth(data, p.cut_off, p.high_pass, p.order)
 
 
 class CannyParam(gdt.DataSet):
@@ -473,6 +932,105 @@ class CannyParam(gdt.DataSet):
     )
 
 
+def compute_canny(data: np.ndarray, p: CannyParam) -> np.ndarray:
+    """Compute Canny filter
+
+    Args:
+        data (np.ndarray): input data
+        p (CannyParam): parameters
+
+    Returns:
+        np.ndarray: output data
+    """
+    return np.array(
+        feature.canny(
+            data,
+            sigma=p.sigma,
+            low_threshold=p.low_threshold,
+            high_threshold=p.high_threshold,
+            use_quantiles=p.use_quantiles,
+            mode=p.mode,
+            cval=p.cval,
+        ),
+        dtype=np.uint8,
+    )
+
+
+def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
+    """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
+    res = []
+    for i_roi in image.iterate_roi_indexes():
+        data_roi = image.get_data(i_roi)
+        if args is None:
+            coords = func(data_roi)
+        else:
+            coords = func(data_roi, *args)
+        if coords.size:
+            if image.roi is not None:
+                x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
+                coords[:, ::2] += x0
+                coords[:, 1::2] += y0
+            coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
+            coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
+            idx = np.ones((coords.shape[0], 1)) * i_roi
+            coords = np.hstack([idx, coords])
+            res.append(coords)
+    if res:
+        return np.vstack(res)
+    return None
+
+
+def get_centroid_coords(data: np.ndarray) -> np.ndarray:
+    """Return centroid coordinates
+
+    Args:
+        data (np.ndarray): input data
+
+    Returns:
+        np.ndarray: centroid coordinates
+    """
+    y, x = get_centroid_fourier(data)
+    return np.array([(x, y)])
+
+
+def compute_centroid(image: ImageObj) -> np.ndarray:
+    """Compute centroid
+
+    Args:
+        image (ImageObj): input image
+
+    Returns:
+        np.ndarray: centroid coordinates
+    """
+    return calc_with_osr(image, get_centroid_coords)
+
+
+def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
+    """Return diameter coords for the circle contour enclosing image
+    values above threshold (FWHM)
+
+    Args:
+        data (np.ndarray): input data
+
+    Returns:
+        np.ndarray: diameter coords
+    """
+    x, y, r = get_enclosing_circle(data)
+    return np.array([[x - r, y, x + r, y]])
+
+
+def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
+    """Compute minimum enclosing circle
+
+    Args:
+        image (ImageObj): input image
+
+    Returns:
+        np.ndarray: diameter coords
+    """
+    return calc_with_osr(image, get_enclosing_circle_coords)
+
+
 class GenericDetectionParam(gdt.DataSet):
     """Generic detection parameters"""
 
@@ -503,6 +1061,19 @@ class PeakDetectionParam(GenericDetectionParam):
     create_rois = gdi.BoolItem(_("Create regions of interest"), default=True)
 
 
+def compute_peak_detection(image: ImageObj, p: PeakDetectionParam) -> np.ndarray:
+    """Compute 2D peak detection
+
+    Args:
+        image (ImageObj): input image
+        p (PeakDetectionParam): parameters
+
+    Returns:
+        np.ndarray: peak coordinates
+    """
+    return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
+
+
 class ContourShapeParam(GenericDetectionParam):
     """Contour shape parameters"""
 
@@ -511,6 +1082,11 @@ class ContourShapeParam(GenericDetectionParam):
         ("circle", _("Circle")),
     )
     shape = gdi.ChoiceItem(_("Shape"), shapes, default="ellipse")
+
+
+def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
+    """Compute contour shape fit"""
+    return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
 
 
 class HoughCircleParam(gdt.DataSet):
@@ -523,6 +1099,26 @@ class HoughCircleParam(gdt.DataSet):
         _("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True
     )
     min_distance = gdi.IntItem(_("Minimal distance"), min=0)
+
+
+def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarray:
+    """Compute Hough circles
+
+    Args:
+        image (ImageObj): input image
+        p (HoughCircleParam): parameters
+
+    Returns:
+        np.ndarray: circle coordinates
+    """
+    return calc_with_osr(
+        image,
+        get_hough_circle_peaks,
+        p.min_radius,
+        p.max_radius,
+        None,
+        p.min_distance,
+    )
 
 
 class BaseBlobParam(gdt.DataSet):
@@ -579,6 +1175,27 @@ class BlobDOGParam(BaseBlobParam):
     )
 
 
+def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
+    """Compute blobs using Difference of Gaussian method
+
+    Args:
+        image (ImageObj): input image
+        p (BlobDOGParam): parameters
+
+    Returns:
+        np.ndarray: blobs coordinates
+    """
+    return calc_with_osr(
+        image,
+        find_blobs_dog,
+        p.min_sigma,
+        p.max_sigma,
+        p.overlap,
+        p.threshold_rel,
+        p.exclude_border,
+    )
+
+
 class BlobDOHParam(BaseBlobParam):
     """Blob detection using Determinant of Hessian method"""
 
@@ -593,6 +1210,27 @@ class BlobDOHParam(BaseBlobParam):
     )
 
 
+def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
+    """Compute blobs using Determinant of Hessian method
+
+    Args:
+        image (ImageObj): input image
+        p (BlobDOHParam): parameters
+
+    Returns:
+        np.ndarray: blobs coordinates
+    """
+    return calc_with_osr(
+        image,
+        find_blobs_doh,
+        p.min_sigma,
+        p.max_sigma,
+        p.overlap,
+        p.log_scale,
+        p.threshold_rel,
+    )
+
+
 class BlobLOGParam(BlobDOHParam):
     """Blob detection using Laplacian of Gaussian method"""
 
@@ -600,6 +1238,28 @@ class BlobLOGParam(BlobDOHParam):
         _("Exclude border"),
         default=True,
         help=_("If True, exclude blobs from the border of the image."),
+    )
+
+
+def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
+    """Compute blobs using Laplacian of Gaussian method
+
+    Args:
+        image (ImageObj): input image
+        p (BlobLOGParam): parameters
+
+    Returns:
+        np.ndarray: blobs coordinates
+    """
+    return calc_with_osr(
+        image,
+        find_blobs_log,
+        p.min_sigma,
+        p.max_sigma,
+        p.overlap,
+        p.log_scale,
+        p.threshold_rel,
+        p.exclude_border,
     )
 
 
@@ -739,28 +1399,38 @@ class BlobOpenCVParam(gdt.DataSet):
     ).set_prop("display", active=_prop_conv)
 
 
-def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
-    """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
-    res = []
-    for i_roi in image.iterate_roi_indexes():
-        data_roi = image.get_data(i_roi)
-        if args is None:
-            coords = func(data_roi)
-        else:
-            coords = func(data_roi, *args)
-        if coords.size:
-            if image.roi is not None:
-                x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
-                coords[:, ::2] += x0
-                coords[:, 1::2] += y0
-            coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
-            coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
-            idx = np.ones((coords.shape[0], 1)) * i_roi
-            coords = np.hstack([idx, coords])
-            res.append(coords)
-    if res:
-        return np.vstack(res)
-    return None
+def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
+    """Compute blobs using OpenCV
+
+    Args:
+        image (ImageObj): input image
+        p (BlobOpenCVParam): parameters
+
+    Returns:
+        np.ndarray: blobs coordinates
+    """
+    return calc_with_osr(
+        image,
+        find_blobs_opencv,
+        p.min_threshold,
+        p.max_threshold,
+        p.min_repeatability,
+        p.min_dist_between_blobs,
+        p.filter_by_color,
+        p.blob_color,
+        p.filter_by_area,
+        p.min_area,
+        p.max_area,
+        p.filter_by_circularity,
+        p.min_circularity,
+        p.max_circularity,
+        p.filter_by_inertia,
+        p.min_inertia_ratio,
+        p.max_inertia_ratio,
+        p.filter_by_convexity,
+        p.min_convexity,
+        p.max_convexity,
+    )
 
 
 class ImageProcessor(BaseProcessor):
@@ -775,17 +1445,17 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, LogP1Param, "Log10(z+n)")
         self.compute_11(
             "Log10(z+n)",
-            lambda z, p: np.log10(z + p.n),
+            log_z_plus_n,
             param,
             suffix=lambda p: f"n={p.n}",
             edit=edit,
         )
 
-    def rotate_arbitrarily(self, param: RotateParam | None = None) -> None:
+    def compute_rotate(self, param: RotateParam | None = None) -> None:
         """Rotate data arbitrarily"""
         edit, param = self.init_param(param, RotateParam, "Rotate")
 
-        def rotate_xy(
+        def rotate_obj(
             obj: ImageObj, orig: ImageObj, coords: np.ndarray, p: RotateParam
         ) -> None:
             """Apply rotation to coords"""
@@ -793,48 +1463,40 @@ class ImageProcessor(BaseProcessor):
 
         self.compute_11(
             "Rotate",
-            lambda x, p: spi.rotate(
-                x,
-                p.angle,
-                reshape=p.reshape,
-                order=p.order,
-                mode=p.mode,
-                cval=p.cval,
-                prefilter=p.prefilter,
-            ),
+            compute_rotate,
             param,
             suffix=lambda p: f"α={p.angle:.3f}°, mode='{p.mode}'",
-            func_obj=lambda obj, orig, p: obj.transform_shapes(orig, rotate_xy, p),
+            func_obj=lambda obj, orig, p: obj.transform_shapes(orig, rotate_obj, p),
             edit=edit,
         )
 
-    def rotate_90(self) -> None:
+    def compute_rotate90(self) -> None:
         """Rotate data 90°"""
 
-        def rotate_xy(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
+        def rotate_obj(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply rotation to coords"""
             rotate_obj_coords(90.0, obj, orig, coords)
 
         self.compute_11(
             "Rotate90",
             np.rot90,
-            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_obj),
         )
 
-    def rotate_270(self) -> None:
+    def compute_rotate270(self) -> None:
         """Rotate data 270°"""
 
-        def rotate_xy(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
+        def rotate_obj(obj: ImageObj, orig: ImageObj, coords: np.ndarray) -> None:
             """Apply rotation to coords"""
             rotate_obj_coords(270.0, obj, orig, coords)
 
         self.compute_11(
             "Rotate270",
-            lambda x: np.rot90(x, 3),
-            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_xy),
+            rotate270,
+            func_obj=lambda obj, orig: obj.transform_shapes(orig, rotate_obj),
         )
 
-    def flip_horizontally(self) -> None:
+    def compute_fliph(self) -> None:
         """Flip data horizontally"""
 
         # pylint: disable=unused-argument
@@ -849,7 +1511,7 @@ class ImageProcessor(BaseProcessor):
             func_obj=lambda obj, orig: obj.transform_shapes(orig, hflip_coords),
         )
 
-    def flip_vertically(self) -> None:
+    def compute_flipv(self) -> None:
         """Flip data vertically"""
 
         # pylint: disable=unused-argument
@@ -935,7 +1597,7 @@ class ImageProcessor(BaseProcessor):
                 obj.transform_shapes(None, translate_coords)
         self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
-    def resize(self, param: ResizeParam | None = None) -> None:
+    def compute_resize(self, param: ResizeParam | None = None) -> None:
         """Resize image"""
         obj0 = self.panel.objview.get_sel_objects()[0]
         for obj in self.panel.objview.get_sel_objects():
@@ -971,21 +1633,14 @@ class ImageProcessor(BaseProcessor):
 
         self.compute_11(
             "Zoom",
-            lambda x, p: spi.interpolation.zoom(
-                x,
-                p.zoom,
-                order=p.order,
-                mode=p.mode,
-                cval=p.cval,
-                prefilter=p.prefilter,
-            ),
+            compute_resize,
             param,
             suffix=lambda p: f"zoom={p.zoom:.3f}",
             func_obj=func_obj,
             edit=edit,
         )
 
-    def rebin(self, param: BinningParam | None = None) -> None:
+    def compute_binning(self, param: BinningParam | None = None) -> None:
         """Binning image"""
         edit = param is None
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -1008,13 +1663,7 @@ class ImageProcessor(BaseProcessor):
 
         self.compute_11(
             "PixelBinning",
-            lambda x, p: binning(
-                x,
-                binning_x=p.binning_x,
-                binning_y=p.binning_y,
-                operation=p.operation,
-                dtype=p.dtype_str,
-            ),
+            compute_binning,
             param,
             suffix=lambda p: f"{p.binning_x}x{p.binning_y},{p.operation},"
             f"change_pixel_size={p.change_pixel_size}",
@@ -1040,21 +1689,6 @@ class ImageProcessor(BaseProcessor):
                     return p.get_suffix()
                 return ""
 
-            def extract_roi_func(data: np.ndarray, group: gdt.DataSetGroup):
-                """Extract ROI function on data"""
-                if len(group.datasets) == 1:
-                    p = group.datasets[0]
-                    return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
-                out = np.zeros_like(data)
-                for p in group.datasets:
-                    slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
-                    out[slice1, slice2] = data[slice1, slice2]
-                x0 = min([p.x0 for p in group.datasets])
-                y0 = min([p.y0 for p in group.datasets])
-                x1 = max([p.x1 for p in group.datasets])
-                y1 = max([p.y1 for p in group.datasets])
-                return out[y0:y1, x0:x1]
-
             def extract_roi_func_obj(
                 image: ImageObj, orig: ImageObj, group: gdt.DataSetGroup
             ):  # pylint: disable=unused-argument
@@ -1065,7 +1699,7 @@ class ImageProcessor(BaseProcessor):
 
             self.compute_11(
                 "ROI",
-                extract_roi_func,
+                extract_multiple_roi,
                 group,
                 suffix=suffix_func,
                 func_obj=extract_roi_func_obj,
@@ -1087,18 +1721,18 @@ class ImageProcessor(BaseProcessor):
 
             self.compute_1n(
                 [f"ROI{iroi}" for iroi in range(len(group.datasets))],
-                lambda z, p: z.copy()[p.y0 : p.y1, p.x0 : p.x1],
+                extract_single_roi,
                 group.datasets,
                 suffix=lambda p: p.get_suffix(),
                 func_obj=extract_roi_func_obj,
                 edit=False,
             )
 
-    def swap_axes(self) -> None:
+    def compute_swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(
             "SwapAxes",
-            lambda z: z.T,
+            np.transpose,
             func_obj=lambda obj, _orig: obj.remove_all_shapes(),
         )
 
@@ -1111,7 +1745,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11("Log10", np.log10)
 
     @qt_try_except()
-    def flat_field_correction(
+    def compute_flatfield(
         self, obj2: Obj | None = None, param: FlatFieldParam | None = None
     ) -> None:
         """Compute flat field correction"""
@@ -1123,7 +1757,7 @@ class ImageProcessor(BaseProcessor):
             _("FlatField"),
             obj2,
             _("flat field image"),
-            func=lambda raw, flat, p: flatfield(raw, flat, p.threshold),
+            func=compute_flatfield,
             param=param,
             suffix=lambda p: "threshold={p.threshold}",
             edit=edit,
@@ -1148,7 +1782,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "LinearCal",
-            lambda x, p: p.a * x + p.b,
+            compute_calibration,
             param,
             suffix=lambda p: "z={p.a}*z+{p.b}",
             edit=edit,
@@ -1160,7 +1794,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
         self.compute_11(
             "Threshold",
-            lambda x, p: np.clip(x, p.value, x.max()),
+            compute_threshold,
             param,
             suffix=lambda p: f"min={p.value} lsb",
             edit=edit,
@@ -1172,7 +1806,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, ClipParam, _("Clipping"))
         self.compute_11(
             "Clip",
-            lambda x, p: np.clip(x, x.min(), p.value),
+            compute_clip,
             param,
             suffix=lambda p: f"max={p.value} lsb",
             edit=edit,
@@ -1184,7 +1818,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, AdjustGammaParam, _("Gamma correction"))
         self.compute_11(
             "Gamma",
-            lambda x, p: exposure.adjust_gamma(x, gamma=p.gamma, gain=p.gain),
+            compute_adjust_gamma,
             param,
             suffix=lambda p: f"γ={p.gamma},gain={p.gain}",
             edit=edit,
@@ -1196,7 +1830,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, AdjustLogParam, _("Log correction"))
         self.compute_11(
             "Log",
-            lambda x, p: exposure.adjust_log(x, gain=p.gain, inv=p.inv),
+            compute_adjust_log,
             param,
             suffix=lambda p: f"gain={p.gain},inv={p.inv}",
             edit=edit,
@@ -1210,9 +1844,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "Sigmoid",
-            lambda x, p: exposure.adjust_sigmoid(
-                x, cutoff=p.cutoff, gain=p.gain, inv=p.inv
-            ),
+            compute_adjust_sigmoid,
             param,
             suffix=lambda p: f"cutoff={p.cutoff},gain={p.gain},inv={p.inv}",
             edit=edit,
@@ -1228,9 +1860,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "RescaleIntensity",
-            lambda x, p: exposure.rescale_intensity(
-                x, in_range=p.in_range, out_range=p.out_range
-            ),
+            compute_rescale_intensity,
             param,
             suffix=lambda p: f"in_range={p.in_range},out_range={p.out_range}",
             edit=edit,
@@ -1244,7 +1874,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "EqualizeHist",
-            lambda x, p: exposure.equalize_hist(x, nbins=p.nbins),
+            compute_equalize_hist,
             param,
             suffix=lambda p: f"nbins={p.nbins}",
             edit=edit,
@@ -1260,19 +1890,52 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "EqualizeAdaptHist",
-            lambda x, p: exposure.equalize_adapthist(
-                x, clip_limit=p.clip_limit, nbins=p.nbins
-            ),
+            compute_equalize_adapthist,
             param,
             suffix=lambda p: f"clip_limit={p.clip_limit},nbins={p.nbins}",
             edit=edit,
         )
 
-    @staticmethod
-    # pylint: disable=arguments-differ
-    def func_gaussian_filter(x: np.ndarray, p: GaussianParam) -> np.ndarray:
+    @qt_try_except()
+    def compute_gaussian_filter(self, param: GaussianParam | None = None) -> None:
         """Compute gaussian filter"""
-        return spi.gaussian_filter(x, p.sigma)
+        edit, param = self.init_param(param, GaussianParam, _("Gaussian filter"))
+        self.compute_11(
+            "GaussianFilter",
+            compute_gaussian_filter,
+            param,
+            suffix=lambda p: f"σ={p.sigma:.3f} pixels",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
+        """Compute moving average"""
+        edit, param = self.init_param(param, MovingAverageParam, _("Moving average"))
+        self.compute_11(
+            "MovAvg",
+            compute_moving_average,
+            param,
+            suffix=lambda p: f"n={p.n}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
+        """Compute moving median"""
+        edit, param = self.init_param(param, MovingMedianParam, _("Moving median"))
+        self.compute_11(
+            "MovMed",
+            compute_moving_median,
+            param,
+            suffix=lambda p: f"n={p.n}",
+            edit=edit,
+        )
+
+    @qt_try_except()
+    def compute_wiener(self) -> None:
+        """Compute Wiener filter"""
+        self.compute_11("WienerFilter", sps.wiener)
 
     @qt_try_except()
     def compute_fft(self) -> None:
@@ -1284,23 +1947,6 @@ class ImageProcessor(BaseProcessor):
         "Compute iFFT" ""
         self.compute_11("iFFT", np.fft.ifft2)
 
-    @staticmethod
-    # pylint: disable=arguments-differ
-    def func_moving_average(x: np.ndarray, p: MovingAverageParam) -> np.ndarray:
-        """Moving average computing function"""
-        return spi.uniform_filter(x, size=p.n, mode="constant")
-
-    @staticmethod
-    # pylint: disable=arguments-differ
-    def func_moving_median(x: np.ndarray, p: MovingMedianParam) -> np.ndarray:
-        """Moving median computing function"""
-        return sps.medfilt(x, kernel_size=p.n)
-
-    @qt_try_except()
-    def compute_wiener(self) -> None:
-        """Compute Wiener filter"""
-        self.compute_11("WienerFilter", sps.wiener)
-
     @qt_try_except()
     def compute_denoise_tv(self, param: DenoiseTVParam | None = None) -> None:
         """Compute Total Variation denoising"""
@@ -1309,9 +1955,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "TV_Chambolle",
-            lambda x, p: denoise_tv_chambolle(
-                x, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
-            ),
+            compute_denoise_tv,
             param,
             suffix=lambda p: f"weight={p.weight},eps={p.eps},maxn={p.max_num_iter}",
             edit=edit,
@@ -1327,9 +1971,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "DenoiseBilateral",
-            lambda x, p: denoise_bilateral(
-                x, sigma_spatial=p.sigma_spatial, mode=p.mode, cval=p.cval
-            ),
+            compute_denoise_bilateral,
             param,
             suffix=lambda p: f"σspatial={p.sigma_spatial},mode={p.mode},cval={p.cval}",
             edit=edit,
@@ -1343,12 +1985,7 @@ class ImageProcessor(BaseProcessor):
         )
         self.compute_11(
             "DenoiseWavelet",
-            lambda x, p: denoise_wavelet(
-                x,
-                wavelet=p.wavelet,
-                mode=p.mode,
-                method=p.method,
-            ),
+            compute_denoise_wavelet,
             param,
             suffix=lambda p: f"wavelet={p.wavelet},mode={p.mode},method={p.method}",
             edit=edit,
@@ -1360,20 +1997,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, MorphologyParam, _("Denoise / Top-Hat"))
         self.compute_11(
             "DenoiseWhiteTopHat",
-            lambda x, p: x - morphology.white_tophat(x, morphology.disk(p.radius)),
-            param,
-            suffix=lambda p: f"radius={p.radius}",
-            edit=edit,
-        )
-
-    def _morph(
-        self, param: MorphologyParam | None, func: Callable, title: str, name: str
-    ) -> None:
-        """Compute morphological transform"""
-        edit, param = self.init_param(param, MorphologyParam, title)
-        self.compute_11(
-            name,
-            lambda x, p: func(x, morphology.disk(p.radius)),
+            compute_denoise_tophat,
             param,
             suffix=lambda p: f"radius={p.radius}",
             edit=edit,
@@ -1382,36 +2006,74 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_white_tophat(self, param: MorphologyParam | None = None) -> None:
         """Compute White Top-Hat"""
-        self._morph(
-            param, morphology.white_tophat, _("White Top-Hat"), "WhiteTopHatDisk"
+        edit, param = self.init_param(param, MorphologyParam, _("White Top-Hat"))
+        self.compute_11(
+            "WhiteTopHatDisk",
+            compute_white_tophat,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
         )
 
     @qt_try_except()
     def compute_black_tophat(self, param: MorphologyParam | None = None) -> None:
         """Compute Black Top-Hat"""
-        self._morph(
-            param, morphology.black_tophat, _("Black Top-Hat"), "BlackTopHatDisk"
+        edit, param = self.init_param(param, MorphologyParam, _("Black Top-Hat"))
+        self.compute_11(
+            "BlackTopHatDisk",
+            compute_black_tophat,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
         )
 
     @qt_try_except()
     def compute_erosion(self, param: MorphologyParam | None = None) -> None:
         """Compute Erosion"""
-        self._morph(param, morphology.erosion, _("Erosion"), "ErosionDisk")
+        edit, param = self.init_param(param, MorphologyParam, _("Erosion"))
+        self.compute_11(
+            "ErosionDisk",
+            compute_erosion,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
 
     @qt_try_except()
     def compute_dilation(self, param: MorphologyParam | None = None) -> None:
         """Compute Dilation"""
-        self._morph(param, morphology.dilation, _("Dilation"), "DilationDisk")
+        edit, param = self.init_param(param, MorphologyParam, _("Dilation"))
+        self.compute_11(
+            "DilationDisk",
+            compute_dilation,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
 
     @qt_try_except()
     def compute_opening(self, param: MorphologyParam | None = None) -> None:
         """Compute morphological opening"""
-        self._morph(param, morphology.opening, _("Opening"), "OpeningDisk")
+        edit, param = self.init_param(param, MorphologyParam, _("Opening"))
+        self.compute_11(
+            "OpeningDisk",
+            compute_opening,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
 
     @qt_try_except()
     def compute_closing(self, param: MorphologyParam | None = None) -> None:
         """Compute morphological closing"""
-        self._morph(param, morphology.closing, _("Closing"), "ClosingDisk")
+        edit, param = self.init_param(param, MorphologyParam, _("Closing"))
+        self.compute_11(
+            "ClosingDisk",
+            compute_closing,
+            param,
+            suffix=lambda p: f"radius={p.radius}",
+            edit=edit,
+        )
 
     @qt_try_except()
     def compute_butterworth(self, param: ButterworthParam | None = None) -> None:
@@ -1419,7 +2081,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, ButterworthParam, _("Butterworth filter"))
         self.compute_11(
             "Butterworth",
-            lambda x, p: filters.butterworth(x, p.cut_off, p.high_pass, p.order),
+            compute_butterworth,
             param,
             suffix=lambda p: f"cut_off={p.cut_off},"
             "high_pass={p.high_pass},order={p.order}",
@@ -1432,18 +2094,7 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, CannyParam, _("Canny filter"))
         self.compute_11(
             "Canny",
-            lambda x, p: np.array(
-                feature.canny(
-                    x,
-                    sigma=p.sigma,
-                    low_threshold=p.low_threshold,
-                    high_threshold=p.high_threshold,
-                    use_quantiles=p.use_quantiles,
-                    mode=p.mode,
-                    cval=p.cval,
-                ),
-                dtype=np.uint8,
-            ),
+            compute_canny,
             param,
             suffix=lambda p: f"sigma={p.sigma},low_threshold={p.low_threshold},"
             f"high_threshold={p.high_threshold},use_quantiles={p.use_quantiles},"
@@ -1525,51 +2176,25 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_centroid(self) -> None:
         """Compute image centroid"""
-
-        def get_centroid_coords(data: np.ndarray) -> np.ndarray:
-            """Return centroid coordinates"""
-            y, x = get_centroid_fourier(data)
-            return np.array([(x, y)])
-
-        def centroid(image: ImageObj) -> np.ndarray:
-            """Compute centroid"""
-            return calc_with_osr(image, get_centroid_coords)
-
-        self.compute_10("Centroid", centroid, ShapeTypes.MARKER)
+        self.compute_10("Centroid", compute_centroid, ShapeTypes.MARKER)
 
     @qt_try_except()
     def compute_enclosing_circle(self) -> None:
         """Compute minimum enclosing circle"""
-
-        def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
-            """Return diameter coords for the circle contour enclosing image
-            values above threshold (FWHM)"""
-            x, y, r = get_enclosing_circle(data)
-            return np.array([[x - r, y, x + r, y]])
-
-        def enclosing_circle(image: ImageObj):
-            """Compute minimum enclosing circle"""
-            return calc_with_osr(image, get_enclosing_circle_coords)
-
         # TODO: [P2] Find a way to add the circle to the computing results
         #  as in "enclosingcircle_test.py"
-        self.compute_10("MinEnclosCircle", enclosing_circle, ShapeTypes.CIRCLE)
+        self.compute_10("MinEnclosCircle", compute_enclosing_circle, ShapeTypes.CIRCLE)
 
     @qt_try_except()
     def compute_peak_detection(self, param: PeakDetectionParam | None = None) -> None:
         """Compute 2D peak detection"""
-
-        def peak_detection(image: ImageObj, p: PeakDetectionParam) -> np.ndarray:
-            """Compute centroid"""
-            return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
-
         edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
         if edit:
             data = self.panel.objview.get_sel_objects()[0].data
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(
-            _("Peaks"), peak_detection, ShapeTypes.POINT, param, edit=edit
+            _("Peaks"), compute_peak_detection, ShapeTypes.POINT, param, edit=edit
         )
         if results is not None and param.create_rois and len(results.items()) > 1:
             with create_progress_bar(
@@ -1604,124 +2229,51 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_contour_shape(self, param: ContourShapeParam | None = None) -> None:
         """Compute contour shape fit"""
-
-        def contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
-            """Compute contour shape fit"""
-            return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
-
         edit, param = self.init_param(param, ContourShapeParam, _("Contour"))
         shapetype = ShapeTypes.CIRCLE if param.shape == "circle" else ShapeTypes.ELLIPSE
-        self.compute_10("Contour", contour_shape, shapetype, param, edit=edit)
+        self.compute_10("Contour", compute_contour_shape, shapetype, param, edit=edit)
 
     @qt_try_except()
     def compute_hough_circle_peaks(self, param: HoughCircleParam | None = None) -> None:
         """Compute peak detection based on a circle Hough transform"""
-
-        def hough_circles(image: ImageObj, p: HoughCircleParam) -> np.ndarray:
-            """Compute Hough circles"""
-            return calc_with_osr(
-                image,
-                get_hough_circle_peaks,
-                p.min_radius,
-                p.max_radius,
-                None,
-                p.min_distance,
-            )
-
         edit, param = self.init_param(param, HoughCircleParam, _("Hough circles"))
-        self.compute_10("Circles", hough_circles, ShapeTypes.CIRCLE, param, edit=edit)
+        self.compute_10(
+            "Circles", compute_hough_circle_peaks, ShapeTypes.CIRCLE, param, edit=edit
+        )
 
     @qt_try_except()
     def compute_blob_dog(self, param: BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
-
-        def blobs(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
-            """Compute blobs"""
-            return calc_with_osr(
-                image,
-                find_blobs_dog,
-                p.min_sigma,
-                p.max_sigma,
-                p.overlap,
-                p.threshold_rel,
-                p.exclude_border,
-            )
-
         edit, param = self.init_param(param, BlobDOGParam, _("Blob detection (DOG)"))
-        self.compute_10("BlobsDOG", blobs, ShapeTypes.CIRCLE, param, edit=edit)
+        self.compute_10(
+            "BlobsDOG", compute_blob_dog, ShapeTypes.CIRCLE, param, edit=edit
+        )
 
     @qt_try_except()
     def compute_blob_doh(self, param: BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
-
-        def blobs(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
-            """Compute blobs"""
-            return calc_with_osr(
-                image,
-                find_blobs_doh,
-                p.min_sigma,
-                p.max_sigma,
-                p.overlap,
-                p.log_scale,
-                p.threshold_rel,
-            )
-
         edit, param = self.init_param(param, BlobDOHParam, _("Blob detection (DOH)"))
-        self.compute_10("BlobsDOH", blobs, ShapeTypes.CIRCLE, param, edit=edit)
+        self.compute_10(
+            "BlobsDOH", compute_blob_doh, ShapeTypes.CIRCLE, param, edit=edit
+        )
 
     @qt_try_except()
     def compute_blob_log(self, param: BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
-
-        def blobs(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
-            """Compute blobs"""
-            return calc_with_osr(
-                image,
-                find_blobs_log,
-                p.min_sigma,
-                p.max_sigma,
-                p.overlap,
-                p.log_scale,
-                p.threshold_rel,
-                p.exclude_border,
-            )
-
         edit, param = self.init_param(param, BlobLOGParam, _("Blob detection (LOG)"))
-        self.compute_10("BlobsLOG", blobs, ShapeTypes.CIRCLE, param, edit=edit)
+        self.compute_10(
+            "BlobsLOG", compute_blob_log, ShapeTypes.CIRCLE, param, edit=edit
+        )
 
     @qt_try_except()
     def compute_blob_opencv(self, param: BlobOpenCVParam | None = None) -> None:
         """Compute blob detection using OpenCV"""
-
-        def blobs(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
-            """Compute blobs"""
-            return calc_with_osr(
-                image,
-                find_blobs_opencv,
-                p.min_threshold,
-                p.max_threshold,
-                p.min_repeatability,
-                p.min_dist_between_blobs,
-                p.filter_by_color,
-                p.blob_color,
-                p.filter_by_area,
-                p.min_area,
-                p.max_area,
-                p.filter_by_circularity,
-                p.min_circularity,
-                p.max_circularity,
-                p.filter_by_inertia,
-                p.min_inertia_ratio,
-                p.max_inertia_ratio,
-                p.filter_by_convexity,
-                p.min_convexity,
-                p.max_convexity,
-            )
-
         edit, param = self.init_param(
             param, BlobOpenCVParam, _("Blob detection (OpenCV)")
         )
-        self.compute_10("BlobsOpenCV", blobs, ShapeTypes.CIRCLE, param, edit=edit)
+        self.compute_10(
+            "BlobsOpenCV", compute_blob_opencv, ShapeTypes.CIRCLE, param, edit=edit
+        )
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

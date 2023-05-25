@@ -365,7 +365,9 @@ class BaseDataPanel(AbstractPanel):
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
-        for dlg in self.__separate_views:
+        # iterate over a copy of self.__separate_views dict keys to avoid RuntimeError:
+        # dictionary changed size during iteration
+        for dlg in list(self.__separate_views):
             dlg.done(QW.QDialog.DialogCode.Rejected)
         self.objmodel.clear()
         self.plothandler.clear()

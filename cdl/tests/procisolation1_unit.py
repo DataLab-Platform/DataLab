@@ -6,11 +6,6 @@
 """
 Process isolation unit test
 ---------------------------
-
-Requires the external package `multiprocess`, which relies on `dill` for serialization.
-
-Using third-party multiprocess module, for better versatility (dill is used for
-serialization, instead of pickle).
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -20,13 +15,13 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable
+from multiprocessing import Pool
+from multiprocessing.pool import AsyncResult
 from typing import Any
 
 import numpy as np
 import scipy.signal as sps
 from guiqwt.plot import ImageWindow
-from multiprocess import Pool
-from multiprocess.pool import AsyncResult
 from qtpy import QtWidgets as QW
 
 from cdl.env import execenv
@@ -87,6 +82,13 @@ class Worker:
         return self.result
 
 
+def func(data: np.ndarray, size: int, error: bool) -> np.ndarray:
+    """Test function"""
+    if error:
+        raise ValueError("Test error")
+    return sps.medfilt(data, size) + create_2d_random(data.shape[0], data.dtype)
+
+
 def test(iterations: int = 4) -> None:
     """Multiprocessing test"""
     Worker.create_pool()
@@ -101,14 +103,6 @@ def test(iterations: int = 4) -> None:
             for index in range(iterations):
                 progress.setValue(index)
                 progress.setLabelText(f"Computing {index}")
-
-                def func(data: np.ndarray, size: int, error: bool) -> np.ndarray:
-                    if error:
-                        raise ValueError("Test error")
-                    return sps.medfilt(data, size) + create_2d_random(
-                        data.shape[0], data.dtype
-                    )
-
                 test_error = index == 2
                 worker.run(func, (image.data, 3, test_error))
                 while not worker.is_computation_finished():

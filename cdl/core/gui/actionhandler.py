@@ -540,7 +540,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Gaussian filter"),
-                triggered=self.panel.processor.compute_gaussian,
+                triggered=self.panel.processor.compute_gaussian_filter,
             )
             self.new_action(
                 _("Moving average"),
@@ -599,7 +599,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon=get_icon(f"{self.OBJECT_STR}_roi.svg"),
             )
             self.new_action(
-                _("Swap X/Y axes"), triggered=self.panel.processor.swap_axes
+                _("Swap X/Y axes"), triggered=self.panel.processor.compute_swap_axes
             )
 
 
@@ -611,7 +611,9 @@ class SignalActionHandler(BaseActionHandler):
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(_("Normalize"), triggered=self.panel.processor.normalize)
+            self.new_action(
+                _("Normalize"), triggered=self.panel.processor.compute_normalize
+            )
             self.new_action(
                 _("Derivative"), triggered=self.panel.processor.compute_derivative
             )
@@ -624,7 +626,7 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Peak detection"),
-                triggered=self.panel.processor.detect_peaks,
+                triggered=self.panel.processor.compute_peak_detection,
                 icon=get_icon("peak_detect.svg"),
             )
 
@@ -688,41 +690,41 @@ class ImageActionHandler(BaseActionHandler):
             )
             self.new_action(
                 _("Flat-field correction"),
-                triggered=self.panel.processor.flat_field_correction,
+                triggered=self.panel.processor.compute_flatfield,
                 select_condition=SelectCond.at_least_one,
             )
 
             with self.new_menu(_("Rotation")):
                 self.new_action(
                     _("Flip horizontally"),
-                    triggered=self.panel.processor.flip_horizontally,
+                    triggered=self.panel.processor.compute_fliph,
                     icon=get_icon("flip_horizontally.svg"),
                     context_menu_pos=-1,
                     context_menu_sep=True,
                 )
                 self.new_action(
                     _("Flip vertically"),
-                    triggered=self.panel.processor.flip_vertically,
+                    triggered=self.panel.processor.compute_flipv,
                     icon=get_icon("flip_vertically.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s right")
                     % "90°",  # pylint: disable=consider-using-f-string
-                    triggered=self.panel.processor.rotate_270,
+                    triggered=self.panel.processor.compute_rotate270,
                     icon=get_icon("rotate_right.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s left")
                     % "90°",  # pylint: disable=consider-using-f-string
-                    triggered=self.panel.processor.rotate_90,
+                    triggered=self.panel.processor.compute_rotate90,
                     icon=get_icon("rotate_left.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate arbitrarily..."),
-                    triggered=self.panel.processor.rotate_arbitrarily,
+                    triggered=self.panel.processor.compute_rotate,
                 )
 
             self.new_action(
@@ -738,10 +740,12 @@ class ImageActionHandler(BaseActionHandler):
 
             self.new_action(
                 _("Resize"),
-                triggered=self.panel.processor.resize,
+                triggered=self.panel.processor.compute_resize,
                 separator=True,
             )
-            self.new_action(_("Pixel binning"), triggered=self.panel.processor.rebin)
+            self.new_action(
+                _("Pixel binning"), triggered=self.panel.processor.compute_binning
+            )
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(

@@ -244,7 +244,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.__update_actions()
         self.context_menu.popup(position)
 
-    def get_macro(self, index: int | None = None) -> Macro:
+    def get_macro(self, index: int | None = None) -> Macro | None:
         """Return macro at index (if index is None, return current macro)"""
         if index is None:
             index = self.tabwidget.currentIndex()
@@ -268,11 +268,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def run_macro(self):
         """Run current macro"""
         macro = self.get_macro()
+        assert macro is not None
         macro.run()
 
     def stop_macro(self) -> None:
         """Stop current macro"""
         macro = self.get_macro()
+        assert macro is not None
         macro.kill()
 
     def macro_state_changed(self, orig_macro: Macro, state: bool) -> None:
@@ -299,6 +301,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     def rename_macro(self, index: int | None = None) -> None:
         """Rename macro"""
         macro = self.get_macro(index)
+        assert macro is not None
         name, valid = QW.QInputDialog.getText(
             self,
             _("Rename"),
@@ -313,7 +316,9 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def export_macro_to_file(self) -> None:
         """Export macro to file"""
-        code = self.FILE_HEADER + self.get_macro().get_code()
+        macro = self.get_macro()
+        assert macro is not None
+        code = self.FILE_HEADER + macro.get_code()
         basedir = Conf.main.base_dir.get()
         with save_restore_stds():
             filename, _filt = getsavefilename(

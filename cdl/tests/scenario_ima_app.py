@@ -149,20 +149,20 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     param.n = 1
     panel.processor.compute_logp1(param)
 
-    panel.processor.rotate_90()
-    panel.processor.rotate_270()
-    panel.processor.flip_horizontally()
-    panel.processor.flip_vertically()
+    panel.processor.compute_rotate90()
+    panel.processor.compute_rotate270()
+    panel.processor.compute_fliph()
+    panel.processor.compute_flipv()
 
     param = RotateParam()
     param.angle = 5.0
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
-        panel.processor.rotate_arbitrarily(param)
+        panel.processor.compute_rotate(param)
 
     param = ResizeParam()
     param.zoom = 1.3
-    panel.processor.resize(param)
+    panel.processor.compute_resize(param)
 
     n = data_size // 10
     panel.processor.extract_roi([[n, n, data_size - n, data_size - n]])

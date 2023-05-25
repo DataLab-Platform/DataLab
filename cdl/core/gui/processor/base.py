@@ -22,19 +22,19 @@ This module defines the base class for data processing GUIs.
 from __future__ import annotations
 
 import abc
+import multiprocessing
 import time
 import warnings
 from collections.abc import Callable
+from multiprocessing import Pool
 from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
-import multiprocess
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
-from multiprocess import Pool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -51,8 +51,9 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover
+    from multiprocessing.pool import AsyncResult
+
     from guiqwt.plot import CurveWidget, ImageWidget
-    from multiprocess.pool import AsyncResult
 
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
@@ -62,7 +63,7 @@ if TYPE_CHECKING:  # pragma: no cover
     Obj = Union[SignalObj, ImageObj]
 
 
-multiprocess.freeze_support()
+multiprocessing.freeze_support()
 
 
 class GaussianParam(gdt.DataSet):
@@ -107,6 +108,13 @@ COMPUTATION_TIP = _(
 POOL: Pool = None
 
 
+def wng_func(func, *args) -> np.ndarray | tuple[np.ndarray]:
+    """Wrapper function to ignore RuntimeWarning"""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        return func(*args)
+
+
 class Worker:
     """Multiprocessing worker, to run long-running tasks in a separate process"""
 
@@ -134,7 +142,8 @@ class Worker:
         """Run computation"""
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
-        self.asyncresult = POOL.apply_async(func, args)
+        new_args = tuple([func] + list(args))
+        self.asyncresult = POOL.apply_async(wng_func, new_args)
 
     def terminate(self) -> None:
         """Terminate worker"""
@@ -265,21 +274,15 @@ class BaseProcessor(QC.QObject):
                         new_obj.title += "|" + suffix(param)
                     new_obj.copy_data_from(obj)
 
-                    def wng_func(*args) -> np.ndarray | tuple[np.ndarray]:
-                        """Wrapper function to ignore RuntimeWarning"""
-                        with warnings.catch_warnings():
-                            warnings.simplefilter("ignore", RuntimeWarning)
-                            return func(*args)
-
                     args = self.get_11_func_args(obj, param)
 
                     context = _("Computing:") + " " + new_obj.title
                     if self.worker is None:
                         with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                            result = wng_func(*args)
+                            result = wng_func(func, *args)
                             self.set_11_func_result(new_obj, result)
                     else:
-                        self.worker.run(wng_func, args)
+                        self.worker.run(func, args)
                         while not self.worker.is_computation_finished():
                             QW.QApplication.processEvents()
                             time.sleep(0.1)
@@ -348,18 +351,12 @@ class BaseProcessor(QC.QObject):
 
                 args = (obj,) if param is None else (obj, param)
 
-                def wng_func(*args):
-                    """Wrapper function to ignore RuntimeWarning"""
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", RuntimeWarning)
-                        return func(*args)
-
                 context = _("Computing:") + " " + title
                 if self.worker is None:
                     with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                        result = wng_func(*args)
+                        result = wng_func(func, *args)
                 else:
-                    self.worker.run(wng_func, args)
+                    self.worker.run(func, args)
                     while not self.worker.is_computation_finished():
                         QW.QApplication.processEvents()
                         time.sleep(0.1)
@@ -623,7 +620,7 @@ class BaseProcessor(QC.QObject):
         """Extract Region Of Interest (ROI) from data"""
 
     @abc.abstractmethod
-    def swap_axes(self):
+    def compute_swap_axes(self):
         """Swap data axes"""
 
     @abc.abstractmethod
@@ -651,47 +648,20 @@ class BaseProcessor(QC.QObject):
     def compute_clip(self, param: ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
 
-    @staticmethod
     @abc.abstractmethod
-    def func_gaussian_filter(x, y, p):
-        """Compute gaussian filter"""
-
     @qt_try_except()
-    def compute_gaussian(self, param: GaussianParam | None = None) -> None:
+    def compute_gaussian_filter(self, param: GaussianParam | None = None) -> None:
         """Compute gaussian filter"""
-        edit, param = self.init_param(param, GaussianParam, _("Gaussian filter"))
-        func = self.func_gaussian_filter
-        self.compute_11(
-            "GaussianFilter",
-            func,
-            param,
-            suffix=lambda p: f"σ={p.sigma:.3f} pixels",
-            edit=edit,
-        )
 
-    @staticmethod
     @abc.abstractmethod
-    def func_moving_average(x, y, p):
-        """Moving average computing function"""
-
     @qt_try_except()
     def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
         """Compute moving average"""
-        edit, param = self.init_param(param, MovingAverageParam, _("Moving average"))
-        func = self.func_moving_average
-        self.compute_11("MovAvg", func, param, suffix=lambda p: f"n={p.n}", edit=edit)
 
-    @staticmethod
     @abc.abstractmethod
-    def func_moving_median(x, y, p):
-        """Moving median computing function"""
-
     @qt_try_except()
     def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
         """Compute moving median"""
-        edit, param = self.init_param(param, MovingMedianParam, _("Moving median"))
-        func = self.func_moving_median
-        self.compute_11("MovMed", func, param, suffix=lambda p: f"n={p.n}", edit=edit)
 
     @abc.abstractmethod
     @qt_try_except()

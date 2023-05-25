@@ -57,7 +57,7 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
     Requires that one signal or image has been added at index."""
     assert len(panel.objmodel) >= index - 1
     panel.objview.select_nums((index,))
-    panel.processor.compute_gaussian(GaussianParam())
+    panel.processor.compute_gaussian_filter(GaussianParam())
     panel.processor.compute_moving_average(MovingAverageParam())
     panel.processor.compute_moving_median(MovingMedianParam())
     panel.processor.compute_wiener()
@@ -65,8 +65,8 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
     panel.processor.compute_ifft()
     panel.processor.compute_abs()
     panel.processor.compute_log10()
-    panel.processor.swap_axes()
-    panel.processor.swap_axes()
+    panel.processor.compute_swap_axes()
+    panel.processor.compute_swap_axes()
 
 
 def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
@@ -141,7 +141,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     param = NormalizeParam()
     for _name, method in param.methods:
         param.method = method
-        panel.processor.normalize(param)
+        panel.processor.compute_normalize(param)
 
     param = XYCalibrateParam()
     param.a, param.b = 1.2, 0.1
@@ -151,7 +151,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.processor.compute_integral()
 
     param = PeakDetectionParam()
-    panel.processor.detect_peaks(param)
+    panel.processor.compute_peak_detection(param)
 
     panel.processor.compute_multigaussianfit()
 
