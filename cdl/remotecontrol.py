@@ -375,7 +375,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     @remote_call
     def calc(self, name: str, param_data: list[str] | None = None) -> bool:
-        """Call compute function `name` in current panel's processor.
+        """Call compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
@@ -428,9 +428,9 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
             group_index (int, optional): Group index. Defaults to None.
             panel (str, optional): Panel name. Defaults to None.
 
-        If `index` is not specified, returns the currently selected object.
-        If `group_index` is not specified, return an object from the current group.
-        If `panel` is not specified, return an object from the current panel.
+        If ``index`` is not specified, returns the currently selected object.
+        If ``group_index`` is not specified, return an object from the current group.
+        If ``panel`` is not specified, return an object from the current panel.
 
         Returns:
             list[str]: Object data
@@ -490,7 +490,7 @@ def get_cdl_xmlrpc_port():
     """Return DataLab current XML-RPC port"""
     #  The following is valid only when using Python 3.8+ with DataLab
     #  installed on the client side. In any other situation, please use the
-    #  `get_cdl_xmlrpc_port` function from doc/remotecontrol_py27.py.
+    #  ``get_cdl_xmlrpc_port`` function from doc/remotecontrol_py27.py.
     initialize()
     try:
         return Conf.main.rpc_server_port.get()
@@ -729,7 +729,7 @@ class RemoteClient:
         return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
 
     def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
-        """Call compute function `name` in current panel's processor.
+        """Call compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
@@ -744,7 +744,7 @@ class RemoteClient:
         return p.calc(name, dataset_to_json(param))
 
     def __getattr__(self, name: str) -> Callable:
-        """Return compute function `name` in current panel's processor.
+        """Return compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
@@ -753,7 +753,7 @@ class RemoteClient:
             Callable: Compute function
 
         Raises:
-            AttributeError: If compute function `name` does not exist
+            AttributeError: If compute function ``name`` does not exist
         """
 
         def compute_func(param: gdt.DataSet | None = None) -> gdt.DataSet:
@@ -849,9 +849,9 @@ class RemoteClient:
             group_index (int, optional): Group index. Defaults to None.
             panel (str, optional): Panel name. Defaults to None.
 
-        If `index` is not specified, returns the currently selected object.
-        If `group_index` is not specified, return an object from the current group.
-        If `panel` is not specified, return an object from the current panel.
+        If ``index`` is not specified, returns the currently selected object.
+        If ``group_index`` is not specified, return an object from the current group.
+        If ``panel`` is not specified, return an object from the current panel.
 
         Returns:
             Union[SignalObj, ImageObj]: object

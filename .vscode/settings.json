@@ -34,5 +34,6 @@
     "restructuredtext.linter.doc8.extraArgs": [
         "--ignore=D004"
     ],
-    "esbonio.sphinx.confDir": "${workspaceFolder}\\doc"
+    "esbonio.sphinx.confDir": "${workspaceFolder}\\doc",
+    "python.analysis.autoFormatStrings": true,
 }

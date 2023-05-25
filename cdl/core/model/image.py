@@ -17,7 +17,7 @@ import re
 import weakref
 from collections.abc import ByteString, Iterator, Mapping, Sequence
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
@@ -41,7 +41,15 @@ if TYPE_CHECKING:  # pragma: no cover
 def make_roi_rectangle(
     x0: int, y0: int, x1: int, y1: int, title: str
 ) -> AnnotatedRectangle:
-    """Make and return the annnotated rectangle associated to ROI"""
+    """Make and return the annnotated rectangle associated to ROI
+
+    Args:
+        x0 (int): top left corner X coordinate
+        y0 (int): top left corner Y coordinate
+        x1 (int): bottom right corner X coordinate
+        y1 (int): bottom right corner Y coordinate
+        title (str): title
+    """
     roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
     param = roi_item.label.labelparam
     param.anchor = "BL"
@@ -51,7 +59,15 @@ def make_roi_rectangle(
 
 
 def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> AnnotatedCircle:
-    """Make and return the annnotated circle associated to ROI"""
+    """Make and return the annnotated circle associated to ROI
+
+    Args:
+        x0 (int): top left corner X coordinate
+        y0 (int): top left corner Y coordinate
+        x1 (int): bottom right corner X coordinate
+        y1 (int): bottom right corner Y coordinate
+        title (str): title
+    """
     item = AnnotatedCircle(x0, y0, x1, y1)
     item.annotationparam.title = title
     item.annotationparam.update_annotation(item)
@@ -87,14 +103,23 @@ class RoiDataGeometries(enum.Enum):
 
 
 class RoiDataItem:
-    """Object representing an image ROI."""
+    """Object representing an image ROI.
 
-    def __init__(self, data: np.ndarray):
+    Args:
+        data (numpy.ndarray | list | tuple): ROI data
+    """
+
+    def __init__(self, data: np.ndarray | list | tuple):
         self._data = data
 
     @classmethod
     def from_image(cls, obj, geometry: RoiDataGeometries) -> RoiDataItem:
-        """Construct roi data item from image object: called for making new ROI items"""
+        """Construct roi data item from image object: called for making new ROI items
+
+        Args:
+            obj (ImageObj): image object
+            geometry (RoiDataGeometries): ROI geometry
+        """
         x0, x1 = obj.x0, obj.size[0] + obj.x0
         if geometry is RoiDataGeometries.RECTANGLE:
             y0, y1 = obj.y0, obj.size[1] + obj.y0
@@ -120,14 +145,24 @@ class RoiDataItem:
         return x0, y0, x1, y1
 
     def get_masked_view(self, data: np.ndarray, maskdata: np.ndarray) -> np.ndarray:
-        """Return masked view for data"""
+        """Return masked view for data
+
+        Args:
+            data (numpy.ndarray): data
+            maskdata (numpy.ndarray): mask data
+        """
         x0, y0, x1, y1 = self.get_rect()
         masked_view = data.view(ma.MaskedArray)
         masked_view.mask = maskdata
         return masked_view[y0:y1, x0:x1]
 
     def apply_mask(self, data: np.ndarray, yxratio: float) -> np.ndarray:
-        """Apply ROI to data as a mask and return masked array"""
+        """Apply ROI to data as a mask and return masked array
+
+        Args:
+            data (numpy.ndarray): data
+            yxratio (float): Y/X ratio
+        """
         roi_mask = np.ones_like(data, dtype=bool)
         x0, y0, x1, y1 = self.get_rect()
         if self.geometry is RoiDataGeometries.RECTANGLE:
@@ -139,8 +174,17 @@ class RoiDataItem:
             roi_mask[rr, cc] = False
         return roi_mask
 
-    def make_roi_item(self, index: int, fmt: str, lbl: bool, editable: bool = True):
-        """Make ROI plot item"""
+    def make_roi_item(
+        self, index: int | None, fmt: str, lbl: bool, editable: bool = True
+    ):
+        """Make ROI plot item
+
+        Args:
+            index (int | None): ROI index
+            fmt (str): format string
+            lbl (bool): if True, show label
+            editable (bool): if True, ROI is editable
+        """
         coords = self._data
         if self.geometry is RoiDataGeometries.RECTANGLE:
             func = make_roi_rectangle
@@ -151,7 +195,13 @@ class RoiDataItem:
 
 
 class ImageObj(gdt.DataSet, base.ObjectItf):
-    """Image dataset"""
+    """Image dataset
+
+    Args:
+        title (str): title
+        comment (str): comment
+        icon (str): icon
+    """
 
     PREFIX = "i"
     CONF_FMT = Conf.view.ima_format
@@ -178,8 +228,13 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """Returns (width, height)"""
         return self.data.shape[1], self.data.shape[0]
 
-    def __add_metadata(self, key, value) -> None:
-        """Add value to metadata if value can be converted into builtin/NumPy type"""
+    def __add_metadata(self, key: str, value: Any) -> None:
+        """Add value to metadata if value can be converted into builtin/NumPy type
+
+        Args:
+            key (str): key
+            value (Any): value
+        """
         stored_val = to_builtin(value)
         if stored_val is not None:
             self.metadata[key] = stored_val
@@ -203,9 +258,13 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         #     classes)
         # 4. Update all active objects when settings were changed
 
-    def set_metadata_from(self, obj) -> None:
+    def set_metadata_from(self, obj: Mapping | dict) -> None:
         """Set metadata from object: dict-like (only string keys are considered)
-        or any other object (iterating over supported attributes)"""
+        or any other object (iterating over supported attributes)
+
+        Args:
+            obj (Mapping | dict): object
+        """
         self.reset_metadata_to_defaults()
         ptn = r"__[\S_]*__$"
         if isinstance(obj, Mapping):
@@ -279,12 +338,12 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
     _e_tabs = gdt.EndTabGroup("all")
 
     @property
-    def xc(self):
+    def xc(self) -> float:
         """Return image center X-axis coordinate"""
         return self.x0 + 0.5 * self.data.shape[1] * self.dx
 
     @property
-    def yc(self):
+    def yc(self) -> float:
         """Return image center Y-axis coordinate"""
         return self.y0 + 0.5 * self.data.shape[0] * self.dy
 
@@ -304,12 +363,12 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         roidataitem = RoiDataItem(self.roi[roi_index])
         return roidataitem.get_masked_view(self.data, self.maskdata)
 
-    def copy_data_from(self, other, dtype=None):
+    def copy_data_from(self, other: ImageObj, dtype: np.dtype | None = None) -> None:
         """Copy data from other dataset instance.
 
         Args:
-            other (ObjectItf): other dataset instance
-            dtype (numpy.dtype): data type
+            other (ImageObj): other dataset instance
+            dtype (numpy.dtype | None): data type
         """
         self.x0 = other.x0
         self.y0 = other.y0
@@ -319,7 +378,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         self.data = np.array(other.data, copy=True, dtype=dtype)
         self.dicom_template = other.dicom_template
 
-    def set_data_type(self, dtype):
+    def set_data_type(self, dtype: np.dtype) -> None:
         """Change data type.
 
         Args:
@@ -327,15 +386,19 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """
         self.data = np.array(self.data, dtype=dtype)
 
-    def __viewable_data(self):
+    def __viewable_data(self) -> np.ndarray:
         """Return viewable data"""
         data = self.data.real
         if np.any(np.isnan(data)):
             data = np.nan_to_num(data, posinf=0, neginf=0)
         return data
 
-    def __update_item_params(self, item: MaskedImageItem):
-        """Update plot item parameters"""
+    def __update_item_params(self, item: MaskedImageItem) -> None:
+        """Update plot item parameters
+
+        Args:
+            item (MaskedImageItem): plot item
+        """
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
             fmt = r"%.1f"
@@ -357,14 +420,14 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         update_dataset(item.imageparam, self.metadata)
         item.imageparam.update_image(item)
 
-    def make_item(self, update_from: MaskedImageItem | None = None):
+    def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
         """Make plot item from data.
 
         Args:
-            update_from (ObjectItf): update
+            update_from (MaskedImageItem | None): update from plot item
 
         Returns:
-            PlotItem: plot item
+            MaskedImageItem: plot item
         """
         data = self.__viewable_data()
         item = make.maskedimage(
@@ -387,7 +450,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """Update plot item from data.
 
         Args:
-            item (PlotItem): plot item
+            item (MaskedImageItem): plot item
             data_changed (bool): if True, data has changed
         """
         if data_changed:
@@ -397,7 +460,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         self.__update_item_params(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults):
+    def get_roi_param(self, title, *defaults) -> gdt.DataSet:
         """Return ROI parameters dataset.
 
         Args:
@@ -491,7 +554,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         return ROIParam(title)
 
     @staticmethod
-    def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray | None:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -507,8 +570,17 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
             return None
         return np.array(roilist, int)
 
-    def new_roi_item(self, fmt, lbl, editable, geometry: RoiDataGeometries):
-        """Return a new ROI item from scratch"""
+    def new_roi_item(
+        self, fmt: str, lbl: bool, editable: bool, geometry: RoiDataGeometries
+    ) -> MaskedImageItem:
+        """Return a new ROI item from scratch
+
+        Args:
+            fmt (str): format string
+            lbl (bool): if True, add label
+            editable (bool): if True, ROI is editable
+            geometry (RoiDataGeometries): ROI geometry
+        """
         roidataitem = RoiDataItem.from_image(self, geometry)
         return roidataitem.make_roi_item(None, fmt, lbl, editable)
 
@@ -716,7 +788,7 @@ def create_image_from_param(
     addparam: gdt.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
-) -> ImageObj:
+) -> ImageObj | None:
     """Create a new Image object from dialog box.
 
     Args:
@@ -726,7 +798,7 @@ def create_image_from_param(
         parent (QWidget): parent widget
 
     Returns:
-        ImageObj: new image object
+        ImageObj: new image object or None if user cancelled
     """
     global IMG_NB  # pylint: disable=global-statement
     if newparam is None:

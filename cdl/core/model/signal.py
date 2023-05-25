@@ -57,7 +57,13 @@ class CurveStyles:
 
 
 class SignalObj(gdt.DataSet, base.ObjectItf):
-    """Signal dataset"""
+    """Signal dataset
+
+    Args:
+        title (str): signal title
+        comment (str): signal comment
+        icon (str): signal icon
+    """
 
     PREFIX = "s"
     CONF_FMT = Conf.view.sig_format
@@ -92,11 +98,11 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         gdt.DataSet.__init__(self, title, comment, icon)
         base.ObjectItf.__init__(self)
 
-    def copy_data_from(self, other, dtype=None):
+    def copy_data_from(self, other: SignalObj, dtype: np.dtype | None = None) -> None:
         """Copy data from other dataset instance.
 
         Args:
-            other (ObjectItf): other dataset instance
+            other (SignalObj): other dataset instance
             dtype (numpy.dtype): data type
         """
         if dtype not in (None, float, complex, np.complex128):
@@ -104,7 +110,9 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         self.metadata = deepcopy(other.metadata)
         self.xydata = np.array(other.xydata, copy=True, dtype=dtype)
 
-    def set_data_type(self, dtype):  # pylint: disable=unused-argument,no-self-use
+    def set_data_type(
+        self, dtype: np.dtype
+    ) -> None:  # pylint: disable=unused-argument,no-self-use
         """Change data type.
 
         Args:
@@ -112,8 +120,21 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """
         raise RuntimeError("Setting data type is not support for signals")
 
-    def set_xydata(self, x, y, dx=None, dy=None):
-        """Set xy data"""
+    def set_xydata(
+        self,
+        x: np.ndarray | list,
+        y: np.ndarray | list,
+        dx: np.ndarray | list | None = None,
+        dy: np.ndarray | list | None = None,
+    ) -> None:
+        """Set xy data
+
+        Args:
+            x (numpy.ndarray): x data
+            y (numpy.ndarray): y data
+            dx (numpy.ndarray): dx data (optional: error bars)
+            dy (numpy.ndarray): dy data (optional: error bars)
+        """
         if x is not None:
             x = np.array(x)
         if y is not None:
@@ -131,23 +152,23 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
                 dy = np.zeros_like(dx)
             self.xydata = np.vstack((x, y, dx, dy))
 
-    def __get_x(self):
+    def __get_x(self) -> np.ndarray | None:
         """Get x data"""
         if self.xydata is not None:
             return self.xydata[0]
         return None
 
-    def __set_x(self, data):
+    def __set_x(self, data) -> None:
         """Set x data"""
         self.xydata[0] = np.array(data)
 
-    def __get_y(self):
+    def __get_y(self) -> np.ndarray | None:
         """Get y data"""
         if self.xydata is not None:
             return self.xydata[1]
         return None
 
-    def __set_y(self, data):
+    def __set_y(self, data) -> None:
         """Set y data"""
         self.xydata[1] = np.array(data)
 
@@ -174,19 +195,19 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """Update item parameters.
 
         Args:
-            item (PlotItem): plot item
+            item (CurveItem): plot item
         """
         update_dataset(item.curveparam, self.metadata)
         item.update_params()
 
-    def make_item(self, update_from=None):
+    def make_item(self, update_from: CurveItem = None) -> CurveItem:
         """Make plot item from data.
 
         Args:
-            update_from (ObjectItf): update
+            update_from (CurveItem): plot item to update from
 
         Returns:
-            PlotItem: plot item
+            CurveItem: plot item
         """
         if len(self.xydata) in (2, 3, 4):
             if len(self.xydata) == 2:  # x, y signal
@@ -214,7 +235,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """Update plot item from data.
 
         Args:
-            item (PlotItem): plot item
+            item (CurveItem): plot item
             data_changed (bool): if True, data has changed
         """
         if data_changed:
@@ -246,7 +267,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
                 indexes[row, col] = np.abs(self.x - x0).argmin()
         return indexes
 
-    def get_roi_param(self, title, *defaults):
+    def get_roi_param(self, title: str, *defaults) -> gdt.DataSet:
         """Return ROI parameters dataset.
 
         Args:
@@ -281,8 +302,14 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
             return None
         return np.array(roilist, int)
 
-    def new_roi_item(self, fmt, lbl, editable):
-        """Return a new ROI item from scratch"""
+    def new_roi_item(self, fmt: str, lbl: bool, editable: bool):
+        """Return a new ROI item from scratch
+
+        Args:
+            fmt (str): format string
+            lbl (bool): if True, add label
+            editable (bool): if True, ROI is editable
+        """
         coords = self.x.min(), self.x.max()
         return base.make_roi_item(
             lambda x, y, _title: make.range(x, y), coords, "ROI", fmt, lbl, editable
@@ -471,7 +498,11 @@ SIG_NB = 0
 
 
 def triangle_func(xarr: np.ndarray) -> np.ndarray:
-    """Triangle function"""
+    """Triangle function
+
+    Args:
+        xarr (numpy.ndarray): x data
+    """
     return sps.sawtooth(xarr, width=0.5)
 
 
@@ -480,7 +511,7 @@ def create_signal_from_param(
     addparam: gdt.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
-) -> SignalObj:
+) -> SignalObj | None:
     """Create a new Signal object from a dialog box.
 
     Args:
@@ -490,7 +521,7 @@ def create_signal_from_param(
         parent (QWidget): parent widget
 
     Returns:
-        SignalObj: signal object
+        SignalObj: signal object or None if canceled
     """
     global SIG_NB  # pylint: disable=global-statement
     if newparam is None:

@@ -16,6 +16,7 @@ import enum
 import json
 import sys
 from collections.abc import Iterable
+from typing import Any
 from uuid import uuid4
 
 import guidata.dataset.dataitems as gdi
@@ -89,7 +90,7 @@ class Choices(enum.Enum):
     """Object associating an enum to guidata.dataset.dataitems.ChoiceItem choices"""
 
     # Reimplement enum.Enum method as suggested by Python documentation:
-    # https://docs.python.org/3/library/enum.html#using-automatic-values
+    # https://docs.python.org/3/library/enum.html#enum.Enum._generate_next_value_
     # Here, it is only needed for ImageDatatypes (see core/model/image.py).
     # pylint: disable=unused-argument,no-self-argument,no-member
     def _generate_next_value_(name, start, count, last_values):
@@ -174,7 +175,8 @@ class ShapeTypes(enum.Enum):
     """Shape types for image metadata"""
 
     # Reimplement enum.Enum method as suggested by Python documentation:
-    # https://docs.python.org/3/library/enum.html#using-automatic-values
+    # https://docs.python.org/3/library/enum.html#enum.Enum._generate_next_value_
+    # Here, it is only needed for ImageDatatypes (see core/model/image.py).
     # pylint: disable=unused-argument,no-self-argument,no-member
     def _generate_next_value_(name, start, count, last_values):
         return f"_{name.lower()[:3]}_"
@@ -261,7 +263,7 @@ class ResultShape:
         raise ValueError(f"Invalid metadata key `{key}`")
 
     @classmethod
-    def from_metadata_entry(cls, key, value):
+    def from_metadata_entry(cls, key, value) -> ResultShape | None:
         """Create metadata shape object from (key, value) metadata entry"""
         if isinstance(key, str) and isinstance(value, np.ndarray):
             try:
@@ -272,17 +274,17 @@ class ResultShape:
         return None
 
     @classmethod
-    def match(cls, key, value):
+    def match(cls, key, value) -> bool:
         """Return True if metadata dict entry (key, value) is a metadata result"""
         return cls.from_metadata_entry(key, value) is not None
 
     @property
-    def key(self):
+    def key(self) -> str:
         """Return metadata key associated to result"""
         return self.shapetype.value + self.label
 
     @property
-    def xlabels(self):
+    def xlabels(self) -> tuple[str]:
         """Return labels for result array columns"""
         if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
             labels = "ROI", "x", "y"
@@ -298,7 +300,7 @@ class ResultShape:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
         return labels[-self.array.shape[1] :]
 
-    def add_to(self, obj):
+    def add_to(self, obj: ObjectItf):
         """Add metadata shape to object (signal/image)"""
         obj.metadata[self.key] = self.array
         if self.shapetype in (
@@ -325,7 +327,7 @@ class ResultShape:
                 label += "Diameters"
             obj.metadata[label] = results
 
-    def merge_with(self, obj, other_obj=None):
+    def merge_with(self, obj: ObjectItf, other_obj: ObjectItf | None = None):
         """Merge object resultshape with another's: obj <-- other_obj
         or simply merge this resultshape with obj if other_obj is None"""
         if other_obj is None:
@@ -333,6 +335,7 @@ class ResultShape:
         other_value = other_obj.metadata.get(self.key)
         if other_value is not None:
             other = ResultShape.from_metadata_entry(self.key, other_value)
+            assert other is not None
             other_array = np.array(other.array, copy=True)
             if other_array.shape[1] > self.data_colnb:  # Column 0 is the ROI index
                 other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
@@ -492,7 +495,8 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     PREFIX = ""  # This is overriden in children classes
 
-    metadata = {}  # This is overriden in children classes with a gdi.DictItem instance
+    # This is overriden in children classes with a gdi.DictItem instance:
+    metadata: dict[str, Any] = {}
 
     # Metadata dictionary keys for special properties:
     METADATA_FMT = "__format"
@@ -636,13 +640,15 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """
 
     @property
-    def roi(self) -> np.ndarray:
+    def roi(self) -> np.ndarray | None:
         """Return object regions of interest array (one ROI per line).
 
         Returns:
             numpy.ndarray: regions of interest array
         """
-        return self.metadata.get(ROI_KEY)
+        roidata = self.metadata.get(ROI_KEY)
+        assert roidata is None or isinstance(roidata, np.ndarray)
+        return roidata
 
     @roi.setter
     def roi(self, roidata: np.ndarray):
@@ -698,6 +704,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
             other (ObjectItf): other object
         """
         for mshape in self.iterate_resultshapes():
+            assert mshape is not None
             mshape.merge_with(self, other)
 
     def transform_shapes(self, orig, func, param=None):
@@ -717,6 +724,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
                 func(self, orig, coords, param)
 
         for mshape in self.iterate_resultshapes():
+            assert mshape is not None
             transform(mshape.data)
         if self.annotations:
             items = []
