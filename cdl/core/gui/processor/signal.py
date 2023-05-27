@@ -137,9 +137,7 @@ class SignalProcessor(BaseProcessor):
             return (x, y, param)
         if len(data) == 4:  # x, y, dx, dy error bar signal
             x, y, _dx, dy = data
-            if param is None:
-                return (dy,)
-            return (dy, param)
+            raise NotImplementedError("Error bar signal processing not implemented")
         raise ValueError("Invalid data")
 
     def set_11_func_result(self, new_obj: SignalObj, result: tuple[np.ndarray]) -> None:
