@@ -9,12 +9,15 @@ Module providing an error message box
 
 import traceback
 
+from guidata.config import CONF
+from guidata.configtools import get_font
 from guidata.qthelpers import get_std_icon
-from guidata.widgets.codeeditor import CodeEditor
+from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
+from cdl.utils.misc import go_to_error
 
 
 def insert_spaces(text: str, nbchars: int) -> str:
@@ -56,12 +59,12 @@ class ErrorMessageBox(QW.QDialog):
         super().__init__(parent)
         title = parent.window().objectName()
         self.setWindowTitle(title)
-        self.editor = CodeEditor(self)
-        font = self.editor.font()
-        font.setPixelSize(12)
-        self.editor.setFont(font)
-        self.editor.setReadOnly(True)
-        self.editor.setPlainText(traceback.format_exc() * 10)
+        self.shell = PythonShellWidget(self, read_only=True)
+        self.shell.go_to_error.connect(go_to_error)
+        font = get_font(CONF, "console")
+        font.setPointSize(9)
+        self.shell.set_font(font)
+        self.shell.insert_text(traceback.format_exc() * 10, at_end=True, error=True)
 
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok)
         bbox.accepted.connect(self.accept)
@@ -95,7 +98,7 @@ class ErrorMessageBox(QW.QDialog):
         tb_layout = QW.QVBoxLayout()
         tb_text = _("The following traceback may help to understand the problem:")
         tb_layout.addWidget(QW.QLabel(tb_text))
-        tb_layout.addWidget(self.editor)
+        tb_layout.addWidget(self.shell)
         tb_groupbox.setLayout(tb_layout)
         tb_groupbox.setSizePolicy(
             QW.QSizePolicy.MinimumExpanding, QW.QSizePolicy.MinimumExpanding
