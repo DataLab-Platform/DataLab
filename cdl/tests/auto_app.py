@@ -16,7 +16,7 @@ DataLab mainwindow automation test:
 
 import os.path as osp
 
-from cdl.core.gui.processor.base import ClipParam
+from cdl.core.computation.base import ClipParam
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_image2, create_test_signal1

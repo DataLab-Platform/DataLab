@@ -37,7 +37,7 @@ The contour detection algorithm works in the following way:
   - Then, each contour is fitted to the closest ellipse (or circle)
 
 Feature is based on ``get_contour_shapes`` function
-from ``cdl.core.computation`` module:
+from ``cdl.algorithms`` module:
 
-  .. literalinclude:: ../../../cdl/core/computation/image.py
+  .. literalinclude:: ../../../cdl/algorithms/image.py
      :pyobject: get_contour_shapes

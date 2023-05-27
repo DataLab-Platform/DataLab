@@ -12,9 +12,9 @@ import numpy as np
 from guidata.configtools import get_icon
 from guiqwt.widgets.fit import FitDialog, FitParam
 
+from cdl.algorithms import fit
+from cdl.algorithms.signal import xpeak
 from cdl.config import _
-from cdl.core.computation import fit
-from cdl.core.computation.signal import xpeak
 from cdl.utils.qthelpers import exec_dialog
 from cdl.utils.tests import get_default_test_name
 

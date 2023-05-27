@@ -15,7 +15,7 @@ import time
 from guiqwt.builder import make
 from numpy import ma
 
-from cdl.core.computation.image import BINNING_OPERATIONS, binning
+from cdl.algorithms.image import BINNING_OPERATIONS, binning
 from cdl.env import execenv
 from cdl.tests.data import get_laser_spot_data
 from cdl.utils.qthelpers import qt_app_context

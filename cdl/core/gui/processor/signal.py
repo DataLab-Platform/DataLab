@@ -13,426 +13,19 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
-import scipy.integrate as spt
-import scipy.ndimage as spi
-import scipy.optimize as spo
-import scipy.signal as sps
 
-from cdl.config import Conf, _
-from cdl.core.computation import fit
-from cdl.core.computation.signal import (
-    derivative,
-    moving_average,
-    normalize,
-    peak_indexes,
-    xpeak,
-    xy_fft,
-    xy_ifft,
-)
-from cdl.core.gui.processor.base import (
-    BaseProcessor,
-    ClipParam,
-    GaussianParam,
-    MovingAverageParam,
-    MovingMedianParam,
-    ThresholdParam,
-)
+import cdl.core.computation.base as cpb
+import cdl.core.computation.signal as cps
+from cdl.config import _
+from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ShapeTypes
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import exec_dialog, qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
-
-
-def extract_multiple_roi(
-    x: np.ndarray, y: np.ndarray, group: gdt.DataSetGroup
-) -> tuple[np.ndarray, np.ndarray]:
-    """Extract multiple regions of interest from data
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        group (gdt.DataSetGroup): group of parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
-    for p in group.datasets:
-        slice0 = slice(p.col1, p.col2 + 1)
-        xout[slice0], yout[slice0] = x[slice0], y[slice0]
-    nans = np.isnan(xout) | np.isnan(yout)
-    return xout[~nans], yout[~nans]
-
-
-def extract_single_roi(
-    x: np.ndarray, y: np.ndarray, p: gdt.DataSet
-) -> tuple[np.ndarray, np.ndarray]:
-    """Extract single region of interest from data
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (gdt.DataSet): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1]
-
-
-def compute_swap_axes(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Swap axes
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return y, x
-
-
-def compute_abs(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute absolute value
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.abs(y))
-
-
-def compute_log10(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute Log10
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.log10(y))
-
-
-class PeakDetectionParam(gdt.DataSet):
-    """Peak detection parameters"""
-
-    threshold = gdi.IntItem(
-        _("Threshold"), default=30, min=0, max=100, slider=True, unit="%"
-    )
-    min_dist = gdi.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
-
-
-def compute_peak_detection(
-    x: np.ndarray, y: np.ndarray, p: PeakDetectionParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Peak detection
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (PeakDetectionParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
-    return x[indexes], y[indexes]
-
-
-class NormalizeParam(gdt.DataSet):
-    """Normalize parameters"""
-
-    methods = (
-        (_("maximum"), "maximum"),
-        (_("amplitude"), "amplitude"),
-        (_("sum"), "sum"),
-        (_("energy"), "energy"),
-    )
-    method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
-
-
-def compute_normalize(
-    x: np.ndarray, y: np.ndarray, p: NormalizeParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Normalize data
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (NormalizeParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, normalize(y, p.method))
-
-
-def compute_derivative(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute derivative
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, derivative(x, y))
-
-
-def compute_integral(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute integral
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, spt.cumtrapz(y, x, initial=0.0))
-
-
-def compute_threshold(
-    x: np.ndarray, y: np.ndarray, p: ThresholdParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute threshold clipping
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (ThresholdParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.clip(y, p.value, y.max()))
-
-
-def compute_clip(
-    x: np.ndarray, y: np.ndarray, p: ClipParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute maximum data clipping
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (ClipParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.clip(y, y.min(), p.value))
-
-
-def compute_gaussian_filter(
-    x: np.ndarray, y: np.ndarray, p: GaussianParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute gaussian filter
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (GaussianParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, spi.gaussian_filter1d(y, p.sigma))
-
-
-def compute_moving_average(
-    x: np.ndarray, y: np.ndarray, p: MovingAverageParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute moving average
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (MovingAverageParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, moving_average(y, p.n))
-
-
-def compute_moving_median(
-    x: np.ndarray, y: np.ndarray, p: MovingMedianParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute moving median
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (MovingMedianParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, sps.medfilt(y, kernel_size=p.n))
-
-
-def compute_wiener(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute Wiener filter
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, sps.wiener(y))
-
-
-class XYCalibrateParam(gdt.DataSet):
-    """Signal calibration parameters"""
-
-    axes = (("x", _("X-axis")), ("y", _("Y-axis")))
-    axis = gdi.ChoiceItem(_("Calibrate"), axes, default="y")
-    a = gdi.FloatItem("a", default=1.0)
-    b = gdi.FloatItem("b", default=0.0)
-
-
-def compute_calibration(
-    x: np.ndarray, y: np.ndarray, p: XYCalibrateParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute linear calibration
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (XYCalibrateParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    if p.axis == "x":
-        return p.a * x + p.b, y
-    return x, p.a * y + p.b
-
-
-class FFTParam(gdt.DataSet):
-    """FFT parameters"""
-
-    shift = gdi.BoolItem(
-        _("Shift"),
-        default=Conf.proc.fft_shift_enabled.get(),
-        help=_("Shift zero frequency to center"),
-    )
-
-
-def compute_fft(
-    x: np.ndarray, y: np.ndarray, p: FFTParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute FFT
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (FFTParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return xy_fft(x, y, shift=p.shift)
-
-
-def compute_ifft(
-    x: np.ndarray, y: np.ndarray, p: FFTParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute iFFT
-
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (FFTParam): parameters
-
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return xy_ifft(x, y, shift=p.shift)
-
-
-class PolynomialFitParam(gdt.DataSet):
-    """Polynomial fitting parameters"""
-
-    degree = gdi.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
-
-
-class FWHMParam(gdt.DataSet):
-    """FWHM parameters"""
-
-    fittypes = (
-        ("GaussianModel", _("Gaussian")),
-        ("LorentzianModel", _("Lorentzian")),
-        ("VoigtModel", "Voigt"),
-    )
-
-    fittype = gdi.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
-
-
-def compute_fwhm(signal: SignalObj, param: FWHMParam):
-    """Compute FWHM"""
-    res = []
-    for i_roi in signal.iterate_roi_indexes():
-        x, y = signal.get_data(i_roi)
-        dx = np.max(x) - np.min(x)
-        dy = np.max(y) - np.min(y)
-        base = np.min(y)
-        sigma, mu = dx * 0.1, xpeak(x, y)
-        FitModel = getattr(fit, param.fittype)
-        amp = FitModel.get_amp_from_amplitude(dy, sigma)
-
-        def func(params):
-            """Fitting model function"""
-            # pylint: disable=cell-var-from-loop
-            return y - FitModel.func(x, *params)
-
-        (amp, sigma, mu, base), _ier = spo.leastsq(
-            func, np.array([amp, sigma, mu, base])
-        )
-        x0, y0, x1, y1 = FitModel.half_max_segment(amp, sigma, mu, base)
-        res.append([i_roi, x0, y0, x1, y1])
-    return np.array(res)
-
-
-def compute_fw1e2(signal: SignalObj):
-    """Compute FW at 1/e²"""
-    res = []
-    for i_roi in signal.iterate_roi_indexes():
-        x, y = signal.get_data(i_roi)
-        dx = np.max(x) - np.min(x)
-        dy = np.max(y) - np.min(y)
-        base = np.min(y)
-        sigma, mu = dx * 0.1, xpeak(x, y)
-        amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
-        p_in = np.array([amp, sigma, mu, base])
-
-        def func(params):
-            """Fitting model function"""
-            # pylint: disable=cell-var-from-loop
-            return y - fit.GaussianModel.func(x, *params)
-
-        p_out, _ier = spo.leastsq(func, p_in)
-        amp, sigma, mu, base = p_out
-        hw = 2 * sigma
-        amplitude = fit.GaussianModel.amplitude(amp, sigma)
-        yhm = amplitude / np.e**2 + base
-        res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
-    return np.array(res)
 
 
 class SignalProcessor(BaseProcessor):
@@ -469,7 +62,7 @@ class SignalProcessor(BaseProcessor):
             # TODO: [P2] Instead of removing geometric shapes, apply roi extract
             self.compute_11(
                 "ROI",
-                extract_multiple_roi,
+                cps.extract_multiple_roi,
                 group,
                 suffix=suffix_func,
                 func_obj=lambda obj, _orig, _group: obj.remove_all_shapes(),
@@ -479,7 +72,7 @@ class SignalProcessor(BaseProcessor):
             # TODO: [P2] Instead of removing geometric shapes, apply roi extract
             self.compute_1n(
                 [f"ROI{iroi}" for iroi in range(len(group.datasets))],
-                extract_single_roi,
+                cps.extract_single_roi,
                 group.datasets,
                 suffix=lambda p: f"indexes={p.col1:d}:{p.col2:d}",
                 func_obj=lambda obj, _orig, _group: obj.remove_all_shapes(),
@@ -490,22 +83,26 @@ class SignalProcessor(BaseProcessor):
         """Swap data axes"""
         self.compute_11(
             "SwapAxes",
-            compute_swap_axes,
+            cps.compute_swap_axes,
             func_obj=lambda obj, _orig: obj.remove_all_shapes(),
         )
 
     def compute_abs(self) -> None:
         """Compute absolute value"""
-        self.compute_11("Abs", compute_abs)
+        self.compute_11("Abs", cps.compute_abs)
 
     def compute_log10(self) -> None:
         """Compute Log10"""
-        self.compute_11("Log10", compute_log10)
+        self.compute_11("Log10", cps.compute_log10)
 
-    def compute_peak_detection(self, param: PeakDetectionParam | None = None) -> None:
+    def compute_peak_detection(
+        self, param: cps.PeakDetectionParam | None = None
+    ) -> None:
         """Detect peaks from data"""
         obj = self.panel.objview.get_sel_objects()[0]
-        edit, param = self.init_param(param, PeakDetectionParam, _("Peak detection"))
+        edit, param = self.init_param(
+            param, cps.PeakDetectionParam, _("Peak detection")
+        )
         if edit:
             dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
             dlg.setup_data(obj.x, obj.y)
@@ -515,14 +112,14 @@ class SignalProcessor(BaseProcessor):
 
         # pylint: disable=unused-argument
         def func_obj(
-            obj: SignalObj, orig: SignalObj, param: PeakDetectionParam
+            obj: SignalObj, orig: SignalObj, param: cps.PeakDetectionParam
         ) -> None:
             """Customize signal object"""
             obj.metadata["curvestyle"] = "Sticks"
 
         self.compute_11(
             "Peaks",
-            compute_peak_detection,
+            cps.compute_peak_detection,
             param,
             suffix=lambda p: f"threshold={p.threshold}%, min_dist={p.min_dist}pts",
             func_obj=func_obj,
@@ -551,12 +148,12 @@ class SignalProcessor(BaseProcessor):
         new_obj.set_xydata(x, y)
 
     @qt_try_except()
-    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
+    def compute_normalize(self, param: cps.NormalizeParam | None = None) -> None:
         """Normalize data"""
-        edit, param = self.init_param(param, NormalizeParam, _("Normalize"))
+        edit, param = self.init_param(param, cps.NormalizeParam, _("Normalize"))
         self.compute_11(
             "Normalize",
-            compute_normalize,
+            cps.compute_normalize,
             param,
             suffix=lambda p: f"ref={p.method}",
             edit=edit,
@@ -565,82 +162,86 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_derivative(self) -> None:
         """Compute derivative"""
-        self.compute_11("Derivative", compute_derivative)
+        self.compute_11("Derivative", cps.compute_derivative)
 
     @qt_try_except()
     def compute_integral(self) -> None:
         """Compute integral"""
-        self.compute_11("Integral", compute_integral)
+        self.compute_11("Integral", cps.compute_integral)
 
     @qt_try_except()
-    def compute_calibration(self, param: XYCalibrateParam | None = None) -> None:
+    def compute_calibration(self, param: cps.XYCalibrateParam | None = None) -> None:
         """Compute data linear calibration"""
         edit, param = self.init_param(
-            param, XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
+            param, cps.XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
         )
         self.compute_11(
             "LinearCal",
-            compute_calibration,
+            cps.compute_calibration,
             param,
             suffix=lambda p: f"{p.axis}={p.a}*{p.axis}+{p.b}",
             edit=edit,
         )
 
     @qt_try_except()
-    def compute_threshold(self, param: ThresholdParam | None = None) -> None:
+    def compute_threshold(self, param: cpb.ThresholdParam | None = None) -> None:
         """Compute threshold clipping"""
-        edit, param = self.init_param(param, ThresholdParam, _("Thresholding"))
+        edit, param = self.init_param(param, cpb.ThresholdParam, _("Thresholding"))
         self.compute_11(
             "Threshold",
-            compute_threshold,
+            cps.compute_threshold,
             param,
             suffix=lambda p: f"min={p.value} lsb",
             edit=edit,
         )
 
     @qt_try_except()
-    def compute_clip(self, param: ClipParam | None = None) -> None:
+    def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
-        edit, param = self.init_param(param, ClipParam, _("Clipping"))
+        edit, param = self.init_param(param, cpb.ClipParam, _("Clipping"))
         self.compute_11(
             "Clip",
-            compute_clip,
+            cps.compute_clip,
             param,
             suffix=lambda p: f"max={p.value} lsb",
             edit=edit,
         )
 
     @qt_try_except()
-    def compute_gaussian_filter(self, param: GaussianParam | None = None) -> None:
+    def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:
         """Compute gaussian filter"""
-        edit, param = self.init_param(param, GaussianParam, _("Gaussian filter"))
+        edit, param = self.init_param(param, cpb.GaussianParam, _("Gaussian filter"))
         self.compute_11(
             "GaussianFilter",
-            compute_gaussian_filter,
+            cps.compute_gaussian_filter,
             param,
             suffix=lambda p: f"σ={p.sigma:.3f} pixels",
             edit=edit,
         )
 
     @qt_try_except()
-    def compute_moving_average(self, param: MovingAverageParam | None = None) -> None:
+    def compute_moving_average(
+        self, param: cpb.MovingAverageParam | None = None
+    ) -> None:
         """Compute moving average"""
-        edit, param = self.init_param(param, MovingAverageParam, _("Moving average"))
+        edit, param = self.init_param(
+            param, cpb.MovingAverageParam, _("Moving average")
+        )
         self.compute_11(
             "MovAvg",
-            compute_moving_average,
+            cps.compute_moving_average,
             param,
             suffix=lambda p: f"n={p.n}",
             edit=edit,
         )
 
     @qt_try_except()
-    def compute_moving_median(self, param: MovingMedianParam | None = None) -> None:
+    def compute_moving_median(self, param: cpb.MovingMedianParam | None = None) -> None:
         """Compute moving median"""
-        edit, param = self.init_param(param, MovingMedianParam, _("Moving median"))
+        edit, param = self.init_param(param, cpb.MovingMedianParam, _("Moving median"))
         self.compute_11(
             "MovMed",
-            compute_moving_median,
+            cps.compute_moving_median,
             param,
             suffix=lambda p: f"n={p.n}",
             edit=edit,
@@ -649,28 +250,28 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_wiener(self) -> None:
         """Compute Wiener filter"""
-        self.compute_11("WienerFilter", compute_wiener)
+        self.compute_11("WienerFilter", cps.compute_wiener)
 
     @qt_try_except()
-    def compute_fft(self, param: FFTParam | None = None) -> None:
+    def compute_fft(self, param: cps.FFTParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
-            param = FFTParam()
+            param = cps.FFTParam()
         self.compute_11(
             "FFT",
-            compute_fft,
+            cps.compute_fft,
             param,
             edit=False,
         )
 
     @qt_try_except()
-    def compute_ifft(self, param: FFTParam | None = None) -> None:
+    def compute_ifft(self, param: cps.FFTParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
-            param = FFTParam()
+            param = cps.FFTParam()
         self.compute_11(
             "iFFT",
-            compute_ifft,
+            cps.compute_ifft,
             param,
             edit=False,
         )
@@ -682,10 +283,10 @@ class SignalProcessor(BaseProcessor):
             self.__row_compute_fit(obj, name, fitdlgfunc)
 
     @qt_try_except()
-    def compute_polyfit(self, param: PolynomialFitParam | None = None) -> None:
+    def compute_polyfit(self, param: cps.PolynomialFitParam | None = None) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
-        edit, param = self.init_param(param, PolynomialFitParam, txt)
+        edit, param = self.init_param(param, cps.PolynomialFitParam, txt)
         if not edit or param.edit(self):
             dlgfunc = fitdialog.polynomialfit
             self.compute_fit(
@@ -735,17 +336,17 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Computing
     @qt_try_except()
-    def compute_fwhm(self, param: FWHMParam | None = None) -> None:
+    def compute_fwhm(self, param: cps.FWHMParam | None = None) -> None:
         """Compute FWHM"""
         title = _("FWHM")
-        edit, param = self.init_param(param, FWHMParam, title)
-        self.compute_10(title, compute_fwhm, ShapeTypes.SEGMENT, param, edit=edit)
+        edit, param = self.init_param(param, cps.FWHMParam, title)
+        self.compute_10(title, cps.compute_fwhm, ShapeTypes.SEGMENT, param, edit=edit)
 
     @qt_try_except()
     def compute_fw1e2(self):
         """Compute FW at 1/e²"""
         title = _("FW") + "1/e²"
-        self.compute_10(title, compute_fw1e2, ShapeTypes.SEGMENT)
+        self.compute_10(title, cps.compute_fw1e2, ShapeTypes.SEGMENT)
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

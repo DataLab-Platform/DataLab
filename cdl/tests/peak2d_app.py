@@ -12,7 +12,7 @@ Testing the following:
 """
 
 from cdl.config import _
-from cdl.core.gui.processor.image import PeakDetectionParam
+from cdl.core.computation.image import PeakDetectionParam
 from cdl.core.model import image as imod
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 from cdl.tests.data import get_peak2d_data

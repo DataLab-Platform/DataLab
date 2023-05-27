@@ -24,8 +24,8 @@ from guidata.utils import update_dataset
 from guiqwt.builder import make
 from guiqwt.styles import COLORS, LINESTYLES
 
+from cdl.algorithms import fit
 from cdl.config import Conf, _
-from cdl.core.computation import fit
 from cdl.core.model import base
 from cdl.env import execenv
 

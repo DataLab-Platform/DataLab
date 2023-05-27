@@ -18,23 +18,23 @@ Testing the following:
 from __future__ import annotations
 
 from cdl.config import _
-from cdl.core.gui.main import CDLMainWindow
-from cdl.core.gui.panel.image import ImagePanel
-from cdl.core.gui.panel.signal import SignalPanel
-from cdl.core.gui.processor.base import (
+from cdl.core.computation.base import (
     ClipParam,
     GaussianParam,
     MovingAverageParam,
     MovingMedianParam,
     ThresholdParam,
 )
-from cdl.core.gui.processor.signal import (
+from cdl.core.computation.signal import (
     FWHMParam,
     NormalizeParam,
     PeakDetectionParam,
     PolynomialFitParam,
     XYCalibrateParam,
 )
+from cdl.core.gui.main import CDLMainWindow
+from cdl.core.gui.panel.image import ImagePanel
+from cdl.core.gui.panel.signal import SignalPanel
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.signal import (
     GaussLorentzVoigtParam,

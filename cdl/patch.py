@@ -133,7 +133,7 @@ def get_stats(self, x0, y0, x1, y1):
     data = self.data[iy0:iy1, ix0:ix1]
 
     # pylint: disable=C0415
-    from cdl.core.computation.image import get_centroid_fourier
+    from cdl.algorithms.image import get_centroid_fourier
 
     c_i, c_j = get_centroid_fourier(data)
     c_x, c_y = self.get_plot_coordinates(c_j + ix0, c_i + iy0)

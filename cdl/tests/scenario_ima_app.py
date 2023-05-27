@@ -15,8 +15,7 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
-from cdl.core.gui.main import CDLMainWindow
-from cdl.core.gui.processor.image import (
+from cdl.core.computation.image import (
     AdjustGammaParam,
     AdjustLogParam,
     AdjustSigmoidParam,
@@ -36,6 +35,7 @@ from cdl.core.gui.processor.image import (
     RotateParam,
     ZCalibrateParam,
 )
+from cdl.core.gui.main import CDLMainWindow
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
 from cdl.tests import cdl_app_context

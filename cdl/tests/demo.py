@@ -13,11 +13,11 @@ DataLab Demo
 from qtpy import QtWidgets as QW
 
 from cdl.config import _, reset
+from cdl.core.computation.image import ContourShapeParam
+from cdl.core.computation.image import PeakDetectionParam as Peak2DDetectionParam
+from cdl.core.computation.image import RotateParam
+from cdl.core.computation.signal import PeakDetectionParam, PolynomialFitParam
 from cdl.core.gui.main import CDLMainWindow
-from cdl.core.gui.processor.image import ContourShapeParam
-from cdl.core.gui.processor.image import PeakDetectionParam as Peak2DDetectionParam
-from cdl.core.gui.processor.image import RotateParam
-from cdl.core.gui.processor.signal import PeakDetectionParam, PolynomialFitParam
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
 from cdl.core.model.signal import (

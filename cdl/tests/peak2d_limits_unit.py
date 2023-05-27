@@ -10,7 +10,7 @@ Image peak detection test: testing algorithm limits
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 
-from cdl.core.computation.image import get_2d_peaks_coords
+from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.tests.peak2d_unit import exec_image_peak_detection_func

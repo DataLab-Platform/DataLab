@@ -14,7 +14,7 @@ import numpy as np
 from guiqwt.builder import make
 from skimage.feature import canny
 
-from cdl.core.computation.image import get_hough_circle_peaks
+from cdl.algorithms.image import get_hough_circle_peaks
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.utils.qthelpers import qt_app_context

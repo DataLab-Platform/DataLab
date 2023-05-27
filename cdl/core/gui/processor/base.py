@@ -29,7 +29,6 @@ from collections.abc import Callable
 from multiprocessing import Pool
 from typing import TYPE_CHECKING, Any, Union
 
-import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 from guidata.configtools import get_icon
@@ -43,6 +42,7 @@ from cdl.config import Conf, _
 from cdl.core.gui.roieditor import ROIEditorData
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.utils import misc
+from cdl.utils.misc import wng_func
 from cdl.utils.qthelpers import (
     create_progress_bar,
     exec_dialog,
@@ -55,6 +55,13 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from guiqwt.plot import CurveWidget, ImageWidget
 
+    from cdl.core.computation.base import (
+        ClipParam,
+        GaussianParam,
+        MovingAverageParam,
+        MovingMedianParam,
+        ThresholdParam,
+    )
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
     from cdl.core.model.image import ImageObj
@@ -63,37 +70,8 @@ if TYPE_CHECKING:  # pragma: no cover
     Obj = Union[SignalObj, ImageObj]
 
 
+# Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
 multiprocessing.freeze_support()
-
-
-class GaussianParam(gdt.DataSet):
-    """Gaussian filter parameters"""
-
-    sigma = gdi.FloatItem("σ", default=1.0)
-
-
-class MovingAverageParam(gdt.DataSet):
-    """Moving average parameters"""
-
-    n = gdi.IntItem(_("Size of the moving window"), default=3, min=1)
-
-
-class MovingMedianParam(gdt.DataSet):
-    """Moving median parameters"""
-
-    n = gdi.IntItem(_("Size of the moving window"), default=3, min=1, even=False)
-
-
-class ThresholdParam(gdt.DataSet):
-    """Threshold parameters"""
-
-    value = gdi.FloatItem(_("Threshold"))
-
-
-class ClipParam(gdt.DataSet):
-    """Data clipping parameters"""
-
-    value = gdi.FloatItem(_("Clipping value"))
 
 
 COMPUTATION_TIP = _(
@@ -106,13 +84,6 @@ COMPUTATION_TIP = _(
 
 
 POOL: Pool = None
-
-
-def wng_func(func, *args) -> np.ndarray | tuple[np.ndarray]:
-    """Wrapper function to ignore RuntimeWarning"""
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", RuntimeWarning)
-        return func(*args)
 
 
 class Worker:

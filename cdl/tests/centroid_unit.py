@@ -24,8 +24,8 @@ import scipy.ndimage as spi
 from guiqwt.builder import make
 from numpy import ma
 
+from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _
-from cdl.core.computation.image import get_centroid_fourier
 from cdl.env import execenv
 from cdl.tests.data import get_laser_spot_data
 from cdl.utils.qthelpers import qt_app_context

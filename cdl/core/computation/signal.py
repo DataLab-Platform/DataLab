@@ -4,233 +4,396 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Computation / Signal module
+DataLab Signal Computation module
+-------------------------------
+
+This module defines the signal parameters and functions used by the
+:mod:`cdl.core.gui.processor` module.
+
+It is based on the :mod:`cdl.algorithms` module, which defines the algorithms
+that are applied to the data, and on the :mod:`cdl.core.model` module, which
+defines the data model.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 from __future__ import annotations
 
+import guidata.dataset.dataitems as gdi
+import guidata.dataset.datatypes as gdt
 import numpy as np
+import scipy.integrate as spt
+import scipy.ndimage as spi
+import scipy.optimize as spo
+import scipy.signal as sps
+
+from cdl.algorithms import fit
+from cdl.algorithms.signal import (
+    derivative,
+    moving_average,
+    normalize,
+    peak_indexes,
+    xpeak,
+    xy_fft,
+    xy_ifft,
+)
+from cdl.config import Conf, _
+from cdl.core.computation.base import (
+    ClipParam,
+    GaussianParam,
+    MovingAverageParam,
+    MovingMedianParam,
+    ThresholdParam,
+)
+from cdl.core.model.signal import SignalObj
 
 
-# ----- Filtering functions ----------------------------------------------------
-def moving_average(y: np.ndarray, n: int) -> np.ndarray:
-    """Compute moving average.
-
-    Args:
-        y (np.ndarray): Input array
-        n (int): Window size
-
-    Returns:
-        np.ndarray: Moving average
-    """
-    y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
-    return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
-
-
-# ----- Misc. functions --------------------------------------------------------
-def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Compute numerical derivative.
-
-    Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-
-    Returns:
-        np.ndarray: Numerical derivative
-    """
-    dy = np.zeros_like(y)
-    dy[0:-1] = np.diff(y) / np.diff(x)
-    dy[-1] = (y[-1] - y[-2]) / (x[-1] - x[-2])
-    return dy
-
-
-def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
-    """Normalize input array to a given parameter.
-
-    Args:
-        yin (np.ndarray): Input array
-        parameter (str, optional): Normalization parameter. Defaults to "maximum".
-            Supported values: 'maximum', 'amplitude', 'sum', 'energy'
-
-    Returns:
-        np.ndarray: Normalized array
-    """
-    axis = len(yin.shape) - 1
-    if parameter == "maximum":
-        maximum = np.max(yin, axis)
-        if axis == 1:
-            maximum = maximum.reshape((len(maximum), 1))
-        maxarray = np.tile(maximum, yin.shape[axis]).reshape(yin.shape)
-        return yin / maxarray
-    if parameter == "amplitude":
-        ytemp = np.array(yin, copy=True)
-        minimum = np.min(yin, axis)
-        if axis == 1:
-            minimum = minimum.reshape((len(minimum), 1))
-        ytemp -= minimum
-        return normalize(ytemp, parameter="maximum")
-    if parameter == "sum":
-        return yin / yin.sum()
-    if parameter == "energy":
-        return yin / (yin * yin.conjugate()).sum()
-    raise RuntimeError(f"Unsupported parameter {parameter}")
-
-
-def xy_fft(
-    x: np.ndarray, y: np.ndarray, shift: bool = True
+def extract_multiple_roi(
+    x: np.ndarray, y: np.ndarray, group: gdt.DataSetGroup
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Compute FFT on X,Y data.
-
+    """Extract multiple regions of interest from data
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
-
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        group (gdt.DataSetGroup): group of parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
     """
-    y1 = np.fft.fft(y)
-    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
-    if shift:
-        x1 = np.fft.fftshift(x1)
-        y1 = np.fft.fftshift(y1)
-    return x1, y1
+    xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
+    for p in group.datasets:
+        slice0 = slice(p.col1, p.col2 + 1)
+        xout[slice0], yout[slice0] = x[slice0], y[slice0]
+    nans = np.isnan(xout) | np.isnan(yout)
+    return xout[~nans], yout[~nans]
 
 
-def xy_ifft(
-    x: np.ndarray, y: np.ndarray, shift: bool = True
+def extract_single_roi(
+    x: np.ndarray, y: np.ndarray, p: gdt.DataSet
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Compute iFFT on X,Y data.
-
+    """Extract single region of interest from data
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
-
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (gdt.DataSet): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
     """
-    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
-    if shift:
-        x1 = np.fft.ifftshift(x1)
-        y = np.fft.ifftshift(y)
-    y1 = np.fft.ifft(y)
-    return x1, y1.real
+    return x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1]
 
 
-# ----- Peak detection functions -----------------------------------------------
-def peak_indexes(
-    y, thres: float = 0.3, min_dist: int = 1, thres_abs: bool = False
-) -> np.ndarray:
-    #  Copyright (c) 2014 Lucas Hermann Negri
-    #  Unmodified code snippet from PeakUtils 1.3.0
-    """Peak detection routine.
-
-    Finds the numeric index of the peaks in *y* by taking its first order
-    difference. By using *thres* and *min_dist* parameters, it is possible
-    to reduce the number of detected peaks. *y* must be signed.
-
-    Parameters
-    ----------
-    y : ndarray (signed)
-        1D amplitude data to search for peaks.
-    thres : float between [0., 1.]
-        Normalized threshold. Only the peaks with amplitude higher than the
-        threshold will be detected.
-    min_dist : int
-        Minimum distance between each detected peak. The peak with the highest
-        amplitude is preferred to satisfy this constraint.
-    thres_abs: boolean
-        If True, the thres value will be interpreted as an absolute value,
-        instead of a normalized threshold.
-
-    Returns
-    -------
-    ndarray
-        Array containing the numeric indexes of the peaks that were detected
-    """
-    if isinstance(y, np.ndarray) and np.issubdtype(y.dtype, np.unsignedinteger):
-        raise ValueError("y must be signed")
-
-    if not thres_abs:
-        thres = thres * (np.max(y) - np.min(y)) + np.min(y)
-
-    # compute first order difference
-    dy = np.diff(y)
-
-    # propagate left and right values successively to fill all plateau pixels
-    # (0-value)
-    (zeros,) = np.where(dy == 0)
-
-    # check if the signal is totally flat
-    if len(zeros) == len(y) - 1:
-        return np.array([])
-
-    if len(zeros):
-        # compute first order difference of zero indexes
-        zeros_diff = np.diff(zeros)
-        # check when zeros are not chained together
-        (zeros_diff_not_one,) = np.add(np.where(zeros_diff != 1), 1)
-        # make an array of the chained zero indexes
-        zero_plateaus = np.split(zeros, zeros_diff_not_one)
-
-        # fix if leftmost value in dy is zero
-        if zero_plateaus[0][0] == 0:
-            dy[zero_plateaus[0]] = dy[zero_plateaus[0][-1] + 1]
-            zero_plateaus.pop(0)
-
-        # fix if rightmost value of dy is zero
-        if len(zero_plateaus) > 0 and zero_plateaus[-1][-1] == len(dy) - 1:
-            dy[zero_plateaus[-1]] = dy[zero_plateaus[-1][0] - 1]
-            zero_plateaus.pop(-1)
-
-        # for each chain of zero indexes
-        for plateau in zero_plateaus:
-            median = np.median(plateau)
-            # set leftmost values to leftmost non zero values
-            dy[plateau[plateau < median]] = dy[plateau[0] - 1]
-            # set rightmost and middle values to rightmost non zero values
-            dy[plateau[plateau >= median]] = dy[plateau[-1] + 1]
-
-    # find the peaks by using the first order difference
-    peaks = np.where(
-        (np.hstack([dy, 0.0]) < 0.0)
-        & (np.hstack([0.0, dy]) > 0.0)
-        & (np.greater(y, thres))
-    )[0]
-
-    # handle multiple peaks, respecting the minimum distance
-    if peaks.size > 1 and min_dist > 1:
-        highest = peaks[np.argsort(y[peaks])][::-1]
-        rem = np.ones(y.size, dtype=bool)
-        rem[peaks] = False
-
-        for peak in highest:
-            if not rem[peak]:
-                sl = slice(max(0, peak - min_dist), peak + min_dist + 1)
-                rem[sl] = True
-                rem[peak] = False
-
-        peaks = np.arange(y.size)[~rem]
-
-    return peaks
-
-
-def xpeak(x: np.ndarray, y: np.ndarray) -> float:
-    """Return default peak X-position (assuming a single peak).
-
+def compute_swap_axes(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Swap axes
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
     Returns:
-        float: Peak X-position
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
     """
-    peaks = peak_indexes(y)
-    if peaks.size == 1:
-        return x[peaks[0]]
-    return np.average(x, weights=y)
+    return y, x
+
+
+def compute_abs(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute absolute value
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, np.abs(y))
+
+
+def compute_log10(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute Log10
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, np.log10(y))
+
+
+class PeakDetectionParam(gdt.DataSet):
+    """Peak detection parameters"""
+
+    threshold = gdi.IntItem(
+        _("Threshold"), default=30, min=0, max=100, slider=True, unit="%"
+    )
+    min_dist = gdi.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
+
+
+def compute_peak_detection(
+    x: np.ndarray, y: np.ndarray, p: PeakDetectionParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Peak detection
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (PeakDetectionParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    return x[indexes], y[indexes]
+
+
+class NormalizeParam(gdt.DataSet):
+    """Normalize parameters"""
+
+    methods = (
+        (_("maximum"), "maximum"),
+        (_("amplitude"), "amplitude"),
+        (_("sum"), "sum"),
+        (_("energy"), "energy"),
+    )
+    method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
+
+
+def compute_normalize(
+    x: np.ndarray, y: np.ndarray, p: NormalizeParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Normalize data
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (NormalizeParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, normalize(y, p.method))
+
+
+def compute_derivative(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute derivative
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, derivative(x, y))
+
+
+def compute_integral(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute integral
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, spt.cumtrapz(y, x, initial=0.0))
+
+
+def compute_threshold(
+    x: np.ndarray, y: np.ndarray, p: ThresholdParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute threshold clipping
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (ThresholdParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, np.clip(y, p.value, y.max()))
+
+
+def compute_clip(
+    x: np.ndarray, y: np.ndarray, p: ClipParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute maximum data clipping
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (ClipParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, np.clip(y, y.min(), p.value))
+
+
+def compute_gaussian_filter(
+    x: np.ndarray, y: np.ndarray, p: GaussianParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute gaussian filter
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (GaussianParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, spi.gaussian_filter1d(y, p.sigma))
+
+
+def compute_moving_average(
+    x: np.ndarray, y: np.ndarray, p: MovingAverageParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute moving average
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (MovingAverageParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, moving_average(y, p.n))
+
+
+def compute_moving_median(
+    x: np.ndarray, y: np.ndarray, p: MovingMedianParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute moving median
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (MovingMedianParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, sps.medfilt(y, kernel_size=p.n))
+
+
+def compute_wiener(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Compute Wiener filter
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return (x, sps.wiener(y))
+
+
+class XYCalibrateParam(gdt.DataSet):
+    """Signal calibration parameters"""
+
+    axes = (("x", _("X-axis")), ("y", _("Y-axis")))
+    axis = gdi.ChoiceItem(_("Calibrate"), axes, default="y")
+    a = gdi.FloatItem("a", default=1.0)
+    b = gdi.FloatItem("b", default=0.0)
+
+
+def compute_calibration(
+    x: np.ndarray, y: np.ndarray, p: XYCalibrateParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute linear calibration
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (XYCalibrateParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    if p.axis == "x":
+        return p.a * x + p.b, y
+    return x, p.a * y + p.b
+
+
+class FFTParam(gdt.DataSet):
+    """FFT parameters"""
+
+    shift = gdi.BoolItem(
+        _("Shift"),
+        default=Conf.proc.fft_shift_enabled.get(),
+        help=_("Shift zero frequency to center"),
+    )
+
+
+def compute_fft(
+    x: np.ndarray, y: np.ndarray, p: FFTParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute FFT
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (FFTParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return xy_fft(x, y, shift=p.shift)
+
+
+def compute_ifft(
+    x: np.ndarray, y: np.ndarray, p: FFTParam
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute iFFT
+    Args:
+        x (np.ndarray): X-axis data
+        y (np.ndarray): Y-axis data
+        p (FFTParam): parameters
+    Returns:
+        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+    """
+    return xy_ifft(x, y, shift=p.shift)
+
+
+class PolynomialFitParam(gdt.DataSet):
+    """Polynomial fitting parameters"""
+
+    degree = gdi.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
+
+
+class FWHMParam(gdt.DataSet):
+    """FWHM parameters"""
+
+    fittypes = (
+        ("GaussianModel", _("Gaussian")),
+        ("LorentzianModel", _("Lorentzian")),
+        ("VoigtModel", "Voigt"),
+    )
+
+    fittype = gdi.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+
+
+def compute_fwhm(signal: SignalObj, param: FWHMParam):
+    """Compute FWHM"""
+    res = []
+    for i_roi in signal.iterate_roi_indexes():
+        x, y = signal.get_data(i_roi)
+        dx = np.max(x) - np.min(x)
+        dy = np.max(y) - np.min(y)
+        base = np.min(y)
+        sigma, mu = dx * 0.1, xpeak(x, y)
+        FitModel = getattr(fit, param.fittype)
+        amp = FitModel.get_amp_from_amplitude(dy, sigma)
+
+        def func(params):
+            """Fitting model function"""
+            # pylint: disable=cell-var-from-loop
+            return y - FitModel.func(x, *params)
+
+        (amp, sigma, mu, base), _ier = spo.leastsq(
+            func, np.array([amp, sigma, mu, base])
+        )
+        x0, y0, x1, y1 = FitModel.half_max_segment(amp, sigma, mu, base)
+        res.append([i_roi, x0, y0, x1, y1])
+    return np.array(res)
+
+
+def compute_fw1e2(signal: SignalObj):
+    """Compute FW at 1/e²"""
+    res = []
+    for i_roi in signal.iterate_roi_indexes():
+        x, y = signal.get_data(i_roi)
+        dx = np.max(x) - np.min(x)
+        dy = np.max(y) - np.min(y)
+        base = np.min(y)
+        sigma, mu = dx * 0.1, xpeak(x, y)
+        amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
+        p_in = np.array([amp, sigma, mu, base])
+
+        def func(params):
+            """Fitting model function"""
+            # pylint: disable=cell-var-from-loop
+            return y - fit.GaussianModel.func(x, *params)
+
+        p_out, _ier = spo.leastsq(func, p_in)
+        amp, sigma, mu, base = p_out
+        hw = 2 * sigma
+        amplitude = fit.GaussianModel.amplitude(amp, sigma)
+        yhm = amplitude / np.e**2 + base
+        res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
+    return np.array(res)

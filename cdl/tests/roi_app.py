@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import numpy as np
 
+from cdl.core.computation.image import PeakDetectionParam
+from cdl.core.computation.signal import FWHMParam
 from cdl.core.gui.panel import image, signal
-from cdl.core.gui.processor.image import PeakDetectionParam
-from cdl.core.gui.processor.signal import FWHMParam
 from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
 from cdl.tests import cdl_app_context

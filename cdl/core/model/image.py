@@ -29,8 +29,8 @@ from guiqwt.image import MaskedImageItem
 from numpy import ma
 from skimage import draw
 
+from cdl.algorithms.image import scale_data_to_min_max
 from cdl.config import Conf, _
-from cdl.core.computation.image import scale_data_to_min_max
 from cdl.core.model import base
 
 if TYPE_CHECKING:  # pragma: no cover

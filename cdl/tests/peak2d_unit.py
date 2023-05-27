@@ -14,7 +14,7 @@ import time
 
 from guiqwt.builder import make
 
-from cdl.core.computation.image import get_2d_peaks_coords
+from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.utils.qthelpers import qt_app_context

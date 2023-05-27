@@ -17,7 +17,7 @@ import dataclasses
 
 import numpy as np
 
-from cdl.core.computation import fit
+from cdl.algorithms import fit
 from cdl.core.io import read_image, read_signal
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.image import create_image

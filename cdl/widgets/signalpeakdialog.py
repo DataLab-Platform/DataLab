@@ -14,8 +14,8 @@ from guiqwt.plot import CurveDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+from cdl.algorithms.signal import peak_indexes
 from cdl.config import _
-from cdl.core.computation.signal import peak_indexes
 
 
 class DistanceSlider(QW.QWidget):
