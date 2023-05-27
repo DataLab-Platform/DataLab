@@ -57,13 +57,7 @@ class CurveStyles:
 
 
 class SignalObj(gdt.DataSet, base.ObjectItf):
-    """Signal dataset
-
-    Args:
-        title (str): signal title
-        comment (str): signal comment
-        icon (str): signal icon
-    """
+    """Signal object"""
 
     PREFIX = "s"
     CONF_FMT = Conf.view.sig_format
@@ -95,6 +89,13 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
     _e_tabs = gdt.EndTabGroup("all")
 
     def __init__(self, title=None, comment=None, icon=""):
+        """Constructor
+
+        Args:
+            title (str): title
+            comment (str): comment
+            icon (str): icon
+        """
         gdt.DataSet.__init__(self, title, comment, icon)
         base.ObjectItf.__init__(self)
 

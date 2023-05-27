@@ -194,13 +194,7 @@ class RoiDataItem:
 
 
 class ImageObj(gdt.DataSet, base.ObjectItf):
-    """Image dataset
-
-    Args:
-        title (str): title
-        comment (str): comment
-        icon (str): icon
-    """
+    """Image object"""
 
     PREFIX = "i"
     CONF_FMT = Conf.view.ima_format
@@ -216,6 +210,13 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
     )
 
     def __init__(self, title=None, comment=None, icon=""):
+        """Constructor
+
+        Args:
+            title (str): title
+            comment (str): comment
+            icon (str): icon
+        """
         gdt.DataSet.__init__(self, title, comment, icon)
         base.ObjectItf.__init__(self)
         self._dicom_template = None
