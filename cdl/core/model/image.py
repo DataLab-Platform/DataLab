@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import enum
 import re
-import weakref
 from collections.abc import ByteString, Iterator, Mapping, Sequence
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
@@ -221,7 +220,6 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         base.ObjectItf.__init__(self)
         self._dicom_template = None
         self._maskdata_cache = None
-        self._roidata_cache = None  # weak reference
 
     @property
     def size(self) -> tuple[int, int]:
@@ -624,11 +622,14 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
 
     @property
     def maskdata(self) -> np.ndarray:
-        """Return masked data (areas outside defined regions of interest)"""
-        roi_changed = self._roidata_cache is not None and self._roidata_cache() is None
+        """Return masked data (areas outside defined regions of interest)
+
+        Returns:
+            numpy.ndarray: masked data
+        """
+        roi_changed = self.roi_has_changed()
         if self.roi is None:
             if roi_changed:
-                self._roidata_cache = None
                 self._maskdata_cache = None
         elif roi_changed or self._maskdata_cache is None:
             mask = np.ones_like(self.data, dtype=bool)
@@ -637,7 +638,6 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
                 roi_mask = roidataitem.apply_mask(self.data, yxratio=self.dy / self.dx)
                 mask &= roi_mask
             self._maskdata_cache = mask
-            self._roidata_cache = weakref.ref(self.roi)
         return self._maskdata_cache
 
     def invalidate_maskdata_cache(self) -> None:

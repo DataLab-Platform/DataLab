@@ -509,6 +509,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
     def __init__(self):
         self.uuid = str(uuid4())
         self.__onb = 0
+        self.__roi_changed: bool | None = None
 
     def set_object_number(self, onb: int):
         """Set object number (used for short ID).
@@ -639,6 +640,23 @@ class ObjectItf(metaclass=ObjectItfMeta):
             numpy.ndarray: ROI array data
         """
 
+    def roi_has_changed(self) -> bool:
+        """Return True if ROI has changed since last call to this method.
+
+        The first call to this method will return True if ROI has not yet been set,
+        or if ROI has been set and has changed since the last call to this method.
+        The next call to this method will always return False if ROI has not changed
+        in the meantime.
+
+        Returns:
+            bool: True if ROI has changed
+        """
+        if self.__roi_changed is None:
+            self.__roi_changed = True
+        returned_value = self.__roi_changed
+        self.__roi_changed = False
+        return returned_value
+
     @property
     def roi(self) -> np.ndarray | None:
         """Return object regions of interest array (one ROI per line).
@@ -662,6 +680,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
                 self.metadata.pop(ROI_KEY)
         else:
             self.metadata[ROI_KEY] = np.array(roidata, int)
+        self.__roi_changed = True
 
     def add_resultshape(
         self,
