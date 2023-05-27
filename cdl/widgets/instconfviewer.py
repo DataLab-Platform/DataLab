@@ -20,7 +20,7 @@ from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from cdl import __version__
-from cdl.config import DATAPATH, _
+from cdl.config import DATAPATH, IS_FROZEN, _
 from cdl.utils import dephash
 from cdl.utils.qthelpers import exec_dialog
 
@@ -79,7 +79,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         except IOError:
             more_infos += "Unable to open dependencies hash file."
         more_infos += os.linesep * 2
-        if sys.executable.lower().endswith("cdl.exe"):
+        if IS_FROZEN:
             #  Stand-alone version
             more_infos += "This is the Stand-alone version of DataLab"
         else:
