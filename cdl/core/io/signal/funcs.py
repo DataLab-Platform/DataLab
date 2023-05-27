@@ -40,12 +40,16 @@ def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
         Header.
     """
     xydata, xlabel, xunit, ylabel, yunit, header = None, "", "", "", "", ""
-    for delimiter, comments in zip(("\t", ",", " ", ";"), (None, "#")):
+    for delimiter, comments in (
+        (x, y) for x in (";", "\t", ",", " ") for y in ("#", None)
+    ):
         try:
             # Load everything readable (titles are eventually converted as NaNs)
             xydata = np.genfromtxt(
                 filename, delimiter=delimiter, comments=comments, dtype=float
             )
+            if np.all(np.isnan(xydata)):
+                continue
             # Removing lines with NaNs
             xydata = xydata[~np.isnan(xydata).any(axis=1), :]
             # Trying to read X,Y titles
@@ -54,14 +58,14 @@ def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
             with open(filename, "r", encoding="utf-8") as fdesc:
                 lines = fdesc.readlines()
                 for rawline in lines:
-                    if rawline.startswith(comments):
+                    if comments is not None and rawline.startswith(comments):
                         header += rawline
                         continue
                     line = rawline.replace(" ", "")
                     if line == line0:
                         break
                     try:
-                        xlabel, ylabel = rawline.split(delimiter)
+                        xlabel, ylabel = rawline.split(delimiter)[:2]
                         xlabel = xlabel.strip()
                         ylabel = ylabel.strip()
                         # Trying to parse X,Y units

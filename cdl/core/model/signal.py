@@ -148,7 +148,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         else:
             if dx is None:
                 dx = np.zeros_like(dy)
-            else:
+            if dy is None:
                 dy = np.zeros_like(dx)
             self.xydata = np.vstack((x, y, dx, dy))
 

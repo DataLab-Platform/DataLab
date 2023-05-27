@@ -19,7 +19,15 @@ from cdl.utils.vistools import view_curve_items, view_images
 SHOW = True  # Show test in GUI-based test launcher
 
 
-@try_open_test_data("Testing CSV file reader", "*.txt")
+@try_open_test_data("Testing TXT file reader", "*.txt")
+def test_txt(fname=None):
+    """Testing TXT files"""
+    signal = read_signal(fname)
+    execenv.print(signal)
+    view_curve_items([signal.make_item()])
+
+
+@try_open_test_data("Testing CSV file reader", "*.csv")
 def test_csv(fname=None):
     """Testing CSV files"""
     signal = read_signal(fname)
@@ -54,6 +62,7 @@ def test_scordata(fname=None):
 def io_test():
     """I/O test"""
     with qt_app_context():
+        test_txt()
         test_csv()
         test_sif()
         test_fxd()
