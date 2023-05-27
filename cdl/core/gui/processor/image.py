@@ -257,6 +257,7 @@ class ImageProcessor(BaseProcessor):
                 if obj.dx is not None and obj.dy is not None:
                     obj.dx *= param.binning_x
                     obj.dy *= param.binning_y
+            else:
                 # TODO: [P2] Instead of removing geometric shapes, apply zoom
                 obj.remove_all_shapes()
 
