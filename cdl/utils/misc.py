@@ -13,7 +13,7 @@ import subprocess
 
 import numpy as np
 
-from cdl.config import Conf
+from cdl.config import Conf, get_mod_source_dir
 
 
 def to_string(obj):
@@ -55,6 +55,16 @@ def go_to_error(text: str) -> None:
     if match:
         path = match.group(1)
         line_number = match.group(2)
+        if not osp.isfile(path):
+            otherpath = osp.join(get_mod_source_dir(), path)
+            if not osp.isfile(otherpath):
+                # TODO: For frozen app, go to error is  implemented only when the
+                # source code is available locally (development mode).
+                # How about using a web browser to open the source code on github?
+                return
+            path = otherpath
+        if not osp.isfile(path):
+            return  # File not found (unhandled case)
         fdict = {"path": path, "line_number": line_number}
         args = Conf.console.external_editor_args.get().format(**fdict).split(" ")
         editor_path = Conf.console.external_editor_path.get()

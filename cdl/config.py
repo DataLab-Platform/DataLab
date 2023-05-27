@@ -11,8 +11,11 @@ The `config` module handles `DataLab` configuration
 (options, images and icons).
 """
 
+from __future__ import annotations
+
 import os
 import os.path as osp
+import sys
 
 from guidata import configtools
 from guiqwt.config import CONF as GUIQWT_CONF
@@ -47,14 +50,37 @@ SHOTPATH = osp.join(
 )
 
 
-def is_frozen(module_name):
-    """Test if module has been frozen (py2exe/cx_Freeze)"""
+def is_frozen(module_name: str) -> bool:
+    """Test if module has been frozen (py2exe/cx_Freeze/pyinstaller)
+
+    Args:
+        module_name (str): module name
+
+    Returns:
+        bool: True if module has been frozen (py2exe/cx_Freeze/pyinstaller)
+    """
     datapath = configtools.get_module_path(module_name)
     parentdir = osp.normpath(osp.join(datapath, osp.pardir))
     return not osp.isfile(__file__) or osp.isfile(parentdir)  # library.zip
 
 
 IS_FROZEN = is_frozen(MOD_NAME)
+
+
+def get_mod_source_dir() -> str | None:
+    """Return module source directory
+
+    Returns:
+        str | None: module source directory, or None if not found
+    """
+    if IS_FROZEN:
+        devdir = osp.abspath(osp.join(sys.prefix, os.pardir, os.pardir))
+    else:
+        devdir = osp.abspath(osp.dirname(__file__), os.pardir)
+    if osp.isfile(osp.join(devdir, MOD_NAME, "__init__.py")):
+        return devdir
+    # Unhandled case (this should not happen, but just in case):
+    return None
 
 
 class MainSection(conf.Section, metaclass=conf.SectionMeta):
