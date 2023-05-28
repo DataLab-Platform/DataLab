@@ -56,236 +56,111 @@ from cdl.core.computation.base import (
     ThresholdParam,
 )
 from cdl.core.model.base import BaseProcParam
-from cdl.core.model.image import ImageObj, RoiDataItem
+from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 
 VALID_DTYPES_STRLIST = [
     dtype.__name__ for dtype in dtype_range if dtype in ImageObj.VALID_DTYPES
 ]
 
 
-def compute_gaussian_filter(data: np.ndarray, p: GaussianParam) -> np.ndarray:
-    """Compute gaussian filter
+def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
+    """Create result image object for compute_11 function
+
     Args:
-        data (np.ndarray): input data
-        p (GaussianParam): parameters
+        src (ImageObj): input image object
+        name (str): name of the processing function
+
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return spi.gaussian_filter(data, sigma=p.sigma)
+    dst = ImageObj()
+    dst.title = f"{name}({src.short_id})"
+    if suffix is not None:
+        dst.title += "|" + suffix
+    dst.copy_data_from(src)
+    return dst
 
 
-def compute_moving_average(data: np.ndarray, p: MovingAverageParam) -> np.ndarray:
-    """Compute moving average
+def dst_n1n(
+    src1: ImageObj, src2: ImageObj, name: str, suffix: str | None = None
+) -> ImageObj:
+    """Create result image object for compute_n1n function
+
     Args:
-        data (np.ndarray): input data
-        p (MovingAverageParam): parameters
+        src1 (ImageObj): input image object
+        src2 (ImageObj): input image object
+        name (str): name of the processing function
+
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return spi.uniform_filter(data, size=p.n, mode="constant")
+    dst = ImageObj()
+    dst.title = f"{name}({src1.short_id}, {src2.short_id})"
+    if suffix is not None:
+        dst.title += "|" + suffix
+    dst.copy_data_from(src1)
+    return dst
 
 
-def compute_moving_median(data: np.ndarray, p: MovingMedianParam) -> np.ndarray:
-    """Compute moving median
+def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
+    """Compute difference between two images
     Args:
-        data (np.ndarray): input data
-        p (MovingMedianParam): parameters
+        src1 (ImageObj): input image object
+        src2 (ImageObj): input image object
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return sps.medfilt(data, kernel_size=p.n)
+    dst = dst_n1n(src1, src2, "difference")
+    dst.data = src1.data - src2.data
+    return dst
 
 
-def compute_threshold(data: np.ndarray, p: ThresholdParam) -> np.ndarray:
-    """Apply thresholding
+def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
+    """Compute quadratic difference between two images
     Args:
-        data (np.ndarray): data
-        p (ThresholdParam): parameters
+        src1 (ImageObj): input image object
+        src2 (ImageObj): input image object
     Returns:
-        np.ndarray: thresholded data
+        ImageObj: output image object
     """
-    return np.clip(data, p.value, data.max())
+    dst = dst_n1n(src1, src2, "quadratic_difference")
+    dst.data = (src1.data - src2.data) / np.sqrt(2.0)
+    if np.issubdtype(dst.data.dtype, np.unsignedinteger):
+        dst.data[src1.data < src2.data] = 0
+    return dst
 
 
-def compute_clip(data: np.ndarray, p: ClipParam) -> np.ndarray:
-    """Apply clipping
+def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
+    """Compute division between two images
     Args:
-        data (np.ndarray): data
-        p (ClipParam): parameters
+        src1 (ImageObj): input image object
+        src2 (ImageObj): input image object
     Returns:
-        np.ndarray: clipped data"""
-    return np.clip(data, data.min(), p.value)
-
-
-class AdjustGammaParam(gdt.DataSet):
-    """Gamma adjustment parameters"""
-
-    gamma = gdi.FloatItem(
-        _("Gamma"),
-        default=1.0,
-        min=0.0,
-        help=_("Gamma correction factor (higher values give more contrast)."),
-    )
-    gain = gdi.FloatItem(
-        _("Gain"),
-        default=1.0,
-        min=0.0,
-        help=_("Gain factor (higher values give more contrast)."),
-    )
-
-
-def compute_adjust_gamma(data: np.ndarray, p: AdjustGammaParam) -> np.ndarray:
-    """Gamma correction
-    Args:
-        data (np.ndarray): input data
-        p (AdjustGammaParam): parameters
-    Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return exposure.adjust_gamma(data, gamma=p.gamma, gain=p.gain)
+    dst = dst_n1n(src1, src2, "division")
+    dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
+    return dst
 
 
-class AdjustLogParam(gdt.DataSet):
-    """Logarithmic adjustment parameters"""
+class FlatFieldParam(BaseProcParam):
+    """Flat-field parameters"""
 
-    gain = gdi.FloatItem(
-        _("Gain"),
-        default=1.0,
-        min=0.0,
-        help=_("Gain factor (higher values give more contrast)."),
-    )
-    inv = gdi.BoolItem(
-        _("Inverse"),
-        default=False,
-        help=_("If True, apply inverse logarithmic transformation."),
-    )
+    threshold = gdi.FloatItem(_("Threshold"), default=0.0)
 
 
-def compute_adjust_log(data: np.ndarray, p: AdjustLogParam) -> np.ndarray:
-    """Compute log correction
+def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
+    """Compute flat field correction
     Args:
-        data (np.ndarray): input data
-        p (AdjustLogParam): parameters
+        src1 (ImageObj): raw data image object
+        src2 (ImageObj): flat field image object
+        p (FlatFieldParam): flat field parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return exposure.adjust_log(data, gain=p.gain, inv=p.inv)
-
-
-class AdjustSigmoidParam(gdt.DataSet):
-    """Sigmoid adjustment parameters"""
-
-    cutoff = gdi.FloatItem(
-        _("Cutoff"),
-        default=0.5,
-        min=0.0,
-        max=1.0,
-        help=_("Cutoff value (higher values give more contrast)."),
-    )
-    gain = gdi.FloatItem(
-        _("Gain"),
-        default=10.0,
-        min=0.0,
-        help=_("Gain factor (higher values give more contrast)."),
-    )
-    inv = gdi.BoolItem(
-        _("Inverse"),
-        default=False,
-        help=_("If True, apply inverse sigmoid transformation."),
-    )
-
-
-def compute_adjust_sigmoid(data: np.ndarray, p: AdjustSigmoidParam) -> np.ndarray:
-    """Compute sigmoid correction
-    Args:
-        data (np.ndarray): input data
-        p (AdjustSigmoidParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return exposure.adjust_sigmoid(data, cutoff=p.cutoff, gain=p.gain, inv=p.inv)
-
-
-class RescaleIntensityParam(gdt.DataSet):
-    """Intensity rescaling parameters"""
-
-    _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
-    in_range = gdi.ChoiceItem(
-        _("Input range"),
-        list(zip(_dtype_list, _dtype_list)),
-        default="image",
-        help=_(
-            "Min and max intensity values of input image ('image' refers to input "
-            "image min/max levels, 'dtype' refers to input image data type range)."
-        ),
-    )
-    out_range = gdi.ChoiceItem(
-        _("Output range"),
-        list(zip(_dtype_list, _dtype_list)),
-        default="dtype",
-        help=_(
-            "Min and max intensity values of output image  ('image' refers to input "
-            "image min/max levels, 'dtype' refers to input image data type range).."
-        ),
-    )
-
-
-def compute_rescale_intensity(data: np.ndarray, p: RescaleIntensityParam) -> np.ndarray:
-    """Rescale image intensity levels
-    Args:
-        data (np.ndarray): input data
-        p (RescaleIntensityParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return exposure.rescale_intensity(data, in_range=p.in_range, out_range=p.out_range)
-
-
-class EqualizeHistParam(gdt.DataSet):
-    """Histogram equalization parameters"""
-
-    nbins = gdi.IntItem(
-        _("Number of bins"),
-        min=1,
-        default=256,
-        help=_("Number of bins for image histogram."),
-    )
-
-
-def compute_equalize_hist(data: np.ndarray, p: EqualizeHistParam) -> np.ndarray:
-    """Histogram equalization
-    Args:
-        data (np.ndarray): input data
-        p (EqualizeHistParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return exposure.equalize_hist(data, nbins=p.nbins)
-
-
-class EqualizeAdaptHistParam(EqualizeHistParam):
-    """Adaptive histogram equalization parameters"""
-
-    clip_limit = gdi.FloatItem(
-        _("Clipping limit"),
-        default=0.01,
-        min=0.0,
-        max=1.0,
-        help=_("Clipping limit (higher values give more contrast)."),
-    )
-
-
-def compute_equalize_adapthist(
-    data: np.ndarray, p: EqualizeAdaptHistParam
-) -> np.ndarray:
-    """Adaptive histogram equalization
-    Args:
-        data (np.ndarray): input data
-        p (EqualizeAdaptHistParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return exposure.equalize_adapthist(data, clip_limit=p.clip_limit, nbins=p.nbins)
+    dst = dst_n1n(src1, src2, "flatfield", f"threshold={p.threshold}")
+    dst.data = flatfield(src1.data, src2.data, p.threshold)
+    return dst
 
 
 class LogP1Param(gdt.DataSet):
@@ -294,15 +169,17 @@ class LogP1Param(gdt.DataSet):
     n = gdi.FloatItem("n")
 
 
-def log_z_plus_n(data: np.ndarray, p: LogP1Param) -> np.ndarray:
+def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
     """Compute log10(z+n)
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (LogP1Param): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return np.log10(data + p.n)
+    dst = dst_11(src, "log_z_plus_n", f"n={p.n}")
+    dst.data = np.log10(src.data + p.n)
+    return dst
 
 
 class RotateParam(gdt.DataSet):
@@ -345,25 +222,6 @@ class RotateParam(gdt.DataSet):
     ).set_prop("display", active=prop)
 
 
-def compute_rotate(data: np.ndarray, p: RotateParam) -> np.ndarray:
-    """Rotate data
-    Args:
-        data (np.ndarray): input data
-        p (RotateParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return spi.rotate(
-        data,
-        p.angle,
-        reshape=p.reshape,
-        order=p.order,
-        mode=p.mode,
-        cval=p.cval,
-        prefilter=p.prefilter,
-    )
-
-
 def rotate_obj_coords(
     angle: float, obj: ImageObj, orig: ImageObj, coords: np.ndarray
 ) -> None:
@@ -386,14 +244,109 @@ def rotate_obj_coords(
     obj.roi = None
 
 
-def rotate270(data: np.ndarray) -> np.ndarray:
+def rotate_obj_alpha(
+    obj: ImageObj, orig: ImageObj, coords: np.ndarray, p: RotateParam
+) -> None:
+    """Apply rotation to coords associated to image obj"""
+    rotate_obj_coords(p.angle, obj, orig, coords)
+
+
+def compute_rotate(src: ImageObj, p: RotateParam) -> ImageObj:
+    """Rotate data
+    Args:
+        src (ImageObj): input image object
+        p (RotateParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "rotate", f"α={p.angle:.3f}°, mode='{p.mode}'")
+    dst.data = spi.rotate(
+        src.data,
+        p.angle,
+        reshape=p.reshape,
+        order=p.order,
+        mode=p.mode,
+        cval=p.cval,
+        prefilter=p.prefilter,
+    )
+    dst.transform_shapes(src, rotate_obj_alpha, p)
+    return dst
+
+
+def rotate_obj_90(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
+    """Apply rotation to coords associated to image obj"""
+    rotate_obj_coords(90.0, dst, src, coords)
+
+
+def compute_rotate90(src: ImageObj) -> ImageObj:
+    """Rotate data 90°
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "rotate90")
+    dst.data = np.rot90(src.data)
+    dst.transform_shapes(src, rotate_obj_90)
+    return dst
+
+
+def rotate_obj_270(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
+    """Apply rotation to coords associated to image obj"""
+    rotate_obj_coords(270.0, dst, src, coords)
+
+
+def compute_rotate270(src: ImageObj) -> ImageObj:
     """Rotate data 270°
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return np.rot90(data, 3)
+    dst = dst_11(src, "rotate270")
+    dst.data = np.rot90(src.data, 3)
+    dst.transform_shapes(src, rotate_obj_270)
+    return dst
+
+
+# pylint: disable=unused-argument
+def hflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
+    """Apply HFlip to coords"""
+    coords[:, ::2] = dst.x0 + dst.dx * dst.data.shape[1] - coords[:, ::2]
+    dst.roi = None
+
+
+def compute_fliph(src: ImageObj) -> ImageObj:
+    """Flip data horizontally
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "fliph")
+    dst.data = np.fliplr(src.data)
+    dst.transform_shapes(src, hflip_coords)
+    return dst
+
+
+# pylint: disable=unused-argument
+def vflip_coords(dst: ImageObj, src: ImageObj, coords: np.ndarray) -> None:
+    """Apply VFlip to coords"""
+    coords[:, 1::2] = dst.y0 + dst.dy * dst.data.shape[0] - coords[:, 1::2]
+    dst.roi = None
+
+
+def compute_flipv(src: ImageObj) -> ImageObj:
+    """Flip data vertically
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "flipv")
+    dst.data = np.flipud(src.data)
+    dst.transform_shapes(src, vflip_coords)
+    return dst
 
 
 class GridParam(gdt.DataSet):
@@ -445,22 +398,28 @@ class ResizeParam(gdt.DataSet):
     ).set_prop("display", active=prop)
 
 
-def compute_resize(data: np.ndarray, p: ResizeParam) -> np.ndarray:
+def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
     """Zooming function
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (ResizeParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return spi.interpolation.zoom(
-        data,
+    dst = dst_11(src, "resize", f"zoom={p.zoom:.3f}")
+    dst.data = spi.interpolation.zoom(
+        src.data,
         p.zoom,
         order=p.order,
         mode=p.mode,
         cval=p.cval,
         prefilter=p.prefilter,
     )
+    if dst.dx is not None and dst.dy is not None:
+        dst.dx, dst.dy = dst.dx / p.zoom, dst.dy / p.zoom
+    # TODO: [P2] Instead of removing geometric shapes, apply zoom
+    dst.remove_all_shapes()
+    return dst
 
 
 class BinningParam(gdt.DataSet):
@@ -497,72 +456,123 @@ class BinningParam(gdt.DataSet):
     )
 
 
-def compute_binning(data: np.ndarray, param: BinningParam) -> np.ndarray:
+def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
     """Binning function on data
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         param (BinningParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return binning(
-        data,
+    dst = dst_11(
+        src,
+        "binning",
+        f"{param.binning_x}x{param.binning_y},{param.operation},"
+        f"change_pixel_size={param.change_pixel_size}",
+    )
+    dst.data = binning(
+        src.data,
         binning_x=param.binning_x,
         binning_y=param.binning_y,
         operation=param.operation,
         dtype=param.dtype_str,
     )
+    if param.change_pixel_size:
+        if src.dx is not None and src.dy is not None:
+            dst.dx = src.dx * param.binning_x
+            dst.dy = src.dy * param.binning_y
+    else:
+        # TODO: [P2] Instead of removing geometric shapes, apply zoom
+        dst.remove_all_shapes()
+    return dst
 
 
-def extract_multiple_roi(data: np.ndarray, group: gdt.DataSetGroup) -> np.ndarray:
+def extract_multiple_roi(src: ImageObj, group: gdt.DataSetGroup) -> ImageObj:
     """Extract multiple regions of interest from data
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         group (gdt.DataSetGroup): parameters defining the regions of interest
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
+    suffix = None
     if len(group.datasets) == 1:
         p = group.datasets[0]
-        return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
-    out = np.zeros_like(data)
+        suffix = p.get_suffix()
+    dst = dst_11(src, "extract_multiple_roi", suffix)
+    if len(group.datasets) == 1:
+        p = group.datasets[0]
+        dst.data = src.data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+        return dst
+    out = np.zeros_like(src.data)
     for p in group.datasets:
         slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
-        out[slice1, slice2] = data[slice1, slice2]
-    x0 = min([p.x0 for p in group.datasets])
-    y0 = min([p.y0 for p in group.datasets])
-    x1 = max([p.x1 for p in group.datasets])
-    y1 = max([p.y1 for p in group.datasets])
-    return out[y0:y1, x0:x1]
+        out[slice1, slice2] = src.data[slice1, slice2]
+    x0 = min(p.x0 for p in group.datasets)
+    y0 = min(p.y0 for p in group.datasets)
+    x1 = max(p.x1 for p in group.datasets)
+    y1 = max(p.y1 for p in group.datasets)
+    dst.data = out[y0:y1, x0:x1]
+    dst.x0 += min(p.x0 for p in group.datasets)
+    dst.y0 += min(p.y0 for p in group.datasets)
+    dst.roi = None
+    return dst
 
 
-def extract_single_roi(data: np.ndarray, p: gdt.DataSet) -> np.ndarray:
+def extract_single_roi(src: ImageObj, p: gdt.DataSet) -> ImageObj:
     """Extract single ROI
     Args:
-        data (np.ndarray): data
+        src (ImageObj): input image object
         p (gdt.DataSet): ROI parameters
     Returns:
-        np.ndarray: ROI data
+        ImageObj: output image object
     """
-    return data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+    dst = dst_11(src, "extract_single_roi", p.get_suffix())
+    dst.data = src.data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+    dst.x0 += p.x0
+    dst.y0 += p.y0
+    dst.roi = None
+    if p.geometry is RoiDataGeometries.CIRCLE:
+        # Circular ROI
+        dst.roi = p.get_single_roi()
+    return dst
 
 
-class FlatFieldParam(BaseProcParam):
-    """Flat-field parameters"""
-
-    threshold = gdi.FloatItem(_("Threshold"), default=0.0)
-
-
-def compute_flatfield(raw: np.ndarray, flat: np.ndarray, p: FlatFieldParam):
-    """Compute flat field correction
+def compute_swap_axes(src: ImageObj) -> ImageObj:
+    """Swap image axes
     Args:
-        raw (np.ndarray): raw data
-        flat (np.ndarray): flat field data
-        p (FlatFieldParam): flat field parameters
+        src (ImageObj): input image object
     Returns:
-        np.ndarray: corrected data
+        ImageObj: output image object
     """
-    return flatfield(raw, flat, p.threshold)
+    dst = dst_11(src, "swap_axes")
+    dst.data = np.transpose(src.data)
+    src.remove_all_shapes()
+    return dst
+
+
+def compute_abs(src: ImageObj) -> ImageObj:
+    """Compute absolute value
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "abs")
+    dst.data = np.abs(src.data)
+    return dst
+
+
+def compute_log10(src: ImageObj) -> ImageObj:
+    """Compute log10
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "log10")
+    dst.data = np.log10(src.data)
+    return dst
 
 
 class ZCalibrateParam(gdt.DataSet):
@@ -572,15 +582,353 @@ class ZCalibrateParam(gdt.DataSet):
     b = gdi.FloatItem("b", default=0.0)
 
 
-def compute_calibration(data: np.ndarray, param: ZCalibrateParam) -> np.ndarray:
+def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
     """Compute linear calibration
     Args:
-        data (np.ndarray): data to calibrate
+        src (ImageObj): input image object
         param (ZCalibrateParam): calibration parameters
     Returns:
-        np.ndarray: calibrated data
+        ImageObj: output image object
     """
-    return param.a * data + param.b
+    dst = dst_11(src, "calibration", f"z={p.a}*z+{p.b}")
+    dst.data = p.a * src.data + p.b
+    return dst
+
+
+def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
+    """Apply thresholding
+    Args:
+        src (ImageObj): input image object
+        p (ThresholdParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "threshold", f"min={p.value} lsb")
+    dst.data = np.clip(src.data, p.value, src.data.max())
+    return dst
+
+
+def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
+    """Apply clipping
+    Args:
+        src (ImageObj): input image object
+        p (ClipParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "clip", f"max={p.value} lsb")
+    dst.data = np.clip(src.data, src.data.min(), p.value)
+    return dst
+
+
+def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
+    """Compute gaussian filter
+    Args:
+        src (ImageObj): input image object
+        p (GaussianParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f} pixels")
+    dst.data = spi.gaussian_filter(src.data, sigma=p.sigma)
+    return dst
+
+
+def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
+    """Compute moving average
+    Args:
+        src (ImageObj): input image object
+        p (MovingAverageParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "moving_average", f"n={p.n}")
+    dst.data = spi.uniform_filter(src.data, size=p.n, mode="constant")
+    return dst
+
+
+def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
+    """Compute moving median
+    Args:
+        src (ImageObj): input image object
+        p (MovingMedianParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "moving_median", f"n={p.n}")
+    dst.data = sps.medfilt(src.data, kernel_size=p.n)
+    return dst
+
+
+def compute_wiener(src: ImageObj) -> ImageObj:
+    """Compute Wiener filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "wiener")
+    dst.data = sps.wiener(src.data)
+    return dst
+
+
+def compute_fft(src: ImageObj) -> ImageObj:
+    """Compute FFT
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "fft")
+    dst.data = np.fft.fft2(src.data)
+    return dst
+
+
+def compute_ifft(src: ImageObj) -> ImageObj:
+    """Compute inverse FFT
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "ifft")
+    dst.data = np.fft.ifft2(src.data)
+    return dst
+
+
+class ButterworthParam(gdt.DataSet):
+    """Butterworth filter parameters"""
+
+    cut_off = gdi.FloatItem(
+        _("Cut-off frequency ratio"),
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
+    )
+    high_pass = gdi.BoolItem(
+        _("High-pass filter"),
+        default=False,
+        help=_("If True, apply high-pass filter instead of low-pass."),
+    )
+    order = gdi.IntItem(
+        _("Order"),
+        default=2,
+        min=1,
+        help=_("Order of the Butterworth filter."),
+    )
+
+
+def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
+    """Compute Butterworth filter
+    Args:
+        src (ImageObj): input image object
+        p (ButterworthParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(
+        src,
+        "butterworth",
+        f"cut_off={p.cut_off:.3f}, order={p.order}, high_pass={p.high_pass}",
+    )
+    dst.data = filters.butterworth(src.data, p.cut_off, p.high_pass, p.order)
+    return dst
+
+
+class AdjustGammaParam(gdt.DataSet):
+    """Gamma adjustment parameters"""
+
+    gamma = gdi.FloatItem(
+        _("Gamma"),
+        default=1.0,
+        min=0.0,
+        help=_("Gamma correction factor (higher values give more contrast)."),
+    )
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=1.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+
+
+def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
+    """Gamma correction
+    Args:
+        src (ImageObj): input image object
+        p (AdjustGammaParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "adjust_gamma", f"gamma={p.gamma}, gain={p.gain}")
+    dst.data = exposure.adjust_gamma(src.data, gamma=p.gamma, gain=p.gain)
+    return dst
+
+
+class AdjustLogParam(gdt.DataSet):
+    """Logarithmic adjustment parameters"""
+
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=1.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+    inv = gdi.BoolItem(
+        _("Inverse"),
+        default=False,
+        help=_("If True, apply inverse logarithmic transformation."),
+    )
+
+
+def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
+    """Compute log correction
+    Args:
+        src (ImageObj): input image object
+        p (AdjustLogParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "adjust_log", f"gain={p.gain}, inv={p.inv}")
+    dst.data = exposure.adjust_log(src.data, gain=p.gain, inv=p.inv)
+    return dst
+
+
+class AdjustSigmoidParam(gdt.DataSet):
+    """Sigmoid adjustment parameters"""
+
+    cutoff = gdi.FloatItem(
+        _("Cutoff"),
+        default=0.5,
+        min=0.0,
+        max=1.0,
+        help=_("Cutoff value (higher values give more contrast)."),
+    )
+    gain = gdi.FloatItem(
+        _("Gain"),
+        default=10.0,
+        min=0.0,
+        help=_("Gain factor (higher values give more contrast)."),
+    )
+    inv = gdi.BoolItem(
+        _("Inverse"),
+        default=False,
+        help=_("If True, apply inverse sigmoid transformation."),
+    )
+
+
+def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
+    """Compute sigmoid correction
+    Args:
+        src (ImageObj): input image object
+        p (AdjustSigmoidParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(
+        src, "adjust_sigmoid", f"cutoff={p.cutoff}, gain={p.gain}, inv={p.inv}"
+    )
+    dst.data = exposure.adjust_sigmoid(
+        src.data, cutoff=p.cutoff, gain=p.gain, inv=p.inv
+    )
+    return dst
+
+
+class RescaleIntensityParam(gdt.DataSet):
+    """Intensity rescaling parameters"""
+
+    _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
+    in_range = gdi.ChoiceItem(
+        _("Input range"),
+        list(zip(_dtype_list, _dtype_list)),
+        default="image",
+        help=_(
+            "Min and max intensity values of input image ('image' refers to input "
+            "image min/max levels, 'dtype' refers to input image data type range)."
+        ),
+    )
+    out_range = gdi.ChoiceItem(
+        _("Output range"),
+        list(zip(_dtype_list, _dtype_list)),
+        default="dtype",
+        help=_(
+            "Min and max intensity values of output image  ('image' refers to input "
+            "image min/max levels, 'dtype' refers to input image data type range).."
+        ),
+    )
+
+
+def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
+    """Rescale image intensity levels
+    Args:
+        src (ImageObj): input image object
+        p (RescaleIntensityParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(
+        src,
+        "rescale_intensity",
+        f"in_range={p.in_range}, out_range={p.out_range}",
+    )
+    dst.data = exposure.rescale_intensity(
+        src.data, in_range=p.in_range, out_range=p.out_range
+    )
+    return dst
+
+
+class EqualizeHistParam(gdt.DataSet):
+    """Histogram equalization parameters"""
+
+    nbins = gdi.IntItem(
+        _("Number of bins"),
+        min=1,
+        default=256,
+        help=_("Number of bins for image histogram."),
+    )
+
+
+def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
+    """Histogram equalization
+    Args:
+        src (ImageObj): input image object
+        p (EqualizeHistParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "equalize_hist", f"nbins={p.nbins}")
+    dst.data = exposure.equalize_hist(src.data, nbins=p.nbins)
+    return dst
+
+
+class EqualizeAdaptHistParam(EqualizeHistParam):
+    """Adaptive histogram equalization parameters"""
+
+    clip_limit = gdi.FloatItem(
+        _("Clipping limit"),
+        default=0.01,
+        min=0.0,
+        max=1.0,
+        help=_("Clipping limit (higher values give more contrast)."),
+    )
+
+
+def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
+    """Adaptive histogram equalization
+    Args:
+        src (ImageObj): input image object
+        p (EqualizeAdaptHistParam): parameters
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(
+        src, "equalize_adapthist", f"nbins={p.nbins}, clip_limit={p.clip_limit}"
+    )
+    dst.data = exposure.equalize_adapthist(
+        src.data, clip_limit=p.clip_limit, nbins=p.nbins
+    )
+    return dst
 
 
 class DenoiseTVParam(gdt.DataSet):
@@ -616,17 +964,23 @@ class DenoiseTVParam(gdt.DataSet):
     )
 
 
-def compute_denoise_tv(data: np.ndarray, p: DenoiseTVParam) -> np.ndarray:
+def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     """Compute Total Variation denoising
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (DenoiseTVParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return denoise_tv_chambolle(
-        data, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+    dst = dst_11(
+        src,
+        "denoise_tv",
+        f"weight={p.weight}, eps={p.eps}, max_num_iter={p.max_num_iter}",
     )
+    dst.data = denoise_tv_chambolle(
+        src.data, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+    )
+    return dst
 
 
 class DenoiseBilateralParam(gdt.DataSet):
@@ -658,20 +1012,26 @@ class DenoiseBilateralParam(gdt.DataSet):
     )
 
 
-def compute_denoise_bilateral(data: np.ndarray, p: DenoiseBilateralParam) -> np.ndarray:
+def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
     """Compute bilateral filter denoising
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (DenoiseBilateralParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return denoise_bilateral(
-        data,
+    dst = dst_11(
+        src,
+        "denoise_bilateral",
+        f"σspatial={p.sigma_spatial}, mode={p.mode}, cval={p.cval}",
+    )
+    dst.data = denoise_bilateral(
+        src.data,
         sigma_spatial=p.sigma_spatial,
         mode=p.mode,
         cval=p.cval,
     )
+    return dst
 
 
 class DenoiseWaveletParam(gdt.DataSet):
@@ -689,20 +1049,26 @@ class DenoiseWaveletParam(gdt.DataSet):
     )
 
 
-def compute_denoise_wavelet(data: np.ndarray, p: DenoiseWaveletParam) -> np.ndarray:
+def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     """Compute Wavelet denoising
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (DenoiseWaveletParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return denoise_wavelet(
-        data,
+    dst = dst_11(
+        src,
+        "denoise_wavelet",
+        f"wavelet={p.wavelet}, mode={p.mode}, method={p.method}",
+    )
+    dst.data = denoise_wavelet(
+        src.data,
         wavelet=p.wavelet,
         mode=p.mode,
         method=p.method,
     )
+    return dst
 
 
 class MorphologyParam(gdt.DataSet):
@@ -713,115 +1079,95 @@ class MorphologyParam(gdt.DataSet):
     )
 
 
-def compute_denoise_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Denoise using White Top-Hat
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return data - morphology.white_tophat(data, morphology.disk(p.radius))
+    dst = dst_11(src, "denoise_tophat", f"radius={p.radius}")
+    dst.data = src.data - morphology.white_tophat(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_white_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute White Top-Hat
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.white_tophat(data, morphology.disk(p.radius))
+    dst = dst_11(src, "white_tophat", f"radius={p.radius}")
+    dst.data = morphology.white_tophat(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_black_tophat(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Black Top-Hat
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.black_tophat(data, morphology.disk(p.radius))
+    dst = dst_11(src, "black_tophat", f"radius={p.radius}")
+    dst.data = morphology.black_tophat(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_erosion(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Erosion
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.erosion(data, morphology.disk(p.radius))
+    dst = dst_11(src, "erosion", f"radius={p.radius}")
+    dst.data = morphology.erosion(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_dilation(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Dilation
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.dilation(data, morphology.disk(p.radius))
+    dst = dst_11(src, "dilation", f"radius={p.radius}")
+    dst.data = morphology.dilation(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_opening(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological opening
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.opening(data, morphology.disk(p.radius))
+    dst = dst_11(src, "opening", f"radius={p.radius}")
+    dst.data = morphology.opening(src.data, morphology.disk(p.radius))
+    return dst
 
 
-def compute_closing(data: np.ndarray, p: MorphologyParam) -> np.ndarray:
+def compute_closing(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological closing
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (MorphologyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return morphology.closing(data, morphology.disk(p.radius))
-
-
-class ButterworthParam(gdt.DataSet):
-    """Butterworth filter parameters"""
-
-    cut_off = gdi.FloatItem(
-        _("Cut-off frequency ratio"),
-        default=0.5,
-        min=0.0,
-        max=1.0,
-        help=_("Cut-off frequency ratio (0.0 - 1.0)."),
-    )
-    high_pass = gdi.BoolItem(
-        _("High-pass filter"),
-        default=False,
-        help=_("If True, apply high-pass filter instead of low-pass."),
-    )
-    order = gdi.IntItem(
-        _("Order"),
-        default=2,
-        min=1,
-        help=_("Order of the Butterworth filter."),
-    )
-
-
-def compute_butterworth(data: np.ndarray, p: ButterworthParam) -> np.ndarray:
-    """Compute Butterworth filter
-    Args:
-        data (np.ndarray): input data
-        p (ButterworthParam): parameters
-    Returns:
-        np.ndarray: output data
-    """
-    return filters.butterworth(data, p.cut_off, p.high_pass, p.order)
+    dst = dst_11(src, "closing", f"radius={p.radius}")
+    dst.data = morphology.closing(src.data, morphology.disk(p.radius))
+    return dst
 
 
 class CannyParam(gdt.DataSet):
@@ -867,17 +1213,24 @@ class CannyParam(gdt.DataSet):
     )
 
 
-def compute_canny(data: np.ndarray, p: CannyParam) -> np.ndarray:
+def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
     """Compute Canny filter
     Args:
-        data (np.ndarray): input data
+        src (ImageObj): input image object
         p (CannyParam): parameters
     Returns:
-        np.ndarray: output data
+        ImageObj: output image object
     """
-    return np.array(
+    dst = dst_11(
+        src,
+        "canny",
+        f"sigma={p.sigma}, low_threshold={p.low_threshold}, "
+        f"high_threshold={p.high_threshold}, use_quantiles={p.use_quantiles}, "
+        f"mode={p.mode}, cval={p.cval}",
+    )
+    dst.data = np.array(
         feature.canny(
-            data,
+            src.data,
             sigma=p.sigma,
             low_threshold=p.low_threshold,
             high_threshold=p.high_threshold,
@@ -887,6 +1240,175 @@ def compute_canny(data: np.ndarray, p: CannyParam) -> np.ndarray:
         ),
         dtype=np.uint8,
     )
+    return dst
+
+
+def compute_roberts(src: ImageObj) -> ImageObj:
+    """Compute Roberts filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "roberts")
+    dst.data = filters.roberts(src.data)
+    return dst
+
+
+def compute_prewitt(src: ImageObj) -> ImageObj:
+    """Compute Prewitt filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "prewitt")
+    dst.data = filters.prewitt(src.data)
+    return dst
+
+
+def compute_prewitt_h(src: ImageObj) -> ImageObj:
+    """Compute horizontal Prewitt filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "prewitt_h")
+    dst.data = filters.prewitt_h(src.data)
+    return dst
+
+
+def compute_prewitt_v(src: ImageObj) -> ImageObj:
+    """Compute vertical Prewitt filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "prewitt_v")
+    dst.data = filters.prewitt_v(src.data)
+    return dst
+
+
+def compute_sobel(src: ImageObj) -> ImageObj:
+    """Compute Sobel filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "sobel")
+    dst.data = filters.sobel(src.data)
+    return dst
+
+
+def compute_sobel_h(src: ImageObj) -> ImageObj:
+    """Compute horizontal Sobel filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "sobel_h")
+    dst.data = filters.sobel_h(src.data)
+    return dst
+
+
+def compute_sobel_v(src: ImageObj) -> ImageObj:
+    """Compute vertical Sobel filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "sobel_v")
+    dst.data = filters.sobel_v(src.data)
+    return dst
+
+
+def compute_scharr(src: ImageObj) -> ImageObj:
+    """Compute Scharr filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "scharr")
+    dst.data = filters.scharr(src.data)
+    return dst
+
+
+def compute_scharr_h(src: ImageObj) -> ImageObj:
+    """Compute horizontal Scharr filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "scharr_h")
+    dst.data = filters.scharr_h(src.data)
+    return dst
+
+
+def compute_scharr_v(src: ImageObj) -> ImageObj:
+    """Compute vertical Scharr filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "scharr_v")
+    dst.data = filters.scharr_v(src.data)
+    return dst
+
+
+def compute_farid(src: ImageObj) -> ImageObj:
+    """Compute Farid filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "farid")
+    dst.data = filters.farid(src.data)
+    return dst
+
+
+def compute_farid_h(src: ImageObj) -> ImageObj:
+    """Compute horizontal Farid filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "farid_h")
+    dst.data = filters.farid_h(src.data)
+    return dst
+
+
+def compute_farid_v(src: ImageObj) -> ImageObj:
+    """Compute vertical Farid filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "farid_v")
+    dst.data = filters.farid_v(src.data)
+    return dst
+
+
+def compute_laplace(src: ImageObj) -> ImageObj:
+    """Compute Laplace filter
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "laplace")
+    dst.data = filters.laplace(src.data)
+    return dst
 
 
 def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:

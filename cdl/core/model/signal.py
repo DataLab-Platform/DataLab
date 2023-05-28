@@ -38,7 +38,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class CurveStyles:
     """Object to manage curve styles"""
 
-    def style_generator():
+    def style_generator():  # pylint: disable=no-method-argument
         """Cycling through curve styles"""
         while True:
             for linestyle in LINESTYLES:
@@ -54,6 +54,13 @@ class CurveStyles:
         curveparam.line.color = COLORS[color]
         curveparam.line.style = LINESTYLES[linestyle]
         curveparam.symbol.marker = "NoSymbol"
+
+
+class ROIParam(gdt.DataSet):
+    """Signal ROI parameters"""
+
+    col1 = gdi.IntItem(_("First point index"))
+    col2 = gdi.IntItem(_("Last point index"))
 
 
 class SignalObj(gdt.DataSet, base.ObjectItf):
@@ -111,9 +118,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         self.metadata = deepcopy(other.metadata)
         self.xydata = np.array(other.xydata, copy=True, dtype=dtype)
 
-    def set_data_type(
-        self, dtype: np.dtype
-    ) -> None:  # pylint: disable=unused-argument,no-self-use
+    def set_data_type(self, dtype: np.dtype) -> None:  # pylint: disable=unused-argument
         """Change data type.
 
         Args:
@@ -277,14 +282,11 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """
         imax = len(self.x) - 1
         i0, i1 = defaults
-
-        class ROIParam(gdt.DataSet):
-            """Signal ROI parameters"""
-
-            col1 = gdi.IntItem(_("First point index"), default=i0, min=-1, max=imax)
-            col2 = gdi.IntItem(_("Last point index"), default=i1, min=-1, max=imax)
-
-        return ROIParam(title)
+        param = ROIParam(title)
+        param.col1 = i0
+        param.col2 = i1
+        param.set_global_prop("data", min=-1, max=imax)
+        return param
 
     @staticmethod
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
@@ -298,6 +300,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """
         roilist = []
         for roiparam in params.datasets:
+            roiparam: ROIParam
             roilist.append([roiparam.col1, roiparam.col2])
         if len(roilist) == 0:
             return None

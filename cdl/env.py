@@ -42,6 +42,7 @@ class CDLExecEnv:
         self.h5files = None
         self.h5browser_file = None
         self.demo_mode = False
+        self.test_mode = False
         self.parse_args()
 
     def enable_demo_mode(self, delay: int):

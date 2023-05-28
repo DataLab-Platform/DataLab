@@ -15,6 +15,7 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+from cdl.config import Conf
 from cdl.core.computation.image import (
     AdjustGammaParam,
     AdjustLogParam,
@@ -38,6 +39,7 @@ from cdl.core.computation.image import (
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
+from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import PeakDataParam, create_test_image1, get_peak2d_data
 from cdl.tests.newobject_unit import iterate_image_creation
@@ -46,16 +48,19 @@ from cdl.tests.scenario_sig_app import test_common_operations
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
+def test_image_features(
+    win: CDLMainWindow, data_size: int = 150, all_types: bool = True
+) -> None:
     """Testing signal features"""
     win.switch_to_panel("image")
     panel = win.imagepanel
 
-    for image in iterate_image_creation(data_size, non_zero=True):
-        panel.add_object(create_test_image1(data_size))
-        panel.add_object(image)
-        test_common_operations(panel)
-        panel.remove_all_objects()
+    if all_types:
+        for image in iterate_image_creation(data_size, non_zero=True):
+            panel.add_object(create_test_image1(data_size))
+            panel.add_object(image)
+            test_common_operations(panel)
+            panel.remove_all_objects()
 
     ima1 = create_test_image1(data_size)
     panel.add_object(ima1)
@@ -181,10 +186,19 @@ def test_image_features(win: CDLMainWindow, data_size: int = 150) -> None:
     panel.processor.compute_contour_shape(param)
 
 
-def test():
+def test() -> None:
     """Run image unit test scenario 1"""
+    assert (
+        Conf.main.process_isolation_enabled.get()
+    ), "Process isolation must be enabled"
     with cdl_app_context(save=True) as win:
+        execenv.print("Testing image features without process isolation...")
+        win.set_process_isolation_enabled(False)
         test_image_features(win)
+        win.imagepanel.remove_all_objects()
+        execenv.print("Testing image features *with* process isolation...")
+        win.set_process_isolation_enabled(True)
+        test_image_features(win, all_types=False)
         oids = win.imagepanel.objmodel.get_object_ids()
         win.imagepanel.open_separate_view(oids[:4])
 

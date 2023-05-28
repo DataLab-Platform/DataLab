@@ -127,7 +127,7 @@ class SIFFile:
             ("Filesize", f"{self.filesize:d}"),
             ("Offset to Image Data", f"{self.m_offset:f}"),
         )
-        desc_len = max([len(d) for d in list(zip(*info))[0]]) + 3
+        desc_len = max(len(d) for d in list(zip(*info))[0]) + 3
         res = ""
         for description, value in info:
             res += ("{:" + str(desc_len) + "}{}\n").format(description + ": ", value)
@@ -148,7 +148,7 @@ class SIFFile:
                 if i == 0:
                     if line != b"Andor Technology Multi-Channel File":
                         sif_file.close()
-                        raise Exception(f"{filepath} is not an Andor SIF file")
+                        raise ValueError(f"{filepath} is not an Andor SIF file")
                 elif i == 2:
                     tokens = line.split()
                     self.temperature = float(tokens[5])
@@ -184,14 +184,14 @@ class SIFFile:
                             line = line[12:]
                         tokens = line.split()
                         if len(tokens) < 6:
-                            raise Exception("Not able to read stacksize.")
+                            raise ValueError("Not able to read stacksize.")
                         self.yres = int(tokens[2])
                         self.xres = int(tokens[3])
                         self.stacksize = int(tokens[5])
                     elif i == headerlen - 1:
                         tokens = line.split()
                         if len(tokens) < 7:
-                            raise Exception("Not able to read Image dimensions.")
+                            raise ValueError("Not able to read Image dimensions.")
                         self.left = int(tokens[1])
                         self.top = int(tokens[2])
                         self.right = int(tokens[3])
@@ -258,7 +258,7 @@ class SCORFile:
             ("Datasize", f"{self.datasize:d}"),
             ("Offset to Image Data", f"{self.m_offset:f}"),
         )
-        desc_len = max([len(d) for d in list(zip(*info))[0]]) + 3
+        desc_len = max(len(d) for d in list(zip(*info))[0]) + 3
         res = ""
         for description, value in info:
             res += ("{:" + str(desc_len) + "}{}\n").format(description + ": ", value)
@@ -343,7 +343,7 @@ class FXDFile:
             ("Max. level", f"{self.maxlevel:f}"),
             ("Comment length", f"{self.comment_length:d}"),
         )
-        desc_len = max([len(d) for d in list(zip(*info))[0]]) + 3
+        desc_len = max(len(d) for d in list(zip(*info))[0]) + 3
         res = ""
         for description, value in info:
             res += ("{:" + str(desc_len) + "}{}\n").format(description + ": ", value)

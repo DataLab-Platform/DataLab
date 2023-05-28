@@ -788,6 +788,15 @@ class CDLMainWindow(QW.QMainWindow):
         if tab_idx is not None:
             self.tabwidget.setCurrentIndex(tab_idx)
 
+    def set_process_isolation_enabled(self, state: bool) -> None:
+        """Enable/disable process isolation
+
+        Args:
+            state (bool): True to enable process isolation
+        """
+        for processor in (self.imagepanel.processor, self.signalpanel.processor):
+            processor.set_process_isolation_enabled(state)
+
     # ------Remote control
     @remote_controlled
     def switch_to_panel(self, panel: str) -> None:
@@ -834,7 +843,7 @@ class CDLMainWindow(QW.QMainWindow):
     # ------GUI refresh
     def has_objects(self) -> bool:
         """Return True if sig/ima panels have any object"""
-        return sum([panel.object_number for panel in self.panels]) > 0
+        return sum(panel.object_number for panel in self.panels) > 0
 
     def set_modified(self, state: bool = True) -> None:
         """Set mainwindow modified state"""

@@ -299,6 +299,13 @@ def qt_try_context(parent: QW.QWidget, context: str = None, tip: str = None):
     except Exception:  # pylint: disable=broad-except
         dlg = ErrorMessageBox(parent, context, tip)
         exec_dialog(dlg)
+        if execenv.test_mode:
+            #  In test mode, we want to raise the exception because test cases
+            #  are supposed to work without any error. In real life, we want to
+            #  avoid raising the exception because it would stop the application,
+            #  and exceptions could be related to non-critical errors due to
+            #  external libraries.
+            raise
     finally:
         pass
 

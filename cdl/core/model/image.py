@@ -193,6 +193,78 @@ class RoiDataItem:
         return base.make_roi_item(func, coords, title, fmt, lbl, editable)
 
 
+def roi_label(name: str, index: int):
+    """Returns name<sub>index</sub>"""
+    return f"{name}<sub>{index}</sub>"
+
+
+class RectangleROIParam(gdt.DataSet):
+    """ROI parameters"""
+
+    geometry = RoiDataGeometries.RECTANGLE
+
+    def get_suffix(self):
+        """Get suffix text representation for ROI extraction"""
+        return f"x={self.x0}:{self.x1},y={self.y0}:{self.y1}"
+
+    def get_coords(self):
+        """Get ROI coordinates"""
+        return self.x0, self.y0, self.x1, self.y1
+
+    _tlcorner = gdt.BeginGroup(_("Top left corner"))
+    x0 = gdi.IntItem(roi_label("X", 0), unit="pixel")
+    y0 = gdi.IntItem(roi_label("Y", 0), unit="pixel").set_pos(1)
+    _e_tlcorner = gdt.EndGroup(_("Top left corner"))
+    _brcorner = gdt.BeginGroup(_("Bottom right corner"))
+    x1 = gdi.IntItem(roi_label("X", 1), unit="pixel")
+    y1 = gdi.IntItem(roi_label("Y", 1), unit="pixel").set_pos(1)
+    _e_brcorner = gdt.EndGroup(_("Bottom right corner"))
+
+
+class CircularROIParam(gdt.DataSet):
+    """ROI parameters"""
+
+    geometry = RoiDataGeometries.CIRCLE
+
+    def get_single_roi(self):
+        """Get single circular ROI, i.e. after extracting ROI from image"""
+        return np.array([(0, self.r, self.x1 - self.x0, self.r)], int)
+
+    def get_suffix(self):
+        """Get suffix text representation for ROI extraction"""
+        return f"xc={self.xc},yc={self.yc},r={self.r}"
+
+    def get_coords(self):
+        """Get ROI coordinates"""
+        return self.x0, self.yc, self.x1, self.yc
+
+    @property
+    def x0(self):
+        """Return rectangle top left corner X coordinate"""
+        return self.xc - self.r
+
+    @property
+    def x1(self):
+        """Return rectangle bottom right corner X coordinate"""
+        return self.xc + self.r
+
+    @property
+    def y0(self):
+        """Return rectangle top left corner Y coordinate"""
+        return self.yc - self.r
+
+    @property
+    def y1(self):
+        """Return rectangle bottom right corner Y coordinate"""
+        return self.yc + self.r
+
+    _tlcorner = gdt.BeginGroup(_("Center coordinates"))
+    xc = gdi.IntItem(roi_label("X", "C"), unit="pixel")
+    yc = gdi.IntItem(roi_label("Y", "C"), unit="pixel").set_pos(1)
+    _e_tlcorner = gdt.EndGroup(_("Center coordinates"))
+    r = gdi.IntItem(_("Radius"), unit="pixel")
+
+
 class ImageObj(gdt.DataSet, base.ObjectItf):
     """Image object"""
 
@@ -467,90 +539,19 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
             *defaults: default values
         """
         roidataitem = RoiDataItem(defaults)
-
         xd0, yd0, xd1, yd1 = defaults
-
-        def s(name: str, index: int):
-            """Returns name<sub>index</sub>"""
-            return f"{name}<sub>{index}</sub>"
-
         if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
-            gtitle1 = _("Top left corner")
-            gtitle2 = _("Bottom right corner")
-
-            class ROIParam(gdt.DataSet):
-                """ROI parameters"""
-
-                geometry = roidataitem.geometry
-
-                def get_suffix(self):
-                    """Get suffix text representation for ROI extraction"""
-                    return f"x={self.x0}:{self.x1},y={self.y0}:{self.y1}"
-
-                def get_coords(self):
-                    """Get ROI coordinates"""
-                    return self.x0, self.y0, self.x1, self.y1
-
-                _tlcorner = gdt.BeginGroup(gtitle1)
-                x0 = gdi.IntItem(s("X", 0), default=xd0, unit="pixel")
-                y0 = gdi.IntItem(s("Y", 0), default=yd0, unit="pixel").set_pos(1)
-                _e_tlcorner = gdt.EndGroup(gtitle1)
-                _brcorner = gdt.BeginGroup(gtitle2)
-                x1 = gdi.IntItem(s("X", 1), default=xd1, unit="pixel")
-                y1 = gdi.IntItem(s("Y", 1), default=yd1, unit="pixel").set_pos(1)
-                _e_brcorner = gdt.EndGroup(gtitle2)
-
+            param = RectangleROIParam(title)
+            param.x0 = xd0
+            param.y0 = yd0
+            param.x1 = xd1
+            param.y1 = yd1
         else:
-            gtitle1 = _("Center coordinates")
-
-            class ROIParam(gdt.DataSet):
-                """ROI parameters"""
-
-                geometry = roidataitem.geometry
-
-                def get_single_roi(self):
-                    """Get single circular ROI, i.e. after extracting ROI from image"""
-                    return np.array([(0, self.r, self.x1 - self.x0, self.r)], int)
-
-                def get_suffix(self):
-                    """Get suffix text representation for ROI extraction"""
-                    return f"xc={self.xc},yc={self.yc},r={self.r}"
-
-                def get_coords(self):
-                    """Get ROI coordinates"""
-                    return self.x0, self.yc, self.x1, self.yc
-
-                @property
-                def x0(self):
-                    """Return rectangle top left corner X coordinate"""
-                    return self.xc - self.r
-
-                @property
-                def x1(self):
-                    """Return rectangle bottom right corner X coordinate"""
-                    return self.xc + self.r
-
-                @property
-                def y0(self):
-                    """Return rectangle top left corner Y coordinate"""
-                    return self.yc - self.r
-
-                @property
-                def y1(self):
-                    """Return rectangle bottom right corner Y coordinate"""
-                    return self.yc + self.r
-
-                _tlcorner = gdt.BeginGroup(gtitle1)
-                xc = gdi.IntItem(
-                    s("X", "C"), default=int(0.5 * (xd0 + xd1)), unit="pixel"
-                )
-                yc = gdi.IntItem(s("Y", "C"), default=yd0, unit="pixel").set_pos(1)
-                _e_tlcorner = gdt.EndGroup(gtitle1)
-                r = gdi.IntItem(
-                    _("Radius"), default=int(0.5 * (xd1 - xd0)), unit="pixel"
-                )
-
-        return ROIParam(title)
+            param = CircularROIParam(title)
+            param.xc = int(0.5 * (xd0 + xd1))
+            param.yc = yd0
+            param.r = int(0.5 * (xd1 - xd0))
+        return param
 
     @staticmethod
     def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray | None:
@@ -564,6 +565,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """
         roilist = []
         for roiparam in params.datasets:
+            roiparam: RectangleROIParam | CircularROIParam
             roilist.append(roiparam.get_coords())
         if len(roilist) == 0:
             return None

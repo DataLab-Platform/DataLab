@@ -98,7 +98,7 @@ class Worker:
         """Create multiprocessing pool"""
         global POOL  # pylint: disable=global-statement
         # Create a pool with one process
-        POOL = Pool(processes=1)  # pylint: disable=not-callable
+        POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
 
     @staticmethod
     def terminate_pool() -> None:
@@ -113,8 +113,7 @@ class Worker:
         """Run computation"""
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
-        new_args = tuple([func] + list(args))
-        self.asyncresult = POOL.apply_async(wng_func, new_args)
+        self.asyncresult = POOL.apply_async(wng_func, (func, args))
 
     def terminate(self) -> None:
         """Terminate worker"""
@@ -148,14 +147,22 @@ class BaseProcessor(QC.QObject):
         self.panel = panel
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
-        if Conf.main.process_isolation_enabled.get():
-            self.worker = Worker()
-            self.worker.create_pool()
+        self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
 
     def close(self):
         """Close processor properly"""
-        if self.worker is not None:
-            self.worker.terminate_pool()
+        self.set_process_isolation_enabled(False)
+
+    def set_process_isolation_enabled(self, enabled: bool) -> None:
+        """Set process isolation enabled"""
+        if enabled:
+            if self.worker is None:
+                self.worker = Worker()
+                self.worker.create_pool()
+        else:
+            if self.worker is not None:
+                self.worker.terminate_pool()
+                self.worker = None
 
     def init_param(
         self,
@@ -174,38 +181,28 @@ class BaseProcessor(QC.QObject):
             self.PARAM_DEFAULTS[paramclass.__name__] = param
         return edit, param
 
-    @abc.abstractmethod
-    def get_11_func_args(self, orig: Obj, param: gdt.DataSet) -> tuple[Any]:
-        """Get 11 function args: 1 object in --> 1 object out"""
-
-    @abc.abstractmethod
-    def set_11_func_result(
-        self, new_obj: Obj, result: np.ndarray | tuple[np.ndarray]
-    ) -> None:
-        """Set 11 function result: 1 object in --> 1 object out"""
-
     def compute_11(
         self,
-        name: str,
         func: Callable,
         param: gdt.DataSet | None = None,
-        suffix: Callable | None = None,
-        func_obj: Callable | None = None,
-        edit: bool = True,
+        paramclass: gdt.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
+        edit: bool | None = None,
     ):
         """Compute 11 function: 1 object in --> 1 object out"""
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
-        self._compute_11_subroutine([name], func, [param], suffix, func_obj)
+        self._compute_11_subroutine(func, [param], title)
 
     def compute_1n(
         self,
-        names: list,
         func: Callable,
         params: list | None = None,
-        suffix: Callable | None = None,
-        func_obj: Callable | None = None,
+        title: str | None = None,
         edit: bool = True,
     ):
         """Compute 1n function: 1 object in --> n objects out"""
@@ -213,45 +210,33 @@ class BaseProcessor(QC.QObject):
             group = gdt.DataSetGroup(params, title=_("Parameters"))
             if edit and not group.edit(parent=self.panel.parent()):
                 return
-        self._compute_11_subroutine(names, func, params, suffix, func_obj)
+        self._compute_11_subroutine(func, params, title)
 
-    def _compute_11_subroutine(
-        self,
-        names: list,
-        func: Callable,
-        params: list,
-        suffix: Callable,
-        func_obj: Callable,
-    ):
+    def _compute_11_subroutine(self, func: Callable, params: list, title: str):
         """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
         new_gids = {}
+        name = func.__name__.replace("compute_", "")
         with create_progress_bar(
-            self.panel, names[0], max_=len(objs) * len(params)
+            self.panel, title, max_=len(objs) * len(params)
         ) as progress:
             for i_row, obj in enumerate(objs):
-                for i_param, (param, name) in enumerate(zip(params, names)):
+                for i_param, param in enumerate(params):
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
                     progress.setValue(pvalue)
-                    progress.setLabelText(name)
+                    i_title = f"{title} ({i_row + 1}/{len(objs)})"
+                    progress.setLabelText(i_title)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    new_obj = self.panel.create_object()
-                    new_obj.title = f"{name}({obj.short_id})"
-                    if suffix is not None:
-                        new_obj.title += "|" + suffix(param)
-                    new_obj.copy_data_from(obj)
-
-                    args = self.get_11_func_args(obj, param)
-
-                    context = _("Computing:") + " " + new_obj.title
+                    context = _("Computing:") + " " + i_title
+                    new_obj = None
+                    args = (obj,) if param is None else (obj, param)
                     if self.worker is None:
                         with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                            result = wng_func(func, *args)
-                            self.set_11_func_result(new_obj, result)
+                            new_obj = wng_func(func, args)
                     else:
                         self.worker.run(func, args)
                         while not self.worker.is_computation_finished():
@@ -262,19 +247,10 @@ class BaseProcessor(QC.QObject):
                                 break
                         if not self.worker.is_computation_finished():
                             break
-                        result = None
                         with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                            result = self.worker.get_result()
-                            self.set_11_func_result(new_obj, result)
-
-                    if result is None:
+                            new_obj = self.worker.get_result()
+                    if new_obj is None:
                         continue
-
-                    if func_obj is not None:
-                        if param is None:
-                            func_obj(new_obj, obj)
-                        else:
-                            func_obj(new_obj, obj, param)
                     new_gid = None
                     if grps:
                         # If groups are selected, then it means that there is no
@@ -293,24 +269,28 @@ class BaseProcessor(QC.QObject):
 
     def compute_10(
         self,
-        name: str,
         func: Callable,
         shapetype: ShapeTypes,
         param: gdt.DataSet | None = None,
-        suffix: Callable | None = None,
+        paramclass: gdt.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
         edit: bool = True,
     ) -> dict[int, ResultShape]:
         """Compute 10 function: 1 object in --> 0 object out
         (the result of this method is stored in original object's metadata)"""
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-        with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
+        name = func.__name__.replace("compute_", "")
+        title = name if title is None else title
+        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             results: dict[int, ResultShape] = {}
             xlabels = None
             ylabels = []
-            title_suffix = "" if suffix is None else "|" + suffix(param)
             for idx, obj in enumerate(objs):
                 pvalue = idx + 1
                 pvalue = 0 if pvalue == 1 else pvalue
@@ -318,14 +298,11 @@ class BaseProcessor(QC.QObject):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                title = f"{name}{title_suffix}"
-
                 args = (obj,) if param is None else (obj, param)
-
                 context = _("Computing:") + " " + title
                 if self.worker is None:
                     with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                        result = wng_func(func, *args)
+                        result = wng_func(func, args)
                 else:
                     self.worker.run(func, args)
                     while not self.worker.is_computation_finished():
@@ -350,7 +327,7 @@ class BaseProcessor(QC.QObject):
                 self.panel.selection_changed()
                 self.panel.SIG_UPDATE_PLOT_ITEM.emit(obj.uuid)
                 for _i_row_res in range(resultshape.array.shape[0]):
-                    ylabel = f"{name}({obj.short_id}){title_suffix}"
+                    ylabel = f"{name}({obj.short_id})"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():
@@ -371,11 +348,15 @@ class BaseProcessor(QC.QObject):
         name: str,
         func: Callable,
         param: gdt.DataSet | None = None,
-        suffix: Callable | None = None,
+        paramclass: gdt.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
         func_objs: Callable | None = None,
         edit: bool = True,
     ):
         """Compute n1 function: N(>=2) objects in --> 1 object out"""
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
@@ -389,10 +370,10 @@ class BaseProcessor(QC.QObject):
         # [old_objs dictionary] keys: old group id, values: list of old objects
         old_objs: dict[str, list[Obj]] = {}
 
-        with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
+        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             for index, obj in enumerate(objs):
                 progress.setValue(index + 1)
-                progress.setLabelText(name)
+                progress.setLabelText(title)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
@@ -402,8 +383,6 @@ class BaseProcessor(QC.QObject):
                     old_dtypes[old_gid] = old_dtype = obj.data.dtype
                     new_objs[old_gid] = new_obj = self.panel.create_object()
                     old_objs[old_gid] = [obj]
-                    if suffix is not None:
-                        new_obj.title += "|" + suffix(param)
                     new_dtype = complex if misc.is_complex_dtype(old_dtype) else float
                     new_obj.copy_data_from(obj, dtype=new_dtype)
                 else:
@@ -449,18 +428,20 @@ class BaseProcessor(QC.QObject):
 
     def compute_n1n(
         self,
-        name: str,
         obj2: Obj | None,
         obj2_name: str,
         func: Callable,
         param: gdt.DataSet | None = None,
-        suffix: Callable | None = None,
-        func_obj: Callable | None = None,
+        paramclass: gdt.DataSet | None = None,
+        title: str | None = None,
+        comment: str | None = None,
         edit: bool = True,
     ):
         """Compute n1n function: N(>=1) objects + 1 object in --> N objects out.
 
         Examples: subtract, divide"""
+        if (edit is None or param is None) and paramclass is not None:
+            edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
@@ -468,33 +449,22 @@ class BaseProcessor(QC.QObject):
             obj2 = self.panel.get_object_dialog(_("Select %s") % obj2_name)
             if obj2 is None:
                 return
-
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-        with create_progress_bar(self.panel, name, max_=len(objs)) as progress:
+        # name = func.__name__.replace("compute_", "")
+        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             for index, obj in enumerate(objs):
                 progress.setValue(index + 1)
-                progress.setLabelText(name)
+                progress.setLabelText(title)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                new_obj = self.panel.create_object()
-                short_ids = (obj.short_id, obj2.short_id)
-                new_obj.title = f'{name}({", ".join(short_ids)})'
-                new_obj.copy_data_from(obj)
                 with warnings.catch_warnings():
                     warnings.simplefilter("ignore", RuntimeWarning)
                     # TODO: Add support for process isolation
                     if param is None:
-                        new_obj.data = func(obj.data, obj2.data)
+                        new_obj = func(obj, obj2)
                     else:
-                        new_obj.data = func(obj.data, obj2.data, param)
-                if func_obj is not None:
-                    if param is None:
-                        func_obj(new_obj, obj, obj2)
-                    else:
-                        func_obj(new_obj, obj, obj2, param)
-                if suffix is not None:
-                    new_obj.title += "|" + suffix(param)
+                        new_obj = func(obj, obj2, param)
                 group_id = self.panel.objmodel.get_object_group_id(obj)
                 self.panel.add_object(new_obj, group_id=group_id)
 
@@ -506,63 +476,44 @@ class BaseProcessor(QC.QObject):
         out += np.array(in_i, dtype=out.dtype)
 
     @qt_try_except()
-    def compute_sum(self):
+    def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1(_("Sum"), self.__sum_func)
+        self.compute_n1("Σ", self.__sum_func, title=_("Sum"))
 
     @qt_try_except()
-    def compute_average(self):
+    def compute_average(self) -> None:
         """Compute average"""
 
         def func_objs(new_obj: Obj, old_objs: list[Obj]) -> None:
             """Finalize average computation"""
             new_obj.data = new_obj.data / float(len(old_objs))
 
-        self.compute_n1(_("Average"), self.__sum_func, func_objs=func_objs)
+        self.compute_n1("μ", self.__sum_func, func_objs=func_objs, title=_("Average"))
 
     @qt_try_except()
-    def compute_product(self):
+    def compute_product(self) -> None:
         """Compute product"""
 
         def prod_func(in_i: np.ndarray, out: np.ndarray) -> None:
             """Compute product of input data"""
             out *= np.array(in_i, dtype=out.dtype)
 
-        self.compute_n1(_("Product"), prod_func)
+        self.compute_n1("Π", prod_func, title=_("Product"))
 
+    @abc.abstractmethod
     @qt_try_except()
-    def compute_difference(
-        self,
-        obj2: Obj | None = None,
-        quadratic: bool | None = None,
-    ):
-        """Compute (quadratic) difference"""
+    def compute_difference(self, obj2: Obj | None = None) -> None:
+        """Compute difference"""
 
-        def func(data1: np.ndarray, data2: np.ndarray) -> np.ndarray:
-            """Function to be applied to each object"""
-            data = data1 - np.array(data2, dtype=data1.dtype)
-            if quadratic:
-                data = data / np.sqrt(2.0)
-            return data
-
-        def func_obj(new_obj: Obj, obj: Obj, obj2: Obj) -> None:
-            """Function to be applied to each object"""
-            if np.issubdtype(new_obj.data.dtype, np.unsignedinteger):
-                new_obj.data[obj.data < obj2.data] = 0
-
-        name = _("QuadDiff") if quadratic else _("Diff")
-        obj2_name = _("object to subtract")
-        self.compute_n1n(name, obj2, obj2_name, func=func, func_obj=func_obj)
-
+    @abc.abstractmethod
     @qt_try_except()
-    def compute_division(self, obj2: Obj | None = None):
+    def compute_quadratic_difference(self, obj2: Obj | None = None) -> None:
+        """Compute quadratic difference"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_division(self, obj2: Obj | None = None) -> None:
         """Compute division"""
-        self.compute_n1n(
-            _("Div"),
-            obj2,
-            _("divider"),
-            func=lambda d1, d2: d1 / np.array(d2, dtype=d1.dtype),
-        )
 
     def _get_roieditordata(
         self, roidata: np.ndarray | None = None, singleobj: bool | None = None
@@ -587,19 +538,23 @@ class BaseProcessor(QC.QObject):
         return roieditordata
 
     @abc.abstractmethod
+    @qt_try_except()
     def extract_roi(self, roidata: np.ndarray | None = None) -> None:
         """Extract Region Of Interest (ROI) from data"""
 
     @abc.abstractmethod
-    def compute_swap_axes(self):
+    @qt_try_except()
+    def compute_swap_axes(self) -> None:
         """Swap data axes"""
 
     @abc.abstractmethod
-    def compute_abs(self):
+    @qt_try_except()
+    def compute_abs(self) -> None:
         """Compute absolute value"""
 
     @abc.abstractmethod
-    def compute_log10(self):
+    @qt_try_except()
+    def compute_log10(self) -> None:
         """Compute Log10"""
 
     # ------Data Processing-------------------------------------------------------------
@@ -636,17 +591,17 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_wiener(self):
+    def compute_wiener(self) -> None:
         """Compute Wiener filter"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_fft(self):
+    def compute_fft(self) -> None:
         """Compute iFFT"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_ifft(self):
+    def compute_ifft(self) -> None:
         """Compute FFT"""
 
     # ------Computing-------------------------------------------------------------------
@@ -674,7 +629,7 @@ class BaseProcessor(QC.QObject):
                     self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
         return roieditordata
 
-    def delete_regions_of_interest(self):
+    def delete_regions_of_interest(self) -> None:
         """Delete Regions Of Interest"""
         for obj in self.panel.objview.get_sel_objects():
             if obj.roi is not None:
@@ -687,7 +642,7 @@ class BaseProcessor(QC.QObject):
         """Return statistics functions list"""
 
     @qt_try_except()
-    def compute_stats(self):
+    def compute_stats(self) -> None:
         """Compute data statistics"""
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         stfuncs = self._get_stat_funcs()

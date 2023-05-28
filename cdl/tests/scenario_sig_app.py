@@ -17,7 +17,7 @@ Testing the following:
 
 from __future__ import annotations
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.computation.base import (
     ClipParam,
     GaussianParam,
@@ -43,6 +43,7 @@ from cdl.core.model.signal import (
     create_signal_from_param,
     new_signal_param,
 )
+from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
 from cdl.tests.newobject_unit import iterate_signal_creation
@@ -55,7 +56,7 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
     """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
-    assert len(panel.objmodel) >= index - 1
+    assert panel.object_number >= index - 1
     panel.objview.select_nums((index,))
     panel.processor.compute_gaussian_filter(GaussianParam())
     panel.processor.compute_moving_average(MovingAverageParam())
@@ -77,14 +78,14 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     First signal/image is supposed to be always the same (reference)
     Second signal/image is the tested object
     """
-    assert len(panel.objmodel) == 2
+    assert panel.object_number == 2
 
     panel.duplicate_object()
     panel.objview.select_nums((1, 2))
-    panel.processor.compute_difference(quadratic=False)
+    panel.processor.compute_difference()
     panel.remove_object()
     panel.objview.select_nums((1, 2))
-    panel.processor.compute_difference(quadratic=True)
+    panel.processor.compute_quadratic_difference()
     panel.delete_metadata()
     panel.objview.select_nums((2, 3))
     panel.remove_object()
@@ -112,16 +113,19 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     test_compute_11_operations(panel, 1)
 
 
-def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
+def test_signal_features(
+    win: CDLMainWindow, data_size: int = 500, all_types: bool = True
+) -> None:
     """Testing signal features"""
     panel = win.signalpanel
     win.switch_to_panel("signal")
 
-    for signal in iterate_signal_creation(data_size, non_zero=True):
-        panel.add_object(create_test_signal1(data_size))
-        panel.add_object(signal)
-        test_common_operations(panel)
-        panel.remove_all_objects()
+    if all_types:
+        for signal in iterate_signal_creation(data_size, non_zero=True):
+            panel.add_object(create_test_signal1(data_size))
+            panel.add_object(signal)
+            test_common_operations(panel)
+            panel.remove_all_objects()
 
     sig1 = create_test_signal1(data_size)
     win.add_object(sig1)
@@ -181,10 +185,19 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.processor.compute_fw1e2()
 
 
-def test():
+def test() -> None:
     """Run signal unit test scenario 1"""
+    assert (
+        Conf.main.process_isolation_enabled.get()
+    ), "Process isolation must be enabled"
     with cdl_app_context(save=True) as win:
+        execenv.print("Testing signal features without process isolation...")
+        win.set_process_isolation_enabled(False)
         test_signal_features(win)
+        win.signalpanel.remove_all_objects()
+        execenv.print("Testing signal features *with* process isolation...")
+        win.set_process_isolation_enabled(True)
+        test_signal_features(win, all_types=False)
         oids = win.signalpanel.objmodel.get_object_ids()
         win.signalpanel.open_separate_view(oids[:3])
 

@@ -498,16 +498,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Difference"),
-                triggered=lambda: self.panel.processor.compute_difference(
-                    quadratic=False
-                ),
+                triggered=self.panel.processor.compute_difference,
                 select_condition=SelectCond.at_least_one,
             )
             self.new_action(
                 _("Quadratic difference"),
-                triggered=lambda: self.panel.processor.compute_difference(
-                    quadratic=True
-                ),
+                triggered=self.panel.processor.compute_quadratic_difference,
                 select_condition=SelectCond.at_least_one,
             )
             self.new_action(

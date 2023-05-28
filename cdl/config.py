@@ -76,7 +76,7 @@ def get_mod_source_dir() -> str | None:
     if IS_FROZEN:
         devdir = osp.abspath(osp.join(sys.prefix, os.pardir, os.pardir))
     else:
-        devdir = osp.abspath(osp.dirname(__file__), os.pardir)
+        devdir = osp.abspath(osp.join(osp.dirname(__file__), os.pardir))
     if osp.isfile(osp.join(devdir, MOD_NAME, "__init__.py")):
         return devdir
     # Unhandled case (this should not happen, but just in case):

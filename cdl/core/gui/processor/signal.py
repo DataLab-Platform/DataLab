@@ -13,9 +13,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from typing import Any
 
-import guidata.dataset.datatypes as gdt
 import numpy as np
 
 import cdl.core.computation.base as cpb
@@ -33,6 +31,7 @@ class SignalProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
+    @qt_try_except()
     def extract_roi(
         self, roidata: np.ndarray | None = None, singleobj: bool | None = None
     ) -> None:
@@ -42,59 +41,57 @@ class SignalProcessor(BaseProcessor):
             return
         obj = self.panel.objview.get_sel_objects()[0]
         group = obj.roidata_to_params(roieditordata.roidata)
-
         if roieditordata.singleobj:
-
-            def suffix_func(group: gdt.DataSetGroup) -> str:
-                """Suffix function
-
-                Args:
-                    group (gdt.DataSetGroup): group of parameters
-
-                Returns:
-                    str: suffix
-                """
-                if len(group.datasets) == 1:
-                    p = group.datasets[0]
-                    return f"indexes={p.col1:d}:{p.col2:d}"
-                return ""
-
-            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
-            self.compute_11(
-                "ROI",
-                cps.extract_multiple_roi,
-                group,
-                suffix=suffix_func,
-                func_obj=lambda obj, _orig, _group: obj.remove_all_shapes(),
-                edit=False,
-            )
+            self.compute_11(cps.extract_multiple_roi, group, title=_("Extract ROI"))
         else:
-            # TODO: [P2] Instead of removing geometric shapes, apply roi extract
-            self.compute_1n(
-                [f"ROI{iroi}" for iroi in range(len(group.datasets))],
-                cps.extract_single_roi,
-                group.datasets,
-                suffix=lambda p: f"indexes={p.col1:d}:{p.col2:d}",
-                func_obj=lambda obj, _orig, _group: obj.remove_all_shapes(),
-                edit=False,
-            )
+            self.compute_1n(cps.extract_single_roi, group.datasets, "ROI", edit=False)
 
+    @qt_try_except()
     def compute_swap_axes(self) -> None:
         """Swap data axes"""
-        self.compute_11(
-            "SwapAxes",
-            cps.compute_swap_axes,
-            func_obj=lambda obj, _orig: obj.remove_all_shapes(),
-        )
+        self.compute_11(cps.compute_swap_axes, title=_("Swap axes"))
 
+    @qt_try_except()
     def compute_abs(self) -> None:
         """Compute absolute value"""
-        self.compute_11("Abs", cps.compute_abs)
+        self.compute_11(cps.compute_abs, title=_("Absolute value"))
 
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
-        self.compute_11("Log10", cps.compute_log10)
+        self.compute_11(cps.compute_log10, title="Log10")
 
+    @qt_try_except()
+    def compute_difference(self, obj2: SignalObj | None = None) -> None:
+        """Compute difference between two signals"""
+        self.compute_n1n(
+            obj2,
+            _("signal to subtract"),
+            cps.compute_difference,
+            title=_("Difference"),
+        )
+
+    @qt_try_except()
+    def compute_quadratic_difference(self, obj2: SignalObj | None = None) -> None:
+        """Compute quadratic difference between two signals"""
+        self.compute_n1n(
+            obj2,
+            _("signal to subtract"),
+            cps.compute_quadratic_difference,
+            title=_("Quadratic difference"),
+        )
+
+    @qt_try_except()
+    def compute_division(self, obj2: SignalObj | None = None) -> None:
+        """Compute division between two signals"""
+        self.compute_n1n(
+            obj2,
+            _("divider"),
+            cps.compute_division,
+            title=_("Division"),
+        )
+
+    @qt_try_except()
     def compute_peak_detection(
         self, param: cps.PeakDetectionParam | None = None
     ) -> None:
@@ -109,112 +106,59 @@ class SignalProcessor(BaseProcessor):
             if exec_dialog(dlg):
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
-
-        # pylint: disable=unused-argument
-        def func_obj(
-            obj: SignalObj, orig: SignalObj, param: cps.PeakDetectionParam
-        ) -> None:
-            """Customize signal object"""
-            obj.metadata["curvestyle"] = "Sticks"
-
-        self.compute_11(
-            "Peaks",
-            cps.compute_peak_detection,
-            param,
-            suffix=lambda p: f"threshold={p.threshold}%, min_dist={p.min_dist}pts",
-            func_obj=func_obj,
-            edit=edit,
-        )
+            else:
+                return
+        self.compute_11(cps.compute_peak_detection, param)
 
     # ------Signal Processing
-    def get_11_func_args(self, orig: SignalObj, param: gdt.DataSet) -> tuple[Any]:
-        """Get 11 function args: 1 object in --> 1 object out"""
-        data = orig.xydata
-        if len(data) == 2:  # x, y signal
-            x, y = data
-            if param is None:
-                return (x, y)
-            return (x, y, param)
-        if len(data) == 4:  # x, y, dx, dy error bar signal
-            x, y, _dx, dy = data
-            raise NotImplementedError("Error bar signal processing not implemented")
-        raise ValueError("Invalid data")
-
-    def set_11_func_result(self, new_obj: SignalObj, result: tuple[np.ndarray]) -> None:
-        """Set 11 function result: 1 object in --> 1 object out"""
-        x, y = result
-        new_obj.set_xydata(x, y)
-
     @qt_try_except()
     def compute_normalize(self, param: cps.NormalizeParam | None = None) -> None:
         """Normalize data"""
-        edit, param = self.init_param(param, cps.NormalizeParam, _("Normalize"))
         self.compute_11(
-            "Normalize",
-            cps.compute_normalize,
-            param,
-            suffix=lambda p: f"ref={p.method}",
-            edit=edit,
+            cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
         )
 
     @qt_try_except()
     def compute_derivative(self) -> None:
         """Compute derivative"""
-        self.compute_11("Derivative", cps.compute_derivative)
+        self.compute_11(cps.compute_derivative, title=_("Derivative"))
 
     @qt_try_except()
     def compute_integral(self) -> None:
         """Compute integral"""
-        self.compute_11("Integral", cps.compute_integral)
+        self.compute_11(cps.compute_integral, title=_("Integral"))
 
     @qt_try_except()
     def compute_calibration(self, param: cps.XYCalibrateParam | None = None) -> None:
         """Compute data linear calibration"""
-        edit, param = self.init_param(
-            param, cps.XYCalibrateParam, _("Linear calibration"), "y = a.x + b"
-        )
         self.compute_11(
-            "LinearCal",
             cps.compute_calibration,
             param,
-            suffix=lambda p: f"{p.axis}={p.a}*{p.axis}+{p.b}",
-            edit=edit,
+            cps.XYCalibrateParam,
+            title=_("Linear calibration"),
+            comment="y = a.x + b",
         )
 
     @qt_try_except()
     def compute_threshold(self, param: cpb.ThresholdParam | None = None) -> None:
         """Compute threshold clipping"""
-        edit, param = self.init_param(param, cpb.ThresholdParam, _("Thresholding"))
         self.compute_11(
-            "Threshold",
-            cps.compute_threshold,
-            param,
-            suffix=lambda p: f"min={p.value} lsb",
-            edit=edit,
+            cps.compute_threshold, param, cpb.ThresholdParam, title=_("Thresholding")
         )
 
     @qt_try_except()
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
-        edit, param = self.init_param(param, cpb.ClipParam, _("Clipping"))
-        self.compute_11(
-            "Clip",
-            cps.compute_clip,
-            param,
-            suffix=lambda p: f"max={p.value} lsb",
-            edit=edit,
-        )
+        self.compute_11(cps.compute_clip, param, cpb.ClipParam, title=_("Clipping"))
 
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:
         """Compute gaussian filter"""
-        edit, param = self.init_param(param, cpb.GaussianParam, _("Gaussian filter"))
         self.compute_11(
-            "GaussianFilter",
             cps.compute_gaussian_filter,
             param,
-            suffix=lambda p: f"σ={p.sigma:.3f} pixels",
-            edit=edit,
+            cpb.GaussianParam,
+            title=_("Gaussian filter"),
         )
 
     @qt_try_except()
@@ -222,57 +166,41 @@ class SignalProcessor(BaseProcessor):
         self, param: cpb.MovingAverageParam | None = None
     ) -> None:
         """Compute moving average"""
-        edit, param = self.init_param(
-            param, cpb.MovingAverageParam, _("Moving average")
-        )
         self.compute_11(
-            "MovAvg",
             cps.compute_moving_average,
             param,
-            suffix=lambda p: f"n={p.n}",
-            edit=edit,
+            cpb.MovingAverageParam,
+            title=_("Moving average"),
         )
 
     @qt_try_except()
     def compute_moving_median(self, param: cpb.MovingMedianParam | None = None) -> None:
         """Compute moving median"""
-        edit, param = self.init_param(param, cpb.MovingMedianParam, _("Moving median"))
         self.compute_11(
-            "MovMed",
             cps.compute_moving_median,
             param,
-            suffix=lambda p: f"n={p.n}",
-            edit=edit,
+            cpb.MovingMedianParam,
+            title=_("Moving median"),
         )
 
     @qt_try_except()
     def compute_wiener(self) -> None:
         """Compute Wiener filter"""
-        self.compute_11("WienerFilter", cps.compute_wiener)
+        self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
     def compute_fft(self, param: cps.FFTParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
             param = cps.FFTParam()
-        self.compute_11(
-            "FFT",
-            cps.compute_fft,
-            param,
-            edit=False,
-        )
+        self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
     def compute_ifft(self, param: cps.FFTParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
             param = cps.FFTParam()
-        self.compute_11(
-            "iFFT",
-            cps.compute_ifft,
-            param,
-            edit=False,
-        )
+        self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
@@ -315,7 +243,7 @@ class SignalProcessor(BaseProcessor):
             self.panel.add_object(signal)
 
     @qt_try_except()
-    def compute_multigaussianfit(self):
+    def compute_multigaussianfit(self) -> None:
         """Compute multi-Gaussian fitting curve"""
         fitdlgfunc = fitdialog.multigaussianfit
         for obj in self.panel.objview.get_sel_objects():
@@ -336,15 +264,14 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_fwhm(self, param: cps.FWHMParam | None = None) -> None:
         """Compute FWHM"""
-        title = _("FWHM")
-        edit, param = self.init_param(param, cps.FWHMParam, title)
-        self.compute_10(title, cps.compute_fwhm, ShapeTypes.SEGMENT, param, edit=edit)
+        self.compute_10(
+            cps.compute_fwhm, ShapeTypes.SEGMENT, param, cps.FWHMParam, title=_("FWHM")
+        )
 
     @qt_try_except()
-    def compute_fw1e2(self):
+    def compute_fw1e2(self) -> None:
         """Compute FW at 1/e²"""
-        title = _("FW") + "1/e²"
-        self.compute_10(title, cps.compute_fw1e2, ShapeTypes.SEGMENT)
+        self.compute_10(cps.compute_fw1e2, ShapeTypes.SEGMENT, title=_("FW") + "1/e²")
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

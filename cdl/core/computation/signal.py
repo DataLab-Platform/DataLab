@@ -48,70 +48,166 @@ from cdl.core.computation.base import (
 from cdl.core.model.signal import SignalObj
 
 
-def extract_multiple_roi(
-    x: np.ndarray, y: np.ndarray, group: gdt.DataSetGroup
-) -> tuple[np.ndarray, np.ndarray]:
+def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
+    """Create result signal object for compute_11 function
+
+    Args:
+        src (SignalObj): source signal
+        name (str): name of the function
+
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = SignalObj()
+    dst.title = f"{name}({src.short_id})"
+    if suffix is not None:
+        dst.title += "|" + suffix
+    dst.copy_data_from(src)
+    return dst
+
+
+def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = None):
+    """Create result signal object for compute_n1n function
+
+    Args:
+        src1 (SignalObj): source signal 1
+        src2 (SignalObj): source signal 2
+        name (str): name of the function
+
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = SignalObj()
+    dst.title = f"{name}({src1.short_id}, {src2.short_id})"
+    if suffix is not None:
+        dst.title += "|" + suffix
+    dst.copy_data_from(src1)
+    return dst
+
+
+def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Compute difference between two signals
+    Args:
+        src1 (SignalObj): source signal 1
+        src2 (SignalObj): source signal 2
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_n1n(src1, src2, "difference")
+    dst.data = src1.data - src2.data
+    return dst
+
+
+def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Compute quadratic difference between two signals
+    Args:
+        src1 (SignalObj): source signal 1
+        src2 (SignalObj): source signal 2
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_n1n(src1, src2, "quadratic_difference")
+    x1, y1 = src1.get_data()
+    _x2, y2 = src2.get_data()
+    dst.set_xydata(x1, (y1 - np.array(y2, dtype=y1.dtype)) / np.sqrt(2.0))
+    if np.issubdtype(dst.data.dtype, np.unsignedinteger):
+        dst.data[src1.data < src2.data] = 0
+    return dst
+
+
+def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Compute division between two signals
+    Args:
+        src1 (SignalObj): source signal 1
+        src2 (SignalObj): source signal 2
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_n1n(src1, src2, "division")
+    x1, y1 = src1.get_data()
+    _x2, y2 = src2.get_data()
+    dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
+    return dst
+
+
+def extract_multiple_roi(src: SignalObj, group: gdt.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         group (gdt.DataSetGroup): group of parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: signal with multiple regions of interest
     """
+    suffix = None
+    if len(group.datasets) == 1:
+        p = group.datasets[0]
+        suffix = f"indexes={p.col1:d}:{p.col2:d}"
+    dst = dst_11(src, "extract_multiple_roi", suffix)
+    x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
         slice0 = slice(p.col1, p.col2 + 1)
         xout[slice0], yout[slice0] = x[slice0], y[slice0]
     nans = np.isnan(xout) | np.isnan(yout)
-    return xout[~nans], yout[~nans]
+    dst.set_xydata(xout[~nans], yout[~nans])
+    # TODO: [P2] Instead of removing geometric shapes, apply roi extract
+    dst.remove_all_shapes()
+    return dst
 
 
-def extract_single_roi(
-    x: np.ndarray, y: np.ndarray, p: gdt.DataSet
-) -> tuple[np.ndarray, np.ndarray]:
+def extract_single_roi(src: SignalObj, p: gdt.DataSet) -> SignalObj:
     """Extract single region of interest from data
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (gdt.DataSet): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: signal with single region of interest
     """
-    return x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1]
+    dst = dst_11(src, "extract_single_roi", f"indexes={p.col1:d}:{p.col2:d}")
+    x, y = src.get_data()
+    dst.set_xydata(x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1])
+    # TODO: [P2] Instead of removing geometric shapes, apply roi extract
+    dst.remove_all_shapes()
+    return dst
 
 
-def compute_swap_axes(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def compute_swap_axes(src: SignalObj) -> SignalObj:
     """Swap axes
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return y, x
+    dst = dst_11(src, "swap_axes")
+    x, y = src.get_data()
+    dst.set_xydata(y, x)
+    return dst
 
 
-def compute_abs(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def compute_abs(src: SignalObj) -> SignalObj:
     """Compute absolute value
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return (x, np.abs(y))
+    dst = dst_11(src, "abs")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.abs(y))
+    return dst
 
 
-def compute_log10(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def compute_log10(src: SignalObj) -> SignalObj:
     """Compute Log10
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return (x, np.log10(y))
+    dst = dst_11(src, "log10")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.log10(y))
+    return dst
 
 
 class PeakDetectionParam(gdt.DataSet):
@@ -123,19 +219,22 @@ class PeakDetectionParam(gdt.DataSet):
     min_dist = gdi.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
 
 
-def compute_peak_detection(
-    x: np.ndarray, y: np.ndarray, p: PeakDetectionParam
-) -> tuple[np.ndarray, np.ndarray]:
+def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     """Peak detection
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (PeakDetectionParam): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
+    dst = dst_11(
+        src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
+    )
+    x, y = src.get_data()
     indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
-    return x[indexes], y[indexes]
+    dst.set_xydata(x[indexes], y[indexes])
+    dst.metadata["curvestyle"] = "Sticks"
+    return dst
 
 
 class NormalizeParam(gdt.DataSet):
@@ -150,121 +249,44 @@ class NormalizeParam(gdt.DataSet):
     method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
 
 
-def compute_normalize(
-    x: np.ndarray, y: np.ndarray, p: NormalizeParam
-) -> tuple[np.ndarray, np.ndarray]:
+def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """Normalize data
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (NormalizeParam): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return (x, normalize(y, p.method))
+    dst = dst_11(src, "normalize", f"ref={p.method}")
+    x, y = src.get_data()
+    dst.set_xydata(x, normalize(y, p.method))
+    return dst
 
 
-def compute_derivative(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def compute_derivative(src: SignalObj) -> SignalObj:
     """Compute derivative
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return (x, derivative(x, y))
+    dst = dst_11(src, "derivative")
+    x, y = src.get_data()
+    dst.set_xydata(x, derivative(x, y))
+    return dst
 
 
-def compute_integral(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def compute_integral(src: SignalObj) -> SignalObj:
     """Compute integral
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return (x, spt.cumtrapz(y, x, initial=0.0))
-
-
-def compute_threshold(
-    x: np.ndarray, y: np.ndarray, p: ThresholdParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute threshold clipping
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (ThresholdParam): parameters
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.clip(y, p.value, y.max()))
-
-
-def compute_clip(
-    x: np.ndarray, y: np.ndarray, p: ClipParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute maximum data clipping
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (ClipParam): parameters
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, np.clip(y, y.min(), p.value))
-
-
-def compute_gaussian_filter(
-    x: np.ndarray, y: np.ndarray, p: GaussianParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute gaussian filter
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (GaussianParam): parameters
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, spi.gaussian_filter1d(y, p.sigma))
-
-
-def compute_moving_average(
-    x: np.ndarray, y: np.ndarray, p: MovingAverageParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute moving average
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (MovingAverageParam): parameters
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, moving_average(y, p.n))
-
-
-def compute_moving_median(
-    x: np.ndarray, y: np.ndarray, p: MovingMedianParam
-) -> tuple[np.ndarray, np.ndarray]:
-    """Compute moving median
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-        p (MovingMedianParam): parameters
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, sps.medfilt(y, kernel_size=p.n))
-
-
-def compute_wiener(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Compute Wiener filter
-    Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
-    Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
-    """
-    return (x, sps.wiener(y))
+    dst = dst_11(src, "integral")
+    x, y = src.get_data()
+    dst.set_xydata(x, spt.cumtrapz(y, x, initial=0.0))
+    return dst
 
 
 class XYCalibrateParam(gdt.DataSet):
@@ -276,20 +298,104 @@ class XYCalibrateParam(gdt.DataSet):
     b = gdi.FloatItem("b", default=0.0)
 
 
-def compute_calibration(
-    x: np.ndarray, y: np.ndarray, p: XYCalibrateParam
-) -> tuple[np.ndarray, np.ndarray]:
+def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     """Compute linear calibration
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (XYCalibrateParam): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
+    dst = dst_11(src, "calibration", f"{p.axis}={p.a}*{p.axis}+{p.b}")
+    x, y = src.get_data()
     if p.axis == "x":
-        return p.a * x + p.b, y
-    return x, p.a * y + p.b
+        dst.set_xydata(p.a * x + p.b, y)
+    else:
+        dst.set_xydata(x, p.a * y + p.b)
+    return dst
+
+
+def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
+    """Compute threshold clipping
+    Args:
+        src (SignalObj): source signal
+        p (ThresholdParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "threshold", f"min={p.value}")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.clip(y, p.value, y.max()))
+    return dst
+
+
+def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
+    """Compute maximum data clipping
+    Args:
+        src (SignalObj): source signal
+        p (ClipParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "clip", f"max={p.value}")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.clip(y, y.min(), p.value))
+    return dst
+
+
+def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
+    """Compute gaussian filter
+    Args:
+        src (SignalObj): source signal
+        p (GaussianParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f}")
+    x, y = src.get_data()
+    dst.set_xydata(x, spi.gaussian_filter1d(y, p.sigma))
+    return dst
+
+
+def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
+    """Compute moving average
+    Args:
+        src (SignalObj): source signal
+        p (MovingAverageParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "moving_average", f"n={p.n:d}")
+    x, y = src.get_data()
+    dst.set_xydata(x, moving_average(y, p.n))
+    return dst
+
+
+def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
+    """Compute moving median
+    Args:
+        src (SignalObj): source signal
+        p (MovingMedianParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "moving_median", f"n={p.n:d}")
+    x, y = src.get_data()
+    dst.set_xydata(x, sps.medfilt(y, kernel_size=p.n))
+    return dst
+
+
+def compute_wiener(src: SignalObj) -> SignalObj:
+    """Compute Wiener filter
+    Args:
+        src (SignalObj): source signal
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "wiener")
+    x, y = src.get_data()
+    dst.set_xydata(x, sps.wiener(y))
+    return dst
 
 
 class FFTParam(gdt.DataSet):
@@ -302,32 +408,32 @@ class FFTParam(gdt.DataSet):
     )
 
 
-def compute_fft(
-    x: np.ndarray, y: np.ndarray, p: FFTParam
-) -> tuple[np.ndarray, np.ndarray]:
+def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute FFT
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (FFTParam): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return xy_fft(x, y, shift=p.shift)
+    dst = dst_11(src, "fft")
+    x, y = src.get_data()
+    dst.set_xydata(*xy_fft(x, y, shift=p.shift))
+    return dst
 
 
-def compute_ifft(
-    x: np.ndarray, y: np.ndarray, p: FFTParam
-) -> tuple[np.ndarray, np.ndarray]:
+def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute iFFT
     Args:
-        x (np.ndarray): X-axis data
-        y (np.ndarray): Y-axis data
+        src (SignalObj): source signal
         p (FFTParam): parameters
     Returns:
-        tuple[np.ndarray, np.ndarray]: X-axis data, Y-axis data
+        SignalObj: result signal object
     """
-    return xy_ifft(x, y, shift=p.shift)
+    dst = dst_11(src, "ifft")
+    x, y = src.get_data()
+    dst.set_xydata(*xy_ifft(x, y, shift=p.shift))
+    return dst
 
 
 class PolynomialFitParam(gdt.DataSet):

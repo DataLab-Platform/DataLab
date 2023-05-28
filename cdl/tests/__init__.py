@@ -16,10 +16,10 @@ from contextlib import contextmanager
 from guidata.guitest import run_testlauncher
 
 import cdl.config  # Loading icons
-from cdl import env
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
+from cdl.env import execenv
 from cdl.utils import qthelpers as qth
 from cdl.utils import tests
 
@@ -35,6 +35,9 @@ def cdl_app_context(
     """Context manager handling DataLab mainwindow creation and Qt event loop"""
     if size is None:
         size = 950, 600
+
+    # Enable test mode: raises exceptions during computations
+    execenv.test_mode = True
 
     with qth.qt_app_context(exec_loop=True):
         try:
@@ -60,7 +63,7 @@ def cdl_app_context(
 
 def take_plotwidget_screenshot(panel: SignalPanel | ImagePanel, name: str):
     """Eventually takes plotwidget screenshot (only in screenshot mode)"""
-    if env.execenv.screenshot:
+    if execenv.screenshot:
         prefix = panel.PARAMCLASS.PREFIX
         qth.grab_save_window(panel.plothandler.plotwidget, f"{prefix}_{name}")
 

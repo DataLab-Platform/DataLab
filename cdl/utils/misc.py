@@ -13,6 +13,8 @@ import os.path as osp
 import re
 import subprocess
 import warnings
+from collections.abc import Callable
+from typing import Any
 
 import numpy as np
 
@@ -74,7 +76,7 @@ def go_to_error(text: str) -> None:
         subprocess.run([editor_path] + args, shell=True, check=False)
 
 
-def wng_func(func, *args) -> np.ndarray | tuple[np.ndarray]:
+def wng_func(func: Callable, args: tuple[Any]) -> np.ndarray | tuple[np.ndarray]:
     """Wrapper function to ignore RuntimeWarning"""
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", RuntimeWarning)
