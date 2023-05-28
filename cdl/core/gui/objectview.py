@@ -104,7 +104,8 @@ class SimpleObjectTree(QW.QTreeWidget):
                 return item
         return None
 
-    def get_actions_from_items(self, items):  # pylint: disable=W0613,R0201
+    # pylint: disable=unused-argument
+    def get_actions_from_items(self, items):
         """Get actions from item"""
         return []
 
@@ -296,14 +297,16 @@ class ObjectView(SimpleObjectTree):
         else:
             event.ignore()
 
-    def dragEnterEvent(self, event):  # pylint: disable=C0103,R0201
+    # pylint: disable=unused-argument
+    def dragEnterEvent(self, event):
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
             event.accept()
         else:
             event.ignore()
 
-    def dragMoveEvent(self, event):  # pylint: disable=C0103,R0201
+    # pylint: disable=unused-argument
+    def dragMoveEvent(self, event):
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
             event.setDropAction(QC.Qt.CopyAction)

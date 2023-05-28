@@ -254,7 +254,7 @@ class H5TreeWidget(BaseTreeWidget):
         """Click event"""
         self.activated(item)
 
-    def get_actions_from_items(self, items):  # pylint: disable=W0613,R0201
+    def get_actions_from_items(self, items):  # pylint: disable=W0613
         """Get actions from item"""
         return []
 

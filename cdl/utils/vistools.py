@@ -38,7 +38,7 @@ def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None):
         icon=get_icon("DataLab.svg"),
         toolbar=True,
         wintitle=title,
-        options=dict(xlabel=xlabel, ylabel=ylabel),
+        options={"xlabel": xlabel, "ylabel": ylabel},
     )
     win.setObjectName(name)
     return win
@@ -78,7 +78,7 @@ def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None):
         icon=get_icon("DataLab.svg"),
         toolbar=True,
         wintitle=title,
-        options=dict(xlabel=xlabel, ylabel=ylabel),
+        options={"xlabel": xlabel, "ylabel": ylabel},
     )
     win.setObjectName(name)
     for toolklass in (

@@ -124,6 +124,7 @@ class WorkingDirOption(Option):
 class SectionMeta(type):
     """Configuration metaclass"""
 
+    #  pylint: disable=bad-mcs-classmethod-argument
     def __new__(cls, name, bases, dct):
         optlist = []
         for attrname, obj in list(dct.items()):
@@ -137,6 +138,7 @@ class SectionMeta(type):
 class ConfMeta(type):
     """Configuration metaclass"""
 
+    #  pylint: disable=bad-mcs-classmethod-argument
     def __new__(cls, name, bases, dct):
         for attrname, obj in list(dct.items()):
             if isinstance(obj, Section):

@@ -36,6 +36,7 @@ if not osp.isdir(PLUGIN_PYTHONPATH):
 sys.path.append(PLUGIN_PYTHONPATH)
 
 
+#  pylint: disable=bad-mcs-classmethod-argument
 class PluginRegistry(type):
     """Metaclass for registering plugins"""
 

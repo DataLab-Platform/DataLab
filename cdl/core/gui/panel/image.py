@@ -61,7 +61,7 @@ class ImagePanel(BaseDataPanel):
     )
     IO_REGISTRY = ImageIORegistry
     H5_PREFIX = "DataLab_Ima"
-    ROIDIALOGOPTIONS = dict(show_itemlist=True, show_contrast=False)
+    ROIDIALOGOPTIONS = {"show_itemlist": True, "show_contrast": False}
     ROIDIALOGCLASS = roieditor.ImageROIEditor
 
     # pylint: disable=duplicate-code

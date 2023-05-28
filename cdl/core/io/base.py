@@ -27,6 +27,7 @@ class IOAction(enum.Enum):
     SAVE = enum.auto()
 
 
+#  pylint: disable=bad-mcs-classmethod-argument
 class BaseIORegistry(type):
     """Metaclass for registering I/O handler classes"""
 

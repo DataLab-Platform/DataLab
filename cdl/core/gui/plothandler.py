@@ -257,12 +257,12 @@ class BasePlotHandler:
 
         :return: Dictionary containing plot arguments for CurveDialog/ImageDialog
         """
-        return dict(
-            xlabel=self.plot.get_axis_title("bottom"),
-            ylabel=self.plot.get_axis_title("left"),
-            xunit=self.plot.get_axis_unit("bottom"),
-            yunit=self.plot.get_axis_unit("left"),
-        )
+        return {
+            "xlabel": self.plot.get_axis_title("bottom"),
+            "ylabel": self.plot.get_axis_title("left"),
+            "xunit": self.plot.get_axis_unit("bottom"),
+            "yunit": self.plot.get_axis_unit("left"),
+        }
 
 
 class SignalPlotHandler(BasePlotHandler):
@@ -312,10 +312,9 @@ class ImagePlotHandler(BasePlotHandler):
         """
         options = super().get_current_plot_options()
         options.update(
-            dict(
-                zlabel=self.plot.get_axis_title("right"),
-                zunit=self.plot.get_axis_unit("right"),
-                show_contrast=True,
-            )
+            {
+                "zlabel": self.plot.get_axis_title("right"),
+                "zunit": self.plot.get_axis_unit("right"),
+            }
         )
         return options

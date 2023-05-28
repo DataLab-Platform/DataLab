@@ -312,7 +312,11 @@ class BaseDataPanel(AbstractPanel):
 
     @property
     def object_number(self) -> int:
-        """Return object number"""
+        """Return number of objects in panel
+
+        Returns:
+            number of objects (signals or images)
+        """
         return len(self.objmodel)
 
     def create_object(self, title: str | None = None) -> SignalObj | ImageObj:

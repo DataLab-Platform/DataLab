@@ -113,7 +113,7 @@ class MainWindow(QW.QMainWindow):
         self.timer.stop()
         execenv.print("Computation cancelled!")
         # Recreate the pool for the next computation
-        POOL = Pool(processes=1)  # pylint: disable=not-callable
+        POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
 
     def check_process(self) -> None:
         """
@@ -168,5 +168,5 @@ def test() -> None:
 
 
 if __name__ == "__main__":
-    POOL = Pool(processes=1)  # pylint: disable=not-callable
+    POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
     test()

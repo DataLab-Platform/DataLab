@@ -15,5 +15,6 @@ call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
 set PYLINT_ARG=%*
 if "%PYLINT_ARG%"=="" set PYLINT_ARG=%MODNAME% --disable=fixme
+set RCFILE=%SCRIPTPATH%\..\.pylintrc
 python -m pylint --rcfile=%RCFILE% %PYLINT_ARG%
 call %FUNC% EndOfScript

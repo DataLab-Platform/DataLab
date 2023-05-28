@@ -43,7 +43,7 @@ def guifit(
         wintitle=wintitle,
         icon=None,
         toolbar=True,
-        options=dict(title=title, xlabel=xlabel, ylabel=ylabel),
+        options={"title": title, "xlabel": xlabel, "ylabel": ylabel},
         parent=parent,
         param_cols=param_cols,
         auto_fit=auto_fit,
@@ -214,7 +214,7 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
         )
     )
 
-    kwargs = dict(a_x0=x[peak_indexes])
+    kwargs = {"a_x0": x[peak_indexes]}
 
     def fitfunc(xi, params):
         return multigaussian(xi, *params, **kwargs)

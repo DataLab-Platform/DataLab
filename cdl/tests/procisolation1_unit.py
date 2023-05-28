@@ -46,7 +46,7 @@ class Worker:
         """Create multiprocessing pool"""
         global POOL  # pylint: disable=global-statement
         # Create a pool with one process
-        POOL = Pool(processes=1)  # pylint: disable=not-callable
+        POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
 
     @staticmethod
     def terminate_pool() -> None:
@@ -82,7 +82,7 @@ class Worker:
         return self.result
 
 
-def func(data: np.ndarray, size: int, error: bool) -> np.ndarray:
+def testfunc(data: np.ndarray, size: int, error: bool) -> np.ndarray:
     """Test function"""
     if error:
         raise ValueError("Test error")
@@ -104,7 +104,7 @@ def test(iterations: int = 4) -> None:
                 progress.setValue(index)
                 progress.setLabelText(f"Computing {index}")
                 test_error = index == 2
-                worker.run(func, (image.data, 3, test_error))
+                worker.run(testfunc, (image.data, 3, test_error))
                 while not worker.is_computation_finished():
                     QW.QApplication.processEvents()
                     time.sleep(0.1)
