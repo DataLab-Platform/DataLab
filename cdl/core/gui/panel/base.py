@@ -304,7 +304,7 @@ class BaseDataPanel(AbstractPanel):
                 with reader.group(name):
                     group = self.add_group("")
                     with reader.group("title"):
-                        group.set_title(reader.read_str())
+                        group.title = reader.read_str()
                     for obj_name in reader.h5.get(f"{self.H5_PREFIX}/{name}", []):
                         obj = self.deserialize_object_from_hdf5(reader, obj_name)
                         self.add_object(obj, group.uuid, set_current=False)
@@ -366,6 +366,7 @@ class BaseDataPanel(AbstractPanel):
         self.objmodel.add_object(obj, group_id)
         self.objview.add_object_item(obj, group_id, set_current=set_current)
         self.SIG_OBJECT_ADDED.emit()
+        self.objview.update_tree()
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
@@ -544,7 +545,7 @@ class BaseDataPanel(AbstractPanel):
             self, _("Rename group"), _("Group name:"), QW.QLineEdit.Normal, group.title
         )
         if ok:
-            group.set_title(group_name)
+            group.title = group_name
             self.objview.update_item(group.uuid)
 
     @abc.abstractmethod

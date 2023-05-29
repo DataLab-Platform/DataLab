@@ -40,6 +40,7 @@ a container for SignalObj and ImageObj instances.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterator
 from typing import TYPE_CHECKING
 from uuid import uuid4
@@ -47,6 +48,37 @@ from uuid import uuid4
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.image import ImageObj
     from cdl.core.model.signal import SignalObj
+
+
+def fix_titles(
+    objlist: list[ObjectGroup | SignalObj | ImageObj],
+    obj: ObjectGroup | SignalObj | ImageObj,
+    operation: str,
+) -> None:
+    """Fix all object/group titles before adding or removing an object/group
+
+    Args:
+        objlist (list[ObjectGroup | SignalObj | ImageObj]): list of objects/groups
+        obj (ObjectGroup | SignalObj | ImageObj): object/group to be added or removed
+        operation (str): operation to be performed ("add" or "remove")
+    """
+    assert len(objlist) > 0
+    assert operation in ("add", "remove")
+    sign = 1 if operation == "add" else -1
+    onb = obj.number
+    pfx = obj.PREFIX
+    oname = f"{pfx}%03d"
+    for obj_i in objlist:
+        for match in re.finditer(pfx + "[0-9]{3}", obj_i.title):
+            before = match.group()
+            i_match = int(before[1:])
+            if sign == -1 and i_match == onb:
+                after = f"{pfx}xxx"
+            elif (sign == -1 and i_match > onb) or (sign == 1 and i_match >= onb):
+                after = oname % (i_match + sign)
+            else:
+                continue
+            obj_i.title = obj_i.title.replace(before, after)
 
 
 class ObjectGroup:
@@ -57,11 +89,17 @@ class ObjectGroup:
     def __init__(self, title: str, model: ObjectModel) -> None:
         self.model = model
         self.uuid: str = str(uuid4())  # Group uuid
-        self._objects: list[str] = []  # list of object uuids
-        self._title: str = title
+        self.__objects: list[str] = []  # list of object uuids
+        self.__title: str = title
         self.__gnb = 0
 
-    def set_group_number(self, gnb: int):
+    @property
+    def number(self) -> int:
+        """Return group number (used for short ID)"""
+        return self.__gnb
+
+    @number.setter
+    def number(self, gnb: int):
         """Set group number (used for short ID)"""
         self.__gnb = gnb
 
@@ -73,51 +111,54 @@ class ObjectGroup:
     @property
     def title(self) -> str:
         """Return group title"""
-        return self._title
+        return self.__title
 
-    def set_title(self, title: str) -> None:
+    @title.setter
+    def title(self, title: str) -> None:
         """Set group title"""
-        self._title = title
+        self.__title = title
 
     def __iter__(self) -> Iterator[SignalObj | ImageObj]:
         """Iterate over objects in group"""
-        return iter(self.model.get_objects(self._objects))
+        return iter(self.model.get_objects(self.__objects))
 
     def __len__(self) -> int:
         """Return number of objects in group"""
-        return len(self._objects)
+        return len(self.__objects)
 
     def __getitem__(self, index: int) -> SignalObj | ImageObj:
         """Return object at index"""
-        return self.model[self._objects[index]]
+        return self.model[self.__objects[index]]
 
     def __contains__(self, obj: SignalObj | ImageObj) -> bool:
         """Return True if obj is in group"""
-        return obj.uuid in self._objects
+        return obj.uuid in self.__objects
 
     def append(self, obj: SignalObj | ImageObj) -> None:
         """Append object to group"""
-        self._objects.append(obj.uuid)
+        self.__objects.append(obj.uuid)
 
     def insert(self, index: int, obj: SignalObj | ImageObj) -> None:
         """Insert object at index"""
-        self._objects.insert(index, obj.uuid)
+        fix_titles(self.model.get_all_objects(), obj, "add")
+        self.__objects.insert(index, obj.uuid)
 
     def remove(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from group"""
-        self._objects.remove(obj.uuid)
+        fix_titles(self.model.get_all_objects(), obj, "remove")
+        self.__objects.remove(obj.uuid)
 
     def clear(self) -> None:
         """Clear group"""
-        self._objects.clear()
+        self.__objects.clear()
 
     def get_objects(self) -> list[SignalObj | ImageObj]:
         """Return objects in group"""
-        return self.model.get_objects(self._objects)
+        return self.model.get_objects(self.__objects)
 
     def get_object_ids(self) -> list[str]:
         """Return object ids in group"""
-        return self._objects
+        return self.__objects
 
 
 class ObjectModel:
@@ -129,14 +170,16 @@ class ObjectModel:
         # list of groups:
         self._groups: list[ObjectGroup] = []
 
-    def refresh_short_ids(self) -> None:
-        """Refresh short ids of objects"""
+    def reset_short_ids(self) -> None:
+        """Reset short IDs (used for object numbering)
+
+        This method is called when an object was removed from a group."""
         gnb = onb = 1
         for group in self._groups:
-            group.set_group_number(gnb)
+            group.number = gnb
             gnb += 1
             for obj in group:
-                obj.set_object_number(onb)
+                obj.number = onb
                 onb += 1
 
     def __len__(self) -> int:
@@ -168,6 +211,13 @@ class ObjectModel:
         self._objects.clear()
         self._groups.clear()
 
+    def get_all_objects(self) -> list[SignalObj | ImageObj]:
+        """Return all objects, in order of appearance in groups"""
+        objects = []
+        for group in self._groups:
+            objects.extend(group.get_objects())
+        return objects
+
     def get_object_or_group(self, uuid: str) -> SignalObj | ImageObj | ObjectGroup:
         """Return object or group with uuid"""
         if uuid in self._objects:
@@ -193,6 +243,10 @@ class ObjectModel:
     def add_group(self, title: str) -> ObjectGroup:
         """Add group to model"""
         group = ObjectGroup(title, self)
+        gnb = 1
+        if self._groups:
+            gnb += self._groups[-1].number
+        group.number = gnb
         self._groups.append(group)
         return group
 
@@ -212,6 +266,7 @@ class ObjectModel:
 
     def remove_group(self, group: ObjectGroup) -> None:
         """Remove group from model"""
+        fix_titles(self.get_groups(), group, "remove")
         self._groups.remove(group)
         for obj in group:
             remove_obj = True
@@ -221,23 +276,29 @@ class ObjectModel:
                     break
             if remove_obj:
                 del self._objects[obj.uuid]
+        self.reset_short_ids()
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
         self._objects[obj.uuid] = obj
+        onb = 0
         for group in self._groups:
+            onb += len(group)
             if group.uuid == group_id:
+                obj.number = onb + 1
                 group.append(obj)
                 break
         else:
             raise KeyError(f"Group with uuid '{group_id}' not found")
+        self.reset_short_ids()
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
-        del self._objects[obj.uuid]
         for group in self._groups:
             if obj in group:
                 group.remove(obj)
+        del self._objects[obj.uuid]
+        self.reset_short_ids()
 
     def get_object(self, index: int, group_index: int = 0) -> SignalObj | ImageObj:
         """Return object with index.

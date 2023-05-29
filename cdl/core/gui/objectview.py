@@ -166,7 +166,6 @@ class SimpleObjectTree(QW.QTreeWidget):
 
     def update_tree(self) -> None:
         """Update tree"""
-        self.objmodel.refresh_short_ids()
         for group in self.objmodel.get_groups():
             self.__update_item(self.get_item_from_id(group.uuid), group)
             for obj in group:
@@ -182,7 +181,6 @@ class SimpleObjectTree(QW.QTreeWidget):
 
     def add_group_item(self, group: ObjectGroup) -> None:
         """Add group item"""
-        self.objmodel.refresh_short_ids()
         group_item = QW.QTreeWidgetItem()
         group_item.setIcon(0, get_icon("group.svg"))
         self.__update_item(group_item, group)
@@ -195,7 +193,6 @@ class SimpleObjectTree(QW.QTreeWidget):
         self, obj: SignalObj | ImageObj, group_id: str, set_current: bool = True
     ) -> None:
         """Add item"""
-        self.objmodel.refresh_short_ids()
         group_item = self.get_item_from_id(group_id)
         self.__add_to_group_item(obj, group_item)
         if set_current:

@@ -511,7 +511,13 @@ class ObjectItf(metaclass=ObjectItfMeta):
         self.__onb = 0
         self.__roi_changed: bool | None = None
 
-    def set_object_number(self, onb: int):
+    @property
+    def number(self) -> int:
+        """Return object number (used for short ID)"""
+        return self.__onb
+
+    @number.setter
+    def number(self, onb: int):
         """Set object number (used for short ID).
 
         Args:
