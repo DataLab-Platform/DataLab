@@ -36,6 +36,26 @@ class ImageProcessor(BaseProcessor):
     EDIT_ROI_PARAMS = True
 
     @qt_try_except()
+    def compute_sum(self) -> None:
+        """Compute sum"""
+        self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
+
+    @qt_try_except()
+    def compute_average(self) -> None:
+        """Compute average"""
+
+        def func_objs(new_obj: ImageObj, old_objs: list[ImageObj]) -> None:
+            """Finalize average computation"""
+            new_obj.data = new_obj.data / float(len(old_objs))
+
+        self.compute_n1("μ", cpi.compute_add, func_objs=func_objs, title=_("Average"))
+
+    @qt_try_except()
+    def compute_product(self) -> None:
+        """Compute product"""
+        self.compute_n1("Π", cpi.compute_product, title=_("Product"))
+
+    @qt_try_except()
     def compute_logp1(self, param: cpi.LogP1Param | None = None) -> None:
         """Compute base 10 logarithm"""
         self.compute_11(cpi.compute_logp1, param, cpi.LogP1Param, title="Log10")

@@ -102,6 +102,36 @@ def dst_n1n(
     return dst
 
 
+# -------- compute_n1 functions --------------------------------------------------------
+# Functions with N input images and 1 output image
+# --------------------------------------------------------------------------------------
+
+
+def compute_add(dst: ImageObj, src: ImageObj):
+    """Compute addition between two images
+
+    Args:
+        dst (ImageObj): output image object
+        src (ImageObj): input image object
+    """
+    dst.data += np.array(src.data, dtype=dst.data.dtype)
+
+
+def compute_product(dst: ImageObj, src: ImageObj):
+    """Compute product between two images
+
+    Args:
+        dst (ImageObj): output image object
+        src (ImageObj): input image object
+    """
+    dst.data *= np.array(src.data, dtype=dst.data.dtype)
+
+
+# -------- compute_n1n functions -------------------------------------------------------
+# Functions with N input images + 1 input image and N output images
+# --------------------------------------------------------------------------------------
+
+
 def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
     """Compute difference between two images
     Args:
@@ -161,6 +191,11 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     dst = dst_n1n(src1, src2, "flatfield", f"threshold={p.threshold}")
     dst.data = flatfield(src1.data, src2.data, p.threshold)
     return dst
+
+
+# -------- compute_11 functions --------------------------------------------------------
+# Functions with 1 input image and 1 output image
+# --------------------------------------------------------------------------------------
 
 
 class LogP1Param(gdt.DataSet):

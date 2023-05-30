@@ -32,6 +32,28 @@ class SignalProcessor(BaseProcessor):
     # pylint: disable=duplicate-code
 
     @qt_try_except()
+    def compute_sum(self) -> None:
+        """Compute sum"""
+        self.compute_n1("Σ", cps.compute_add, title=_("Sum"))
+
+    @qt_try_except()
+    def compute_average(self) -> None:
+        """Compute average"""
+
+        def func_objs(new_obj: SignalObj, old_objs: list[SignalObj]) -> None:
+            """Finalize average computation"""
+            new_obj.data = new_obj.data / float(len(old_objs))
+            if new_obj.dy is not None:
+                new_obj.dy = new_obj.dy / float(len(old_objs))
+
+        self.compute_n1("μ", cps.compute_add, func_objs=func_objs, title=_("Average"))
+
+    @qt_try_except()
+    def compute_product(self) -> None:
+        """Compute product"""
+        self.compute_n1("Π", cps.compute_product, title=_("Product"))
+
+    @qt_try_except()
     def extract_roi(
         self, roidata: np.ndarray | None = None, singleobj: bool | None = None
     ) -> None:

@@ -364,67 +364,68 @@ class BaseProcessor(QC.QObject):
         objs = self.panel.objview.get_sel_objects(include_groups=True)
 
         # [new_objs dictionary] keys: old group id, values: new object
-        new_objs: dict[str, Obj] = {}
-        # [old_dtypes dictionary] keys: old group id, values: old data type
-        old_dtypes: dict[str, np.dtype] = {}
-        # [old_objs dictionary] keys: old group id, values: list of old objects
-        old_objs: dict[str, list[Obj]] = {}
+        dst_objs: dict[str, Obj] = {}
+        # [src_dtypes dictionary] keys: old group id, values: old data type
+        src_dtypes: dict[str, np.dtype] = {}
+        # [src_objs dictionary] keys: old group id, values: list of old objects
+        src_objs: dict[str, list[Obj]] = {}
 
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            for index, obj in enumerate(objs):
+            for index, src_obj in enumerate(objs):
                 progress.setValue(index + 1)
                 progress.setLabelText(title)
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                old_gid = self.panel.objmodel.get_object_group_id(obj)
-                new_obj = new_objs.get(old_gid)
-                if new_obj is None:
-                    old_dtypes[old_gid] = old_dtype = obj.data.dtype
-                    new_objs[old_gid] = new_obj = self.panel.create_object()
-                    old_objs[old_gid] = [obj]
-                    new_dtype = complex if misc.is_complex_dtype(old_dtype) else float
-                    new_obj.copy_data_from(obj, dtype=new_dtype)
+                src_gid = self.panel.objmodel.get_object_group_id(src_obj)
+                dst_obj = dst_objs.get(src_gid)
+                if dst_obj is None:
+                    src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
+                    dst_objs[src_gid] = dst_obj = self.panel.create_object()
+                    src_objs[src_gid] = [src_obj]
+                    dst_dtype = complex if misc.is_complex_dtype(src_dtype) else float
+                    dst_obj.copy_data_from(src_obj, dtype=dst_dtype)
                 else:
-                    old_objs[old_gid].append(obj)
+                    src_objs[src_gid].append(src_obj)
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore", RuntimeWarning)
-                        # TODO: Add support for process isolation
+                        # TODO: Add support for process isolation? (not sure it is
+                        # necessary here... operations are fast and simple)
                         if param is None:
-                            func(obj.data, new_obj.data)
+                            func(dst_obj, src_obj)
                         else:
-                            func(obj.data, new_obj.data, param)
-                    new_obj.update_resultshapes_from(obj)
-                if obj.roi is not None:
-                    if new_obj.roi is None:
-                        new_obj.roi = obj.roi.copy()
+                            func(dst_obj, src_obj, param)
+                    dst_obj.update_resultshapes_from(src_obj)
+                if src_obj.roi is not None:
+                    if dst_obj.roi is None:
+                        dst_obj.roi = src_obj.roi.copy()
                     else:
-                        new_obj.roi = np.vstack((new_obj.roi, obj.roi))
+                        dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
 
         grps = self.panel.objview.get_sel_groups()
         if grps:
             # (Group exclusive selection)
             # At least one group is selected: create a new group
-            new_gname = f"{name}({','.join([grp.short_id for grp in grps])})"
-            new_gid = self.panel.add_group(new_gname).uuid
+            dst_gname = f"{name}({','.join([grp.short_id for grp in grps])})"
+            dst_gid = self.panel.add_group(dst_gname).uuid
         else:
             # (Object exclusive selection)
             # No group is selected: use each object's group
-            new_gid = None
+            dst_gid = None
 
-        for old_gid, new_obj in new_objs.items():
-            if misc.is_integer_dtype(old_dtypes[old_gid]):
-                new_obj.set_data_type(dtype=old_dtypes[old_gid])
+        for src_gid, dst_obj in dst_objs.items():
+            if misc.is_integer_dtype(src_dtypes[src_gid]):
+                dst_obj.set_data_type(dtype=src_dtypes[src_gid])
             if func_objs is not None:
-                func_objs(new_obj, old_objs[old_gid])
-            short_ids = [obj.short_id for obj in old_objs[old_gid]]
-            new_obj.title = f'{name}({", ".join(short_ids)})'
-            group_id = new_gid if new_gid is not None else old_gid
-            self.panel.add_object(new_obj, group_id=group_id)
+                func_objs(dst_obj, src_objs[src_gid])
+            short_ids = [obj.short_id for obj in src_objs[src_gid]]
+            dst_obj.title = f'{name}({", ".join(short_ids)})'
+            group_id = dst_gid if dst_gid is not None else src_gid
+            self.panel.add_object(dst_obj, group_id=group_id)
 
-        # Select newly created groups, if any
-        if new_gid is not None:
-            self.panel.objview.set_current_item_id(new_gid)
+        # Select newly created group, if any
+        if dst_gid is not None:
+            self.panel.objview.set_current_item_id(dst_gid)
 
     def compute_n1n(
         self,
@@ -470,35 +471,20 @@ class BaseProcessor(QC.QObject):
 
     # ------Data Operations-------------------------------------------------------------
 
-    @staticmethod
-    def __sum_func(in_i: np.ndarray, out: np.ndarray) -> None:
-        """Compute sum of input data"""
-        out += np.array(in_i, dtype=out.dtype)
-
+    @abc.abstractmethod
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1("Σ", self.__sum_func, title=_("Sum"))
 
+    @abc.abstractmethod
     @qt_try_except()
     def compute_average(self) -> None:
         """Compute average"""
 
-        def func_objs(new_obj: Obj, old_objs: list[Obj]) -> None:
-            """Finalize average computation"""
-            new_obj.data = new_obj.data / float(len(old_objs))
-
-        self.compute_n1("μ", self.__sum_func, func_objs=func_objs, title=_("Average"))
-
+    @abc.abstractmethod
     @qt_try_except()
     def compute_product(self) -> None:
         """Compute product"""
-
-        def prod_func(in_i: np.ndarray, out: np.ndarray) -> None:
-            """Compute product of input data"""
-            out *= np.array(in_i, dtype=out.dtype)
-
-        self.compute_n1("Π", prod_func, title=_("Product"))
 
     @abc.abstractmethod
     @qt_try_except()

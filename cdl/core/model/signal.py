@@ -178,8 +178,36 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
         """Set y data"""
         self.xydata[1] = np.array(data)
 
+    def __get_dx(self) -> np.ndarray | None:
+        """Get dx data"""
+        if self.xydata is not None and len(self.xydata) > 2:
+            return self.xydata[2]
+        return None
+
+    def __set_dx(self, data) -> None:
+        """Set dx data"""
+        if self.xydata is not None and len(self.xydata) > 2:
+            self.xydata[2] = np.array(data)
+        else:
+            raise ValueError("dx data not available")
+
+    def __get_dy(self) -> np.ndarray | None:
+        """Get dy data"""
+        if self.xydata is not None and len(self.xydata) > 3:
+            return self.xydata[3]
+        return None
+
+    def __set_dy(self, data) -> None:
+        """Set dy data"""
+        if self.xydata is not None and len(self.xydata) > 3:
+            self.xydata[3] = np.array(data)
+        else:
+            raise ValueError("dy data not available")
+
     x = property(__get_x, __set_x)
     y = data = property(__get_y, __set_y)
+    dx = property(__get_dx, __set_dx)
+    dy = property(__get_dy, __set_dy)
 
     def get_data(self, roi_index: int | None = None) -> np.ndarray:
         """

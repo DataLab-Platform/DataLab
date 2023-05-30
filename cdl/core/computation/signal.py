@@ -85,6 +85,38 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
     return dst
 
 
+# -------- compute_n1 functions --------------------------------------------------------
+# Functions with N input images and 1 output image
+# --------------------------------------------------------------------------------------
+
+
+def compute_add(dst: SignalObj, src: SignalObj) -> None:
+    """Add signal to result signal
+    Args:
+        dst (SignalObj): destination signal
+        src (SignalObj): source signal
+    """
+    dst.y += np.array(src.y, dtype=dst.y.dtype)
+    if dst.dy is not None:
+        dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+
+
+def compute_product(dst: SignalObj, src: SignalObj) -> None:
+    """Multiply signal to result signal
+    Args:
+        dst (SignalObj): destination signal
+        src (SignalObj): source signal
+    """
+    dst.y *= np.array(src.y, dtype=dst.y.dtype)
+    if dst.dy is not None:
+        dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+
+
+# -------- compute_n1n functions -------------------------------------------------------
+# Functions with N input images + 1 input image and N output images
+# --------------------------------------------------------------------------------------
+
+
 def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute difference between two signals
     Args:
@@ -94,7 +126,9 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
         SignalObj: result signal object
     """
     dst = dst_n1n(src1, src2, "difference")
-    dst.data = src1.data - src2.data
+    dst.y = src1.y - src2.y
+    if dst.dy is not None:
+        dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
     return dst
 
 
@@ -112,6 +146,8 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     dst.set_xydata(x1, (y1 - np.array(y2, dtype=y1.dtype)) / np.sqrt(2.0))
     if np.issubdtype(dst.data.dtype, np.unsignedinteger):
         dst.data[src1.data < src2.data] = 0
+    if dst.dy is not None:
+        dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
     return dst
 
 
@@ -128,6 +164,11 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
     return dst
+
+
+# -------- compute_11 functions --------------------------------------------------------
+# Functions with 1 input image and 1 output image
+# --------------------------------------------------------------------------------------
 
 
 def extract_multiple_roi(src: SignalObj, group: gdt.DataSetGroup) -> SignalObj:
