@@ -79,29 +79,29 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         self.collapse_all_action = create_action(
             self,
             _("Collapse all"),
-            icon=get_icon("collapse.png"),
+            icon=get_icon("collapse.svg"),
             triggered=self.collapseAll,
         )
         self.expand_all_action = create_action(
-            self, _("Expand all"), icon=get_icon("expand.png"), triggered=self.expandAll
+            self, _("Expand all"), icon=get_icon("expand.svg"), triggered=self.expandAll
         )
         self.restore_action = create_action(
             self,
             _("Restore"),
             tip=_("Restore original tree layout"),
-            icon=get_icon("restore.png"),
+            icon=get_icon("restore.svg"),
             triggered=self.restore,
         )
         self.collapse_selection_action = create_action(
             self,
             _("Collapse selection"),
-            icon=get_icon("collapse_selection.png"),
+            icon=get_icon("collapse_selection.svg"),
             triggered=self.collapse_selection,
         )
         self.expand_selection_action = create_action(
             self,
             _("Expand selection"),
-            icon=get_icon("expand_selection.png"),
+            icon=get_icon("expand_selection.svg"),
             triggered=self.expand_selection,
         )
         return [

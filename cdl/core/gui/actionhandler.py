@@ -355,7 +355,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
-                icon=get_icon("libre-gui-import.svg"),
+                icon=get_icon("import.svg"),
                 tip=_("Open %s") % self.OBJECT_STR,
                 triggered=self.panel.open_objects,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
@@ -364,7 +364,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
-                icon=get_icon("libre-gui-export.svg"),
+                icon=get_icon("export.svg"),
                 tip=_("Save selected %s") % self.OBJECT_STR,
                 triggered=self.panel.save_objects,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
@@ -467,7 +467,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
                 _("View in a new window"),
-                icon=get_icon("libre-gui-binoculars.svg"),
+                icon=get_icon("new_window.svg"),
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
                 context_menu_sep=True,

@@ -176,6 +176,8 @@ class SimpleObjectTree(QW.QTreeWidget):
     ) -> None:
         """Add object to group item"""
         item = QW.QTreeWidgetItem()
+        icon = "signal.svg" if isinstance(obj, SignalObj) else "image.svg"
+        item.setIcon(0, get_icon(icon))
         self.__update_item(item, obj)
         group_item.addChild(item)
 

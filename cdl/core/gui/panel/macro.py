@@ -184,13 +184,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         exp_act = create_action(
             self,
             _("Export macro to file"),
-            icon=get_icon("libre-gui-export.svg"),
+            icon=get_icon("export.svg"),
             triggered=self.export_macro_to_file,
         )
         imp_act = create_action(
             self,
             _("Import macro from file"),
-            icon=get_icon("libre-gui-import.svg"),
+            icon=get_icon("import.svg"),
             triggered=self.import_macro_from_file,
         )
         rem_act = create_action(
