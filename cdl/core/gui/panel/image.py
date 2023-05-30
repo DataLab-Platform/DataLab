@@ -112,6 +112,12 @@ class ImagePanel(BaseDataPanel):
         self.add_object(image)
         return image
 
+    def delete_metadata(self) -> None:
+        """Delete object metadata"""
+        for obj in self.objview.get_sel_objects(include_groups=True):
+            obj.invalidate_maskdata_cache()
+        super().delete_metadata()
+
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
