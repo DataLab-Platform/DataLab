@@ -777,9 +777,18 @@ class ObjectItf(metaclass=ObjectItfMeta):
             PlotItem: plot item
         """
 
-    def __set_annotations(self, annotations: str) -> None:
-        """Set object annotations (JSON string describing annotation plot items)"""
-        self.metadata[ANN_KEY] = annotations
+    def __set_annotations(self, annotations: str | None) -> None:
+        """Set object annotations (JSON string describing annotation plot items)
+
+        Args:
+            annotations (str | None): JSON string describing annotation plot items,
+                or None to remove annotations
+        """
+        if annotations is None:
+            if ANN_KEY in self.metadata:
+                self.metadata.pop(ANN_KEY)
+        else:
+            self.metadata[ANN_KEY] = annotations
 
     def __get_annotations(self) -> str:
         """Get object annotations (JSON string describing annotation plot items)"""
@@ -793,9 +802,12 @@ class ObjectItf(metaclass=ObjectItfMeta):
         Args:
             items (list): annotation plot items
         """
-        writer = JSONWriter(None)
-        save_items(writer, items)
-        self.annotations = writer.get_json(indent=4)
+        if items:
+            writer = JSONWriter(None)
+            save_items(writer, items)
+            self.annotations = writer.get_json(indent=4)
+        else:
+            self.annotations = None
 
     def iterate_shape_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).
@@ -832,8 +844,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
             if resultshape is not None or key == ROI_KEY:
                 # Metadata entry is a metadata shape or a ROI
                 self.metadata.pop(key)
-        if ANN_KEY in self.metadata:
-            self.metadata.pop(ANN_KEY)
+        self.annotations = None
 
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""

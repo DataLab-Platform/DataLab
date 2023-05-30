@@ -764,11 +764,10 @@ class BaseDataPanel(AbstractPanel):
         if result == QW.QDialog.DialogCode.Accepted:
             items = dlg.get_plot().get_items()
             rw_items = [item for item in items if not item.is_readonly()]
-            if rw_items:
-                obj = self.__separate_views[dlg]
-                obj.set_annotations_from_items(rw_items)
-                self.selection_changed()
-                self.SIG_UPDATE_PLOT_ITEMS.emit()
+            obj = self.__separate_views[dlg]
+            obj.set_annotations_from_items(rw_items)
+            self.selection_changed()
+            self.SIG_UPDATE_PLOT_ITEMS.emit()
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
 
