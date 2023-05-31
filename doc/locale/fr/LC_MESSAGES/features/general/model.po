@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 10:37+0200\n"
+"POT-Creation-Date: 2023-05-31 21:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../features/general/model.rst:4
 msgid "Internal data model"
@@ -71,7 +71,7 @@ msgstr ""
 
 #: cdl.core.model.image.ImageDatatypes:1 cdl.core.model.image.ImageTypes:1
 #: cdl.core.model.signal.FreqUnits:1 cdl.core.model.signal.SignalTypes:1 of
-msgid "Bases: :py:class:`~cdl.core.model.base.Choices`"
+msgid "Bases: :py:class:`cdl.core.model.base.Choices`"
 msgstr ""
 
 #: cdl.core.model.signal.FreqUnits:1 of
@@ -82,11 +82,13 @@ msgstr ""
 msgid "Convert value in Hz"
 msgstr ""
 
-#: cdl.core.model.image.Gauss2DParam:1 cdl.core.model.image.NewImageParam:1
+#: cdl.core.model.image.CircularROIParam:1 cdl.core.model.image.Gauss2DParam:1
+#: cdl.core.model.image.NewImageParam:1
+#: cdl.core.model.image.RectangleROIParam:1
 #: cdl.core.model.signal.GaussLorentzVoigtParam:1
 #: cdl.core.model.signal.NewSignalParam:1 cdl.core.model.signal.PeriodicParam:1
-#: cdl.core.model.signal.StepParam:1 of
-msgid "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`"
+#: cdl.core.model.signal.ROIParam:1 cdl.core.model.signal.StepParam:1 of
+msgid "Bases: :py:class:`guidata.dataset.datatypes.DataSet`"
 msgstr ""
 
 #: cdl.core.model.signal.GaussLorentzVoigtParam:1 of
@@ -105,14 +107,18 @@ msgstr ""
 msgid "Return frequency in Hz"
 msgstr ""
 
+#: cdl.core.model.signal.ROIParam:1 of
+msgid "Signal ROI parameters"
+msgstr ""
+
 #: cdl.core.model.image.ImageObj:1 cdl.core.model.signal.SignalObj:1 of
 msgid ""
-"Bases: :py:class:`~guidata.dataset.datatypes.DataSet`, "
-":py:class:`~cdl.core.model.base.ObjectItf`"
+"Bases: :py:class:`guidata.dataset.datatypes.DataSet`, "
+":py:class:`cdl.core.model.base.ObjectItf`"
 msgstr ""
 
 #: cdl.core.model.signal.SignalObj:1 of
-msgid "Signal dataset"
+msgid "Signal object"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.copy_data_from:1
@@ -125,24 +131,35 @@ msgstr ""
 #: cdl.core.model.image.ImageObj.get_roi_param
 #: cdl.core.model.image.ImageObj.iterate_roi_items
 #: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.new_roi_item
 #: cdl.core.model.image.ImageObj.params_to_roidata
 #: cdl.core.model.image.ImageObj.roi_coords_to_indexes
 #: cdl.core.model.image.ImageObj.set_data_type
-#: cdl.core.model.image.ImageObj.update_item cdl.core.model.image.create_image
+#: cdl.core.model.image.ImageObj.set_metadata_from
+#: cdl.core.model.image.ImageObj.update_item cdl.core.model.image.RoiDataItem
+#: cdl.core.model.image.RoiDataItem.apply_mask
+#: cdl.core.model.image.RoiDataItem.from_image
+#: cdl.core.model.image.RoiDataItem.get_masked_view
+#: cdl.core.model.image.RoiDataItem.make_roi_item
+#: cdl.core.model.image.create_image
 #: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.make_roi_circle cdl.core.model.image.make_roi_rectangle
 #: cdl.core.model.image.new_image_param
 #: cdl.core.model.signal.SignalObj.copy_data_from
 #: cdl.core.model.signal.SignalObj.get_data
 #: cdl.core.model.signal.SignalObj.get_roi_param
 #: cdl.core.model.signal.SignalObj.iterate_roi_items
 #: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.new_roi_item
 #: cdl.core.model.signal.SignalObj.params_to_roidata
 #: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
 #: cdl.core.model.signal.SignalObj.set_data_type
+#: cdl.core.model.signal.SignalObj.set_xydata
 #: cdl.core.model.signal.SignalObj.update_item
 #: cdl.core.model.signal.create_signal
 #: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param of
+#: cdl.core.model.signal.new_signal_param cdl.core.model.signal.triangle_func
+#: of
 msgid "Parameters"
 msgstr ""
 
@@ -163,6 +180,14 @@ msgstr ""
 msgid "Get y data"
 msgstr ""
 
+#: cdl.core.model.signal.SignalObj.dx:1 of
+msgid "Get dx data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.dy:1 of
+msgid "Get dy data"
+msgstr ""
+
 #: cdl.core.model.image.ImageObj.get_data:1
 #: cdl.core.model.signal.SignalObj.get_data:1 of
 msgid ""
@@ -171,12 +196,14 @@ msgid ""
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.get_data:4
+#: cdl.core.model.image.RoiDataItem.make_roi_item:3
 #: cdl.core.model.signal.SignalObj.get_data:4 of
 msgid "ROI index"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.get_data
 #: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.maskdata
 #: cdl.core.model.image.ImageObj.params_to_roidata
 #: cdl.core.model.image.ImageObj.roi_coords_to_indexes
 #: cdl.core.model.image.create_image
@@ -192,12 +219,15 @@ msgstr ""
 msgid "Returns"
 msgstr ""
 
+#: cdl.core.model.image.RoiDataItem.apply_mask:3
+#: cdl.core.model.image.RoiDataItem.get_masked_view:3
 #: cdl.core.model.signal.SignalObj.get_data:7 of
 msgid "data"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.get_data
 #: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.maskdata
 #: cdl.core.model.image.ImageObj.params_to_roidata
 #: cdl.core.model.image.ImageObj.roi_coords_to_indexes
 #: cdl.core.model.image.create_image
@@ -219,6 +249,8 @@ msgid "Return ROI parameters dataset."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.get_roi_param:3
+#: cdl.core.model.image.make_roi_circle:11
+#: cdl.core.model.image.make_roi_rectangle:11
 #: cdl.core.model.signal.SignalObj.get_roi_param:3 of
 msgid "title"
 msgstr ""
@@ -234,17 +266,25 @@ msgid "Make plot item representing a Region of Interest."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.iterate_roi_items:3
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:3 of
+#: cdl.core.model.image.ImageObj.new_roi_item:3
+#: cdl.core.model.image.RoiDataItem.make_roi_item:5
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:3
+#: cdl.core.model.signal.SignalObj.new_roi_item:3 of
 msgid "format string"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.iterate_roi_items:5
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:5 of
+#: cdl.core.model.image.ImageObj.new_roi_item:5
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
+#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
 msgid "if True, add label"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.iterate_roi_items:7
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:7 of
+#: cdl.core.model.image.ImageObj.new_roi_item:7
+#: cdl.core.model.image.RoiDataItem.make_roi_item:9
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
+#: cdl.core.model.signal.SignalObj.new_roi_item:7 of
 msgid "if True, ROI is editable"
 msgstr ""
 
@@ -263,9 +303,8 @@ msgstr ""
 msgid "Make plot item from data."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.make_item:3
 #: cdl.core.model.signal.SignalObj.make_item:3 of
-msgid "update"
+msgid "plot item to update from"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.make_item:6
@@ -317,6 +356,23 @@ msgstr ""
 
 #: cdl.core.model.signal.SignalObj.set_xydata:1 of
 msgid "Set xy data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:3
+#: cdl.core.model.signal.triangle_func:3 of
+msgid "x data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:5 of
+msgid "y data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:7 of
+msgid "dx data (optional: error bars)"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:9 of
+msgid "dy data (optional: error bars)"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.update_item:1
@@ -377,8 +433,7 @@ msgstr ""
 msgid "X, Y labels (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:20
-#: cdl.core.model.signal.create_signal_from_param:12 of
+#: cdl.core.model.signal.create_signal:20 of
 msgid "signal object"
 msgstr ""
 
@@ -403,6 +458,10 @@ msgstr ""
 #: cdl.core.model.image.create_image_from_param:9
 #: cdl.core.model.signal.create_signal_from_param:9 of
 msgid "parent widget"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_from_param:12 of
+msgid "signal object or None if canceled"
 msgstr ""
 
 #: cdl.core.model.signal.new_signal_param:1 of
@@ -438,6 +497,41 @@ msgstr ""
 msgid "Triangle function"
 msgstr ""
 
+#: cdl.core.model.image.CircularROIParam:1
+#: cdl.core.model.image.RectangleROIParam:1 of
+msgid "ROI parameters"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.get_coords:1
+#: cdl.core.model.image.RectangleROIParam.get_coords:1 of
+msgid "Get ROI coordinates"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.get_single_roi:1 of
+msgid "Get single circular ROI, i.e. after extracting ROI from image"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.get_suffix:1
+#: cdl.core.model.image.RectangleROIParam.get_suffix:1 of
+msgid "Get suffix text representation for ROI extraction"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.x0:1 of
+msgid "Return rectangle top left corner X coordinate"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.x1:1 of
+msgid "Return rectangle bottom right corner X coordinate"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.y0:1 of
+msgid "Return rectangle top left corner Y coordinate"
+msgstr ""
+
+#: cdl.core.model.image.CircularROIParam.y1:1 of
+msgid "Return rectangle bottom right corner Y coordinate"
+msgstr ""
+
 #: cdl.core.model.image.Gauss2DParam:1 of
 msgid "2D Gaussian parameters"
 msgstr ""
@@ -455,14 +549,15 @@ msgid "Return member from NumPy dtype"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj:1 of
-msgid "Image dataset"
+msgid "Image object"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.dicom_template:1 of
 msgid "Get DICOM template"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data:7 of
+#: cdl.core.model.image.ImageObj.get_data:7
+#: cdl.core.model.image.ImageObj.maskdata:3 of
 msgid "masked data"
 msgstr ""
 
@@ -470,8 +565,18 @@ msgstr ""
 msgid "Invalidate mask data cache: force to rebuild it"
 msgstr ""
 
+#: cdl.core.model.image.ImageObj.make_item:3 of
+msgid "update from plot item"
+msgstr ""
+
 #: cdl.core.model.image.ImageObj.maskdata:1 of
 msgid "Return masked data (areas outside defined regions of interest)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.new_roi_item:9
+#: cdl.core.model.image.RoiDataItem.from_image:5
+#: cdl.core.model.image.RoiDataItem.geometry:1 of
+msgid "ROI geometry"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.reset_metadata_to_defaults:1 of
@@ -482,6 +587,10 @@ msgstr ""
 msgid ""
 "Set metadata from object: dict-like (only string keys are considered) or "
 "any other object (iterating over supported attributes)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.set_metadata_from:4 of
+msgid "object"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.size:1 of
@@ -505,7 +614,7 @@ msgid "New image dataset"
 msgstr ""
 
 #: cdl.core.model.image.RoiDataGeometries:1 of
-msgid "Bases: :py:class:`~enum.Enum`"
+msgid "Bases: :py:class:`enum.Enum`"
 msgstr ""
 
 #: cdl.core.model.image.RoiDataGeometries:1 of
@@ -516,20 +625,33 @@ msgstr ""
 msgid "Object representing an image ROI."
 msgstr ""
 
+#: cdl.core.model.image.RoiDataItem:3 of
+msgid "ROI data"
+msgstr ""
+
 #: cdl.core.model.image.RoiDataItem.apply_mask:1 of
 msgid "Apply ROI to data as a mask and return masked array"
+msgstr ""
+
+#: cdl.core.model.image.RoiDataItem.apply_mask:5 of
+msgid "Y/X ratio"
 msgstr ""
 
 #: cdl.core.model.image.RoiDataItem.from_image:1 of
 msgid "Construct roi data item from image object: called for making new ROI items"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.geometry:1 of
-msgid "ROI geometry"
+#: cdl.core.model.image.RoiDataItem.from_image:3
+#: cdl.core.model.image.create_image:14 of
+msgid "image object"
 msgstr ""
 
 #: cdl.core.model.image.RoiDataItem.get_masked_view:1 of
 msgid "Return masked view for data"
+msgstr ""
+
+#: cdl.core.model.image.RoiDataItem.get_masked_view:5 of
+msgid "mask data"
 msgstr ""
 
 #: cdl.core.model.image.RoiDataItem.get_rect:1 of
@@ -538,6 +660,10 @@ msgstr ""
 
 #: cdl.core.model.image.RoiDataItem.make_roi_item:1 of
 msgid "Make ROI plot item"
+msgstr ""
+
+#: cdl.core.model.image.RoiDataItem.make_roi_item:7 of
+msgid "if True, show label"
 msgstr ""
 
 #: cdl.core.model.image.create_image:1 of
@@ -564,10 +690,6 @@ msgstr ""
 msgid "X, Y, Z labels (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.image.create_image:14 of
-msgid "image object"
-msgstr ""
-
 #: cdl.core.model.image.create_image_from_param:1 of
 msgid "Create a new Image object from dialog box."
 msgstr ""
@@ -577,11 +699,31 @@ msgid "new image parameters"
 msgstr ""
 
 #: cdl.core.model.image.create_image_from_param:12 of
-msgid "new image object"
+msgid "new image object or None if user cancelled"
 msgstr ""
 
 #: cdl.core.model.image.make_roi_circle:1 of
 msgid "Make and return the annnotated circle associated to ROI"
+msgstr ""
+
+#: cdl.core.model.image.make_roi_circle:3
+#: cdl.core.model.image.make_roi_rectangle:3 of
+msgid "top left corner X coordinate"
+msgstr ""
+
+#: cdl.core.model.image.make_roi_circle:5
+#: cdl.core.model.image.make_roi_rectangle:5 of
+msgid "top left corner Y coordinate"
+msgstr ""
+
+#: cdl.core.model.image.make_roi_circle:7
+#: cdl.core.model.image.make_roi_rectangle:7 of
+msgid "bottom right corner X coordinate"
+msgstr ""
+
+#: cdl.core.model.image.make_roi_circle:9
+#: cdl.core.model.image.make_roi_rectangle:9 of
+msgid "bottom right corner Y coordinate"
 msgstr ""
 
 #: cdl.core.model.image.make_roi_rectangle:1 of
@@ -612,6 +754,10 @@ msgstr ""
 msgid "new image dataset instance"
 msgstr ""
 
+#: cdl.core.model.image.roi_label:1 of
+msgid "Returns name<sub>index</sub>"
+msgstr ""
+
 #: cdl.core.model.image.to_builtin:1 of
 msgid ""
 "Convert an object implementing a numeric value or collection into the "
@@ -621,3 +767,30 @@ msgstr ""
 #: cdl.core.model.image.to_builtin:4 of
 msgid "Return None if conversion fails."
 msgstr ""
+
+#~ msgid "Bases: :py:class:`~cdl.core.model.base.Choices`"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`, "
+#~ ":py:class:`~cdl.core.model.base.ObjectItf`"
+#~ msgstr ""
+
+#~ msgid "Signal dataset"
+#~ msgstr ""
+
+#~ msgid "update"
+#~ msgstr ""
+
+#~ msgid "Image dataset"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`~enum.Enum`"
+#~ msgstr ""
+
+#~ msgid "new image object"
+#~ msgstr ""
+

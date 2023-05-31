@@ -39,16 +39,12 @@ from qtpy import QtWidgets as QW
 
 from cdl import env
 from cdl.config import Conf, _
+from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.gui.roieditor import ROIEditorData
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.utils import misc
-from cdl.utils.misc import wng_func
-from cdl.utils.qthelpers import (
-    create_progress_bar,
-    exec_dialog,
-    qt_try_context,
-    qt_try_except,
-)
+from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
+from cdl.widgets.warningerror import show_warning_error
 
 if TYPE_CHECKING:  # pragma: no cover
     from multiprocessing.pool import AsyncResult
@@ -113,7 +109,7 @@ class Worker:
         """Run computation"""
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
-        self.asyncresult = POOL.apply_async(wng_func, (func, args))
+        self.asyncresult = POOL.apply_async(wng_err_func, (func, args))
 
     def terminate(self) -> None:
         """Terminate worker"""
@@ -126,7 +122,7 @@ class Worker:
         """Return True if computation is finished"""
         return self.asyncresult.ready()
 
-    def get_result(self) -> Any:
+    def get_result(self) -> CompOut:
         """Return computation result"""
         self.result = self.asyncresult.get()
         self.asyncresult = None
@@ -212,6 +208,29 @@ class BaseProcessor(QC.QObject):
                 return
         self._compute_11_subroutine(func, params, title)
 
+    def handle_output(
+        self, compout: CompOut, context: str
+    ) -> SignalObj | ImageObj | np.ndarray | None:
+        """Handle computation output: if error, display error message,
+        if warning, display warning message.
+
+        Args:
+            compout (CompOut): computation output
+            context (str): context (e.g. "Computing: Gaussian filter")
+
+        Returns:
+            SignalObj | ImageObj | np.ndarray | None: output object
+            (None if error)
+        """
+        if compout.error_msg:
+            show_warning_error(
+                self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
+            )
+            return None
+        if compout.warning_msg:
+            show_warning_error(self.panel, "warning", context, compout.warning_msg)
+        return compout.result
+
     def _compute_11_subroutine(self, func: Callable, params: list, title: str):
         """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
         objs = self.panel.objview.get_sel_objects(include_groups=True)
@@ -231,12 +250,9 @@ class BaseProcessor(QC.QObject):
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
-                    context = _("Computing:") + " " + i_title
-                    new_obj = None
                     args = (obj,) if param is None else (obj, param)
                     if self.worker is None:
-                        with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                            new_obj = wng_func(func, args)
+                        result = wng_err_func(func, args)
                     else:
                         self.worker.run(func, args)
                         while not self.worker.is_computation_finished():
@@ -247,8 +263,8 @@ class BaseProcessor(QC.QObject):
                                 break
                         if not self.worker.is_computation_finished():
                             break
-                        with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                            new_obj = self.worker.get_result()
+                        result = self.worker.get_result()
+                    new_obj = self.handle_output(result, _("Computing: %s") % i_title)
                     if new_obj is None:
                         continue
                     new_gid = None
@@ -299,10 +315,8 @@ class BaseProcessor(QC.QObject):
                 if progress.wasCanceled():
                     break
                 args = (obj,) if param is None else (obj, param)
-                context = _("Computing:") + " " + title
                 if self.worker is None:
-                    with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                        result = wng_func(func, args)
+                    result = wng_err_func(func, args)
                 else:
                     self.worker.run(func, args)
                     while not self.worker.is_computation_finished():
@@ -313,14 +327,11 @@ class BaseProcessor(QC.QObject):
                             break
                     if not self.worker.is_computation_finished():
                         break
-                    result = None
-                    with qt_try_context(self.panel, context, COMPUTATION_TIP):
-                        result = self.worker.get_result()
-
-                if result is None:
+                    result = self.worker.get_result()
+                result_array = self.handle_output(result, _("Computing: %s") % title)
+                if result_array is None:
                     continue
-
-                resultshape = obj.add_resultshape(name, shapetype, result, param)
+                resultshape = obj.add_resultshape(name, shapetype, result_array, param)
                 results[obj.uuid] = resultshape
                 xlabels = resultshape.xlabels
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
@@ -387,14 +398,14 @@ class BaseProcessor(QC.QObject):
                     dst_obj.copy_data_from(src_obj, dtype=dst_dtype)
                 else:
                     src_objs[src_gid].append(src_obj)
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore", RuntimeWarning)
-                        # TODO: Add support for process isolation? (not sure it is
-                        # necessary here... operations are fast and simple)
-                        if param is None:
-                            func(dst_obj, src_obj)
-                        else:
-                            func(dst_obj, src_obj, param)
+                    if param is None:
+                        args = (dst_obj, src_obj)
+                    else:
+                        args = (dst_obj, src_obj, param)
+                    # TODO: Add support for process isolation? (not sure it is
+                    # necessary here... operations are fast and simple)
+                    result = wng_err_func(func, args)
+                    self.handle_output(result, _("Calculating: %s") % title)
                     dst_obj.update_resultshapes_from(src_obj)
                 if src_obj.roi is not None:
                     if dst_obj.roi is None:
@@ -459,13 +470,13 @@ class BaseProcessor(QC.QObject):
                 QW.QApplication.processEvents()
                 if progress.wasCanceled():
                     break
-                with warnings.catch_warnings():
-                    warnings.simplefilter("ignore", RuntimeWarning)
-                    # TODO: Add support for process isolation
-                    if param is None:
-                        new_obj = func(obj, obj2)
-                    else:
-                        new_obj = func(obj, obj2, param)
+                args = (obj, obj2) if param is None else (obj, obj2, param)
+                # TODO: Add support for process isolation? (not sure it is
+                # necessary here... operations are fast and simple)
+                result = wng_err_func(func, args)
+                new_obj = self.handle_output(result, _("Calculating: %s") % title)
+                if new_obj is None:
+                    continue
                 group_id = self.panel.objmodel.get_object_group_id(obj)
                 self.panel.add_object(new_obj, group_id=group_id)
 

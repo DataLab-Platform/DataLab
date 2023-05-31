@@ -29,6 +29,8 @@ New features:
     signals/images
   * Added support for groups: signals and images can be grouped together, and
     operations can be applied to all objects in a group, or between groups
+  * Added warning and error dialogs with detailed traceback links to the source
+    code (warnings may be optionally ignored)
   * Drastically improved performance when selecting objects
   * Optimized performance when showing large images
   * Added support for dropping files on signal/image panel

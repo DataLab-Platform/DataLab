@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-14 15:11+0200\n"
+"POT-Creation-Date: 2023-05-31 21:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,10 @@ msgid ""
 "DataLab provides a \"Contour Detection\" feature which is based on `the "
 "marching cubes algorithm "
 "<https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_."
-msgstr "DataLab fournit une fonctionnalté de \"Détection de contours\" qui est basée sur l'algorithme des `marching cubes <https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_.
+msgstr ""
+"DataLab fournit une fonctionnalté de \"Détection de contours\" qui est "
+"basée sur l'algorithme des `marching cubes "
+"<https://courses.cs.duke.edu/fall01/cps124/resources/p163-lorensen.pdf>`_"
 
 #: ../../features/image/contour_detection.rst:11
 msgid "Contour detection parameters."
@@ -66,14 +69,19 @@ msgstr "Chaque ligne est associée à un contour"
 
 #: ../../features/image/contour_detection.rst:25
 msgid "First column shows the ROI index (0 if no ROI is defined on input image)"
-msgstr "La première colonne contient l'indice de la ROI (0 si aucune ROI n'est définie)"
+msgstr ""
+"La première colonne contient l'indice de la ROI (0 si aucune ROI n'est "
+"définie)"
 
 #: ../../features/image/contour_detection.rst:26
 msgid ""
 "Other columns show contour coordinates: 4 columns for circles "
 "(coordinates of diameter), 8 columns for ellipses (coordinates of "
 "diameters)"
-msgstr "Les colonnes suivantes présentent les coordonnées des contours : 4 colonnes pour les cercles (coordonnées du diamètre) et 8 colonnes pour les ellipses (coordonnées des diamètres)"
+msgstr ""
+"Les colonnes suivantes présentent les coordonnées des contours : 4 "
+"colonnes pour les cercles (coordonnées du diamètre) et 8 colonnes pour "
+"les ellipses (coordonnées des diamètres)"
 
 #: ../../features/image/contour_detection.rst:32
 msgid "Example of contour detection."
@@ -89,14 +97,22 @@ msgid ""
 "`skimage.measure.find_contours.find_contours <https://scikit-"
 "image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-"
 "contours>`_)"
-msgstr "Tout d'abord, les isocontours sont calculés (l'implémentation est basée sur `skimage.measure.find_contours.find_contours <https://scikit-image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-contours>`_)"
+msgstr ""
+"Tout d'abord, les isocontours sont calculés (l'implémentation est basée "
+"sur `skimage.measure.find_contours.find_contours <https://scikit-"
+"image.org/docs/0.8.0/api/skimage.measure.find_contours.html#find-"
+"contours>`_)"
 
 #: ../../features/image/contour_detection.rst:37
 msgid "Then, each contour is fitted to the closest ellipse (or circle)"
 msgstr "Ensuite, chaque contour est ajusté à une ellipse (ou à un cercle)"
 
 #: ../../features/image/contour_detection.rst:39
+#, fuzzy
 msgid ""
 "Feature is based on ``get_contour_shapes`` function from "
-"``cdl.core.computation`` module:"
-msgstr "La fonctionnalité est basée sur la fonction ``get_contour_shapes`` du module ``cdl.core.computation`` :"
+"``cdl.algorithms`` module:"
+msgstr ""
+"La fonctionnalité est basée sur la fonction ``get_contour_shapes`` du "
+"module ``cdl.core.computation`` :"
+

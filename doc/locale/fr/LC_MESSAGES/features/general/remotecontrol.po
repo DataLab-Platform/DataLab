@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 10:37+0200\n"
+"POT-Creation-Date: 2023-05-31 21:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../features/general/remotecontrol.rst:2
 msgid "Remote controlling"
@@ -198,7 +198,7 @@ msgid "DataLab remote controlling utilities"
 msgstr ""
 
 #: cdl.remotecontrol.BaseRPCServer:1 of
-msgid "Bases: :py:class:`~abc.ABC`"
+msgid "Bases: :py:class:`abc.ABC`"
 msgstr ""
 
 #: cdl.remotecontrol.BaseRPCServer:1 of
@@ -455,7 +455,7 @@ msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.calc:1 cdl.remotecontrol.RemoteServer.calc:1
 #: of
-msgid "Call compute function `name` in current panel's processor."
+msgid "Call compute function ``name`` in current panel's processor."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.calc:3 cdl.remotecontrol.RemoteServer.calc:3
@@ -535,9 +535,10 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.get_object:10
 #: cdl.remotecontrol.RemoteServer.get_object:10 of
 msgid ""
-"If `index` is not specified, returns the currently selected object. If "
-"`group_index` is not specified, return an object from the current group. "
-"If `panel` is not specified, return an object from the current panel."
+"If ``index`` is not specified, returns the currently selected object. If "
+"``group_index`` is not specified, return an object from the current "
+"group. If ``panel`` is not specified, return an object from the current "
+"panel."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.get_object:14
@@ -676,90 +677,12 @@ msgstr ""
 
 #: cdl.remotecontrol.RemoteServer:1 of
 msgid ""
-"Bases: :py:class:`~PyQt5.QtCore.QThread`, "
-":py:class:`~cdl.remotecontrol.BaseRPCServer`"
+"Bases: :py:class:`PyQt5.QtCore.QThread`, "
+":py:class:`cdl.remotecontrol.BaseRPCServer`"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServer:1 of
 msgid "XML-RPC server QThread"
-msgstr ""
-
-#: ../../docstring cdl.remotecontrol.RemoteServer.SIG_ADD_OBJECT:1
-#: cdl.remotecontrol.RemoteServer.SIG_CALC:1
-#: cdl.remotecontrol.RemoteServer.SIG_CLOSE_APP:1
-#: cdl.remotecontrol.RemoteServer.SIG_IMPORT_H5:1
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_H5:1
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_OBJECT:1
-#: cdl.remotecontrol.RemoteServer.SIG_RESET_ALL:1
-#: cdl.remotecontrol.RemoteServer.SIG_SAVE_TO_H5:1
-#: cdl.remotecontrol.RemoteServer.SIG_SERVER_PORT:1
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_IMAGE_PANEL:1
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_PANEL:1 of
-msgid "int = ..., arguments: Sequence = ...) -> PYQT_SIGNAL"
-msgstr ""
-
-#: ../../docstring cdl.remotecontrol.RemoteServer.SIG_ADD_OBJECT:3
-#: cdl.remotecontrol.RemoteServer.SIG_CALC:3
-#: cdl.remotecontrol.RemoteServer.SIG_CLOSE_APP:3
-#: cdl.remotecontrol.RemoteServer.SIG_IMPORT_H5:3
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_H5:3
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_OBJECT:3
-#: cdl.remotecontrol.RemoteServer.SIG_RESET_ALL:3
-#: cdl.remotecontrol.RemoteServer.SIG_SAVE_TO_H5:3
-#: cdl.remotecontrol.RemoteServer.SIG_SERVER_PORT:3
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_IMAGE_PANEL:3
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_PANEL:3 of
-msgid ""
-"types is normally a sequence of individual types.  Each type is either a "
-"type object or a string that is the name of a C++ type.  Alternatively "
-"each type could itself be a sequence of types each describing a different"
-" overloaded signal. name is the optional C++ name of the signal.  If it "
-"is not specified then the name of the class attribute that is bound to "
-"the signal is used. revision is the optional revision of the signal that "
-"is exported to QML. If it is not specified then 0 is used. arguments is "
-"the optional sequence of the names of the signal's arguments."
-msgstr ""
-
-#: ../../docstring cdl.remotecontrol.RemoteServer.SIG_ADD_OBJECT
-#: cdl.remotecontrol.RemoteServer.SIG_CALC
-#: cdl.remotecontrol.RemoteServer.SIG_CLOSE_APP
-#: cdl.remotecontrol.RemoteServer.SIG_IMPORT_H5
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_H5
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_OBJECT
-#: cdl.remotecontrol.RemoteServer.SIG_RESET_ALL
-#: cdl.remotecontrol.RemoteServer.SIG_SAVE_TO_H5
-#: cdl.remotecontrol.RemoteServer.SIG_SERVER_PORT
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_IMAGE_PANEL
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_PANEL of
-msgid "type"
-msgstr ""
-
-#: ../../docstring cdl.remotecontrol.RemoteServer.SIG_ADD_OBJECT:13
-#: cdl.remotecontrol.RemoteServer.SIG_CALC:13
-#: cdl.remotecontrol.RemoteServer.SIG_CLOSE_APP:13
-#: cdl.remotecontrol.RemoteServer.SIG_IMPORT_H5:13
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_H5:13
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_OBJECT:13
-#: cdl.remotecontrol.RemoteServer.SIG_RESET_ALL:13
-#: cdl.remotecontrol.RemoteServer.SIG_SAVE_TO_H5:13
-#: cdl.remotecontrol.RemoteServer.SIG_SERVER_PORT:13
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_IMAGE_PANEL:13
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_PANEL:13 of
-msgid "pyqtSignal(*types, name"
-msgstr ""
-
-#: ../../docstring cdl.remotecontrol.RemoteServer.SIG_ADD_OBJECT:15
-#: cdl.remotecontrol.RemoteServer.SIG_CALC:15
-#: cdl.remotecontrol.RemoteServer.SIG_CLOSE_APP:15
-#: cdl.remotecontrol.RemoteServer.SIG_IMPORT_H5:15
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_H5:15
-#: cdl.remotecontrol.RemoteServer.SIG_OPEN_OBJECT:15
-#: cdl.remotecontrol.RemoteServer.SIG_RESET_ALL:15
-#: cdl.remotecontrol.RemoteServer.SIG_SAVE_TO_H5:15
-#: cdl.remotecontrol.RemoteServer.SIG_SERVER_PORT:15
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_IMAGE_PANEL:15
-#: cdl.remotecontrol.RemoteServer.SIG_SWITCH_TO_PANEL:15 of
-msgid "str = ..., revision"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServer.add_image:5 of
@@ -847,7 +770,7 @@ msgid "Panel name (valid values: 'signal', 'image', 'macro')"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServerMeta:1 of
-msgid "Bases: :py:class:`~sip.wrappertype`, :py:class:`~abc.ABCMeta`"
+msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServerMeta:1 of
@@ -950,3 +873,60 @@ msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr ""
 "Voici de plus un exemple de réimplementation de cette classe en Python "
 "2.7 :"
+
+#~ msgid "Bases: :py:class:`~abc.ABC`"
+#~ msgstr ""
+
+#~ msgid "Call compute function `name` in current panel's processor."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If `index` is not specified, returns "
+#~ "the currently selected object. If "
+#~ "`group_index` is not specified, return "
+#~ "an object from the current group. "
+#~ "If `panel` is not specified, return "
+#~ "an object from the current panel."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bases: :py:class:`~PyQt5.QtCore.QThread`, "
+#~ ":py:class:`~cdl.remotecontrol.BaseRPCServer`"
+#~ msgstr ""
+
+#~ msgid "int = ..., arguments: Sequence = ...) -> PYQT_SIGNAL"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "types is normally a sequence of "
+#~ "individual types.  Each type is either"
+#~ " a type object or a string that"
+#~ " is the name of a C++ type."
+#~ "  Alternatively each type could itself "
+#~ "be a sequence of types each "
+#~ "describing a different overloaded signal. "
+#~ "name is the optional C++ name of"
+#~ " the signal.  If it is not "
+#~ "specified then the name of the "
+#~ "class attribute that is bound to "
+#~ "the signal is used. revision is "
+#~ "the optional revision of the signal "
+#~ "that is exported to QML. If it "
+#~ "is not specified then 0 is used."
+#~ " arguments is the optional sequence "
+#~ "of the names of the signal's "
+#~ "arguments."
+#~ msgstr ""
+
+#~ msgid "type"
+#~ msgstr ""
+
+#~ msgid "pyqtSignal(*types, name"
+#~ msgstr ""
+
+#~ msgid "str = ..., revision"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`~sip.wrappertype`, :py:class:`~abc.ABCMeta`"
+#~ msgstr ""
+

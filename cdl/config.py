@@ -148,6 +148,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: FFT shift is disabled
     fft_shift_enabled = conf.Option()
 
+    # Ignore warnings during computation:
+    # - True: ignore warnings
+    # - False: do not ignore warnings
+    ignore_warnings = conf.Option()
+
 
 class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the view configuration section structure.
@@ -219,6 +224,7 @@ def initialize():
     # Proc section
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
+    Conf.proc.ignore_warnings.get(False)
 
 
 def reset():
