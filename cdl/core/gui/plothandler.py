@@ -176,16 +176,21 @@ class BasePlotHandler:
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
 
-    def refresh_plot(self, what: str = None, just_show: bool = False) -> None:
+    def refresh_plot(self, what: str, just_show: bool = False) -> None:
         """Refresh plot.
 
         Args:
-            what (str, optional): if "selected", refresh the selected objects,
-                if "all", refresh all objects. Defaults to None.
+            what (str, optional): string describing the objects to refresh.
+                Valid values are "selected" (refresh the selected objects),
+                "all" (refresh all objects), or an object uuid.
             just_show (bool, optional): if True, only show the item (do not update it,
                 except regarding the reference item). Defaults to False.
+
+        Raises:
+            ValueError: if `what` is not a valid value
         """
-        if what in ("selected", None):
+        if what == "selected":
+            # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
             if len(oids) == 1:
                 self.cleanup_dataview()
@@ -194,9 +199,16 @@ class BasePlotHandler:
                 if item is not None:
                     item.hide()
         elif what == "all":
+            # Refresh all objects
             oids = self.panel.objmodel.get_object_ids()
         else:
-            raise ValueError(f"Invalid value for `what`: {what}")
+            # Refresh a single object defined by its uuid
+            oids = [what]
+            try:
+                # Check if this is a valid object uuid
+                self.panel.objmodel.get_objects(oids)
+            except KeyError:
+                raise ValueError(f"Invalid value for `what`: {what}")
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
         if oids:
@@ -284,14 +296,18 @@ class ImagePlotHandler(BasePlotHandler):
             plot: ImagePlot = item.plot()
             plot.update_colormap_axis(item)
 
-    def refresh_plot(self, what: str = None, just_show: bool = False) -> None:
+    def refresh_plot(self, what: str, just_show: bool = False) -> None:
         """Refresh plot.
 
         Args:
-            what (str, optional): if "selected", refresh the selected objects,
-                if "all", refresh all objects. Defaults to None.
+            what (str, optional): string describing the objects to refresh.
+                Valid values are "selected" (refresh the selected objects),
+                "all" (refresh all objects), or an object uuid.
             just_show (bool, optional): if True, only show the item (do not update it,
                 except regarding the reference item). Defaults to False.
+
+        Raises:
+            ValueError: if `what` is not a valid value
         """
         super().refresh_plot(what=what, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))

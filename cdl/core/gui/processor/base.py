@@ -329,7 +329,7 @@ class BaseProcessor(QC.QObject):
                 xlabels = resultshape.xlabels
                 self.SIG_ADD_SHAPE.emit(obj.uuid)
                 self.panel.selection_changed()
-                self.panel.SIG_UPDATE_PLOT_ITEM.emit(obj.uuid)
+                self.panel.SIG_REFRESH_PLOT.emit(obj.uuid)
                 for _i_row_res in range(resultshape.array.shape[0]):
                     ylabel = f"{name}({obj.short_id})"
                     ylabels.append(ylabel)
@@ -616,7 +616,7 @@ class BaseProcessor(QC.QObject):
                     obj.roi = roidata
                     self.SIG_ADD_SHAPE.emit(obj.uuid)
                     self.panel.selection_changed()
-                    self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
+                    self.panel.SIG_REFRESH_PLOT.emit("selected")
         return roieditordata
 
     def delete_regions_of_interest(self) -> None:
@@ -625,7 +625,7 @@ class BaseProcessor(QC.QObject):
             if obj.roi is not None:
                 obj.roi = None
                 self.panel.selection_changed()
-                self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
+                self.panel.SIG_REFRESH_PLOT.emit("selected")
 
     @abc.abstractmethod
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:

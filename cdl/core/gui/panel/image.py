@@ -121,4 +121,4 @@ class ImagePanel(BaseDataPanel):
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""
         Conf.view.show_contrast.set(state)
-        self.SIG_UPDATE_PLOT_ITEMS.emit()
+        self.SIG_REFRESH_PLOT.emit("selected")
