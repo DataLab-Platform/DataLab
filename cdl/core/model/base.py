@@ -849,6 +849,9 @@ class ObjectItf(metaclass=ObjectItfMeta):
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         self.metadata = {}
+        # Default visualization settings
+        def_dict = Conf.view.get_def_dict(self.__class__.__name__[:3].lower())
+        self.metadata.update(def_dict)
 
     def export_metadata_to_file(self, filename: str) -> None:
         """Export object metadata to file (JSON).

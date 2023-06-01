@@ -11,8 +11,12 @@ DataLab settings
 
 from __future__ import annotations
 
+from typing import Any
+
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
+from guidata.utils import restore_dataset, update_dataset
+from guiqwt.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
@@ -89,6 +93,58 @@ class ProcSettings(gdt.DataSet):
     _g0 = gdt.EndGroup("")
 
 
+class ImageDefaultSettings(BaseImageParam):
+    """Image visualization default settings"""
+
+    _multiselection = True  # Hide label (not clean because it's not the intended use)
+
+
+#  pylint:disable=unused-argument
+def edit_default_image_settings(
+    dataset: gdt.DataSet, item: gdt.DataItem, value: Any, parent: QW.QWidget
+) -> None:
+    """Edit default image settings"""
+    param = ImageDefaultSettings(_("Default image visualization settings"))
+    ima_def_dict = Conf.view.get_def_dict("ima")
+    update_dataset(param, ima_def_dict)
+    if param.edit(parent=parent):
+        restore_dataset(param, ima_def_dict)
+        Conf.view.set_def_dict("ima", ima_def_dict)
+        # TODO: [P2] Update all active objects when settings were changed
+        # Find a way to return the info to the main window, then update all
+        # active images with the new settings.
+
+
+class ViewSettings(gdt.DataSet):
+    """DataLab Visualization settings"""
+
+    g0 = gdt.BeginGroup(_("Image visualization settings"))
+    ima_ref_lut_range = gdi.BoolItem(
+        "",
+        _("Use reference image LUT range"),
+        help=_(
+            "If this setting is enabled, images are shown<br>"
+            "with the same LUT range as the first selected image"
+        ),
+    )
+    ima_eliminate_outliers = gdi.FloatItem(
+        _("Eliminate outliers"),
+        unit=_("%"),
+        min=0,
+        max=100,
+        help=_(
+            "Eliminate a percentage of the highest and lowest values<br>"
+            "of the image histogram - <i>recommanded values are below 1%</i>"
+        ),
+    )
+    ima_defaults = gdi.ButtonItem(
+        _("Default image visualization settings"),
+        edit_default_image_settings,
+        icon="image.svg",
+    )
+    _g0 = gdt.EndGroup("")
+
+
 # Generator yielding (param, section, option) tuples from configuration dictionary
 def _iter_conf(paramdict: dict[str, gdt.DataSet]) -> tuple[gdt.DataSet, str, str]:
     """Iterate over configuration parameters"""
@@ -133,13 +189,18 @@ def get_restart_items_values(paramdict: dict[str, gdt.DataSet]) -> list:
     return values
 
 
-def edit_settings(parent: QW.QWidget | None = None):
-    """Edit DataLab settings"""
+def edit_settings(parent: QW.QWidget) -> None:
+    """Edit DataLab settings
+
+    Args:
+        parent (QWidget): Parent widget
+    """
     paramdict = {
-        "main": MainSettings(_("General features")),
-        "console": ConsoleSettings(_("Console")),
-        "io": IOSettings(_("I/O")),
+        "main": MainSettings(_("General")),
         "proc": ProcSettings(_("Processing")),
+        "view": ViewSettings(_("Visualization")),
+        "io": IOSettings(_("I/O")),
+        "console": ConsoleSettings(_("Console")),
     }
     conf_to_datasets(paramdict)
     before = get_restart_items_values(paramdict)

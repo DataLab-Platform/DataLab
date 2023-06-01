@@ -328,14 +328,6 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             SignalObj or ImageObj object
         """
-        # TODO: [P2] Add default signal/image visualization settings
-        # 1. Initialize here (at object creation) metadata with default settings
-        #    (see guiqwt.styles.CurveParam and ImageObj for inspiration)
-        # 2. Add a dialog box to edit default settings in main window
-        #    (use a guidata dataset with only a selection of items from guiqwt.styles
-        #     classes)
-        # 3. Update all active objects when settings were changed
-        # 4. Persist settings in .INI configuration file
         obj = self.PARAMCLASS(title=title)  # pylint: disable=not-callable
         obj.title = title
         return obj

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 21:32+0200\n"
+"POT-Creation-Date: 2023-06-01 11:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -579,10 +579,6 @@ msgstr ""
 msgid "ROI geometry"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.reset_metadata_to_defaults:1 of
-msgid "Reset metadata to default values"
-msgstr ""
-
 #: cdl.core.model.image.ImageObj.set_metadata_from:1 of
 msgid ""
 "Set metadata from object: dict-like (only string keys are considered) or "
@@ -792,5 +788,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "new image object"
+#~ msgstr ""
+
+#~ msgid "Reset metadata to default values"
 #~ msgstr ""
 

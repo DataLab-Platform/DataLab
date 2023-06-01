@@ -194,6 +194,49 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # (e.g. see `create_image` in cdl/core/model/image.py)
     ima_def_colormap = conf.Option()
     ima_def_interpolation = conf.Option()
+    ima_def_alpha = conf.Option()
+    ima_def_alpha_mask = conf.Option()
+
+    @classmethod
+    def get_def_dict(cls, category: str) -> dict:
+        """Get default visualization settings as a dictionnary
+
+        Args:
+            category (str): category ("ima" or "sig", respectively for image
+                and signal)
+
+        Returns:
+            dict: default visualization settings as a dictionnary
+        """
+        assert category in ("ima", "sig")
+        prefix = f"{category}_def_"
+        def_dict = {}
+        for attrname in dir(cls):
+            if attrname.startswith(prefix):
+                name = attrname[len(prefix) :]
+                opt = getattr(cls, attrname)
+                defval = opt.get(None)
+                if defval is not None:
+                    def_dict[name] = defval
+        return def_dict
+
+    @classmethod
+    def set_def_dict(cls, category: str, def_dict: dict) -> None:
+        """Set default visualization settings from a dictionnary
+
+        Args:
+            category (str): category ("ima" or "sig", respectively for image
+                and signal)
+            def_dict (dict): default visualization settings as a dictionnary
+        """
+        assert category in ("ima", "sig")
+        prefix = f"{category}_def_"
+        for attrname in dir(cls):
+            if attrname.startswith(prefix):
+                name = attrname[len(prefix) :]
+                opt = getattr(cls, attrname)
+                if name in def_dict:
+                    opt.set(def_dict[name])
 
 
 # Usage (example): Conf.console.console_enabled.get(True)
@@ -243,6 +286,13 @@ def initialize():
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.ignore_warnings.get(False)
+    # View section
+    Conf.view.ima_ref_lut_range.get(True)
+    Conf.view.ima_eliminate_outliers.get(0.1)
+    Conf.view.ima_def_colormap.get("jet")
+    Conf.view.ima_def_interpolation.get(0)
+    Conf.view.ima_def_alpha.get(1.0)
+    Conf.view.ima_def_alpha_mask.get(False)
 
 
 def reset():

@@ -16,7 +16,7 @@ SHOW = True  # Show test in GUI-based test launcher
 def test_edit_settings():
     """Test edit settings"""
     with qt_app_context():
-        edit_settings()
+        edit_settings(None)
 
 
 if __name__ == "__main__":

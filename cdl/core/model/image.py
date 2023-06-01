@@ -310,25 +310,6 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         if stored_val is not None:
             self.metadata[key] = stored_val
 
-    def reset_metadata_to_defaults(self) -> None:
-        """Reset metadata to default values"""
-        base.ObjectItf.reset_metadata_to_defaults(self)
-        # Default visualization settings
-        for name, opt in (
-            ("colormap", Conf.view.ima_def_colormap),
-            ("interpolation", Conf.view.ima_def_interpolation),
-        ):
-            defval = opt.get(None)
-            if defval is not None:
-                self.metadata[name] = defval
-        # TODO: [P2] Add default signal/image visualization settings
-        # 1. Add signal visualization settings?
-        # 2. Add more image visualization settings?
-        # 3. Add a dialog box to edit default settings in main window
-        #    (use a guidata dataset with only a selection of items from guiqwt.styles
-        #     classes)
-        # 4. Update all active objects when settings were changed
-
     def set_metadata_from(self, obj: Mapping | dict) -> None:
         """Set metadata from object: dict-like (only string keys are considered)
         or any other object (iterating over supported attributes)
@@ -506,7 +487,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
             self.maskdata,
             title=self.title,
             colormap="jet",
-            eliminate_outliers=Conf.view.ima_eliminate_outliers.get(0.1),
+            eliminate_outliers=Conf.view.ima_eliminate_outliers.get(),
             interpolation="nearest",
             show_mask=True,
         )

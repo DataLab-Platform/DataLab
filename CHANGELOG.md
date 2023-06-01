@@ -24,7 +24,11 @@ New features:
   * Added macro commands: DataLab can be controlled via a macro file (see
     [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
 * General features:
-  * Added settings dialog box (see "Settings" entry in "File" menu)
+  * Added settings dialog box (see "Settings" entry in "File" menu):
+    * General settings
+    * Visualization settings
+    * Processing settings
+    * Etc.
   * New default layout: signal/image panels are on the right side of the main
     window, visualization panels are on the left side with a vertical toolbar
 * Signal/Image features:

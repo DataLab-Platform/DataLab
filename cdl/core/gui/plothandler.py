@@ -279,7 +279,7 @@ class ImagePlotHandler(BasePlotHandler):
         item: MaskedImageItem, ref_item: MaskedImageItem
     ) -> None:
         """Update plot item according to reference item"""
-        if ref_item is not None and Conf.view.ima_ref_lut_range.get(True):
+        if ref_item is not None and Conf.view.ima_ref_lut_range.get():
             item.set_lut_range(ref_item.get_lut_range())
             plot: ImagePlot = item.plot()
             plot.update_colormap_axis(item)
