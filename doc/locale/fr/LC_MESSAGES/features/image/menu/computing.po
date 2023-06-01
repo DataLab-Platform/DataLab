@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-16 09:23+0100\n"
+"POT-Creation-Date: 2023-06-01 17:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,13 +140,10 @@ msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
 #: ../../features/image/menu/computing.rst:54
-#, fuzzy
 msgid ""
 "See :ref:`ref-to-contour-detection` for more details on algorithm and "
 "associated parameters."
-msgstr ""
-"Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
-"l'algorithme et les paramètres associés."
+msgstr "Voir :ref:`ref-to-contour-detection` pour plus de détails sur l'algorithme et les paramètres associés."
 
 #: ../../features/image/menu/computing.rst:56
 msgid ""
@@ -174,11 +171,26 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
 
+#: ../../features/image/menu/computing.rst:77
+msgid "Blob detection"
+msgstr "Détection de taches"
+
+#: ../../features/image/menu/computing.rst:67
+msgid "Blob detection (DOG)"
+msgstr "Détection de taches (DOG)"
+
 #: ../../features/image/menu/computing.rst:66
+msgid ""
+"Detect blobs using Difference of Gaussian (DOG) method (implementation "
+"based on `skimage.feature.blob_dog <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
+msgstr "Détection de taches basée sur la méthode de différence de gaussienne (DOG) (implementation basée sur `skimage.feature.blob_dog <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
+
+#: ../../features/image/menu/computing.rst:71
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: ../../features/image/menu/computing.rst:65
+#: ../../features/image/menu/computing.rst:70
 msgid ""
 "Detect blobs using Determinant of Hessian (DOH) method (implementation "
 "based on `skimage.feature.blob_doh <https://scikit-"
@@ -188,12 +200,26 @@ msgstr ""
 "(implementation basée sur `skimage.feature.blob_doh <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
 
-#: ../../features/image/menu/computing.rst:68
+#: ../../features/image/menu/computing.rst:75
+msgid "Blob detection (LOG)"
+msgstr "Détection de taches (LOG)"
+
+#: ../../features/image/menu/computing.rst:74
+msgid ""
+"Detect blobs using Laplacian of Gaussian (LOG) method (implementation "
+"based on `skimage.feature.blob_log <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
+msgstr "Détection de taches basée sur la méthode du laplacien de gaussienne (LOG) (implementation basée sur `skimage.feature.blob_log <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
+
+#: ../../features/image/menu/computing.rst:77
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: ../../features/image/menu/computing.rst:69
+#: ../../features/image/menu/computing.rst:78
 msgid ""
 "Detect blobs using OpenCV implementation of `SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
-msgstr "Détection de taches basée sur l'implémentation OpenCV de `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+msgstr ""
+"Détection de taches basée sur l'implémentation OpenCV de "
+"`SimpleBlobDetector "
+"<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."

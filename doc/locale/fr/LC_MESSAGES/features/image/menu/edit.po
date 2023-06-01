@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-30 12:15+0100\n"
+"POT-Creation-Date: 2023-06-01 17:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,11 +61,27 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata from clipboard into selected image."
 msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
 
-#: ../../features/image/menu/edit.rst:24
+#: ../../features/image/menu/edit.rst:22
+msgid "Import metadata into image"
+msgstr "Importer les métadonnées dans l'image"
+
+#: ../../features/image/menu/edit.rst:22
+msgid "Import metadata from a JSON text file."
+msgstr "Importer les métadonnées depuis un fichier texte au format JSON."
+
+#: ../../features/image/menu/edit.rst:25
+msgid "Export metadata from image"
+msgstr "Exporter les métadonnées de l'image"
+
+#: ../../features/image/menu/edit.rst:25
+msgid "Export metadata to a JSON text file."
+msgstr "Exporter les métadonnées vers un fichier texte au format JSON."
+
+#: ../../features/image/menu/edit.rst:30
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: ../../features/image/menu/edit.rst:22
+#: ../../features/image/menu/edit.rst:28
 msgid ""
 "Delete metadata from currently selected image. Metadata contains "
 "additionnal information such as Region of Interest or results of "
@@ -75,12 +91,15 @@ msgstr ""
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
 
-#: ../../features/image/menu/edit.rst:27
+#: ../../features/image/menu/edit.rst:33
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/image/menu/edit.rst:27
+#: ../../features/image/menu/edit.rst:33
 msgid ""
 "Copy all image titles to clipboard as a multiline text. This text may be "
 "used for reproducing a processing chain, for example."
-msgstr "Copie les titres de toutes les images dans le presse-papier, sous la forme d'un texte multiligne. Ce texte peut être ensuite utilisé pour reproduire une chaîne de traitement, par exemple."
+msgstr ""
+"Copie les titres de toutes les images dans le presse-papier, sous la "
+"forme d'un texte multiligne. Ce texte peut être ensuite utilisé pour "
+"reproduire une chaîne de traitement, par exemple."

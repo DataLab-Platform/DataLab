@@ -4,14 +4,25 @@ Roadmap
 Future milestones
 -----------------
 
-DataLab 2.0
-^^^^^^^^^^^
+Features
+^^^^^^^^
 
-Ideas for new features:
+* Add support for timeseries
 
 * Add support for multichannel timeseries
 
-* Add a "Preferences" dialog box to setup all configurable parameters
+* Develop a Jupyter plugin for interactive data analysis connected with DataLab
+
+* Develop a Spyder plugin for interactive data analysis connected with DataLab
+
+Other tasks
+^^^^^^^^^^^
+
+* Develop a very simple DataLab plugin to demonstrate the plugin system
+
+* Develop a DataLab plugin template
+
+* Make a video tutorial about the plugin system and remote control features
 
 Past milestones
 ---------------
@@ -29,6 +40,8 @@ DataLab 1.0
     communication port number)
 
 * Optimize image displaying performance
+
+* Add preferences dialog box
 
 * Add new image processing features: denoising, ...
 

@@ -66,16 +66,6 @@ between your application and DataLab:
 
     Screenshot of remote client application test (``cdl.tests.remoteclient_app``)
 
-Public API
-^^^^^^^^^^
-
-The public API is the following:
-
-.. automodule:: cdl.remotecontrol
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Examples
 ^^^^^^^^
 
@@ -91,6 +81,26 @@ structure of the script make it convenient to be used in `Spyder`_ IDE):
 Here is a Python 2.7 reimplementation of this class:
 
 .. literalinclude:: ../../remotecontrol_py27.py
+
+Public API: remote client
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. automodule:: cdl.remotecontrol
+    :members: RemoteClient
+
+Public API: additional methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The remote control class methods may be completed with additional methods which
+are dynamically added at runtime. This mechanism allows to access the methods
+of the "processor" objects of DataLab.
+
+.. automodule:: cdl.core.gui.processor.signal
+    :members:
+
+.. automodule:: cdl.core.gui.processor.image
+    :members:
+
 
 .. _XML-RPC: https://docs.python.org/3/library/xmlrpc.html
 

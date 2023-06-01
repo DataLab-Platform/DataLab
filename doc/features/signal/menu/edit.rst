@@ -18,6 +18,12 @@ Copy metadata
 Paste metadata
     Paste metadata from clipboard into selected image.
 
+Import metadata into signal
+    Import metadata from a JSON text file.
+
+Export metadata from signal
+    Export metadata to a JSON text file.
+
 Delete object metadata
     Delete metadata from currently selected signal.
     Metadata contains additionnal information such as Region of Interest

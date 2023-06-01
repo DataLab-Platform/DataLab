@@ -52,12 +52,6 @@ Open image
 Save image
     Save current image (see "Open image" supported filetypes).
 
-Import metadata into image
-    Import metadata from a JSON text file.
-
-Export metadata from image
-    Export metadata to a JSON text file.
-
 Open HDF5 file
     Import data from a HDF5 file.
 
@@ -67,3 +61,8 @@ Save to HDF5 file
 Browse HDF5 file
     Open the :ref:`h5browser` in a new window to browse and import data
     from HDF5 file.
+
+Settings
+    Open the the "Settings" dialog box.
+
+    .. image:: /images/settings.png

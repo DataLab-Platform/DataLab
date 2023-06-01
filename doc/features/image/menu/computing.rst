@@ -61,9 +61,18 @@ Circle Hough transform
     Detect circular shapes using circle Hough transform
     (implementation based on `skimage.transform.hough_circle_peaks <https://scikit-image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_).
 
-Blob detection (DOH)
-    Detect blobs using Determinant of Hessian (DOH) method
-    (implementation based on `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_).
+Blob detection
+    Blob detection (DOG)
+        Detect blobs using Difference of Gaussian (DOG) method
+        (implementation based on `skimage.feature.blob_dog <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_).
 
-Blob detection (OpenCV)
-    Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.
+    Blob detection (DOH)
+        Detect blobs using Determinant of Hessian (DOH) method
+        (implementation based on `skimage.feature.blob_doh <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-doh>`_).
+
+    Blob detection (LOG)
+        Detect blobs using Laplacian of Gaussian (LOG) method
+        (implementation based on `skimage.feature.blob_log <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-log>`_).
+
+    Blob detection (OpenCV)
+        Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.

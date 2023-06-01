@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-30 12:15+0100\n"
+"POT-Creation-Date: 2023-06-01 17:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,11 +61,27 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata from clipboard into selected image."
 msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
 
-#: ../../features/signal/menu/edit.rst:24
+#: ../../features/signal/menu/edit.rst:22
+msgid "Import metadata into signal"
+msgstr "Importer les métadonnées dans le signal"
+
+#: ../../features/signal/menu/edit.rst:22
+msgid "Import metadata from a JSON text file."
+msgstr "Importer les métadonnées depuis un fichier texte JSON."
+
+#: ../../features/signal/menu/edit.rst:25
+msgid "Export metadata from signal"
+msgstr "Exporter les métadonnées du signal"
+
+#: ../../features/signal/menu/edit.rst:25
+msgid "Export metadata to a JSON text file."
+msgstr "Exporter les métadonnées vers un fichier texte JSON."
+
+#: ../../features/signal/menu/edit.rst:30
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: ../../features/signal/menu/edit.rst:22
+#: ../../features/signal/menu/edit.rst:28
 msgid ""
 "Delete metadata from currently selected signal. Metadata contains "
 "additionnal information such as Region of Interest or results of "
@@ -75,12 +91,15 @@ msgstr ""
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
 
-#: ../../features/signal/menu/edit.rst:27
+#: ../../features/signal/menu/edit.rst:33
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/signal/menu/edit.rst:27
+#: ../../features/signal/menu/edit.rst:33
 msgid ""
 "Copy all signal titles to clipboard as a multiline text. This text may be"
 " used for reproducing a processing chain, for example."
-msgstr "Copie les titres de tous les signaux dans le presse-papier, sous la forme d'un texte multiligne. Ce texte peut être ensuite utilisé pour reproduire une chaîne de traitement, par exemple."
+msgstr ""
+"Copie les titres de tous les signaux dans le presse-papier, sous la forme"
+" d'un texte multiligne. Ce texte peut être ensuite utilisé pour "
+"reproduire une chaîne de traitement, par exemple."

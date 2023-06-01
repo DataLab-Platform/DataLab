@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 21:32+0200\n"
+"POT-Creation-Date: 2023-06-01 18:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -158,7 +158,7 @@ msgstr "Exécution d'un calcul avec des paramètres"
 msgid ""
 "The signal and image objects are described on this section: :ref:`ref-to-"
 "model`."
-msgstr ""
+msgstr "Les objets signal et image sont décrits dans cette section : :ref:`ref-to-model`."
 
 #: ../../features/general/remotecontrol.rst:59
 msgid ""
@@ -185,40 +185,72 @@ msgstr ""
 "Copie d'écran du test applicatif du contrôle à distance "
 "(``cdl.tests.remoteclient_app``)"
 
-#: ../../features/general/remotecontrol.rst:70
-msgid "Public API"
-msgstr "API publique"
+#: ../../features/general/remotecontrol.rst:70 cdl.remotecontrol.RemoteClient:5
+#: of
+msgid "Examples"
+msgstr "Exemples"
 
 #: ../../features/general/remotecontrol.rst:72
-msgid "The public API is the following:"
-msgstr "L'API publique est la suivante :"
+msgid ""
+"When using Python 3, you may directly use the `RemoteClient` class as in "
+"examples cited above."
+msgstr ""
+"Avec Python 3, il est possible d'utiliser directement la classe "
+"`RemoteClient` comme dans les exemples précités."
 
-#: cdl.remotecontrol:1 of
+#: ../../features/general/remotecontrol.rst:75
+msgid ""
+"Here is an example in Python 3 of a script that connects to a running "
+"DataLab instance, adds a signal and an image, and then runs calculations "
+"(the cell structure of the script make it convenient to be used in "
+"`Spyder`_ IDE):"
+msgstr ""
+"Voici un exemple d'un script en Python 3 qui se connecte à une instance "
+"de DataLab, ajoute un signal et une image, puis exécute des calculs (la "
+"structure en cellules du script le rend pratique à utiliser dans l'IDE "
+"`Spyder`_):"
+
+#: ../../features/general/remotecontrol.rst:81
+msgid "Here is a Python 2.7 reimplementation of this class:"
+msgstr ""
+"Voici de plus un exemple de réimplementation de cette classe en Python "
+"2.7 :"
+
+#: ../../features/general/remotecontrol.rst:86
+msgid "Public API: remote client"
+msgstr "API publique : client distant"
+
+#: cdl.remotecontrol:2 of
 msgid "DataLab remote controlling utilities"
 msgstr ""
 
-#: cdl.remotecontrol.BaseRPCServer:1 of
-msgid "Bases: :py:class:`abc.ABC`"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer:1 of
-msgid "Base XML-RPC server mixin"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.get_version:1 of
-msgid "Return DataLab version"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:1
-#: cdl.remotecontrol.RemoteServer.notify_port:1 of
-msgid "Notify automatically attributed port."
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:3 of
+#: cdl.remotecontrol:4 of
 msgid ""
-"This method is called after the server port has been automatically "
-"attributed. It is intended to be reimplemented by subclasses to notify "
-"the port number to the main window."
+"This module provides utilities to control DataLab from a Python script "
+"(e.g. with Spyder) or from a Jupyter notebook."
+msgstr ""
+
+#: cdl.remotecontrol:7 of
+msgid ""
+"The :class:`RemoteClient` class provides the main interface to DataLab "
+"XML-RPC server."
+msgstr ""
+
+#: cdl.remotecontrol.RemoteClient:1 of
+msgid ""
+"Object representing a proxy/client to DataLab XML-RPC server. This object"
+" is used to call DataLab functions from a Python script."
+msgstr ""
+
+#: cdl.remotecontrol.RemoteClient:6 of
+msgid ""
+"Here is a simple example of how to use RemoteClient in a Python script or"
+" in a Jupyter notebook:"
+msgstr ""
+
+#: cdl.remotecontrol.RemoteClient.add_image:1
+#: cdl.remotecontrol.RemoteServer.add_image:1 of
+msgid "Add image data to DataLab."
 msgstr ""
 
 #: cdl.remotecontrol.BaseRPCServer.notify_port
@@ -253,54 +285,6 @@ msgstr ""
 #: cdl.remotecontrol.array_to_rpcbinary cdl.remotecontrol.dataset_to_json
 #: cdl.remotecontrol.json_to_dataset cdl.remotecontrol.rpcbinary_to_array of
 msgid "Parameters"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:7
-#: cdl.remotecontrol.RemoteServer.notify_port:6 of
-msgid "Server port number"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.register_functions:1
-#: cdl.remotecontrol.RemoteServer.register_functions:1 of
-msgid "Register functions"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.serve:1 of
-msgid "Start server and serve forever"
-msgstr ""
-
-#: cdl.remotecontrol.CDLConnectionError:1 of
-msgid "Bases: :py:class:`Exception`"
-msgstr ""
-
-#: cdl.remotecontrol.CDLConnectionError:1 of
-msgid "Error when trying to connect to DataLab XML-RPC server"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteClient:1 of
-msgid "Bases: :py:class:`object`"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteClient:1 of
-msgid ""
-"Object representing a proxy/client to DataLab XML-RPC server. This object"
-" is used to call DataLab functions from a Python script."
-msgstr ""
-
-#: ../../features/general/remotecontrol.rst:80 cdl.remotecontrol.RemoteClient:5
-#: of
-msgid "Examples"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteClient:6 of
-msgid ""
-"Here is a simple example of how to use RemoteClient in a Python script or"
-" in a Jupyter notebook:"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteClient.add_image:1
-#: cdl.remotecontrol.RemoteServer.add_image:1 of
-msgid "Add image data to DataLab."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.add_image:3
@@ -675,10 +659,42 @@ msgstr ""
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteServer:1 of
+#: cdl.remotecontrol.BaseRPCServer:1 of
+msgid "Base XML-RPC server mixin"
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.get_version:1 of
+msgid "Return DataLab version"
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.notify_port:1
+#: cdl.remotecontrol.RemoteServer.notify_port:1 of
+msgid "Notify automatically attributed port."
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.notify_port:3 of
 msgid ""
-"Bases: :py:class:`PyQt5.QtCore.QThread`, "
-":py:class:`cdl.remotecontrol.BaseRPCServer`"
+"This method is called after the server port has been automatically "
+"attributed. It is intended to be reimplemented by subclasses to notify "
+"the port number to the main window."
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.notify_port:7
+#: cdl.remotecontrol.RemoteServer.notify_port:6 of
+msgid "Server port number"
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.register_functions:1
+#: cdl.remotecontrol.RemoteServer.register_functions:1 of
+msgid "Register functions"
+msgstr ""
+
+#: cdl.remotecontrol.BaseRPCServer.serve:1 of
+msgid "Start server and serve forever"
+msgstr ""
+
+#: cdl.remotecontrol.CDLConnectionError:1 of
+msgid "Error when trying to connect to DataLab XML-RPC server"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServer:1 of
@@ -770,10 +786,6 @@ msgid "Panel name (valid values: 'signal', 'image', 'macro')"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServerMeta:1 of
-msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServerMeta:1 of
 msgid "Mixed metaclass to avoid conflicts"
 msgstr ""
 
@@ -848,31 +860,382 @@ msgstr ""
 msgid "NumPy array"
 msgstr ""
 
-#: ../../features/general/remotecontrol.rst:82
-msgid ""
-"When using Python 3, you may directly use the `RemoteClient` class as in "
-"examples cited above."
-msgstr ""
-"Avec Python 3, il est possible d'utiliser directement la classe "
-"`RemoteClient` comme dans les exemples précités."
+#: ../../features/general/remotecontrol.rst:92
+msgid "Public API: additional methods"
+msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remotecontrol.rst:85
+#: ../../features/general/remotecontrol.rst:94
 msgid ""
-"Here is an example in Python 3 of a script that connects to a running "
-"DataLab instance, adds a signal and an image, and then runs calculations "
-"(the cell structure of the script make it convenient to be used in "
-"`Spyder`_ IDE):"
-msgstr ""
-"Voici un exemple d'un script en Python 3 qui se connecte à une instance "
-"de DataLab, ajoute un signal et une image, puis exécute des calculs (la "
-"structure en cellules du script le rend pratique à utiliser dans l'IDE "
-"`Spyder`_):"
+"The remote control class methods may be completed with additional methods"
+" which are dynamically added at runtime. This mechanism allows to access "
+"the methods of the \"processor\" objects of DataLab."
+msgstr "Le client de contrôle à distance peut être complété avec des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des objets \"processor\" de DataLab."
 
-#: ../../features/general/remotecontrol.rst:91
-msgid "Here is a Python 2.7 reimplementation of this class:"
+#: cdl.core.gui.processor.signal:1 of
+msgid "DataLab Signal Processor GUI module"
 msgstr ""
-"Voici de plus un exemple de réimplementation de cette classe en Python "
-"2.7 :"
+
+#: cdl.core.gui.processor.signal.SignalProcessor:1 of
+msgid "Object handling signal processing: operations, processing, computing"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_abs:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_abs:1 of
+msgid "Compute absolute value"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_average:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_average:1 of
+msgid "Compute average"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_calibration:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_calibration:1 of
+msgid "Compute data linear calibration"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
+msgid "Compute maximum data clipping"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_derivative:1 of
+msgid "Compute derivative"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
+msgid "Compute difference between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division:1 of
+msgid "Compute division between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_ifft:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fft:1 of
+msgid "Compute iFFT"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
+msgid "Compute fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2:1 of
+msgid "Compute FW at 1/e²"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm:1 of
+msgid "Compute FWHM"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter:1 of
+msgid "Compute gaussian filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_fft:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_ifft:1 of
+msgid "Compute FFT"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_integral:1 of
+msgid "Compute integral"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
+msgid "Compute Log10"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_average:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average:1 of
+msgid "Compute moving average"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_median:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median:1 of
+msgid "Compute moving median"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit:1 of
+msgid "Compute multi-Gaussian fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
+msgid "Normalize data"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection:1 of
+msgid "Detect peaks from data"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit:1 of
+msgid "Compute polynomial fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_product:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product:1 of
+msgid "Compute product"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference:1
+#: of
+msgid "Compute quadratic difference between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
+msgid "Compute sum"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes:1 of
+msgid "Swap data axes"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_threshold:1 of
+msgid "Compute threshold clipping"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_wiener:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_wiener:1 of
+msgid "Compute Wiener filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.extract_roi:1
+#: cdl.core.gui.processor.signal.SignalProcessor.extract_roi:1 of
+msgid "Extract Region Of Interest (ROI) from data"
+msgstr ""
+
+#: cdl.core.gui.processor.image:1 of
+msgid "DataLab Image Processor GUI module"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor:1 of
+msgid "Object handling image processing: operations, processing, computing"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
+msgid "Compute gamma correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log:1 of
+msgid "Compute log correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid:1 of
+msgid "Compute sigmoid correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_binning:1 of
+msgid "Binning image"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat:1 of
+msgid "Compute Black Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog:1 of
+msgid "Compute blob detection using Difference of Gaussian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh:1 of
+msgid "Compute blob detection using Determinant of Hessian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_log:1 of
+msgid "Compute blob detection using Laplacian of Gaussian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
+msgid "Compute blob detection using OpenCV"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
+msgid "Compute Butterworth filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_canny:1 of
+msgid "Compute Canny filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_centroid:1 of
+msgid "Compute image centroid"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_closing:1 of
+msgid "Compute morphological closing"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape:1 of
+msgid "Compute contour shape fit"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral:1 of
+msgid "Compute bilateral filter denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat:1 of
+msgid "Denoise using White Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv:1 of
+msgid "Compute Total Variation denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet:1 of
+msgid "Compute Wavelet denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_difference:1 of
+msgid "Compute difference between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_dilation:1 of
+msgid "Compute Dilation"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_division:1 of
+msgid "Compute division between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle:1 of
+msgid "Compute minimum enclosing circle"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist:1 of
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist:1 of
+msgid "Histogram equalization"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_erosion:1 of
+msgid "Compute Erosion"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid:1 of
+msgid "Compute Farid filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_h:1 of
+msgid "Compute Farid filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_v:1 of
+msgid "Compute Farid filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
+msgid "Compute flat field correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_fliph:1 of
+msgid "Flip data horizontally"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_flipv:1 of
+msgid "Flip data vertically"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks:1 of
+msgid "Compute peak detection based on a circle Hough transform"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_laplace:1 of
+msgid "Compute Laplace filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
+msgid "Compute base 10 logarithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_opening:1 of
+msgid "Compute morphological opening"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection:1 of
+msgid "Compute 2D peak detection"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt:1 of
+msgid "Compute Prewitt filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h:1 of
+msgid "Compute Prewitt filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v:1 of
+msgid "Compute Prewitt filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference:1
+#: of
+msgid "Compute quadratic difference between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity:1 of
+msgid "Rescale image intensity levels"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_resize:1 of
+msgid "Resize image"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_roberts:1 of
+msgid "Compute Roberts filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate:1 of
+msgid "Rotate data arbitrarily"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate270:1 of
+msgid "Rotate data 270°"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate90:1 of
+msgid "Rotate data 90°"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr:1 of
+msgid "Compute Scharr filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h:1 of
+msgid "Compute Scharr filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v:1 of
+msgid "Compute Scharr filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel:1 of
+msgid "Compute Sobel filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h:1 of
+msgid "Compute Sobel filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v:1 of
+msgid "Compute Sobel filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat:1 of
+msgid "Compute White Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.distribute_on_grid:1 of
+msgid "Distribute images on a grid"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.reset_positions:1 of
+msgid "Reset image positions"
+msgstr ""
 
 #~ msgid "Bases: :py:class:`~abc.ABC`"
 #~ msgstr ""
@@ -930,3 +1293,25 @@ msgstr ""
 #~ msgid "Bases: :py:class:`~sip.wrappertype`, :py:class:`~abc.ABCMeta`"
 #~ msgstr ""
 
+#~ msgid "Public API"
+#~ msgstr "API publique"
+
+#~ msgid "The public API is the following:"
+#~ msgstr "L'API publique est la suivante :"
+
+#~ msgid "Bases: :py:class:`abc.ABC`"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`Exception`"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`object`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Bases: :py:class:`PyQt5.QtCore.QThread`, "
+#~ ":py:class:`cdl.remotecontrol.BaseRPCServer`"
+#~ msgstr ""
+
+#~ msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"
+#~ msgstr ""
