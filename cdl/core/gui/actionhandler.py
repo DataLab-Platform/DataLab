@@ -392,7 +392,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Duplicate"),
-                icon=get_icon("libre-gui-copy.svg"),
+                icon=get_icon("duplicate.svg"),
                 separator=True,
                 triggered=self.panel.duplicate_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Copy),
@@ -458,8 +458,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
                 icon=get_icon("copy_titles.svg"),
                 triggered=self.panel.copy_titles_to_clipboard,
-                toolbar_pos=-1,
-                toolbar_sep=True,
             )
 
         with self.new_category(ActionCategory.VIEW):
