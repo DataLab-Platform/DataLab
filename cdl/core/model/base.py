@@ -818,9 +818,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         Yields:
             PlotItem: plot item
         """
-        setdef = self.metadata.setdefault
-        fmt = setdef(self.METADATA_FMT, "%" + self.CONF_FMT.get(self.DEFAULT_FMT))
-        lbl = setdef(self.METADATA_LBL, Conf.view.show_label.get(False))
+        fmt, lbl = self.metadata[self.METADATA_FMT], self.metadata[self.METADATA_LBL]
         for key, value in self.metadata.items():
             if key == ROI_KEY:
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
@@ -848,7 +846,10 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
-        self.metadata = {}
+        self.metadata = {
+            self.METADATA_FMT: "%" + self.CONF_FMT.get(self.DEFAULT_FMT),
+            self.METADATA_LBL: Conf.view.show_label.get(False),
+        }
         self.update_metadata_view_settings()
 
     def update_metadata_view_settings(self) -> None:
