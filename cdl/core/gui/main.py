@@ -127,7 +127,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.signalpanel: SignalPanel = None
         self.imagepanel: ImagePanel = None
         self.tabwidget: QW.QTabWidget = None
-        self.signal_image_docks = None
+        self.signal_image_docks: tuple[QW.QDockWidget] = None
         self.h5inputoutput = H5InputOutput(self)
 
         self.openh5_action: QW.QAction = None
@@ -569,7 +569,7 @@ class CDLMainWindow(QW.QMainWindow):
             _("Settings..."),
             icon=get_icon("libre-gui-settings.svg"),
             tip=_("Open settings dialog"),
-            triggered=lambda: edit_settings(self),
+            triggered=self.__edit_settings,
         )
         main_toolbar = self.addToolBar(_("Main Toolbar"))
         add_actions(
@@ -601,9 +601,7 @@ class CDLMainWindow(QW.QMainWindow):
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
-        curveplot_toolbar = QW.QToolBar(_("Curve Plotting Toolbar"), self)
-        self.addToolBar(QC.Qt.LeftToolBarArea, curveplot_toolbar)
-        curvewidget = DockablePlotWidget(self, CurveWidget, curveplot_toolbar)
+        curvewidget = DockablePlotWidget(self, CurveWidget)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
         self.signalpanel = signal.SignalPanel(
@@ -615,9 +613,7 @@ class CDLMainWindow(QW.QMainWindow):
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
-        imagevis_toolbar = QW.QToolBar(_("Image Visualization Toolbar"), self)
-        self.addToolBar(QC.Qt.LeftToolBarArea, imagevis_toolbar)
-        imagewidget = DockablePlotWidget(self, ImageWidget, imagevis_toolbar)
+        imagewidget = DockablePlotWidget(self, ImageWidget)
         self.imagepanel = image.ImagePanel(
             self, imagewidget.plotwidget, self.image_toolbar
         )
@@ -1097,6 +1093,14 @@ class CDLMainWindow(QW.QMainWindow):
               <p>{adv_conf}<br><br>{pinfos}""",
         )
 
+    def __edit_settings(self) -> None:
+        """Edit settings"""
+        changed_options = edit_settings(self)
+        for option in changed_options:
+            if option == "plot_toolbar_position":
+                for dock in self.signal_image_docks:
+                    widget: DockablePlotWidget = dock.widget()
+                    widget.update_toolbar_position()
     def show_log_viewer(self) -> None:
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)

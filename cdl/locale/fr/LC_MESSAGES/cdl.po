@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-01 11:50+0200\n"
+"POT-Creation-Date: 2023-06-01 13:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1225,6 +1225,10 @@ msgstr "Détection de taches (OpenCV)"
 msgid "Detect blobs using OpenCV SimpleBlobDetector"
 msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
+#: cdl\core\gui\docks.py:39
+msgid "Plot Toolbar"
+msgstr "Barre d'outils des graphiques"
+
 #: cdl\core\gui\h5io.py:42
 msgid "Loading data from %s..."
 msgstr "Chargement des données depuis %s..."
@@ -1233,7 +1237,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:321 cdl\core\gui\main.py:991
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:321 cdl\core\gui\main.py:987
 #: cdl\plugins.py:138
 msgid "Warning"
 msgstr "Attention"
@@ -1402,7 +1406,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:590 cdl\core\gui\main.py:1128
+#: cdl\core\gui\main.py:590 cdl\core\gui\main.py:1124
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1414,107 +1418,99 @@ msgstr "Quitter l'application"
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: cdl\core\gui\main.py:604
-msgid "Curve Plotting Toolbar"
-msgstr "Barre d'outils d'affichage de courbes"
-
-#: cdl\core\gui\main.py:617
+#: cdl\core\gui\main.py:615
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: cdl\core\gui\main.py:618
-msgid "Image Visualization Toolbar"
-msgstr "Barre d'outils d'affichage d'images"
-
-#: cdl\core\gui\main.py:640
+#: cdl\core\gui\main.py:636
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: cdl\core\gui\main.py:641 cdl\core\gui\panel\image.py:50
+#: cdl\core\gui\main.py:637 cdl\core\gui\panel\image.py:50
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: cdl\core\gui\main.py:655
+#: cdl\core\gui\main.py:651
 msgid "Signals"
 msgstr "Signaux"
 
-#: cdl\core\gui\main.py:656
+#: cdl\core\gui\main.py:652
 msgid "Images"
 msgstr "Images"
 
-#: cdl\core\gui\main.py:661
+#: cdl\core\gui\main.py:657
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:663
+#: cdl\core\gui\main.py:659
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:664
+#: cdl\core\gui\main.py:660
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:665 cdl\core\gui\settings.py:200
+#: cdl\core\gui\main.py:661 cdl\core\gui\settings.py:210
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:666
+#: cdl\core\gui\main.py:662
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:667
+#: cdl\core\gui\main.py:663
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:668
+#: cdl\core\gui\main.py:664
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:683
+#: cdl\core\gui\main.py:679
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:693
+#: cdl\core\gui\main.py:689
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: cdl\core\gui\main.py:703
+#: cdl\core\gui\main.py:699
 msgid "Test segfault/Python error"
-msgstr ""
+msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:710
+#: cdl\core\gui\main.py:706
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: cdl\core\gui\main.py:716 cdl\widgets\instconfviewer.py:66
+#: cdl\core\gui\main.py:712 cdl\widgets\instconfviewer.py:66
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: cdl\core\gui\main.py:723
+#: cdl\core\gui\main.py:719
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:729
+#: cdl\core\gui\main.py:725
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:735
+#: cdl\core\gui\main.py:731
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:769 cdl\core\gui\settings.py:203
+#: cdl\core\gui\main.py:765 cdl\core\gui\settings.py:213
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:778 cdl\core\gui\panel\macro.py:68
+#: cdl\core\gui\main.py:774 cdl\core\gui\panel\macro.py:68
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:959
+#: cdl\core\gui\main.py:955
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:992
+#: cdl\core\gui\main.py:988
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1522,40 +1518,40 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1004 cdl\core\gui\panel\base.py:626
+#: cdl\core\gui\main.py:1000 cdl\core\gui\panel\base.py:626
 #: cdl\core\gui\panel\macro.py:338
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1075
+#: cdl\core\gui\main.py:1071
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1083
+#: cdl\core\gui\main.py:1079
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1084
+#: cdl\core\gui\main.py:1080
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1085
+#: cdl\core\gui\main.py:1081
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1089
+#: cdl\core\gui\main.py:1085
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1090
+#: cdl\core\gui\main.py:1086
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1094
+#: cdl\core\gui\main.py:1090
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1129
+#: cdl\core\gui\main.py:1125
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1972,7 +1968,7 @@ msgstr "Extraire les ROI dans un seul objet"
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
 
-#: cdl\core\gui\settings.py:107 cdl\core\gui\settings.py:141
+#: cdl\core\gui\settings.py:107 cdl\core\gui\settings.py:150
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
 
@@ -1980,11 +1976,31 @@ msgstr "Réglages d'affichage d'images par défaut"
 msgid "Image visualization settings"
 msgstr "Réglages d'affichage d'images"
 
-#: cdl\core\gui\settings.py:124
+#: cdl\core\gui\settings.py:123 cdl\core\gui\settings.py:188
+msgid "Plot toolbar position"
+msgstr "Position de la barre d'outils des graphiques"
+
+#: cdl\core\gui\settings.py:125
+msgid "Top (above plot)"
+msgstr "Haut (au-dessus du graphique)"
+
+#: cdl\core\gui\settings.py:126
+msgid "Bottom (below plot)"
+msgstr "Bas (en-dessous du graphique)"
+
+#: cdl\core\gui\settings.py:127
+msgid "Left (of plot)"
+msgstr "Gauche (à gauche du graphique)"
+
+#: cdl\core\gui\settings.py:128
+msgid "Right (of plot)"
+msgstr "Droite (à droite du graphique)"
+
+#: cdl\core\gui\settings.py:133
 msgid "Use reference image LUT range"
 msgstr "Utiliser la LUT de l'image de référence"
 
-#: cdl\core\gui\settings.py:125
+#: cdl\core\gui\settings.py:134
 msgid ""
 "If this setting is enabled, images are shown<br>with the same LUT range as "
 "the first selected image"
@@ -1992,15 +2008,15 @@ msgstr ""
 "Si cette option est activée, les images sont affichées<br>avec la même LUT "
 "que la première image sélectionnée"
 
-#: cdl\core\gui\settings.py:131
+#: cdl\core\gui\settings.py:140
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"
 
-#: cdl\core\gui\settings.py:132
+#: cdl\core\gui\settings.py:141
 msgid "%"
 msgstr "%"
 
-#: cdl\core\gui\settings.py:135
+#: cdl\core\gui\settings.py:144
 msgid ""
 "Eliminate a percentage of the highest and lowest values<br>of the image "
 "histogram - <i>recommanded values are below 1%</i>"
@@ -2009,43 +2025,43 @@ msgstr ""
 "l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à "
 "1%</i>"
 
-#: cdl\core\gui\settings.py:175
+#: cdl\core\gui\settings.py:184
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
-#: cdl\core\gui\settings.py:176
+#: cdl\core\gui\settings.py:185
 msgid "RPC server enable status"
 msgstr "Etat d'activation du serveur XML-RPC"
 
-#: cdl\core\gui\settings.py:177
+#: cdl\core\gui\settings.py:186
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
 
-#: cdl\core\gui\settings.py:178
+#: cdl\core\gui\settings.py:187
 msgid "Third-party plugins support"
 msgstr "Prise en charge des plugins tiers"
 
-#: cdl\core\gui\settings.py:199
+#: cdl\core\gui\settings.py:209
 msgid "General"
 msgstr "Général"
 
-#: cdl\core\gui\settings.py:201
+#: cdl\core\gui\settings.py:211
 msgid "Visualization"
 msgstr "Visualisation"
 
-#: cdl\core\gui\settings.py:202
+#: cdl\core\gui\settings.py:212
 msgid "I/O"
 msgstr "Entrée/sortie"
 
-#: cdl\core\gui\settings.py:207
+#: cdl\core\gui\settings.py:217
 msgid "Settings"
 msgstr "Préférences"
 
-#: cdl\core\gui\settings.py:220
+#: cdl\core\gui\settings.py:230
 msgid "Restart required"
 msgstr "Redémarrage requis"
 
-#: cdl\core\gui\settings.py:221
+#: cdl\core\gui\settings.py:231
 msgid ""
 "The following options have been changed:\n"
 "\n"
@@ -2353,7 +2369,7 @@ msgstr "Aucun plugin disponible"
 
 #: cdl\plugins.py:96
 msgid "Plugins are disabled (see DataLab settings)"
-msgstr ""
+msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
 #: cdl\plugins.py:146
 msgid "Information"
@@ -2447,19 +2463,19 @@ msgstr "En attente : %s s"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: cdl\utils\qthelpers.py:254
+#: cdl\utils\qthelpers.py:253
 msgid "Error:"
 msgstr "Erreur:"
 
-#: cdl\utils\qthelpers.py:254 cdl\widgets\warningerror.py:107
+#: cdl\utils\qthelpers.py:253 cdl\widgets\warningerror.py:107
 msgid "Context"
 msgstr "Contexte"
 
-#: cdl\utils\qthelpers.py:299
+#: cdl\utils\qthelpers.py:298
 msgid "%s could not be opened:"
 msgstr "%s n'a pas pu être ouvert:"
 
-#: cdl\utils\qthelpers.py:301
+#: cdl\utils\qthelpers.py:300
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 
@@ -2596,6 +2612,9 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid "Image Visualization Toolbar"
+#~ msgstr "Barre d'outils d'affichage d'images"
 
 #~ msgid "General features"
 #~ msgstr "Fonctionnalités générales"

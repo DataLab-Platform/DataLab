@@ -8,6 +8,7 @@ DataLab settings test
 """
 
 from cdl.core.gui.settings import edit_settings
+from cdl.env import execenv
 from cdl.utils.qthelpers import qt_app_context
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -16,7 +17,8 @@ SHOW = True  # Show test in GUI-based test launcher
 def test_edit_settings():
     """Test edit settings"""
     with qt_app_context():
-        edit_settings(None)
+        changed = edit_settings(None)
+        execenv.print(changed)
 
 
 if __name__ == "__main__":

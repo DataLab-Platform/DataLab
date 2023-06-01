@@ -119,6 +119,15 @@ class ViewSettings(gdt.DataSet):
     """DataLab Visualization settings"""
 
     g0 = gdt.BeginGroup(_("Image visualization settings"))
+    plot_toolbar_position = gdi.ImageChoiceItem(
+        _("Plot toolbar position"),
+        (
+            ("top", _("Top (above plot)"), "libre-gui-arrow-up.svg"),
+            ("bottom", _("Bottom (below plot)"), "libre-gui-arrow-down.svg"),
+            ("left", _("Left (of plot)"), "libre-gui-arrow-left.svg"),
+            ("right", _("Right (of plot)"), "libre-gui-arrow-right.svg"),
+        ),
+    )
     ima_ref_lut_range = gdi.BoolItem(
         "",
         _("Use reference image LUT range"),
@@ -189,6 +198,22 @@ def get_restart_items_values(paramdict: dict[str, gdt.DataSet]) -> list:
     return values
 
 
+def get_all_values(paramdict: dict[str, gdt.DataSet]) -> list:
+    """Get all values"""
+    values = []
+    for param, _section, _option in _iter_conf(paramdict):
+        values.append(getattr(param, _option))
+    return values
+
+
+def get_all_options(paramdict: dict[str, gdt.DataSet]) -> list:
+    """Get all options"""
+    options = []
+    for _param, _section, _option in _iter_conf(paramdict):
+        options.append(_option)
+    return options
+
+
 def edit_settings(parent: QW.QWidget) -> None:
     """Edit DataLab settings
 
@@ -204,7 +229,9 @@ def edit_settings(parent: QW.QWidget) -> None:
     }
     conf_to_datasets(paramdict)
     before = get_restart_items_values(paramdict)
+    all_values_before = get_all_values(paramdict)
     params = gdt.DataSetGroup(paramdict.values(), title=_("Settings"))
+    changed_options = []
     if params.edit(parent=parent):
         after = get_restart_items_values(paramdict)
         if before != after:
@@ -226,3 +253,12 @@ def edit_settings(parent: QW.QWidget) -> None:
                 % "\n- ".join(changed),
             )
         datasets_to_conf(paramdict)
+        all_values_after = get_all_values(paramdict)
+        all_options = get_all_options(paramdict)
+        if all_values_before != all_values_after:
+            changed_options = [
+                option
+                for option, value in zip(all_options, all_values_before)
+                if value != all_values_after[all_options.index(option)]
+            ]
+    return changed_options

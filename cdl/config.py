@@ -176,6 +176,13 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    # Toolbar position:
+    # - "top": top
+    # - "bottom": bottom
+    # - "left": left
+    # - "right": right
+    plot_toolbar_position = conf.Option()
+
     # String formatting for shape legends
     sig_format = conf.Option()
     ima_format = conf.Option()
@@ -287,6 +294,8 @@ def initialize():
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.ignore_warnings.get(False)
     # View section
+    tb_pos = Conf.view.plot_toolbar_position.get("left")
+    assert tb_pos in ("top", "bottom", "left", "right")
     Conf.view.ima_ref_lut_range.get(True)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.ima_def_colormap.get("jet")
