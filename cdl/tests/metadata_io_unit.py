@@ -18,12 +18,19 @@ import os.path as osp
 
 import numpy as np
 
+from cdl.config import Conf
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
 from cdl.utils import tests
 
 SHOW = True  # Show test in GUI-based test launcher
+
+
+def get_metadata_param_number_after_reset():
+    """Return metadata parameters number after reset"""
+    def_ima_nb = len(Conf.view.get_def_dict("ima"))
+    return def_ima_nb + 2  # +2 for 'METADATA_FMT' and 'METADATA_LBL' parameters
 
 
 def test():
@@ -40,7 +47,7 @@ def test():
             orig_metadata = ima.metadata.copy()
             panel.export_metadata_from_file(fname)
             panel.delete_metadata()
-            assert len(ima.metadata) == 0
+            assert len(ima.metadata) == get_metadata_param_number_after_reset()
             panel.import_metadata_from_file(fname)
             execenv.print("Check metadata export <--> import features:")
             for key, value in orig_metadata.items():
