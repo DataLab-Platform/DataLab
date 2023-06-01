@@ -372,24 +372,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
-            self.new_action(
-                _("Import metadata into %s...") % self.OBJECT_STR,
-                separator=True,
-                icon=get_icon("metadata_import.svg"),
-                tip=_("Import metadata into %s") % self.OBJECT_STR,
-                triggered=self.panel.import_metadata_from_file,
-                select_condition=SelectCond.exactly_one,
-                toolbar_pos=-1,
-            )
-            self.new_action(
-                _("Export metadata from %s...") % self.OBJECT_STR,
-                icon=get_icon("metadata_export.svg"),
-                tip=_("Export selected %s metadata") % self.OBJECT_STR,
-                triggered=self.panel.export_metadata_from_file,
-                select_condition=SelectCond.exactly_one,
-                toolbar_pos=-1,
-                toolbar_sep=True,
-            )
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
@@ -449,6 +431,22 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Import metadata") + "...",
+                icon=get_icon("metadata_import.svg"),
+                tip=_("Import metadata into %s") % self.OBJECT_STR,
+                triggered=self.panel.import_metadata_from_file,
+                select_condition=SelectCond.exactly_one,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Export metadata") + "...",
+                icon=get_icon("metadata_export.svg"),
+                tip=_("Export selected %s metadata") % self.OBJECT_STR,
+                triggered=self.panel.export_metadata_from_file,
+                select_condition=SelectCond.exactly_one,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Delete object metadata"),
                 icon=get_icon("metadata_delete.svg"),
                 tip=_("Delete all that is contained in object metadata"),
@@ -472,6 +470,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=0,
                 context_menu_sep=True,
                 toolbar_pos=-1,
+                toolbar_sep=True,
             )
             showlabel_action = self.new_action(
                 _("Show graphical object titles"),
