@@ -672,8 +672,7 @@ class CDLMainWindow(QW.QMainWindow):
             self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
-        actions = []
-        actions + [
+        actions = [
             create_action(
                 self,
                 _("Online documentation"),
@@ -827,16 +826,17 @@ class CDLMainWindow(QW.QMainWindow):
             ValueError: unknown function
         """
         panel = self.tabwidget.currentWidget()
-        for funcname in (name, f"compute_{name}"):
-            func = getattr(panel.processor, funcname, None)
-            if func is not None:
-                break
-        else:
-            raise ValueError(f"Unknown function {funcname}")
-        if param is None:
-            func()
-        else:
-            func(param)
+        if isinstance(panel, base.BaseDataPanel):
+            for funcname in (name, f"compute_{name}"):
+                func = getattr(panel.processor, funcname, None)
+                if func is not None:
+                    break
+            else:
+                raise ValueError(f"Unknown function {funcname}")
+            if param is None:
+                func()
+            else:
+                func(param)
 
     # ------GUI refresh
     def has_objects(self) -> bool:

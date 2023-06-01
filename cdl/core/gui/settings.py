@@ -168,12 +168,12 @@ class ViewSettings(gdt.DataSet):
 def _iter_conf(paramdict: dict[str, gdt.DataSet]) -> tuple[gdt.DataSet, str, str]:
     """Iterate over configuration parameters"""
     confdict = Conf.to_dict()
-    for section in confdict:
-        if section in paramdict:
-            for option in confdict[section]:
-                param = paramdict[section]
+    for section_name, section in confdict.items():
+        if section_name in paramdict:
+            for option in section:
+                param = paramdict[section_name]
                 if hasattr(param, option):
-                    yield param, section, option
+                    yield param, section_name, option
 
 
 def conf_to_datasets(paramdict: dict[str, gdt.DataSet]) -> None:
