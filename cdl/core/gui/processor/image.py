@@ -25,6 +25,7 @@ import cdl.core.computation.image.edges as cpi_edg
 import cdl.core.computation.image.exposure as cpi_exp
 import cdl.core.computation.image.morphology as cpi_mor
 import cdl.core.computation.image.restoration as cpi_res
+import cdl.param
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, _
 from cdl.core.gui.processor.base import BaseProcessor
@@ -61,12 +62,12 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def compute_logp1(self, param: cpi.LogP1Param | None = None) -> None:
+    def compute_logp1(self, param: cdl.param.LogP1Param | None = None) -> None:
         """Compute base 10 logarithm"""
         self.compute_11(cpi.compute_logp1, param, cpi.LogP1Param, title="Log10")
 
     @qt_try_except()
-    def compute_rotate(self, param: cpi.RotateParam | None = None) -> None:
+    def compute_rotate(self, param: cdl.param.RotateParam | None = None) -> None:
         """Rotate data arbitrarily"""
         self.compute_11(cpi.compute_rotate, param, cpi.RotateParam, title="Rotate")
 
@@ -91,7 +92,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_flipv, title="VFlip")
 
     @qt_try_except()
-    def distribute_on_grid(self, param: cpi.GridParam | None = None) -> None:
+    def distribute_on_grid(self, param: cdl.param.GridParam | None = None) -> None:
         """Distribute images on a grid"""
         title = _("Distribute on grid")
         edit, param = self.init_param(param, cpi.GridParam, title)
@@ -164,7 +165,7 @@ class ImageProcessor(BaseProcessor):
         self.panel.SIG_UPDATE_PLOT_ITEMS.emit()
 
     @qt_try_except()
-    def compute_resize(self, param: cpi.ResizeParam | None = None) -> None:
+    def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
         """Resize image"""
         obj0 = self.panel.objview.get_sel_objects()[0]
         for obj in self.panel.objview.get_sel_objects():
@@ -193,7 +194,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_resize, param, title=_("Resize"))
 
     @qt_try_except()
-    def compute_binning(self, param: cpi.BinningParam | None = None) -> None:
+    def compute_binning(self, param: cdl.param.BinningParam | None = None) -> None:
         """Binning image"""
         edit = param is None
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
@@ -268,7 +269,9 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_flatfield(
-        self, obj2: ImageObj | None = None, param: cpi.FlatFieldParam | None = None
+        self,
+        obj2: ImageObj | None = None,
+        param: cdl.core.computation.param.FlatFieldParam | None = None,
     ) -> None:
         """Compute flat field correction"""
         edit, param = self.init_param(param, cpi.FlatFieldParam, _("Flat field"))
@@ -286,7 +289,9 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Processing
     @qt_try_except()
-    def compute_calibration(self, param: cpi.ZCalibrateParam | None = None) -> None:
+    def compute_calibration(
+        self, param: cdl.param.ZCalibrateParam | None = None
+    ) -> None:
         """Compute data linear calibration"""
         self.compute_11(
             cpi.compute_calibration,
@@ -361,7 +366,9 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_ifft, title="iFFT")
 
     @qt_try_except()
-    def compute_butterworth(self, param: cpi.ButterworthParam | None = None) -> None:
+    def compute_butterworth(
+        self, param: cdl.param.ButterworthParam | None = None
+    ) -> None:
         """Compute Butterworth filter"""
         self.compute_11(
             cpi.compute_butterworth,
@@ -372,7 +379,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_adjust_gamma(
-        self, param: cpi_exp.AdjustGammaParam | None = None
+        self, param: cdl.param.AdjustGammaParam | None = None
     ) -> None:
         """Compute gamma correction"""
         self.compute_11(
@@ -383,7 +390,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_adjust_log(self, param: cpi_exp.AdjustLogParam | None = None) -> None:
+    def compute_adjust_log(self, param: cdl.param.AdjustLogParam | None = None) -> None:
         """Compute log correction"""
         self.compute_11(
             cpi_exp.compute_adjust_log,
@@ -395,7 +402,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_adjust_sigmoid(
         self,
-        param: cpi_exp.AdjustSigmoidParam | None = None,
+        param: cdl.param.AdjustSigmoidParam | None = None,
     ) -> None:
         """Compute sigmoid correction"""
         self.compute_11(
@@ -408,7 +415,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_rescale_intensity(
         self,
-        param: cpi_exp.RescaleIntensityParam | None = None,
+        param: cdl.param.RescaleIntensityParam | None = None,
     ) -> None:
         """Rescale image intensity levels"""
         self.compute_11(
@@ -420,7 +427,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_equalize_hist(
-        self, param: cpi_exp.EqualizeHistParam | None = None
+        self, param: cdl.param.EqualizeHistParam | None = None
     ) -> None:
         """Histogram equalization"""
         self.compute_11(
@@ -433,7 +440,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_equalize_adapthist(
         self,
-        param: cpi_exp.EqualizeAdaptHistParam | None = None,
+        param: cdl.param.EqualizeAdaptHistParam | None = None,
     ) -> None:
         """Adaptive histogram equalization"""
         self.compute_11(
@@ -444,7 +451,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_denoise_tv(self, param: cpi_res.DenoiseTVParam | None = None) -> None:
+    def compute_denoise_tv(self, param: cdl.param.DenoiseTVParam | None = None) -> None:
         """Compute Total Variation denoising"""
         self.compute_11(
             cpi_res.compute_denoise_tv,
@@ -456,7 +463,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_bilateral(
         self,
-        param: cpi_res.DenoiseBilateralParam | None = None,
+        param: cdl.param.DenoiseBilateralParam | None = None,
     ) -> None:
         """Compute bilateral filter denoising"""
         self.compute_11(
@@ -469,7 +476,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_denoise_wavelet(
         self,
-        param: cpi_res.DenoiseWaveletParam | None = None,
+        param: cdl.param.DenoiseWaveletParam | None = None,
     ) -> None:
         """Compute Wavelet denoising"""
         self.compute_11(
@@ -481,7 +488,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_denoise_tophat(
-        self, param: cpi_mor.MorphologyParam | None = None
+        self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
         """Denoise using White Top-Hat"""
         self.compute_11(
@@ -493,7 +500,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_white_tophat(
-        self, param: cpi_mor.MorphologyParam | None = None
+        self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
         """Compute White Top-Hat"""
         self.compute_11(
@@ -505,7 +512,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_black_tophat(
-        self, param: cpi_mor.MorphologyParam | None = None
+        self, param: cdl.param.MorphologyParam | None = None
     ) -> None:
         """Compute Black Top-Hat"""
         self.compute_11(
@@ -516,7 +523,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_erosion(self, param: cpi_mor.MorphologyParam | None = None) -> None:
+    def compute_erosion(self, param: cdl.param.MorphologyParam | None = None) -> None:
         """Compute Erosion"""
         self.compute_11(
             cpi_mor.compute_erosion,
@@ -526,7 +533,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_dilation(self, param: cpi_mor.MorphologyParam | None = None) -> None:
+    def compute_dilation(self, param: cdl.param.MorphologyParam | None = None) -> None:
         """Compute Dilation"""
         self.compute_11(
             cpi_mor.compute_dilation,
@@ -536,7 +543,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_opening(self, param: cpi_mor.MorphologyParam | None = None) -> None:
+    def compute_opening(self, param: cdl.param.MorphologyParam | None = None) -> None:
         """Compute morphological opening"""
         self.compute_11(
             cpi_mor.compute_opening,
@@ -546,7 +553,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_closing(self, param: cpi_mor.MorphologyParam | None = None) -> None:
+    def compute_closing(self, param: cdl.param.MorphologyParam | None = None) -> None:
         """Compute morphological closing"""
         self.compute_11(
             cpi_mor.compute_closing,
@@ -556,7 +563,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_canny(self, param: cpi_edg.CannyParam | None = None) -> None:
+    def compute_canny(self, param: cdl.param.CannyParam | None = None) -> None:
         """Compute Canny filter"""
         self.compute_11(
             cpi_edg.compute_canny,
@@ -676,7 +683,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: cpi_det.Peak2DDetectionParam | None = None
+        self, param: cdl.param.Peak2DDetectionParam | None = None
     ) -> None:
         """Compute 2D peak detection"""
         edit, param = self.init_param(
@@ -725,7 +732,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_contour_shape(
-        self, param: cpi_det.ContourShapeParam | None = None
+        self, param: cdl.param.ContourShapeParam | None = None
     ) -> None:
         """Compute contour shape fit"""
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
@@ -740,7 +747,7 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_hough_circle_peaks(
-        self, param: cpi.HoughCircleParam | None = None
+        self, param: cdl.param.HoughCircleParam | None = None
     ) -> None:
         """Compute peak detection based on a circle Hough transform"""
         self.compute_10(
@@ -752,7 +759,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_dog(self, param: cpi_det.BlobDOGParam | None = None) -> None:
+    def compute_blob_dog(self, param: cdl.param.BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
         self.compute_10(
             cpi_det.compute_blob_dog,
@@ -763,7 +770,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_doh(self, param: cpi_det.BlobDOHParam | None = None) -> None:
+    def compute_blob_doh(self, param: cdl.param.BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
         self.compute_10(
             cpi_det.compute_blob_doh,
@@ -774,7 +781,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_log(self, param: cpi_det.BlobLOGParam | None = None) -> None:
+    def compute_blob_log(self, param: cdl.param.BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
         self.compute_10(
             cpi_det.compute_blob_log,
@@ -787,7 +794,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_blob_opencv(
         self,
-        param: cpi_det.BlobOpenCVParam | None = None,
+        param: cdl.param.BlobOpenCVParam | None = None,
     ) -> None:
         """Compute blob detection using OpenCV"""
         self.compute_10(

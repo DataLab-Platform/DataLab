@@ -8,13 +8,6 @@ DataLab Base Processor GUI module
 ---------------------------------
 
 This module defines the base class for data processing GUIs.
-
-.. autosummary::
-
-    BaseProcessor
-
-.. autoclass:: BaseProcessor
-    :members:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

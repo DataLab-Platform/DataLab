@@ -9,7 +9,7 @@ Contour finding application test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-import cdl.core.computation.param as cparam
+import cdl.param
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_test_image3
 from cdl.tests.roi_app import create_test_image_with_roi
@@ -24,7 +24,7 @@ def test():
         panel = win.imagepanel
         ima1 = create_test_image3(size)
         panel.add_object(ima1)
-        param = cparam.ContourShapeParam()
+        param = cdl.param.ContourShapeParam()
         panel.processor.compute_contour_shape(param)
         take_plotwidget_screenshot(panel, "contour_test")
         ima2 = create_test_image_with_roi(size)

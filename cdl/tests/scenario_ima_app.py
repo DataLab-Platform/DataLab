@@ -15,7 +15,7 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
-import cdl.core.computation.param as cparam
+import cdl.param
 from cdl.config import Conf
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.model.base import UniformRandomParam
@@ -56,41 +56,41 @@ def test_image_features(
 
     test_common_operations(panel)
 
-    param = cparam.ZCalibrateParam()
+    param = cdl.param.ZCalibrateParam()
     param.a, param.b = 1.2, 0.1
     panel.processor.compute_calibration(param)
 
-    param = cparam.DenoiseTVParam()
+    param = cdl.param.DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
 
-    param = cparam.DenoiseBilateralParam()
+    param = cdl.param.DenoiseBilateralParam()
     panel.processor.compute_denoise_bilateral(param)
 
-    param = cparam.DenoiseWaveletParam()
+    param = cdl.param.DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
-    param = cparam.AdjustGammaParam()
+    param = cdl.param.AdjustGammaParam()
     param.gamma = 0.5
     panel.processor.compute_adjust_gamma(param)
 
-    param = cparam.AdjustLogParam()
+    param = cdl.param.AdjustLogParam()
     param.gain = 0.5
     panel.processor.compute_adjust_log(param)
 
-    param = cparam.AdjustSigmoidParam()
+    param = cdl.param.AdjustSigmoidParam()
     param.gain = 0.5
     panel.processor.compute_adjust_sigmoid(param)
 
-    param = cparam.EqualizeHistParam()
+    param = cdl.param.EqualizeHistParam()
     panel.processor.compute_equalize_hist(param)
 
-    param = cparam.EqualizeAdaptHistParam()
+    param = cdl.param.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
 
-    param = cparam.RescaleIntensityParam()
+    param = cdl.param.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
-    param = cparam.MorphologyParam()
+    param = cdl.param.MorphologyParam()
     param.radius = 10
     panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
@@ -101,13 +101,13 @@ def test_image_features(
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
 
-    param = cparam.ButterworthParam()
+    param = cdl.param.ButterworthParam()
     param.order = 2
     param.cut_off = 0.5
     panel.processor.compute_butterworth(param)
 
     ima2 = create_test_image1(data_size)
-    param = cparam.CannyParam()
+    param = cdl.param.CannyParam()
     panel.processor.compute_canny(param)
     panel.add_object(ima2)
 
@@ -131,7 +131,7 @@ def test_image_features(
 
     panel.processor.compute_laplace()
 
-    param = cparam.LogP1Param()
+    param = cdl.param.LogP1Param()
     param.n = 1
     panel.processor.compute_logp1(param)
 
@@ -140,13 +140,13 @@ def test_image_features(
     panel.processor.compute_fliph()
     panel.processor.compute_flipv()
 
-    param = cparam.RotateParam()
+    param = cdl.param.RotateParam()
     param.angle = 5.0
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.compute_rotate(param)
 
-    param = cparam.ResizeParam()
+    param = cdl.param.ResizeParam()
     param.zoom = 1.3
     panel.processor.compute_resize(param)
 
@@ -159,11 +159,11 @@ def test_image_features(
     data = get_peak2d_data(PeakDataParam(size=data_size))
     ima = create_image("Test image with peaks", data)
     panel.add_object(ima)
-    param = cparam.Peak2DDetectionParam()
+    param = cdl.param.Peak2DDetectionParam()
     param.create_rois = True
     panel.processor.compute_peak_detection(param)
 
-    param = cparam.ContourShapeParam()
+    param = cdl.param.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
 

@@ -18,6 +18,7 @@ import numpy as np
 
 import cdl.core.computation.base as cpb
 import cdl.core.computation.signal as cps
+import cdl.param
 from cdl.config import _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ShapeTypes
@@ -115,7 +116,7 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: cps.PeakDetectionParam | None = None
+        self, param: cdl.param.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data"""
         obj = self.panel.objview.get_sel_objects()[0]
@@ -134,7 +135,7 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Processing
     @qt_try_except()
-    def compute_normalize(self, param: cps.NormalizeYParam | None = None) -> None:
+    def compute_normalize(self, param: cdl.param.NormalizeYParam | None = None) -> None:
         """Normalize data"""
         self.compute_11(
             cps.compute_normalize, param, cps.NormalizeYParam, title=_("Normalize")
@@ -151,7 +152,9 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_integral, title=_("Integral"))
 
     @qt_try_except()
-    def compute_calibration(self, param: cps.XYCalibrateParam | None = None) -> None:
+    def compute_calibration(
+        self, param: cdl.param.XYCalibrateParam | None = None
+    ) -> None:
         """Compute data linear calibration"""
         self.compute_11(
             cps.compute_calibration,
@@ -211,14 +214,14 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
-    def compute_fft(self, param: cps.FFT1DParam | None = None) -> None:
+    def compute_fft(self, param: cdl.param.FFT1DParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
             param = cps.FFT1DParam()
         self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
-    def compute_ifft(self, param: cps.FFT1DParam | None = None) -> None:
+    def compute_ifft(self, param: cdl.param.FFT1DParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
             param = cps.FFT1DParam()
@@ -231,7 +234,9 @@ class SignalProcessor(BaseProcessor):
             self.__row_compute_fit(obj, name, fitdlgfunc)
 
     @qt_try_except()
-    def compute_polyfit(self, param: cps.PolynomialFitParam | None = None) -> None:
+    def compute_polyfit(
+        self, param: cdl.param.PolynomialFitParam | None = None
+    ) -> None:
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, cps.PolynomialFitParam, txt)
@@ -284,7 +289,7 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Computing
     @qt_try_except()
-    def compute_fwhm(self, param: cps.FWHMParam | None = None) -> None:
+    def compute_fwhm(self, param: cdl.param.FWHMParam | None = None) -> None:
         """Compute FWHM"""
         self.compute_10(
             cps.compute_fwhm, ShapeTypes.SEGMENT, param, cps.FWHMParam, title=_("FWHM")

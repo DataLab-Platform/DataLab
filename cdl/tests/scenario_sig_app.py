@@ -17,7 +17,7 @@ Testing the following:
 
 from __future__ import annotations
 
-import cdl.core.computation.param as cparam
+import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
@@ -45,9 +45,9 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
     Requires that one signal or image has been added at index."""
     assert panel.object_number >= index - 1
     panel.objview.select_nums((index,))
-    panel.processor.compute_gaussian_filter(cparam.GaussianParam())
-    panel.processor.compute_moving_average(cparam.MovingAverageParam())
-    panel.processor.compute_moving_median(cparam.MovingMedianParam())
+    panel.processor.compute_gaussian_filter(cdl.param.GaussianParam())
+    panel.processor.compute_moving_average(cdl.param.MovingAverageParam())
+    panel.processor.compute_moving_median(cdl.param.MovingMedianParam())
     panel.processor.compute_wiener()
     panel.processor.compute_fft()
     panel.processor.compute_ifft()
@@ -85,10 +85,10 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_product()
 
     obj = panel.objmodel.get_groups()[0][-1]
-    param = cparam.ThresholdParam()
+    param = cdl.param.ThresholdParam()
     param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
     panel.processor.compute_threshold(param)
-    param = cparam.ClipParam()  # Clipping before division...
+    param = cdl.param.ClipParam()  # Clipping before division...
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
@@ -129,19 +129,19 @@ def test_signal_features(
 
     win.add_object(create_test_signal1(data_size))
 
-    param = cparam.NormalizeYParam()
+    param = cdl.param.NormalizeYParam()
     for _name, method in param.methods:
         param.method = method
         panel.processor.compute_normalize(param)
 
-    param = cparam.XYCalibrateParam()
+    param = cdl.param.XYCalibrateParam()
     param.a, param.b = 1.2, 0.1
     panel.processor.compute_calibration(param)
 
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
 
-    param = cparam.PeakDetectionParam()
+    param = cdl.param.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
 
     panel.processor.compute_multigaussianfit()
@@ -152,7 +152,7 @@ def test_signal_features(
     i2 = len(sig.y) - i1
     panel.processor.extract_roi([[i1, i2]])
 
-    param = cparam.PolynomialFitParam()
+    param = cdl.param.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
@@ -165,7 +165,7 @@ def test_signal_features(
     sig = create_signal_from_param(newparam, GaussLorentzVoigtParam(), edit=False)
     panel.add_object(sig)
 
-    param = cparam.FWHMParam()
+    param = cdl.param.FWHMParam()
     for fittype, _name in param.fittypes:
         param.fittype = fittype
         panel.processor.compute_fwhm(param)
