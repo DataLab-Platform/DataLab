@@ -37,7 +37,7 @@ from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
 
 from cdl.config import Conf, _
-from cdl.utils.qthelpers import create_progress_bar
+from cdl.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:  # pragma: no cover
     from guiqwt.curve import CurveItem
@@ -118,11 +118,10 @@ class BasePlotHandler:
             # (this avoids some unnecessary refresh process by guiqwt)
             items = list(obj.iterate_shape_items(editable=False))
             if items:
-                block = self.plot.blockSignals(True)
-                for item in items[:-1]:
-                    self.plot.add_item(item)
-                    self.__shapeitems.append(item)
-                self.plot.blockSignals(block)
+                with block_signals(self.plot, True):
+                    for item in items[:-1]:
+                        self.plot.add_item(item)
+                        self.__shapeitems.append(item)
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
 
