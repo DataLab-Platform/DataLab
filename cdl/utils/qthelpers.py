@@ -238,7 +238,6 @@ def create_progress_bar(
     prog = QW.QProgressDialog(label, _("Cancel"), 0, max_, parent, QC.Qt.SplashScreen)
     prog.setWindowModality(QC.Qt.WindowModal)
     prog.show()
-    QW.QApplication.processEvents()
     try:
         yield prog
     finally:
