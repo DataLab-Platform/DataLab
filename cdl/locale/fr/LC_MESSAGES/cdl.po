@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-01 13:27+0200\n"
+"POT-Creation-Date: 2023-06-01 14:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -737,7 +737,7 @@ msgstr "Copier les métadonnées"
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: cdl\core\gui\actionhandler.py:434 cdl\core\gui\panel\base.py:664
+#: cdl\core\gui\actionhandler.py:434 cdl\core\gui\panel\base.py:671
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -745,7 +745,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:687
+#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:694
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -946,7 +946,8 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:665 cdl\core\gui\roieditor.py:238
+#: cdl\core\gui\actionhandler.py:665 cdl\core\gui\main.py:1112
+#: cdl\core\gui\roieditor.py:238
 msgid "image"
 msgstr "image"
 
@@ -1406,7 +1407,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:590 cdl\core\gui\main.py:1124
+#: cdl\core\gui\main.py:590 cdl\core\gui\main.py:1146
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1450,7 +1451,7 @@ msgstr "&Édition"
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:661 cdl\core\gui\settings.py:210
+#: cdl\core\gui\main.py:661 cdl\core\gui\settings.py:235
 msgid "Processing"
 msgstr "Traitement"
 
@@ -1498,7 +1499,7 @@ msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:765 cdl\core\gui\settings.py:213
+#: cdl\core\gui\main.py:765 cdl\core\gui\settings.py:238
 msgid "Console"
 msgstr "Console"
 
@@ -1518,7 +1519,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1000 cdl\core\gui\panel\base.py:626
+#: cdl\core\gui\main.py:1000 cdl\core\gui\panel\base.py:633
 #: cdl\core\gui\panel\macro.py:338
 msgid "Open"
 msgstr "Ouvrir"
@@ -1551,7 +1552,17 @@ msgstr "Développé et maintenu par l'équipe du projet libre %s"
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1125
+#: cdl\core\gui\main.py:1107
+msgid "Visualization settings"
+msgstr "Réglages d'affichage"
+
+#: cdl\core\gui\main.py:1108
+msgid ""
+"Default visualization settings have changed.<br><br>Do you want to update "
+"all active %s objects?"
+msgstr "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre à jour tous les objets %s actifs ?"
+
+#: cdl\core\gui\main.py:1147
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1583,52 +1594,52 @@ msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: cdl\core\gui\panel\base.py:528
+#: cdl\core\gui\panel\base.py:535
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:528 cdl\core\gui\panel\base.py:537
+#: cdl\core\gui\panel\base.py:535 cdl\core\gui\panel\base.py:544
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:537
+#: cdl\core\gui\panel\base.py:544
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:587 cdl\core\gui\panel\macro.py:325
+#: cdl\core\gui\panel\base.py:594 cdl\core\gui\panel\macro.py:325
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:724
+#: cdl\core\gui\panel\base.py:731
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:826 cdl\core\gui\plothandler.py:205
+#: cdl\core\gui\panel\base.py:833 cdl\core\gui\plothandler.py:205
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:882 cdl\core\gui\roieditor.py:213
+#: cdl\core\gui\panel\base.py:889 cdl\core\gui\roieditor.py:213
 #: cdl\core\model\base.py:634
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:918
+#: cdl\core\gui\panel\base.py:925
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\panel\base.py:919
+#: cdl\core\gui\panel\base.py:926
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:954 cdl\core\gui\processor\base.py:347
+#: cdl\core\gui\panel\base.py:961 cdl\core\gui\processor\base.py:347
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:968
+#: cdl\core\gui\panel\base.py:975
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:970
+#: cdl\core\gui\panel\base.py:977
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -1968,39 +1979,39 @@ msgstr "Extraire les ROI dans un seul objet"
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
 
-#: cdl\core\gui\settings.py:107 cdl\core\gui\settings.py:150
+#: cdl\core\gui\settings.py:117 cdl\core\gui\settings.py:159
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
 
-#: cdl\core\gui\settings.py:121
+#: cdl\core\gui\settings.py:130
 msgid "Image visualization settings"
 msgstr "Réglages d'affichage d'images"
 
-#: cdl\core\gui\settings.py:123 cdl\core\gui\settings.py:188
+#: cdl\core\gui\settings.py:132
 msgid "Plot toolbar position"
 msgstr "Position de la barre d'outils des graphiques"
 
-#: cdl\core\gui\settings.py:125
+#: cdl\core\gui\settings.py:134
 msgid "Top (above plot)"
 msgstr "Haut (au-dessus du graphique)"
 
-#: cdl\core\gui\settings.py:126
+#: cdl\core\gui\settings.py:135
 msgid "Bottom (below plot)"
 msgstr "Bas (en-dessous du graphique)"
 
-#: cdl\core\gui\settings.py:127
+#: cdl\core\gui\settings.py:136
 msgid "Left (of plot)"
 msgstr "Gauche (à gauche du graphique)"
 
-#: cdl\core\gui\settings.py:128
+#: cdl\core\gui\settings.py:137
 msgid "Right (of plot)"
 msgstr "Droite (à droite du graphique)"
 
-#: cdl\core\gui\settings.py:133
+#: cdl\core\gui\settings.py:142
 msgid "Use reference image LUT range"
 msgstr "Utiliser la LUT de l'image de référence"
 
-#: cdl\core\gui\settings.py:134
+#: cdl\core\gui\settings.py:143
 msgid ""
 "If this setting is enabled, images are shown<br>with the same LUT range as "
 "the first selected image"
@@ -2008,15 +2019,15 @@ msgstr ""
 "Si cette option est activée, les images sont affichées<br>avec la même LUT "
 "que la première image sélectionnée"
 
-#: cdl\core\gui\settings.py:140
+#: cdl\core\gui\settings.py:149
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"
 
-#: cdl\core\gui\settings.py:141
+#: cdl\core\gui\settings.py:150
 msgid "%"
 msgstr "%"
 
-#: cdl\core\gui\settings.py:144
+#: cdl\core\gui\settings.py:153
 msgid ""
 "Eliminate a percentage of the highest and lowest values<br>of the image "
 "histogram - <i>recommanded values are below 1%</i>"
@@ -2025,43 +2036,43 @@ msgstr ""
 "l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à "
 "1%</i>"
 
-#: cdl\core\gui\settings.py:184
+#: cdl\core\gui\settings.py:194
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
-#: cdl\core\gui\settings.py:185
+#: cdl\core\gui\settings.py:195
 msgid "RPC server enable status"
 msgstr "Etat d'activation du serveur XML-RPC"
 
-#: cdl\core\gui\settings.py:186
+#: cdl\core\gui\settings.py:196
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
 
-#: cdl\core\gui\settings.py:187
+#: cdl\core\gui\settings.py:197
 msgid "Third-party plugins support"
 msgstr "Prise en charge des plugins tiers"
 
-#: cdl\core\gui\settings.py:209
+#: cdl\core\gui\settings.py:234
 msgid "General"
 msgstr "Général"
 
-#: cdl\core\gui\settings.py:211
+#: cdl\core\gui\settings.py:236
 msgid "Visualization"
 msgstr "Visualisation"
 
-#: cdl\core\gui\settings.py:212
+#: cdl\core\gui\settings.py:237
 msgid "I/O"
 msgstr "Entrée/sortie"
 
-#: cdl\core\gui\settings.py:217
+#: cdl\core\gui\settings.py:243
 msgid "Settings"
 msgstr "Préférences"
 
-#: cdl\core\gui\settings.py:230
+#: cdl\core\gui\settings.py:257
 msgid "Restart required"
 msgstr "Redémarrage requis"
 
-#: cdl\core\gui\settings.py:231
+#: cdl\core\gui\settings.py:258
 msgid ""
 "The following options have been changed:\n"
 "\n"
@@ -2135,11 +2146,11 @@ msgstr "Ecart-type de la distribution normale"
 msgid "Annotation"
 msgstr "Annotation"
 
-#: cdl\core\model\base.py:895
+#: cdl\core\model\base.py:898
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:896
+#: cdl\core\model\base.py:899
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 

@@ -176,18 +176,16 @@ class BasePlotHandler:
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
 
-    def refresh_plot(
-        self, only_oid: str | None = None, just_show: bool = False
-    ) -> None:
+    def refresh_plot(self, what: str = None, just_show: bool = False) -> None:
         """Refresh plot.
 
         Args:
-            only_oid (str, optional): if not None, only refresh the item associated
-                to this object uuid. Defaults to None.
+            what (str, optional): if "selected", refresh the selected objects,
+                if "all", refresh all objects. Defaults to None.
             just_show (bool, optional): if True, only show the item (do not update it,
                 except regarding the reference item). Defaults to False.
         """
-        if only_oid is None:
+        if what in ("selected", None):
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
             if len(oids) == 1:
                 self.cleanup_dataview()
@@ -195,8 +193,10 @@ class BasePlotHandler:
             for item in self:
                 if item is not None:
                     item.hide()
+        elif what == "all":
+            oids = self.panel.objmodel.get_object_ids()
         else:
-            oids = [only_oid]
+            raise ValueError(f"Invalid value for `what`: {what}")
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
         if oids:
@@ -284,18 +284,16 @@ class ImagePlotHandler(BasePlotHandler):
             plot: ImagePlot = item.plot()
             plot.update_colormap_axis(item)
 
-    def refresh_plot(
-        self, only_oid: str | None = None, just_show: bool = False
-    ) -> None:
+    def refresh_plot(self, what: str = None, just_show: bool = False) -> None:
         """Refresh plot.
 
         Args:
-            only_oid (str, optional): if not None, only refresh the item associated
-                to this object uuid. Defaults to None.
+            what (str, optional): if "selected", refresh the selected objects,
+                if "all", refresh all objects. Defaults to None.
             just_show (bool, optional): if True, only show the item (do not update it,
                 except regarding the reference item). Defaults to False.
         """
-        super().refresh_plot(only_oid=only_oid, just_show=just_show)
+        super().refresh_plot(what=what, just_show=just_show)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self) -> None:

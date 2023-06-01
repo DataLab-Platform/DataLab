@@ -102,17 +102,26 @@ class ImageDefaultSettings(BaseImageParam):
 #  pylint:disable=unused-argument
 def edit_default_image_settings(
     dataset: gdt.DataSet, item: gdt.DataItem, value: Any, parent: QW.QWidget
-) -> None:
-    """Edit default image settings"""
+) -> bool:
+    """Edit default image settings
+
+    Args:
+        dataset (DataSet): Dataset
+        item (DataItem): Data item
+        value (Any): Value
+        parent (QWidget): Parent widget
+
+    Returns:
+        bool: True if the settings were edited
+    """
     param = ImageDefaultSettings(_("Default image visualization settings"))
     ima_def_dict = Conf.view.get_def_dict("ima")
     update_dataset(param, ima_def_dict)
     if param.edit(parent=parent):
         restore_dataset(param, ima_def_dict)
         Conf.view.set_def_dict("ima", ima_def_dict)
-        # TODO: [P2] Update all active objects when settings were changed
-        # Find a way to return the info to the main window, then update all
-        # active images with the new settings.
+        return True
+    return False
 
 
 class ViewSettings(gdt.DataSet):
@@ -150,6 +159,7 @@ class ViewSettings(gdt.DataSet):
         _("Default image visualization settings"),
         edit_default_image_settings,
         icon="image.svg",
+        default=False,
     )
     _g0 = gdt.EndGroup("")
 
@@ -261,4 +271,7 @@ def edit_settings(parent: QW.QWidget) -> None:
                 for option, value in zip(all_options, all_values_before)
                 if value != all_values_after[all_options.index(option)]
             ]
+        for vis_defaults in ("ima_defaults",):
+            if getattr(paramdict["view"], vis_defaults):
+                changed_options.append(vis_defaults)
     return changed_options

@@ -849,7 +849,10 @@ class ObjectItf(metaclass=ObjectItfMeta):
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         self.metadata = {}
-        # Default visualization settings
+        self.update_metadata_view_settings()
+
+    def update_metadata_view_settings(self) -> None:
+        """Update metadata view settings from Conf.view"""
         def_dict = Conf.view.get_def_dict(self.__class__.__name__[:3].lower())
         self.metadata.update(def_dict)
 

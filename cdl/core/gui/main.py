@@ -1101,6 +1101,20 @@ class CDLMainWindow(QW.QMainWindow):
                 for dock in self.signal_image_docks:
                     widget: DockablePlotWidget = dock.widget()
                     widget.update_toolbar_position()
+            if option == "ima_defaults" and self.imagepanel.object_number > 0:
+                answer = QW.QMessageBox.question(
+                    self,
+                    _("Visualization settings"),
+                    _(
+                        "Default visualization settings have changed.<br><br>"
+                        "Do you want to update all active %s objects?"
+                    )
+                    % _("image"),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                )
+                if answer == QW.QMessageBox.Yes:
+                    self.imagepanel.update_metadata_view_settings()
+
     def show_log_viewer(self) -> None:
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)

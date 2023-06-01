@@ -518,6 +518,13 @@ class BaseDataPanel(AbstractPanel):
                 self.selection_changed()
         self.SIG_UPDATE_PLOT_ITEMS.emit()
 
+    def update_metadata_view_settings(self) -> None:
+        """Update metadata view settings"""
+        for obj in self.objmodel:
+            obj.update_metadata_view_settings()
+        self.plothandler.refresh_plot(what="all")
+        self.SIG_UPDATE_PLOT_ITEMS.emit()
+
     def copy_titles_to_clipboard(self) -> None:
         """Copy object titles to clipboard (for reproducibility)"""
         QW.QApplication.clipboard().setText(str(self.objview))
