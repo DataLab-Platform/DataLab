@@ -23,6 +23,10 @@ New features:
     TCP/IP connection (see [Remote control](https://cdl.readthedocs.io/en/latest/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
     [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
+* General features:
+  * Added settings dialog box (see "Settings" entry in "File" menu)
+  * New default layout: signal/image panels are on the right side of the main
+    window, visualization panels are on the left side with a vertical toolbar
 * Signal/Image features:
   * Added process isolation: each signal/image is processed in a separate
     process, so that DataLab does not freeze anymore when processing large

@@ -30,7 +30,7 @@ OPT_SIZ = SEC_MAIN.window_size
 OPT_DIR = SEC_MAIN.base_dir
 
 SEC_CONS = Conf.console
-OPT_CON = SEC_CONS.enabled
+OPT_CON = SEC_CONS.console_enabled
 
 CONFIGS = (
     {

@@ -81,16 +81,19 @@ class PluginRegistry(type):
     @classmethod
     def get_plugin_infos(cls) -> str:
         """Return plugin infos (names, versions, descriptions) in html format"""
-        plugins = cls.get_plugins()
-        if plugins:
-            html = "<i>" + _("Registered plugins:") + "</i><br>"
-            for plugin in plugins:
-                html += f"• {plugin.info.name} ({plugin.info.version})"
-                if plugin.info.description:
-                    html += f": {plugin.info.description}"
-                html += "<br>"
+        if Conf.main.plugins_enabled.get():
+            plugins = cls.get_plugins()
+            if plugins:
+                html = "<i>" + _("Registered plugins:") + "</i><br>"
+                for plugin in plugins:
+                    html += f"• {plugin.info.name} ({plugin.info.version})"
+                    if plugin.info.description:
+                        html += f": {plugin.info.description}"
+                    html += "<br>"
+            else:
+                html = "<i>" + _("No plugins available") + "</i>"
         else:
-            html = "<i>" + _("No plugins available") + "</i>"
+            html = "<i>" + _("Plugins are disabled (see DataLab settings)") + "</i>"
         return html
 
 
@@ -192,8 +195,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 
 def discover_plugins() -> list[PluginBase]:
     """Discover plugins using naming convention"""
-    return [
-        importlib.import_module(name)
-        for _finder, name, _ispkg in pkgutil.iter_modules()
-        if name.startswith(f"{MOD_NAME}_")
-    ]
+    if Conf.main.plugins_enabled.get():
+        return [
+            importlib.import_module(name)
+            for _finder, name, _ispkg in pkgutil.iter_modules()
+            if name.startswith(f"{MOD_NAME}_")
+        ]
+    return []

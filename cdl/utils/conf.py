@@ -27,6 +27,16 @@ class AppUserConfig(UserConfig):
         """Return configuration file name"""
         return self.get_path(f"{self.name}.ini")
 
+    def to_dict(self) -> dict:
+        """Return configuration as a dictionary"""
+        confdict = {}
+        for section in self.sections():
+            secdict = {}
+            for option, value in self.items(section, raw=self.raw):
+                secdict[option] = value
+            confdict[section] = secdict
+        return confdict
+
 
 CONF = AppUserConfig({})
 
@@ -50,6 +60,11 @@ class Configuration:
     def get_path(cls, basename: str) -> str:
         """Return filename path inside configuration directory"""
         return CONF.get_path(basename)
+
+    @classmethod
+    def to_dict(cls) -> dict:
+        """Return configuration as a dictionary"""
+        return CONF.to_dict()
 
 
 class Section:

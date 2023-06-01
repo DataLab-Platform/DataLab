@@ -57,7 +57,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print("🔥 DataLab configuration:")
     print(f"  Process isolation: {__get_enabled(Conf.main.process_isolation_enabled)}")
     print(f"  RPC server: {__get_enabled(Conf.main.rpc_server_enabled)}")
-    print(f'  Console: {__get_enabled(Conf.console.enabled)}')
+    print(f"  Console: {__get_enabled(Conf.console.console_enabled)}")
     mem_threshold = Conf.main.available_memory_threshold.get()
     print(f"  Available memory threshold: {mem_threshold:d} MB")
     print(f"  Ignored dependencies: {__get_enabled(Conf.main.ignore_dependency_check)}")

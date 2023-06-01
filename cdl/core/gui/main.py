@@ -12,7 +12,6 @@ DataLab main window
 from __future__ import annotations
 
 import functools
-import locale
 import os
 import os.path as osp
 import sys
@@ -43,11 +42,13 @@ from cdl.config import (
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
+    get_htmlhelp,
 )
 from cdl.core.gui.actionhandler import ActionCategory
 from cdl.core.gui.docks import DockablePlotWidget
 from cdl.core.gui.h5io import H5InputOutput
 from cdl.core.gui.panel import base, image, macro, signal
+from cdl.core.gui.settings import edit_settings
 from cdl.core.model.image import ImageObj
 from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
@@ -63,16 +64,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.macro import MacroPanel
     from cdl.core.gui.panel.signal import SignalPanel
-
-
-def get_htmlhelp():
-    """Return HTML Help documentation link adapted to locale, if it exists"""
-    if os.name == "nt":
-        for suffix in ("_" + locale.getlocale()[0][:2], ""):
-            path = osp.join(DATAPATH, f"DataLab{suffix}.chm")
-            if osp.isfile(path):
-                return path
-    return None
 
 
 def remote_controlled(func):
@@ -142,6 +133,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.openh5_action: QW.QAction = None
         self.saveh5_action: QW.QAction = None
         self.browseh5_action: QW.QAction = None
+        self.settings_action: QW.QAction = None
         self.quit_action: QW.QAction = None
 
         self.file_menu: QW.QMenu = None
@@ -164,7 +156,7 @@ class CDLMainWindow(QW.QMainWindow):
 
         # Setup actions and menus
         if console is None:
-            console = Conf.console.enabled.get()
+            console = Conf.console.console_enabled.get()
         self.setup(console)
 
     # ------API related to XML-RPC remote control
@@ -572,9 +564,23 @@ class CDLMainWindow(QW.QMainWindow):
             tip=_("Browse an HDF5 file"),
             triggered=lambda checked=False: self.open_h5_files(import_all=None),
         )
-        h5_toolbar = self.addToolBar(_("HDF5 I/O Toolbar"))
+        self.settings_action = create_action(
+            self,
+            _("Settings..."),
+            icon=get_icon("libre-gui-settings.svg"),
+            tip=_("Open settings dialog"),
+            triggered=lambda: edit_settings(self),
+        )
+        main_toolbar = self.addToolBar(_("Main Toolbar"))
         add_actions(
-            h5_toolbar, [self.openh5_action, self.saveh5_action, self.browseh5_action]
+            main_toolbar,
+            [
+                self.openh5_action,
+                self.saveh5_action,
+                self.browseh5_action,
+                None,
+                self.settings_action,
+            ],
         )
         # Quit action for "File menu" (added when populating menu on demand)
         if self.hide_on_close:
@@ -595,7 +601,8 @@ class CDLMainWindow(QW.QMainWindow):
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
-        curveplot_toolbar = self.addToolBar(_("Curve Plotting Toolbar"))
+        curveplot_toolbar = QW.QToolBar(_("Curve Plotting Toolbar"), self)
+        self.addToolBar(QC.Qt.LeftToolBarArea, curveplot_toolbar)
         curvewidget = DockablePlotWidget(self, CurveWidget, curveplot_toolbar)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
@@ -608,7 +615,8 @@ class CDLMainWindow(QW.QMainWindow):
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
-        imagevis_toolbar = self.addToolBar(_("Image Visualization Toolbar"))
+        imagevis_toolbar = QW.QToolBar(_("Image Visualization Toolbar"), self)
+        self.addToolBar(QC.Qt.LeftToolBarArea, imagevis_toolbar)
         imagewidget = DockablePlotWidget(self, ImageWidget, imagevis_toolbar)
         self.imagepanel = image.ImagePanel(
             self, imagewidget.plotwidget, self.image_toolbar
@@ -668,74 +676,68 @@ class CDLMainWindow(QW.QMainWindow):
             self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
-        about_action = create_action(
-            self,
-            _("About..."),
-            icon=get_icon("libre-gui-about.svg"),
-            triggered=self.__about,
-        )
-        homepage_action = create_action(
-            self,
-            _("Project home page"),
-            icon=get_icon("libre-gui-globe.svg"),
-            triggered=lambda: webbrowser.open(__homeurl__),
-        )
-        issue_action = create_action(
-            self,
-            _("Bug report or feature request"),
-            icon=get_icon("libre-gui-globe.svg"),
-            triggered=lambda: webbrowser.open(__supporturl__),
-        )
-        onlinedoc_action = create_action(
-            self,
-            _("Online documentation"),
-            icon=get_icon("libre-gui-help.svg"),
-            triggered=lambda: webbrowser.open(__docurl__),
-        )
-        chmdoc_action = create_action(
-            self,
-            _("CHM documentation"),
-            icon=get_icon("chm.svg"),
-            triggered=lambda: os.startfile(get_htmlhelp()),
-        )
-        chmdoc_action.setVisible(get_htmlhelp() is not None)
-        logv_action = create_action(
-            self,
-            _("Show log files..."),
-            icon=get_icon("logs.svg"),
-            triggered=self.show_log_viewer,
-        )
-        dep_action = create_action(
-            self,
-            _("About DataLab installation") + "...",
-            icon=get_icon("logs.svg"),
-            triggered=lambda: instconfviewer.exec_cdl_installconfig_dialog(self),
-        )
-        errtest_action = create_action(
-            self, "Test segfault/Python error", triggered=self.test_segfault_error
-        )
-        errtest_action.setVisible(TEST_SEGFAULT_ERROR)
-        about_action = create_action(
-            self,
-            _("About..."),
-            icon=get_icon("libre-gui-about.svg"),
-            triggered=self.__about,
-        )
-        add_actions(
-            self.help_menu,
-            (
-                onlinedoc_action,
-                chmdoc_action,
-                None,
-                errtest_action,
-                logv_action,
-                dep_action,
-                None,
-                homepage_action,
-                issue_action,
-                about_action,
+        actions = []
+        actions + [
+            create_action(
+                self,
+                _("Online documentation"),
+                icon=get_icon("libre-gui-help.svg"),
+                triggered=lambda: webbrowser.open(__docurl__),
+            )
+        ]
+        chmpath = get_htmlhelp()
+        if os.name == "nt" and chmpath is not None:
+            actions += [
+                create_action(
+                    self,
+                    _("CHM documentation"),
+                    icon=get_icon("chm.svg"),
+                    triggered=lambda: os.startfile(get_htmlhelp()),
+                )
+            ]
+        actions += [None]
+        if TEST_SEGFAULT_ERROR:
+            actions += [
+                create_action(
+                    self,
+                    _("Test segfault/Python error"),
+                    triggered=self.test_segfault_error,
+                )
+            ]
+        actions += [
+            create_action(
+                self,
+                _("Show log files..."),
+                icon=get_icon("logs.svg"),
+                triggered=self.show_log_viewer,
             ),
-        )
+            create_action(
+                self,
+                _("About DataLab installation") + "...",
+                icon=get_icon("logs.svg"),
+                triggered=lambda: instconfviewer.exec_cdl_installconfig_dialog(self),
+            ),
+            None,
+            create_action(
+                self,
+                _("Project home page"),
+                icon=get_icon("libre-gui-globe.svg"),
+                triggered=lambda: webbrowser.open(__homeurl__),
+            ),
+            create_action(
+                self,
+                _("Bug report or feature request"),
+                icon=get_icon("libre-gui-globe.svg"),
+                triggered=lambda: webbrowser.open(__supporturl__),
+            ),
+            create_action(
+                self,
+                _("About..."),
+                icon=get_icon("libre-gui-about.svg"),
+                triggered=self.__about,
+            ),
+        ]
+        add_actions(self.help_menu, actions)
 
     def __setup_console(self) -> None:
         """Add an internal console"""
@@ -909,6 +911,8 @@ class CDLMainWindow(QW.QMainWindow):
                 self.openh5_action,
                 self.saveh5_action,
                 self.browseh5_action,
+                None,
+                self.settings_action,
                 None,
                 self.quit_action,
             ],

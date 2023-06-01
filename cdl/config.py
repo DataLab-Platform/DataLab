@@ -13,6 +13,7 @@ The `config` module handles `DataLab` configuration
 
 from __future__ import annotations
 
+import locale
 import os
 import os.path as osp
 import sys
@@ -83,6 +84,21 @@ def get_mod_source_dir() -> str | None:
     return None
 
 
+def get_htmlhelp() -> str | None:
+    """Return HTML Help documentation link adapted to locale, if it exists
+
+    Returns:
+        str | None: HTML Help documentation link adapted to locale,
+            or None if not found
+    """
+    if os.name == "nt":
+        for suffix in ("_" + locale.getlocale()[0][:2], ""):
+            path = osp.join(DATAPATH, f"DataLab{suffix}.chm")
+            if osp.isfile(path):
+                return path
+    return None
+
+
 class MainSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the main configuration section structure.
     Each class attribute is an option (metaclass is automatically affecting
@@ -103,6 +119,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     available_memory_threshold = conf.Option()
     ignore_dependency_check = conf.Option()
     current_tab = conf.Option()
+    plugins_enabled = conf.Option()
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
@@ -110,7 +127,7 @@ class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
-    enabled = conf.Option()
+    console_enabled = conf.Option()
     max_line_count = conf.Option()
     external_editor_path = conf.Option()
     external_editor_args = conf.Option()
@@ -179,7 +196,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_def_interpolation = conf.Option()
 
 
-# Usage (example): Conf.console.enabled.get(True)
+# Usage (example): Conf.console.console_enabled.get(True)
 class Conf(conf.Configuration, metaclass=conf.ConfMeta):
     """Class defining DataLab configuration structure.
     Each class attribute is a section (metaclass is automatically affecting
@@ -214,8 +231,9 @@ def initialize():
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
     Conf.main.available_memory_threshold.get(500)
     Conf.main.ignore_dependency_check.get(False)
+    Conf.main.plugins_enabled.get(True)
     # Console section
-    Conf.console.enabled.get(True)
+    Conf.console.console_enabled.get(True)
     Conf.console.external_editor_path.get("code")
     Conf.console.external_editor_args.get("-g {path}:{line_number}")
     # IO section
