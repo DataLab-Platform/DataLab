@@ -159,7 +159,7 @@ def test_image_features(
     data = get_peak2d_data(PeakDataParam(size=data_size))
     ima = create_image("Test image with peaks", data)
     panel.add_object(ima)
-    param = cparam.PeakDetectionParam()
+    param = cparam.Peak2DDetectionParam()
     param.create_rois = True
     panel.processor.compute_peak_detection(param)
 

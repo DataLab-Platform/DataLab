@@ -282,7 +282,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-class NormalizeParam(gdt.DataSet):
+class NormalizeYParam(gdt.DataSet):
     """Normalize parameters"""
 
     methods = (
@@ -294,11 +294,11 @@ class NormalizeParam(gdt.DataSet):
     method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
 
 
-def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
+def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
     """Normalize data
     Args:
         src (SignalObj): source signal
-        p (NormalizeParam): parameters
+        p (NormalizeYParam): parameters
     Returns:
         SignalObj: result signal object
     """
@@ -443,7 +443,7 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     return dst
 
 
-class FFTParam(gdt.DataSet):
+class FFT1DParam(gdt.DataSet):
     """FFT parameters"""
 
     shift = gdi.BoolItem(
@@ -453,11 +453,11 @@ class FFTParam(gdt.DataSet):
     )
 
 
-def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
+def compute_fft(src: SignalObj, p: FFT1DParam) -> SignalObj:
     """Compute FFT
     Args:
         src (SignalObj): source signal
-        p (FFTParam): parameters
+        p (FFT1DParam): parameters
     Returns:
         SignalObj: result signal object
     """
@@ -467,11 +467,11 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     return dst
 
 
-def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
+def compute_ifft(src: SignalObj, p: FFT1DParam) -> SignalObj:
     """Compute iFFT
     Args:
         src (SignalObj): source signal
-        p (FFTParam): parameters
+        p (FFT1DParam): parameters
     Returns:
         SignalObj: result signal object
     """

@@ -12,11 +12,8 @@ DataLab Demo
 
 from qtpy import QtWidgets as QW
 
+import cdl.core.computation.param as cparam
 from cdl.config import _, reset
-from cdl.core.computation.image import ContourShapeParam
-from cdl.core.computation.image import PeakDetectionParam as Peak2DDetectionParam
-from cdl.core.computation.image import RotateParam
-from cdl.core.computation.signal import PeakDetectionParam, PolynomialFitParam
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
@@ -67,12 +64,12 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
 
-    param = PeakDetectionParam()
+    param = cparam.Peak2DDetectionParam()
     panel.processor.compute_peak_detection(param)
 
     qt_wait(DELAY2)
 
-    param = PolynomialFitParam()
+    param = cparam.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
@@ -118,7 +115,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
     panel.processor.compute_fliph()
     panel.processor.compute_flipv()
 
-    param = RotateParam()
+    param = cparam.RotateParam()
     param.angle = 5.0
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
@@ -140,13 +137,13 @@ def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
     data = get_peak2d_data(PeakDataParam(size=data_size))
     ima = create_image("Test image with peaks", data)
     panel.add_object(ima)
-    param = Peak2DDetectionParam()
+    param = cparam.Peak2DDetectionParam()
     param.create_rois = True
     panel.processor.compute_peak_detection(param)
 
     qt_wait(DELAY3)
 
-    param = ContourShapeParam()
+    param = cparam.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
     qt_wait(DELAY3)

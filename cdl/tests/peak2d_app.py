@@ -11,8 +11,8 @@ Testing the following:
   - Compute 2D peak detection and show points on image
 """
 
+import cdl.core.computation.param as cparam
 from cdl.config import _
-from cdl.core.computation.image import PeakDetectionParam
 from cdl.core.model import image as imod
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 from cdl.tests.data import get_peak2d_data
@@ -27,7 +27,7 @@ def test():
 
         ima = imod.create_image(_("Test image with peaks"), get_peak2d_data())
         panel.add_object(ima)
-        param = PeakDetectionParam()
+        param = cparam.Peak2DDetectionParam()
         param.create_rois = True
         panel.processor.compute_peak_detection(param)
         panel.toggle_show_titles(False)

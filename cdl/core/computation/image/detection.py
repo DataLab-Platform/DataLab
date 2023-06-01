@@ -49,7 +49,7 @@ class GenericDetectionParam(gdt.DataSet):
     )
 
 
-class PeakDetectionParam(GenericDetectionParam):
+class Peak2DDetectionParam(GenericDetectionParam):
     """Peak detection parameters"""
 
     size = gdi.IntItem(
@@ -64,11 +64,11 @@ class PeakDetectionParam(GenericDetectionParam):
     create_rois = gdi.BoolItem(_("Create regions of interest"), default=True)
 
 
-def compute_peak_detection(image: ImageObj, p: PeakDetectionParam) -> np.ndarray:
+def compute_peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> np.ndarray:
     """Compute 2D peak detection
     Args:
         image (ImageObj): input image
-        p (PeakDetectionParam): parameters
+        p (Peak2DDetectionParam): parameters
     Returns:
         np.ndarray: peak coordinates
     """

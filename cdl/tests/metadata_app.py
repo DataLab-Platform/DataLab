@@ -15,8 +15,7 @@ Metadata application test:
 
 import numpy as np
 
-from cdl.core.computation.image import PeakDetectionParam
-from cdl.core.computation.signal import FWHMParam
+import cdl.core.computation.param as cparam
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
@@ -29,7 +28,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test_signal_features(panel: SignalPanel):
     """Test all signal features related to ROI"""
-    panel.processor.compute_fwhm(FWHMParam())
+    panel.processor.compute_fwhm(cparam.FWHMParam())
     panel.processor.compute_fw1e2()
 
 
@@ -37,7 +36,7 @@ def test_image_features(panel: ImagePanel):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
-    panel.processor.compute_peak_detection(PeakDetectionParam())
+    panel.processor.compute_peak_detection(cparam.Peak2DDetectionParam())
 
 
 def test_metadata_features(panel: BaseDataPanel):

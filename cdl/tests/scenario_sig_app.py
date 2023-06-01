@@ -129,7 +129,7 @@ def test_signal_features(
 
     win.add_object(create_test_signal1(data_size))
 
-    param = cparam.NormalizeParam()
+    param = cparam.NormalizeYParam()
     for _name, method in param.methods:
         param.method = method
         panel.processor.compute_normalize(param)

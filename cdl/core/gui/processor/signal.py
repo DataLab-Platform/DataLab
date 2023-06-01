@@ -134,10 +134,10 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Processing
     @qt_try_except()
-    def compute_normalize(self, param: cps.NormalizeParam | None = None) -> None:
+    def compute_normalize(self, param: cps.NormalizeYParam | None = None) -> None:
         """Normalize data"""
         self.compute_11(
-            cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
+            cps.compute_normalize, param, cps.NormalizeYParam, title=_("Normalize")
         )
 
     @qt_try_except()
@@ -211,17 +211,17 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
-    def compute_fft(self, param: cps.FFTParam | None = None) -> None:
+    def compute_fft(self, param: cps.FFT1DParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
-            param = cps.FFTParam()
+            param = cps.FFT1DParam()
         self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
-    def compute_ifft(self, param: cps.FFTParam | None = None) -> None:
+    def compute_ifft(self, param: cps.FFT1DParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
-            param = cps.FFTParam()
+            param = cps.FFT1DParam()
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()

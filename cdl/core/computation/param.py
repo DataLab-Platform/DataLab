@@ -43,7 +43,7 @@ from cdl.core.computation.image.detection import (
     BlobLOGParam,
     BlobOpenCVParam,
     ContourShapeParam,
-    PeakDetectionParam,
+    Peak2DDetectionParam,
 )
 from cdl.core.computation.image.edges import CannyParam
 from cdl.core.computation.image.exposure import (
@@ -61,9 +61,9 @@ from cdl.core.computation.image.restoration import (
     DenoiseWaveletParam,
 )
 from cdl.core.computation.signal import (
-    FFTParam,
+    FFT1DParam,
     FWHMParam,
-    NormalizeParam,
+    NormalizeYParam,
     PeakDetectionParam,
     PolynomialFitParam,
     XYCalibrateParam,

@@ -676,11 +676,11 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: cpi_det.PeakDetectionParam | None = None
+        self, param: cpi_det.Peak2DDetectionParam | None = None
     ) -> None:
         """Compute 2D peak detection"""
         edit, param = self.init_param(
-            param, cpi_det.PeakDetectionParam, _("Peak detection")
+            param, cpi_det.Peak2DDetectionParam, _("Peak detection")
         )
         if edit:
             data = self.panel.objview.get_sel_objects()[0].data
