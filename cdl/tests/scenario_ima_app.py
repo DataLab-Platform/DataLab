@@ -15,27 +15,8 @@ Testing the following:
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+import cdl.core.computation.param as cparam
 from cdl.config import Conf
-from cdl.core.computation.image import (
-    AdjustGammaParam,
-    AdjustLogParam,
-    AdjustSigmoidParam,
-    ButterworthParam,
-    CannyParam,
-    ContourShapeParam,
-    DenoiseBilateralParam,
-    DenoiseTVParam,
-    DenoiseWaveletParam,
-    EqualizeAdaptHistParam,
-    EqualizeHistParam,
-    LogP1Param,
-    MorphologyParam,
-    PeakDetectionParam,
-    RescaleIntensityParam,
-    ResizeParam,
-    RotateParam,
-    ZCalibrateParam,
-)
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.model.base import UniformRandomParam
 from cdl.core.model.image import ImageTypes, create_image, new_image_param
@@ -75,41 +56,41 @@ def test_image_features(
 
     test_common_operations(panel)
 
-    param = ZCalibrateParam()
+    param = cparam.ZCalibrateParam()
     param.a, param.b = 1.2, 0.1
     panel.processor.compute_calibration(param)
 
-    param = DenoiseTVParam()
+    param = cparam.DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
 
-    param = DenoiseBilateralParam()
+    param = cparam.DenoiseBilateralParam()
     panel.processor.compute_denoise_bilateral(param)
 
-    param = DenoiseWaveletParam()
+    param = cparam.DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
-    param = AdjustGammaParam()
+    param = cparam.AdjustGammaParam()
     param.gamma = 0.5
     panel.processor.compute_adjust_gamma(param)
 
-    param = AdjustLogParam()
+    param = cparam.AdjustLogParam()
     param.gain = 0.5
     panel.processor.compute_adjust_log(param)
 
-    param = AdjustSigmoidParam()
+    param = cparam.AdjustSigmoidParam()
     param.gain = 0.5
     panel.processor.compute_adjust_sigmoid(param)
 
-    param = EqualizeHistParam()
+    param = cparam.EqualizeHistParam()
     panel.processor.compute_equalize_hist(param)
 
-    param = EqualizeAdaptHistParam()
+    param = cparam.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
 
-    param = RescaleIntensityParam()
+    param = cparam.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
-    param = MorphologyParam()
+    param = cparam.MorphologyParam()
     param.radius = 10
     panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
@@ -120,13 +101,13 @@ def test_image_features(
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
 
-    param = ButterworthParam()
+    param = cparam.ButterworthParam()
     param.order = 2
     param.cut_off = 0.5
     panel.processor.compute_butterworth(param)
 
     ima2 = create_test_image1(data_size)
-    param = CannyParam()
+    param = cparam.CannyParam()
     panel.processor.compute_canny(param)
     panel.add_object(ima2)
 
@@ -150,7 +131,7 @@ def test_image_features(
 
     panel.processor.compute_laplace()
 
-    param = LogP1Param()
+    param = cparam.LogP1Param()
     param.n = 1
     panel.processor.compute_logp1(param)
 
@@ -159,13 +140,13 @@ def test_image_features(
     panel.processor.compute_fliph()
     panel.processor.compute_flipv()
 
-    param = RotateParam()
+    param = cparam.RotateParam()
     param.angle = 5.0
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.compute_rotate(param)
 
-    param = ResizeParam()
+    param = cparam.ResizeParam()
     param.zoom = 1.3
     panel.processor.compute_resize(param)
 
@@ -178,11 +159,11 @@ def test_image_features(
     data = get_peak2d_data(PeakDataParam(size=data_size))
     ima = create_image("Test image with peaks", data)
     panel.add_object(ima)
-    param = PeakDetectionParam()
+    param = cparam.PeakDetectionParam()
     param.create_rois = True
     panel.processor.compute_peak_detection(param)
 
-    param = ContourShapeParam()
+    param = cparam.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
 

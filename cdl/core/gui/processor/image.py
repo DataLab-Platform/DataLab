@@ -20,6 +20,11 @@ from qtpy import QtWidgets as QW
 
 import cdl.core.computation.base as cpb
 import cdl.core.computation.image as cpi
+import cdl.core.computation.image.detection as cpi_det
+import cdl.core.computation.image.edges as cpi_edg
+import cdl.core.computation.image.exposure as cpi_exp
+import cdl.core.computation.image.morphology as cpi_mor
+import cdl.core.computation.image.restoration as cpi_res
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, _
 from cdl.core.gui.processor.base import BaseProcessor
@@ -366,254 +371,293 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_adjust_gamma(self, param: cpi.AdjustGammaParam | None = None) -> None:
+    def compute_adjust_gamma(
+        self, param: cpi_exp.AdjustGammaParam | None = None
+    ) -> None:
         """Compute gamma correction"""
         self.compute_11(
-            cpi.compute_adjust_gamma,
+            cpi_exp.compute_adjust_gamma,
             param,
-            cpi.AdjustGammaParam,
+            cpi_exp.AdjustGammaParam,
             _("Gamma correction"),
         )
 
     @qt_try_except()
-    def compute_adjust_log(self, param: cpi.AdjustLogParam | None = None) -> None:
+    def compute_adjust_log(self, param: cpi_exp.AdjustLogParam | None = None) -> None:
         """Compute log correction"""
         self.compute_11(
-            cpi.compute_adjust_log,
+            cpi_exp.compute_adjust_log,
             param,
-            cpi.AdjustLogParam,
+            cpi_exp.AdjustLogParam,
             _("Log correction"),
         )
 
     @qt_try_except()
     def compute_adjust_sigmoid(
-        self, param: cpi.AdjustSigmoidParam | None = None
+        self,
+        param: cpi_exp.AdjustSigmoidParam | None = None,
     ) -> None:
         """Compute sigmoid correction"""
         self.compute_11(
-            cpi.compute_adjust_sigmoid,
+            cpi_exp.compute_adjust_sigmoid,
             param,
-            cpi.AdjustSigmoidParam,
+            cpi_exp.AdjustSigmoidParam,
             _("Sigmoid correction"),
         )
 
     @qt_try_except()
     def compute_rescale_intensity(
-        self, param: cpi.RescaleIntensityParam | None = None
+        self,
+        param: cpi_exp.RescaleIntensityParam | None = None,
     ) -> None:
         """Rescale image intensity levels"""
         self.compute_11(
-            cpi.compute_rescale_intensity,
+            cpi_exp.compute_rescale_intensity,
             param,
-            cpi.RescaleIntensityParam,
+            cpi_exp.RescaleIntensityParam,
             _("Rescale intensity"),
         )
 
     @qt_try_except()
-    def compute_equalize_hist(self, param: cpi.EqualizeHistParam | None = None) -> None:
+    def compute_equalize_hist(
+        self, param: cpi_exp.EqualizeHistParam | None = None
+    ) -> None:
         """Histogram equalization"""
         self.compute_11(
-            cpi.compute_equalize_hist,
+            cpi_exp.compute_equalize_hist,
             param,
-            cpi.EqualizeHistParam,
+            cpi_exp.EqualizeHistParam,
             _("Histogram equalization"),
         )
 
     @qt_try_except()
     def compute_equalize_adapthist(
-        self, param: cpi.EqualizeAdaptHistParam | None = None
+        self,
+        param: cpi_exp.EqualizeAdaptHistParam | None = None,
     ) -> None:
         """Adaptive histogram equalization"""
         self.compute_11(
-            cpi.compute_equalize_adapthist,
+            cpi_exp.compute_equalize_adapthist,
             param,
-            cpi.EqualizeAdaptHistParam,
+            cpi_exp.EqualizeAdaptHistParam,
             _("Adaptive histogram equalization"),
         )
 
     @qt_try_except()
-    def compute_denoise_tv(self, param: cpi.DenoiseTVParam | None = None) -> None:
+    def compute_denoise_tv(self, param: cpi_res.DenoiseTVParam | None = None) -> None:
         """Compute Total Variation denoising"""
         self.compute_11(
-            cpi.compute_denoise_tv,
+            cpi_res.compute_denoise_tv,
             param,
-            cpi.DenoiseTVParam,
+            cpi_res.DenoiseTVParam,
             _("Total variation denoising"),
         )
 
     @qt_try_except()
     def compute_denoise_bilateral(
-        self, param: cpi.DenoiseBilateralParam | None = None
+        self,
+        param: cpi_res.DenoiseBilateralParam | None = None,
     ) -> None:
         """Compute bilateral filter denoising"""
         self.compute_11(
-            cpi.compute_denoise_bilateral,
+            cpi_res.compute_denoise_bilateral,
             param,
-            cpi.DenoiseBilateralParam,
+            cpi_res.DenoiseBilateralParam,
             _("Bilateral filter denoising"),
         )
 
     @qt_try_except()
     def compute_denoise_wavelet(
-        self, param: cpi.DenoiseWaveletParam | None = None
+        self,
+        param: cpi_res.DenoiseWaveletParam | None = None,
     ) -> None:
         """Compute Wavelet denoising"""
         self.compute_11(
-            cpi.compute_denoise_wavelet,
+            cpi_res.compute_denoise_wavelet,
             param,
-            cpi.DenoiseWaveletParam,
+            cpi_res.DenoiseWaveletParam,
             _("Wavelet denoising"),
         )
 
     @qt_try_except()
-    def compute_denoise_tophat(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_denoise_tophat(
+        self, param: cpi_mor.MorphologyParam | None = None
+    ) -> None:
         """Denoise using White Top-Hat"""
         self.compute_11(
-            cpi.compute_denoise_tophat,
+            cpi_res.compute_denoise_tophat,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Denoise / Top-Hat"),
         )
 
     @qt_try_except()
-    def compute_white_tophat(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_white_tophat(
+        self, param: cpi_mor.MorphologyParam | None = None
+    ) -> None:
         """Compute White Top-Hat"""
         self.compute_11(
-            cpi.compute_white_tophat,
+            cpi_mor.compute_white_tophat,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("White Top-Hat"),
         )
 
     @qt_try_except()
-    def compute_black_tophat(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_black_tophat(
+        self, param: cpi_mor.MorphologyParam | None = None
+    ) -> None:
         """Compute Black Top-Hat"""
         self.compute_11(
-            cpi.compute_black_tophat,
+            cpi_mor.compute_black_tophat,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Black Top-Hat"),
         )
 
     @qt_try_except()
-    def compute_erosion(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_erosion(self, param: cpi_mor.MorphologyParam | None = None) -> None:
         """Compute Erosion"""
         self.compute_11(
-            cpi.compute_erosion,
+            cpi_mor.compute_erosion,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Erosion"),
         )
 
     @qt_try_except()
-    def compute_dilation(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_dilation(self, param: cpi_mor.MorphologyParam | None = None) -> None:
         """Compute Dilation"""
         self.compute_11(
-            cpi.compute_dilation,
+            cpi_mor.compute_dilation,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Dilation"),
         )
 
     @qt_try_except()
-    def compute_opening(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_opening(self, param: cpi_mor.MorphologyParam | None = None) -> None:
         """Compute morphological opening"""
         self.compute_11(
-            cpi.compute_opening,
+            cpi_mor.compute_opening,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Opening"),
         )
 
     @qt_try_except()
-    def compute_closing(self, param: cpi.MorphologyParam | None = None) -> None:
+    def compute_closing(self, param: cpi_mor.MorphologyParam | None = None) -> None:
         """Compute morphological closing"""
         self.compute_11(
-            cpi.compute_closing,
+            cpi_mor.compute_closing,
             param,
-            cpi.MorphologyParam,
+            cpi_mor.MorphologyParam,
             _("Closing"),
         )
 
     @qt_try_except()
-    def compute_canny(self, param: cpi.CannyParam | None = None) -> None:
+    def compute_canny(self, param: cpi_edg.CannyParam | None = None) -> None:
         """Compute Canny filter"""
         self.compute_11(
-            cpi.compute_canny,
+            cpi_edg.compute_canny,
             param,
-            cpi.CannyParam,
+            cpi_edg.CannyParam,
             _("Canny filter"),
         )
 
     @qt_try_except()
     def compute_roberts(self) -> None:
         """Compute Roberts filter"""
-        self.compute_11(cpi.compute_roberts, title=_("Roberts filter"))
+        self.compute_11(cpi_edg.compute_roberts, title=_("Roberts filter"))
 
     @qt_try_except()
     def compute_prewitt(self) -> None:
         """Compute Prewitt filter"""
-        self.compute_11(cpi.compute_prewitt, title=_("Prewitt filter"))
+        self.compute_11(cpi_edg.compute_prewitt, title=_("Prewitt filter"))
 
     @qt_try_except()
     def compute_prewitt_h(self) -> None:
         """Compute Prewitt filter (horizontal)"""
-        self.compute_11(cpi.compute_prewitt_h, title=_("Prewitt filter (horizontal)"))
+        self.compute_11(
+            cpi_edg.compute_prewitt_h,
+            title=_("Prewitt filter (horizontal)"),
+        )
 
     @qt_try_except()
     def compute_prewitt_v(self) -> None:
         """Compute Prewitt filter (vertical)"""
-        self.compute_11(cpi.compute_prewitt_v, title=_("Prewitt filter (vertical)"))
+        self.compute_11(
+            cpi_edg.compute_prewitt_v,
+            title=_("Prewitt filter (vertical)"),
+        )
 
     @qt_try_except()
     def compute_sobel(self) -> None:
         """Compute Sobel filter"""
-        self.compute_11(cpi.compute_sobel, title=_("Sobel filter"))
+        self.compute_11(cpi_edg.compute_sobel, title=_("Sobel filter"))
 
     @qt_try_except()
     def compute_sobel_h(self) -> None:
         """Compute Sobel filter (horizontal)"""
-        self.compute_11(cpi.compute_sobel_h, title=_("Sobel filter (horizontal)"))
+        self.compute_11(
+            cpi_edg.compute_sobel_h,
+            title=_("Sobel filter (horizontal)"),
+        )
 
     @qt_try_except()
     def compute_sobel_v(self) -> None:
         """Compute Sobel filter (vertical)"""
-        self.compute_11(cpi.compute_sobel_v, title=_("Sobel filter (vertical)"))
+        self.compute_11(
+            cpi_edg.compute_sobel_v,
+            title=_("Sobel filter (vertical)"),
+        )
 
     @qt_try_except()
     def compute_scharr(self) -> None:
         """Compute Scharr filter"""
-        self.compute_11(cpi.compute_scharr, title=_("Scharr filter"))
+        self.compute_11(cpi_edg.compute_scharr, title=_("Scharr filter"))
 
     @qt_try_except()
     def compute_scharr_h(self) -> None:
         """Compute Scharr filter (horizontal)"""
-        self.compute_11(cpi.compute_scharr_h, title=_("Scharr filter (horizontal)"))
+        self.compute_11(
+            cpi_edg.compute_scharr_h,
+            title=_("Scharr filter (horizontal)"),
+        )
 
     @qt_try_except()
     def compute_scharr_v(self) -> None:
         """Compute Scharr filter (vertical)"""
-        self.compute_11(cpi.compute_scharr_v, title=_("Scharr filter (vertical)"))
+        self.compute_11(
+            cpi_edg.compute_scharr_v,
+            title=_("Scharr filter (vertical)"),
+        )
 
     @qt_try_except()
     def compute_farid(self) -> None:
         """Compute Farid filter"""
-        self.compute_11(cpi.compute_farid, title=_("Farid filter"))
+        self.compute_11(cpi_edg.compute_farid, title=_("Farid filter"))
 
     @qt_try_except()
     def compute_farid_h(self) -> None:
         """Compute Farid filter (horizontal)"""
-        self.compute_11(cpi.compute_farid_h, title=_("Farid filter (horizontal)"))
+        self.compute_11(
+            cpi_edg.compute_farid_h,
+            title=_("Farid filter (horizontal)"),
+        )
 
     @qt_try_except()
     def compute_farid_v(self) -> None:
         """Compute Farid filter (vertical)"""
-        self.compute_11(cpi.compute_farid_v, title=_("Farid filter (vertical)"))
+        self.compute_11(
+            cpi_edg.compute_farid_v,
+            title=_("Farid filter (vertical)"),
+        )
 
     @qt_try_except()
     def compute_laplace(self) -> None:
         """Compute Laplace filter"""
-        self.compute_11(cpi.compute_laplace, title=_("Laplace filter"))
+        self.compute_11(cpi_edg.compute_laplace, title=_("Laplace filter"))
 
     # ------Image Computing
     @qt_try_except()
@@ -632,18 +676,18 @@ class ImageProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_peak_detection(
-        self, param: cpi.PeakDetectionParam | None = None
+        self, param: cpi_det.PeakDetectionParam | None = None
     ) -> None:
         """Compute 2D peak detection"""
         edit, param = self.init_param(
-            param, cpi.PeakDetectionParam, _("Peak detection")
+            param, cpi_det.PeakDetectionParam, _("Peak detection")
         )
         if edit:
             data = self.panel.objview.get_sel_objects()[0].data
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(
-            cpi.compute_peak_detection,
+            cpi_det.compute_peak_detection,
             ShapeTypes.POINT,
             param,
             edit=edit,
@@ -680,12 +724,18 @@ class ImageProcessor(BaseProcessor):
                     self.panel.SIG_UPDATE_PLOT_ITEM.emit(obj.uuid)
 
     @qt_try_except()
-    def compute_contour_shape(self, param: cpi.ContourShapeParam | None = None) -> None:
+    def compute_contour_shape(
+        self, param: cpi_det.ContourShapeParam | None = None
+    ) -> None:
         """Compute contour shape fit"""
-        edit, param = self.init_param(param, cpi.ContourShapeParam, _("Contour"))
+        edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
         shapetype = ShapeTypes.CIRCLE if param.shape == "circle" else ShapeTypes.ELLIPSE
         self.compute_10(
-            cpi.compute_contour_shape, shapetype, param, title=_("Contour"), edit=edit
+            cpi_det.compute_contour_shape,
+            shapetype,
+            param,
+            title=_("Contour"),
+            edit=edit,
         )
 
     @qt_try_except()
@@ -702,46 +752,49 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_dog(self, param: cpi.BlobDOGParam | None = None) -> None:
+    def compute_blob_dog(self, param: cpi_det.BlobDOGParam | None = None) -> None:
         """Compute blob detection using Difference of Gaussian method"""
         self.compute_10(
-            cpi.compute_blob_dog,
+            cpi_det.compute_blob_dog,
             ShapeTypes.CIRCLE,
             param,
-            cpi.BlobDOGParam,
+            cpi_det.BlobDOGParam,
             title=_("Blob detection (DOG)"),
         )
 
     @qt_try_except()
-    def compute_blob_doh(self, param: cpi.BlobDOHParam | None = None) -> None:
+    def compute_blob_doh(self, param: cpi_det.BlobDOHParam | None = None) -> None:
         """Compute blob detection using Determinant of Hessian method"""
         self.compute_10(
-            cpi.compute_blob_doh,
+            cpi_det.compute_blob_doh,
             ShapeTypes.CIRCLE,
             param,
-            cpi.BlobDOHParam,
+            cpi_det.BlobDOHParam,
             title=_("Blob detection (DOH)"),
         )
 
     @qt_try_except()
-    def compute_blob_log(self, param: cpi.BlobLOGParam | None = None) -> None:
+    def compute_blob_log(self, param: cpi_det.BlobLOGParam | None = None) -> None:
         """Compute blob detection using Laplacian of Gaussian method"""
         self.compute_10(
-            cpi.compute_blob_log,
+            cpi_det.compute_blob_log,
             ShapeTypes.CIRCLE,
             param,
-            cpi.BlobLOGParam,
+            cpi_det.BlobLOGParam,
             title=_("Blob detection (LOG)"),
         )
 
     @qt_try_except()
-    def compute_blob_opencv(self, param: cpi.BlobOpenCVParam | None = None) -> None:
+    def compute_blob_opencv(
+        self,
+        param: cpi_det.BlobOpenCVParam | None = None,
+    ) -> None:
         """Compute blob detection using OpenCV"""
         self.compute_10(
-            cpi.compute_blob_opencv,
+            cpi_det.compute_blob_opencv,
             ShapeTypes.CIRCLE,
             param,
-            cpi.BlobOpenCVParam,
+            cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
         )
 

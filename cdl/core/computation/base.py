@@ -17,6 +17,10 @@ defines the data model.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+# Note:
+# ----
+# All dataset classes must also be imported in the cdl.core.computation.param module.
+
 from __future__ import annotations
 
 import guidata.dataset.dataitems as gdi
