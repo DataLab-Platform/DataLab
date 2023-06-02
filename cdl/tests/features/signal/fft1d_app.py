@@ -10,11 +10,7 @@ Signal FFT application test.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 
-from cdl.core.model.signal import (
-    SignalTypes,
-    create_signal_from_param,
-    new_signal_param,
-)
+from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
 from cdl.tests import cdl_app_context
 
 SHOW = True  # Show test in GUI-based test launcher

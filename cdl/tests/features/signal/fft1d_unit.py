@@ -13,12 +13,8 @@ Signal FFT unit test.
 import numpy as np
 
 from cdl.algorithms.signal import xy_fft, xy_ifft
-from cdl.core.model.signal import (
-    SignalTypes,
-    create_signal_from_param,
-    new_signal_param,
-)
 from cdl.env import execenv
+from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves
 

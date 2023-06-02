@@ -22,15 +22,15 @@ from cdl.config import Conf, _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
-from cdl.core.model.base import UniformRandomParam
-from cdl.core.model.signal import (
+from cdl.env import execenv
+from cdl.obj import (
     GaussLorentzVoigtParam,
     NewSignalParam,
     SignalTypes,
     create_signal_from_param,
     new_signal_param,
 )
-from cdl.env import execenv
+from cdl.param import UniformRandomParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
 from cdl.tests.features.common.newobject_unit import iterate_signal_creation

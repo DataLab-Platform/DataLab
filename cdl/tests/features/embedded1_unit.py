@@ -19,7 +19,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
-from cdl.core.model.signal import SignalObj
+from cdl.obj import SignalObj
 from cdl.tests import data as test_data
 from cdl.utils.qthelpers import qt_app_context
 

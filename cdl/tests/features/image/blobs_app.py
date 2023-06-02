@@ -12,7 +12,7 @@ Blob detection application test
 from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 
 import cdl.param
-from cdl.core.model.image import create_image
+from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 
 SHOW = True  # Show test in GUI-based test launcher

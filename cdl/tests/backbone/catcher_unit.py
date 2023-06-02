@@ -18,7 +18,7 @@ caught and displayed in the GUI.
 import warnings
 
 from cdl.config import Conf
-from cdl.core.model.signal import SignalObj
+from cdl.obj import SignalObj
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
 

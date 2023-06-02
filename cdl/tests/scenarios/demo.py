@@ -15,16 +15,18 @@ from qtpy import QtWidgets as QW
 import cdl.param
 from cdl.config import _, reset
 from cdl.core.gui.main import CDLMainWindow
-from cdl.core.model.base import UniformRandomParam
-from cdl.core.model.image import ImageTypes, create_image, new_image_param
-from cdl.core.model.signal import (
+from cdl.env import execenv
+from cdl.obj import (
     GaussLorentzVoigtParam,
+    ImageTypes,
     NewSignalParam,
     SignalTypes,
+    create_image,
     create_signal_from_param,
+    new_image_param,
     new_signal_param,
 )
-from cdl.env import execenv
+from cdl.param import UniformRandomParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import (
     PeakDataParam,

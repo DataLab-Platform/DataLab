@@ -12,8 +12,8 @@ import os.path as osp
 import numpy as np
 from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 
-from cdl.core.model.image import create_image
 from cdl.env import execenv
+from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 from cdl.utils.tests import temporary_directory
 

@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-Basic application launcher test 4
+Example of high-level test scenario
 
 Create an image object from Scikit-image human mitosis sample,
 then open DataLab to show it.
@@ -13,7 +13,7 @@ then open DataLab to show it.
 
 from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 
-from cdl.core.model.image import create_image
+from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 
 SHOW = False  # Show test in GUI-based test launcher

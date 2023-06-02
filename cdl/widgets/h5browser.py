@@ -29,8 +29,8 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
-from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
+from cdl.obj import SignalObj
 from cdl.utils.misc import to_string
 from cdl.utils.qthelpers import qt_handle_error_message
 

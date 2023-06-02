@@ -12,8 +12,8 @@ Circular ROI test
 import numpy as np
 from skimage import draw
 
-from cdl.core.model.image import RoiDataGeometries, create_image
 from cdl.env import execenv
+from cdl.obj import RoiDataGeometries, create_image
 from cdl.tests import cdl_app_context
 from cdl.tests.features.common.roi_app import print_obj_shapes
 

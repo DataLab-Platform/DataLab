@@ -12,8 +12,8 @@ Result shapes application test:
 
 import numpy as np
 
-from cdl.core.computation.signal import FWHMParam
-from cdl.core.model.image import create_image
+from cdl.obj import create_image
+from cdl.param import FWHMParam
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
 

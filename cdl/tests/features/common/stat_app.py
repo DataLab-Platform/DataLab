@@ -18,8 +18,16 @@ Testing the following:
 import numpy as np
 
 from cdl.config import _
-from cdl.core.model import image as imod
-from cdl.core.model import signal as smod
+from cdl.obj import (
+    Gauss2DParam,
+    GaussLorentzVoigtParam,
+    ImageTypes,
+    SignalTypes,
+    create_image_from_param,
+    create_signal_from_param,
+    new_image_param,
+    new_signal_param,
+)
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -30,9 +38,9 @@ def test():
     with cdl_app_context() as win:
         # === Signal statistics test ===
         panel = win.signalpanel
-        snew = smod.new_signal_param(_("Gaussian"), stype=smod.SignalTypes.GAUSS)
-        addparam = smod.GaussLorentzVoigtParam()
-        sig = smod.create_signal_from_param(snew, addparam=addparam, edit=False)
+        snew = new_signal_param(_("Gaussian"), stype=SignalTypes.GAUSS)
+        addparam = GaussLorentzVoigtParam()
+        sig = create_signal_from_param(snew, addparam=addparam, edit=False)
         panel.add_object(sig)
         panel.processor.compute_stats()
         sig.roi = np.array([[len(sig.x) // 2, len(sig.x) - 1]], int)
@@ -40,9 +48,9 @@ def test():
         panel.processor.compute_stats()
         # === Image statistics test ===
         panel = win.imagepanel
-        inew = imod.new_image_param(_("Raw data (2D-Gaussian)"), imod.ImageTypes.GAUSS)
-        addparam = imod.Gauss2DParam()
-        ima = imod.create_image_from_param(inew, addparam=addparam, edit=False)
+        inew = new_image_param(_("Raw data (2D-Gaussian)"), ImageTypes.GAUSS)
+        addparam = Gauss2DParam()
+        ima = create_image_from_param(inew, addparam=addparam, edit=False)
         dy, dx = ima.size
         ima.roi = np.array(
             [

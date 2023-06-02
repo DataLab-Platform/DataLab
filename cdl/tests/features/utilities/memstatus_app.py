@@ -11,8 +11,8 @@ import numpy as np
 import psutil
 
 from cdl.config import Conf
-from cdl.core.model.image import Gauss2DParam, ImageTypes, new_image_param
 from cdl.env import execenv
+from cdl.obj import Gauss2DParam, ImageTypes, new_image_param
 from cdl.tests import cdl_app_context
 
 SHOW = True  # Show test in GUI-based test launcher

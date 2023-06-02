@@ -18,9 +18,9 @@ Testing the following:
 import cdl.param
 from cdl.config import Conf
 from cdl.core.gui.main import CDLMainWindow
-from cdl.core.model.base import UniformRandomParam
-from cdl.core.model.image import ImageTypes, create_image, new_image_param
 from cdl.env import execenv
+from cdl.obj import ImageTypes, create_image, new_image_param
+from cdl.param import UniformRandomParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import PeakDataParam, create_test_image1, get_peak2d_data
 from cdl.tests.features.common.newobject_unit import iterate_image_creation

@@ -9,9 +9,9 @@ I/O test
 Testing DataLab specific formats.
 """
 
-from cdl.core.io import read_signal
 from cdl.core.io.image import funcs as image_funcs
 from cdl.env import execenv
+from cdl.obj import read_signal
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import try_open_test_data
 from cdl.utils.vistools import view_curve_items, view_images

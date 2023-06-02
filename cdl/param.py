@@ -30,6 +30,7 @@ from cdl.core.computation.base import (
 from cdl.core.computation.image import (
     BinningParam,
     ButterworthParam,
+    FlatFieldParam,
     GridParam,
     HoughCircleParam,
     LogP1Param,

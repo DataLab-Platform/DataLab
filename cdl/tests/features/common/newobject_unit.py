@@ -16,22 +16,21 @@ from __future__ import annotations
 
 from collections.abc import Generator
 
-from cdl.core.model.base import NormalRandomParam, UniformRandomParam
-from cdl.core.model.image import (
+from cdl.env import execenv
+from cdl.obj import (
     Gauss2DParam,
     ImageDatatypes,
     ImageObj,
     ImageTypes,
-    create_image_from_param,
-    new_image_param,
-)
-from cdl.core.model.signal import (
+    NormalRandomParam,
     SignalObj,
     SignalTypes,
+    UniformRandomParam,
+    create_image_from_param,
     create_signal_from_param,
+    new_image_param,
     new_signal_param,
 )
-from cdl.env import execenv
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves, view_images
 

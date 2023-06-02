@@ -18,8 +18,8 @@ import numpy as np
 
 import cdl.param
 from cdl.core.gui.panel import image, signal
-from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
+from cdl.obj import SignalObj
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_image3, create_test_signal1
 

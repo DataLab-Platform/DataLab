@@ -18,10 +18,14 @@ import dataclasses
 import numpy as np
 
 from cdl.algorithms import fit
-from cdl.core.io import read_image, read_signal
-from cdl.core.model.base import ResultShape, ShapeTypes
-from cdl.core.model.image import create_image
-from cdl.core.model.signal import create_signal
+from cdl.obj import (
+    ResultShape,
+    ShapeTypes,
+    create_image,
+    create_signal,
+    read_image,
+    read_signal,
+)
 from cdl.utils.tests import get_test_fnames
 
 
