@@ -44,14 +44,12 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
         testmodules += get_test_modules(other_package, contains=contains)
         testnb += len(get_tests(other_package)) - 1
     tnb = len(testmodules)
-    print("=" * 80)
-    print(f"🚀 DataLab v{__version__} automatic unit tests 🌌")
-    print("=" * 80)
+    print("")
+    print(f"            🚀 DataLab v{__version__} automatic unit tests 🌌")
     print("")
     print("🔥 DataLab characteristics/environment:")
     print(f"  Configuration version: {config.CONF_VERSION}")
     print(f"  Path: {config.APP_PATH}")
-    print(f"  Frozen: {config.IS_FROZEN}")
     print(f"  Debug: {config.DEBUG}")
     print("")
     print("🔥 DataLab configuration:")
@@ -61,13 +59,6 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     mem_threshold = Conf.main.available_memory_threshold.get()
     print(f"  Available memory threshold: {mem_threshold:d} MB")
     print(f"  Ignored dependencies: {__get_enabled(Conf.main.ignore_dependency_check)}")
-    print("  Processing:")
-    if Conf.proc.extract_roi_singleobj:
-        roi_extract = "Extract all ROIs in a single signal or image"
-    else:
-        roi_extract = "Extract each ROI in a separate signal or image"
-    print(f"    {roi_extract}")
-    print(f"    FFT shift: {__get_enabled(Conf.proc.fft_shift_enabled)}")
     print("")
     print("🔥 Test parameters:")
     print(f"  ⚡ Selected {tnb} tests ({testnb} total available)")
@@ -86,7 +77,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print("")
     for idx, testmodule in enumerate(testmodules):
         rpath = osp.relpath(testmodule.path, osp.dirname(cdl.__file__))
-        print(f"===[{(idx+1):02d}/{tnb:02d}]=== 🍺 Running test [{rpath}]")
+        print(f" 🔹 [{(idx+1):02d}/{tnb:02d}] 🍺 Running test: {rpath}")
         testmodule.run(args=args, timeout=timeout)
 
 
