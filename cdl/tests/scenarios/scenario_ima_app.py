@@ -23,8 +23,8 @@ from cdl.core.model.image import ImageTypes, create_image, new_image_param
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import PeakDataParam, create_test_image1, get_peak2d_data
-from cdl.tests.newobject_unit import iterate_image_creation
-from cdl.tests.scenario_sig_app import test_common_operations
+from cdl.tests.features.common.newobject_unit import iterate_image_creation
+from cdl.tests.scenarios.scenario_sig_app import test_common_operations
 
 SHOW = True  # Show test in GUI-based test launcher
 

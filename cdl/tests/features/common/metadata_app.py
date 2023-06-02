@@ -20,8 +20,9 @@ from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
-from cdl.tests import cdl_app_context, roi_app
+from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
+from cdl.tests.features.common import roi_app
 
 SHOW = True  # Show test in GUI-based test launcher
 

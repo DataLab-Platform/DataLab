@@ -19,8 +19,8 @@ from cdl.core.model.image import (
     new_image_param,
 )
 from cdl.tests import cdl_app_context
-from cdl.tests.newobject_unit import iterate_image_creation
-from cdl.tests.scenario_sig_app import test_compute_11_operations
+from cdl.tests.features.common.newobject_unit import iterate_image_creation
+from cdl.tests.scenarios.scenario_sig_app import test_compute_11_operations
 
 SHOW = True  # Show test in GUI-based test launcher
 

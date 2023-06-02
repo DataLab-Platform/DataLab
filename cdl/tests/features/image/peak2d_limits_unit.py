@@ -13,7 +13,7 @@ Image peak detection test: testing algorithm limits
 from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
-from cdl.tests.peak2d_unit import exec_image_peak_detection_func
+from cdl.tests.features.image.peak2d_unit import exec_image_peak_detection_func
 from cdl.utils.qthelpers import qt_app_context
 
 SHOW = False  # Do not show test in GUI-based test launcher

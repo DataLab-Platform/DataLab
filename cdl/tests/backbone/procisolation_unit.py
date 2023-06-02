@@ -11,7 +11,7 @@ Just test if it's possible to run the process isolation test from another module
 may be an issue with the Pool object being global.
 """
 
-from cdl.tests.procisolation1_unit import test
+from cdl.tests.backbone.procisolation1_unit import test
 
 SHOW = True  # Show test in GUI-based test launcher
 

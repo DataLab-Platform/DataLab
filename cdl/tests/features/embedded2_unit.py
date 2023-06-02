@@ -11,7 +11,7 @@ It is shown and raised above other windows when reopening application.
 """
 
 from cdl.core.gui.main import CDLMainWindow
-from cdl.tests import embedded1_unit
+from cdl.tests.features import embedded1_unit
 
 SHOW = True  # Show test in GUI-based test launcher
 

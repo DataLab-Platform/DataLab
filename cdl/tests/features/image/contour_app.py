@@ -12,7 +12,7 @@ Contour finding application test
 import cdl.param
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_test_image3
-from cdl.tests.roi_app import create_test_image_with_roi
+from cdl.tests.features.common.roi_app import create_test_image_with_roi
 
 SHOW = True  # Show test in GUI-based test launcher
 

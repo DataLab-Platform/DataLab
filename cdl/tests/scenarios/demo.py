@@ -33,8 +33,8 @@ from cdl.tests.data import (
     create_test_signal1,
     get_peak2d_data,
 )
-from cdl.tests.roi_app import create_test_image_with_roi
-from cdl.tests.scenario_sig_app import test_common_operations
+from cdl.tests.features.common.roi_app import create_test_image_with_roi
+from cdl.tests.scenarios.scenario_sig_app import test_common_operations
 from cdl.utils.qthelpers import qt_wait
 from cdl.widgets import fitdialog
 

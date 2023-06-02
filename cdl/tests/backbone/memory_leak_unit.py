@@ -15,7 +15,7 @@ import numpy as np
 import psutil
 
 from cdl.env import execenv
-from cdl.tests.embedded1_unit import HostWindow
+from cdl.tests.features.embedded1_unit import HostWindow
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves
 

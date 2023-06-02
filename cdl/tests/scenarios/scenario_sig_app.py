@@ -33,7 +33,7 @@ from cdl.core.model.signal import (
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
-from cdl.tests.newobject_unit import iterate_signal_creation
+from cdl.tests.features.common.newobject_unit import iterate_signal_creation
 from cdl.widgets import fitdialog
 
 SHOW = True  # Show test in GUI-based test launcher

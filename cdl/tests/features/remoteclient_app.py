@@ -17,9 +17,9 @@ from cdl import app
 from cdl.config import _
 from cdl.env import execenv
 from cdl.remotecontrol import CDLConnectionError, RemoteClient
-from cdl.tests import embedded1_unit
-from cdl.tests.logview_app import exec_script
-from cdl.tests.remoteclient_unit import multiple_commands
+from cdl.tests.features import embedded1_unit
+from cdl.tests.features.remoteclient_unit import multiple_commands
+from cdl.tests.features.utilities.logview_app import exec_script
 from cdl.utils.qthelpers import qt_app_context, qt_wait
 
 SHOW = True  # Show test in GUI-based test launcher

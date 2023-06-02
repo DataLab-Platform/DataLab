@@ -15,7 +15,7 @@ from skimage import draw
 from cdl.core.model.image import RoiDataGeometries, create_image
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
-from cdl.tests.roi_app import print_obj_shapes
+from cdl.tests.features.common.roi_app import print_obj_shapes
 
 SHOW = True  # Show test in GUI-based test launcher
 

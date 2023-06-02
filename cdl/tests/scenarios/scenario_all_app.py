@@ -12,8 +12,8 @@ Maximizing test coverage.
 # pylint: disable=duplicate-code
 
 from cdl.tests import cdl_app_context
-from cdl.tests.scenario_ima_app import test_image_features
-from cdl.tests.scenario_sig_app import test_signal_features
+from cdl.tests.scenarios.scenario_ima_app import test_image_features
+from cdl.tests.scenarios.scenario_sig_app import test_signal_features
 
 
 def test():

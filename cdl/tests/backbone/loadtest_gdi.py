@@ -25,8 +25,8 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_image1
-from cdl.tests.newobject_unit import iterate_image_creation
-from cdl.tests.scenario_sig_app import test_common_operations
+from cdl.tests.features.common.newobject_unit import iterate_image_creation
+from cdl.tests.scenarios.scenario_sig_app import test_common_operations
 
 SHOW = os.name == "nt"  # Show test in GUI-based test launcher
 
