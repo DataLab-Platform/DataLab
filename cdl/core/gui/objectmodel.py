@@ -332,7 +332,7 @@ class ObjectModel:
         """Return object titles"""
         return [obj.title for obj in self._objects.values()]
 
-    def get_object_by_title(self, title: str) -> SignalObj | ImageObj:
+    def get_object_from_title(self, title: str) -> SignalObj | ImageObj:
         """Return object with title.
 
         Args:

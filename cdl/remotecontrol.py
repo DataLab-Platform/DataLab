@@ -230,7 +230,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         server.register_function(self.open_object)
         server.register_function(self.calc)
         server.register_function(self.get_object_titles)
-        server.register_function(self.get_object_by_title)
+        server.register_function(self.get_object_from_title)
         server.register_function(self.get_object)
         server.register_function(self.get_object_uuids)
         server.register_function(self.get_object_from_uuid)
@@ -409,7 +409,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         """
         return self.win.get_object_titles(panel)
 
-    def get_object_by_title(self, title: str, panel: str | None = None) -> list[str]:
+    def get_object_from_title(self, title: str, panel: str | None = None) -> list[str]:
         """Get object (signal/image) from title.
 
         Args:
@@ -419,7 +419,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         Returns:
             list[str]: Object data
         """
-        return dataset_to_json(self.win.get_object_by_title(title, panel))
+        return dataset_to_json(self.win.get_object_from_title(title, panel))
 
     def get_object(
         self,
@@ -521,7 +521,7 @@ class RemoteClient:
         True
         >>> cdl.get_object_titles()
         ['toto']
-        >>> cdl.get_object_by_title("toto")
+        >>> cdl.get_object_from_title("toto")
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
         >>> cdl.get_object(0)
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
@@ -822,7 +822,7 @@ class RemoteClient:
         """
         return self.serverproxy.get_object_titles(panel)
 
-    def get_object_by_title(
+    def get_object_from_title(
         self, title: str, panel: str | None = None
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from title
@@ -839,7 +839,7 @@ class RemoteClient:
             ValueError: if object not found
             ValueError: if panel not found
         """
-        param_data = self.serverproxy.get_object_by_title(title, panel)
+        param_data = self.serverproxy.get_object_from_title(title, panel)
         return json_to_dataset(param_data)
 
     def get_object(

@@ -213,7 +213,7 @@ class CDLMainWindow(QW.QMainWindow):
         """
         return self.__get_specific_panel(panel).objmodel.get_object_titles()
 
-    def get_object_by_title(
+    def get_object_from_title(
         self, title: str, panel: str | None = None
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from title
@@ -230,7 +230,7 @@ class CDLMainWindow(QW.QMainWindow):
             ValueError: if object not found
             ValueError: if panel is unknown
         """
-        return self.__get_specific_panel(panel).objmodel.get_object_by_title(title)
+        return self.__get_specific_panel(panel).objmodel.get_object_from_title(title)
 
     def get_object(
         self,

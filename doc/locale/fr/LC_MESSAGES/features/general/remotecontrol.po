@@ -259,7 +259,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.add_signal
 #: cdl.remotecontrol.RemoteClient.calc cdl.remotecontrol.RemoteClient.connect
 #: cdl.remotecontrol.RemoteClient.get_object
-#: cdl.remotecontrol.RemoteClient.get_object_by_title
+#: cdl.remotecontrol.RemoteClient.get_object_from_title
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
@@ -272,7 +272,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteServer.add_signal
 #: cdl.remotecontrol.RemoteServer.calc
 #: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_by_title
+#: cdl.remotecontrol.RemoteServer.get_object_from_title
 #: cdl.remotecontrol.RemoteServer.get_object_from_uuid
 #: cdl.remotecontrol.RemoteServer.get_object_titles
 #: cdl.remotecontrol.RemoteServer.get_object_uuids
@@ -338,7 +338,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.add_signal
 #: cdl.remotecontrol.RemoteClient.calc
 #: cdl.remotecontrol.RemoteClient.get_object
-#: cdl.remotecontrol.RemoteClient.get_object_by_title
+#: cdl.remotecontrol.RemoteClient.get_object_from_title
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
@@ -347,7 +347,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteServer.add_signal
 #: cdl.remotecontrol.RemoteServer.calc
 #: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_by_title
+#: cdl.remotecontrol.RemoteServer.get_object_from_title
 #: cdl.remotecontrol.RemoteServer.get_object_from_uuid
 #: cdl.remotecontrol.RemoteServer.get_object_titles
 #: cdl.remotecontrol.RemoteServer.get_object_uuids
@@ -364,7 +364,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.add_signal
 #: cdl.remotecontrol.RemoteClient.calc
 #: cdl.remotecontrol.RemoteClient.get_object
-#: cdl.remotecontrol.RemoteClient.get_object_by_title
+#: cdl.remotecontrol.RemoteClient.get_object_from_title
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
@@ -373,7 +373,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteServer.add_signal
 #: cdl.remotecontrol.RemoteServer.calc
 #: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_by_title
+#: cdl.remotecontrol.RemoteServer.get_object_from_title
 #: cdl.remotecontrol.RemoteServer.get_object_from_uuid
 #: cdl.remotecontrol.RemoteServer.get_object_titles
 #: cdl.remotecontrol.RemoteServer.get_object_uuids of
@@ -384,7 +384,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.add_signal
 #: cdl.remotecontrol.RemoteClient.connect
 #: cdl.remotecontrol.RemoteClient.get_object
-#: cdl.remotecontrol.RemoteClient.get_object_by_title
+#: cdl.remotecontrol.RemoteClient.get_object_from_title
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
@@ -509,7 +509,7 @@ msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.get_object:7
 #: cdl.remotecontrol.RemoteServer.get_object:7
-#: cdl.remotecontrol.RemoteServer.get_object_by_title:5
+#: cdl.remotecontrol.RemoteServer.get_object_from_title:5
 #: cdl.remotecontrol.RemoteServer.get_object_from_uuid:5
 #: cdl.remotecontrol.RemoteServer.get_object_titles:3
 #: cdl.remotecontrol.RemoteServer.get_object_uuids:3 of
@@ -526,25 +526,25 @@ msgid ""
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.get_object:14
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:3
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:9
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:3
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:9
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid:8 of
 msgid "object"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.get_object:17
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:12
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:12
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid:11
 #: cdl.remotecontrol.RemoteServer.get_object:17 of
 msgid "if object not found"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:1 of
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:1 of
 #, fuzzy
 msgid "Get object (signal/image) from title"
 msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
 
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:5
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:5
 #: cdl.remotecontrol.RemoteClient.get_object_titles:3
 #: cdl.remotecontrol.RemoteClient.get_object_uuids:3 of
 msgid ""
@@ -552,7 +552,7 @@ msgid ""
 "is used."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object_by_title:13
+#: cdl.remotecontrol.RemoteClient.get_object_from_title:13
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid:12
 #: cdl.remotecontrol.RemoteClient.get_object_titles:10
 #: cdl.remotecontrol.RemoteClient.get_object_uuids:10 of
@@ -720,18 +720,18 @@ msgid "Called when DataLab is ready to process new requests"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteServer.get_object:14
-#: cdl.remotecontrol.RemoteServer.get_object_by_title:8
+#: cdl.remotecontrol.RemoteServer.get_object_from_title:8
 #: cdl.remotecontrol.RemoteServer.get_object_from_uuid:8 of
 #, fuzzy
 msgid "Object data"
 msgstr "Récupération de la liste des objets"
 
-#: cdl.remotecontrol.RemoteServer.get_object_by_title:1 of
+#: cdl.remotecontrol.RemoteServer.get_object_from_title:1 of
 #, fuzzy
 msgid "Get object (signal/image) from title."
 msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
 
-#: cdl.remotecontrol.RemoteServer.get_object_by_title:3 of
+#: cdl.remotecontrol.RemoteServer.get_object_from_title:3 of
 msgid "Object title"
 msgstr ""
 
