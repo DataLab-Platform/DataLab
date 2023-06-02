@@ -123,7 +123,7 @@ def load_test():
     execenv.unattended = True
     with cdl_app_context() as win:
         gdi_count = []
-        for iteration in range(10):
+        for iteration in range(4):
             execenv.print(f"Test iteration: {iteration}")
             count = test_gdi_count(win)
             if count is None:
@@ -132,6 +132,7 @@ def load_test():
             gdi_count.append(count)
             if iteration > 0:
                 increase = gdi_count[-1] - gdi_count[-2]
+                assert increase <= 0, "GDI count should not increase (memory leak)"
                 increase_pct = increase / gdi_count[0] * 100
                 execenv.print(
                     f"   GDI count increase: {increase:+d} ({increase_pct:.2f}%)"
