@@ -16,8 +16,8 @@ import time
 import numpy as np
 
 from cdl import app
-from cdl.core.computation.signal import XYCalibrateParam
 from cdl.env import execenv
+from cdl.param import XYCalibrateParam
 from cdl.remotecontrol import RemoteClient
 from cdl.tests.data import create_2d_gaussian, create_test_signal1
 from cdl.utils.tests import exec_script, temporary_directory
