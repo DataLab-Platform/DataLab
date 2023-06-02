@@ -284,7 +284,7 @@ class BaseProcessor(QC.QObject):
         paramclass: gdt.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
-        edit: bool = True,
+        edit: bool | None = None,
     ) -> dict[int, ResultShape]:
         """Compute 10 function: 1 object in --> 0 object out
         (the result of this method is stored in original object's metadata)"""
@@ -356,7 +356,7 @@ class BaseProcessor(QC.QObject):
         title: str | None = None,
         comment: str | None = None,
         func_objs: Callable | None = None,
-        edit: bool = True,
+        edit: bool | None = None,
     ):
         """Compute n1 function: N(>=2) objects in --> 1 object out"""
         if (edit is None or param is None) and paramclass is not None:
@@ -440,7 +440,7 @@ class BaseProcessor(QC.QObject):
         paramclass: gdt.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
-        edit: bool = True,
+        edit: bool | None = None,
     ):
         """Compute n1n function: N(>=1) objects + 1 object in --> N objects out.
 
