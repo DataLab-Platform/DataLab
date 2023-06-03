@@ -23,18 +23,27 @@ from qtpy import QtWidgets as QW
 from cdl.config import _
 from cdl.core.gui import ObjItf
 from cdl.env import execenv
+from cdl.utils.misc import to_string
 
 UNTITLED_NB = 0
 
 
 class Macro(QC.QObject, ObjItf):
-    """Object representing a macro: editor, path, open/save actions, etc."""
+    """Object representing a macro: editor, path, open/save actions, etc.
+
+    Args:
+        console (PythonShellWidget): Python shell widget
+        name (str, optional): Macro name. Defaults to None.
+    """
 
     PREFIX = "m"
 
     STARTED = QC.Signal()
     FINISHED = QC.Signal()
     MODIFIED = QC.Signal()
+    FILE_HEADER = os.linesep.join(
+        ["# -*- coding: utf-8 -*-", "", '"""DataLab Macro"""', "", ""]
+    )
     MACRO_TITLE = _("Macro simple example")
     MACRO_SAMPLE = f"""# {MACRO_TITLE}
 
@@ -63,7 +72,7 @@ print("All done!")
         self.process = None
 
     @property
-    def short_id(self):
+    def short_id(self) -> str:
         """Short macro ID"""
         return self.PREFIX + self.uuid[:3]
 
@@ -78,44 +87,98 @@ print("All done!")
         return os.linesep.join(text.splitlines(False))
 
     def set_code(self, code: str) -> None:
-        """Set code to be executed"""
+        """Set code to be executed
+
+        Args:
+            code (str): Code to be executed
+        """
         self.editor.setPlainText(code)
 
     def serialize(self, writer: BaseIOHandler) -> None:
-        """Serialize this macro"""
+        """Serialize this macro
+
+        Args:
+            writer (BaseIOHandler): Writer
+        """
         with writer.group("name"):
             writer.write(self.objectName())
         with writer.group("contents"):
             writer.write(self.get_code())
 
     def deserialize(self, reader: BaseIOHandler) -> None:
-        """Deserialize this macro"""
+        """Deserialize this macro
+
+        Args:
+            reader (BaseIOHandler): Reader
+        """
         with reader.group("name"):
             self.setObjectName(reader.read_any())
         with reader.group("contents"):
             self.set_code(reader.read_any())
 
+    def to_file(self, filename: str) -> None:
+        """Save macro to file
+
+        Args:
+            filename (str): File name
+        """
+        code = self.FILE_HEADER + self.get_code()
+        with open(filename, "wb") as fdesc:
+            fdesc.write(code.encode("utf-8"))
+
+    def from_file(self, filename: str) -> None:
+        """Load macro from file
+
+        Args:
+            filename (str): File name
+        """
+        with open(filename, "rb") as fdesc:
+            code = to_string(fdesc.read()).strip()
+        header = self.FILE_HEADER.strip()
+        if code.startswith(header):
+            code = code[len(header) :].strip()
+        self.set_code(code)
+
     @staticmethod
     def get_untitled_title() -> str:
-        """Increment untitled number and return untitled macro title"""
+        """Increment untitled number and return untitled macro title
+
+        Returns:
+            str: Untitled macro title
+        """
         global UNTITLED_NB  # pylint: disable=global-statement
         UNTITLED_NB += 1
         untitled = _("Untitled")
         return f"{untitled} {UNTITLED_NB:02d}"
 
     def modification_changed(self, state: bool) -> None:
-        """Method called when macro's editor modification state changed"""
+        """Method called when macro's editor modification state changed
+
+        Args:
+            state (bool): Modification state
+        """
         if state:
             self.MODIFIED.emit()
 
     @staticmethod
-    def transcode(bytearr) -> str:
-        """Transcode bytes to locale str"""
+    def transcode(bytearr: QC.QByteArray) -> str:
+        """Transcode bytes to locale str
+
+        Args:
+            bytearr (QByteArray): Byte array
+
+        Returns:
+            str: Locale str
+        """
         locale_codec = QC.QTextCodec.codecForLocale()
         return locale_codec.toUnicode(bytearr.data())
 
     def get_stdout(self) -> str:
-        """Return standard output str"""
+        """Return standard output str
+
+        Returns:
+            str: Standard output str
+        """
         self.process.setReadChannel(QC.QProcess.StandardOutput)
         bytearr = QC.QByteArray()
         while self.process.bytesAvailable():
@@ -123,7 +186,11 @@ print("All done!")
         return self.transcode(bytearr)
 
     def get_stderr(self) -> str:
-        """Return standard error str"""
+        """Return standard error str
+
+        Returns:
+            str: Standard error str
+        """
         self.process.setReadChannel(QC.QProcess.StandardError)
         bytearr = QC.QByteArray()
         while self.process.bytesAvailable():
@@ -139,7 +206,12 @@ print("All done!")
         self.console.write_error(self.get_stderr())
 
     def print(self, text, error=False, eol_before=True) -> None:
-        """Print text in console, with line separator"""
+        """Print text in console, with line separator
+
+        Args:
+            text (str): Text to be printed
+            error (bool, optional): Print as error. Defaults to False.
+        """
         msg = f"---({time.ctime()})---[{text}]{os.linesep}"
         if eol_before:
             msg = os.linesep + msg
@@ -172,7 +244,11 @@ print("All done!")
             self.STARTED.emit()
 
     def is_running(self) -> bool:
-        """Is macro running?"""
+        """Is macro running?
+
+        Returns:
+            bool: True if macro is running
+        """
         if self.process is not None:
             return self.process.state() == QC.QProcess.Running
         return False
@@ -185,7 +261,12 @@ print("All done!")
 
     # pylint: disable=unused-argument
     def finished(self, exit_code, exit_status) -> None:
-        """Process has finished"""
+        """Process has finished
+
+        Args:
+            exit_code (int): Exit code
+            exit_status (QC.QProcess.ExitStatus): Exit status
+        """
         self.print(
             _("# <== '%s' macro has finished") % self.objectName(), eol_before=False
         )

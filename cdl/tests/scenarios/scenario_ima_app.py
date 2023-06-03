@@ -4,12 +4,10 @@
 # (see cdl/LICENSE for details)
 
 """
-Unit test scenario Image 01
+Image processing test scenario
+------------------------------
 
-Testing the following:
-  - Add image object at startup
-  - Create image (random type)
-  - Sum two images
+Testing all the image processing features.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

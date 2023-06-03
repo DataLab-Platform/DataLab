@@ -4,12 +4,10 @@
 # (see cdl/LICENSE for details)
 
 """
-Unit test scenario Signal 01
+Signal processing test scenario
+-------------------------------
 
-Testing the following:
-  - Add signal object at startup
-  - Create signal (random type)
-  - Sum two signals
+Testing all the signal processing features.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

@@ -25,7 +25,7 @@ from qtpy.compat import getopenfilename, getsavefilename
 from cdl.config import Conf, _
 from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.panel.base import AbstractPanel
-from cdl.utils.misc import to_string
+from cdl.env import execenv
 from cdl.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -33,7 +33,11 @@ if TYPE_CHECKING:  # pragma: no cover
 
 
 class MacroTabs(QW.QTabWidget):
-    """Macro tabwidget"""
+    """Macro tabwidget
+
+    Args:
+        parent (QWidget): Parent widget
+    """
 
     SIG_CONTEXT_MENU = QC.Signal(QC.QPoint)
 
@@ -48,7 +52,11 @@ class MacroTabs(QW.QTabWidget):
 
 
 class MacroPanel(AbstractPanel, DockableWidgetMixin):
-    """Macro manager widget"""
+    """Macro manager widget
+
+    Args:
+        parent (QWidget): Parent widget
+    """
 
     LOCATION = QC.Qt.LeftDockWidgetArea
     PANEL_STR = _("Macro panel")
@@ -58,10 +66,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
     SIG_OBJECT_MODIFIED = QC.Signal()
 
     FILE_FILTERS = f"{_('Python files')} (*.py)"
-
-    FILE_HEADER = os.linesep.join(
-        ["# -*- coding: utf-8 -*-", "", '"""DataLab Macro"""', "", ""]
-    )
 
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
@@ -96,13 +100,21 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     # ------AbstractPanel interface-----------------------------------------------------
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
-        """Serialize whole panel to a HDF5 file"""
+        """Serialize whole panel to a HDF5 file
+
+        Args:
+            writer (NativeH5Writer): HDF5 writer
+        """
         with writer.group(self.H5_PREFIX):
             for obj in self.__macros.values():
                 self.serialize_object_to_hdf5(obj, writer)
 
     def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
-        """Deserialize whole panel from a HDF5 file"""
+        """Deserialize whole panel from a HDF5 file
+
+        Args:
+            reader (NativeH5Reader): HDF5 reader
+        """
         with reader.group(self.H5_PREFIX):
             for name in reader.h5.get(self.H5_PREFIX, []):
                 #  Contrary to signal or image panels, macros are not stored
@@ -112,7 +124,11 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     @property
     def object_number(self) -> int:
-        """Return object number"""
+        """Return object number
+
+        Returns:
+            int: Number of objects
+        """
         return len(self.__macros)
 
     def create_object(self, title=None) -> Macro:
@@ -141,9 +157,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         Args:
             obj (Macro): Macro object
         """
-        self.tabwidget.addTab(obj.editor, obj.title)
+        index = self.tabwidget.addTab(obj.editor, obj.title)
         self.__macros[obj.uuid] = obj
         self.SIG_OBJECT_ADDED.emit()
+        self.tabwidget.setCurrentIndex(index)
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
@@ -240,12 +257,23 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.current_macro_changed()
 
     def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
-        """Popup context menu at position"""
+        """Popup context menu at position
+
+        Args:
+            position (QPoint): Position of the context menu
+        """
         self.__update_actions()
         self.context_menu.popup(position)
 
     def get_macro(self, index: int | None = None) -> Macro | None:
-        """Return macro at index (if index is None, return current macro)"""
+        """Return macro at index (if index is None, return current macro)
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+
+        Returns:
+            Macro: Macro object
+        """
         if index is None:
             index = self.tabwidget.currentIndex()
         for macro in self.__macros.values():
@@ -254,7 +282,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         return None
 
     # pylint: disable=unused-argument
-    def current_macro_changed(self, index: int | None = None) -> None:
+    def current_macro_changed(self) -> None:
         """Current macro has changed"""
         macro = self.get_macro()
         if macro is not None:
@@ -265,41 +293,69 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """One of the macro contents has changed"""
         self.SIG_OBJECT_MODIFIED.emit()
 
-    def run_macro(self):
-        """Run current macro"""
-        macro = self.get_macro()
+    def run_macro(self, index: int | None = None) -> None:
+        """Run current macro
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+        """
+        macro = self.get_macro(index)
         assert macro is not None
         macro.run()
 
-    def stop_macro(self) -> None:
-        """Stop current macro"""
-        macro = self.get_macro()
+    def stop_macro(self, index: int | None = None) -> None:
+        """Stop current macro
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+        """
+        macro = self.get_macro(index)
         assert macro is not None
         macro.kill()
 
     def macro_state_changed(self, orig_macro: Macro, state: bool) -> None:
-        """Macro state has changed (True: started, False: stopped)"""
+        """Macro state has changed (True: started, False: stopped)
+
+        Args:
+            orig_macro (Macro): Macro object
+            state (bool): State of the macro
+        """
         macro = self.get_macro()
         if macro is orig_macro:
             self.run_action.setEnabled(not state)
             self.stop_action.setEnabled(state)
 
-    def add_macro(self, name: str | None = None, rename: bool = True) -> Macro:
-        """Add macro, optionally with name"""
+    def add_macro(self, name: str | None = None) -> Macro:
+        """Add macro, optionally with name
+
+        Args:
+            name (str, optional): Name of the macro. Defaults to None.
+                If None, a dialog box will be opened to ask for a name.
+
+        Returns:
+            Macro: Macro object
+        """
         macro = self.create_object(name)
         self.add_object(macro)
-        if rename:
+        if name is None:
             self.rename_macro()
-        self.current_macro_changed()
         return macro
 
-    def macro_name_changed(self, name) -> None:
-        """Macro name has been changed"""
+    def macro_name_changed(self, name: str) -> None:
+        """Macro name has been changed
+
+        Args:
+            name (str): New name of the macro
+        """
         index = self.indexOf(self.tabwidget)
         self.tabwidget.setTabText(index, name)
 
     def rename_macro(self, index: int | None = None) -> None:
-        """Rename macro"""
+        """Rename macro
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+        """
         macro = self.get_macro(index)
         assert macro is not None
         name, valid = QW.QInputDialog.getText(
@@ -314,42 +370,57 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             if index is not None:
                 self.tabwidget.setCurrentIndex(index)
 
-    def export_macro_to_file(self) -> None:
-        """Export macro to file"""
-        macro = self.get_macro()
+    def export_macro_to_file(
+        self, index: int | None = None, filename: str | None = None
+    ) -> None:
+        """Export macro to file
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+            filename (str, optional): Filename. Defaults to None.
+        """
+        macro = self.get_macro(index)
         assert macro is not None
-        code = self.FILE_HEADER + macro.get_code()
-        basedir = Conf.main.base_dir.get()
-        with save_restore_stds():
-            filename, _filt = getsavefilename(
-                self, _("Save as"), basedir, self.FILE_FILTERS
-            )
+        if filename is None:
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filt = getsavefilename(
+                    self, _("Save as"), basedir, self.FILE_FILTERS
+                )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                with open(filename, "wb") as fdesc:
-                    fdesc.write(code.encode("utf-8"))
+                macro.to_file(filename)
 
-    def import_macro_from_file(self) -> None:
-        """Import macro from file"""
-        basedir = Conf.main.base_dir.get()
-        with save_restore_stds():
-            filename, _filt = getopenfilename(
-                self, _("Open"), basedir, self.FILE_FILTERS
-            )
+    def import_macro_from_file(self, filename: str | None = None) -> Macro | None:
+        """Import macro from file
+
+        Args:
+            filename (str, optional): Filename. Defaults to None.
+
+        Returns:
+            Macro: Macro object or None
+        """
+        if filename is None:
+            basedir = Conf.main.base_dir.get()
+            with save_restore_stds():
+                filename, _filt = getopenfilename(
+                    self, _("Open"), basedir, self.FILE_FILTERS
+                )
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                with open(filename, "rb") as fdesc:
-                    code = to_string(fdesc.read()).strip()
-                header = self.FILE_HEADER.strip()
-                if code.startswith(header):
-                    code = code[len(header) :].strip()
-                macro = self.add_macro(osp.basename(filename), rename=False)
-                macro.set_code(code)
+                macro = self.add_macro(osp.basename(filename))
+                macro.from_file(filename)
+            return macro
+        return None
 
     def remove_macro(self, index: int | None = None) -> None:
-        """Remove macro"""
+        """Remove macro
+
+        Args:
+            index (int, optional): Index of the macro. Defaults to None.
+        """
         if index is None:
             index = self.tabwidget.currentIndex()
         txt = "<br>".join(
@@ -363,7 +434,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             ]
         )
         btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
-        choice = QW.QMessageBox.warning(self, self.windowTitle(), txt, btns)
+        if execenv.unattended:
+            choice = QW.QMessageBox.StandardButton.Yes
+        else:
+            choice = QW.QMessageBox.warning(self, self.windowTitle(), txt, btns)
         if choice == QW.QMessageBox.StandardButton.Yes:
             self.tabwidget.removeTab(index)
             self.SIG_OBJECT_REMOVED.emit()
