@@ -4,7 +4,20 @@
 # (see cdl/LICENSE for details)
 
 """
-A beautiful image obtained with high-level test scenario
+beautiful_app
+-------------
+
+A high-level test scenario producing beautiful screenshots.
+
+.. note::
+
+    This scenario is used to produce screenshots for the documentation.
+    Thus, it is not run by default when running all tests.
+
+.. warning::
+
+    When modifying this scenario, please update the script "update_screenshots.py"
+    in the "doc" folder.
 """
 
 import cdl.obj
@@ -14,16 +27,33 @@ from cdl.tests import cdl_app_context
 SHOW = False  # Show test in GUI-based test launcher
 
 
-def test():
-    """Dictionnary/List in metadata (de)serialization test"""
+def run_beautiful_scenario(screenshots: bool = False):
+    """High-level test scenario producing beautiful screenshots"""
     data_size = 500
-    with cdl_app_context(console=False) as win:
+    with cdl_app_context(console=False, exec_loop=not screenshots) as win:
+        # Beautiful screenshot of a signal
+        panel = win.signalpanel
+        newparam = cdl.obj.NewSignalParam()
+        newparam.type = cdl.obj.SignalTypes.LORENTZ
+        sig = cdl.obj.create_signal_from_param(newparam)
+        panel.add_object(sig)
+        panel.processor.compute_fft()
+        panel.processor.compute_wiener()
+        panel.processor.compute_derivative()
+        panel.processor.compute_integral()
+        param = cdl.param.GaussianParam()
+        panel.processor.compute_gaussian_filter(param)
+        panel.processor.compute_fft()
+        panel.processor.compute_derivative()
+        if screenshots:
+            win.take_screenshot("s_beautiful")
+        # Beautiful screenshot of an image
         panel = win.imagepanel
         newparam = cdl.obj.NewImageParam()
         newparam.width = newparam.height = data_size
         newparam.type = cdl.obj.ImageTypes.GAUSS
-        image = cdl.obj.create_image_from_param(newparam)
-        panel.add_object(image)
+        ima = cdl.obj.create_image_from_param(newparam)
+        panel.add_object(ima)
         panel.processor.compute_equalize_hist(cdl.param.EqualizeHistParam())
         panel.processor.compute_equalize_adapthist(cdl.param.EqualizeAdaptHistParam())
         panel.processor.compute_denoise_tv(cdl.param.DenoiseTVParam())
@@ -33,8 +63,10 @@ def test():
         n = data_size // 5
         m = int(n * 1.25)
         panel.processor.extract_roi([[n, m, data_size - n, data_size - m]])
-        win.take_screenshot("i_beautiful")
+        if screenshots:
+            win.take_screenshot("i_beautiful")
+            win.take_menu_screenshots()
 
 
 if __name__ == "__main__":
-    test()
+    run_beautiful_scenario(True)

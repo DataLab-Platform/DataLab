@@ -1,7 +1,7 @@
 Image processing
 ================
 
-.. figure:: /images/shots/i_simple_example.png
+.. figure:: /images/shots/i_beautiful.png
 
     DataLab main window: Image processing view
 

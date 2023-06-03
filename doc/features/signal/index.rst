@@ -1,7 +1,7 @@
 Signal processing
 =================
 
-.. figure:: /images/shots/s_simple_example.png
+.. figure:: /images/shots/s_beautiful.png
 
     DataLab main window: Signal processing view
 

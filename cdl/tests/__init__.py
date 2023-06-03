@@ -24,13 +24,15 @@ from cdl.utils import qthelpers as qth
 from cdl.utils import tests
 
 # TODO: [P2] Documentation: add more screenshots from tests
-# TODO: [P3] Create subpackages "app" & "unit" + add support for subpackages in
-# test launcher
 
 
 @contextmanager
 def cdl_app_context(
-    size=None, maximized=False, save=False, console=None
+    size: tuple[int, int] = None,
+    maximized: bool = False,
+    save: bool = False,
+    console: bool | None = None,
+    exec_loop: bool = True,
 ) -> Generator[CDLMainWindow, None, None]:
     """Context manager handling DataLab mainwindow creation and Qt event loop"""
     if size is None:
@@ -39,7 +41,7 @@ def cdl_app_context(
     # Enable test mode: raises exceptions during computations
     execenv.test_mode = True
 
-    with qth.qt_app_context(exec_loop=True):
+    with qth.qt_app_context(exec_loop=exec_loop):
         try:
             win = CDLMainWindow(console=console)
             if maximized:
@@ -59,16 +61,20 @@ def cdl_app_context(
                     win.save_to_h5_file(path)
                 except PermissionError:
                     pass
+            if not exec_loop:
+                # Closing main window properly
+                win.set_modified(False)
+                win.close()
 
 
-def take_plotwidget_screenshot(panel: SignalPanel | ImagePanel, name: str):
+def take_plotwidget_screenshot(panel: SignalPanel | ImagePanel, name: str) -> None:
     """Eventually takes plotwidget screenshot (only in screenshot mode)"""
     if execenv.screenshot:
         prefix = panel.PARAMCLASS.PREFIX
         qth.grab_save_window(panel.plothandler.plotwidget, f"{prefix}_{name}")
 
 
-def run():
+def run() -> None:
     """Run DataLab test launcher"""
     run_testlauncher(cdl)
 
