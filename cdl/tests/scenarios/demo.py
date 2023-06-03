@@ -21,12 +21,12 @@ from cdl.obj import (
     ImageTypes,
     NewSignalParam,
     SignalTypes,
+    UniformRandomParam,
     create_image,
     create_signal_from_param,
     new_image_param,
     new_signal_param,
 )
-from cdl.param import UniformRandomParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import (
     PeakDataParam,

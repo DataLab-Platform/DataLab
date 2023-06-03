@@ -27,10 +27,10 @@ from cdl.obj import (
     GaussLorentzVoigtParam,
     NewSignalParam,
     SignalTypes,
+    UniformRandomParam,
     create_signal_from_param,
     new_signal_param,
 )
-from cdl.param import UniformRandomParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
 from cdl.tests.features.common.newobject_unit import iterate_signal_creation
