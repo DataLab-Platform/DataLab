@@ -60,7 +60,7 @@ from cdl.utils.misc import go_to_error
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:  # pragma: no cover
-    from cdl.core.gui.panel.base import BaseDataPanel
+    from cdl.core.gui.panel.base import AbstractPanel, BaseDataPanel
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.macro import MacroPanel
     from cdl.core.gui.panel.signal import SignalPanel
@@ -88,7 +88,12 @@ def remote_controlled(func):
 
 
 class CDLMainWindow(QW.QMainWindow):
-    """DataLab main window"""
+    """DataLab main window
+
+    Args:
+        console: enable internal console
+        hide_on_close: True to hide window on close
+    """
 
     __instance = None
 
@@ -127,7 +132,7 @@ class CDLMainWindow(QW.QMainWindow):
         self.signalpanel: SignalPanel = None
         self.imagepanel: ImagePanel = None
         self.tabwidget: QW.QTabWidget = None
-        self.signal_image_docks: tuple[QW.QDockWidget] = None
+        self.docks: dict[AbstractPanel, QW.QDockWidget] = None
         self.h5inputoutput = H5InputOutput(self)
 
         self.openh5_action: QW.QAction = None
@@ -637,7 +642,7 @@ class CDLMainWindow(QW.QMainWindow):
         cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Curve panel"))
         idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image panel"))
         self.tabifyDockWidget(cdock, idock)
-        self.signal_image_docks = cdock, idock
+        self.docks = {self.signalpanel: cdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(
             lambda: self.switch_to_panel("signal")
@@ -771,9 +776,10 @@ class CDLMainWindow(QW.QMainWindow):
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
         self.macropanel = macro.MacroPanel()
-        macrodock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
-        self.tabifyDockWidget(self.signal_image_docks[1], macrodock)
-        self.signal_image_docks[0].raise_()
+        mdock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
+        self.docks[self.macropanel] = mdock
+        self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
+        self.docks[self.signalpanel].raise_()
 
     def __configure_panels(self) -> None:
         """Configure panels"""
@@ -811,7 +817,7 @@ class CDLMainWindow(QW.QMainWindow):
         elif panel == "image":
             self.tabwidget.setCurrentWidget(self.imagepanel)
         elif panel == "macro":
-            self.tabwidget.setCurrentWidget(self.macropanel)
+            self.docks[self.macropanel].raise_()
         else:
             raise ValueError(f"Unknown panel {panel}")
 
@@ -875,7 +881,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     def __tab_index_changed(self, index: int) -> None:
         """Switch from signal to image mode, or vice-versa"""
-        dock = self.signal_image_docks[index]
+        dock = self.docks[self.tabwidget.widget(index)]
         dock.raise_()
         self.__update_actions()
 
@@ -1099,9 +1105,10 @@ class CDLMainWindow(QW.QMainWindow):
         changed_options = edit_settings(self)
         for option in changed_options:
             if option == "plot_toolbar_position":
-                for dock in self.signal_image_docks:
-                    widget: DockablePlotWidget = dock.widget()
-                    widget.update_toolbar_position()
+                for dock in self.docks.values():
+                    widget = dock.widget()
+                    if isinstance(widget, DockablePlotWidget):
+                        widget.update_toolbar_position()
             if option == "ima_defaults" and self.imagepanel.object_number > 0:
                 answer = QW.QMessageBox.question(
                     self,
