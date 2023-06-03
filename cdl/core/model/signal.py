@@ -369,6 +369,12 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
                     editable,
                 )
 
+    def add_label_with_title(self) -> None:
+        """Add label with title annotation"""
+        if self.title:
+            label = make.label(self.title, "TL", (0, 0), "TL")
+            self.add_annotations_from_items([label])
+
 
 def create_signal(
     title: str,

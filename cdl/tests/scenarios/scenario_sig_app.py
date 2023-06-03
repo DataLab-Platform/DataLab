@@ -95,6 +95,8 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_nums((0, 1, 2))
     panel.processor.compute_average()
 
+    panel.add_label_with_title()
+
     test_compute_11_operations(panel, 1)
 
 

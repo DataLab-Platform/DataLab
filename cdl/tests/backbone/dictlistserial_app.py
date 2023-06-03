@@ -17,7 +17,7 @@ from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 from cdl.utils.tests import temporary_directory
 
-SHOW = False  # Show test in GUI-based test launcher
+SHOW = True  # Show test in GUI-based test launcher
 
 
 def __compare_metadata(dict1, dict2):

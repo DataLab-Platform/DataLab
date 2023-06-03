@@ -628,6 +628,12 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """Invalidate mask data cache: force to rebuild it"""
         self._maskdata_cache = None
 
+    def add_label_with_title(self) -> None:
+        """Add label with title annotation"""
+        if self.title:
+            label = make.label(self.title, (0, 0), (10, 10), "TL")
+            self.add_annotations_from_items([label])
+
 
 def create_image(
     title: str,

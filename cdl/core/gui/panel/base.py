@@ -979,3 +979,10 @@ class BaseDataPanel(AbstractPanel):
                 ]
             )
             QW.QMessageBox.information(self, APP_NAME, msg)
+
+    def add_label_with_title(self) -> None:
+        """Add a label with object title on the associated plot"""
+        objs = self.objview.get_sel_objects(include_groups=True)
+        for obj in objs:
+            obj.add_label_with_title()
+        self.SIG_REFRESH_PLOT.emit("selected", True)

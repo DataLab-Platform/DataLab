@@ -454,8 +454,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Copy titles to clipboard"),
+                _("Add object title to plot"),
                 separator=True,
+                triggered=self.panel.add_label_with_title,
+                tip=_("Add object title as a label to the plot"),
+            )
+            self.new_action(
+                _("Copy titles to clipboard"),
                 icon=get_icon("copy_titles.svg"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )

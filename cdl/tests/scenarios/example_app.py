@@ -17,7 +17,7 @@ import cdl.param
 from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 
-SHOW = False  # Show test in GUI-based test launcher
+SHOW = False  # Redundant test in terms of covered features (see other scenarios)
 
 
 def test():

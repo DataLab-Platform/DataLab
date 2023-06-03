@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-01 11:45+0200\n"
+"POT-Creation-Date: 2023-06-03 19:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -119,6 +119,11 @@ msgstr ""
 
 #: cdl.core.model.signal.SignalObj:1 of
 msgid "Signal object"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.add_label_with_title:1
+#: cdl.core.model.signal.SignalObj.add_label_with_title:1 of
+msgid "Add label with title annotation"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.copy_data_from:1

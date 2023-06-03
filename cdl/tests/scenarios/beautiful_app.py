@@ -24,7 +24,7 @@ import cdl.obj
 import cdl.param
 from cdl.tests import cdl_app_context
 
-SHOW = False  # Show test in GUI-based test launcher
+SHOW = False  # Redundant test in terms of covered features (see other scenarios)
 
 
 def run_beautiful_scenario(screenshots: bool = False):
@@ -69,4 +69,4 @@ def run_beautiful_scenario(screenshots: bool = False):
 
 
 if __name__ == "__main__":
-    run_beautiful_scenario(True)
+    run_beautiful_scenario()

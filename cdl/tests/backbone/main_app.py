@@ -18,11 +18,11 @@ from cdl.param import MovingMedianParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_signal1
 
-SHOW = False  # Show test in GUI-based test launcher
+SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Dictionnary/List in metadata (de)serialization test"""
+    """Main window test"""
     with cdl_app_context(console=False) as win:
         # Switch from panel to panel
         for panelname in ("macro", "image", "signal"):

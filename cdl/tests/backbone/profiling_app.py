@@ -14,7 +14,7 @@ SHOW = False  # Show test in GUI-based test launcher
 
 
 def test():
-    """Dictionnary/List in metadata (de)serialization test"""
+    """Profiling test"""
     execenv.unattended = True
     with cdl_app_context() as win:
         win.open_h5_files(

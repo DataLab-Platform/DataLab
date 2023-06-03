@@ -31,6 +31,7 @@ from guiqwt.annotations import (
 )
 from guiqwt.builder import make
 from guiqwt.io import load_items, save_items
+from guiqwt.label import LabelItem
 from guiqwt.styles import AnnotationParam
 
 from cdl.config import Conf, _
@@ -751,18 +752,20 @@ class ObjectItf(metaclass=ObjectItfMeta):
         for mshape in self.iterate_resultshapes():
             assert mshape is not None
             transform(mshape.data)
-        if self.annotations:
-            items = []
-            try:
-                for item in load_items(JSONReader(self.annotations)):
-                    if isinstance(item, AnnotatedShape):
-                        transform(item.shape.points)
-                        item.set_label_position()
-                    items.append(item)
-            except json.decoder.JSONDecodeError:
-                pass
-            if items:
-                self.set_annotations_from_items(items)
+        items = []
+        for item in self.get_annotations_from_items():
+            if isinstance(item, AnnotatedShape):
+                transform(item.shape.points)
+                item.set_label_position()
+            elif isinstance(item, LabelItem):
+                x, y = item.G
+                points = np.array([[x, y]], float)
+                transform(points)
+                x, y = points[0]
+                item.set_pos(x, y)
+            items.append(item)
+        if items:
+            self.set_annotations_from_items(items)
 
     @abc.abstractmethod
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
@@ -796,6 +799,21 @@ class ObjectItf(metaclass=ObjectItfMeta):
 
     annotations = property(__get_annotations, __set_annotations)
 
+    def get_annotations_from_items(self) -> list:
+        """Get object annotations (annotation plot items).
+
+        Returns:
+            list: annotation plot items
+        """
+        items = []
+        if self.annotations:
+            try:
+                for item in load_items(JSONReader(self.annotations)):
+                    items.append(item)
+            except json.decoder.JSONDecodeError:
+                pass
+        return items
+
     def set_annotations_from_items(self, items: list) -> None:
         """Set object annotations (annotation plot items).
 
@@ -808,6 +826,21 @@ class ObjectItf(metaclass=ObjectItfMeta):
             self.annotations = writer.get_json(indent=4)
         else:
             self.annotations = None
+
+    def add_annotations_from_items(self, items: list) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+        """
+        ann_items = self.get_annotations_from_items()
+        ann_items.extend(items)
+        if ann_items:
+            self.set_annotations_from_items(ann_items)
+
+    @abc.abstractmethod
+    def add_label_with_title(self) -> None:
+        """Add label with title annotation"""
 
     def iterate_shape_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).

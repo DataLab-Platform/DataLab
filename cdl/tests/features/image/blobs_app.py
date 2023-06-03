@@ -23,20 +23,34 @@ def test():
     with cdl_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
+        data = human_mitosis()
+
+        # Testing blob detection
+        # ======================
         for paramclass, compute_method, name in (
             (cdl.param.BlobDOGParam, proc.compute_blob_dog, "BlobDOG"),
             (cdl.param.BlobDOHParam, proc.compute_blob_doh, "BlobDOH"),
             (cdl.param.BlobLOGParam, proc.compute_blob_log, "BlobLOG"),
             (cdl.param.BlobOpenCVParam, proc.compute_blob_opencv, "BlobOpenCV"),
         ):
-            image = create_image(title, human_mitosis())
-            panel.add_object(image)
             param = paramclass()
-            title = f"Testing {name} with default parameters"
-            if isinstance(param, cdl.param.BlobOpenCVParam):
-                param.filter_by_color = False
-                title = f"Testing {name} with filter_by_color={param.filter_by_color}"
+            image = create_image(name, data)
+            image.add_label_with_title()
+            panel.add_object(image)
             compute_method(param)
+
+        # Testing distribute_on_grid and reset_positions
+        # ==============================================
+        # We begin by selecting all objects, then we reset their positions. This does
+        # not make sense except for coverage (because the objects are already at their
+        # default positions) and it allows to finish by testing the distribution on
+        # grid, which is more appropriate for the eventual final screenshot.
+        panel.objview.selectAll()
+        proc.reset_positions()  # No sense except for coverage
+        param = cdl.param.GridParam()
+        param.cols = 2
+        param.colspac = param.rowspac = 10
+        proc.distribute_on_grid(param)
 
 
 if __name__ == "__main__":
