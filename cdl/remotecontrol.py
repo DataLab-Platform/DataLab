@@ -18,6 +18,8 @@ from __future__ import annotations
 import abc
 import functools
 import importlib
+import sys
+import threading
 import time
 from collections.abc import Callable
 from io import BytesIO
@@ -237,6 +239,9 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     def run(self) -> None:
         """Thread execution method"""
+        if "coverage" in sys.modules:
+            # The following is required to make coverage work with threading
+            sys.settrace(threading._trace_hook)
         self.serve()
 
     def cdl_is_ready(self) -> None:
