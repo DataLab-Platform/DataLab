@@ -15,20 +15,34 @@ from cdl.widgets.warningerror import WarningErrorMessageBox
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def test_error_message_box():
-    """Test error message box"""
+def test_error_message_box(category: str):
+    """Test error message box
+
+    Args:
+        category (str): Error category
+            Valid values are: "error", "warning"
+    """
     with qt_app_context():
         win = QW.QMainWindow()
-        win.setWindowTitle("DataLab Error Message Box test")
+        win.setWindowTitle(f"DataLab {category.capitalize()} Message Box test")
         win.show()
-        try:
-            raise ValueError("Test error message box")
-        except ValueError:
-            context = "Test_error_message_box." * 5
-            tip = "This error may occured when testing the error message box. " * 10
-            dlg = WarningErrorMessageBox(win, "error", context, tip)
+        if category == "error":
+            try:
+                raise ValueError("Test error message box")
+            except ValueError:
+                context = "Test_error_message_box." * 5
+                tip = "This error may occured when testing the error message box. " * 10
+                dlg = WarningErrorMessageBox(win, "error", context, tip=tip)
+                exec_dialog(dlg)
+        elif category == "warning":
+            context = "Test_warning_message_box." * 5
+            message = "Test warning message box" * 10
+            dlg = WarningErrorMessageBox(win, "warning", context, message)
             exec_dialog(dlg)
+        else:
+            raise ValueError(f"Invalid category: {category}")
 
 
 if __name__ == "__main__":
-    test_error_message_box()
+    test_error_message_box("error")
+    test_error_message_box("warning")

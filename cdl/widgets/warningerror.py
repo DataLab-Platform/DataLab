@@ -167,6 +167,8 @@ class WarningErrorMessageBox(QW.QDialog):
         self.setLayout(layout)
         self.resize(width, height)
 
+        bbox.button(QW.QDialogButtonBox.Ok).setFocus()
+
     def ignore(self):
         """Ignore warning next time"""
         Conf.proc.ignore_warnings.set(True)
