@@ -18,6 +18,9 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test():
     """Testing DataLab app launcher"""
+    # Enable test mode for unattended tests (e.g. do not check for dependencies)
+    execenv.test_mode = execenv.unattended
+
     with qt_app_context(exec_loop=True):
         execenv.print("Opening DataLab with no argument")
         app.create()

@@ -13,6 +13,7 @@ then open DataLab to show them.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 from cdl.app import run
+from cdl.env import execenv
 from cdl.tests import data as test_data
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -20,6 +21,9 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test():
     """Simple test"""
+    # Enable test mode for unattended tests (e.g. do not check for dependencies)
+    execenv.test_mode = execenv.unattended
+
     sig1 = test_data.create_test_signal1()
     sig2 = test_data.create_test_signal2()
     size = 2000

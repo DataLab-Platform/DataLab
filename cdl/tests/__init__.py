@@ -38,7 +38,7 @@ def cdl_app_context(
     if size is None:
         size = 950, 600
 
-    # Enable test mode: raises exceptions during computations
+    # Enable test mode (e.g. raises exceptions during computations)
     execenv.test_mode = True
 
     with qth.qt_app_context(exec_loop=exec_loop):

@@ -361,8 +361,9 @@ class CDLMainWindow(QW.QMainWindow):
 
     def check_dependencies(self) -> None:  # pragma: no cover
         """Check dependencies"""
-        if IS_FROZEN or Conf.main.ignore_dependency_check.get():
-            # No need to check dependencies if DataLab has been frozen
+        if IS_FROZEN or Conf.main.ignore_dependency_check.get() or execenv.test_mode:
+            # No need to check dependencies if DataLab has been frozen, or if
+            # the user has chosen to ignore this check, or if we are in test mode
             return
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
