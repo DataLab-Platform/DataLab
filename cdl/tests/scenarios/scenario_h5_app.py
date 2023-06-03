@@ -26,7 +26,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Example of high-level test scenario with HDF5 file"""
     with temporary_directory() as tmpdir:
         size = 500
         with cdl_app_context(console=False) as win:

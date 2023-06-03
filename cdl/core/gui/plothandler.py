@@ -109,7 +109,7 @@ class BasePlotHandler:
         self.__plotitems = {}
         self.cleanup_dataview()
 
-    def add_shapes(self, oid: str) -> None:
+    def add_shapes(self, oid: str, do_autoscale: bool = False) -> None:
         """Add geometric shape items associated to computed results and annotations,
         for the object with the given uuid"""
         obj = self.panel.objmodel[oid]
@@ -119,10 +119,19 @@ class BasePlotHandler:
             # (this avoids some unnecessary refresh process by guiqwt)
             items = list(obj.iterate_shape_items(editable=False))
             if items:
+                if do_autoscale:
+                    self.plot.do_autoscale()
                 with block_signals(self.plot, True):
-                    for item in items[:-1]:
-                        self.plot.add_item(item)
-                        self.__shapeitems.append(item)
+                    with create_progress_bar(
+                        self.panel, _("Creating geometric shapes"), max_=len(items) - 1
+                    ) as progress:
+                        for i_item, item in enumerate(items[:-1]):
+                            progress.setValue(i_item + 1)
+                            if progress.wasCanceled():
+                                break
+                            self.plot.add_item(item)
+                            self.__shapeitems.append(item)
+                            QW.QApplication.processEvents()
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
 
@@ -242,7 +251,7 @@ class BasePlotHandler:
                     self.plot.set_item_visible(item, True, replot=False)
                     self.plot.set_active_item(item)
                     item.unselect()
-                    self.add_shapes(oid)
+                    self.add_shapes(oid, do_autoscale=True)
             self.plot.replot()
         else:
             for key in title_keys:

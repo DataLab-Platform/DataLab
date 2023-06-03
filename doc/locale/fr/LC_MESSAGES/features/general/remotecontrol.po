@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-01 18:06+0200\n"
+"POT-Creation-Date: 2023-06-03 10:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -158,7 +158,9 @@ msgstr "Exécution d'un calcul avec des paramètres"
 msgid ""
 "The signal and image objects are described on this section: :ref:`ref-to-"
 "model`."
-msgstr "Les objets signal et image sont décrits dans cette section : :ref:`ref-to-model`."
+msgstr ""
+"Les objets signal et image sont décrits dans cette section : :ref:`ref-"
+"to-model`."
 
 #: ../../features/general/remotecontrol.rst:59
 msgid ""
@@ -221,8 +223,9 @@ msgid "Public API: remote client"
 msgstr "API publique : client distant"
 
 #: cdl.remotecontrol:2 of
-msgid "DataLab remote controlling utilities"
-msgstr ""
+#, fuzzy
+msgid "DataLab remote control"
+msgstr "Contrôle à distance"
 
 #: cdl.remotecontrol:4 of
 msgid ""
@@ -248,12 +251,10 @@ msgid ""
 " in a Jupyter notebook:"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_image:1
-#: cdl.remotecontrol.RemoteServer.add_image:1 of
+#: cdl.remotecontrol.RemoteClient.add_image:1 of
 msgid "Add image data to DataLab."
 msgstr ""
 
-#: cdl.remotecontrol.BaseRPCServer.notify_port
 #: cdl.remotecontrol.RemoteClient.add_image
 #: cdl.remotecontrol.RemoteClient.add_object
 #: cdl.remotecontrol.RemoteClient.add_signal
@@ -267,28 +268,11 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.open_h5_files
 #: cdl.remotecontrol.RemoteClient.open_object
 #: cdl.remotecontrol.RemoteClient.save_to_h5_file
-#: cdl.remotecontrol.RemoteClient.switch_to_panel
-#: cdl.remotecontrol.RemoteServer.add_image
-#: cdl.remotecontrol.RemoteServer.add_signal
-#: cdl.remotecontrol.RemoteServer.calc
-#: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_from_title
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid
-#: cdl.remotecontrol.RemoteServer.get_object_titles
-#: cdl.remotecontrol.RemoteServer.get_object_uuids
-#: cdl.remotecontrol.RemoteServer.import_h5_file
-#: cdl.remotecontrol.RemoteServer.notify_port
-#: cdl.remotecontrol.RemoteServer.open_h5_files
-#: cdl.remotecontrol.RemoteServer.open_object
-#: cdl.remotecontrol.RemoteServer.save_to_h5_file
-#: cdl.remotecontrol.RemoteServer.switch_to_panel
-#: cdl.remotecontrol.array_to_rpcbinary cdl.remotecontrol.dataset_to_json
-#: cdl.remotecontrol.json_to_dataset cdl.remotecontrol.rpcbinary_to_array of
+#: cdl.remotecontrol.RemoteClient.switch_to_panel of
 msgid "Parameters"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_image:3
-#: cdl.remotecontrol.RemoteServer.add_image:3 of
+#: cdl.remotecontrol.RemoteClient.add_image:3 of
 msgid "Image title"
 msgstr ""
 
@@ -297,40 +281,30 @@ msgid "Image data"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.add_image:7
-#: cdl.remotecontrol.RemoteClient.add_signal:9
-#: cdl.remotecontrol.RemoteServer.add_image:7
-#: cdl.remotecontrol.RemoteServer.add_signal:9 of
+#: cdl.remotecontrol.RemoteClient.add_signal:9 of
 msgid "X unit. Defaults to None."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.add_image:9
-#: cdl.remotecontrol.RemoteClient.add_signal:11
-#: cdl.remotecontrol.RemoteServer.add_image:9
-#: cdl.remotecontrol.RemoteServer.add_signal:11 of
+#: cdl.remotecontrol.RemoteClient.add_signal:11 of
 msgid "Y unit. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_image:11
-#: cdl.remotecontrol.RemoteServer.add_image:11 of
+#: cdl.remotecontrol.RemoteClient.add_image:11 of
 msgid "Z unit. Defaults to None."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.add_image:13
-#: cdl.remotecontrol.RemoteClient.add_signal:13
-#: cdl.remotecontrol.RemoteServer.add_image:13
-#: cdl.remotecontrol.RemoteServer.add_signal:13 of
+#: cdl.remotecontrol.RemoteClient.add_signal:13 of
 msgid "X label. Defaults to None."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.add_image:15
-#: cdl.remotecontrol.RemoteClient.add_signal:15
-#: cdl.remotecontrol.RemoteServer.add_image:15
-#: cdl.remotecontrol.RemoteServer.add_signal:15 of
+#: cdl.remotecontrol.RemoteClient.add_signal:15 of
 msgid "Y label. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_image:17
-#: cdl.remotecontrol.RemoteServer.add_image:17 of
+#: cdl.remotecontrol.RemoteClient.add_image:17 of
 msgid "Z label. Defaults to None."
 msgstr ""
 
@@ -342,17 +316,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
-#: cdl.remotecontrol.RemoteClient.get_version
-#: cdl.remotecontrol.RemoteServer.add_image
-#: cdl.remotecontrol.RemoteServer.add_signal
-#: cdl.remotecontrol.RemoteServer.calc
-#: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_from_title
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid
-#: cdl.remotecontrol.RemoteServer.get_object_titles
-#: cdl.remotecontrol.RemoteServer.get_object_uuids
-#: cdl.remotecontrol.array_to_rpcbinary cdl.remotecontrol.dataset_to_json
-#: cdl.remotecontrol.json_to_dataset cdl.remotecontrol.rpcbinary_to_array of
+#: cdl.remotecontrol.RemoteClient.get_version of
 msgid "Returns"
 msgstr ""
 
@@ -368,15 +332,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
 #: cdl.remotecontrol.RemoteClient.get_object_uuids
-#: cdl.remotecontrol.RemoteClient.get_version
-#: cdl.remotecontrol.RemoteServer.add_image
-#: cdl.remotecontrol.RemoteServer.add_signal
-#: cdl.remotecontrol.RemoteServer.calc
-#: cdl.remotecontrol.RemoteServer.get_object
-#: cdl.remotecontrol.RemoteServer.get_object_from_title
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid
-#: cdl.remotecontrol.RemoteServer.get_object_titles
-#: cdl.remotecontrol.RemoteServer.get_object_uuids of
+#: cdl.remotecontrol.RemoteClient.get_version of
 msgid "Return type"
 msgstr ""
 
@@ -387,8 +343,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.get_object_from_title
 #: cdl.remotecontrol.RemoteClient.get_object_from_uuid
 #: cdl.remotecontrol.RemoteClient.get_object_titles
-#: cdl.remotecontrol.RemoteClient.get_object_uuids
-#: cdl.remotecontrol.RemoteServer.get_object of
+#: cdl.remotecontrol.RemoteClient.get_object_uuids of
 msgid "Raises"
 msgstr ""
 
@@ -405,23 +360,19 @@ msgstr ""
 msgid "Signal or image object"
 msgstr "Basculement vers le panneau signal ou image"
 
-#: cdl.remotecontrol.RemoteClient.add_signal:1
-#: cdl.remotecontrol.RemoteServer.add_signal:1 of
+#: cdl.remotecontrol.RemoteClient.add_signal:1 of
 msgid "Add signal data to DataLab."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_signal:3
-#: cdl.remotecontrol.RemoteServer.add_signal:3 of
+#: cdl.remotecontrol.RemoteClient.add_signal:3 of
 msgid "Signal title"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_signal:5
-#: cdl.remotecontrol.RemoteServer.add_signal:5 of
+#: cdl.remotecontrol.RemoteClient.add_signal:5 of
 msgid "X data"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.add_signal:7
-#: cdl.remotecontrol.RemoteServer.add_signal:7 of
+#: cdl.remotecontrol.RemoteClient.add_signal:7 of
 msgid "Y data"
 msgstr ""
 
@@ -437,13 +388,11 @@ msgstr ""
 msgid "Invalid ydata dtype"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.calc:1 cdl.remotecontrol.RemoteServer.calc:1
-#: of
+#: cdl.remotecontrol.RemoteClient.calc:1 of
 msgid "Call compute function ``name`` in current panel's processor."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.calc:3 cdl.remotecontrol.RemoteServer.calc:3
-#: of
+#: cdl.remotecontrol.RemoteClient.calc:3 of
 msgid "Compute function name"
 msgstr ""
 
@@ -455,8 +404,7 @@ msgstr ""
 msgid "Compute function result"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.close_application:1
-#: cdl.remotecontrol.RemoteServer.close_application:1 of
+#: cdl.remotecontrol.RemoteClient.close_application:1 of
 #, fuzzy
 msgid "Close DataLab application"
 msgstr "Depuis une application tierce"
@@ -491,33 +439,24 @@ msgstr ""
 msgid "Invalid number of retries (must be >= 1)"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object:1
-#: cdl.remotecontrol.RemoteServer.get_object:1 of
+#: cdl.remotecontrol.RemoteClient.get_object:1 of
 #, fuzzy
 msgid "Get object (signal/image) from index."
 msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
 
-#: cdl.remotecontrol.RemoteClient.get_object:3
-#: cdl.remotecontrol.RemoteServer.get_object:3 of
+#: cdl.remotecontrol.RemoteClient.get_object:3 of
 msgid "Object index in current panel. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object:5
-#: cdl.remotecontrol.RemoteServer.get_object:5 of
+#: cdl.remotecontrol.RemoteClient.get_object:5 of
 msgid "Group index. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object:7
-#: cdl.remotecontrol.RemoteServer.get_object:7
-#: cdl.remotecontrol.RemoteServer.get_object_from_title:5
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid:5
-#: cdl.remotecontrol.RemoteServer.get_object_titles:3
-#: cdl.remotecontrol.RemoteServer.get_object_uuids:3 of
+#: cdl.remotecontrol.RemoteClient.get_object:7 of
 msgid "Panel name. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.get_object:10
-#: cdl.remotecontrol.RemoteServer.get_object:10 of
+#: cdl.remotecontrol.RemoteClient.get_object:10 of
 msgid ""
 "If ``index`` is not specified, returns the currently selected object. If "
 "``group_index`` is not specified, return an object from the current "
@@ -534,8 +473,7 @@ msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.get_object:17
 #: cdl.remotecontrol.RemoteClient.get_object_from_title:12
-#: cdl.remotecontrol.RemoteClient.get_object_from_uuid:11
-#: cdl.remotecontrol.RemoteServer.get_object:17 of
+#: cdl.remotecontrol.RemoteClient.get_object_from_uuid:11 of
 msgid "if object not found"
 msgstr ""
 
@@ -599,26 +537,21 @@ msgstr ""
 msgid "DataLab version"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.import_h5_file:1
-#: cdl.remotecontrol.RemoteServer.import_h5_file:1 of
+#: cdl.remotecontrol.RemoteClient.import_h5_file:1 of
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.import_h5_file:3
-#: cdl.remotecontrol.RemoteClient.save_to_h5_file:3
-#: cdl.remotecontrol.RemoteServer.import_h5_file:3 of
+#: cdl.remotecontrol.RemoteClient.save_to_h5_file:3 of
 msgid "HDF5 file name"
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.import_h5_file:5
-#: cdl.remotecontrol.RemoteClient.open_h5_files:8
-#: cdl.remotecontrol.RemoteServer.import_h5_file:5
-#: cdl.remotecontrol.RemoteServer.open_h5_files:8 of
+#: cdl.remotecontrol.RemoteClient.open_h5_files:8 of
 msgid "Reset all application data. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.open_h5_files:1
-#: cdl.remotecontrol.RemoteServer.open_h5_files:1 of
+#: cdl.remotecontrol.RemoteClient.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr ""
 
@@ -630,234 +563,28 @@ msgstr ""
 msgid "Import all objects from HDF5 files. Defaults to None."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.open_object:1
-#: cdl.remotecontrol.RemoteServer.open_object:1 of
+#: cdl.remotecontrol.RemoteClient.open_object:1 of
 msgid "Open object from file in current panel (signal/image)."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.open_object:3
-#: cdl.remotecontrol.RemoteServer.open_object:3 of
+#: cdl.remotecontrol.RemoteClient.open_object:3 of
 msgid "File name"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.reset_all:1
-#: cdl.remotecontrol.RemoteServer.reset_all:1 of
+#: cdl.remotecontrol.RemoteClient.reset_all:1 of
 msgid "Reset all application data"
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.save_to_h5_file:1
-#: cdl.remotecontrol.RemoteServer.save_to_h5_file:1 of
+#: cdl.remotecontrol.RemoteClient.save_to_h5_file:1 of
 msgid "Save to a DataLab HDF5 file."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.switch_to_panel:1
-#: cdl.remotecontrol.RemoteServer.switch_to_panel:1 of
+#: cdl.remotecontrol.RemoteClient.switch_to_panel:1 of
 msgid "Switch to panel."
 msgstr ""
 
 #: cdl.remotecontrol.RemoteClient.switch_to_panel:3 of
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer:1 of
-msgid "Base XML-RPC server mixin"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.get_version:1 of
-msgid "Return DataLab version"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:1
-#: cdl.remotecontrol.RemoteServer.notify_port:1 of
-msgid "Notify automatically attributed port."
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:3 of
-msgid ""
-"This method is called after the server port has been automatically "
-"attributed. It is intended to be reimplemented by subclasses to notify "
-"the port number to the main window."
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.notify_port:7
-#: cdl.remotecontrol.RemoteServer.notify_port:6 of
-msgid "Server port number"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.register_functions:1
-#: cdl.remotecontrol.RemoteServer.register_functions:1 of
-msgid "Register functions"
-msgstr ""
-
-#: cdl.remotecontrol.BaseRPCServer.serve:1 of
-msgid "Start server and serve forever"
-msgstr ""
-
-#: cdl.remotecontrol.CDLConnectionError:1 of
-msgid "Error when trying to connect to DataLab XML-RPC server"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer:1 of
-msgid "XML-RPC server QThread"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.add_image:5 of
-msgid "Z data"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.add_image:20
-#: cdl.remotecontrol.RemoteServer.add_signal:18
-#: cdl.remotecontrol.RemoteServer.calc:9 of
-msgid "True if successful"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.calc:5 of
-msgid "Compute function parameters. Defaults to None."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.cdl_is_ready:1 of
-msgid "Called when DataLab is ready to process new requests"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.get_object:14
-#: cdl.remotecontrol.RemoteServer.get_object_from_title:8
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid:8 of
-#, fuzzy
-msgid "Object data"
-msgstr "Récupération de la liste des objets"
-
-#: cdl.remotecontrol.RemoteServer.get_object_from_title:1 of
-#, fuzzy
-msgid "Get object (signal/image) from title."
-msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
-
-#: cdl.remotecontrol.RemoteServer.get_object_from_title:3 of
-msgid "Object title"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid:1 of
-msgid "Get object (signal/image) from uuid."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.get_object_from_uuid:3 of
-#, fuzzy
-msgid "Object uuid"
-msgstr "Récupération de la liste des objets"
-
-#: cdl.remotecontrol.RemoteServer.get_object_titles:1
-#: cdl.remotecontrol.RemoteServer.get_object_uuids:1 of
-msgid "Get object (signal/image) list for current panel."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.get_object_titles:6 of
-#, fuzzy
-msgid "Object titles"
-msgstr "Récupération de la liste des objets"
-
-#: cdl.remotecontrol.RemoteServer.get_object_uuids:6 of
-#, fuzzy
-msgid "Object uuids"
-msgstr "Récupération de la liste des objets"
-
-#: cdl.remotecontrol.RemoteServer.notify_port:3 of
-msgid ""
-"This method is called after the server port has been automatically "
-"attributed. It notifies the port number to the main window."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.open_h5_files:3 of
-msgid "HDF5 file names. Defaults to None."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.open_h5_files:5 of
-msgid "Import all objects from HDF5 file. Defaults to None."
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.run:1 of
-msgid "Thread execution method"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.save_to_h5_file:3 of
-msgid "HDF5 file name (with extension .h5)"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServer.switch_to_panel:3 of
-msgid "Panel name (valid values: 'signal', 'image', 'macro')"
-msgstr ""
-
-#: cdl.remotecontrol.RemoteServerMeta:1 of
-msgid "Mixed metaclass to avoid conflicts"
-msgstr ""
-
-#: cdl.remotecontrol.array_to_rpcbinary:1 of
-msgid "Convert NumPy array to XML-RPC Binary object, with shape and dtype."
-msgstr ""
-
-#: cdl.remotecontrol.array_to_rpcbinary:3 of
-msgid ""
-"The array is converted to a binary string using NumPy's native binary "
-"format."
-msgstr ""
-
-#: cdl.remotecontrol.array_to_rpcbinary:6 of
-msgid "NumPy array to convert"
-msgstr ""
-
-#: cdl.remotecontrol.array_to_rpcbinary:8
-#: cdl.remotecontrol.rpcbinary_to_array:3 of
-msgid "XML-RPC Binary object"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:1 of
-msgid "Convert guidata DataSet to JSON data."
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:3 of
-msgid "The JSON data is a list of three elements:"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:5 of
-msgid "The first element is the module name of the DataSet class"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:6 of
-msgid "The second element is the class name of the DataSet class"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:7 of
-msgid "The third element is the JSON data of the DataSet instance"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:9 of
-msgid "guidata DataSet to convert"
-msgstr ""
-
-#: cdl.remotecontrol.dataset_to_json:11 cdl.remotecontrol.json_to_dataset:3 of
-msgid "JSON data"
-msgstr ""
-
-#: cdl.remotecontrol.get_cdl_xmlrpc_port:1 of
-msgid "Return DataLab current XML-RPC port"
-msgstr ""
-
-#: cdl.remotecontrol.json_to_dataset:1 of
-msgid "Convert JSON data to guidata DataSet."
-msgstr ""
-
-#: cdl.remotecontrol.json_to_dataset:5 of
-msgid "guidata DataSet"
-msgstr ""
-
-#: cdl.remotecontrol.remote_call:1 of
-msgid "Decorator for method calling DataLab main window remotely"
-msgstr ""
-
-#: cdl.remotecontrol.rpcbinary_to_array:1 of
-msgid "Convert XML-RPC binary to NumPy array."
-msgstr ""
-
-#: cdl.remotecontrol.rpcbinary_to_array:5 of
-msgid "NumPy array"
 msgstr ""
 
 #: ../../features/general/remotecontrol.rst:92
@@ -869,7 +596,11 @@ msgid ""
 "The remote control class methods may be completed with additional methods"
 " which are dynamically added at runtime. This mechanism allows to access "
 "the methods of the \"processor\" objects of DataLab."
-msgstr "Le client de contrôle à distance peut être complété avec des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des objets \"processor\" de DataLab."
+msgstr ""
+"Le client de contrôle à distance peut être complété avec des méthodes "
+"supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce "
+"mécanisme permet d'accéder aux méthodes des objets \"processor\" de "
+"DataLab."
 
 #: cdl.core.gui.processor.signal:1 of
 msgid "DataLab Signal Processor GUI module"
@@ -1315,3 +1046,155 @@ msgstr ""
 
 #~ msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"
 #~ msgstr ""
+
+#~ msgid "DataLab remote controlling utilities"
+#~ msgstr ""
+
+#~ msgid "Base XML-RPC server mixin"
+#~ msgstr ""
+
+#~ msgid "Return DataLab version"
+#~ msgstr ""
+
+#~ msgid "Notify automatically attributed port."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This method is called after the "
+#~ "server port has been automatically "
+#~ "attributed. It is intended to be "
+#~ "reimplemented by subclasses to notify "
+#~ "the port number to the main "
+#~ "window."
+#~ msgstr ""
+
+#~ msgid "Server port number"
+#~ msgstr ""
+
+#~ msgid "Register functions"
+#~ msgstr ""
+
+#~ msgid "Start server and serve forever"
+#~ msgstr ""
+
+#~ msgid "Error when trying to connect to DataLab XML-RPC server"
+#~ msgstr ""
+
+#~ msgid "XML-RPC server QThread"
+#~ msgstr ""
+
+#~ msgid "Z data"
+#~ msgstr ""
+
+#~ msgid "True if successful"
+#~ msgstr ""
+
+#~ msgid "Compute function parameters. Defaults to None."
+#~ msgstr ""
+
+#~ msgid "Called when DataLab is ready to process new requests"
+#~ msgstr ""
+
+#~ msgid "Object data"
+#~ msgstr "Récupération de la liste des objets"
+
+#~ msgid "Get object (signal/image) from title."
+#~ msgstr "Ouverture d'un signal ou d'une image depuis un fichier"
+
+#~ msgid "Object title"
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) from uuid."
+#~ msgstr ""
+
+#~ msgid "Object uuid"
+#~ msgstr "Récupération de la liste des objets"
+
+#~ msgid "Get object (signal/image) list for current panel."
+#~ msgstr ""
+
+#~ msgid "Object titles"
+#~ msgstr "Récupération de la liste des objets"
+
+#~ msgid "Object uuids"
+#~ msgstr "Récupération de la liste des objets"
+
+#~ msgid ""
+#~ "This method is called after the "
+#~ "server port has been automatically "
+#~ "attributed. It notifies the port number"
+#~ " to the main window."
+#~ msgstr ""
+
+#~ msgid "HDF5 file names. Defaults to None."
+#~ msgstr ""
+
+#~ msgid "Import all objects from HDF5 file. Defaults to None."
+#~ msgstr ""
+
+#~ msgid "Thread execution method"
+#~ msgstr ""
+
+#~ msgid "HDF5 file name (with extension .h5)"
+#~ msgstr ""
+
+#~ msgid "Panel name (valid values: 'signal', 'image', 'macro')"
+#~ msgstr ""
+
+#~ msgid "Mixed metaclass to avoid conflicts"
+#~ msgstr ""
+
+#~ msgid "Convert NumPy array to XML-RPC Binary object, with shape and dtype."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The array is converted to a binary"
+#~ " string using NumPy's native binary "
+#~ "format."
+#~ msgstr ""
+
+#~ msgid "NumPy array to convert"
+#~ msgstr ""
+
+#~ msgid "XML-RPC Binary object"
+#~ msgstr ""
+
+#~ msgid "Convert guidata DataSet to JSON data."
+#~ msgstr ""
+
+#~ msgid "The JSON data is a list of three elements:"
+#~ msgstr ""
+
+#~ msgid "The first element is the module name of the DataSet class"
+#~ msgstr ""
+
+#~ msgid "The second element is the class name of the DataSet class"
+#~ msgstr ""
+
+#~ msgid "The third element is the JSON data of the DataSet instance"
+#~ msgstr ""
+
+#~ msgid "guidata DataSet to convert"
+#~ msgstr ""
+
+#~ msgid "JSON data"
+#~ msgstr ""
+
+#~ msgid "Return DataLab current XML-RPC port"
+#~ msgstr ""
+
+#~ msgid "Convert JSON data to guidata DataSet."
+#~ msgstr ""
+
+#~ msgid "guidata DataSet"
+#~ msgstr ""
+
+#~ msgid "Decorator for method calling DataLab main window remotely"
+#~ msgstr ""
+
+#~ msgid "Convert XML-RPC binary to NumPy array."
+#~ msgstr ""
+
+#~ msgid "NumPy array"
+#~ msgstr ""
+

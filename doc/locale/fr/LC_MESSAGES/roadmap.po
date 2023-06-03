@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 15:31+0200\n"
+"POT-Creation-Date: 2023-06-03 10:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,11 +27,11 @@ msgid "Future milestones"
 msgstr ""
 
 #: ../../roadmap.rst:8
-msgid "DataLab 2.0"
+msgid "Features"
 msgstr ""
 
 #: ../../roadmap.rst:10
-msgid "Ideas for new features:"
+msgid "Add support for timeseries"
 msgstr ""
 
 #: ../../roadmap.rst:12
@@ -39,185 +39,213 @@ msgid "Add support for multichannel timeseries"
 msgstr ""
 
 #: ../../roadmap.rst:14
-msgid "Add a \"Preferences\" dialog box to setup all configurable parameters"
+msgid ""
+"Develop a Jupyter plugin for interactive data analysis connected with "
+"DataLab"
 msgstr ""
 
-#: ../../roadmap.rst:17
-msgid "Past milestones"
+#: ../../roadmap.rst:16
+msgid ""
+"Develop a Spyder plugin for interactive data analysis connected with "
+"DataLab"
 msgstr ""
 
-#: ../../roadmap.rst:20
-msgid "DataLab 1.0"
+#: ../../roadmap.rst:19
+msgid "Other tasks"
 msgstr ""
 
-#: ../../roadmap.rst:22
-msgid "Run computations in a separate process:"
+#: ../../roadmap.rst:21
+msgid "Develop a very simple DataLab plugin to demonstrate the plugin system"
 msgstr ""
 
-#: ../../roadmap.rst:24
-msgid "Execute a \"computing server\" in background, in another process"
+#: ../../roadmap.rst:23
+msgid "Develop a DataLab plugin template"
 msgstr ""
 
 #: ../../roadmap.rst:25
+msgid "Make a video tutorial about the plugin system and remote control features"
+msgstr ""
+
+#: ../../roadmap.rst:28
+msgid "Past milestones"
+msgstr ""
+
+#: ../../roadmap.rst:31
+msgid "DataLab 1.0"
+msgstr ""
+
+#: ../../roadmap.rst:33
+msgid "Run computations in a separate process:"
+msgstr ""
+
+#: ../../roadmap.rst:35
+msgid "Execute a \"computing server\" in background, in another process"
+msgstr ""
+
+#: ../../roadmap.rst:36
 msgid ""
 "For each computation, send serialized data and computing function to the "
 "server and wait for the result"
 msgstr ""
 
-#: ../../roadmap.rst:27
+#: ../../roadmap.rst:38
 msgid ""
 "It is then possible to stop any computation at any time by killing the "
 "server process and restarting it (eventually after incrementing the "
 "communication port number)"
 msgstr ""
 
-#: ../../roadmap.rst:31
+#: ../../roadmap.rst:42
 msgid "Optimize image displaying performance"
 msgstr ""
 
-#: ../../roadmap.rst:33
+#: ../../roadmap.rst:44
+msgid "Add preferences dialog box"
+msgstr ""
+
+#: ../../roadmap.rst:46
 msgid "Add new image processing features: denoising, ..."
 msgstr ""
 
-#: ../../roadmap.rst:35
+#: ../../roadmap.rst:48
 msgid "New plugin system: API for third-party extensions"
 msgstr ""
 
-#: ../../roadmap.rst:37
+#: ../../roadmap.rst:50
 msgid ""
 "Objective #1: a plugin must be manageable using a single Python script, "
 "which includes an extension of `ImageProcessor`, `ActionHandler` and new "
 "file format support"
 msgstr ""
 
-#: ../../roadmap.rst:40
+#: ../../roadmap.rst:53
 msgid ""
 "Objective #2: plugins must be simply stored in a folder wich defaults to "
 "the user directory (same folder as \".DataLab.ini\" configuration file)"
 msgstr ""
 
-#: ../../roadmap.rst:44
+#: ../../roadmap.rst:57
 msgid "Add a macro-command system:"
 msgstr ""
 
-#: ../../roadmap.rst:46
+#: ../../roadmap.rst:59
 msgid "New embedded Python editor"
 msgstr ""
 
-#: ../../roadmap.rst:47
+#: ../../roadmap.rst:60
 msgid "Scripts using the same API as high-level applicative test scenarios"
 msgstr ""
 
-#: ../../roadmap.rst:48
+#: ../../roadmap.rst:61
 msgid "Support for macro recording"
 msgstr ""
 
-#: ../../roadmap.rst:50
+#: ../../roadmap.rst:63
 msgid "Add an xmlrpc server to allow DataLab remote control:"
 msgstr ""
 
-#: ../../roadmap.rst:52
+#: ../../roadmap.rst:65
 msgid ""
 "Controlling DataLab main features (open a signal or an image, open a HDF5"
 " file, etc.) and processing features (run a computation, etc.)"
 msgstr ""
 
-#: ../../roadmap.rst:55
+#: ../../roadmap.rst:68
 msgid "Take control of DataLab from a third-party software"
 msgstr ""
 
-#: ../../roadmap.rst:56
+#: ../../roadmap.rst:69
 msgid ""
 "Run interactive calculations from an IDE (e.g. Spyder or Visual Studio "
 "Code)"
 msgstr ""
 
-#: ../../roadmap.rst:60
+#: ../../roadmap.rst:73
 msgid "CodraFT 2.2"
 msgstr ""
 
-#: ../../roadmap.rst:62
+#: ../../roadmap.rst:75
 msgid "Add default image visualization settings in .INI configuration file"
 msgstr ""
 
-#: ../../roadmap.rst:65
+#: ../../roadmap.rst:78
 msgid "CodraFT 2.1"
 msgstr ""
 
-#: ../../roadmap.rst:67
+#: ../../roadmap.rst:80
 msgid ""
 "\"Open in a new window\" feature: add support for multiple separate "
 "windows, thus allowing to visualize for example two images side by side"
 msgstr ""
 
-#: ../../roadmap.rst:70
+#: ../../roadmap.rst:83
 msgid "New demo mode"
 msgstr ""
 
-#: ../../roadmap.rst:72
+#: ../../roadmap.rst:85
 msgid "New command line option features (open/browse HDF5 files at startup)"
 msgstr ""
 
-#: ../../roadmap.rst:74
+#: ../../roadmap.rst:87
 msgid "ROI features:"
 msgstr ""
 
-#: ../../roadmap.rst:76
+#: ../../roadmap.rst:89
 msgid ""
 "Add an option to extract multiples ROI on either one signal/image "
 "(current behavior) or one signal/image per ROI"
 msgstr ""
 
-#: ../../roadmap.rst:78
+#: ../../roadmap.rst:91
 msgid "Images: create ROI using array masks"
 msgstr ""
 
-#: ../../roadmap.rst:79
+#: ../../roadmap.rst:92
 msgid "Images: add support for circular ROI"
 msgstr ""
 
-#: ../../roadmap.rst:82
+#: ../../roadmap.rst:95
 msgid "CodraFT 2.0"
 msgstr ""
 
-#: ../../roadmap.rst:84
+#: ../../roadmap.rst:97
 msgid "New data processing and visualization features (see below)"
 msgstr ""
 
-#: ../../roadmap.rst:86
+#: ../../roadmap.rst:99
 msgid ""
 "Fully automated high-level processing features for internal testing "
 "purpose, as well as embedding DataLab in a third-party software"
 msgstr ""
 
-#: ../../roadmap.rst:89
+#: ../../roadmap.rst:102
 #, python-format
 msgid ""
 "Extensive test suite (unit tests and application tests) with 90% feature "
 "coverage"
 msgstr ""
 
-#: ../../roadmap.rst:93
+#: ../../roadmap.rst:106
 msgid "CodraFT 1.7"
 msgstr ""
 
-#: ../../roadmap.rst:95
+#: ../../roadmap.rst:108
 msgid "Major redesign"
 msgstr ""
 
-#: ../../roadmap.rst:97
+#: ../../roadmap.rst:110
 msgid "Python 3.8 is the new reference"
 msgstr ""
 
-#: ../../roadmap.rst:99
+#: ../../roadmap.rst:112
 msgid "Dropped Python 2 support"
 msgstr ""
 
-#: ../../roadmap.rst:102
+#: ../../roadmap.rst:115
 msgid "CodraFT 1.6"
 msgstr ""
 
-#: ../../roadmap.rst:104
+#: ../../roadmap.rst:117
 msgid "Last release supporting Python 2"
 msgstr ""
 
@@ -273,5 +301,14 @@ msgstr ""
 #~ "external applications controlling DataLab main"
 #~ " features (open a signal or an "
 #~ "image, open a HDF5 file, etc.)"
+#~ msgstr ""
+
+#~ msgid "DataLab 2.0"
+#~ msgstr ""
+
+#~ msgid "Ideas for new features:"
+#~ msgstr ""
+
+#~ msgid "Add a \"Preferences\" dialog box to setup all configurable parameters"
 #~ msgstr ""
 
