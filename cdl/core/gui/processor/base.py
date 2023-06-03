@@ -294,6 +294,7 @@ class BaseProcessor(QC.QObject):
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
         objs = self.panel.objview.get_sel_objects(include_groups=True)
+        current_obj = self.panel.objview.get_current_object()
         name = func.__name__.replace("compute_", "")
         title = name if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
@@ -327,9 +328,10 @@ class BaseProcessor(QC.QObject):
                 resultshape = obj.add_resultshape(name, shapetype, result_array, param)
                 results[obj.uuid] = resultshape
                 xlabels = resultshape.xlabels
-                self.SIG_ADD_SHAPE.emit(obj.uuid)
-                self.panel.selection_changed()
-                self.panel.SIG_REFRESH_PLOT.emit(obj.uuid)
+                if obj is current_obj:
+                    self.panel.selection_changed(update_items=True)
+                else:
+                    self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
                 for _i_row_res in range(resultshape.array.shape[0]):
                     ylabel = f"{name}({obj.short_id})"
                     ylabels.append(ylabel)
@@ -615,8 +617,7 @@ class BaseProcessor(QC.QObject):
                     # If ROI has been modified, save ROI (even in "extract mode")
                     obj.roi = roidata
                     self.SIG_ADD_SHAPE.emit(obj.uuid)
-                    self.panel.selection_changed()
-                    self.panel.SIG_REFRESH_PLOT.emit("selected")
+                    self.panel.selection_changed(update_items=True)
         return roieditordata
 
     def delete_regions_of_interest(self) -> None:
@@ -624,8 +625,7 @@ class BaseProcessor(QC.QObject):
         for obj in self.panel.objview.get_sel_objects():
             if obj.roi is not None:
                 obj.roi = None
-                self.panel.selection_changed()
-                self.panel.SIG_REFRESH_PLOT.emit("selected")
+                self.panel.selection_changed(update_items=True)
 
     @abc.abstractmethod
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:

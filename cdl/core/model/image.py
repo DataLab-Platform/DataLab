@@ -353,12 +353,12 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
 
     _tabs = gdt.BeginTabGroup("all")
 
-    _datag = gdt.BeginGroup(_("Data and metadata"))
+    _datag = gdt.BeginGroup(_("Data"))
     data = gdi.FloatArrayItem(_("Data"))
     metadata = base.MetadataItem(_("Metadata"), default={})
-    _e_datag = gdt.EndGroup(_("Data and metadata"))
+    _e_datag = gdt.EndGroup(_("Data"))
 
-    _dxdyg = gdt.BeginGroup(_("Origin and pixel spacing"))
+    _dxdyg = gdt.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')
     _origin = gdt.BeginGroup(_("Origin"))
     x0 = gdi.FloatItem("X<sub>0</sub>", default=0.0)
     y0 = gdi.FloatItem("Y<sub>0</sub>", default=0.0).set_pos(col=1)
@@ -367,9 +367,9 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
     dx = gdi.FloatItem("Δx", default=1.0, nonzero=True)
     dy = gdi.FloatItem("Δy", default=1.0, nonzero=True).set_pos(col=1)
     _e_pixel_spacing = gdt.EndGroup(_("Pixel spacing"))
-    _e_dxdyg = gdt.EndGroup(_("Origin and pixel spacing"))
+    _e_dxdyg = gdt.EndGroup(f'{_("Origin")} / {_("Pixel spacing")}')
 
-    _unitsg = gdt.BeginGroup(_("Titles and units"))
+    _unitsg = gdt.BeginGroup(f'{_("Titles")} / {_("Units")}')
     title = gdi.StringItem(_("Image title"), default=_("Untitled"))
     _tabs_u = gdt.BeginTabGroup("units")
     _unitsx = gdt.BeginGroup(_("X-axis"))
@@ -385,7 +385,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
     zunit = gdi.StringItem(_("Unit"), default="")
     _e_unitsz = gdt.EndGroup(_("Z-axis"))
     _e_tabs_u = gdt.EndTabGroup("units")
-    _e_unitsg = gdt.EndGroup(_("Titles and units"))
+    _e_unitsg = gdt.EndGroup(f'{_("Titles")} / {_("Units")}')
 
     _e_tabs = gdt.EndTabGroup("all")
 

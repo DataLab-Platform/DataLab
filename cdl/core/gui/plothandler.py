@@ -35,6 +35,7 @@ from weakref import WeakKeyDictionary
 import numpy as np
 from guiqwt.curve import GridItem
 from guiqwt.label import LegendBoxItem
+from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
 from cdl.utils.qthelpers import block_signals, create_progress_bar
@@ -175,15 +176,17 @@ class BasePlotHandler:
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
 
-    def refresh_plot(self, what: str, just_show: bool = False) -> None:
+    def refresh_plot(self, what: str, update_items: bool = True) -> None:
         """Refresh plot.
 
         Args:
             what (str, optional): string describing the objects to refresh.
                 Valid values are "selected" (refresh the selected objects),
                 "all" (refresh all objects), or an object uuid.
-            just_show (bool, optional): if True, only show the item (do not update it,
-                except regarding the reference item). Defaults to False.
+            update_items (bool, optional): if True, update the items.
+                If False, only show the items (do not update them, except if the
+                option "Use reference item LUT range" is enabled and more than one
+                item is selected). Defaults to True.
 
         Raises:
             ValueError: if `what` is not a valid value
@@ -232,7 +235,7 @@ class BasePlotHandler:
                         item = self.__add_item_to_plot(oid)
                     else:
                         self.__update_item_on_plot(
-                            oid, ref_item=ref_item, just_show=just_show
+                            oid, ref_item=ref_item, just_show=not update_items
                         )
                         if ref_item is None:
                             ref_item = item
@@ -295,20 +298,22 @@ class ImagePlotHandler(BasePlotHandler):
             plot: ImagePlot = item.plot()
             plot.update_colormap_axis(item)
 
-    def refresh_plot(self, what: str, just_show: bool = False) -> None:
+    def refresh_plot(self, what: str, update_items: bool = True) -> None:
         """Refresh plot.
 
         Args:
             what (str, optional): string describing the objects to refresh.
                 Valid values are "selected" (refresh the selected objects),
                 "all" (refresh all objects), or an object uuid.
-            just_show (bool, optional): if True, only show the item (do not update it,
-                except regarding the reference item). Defaults to False.
+            update_items (bool, optional): if True, update the items.
+                If False, only show the items (do not update them, except if the
+                option "Use reference item LUT range" is enabled and more than one
+                item is selected). Defaults to True.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
-        super().refresh_plot(what=what, just_show=just_show)
+        super().refresh_plot(what=what, update_items=update_items)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self) -> None:

@@ -258,7 +258,7 @@ class BaseDataPanel(AbstractPanel):
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
     SIG_STATUS_MESSAGE = QC.Signal(str)  # emitted by "qt_try_except" decorator
-    SIG_REFRESH_PLOT = QC.Signal(str)  # Connected to PlotHandler.refresh_plot
+    SIG_REFRESH_PLOT = QC.Signal(str, bool)  # Connected to PlotHandler.refresh_plot
     ROIDIALOGOPTIONS = {}
     # Replaced in child object:
     ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
@@ -369,7 +369,7 @@ class BaseDataPanel(AbstractPanel):
         self.objmodel.clear()
         self.plothandler.clear()
         self.objview.populate_tree()
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.SIG_REFRESH_PLOT.emit("selected", True)
         super().remove_all_objects()
 
     # ---- Signal/Image Panel API ------------------------------------------------------
@@ -439,8 +439,7 @@ class BaseDataPanel(AbstractPanel):
             new_group = self.add_group(group.title)
             for oid in self.objmodel.get_group_object_ids(group.uuid):
                 self.__duplicate_individual_obj(oid, new_group.uuid, set_current=False)
-        self.selection_changed()
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.selection_changed(update_items=True)
 
     def copy_metadata(self) -> None:
         """Copy object metadata"""
@@ -466,7 +465,7 @@ class BaseDataPanel(AbstractPanel):
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
             obj.metadata.update(self.__metadata_clipboard)
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def remove_object(self) -> None:
         """Remove signal/image object"""
@@ -492,8 +491,7 @@ class BaseDataPanel(AbstractPanel):
             self.objview.remove_item(group.uuid, refresh=False)
             self.objmodel.remove_group(group)
         self.objview.update_tree()
-        self.selection_changed()
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.selection_changed(update_items=True)
         self.SIG_OBJECT_REMOVED.emit()
 
     def delete_all_objects(self) -> None:  # pragma: no cover
@@ -515,13 +513,13 @@ class BaseDataPanel(AbstractPanel):
             obj.reset_metadata_to_defaults()
             if index == 0:
                 self.selection_changed()
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
         for obj in self.objmodel:
             obj.update_metadata_view_settings()
-        self.SIG_REFRESH_PLOT.emit("all")
+        self.SIG_REFRESH_PLOT.emit("all", True)
 
     def copy_titles_to_clipboard(self) -> None:
         """Copy object titles to clipboard (for reproducibility)"""
@@ -673,7 +671,7 @@ class BaseDataPanel(AbstractPanel):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
                 obj.import_metadata_from_file(filename)
-            self.SIG_REFRESH_PLOT.emit("selected")
+            self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
         """Export metadata to file (JSON).
@@ -697,15 +695,18 @@ class BaseDataPanel(AbstractPanel):
                 obj.export_metadata_to_file(filename)
 
     # ------Refreshing GUI--------------------------------------------------------------
-    def selection_changed(self) -> None:
+    def selection_changed(self, update_items: bool = False) -> None:
         """Object selection changed: update object properties, refresh plot and update
         object view.
+
+        Args:
+            update_items (bool): Update plot items (default: False)
         """
         selected_objects = self.objview.get_sel_objects(include_groups=True)
         selected_groups = self.objview.get_sel_groups()
         self.objprop.update_properties_from(self.objview.get_current_object())
-        self.plothandler.refresh_plot("selected", just_show=True)
         self.acthandler.selected_objects_changed(selected_groups, selected_objects)
+        self.SIG_REFRESH_PLOT.emit("selected", update_items)
 
     def properties_changed(self) -> None:
         """The properties 'Apply' button was clicked: update object properties,
@@ -713,7 +714,7 @@ class BaseDataPanel(AbstractPanel):
         obj = self.objview.get_current_object()
         update_dataset(obj, self.objprop.properties.dataset)
         self.objview.update_item(obj.uuid)
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.SIG_REFRESH_PLOT.emit("selected", True)
 
     # ------Plotting data in modal dialogs----------------------------------------------
     def open_separate_view(self, oids: list[str] | None = None) -> QW.QDialog | None:
@@ -763,8 +764,7 @@ class BaseDataPanel(AbstractPanel):
             rw_items = [item for item in items if not item.is_readonly()]
             obj = self.__separate_views[dlg]
             obj.set_annotations_from_items(rw_items)
-            self.selection_changed()
-            self.SIG_REFRESH_PLOT.emit("selected")
+            self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()
 
@@ -773,7 +773,7 @@ class BaseDataPanel(AbstractPanel):
         Conf.view.show_label.set(state)
         for obj in self.objmodel:
             obj.metadata[obj.METADATA_LBL] = state
-        self.SIG_REFRESH_PLOT.emit("selected")
+        self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def create_new_dialog(
         self,
