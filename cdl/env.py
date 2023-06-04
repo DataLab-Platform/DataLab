@@ -31,7 +31,7 @@ class CDLExecEnv:
     SCREENSHOT_ARG = "screenshot"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "port"
-    KEEPMAINWINDOW_ENV = "CDL_KEEP_MAIN_WINDOW"
+    DONOTQUIT_ENV = "CDL_DO_NOT_QUIT"
     UNATTENDED_ENV = "CDL_UNATTENDED_TESTS"
     VERBOSE_ENV = "CDL_VERBOSITY_LEVEL"
     SCREENSHOT_ENV = "CDL_TAKE_SCREENSHOT"
@@ -42,7 +42,6 @@ class CDLExecEnv:
         self.h5files = None
         self.h5browser_file = None
         self.demo_mode = False
-        self.test_mode = False
         self.parse_args()
 
     def enable_demo_mode(self, delay: int):
@@ -65,9 +64,14 @@ class CDLExecEnv:
             os.environ[env] = "1"
 
     @property
-    def keep_main_window(self):
-        """Keep main window open after test"""
-        return self.__get_mode(self.KEEPMAINWINDOW_ENV)
+    def do_not_quit(self):
+        """Keep QApplication running (and widgets opened) after test execution,
+        even in unattended mode (e.g. useful for testing the remote client API:
+        we need to run DataLab in unattended mode [to avoid any user interaction
+        during the test] but we also need to keep the QApplication running to
+        be able to send commands to the remote client API).
+        """
+        return self.__get_mode(self.DONOTQUIT_ENV)
 
     @property
     def unattended(self):

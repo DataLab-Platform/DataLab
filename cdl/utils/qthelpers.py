@@ -117,7 +117,7 @@ def qt_app_context(
         try:
             yield QAPP_INSTANCE
         finally:
-            if execenv.unattended and not execenv.keep_main_window:  # pragma: no cover
+            if execenv.unattended and not execenv.do_not_quit:  # pragma: no cover
                 if execenv.delay > 0:
                     mode = "Screenshot" if execenv.screenshot else "Unattended"
                     message = f"{mode} mode (delay: {execenv.delay}s)"

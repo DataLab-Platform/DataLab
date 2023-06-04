@@ -122,7 +122,7 @@ def qt_wait_print(dt: float, message: str, parent=None):
 def test_remote_client():
     """Remote client test"""
     env = os.environ.copy()
-    env[execenv.KEEPMAINWINDOW_ENV] = "1"
+    env[execenv.DONOTQUIT_ENV] = "1"
     exec_script(app.__file__, wait=False, env=env)
     with qt_app_context(exec_loop=True, enable_logs=False):
         window = HostWindow()
