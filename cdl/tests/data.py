@@ -227,7 +227,8 @@ def get_peak2d_data(
     Args:
         p (PeakDataParam, optional): Peak data test image parameters. Defaults to None.
         seed (int, optional): Seed for random number generator. Defaults to None.
-        multi (bool, optional): If True, multiple peaks are generated. Defaults to False.
+        multi (bool, optional): If True, multiple peaks are generated.
+            Defaults to False.
 
     Returns:
         np.ndarray: 2D data

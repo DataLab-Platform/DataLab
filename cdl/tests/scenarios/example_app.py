@@ -10,6 +10,7 @@ Create an image object from Scikit-image human mitosis sample,
 then open DataLab to show it.
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 

@@ -218,8 +218,8 @@ class BasePlotHandler:
             try:
                 # Check if this is a valid object uuid
                 self.panel.objmodel.get_objects(oids)
-            except KeyError:
-                raise ValueError(f"Invalid value for `what`: {what}")
+            except KeyError as exc:
+                raise ValueError(f"Invalid value for `what`: {what}") from exc
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
         if oids:

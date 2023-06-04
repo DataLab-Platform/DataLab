@@ -23,16 +23,10 @@ import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 from guidata.jsonio import JSONHandler, JSONReader, JSONWriter
-from guiqwt.annotations import (
-    AnnotatedCircle,
-    AnnotatedEllipse,
-    AnnotatedPoint,
-    AnnotatedShape,
-)
+from guiqwt.annotations import AnnotatedPoint, AnnotatedShape
 from guiqwt.builder import make
 from guiqwt.io import load_items, save_items
 from guiqwt.label import LabelItem
-from guiqwt.styles import AnnotationParam
 
 from cdl.config import Conf, _
 from cdl.utils.misc import is_integer_dtype

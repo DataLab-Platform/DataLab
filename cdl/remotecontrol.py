@@ -241,6 +241,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         """Thread execution method"""
         if "coverage" in sys.modules:
             # The following is required to make coverage work with threading
+            # pylint: disable=protected-access
             sys.settrace(threading._trace_hook)
         self.serve()
 

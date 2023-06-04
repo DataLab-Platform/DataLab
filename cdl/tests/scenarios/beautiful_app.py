@@ -20,6 +20,8 @@ A high-level test scenario producing beautiful screenshots.
     in the "doc" folder.
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+
 import cdl.obj
 import cdl.param
 from cdl.tests import cdl_app_context
