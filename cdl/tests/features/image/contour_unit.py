@@ -24,14 +24,6 @@ from cdl.utils.vistools import view_image_items
 SHOW = True  # Show test in GUI-based test launcher
 
 
-def make_ellipse(x1, y1, x2, y2, x3, y3, x4, y4):
-    """Make ellipse shape plot item"""
-    item = make.ellipse(x1, y1, x2, y2)
-    item.switch_to_ellipse()
-    item.set_ydiameter(x3, y3, x4, y4)
-    return item
-
-
 def exec_contour_test(data):
     """Find contours"""
     items = [make.image(data, interpolation="linear", colormap="hsv")]
@@ -49,7 +41,7 @@ def exec_contour_test(data):
             if shape == "circle":
                 item = make.circle(*shapeargs)
             else:
-                item = make_ellipse(*shapeargs)
+                item = make.ellipse(*shapeargs)
             items.append(item)
     view_image_items(items)
 

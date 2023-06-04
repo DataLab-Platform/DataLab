@@ -407,22 +407,15 @@ class ResultShape:
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.CIRCLE:
             x0, y0, x1, y1 = args
-            param = AnnotationParam(_("Annotation"), icon="annotation.png")
-            param.title = self.show_label
-            item = AnnotatedCircle(x0, y0, x1, y1, param)
-            item.set_style("plot", "shape/drag")
+            item = make.annotated_circle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.SEGMENT:
             x0, y0, x1, y1 = args
             item = make.annotated_segment(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.ELLIPSE:
             x0, y0, x1, y1, x2, y2, x3, y3 = args
-            param = AnnotationParam(_("Annotation"), icon="annotation.png")
-            param.title = self.show_label
-            item = AnnotatedEllipse(annotationparam=param)
-            item.shape.switch_to_ellipse()
-            item.set_xdiameter(x0, y0, x1, y1)
-            item.set_ydiameter(x2, y2, x3, y3)
-            item.set_style("plot", "shape/drag")
+            item = make.annotated_ellipse(
+                x0, y0, x1, y1, x2, y2, x3, y3, title=self.show_label
+            )
         else:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
@@ -827,6 +820,15 @@ class ObjectItf(metaclass=ObjectItfMeta):
         else:
             self.annotations = None
 
+    def set_annotations_from_file(self, filename: str) -> None:
+        """Set object annotations from file (JSON).
+
+        Args:
+            filename (str): filename
+        """
+        with open(filename, mode="rb") as fdesc:
+            self.annotations = fdesc.read().decode()
+
     def add_annotations_from_items(self, items: list) -> None:
         """Add object annotations (annotation plot items).
 
@@ -837,6 +839,15 @@ class ObjectItf(metaclass=ObjectItfMeta):
         ann_items.extend(items)
         if ann_items:
             self.set_annotations_from_items(ann_items)
+
+    def add_annotations_from_file(self, filename: str) -> None:
+        """Add object annotations from file (JSON).
+
+        Args:
+            filename (str): filename
+        """
+        items = load_items(JSONReader(filename))
+        self.add_annotations_from_items(items)
 
     @abc.abstractmethod
     def add_label_with_title(self) -> None:
