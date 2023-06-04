@@ -42,11 +42,15 @@ def test_image_features(panel: ImagePanel):
 
 def test_metadata_features(panel: BaseDataPanel):
     """Test all metadata features"""
+    # Duplicate the first object
     panel.duplicate_object()
+    # Delete metadata of the first object
     panel.delete_metadata()
-    panel.objview.select_nums([-2])
+    # Select and copy metadata of the second object
+    panel.objview.select_nums([1])
     panel.copy_metadata()
-    panel.objview.select_nums([-1])
+    # Select and paste metadata to the first object
+    panel.objview.select_nums([0])
     panel.paste_metadata()
 
 
