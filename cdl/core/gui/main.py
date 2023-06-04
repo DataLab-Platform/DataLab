@@ -301,7 +301,7 @@ class CDLMainWindow(QW.QMainWindow):
 
     # ------Misc.
     @property
-    def panels(self) -> tuple[SignalPanel, ImagePanel, MacroPanel]:
+    def panels(self) -> tuple[AbstractPanel, ...]:
         """Return the tuple of implemented panels (signal, image)
 
         Returns:

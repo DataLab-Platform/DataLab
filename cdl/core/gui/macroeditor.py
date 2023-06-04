@@ -9,10 +9,10 @@ Module providing DataLab Macro editor widget
 
 from __future__ import annotations
 
+import abc
 import os
 import sys
 import time
-from uuid import uuid4
 
 from guidata.userconfigio import BaseIOHandler
 from guidata.widgets.codeeditor import CodeEditor
@@ -28,7 +28,11 @@ from cdl.utils.misc import to_string
 UNTITLED_NB = 0
 
 
-class Macro(QC.QObject, ObjItf):
+class MacroMeta(type(QC.QObject), abc.ABCMeta):
+    """Mixed metaclass to avoid conflicts"""
+
+
+class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
     """Object representing a macro: editor, path, open/save actions, etc.
 
     Args:
@@ -63,18 +67,12 @@ print("All done!")
 
     def __init__(self, console: PythonShellWidget, name: str | None = None) -> None:
         super().__init__()
-        self.uuid = str(uuid4())
         self.console = console
         self.setObjectName(self.get_untitled_title() if name is None else name)
         self.editor = CodeEditor(language="python")
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
         self.process = None
-
-    @property
-    def short_id(self) -> str:
-        """Short macro ID"""
-        return self.PREFIX + self.uuid[:3]
 
     @property
     def title(self) -> str:

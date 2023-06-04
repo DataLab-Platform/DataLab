@@ -31,6 +31,7 @@ from cdl.param import ClipParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_test_image2, create_test_signal1
 from cdl.tests.scenarios import scenario_mac_app
+from cdl.utils.misc import save_html_diff
 from cdl.utils.tests import temporary_directory
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -54,7 +55,7 @@ def test():
             param.value = ima1.data.mean()
             panel.processor.compute_clip(param)
             # === Creating a macro
-            code0 = scenario_mac_app.add_macro_sample(win, 0).get_code()
+            scode = scenario_mac_app.add_macro_sample(win, 0).get_code()
             scenario_mac_app.add_macro_sample(win, 1)
             # === Saving project
             fname = osp.join(tmpdir, "test.h5")
@@ -70,8 +71,10 @@ def test():
             for key, value in obj.metadata.items():
                 execenv.print(f'  metadata["{key}"] = {value}')
             # === Checking macro code
-            macro0 = win.macropanel.get_macro(0)
-            assert macro0.get_code() == code0
+            lcode = win.macropanel.get_macro(0).get_code()
+            if lcode != scode:
+                save_html_diff(scode, lcode, "Saved code", "Loaded code", "macro0.html")
+                raise AssertionError("Macro code is not the same as saved")
 
 
 if __name__ == "__main__":

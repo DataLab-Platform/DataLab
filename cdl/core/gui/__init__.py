@@ -24,13 +24,8 @@ import abc
 from guidata.userconfigio import BaseIOHandler
 
 
-class ObjItf:
+class ObjItf(abc.ABC):
     """Interface for objects handled by panels"""
-
-    @property
-    @abc.abstractmethod
-    def short_id(self) -> str:
-        """Object short id"""
 
     @property
     @abc.abstractmethod

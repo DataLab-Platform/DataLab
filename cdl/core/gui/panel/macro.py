@@ -9,8 +9,8 @@
 
 from __future__ import annotations
 
-import os
 import os.path as osp
+import re
 from typing import TYPE_CHECKING
 
 from guidata.config import CONF
@@ -94,11 +94,18 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.run_action = None
         self.stop_action = None
         self.obj_actions: list[QW.QAction] = []  # Object-dependent actions
-        self.__macros: dict[str, Macro] = {}
+        self.__macros: list[Macro] = []
 
         self.setup_actions()
 
     # ------AbstractPanel interface-----------------------------------------------------
+    # pylint: disable=unused-argument
+    def get_serializable_name(self, obj: Macro) -> str:
+        """Return serializable name of object"""
+        title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
+        name = f"{obj.PREFIX}{self.__macros.index(obj):03d}: {title}"
+        return name
+
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize whole panel to a HDF5 file
 
@@ -106,7 +113,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             writer (NativeH5Writer): HDF5 writer
         """
         with writer.group(self.H5_PREFIX):
-            for obj in self.__macros.values():
+            for obj in self.__macros:
                 self.serialize_object_to_hdf5(obj, writer)
 
     def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
@@ -158,14 +165,14 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             obj (Macro): Macro object
         """
         index = self.tabwidget.addTab(obj.editor, obj.title)
-        self.__macros[obj.uuid] = obj
+        self.__macros.append(obj)
         self.SIG_OBJECT_ADDED.emit()
         self.tabwidget.setCurrentIndex(index)
 
     def remove_all_objects(self) -> None:
         """Remove all objects"""
-        while self.tabwidget.count() > 0:
-            self.tabwidget.removeTab(0)
+        self.tabwidget.clear()
+        self.__macros.clear()
         super().remove_all_objects()
 
     # ---- Macro panel API -------------------------------------------------------------
@@ -276,7 +283,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """
         if index is None:
             index = self.tabwidget.currentIndex()
-        for macro in self.__macros.values():
+        for macro in self.__macros:
             if self.tabwidget.widget(index) is macro.editor:
                 return macro
         return None
@@ -440,4 +447,5 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             choice = QW.QMessageBox.warning(self, self.windowTitle(), txt, btns)
         if choice == QW.QMessageBox.StandardButton.Yes:
             self.tabwidget.removeTab(index)
+            self.__macros.pop(index)
             self.SIG_OBJECT_REMOVED.emit()

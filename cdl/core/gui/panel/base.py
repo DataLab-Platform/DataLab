@@ -186,8 +186,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         super().__init__(QC.Qt.Vertical, parent)
         self.setObjectName(self.__class__.__name__[0].lower())
 
-    @staticmethod
-    def get_serializable_name(obj: ObjItf) -> str:
+    # pylint: disable=unused-argument
+    def get_serializable_name(self, obj: ObjItf) -> str:
         """Return serializable name of object"""
         title = re.sub("[^-a-zA-Z0-9_.() ]+", "", obj.title.replace("/", "_"))
         name = f"{obj.short_id}: {title}"
