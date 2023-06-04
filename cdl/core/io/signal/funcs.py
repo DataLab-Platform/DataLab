@@ -50,8 +50,12 @@ def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
             )
             if np.all(np.isnan(xydata)):
                 continue
+            # Removing columns with all but NaNs
+            xydata = xydata[:, ~np.all(np.isnan(xydata), axis=0)]
             # Removing lines with NaNs
             xydata = xydata[~np.isnan(xydata).any(axis=1), :]
+            if xydata.size == 0:
+                raise ValueError("No data")
             # Trying to read X,Y titles
             line0 = delimiter.join([str(val) for val in xydata[0]])
             header = ""
