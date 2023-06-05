@@ -37,6 +37,7 @@ class CDLExecEnv:
     SCREENSHOT_ENV = "CDL_TAKE_SCREENSHOT"
     DELAY_ENV = "CDL_DELAY_BEFORE_QUIT"
     XMLRPCPORT_ENV = "CDL_XMLRPC_PORT"
+    CATCHER_TEST_ENV = "CDL_CATCHER_TEST"
 
     def __init__(self):
         self.h5files = None
@@ -82,6 +83,16 @@ class CDLExecEnv:
     def unattended(self, value):
         """Set unattended value"""
         self.__set_mode(self.UNATTENDED_ENV, value)
+
+    @property
+    def catcher_test(self):
+        """Get catcher_test value"""
+        return self.__get_mode(self.CATCHER_TEST_ENV)
+
+    @catcher_test.setter
+    def catcher_test(self, value):
+        """Set catcher_test value"""
+        self.__set_mode(self.CATCHER_TEST_ENV, value)
 
     @property
     def screenshot(self):

@@ -18,6 +18,7 @@ caught and displayed in the GUI.
 import warnings
 
 from cdl.config import Conf
+from cdl.env import execenv
 from cdl.obj import SignalObj
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
@@ -49,6 +50,7 @@ def comp_no_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argume
 
 def test_catcher():
     """Catch error and warning test"""
+    execenv.catcher_test = True
     with cdl_app_context() as win:
         panel = win.signalpanel
         sig = test_data.create_test_signal1()
