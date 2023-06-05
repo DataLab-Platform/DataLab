@@ -63,11 +63,14 @@ def wng_err_func(func: Callable, args: tuple[Any]) -> CompOut:
                 return CompOut(result=result, warning_msg=warning_msg)
             return CompOut(result=result)
         except Exception:  # pylint: disable=broad-except
-            if execenv.unattended:
+            if execenv.unattended and not execenv.catcher_test:
                 #  In unattended mode (test cases), we want to raise the exception
                 #  because test cases are supposed to work without any error. In real
                 #  life, we want to avoid raising the exception because it would stop
                 #  the application, and exceptions could be related to non-critical
                 #  errors due to external libraries.
+                #  When testing the catcher, on the other hand, we don't want to
+                #  raise the exception because it would stop the unattended test
+                #  execution.
                 raise
             return CompOut(error_msg=traceback.format_exc())
