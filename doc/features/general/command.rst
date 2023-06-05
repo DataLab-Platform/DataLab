@@ -11,7 +11,8 @@ To run DataLab from the command line, type the following::
 To show help on command line usage, simply run::
 
     $ cdl --help
-    usage: app.py [-h] [-b path] [-v] [--mode {unattended,screenshot}] [--delay DELAY] [--verbose {quiet,minimal,normal}]
+    usage: app.py [-h] [-b path] [-v] [--unattended] [--screenshot] [--delay DELAY] [--xmlrpcport PORT]
+                  [--verbose {quiet,minimal,normal}]
                   [h5]
 
     Run DataLab
@@ -24,10 +25,11 @@ To show help on command line usage, simply run::
       -b path, --h5browser path
                             path to open with HDF5 browser
       -v, --version         show DataLab version
-      --mode {unattended,screenshot}
-                            unattended: non-interactive test mode ; screenshot: unattended mode, with automatic
-                            screenshots
+      --unattended          non-interactive mode
+      --screenshot          automatic screenshots
       --delay DELAY         delay (seconds) before quitting application in unattended mode
+      --xmlrpcport XMLRPCPORT
+                            XML-RPC port number
       --verbose {quiet,minimal,normal}
                             verbosity level: for debugging/testing purpose
 

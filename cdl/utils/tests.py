@@ -116,21 +116,40 @@ def temporary_directory() -> Generator[str, None, None]:
 
 
 def exec_script(
-    path: str, wait: bool = True, args: str = "", env: dict[str, str] | None = None
+    path: str,
+    wait: bool = True,
+    args: list[str] = None,
+    env: dict[str, str] | None = None,
 ) -> None:
     """Run test script.
 
     Args:
-        path: path to script
-        wait: wait for script to finish
-        args: arguments to pass to script
-        env: environment variables to pass to script
+        path (str): path to script
+        wait (bool): wait for script to finish
+        args (list): arguments to pass to script
+        env (dict): environment variables to pass to script
     """
-    command = [sys.executable, '"' + path + '"']
-    if args:
-        command.append(args)
+    command = [sys.executable, '"' + path + '"'] + ([] if args is None else args)
     stderr = subprocess.DEVNULL if execenv.unattended else None
     # pylint: disable=consider-using-with
     proc = subprocess.Popen(" ".join(command), shell=True, stderr=stderr, env=env)
     if wait:
         proc.wait()
+
+
+def get_script_output(
+    path: str, args: list[str] = None, env: dict[str, str] | None = None
+) -> str:
+    """Run test script and return its output.
+
+    Args:
+        path (str): path to script
+        args (list): arguments to pass to script
+        env (dict): environment variables to pass to script
+
+    Returns:
+        str: script output
+    """
+    command = [sys.executable, '"' + path + '"'] + ([] if args is None else args)
+    result = subprocess.run(" ".join(command), capture_output=True, text=True, env=env)
+    return result.stdout.strip()

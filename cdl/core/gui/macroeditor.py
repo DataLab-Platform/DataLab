@@ -220,7 +220,7 @@ print("All done!")
         self.process = QC.QProcess()
         code = self.get_code().replace('"', "'")
         env = QC.QProcessEnvironment()
-        env.insert(execenv.XMLRPCPORT_ENV, str(execenv.port))
+        env.insert(execenv.XMLRPCPORT_ENV, str(execenv.xmlrpcport))
         sysenv = env.systemEnvironment()
         for key in sysenv.keys():
             env.insert(key, sysenv.value(key))

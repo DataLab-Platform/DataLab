@@ -131,7 +131,7 @@ class BaseRPCServer(abc.ABC):
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
-            execenv.port = self.port
+            execenv.xmlrpcport = self.port
             server.serve_forever()
 
     @staticmethod
@@ -550,7 +550,7 @@ class RemoteClient:
             CDLConnectionError: DataLab is currently not running
         """
         if port is None:
-            port = execenv.port
+            port = execenv.xmlrpcport
             if port is None:
                 port = get_cdl_xmlrpc_port()
         self.port = port

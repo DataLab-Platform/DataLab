@@ -89,7 +89,7 @@ def run(other_package=None):
     parser.add_argument("--timeout", type=int, default=600)
     args = parser.parse_args()
     run_all_tests(
-        "--mode unattended --verbose quiet",
+        "--unattended --verbose quiet",
         args.contains,
         args.timeout,
         other_package,

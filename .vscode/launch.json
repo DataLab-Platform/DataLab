@@ -47,11 +47,10 @@
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5",
                 // "C:/Dev/Projets/DataLab_Test_CEA/cdl_test_cea/data/lmj_cbfx.h5,/A/valeur"
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5,/DataLab_Ima/i002: i002+i004",
-                // "--mode",
-                // "unattended",
+                "--unattended",
+                // "--screenshot",
                 // "--verbose",
                 // "quiet",
-                // "screenshot",
                 // "--delay",
                 // "1"
             ],
@@ -90,8 +89,8 @@
                 // "QT_COLOR_MODE": "light",
             },
             "args": [
-                // "--mode",
-                // "unattended",
+                // "--unattended",
+                // "--screenshot",
             ],
         },
     ]
