@@ -16,10 +16,6 @@ call %FUNC% UseWinPython
 if exist sitecustomize.py ( del /q sitecustomize.py )
 echo import coverage> sitecustomize.py
 echo coverage.process_startup()>> sitecustomize.py
-echo try:>> sitecustomize.py
-echo     import cdl_test_cea.config>> sitecustomize.py
-echo except ImportError:>> sitecustomize.py
-echo     pass>> sitecustomize.py
 set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
 coverage run -m cdl.tests.all_tests %* --timeout 600
 @REM coverage report -m

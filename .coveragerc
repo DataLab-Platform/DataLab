@@ -1,5 +1,6 @@
 [run]
 parallel = True
+concurrency = multiprocessing,thread
 omit =
     */cdl/utils/tests.py
     */cdl/tests/*
