@@ -499,6 +499,31 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_all_denoise(self, params: list | None = None) -> None:
+        """Compute all denoising filters"""
+        if params is not None:
+            assert len(params) == 4, "Wrong number of parameters (4 expected)"
+        funcs = [
+            cpi_res.compute_denoise_tv,
+            cpi_res.compute_denoise_bilateral,
+            cpi_res.compute_denoise_wavelet,
+            cpi_res.compute_denoise_tophat,
+        ]
+        edit = params is None
+        if edit:
+            params = []
+            for paramclass, title in (
+                (cpi_res.DenoiseTVParam, _("Total variation denoising")),
+                (cpi_res.DenoiseBilateralParam, _("Bilateral filter denoising")),
+                (cpi_res.DenoiseWaveletParam, _("Wavelet denoising")),
+                (cpi_mor.MorphologyParam, _("Denoise / Top-Hat")),
+            ):
+                param = paramclass(title)
+                self.update_param_defaults(param)
+                params.append(param)
+        self.compute_1n(funcs, params, "Denoise", edit=edit)
+
+    @qt_try_except()
     def compute_white_tophat(
         self, param: cdl.param.MorphologyParam | None = None
     ) -> None:

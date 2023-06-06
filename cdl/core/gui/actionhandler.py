@@ -792,6 +792,12 @@ class ImageActionHandler(BaseActionHandler):
                     _("White Top-Hat denoising"),
                     triggered=self.panel.processor.compute_denoise_tophat,
                 )
+                self.new_action(
+                    _("All denoising methods") + "...",
+                    triggered=self.panel.processor.compute_all_denoise,
+                    separator=True,
+                    tip=_("Apply all denoising methods"),
+                )
             with self.new_menu(_("Morphology")):
                 self.new_action(
                     _("White Top-Hat (disk)"),
@@ -818,7 +824,7 @@ class ImageActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_closing,
                 )
                 self.new_action(
-                    _("All morphological operations"),
+                    _("All morphological operations") + "...",
                     triggered=self.panel.processor.compute_all_morphology,
                     separator=True,
                     tip=_("Apply all morphological operations"),
@@ -885,7 +891,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                 )
                 self.new_action(
-                    _("All edges filters"),
+                    _("All edges filters") + "...",
                     triggered=self.panel.processor.compute_all_edges,
                     separator=True,
                     tip=_("Compute all edges filters"),

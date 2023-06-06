@@ -153,6 +153,14 @@ class BaseProcessor(QC.QObject):
                 self.worker.terminate_pool()
                 self.worker = None
 
+    def update_param_defaults(self, param: gdt.DataSet) -> None:
+        """Update parameter defaults"""
+        key = param.__class__.__name__
+        pdefaults = self.PARAM_DEFAULTS.get(key)
+        if pdefaults is not None:
+            update_dataset(param, pdefaults)
+        self.PARAM_DEFAULTS[key] = param
+
     def init_param(
         self,
         param: gdt.DataSet,
@@ -164,10 +172,7 @@ class BaseProcessor(QC.QObject):
         edit = param is None
         if edit:
             param = paramclass(title, comment)
-            pdefaults = self.PARAM_DEFAULTS.get(paramclass.__name__)
-            if pdefaults is not None:
-                update_dataset(param, pdefaults)
-            self.PARAM_DEFAULTS[paramclass.__name__] = param
+            self.update_param_defaults(param)
         return edit, param
 
     def compute_11(
