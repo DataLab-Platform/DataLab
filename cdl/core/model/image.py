@@ -628,10 +628,15 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
         """Invalidate mask data cache: force to rebuild it"""
         self._maskdata_cache = None
 
-    def add_label_with_title(self) -> None:
-        """Add label with title annotation"""
-        if self.title:
-            label = make.label(self.title, (0, 0), (10, 10), "TL")
+    def add_label_with_title(self, title: str | None = None) -> None:
+        """Add label with title annotation
+
+        Args:
+            title (str): title (if None, use image title)
+        """
+        title = self.title if title is None else title
+        if title:
+            label = make.label(title, (self.x0, self.y0), (10, 10), "TL")
             self.add_annotations_from_items([label])
 
 
@@ -663,10 +668,8 @@ def create_image(
         image.xunit, image.yunit, image.zunit = units
     if labels is not None:
         image.xlabel, image.ylabel, image.zlabel = labels
-    if metadata is None:
-        image.reset_metadata_to_defaults()
-    else:
-        image.metadata = metadata
+    if metadata is not None:
+        image.metadata.update(metadata)
     return image
 
 

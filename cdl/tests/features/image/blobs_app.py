@@ -9,11 +9,10 @@ Blob detection application test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
-
 import cdl.param
 from cdl.obj import create_image
 from cdl.tests import cdl_app_context
+from cdl.tests.data import get_test_image
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -23,7 +22,7 @@ def test():
     with cdl_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
-        data = human_mitosis()
+        data = get_test_image("flower.npy").data
 
         # Testing blob detection
         # ======================

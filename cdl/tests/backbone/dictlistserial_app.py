@@ -10,11 +10,11 @@ Testing (de)serialization of Dictionnary/List inside object metadata
 import os.path as osp
 
 import numpy as np
-from skimage.data import human_mitosis  # pylint: disable=no-name-in-module
 
 from cdl.env import execenv
 from cdl.obj import create_image
 from cdl.tests import cdl_app_context
+from cdl.tests.data import get_test_image
 from cdl.utils.tests import temporary_directory
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -37,7 +37,7 @@ def test():
         with cdl_app_context(console=False) as win:
             panel = win.imagepanel
 
-            data = human_mitosis()
+            data = get_test_image("flower.npy").data
             image = create_image("Test image with peaks", data)
             image.metadata["tata"] = {
                 "lkl": 2,

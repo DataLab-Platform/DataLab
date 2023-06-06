@@ -257,6 +257,30 @@ def get_peak2d_data(
     return data
 
 
+def get_test_signal(filename: str) -> SignalObj:
+    """Return test signal
+
+    Args:
+        filename (str): Filename
+
+    Returns:
+        SignalObj: Signal object
+    """
+    return read_signal(get_test_fnames(filename)[0])
+
+
+def get_test_image(filename: str) -> ImageObj:
+    """Return test image
+
+    Args:
+        filename (str): Filename
+
+    Returns:
+        ImageObj: Image object
+    """
+    return read_image(get_test_fnames(filename)[0])
+
+
 def __get_default_data_size(size: int | None = None) -> int:
     """Return default data size
 

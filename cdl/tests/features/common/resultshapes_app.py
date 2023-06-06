@@ -41,7 +41,7 @@ def test():
             panel.add_object(sig)
             panel.processor.compute_fwhm(FWHMParam())
             panel.processor.compute_fw1e2()
-        panel.objview.select_nums((0, 1))
+        panel.objview.select_objects((0, 1))
         panel.show_results()
         win.switch_to_panel("image")
         panel = win.imagepanel

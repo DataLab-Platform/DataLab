@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 19:19+0200\n"
+"POT-Creation-Date: 2023-06-06 14:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -126,11 +126,7 @@ msgstr ""
 msgid "Add label with title annotation"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy_data_from:1
-#: cdl.core.model.signal.SignalObj.copy_data_from:1 of
-msgid "Copy data from other dataset instance."
-msgstr ""
-
+#: cdl.core.model.image.ImageObj.add_label_with_title
 #: cdl.core.model.image.ImageObj.copy_data_from
 #: cdl.core.model.image.ImageObj.get_data
 #: cdl.core.model.image.ImageObj.get_roi_param
@@ -150,6 +146,7 @@ msgstr ""
 #: cdl.core.model.image.create_image_from_param
 #: cdl.core.model.image.make_roi_circle cdl.core.model.image.make_roi_rectangle
 #: cdl.core.model.image.new_image_param
+#: cdl.core.model.signal.SignalObj.add_label_with_title
 #: cdl.core.model.signal.SignalObj.copy_data_from
 #: cdl.core.model.signal.SignalObj.get_data
 #: cdl.core.model.signal.SignalObj.get_roi_param
@@ -166,6 +163,15 @@ msgstr ""
 #: cdl.core.model.signal.new_signal_param cdl.core.model.signal.triangle_func
 #: of
 msgid "Parameters"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.add_label_with_title:3 of
+msgid "title (if None, use signal title)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy_data_from:1
+#: cdl.core.model.signal.SignalObj.copy_data_from:1 of
+msgid "Copy data from other dataset instance."
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.copy_data_from:3
@@ -555,6 +561,10 @@ msgstr ""
 
 #: cdl.core.model.image.ImageObj:1 of
 msgid "Image object"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.add_label_with_title:3 of
+msgid "title (if None, use image title)"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.dicom_template:1 of

@@ -42,7 +42,7 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
 
     Requires that one signal or image has been added at index."""
     assert panel.object_number >= index - 1
-    panel.objview.select_nums((index,))
+    panel.objview.select_objects((index,))
     panel.processor.compute_gaussian_filter(cdl.param.GaussianParam())
     panel.processor.compute_moving_average(cdl.param.MovingAverageParam())
     panel.processor.compute_moving_median(cdl.param.MovingMedianParam())
@@ -66,20 +66,20 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     assert panel.object_number == 2
 
     panel.duplicate_object()
-    panel.objview.select_nums((1, 2))
+    panel.objview.select_objects((1, 2))
     panel.processor.compute_difference()
     panel.remove_object()
-    panel.objview.select_nums((1, 2))
+    panel.objview.select_objects((1, 2))
     panel.processor.compute_quadratic_difference()
     panel.delete_metadata()
-    panel.objview.select_nums((2, 3))
+    panel.objview.select_objects((2, 3))
     panel.remove_object()
 
-    panel.objview.select_nums((0, 1))
+    panel.objview.select_objects((0, 1))
     panel.processor.compute_sum()
-    panel.objview.select_nums((0, 1))
+    panel.objview.select_objects((0, 1))
     panel.processor.compute_sum()
-    panel.objview.select_nums((0, 1))
+    panel.objview.select_objects((0, 1))
     panel.processor.compute_product()
 
     obj = panel.objmodel.get_groups()[0][-1]
@@ -90,9 +90,9 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
-    panel.objview.select_nums((2, 6))
+    panel.objview.select_objects((2, 6))
     panel.processor.compute_division()
-    panel.objview.select_nums((0, 1, 2))
+    panel.objview.select_objects((0, 1, 2))
     panel.processor.compute_average()
 
     panel.add_label_with_title()
@@ -146,7 +146,7 @@ def test_signal_features(
 
     panel.processor.compute_multigaussianfit()
 
-    panel.objview.select_nums([-3])
+    panel.objview.select_objects([-3])
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1

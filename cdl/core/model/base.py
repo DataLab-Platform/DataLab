@@ -498,6 +498,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         self.uuid = str(uuid4())
         self.__onb = 0
         self.__roi_changed: bool | None = None
+        self.reset_metadata_to_defaults()
 
     @property
     def number(self) -> int:
@@ -844,8 +845,12 @@ class ObjectItf(metaclass=ObjectItfMeta):
         self.add_annotations_from_items(items)
 
     @abc.abstractmethod
-    def add_label_with_title(self) -> None:
-        """Add label with title annotation"""
+    def add_label_with_title(self, title: str | None = None) -> None:
+        """Add label with title annotation
+
+        Args:
+            title (str): title (if None, use object title)
+        """
 
     def iterate_shape_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).

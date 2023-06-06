@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 10:48+0200\n"
+"POT-Creation-Date: 2023-06-06 14:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -757,6 +757,10 @@ msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid:1 of
 msgid "Compute sigmoid correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_edges:1 of
+msgid "Compute all edges"
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_binning:1 of

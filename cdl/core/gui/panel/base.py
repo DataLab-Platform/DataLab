@@ -561,6 +561,12 @@ class BaseDataPanel(AbstractPanel):
             New object
         """
 
+    def set_current_object_title(self, title: str) -> None:
+        """Set current object title"""
+        obj = self.objview.get_current_object()
+        obj.title = title
+        self.objview.update_item(obj.uuid)
+
     def open_object(
         self, filename: str
     ) -> SignalObj | ImageObj | list[SignalObj | ImageObj]:
@@ -980,9 +986,14 @@ class BaseDataPanel(AbstractPanel):
             )
             QW.QMessageBox.information(self, APP_NAME, msg)
 
-    def add_label_with_title(self) -> None:
-        """Add a label with object title on the associated plot"""
+    def add_label_with_title(self, title: str | None = None) -> None:
+        """Add a label with object title on the associated plot
+
+        Args:
+            title (str, optional): Label title. Defaults to None.
+                If None, the title is the object title.
+        """
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
-            obj.add_label_with_title()
+            obj.add_label_with_title(title=title)
         self.SIG_REFRESH_PLOT.emit("selected", True)

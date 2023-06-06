@@ -879,6 +879,12 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                 )
                 self.new_action(
+                    _("All edges filters"),
+                    triggered=self.panel.processor.compute_all_edges,
+                    separator=True,
+                    tip=_("Compute all edges filters"),
+                )
+                self.new_action(
                     _("Canny filter"), triggered=self.panel.processor.compute_canny
                 )
 

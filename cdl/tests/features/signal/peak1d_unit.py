@@ -13,9 +13,8 @@ Testing peak detection dialog box.
 
 
 from cdl.env import execenv
-from cdl.obj import read_signal
+from cdl.tests.data import get_test_signal
 from cdl.utils.qthelpers import exec_dialog, qt_app_context
-from cdl.utils.tests import get_test_fnames
 from cdl.widgets.signalpeakdialog import SignalPeakDetectionDialog
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -24,7 +23,7 @@ SHOW = True  # Show test in GUI-based test launcher
 def test():
     """Signal peak dialog test"""
     with qt_app_context():
-        s = read_signal(get_test_fnames("paracetamol.txt")[0])
+        s = get_test_signal("paracetamol.txt")
         dlg = SignalPeakDetectionDialog()
         dlg.resize(640, 300)
         dlg.setup_data(s.x, s.y)

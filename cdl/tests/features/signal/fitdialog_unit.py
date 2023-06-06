@@ -12,8 +12,7 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 
 from cdl.algorithms.signal import peak_indexes
 from cdl.env import execenv
-from cdl.obj import read_signal
-from cdl.tests.data import create_1d_gaussian, get_test_fnames
+from cdl.tests.data import create_1d_gaussian, get_test_signal
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import get_default_test_name
 from cdl.widgets import fitdialog as fdlg
@@ -25,7 +24,7 @@ def test():
     """Test function"""
     with qt_app_context():
         # Multi-gaussian curve fitting test
-        s = read_signal(get_test_fnames("paracetamol.txt")[0])
+        s = get_test_signal("paracetamol.txt")
         peakidx = peak_indexes(s.y)
         execenv.print(
             fdlg.multigaussianfit(s.x, s.y, peakidx, name=get_default_test_name("00"))

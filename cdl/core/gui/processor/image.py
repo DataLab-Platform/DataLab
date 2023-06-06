@@ -666,6 +666,26 @@ class ImageProcessor(BaseProcessor):
         """Compute Laplace filter"""
         self.compute_11(cpi_edg.compute_laplace, title=_("Laplace filter"))
 
+    def compute_all_edges(self) -> None:
+        """Compute all edges"""
+        funcs = [
+            cpi_edg.compute_roberts,
+            cpi_edg.compute_prewitt,
+            cpi_edg.compute_prewitt_h,
+            cpi_edg.compute_prewitt_v,
+            cpi_edg.compute_sobel,
+            cpi_edg.compute_sobel_h,
+            cpi_edg.compute_sobel_v,
+            cpi_edg.compute_scharr,
+            cpi_edg.compute_scharr_h,
+            cpi_edg.compute_scharr_v,
+            cpi_edg.compute_farid,
+            cpi_edg.compute_farid_h,
+            cpi_edg.compute_farid_v,
+            cpi_edg.compute_laplace,
+        ]
+        self.compute_1n(funcs, None, "Edges")
+
     # ------Image Computing
     @qt_try_except()
     def compute_centroid(self) -> None:

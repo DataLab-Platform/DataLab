@@ -185,21 +185,28 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
-        self._compute_11_subroutine(func, [param], title)
+        self._compute_11_subroutine([func], [param], title)
 
     def compute_1n(
         self,
-        func: Callable,
+        funcs: list[Callable] | Callable,
         params: list | None = None,
         title: str | None = None,
         edit: bool = True,
     ):
         """Compute 1n function: 1 object in --> n objects out"""
-        if params is not None:
+        if params is None:
+            assert not isinstance(funcs, Callable)
+            params = [None] * len(funcs)
+        else:
             group = gdt.DataSetGroup(params, title=_("Parameters"))
             if edit and not group.edit(parent=self.panel.parent()):
                 return
-        self._compute_11_subroutine(func, params, title)
+            if isinstance(funcs, Callable):
+                funcs = [funcs] * len(params)
+            else:
+                assert len(funcs) == len(params)
+        self._compute_11_subroutine(funcs, params, title)
 
     def handle_output(
         self, compout: CompOut, context: str
@@ -224,17 +231,18 @@ class BaseProcessor(QC.QObject):
             show_warning_error(self.panel, "warning", context, compout.warning_msg)
         return compout.result
 
-    def _compute_11_subroutine(self, func: Callable, params: list, title: str):
+    def _compute_11_subroutine(self, funcs: list[Callable], params: list, title: str):
         """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
+        assert len(funcs) == len(params)
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
         new_gids = {}
-        name = func.__name__.replace("compute_", "")
         with create_progress_bar(
             self.panel, title, max_=len(objs) * len(params)
         ) as progress:
             for i_row, obj in enumerate(objs):
-                for i_param, param in enumerate(params):
+                for i_param, (param, func) in enumerate(zip(params, funcs)):
+                    name = func.__name__.replace("compute_", "")
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
                     progress.setValue(pvalue)

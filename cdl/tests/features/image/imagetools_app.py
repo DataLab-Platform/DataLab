@@ -10,6 +10,8 @@ Image tools application test:
   - Testing `to_cdl` function (image cross section -> curve)
 """
 
+import os.path as osp
+
 from guiqwt.baseplot import axes_to_canvas
 from guiqwt.tools import CrossSectionTool
 from qtpy import QtCore as QC
@@ -29,6 +31,7 @@ def test():
         size = 200
         ima = create_test_image3(size)
         panel.add_object(ima)
+        panel.set_current_object_title(f"Test image for {osp.basename(__file__)}")
         plotwidget = panel.plothandler.plotwidget
 
         # === Testing "ZAxisLogTool" ---------------------------------------------------

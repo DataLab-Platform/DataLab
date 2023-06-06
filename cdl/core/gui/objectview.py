@@ -46,12 +46,13 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import _
+from cdl.core.gui.objectmodel import ObjectGroup
 from cdl.core.model.image import ImageObj
 from cdl.core.model.signal import SignalObj
 from cdl.utils.qthelpers import block_signals
 
 if TYPE_CHECKING:  # pragma: no cover
-    from cdl.core.gui.objectmodel import ObjectGroup, ObjectModel
+    from cdl.core.gui.objectmodel import ObjectModel
     from cdl.core.gui.panel.base import BaseDataPanel
 
 
@@ -377,21 +378,24 @@ class ObjectView(SimpleObjectTree):
 
         self.SIG_SELECTION_CHANGED.emit()
 
-    def select_nums(self, obj_nums: list[int], group_num: int = 0) -> None:
-        """Select multiple objects by their numbers"""
-        uuids = [self.objmodel.get_groups()[group_num][num].uuid for num in obj_nums]
-        self.clearSelection()
-        for uuid in uuids:
-            self.set_current_item_id(uuid, extend=True)
-
-    def select_objects(self, objs: list[SignalObj | ImageObj]) -> None:
+    def select_objects(
+        self, selection: list[SignalObj | ImageObj | int], group_num: int | None = None
+    ) -> None:
         """Select multiple objects"""
-        self.clearSelection()
-        for obj in objs:
-            self.set_current_item_id(obj.uuid, extend=True)
+        if all(isinstance(obj, int) for obj in selection):
+            groups = self.objmodel.get_groups()
+            group_num = 0 if group_num is None else group_num
+            uuids = [groups[group_num][num].uuid for num in selection]
+        else:
+            assert all(isinstance(obj, (SignalObj, ImageObj)) for obj in selection)
+            uuids = [obj.uuid for obj in selection]
+        for idx, uuid in enumerate(uuids):
+            self.set_current_item_id(uuid, extend=idx > 0)
 
-    def select_groups(self, groups: list[ObjectGroup]) -> None:
+    def select_groups(self, groups: list[ObjectGroup | int]) -> None:
         """Select multiple groups"""
-        self.clearSelection()
-        for group in groups:
-            self.set_current_item_id(group.uuid, extend=True)
+        if all(isinstance(group, int) for group in groups):
+            groups = [self.objmodel.get_groups()[grp_num] for grp_num in groups]
+        assert all(isinstance(group, ObjectGroup) for group in groups)
+        for idx, group in enumerate(groups):
+            self.set_current_item_id(group.uuid, extend=idx > 0)
