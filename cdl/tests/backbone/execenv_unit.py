@@ -67,10 +67,13 @@ def assert_two_dicts_are_equal(
 
 def test_cli():
     """Test CDL execution environment from command-line"""
+    remove_all_cdl_envvars()
+
     # Test default values
     execenv.print("Testing command-line arguments:")
-    args = []
-    execenvdict = get_subprocess_execenv_dict(args)
+    execenv.print("  Default values: ", end="")
+    execenvdict = get_subprocess_execenv_dict([])
+    execenv.print("OK")
     assert execenvdict == execenv.to_dict()
     # Testing boolean arguments
     execenv.print("  Testing boolean arguments:")
@@ -84,7 +87,9 @@ def test_cli():
                 args = []  # Default value is False
             execenvdict = get_subprocess_execenv_dict(args)
             assert_two_dicts_are_equal(execenvdict, execenv.to_dict(), (argname,))
-            assert execenvdict[argname] is val
+            assert (
+                execenvdict[argname] is val
+            ), f"execenvdict[{argname}] = {execenvdict[argname]} != {val}"
         execenv.print()
     # Testing integer arguments
     execenv.print("  Testing integer arguments:")
@@ -224,20 +229,13 @@ ATTR_TO_ENVVAR = {
 
 def test_envvar():
     """Testing DataLab configuration file"""
-
-    # In this function, we are using prints instead of execenv.print() because
-    # we want to see the output even when unattended is True.
-
-    unattended = execenv.unattended
-    if not unattended:
-        print("Testing DataLab execution environment:")
+    assert execenv.unattended is False, "This test must be run with unattended=False"
+    print("Testing DataLab execution environment:")
     for attrname, envvar in iterate_over_attrs_envvars():
         attr_to_envvar = ATTR_TO_ENVVAR[attrname]
-        if not unattended:
-            print(f"  Testing {attrname}:")
+        print(f"  Testing {attrname}:")
         for value, envvals in attr_to_envvar:
-            if not unattended:
-                print(f"    {value}: [attr->env]", end="")
+            print(f"    {value}: [attr->env]", end="")
             remove_all_cdl_envvars()
             if value is not None:
                 setattr(execenv, attrname, value)
@@ -246,8 +244,7 @@ def test_envvar():
                 os.environ.get(envvar),
                 envvals,
             )
-            if not unattended:
-                print(f" [env->attr]", end="")
+            print(f" [env->attr]", end="")
             remove_all_cdl_envvars()
             for envval in envvals:
                 if envval is not None:
@@ -260,10 +257,22 @@ def test_envvar():
                     value,
                     envval,
                 )
-            if not unattended:
-                print()
-    if not unattended:
-        print("=> Everything is OK")
+            print(f" [env->subprocess->attr]", end="")
+            remove_all_cdl_envvars()
+            for envval in envvals:
+                if envval is not None:
+                    os.environ[envvar] = envval
+                execenvdict = get_subprocess_execenv_dict([])
+                assert (
+                    execenvdict[attrname] == value
+                ), "execenvdict[%s] = %s != %s (envval = %r)" % (
+                    attrname,
+                    execenvdict[attrname],
+                    value,
+                    envval,
+                )
+            print()
+    print("=> Everything is OK")
 
 
 if __name__ == "__main__":

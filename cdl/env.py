@@ -24,9 +24,13 @@ class VerbosityLevels(enum.Enum):
 
 
 # TODO: Rewrite this class so that options are automatically associated with
-#       environment variables and command line arguments. This could be done
-#       using objects deriving from something like this (and implementing
-#       integer, boolean, string, choices):
+#       environment variables and command line arguments.
+#
+#       Use the unit test "cdl\tests\backbone\execenv_unit.py" to check that
+#       everything still works as expected.
+#
+#       This could be done using objects deriving from something like this (and
+#       implementing integer, boolean, string, choices):
 #
 #        class EnvVar:
 #            """Descriptor for handling attributes
@@ -294,17 +298,21 @@ class CDLExecEnv:
             "-v", "--version", action="store_true", help="show DataLab version"
         )
         parser.add_argument(
-            "--" + self.UNATTENDED_ARG, action="store_true", help="non-interactive mode"
+            "--" + self.UNATTENDED_ARG,
+            action="store_true",
+            help="non-interactive mode",
+            default=None,
         )
         parser.add_argument(
             "--" + self.SCREENSHOT_ARG,
             action="store_true",
             help="automatic screenshots",
+            default=None,
         )
         parser.add_argument(
             "--" + self.DELAY_ARG,
             type=int,
-            default=0,
+            default=None,
             help="delay (seconds) before quitting application in unattended mode",
         )
         parser.add_argument(
@@ -317,7 +325,7 @@ class CDLExecEnv:
             "--" + self.VERBOSE_ARG,
             choices=[lvl.value for lvl in VerbosityLevels],
             required=False,
-            default=VerbosityLevels.NORMAL.value,
+            default=None,
             help="verbosity level: for debugging/testing purpose",
         )
         args, _unknown = parser.parse_known_args()
