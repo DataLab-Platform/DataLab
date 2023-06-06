@@ -39,7 +39,7 @@ def create_test_image_with_roi(roi_geometry: RoiDataGeometries):
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Run circular ROI application test scenario"""
     with cdl_app_context() as win:
         execenv.print("Circular ROI test:")
         panel = win.imagepanel

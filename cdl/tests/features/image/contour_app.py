@@ -18,7 +18,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Run contour finding application test scenario"""
     size = 200
     with cdl_app_context() as win:
         panel = win.imagepanel

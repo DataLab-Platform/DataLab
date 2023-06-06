@@ -817,6 +817,12 @@ class ImageActionHandler(BaseActionHandler):
                     _("Closing (disk)"),
                     triggered=self.panel.processor.compute_closing,
                 )
+                self.new_action(
+                    _("All morphological operations"),
+                    triggered=self.panel.processor.compute_all_morphology,
+                    separator=True,
+                    tip=_("Apply all morphological operations"),
+                )
             with self.new_menu(_("Edges")):
                 self.new_action(
                     _("Roberts filter"), triggered=self.panel.processor.compute_roberts

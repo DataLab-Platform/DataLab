@@ -75,7 +75,7 @@ def print_obj_shapes(obj):
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Run ROI application test scenario"""
     size = 200
     with cdl_app_context() as win:
         execenv.print("ROI application test:")

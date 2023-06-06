@@ -192,7 +192,7 @@ class BaseProcessor(QC.QObject):
         funcs: list[Callable] | Callable,
         params: list | None = None,
         title: str | None = None,
-        edit: bool = True,
+        edit: bool | None = None,
     ):
         """Compute 1n function: 1 object in --> n objects out"""
         if params is None:

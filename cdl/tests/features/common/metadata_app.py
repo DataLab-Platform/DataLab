@@ -55,7 +55,7 @@ def test_metadata_features(panel: BaseDataPanel):
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Run metadata application test scenario"""
     size = 200
     with cdl_app_context() as win:
         execenv.print("Metadata application test:")

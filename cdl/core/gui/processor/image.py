@@ -563,6 +563,25 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_all_morphology(
+        self, param: cdl.param.MorphologyParam | None = None
+    ) -> None:
+        """Compute all morphology filters"""
+        if param is None:
+            param = cpi_mor.MorphologyParam()
+            if not param.edit(parent=self.panel.parent()):
+                return
+        funcs = [
+            cpi_mor.compute_white_tophat,
+            cpi_mor.compute_black_tophat,
+            cpi_mor.compute_erosion,
+            cpi_mor.compute_dilation,
+            cpi_mor.compute_opening,
+            cpi_mor.compute_closing,
+        ]
+        self.compute_1n(funcs, [param] * len(funcs), "Morph", edit=False)
+
+    @qt_try_except()
     def compute_canny(self, param: cdl.param.CannyParam | None = None) -> None:
         """Compute Canny filter"""
         self.compute_11(
@@ -666,6 +685,7 @@ class ImageProcessor(BaseProcessor):
         """Compute Laplace filter"""
         self.compute_11(cpi_edg.compute_laplace, title=_("Laplace filter"))
 
+    @qt_try_except()
     def compute_all_edges(self) -> None:
         """Compute all edges"""
         funcs = [

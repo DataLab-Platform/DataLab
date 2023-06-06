@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-Edges processing application test
+Morphology processing application test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -17,13 +17,15 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Run edges processing application test scenario"""
+    """Run morphology application test scenario"""
     with cdl_app_context() as win:
         win.showMaximized()
         panel = win.imagepanel
         panel.add_object(get_test_image("flower.npy"))
         proc = panel.processor
-        proc.compute_all_edges()
+        param = cdl.param.MorphologyParam()
+        param.radius = 10
+        proc.compute_all_morphology(param)
         panel.objview.select_groups([0])
         param = cdl.param.GridParam()
         param.cols = 4

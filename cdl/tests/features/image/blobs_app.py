@@ -18,7 +18,7 @@ SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():
-    """Run ROI unit test scenario"""
+    """Run blob detection application test scenario"""
     with cdl_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
