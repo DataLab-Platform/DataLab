@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 17:12+0200\n"
+"POT-Creation-Date: 2023-06-06 18:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -587,11 +587,11 @@ msgstr ""
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
 msgstr ""
 
-#: ../../features/general/remotecontrol.rst:92
+#: ../../features/general/remotecontrol.rst:91
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remotecontrol.rst:94
+#: ../../features/general/remotecontrol.rst:93
 msgid ""
 "The remote control class methods may be completed with additional methods"
 " which are dynamically added at runtime. This mechanism allows to access "
@@ -602,8 +602,8 @@ msgstr ""
 "mécanisme permet d'accéder aux méthodes des objets \"processor\" de "
 "DataLab."
 
-#: cdl.core.gui.processor.signal:1 of
-msgid "DataLab Signal Processor GUI module"
+#: cdl.core.gui.processor.signal:2 of
+msgid "Signal Processor"
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
@@ -739,8 +739,8 @@ msgstr ""
 msgid "Extract Region Of Interest (ROI) from data"
 msgstr ""
 
-#: cdl.core.gui.processor.image:1 of
-msgid "DataLab Image Processor GUI module"
+#: cdl.core.gui.processor.image:2 of
+msgid "Image Processor"
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
@@ -1208,5 +1208,11 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "NumPy array"
+#~ msgstr ""
+
+#~ msgid "DataLab Signal Processor GUI module"
+#~ msgstr ""
+
+#~ msgid "DataLab Image Processor GUI module"
 #~ msgstr ""
 

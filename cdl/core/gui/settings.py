@@ -59,6 +59,14 @@ class MainSettings(gdt.DataSet):
         _("Third-party plugins"),
         help=_("Disable third-party plugins at startup"),
     )
+    plugins_path = gdi.DirectoryItem(
+        _("Plugins path"),
+        help=_(
+            "Path to third-party plugins.<br><br>"
+            "DataLab will discover plugins in this path, "
+            "as well as in your PYTHONPATH."
+        ),
+    )
     _g0 = gdt.EndGroup("")
 
 
@@ -195,6 +203,7 @@ RESTART_OPTIONS = (
     ("rpc_server_enabled", _("RPC server enable status")),
     ("console_enabled", _("Console enable status")),
     ("plugins_enabled", _("Third-party plugins support")),
+    ("plugins_path", _("Third-party plugins path")),
 )
 
 

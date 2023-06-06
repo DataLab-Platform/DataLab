@@ -110,7 +110,7 @@ class ConfigPathOption(Option):
             default = ""
         fname = super().get(default)
         if osp.basename(fname) != fname:
-            raise ValueError("Invalid configuration file name {fname}")
+            raise ValueError("Invalid configuration file name %s" % fname)
         return CONF.get_path(osp.basename(fname))
 
 

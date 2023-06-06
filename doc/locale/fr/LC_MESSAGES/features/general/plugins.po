@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-06 18:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../features/general/plugins.rst:2
+msgid "Plugins"
+msgstr ""
+
+#: ../../features/general/plugins.rst:4
+msgid ""
+"DataLab is a modular application. It is possible to add new features to "
+"DataLab by writing plugins. A plugin is a Python module that is loaded at"
+" startup by DataLab. A plugin may add new features to DataLab, or modify "
+"existing features."
+msgstr ""
+
+#: ../../features/general/plugins.rst:8
+msgid "The plugin system currently supports the following features:"
+msgstr ""
+
+#: ../../features/general/plugins.rst:10
+msgid ""
+"Processing features: add new processing tasks to the DataLab processing "
+"system, including specific graphical user interfaces."
+msgstr ""
+
+#: ../../features/general/plugins.rst:12
+msgid ""
+"Input/output features: add new file formats to the DataLab file I/O "
+"system."
+msgstr ""
+
+#: ../../features/general/plugins.rst:13
+msgid "HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system."
+msgstr ""
+
+#: ../../features/general/plugins.rst:16
+msgid "Public API"
+msgstr ""
+
+#: cdl.plugins:2 of
+msgid "DataLab plugin system"
+msgstr ""
+
+#: cdl.plugins:4 of
+msgid ""
+"DataLab plugin system provides a way to extend the application with new "
+"functionalities."
+msgstr ""
+
+#: cdl.plugins:7 of
+msgid "Plugins are Python modules that relies on two classes:"
+msgstr ""
+
+#: cdl.plugins:9 of
+msgid ":class:`PluginInfo`, which stores information about the plugin"
+msgstr ""
+
+#: cdl.plugins:10 of
+msgid ":class:`PluginBase`, which is the base class for all plugins"
+msgstr ""
+
+#: cdl.plugins.PluginInfo:1 of
+msgid "Plugin info"
+msgstr ""
+
+#: cdl.plugins.PluginBase:1 of
+msgid "Plugin base class"
+msgstr ""
+
+#: cdl.plugins.PluginBase.ask_yesno:1 of
+msgid "Ask yes/no question"
+msgstr ""
+
+#: cdl.plugins.PluginBase.create_actions:1 of
+msgid "Create actions"
+msgstr ""
+
+#: cdl.plugins.PluginBase.imagepanel:1 of
+msgid "Return image panel"
+msgstr ""
+
+#: cdl.plugins.PluginBase.is_registered:1 of
+msgid "Return True if plugin is registered"
+msgstr ""
+
+#: cdl.plugins.PluginBase.register:1 of
+msgid "Register plugin"
+msgstr ""
+
+#: cdl.plugins.PluginBase.register_hooks:1 of
+msgid "Register plugin hooks"
+msgstr ""
+
+#: cdl.plugins.PluginBase.show_error:1 of
+msgid "Show error message"
+msgstr ""
+
+#: cdl.plugins.PluginBase.show_info:1 of
+msgid "Show info message"
+msgstr ""
+
+#: cdl.plugins.PluginBase.show_warning:1 of
+msgid "Show warning message"
+msgstr ""
+
+#: cdl.plugins.PluginBase.signalpanel:1 of
+msgid "Return signal panel"
+msgstr ""
+
+#: cdl.plugins.PluginBase.unregister:1 of
+msgid "Unregister plugin"
+msgstr ""
+
+#: cdl.plugins.PluginBase.unregister_hooks:1 of
+msgid "Unregister plugin hooks"
+msgstr ""
+

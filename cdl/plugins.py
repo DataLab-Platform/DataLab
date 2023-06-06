@@ -211,6 +211,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 def discover_plugins() -> list[PluginBase]:
     """Discover plugins using naming convention"""
     if Conf.main.plugins_enabled.get():
+        sys.path.append(Conf.main.plugins_path.get())
         return [
             importlib.import_module(name)
             for _finder, name, _ispkg in pkgutil.iter_modules()

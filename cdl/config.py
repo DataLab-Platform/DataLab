@@ -120,6 +120,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     ignore_dependency_check = conf.Option()
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
+    plugins_path = conf.Option()
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
@@ -282,6 +283,7 @@ def initialize():
     Conf.main.available_memory_threshold.get(500)
     Conf.main.ignore_dependency_check.get(False)
     Conf.main.plugins_enabled.get(True)
+    Conf.main.plugins_path.get("")
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.external_editor_path.get("code")

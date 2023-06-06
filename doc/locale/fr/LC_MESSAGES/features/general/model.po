@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 14:24+0200\n"
+"POT-Creation-Date: 2023-06-06 18:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -49,9 +49,9 @@ msgstr "API publique"
 msgid "The public API is the following:"
 msgstr "L'API publique est la suivante :"
 
-#: cdl.core.model.image:1 cdl.core.model.signal:1 of
-msgid "DataLab Datasets"
-msgstr "Datasets DataLab"
+#: cdl.core.model.signal:2 of
+msgid "Signal object and related classes"
+msgstr ""
 
 #: cdl.core.model.image.RoiDataItem:1 cdl.core.model.signal.CurveStyles:1 of
 msgid "Bases: :py:class:`object`"
@@ -508,6 +508,10 @@ msgstr ""
 msgid "Triangle function"
 msgstr ""
 
+#: cdl.core.model.image:2 of
+msgid "Image object and related classes"
+msgstr ""
+
 #: cdl.core.model.image.CircularROIParam:1
 #: cdl.core.model.image.RectangleROIParam:1 of
 msgid "ROI parameters"
@@ -807,4 +811,7 @@ msgstr ""
 
 #~ msgid "Reset metadata to default values"
 #~ msgstr ""
+
+#~ msgid "DataLab Datasets"
+#~ msgstr "Datasets DataLab"
 
