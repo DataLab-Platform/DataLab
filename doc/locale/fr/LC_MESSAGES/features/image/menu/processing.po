@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-24 21:51+0200\n"
+"POT-Creation-Date: 2023-06-06 17:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.3\n"
+"Generated-By: Babel 2.9.1\n"
 
 #: ../../features/image/menu/processing.rst:2
 msgid "\"Processing\" menu"
@@ -233,7 +233,7 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
 
-#: ../../features/image/menu/processing.rst:88
+#: ../../features/image/menu/processing.rst:93
 msgid "Restoration"
 msgstr "Restauration"
 
@@ -295,15 +295,26 @@ msgstr ""
 "Débruitage de l'image par soustraction de la transformée Top-Hat avec "
 "ouverture circulaire de rayon paramétrabl"
 
-#: ../../features/image/menu/processing.rst:113
+#: ../../features/image/menu/processing.rst:93
+msgid "All denoising methods"
+msgstr "Tous les débruitages"
+
+#: ../../features/image/menu/processing.rst:91
+msgid ""
+"Perform all denoising methods on image. Combined with the \"distribute on"
+" a grid\" option, this allows to compare the different denoising methods "
+"on the same image."
+msgstr "Applique tous les débruitages à l'image. Combiné avec l'option \"distribuer sur une grille\", cela permet de comparer les différents débruitages sur la même image."
+
+#: ../../features/image/menu/processing.rst:123
 msgid "Morphology"
 msgstr "Morphologie"
 
-#: ../../features/image/menu/processing.rst:93
+#: ../../features/image/menu/processing.rst:98
 msgid "White Top-Hat (disk)"
 msgstr "Top-Hat (disque)"
 
-#: ../../features/image/menu/processing.rst:92
+#: ../../features/image/menu/processing.rst:97
 msgid ""
 "Perform white top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.white_tophat <https"
@@ -315,11 +326,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
 
-#: ../../features/image/menu/processing.rst:97
+#: ../../features/image/menu/processing.rst:102
 msgid "Black Top-Hat (disk)"
 msgstr "Top-Hat dual (disque)"
 
-#: ../../features/image/menu/processing.rst:96
+#: ../../features/image/menu/processing.rst:101
 msgid ""
 "Perform black top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.black_tophat <https"
@@ -331,11 +342,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
 
-#: ../../features/image/menu/processing.rst:101
+#: ../../features/image/menu/processing.rst:106
 msgid "Erosion (disk)"
 msgstr "Erosion (disque)"
 
-#: ../../features/image/menu/processing.rst:100
+#: ../../features/image/menu/processing.rst:105
 msgid ""
 "Perform morphological erosion on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.erosion <https://scikit-"
@@ -346,11 +357,11 @@ msgstr ""
 "`skimage.morphology.erosion <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
 
-#: ../../features/image/menu/processing.rst:105
+#: ../../features/image/menu/processing.rst:110
 msgid "Dilation (disk)"
 msgstr "Dilatation (disque)"
 
-#: ../../features/image/menu/processing.rst:104
+#: ../../features/image/menu/processing.rst:109
 msgid ""
 "Perform morphological dilation on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.dilation <https://scikit-"
@@ -361,11 +372,11 @@ msgstr ""
 "`skimage.morphology.dilation <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
 
-#: ../../features/image/menu/processing.rst:109
+#: ../../features/image/menu/processing.rst:114
 msgid "Opening (disk)"
 msgstr "Ouverture (disque)"
 
-#: ../../features/image/menu/processing.rst:108
+#: ../../features/image/menu/processing.rst:113
 msgid ""
 "Perform morphological opening on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.opening <https://scikit-"
@@ -376,11 +387,11 @@ msgstr ""
 " `skimage.morphology.opening <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
 
-#: ../../features/image/menu/processing.rst:113
+#: ../../features/image/menu/processing.rst:118
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-#: ../../features/image/menu/processing.rst:112
+#: ../../features/image/menu/processing.rst:117
 msgid ""
 "Perform morphological closing on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.closing <https://scikit-"
@@ -391,26 +402,41 @@ msgstr ""
 " `skimage.morphology.closing <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
 
-#: ../../features/image/menu/processing.rst:173
+#: ../../features/image/menu/processing.rst:123
+msgid "All morphological operations"
+msgstr "Toutes les opérations morphologiques"
+
+#: ../../features/image/menu/processing.rst:121
+msgid ""
+"Perform all morphological operations on an image, using a disk footprint."
+" Combined with the \"distribute on a grid\" option, this allows to "
+"compare the different morphological operations on the same image."
+msgstr "Applique toutes les opérations morphologiques à une image. Combiné avec l'option \"distribuer sur une grille\", cela permet de comparer les différentes opérations morphologiques sur la même image."
+
+#: ../../features/image/menu/processing.rst:188
 msgid "Edges"
 msgstr "Contours"
 
-#: ../../features/image/menu/processing.rst:118
+#: ../../features/image/menu/processing.rst:128
 msgid "Roberts filter"
 msgstr "Filtre de Roberts"
 
-#: ../../features/image/menu/processing.rst:117
+#: ../../features/image/menu/processing.rst:127
 msgid ""
 "Perform edge filtering on an image, using the Roberts algorithm "
 "(implementation based on `skimage.filters.roberts <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
-msgstr "Calcule le résultat d'une détection de contours à l'aide l'algorithme de Roberts (implémentation basée sur `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Roberts (implémentation basée sur `skimage.filters.roberts <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
 
-#: ../../features/image/menu/processing.rst:122
+#: ../../features/image/menu/processing.rst:132
 msgid "Prewitt filter"
 msgstr "Filtre de Prewitt"
 
-#: ../../features/image/menu/processing.rst:121
+#: ../../features/image/menu/processing.rst:131
 msgid ""
 "Perform edge filtering on an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt <https://scikit-"
@@ -421,99 +447,129 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
 
-#: ../../features/image/menu/processing.rst:126
+#: ../../features/image/menu/processing.rst:136
 msgid "Prewitt filter (horizontal)"
 msgstr "Filtre de Prewitt (horizontal)"
 
-#: ../../features/image/menu/processing.rst:125
+#: ../../features/image/menu/processing.rst:135
 msgid ""
 "Find the horizontal edges of an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt_h <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
-msgstr "Recherche les contours horizontaux d'une image, à l'aide de l'algorithme de Prewitt (implémentation basée sur `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Prewitt (implémentation basée sur `skimage.filters.prewitt_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
 
-#: ../../features/image/menu/processing.rst:130
+#: ../../features/image/menu/processing.rst:140
 msgid "Prewitt filter (vertical)"
 msgstr "Filtre de Prewitt (vertical)"
 
-#: ../../features/image/menu/processing.rst:129
+#: ../../features/image/menu/processing.rst:139
 msgid ""
 "Find the vertical edges of an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt_v <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
-msgstr "Recherche les contours verticaux d'une image, à l'aide de l'algorithme de Prewitt (implémentation basée sur `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Prewitt (implémentation basée sur `skimage.filters.prewitt_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
 
-#: ../../features/image/menu/processing.rst:134
+#: ../../features/image/menu/processing.rst:144
 msgid "Sobel filter"
 msgstr "Filtre de Sobel"
 
-#: ../../features/image/menu/processing.rst:133
+#: ../../features/image/menu/processing.rst:143
 msgid ""
 "Perform edge filtering on an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
-msgstr "Calcule le résultat d'une détection de contours à l'aide l'algorithme de Sobel (implémentation basée sur `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Sobel (implémentation basée sur `skimage.filters.sobel <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
 
-#: ../../features/image/menu/processing.rst:138
+#: ../../features/image/menu/processing.rst:148
 msgid "Sobel filter (horizontal)"
 msgstr "Filtre de Sobel (horizontal)"
 
-#: ../../features/image/menu/processing.rst:137
+#: ../../features/image/menu/processing.rst:147
 msgid ""
 "Find the horizontal edges of an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel_h <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
-msgstr "Recherche les contours horizontaux d'une image, à l'aide de l'algorithme de Sobel (implémentation basée sur `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Sobel (implémentation basée sur `skimage.filters.sobel_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
 
-#: ../../features/image/menu/processing.rst:142
+#: ../../features/image/menu/processing.rst:152
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
-#: ../../features/image/menu/processing.rst:141
+#: ../../features/image/menu/processing.rst:151
 msgid ""
 "Find the vertical edges of an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel_v <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
-msgstr "Recherche les contours verticaux d'une image, à l'aide de l'algorithme de Sobel (implémentation basée sur `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Sobel (implémentation basée sur `skimage.filters.sobel_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
 
-#: ../../features/image/menu/processing.rst:146
+#: ../../features/image/menu/processing.rst:156
 msgid "Scharr filter"
 msgstr "Filtre de Scharr"
 
-#: ../../features/image/menu/processing.rst:145
+#: ../../features/image/menu/processing.rst:155
 msgid ""
 "Perform edge filtering on an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
-msgstr "Calcule le résultat d'une détection de contours à l'aide l'algorithme de Scharr (implémentation basée sur `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Scharr (implémentation basée sur `skimage.filters.scharr <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
 
-#: ../../features/image/menu/processing.rst:150
+#: ../../features/image/menu/processing.rst:160
 msgid "Scharr filter (horizontal)"
 msgstr "Filtre de Scharr (horizontal)"
 
-#: ../../features/image/menu/processing.rst:149
+#: ../../features/image/menu/processing.rst:159
 msgid ""
 "Find the horizontal edges of an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr_h <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
-msgstr "Recherche les contours horizontaux d'une image, à l'aide de l'algorithme de Scharr (implémentation basée sur `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Scharr (implémentation basée sur `skimage.filters.scharr_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
 
-#: ../../features/image/menu/processing.rst:154
+#: ../../features/image/menu/processing.rst:164
 msgid "Scharr filter (vertical)"
 msgstr "Filtre de Scharr (vertical)"
 
-#: ../../features/image/menu/processing.rst:153
+#: ../../features/image/menu/processing.rst:163
 msgid ""
 "Find the vertical edges of an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr_v <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
-msgstr "Recherche les contours verticaux d'une image, à l'aide de l'algorithme de Scharr (implémentation basée sur `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Scharr (implémentation basée sur `skimage.filters.scharr_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
 
-#: ../../features/image/menu/processing.rst:158
+#: ../../features/image/menu/processing.rst:168
 msgid "Farid filter"
 msgstr "Filtre de Farid"
 
-#: ../../features/image/menu/processing.rst:157
+#: ../../features/image/menu/processing.rst:167
 msgid ""
 "Perform edge filtering on an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid <https://scikit-"
@@ -523,44 +579,67 @@ msgstr ""
 "Farid (implémentation basée sur `skimage.filters.farid <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
 
-#: ../../features/image/menu/processing.rst:162
+#: ../../features/image/menu/processing.rst:172
 msgid "Farid filter (horizontal)"
 msgstr "Filtre de Farid (horizontal)"
 
-#: ../../features/image/menu/processing.rst:161
+#: ../../features/image/menu/processing.rst:171
 msgid ""
 "Find the horizontal edges of an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid_h <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
-msgstr "Recherche les contours horizontaux d'une image, à l'aide de l'algorithme de Farid (implémentation basée sur `skimage.filters.farid_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Farid (implémentation basée sur `skimage.filters.farid_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
 
-#: ../../features/image/menu/processing.rst:166
+#: ../../features/image/menu/processing.rst:176
 msgid "Farid filter (vertical)"
 msgstr "Filtre de Farid (vertical)"
 
-#: ../../features/image/menu/processing.rst:165
+#: ../../features/image/menu/processing.rst:175
 msgid ""
 "Find the vertical edges of an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid_v <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
-msgstr "Recherche les contours verticaux d'une image, à l'aide de l'algorithme de Farid (implémentation basée sur `skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Farid (implémentation basée sur `skimage.filters.farid_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
 
-#: ../../features/image/menu/processing.rst:170
+#: ../../features/image/menu/processing.rst:180
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-#: ../../features/image/menu/processing.rst:169
+#: ../../features/image/menu/processing.rst:179
 msgid ""
 "Perform edge filtering on an image, using the Laplace algorithm "
 "(implementation based on `skimage.filters.laplace <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
-msgstr "Calcule le résultat d'une détection de contours à l'aide l'algorithme de Laplace (implémentation basée sur `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Laplace (implémentation basée sur `skimage.filters.laplace <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
 
-#: ../../features/image/menu/processing.rst:173
+#: ../../features/image/menu/processing.rst:185
+msgid "All edges filters"
+msgstr "Tous les filtres de contours"
+
+#: ../../features/image/menu/processing.rst:183
+msgid ""
+"Perform all edge filtering algorithms (see above) on an image. Combined "
+"with the \"distribute on a grid\" option, this allows to compare the "
+"different edge filters on the same image."
+msgstr "Applique tous les algorithmes de détection de contours (voir ci-dessus) à une image. Combiné avec l'option \"distribuer sur une grille\", cela permet de comparer les différents filtres de contours sur la même image."
+
+#: ../../features/image/menu/processing.rst:188
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: ../../features/image/menu/processing.rst:173
+#: ../../features/image/menu/processing.rst:188
 msgid ""
 "Perform edge filtering on an image, using the Canny algorithm "
 "(implementation based on `skimage.feature.canny <https://scikit-"

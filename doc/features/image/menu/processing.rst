@@ -87,6 +87,11 @@ Restoration
         Denoise image by subtracting its white top hat transform
         (using a disk footprint)
 
+    All denoising methods
+        Perform all denoising methods on image. Combined with the
+        "distribute on a grid" option, this allows to compare the
+        different denoising methods on the same image.
+
 Morphology
     White Top-Hat (disk)
         Perform white top hat transform of an image, using a disk footprint
@@ -111,6 +116,11 @@ Morphology
     Closing (disk)
         Perform morphological closing on an image, using a disk footprint
         (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
+
+    All morphological operations
+        Perform all morphological operations on an image, using a disk footprint.
+        Combined with the "distribute on a grid" option, this allows to compare
+        the different morphological operations on the same image.
 
 Edges
     Roberts filter
@@ -168,6 +178,11 @@ Edges
     Laplace filter
         Perform edge filtering on an image, using the Laplace algorithm
         (implementation based on `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)
+
+    All edges filters
+        Perform all edge filtering algorithms (see above) on an image.
+        Combined with the "distribute on a grid" option, this allows to compare
+        the different edge filters on the same image.
 
     Canny filter
         Perform edge filtering on an image, using the Canny algorithm

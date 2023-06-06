@@ -4,7 +4,9 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Signal Processor GUI module
+Signal Processor
+----------------
+
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

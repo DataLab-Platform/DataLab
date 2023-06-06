@@ -4,7 +4,9 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Datasets
+Image object and related classes
+--------------------------------
+
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

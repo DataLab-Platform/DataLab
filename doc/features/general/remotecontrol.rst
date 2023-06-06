@@ -86,7 +86,6 @@ Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: cdl.remotecontrol
-    :members: RemoteClient
 
 Public API: additional methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

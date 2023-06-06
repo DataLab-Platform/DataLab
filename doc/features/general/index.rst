@@ -13,5 +13,6 @@ General features
    h5browser
    remotecontrol
    model
+   plugins
    logviewer
    instviewer

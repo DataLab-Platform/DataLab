@@ -5,6 +5,21 @@
 
 """
 DataLab plugin system
+---------------------
+
+DataLab plugin system provides a way to extend the application with new
+functionalities.
+
+Plugins are Python modules that relies on two classes:
+
+    - :class:`PluginInfo`, which stores information about the plugin
+    - :class:`PluginBase`, which is the base class for all plugins
+
+.. autoclass:: PluginInfo
+    :members:
+
+.. autoclass:: PluginBase
+    :members:
 """
 
 from __future__ import annotations

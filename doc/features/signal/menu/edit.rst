@@ -29,6 +29,9 @@ Delete object metadata
     Metadata contains additionnal information such as Region of Interest
     or results of computations
 
+Add object title to plot
+    Add currently selected signal title to the associated plot.
+
 Copy titles to clipboard
     Copy all signal titles to clipboard as a multiline text.
     This text may be used for reproducing a processing chain, for example.

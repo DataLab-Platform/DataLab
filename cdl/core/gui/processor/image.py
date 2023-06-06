@@ -4,7 +4,9 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Image Processor GUI module
+Image Processor
+---------------
+
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

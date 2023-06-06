@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-01 17:34+0200\n"
+"POT-Creation-Date: 2023-06-06 17:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,10 +92,18 @@ msgstr ""
 "d'intérêt ou encore des résultats de calcul."
 
 #: ../../features/signal/menu/edit.rst:33
+msgid "Add object title to plot"
+msgstr "Ajouter le titre de l'objet au graphique"
+
+#: ../../features/signal/menu/edit.rst:33
+msgid "Add currently selected signal title to the associated plot."
+msgstr "Ajoute le titre du signal sélectionné au graphique associé."
+
+#: ../../features/signal/menu/edit.rst:36
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/signal/menu/edit.rst:33
+#: ../../features/signal/menu/edit.rst:36
 msgid ""
 "Copy all signal titles to clipboard as a multiline text. This text may be"
 " used for reproducing a processing chain, for example."
