@@ -163,6 +163,12 @@ def test_image_features(
     param = cdl.param.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
+    param = cdl.param.BinningParam()
+    param.binning_x = 2
+    param.binning_y = 2
+    param.operation = "average"
+    panel.processor.compute_binning(param)
+
 
 def test() -> None:
     """Run image unit test scenario 1"""
