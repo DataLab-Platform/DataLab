@@ -283,7 +283,7 @@ def initialize():
     Conf.main.available_memory_threshold.get(500)
     Conf.main.ignore_dependency_check.get(False)
     Conf.main.plugins_enabled.get(True)
-    Conf.main.plugins_path.get("")
+    Conf.main.plugins_path.get(Conf.get_path(""))
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.external_editor_path.get("code")
