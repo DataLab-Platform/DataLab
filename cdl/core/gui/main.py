@@ -1074,14 +1074,14 @@ class CDLMainWindow(QW.QMainWindow):
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:
-            xrpcstate = f'<font color="red">{_("not started")}</font>'
+            xrpcstate = '<font color="red">%s</font>' % _("not started")
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
             xrpcstate = f"<font color='green'>{xrpcstate}</font>"
         if Conf.main.process_isolation_enabled.get():
-            pistate = f"<font color='green'>{_('enabled')}</font>"
+            pistate = "<font color='green'>%s</font>" % _("enabled")
         else:
-            pistate = f"<font color='red'>{_('disabled')}</font>"
+            pistate = "<font color='red'>%s</font>" % _("disabled")
         adv_conf = "<br>".join(
             [
                 "<i>" + _("Advanced configuration:") + "</i>",

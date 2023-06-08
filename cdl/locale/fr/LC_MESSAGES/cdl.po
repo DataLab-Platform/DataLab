@@ -1573,9 +1573,21 @@ msgstr ""
 msgid "Open"
 msgstr "Ouvrir"
 
+#: cdl\core\gui\main.py:1077
+msgid "not started"
+msgstr "non démarré"
+
 #: cdl\core\gui\main.py:1079
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
+
+#: cdl\core\gui\main.py:1082
+msgid "enabled"
+msgstr "activé"
+
+#: cdl\core\gui\main.py:1084
+msgid "disabled"
+msgstr "désactivé"
 
 #: cdl\core\gui\main.py:1087
 msgid "Advanced configuration:"
