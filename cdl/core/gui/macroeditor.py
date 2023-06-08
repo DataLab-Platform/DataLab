@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import abc
 import os
+import os.path as osp
 import sys
 import time
 
@@ -20,6 +21,7 @@ from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+import cdl
 from cdl.config import _
 from cdl.core.gui import ObjItf
 from cdl.env import execenv
@@ -219,6 +221,8 @@ print("All done!")
         """Run macro"""
         self.process = QC.QProcess()
         code = self.get_code().replace('"', "'")
+        cdl_path = osp.abspath(osp.join(osp.dirname(cdl.__file__), os.pardir))
+        code = f"import sys; sys.path.append(r'{cdl_path}'){os.linesep}{code}"
         env = QC.QProcessEnvironment()
         env.insert(execenv.XMLRPCPORT_ENV, str(execenv.xmlrpcport))
         sysenv = env.systemEnvironment()
