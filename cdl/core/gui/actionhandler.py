@@ -216,7 +216,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         shortcut: QW.QShortcut | None = None,
         icon: QG.QIcon | None = None,
         tip: str | None = None,
-        select_condition: Callable | None = None,
+        select_condition: Callable | str | None = None,
         context_menu_pos: int | None = None,
         context_menu_sep: bool = False,
         toolbar_pos: int | None = None,
@@ -235,9 +235,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             shortcut (QW.QShortcut, optional): shortcut. Defaults to None.
             icon (QG.QIcon, optional): icon. Defaults to None.
             tip (str, optional): tooltip. Defaults to None.
-            select_condition (Callable, optional): condition to enable action.
-                Defaults to None. If None, action is enabled if at least one
-                object is selected.
+            select_condition (Callable, str, optional): selection condition.
+                Defaults to None.
+                If str, must be the name of a method of SelectCond, i.e. one of
+                "always", "exactly_one", "exactly_one_group",
+                "at_least_one_group_or_one_object", "at_least_one",
+                "at_least_two", "with_roi".
             context_menu_pos (int, optional): add action to context menu at this
                 position. Defaults to None.
             context_menu_sep (bool, optional): add separator before action in
@@ -251,6 +254,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         Returns:
             QW.QAction: new action
         """
+        if isinstance(select_condition, str):
+            assert select_condition in SelectCond.__dict__
+            select_condition = getattr(SelectCond, select_condition)
         action = create_action(
             self.panel, title, triggered, toggled, shortcut, icon, tip
         )

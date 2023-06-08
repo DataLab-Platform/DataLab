@@ -15,86 +15,143 @@ from __future__ import annotations
 
 import dataclasses
 
+import guidata.dataset.dataitems as gdi
+import guidata.dataset.datatypes as gdt
 import numpy as np
 
-from cdl.algorithms import fit
-from cdl.obj import (
-    ImageObj,
-    ResultShape,
-    ShapeTypes,
-    SignalObj,
-    create_image,
-    create_signal,
-    read_image,
-    read_signal,
-)
+import cdl.obj
+from cdl.config import _
 from cdl.utils.tests import get_test_fnames
 
 
-def add_gaussian_noise(
-    data: np.ndarray, mu: float = 0.0, sigma: float = 0.1, seed: int = 1
+def get_test_signal(filename: str) -> cdl.obj.SignalObj:
+    """Return test signal
+
+    Args:
+        filename (str): Filename
+
+    Returns:
+        SignalObj: Signal object
+    """
+    return cdl.obj.read_signal(get_test_fnames(filename)[0])
+
+
+def get_test_image(filename: str) -> cdl.obj.ImageObj:
+    """Return test image
+
+    Args:
+        filename (str): Filename
+
+    Returns:
+        ImageObj: Image object
+    """
+    return cdl.obj.read_image(get_test_fnames(filename)[0])
+
+
+def create_paracetamol_signal(
+    size: int | None = None, title: str | None = None
+) -> cdl.obj.SignalObj:
+    """Create test signal (Paracetamol molecule spectrum)
+
+    Args:
+        size (int, optional): Size of the data. Defaults to None.
+        title (str, optional): Title of the signal. Defaults to None.
+
+    Returns:
+        SignalObj: Signal object
+    """
+    obj = cdl.obj.read_signal(get_test_fnames("paracetamol.txt")[0])
+    if title is not None:
+        obj.title = title
+    if size is not None:
+        x0, y0 = obj.xydata
+        x1 = np.linspace(x0[0], x0[-1], size)
+        y1 = np.interp(x1, x0, y0)
+        obj.set_xydata(x1, y1)
+    return obj
+
+
+class GaussianNoiseParam(gdt.DataSet):
+    """Gaussian noise parameters"""
+
+    mu = gdi.FloatItem(
+        _("Mean"),
+        default=0.0,
+        min=-100.0,
+        max=100.0,
+        help=_("Mean of the Gaussian distribution"),
+    )
+    sigma = gdi.FloatItem(
+        _("Standard deviation"),
+        default=0.1,
+        min=0.0,
+        max=100.0,
+        help=_("Standard deviation of the Gaussian distribution"),
+    )
+    seed = gdi.IntItem(
+        _("Seed"),
+        default=1,
+        min=0,
+        max=1000000,
+        help=_("Seed for random number generator"),
+    )
+
+
+def add_gaussian_noise_to_signal(
+    signal: cdl.obj.SignalObj, p: GaussianNoiseParam | None = None
 ) -> None:
     """Add Gaussian (Normal-law) random noise to data
 
     Args:
-        data (np.ndarray): Data to be noised
-        mu (float, optional): Mean of the Gaussian distribution. Defaults to 0.0.
-        sigma (float, optional): Standard deviation of the Gaussian distribution.
-            Defaults to 0.1.
-        seed (int, optional): Seed for random number generator. Defaults to 1.
+        signal (cdl.obj.SignalObj): Signal object
+        p (GaussianNoiseParam, optional): Gaussian noise parameters.
     """
-    rng = np.random.default_rng(seed)
-    data += rng.normal(mu, sigma, size=data.shape)
+    if p is None:
+        p = GaussianNoiseParam()
+    rng = np.random.default_rng(p.seed)
+    signal.data += rng.normal(p.mu, p.sigma, size=signal.data.shape)
 
 
-def create_1d_gaussian(
-    size,
-    amp: float = 50.0,
-    sigma: float = 2.0,
-    x0: float = 0.0,
-    y0: float = 0.0,
-    noise_mu: float = 0.0,
-    noise_sigma: float = 0.0,
-    seed: int = 1,
-) -> tuple[np.ndarray, np.ndarray]:
-    """Create Gaussian curve data (optionally noised, if noise_sigma != 0.0)
+def create_noisy_signal(
+    noiseparam: GaussianNoiseParam | None = None,
+    newparam: cdl.obj.NewSignalParam | None = None,
+    addparam: cdl.obj.GaussLorentzVoigtParam | None = None,
+    title: str | None = None,
+    noised: bool | None = None,
+) -> cdl.obj.SignalObj:
+    """Create curve data, optionally noised
 
     Args:
-        size (int): Number of points
-        amp (float, optional): Amplitude. Defaults to 50.0.
-        sigma (float, optional): Standard deviation. Defaults to 2.0.
-        x0 (float, optional): x0. Defaults to 0.0.
-        y0 (float, optional): y0. Defaults to 0.0.
-        noise_mu (float, optional): Mean of the Gaussian distribution. Defaults to 0.0.
-        noise_sigma (float, optional): Standard deviation of the Gaussian distribution.
-            Defaults to 0.0.
-        seed (int, optional): Seed for random number generator. Defaults to 1.
+        noiseparam (GaussianNoiseParam, optional): Noise parameters. Default:
+            None: No noise
+        newparam (cdl.obj.NewSignalParam, optional): New signal parameters.
+            Default: Gaussian, size=500, xmin=-10, xmax=10
+        addparam (cdl.obj.GaussLorentzVoigtParam, optional): Additional parameters.
+            Default: a=1.0, sigma=1.0, mu=0.0, ymin=0.0
+        title (str, optional): Title of the signal. Default: None
+            If not None, overrides the title in newparam
+        noised (bool, optional): If True, add noise to the signal.
+            Default: None (use noiseparam)
+            If True, eventually creates a new noiseparam if None
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: x, y
+        cdl.obj.SignalObj: Signal object
     """
-    x = np.linspace(-10, 10, size)
-    y = fit.GaussianModel.func(x, amp, sigma, x0, y0)
-    if noise_sigma:
-        add_gaussian_noise(y, mu=noise_mu, sigma=noise_sigma, seed=seed)
-    return x, y
-
-
-def create_test_2d_data(size: int, dtype: np.dtype) -> np.ndarray:
-    """Creating 2D test data
-
-    Args:
-        size (int): Size of the data
-        dtype (np.dtype): Data type
-
-    Returns:
-        np.ndarray: 2D data
-    """
-    x, y = np.meshgrid(np.linspace(0, 10, size), np.linspace(0, 10, size))
-    raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
-    dmin = np.iinfo(dtype).min * 0.95
-    dmax = np.iinfo(dtype).max * 0.95
-    return np.array(raw_data * (dmax - dmin) + dmin, dtype=dtype)
+    if newparam is None:
+        newparam = cdl.obj.NewSignalParam()
+        newparam.type = cdl.obj.SignalTypes.GAUSS
+    if title is not None:
+        newparam.title = title
+    newparam.title = "Test signal (noisy)" if newparam.title is None else newparam.title
+    if addparam is None:
+        addparam = cdl.obj.GaussLorentzVoigtParam()
+    if noised is not None and noiseparam is None:
+        noiseparam = GaussianNoiseParam()
+        noiseparam.sigma = 5.0
+    sig = cdl.obj.create_signal_from_param(newparam, addparam)
+    if noiseparam is not None:
+        add_gaussian_noise_to_signal(sig, noiseparam)
+    return sig
 
 
 def create_2d_steps_data(size: int, width: int, dtype: np.dtype) -> np.ndarray:
@@ -187,7 +244,7 @@ def get_laser_spot_data() -> list[np.ndarray]:
     znoise = create_2d_random(2000, np.uint16)
     zgauss = create_2d_gaussian(2000, np.uint16, x0=2.0, y0=-3.0)
     return [zgauss + znoise] + [
-        read_image(fname).data for fname in get_test_fnames("*.scor-data")
+        cdl.obj.read_image(fname).data for fname in get_test_fnames("*.scor-data")
     ]
 
 
@@ -257,207 +314,171 @@ def get_peak2d_data(
     return data
 
 
-def get_test_signal(filename: str) -> SignalObj:
-    """Return test signal
+def __set_default_size_dtype(
+    p: cdl.obj.NewImageParam | None = None,
+) -> cdl.obj.NewImageParam:
+    """Set default shape and dtype
 
     Args:
-        filename (str): Filename
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+            If None, a new object is created.
 
     Returns:
-        SignalObj: Signal object
+        cdl.obj.NewImageParam: Image parameters
     """
-    return read_signal(get_test_fnames(filename)[0])
+    if p is None:
+        p = cdl.obj.NewImageParam()
+    p.height = 2000 if p.height is None else p.height
+    p.width = 2000 if p.width is None else p.width
+    p.dtype = cdl.obj.ImageDatatypes.UINT16 if p.dtype is None else p.dtype
+    return p
 
 
-def get_test_image(filename: str) -> ImageObj:
-    """Return test image
+def add_gaussian_noise_to_image(
+    image: cdl.obj.ImageObj, param: cdl.obj.NormalRandomParam
+) -> None:
+    """Add Gaussian noise to image
 
     Args:
-        filename (str): Filename
-
-    Returns:
-        ImageObj: Image object
+        src (cdl.obj.ImageObj): Source image
+        param (cdl.obj.NormalRandomParam): Parameters for the normal distribution
     """
-    return read_image(get_test_fnames(filename)[0])
+    newparam = cdl.obj.new_image_param(
+        height=image.data.shape[0],
+        width=image.data.shape[1],
+        dtype=cdl.obj.ImageDatatypes.from_dtype(image.data.dtype),
+        itype=cdl.obj.ImageTypes.NORMALRANDOM,
+    )
+    noise = cdl.obj.create_image_from_param(newparam, param)
+    image.data = image.data + noise.data
 
 
-def __get_default_data_size(size: int | None = None) -> int:
-    """Return default data size
+def create_2dstep_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
+    """Creating 2D step image
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
 
     Returns:
-        int: Size of the data
+        cdl.obj.ImageObj: Image object
     """
-    return 500 if size is None else size
-
-
-def create_test_signal1(size: int | None = None, title: str | None = None) -> SignalObj:
-    """Create test signal (Paracetamol molecule spectrum)
-
-    Args:
-        size (int, optional): Size of the data. Defaults to None.
-        title (str, optional): Title of the signal. Defaults to None.
-
-    Returns:
-        SignalObj: Signal object
-    """
-    obj = read_signal(get_test_fnames("paracetamol.txt")[0])
-    if title is not None:
-        obj.title = title
-    size = __get_default_data_size(size)
-    if size is not None:
-        x0, y0 = obj.xydata
-        x1 = np.linspace(x0[0], x0[-1], size)
-        y1 = np.interp(x1, x0, y0)
-        obj.set_xydata(x1, y1)
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (2D step)" if p.title is None else p.title
+    obj = cdl.obj.create_image_from_param(p)
+    obj.data = create_2d_steps_data(p.height, p.height // 10, p.dtype.value)
     return obj
 
 
-def create_test_signal2(
-    size: int | None = None, title: str | None = None, noised: bool = False
-) -> SignalObj:
-    """Create test signal (Gaussian curve, optionally noised)
+def create_peak2d_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
+    """Creating 2D peak image
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
-        title (str, optional): Title of the signal. Defaults to None.
-        noised (bool, optional): If True, the signal is noised. Defaults to False.
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
 
     Returns:
-        SignalObj: Signal object
+        cdl.obj.ImageObj: Image object
     """
-    size = __get_default_data_size(size)
-    default_title = "Gaussian curve" + (" with noise" if noised else "")
-    obj = create_signal(default_title if title is None else title)
-    x, y = create_1d_gaussian(size=size, noise_sigma=5.0 if noised else 0.0)
-    obj.set_xydata(x, y)
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (2D peaks)" if p.title is None else p.title
+    obj = cdl.obj.create_image_from_param(p)
+    param = PeakDataParam()
+    if p.height is not None and p.width is not None:
+        param.size = max(p.height, p.width)
+    obj.data = get_peak2d_data(param)
     return obj
 
 
-def __get_default_size_dtype(
-    size: int | None = None, dtype: np.dtype | None = None
-) -> tuple[int, np.dtype]:
-    """Return default shape and dtype
+def create_sincos_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
+    """Creating test image (sin(x)+cos(y))
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
-        dtype (np.dtype, optional): Data type. Defaults to None.
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
 
     Returns:
-        tuple[int, np.dtype]: Size and data type
+        cdl.obj.ImageObj: Image object
     """
-    size = 2000 if size is None else size
-    dtype = np.uint16 if dtype is None else dtype
-    return size, dtype
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (sin(x)+cos(y))" if p.title is None else p.title
+    dtype = p.dtype.value
+    x, y = np.meshgrid(np.linspace(0, 10, p.width), np.linspace(0, 10, p.height))
+    raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
+    dmin = np.iinfo(dtype).min * 0.95
+    dmax = np.iinfo(dtype).max * 0.95
+    obj = cdl.obj.create_image_from_param(p)
+    obj.data = np.array(raw_data * (dmax - dmin) + dmin, dtype=dtype)
+    return obj
 
 
-def create_test_image1(
-    size: int | None = None, dtype: np.dtype | None = None, title: str | None = None
-) -> ImageObj:
-    """Create test image (sin(x)+cos(y))
-
-    Args:
-        size (int, optional): Size of the data. Defaults to None.
-        dtype (np.dtype, optional): Data type. Defaults to None.
-        title (str, optional): Title of the image. Defaults to None.
-
-    Returns:
-        ImageObj: Image object
-    """
-    size, dtype = __get_default_size_dtype(size, dtype)
-    title = "sin(x)+cos(y)" if title is None else title
-    return create_image(title, create_test_2d_data(size, dtype=dtype))
-
-
-def create_test_image2(
-    size: int | None = None,
-    dtype: np.dtype | None = None,
-    with_annotations: bool = True,
-    title: str | None = None,
-) -> ImageObj:
+def create_noisygauss_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
     """Create test image (2D noisy gaussian)
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
-        dtype (np.dtype, optional): Data type. Defaults to None.
-        with_annotations (bool, optional): If True, the image is annotated.
-            Defaults to True.
-        title (str, optional): Title of the image. Defaults to None.
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
 
     Returns:
         ImageObj: Image object
     """
-    size, dtype = __get_default_size_dtype(size, dtype)
-    title = "2D Gaussian" if title is None else title
-    zgauss = create_2d_gaussian(size, dtype=dtype, x0=2.0, y0=3.0)
-    znoise = create_2d_random(size, dtype)
-    data = zgauss + znoise
-    image = create_image(title, data)
-    if with_annotations:
-        with open(get_test_fnames("annotations.json")[0], mode="rb") as fdesc:
-            image.annotations = fdesc.read().decode()
-    return image
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (noisy 2D Gaussian)" if p.title is None else p.title
+    dtype = p.dtype.value
+    size = p.width
+    obj = cdl.obj.create_image_from_param(p)
+    obj.data = create_2d_gaussian(size, dtype=dtype, x0=2.0, y0=3.0) + create_2d_random(
+        size, dtype
+    )
+    obj.set_annotations_from_file(get_test_fnames("annotations.json")[0])
+    return obj
 
 
-def create_test_image3(
-    size: int | None = None, dtype: np.dtype | None = None, title: str | None = None
-) -> ImageObj:
+def create_multigauss_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
     """Create test image (multiple 2D-gaussian peaks)
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
-        dtype (np.dtype, optional): Data type. Defaults to None.
-        title (str, optional): Title of the image. Defaults to None.
+        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
 
     Returns:
         ImageObj: Image object
     """
-    size, dtype = __get_default_size_dtype(size, dtype)
-    data = (
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (multi-2D-gaussian)" if p.title is None else p.title
+    dtype = p.dtype.value
+    size = p.width
+    obj = cdl.obj.create_image_from_param(p)
+    obj.data = (
         create_2d_gaussian(size, dtype, x0=0.5, y0=3.0)
         + create_2d_gaussian(size, dtype, x0=-1.0, y0=-1.0, sigma=1.0)
         + create_2d_gaussian(size, dtype, x0=7.0, y0=8.0)
     )
-    return create_image("Multiple 2D-gaussian peaks" if title is None else title, data)
+    return obj
 
 
-def create_resultshapes() -> tuple[ResultShape, ...]:
-    """Create test result shapes (core.model.base.ResultShape test objects)
-
-    Returns:
-        tuple[ResultShape, ...]: Tuple of ResultShape objects
-    """
-    return (
-        ResultShape(
-            ShapeTypes.CIRCLE,
-            [[0, 100, 100, 400, 400], [0, 150, 150, 350, 350]],
-            "circle",
-        ),
-        ResultShape(ShapeTypes.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
-        ResultShape(ShapeTypes.SEGMENT, [0, 50, 250, 400, 400], "segment"),
-        ResultShape(ShapeTypes.POINT, [[0, 500, 500], [0, 15, 400]], "point"),
-    )
-
-
-def create_image_with_annotations(title: str | None = None) -> ImageObj:
+def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     """Create test image with annotations
 
     Returns:
         ImageObj: Image object
     """
     data = create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
-    title = "Test image with metadata" if title is None else title
-    image = create_image(title, data)
+    title = "Test image (with metadata)" if title is None else title
+    image = cdl.obj.create_image(title, data)
     image.set_annotations_from_file(get_test_fnames("annotations.json")[0])
     return image
 
 
-def add_annotations_to_image(image: ImageObj):
-    """Add annotations to image
+def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
+    """Create test result shapes (core.model.base.ResultShape test objects)
 
-    Args:
-        image (ImageObj): Image object
+    Returns:
+        tuple[ResultShape, ...]: Tuple of ResultShape objects
     """
-    image.add_annotations_from_file(get_test_fnames("annotations.json")[0])
+    RShape, SType = cdl.obj.ResultShape, cdl.obj.ShapeTypes
+    return (
+        RShape(
+            SType.CIRCLE,
+            [[0, 100, 100, 400, 400], [0, 150, 150, 350, 350]],
+            "circle",
+        ),
+        RShape(SType.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
+        RShape(SType.SEGMENT, [0, 50, 250, 400, 400], "segment"),
+        RShape(SType.POINT, [[0, 500, 500], [0, 15, 400]], "point"),
+    )

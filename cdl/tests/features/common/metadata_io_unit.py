@@ -40,7 +40,7 @@ def test():
         fname = osp.join(tmpdir, "test.json")
         with cdl_app_context() as win:
             panel = win.imagepanel
-            ima = test_data.create_image_with_annotations()
+            ima = test_data.create_annotated_image()
             for mshape in test_data.create_resultshapes():
                 mshape.add_to(ima)
             panel.add_object(ima)

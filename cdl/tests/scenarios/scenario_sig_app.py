@@ -15,22 +15,15 @@ Testing all the signal processing features.
 
 from __future__ import annotations
 
+import cdl.obj
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
-from cdl.obj import (
-    GaussLorentzVoigtParam,
-    NewSignalParam,
-    SignalTypes,
-    UniformRandomParam,
-    create_signal_from_param,
-    new_signal_param,
-)
 from cdl.tests import cdl_app_context
-from cdl.tests.data import create_test_signal1
+from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common.newobject_unit import iterate_signal_creation
 from cdl.widgets import fitdialog
 
@@ -109,25 +102,27 @@ def test_signal_features(
 
     if all_types:
         for signal in iterate_signal_creation(data_size, non_zero=True):
-            panel.add_object(create_test_signal1(data_size))
+            panel.add_object(create_paracetamol_signal(data_size))
             panel.add_object(signal)
             test_common_operations(panel)
             panel.remove_all_objects()
 
-    sig1 = create_test_signal1(data_size)
+    sig1 = create_paracetamol_signal(data_size)
     win.add_object(sig1)
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    newparam = new_signal_param(_("Random function"), stype=SignalTypes.UNIFORMRANDOM)
-    addparam = UniformRandomParam()
+    newparam = cdl.obj.new_signal_param(
+        _("Random function"), stype=cdl.obj.SignalTypes.UNIFORMRANDOM
+    )
+    addparam = cdl.obj.UniformRandomParam()
     addparam.vmin = 0
     addparam.vmax = sig1.y.max() * 0.2
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     test_common_operations(panel)
 
-    win.add_object(create_test_signal1(data_size))
+    win.add_object(create_paracetamol_signal(data_size))
 
     param = cdl.param.NormalizeYParam()
     for _name, method in param.methods:
@@ -159,10 +154,10 @@ def test_signal_features(
     panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
     panel.processor.compute_fit(_("Voigt fit"), fitdialog.voigtfit)
 
-    newparam = NewSignalParam()
-    newparam.title = _("Gaussian")
-    newparam.type = SignalTypes.GAUSS
-    sig = create_signal_from_param(newparam, GaussLorentzVoigtParam(), edit=False)
+    newparam = cdl.obj.new_signal_param(_("Gaussian"), stype=cdl.obj.SignalTypes.GAUSS)
+    sig = cdl.obj.create_signal_from_param(
+        newparam, cdl.obj.GaussLorentzVoigtParam(), edit=False
+    )
     panel.add_object(sig)
 
     param = cdl.param.FWHMParam()

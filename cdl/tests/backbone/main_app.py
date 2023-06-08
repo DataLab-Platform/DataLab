@@ -16,7 +16,7 @@ import os
 from cdl.env import execenv
 from cdl.param import MovingMedianParam
 from cdl.tests import cdl_app_context
-from cdl.tests.data import create_test_signal1
+from cdl.tests.data import create_paracetamol_signal
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -36,7 +36,7 @@ def test():
 
         # Add signals to signal panel
         panel = win.signalpanel
-        sig1 = create_test_signal1(500)
+        sig1 = create_paracetamol_signal(500)
         panel.add_object(sig1)
         panel.processor.compute_derivative()
         panel.processor.compute_wiener()

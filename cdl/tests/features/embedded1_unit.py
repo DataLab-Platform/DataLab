@@ -17,9 +17,9 @@ from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+import cdl.obj
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
-from cdl.obj import SignalObj
 from cdl.tests import data as test_data
 from cdl.utils.qthelpers import qt_app_context
 
@@ -144,7 +144,10 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def add_signals(self):
         """Add signals to DataLab"""
         if self.cdl is not None:
-            for func in (test_data.create_test_signal1, test_data.create_test_signal2):
+            for func in (
+                test_data.create_paracetamol_signal,
+                test_data.create_noisy_signal,
+            ):
                 obj = func(title=self.sigtitle)
                 self.add_object(obj)
                 self.host.log(f"Added signal: {obj.title}")
@@ -152,13 +155,13 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def add_images(self):
         """Add images to DataLab"""
         if self.cdl is not None:
-            size = 2000
+            p = cdl.obj.new_image_param(height=2000, width=2000, title=self.imatitle)
             for func in (
-                test_data.create_test_image1,
-                test_data.create_test_image2,
-                test_data.create_test_image3,
+                test_data.create_sincos_image,
+                test_data.create_noisygauss_image,
+                test_data.create_multigauss_image,
             ):
-                obj = func(size, title=self.imatitle)
+                obj = func(p)
                 self.add_object(obj)
                 self.host.log(f"Added image: {obj.title}")
 
@@ -175,7 +178,7 @@ class BaseHostWindow(AbstractClientWindow):
 
     def add_object(self, obj):
         """Add object to DataLab"""
-        if isinstance(obj, SignalObj):
+        if isinstance(obj, cdl.obj.SignalObj):
             self.cdl.signalpanel.add_object(obj)
         else:
             self.cdl.imagepanel.add_object(obj)

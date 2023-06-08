@@ -20,8 +20,9 @@ from guiqwt.plot import ImageWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
+import cdl.obj
 from cdl.env import execenv
-from cdl.tests.data import create_2d_random, create_test_image2
+from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import qt_app_context
 
 SHOW = False  # Do not test in GUI-based test launcher
@@ -52,7 +53,8 @@ class MainWindow(QW.QMainWindow):
         self.layout.addWidget(self.cancel_button)
 
         # Create a test image and add it to the plot
-        image = create_test_image2(1000, np.uint16)
+        param = cdl.obj.new_image_param(height=1000, width=1000)
+        image = create_noisygauss_image(param)
         self.imageitem = image.make_item()
         self.imagewidget.plot.add_item(self.imageitem)
 

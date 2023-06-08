@@ -12,8 +12,8 @@ Result shapes application test:
 
 import numpy as np
 
-from cdl.obj import create_image
-from cdl.param import FWHMParam
+import cdl.obj
+import cdl.param
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
 
@@ -22,8 +22,16 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def create_image_with_resultshapes():
     """Create test image with resultshapes"""
-    data = test_data.create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
-    image = create_image("Test image with metadata", data)
+    newparam = cdl.obj.new_image_param(
+        height=600,
+        width=600,
+        title="Test image (with result shapes)",
+        itype=cdl.obj.ImageTypes.GAUSS,
+        dtype=cdl.obj.ImageDatatypes.UINT16,
+    )
+    addparam = cdl.obj.Gauss2DParam()
+    addparam.x0, addparam.y0 = 2, 3
+    image = cdl.obj.create_image_from_param(newparam, addparam)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)
     return image
@@ -31,15 +39,15 @@ def create_image_with_resultshapes():
 
 def test():
     """Result shapes test"""
-    obj1 = test_data.create_test_image1()
+    obj1 = test_data.create_sincos_image()
     obj2 = create_image_with_resultshapes()
     obj2.roi = np.array([[10, 10, 60, 400]], int)
     with cdl_app_context(console=False) as win:
         panel = win.signalpanel
         for noised in (False, True):
-            sig = test_data.create_test_signal2(noised=noised)
+            sig = test_data.create_noisy_signal(noised=noised)
             panel.add_object(sig)
-            panel.processor.compute_fwhm(FWHMParam())
+            panel.processor.compute_fwhm(cdl.param.FWHMParam())
             panel.processor.compute_fw1e2()
         panel.objview.select_objects((0, 1))
         panel.show_results()

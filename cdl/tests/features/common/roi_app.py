@@ -16,12 +16,12 @@ from __future__ import annotations
 
 import numpy as np
 
+import cdl.obj
 import cdl.param
 from cdl.core.gui.panel import image, signal
 from cdl.env import execenv
-from cdl.obj import SignalObj
 from cdl.tests import cdl_app_context
-from cdl.tests.data import create_test_image3, create_test_signal1
+from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -41,9 +41,18 @@ def test_image_features(panel: image, singleobj: bool | None = None):
     panel.processor.extract_roi(singleobj=singleobj)
 
 
-def create_test_image_with_roi(size=None):
-    """Create test image with ROIs"""
-    ima = create_test_image3(size)
+def create_test_image_with_roi(
+    newimageparam: cdl.obj.NewImageParam,
+) -> cdl.obj.ImageObj:
+    """Create test image with ROIs
+
+    Args:
+        newimageparam (cdl.obj.NewImageParam): Image parameters
+
+    Returns:
+        cdl.obj.ImageObj: Image object with ROIs
+    """
+    ima = create_multigauss_image(newimageparam)
     dy, dx = ima.size
     roi1 = [dx // 2, dy // 2, dx - 25, dy]
     roi2 = [dx // 4, dy // 2, dx // 2, dy // 2]
@@ -64,12 +73,12 @@ def array_1d_to_str(arr: np.ndarray) -> str:
 def print_obj_shapes(obj):
     """Print object and associated ROI array shapes"""
     execenv.print(f"  Accessing object '{obj.title}':")
-    func = array_1d_to_str if isinstance(obj, SignalObj) else array_2d_to_str
+    func = array_1d_to_str if isinstance(obj, cdl.obj.SignalObj) else array_2d_to_str
     execenv.print(f"    data: {func(obj.data)}")
     if obj.roi is not None:
         for idx in range(obj.roi.shape[0]):
             roi_data = obj.get_data(idx)
-            if isinstance(obj, SignalObj):
+            if isinstance(obj, cdl.obj.SignalObj):
                 roi_data = roi_data[1]  # y data
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
@@ -81,10 +90,10 @@ def test():
         execenv.print("ROI application test:")
         # === Signal ROI extraction test ===
         panel = win.signalpanel
-        sig1 = create_test_signal1(size)
+        sig1 = create_paracetamol_signal(size)
         panel.add_object(sig1)
         test_signal_features(panel)
-        sig2 = create_test_signal1(size)
+        sig2 = create_paracetamol_signal(size)
         sig2.roi = np.array([[26, 41], [125, 146]], int)
         for singleobj in (False, True):
             panel.add_object(sig2)
@@ -94,10 +103,11 @@ def test():
             test_signal_features(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
-        ima1 = create_test_image3(size)
+        param = cdl.obj.new_image_param(height=size, width=size)
+        ima1 = create_multigauss_image(param)
         panel.add_object(ima1)
         test_image_features(panel)
-        ima2 = create_test_image_with_roi(size)
+        ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
             panel.add_object(ima2)
             print_obj_shapes(ima2)

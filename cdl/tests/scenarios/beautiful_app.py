@@ -35,8 +35,7 @@ def run_beautiful_scenario(screenshots: bool = False):
     with cdl_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
-        newparam = cdl.obj.NewSignalParam()
-        newparam.type = cdl.obj.SignalTypes.LORENTZ
+        newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.LORENTZ)
         sig = cdl.obj.create_signal_from_param(newparam)
         panel.add_object(sig)
         panel.processor.compute_fft()
@@ -51,9 +50,9 @@ def run_beautiful_scenario(screenshots: bool = False):
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
-        newparam = cdl.obj.NewImageParam()
-        newparam.width = newparam.height = data_size
-        newparam.type = cdl.obj.ImageTypes.GAUSS
+        newparam = cdl.obj.new_image_param(
+            height=data_size, width=data_size, itype=cdl.obj.ImageTypes.GAUSS
+        )
         ima = cdl.obj.create_image_from_param(newparam)
         panel.add_object(ima)
         panel.processor.compute_equalize_hist(cdl.param.EqualizeHistParam())

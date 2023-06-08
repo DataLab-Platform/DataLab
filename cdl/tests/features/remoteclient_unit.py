@@ -19,7 +19,7 @@ from cdl import app
 from cdl.env import execenv
 from cdl.param import XYCalibrateParam
 from cdl.remotecontrol import RemoteClient
-from cdl.tests.data import create_2d_gaussian, create_test_signal1
+from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
 from cdl.utils.tests import exec_script, temporary_directory
 
 SHOW = False  # Show test in GUI-based test launcher
@@ -28,7 +28,7 @@ SHOW = False  # Show test in GUI-based test launcher
 def multiple_commands(remote: RemoteClient):
     """Execute multiple XML-RPC commands"""
     with temporary_directory() as tmpdir:
-        x, y = create_test_signal1().get_data()
+        x, y = create_paracetamol_signal().get_data()
         remote.add_signal("tutu", x, y)
 
         z = create_2d_gaussian(2000, np.uint16)

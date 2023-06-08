@@ -12,7 +12,7 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 
 from cdl.algorithms.signal import peak_indexes
 from cdl.env import execenv
-from cdl.tests.data import create_1d_gaussian, get_test_signal
+from cdl.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import get_default_test_name
 from cdl.widgets import fitdialog as fdlg
@@ -31,8 +31,10 @@ def test():
         )
 
         # Gaussian curve fitting test
-        size = 500
-        x, y = create_1d_gaussian(size=size, noise_sigma=5.0)
+        noiseparam = GaussianNoiseParam()
+        noiseparam.sigma = 5.0
+        sig = create_noisy_signal(noiseparam)
+        x, y = sig.x, sig.y
         execenv.print(fdlg.gaussianfit(x, y))
 
         # Lorentzian curve fitting test

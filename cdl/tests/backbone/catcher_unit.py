@@ -53,7 +53,7 @@ def test_catcher():
     execenv.catcher_test = True
     with cdl_app_context() as win:
         panel = win.signalpanel
-        sig = test_data.create_test_signal1()
+        sig = test_data.create_paracetamol_signal()
         panel.add_object(sig)
         panel.processor.compute_11(comp_no_error, title="Test no error")
         panel.processor.compute_11(comp_error, title="Test error")

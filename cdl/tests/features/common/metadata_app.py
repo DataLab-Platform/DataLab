@@ -15,13 +15,14 @@ Metadata application test:
 
 import numpy as np
 
+import cdl.obj
 import cdl.param
 from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
-from cdl.tests.data import create_test_signal1
+from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app
 
 SHOW = True  # Show test in GUI-based test launcher
@@ -61,14 +62,15 @@ def test():
         execenv.print("Metadata application test:")
         # === Signal metadata features test ===
         panel = win.signalpanel
-        sig = create_test_signal1(size)
+        sig = create_paracetamol_signal(size)
         sig.roi = np.array([[26, 41], [125, 146]], int)
         panel.add_object(sig)
         test_signal_features(panel)
         test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
-        ima = roi_app.create_test_image_with_roi(size)
+        param = cdl.obj.new_image_param(height=size, width=size)
+        ima = roi_app.create_test_image_with_roi(param)
         panel.add_object(ima)
         test_image_features(panel)
         test_metadata_features(panel)

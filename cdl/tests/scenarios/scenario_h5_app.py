@@ -29,7 +29,7 @@ import os.path as osp
 from cdl.env import execenv
 from cdl.param import ClipParam
 from cdl.tests import cdl_app_context
-from cdl.tests.data import create_test_image2, create_test_signal1
+from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app
 from cdl.utils.misc import save_html_diff
 from cdl.utils.tests import temporary_directory
@@ -40,16 +40,15 @@ SHOW = True  # Show test in GUI-based test launcher
 def test():
     """Example of high-level test scenario with HDF5 file"""
     with temporary_directory() as tmpdir:
-        size = 500
         with cdl_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel
-            sig1 = create_test_signal1(size)
+            sig1 = create_paracetamol_signal()
             panel.add_object(sig1)
             panel.processor.compute_derivative()
             # === Creating two test images
             panel = win.imagepanel
-            ima1 = create_test_image2(size, with_annotations=True)
+            ima1 = create_noisygauss_image()
             panel.add_object(ima1)
             param = ClipParam()
             param.value = ima1.data.mean()

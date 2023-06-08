@@ -46,6 +46,7 @@ configtools.add_image_module_path(MOD_NAME, osp.join("data", "logo"))
 configtools.add_image_module_path(MOD_NAME, osp.join("data", "icons"))
 
 DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
+IPLGPATH = configtools.get_module_data_path(MOD_NAME, "plugins")
 SHOTPATH = osp.join(
     configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
 )
@@ -283,7 +284,7 @@ def initialize():
     Conf.main.available_memory_threshold.get(500)
     Conf.main.ignore_dependency_check.get(False)
     Conf.main.plugins_enabled.get(True)
-    Conf.main.plugins_path.get(Conf.get_path(""))
+    Conf.main.plugins_path.get(Conf.get_path("plugins"))
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.external_editor_path.get("code")

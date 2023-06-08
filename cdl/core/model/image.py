@@ -714,14 +714,12 @@ class NewImageParam(gdt.DataSet):
 
     title = gdi.StringItem(_("Title"))
     height = gdi.IntItem(
-        _("Height"), help=_("Image height (total number of rows)"), min=1, default=500
+        _("Height"), help=_("Image height (total number of rows)"), min=1
     )
     width = gdi.IntItem(
-        _("Width"), help=_("Image width (total number of columns)"), min=1, default=500
+        _("Width"), help=_("Image width (total number of columns)"), min=1
     )
-    dtype = gdi.ChoiceItem(
-        _("Data type"), ImageDatatypes.get_choices(), default=ImageDatatypes.UINT16
-    )
+    dtype = gdi.ChoiceItem(_("Data type"), ImageDatatypes.get_choices())
     type = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
 
 
@@ -798,6 +796,12 @@ def create_image_from_param(
     global IMG_NB  # pylint: disable=global-statement
     if newparam is None:
         newparam = new_image_param()
+    if newparam.height is None:
+        newparam.height = 500
+    if newparam.width is None:
+        newparam.width = 500
+    if newparam.dtype is None:
+        newparam.dtype = ImageDatatypes.UINT16
     incr_sig_nb = not newparam.title
     if incr_sig_nb:
         newparam.title = f"{newparam.title} {IMG_NB + 1:d}"

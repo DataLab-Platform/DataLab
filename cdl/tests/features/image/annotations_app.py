@@ -20,8 +20,8 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test():
     """Annotations test"""
-    obj1 = test_data.create_test_image1()
-    obj2 = test_data.create_image_with_annotations()
+    obj1 = test_data.create_sincos_image()
+    obj2 = test_data.create_annotated_image()
     obj2.roi = np.array([[10, 10, 60, 400]], int)
     run(console=False, objects=(obj1, obj2), size=(1200, 550))
 

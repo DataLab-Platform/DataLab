@@ -13,9 +13,8 @@ Testing the following:
 
 import cdl.param
 from cdl.config import _
-from cdl.obj import create_image
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
-from cdl.tests.data import get_peak2d_data
+from cdl.tests.data import create_peak2d_image
 
 SHOW = True  # Show test in GUI-based test launcher
 
@@ -24,8 +23,7 @@ def test():
     """Run 2D peak detection scenario"""
     with cdl_app_context() as win:
         panel = win.imagepanel
-
-        ima = create_image(_("Test image with peaks"), get_peak2d_data())
+        ima = create_peak2d_image()
         panel.add_object(ima)
         param = cdl.param.Peak2DDetectionParam()
         param.create_rois = True

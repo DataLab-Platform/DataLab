@@ -24,8 +24,9 @@ import scipy.signal as sps
 from guiqwt.plot import ImageWindow
 from qtpy import QtWidgets as QW
 
+import cdl.obj
 from cdl.env import execenv
-from cdl.tests.data import create_2d_random, create_test_image2
+from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import create_progress_bar, qt_app_context
 
 SHOW = False  # Do not test in GUI-based test launcher
@@ -96,7 +97,10 @@ def test(iterations: int = 4) -> None:
         win = ImageWindow("Multiprocessing test", icon="datalab.svg", toolbar=True)
         win.resize(800, 600)
         win.show()
-        image = create_test_image2(1000, np.uint16)
+        param = cdl.obj.new_image_param(
+            height=1000, width=1000, dtype=cdl.obj.ImageDatatypes.UINT16
+        )
+        image = create_noisygauss_image(param)
         win.get_plot().add_item(image.make_item())
         worker = Worker()
         with create_progress_bar(win, "Computing", max_=iterations) as progress:

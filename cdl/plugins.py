@@ -35,7 +35,7 @@ from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
-from cdl.config import MOD_NAME, Conf, _
+from cdl.config import IPLGPATH, MOD_NAME, Conf, _
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui import main
@@ -43,12 +43,10 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.signal import SignalPanel
 
 
-PLUGIN_PYTHONPATH = Conf.get_path("plugins")
+PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
 
-if not osp.isdir(PLUGIN_PYTHONPATH):
-    os.makedirs(PLUGIN_PYTHONPATH)
-
-sys.path.append(PLUGIN_PYTHONPATH)
+if not osp.isdir(PLUGINS_DEFAULT_PATH):
+    os.makedirs(PLUGINS_DEFAULT_PATH)
 
 
 #  pylint: disable=bad-mcs-classmethod-argument
@@ -211,7 +209,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 def discover_plugins() -> list[PluginBase]:
     """Discover plugins using naming convention"""
     if Conf.main.plugins_enabled.get():
-        sys.path.append(Conf.main.plugins_path.get())
+        for path in (Conf.main.plugins_path.get(), PLUGINS_DEFAULT_PATH, IPLGPATH):
+            rpath = osp.realpath(path)
+            if rpath not in sys.path:
+                sys.path.append(rpath)
         return [
             importlib.import_module(name)
             for _finder, name, _ispkg in pkgutil.iter_modules()

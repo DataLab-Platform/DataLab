@@ -12,6 +12,7 @@ then open DataLab to show them.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+import cdl.obj
 from cdl.app import run
 from cdl.tests import data as test_data
 
@@ -20,11 +21,11 @@ SHOW = True  # Show test in GUI-based test launcher
 
 def test():
     """Simple test"""
-    sig1 = test_data.create_test_signal1()
-    sig2 = test_data.create_test_signal2()
-    size = 2000
-    ima1 = test_data.create_test_image1(size)
-    ima2 = test_data.create_test_image2(size, with_annotations=True)
+    sig1 = test_data.create_paracetamol_signal()
+    sig2 = test_data.create_noisy_signal()
+    param = cdl.obj.new_image_param(height=2000, width=2000)
+    ima1 = test_data.create_sincos_image(param)
+    ima2 = test_data.create_noisygauss_image(param)
     run(objects=(sig1, sig2, ima1, ima2), size=(1200, 550))
 
 

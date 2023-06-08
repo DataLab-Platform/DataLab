@@ -13,13 +13,13 @@ Testing all the image processing features.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+import cdl.obj
 import cdl.param
 from cdl.config import Conf
 from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
-from cdl.obj import ImageTypes, UniformRandomParam, create_image, new_image_param
 from cdl.tests import cdl_app_context
-from cdl.tests.data import PeakDataParam, create_test_image1, get_peak2d_data
+from cdl.tests.data import create_peak2d_image, create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
 from cdl.tests.scenarios.scenario_sig_app import test_common_operations
 
@@ -33,20 +33,22 @@ def test_image_features(
     win.switch_to_panel("image")
     panel = win.imagepanel
 
+    newparam = cdl.obj.new_image_param(height=data_size, width=data_size)
+
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
-            panel.add_object(create_test_image1(data_size))
+            panel.add_object(create_sincos_image(newparam))
             panel.add_object(image)
             test_common_operations(panel)
             panel.remove_all_objects()
 
-    ima1 = create_test_image1(data_size)
+    ima1 = create_sincos_image(newparam)
     panel.add_object(ima1)
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = new_image_param(itype=ImageTypes.UNIFORMRANDOM)
-    addparam = UniformRandomParam()
+    newparam = cdl.obj.new_image_param(itype=cdl.obj.ImageTypes.UNIFORMRANDOM)
+    addparam = cdl.obj.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, addparam=addparam, edit=False)
@@ -103,7 +105,7 @@ def test_image_features(
     param.cut_off = 0.5
     panel.processor.compute_butterworth(param)
 
-    ima2 = create_test_image1(data_size)
+    ima2 = create_sincos_image(newparam)
     param = cdl.param.CannyParam()
     panel.processor.compute_canny(param)
     panel.add_object(ima2)
@@ -153,8 +155,7 @@ def test_image_features(
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
 
-    data = get_peak2d_data(PeakDataParam(size=data_size))
-    ima = create_image("Test image with peaks", data)
+    ima = create_peak2d_image(newparam)
     panel.add_object(ima)
     param = cdl.param.Peak2DDetectionParam()
     param.create_rois = True
