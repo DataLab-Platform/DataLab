@@ -26,7 +26,11 @@ from cdl.config import Conf, _
 from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.panel.base import AbstractPanel
 from cdl.env import execenv
-from cdl.utils.qthelpers import qt_try_loadsave_file, save_restore_stds
+from cdl.utils.qthelpers import (
+    create_menu_button,
+    qt_try_loadsave_file,
+    save_restore_stds,
+)
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer
@@ -74,6 +78,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.setOrientation(QC.Qt.Vertical)
 
         self.context_menu = QW.QMenu()
+        self.tabwidget_tb = QW.QToolBar(self)
+        self.tabwidget_tb.setOrientation(QC.Qt.Vertical)
 
         self.console = PythonShellWidget(self)
         self.console.set_light_background(not is_dark_mode())
@@ -86,10 +92,27 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.tabwidget = MacroTabs(self)
         self.tabwidget.tabBarDoubleClicked.connect(self.rename_macro)
         self.tabwidget.tabCloseRequested.connect(self.remove_macro)
-        self.tabwidget.currentChanged.connect(self.current_macro_changed)
+        self.tabwidget.currentChanged.connect(self.__update_actions)
 
-        for widget in (self.tabwidget, self.console):
+        tabwidget_with_tb = QW.QWidget(self)
+        tabwidget_with_tb.setLayout(QW.QHBoxLayout())
+        tabwidget_with_tb.layout().addWidget(self.tabwidget_tb)
+        tabwidget_with_tb.layout().addWidget(self.tabwidget)
+
+        # Put console in a groupbox to have a title
+        console_groupbox = QW.QGroupBox(_("Console"), self)
+        console_groupbox.setLayout(QW.QHBoxLayout())
+        console_groupbox.layout().addWidget(self.console)
+        # Put console groupbox in a frame to have a nice margin
+        console_frame = QW.QFrame(self)
+        console_frame.setLayout(QW.QHBoxLayout())
+        console_frame.layout().addWidget(console_groupbox)
+
+        for widget in (tabwidget_with_tb, console_frame):
             self.addWidget(widget)
+        # Ensure that the tabwidget and the console have the same height
+        self.setStretchFactor(0, 1)
+        self.setStretchFactor(1, 0)
 
         self.run_action = None
         self.stop_action = None
@@ -164,8 +187,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         Args:
             obj (Macro): Macro object
         """
-        index = self.tabwidget.addTab(obj.editor, obj.title)
         self.__macros.append(obj)
+        index = self.tabwidget.addTab(obj.editor, obj.title)
         self.SIG_OBJECT_ADDED.emit()
         self.tabwidget.setCurrentIndex(index)
 
@@ -205,34 +228,23 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             icon=get_icon("libre-gui-pencil.svg"),
             triggered=self.rename_macro,
         )
-        exp_act = create_action(
-            self,
-            _("Export macro to file"),
-            icon=get_icon("export.svg"),
-            triggered=self.export_macro_to_file,
-        )
         imp_act = create_action(
             self,
             _("Import macro from file"),
-            icon=get_icon("import.svg"),
+            icon=get_icon("fileopen_py.svg"),
             triggered=self.import_macro_from_file,
+        )
+        exp_act = create_action(
+            self,
+            _("Export macro to file"),
+            icon=get_icon("filesave_py.svg"),
+            triggered=self.export_macro_to_file,
         )
         rem_act = create_action(
             self,
             _("Remove macro"),
             icon=get_icon("libre-gui-action-delete.svg"),
             triggered=self.remove_macro,
-        )
-        actions = (
-            self.run_action,
-            self.stop_action,
-            None,
-            add_act,
-            ren_act,
-            exp_act,
-            imp_act,
-            None,
-            rem_act,
         )
         self.obj_actions += [
             self.run_action,
@@ -242,18 +254,28 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             rem_act,
         ]
 
-        self.tabwidget.SIG_CONTEXT_MENU.connect(self.__popup_contextmenu)
+        self.tabwidget.SIG_CONTEXT_MENU.connect(self.context_menu.popup)
 
-        toolbar = QW.QToolBar(_("Macro editor toolbar"), self)
-        menu_button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", self)
-        menu_button.setFlat(True)
-        menu_button.setMenu(self.context_menu)
+        tabwidget_corner = QW.QToolBar(_("Macro editor toolbar"), self)
         self.context_menu.aboutToShow.connect(self.__update_actions)
-        toolbar.addWidget(menu_button)
-        self.tabwidget.setCornerWidget(toolbar)
+        tabwidget_menu_btn = create_menu_button(self, self.context_menu)
+        tabwidget_corner.addWidget(tabwidget_menu_btn)
+        self.tabwidget.setCornerWidget(tabwidget_corner)
 
-        add_actions(toolbar, [self.run_action, self.stop_action, None])
-        add_actions(self.context_menu, actions)
+        main_actions = [
+            self.run_action,
+            self.stop_action,
+            None,
+            add_act,
+            ren_act,
+            imp_act,
+            exp_act,
+        ]
+        add_actions(tabwidget_corner, [self.run_action, self.stop_action])
+        add_actions(self.tabwidget_tb, main_actions)
+        add_actions(self.context_menu, main_actions + [None, rem_act])
+
+        self.__update_actions()
 
     def __update_actions(self) -> None:
         """Update actions"""
@@ -261,16 +283,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         for action in self.obj_actions:
             action.setEnabled(not_empty)
         if not_empty:
-            self.current_macro_changed()
-
-    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
-        """Popup context menu at position
-
-        Args:
-            position (QPoint): Position of the context menu
-        """
-        self.__update_actions()
-        self.context_menu.popup(position)
+            macro = self.get_macro()
+            if macro is not None:
+                macro: Macro
+                self.macro_state_changed(macro, macro.is_running())
 
     def get_macro(self, index: int | None = None) -> Macro | None:
         """Return macro at index (if index is None, return current macro)
@@ -287,14 +303,6 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             if self.tabwidget.widget(index) is macro.editor:
                 return macro
         return None
-
-    # pylint: disable=unused-argument
-    def current_macro_changed(self) -> None:
-        """Current macro has changed"""
-        macro = self.get_macro()
-        if macro is not None:
-            state = macro.is_running()
-            self.macro_state_changed(macro, state)
 
     def macro_contents_changed(self) -> None:
         """One of the macro contents has changed"""

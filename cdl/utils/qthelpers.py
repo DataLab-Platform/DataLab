@@ -23,6 +23,7 @@ from contextlib import contextmanager
 from datetime import datetime
 
 import guidata
+from guidata.configtools import get_icon
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -345,3 +346,22 @@ def block_signals(widget: QW.QWidget, enable: bool) -> Generator[None, None, Non
     finally:
         if enable:
             widget.blockSignals(False)
+
+
+def create_menu_button(
+    parent: QW.QWidget | None = None, menu: QW.QMenu | None = None
+) -> QW.QPushButton:
+    """Create a menu button
+
+    Args:
+        parent (QWidget): Parent widget
+        menu (QMenu): Menu to attach to the button
+
+    Returns:
+        QW.QPushButton: Menu button
+    """
+    button = QW.QPushButton(get_icon("libre-gui-menu.svg"), "", parent)
+    button.setFlat(True)
+    if menu is not None:
+        button.setMenu(menu)
+    return button
