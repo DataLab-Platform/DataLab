@@ -221,7 +221,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         context_menu_sep: bool = False,
         toolbar_pos: int | None = None,
         toolbar_sep: bool = False,
-    ):
+    ) -> QW.QAction:
         """Create new action and add it to list of actions.
 
         Args:
@@ -355,7 +355,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
-                icon=get_icon("import.svg"),
+                # icon: fileopen_signal.svg or fileopen_image.svg
+                icon=get_icon(f"fileopen_{self.__class__.__name__[:3].lower()}.svg"),
                 tip=_("Open %s") % self.OBJECT_STR,
                 triggered=self.panel.open_objects,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
@@ -364,7 +365,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
-                icon=get_icon("export.svg"),
+                # icon: filesave_signal.svg or filesave_image.svg
+                icon=get_icon(f"filesave_{self.__class__.__name__[:3].lower()}.svg"),
                 tip=_("Save selected %s") % self.OBJECT_STR,
                 triggered=self.panel.save_objects,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),

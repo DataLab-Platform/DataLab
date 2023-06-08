@@ -553,14 +553,14 @@ class CDLMainWindow(QW.QMainWindow):
         self.openh5_action = create_action(
             self,
             _("Open HDF5 files..."),
-            icon=get_icon("h5open.svg"),
+            icon=get_icon("fileopen_h5.svg"),
             tip=_("Open one or several HDF5 files"),
             triggered=lambda checked=False: self.open_h5_files(import_all=True),
         )
         self.saveh5_action = create_action(
             self,
             _("Save to HDF5 file..."),
-            icon=get_icon("h5save.svg"),
+            icon=get_icon("filesave_h5.svg"),
             tip=_("Save to HDF5 file"),
             triggered=self.save_to_h5_file,
         )
