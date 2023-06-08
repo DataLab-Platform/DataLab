@@ -66,7 +66,7 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowTitle(_("About DataLab installation"))
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget()
-        label = "Information on current DataLab installation:"
+        label = _("Information about DataLab installation:")
         more_infos = ""
         try:
             state = dephash.check_dependencies_hash(DATAPATH)

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-08 16:03+0200\n"
+"POT-Creation-Date: 2023-06-08 18:41+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2475,9 +2475,8 @@ msgid "Testing DataLab functionalities"
 msgstr "Tester les fonctionnalités de DataLab"
 
 #: cdl\plugins\cdl_plugin_testdata.py:56 cdl\plugins\cdl_plugin_testdata.py:77
-#, fuzzy
 msgid "Add noise"
-msgstr "Ajouter du bruit à l'image"
+msgstr "Ajouter du bruit"
 
 #: cdl\plugins\cdl_plugin_testdata.py:122
 msgid "Add noise to signal"
@@ -2707,6 +2706,10 @@ msgstr "Cocher tout"
 #: cdl\widgets\h5browser.py:474
 msgid "Uncheck all"
 msgstr "Décocher tout"
+
+#: cdl\widgets\instconfviewer.py:69
+msgid "Information about DataLab installation:"
+msgstr "Informations sur l'installation de DataLab :"
 
 #: cdl\widgets\logviewer.py:73
 msgid "DataLab log files"
