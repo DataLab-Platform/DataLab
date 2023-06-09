@@ -535,8 +535,9 @@ class CDLMainWindow(QW.QMainWindow):
     @staticmethod
     def __unregister_plugins() -> None:
         """Unregister plugins"""
-        for plugin in PluginRegistry.get_plugins():
+        while PluginRegistry.get_plugins():
             # Unregistering plugin
+            plugin = PluginRegistry.get_plugins()[-1]
             with qth.try_or_log_error(f"Unregistering plugin {plugin.info.name}"):
                 plugin.unregister()
 
