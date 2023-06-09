@@ -118,7 +118,7 @@ def test_cli():
     for argname in ("verbose",):
         execenv.print("    %s:" % argname, end="")
         choices = {"verbose": [verb.value for verb in VerbosityLevels]}
-        defaultval = {"verbose": VerbosityLevels.NORMAL.value}[argname]
+        defaultval = {"verbose": VerbosityLevels.MINIMAL.value}[argname]
         for val in [None] + choices[argname]:
             if val is None:
                 args = []
@@ -222,7 +222,7 @@ ATTR_TO_ENVVAR = {
     "delay": get_attr_to_envvar(int, 0, [0, 10, 20]),
     "xmlrpcport": get_attr_to_envvar(int, None, [9854, 1020, 213]),
     "verbose": get_attr_to_envvar(
-        list, VerbosityLevels.NORMAL.value, [verb.value for verb in VerbosityLevels]
+        list, VerbosityLevels.MINIMAL.value, [verb.value for verb in VerbosityLevels]
     ),
 }
 

@@ -238,7 +238,7 @@ class CDLExecEnv:
         """Get verbosity level"""
         env_val = os.environ.get(self.VERBOSE_ENV)
         if env_val in (None, ""):
-            return VerbosityLevels.NORMAL.value
+            return VerbosityLevels.MINIMAL.value
         return env_val.lower()
 
     @verbose.setter
@@ -366,11 +366,7 @@ class CDLExecEnv:
 
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
         """Print in file, depending on verbosity level"""
-        # print(f"unattended={self.unattended} ; verbose={self.verbose} ; ")
-        # print(f"screenshot={self.screenshot}; delay={self.delay}")
-        if (self.verbose != VerbosityLevels.QUIET.value) and (
-            self.verbose != VerbosityLevels.MINIMAL.value or file == sys.stderr
-        ):
+        if self.verbose != VerbosityLevels.QUIET.value or file == sys.stderr:
             print(*objects, sep=sep, end=end, file=file, flush=flush)
 
     def pprint(
@@ -384,9 +380,7 @@ class CDLExecEnv:
         sort_dicts=True,
     ):
         """Pretty-print in stream, depending on verbosity level"""
-        if (self.verbose != VerbosityLevels.QUIET.value) and (
-            self.verbose != VerbosityLevels.MINIMAL.value or stream == sys.stderr
-        ):
+        if self.verbose != VerbosityLevels.QUIET.value or stream == sys.stderr:
             pprint.pprint(
                 obj,
                 stream=stream,
