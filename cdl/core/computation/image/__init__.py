@@ -502,7 +502,7 @@ def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
         binning_x=param.binning_x,
         binning_y=param.binning_y,
         operation=param.operation,
-        dtype=param.dtype_str,
+        dtype=None if param.dtype_str == "dtype" else param.dtype_str,
     )
     if param.change_pixel_size:
         if src.dx is not None and src.dy is not None:
