@@ -90,13 +90,25 @@ class Worker:
         POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
 
     @staticmethod
-    def terminate_pool() -> None:
+    def terminate_pool(wait: bool = False) -> None:
         """Terminate multiprocessing pool"""
         global POOL  # pylint: disable=global-statement
         if POOL is not None:
-            POOL.terminate()
+            if wait:
+                # Close the pool properly (wait for all tasks to finish)
+                POOL.close()
+            else:
+                # Terminate the pool and stop the timer
+                POOL.terminate()
             POOL.join()
             POOL = None
+
+    def restart_pool(self) -> None:
+        """Terminate and recreate the pool"""
+        # Terminate the process and stop the timer
+        self.terminate_pool(wait=False)
+        # Recreate the pool for the next computation
+        self.create_pool()
 
     def run(self, func: Callable, args: tuple[Any]) -> None:
         """Run computation"""
@@ -104,12 +116,13 @@ class Worker:
         assert POOL is not None
         self.asyncresult = POOL.apply_async(wng_err_func, (func, args))
 
-    def terminate(self) -> None:
-        """Terminate worker"""
-        # Terminate the process and stop the timer
-        self.terminate_pool()
-        # Recreate the pool for the next computation
-        self.create_pool()
+    def close(self) -> None:
+        """Close worker: close pool properly and wait for all tasks to finish"""
+        # Close multiprocessing Pool properly, but only if no computation is running,
+        # to avoid blocking the GUI at exit (so, when wait=True, we wait for the
+        # task to finish before closing the pool but there is actually no task running,
+        # so the pool is closed immediately but *properly*)
+        self.terminate_pool(wait=self.asyncresult is None)
 
     def is_computation_finished(self) -> bool:
         """Return True if computation is finished"""
@@ -140,7 +153,9 @@ class BaseProcessor(QC.QObject):
 
     def close(self):
         """Close processor properly"""
-        self.set_process_isolation_enabled(False)
+        if self.worker is not None:
+            self.worker.close()
+            self.worker = None
 
     def set_process_isolation_enabled(self, enabled: bool) -> None:
         """Set process isolation enabled"""
@@ -265,7 +280,7 @@ class BaseProcessor(QC.QObject):
                             QW.QApplication.processEvents()
                             time.sleep(0.1)
                             if progress.wasCanceled():
-                                self.worker.terminate()
+                                self.worker.restart_pool()
                                 break
                         if not self.worker.is_computation_finished():
                             break
@@ -330,7 +345,7 @@ class BaseProcessor(QC.QObject):
                         QW.QApplication.processEvents()
                         time.sleep(0.1)
                         if progress.wasCanceled():
-                            self.worker.terminate()
+                            self.worker.restart_pool()
                             break
                     if not self.worker.is_computation_finished():
                         break
