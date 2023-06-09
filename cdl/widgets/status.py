@@ -61,7 +61,7 @@ class MemoryStatus(QW.QWidget):
         memok = mem.available > self.__threshold
         self.SIG_MEMORY_ALARM.emit(not memok)
         if DEBUG and not memok:
-            execenv.print(f"=== Memory available: {mem.available//(1024**2)} MB ===")
+            execenv.log(self, f"Memory available: {mem.available//(1024**2)} MB")
         self.label.setStyleSheet("" if memok else "color: red")
         size = self.label.sizeHint().height()
         self.icon.setPixmap(QG.QPixmap() if memok else self.ko_icon.pixmap(size, size))

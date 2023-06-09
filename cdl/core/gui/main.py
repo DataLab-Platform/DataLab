@@ -38,6 +38,7 @@ from cdl.config import (
     APP_DESC,
     APP_NAME,
     DATAPATH,
+    DEBUG,
     IS_FROZEN,
     TEST_SEGFAULT_ERROR,
     Conf,
@@ -771,8 +772,7 @@ class CDLMainWindow(QW.QMainWindow):
             "os, sys, os.path as osp, time, "
             "numpy as np, scipy.signal as sps, scipy.ndimage as spi"
         )
-        debug = os.environ.get("DEBUG") == "1"
-        self.console = DockableConsole(self, namespace=ns, message=msg, debug=debug)
+        self.console = DockableConsole(self, namespace=ns, message=msg, debug=DEBUG)
         self.console.setMaximumBlockCount(Conf.console.max_line_count.get(5000))
         self.console.go_to_error.connect(go_to_error)
         console_dock = self.__add_dockwidget(self.console, _("Console"))

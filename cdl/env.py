@@ -15,13 +15,16 @@ import pprint
 import sys
 from typing import Any
 
+# We could import DEBUG from cdl.config, but is it really worth it?
+DEBUG = os.environ.get("DEBUG", "").lower() in ("1", "true")
+
 
 class VerbosityLevels(enum.Enum):
     """Print verbosity levels (for testing purpose)"""
 
     QUIET = "quiet"
-    MINIMAL = "minimal"
     NORMAL = "normal"
+    DEBUG = "debug"
 
 
 # TODO: Rewrite this class so that options are automatically associated with
@@ -238,7 +241,7 @@ class CDLExecEnv:
         """Get verbosity level"""
         env_val = os.environ.get(self.VERBOSE_ENV)
         if env_val in (None, ""):
-            return VerbosityLevels.MINIMAL.value
+            return VerbosityLevels.NORMAL.value
         return env_val.lower()
 
     @verbose.setter
@@ -360,13 +363,13 @@ class CDLExecEnv:
             source: object from which the log is issued
             *objects: objects to log
         """
-        if self.verbose != VerbosityLevels.MINIMAL.value:
+        if DEBUG or self.verbose == VerbosityLevels.DEBUG.value:
             print(str(source) + ":", *objects)
             #  TODO: [P4] Eventually, log in a file (optionally)
 
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
         """Print in file, depending on verbosity level"""
-        if self.verbose != VerbosityLevels.QUIET.value or file == sys.stderr:
+        if self.verbose != VerbosityLevels.QUIET.value or DEBUG:
             print(*objects, sep=sep, end=end, file=file, flush=flush)
 
     def pprint(
@@ -380,7 +383,7 @@ class CDLExecEnv:
         sort_dicts=True,
     ):
         """Pretty-print in stream, depending on verbosity level"""
-        if self.verbose != VerbosityLevels.QUIET.value or stream == sys.stderr:
+        if self.verbose != VerbosityLevels.QUIET.value or DEBUG:
             pprint.pprint(
                 obj,
                 stream=stream,

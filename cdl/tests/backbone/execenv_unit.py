@@ -118,7 +118,7 @@ def test_cli():
     for argname in ("verbose",):
         execenv.print("    %s:" % argname, end="")
         choices = {"verbose": [verb.value for verb in VerbosityLevels]}
-        defaultval = {"verbose": VerbosityLevels.MINIMAL.value}[argname]
+        defaultval = {"verbose": VerbosityLevels.NORMAL.value}[argname]
         for val in [None] + choices[argname]:
             if val is None:
                 args = []
@@ -161,6 +161,7 @@ def test_cli():
             execenvdict = get_subprocess_execenv_dict(args)
             assert execenvdict["h5browser_file"] == val
         execenv.print()
+    execenv.print("=> Everything is OK")
 
 
 def iterate_over_attrs_envvars():
@@ -222,7 +223,7 @@ ATTR_TO_ENVVAR = {
     "delay": get_attr_to_envvar(int, 0, [0, 10, 20]),
     "xmlrpcport": get_attr_to_envvar(int, None, [9854, 1020, 213]),
     "verbose": get_attr_to_envvar(
-        list, VerbosityLevels.MINIMAL.value, [verb.value for verb in VerbosityLevels]
+        list, VerbosityLevels.NORMAL.value, [verb.value for verb in VerbosityLevels]
     ),
 }
 
@@ -279,5 +280,5 @@ if __name__ == "__main__":
     if ARGV_TEST in sys.argv:
         print_execenv()
     else:
-        test_cli()
         test_envvar()
+        test_cli()
