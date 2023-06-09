@@ -86,6 +86,7 @@ def test_image_features(
     param = cdl.param.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
 
+    panel.processor.compute_abs()  # Avoid negative values for rescale intensity
     param = cdl.param.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
