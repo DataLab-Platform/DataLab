@@ -115,6 +115,9 @@ class CDLMainWindow(QW.QMainWindow):
         win32_fix_title_bar_background(self)
         self.setObjectName(APP_NAME)
         self.setWindowIcon(get_icon("DataLab.svg"))
+
+        execenv.log(self, "Starting initialization")
+
         self.__restore_pos_and_size()
 
         self.ready_flag = True
@@ -163,6 +166,8 @@ class CDLMainWindow(QW.QMainWindow):
         if console is None:
             console = Conf.console.console_enabled.get()
         self.setup(console)
+
+        execenv.log(self, "Initialization done")
 
     # ------API related to XML-RPC remote control
     @staticmethod
@@ -515,7 +520,8 @@ class CDLMainWindow(QW.QMainWindow):
         """Register plugins"""
         with qth.try_or_log_error("Discovering plugins"):
             # Discovering plugins
-            discover_plugins()
+            plugin_nb = len(discover_plugins())
+            execenv.log(self, f"{plugin_nb} plugin(s) found")
         for plugin_class in PluginRegistry.get_plugin_classes():
             with qth.try_or_log_error(f"Instantiating plugin {plugin_class.__name__}"):
                 # Instantiating plugin
@@ -1190,4 +1196,5 @@ class CDLMainWindow(QW.QMainWindow):
             # Saving current tab for next session
             Conf.main.current_tab.set(self.tabwidget.currentIndex())
 
+            execenv.log(self, "closed properly")
             event.accept()

@@ -13,6 +13,7 @@ import os
 import platform
 import pprint
 import sys
+from typing import Any
 
 
 class VerbosityLevels(enum.Enum):
@@ -352,6 +353,17 @@ class CDLExecEnv:
             if argvalue is not None:
                 setattr(self, argname, argvalue)
 
+    def log(self, source: Any, *objects: Any) -> None:
+        """Log text on screen
+
+        Args:
+            source: object from which the log is issued
+            *objects: objects to log
+        """
+        if self.verbose != VerbosityLevels.MINIMAL.value:
+            print(str(source) + ":", *objects)
+            #  TODO: [P4] Eventually, log in a file (optionally)
+
     def print(self, *objects, sep=" ", end="\n", file=sys.stdout, flush=False):
         """Print in file, depending on verbosity level"""
         # print(f"unattended={self.unattended} ; verbose={self.verbose} ; ")
@@ -360,7 +372,6 @@ class CDLExecEnv:
             self.verbose != VerbosityLevels.MINIMAL.value or file == sys.stderr
         ):
             print(*objects, sep=sep, end=end, file=file, flush=flush)
-        # TODO: [P4] Eventually add logging here
 
     def pprint(
         self,

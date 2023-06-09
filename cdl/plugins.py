@@ -36,6 +36,7 @@ from typing import TYPE_CHECKING
 from qtpy import QtWidgets as QW
 
 from cdl.config import IPLGPATH, MOD_NAME, Conf, _
+from cdl.env import execenv
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui import main
@@ -85,11 +86,14 @@ class PluginRegistry(type):
         if plugin.info.name in [plug.info.name for plug in cls._plugin_instances]:
             raise ValueError(f"Plugin {plugin.info.name} already registered")
         cls._plugin_instances.append(plugin)
+        execenv.log(cls, f"Plugin {plugin.info.name} registered")
 
     @classmethod
     def unregister_plugin(cls, plugin: PluginBase):
         """Unregister plugin"""
         cls._plugin_instances.remove(plugin)
+        execenv.log(cls, f"Plugin {plugin.info.name} unregistered")
+        execenv.log(cls, f"{len(cls._plugin_instances)} plugins left")
 
     @classmethod
     def get_plugin_infos(cls) -> str:
