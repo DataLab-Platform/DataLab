@@ -68,6 +68,8 @@ def test_image_features(
     param = cdl.param.DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
+    panel.processor.compute_abs()  # Avoid neg. values for skimage correction methods
+
     param = cdl.param.AdjustGammaParam()
     param.gamma = 0.5
     panel.processor.compute_adjust_gamma(param)
@@ -86,7 +88,6 @@ def test_image_features(
     param = cdl.param.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
 
-    panel.processor.compute_abs()  # Avoid negative values for rescale intensity
     param = cdl.param.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
