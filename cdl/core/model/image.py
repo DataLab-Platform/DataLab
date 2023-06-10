@@ -267,7 +267,7 @@ class CircularROIParam(gdt.DataSet):
     r = gdi.IntItem(_("Radius"), unit="pixel")
 
 
-class ImageObj(gdt.DataSet, base.ObjectItf):
+class ImageObj(gdt.DataSet, base.BaseObj):
     """Image object"""
 
     PREFIX = "i"
@@ -292,7 +292,7 @@ class ImageObj(gdt.DataSet, base.ObjectItf):
             icon (str): icon
         """
         gdt.DataSet.__init__(self, title, comment, icon)
-        base.ObjectItf.__init__(self)
+        base.BaseObj.__init__(self)
         self._dicom_template = None
         self._maskdata_cache = None
 

@@ -17,7 +17,7 @@ import os.path as osp
 import re
 
 from cdl.config import _
-from cdl.core.model.base import ObjectItf
+from cdl.core.model.base import BaseObj
 
 
 class IOAction(enum.Enum):
@@ -97,7 +97,7 @@ class BaseIORegistry(type):
         )
 
     @classmethod
-    def read(cls, filename: str) -> ObjectItf:
+    def read(cls, filename: str) -> BaseObj:
         """Read data from file, return native object (signal or image).
 
         If file data type is not supported, raise NotImplementedError."""
@@ -105,7 +105,7 @@ class BaseIORegistry(type):
         return fmt.read(filename)
 
     @classmethod
-    def write(cls, filename: str, obj: ObjectItf) -> None:
+    def write(cls, filename: str, obj: BaseObj) -> None:
         """Write data to file from native object (signal or image).
 
         If file data type is not supported, raise NotImplementedError."""
@@ -167,10 +167,10 @@ class FormatBase:
             return ""
         return f"{self.info.name} ({self.info.extensions})"
 
-    def read(self, filename: str) -> ObjectItf:
+    def read(self, filename: str) -> BaseObj:
         """Read data from file, return one or more objects"""
         raise NotImplementedError(f"Reading from {self.info.name} is not supported")
 
-    def write(self, filename: str, obj: ObjectItf) -> None:
+    def write(self, filename: str, obj: BaseObj) -> None:
         """Write data to file"""
         raise NotImplementedError(f"Writing to {self.info.name} is not supported")

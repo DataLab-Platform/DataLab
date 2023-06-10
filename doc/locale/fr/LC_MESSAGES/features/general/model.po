@@ -114,7 +114,7 @@ msgstr ""
 #: cdl.core.model.image.ImageObj:1 cdl.core.model.signal.SignalObj:1 of
 msgid ""
 "Bases: :py:class:`guidata.dataset.datatypes.DataSet`, "
-":py:class:`cdl.core.model.base.ObjectItf`"
+":py:class:`cdl.core.model.base.BaseObj`"
 msgstr ""
 
 #: cdl.core.model.signal.SignalObj:1 of
@@ -791,7 +791,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`, "
-#~ ":py:class:`~cdl.core.model.base.ObjectItf`"
+#~ ":py:class:`~cdl.core.model.base.BaseObj`"
 #~ msgstr ""
 
 #~ msgid "Signal dataset"
@@ -814,4 +814,3 @@ msgstr ""
 
 #~ msgid "DataLab Datasets"
 #~ msgstr "Datasets DataLab"
-

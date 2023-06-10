@@ -23,7 +23,7 @@ from guiqwt.label import ObjectInfo
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
-from cdl.core.model.base import ObjectItf
+from cdl.core.model.base import BaseObj
 from cdl.core.model.image import RoiDataGeometries
 
 
@@ -72,7 +72,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
     def __init__(
         self,
         parent: QW.QDialog,
-        obj: ObjectItf,
+        obj: BaseObj,
         extract: bool,
         singleobj: bool | None = None,
     ):

@@ -65,7 +65,7 @@ class ROIParam(gdt.DataSet):
     col2 = gdi.IntItem(_("Last point index"))
 
 
-class SignalObj(gdt.DataSet, base.ObjectItf):
+class SignalObj(gdt.DataSet, base.BaseObj):
     """Signal object"""
 
     PREFIX = "s"
@@ -106,7 +106,7 @@ class SignalObj(gdt.DataSet, base.ObjectItf):
             icon (str): icon
         """
         gdt.DataSet.__init__(self, title, comment, icon)
-        base.ObjectItf.__init__(self)
+        base.BaseObj.__init__(self)
 
     def copy_data_from(self, other: SignalObj, dtype: np.dtype | None = None) -> None:
         """Copy data from other dataset instance.

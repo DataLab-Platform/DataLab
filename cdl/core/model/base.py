@@ -295,7 +295,7 @@ class ResultShape:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
         return labels[-self.array.shape[1] :]
 
-    def add_to(self, obj: ObjectItf):
+    def add_to(self, obj: BaseObj):
         """Add metadata shape to object (signal/image)"""
         obj.metadata[self.key] = self.array
         if self.shapetype in (
@@ -322,7 +322,7 @@ class ResultShape:
                 label += "Diameters"
             obj.metadata[label] = results
 
-    def merge_with(self, obj: ObjectItf, other_obj: ObjectItf | None = None):
+    def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
         """Merge object resultshape with another's: obj <-- other_obj
         or simply merge this resultshape with obj if other_obj is None"""
         if other_obj is None:
@@ -474,11 +474,11 @@ def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable:
     return item
 
 
-class ObjectItfMeta(abc.ABCMeta, gdt.DataSetMeta):
+class BaseObjMeta(abc.ABCMeta, gdt.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class ObjectItf(metaclass=ObjectItfMeta):
+class BaseObj(metaclass=BaseObjMeta):
     """Object (signal/image) interface"""
 
     PREFIX = ""  # This is overriden in children classes
@@ -555,7 +555,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Copy data from other dataset instance.
 
         Args:
-            other (ObjectItf): other dataset instance
+            other (BaseObj): other dataset instance
             dtype (numpy.dtype): data type
         """
 
@@ -572,7 +572,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Make plot item from data.
 
         Args:
-            update_from (ObjectItf): update
+            update_from (BaseObj): update
 
         Returns:
             PlotItem: plot item
@@ -715,7 +715,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Update geometric shape from another object (merge metadata).
 
         Args:
-            other (ObjectItf): other object
+            other (BaseObj): other object
         """
         for mshape in self.iterate_resultshapes():
             assert mshape is not None
@@ -725,7 +725,7 @@ class ObjectItf(metaclass=ObjectItfMeta):
         """Apply transform function to result shape / annotations coordinates.
 
         Args:
-            orig (ObjectItf): original object
+            orig (BaseObj): original object
             func (callable): transform function
             param (object): transform function parameter
         """
