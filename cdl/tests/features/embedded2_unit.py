@@ -38,7 +38,9 @@ class HostWindow(embedded1_unit.BaseHostWindow):
 
     def closeEvent(self, event) -> None:
         """Close event"""
-        if self.cdl.close_properly():
+        if self.cdl is None:
+            event.ignore()
+        elif self.cdl.close_properly():
             event.accept()
         else:
             event.ignore()
