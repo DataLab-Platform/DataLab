@@ -101,6 +101,7 @@ class CDLMainWindow(QW.QMainWindow):
     SIG_READY = QC.Signal()
     SIG_SEND_OBJECT = QC.Signal(object)
     SIG_SEND_OBJECTLIST = QC.Signal(object)
+    SIG_CLOSING = QC.Signal()
 
     @staticmethod
     def get_instance(console=None, hide_on_close=False):
@@ -1150,51 +1151,61 @@ class CDLMainWindow(QW.QMainWindow):
             self.resize(self.__old_size)
 
     # ------Close window
-    def closeEvent(self, event):
+    def close_properly(self) -> bool:
+        """Close properly
+
+        Returns:
+            bool: True if closed properly, False otherwise
+        """
+        if not env.execenv.unattended and self.__is_modified:
+            answer = QW.QMessageBox.warning(
+                self,
+                _("Quit"),
+                _(
+                    "Do you want to save all signals and images "
+                    "to an HDF5 file before quitting DataLab?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
+            )
+            if answer == QW.QMessageBox.Yes:
+                self.save_to_h5_file()
+                if self.__is_modified:
+                    return False
+            elif answer == QW.QMessageBox.Cancel:
+                return False
+        for panel in self.panels:
+            panel.close()
+        if self.console is not None:
+            try:
+                self.console.close()
+            except RuntimeError:
+                # TODO: [P3] Investigate further why the following error occurs when
+                # restarting the mainwindow (this is *not* a production case):
+                # "RuntimeError: wrapped C/C++ object of type DockableConsole
+                #  has been deleted".
+                # Another solution to avoid this error would be to really restart
+                # the application (run each unit test in a separate process), but
+                # it would represent too much effort for an error occuring in test
+                # configurations only.
+                pass
+        self.reset_all()
+        self.__save_pos_and_size()
+        self.__unregister_plugins()
+
+        # Saving current tab for next session
+        Conf.main.current_tab.set(self.tabwidget.currentIndex())
+
+        execenv.log(self, "closed properly")
+        return True
+
+    def closeEvent(self, event: QG.QCloseEvent) -> None:
         """Reimplement QMainWindow method"""
         if self.hide_on_close:
             self.__old_size = self.size()
             self.hide()
         else:
-            if not env.execenv.unattended and self.__is_modified:
-                answer = QW.QMessageBox.warning(
-                    self,
-                    _("Quit"),
-                    _(
-                        "Do you want to save all signals and images "
-                        "to an HDF5 file before quitting DataLab?"
-                    ),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
-                )
-                if answer == QW.QMessageBox.Yes:
-                    self.save_to_h5_file()
-                    if self.__is_modified:
-                        event.ignore()
-                        return
-                elif answer == QW.QMessageBox.Cancel:
-                    event.ignore()
-                    return
-            for panel in self.panels:
-                panel.close()
-            if self.console is not None:
-                try:
-                    self.console.close()
-                except RuntimeError:
-                    # TODO: [P3] Investigate further why the following error occurs when
-                    # restarting the mainwindow (this is *not* a production case):
-                    # "RuntimeError: wrapped C/C++ object of type DockableConsole
-                    #  has been deleted".
-                    # Another solution to avoid this error would be to really restart
-                    # the application (run each unit test in a separate process), but
-                    # it would represent too much effort for an error occuring in test
-                    # configurations only.
-                    pass
-            self.reset_all()
-            self.__save_pos_and_size()
-            self.__unregister_plugins()
-
-            # Saving current tab for next session
-            Conf.main.current_tab.set(self.tabwidget.currentIndex())
-
-            execenv.log(self, "closed properly")
-            event.accept()
+            if self.close_properly():
+                self.SIG_CLOSING.emit()
+                event.accept()
+            else:
+                event.ignore()

@@ -46,6 +46,11 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
                 self.cdl = None
                 self.host.log("🔥 Connection refused 🔥 (server is not ready?)")
 
+    def close_cdl(self):
+        """Close DataLab window"""
+        self.cdl.close_application()
+        self.host.log("🎬 Closed DataLab!")
+
     def add_additional_buttons(self):
         """Add additional buttons"""
         add_btn = self.host.add_button
@@ -103,11 +108,6 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         if self.cdl is not None:
             self.cdl.reset_all()
             self.host.log("Removed all objects")
-
-    def close_cdl(self):
-        """Close DataLab window"""
-        self.cdl.close_application()
-        self.host.log("🎬 Closed DataLab!")
 
 
 @contextmanager

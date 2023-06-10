@@ -127,15 +127,13 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def add_additional_buttons(self):
         """Add additional buttons"""
 
+    @abc.abstractmethod
     def init_cdl(self):
         """Open DataLab test"""
 
+    @abc.abstractmethod
     def close_cdl(self):
         """Close DataLab window"""
-        if self.cdl is not None:
-            self.host.log("=> Closed DataLab")
-            self.cdl.close()
-            self.cdl = None
 
     @abc.abstractmethod
     def add_object(self, obj):
@@ -224,7 +222,7 @@ class HostWindow(BaseHostWindow):
         """Open DataLab test"""
         if self.cdl is None:
             self.cdl = CDLMainWindow(console=False)
-            self.cdl.setAttribute(QC.Qt.WA_DeleteOnClose, True)
+            self.cdl.SIG_CLOSING.connect(self.cdl_was_closed)
             self.cdl.show()
             self.host.log("✨Initialized DataLab window")
         else:
@@ -235,6 +233,20 @@ class HostWindow(BaseHostWindow):
             except RuntimeError:
                 self.cdl = None
                 self.init_cdl()
+
+    def cdl_was_closed(self):
+        """DataLab was closed"""
+        self.cdl = None
+        self.host.log("✨DataLab window was closed by user")
+
+    def close_cdl(self):
+        """Close DataLab window"""
+        if self.cdl is not None:
+            self.host.log("=> Closed DataLab")
+            self.cdl.SIG_CLOSING.disconnect(self.cdl_was_closed)
+            self.cdl.close()
+            self.cdl.deleteLater()
+            self.cdl = None
 
 
 def test_embedded_feature(klass):

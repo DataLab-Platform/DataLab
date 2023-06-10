@@ -31,12 +31,7 @@ def memory_leak_test(iterations=100):
         memlist = []
         for i in range(iterations):
             mainview.init_cdl()
-            mainview.cdl.close()
-            # mainview.cdl.destroy()
-            mainview.cdl = None
-            # QApplication.processEvents()
-            # import time; time.sleep(2)
-            # QApplication.processEvents()
+            mainview.close_cdl()
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
             execenv.print(i + 1, ":", memdata, "MB")

@@ -19,7 +19,7 @@ from cdl.tests.features import embedded1_unit
 class HostWindow(embedded1_unit.BaseHostWindow):
     """Test main view"""
 
-    def init_cdl(self):
+    def init_cdl(self) -> None:
         """Open DataLab test"""
         if self.cdl is None:
             self.cdl = CDLMainWindow(console=False, hide_on_close=True)
@@ -30,11 +30,18 @@ class HostWindow(embedded1_unit.BaseHostWindow):
             self.cdl.raise_()
         self.host.log("=> Shown DataLab window")
 
-    def close_cdl(self):
+    def close_cdl(self) -> None:
         """Close DataLab window"""
         if self.cdl is not None:
             self.host.log("=> Closed DataLab")
             self.cdl.close()
+
+    def closeEvent(self, event) -> None:
+        """Close event"""
+        if self.cdl.close_properly():
+            event.accept()
+        else:
+            event.ignore()
 
 
 if __name__ == "__main__":
