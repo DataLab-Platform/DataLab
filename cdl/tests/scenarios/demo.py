@@ -9,6 +9,7 @@ DataLab Demo
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show,skip
 
 from qtpy import QtWidgets as QW
 
