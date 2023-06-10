@@ -1,6 +1,13 @@
 [run]
+
+#--- Ignore this warning because the process isolation feature of DataLab
+#--- causes coverage to report 0% coverage when no computation is performed
+#--- in the isolated process during the session.
+disable_warnings = no-data-collected
+
 parallel = True
 concurrency = multiprocessing,thread
+
 omit =
     */cdl/utils/tests.py
     */cdl/tests/*
