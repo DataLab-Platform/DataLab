@@ -23,12 +23,22 @@ from cdl.utils.tests import TST_PATH
 
 
 def get_test_modules(package, contains=""):
-    """Return test module list for package"""
-    return [
+    """Return test module list for package
+
+    Args:
+        package (module): package to test
+        contains (str): string to match in test module path
+
+    Returns:
+        tuple: (selected test module list, total number of test modules)
+    """
+    allbatch_testmodules = get_tests(package, category="batch")
+    selected_testmodules = [
         tmod
-        for tmod in get_tests(package, category="batch")
+        for tmod in allbatch_testmodules
         if osp.basename(tmod.path) != osp.basename(__file__) and contains in tmod.path
     ]
+    return selected_testmodules, len(allbatch_testmodules) - 1
 
 
 def __get_enabled(confopt: Option) -> str:
@@ -38,11 +48,11 @@ def __get_enabled(confopt: Option) -> str:
 
 def run_all_tests(args="", contains="", timeout=None, other_package=None):
     """Run all DataLab tests"""
-    testmodules = get_test_modules(cdl, contains=contains)
-    testnb = len(get_tests(cdl)) - 1
+    testmodules, testnb = get_test_modules(cdl, contains=contains)
     if other_package is not None:
-        testmodules += get_test_modules(other_package, contains=contains)
-        testnb += len(get_tests(other_package)) - 1
+        othermodules, othernb = get_test_modules(other_package, contains=contains)
+        testmodules += othermodules
+        testnb += othernb
     tnb = len(testmodules)
     print("")
     print(f"            🚀 DataLab v{__version__} automatic unit tests 🌌")
