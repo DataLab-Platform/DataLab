@@ -10,14 +10,14 @@ Result shapes application test:
   - Further tests to be done manually: check if copy/paste metadata works
 """
 
+# guitest: show
+
 import numpy as np
 
 import cdl.obj
 import cdl.param
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def create_image_with_resultshapes():

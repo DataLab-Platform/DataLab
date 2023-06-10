@@ -10,14 +10,13 @@ Simple image dialog for testing all image tools available in DataLab
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 from guiqwt.builder import make
 
 from cdl.tests.data import create_noisygauss_image
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_image_items
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def image_tools_test():

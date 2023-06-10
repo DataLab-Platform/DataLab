@@ -10,14 +10,12 @@ Testing peak detection dialog box.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-
+# guitest: show
 
 from cdl.env import execenv
 from cdl.tests.data import get_test_signal
 from cdl.utils.qthelpers import exec_dialog, qt_app_context
 from cdl.widgets.signalpeakdialog import SignalPeakDetectionDialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

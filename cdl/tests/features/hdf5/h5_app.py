@@ -9,12 +9,12 @@ Application launcher test 1
 Running application a few times in a row with different entry parameters.
 """
 
+# guitest: show
+
 from cdl import app
 from cdl.env import execenv
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import get_test_fnames
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test(pattern=None):

@@ -10,6 +10,8 @@ I/O application test:
   - Testing images I/O
 """
 
+# guitest: show
+
 import os.path as osp
 
 from cdl.core.gui.panel.base import BaseDataPanel
@@ -19,8 +21,6 @@ from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.utils.tests import get_test_fnames, temporary_directory
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def __test_func(

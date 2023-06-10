@@ -21,12 +21,11 @@ A high-level test scenario producing beautiful screenshots.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show,skip
 
 import cdl.obj
 import cdl.param
 from cdl.tests import cdl_app_context
-
-SHOW = False  # Redundant test in terms of covered features (see other scenarios)
 
 
 def run_beautiful_scenario(screenshots: bool = False):

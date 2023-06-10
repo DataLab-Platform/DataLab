@@ -11,12 +11,11 @@ then open DataLab to show them.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import cdl.obj
 from cdl.app import run
 from cdl.tests import data as test_data
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

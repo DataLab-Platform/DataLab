@@ -16,6 +16,8 @@ widget are closed (i.e. when the Python object is garbage collected).
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+# guitest: skip
+
 from __future__ import annotations
 
 import ctypes
@@ -29,10 +31,7 @@ from cdl.tests.data import create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
 from cdl.tests.scenarios.scenario_sig_app import test_common_operations
 
-SHOW = os.name == "nt"  # Show test in GUI-based test launcher
-
-
-if SHOW:
+if os.name == "nt":
     from ctypes import WinDLL
 
     def get_gdi_count() -> int:

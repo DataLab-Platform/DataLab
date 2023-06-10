@@ -7,12 +7,11 @@
 Log viewer test: raise an exception and create a seg fault in DataLab
 """
 
+# guitest: skip
 
 from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = False  # Do not show test in GUI-based test launcher
 
 
 def error():

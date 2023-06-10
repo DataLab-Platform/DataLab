@@ -11,12 +11,12 @@ Testing the following:
   - Compute 2D peak detection and show points on image
 """
 
+# guitest: show
+
 import cdl.param
 from cdl.config import _
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_peak2d_image
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

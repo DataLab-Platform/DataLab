@@ -9,6 +9,7 @@ Process isolation unit test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: skip
 
 import time
 from multiprocessing import Pool
@@ -24,8 +25,6 @@ import cdl.obj
 from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = False  # Do not test in GUI-based test launcher
 
 
 class MainWindow(QW.QMainWindow):

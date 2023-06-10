@@ -9,6 +9,8 @@ I/O test
 Testing DataLab specific formats.
 """
 
+# guitest: show
+
 import os.path as osp
 
 from cdl.core.io.base import BaseIORegistry
@@ -17,8 +19,6 @@ from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
 from cdl.utils.misc import reduce_path
 from cdl.utils.tests import get_test_fnames, temporary_directory
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:

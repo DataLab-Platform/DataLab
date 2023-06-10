@@ -10,6 +10,8 @@ Remote GUI-based client test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
 
+# guitest: show
+
 import os
 from contextlib import contextmanager
 
@@ -21,8 +23,6 @@ from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
 from cdl.utils.qthelpers import qt_app_context, qt_wait
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 class HostWindow(embedded1_unit.AbstractClientWindow):

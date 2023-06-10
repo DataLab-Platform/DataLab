@@ -10,6 +10,7 @@ Process isolation unit test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: skip
 
 from __future__ import annotations
 
@@ -28,9 +29,6 @@ import cdl.obj
 from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import create_progress_bar, qt_app_context
-
-SHOW = False  # Do not test in GUI-based test launcher
-
 
 POOL: Pool = None
 

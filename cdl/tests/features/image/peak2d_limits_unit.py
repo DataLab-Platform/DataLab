@@ -8,15 +8,13 @@ Image peak detection test: testing algorithm limits
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-
+# guitest: skip
 
 from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.tests.features.image.peak2d_unit import exec_image_peak_detection_func
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = False  # Do not show test in GUI-based test launcher
 
 
 def peak2d_limit_test():

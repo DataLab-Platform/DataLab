@@ -7,10 +7,10 @@
 Dependencies viewer test
 """
 
+# guitest: show
+
 from cdl.utils.qthelpers import qt_app_context
 from cdl.widgets.instconfviewer import exec_cdl_installconfig_dialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_dep_viewer():

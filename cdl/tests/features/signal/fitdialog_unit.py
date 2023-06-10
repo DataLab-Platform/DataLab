@@ -9,6 +9,7 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 from cdl.algorithms.signal import peak_indexes
 from cdl.env import execenv
@@ -16,8 +17,6 @@ from cdl.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_sig
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import get_default_test_name
 from cdl.widgets import fitdialog as fdlg
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

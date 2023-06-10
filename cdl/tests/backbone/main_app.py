@@ -11,14 +11,14 @@ Testing the features of the main window of the application that are not
 covered by other tests.
 """
 
+# guitest: show
+
 import os
 
 from cdl.env import execenv
 from cdl.param import MovingMedianParam
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_paracetamol_signal
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

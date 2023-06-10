@@ -10,12 +10,13 @@ Annotations application test:
   - Further tests to be done manually: edit "Annotations" and check that
     modifications are taken into account, without affecting the existing ROI
 """
+
+# guitest: show
+
 import numpy as np
 
 from cdl.app import run
 from cdl.tests import data as test_data
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

@@ -10,11 +10,11 @@ Emphasizing contrast calculation issue when data contains outlier points (e.g. h
 spots) thus preventing from cleaning up contrast histogram or showing valid Z-axis.
 """
 
+# guitest: show
+
 from cdl.tests.data import get_test_image
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_images
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def contrast_test():

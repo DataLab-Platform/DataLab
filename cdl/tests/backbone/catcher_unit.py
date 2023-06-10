@@ -14,6 +14,7 @@ caught and displayed in the GUI.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 import warnings
 
@@ -22,8 +23,6 @@ from cdl.env import execenv
 from cdl.obj import SignalObj
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument

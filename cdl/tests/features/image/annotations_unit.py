@@ -12,6 +12,8 @@ Annotations unit test:
   - Check if image annotations are still the same
 """
 
+# guitest: show
+
 from guiqwt.builder import make
 from qtpy import QtWidgets as QW
 
@@ -19,8 +21,6 @@ from cdl.core.model.base import ANN_KEY
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

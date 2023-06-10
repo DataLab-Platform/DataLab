@@ -7,6 +7,8 @@
 Testing (de)serialization of Dictionnary/List inside object metadata
 """
 
+# guitest: show
+
 import os.path as osp
 
 import numpy as np
@@ -16,8 +18,6 @@ from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 from cdl.tests.data import get_test_image
 from cdl.utils.tests import temporary_directory
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def __compare_metadata(dict1, dict2):

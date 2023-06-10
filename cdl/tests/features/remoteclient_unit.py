@@ -9,6 +9,7 @@ Remote client test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: skip
 
 import os.path as osp
 import time
@@ -21,8 +22,6 @@ from cdl.param import XYCalibrateParam
 from cdl.remotecontrol import RemoteClient
 from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
 from cdl.utils.tests import exec_script, temporary_directory
-
-SHOW = False  # Show test in GUI-based test launcher
 
 
 def multiple_commands(remote: RemoteClient):

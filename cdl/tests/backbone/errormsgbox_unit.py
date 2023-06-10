@@ -7,12 +7,12 @@
 Error message box test
 """
 
+# guitest: show
+
 from qtpy import QtWidgets as QW
 
 from cdl.utils.qthelpers import exec_dialog, qt_app_context
 from cdl.widgets.warningerror import WarningErrorMessageBox
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_error_message_box(category: str):

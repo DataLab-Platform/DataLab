@@ -11,6 +11,7 @@ Testing all the macro-commands features.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import os.path as osp
 import time
@@ -19,8 +20,6 @@ from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import cdl_app_context
 from cdl.utils.tests import temporary_directory
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:

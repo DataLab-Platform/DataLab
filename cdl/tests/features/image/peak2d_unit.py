@@ -9,6 +9,7 @@ Image peak detection test
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 import time
 
@@ -19,8 +20,6 @@ from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_image_items
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def exec_image_peak_detection_func(data):

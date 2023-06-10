@@ -7,10 +7,10 @@
 Profiling
 """
 
+# guitest: skip
+
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
-
-SHOW = False  # Show test in GUI-based test launcher
 
 
 def test():

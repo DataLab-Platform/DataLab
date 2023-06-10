@@ -7,10 +7,10 @@
 Log viewer test
 """
 
+# guitest: show
+
 from cdl.utils.qthelpers import qt_app_context
 from cdl.widgets.logviewer import exec_cdl_logviewer_dialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_log_viewer():

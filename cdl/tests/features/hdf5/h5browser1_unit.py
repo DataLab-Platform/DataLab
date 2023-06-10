@@ -9,13 +9,12 @@ HDF5 browser test 1
 Try and open all HDF5 test data available.
 """
 
+# guitest: show
 
 from cdl.env import execenv
 from cdl.tests.data import get_test_fnames
 from cdl.utils.qthelpers import exec_dialog, qt_app_context
 from cdl.widgets.h5browser import H5BrowserDialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def h5browser_test(pattern=None):

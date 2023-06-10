@@ -11,6 +11,7 @@ Testing functions related to signal/image creation.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 from __future__ import annotations
 
@@ -33,8 +34,6 @@ from cdl.obj import (
 )
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves, view_images
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def iterate_signal_creation(

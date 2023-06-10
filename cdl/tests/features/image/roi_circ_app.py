@@ -8,6 +8,7 @@ Circular ROI test
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import numpy as np
 from skimage import draw
@@ -16,8 +17,6 @@ from cdl.env import execenv
 from cdl.obj import RoiDataGeometries, create_image
 from cdl.tests import cdl_app_context
 from cdl.tests.features.common.roi_app import print_obj_shapes
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def create_test_image_with_roi(roi_geometry: RoiDataGeometries):

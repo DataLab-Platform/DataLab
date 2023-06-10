@@ -11,13 +11,12 @@ then open DataLab to show it.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show,skip
 
 import cdl.param
 from cdl.obj import create_image
 from cdl.tests import cdl_app_context
 from cdl.tests.data import get_test_image
-
-SHOW = False  # Redundant test in terms of covered features (see other scenarios)
 
 
 def test():

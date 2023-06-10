@@ -7,12 +7,11 @@
 Log viewer test
 """
 
+# guitest: show
+
 from cdl.app import run
 from cdl.tests.features.utilities import logview_error
 from cdl.utils.tests import exec_script
-
-SHOW = True  # Show test in GUI-based test launcher
-
 
 if __name__ == "__main__":
     exec_script(logview_error.__file__)

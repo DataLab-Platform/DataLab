@@ -9,6 +9,8 @@ Configuration test
 Checking .ini configuration file management.
 """
 
+# guitest: show
+
 import os
 import os.path as osp
 
@@ -20,8 +22,6 @@ from cdl.env import execenv
 from cdl.utils.conf import CONF
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import get_test_fnames
-
-SHOW = True  # Show test in GUI-based test launcher
 
 SEC_MAIN = Conf.main
 OPT_MAX = SEC_MAIN.window_maximized

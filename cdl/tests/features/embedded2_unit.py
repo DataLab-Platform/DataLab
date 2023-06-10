@@ -10,10 +10,10 @@ DataLab main window is simply hidden when closing application.
 It is shown and raised above other windows when reopening application.
 """
 
+# guitest: show
+
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests.features import embedded1_unit
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 class HostWindow(embedded1_unit.BaseHostWindow):

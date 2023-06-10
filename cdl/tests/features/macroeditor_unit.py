@@ -7,10 +7,10 @@
 Macro editor test
 """
 
+# guitest: show
+
 from cdl.core.gui.panel import macro
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_macro_editor():

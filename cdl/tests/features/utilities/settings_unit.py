@@ -7,11 +7,11 @@
 DataLab settings test
 """
 
+# guitest: show
+
 from cdl.core.gui.settings import edit_settings
 from cdl.env import execenv
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_edit_settings():

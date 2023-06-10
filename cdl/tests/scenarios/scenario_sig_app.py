@@ -12,6 +12,7 @@ Testing all the signal processing features.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 from __future__ import annotations
 
@@ -26,8 +27,6 @@ from cdl.tests import cdl_app_context
 from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common.newobject_unit import iterate_signal_creation
 from cdl.widgets import fitdialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> None:

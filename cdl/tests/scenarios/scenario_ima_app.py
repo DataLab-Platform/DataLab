@@ -12,6 +12,7 @@ Testing all the image processing features.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 import cdl.obj
 import cdl.param
@@ -22,8 +23,6 @@ from cdl.tests import cdl_app_context
 from cdl.tests.data import create_peak2d_image, create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
 from cdl.tests.scenarios.scenario_sig_app import test_common_operations
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_image_features(

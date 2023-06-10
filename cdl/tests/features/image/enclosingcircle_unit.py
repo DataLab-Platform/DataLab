@@ -11,6 +11,7 @@ Testing enclsoing circle function on various test images.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 from guiqwt.builder import make
 
@@ -20,8 +21,6 @@ from cdl.env import execenv
 from cdl.tests.data import get_laser_spot_data
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_image_items
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_enclosingcircle(data):

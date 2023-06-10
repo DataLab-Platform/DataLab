@@ -23,6 +23,7 @@ This scenario executes the following steps:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import os.path as osp
 
@@ -33,8 +34,6 @@ from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app
 from cdl.utils.misc import save_html_diff
 from cdl.utils.tests import temporary_directory
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

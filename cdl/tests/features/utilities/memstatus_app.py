@@ -7,6 +7,8 @@
 Memory status widget application test
 """
 
+# guitest: show
+
 import numpy as np
 import psutil
 
@@ -14,8 +16,6 @@ from cdl.config import Conf
 from cdl.env import execenv
 from cdl.obj import Gauss2DParam, ImageTypes, new_image_param
 from cdl.tests import cdl_app_context
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_memory_alarm(threshold):

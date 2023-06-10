@@ -12,6 +12,7 @@ Metadata application test:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import numpy as np
 
@@ -24,8 +25,6 @@ from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_signal_features(panel: SignalPanel):

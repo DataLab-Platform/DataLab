@@ -9,6 +9,8 @@ HDF5 browser test 2
 Testing for memory leak
 """
 
+# guitest: show
+
 import os
 
 import numpy as np
@@ -19,8 +21,6 @@ from cdl.tests.data import get_test_fnames
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves
 from cdl.widgets.h5browser import H5BrowserDialog
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def memoryleak_test(fname, iterations=20):

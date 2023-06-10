@@ -10,6 +10,8 @@ CDLExecEnv test
 Checking DataLab execution environment management.
 """
 
+# guitest: skip (only needed for regression tests)
+
 from __future__ import annotations
 
 import os
@@ -18,9 +20,6 @@ import sys
 from cdl import __version__
 from cdl.env import VerbosityLevels, execenv
 from cdl.utils.tests import get_script_output
-
-SHOW = False  # Do not run this test every time (only needed for regression tests)
-
 
 ARGV_TEST = "--execenvtest"
 

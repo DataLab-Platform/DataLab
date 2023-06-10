@@ -12,12 +12,12 @@ Testing the following:
   - Compute the flat field image
 """
 
+# guitest: show
+
 from cdl.config import _
 from cdl.obj import Gauss2DParam, ImageTypes, UniformRandomParam, new_image_param
 from cdl.param import FlatFieldParam
 from cdl.tests import cdl_app_context
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

@@ -14,6 +14,7 @@ Testing the following:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 import numpy as np
 
@@ -29,8 +30,6 @@ from cdl.obj import (
     new_signal_param,
 )
 from cdl.tests import cdl_app_context, take_plotwidget_screenshot
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

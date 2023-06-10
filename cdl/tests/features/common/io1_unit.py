@@ -9,14 +9,14 @@ I/O test
 Testing DataLab specific formats.
 """
 
+# guitest: show
+
 from cdl.core.io.image import funcs as image_funcs
 from cdl.env import execenv
 from cdl.obj import read_signal
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.tests import try_open_test_data
 from cdl.utils.vistools import view_curve_items, view_images
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 @try_open_test_data("Testing TXT file reader", "*.txt")

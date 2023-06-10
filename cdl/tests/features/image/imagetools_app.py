@@ -10,6 +10,8 @@ Image tools application test:
   - Testing `to_cdl` function (image cross section -> curve)
 """
 
+# guitest: show
+
 import os.path as osp
 
 from guiqwt.baseplot import axes_to_canvas
@@ -21,8 +23,6 @@ from cdl.patch import ZAxisLogTool, to_cdl
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_multigauss_image
 from cdl.utils.qthelpers import qt_wait
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

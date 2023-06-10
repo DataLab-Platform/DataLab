@@ -7,6 +7,8 @@
 Run all tests in unattended mode
 """
 
+# guitest: show
+
 import argparse
 import os
 import os.path as osp
@@ -19,14 +21,12 @@ from cdl.config import Conf
 from cdl.utils.conf import Option
 from cdl.utils.tests import TST_PATH
 
-SHOW = True  # Show test in GUI-based test launcher
-
 
 def get_test_modules(package, contains=""):
     """Return test module list for package"""
     return [
         tmod
-        for tmod in get_tests(package)
+        for tmod in get_tests(package, category="batch")
         if osp.basename(tmod.path) != osp.basename(__file__) and contains in tmod.path
     ]
 

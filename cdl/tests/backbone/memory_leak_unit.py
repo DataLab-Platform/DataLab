@@ -9,6 +9,8 @@ Memory leak test
 DataLab application memory leak test.
 """
 
+# guitest: skip
+
 import os
 
 import numpy as np
@@ -18,8 +20,6 @@ from cdl.env import execenv
 from cdl.tests.features.embedded1_unit import HostWindow
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def memory_leak_test(iterations=100):

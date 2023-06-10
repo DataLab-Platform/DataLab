@@ -9,6 +9,7 @@ Signal FFT unit test.
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # pylint: disable=duplicate-code
+# guitest: show
 
 import numpy as np
 
@@ -17,8 +18,6 @@ from cdl.env import execenv
 from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
 from cdl.utils.qthelpers import qt_app_context
 from cdl.utils.vistools import view_curves
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test():

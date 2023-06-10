@@ -11,10 +11,9 @@ Just test if it's possible to run the process isolation test from another module
 may be an issue with the Pool object being global.
 """
 
+# guitest: show
+
 from cdl.tests.backbone.procisolation1_unit import test
-
-SHOW = True  # Show test in GUI-based test launcher
-
 
 if __name__ == "__main__":
     test()

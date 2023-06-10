@@ -11,6 +11,7 @@ ROI test:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
 
 from __future__ import annotations
 
@@ -22,8 +23,6 @@ from cdl.core.gui.panel import image, signal
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def test_signal_features(panel: signal, singleobj: bool | None = None):

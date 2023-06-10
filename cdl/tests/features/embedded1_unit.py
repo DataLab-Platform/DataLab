@@ -10,6 +10,8 @@ DataLab main window is destroyed when closing application.
 It is rebuilt from scratch when reopening application.
 """
 
+# guitest: show
+
 import abc
 
 from guidata.qthelpers import get_std_icon
@@ -22,8 +24,6 @@ from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
 from cdl.utils.qthelpers import qt_app_context
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 class HostWidget(QW.QWidget):

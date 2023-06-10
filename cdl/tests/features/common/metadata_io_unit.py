@@ -14,6 +14,8 @@ Metadata import/export unit test:
   - Check if image metadata is the same as the original image
 """
 
+# guitest: show
+
 import os.path as osp
 
 import numpy as np
@@ -23,8 +25,6 @@ from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests import data as test_data
 from cdl.utils import tests
-
-SHOW = True  # Show test in GUI-based test launcher
 
 
 def get_metadata_param_number_after_reset():
