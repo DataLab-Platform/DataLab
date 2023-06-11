@@ -68,7 +68,6 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print(f"  Console: {__get_enabled(Conf.console.console_enabled)}")
     mem_threshold = Conf.main.available_memory_threshold.get()
     print(f"  Available memory threshold: {mem_threshold:d} MB")
-    print(f"  Ignored dependencies: {__get_enabled(Conf.main.ignore_dependency_check)}")
     print("")
     print("🔥 Test parameters:")
     print(f"  ⚡ Selected {tnb} tests ({testnb} total available)")

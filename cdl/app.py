@@ -67,7 +67,6 @@ def run(console=None, objects=None, h5files=None, size=None):
         )
         QW.QApplication.processEvents()
         window.check_stable_release()
-        window.check_dependencies()
         window.check_for_previous_crash()
 
 

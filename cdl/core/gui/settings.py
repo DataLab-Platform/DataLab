@@ -49,11 +49,6 @@ class MainSettings(gdt.DataSet):
             "Threshold below which a warning is displayed before loading any new data"
         ),
     )
-    ignore_dependency_check = gdi.BoolItem(
-        "",
-        _("Ignore dependency check"),
-        help=_("Disable the dependency check at startup for critical packages"),
-    )
     plugins_enabled = gdi.BoolItem(
         "",
         _("Third-party plugins"),

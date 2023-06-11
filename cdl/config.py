@@ -118,7 +118,6 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     window_size = conf.Option()
     base_dir = conf.WorkingDirOption()
     available_memory_threshold = conf.Option()
-    ignore_dependency_check = conf.Option()
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
     plugins_path = conf.Option()
@@ -282,7 +281,6 @@ def initialize():
     Conf.main.traceback_log_path.get(f".{APP_NAME}_traceback.log")
     Conf.main.faulthandler_log_path.get(f".{APP_NAME}_faulthandler.log")
     Conf.main.available_memory_threshold.get(500)
-    Conf.main.ignore_dependency_check.get(False)
     Conf.main.plugins_enabled.get(True)
     Conf.main.plugins_path.get(Conf.get_path("plugins"))
     # Console section

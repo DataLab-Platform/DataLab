@@ -371,18 +371,38 @@ class CDLMainWindow(QW.QMainWindow):
         ]
         QW.QMessageBox.warning(self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok)
 
-    def check_dependencies(self) -> None:  # pragma: no cover
+    def __check_dependencies(self) -> None:  # pragma: no cover
         """Check dependencies"""
-        if IS_FROZEN or Conf.main.ignore_dependency_check.get() or execenv.unattended:
+        if IS_FROZEN or execenv.unattended:
             # No need to check dependencies if DataLab has been frozen, or if
             # the user has chosen to ignore this check, or if we are in unattended mode
             # (i.e. running automated tests)
+
+            if IS_FROZEN:
+                QW.QMessageBox.information(
+                    self,
+                    _("Information"),
+                    _(
+                        "The dependency check feature is not relevant for the "
+                        "standalone version of DataLab."
+                    ),
+                    QW.QMessageBox.Ok,
+                )
             return
         try:
             state = dephash.check_dependencies_hash(DATAPATH)
             bad_deps = [name for name in state if not state[name]]
             if not bad_deps:
                 # Everything is OK
+                QW.QMessageBox.information(
+                    self,
+                    _("Information"),
+                    _(
+                        "All critical dependencies of DataLab have been qualified "
+                        "on this operating system."
+                    ),
+                    QW.QMessageBox.Ok,
+                )
                 return
         except IOError:
             bad_deps = None
@@ -396,7 +416,6 @@ class CDLMainWindow(QW.QMainWindow):
         else:
             txtlist = [
                 "<u>" + txt0 + "</u> " + ", ".join(bad_deps),
-                "",
                 "",
                 _(
                     "At least one dependency does not comply with DataLab "
@@ -412,17 +431,9 @@ class CDLMainWindow(QW.QMainWindow):
                 "This means that the application has not been officially qualified "
                 "in this context and may not behave as expected."
             ),
-            "",
-            _(
-                "Please click on the Ignore button "
-                "to avoid showing this message at startup."
-            ),
         ]
         txt = "<br>".join(txtlist)
-        btn = QW.QMessageBox.information(
-            self, APP_NAME, txt, QW.QMessageBox.Ok | QW.QMessageBox.Ignore
-        )
-        Conf.main.ignore_dependency_check.set(btn == QW.QMessageBox.Ignore)
+        QW.QMessageBox.warning(self, APP_NAME, txt, QW.QMessageBox.Ok)
 
     def check_for_previous_crash(self) -> None:  # pragma: no cover
         """Check for previous crash"""
@@ -740,6 +751,11 @@ class CDLMainWindow(QW.QMainWindow):
                 _("Bug report or feature request"),
                 icon=get_icon("libre-gui-globe.svg"),
                 triggered=lambda: webbrowser.open(__supporturl__),
+            ),
+            create_action(
+                self,
+                _("Check critical dependencies..."),
+                triggered=self.__check_dependencies,
             ),
             create_action(
                 self,

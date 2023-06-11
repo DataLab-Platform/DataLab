@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-08 18:41+0200\n"
+"POT-Creation-Date: 2023-06-11 08:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -686,8 +686,8 @@ msgid "Degree"
 msgstr "Degré"
 
 #: cdl\core\computation\signal.py:494 cdl\core\model\signal.py:611
-#: cdl\tests\features\common\stat_app.py:41 cdl\tests\scenarios\demo.py:70
-#: cdl\tests\scenarios\scenario_sig_app.py:157
+#: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\demo.py:71
+#: cdl\tests\scenarios\scenario_sig_app.py:156
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -891,7 +891,7 @@ msgstr "Modifier les régions d'intérêt..."
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: cdl\core\gui\actionhandler.py:591 cdl\core\gui\processor\base.py:672
+#: cdl\core\gui\actionhandler.py:591 cdl\core\gui\processor\base.py:687
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -928,18 +928,18 @@ msgstr "Détection de pics"
 msgid "Fitting"
 msgstr "Ajustement"
 
-#: cdl\core\gui\actionhandler.py:648 cdl\tests\scenarios\demo.py:68
-#: cdl\tests\scenarios\scenario_sig_app.py:153 cdl\widgets\fitdialog.py:115
+#: cdl\core\gui\actionhandler.py:648 cdl\tests\scenarios\demo.py:69
+#: cdl\tests\scenarios\scenario_sig_app.py:152 cdl\widgets\fitdialog.py:115
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
 #: cdl\core\gui\actionhandler.py:649
-#: cdl\tests\scenarios\scenario_sig_app.py:154 cdl\widgets\fitdialog.py:143
+#: cdl\tests\scenarios\scenario_sig_app.py:153 cdl\widgets\fitdialog.py:143
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
 #: cdl\core\gui\actionhandler.py:650
-#: cdl\tests\scenarios\scenario_sig_app.py:155 cdl\widgets\fitdialog.py:171
+#: cdl\tests\scenarios\scenario_sig_app.py:154 cdl\widgets\fitdialog.py:171
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
@@ -968,7 +968,7 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1121
+#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1145
 #: cdl\core\gui\roieditor.py:238
 msgid "image"
 msgstr "image"
@@ -1198,7 +1198,7 @@ msgid "Canny filter"
 msgstr "Filtre de Canny"
 
 #: cdl\core\gui\actionhandler.py:915 cdl\core\gui\processor\image.py:740
-#: cdl\tests\features\image\enclosingcircle_unit.py:34
+#: cdl\tests\features\images\enclosingcircle_unit.py:33
 msgid "Centroid"
 msgstr "Barycentre"
 
@@ -1287,8 +1287,8 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:326 cdl\core\gui\main.py:995
-#: cdl\plugins.py:151
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:333 cdl\core\gui\main.py:1019
+#: cdl\plugins.py:155
 msgid "Warning"
 msgstr "Attention"
 
@@ -1309,7 +1309,7 @@ msgstr "# ==> Impossible d'exécuter la macro '%s'"
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-#: cdl\core\gui\macroeditor.py:242 cdl\plugins.py:155
+#: cdl\core\gui\macroeditor.py:242 cdl\plugins.py:159
 msgid "Error"
 msgstr "Erreur"
 
@@ -1325,13 +1325,13 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
-#: cdl\core\gui\main.py:327
+#: cdl\core\gui\main.py:334
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: cdl\core\gui\main.py:341
+#: cdl\core\gui\main.py:348
 msgid ""
 "This software is in the <b>beta stage</b> of its release cycle. The focus of "
 "beta testing is providing a feature complete software for users interested "
@@ -1347,7 +1347,7 @@ msgstr ""
 "fonctionner correctement et présente plus d'anomalies résiduelles et de "
 "problèmes de performance que la version finale</u>."
 
-#: cdl\core\gui\main.py:351
+#: cdl\core\gui\main.py:358
 msgid ""
 "This software is in the <b>alpha stage</b> of its release cycle. The focus "
 "of alpha testing is providing an incomplete software for early testing of "
@@ -1361,23 +1361,39 @@ msgstr ""
 "Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests "
 "poussés avant sa diffusion</u>."
 
-#: cdl\core\gui\main.py:361
+#: cdl\core\gui\main.py:368
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:382
+#: cdl\core\gui\main.py:384 cdl\core\gui\main.py:399 cdl\plugins.py:163
+msgid "Information"
+msgstr "Information"
+
+#: cdl\core\gui\main.py:385
+msgid ""
+"The dependency check feature is not relevant for the standalone version of "
+"DataLab."
+msgstr "La vérification des dépendances n'est pas pertinente pour la version autonome de DataLab."
+
+#: cdl\core\gui\main.py:400
+msgid ""
+"All critical dependencies of DataLab have been qualified on this operating "
+"system."
+msgstr "Toutes les dépendances critiques de DataLab ont été qualifiées sur ce système d'exploitation."
+
+#: cdl\core\gui\main.py:409
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: cdl\core\gui\main.py:384
+#: cdl\core\gui\main.py:411
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: cdl\core\gui\main.py:387
+#: cdl\core\gui\main.py:414
 msgid "DataLab has not yet been qualified on your operating system."
 msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: cdl\core\gui\main.py:394
+#: cdl\core\gui\main.py:420
 msgid ""
 "At least one dependency does not comply with DataLab qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -1389,7 +1405,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: cdl\core\gui\main.py:404
+#: cdl\core\gui\main.py:430
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -1397,171 +1413,168 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:409
-msgid ""
-"Please click on the Ignore button to avoid showing this message at startup."
-msgstr ""
-"Cliquer sur le bouton Ignorer pour éviter d'afficher ce message à chaque "
-"démarrage."
-
-#: cdl\core\gui\main.py:431
+#: cdl\core\gui\main.py:449
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:545
+#: cdl\core\gui\main.py:565
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:555
+#: cdl\core\gui\main.py:575
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:557
+#: cdl\core\gui\main.py:577
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:562
+#: cdl\core\gui\main.py:582
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:564
+#: cdl\core\gui\main.py:584
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:569
+#: cdl\core\gui\main.py:589
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:571
+#: cdl\core\gui\main.py:591
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:576
+#: cdl\core\gui\main.py:596
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:578
+#: cdl\core\gui\main.py:598
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:581
+#: cdl\core\gui\main.py:601
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:594
+#: cdl\core\gui\main.py:614
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:595
+#: cdl\core\gui\main.py:615
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:597 cdl\core\gui\main.py:1155
+#: cdl\core\gui\main.py:617 cdl\core\gui\main.py:1179
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:598
+#: cdl\core\gui\main.py:618
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:610
+#: cdl\core\gui\main.py:630
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: cdl\core\gui\main.py:622
+#: cdl\core\gui\main.py:642
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: cdl\core\gui\main.py:643
+#: cdl\core\gui\main.py:663
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: cdl\core\gui\main.py:644 cdl\core\gui\panel\image.py:50
+#: cdl\core\gui\main.py:664 cdl\core\gui\panel\image.py:50
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: cdl\core\gui\main.py:658
+#: cdl\core\gui\main.py:678
 msgid "Signals"
 msgstr "Signaux"
 
-#: cdl\core\gui\main.py:659
+#: cdl\core\gui\main.py:679
 msgid "Images"
 msgstr "Images"
 
-#: cdl\core\gui\main.py:664
+#: cdl\core\gui\main.py:684
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:666
+#: cdl\core\gui\main.py:686
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:667
+#: cdl\core\gui\main.py:687
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:668 cdl\core\gui\settings.py:244
+#: cdl\core\gui\main.py:688 cdl\core\gui\settings.py:239
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:669
+#: cdl\core\gui\main.py:689
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:670
+#: cdl\core\gui\main.py:690
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:671
+#: cdl\core\gui\main.py:691
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:685
+#: cdl\core\gui\main.py:705
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:695
+#: cdl\core\gui\main.py:715
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: cdl\core\gui\main.py:705
+#: cdl\core\gui\main.py:725
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:712
+#: cdl\core\gui\main.py:732
 msgid "Show log files..."
 msgstr "Afficher les journaux de bords..."
 
-#: cdl\core\gui\main.py:718 cdl\widgets\instconfviewer.py:66
+#: cdl\core\gui\main.py:738 cdl\widgets\instconfviewer.py:66
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: cdl\core\gui\main.py:725
+#: cdl\core\gui\main.py:745
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:731
+#: cdl\core\gui\main.py:751
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:737
+#: cdl\core\gui\main.py:757
+msgid "Check critical dependencies..."
+msgstr "Vérifier les dépendances critiques..."
+
+#: cdl\core\gui\main.py:762
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:771 cdl\core\gui\panel\macro.py:103
-#: cdl\core\gui\settings.py:247
+#: cdl\core\gui\main.py:795 cdl\core\gui\panel\macro.py:103
+#: cdl\core\gui\settings.py:242
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:780 cdl\core\gui\panel\macro.py:76
+#: cdl\core\gui\main.py:804 cdl\core\gui\panel\macro.py:76
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:963
+#: cdl\core\gui\main.py:987
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:996
+#: cdl\core\gui\main.py:1020
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1569,56 +1582,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1008 cdl\core\gui\panel\base.py:635
+#: cdl\core\gui\main.py:1032 cdl\core\gui\panel\base.py:635
 #: cdl\core\gui\panel\macro.py:423
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1077
+#: cdl\core\gui\main.py:1101
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1079
+#: cdl\core\gui\main.py:1103
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1082
+#: cdl\core\gui\main.py:1106
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1084
+#: cdl\core\gui\main.py:1108
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1087
+#: cdl\core\gui\main.py:1111
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1088
+#: cdl\core\gui\main.py:1112
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1089
+#: cdl\core\gui\main.py:1113
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1093
+#: cdl\core\gui\main.py:1117
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1094
+#: cdl\core\gui\main.py:1118
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1098
+#: cdl\core\gui\main.py:1122
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1116
+#: cdl\core\gui\main.py:1140
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1117
+#: cdl\core\gui\main.py:1141
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1626,7 +1639,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1156
+#: cdl\core\gui\main.py:1180
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1695,7 +1708,7 @@ msgstr "Afficher les résultats"
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:965 cdl\core\gui\processor\base.py:355
+#: cdl\core\gui\panel\base.py:965 cdl\core\gui\processor\base.py:370
 msgid "Results"
 msgstr "Résultats"
 
@@ -1794,19 +1807,19 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:207
+#: cdl\core\gui\processor\base.py:222
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl\core\gui\processor\base.py:273 cdl\core\gui\processor\base.py:338
+#: cdl\core\gui\processor\base.py:288 cdl\core\gui\processor\base.py:353
 msgid "Computing: %s"
 msgstr "Calcul en cours : %s"
 
-#: cdl\core\gui\processor\base.py:416 cdl\core\gui\processor\base.py:485
+#: cdl\core\gui\processor\base.py:431 cdl\core\gui\processor\base.py:500
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
 
-#: cdl\core\gui\processor\base.py:469
+#: cdl\core\gui\processor\base.py:484
 msgid "Select %s"
 msgstr "Sélectionner %s"
 
@@ -1984,28 +1997,18 @@ msgstr ""
 "nouvelle donnée"
 
 #: cdl\core\gui\settings.py:54
-msgid "Ignore dependency check"
-msgstr "Ignorer la vérification des dépendances"
-
-#: cdl\core\gui\settings.py:55
-msgid "Disable the dependency check at startup for critical packages"
-msgstr ""
-"Désactiver la vérification des dépendances au démarrage pour les paquets "
-"critiques"
-
-#: cdl\core\gui\settings.py:59
 msgid "Third-party plugins"
 msgstr "Plugins tiers"
 
-#: cdl\core\gui\settings.py:60
+#: cdl\core\gui\settings.py:55
 msgid "Disable third-party plugins at startup"
 msgstr "Désactiver les plugins tiers au démarrage"
 
-#: cdl\core\gui\settings.py:63
+#: cdl\core\gui\settings.py:58
 msgid "Plugins path"
 msgstr "Chemin des plugins"
 
-#: cdl\core\gui\settings.py:64
+#: cdl\core\gui\settings.py:59
 msgid ""
 "Path to third-party plugins.<br><br>DataLab will discover plugins in this "
 "path, as well as in your PYTHONPATH."
@@ -2013,85 +2016,85 @@ msgstr ""
 "Chemin d'accès aux plugins tiers.<br><br>DataLab découvrira les plugins dans "
 "ce chemin, ainsi que dans votre PYTHONPATH."
 
-#: cdl\core\gui\settings.py:77
+#: cdl\core\gui\settings.py:72
 msgid "Settings for internal console, used for debugging or advanced users"
 msgstr ""
 "Réglages de la console interne, utilisée pour le débogage ou les "
 "utilisateurs avancés"
 
-#: cdl\core\gui\settings.py:79
+#: cdl\core\gui\settings.py:74
 msgid "Console enabled"
 msgstr "Console activée"
 
-#: cdl\core\gui\settings.py:80
+#: cdl\core\gui\settings.py:75
 msgid "External editor path"
 msgstr "Chemin de l'éditeur externe"
 
-#: cdl\core\gui\settings.py:81
+#: cdl\core\gui\settings.py:76
 msgid "External editor arguments"
 msgstr "Arguments de l'éditeur externe"
 
-#: cdl\core\gui\settings.py:88
+#: cdl\core\gui\settings.py:83
 msgid "Settings for I/O operations"
 msgstr "Réglages des opérations d'entrée/sortie"
 
-#: cdl\core\gui\settings.py:89
+#: cdl\core\gui\settings.py:84
 msgid "HDF5 full path in title"
 msgstr "Chemin complet du fichier HDF5 dans le titre"
 
-#: cdl\core\gui\settings.py:90
+#: cdl\core\gui\settings.py:85
 msgid "HDF5 file name in title"
 msgstr "Nom du fichier HDF5 dans le titre"
 
-#: cdl\core\gui\settings.py:97
+#: cdl\core\gui\settings.py:92
 msgid "Settings for computations"
 msgstr "Réglages des calculs"
 
-#: cdl\core\gui\settings.py:98
+#: cdl\core\gui\settings.py:93
 msgid "FFT shift"
 msgstr "Décalage FFT"
 
-#: cdl\core\gui\settings.py:99
+#: cdl\core\gui\settings.py:94
 msgid "Extract ROI in single object"
 msgstr "Extraire les ROI dans un seul objet"
 
-#: cdl\core\gui\settings.py:100
+#: cdl\core\gui\settings.py:95
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
 
-#: cdl\core\gui\settings.py:125 cdl\core\gui\settings.py:167
+#: cdl\core\gui\settings.py:120 cdl\core\gui\settings.py:162
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
 
-#: cdl\core\gui\settings.py:138
+#: cdl\core\gui\settings.py:133
 msgid "Image visualization settings"
 msgstr "Réglages d'affichage d'images"
 
-#: cdl\core\gui\settings.py:140
+#: cdl\core\gui\settings.py:135
 msgid "Plot toolbar position"
 msgstr "Position de la barre d'outils des graphiques"
 
-#: cdl\core\gui\settings.py:142
+#: cdl\core\gui\settings.py:137
 msgid "Top (above plot)"
 msgstr "Haut (au-dessus du graphique)"
 
-#: cdl\core\gui\settings.py:143
+#: cdl\core\gui\settings.py:138
 msgid "Bottom (below plot)"
 msgstr "Bas (en-dessous du graphique)"
 
-#: cdl\core\gui\settings.py:144
+#: cdl\core\gui\settings.py:139
 msgid "Left (of plot)"
 msgstr "Gauche (à gauche du graphique)"
 
-#: cdl\core\gui\settings.py:145
+#: cdl\core\gui\settings.py:140
 msgid "Right (of plot)"
 msgstr "Droite (à droite du graphique)"
 
-#: cdl\core\gui\settings.py:150
+#: cdl\core\gui\settings.py:145
 msgid "Use reference image LUT range"
 msgstr "Utiliser la LUT de l'image de référence"
 
-#: cdl\core\gui\settings.py:151
+#: cdl\core\gui\settings.py:146
 msgid ""
 "If this setting is enabled, images are shown<br>with the same LUT range as "
 "the first selected image"
@@ -2099,15 +2102,15 @@ msgstr ""
 "Si cette option est activée, les images sont affichées<br>avec la même LUT "
 "que la première image sélectionnée"
 
-#: cdl\core\gui\settings.py:157
+#: cdl\core\gui\settings.py:152
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"
 
-#: cdl\core\gui\settings.py:158
+#: cdl\core\gui\settings.py:153
 msgid "%"
 msgstr "%"
 
-#: cdl\core\gui\settings.py:161
+#: cdl\core\gui\settings.py:156
 msgid ""
 "Eliminate a percentage of the highest and lowest values<br>of the image "
 "histogram - <i>recommanded values are below 1%</i>"
@@ -2116,47 +2119,47 @@ msgstr ""
 "l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à "
 "1%</i>"
 
-#: cdl\core\gui\settings.py:202
+#: cdl\core\gui\settings.py:197
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
-#: cdl\core\gui\settings.py:203
+#: cdl\core\gui\settings.py:198
 msgid "RPC server enable status"
 msgstr "Etat d'activation du serveur XML-RPC"
 
-#: cdl\core\gui\settings.py:204
+#: cdl\core\gui\settings.py:199
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
 
-#: cdl\core\gui\settings.py:205
+#: cdl\core\gui\settings.py:200
 msgid "Third-party plugins support"
 msgstr "Prise en charge des plugins tiers"
 
-#: cdl\core\gui\settings.py:206
+#: cdl\core\gui\settings.py:201
 msgid "Third-party plugins path"
 msgstr "Chemin des plugins tiers"
 
-#: cdl\core\gui\settings.py:243
+#: cdl\core\gui\settings.py:238
 msgid "General"
 msgstr "Général"
 
-#: cdl\core\gui\settings.py:245
+#: cdl\core\gui\settings.py:240
 msgid "Visualization"
 msgstr "Visualisation"
 
-#: cdl\core\gui\settings.py:246
+#: cdl\core\gui\settings.py:241
 msgid "I/O"
 msgstr "Entrée/sortie"
 
-#: cdl\core\gui\settings.py:252
+#: cdl\core\gui\settings.py:247
 msgid "Settings"
 msgstr "Préférences"
 
-#: cdl\core\gui\settings.py:266
+#: cdl\core\gui\settings.py:261
 msgid "Restart required"
 msgstr "Redémarrage requis"
 
-#: cdl\core\gui\settings.py:267
+#: cdl\core\gui\settings.py:262
 msgid ""
 "The following options have been changed:\n"
 "\n"
@@ -2445,23 +2448,19 @@ msgstr "Axe Z en échelle logarithmique"
 msgid "Process signal"
 msgstr "Traiter le signal"
 
-#: cdl\plugins.py:100
+#: cdl\plugins.py:104
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
-#: cdl\plugins.py:107
+#: cdl\plugins.py:111
 msgid "No plugins available"
 msgstr "Aucun plugin disponible"
 
-#: cdl\plugins.py:109
+#: cdl\plugins.py:113
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
-#: cdl\plugins.py:159
-msgid "Information"
-msgstr "Information"
-
-#: cdl\plugins.py:166
+#: cdl\plugins.py:170
 msgid "Question"
 msgstr "Question"
 
@@ -2539,8 +2538,8 @@ msgstr "Ecart-type de la distribution gaussienne"
 msgid "Seed for random number generator"
 msgstr "Graine du générateur de nombres aléatoires"
 
-#: cdl\tests\features\common\stat_app.py:51
-#: cdl\tests\features\image\flatfield_app.py:29
+#: cdl\tests\features\common\stat_app.py:50
+#: cdl\tests\features\images\flatfield_app.py:29
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
 
@@ -2564,23 +2563,23 @@ msgstr "Supprimer tous les objets"
 msgid "Close DataLab"
 msgstr "Fermer DataLab"
 
-#: cdl\tests\features\embedded1_unit.py:176
+#: cdl\tests\features\embedded1_unit.py:174
 msgid "This the host application, which embeds DataLab."
 msgstr "Ceci est une application embarquant DataLab."
 
-#: cdl\tests\features\embedded1_unit.py:177
+#: cdl\tests\features\embedded1_unit.py:175
 msgid "Open DataLab"
 msgstr "Ouvrir DataLab"
 
-#: cdl\tests\features\embedded1_unit.py:196
+#: cdl\tests\features\embedded1_unit.py:194
 msgid "Import signal from DataLab"
 msgstr "Importer un signal depuis DataLab"
 
-#: cdl\tests\features\embedded1_unit.py:197
+#: cdl\tests\features\embedded1_unit.py:195
 msgid "Import image from DataLab"
 msgstr "Importer une image depuis DataLab"
 
-#: cdl\tests\features\image\flatfield_app.py:37
+#: cdl\tests\features\images\flatfield_app.py:37
 msgid "Flat data (Uniform random)"
 msgstr "Image d'homogénéité (Distribution uniforme)"
 
@@ -2592,23 +2591,23 @@ msgstr "Ceci l'application cliente, qui se connecte à DataLab."
 msgid "Connect to DataLab"
 msgstr "Se connecter à DataLab"
 
-#: cdl\tests\features\remoteclient_app.py:52
+#: cdl\tests\features\remoteclient_app.py:57
 msgid "Execute multiple commands"
 msgstr "Exécuter des commandes multiples"
 
-#: cdl\tests\features\remoteclient_app.py:53
+#: cdl\tests\features\remoteclient_app.py:58
 msgid "Get object titles"
 msgstr "Obtenir la liste des titres"
 
-#: cdl\tests\features\remoteclient_app.py:54
+#: cdl\tests\features\remoteclient_app.py:59
 msgid "Get object uuids"
 msgstr "Obtenir la liste des uuids"
 
-#: cdl\tests\features\remoteclient_app.py:55
+#: cdl\tests\features\remoteclient_app.py:60
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdl\tests\scenarios\demo.py:48 cdl\tests\scenarios\scenario_sig_app.py:116
+#: cdl\tests\scenarios\demo.py:49 cdl\tests\scenarios\scenario_sig_app.py:115
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
@@ -2768,6 +2767,21 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid ""
+#~ "Please click on the Ignore button to avoid showing this message at "
+#~ "startup."
+#~ msgstr ""
+#~ "Cliquer sur le bouton Ignorer pour éviter d'afficher ce message à chaque "
+#~ "démarrage."
+
+#~ msgid "Ignore dependency check"
+#~ msgstr "Ignorer la vérification des dépendances"
+
+#~ msgid "Disable the dependency check at startup for critical packages"
+#~ msgstr ""
+#~ "Désactiver la vérification des dépendances au démarrage pour les paquets "
+#~ "critiques"
 
 #~ msgid "Sample 1"
 #~ msgstr "Echantillon 1"
