@@ -346,6 +346,13 @@ class BaseDataPanel(AbstractPanel):
             group_id: group id
             set_current: if True, set the added object as current
         """
+        if obj in self.objmodel:
+            # Prevent adding the same object twice
+            raise ValueError(
+                f"Object {hex(id(obj))} already in panel. "
+                f"The same object cannot be added twice: "
+                f"please use a copy of the object."
+            )
         if group_id is None:
             group_id = self.objview.get_current_group_id()
             if group_id is None:

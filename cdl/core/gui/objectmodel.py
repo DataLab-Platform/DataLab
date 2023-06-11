@@ -206,6 +206,10 @@ class ObjectModel:
         """Return True if model is not empty"""
         return bool(self._objects)
 
+    def __contains__(self, obj: SignalObj | ImageObj) -> bool:
+        """Return True if obj is in model"""
+        return obj.uuid in self._objects
+
     def clear(self) -> None:
         """Clear model"""
         self._objects.clear()
