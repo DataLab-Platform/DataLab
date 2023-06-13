@@ -370,7 +370,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             name (str): New name of the macro
         """
         index = self.get_index_from_macro(self.sender())
-        self.tabwidget.setTabText(index, name)
+        if index is not None:
+            self.tabwidget.setTabText(index, name)
 
     def rename_macro(self, index: int | None = None) -> None:
         """Rename macro
