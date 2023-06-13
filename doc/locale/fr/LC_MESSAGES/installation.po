@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-18 11:22+0200\n"
+"POT-Creation-Date: 2023-06-13 14:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -107,27 +107,27 @@ msgstr ""
 msgid "5.5"
 msgstr ""
 
-#: ../../install_requires.txt:24
+#: ../../install_requires.txt:22
 msgid "guidata"
 msgstr ""
 
-#: ../../install_requires.txt:25
-msgid "2.3"
+#: ../../install_requires.txt:23
+msgid "2.4"
 msgstr ""
 
-#: ../../install_requires.txt:26
+#: ../../install_requires.txt:24
 msgid "guiqwt"
 msgstr ""
 
-#: ../../install_requires.txt:27
-msgid "4.3"
+#: ../../install_requires.txt:25
+msgid "4.4"
 msgstr ""
 
-#: ../../install_requires.txt:28
+#: ../../install_requires.txt:26
 msgid "QtPy"
 msgstr ""
 
-#: ../../install_requires.txt:29
+#: ../../install_requires.txt:27
 msgid "1.9"
 msgstr ""
 
@@ -221,3 +221,10 @@ msgstr ""
 
 #~ msgid "3.7"
 #~ msgstr ""
+
+#~ msgid "2.3"
+#~ msgstr ""
+
+#~ msgid "4.3"
+#~ msgstr ""
+

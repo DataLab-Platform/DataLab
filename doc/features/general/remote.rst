@@ -2,23 +2,28 @@ Remote controlling
 ==================
 
 DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
-natively supported by Python. Remote controlling allows to access DataLab
-main features from a separate process.
+natively supported by Python (and many other languages). Remote controlling
+allows to access DataLab main features from a separate process.
 
 From an IDE
 ^^^^^^^^^^^
 
-It is possible to run a Python script from an IDE (e.g. `Spyder`_ or any
-other IDE, or even a Jupyter Notebook) that connects to a running DataLab
-instance, adds a signal and an image, and then runs calculations. This is
-the case of the `RemoteCDLProxy` class that is provided in module ``cdl.proxy``.
+DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other
+IDE, or even a Jupyter Notebook) that runs a Python script. It allows to
+connect to a running DataLab instance, adds a signal and an image, and then
+runs calculations. This feature is exposed by the `RemoteCDLProxy` class that
+is provided in module ``cdl.proxy``.
 
 From a third-party application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-It is also possible to connect to a running DataLab instance from a third-party
-application, adds a signal and an image, and then runs calculations. This is
-the case of the `RemoteCDLProxy` class that is provided in module ``cdl.proxy``.
+DataLab may also be controlled remotely from a third-party application, for the
+same purpose.
+
+If the third-party application is written in Python 3, it may directly use the
+`RemoteCDLProxy` class as mentioned above. From another language, it is also
+achievable, but it requires to implement a XML-RPC client in this language
+using the same methods of proxy server as in the `RemoteCDLProxy` class.
 
 Data (signals and images) may also be exchanged between DataLab and the remote
 client application, in both directions.
@@ -86,14 +91,15 @@ Here is a Python 2.7 reimplementation of this class:
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: cdl.remotecontrol
+.. automodule:: cdl.core.remote
 
 Public API: additional methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The remote control class methods may be completed with additional methods which
-are dynamically added at runtime. This mechanism allows to access the methods
-of the "processor" objects of DataLab.
+The remote control class methods (either using the proxy or the remote client)
+may be completed with additional methods which are dynamically added at
+runtime. This mechanism allows to access the methods of the "processor"
+objects of DataLab.
 
 .. automodule:: cdl.core.gui.processor.signal
     :members:

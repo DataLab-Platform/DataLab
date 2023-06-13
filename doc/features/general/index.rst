@@ -11,7 +11,7 @@ General features
 
    command
    h5browser
-   remotecontrol
+   remote
    model
    plugins
    logviewer

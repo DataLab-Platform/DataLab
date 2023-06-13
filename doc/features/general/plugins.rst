@@ -12,6 +12,14 @@ The plugin system currently supports the following features:
 - Input/output features: add new file formats to the DataLab file I/O system.
 - HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system.
 
+Example
+^^^^^^^
+
+Here is a simple example of a plugin that adds a new features to DataLab.
+
+.. literalinclude:: ../../../cdl/plugins/cdl_plugin_testdata.py
+
+
 Public API
 ^^^^^^^^^^
 

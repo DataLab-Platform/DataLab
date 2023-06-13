@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 18:27+0200\n"
+"POT-Creation-Date: 2023-06-13 14:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../features/general/plugins.rst:2
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: ../../features/general/plugins.rst:4
 msgid ""
@@ -27,31 +27,39 @@ msgid ""
 "DataLab by writing plugins. A plugin is a Python module that is loaded at"
 " startup by DataLab. A plugin may add new features to DataLab, or modify "
 "existing features."
-msgstr ""
+msgstr "DataLab est une application modulaire. Il est possible d'ajouter de nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin est un module Python qui est chargé au démarrage par DataLab. Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des fonctionnalités existantes."
 
 #: ../../features/general/plugins.rst:8
 msgid "The plugin system currently supports the following features:"
-msgstr ""
+msgstr "Le système de plugins prend actuellement en charge les fonctionnalités suivantes :"
 
 #: ../../features/general/plugins.rst:10
 msgid ""
 "Processing features: add new processing tasks to the DataLab processing "
 "system, including specific graphical user interfaces."
-msgstr ""
+msgstr "Fonctionnalités de traitement : ajouter de nouvelles tâches de traitement au système de traitement DataLab, y compris des interfaces graphiques spécifiques."
 
 #: ../../features/general/plugins.rst:12
 msgid ""
 "Input/output features: add new file formats to the DataLab file I/O "
 "system."
-msgstr ""
+msgstr "Entrée/sortie : ajouter de nouveaux formats de fichiers au système d'entrée/sortie de DataLab."
 
 #: ../../features/general/plugins.rst:13
 msgid "HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system."
-msgstr ""
+msgstr "Fonctionnalités HDF5 : ajouter de nouveaux formats de fichiers HDF5 au système d'entrée/sortie HDF5 de DataLab."
 
 #: ../../features/general/plugins.rst:16
+msgid "Example"
+msgstr "Exemple"
+
+#: ../../features/general/plugins.rst:18
+msgid "Here is a simple example of a plugin that adds a new features to DataLab."
+msgstr "Voici un exemple simple d'un plugin qui ajoute une nouvelle fonctionnalité à DataLab."
+
+#: ../../features/general/plugins.rst:24
 msgid "Public API"
-msgstr ""
+msgstr "API publique"
 
 #: cdl.plugins:2 of
 msgid "DataLab plugin system"
@@ -130,4 +138,3 @@ msgstr ""
 #: cdl.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
 msgstr ""
-

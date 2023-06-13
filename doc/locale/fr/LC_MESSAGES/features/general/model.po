@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 18:27+0200\n"
+"POT-Creation-Date: 2023-06-13 14:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -38,16 +38,91 @@ msgid "`cdl.core.model.image.ImageObj`, which represents an image object."
 msgstr "`cdl.core.model.image.ImageObj`, qui représente un objet image."
 
 #: ../../features/general/model.rst:11
-msgid "These classes are defined in the `cdl.core.model` package."
-msgstr "Ces classes sont définies dans le paquet `cdl.core.model`."
+msgid ""
+"These classes are defined in the `cdl.core.model` package but are exposed"
+" publicly in the `cdl.obj` package."
+msgstr "Ces classes sont définies dans le paquet `cdl.core.model` mais sont exposées publiquement dans le paquet `cdl.obj`."
 
 #: ../../features/general/model.rst:14
+msgid ""
+"Also, DataLab uses many different datasets (based on guidata's `DataSet` "
+"class) to store the parameters of the computations. These datasets are "
+"defined in different modules but are exposed publicly in the `cdl.param` "
+"package."
+msgstr "Par ailleurs, DataLab utilise de nombreux jeux de données différents (basés sur la classe `DataSet` de guidata) pour stocker les paramètres des calculs. Ces jeux de données sont définis dans différents modules mais sont exposés publiquement dans le paquet `cdl.param`."
+
+#: ../../features/general/model.rst:19
 msgid "Public API"
 msgstr "API publique"
 
-#: ../../features/general/model.rst:16
+#: ../../features/general/model.rst:21
 msgid "The public API is the following:"
 msgstr "L'API publique est la suivante :"
+
+#: cdl.obj:2 of
+msgid "DataLab Public API's object model module"
+msgstr ""
+
+#: cdl.obj:4 of
+msgid ""
+"This modules aims at providing all the necessary classes and functions to"
+" create and manipulate DataLab signal and image objects."
+msgstr ""
+
+#: cdl.obj:11 of
+#, fuzzy
+msgid "Those classes and functions are defined in other modules:"
+msgstr "Ces classes sont définies dans le paquet `cdl.core.model`."
+
+#: cdl.obj:8 of
+msgid ":mod:`cdl.core.model.base`"
+msgstr ""
+
+#: cdl.obj:9 of
+msgid ":mod:`cdl.core.model.image`"
+msgstr ""
+
+#: cdl.obj:10 of
+msgid ":mod:`cdl.core.model.signal`"
+msgstr ""
+
+#: cdl.obj:11 of
+msgid ":mod:`cdl.core.io`"
+msgstr ""
+
+#: cdl.obj:13 of
+msgid "This module is thus a convenient way to import all the objects at once."
+msgstr ""
+
+#: cdl.param:2 of
+msgid "DataLab Base Computation parameters module"
+msgstr ""
+
+#: cdl.param:4 of
+msgid ""
+"This modules aims at providing all the dataset parameters that are used "
+"by the :mod:`cdl.core.gui.processor` module."
+msgstr ""
+
+#: cdl.param:10 of
+msgid "Those datasets are defined other modules:"
+msgstr ""
+
+#: cdl.param:8 of
+msgid ":mod:`cdl.core.computation.base`"
+msgstr ""
+
+#: cdl.param:9 of
+msgid ":mod:`cdl.core.computation.image`"
+msgstr ""
+
+#: cdl.param:10 of
+msgid ":mod:`cdl.core.computation.signal`"
+msgstr ""
+
+#: cdl.param:12 of
+msgid "This module is thus a convenient way to import all the parameters at once."
+msgstr ""
 
 #: cdl.core.model.signal:2 of
 msgid "Signal object and related classes"
@@ -127,8 +202,7 @@ msgid "Add label with title annotation"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.add_label_with_title
-#: cdl.core.model.image.ImageObj.copy_data_from
-#: cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
 #: cdl.core.model.image.ImageObj.get_roi_param
 #: cdl.core.model.image.ImageObj.iterate_roi_items
 #: cdl.core.model.image.ImageObj.make_item
@@ -147,7 +221,7 @@ msgstr ""
 #: cdl.core.model.image.make_roi_circle cdl.core.model.image.make_roi_rectangle
 #: cdl.core.model.image.new_image_param
 #: cdl.core.model.signal.SignalObj.add_label_with_title
-#: cdl.core.model.signal.SignalObj.copy_data_from
+#: cdl.core.model.signal.SignalObj.copy
 #: cdl.core.model.signal.SignalObj.get_data
 #: cdl.core.model.signal.SignalObj.get_roi_param
 #: cdl.core.model.signal.SignalObj.iterate_roi_items
@@ -169,21 +243,66 @@ msgstr ""
 msgid "title (if None, use signal title)"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy_data_from:1
-#: cdl.core.model.signal.SignalObj.copy_data_from:1 of
-msgid "Copy data from other dataset instance."
+#: cdl.core.model.image.ImageObj.copy:1 cdl.core.model.signal.SignalObj.copy:1
+#: of
+msgid "Copy object."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy_data_from:3
-#: cdl.core.model.signal.SignalObj.copy_data_from:3 of
-msgid "other dataset instance"
+#: cdl.core.model.image.ImageObj.copy:3
+#: cdl.core.model.image.ImageObj.get_roi_param:3
+#: cdl.core.model.image.make_roi_circle:11
+#: cdl.core.model.image.make_roi_rectangle:11
+#: cdl.core.model.signal.SignalObj.copy:3
+#: cdl.core.model.signal.SignalObj.get_roi_param:3 of
+msgid "title"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy_data_from:5
+#: cdl.core.model.image.ImageObj.copy:5
 #: cdl.core.model.image.ImageObj.set_data_type:3
-#: cdl.core.model.signal.SignalObj.copy_data_from:5
+#: cdl.core.model.signal.SignalObj.copy:5
 #: cdl.core.model.signal.SignalObj.set_data_type:3 of
 msgid "data type"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.maskdata
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy:8 cdl.core.model.signal.SignalObj.copy:8
+#: of
+msgid "copied object"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.maskdata
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param of
+msgid "Return type"
 msgstr ""
 
 #: cdl.core.model.signal.SignalObj.data:1 cdl.core.model.signal.SignalObj.y:1
@@ -212,58 +331,15 @@ msgstr ""
 msgid "ROI index"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.maskdata
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param of
-msgid "Returns"
-msgstr ""
-
 #: cdl.core.model.image.RoiDataItem.apply_mask:3
 #: cdl.core.model.image.RoiDataItem.get_masked_view:3
 #: cdl.core.model.signal.SignalObj.get_data:7 of
 msgid "data"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.maskdata
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param of
-msgid "Return type"
-msgstr ""
-
 #: cdl.core.model.image.ImageObj.get_roi_param:1
 #: cdl.core.model.signal.SignalObj.get_roi_param:1 of
 msgid "Return ROI parameters dataset."
-msgstr ""
-
-#: cdl.core.model.image.ImageObj.get_roi_param:3
-#: cdl.core.model.image.make_roi_circle:11
-#: cdl.core.model.image.make_roi_rectangle:11
-#: cdl.core.model.signal.SignalObj.get_roi_param:3 of
-msgid "title"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.get_roi_param:5
@@ -814,3 +890,9 @@ msgstr ""
 
 #~ msgid "DataLab Datasets"
 #~ msgstr "Datasets DataLab"
+
+#~ msgid "Copy data from other dataset instance."
+#~ msgstr ""
+
+#~ msgid "other dataset instance"
+#~ msgstr ""
