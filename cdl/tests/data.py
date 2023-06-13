@@ -110,6 +110,7 @@ def add_gaussian_noise_to_signal(
         p = GaussianNoiseParam()
     rng = np.random.default_rng(p.seed)
     signal.data += rng.normal(p.mu, p.sigma, size=signal.data.shape)
+    signal.title = f"GaussNoise({signal.title}, µ={p.mu}, σ={p.sigma})"
 
 
 def create_noisy_signal(
@@ -248,31 +249,28 @@ def get_laser_spot_data() -> list[np.ndarray]:
     ]
 
 
-@dataclasses.dataclass
-class PeakDataParam:
-    """Peak data test image parameters
+class PeakDataParam(gdt.DataSet):
+    """Peak data test image parameters"""
 
-    Attributes:
-        size (int): Size of the data
-        n_points (int): Number of points
-        sigma_gauss2d (float): Sigma of the 2D Gaussian
-        amp_gauss2d (int): Amplitude of the 2D Gaussian
-        mu_noise (int): Mean of the Gaussian distribution
-        sigma_noise (int): Standard deviation of the Gaussian distribution
-        dx0 (float): x0
-        dy0 (float): y0
-        att (float): Attenuation
-    """
-
-    size: int = 2000
-    n_points: int = 4
-    sigma_gauss2d: float = 0.06
-    amp_gauss2d: int = 1900
-    mu_noise: int = 845
-    sigma_noise: int = 25
-    dx0: float = 0.0
-    dy0: float = 0.0
-    att: float = 1.0
+    size = gdi.IntItem(_("Size"), default=2000, min=1)
+    n_points = gdi.IntItem(_("Number"), default=4, min=1, help=_("Number of points"))
+    sigma_gauss2d = gdi.FloatItem(
+        "σ<sub>Gauss2D</sub>", default=0.06, help=_("Sigma of the 2D Gaussian")
+    )
+    amp_gauss2d = gdi.IntItem(
+        "A<sub>Gauss2D</sub>", default=1900, help=_("Amplitude of the 2D Gaussian")
+    )
+    mu_noise = gdi.IntItem(
+        "μ<sub>noise</sub>", default=845, help=_("Mean of the Gaussian distribution")
+    )
+    sigma_noise = gdi.IntItem(
+        "σ<sub>noise</sub>",
+        default=25,
+        help=_("Standard deviation of the Gaussian distribution"),
+    )
+    dx0 = gdi.FloatItem("dx0", default=0.0)
+    dy0 = gdi.FloatItem("dy0", default=0.0)
+    att = gdi.FloatItem(_("Attenuation"), default=1.0)
 
 
 def get_peak2d_data(

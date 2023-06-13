@@ -719,6 +719,8 @@ class ImageTypes(base.Choices):
 class NewImageParam(gdt.DataSet):
     """New image dataset"""
 
+    hide_image_type = False
+
     title = gdi.StringItem(_("Title"))
     height = gdi.IntItem(
         _("Height"), help=_("Image height (total number of rows)"), min=1
@@ -727,7 +729,9 @@ class NewImageParam(gdt.DataSet):
         _("Width"), help=_("Image width (total number of columns)"), min=1
     )
     dtype = gdi.ChoiceItem(_("Data type"), ImageDatatypes.get_choices())
-    itype = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
+    itype = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices()).set_prop(
+        "display", hide=gdt.GetAttrProp("hide_image_type")
+    )
 
 
 DEFAULT_TITLE = _("Untitled image")

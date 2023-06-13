@@ -540,11 +540,25 @@ class BaseDataPanel(AbstractPanel):
             self.objview.update_item(group.uuid)
 
     @abc.abstractmethod
+    def get_newparam_from_current(
+        self, newparam: NewSignalParam | NewImageParam | None = None
+    ) -> NewSignalParam | NewImageParam | None:
+        """Get new object parameters from the current object.
+
+        Args:
+            newparam (DataSet): new object parameters. If None, create a new one.
+
+        Returns:
+            New object parameters
+        """
+
+    @abc.abstractmethod
     def new_object(
         self,
         newparam: NewSignalParam | NewImageParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
+        add_to_panel: bool = True,
     ) -> SignalObj | ImageObj | None:
         """Create a new object (signal/image).
 
@@ -552,6 +566,7 @@ class BaseDataPanel(AbstractPanel):
             newparam (DataSet): new object parameters
             addparam (DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
+            add_to_panel (bool): Add object to panel (default: True)
 
         Returns:
             New object

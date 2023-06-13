@@ -81,11 +81,30 @@ class ImagePanel(BaseDataPanel):
             super().properties_changed()
 
     # ------Creating, adding, removing objects------------------------------------------
+    def get_newparam_from_current(
+        self, newparam: NewImageParam | None = None
+    ) -> NewImageParam | None:
+        """Get new object parameters from the current object.
+
+        Args:
+            newparam (DataSet): new object parameters. If None, create a new one.
+
+        Returns:
+            New object parameters
+        """
+        curobj: ImageObj = self.objview.get_current_object()
+        newparam = new_image_param() if newparam is None else newparam
+        if curobj is not None:
+            newparam.width, newparam.height = curobj.size
+            newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)
+        return newparam
+
     def new_object(
         self,
         newparam: NewImageParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
+        add_to_panel: bool = True,
     ) -> ImageObj | None:
         """Create a new object (image).
 
@@ -93,23 +112,21 @@ class ImagePanel(BaseDataPanel):
             newparam (DataSet): new object parameters
             addparam (DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
+            add_to_panel (bool): Add the object to the panel (default: True)
 
         Returns:
             New object
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        curobj: ImageObj = self.objview.get_current_object()
-        if curobj is not None:
-            newparam = newparam if newparam is not None else new_image_param()
-            newparam.width, newparam.height = curobj.size
-            newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)
+        newparam = self.get_newparam_from_current(newparam)
         image = create_image_from_param(
             newparam, addparam=addparam, edit=edit, parent=self
         )
         if image is None:
             return None
-        self.add_object(image)
+        if add_to_panel:
+            self.add_object(image)
         return image
 
     def delete_metadata(self) -> None:

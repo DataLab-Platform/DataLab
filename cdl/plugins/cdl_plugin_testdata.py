@@ -11,11 +11,12 @@ This plugin is an example of DataLab plugin. It provides test data samples
 and some actions to test DataLab functionalities.
 """
 
+import cdl.obj as dlo
+import cdl.param as dlp
 import cdl.tests.data as test_data
 from cdl.config import _
 from cdl.core.computation import image as cpima
 from cdl.core.computation import signal as cpsig
-from cdl.obj import ImageObj, NormalRandomParam, SignalObj
 from cdl.plugins import PluginBase, PluginInfo
 
 # ------------------------------------------------------------------------------
@@ -24,14 +25,16 @@ from cdl.plugins import PluginBase, PluginInfo
 # ------------------------------------------------------------------------------
 
 
-def add_noise_to_signal(src: SignalObj, p: test_data.GaussianNoiseParam) -> SignalObj:
+def add_noise_to_signal(
+    src: dlo.SignalObj, p: test_data.GaussianNoiseParam
+) -> dlo.SignalObj:
     """Add gaussian noise to signal"""
     dst = cpsig.dst_11(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_signal(dst, p)
     return dst
 
 
-def add_noise_to_image(src: ImageObj, p: NormalRandomParam) -> ImageObj:
+def add_noise_to_image(src: dlo.ImageObj, p: dlo.NormalRandomParam) -> dlo.ImageObj:
     """Add gaussian noise to image"""
     dst = cpima.dst_11(src, "add_gaussian_noise", f"mu={p.mu},sigma={p.sigma}")
     test_data.add_gaussian_noise_to_image(dst, p)
@@ -63,42 +66,67 @@ class PluginTestData(PluginBase):
 
     def create_noisy_signal(self) -> None:
         """Create noisy signal"""
-        obj = test_data.create_noisy_signal()
-        self.proxy.add_object(obj)
+        obj = self.signalpanel.new_object(add_to_panel=False)
+        if obj is not None:
+            noiseparam = test_data.GaussianNoiseParam(_("Noise"))
+            self.signalpanel.processor.update_param_defaults(noiseparam)
+            if noiseparam.edit(self.signalpanel):
+                test_data.add_gaussian_noise_to_signal(obj, noiseparam)
+                self.proxy.add_object(obj)
 
     # Image processing features ------------------------------------------------
     def add_noise_to_image(self) -> None:
         """Add noise to image"""
         self.imagepanel.processor.compute_11(
             add_noise_to_image,
-            paramclass=NormalRandomParam,
+            paramclass=dlo.NormalRandomParam,
             title=_("Add noise"),
         )
 
     def create_peak2d_image(self) -> None:
         """Create 2D peak image"""
-        obj = test_data.create_peak2d_image()
-        self.proxy.add_object(obj)
+        obj = self.imagepanel.new_object(add_to_panel=False)
+        param = test_data.PeakDataParam.create(size=max(obj.data.shape))
+        self.imagepanel.processor.update_param_defaults(param)
+        if param.edit(self.imagepanel):
+            obj.data = test_data.get_peak2d_data(param)
+            self.proxy.add_object(obj)
+
+    def __get_newimageparam(self):
+        """Create new image parameter dataset"""
+        newparam = self.imagepanel.get_newparam_from_current()
+        newparam.hide_image_type = True
+        if newparam.edit(self.imagepanel):
+            return newparam
+        return None
 
     def create_sincos_image(self) -> None:
         """Create 2D sin cos image"""
-        obj = test_data.create_sincos_image()
-        self.proxy.add_object(obj)
+        newparam = self.__get_newimageparam()
+        if newparam is not None:
+            obj = test_data.create_sincos_image(newparam)
+            self.proxy.add_object(obj)
 
     def create_noisygauss_image(self) -> None:
         """Create 2D noisy gauss image"""
-        obj = test_data.create_noisygauss_image()
-        self.proxy.add_object(obj)
+        newparam = self.__get_newimageparam()
+        if newparam is not None:
+            obj = test_data.create_noisygauss_image(newparam)
+            self.proxy.add_object(obj)
 
     def create_multigauss_image(self) -> None:
         """Create 2D multi gauss image"""
-        obj = test_data.create_multigauss_image()
-        self.proxy.add_object(obj)
+        newparam = self.__get_newimageparam()
+        if newparam is not None:
+            obj = test_data.create_multigauss_image(newparam)
+            self.proxy.add_object(obj)
 
     def create_2dstep_image(self) -> None:
         """Create 2D step image"""
-        obj = test_data.create_2dstep_image()
-        self.proxy.add_object(obj)
+        newparam = self.__get_newimageparam()
+        if newparam is not None:
+            obj = test_data.create_2dstep_image(newparam)
+            self.proxy.add_object(obj)
 
     def create_annotated_image(self) -> None:
         """Create annotated image"""

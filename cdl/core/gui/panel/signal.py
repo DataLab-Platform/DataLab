@@ -50,11 +50,31 @@ class SignalPanel(BaseDataPanel):
         self.acthandler = SignalActionHandler(self, toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
+    def get_newparam_from_current(
+        self, newparam: NewSignalParam | None = None
+    ) -> NewSignalParam | None:
+        """Get new object parameters from the current object.
+
+        Args:
+            newparam (DataSet): new object parameters. If None, create a new one.
+
+        Returns:
+            New object parameters
+        """
+        curobj: SignalObj = self.objview.get_current_object()
+        newparam = new_signal_param() if newparam is None else newparam
+        if curobj is not None:
+            newparam.size = len(curobj.data)
+            newparam.xmin = curobj.x.min()
+            newparam.xmax = curobj.x.max()
+        return newparam
+
     def new_object(
         self,
         newparam: NewSignalParam | None = None,
         addparam: gdt.DataSet | None = None,
         edit: bool = True,
+        add_to_panel: bool = True,
     ) -> SignalObj | None:
         """Create a new object (signal).
 
@@ -62,22 +82,19 @@ class SignalPanel(BaseDataPanel):
             newparam (DataSet): new object parameters
             addparam (DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
+            add_to_panel (bool): Add the new object to the panel (default: True)
 
         Returns:
             New object
         """
         if not self.mainwindow.confirm_memory_state():
             return None
-        curobj: SignalObj = self.objview.get_current_object()
-        if curobj is not None:
-            newparam = newparam if newparam is not None else new_signal_param()
-            newparam.size = len(curobj.data)
-            newparam.xmin = curobj.x.min()
-            newparam.xmax = curobj.x.max()
+        newparam = self.get_newparam_from_current(newparam)
         signal = create_signal_from_param(
             newparam, addparam=addparam, edit=edit, parent=self
         )
         if signal is None:
             return None
-        self.add_object(signal)
+        if add_to_panel:
+            self.add_object(signal)
         return signal

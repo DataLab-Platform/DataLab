@@ -501,13 +501,17 @@ class StepParam(gdt.DataSet):
 class NewSignalParam(gdt.DataSet):
     """New signal dataset"""
 
+    hide_signal_type = False
+
     title = gdi.StringItem(_("Title"))
     xmin = gdi.FloatItem("Xmin", default=-10.0)
     xmax = gdi.FloatItem("Xmax", default=10.0)
     size = gdi.IntItem(
         _("Size"), help=_("Signal size (total number of points)"), min=1, default=500
     )
-    stype = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices())
+    stype = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices()).set_prop(
+        "display", hide=gdt.GetAttrProp("hide_signal_type")
+    )
 
 
 DEFAULT_TITLE = _("Untitled signal")
