@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
+import numpy as np
 
 from cdl.config import _
 
@@ -57,3 +58,27 @@ class ClipParam(gdt.DataSet):
     """Data clipping parameters"""
 
     value = gdi.FloatItem(_("Clipping value"))
+
+
+class ROIDataParam(gdt.DataSet):
+    """ROI Editor data"""
+
+    roidata = gdi.FloatArrayItem(_("ROI data"))
+    singleobj = gdi.BoolItem(_("Single object"))
+    modified = gdi.BoolItem(_("Modified")).set_prop("display", hide=True)
+
+    # pylint: disable=arguments-differ
+    @classmethod
+    def create(cls, roidata: np.ndarray | None = None, singleobj: bool | None = None):
+        """Create ROIDataParam instance"""
+        if roidata is not None:
+            roidata = np.array(roidata, dtype=int)
+        instance = cls()
+        instance.roidata = roidata
+        instance.singleobj = singleobj
+        return instance
+
+    @property
+    def is_empty(self) -> bool:
+        """Return True if there is no ROI"""
+        return self.roidata is None or self.roidata.size == 0

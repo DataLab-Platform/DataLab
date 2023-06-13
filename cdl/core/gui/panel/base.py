@@ -69,6 +69,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
+import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
@@ -223,12 +224,8 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         """Return object number"""
 
     @abc.abstractmethod
-    def create_object(self, title=None) -> ObjItf:
-        """Create and return object
-
-        Args:
-            title: object title
-        """
+    def create_object(self) -> ObjItf:
+        """Create and return object"""
 
     @abc.abstractmethod
     def add_object(self, obj: ObjItf) -> None:
@@ -319,18 +316,13 @@ class BaseDataPanel(AbstractPanel):
         """
         return len(self.objmodel)
 
-    def create_object(self, title: str | None = None) -> SignalObj | ImageObj:
+    def create_object(self) -> SignalObj | ImageObj:
         """Create object (signal or image)
-
-        Args:
-            title: object title
 
         Returns:
             SignalObj or ImageObj object
         """
-        obj = self.PARAMCLASS(title=title)  # pylint: disable=not-callable
-        obj.title = title
-        return obj
+        return self.PARAMCLASS()  # pylint: disable=not-callable
 
     @qt_try_except()
     def add_object(
@@ -427,12 +419,9 @@ class BaseDataPanel(AbstractPanel):
     ) -> None:
         """Duplicate individual object"""
         obj = self.objmodel[oid]
-        objcopy = self.create_object()
-        objcopy.title = obj.title
-        objcopy.copy_data_from(obj)
         if new_group_id is None:
             new_group_id = self.objmodel.get_object_group_id(obj)
-        self.add_object(objcopy, group_id=new_group_id, set_current=set_current)
+        self.add_object(obj.copy(), group_id=new_group_id, set_current=set_current)
 
     def duplicate_object(self) -> None:
         """Duplication signal/image object"""
@@ -887,7 +876,9 @@ class BaseDataPanel(AbstractPanel):
         )
         return dlg, obj
 
-    def get_roi_dialog(self, extract: bool, singleobj: bool) -> roieditor.ROIEditorData:
+    def get_roi_dialog(
+        self, extract: bool, singleobj: bool
+    ) -> cdl.core.computation.base.ROIDataParam:
         """Get ROI data (array) from specific dialog box.
 
         Args:

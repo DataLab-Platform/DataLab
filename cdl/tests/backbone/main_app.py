@@ -62,8 +62,7 @@ def test():
         execenv.print(f"Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
-        param = MovingMedianParam()
-        param.n = 5
+        param = MovingMedianParam.create(n=5)
         win.calc("compute_moving_median", param)
         # Use "calc" method without parameters
         win.calc("compute_integral")

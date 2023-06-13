@@ -161,16 +161,13 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """
         return len(self.__macros)
 
-    def create_object(self, title=None) -> Macro:
+    def create_object(self) -> Macro:
         """Create object.
-
-        Args:
-            title (str): Title of the object
 
         Returns:
             Macro: Macro object
         """
-        macro = Macro(self.console, title)
+        macro = Macro(self.console)
         macro.objectNameChanged.connect(self.macro_name_changed)
         macro.STARTED.connect(
             lambda orig_macro=macro: self.macro_state_changed(orig_macro, True)
@@ -340,19 +337,20 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.run_action.setEnabled(not state)
             self.stop_action.setEnabled(state)
 
-    def add_macro(self, name: str | None = None) -> Macro:
+    def add_macro(self, title: str | None = None) -> Macro:
         """Add macro, optionally with name
 
         Args:
-            name (str, optional): Name of the macro. Defaults to None.
-                If None, a dialog box will be opened to ask for a name.
+            title (str, optional): Title of the macro. Defaults to None.
+                If None, a dialog box will be opened to ask for a title.
 
         Returns:
             Macro: Macro object
         """
-        macro = self.create_object(name)
+        macro = self.create_object()
+        macro.title = title
         self.add_object(macro)
-        if name is None:
+        if title is None:
             self.rename_macro()
         return macro
 
@@ -371,17 +369,17 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         Args:
             index (int, optional): Index of the macro. Defaults to None.
         """
-        macro = self.get_macro(index)
+        macro: Macro = self.get_macro(index)
         assert macro is not None
-        name, valid = QW.QInputDialog.getText(
+        title, valid = QW.QInputDialog.getText(
             self,
             _("Rename"),
             _("New title:"),
             QW.QLineEdit.Normal,
-            macro.objectName(),
+            macro.title,
         )
         if valid:
-            macro.setObjectName(name)
+            macro.title = title
             if index is not None:
                 self.tabwidget.setCurrentIndex(index)
 

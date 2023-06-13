@@ -25,6 +25,7 @@ from cdl.core.computation.base import (
     GaussianParam,
     MovingAverageParam,
     MovingMedianParam,
+    ROIDataParam,
     ThresholdParam,
 )
 from cdl.core.computation.image import (

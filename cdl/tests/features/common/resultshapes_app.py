@@ -29,8 +29,7 @@ def create_image_with_resultshapes():
         itype=cdl.obj.ImageTypes.GAUSS,
         dtype=cdl.obj.ImageDatatypes.UINT16,
     )
-    addparam = cdl.obj.Gauss2DParam()
-    addparam.x0, addparam.y0 = 2, 3
+    addparam = cdl.obj.Gauss2DParam.create(x0=2, y0=3)
     image = cdl.obj.create_image_from_param(newparam, addparam)
     for mshape in test_data.create_resultshapes():
         mshape.add_to(image)

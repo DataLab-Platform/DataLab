@@ -65,11 +65,9 @@ def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = ImageObj()
-    dst.title = f"{name}({src.short_id})"
+    dst = src.copy(title=f"{name}({src.short_id})")
     if suffix is not None:
         dst.title += "|" + suffix
-    dst.copy_data_from(src)
     return dst
 
 
@@ -86,11 +84,9 @@ def dst_n1n(
     Returns:
         ImageObj: output image object
     """
-    dst = ImageObj()
-    dst.title = f"{name}({src1.short_id}, {src2.short_id})"
+    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
     if suffix is not None:
         dst.title += "|" + suffix
-    dst.copy_data_from(src1)
     return dst
 
 

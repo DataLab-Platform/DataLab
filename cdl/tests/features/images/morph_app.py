@@ -22,12 +22,10 @@ def test():
         panel = win.imagepanel
         panel.add_object(get_test_image("flower.npy"))
         proc = panel.processor
-        param = cdl.param.MorphologyParam()
-        param.radius = 10
+        param = cdl.param.MorphologyParam.create(radius=10)
         proc.compute_all_morphology(param)
         panel.objview.select_groups([0])
-        param = cdl.param.GridParam()
-        param.cols = 4
+        param = cdl.param.GridParam.create(cols=4)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
 

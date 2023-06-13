@@ -11,6 +11,7 @@ DataLab main window
 
 from __future__ import annotations
 
+import abc
 import functools
 import os
 import os.path as osp
@@ -45,16 +46,17 @@ from cdl.config import (
     _,
     get_htmlhelp,
 )
+from cdl.core.baseproxy import AbstractCDLControl
 from cdl.core.gui.actionhandler import ActionCategory
 from cdl.core.gui.docks import DockablePlotWidget
 from cdl.core.gui.h5io import H5InputOutput
 from cdl.core.gui.panel import base, image, macro, signal
 from cdl.core.gui.settings import edit_settings
-from cdl.core.model.image import ImageObj
-from cdl.core.model.signal import SignalObj
+from cdl.core.model.image import ImageObj, create_image
+from cdl.core.model.signal import SignalObj, create_signal
+from cdl.core.remote import RemoteServer
 from cdl.env import execenv
-from cdl.plugins import PluginBase, PluginRegistry, discover_plugins
-from cdl.remotecontrol import RemoteServer
+from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
 from cdl.utils.misc import go_to_error
@@ -65,6 +67,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.macro import MacroPanel
     from cdl.core.gui.panel.signal import SignalPanel
+    from cdl.plugins import PluginBase
 
 
 def remote_controlled(func):
@@ -88,7 +91,11 @@ def remote_controlled(func):
     return method_wrapper
 
 
-class CDLMainWindow(QW.QMainWindow):
+class CDLMainWindowMeta(type(QW.QMainWindow), abc.ABCMeta):
+    """Mixed metaclass to avoid conflicts"""
+
+
+class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowMeta):
     """DataLab main window
 
     Args:
@@ -1093,19 +1100,108 @@ class CDLMainWindow(QW.QMainWindow):
         panel = self.tabwidget.currentWidget()
         panel.open_object(filename)
 
+    # ------Other methods related to AbstractCDLControl interface
+    def get_version(self) -> str:
+        """Return DataLab version.
+
+        Returns:
+            str: DataLab version
+        """
+        return __version__
+
+    def close_application(self) -> None:  # Implementing AbstractCDLControl interface
+        """Close DataLab application"""
+        self.close()
+
+    def add_signal(
+        self,
+        title: str,
+        xdata: np.ndarray,
+        ydata: np.ndarray,
+        xunit: str | None = None,
+        yunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+    ) -> bool:  # pylint: disable=too-many-arguments
+        """Add signal data to DataLab.
+
+        Args:
+            title (str): Signal title
+            xdata (np.ndarray): X data
+            ydata (np.ndarray): Y data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+
+        Returns:
+            bool: True if signal was added successfully, False otherwise
+
+        Raises:
+            ValueError: Invalid xdata dtype
+            ValueError: Invalid ydata dtype
+        """
+        obj = create_signal(
+            title,
+            xdata,
+            ydata,
+            units=(xunit, yunit),
+            labels=(xlabel, ylabel),
+        )
+        self.add_object(obj)
+        return True
+
+    def add_image(
+        self,
+        title: str,
+        data: np.ndarray,
+        xunit: str | None = None,
+        yunit: str | None = None,
+        zunit: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+        zlabel: str | None = None,
+    ) -> bool:  # pylint: disable=too-many-arguments
+        """Add image data to DataLab.
+
+        Args:
+            title (str): Image title
+            data (np.ndarray): Image data
+            xunit (str, optional): X unit. Defaults to None.
+            yunit (str, optional): Y unit. Defaults to None.
+            zunit (str, optional): Z unit. Defaults to None.
+            xlabel (str, optional): X label. Defaults to None.
+            ylabel (str, optional): Y label. Defaults to None.
+            zlabel (str, optional): Z label. Defaults to None.
+
+        Returns:
+            bool: True if image was added successfully, False otherwise
+
+        Raises:
+            ValueError: Invalid data dtype
+        """
+        obj = create_image(
+            title,
+            data,
+            units=(xunit, yunit, zunit),
+            labels=(xlabel, ylabel, zlabel),
+        )
+        self.add_object(obj)
+        return True
+
     # ------?
     def __about(self) -> None:  # pragma: no cover
         """About dialog box"""
         self.check_stable_release()
         if self.remote_server.port is None:
-            xrpcstate = '<font color="red">%s</font>' % _("not started")
+            xrpcstate = '<font color="red">' + _("not started") + "</font>"
         else:
             xrpcstate = _("started (port %s)") % self.remote_server.port
             xrpcstate = f"<font color='green'>{xrpcstate}</font>"
         if Conf.main.process_isolation_enabled.get():
-            pistate = "<font color='green'>%s</font>" % _("enabled")
+            pistate = "<font color='green'>" + _("enabled") + "</font>"
         else:
-            pistate = "<font color='red'>%s</font>" % _("disabled")
+            pistate = "<font color='red'>" + _("disabled") + "</font>"
         adv_conf = "<br>".join(
             [
                 "<i>" + _("Advanced configuration:") + "</i>",

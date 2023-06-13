@@ -525,7 +525,11 @@ class BaseObj(metaclass=BaseObjMeta):
         """Data"""
 
     def check_data(self):
-        """Check if data is valid, raise an exception if that's not the case"""
+        """Check if data is valid, raise an exception if that's not the case
+
+        Raises:
+            TypeError: if data type is not supported
+        """
         if self.data is not None:
             if self.data.dtype not in self.VALID_DTYPES:
                 raise TypeError(f"Unsupported data type: {self.data.dtype}")
@@ -551,13 +555,17 @@ class BaseObj(metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def copy_data_from(self, other, dtype=None):
-        """Copy data from other dataset instance.
+    def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> BaseObj:
+        """Copy object.
 
         Args:
-            other (BaseObj): other dataset instance
+            title (str): title
             dtype (numpy.dtype): data type
+
+        Returns:
+            BaseObj: copied object
         """
+
 
     @abc.abstractmethod
     def set_data_type(self, dtype):

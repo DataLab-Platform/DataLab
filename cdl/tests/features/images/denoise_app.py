@@ -24,8 +24,7 @@ def test():
         proc = panel.processor
         proc.compute_all_denoise()
         panel.objview.select_groups([0])
-        param = cdl.param.GridParam()
-        param.cols = 3
+        param = cdl.param.GridParam.create(cols=3)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
 

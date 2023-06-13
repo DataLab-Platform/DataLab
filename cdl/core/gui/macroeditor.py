@@ -67,10 +67,10 @@ remote.compute_fft()
 print("All done!")
 """
 
-    def __init__(self, console: PythonShellWidget, name: str | None = None) -> None:
+    def __init__(self, console: PythonShellWidget, title: str | None = None) -> None:
         super().__init__()
         self.console = console
-        self.setObjectName(self.get_untitled_title() if name is None else name)
+        self.title = self.get_untitled_title() if title is None else title
         self.editor = CodeEditor(language="python")
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
@@ -80,6 +80,11 @@ print("All done!")
     def title(self) -> str:
         """Return object title"""
         return self.objectName()
+
+    @title.setter
+    def title(self, title: str) -> None:
+        """Set object title"""
+        self.setObjectName(title)
 
     def get_code(self) -> str:
         """Return code to be executed"""
@@ -100,8 +105,8 @@ print("All done!")
         Args:
             writer (BaseIOHandler): Writer
         """
-        with writer.group("name"):
-            writer.write(self.objectName())
+        with writer.group("title"):
+            writer.write(self.title)
         with writer.group("contents"):
             writer.write(self.get_code())
 
@@ -111,8 +116,8 @@ print("All done!")
         Args:
             reader (BaseIOHandler): Reader
         """
-        with reader.group("name"):
-            self.setObjectName(reader.read_any())
+        with reader.group("title"):
+            self.title = reader.read_any()
         with reader.group("contents"):
             self.set_code(reader.read_any())
 
@@ -235,14 +240,13 @@ print("All done!")
         args = ["-c", code]
         self.process.start(sys.executable, args)
         running = self.process.waitForStarted(3000)
-        name = self.objectName()
         if not running:
-            self.print(_("# ==> Unable to run '%s' macro") % name, error=True)
+            self.print(_("# ==> Unable to run '%s' macro") % self.title, error=True)
             QW.QMessageBox.critical(
                 self, _("Error"), _("Macro Python interpreter failed to start!")
             )
         else:
-            self.print(_("# ==> Running '%s' macro...") % name)
+            self.print(_("# ==> Running '%s' macro...") % self.title)
             self.STARTED.emit()
 
     def is_running(self) -> bool:
@@ -258,7 +262,7 @@ print("All done!")
     def kill(self) -> None:
         """Kill process associated to macro"""
         if self.process is not None:
-            self.print(_("Terminating '%s' macro") % self.objectName(), error=True)
+            self.print(_("Terminating '%s' macro") % self.title, error=True)
             self.process.kill()
 
     # pylint: disable=unused-argument
@@ -269,8 +273,6 @@ print("All done!")
             exit_code (int): Exit code
             exit_status (QC.QProcess.ExitStatus): Exit status
         """
-        self.print(
-            _("# <== '%s' macro has finished") % self.objectName(), eol_before=False
-        )
+        self.print(_("# <== '%s' macro has finished") % self.title, eol_before=False)
         self.FINISHED.emit()
         self.process = None

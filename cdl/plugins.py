@@ -37,6 +37,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import IPLGPATH, MOD_NAME, Conf, _
 from cdl.env import execenv
+from cdl.proxy import CDLProxy
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui import main
@@ -135,6 +136,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 
     def __init__(self):
         self.main: main.CDLMainWindow = None
+        self.proxy: CDLProxy = None
         self._is_registered = False
         self.info = self.PLUGIN_INFO
         if self.info is None:
@@ -189,6 +191,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main
+        self.proxy = CDLProxy(main)
         self.register_hooks()
 
     def unregister(self):
@@ -198,6 +201,8 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.unregister_plugin(self)
         self._is_registered = False
         self.unregister_hooks()
+        self.main = None
+        self.proxy = None
 
     def register_hooks(self):
         """Register plugin hooks"""

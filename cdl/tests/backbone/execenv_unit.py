@@ -41,7 +41,7 @@ def get_subprocess_execenv_dict(args: list[str], env: dict | None = None) -> dic
         dict[str, str | int | bool | None]: CDL execution environment dict
     """
     output = get_script_output(__file__, args=args + [ARGV_TEST], env=env)
-    return eval(output)
+    return eval(output)  # pylint: disable=eval-used
 
 
 def assert_two_dicts_are_equal(
@@ -61,7 +61,7 @@ def assert_two_dicts_are_equal(
         if dict1[key] != dict2[key]:
             diff_keys.append(key)
     if diff_keys:
-        assert False, "Dictionaries differ on keys: %s" % str(diff_keys)
+        assert False, f"Dictionaries differ on keys: {diff_keys}"
 
 
 def test_cli():
@@ -77,9 +77,9 @@ def test_cli():
     # Testing boolean arguments
     execenv.print("  Testing boolean arguments:")
     for argname in ("unattended", "screenshot"):
-        execenv.print("    %s:" % argname, end="")
+        execenv.print(f"    {argname}:", end="")
         for val in (True, False):
-            execenv.print(" %s" % str(val), end="")
+            execenv.print(f" {val}", end="")
             if val:
                 args = [f"--{argname}"]
             else:
@@ -93,7 +93,7 @@ def test_cli():
     # Testing integer arguments
     execenv.print("  Testing integer arguments:")
     for argname in ("delay", "xmlrpcport"):
-        execenv.print("    %s:" % argname, end="")
+        execenv.print(f"    {argname}:", end="")
         for val in (None, 0, 1, 2):
             if val is None:
                 args = []
@@ -115,7 +115,7 @@ def test_cli():
     # Testing choice arguments
     execenv.print("  Testing choice arguments:")
     for argname in ("verbose",):
-        execenv.print("    %s:" % argname, end="")
+        execenv.print(f"    {argname}:", end="")
         choices = {"verbose": [verb.value for verb in VerbosityLevels]}
         defaultval = {"verbose": VerbosityLevels.NORMAL.value}[argname]
         for val in [None] + choices[argname]:
@@ -239,37 +239,27 @@ def test_envvar():
             remove_all_cdl_envvars()
             if value is not None:
                 setattr(execenv, attrname, value)
-            assert os.environ.get(envvar) in envvals, "os.environ[%s] = %s != %s" % (
-                envvar,
-                os.environ.get(envvar),
-                envvals,
-            )
-            print(f" [env->attr]", end="")
+            assert (
+                os.environ.get(envvar) in envvals
+            ), f"os.environ[{envvar}] = {os.environ.get(envvar)} != {envvals}"
+            print(" [env->attr]", end="")
             remove_all_cdl_envvars()
             for envval in envvals:
                 if envval is not None:
                     os.environ[envvar] = envval
-                assert (
-                    getattr(execenv, attrname) == value
-                ), "execenv.%s = %s != %s (envval = %r)" % (
-                    attrname,
-                    getattr(execenv, attrname),
-                    value,
-                    envval,
+                assert getattr(execenv, attrname) == value, (
+                    f"execenv.{attrname} = {getattr(execenv, attrname)}"
+                    f" != {value} (envval = {repr(envval)})"
                 )
-            print(f" [env->subprocess->attr]", end="")
+            print(" [env->subprocess->attr]", end="")
             remove_all_cdl_envvars()
             for envval in envvals:
                 if envval is not None:
                     os.environ[envvar] = envval
                 execenvdict = get_subprocess_execenv_dict([])
-                assert (
-                    execenvdict[attrname] == value
-                ), "execenvdict[%s] = %s != %s (envval = %r)" % (
-                    attrname,
-                    execenvdict[attrname],
-                    value,
-                    envval,
+                assert execenvdict[attrname] == value, (
+                    f"execenvdict[{attrname}] = {execenvdict[attrname]}"
+                    f" != {value} (envval = {repr(envval)})"
                 )
             print()
     print("=> Everything is OK")

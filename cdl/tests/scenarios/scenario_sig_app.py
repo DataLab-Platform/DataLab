@@ -16,8 +16,8 @@ Testing all the signal processing features.
 
 from __future__ import annotations
 
-import cdl.obj
-import cdl.param
+import cdl.obj as dlo
+import cdl.param as dlp
 from cdl.config import Conf, _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
@@ -35,9 +35,9 @@ def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> N
     Requires that one signal or image has been added at index."""
     assert panel.object_number >= index - 1
     panel.objview.select_objects((index,))
-    panel.processor.compute_gaussian_filter(cdl.param.GaussianParam())
-    panel.processor.compute_moving_average(cdl.param.MovingAverageParam())
-    panel.processor.compute_moving_median(cdl.param.MovingMedianParam())
+    panel.processor.compute_gaussian_filter(dlp.GaussianParam())
+    panel.processor.compute_moving_average(dlp.MovingAverageParam())
+    panel.processor.compute_moving_median(dlp.MovingMedianParam())
     panel.processor.compute_wiener()
     panel.processor.compute_fft()
     panel.processor.compute_ifft()
@@ -75,10 +75,10 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_product()
 
     obj = panel.objmodel.get_groups()[0][-1]
-    param = cdl.param.ThresholdParam()
+    param = dlp.ThresholdParam()
     param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
     panel.processor.compute_threshold(param)
-    param = cdl.param.ClipParam()  # Clipping before division...
+    param = dlp.ClipParam()  # Clipping before division...
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
@@ -111,31 +111,28 @@ def test_signal_features(
 
     # Add new signal based on s0
     panel.objview.set_current_object(sig1)
-    newparam = cdl.obj.new_signal_param(
-        _("Random function"), stype=cdl.obj.SignalTypes.UNIFORMRANDOM
+    newparam = dlo.new_signal_param(
+        _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
     )
-    addparam = cdl.obj.UniformRandomParam()
-    addparam.vmin = 0
-    addparam.vmax = sig1.y.max() * 0.2
+    addparam = dlo.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     test_common_operations(panel)
 
     win.add_object(create_paracetamol_signal(data_size))
 
-    param = cdl.param.NormalizeYParam()
+    param = dlp.NormalizeYParam()
     for _name, method in param.methods:
         param.method = method
         panel.processor.compute_normalize(param)
 
-    param = cdl.param.XYCalibrateParam()
-    param.a, param.b = 1.2, 0.1
+    param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
 
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
 
-    param = cdl.param.PeakDetectionParam()
+    param = dlp.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
 
     panel.processor.compute_multigaussianfit()
@@ -144,22 +141,22 @@ def test_signal_features(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    panel.processor.extract_roi([[i1, i2]])
+    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create([[i1, i2]]))
 
-    param = cdl.param.PolynomialFitParam()
+    param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
     panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
     panel.processor.compute_fit(_("Voigt fit"), fitdialog.voigtfit)
 
-    newparam = cdl.obj.new_signal_param(_("Gaussian"), stype=cdl.obj.SignalTypes.GAUSS)
-    sig = cdl.obj.create_signal_from_param(
-        newparam, cdl.obj.GaussLorentzVoigtParam(), edit=False
+    newparam = dlo.new_signal_param(_("Gaussian"), stype=dlo.SignalTypes.GAUSS)
+    sig = dlo.create_signal_from_param(
+        newparam, dlo.GaussLorentzVoigtParam(), edit=False
     )
     panel.add_object(sig)
 
-    param = cdl.param.FWHMParam()
+    param = dlp.FWHMParam()
     for fittype, _name in param.fittypes:
         param.fittype = fittype
         panel.processor.compute_fwhm(param)
@@ -176,11 +173,13 @@ def test() -> None:
         win.set_process_isolation_enabled(False)
         test_signal_features(win)
         win.signalpanel.remove_all_objects()
+        execenv.print("==> OK")
         execenv.print("Testing signal features *with* process isolation...")
         win.set_process_isolation_enabled(True)
         test_signal_features(win, all_types=False)
         oids = win.signalpanel.objmodel.get_object_ids()
         win.signalpanel.open_separate_view(oids[:3])
+        execenv.print("==> OK")
 
 
 if __name__ == "__main__":

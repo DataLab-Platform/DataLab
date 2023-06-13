@@ -14,32 +14,31 @@ Created on Fri May 12 12:28:56 2023
 import numpy as np
 
 # DataLab remote control client:
-from cdl.remotecontrol import RemoteClient
+from cdl.proxy import RemoteCDLProxy
 
 # %% Connecting to DataLab current session
 
-cdl = RemoteClient()
-cdl.connect()
+proxy = RemoteCDLProxy()
 
 # %% Executing commands in DataLab (...)
 
 z = np.random.rand(20, 20)
-cdl.add_image("toto", z)
+proxy.add_image("toto", z)
 
 # %% Executing commands in DataLab (...)
 
 x = np.array([1.0, 2.0, 3.0])
 y = np.array([4.0, 5.0, -1.0])
-cdl.add_signal("toto", x, y)
+proxy.add_signal("toto", x, y)
 
 # %% Executing commands in DataLab (...)
 
-cdl.compute_derivative()
+proxy.compute_derivative()
 
 # %% Executing commands in DataLab (...)
 
-cdl.switch_to_panel("image")
+proxy.switch_to_panel("image")
 
 # %% Executing commands in DataLab (...)
 
-cdl.compute_fft()
+proxy.compute_fft()

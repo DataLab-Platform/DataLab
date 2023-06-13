@@ -57,16 +57,16 @@ class SignalProcessor(BaseProcessor):
         self.compute_n1("Π", cps.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def extract_roi(
-        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
+    def compute_roi_extraction(
+        self, param: cdl.param.ROIDataParam | None = None
     ) -> None:
         """Extract Region Of Interest (ROI) from data"""
-        roieditordata = self._get_roieditordata(roidata, singleobj)
-        if roieditordata is None or roieditordata.is_empty:
+        param = self._get_roidataparam(param)
+        if param is None or param.is_empty:
             return
         obj = self.panel.objview.get_sel_objects()[0]
-        group = obj.roidata_to_params(roieditordata.roidata)
-        if roieditordata.singleobj:
+        group = obj.roidata_to_params(param.roidata)
+        if param.singleobj:
             self.compute_11(cps.extract_multiple_roi, group, title=_("Extract ROI"))
         else:
             self.compute_1n(cps.extract_single_roi, group.datasets, "ROI", edit=False)

@@ -45,9 +45,7 @@ def test():
         # grid, which is more appropriate for the eventual final screenshot.
         panel.objview.selectAll()
         proc.reset_positions()  # No sense except for coverage
-        param = cdl.param.GridParam()
-        param.cols = 2
-        param.colspac = param.rowspac = 10
+        param = cdl.param.GridParam.create(cols=2, colspac=10, rowspac=10)
         proc.distribute_on_grid(param)
 
 

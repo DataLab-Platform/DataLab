@@ -14,8 +14,8 @@ Testing all the image processing features.
 # pylint: disable=duplicate-code
 # guitest: show
 
-import cdl.obj
-import cdl.param
+import cdl.obj as dlo
+import cdl.param as dlp
 from cdl.config import Conf
 from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
@@ -32,7 +32,7 @@ def test_image_features(
     win.switch_to_panel("image")
     panel = win.imagepanel
 
-    newparam = cdl.obj.new_image_param(height=data_size, width=data_size)
+    newparam = dlo.new_image_param(height=data_size, width=data_size)
 
     if all_types:
         for image in iterate_image_creation(data_size, non_zero=True):
@@ -46,52 +46,47 @@ def test_image_features(
 
     # Add new image based on i0
     panel.objview.set_current_object(ima1)
-    newparam = cdl.obj.new_image_param(itype=cdl.obj.ImageTypes.UNIFORMRANDOM)
-    addparam = cdl.obj.UniformRandomParam()
+    newparam = dlo.new_image_param(itype=dlo.ImageTypes.UNIFORMRANDOM)
+    addparam = dlo.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     test_common_operations(panel)
 
-    param = cdl.param.ZCalibrateParam()
-    param.a, param.b = 1.2, 0.1
+    param = dlp.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
 
-    param = cdl.param.DenoiseTVParam()
+    param = dlp.DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
 
-    param = cdl.param.DenoiseBilateralParam()
+    param = dlp.DenoiseBilateralParam()
     panel.processor.compute_denoise_bilateral(param)
 
-    param = cdl.param.DenoiseWaveletParam()
+    param = dlp.DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
     panel.processor.compute_abs()  # Avoid neg. values for skimage correction methods
 
-    param = cdl.param.AdjustGammaParam()
-    param.gamma = 0.5
+    param = dlp.AdjustGammaParam.create(gamma=0.5)
     panel.processor.compute_adjust_gamma(param)
 
-    param = cdl.param.AdjustLogParam()
-    param.gain = 0.5
+    param = dlp.AdjustLogParam.create(gain=0.5)
     panel.processor.compute_adjust_log(param)
 
-    param = cdl.param.AdjustSigmoidParam()
-    param.gain = 0.5
+    param = dlp.AdjustSigmoidParam.create(gain=0.5)
     panel.processor.compute_adjust_sigmoid(param)
 
-    param = cdl.param.EqualizeHistParam()
+    param = dlp.EqualizeHistParam()
     panel.processor.compute_equalize_hist(param)
 
-    param = cdl.param.EqualizeAdaptHistParam()
+    param = dlp.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
 
-    param = cdl.param.RescaleIntensityParam()
+    param = dlp.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
-    param = cdl.param.MorphologyParam()
-    param.radius = 10
+    param = dlp.MorphologyParam.create(radius=10)
     panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
     panel.processor.compute_black_tophat(param)
@@ -101,13 +96,11 @@ def test_image_features(
     panel.processor.compute_opening(param)
     panel.processor.compute_closing(param)
 
-    param = cdl.param.ButterworthParam()
-    param.order = 2
-    param.cut_off = 0.5
+    param = dlp.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.compute_butterworth(param)
 
     ima2 = create_sincos_image(newparam)
-    param = cdl.param.CannyParam()
+    param = dlp.CannyParam()
     panel.processor.compute_canny(param)
     panel.add_object(ima2)
 
@@ -131,8 +124,7 @@ def test_image_features(
 
     panel.processor.compute_laplace()
 
-    param = cdl.param.LogP1Param()
-    param.n = 1
+    param = dlp.LogP1Param.create(n=1)
     panel.processor.compute_logp1(param)
 
     panel.processor.compute_rotate90()
@@ -140,35 +132,31 @@ def test_image_features(
     panel.processor.compute_fliph()
     panel.processor.compute_flipv()
 
-    param = cdl.param.RotateParam()
-    param.angle = 5.0
+    param = dlp.RotateParam.create(angle=5.0)
     for boundary in param.boundaries[:-1]:
         param.mode = boundary
         panel.processor.compute_rotate(param)
 
-    param = cdl.param.ResizeParam()
-    param.zoom = 1.3
+    param = dlp.ResizeParam.create(zoom=1.3)
     panel.processor.compute_resize(param)
 
     n = data_size // 10
-    panel.processor.extract_roi([[n, n, data_size - n, data_size - n]])
+    panel.processor.compute_roi_extraction(
+        dlp.ROIDataParam.create([[n, n, data_size - n, data_size - n]])
+    )
 
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
 
     ima = create_peak2d_image(newparam)
     panel.add_object(ima)
-    param = cdl.param.Peak2DDetectionParam()
-    param.create_rois = True
+    param = dlp.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)
 
-    param = cdl.param.ContourShapeParam()
+    param = dlp.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
-    param = cdl.param.BinningParam()
-    param.binning_x = 2
-    param.binning_y = 2
-    param.operation = "average"
+    param = dlp.BinningParam.create(binning_x=2, binning_y=2, operation="average")
     panel.processor.compute_binning(param)
 
 
@@ -182,11 +170,13 @@ def test() -> None:
         win.set_process_isolation_enabled(False)
         test_image_features(win)
         win.imagepanel.remove_all_objects()
+        execenv.print("==> OK")
         execenv.print("Testing image features *with* process isolation...")
         win.set_process_isolation_enabled(True)
         test_image_features(win, all_types=False)
         oids = win.imagepanel.objmodel.get_object_ids()
         win.imagepanel.open_separate_view(oids[:4])
+        execenv.print("==> OK")
 
 
 if __name__ == "__main__":

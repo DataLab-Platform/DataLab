@@ -11,14 +11,14 @@ From an IDE
 It is possible to run a Python script from an IDE (e.g. `Spyder`_ or any
 other IDE, or even a Jupyter Notebook) that connects to a running DataLab
 instance, adds a signal and an image, and then runs calculations. This is
-the case of the `RemoteClient` class that is provided in module ``cdl.remote``.
+the case of the `RemoteCDLProxy` class that is provided in module ``cdl.proxy``.
 
 From a third-party application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 It is also possible to connect to a running DataLab instance from a third-party
 application, adds a signal and an image, and then runs calculations. This is
-the case of the `RemoteClient` class that is provided in module ``cdl.remote``.
+the case of the `RemoteCDLProxy` class that is provided in module ``cdl.proxy``.
 
 Data (signals and images) may also be exchanged between DataLab and the remote
 client application, in both directions.
@@ -70,7 +70,8 @@ Examples
 ^^^^^^^^
 
 When using Python 3, you may directly use the `RemoteClient` class as in
-examples cited above.
+examples cited above, or the `RemoteCDLProxy` class as in the following
+example.
 
 Here is an example in Python 3 of a script that connects to a running DataLab
 instance, adds a signal and an image, and then runs calculations (the cell

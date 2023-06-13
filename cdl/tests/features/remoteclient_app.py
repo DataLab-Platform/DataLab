@@ -17,8 +17,8 @@ from contextlib import contextmanager
 
 from cdl import app
 from cdl.config import _
+from cdl.core.remote import CDLConnectionError, RemoteClient
 from cdl.env import execenv
-from cdl.remotecontrol import CDLConnectionError, RemoteClient
 from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
@@ -40,7 +40,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
                 self.host.log("✨ Initialized DataLab connection ✨")
                 self.host.log(f"  Communication port: {self.cdl.port}")
                 self.host.log("  List of exposed methods:")
-                for name in self.cdl.serverproxy.system.listMethods():
+                for name in self.cdl.get_method_list():
                     self.host.log(f"    {name}")
             except CDLConnectionError:
                 self.cdl = None

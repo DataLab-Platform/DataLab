@@ -15,34 +15,39 @@ ROI test:
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
 
-import cdl.obj
-import cdl.param
-from cdl.core.gui.panel import image, signal
+import cdl.obj as dlo
+import cdl.param as dlp
 from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 
+if TYPE_CHECKING:
+    from cdl.core.gui.panel.image import ImagePanel
+    from cdl.core.gui.panel.signal import SignalPanel
 
-def test_signal_features(panel: signal, singleobj: bool | None = None):
+
+def test_signal_features(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
-    panel.processor.compute_fwhm(cdl.param.FWHMParam())
+    panel.processor.compute_fwhm(dlp.FWHMParam())
     panel.processor.compute_fw1e2()
-    panel.processor.extract_roi(singleobj=singleobj)
+    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
 
-def test_image_features(panel: image, singleobj: bool | None = None):
+def test_image_features(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
-    panel.processor.compute_peak_detection(cdl.param.Peak2DDetectionParam())
-    panel.processor.extract_roi(singleobj=singleobj)
+    panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
+    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
 
 def create_test_image_with_roi(
-    newimageparam: cdl.obj.NewImageParam,
-) -> cdl.obj.ImageObj:
+    newimageparam: dlo.NewImageParam,
+) -> dlo.ImageObj:
     """Create test image with ROIs
 
     Args:
@@ -72,12 +77,12 @@ def array_1d_to_str(arr: np.ndarray) -> str:
 def print_obj_shapes(obj):
     """Print object and associated ROI array shapes"""
     execenv.print(f"  Accessing object '{obj.title}':")
-    func = array_1d_to_str if isinstance(obj, cdl.obj.SignalObj) else array_2d_to_str
+    func = array_1d_to_str if isinstance(obj, dlo.SignalObj) else array_2d_to_str
     execenv.print(f"    data: {func(obj.data)}")
     if obj.roi is not None:
         for idx in range(obj.roi.shape[0]):
             roi_data = obj.get_data(idx)
-            if isinstance(obj, cdl.obj.SignalObj):
+            if isinstance(obj, dlo.SignalObj):
                 roi_data = roi_data[1]  # y data
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
@@ -95,21 +100,23 @@ def test():
         sig2 = create_paracetamol_signal(size)
         sig2.roi = np.array([[26, 41], [125, 146]], int)
         for singleobj in (False, True):
-            panel.add_object(sig2)
-            print_obj_shapes(sig2)
+            sig2_i = sig2.copy()
+            panel.add_object(sig2_i)
+            print_obj_shapes(sig2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("s_roi_signal")
             test_signal_features(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
-        param = cdl.obj.new_image_param(height=size, width=size)
+        param = dlo.new_image_param(height=size, width=size)
         ima1 = create_multigauss_image(param)
         panel.add_object(ima1)
         test_image_features(panel)
         ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
-            panel.add_object(ima2)
-            print_obj_shapes(ima2)
+            ima2_i = ima2.copy()
+            panel.add_object(ima2_i)
+            print_obj_shapes(ima2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("i_roi_image")
             test_image_features(panel, singleobj=singleobj)

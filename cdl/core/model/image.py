@@ -417,20 +417,27 @@ class ImageObj(gdt.DataSet, base.BaseObj):
         roidataitem = RoiDataItem(self.roi[roi_index])
         return roidataitem.get_masked_view(self.data, self.maskdata)
 
-    def copy_data_from(self, other: ImageObj, dtype: np.dtype | None = None) -> None:
-        """Copy data from other dataset instance.
+    def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> ImageObj:
+        """Copy object.
 
         Args:
-            other (ImageObj): other dataset instance
-            dtype (numpy.dtype | None): data type
+            title (str): title
+            dtype (numpy.dtype): data type
+
+        Returns:
+            ImageObj: copied object
         """
-        self.x0 = other.x0
-        self.y0 = other.y0
-        self.dx = other.dx
-        self.dy = other.dy
-        self.metadata = deepcopy(other.metadata)
-        self.data = np.array(other.data, copy=True, dtype=dtype)
-        self.dicom_template = other.dicom_template
+        title = self.title if title is None else title
+        obj = ImageObj(title=title)
+        obj.title = title
+        obj.x0 = self.x0
+        obj.y0 = self.y0
+        obj.dx = self.dx
+        obj.dy = self.dy
+        obj.metadata = deepcopy(self.metadata)
+        obj.data = np.array(self.data, copy=True, dtype=dtype)
+        obj.dicom_template = self.dicom_template
+        return obj
 
     def set_data_type(self, dtype: np.dtype) -> None:
         """Change data type.
@@ -720,7 +727,7 @@ class NewImageParam(gdt.DataSet):
         _("Width"), help=_("Image width (total number of columns)"), min=1
     )
     dtype = gdi.ChoiceItem(_("Data type"), ImageDatatypes.get_choices())
-    type = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
+    itype = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices())
 
 
 DEFAULT_TITLE = _("Untitled image")
@@ -755,7 +762,7 @@ def new_image_param(
     if dtype is not None:
         param.dtype = dtype
     if itype is not None:
-        param.type = itype
+        param.itype = itype
     return param
 
 
@@ -806,18 +813,18 @@ def create_image_from_param(
     if incr_sig_nb:
         newparam.title = f"{newparam.title} {IMG_NB + 1:d}"
     if not edit or addparam is not None or newparam.edit(parent=parent):
-        prefix = newparam.type.name.lower()
+        prefix = newparam.itype.name.lower()
         if incr_sig_nb:
             IMG_NB += 1
         image = create_image(newparam.title)
         shape = (newparam.height, newparam.width)
         dtype = newparam.dtype.value
         p = addparam
-        if newparam.type == ImageTypes.ZEROS:
+        if newparam.itype == ImageTypes.ZEROS:
             image.data = np.zeros(shape, dtype=dtype)
-        elif newparam.type == ImageTypes.EMPTY:
+        elif newparam.itype == ImageTypes.EMPTY:
             image.data = np.empty(shape, dtype=dtype)
-        elif newparam.type == ImageTypes.GAUSS:
+        elif newparam.itype == ImageTypes.GAUSS:
             if p is None:
                 p = Gauss2DParam(_("2D-gaussian image"))
             if p.a is None:
@@ -841,29 +848,29 @@ def create_image_from_param(
                     f"{prefix}(a={p.a:g},μ={p.mu:g},σ={p.sigma:g}),"
                     f"x0={p.x0:g},y0={p.y0:g})"
                 )
-        elif newparam.type in (ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM):
+        elif newparam.itype in (ImageTypes.UNIFORMRANDOM, ImageTypes.NORMALRANDOM):
             pclass = {
                 ImageTypes.UNIFORMRANDOM: base.UniformRandomParam,
                 ImageTypes.NORMALRANDOM: base.NormalRandomParam,
-            }[newparam.type]
+            }[newparam.itype]
             if p is None:
-                p = pclass(_("Image") + " - " + newparam.type.value)
+                p = pclass(_("Image") + " - " + newparam.itype.value)
                 p.set_from_datatype(dtype)
             if edit and not p.edit(parent=parent):
                 return None
             rng = np.random.default_rng(p.seed)
-            if newparam.type == ImageTypes.UNIFORMRANDOM:
+            if newparam.itype == ImageTypes.UNIFORMRANDOM:
                 data = rng.random(shape)
                 image.data = scale_data_to_min_max(data, p.vmin, p.vmax)
                 if image.title == DEFAULT_TITLE:
                     image.title = (
                         f"{prefix}(vmin={p.vmin:g},vmax={p.vmax:g},seed={p.seed})"
                     )
-            elif newparam.type == ImageTypes.NORMALRANDOM:
+            elif newparam.itype == ImageTypes.NORMALRANDOM:
                 image.data = rng.normal(p.mu, p.sigma, size=shape)
                 if image.title == DEFAULT_TITLE:
                     image.title = f"{prefix}(μ={p.mu:g},σ={p.sigma:g},seed={p.seed})"
             else:
-                raise NotImplementedError(f"New param type: {newparam.type.value}")
+                raise NotImplementedError(f"New param type: {newparam.itype.value}")
         return image
     return None

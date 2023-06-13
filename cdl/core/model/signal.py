@@ -108,17 +108,26 @@ class SignalObj(gdt.DataSet, base.BaseObj):
         gdt.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
 
-    def copy_data_from(self, other: SignalObj, dtype: np.dtype | None = None) -> None:
-        """Copy data from other dataset instance.
+    def copy(
+        self, title: str | None = None, dtype: np.dtype | None = None
+    ) -> SignalObj:
+        """Copy object.
 
         Args:
-            other (SignalObj): other dataset instance
+            title (str): title
             dtype (numpy.dtype): data type
+
+        Returns:
+            SignalObj: copied object
         """
+        title = self.title if title is None else title
+        obj = SignalObj(title=title)
+        obj.title = title
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
-        self.metadata = deepcopy(other.metadata)
-        self.xydata = np.array(other.xydata, copy=True, dtype=dtype)
+        obj.metadata = deepcopy(self.metadata)
+        obj.xydata = np.array(self.xydata, copy=True, dtype=dtype)
+        return obj
 
     def set_data_type(self, dtype: np.dtype) -> None:  # pylint: disable=unused-argument
         """Change data type.
@@ -498,7 +507,7 @@ class NewSignalParam(gdt.DataSet):
     size = gdi.IntItem(
         _("Size"), help=_("Signal size (total number of points)"), min=1, default=500
     )
-    type = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices())
+    stype = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices())
 
 
 DEFAULT_TITLE = _("Untitled signal")
@@ -533,7 +542,7 @@ def new_signal_param(
     if size is not None:
         param.size = size
     if stype is not None:
-        param.type = stype
+        param.stype = stype
     return param
 
 
@@ -573,36 +582,36 @@ def create_signal_from_param(
     if incr_sig_nb:
         newparam.title = f"{newparam.title} {SIG_NB + 1:d}"
     if not edit or addparam is not None or newparam.edit(parent=parent):
-        prefix = newparam.type.name.lower()
+        prefix = newparam.stype.name.lower()
         if incr_sig_nb:
             SIG_NB += 1
         signal = create_signal(newparam.title)
         xarr = np.linspace(newparam.xmin, newparam.xmax, newparam.size)
         p = addparam
-        if newparam.type == SignalTypes.ZEROS:
+        if newparam.stype == SignalTypes.ZEROS:
             signal.set_xydata(xarr, np.zeros(newparam.size))
-        elif newparam.type in (SignalTypes.UNIFORMRANDOM, SignalTypes.NORMALRANDOM):
+        elif newparam.stype in (SignalTypes.UNIFORMRANDOM, SignalTypes.NORMALRANDOM):
             pclass = {
                 SignalTypes.UNIFORMRANDOM: base.UniformRandomParam,
                 SignalTypes.NORMALRANDOM: base.NormalRandomParam,
-            }[newparam.type]
+            }[newparam.stype]
             if p is None:
                 p = pclass(_("Signal") + " - " + prefix)
             if edit and not p.edit(parent=parent):
                 return None
             rng = np.random.default_rng(p.seed)
-            if newparam.type == SignalTypes.UNIFORMRANDOM:
+            if newparam.stype == SignalTypes.UNIFORMRANDOM:
                 yarr = rng.random((newparam.size,)) * (p.vmax - p.vmin) + p.vmin
                 if signal.title == DEFAULT_TITLE:
                     signal.title = f"{prefix}(vmin={p.vmin:.3g},vmax={p.vmax:.3g})"
-            elif newparam.type == SignalTypes.NORMALRANDOM:
+            elif newparam.stype == SignalTypes.NORMALRANDOM:
                 yarr = rng.normal(p.mu, p.sigma, size=(newparam.size,))
                 if signal.title == DEFAULT_TITLE:
                     signal.title = f"{prefix}(mu={p.mu:.3g},sigma={p.sigma:.3g})"
             else:
                 raise NotImplementedError(f"New param type: {prefix}")
             signal.set_xydata(xarr, yarr)
-        elif newparam.type in (
+        elif newparam.stype in (
             SignalTypes.GAUSS,
             SignalTypes.LORENTZ,
             SignalTypes.VOIGT,
@@ -611,7 +620,7 @@ def create_signal_from_param(
                 SignalTypes.GAUSS: (fit.GaussianModel.func, _("Gaussian")),
                 SignalTypes.LORENTZ: (fit.LorentzianModel.func, _("Lorentzian")),
                 SignalTypes.VOIGT: (fit.VoigtModel.func, "Voigt"),
-            }[newparam.type]
+            }[newparam.stype]
             if p is None:
                 p = GaussLorentzVoigtParam(title)
             if edit and not p.edit(parent=parent):
@@ -623,7 +632,7 @@ def create_signal_from_param(
                     f"{prefix}(a={p.a:.3g},sigma={p.sigma:.3g},"
                     f"mu={p.mu:.3g},ymin={p.ymin:.3g})"
                 )
-        elif newparam.type in (
+        elif newparam.stype in (
             SignalTypes.SINUS,
             SignalTypes.COSINUS,
             SignalTypes.SAWTOOTH,
@@ -638,7 +647,7 @@ def create_signal_from_param(
                 SignalTypes.TRIANGLE: (triangle_func, _("Triangle function")),
                 SignalTypes.SQUARE: (sps.square, _("Square function")),
                 SignalTypes.SINC: (np.sinc, _("Cardinal sine")),
-            }[newparam.type]
+            }[newparam.stype]
             if p is None:
                 p = PeriodicParam(title)
             if edit and not p.edit(parent=parent):
@@ -651,7 +660,7 @@ def create_signal_from_param(
                     f"{prefix}(f={p.freq:.3g} {p.freq_unit.value}),"
                     f"a={p.a:.3g},ymin={p.ymin:.3g},phase={p.phase:.3g}°)"
                 )
-        elif newparam.type == SignalTypes.STEP:
+        elif newparam.stype == SignalTypes.STEP:
             if p is None:
                 p = StepParam(_("Step function"))
             if edit and not p.edit(parent=parent):

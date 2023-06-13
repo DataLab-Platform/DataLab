@@ -18,7 +18,6 @@ The :class:`RemoteClient` class provides the main interface to DataLab XML-RPC s
 
 from __future__ import annotations
 
-import abc
 import functools
 import importlib
 import sys
@@ -36,6 +35,7 @@ from qtpy import QtCore as QC
 
 from cdl import __version__
 from cdl.config import Conf, initialize
+from cdl.core.baseproxy import BaseProxy
 from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
@@ -118,47 +118,6 @@ def json_to_dataset(param_data: list[str]) -> gdt.DataSet:
     return param
 
 
-class BaseRPCServer(abc.ABC):
-    """Base XML-RPC server mixin"""
-
-    def __init__(self) -> None:
-        self.port: int = None
-
-    def serve(self) -> None:
-        """Start server and serve forever"""
-        with SimpleXMLRPCServer(
-            ("127.0.0.1", 0), logRequests=False, allow_none=True
-        ) as server:
-            server.register_introspection_functions()
-            server.register_function(self.get_version)
-            self.register_functions(server)
-            self.port = server.server_address[1]
-            self.notify_port(self.port)
-            execenv.xmlrpcport = self.port
-            server.serve_forever()
-
-    @staticmethod
-    def get_version() -> str:
-        """Return DataLab version"""
-        return __version__
-
-    @abc.abstractmethod
-    def notify_port(self, port: int) -> None:
-        """Notify automatically attributed port.
-
-        This method is called after the server port has been automatically
-        attributed. It is intended to be reimplemented by subclasses to
-        notify the port number to the main window.
-
-        Args:
-            port: Server port number
-        """
-
-    @abc.abstractmethod
-    def register_functions(self, server: SimpleXMLRPCServer) -> None:
-        """Register functions"""
-
-
 def remote_call(func: Callable) -> object:
     """Decorator for method calling DataLab main window remotely"""
 
@@ -176,11 +135,11 @@ def remote_call(func: Callable) -> object:
     return method_wrapper
 
 
-class RemoteServerMeta(type(QC.QThread), abc.ABCMeta):
-    """Mixed metaclass to avoid conflicts"""
+# Note: RemoteServer can't inherit from AbstractCDLControl because it is a QThread
+# and most of the methods are not returning expected data types
 
 
-class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
+class RemoteServer(QC.QThread):
     """XML-RPC server QThread"""
 
     SIG_SERVER_PORT = QC.Signal(int)
@@ -197,7 +156,7 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
 
     def __init__(self, win: CDLMainWindow) -> None:
         QC.QThread.__init__(self)
-        BaseRPCServer.__init__(self)
+        self.port: int = None
         self.is_ready = True
         self.win = win
         win.SIG_READY.connect(self.cdl_is_ready)
@@ -210,6 +169,19 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
         self.SIG_CALC.connect(win.calc)
+
+    def serve(self) -> None:
+        """Start server and serve forever"""
+        with SimpleXMLRPCServer(
+            ("127.0.0.1", 0), logRequests=False, allow_none=True
+        ) as server:
+            server.register_introspection_functions()
+            server.register_function(self.get_version)
+            self.register_functions(server)
+            self.port = server.server_address[1]
+            self.notify_port(self.port)
+            execenv.xmlrpcport = self.port
+            server.serve_forever()
 
     def notify_port(self, port: int) -> None:
         """Notify automatically attributed port.
@@ -251,6 +223,11 @@ class RemoteServer(QC.QThread, BaseRPCServer, metaclass=RemoteServerMeta):
     def cdl_is_ready(self) -> None:
         """Called when DataLab is ready to process new requests"""
         self.is_ready = True
+
+    @staticmethod
+    def get_version() -> str:
+        """Return DataLab version"""
+        return __version__
 
     def close_application(self) -> None:
         """Close DataLab application"""
@@ -513,7 +490,7 @@ def get_cdl_xmlrpc_port():
         raise CDLConnectionError("DataLab has not yet been executed") from exc
 
 
-class RemoteClient:
+class RemoteClient(BaseProxy):
     """Object representing a proxy/client to DataLab XML-RPC server.
     This object is used to call DataLab functions from a Python script.
 
@@ -539,8 +516,9 @@ class RemoteClient:
     """
 
     def __init__(self) -> None:
+        super().__init__()
         self.port: str = None
-        self.serverproxy: ServerProxy = None
+        self._cdl: ServerProxy
 
     def __connect_to_server(self, port: str | None = None) -> None:
         """Connect to DataLab XML-RPC server.
@@ -557,7 +535,7 @@ class RemoteClient:
             if port is None:
                 port = get_cdl_xmlrpc_port()
         self.port = port
-        self.serverproxy = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
+        self._cdl = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
         try:
             self.get_version()
         except ConnectionRefusedError as exc:
@@ -594,72 +572,17 @@ class RemoteClient:
             raise CDLConnectionError("Unable to connect to DataLab")
         execenv.print(f"OK (port: {self.port})")
 
+    def disconnect(self) -> None:
+        """Disconnect from DataLab XML-RPC server."""
+        # This is not mandatory with XML-RPC, but if we change protocol in the
+        # future, it may be useful to have a disconnect method.
+        self._cdl = None
+
+    def get_method_list(self) -> list[str]:
+        """Return list of available methods."""
+        return self._cdl.system.listMethods()
+
     # === Following methods should match the register functions in XML-RPC server
-
-    def get_version(self) -> str:
-        """Return DataLab version.
-
-        Returns:
-            str: DataLab version
-        """
-        return self.serverproxy.get_version()
-
-    def close_application(self) -> None:
-        """Close DataLab application"""
-        self.serverproxy.close_application()
-
-    def switch_to_panel(self, panel: str) -> None:
-        """Switch to panel.
-
-        Args:
-            panel (str): Panel name (valid values: "signal", "image", "macro"))
-        """
-        self.serverproxy.switch_to_panel(panel)
-
-    def reset_all(self) -> None:
-        """Reset all application data"""
-        self.serverproxy.reset_all()
-
-    def save_to_h5_file(self, filename: str) -> None:
-        """Save to a DataLab HDF5 file.
-
-        Args:
-            filename (str): HDF5 file name
-        """
-        self.serverproxy.save_to_h5_file(filename)
-
-    def open_h5_files(
-        self,
-        h5files: list[str] | None = None,
-        import_all: bool | None = None,
-        reset_all: bool | None = None,
-    ) -> None:
-        """Open a DataLab HDF5 file or import from any other HDF5 file.
-
-        Args:
-            h5files (list[str], optional): List of HDF5 files to open. Defaults to None.
-            import_all (bool, optional): Import all objects from HDF5 files.
-                Defaults to None.
-            reset_all (bool, optional): Reset all application data. Defaults to None.
-        """
-        self.serverproxy.open_h5_files(h5files, import_all, reset_all)
-
-    def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
-        """Open DataLab HDF5 browser to Import HDF5 file.
-
-        Args:
-            filename (str): HDF5 file name
-            reset_all (bool, optional): Reset all application data. Defaults to None.
-        """
-        self.serverproxy.import_h5_file(filename, reset_all)
-
-    def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image).
-
-        Args:
-            filename (str): File name
-        """
-        self.serverproxy.open_object(filename)
 
     def add_signal(
         self,
@@ -689,20 +612,14 @@ class RemoteClient:
             ValueError: Invalid xdata dtype
             ValueError: Invalid ydata dtype
         """
-        dtypes = SignalObj.VALID_DTYPES
-        dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
-        if xdata.dtype not in dtypes:
-            raise ValueError(
-                f"xdata dtype must be one of {dtnames}, got {xdata.dtype.name}"
-            )
-        if ydata.dtype not in dtypes:
-            raise ValueError(
-                f"ydata dtype must be one of {dtnames}, got {ydata.dtype.name}"
-            )
+        obj = SignalObj()
+        obj.set_xydata(xdata, ydata)
+        obj.check_data()
         xbinary = array_to_rpcbinary(xdata)
         ybinary = array_to_rpcbinary(ydata)
-        p = self.serverproxy
-        return p.add_signal(title, xbinary, ybinary, xunit, yunit, xlabel, ylabel)
+        return self._cdl.add_signal(
+            title, xbinary, ybinary, xunit, yunit, xlabel, ylabel
+        )
 
     def add_image(
         self,
@@ -733,15 +650,13 @@ class RemoteClient:
         Raises:
             ValueError: Invalid data dtype
         """
-        dtypes = ImageObj.VALID_DTYPES
-        dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
-        if data.dtype not in dtypes:
-            raise ValueError(
-                f"data dtype must be one of {dtnames}, got {data.dtype.name}"
-            )
+        obj = ImageObj()
+        obj.data = data
+        obj.check_data()
         zbinary = array_to_rpcbinary(data)
-        p = self.serverproxy
-        return p.add_image(title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel)
+        return self._cdl.add_image(
+            title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel
+        )
 
     def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
         """Call compute function ``name`` in current panel's processor.
@@ -753,83 +668,9 @@ class RemoteClient:
         Returns:
             gdt.DataSet: Compute function result
         """
-        p = self.serverproxy
         if param is None:
-            return p.calc(name)
-        return p.calc(name, dataset_to_json(param))
-
-    def __getattr__(self, name: str) -> Callable:
-        """Return compute function ``name`` in current panel's processor.
-
-        Args:
-            name (str): Compute function name
-
-        Returns:
-            Callable: Compute function
-
-        Raises:
-            AttributeError: If compute function ``name`` does not exist
-        """
-
-        def compute_func(param: gdt.DataSet | None = None) -> gdt.DataSet:
-            """Compute function.
-
-            Args:
-                param (gdt.DataSet, optional): Compute function parameter.
-                    Defaults to None.
-
-            Returns:
-                gdt.DataSet: Compute function result
-            """
-            return self.calc(name, param)
-
-        if name.startswith("compute_"):
-            return compute_func
-        raise AttributeError(f"DataLab remote client has no method named {name}")
-
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """
-        p = self.serverproxy
-        if isinstance(obj, SignalObj):
-            p.add_signal(
-                obj.title,
-                array_to_rpcbinary(obj.x),
-                array_to_rpcbinary(obj.y),
-                obj.xunit,
-                obj.yunit,
-                obj.xlabel,
-                obj.ylabel,
-            )
-        else:
-            p.add_image(
-                obj.title,
-                array_to_rpcbinary(obj.data),
-                obj.xunit,
-                obj.yunit,
-                obj.zunit,
-                obj.xlabel,
-                obj.ylabel,
-                obj.zlabel,
-            )
-
-    def get_object_titles(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel
-
-        Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            list[str]: list of object titles
-
-        Raises:
-            ValueError: if panel not found
-        """
-        return self.serverproxy.get_object_titles(panel)
+            return self._cdl.calc(name)
+        return self._cdl.calc(name, dataset_to_json(param))
 
     def get_object_from_title(
         self, title: str, panel: str | None = None
@@ -848,7 +689,7 @@ class RemoteClient:
             ValueError: if object not found
             ValueError: if panel not found
         """
-        param_data = self.serverproxy.get_object_from_title(title, panel)
+        param_data = self._cdl.get_object_from_title(title, panel)
         return json_to_dataset(param_data)
 
     def get_object(
@@ -874,23 +715,8 @@ class RemoteClient:
         Raises:
             IndexError: if object not found
         """
-        param_data = self.serverproxy.get_object(index, group_index, panel)
+        param_data = self._cdl.get_object(index, group_index, panel)
         return json_to_dataset(param_data)
-
-    def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) uuid list for current panel
-
-        Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            list[str]: list of object uuids
-
-        Raises:
-            ValueError: if panel not found
-        """
-        return self.serverproxy.get_object_uuids(panel)
 
     def get_object_from_uuid(
         self, oid: str, panel: str | None = None
@@ -908,5 +734,5 @@ class RemoteClient:
             ValueError: if object not found
             ValueError: if panel not found
         """
-        param_data = self.serverproxy.get_object_from_uuid(oid, panel)
+        param_data = self._cdl.get_object_from_uuid(oid, panel)
         return json_to_dataset(param_data)

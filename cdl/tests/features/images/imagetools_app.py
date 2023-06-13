@@ -10,6 +10,7 @@ Image tools application test:
   - Testing `to_cdl` function (image cross section -> curve)
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
 import os.path as osp

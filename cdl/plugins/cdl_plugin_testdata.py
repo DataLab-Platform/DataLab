@@ -58,15 +58,13 @@ class PluginTestData(PluginBase):
 
     def create_paracetamol_signal(self) -> None:
         """Create paracetamol signal"""
-        panel = self.signalpanel
         obj = test_data.create_paracetamol_signal()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_noisy_signal(self) -> None:
         """Create noisy signal"""
-        panel = self.signalpanel
         obj = test_data.create_noisy_signal()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     # Image processing features ------------------------------------------------
     def add_noise_to_image(self) -> None:
@@ -79,39 +77,33 @@ class PluginTestData(PluginBase):
 
     def create_peak2d_image(self) -> None:
         """Create 2D peak image"""
-        panel = self.imagepanel
         obj = test_data.create_peak2d_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_sincos_image(self) -> None:
         """Create 2D sin cos image"""
-        panel = self.imagepanel
         obj = test_data.create_sincos_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_noisygauss_image(self) -> None:
         """Create 2D noisy gauss image"""
-        panel = self.imagepanel
         obj = test_data.create_noisygauss_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_multigauss_image(self) -> None:
         """Create 2D multi gauss image"""
-        panel = self.imagepanel
         obj = test_data.create_multigauss_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_2dstep_image(self) -> None:
         """Create 2D step image"""
-        panel = self.imagepanel
         obj = test_data.create_2dstep_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     def create_annotated_image(self) -> None:
         """Create annotated image"""
-        panel = self.imagepanel
         obj = test_data.create_annotated_image()
-        panel.add_object(obj)
+        self.proxy.add_object(obj)
 
     # Plugin menu entries ------------------------------------------------------
     def create_actions(self) -> None:

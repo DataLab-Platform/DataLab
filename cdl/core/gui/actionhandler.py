@@ -601,7 +601,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("ROI extraction"),
-                triggered=self.panel.processor.extract_roi,
+                triggered=self.panel.processor.compute_roi_extraction,
                 icon=get_icon(f"{self.OBJECT_STR}_roi.svg"),
             )
             self.new_action(

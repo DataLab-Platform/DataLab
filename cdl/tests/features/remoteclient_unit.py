@@ -17,9 +17,9 @@ import time
 import numpy as np
 
 from cdl import app
+from cdl.core.remote import RemoteClient
 from cdl.env import execenv
 from cdl.param import XYCalibrateParam
-from cdl.remotecontrol import RemoteClient
 from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
 from cdl.utils.tests import exec_script, temporary_directory
 
@@ -41,8 +41,7 @@ def multiple_commands(remote: RemoteClient):
         remote.switch_to_panel("signal")
         remote.calc("log10")
 
-        param = XYCalibrateParam()
-        param.a, param.b = 1.2, 0.1
+        param = XYCalibrateParam.create(a=1.2, b=0.1)
         remote.calc("compute_calibration", param)
 
         time.sleep(2)  # Avoid permission error when trying to clean-up temporary files

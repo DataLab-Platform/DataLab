@@ -13,7 +13,6 @@ from __future__ import annotations
 
 import abc
 
-import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from guiqwt.annotations import AnnotatedCircle
@@ -23,40 +22,9 @@ from guiqwt.label import ObjectInfo
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
+from cdl.core.computation.base import ROIDataParam
 from cdl.core.model.base import BaseObj
 from cdl.core.model.image import RoiDataGeometries
-
-
-class ROIEditorData:
-    """ROI Editor data"""
-
-    def __init__(
-        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
-    ):
-        self.__singleobj = None
-        if roidata is not None:
-            roidata = np.array(roidata, dtype=int)
-        self.roidata = roidata
-        self.singleobj = singleobj
-        self.modified = None
-
-    @property
-    def is_empty(self) -> bool:
-        """Return True if there is no ROI"""
-        return self.roidata is None or self.roidata.size == 0
-
-    @property
-    def singleobj(self) -> bool:
-        """Return singleobj parameter"""
-        return self.__singleobj
-
-    @singleobj.setter
-    def singleobj(self, value: bool):
-        """Set singleobj parameter"""
-        if value is None:
-            value = Conf.proc.extract_roi_singleobj.get()
-        self.__singleobj = value
-        Conf.proc.extract_roi_singleobj.set(value)
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
@@ -83,7 +51,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
         self.extract = extract
         self.__modified = None
 
-        self.__data = ROIEditorData(singleobj=singleobj)
+        self.__data = ROIDataParam.create(singleobj=singleobj)
 
         self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
         self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
@@ -130,10 +98,12 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             coords.append(list(self.get_roi_item_coords(roi_item)))
         self.__data.roidata = self.obj.roi_coords_to_indexes(coords)
         if self.singleobj_btn is not None:
-            self.__data.singleobj = self.singleobj_btn.isChecked()
+            singleobj = self.singleobj_btn.isChecked()
+            self.__data.singleobj = singleobj
+            Conf.proc.extract_roi_singleobj.set(singleobj)
         self.__data.modified = self.modified
 
-    def get_data(self) -> ROIEditorData:
+    def get_data(self) -> ROIDataParam:
         """Get ROI Editor data (results of the dialog box)"""
         return self.__data
 
@@ -151,7 +121,10 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
                 self,
             )
             layout.addWidget(self.singleobj_btn)
-            self.singleobj_btn.setChecked(self.__data.singleobj)
+            singleobj = self.__data.singleobj
+            if singleobj is None:
+                singleobj = Conf.proc.extract_roi_singleobj.get()
+            self.singleobj_btn.setChecked(singleobj)
         layout.addStretch()
         self.setLayout(layout)
 

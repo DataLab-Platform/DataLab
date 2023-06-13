@@ -16,7 +16,7 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.tests.features import embedded1_unit
 
 
-class HostWindow(embedded1_unit.BaseHostWindow):
+class HostWindow(embedded1_unit.AbstractHostWindow):
     """Test main view"""
 
     def init_cdl(self) -> None:
@@ -36,8 +36,10 @@ class HostWindow(embedded1_unit.BaseHostWindow):
             self.host.log("=> Closed DataLab")
             self.cdl.close()
 
-    def closeEvent(self, event) -> None:
-        """Close event"""
+    def closeEvent(self, event) -> None:  # pylint: disable=invalid-name
+        """Close event
+
+        Reimplemented from QWidget.closeEvent"""
         if self.cdl is None or self.cdl.close_properly():
             event.accept()
         else:

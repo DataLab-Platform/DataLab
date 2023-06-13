@@ -11,34 +11,37 @@ then open DataLab to show it.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
-# guitest: show,skip
+# guitest: show
 
 import cdl.param
 from cdl.obj import create_image
-from cdl.tests import cdl_app_context
+from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
 
 
 def test():
-    """Example of high-level test scenario"""
-    with cdl_app_context(console=False) as win:
-        panel = win.imagepanel
+    """Example of high-level test scenario using proxy interface, so that it may
+    be run remotely inside an already running DataLab instance, or in a new
+    dedicated instance."""
+    with proxy_context("gui") as proxy:
         data = get_test_image("flower.npy").data
         image = create_image("Test image with peaks", data)
-        panel.add_object(image)
-        panel.processor.compute_roberts()
+        proxy.add_object(image)
+        proxy.compute_roberts()
         data_size = data.shape[0]
         n = data_size // 5
         m = int(n * 1.25)
-        panel.processor.extract_roi([[n, m, data_size - n, data_size - m]])
-        param = cdl.param.BlobOpenCVParam()
-        param.min_dist_between_blobs = 0
-        param.filter_by_color = False
-        param.min_area = 500
-        param.max_area = 2000
-        param.filter_by_circularity = True
-        param.min_circularity = 0.2
-        panel.processor.compute_blob_opencv(param)
+        param = cdl.param.ROIDataParam.create([[n, m, data_size - n, data_size - m]])
+        proxy.compute_roi_extraction(param)
+        param = cdl.param.BlobOpenCVParam.create(
+            min_dist_between_blobs=0,
+            filter_by_color=False,
+            min_area=500,
+            max_area=2000,
+            filter_by_circularity=True,
+            min_circularity=0.2,
+        )
+        proxy.compute_blob_opencv(param)
 
 
 if __name__ == "__main__":

@@ -26,9 +26,9 @@ def test_memory_alarm(threshold):
         panel = win.imagepanel
         win.memorystatus.update_status()  # Force memory status update
         newparam = new_image_param(itype=ImageTypes.GAUSS)
-        addparam = Gauss2DParam()
-        addparam.x0 = addparam.y0 = rng.integers(-9, 9)
-        addparam.sigma = rng.integers(1, 20)
+        addparam = Gauss2DParam.create(
+            x0=rng.integers(-9, 9), y0=rng.integers(-9, 9), sigma=rng.integers(1, 20)
+        )
         panel.new_object(newparam, addparam=addparam, edit=False)
 
 

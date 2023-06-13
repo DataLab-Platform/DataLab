@@ -32,8 +32,8 @@ from qtpy import QtWidgets as QW
 
 from cdl import env
 from cdl.config import Conf, _
+from cdl.core.computation.base import ROIDataParam
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
-from cdl.core.gui.roieditor import ROIEditorData
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.utils import misc
 from cdl.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
@@ -415,10 +415,9 @@ class BaseProcessor(QC.QObject):
                 dst_obj = dst_objs.get(src_gid)
                 if dst_obj is None:
                     src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
-                    dst_objs[src_gid] = dst_obj = self.panel.create_object()
-                    src_objs[src_gid] = [src_obj]
                     dst_dtype = complex if misc.is_complex_dtype(src_dtype) else float
-                    dst_obj.copy_data_from(src_obj, dtype=dst_dtype)
+                    dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
+                    src_objs[src_gid] = [src_obj]
                 else:
                     src_objs[src_gid].append(src_obj)
                     if param is None:
@@ -535,31 +534,28 @@ class BaseProcessor(QC.QObject):
     def compute_division(self, obj2: Obj | None = None) -> None:
         """Compute division"""
 
-    def _get_roieditordata(
-        self, roidata: np.ndarray | None = None, singleobj: bool | None = None
-    ) -> ROIEditorData:
+    def _get_roidataparam(self, param: ROIDataParam | None = None) -> ROIDataParam:
         """Eventually open ROI Editing Dialog, and return ROI editor data"""
         # Expected behavior:
         # -----------------
-        # * If roidata argument is not None, skip the ROI dialog
+        # * If param.roidata argument is not None, skip the ROI dialog
         # * If first selected obj has a ROI, use this ROI as default but open
         #   ROI Editor dialog anyway
         # * If multiple objs are selected, then apply the first obj ROI to all
-
-        if roidata is None:
-            roieditordata = self.edit_regions_of_interest(
-                extract=True, singleobj=singleobj
+        if param is None:
+            param = ROIDataParam()
+        if param.roidata is None:
+            param = self.edit_regions_of_interest(
+                extract=True, singleobj=param.singleobj
             )
-            if roieditordata is not None and roieditordata.roidata is None:
+            if param is not None and param.roidata is None:
                 # This only happens in unattended mode (forcing QDialog accept)
                 return None
-        else:
-            roieditordata = ROIEditorData(roidata=roidata, singleobj=singleobj)
-        return roieditordata
+        return param
 
     @abc.abstractmethod
     @qt_try_except()
-    def extract_roi(self, roidata: np.ndarray | None = None) -> None:
+    def compute_roi_extraction(self, param=None) -> None:
         """Extract Region Of Interest (ROI) from data"""
 
     @abc.abstractmethod
@@ -628,7 +624,7 @@ class BaseProcessor(QC.QObject):
 
     def edit_regions_of_interest(
         self, extract: bool = False, singleobj: bool | None = None
-    ) -> ROIEditorData:
+    ) -> ROIDataParam:
         """Define Region Of Interest (ROI) for computing functions"""
         roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
         if roieditordata is not None:

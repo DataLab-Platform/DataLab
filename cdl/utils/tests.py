@@ -151,5 +151,7 @@ def get_script_output(
         str: script output
     """
     command = [sys.executable, '"' + path + '"'] + ([] if args is None else args)
-    result = subprocess.run(" ".join(command), capture_output=True, text=True, env=env)
+    result = subprocess.run(
+        " ".join(command), capture_output=True, text=True, env=env, check=False
+    )
     return result.stdout.strip()

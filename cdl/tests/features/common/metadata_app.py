@@ -29,12 +29,14 @@ from cdl.tests.features.common import roi_app
 
 def test_signal_features(panel: SignalPanel):
     """Test all signal features related to ROI"""
+    execenv.print("  Signal features")
     panel.processor.compute_fwhm(cdl.param.FWHMParam())
     panel.processor.compute_fw1e2()
 
 
 def test_image_features(panel: ImagePanel):
     """Test all image features related to ROI"""
+    execenv.print("  Image features")
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
     panel.processor.compute_peak_detection(cdl.param.Peak2DDetectionParam())
@@ -73,6 +75,7 @@ def test():
         panel.add_object(ima)
         test_image_features(panel)
         test_metadata_features(panel)
+        execenv.print("==> OK")
 
 
 if __name__ == "__main__":

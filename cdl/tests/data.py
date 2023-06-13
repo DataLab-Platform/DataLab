@@ -139,7 +139,7 @@ def create_noisy_signal(
     """
     if newparam is None:
         newparam = cdl.obj.NewSignalParam()
-        newparam.type = cdl.obj.SignalTypes.GAUSS
+        newparam.stype = cdl.obj.SignalTypes.GAUSS
     if title is not None:
         newparam.title = title
     newparam.title = "Test signal (noisy)" if newparam.title is None else newparam.title

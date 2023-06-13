@@ -49,8 +49,7 @@ def test():
             panel = win.imagepanel
             ima1 = create_noisygauss_image()
             panel.add_object(ima1)
-            param = ClipParam()
-            param.value = ima1.data.mean()
+            param = ClipParam.create(value=ima1.data.mean())
             panel.processor.compute_clip(param)
             # === Creating a macro
             scode = scenario_mac_app.add_macro_sample(win, 0).get_code()

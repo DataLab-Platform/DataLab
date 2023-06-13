@@ -10,13 +10,13 @@ DataLab main window is destroyed when closing application.
 It is rebuilt from scratch when reopening application.
 """
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
 import abc
 
 from guidata.qthelpers import get_std_icon
 from guidata.widgets.codeeditor import CodeEditor
-from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 import cdl.obj
@@ -168,8 +168,8 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         """Remove all objects from DataLab"""
 
 
-class BaseHostWindow(AbstractClientWindow):
-    """Base host window, embedding DataLab"""
+class AbstractHostWindow(AbstractClientWindow):  # pylint: disable=abstract-method
+    """Abstract host window, embedding DataLab"""
 
     PURPOSE = _("This the host application, which embeds DataLab.")
     INIT_BUTTON_LABEL = _("Open DataLab")
@@ -215,7 +215,7 @@ class BaseHostWindow(AbstractClientWindow):
             self.import_object(self.cdl.imagepanel, self.sender().text())
 
 
-class HostWindow(BaseHostWindow):
+class HostWindow(AbstractHostWindow):
     """Test main view"""
 
     def init_cdl(self):

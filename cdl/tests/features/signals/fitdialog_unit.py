@@ -30,8 +30,7 @@ def test():
         )
 
         # Gaussian curve fitting test
-        noiseparam = GaussianNoiseParam()
-        noiseparam.sigma = 5.0
+        noiseparam = GaussianNoiseParam.create(sigma=5.0)
         sig = create_noisy_signal(noiseparam)
         x, y = sig.x, sig.y
         execenv.print(fdlg.gaussianfit(x, y))
