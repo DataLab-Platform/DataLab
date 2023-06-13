@@ -55,14 +55,13 @@ class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
 
 import numpy as np
 
-from cdl.remotecontrol import RemoteClient
+from cdl.proxy import RemoteCDLProxy
 
-remote = RemoteClient()
-remote.connect()
+proxy = RemoteCDLProxy()
 
 z = np.random.rand(20, 20)
-remote.add_image("toto", z)
-remote.compute_fft()
+proxy.add_image("toto", z)
+proxy.compute_fft()
 
 print("All done!")
 """
@@ -143,6 +142,7 @@ print("All done!")
         if code.startswith(header):
             code = code[len(header) :].strip()
         self.set_code(code)
+        self.title = osp.basename(filename)
 
     @staticmethod
     def get_untitled_title() -> str:

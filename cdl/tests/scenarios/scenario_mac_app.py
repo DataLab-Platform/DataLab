@@ -29,7 +29,8 @@ def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:
         win: CDLMainWindow
         index: index of the macro sample to add
     """
-    macro = win.macropanel.add_macro(f"Test macro {index}")
+    macro = win.macropanel.add_macro()
+    macro.title = f"Test macro {index}"
     samples = [
         "import time; [print(f'{i}:{time.sleep(.1)}') for i in range(50)]",
         "print('Hello world')",

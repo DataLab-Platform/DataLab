@@ -301,6 +301,20 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 return macro
         return None
 
+    def get_index_from_macro(self, macro: Macro) -> int | None:
+        """Return tab index from macro
+
+        Args:
+            macro (Macro): Macro object
+
+        Returns:
+            int: Index of the macro in the tab widget
+        """
+        for index in range(self.tabwidget.count()):
+            if self.tabwidget.widget(index) is macro.editor:
+                return index
+        return None
+
     def macro_contents_changed(self) -> None:
         """One of the macro contents has changed"""
         self.SIG_OBJECT_MODIFIED.emit()
@@ -337,20 +351,15 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             self.run_action.setEnabled(not state)
             self.stop_action.setEnabled(state)
 
-    def add_macro(self, title: str | None = None) -> Macro:
+    def add_macro(self) -> Macro:
         """Add macro, optionally with name
-
-        Args:
-            title (str, optional): Title of the macro. Defaults to None.
-                If None, a dialog box will be opened to ask for a title.
 
         Returns:
             Macro: Macro object
         """
         macro = self.create_object()
-        macro.title = title
         self.add_object(macro)
-        if title is None:
+        if not macro.title:
             self.rename_macro()
         return macro
 
@@ -360,7 +369,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         Args:
             name (str): New name of the macro
         """
-        index = self.indexOf(self.tabwidget)
+        index = self.get_index_from_macro(self.sender())
         self.tabwidget.setTabText(index, name)
 
     def rename_macro(self, index: int | None = None) -> None:
@@ -423,7 +432,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                macro = self.add_macro(osp.basename(filename))
+                macro = self.add_macro()
                 macro.from_file(filename)
             return macro
         return None
