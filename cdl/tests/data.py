@@ -13,8 +13,6 @@ Functions creating test data: curves, images, ...
 
 from __future__ import annotations
 
-import dataclasses
-
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np

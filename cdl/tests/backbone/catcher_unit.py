@@ -33,7 +33,7 @@ def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
 def comp_warning(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
     """Computation function that raises a warning"""
     warnings.warn("This is a test warning")
-    return src
+    return src.copy()
 
 
 def comp_warning_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
@@ -44,7 +44,7 @@ def comp_warning_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-a
 
 def comp_no_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
     """Computation function that does not raise an error"""
-    return src
+    return src.copy()
 
 
 def test_catcher():
