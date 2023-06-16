@@ -355,7 +355,13 @@ class SignalObj(gdt.DataSet, base.BaseObj):
         """
         coords = self.x.min(), self.x.max()
         return base.make_roi_item(
-            lambda x, y, _title: make.range(x, y), coords, "ROI", fmt, lbl, editable
+            lambda x, y, _title: make.range(x, y),
+            coords,
+            "ROI",
+            fmt,
+            lbl,
+            editable,
+            option="shape/drag",
         )
 
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
@@ -378,6 +384,7 @@ class SignalObj(gdt.DataSet, base.BaseObj):
                     fmt,
                     lbl,
                     editable,
+                    option="shape/drag",
                 )
 
     def add_label_with_title(self, title: str | None = None) -> None:

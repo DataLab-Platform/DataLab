@@ -192,7 +192,9 @@ class RoiDataItem:
         else:
             func = make_roi_circle
         title = "ROI" if index is None else f"ROI{index:02d}"
-        return base.make_roi_item(func, coords, title, fmt, lbl, editable)
+        return base.make_roi_item(
+            func, coords, title, fmt, lbl, editable, option="shape/drag"
+        )
 
 
 def roi_label(name: str, index: int):

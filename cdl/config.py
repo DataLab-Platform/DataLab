@@ -20,6 +20,7 @@ import sys
 
 from guidata import configtools
 from guiqwt.config import CONF as GUIQWT_CONF
+from guiqwt.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 
 from cdl.utils import conf, tests
 
@@ -347,6 +348,79 @@ GUIQWT_DEFAULTS = {
         "shape/drag/symbol/marker": "NoSymbol",
         "shape/mask/symbol/size": 5,
         "shape/mask/sel_symbol/size": 8,
+        # -----------------------------------------------------------------------------
+        # Annotated shape style for annotations:
+        "shape/annotation/line/style": "SolidLine",
+        "shape/annotation/line/color": "#ffff00",
+        "shape/annotation/line/width": 1,
+        "shape/annotation/fill/style": "SolidPattern",
+        "shape/annotation/fill/color": MAIN_BG_COLOR,
+        "shape/annotation/fill/alpha": 0.1,
+        "shape/annotation/symbol/marker": "Rect",
+        "shape/annotation/symbol/size": 3,
+        "shape/annotation/symbol/edgecolor": "#ffff00",
+        "shape/annotation/symbol/facecolor": "#ffff00",
+        "shape/annotation/symbol/alpha": 1.0,
+        "shape/annotation/sel_line/style": "SolidLine",
+        "shape/annotation/sel_line/color": "#00ff00",
+        "shape/annotation/sel_line/width": 1,
+        "shape/annotation/sel_fill/style": "SolidPattern",
+        "shape/annotation/sel_fill/color": MAIN_BG_COLOR,
+        "shape/annotation/sel_fill/alpha": 0.1,
+        "shape/annotation/sel_symbol/marker": "Rect",
+        "shape/annotation/sel_symbol/size": 9,
+        "shape/annotation/sel_symbol/edgecolor": "#00aa00",
+        "shape/annotation/sel_symbol/facecolor": "#00ff00",
+        "shape/annotation/sel_symbol/alpha": 0.7,
+        # -----------------------------------------------------------------------------
+        # Annotated shape style for result shapes / signals:
+        "shape/result/s/line/style": "SolidLine",
+        "shape/result/s/line/color": MAIN_FG_COLOR,
+        "shape/result/s/line/width": 1,
+        "shape/result/s/fill/style": "SolidPattern",
+        "shape/result/s/fill/color": MAIN_BG_COLOR,
+        "shape/result/s/fill/alpha": 0.1,
+        "shape/result/s/symbol/marker": "XCross",
+        "shape/result/s/symbol/size": 7,
+        "shape/result/s/symbol/edgecolor": MAIN_FG_COLOR,
+        "shape/result/s/symbol/facecolor": MAIN_FG_COLOR,
+        "shape/result/s/symbol/alpha": 1.0,
+        "shape/result/s/sel_line/style": "SolidLine",
+        "shape/result/s/sel_line/color": "#00ff00",
+        "shape/result/s/sel_line/width": 1,
+        "shape/result/s/sel_fill/style": "SolidPattern",
+        "shape/result/s/sel_fill/color": MAIN_BG_COLOR,
+        "shape/result/s/sel_fill/alpha": 0.1,
+        "shape/result/s/sel_symbol/marker": "Rect",
+        "shape/result/s/sel_symbol/size": 9,
+        "shape/result/s/sel_symbol/edgecolor": "#00aa00",
+        "shape/result/s/sel_symbol/facecolor": "#00ff00",
+        "shape/result/s/sel_symbol/alpha": 0.7,
+        # -----------------------------------------------------------------------------
+        # Annotated shape style for result shapes / images:
+        "shape/result/i/line/style": "SolidLine",
+        "shape/result/i/line/color": "#ffff00",
+        "shape/result/i/line/width": 1,
+        "shape/result/i/fill/style": "SolidPattern",
+        "shape/result/i/fill/color": MAIN_BG_COLOR,
+        "shape/result/i/fill/alpha": 0.1,
+        "shape/result/i/symbol/marker": "Rect",
+        "shape/result/i/symbol/size": 3,
+        "shape/result/i/symbol/edgecolor": "#ffff00",
+        "shape/result/i/symbol/facecolor": "#ffff00",
+        "shape/result/i/symbol/alpha": 1.0,
+        "shape/result/i/sel_line/style": "SolidLine",
+        "shape/result/i/sel_line/color": "#00ff00",
+        "shape/result/i/sel_line/width": 1,
+        "shape/result/i/sel_fill/style": "SolidPattern",
+        "shape/result/i/sel_fill/color": MAIN_BG_COLOR,
+        "shape/result/i/sel_fill/alpha": 0.1,
+        "shape/result/i/sel_symbol/marker": "Rect",
+        "shape/result/i/sel_symbol/size": 9,
+        "shape/result/i/sel_symbol/edgecolor": "#00aa00",
+        "shape/result/i/sel_symbol/facecolor": "#00ff00",
+        "shape/result/i/sel_symbol/alpha": 0.7,
+        # -----------------------------------------------------------------------------
     },
 }
 

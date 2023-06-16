@@ -185,19 +185,33 @@ class ShapeTypes(enum.Enum):
 
 
 def config_annotated_shape(
-    item: AnnotatedShape, fmt: str, lbl: bool, cmp: bool | None = None
+    item: AnnotatedShape, fmt: str, lbl: bool, option: str, cmp: bool | None = None
 ):
-    """Configurate annotated shape"""
+    """Configurate annotated shape.
+
+    Args:
+        item (AnnotatedShape): Annotated shape item
+        fmt (str): Format string
+        lbl (bool): Show label
+        option (str): Shape style option (e.g. "shape/drag")
+        cmp (bool | None): Show computations
+    """
     param = item.annotationparam
     param.format = fmt
     param.show_label = lbl
     if cmp is not None:
         param.show_computations = cmp
     param.update_annotation(item)
+    item.set_style("plot", option)
 
 
 def set_plot_item_editable(item, state):
-    """Set plot item editable state"""
+    """Set plot item editable state.
+
+    Args:
+        item (PlotItem): Plot item
+        state (bool): State
+    """
     item.set_movable(state)
     item.set_resizable(state)
     item.set_rotatable(state)
@@ -359,26 +373,28 @@ class ResultShape:
         assert len(self.array.shape) == 2
         assert self.array.shape[1] == self.data_colnb + 1
 
-    def iterate_plot_items(self, fmt: str, lbl: bool) -> Iterable:
+    def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
         """Iterate over metadata shape plot items.
 
         Args:
             fmt (str): numeric format (e.g. "%.3f")
             lbl (bool): if True, show shape labels
+            option (str): shape style option (e.g. "shape/drag")
 
         Yields:
             PlotItem: plot item
         """
         for args in self.data:
-            yield self.create_plot_item(args, fmt, lbl)
+            yield self.create_plot_item(args, fmt, lbl, option)
 
-    def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool):
+    def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool, option: str):
         """Make plot item.
 
         Args:
             args (np.ndarray): shape data
             fmt (str): numeric format (e.g. "%.3f")
             lbl (bool): if True, show shape labels
+            option (str): shape style option (e.g. "shape/drag")
 
         Returns:
             PlotItem: plot item
@@ -414,7 +430,7 @@ class ResultShape:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl)
+            config_annotated_shape(item, fmt, lbl, option)
         set_plot_item_editable(item, False)
         return item
 
@@ -449,7 +465,9 @@ class ResultShape:
         )
 
 
-def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable: bool):
+def make_roi_item(
+    func, coords: list, title: str, fmt: str, lbl: bool, editable: bool, option: str
+):
     """Make ROI item shape.
 
     Args:
@@ -459,6 +477,7 @@ def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable:
         fmt (str): numeric format (e.g. "%.3f")
         lbl (bool): if True, show shape labels
         editable (bool): if True, make shape editable
+        option (str): shape style option (e.g. "shape/drag")
 
     Returns:
         PlotItem: plot item
@@ -466,7 +485,7 @@ def make_roi_item(func, coords: list, title: str, fmt: str, lbl: bool, editable:
     item = func(*coords, title)
     if not editable:
         if isinstance(item, AnnotatedShape):
-            config_annotated_shape(item, fmt, lbl, cmp=editable)
+            config_annotated_shape(item, fmt, lbl, option, cmp=editable)
             item.set_style("plot", "shape/mask")
         item.set_movable(False)
         item.set_resizable(False)
@@ -565,7 +584,6 @@ class BaseObj(metaclass=BaseObjMeta):
         Returns:
             BaseObj: copied object
         """
-
 
     @abc.abstractmethod
     def set_data_type(self, dtype):
@@ -875,13 +893,15 @@ class BaseObj(metaclass=BaseObjMeta):
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
             elif ResultShape.match(key, value):
                 mshape = ResultShape.from_metadata_entry(key, value)
-                yield from mshape.iterate_plot_items(fmt, lbl)
+                yield from mshape.iterate_plot_items(
+                    fmt, lbl, f"shape/result/{self.PREFIX}"
+                )
         if self.annotations:
             try:
                 for item in load_items(JSONReader(self.annotations)):
                     set_plot_item_editable(item, editable)
                     if isinstance(item, AnnotatedShape):
-                        config_annotated_shape(item, fmt, lbl)
+                        config_annotated_shape(item, fmt, lbl, "shape/annotation")
                     yield item
             except json.decoder.JSONDecodeError:
                 pass
