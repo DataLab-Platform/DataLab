@@ -27,7 +27,7 @@ class VerbosityLevels(enum.Enum):
     DEBUG = "debug"
 
 
-# TODO: Rewrite this class so that options are automatically associated with
+# TODO: [P2] Rewrite this class so that options are automatically associated with
 #       environment variables and command line arguments.
 #
 #       Use the unit test "cdl\tests\backbone\execenv_unit.py" to check that

@@ -62,7 +62,7 @@ def go_to_error(text: str) -> None:
         if not osp.isfile(path):
             otherpath = osp.join(get_mod_source_dir(), path)
             if not osp.isfile(otherpath):
-                # TODO: For frozen app, go to error is  implemented only when the
+                # TODO: [P3] For frozen app, go to error is implemented only when the
                 # source code is available locally (development mode).
                 # How about using a web browser to open the source code on github?
                 return

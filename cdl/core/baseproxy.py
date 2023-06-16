@@ -122,19 +122,6 @@ class AbstractCDLControl(abc.ABC):
             ValueError: Invalid ydata dtype
         """
 
-        # TODO: Check if this is really needed: data type is already checked in
-        # "add_object" method of "CDLMainWindow" class
-        # dtypes = SignalObj.VALID_DTYPES
-        # dtnames = ", ".join([dtype.__name__ for dtype in dtypes])
-        # if xdata.dtype not in dtypes:
-        #     raise ValueError(
-        #         f"xdata dtype must be one of {dtnames}, got {xdata.dtype.name}"
-        #     )
-        # if ydata.dtype not in dtypes:
-        #     raise ValueError(
-        #         f"ydata dtype must be one of {dtnames}, got {ydata.dtype.name}"
-        #     )
-
     @abc.abstractmethod
     def add_image(
         self,

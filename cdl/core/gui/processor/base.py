@@ -91,7 +91,11 @@ class Worker:
 
     @staticmethod
     def terminate_pool(wait: bool = False) -> None:
-        """Terminate multiprocessing pool"""
+        """Terminate multiprocessing pool.
+
+        Args:
+            wait (bool, optional): wait for all tasks to finish. Defaults to False.
+        """
         global POOL  # pylint: disable=global-statement
         if POOL is not None:
             if wait:
@@ -111,7 +115,12 @@ class Worker:
         self.create_pool()
 
     def run(self, func: Callable, args: tuple[Any]) -> None:
-        """Run computation"""
+        """Run computation.
+
+        Args:
+            func (Callable): function to run
+            args (tuple[Any]): arguments
+        """
         global POOL  # pylint: disable=global-statement,global-variable-not-assigned
         assert POOL is not None
         self.asyncresult = POOL.apply_async(wng_err_func, (func, args))
@@ -125,18 +134,31 @@ class Worker:
         self.terminate_pool(wait=self.asyncresult is None)
 
     def is_computation_finished(self) -> bool:
-        """Return True if computation is finished"""
+        """Return True if computation is finished.
+
+        Returns:
+            bool: True if computation is finished
+        """
         return self.asyncresult.ready()
 
     def get_result(self) -> CompOut:
-        """Return computation result"""
+        """Return computation result.
+
+        Returns:
+            CompOut: computation result
+        """
         self.result = self.asyncresult.get()
         self.asyncresult = None
         return self.result
 
 
 class BaseProcessor(QC.QObject):
-    """Object handling data processing: operations, processing, computing"""
+    """Object handling data processing: operations, processing, computing.
+
+    Args:
+        panel (SignalPanel | ImagePanel): panel
+        plotwidget (CurveWidget | ImageWidget): plot widget
+    """
 
     SIG_ADD_SHAPE = QC.Signal(str)
     EDIT_ROI_PARAMS = False
@@ -158,7 +180,11 @@ class BaseProcessor(QC.QObject):
             self.worker = None
 
     def set_process_isolation_enabled(self, enabled: bool) -> None:
-        """Set process isolation enabled"""
+        """Set process isolation enabled.
+
+        Args:
+            enabled (bool): enabled
+        """
         if enabled:
             if self.worker is None:
                 self.worker = Worker()
@@ -169,7 +195,11 @@ class BaseProcessor(QC.QObject):
                 self.worker = None
 
     def update_param_defaults(self, param: gdt.DataSet) -> None:
-        """Update parameter defaults"""
+        """Update parameter defaults.
+
+        Args:
+            param (gdt.DataSet): parameter
+        """
         key = param.__class__.__name__
         pdefaults = self.PARAM_DEFAULTS.get(key)
         if pdefaults is not None:
@@ -183,7 +213,17 @@ class BaseProcessor(QC.QObject):
         title: str,
         comment: str | None = None,
     ) -> tuple[bool, gdt.DataSet]:
-        """Initialize processing parameters"""
+        """Initialize processing parameters.
+
+        Args:
+            param (gdt.DataSet): parameter
+            paramclass (gdt.DataSet): parameter class
+            title (str): title
+            comment (str | None): comment
+
+        Returns:
+            tuple[bool, gdt.DataSet]: edit, param
+        """
         edit = param is None
         if edit:
             param = paramclass(title, comment)
@@ -199,7 +239,16 @@ class BaseProcessor(QC.QObject):
         comment: str | None = None,
         edit: bool | None = None,
     ):
-        """Compute 11 function: 1 object in --> 1 object out"""
+        """Compute 11 function: 1 object in --> 1 object out.
+
+        Args:
+            func (Callable): function
+            param (gdt.DataSet | None): parameter
+            paramclass (gdt.DataSet | None): parameter class
+            title (str | None): title
+            comment (str | None): comment
+            edit (bool | None): edit parameters
+        """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
@@ -214,7 +263,14 @@ class BaseProcessor(QC.QObject):
         title: str | None = None,
         edit: bool | None = None,
     ):
-        """Compute 1n function: 1 object in --> n objects out"""
+        """Compute 1n function: 1 object in --> n objects out.
+
+        Args:
+            funcs (list[Callable] | Callable): list of functions
+            params (list | None): list of parameters
+            title (str | None): title
+            edit (bool | None): edit parameters
+        """
         if params is None:
             assert not isinstance(funcs, Callable)
             params = [None] * len(funcs)
@@ -284,7 +340,13 @@ class BaseProcessor(QC.QObject):
         return None
 
     def _compute_11_subroutine(self, funcs: list[Callable], params: list, title: str):
-        """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
+        """Compute 11 subroutine: used by compute 11 and compute 1n methods.
+
+        Args:
+            funcs (list[Callable]): list of functions to execute
+            params (list): list of parameters
+            title (str): title of progress bar
+        """
         assert len(funcs) == len(params)
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         grps = self.panel.objview.get_sel_groups()
@@ -334,7 +396,23 @@ class BaseProcessor(QC.QObject):
         edit: bool | None = None,
     ) -> dict[int, ResultShape]:
         """Compute 10 function: 1 object in --> 0 object out
-        (the result of this method is stored in original object's metadata)"""
+        (the result of this method is stored in original object's metadata).
+
+        Args:
+            func (Callable): function to execute
+            shapetype (ShapeTypes): shape type
+            param (gdt.DataSet | None, optional): parameters. Defaults to None.
+            paramclass (gdt.DataSet | None, optional): parameters class.
+                Defaults to None.
+            title (str | None, optional): title of progress bar.
+                Defaults to None.
+            comment (str | None, optional): comment. Defaults to None.
+            edit (bool | None, optional): if True, edit parameters.
+                Defaults to None.
+
+        Returns:
+            dict[int, ResultShape]: dictionary of results
+        """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
@@ -394,7 +472,22 @@ class BaseProcessor(QC.QObject):
         func_objs: Callable | None = None,
         edit: bool | None = None,
     ):
-        """Compute n1 function: N(>=2) objects in --> 1 object out"""
+        """Compute n1 function: N(>=2) objects in --> 1 object out.
+
+        Args:
+            name (str): name of function
+            func (Callable): function to execute
+            param (gdt.DataSet | None, optional): parameters. Defaults to None.
+            paramclass (gdt.DataSet | None, optional): parameters class.
+                Defaults to None.
+            title (str | None, optional): title of progress bar.
+                Defaults to None.
+            comment (str | None, optional): comment. Defaults to None.
+            func_objs (Callable | None, optional): function to execute on objects.
+                Defaults to None.
+            edit (bool | None, optional): if True, edit parameters.
+                Defaults to None.
+        """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
@@ -479,7 +572,21 @@ class BaseProcessor(QC.QObject):
     ):
         """Compute n1n function: N(>=1) objects + 1 object in --> N objects out.
 
-        Examples: subtract, divide"""
+        Examples: subtract, divide
+
+        Args:
+            obj2 (Obj | None): second object
+            obj2_name (str): name of second object
+            func (Callable): function to execute
+            param (gdt.DataSet | None, optional): parameters. Defaults to None.
+            paramclass (gdt.DataSet | None, optional): parameters class.
+                Defaults to None.
+            title (str | None, optional): title of progress bar.
+                Defaults to None.
+            comment (str | None, optional): comment. Defaults to None.
+            edit (bool | None, optional): if True, edit parameters.
+                Defaults to None.
+        """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
@@ -538,7 +645,15 @@ class BaseProcessor(QC.QObject):
         """Compute division"""
 
     def _get_roidataparam(self, param: ROIDataParam | None = None) -> ROIDataParam:
-        """Eventually open ROI Editing Dialog, and return ROI editor data"""
+        """Eventually open ROI Editing Dialog, and return ROI editor data.
+
+        Args:
+            param (ROIDataParam | None, optional): ROI data parameters.
+                Defaults to None.
+
+        Returns:
+            ROIDataParam: ROI data parameters.
+        """
         # Expected behavior:
         # -----------------
         # * If param.roidata argument is not None, skip the ROI dialog
@@ -628,7 +743,20 @@ class BaseProcessor(QC.QObject):
     def edit_regions_of_interest(
         self, extract: bool = False, singleobj: bool | None = None
     ) -> ROIDataParam:
-        """Define Region Of Interest (ROI) for computing functions"""
+        """Define Region Of Interest (ROI) for computing functions.
+
+        Args:
+            extract (bool, optional): If True, ROI is extracted from data.
+                Defaults to False.
+            singleobj (bool | None, optional): If True, ROI is extracted from
+                first selected object only. If False, ROI is extracted from
+                all selected objects. If None, ROI is extracted from all
+                selected objects only if they all have the same ROI.
+                Defaults to None.
+
+        Returns:
+            ROIDataParam: ROI data parameters.
+        """
         roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
         if roieditordata is not None:
             obj = self.panel.objview.get_sel_objects()[0]

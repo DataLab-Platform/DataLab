@@ -103,7 +103,7 @@ def temporary_directory() -> Generator[str, None, None]:
     """Create a temporary directory and clean-up afterwards"""
     #  TemporaryDirectory is not used within a "with" statement in order to ignore
     #  errors occuring when cleaning up directory at exit
-    #  TODO: [P3] Requires Python 3.10 / Use "ignore_cleanup_errors=True" instead
+    #  TODO: [P4] Requires Python 3.10 / Use "ignore_cleanup_errors=True" instead
     #  In other words: this function will be replaced by TemporaryDirectory context mgr
     tmp = tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
     try:

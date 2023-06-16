@@ -12,7 +12,6 @@ and some actions to test DataLab functionalities.
 """
 
 import cdl.obj as dlo
-import cdl.param as dlp
 import cdl.tests.data as test_data
 from cdl.config import _
 from cdl.core.computation import image as cpima
