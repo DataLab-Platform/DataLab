@@ -228,6 +228,16 @@ def set_plot_item_editable(item, state):
 # to be written using AnnotatedRectangle as a model). This also has been made possible
 # due to a recent change in DataLab HDF5 (de)serialization which now accepts nested
 # lists or dictionnaries.
+#
+# Additionnal note:
+# -----------------
+# Could we also use this opportunity to introduce support for custom shapes?
+# This could be done by specifying the class name of the shape to be used in the
+# key of the metadata dictionnary entry (instead of "_xxx_label", the key would be
+# "_xxx_classname_label"). This would allow to use custom shapes in the same way
+# as the built-in shapes (e.g. rectangle, circle, etc.).
+# Custom shapes would have to be registered: for this, we could use the same
+# technique as for the extendable I/O formats (registry class).
 class ResultShape:
     """Object representing a geometrical shape serializable in signal/image metadata.
 

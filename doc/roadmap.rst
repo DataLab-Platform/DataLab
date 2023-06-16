@@ -7,13 +7,22 @@ Future milestones
 Features
 ^^^^^^^^
 
-* Add support for timeseries
-
 * Add support for multichannel timeseries
 
 * Develop a Jupyter plugin for interactive data analysis connected with DataLab
 
 * Develop a Spyder plugin for interactive data analysis connected with DataLab
+
+* Image computing results (`cdl.model.base.ResultShape`):
+
+  - Add support for "free form" geometrical shapes (this could be used to draw
+    the result of a segmentation algorithm, or the result of an edge detection)
+
+  - Add support for custom geometrical shapes (this could be used to draw
+    the result of a specific algorithm, e.g. a pattern recognition algorithm)
+
+  .. note:: See "TODO" comment just above ``cdl.model.base.ResultShape`` class definition
+        for more details about how to implement this feature.
 
 Other tasks
 ^^^^^^^^^^^
