@@ -191,9 +191,7 @@ class ImageProcessor(BaseProcessor):
             if not exec_dialog(dlg):
                 return
             param.zoom = dlg.get_zoom()
-
-        # FIXME: do we have to add ", edit=edit" here?
-        self.compute_11(cpi.compute_resize, param, title=_("Resize"))
+        self.compute_11(cpi.compute_resize, param, title=_("Resize"), edit=edit)
 
     @qt_try_except()
     def compute_binning(self, param: cdl.param.BinningParam | None = None) -> None:

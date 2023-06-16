@@ -449,8 +449,6 @@ def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
     )
     if dst.dx is not None and dst.dy is not None:
         dst.dx, dst.dy = dst.dx / p.zoom, dst.dy / p.zoom
-    # TODO: [P2] Instead of removing geometric shapes, apply zoom
-    dst.remove_all_shapes()
     return dst
 
 
