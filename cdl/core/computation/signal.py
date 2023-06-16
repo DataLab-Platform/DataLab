@@ -86,11 +86,18 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
 
 
 # -------- compute_n1 functions --------------------------------------------------------
-# Functions with N input images and 1 output image
+# Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
+# Those functions are perfoming a computation on N input signals and return a single
+# output signal. If we were only executing these functions locally, we would not need
+# to define them here, but since we are using the multiprocessing module, we need to
+# define them here so that they can be pickled and sent to the worker processes.
+# Also, we need to systematically return the output signal object, even if it is already
+# modified in place, because the multiprocessing module will not be able to retrieve
+# the modified object from the worker processes.
 
 
-def compute_add(dst: SignalObj, src: SignalObj) -> None:
+def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Add signal to result signal
     Args:
         dst (SignalObj): destination signal
@@ -99,9 +106,10 @@ def compute_add(dst: SignalObj, src: SignalObj) -> None:
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    return dst
 
 
-def compute_product(dst: SignalObj, src: SignalObj) -> None:
+def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Multiply signal to result signal
     Args:
         dst (SignalObj): destination signal
@@ -110,6 +118,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> None:
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    return dst
 
 
 # -------- compute_n1n functions -------------------------------------------------------

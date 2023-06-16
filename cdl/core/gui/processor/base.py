@@ -251,6 +251,38 @@ class BaseProcessor(QC.QObject):
             show_warning_error(self.panel, "warning", context, compout.warning_msg)
         return compout.result
 
+    def __exec_func(
+        self,
+        func: Callable,
+        args: tuple,
+        progress: QW.QProgressDialog,
+    ) -> CompOut | None:
+        """Execute function, eventually in a separate process.
+
+        Args:
+            func (Callable): function to execute
+            args (tuple): function arguments
+            progress (QW.QProgressDialog): progress dialog
+
+        Returns:
+            CompOut | None: computation output
+        """
+        QW.QApplication.processEvents()
+        if not progress.wasCanceled():
+            if self.worker is None:
+                return wng_err_func(func, args)
+            else:
+                self.worker.run(func, args)
+                while not self.worker.is_computation_finished():
+                    QW.QApplication.processEvents()
+                    time.sleep(0.1)
+                    if progress.wasCanceled():
+                        self.worker.restart_pool()
+                        break
+                if self.worker.is_computation_finished():
+                    return self.worker.get_result()
+        return None
+
     def _compute_11_subroutine(self, funcs: list[Callable], params: list, title: str):
         """Compute 11 subroutine: used by compute 11 and compute 1n methods"""
         assert len(funcs) == len(params)
@@ -263,28 +295,15 @@ class BaseProcessor(QC.QObject):
             for i_row, obj in enumerate(objs):
                 for i_param, (param, func) in enumerate(zip(params, funcs)):
                     name = func.__name__.replace("compute_", "")
+                    i_title = f"{title} ({i_row + 1}/{len(objs)})"
+                    progress.setLabelText(i_title)
                     pvalue = (i_row + 1) * (i_param + 1)
                     pvalue = 0 if pvalue == 1 else pvalue
                     progress.setValue(pvalue)
-                    i_title = f"{title} ({i_row + 1}/{len(objs)})"
-                    progress.setLabelText(i_title)
-                    QW.QApplication.processEvents()
-                    if progress.wasCanceled():
-                        break
                     args = (obj,) if param is None else (obj, param)
-                    if self.worker is None:
-                        result = wng_err_func(func, args)
-                    else:
-                        self.worker.run(func, args)
-                        while not self.worker.is_computation_finished():
-                            QW.QApplication.processEvents()
-                            time.sleep(0.1)
-                            if progress.wasCanceled():
-                                self.worker.restart_pool()
-                                break
-                        if not self.worker.is_computation_finished():
-                            break
-                        result = self.worker.get_result()
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
                     new_obj = self.handle_output(result, _("Computing: %s") % i_title)
                     if new_obj is None:
                         continue
@@ -333,23 +352,10 @@ class BaseProcessor(QC.QObject):
                 pvalue = idx + 1
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    break
                 args = (obj,) if param is None else (obj, param)
-                if self.worker is None:
-                    result = wng_err_func(func, args)
-                else:
-                    self.worker.run(func, args)
-                    while not self.worker.is_computation_finished():
-                        QW.QApplication.processEvents()
-                        time.sleep(0.1)
-                        if progress.wasCanceled():
-                            self.worker.restart_pool()
-                            break
-                    if not self.worker.is_computation_finished():
-                        break
-                    result = self.worker.get_result()
+                result = self.__exec_func(func, args, progress)
+                if result is None:
+                    break
                 result_array = self.handle_output(result, _("Computing: %s") % title)
                 if result_array is None:
                     continue
@@ -408,9 +414,6 @@ class BaseProcessor(QC.QObject):
             for index, src_obj in enumerate(objs):
                 progress.setValue(index + 1)
                 progress.setLabelText(title)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    break
                 src_gid = self.panel.objmodel.get_object_group_id(src_obj)
                 dst_obj = dst_objs.get(src_gid)
                 if dst_obj is None:
@@ -424,10 +427,13 @@ class BaseProcessor(QC.QObject):
                         args = (dst_obj, src_obj)
                     else:
                         args = (dst_obj, src_obj, param)
-                    # TODO: Add support for process isolation? (not sure it is
-                    # necessary here... operations are fast and simple)
-                    result = wng_err_func(func, args)
-                    self.handle_output(result, _("Calculating: %s") % title)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    dst_obj = self.handle_output(result, _("Calculating: %s") % title)
+                    if dst_obj is None:
+                        break
+                    dst_objs[src_gid] = dst_obj
                     dst_obj.update_resultshapes_from(src_obj)
                 if src_obj.roi is not None:
                     if dst_obj.roi is None:
@@ -489,13 +495,10 @@ class BaseProcessor(QC.QObject):
             for index, obj in enumerate(objs):
                 progress.setValue(index + 1)
                 progress.setLabelText(title)
-                QW.QApplication.processEvents()
-                if progress.wasCanceled():
-                    break
                 args = (obj, obj2) if param is None else (obj, obj2, param)
-                # TODO: Add support for process isolation? (not sure it is
-                # necessary here... operations are fast and simple)
-                result = wng_err_func(func, args)
+                result = self.__exec_func(func, args, progress)
+                if result is None:
+                    break
                 new_obj = self.handle_output(result, _("Calculating: %s") % title)
                 if new_obj is None:
                     continue

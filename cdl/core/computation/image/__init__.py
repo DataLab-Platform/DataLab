@@ -93,9 +93,16 @@ def dst_n1n(
 # -------- compute_n1 functions --------------------------------------------------------
 # Functions with N input images and 1 output image
 # --------------------------------------------------------------------------------------
+# Those functions are perfoming a computation on N input images and return a single
+# output image. If we were only executing these functions locally, we would not need
+# to define them here, but since we are using the multiprocessing module, we need to
+# define them here so that they can be pickled and sent to the worker processes.
+# Also, we need to systematically return the output image object, even if it is already
+# modified in place, because the multiprocessing module will not be able to retrieve
+# the modified object from the worker processes.
 
 
-def compute_add(dst: ImageObj, src: ImageObj):
+def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Compute addition between two images
 
     Args:
@@ -103,9 +110,10 @@ def compute_add(dst: ImageObj, src: ImageObj):
         src (ImageObj): input image object
     """
     dst.data += np.array(src.data, dtype=dst.data.dtype)
+    return dst
 
 
-def compute_product(dst: ImageObj, src: ImageObj):
+def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Compute product between two images
 
     Args:
@@ -113,6 +121,7 @@ def compute_product(dst: ImageObj, src: ImageObj):
         src (ImageObj): input image object
     """
     dst.data *= np.array(src.data, dtype=dst.data.dtype)
+    return dst
 
 
 # -------- compute_n1n functions -------------------------------------------------------
