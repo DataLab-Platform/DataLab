@@ -129,11 +129,15 @@ class ImagePanel(BaseDataPanel):
             self.add_object(image)
         return image
 
-    def delete_metadata(self) -> None:
-        """Delete object metadata"""
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.invalidate_maskdata_cache()
-        super().delete_metadata()
+        super().delete_metadata(refresh_plot)
 
     def toggle_show_contrast(self, state: bool) -> None:
         """Toggle show contrast option"""

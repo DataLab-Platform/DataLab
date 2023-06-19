@@ -503,6 +503,41 @@ def make_roi_item(
     return item
 
 
+def items_to_json(items: list) -> str | None:
+    """Convert plot items to JSON string.
+
+    Args:
+        items (list): list of plot items
+
+    Returns:
+        str: JSON string or None if items is empty
+    """
+    if items:
+        writer = JSONWriter(None)
+        save_items(writer, items)
+        return writer.get_json(indent=4)
+    return None
+
+
+def json_to_items(json_str: str | None) -> list:
+    """Convert JSON string to plot items.
+
+    Args:
+        json_str (str): JSON string or None
+
+    Returns:
+        list: list of plot items
+    """
+    items = []
+    if json_str:
+        try:
+            for item in load_items(JSONReader(json_str)):
+                items.append(item)
+        except json.decoder.JSONDecodeError:
+            pass
+    return items
+
+
 class BaseObjMeta(abc.ABCMeta, gdt.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
@@ -777,7 +812,7 @@ class BaseObj(metaclass=BaseObjMeta):
             assert mshape is not None
             transform(mshape.data)
         items = []
-        for item in self.get_annotations_from_items():
+        for item in json_to_items(self.annotations):
             if isinstance(item, AnnotatedShape):
                 transform(item.shape.points)
                 item.set_label_position()
@@ -789,7 +824,7 @@ class BaseObj(metaclass=BaseObjMeta):
                 item.set_pos(x, y)
             items.append(item)
         if items:
-            self.set_annotations_from_items(items)
+            self.annotations = items_to_json(items)
 
     @abc.abstractmethod
     def iterate_roi_items(self, fmt: str, lbl: bool, editable: bool = True):
@@ -823,34 +858,6 @@ class BaseObj(metaclass=BaseObjMeta):
 
     annotations = property(__get_annotations, __set_annotations)
 
-    def get_annotations_from_items(self) -> list:
-        """Get object annotations (annotation plot items).
-
-        Returns:
-            list: annotation plot items
-        """
-        items = []
-        if self.annotations:
-            try:
-                for item in load_items(JSONReader(self.annotations)):
-                    items.append(item)
-            except json.decoder.JSONDecodeError:
-                pass
-        return items
-
-    def set_annotations_from_items(self, items: list) -> None:
-        """Set object annotations (annotation plot items).
-
-        Args:
-            items (list): annotation plot items
-        """
-        if items:
-            writer = JSONWriter(None)
-            save_items(writer, items)
-            self.annotations = writer.get_json(indent=4)
-        else:
-            self.annotations = None
-
     def set_annotations_from_file(self, filename: str) -> None:
         """Set object annotations from file (JSON).
 
@@ -866,10 +873,10 @@ class BaseObj(metaclass=BaseObjMeta):
         Args:
             items (list): annotation plot items
         """
-        ann_items = self.get_annotations_from_items()
+        ann_items = json_to_items(self.annotations)
         ann_items.extend(items)
         if ann_items:
-            self.set_annotations_from_items(ann_items)
+            self.annotations = items_to_json(ann_items)
 
     def add_annotations_from_file(self, filename: str) -> None:
         """Add object annotations from file (JSON).

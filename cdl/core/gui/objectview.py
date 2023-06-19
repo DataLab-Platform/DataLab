@@ -329,7 +329,12 @@ class ObjectView(SimpleObjectTree):
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
 
-        If include_groups is True, also return objects from selected groups."""
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
         sel_items = self.get_sel_object_items()
         if not sel_items:
             cur_item = self.currentItem()
@@ -379,23 +384,38 @@ class ObjectView(SimpleObjectTree):
         self.SIG_SELECTION_CHANGED.emit()
 
     def select_objects(
-        self, selection: list[SignalObj | ImageObj | int], group_num: int | None = None
+        self,
+        selection: list[SignalObj | ImageObj | int | str],
+        group_num: int | None = None,
     ) -> None:
-        """Select multiple objects"""
+        """Select multiple objects
+
+        Args:
+            selection (list): list of objects, group numbers or uuids
+            group_num (int, optional): group number. Defaults to None.
+        """
         if all(isinstance(obj, int) for obj in selection):
             groups = self.objmodel.get_groups()
             group_num = 0 if group_num is None else group_num
             uuids = [groups[group_num][num].uuid for num in selection]
+        elif all(isinstance(obj, str) for obj in selection):
+            uuids = selection
         else:
             assert all(isinstance(obj, (SignalObj, ImageObj)) for obj in selection)
             uuids = [obj.uuid for obj in selection]
         for idx, uuid in enumerate(uuids):
             self.set_current_item_id(uuid, extend=idx > 0)
 
-    def select_groups(self, groups: list[ObjectGroup | int]) -> None:
-        """Select multiple groups"""
+    def select_groups(self, groups: list[ObjectGroup | int | str]) -> None:
+        """Select multiple groups
+
+        Args:
+            groups (list): list of groups, group numbers or group names
+        """
         if all(isinstance(group, int) for group in groups):
             groups = [self.objmodel.get_groups()[grp_num] for grp_num in groups]
+        elif all(isinstance(group, str) for group in groups):
+            groups = self.objmodel.get_groups(groups)
         assert all(isinstance(group, ObjectGroup) for group in groups)
         for idx, group in enumerate(groups):
             self.set_current_item_id(group.uuid, extend=idx > 0)

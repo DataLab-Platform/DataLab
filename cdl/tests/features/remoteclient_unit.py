@@ -15,6 +15,7 @@ import os.path as osp
 import time
 
 import numpy as np
+from guiqwt.builder import make
 
 from cdl import app
 from cdl.core.remote import RemoteClient
@@ -32,6 +33,13 @@ def multiple_commands(remote: RemoteClient):
 
         z = create_2d_gaussian(2000, np.uint16)
         remote.add_image("toto", z)
+        rect = make.annotated_rectangle(100, 100, 200, 200, title="Test")
+        remote.add_annotations_from_items([rect])
+        uuid = remote.get_sel_object_uuids()[0]
+        remote.add_label_with_title(f"Image uuid: {uuid}")
+        remote.select_groups([0])
+        remote.select_objects([uuid])
+        remote.delete_metadata()
 
         fname = osp.join(tmpdir, osp.basename("remote_test.h5"))
         remote.save_to_h5_file(fname)

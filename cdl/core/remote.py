@@ -37,6 +37,7 @@ from cdl import __version__
 from cdl.config import Conf, initialize
 from cdl.core.baseproxy import BaseProxy
 from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
+from cdl.core.model.base import items_to_json, json_to_items
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.env import execenv
@@ -146,6 +147,9 @@ class RemoteServer(QC.QThread):
     SIG_CLOSE_APP = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
     SIG_OPEN_OBJECT = QC.Signal(str)
+    SIG_SELECT_OBJECTS = QC.Signal(list, int, str)
+    SIG_SELECT_GROUPS = QC.Signal(list, str)
+    SIG_DELETE_METADATA = QC.Signal(bool)
     SIG_SWITCH_TO_PANEL = QC.Signal(str)
     SIG_SWITCH_TO_IMAGE_PANEL = QC.Signal()
     SIG_RESET_ALL = QC.Signal()
@@ -163,6 +167,9 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_ADD_OBJECT.connect(win.add_object)
         self.SIG_OPEN_OBJECT.connect(win.open_object)
+        self.SIG_SELECT_OBJECTS.connect(win.select_objects)
+        self.SIG_SELECT_GROUPS.connect(win.select_groups)
+        self.SIG_DELETE_METADATA.connect(win.delete_metadata)
         self.SIG_SWITCH_TO_PANEL.connect(win.switch_to_panel)
         self.SIG_RESET_ALL.connect(win.reset_all)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
@@ -205,12 +212,18 @@ class RemoteServer(QC.QThread):
         server.register_function(self.open_h5_files)
         server.register_function(self.import_h5_file)
         server.register_function(self.open_object)
+        server.register_function(self.get_sel_object_uuids)
+        server.register_function(self.select_objects)
+        server.register_function(self.select_groups)
+        server.register_function(self.delete_metadata)
         server.register_function(self.calc)
         server.register_function(self.get_object_titles)
         server.register_function(self.get_object_from_title)
         server.register_function(self.get_object)
         server.register_function(self.get_object_uuids)
         server.register_function(self.get_object_from_uuid)
+        server.register_function(self.add_annotations_from_items)
+        server.register_function(self.add_label_with_title)
 
     def run(self) -> None:
         """Thread execution method"""
@@ -366,6 +379,57 @@ class RemoteServer(QC.QThread):
         return True
 
     @remote_call
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
+        """Return selected objects uuids.
+
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
+        return self.win.get_sel_object_uuids(include_groups)
+
+    @remote_call
+    def select_objects(
+        self,
+        selection: list[int | str],
+        group_num: int | None = None,
+        panel: str | None = None,
+    ) -> None:
+        """Select objects in current panel.
+
+        Args:
+            selection (list[int|str]): List of object indices or object uuids to select
+            group_num (int, optional): Group number. Defaults to None.
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        self.SIG_SELECT_OBJECTS.emit(selection, group_num, panel)
+
+    @remote_call
+    def select_groups(
+        self, selection: list[int | str], panel: str | None = None
+    ) -> None:
+        """Select groups in current panel.
+
+        Args:
+            selection (list[int|str]): List of group indices or group uuids to select
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        self.SIG_SELECT_GROUPS.emit(selection, panel)
+
+    @remote_call
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
+        self.SIG_DELETE_METADATA.emit(refresh_plot)
+
+    @remote_call
     def calc(self, name: str, param_data: list[str] | None = None) -> bool:
         """Call compute function ``name`` in current panel's processor.
 
@@ -384,6 +448,7 @@ class RemoteServer(QC.QThread):
         self.SIG_CALC.emit(name, param)
         return True
 
+    @remote_call
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.
 
@@ -395,6 +460,7 @@ class RemoteServer(QC.QThread):
         """
         return self.win.get_object_titles(panel)
 
+    @remote_call
     def get_object_from_title(self, title: str, panel: str | None = None) -> list[str]:
         """Get object (signal/image) from title.
 
@@ -407,6 +473,7 @@ class RemoteServer(QC.QThread):
         """
         return dataset_to_json(self.win.get_object_from_title(title, panel))
 
+    @remote_call
     def get_object(
         self,
         index: int | None = None,
@@ -432,6 +499,7 @@ class RemoteServer(QC.QThread):
         """
         return dataset_to_json(self.win.get_object(index, group_index, panel))
 
+    @remote_call
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.
 
@@ -443,6 +511,7 @@ class RemoteServer(QC.QThread):
         """
         return self.win.get_object_uuids(panel)
 
+    @remote_call
     def get_object_from_uuid(self, oid: str, panel: str | None = None) -> list[str]:
         """Get object (signal/image) from uuid.
 
@@ -454,6 +523,36 @@ class RemoteServer(QC.QThread):
             list[str]: Object data
         """
         return dataset_to_json(self.win.get_object_from_uuid(oid, panel))
+
+    @remote_call
+    def add_annotations_from_items(
+        self, items_json: str, refresh_plot: bool = True, panel: str | None = None
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items_json (str): JSON string of annotation items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        items = json_to_items(items_json)
+        if items:
+            self.win.add_annotations_from_items(items, refresh_plot, panel)
+
+    @remote_call
+    def add_label_with_title(
+        self, title: str | None = None, panel: str | None = None
+    ) -> None:
+        """Add a label with object title on the associated plot
+
+        Args:
+            title (str, optional): Label title. Defaults to None.
+                If None, the title is the object title.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        self.win.add_label_with_title(title, panel)
 
 
 # === Python 2.7 client side:
@@ -542,7 +641,10 @@ class RemoteClient(BaseProxy):
             raise CDLConnectionError("DataLab is currently not running") from exc
 
     def connect(
-        self, port: str | None = None, timeout: float = 5.0, retries: int = 10
+        self,
+        port: str | None = None,
+        timeout: float | None = None,
+        retries: int | None = None,
     ) -> None:
         """Try to connect to DataLab XML-RPC server.
 
@@ -557,6 +659,8 @@ class RemoteClient(BaseProxy):
             ValueError: Invalid timeout (must be >= 0.0)
             ValueError: Invalid number of retries (must be >= 1)
         """
+        timeout = 5.0 if timeout is None else timeout
+        retries = 10 if retries is None else retries
         if timeout < 0.0:
             raise ValueError("timeout must be >= 0.0")
         if retries < 1:
@@ -569,6 +673,7 @@ class RemoteClient(BaseProxy):
             except CDLConnectionError:
                 time.sleep(timeout / retries)
         else:
+            execenv.print("KO")
             raise CDLConnectionError("Unable to connect to DataLab")
         execenv.print(f"OK (port: {self.port})")
 
@@ -736,3 +841,18 @@ class RemoteClient(BaseProxy):
         """
         param_data = self._cdl.get_object_from_uuid(oid, panel)
         return json_to_dataset(param_data)
+
+    def add_annotations_from_items(
+        self, items: list, refresh_plot: bool = True, panel: str | None = None
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        items_json = items_to_json(items)
+        if items_json is not None:
+            self._cdl.add_annotations_from_items(items_json, refresh_plot, panel)

@@ -15,10 +15,27 @@ Plugins are Python modules that relies on two classes:
     - :class:`PluginInfo`, which stores information about the plugin
     - :class:`PluginBase`, which is the base class for all plugins
 
+Plugins may also extends DataLab I/O features by providing new image or
+signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase`
+or :class:`SignalFormatBase`, in which format infos are defined using the
+:class:`FormatInfo` class.
+
 .. autoclass:: PluginInfo
     :members:
 
 .. autoclass:: PluginBase
+    :members:
+
+.. autoclass:: FormatInfo
+    :members:
+
+.. autoclass:: ImageFormatBase
+    :members:
+
+.. autoclass: ClassicsImageFormat
+    :members:
+
+.. autoclass:: SignalFormatBase
     :members:
 """
 
@@ -36,6 +53,10 @@ from typing import TYPE_CHECKING
 from qtpy import QtWidgets as QW
 
 from cdl.config import IPLGPATH, MOD_NAME, Conf, _
+from cdl.core.io.base import FormatInfo  # pylint: disable=W0611
+from cdl.core.io.image.base import ImageFormatBase  # pylint: disable=W0611
+from cdl.core.io.image.formats import ClassicsImageFormat  # pylint: disable=W0611
+from cdl.core.io.signal.base import SignalFormatBase  # pylint: disable=W0611
 from cdl.env import execenv
 from cdl.proxy import CDLProxy
 

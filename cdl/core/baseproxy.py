@@ -8,6 +8,24 @@ DataLab base proxy module
 -------------------------
 """
 
+# How to add a new method to the proxy:
+# -------------------------------------
+#
+# 1.  Add the method to the AbstractCDLControl class, as an abstract method
+#
+# 2a. If the method requires any data conversion to get through the XML-RPC layer,
+#     implement the method in both CDLProxy and RemoteClient classes
+#
+# 2b. If the method does not require any data conversion, implement the method
+#     directly in the BaseProxy class, so that it is available to both CDLProxy
+#     and RemoteClient classes without any code duplication
+#
+# 3.  Implement the method in the CDLMainWindow class
+#
+# 4.  Add the method to the RemoteServer class:
+#    - Implement the method in the RemoteServer class
+#    - Register the method in the RemoteServer class (in the register_functions method)
+
 from __future__ import annotations
 
 import abc
@@ -176,6 +194,53 @@ class AbstractCDLControl(abc.ABC):
             )
 
     @abc.abstractmethod
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
+        """Return selected objects uuids.
+
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
+
+    @abc.abstractmethod
+    def select_objects(
+        self,
+        selection: list[int | str],
+        group_num: int | None = None,
+        panel: str | None = None,
+    ) -> None:
+        """Select objects in current panel.
+
+        Args:
+            selection (list[int | str]): List of object indices or uuids to select
+            group_num (int, optional): Group number. Defaults to None.
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+
+    @abc.abstractmethod
+    def select_groups(
+        self, selection: list[int | str], panel: str | None = None
+    ) -> None:
+        """Select groups in current panel.
+
+        Args:
+            selection (list[int | str]): List of group numbers or uuids to select
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+
+    @abc.abstractmethod
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
+
+    @abc.abstractmethod
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel
 
@@ -265,6 +330,32 @@ class AbstractCDLControl(abc.ABC):
         Raises:
             ValueError: if object not found
             ValueError: if panel not found
+        """
+
+    @abc.abstractmethod
+    def add_annotations_from_items(
+        self, items: list, refresh_plot: bool = True, panel: str | None = None
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+
+    @abc.abstractmethod
+    def add_label_with_title(
+        self, title: str | None = None, panel: str | None = None
+    ) -> None:
+        """Add a label with object title on the associated plot
+
+        Args:
+            title (str, optional): Label title. Defaults to None.
+                If None, the title is the object title.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
         """
 
     @abc.abstractmethod
@@ -380,6 +471,53 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.open_object(filename)
 
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
+        """Return selected objects uuids.
+
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
+        return self._cdl.get_sel_object_uuids(include_groups)
+
+    def select_objects(
+        self,
+        selection: list[int | str],
+        group_num: int | None = None,
+        panel: str | None = None,
+    ) -> None:
+        """Select objects in current panel.
+
+        Args:
+            selection (list[int | str]): List of object indices or uuids to select
+            group_num (int, optional): Group number. Defaults to None.
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        self._cdl.select_objects(selection, group_num, panel)
+
+    def select_groups(
+        self, selection: list[int | str], panel: str | None = None
+    ) -> None:
+        """Select groups in current panel.
+
+        Args:
+            selection (list[int | str]): List of group numbers or uuids to select
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        self._cdl.select_groups(selection, panel)
+
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
+        self._cdl.delete_metadata(refresh_plot)
+
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel
 
@@ -409,3 +547,16 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             ValueError: if panel not found
         """
         return self._cdl.get_object_uuids(panel)
+
+    def add_label_with_title(
+        self, title: str | None = None, panel: str | None = None
+    ) -> None:
+        """Add a label with object title on the associated plot
+
+        Args:
+            title (str, optional): Label title. Defaults to None.
+                If None, the title is the object title.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        self._cdl.add_label_with_title(title, panel)

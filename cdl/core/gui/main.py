@@ -209,7 +209,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: if panel is unknown
         """
-        if panel is None:
+        if not panel:
             return self.__get_current_basedatapanel()
         if panel == "signal":
             return self.signalpanel
@@ -217,6 +217,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             return self.imagepanel
         raise ValueError(f"Unknown panel: {panel}")
 
+    @remote_controlled
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel
 
@@ -232,6 +233,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         return self.__get_specific_panel(panel).objmodel.get_object_titles()
 
+    @remote_controlled
     def get_object_from_title(
         self, title: str, panel: str | None = None
     ) -> SignalObj | ImageObj:
@@ -251,6 +253,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         return self.__get_specific_panel(panel).objmodel.get_object_from_title(title)
 
+    @remote_controlled
     def get_object(
         self,
         index: int | None = None,
@@ -280,6 +283,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         group_index = 0 if group_index is None else group_index
         return panelw.objmodel.get_object(index, group_index)
 
+    @remote_controlled
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) uuid list for current panel
 
@@ -295,6 +299,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         return self.__get_specific_panel(panel).objmodel.get_object_ids()
 
+    @remote_controlled
     def get_object_from_uuid(
         self, oid: str, panel: str | None = None
     ) -> SignalObj | ImageObj:
@@ -312,6 +317,90 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             ValueError: if object not found
         """
         return self.__get_specific_panel(panel).objmodel[oid]
+
+    @remote_controlled
+    def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
+        """Return selected objects uuids.
+
+        Args:
+            include_groups: If True, also return objects from selected groups.
+
+        Returns:
+            List of selected objects uuids.
+        """
+        panel = self.__get_current_basedatapanel()
+        return panel.objview.get_sel_object_uuids(include_groups)
+
+    @remote_controlled
+    def select_objects(
+        self,
+        selection: list[int | str],
+        group_num: int | None = None,
+        panel: str | None = None,
+    ) -> None:
+        """Select objects in current panel.
+
+        Args:
+            selection (list[int | str]): List of object indices or uuids to select
+            group_num (int, optional): Group number. Defaults to None.
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        panel = self.__get_specific_panel(panel)
+        panel.objview.select_objects(selection, group_num)
+
+    @remote_controlled
+    def select_groups(
+        self, selection: list[int | str], panel: str | None = None
+    ) -> None:
+        """Select groups in current panel.
+
+        Args:
+            selection (list[int | str]): List of group numbers or uuids to select
+            panel (str, optional): panel name (valid values: "signal", "image").
+                If None, current panel is used. Defaults to None.
+        """
+        panel = self.__get_specific_panel(panel)
+        panel.objview.select_groups(selection)
+
+    @remote_controlled
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
+        panel = self.__get_current_basedatapanel()
+        panel.delete_metadata(refresh_plot)
+
+    @remote_controlled
+    def add_annotations_from_items(
+        self, items: list, refresh_plot: bool = True, panel: str | None = None
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        panel = self.__get_specific_panel(panel)
+        panel.add_annotations_from_items(items, refresh_plot)
+
+    @remote_controlled
+    def add_label_with_title(
+        self, title: str | None = None, panel: str | None = None
+    ) -> None:
+        """Add a label with object title on the associated plot
+
+        Args:
+            title (str, optional): Label title. Defaults to None.
+                If None, the title is the object title.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        self.__get_specific_panel(panel).add_label_with_title(title)
 
     # ------Misc.
     @property

@@ -73,7 +73,7 @@ import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
-from cdl.core.model.base import MetadataItem, ResultShape
+from cdl.core.model.base import MetadataItem, ResultShape, items_to_json
 from cdl.utils.qthelpers import (
     create_progress_bar,
     exec_dialog,
@@ -503,13 +503,32 @@ class BaseDataPanel(AbstractPanel):
         if answer == QW.QMessageBox.Yes:
             self.remove_all_objects()
 
-    def delete_metadata(self) -> None:
-        """Delete object metadata"""
+    def delete_metadata(self, refresh_plot: bool = True) -> None:
+        """Delete metadata of selected objects
+
+        Args:
+            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+        """
         for index, obj in enumerate(self.objview.get_sel_objects(include_groups=True)):
             obj.reset_metadata_to_defaults()
             if index == 0:
                 self.selection_changed()
-        self.SIG_REFRESH_PLOT.emit("selected", True)
+        if refresh_plot:
+            self.SIG_REFRESH_PLOT.emit("selected", True)
+
+    def add_annotations_from_items(
+        self, items: list, refresh_plot: bool = True
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+        """
+        for obj in self.objview.get_sel_objects(include_groups=True):
+            obj.add_annotations_from_items(items)
+        if refresh_plot:
+            self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings"""
@@ -780,7 +799,7 @@ class BaseDataPanel(AbstractPanel):
             items = dlg.get_plot().get_items()
             rw_items = [item for item in items if not item.is_readonly()]
             obj = self.__separate_views[dlg]
-            obj.set_annotations_from_items(rw_items)
+            obj.annotations = items_to_json(rw_items)
             self.selection_changed(update_items=True)
         self.__separate_views.pop(dlg)
         dlg.deleteLater()

@@ -28,11 +28,27 @@ class RemoteCDLProxy(RemoteClient):
     """DataLab proxy class.
 
     This class provides access to DataLab features from a proxy class.
+
+    Args:
+        port (str, optional): XML-RPC port to connect to. If not specified,
+            the port is automatically retrieved from DataLab configuration.
+        timeout (float, optional): Timeout in seconds. Defaults to 5.0.
+        retries (int, optional): Number of retries. Defaults to 10.
+
+    Raises:
+        CDLConnectionError: Unable to connect to DataLab
+        ValueError: Invalid timeout (must be >= 0.0)
+        ValueError: Invalid number of retries (must be >= 1)
     """
 
-    def __init__(self, port: str | None = None):
+    def __init__(
+        self,
+        port: str | None = None,
+        timeout: float | None = None,
+        retries: int | None = None,
+    ) -> None:
         super().__init__()
-        self.connect(port)
+        self.connect(port, timeout, retries)
 
 
 class CDLProxy(BaseProxy):
@@ -177,6 +193,19 @@ class CDLProxy(BaseProxy):
             ValueError: if panel not found
         """
         return self._cdl.get_object_from_uuid(oid, panel)
+
+    def add_annotations_from_items(
+        self, items: list, refresh_plot: bool = True, panel: str | None = None
+    ) -> None:
+        """Add object annotations (annotation plot items).
+
+        Args:
+            items (list): annotation plot items
+            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            panel (str | None): panel name (valid values: "signal", "image").
+                If None, current panel is used.
+        """
+        self._cdl.add_annotations_from_items(items, refresh_plot, panel)
 
 
 @contextmanager
