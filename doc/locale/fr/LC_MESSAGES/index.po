@@ -87,10 +87,6 @@ msgstr "Signalement d'anomalies et demandes d'évolutions"
 msgid "Copyrights and licensing"
 msgstr "Licence et copyrights"
 
-#: ../../index.rst:44
-msgid "Copyright © 2023 `CEA`_ - `Codra`_, Pierre Raybaut"
-msgstr "Copyright © 2023 `CEA`_ - `Codra`_, Pierre Raybaut"
-
 #: ../../index.rst:45
 msgid "Licensed under the terms of the `BSD 3-Clause`_"
 msgstr "Distribué sous licence `BSD 3-Clause`_"

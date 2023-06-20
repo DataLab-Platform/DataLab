@@ -38,8 +38,7 @@ New key features in DataLab 1.0:
 
 Copyrights and licensing:
 
-* Copyright © 2023 [CEA](http://www.cea.fr), [Codra](https://codra.net/),
-  [Pierre Raybaut](https://github.com/PierreRaybaut).
+* Copyright © 2023 [Codra](https://codra.net/), [Pierre Raybaut](https://github.com/PierreRaybaut).
 * Licensed under the terms of the BSD 3-Clause (see [LICENSE](LICENSE)).
 
 ----
