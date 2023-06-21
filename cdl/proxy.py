@@ -207,6 +207,17 @@ class CDLProxy(BaseProxy):
         """
         self._cdl.add_annotations_from_items(items, refresh_plot, panel)
 
+    # ----- Proxy specific methods ------------------------------------------------
+    # (not available symetrically in AbstractCDLControl)
+
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalObj | ImageObj): Signal or image object
+        """
+        self._cdl.add_object(obj)
+
 
 @contextmanager
 def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]:

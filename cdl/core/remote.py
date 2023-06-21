@@ -856,3 +856,44 @@ class RemoteClient(BaseProxy):
         items_json = items_to_json(items)
         if items_json is not None:
             self._cdl.add_annotations_from_items(items_json, refresh_plot, panel)
+
+    # ----- Proxy specific methods ------------------------------------------------
+    # (not available symetrically in AbstractCDLControl)
+
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalObj | ImageObj): Signal or image object
+        """
+
+        # TODO [P1]: Would it be better to use directly a remote "add_object" method?
+        #     This would require to implement the add_object method in the
+        #     XML-RPC server. And first of all, to check if performance is
+        #     really better or not. This is equivalent to comparing the performance
+        #     between JSON transfer (using "json_to_dataset") and binary transfer
+        #     (using "array_to_rpcbinary") through XML-RPC.
+        #
+        #     If it is better, then here is what should be done:
+        #     - Implement add_object method in AbstractCDLProcessor instead of in
+        #       BaseProxy
+        #     - Implement add_object method in XML-RPC server
+        #     - Remove add_object method from BaseProxy
+        #     - Rewrite add_object method in CDLProxy and RemoteClient to use
+        #       the remote method
+
+        if isinstance(obj, SignalObj):
+            self.add_signal(
+                obj.title, obj.x, obj.y, obj.xunit, obj.yunit, obj.xlabel, obj.ylabel
+            )
+        elif isinstance(obj, ImageObj):
+            self.add_image(
+                obj.title,
+                obj.data,
+                obj.xunit,
+                obj.yunit,
+                obj.zunit,
+                obj.xlabel,
+                obj.ylabel,
+                obj.zlabel,
+            )

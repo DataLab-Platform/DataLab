@@ -1158,15 +1158,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             filename = self.__check_h5file(filename, "load")
             self.h5inputoutput.import_file(filename, False, reset_all)
 
-    @remote_controlled
+    # This method is intentionally *not* remote controlled
+    # (see TODO regarding RemoteClient.add_object method)
+    #  @remote_controlled
     def add_object(self, obj: SignalObj | ImageObj) -> None:
         """Add object - signal or image
 
         Args:
             obj (SignalObj or ImageObj): object to add (signal or image)
-
-        Returns:
-            None
         """
         if self.confirm_memory_state():
             if isinstance(obj, SignalObj):

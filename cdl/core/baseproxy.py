@@ -171,28 +171,6 @@ class AbstractCDLControl(abc.ABC):
             ValueError: Invalid data dtype
         """
 
-    def add_object(self, obj: SignalObj | ImageObj) -> None:
-        """Add object to DataLab.
-
-        Args:
-            obj (SignalObj | ImageObj): Signal or image object
-        """
-        if isinstance(obj, SignalObj):
-            self.add_signal(
-                obj.title, obj.x, obj.y, obj.xunit, obj.yunit, obj.xlabel, obj.ylabel
-            )
-        elif isinstance(obj, ImageObj):
-            self.add_image(
-                obj.title,
-                obj.data,
-                obj.xunit,
-                obj.yunit,
-                obj.zunit,
-                obj.xlabel,
-                obj.ylabel,
-                obj.zlabel,
-            )
-
     @abc.abstractmethod
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
@@ -560,3 +538,14 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
                 If None, current panel is used.
         """
         self._cdl.add_label_with_title(title, panel)
+
+    # ----- Proxy specific methods ------------------------------------------------
+    # (not available symetrically in AbstractCDLControl)
+
+    @abc.abstractmethod
+    def add_object(self, obj: SignalObj | ImageObj) -> None:
+        """Add object to DataLab.
+
+        Args:
+            obj (SignalObj | ImageObj): Signal or image object
+        """
