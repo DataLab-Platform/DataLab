@@ -22,9 +22,8 @@ DataLab base proxy module
 #
 # 3.  Implement the method in the CDLMainWindow class
 #
-# 4.  Add the method to the RemoteServer class:
-#    - Implement the method in the RemoteServer class
-#    - Register the method in the RemoteServer class (in the register_functions method)
+# 4.  Implement the method in the RemoteServer class (it will be automatically
+#     registered as an XML-RPC method, like all methods of AbstractCDLControl)
 
 from __future__ import annotations
 
@@ -44,6 +43,19 @@ if TYPE_CHECKING:
 
 class AbstractCDLControl(abc.ABC):
     """Abstract base class for controlling DataLab (main window or remote server)"""
+
+    @classmethod
+    def get_public_methods(cls) -> list[str]:
+        """Return all public methods of the class, except itself.
+
+        Returns:
+            list[str]: List of public methods
+        """
+        return [
+            method
+            for method in dir(cls)
+            if not method.startswith("_") and method != "get_public_methods"
+        ]
 
     @abc.abstractmethod
     def get_version(self) -> str:

@@ -35,7 +35,7 @@ from qtpy import QtCore as QC
 
 from cdl import __version__
 from cdl.config import Conf, initialize
-from cdl.core.baseproxy import BaseProxy
+from cdl.core.baseproxy import AbstractCDLControl, BaseProxy
 from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
 from cdl.core.model.base import items_to_json, json_to_items
 from cdl.core.model.image import ImageObj, create_image
@@ -183,7 +183,6 @@ class RemoteServer(QC.QThread):
             ("127.0.0.1", 0), logRequests=False, allow_none=True
         ) as server:
             server.register_introspection_functions()
-            server.register_function(self.get_version)
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
@@ -201,29 +200,20 @@ class RemoteServer(QC.QThread):
         """
         self.SIG_SERVER_PORT.emit(port)
 
+    @classmethod
+    def check_remote_functions(cls) -> None:
+        """Check if all AbstractCDLControl methods are implemented in RemoteServer"""
+        mlist = []
+        for method in AbstractCDLControl.get_public_methods():
+            if not hasattr(cls, method):
+                mlist.append(method)
+        if mlist:
+            raise RuntimeError(f"{cls} is missing some methods: {','.join(mlist)}")
+
     def register_functions(self, server: SimpleXMLRPCServer) -> None:
         """Register functions"""
-        server.register_function(self.close_application)
-        server.register_function(self.switch_to_panel)
-        server.register_function(self.add_signal)
-        server.register_function(self.add_image)
-        server.register_function(self.reset_all)
-        server.register_function(self.save_to_h5_file)
-        server.register_function(self.open_h5_files)
-        server.register_function(self.import_h5_file)
-        server.register_function(self.open_object)
-        server.register_function(self.get_sel_object_uuids)
-        server.register_function(self.select_objects)
-        server.register_function(self.select_groups)
-        server.register_function(self.delete_metadata)
-        server.register_function(self.calc)
-        server.register_function(self.get_object_titles)
-        server.register_function(self.get_object_from_title)
-        server.register_function(self.get_object)
-        server.register_function(self.get_object_uuids)
-        server.register_function(self.get_object_from_uuid)
-        server.register_function(self.add_annotations_from_items)
-        server.register_function(self.add_label_with_title)
+        for name in AbstractCDLControl.get_public_methods():
+            server.register_function(getattr(self, name))
 
     def run(self) -> None:
         """Thread execution method"""
@@ -553,6 +543,9 @@ class RemoteServer(QC.QThread):
                 If None, current panel is used.
         """
         self.win.add_label_with_title(title, panel)
+
+
+RemoteServer.check_remote_functions()
 
 
 # === Python 2.7 client side:
