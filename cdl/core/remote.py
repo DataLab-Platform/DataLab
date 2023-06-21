@@ -591,19 +591,20 @@ class RemoteClient(BaseProxy):
         or in a Jupyter notebook:
 
         >>> from cdl.remotecontrol import RemoteClient
-        >>> cdl = RemoteClient()
-        >>> cdl.connect()
-        >>> cdl.get_version()
+        >>> proxy = RemoteClient()
+        >>> proxy.connect()
+        Connecting to DataLab XML-RPC server...OK (port: 28867)
+        >>> proxy.get_version()
         '1.0.0'
-        >>> cdl.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
+        >>> proxy.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
         True
-        >>> cdl.get_object_titles()
+        >>> proxy.get_object_titles()
         ['toto']
-        >>> cdl.get_object_from_title("toto")
+        >>> proxy.get_object_from_title("toto")
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> cdl.get_object(0)
+        >>> proxy.get_object(0)
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> cdl.get_object(0).data
+        >>> proxy.get_object(0).data
         array([1., 2., 3.])
     """
 

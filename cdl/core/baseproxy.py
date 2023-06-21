@@ -391,7 +391,13 @@ class AbstractCDLControl(abc.ABC):
 
 
 class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
-    """Common base class for DataLab proxies"""
+    """Common base class for DataLab proxies
+
+    Args:
+        cdl (CDLMainWindow | ServerProxy | None): CDLMainWindow instance or
+            ServerProxy instance. If None, then the proxy implementation will
+            have to set it later (e.g. see RemoteClient).
+    """
 
     def __init__(self, cdl: CDLMainWindow | ServerProxy | None = None) -> None:
         self._cdl = cdl

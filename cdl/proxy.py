@@ -39,6 +39,26 @@ class RemoteCDLProxy(RemoteClient):
         CDLConnectionError: Unable to connect to DataLab
         ValueError: Invalid timeout (must be >= 0.0)
         ValueError: Invalid number of retries (must be >= 1)
+
+    Examples:
+        Here is a simple example of how to use RemoteCDLProxy in a Python script
+        or in a Jupyter notebook:
+
+        >>> from cdl.proxy import RemoteCDLProxy
+        >>> proxy = RemoteCDLProxy()
+        Connecting to DataLab XML-RPC server...OK (port: 28867)
+        >>> proxy.get_version()
+        '1.0.0'
+        >>> proxy.add_signal("toto", np.array([1., 2., 3.]), np.array([4., 5., -1.]))
+        True
+        >>> proxy.get_object_titles()
+        ['toto']
+        >>> proxy.get_object_from_title("toto")
+        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
+        >>> proxy.get_object(0)
+        <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
+        >>> proxy.get_object(0).data
+        array([1., 2., 3.])
     """
 
     def __init__(
@@ -55,6 +75,9 @@ class CDLProxy(BaseProxy):
     """DataLab proxy class.
 
     This class provides access to DataLab features from a proxy class.
+
+    Args:
+        cdl (CDLMainWindow): CDLMainWindow instance.
     """
 
     def add_signal(
@@ -231,6 +254,10 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
         Generator[CDLProxy | RemoteCDLProxy, None, None]: proxy
             CDLProxy if what == "gui"
             RemoteCDLProxy if what == "remote" or "remote:port"
+
+    Example:
+        with proxy_context("gui") as proxy:
+            proxy.add_signal(...)
     """
     assert what == "gui" or what.startswith("remote"), "Invalid proxy type"
     xmlrpcport = None
