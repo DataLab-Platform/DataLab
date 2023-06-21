@@ -33,7 +33,6 @@ class H5InputOutput:
 
     def __init__(self, mainwindow: CDLMainWindow) -> None:
         self.mainwindow = mainwindow
-        self.h5browser: H5BrowserDialog = None
         self.uint32_wng: bool = None
 
     @staticmethod
@@ -90,23 +89,22 @@ class H5InputOutput:
 
     def import_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
         """Import HDF5 file"""
-        if self.h5browser is None:
-            self.h5browser = H5BrowserDialog(self.mainwindow)
+        h5browser = H5BrowserDialog(self.mainwindow)
 
         with qt_try_loadsave_file(self.mainwindow, filename, "load"):
-            self.h5browser.setup(filename)
+            h5browser.setup(filename)
             if execenv.unattended:
                 # Unattended mode: import all datasets (for testing)
                 import_all = True
-            if not import_all and not exec_dialog(self.h5browser):
-                self.h5browser.cleanup()
+            if not import_all and not exec_dialog(h5browser):
+                h5browser.cleanup()
                 return
             if import_all:
-                nodes = self.h5browser.get_all_nodes()
+                nodes = h5browser.get_all_nodes()
             else:
-                nodes = self.h5browser.get_nodes()
+                nodes = h5browser.get_nodes()
             if nodes is None:
-                self.h5browser.cleanup()
+                h5browser.cleanup()
                 return
             if reset_all:
                 self.mainwindow.reset_all()
@@ -120,7 +118,7 @@ class H5InputOutput:
                     if progress.wasCanceled():
                         break
                     self.__add_object_from_node(node)
-            self.h5browser.cleanup()
+            h5browser.cleanup()
             self.__eventually_show_warnings()
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
