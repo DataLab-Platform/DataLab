@@ -127,6 +127,13 @@ class PluginTestData(PluginBase):
             obj = test_data.create_2dstep_image(newparam)
             self.proxy.add_object(obj)
 
+    def create_ring_image(self) -> None:
+        """Create 2D ring image"""
+        param = test_data.RingParam(_("Ring"))
+        if param.edit(self.imagepanel):
+            obj = test_data.create_ring_image(param)
+            self.proxy.add_object(obj)
+
     def create_annotated_image(self) -> None:
         """Create annotated image"""
         obj = test_data.create_annotated_image()
@@ -184,5 +191,10 @@ class PluginTestData(PluginBase):
             iah.new_action(
                 _("Create 2D step image"),
                 triggered=self.create_2dstep_image,
+                select_condition="always",
+            )
+            iah.new_action(
+                _("Create ring image"),
+                triggered=self.create_ring_image,
                 select_condition="always",
             )

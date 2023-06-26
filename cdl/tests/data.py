@@ -365,6 +365,69 @@ def create_2dstep_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.Image
     return obj
 
 
+class RingParam(gdt.DataSet):
+    """Parameters for creating a ring image"""
+
+    size = gdi.IntItem(_("Size"), default=1000)
+    ring_x0 = gdi.IntItem(_("Ring center x"), default=500)
+    ring_y0 = gdi.IntItem(_("Ring center y"), default=500)
+    ring_width = gdi.IntItem(_("Ring width"), default=10)
+    ring_radius = gdi.IntItem(_("Ring radius"), default=250)
+    ring_intensity = gdi.IntItem(_("Ring intensity"), default=1000)
+
+
+def create_ring_data(
+    size: int, x0: int, y0: int, width: int, radius: int, intensity: int
+) -> np.ndarray:
+    """Create 2D ring data
+
+    Args:
+        size (int): Size of the image
+        x0 (int): Center x coordinate
+        y0 (int): Center y coordinate
+        width (int): Width of the ring
+        radius (int): Radius of the ring
+        intensity (int): Intensity of the ring
+
+    Returns:
+        np.ndarray: 2D data
+    """
+    data = np.zeros((size, size), dtype=np.uint16)
+    for x in range(data.shape[0]):
+        for y in range(data.shape[1]):
+            if (x - x0) ** 2 + (y - y0) ** 2 >= (radius - width) ** 2 and (
+                x - x0
+            ) ** 2 + (y - y0) ** 2 <= (radius + width) ** 2:
+                data[x, y] = intensity
+    return data
+
+
+def create_ring_image(p: RingParam | None = None) -> cdl.obj.ImageObj:
+    """Creating 2D ring image
+
+    Args:
+        p (RingParam, optional): Ring image parameters. Defaults to None.
+
+    Returns:
+        cdl.obj.ImageObj: Image object
+    """
+    if p is None:
+        p = RingParam()
+    obj = cdl.obj.create_image(
+        f"Ring(size={p.size},x0={p.ring_x0},y0={p.ring_y0},width={p.ring_width},"
+        f"radius={p.ring_radius},intensity={p.ring_intensity})"
+    )
+    obj.data = create_ring_data(
+        p.size,
+        p.ring_x0,
+        p.ring_y0,
+        p.ring_width,
+        p.ring_radius,
+        p.ring_intensity,
+    )
+    return obj
+
+
 def create_peak2d_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.ImageObj:
     """Creating 2D peak image
 
