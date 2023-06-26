@@ -547,15 +547,18 @@ class BaseObj(metaclass=BaseObjMeta):
 
     PREFIX = ""  # This is overriden in children classes
 
+    DEFAULT_FMT = "s"  # This is overriden in children classes
+    CONF_FMT = Conf.view.sig_format  # This is overriden in children classes
+
     # This is overriden in children classes with a gdi.DictItem instance:
     metadata: dict[str, Any] = {}
 
     # Metadata dictionary keys for special properties:
     METADATA_FMT = "__format"
     METADATA_LBL = "__showlabel"
+    METADATA_FMT_DEFAULT = ("%" + CONF_FMT.get(DEFAULT_FMT),)
+    METADATA_LBL_DEFAULT = (Conf.view.show_label.get(False),)
 
-    DEFAULT_FMT = "s"  # This is overriden in children classes
-    CONF_FMT = Conf.view.sig_format  # This is overriden in children classes
     VALID_DTYPES = ()
 
     def __init__(self):
@@ -904,7 +907,8 @@ class BaseObj(metaclass=BaseObjMeta):
         Yields:
             PlotItem: plot item
         """
-        fmt, lbl = self.metadata[self.METADATA_FMT], self.metadata[self.METADATA_LBL]
+        fmt = self.metadata.get(self.METADATA_FMT, self.METADATA_FMT_DEFAULT)
+        lbl = self.metadata.get(self.METADATA_LBL, self.METADATA_LBL_DEFAULT)
         for key, value in self.metadata.items():
             if key == ROI_KEY:
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
@@ -935,8 +939,8 @@ class BaseObj(metaclass=BaseObjMeta):
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         self.metadata = {
-            self.METADATA_FMT: "%" + self.CONF_FMT.get(self.DEFAULT_FMT),
-            self.METADATA_LBL: Conf.view.show_label.get(False),
+            self.METADATA_FMT: self.METADATA_FMT_DEFAULT,
+            self.METADATA_LBL: self.METADATA_LBL_DEFAULT,
         }
         self.update_metadata_view_settings()
 

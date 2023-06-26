@@ -14,7 +14,7 @@
     "files.trimTrailingWhitespace": true,
     "python.defaultInterpreterPath": "${env:CDL_PYTHONEXE}",
     "editor.formatOnSave": true,
-    "python.sortImports.args": [
+    "isort.args": [
         "--profile",
         "black"
     ],
