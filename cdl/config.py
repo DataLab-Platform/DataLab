@@ -162,7 +162,7 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: extract each ROI in a separate signal or image
     extract_roi_singleobj = conf.Option()
 
-    # FFT shift enabled state for signal processing:
+    # FFT shift enabled state for signal/image processing:
     # - True: FFT shift is enabled (default)
     # - False: FFT shift is disabled
     fft_shift_enabled = conf.Option()

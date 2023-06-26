@@ -42,6 +42,38 @@ def scale_data_to_min_max(
     return np.array(fdata, data.dtype)
 
 
+def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+    """Compute FFT of complex array `z`
+
+    Args:
+        z (np.ndarray): Input data
+        shift (bool, optional): Shift zero frequency to center (default: True)
+
+    Returns:
+        np.ndarray: FFT of input data
+    """
+    z1 = np.fft.fft2(z)
+    if shift:
+        z1 = np.fft.fftshift(z1)
+    return z1
+
+
+def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+    """Compute inverse FFT of complex array `z`
+
+    Args:
+        z (np.ndarray): Input data
+        shift (bool, optional): Shift zero frequency to center (default: True)
+
+    Returns:
+        np.ndarray: Inverse FFT of input data
+    """
+    if shift:
+        z = np.fft.ifftshift(z)
+    z1 = np.fft.ifft2(z)
+    return z1
+
+
 BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
 
 

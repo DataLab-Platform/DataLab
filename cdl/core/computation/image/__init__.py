@@ -38,10 +38,13 @@ from cdl.algorithms.image import (
     get_centroid_fourier,
     get_enclosing_circle,
     get_hough_circle_peaks,
+    z_fft,
+    z_ifft,
 )
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    FFTParam,
     GaussianParam,
     MovingAverageParam,
     MovingMedianParam,
@@ -702,27 +705,29 @@ def compute_wiener(src: ImageObj) -> ImageObj:
     return dst
 
 
-def compute_fft(src: ImageObj) -> ImageObj:
+def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:
     """Compute FFT
     Args:
         src (ImageObj): input image object
+        p (FFTParam): parameters
     Returns:
         ImageObj: output image object
     """
     dst = dst_11(src, "fft")
-    dst.data = np.fft.fft2(src.data)
+    dst.data = z_fft(src.data, shift=p.shift)
     return dst
 
 
-def compute_ifft(src: ImageObj) -> ImageObj:
+def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
     """Compute inverse FFT
     Args:
         src (ImageObj): input image object
+        p (FFTParam): parameters
     Returns:
         ImageObj: output image object
     """
     dst = dst_11(src, "ifft")
-    dst.data = np.fft.ifft2(src.data)
+    dst.data = z_ifft(src.data, shift=p.shift)
     return dst
 
 

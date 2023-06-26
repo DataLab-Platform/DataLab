@@ -4,23 +4,23 @@
 # (see cdl/LICENSE for details)
 
 """
-Signal FFT application test.
+Image FFT application test.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
+from cdl.obj import ImageTypes, create_image_from_param, new_image_param
 from cdl.tests import cdl_app_context
 
 
 def test():
     """FFT application test."""
     with cdl_app_context() as win:
-        panel = win.signalpanel
-        newparam = new_signal_param(stype=SignalTypes.COSINUS, size=10000)
-        s1 = create_signal_from_param(newparam)
-        panel.add_object(s1)
+        panel = win.imagepanel
+        newparam = new_image_param(itype=ImageTypes.GAUSS, width=100, height=100)
+        i1 = create_image_from_param(newparam)
+        panel.add_object(i1)
         panel.processor.compute_fft()
         panel.processor.compute_ifft()
 

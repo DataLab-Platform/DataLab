@@ -47,6 +47,8 @@ New features:
   * For every single processing feature (operation, processing and computing menus),
     the entered parameters (dialog boxes) are stored in cache to be used as defaults
     the next time the feature is used
+* Signal processing:
+  * Added support for optional FFT shift (see Settings dialog box)
 * Image processing:
   * Added pixel binning operation (X/Y binning factors, operation: sum, mean, ...)
   * Added "Distribute on a grid" and "Reset image positions" in operation menu
@@ -88,6 +90,7 @@ New features:
     executing one of the following operations:
     * Rotation (arbitrary angle, +90°, -90°)
     * Symetry (vertical/horizontal)
+  * Added support for optional FFT shift (see Settings dialog box)
 * Console: added configurable external editor (default: VSCode) to follow the
   traceback links to the source code
 

@@ -21,7 +21,7 @@ import numpy as np
 import cdl.core.computation.base as cpb
 import cdl.core.computation.signal as cps
 import cdl.param
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ShapeTypes
 from cdl.core.model.signal import SignalObj, create_signal
@@ -216,17 +216,17 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
-    def compute_fft(self, param: cdl.param.FFT1DParam | None = None) -> None:
+    def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
-            param = cps.FFT1DParam()
+            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
-    def compute_ifft(self, param: cdl.param.FFT1DParam | None = None) -> None:
+    def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
-            param = cps.FFT1DParam()
+            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()

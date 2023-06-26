@@ -22,6 +22,7 @@ This module is thus a convenient way to import all the parameters at once.
 
 from cdl.core.computation.base import (
     ClipParam,
+    FFTParam,
     GaussianParam,
     MovingAverageParam,
     MovingMedianParam,
@@ -63,7 +64,6 @@ from cdl.core.computation.image.restoration import (
     DenoiseWaveletParam,
 )
 from cdl.core.computation.signal import (
-    FFT1DParam,
     FWHMParam,
     NormalizeYParam,
     PeakDetectionParam,

@@ -29,7 +29,7 @@ import cdl.core.computation.image.morphology as cpi_mor
 import cdl.core.computation.image.restoration as cpi_res
 import cdl.param
 from cdl.algorithms.image import distance_matrix
-from cdl.config import APP_NAME, _
+from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ShapeTypes
 from cdl.core.model.image import ImageObj
@@ -356,14 +356,18 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_wiener, title=_("Wiener filter"))
 
     @qt_try_except()
-    def compute_fft(self) -> None:
+    def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT"""
-        self.compute_11(cpi.compute_fft, title="FFT")
+        if param is None:
+            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
+        self.compute_11(cpi.compute_fft, param, title="FFT", edit=False)
 
     @qt_try_except()
-    def compute_ifft(self) -> None:
+    def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
         "Compute iFFT" ""
-        self.compute_11(cpi.compute_ifft, title="iFFT")
+        if param is None:
+            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
+        self.compute_11(cpi.compute_ifft, param, title="iFFT", edit=False)
 
     @qt_try_except()
     def compute_butterworth(

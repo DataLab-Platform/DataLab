@@ -27,7 +27,7 @@ import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
 
-from cdl.config import _
+from cdl.config import Conf, _
 
 
 class GaussianParam(gdt.DataSet):
@@ -82,3 +82,9 @@ class ROIDataParam(gdt.DataSet):
     def is_empty(self) -> bool:
         """Return True if there is no ROI"""
         return self.roidata is None or self.roidata.size == 0
+
+
+class FFTParam(gdt.DataSet):
+    """FFT parameters"""
+
+    shift = gdi.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))

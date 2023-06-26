@@ -41,9 +41,10 @@ from cdl.algorithms.signal import (
     xy_fft,
     xy_ifft,
 )
-from cdl.config import Conf, _
+from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    FFTParam,
     GaussianParam,
     MovingAverageParam,
     MovingMedianParam,
@@ -448,21 +449,11 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     return dst
 
 
-class FFT1DParam(gdt.DataSet):
-    """FFT parameters"""
-
-    shift = gdi.BoolItem(
-        _("Shift"),
-        default=Conf.proc.fft_shift_enabled.get(),
-        help=_("Shift zero frequency to center"),
-    )
-
-
-def compute_fft(src: SignalObj, p: FFT1DParam) -> SignalObj:
+def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute FFT
     Args:
         src (SignalObj): source signal
-        p (FFT1DParam): parameters
+        p (FFTParam): parameters
     Returns:
         SignalObj: result signal object
     """
@@ -472,11 +463,11 @@ def compute_fft(src: SignalObj, p: FFT1DParam) -> SignalObj:
     return dst
 
 
-def compute_ifft(src: SignalObj, p: FFT1DParam) -> SignalObj:
+def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute iFFT
     Args:
         src (SignalObj): source signal
-        p (FFT1DParam): parameters
+        p (FFTParam): parameters
     Returns:
         SignalObj: result signal object
     """
