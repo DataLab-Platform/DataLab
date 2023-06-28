@@ -534,7 +534,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def check_for_previous_crash(self) -> None:  # pragma: no cover
         """Check for previous crash"""
         if execenv.unattended:
-            self.show_log_viewer()
+            self.__show_logviewer()
         elif Conf.main.faulthandler_log_available.get(
             False
         ) or Conf.main.traceback_log_available.get(False):
@@ -548,7 +548,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             btns = QW.QMessageBox.StandardButton.Yes | QW.QMessageBox.StandardButton.No
             choice = QW.QMessageBox.warning(self, APP_NAME, txt, btns)
             if choice == QW.QMessageBox.StandardButton.Yes:
-                self.show_log_viewer()
+                self.__show_logviewer()
 
     def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""
@@ -833,14 +833,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         actions += [
             create_action(
                 self,
-                _("Show log files..."),
+                _("Log files") + "...",
                 icon=get_icon("logs.svg"),
-                triggered=self.show_log_viewer,
+                triggered=self.__show_logviewer,
             ),
             create_action(
                 self,
-                _("About DataLab installation") + "...",
-                icon=get_icon("logs.svg"),
+                _("Installation and configuration") + "...",
+                icon=get_icon("libre-toolbox.svg"),
                 triggered=lambda: instconfviewer.exec_cdl_installconfig_dialog(self),
             ),
             None,
@@ -1340,7 +1340,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 if answer == QW.QMessageBox.Yes:
                     self.imagepanel.update_metadata_view_settings()
 
-    def show_log_viewer(self) -> None:
+    def __show_logviewer(self) -> None:
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)
 

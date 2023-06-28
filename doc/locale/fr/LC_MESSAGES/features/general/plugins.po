@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-13 14:39+0200\n"
+"POT-Creation-Date: 2023-06-26 16:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,27 +27,41 @@ msgid ""
 "DataLab by writing plugins. A plugin is a Python module that is loaded at"
 " startup by DataLab. A plugin may add new features to DataLab, or modify "
 "existing features."
-msgstr "DataLab est une application modulaire. Il est possible d'ajouter de nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin est un module Python qui est chargé au démarrage par DataLab. Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des fonctionnalités existantes."
+msgstr ""
+"DataLab est une application modulaire. Il est possible d'ajouter de "
+"nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin "
+"est un module Python qui est chargé au démarrage par DataLab. Un plugin "
+"peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des "
+"fonctionnalités existantes."
 
 #: ../../features/general/plugins.rst:8
 msgid "The plugin system currently supports the following features:"
-msgstr "Le système de plugins prend actuellement en charge les fonctionnalités suivantes :"
+msgstr ""
+"Le système de plugins prend actuellement en charge les fonctionnalités "
+"suivantes :"
 
 #: ../../features/general/plugins.rst:10
 msgid ""
 "Processing features: add new processing tasks to the DataLab processing "
 "system, including specific graphical user interfaces."
-msgstr "Fonctionnalités de traitement : ajouter de nouvelles tâches de traitement au système de traitement DataLab, y compris des interfaces graphiques spécifiques."
+msgstr ""
+"Fonctionnalités de traitement : ajouter de nouvelles tâches de traitement"
+" au système de traitement DataLab, y compris des interfaces graphiques "
+"spécifiques."
 
 #: ../../features/general/plugins.rst:12
 msgid ""
 "Input/output features: add new file formats to the DataLab file I/O "
 "system."
-msgstr "Entrée/sortie : ajouter de nouveaux formats de fichiers au système d'entrée/sortie de DataLab."
+msgstr ""
+"Entrée/sortie : ajouter de nouveaux formats de fichiers au système "
+"d'entrée/sortie de DataLab."
 
 #: ../../features/general/plugins.rst:13
 msgid "HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system."
-msgstr "Fonctionnalités HDF5 : ajouter de nouveaux formats de fichiers HDF5 au système d'entrée/sortie HDF5 de DataLab."
+msgstr ""
+"Fonctionnalités HDF5 : ajouter de nouveaux formats de fichiers HDF5 au "
+"système d'entrée/sortie HDF5 de DataLab."
 
 #: ../../features/general/plugins.rst:16
 msgid "Example"
@@ -55,7 +69,9 @@ msgstr "Exemple"
 
 #: ../../features/general/plugins.rst:18
 msgid "Here is a simple example of a plugin that adds a new features to DataLab."
-msgstr "Voici un exemple simple d'un plugin qui ajoute une nouvelle fonctionnalité à DataLab."
+msgstr ""
+"Voici un exemple simple d'un plugin qui ajoute une nouvelle "
+"fonctionnalité à DataLab."
 
 #: ../../features/general/plugins.rst:24
 msgid "Public API"
@@ -81,6 +97,14 @@ msgstr ""
 
 #: cdl.plugins:10 of
 msgid ":class:`PluginBase`, which is the base class for all plugins"
+msgstr ""
+
+#: cdl.plugins:12 of
+msgid ""
+"Plugins may also extends DataLab I/O features by providing new image or "
+"signal formats. To do so, they must provide a subclass of "
+":class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format "
+"infos are defined using the :class:`FormatInfo` class."
 msgstr ""
 
 #: cdl.plugins.PluginInfo:1 of
@@ -138,3 +162,38 @@ msgstr ""
 #: cdl.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
 msgstr ""
+
+#: cdl.core.io.base.FormatInfo:1 of
+msgid "Format info"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase:1 of
+msgid "Object representing an image file type"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object:1
+#: cdl.core.io.signal.base.SignalFormatBase.create_object:1 of
+msgid "Create empty object"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.read:1
+#: cdl.core.io.signal.base.SignalFormatBase.read:1 of
+msgid "Read data from file, return one or more objects"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.read_data:1 of
+msgid "Read data and return it"
+msgstr ""
+
+#: cdl.core.io.signal.base.SignalFormatBase:1 of
+msgid "Object representing a signal file type"
+msgstr ""
+
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:1 of
+msgid "Read data and metadata from file, write metadata to object, return xydata"
+msgstr ""
+
+#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:1 of
+msgid "Set signal xydata"
+msgstr ""
+

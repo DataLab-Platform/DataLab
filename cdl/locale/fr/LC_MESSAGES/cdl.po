@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-26 16:23+0200\n"
+"POT-Creation-Date: 2023-06-28 17:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -599,6 +599,7 @@ msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
 #: cdl\core\computation\image\morphology.py:33 cdl\core\model\image.py:269
+#: cdl\tests\data.py:375
 msgid "Radius"
 msgstr "Rayon"
 
@@ -980,7 +981,7 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1329
+#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1337
 #: cdl\core\gui\roieditor.py:211
 msgid "image"
 msgstr "image"
@@ -1299,7 +1300,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:87 cdl\core\gui\main.py:429 cdl\core\gui\main.py:1115
+#: cdl\core\gui\h5io.py:87 cdl\core\gui\main.py:429 cdl\core\gui\main.py:1123
 #: cdl\plugins.py:178
 msgid "Warning"
 msgstr "Attention"
@@ -1437,160 +1438,160 @@ msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:671
+#: cdl\core\gui\main.py:679
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:673
+#: cdl\core\gui\main.py:681
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:678
+#: cdl\core\gui\main.py:686
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:680
+#: cdl\core\gui\main.py:688
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:685
+#: cdl\core\gui\main.py:693
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:687
+#: cdl\core\gui\main.py:695
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:692
+#: cdl\core\gui\main.py:700
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:694
+#: cdl\core\gui\main.py:702
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:697
+#: cdl\core\gui\main.py:705
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:710
+#: cdl\core\gui\main.py:718
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:711
+#: cdl\core\gui\main.py:719
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:713 cdl\core\gui\main.py:1363
+#: cdl\core\gui\main.py:721 cdl\core\gui\main.py:1371
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:714
+#: cdl\core\gui\main.py:722
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:726
+#: cdl\core\gui\main.py:734
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: cdl\core\gui\main.py:738
+#: cdl\core\gui\main.py:746
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: cdl\core\gui\main.py:759
+#: cdl\core\gui\main.py:767
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: cdl\core\gui\main.py:760 cdl\core\gui\panel\image.py:50
+#: cdl\core\gui\main.py:768 cdl\core\gui\panel\image.py:50
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: cdl\core\gui\main.py:774
+#: cdl\core\gui\main.py:782
 msgid "Signals"
 msgstr "Signaux"
 
-#: cdl\core\gui\main.py:775
+#: cdl\core\gui\main.py:783
 msgid "Images"
 msgstr "Images"
 
-#: cdl\core\gui\main.py:780
+#: cdl\core\gui\main.py:788
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:782
+#: cdl\core\gui\main.py:790
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:783
+#: cdl\core\gui\main.py:791
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:784 cdl\core\gui\settings.py:239
+#: cdl\core\gui\main.py:792 cdl\core\gui\settings.py:239
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:785
+#: cdl\core\gui\main.py:793
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:786
+#: cdl\core\gui\main.py:794
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:787
+#: cdl\core\gui\main.py:795
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:801
+#: cdl\core\gui\main.py:809
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:811
+#: cdl\core\gui\main.py:819
 msgid "CHM documentation"
 msgstr "Documentation CHM"
 
-#: cdl\core\gui\main.py:821
+#: cdl\core\gui\main.py:829
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:828
-msgid "Show log files..."
-msgstr "Afficher les journaux de bords..."
+#: cdl\core\gui\main.py:836 cdl\widgets\logviewer.py:29
+msgid "Log files"
+msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:834 cdl\widgets\instconfviewer.py:66
-msgid "About DataLab installation"
-msgstr "Configuration d'installation de DataLab"
+#: cdl\core\gui\main.py:842 cdl\widgets\instconfviewer.py:87
+msgid "Installation and configuration"
+msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:841
+#: cdl\core\gui\main.py:849
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:847
+#: cdl\core\gui\main.py:855
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:853
+#: cdl\core\gui\main.py:861
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:858
+#: cdl\core\gui\main.py:866
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:891 cdl\core\gui\panel\macro.py:103
+#: cdl\core\gui\main.py:899 cdl\core\gui\panel\macro.py:103
 #: cdl\core\gui\settings.py:242
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:900 cdl\core\gui\panel\macro.py:76
+#: cdl\core\gui\main.py:908 cdl\core\gui\panel\macro.py:76
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1083
+#: cdl\core\gui\main.py:1091
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1116
+#: cdl\core\gui\main.py:1124
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1598,56 +1599,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1128 cdl\core\gui\panel\base.py:665
+#: cdl\core\gui\main.py:1136 cdl\core\gui\panel\base.py:665
 #: cdl\core\gui\panel\macro.py:431
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1285
+#: cdl\core\gui\main.py:1293
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1287
+#: cdl\core\gui\main.py:1295
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1290
+#: cdl\core\gui\main.py:1298
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1292
+#: cdl\core\gui\main.py:1300
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1295
+#: cdl\core\gui\main.py:1303
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1296
+#: cdl\core\gui\main.py:1304
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1297
+#: cdl\core\gui\main.py:1305
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1301
+#: cdl\core\gui\main.py:1309
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1302
+#: cdl\core\gui\main.py:1310
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1306
+#: cdl\core\gui\main.py:1314
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1324
+#: cdl\core\gui\main.py:1332
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1325
+#: cdl\core\gui\main.py:1333
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1655,7 +1656,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1364
+#: cdl\core\gui\main.py:1372
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2335,7 +2336,7 @@ msgstr "Hauteur de l'image (nombre de lignes)"
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:731
+#: cdl\core\model\image.py:731 cdl\tests\data.py:374
 msgid "Width"
 msgstr "Largeur"
 
@@ -2500,7 +2501,7 @@ msgstr "Bruit"
 
 #: cdl\plugins\cdl_plugin_testdata.py:132
 msgid "Ring"
-msgstr ""
+msgstr "Anneau"
 
 #: cdl\plugins\cdl_plugin_testdata.py:148
 msgid "Add noise to signal"
@@ -2588,26 +2589,16 @@ msgid "Attenuation"
 msgstr "Atténuation"
 
 #: cdl\tests\data.py:372
-msgid "Ring center x"
-msgstr ""
+msgid "X<sub>center</sub>"
+msgstr "X<sub>centre</sub>"
 
 #: cdl\tests\data.py:373
-msgid "Ring center y"
-msgstr ""
-
-#: cdl\tests\data.py:374
-msgid "Ring width"
-msgstr ""
-
-#: cdl\tests\data.py:375
-#, fuzzy
-msgid "Ring radius"
-msgstr "Rayon"
+msgid "Y<sub>center</sub>"
+msgstr "Y<sub>centre</sub>"
 
 #: cdl\tests\data.py:376
-#, fuzzy
-msgid "Ring intensity"
-msgstr "Ajuster les niveaux"
+msgid "Intensity"
+msgstr "Intensité"
 
 #: cdl\tests\features\common\stat_app.py:50
 #: cdl\tests\features\images\flatfield_app.py:29
@@ -2682,33 +2673,37 @@ msgstr "Obtenir un objet"
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: cdl\utils\qthelpers.py:227
+#: cdl\utils\qthelpers.py:234
 msgid "Waiting: %s s"
 msgstr "En attente : %s s"
 
-#: cdl\utils\qthelpers.py:239
+#: cdl\utils\qthelpers.py:246
 msgid "Cancel"
 msgstr "Annuler"
 
-#: cdl\utils\qthelpers.py:254
+#: cdl\utils\qthelpers.py:261
 msgid "Error:"
 msgstr "Erreur:"
 
-#: cdl\utils\qthelpers.py:254 cdl\widgets\warningerror.py:107
+#: cdl\utils\qthelpers.py:261 cdl\widgets\warningerror.py:107
 msgid "Context"
 msgstr "Contexte"
 
-#: cdl\utils\qthelpers.py:299
+#: cdl\utils\qthelpers.py:306
 msgid "%s could not be opened:"
 msgstr "%s n'a pas pu être ouvert:"
 
-#: cdl\utils\qthelpers.py:301
+#: cdl\utils\qthelpers.py:308
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 
 #: cdl\utils\vistools.py:139
 msgid "Tools"
-msgstr ""
+msgstr "Outils"
+
+#: cdl\widgets\fileviewer.py:56
+msgid "Contents of file"
+msgstr "Contenu du fichier"
 
 #: cdl\widgets\fitdialog.py:87
 msgid "Polymomial fit"
@@ -2781,23 +2776,23 @@ msgstr "Cocher tout"
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: cdl\widgets\instconfviewer.py:69
-msgid "Information about DataLab installation:"
-msgstr "Informations sur l'installation de DataLab :"
+#: cdl\widgets\instconfviewer.py:93 cdl\widgets\instconfviewer.py:96
+msgid "Installation configuration"
+msgstr "Configuration d'installation"
 
-#: cdl\widgets\logviewer.py:73
-msgid "DataLab log files"
-msgstr "Journaux de bord de DataLab"
+#: cdl\widgets\instconfviewer.py:102
+msgid "User configuration"
+msgstr "Configuration utilisateur"
 
-#: cdl\widgets\logviewer.py:110
+#: cdl\widgets\logviewer.py:66
 msgid "Log files were generated during current session."
 msgstr "Des journaux de bord ont été générés lors de la session en cours."
 
-#: cdl\widgets\logviewer.py:112
+#: cdl\widgets\logviewer.py:68
 msgid "Log files were generated during last session."
 msgstr "Des journaux de bord ont été générés lors de la dernière session."
 
-#: cdl\widgets\logviewer.py:123
+#: cdl\widgets\logviewer.py:79
 msgid "Log files are currently empty."
 msgstr "Les journaux de bord sont vides."
 
@@ -2809,9 +2804,17 @@ msgstr "Distance minimale :"
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
 
-#: cdl\widgets\status.py:69
+#: cdl\widgets\status.py:108
 msgid "Memory:"
 msgstr "Mémoire :"
+
+#: cdl\widgets\status.py:126
+msgid "Plugins:"
+msgstr "Plugins :"
+
+#: cdl\widgets\status.py:159
+msgid "XML-RPC:"
+msgstr "XML-RPC :"
 
 #: cdl\widgets\warningerror.py:95
 msgid "Error message"
@@ -2842,6 +2845,19 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid "Show log files..."
+#~ msgstr "Afficher les journaux de bords..."
+
+#~ msgid "About DataLab installation"
+#~ msgstr "Configuration d'installation de DataLab"
+
+#~ msgid "Information about DataLab installation:"
+#~ msgstr "Informations sur l'installation de DataLab :"
+
+#, fuzzy
+#~ msgid "Ring radius"
+#~ msgstr "Rayon"
 
 #~ msgid ""
 #~ "Please click on the Ignore button to avoid showing this message at "

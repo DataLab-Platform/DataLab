@@ -121,7 +121,9 @@ def qt_app_context(
         except Exception:  # pylint: disable=broad-except
             exception_occured = True
         finally:
-            if execenv.unattended and not execenv.do_not_quit:  # pragma: no cover
+            if (
+                execenv.unattended or execenv.screenshot
+            ) and not execenv.do_not_quit:  # pragma: no cover
                 if execenv.delay > 0:
                     mode = "Screenshot" if execenv.screenshot else "Unattended"
                     message = f"{mode} mode (delay: {execenv.delay}s)"
@@ -172,7 +174,7 @@ def close_dialog_and_quit(widget, screenshot=False):
 def exec_dialog(dlg: QW.QDialog) -> int:
     """Run QDialog Qt execution loop without blocking,
     depending on environment test mode"""
-    if execenv.unattended:
+    if execenv.unattended or execenv.screenshot:
         QC.QTimer.singleShot(
             execenv.delay * 1000,
             lambda: close_dialog_and_quit(dlg, screenshot=execenv.screenshot),

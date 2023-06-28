@@ -369,11 +369,11 @@ class RingParam(gdt.DataSet):
     """Parameters for creating a ring image"""
 
     size = gdi.IntItem(_("Size"), default=1000)
-    ring_x0 = gdi.IntItem(_("Ring center x"), default=500)
-    ring_y0 = gdi.IntItem(_("Ring center y"), default=500)
-    ring_width = gdi.IntItem(_("Ring width"), default=10)
-    ring_radius = gdi.IntItem(_("Ring radius"), default=250)
-    ring_intensity = gdi.IntItem(_("Ring intensity"), default=1000)
+    ring_x0 = gdi.IntItem(_("X<sub>center</sub>"), default=500)
+    ring_y0 = gdi.IntItem(_("Y<sub>center</sub>"), default=500)
+    ring_width = gdi.IntItem(_("Width"), default=10)
+    ring_radius = gdi.IntItem(_("Radius"), default=250)
+    ring_intensity = gdi.IntItem(_("Intensity"), default=1000)
 
 
 def create_ring_data(

@@ -10,75 +10,31 @@ Module providing a log viewer widget, a log viewer window and DataLab's log view
 from __future__ import annotations
 
 import os.path as osp
-from pathlib import Path
 
 from guidata.configtools import get_icon
-from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from cdl.config import APP_NAME, Conf, _, get_old_log_fname
 from cdl.env import execenv
 from cdl.utils.qthelpers import exec_dialog
-
-
-def read_text_file(path: str) -> str:
-    """Read text file using multiple encodings"""
-    encodings = ["utf-8", "latin1", "cp1252", "utf-16", "utf-32", "ascii"]
-    for encoding in encodings:
-        try:
-            with open(path, "r", encoding=encoding) as fdesc:
-                return fdesc.read()
-        except UnicodeDecodeError:
-            pass
-    raise UnicodeDecodeError(
-        f"Unable to read file using the following encodings: {encodings}"
-    )
-
-
-def get_title_contents(path):
-    """Get title and contents for log filename"""
-    contents = read_text_file(path)
-    pathobj = Path(path)
-    uri_path = pathobj.absolute().as_uri()
-    text = f'{_("Contents of file")} <a href="{uri_path}">{path}</a>:'
-    return text, contents
-
-
-class LogViewerWidget(QW.QWidget):
-    """Log viewer widget"""
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.editor = CodeEditor(language="Python")
-        self.editor.setReadOnly(True)
-        layout = QW.QVBoxLayout()
-        self.label = QW.QLabel("")
-        layout.addWidget(self.label)
-        layout.addWidget(self.editor)
-        self.setLayout(layout)
-
-    def set_data(self, text, contents):
-        """Set log data"""
-        self.label.setText(text)
-        self.label.setOpenExternalLinks(True)
-        self.editor.setPlainText(contents)
+from cdl.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
 class LogViewerWindow(QW.QDialog):
     """Log viewer window"""
 
-    def __init__(self, fnames, parent=None):
+    def __init__(self, fnames: list[str], parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
         self.setObjectName("logviewer")
-        self.setWindowTitle(_("DataLab log files"))
+        self.setWindowTitle(APP_NAME + " - " + _("Log files"))
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
         for fname in fnames:
             if osp.isfile(fname):
-                viewer = LogViewerWidget()
                 title, contents = get_title_contents(fname)
                 if not contents.strip():
                     continue
+                viewer = FileViewerWidget(language="Python")
                 viewer.set_data(title, contents)
                 self.tabs.addTab(viewer, get_icon("logs.svg"), osp.basename(fname))
         layout = QW.QVBoxLayout()
@@ -87,7 +43,7 @@ class LogViewerWindow(QW.QDialog):
         self.resize(900, 400)
 
     @property
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """Return True if there is no log available"""
         return self.tabs.count() == 0
 
@@ -113,7 +69,7 @@ def get_log_prompt_message() -> str | None:
     return None
 
 
-def exec_cdl_logviewer_dialog(parent=None):
+def exec_cdl_logviewer_dialog(parent: QW.QWidget | None = None) -> None:
     """View DataLab logs"""
     fnames = [osp.normpath(fname) for fname in get_log_filenames() if osp.isfile(fname)]
     dlg = LogViewerWindow(fnames, parent=parent)

@@ -16,13 +16,13 @@ import sys
 from subprocess import PIPE, Popen
 
 from guidata.configtools import get_icon
-from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
 from cdl import __version__
-from cdl.config import DATAPATH, IS_FROZEN, _
+from cdl.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
 from cdl.utils import dephash
 from cdl.utils.qthelpers import exec_dialog
+from cdl.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 
 def decode_fs_string(string: bytes) -> str:
@@ -41,20 +41,41 @@ def get_pip_list() -> str:
     return decode_fs_string(output)
 
 
-class InstallConfigViewerWidget(QW.QWidget):
-    """Installation configuration widget"""
+def get_install_infos() -> str:
+    """Get DataLab installation informations
 
-    def __init__(
-        self, label: str, contents: str, parent: QW.QWidget | None = None
-    ) -> None:
-        super().__init__(parent)
-        self.editor = CodeEditor()
-        self.editor.setReadOnly(True)
-        self.editor.setPlainText(contents)
-        layout = QW.QVBoxLayout()
-        layout.addWidget(QW.QLabel(label))
-        layout.addWidget(self.editor)
-        self.setLayout(layout)
+    Returns:
+        str: installation informations
+    """
+    more_infos = ""
+    try:
+        state = dephash.check_dependencies_hash(DATAPATH)
+        bad_deps = [name for name in state if not state[name]]
+        if bad_deps:
+            more_infos += "Invalid dependencies: "
+            more_infos += ", ".join(bad_deps)
+        else:
+            more_infos += "Dependencies hash file: checked."
+    except IOError:
+        more_infos += "Unable to open dependencies hash file."
+    more_infos += os.linesep * 2
+    if IS_FROZEN:
+        #  Stand-alone version
+        more_infos += "This is the Stand-alone version of DataLab"
+    else:
+        more_infos += get_pip_list()
+    infos = os.linesep.join(
+        [
+            f"DataLab v{__version__}",
+            "",
+            f"Machine type: {platform.machine()}",
+            f"Platform: {platform.platform()}",
+            f"Python v{sys.version}",
+            "",
+            more_infos,
+        ]
+    )
+    return infos
 
 
 class InstallConfigViewerWindow(QW.QDialog):
@@ -62,42 +83,30 @@ class InstallConfigViewerWindow(QW.QDialog):
 
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
-        self.setObjectName("dependencies")
-        self.setWindowTitle(_("About DataLab installation"))
+        self.setObjectName("instviewer")
+        self.setWindowTitle(APP_NAME + " - " + _("Installation and configuration"))
         self.setWindowIcon(get_icon("DataLab.svg"))
-        self.tabs = QW.QTabWidget()
-        label = _("Information about DataLab installation:")
-        more_infos = ""
-        try:
-            state = dephash.check_dependencies_hash(DATAPATH)
-            bad_deps = [name for name in state if not state[name]]
-            if bad_deps:
-                more_infos += "Invalid dependencies: "
-                more_infos += ", ".join(bad_deps)
-            else:
-                more_infos += "Dependencies hash file: checked."
-        except IOError:
-            more_infos += "Unable to open dependencies hash file."
-        more_infos += os.linesep * 2
-        if IS_FROZEN:
-            #  Stand-alone version
-            more_infos += "This is the Stand-alone version of DataLab"
-        else:
-            more_infos += get_pip_list()
-        infos = os.linesep.join(
-            [
-                f"DataLab v{__version__}",
-                "",
-                f"Machine type: {platform.machine()}",
-                f"Platform: {platform.platform()}",
-                f"Python v{sys.version}",
-                "",
-                more_infos,
-            ]
-        )
-        viewer = InstallConfigViewerWidget(label, infos, parent=self)
+        self.tabs = QW.QTabWidget(self)
+        uc_title, uc_contents = get_title_contents(Conf.get_filename())
+        for title, contents, tab_icon, tab_title in (
+            (
+                _("Installation configuration"),
+                get_install_infos(),
+                get_icon("libre-toolbox.svg"),
+                _("Installation configuration"),
+            ),
+            (
+                uc_title,
+                uc_contents,
+                get_icon("libre-gui-settings.svg"),
+                _("User configuration"),
+            ),
+        ):
+            viewer = FileViewerWidget(language="Python")
+            viewer.set_data(title, contents)
+            self.tabs.addTab(viewer, tab_icon, tab_title)
         layout = QW.QVBoxLayout()
-        layout.addWidget(viewer)
+        layout.addWidget(self.tabs)
         self.setLayout(layout)
         self.resize(800, 500)
 

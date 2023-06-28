@@ -57,6 +57,11 @@ class Configuration:
         CONF = AppUserConfig({})
 
     @classmethod
+    def get_filename(cls) -> str:
+        """Return configuration file name"""
+        return CONF.filename()
+
+    @classmethod
     def get_path(cls, basename: str) -> str:
         """Return filename path inside configuration directory"""
         return CONF.get_path(basename)
