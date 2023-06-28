@@ -18,7 +18,7 @@ user interfaces (thanks to `guidata`_ and `guiqwt`_ libraries).
 import os
 
 __version__ = "0.9.0"
-__docurl__ = "https://cdl.readthedocs.io/en/latest/"
+__docurl__ = "https://datalab.readthedocs.io/en/latest/"
 __homeurl__ = "https://codra-ingenierie-informatique.github.io/DataLab/"
 __supporturl__ = (
     "https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose"

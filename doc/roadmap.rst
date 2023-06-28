@@ -36,7 +36,7 @@ Other tasks
 Past milestones
 ---------------
 
-DataLab 1.0
+DataLab 0.9
 ^^^^^^^^^^^
 
 * Run computations in a separate process:
