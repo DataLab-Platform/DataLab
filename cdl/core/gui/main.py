@@ -659,6 +659,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __configure_statusbar(self) -> None:
         """Configure status bar"""
         self.statusBar().showMessage(_("Welcome to %s!") % APP_NAME, 5000)
+        # Plugin status
+        pluginstatus = status.PluginStatus()
+        self.statusBar().addPermanentWidget(pluginstatus)
+        # XML-RPC server status
+        xmlrpcstatus = status.XMLRPCStatus()
+        xmlrpcstatus.set_port(self.remote_server.port)
+        self.statusBar().addPermanentWidget(xmlrpcstatus)
+        # Memory status
         threshold = Conf.main.available_memory_threshold.get()
         self.memorystatus = status.MemoryStatus(threshold)
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
