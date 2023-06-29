@@ -17,8 +17,11 @@ from cdl.core.io.base import BaseIORegistry
 from cdl.core.io.image import ImageIORegistry
 from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
+from cdl.plugins import discover_plugins
 from cdl.utils.misc import reduce_path
 from cdl.utils.tests import get_test_fnames, temporary_directory
+
+discover_plugins()
 
 
 def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:

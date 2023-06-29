@@ -43,14 +43,6 @@ def test_sif(fname=None):
     view_images(data)
 
 
-@try_open_test_data("Testing FXD file handler", "*.fxd")
-def test_fxd(fname=None):
-    """Testing FXD files"""
-    execenv.print(image_funcs.FXDFile(fname))
-    data = image_funcs.imread_fxd(fname)
-    view_images(data)
-
-
 @try_open_test_data("Testing SCOR-DATA file handler", "*.scor-data")
 def test_scordata(fname=None):
     """Testing SCOR-DATA files"""
@@ -65,7 +57,6 @@ def io_test():
         test_txt()
         test_csv()
         test_sif()
-        test_fxd()
         test_scordata()
 
 
