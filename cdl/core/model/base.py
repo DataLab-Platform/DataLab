@@ -556,8 +556,8 @@ class BaseObj(metaclass=BaseObjMeta):
     # Metadata dictionary keys for special properties:
     METADATA_FMT = "__format"
     METADATA_LBL = "__showlabel"
-    METADATA_FMT_DEFAULT = ("%" + CONF_FMT.get(DEFAULT_FMT),)
-    METADATA_LBL_DEFAULT = (Conf.view.show_label.get(False),)
+    METADATA_FMT_DEFAULT = "%" + CONF_FMT.get(DEFAULT_FMT)
+    METADATA_LBL_DEFAULT = Conf.view.show_label.get(False)
 
     VALID_DTYPES = ()
 
