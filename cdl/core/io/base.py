@@ -45,12 +45,23 @@ class BaseIORegistry(type):
 
     @classmethod
     def get_formats(cls) -> list[FormatBase]:
-        """Return I/O format handlers"""
+        """Return I/O format handlers
+
+        Returns:
+            list[FormatBase]: list of I/O format handlers
+        """
         return cls._io_format_instances
 
     @classmethod
     def get_all_filters(cls, action: IOAction) -> str:
-        """Return all file filters for Qt file dialog"""
+        """Return all file filters for Qt file dialog
+
+        Args:
+            action (IOAction): I/O action type
+
+        Returns:
+            str: file filters
+        """
         extlist = []  # file extension list
         for fmt in cls.get_formats():
             fmt: FormatBase
@@ -59,11 +70,19 @@ class BaseIORegistry(type):
             if not fmt.info.writeable and action == IOAction.SAVE:
                 continue
             extlist.extend(fmt.extlist)
-        return f"{_('All supported files')} ({'*.' + ' *.'.join(extlist)})"
+        allsupported = _("All supported files")
+        return f"{allsupported} ({'*.' + ' *.'.join(extlist)})"
 
     @classmethod
     def get_filters(cls, action: IOAction) -> str:
-        """Return file filters for Qt file dialog"""
+        """Return file filters for Qt file dialog
+
+        Args:
+            action (IOAction): I/O action type
+
+        Returns:
+            str: file filters
+        """
         flist = []  # file filter list
         flist.append(cls.get_all_filters(action))
         for fmt in cls.get_formats():
@@ -73,17 +92,36 @@ class BaseIORegistry(type):
 
     @classmethod
     def get_read_filters(cls) -> str:
-        """Return file filters for Qt open file dialog"""
+        """Return file filters for Qt open file dialog
+
+        Returns:
+            str: file filters
+        """
         return cls.get_filters(IOAction.LOAD)
 
     @classmethod
     def get_write_filters(cls) -> str:
-        """Return file filters for Qt save file dialog"""
+        """Return file filters for Qt save file dialog
+
+        Returns:
+            str: file filters
+        """
         return cls.get_filters(IOAction.SAVE)
 
     @classmethod
     def get_format(cls, filename: str, action: IOAction) -> FormatBase:
-        """Return format handler for filename"""
+        """Return format handler for filename
+
+        Args:
+            filename (str): file name
+            action (IOAction): I/O action type
+
+        Raises:
+            NotImplementedError: if file data type is not supported
+
+        Returns:
+            FormatBase: format handler
+        """
         for fmt in cls.get_formats():
             fmt: FormatBase
             if osp.splitext(filename)[1][1:].lower() in fmt.extlist:
@@ -100,7 +138,15 @@ class BaseIORegistry(type):
     def read(cls, filename: str) -> BaseObj:
         """Read data from file, return native object (signal or image).
 
-        If file data type is not supported, raise NotImplementedError."""
+        Args:
+            filename (str): file name
+
+        Raises:
+            NotImplementedError: if file data type is not supported
+
+        Returns:
+            BaseObj: native object (signal or image)
+        """
         fmt = cls.get_format(filename, IOAction.LOAD)
         return fmt.read(filename)
 
@@ -108,13 +154,26 @@ class BaseIORegistry(type):
     def write(cls, filename: str, obj: BaseObj) -> None:
         """Write data to file from native object (signal or image).
 
-        If file data type is not supported, raise NotImplementedError."""
+        Args:
+            filename (str): file name
+            obj (BaseObj): native object (signal or image)
+
+        Raises:
+            NotImplementedError: if file data type is not supported
+        """
         fmt = cls.get_format(filename, IOAction.SAVE)
         fmt.write(filename, obj)
 
 
-def get_file_extensions(string):
-    """Return a list of file extensions in a string"""
+def get_file_extensions(string: str) -> list[str]:
+    """Return a list of file extensions in a string
+
+    Args:
+        string (str): string containing file extensions
+
+    Returns:
+        list[str]: list of file extensions
+    """
     pattern = r"\S+\.[\w-]+"
     matches = re.findall(pattern, string)
     return [match.split(".")[-1].lower() for match in matches]
@@ -159,7 +218,14 @@ class FormatBase:
                     ) from exc
 
     def get_filter(self, action: IOAction) -> str:
-        """Return file filter for Qt file dialog"""
+        """Return file filter for Qt file dialog
+
+        Args:
+            action (IOAction): I/O action type
+
+        Returns:
+            str: file filter string
+        """
         assert action in (IOAction.LOAD, IOAction.SAVE)
         if action == IOAction.LOAD and not self.info.readable:
             return ""
@@ -168,9 +234,27 @@ class FormatBase:
         return f"{self.info.name} ({self.info.extensions})"
 
     def read(self, filename: str) -> BaseObj:
-        """Read data from file, return one or more objects"""
+        """Read data from file, return one or more objects
+
+        Args:
+            filename (str): file name
+
+        Raises:
+            NotImplementedError: if format is not supported
+
+        Returns:
+            BaseObj: native object (signal or image)
+        """
         raise NotImplementedError(f"Reading from {self.info.name} is not supported")
 
     def write(self, filename: str, obj: BaseObj) -> None:
-        """Write data to file"""
+        """Write data to file
+
+        Args:
+            filename (str): file name
+            obj (BaseObj): native object (signal or image)
+
+        Raises:
+            NotImplementedError: if format is not supported
+        """
         raise NotImplementedError(f"Writing to {self.info.name} is not supported")

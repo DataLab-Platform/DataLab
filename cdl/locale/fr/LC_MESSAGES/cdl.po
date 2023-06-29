@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-28 17:13+0200\n"
+"POT-Creation-Date: 2023-06-29 10:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2190,39 +2190,19 @@ msgstr ""
 "\n"
 "Un redémarrage est nécessaire pour que ces changements prennent effet."
 
-#: cdl\core\io\image\formats.py:27
-msgid "BMP, JPEG, PNG and TIFF files"
-msgstr "Fichiers BMP, JPEG, PNG et TIFF"
+#: cdl\core\io\base.py:73
+msgid "All supported files"
+msgstr "Tous les fichiers pris en charge"
 
-#: cdl\core\io\image\formats.py:47 cdl\core\io\signal\formats.py:23
-msgid "NumPy binary files"
-msgstr "Fichiers binaires NumPy"
-
-#: cdl\core\io\image\formats.py:67
+#: cdl\core\io\image\formats.py:78
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: cdl\core\io\image\formats.py:109
-msgid "DICOM files"
-msgstr "Fichiers DICOM"
+#: cdl\core\io\signal\formats.py:23
+msgid "NumPy binary files"
+msgstr "Fichiers binaires NumPy"
 
-#: cdl\core\io\image\formats.py:126
-msgid "Andor SIF files"
-msgstr "Fichiers SIF Andor"
-
-#: cdl\core\io\image\formats.py:156
-msgid "SPIRICON files"
-msgstr "Fichiers SPIRICON"
-
-#: cdl\core\io\image\formats.py:172
-msgid "FXD files"
-msgstr "Fichiers FXD"
-
-#: cdl\core\io\image\formats.py:188
-msgid "XYZ files"
-msgstr "Fichiers XYZ"
-
-#: cdl\core\io\signal\formats.py:42
+#: cdl\core\io\signal\formats.py:55
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
@@ -2482,68 +2462,68 @@ msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 msgid "Question"
 msgstr "Question"
 
-#: cdl\plugins\cdl_plugin_testdata.py:47 cdl\plugins\cdl_plugin_testdata.py:147
-#: cdl\plugins\cdl_plugin_testdata.py:162
+#: cdl\plugins\cdl_testdata.py:47 cdl\plugins\cdl_testdata.py:147
+#: cdl\plugins\cdl_testdata.py:162
 msgid "Test data"
 msgstr "Données de test"
 
-#: cdl\plugins\cdl_plugin_testdata.py:49
+#: cdl\plugins\cdl_testdata.py:49
 msgid "Testing DataLab functionalities"
 msgstr "Tester les fonctionnalités de DataLab"
 
-#: cdl\plugins\cdl_plugin_testdata.py:58 cdl\plugins\cdl_plugin_testdata.py:82
+#: cdl\plugins\cdl_testdata.py:58 cdl\plugins\cdl_testdata.py:82
 msgid "Add noise"
 msgstr "Ajouter du bruit"
 
-#: cdl\plugins\cdl_plugin_testdata.py:70
+#: cdl\plugins\cdl_testdata.py:70
 msgid "Noise"
 msgstr "Bruit"
 
-#: cdl\plugins\cdl_plugin_testdata.py:132
+#: cdl\plugins\cdl_testdata.py:132
 msgid "Ring"
 msgstr "Anneau"
 
-#: cdl\plugins\cdl_plugin_testdata.py:148
+#: cdl\plugins\cdl_testdata.py:148
 msgid "Add noise to signal"
 msgstr "Ajouter du bruit au signal"
 
-#: cdl\plugins\cdl_plugin_testdata.py:150
+#: cdl\plugins\cdl_testdata.py:150
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
 
-#: cdl\plugins\cdl_plugin_testdata.py:156
+#: cdl\plugins\cdl_testdata.py:156
 msgid "Create noisy signal"
 msgstr "Créer un signal bruité"
 
-#: cdl\plugins\cdl_plugin_testdata.py:163
+#: cdl\plugins\cdl_testdata.py:163
 msgid "Add noise to image"
 msgstr "Ajouter du bruit à l'image"
 
-#: cdl\plugins\cdl_plugin_testdata.py:166
+#: cdl\plugins\cdl_testdata.py:166
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
 
-#: cdl\plugins\cdl_plugin_testdata.py:172
+#: cdl\plugins\cdl_testdata.py:172
 msgid "Create 2D sin cos image"
 msgstr "Créer une image 2D sin cos"
 
-#: cdl\plugins\cdl_plugin_testdata.py:177
+#: cdl\plugins\cdl_testdata.py:177
 msgid "Create 2D noisy gauss image"
 msgstr "Créer une image 2D gaussienne bruitée"
 
-#: cdl\plugins\cdl_plugin_testdata.py:182
+#: cdl\plugins\cdl_testdata.py:182
 msgid "Create 2D multi gauss image"
 msgstr "Créer une image 2D multi-gaussienne"
 
-#: cdl\plugins\cdl_plugin_testdata.py:187
+#: cdl\plugins\cdl_testdata.py:187
 msgid "Create annotated image"
 msgstr "Créer une image annotée"
 
-#: cdl\plugins\cdl_plugin_testdata.py:192
+#: cdl\plugins\cdl_testdata.py:192
 msgid "Create 2D step image"
 msgstr "Créer une image 2D échelon"
 
-#: cdl\plugins\cdl_plugin_testdata.py:197
+#: cdl\plugins\cdl_testdata.py:197
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
@@ -2846,19 +2826,6 @@ msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
 
-#~ msgid "Show log files..."
-#~ msgstr "Afficher les journaux de bords..."
-
-#~ msgid "About DataLab installation"
-#~ msgstr "Configuration d'installation de DataLab"
-
-#~ msgid "Information about DataLab installation:"
-#~ msgstr "Informations sur l'installation de DataLab :"
-
-#, fuzzy
-#~ msgid "Ring radius"
-#~ msgstr "Rayon"
-
 #~ msgid ""
 #~ "Please click on the Ignore button to avoid showing this message at "
 #~ "startup."
@@ -2874,15 +2841,6 @@ msgstr ""
 #~ "Désactiver la vérification des dépendances au démarrage pour les paquets "
 #~ "critiques"
 
-#~ msgid "Sample 1"
-#~ msgstr "Echantillon 1"
-
-#~ msgid "Sample 2"
-#~ msgstr "Echantillon 2"
-
-#~ msgid "Sample 3"
-#~ msgstr "Echantillon 3"
-
 #~ msgid "Test data plugin"
 #~ msgstr "Plugin de données de test"
 
@@ -2894,14 +2852,6 @@ msgstr ""
 
 #~ msgid "General features"
 #~ msgstr "Fonctionnalités générales"
-
-#, fuzzy
-#~ msgid "Edit default image visualization settings"
-#~ msgstr "Réglages d'affichage d'images par défaut"
-
-#, fuzzy
-#~ msgid "Default image settings"
-#~ msgstr "Préférences de DataLab"
 
 #~ msgid "Main settings"
 #~ msgstr "Préférences générales"

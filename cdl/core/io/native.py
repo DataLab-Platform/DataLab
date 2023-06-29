@@ -26,14 +26,22 @@ LIST_LENGTH_STR = "__list_length__"
 
 class NativeH5Writer(HDF5Writer):
     """DataLab signal/image objects HDF5 guidata Dataset Writer class,
-    supporting dictionary serialization"""
+    supporting dictionary serialization
+
+    Args:
+        filename (str): HDF5 file name
+    """
 
     def __init__(self, filename: str) -> None:
         super().__init__(filename)
         self.h5[H5_VERSION] = __version__
 
     def write_dict(self, val: dict[str, Any]) -> None:
-        """Write dictionary to h5 file"""
+        """Write dictionary to h5 file
+
+        Args:
+            val (dict[str, Any]): dictionary to write
+        """
         # Keys must be strings
         # Values must be h5py supported data types
         group = self.get_parent_group()
@@ -58,14 +66,22 @@ class NativeH5Writer(HDF5Writer):
 
 class NativeH5Reader(HDF5Reader):
     """DataLab signal/image objects HDF5 guidata dataset Writer class,
-    supporting dictionary deserialization"""
+    supporting dictionary deserialization
+
+    Args:
+        filename (str): HDF5 file name
+    """
 
     def __init__(self, filename: str) -> None:
         super().__init__(filename)
         self.version = self.h5[H5_VERSION]
 
     def read_dict(self) -> dict[str, Any]:
-        """Read dictionary from h5 file"""
+        """Read dictionary from h5 file
+
+        Returns:
+            dict[str, Any]: dictionary read from h5 file
+        """
         group = self.get_parent_group()
         dict_group = group[self.option[-1]]
         dict_val = {}

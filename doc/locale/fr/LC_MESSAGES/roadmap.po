@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-26 16:23+0200\n"
+"POT-Creation-Date: 2023-06-29 09:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgid "Past milestones"
 msgstr ""
 
 #: ../../roadmap.rst:40
-msgid "DataLab 1.0"
+msgid "DataLab 0.9"
 msgstr ""
 
 #: ../../roadmap.rst:42
@@ -332,5 +332,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Add support for timeseries"
+#~ msgstr ""
+
+#~ msgid "DataLab 1.0"
 #~ msgstr ""
 

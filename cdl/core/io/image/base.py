@@ -33,14 +33,29 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
 
     @staticmethod
     def create_object(filename: str, index: int | None = None) -> ImageObj:
-        """Create empty object"""
+        """Create empty object
+
+        Args:
+            filename (str): File name
+            index (int | None): Index of object in file
+
+        Returns:
+            ImageObj: Image object
+        """
         name = reduce_path(filename)
         if index is not None:
             name += f"_{index}"
         return create_image(name)
 
     def read(self, filename: str) -> ImageObj:
-        """Read data from file, return one or more objects"""
+        """Read data from file, return one or more objects
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            ImageObj: Image object
+        """
         obj = self.create_object(filename)
         obj.data = self.read_data(filename)
         return obj
@@ -48,4 +63,11 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
     @staticmethod
     @abc.abstractmethod
     def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
+        """Read data and return it
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            np.ndarray: Image data
+        """

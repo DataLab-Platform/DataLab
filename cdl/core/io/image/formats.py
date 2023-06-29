@@ -21,10 +21,10 @@ from cdl.core.model.image import ImageObj
 
 
 class ClassicsImageFormat(ImageFormatBase):
-    """Object representing a classic image file types"""
+    """Object representing classic image file types"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("BMP, JPEG, PNG and TIFF files"),
+        name="BMP, JPEG, PNG, TIFF",
         extensions="*.bmp *.jpg *.jpeg *.png *.tif *.tiff",
         readable=True,
         writeable=True,
@@ -40,11 +40,22 @@ class ClassicsImageFormat(ImageFormatBase):
         skimage.io.imsave(filename, obj.data, check_contrast=False)
 
 
-class NumPyImageFormat(ImageFormatBase):
-    """Object representing a NumPy image file types"""
+class JPEG2000ImageFormat(ClassicsImageFormat):
+    """Object representing JPEG2000 image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("NumPy binary files"),
+        name="JPEG2000",
+        extensions="*.jp2",
+        readable=True,
+        writeable=True,
+    )
+
+
+class NumPyImageFormat(ImageFormatBase):
+    """Object representing NumPy image file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name="NumPy",
         extensions="*.npy",
         readable=True,
         writeable=True,
@@ -61,7 +72,7 @@ class NumPyImageFormat(ImageFormatBase):
 
 
 class TextImageFormat(ImageFormatBase):
-    """Object representing a text image file types"""
+    """Object representing text image file type"""
 
     FORMAT_INFO = FormatInfo(
         name=_("Text files"),
@@ -103,10 +114,10 @@ class TextImageFormat(ImageFormatBase):
 
 
 class DICOMImageFormat(ImageFormatBase):
-    """Object representing a DICOM image file types"""
+    """Object representing DICOM image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("DICOM files"),
+        name="DICOM",
         extensions="*.dcm *.dicom",
         readable=True,
         writeable=False,
@@ -120,10 +131,10 @@ class DICOMImageFormat(ImageFormatBase):
 
 
 class AndorSIFImageFormat(ImageFormatBase):
-    """Object representing an Andor SIF image file types"""
+    """Object representing an Andor SIF image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("Andor SIF files"),
+        name="Andor SIF",
         extensions="*.sif",
         readable=True,
         writeable=False,
@@ -150,10 +161,10 @@ class AndorSIFImageFormat(ImageFormatBase):
 
 
 class SpiriconImageFormat(ImageFormatBase):
-    """Object representing a SPIRICON image file types"""
+    """Object representing Spiricon image file type"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("SPIRICON files"),
+        name="Spiricon",
         extensions="*.scor-data",
         readable=True,
         writeable=False,
@@ -163,35 +174,3 @@ class SpiriconImageFormat(ImageFormatBase):
     def read_data(filename: str) -> np.ndarray:
         """Read data and return it"""
         return funcs.imread_scor(filename)
-
-
-class FXDImageFormat(ImageFormatBase):
-    """Object representing a FXD image file types"""
-
-    FORMAT_INFO = FormatInfo(
-        name=_("FXD files"),
-        extensions="*.fxd",
-        readable=True,
-        writeable=False,
-    )
-
-    @staticmethod
-    def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
-        return funcs.imread_fxd(filename)
-
-
-class XYZImageFormat(ImageFormatBase):
-    """Object representing a XYZ image file types"""
-
-    FORMAT_INFO = FormatInfo(
-        name=_("XYZ files"),
-        extensions="*.xyz",
-        readable=True,
-        writeable=False,
-    )
-
-    @staticmethod
-    def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
-        return funcs.imread_xyz(filename)

@@ -11,7 +11,6 @@ DataLab I/O image functions
 
 import os
 import re
-import struct
 import time
 
 import numpy as np
@@ -72,7 +71,7 @@ class SIFFile:
     # pylint: disable=too-many-instance-attributes
     # pylint: disable=too-many-statements
 
-    def __init__(self, filepath):
+    def __init__(self, filepath: str) -> None:
         self.filepath = filepath
         self.original_filename = None
         self.filesize = None
@@ -104,7 +103,8 @@ class SIFFile:
         self.grating_blaze = None
         self._read_header(filepath)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Return a string representation of the SIFFile object"""
         info = (
             ("Original Filename", self.original_filename),
             ("Date", self.date),
@@ -135,8 +135,12 @@ class SIFFile:
         res = object.__repr__(self) + "\n" + res
         return res
 
-    def _read_header(self, filepath):
-        """Read SIF file header"""
+    def _read_header(self, filepath: str) -> None:
+        """Read SIF file header
+
+        Args:
+            filepath (str): path to SIF file
+        """
         with open(filepath, "rb") as sif_file:
             i_wavelength_info = None
             headerlen = None
@@ -214,7 +218,7 @@ class SIFFile:
         self.filesize = os.path.getsize(filepath)
         self.datasize = self.width * self.height * 4 * self.stacksize
 
-    def read_all(self):
+    def read_all(self) -> np.ndarray:
         """
         Returns all blocks (i.e. frames) in the .sif file as a numpy array.
         :return: a numpy array with shape (blocks, y, x)
@@ -226,8 +230,15 @@ class SIFFile:
         return data.reshape(self.stacksize, self.height, self.width)
 
 
-def imread_sif(filename):
-    """Open a SIF image"""
+def imread_sif(filename: str) -> np.ndarray:
+    """Open a SIF image
+
+    Args:
+        filename (str): path to SIF file
+
+    Returns:
+        np.ndarray: image data
+    """
     sif_file = SIFFile(filename)
     return sif_file.read_all()
 
@@ -238,9 +249,13 @@ def imread_sif(filename):
 
 
 class SCORFile:
-    """Object representing a SPIRICON .scor-data file"""
+    """Object representing a SPIRICON .scor-data file
 
-    def __init__(self, filepath):
+    Args:
+        filepath (str): path to .scor-data file
+    """
+
+    def __init__(self, filepath: str) -> None:
         self.filepath = filepath
         self.metadata = None
         self.width = None
@@ -250,7 +265,8 @@ class SCORFile:
         self.datasize = None
         self._read_header()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Return a string representation of the object"""
         info = (
             ("Image width", f"{self.width:d}"),
             ("Image Height", f"{self.height:d}"),
@@ -266,7 +282,7 @@ class SCORFile:
         res = object.__repr__(self) + "\n" + res
         return res
 
-    def _read_header(self):
+    def _read_header(self) -> None:
         """Read file header"""
         with open(self.filepath, "rb") as data_file:
             metadata = {}
@@ -290,7 +306,7 @@ class SCORFile:
         self.datasize = self.width * self.height * 2
         self.m_offset = self.filesize - self.datasize - 8
 
-    def read_all(self):
+    def read_all(self) -> np.ndarray:
         """Read all data"""
         with open(self.filepath, "rb") as data_file:
             data_file.seek(self.m_offset)
@@ -299,103 +315,14 @@ class SCORFile:
         return data.reshape(self.height, self.width)
 
 
-def imread_scor(filename):
-    """Open a SPIRICON image"""
+def imread_scor(filename: str) -> np.ndarray:
+    """Open a SPIRICON image
+
+    Args:
+        filename (str): path to SPIRICON file
+
+    Returns:
+        np.ndarray: image data
+    """
     scor_file = SCORFile(filename)
     return scor_file.read_all()
-
-
-# ==============================================================================
-# FXD I/O functions
-# ==============================================================================
-
-
-class FXDFile:
-    """Class implementing FXD Image file reading feature"""
-
-    HEADER = "<llllllffl"
-
-    def __init__(self, fname=None, debug=False):
-        self.__debug = debug
-        self.file_format = None  # long
-        self.nbcols = None  # long
-        self.nbrows = None  # long
-        self.nbframes = None  # long
-        self.pixeltype = None  # long
-        self.quantlevels = None  # long
-        self.maxlevel = None  # float
-        self.minlevel = None  # float
-        self.comment_length = None  # long
-        self.fname = None
-        self.data = None
-        if fname is not None:
-            self.load(fname)
-
-    def __repr__(self):
-        info = (
-            ("Image width", f"{self.nbcols:d}"),
-            ("Image Height", f"{self.nbrows:d}"),
-            ("Frame number", f"{self.nbframes:d}"),
-            ("File format", f"{self.file_format:d}"),
-            ("Pixel type", f"{self.pixeltype:d}"),
-            ("Quantlevels", f"{self.quantlevels:d}"),
-            ("Min. level", f"{self.minlevel:f}"),
-            ("Max. level", f"{self.maxlevel:f}"),
-            ("Comment length", f"{self.comment_length:d}"),
-        )
-        desc_len = max(len(d) for d in list(zip(*info))[0]) + 3
-        res = ""
-        for description, value in info:
-            res += ("{:" + str(desc_len) + "}{}\n").format(description + ": ", value)
-
-        res = object.__repr__(self) + "\n" + res
-        return res
-
-    def load(self, fname):
-        """Load header and image pixel data"""
-        with open(fname, "rb") as data_file:
-            header_s = struct.Struct(self.HEADER)
-            record = data_file.read(9 * 4)
-            unpacked_rec = header_s.unpack(record)
-            (
-                self.file_format,
-                self.nbcols,
-                self.nbrows,
-                self.nbframes,
-                self.pixeltype,
-                self.quantlevels,
-                self.maxlevel,
-                self.minlevel,
-                self.comment_length,
-            ) = unpacked_rec
-            if self.__debug:
-                print(unpacked_rec)
-                print(self)
-            data_file.seek(128 + self.comment_length)
-            if self.pixeltype == 0:
-                size, dtype = 4, np.float32
-            elif self.pixeltype == 1:
-                size, dtype = 2, np.uint16
-            elif self.pixeltype == 2:
-                size, dtype = 1, np.uint8
-            else:
-                raise NotImplementedError(f"Unsupported pixel type: {self.pixeltype}")
-            block = data_file.read(self.nbrows * self.nbcols * size)
-        data = np.fromstring(block, dtype=dtype)
-        self.data = data.reshape(self.nbrows, self.nbcols)
-
-
-def imread_fxd(filename):
-    """Open an FXD image"""
-    fxd_file = FXDFile(filename)
-    return fxd_file.data
-
-
-def imread_xyz(filename):
-    """Open XYZ file image and return a NumPy array"""
-    with open(filename, "rb") as fdesc:
-        cols = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
-        rows = int(np.fromfile(fdesc, dtype=np.uint16, count=1)[0])
-        arr = np.fromfile(fdesc, dtype=np.uint16, count=cols * rows)
-        arr = arr.reshape((rows, cols))
-    return np.fliplr(arr)

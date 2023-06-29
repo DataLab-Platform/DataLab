@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-26 16:23+0200\n"
+"POT-Creation-Date: 2023-06-29 10:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -64,8 +64,8 @@ msgstr ""
 "système d'entrée/sortie HDF5 de DataLab."
 
 #: ../../features/general/plugins.rst:16
-msgid "Example"
-msgstr "Exemple"
+msgid "Example: processing plugin"
+msgstr "Exemple : plugin de traitement"
 
 #: ../../features/general/plugins.rst:18
 msgid "Here is a simple example of a plugin that adds a new features to DataLab."
@@ -73,7 +73,17 @@ msgstr ""
 "Voici un exemple simple d'un plugin qui ajoute une nouvelle "
 "fonctionnalité à DataLab."
 
-#: ../../features/general/plugins.rst:24
+#: ../../features/general/plugins.rst:23
+msgid "Example: input/output plugin"
+msgstr "Exemple : plugin d'entrée/sortie"
+
+#: ../../features/general/plugins.rst:25
+msgid ""
+"Here is a simple example of a plugin that adds a new file formats to "
+"DataLab."
+msgstr "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de fichiers à DataLab."
+
+#: ../../features/general/plugins.rst:31
 msgid "Public API"
 msgstr "API publique"
 
@@ -176,6 +186,53 @@ msgstr ""
 msgid "Create empty object"
 msgstr ""
 
+#: cdl.core.io.image.base.ImageFormatBase.create_object
+#: cdl.core.io.image.base.ImageFormatBase.read
+#: cdl.core.io.image.base.ImageFormatBase.read_data
+#: cdl.core.io.signal.base.SignalFormatBase.create_object
+#: cdl.core.io.signal.base.SignalFormatBase.read
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata
+#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata of
+msgid "Parameters"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object:3
+#: cdl.core.io.image.base.ImageFormatBase.read:3
+#: cdl.core.io.image.base.ImageFormatBase.read_data:3
+#: cdl.core.io.signal.base.SignalFormatBase.create_object:3
+#: cdl.core.io.signal.base.SignalFormatBase.read:3
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:3 of
+msgid "File name"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object:5
+#: cdl.core.io.signal.base.SignalFormatBase.create_object:5 of
+msgid "Index of object in file"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object
+#: cdl.core.io.image.base.ImageFormatBase.read
+#: cdl.core.io.image.base.ImageFormatBase.read_data
+#: cdl.core.io.signal.base.SignalFormatBase.create_object
+#: cdl.core.io.signal.base.SignalFormatBase.read
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object:8
+#: cdl.core.io.image.base.ImageFormatBase.read:6 of
+msgid "Image object"
+msgstr ""
+
+#: cdl.core.io.image.base.ImageFormatBase.create_object
+#: cdl.core.io.image.base.ImageFormatBase.read
+#: cdl.core.io.image.base.ImageFormatBase.read_data
+#: cdl.core.io.signal.base.SignalFormatBase.create_object
+#: cdl.core.io.signal.base.SignalFormatBase.read
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata of
+msgid "Return type"
+msgstr ""
+
 #: cdl.core.io.image.base.ImageFormatBase.read:1
 #: cdl.core.io.signal.base.SignalFormatBase.read:1 of
 msgid "Read data from file, return one or more objects"
@@ -185,15 +242,33 @@ msgstr ""
 msgid "Read data and return it"
 msgstr ""
 
+#: cdl.core.io.image.base.ImageFormatBase.read_data:6 of
+msgid "Image data"
+msgstr ""
+
 #: cdl.core.io.signal.base.SignalFormatBase:1 of
 msgid "Object representing a signal file type"
+msgstr ""
+
+#: cdl.core.io.signal.base.SignalFormatBase.create_object:8
+#: cdl.core.io.signal.base.SignalFormatBase.read:6
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:5
+#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:3 of
+msgid "Signal object"
 msgstr ""
 
 #: cdl.core.io.signal.base.SignalFormatBase.read_xydata:1 of
 msgid "Read data and metadata from file, write metadata to object, return xydata"
 msgstr ""
 
+#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:8
+#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:5 of
+msgid "XY data"
+msgstr ""
+
 #: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:1 of
 msgid "Set signal xydata"
 msgstr ""
 
+#~ msgid "Example"
+#~ msgstr "Exemple"

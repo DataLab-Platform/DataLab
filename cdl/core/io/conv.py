@@ -16,7 +16,14 @@ import numpy as np
 
 def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
     """Convert 2-D array into a list of 1-D array data (x, y, dx, dy).
-    This is useful for importing data and creating a DataLab signal with it."""
+    This is useful for importing data and creating a DataLab signal with it.
+
+    Args:
+        data (np.ndarray): 2-D array of data
+
+    Returns:
+        list[np.ndarray]: list of 1-D array data (x, y, dx, dy)
+    """
     rows, cols = data.shape
     for colnb in (2, 3, 4):
         if cols == colnb and rows > colnb:

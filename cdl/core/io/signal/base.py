@@ -38,14 +38,29 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
 
     @staticmethod
     def create_object(filename: str, index: int | None = None) -> SignalObj:
-        """Create empty object"""
+        """Create empty object
+
+        Args:
+            filename (str): File name
+            index (int | None): Index of object in file
+
+        Returns:
+            SignalObj: Signal object
+        """
         name = reduce_path(filename)
         if index is not None:
             name += f"_{index}"
         return create_signal(name)
 
     def read(self, filename: str) -> SignalObj:
-        """Read data from file, return one or more objects"""
+        """Read data from file, return one or more objects
+
+        Args:
+            filename (str): File name
+
+        Returns:
+            SignalObj: Signal object
+        """
         obj = self.create_object(filename)
         xydata = self.read_xydata(filename, obj)
         self.set_signal_xydata(obj, xydata)
@@ -53,7 +68,12 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
 
     @staticmethod
     def set_signal_xydata(signal: SignalObj, xydata: np.ndarray) -> None:
-        """Set signal xydata"""
+        """Set signal xydata
+
+        Args:
+            signal (SignalObj): Signal object
+            xydata (np.ndarray): XY data
+        """
         assert isinstance(xydata, np.ndarray), "Data type not supported"
         assert len(xydata.shape) in (1, 2), "Data not supported"
         if len(xydata.shape) == 1:
@@ -64,4 +84,12 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
 
     @abc.abstractmethod
     def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
-        """Read data and metadata from file, write metadata to object, return xydata"""
+        """Read data and metadata from file, write metadata to object, return xydata
+
+        Args:
+            filename (str): File name
+            obj (SignalObj): Signal object
+
+        Returns:
+            np.ndarray: XY data
+        """

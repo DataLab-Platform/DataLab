@@ -20,62 +20,44 @@ from cdl.core.model.signal import SignalObj
 
 
 def read_signal(filename: str) -> SignalObj:
-    """
-    Read a signal from a file.
+    """Read a signal from a file.
 
-    Parameters
-    ----------
-    filename: str
-        File name.
+    Args:
+        filename (str): File name.
 
-    Returns
-    -------
-    signal: Signal
-        Signal.
+    Returns:
+        Signal: Signal.
     """
     return SignalIORegistry.read(filename)
 
 
 def write_signal(filename: str, signal: SignalObj) -> None:
-    """
-    Write a signal to a file.
+    """Write a signal to a file.
 
-    Parameters
-    ----------
-    filename: str
-        File name.
-    signal: Signal
-        Signal.
+    Args:
+        filename (str): File name.
+        signal (Signal): Signal.
     """
     SignalIORegistry.write(filename, signal)
 
 
 def read_image(filename: str) -> ImageObj:
-    """
-    Read an image from a file.
+    """Read an image from a file.
 
-    Parameters
-    ----------
-    filename: str
-        File name.
+    Args:
+        filename (str): File name.
 
-    Returns
-    -------
-    image: Image
-        Image.
+    Returns:
+        Image: Image.
     """
     return ImageIORegistry.read(filename)
 
 
 def write_image(filename: str, image: ImageObj) -> None:
-    """
-    Write an image to a file.
+    """Write an image to a file.
 
-    Parameters
-    ----------
-    filename: str
-        File name.
-    image: Image
-        Image.
+    Args:
+        filename (str): File name.
+        image (Image): Image.
     """
     ImageIORegistry.write(filename, image)
