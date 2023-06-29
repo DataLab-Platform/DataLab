@@ -1,9 +1,9 @@
 ![DataLab](./doc/images/DataLab-banner.png)
 
 [![license](https://img.shields.io/pypi/l/DataLab.svg)](./LICENSE)
-[![pypi version](https://img.shields.io/pypi/v/DataLab.svg)](https://pypi.org/project/cdl/)
+[![pypi version](https://img.shields.io/pypi/v/DataLab.svg)](https://pypi.org/project/DataLab/)
 [![PyPI status](https://img.shields.io/pypi/status/DataLab.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/DataLab.svg)](https://pypi.python.org/pypi/cdl/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/DataLab.svg)](https://pypi.python.org/pypi/DataLab/)
 
 DataLab is developed by [Codra](https://codra.net/).
 

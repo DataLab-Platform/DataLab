@@ -46,7 +46,7 @@ Copyrights and licensing
 
 .. _guidata: https://pypi.python.org/pypi/guidata
 .. _guiqwt: https://pypi.python.org/pypi/guiqwt
-.. _PyPI: https://pypi.python.org/pypi/cdl
+.. _PyPI: https://pypi.python.org/pypi/DataLab
 .. _Home: https://codra-ingenierie-informatique.github.io/DataLab/
 .. _GitHub: https://github.com/Codra-Ingenierie-Informatique/DataLab
 .. _Codra: https://codra.net/
