@@ -10,6 +10,9 @@ guidata_locale = os.path.join(sitepackages, 'guidata', 'locale', 'fr', 'LC_MESSA
 guiqwt_images = os.path.join(sitepackages, 'guiqwt', 'images')
 guiqwt_locale = os.path.join(sitepackages, 'guiqwt', 'locale', 'fr', 'LC_MESSAGES')
 
+from PyInstaller.utils.hooks import collect_submodules
+all_hidden_imports = collect_submodules('cdl')
+
 a = Analysis(['cdl\\start.pyw'],
              pathex=[],
              binaries=[],
@@ -18,10 +21,11 @@ a = Analysis(['cdl\\start.pyw'],
                     (guidata_locale, 'guidata\\locale\\fr\\LC_MESSAGES'),
                     (guiqwt_images, 'guiqwt\\images'),
                     (guiqwt_locale, 'guiqwt\\locale\\fr\\LC_MESSAGES'),
+                    ('cdl\\plugins', 'cdl\\plugins'),
                     ('cdl\\data', 'cdl\\data'),
                     ('cdl\\locale\\fr\\LC_MESSAGES\\cdl.mo', 'cdl\\locale\\fr\\LC_MESSAGES'),
                     ],
-             hiddenimports=[],
+             hiddenimports=all_hidden_imports,
              hookspath=[],
              hooksconfig={},
              runtime_hooks=[],
