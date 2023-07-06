@@ -392,7 +392,7 @@ class ObjectView(SimpleObjectTree):
 
         Args:
             selection (list): list of objects, group numbers or uuids
-            group_num (int, optional): group number. Defaults to None.
+            group_num (int | None): group number. Defaults to None.
         """
         if all(isinstance(obj, int) for obj in selection):
             groups = self.objmodel.get_groups()

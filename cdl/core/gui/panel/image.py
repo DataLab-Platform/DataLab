@@ -87,7 +87,8 @@ class ImagePanel(BaseDataPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (DataSet): new object parameters. If None, create a new one.
+            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+             If None, create a new one.
 
         Returns:
             New object parameters
@@ -109,8 +110,8 @@ class ImagePanel(BaseDataPanel):
         """Create a new object (image).
 
         Args:
-            newparam (DataSet): new object parameters
-            addparam (DataSet): additional parameters
+            newparam (Daguidata.dataset.datatypes.DataSettaSet): new object parameters
+            addparam (guidata.dataset.datatypes.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the object to the panel (default: True)
 
@@ -133,7 +134,7 @@ class ImagePanel(BaseDataPanel):
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+            refresh_plot (bool | None): Refresh plot. Defaults to True.
         """
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.invalidate_maskdata_cache()

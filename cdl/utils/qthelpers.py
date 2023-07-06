@@ -138,7 +138,7 @@ def qt_app_context(
             if exec_loop and not exception_occured:
                 QAPP_INSTANCE.exec()
         if exception_occured:
-            raise
+            raise  # pylint: disable=misplaced-bare-raise
 
     if enable_logs and Conf.main.faulthandler_enabled.get():
         faulthandler.disable()

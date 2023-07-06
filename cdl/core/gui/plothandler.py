@@ -166,7 +166,7 @@ class BasePlotHandler:
         Args:
             oid (str): object uuid
             ref_item (CurveItem | MaskedImageItem): reference item
-            just_show (bool, optional): if True, only show the item (do not update it,
+            just_show (bool | None): if True, only show the item (do not update it,
                 except regarding the reference item). Defaults to False.
         """
         if not just_show:
@@ -189,10 +189,10 @@ class BasePlotHandler:
         """Refresh plot.
 
         Args:
-            what (str, optional): string describing the objects to refresh.
+            what (str | None): string describing the objects to refresh.
                 Valid values are "selected" (refresh the selected objects),
                 "all" (refresh all objects), or an object uuid.
-            update_items (bool, optional): if True, update the items.
+            update_items (bool | None): if True, update the items.
                 If False, only show the items (do not update them, except if the
                 option "Use reference item LUT range" is enabled and more than one
                 item is selected). Defaults to True.
@@ -311,10 +311,10 @@ class ImagePlotHandler(BasePlotHandler):
         """Refresh plot.
 
         Args:
-            what (str, optional): string describing the objects to refresh.
+            what (str | None): string describing the objects to refresh.
                 Valid values are "selected" (refresh the selected objects),
                 "all" (refresh all objects), or an object uuid.
-            update_items (bool, optional): if True, update the items.
+            update_items (bool | None): if True, update the items.
                 If False, only show the items (do not update them, except if the
                 option "Use reference item LUT range" is enabled and more than one
                 item is selected). Defaults to True.

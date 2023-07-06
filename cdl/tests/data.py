@@ -52,8 +52,8 @@ def create_paracetamol_signal(
     """Create test signal (Paracetamol molecule spectrum)
 
     Args:
-        size (int, optional): Size of the data. Defaults to None.
-        title (str, optional): Title of the signal. Defaults to None.
+        size (int | None): Size of the data. Defaults to None.
+        title (str | None): Title of the signal. Defaults to None.
 
     Returns:
         SignalObj: Signal object
@@ -102,7 +102,7 @@ def add_gaussian_noise_to_signal(
 
     Args:
         signal (cdl.obj.SignalObj): Signal object
-        p (GaussianNoiseParam, optional): Gaussian noise parameters.
+        p (GaussianNoiseParam | None): Gaussian noise parameters.
     """
     if p is None:
         p = GaussianNoiseParam()
@@ -121,15 +121,15 @@ def create_noisy_signal(
     """Create curve data, optionally noised
 
     Args:
-        noiseparam (GaussianNoiseParam, optional): Noise parameters. Default:
+        noiseparam (GaussianNoiseParam | None): Noise parameters. Default:
             None: No noise
-        newparam (cdl.obj.NewSignalParam, optional): New signal parameters.
+        newparam (cdl.obj.NewSignalParam | None): New signal parameters.
             Default: Gaussian, size=500, xmin=-10, xmax=10
-        addparam (cdl.obj.GaussLorentzVoigtParam, optional): Additional parameters.
+        addparam (cdl.obj.GaussLorentzVoigtParam | None): Additional parameters.
             Default: a=1.0, sigma=1.0, mu=0.0, ymin=0.0
-        title (str, optional): Title of the signal. Default: None
+        title (str | None): Title of the signal. Default: None
             If not None, overrides the title in newparam
-        noised (bool, optional): If True, add noise to the signal.
+        noised (bool | None): If True, add noise to the signal.
             Default: None (use noiseparam)
             If True, eventually creates a new noiseparam if None
 
@@ -186,8 +186,8 @@ def create_2d_random(
     Args:
         size (int): Size of the data
         dtype (np.dtype): Data type
-        level (float, optional): Level of the random noise. Defaults to 0.1.
-        seed (int, optional): Seed for random number generator. Defaults to 1.
+        level (float | None): Level of the random noise. Defaults to 0.1.
+        seed (int | None): Seed for random number generator. Defaults to 1.
 
     Returns:
         np.ndarray: 2D data
@@ -211,11 +211,11 @@ def create_2d_gaussian(
     Args:
         size (int): Size of the data
         dtype (np.dtype): Data type
-        x0 (float, optional): x0. Defaults to 0.
-        y0 (float, optional): y0. Defaults to 0.
-        mu (float, optional): mu. Defaults to 0.0.
-        sigma (float, optional): sigma. Defaults to 2.0.
-        amp (float, optional): Amplitude. Defaults to None.
+        x0 (float | None): x0. Defaults to 0.
+        y0 (float | None): y0. Defaults to 0.
+        mu (float | None): mu. Defaults to 0.0.
+        sigma (float | None): sigma. Defaults to 2.0.
+        amp (float | None): Amplitude. Defaults to None.
 
     Returns:
         np.ndarray: 2D data
@@ -278,9 +278,9 @@ def get_peak2d_data(
     testing 2D peak detection or similar image processing features
 
     Args:
-        p (PeakDataParam, optional): Peak data test image parameters. Defaults to None.
-        seed (int, optional): Seed for random number generator. Defaults to None.
-        multi (bool, optional): If True, multiple peaks are generated.
+        p (PeakDataParam | None): Peak data test image parameters. Defaults to None.
+        seed (int | None): Seed for random number generator. Defaults to None.
+        multi (bool | None): If True, multiple peaks are generated.
             Defaults to False.
 
     Returns:
@@ -316,7 +316,7 @@ def __set_default_size_dtype(
     """Set default shape and dtype
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
             If None, a new object is created.
 
     Returns:
@@ -353,7 +353,7 @@ def create_2dstep_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.Image
     """Creating 2D step image
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
 
     Returns:
         cdl.obj.ImageObj: Image object
@@ -406,7 +406,7 @@ def create_ring_image(p: RingParam | None = None) -> cdl.obj.ImageObj:
     """Creating 2D ring image
 
     Args:
-        p (RingParam, optional): Ring image parameters. Defaults to None.
+        p (RingParam | None): Ring image parameters. Defaults to None.
 
     Returns:
         cdl.obj.ImageObj: Image object
@@ -432,7 +432,7 @@ def create_peak2d_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.Image
     """Creating 2D peak image
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
 
     Returns:
         cdl.obj.ImageObj: Image object
@@ -451,7 +451,7 @@ def create_sincos_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.Image
     """Creating test image (sin(x)+cos(y))
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
 
     Returns:
         cdl.obj.ImageObj: Image object
@@ -472,7 +472,7 @@ def create_noisygauss_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.I
     """Create test image (2D noisy gaussian)
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
 
     Returns:
         ImageObj: Image object
@@ -493,7 +493,7 @@ def create_multigauss_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.I
     """Create test image (multiple 2D-gaussian peaks)
 
     Args:
-        p (cdl.obj.NewImageParam, optional): Image parameters. Defaults to None.
+        p (cdl.obj.NewImageParam | None): Image parameters. Defaults to None.
 
     Returns:
         ImageObj: Image object

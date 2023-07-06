@@ -19,7 +19,7 @@ def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
     This is useful for importing data and creating a DataLab signal with it.
 
     Args:
-        data (np.ndarray): 2-D array of data
+        data (numpy.ndarray): 2-D array of data
 
     Returns:
         list[np.ndarray]: list of 1-D array data (x, y, dx, dy)

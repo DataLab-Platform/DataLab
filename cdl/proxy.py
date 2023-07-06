@@ -30,10 +30,10 @@ class RemoteCDLProxy(RemoteClient):
     This class provides access to DataLab features from a proxy class.
 
     Args:
-        port (str, optional): XML-RPC port to connect to. If not specified,
+        port (str | None): XML-RPC port to connect to. If not specified,
             the port is automatically retrieved from DataLab configuration.
-        timeout (float, optional): Timeout in seconds. Defaults to 5.0.
-        retries (int, optional): Number of retries. Defaults to 10.
+        timeout (float | None): Timeout in seconds. Defaults to 5.0.
+        retries (int | None): Number of retries. Defaults to 10.
 
     Raises:
         CDLConnectionError: Unable to connect to DataLab
@@ -94,12 +94,12 @@ class CDLProxy(BaseProxy):
 
         Args:
             title (str): Signal title
-            xdata (np.ndarray): X data
-            ydata (np.ndarray): Y data
-            xunit (str, optional): X unit. Defaults to None.
-            yunit (str, optional): Y unit. Defaults to None.
-            xlabel (str, optional): X label. Defaults to None.
-            ylabel (str, optional): Y label. Defaults to None.
+            xdata (numpy.ndarray): X data
+            ydata (numpy.ndarray): Y data
+            xunit (str | None): X unit. Defaults to None.
+            yunit (str | None): Y unit. Defaults to None.
+            xlabel (str | None): X label. Defaults to None.
+            ylabel (str | None): Y label. Defaults to None.
 
         Returns:
             bool: True if signal was added successfully, False otherwise
@@ -125,13 +125,13 @@ class CDLProxy(BaseProxy):
 
         Args:
             title (str): Image title
-            data (np.ndarray): Image data
-            xunit (str, optional): X unit. Defaults to None.
-            yunit (str, optional): Y unit. Defaults to None.
-            zunit (str, optional): Z unit. Defaults to None.
-            xlabel (str, optional): X label. Defaults to None.
-            ylabel (str, optional): Y label. Defaults to None.
-            zlabel (str, optional): Z label. Defaults to None.
+            data (numpy.ndarray): Image data
+            xunit (str | None): X unit. Defaults to None.
+            yunit (str | None): Y unit. Defaults to None.
+            zunit (str | None): Z unit. Defaults to None.
+            xlabel (str | None): X label. Defaults to None.
+            ylabel (str | None): Y label. Defaults to None.
+            zlabel (str | None): Z label. Defaults to None.
 
         Returns:
             bool: True if image was added successfully, False otherwise
@@ -148,10 +148,11 @@ class CDLProxy(BaseProxy):
 
         Args:
             name (str): Compute function name
-            param (gdt.DataSet, optional): Compute function parameter. Defaults to None.
+            param (guidata.dataset.datatypes.DataSet | None): Compute function
+            parameter. Defaults to None.
 
         Returns:
-            gdt.DataSet: Compute function result
+            guidata.dataset.datatypes.DataSet: Compute function result
         """
         return self._cdl.calc(name, param)
 
@@ -184,8 +185,8 @@ class CDLProxy(BaseProxy):
 
         Args:
             index (int): Object index in current panel. Defaults to None.
-            group_index (int, optional): Group index. Defaults to None.
-            panel (str, optional): Panel name. Defaults to None.
+            group_index (int | None): Group index. Defaults to None.
+            panel (str | None): Panel name. Defaults to None.
 
         If ``index`` is not specified, returns the currently selected object.
         If ``group_index`` is not specified, return an object from the current group.
@@ -224,7 +225,7 @@ class CDLProxy(BaseProxy):
 
         Args:
             items (list): annotation plot items
-            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            refresh_plot (bool | None): refresh plot. Defaults to True.
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used.
         """

@@ -57,9 +57,9 @@ class WarningErrorMessageBox(QW.QDialog):
     Args:
         parent (QW.QWidget): parent widget
         category (str): message category ("error" or "warning")
-        context (str, optional): context. Defaults to None.
-        message (str, optional): message. Defaults to None.
-        tip (str, optional): tip. Defaults to None.
+        context (str | None): context. Defaults to None.
+        message (str | None): message. Defaults to None.
+        tip (str | None): tip. Defaults to None.
     """
 
     def __init__(
@@ -187,9 +187,9 @@ def show_warning_error(
     Args:
         parent (QW.QWidget): parent widget
         category (str): message category ("error" or "warning")
-        context (str, optional): context. Defaults to None.
-        message (str, optional): message. Defaults to None.
-        tip (str, optional): tip. Defaults to None.
+        context (str | None): context. Defaults to None.
+        message (str | None): message. Defaults to None.
+        tip (str | None): tip. Defaults to None.
     """
     if category == "warning" and Conf.proc.ignore_warnings.get():
         return

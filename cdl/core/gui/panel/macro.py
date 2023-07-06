@@ -289,7 +289,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Return macro at index (if index is None, return current macro)
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
 
         Returns:
             Macro: Macro object
@@ -323,7 +323,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Run current macro
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
         """
         macro = self.get_macro(index)
         assert macro is not None
@@ -333,7 +333,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Stop current macro
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
         """
         macro = self.get_macro(index)
         assert macro is not None
@@ -377,7 +377,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Rename macro
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
         """
         macro: Macro = self.get_macro(index)
         assert macro is not None
@@ -399,8 +399,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Export macro to file
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
-            filename (str, optional): Filename. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
+            filename (str | None): Filename. Defaults to None.
         """
         macro = self.get_macro(index)
         assert macro is not None
@@ -419,7 +419,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Import macro from file
 
         Args:
-            filename (str, optional): Filename. Defaults to None.
+            filename (str | None): Filename. Defaults to None.
 
         Returns:
             Macro: Macro object or None
@@ -442,7 +442,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Remove macro
 
         Args:
-            index (int, optional): Index of the macro. Defaults to None.
+            index (int | None): Index of the macro. Defaults to None.
         """
         if index is None:
             index = self.tabwidget.currentIndex()

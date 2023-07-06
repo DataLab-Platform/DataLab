@@ -507,7 +507,7 @@ class BaseDataPanel(AbstractPanel):
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool, optional): Refresh plot. Defaults to True.
+            refresh_plot (bool | None): Refresh plot. Defaults to True.
         """
         for index, obj in enumerate(self.objview.get_sel_objects(include_groups=True)):
             obj.reset_metadata_to_defaults()
@@ -523,7 +523,7 @@ class BaseDataPanel(AbstractPanel):
 
         Args:
             items (list): annotation plot items
-            refresh_plot (bool, optional): refresh plot. Defaults to True.
+            refresh_plot (bool | None): refresh plot. Defaults to True.
         """
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.add_annotations_from_items(items)
@@ -565,7 +565,8 @@ class BaseDataPanel(AbstractPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (DataSet): new object parameters. If None, create a new one.
+            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+             If None, create a new one.
 
         Returns:
             New object parameters
@@ -582,8 +583,8 @@ class BaseDataPanel(AbstractPanel):
         """Create a new object (signal/image).
 
         Args:
-            newparam (DataSet): new object parameters
-            addparam (DataSet): additional parameters
+            newparam (guidata.dataset.datatypes.DataSet): new object parameters
+            addparam (guidata.dataset.datatypes.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add object to panel (default: True)
 
@@ -1022,7 +1023,7 @@ class BaseDataPanel(AbstractPanel):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str, optional): Label title. Defaults to None.
+            title (str | None): Label title. Defaults to None.
                 If None, the title is the object title.
         """
         objs = self.objview.get_sel_objects(include_groups=True)

@@ -226,29 +226,29 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         Args:
             title (str): action title
-            position (int, optional): add action to menu at this position.
+            position (int | None): add action to menu at this position.
                 Defaults to None.
-            separator (bool, optional): add separator before action in menu
+            separator (bool | None): add separator before action in menu
                 (or after if pos is positive). Defaults to False.
-            triggered (Callable, optional): triggered callback. Defaults to None.
-            toggled (Callable, optional): toggled callback. Defaults to None.
-            shortcut (QW.QShortcut, optional): shortcut. Defaults to None.
-            icon (QG.QIcon, optional): icon. Defaults to None.
-            tip (str, optional): tooltip. Defaults to None.
-            select_condition (Callable, str, optional): selection condition.
+            triggered (Callable | None): triggered callback. Defaults to None.
+            toggled (Callable | None): toggled callback. Defaults to None.
+            shortcut (QW.QShortcut | None): shortcut. Defaults to None.
+            icon (QG.QIcon | None): icon. Defaults to None.
+            tip (str | None): tooltip. Defaults to None.
+            select_condition (Callable, str | None): selection condition.
                 Defaults to None.
                 If str, must be the name of a method of SelectCond, i.e. one of
                 "always", "exactly_one", "exactly_one_group",
                 "at_least_one_group_or_one_object", "at_least_one",
                 "at_least_two", "with_roi".
-            context_menu_pos (int, optional): add action to context menu at this
+            context_menu_pos (int | None): add action to context menu at this
                 position. Defaults to None.
-            context_menu_sep (bool, optional): add separator before action in
+            context_menu_sep (bool | None): add separator before action in
                 context menu (or after if context_menu_pos is positive).
                 Defaults to False.
-            toolbar_pos (int, optional): add action to toolbar at this position.
+            toolbar_pos (int | None): add action to toolbar at this position.
                 Defaults to None.
-            toolbar_sep (bool, optional): add separator before action in toolbar
+            toolbar_sep (bool | None): add separator before action in toolbar
                 (or after if toolbar_pos is positive). Defaults to False.
 
         Returns:
@@ -283,12 +283,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         Args:
             action (QW.QAction): action to add
-            category (ActionCategory, optional): action category. Defaults to None.
+            category (ActionCategory | None): action category. Defaults to None.
                 If None, action is added to the current category.
-            pos (int, optional): add action to menu at this position.
+            pos (int | None): add action to menu at this position.
                 Defaults to None.
                 If None, action is added at the end of the list.
-            sep (bool, optional): add separator before action in menu
+            sep (bool | None): add separator before action in menu
                 (or after if pos is positive). Defaults to False.
         """
         if category is None:
@@ -317,7 +317,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         Args:
             action (QW.QAction): action to add
-            select_condition (Callable, optional): condition to enable action.
+            select_condition (Callable | None): condition to enable action.
                 Defaults to None. If None, action is enabled if at least one
                 object is selected.
         """

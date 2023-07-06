@@ -73,7 +73,7 @@ class MainWindow(QW.QMainWindow):
         the result in the queue. The done_event is set when the computation is finished.
 
         Args:
-            array (np.ndarray): The input data to compute the filter on.
+            array (numpy.ndarray): The input data to compute the filter on.
         """
         start_time = time.time()
         result = sps.medfilt(array, 1) + create_2d_random(array.shape[0], array.dtype)

@@ -94,7 +94,7 @@ class Worker:
         """Terminate multiprocessing pool.
 
         Args:
-            wait (bool, optional): wait for all tasks to finish. Defaults to False.
+            wait (bool | None): wait for all tasks to finish. Defaults to False.
         """
         global POOL  # pylint: disable=global-statement
         if POOL is not None:
@@ -243,8 +243,8 @@ class BaseProcessor(QC.QObject):
 
         Args:
             func (Callable): function
-            param (gdt.DataSet | None): parameter
-            paramclass (gdt.DataSet | None): parameter class
+            param (guidata.dataset.datatypes.DataSet | None): parameter
+            paramclass (guidata.dataset.datatypes.DataSet | None): parameter class
             title (str | None): title
             comment (str | None): comment
             edit (bool | None): edit parameters
@@ -401,14 +401,15 @@ class BaseProcessor(QC.QObject):
         Args:
             func (Callable): function to execute
             shapetype (ShapeTypes): shape type
-            param (gdt.DataSet | None, optional): parameters. Defaults to None.
-            paramclass (gdt.DataSet | None, optional): parameters class.
-                Defaults to None.
-            title (str | None, optional): title of progress bar.
-                Defaults to None.
-            comment (str | None, optional): comment. Defaults to None.
-            edit (bool | None, optional): if True, edit parameters.
-                Defaults to None.
+            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+             Defaults to None.
+            paramclass (guidata.dataset.datatypes.DataSet | None | None): parameters
+             class. Defaults to None.
+            title (str | None | None): title of progress bar.
+             Defaults to None.
+            comment (str | None | None): comment. Defaults to None.
+            edit (bool | None | None): if True, edit parameters.
+             Defaults to None.
 
         Returns:
             dict[int, ResultShape]: dictionary of results
@@ -477,16 +478,17 @@ class BaseProcessor(QC.QObject):
         Args:
             name (str): name of function
             func (Callable): function to execute
-            param (gdt.DataSet | None, optional): parameters. Defaults to None.
-            paramclass (gdt.DataSet | None, optional): parameters class.
-                Defaults to None.
-            title (str | None, optional): title of progress bar.
-                Defaults to None.
-            comment (str | None, optional): comment. Defaults to None.
-            func_objs (Callable | None, optional): function to execute on objects.
-                Defaults to None.
-            edit (bool | None, optional): if True, edit parameters.
-                Defaults to None.
+            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+             Defaults to None.
+            paramclass (guidata.dataset.datatypes.DataSet | None | None):
+             parameters class. Defaults to None.
+            title (str | None | None): title of progress bar.
+             Defaults to None.
+            comment (str | None | None): comment. Defaults to None.
+            func_objs (Callable | None | None): function to execute on objects.
+             Defaults to None.
+            edit (bool | None | None): if True, edit parameters.
+             Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -578,14 +580,15 @@ class BaseProcessor(QC.QObject):
             obj2 (Obj | None): second object
             obj2_name (str): name of second object
             func (Callable): function to execute
-            param (gdt.DataSet | None, optional): parameters. Defaults to None.
-            paramclass (gdt.DataSet | None, optional): parameters class.
-                Defaults to None.
-            title (str | None, optional): title of progress bar.
-                Defaults to None.
-            comment (str | None, optional): comment. Defaults to None.
-            edit (bool | None, optional): if True, edit parameters.
-                Defaults to None.
+            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+             Defaults to None.
+            paramclass (guidata.dataset.datatypes.DataSet | None | None):
+             parameters class. Defaults to None.
+            title (str | None | None): title of progress bar.
+             Defaults to None.
+            comment (str | None | None): comment. Defaults to None.
+            edit (bool | None | None): if True, edit parameters.
+             Defaults to None.
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -648,7 +651,7 @@ class BaseProcessor(QC.QObject):
         """Eventually open ROI Editing Dialog, and return ROI editor data.
 
         Args:
-            param (ROIDataParam | None, optional): ROI data parameters.
+            param (ROIDataParam | None | None): ROI data parameters.
                 Defaults to None.
 
         Returns:
@@ -746,9 +749,9 @@ class BaseProcessor(QC.QObject):
         """Define Region Of Interest (ROI) for computing functions.
 
         Args:
-            extract (bool, optional): If True, ROI is extracted from data.
+            extract (bool | None): If True, ROI is extracted from data.
                 Defaults to False.
-            singleobj (bool | None, optional): If True, ROI is extracted from
+            singleobj (bool | None | None): If True, ROI is extracted from
                 first selected object only. If False, ROI is extracted from
                 all selected objects. If None, ROI is extracted from all
                 selected objects only if they all have the same ROI.

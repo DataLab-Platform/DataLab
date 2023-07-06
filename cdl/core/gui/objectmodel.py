@@ -309,7 +309,7 @@ class ObjectModel:
 
         Args:
             index (int): object index
-            group_index (int, optional): group index. Defaults to 0.
+            group_index (int | None): group index. Defaults to 0.
 
         Returns:
             object with index

@@ -109,7 +109,7 @@ def edit_default_image_settings(
     """Edit default image settings
 
     Args:
-        dataset (DataSet): Dataset
+        dataset (guidata.dataset.datatypes.DataSet): dataset
         item (DataItem): Data item
         value (Any): Value
         parent (QWidget): Parent widget

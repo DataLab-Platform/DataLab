@@ -19,7 +19,7 @@ def moving_average(y: np.ndarray, n: int) -> np.ndarray:
     """Compute moving average.
 
     Args:
-        y (np.ndarray): Input array
+        y (numpy.ndarray): Input array
         n (int): Window size
 
     Returns:
@@ -34,8 +34,8 @@ def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Compute numerical derivative.
 
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
 
     Returns:
         np.ndarray: Numerical derivative
@@ -50,8 +50,8 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     """Normalize input array to a given parameter.
 
     Args:
-        yin (np.ndarray): Input array
-        parameter (str, optional): Normalization parameter. Defaults to "maximum".
+        yin (numpy.ndarray): Input array
+        parameter (str | None): Normalization parameter. Defaults to "maximum".
             Supported values: 'maximum', 'amplitude', 'sum', 'energy'
 
     Returns:
@@ -84,9 +84,9 @@ def xy_fft(
     """Compute FFT on X,Y data.
 
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        shift (bool | None): Shift the zero frequency to the center of the spectrum.
             Defaults to True.
 
     Returns:
@@ -106,9 +106,9 @@ def xy_ifft(
     """Compute iFFT on X,Y data.
 
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
-        shift (bool, optional): Shift the zero frequency to the center of the spectrum.
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        shift (bool | None): Shift the zero frequency to the center of the spectrum.
             Defaults to True.
 
     Returns:
@@ -224,8 +224,8 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     """Return default peak X-position (assuming a single peak).
 
     Args:
-        x (np.ndarray): X data
-        y (np.ndarray): Y data
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
 
     Returns:
         float: Peak X-position

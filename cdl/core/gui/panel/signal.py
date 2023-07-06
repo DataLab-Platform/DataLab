@@ -56,7 +56,8 @@ class SignalPanel(BaseDataPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (DataSet): new object parameters. If None, create a new one.
+            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+             If None, create a new one.
 
         Returns:
             New object parameters
@@ -79,8 +80,8 @@ class SignalPanel(BaseDataPanel):
         """Create a new object (signal).
 
         Args:
-            newparam (DataSet): new object parameters
-            addparam (DataSet): additional parameters
+            newparam (guidata.dataset.datatypes.DataSet): new object parameters
+            addparam (guidata.dataset.datatypes.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the new object to the panel (default: True)
 

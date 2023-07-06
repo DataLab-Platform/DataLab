@@ -72,7 +72,7 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
 
         Args:
             signal (SignalObj): Signal object
-            xydata (np.ndarray): XY data
+            xydata (numpy.ndarray): XY data
         """
         assert isinstance(xydata, np.ndarray), "Data type not supported"
         assert len(xydata.shape) in (1, 2), "Data not supported"

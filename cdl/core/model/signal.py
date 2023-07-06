@@ -579,7 +579,7 @@ def create_signal_from_param(
 
     Args:
         newparam (NewSignalParam): new signal parameters
-        addparam (DataSet): additional parameters
+        addparam (guidata.dataset.datatypes.DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 

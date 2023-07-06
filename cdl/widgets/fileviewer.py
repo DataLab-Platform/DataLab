@@ -62,7 +62,7 @@ class FileViewerWidget(QW.QWidget):
     """File viewer widget
 
     Args:
-        parent (QW.QWidget, optional): parent widget. Defaults to None.
+        parent (QW.QWidget | None): parent widget. Defaults to None.
     """
 
     def __init__(self, language: str | None = None, parent: QW.QWidget = None) -> None:

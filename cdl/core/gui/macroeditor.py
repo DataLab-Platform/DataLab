@@ -39,7 +39,7 @@ class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
 
     Args:
         console (PythonShellWidget): Python shell widget
-        name (str, optional): Macro name. Defaults to None.
+        name (str | None): Macro name. Defaults to None.
     """
 
     PREFIX = "m"
@@ -215,7 +215,7 @@ print("All done!")
 
         Args:
             text (str): Text to be printed
-            error (bool, optional): Print as error. Defaults to False.
+            error (bool | None): Print as error. Defaults to False.
         """
         msg = f"---({time.ctime()})---[{text}]{os.linesep}"
         if eol_before:

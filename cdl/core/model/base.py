@@ -401,7 +401,7 @@ class ResultShape:
         """Make plot item.
 
         Args:
-            args (np.ndarray): shape data
+            args (numpy.ndarray): shape data
             fmt (str): numeric format (e.g. "%.3f")
             lbl (bool): if True, show shape labels
             option (str): shape style option (e.g. "shape/drag")
@@ -764,7 +764,7 @@ class BaseObj(metaclass=BaseObjMeta):
             label (str): label
             shapetype (ShapeTypes): shape type
             array (numpy.ndarray): array
-            param (DataSet): parameters
+            param (guidata.dataset.datatypes.DataSet): parameters
 
         Returns:
             ResultShape: result shape

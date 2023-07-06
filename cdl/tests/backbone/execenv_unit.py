@@ -35,7 +35,7 @@ def get_subprocess_execenv_dict(args: list[str], env: dict | None = None) -> dic
 
     Args:
         args (list[str]): command-line arguments
-        env (dict, optional): environment variables to pass to subprocess
+        env (dict | None): environment variables to pass to subprocess
 
     Returns:
         dict[str, str | int | bool | None]: CDL execution environment dict
@@ -52,7 +52,7 @@ def assert_two_dicts_are_equal(
     Args:
         dict1 (dict): first dict
         dict2 (dict): second dict
-        exceptions (tuple[str], optional): keys to ignore
+        exceptions (tuple[str] | None): keys to ignore
     """
     diff_keys = []
     for key in dict1:

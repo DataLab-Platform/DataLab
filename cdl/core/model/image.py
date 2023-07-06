@@ -799,7 +799,7 @@ def create_image_from_param(
 
     Args:
         newparam (NewImageParam): new image parameters
-        addparam (DataSet): additional parameters
+        addparam (guidata.dataset.datatypes.DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 

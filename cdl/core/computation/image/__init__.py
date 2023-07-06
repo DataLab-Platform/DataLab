@@ -265,7 +265,7 @@ def rotate_obj_coords(
         angle (float): rotation angle (in degrees)
         obj (ImageObj): image object
         orig (ImageObj): original image object
-        coords (np.ndarray): coordinates to rotate
+        coords (numpy.ndarray): coordinates to rotate
     Returns:
         np.ndarray: output data
     """
@@ -798,7 +798,7 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
 def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     """Return centroid coordinates
     Args:
-        data (np.ndarray): input data
+        data (numpy.ndarray): input data
     Returns:
         np.ndarray: centroid coordinates
     """
@@ -820,7 +820,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
     """Return diameter coords for the circle contour enclosing image
     values above threshold (FWHM)
     Args:
-        data (np.ndarray): input data
+        data (numpy.ndarray): input data
     Returns:
         np.ndarray: diameter coords
     """
