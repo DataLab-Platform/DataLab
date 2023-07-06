@@ -37,6 +37,7 @@ External resources:
    features/general/index
    features/signal/index
    features/image/index
+   dev/index
 
 Copyrights and licensing
 ------------------------
