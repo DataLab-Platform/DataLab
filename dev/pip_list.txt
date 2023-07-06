@@ -21,8 +21,8 @@ doc8                          0.11.1
 docutils                      0.17.1
 esbonio                       0.11.2
 future                        0.18.2
-guidata                       2.3.1
-guiqwt                        4.3.2
+guidata                       3.0.0
+guiqwt                        4.4.0
 h5py                          3.7.0
 idna                          3.3
 imageio                       2.17.0

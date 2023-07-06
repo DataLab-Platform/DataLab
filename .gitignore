@@ -10,6 +10,9 @@ releases/
 *.chm
 .doctrees/
 doc/install_requires.txt
+doc/extras_require-dev.txt
+doc/extras_require-doc.txt
+*.bak
 
 # Created by https://www.gitignore.io/api/python
 

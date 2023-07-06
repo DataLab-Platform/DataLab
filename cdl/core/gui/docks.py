@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 from guidata.configtools import get_image_file_path
 from guidata.qthelpers import is_dark_mode
-from guidata.qtwidgets import DockableWidget
+from guidata.widgets.dockable import DockableWidget
 from guiqwt.plot import ImageWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG

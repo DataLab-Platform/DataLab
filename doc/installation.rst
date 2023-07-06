@@ -14,6 +14,15 @@ itself)*:
 
     Python 3.8 is the reference for production release
 
+Optional modules for development and testing:
+
+.. include:: extras_require-dev.txt
+
+Optional modules for building the documentation:
+
+.. include:: extras_require-doc.txt
+
+
 How to install
 --------------
 

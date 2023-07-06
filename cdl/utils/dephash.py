@@ -12,7 +12,7 @@ import os
 import os.path as osp
 import sys
 
-from guidata.utils import get_module_path
+from guidata.utils.misc import get_module_path
 
 BUFFER_SIZE = 65536
 

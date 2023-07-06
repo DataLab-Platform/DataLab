@@ -15,7 +15,7 @@ import os.path as osp
 import sys
 import time
 
-from guidata.userconfigio import BaseIOHandler
+from guidata.dataset.iniio import BaseIOHandler
 from guidata.widgets.codeeditor import CodeEditor
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC

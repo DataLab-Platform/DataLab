@@ -1,29 +1,18 @@
-# Configuration file for the Sphinx documentation builder.
-#
-# This file only contains a selection of the most common options. For a full
-# list see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
+# -*- coding: utf-8 -*-
 
 # pylint: skip-file
 
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
 import os
 import sys
 
+from guidata.utils.genreqs import generate_requirement_tables
+
 sys.path.insert(0, os.path.abspath(".."))
-sys.path.insert(0, os.path.abspath("."))
 
+import cdl  # noqa: E402
+
+generate_requirement_tables(cdl, ["Python>=3.8", "PyQt5>=5.15"])
 os.environ["CDL_DOC"] = "1"
-import genreqs
-
-import cdl
-
-genreqs.generate_requirement_tables()
 
 # -- Project information -----------------------------------------------------
 
@@ -31,42 +20,39 @@ project = "DataLab"
 author = "Pierre Raybaut"
 copyright = "2023, Codra - " + author
 html_logo = latex_logo = "_static/DataLab-title.png"
-
-# The full version, including alpha/beta/rc tags
-
 release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
 
-# Add any Sphinx extension module names here, as strings. They can be
-# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
-# ones.
-extensions = ["sphinx.ext.imgmath", "sphinx.ext.napoleon"]
-
-# Add any paths that contain templates here, relative to this directory.
+extensions = [
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.imgmath",
+    "sphinx.ext.napoleon",
+]
 templates_path = ["_templates"]
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 html_theme = "sphinx_rtd_theme"
 htmlhelp_basename = project
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-
-# -- Options for sphinx-intl package ----------------------------------------
+# -- Options for sphinx-intl package -----------------------------------------
 
 locale_dirs = ["locale/"]  # path is example but recommended.
 gettext_compact = False  # optional.
+
+# -- Options for intersphinx extension ---------------------------------------
+
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "scikit-image": ("https://scikit-image.org/docs/stable/", None),
+    "h5py": ("https://docs.h5py.org/en/stable/", None),
+    "opencv-python": ("https://docs.opencv.org/master/", None),
+    "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
+    "guiqwt": ("https://guiqwt.readthedocs.io/en/latest/", None),
+}

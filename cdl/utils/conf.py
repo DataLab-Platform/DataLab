@@ -10,22 +10,11 @@ DataLab Configuration utilities
 import os
 import os.path as osp
 
-from guidata.userconfig import NoDefault, UserConfig, get_config_dir
+from guidata.userconfig import NoDefault, UserConfig
 
 
 class AppUserConfig(UserConfig):
     """Application user configuration"""
-
-    def get_path(self, basename: str) -> str:
-        """Return filename path inside configuration directory"""
-        app_config_dir = osp.join(get_config_dir(), f".{self.name}")
-        if not osp.isdir(app_config_dir):
-            os.makedirs(app_config_dir)
-        return osp.join(app_config_dir, basename)
-
-    def filename(self) -> str:
-        """Return configuration file name"""
-        return self.get_path(f"{self.name}.ini")
 
     def to_dict(self) -> dict:
         """Return configuration as a dictionary"""

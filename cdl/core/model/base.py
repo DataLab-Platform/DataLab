@@ -22,7 +22,7 @@ from uuid import uuid4
 import guidata.dataset.dataitems as gdi
 import guidata.dataset.datatypes as gdt
 import numpy as np
-from guidata.jsonio import JSONHandler, JSONReader, JSONWriter
+from guidata.dataset.jsonio import JSONHandler, JSONReader, JSONWriter
 from guiqwt.annotations import AnnotatedPoint, AnnotatedShape
 from guiqwt.builder import make
 from guiqwt.io import load_items, save_items

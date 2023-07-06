@@ -16,8 +16,8 @@ from typing import TYPE_CHECKING
 from guidata.config import CONF
 from guidata.configtools import get_font, get_icon
 from guidata.qthelpers import add_actions, create_action, is_dark_mode
-from guidata.qtwidgets import DockableWidgetMixin
 from guidata.widgets.console.shell import PythonShellWidget
+from guidata.widgets.dockable import DockableWidgetMixin
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getsavefilename
