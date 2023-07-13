@@ -9,6 +9,8 @@ DataLab main window status bar widgets
 
 from __future__ import annotations
 
+import os
+
 import psutil
 from guidata.configtools import get_icon
 from guidata.qthelpers import get_std_icon
@@ -100,8 +102,15 @@ class MemoryStatus(BaseStatus):
         mem = psutil.virtual_memory()
         memok = mem.available > self.__threshold
         self.SIG_MEMORY_ALARM.emit(not memok)
+        txtlist = [
+            f"%s {mem.available//(1024**2)} MB" % _("Memory available:"),
+            f"%s {mem.used//(1024**2)} MB" % _("Memory used:"),
+            f"%s {self.__threshold//(1024**2)} MB" % _("Alarm threshold:"),
+        ]
+        txt = os.linesep.join(txtlist)
+        self.setToolTip(txt)
         if DEBUG and not memok:
-            execenv.log(self, f"Memory available: {mem.available//(1024**2)} MB")
+            execenv.log(self, txt)
         self.label.setStyleSheet("" if memok else "color: red")
         self.set_icon("libre-tech-ram.svg" if memok else self.ko_icon)
         mem_percent = 65 if self.demo_mode else int(mem.percent)
@@ -130,6 +139,7 @@ class PluginStatus(BaseStatus):
         else:
             text += "-"
         self.label.setText(text)
+        self.setToolTip(PluginRegistry.get_plugin_infos())
 
 
 class XMLRPCStatus(BaseStatus):

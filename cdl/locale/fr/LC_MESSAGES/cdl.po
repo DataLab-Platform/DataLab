@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-29 10:02+0200\n"
+"POT-Creation-Date: 2023-07-13 18:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -764,7 +764,7 @@ msgstr "Copier les métadonnées"
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:703
+#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:704
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -772,7 +772,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:450 cdl\core\gui\panel\base.py:726
+#: cdl\core\gui\actionhandler.py:450 cdl\core\gui\panel\base.py:727
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -904,7 +904,7 @@ msgstr "Modifier les régions d'intérêt..."
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: cdl\core\gui\actionhandler.py:591 cdl\core\gui\processor\base.py:814
+#: cdl\core\gui\actionhandler.py:591 cdl\core\gui\processor\base.py:817
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -981,7 +981,7 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1337
+#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1336
 #: cdl\core\gui\roieditor.py:211
 msgid "image"
 msgstr "image"
@@ -1482,7 +1482,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:721 cdl\core\gui\main.py:1371
+#: cdl\core\gui\main.py:721 cdl\core\gui\main.py:1370
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1599,56 +1599,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1136 cdl\core\gui\panel\base.py:665
+#: cdl\core\gui\main.py:1135 cdl\core\gui\panel\base.py:666
 #: cdl\core\gui\panel\macro.py:431
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1293
+#: cdl\core\gui\main.py:1292
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1295
+#: cdl\core\gui\main.py:1294
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1298
+#: cdl\core\gui\main.py:1297
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1300
+#: cdl\core\gui\main.py:1299
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1303
+#: cdl\core\gui\main.py:1302
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1304
+#: cdl\core\gui\main.py:1303
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1305
+#: cdl\core\gui\main.py:1304
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1309
+#: cdl\core\gui\main.py:1308
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1310
+#: cdl\core\gui\main.py:1309
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1314
+#: cdl\core\gui\main.py:1313
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1332
+#: cdl\core\gui\main.py:1331
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1333
+#: cdl\core\gui\main.py:1332
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1656,7 +1656,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1372
+#: cdl\core\gui\main.py:1371
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1700,40 +1700,40 @@ msgstr "Nom du groupe :"
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:626 cdl\core\gui\panel\macro.py:411
+#: cdl\core\gui\panel\base.py:627 cdl\core\gui\panel\macro.py:411
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:766
+#: cdl\core\gui\panel\base.py:767
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:867 cdl\core\gui\plothandler.py:228
+#: cdl\core\gui\panel\base.py:868 cdl\core\gui\plothandler.py:228
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:925 cdl\core\gui\roieditor.py:186
+#: cdl\core\gui\panel\base.py:926 cdl\core\gui\roieditor.py:186
 #: cdl\core\model\base.py:697
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:961
+#: cdl\core\gui\panel\base.py:962
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\panel\base.py:962
+#: cdl\core\gui\panel\base.py:963
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:997 cdl\core\gui\processor\base.py:454
+#: cdl\core\gui\panel\base.py:998 cdl\core\gui\processor\base.py:455
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1011
+#: cdl\core\gui\panel\base.py:1012
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1013
+#: cdl\core\gui\panel\base.py:1014
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -1828,15 +1828,15 @@ msgstr ""
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl\core\gui\processor\base.py:369 cdl\core\gui\processor\base.py:437
+#: cdl\core\gui\processor\base.py:369 cdl\core\gui\processor\base.py:438
 msgid "Computing: %s"
 msgstr "Calcul en cours : %s"
 
-#: cdl\core\gui\processor\base.py:526 cdl\core\gui\processor\base.py:609
+#: cdl\core\gui\processor\base.py:528 cdl\core\gui\processor\base.py:612
 msgid "Calculating: %s"
 msgstr "Calcul : %s"
 
-#: cdl\core\gui\processor\base.py:596
+#: cdl\core\gui\processor\base.py:599
 msgid "Select %s"
 msgstr "Sélectionner %s"
 
@@ -2784,15 +2784,27 @@ msgstr "Distance minimale :"
 msgid "Signal peak detection"
 msgstr "Détection de pics 1D"
 
+#: cdl\widgets\status.py:106
+msgid "Memory available:"
+msgstr "Mémoire disponible :"
+
+#: cdl\widgets\status.py:107
+msgid "Memory used:"
+msgstr "Mémoire utilisée :"
+
 #: cdl\widgets\status.py:108
+msgid "Alarm threshold:"
+msgstr "Seuil d'alarme :"
+
+#: cdl\widgets\status.py:117
 msgid "Memory:"
 msgstr "Mémoire :"
 
-#: cdl\widgets\status.py:126
+#: cdl\widgets\status.py:135
 msgid "Plugins:"
 msgstr "Plugins :"
 
-#: cdl\widgets\status.py:159
+#: cdl\widgets\status.py:169
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
