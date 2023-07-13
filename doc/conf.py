@@ -49,10 +49,9 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "qwt": ("https://pythonqwt.readthedocs.io/en/latest/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "scikit-image": ("https://scikit-image.org/docs/stable/", None),
     "h5py": ("https://docs.h5py.org/en/stable/", None),
-    "opencv-python": ("https://docs.opencv.org/master/", None),
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
     "guiqwt": ("https://guiqwt.readthedocs.io/en/latest/", None),
 }

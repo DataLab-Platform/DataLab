@@ -63,6 +63,9 @@ guidelines:
 - Write docstrings for all classes, methods and functions. The docstrings
   should follow the `Google style <http://google-styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_.
 
+- Add typing annotations for all functions and methods. The annotations should
+  use the future syntax (``from __future__ import annotations``)
+
 - Try to keep the code as simple as possible. If you have to write a complex
   piece of code, try to split it into several functions or classes.
 
