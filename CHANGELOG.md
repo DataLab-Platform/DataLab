@@ -1,6 +1,6 @@
 # DataLab Releases #
 
-See DataLab [roadmap page](https://cdl.readthedocs.io/en/latest/roadmap.html)
+See DataLab [roadmap page](https://cdl.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 0.9.0 ##

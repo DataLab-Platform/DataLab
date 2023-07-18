@@ -8,7 +8,7 @@ DataLab requirements are the following *(Note: the Windows installer
 package already include all those required libraries as well as Python
 itself)*:
 
-.. include:: install_requires.txt
+.. include:: ../install_requires.txt
 
 .. note::
 
@@ -16,11 +16,11 @@ itself)*:
 
 Optional modules for development and testing:
 
-.. include:: extras_require-dev.txt
+.. include:: ../extras_require-dev.txt
 
 Optional modules for building the documentation:
 
-.. include:: extras_require-doc.txt
+.. include:: ../extras_require-doc.txt
 
 
 How to install

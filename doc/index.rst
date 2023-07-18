@@ -1,16 +1,24 @@
-DataLab user guide
-=======================
+DataLab User Guide
+==================
 
-DataLab is a **generic signal and image processing software**.
+DataLab is a **generic signal and image processing software**
+with unique features designed to meet industrial requirements
+(see :ref:`key_strengths`: Extensibility, Interoperability, ...).
 It is based on Python scientific libraries (such as NumPy,
 SciPy or scikit-image) and Qt graphical user interfaces
 (thanks to `guidata`_ and `guiqwt`_ libraries).
 
+With its user-friendly experience and versatile :ref:`usage_modes`,
+DataLab enables efficient development of your data processing and
+visualization applications while benefiting from an industrial-grade
+technological platform.
+
 .. figure:: images/DataLab-Overview.png
+    :class: dark-light
 
     Signal and image visualization in DataLab
 
-DataLab features are available not only using the
+DataLab :ref:`main_features` are available not only using the
 **stand-alone application**
 (easily installed thanks to the Windows installer or the Python package)
 but also by **embedding it into your own application**
@@ -31,9 +39,7 @@ External resources:
    :maxdepth: 2
    :caption: Contents:
 
-   installation
-   overview
-   roadmap
+   intro/index
    features/general/index
    features/signal/index
    features/image/index

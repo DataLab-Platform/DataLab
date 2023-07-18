@@ -3,7 +3,7 @@ Overview
 
 This page presents briefly DataLab key features.
 
-.. figure:: images/DataLab-Screenshot.png
+.. figure:: ../images/DataLab-Screenshot.png
 
     DataLab supports dark and light mode depending on your OS settings
 
@@ -24,11 +24,11 @@ Signal Image  Feature
 ✓      ✓      Annotations
 ====== ====== ==============================
 
-.. figure:: images/multi_gaussian_fit.png
+.. figure:: ../images/multi_gaussian_fit.png
 
     Example of a multi-gaussian curve fit
 
-.. figure:: images/peak_detection.png
+.. figure:: ../images/peak_detection.png
 
     Semi-automatic peak detection
 
