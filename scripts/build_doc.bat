@@ -21,12 +21,12 @@ set LANG=fr
 python doc/update_screenshots.py
 @REM Build documentation
 if exist build\doc ( rmdir /s /q build\doc )
-sphinx-build -D html_theme=classic -D language=fr -D htmlhelp_basename=%LIBNAME%_fr -b htmlhelp doc build\doc
+sphinx-build -D language=fr -D htmlhelp_basename=%LIBNAME%_fr -b htmlhelp doc build\doc
 hhc build\doc\%LIBNAME%_fr.hhp
 @REM Update screenshots
 set LANG=en
 python doc/update_screenshots.py
-sphinx-build -D html_theme=classic -D language=en -b htmlhelp doc build\doc
+sphinx-build -D language=en -b htmlhelp doc build\doc
 hhc build\doc\%LIBNAME%.hhp
 move /y build\doc\*.chm %MODNAME%\data
 sphinx-build -b html doc build\doc

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-26 16:23+0200\n"
+"POT-Creation-Date: 2023-07-18 15:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,80 +18,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: ../../index.rst:30
+#: ../../index.rst:38
 msgid "Contents:"
 msgstr "Table des matières :"
 
 #: ../../index.rst:2
-msgid "DataLab user guide"
-msgstr "Manuel utilisateur de DataLab"
+msgid "DataLab User Guide"
+msgstr "Manuel Utilisateur de DataLab"
 
 #: ../../index.rst:4
 msgid ""
-"DataLab is a **generic signal and image processing software**. It is "
-"based on Python scientific libraries (such as NumPy, SciPy or scikit-"
-"image) and Qt graphical user interfaces (thanks to `guidata`_ and "
-"`guiqwt`_ libraries)."
-msgstr ""
-"DataLab est un **logiciel générique de traitement du signal et de "
-"l'image** basé sur des bibliothèques scientifiques Python (telles que "
-"NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt "
-"(grâce aux bibliothèques `guidata`_ et `guiqwt`_)."
+"DataLab is a **generic signal and image processing software** with unique"
+" features designed to meet industrial requirements (see "
+":ref:`key_strengths`: Extensibility, Interoperability, ...). It is based "
+"on Python scientific libraries (such as NumPy, SciPy or scikit-image) and"
+" Qt graphical user interfaces (thanks to `guidata`_ and `guiqwt`_ "
+"libraries)."
+msgstr "DataLab est un **logiciel générique de traitement du signal et de l'image** avec des fonctionnalités uniques conçues pour répondre à des niveaux d'exigence industriels (cf. :ref:`key_strengths` : Extensibilité, Interopérabilité, ...). Il est basé sur des bibliothèques scientifiques Python (telles que NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt (grâce aux bibliothèques `guidata`_ et `guiqwt`_)."
 
 #: ../../index.rst:11
+msgid ""
+"With its user-friendly experience and versatile :ref:`usage_modes`, "
+"DataLab enables efficient development of your data processing and "
+"visualization applications while benefiting from an industrial-grade "
+"technological platform."
+msgstr "Avec son expérience utilisateur conviviale et ses :ref:`usage_modes` polyvalents, DataLab permet le développement efficace de vos applications de traitement et de visualisation de données tout en bénéficiant d'une plateforme technologique de qualité industrielle."
+
+#: ../../index.rst:19
 msgid "Signal and image visualization in DataLab"
 msgstr "Visualisation de signaux et d'images dans DataLab"
 
-#: ../../index.rst:13
+#: ../../index.rst:21
 msgid ""
-"DataLab features are available not only using the **stand-alone "
-"application** (easily installed thanks to the Windows installer or the "
-"Python package) but also by **embedding it into your own application** "
-"(see the \"embedded tests\" for detailed examples of how to do so)."
-msgstr ""
-"Les fonctionnalités de DataLab sont disponibles non seulement depuis une "
-"**version autonome de l'application** (qui peut être facilement installée"
-" grâce à l'installeur Windows ou au paquet Python) mais aussi en "
-"**embarquant DataLab dans votre propre application** (cf. les tests "
-"\"embedded\" pour des exemples détaillés sur la façon de procéder)."
+"DataLab :ref:`main_features` are available not only using the **stand-"
+"alone application** (easily installed thanks to the Windows installer or "
+"the Python package) but also by **embedding it into your own "
+"application** (see the \"embedded tests\" for detailed examples of how to"
+" do so)."
+msgstr "Les :ref:`main_features` de DataLab sont disponibles non seulement en utilisant l'**application autonome** (facilement installée grâce à l'installateur Windows ou au paquet Python) mais aussi en l'**intégrant dans votre propre application** (voir les \"embedded tests\" pour des exemples détaillés)."
 
-#: ../../index.rst:28
+#: ../../index.rst:36
 msgid "External resources:"
 msgstr "Ressources externes :"
 
-#: ../../index.rst:23
+#: ../../index.rst:31
 msgid "`Home`_"
 msgstr "`Home`_"
 
-#: ../../index.rst:24
+#: ../../index.rst:32
 msgid "DataLab home page"
 msgstr "Site de DataLab"
 
-#: ../../index.rst:25
+#: ../../index.rst:33
 msgid "`PyPI`_"
 msgstr "`PyPI`_"
 
-#: ../../index.rst:26
+#: ../../index.rst:34
 msgid "Python Package Index"
 msgstr "Paquet Python officiel"
 
-#: ../../index.rst:27
+#: ../../index.rst:35
 msgid "`GitHub`_"
 msgstr "`GitHub`_"
 
-#: ../../index.rst:28
+#: ../../index.rst:36
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:42
+#: ../../index.rst:49
 msgid "Copyrights and licensing"
 msgstr "Licence et copyrights"
 
-#: ../../index.rst:44
+#: ../../index.rst:51
 msgid "Copyright © 2023 `Codra`_, Pierre Raybaut"
 msgstr ""
 
-#: ../../index.rst:45
+#: ../../index.rst:52
 msgid "Licensed under the terms of the `BSD 3-Clause`_"
 msgstr "Distribué sous licence `BSD 3-Clause`_"
 
@@ -113,3 +115,18 @@ msgstr "Distribué sous licence `BSD 3-Clause`_"
 #~ msgid "Copyright © 2022 `CEA`_ - `Codra`_, Pierre Raybaut"
 #~ msgstr ""
 
+#~ msgid ""
+#~ "DataLab is a **generic signal and "
+#~ "image processing software**. It is based"
+#~ " on Python scientific libraries (such "
+#~ "as NumPy, SciPy or scikit-image) "
+#~ "and Qt graphical user interfaces (thanks"
+#~ " to `guidata`_ and `guiqwt`_ libraries)."
+#~ msgstr ""
+#~ "DataLab est un **logiciel générique de"
+#~ " traitement du signal et de l'image**"
+#~ " basé sur des bibliothèques scientifiques"
+#~ " Python (telles que NumPy, SciPy ou"
+#~ " encore scikit-image) et sur les "
+#~ "interfaces graphiques Qt (grâce aux "
+#~ "bibliothèques `guidata`_ et `guiqwt`_)."

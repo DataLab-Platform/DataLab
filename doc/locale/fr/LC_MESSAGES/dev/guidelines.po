@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-13 18:19+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../dev/guidelines.rst:4
+msgid "Coding guidelines"
+msgstr "Règles de codage"
+
+#: ../../dev/guidelines.rst:7
+msgid "Generic coding guidelines"
+msgstr "Règles de codage génériques"
+
+#: ../../dev/guidelines.rst:9
+msgid ""
+"We follow the `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ coding"
+" style."
+msgstr "Nous suivons le style de codage `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_."
+
+#: ../../dev/guidelines.rst:11
+msgid "In particular, we are especially strict about the following guidelines:"
+msgstr "En particulier, nous sommes particulièrement stricts sur les directives suivantes :"
+
+#: ../../dev/guidelines.rst:13
+msgid "Limit all lines to a maximum of 79 characters."
+msgstr "Limiter toutes les lignes à un maximum de 79 caractères."
+
+#: ../../dev/guidelines.rst:14
+msgid "Respect the naming conventions (classes, functions, variables, etc.)."
+msgstr "Respecter les conventions de nommage (classes, fonctions, variables, etc.)."
+
+#: ../../dev/guidelines.rst:15
+msgid "Use specific exceptions instead of the generic :class:`Exception`."
+msgstr "Utiliser des exceptions spécifiques au lieu de :class:`Exception`."
+
+#: ../../dev/guidelines.rst:17
+msgid "To enforce these guidelines, the following tools are mandatory:"
+msgstr "Pour faire respecter ces directives, les outils suivants sont obligatoires :"
+
+#: ../../dev/guidelines.rst:19
+msgid "`black <https://pypi.org/project/black/>`_ for code formatting."
+msgstr "`black <https://pypi.org/project/black/>`_ pour le formatage du code."
+
+#: ../../dev/guidelines.rst:20
+msgid "`isort <https://pypi.org/project/isort/>`_ for import sorting."
+msgstr "`isort <https://pypi.org/project/isort/>`_ pour le tri des importations."
+
+#: ../../dev/guidelines.rst:21
+msgid "`pylint <https://pypi.org/project/pylint/>`_ for static code analysis."
+msgstr "`pylint <https://pypi.org/project/pylint/>`_ pour l'analyse statique du code."
+
+#: ../../dev/guidelines.rst:24
+msgid "black"
+msgstr ""
+
+#: ../../dev/guidelines.rst:26
+msgid ""
+"If you are using `Visual Studio Code <https://code.visualstudio.com/>`_, "
+"the project settings will automatically format your code on save."
+msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_, les paramètres du projet formateront automatiquement votre code lors de l'enregistrement."
+
+#: ../../dev/guidelines.rst:29
+msgid ""
+"Or you may use `black` manually. To format your code, run the following "
+"command::"
+msgstr "Ou vous pouvez utiliser `black` manuellement. Pour formater votre code, exécutez la commande suivante::"
+
+#: ../../dev/guidelines.rst:34
+msgid "isort"
+msgstr ""
+
+#: ../../dev/guidelines.rst:36
+msgid ""
+"Again, if you are using `Visual Studio Code "
+"<https://code.visualstudio.com/>`_, the project settings will "
+"automatically sort your imports on save."
+msgstr "Encore une fois, si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_, les paramètres du projet trieront automatiquement vos importations lors de l'enregistrement."
+
+#: ../../dev/guidelines.rst:39
+msgid ""
+"Or you may use `isort` manually. To sort your imports, run the following "
+"command::"
+msgstr "Ou vous pouvez utiliser `isort` manuellement. Pour trier vos importations, exécutez la commande suivante::"
+
+#: ../../dev/guidelines.rst:44
+msgid "pylint"
+msgstr ""
+
+#: ../../dev/guidelines.rst:46
+msgid "To run `pylint`, run the following command::"
+msgstr "Pour exécuter `pylint`, exécutez la commande suivante::"
+
+#: ../../dev/guidelines.rst:50
+msgid ""
+"If you are using `Visual Studio Code <https://code.visualstudio.com/>`_ "
+"on Windows, you may run the task \"Run Pylint\" to run `pylint` on the "
+"project."
+msgstr "Si vous utilisez `Visual Studio Code <https://code.visualstudio.com/>`_ sur Windows, vous pouvez exécuter la tâche \"Run Pylint\" pour exécuter `pylint` sur le projet."
+
+#: ../../dev/guidelines.rst:55
+msgid "A `pylint` rating greater than 9/10 is required to merge a pull request."
+msgstr "Une note `pylint` supérieure à 9/10 est requise pour fusionner une demande d'extraction."
+
+#: ../../dev/guidelines.rst:58
+msgid "Specific coding guidelines"
+msgstr "Règles de codage spécifiques"
+
+#: ../../dev/guidelines.rst:60
+msgid ""
+"In addition to the generic coding guidelines, we have the following "
+"specific guidelines:"
+msgstr "En plus des directives de codage génériques, nous avons les directives spécifiques suivantes :"
+
+#: ../../dev/guidelines.rst:63
+msgid ""
+"Write docstrings for all classes, methods and functions. The docstrings "
+"should follow the `Google style <http://google-"
+"styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_."
+msgstr "Écrire des docstrings pour toutes les classes, méthodes et fonctions. Les docstrings doivent suivre le `style Google <http://google-styleguide.googlecode.com/svn/trunk/pyguide.html?showone=Comments#Comments>`_."
+
+#: ../../dev/guidelines.rst:66
+msgid ""
+"Add typing annotations for all functions and methods. The annotations "
+"should use the future syntax (``from __future__ import annotations``)"
+msgstr "Ajouter des annotations de typage pour toutes les fonctions et méthodes. Les annotations doivent utiliser la syntaxe future (``from __future__ import annotations``)"
+
+#: ../../dev/guidelines.rst:69
+msgid ""
+"Try to keep the code as simple as possible. If you have to write a "
+"complex piece of code, try to split it into several functions or classes."
+msgstr "Essayez de garder le code aussi simple que possible. Si vous devez écrire un morceau de code complexe, essayez de le diviser en plusieurs fonctions ou classes."
+
+#: ../../dev/guidelines.rst:72
+msgid ""
+"Add as many comments as possible. The code should be self-explanatory, "
+"but it is always useful to add some comments to explain the general idea "
+"of the code, or to explain some tricky parts."
+msgstr "Ajouter autant de commentaires que possible. Le code doit être auto-explicatif, mais il est toujours utile d'ajouter des commentaires pour expliquer l'idée générale du code, ou pour expliquer certaines parties délicates."
+
+#: ../../dev/guidelines.rst:76
+msgid ""
+"Do not use ``from module import *`` statements, even in the ``__init__`` "
+"module of a package."
+msgstr "N'utilisez pas d'instructions ``from module import *``, même dans le module ``__init__`` d'un package."
+
+#: ../../dev/guidelines.rst:79
+msgid ""
+"Avoid using mixins (multiple inheritance) when possible. It is often "
+"possible to use composition instead of inheritance."
+msgstr "Évitez d'utiliser des mixins (héritage multiple) si possible. Il est souvent possible d'utiliser la composition au lieu de l'héritage."
+
+#: ../../dev/guidelines.rst:82
+msgid ""
+"Avoid using ``__getattr__`` and ``__setattr__`` methods. They are often "
+"used to implement lazy initialization, but this can be done in a more "
+"explicit way."
+msgstr "Évitez d'utiliser les méthodes ``__getattr__`` et ``__setattr__``. Ils sont souvent utilisés pour implémenter une initialisation paresseuse, mais cela peut être fait de manière plus explicite."

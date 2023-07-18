@@ -1,0 +1,197 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-18 15:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../intro/overview.rst:2
+msgid "Overview"
+msgstr ""
+
+#: ../../intro/overview.rst:4
+msgid "This page presents briefly DataLab key features."
+msgstr ""
+
+#: ../../intro/overview.rst:8
+msgid "DataLab supports dark and light mode depending on your OS settings"
+msgstr ""
+
+#: ../../intro/overview.rst:11
+msgid "Data visualization key features"
+msgstr ""
+
+#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+msgid "Signal"
+msgstr ""
+
+#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+msgid "Image"
+msgstr ""
+
+#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+msgid "Feature"
+msgstr ""
+
+#: ../../intro/overview.rst:16 ../../intro/overview.rst:17
+#: ../../intro/overview.rst:18 ../../intro/overview.rst:19
+#: ../../intro/overview.rst:20 ../../intro/overview.rst:21
+#: ../../intro/overview.rst:22 ../../intro/overview.rst:23
+#: ../../intro/overview.rst:24 ../../intro/overview.rst:41
+#: ../../intro/overview.rst:42 ../../intro/overview.rst:43
+#: ../../intro/overview.rst:44 ../../intro/overview.rst:45
+#: ../../intro/overview.rst:46 ../../intro/overview.rst:47
+#: ../../intro/overview.rst:48 ../../intro/overview.rst:49
+#: ../../intro/overview.rst:50 ../../intro/overview.rst:51
+#: ../../intro/overview.rst:52 ../../intro/overview.rst:53
+#: ../../intro/overview.rst:54 ../../intro/overview.rst:55
+#: ../../intro/overview.rst:56 ../../intro/overview.rst:57
+#: ../../intro/overview.rst:58 ../../intro/overview.rst:59
+#: ../../intro/overview.rst:60
+msgid "✓"
+msgstr ""
+
+#: ../../intro/overview.rst:16
+msgid "Screenshots (save, copy)"
+msgstr ""
+
+#: ../../intro/overview.rst:17
+msgid "Z-axis"
+msgstr ""
+
+#: ../../intro/overview.rst:17
+msgid "Lin/log scales"
+msgstr ""
+
+#: ../../intro/overview.rst:18
+msgid "Data table editing"
+msgstr ""
+
+#: ../../intro/overview.rst:19
+msgid "Statistics on user-defined ROI"
+msgstr ""
+
+#: ../../intro/overview.rst:20
+msgid "Markers"
+msgstr ""
+
+#: ../../intro/overview.rst:21
+msgid "Aspect ratio (1:1, custom)"
+msgstr ""
+
+#: ../../intro/overview.rst:22
+msgid "50+ available colormaps"
+msgstr ""
+
+#: ../../intro/overview.rst:23
+msgid "X/Y raw/averaged profiles"
+msgstr ""
+
+#: ../../intro/overview.rst:24
+msgid "Annotations"
+msgstr ""
+
+#: ../../intro/overview.rst:29
+msgid "Example of a multi-gaussian curve fit"
+msgstr ""
+
+#: ../../intro/overview.rst:33
+msgid "Semi-automatic peak detection"
+msgstr ""
+
+#: ../../intro/overview.rst:36
+msgid "Data processing key features"
+msgstr ""
+
+#: ../../intro/overview.rst:41
+msgid "Process isolation for running computations"
+msgstr ""
+
+#: ../../intro/overview.rst:42
+msgid "Remote control from Jupyter, Spyder or any IDE"
+msgstr ""
+
+#: ../../intro/overview.rst:43
+msgid "Remote control from a third-party application"
+msgstr ""
+
+#: ../../intro/overview.rst:44
+msgid "Sum, average, difference, product, ..."
+msgstr ""
+
+#: ../../intro/overview.rst:45
+msgid "ROI extraction, Swap X/Y axes"
+msgstr ""
+
+#: ../../intro/overview.rst:46
+msgid "Semi-automatic multi-peak detection"
+msgstr ""
+
+#: ../../intro/overview.rst:47
+msgid "Rotation (flip, rotate), resize, ..."
+msgstr ""
+
+#: ../../intro/overview.rst:48
+msgid "Flat-field correction"
+msgstr ""
+
+#: ../../intro/overview.rst:49
+msgid "Normalize, derivative, integral"
+msgstr ""
+
+#: ../../intro/overview.rst:50
+msgid "Linear calibration"
+msgstr ""
+
+#: ../../intro/overview.rst:51
+msgid "Thresholding, clipping"
+msgstr ""
+
+#: ../../intro/overview.rst:52
+msgid "Gaussian filter, Wiener filter"
+msgstr ""
+
+#: ../../intro/overview.rst:53
+msgid "Moving average, moving median"
+msgstr ""
+
+#: ../../intro/overview.rst:54
+msgid "FFT, inverse FFT"
+msgstr ""
+
+#: ../../intro/overview.rst:55
+msgid "Interactive fit: Gauss, Lorenzt, Voigt, polynomial"
+msgstr ""
+
+#: ../../intro/overview.rst:56
+msgid "Interactive multigaussian fit"
+msgstr ""
+
+#: ../../intro/overview.rst:57
+msgid "Computing on custom ROI"
+msgstr ""
+
+#: ../../intro/overview.rst:58
+msgid "FWHM, FW @ 1/e²"
+msgstr ""
+
+#: ../../intro/overview.rst:59
+msgid "Centroid (robust method w/r noise)"
+msgstr ""
+
+#: ../../intro/overview.rst:60
+msgid "Minimum enclosing circle center"
+msgstr ""
+

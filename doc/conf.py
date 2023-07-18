@@ -26,15 +26,22 @@ release = cdl.__version__
 
 extensions = [
     "sphinx.ext.intersphinx",
-    "sphinx.ext.imgmath",
     "sphinx.ext.napoleon",
 ]
+if "htmlhelp" in sys.argv:
+    extensions += ["sphinx.ext.imgmath"]
+else:
+    extensions += ["sphinx.ext.mathjax"]
 templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
-html_theme = "pydata_sphinx_theme"
+if "htmlhelp" in sys.argv:
+    html_theme = "classic"
+else:
+    html_theme = "pydata_sphinx_theme"
+    html_theme_options = {"show_toc_level": 2}
 htmlhelp_basename = project
 html_static_path = ["_static"]
 

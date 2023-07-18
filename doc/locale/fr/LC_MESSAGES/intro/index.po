@@ -1,0 +1,216 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-18 15:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../intro/index.rst:2
+msgid "Getting started"
+msgstr "Débuter"
+
+#: ../../intro/index.rst:5
+msgid "DataLab in a nutshell"
+msgstr "DataLab en bref"
+
+#: ../../intro/index.rst:7
+msgid ""
+"DataLab is an open platform for signal and image processing. Its "
+"functional scope is intentionally broad. With its many functions, some of"
+" them technically advanced, DataLab enables the processing and "
+"visualization of all types of scientific data. As a result, scientific, "
+"industrial, and innovation stakeholders can have access to an easy-to-use"
+" tool that is simple to adapt and offers the reliability of industrial-"
+"grade software."
+msgstr "DataLab est une plateforme ouverte de traitement de signaux et d'images. Son périmètre fonctionnel est volontairement large. Avec ses nombreuses fonctions, certaines techniquement avancées, DataLab permet le traitement et la visualisation de tous types de données scientifiques. Ainsi, les acteurs scientifiques, industriels et de l'innovation peuvent disposer d'un outil facile à utiliser, simple à adapter et offrant la fiabilité d'un logiciel industriel."
+
+#: ../../intro/index.rst:16
+msgid "What are the applications for Datalab?"
+msgstr "Quelles sont les applications de DataLab ?"
+
+#: ../../intro/index.rst:19
+msgid "Real world examples"
+msgstr "Exemples concrets"
+
+#: ../../intro/index.rst:21
+msgid ""
+"A few concrete and specific examples illustrate the nature of the work "
+"that can be carried out with DataLab:"
+msgstr "Quelques exemples concrets et spécifiques illustrent la nature des travaux pouvant être réalisés avec DataLab :"
+
+#: ../../intro/index.rst:24
+msgid "Processing of experimental signals acquired on a scientific facility"
+msgstr "Traitement de signaux expérimentaux acquis sur une installation scientifique"
+
+#: ../../intro/index.rst:25
+msgid "Automatic detection laser spot positions in a scene"
+msgstr "Détection automatique des positions des tâches laser dans une scène"
+
+#: ../../intro/index.rst:26
+msgid "Instrument alignment through image processing"
+msgstr "Alignement d'instrument par traitement d'image"
+
+#: ../../intro/index.rst:27
+msgid "Automatic pattern detection and geometric corrections"
+msgstr "Détection automatique de motifs et corrections géométriques"
+
+#: ../../intro/index.rst:32
+msgid "Usage modes"
+msgstr "Modes d'utilisation"
+
+#: ../../intro/index.rst:34
+msgid ""
+"Depending on the application, DataLab can be used in three different "
+"modes:"
+msgstr "Selon l'application, DataLab peut être utilisé selon trois modes différents :"
+
+#: ../../intro/index.rst:36
+msgid ""
+"**Stand-alone mode**: DataLab is a full-fledged processing application "
+"that can be adapted to the client's needs through the addition of "
+"industry-specific plugins."
+msgstr "**Mode autonome** : DataLab est une application de traitement à part entière qui peut être adaptée aux besoins du client par l'ajout de plugins spécifiques à son métier."
+
+#: ../../intro/index.rst:39
+msgid ""
+"**Embedded mode**: DataLab is integrated into your application to provide"
+" the necessary processing and visualization features."
+msgstr "**Mode embarqué** : DataLab est intégré dans votre application pour apporter les fonctionnalités de traitement et de visualisation nécessaires."
+
+#: ../../intro/index.rst:41
+msgid ""
+"**Remote-controlled mode**: DataLab communicates with your application, "
+"allowing it to benefit from its functionality without disrupting the user"
+" experience."
+msgstr "**Mode commandé à distance** : DataLab communique avec votre application, lui permettant de bénéficier de ses fonctionnalités sans perturber l'expérience utilisateur."
+
+#: ../../intro/index.rst:47
+msgid ""
+"DataLab can also be controlled from your familiar development environment"
+" (e.g., Visual Studio Code, Spyder, ...) to perform calculations using "
+"your processing functions while leveraging the advanced features of "
+"DataLab."
+msgstr "DataLab peut également être piloté depuis votre environnement de développement familier (par exemple Visual Studio Code, Spyder, ...) pour réaliser des calculs en utilisant vos fonctions de traitement tout en bénéficiant des fonctionnalités avancées de DataLab."
+
+#: ../../intro/index.rst:51
+msgid ""
+"With its user-friendly experience and versatile usage modes, DataLab "
+"enables efficient development of your data processing and visualization "
+"applications while benefiting from an industrial-grade technological "
+"platform."
+msgstr "Avec son expérience utilisateur conviviale et ses modes d'utilisation polyvalents, DataLab permet un développement efficace de vos applications de traitement et de visualisation de données tout en bénéficiant d'une plateforme technologique industrielle."
+
+#: ../../intro/index.rst:56
+msgid "How does DataLab work?"
+msgstr "Comment fonctionne DataLab ?"
+
+#: ../../intro/index.rst:58
+msgid ""
+"DataLab is a platform for data processing and visualization (signals or "
+"images) that includes many functions. Developed in Python, it benefits "
+"from the richness of the associated ecosystem in terms of scientific and "
+"technical libraries."
+msgstr "DataLab est une plateforme de traitement et de visualisation de données (signaux ou images) qui intègre de nombreuses fonctions. Développé en Python, il bénéficie de la richesse de l'écosystème associé en termes de bibliothèques scientifiques et techniques."
+
+#: ../../intro/index.rst:66
+msgid "Main features"
+msgstr "Principales fonctionnalités"
+
+#: ../../intro/index.rst:68
+msgid "The main technical features of DataLab include:"
+msgstr "Les principales fonctionnalités techniques de DataLab sont :"
+
+#: ../../intro/index.rst:70
+msgid "Support for numerous standard and proprietary data formats"
+msgstr "Prise en charge de nombreux formats de données standards et propriétaires"
+
+#: ../../intro/index.rst:71
+msgid ""
+"Opening an arbitrary number of objects (signals or images) for batch "
+"processing, with the possibility of defining groups of objects"
+msgstr "Ouverture d'un nombre arbitraire d'objets (signaux ou images) pour un traitement par lot, avec possibilité de définir des groupes d'objets"
+
+#: ../../intro/index.rst:73
+msgid "Simultaneous viewing of multiple objects with annotation support"
+msgstr "Visualisation simultanée de plusieurs objets avec prise en charge des annotations"
+
+#: ../../intro/index.rst:74
+msgid "Standard operations and processing on signals and images"
+msgstr "Opérations et traitements standards sur les signaux et les images"
+
+#: ../../intro/index.rst:75
+msgid "Advanced image processing (restoration, morphology, edge detection, etc.)"
+msgstr "Traitement d'image avancé (restauration, morphologie, détection de contours, etc.)"
+
+#: ../../intro/index.rst:76
+msgid "Management of multiple regions of interest (calculations, extractions)"
+msgstr "Gestion de plusieurs régions d'intérêt (calculs, extractions)"
+
+#: ../../intro/index.rst:77
+msgid "Macro-command editor"
+msgstr "Éditeur de macro-commandes"
+
+#: ../../intro/index.rst:78
+msgid "Remote-controllable API"
+msgstr "API pilotable à distance"
+
+#: ../../intro/index.rst:79
+msgid "Embedded interactive Python console"
+msgstr "Console Python interactive embarquée"
+
+#: ../../intro/index.rst:84
+msgid "Key strengths"
+msgstr "Points forts"
+
+#: ../../intro/index.rst:86
+msgid "DataLab highlights four key strengths:"
+msgstr "DataLab met en avant quatre points forts :"
+
+#: ../../intro/index.rst:88
+msgid ""
+"**Extensibility**: The DataLab plugin system makes it easy to code new "
+"features (specific processing, specific file formats, custom graphical "
+"interfaces). It can also be used as a customizable platform."
+msgstr "**Extensibilité** : Le système de plugins de DataLab permet de coder facilement de nouvelles fonctionnalités (traitement spécifique, formats de fichiers spécifiques, interfaces graphiques personnalisées). Il peut également être utilisé comme une plateforme personnalisable."
+
+#: ../../intro/index.rst:92
+msgid ""
+"**Interoperability**: DataLab can also be embedded in your own "
+"application. For example, within data processing software, machine-level "
+"control systems, or test bench applications."
+msgstr "**Interopérabilité** : DataLab peut également être intégré dans votre propre application. Par exemple, au sein de logiciels de traitement de données, de systèmes de contrôle de niveau machine ou d'applications de banc d'essai."
+
+#: ../../intro/index.rst:96
+msgid ""
+"**Automation**: a high-level public API allows for full remote control of"
+" DataLab to open and process data."
+msgstr "**Automatisation** : une API publique de haut niveau permet de piloter à distance DataLab pour ouvrir et traiter des données."
+
+#: ../../intro/index.rst:99
+#, python-format
+msgid ""
+"**Maintainability and testability**: DataLab is an industrial-grade "
+"scientific and technical processing software. The built-in automated "
+"tests in DataLab cover 90% of its features, which is significant for "
+"software with graphical interfaces and helps mitigate regression risks."
+msgstr "**Maintenabilité et testabilité** : DataLab est un logiciel de traitement scientifique et technique industriel. Les tests automatisés intégrés à DataLab couvrent 90 % de ses fonctionnalités, ce qui est significatif pour un logiciel avec des interfaces graphiques et permet de réduire les risques de régression."
+
+#: ../../intro/index.rst:104
+msgid ""
+"Researchers, engineers, scientists, you will undoubtedly benefit from the"
+" capabilities of DataLab. Its open-source software model will also allow "
+"you to reinvest your achievements in the open-source community, of which "
+"any reputable publisher should be an active member."
+msgstr "Chercheurs, ingénieurs, scientifiques, vous bénéficierez sans aucun doute des capacités de DataLab. Son modèle de logiciel open source vous permettra également de réinvestir vos réalisations dans la communauté open source, dont tout éditeur de renom devrait être un membre actif."
