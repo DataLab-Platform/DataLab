@@ -50,6 +50,13 @@ html_static_path = ["_static"]
 locale_dirs = ["locale/"]  # path is example but recommended.
 gettext_compact = False  # optional.
 
+# -- Options for autodoc extension -------------------------------------------
+
+autodoc_default_options = {
+    "members": True,
+    "member-order": "bysource",
+}
+
 # -- Options for intersphinx extension ---------------------------------------
 
 intersphinx_mapping = {

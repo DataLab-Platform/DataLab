@@ -9,13 +9,13 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "gettext_scan.bat",
+                "gettext_scan.bat"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
             "group": {
@@ -38,13 +38,13 @@
             "args": [
                 "/c",
                 "gettext.bat",
-                "compile",
+                "compile"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
             "group": {
@@ -68,13 +68,13 @@
                 "/c",
                 "run_pylint.bat",
                 "--disable=fixme",
-                "cdl",
+                "cdl"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
             "group": {
@@ -96,15 +96,13 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "run_coverage.bat",
-                // "--contains",
-                // "scenario",
+                "run_coverage.bat"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
             "group": {
@@ -132,7 +130,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
             "group": {
@@ -157,7 +155,7 @@
                 "clean_up.bat"
             ],
             "options": {
-                "cwd": "scripts",
+                "cwd": "scripts"
             },
             "group": {
                 "kind": "build",
@@ -180,7 +178,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1",
+                    "UNATTENDED": "1"
                 }
             },
             "args": [
@@ -213,7 +211,7 @@
                     "NSIS_COPYRIGHT_INFO": "Copyright (c) Codra 2023",
                     "NSIS_HELP_LINK": "https://cdl.readthedocs.io/en/latest/",
                     "NSIS_URLUPDATEINFO": "https://github.com/Codra-Ingenierie-Informatique/DataLab/releases",
-                    "NSIS_URLINFOABOUT": "https://github.com/Codra-Ingenierie-Informatique/DataLab",
+                    "NSIS_URLINFOABOUT": "https://github.com/Codra-Ingenierie-Informatique/DataLab"
                 }
             },
             "args": [
@@ -244,7 +242,7 @@
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "PYTHONPATH": "${env:CDL_PYTHONPATH}",
                     "QT_COLOR_MODE": "light",
-                    "UNATTENDED": "1",
+                    "UNATTENDED": "1"
                 }
             },
             "args": [
@@ -273,7 +271,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1",
+                    "UNATTENDED": "1"
                 }
             },
             "args": [
@@ -295,7 +293,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Build documentation",
+                "Build documentation"
             ]
         },
         {
@@ -310,7 +308,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "UNATTENDED": "1",
+                    "UNATTENDED": "1"
                 }
             },
             "problemMatcher": [],
@@ -331,7 +329,7 @@
                 "Clean Up",
                 "Build Python packages",
                 "Create executable",
-                "Create installer",
+                "Create installer"
             ]
         },
     ]
