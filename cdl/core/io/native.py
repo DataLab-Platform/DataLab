@@ -13,8 +13,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from guidata.dataset.hdf5io import HDF5Reader, HDF5Writer
-from guidata.dataset.jsonio import JSONReader, JSONWriter
+from guidata.dataset.io import HDF5Reader, HDF5Writer, JSONReader, JSONWriter
 
 from cdl import __version__
 
