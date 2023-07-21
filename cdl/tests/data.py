@@ -223,7 +223,11 @@ def create_2d_gaussian(
     xydata = np.linspace(-10, 10, size)
     x, y = np.meshgrid(xydata, xydata)
     if amp is None:
-        amp = np.iinfo(dtype).max * 0.5
+        try:
+            amp = np.iinfo(dtype).max * 0.5
+        except ValueError:
+            # dtype is not integer
+            amp = 1.0
     return np.array(
         amp
         * np.exp(
