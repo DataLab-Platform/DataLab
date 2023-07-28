@@ -13,19 +13,20 @@ call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UseWinPython
 call %FUNC% GetVersion CDL_VERSION
-
+cd %SCRIPTPATH%\..
+%PYTHON% doc\update_requirements.py
 set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%
 @REM Update screenshots
 set QT_COLOR_MODE=light
 set LANG=fr
-python doc/update_screenshots.py
+%PYTHON% doc/update_screenshots.py
 @REM Build documentation
 if exist build\doc ( rmdir /s /q build\doc )
 sphinx-build -D language=fr -D htmlhelp_basename=%LIBNAME%_fr -b htmlhelp doc build\doc
 hhc build\doc\%LIBNAME%_fr.hhp
 @REM Update screenshots
 set LANG=en
-python doc/update_screenshots.py
+%PYTHON% doc/update_screenshots.py
 sphinx-build -D language=en -b htmlhelp doc build\doc
 hhc build\doc\%LIBNAME%.hhp
 move /y build\doc\*.chm %MODNAME%\data

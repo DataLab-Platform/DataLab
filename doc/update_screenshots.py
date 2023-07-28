@@ -11,5 +11,7 @@ from cdl import config
 from cdl.tests.scenarios import beautiful_app
 
 if __name__ == "__main__":
+    print("Updating screenshots...", end=" ")
     config.reset()  # Reset configuration (remove configuration file and initialize it)
     beautiful_app.run_beautiful_scenario(screenshots=True)
+    print("done.")

@@ -4,23 +4,16 @@ Installation
 Dependencies
 ------------
 
-DataLab requirements are the following *(Note: the Windows installer
-package already include all those required libraries as well as Python
-itself)*:
+.. note::
 
-.. include:: ../install_requires.txt
+    The DataLab Windows installer package already include all those required
+    libraries as well as Python itself.
+
+.. include:: ../requirements.rst
 
 .. note::
 
     Python 3.8 is the reference for production release
-
-Optional modules for development and testing:
-
-.. include:: ../extras_require-dev.txt
-
-Optional modules for building the documentation:
-
-.. include:: ../extras_require-doc.txt
 
 
 How to install

@@ -5,13 +5,10 @@
 import os
 import sys
 
-from guidata.utils.genreqs import generate_requirement_tables
-
 sys.path.insert(0, os.path.abspath(".."))
 
 import cdl  # noqa: E402
 
-generate_requirement_tables(cdl, ["Python>=3.8", "PyQt5>=5.15"])
 os.environ["CDL_DOC"] = "1"
 
 # -- Project information -----------------------------------------------------
