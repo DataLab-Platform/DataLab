@@ -19,24 +19,6 @@ Plugins may also extends DataLab I/O features by providing new image or
 signal formats. To do so, they must provide a subclass of :class:`ImageFormatBase`
 or :class:`SignalFormatBase`, in which format infos are defined using the
 :class:`FormatInfo` class.
-
-.. autoclass:: PluginInfo
-    :members:
-
-.. autoclass:: PluginBase
-    :members:
-
-.. autoclass:: FormatInfo
-    :members:
-
-.. autoclass:: ImageFormatBase
-    :members:
-
-.. autoclass: ClassicsImageFormat
-    :members:
-
-.. autoclass:: SignalFormatBase
-    :members:
 """
 
 from __future__ import annotations

@@ -31,3 +31,4 @@ Public API
 ^^^^^^^^^^
 
 .. automodule:: cdl.plugins
+    :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase

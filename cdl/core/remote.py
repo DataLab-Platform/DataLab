@@ -11,9 +11,6 @@ This module provides utilities to control DataLab from a Python script (e.g. wit
 Spyder) or from a Jupyter notebook.
 
 The :class:`RemoteClient` class provides the main interface to DataLab XML-RPC server.
-
-.. autoclass:: RemoteClient
-    :members:
 """
 
 from __future__ import annotations
