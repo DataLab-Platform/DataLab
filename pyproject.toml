@@ -1,0 +1,78 @@
+# DataLab setup configuration file
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "DataLab"
+authors = [{ name = "Codra", email = "p.raybaut@codra.fr" }]
+description = "DataLab is a data processing and analysis software for scientific and industrial applications"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Human Machine Interfaces",
+    "Topic :: Software Development :: User Interfaces",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+requires-python = ">=3.8, <4"
+dependencies = [
+    "h5py >= 3.0",
+    "NumPy >= 1.21",
+    "SciPy >= 1.7",
+    "scikit-image >= 0.18",
+    "opencv-python >= 4.5",
+    "psutil >= 5.5",
+    "guidata >= 3.0.1",
+    "guiqwt >= 4.4",
+    "QtPy >= 1.9",
+]
+dynamic = ["version"]
+
+[project.scripts]
+cdl-alltests = "cdl.tests.all_tests:run"
+
+[project.gui-scripts]
+cdl = "cdl.app:run"
+cdl-demo = "cdl.tests.demo:run"
+cdl-tests = "cdl.tests:run"
+
+[project.optional-dependencies]
+dev = ["black", "isort", "pylint", "Coverage"]
+doc = ["PyQt5", "sphinx", "sphinx_intl", "pydata-sphinx-theme"]
+
+[tool.setuptools.packages.find]
+include = ["cdl*"]
+
+[tool.setuptools.package-data]
+"*" = [
+    "*.png",
+    "*.svg",
+    "*.mo",
+    "*.chm",
+    "*.txt",
+    "*.json",
+    "*.h5",
+    "*.npy",
+    "*.dcm",
+    "*.scor-data",
+    "*.tiff",
+    "*.jpg",
+    "*.sif",
+    "*.csv",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "cdl.__version__" }

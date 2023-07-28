@@ -1,6 +1,3 @@
-recursive-include cdl *.png *.svg *.pot *.po *.mo *.dcm *.h5 *.chm *.txt *.csv *.json *.npy *.scor-data
-recursive-include doc *.py *.rst *.png *.pot *.po
-recursive-include nsis *.nsi *.nsh *.bmp *.ico
-include MANIFEST.in
-include LICENSE
-include *.md
+graft doc
+graft resources
+include *.desktop
