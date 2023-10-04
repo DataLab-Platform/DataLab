@@ -36,7 +36,7 @@ import numpy as np
 
 from cdl.obj import ImageObj, SignalObj
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.main import CDLMainWindow
     from cdl.core.remote import ServerProxy
 

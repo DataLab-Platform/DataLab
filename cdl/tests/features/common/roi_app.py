@@ -25,7 +25,7 @@ from cdl.env import execenv
 from cdl.tests import cdl_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
 
