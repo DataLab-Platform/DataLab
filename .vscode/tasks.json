@@ -68,7 +68,6 @@
                 "/c",
                 "run_pylint.bat",
                 "--disable=fixme",
-                "cdl"
             ],
             "options": {
                 "cwd": "scripts",
