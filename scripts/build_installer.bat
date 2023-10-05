@@ -29,7 +29,7 @@ del "%ICOPATH%\uninstall-*.png"
 
 call %FUNC% GetLibName LIBNAME
 call %FUNC% SetPythonPath
-call %FUNC% UseWinPython
+call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
 call %FUNC% GetVersionWithoutAlphaBeta VERSION_WITHOUT_ALPHABETA
 

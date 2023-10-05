@@ -10,7 +10,7 @@ REM ======================================================
 setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% SetPythonPath
-call %FUNC% UseWinPython
+call %FUNC% UsePython
 call %FUNC% GetModName MODNAME
 python -m %MODNAME%.tests.__init__
 call %FUNC% EndOfScript

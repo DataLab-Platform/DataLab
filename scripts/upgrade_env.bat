@@ -9,7 +9,7 @@ REM (see PythonQwt LICENSE file for more details)
 REM ======================================================
 setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
-call %FUNC% UseWinPython
+call %FUNC% UsePython
 cd %SCRIPTPATH%\..
 pip install --upgrade -r dev\requirements.txt
 pip list > dev\pip_list.txt

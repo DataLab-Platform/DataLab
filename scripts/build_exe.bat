@@ -22,7 +22,7 @@ del "%RESPATH%\tmp-*.png"
 
 @REM Building executable
 call %FUNC% SetPythonPath
-call %FUNC% UseWinPython
+call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
 pyinstaller %LIBNAME%.spec --noconfirm
 "C:\Program Files\7-Zip\7z.exe" a -mx1 "dist\%LIBNAME%-v%VERSION%_exe.zip" dist\%LIBNAME%

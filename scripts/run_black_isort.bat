@@ -12,7 +12,7 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetLibName LIBNAME
 call %FUNC% SetPythonPath
 set PYTHON=%CDL_PYTHONEXE%
-call %FUNC% UseWinPython
+call %FUNC% UsePython
 python -m black .
 python -m isort --profile black .
 call %FUNC% EndOfScript
