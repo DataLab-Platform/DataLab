@@ -27,7 +27,16 @@ def __compare_metadata(dict1, dict2):
         for key in list(dict_.keys()):
             if key.startswith("__"):
                 dict_.pop(key)
-    return str(dict_a) == str(dict_b)
+    same = True
+    for key in dict_a:
+        if key not in dict_b:
+            same = False
+            break
+        if isinstance(dict_a[key], dict):
+            same = same and __compare_metadata(dict_a[key], dict_b[key])
+        else:
+            same = same and (str(dict_a[key]) == str(dict_b[key]))
+    return same
 
 
 def test():
@@ -42,13 +51,25 @@ def test():
             image.metadata["tata"] = {
                 "lkl": 2,
                 "tototo": 3,
+                "arrdata": np.array([0, 1, 2, 3, 4, 5]),
                 "zzzz": "lklk",
-                "d": {"lkl": 2, "tototo": 3, "zzzz": "lklk"},
+                "bool": True,
+                "float": 1.234,
+                "list": [1, 2.5, 3, "str", False, 5],
+                "d": {
+                    "lkl": 2,
+                    "tototo": 3,
+                    "zzzz": "lklk",
+                    "bool": True,
+                    "float": 1.234,
+                    "list": [1, 2.5, 3, "str", False, 5, {"lkl": 2, "l": [1, 2, 3]}],
+                },
             }
             image.metadata["toto"] = [
                 np.array([[1, 2], [-3, 0]]),
                 np.array([[1, 2], [-3, 0], [99, 241]]),
             ]
+            image.metadata["array"] = np.array([-5, -4, -3, -2, -1])
             panel.add_object(image)
             fname = osp.join(tmpdir, "test.h5")
             win.save_to_h5_file(fname)

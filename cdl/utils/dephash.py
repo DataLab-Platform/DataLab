@@ -73,7 +73,7 @@ DEPFILENAME = f"dependencies-py{sys.version_info.major}-{sys.platform}.txt"
 
 
 def check_dependencies_hash(datapath, hash_dict=None):
-    """Check dependencies hash dictionnary"""
+    """Check dependencies hash dictionary"""
     if hash_dict is None:
         hash_dict = {}
         with open(osp.join(datapath, DEPFILENAME), "rb") as filehandle:

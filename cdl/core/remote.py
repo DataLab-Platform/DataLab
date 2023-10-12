@@ -28,12 +28,12 @@ from xmlrpc.server import SimpleXMLRPCServer
 
 import numpy as np
 from guidata.dataset import datatypes as gdt
+from guidata.dataset.io import JSONReader, JSONWriter
 from qtpy import QtCore as QC
 
 from cdl import __version__
 from cdl.config import Conf, initialize
 from cdl.core.baseproxy import AbstractCDLControl, BaseProxy
-from cdl.core.io.native import NativeJSONReader, NativeJSONWriter
 from cdl.core.model.base import items_to_json, json_to_items
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
@@ -91,7 +91,7 @@ def dataset_to_json(param: gdt.DataSet) -> list[str]:
     Returns:
         JSON data
     """
-    writer = NativeJSONWriter()
+    writer = JSONWriter()
     param.serialize(writer)
     param_json = writer.get_json()
     klass = param.__class__
@@ -111,7 +111,7 @@ def json_to_dataset(param_data: list[str]) -> gdt.DataSet:
     mod = importlib.__import__(param_module, fromlist=[param_clsname])
     klass = getattr(mod, param_clsname)
     param = klass()
-    reader = NativeJSONReader(param_json)
+    reader = JSONReader(param_json)
     param.deserialize(reader)
     return param
 

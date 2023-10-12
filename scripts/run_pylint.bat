@@ -1,7 +1,7 @@
 @echo off
 REM This script was derived from PythonQwt project
 REM ======================================================
-REM Test launcher script
+REM Run pylint analysis
 REM ======================================================
 REM Licensed under the terms of the MIT License
 REM Copyright (c) 2020 Pierre Raybaut

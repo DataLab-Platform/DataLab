@@ -635,7 +635,7 @@ New features:
 
 * Added curve fitting feature supporting various models (polynomial,
   gaussian, lorentzian, Voigt and multi-gaussian). Computed fitting
-  parameters are stored in signal's metadata (a new dictionnary item
+  parameters are stored in signal's metadata (a new dictionary item
   for the Signal objects)
 
 * Edit menu: added a new "View in a new window" action

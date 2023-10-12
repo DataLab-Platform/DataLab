@@ -73,7 +73,7 @@ import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
-from cdl.core.model.base import MetadataItem, ResultShape, items_to_json
+from cdl.core.model.base import ResultShape, items_to_json
 from cdl.utils.qthelpers import (
     create_progress_bar,
     exec_dialog,
@@ -98,9 +98,6 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.base import ShapeTypes
     from cdl.core.model.image import ImageObj, NewImageParam
     from cdl.core.model.signal import NewSignalParam, SignalObj
-
-#  Registering MetadataItem edit widget
-gdq.DataSetEditLayout.register(MetadataItem, gdq.ButtonWidget)
 
 
 class ObjectProp(QW.QWidget):

@@ -78,7 +78,7 @@ class SignalObj(gdt.DataSet, base.BaseObj):
     _datag = gdt.BeginGroup(_("Data and metadata"))
     title = gdi.StringItem(_("Signal title"), default=_("Untitled"))
     xydata = gdi.FloatArrayItem(_("Data"), transpose=True, minmax="rows")
-    metadata = base.MetadataItem(_("Metadata"), default={})
+    metadata = gdi.DictItem(_("Metadata"), default={})
     _e_datag = gdt.EndGroup(_("Data and metadata"))
 
     _unitsg = gdt.BeginGroup(_("Titles and units"))

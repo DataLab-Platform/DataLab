@@ -359,7 +359,7 @@ class ImageObj(gdt.DataSet, base.BaseObj):
 
     _datag = gdt.BeginGroup(_("Data"))
     data = gdi.FloatArrayItem(_("Data"))
-    metadata = base.MetadataItem(_("Metadata"), default={})
+    metadata = gdi.DictItem(_("Metadata"), default={})
     _e_datag = gdt.EndGroup(_("Data"))
 
     _dxdyg = gdt.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')

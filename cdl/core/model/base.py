@@ -36,50 +36,6 @@ ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
 
 
-class MetadataItem(gdt.DataItem):
-    """
-    Construct a data item representing a metadata dictionary
-        * label [string]: name
-        * default [dict]: default value (optional)
-        * help [string]: text shown in tooltip (optional)
-        * check [bool]: if False, value is not checked (optional, default=True)
-    """
-
-    # pylint: disable=redefined-builtin,abstract-method
-    def __init__(self, label, default=None, help="", check=True):
-        gdt.DataItem.__init__(self, label, default=default, help=help, check=check)
-        self.set_prop("display", callback=self.__dictedit)
-        self.set_prop("display", icon="dictedit.png")
-
-    @staticmethod
-    # pylint: disable=unused-argument
-    def __dictedit(instance, item, value, parent):
-        """Open a dictionary editor"""
-        # pylint: disable=import-outside-toplevel
-        from guidata.widgets.collectionseditor import CollectionsEditor
-
-        editor = CollectionsEditor(parent)
-        value_was_none = value is None
-        if value_was_none:
-            value = {}
-        editor.setup(value)
-        if exec_dialog(editor):
-            return editor.get_value()
-        if value_was_none:
-            return None
-        return value
-
-    def serialize(self, instance, writer):
-        """Serialize this item"""
-        value = self.get_value(instance)
-        writer.write_dict(value)
-
-    def get_value_from_reader(self, reader):
-        """Reads value from the reader object, inside the try...except
-        statement defined in the base item `deserialize` method"""
-        return reader.read_dict()
-
-
 @enum.unique
 class Choices(enum.Enum):
     """Object associating an enum to guidata.dataset.dataitems.ChoiceItem choices"""
@@ -233,7 +189,7 @@ def set_plot_item_editable(item, state):
 # -----------------
 # Could we also use this opportunity to introduce support for custom shapes?
 # This could be done by specifying the class name of the shape to be used in the
-# key of the metadata dictionnary entry (instead of "_xxx_label", the key would be
+# key of the metadata dictionary entry (instead of "_xxx_label", the key would be
 # "_xxx_classname_label"). This would allow to use custom shapes in the same way
 # as the built-in shapes (e.g. rectangle, circle, etc.).
 # Custom shapes would have to be registered: for this, we could use the same

@@ -208,14 +208,14 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
 
     @classmethod
     def get_def_dict(cls, category: str) -> dict:
-        """Get default visualization settings as a dictionnary
+        """Get default visualization settings as a dictionary
 
         Args:
             category (str): category ("ima" or "sig", respectively for image
                 and signal)
 
         Returns:
-            dict: default visualization settings as a dictionnary
+            dict: default visualization settings as a dictionary
         """
         assert category in ("ima", "sig")
         prefix = f"{category}_def_"
@@ -231,12 +231,12 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
 
     @classmethod
     def set_def_dict(cls, category: str, def_dict: dict) -> None:
-        """Set default visualization settings from a dictionnary
+        """Set default visualization settings from a dictionary
 
         Args:
             category (str): category ("ima" or "sig", respectively for image
                 and signal)
-            def_dict (dict): default visualization settings as a dictionnary
+            def_dict (dict): default visualization settings as a dictionary
         """
         assert category in ("ima", "sig")
         prefix = f"{category}_def_"
