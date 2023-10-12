@@ -3,12 +3,15 @@
 
 block_cipher = None
 
-import sys
-sitepackages = os.path.join(sys.prefix, 'Lib', 'site-packages')
-guidata_images = os.path.join(sitepackages, 'guidata', 'images')
-guidata_locale = os.path.join(sitepackages, 'guidata', 'locale', 'fr', 'LC_MESSAGES')
-guiqwt_images = os.path.join(sitepackages, 'guiqwt', 'images')
-guiqwt_locale = os.path.join(sitepackages, 'guiqwt', 'locale', 'fr', 'LC_MESSAGES')
+import os.path as osp
+import guidata
+guidata_path = osp.dirname(guidata.__file__)
+guidata_images = osp.join(guidata_path, 'images')
+guidata_locale = osp.join(guidata_path, 'locale', 'fr', 'LC_MESSAGES')
+import guiqwt
+guiqwt_path = osp.dirname(guiqwt.__file__)
+guiqwt_images = os.path.join(guiqwt_path, 'images')
+guiqwt_locale = os.path.join(guiqwt_path, 'locale', 'fr', 'LC_MESSAGES')
 
 from PyInstaller.utils.hooks import collect_submodules
 all_hidden_imports = collect_submodules('cdl')
