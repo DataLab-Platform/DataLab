@@ -37,7 +37,10 @@ class ClassicsImageFormat(ImageFormatBase):
 
     def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""
-        skimage.io.imsave(filename, obj.data, check_contrast=False)
+        data = obj.data
+        if osp.splitext(filename)[1].lower() in (".bmp", ".jpg", ".jpeg", ".png"):
+            data = obj.data.astype(np.uint8)
+        skimage.io.imsave(filename, data, check_contrast=False)
 
 
 class JPEG2000ImageFormat(ClassicsImageFormat):
