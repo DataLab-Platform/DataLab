@@ -23,7 +23,7 @@ from cdl.core.io.signal import SignalIORegistry
 from cdl.core.model.signal import SignalObj, create_signal_from_param, new_signal_param
 
 if TYPE_CHECKING:  # pragma: no cover
-    import guidata.dataset.datatypes as gdt
+    import guidata.dataset as gds
     from guiqwt.plot import CurveWidget
     from qtpy import QtWidgets as QW
 
@@ -56,7 +56,7 @@ class SignalPanel(BaseDataPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+            newparam (guidata.dataset.DataSet): new object parameters.
              If None, create a new one.
 
         Returns:
@@ -73,15 +73,15 @@ class SignalPanel(BaseDataPanel):
     def new_object(
         self,
         newparam: NewSignalParam | None = None,
-        addparam: gdt.DataSet | None = None,
+        addparam: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> SignalObj | None:
         """Create a new object (signal).
 
         Args:
-            newparam (guidata.dataset.datatypes.DataSet): new object parameters
-            addparam (guidata.dataset.datatypes.DataSet): additional parameters
+            newparam (guidata.dataset.DataSet): new object parameters
+            addparam (guidata.dataset.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the new object to the panel (default: True)
 

@@ -19,8 +19,7 @@ from collections.abc import Iterable
 from typing import Any
 from uuid import uuid4
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 from guidata.dataset.io import JSONHandler, JSONReader, JSONWriter
 from guiqwt.annotations import AnnotatedPoint, AnnotatedShape
@@ -38,7 +37,7 @@ ANN_KEY = "_ann_"
 
 @enum.unique
 class Choices(enum.Enum):
-    """Object associating an enum to guidata.dataset.dataitems.ChoiceItem choices"""
+    """Object associating an enum to guidata.dataset.ChoiceItem choices"""
 
     # Reimplement enum.Enum method as suggested by Python documentation:
     # https://docs.python.org/3/library/enum.html#enum.Enum._generate_next_value_
@@ -50,11 +49,11 @@ class Choices(enum.Enum):
     @classmethod
     def get_choices(cls):
         """Return tuple of (key, value) choices to be used as parameter of
-        guidata.dataset.dataitems.ChoiceItem"""
+        guidata.dataset.ChoiceItem"""
         return tuple((member, member.value) for member in cls)
 
 
-class BaseProcParam(gdt.DataSet):
+class BaseProcParam(gds.DataSet):
     """Base class for processing parameters"""
 
     def __init__(self, title=None, comment=None, icon=""):
@@ -81,7 +80,7 @@ class BaseProcParam(gdt.DataSet):
 class BaseRandomParam(BaseProcParam):
     """Random signal/image parameters"""
 
-    seed = gdi.IntItem(_("Seed"), default=1)
+    seed = gds.IntItem(_("Seed"), default=1)
 
 
 class UniformRandomParam(BaseRandomParam):
@@ -91,10 +90,10 @@ class UniformRandomParam(BaseRandomParam):
         """Do something in case of integer min-max range"""
         self.vmin, self.vmax = vmin, vmax
 
-    vmin = gdi.FloatItem(
+    vmin = gds.FloatItem(
         "V<sub>min</sub>", default=-0.5, help=_("Uniform distribution lower bound")
     )
-    vmax = gdi.FloatItem(
+    vmax = gds.FloatItem(
         "V<sub>max</sub>", default=0.5, help=_("Uniform distribution higher bound")
     ).set_pos(col=1)
 
@@ -111,10 +110,10 @@ class NormalRandomParam(BaseRandomParam):
         self.mu = int(self.DEFAULT_RELATIVE_MU * delta + vmin)
         self.sigma = int(self.DEFAULT_RELATIVE_SIGMA * delta)
 
-    mu = gdi.FloatItem(
+    mu = gds.FloatItem(
         "μ", default=DEFAULT_RELATIVE_MU, help=_("Normal distribution mean")
     )
-    sigma = gdi.FloatItem(
+    sigma = gds.FloatItem(
         "σ",
         default=DEFAULT_RELATIVE_SIGMA,
         help=_("Normal distribution standard deviation"),
@@ -494,7 +493,7 @@ def json_to_items(json_str: str | None) -> list:
     return items
 
 
-class BaseObjMeta(abc.ABCMeta, gdt.DataSetMeta):
+class BaseObjMeta(abc.ABCMeta, gds.DataSetMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
@@ -506,7 +505,7 @@ class BaseObj(metaclass=BaseObjMeta):
     DEFAULT_FMT = "s"  # This is overriden in children classes
     CONF_FMT = Conf.view.sig_format  # This is overriden in children classes
 
-    # This is overriden in children classes with a gdi.DictItem instance:
+    # This is overriden in children classes with a gds.DictItem instance:
     metadata: dict[str, Any] = {}
 
     # Metadata dictionary keys for special properties:
@@ -637,7 +636,7 @@ class BaseObj(metaclass=BaseObjMeta):
             *defaults: default values
         """
 
-    def roidata_to_params(self, roidata: np.ndarray) -> gdt.DataSetGroup:
+    def roidata_to_params(self, roidata: np.ndarray) -> gds.DataSetGroup:
         """Convert ROI array data to ROI dataset group.
 
         Args:
@@ -650,12 +649,12 @@ class BaseObj(metaclass=BaseObjMeta):
         for index, parameters in enumerate(roidata):
             roi_param = self.get_roi_param(f"ROI{index:02d}", *parameters)
             roi_params.append(roi_param)
-        group = gdt.DataSetGroup(roi_params, title=_("Regions of interest"))
+        group = gds.DataSetGroup(roi_params, title=_("Regions of interest"))
         return group
 
     @staticmethod
     @abc.abstractmethod
-    def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -712,7 +711,7 @@ class BaseObj(metaclass=BaseObjMeta):
         label: str,
         shapetype: ShapeTypes,
         array: np.ndarray,
-        param: gdt.DataSet | None = None,
+        param: gds.DataSet | None = None,
     ) -> ResultShape:
         """Add geometric shape as metadata entry, and return ResultShape instance.
 
@@ -720,7 +719,7 @@ class BaseObj(metaclass=BaseObjMeta):
             label (str): label
             shapetype (ShapeTypes): shape type
             array (numpy.ndarray): array
-            param (guidata.dataset.datatypes.DataSet): parameters
+            param (guidata.dataset.DataSet): parameters
 
         Returns:
             ResultShape: result shape

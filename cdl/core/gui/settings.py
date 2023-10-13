@@ -13,20 +13,19 @@ from __future__ import annotations
 
 from typing import Any
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
-from guidata.utils import restore_dataset, update_dataset
+import guidata.dataset as gds
+from guidata.dataset import restore_dataset, update_dataset
 from guiqwt.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
 
 
-class MainSettings(gdt.DataSet):
+class MainSettings(gds.DataSet):
     """DataLab main settings"""
 
-    g0 = gdt.BeginGroup(_("Settings for main window and general features"))
-    process_isolation_enabled = gdi.BoolItem(
+    g0 = gds.BeginGroup(_("Settings for main window and general features"))
+    process_isolation_enabled = gds.BoolItem(
         "",
         _("Process isolation"),
         help=_(
@@ -34,7 +33,7 @@ class MainSettings(gdt.DataSet):
             "<br>which prevents the application from freezing during long computations."
         ),
     )
-    rpc_server_enabled = gdi.BoolItem(
+    rpc_server_enabled = gds.BoolItem(
         "",
         _("RPC server"),
         help=_(
@@ -42,19 +41,19 @@ class MainSettings(gdt.DataSet):
             "<br>like your own scripts (e.g. from Spyder or Jupyter) or other software."
         ),
     )
-    available_memory_threshold = gdi.IntItem(
+    available_memory_threshold = gds.IntItem(
         _("Available memory threshold"),
         unit=_("MB"),
         help=_(
             "Threshold below which a warning is displayed before loading any new data"
         ),
     )
-    plugins_enabled = gdi.BoolItem(
+    plugins_enabled = gds.BoolItem(
         "",
         _("Third-party plugins"),
         help=_("Disable third-party plugins at startup"),
     )
-    plugins_path = gdi.DirectoryItem(
+    plugins_path = gds.DirectoryItem(
         _("Plugins path"),
         help=_(
             "Path to third-party plugins.<br><br>"
@@ -62,38 +61,38 @@ class MainSettings(gdt.DataSet):
             "as well as in your PYTHONPATH."
         ),
     )
-    _g0 = gdt.EndGroup("")
+    _g0 = gds.EndGroup("")
 
 
-class ConsoleSettings(gdt.DataSet):
+class ConsoleSettings(gds.DataSet):
     """DataLab console settings"""
 
-    g0 = gdt.BeginGroup(
+    g0 = gds.BeginGroup(
         _("Settings for internal console, used for debugging or advanced users")
     )
-    console_enabled = gdi.BoolItem("", _("Console enabled"))
-    external_editor_path = gdi.StringItem(_("External editor path"))
-    external_editor_args = gdi.StringItem(_("External editor arguments"))
-    _g0 = gdt.EndGroup("")
+    console_enabled = gds.BoolItem("", _("Console enabled"))
+    external_editor_path = gds.StringItem(_("External editor path"))
+    external_editor_args = gds.StringItem(_("External editor arguments"))
+    _g0 = gds.EndGroup("")
 
 
-class IOSettings(gdt.DataSet):
+class IOSettings(gds.DataSet):
     """DataLab I/O settings"""
 
-    g0 = gdt.BeginGroup(_("Settings for I/O operations"))
-    h5_fullpath_in_title = gdi.BoolItem("", _("HDF5 full path in title"))
-    h5_fname_in_title = gdi.BoolItem("", _("HDF5 file name in title"))
-    _g0 = gdt.EndGroup("")
+    g0 = gds.BeginGroup(_("Settings for I/O operations"))
+    h5_fullpath_in_title = gds.BoolItem("", _("HDF5 full path in title"))
+    h5_fname_in_title = gds.BoolItem("", _("HDF5 file name in title"))
+    _g0 = gds.EndGroup("")
 
 
-class ProcSettings(gdt.DataSet):
+class ProcSettings(gds.DataSet):
     """DataLab processing settings"""
 
-    g0 = gdt.BeginGroup(_("Settings for computations"))
-    fft_shift_enabled = gdi.BoolItem("", _("FFT shift"))
-    extract_roi_singleobj = gdi.BoolItem("", _("Extract ROI in single object"))
-    ignore_warnings = gdi.BoolItem("", _("Ignore warnings"))
-    _g0 = gdt.EndGroup("")
+    g0 = gds.BeginGroup(_("Settings for computations"))
+    fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
+    extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
+    ignore_warnings = gds.BoolItem("", _("Ignore warnings"))
+    _g0 = gds.EndGroup("")
 
 
 class ImageDefaultSettings(BaseImageParam):
@@ -104,12 +103,12 @@ class ImageDefaultSettings(BaseImageParam):
 
 #  pylint:disable=unused-argument
 def edit_default_image_settings(
-    dataset: gdt.DataSet, item: gdt.DataItem, value: Any, parent: QW.QWidget
+    dataset: gds.DataSet, item: gds.DataItem, value: Any, parent: QW.QWidget
 ) -> bool:
     """Edit default image settings
 
     Args:
-        dataset (guidata.dataset.datatypes.DataSet): dataset
+        dataset (guidata.dataset.DataSet): dataset
         item (DataItem): Data item
         value (Any): Value
         parent (QWidget): Parent widget
@@ -127,11 +126,11 @@ def edit_default_image_settings(
     return False
 
 
-class ViewSettings(gdt.DataSet):
+class ViewSettings(gds.DataSet):
     """DataLab Visualization settings"""
 
-    g0 = gdt.BeginGroup(_("Image visualization settings"))
-    plot_toolbar_position = gdi.ImageChoiceItem(
+    g0 = gds.BeginGroup(_("Image visualization settings"))
+    plot_toolbar_position = gds.ImageChoiceItem(
         _("Plot toolbar position"),
         (
             ("top", _("Top (above plot)"), "libre-gui-arrow-up.svg"),
@@ -140,7 +139,7 @@ class ViewSettings(gdt.DataSet):
             ("right", _("Right (of plot)"), "libre-gui-arrow-right.svg"),
         ),
     )
-    ima_ref_lut_range = gdi.BoolItem(
+    ima_ref_lut_range = gds.BoolItem(
         "",
         _("Use reference image LUT range"),
         help=_(
@@ -148,7 +147,7 @@ class ViewSettings(gdt.DataSet):
             "with the same LUT range as the first selected image"
         ),
     )
-    ima_eliminate_outliers = gdi.FloatItem(
+    ima_eliminate_outliers = gds.FloatItem(
         _("Eliminate outliers"),
         unit=_("%"),
         min=0,
@@ -158,17 +157,17 @@ class ViewSettings(gdt.DataSet):
             "of the image histogram - <i>recommanded values are below 1%</i>"
         ),
     )
-    ima_defaults = gdi.ButtonItem(
+    ima_defaults = gds.ButtonItem(
         _("Default image visualization settings"),
         edit_default_image_settings,
         icon="image.svg",
         default=False,
     )
-    _g0 = gdt.EndGroup("")
+    _g0 = gds.EndGroup("")
 
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
-def _iter_conf(paramdict: dict[str, gdt.DataSet]) -> tuple[gdt.DataSet, str, str]:
+def _iter_conf(paramdict: dict[str, gds.DataSet]) -> tuple[gds.DataSet, str, str]:
     """Iterate over configuration parameters"""
     confdict = Conf.to_dict()
     for section_name, section in confdict.items():
@@ -179,14 +178,14 @@ def _iter_conf(paramdict: dict[str, gdt.DataSet]) -> tuple[gdt.DataSet, str, str
                     yield param, section_name, option
 
 
-def conf_to_datasets(paramdict: dict[str, gdt.DataSet]) -> None:
+def conf_to_datasets(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert DataLab configuration to datasets"""
     for param, section, option in _iter_conf(paramdict):
         value = getattr(getattr(Conf, section), option).get()
         setattr(param, option, value)
 
 
-def datasets_to_conf(paramdict: dict[str, gdt.DataSet]) -> None:
+def datasets_to_conf(paramdict: dict[str, gds.DataSet]) -> None:
     """Convert datasets to DataLab configuration"""
     for param, section, option in _iter_conf(paramdict):
         value = getattr(param, option)
@@ -202,7 +201,7 @@ RESTART_OPTIONS = (
 )
 
 
-def get_restart_items_values(paramdict: dict[str, gdt.DataSet]) -> list:
+def get_restart_items_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get restart items values"""
     values = []
     for option, _name in RESTART_OPTIONS:
@@ -212,7 +211,7 @@ def get_restart_items_values(paramdict: dict[str, gdt.DataSet]) -> list:
     return values
 
 
-def get_all_values(paramdict: dict[str, gdt.DataSet]) -> list:
+def get_all_values(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all values"""
     values = []
     for param, _section, _option in _iter_conf(paramdict):
@@ -220,7 +219,7 @@ def get_all_values(paramdict: dict[str, gdt.DataSet]) -> list:
     return values
 
 
-def get_all_options(paramdict: dict[str, gdt.DataSet]) -> list:
+def get_all_options(paramdict: dict[str, gds.DataSet]) -> list:
     """Get all options"""
     options = []
     for _param, _section, _option in _iter_conf(paramdict):
@@ -244,7 +243,7 @@ def edit_settings(parent: QW.QWidget) -> None:
     conf_to_datasets(paramdict)
     before = get_restart_items_values(paramdict)
     all_values_before = get_all_values(paramdict)
-    params = gdt.DataSetGroup(paramdict.values(), title=_("Settings"))
+    params = gds.DataSetGroup(paramdict.values(), title=_("Settings"))
     changed_options = []
     if params.edit(parent=parent):
         after = get_restart_items_values(paramdict)

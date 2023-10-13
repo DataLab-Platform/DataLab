@@ -17,8 +17,7 @@ Restoration computation module
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import pywt
 from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
@@ -29,10 +28,10 @@ from cdl.core.computation.image.morphology import MorphologyParam
 from cdl.core.model.image import ImageObj
 
 
-class DenoiseTVParam(gdt.DataSet):
+class DenoiseTVParam(gds.DataSet):
     """Total Variation denoising parameters"""
 
-    weight = gdi.FloatItem(
+    weight = gds.FloatItem(
         _("Denoising weight"),
         default=0.1,
         min=0,
@@ -42,7 +41,7 @@ class DenoiseTVParam(gdt.DataSet):
             "(at the expense of fidelity to input)."
         ),
     )
-    eps = gdi.FloatItem(
+    eps = gds.FloatItem(
         "Epsilon",
         default=0.0002,
         min=0,
@@ -53,7 +52,7 @@ class DenoiseTVParam(gdt.DataSet):
             "(E_(n-1) - E_n) < eps * E_0"
         ),
     )
-    max_num_iter = gdi.IntItem(
+    max_num_iter = gds.IntItem(
         _("Max. iterations"),
         default=200,
         min=0,
@@ -81,10 +80,10 @@ def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     return dst
 
 
-class DenoiseBilateralParam(gdt.DataSet):
+class DenoiseBilateralParam(gds.DataSet):
     """Bilateral filter denoising parameters"""
 
-    sigma_spatial = gdi.FloatItem(
+    sigma_spatial = gds.FloatItem(
         "σ<sub>spatial</sub>",
         default=1.0,
         min=0,
@@ -97,10 +96,10 @@ class DenoiseBilateralParam(gdt.DataSet):
         ),
     )
     _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = gdi.ChoiceItem(
+    mode = gds.ChoiceItem(
         _("Mode"), list(zip(_modelist, _modelist)), default="constant"
     )
-    cval = gdi.FloatItem(
+    cval = gds.FloatItem(
         "cval",
         default=0,
         help=_(
@@ -132,17 +131,17 @@ def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageO
     return dst
 
 
-class DenoiseWaveletParam(gdt.DataSet):
+class DenoiseWaveletParam(gds.DataSet):
     """Wavelet denoising parameters"""
 
     _wavelist = pywt.wavelist()
-    wavelet = gdi.ChoiceItem(
+    wavelet = gds.ChoiceItem(
         _("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9"
     )
     _modelist = ("soft", "hard")
-    mode = gdi.ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
     _methlist = ("BayesShrink", "VisuShrink")
-    method = gdi.ChoiceItem(
+    method = gds.ChoiceItem(
         _("Method"), list(zip(_methlist, _methlist)), default="VisuShrink"
     )
 

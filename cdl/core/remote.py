@@ -26,8 +26,8 @@ from typing import TYPE_CHECKING
 from xmlrpc.client import Binary, ServerProxy
 from xmlrpc.server import SimpleXMLRPCServer
 
+import guidata.dataset as gds
 import numpy as np
-from guidata.dataset import datatypes as gdt
 from guidata.dataset.io import JSONReader, JSONWriter
 from qtpy import QtCore as QC
 
@@ -76,7 +76,7 @@ def rpcbinary_to_array(binary: Binary) -> np.ndarray:
     return np.load(dbytes, allow_pickle=False)
 
 
-def dataset_to_json(param: gdt.DataSet) -> list[str]:
+def dataset_to_json(param: gds.DataSet) -> list[str]:
     """Convert guidata DataSet to JSON data.
 
     The JSON data is a list of three elements:
@@ -98,7 +98,7 @@ def dataset_to_json(param: gdt.DataSet) -> list[str]:
     return [klass.__module__, klass.__name__, param_json]
 
 
-def json_to_dataset(param_data: list[str]) -> gdt.DataSet:
+def json_to_dataset(param_data: list[str]) -> gds.DataSet:
     """Convert JSON data to guidata DataSet.
 
     Args:
@@ -754,16 +754,16 @@ class RemoteClient(BaseProxy):
             title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel
         )
 
-    def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
         """Call compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
-            param (guidata.dataset.datatypes.DataSet | None): Compute function
+            param (guidata.dataset.DataSet | None): Compute function
              parameter. Defaults to None.
 
         Returns:
-            guidata.dataset.datatypes.DataSet: Compute function result
+            guidata.dataset.DataSet: Compute function result
         """
         if param is None:
             return self._cdl.calc(name)

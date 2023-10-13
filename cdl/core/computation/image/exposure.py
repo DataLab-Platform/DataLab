@@ -17,8 +17,7 @@ Exposure computation module
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 from skimage import exposure
 
 from cdl.config import _
@@ -26,16 +25,16 @@ from cdl.core.computation.image import VALID_DTYPES_STRLIST, dst_11
 from cdl.core.model.image import ImageObj
 
 
-class AdjustGammaParam(gdt.DataSet):
+class AdjustGammaParam(gds.DataSet):
     """Gamma adjustment parameters"""
 
-    gamma = gdi.FloatItem(
+    gamma = gds.FloatItem(
         _("Gamma"),
         default=1.0,
         min=0.0,
         help=_("Gamma correction factor (higher values give more contrast)."),
     )
-    gain = gdi.FloatItem(
+    gain = gds.FloatItem(
         _("Gain"),
         default=1.0,
         min=0.0,
@@ -56,16 +55,16 @@ def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
     return dst
 
 
-class AdjustLogParam(gdt.DataSet):
+class AdjustLogParam(gds.DataSet):
     """Logarithmic adjustment parameters"""
 
-    gain = gdi.FloatItem(
+    gain = gds.FloatItem(
         _("Gain"),
         default=1.0,
         min=0.0,
         help=_("Gain factor (higher values give more contrast)."),
     )
-    inv = gdi.BoolItem(
+    inv = gds.BoolItem(
         _("Inverse"),
         default=False,
         help=_("If True, apply inverse logarithmic transformation."),
@@ -85,23 +84,23 @@ def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
     return dst
 
 
-class AdjustSigmoidParam(gdt.DataSet):
+class AdjustSigmoidParam(gds.DataSet):
     """Sigmoid adjustment parameters"""
 
-    cutoff = gdi.FloatItem(
+    cutoff = gds.FloatItem(
         _("Cutoff"),
         default=0.5,
         min=0.0,
         max=1.0,
         help=_("Cutoff value (higher values give more contrast)."),
     )
-    gain = gdi.FloatItem(
+    gain = gds.FloatItem(
         _("Gain"),
         default=10.0,
         min=0.0,
         help=_("Gain factor (higher values give more contrast)."),
     )
-    inv = gdi.BoolItem(
+    inv = gds.BoolItem(
         _("Inverse"),
         default=False,
         help=_("If True, apply inverse sigmoid transformation."),
@@ -125,11 +124,11 @@ def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
     return dst
 
 
-class RescaleIntensityParam(gdt.DataSet):
+class RescaleIntensityParam(gds.DataSet):
     """Intensity rescaling parameters"""
 
     _dtype_list = ["image", "dtype"] + VALID_DTYPES_STRLIST
-    in_range = gdi.ChoiceItem(
+    in_range = gds.ChoiceItem(
         _("Input range"),
         list(zip(_dtype_list, _dtype_list)),
         default="image",
@@ -138,7 +137,7 @@ class RescaleIntensityParam(gdt.DataSet):
             "image min/max levels, 'dtype' refers to input image data type range)."
         ),
     )
-    out_range = gdi.ChoiceItem(
+    out_range = gds.ChoiceItem(
         _("Output range"),
         list(zip(_dtype_list, _dtype_list)),
         default="dtype",
@@ -168,10 +167,10 @@ def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageO
     return dst
 
 
-class EqualizeHistParam(gdt.DataSet):
+class EqualizeHistParam(gds.DataSet):
     """Histogram equalization parameters"""
 
-    nbins = gdi.IntItem(
+    nbins = gds.IntItem(
         _("Number of bins"),
         min=1,
         default=256,
@@ -195,7 +194,7 @@ def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
 class EqualizeAdaptHistParam(EqualizeHistParam):
     """Adaptive histogram equalization parameters"""
 
-    clip_limit = gdi.FloatItem(
+    clip_limit = gds.FloatItem(
         _("Clipping limit"),
         default=0.01,
         min=0.0,

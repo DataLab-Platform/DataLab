@@ -22,8 +22,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
@@ -176,7 +175,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
 class FlatFieldParam(BaseProcParam):
     """Flat-field parameters"""
 
-    threshold = gdi.FloatItem(_("Threshold"), default=0.0)
+    threshold = gds.FloatItem(_("Threshold"), default=0.0)
 
 
 def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> ImageObj:
@@ -198,10 +197,10 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # --------------------------------------------------------------------------------------
 
 
-class LogP1Param(gdt.DataSet):
+class LogP1Param(gds.DataSet):
     """Log10 parameters"""
 
-    n = gdi.FloatItem("n")
+    n = gds.FloatItem("n")
 
 
 def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
@@ -217,17 +216,17 @@ def compute_logp1(src: ImageObj, p: LogP1Param) -> ImageObj:
     return dst
 
 
-class RotateParam(gdt.DataSet):
+class RotateParam(gds.DataSet):
     """Rotate parameters"""
 
     boundaries = ("constant", "nearest", "reflect", "wrap")
-    prop = gdt.ValueProp(False)
+    prop = gds.ValueProp(False)
 
-    angle = gdi.FloatItem(f"{_('Angle')} (°)")
-    mode = gdi.ChoiceItem(
+    angle = gds.FloatItem(f"{_('Angle')} (°)")
+    mode = gds.ChoiceItem(
         _("Mode"), list(zip(boundaries, boundaries)), default=boundaries[0]
     )
-    cval = gdi.FloatItem(
+    cval = gds.FloatItem(
         _("cval"),
         default=0.0,
         help=_(
@@ -236,7 +235,7 @@ class RotateParam(gdt.DataSet):
             "'constant'"
         ),
     )
-    reshape = gdi.BoolItem(
+    reshape = gds.BoolItem(
         _("Reshape the output array"),
         default=False,
         help=_(
@@ -245,10 +244,10 @@ class RotateParam(gdt.DataSet):
             "contained completely in the output"
         ),
     )
-    prefilter = gdi.BoolItem(_("Prefilter the input image"), default=True).set_prop(
+    prefilter = gds.BoolItem(_("Prefilter the input image"), default=True).set_prop(
         "display", store=prop
     )
-    order = gdi.IntItem(
+    order = gds.IntItem(
         _("Order"),
         default=3,
         min=0,
@@ -384,35 +383,35 @@ def compute_flipv(src: ImageObj) -> ImageObj:
     return dst
 
 
-class GridParam(gdt.DataSet):
+class GridParam(gds.DataSet):
     """Grid parameters"""
 
-    _prop = gdt.GetAttrProp("direction")
+    _prop = gds.GetAttrProp("direction")
     _directions = (("col", _("columns")), ("row", _("rows")))
-    direction = gdi.ChoiceItem(_("Distribute over"), _directions, radio=True).set_prop(
+    direction = gds.ChoiceItem(_("Distribute over"), _directions, radio=True).set_prop(
         "display", store=_prop
     )
-    cols = gdi.IntItem(_("Columns"), default=1, nonzero=True).set_prop(
-        "display", active=gdt.FuncProp(_prop, lambda x: x == "col")
+    cols = gds.IntItem(_("Columns"), default=1, nonzero=True).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "col")
     )
-    rows = gdi.IntItem(_("Rows"), default=1, nonzero=True).set_prop(
-        "display", active=gdt.FuncProp(_prop, lambda x: x == "row")
+    rows = gds.IntItem(_("Rows"), default=1, nonzero=True).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "row")
     )
-    colspac = gdi.FloatItem(_("Column spacing"), default=0.0, min=0.0)
-    rowspac = gdi.FloatItem(_("Row spacing"), default=0.0, min=0.0)
+    colspac = gds.FloatItem(_("Column spacing"), default=0.0, min=0.0)
+    rowspac = gds.FloatItem(_("Row spacing"), default=0.0, min=0.0)
 
 
-class ResizeParam(gdt.DataSet):
+class ResizeParam(gds.DataSet):
     """Resize parameters"""
 
     boundaries = ("constant", "nearest", "reflect", "wrap")
-    prop = gdt.ValueProp(False)
+    prop = gds.ValueProp(False)
 
-    zoom = gdi.FloatItem(_("Zoom"))
-    mode = gdi.ChoiceItem(
+    zoom = gds.FloatItem(_("Zoom"))
+    mode = gds.ChoiceItem(
         _("Mode"), list(zip(boundaries, boundaries)), default=boundaries[0]
     )
-    cval = gdi.FloatItem(
+    cval = gds.FloatItem(
         _("cval"),
         default=0.0,
         help=_(
@@ -421,10 +420,10 @@ class ResizeParam(gdt.DataSet):
             "'constant'"
         ),
     )
-    prefilter = gdi.BoolItem(_("Prefilter the input image"), default=True).set_prop(
+    prefilter = gds.BoolItem(_("Prefilter the input image"), default=True).set_prop(
         "display", store=prop
     )
-    order = gdi.IntItem(
+    order = gds.IntItem(
         _("Order"),
         default=3,
         min=0,
@@ -455,34 +454,34 @@ def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
     return dst
 
 
-class BinningParam(gdt.DataSet):
+class BinningParam(gds.DataSet):
     """Binning parameters"""
 
-    binning_x = gdi.IntItem(
+    binning_x = gds.IntItem(
         _("Cluster size (X)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along X-axis."),
     )
-    binning_y = gdi.IntItem(
+    binning_y = gds.IntItem(
         _("Cluster size (Y)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along Y-axis."),
     )
     _operations = BINNING_OPERATIONS
-    operation = gdi.ChoiceItem(
+    operation = gds.ChoiceItem(
         _("Operation"),
         list(zip(_operations, _operations)),
         default=_operations[0],
     )
     _dtype_list = ["dtype"] + VALID_DTYPES_STRLIST
-    dtype_str = gdi.ChoiceItem(
+    dtype_str = gds.ChoiceItem(
         _("Data type"),
         list(zip(_dtype_list, _dtype_list)),
         help=_("Output image data type."),
     )
-    change_pixel_size = gdi.BoolItem(
+    change_pixel_size = gds.BoolItem(
         _("Change pixel size"),
         default=False,
         help=_("Change pixel size so that overall image size remains the same."),
@@ -520,11 +519,11 @@ def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
     return dst
 
 
-def extract_multiple_roi(src: ImageObj, group: gdt.DataSetGroup) -> ImageObj:
+def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     """Extract multiple regions of interest from data
     Args:
         src (ImageObj): input image object
-        group (gdt.DataSetGroup): parameters defining the regions of interest
+        group (gds.DataSetGroup): parameters defining the regions of interest
     Returns:
         ImageObj: output image object
     """
@@ -552,11 +551,11 @@ def extract_multiple_roi(src: ImageObj, group: gdt.DataSetGroup) -> ImageObj:
     return dst
 
 
-def extract_single_roi(src: ImageObj, p: gdt.DataSet) -> ImageObj:
+def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
     """Extract single ROI
     Args:
         src (ImageObj): input image object
-        p (gdt.DataSet): ROI parameters
+        p (gds.DataSet): ROI parameters
     Returns:
         ImageObj: output image object
     """
@@ -608,11 +607,11 @@ def compute_log10(src: ImageObj) -> ImageObj:
     return dst
 
 
-class ZCalibrateParam(gdt.DataSet):
+class ZCalibrateParam(gds.DataSet):
     """Image linear calibration parameters"""
 
-    a = gdi.FloatItem("a", default=1.0)
-    b = gdi.FloatItem("b", default=0.0)
+    a = gds.FloatItem("a", default=1.0)
+    b = gds.FloatItem("b", default=0.0)
 
 
 def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
@@ -731,22 +730,22 @@ def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
     return dst
 
 
-class ButterworthParam(gdt.DataSet):
+class ButterworthParam(gds.DataSet):
     """Butterworth filter parameters"""
 
-    cut_off = gdi.FloatItem(
+    cut_off = gds.FloatItem(
         _("Cut-off frequency ratio"),
         default=0.5,
         min=0.0,
         max=1.0,
         help=_("Cut-off frequency ratio (0.0 - 1.0)."),
     )
-    high_pass = gdi.BoolItem(
+    high_pass = gds.BoolItem(
         _("High-pass filter"),
         default=False,
         help=_("If True, apply high-pass filter instead of low-pass."),
     )
-    order = gdi.IntItem(
+    order = gds.IntItem(
         _("Order"),
         default=2,
         min=1,
@@ -838,16 +837,16 @@ def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
     return calc_with_osr(image, get_enclosing_circle_coords)
 
 
-class HoughCircleParam(gdt.DataSet):
+class HoughCircleParam(gds.DataSet):
     """Circle Hough transform parameters"""
 
-    min_radius = gdi.IntItem(
+    min_radius = gds.IntItem(
         _("Radius<sub>min</sub>"), unit="pixels", min=0, nonzero=True
     )
-    max_radius = gdi.IntItem(
+    max_radius = gds.IntItem(
         _("Radius<sub>max</sub>"), unit="pixels", min=0, nonzero=True
     )
-    min_distance = gdi.IntItem(_("Minimal distance"), min=0)
+    min_distance = gds.IntItem(_("Minimal distance"), min=0)
 
 
 def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarray:

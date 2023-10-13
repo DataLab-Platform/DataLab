@@ -54,8 +54,8 @@ from typing import TYPE_CHECKING
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
 from guidata.configtools import get_icon
+from guidata.dataset import update_dataset
 from guidata.qthelpers import add_actions
-from guidata.utils import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
 from guiqwt.tools import (
     HCursorTool,
@@ -83,7 +83,7 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover
-    import guidata.dataset.datatypes as gdt
+    import guidata.dataset as gds
     from guiqwt.plot import CurveDialog, CurveWidget, ImageDialog, ImageWidget
     from guiqwt.tools import GuiTool
 
@@ -562,7 +562,7 @@ class BaseDataPanel(AbstractPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+            newparam (guidata.dataset.DataSet): new object parameters.
              If None, create a new one.
 
         Returns:
@@ -573,15 +573,15 @@ class BaseDataPanel(AbstractPanel):
     def new_object(
         self,
         newparam: NewSignalParam | NewImageParam | None = None,
-        addparam: gdt.DataSet | None = None,
+        addparam: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> SignalObj | ImageObj | None:
         """Create a new object (signal/image).
 
         Args:
-            newparam (guidata.dataset.datatypes.DataSet): new object parameters
-            addparam (guidata.dataset.datatypes.DataSet): additional parameters
+            newparam (guidata.dataset.DataSet): new object parameters
+            addparam (guidata.dataset.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add object to panel (default: True)
 

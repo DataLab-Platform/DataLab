@@ -17,8 +17,7 @@ Morphology computation module
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 from skimage import morphology
 
 from cdl.config import _
@@ -26,10 +25,10 @@ from cdl.core.computation.image import dst_11
 from cdl.core.model.image import ImageObj
 
 
-class MorphologyParam(gdt.DataSet):
+class MorphologyParam(gds.DataSet):
     """White Top-Hat parameters"""
 
-    radius = gdi.IntItem(
+    radius = gds.IntItem(
         _("Radius"), default=1, min=1, help=_("Footprint (disk) radius.")
     )
 

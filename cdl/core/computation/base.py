@@ -23,49 +23,48 @@ defines the data model.
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 
 from cdl.config import Conf, _
 
 
-class GaussianParam(gdt.DataSet):
+class GaussianParam(gds.DataSet):
     """Gaussian filter parameters"""
 
-    sigma = gdi.FloatItem("σ", default=1.0)
+    sigma = gds.FloatItem("σ", default=1.0)
 
 
-class MovingAverageParam(gdt.DataSet):
+class MovingAverageParam(gds.DataSet):
     """Moving average parameters"""
 
-    n = gdi.IntItem(_("Size of the moving window"), default=3, min=1)
+    n = gds.IntItem(_("Size of the moving window"), default=3, min=1)
 
 
-class MovingMedianParam(gdt.DataSet):
+class MovingMedianParam(gds.DataSet):
     """Moving median parameters"""
 
-    n = gdi.IntItem(_("Size of the moving window"), default=3, min=1, even=False)
+    n = gds.IntItem(_("Size of the moving window"), default=3, min=1, even=False)
 
 
-class ThresholdParam(gdt.DataSet):
+class ThresholdParam(gds.DataSet):
     """Threshold parameters"""
 
-    value = gdi.FloatItem(_("Threshold"))
+    value = gds.FloatItem(_("Threshold"))
 
 
-class ClipParam(gdt.DataSet):
+class ClipParam(gds.DataSet):
     """Data clipping parameters"""
 
-    value = gdi.FloatItem(_("Clipping value"))
+    value = gds.FloatItem(_("Clipping value"))
 
 
-class ROIDataParam(gdt.DataSet):
+class ROIDataParam(gds.DataSet):
     """ROI Editor data"""
 
-    roidata = gdi.FloatArrayItem(_("ROI data"))
-    singleobj = gdi.BoolItem(_("Single object"))
-    modified = gdi.BoolItem(_("Modified")).set_prop("display", hide=True)
+    roidata = gds.FloatArrayItem(_("ROI data"))
+    singleobj = gds.BoolItem(_("Single object"))
+    modified = gds.BoolItem(_("Modified")).set_prop("display", hide=True)
 
     # pylint: disable=arguments-differ
     @classmethod
@@ -84,7 +83,7 @@ class ROIDataParam(gdt.DataSet):
         return self.roidata is None or self.roidata.size == 0
 
 
-class FFTParam(gdt.DataSet):
+class FFTParam(gds.DataSet):
     """FFT parameters"""
 
-    shift = gdi.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))
+    shift = gds.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))

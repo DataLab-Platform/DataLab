@@ -31,7 +31,7 @@ import abc
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 
 from cdl.obj import ImageObj, SignalObj
@@ -349,16 +349,16 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
         """Call compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
-            param (guidata.dataset.datatypes.DataSet | None): Compute function
+            param (guidata.dataset.DataSet | None): Compute function
             parameter. Defaults to None.
 
         Returns:
-            guidata.dataset.datatypes.DataSet: Compute function result
+            guidata.dataset.DataSet: Compute function result
         """
 
     def __getattr__(self, name: str) -> Callable:
@@ -374,15 +374,15 @@ class AbstractCDLControl(abc.ABC):
             AttributeError: If compute function ``name`` does not exist
         """
 
-        def compute_func(param: gdt.DataSet | None = None) -> gdt.DataSet:
+        def compute_func(param: gds.DataSet | None = None) -> gds.DataSet:
             """Compute function.
 
             Args:
-                param (guidata.dataset.datatypes.DataSet | None): Compute function
+                param (guidata.dataset.DataSet | None): Compute function
                  parameter. Defaults to None.
 
             Returns:
-                guidata.dataset.datatypes.DataSet: Compute function result
+                guidata.dataset.DataSet: Compute function result
             """
             return self.calc(name, param)
 

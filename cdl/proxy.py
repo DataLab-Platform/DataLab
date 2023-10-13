@@ -15,7 +15,7 @@ from __future__ import annotations
 from collections.abc import Generator
 from contextlib import contextmanager
 
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 
 from cdl.core.baseproxy import BaseProxy
@@ -143,16 +143,16 @@ class CDLProxy(BaseProxy):
             title, data, xunit, yunit, zunit, xlabel, ylabel, zlabel
         )
 
-    def calc(self, name: str, param: gdt.DataSet | None = None) -> gdt.DataSet:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
         """Call compute function ``name`` in current panel's processor.
 
         Args:
             name (str): Compute function name
-            param (guidata.dataset.datatypes.DataSet | None): Compute function
+            param (guidata.dataset.DataSet | None): Compute function
             parameter. Defaults to None.
 
         Returns:
-            guidata.dataset.datatypes.DataSet: Compute function result
+            guidata.dataset.DataSet: Compute function result
         """
         return self._cdl.calc(name, param)
 

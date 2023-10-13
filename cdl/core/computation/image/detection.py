@@ -17,8 +17,7 @@ Blob detection computation module
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 
 from cdl.algorithms.image import (
@@ -34,10 +33,10 @@ from cdl.core.computation.image import calc_with_osr
 from cdl.core.model.image import ImageObj
 
 
-class GenericDetectionParam(gdt.DataSet):
+class GenericDetectionParam(gds.DataSet):
     """Generic detection parameters"""
 
-    threshold = gdi.FloatItem(
+    threshold = gds.FloatItem(
         _("Relative threshold"),
         default=0.5,
         min=0.1,
@@ -52,7 +51,7 @@ class GenericDetectionParam(gdt.DataSet):
 class Peak2DDetectionParam(GenericDetectionParam):
     """Peak detection parameters"""
 
-    size = gdi.IntItem(
+    size = gds.IntItem(
         _("Neighborhoods size"),
         default=10,
         min=1,
@@ -61,7 +60,7 @@ class Peak2DDetectionParam(GenericDetectionParam):
             "Size of the sliding window used in maximum/minimum filtering algorithm"
         ),
     )
-    create_rois = gdi.BoolItem(_("Create regions of interest"), default=True)
+    create_rois = gds.BoolItem(_("Create regions of interest"), default=True)
 
 
 def compute_peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> np.ndarray:
@@ -82,7 +81,7 @@ class ContourShapeParam(GenericDetectionParam):
         ("ellipse", _("Ellipse")),
         ("circle", _("Circle")),
     )
-    shape = gdi.ChoiceItem(_("Shape"), shapes, default="ellipse")
+    shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
 def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
@@ -90,10 +89,10 @@ def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
     return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
 
 
-class BaseBlobParam(gdt.DataSet):
+class BaseBlobParam(gds.DataSet):
     """Base class for blob detection parameters"""
 
-    min_sigma = gdi.FloatItem(
+    min_sigma = gds.FloatItem(
         "σ<sub>min</sub>",
         default=1.0,
         unit="pixels",
@@ -104,7 +103,7 @@ class BaseBlobParam(gdt.DataSet):
             "Keep this low to detect smaller blobs."
         ),
     )
-    max_sigma = gdi.FloatItem(
+    max_sigma = gds.FloatItem(
         "σ<sub>max</sub>",
         default=30.0,
         unit="pixels",
@@ -115,14 +114,14 @@ class BaseBlobParam(gdt.DataSet):
             "Keep this high to detect larger blobs."
         ),
     )
-    threshold_rel = gdi.FloatItem(
+    threshold_rel = gds.FloatItem(
         _("Relative threshold"),
         default=0.2,
         min=0.0,
         max=1.0,
         help=_("Minimum intensity of blobs."),
     )
-    overlap = gdi.FloatItem(
+    overlap = gds.FloatItem(
         _("Overlap"),
         default=0.5,
         min=0.0,
@@ -137,7 +136,7 @@ class BaseBlobParam(gdt.DataSet):
 class BlobDOGParam(BaseBlobParam):
     """Blob detection using Difference of Gaussian method"""
 
-    exclude_border = gdi.BoolItem(
+    exclude_border = gds.BoolItem(
         _("Exclude border"),
         default=True,
         help=_("If True, exclude blobs from the border of the image."),
@@ -166,7 +165,7 @@ def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
 class BlobDOHParam(BaseBlobParam):
     """Blob detection using Determinant of Hessian method"""
 
-    log_scale = gdi.BoolItem(
+    log_scale = gds.BoolItem(
         _("Log scale"),
         default=False,
         help=_(
@@ -199,7 +198,7 @@ def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
 class BlobLOGParam(BlobDOHParam):
     """Blob detection using Laplacian of Gaussian method"""
 
-    exclude_border = gdi.BoolItem(
+    exclude_border = gds.BoolItem(
         _("Exclude border"),
         default=True,
         help=_("If True, exclude blobs from the border of the image."),
@@ -226,10 +225,10 @@ def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
     )
 
 
-class BlobOpenCVParam(gdt.DataSet):
+class BlobOpenCVParam(gds.DataSet):
     """Blob detection using OpenCV"""
 
-    min_threshold = gdi.FloatItem(
+    min_threshold = gds.FloatItem(
         _("Min. threshold"),
         default=10.0,
         min=0.0,
@@ -240,7 +239,7 @@ class BlobOpenCVParam(gdt.DataSet):
             "numbers of blobs."
         ),
     )
-    max_threshold = gdi.FloatItem(
+    max_threshold = gds.FloatItem(
         _("Max. threshold"),
         default=200.0,
         min=0.0,
@@ -251,7 +250,7 @@ class BlobOpenCVParam(gdt.DataSet):
             "numbers of blobs."
         ),
     )
-    min_repeatability = gdi.IntItem(
+    min_repeatability = gds.IntItem(
         _("Min. repeatability"),
         default=2,
         min=1,
@@ -260,7 +259,7 @@ class BlobOpenCVParam(gdt.DataSet):
             "in a sequence of images to be considered valid."
         ),
     )
-    min_dist_between_blobs = gdi.FloatItem(
+    min_dist_between_blobs = gds.FloatItem(
         _("Min. distance between blobs"),
         default=10.0,
         min=0.0,
@@ -269,91 +268,91 @@ class BlobOpenCVParam(gdt.DataSet):
             "closer together than this distance, the smaller blob is removed."
         ),
     )
-    _prop_col = gdt.ValueProp(False)
-    filter_by_color = gdi.BoolItem(
+    _prop_col = gds.ValueProp(False)
+    filter_by_color = gds.BoolItem(
         _("Filter by color"),
         default=True,
         help=_("If true, the image is filtered by color instead of intensity."),
     ).set_prop("display", store=_prop_col)
-    blob_color = gdi.IntItem(
+    blob_color = gds.IntItem(
         _("Blob color"),
         default=0,
         help=_(
             "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
         ),
     ).set_prop("display", active=_prop_col)
-    _prop_area = gdt.ValueProp(False)
-    filter_by_area = gdi.BoolItem(
+    _prop_area = gds.ValueProp(False)
+    filter_by_area = gds.BoolItem(
         _("Filter by area"),
         default=True,
         help=_("If true, the image is filtered by blob area."),
     ).set_prop("display", store=_prop_area)
-    min_area = gdi.FloatItem(
+    min_area = gds.FloatItem(
         _("Min. area"),
         default=25.0,
         min=0.0,
         help=_("The minimum blob area."),
     ).set_prop("display", active=_prop_area)
-    max_area = gdi.FloatItem(
+    max_area = gds.FloatItem(
         _("Max. area"),
         default=500.0,
         min=0.0,
         help=_("The maximum blob area."),
     ).set_prop("display", active=_prop_area)
-    _prop_circ = gdt.ValueProp(False)
-    filter_by_circularity = gdi.BoolItem(
+    _prop_circ = gds.ValueProp(False)
+    filter_by_circularity = gds.BoolItem(
         _("Filter by circularity"),
         default=False,
         help=_("If true, the image is filtered by blob circularity."),
     ).set_prop("display", store=_prop_circ)
-    min_circularity = gdi.FloatItem(
+    min_circularity = gds.FloatItem(
         _("Min. circularity"),
         default=0.8,
         min=0.0,
         max=1.0,
         help=_("The minimum circularity of the blobs."),
     ).set_prop("display", active=_prop_circ)
-    max_circularity = gdi.FloatItem(
+    max_circularity = gds.FloatItem(
         _("Max. circularity"),
         default=1.0,
         min=0.0,
         max=1.0,
         help=_("The maximum circularity of the blobs."),
     ).set_prop("display", active=_prop_circ)
-    _prop_iner = gdt.ValueProp(False)
-    filter_by_inertia = gdi.BoolItem(
+    _prop_iner = gds.ValueProp(False)
+    filter_by_inertia = gds.BoolItem(
         _("Filter by inertia"),
         default=False,
         help=_("If true, the image is filtered by blob inertia."),
     ).set_prop("display", store=_prop_iner)
-    min_inertia_ratio = gdi.FloatItem(
+    min_inertia_ratio = gds.FloatItem(
         _("Min. inertia ratio"),
         default=0.6,
         min=0.0,
         max=1.0,
         help=_("The minimum inertia ratio of the blobs."),
     ).set_prop("display", active=_prop_iner)
-    max_inertia_ratio = gdi.FloatItem(
+    max_inertia_ratio = gds.FloatItem(
         _("Max. inertia ratio"),
         default=1.0,
         min=0.0,
         max=1.0,
         help=_("The maximum inertia ratio of the blobs."),
     ).set_prop("display", active=_prop_iner)
-    _prop_conv = gdt.ValueProp(False)
-    filter_by_convexity = gdi.BoolItem(
+    _prop_conv = gds.ValueProp(False)
+    filter_by_convexity = gds.BoolItem(
         _("Filter by convexity"),
         default=False,
         help=_("If true, the image is filtered by blob convexity."),
     ).set_prop("display", store=_prop_conv)
-    min_convexity = gdi.FloatItem(
+    min_convexity = gds.FloatItem(
         _("Min. convexity"),
         default=0.8,
         min=0.0,
         max=1.0,
         help=_("The minimum convexity of the blobs."),
     ).set_prop("display", active=_prop_conv)
-    max_convexity = gdi.FloatItem(
+    max_convexity = gds.FloatItem(
         _("Max. convexity"),
         default=1.0,
         min=0.0,

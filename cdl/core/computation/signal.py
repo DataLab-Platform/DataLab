@@ -23,8 +23,7 @@ defines the data model.
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 import scipy.integrate as spt
 import scipy.ndimage as spi
@@ -181,11 +180,11 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
 # --------------------------------------------------------------------------------------
 
 
-def extract_multiple_roi(src: SignalObj, group: gdt.DataSetGroup) -> SignalObj:
+def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
     Args:
         src (SignalObj): source signal
-        group (gdt.DataSetGroup): group of parameters
+        group (gds.DataSetGroup): group of parameters
     Returns:
         SignalObj: signal with multiple regions of interest
     """
@@ -206,11 +205,11 @@ def extract_multiple_roi(src: SignalObj, group: gdt.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: gdt.DataSet) -> SignalObj:
+def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
     """Extract single region of interest from data
     Args:
         src (SignalObj): source signal
-        p (gdt.DataSet): parameters
+        p (gds.DataSet): parameters
     Returns:
         SignalObj: signal with single region of interest
     """
@@ -261,13 +260,13 @@ def compute_log10(src: SignalObj) -> SignalObj:
     return dst
 
 
-class PeakDetectionParam(gdt.DataSet):
+class PeakDetectionParam(gds.DataSet):
     """Peak detection parameters"""
 
-    threshold = gdi.IntItem(
+    threshold = gds.IntItem(
         _("Threshold"), default=30, min=0, max=100, slider=True, unit="%"
     )
-    min_dist = gdi.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
+    min_dist = gds.IntItem(_("Minimum distance"), default=1, min=1, unit="points")
 
 
 def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
@@ -288,7 +287,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-class NormalizeYParam(gdt.DataSet):
+class NormalizeYParam(gds.DataSet):
     """Normalize parameters"""
 
     methods = (
@@ -297,7 +296,7 @@ class NormalizeYParam(gdt.DataSet):
         (_("sum"), "sum"),
         (_("energy"), "energy"),
     )
-    method = gdi.ChoiceItem(_("Normalize with respect to"), methods)
+    method = gds.ChoiceItem(_("Normalize with respect to"), methods)
 
 
 def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
@@ -340,13 +339,13 @@ def compute_integral(src: SignalObj) -> SignalObj:
     return dst
 
 
-class XYCalibrateParam(gdt.DataSet):
+class XYCalibrateParam(gds.DataSet):
     """Signal calibration parameters"""
 
     axes = (("x", _("X-axis")), ("y", _("Y-axis")))
-    axis = gdi.ChoiceItem(_("Calibrate"), axes, default="y")
-    a = gdi.FloatItem("a", default=1.0)
-    b = gdi.FloatItem("b", default=0.0)
+    axis = gds.ChoiceItem(_("Calibrate"), axes, default="y")
+    a = gds.FloatItem("a", default=1.0)
+    b = gds.FloatItem("b", default=0.0)
 
 
 def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
@@ -477,13 +476,13 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     return dst
 
 
-class PolynomialFitParam(gdt.DataSet):
+class PolynomialFitParam(gds.DataSet):
     """Polynomial fitting parameters"""
 
-    degree = gdi.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
+    degree = gds.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
 
 
-class FWHMParam(gdt.DataSet):
+class FWHMParam(gds.DataSet):
     """FWHM parameters"""
 
     fittypes = (
@@ -492,7 +491,7 @@ class FWHMParam(gdt.DataSet):
         ("VoigtModel", "Voigt"),
     )
 
-    fittype = gdi.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
 
 
 def compute_fwhm(signal: SignalObj, param: FWHMParam):

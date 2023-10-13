@@ -22,10 +22,10 @@ from collections.abc import Callable
 from multiprocessing import Pool
 from typing import TYPE_CHECKING, Any, Union
 
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
-from guidata.utils import update_dataset
+from guidata.dataset import update_dataset
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -162,7 +162,7 @@ class BaseProcessor(QC.QObject):
 
     SIG_ADD_SHAPE = QC.Signal(str)
     EDIT_ROI_PARAMS = False
-    PARAM_DEFAULTS: dict[str, gdt.DataSet] = {}
+    PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
 
     def __init__(
         self, panel: SignalPanel | ImagePanel, plotwidget: CurveWidget | ImageWidget
@@ -194,11 +194,11 @@ class BaseProcessor(QC.QObject):
                 self.worker.terminate_pool()
                 self.worker = None
 
-    def update_param_defaults(self, param: gdt.DataSet) -> None:
+    def update_param_defaults(self, param: gds.DataSet) -> None:
         """Update parameter defaults.
 
         Args:
-            param (gdt.DataSet): parameter
+            param (gds.DataSet): parameter
         """
         key = param.__class__.__name__
         pdefaults = self.PARAM_DEFAULTS.get(key)
@@ -208,21 +208,21 @@ class BaseProcessor(QC.QObject):
 
     def init_param(
         self,
-        param: gdt.DataSet,
-        paramclass: gdt.DataSet,
+        param: gds.DataSet,
+        paramclass: gds.DataSet,
         title: str,
         comment: str | None = None,
-    ) -> tuple[bool, gdt.DataSet]:
+    ) -> tuple[bool, gds.DataSet]:
         """Initialize processing parameters.
 
         Args:
-            param (gdt.DataSet): parameter
-            paramclass (gdt.DataSet): parameter class
+            param (gds.DataSet): parameter
+            paramclass (gds.DataSet): parameter class
             title (str): title
             comment (str | None): comment
 
         Returns:
-            tuple[bool, gdt.DataSet]: edit, param
+            tuple[bool, gds.DataSet]: edit, param
         """
         edit = param is None
         if edit:
@@ -233,8 +233,8 @@ class BaseProcessor(QC.QObject):
     def compute_11(
         self,
         func: Callable,
-        param: gdt.DataSet | None = None,
-        paramclass: gdt.DataSet | None = None,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -243,8 +243,8 @@ class BaseProcessor(QC.QObject):
 
         Args:
             func (Callable): function
-            param (guidata.dataset.datatypes.DataSet | None): parameter
-            paramclass (guidata.dataset.datatypes.DataSet | None): parameter class
+            param (guidata.dataset.DataSet | None): parameter
+            paramclass (guidata.dataset.DataSet | None): parameter class
             title (str | None): title
             comment (str | None): comment
             edit (bool | None): edit parameters
@@ -275,7 +275,7 @@ class BaseProcessor(QC.QObject):
             assert not isinstance(funcs, Callable)
             params = [None] * len(funcs)
         else:
-            group = gdt.DataSetGroup(params, title=_("Parameters"))
+            group = gds.DataSetGroup(params, title=_("Parameters"))
             if edit and not group.edit(parent=self.panel.parent()):
                 return
             if isinstance(funcs, Callable):
@@ -389,8 +389,8 @@ class BaseProcessor(QC.QObject):
         self,
         func: Callable,
         shapetype: ShapeTypes,
-        param: gdt.DataSet | None = None,
-        paramclass: gdt.DataSet | None = None,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -401,9 +401,9 @@ class BaseProcessor(QC.QObject):
         Args:
             func (Callable): function to execute
             shapetype (ShapeTypes): shape type
-            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+            param (guidata.dataset.DataSet | None | None): parameters.
              Defaults to None.
-            paramclass (guidata.dataset.datatypes.DataSet | None | None): parameters
+            paramclass (guidata.dataset.DataSet | None | None): parameters
              class. Defaults to None.
             title (str | None | None): title of progress bar.
              Defaults to None.
@@ -466,8 +466,8 @@ class BaseProcessor(QC.QObject):
         self,
         name: str,
         func: Callable,
-        param: gdt.DataSet | None = None,
-        paramclass: gdt.DataSet | None = None,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         func_objs: Callable | None = None,
@@ -478,9 +478,9 @@ class BaseProcessor(QC.QObject):
         Args:
             name (str): name of function
             func (Callable): function to execute
-            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+            param (guidata.dataset.DataSet | None | None): parameters.
              Defaults to None.
-            paramclass (guidata.dataset.datatypes.DataSet | None | None):
+            paramclass (guidata.dataset.DataSet | None | None):
              parameters class. Defaults to None.
             title (str | None | None): title of progress bar.
              Defaults to None.
@@ -566,8 +566,8 @@ class BaseProcessor(QC.QObject):
         obj2: Obj | None,
         obj2_name: str,
         func: Callable,
-        param: gdt.DataSet | None = None,
-        paramclass: gdt.DataSet | None = None,
+        param: gds.DataSet | None = None,
+        paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -580,9 +580,9 @@ class BaseProcessor(QC.QObject):
             obj2 (Obj | None): second object
             obj2_name (str): name of second object
             func (Callable): function to execute
-            param (guidata.dataset.datatypes.DataSet | None | None): parameters.
+            param (guidata.dataset.DataSet | None | None): parameters.
              Defaults to None.
-            paramclass (guidata.dataset.datatypes.DataSet | None | None):
+            paramclass (guidata.dataset.DataSet | None | None):
              parameters class. Defaults to None.
             title (str | None | None): title of progress bar.
              Defaults to None.

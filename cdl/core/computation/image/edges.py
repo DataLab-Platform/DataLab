@@ -17,8 +17,7 @@ Edges computation module
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 from skimage import feature, filters
 
@@ -27,10 +26,10 @@ from cdl.core.computation.image import dst_11
 from cdl.core.model.image import ImageObj
 
 
-class CannyParam(gdt.DataSet):
+class CannyParam(gds.DataSet):
     """Canny filter parameters"""
 
-    sigma = gdi.FloatItem(
+    sigma = gds.FloatItem(
         "Sigma",
         default=1.0,
         unit="pixels",
@@ -38,19 +37,19 @@ class CannyParam(gdt.DataSet):
         nonzero=True,
         help=_("Standard deviation of the Gaussian filter."),
     )
-    low_threshold = gdi.FloatItem(
+    low_threshold = gds.FloatItem(
         _("Low threshold"),
         default=0.1,
         min=0,
         help=_("Lower bound for hysteresis thresholding (linking edges)."),
     )
-    high_threshold = gdi.FloatItem(
+    high_threshold = gds.FloatItem(
         _("High threshold"),
         default=0.9,
         min=0,
         help=_("Upper bound for hysteresis thresholding (linking edges)."),
     )
-    use_quantiles = gdi.BoolItem(
+    use_quantiles = gds.BoolItem(
         _("Use quantiles"),
         default=True,
         help=_(
@@ -60,10 +59,10 @@ class CannyParam(gdt.DataSet):
         ),
     )
     _modelist = ("reflect", "constant", "nearest", "mirror", "wrap")
-    mode = gdi.ChoiceItem(
+    mode = gds.ChoiceItem(
         _("Mode"), list(zip(_modelist, _modelist)), default="constant"
     )
-    cval = gdi.FloatItem(
+    cval = gds.FloatItem(
         "cval",
         default=0.0,
         help=_("Value to fill past edges of input if mode is constant."),

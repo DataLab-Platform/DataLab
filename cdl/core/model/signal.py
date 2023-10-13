@@ -17,12 +17,11 @@ from __future__ import annotations
 from copy import deepcopy
 from typing import TYPE_CHECKING
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.utils import update_dataset
+from guidata.dataset import update_dataset
 from guiqwt.builder import make
 from guiqwt.styles import COLORS, LINESTYLES
 
@@ -58,14 +57,14 @@ class CurveStyles:
         curveparam.symbol.marker = "NoSymbol"
 
 
-class ROIParam(gdt.DataSet):
+class ROIParam(gds.DataSet):
     """Signal ROI parameters"""
 
-    col1 = gdi.IntItem(_("First point index"))
-    col2 = gdi.IntItem(_("Last point index"))
+    col1 = gds.IntItem(_("First point index"))
+    col2 = gds.IntItem(_("Last point index"))
 
 
-class SignalObj(gdt.DataSet, base.BaseObj):
+class SignalObj(gds.DataSet, base.BaseObj):
     """Signal object"""
 
     PREFIX = "s"
@@ -73,29 +72,29 @@ class SignalObj(gdt.DataSet, base.BaseObj):
     DEFAULT_FMT = ".3f"
     VALID_DTYPES = (np.float32, np.float64, np.complex128)
 
-    _tabs = gdt.BeginTabGroup("all")
+    _tabs = gds.BeginTabGroup("all")
 
-    _datag = gdt.BeginGroup(_("Data and metadata"))
-    title = gdi.StringItem(_("Signal title"), default=_("Untitled"))
-    xydata = gdi.FloatArrayItem(_("Data"), transpose=True, minmax="rows")
-    metadata = gdi.DictItem(_("Metadata"), default={})
-    _e_datag = gdt.EndGroup(_("Data and metadata"))
+    _datag = gds.BeginGroup(_("Data and metadata"))
+    title = gds.StringItem(_("Signal title"), default=_("Untitled"))
+    xydata = gds.FloatArrayItem(_("Data"), transpose=True, minmax="rows")
+    metadata = gds.DictItem(_("Metadata"), default={})
+    _e_datag = gds.EndGroup(_("Data and metadata"))
 
-    _unitsg = gdt.BeginGroup(_("Titles and units"))
-    title = gdi.StringItem(_("Signal title"), default=_("Untitled"))
-    _tabs_u = gdt.BeginTabGroup("units")
-    _unitsx = gdt.BeginGroup(_("X-axis"))
-    xlabel = gdi.StringItem(_("Title"), default="")
-    xunit = gdi.StringItem(_("Unit"), default="")
-    _e_unitsx = gdt.EndGroup(_("X-axis"))
-    _unitsy = gdt.BeginGroup(_("Y-axis"))
-    ylabel = gdi.StringItem(_("Title"), default="")
-    yunit = gdi.StringItem(_("Unit"), default="")
-    _e_unitsy = gdt.EndGroup(_("Y-axis"))
-    _e_tabs_u = gdt.EndTabGroup("units")
-    _e_unitsg = gdt.EndGroup(_("Titles and units"))
+    _unitsg = gds.BeginGroup(_("Titles and units"))
+    title = gds.StringItem(_("Signal title"), default=_("Untitled"))
+    _tabs_u = gds.BeginTabGroup("units")
+    _unitsx = gds.BeginGroup(_("X-axis"))
+    xlabel = gds.StringItem(_("Title"), default="")
+    xunit = gds.StringItem(_("Unit"), default="")
+    _e_unitsx = gds.EndGroup(_("X-axis"))
+    _unitsy = gds.BeginGroup(_("Y-axis"))
+    ylabel = gds.StringItem(_("Title"), default="")
+    yunit = gds.StringItem(_("Unit"), default="")
+    _e_unitsy = gds.EndGroup(_("Y-axis"))
+    _e_tabs_u = gds.EndTabGroup("units")
+    _e_unitsg = gds.EndGroup(_("Titles and units"))
 
-    _e_tabs = gdt.EndTabGroup("all")
+    _e_tabs = gds.EndTabGroup("all")
 
     def __init__(self, title=None, comment=None, icon=""):
         """Constructor
@@ -105,7 +104,7 @@ class SignalObj(gdt.DataSet, base.BaseObj):
             comment (str): comment
             icon (str): icon
         """
-        gdt.DataSet.__init__(self, title, comment, icon)
+        gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
 
     def copy(
@@ -312,7 +311,7 @@ class SignalObj(gdt.DataSet, base.BaseObj):
                 indexes[row, col] = np.abs(self.x - x0).argmin()
         return indexes
 
-    def get_roi_param(self, title: str, *defaults) -> gdt.DataSet:
+    def get_roi_param(self, title: str, *defaults) -> gds.DataSet:
         """Return ROI parameters dataset.
 
         Args:
@@ -328,7 +327,7 @@ class SignalObj(gdt.DataSet, base.BaseObj):
         return param
 
     @staticmethod
-    def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -455,13 +454,13 @@ class SignalTypes(base.Choices):
     STEP = _("step")
 
 
-class GaussLorentzVoigtParam(gdt.DataSet):
+class GaussLorentzVoigtParam(gds.DataSet):
     """Parameters for Gaussian and Lorentzian functions"""
 
-    a = gdi.FloatItem("A", default=1.0)
-    ymin = gdi.FloatItem("Ymin", default=0.0).set_pos(col=1)
-    sigma = gdi.FloatItem("σ", default=1.0)
-    mu = gdi.FloatItem("μ", default=0.0).set_pos(col=1)
+    a = gds.FloatItem("A", default=1.0)
+    ymin = gds.FloatItem("Ymin", default=0.0).set_pos(col=1)
+    sigma = gds.FloatItem("σ", default=1.0)
+    mu = gds.FloatItem("μ", default=0.0).set_pos(col=1)
 
 
 class FreqUnits(base.Choices):
@@ -481,43 +480,43 @@ class FreqUnits(base.Choices):
         return value * factor
 
 
-class PeriodicParam(gdt.DataSet):
+class PeriodicParam(gds.DataSet):
     """Parameters for periodic functions"""
 
     def get_frequency_in_hz(self):
         """Return frequency in Hz"""
         return FreqUnits.convert_in_hz(self.freq, self.freq_unit)
 
-    a = gdi.FloatItem("A", default=1.0)
-    ymin = gdi.FloatItem("Ymin", default=0.0).set_pos(col=1)
-    freq = gdi.FloatItem(_("Frequency"), default=1.0)
-    freq_unit = gdi.ChoiceItem(
+    a = gds.FloatItem("A", default=1.0)
+    ymin = gds.FloatItem("Ymin", default=0.0).set_pos(col=1)
+    freq = gds.FloatItem(_("Frequency"), default=1.0)
+    freq_unit = gds.ChoiceItem(
         _("Unit"), FreqUnits.get_choices(), default=FreqUnits.HZ
     ).set_pos(col=1)
-    phase = gdi.FloatItem(_("Phase"), default=0.0, unit="°").set_pos(col=1)
+    phase = gds.FloatItem(_("Phase"), default=0.0, unit="°").set_pos(col=1)
 
 
-class StepParam(gdt.DataSet):
+class StepParam(gds.DataSet):
     """Parameters for step function"""
 
-    a1 = gdi.FloatItem("A1", default=0.0)
-    a2 = gdi.FloatItem("A2", default=1.0).set_pos(col=1)
-    x0 = gdi.FloatItem("X0", default=0.0)
+    a1 = gds.FloatItem("A1", default=0.0)
+    a2 = gds.FloatItem("A2", default=1.0).set_pos(col=1)
+    x0 = gds.FloatItem("X0", default=0.0)
 
 
-class NewSignalParam(gdt.DataSet):
+class NewSignalParam(gds.DataSet):
     """New signal dataset"""
 
     hide_signal_type = False
 
-    title = gdi.StringItem(_("Title"))
-    xmin = gdi.FloatItem("Xmin", default=-10.0)
-    xmax = gdi.FloatItem("Xmax", default=10.0)
-    size = gdi.IntItem(
+    title = gds.StringItem(_("Title"))
+    xmin = gds.FloatItem("Xmin", default=-10.0)
+    xmax = gds.FloatItem("Xmax", default=10.0)
+    size = gds.IntItem(
         _("Size"), help=_("Signal size (total number of points)"), min=1, default=500
     )
-    stype = gdi.ChoiceItem(_("Type"), SignalTypes.get_choices()).set_prop(
-        "display", hide=gdt.GetAttrProp("hide_signal_type")
+    stype = gds.ChoiceItem(_("Type"), SignalTypes.get_choices()).set_prop(
+        "display", hide=gds.GetAttrProp("hide_signal_type")
     )
 
 
@@ -571,7 +570,7 @@ def triangle_func(xarr: np.ndarray) -> np.ndarray:
 
 def create_signal_from_param(
     newparam: NewSignalParam,
-    addparam: gdt.DataSet | None = None,
+    addparam: gds.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
 ) -> SignalObj | None:
@@ -579,7 +578,7 @@ def create_signal_from_param(
 
     Args:
         newparam (NewSignalParam): new signal parameters
-        addparam (guidata.dataset.datatypes.DataSet): additional parameters
+        addparam (guidata.dataset.DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 

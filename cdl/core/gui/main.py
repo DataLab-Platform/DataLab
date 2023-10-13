@@ -20,11 +20,11 @@ import time
 import webbrowser
 from typing import TYPE_CHECKING
 
+import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.dataset import datatypes as gdt
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
 from guiqwt.builder import make
@@ -951,12 +951,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             raise ValueError(f"Unknown panel {panel}")
 
     @remote_controlled
-    def calc(self, name: str, param: gdt.DataSet | None = None) -> None:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function `name` in current panel's processor
 
         Args:
             name (str): function name
-            param (guidata.dataset.datatypes.DataSet): optional parameters
+            param (guidata.dataset.DataSet): optional parameters
              (default: None)
 
         Raises:

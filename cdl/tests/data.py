@@ -13,8 +13,7 @@ Functions creating test data: curves, images, ...
 
 from __future__ import annotations
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 
 import cdl.obj
@@ -69,24 +68,24 @@ def create_paracetamol_signal(
     return obj
 
 
-class GaussianNoiseParam(gdt.DataSet):
+class GaussianNoiseParam(gds.DataSet):
     """Gaussian noise parameters"""
 
-    mu = gdi.FloatItem(
+    mu = gds.FloatItem(
         _("Mean"),
         default=0.0,
         min=-100.0,
         max=100.0,
         help=_("Mean of the Gaussian distribution"),
     )
-    sigma = gdi.FloatItem(
+    sigma = gds.FloatItem(
         _("Standard deviation"),
         default=0.1,
         min=0.0,
         max=100.0,
         help=_("Standard deviation of the Gaussian distribution"),
     )
-    seed = gdi.IntItem(
+    seed = gds.IntItem(
         _("Seed"),
         default=1,
         min=0,
@@ -251,28 +250,28 @@ def get_laser_spot_data() -> list[np.ndarray]:
     ]
 
 
-class PeakDataParam(gdt.DataSet):
+class PeakDataParam(gds.DataSet):
     """Peak data test image parameters"""
 
-    size = gdi.IntItem(_("Size"), default=2000, min=1)
-    n_points = gdi.IntItem(_("Number"), default=4, min=1, help=_("Number of points"))
-    sigma_gauss2d = gdi.FloatItem(
+    size = gds.IntItem(_("Size"), default=2000, min=1)
+    n_points = gds.IntItem(_("Number"), default=4, min=1, help=_("Number of points"))
+    sigma_gauss2d = gds.FloatItem(
         "σ<sub>Gauss2D</sub>", default=0.06, help=_("Sigma of the 2D Gaussian")
     )
-    amp_gauss2d = gdi.IntItem(
+    amp_gauss2d = gds.IntItem(
         "A<sub>Gauss2D</sub>", default=1900, help=_("Amplitude of the 2D Gaussian")
     )
-    mu_noise = gdi.IntItem(
+    mu_noise = gds.IntItem(
         "μ<sub>noise</sub>", default=845, help=_("Mean of the Gaussian distribution")
     )
-    sigma_noise = gdi.IntItem(
+    sigma_noise = gds.IntItem(
         "σ<sub>noise</sub>",
         default=25,
         help=_("Standard deviation of the Gaussian distribution"),
     )
-    dx0 = gdi.FloatItem("dx0", default=0.0)
-    dy0 = gdi.FloatItem("dy0", default=0.0)
-    att = gdi.FloatItem(_("Attenuation"), default=1.0)
+    dx0 = gds.FloatItem("dx0", default=0.0)
+    dy0 = gds.FloatItem("dy0", default=0.0)
+    att = gds.FloatItem(_("Attenuation"), default=1.0)
 
 
 def get_peak2d_data(
@@ -369,15 +368,15 @@ def create_2dstep_image(p: cdl.obj.NewImageParam | None = None) -> cdl.obj.Image
     return obj
 
 
-class RingParam(gdt.DataSet):
+class RingParam(gds.DataSet):
     """Parameters for creating a ring image"""
 
-    size = gdi.IntItem(_("Size"), default=1000)
-    ring_x0 = gdi.IntItem(_("X<sub>center</sub>"), default=500)
-    ring_y0 = gdi.IntItem(_("Y<sub>center</sub>"), default=500)
-    ring_width = gdi.IntItem(_("Width"), default=10)
-    ring_radius = gdi.IntItem(_("Radius"), default=250)
-    ring_intensity = gdi.IntItem(_("Intensity"), default=1000)
+    size = gds.IntItem(_("Size"), default=1000)
+    ring_x0 = gds.IntItem(_("X<sub>center</sub>"), default=500)
+    ring_y0 = gds.IntItem(_("Y<sub>center</sub>"), default=500)
+    ring_width = gds.IntItem(_("Width"), default=10)
+    ring_radius = gds.IntItem(_("Radius"), default=250)
+    ring_intensity = gds.IntItem(_("Intensity"), default=1000)
 
 
 def create_ring_data(

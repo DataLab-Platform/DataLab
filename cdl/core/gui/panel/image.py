@@ -36,7 +36,7 @@ from cdl.core.model.image import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover
-    import guidata.dataset.datatypes as gdt
+    import guidata.dataset as gds
     from guiqwt.plot import ImageWidget
     from qtpy import QtWidgets as QW
 
@@ -87,7 +87,7 @@ class ImagePanel(BaseDataPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (guidata.dataset.datatypes.DataSet): new object parameters.
+            newparam (guidata.dataset.DataSet): new object parameters.
              If None, create a new one.
 
         Returns:
@@ -103,7 +103,7 @@ class ImagePanel(BaseDataPanel):
     def new_object(
         self,
         newparam: NewImageParam | None = None,
-        addparam: gdt.DataSet | None = None,
+        addparam: gds.DataSet | None = None,
         edit: bool = True,
         add_to_panel: bool = True,
     ) -> ImageObj | None:
@@ -111,7 +111,7 @@ class ImagePanel(BaseDataPanel):
 
         Args:
             newparam (Daguidata.dataset.datatypes.DataSettaSet): new object parameters
-            addparam (guidata.dataset.datatypes.DataSet): additional parameters
+            addparam (guidata.dataset.DataSet): additional parameters
             edit (bool): Open a dialog box to edit parameters (default: True)
             add_to_panel (bool): Add the object to the panel (default: True)
 

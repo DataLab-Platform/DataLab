@@ -20,11 +20,10 @@ from collections.abc import ByteString, Iterator, Mapping, Sequence
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 
-import guidata.dataset.dataitems as gdi
-import guidata.dataset.datatypes as gdt
+import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
-from guidata.utils import update_dataset
+from guidata.dataset import update_dataset
 from guiqwt.annotations import AnnotatedCircle, AnnotatedRectangle
 from guiqwt.builder import make
 from guiqwt.image import MaskedImageItem
@@ -202,7 +201,7 @@ def roi_label(name: str, index: int):
     return f"{name}<sub>{index}</sub>"
 
 
-class RectangleROIParam(gdt.DataSet):
+class RectangleROIParam(gds.DataSet):
     """ROI parameters"""
 
     geometry = RoiDataGeometries.RECTANGLE
@@ -215,17 +214,17 @@ class RectangleROIParam(gdt.DataSet):
         """Get ROI coordinates"""
         return self.x0, self.y0, self.x1, self.y1
 
-    _tlcorner = gdt.BeginGroup(_("Top left corner"))
-    x0 = gdi.IntItem(roi_label("X", 0), unit="pixel")
-    y0 = gdi.IntItem(roi_label("Y", 0), unit="pixel").set_pos(1)
-    _e_tlcorner = gdt.EndGroup(_("Top left corner"))
-    _brcorner = gdt.BeginGroup(_("Bottom right corner"))
-    x1 = gdi.IntItem(roi_label("X", 1), unit="pixel")
-    y1 = gdi.IntItem(roi_label("Y", 1), unit="pixel").set_pos(1)
-    _e_brcorner = gdt.EndGroup(_("Bottom right corner"))
+    _tlcorner = gds.BeginGroup(_("Top left corner"))
+    x0 = gds.IntItem(roi_label("X", 0), unit="pixel")
+    y0 = gds.IntItem(roi_label("Y", 0), unit="pixel").set_pos(1)
+    _e_tlcorner = gds.EndGroup(_("Top left corner"))
+    _brcorner = gds.BeginGroup(_("Bottom right corner"))
+    x1 = gds.IntItem(roi_label("X", 1), unit="pixel")
+    y1 = gds.IntItem(roi_label("Y", 1), unit="pixel").set_pos(1)
+    _e_brcorner = gds.EndGroup(_("Bottom right corner"))
 
 
-class CircularROIParam(gdt.DataSet):
+class CircularROIParam(gds.DataSet):
     """ROI parameters"""
 
     geometry = RoiDataGeometries.CIRCLE
@@ -262,14 +261,14 @@ class CircularROIParam(gdt.DataSet):
         """Return rectangle bottom right corner Y coordinate"""
         return self.yc + self.r
 
-    _tlcorner = gdt.BeginGroup(_("Center coordinates"))
-    xc = gdi.IntItem(roi_label("X", "C"), unit="pixel")
-    yc = gdi.IntItem(roi_label("Y", "C"), unit="pixel").set_pos(1)
-    _e_tlcorner = gdt.EndGroup(_("Center coordinates"))
-    r = gdi.IntItem(_("Radius"), unit="pixel")
+    _tlcorner = gds.BeginGroup(_("Center coordinates"))
+    xc = gds.IntItem(roi_label("X", "C"), unit="pixel")
+    yc = gds.IntItem(roi_label("Y", "C"), unit="pixel").set_pos(1)
+    _e_tlcorner = gds.EndGroup(_("Center coordinates"))
+    r = gds.IntItem(_("Radius"), unit="pixel")
 
 
-class ImageObj(gdt.DataSet, base.BaseObj):
+class ImageObj(gds.DataSet, base.BaseObj):
     """Image object"""
 
     PREFIX = "i"
@@ -293,7 +292,7 @@ class ImageObj(gdt.DataSet, base.BaseObj):
             comment (str): comment
             icon (str): icon
         """
-        gdt.DataSet.__init__(self, title, comment, icon)
+        gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
         self._dicom_template = None
         self._maskdata_cache = None
@@ -355,43 +354,43 @@ class ImageObj(gdt.DataSet, base.BaseObj):
             self.set_metadata_from(template)
             self._dicom_template = template
 
-    _tabs = gdt.BeginTabGroup("all")
+    _tabs = gds.BeginTabGroup("all")
 
-    _datag = gdt.BeginGroup(_("Data"))
-    data = gdi.FloatArrayItem(_("Data"))
-    metadata = gdi.DictItem(_("Metadata"), default={})
-    _e_datag = gdt.EndGroup(_("Data"))
+    _datag = gds.BeginGroup(_("Data"))
+    data = gds.FloatArrayItem(_("Data"))
+    metadata = gds.DictItem(_("Metadata"), default={})
+    _e_datag = gds.EndGroup(_("Data"))
 
-    _dxdyg = gdt.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')
-    _origin = gdt.BeginGroup(_("Origin"))
-    x0 = gdi.FloatItem("X<sub>0</sub>", default=0.0)
-    y0 = gdi.FloatItem("Y<sub>0</sub>", default=0.0).set_pos(col=1)
-    _e_origin = gdt.EndGroup(_("Origin"))
-    _pixel_spacing = gdt.BeginGroup(_("Pixel spacing"))
-    dx = gdi.FloatItem("Δx", default=1.0, nonzero=True)
-    dy = gdi.FloatItem("Δy", default=1.0, nonzero=True).set_pos(col=1)
-    _e_pixel_spacing = gdt.EndGroup(_("Pixel spacing"))
-    _e_dxdyg = gdt.EndGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _dxdyg = gds.BeginGroup(f'{_("Origin")} / {_("Pixel spacing")}')
+    _origin = gds.BeginGroup(_("Origin"))
+    x0 = gds.FloatItem("X<sub>0</sub>", default=0.0)
+    y0 = gds.FloatItem("Y<sub>0</sub>", default=0.0).set_pos(col=1)
+    _e_origin = gds.EndGroup(_("Origin"))
+    _pixel_spacing = gds.BeginGroup(_("Pixel spacing"))
+    dx = gds.FloatItem("Δx", default=1.0, nonzero=True)
+    dy = gds.FloatItem("Δy", default=1.0, nonzero=True).set_pos(col=1)
+    _e_pixel_spacing = gds.EndGroup(_("Pixel spacing"))
+    _e_dxdyg = gds.EndGroup(f'{_("Origin")} / {_("Pixel spacing")}')
 
-    _unitsg = gdt.BeginGroup(f'{_("Titles")} / {_("Units")}')
-    title = gdi.StringItem(_("Image title"), default=_("Untitled"))
-    _tabs_u = gdt.BeginTabGroup("units")
-    _unitsx = gdt.BeginGroup(_("X-axis"))
-    xlabel = gdi.StringItem(_("Title"), default="")
-    xunit = gdi.StringItem(_("Unit"), default="")
-    _e_unitsx = gdt.EndGroup(_("X-axis"))
-    _unitsy = gdt.BeginGroup(_("Y-axis"))
-    ylabel = gdi.StringItem(_("Title"), default="")
-    yunit = gdi.StringItem(_("Unit"), default="")
-    _e_unitsy = gdt.EndGroup(_("Y-axis"))
-    _unitsz = gdt.BeginGroup(_("Z-axis"))
-    zlabel = gdi.StringItem(_("Title"), default="")
-    zunit = gdi.StringItem(_("Unit"), default="")
-    _e_unitsz = gdt.EndGroup(_("Z-axis"))
-    _e_tabs_u = gdt.EndTabGroup("units")
-    _e_unitsg = gdt.EndGroup(f'{_("Titles")} / {_("Units")}')
+    _unitsg = gds.BeginGroup(f'{_("Titles")} / {_("Units")}')
+    title = gds.StringItem(_("Image title"), default=_("Untitled"))
+    _tabs_u = gds.BeginTabGroup("units")
+    _unitsx = gds.BeginGroup(_("X-axis"))
+    xlabel = gds.StringItem(_("Title"), default="")
+    xunit = gds.StringItem(_("Unit"), default="")
+    _e_unitsx = gds.EndGroup(_("X-axis"))
+    _unitsy = gds.BeginGroup(_("Y-axis"))
+    ylabel = gds.StringItem(_("Title"), default="")
+    yunit = gds.StringItem(_("Unit"), default="")
+    _e_unitsy = gds.EndGroup(_("Y-axis"))
+    _unitsz = gds.BeginGroup(_("Z-axis"))
+    zlabel = gds.StringItem(_("Title"), default="")
+    zunit = gds.StringItem(_("Unit"), default="")
+    _e_unitsz = gds.EndGroup(_("Z-axis"))
+    _e_tabs_u = gds.EndTabGroup("units")
+    _e_unitsg = gds.EndGroup(f'{_("Titles")} / {_("Units")}')
 
-    _e_tabs = gdt.EndTabGroup("all")
+    _e_tabs = gds.EndTabGroup("all")
 
     @property
     def xc(self) -> float:
@@ -523,7 +522,7 @@ class ImageObj(gdt.DataSet, base.BaseObj):
         self.__update_item_params(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults) -> gdt.DataSet:
+    def get_roi_param(self, title, *defaults) -> gds.DataSet:
         """Return ROI parameters dataset.
 
         Args:
@@ -546,7 +545,7 @@ class ImageObj(gdt.DataSet, base.BaseObj):
         return param
 
     @staticmethod
-    def params_to_roidata(params: gdt.DataSetGroup) -> np.ndarray | None:
+    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray | None:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -718,21 +717,21 @@ class ImageTypes(base.Choices):
     NORMALRANDOM = _("random (normal law)")
 
 
-class NewImageParam(gdt.DataSet):
+class NewImageParam(gds.DataSet):
     """New image dataset"""
 
     hide_image_type = False
 
-    title = gdi.StringItem(_("Title"))
-    height = gdi.IntItem(
+    title = gds.StringItem(_("Title"))
+    height = gds.IntItem(
         _("Height"), help=_("Image height (total number of rows)"), min=1
     )
-    width = gdi.IntItem(
+    width = gds.IntItem(
         _("Width"), help=_("Image width (total number of columns)"), min=1
     )
-    dtype = gdi.ChoiceItem(_("Data type"), ImageDatatypes.get_choices())
-    itype = gdi.ChoiceItem(_("Type"), ImageTypes.get_choices()).set_prop(
-        "display", hide=gdt.GetAttrProp("hide_image_type")
+    dtype = gds.ChoiceItem(_("Data type"), ImageDatatypes.get_choices())
+    itype = gds.ChoiceItem(_("Type"), ImageTypes.get_choices()).set_prop(
+        "display", hide=gds.GetAttrProp("hide_image_type")
     )
 
 
@@ -775,23 +774,23 @@ def new_image_param(
 IMG_NB = 0
 
 
-class Gauss2DParam(gdt.DataSet):
+class Gauss2DParam(gds.DataSet):
     """2D Gaussian parameters"""
 
-    a = gdi.FloatItem("Norm")
-    xmin = gdi.FloatItem("Xmin", default=-10).set_pos(col=1)
-    sigma = gdi.FloatItem("σ", default=1.0)
-    xmax = gdi.FloatItem("Xmax", default=10).set_pos(col=1)
-    mu = gdi.FloatItem("μ", default=0.0)
-    ymin = gdi.FloatItem("Ymin", default=-10).set_pos(col=1)
-    x0 = gdi.FloatItem("X0", default=0)
-    ymax = gdi.FloatItem("Ymax", default=10).set_pos(col=1)
-    y0 = gdi.FloatItem("Y0", default=0).set_pos(col=0, colspan=1)
+    a = gds.FloatItem("Norm")
+    xmin = gds.FloatItem("Xmin", default=-10).set_pos(col=1)
+    sigma = gds.FloatItem("σ", default=1.0)
+    xmax = gds.FloatItem("Xmax", default=10).set_pos(col=1)
+    mu = gds.FloatItem("μ", default=0.0)
+    ymin = gds.FloatItem("Ymin", default=-10).set_pos(col=1)
+    x0 = gds.FloatItem("X0", default=0)
+    ymax = gds.FloatItem("Ymax", default=10).set_pos(col=1)
+    y0 = gds.FloatItem("Y0", default=0).set_pos(col=0, colspan=1)
 
 
 def create_image_from_param(
     newparam: NewImageParam,
-    addparam: gdt.DataSet | None = None,
+    addparam: gds.DataSet | None = None,
     edit: bool = False,
     parent: QW.QWidget | None = None,
 ) -> ImageObj | None:
@@ -799,7 +798,7 @@ def create_image_from_param(
 
     Args:
         newparam (NewImageParam): new image parameters
-        addparam (guidata.dataset.datatypes.DataSet): additional parameters
+        addparam (guidata.dataset.DataSet): additional parameters
         edit (bool): Open a dialog box to edit parameters (default: False)
         parent (QWidget): parent widget
 

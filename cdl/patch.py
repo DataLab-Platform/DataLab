@@ -14,7 +14,7 @@ Module patching *guidata* and *guiqwt* to adapt it to DataLab
 import sys
 import warnings
 
-import guidata.dataset.datatypes
+import guidata.dataset
 import guiqwt.annotations
 import guiqwt.curve
 import guiqwt.histogram
@@ -77,8 +77,8 @@ def monkeypatch_method(cls, patch_name):
 # now it's possible to test those lines without blocking)
 
 
-#  Patching guidata.dataset.datatypes.DataSet edit methods for automatic GUI testing
-@monkeypatch_method(guidata.dataset.datatypes.DataSet, "DataSet")
+#  Patching guidata.dataset.DataSet edit methods for automatic GUI testing
+@monkeypatch_method(guidata.dataset.DataSet, "DataSet")
 def edit(self, parent=None, apply=None, size=None):
     """
     Open a dialog box to edit data set
@@ -91,8 +91,8 @@ def edit(self, parent=None, apply=None, size=None):
     return exec_dialog(win)
 
 
-#  Patching guidata.dataset.datatypes.DataSet edit methods for automatic GUI testing
-@monkeypatch_method(guidata.dataset.datatypes.DataSetGroup, "DataSetGroup")
+#  Patching guidata.dataset.DataSet edit methods for automatic GUI testing
+@monkeypatch_method(guidata.dataset.DataSetGroup, "DataSetGroup")
 def edit(self, parent=None, apply=None, size=None):
     """
     Open a dialog box to edit data set
