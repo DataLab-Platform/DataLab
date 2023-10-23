@@ -3,6 +3,7 @@ guiqwt
 PythonQwt
 scikit-image
 opencv-python
+pywt
 psutil
 pylint
 black
