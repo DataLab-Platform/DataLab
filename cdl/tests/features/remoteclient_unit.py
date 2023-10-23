@@ -15,7 +15,7 @@ import os.path as osp
 import time
 
 import numpy as np
-from guiqwt.builder import make
+from plotpy.builder import make
 
 from cdl import app
 from cdl.core.remote import RemoteClient

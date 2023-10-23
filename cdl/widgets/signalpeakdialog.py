@@ -9,8 +9,8 @@
 
 import numpy as np
 from guidata.configtools import get_icon
-from guiqwt.builder import make
-from guiqwt.plot import CurveDialog
+from plotpy.builder import make
+from plotpy.plot import PlotDialog
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -49,14 +49,10 @@ class DistanceSlider(QW.QWidget):
         self.slider.valueChanged.connect(self.value_changed)
 
 
-class SignalPeakDetectionDialog(CurveDialog):
+class SignalPeakDetectionDialog(PlotDialog):
     """Signal Peak detection dialog"""
 
     def __init__(self, parent=None):
-        super().__init__(wintitle=_("Signal peak detection"), edit=True, parent=parent)
-        self.setObjectName("peakdetection")
-        if parent is None:
-            self.setWindowIcon(get_icon("DataLab.svg"))
         self.peaks = None
         self.peak_indexes = None
         self.in_x = None
@@ -68,10 +64,19 @@ class SignalPeakDetectionDialog(CurveDialog):
         self.co_positions = None
         self.co_markers = None
         self.min_distance = None
-        self.distance_slider = DistanceSlider(self)
-        self.plot_layout.addWidget(self.distance_slider, 1, 0, 1, 1)
+        self.distance_slider: DistanceSlider | None = None
+        super().__init__(title=_("Signal peak detection"), edit=True, parent=parent)
+        self.setObjectName("peakdetection")
+        if parent is None:
+            self.setWindowIcon(get_icon("DataLab.svg"))
         legend = make.legend("TR")
         self.get_plot().add_item(legend)
+
+    def populate_plot_layout(self) -> None:  # Reimplement PlotDialog method
+        """Populate the plot layout"""
+        super().populate_plot_layout()
+        self.distance_slider = DistanceSlider(self)
+        self.add_widget(self.distance_slider, 1, 0, 1, 1)
 
     def get_peaks(self):
         """Return peaks coordinates"""

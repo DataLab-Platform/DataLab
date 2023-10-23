@@ -13,7 +13,7 @@ Testing enclsoing circle function on various test images.
 # pylint: disable=duplicate-code
 # guitest: show
 
-from guiqwt.builder import make
+from plotpy.builder import make
 
 from cdl.algorithms.image import get_centroid_fourier, get_enclosing_circle
 from cdl.config import _

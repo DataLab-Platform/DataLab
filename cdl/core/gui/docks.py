@@ -14,7 +14,8 @@ from typing import TYPE_CHECKING
 from guidata.configtools import get_image_file_path
 from guidata.qthelpers import is_dark_mode
 from guidata.widgets.dockable import DockableWidget
-from guiqwt.plot import ImageWidget
+from plotpy.constants import PlotType
+from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -22,7 +23,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import Conf, _
 
 if TYPE_CHECKING:  # pragma: no cover
-    from guiqwt.plot import CurvePlot, CurveWidget, ImagePlot
+    from plotpy.plot import BasePlot
 
 
 class DockablePlotWidget(DockableWidget):
@@ -33,11 +34,11 @@ class DockablePlotWidget(DockableWidget):
     def __init__(
         self,
         parent: QW.QWidget,
-        plotwidgetclass: CurveWidget | ImageWidget,
+        plot_type: PlotType,
     ) -> None:
         super().__init__(parent)
-        self.toolbar = QW.QToolBar(_("Plot Toolbar"), self)
-        self.plotwidget = plotwidgetclass()
+        self.plotwidget = PlotWidget(toolbar=True, options=PlotOptions(type=plot_type))
+        self.toolbar = self.plotwidget.get_toolbar()
         self.watermark = QW.QLabel()
         original_image = QG.QPixmap(get_image_file_path("DataLab-watermark.png"))
         self.watermark.setPixmap(original_image)
@@ -75,16 +76,11 @@ class DockablePlotWidget(DockableWidget):
     def setup_plotwidget(self) -> None:
         """Setup plotting widget"""
         title = self.toolbar.windowTitle()
-        pwidget = self.plotwidget
-        pwidget.add_toolbar(self.toolbar, title)
-        if isinstance(self.plotwidget, ImageWidget):
-            pwidget.register_all_image_tools()
-        else:
-            pwidget.register_all_curve_tools()
+        self.plotwidget.get_manager().add_toolbar(self.toolbar, title)
         #  Customizing widget appearances
-        plot = pwidget.get_plot()
+        plot = self.plotwidget.get_plot()
         if not is_dark_mode():
-            for widget in (pwidget, plot, self):
+            for widget in (self.plotwidget, plot, self):
                 widget.setBackgroundRole(QG.QPalette.Window)
                 widget.setAutoFillBackground(True)
                 widget.setPalette(QG.QPalette(QC.Qt.white))
@@ -92,14 +88,14 @@ class DockablePlotWidget(DockableWidget):
         canvas.setFrameStyle(canvas.Plain | canvas.NoFrame)
         plot.SIG_ITEMS_CHANGED.connect(self.update_watermark)
 
-    def get_plot(self) -> CurvePlot | ImagePlot:
+    def get_plot(self) -> BasePlot:
         """Return plot instance"""
-        return self.plotwidget.plot
+        return self.plotwidget.get_plot()
 
     def update_watermark(self) -> None:
         """Update watermark visibility"""
         items = self.get_plot().get_items()
-        if isinstance(self.plotwidget, ImageWidget):
+        if self.plotwidget.options.type == PlotType.IMAGE:
             enabled = len(items) <= 1
         else:
             enabled = len(items) <= 2

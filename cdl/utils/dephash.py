@@ -99,10 +99,10 @@ def create_dependencies_file(datapath, dependencies):
 
 if __name__ == "__main__":
     # datapath = osp.join(osp.dirname(__file__), os.pardir, "data")
-    # hdict = get_dependencies_hash(("guidata", "guiqwt"))
+    # hdict = get_dependencies_hash(("guidata", "plotpy"))
     # print(hdict)
     # print(check_dependencies_hash(datapath, hdict))
     create_dependencies_file(
-        osp.join(osp.dirname(__file__), os.pardir, "data"), ("guidata", "guiqwt")
+        osp.join(osp.dirname(__file__), os.pardir, "data"), ("guidata", "plotpy")
     )
     # print(check_dependencies_hash(datapath))

@@ -15,8 +15,8 @@ Image tools application test:
 
 import os.path as osp
 
-from guiqwt.baseplot import axes_to_canvas
-from guiqwt.tools import CrossSectionTool
+from plotpy.coords import axes_to_canvas
+from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
 import cdl.obj
@@ -35,21 +35,23 @@ def test():
         panel.add_object(ima)
         panel.set_current_object_title(f"Test image for {osp.basename(__file__)}")
         plotwidget = panel.plothandler.plotwidget
+        plotmanager = plotwidget.get_manager()
+        plot = plotwidget.get_plot()
 
         # === Testing "ZAxisLogTool" ---------------------------------------------------
-        lstool = plotwidget.get_tool(ZAxisLogTool)
+        lstool = plotmanager.get_tool(ZAxisLogTool)
         qt_wait(1, except_unattended=True)
         for _index in range(2):
             lstool.activate()
             qt_wait(1, except_unattended=True)
 
         # === Testing "to_cdl" -----------------------------------------------------
-        plot = plotwidget.plot
-        cstool = plotwidget.get_tool(CrossSectionTool)
+        cstool = plotmanager.get_tool(CrossSectionTool)
         cstool.activate()
         x, y = newparam.width // 2, newparam.height // 2
-        pos = QC.QPointF(*axes_to_canvas(plot.active_item, x, y))
-        cstool.end_rect(plotwidget.plot.filter, pos, pos)
+        active_item = plot.get_active_item()
+        pos = QC.QPointF(*axes_to_canvas(active_item, x, y))
+        cstool.end_rect(plot.filter, pos, pos)
         for csw in (plotwidget.xcsw, plotwidget.ycsw):
             to_cdl(csw.cs_plot)
 

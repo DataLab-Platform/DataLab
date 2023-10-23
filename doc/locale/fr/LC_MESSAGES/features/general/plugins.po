@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-29 10:00+0200\n"
+"POT-Creation-Date: 2023-10-23 18:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/general/plugins.rst:2
 msgid "Plugins"
@@ -81,7 +81,9 @@ msgstr "Exemple : plugin d'entrée/sortie"
 msgid ""
 "Here is a simple example of a plugin that adds a new file formats to "
 "DataLab."
-msgstr "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de fichiers à DataLab."
+msgstr ""
+"Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de "
+"fichiers à DataLab."
 
 #: ../../features/general/plugins.rst:31
 msgid "Public API"
@@ -117,36 +119,58 @@ msgid ""
 "infos are defined using the :class:`FormatInfo` class."
 msgstr ""
 
+#: cdl.plugins.PluginRegistry:1 of
+msgid "Metaclass for registering plugins"
+msgstr ""
+
+#: cdl.plugins.PluginRegistry.get_plugin_classes:1 of
+msgid "Return plugin classes"
+msgstr ""
+
+#: cdl.plugins.PluginRegistry.get_plugins:1 of
+msgid "Return plugin instances"
+msgstr ""
+
+#: cdl.plugins.PluginRegistry.get_plugin:1 of
+msgid "Return plugin instance"
+msgstr ""
+
+#: cdl.plugins.PluginBase.register:1
+#: cdl.plugins.PluginRegistry.register_plugin:1 of
+msgid "Register plugin"
+msgstr ""
+
+#: cdl.plugins.PluginBase.unregister:1
+#: cdl.plugins.PluginRegistry.unregister_plugin:1 of
+msgid "Unregister plugin"
+msgstr ""
+
+#: cdl.plugins.PluginRegistry.get_plugin_infos:1 of
+msgid "Return plugin infos (names, versions, descriptions) in html format"
+msgstr ""
+
 #: cdl.plugins.PluginInfo:1 of
 msgid "Plugin info"
+msgstr ""
+
+#: cdl.plugins.PluginBaseMeta:1 of
+msgid "Mixed metaclass to avoid conflicts"
 msgstr ""
 
 #: cdl.plugins.PluginBase:1 of
 msgid "Plugin base class"
 msgstr ""
 
-#: cdl.plugins.PluginBase.ask_yesno:1 of
-msgid "Ask yes/no question"
-msgstr ""
-
-#: cdl.plugins.PluginBase.create_actions:1 of
-msgid "Create actions"
+#: cdl.plugins.PluginBase.signalpanel:1 of
+msgid "Return signal panel"
 msgstr ""
 
 #: cdl.plugins.PluginBase.imagepanel:1 of
 msgid "Return image panel"
 msgstr ""
 
-#: cdl.plugins.PluginBase.is_registered:1 of
-msgid "Return True if plugin is registered"
-msgstr ""
-
-#: cdl.plugins.PluginBase.register:1 of
-msgid "Register plugin"
-msgstr ""
-
-#: cdl.plugins.PluginBase.register_hooks:1 of
-msgid "Register plugin hooks"
+#: cdl.plugins.PluginBase.show_warning:1 of
+msgid "Show warning message"
 msgstr ""
 
 #: cdl.plugins.PluginBase.show_error:1 of
@@ -157,118 +181,83 @@ msgstr ""
 msgid "Show info message"
 msgstr ""
 
-#: cdl.plugins.PluginBase.show_warning:1 of
-msgid "Show warning message"
+#: cdl.plugins.PluginBase.ask_yesno:1 of
+msgid "Ask yes/no question"
 msgstr ""
 
-#: cdl.plugins.PluginBase.signalpanel:1 of
-msgid "Return signal panel"
+#: cdl.plugins.PluginBase.is_registered:1 of
+msgid "Return True if plugin is registered"
 msgstr ""
 
-#: cdl.plugins.PluginBase.unregister:1 of
-msgid "Unregister plugin"
+#: cdl.plugins.PluginBase.register_hooks:1 of
+msgid "Register plugin hooks"
 msgstr ""
 
 #: cdl.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
 msgstr ""
 
-#: cdl.core.io.base.FormatInfo:1 of
-msgid "Format info"
+#: cdl.plugins.PluginBase.create_actions:1 of
+msgid "Create actions"
 msgstr ""
 
-#: cdl.core.io.image.base.ImageFormatBase:1 of
-msgid "Object representing an image file type"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object:1
-#: cdl.core.io.signal.base.SignalFormatBase.create_object:1 of
-msgid "Create empty object"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object
-#: cdl.core.io.image.base.ImageFormatBase.read
-#: cdl.core.io.image.base.ImageFormatBase.read_data
-#: cdl.core.io.signal.base.SignalFormatBase.create_object
-#: cdl.core.io.signal.base.SignalFormatBase.read
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata
-#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata of
-msgid "Parameters"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object:3
-#: cdl.core.io.image.base.ImageFormatBase.read:3
-#: cdl.core.io.image.base.ImageFormatBase.read_data:3
-#: cdl.core.io.signal.base.SignalFormatBase.create_object:3
-#: cdl.core.io.signal.base.SignalFormatBase.read:3
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:3 of
-msgid "File name"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object:5
-#: cdl.core.io.signal.base.SignalFormatBase.create_object:5 of
-msgid "Index of object in file"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object
-#: cdl.core.io.image.base.ImageFormatBase.read
-#: cdl.core.io.image.base.ImageFormatBase.read_data
-#: cdl.core.io.signal.base.SignalFormatBase.create_object
-#: cdl.core.io.signal.base.SignalFormatBase.read
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata of
-msgid "Returns"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object:8
-#: cdl.core.io.image.base.ImageFormatBase.read:6 of
-msgid "Image object"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.create_object
-#: cdl.core.io.image.base.ImageFormatBase.read
-#: cdl.core.io.image.base.ImageFormatBase.read_data
-#: cdl.core.io.signal.base.SignalFormatBase.create_object
-#: cdl.core.io.signal.base.SignalFormatBase.read
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata of
-msgid "Return type"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.read:1
-#: cdl.core.io.signal.base.SignalFormatBase.read:1 of
-msgid "Read data from file, return one or more objects"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.read_data:1 of
-msgid "Read data and return it"
-msgstr ""
-
-#: cdl.core.io.image.base.ImageFormatBase.read_data:6 of
-msgid "Image data"
-msgstr ""
-
-#: cdl.core.io.signal.base.SignalFormatBase:1 of
-msgid "Object representing a signal file type"
-msgstr ""
-
-#: cdl.core.io.signal.base.SignalFormatBase.create_object:8
-#: cdl.core.io.signal.base.SignalFormatBase.read:6
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:5
-#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:3 of
-msgid "Signal object"
-msgstr ""
-
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:1 of
-msgid "Read data and metadata from file, write metadata to object, return xydata"
-msgstr ""
-
-#: cdl.core.io.signal.base.SignalFormatBase.read_xydata:8
-#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:5 of
-msgid "XY data"
-msgstr ""
-
-#: cdl.core.io.signal.base.SignalFormatBase.set_signal_xydata:1 of
-msgid "Set signal xydata"
+#: cdl.plugins.discover_plugins:1 of
+msgid "Discover plugins using naming convention"
 msgstr ""
 
 #~ msgid "Example"
 #~ msgstr "Exemple"
+
+#~ msgid "Format info"
+#~ msgstr ""
+
+#~ msgid "Object representing an image file type"
+#~ msgstr ""
+
+#~ msgid "Create empty object"
+#~ msgstr ""
+
+#~ msgid "Parameters"
+#~ msgstr ""
+
+#~ msgid "File name"
+#~ msgstr ""
+
+#~ msgid "Index of object in file"
+#~ msgstr ""
+
+#~ msgid "Returns"
+#~ msgstr ""
+
+#~ msgid "Image object"
+#~ msgstr ""
+
+#~ msgid "Return type"
+#~ msgstr ""
+
+#~ msgid "Read data from file, return one or more objects"
+#~ msgstr ""
+
+#~ msgid "Read data and return it"
+#~ msgstr ""
+
+#~ msgid "Image data"
+#~ msgstr ""
+
+#~ msgid "Object representing a signal file type"
+#~ msgstr ""
+
+#~ msgid "Signal object"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Read data and metadata from file, "
+#~ "write metadata to object, return xydata"
+#~ msgstr ""
+
+#~ msgid "XY data"
+#~ msgstr ""
+
+#~ msgid "Set signal xydata"
+#~ msgstr ""
+

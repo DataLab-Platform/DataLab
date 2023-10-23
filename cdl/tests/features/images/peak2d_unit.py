@@ -13,7 +13,7 @@ Image peak detection test
 
 import time
 
-from guiqwt.builder import make
+from plotpy.builder import make
 
 from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv

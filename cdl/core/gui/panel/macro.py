@@ -9,7 +9,6 @@
 
 from __future__ import annotations
 
-import os.path as osp
 import re
 from typing import TYPE_CHECKING
 

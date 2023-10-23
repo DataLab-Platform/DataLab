@@ -14,8 +14,10 @@ DataLab is developed by [Codra](https://codra.net/).
 ## Overview
 
 DataLab is a generic signal and image processing software based on Python scientific
-libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces (thanks to
-[guidata](https://pypi.python.org/pypi/guidata) and [guiqwt](https://pypi.python.org/pypi/guiqwt) libraries).
+libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interfaces
+(thanks to the powerful [PlotPyStack](https://github.com/PlotPyStack) - mostly the
+[guidata](https://github.com/PlotPyStack/guidata) and
+[PlotPy](https://github.com/PlotPyStack/PlotPy) libraries).
 
 DataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
 

@@ -22,8 +22,8 @@ import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guiqwt.builder import make
-from guiqwt.styles import COLORS, LINESTYLES
+from plotpy.builder import make
+from plotpy.styles import COLORS, LINESTYLES
 
 from cdl.algorithms import fit
 from cdl.config import Conf, _
@@ -31,8 +31,8 @@ from cdl.core.model import base
 from cdl.env import execenv
 
 if TYPE_CHECKING:  # pragma: no cover
-    from guiqwt.curve import CurveItem
-    from guiqwt.styles import CurveParam
+    from plotpy.items import CurveItem
+    from plotpy.styles import CurveParam
     from qtpy import QtWidgets as QW
 
 
@@ -49,12 +49,12 @@ class CurveStyles:
     CURVE_STYLE = style_generator()
 
     @classmethod
-    def apply_style(cls, curveparam: CurveParam):
+    def apply_style(cls, param: CurveParam):
         """Apply style to curve"""
         color, linestyle = next(cls.CURVE_STYLE)
-        curveparam.line.color = COLORS[color]
-        curveparam.line.style = LINESTYLES[linestyle]
-        curveparam.symbol.marker = "NoSymbol"
+        param.line.color = COLORS[color]
+        param.line.style = LINESTYLES[linestyle]
+        param.symbol.marker = "NoSymbol"
 
 
 class ROIParam(gds.DataSet):
@@ -241,7 +241,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         Args:
             item (CurveItem): plot item
         """
-        update_dataset(item.curveparam, self.metadata)
+        update_dataset(item.param, self.metadata)
         item.update_params()
 
     def make_item(self, update_from: CurveItem = None) -> CurveItem:
@@ -263,15 +263,15 @@ class SignalObj(gds.DataSet, base.BaseObj):
             elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
                 x, y, dx, dy = self.xydata
                 item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
-            CurveStyles.apply_style(item.curveparam)
+            CurveStyles.apply_style(item.param)
         else:
             raise RuntimeError("data not supported")
         if update_from is None:
             if execenv.demo_mode:
-                item.curveparam.line.width = 3
+                item.param.line.width = 3
             self.__update_item_params(item)
         else:
-            update_dataset(item.curveparam, update_from.curveparam)
+            update_dataset(item.param, update_from.param)
             item.update_params()
         return item
 
@@ -292,7 +292,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
             elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
                 x, y, dx, dy = self.xydata
                 item.set_data(x.real, y.real, dx.real, dy.real)
-        item.curveparam.label = self.title
+        item.param.label = self.title
         self.__update_item_params(item)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:

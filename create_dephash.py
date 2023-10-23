@@ -10,4 +10,4 @@ Create dependencies hash
 from cdl.config import DATAPATH
 from cdl.utils import dephash
 
-dephash.create_dependencies_file(DATAPATH, ("guidata", "guiqwt"))
+dephash.create_dependencies_file(DATAPATH, ("guidata", "plotpy"))

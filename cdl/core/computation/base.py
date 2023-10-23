@@ -26,7 +26,7 @@ from __future__ import annotations
 import guidata.dataset as gds
 import numpy as np
 
-from cdl.config import Conf, _
+from cdl.config import _
 
 
 class GaussianParam(gds.DataSet):

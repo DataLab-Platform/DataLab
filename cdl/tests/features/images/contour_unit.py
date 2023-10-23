@@ -14,7 +14,7 @@ Contour finding test
 import sys
 import time
 
-from guiqwt.builder import make
+from plotpy.builder import make
 
 from cdl.algorithms.image import get_2d_peaks_coords, get_contour_shapes
 from cdl.env import execenv

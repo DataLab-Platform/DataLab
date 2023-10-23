@@ -22,8 +22,8 @@ import time
 
 import numpy as np
 import scipy.ndimage as spi
-from guiqwt.builder import make
 from numpy import ma
+from plotpy.builder import make
 
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _

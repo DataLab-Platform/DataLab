@@ -7,6 +7,10 @@ for future and past milestones.
 
 New dependencies:
 
+* DataLab is now powered by [PlotPyStack](https://github.com/PlotPyStack):
+  * [PythonQwt](https://github.com/PlotPyStack/PythonQwt)
+  * [guidata](https://github.com/PlotPyStack/guidata)
+  * [PlotPy](https://github.com/PlotPyStack/PlotPy)
 * [opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)
 
 New features:

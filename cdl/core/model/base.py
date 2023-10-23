@@ -22,14 +22,12 @@ from uuid import uuid4
 import guidata.dataset as gds
 import numpy as np
 from guidata.dataset.io import JSONHandler, JSONReader, JSONWriter
-from guiqwt.annotations import AnnotatedPoint, AnnotatedShape
-from guiqwt.builder import make
-from guiqwt.io import load_items, save_items
-from guiqwt.label import LabelItem
+from plotpy.builder import make
+from plotpy.io import load_items, save_items
+from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
 
 from cdl.config import Conf, _
 from cdl.utils.misc import is_integer_dtype
-from cdl.utils.qthelpers import exec_dialog
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"

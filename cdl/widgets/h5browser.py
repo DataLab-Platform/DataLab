@@ -22,7 +22,7 @@ from guidata.qthelpers import (
     get_icon,
     win32_fix_title_bar_background,
 )
-from guiqwt.plot import CurveWidget, ImageWidget
+from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -335,11 +335,11 @@ class H5Browser(QW.QSplitter):
         self.addWidget(self.tree)
         self.stack = QW.QStackedWidget(self)
         self.addWidget(self.stack)
-        self.curvewidget = CurveWidget(self.stack)
-        self.curvewidget.register_all_curve_tools()
+        self.curvewidget = PlotWidget(self.stack, options=PlotOptions(type="curve"))
         self.stack.addWidget(self.curvewidget)
-        self.imagewidget = ImageWidget(self.stack, show_contrast=True)
-        self.imagewidget.register_all_image_tools()
+        self.imagewidget = PlotWidget(
+            self.stack, options=PlotOptions(type="image", show_contrast=True)
+        )
         self.stack.addWidget(self.imagewidget)
 
     def setup(self, fname):
@@ -349,7 +349,7 @@ class H5Browser(QW.QSplitter):
     def cleanup(self):
         """Clean up widget"""
         for widget in (self.imagewidget, self.curvewidget):
-            widget.plot.del_all_items()
+            widget.get_plot().del_all_items()
         self.tree.cleanup()
 
     def get_node(self, item=None):
@@ -376,7 +376,7 @@ class H5Browser(QW.QSplitter):
         else:
             widget = self.imagewidget
         item = obj.make_item()
-        plot = widget.plot
+        plot = widget.get_plot()
         plot.del_all_items()
         plot.add_item(item)
         plot.set_active_item(item)

@@ -1,5 +1,5 @@
 guidata
-guiqwt
+plotpy
 PythonQwt
 scikit-image
 opencv-python

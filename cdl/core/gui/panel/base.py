@@ -18,7 +18,7 @@ Signal and Image Panel widgets relie on components:
   classes handling Qt actions
 
   * `core.gui.panel.plothandler.SignalPlotHandler` or `ImagePlotHandler`:
-  classes handling guiqwt plot items
+  classes handling PlotPy plot items
 
   * `core.gui.panel.processor.signal.SignalProcessor` or
   `core.gui.panel.processor.image.ImageProcessor`: classes handling computing features
@@ -57,7 +57,8 @@ from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import add_actions
 from guidata.widgets.arrayeditor import ArrayEditor
-from guiqwt.tools import (
+from plotpy.plot import PlotDialog
+from plotpy.tools import (
     HCursorTool,
     LabelTool,
     RectangleTool,
@@ -84,8 +85,8 @@ from cdl.utils.qthelpers import (
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset as gds
-    from guiqwt.plot import CurveDialog, CurveWidget, ImageDialog, ImageWidget
-    from guiqwt.tools import GuiTool
+    from plotpy.plot import PlotWidget
+    from plotpy.tools import GuiTool
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
@@ -239,7 +240,6 @@ class BaseDataPanel(AbstractPanel):
 
     PANEL_STR = ""  # e.g. "Signal Panel"
     PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
-    DIALOGCLASS: CurveDialog | ImageDialog = None  # Idem
     ANNOTATION_TOOLS = (
         LabelTool,
         VCursorTool,
@@ -258,9 +258,7 @@ class BaseDataPanel(AbstractPanel):
     ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
 
     @abc.abstractmethod
-    def __init__(
-        self, parent: QW.QWidget, plotwidget: CurveWidget | ImageWidget, toolbar
-    ) -> None:
+    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
         super().__init__(parent)
         self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
@@ -770,15 +768,16 @@ class BaseDataPanel(AbstractPanel):
             return None
         width, height = self.DIALOGSIZE
         dlg.resize(width, height)
-        dlg.get_itemlist_panel().show()
+        mgr = dlg.get_manager()
+        mgr.get_itemlist_panel().show()
         toolbar = QW.QToolBar(title, self)
         dlg.button_layout.insertWidget(0, toolbar)
         # dlg.layout().insertWidget(1, toolbar)  # other possible location
         # dlg.plot_layout.addWidget(toolbar, 1, 0, 1, 1)  # other possible location
-        dlg.add_toolbar(toolbar, id(toolbar))
+        mgr.add_toolbar(toolbar, id(toolbar))
         toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
         for tool in self.ANNOTATION_TOOLS:
-            dlg.add_tool(tool, toolbar_id=id(toolbar))
+            mgr.add_tool(tool, toolbar_id=id(toolbar))
         plot = dlg.get_plot()
         plot.unselect_all()
         for item in plot.items:
@@ -792,7 +791,7 @@ class BaseDataPanel(AbstractPanel):
 
     def __separate_view_finished(self, result: int) -> None:
         """Separate view was closed"""
-        dlg: CurveDialog | ImageDialog = self.sender()
+        dlg: PlotDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
             items = dlg.get_plot().get_items()
             rw_items = [item for item in items if not item.is_readonly()]
@@ -818,7 +817,7 @@ class BaseDataPanel(AbstractPanel):
         tools: list[GuiTool] | None = None,
         name: str | None = None,
         options: dict | None = None,
-    ) -> CurveDialog | ImageDialog | None:
+    ) -> PlotDialog | None:
         """Create new pop-up signal/image plot dialog.
 
         Args:
@@ -842,12 +841,12 @@ class BaseDataPanel(AbstractPanel):
 
         plot_options = self.plothandler.get_current_plot_options()
         if options is not None:
-            plot_options.update(options)
+            plot_options = plot_options.copy(options)
 
         # pylint: disable=not-callable
-        dlg: CurveDialog | ImageDialog = self.DIALOGCLASS(
+        dlg = PlotDialog(
             parent=self,
-            wintitle=title,
+            title=title,
             edit=edit,
             options=plot_options,
             toolbar=toolbar,
@@ -855,7 +854,7 @@ class BaseDataPanel(AbstractPanel):
         dlg.setWindowIcon(get_icon("DataLab.svg"))
         if tools is not None:
             for tool in tools:
-                dlg.add_tool(tool)
+                dlg.get_manager().add_tool(tool)
         plot = dlg.get_plot()
 
         objs = self.objmodel.get_objects(oids)

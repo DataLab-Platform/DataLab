@@ -21,14 +21,12 @@ set QT_COLOR_MODE=light
 set LANG=fr
 %PYTHON% doc/update_screenshots.py
 @REM Build documentation
-if exist build\doc ( rmdir /s /q build\doc )
-sphinx-build -D language=fr -D htmlhelp_basename=%LIBNAME%_fr -b htmlhelp doc build\doc
-hhc build\doc\%LIBNAME%_fr.hhp
+if exist %MODNAME%\data\doc ( rmdir /s /q %MODNAME%\data\doc )
+sphinx-build -D language=fr -b singlehtml doc %MODNAME%\data\doc
+ren %MODNAME%\data\doc\index.html index_fr.html
 @REM Update screenshots
 set LANG=en
 %PYTHON% doc/update_screenshots.py
-sphinx-build -D language=en -b htmlhelp doc build\doc
-hhc build\doc\%LIBNAME%.hhp
-move /y build\doc\*.chm %MODNAME%\data
-sphinx-build -b html doc build\doc
+sphinx-build -D language=en -b singlehtml doc %MODNAME%\data\doc
+@REM explorer %MODNAME%\data\doc
 call %FUNC% EndOfScript

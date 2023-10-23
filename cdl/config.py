@@ -19,8 +19,8 @@ import os.path as osp
 import sys
 
 from guidata import configtools
-from guiqwt.config import CONF as GUIQWT_CONF
-from guiqwt.config import MAIN_BG_COLOR, MAIN_FG_COLOR
+from plotpy.config import CONF as PLOTPY_CONF
+from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 
 from cdl.utils import conf, tests
 
@@ -86,16 +86,15 @@ def get_mod_source_dir() -> str | None:
     return None
 
 
-def get_htmlhelp() -> str | None:
-    """Return HTML Help documentation link adapted to locale, if it exists
+def get_local_help() -> str | None:
+    """Return local Help documentation link adapted to locale, if it exists
 
     Returns:
-        str | None: HTML Help documentation link adapted to locale,
-            or None if not found
+        str | None: HTML documentation link adapted to locale, or None if not found
     """
     if os.name == "nt":
         for suffix in ("_" + locale.getlocale()[0][:2], ""):
-            path = osp.join(DATAPATH, f"DataLab{suffix}.chm")
+            path = osp.join(DATAPATH, "doc", f"index{suffix}.html")
             if osp.isfile(path):
                 return path
     return None
@@ -298,7 +297,7 @@ def initialize():
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
-    Conf.view.ima_ref_lut_range.get(True)
+    Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.ima_def_colormap.get("jet")
     Conf.view.ima_def_interpolation.get(0)
@@ -316,7 +315,7 @@ initialize()
 tests.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
-GUIQWT_DEFAULTS = {
+PLOTPY_DEFAULTS = {
     "plot": {
         # "antialiasing": False,
         # "title/font/size": 12,
@@ -424,5 +423,5 @@ GUIQWT_DEFAULTS = {
     },
 }
 
-GUIQWT_CONF.update_defaults(GUIQWT_DEFAULTS)
-GUIQWT_CONF.set_application(osp.join(APP_NAME, "guiqwt"), CONF_VERSION, load=False)
+PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
+PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=False)

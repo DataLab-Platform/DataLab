@@ -9,8 +9,8 @@ DataLab I/O image formats
 
 import os.path as osp
 
-import guiqwt.io
 import numpy as np
+import plotpy.io
 import skimage.io
 
 from cdl.config import _
@@ -130,7 +130,7 @@ class DICOMImageFormat(ImageFormatBase):
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
         """Read data and return it"""
-        return guiqwt.io.imread(filename)
+        return plotpy.io.imread(filename)
 
 
 class AndorSIFImageFormat(ImageFormatBase):

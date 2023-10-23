@@ -12,7 +12,7 @@ omit =
     */cdl/utils/tests.py
     */cdl/tests/*
     */guidata/*
-    */guiqwt/*
+    */plotpy/*
 
     #--- Workaround for certain builds of python-opencv package:
     ./config-3.py

@@ -7,7 +7,7 @@
 DataLab Plot item list classes
 ------------------------------
 
-These classes handle guiqwt plot items for signal and image panels.
+These classes handle PlotPy plot items for signal and image panels.
 
 .. autosummary::
 
@@ -33,17 +33,17 @@ from typing import TYPE_CHECKING
 from weakref import WeakKeyDictionary
 
 import numpy as np
-from guiqwt.curve import GridItem
-from guiqwt.label import LegendBoxItem
+from plotpy.constants import PlotType
+from plotpy.items import GridItem, LegendBoxItem
+from plotpy.plot import PlotOptions
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
 from cdl.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:  # pragma: no cover
-    from guiqwt.curve import CurveItem
-    from guiqwt.image import MaskedImageItem
-    from guiqwt.plot import CurveWidget, ImagePlot, ImageWidget
+    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.plot import BasePlot, PlotWidget
 
     from cdl.core.gui.panel.base import BaseDataPanel
     from cdl.core.model.image import ImageObj
@@ -58,10 +58,12 @@ def calc_data_hash(obj: SignalObj | ImageObj) -> str:
 class BasePlotHandler:
     """Object handling plot items associated to objects (signals/images)"""
 
+    PLOT_TYPE: PlotType | None = None  # Replaced in subclasses
+
     def __init__(
         self,
         panel: BaseDataPanel,
-        plotwidget: CurveWidget | ImageWidget,
+        plotwidget: PlotWidget,
     ) -> None:
         self.panel = panel
         self.plotwidget = plotwidget
@@ -114,9 +116,9 @@ class BasePlotHandler:
         for the object with the given uuid"""
         obj = self.panel.objmodel[oid]
         if obj.metadata:
-            # Performance optimization: block `guiqwt.baseplot.BasePlot` signals,
+            # Performance optimization: block `plotpy.plot.BasePlot` signals,
             # add all items except the last one, unblock signals, then add the last one
-            # (this avoids some unnecessary refresh process by guiqwt)
+            # (this avoids some unnecessary refresh process by PlotPy)
             items = list(obj.iterate_shape_items(editable=False))
             if items:
                 if do_autoscale:
@@ -274,28 +276,27 @@ class BasePlotHandler:
             ]
         )
 
-    def get_current_plot_options(self) -> dict:
-        """
-        Return standard signal/image plot options
-
-        :return: Dictionary containing plot arguments for CurveDialog/ImageDialog
-        """
-        return {
-            "xlabel": self.plot.get_axis_title("bottom"),
-            "ylabel": self.plot.get_axis_title("left"),
-            "xunit": self.plot.get_axis_unit("bottom"),
-            "yunit": self.plot.get_axis_unit("left"),
-        }
+    def get_current_plot_options(self) -> PlotOptions:
+        """Return standard signal/image plot options"""
+        return PlotOptions(
+            type=self.PLOT_TYPE,
+            xlabel=self.plot.get_axis_title("bottom"),
+            ylabel=self.plot.get_axis_title("left"),
+            xunit=self.plot.get_axis_unit("bottom"),
+            yunit=self.plot.get_axis_unit("left"),
+        )
 
 
 class SignalPlotHandler(BasePlotHandler):
     """Object handling signal plot items, plot dialogs, plot options"""
 
-    # Nothing specific to signals, as of today
+    PLOT_TYPE = PlotType.CURVE
 
 
 class ImagePlotHandler(BasePlotHandler):
     """Object handling image plot items, plot dialogs, plot options"""
+
+    PLOT_TYPE = PlotType.IMAGE
 
     @staticmethod
     def update_item_according_to_ref_item(
@@ -304,7 +305,7 @@ class ImagePlotHandler(BasePlotHandler):
         """Update plot item according to reference item"""
         if ref_item is not None and Conf.view.ima_ref_lut_range.get():
             item.set_lut_range(ref_item.get_lut_range())
-            plot: ImagePlot = item.plot()
+            plot: BasePlot = item.plot()
             plot.update_colormap_axis(item)
 
     def refresh_plot(self, what: str, update_items: bool = True) -> None:
@@ -331,17 +332,9 @@ class ImagePlotHandler(BasePlotHandler):
             widget.hide()
         super().cleanup_dataview()
 
-    def get_current_plot_options(self) -> dict:
-        """
-        Return standard signal/image plot options
-
-        :return: Dictionary containing plot arguments for CurveDialog/ImageDialog
-        """
+    def get_current_plot_options(self) -> PlotOptions:
+        """Return standard signal/image plot options"""
         options = super().get_current_plot_options()
-        options.update(
-            {
-                "zlabel": self.plot.get_axis_title("right"),
-                "zunit": self.plot.get_axis_unit("right"),
-            }
-        )
+        options.zlabel = self.plot.get_axis_title("right")
+        options.zunit = self.plot.get_axis_unit("right")
         return options

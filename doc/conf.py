@@ -35,7 +35,7 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 if "htmlhelp" in sys.argv:
-    html_theme = "classic"
+    html_theme = "sphinxdoc"
 else:
     html_theme = "pydata_sphinx_theme"
     html_theme_options = {"show_toc_level": 2}
@@ -64,5 +64,5 @@ intersphinx_mapping = {
     "scikit-image": ("https://scikit-image.org/docs/stable/", None),
     "h5py": ("https://docs.h5py.org/en/stable/", None),
     "guidata": ("https://guidata.readthedocs.io/en/latest/", None),
-    "guiqwt": ("https://guiqwt.readthedocs.io/en/latest/", None),
+    "plotpy": ("https://plotpy.readthedocs.io/en/latest/", None),
 }

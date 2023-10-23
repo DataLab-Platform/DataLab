@@ -15,10 +15,9 @@ import abc
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
-from guiqwt.annotations import AnnotatedCircle
-from guiqwt.builder import make
-from guiqwt.interfaces import IImageItemType
-from guiqwt.label import ObjectInfo
+from plotpy.builder import make
+from plotpy.interfaces import IImageItemType
+from plotpy.items import AnnotatedCircle, ObjectInfo
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _

@@ -13,8 +13,8 @@ Image pixel binning computation test
 
 import time
 
-from guiqwt.builder import make
 from numpy import ma
+from plotpy.builder import make
 
 from cdl.algorithms.image import BINNING_OPERATIONS, binning
 from cdl.env import execenv

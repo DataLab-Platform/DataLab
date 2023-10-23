@@ -22,7 +22,7 @@ from typing import Any
 
 import numpy as np
 import scipy.signal as sps
-from guiqwt.plot import ImageWindow
+from plotpy.plot import PlotWindow
 from qtpy import QtWidgets as QW
 
 import cdl.obj
@@ -92,7 +92,7 @@ def test(iterations: int = 4) -> None:
     """Multiprocessing test"""
     Worker.create_pool()
     with qt_app_context(exec_loop=True):
-        win = ImageWindow("Multiprocessing test", icon="datalab.svg", toolbar=True)
+        win = PlotWindow(title="Multiprocessing test", icon="datalab.svg", toolbar=True)
         win.resize(800, 600)
         win.show()
         param = cdl.obj.new_image_param(

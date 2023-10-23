@@ -4,7 +4,7 @@
 max-line-length=88
 
 [TYPECHECK]
-ignored-modules=qtpy.QtWidgets,qtpy.QtCore,qtpy.QtGui,cv2
+ignored-modules=qtpy.QtWidgets,qtpy.QtCore,qtpy.QtGui,cv2,plotpy._scaler,skimage.restoration,skimage.feature
 
 [MESSAGES CONTROL]
 disable=wrong-import-order

@@ -8,10 +8,10 @@ import guidata
 guidata_path = osp.dirname(guidata.__file__)
 guidata_images = osp.join(guidata_path, 'images')
 guidata_locale = osp.join(guidata_path, 'locale', 'fr', 'LC_MESSAGES')
-import guiqwt
-guiqwt_path = osp.dirname(guiqwt.__file__)
-guiqwt_images = os.path.join(guiqwt_path, 'images')
-guiqwt_locale = os.path.join(guiqwt_path, 'locale', 'fr', 'LC_MESSAGES')
+import plotpy
+plotpy_path = osp.dirname(plotpy.__file__)
+plotpy_images = osp.join(plotpy_path, 'images')
+plotpy_locale = osp.join(plotpy_path, 'locale', 'fr', 'LC_MESSAGES')
 
 from PyInstaller.utils.hooks import collect_submodules
 all_hidden_imports = collect_submodules('cdl')
@@ -22,8 +22,8 @@ a = Analysis(['cdl\\start.pyw'],
              datas=[
                     (guidata_images, 'guidata\\images'),
                     (guidata_locale, 'guidata\\locale\\fr\\LC_MESSAGES'),
-                    (guiqwt_images, 'guiqwt\\images'),
-                    (guiqwt_locale, 'guiqwt\\locale\\fr\\LC_MESSAGES'),
+                    (plotpy_images, 'plotpy\\images'),
+                    (plotpy_locale, 'plotpy\\locale\\fr\\LC_MESSAGES'),
                     ('cdl\\plugins', 'cdl\\plugins'),
                     ('cdl\\data', 'cdl\\data'),
                     ('cdl\\locale\\fr\\LC_MESSAGES\\cdl.mo', 'cdl\\locale\\fr\\LC_MESSAGES'),

@@ -9,9 +9,10 @@ HDF5 browser test 2
 Testing for memory leak
 """
 
-# guitest: show
+# guitest: show,skip
 
 import os
+import time
 
 import numpy as np
 import psutil
@@ -31,6 +32,7 @@ def memoryleak_test(fname, iterations=20):
         dlg = H5BrowserDialog(None)
         memlist = []
         for i in range(iterations):
+            t0 = time.time()
             dlg.setup(fname)
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
@@ -43,6 +45,7 @@ def memoryleak_test(fname, iterations=20):
             dlg.close()
             execenv.print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
             dlg.cleanup()
+            execenv.print(i + 1, ":", f"{(time.time() - t0):.1f} s")
         view_curves(
             np.array(memlist),
             title="Memory leak test for HDF5 browser dialog",

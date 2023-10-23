@@ -11,8 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from guiqwt.plot import ImageDialog
-from guiqwt.tools import (
+from plotpy.tools import (
     AnnotatedCircleTool,
     AnnotatedEllipseTool,
     AnnotatedPointTool,
@@ -37,7 +36,7 @@ from cdl.core.model.image import (
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset as gds
-    from guiqwt.plot import ImageWidget
+    from plotpy.plot import PlotWidget
     from qtpy import QtWidgets as QW
 
     from cdl.core.model.image import NewImageParam
@@ -49,7 +48,6 @@ class ImagePanel(BaseDataPanel):
 
     PANEL_STR = _("Image panel")
     PARAMCLASS = ImageObj
-    DIALOGCLASS = ImageDialog
     DIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (
         AnnotatedCircleTool,
@@ -66,7 +64,7 @@ class ImagePanel(BaseDataPanel):
 
     # pylint: disable=duplicate-code
 
-    def __init__(self, parent: QW.QWidget, plotwidget: ImageWidget, toolbar) -> None:
+    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
         super().__init__(parent, plotwidget, toolbar)
         self.plothandler = ImagePlotHandler(self, plotwidget)
         self.processor = ImageProcessor(self, plotwidget)

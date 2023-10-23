@@ -12,7 +12,7 @@ Testing z-log scale tool feature.
 # guitest: show
 
 import numpy as np
-from guiqwt.builder import make
+from plotpy.builder import make
 
 from cdl import patch  # pylint: disable=unused-import
 from cdl.tests.data import create_2d_steps_data

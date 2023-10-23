@@ -25,14 +25,17 @@ The :mod:`cdl` package requires the following Python modules:
     * - opencv-python 
       - >= 4.5
       - 
+    * - PyWavelets 
+      - >= 1.1
+      - 
     * - psutil 
       - >= 5.5
       - 
     * - guidata 
-      - >= 3.0.1
+      - >= 3.1
       - 
-    * - guiqwt 
-      - >= 4.4
+    * - plotpy 
+      - >= 2.0
       - 
     * - QtPy 
       - >= 1.9

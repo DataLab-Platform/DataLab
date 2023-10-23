@@ -26,7 +26,7 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.ndimage as spi
 import scipy.signal as sps
-from guiqwt.geometry import vector_rotation
+from plotpy.mathutils.geometry import vector_rotation
 from skimage import filters
 from skimage.util.dtype import dtype_range
 

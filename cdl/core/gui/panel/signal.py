@@ -11,8 +11,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from guiqwt.plot import CurveDialog
-
 from cdl.config import _
 from cdl.core.gui import roieditor
 from cdl.core.gui.actionhandler import SignalActionHandler
@@ -24,7 +22,7 @@ from cdl.core.model.signal import SignalObj, create_signal_from_param, new_signa
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset as gds
-    from guiqwt.plot import CurveWidget
+    from plotpy.plot import PlotWidget
     from qtpy import QtWidgets as QW
 
     from cdl.core.model.signal import NewSignalParam
@@ -36,14 +34,13 @@ class SignalPanel(BaseDataPanel):
 
     PANEL_STR = _("Signal panel")
     PARAMCLASS = SignalObj
-    DIALOGCLASS = CurveDialog
     IO_REGISTRY = SignalIORegistry
     H5_PREFIX = "DataLab_Sig"
     ROIDIALOGCLASS = roieditor.SignalROIEditor
 
     # pylint: disable=duplicate-code
 
-    def __init__(self, parent: QW.QWidget, plotwidget: CurveWidget, toolbar) -> None:
+    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
         super().__init__(parent, plotwidget, toolbar)
         self.plothandler = SignalPlotHandler(self, plotwidget)
         self.processor = SignalProcessor(self, plotwidget)

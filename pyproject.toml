@@ -37,7 +37,7 @@ dependencies = [
     "PyWavelets >= 1.1",
     "psutil >= 5.5",
     "guidata >= 3.1",
-    "guiqwt >= 4.4",
+    "plotpy >= 2.0",
     "QtPy >= 1.9",
 ]
 dynamic = ["version"]
@@ -62,7 +62,6 @@ include = ["cdl*"]
     "*.png",
     "*.svg",
     "*.mo",
-    "*.chm",
     "*.txt",
     "*.json",
     "*.h5",
@@ -73,6 +72,11 @@ include = ["cdl*"]
     "*.jpg",
     "*.sif",
     "*.csv",
+    "*.js",
+    "*.css",
+    "*.html",
+    "*.buildinfo",
+    "*.inv",
 ]
 
 [tool.setuptools.dynamic]

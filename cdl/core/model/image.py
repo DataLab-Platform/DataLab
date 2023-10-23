@@ -24,10 +24,9 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guiqwt.annotations import AnnotatedCircle, AnnotatedRectangle
-from guiqwt.builder import make
-from guiqwt.image import MaskedImageItem
 from numpy import ma
+from plotpy.builder import make
+from plotpy.items import AnnotatedCircle, AnnotatedRectangle, MaskedImageItem
 from skimage import draw
 
 from cdl.algorithms.image import scale_data_to_min_max
@@ -466,7 +465,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             fmt = r"%.1f"
             if unit:
                 fmt = r"%.1f (" + unit + ")"
-            setattr(item.imageparam, axis + "format", fmt)
+            setattr(item.param, axis + "format", fmt)
         # Updating origin and pixel spacing
         has_origin = self.x0 is not None and self.y0 is not None
         has_pixelspacing = self.dx is not None and self.dy is not None
@@ -477,10 +476,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
             if has_pixelspacing:
                 dx, dy = self.dx, self.dy
             shape = self.data.shape
-            item.imageparam.xmin, item.imageparam.xmax = x0, x0 + dx * shape[1]
-            item.imageparam.ymin, item.imageparam.ymax = y0, y0 + dy * shape[0]
-        update_dataset(item.imageparam, self.metadata)
-        item.imageparam.update_image(item)
+            item.param.xmin, item.param.xmax = x0, x0 + dx * shape[1]
+            item.param.ymin, item.param.ymax = y0, y0 + dy * shape[0]
+        update_dataset(item.param, self.metadata)
+        item.param.update_item(item)
 
     def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
         """Make plot item from data.
@@ -504,8 +503,8 @@ class ImageObj(gds.DataSet, base.BaseObj):
         if update_from is None:
             self.__update_item_params(item)
         else:
-            update_dataset(item.imageparam, update_from.imageparam)
-            item.imageparam.update_image(item)
+            update_dataset(item.param, update_from.param)
+            item.param.update_item(item)
         return item
 
     def update_item(self, item: MaskedImageItem, data_changed: bool = True) -> None:
@@ -518,7 +517,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         if data_changed:
             item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
-        item.imageparam.label = self.title
+        item.param.label = self.title
         self.__update_item_params(item)
         item.plot().update_colormap_axis(item)
 

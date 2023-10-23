@@ -9,10 +9,9 @@ DataLab
 
 DataLab is a generic signal and image processing software based on Python
 scientific libraries (such as NumPy, SciPy or scikit-image) and Qt graphical
-user interfaces (thanks to `guidata`_ and `guiqwt`_ libraries).
+user interfaces (thanks to `PlotPyStack`_ libraries).
 
-.. _guidata: https://pypi.python.org/pypi/guidata
-.. _guiqwt: https://pypi.python.org/pypi/guiqwt
+.. _PlotPyStack: https://github.com/PlotPyStack
 """
 
 import os

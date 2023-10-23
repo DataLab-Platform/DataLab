@@ -12,7 +12,7 @@ Image peak detection test using circle Hough transform
 # guitest: show
 
 import numpy as np
-from guiqwt.builder import make
+from plotpy.builder import make
 from skimage.feature import canny
 
 from cdl.algorithms.image import get_hough_circle_peaks
@@ -39,7 +39,7 @@ def exec_hough_circle_test(data):
             np.array(edges, dtype=np.uint8),
             interpolation="linear",
             colormap="hsv",
-            alpha_mask=True,
+            alpha_function="tanh",
         ),
     ]
     coords = get_hough_circle_peaks(

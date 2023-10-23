@@ -17,7 +17,7 @@ from multiprocessing import Pool
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guiqwt.plot import ImageWidget
+from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -39,7 +39,7 @@ class MainWindow(QW.QMainWindow):
         self.setWindowIcon(get_icon("datalab.svg"))
 
         # Setting up the layout and widgets
-        self.imagewidget = ImageWidget()
+        self.imagewidget = PlotWidget(options=PlotOptions(type="image"))
         self.setCentralWidget(self.imagewidget)
         self.layout = QW.QVBoxLayout(self.imagewidget)
 

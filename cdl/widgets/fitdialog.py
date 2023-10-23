@@ -10,7 +10,8 @@
 
 import numpy as np
 from guidata.configtools import get_icon
-from guiqwt.widgets.fit import FitDialog, FitParam
+from plotpy.plot import PlotOptions
+from plotpy.widgets.fit import FitDialog, FitParam
 
 from cdl.algorithms import fit
 from cdl.algorithms.signal import xpeak
@@ -40,10 +41,10 @@ def guifit(
     """GUI-based curve fitting tool"""
     win = FitDialog(
         edit=True,
-        wintitle=wintitle,
+        title=wintitle,
         icon=None,
         toolbar=True,
-        options={"title": title, "xlabel": xlabel, "ylabel": ylabel},
+        options=PlotOptions(title=title, xlabel=xlabel, ylabel=ylabel),
         parent=parent,
         param_cols=param_cols,
         auto_fit=auto_fit,

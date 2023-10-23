@@ -14,7 +14,7 @@ Annotations unit test:
 
 # guitest: show
 
-from guiqwt.builder import make
+from plotpy.builder import make
 from qtpy import QtWidgets as QW
 
 from cdl.core.model.base import ANN_KEY

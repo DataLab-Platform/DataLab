@@ -15,7 +15,7 @@ from typing import Any
 
 import guidata.dataset as gds
 from guidata.dataset import restore_dataset, update_dataset
-from guiqwt.styles import BaseImageParam
+from plotpy.styles import BaseImageParam
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _

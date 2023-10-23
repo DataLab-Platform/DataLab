@@ -42,7 +42,7 @@ from cdl.widgets.warningerror import show_warning_error
 if TYPE_CHECKING:  # pragma: no cover
     from multiprocessing.pool import AsyncResult
 
-    from guiqwt.plot import CurveWidget, ImageWidget
+    from plotpy.plot import PlotWidget
 
     from cdl.core.computation.base import (
         ClipParam,
@@ -164,9 +164,7 @@ class BaseProcessor(QC.QObject):
     EDIT_ROI_PARAMS = False
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
 
-    def __init__(
-        self, panel: SignalPanel | ImagePanel, plotwidget: CurveWidget | ImageWidget
-    ):
+    def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
         super().__init__()
         self.panel = panel
         self.plotwidget = plotwidget
@@ -327,16 +325,15 @@ class BaseProcessor(QC.QObject):
         if not progress.wasCanceled():
             if self.worker is None:
                 return wng_err_func(func, args)
-            else:
-                self.worker.run(func, args)
-                while not self.worker.is_computation_finished():
-                    QW.QApplication.processEvents()
-                    time.sleep(0.1)
-                    if progress.wasCanceled():
-                        self.worker.restart_pool()
-                        break
-                if self.worker.is_computation_finished():
-                    return self.worker.get_result()
+            self.worker.run(func, args)
+            while not self.worker.is_computation_finished():
+                QW.QApplication.processEvents()
+                time.sleep(0.1)
+                if progress.wasCanceled():
+                    self.worker.restart_pool()
+                    break
+            if self.worker.is_computation_finished():
+                return self.worker.get_result()
         return None
 
     def _compute_11_subroutine(self, funcs: list[Callable], params: list, title: str):

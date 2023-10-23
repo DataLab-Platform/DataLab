@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-Module patching *guidata* and *guiqwt* to adapt it to DataLab
+Module patching *guidata* and *plotpy* to adapt it to DataLab
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -15,19 +15,19 @@ import sys
 import warnings
 
 import guidata.dataset
-import guiqwt.annotations
-import guiqwt.curve
-import guiqwt.histogram
-import guiqwt.image
-import guiqwt.plot
-import guiqwt.tools
 import numpy as np
+import plotpy.items
+import plotpy.plot
+import plotpy.tools
 from guidata.configtools import get_icon
 from guidata.dataset.qtwidgets import DataSetEditDialog, DataSetGroupEditDialog
 from guidata.qthelpers import add_actions, create_action
-from guiqwt import cross_section as cs
-from guiqwt.transitional import QwtLinearScaleEngine
+from plotpy._scaler import INTERP_NEAREST, _scale_rect
+from plotpy.mathutils.arrayfuncs import get_nan_range
+from plotpy.panels.csection import csplot, cswidget
+from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
+from qwt import QwtLinearScaleEngine
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
 from qwt import QwtScaleDraw
 
@@ -102,27 +102,27 @@ def edit(self, parent=None, apply=None, size=None):
 
 
 # Patching AnnotatedSegment "get_infos" method for a more compact text
-@monkeypatch_method(guiqwt.annotations.AnnotatedSegment, "AnnotatedSegment")
+@monkeypatch_method(plotpy.items.AnnotatedSegment, "AnnotatedSegment")
 def get_infos(self):
     """Return formatted string with informations on current shape"""
     return "Δ = " + self.x_to_str(self.get_tr_length())
 
 
 #  Patching CurveItem's "select" method to avoid showing giant ugly squares
-@monkeypatch_method(guiqwt.curve.CurveItem, "CurveItem")
+@monkeypatch_method(plotpy.items.CurveItem, "CurveItem")
 def select(self):
     """Select item"""
     self.selected = True
     plot = self.plot()
     with block_signals(widget=plot, enable=plot is not None):
-        pen = self.curveparam.line.build_pen()
+        pen = self.param.line.build_pen()
         pen.setWidth(2)
         self.setPen(pen)
     self.invalidate_plot()
 
 
 #  Adding centroid parameter to the image stats tool
-@monkeypatch_method(guiqwt.image.BaseImageItem, "ImageItem")
+@monkeypatch_method(plotpy.items.BaseImageItem, "ImageItem")
 def get_stats(self, x0, y0, x1, y1):
     """Return formatted string with stats on image rectangular area
     (output should be compatible with AnnotatedShape.get_infos)"""
@@ -137,8 +137,8 @@ def get_stats(self, x0, y0, x1, y1):
 
     c_i, c_j = get_centroid_fourier(data)
     c_x, c_y = self.get_plot_coordinates(c_j + ix0, c_i + iy0)
-    xfmt = self.imageparam.xformat
-    yfmt = self.imageparam.yformat
+    xfmt = self.param.xformat
+    yfmt = self.param.yformat
     return (
         txt
         + "<br>"
@@ -154,7 +154,7 @@ def get_stats(self, x0, y0, x1, y1):
 # ==============================================================================
 #  Adding support for z-axis logarithmic scale
 # ==============================================================================
-class ZAxisLogTool(guiqwt.tools.ToggleTool):
+class ZAxisLogTool(plotpy.tools.ToggleTool):
     """Patched tools.ToggleTool"""
 
     def __init__(self, manager):
@@ -162,7 +162,7 @@ class ZAxisLogTool(guiqwt.tools.ToggleTool):
         super().__init__(
             manager,
             title=title,
-            toolbar_id=guiqwt.tools.DefaultToolbarID,
+            toolbar_id=plotpy.tools.DefaultToolbarID,
             icon="zlog.svg",
         )
 
@@ -178,7 +178,7 @@ class ZAxisLogTool(guiqwt.tools.ToggleTool):
         items = [
             item
             for item in plot.get_items()
-            if isinstance(item, guiqwt.image.ImageItem)
+            if isinstance(item, plotpy.items.ImageItem)
             and not item.is_empty()
             and hasattr(item, "get_zaxis_log_state")
         ]
@@ -193,14 +193,14 @@ class ZAxisLogTool(guiqwt.tools.ToggleTool):
         self.action.setEnabled(len(self.get_supported_items(plot)) > 0)
 
 
-@monkeypatch_method(guiqwt.plot.PlotManager, "PlotManager")
+@monkeypatch_method(plotpy.plot.PlotManager, "PlotManager")
 def register_image_tools(self):
-    """Reimplement guiqwt.plot.PlotManager method"""
+    """Reimplement plotpy.plot.PlotManager method"""
     self._old_PlotManager_register_image_tools()
     self.add_tool(ZAxisLogTool)
 
 
-@monkeypatch_method(guiqwt.image.ImageItem, "ImageItem")
+@monkeypatch_method(plotpy.items.ImageItem, "ImageItem")
 def __init__(self, data=None, param=None):
     self._log_data = None
     self._lin_lut_range = None
@@ -220,7 +220,7 @@ class ZLogScaleDraw(QwtScaleDraw):
         #  rendering process, in order to choose scale data properly)
 
 
-@monkeypatch_method(guiqwt.image.ImageItem, "ImageItem")
+@monkeypatch_method(plotpy.items.ImageItem, "ImageItem")
 def set_zaxis_log_state(self, state):
     """Reimplement image.ImageItem method"""
     self._is_zaxis_log = state
@@ -231,9 +231,7 @@ def set_zaxis_log_state(self, state):
             self._log_data = np.array(
                 np.log10(self.data.clip(1)), dtype=np.float64, copy=True
             )
-        self.set_lut_range(
-            [guiqwt.image._nanmin(self._log_data), guiqwt.image._nanmax(self._log_data)]
-        )
+        self.set_lut_range(get_nan_range(self._log_data))
         plot.setAxisScaleDraw(plot.yRight, ZLogScaleDraw())
         plot.setAxisScaleEngine(plot.yRight, QwtLog10ScaleEngine())
     else:
@@ -244,13 +242,13 @@ def set_zaxis_log_state(self, state):
     plot.update_colormap_axis(self)
 
 
-@monkeypatch_method(guiqwt.image.ImageItem, "ImageItem")
+@monkeypatch_method(plotpy.items.ImageItem, "ImageItem")
 def get_zaxis_log_state(self):
     """Reimplement image.ImageItem method"""
     return self._is_zaxis_log
 
 
-@monkeypatch_method(guiqwt.image.ImageItem, "ImageItem")
+@monkeypatch_method(plotpy.items.ImageItem, "ImageItem")
 def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
     """Reimplement image.ImageItem method"""
     if self.data is None:
@@ -266,12 +264,10 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
         data = self.data
     # --------------------------------------------------------------------------
 
-    dest = guiqwt.image._scale_rect(
-        data, src2, self._offscreen, dst_rect, self.lut, (guiqwt.image.INTERP_NEAREST,)
+    dest = _scale_rect(
+        data, src2, self._offscreen, dst_rect, self.lut, (INTERP_NEAREST,)
     )
-    qrect = guiqwt.image.QRectF(
-        guiqwt.image.QPointF(dest[0], dest[1]), guiqwt.image.QPointF(dest[2], dest[3])
-    )
+    qrect = QC.QRectF(QC.QPointF(dest[0], dest[1]), QC.QPointF(dest[2], dest[3]))
     painter.drawImage(qrect, self._image, qrect)
 
 
@@ -296,13 +292,13 @@ def to_cdl(cs_plot):
         assert win is not None  # Should never happen
 
     for item in cs_plot.get_items():
-        if not isinstance(item, guiqwt.curve.CurveItem):
+        if not isinstance(item, plotpy.items.CurveItem):
             continue
         x, y, _dx, _dy = item.get_data()
         if x is None or y is None or x.size == 0 or y.size == 0:
             continue
 
-        signal = create_signal(item.curveparam.label)
+        signal = create_signal(item.param.label)
 
         image_item = None
         for image_item, curve_item in cs_plot.known_items.items():
@@ -310,7 +306,7 @@ def to_cdl(cs_plot):
                 break
         image_plot = image_item.plot()
 
-        if isinstance(cs_plot, cs.VerticalCrossSectionPlot):
+        if isinstance(cs_plot, csplot.VerticalCrossSectionPlot):
             signal.set_xydata(y, x)
             xaxis_name = "left"
             xunit = image_plot.get_axis_unit("bottom")
@@ -335,7 +331,7 @@ def to_cdl(cs_plot):
     win.raise_()
 
 
-@monkeypatch_method(cs.XCrossSection, "XCrossSection")
+@monkeypatch_method(cswidget.XCrossSection, "XCrossSection")
 def add_actions_to_toolbar(self):
     """Add actions to toolbar"""
     to_codraft_ac = create_action(

@@ -27,8 +27,8 @@ import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action, win32_fix_title_bar_background
 from guidata.widgets.console import DockableConsole
-from guiqwt.builder import make
-from guiqwt.plot import CurveWidget, ImageWidget
+from plotpy.builder import make
+from plotpy.constants import PlotType
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -44,7 +44,7 @@ from cdl.config import (
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
-    get_htmlhelp,
+    get_local_help,
 )
 from cdl.core.baseproxy import AbstractCDLControl
 from cdl.core.gui.actionhandler import ActionCategory
@@ -732,7 +732,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
-        curvewidget = DockablePlotWidget(self, CurveWidget)
+        curvewidget = DockablePlotWidget(self, PlotType.CURVE)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
         self.signalpanel = signal.SignalPanel(
@@ -744,13 +744,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
-        imagewidget = DockablePlotWidget(self, ImageWidget)
+        imagewidget = DockablePlotWidget(self, PlotType.IMAGE)
         self.imagepanel = image.ImagePanel(
             self, imagewidget.plotwidget, self.image_toolbar
         )
         # -----------------------------------------------------------------------------
         # # Before eventually disabling the "peritem" mode by default, wait for the
-        # # guiqwt bug to be fixed (peritem mode is not compatible with multiple image
+        # # plotpy bug to be fixed (peritem mode is not compatible with multiple image
         # # items):
         # for cspanel in (
         #     self.imagepanel.plotwidget.get_xcs_panel(),
@@ -803,22 +803,24 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
-        actions = [
-            create_action(
-                self,
-                _("Online documentation"),
-                icon=get_icon("libre-gui-help.svg"),
-                triggered=lambda: webbrowser.open(__docurl__),
-            )
-        ]
-        chmpath = get_htmlhelp()
-        if os.name == "nt" and chmpath is not None:
+        actions = []
+        localhelp = get_local_help()
+        if localhelp is None:
             actions += [
                 create_action(
                     self,
-                    _("CHM documentation"),
-                    icon=get_icon("chm.svg"),
-                    triggered=lambda: os.startfile(get_htmlhelp()),
+                    _("Online documentation"),
+                    icon=get_icon("libre-gui-help.svg"),
+                    triggered=lambda: webbrowser.open(__docurl__),
+                )
+            ]
+        else:
+            actions += [
+                create_action(
+                    self,
+                    _("Local documentation"),
+                    icon=get_icon("libre-gui-help.svg"),
+                    triggered=lambda: webbrowser.open(localhelp),
                 )
             ]
         actions += [None]
