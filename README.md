@@ -114,18 +114,7 @@ python setup.py install
 
 ----
 
-## Dependencies
+## Dependencies and installation
 
-### Requirements
-
-* Python 3.8+
-* [PyQt5](https://pypi.python.org/pypi/PyQt5) (Python Qt bindings)
-* [QtPy](https://pypi.org/project/QtPy/) (abstraction layer for Python-Qt binding libraries)
-* [guidata](https://pypi.python.org/pypi/guidata) (set of tools for automatic GUI generation)
-* [guiqwt](https://pypi.python.org/pypi/guiqwt) (set of tools for curve and image plotting based on guidata)
-* [h5py](https://pypi.org/project/h5py/) (interface to the HDF5 data format)
-* [NumPy](https://pypi.org/project/numpy/) (operations on multidimensional arrays)
-* [SciPy](https://pypi.org/project/scipy/) (algorithms for scientific computing)
-* [scikit-image](https://pypi.org/project/scikit-image/) (algorithms for image processing)
-* [opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)
-* [psutil](https://pypi.org/project/psutil/) (process and system monitoring)
+See [Installation](https://datalab.readthedocs.io/en/latest/intro/installation.html)
+section in the documentation for more details.
