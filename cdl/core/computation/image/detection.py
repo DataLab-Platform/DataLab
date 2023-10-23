@@ -263,6 +263,7 @@ class BlobOpenCVParam(gds.DataSet):
         _("Min. distance between blobs"),
         default=10.0,
         min=0.0,
+        nonzero=True,
         help=_(
             "The minimum distance between two blobs. If blobs are found "
             "closer together than this distance, the smaller blob is removed."

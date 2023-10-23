@@ -34,7 +34,7 @@ def test():
         param = cdl.param.ROIDataParam.create([[n, m, data_size - n, data_size - m]])
         proxy.compute_roi_extraction(param)
         param = cdl.param.BlobOpenCVParam.create(
-            min_dist_between_blobs=0,
+            min_dist_between_blobs=0.1,
             filter_by_color=False,
             min_area=500,
             max_area=2000,
