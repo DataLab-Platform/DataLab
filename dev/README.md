@@ -41,9 +41,6 @@ Adding support for mathematical equations in documentation:
 Visual Studio Code configuration used in `launch.json` and `tasks.json`
 (examples) :
 
-    @REM Development PYTHONPATH (needed if new required features have been added in
-    @REM development version of dependencies like guidata and guiqwt, for example)
-    set CDL_PYTHONPATH=C:\dev\libre\guidata;C:\dev\libre\guiqwt
     @REM Development environment
     set CDL_PYTHONEXE=C:\C2OIQ-DevCDL\python-3.8.10.amd64\python.exe
     @REM Folder containing additional working test data

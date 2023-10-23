@@ -239,7 +239,6 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
-                    "PYTHONPATH": "${env:CDL_PYTHONPATH}",
                     "QT_COLOR_MODE": "light",
                     "UNATTENDED": "1"
                 }
