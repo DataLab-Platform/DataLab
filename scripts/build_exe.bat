@@ -11,6 +11,9 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetLibName LIBNAME
 set ROOTPATH=%SCRIPTPATH%\..\
 
+@REM Keep this around for Qt hooks debugging (the output must not be empty):
+@REM %PYTHON%  -c "from PyInstaller.utils.hooks import qt; print(qt.pyqt5_library_info.location)"
+
 @REM Generating icon
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 set RESPATH=%ROOTPATH%resources
@@ -24,6 +27,7 @@ del "%RESPATH%\tmp-*.png"
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
 call %FUNC% GetVersion VERSION
-pyinstaller %LIBNAME%.spec --noconfirm
-"C:\Program Files\7-Zip\7z.exe" a -mx1 "dist\%LIBNAME%-v%VERSION%_exe.zip" dist\%LIBNAME%
+pyinstaller %LIBNAME%.spec --noconfirm --clean
+cd dist
+"C:\Program Files\7-Zip\7z.exe" a -mx1 "%LIBNAME%-v%VERSION%_exe.zip" %LIBNAME%
 call %FUNC% EndOfScript
