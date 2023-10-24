@@ -13,7 +13,6 @@ The `config` module handles `DataLab` configuration
 
 from __future__ import annotations
 
-import locale
 import os
 import os.path as osp
 import sys
@@ -83,20 +82,6 @@ def get_mod_source_dir() -> str | None:
     if osp.isfile(osp.join(devdir, MOD_NAME, "__init__.py")):
         return devdir
     # Unhandled case (this should not happen, but just in case):
-    return None
-
-
-def get_local_help() -> str | None:
-    """Return local Help documentation link adapted to locale, if it exists
-
-    Returns:
-        str | None: HTML documentation link adapted to locale, or None if not found
-    """
-    if os.name == "nt":
-        for suffix in ("_" + locale.getlocale()[0][:2], ""):
-            path = osp.join(DATAPATH, "doc", f"index{suffix}.html")
-            if osp.isfile(path):
-                return path
     return None
 
 

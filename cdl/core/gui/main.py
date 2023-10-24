@@ -44,7 +44,6 @@ from cdl.config import (
     TEST_SEGFAULT_ERROR,
     Conf,
     _,
-    get_local_help,
 )
 from cdl.core.baseproxy import AbstractCDLControl
 from cdl.core.gui.actionhandler import ActionCategory
@@ -783,6 +782,16 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
         self.setCentralWidget(self.tabwidget)
 
+    @staticmethod
+    def __get_local_doc_path() -> str | None:
+        """Return local documentation path, if it exists"""
+        locale = QC.QLocale.system().name()
+        for suffix in ("_" + locale[:2], ""):
+            path = osp.join(DATAPATH, "doc", f"index{suffix}.html")
+            if osp.isfile(path):
+                return path
+        return None
+
     def __add_menus(self) -> None:
         """Adding menus"""
         self.file_menu = self.menuBar().addMenu(_("File"))
@@ -803,27 +812,22 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
-        actions = []
-        localhelp = get_local_help()
-        if localhelp is None:
-            actions += [
-                create_action(
-                    self,
-                    _("Online documentation"),
-                    icon=get_icon("libre-gui-help.svg"),
-                    triggered=lambda: webbrowser.open(__docurl__),
-                )
-            ]
+        localdocpath = self.__get_local_doc_path()
+        if localdocpath is None:
+            label = _("Online documentation")
+            url = __docurl__
         else:
-            actions += [
-                create_action(
-                    self,
-                    _("Local documentation"),
-                    icon=get_icon("libre-gui-help.svg"),
-                    triggered=lambda: webbrowser.open(localhelp),
-                )
-            ]
-        actions += [None]
+            label = _("Local documentation")
+            url = localdocpath
+        actions = [
+            create_action(
+                self,
+                label,
+                icon=get_icon("libre-gui-help.svg"),
+                triggered=lambda: webbrowser.open(url),
+            ),
+            None,
+        ]
         if TEST_SEGFAULT_ERROR:
             actions += [
                 create_action(
