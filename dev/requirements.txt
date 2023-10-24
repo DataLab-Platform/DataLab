@@ -12,7 +12,6 @@ coverage
 pycodestyle
 pyinstaller
 sphinx
-sphinx-rtd-theme
 sphinx-intl
 pydata-sphinx-theme
 esbonio
