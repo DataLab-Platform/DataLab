@@ -24,6 +24,13 @@ Features
   .. note:: See "TODO" comment just above ``cdl.model.base.ResultShape`` class definition
         for more details about how to implement this feature.
 
+Maintenance
+^^^^^^^^^^^
+
+* 2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ;
+  this should be straightforward, thanks to the `qtpy` compatibility layer
+  and to the fact that `PlotPyStack` is already compatible with PyQt6)
+
 Other tasks
 ^^^^^^^^^^^
 
@@ -36,8 +43,10 @@ Other tasks
 Past milestones
 ---------------
 
-DataLab 0.9
+DataLab 1.0
 ^^^^^^^^^^^
+
+* Python 3.11 is the new reference
 
 * Run computations in a separate process:
 

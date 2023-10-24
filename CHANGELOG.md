@@ -13,6 +13,12 @@ New dependencies:
   * [PlotPy](https://github.com/PlotPyStack/PlotPy)
 * [opencv-python](https://pypi.org/project/opencv-python/) (algorithms for image processing)
 
+New reference platform:
+
+* DataLab is validated on Windows 11 with Python 3.11 and PyQt 5.15
+* DataLab is also compatible with other OS (Linux, MacOS) and other Python-Qt
+  bindings and versions (Python 3.8-3.12, PyQt6, PySide6)
+
 New features:
 
 * DataLab is a platform:

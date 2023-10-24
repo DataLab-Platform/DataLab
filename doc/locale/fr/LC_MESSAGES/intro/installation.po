@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 18:14+0200\n"
+"POT-Creation-Date: 2023-10-24 11:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,9 @@ msgstr "Dépendances"
 msgid ""
 "The DataLab Windows installer package already include all those required "
 "libraries as well as Python itself."
-msgstr "L'installeur Windows de DataLab inclut déjà toutes les dépendances, ainsi que Python lui-même."
+msgstr ""
+"L'installeur Windows de DataLab inclut déjà toutes les dépendances, ainsi"
+" que Python lui-même."
 
 #: ../../requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
@@ -212,7 +214,7 @@ msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr ""
 
 #: ../../intro/installation.rst:16
-msgid "Python 3.8 is the reference for production release"
+msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr ""
 
 #: ../../intro/installation.rst:20
@@ -304,3 +306,7 @@ msgstr ""
 
 #~ msgid "sphinx_qt_documentation"
 #~ msgstr ""
+
+#~ msgid "Python 3.8 is the reference for production release"
+#~ msgstr ""
+

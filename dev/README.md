@@ -6,13 +6,16 @@ Python distribution
 
 DataLab requires the following :
 
-* Python 3.8.10 (e.g. WinPython)
+* Python (e.g. WinPython)
 
 * Additional Python packages
 
 Installing all required packages :
 
     pip install --upgrade -r dev\requirements.txt
+
+ℹ️ See [Installation](https://datalab.readthedocs.io/en/latest/intro/installation.html)
+for more details on reference Python and Qt versions.
 
 Test data
 ---------

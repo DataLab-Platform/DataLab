@@ -8,7 +8,6 @@ It is based on Python scientific libraries (such as NumPy,
 SciPy or scikit-image) and Qt graphical user interfaces (thanks to
 the powerful `PlotPyStack`_ - mostly the `guidata`_ and `PlotPy`_ libraries).
 
-
 With its user-friendly experience and versatile :ref:`usage_modes`,
 DataLab enables efficient development of your data processing and
 visualization applications while benefiting from an industrial-grade
@@ -24,6 +23,11 @@ DataLab :ref:`main_features` are available not only using the
 (easily installed thanks to the Windows installer or the Python package)
 but also by **embedding it into your own application**
 (see the "embedded tests" for detailed examples of how to do so).
+
+.. figure:: _static/plotpy-stack-powered.png
+    :align: center
+
+    DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_
 
 External resources:
     .. list-table::

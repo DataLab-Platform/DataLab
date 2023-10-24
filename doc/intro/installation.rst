@@ -13,7 +13,7 @@ Dependencies
 
 .. note::
 
-    Python 3.8 is the reference for production release
+    Python 3.11 and PyQt5 are the reference for production release
 
 
 How to install

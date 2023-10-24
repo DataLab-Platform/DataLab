@@ -5,9 +5,13 @@
 [![PyPI status](https://img.shields.io/pypi/status/DataLab.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/DataLab.svg)](https://pypi.python.org/pypi/DataLab/)
 
-DataLab is developed by [Codra](https://codra.net/).
+ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
 
 ![DataLab](./doc/images/DataLab-Screenshot.png)
+
+ℹ️ DataLab is powered by [PlotPyStack](https://github.com/PlotPyStack) 🚀.
+
+![PlotPyStack](https://raw.githubusercontent.com/PlotPyStack/.github/main/data/plotpy-stack-powered.png)
 
 ----
 
@@ -108,15 +112,7 @@ distribution to be installed. Just run the installer and you're good to go!
 
 The installer package is available in the [Releases](https://github.com/Codra-Ingenierie-Informatique/DataLab/releases) section.
 
-### From the source package
-
-```bash
-python setup.py install
-```
-
-----
-
-## Dependencies and installation
+### Dependencies and other installation methods
 
 See [Installation](https://datalab.readthedocs.io/en/latest/intro/installation.html)
 section in the documentation for more details.
