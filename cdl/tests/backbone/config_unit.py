@@ -107,7 +107,8 @@ def check_conf(conf, name, win, h5files):
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:
         #  Check position/size only when not maximized
-        assert sec_main[OPT_POS.option] == (win.pos().x(), win.pos().y())
+        pos = win.pos() if os.name == "nt" else win.geometry()
+        assert sec_main[OPT_POS.option] == (pos.x(), pos.y())
         assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
         assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
         execenv.print("OK")
