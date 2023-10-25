@@ -135,10 +135,16 @@ class GenericArrayNode(BaseGenericNode):
         """Create native object, if supported"""
         if self.is_signal:
             obj = create_signal(self.object_title)
-            self.set_signal_data(obj)
+            try:
+                self.set_signal_data(obj)
+            except ValueError:
+                obj = None
         else:
             obj = create_image(self.object_title)
-            self.set_image_data(obj)
+            try:
+                self.set_image_data(obj)
+            except ValueError:
+                obj = None
         return obj
 
 

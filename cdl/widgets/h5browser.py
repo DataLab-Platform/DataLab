@@ -371,6 +371,9 @@ class H5Browser(QW.QSplitter):
         except Exception as msg:  # pylint: disable=broad-except
             qt_handle_error_message(self, msg)
             return
+        if obj is None:
+            # An error occurred while creating the object (invalid data, ...)
+            return
         if isinstance(obj, SignalObj):
             widget = self.curvewidget
         else:
