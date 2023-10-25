@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING
 
 from qtpy import QtWidgets as QW
 
-from cdl.config import IPLGPATH, MOD_NAME, Conf, _
+from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
 from cdl.core.io.base import FormatInfo  # pylint: disable=W0611
 from cdl.core.io.image.base import ImageFormatBase  # pylint: disable=W0611
 from cdl.core.io.image.formats import ClassicsImageFormat  # pylint: disable=W0611
@@ -221,7 +221,10 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 def discover_plugins() -> list[PluginBase]:
     """Discover plugins using naming convention"""
     if Conf.main.plugins_enabled.get():
-        for path in (Conf.main.plugins_path.get(), PLUGINS_DEFAULT_PATH, IPLGPATH):
+        for path in [
+            Conf.main.plugins_path.get(),
+            PLUGINS_DEFAULT_PATH,
+        ] + OTHER_PLUGINS_PATHLIST:
             rpath = osp.realpath(path)
             if rpath not in sys.path:
                 sys.path.append(rpath)

@@ -12,6 +12,37 @@ The plugin system currently supports the following features:
 - Input/output features: add new file formats to the DataLab file I/O system.
 - HDF5 features: add new HDF5 file formats to the DataLab HDF5 I/O system.
 
+What is a plugin?
+^^^^^^^^^^^^^^^^^
+
+A plugin is a Python module that is loaded at startup by DataLab. A plugin may
+add new features to DataLab, or modify existing features.
+
+A plugin is a Python module that contains a class derived from the `PluginBase`
+class. The name of the class is not important, as long as it is derived from
+`PluginBase`. The class must have a `PLUGIN_INFO` attribute that is an instance
+of the `PluginInfo` class. The `PLUGIN_INFO` attribute is used by DataLab to
+retrieve information about the plugin.
+
+Where to put a plugin?
+^^^^^^^^^^^^^^^^^^^^^^
+
+As plugins are Python modules, they can be put anywhere in the Python path of
+the DataLab installation.
+
+Special additional locations are available for plugins:
+
+- The `plugins` directory in the user configuration folder
+  (e.g. `C:\Users\JohnDoe\.DataLab\plugins` on Windows
+  or `~/.DataLab/plugins` on Linux).
+
+- The `plugins` directory in the same folder as the `DataLab` executable
+  in case of a standalone installation.
+
+- The `plugins` directory in the `cdl` package in case for internal plugins
+  only (i.e. it is not recommended to put your own plugins there).
+
+
 Example: processing plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -46,10 +46,10 @@ configtools.add_image_module_path(MOD_NAME, osp.join("data", "logo"))
 configtools.add_image_module_path(MOD_NAME, osp.join("data", "icons"))
 
 DATAPATH = configtools.get_module_data_path(MOD_NAME, "data")
-IPLGPATH = configtools.get_module_data_path(MOD_NAME, "plugins")
 SHOTPATH = osp.join(
     configtools.get_module_data_path(MOD_NAME), os.pardir, "doc", "images", "shots"
 )
+OTHER_PLUGINS_PATHLIST = [configtools.get_module_data_path(MOD_NAME, "plugins")]
 
 
 def is_frozen(module_name: str) -> bool:
@@ -67,6 +67,12 @@ def is_frozen(module_name: str) -> bool:
 
 
 IS_FROZEN = is_frozen(MOD_NAME)
+if IS_FROZEN:
+    OTHER_PLUGINS_PATHLIST.append(osp.join(osp.dirname(sys.executable), "plugins"))
+    try:
+        os.mkdir(OTHER_PLUGINS_PATHLIST[-1])
+    except OSError:
+        pass
 
 
 def get_mod_source_dir() -> str | None:
