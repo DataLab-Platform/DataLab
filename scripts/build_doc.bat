@@ -16,6 +16,8 @@ call %FUNC% GetVersion CDL_VERSION
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_requirements.py
 set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%
+
+@REM Build documentation in french =====================================================
 @REM Update screenshots
 set QT_COLOR_MODE=light
 set LANG=fr
@@ -23,7 +25,13 @@ set LANG=fr
 @REM Build documentation
 if exist %MODNAME%\data\doc ( rmdir /s /q %MODNAME%\data\doc )
 sphinx-build -D language=fr -b singlehtml doc %MODNAME%\data\doc
+@REM Rename index.html to index_fr.html and update links
 ren %MODNAME%\data\doc\index.html index_fr.html
+pushd %MODNAME%\data\doc
+%PYTHON% -c "with open('index_fr.html', 'r+', encoding='utf-8') as f: content = f.read(); f.seek(0); f.write(content.replace('index.html', 'index_fr.html')); f.truncate()"
+popd
+
+@REM Build documentation in english ====================================================
 @REM Update screenshots
 set LANG=en
 %PYTHON% doc/update_screenshots.py
