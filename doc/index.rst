@@ -59,7 +59,7 @@ Copyrights and licensing
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _guidata: https://pypi.python.org/pypi/guidata
 .. _PlotPy: https://pypi.python.org/pypi/PlotPy
-.. _PyPI: https://pypi.python.org/pypi/DataLab
+.. _PyPI: https://pypi.python.org/pypi/CDL
 .. _Home: https://codra-ingenierie-informatique.github.io/DataLab/
 .. _GitHub: https://github.com/Codra-Ingenierie-Informatique/DataLab
 .. _Codra: https://codra.net/

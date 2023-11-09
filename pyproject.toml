@@ -5,9 +5,9 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "DataLab"
+name = "CDL"
 authors = [{ name = "Codra", email = "p.raybaut@codra.fr" }]
-description = "DataLab is a data processing and analysis software for scientific and industrial applications"
+description = "DataLab (CDL) is a data processing and analysis software for scientific and industrial applications"
 readme = "README.md"
 license = { file = "LICENSE" }
 classifiers = [
