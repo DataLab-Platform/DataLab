@@ -218,8 +218,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
     @try_send_command()
     def add_object(self, obj):
         """Add object to DataLab"""
-        if self.cdl is not None:
-            self.cdl.add_object(obj)
+        super().add_object(obj)
 
     @try_send_command()
     def remove_all(self):

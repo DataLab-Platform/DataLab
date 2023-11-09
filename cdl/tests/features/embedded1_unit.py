@@ -136,9 +136,10 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def close_cdl(self):
         """Close DataLab window"""
 
-    @abc.abstractmethod
     def add_object(self, obj):
         """Add object to DataLab"""
+        if self.cdl is not None:
+            self.cdl.add_object(obj)
 
     def add_signals(self):
         """Add signals to DataLab"""
@@ -174,13 +175,6 @@ class AbstractHostWindow(AbstractClientWindow):  # pylint: disable=abstract-meth
 
     PURPOSE = _("This the host application, which embeds DataLab.")
     INIT_BUTTON_LABEL = _("Open DataLab")
-
-    def add_object(self, obj):
-        """Add object to DataLab"""
-        if isinstance(obj, cdl.obj.SignalObj):
-            self.cdl.signalpanel.add_object(obj)
-        else:
-            self.cdl.imagepanel.add_object(obj)
 
     def remove_all(self):
         """Remove all objects from DataLab"""
