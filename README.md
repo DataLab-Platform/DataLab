@@ -26,7 +26,7 @@ libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interface
 DataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
-[documentation](https://cdl.readthedocs.io/en/latest/) for more details on
+[documentation](https://datalab.readthedocs.io/en/latest/) for more details on
 the library and [changelog](CHANGELOG.md) for recent history of changes.
 
 ### New in DataLab 1.0

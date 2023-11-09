@@ -1,6 +1,6 @@
 # DataLab Releases #
 
-See DataLab [roadmap page](https://cdl.readthedocs.io/en/latest/dev/roadmap.html)
+See DataLab [roadmap page](https://datalab.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 1.0.0 ##
@@ -30,9 +30,9 @@ New features:
       HDF5 import feature
     * More features to come...
   * Added remote control feature: DataLab can be controlled remotely via a
-    TCP/IP connection (see [Remote control](https://cdl.readthedocs.io/en/latest/remote_control.html))
+    TCP/IP connection (see [Remote control](https://datalab.readthedocs.io/en/latest/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
-    [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
+    [Macro commands](https://datalab.readthedocs.io/en/latest/macro_commands.html))
 * General features:
   * Added settings dialog box (see "Settings" entry in "File" menu):
     * General settings
