@@ -12,8 +12,16 @@ Remote GUI-based client test
 
 # guitest: show
 
+from __future__ import annotations
+
+import functools
 import os
+from collections.abc import Callable
 from contextlib import contextmanager
+
+from guidata.qthelpers import win32_fix_title_bar_background
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 
 from cdl import app
 from cdl.config import _
@@ -23,6 +31,105 @@ from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
 from cdl.utils.qthelpers import qt_app_context, qt_wait
+
+APP_NAME = _("Remote client test")
+
+
+def try_send_command():
+    """Try and send command to DataLab application remotely"""
+
+    def try_send_command_decorator(func):
+        """Try... except... decorator"""
+
+        @functools.wraps(func)
+        def method_wrapper(*args, **kwargs):
+            """Decorator wrapper function"""
+            self: HostWindow = args[0]  # extracting 'self' from method arguments
+            output = None
+            try:
+                output = func(*args, **kwargs)
+            except ConnectionRefusedError:
+                self.cdl = None
+                message = "🔥 Connection refused 🔥 (server is not ready?)"
+                self.host.log(message)
+                QW.QMessageBox.critical(self, APP_NAME, message)
+            return output
+
+        return method_wrapper
+
+    return try_send_command_decorator
+
+
+class DataLabConnectionThread(QC.QThread):
+    """DataLab Connection thread"""
+
+    SIG_CONNECTION_OK = QC.Signal()
+    SIG_CONNECTION_KO = QC.Signal()
+
+    def __init__(self, connect_callback: Callable, parent: QC.QObject = None) -> None:
+        super().__init__(parent)
+        self.connect_callback = connect_callback
+
+    def run(self) -> None:
+        """Run thread"""
+        try:
+            self.connect_callback()
+            self.SIG_CONNECTION_OK.emit()
+        except CDLConnectionError:
+            self.SIG_CONNECTION_KO.emit()
+
+
+class DataLabConnectionDialog(QW.QDialog):
+    """DataLab Connection dialog
+
+    Args:
+        connect_callback: Callback function to connect to DataLab server
+        parent: Parent widget. Defaults to None.
+    """
+
+    def __init__(self, connect_callback: Callable, parent: QW.QWidget = None) -> None:
+        super().__init__(parent)
+        win32_fix_title_bar_background(self)
+        self.host_label = QW.QLabel("Host:")
+        self.progress_bar = QW.QProgressBar()
+        self.progress_bar.setRange(0, 0)
+        self.status_label = QW.QLabel("Waiting for connection...")
+        layout = QW.QVBoxLayout()
+        layout.addWidget(self.host_label)
+        layout.addWidget(self.progress_bar)
+        layout.addWidget(self.status_label)
+        self.setLayout(layout)
+        self.thread = DataLabConnectionThread(connect_callback)
+        self.thread.SIG_CONNECTION_OK.connect(self.on_connection_successful)
+        self.thread.SIG_CONNECTION_KO.connect(self.on_connection_failed)
+        button_box = QW.QDialogButtonBox(QW.QDialogButtonBox.Cancel)
+        button_box.rejected.connect(self.reject)
+        layout.addWidget(button_box)
+
+    def exec(self) -> int:
+        """Execute dialog"""
+        self.connect_to_server()
+        return super().exec()
+
+    def connect_to_server(self) -> None:
+        """Connect to server"""
+        self.progress_bar.setRange(0, 0)
+        self.status_label.setText("Connecting to server...")
+        self.thread.start()
+
+    def on_connection_successful(self) -> None:
+        """Connection successful"""
+        self.progress_bar.setRange(0, 1)
+        self.progress_bar.setValue(1)
+        self.status_label.setText("Connection successful!")
+        self.accept()
+
+    def on_connection_failed(self) -> None:
+        """Connection failed"""
+        self.progress_bar.setRange(0, 1)
+        self.progress_bar.setValue(1)
+        self.status_label.setText("Connection failed.")
+        self.reject()
 
 
 class HostWindow(embedded1_unit.AbstractClientWindow):
@@ -35,21 +142,26 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         """Open DataLab test"""
         if self.cdl is None:
             self.cdl: RemoteClient = RemoteClient()
-            try:
-                self.cdl.connect()
+            connect_dlg = DataLabConnectionDialog(self.cdl.connect, self)
+            connect_dlg.host_label.setText(f"Host: DataLab server")
+            ok = connect_dlg.exec()
+            if ok:
                 self.host.log("✨ Initialized DataLab connection ✨")
                 self.host.log(f"  Communication port: {self.cdl.port}")
                 self.host.log("  List of exposed methods:")
                 for name in self.cdl.get_method_list():
                     self.host.log(f"    {name}")
-            except CDLConnectionError:
+            else:
                 self.cdl = None
                 self.host.log("🔥 Connection refused 🔥 (server is not ready?)")
 
+    @try_send_command()
     def close_cdl(self):
         """Close DataLab window"""
-        self.cdl.close_application()
-        self.host.log("🎬 Closed DataLab!")
+        if self.cdl is not None:
+            self.cdl.close_application()
+            self.host.log("🎬 Closed DataLab!")
+            self.cdl = None
 
     def add_additional_buttons(self):
         """Add additional buttons"""
@@ -59,6 +171,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         add_btn(_("Get object uuids"), self.get_object_uuids, 10)
         add_btn(_("Get object"), self.get_object)
 
+    @try_send_command()
     def exec_multiple_cmd(self):
         """Execute multiple commands in DataLab"""
         if self.cdl is not None:
@@ -66,6 +179,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             multiple_commands(self.cdl)
             self.host.log("...end")
 
+    @try_send_command()
     def get_object_titles(self):
         """Get object (signal/image) titles for current panel"""
         if self.cdl is not None:
@@ -77,6 +191,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             else:
                 self.host.log("  Empty.")
 
+    @try_send_command()
     def get_object_uuids(self):
         """Get object (signal/image) uuids for current panel"""
         if self.cdl is not None:
@@ -88,6 +203,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             else:
                 self.host.log("  Empty.")
 
+    @try_send_command()
     def get_object(self):
         """Get object (signal/image) at index for current panel"""
         if self.cdl is not None:
@@ -99,10 +215,13 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             else:
                 self.host.log("🏴‍☠️ Object list is empty!")
 
+    @try_send_command()
     def add_object(self, obj):
         """Add object to DataLab"""
-        self.cdl.add_object(obj)
+        if self.cdl is not None:
+            self.cdl.add_object(obj)
 
+    @try_send_command()
     def remove_all(self):
         """Remove all objects from DataLab"""
         if self.cdl is not None:

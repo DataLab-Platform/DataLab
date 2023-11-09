@@ -15,7 +15,7 @@ It is rebuilt from scratch when reopening application.
 
 import abc
 
-from guidata.qthelpers import get_std_icon
+from guidata.qthelpers import get_std_icon, win32_fix_title_bar_background
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
@@ -62,7 +62,7 @@ class HostWidget(QW.QWidget):
         btn = QW.QPushButton(title)
         if icon is not None:
             btn.setIcon(get_std_icon(icon))
-        btn.clicked.connect(slot)
+        btn.clicked.connect(lambda _checked=False: slot())
         self.add_widget(btn, spacing_before=spacing_before)
         return btn
 
@@ -91,6 +91,7 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
 
     def __init__(self):
         super().__init__()
+        win32_fix_title_bar_background(self)
         self.setWindowTitle(_("Host application"))
         self.setWindowIcon(get_std_icon("ComputerIcon"))
         self.cdl: CDLMainWindow = None
