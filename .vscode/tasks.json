@@ -68,6 +68,8 @@
                 "/c",
                 "run_pylint.bat",
                 "--disable=fixme",
+                "--disable=too-many-arguments,too-many-locals,too-many-branches,too-many-statements,too-many-public-methods,too-many-lines,too-many-instance-attributes",
+                "--disable=R0801",
             ],
             "options": {
                 "cwd": "scripts",

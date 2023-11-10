@@ -143,7 +143,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         if self.cdlapp is None:
             self.cdlapp = RemoteCDLProxy(autoconnect=False)
             connect_dlg = DataLabConnectionDialog(self.cdlapp.connect, self)
-            connect_dlg.host_label.setText(f"Host: DataLab server")
+            connect_dlg.host_label.setText("Host: DataLab server")
             ok = connect_dlg.exec()
             if ok:
                 self.host.log("✨ Initialized DataLab connection ✨")

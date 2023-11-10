@@ -20,7 +20,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdlapp.config import Conf, _
+from cdlapp.config import Conf
 
 if TYPE_CHECKING:  # pragma: no cover
     from plotpy.plot import BasePlot
