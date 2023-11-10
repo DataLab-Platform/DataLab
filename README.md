@@ -27,7 +27,8 @@ DataLab is available as a **stand-alone** application (see for example our all-i
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 [documentation](https://cdl.readthedocs.io/en/latest/) for more details on
-the library and [changelog](CHANGELOG.md) for recent history of changes.
+the library and [changelog](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/CHANGELOG.md)
+for recent history of changes.
 
 ### New in DataLab 1.0
 
@@ -45,7 +46,7 @@ New key features in DataLab 1.0:
 Copyrights and licensing:
 
 * Copyright © 2023 [Codra](https://codra.net/), [Pierre Raybaut](https://github.com/PierreRaybaut).
-* Licensed under the terms of the BSD 3-Clause (see [LICENSE](LICENSE)).
+* Licensed under the terms of the BSD 3-Clause (see [LICENSE](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/LICENSE)).
 
 ----
 
