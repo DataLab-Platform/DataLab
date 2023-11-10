@@ -1,4 +1,4 @@
-![DataLab](./doc/images/DataLab-banner.png)
+![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-banner.png)
 
 [![license](https://img.shields.io/pypi/l/cdl.svg)](./LICENSE)
 [![pypi version](https://img.shields.io/pypi/v/cdl.svg)](https://pypi.org/project/CDL/)
@@ -7,7 +7,7 @@
 
 ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
 
-![DataLab](./doc/images/DataLab-Screenshot.png)
+![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-Screenshot.png)
 
 ℹ️ DataLab is powered by [PlotPyStack](https://github.com/PlotPyStack) 🚀.
 
@@ -65,9 +65,9 @@ Copyrights and licensing:
 |        |    •   | X/Y raw/averaged profiles      |
 |    •   |    •   | User-defined annotations       |
 
-![1D-Peak detection](./doc/images/peak_detection.png)
+![1D-Peak detection](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/peak_detection.png)
 
-![2D-Peak detection](./doc/images/2dpeak_detection.png)
+![2D-Peak detection](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/2dpeak_detection.png)
 
 ### Data processing
 
@@ -97,9 +97,9 @@ Copyrights and licensing:
 |        |   •   | Automatic 2D-peak detection                        |
 |        |   •   | Automatic contour extraction (circle/ellipse fit)  |
 
-![Contour detection](./doc/images/contour_detection.png)
+![Contour detection](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/contour_detection.png)
 
-![Multi-gaussian fit](./doc/images/multi_gaussian_fit.png)
+![Multi-gaussian fit](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/multi_gaussian_fit.png)
 
 ----
 
