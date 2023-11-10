@@ -74,9 +74,8 @@ between your application and DataLab:
 Examples
 ^^^^^^^^
 
-When using Python 3, you may directly use the `RemoteClient` class as in
-examples cited above, or the `RemoteCDLProxy` class as in the following
-example.
+When using Python 3, you may directly use the `RemoteCDLProxy` class as in
+examples cited above or below.
 
 Here is an example in Python 3 of a script that connects to a running DataLab
 instance, adds a signal and an image, and then runs calculations (the cell

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 18:14+0200\n"
+"POT-Creation-Date: 2023-11-10 15:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -206,15 +206,12 @@ msgstr "Exemples"
 
 #: ../../features/general/remote.rst:77
 msgid ""
-"When using Python 3, you may directly use the `RemoteClient` class as in "
-"examples cited above, or the `RemoteCDLProxy` class as in the following "
-"example."
+"When using Python 3, you may directly use the `RemoteCDLProxy` class as "
+"in examples cited above or below."
 msgstr ""
-"Lorsque vous utilisez Python 3, vous pouvez utiliser directement la "
-"classe `RemoteClient` comme dans les exemples cités ci-dessus, ou la "
-"classe `RemoteCDLProxy` comme dans l'exemple suivant."
+"Lorsque vous utilisez Python 3, vous pouvez utiliser directement la classe `RemoteCDLProxy` comme dans les exemples cités ci-dessus ou ci-dessous."
 
-#: ../../features/general/remote.rst:81
+#: ../../features/general/remote.rst:80
 msgid ""
 "Here is an example in Python 3 of a script that connects to a running "
 "DataLab instance, adds a signal and an image, and then runs calculations "
@@ -226,11 +223,11 @@ msgstr ""
 "exécute des calculs (la structure de cellule du script le rend pratique à"
 " utiliser dans l'IDE `Spyder`_):"
 
-#: ../../features/general/remote.rst:87
+#: ../../features/general/remote.rst:86
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
-#: ../../features/general/remote.rst:92
+#: ../../features/general/remote.rst:91
 msgid "Public API: remote client"
 msgstr "API publique : client distant"
 
@@ -309,7 +306,8 @@ msgstr ""
 #: cdl.core.remote.RemoteServer.get_object_uuids
 #: cdl.core.remote.RemoteServer.get_sel_object_uuids
 #: cdl.core.remote.array_to_rpcbinary cdl.core.remote.dataset_to_json
-#: cdl.core.remote.json_to_dataset cdl.core.remote.rpcbinary_to_array of
+#: cdl.core.remote.get_cdl_xmlrpc_port cdl.core.remote.json_to_dataset
+#: cdl.core.remote.rpcbinary_to_array of
 msgid "Returns"
 msgstr ""
 
@@ -685,7 +683,8 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.get_object
 #: cdl.core.remote.RemoteClient.get_object_from_title
 #: cdl.core.remote.RemoteClient.get_object_from_uuid
-#: cdl.core.remote.RemoteServer.get_object of
+#: cdl.core.remote.RemoteServer.get_object cdl.core.remote.get_cdl_xmlrpc_port
+#: of
 msgid "Raises"
 msgstr ""
 
@@ -741,12 +740,16 @@ msgstr ""
 msgid "Label title. Defaults to None. If None, the title is the object title."
 msgstr ""
 
-#: cdl.core.remote.CDLConnectionError:1 of
-msgid "Error when trying to connect to DataLab XML-RPC server"
-msgstr ""
-
 #: cdl.core.remote.get_cdl_xmlrpc_port:1 of
 msgid "Return DataLab current XML-RPC port"
+msgstr ""
+
+#: cdl.core.remote.get_cdl_xmlrpc_port:3 of
+msgid "XML-RPC port"
+msgstr ""
+
+#: cdl.core.remote.get_cdl_xmlrpc_port:5 of
+msgid "DataLab has not yet been executed"
 msgstr ""
 
 #: cdl.core.remote.RemoteClient:1 of
@@ -872,11 +875,11 @@ msgstr ""
 msgid "Signal or image object"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: ../../features/general/remote.rst:98
+#: ../../features/general/remote.rst:97
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remote.rst:100
+#: ../../features/general/remote.rst:99
 msgid ""
 "The remote control class methods (either using the proxy or the remote "
 "client) may be completed with additional methods which are dynamically "
@@ -1262,3 +1265,5 @@ msgstr ""
 msgid "Compute blob detection using OpenCV"
 msgstr ""
 
+#~ msgid "Error when trying to connect to DataLab XML-RPC server"
+#~ msgstr ""

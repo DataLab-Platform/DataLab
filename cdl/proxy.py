@@ -30,13 +30,10 @@ class RemoteCDLProxy(RemoteClient):
     This class provides access to DataLab features from a proxy class.
 
     Args:
-        port (str | None): XML-RPC port to connect to. If not specified,
-            the port is automatically retrieved from DataLab configuration.
-        timeout (float | None): Timeout in seconds. Defaults to 5.0.
-        retries (int | None): Number of retries. Defaults to 10.
+        autoconnect (bool): Automatically connect to DataLab XML-RPC server.
 
     Raises:
-        CDLConnectionError: Unable to connect to DataLab
+        ConnectionRefusedError: Unable to connect to DataLab
         ValueError: Invalid timeout (must be >= 0.0)
         ValueError: Invalid number of retries (must be >= 1)
 
@@ -61,14 +58,10 @@ class RemoteCDLProxy(RemoteClient):
         array([1., 2., 3.])
     """
 
-    def __init__(
-        self,
-        port: str | None = None,
-        timeout: float | None = None,
-        retries: int | None = None,
-    ) -> None:
+    def __init__(self, autoconnect: bool = True) -> None:
         super().__init__()
-        self.connect(port, timeout, retries)
+        if autoconnect:
+            self.connect()
 
 
 class CDLProxy(BaseProxy):
@@ -261,9 +254,9 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
             proxy.add_signal(...)
     """
     assert what == "gui" or what.startswith("remote"), "Invalid proxy type"
-    xmlrpcport = None
+    port = None
     if ":" in what:
-        xmlrpcport = int(what.split(":")[1].strip())
+        port = int(what.split(":")[1].strip())
     if what == "gui":
         # pylint: disable=import-outside-toplevel
         from cdl.core.gui.main import CDLMainWindow
@@ -278,7 +271,8 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
                 pass
     else:
         try:
-            proxy = RemoteCDLProxy(xmlrpcport)
+            proxy = RemoteCDLProxy(autoconnect=False)
+            proxy.connect(port)
             yield proxy
         finally:
             proxy.disconnect()

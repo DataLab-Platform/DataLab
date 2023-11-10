@@ -25,8 +25,8 @@ from qtpy import QtWidgets as QW
 
 from cdl import app
 from cdl.config import _
-from cdl.core.remote import CDLConnectionError, RemoteClient
 from cdl.env import execenv
+from cdl.proxy import RemoteCDLProxy
 from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
@@ -75,7 +75,7 @@ class DataLabConnectionThread(QC.QThread):
         try:
             self.connect_callback()
             self.SIG_CONNECTION_OK.emit()
-        except CDLConnectionError:
+        except ConnectionRefusedError:
             self.SIG_CONNECTION_KO.emit()
 
 
@@ -141,7 +141,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
     def init_cdl(self):
         """Open DataLab test"""
         if self.cdl is None:
-            self.cdl: RemoteClient = RemoteClient()
+            self.cdl = RemoteCDLProxy(autoconnect=False)
             connect_dlg = DataLabConnectionDialog(self.cdl.connect, self)
             connect_dlg.host_label.setText(f"Host: DataLab server")
             ok = connect_dlg.exec()

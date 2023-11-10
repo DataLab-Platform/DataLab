@@ -26,12 +26,6 @@ def array_to_rpcbinary(data):
     return Binary(dbytes.getvalue())
 
 
-class CDLConnectionError(Exception):
-    """Error when trying to connect to DataLab XML-RPC server"""
-
-    pass
-
-
 def get_cdl_xmlrpc_port():
     """Return DataLab current XML-RPC port"""
     if sys.platform == "win32" and "HOME" in os.environ:
@@ -42,7 +36,7 @@ def get_cdl_xmlrpc_port():
     try:
         return ini.get("main", "rpc_server_port")
     except (cp.NoSectionError, cp.NoOptionError):
-        raise CDLConnectionError("DataLab has not yet been executed")
+        raise ConnectionRefusedError("DataLab has not yet been executed")
 
 
 class RemoteClient(object):
@@ -62,7 +56,7 @@ class RemoteClient(object):
         try:
             self.get_version()
         except socket.error:
-            raise CDLConnectionError("DataLab is currently not running")
+            raise ConnectionRefusedError("DataLab is currently not running")
 
     def get_version(self):
         """Return DataLab version"""

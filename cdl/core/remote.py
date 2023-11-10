@@ -563,12 +563,15 @@ RemoteServer.check_remote_functions()
 # s.add_image("toto", array_to_binary(data))
 
 
-class CDLConnectionError(Exception):
-    """Error when trying to connect to DataLab XML-RPC server"""
+def get_cdl_xmlrpc_port() -> str:
+    """Return DataLab current XML-RPC port
 
+    Returns:
+        XML-RPC port
 
-def get_cdl_xmlrpc_port():
-    """Return DataLab current XML-RPC port"""
+    Raises:
+        ConnectionRefusedError: DataLab has not yet been executed
+    """
     #  The following is valid only when using Python 3.8+ with DataLab
     #  installed on the client side. In any other situation, please use the
     #  ``get_cdl_xmlrpc_port`` function from doc/remotecontrol_py27.py.
@@ -576,7 +579,7 @@ def get_cdl_xmlrpc_port():
     try:
         return Conf.main.rpc_server_port.get()
     except RuntimeError as exc:
-        raise CDLConnectionError("DataLab has not yet been executed") from exc
+        raise ConnectionRefusedError("DataLab has not yet been executed") from exc
 
 
 class RemoteClient(BaseProxy):
@@ -618,7 +621,7 @@ class RemoteClient(BaseProxy):
                 the port is automatically retrieved from DataLab configuration.
 
         Raises:
-            CDLConnectionError: DataLab is currently not running
+            ConnectionRefusedError: DataLab is currently not running
         """
         if port is None:
             port = execenv.xmlrpcport
@@ -629,7 +632,7 @@ class RemoteClient(BaseProxy):
         try:
             self.get_version()
         except ConnectionRefusedError as exc:
-            raise CDLConnectionError("DataLab is currently not running") from exc
+            raise ConnectionRefusedError("DataLab is currently not running") from exc
 
     def connect(
         self,
@@ -646,7 +649,7 @@ class RemoteClient(BaseProxy):
             retries (int | None): Number of retries. Defaults to 10.
 
         Raises:
-            CDLConnectionError: Unable to connect to DataLab
+            ConnectionRefusedError: Unable to connect to DataLab
             ValueError: Invalid timeout (must be >= 0.0)
             ValueError: Invalid number of retries (must be >= 1)
         """
@@ -661,11 +664,11 @@ class RemoteClient(BaseProxy):
             try:
                 self.__connect_to_server(port=port)
                 break
-            except CDLConnectionError:
+            except ConnectionRefusedError:
                 time.sleep(timeout / retries)
         else:
             execenv.print("KO")
-            raise CDLConnectionError("Unable to connect to DataLab")
+            raise ConnectionRefusedError("Unable to connect to DataLab")
         execenv.print(f"OK (port: {self.port})")
 
     def disconnect(self) -> None:
