@@ -15,5 +15,4 @@ call %FUNC% UsePython
 if exist MANIFEST ( del /q MANIFEST )
 %PYTHON% create_dephash.py
 %PYTHON% -m build
-rmdir /s /q %LIBNAME%.egg-info
 call %FUNC% EndOfScript
