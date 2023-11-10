@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+#
+# Licensed under the terms of the BSD 3-Clause
+# (see cdlapp/LICENSE for details)
+
+"""
+DataLab
+============
+
+DataLab is a generic signal and image processing software based on Python
+scientific libraries (such as NumPy, SciPy or scikit-image) and Qt graphical
+user interfaces (thanks to `PlotPyStack`_ libraries).
+
+.. _PlotPyStack: https://github.com/PlotPyStack
+"""
+
+import os
+
+__version__ = "0.9.0"
+__docurl__ = "https://cdlapp.readthedocs.io/en/latest/"
+__homeurl__ = "https://codra-ingenierie-informatique.github.io/DataLab/"
+__supporturl__ = (
+    "https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose"
+)
+
+os.environ["CDL_VERSION"] = __version__
+
+try:
+    import cdlapp.core.io  # analysis:ignore
+    import cdlapp.patch  # analysis:ignore
+except ImportError:
+    if not os.environ.get("CDL_DOC"):
+        raise
+
+# Dear (Debian, RPM, ...) package makers, please feel free to customize the
+# following path to module's data (images) and translations:
+DATAPATH = LOCALEPATH = ""

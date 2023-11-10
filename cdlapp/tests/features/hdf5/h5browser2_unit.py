@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+#
+# Licensed under the terms of the BSD 3-Clause
+# (see cdlapp/LICENSE for details)
+
+"""
+HDF5 browser test 2
+
+Testing for memory leak
+"""
+
+# guitest: show,skip
+
+import os
+import time
+
+import numpy as np
+import psutil
+
+from cdlapp.env import execenv
+from cdlapp.tests.data import get_test_fnames
+from cdlapp.utils.qthelpers import qt_app_context
+from cdlapp.utils.vistools import view_curves
+from cdlapp.widgets.h5browser import H5BrowserDialog
+
+
+def memoryleak_test(fname, iterations=20):
+    """Memory leak test"""
+    with qt_app_context():
+        proc = psutil.Process(os.getpid())
+        fname = get_test_fnames(fname)[0]
+        dlg = H5BrowserDialog(None)
+        memlist = []
+        for i in range(iterations):
+            t0 = time.time()
+            dlg.setup(fname)
+            memdata = proc.memory_info().vms / 1024**2
+            memlist.append(memdata)
+            execenv.print(i + 1, ":", memdata, "MB")
+            dlg.browser.tree.select_all(True)
+            dlg.browser.tree.toggle_all(True)
+            execenv.print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
+            dlg.show()
+            dlg.accept()
+            dlg.close()
+            execenv.print(i + 1, ":", proc.memory_info().vms / 1024**2, "MB")
+            dlg.cleanup()
+            execenv.print(i + 1, ":", f"{(time.time() - t0):.1f} s")
+        view_curves(
+            np.array(memlist),
+            title="Memory leak test for HDF5 browser dialog",
+            ylabel="Memory (MB)",
+        )
+
+
+if __name__ == "__main__":
+    memoryleak_test("scenario*.h5")

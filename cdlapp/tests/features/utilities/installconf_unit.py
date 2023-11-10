@@ -1,0 +1,23 @@
+# -*- coding: utf-8 -*-
+#
+# Licensed under the terms of the BSD 3-Clause
+# (see cdlapp/LICENSE for details)
+
+"""
+Dependencies viewer test
+"""
+
+# guitest: show
+
+from cdlapp.utils.qthelpers import qt_app_context
+from cdlapp.widgets.instconfviewer import exec_cdl_installconfig_dialog
+
+
+def test_dep_viewer():
+    """Test dep viewer window"""
+    with qt_app_context():
+        exec_cdl_installconfig_dialog()
+
+
+if __name__ == "__main__":
+    test_dep_viewer()

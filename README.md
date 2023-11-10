@@ -1,9 +1,9 @@
 ![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-banner.png)
 
-[![license](https://img.shields.io/pypi/l/cdl.svg)](./LICENSE)
-[![pypi version](https://img.shields.io/pypi/v/cdl.svg)](https://pypi.org/project/CDL/)
-[![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdl.svg)](https://pypi.python.org/pypi/CDL/)
+[![license](https://img.shields.io/pypi/l/cdlapp.svg)](./LICENSE)
+[![pypi version](https://img.shields.io/pypi/v/cdlapp.svg)](https://pypi.org/project/CDL/)
+[![PyPI status](https://img.shields.io/pypi/status/cdlapp.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdlapp.svg)](https://pypi.python.org/pypi/CDL/)
 
 ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
 
@@ -26,7 +26,7 @@ libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interface
 DataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
-[documentation](https://cdl.readthedocs.io/en/latest/) for more details on
+[documentation](https://cdlapp.readthedocs.io/en/latest/) for more details on
 the library and [changelog](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/CHANGELOG.md)
 for recent history of changes.
 
@@ -115,5 +115,5 @@ The installer package is available in the [Releases](https://github.com/Codra-In
 
 ### Dependencies and other installation methods
 
-See [Installation](https://cdl.readthedocs.io/en/latest/intro/installation.html)
+See [Installation](https://cdlapp.readthedocs.io/en/latest/intro/installation.html)
 section in the documentation for more details.

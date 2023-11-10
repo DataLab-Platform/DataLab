@@ -1,6 +1,6 @@
 # DataLab Releases #
 
-See DataLab [roadmap page](https://cdl.readthedocs.io/en/latest/dev/roadmap.html)
+See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 1.0.0 ##
@@ -30,9 +30,9 @@ New features:
       HDF5 import feature
     * More features to come...
   * Added remote control feature: DataLab can be controlled remotely via a
-    TCP/IP connection (see [Remote control](https://cdl.readthedocs.io/en/latest/remote_control.html))
+    TCP/IP connection (see [Remote control](https://cdlapp.readthedocs.io/en/latest/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
-    [Macro commands](https://cdl.readthedocs.io/en/latest/macro_commands.html))
+    [Macro commands](https://cdlapp.readthedocs.io/en/latest/macro_commands.html))
 * General features:
   * Added settings dialog box (see "Settings" entry in "File" menu):
     * General settings
@@ -196,7 +196,7 @@ Changes:
   * When multiple images are selected, the first image LUT range is applied to all
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
-* Added demo mode (from command line, simply run: cdl-demo)
+* Added demo mode (from command line, simply run: cdlapp-demo)
 * Command line option --h5 is now a positionnal argument (h5)
 * Added command line option -b (or --h5browser) to browse a HDF5 file at startup
 * Added command line option --version to show DataLab version
@@ -327,7 +327,7 @@ Other changes (on existing features):
   * Peak detection: added minimal distance parameter
   * Fit dialog / plot: do auto scale at startup
   * Peak detection dialog: preselect horizontal cursor at startup
-* `cdl.core.gui` code refactoring: added subpackage `core.gui.processor`
+* `cdlapp.core.gui` code refactoring: added subpackage `core.gui.processor`
 * Added "Browse HDF5" action to main window ("Open HDF5" now imports all data)
 
 Bug fixes:

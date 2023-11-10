@@ -14,7 +14,7 @@ Installing all required packages :
 
     pip install --upgrade -r dev\requirements.txt
 
-ℹ️ See [Installation](https://cdl.readthedocs.io/en/latest/intro/installation.html)
+ℹ️ See [Installation](https://cdlapp.readthedocs.io/en/latest/intro/installation.html)
 for more details on reference Python and Qt versions.
 
 Test data
@@ -22,7 +22,7 @@ Test data
 
 DataLab test data are located in different folders, depending on their nature or origin.
 
-Required data for unit tests are located in "cdl\data\tests" (public data).
+Required data for unit tests are located in "cdlapp\data\tests" (public data).
 
 A second folder %CDL_DATA% (optional) may be defined for additional tests which are
 still under development (or for confidential data).

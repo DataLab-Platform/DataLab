@@ -5,7 +5,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cdl"
+name = "cdlapp"
 authors = [{ name = "Codra", email = "p.raybaut@codra.fr" }]
 description = "DataLab (CDL) is a data processing and analysis software for scientific and industrial applications"
 readme = "README.md"
@@ -44,19 +44,19 @@ dependencies = [
 dynamic = ["version"]
 
 [project.scripts]
-cdl-alltests = "cdl.tests.all_tests:run"
+cdlapp-alltests = "cdlapp.tests.all_tests:run"
 
 [project.gui-scripts]
-cdl = "cdl.app:run"
-cdl-demo = "cdl.tests.demo:run"
-cdl-tests = "cdl.tests:run"
+cdlapp = "cdlapp.app:run"
+cdlapp-demo = "cdlapp.tests.demo:run"
+cdlapp-tests = "cdlapp.tests:run"
 
 [project.optional-dependencies]
 dev = ["black", "isort", "pylint", "Coverage"]
 doc = ["PyQt5", "sphinx", "sphinx_intl", "pydata-sphinx-theme"]
 
 [tool.setuptools.packages.find]
-include = ["cdl*"]
+include = ["cdlapp*"]
 
 [tool.setuptools.package-data]
 "*" = [
@@ -81,4 +81,4 @@ include = ["cdl*"]
 ]
 
 [tool.setuptools.dynamic]
-version = { attr = "cdl.__version__" }
+version = { attr = "cdlapp.__version__" }

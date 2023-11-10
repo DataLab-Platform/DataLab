@@ -1,12 +1,12 @@
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 
 @REM Deploying images and icons
-copy DataLab.svg ..\cdl\data\logo
+copy DataLab.svg ..\cdlapp\data\logo
 %INKSCAPE_PATH% "DataLab-Title.svg" -o "DataLab-Title.png" -w 190
 copy DataLab-Title.png ..\doc\_static
 %INKSCAPE_PATH% "DataLab-Splash.svg" -o "DataLab-Splash.png" -w 300
-copy DataLab-Splash.png ..\cdl\data\logo
-%INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdl\data\logo\DataLab-Watermark.png" -w 300
+copy DataLab-Splash.png ..\cdlapp\data\logo
+%INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdlapp\data\logo\DataLab-Watermark.png" -w 300
 %INKSCAPE_PATH% "DataLab-Banner.svg" -o "DataLab-Banner.png" -w 364
 copy DataLab-Banner.png ..\doc\images
 %INKSCAPE_PATH% "DataLab-Screenshot.svg" -o "DataLab-Screenshot.png" -w 1180

@@ -17,7 +17,7 @@ if exist sitecustomize.py ( del /q sitecustomize.py )
 echo import coverage> sitecustomize.py
 echo coverage.process_startup()>> sitecustomize.py
 set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
-coverage run -m cdl.tests.all_tests %* --timeout 600
+coverage run -m cdlapp.tests.all_tests %* --timeout 600
 @REM coverage report -m
 coverage combine
 coverage html
