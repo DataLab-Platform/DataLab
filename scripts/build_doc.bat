@@ -15,7 +15,6 @@ call %FUNC% UsePython
 call %FUNC% GetVersion CDL_VERSION
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_requirements.py
-set PATH=C:\Program Files\HTML Help Workshop;C:\Program Files (x86)\HTML Help Workshop;%PATH%
 
 @REM Build documentation in french =====================================================
 @REM Update screenshots
