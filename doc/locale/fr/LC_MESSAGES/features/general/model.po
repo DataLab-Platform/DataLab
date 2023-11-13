@@ -30,32 +30,32 @@ msgstr ""
 "de deux classes principales :"
 
 #: ../../features/general/model.rst:8
-msgid "`cdl.core.model.signal.SignalObj`, which represents a signal object, and"
-msgstr "`cdl.core.model.signal.SignalObj`, qui représente un objet signal, et"
+msgid "`cdlapp.core.model.signal.SignalObj`, which represents a signal object, and"
+msgstr "`cdlapp.core.model.signal.SignalObj`, qui représente un objet signal, et"
 
 #: ../../features/general/model.rst:9
-msgid "`cdl.core.model.image.ImageObj`, which represents an image object."
-msgstr "`cdl.core.model.image.ImageObj`, qui représente un objet image."
+msgid "`cdlapp.core.model.image.ImageObj`, which represents an image object."
+msgstr "`cdlapp.core.model.image.ImageObj`, qui représente un objet image."
 
 #: ../../features/general/model.rst:11
 msgid ""
-"These classes are defined in the `cdl.core.model` package but are exposed"
-" publicly in the `cdl.obj` package."
+"These classes are defined in the `cdlapp.core.model` package but are exposed"
+" publicly in the `cdlapp.obj` package."
 msgstr ""
-"Ces classes sont définies dans le paquet `cdl.core.model` mais sont "
-"exposées publiquement dans le paquet `cdl.obj`."
+"Ces classes sont définies dans le paquet `cdlapp.core.model` mais sont "
+"exposées publiquement dans le paquet `cdlapp.obj`."
 
 #: ../../features/general/model.rst:14
 msgid ""
 "Also, DataLab uses many different datasets (based on guidata's `DataSet` "
 "class) to store the parameters of the computations. These datasets are "
-"defined in different modules but are exposed publicly in the `cdl.param` "
+"defined in different modules but are exposed publicly in the `cdlapp.param` "
 "package."
 msgstr ""
 "Par ailleurs, DataLab utilise de nombreux jeux de données différents "
 "(basés sur la classe `DataSet` de guidata) pour stocker les paramètres "
 "des calculs. Ces jeux de données sont définis dans différents modules "
-"mais sont exposés publiquement dans le paquet `cdl.param`."
+"mais sont exposés publiquement dans le paquet `cdlapp.param`."
 
 #: ../../features/general/model.rst:19
 msgid "Public API"
@@ -65,807 +65,807 @@ msgstr "API publique"
 msgid "The public API is the following:"
 msgstr "L'API publique est la suivante :"
 
-#: cdl.obj:2 of
+#: cdlapp.obj:2 of
 msgid "DataLab Public API's object model module"
 msgstr ""
 
-#: cdl.obj:4 of
+#: cdlapp.obj:4 of
 msgid ""
 "This modules aims at providing all the necessary classes and functions to"
 " create and manipulate DataLab signal and image objects."
 msgstr ""
 
-#: cdl.obj:11 of
+#: cdlapp.obj:11 of
 #, fuzzy
 msgid "Those classes and functions are defined in other modules:"
-msgstr "Ces classes sont définies dans le paquet `cdl.core.model`."
+msgstr "Ces classes sont définies dans le paquet `cdlapp.core.model`."
 
-#: cdl.obj:8 of
-msgid ":mod:`cdl.core.model.base`"
+#: cdlapp.obj:8 of
+msgid ":mod:`cdlapp.core.model.base`"
 msgstr ""
 
-#: cdl.obj:9 of
-msgid ":mod:`cdl.core.model.image`"
+#: cdlapp.obj:9 of
+msgid ":mod:`cdlapp.core.model.image`"
 msgstr ""
 
-#: cdl.obj:10 of
-msgid ":mod:`cdl.core.model.signal`"
+#: cdlapp.obj:10 of
+msgid ":mod:`cdlapp.core.model.signal`"
 msgstr ""
 
-#: cdl.obj:11 of
-msgid ":mod:`cdl.core.io`"
+#: cdlapp.obj:11 of
+msgid ":mod:`cdlapp.core.io`"
 msgstr ""
 
-#: cdl.obj:13 of
+#: cdlapp.obj:13 of
 msgid "This module is thus a convenient way to import all the objects at once."
 msgstr ""
 
-#: cdl.param:2 of
+#: cdlapp.param:2 of
 msgid "DataLab Base Computation parameters module"
 msgstr ""
 
-#: cdl.param:4 of
+#: cdlapp.param:4 of
 msgid ""
 "This modules aims at providing all the dataset parameters that are used "
-"by the :mod:`cdl.core.gui.processor` module."
+"by the :mod:`cdlapp.core.gui.processor` module."
 msgstr ""
 
-#: cdl.param:10 of
+#: cdlapp.param:10 of
 msgid "Those datasets are defined other modules:"
 msgstr ""
 
-#: cdl.param:8 of
-msgid ":mod:`cdl.core.computation.base`"
+#: cdlapp.param:8 of
+msgid ":mod:`cdlapp.core.computation.base`"
 msgstr ""
 
-#: cdl.param:9 of
-msgid ":mod:`cdl.core.computation.image`"
+#: cdlapp.param:9 of
+msgid ":mod:`cdlapp.core.computation.image`"
 msgstr ""
 
-#: cdl.param:10 of
-msgid ":mod:`cdl.core.computation.signal`"
+#: cdlapp.param:10 of
+msgid ":mod:`cdlapp.core.computation.signal`"
 msgstr ""
 
-#: cdl.param:12 of
+#: cdlapp.param:12 of
 msgid "This module is thus a convenient way to import all the parameters at once."
 msgstr ""
 
-#: cdl.core.model.signal:2 of
+#: cdlapp.core.model.signal:2 of
 msgid "Signal object and related classes"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem:1 cdl.core.model.signal.CurveStyles:1 of
+#: cdlapp.core.model.image.RoiDataItem:1 cdlapp.core.model.signal.CurveStyles:1 of
 msgid "Bases: :py:class:`object`"
 msgstr ""
 
-#: cdl.core.model.signal.CurveStyles:1 of
+#: cdlapp.core.model.signal.CurveStyles:1 of
 msgid "Object to manage curve styles"
 msgstr ""
 
-#: cdl.core.model.signal.CurveStyles.style_generator:1 of
+#: cdlapp.core.model.signal.CurveStyles.style_generator:1 of
 msgid "Cycling through curve styles"
 msgstr ""
 
-#: cdl.core.model.signal.CurveStyles.apply_style:1 of
+#: cdlapp.core.model.signal.CurveStyles.apply_style:1 of
 msgid "Apply style to curve"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam:1 cdl.core.model.image.Gauss2DParam:1
-#: cdl.core.model.image.NewImageParam:1
-#: cdl.core.model.image.RectangleROIParam:1
-#: cdl.core.model.signal.GaussLorentzVoigtParam:1
-#: cdl.core.model.signal.NewSignalParam:1 cdl.core.model.signal.PeriodicParam:1
-#: cdl.core.model.signal.ROIParam:1 cdl.core.model.signal.StepParam:1 of
+#: cdlapp.core.model.image.CircularROIParam:1 cdlapp.core.model.image.Gauss2DParam:1
+#: cdlapp.core.model.image.NewImageParam:1
+#: cdlapp.core.model.image.RectangleROIParam:1
+#: cdlapp.core.model.signal.GaussLorentzVoigtParam:1
+#: cdlapp.core.model.signal.NewSignalParam:1 cdlapp.core.model.signal.PeriodicParam:1
+#: cdlapp.core.model.signal.ROIParam:1 cdlapp.core.model.signal.StepParam:1 of
 msgid "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`"
 msgstr ""
 
-#: cdl.core.model.signal.ROIParam:1 of
+#: cdlapp.core.model.signal.ROIParam:1 of
 msgid "Signal ROI parameters"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj:1 cdl.core.model.signal.SignalObj:1 of
+#: cdlapp.core.model.image.ImageObj:1 cdlapp.core.model.signal.SignalObj:1 of
 msgid ""
 "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`, "
-":py:class:`~cdl.core.model.base.BaseObj`"
+":py:class:`~cdlapp.core.model.base.BaseObj`"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj:1 of
+#: cdlapp.core.model.signal.SignalObj:1 of
 msgid "Signal object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy:1 cdl.core.model.signal.SignalObj.copy:1
+#: cdlapp.core.model.image.ImageObj.copy:1 cdlapp.core.model.signal.SignalObj.copy:1
 #: of
 msgid "Copy object."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.add_label_with_title
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.get_roi_param
-#: cdl.core.model.image.ImageObj.iterate_roi_items
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.new_roi_item
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.ImageObj.set_data_type
-#: cdl.core.model.image.ImageObj.set_metadata_from
-#: cdl.core.model.image.ImageObj.update_item cdl.core.model.image.RoiDataItem
-#: cdl.core.model.image.RoiDataItem.apply_mask
-#: cdl.core.model.image.RoiDataItem.from_image
-#: cdl.core.model.image.RoiDataItem.get_masked_view
-#: cdl.core.model.image.RoiDataItem.make_roi_item
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.make_roi_circle cdl.core.model.image.make_roi_rectangle
-#: cdl.core.model.image.new_image_param
-#: cdl.core.model.signal.SignalObj.add_label_with_title
-#: cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.get_roi_param
-#: cdl.core.model.signal.SignalObj.iterate_roi_items
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.new_roi_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.SignalObj.set_data_type
-#: cdl.core.model.signal.SignalObj.set_xydata
-#: cdl.core.model.signal.SignalObj.update_item
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param cdl.core.model.signal.triangle_func
+#: cdlapp.core.model.image.ImageObj.add_label_with_title
+#: cdlapp.core.model.image.ImageObj.copy cdlapp.core.model.image.ImageObj.get_data
+#: cdlapp.core.model.image.ImageObj.get_roi_param
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items
+#: cdlapp.core.model.image.ImageObj.make_item
+#: cdlapp.core.model.image.ImageObj.new_roi_item
+#: cdlapp.core.model.image.ImageObj.params_to_roidata
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdlapp.core.model.image.ImageObj.set_data_type
+#: cdlapp.core.model.image.ImageObj.set_metadata_from
+#: cdlapp.core.model.image.ImageObj.update_item cdlapp.core.model.image.RoiDataItem
+#: cdlapp.core.model.image.RoiDataItem.apply_mask
+#: cdlapp.core.model.image.RoiDataItem.from_image
+#: cdlapp.core.model.image.RoiDataItem.get_masked_view
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item
+#: cdlapp.core.model.image.create_image
+#: cdlapp.core.model.image.create_image_from_param
+#: cdlapp.core.model.image.make_roi_circle cdlapp.core.model.image.make_roi_rectangle
+#: cdlapp.core.model.image.new_image_param
+#: cdlapp.core.model.signal.SignalObj.add_label_with_title
+#: cdlapp.core.model.signal.SignalObj.copy
+#: cdlapp.core.model.signal.SignalObj.get_data
+#: cdlapp.core.model.signal.SignalObj.get_roi_param
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items
+#: cdlapp.core.model.signal.SignalObj.make_item
+#: cdlapp.core.model.signal.SignalObj.new_roi_item
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdlapp.core.model.signal.SignalObj.set_data_type
+#: cdlapp.core.model.signal.SignalObj.set_xydata
+#: cdlapp.core.model.signal.SignalObj.update_item
+#: cdlapp.core.model.signal.create_signal
+#: cdlapp.core.model.signal.create_signal_from_param
+#: cdlapp.core.model.signal.new_signal_param cdlapp.core.model.signal.triangle_func
 #: of
 msgid "Parameters"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy:3
-#: cdl.core.model.image.ImageObj.get_roi_param:3
-#: cdl.core.model.image.make_roi_circle:11
-#: cdl.core.model.image.make_roi_rectangle:11
-#: cdl.core.model.signal.SignalObj.copy:3
-#: cdl.core.model.signal.SignalObj.get_roi_param:3 of
+#: cdlapp.core.model.image.ImageObj.copy:3
+#: cdlapp.core.model.image.ImageObj.get_roi_param:3
+#: cdlapp.core.model.image.make_roi_circle:11
+#: cdlapp.core.model.image.make_roi_rectangle:11
+#: cdlapp.core.model.signal.SignalObj.copy:3
+#: cdlapp.core.model.signal.SignalObj.get_roi_param:3 of
 msgid "title"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy:5
-#: cdl.core.model.image.ImageObj.set_data_type:3
-#: cdl.core.model.signal.SignalObj.copy:5
-#: cdl.core.model.signal.SignalObj.set_data_type:3 of
+#: cdlapp.core.model.image.ImageObj.copy:5
+#: cdlapp.core.model.image.ImageObj.set_data_type:3
+#: cdlapp.core.model.signal.SignalObj.copy:5
+#: cdlapp.core.model.signal.SignalObj.set_data_type:3 of
 msgid "data type"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.maskdata
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param of
+#: cdlapp.core.model.image.ImageObj.copy cdlapp.core.model.image.ImageObj.get_data
+#: cdlapp.core.model.image.ImageObj.make_item
+#: cdlapp.core.model.image.ImageObj.maskdata
+#: cdlapp.core.model.image.ImageObj.params_to_roidata
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdlapp.core.model.image.create_image
+#: cdlapp.core.model.image.create_image_from_param
+#: cdlapp.core.model.image.new_image_param cdlapp.core.model.signal.SignalObj.copy
+#: cdlapp.core.model.signal.SignalObj.get_data
+#: cdlapp.core.model.signal.SignalObj.make_item
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdlapp.core.model.signal.create_signal
+#: cdlapp.core.model.signal.create_signal_from_param
+#: cdlapp.core.model.signal.new_signal_param of
 msgid "Returns"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy:8 cdl.core.model.signal.SignalObj.copy:8
+#: cdlapp.core.model.image.ImageObj.copy:8 cdlapp.core.model.signal.SignalObj.copy:8
 #: of
 msgid "copied object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.maskdata
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param of
+#: cdlapp.core.model.image.ImageObj.copy cdlapp.core.model.image.ImageObj.get_data
+#: cdlapp.core.model.image.ImageObj.make_item
+#: cdlapp.core.model.image.ImageObj.maskdata
+#: cdlapp.core.model.image.ImageObj.params_to_roidata
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdlapp.core.model.image.create_image
+#: cdlapp.core.model.image.create_image_from_param
+#: cdlapp.core.model.image.new_image_param cdlapp.core.model.signal.SignalObj.copy
+#: cdlapp.core.model.signal.SignalObj.get_data
+#: cdlapp.core.model.signal.SignalObj.make_item
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdlapp.core.model.signal.create_signal
+#: cdlapp.core.model.signal.create_signal_from_param
+#: cdlapp.core.model.signal.new_signal_param of
 msgid "Return type"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.set_data_type:1
-#: cdl.core.model.signal.SignalObj.set_data_type:1 of
+#: cdlapp.core.model.image.ImageObj.set_data_type:1
+#: cdlapp.core.model.signal.SignalObj.set_data_type:1 of
 msgid "Change data type."
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.set_xydata:1 of
+#: cdlapp.core.model.signal.SignalObj.set_xydata:1 of
 msgid "Set xy data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.set_xydata:3
-#: cdl.core.model.signal.triangle_func:3 of
+#: cdlapp.core.model.signal.SignalObj.set_xydata:3
+#: cdlapp.core.model.signal.triangle_func:3 of
 msgid "x data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.set_xydata:5 of
+#: cdlapp.core.model.signal.SignalObj.set_xydata:5 of
 msgid "y data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.set_xydata:7 of
+#: cdlapp.core.model.signal.SignalObj.set_xydata:7 of
 msgid "dx data (optional: error bars)"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.set_xydata:9 of
+#: cdlapp.core.model.signal.SignalObj.set_xydata:9 of
 msgid "dy data (optional: error bars)"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.x:1 of
+#: cdlapp.core.model.signal.SignalObj.x:1 of
 msgid "Get x data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.data:1 cdl.core.model.signal.SignalObj.y:1
+#: cdlapp.core.model.signal.SignalObj.data:1 cdlapp.core.model.signal.SignalObj.y:1
 #: of
 msgid "Get y data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.dx:1 of
+#: cdlapp.core.model.signal.SignalObj.dx:1 of
 msgid "Get dx data"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.dy:1 of
+#: cdlapp.core.model.signal.SignalObj.dy:1 of
 msgid "Get dy data"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data:1
-#: cdl.core.model.signal.SignalObj.get_data:1 of
+#: cdlapp.core.model.image.ImageObj.get_data:1
+#: cdlapp.core.model.signal.SignalObj.get_data:1 of
 msgid ""
 "Return original data (if ROI is not defined or `roi_index` is None), or "
 "ROI data (if both ROI and `roi_index` are defined)."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data:4
-#: cdl.core.model.image.RoiDataItem.make_roi_item:3
-#: cdl.core.model.signal.SignalObj.get_data:4 of
+#: cdlapp.core.model.image.ImageObj.get_data:4
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item:3
+#: cdlapp.core.model.signal.SignalObj.get_data:4 of
 msgid "ROI index"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.apply_mask:3
-#: cdl.core.model.image.RoiDataItem.get_masked_view:3
-#: cdl.core.model.signal.SignalObj.get_data:7 of
+#: cdlapp.core.model.image.RoiDataItem.apply_mask:3
+#: cdlapp.core.model.image.RoiDataItem.get_masked_view:3
+#: cdlapp.core.model.signal.SignalObj.get_data:7 of
 msgid "data"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.make_item:1
-#: cdl.core.model.signal.SignalObj.make_item:1 of
+#: cdlapp.core.model.image.ImageObj.make_item:1
+#: cdlapp.core.model.signal.SignalObj.make_item:1 of
 msgid "Make plot item from data."
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.make_item:3 of
+#: cdlapp.core.model.signal.SignalObj.make_item:3 of
 msgid "plot item to update from"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.make_item:6
-#: cdl.core.model.image.ImageObj.update_item:3
-#: cdl.core.model.signal.SignalObj.make_item:6
-#: cdl.core.model.signal.SignalObj.update_item:3 of
+#: cdlapp.core.model.image.ImageObj.make_item:6
+#: cdlapp.core.model.image.ImageObj.update_item:3
+#: cdlapp.core.model.signal.SignalObj.make_item:6
+#: cdlapp.core.model.signal.SignalObj.update_item:3 of
 msgid "plot item"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.update_item:1
-#: cdl.core.model.signal.SignalObj.update_item:1 of
+#: cdlapp.core.model.image.ImageObj.update_item:1
+#: cdlapp.core.model.signal.SignalObj.update_item:1 of
 msgid "Update plot item from data."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.update_item:5
-#: cdl.core.model.signal.SignalObj.update_item:5 of
+#: cdlapp.core.model.image.ImageObj.update_item:5
+#: cdlapp.core.model.signal.SignalObj.update_item:5 of
 msgid "if True, data has changed"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:1
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:1 of
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes:1
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes:1 of
 msgid "Convert ROI coordinates to indexes."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:3
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:3 of
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes:3
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes:3 of
 msgid "coordinates"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:6
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:6 of
+#: cdlapp.core.model.image.ImageObj.roi_coords_to_indexes:6
+#: cdlapp.core.model.signal.SignalObj.roi_coords_to_indexes:6 of
 msgid "indexes"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_roi_param:1
-#: cdl.core.model.signal.SignalObj.get_roi_param:1 of
+#: cdlapp.core.model.image.ImageObj.get_roi_param:1
+#: cdlapp.core.model.signal.SignalObj.get_roi_param:1 of
 msgid "Return ROI parameters dataset."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_roi_param:5
-#: cdl.core.model.signal.SignalObj.get_roi_param:5 of
+#: cdlapp.core.model.image.ImageObj.get_roi_param:5
+#: cdlapp.core.model.signal.SignalObj.get_roi_param:5 of
 msgid "default values"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.params_to_roidata:1
-#: cdl.core.model.signal.SignalObj.params_to_roidata:1 of
+#: cdlapp.core.model.image.ImageObj.params_to_roidata:1
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata:1 of
 msgid "Convert ROI dataset group to ROI array data."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.params_to_roidata:3
-#: cdl.core.model.signal.SignalObj.params_to_roidata:3 of
+#: cdlapp.core.model.image.ImageObj.params_to_roidata:3
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata:3 of
 msgid "ROI dataset group"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.params_to_roidata:6
-#: cdl.core.model.signal.SignalObj.params_to_roidata:6 of
+#: cdlapp.core.model.image.ImageObj.params_to_roidata:6
+#: cdlapp.core.model.signal.SignalObj.params_to_roidata:6 of
 msgid "ROI array data"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.new_roi_item:1
-#: cdl.core.model.signal.SignalObj.new_roi_item:1 of
+#: cdlapp.core.model.image.ImageObj.new_roi_item:1
+#: cdlapp.core.model.signal.SignalObj.new_roi_item:1 of
 msgid "Return a new ROI item from scratch"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:3
-#: cdl.core.model.image.ImageObj.new_roi_item:3
-#: cdl.core.model.image.RoiDataItem.make_roi_item:5
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:3
-#: cdl.core.model.signal.SignalObj.new_roi_item:3 of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items:3
+#: cdlapp.core.model.image.ImageObj.new_roi_item:3
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item:5
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items:3
+#: cdlapp.core.model.signal.SignalObj.new_roi_item:3 of
 msgid "format string"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:5
-#: cdl.core.model.image.ImageObj.new_roi_item:5
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
-#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items:5
+#: cdlapp.core.model.image.ImageObj.new_roi_item:5
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items:5
+#: cdlapp.core.model.signal.SignalObj.new_roi_item:5 of
 msgid "if True, add label"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:7
-#: cdl.core.model.image.ImageObj.new_roi_item:7
-#: cdl.core.model.image.RoiDataItem.make_roi_item:9
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
-#: cdl.core.model.signal.SignalObj.new_roi_item:7 of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items:7
+#: cdlapp.core.model.image.ImageObj.new_roi_item:7
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item:9
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items:7
+#: cdlapp.core.model.signal.SignalObj.new_roi_item:7 of
 msgid "if True, ROI is editable"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:1
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:1 of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items:1
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items:1 of
 msgid "Make plot item representing a Region of Interest."
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items
-#: cdl.core.model.signal.SignalObj.iterate_roi_items of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items of
 msgid "Yields"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:10
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:10 of
+#: cdlapp.core.model.image.ImageObj.iterate_roi_items:10
+#: cdlapp.core.model.signal.SignalObj.iterate_roi_items:10 of
 msgid "*PlotItem* -- plot item"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.add_label_with_title:1
-#: cdl.core.model.signal.SignalObj.add_label_with_title:1 of
+#: cdlapp.core.model.image.ImageObj.add_label_with_title:1
+#: cdlapp.core.model.signal.SignalObj.add_label_with_title:1 of
 msgid "Add label with title annotation"
 msgstr ""
 
-#: cdl.core.model.signal.SignalObj.add_label_with_title:3 of
+#: cdlapp.core.model.signal.SignalObj.add_label_with_title:3 of
 msgid "title (if None, use signal title)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:1 of
+#: cdlapp.core.model.signal.create_signal:1 of
 msgid "Create a new Signal object."
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:3 of
+#: cdlapp.core.model.signal.create_signal:3 of
 msgid "signal title"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:5 of
+#: cdlapp.core.model.signal.create_signal:5 of
 msgid "X data"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:7 of
+#: cdlapp.core.model.signal.create_signal:7 of
 msgid "Y data"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:9 of
+#: cdlapp.core.model.signal.create_signal:9 of
 msgid "dX data (optional: error bars)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:11 of
+#: cdlapp.core.model.signal.create_signal:11 of
 msgid "dY data (optional: error bars)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:13 of
+#: cdlapp.core.model.signal.create_signal:13 of
 msgid "signal metadata"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:15 of
+#: cdlapp.core.model.signal.create_signal:15 of
 msgid "X, Y units (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:17 of
+#: cdlapp.core.model.signal.create_signal:17 of
 msgid "X, Y labels (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal:20 of
+#: cdlapp.core.model.signal.create_signal:20 of
 msgid "signal object"
 msgstr ""
 
-#: cdl.core.model.image.ImageDatatypes:1 cdl.core.model.image.ImageTypes:1
-#: cdl.core.model.signal.FreqUnits:1 cdl.core.model.signal.SignalTypes:1 of
-msgid "Bases: :py:class:`~cdl.core.model.base.Choices`"
+#: cdlapp.core.model.image.ImageDatatypes:1 cdlapp.core.model.image.ImageTypes:1
+#: cdlapp.core.model.signal.FreqUnits:1 cdlapp.core.model.signal.SignalTypes:1 of
+msgid "Bases: :py:class:`~cdlapp.core.model.base.Choices`"
 msgstr ""
 
-#: cdl.core.model.signal.SignalTypes:1 of
+#: cdlapp.core.model.signal.SignalTypes:1 of
 msgid "Signal types"
 msgstr ""
 
-#: cdl.core.model.signal.GaussLorentzVoigtParam:1 of
+#: cdlapp.core.model.signal.GaussLorentzVoigtParam:1 of
 msgid "Parameters for Gaussian and Lorentzian functions"
 msgstr ""
 
-#: cdl.core.model.signal.FreqUnits:1 of
+#: cdlapp.core.model.signal.FreqUnits:1 of
 msgid "Frequency units"
 msgstr ""
 
-#: cdl.core.model.signal.FreqUnits.convert_in_hz:1 of
+#: cdlapp.core.model.signal.FreqUnits.convert_in_hz:1 of
 msgid "Convert value in Hz"
 msgstr ""
 
-#: cdl.core.model.signal.PeriodicParam:1 of
+#: cdlapp.core.model.signal.PeriodicParam:1 of
 msgid "Parameters for periodic functions"
 msgstr ""
 
-#: cdl.core.model.signal.PeriodicParam.get_frequency_in_hz:1 of
+#: cdlapp.core.model.signal.PeriodicParam.get_frequency_in_hz:1 of
 msgid "Return frequency in Hz"
 msgstr ""
 
-#: cdl.core.model.signal.StepParam:1 of
+#: cdlapp.core.model.signal.StepParam:1 of
 msgid "Parameters for step function"
 msgstr ""
 
-#: cdl.core.model.signal.NewSignalParam:1 of
+#: cdlapp.core.model.signal.NewSignalParam:1 of
 msgid "New signal dataset"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:1 of
+#: cdlapp.core.model.signal.new_signal_param:1 of
 msgid "Create a new Signal dataset instance."
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:3
-#: cdl.core.model.signal.new_signal_param:3 of
+#: cdlapp.core.model.image.new_image_param:3
+#: cdlapp.core.model.signal.new_signal_param:3 of
 msgid "dataset title (default: None, uses default title)"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:5 of
+#: cdlapp.core.model.signal.new_signal_param:5 of
 msgid "signal type (default: None, uses default type)"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:7 of
+#: cdlapp.core.model.signal.new_signal_param:7 of
 msgid "X min (default: None, uses default value)"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:9 of
+#: cdlapp.core.model.signal.new_signal_param:9 of
 msgid "X max (default: None, uses default value)"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:11 of
+#: cdlapp.core.model.signal.new_signal_param:11 of
 msgid "signal size (default: None, uses default value)"
 msgstr ""
 
-#: cdl.core.model.signal.new_signal_param:14 of
+#: cdlapp.core.model.signal.new_signal_param:14 of
 msgid "new signal dataset instance"
 msgstr ""
 
-#: cdl.core.model.signal.triangle_func:1 of
+#: cdlapp.core.model.signal.triangle_func:1 of
 msgid "Triangle function"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal_from_param:1 of
+#: cdlapp.core.model.signal.create_signal_from_param:1 of
 msgid "Create a new Signal object from a dialog box."
 msgstr ""
 
-#: cdl.core.model.signal.create_signal_from_param:3 of
+#: cdlapp.core.model.signal.create_signal_from_param:3 of
 msgid "new signal parameters"
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:5
-#: cdl.core.model.signal.create_signal_from_param:5 of
+#: cdlapp.core.model.image.create_image_from_param:5
+#: cdlapp.core.model.signal.create_signal_from_param:5 of
 msgid "additional parameters"
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:7
-#: cdl.core.model.signal.create_signal_from_param:7 of
+#: cdlapp.core.model.image.create_image_from_param:7
+#: cdlapp.core.model.signal.create_signal_from_param:7 of
 msgid "Open a dialog box to edit parameters (default: False)"
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:9
-#: cdl.core.model.signal.create_signal_from_param:9 of
+#: cdlapp.core.model.image.create_image_from_param:9
+#: cdlapp.core.model.signal.create_signal_from_param:9 of
 msgid "parent widget"
 msgstr ""
 
-#: cdl.core.model.signal.create_signal_from_param:12 of
+#: cdlapp.core.model.signal.create_signal_from_param:12 of
 msgid "signal object or None if canceled"
 msgstr ""
 
-#: cdl.core.model.image:2 of
+#: cdlapp.core.model.image:2 of
 msgid "Image object and related classes"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_rectangle:1 of
+#: cdlapp.core.model.image.make_roi_rectangle:1 of
 msgid "Make and return the annnotated rectangle associated to ROI"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_circle:3
-#: cdl.core.model.image.make_roi_rectangle:3 of
+#: cdlapp.core.model.image.make_roi_circle:3
+#: cdlapp.core.model.image.make_roi_rectangle:3 of
 msgid "top left corner X coordinate"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_circle:5
-#: cdl.core.model.image.make_roi_rectangle:5 of
+#: cdlapp.core.model.image.make_roi_circle:5
+#: cdlapp.core.model.image.make_roi_rectangle:5 of
 msgid "top left corner Y coordinate"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_circle:7
-#: cdl.core.model.image.make_roi_rectangle:7 of
+#: cdlapp.core.model.image.make_roi_circle:7
+#: cdlapp.core.model.image.make_roi_rectangle:7 of
 msgid "bottom right corner X coordinate"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_circle:9
-#: cdl.core.model.image.make_roi_rectangle:9 of
+#: cdlapp.core.model.image.make_roi_circle:9
+#: cdlapp.core.model.image.make_roi_rectangle:9 of
 msgid "bottom right corner Y coordinate"
 msgstr ""
 
-#: cdl.core.model.image.make_roi_circle:1 of
+#: cdlapp.core.model.image.make_roi_circle:1 of
 msgid "Make and return the annnotated circle associated to ROI"
 msgstr ""
 
-#: cdl.core.model.image.to_builtin:1 of
+#: cdlapp.core.model.image.to_builtin:1 of
 msgid ""
 "Convert an object implementing a numeric value or collection into the "
 "corresponding builtin/NumPy type."
 msgstr ""
 
-#: cdl.core.model.image.to_builtin:4 of
+#: cdlapp.core.model.image.to_builtin:4 of
 msgid "Return None if conversion fails."
 msgstr ""
 
-#: cdl.core.model.image.RoiDataGeometries:1 of
+#: cdlapp.core.model.image.RoiDataGeometries:1 of
 msgid "Bases: :py:class:`~enum.Enum`"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataGeometries:1 of
+#: cdlapp.core.model.image.RoiDataGeometries:1 of
 msgid "ROI data geometry types"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem:1 of
+#: cdlapp.core.model.image.RoiDataItem:1 of
 msgid "Object representing an image ROI."
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem:3 of
+#: cdlapp.core.model.image.RoiDataItem:3 of
 msgid "ROI data"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.from_image:1 of
+#: cdlapp.core.model.image.RoiDataItem.from_image:1 of
 msgid "Construct roi data item from image object: called for making new ROI items"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.from_image:3
-#: cdl.core.model.image.create_image:14 of
+#: cdlapp.core.model.image.RoiDataItem.from_image:3
+#: cdlapp.core.model.image.create_image:14 of
 msgid "image object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.new_roi_item:9
-#: cdl.core.model.image.RoiDataItem.from_image:5
-#: cdl.core.model.image.RoiDataItem.geometry:1 of
+#: cdlapp.core.model.image.ImageObj.new_roi_item:9
+#: cdlapp.core.model.image.RoiDataItem.from_image:5
+#: cdlapp.core.model.image.RoiDataItem.geometry:1 of
 msgid "ROI geometry"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.get_rect:1 of
+#: cdlapp.core.model.image.RoiDataItem.get_rect:1 of
 msgid "Get rectangle coordinates"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.get_masked_view:1 of
+#: cdlapp.core.model.image.RoiDataItem.get_masked_view:1 of
 msgid "Return masked view for data"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.get_masked_view:5 of
+#: cdlapp.core.model.image.RoiDataItem.get_masked_view:5 of
 msgid "mask data"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.apply_mask:1 of
+#: cdlapp.core.model.image.RoiDataItem.apply_mask:1 of
 msgid "Apply ROI to data as a mask and return masked array"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.apply_mask:5 of
+#: cdlapp.core.model.image.RoiDataItem.apply_mask:5 of
 msgid "Y/X ratio"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.make_roi_item:1 of
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item:1 of
 msgid "Make ROI plot item"
 msgstr ""
 
-#: cdl.core.model.image.RoiDataItem.make_roi_item:7 of
+#: cdlapp.core.model.image.RoiDataItem.make_roi_item:7 of
 msgid "if True, show label"
 msgstr ""
 
-#: cdl.core.model.image.roi_label:1 of
+#: cdlapp.core.model.image.roi_label:1 of
 msgid "Returns name<sub>index</sub>"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam:1
-#: cdl.core.model.image.RectangleROIParam:1 of
+#: cdlapp.core.model.image.CircularROIParam:1
+#: cdlapp.core.model.image.RectangleROIParam:1 of
 msgid "ROI parameters"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.get_suffix:1
-#: cdl.core.model.image.RectangleROIParam.get_suffix:1 of
+#: cdlapp.core.model.image.CircularROIParam.get_suffix:1
+#: cdlapp.core.model.image.RectangleROIParam.get_suffix:1 of
 msgid "Get suffix text representation for ROI extraction"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.get_coords:1
-#: cdl.core.model.image.RectangleROIParam.get_coords:1 of
+#: cdlapp.core.model.image.CircularROIParam.get_coords:1
+#: cdlapp.core.model.image.RectangleROIParam.get_coords:1 of
 msgid "Get ROI coordinates"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.get_single_roi:1 of
+#: cdlapp.core.model.image.CircularROIParam.get_single_roi:1 of
 msgid "Get single circular ROI, i.e. after extracting ROI from image"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.x0:1 of
+#: cdlapp.core.model.image.CircularROIParam.x0:1 of
 msgid "Return rectangle top left corner X coordinate"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.x1:1 of
+#: cdlapp.core.model.image.CircularROIParam.x1:1 of
 msgid "Return rectangle bottom right corner X coordinate"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.y0:1 of
+#: cdlapp.core.model.image.CircularROIParam.y0:1 of
 msgid "Return rectangle top left corner Y coordinate"
 msgstr ""
 
-#: cdl.core.model.image.CircularROIParam.y1:1 of
+#: cdlapp.core.model.image.CircularROIParam.y1:1 of
 msgid "Return rectangle bottom right corner Y coordinate"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj:1 of
+#: cdlapp.core.model.image.ImageObj:1 of
 msgid "Image object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.size:1 of
+#: cdlapp.core.model.image.ImageObj.size:1 of
 msgid "Returns (width, height)"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.set_metadata_from:1 of
+#: cdlapp.core.model.image.ImageObj.set_metadata_from:1 of
 msgid ""
 "Set metadata from object: dict-like (only string keys are considered) or "
 "any other object (iterating over supported attributes)"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.set_metadata_from:4 of
+#: cdlapp.core.model.image.ImageObj.set_metadata_from:4 of
 msgid "object"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.dicom_template:1 of
+#: cdlapp.core.model.image.ImageObj.dicom_template:1 of
 msgid "Get DICOM template"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.xc:1 of
+#: cdlapp.core.model.image.ImageObj.xc:1 of
 msgid "Return image center X-axis coordinate"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.yc:1 of
+#: cdlapp.core.model.image.ImageObj.yc:1 of
 msgid "Return image center Y-axis coordinate"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.get_data:7
-#: cdl.core.model.image.ImageObj.maskdata:3 of
+#: cdlapp.core.model.image.ImageObj.get_data:7
+#: cdlapp.core.model.image.ImageObj.maskdata:3 of
 msgid "masked data"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.make_item:3 of
+#: cdlapp.core.model.image.ImageObj.make_item:3 of
 msgid "update from plot item"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.maskdata:1 of
+#: cdlapp.core.model.image.ImageObj.maskdata:1 of
 msgid "Return masked data (areas outside defined regions of interest)"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
+#: cdlapp.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
 msgid "Invalidate mask data cache: force to rebuild it"
 msgstr ""
 
-#: cdl.core.model.image.ImageObj.add_label_with_title:3 of
+#: cdlapp.core.model.image.ImageObj.add_label_with_title:3 of
 msgid "title (if None, use image title)"
 msgstr ""
 
-#: cdl.core.model.image.create_image:1 of
+#: cdlapp.core.model.image.create_image:1 of
 msgid "Create a new Image object"
 msgstr ""
 
-#: cdl.core.model.image.create_image:3 of
+#: cdlapp.core.model.image.create_image:3 of
 msgid "image title"
 msgstr ""
 
-#: cdl.core.model.image.create_image:5 of
+#: cdlapp.core.model.image.create_image:5 of
 msgid "image data"
 msgstr ""
 
-#: cdl.core.model.image.create_image:7 of
+#: cdlapp.core.model.image.create_image:7 of
 msgid "image metadata"
 msgstr ""
 
-#: cdl.core.model.image.create_image:9 of
+#: cdlapp.core.model.image.create_image:9 of
 msgid "X, Y, Z units (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.image.create_image:11 of
+#: cdlapp.core.model.image.create_image:11 of
 msgid "X, Y, Z labels (tuple of strings)"
 msgstr ""
 
-#: cdl.core.model.image.ImageDatatypes:1 of
+#: cdlapp.core.model.image.ImageDatatypes:1 of
 msgid "Image data types"
 msgstr ""
 
-#: cdl.core.model.image.ImageDatatypes.from_dtype:1 of
+#: cdlapp.core.model.image.ImageDatatypes.from_dtype:1 of
 msgid "Return member from NumPy dtype"
 msgstr ""
 
-#: cdl.core.model.image.ImageDatatypes.check:1 of
+#: cdlapp.core.model.image.ImageDatatypes.check:1 of
 msgid "Check if data types are valid"
 msgstr ""
 
-#: cdl.core.model.image.ImageTypes:1 of
+#: cdlapp.core.model.image.ImageTypes:1 of
 msgid "Image types"
 msgstr ""
 
-#: cdl.core.model.image.NewImageParam:1 of
+#: cdlapp.core.model.image.NewImageParam:1 of
 msgid "New image dataset"
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:1 of
+#: cdlapp.core.model.image.new_image_param:1 of
 msgid "Create a new Image dataset instance."
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:5 of
+#: cdlapp.core.model.image.new_image_param:5 of
 msgid "image type (default: None, uses default type)"
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:7 of
+#: cdlapp.core.model.image.new_image_param:7 of
 msgid "image height (default: None, uses default height)"
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:9 of
+#: cdlapp.core.model.image.new_image_param:9 of
 msgid "image width (default: None, uses default width)"
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:11 of
+#: cdlapp.core.model.image.new_image_param:11 of
 msgid "image data type (default: None, uses default data type)"
 msgstr ""
 
-#: cdl.core.model.image.new_image_param:14 of
+#: cdlapp.core.model.image.new_image_param:14 of
 msgid "new image dataset instance"
 msgstr ""
 
-#: cdl.core.model.image.Gauss2DParam:1 of
+#: cdlapp.core.model.image.Gauss2DParam:1 of
 msgid "2D Gaussian parameters"
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:1 of
+#: cdlapp.core.model.image.create_image_from_param:1 of
 msgid "Create a new Image object from dialog box."
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:3 of
+#: cdlapp.core.model.image.create_image_from_param:3 of
 msgid "new image parameters"
 msgstr ""
 
-#: cdl.core.model.image.create_image_from_param:12 of
+#: cdlapp.core.model.image.create_image_from_param:12 of
 msgid "new image object or None if user cancelled"
 msgstr ""
 
-#~ msgid "Bases: :py:class:`~cdl.core.model.base.Choices`"
+#~ msgid "Bases: :py:class:`~cdlapp.core.model.base.Choices`"
 #~ msgstr ""
 
 #~ msgid "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`"
@@ -873,7 +873,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`~guidata.dataset.datatypes.DataSet`, "
-#~ ":py:class:`~cdl.core.model.base.BaseObj`"
+#~ ":py:class:`~cdlapp.core.model.base.BaseObj`"
 #~ msgstr ""
 
 #~ msgid "Signal dataset"
@@ -903,7 +903,7 @@ msgstr ""
 #~ msgid "other dataset instance"
 #~ msgstr ""
 
-#~ msgid "Bases: :py:class:`cdl.core.model.base.Choices`"
+#~ msgid "Bases: :py:class:`cdlapp.core.model.base.Choices`"
 #~ msgstr ""
 
 #~ msgid "Bases: :py:class:`guidata.dataset.datatypes.DataSet`"
@@ -911,9 +911,8 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`guidata.dataset.datatypes.DataSet`, "
-#~ ":py:class:`cdl.core.model.base.BaseObj`"
+#~ ":py:class:`cdlapp.core.model.base.BaseObj`"
 #~ msgstr ""
 
 #~ msgid "Bases: :py:class:`enum.Enum`"
 #~ msgstr ""
-

@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../roadmap.rst:2
 msgid "Roadmap"
@@ -335,5 +335,15 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "DataLab 1.0"
+#~ msgstr ""
+
+#~ msgid "Image computing results (`cdlapp.model.base.ResultShape`):"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "See \"TODO\" comment just above "
+#~ "``cdlapp.model.base.ResultShape`` class definition "
+#~ "for more details about how to "
+#~ "implement this feature."
 #~ msgstr ""
 

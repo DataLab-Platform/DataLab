@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import cdl  # noqa: E402
+import cdlapp  # noqa: E402
 
 os.environ["CDL_DOC"] = "1"
 
@@ -17,7 +17,7 @@ project = "DataLab"
 author = "Pierre Raybaut"
 copyright = "2023, Codra - " + author
 html_logo = latex_logo = "_static/DataLab-title.png"
-release = cdl.__version__
+release = cdlapp.__version__
 
 # -- General configuration ---------------------------------------------------
 

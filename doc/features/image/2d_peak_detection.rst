@@ -47,7 +47,7 @@ The 2d peak detection parameters are the following:
   - "Relative threshold": detection threshold
 
 Feature is based on ``get_2d_peaks_coords`` function
-from ``cdl.algorithms`` module:
+from ``cdlapp.algorithms`` module:
 
-  .. literalinclude:: ../../../cdl/algorithms/image.py
+  .. literalinclude:: ../../../cdlapp/algorithms/image.py
      :pyobject: get_2d_peaks_coords

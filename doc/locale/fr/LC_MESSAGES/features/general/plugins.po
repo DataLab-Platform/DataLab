@@ -118,7 +118,7 @@ msgstr ""
 
 #: ../../features/general/plugins.rst:42
 msgid ""
-"The `plugins` directory in the `cdl` package in case for internal plugins"
+"The `plugins` directory in the `cdlapp` package in case for internal plugins"
 " only (i.e. it is not recommended to put your own plugins there)."
 msgstr ""
 
@@ -148,29 +148,29 @@ msgstr ""
 msgid "Public API"
 msgstr "API publique"
 
-#: cdl.plugins:2 of
+#: cdlapp.plugins:2 of
 msgid "DataLab plugin system"
 msgstr ""
 
-#: cdl.plugins:4 of
+#: cdlapp.plugins:4 of
 msgid ""
 "DataLab plugin system provides a way to extend the application with new "
 "functionalities."
 msgstr ""
 
-#: cdl.plugins:7 of
+#: cdlapp.plugins:7 of
 msgid "Plugins are Python modules that relies on two classes:"
 msgstr ""
 
-#: cdl.plugins:9 of
+#: cdlapp.plugins:9 of
 msgid ":class:`PluginInfo`, which stores information about the plugin"
 msgstr ""
 
-#: cdl.plugins:10 of
+#: cdlapp.plugins:10 of
 msgid ":class:`PluginBase`, which is the base class for all plugins"
 msgstr ""
 
-#: cdl.plugins:12 of
+#: cdlapp.plugins:12 of
 msgid ""
 "Plugins may also extends DataLab I/O features by providing new image or "
 "signal formats. To do so, they must provide a subclass of "
@@ -178,89 +178,89 @@ msgid ""
 "infos are defined using the :class:`FormatInfo` class."
 msgstr ""
 
-#: cdl.plugins.PluginRegistry:1 of
+#: cdlapp.plugins.PluginRegistry:1 of
 msgid "Metaclass for registering plugins"
 msgstr ""
 
-#: cdl.plugins.PluginRegistry.get_plugin_classes:1 of
+#: cdlapp.plugins.PluginRegistry.get_plugin_classes:1 of
 msgid "Return plugin classes"
 msgstr ""
 
-#: cdl.plugins.PluginRegistry.get_plugins:1 of
+#: cdlapp.plugins.PluginRegistry.get_plugins:1 of
 msgid "Return plugin instances"
 msgstr ""
 
-#: cdl.plugins.PluginRegistry.get_plugin:1 of
+#: cdlapp.plugins.PluginRegistry.get_plugin:1 of
 msgid "Return plugin instance"
 msgstr ""
 
-#: cdl.plugins.PluginBase.register:1
-#: cdl.plugins.PluginRegistry.register_plugin:1 of
+#: cdlapp.plugins.PluginBase.register:1
+#: cdlapp.plugins.PluginRegistry.register_plugin:1 of
 msgid "Register plugin"
 msgstr ""
 
-#: cdl.plugins.PluginBase.unregister:1
-#: cdl.plugins.PluginRegistry.unregister_plugin:1 of
+#: cdlapp.plugins.PluginBase.unregister:1
+#: cdlapp.plugins.PluginRegistry.unregister_plugin:1 of
 msgid "Unregister plugin"
 msgstr ""
 
-#: cdl.plugins.PluginRegistry.get_plugin_infos:1 of
+#: cdlapp.plugins.PluginRegistry.get_plugin_infos:1 of
 msgid "Return plugin infos (names, versions, descriptions) in html format"
 msgstr ""
 
-#: cdl.plugins.PluginInfo:1 of
+#: cdlapp.plugins.PluginInfo:1 of
 msgid "Plugin info"
 msgstr ""
 
-#: cdl.plugins.PluginBaseMeta:1 of
+#: cdlapp.plugins.PluginBaseMeta:1 of
 msgid "Mixed metaclass to avoid conflicts"
 msgstr ""
 
-#: cdl.plugins.PluginBase:1 of
+#: cdlapp.plugins.PluginBase:1 of
 msgid "Plugin base class"
 msgstr ""
 
-#: cdl.plugins.PluginBase.signalpanel:1 of
+#: cdlapp.plugins.PluginBase.signalpanel:1 of
 msgid "Return signal panel"
 msgstr ""
 
-#: cdl.plugins.PluginBase.imagepanel:1 of
+#: cdlapp.plugins.PluginBase.imagepanel:1 of
 msgid "Return image panel"
 msgstr ""
 
-#: cdl.plugins.PluginBase.show_warning:1 of
+#: cdlapp.plugins.PluginBase.show_warning:1 of
 msgid "Show warning message"
 msgstr ""
 
-#: cdl.plugins.PluginBase.show_error:1 of
+#: cdlapp.plugins.PluginBase.show_error:1 of
 msgid "Show error message"
 msgstr ""
 
-#: cdl.plugins.PluginBase.show_info:1 of
+#: cdlapp.plugins.PluginBase.show_info:1 of
 msgid "Show info message"
 msgstr ""
 
-#: cdl.plugins.PluginBase.ask_yesno:1 of
+#: cdlapp.plugins.PluginBase.ask_yesno:1 of
 msgid "Ask yes/no question"
 msgstr ""
 
-#: cdl.plugins.PluginBase.is_registered:1 of
+#: cdlapp.plugins.PluginBase.is_registered:1 of
 msgid "Return True if plugin is registered"
 msgstr ""
 
-#: cdl.plugins.PluginBase.register_hooks:1 of
+#: cdlapp.plugins.PluginBase.register_hooks:1 of
 msgid "Register plugin hooks"
 msgstr ""
 
-#: cdl.plugins.PluginBase.unregister_hooks:1 of
+#: cdlapp.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
 msgstr ""
 
-#: cdl.plugins.PluginBase.create_actions:1 of
+#: cdlapp.plugins.PluginBase.create_actions:1 of
 msgid "Create actions"
 msgstr ""
 
-#: cdl.plugins.discover_plugins:1 of
+#: cdlapp.plugins.discover_plugins:1 of
 msgid "Discover plugins using naming convention"
 msgstr ""
 
@@ -319,4 +319,3 @@ msgstr ""
 
 #~ msgid "Set signal xydata"
 #~ msgstr ""
-

@@ -20,8 +20,8 @@ msgstr ""
 "Generated-By: Babel 2.13.0\n"
 
 #: ../../requirements.rst:1
-msgid "The :mod:`cdl` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
+msgid "The :mod:`cdlapp` package requires the following Python modules:"
+msgstr "Le paquet :mod:`cdlapp` nécessite les modules Python suivants :"
 
 #: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:75
 msgid "Name"

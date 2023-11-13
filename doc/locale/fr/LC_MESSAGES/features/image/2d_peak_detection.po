@@ -149,8 +149,7 @@ msgstr "\"Seuil relatif\": seuil de détection"
 #, fuzzy
 msgid ""
 "Feature is based on ``get_2d_peaks_coords`` function from "
-"``cdl.algorithms`` module:"
+"``cdlapp.algorithms`` module:"
 msgstr ""
 "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du "
-"module ``cdl.core.computation`` :"
-
+"module ``cdlapp.core.computation`` :"

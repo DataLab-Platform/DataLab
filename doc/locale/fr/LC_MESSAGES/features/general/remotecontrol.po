@@ -15,7 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/general/remotecontrol.rst:2
 msgid "Remote controlling"
@@ -37,6 +37,7 @@ msgid "From an IDE"
 msgstr "Depuis un IDE"
 
 #: ../../features/general/remotecontrol.rst:11
+#, fuzzy
 msgid ""
 "It is possible to run a Python script from an IDE (e.g. `Spyder`_ or any "
 "other IDE, or even a Jupyter Notebook) that connects to a running DataLab"
@@ -48,13 +49,14 @@ msgstr ""
 "`Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui se connecte"
 " à une instance de DataLab en cours d'exécution, ajoute un signal et une "
 "image, puis exécute des calculs. C'est le cas de la classe `RemoteClient`"
-" qui est fournie dans le module ``cdl.remote``."
+" qui est fournie dans le module ``cdlapp.remote``."
 
 #: ../../features/general/remotecontrol.rst:17
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"
 
 #: ../../features/general/remotecontrol.rst:19
+#, fuzzy
 msgid ""
 "It is also possible to connect to a running DataLab instance from a "
 "third-party application, adds a signal and an image, and then runs "
@@ -64,7 +66,7 @@ msgstr ""
 "Il est également possible de se connecter à une instance de DataLab en "
 "cours d'exécution depuis une application tierce, d'ajouter un signal et "
 "une image, puis d'exécuter des calculs. C'est le cas de la classe "
-"`RemoteClient` qui est fournie dans le module ``cdl.remote``."
+"`RemoteClient` qui est fournie dans le module ``cdlapp.remote``."
 
 #: ../../features/general/remotecontrol.rst:23
 msgid ""
@@ -172,20 +174,23 @@ msgstr ""
 " DataLab :"
 
 #: ../../features/general/remotecontrol.rst:62
+#, fuzzy
 msgid "See module: ``cdl.tests.remoteclient_app``"
-msgstr "Voir le module ``cdl.tests.remoteclient_app``"
+msgstr "Voir le module ``cdlapp.tests.remoteclient_app``"
 
 #: ../../features/general/remotecontrol.rst:63
+#, fuzzy
 msgid "See module: ``cdl.tests.remoteclient_unit``"
-msgstr "Voir le module ``cdl.tests.remoteclient_unit``"
+msgstr "Voir le module ``cdlapp.tests.remoteclient_unit``"
 
 #: ../../features/general/remotecontrol.rst:67
+#, fuzzy
 msgid ""
 "Screenshot of remote client application test "
 "(``cdl.tests.remoteclient_app``)"
 msgstr ""
 "Copie d'écran du test applicatif du contrôle à distance "
-"(``cdl.tests.remoteclient_app``)"
+"(``cdlapp.tests.remoteclient_app``)"
 
 #: ../../features/general/remotecontrol.rst:70 cdl.remotecontrol.RemoteClient:5
 #: of
@@ -997,7 +1002,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`~PyQt5.QtCore.QThread`, "
-#~ ":py:class:`~cdl.remotecontrol.BaseRPCServer`"
+#~ ":py:class:`~cdlapp.remotecontrol.BaseRPCServer`"
 #~ msgstr ""
 
 #~ msgid "int = ..., arguments: Sequence = ...) -> PYQT_SIGNAL"
@@ -1053,7 +1058,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`PyQt5.QtCore.QThread`, "
-#~ ":py:class:`cdl.remotecontrol.BaseRPCServer`"
+#~ ":py:class:`cdlapp.remotecontrol.BaseRPCServer`"
 #~ msgstr ""
 
 #~ msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"

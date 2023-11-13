@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-11-10 15:30+0100\n"
+"POT-Creation-Date: 2023-11-13 17:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,8 @@ msgstr ""
 msgid "Size of the moving window"
 msgstr "Taille de la fenêtre glissante"
 
-#: cdlapp\core\computation\base.py:53 cdlapp\core\computation\image\__init__.py:178
+#: cdlapp\core\computation\base.py:53
+#: cdlapp\core\computation\image\__init__.py:178
 #: cdlapp\core\computation\signal.py:267
 msgid "Threshold"
 msgstr "Seuil"
@@ -231,7 +232,7 @@ msgstr ""
 "maximum/minimum"
 
 #: cdlapp\core\computation\image\detection.py:63
-#: cdlapp\core\gui\processor\image.py:774
+#: cdlapp\core\gui\processor\image.py:786
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
@@ -602,8 +603,8 @@ msgstr ""
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
-#: cdlapp\core\computation\image\morphology.py:32 cdlapp\core\model\image.py:267
-#: cdlapp\tests\data.py:378
+#: cdlapp\core\computation\image\morphology.py:32
+#: cdlapp\core\model\image.py:267 cdlapp\tests\data.py:380
 msgid "Radius"
 msgstr "Rayon"
 
@@ -703,7 +704,8 @@ msgid "Degree"
 msgstr "Degré"
 
 #: cdlapp\core\computation\signal.py:489 cdlapp\core\model\signal.py:630
-#: cdlapp\tests\features\common\stat_app.py:40 cdlapp\tests\scenarios\demo.py:70
+#: cdlapp\tests\features\common\stat_app.py:40
+#: cdlapp\tests\scenarios\demo.py:70
 #: cdlapp\tests\scenarios\scenario_sig_app.py:153
 msgid "Gaussian"
 msgstr "Gaussienne"
@@ -854,41 +856,41 @@ msgid "Absolute value"
 msgstr "Valeur absolue"
 
 #: cdlapp\core\gui\actionhandler.py:536 cdlapp\core\gui\processor\image.py:311
-#: cdlapp\core\gui\processor\signal.py:173
+#: cdlapp\core\gui\processor\signal.py:175
 msgid "Thresholding"
 msgstr "Seuillage"
 
 #: cdlapp\core\gui\actionhandler.py:540 cdlapp\core\gui\processor\image.py:321
-#: cdlapp\core\gui\processor\signal.py:179
+#: cdlapp\core\gui\processor\signal.py:181
 msgid "Clipping"
 msgstr "Écrêtage"
 
 #: cdlapp\core\gui\actionhandler.py:544 cdlapp\core\gui\processor\image.py:300
-#: cdlapp\core\gui\processor\signal.py:165
+#: cdlapp\core\gui\processor\signal.py:167
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
 #: cdlapp\core\gui\actionhandler.py:548 cdlapp\core\gui\processor\image.py:328
-#: cdlapp\core\gui\processor\signal.py:188
+#: cdlapp\core\gui\processor\signal.py:190
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
 #: cdlapp\core\gui\actionhandler.py:552 cdlapp\core\gui\processor\image.py:340
-#: cdlapp\core\gui\processor\signal.py:200
+#: cdlapp\core\gui\processor\signal.py:202
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
 #: cdlapp\core\gui\actionhandler.py:556 cdlapp\core\gui\processor\image.py:350
-#: cdlapp\core\gui\processor\signal.py:210
+#: cdlapp\core\gui\processor\signal.py:212
 msgid "Moving median"
 msgstr "Médiane mobile"
 
 #: cdlapp\core\gui\actionhandler.py:560 cdlapp\core\gui\processor\image.py:356
-#: cdlapp\core\gui\processor\signal.py:216
+#: cdlapp\core\gui\processor\signal.py:218
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-#: cdlapp\core\gui\actionhandler.py:564 cdlapp\core\gui\processor\signal.py:223
+#: cdlapp\core\gui\actionhandler.py:564 cdlapp\core\gui\processor\signal.py:225
 msgid "FFT"
 msgstr "FFT"
 
@@ -924,20 +926,21 @@ msgstr "Permuter les axes X/Y"
 msgid "signal"
 msgstr "signal"
 
-#: cdlapp\core\gui\actionhandler.py:621 cdlapp\core\gui\processor\signal.py:143
+#: cdlapp\core\gui\actionhandler.py:621 cdlapp\core\gui\processor\signal.py:145
 msgid "Normalize"
 msgstr "Normaliser"
 
-#: cdlapp\core\gui\actionhandler.py:624 cdlapp\core\gui\processor\signal.py:149
+#: cdlapp\core\gui\actionhandler.py:624 cdlapp\core\gui\processor\signal.py:151
 msgid "Derivative"
 msgstr "Dérivée"
 
-#: cdlapp\core\gui\actionhandler.py:627 cdlapp\core\gui\processor\signal.py:154
+#: cdlapp\core\gui\actionhandler.py:627 cdlapp\core\gui\processor\signal.py:156
 msgid "Integral"
 msgstr "Intégrale"
 
-#: cdlapp\core\gui\actionhandler.py:634 cdlapp\core\gui\processor\image.py:759
-#: cdlapp\core\gui\processor\image.py:770 cdlapp\core\gui\processor\signal.py:126
+#: cdlapp\core\gui\actionhandler.py:634 cdlapp\core\gui\processor\image.py:771
+#: cdlapp\core\gui\processor\image.py:782
+#: cdlapp\core\gui\processor\signal.py:126
 msgid "Peak detection"
 msgstr "Détection de pics"
 
@@ -946,25 +949,28 @@ msgid "Fitting"
 msgstr "Ajustement"
 
 #: cdlapp\core\gui\actionhandler.py:648 cdlapp\tests\scenarios\demo.py:68
-#: cdlapp\tests\scenarios\scenario_sig_app.py:149 cdlapp\widgets\fitdialog.py:116
+#: cdlapp\tests\scenarios\scenario_sig_app.py:149
+#: cdlapp\widgets\fitdialog.py:116
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
 #: cdlapp\core\gui\actionhandler.py:649
-#: cdlapp\tests\scenarios\scenario_sig_app.py:150 cdlapp\widgets\fitdialog.py:144
+#: cdlapp\tests\scenarios\scenario_sig_app.py:150
+#: cdlapp\widgets\fitdialog.py:144
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
 #: cdlapp\core\gui\actionhandler.py:650
-#: cdlapp\tests\scenarios\scenario_sig_app.py:151 cdlapp\widgets\fitdialog.py:172
+#: cdlapp\tests\scenarios\scenario_sig_app.py:151
+#: cdlapp\widgets\fitdialog.py:172
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
-#: cdlapp\core\gui\actionhandler.py:652 cdlapp\core\gui\processor\signal.py:243
+#: cdlapp\core\gui\actionhandler.py:652 cdlapp\core\gui\processor\signal.py:245
 msgid "Polynomial fit"
 msgstr "Ajustement polynomial"
 
-#: cdlapp\core\gui\actionhandler.py:656 cdlapp\core\gui\processor\signal.py:286
+#: cdlapp\core\gui\actionhandler.py:656 cdlapp\core\gui\processor\signal.py:288
 #: cdlapp\widgets\fitdialog.py:235
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
@@ -1059,15 +1065,15 @@ msgstr "Correction gamma"
 msgid "Logarithmic correction"
 msgstr "Correction logarithmique"
 
-#: cdlapp\core\gui\actionhandler.py:771 cdlapp\core\gui\processor\image.py:416
+#: cdlapp\core\gui\actionhandler.py:771 cdlapp\core\gui\processor\image.py:418
 msgid "Sigmoid correction"
 msgstr "Correction sigmoïde"
 
-#: cdlapp\core\gui\actionhandler.py:775 cdlapp\core\gui\processor\image.py:441
+#: cdlapp\core\gui\actionhandler.py:775 cdlapp\core\gui\processor\image.py:443
 msgid "Histogram equalization"
 msgstr "Egalisation d'histogramme"
 
-#: cdlapp\core\gui\actionhandler.py:779 cdlapp\core\gui\processor\image.py:454
+#: cdlapp\core\gui\actionhandler.py:779 cdlapp\core\gui\processor\image.py:456
 msgid "Adaptive histogram equalization"
 msgstr "Egalisation d'histogramme adaptative"
 
@@ -1079,18 +1085,18 @@ msgstr "Ajustement des niveaux"
 msgid "Restoration"
 msgstr "Restauration"
 
-#: cdlapp\core\gui\actionhandler.py:788 cdlapp\core\gui\processor\image.py:464
-#: cdlapp\core\gui\processor\image.py:520
+#: cdlapp\core\gui\actionhandler.py:788 cdlapp\core\gui\processor\image.py:468
+#: cdlapp\core\gui\processor\image.py:524
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
-#: cdlapp\core\gui\actionhandler.py:792 cdlapp\core\gui\processor\image.py:477
-#: cdlapp\core\gui\processor\image.py:521
+#: cdlapp\core\gui\actionhandler.py:792 cdlapp\core\gui\processor\image.py:481
+#: cdlapp\core\gui\processor\image.py:525
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
-#: cdlapp\core\gui\actionhandler.py:796 cdlapp\core\gui\processor\image.py:490
-#: cdlapp\core\gui\processor\image.py:522
+#: cdlapp\core\gui\actionhandler.py:796 cdlapp\core\gui\processor\image.py:494
+#: cdlapp\core\gui\processor\image.py:526
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
@@ -1146,59 +1152,59 @@ msgstr "Appliquer toutes les opérations morphologiques"
 msgid "Edges"
 msgstr "Contours"
 
-#: cdlapp\core\gui\actionhandler.py:842 cdlapp\core\gui\processor\image.py:626
+#: cdlapp\core\gui\actionhandler.py:842 cdlapp\core\gui\processor\image.py:638
 msgid "Roberts filter"
 msgstr "Filtre de Roberts"
 
-#: cdlapp\core\gui\actionhandler.py:845 cdlapp\core\gui\processor\image.py:631
+#: cdlapp\core\gui\actionhandler.py:845 cdlapp\core\gui\processor\image.py:643
 msgid "Prewitt filter"
 msgstr "Filtre de Prewitt"
 
-#: cdlapp\core\gui\actionhandler.py:850 cdlapp\core\gui\processor\image.py:638
+#: cdlapp\core\gui\actionhandler.py:850 cdlapp\core\gui\processor\image.py:650
 msgid "Prewitt filter (horizontal)"
 msgstr "Filtre de Prewitt (horizontal)"
 
-#: cdlapp\core\gui\actionhandler.py:854 cdlapp\core\gui\processor\image.py:646
+#: cdlapp\core\gui\actionhandler.py:854 cdlapp\core\gui\processor\image.py:658
 msgid "Prewitt filter (vertical)"
 msgstr "Filtre de Prewitt (vertical)"
 
-#: cdlapp\core\gui\actionhandler.py:858 cdlapp\core\gui\processor\image.py:652
+#: cdlapp\core\gui\actionhandler.py:858 cdlapp\core\gui\processor\image.py:664
 msgid "Sobel filter"
 msgstr "Filtre de Sobel"
 
-#: cdlapp\core\gui\actionhandler.py:863 cdlapp\core\gui\processor\image.py:659
+#: cdlapp\core\gui\actionhandler.py:863 cdlapp\core\gui\processor\image.py:671
 msgid "Sobel filter (horizontal)"
 msgstr "Filtre de Sobel (horizontal)"
 
-#: cdlapp\core\gui\actionhandler.py:867 cdlapp\core\gui\processor\image.py:667
+#: cdlapp\core\gui\actionhandler.py:867 cdlapp\core\gui\processor\image.py:679
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
-#: cdlapp\core\gui\actionhandler.py:871 cdlapp\core\gui\processor\image.py:673
+#: cdlapp\core\gui\actionhandler.py:871 cdlapp\core\gui\processor\image.py:685
 msgid "Scharr filter"
 msgstr "Filtre de Scharr"
 
-#: cdlapp\core\gui\actionhandler.py:876 cdlapp\core\gui\processor\image.py:680
+#: cdlapp\core\gui\actionhandler.py:876 cdlapp\core\gui\processor\image.py:692
 msgid "Scharr filter (horizontal)"
 msgstr "Filtre de Scharr (horizontal)"
 
-#: cdlapp\core\gui\actionhandler.py:880 cdlapp\core\gui\processor\image.py:688
+#: cdlapp\core\gui\actionhandler.py:880 cdlapp\core\gui\processor\image.py:700
 msgid "Scharr filter (vertical)"
 msgstr "Filtre de Scharr (vertical)"
 
-#: cdlapp\core\gui\actionhandler.py:884 cdlapp\core\gui\processor\image.py:694
+#: cdlapp\core\gui\actionhandler.py:884 cdlapp\core\gui\processor\image.py:706
 msgid "Farid filter"
 msgstr "Filtre de Farid"
 
-#: cdlapp\core\gui\actionhandler.py:889 cdlapp\core\gui\processor\image.py:701
+#: cdlapp\core\gui\actionhandler.py:889 cdlapp\core\gui\processor\image.py:713
 msgid "Farid filter (horizontal)"
 msgstr "Filtre de Farid (horizontal)"
 
-#: cdlapp\core\gui\actionhandler.py:893 cdlapp\core\gui\processor\image.py:709
+#: cdlapp\core\gui\actionhandler.py:893 cdlapp\core\gui\processor\image.py:721
 msgid "Farid filter (vertical)"
 msgstr "Filtre de Farid (vertical)"
 
-#: cdlapp\core\gui\actionhandler.py:897 cdlapp\core\gui\processor\image.py:715
+#: cdlapp\core\gui\actionhandler.py:897 cdlapp\core\gui\processor\image.py:727
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
@@ -1210,11 +1216,11 @@ msgstr "Tous les filtres de contours"
 msgid "Compute all edges filters"
 msgstr "Calcule tous les filtres de contours"
 
-#: cdlapp\core\gui\actionhandler.py:908 cdlapp\core\gui\processor\image.py:620
+#: cdlapp\core\gui\actionhandler.py:908 cdlapp\core\gui\processor\image.py:632
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: cdlapp\core\gui\actionhandler.py:915 cdlapp\core\gui\processor\image.py:742
+#: cdlapp\core\gui\actionhandler.py:915 cdlapp\core\gui\processor\image.py:754
 #: cdlapp\tests\features\images\centroid_unit.py:58
 #: cdlapp\tests\features\images\enclosingcircle_unit.py:33
 msgid "Centroid"
@@ -1260,7 +1266,7 @@ msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: cdlapp\core\gui\actionhandler.py:943 cdlapp\core\gui\processor\image.py:837
+#: cdlapp\core\gui\actionhandler.py:943 cdlapp\core\gui\processor\image.py:849
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (gaussien)"
 
@@ -1268,7 +1274,7 @@ msgstr "Détection de taches (gaussien)"
 msgid "Detect blobs using Difference of Gaussian (DOG) method"
 msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
 
-#: cdlapp\core\gui\actionhandler.py:948 cdlapp\core\gui\processor\image.py:848
+#: cdlapp\core\gui\actionhandler.py:948 cdlapp\core\gui\processor\image.py:860
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
@@ -1276,7 +1282,7 @@ msgstr "Détection de taches (hessien)"
 msgid "Detect blobs using Determinant of Hessian (DOH) method"
 msgstr "Détection de taches basée sur la méthode du discriminant hessien"
 
-#: cdlapp\core\gui\actionhandler.py:953 cdlapp\core\gui\processor\image.py:859
+#: cdlapp\core\gui\actionhandler.py:953 cdlapp\core\gui\processor\image.py:871
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
@@ -1285,7 +1291,7 @@ msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
 msgstr ""
 "Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
 
-#: cdlapp\core\gui\actionhandler.py:958 cdlapp\core\gui\processor\image.py:873
+#: cdlapp\core\gui\actionhandler.py:958 cdlapp\core\gui\processor\image.py:885
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
@@ -1293,16 +1299,16 @@ msgstr "Détection de taches (OpenCV)"
 msgid "Detect blobs using OpenCV SimpleBlobDetector"
 msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
-#: cdlapp\core\gui\h5io.py:41
+#: cdlapp\core\gui\h5io.py:45
 msgid "Loading data from %s..."
 msgstr "Chargement des données depuis %s..."
 
-#: cdlapp\core\gui\h5io.py:87
+#: cdlapp\core\gui\h5io.py:91
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdlapp\core\gui\h5io.py:87 cdlapp\core\gui\main.py:428 cdlapp\core\gui\main.py:1129
-#: cdlapp\plugins.py:160
+#: cdlapp\core\gui\h5io.py:91 cdlapp\core\gui\main.py:428
+#: cdlapp\core\gui\main.py:1129 cdlapp\plugins.py:160
 msgid "Warning"
 msgstr "Attention"
 
@@ -1379,7 +1385,8 @@ msgstr ""
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdlapp\core\gui\main.py:479 cdlapp\core\gui\main.py:494 cdlapp\plugins.py:168
+#: cdlapp\core\gui\main.py:479 cdlapp\core\gui\main.py:494
+#: cdlapp\plugins.py:168
 msgid "Information"
 msgstr "Information"
 
@@ -1806,7 +1813,7 @@ msgstr ""
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
 
-#: cdlapp\core\gui\panel\signal.py:35
+#: cdlapp\core\gui\panel\signal.py:39
 msgid "Signal panel"
 msgstr "Panneau des signaux"
 
@@ -1865,19 +1872,23 @@ msgstr "Taille de destination :"
 msgid "Binning"
 msgstr "Binning"
 
-#: cdlapp\core\gui\processor\image.py:221 cdlapp\core\gui\processor\signal.py:70
+#: cdlapp\core\gui\processor\image.py:221
+#: cdlapp\core\gui\processor\signal.py:70
 msgid "Extract ROI"
 msgstr "Extraire une ROI"
 
-#: cdlapp\core\gui\processor\image.py:228 cdlapp\core\gui\processor\signal.py:77
+#: cdlapp\core\gui\processor\image.py:228
+#: cdlapp\core\gui\processor\signal.py:77
 msgid "Swap axes"
 msgstr "Permuter les axes"
 
-#: cdlapp\core\gui\processor\image.py:245 cdlapp\core\gui\processor\image.py:255
+#: cdlapp\core\gui\processor\image.py:245
+#: cdlapp\core\gui\processor\image.py:255
 msgid "image to subtract"
 msgstr "image à soustraire"
 
-#: cdlapp\core\gui\processor\image.py:265 cdlapp\core\gui\processor\signal.py:114
+#: cdlapp\core\gui\processor\image.py:265
+#: cdlapp\core\gui\processor\signal.py:114
 msgid "divider"
 msgstr "le diviseur"
 
@@ -1893,67 +1904,70 @@ msgstr "l'image de champ plat"
 msgid "Flat field correction"
 msgstr "Correction de champ plat"
 
-#: cdlapp\core\gui\processor\image.py:403
+#: cdlapp\core\gui\processor\image.py:405
 msgid "Log correction"
 msgstr "Correction logarithmique"
 
-#: cdlapp\core\gui\processor\image.py:429
+#: cdlapp\core\gui\processor\image.py:431
 msgid "Rescale intensity"
 msgstr "Ajuster les niveaux"
 
-#: cdlapp\core\gui\processor\image.py:502 cdlapp\core\gui\processor\image.py:523
+#: cdlapp\core\gui\processor\image.py:506
+#: cdlapp\core\gui\processor\image.py:527
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
-#: cdlapp\core\gui\processor\image.py:539
+#: cdlapp\core\gui\processor\image.py:543
 msgid "White Top-Hat"
 msgstr "Top-Hat"
 
-#: cdlapp\core\gui\processor\image.py:551
+#: cdlapp\core\gui\processor\image.py:555
 msgid "Black Top-Hat"
 msgstr "Top-Hat dual"
 
-#: cdlapp\core\gui\processor\image.py:561
+#: cdlapp\core\gui\processor\image.py:567
 msgid "Erosion"
 msgstr "Erosion"
 
-#: cdlapp\core\gui\processor\image.py:571
+#: cdlapp\core\gui\processor\image.py:579
 msgid "Dilation"
 msgstr "Dilatation"
 
-#: cdlapp\core\gui\processor\image.py:581
+#: cdlapp\core\gui\processor\image.py:591
 msgid "Opening"
 msgstr "Ouverture"
 
-#: cdlapp\core\gui\processor\image.py:591
+#: cdlapp\core\gui\processor\image.py:603
 msgid "Closing"
 msgstr "Fermeture"
 
-#: cdlapp\core\gui\processor\image.py:750
+#: cdlapp\core\gui\processor\image.py:762
 msgid "Enclosing circle"
 msgstr "Cercle minimum"
 
-#: cdlapp\core\gui\processor\image.py:806 cdlapp\core\gui\processor\image.py:812
+#: cdlapp\core\gui\processor\image.py:818
+#: cdlapp\core\gui\processor\image.py:824
 msgid "Contour"
 msgstr "Contour"
 
-#: cdlapp\core\gui\processor\image.py:826
+#: cdlapp\core\gui\processor\image.py:838
 msgid "Hough circles"
 msgstr "Cercles de Hough"
 
-#: cdlapp\core\gui\processor\signal.py:94 cdlapp\core\gui\processor\signal.py:104
+#: cdlapp\core\gui\processor\signal.py:94
+#: cdlapp\core\gui\processor\signal.py:104
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
-#: cdlapp\core\gui\processor\signal.py:230
+#: cdlapp\core\gui\processor\signal.py:232
 msgid "iFFT"
 msgstr "iFFT"
 
-#: cdlapp\core\gui\processor\signal.py:297
+#: cdlapp\core\gui\processor\signal.py:299
 msgid "FWHM"
 msgstr "LMH"
 
-#: cdlapp\core\gui\processor\signal.py:303
+#: cdlapp\core\gui\processor\signal.py:305
 msgid "FW"
 msgstr "LH"
 
@@ -2331,7 +2345,7 @@ msgstr "Hauteur de l'image (nombre de lignes)"
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdlapp\core\model\image.py:729 cdlapp\tests\data.py:377
+#: cdlapp\core\model\image.py:729 cdlapp\tests\data.py:379
 msgid "Width"
 msgstr "Largeur"
 
@@ -2416,8 +2430,8 @@ msgstr "Phase"
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdlapp\core\model\signal.py:516 cdlapp\tests\data.py:256 cdlapp\tests\data.py:374
-#: cdlapp\widgets\h5browser.py:210
+#: cdlapp\core\model\signal.py:516 cdlapp\tests\data.py:256
+#: cdlapp\tests\data.py:376 cdlapp\widgets\h5browser.py:210
 msgid "Size"
 msgstr "Taille"
 
@@ -2583,15 +2597,15 @@ msgstr "Amplitude de la gaussienne 2D"
 msgid "Attenuation"
 msgstr "Atténuation"
 
-#: cdlapp\tests\data.py:375
+#: cdlapp\tests\data.py:377
 msgid "X<sub>center</sub>"
 msgstr "X<sub>centre</sub>"
 
-#: cdlapp\tests\data.py:376
+#: cdlapp\tests\data.py:378
 msgid "Y<sub>center</sub>"
 msgstr "Y<sub>centre</sub>"
 
-#: cdlapp\tests\data.py:379
+#: cdlapp\tests\data.py:381
 msgid "Intensity"
 msgstr "Intensité"
 
@@ -2668,31 +2682,32 @@ msgstr "Obtenir la liste des uuids"
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdlapp\tests\scenarios\demo.py:49 cdlapp\tests\scenarios\scenario_sig_app.py:115
+#: cdlapp\tests\scenarios\demo.py:49
+#: cdlapp\tests\scenarios\scenario_sig_app.py:115
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: cdlapp\utils\qthelpers.py:234
+#: cdlapp\utils\qthelpers.py:241
 msgid "Waiting: %s s"
 msgstr "En attente : %s s"
 
-#: cdlapp\utils\qthelpers.py:246
+#: cdlapp\utils\qthelpers.py:253
 msgid "Cancel"
 msgstr "Annuler"
 
-#: cdlapp\utils\qthelpers.py:261
+#: cdlapp\utils\qthelpers.py:268
 msgid "Error:"
 msgstr "Erreur:"
 
-#: cdlapp\utils\qthelpers.py:261 cdlapp\widgets\warningerror.py:107
+#: cdlapp\utils\qthelpers.py:268 cdlapp\widgets\warningerror.py:107
 msgid "Context"
 msgstr "Contexte"
 
-#: cdlapp\utils\qthelpers.py:306
+#: cdlapp\utils\qthelpers.py:313
 msgid "%s could not be opened:"
 msgstr "%s n'a pas pu être ouvert:"
 
-#: cdlapp\utils\qthelpers.py:308
+#: cdlapp\utils\qthelpers.py:315
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 

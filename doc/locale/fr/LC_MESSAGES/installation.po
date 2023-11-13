@@ -236,7 +236,7 @@ msgstr ""
 #~ msgid "$ python setup.py install"
 #~ msgstr ""
 
-#~ msgid "$ pip install --upgrade --no-deps cdl-1.7.0-py2.py3-none-any.whl"
+#~ msgid "$ pip install --upgrade --no-deps cdlapp-1.7.0-py2.py3-none-any.whl"
 #~ msgstr ""
 
 #~ msgid "Comment"

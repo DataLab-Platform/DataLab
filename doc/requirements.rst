@@ -1,4 +1,4 @@
-The :mod:`cdl` package requires the following Python modules:
+The :mod:`cdlapp` package requires the following Python modules:
 
 .. list-table::
     :header-rows: 1
