@@ -30,9 +30,9 @@ See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 the library and [changelog](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/CHANGELOG.md)
 for recent history of changes.
 
-### New in DataLab 1.0
+### New in DataLab 0.9
 
-New key features in DataLab 1.0:
+New key features in DataLab 0.9:
 
 * New process isolation feature to run computations safely in a separate process
 * New remote control features to interact with DataLab from Spyder, Jupyter or any IDE

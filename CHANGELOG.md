@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 1.0.0 ##
+## DataLab Version 0.9.0 ##
 
 New dependencies:
 

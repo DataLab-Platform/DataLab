@@ -4,11 +4,10 @@
 # (see cdlapp/LICENSE for details)
 
 """
-cdlapp.config
-----------
+DataLab configuration module
+----------------------------
 
-The `config` module handles `DataLab` configuration
-(options, images and icons).
+This module handles `DataLab` configuration (options, images and icons).
 """
 
 from __future__ import annotations

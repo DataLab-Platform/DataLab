@@ -43,7 +43,7 @@ Other tasks
 Past milestones
 ---------------
 
-DataLab 1.0
+DataLab 0.9
 ^^^^^^^^^^^
 
 * Python 3.11 is the new reference
