@@ -258,7 +258,7 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
     if ":" in what:
         port = int(what.split(":")[1].strip())
     if what == "gui":
-        # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel, cyclic-import
         from cdlapp.core.gui.main import CDLMainWindow
 
         with qth.cdl_app_context(exec_loop=True):

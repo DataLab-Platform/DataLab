@@ -16,7 +16,6 @@ import os
 import os.path as osp
 import shutil
 import sys
-import time
 import traceback
 from collections.abc import Generator
 from contextlib import contextmanager
