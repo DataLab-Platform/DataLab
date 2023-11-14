@@ -3,7 +3,7 @@ Overview
 
 This page presents briefly DataLab key features.
 
-.. figure:: ../images/DataLab-Screenshot.png
+.. figure:: ../images/DataLab-Screenshot-Theme.png
 
     DataLab supports dark and light mode depending on your OS settings
 

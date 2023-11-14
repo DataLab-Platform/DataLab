@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 11:13+0200\n"
+"POT-Creation-Date: 2023-11-14 13:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,7 @@ msgid "Past milestones"
 msgstr ""
 
 #: ../../dev/roadmap.rst:47
-msgid "DataLab 1.0"
+msgid "DataLab 0.9"
 msgstr ""
 
 #: ../../dev/roadmap.rst:49
@@ -284,3 +284,7 @@ msgstr ""
 
 #~ msgid "DataLab 0.9"
 #~ msgstr ""
+
+#~ msgid "DataLab 1.0"
+#~ msgstr ""
+

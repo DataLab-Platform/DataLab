@@ -1,7 +1,7 @@
 General features
 ================
 
-.. figure:: /images/DataLab-Screenshot-Image.png
+.. figure:: /images/DataLab-Screenshot.png
 
     DataLab main window
 

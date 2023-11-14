@@ -2,7 +2,7 @@ Command line features
 =====================
 
 Run DataLab
-----------------
+-----------
 
 To run DataLab from the command line, type the following::
 

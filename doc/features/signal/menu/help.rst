@@ -3,15 +3,10 @@
 
 .. image:: /images/shots/s_help.png
 
-Online documentation
-    Open the online documentation (english only):
+Online or Local documentation
+    Open the online or local documentation (english only for online version):
 
     .. image:: /images/shots/doc_online.png
-
-CHM documentation
-    Open the CHM documentation (french/english, Windows only):
-
-    .. image:: /images/shots/doc_chm.png
 
 Show log files
     Open DataLab log viewer
