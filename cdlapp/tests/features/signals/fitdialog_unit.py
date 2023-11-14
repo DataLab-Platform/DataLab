@@ -11,10 +11,11 @@ Testing fit dialogs: Gaussian, Lorentzian, Voigt, etc.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.algorithms.signal import peak_indexes
 from cdlapp.env import execenv
 from cdlapp.tests.data import GaussianNoiseParam, create_noisy_signal, get_test_signal
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.tests import get_default_test_name
 from cdlapp.widgets import fitdialog as fdlg
 

@@ -14,13 +14,11 @@ Module patching *guidata* and *plotpy* to adapt it to DataLab
 import sys
 import warnings
 
-import guidata.dataset
 import numpy as np
 import plotpy.items
 import plotpy.plot
 import plotpy.tools
 from guidata.configtools import get_icon
-from guidata.dataset.qtwidgets import DataSetEditDialog, DataSetGroupEditDialog
 from guidata.qthelpers import add_actions, create_action
 from plotpy._scaler import INTERP_NEAREST, _scale_rect
 from plotpy.mathutils.arrayfuncs import get_nan_range
@@ -33,7 +31,7 @@ from qwt import QwtScaleDraw
 
 from cdlapp.config import APP_NAME, _
 from cdlapp.core.model.signal import create_signal
-from cdlapp.utils.qthelpers import block_signals, exec_dialog
+from cdlapp.utils.qthelpers import block_signals
 
 
 def monkeypatch_method(cls, patch_name):
@@ -70,35 +68,6 @@ def monkeypatch_method(cls, patch_name):
         return func
 
     return decorator
-
-
-# TODO: Improve test coverage using the following two patches
-# (sometimes we had to skip DataSet edit method to avoid blocking GUI testing:
-# now it's possible to test those lines without blocking)
-
-
-#  Patching guidata.dataset.DataSet edit methods for automatic GUI testing
-@monkeypatch_method(guidata.dataset.DataSet, "DataSet")
-def edit(self, parent=None, apply=None, size=None):
-    """
-    Open a dialog box to edit data set
-        * parent: parent widget (default is None, meaning no parent)
-        * apply: apply callback (default is None)
-        * size: dialog size (QSize object or integer tuple (width, height))
-    """
-    icon = self.get_icon()
-    win = DataSetEditDialog(self, icon=icon, parent=parent, apply=apply, size=size)
-    return exec_dialog(win)
-
-
-#  Patching guidata.dataset.DataSet edit methods for automatic GUI testing
-@monkeypatch_method(guidata.dataset.DataSetGroup, "DataSetGroup")
-def edit(self, parent=None, apply=None, size=None):
-    """
-    Open a dialog box to edit data set
-    """
-    win = DataSetGroupEditDialog(self, parent=parent, apply=apply)
-    return exec_dialog(win)
 
 
 # Patching AnnotatedSegment "get_infos" method for a more compact text

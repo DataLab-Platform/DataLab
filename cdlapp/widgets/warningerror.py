@@ -11,14 +11,13 @@ import traceback
 
 from guidata.config import CONF
 from guidata.configtools import get_font
-from guidata.qthelpers import get_std_icon
+from guidata.qthelpers import exec_dialog, get_std_icon
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdlapp.config import Conf, _
 from cdlapp.utils.misc import go_to_error
-from cdlapp.utils.qthelpers import exec_dialog
 
 
 def insert_spaces(text: str, nbchars: int) -> str:

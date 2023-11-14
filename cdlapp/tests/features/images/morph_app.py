@@ -11,13 +11,13 @@ Morphology processing application test
 # guitest: show
 
 import cdlapp.param
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import get_test_image
 
 
 def test():
     """Run morphology application test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         win.showMaximized()
         panel = win.imagepanel
         panel.add_object(get_test_image("flower.npy"))

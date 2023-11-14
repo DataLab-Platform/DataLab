@@ -20,7 +20,7 @@ from cdlapp import app
 from cdlapp.config import Conf
 from cdlapp.env import execenv
 from cdlapp.utils.conf import CONF
-from cdlapp.utils.qthelpers import qt_app_context
+from cdlapp.utils.qthelpers import cdl_app_context
 from cdlapp.utils.tests import get_test_fnames
 
 SEC_MAIN = Conf.main
@@ -134,7 +134,7 @@ def test():
     for index, conf in enumerate(CONFIGS):
         name = f"CONFIG{index}"
         apply_conf(conf, name)
-        with qt_app_context(exec_loop=True) as qapp:
+        with cdl_app_context(exec_loop=True) as qapp:
             win = app.create(splash=False, h5files=h5files)
             qapp.processEvents()
             check_conf(conf, name, win, h5files)

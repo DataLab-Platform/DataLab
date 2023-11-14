@@ -261,7 +261,7 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
         # pylint: disable=import-outside-toplevel
         from cdlapp.core.gui.main import CDLMainWindow
 
-        with qth.qt_app_context(exec_loop=True):
+        with qth.cdl_app_context(exec_loop=True):
             try:
                 win = CDLMainWindow()
                 proxy = CDLProxy(win)

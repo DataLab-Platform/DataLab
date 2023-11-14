@@ -16,8 +16,8 @@ import numpy as np
 
 import cdlapp.obj
 import cdlapp.param
-from cdlapp.tests import cdl_app_context
 from cdlapp.tests import data as test_data
+from cdlapp.tests import test_cdl_app_context
 
 
 def create_image_with_resultshapes():
@@ -41,7 +41,7 @@ def test():
     obj1 = test_data.create_sincos_image()
     obj2 = create_image_with_resultshapes()
     obj2.roi = np.array([[10, 10, 60, 400]], int)
-    with cdl_app_context(console=False) as win:
+    with test_cdl_app_context(console=False) as win:
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)

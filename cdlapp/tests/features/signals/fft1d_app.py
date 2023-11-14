@@ -11,12 +11,12 @@ Signal FFT application test.
 # guitest: show
 
 from cdlapp.obj import SignalTypes, create_signal_from_param, new_signal_param
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 
 
 def test():
     """FFT application test."""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.signalpanel
         newparam = new_signal_param(stype=SignalTypes.COSINUS, size=10000)
         s1 = create_signal_from_param(newparam)

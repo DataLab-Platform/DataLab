@@ -27,17 +27,26 @@ from cdlapp.utils import tests
 
 
 @contextmanager
-def cdl_app_context(
+def test_cdl_app_context(
     size: tuple[int, int] = None,
     maximized: bool = False,
     save: bool = False,
     console: bool | None = None,
     exec_loop: bool = True,
 ) -> Generator[CDLMainWindow, None, None]:
-    """Context manager handling DataLab mainwindow creation and Qt event loop"""
+    """Context manager handling DataLab mainwindow creation and Qt event loop
+    with optional HDF5 file save and other options for testing purposes
+
+    Args:
+        size: mainwindow size (default: (950, 600))
+        maximized: whether to maximize mainwindow (default: False)
+        save: whether to save HDF5 file (default: False)
+        console: whether to show console (default: None)
+        exec_loop: whether to execute Qt event loop (default: True)
+    """
     if size is None:
         size = 950, 600
-    with qth.qt_app_context(exec_loop=exec_loop):
+    with qth.cdl_app_context(exec_loop=exec_loop):
         try:
             win = CDLMainWindow(console=console)
             if maximized:

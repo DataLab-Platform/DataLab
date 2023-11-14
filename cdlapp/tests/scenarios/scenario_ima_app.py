@@ -19,7 +19,7 @@ import cdlapp.param as dlp
 from cdlapp.config import Conf
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_peak2d_image, create_sincos_image
 from cdlapp.tests.features.common.newobject_unit import iterate_image_creation
 from cdlapp.tests.scenarios.scenario_sig_app import test_common_operations
@@ -165,7 +165,7 @@ def test() -> None:
     assert (
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
-    with cdl_app_context(save=True) as win:
+    with test_cdl_app_context(save=True) as win:
         execenv.print("Testing image features without process isolation...")
         win.set_process_isolation_enabled(False)
         test_image_features(win)

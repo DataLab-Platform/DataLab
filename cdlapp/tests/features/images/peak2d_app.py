@@ -14,13 +14,13 @@ Testing the following:
 # guitest: show
 
 import cdlapp.param
-from cdlapp.tests import cdl_app_context, take_plotwidget_screenshot
+from cdlapp.tests import take_plotwidget_screenshot, test_cdl_app_context
 from cdlapp.tests.data import create_peak2d_image
 
 
 def test():
     """Run 2D peak detection scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         ima = create_peak2d_image()
         panel.add_object(ima)

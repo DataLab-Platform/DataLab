@@ -29,12 +29,12 @@ from cdlapp.obj import (
     new_image_param,
     new_signal_param,
 )
-from cdlapp.tests import cdl_app_context, take_plotwidget_screenshot
+from cdlapp.tests import take_plotwidget_screenshot, test_cdl_app_context
 
 
 def test():
     """Run statistics unit test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         # === Signal statistics test ===
         panel = win.signalpanel
         snew = new_signal_param(_("Gaussian"), stype=SignalTypes.GAUSS)

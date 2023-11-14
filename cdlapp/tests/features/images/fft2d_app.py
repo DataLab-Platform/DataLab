@@ -11,12 +11,12 @@ Image FFT application test.
 # guitest: show
 
 from cdlapp.obj import ImageTypes, create_image_from_param, new_image_param
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 
 
 def test():
     """FFT application test."""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         newparam = new_image_param(itype=ImageTypes.GAUSS, width=100, height=100)
         i1 = create_image_from_param(newparam)

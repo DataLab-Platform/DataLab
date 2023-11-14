@@ -10,6 +10,7 @@ DataLab Visualization tools (based on PlotPy)
 import plotpy.items
 import plotpy.tools
 from guidata.configtools import get_icon
+from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.builder import make
 from plotpy.plot import (
     BasePlot,
@@ -20,7 +21,6 @@ from plotpy.plot import (
 )
 
 from cdlapp.config import _
-from cdlapp.utils.qthelpers import exec_dialog, qt_app_context
 from cdlapp.utils.tests import get_default_test_name
 
 TEST_NB = {}

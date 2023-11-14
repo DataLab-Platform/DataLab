@@ -19,7 +19,7 @@ import os
 from collections.abc import Callable
 from contextlib import contextmanager
 
-from guidata.qthelpers import win32_fix_title_bar_background
+from guidata.qthelpers import qt_app_context, qt_wait, win32_fix_title_bar_background
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
@@ -30,7 +30,6 @@ from cdlapp.proxy import RemoteCDLProxy
 from cdlapp.tests.features import embedded1_unit
 from cdlapp.tests.features.remoteclient_unit import multiple_commands
 from cdlapp.tests.features.utilities.logview_app import exec_script
-from cdlapp.utils.qthelpers import qt_app_context, qt_wait
 
 APP_NAME = _("Remote client test")
 
@@ -242,7 +241,7 @@ def test_remote_client():
     env = os.environ.copy()
     env[execenv.DONOTQUIT_ENV] = "1"
     exec_script(app.__file__, wait=False, env=env)
-    with qt_app_context(exec_loop=True, enable_logs=False):
+    with qt_app_context(exec_loop=True):
         window = HostWindow()
         window.resize(800, 800)
         window.show()

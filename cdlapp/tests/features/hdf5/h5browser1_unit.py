@@ -11,9 +11,10 @@ Try and open all HDF5 test data available.
 
 # guitest: show
 
+from guidata.qthelpers import exec_dialog, qt_app_context
+
 from cdlapp.env import execenv
 from cdlapp.tests.data import get_test_fnames
-from cdlapp.utils.qthelpers import exec_dialog, qt_app_context
 from cdlapp.widgets.h5browser import H5BrowserDialog
 
 

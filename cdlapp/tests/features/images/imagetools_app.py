@@ -15,20 +15,20 @@ Image tools application test:
 
 import os.path as osp
 
+from guidata.qthelpers import qt_wait
 from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
 import cdlapp.obj
 from cdlapp.patch import ZAxisLogTool, to_cdl
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_multigauss_image
-from cdlapp.utils.qthelpers import qt_wait
 
 
 def test():
     """Run image tools test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         newparam = cdlapp.obj.new_image_param(height=200, width=200)
         ima = create_multigauss_image(newparam)

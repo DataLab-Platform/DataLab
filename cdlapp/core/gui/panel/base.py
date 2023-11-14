@@ -55,7 +55,7 @@ import guidata.dataset.qtwidgets as gdq
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
-from guidata.qthelpers import add_actions
+from guidata.qthelpers import add_actions, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
 from plotpy.tools import (
@@ -77,7 +77,6 @@ from cdlapp.core.io.base import IOAction
 from cdlapp.core.model.base import ResultShape, items_to_json
 from cdlapp.utils.qthelpers import (
     create_progress_bar,
-    exec_dialog,
     qt_try_except,
     qt_try_loadsave_file,
     save_restore_stds,

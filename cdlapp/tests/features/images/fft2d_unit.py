@@ -12,11 +12,11 @@ Image FFT unit test.
 # guitest: show
 
 import numpy as np
+from guidata.qthelpers import qt_app_context
 
 from cdlapp.algorithms.image import z_fft, z_ifft
 from cdlapp.env import execenv
 from cdlapp.tests.data import RingParam, create_ring_image
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_images_side_by_side
 
 

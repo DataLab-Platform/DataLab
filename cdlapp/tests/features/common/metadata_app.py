@@ -22,7 +22,7 @@ from cdlapp.core.gui.panel.base import BaseDataPanel
 from cdlapp.core.gui.panel.image import ImagePanel
 from cdlapp.core.gui.panel.signal import SignalPanel
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_paracetamol_signal
 from cdlapp.tests.features.common import roi_app
 
@@ -59,7 +59,7 @@ def test_metadata_features(panel: BaseDataPanel):
 def test():
     """Run metadata application test scenario"""
     size = 200
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         execenv.print("Metadata application test:")
         # === Signal metadata features test ===
         panel = win.signalpanel

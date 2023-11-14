@@ -11,10 +11,11 @@ Testing DataLab specific formats.
 
 # guitest: show
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.core.io.image import funcs as image_funcs
 from cdlapp.env import execenv
 from cdlapp.obj import read_signal
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.tests import try_open_test_data
 from cdlapp.utils.vistools import view_curve_items, view_images
 

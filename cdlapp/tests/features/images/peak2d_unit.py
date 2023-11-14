@@ -13,12 +13,12 @@ Image peak detection test
 
 import time
 
+from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 from cdlapp.algorithms.image import get_2d_peaks_coords
 from cdlapp.env import execenv
 from cdlapp.tests.data import get_peak2d_data
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_image_items
 
 

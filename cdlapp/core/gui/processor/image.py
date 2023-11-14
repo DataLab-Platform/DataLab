@@ -16,6 +16,7 @@ from __future__ import annotations
 from collections.abc import Callable
 
 import numpy as np
+from guidata.qthelpers import exec_dialog
 from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
@@ -33,7 +34,7 @@ from cdlapp.config import APP_NAME, Conf, _
 from cdlapp.core.gui.processor.base import BaseProcessor
 from cdlapp.core.model.base import ShapeTypes
 from cdlapp.core.model.image import ImageObj
-from cdlapp.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
+from cdlapp.utils.qthelpers import create_progress_bar, qt_try_except
 
 
 class ImageProcessor(BaseProcessor):

@@ -10,11 +10,12 @@ Image peak detection test: testing algorithm limits
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: skip
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.algorithms.image import get_2d_peaks_coords
 from cdlapp.env import execenv
 from cdlapp.tests.data import get_peak2d_data
 from cdlapp.tests.features.images.peak2d_unit import exec_image_peak_detection_func
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 def peak2d_limit_test():

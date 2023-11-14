@@ -12,11 +12,11 @@ from __future__ import annotations
 import os.path as osp
 
 from guidata.configtools import get_icon
+from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 
 from cdlapp.config import APP_NAME, Conf, _, get_old_log_fname
 from cdlapp.env import execenv
-from cdlapp.utils.qthelpers import exec_dialog
 from cdlapp.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 

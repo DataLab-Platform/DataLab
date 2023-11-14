@@ -19,13 +19,13 @@ from qtpy import QtWidgets as QW
 
 from cdlapp.core.model.base import ANN_KEY
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
 from cdlapp.tests import data as test_data
+from cdlapp.tests import test_cdl_app_context
 
 
 def test():
     """Run image tools test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
 
         # Create image with annotations

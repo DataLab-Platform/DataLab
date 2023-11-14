@@ -12,13 +12,13 @@ Blob detection application test
 
 import cdlapp.param
 from cdlapp.obj import create_image
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import get_test_image
 
 
 def test():
     """Run blob detection application test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
         data = get_test_image("flower.npy").data

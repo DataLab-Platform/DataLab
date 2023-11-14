@@ -9,9 +9,10 @@ DataLab settings test
 
 # guitest: show
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.core.gui.settings import edit_settings
 from cdlapp.env import execenv
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 def test_edit_settings():

@@ -9,8 +9,9 @@ Macro editor test
 
 # guitest: show
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.core.gui.panel import macro
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 def test_macro_editor():

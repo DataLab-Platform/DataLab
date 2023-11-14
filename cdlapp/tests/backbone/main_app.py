@@ -17,13 +17,13 @@ import os
 
 from cdlapp.env import execenv
 from cdlapp.param import MovingMedianParam
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_paracetamol_signal
 
 
 def test():
     """Main window test"""
-    with cdl_app_context(console=False) as win:
+    with test_cdl_app_context(console=False) as win:
         # Switch from panel to panel
         for panelname in ("macro", "image", "signal"):
             win.switch_to_panel(panelname)

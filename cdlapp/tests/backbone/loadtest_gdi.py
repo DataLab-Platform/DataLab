@@ -26,7 +26,7 @@ import os
 import cdlapp.obj
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_sincos_image
 from cdlapp.tests.features.common.newobject_unit import iterate_image_creation
 from cdlapp.tests.scenarios.scenario_sig_app import test_common_operations
@@ -121,7 +121,7 @@ def test_gdi_count(win: CDLMainWindow) -> int | None:
 def load_test():
     """Load test."""
     execenv.unattended = True
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         gdi_count = []
         for iteration in range(4):
             execenv.print(f"Test iteration: {iteration}")

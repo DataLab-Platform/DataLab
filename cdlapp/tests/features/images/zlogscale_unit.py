@@ -12,11 +12,11 @@ Testing z-log scale tool feature.
 # guitest: show
 
 import numpy as np
+from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 from cdlapp import patch  # pylint: disable=unused-import
 from cdlapp.tests.data import create_2d_steps_data
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_image_items
 
 

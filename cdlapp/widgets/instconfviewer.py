@@ -16,12 +16,12 @@ import sys
 from subprocess import PIPE, Popen
 
 from guidata.configtools import get_icon
+from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 
 from cdlapp import __version__
 from cdlapp.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
 from cdlapp.utils import dephash
-from cdlapp.utils.qthelpers import exec_dialog
 from cdlapp.widgets.fileviewer import FileViewerWidget, get_title_contents
 
 

@@ -9,9 +9,9 @@ Error message box test
 
 # guitest: show
 
+from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
-from cdlapp.utils.qthelpers import exec_dialog, qt_app_context
 from cdlapp.widgets.warningerror import WarningErrorMessageBox
 
 

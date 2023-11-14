@@ -17,6 +17,7 @@ from multiprocessing import Pool
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
+from guidata.qthelpers import qt_app_context
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -24,7 +25,6 @@ from qtpy import QtWidgets as QW
 import cdlapp.obj
 from cdlapp.env import execenv
 from cdlapp.tests.data import create_2d_random, create_noisygauss_image
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 class MainWindow(QW.QMainWindow):

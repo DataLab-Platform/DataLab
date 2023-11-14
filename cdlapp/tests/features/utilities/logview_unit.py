@@ -9,7 +9,8 @@ Log viewer test
 
 # guitest: show
 
-from cdlapp.utils.qthelpers import qt_app_context
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.widgets.logviewer import exec_cdl_logviewer_dialog
 
 

@@ -11,6 +11,7 @@ DataLab Demo
 # pylint: disable=duplicate-code
 # guitest: show,skip
 
+from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
 import cdlapp.obj as dlo
@@ -18,7 +19,7 @@ import cdlapp.param as dlp
 from cdlapp.config import _, reset
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import (
     create_noisygauss_image,
     create_paracetamol_signal,
@@ -27,7 +28,6 @@ from cdlapp.tests.data import (
 )
 from cdlapp.tests.features.common.roi_app import create_test_image_with_roi
 from cdlapp.tests.scenarios.scenario_sig_app import test_common_operations
-from cdlapp.utils.qthelpers import qt_wait
 from cdlapp.widgets import fitdialog
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 4
@@ -149,7 +149,7 @@ def run():
     """Run demo"""
     reset()  # Reset configuration (remove configuration file and initialize it)
     execenv.enable_demo_mode(DELAY1)
-    with cdl_app_context(console=False) as win:
+    with test_cdl_app_context(console=False) as win:
         QW.QMessageBox.information(win, "Demo", "Click OK to start demo")
         test_signal_features(win)
         test_image_features(win)

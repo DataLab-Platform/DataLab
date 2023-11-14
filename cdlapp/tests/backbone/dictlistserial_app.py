@@ -15,7 +15,7 @@ import numpy as np
 
 from cdlapp.env import execenv
 from cdlapp.obj import create_image
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import get_test_image
 from cdlapp.utils.tests import temporary_directory
 
@@ -43,7 +43,7 @@ def test():
     """Dictionnary/List in metadata (de)serialization test"""
     execenv.unattended = True
     with temporary_directory() as tmpdir:
-        with cdl_app_context(console=False) as win:
+        with test_cdl_app_context(console=False) as win:
             panel = win.imagepanel
 
             data = get_test_image("flower.npy").data

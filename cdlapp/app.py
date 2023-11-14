@@ -17,7 +17,7 @@ from qtpy import QtWidgets as QW
 from cdlapp.config import Conf
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.env import execenv
-from cdlapp.utils.qthelpers import qt_app_context
+from cdlapp.utils.qthelpers import cdl_app_context
 
 
 def create(
@@ -61,7 +61,7 @@ def run(console=None, objects=None, h5files=None, size=None):
     if execenv.h5files:
         h5files = ([] if h5files is None else h5files) + execenv.h5files
 
-    with qt_app_context(exec_loop=True):
+    with cdl_app_context(exec_loop=True):
         window = create(
             splash=True, console=console, objects=objects, h5files=h5files, size=size
         )

@@ -22,13 +22,14 @@ from typing import Any
 
 import numpy as np
 import scipy.signal as sps
+from guidata.qthelpers import qt_app_context
 from plotpy.plot import PlotWindow
 from qtpy import QtWidgets as QW
 
 import cdlapp.obj
 from cdlapp.env import execenv
 from cdlapp.tests.data import create_2d_random, create_noisygauss_image
-from cdlapp.utils.qthelpers import create_progress_bar, qt_app_context
+from cdlapp.utils.qthelpers import create_progress_bar
 
 POOL: Pool = None
 

@@ -17,6 +17,7 @@ import re
 from collections.abc import Callable
 
 import numpy as np
+from guidata.qthelpers import exec_dialog
 
 import cdlapp.core.computation.base as cpb
 import cdlapp.core.computation.signal as cps
@@ -25,7 +26,7 @@ from cdlapp.config import Conf, _
 from cdlapp.core.gui.processor.base import BaseProcessor
 from cdlapp.core.model.base import ShapeTypes
 from cdlapp.core.model.signal import SignalObj, create_signal
-from cdlapp.utils.qthelpers import exec_dialog, qt_try_except
+from cdlapp.utils.qthelpers import qt_try_except
 from cdlapp.widgets import fitdialog, signalpeakdialog
 
 

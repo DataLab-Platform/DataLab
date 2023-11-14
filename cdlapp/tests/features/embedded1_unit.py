@@ -15,7 +15,11 @@ It is rebuilt from scratch when reopening application.
 
 import abc
 
-from guidata.qthelpers import get_std_icon, win32_fix_title_bar_background
+from guidata.qthelpers import (
+    get_std_icon,
+    qt_app_context,
+    win32_fix_title_bar_background,
+)
 from guidata.widgets.codeeditor import CodeEditor
 from qtpy import QtWidgets as QW
 
@@ -23,7 +27,6 @@ import cdlapp.obj
 from cdlapp.config import _
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.tests import data as test_data
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 class HostWidget(QW.QWidget):
@@ -246,7 +249,7 @@ class HostWindow(AbstractHostWindow):
 
 def test_embedded_feature(klass):
     """Testing embedded feature"""
-    with qt_app_context(exec_loop=True, enable_logs=False):
+    with qt_app_context(exec_loop=True):
         window = klass()
         window.resize(800, 800)
         window.show()

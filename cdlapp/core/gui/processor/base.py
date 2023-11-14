@@ -26,6 +26,7 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
+from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
@@ -36,7 +37,7 @@ from cdlapp.core.computation.base import ROIDataParam
 from cdlapp.core.gui.processor.catcher import CompOut, wng_err_func
 from cdlapp.core.model.base import ResultShape, ShapeTypes
 from cdlapp.utils import misc
-from cdlapp.utils.qthelpers import create_progress_bar, exec_dialog, qt_try_except
+from cdlapp.utils.qthelpers import create_progress_bar, qt_try_except
 from cdlapp.widgets.warningerror import show_warning_error
 
 if TYPE_CHECKING:  # pragma: no cover

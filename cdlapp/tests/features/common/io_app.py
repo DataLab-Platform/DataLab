@@ -19,7 +19,7 @@ from cdlapp.core.io.base import BaseIORegistry, IOAction
 from cdlapp.core.io.image import ImageIORegistry
 from cdlapp.core.io.signal import SignalIORegistry
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.utils.tests import get_test_fnames, temporary_directory
 
 
@@ -58,7 +58,7 @@ def __test_func(
 
 def test() -> None:
     """Run image tools test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         execenv.print("I/O application test:")
         __test_func("Signals", win.signalpanel, SignalIORegistry, "curve_formats/*.*")
         __test_func("Images", win.imagepanel, ImageIORegistry, "image_formats/*.*")

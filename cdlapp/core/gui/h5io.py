@@ -12,6 +12,7 @@ from __future__ import annotations
 import os.path as osp
 from typing import TYPE_CHECKING
 
+from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 
 from cdlapp.config import _
@@ -19,11 +20,7 @@ from cdlapp.core.io.h5 import H5Importer
 from cdlapp.core.io.native import NativeH5Reader, NativeH5Writer
 from cdlapp.core.model.signal import SignalObj
 from cdlapp.env import execenv
-from cdlapp.utils.qthelpers import (
-    create_progress_bar,
-    exec_dialog,
-    qt_try_loadsave_file,
-)
+from cdlapp.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdlapp.widgets.h5browser import H5BrowserDialog
 
 if TYPE_CHECKING:  # pragma: no cover

@@ -22,8 +22,8 @@ import numpy as np
 
 from cdlapp.config import Conf
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
 from cdlapp.tests import data as test_data
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.utils import tests
 
 
@@ -38,7 +38,7 @@ def test():
     execenv.unattended = True
     with tests.temporary_directory() as tmpdir:
         fname = osp.join(tmpdir, "test.json")
-        with cdl_app_context() as win:
+        with test_cdl_app_context() as win:
             panel = win.imagepanel
             ima = test_data.create_annotated_image()
             for mshape in test_data.create_resultshapes():

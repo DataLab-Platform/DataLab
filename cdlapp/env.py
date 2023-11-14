@@ -15,6 +15,8 @@ import pprint
 import sys
 from typing import Any
 
+from guidata.env import ExecEnv as GuiDataExecEnv
+
 # We could import DEBUG from cdlapp.config, but is it really worth it?
 DEBUG = os.environ.get("DEBUG", "").lower() in ("1", "true")
 
@@ -135,10 +137,10 @@ class CDLExecEnv:
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "xmlrpcport"
     DONOTQUIT_ENV = "CDL_DO_NOT_QUIT"
-    UNATTENDED_ENV = "CDL_UNATTENDED"
-    VERBOSE_ENV = "CDL_VERBOSE"
-    SCREENSHOT_ENV = "CDL_SCREENSHOT"
-    DELAY_ENV = "CDL_DELAY"
+    UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
+    VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
+    SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
+    DELAY_ENV = GuiDataExecEnv.DELAY_ENV
     XMLRPCPORT_ENV = "CDL_XMLRPCPORT"
     CATCHER_TEST_ENV = "CDL_CATCHER_TEST"
 

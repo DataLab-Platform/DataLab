@@ -12,10 +12,10 @@ Simple image dialog for testing all image tools available in DataLab
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 from cdlapp.tests.data import create_noisygauss_image
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_image_items
 
 

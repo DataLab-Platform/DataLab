@@ -84,10 +84,17 @@ def remove_empty_log_file(fname: str) -> None:
 
 
 @contextmanager
-def qt_app_context(
+def cdl_app_context(
     exec_loop=False, enable_logs=True
 ) -> Generator[QW.QApplication, None, None]:
-    """Context manager handling Qt application creation and persistance"""
+    """DataLab Qt application context manager, handling Qt application creation
+    and persistance, faulthandler/traceback logging features, screenshot mode
+    and unattended mode.
+
+    Args:
+        exec_loop: whether to execute Qt event loop (default: False)
+        enable_logs: whether to enable logs (default: True)
+    """
     global QAPP_INSTANCE  # pylint: disable=global-statement
     if QAPP_INSTANCE is None:
         QAPP_INSTANCE = guidata.qapplication()
@@ -167,82 +174,6 @@ def try_or_log_error(context: str) -> Generator[None, None, None]:
         Conf.main.traceback_log_available.set(True)
     finally:
         pass
-
-
-def close_dialog_and_quit(widget, screenshot=False):
-    """Close QDialog and quit Qt event loop"""
-    wname = widget.objectName()
-    if screenshot and wname and widget.isVisible():  # pragma: no cover
-        grab_save_window(widget, wname.lower())
-    widget.done(QW.QDialog.Accepted)
-    # QW.QApplication.instance().quit()
-
-
-def exec_dialog(dlg: QW.QDialog) -> int:
-    """Run QDialog Qt execution loop without blocking,
-    depending on environment test mode"""
-    if execenv.unattended or execenv.screenshot:
-        QC.QTimer.singleShot(
-            execenv.delay * 1000,
-            lambda: close_dialog_and_quit(dlg, screenshot=execenv.screenshot),
-        )
-    delete_later = not dlg.testAttribute(QC.Qt.WA_DeleteOnClose)
-    result = dlg.exec()
-    if delete_later:
-        dlg.deleteLater()
-    return result
-
-
-class TopMessageBox(QW.QWidget):
-    """Widget containing a message box, shown on top of all windows"""
-
-    def __init__(self, parent: QW.QWidget | None = None) -> None:
-        super().__init__(parent)
-        self.__label = QW.QLabel()
-        font = self.__label.font()
-        font.setPointSize(20)
-        self.__label.setFont(font)
-        self.__label.setAlignment(QC.Qt.AlignCenter)
-        layout = QW.QVBoxLayout()
-        layout.addWidget(self.__label)
-        self.setLayout(layout)
-        self.setWindowFlags(QC.Qt.WindowStaysOnTopHint | QC.Qt.SplashScreen)
-
-    def set_text(self, text: str) -> None:
-        """Set message box text"""
-        self.__label.setText(text)
-
-
-def qt_wait(
-    timeout: float,
-    except_unattended: bool = False,
-    show_message: bool = False,
-    parent: QW.QWidget | None = None,
-) -> None:  # pragma: no cover
-    """Freeze GUI during timeout (seconds) while processing Qt events.
-
-    Args:
-        timeout: timeout in seconds
-        except_unattended: if True, do not wait if unattended mode is enabled
-        show_message: if True, show a message box with a timeout
-        parent: parent widget of the message box
-    """
-    if except_unattended and execenv.unattended:
-        return
-    start = time.time()
-    msgbox = None
-    if show_message:
-        #  Show a message box with a timeout
-        msgbox = TopMessageBox(parent)
-        msgbox.show()
-    while time.time() <= start + timeout:
-        time.sleep(0.01)
-        if msgbox is not None:
-            msgbox.set_text(_("Waiting: %s s") % int(timeout - (time.time() - start)))
-        QW.QApplication.processEvents()
-    if msgbox is not None:
-        msgbox.close()
-        msgbox.deleteLater()
 
 
 @contextmanager

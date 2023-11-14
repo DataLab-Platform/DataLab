@@ -12,9 +12,10 @@ Testing peak detection dialog box.
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from guidata.qthelpers import exec_dialog, qt_app_context
+
 from cdlapp.env import execenv
 from cdlapp.tests.data import get_test_signal
-from cdlapp.utils.qthelpers import exec_dialog, qt_app_context
 from cdlapp.widgets.signalpeakdialog import SignalPeakDetectionDialog
 
 

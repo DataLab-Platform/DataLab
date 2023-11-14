@@ -22,7 +22,7 @@ import numpy as np
 import cdlapp.obj as dlo
 import cdlapp.param as dlp
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_multigauss_image, create_paracetamol_signal
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -90,7 +90,7 @@ def print_obj_shapes(obj):
 def test():
     """Run ROI application test scenario"""
     size = 200
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         execenv.print("ROI application test:")
         # === Signal ROI extraction test ===
         panel = win.signalpanel

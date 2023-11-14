@@ -12,7 +12,7 @@ Contour finding application test
 
 import cdlapp.obj
 import cdlapp.param
-from cdlapp.tests import cdl_app_context, take_plotwidget_screenshot
+from cdlapp.tests import take_plotwidget_screenshot, test_cdl_app_context
 from cdlapp.tests.data import create_multigauss_image
 from cdlapp.tests.features.common.roi_app import create_test_image_with_roi
 
@@ -20,7 +20,7 @@ from cdlapp.tests.features.common.roi_app import create_test_image_with_roi
 def test():
     """Run contour finding application test scenario"""
     newparam = cdlapp.obj.new_image_param(height=200, width=200)
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         ima1 = create_multigauss_image(newparam)
         panel.add_object(ima1)

@@ -17,6 +17,8 @@ from __future__ import annotations
 
 from collections.abc import Generator
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.env import execenv
 from cdlapp.obj import (
     Gauss2DParam,
@@ -32,7 +34,6 @@ from cdlapp.obj import (
     new_image_param,
     new_signal_param,
 )
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_curves, view_images
 
 

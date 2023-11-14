@@ -29,7 +29,7 @@ import os.path as osp
 
 from cdlapp.env import execenv
 from cdlapp.param import ClipParam
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdlapp.tests.scenarios import scenario_mac_app
 from cdlapp.utils.misc import save_html_diff
@@ -39,7 +39,7 @@ from cdlapp.utils.tests import temporary_directory
 def test():
     """Example of high-level test scenario with HDF5 file"""
     with temporary_directory() as tmpdir:
-        with cdl_app_context(console=False) as win:
+        with test_cdl_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel
             sig1 = create_paracetamol_signal()

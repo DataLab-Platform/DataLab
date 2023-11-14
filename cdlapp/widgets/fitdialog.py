@@ -10,13 +10,13 @@
 
 import numpy as np
 from guidata.configtools import get_icon
+from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 
 from cdlapp.algorithms import fit
 from cdlapp.algorithms.signal import xpeak
 from cdlapp.config import _
-from cdlapp.utils.qthelpers import exec_dialog
 from cdlapp.utils.tests import get_default_test_name
 
 

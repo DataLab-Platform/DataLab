@@ -23,7 +23,7 @@ from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.core.gui.panel.image import ImagePanel
 from cdlapp.core.gui.panel.signal import SignalPanel
 from cdlapp.env import execenv
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 from cdlapp.tests.data import create_paracetamol_signal
 from cdlapp.tests.features.common.newobject_unit import iterate_signal_creation
 from cdlapp.widgets import fitdialog
@@ -168,7 +168,7 @@ def test() -> None:
     assert (
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
-    with cdl_app_context(save=True) as win:
+    with test_cdl_app_context(save=True) as win:
         execenv.print("Testing signal features without process isolation...")
         win.set_process_isolation_enabled(False)
         test_signal_features(win)

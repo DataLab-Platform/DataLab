@@ -15,10 +15,10 @@ import os
 
 import numpy as np
 import psutil
+from guidata.qthelpers import qt_app_context
 
 from cdlapp.env import execenv
 from cdlapp.tests.features.embedded1_unit import HostWindow
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_curves
 
 

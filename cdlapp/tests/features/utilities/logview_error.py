@@ -9,9 +9,10 @@ Log viewer test: raise an exception and create a seg fault in DataLab
 
 # guitest: skip
 
+from guidata.qthelpers import qt_app_context
+
 from cdlapp.core.gui.main import CDLMainWindow
 from cdlapp.env import execenv
-from cdlapp.utils.qthelpers import qt_app_context
 
 
 def error():

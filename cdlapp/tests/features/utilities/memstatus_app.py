@@ -15,14 +15,14 @@ import psutil
 from cdlapp.config import Conf
 from cdlapp.env import execenv
 from cdlapp.obj import Gauss2DParam, ImageTypes, new_image_param
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 
 
 def test_memory_alarm(threshold):
     """Memory alarm test"""
     Conf.main.available_memory_threshold.set(threshold)
     rng = np.random.default_rng()
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
         win.memorystatus.update_status()  # Force memory status update
         newparam = new_image_param(itype=ImageTypes.GAUSS)

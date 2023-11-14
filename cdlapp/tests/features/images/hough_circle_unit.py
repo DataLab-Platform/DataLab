@@ -12,13 +12,13 @@ Image peak detection test using circle Hough transform
 # guitest: show
 
 import numpy as np
+from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 from skimage.feature import canny
 
 from cdlapp.algorithms.image import get_hough_circle_peaks
 from cdlapp.env import execenv
 from cdlapp.tests.data import get_peak2d_data
-from cdlapp.utils.qthelpers import qt_app_context
 from cdlapp.utils.vistools import view_image_items
 
 

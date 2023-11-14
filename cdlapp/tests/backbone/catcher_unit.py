@@ -21,8 +21,8 @@ import warnings
 from cdlapp.config import Conf
 from cdlapp.env import execenv
 from cdlapp.obj import SignalObj
-from cdlapp.tests import cdl_app_context
 from cdlapp.tests import data as test_data
+from cdlapp.tests import test_cdl_app_context
 
 
 def comp_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argument
@@ -50,7 +50,7 @@ def comp_no_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argume
 def test_catcher():
     """Catch error and warning test"""
     execenv.catcher_test = True
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.signalpanel
         sig = test_data.create_paracetamol_signal()
         panel.add_object(sig)

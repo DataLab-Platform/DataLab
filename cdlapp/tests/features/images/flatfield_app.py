@@ -17,12 +17,12 @@ Testing the following:
 from cdlapp.config import _
 from cdlapp.obj import Gauss2DParam, ImageTypes, UniformRandomParam, new_image_param
 from cdlapp.param import FlatFieldParam
-from cdlapp.tests import cdl_app_context
+from cdlapp.tests import test_cdl_app_context
 
 
 def test():
     """Run flat field test scenario"""
-    with cdl_app_context() as win:
+    with test_cdl_app_context() as win:
         panel = win.imagepanel
 
         ima0 = panel.new_object(
