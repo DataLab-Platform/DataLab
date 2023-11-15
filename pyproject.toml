@@ -43,6 +43,10 @@ dependencies = [
 ]
 dynamic = ["version"]
 
+[project.urls]
+Homepage = "https://codra-ingenierie-informatique.github.io/DataLab/"
+Documentation = "https://cdlapp.readthedocs.io/en/latest/"
+
 [project.scripts]
 cdlapp-alltests = "cdlapp.tests.all_tests:run"
 
