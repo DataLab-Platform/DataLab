@@ -374,6 +374,30 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         panel.delete_metadata(refresh_plot)
 
     @remote_controlled
+    def get_object_shapes(
+        self,
+        index: int | None = None,
+        group_index: int | None = None,
+        panel: str | None = None,
+    ) -> list:
+        """Get plot item shapes associated to object (signal/image).
+
+        Args:
+            index: Object index in current panel. Defaults to None.
+            group_index: Group index. Defaults to None.
+            panel: Panel name. Defaults to None.
+
+        If ``index`` is not specified, returns the currently selected object.
+        If ``group_index`` is not specified, return an object from the current group.
+        If ``panel`` is not specified, return an object from the current panel.
+
+        Returns:
+            List of plot item shapes
+        """
+        obj = self.get_object(index, group_index, panel)
+        return list(obj.iterate_shape_items(editable=False))
+
+    @remote_controlled
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True, panel: str | None = None
     ) -> None:

@@ -519,6 +519,30 @@ class RemoteServer(QC.QThread):
         return dataset_to_json(self.win.get_object_from_uuid(oid, panel))
 
     @remote_call
+    def get_object_shapes(
+        self,
+        index: int | None = None,
+        group_index: int | None = None,
+        panel: str | None = None,
+    ) -> str | None:
+        """Get plot item shapes associated to object (signal/image).
+
+        Args:
+            index: Object index in current panel. Defaults to None.
+            group_index: Group index. Defaults to None.
+            panel: Panel name. Defaults to None.
+
+        If ``index`` is not specified, returns the currently selected object.
+        If ``group_index`` is not specified, return an object from the current group.
+        If ``panel`` is not specified, return an object from the current panel.
+
+        Returns:
+            JSON string of annotation items or None if no items
+        """
+        items = self.win.get_object_shapes(index, group_index, panel)
+        return items_to_json(items)
+
+    @remote_call
     def add_annotations_from_items(
         self, items_json: str, refresh_plot: bool = True, panel: str | None = None
     ) -> None:
@@ -843,6 +867,29 @@ class RemoteClient(BaseProxy):
         """
         param_data = self._cdl.get_object_from_uuid(oid, panel)
         return json_to_dataset(param_data)
+
+    def get_object_shapes(
+        self,
+        index: int | None = None,
+        group_index: int | None = None,
+        panel: str | None = None,
+    ) -> list:
+        """Get plot item shapes associated to object (signal/image).
+
+        Args:
+            index: Object index in current panel. Defaults to None.
+            group_index: Group index. Defaults to None.
+            panel: Panel name. Defaults to None.
+
+        If ``index`` is not specified, returns the currently selected object.
+        If ``group_index`` is not specified, return an object from the current group.
+        If ``panel`` is not specified, return an object from the current panel.
+
+        Returns:
+            List of plot item shapes
+        """
+        items_json = self._cdl.get_object_shapes(index, group_index, panel)
+        return json_to_items(items_json)
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True, panel: str | None = None
