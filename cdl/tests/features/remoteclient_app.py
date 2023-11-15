@@ -30,6 +30,7 @@ from cdl.proxy import RemoteCDLProxy
 from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
+from cdl.utils.qthelpers import bring_to_front
 
 APP_NAME = _("Remote client test")
 
@@ -241,7 +242,7 @@ def test_remote_client():
     env = os.environ.copy()
     env[execenv.DONOTQUIT_ENV] = "1"
     exec_script(app.__file__, wait=False, env=env)
-    with qt_app_context(exec_loop=True):
+    with qt_app_context(exec_loop=True) as qapp:
         window = HostWindow()
         window.resize(800, 800)
         window.show()
@@ -251,6 +252,9 @@ def test_remote_client():
             window.init_cdl()
             with qt_wait_print(dt, "Executing multiple commands"):
                 window.exec_multiple_cmd()
+            bring_to_front(window)
+            with qt_wait_print(dt, "Raising DataLab window"):
+                window.raise_cdl()
             with qt_wait_print(dt, "Getting object titles"):
                 window.get_object_titles()
             with qt_wait_print(dt, "Getting object uuids"):

@@ -27,7 +27,7 @@ class HostWindow(embedded1_unit.AbstractHostWindow):
             self.cdl.show()
         else:
             self.cdl.show()
-            self.cdl.raise_()
+            self.cdl.raise_window()
         self.host.log("=> Shown DataLab window")
 
     def close_cdl(self) -> None:

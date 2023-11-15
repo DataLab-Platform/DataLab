@@ -142,6 +142,7 @@ class RemoteServer(QC.QThread):
 
     SIG_SERVER_PORT = QC.Signal(int)
     SIG_CLOSE_APP = QC.Signal()
+    SIG_RAISE_WINDOW = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
     SIG_OPEN_OBJECT = QC.Signal(str)
     SIG_SELECT_OBJECTS = QC.Signal(list, int, str)
@@ -162,6 +163,7 @@ class RemoteServer(QC.QThread):
         self.win = win
         win.SIG_READY.connect(self.cdl_is_ready)
         self.SIG_CLOSE_APP.connect(win.close)
+        self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
         self.SIG_OPEN_OBJECT.connect(win.open_object)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
@@ -232,6 +234,10 @@ class RemoteServer(QC.QThread):
     def close_application(self) -> None:
         """Close DataLab application"""
         self.SIG_CLOSE_APP.emit()
+
+    def raise_window(self) -> None:
+        """Raise DataLab window"""
+        self.SIG_RAISE_WINDOW.emit()
 
     @remote_call
     def switch_to_panel(self, panel: str) -> None:

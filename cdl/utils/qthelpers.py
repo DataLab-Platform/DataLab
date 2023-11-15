@@ -27,14 +27,7 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdl.config import (
-    APP_NAME,
-    DATETIME_FORMAT,
-    SHOTPATH,
-    Conf,
-    _,
-    get_old_log_fname,
-)
+from cdl.config import APP_NAME, DATETIME_FORMAT, SHOTPATH, Conf, _, get_old_log_fname
 from cdl.env import execenv
 from cdl.utils.misc import to_string
 
@@ -309,3 +302,19 @@ def create_menu_button(
     if menu is not None:
         button.setMenu(menu)
     return button
+
+
+def bring_to_front(window: QW.QWidget) -> None:
+    """Bring window to front
+
+    Args:
+        window: Window to bring to front
+    """
+    if sys.platform == "win32":
+        eflags = window.windowFlags()
+        window.setWindowFlags(eflags | QC.Qt.WindowStaysOnTopHint)
+        window.show()
+        window.setWindowFlags(eflags)
+        window.show()
+    window.raise_()
+    window.activateWindow()

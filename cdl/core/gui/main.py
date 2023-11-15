@@ -59,6 +59,7 @@ from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
 from cdl.utils.misc import go_to_error
+from cdl.utils.qthelpers import bring_to_front
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -1213,6 +1214,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def close_application(self) -> None:  # Implementing AbstractCDLControl interface
         """Close DataLab application"""
         self.close()
+
+    def raise_window(self) -> None:  # Implementing AbstractCDLControl interface
+        """Raise DataLab window"""
+        bring_to_front(self)
 
     def add_signal(
         self,

@@ -66,6 +66,10 @@ class RemoteClient(object):
         """Close DataLab application"""
         self.serverproxy.close_application()
 
+    def raise_window(self):
+        """Raise DataLab window"""
+        self.serverproxy.raise_window()
+
     def switch_to_panel(self, panel):
         """Switch to panel"""
         self.serverproxy.switch_to_panel(panel)
