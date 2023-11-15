@@ -337,13 +337,12 @@ msgstr ""
 #~ msgid "DataLab 1.0"
 #~ msgstr ""
 
-#~ msgid "Image computing results (`cdlapp.model.base.ResultShape`):"
+#~ msgid "Image computing results (`cdl.model.base.ResultShape`):"
 #~ msgstr ""
 
 #~ msgid ""
 #~ "See \"TODO\" comment just above "
-#~ "``cdlapp.model.base.ResultShape`` class definition "
+#~ "``cdl.model.base.ResultShape`` class definition "
 #~ "for more details about how to "
 #~ "implement this feature."
 #~ msgstr ""
-

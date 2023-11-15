@@ -11,9 +11,9 @@ without internet connection like the Debian package management infrastructure).
 
 from guidata.utils.genreqs import gen_module_req_rst  # noqa: E402
 
-import cdlapp
+import cdl
 
 if __name__ == "__main__":
     print("Updating requirements.rst file...", end=" ")
-    gen_module_req_rst(cdlapp, ["Python>=3.8", "PyQt5>=5.11"])
+    gen_module_req_rst(cdl, ["Python>=3.8", "PyQt5>=5.11"])
     print("done.")

@@ -196,7 +196,7 @@ Changes:
   * When multiple images are selected, the first image LUT range is applied to all
 * "View in a new window": now opens non-modal dialogs, thus allowing to visualize
   multiple signals or images in separate windows
-* Added demo mode (from command line, simply run: cdlapp-demo)
+* Added demo mode (from command line, simply run: cdl-demo)
 * Command line option --h5 is now a positionnal argument (h5)
 * Added command line option -b (or --h5browser) to browse a HDF5 file at startup
 * Added command line option --version to show DataLab version
@@ -327,7 +327,7 @@ Other changes (on existing features):
   * Peak detection: added minimal distance parameter
   * Fit dialog / plot: do auto scale at startup
   * Peak detection dialog: preselect horizontal cursor at startup
-* `cdlapp.core.gui` code refactoring: added subpackage `core.gui.processor`
+* `cdl.core.gui` code refactoring: added subpackage `core.gui.processor`
 * Added "Browse HDF5" action to main window ("Open HDF5" now imports all data)
 
 Bug fixes:

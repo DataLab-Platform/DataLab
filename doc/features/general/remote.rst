@@ -12,7 +12,7 @@ DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other
 IDE, or even a Jupyter Notebook) that runs a Python script. It allows to
 connect to a running DataLab instance, adds a signal and an image, and then
 runs calculations. This feature is exposed by the `RemoteCDLProxy` class that
-is provided in module ``cdlapp.proxy``.
+is provided in module ``cdl.proxy``.
 
 From a third-party application
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -64,12 +64,12 @@ Supported features are the following:
 Some examples are provided to help implementing such a communication
 between your application and DataLab:
 
-  - See module: ``cdlapp.tests.remoteclient_app``
-  - See module: ``cdlapp.tests.remoteclient_unit``
+  - See module: ``cdl.tests.remoteclient_app``
+  - See module: ``cdl.tests.remoteclient_unit``
 
 .. figure:: /images/shots/remote_control_test.png
 
-    Screenshot of remote client application test (``cdlapp.tests.remoteclient_app``)
+    Screenshot of remote client application test (``cdl.tests.remoteclient_app``)
 
 Examples
 ^^^^^^^^
@@ -90,7 +90,7 @@ Here is a Python 2.7 reimplementation of this class:
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: cdlapp.core.remote
+.. automodule:: cdl.core.remote
     :members: RemoteClient
 
 Public API: additional methods
@@ -101,10 +101,10 @@ may be completed with additional methods which are dynamically added at
 runtime. This mechanism allows to access the methods of the "processor"
 objects of DataLab.
 
-.. automodule:: cdlapp.core.gui.processor.signal
+.. automodule:: cdl.core.gui.processor.signal
     :members:
 
-.. automodule:: cdlapp.core.gui.processor.image
+.. automodule:: cdl.core.gui.processor.image
     :members:
 
 

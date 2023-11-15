@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Licensed under the terms of the BSD 3-Clause
-# (see cdlapp/LICENSE for details)
+# (see cdl/LICENSE for details)
 
 """
 DataLab remote controlling class for Python 2.7

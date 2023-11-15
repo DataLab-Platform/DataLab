@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 
 #: ../../dev/roadmap.rst:16
-msgid "Image computing results (`cdlapp.model.base.ResultShape`):"
+msgid "Image computing results (`cdl.model.base.ResultShape`):"
 msgstr ""
 
 #: ../../dev/roadmap.rst:18
@@ -64,7 +64,7 @@ msgstr ""
 
 #: ../../dev/roadmap.rst:24
 msgid ""
-"See \"TODO\" comment just above ``cdlapp.model.base.ResultShape`` class "
+"See \"TODO\" comment just above ``cdl.model.base.ResultShape`` class "
 "definition for more details about how to implement this feature."
 msgstr ""
 
@@ -287,4 +287,3 @@ msgstr ""
 
 #~ msgid "DataLab 1.0"
 #~ msgstr ""
-

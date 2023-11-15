@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=cdlapp
+Name=cdl
 GenericName=DataLab
 Comment=Run DataLab, the Python Signal and image processing software
-TryExec=cdlapp
-Exec=cdlapp
+TryExec=cdl
+Exec=cdl
 Icon=DataLab.svg
 Categories=Education;Science;Physics;

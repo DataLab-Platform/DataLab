@@ -1,4 +1,4 @@
-The :mod:`cdlapp` package requires the following Python modules:
+The :mod:`cdl` package requires the following Python modules:
 
 .. list-table::
     :header-rows: 1
@@ -9,37 +9,37 @@ The :mod:`cdlapp` package requires the following Python modules:
       - Summary
     * - Python
       - >=3.8, <4
-      - 
-    * - h5py 
+      -
+    * - h5py
       - >= 3.0
-      - 
-    * - NumPy 
+      -
+    * - NumPy
       - >= 1.21
-      - 
-    * - SciPy 
+      -
+    * - SciPy
       - >= 1.7
-      - 
-    * - scikit-image 
+      -
+    * - scikit-image
       - >= 0.18
-      - 
-    * - opencv-python 
+      -
+    * - opencv-python
       - >= 4.5
-      - 
-    * - PyWavelets 
+      -
+    * - PyWavelets
       - >= 1.1
-      - 
-    * - psutil 
+      -
+    * - psutil
       - >= 5.5
-      - 
-    * - guidata 
+      -
+    * - guidata
       - >= 3.1
-      - 
-    * - plotpy 
+      -
+    * - plotpy
       - >= 2.0
-      - 
-    * - QtPy 
+      -
+    * - QtPy
       - >= 1.9
-      - 
+      -
     * - PyQt5
       - >=5.11
       - Python bindings for the Qt cross platform application toolkit
@@ -54,16 +54,16 @@ Optional modules for development:
       - Version
       - Summary
     * - black
-      - 
+      -
       - The uncompromising code formatter.
     * - isort
-      - 
+      -
       - A Python utility / library to sort Python imports.
     * - pylint
-      - 
+      -
       - python code static checker
     * - Coverage
-      - 
+      -
       - Code coverage measurement for Python
 
 Optional modules for building the documentation:
@@ -76,14 +76,14 @@ Optional modules for building the documentation:
       - Version
       - Summary
     * - PyQt5
-      - 
+      -
       - Python bindings for the Qt cross platform application toolkit
     * - sphinx
-      - 
+      -
       - Python documentation generator
     * - sphinx_intl
-      - 
+      -
       - Sphinx utility that make it easy to translate and to apply translation.
     * - pydata-sphinx-theme
-      - 
+      -
       - Bootstrap-based Sphinx theme from the PyData community

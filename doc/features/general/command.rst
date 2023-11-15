@@ -6,11 +6,11 @@ Run DataLab
 
 To run DataLab from the command line, type the following::
 
-    $ cdlapp
+    $ cdl
 
 To show help on command line usage, simply run::
 
-    $ cdlapp --help
+    $ cdl --help
     usage: app.py [-h] [-b path] [-v] [--unattended] [--screenshot] [--delay DELAY] [--xmlrpcport PORT]
                   [--verbose {quiet,minimal,normal}]
                   [h5]
@@ -38,31 +38,31 @@ Open HDF5 file at startup
 
 To open HDF5 files, or even import only a specified HDF5 dataset, use the following::
 
-    $ cdlapp /path/to/file1.h5
-    $ cdlapp /path/to/file1.h5,/path/to/dataset1
-    $ cdlapp /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
+    $ cdl /path/to/file1.h5
+    $ cdl /path/to/file1.h5,/path/to/dataset1
+    $ cdl /path/to/file1.h5,/path/to/dataset1;/path/to/file2.h5,/path/to/dataset2
 
 Open HDF5 browser at startup
 ----------------------------
 
 To open the HDF5 browser at startup, use one of the following commands::
 
-    $ cdlapp -b /path/to/file1.h5
-    $ cdlapp --h5browser /path/to/file1.h5
+    $ cdl -b /path/to/file1.h5
+    $ cdl --h5browser /path/to/file1.h5
 
 Run DataLab demo
 ---------------------
 
 To execute DataLab demo, run the following::
 
-    $ cdlapp-demo
+    $ cdl-demo
 
 Run unit tests
 --------------
 
 To execute all DataLab unit tests, simply run::
 
-    $ cdlapp-alltests
+    $ cdl-alltests
 
     ================================================================================
     🚀 DataLab v0.9.0 automatic unit tests 🌌
@@ -70,7 +70,7 @@ To execute all DataLab unit tests, simply run::
 
     🔥 DataLab characteristics/environment:
     Configuration version: 1.0.0
-    Path: C:\Dev\Projets\DataLab\cdlapp
+    Path: C:\Dev\Projets\DataLab\cdl
     Frozen: False
     Debug: False
 
@@ -87,7 +87,7 @@ To execute all DataLab unit tests, simply run::
     🔥 Test parameters:
     ⚡ Selected 51 tests (51 total available)
     ⚡ Test data path:
-        C:\Dev\Projets\DataLab\cdlapp\data\tests
+        C:\Dev\Projets\DataLab\cdl\data\tests
     ⚡ Environment:
         CDL_DATA=C:\Dev\Projets\DataLab_data\
         PYTHONPATH=.
@@ -108,6 +108,6 @@ Run interactive tests
 
 To execute DataLab interactive tests, run the following::
 
-    $ cdlapp-tests
+    $ cdl-tests
 
 .. image:: /images/interactive_tests.png

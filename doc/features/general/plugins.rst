@@ -39,7 +39,7 @@ Special additional locations are available for plugins:
 - The `plugins` directory in the same folder as the `DataLab` executable
   in case of a standalone installation.
 
-- The `plugins` directory in the `cdlapp` package in case for internal plugins
+- The `plugins` directory in the `cdl` package in case for internal plugins
   only (i.e. it is not recommended to put your own plugins there).
 
 
@@ -48,18 +48,18 @@ Example: processing plugin
 
 Here is a simple example of a plugin that adds a new features to DataLab.
 
-.. literalinclude:: ../../../cdlapp/plugins/cdl_testdata.py
+.. literalinclude:: ../../../cdl/plugins/cdl_testdata.py
 
 Example: input/output plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here is a simple example of a plugin that adds a new file formats to DataLab.
 
-.. literalinclude:: ../../../cdlapp/plugins/cdl_imageformats.py
+.. literalinclude:: ../../../cdl/plugins/cdl_imageformats.py
 
 
 Public API
 ^^^^^^^^^^
 
-.. automodule:: cdlapp.plugins
+.. automodule:: cdl.plugins
     :members: PluginInfo, PluginBase, FormatInfo, ImageFormatBase, ClassicsImageFormat, SignalFormatBase

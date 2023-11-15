@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 # Initial command:
-# pyinstaller -y --clean -n DataLab -i resources\DataLab.ico cdlapp\start.pyw
+# pyinstaller -y --clean -n DataLab -i resources\DataLab.ico cdl\start.pyw
 
 import os.path as osp
 import guidata
@@ -14,10 +14,10 @@ plotpy_images = osp.join(plotpy_path, 'images')
 plotpy_locale = osp.join(plotpy_path, 'locale', 'fr', 'LC_MESSAGES')
 
 from PyInstaller.utils.hooks import collect_submodules
-all_hidden_imports = collect_submodules('cdlapp')
+all_hidden_imports = collect_submodules('cdl')
 
 a = Analysis(
-    ['cdlapp\\start.pyw'],
+    ['cdl\\start.pyw'],
     pathex=[],
     binaries=[],
     datas=[
@@ -25,9 +25,9 @@ a = Analysis(
         (guidata_locale, 'guidata\\locale\\fr\\LC_MESSAGES'),
         (plotpy_images, 'plotpy\\images'),
         (plotpy_locale, 'plotpy\\locale\\fr\\LC_MESSAGES'),
-        ('cdlapp\\plugins', 'cdlapp\\plugins'),
-        ('cdlapp\\data', 'cdlapp\\data'),
-        ('cdlapp\\locale\\fr\\LC_MESSAGES\\cdlapp.mo', 'cdlapp\\locale\\fr\\LC_MESSAGES'),
+        ('cdl\\plugins', 'cdl\\plugins'),
+        ('cdl\\data', 'cdl\\data'),
+        ('cdl\\locale\\fr\\LC_MESSAGES\\cdl.mo', 'cdl\\locale\\fr\\LC_MESSAGES'),
         ],
     hiddenimports=all_hidden_imports,
     hookspath=[],

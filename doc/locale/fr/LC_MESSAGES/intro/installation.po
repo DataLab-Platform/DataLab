@@ -34,8 +34,8 @@ msgstr ""
 " que Python lui-même."
 
 #: ../../requirements.rst:1
-msgid "The :mod:`cdlapp` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdlapp` requiert les modules Python suivants :"
+msgid "The :mod:`cdl` package requires the following Python modules:"
+msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
 
 #: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:75
 msgid "Name"

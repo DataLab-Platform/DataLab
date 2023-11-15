@@ -13,7 +13,7 @@ Features
 
 * Develop a Spyder plugin for interactive data analysis connected with DataLab
 
-* Image computing results (`cdlapp.model.base.ResultShape`):
+* Image computing results (`cdl.model.base.ResultShape`):
 
   - Add support for "free form" geometrical shapes (this could be used to draw
     the result of a segmentation algorithm, or the result of an edge detection)
@@ -21,7 +21,7 @@ Features
   - Add support for custom geometrical shapes (this could be used to draw
     the result of a specific algorithm, e.g. a pattern recognition algorithm)
 
-  .. note:: See "TODO" comment just above ``cdlapp.model.base.ResultShape`` class definition
+  .. note:: See "TODO" comment just above ``cdl.model.base.ResultShape`` class definition
         for more details about how to implement this feature.
 
 Maintenance

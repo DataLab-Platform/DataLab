@@ -49,7 +49,7 @@ msgstr ""
 "`Spyder`_ ou tout autre IDE, ou même un Jupyter Notebook) qui se connecte"
 " à une instance de DataLab en cours d'exécution, ajoute un signal et une "
 "image, puis exécute des calculs. C'est le cas de la classe `RemoteClient`"
-" qui est fournie dans le module ``cdlapp.remote``."
+" qui est fournie dans le module ``cdl.remote``."
 
 #: ../../features/general/remotecontrol.rst:17
 msgid "From a third-party application"
@@ -66,7 +66,7 @@ msgstr ""
 "Il est également possible de se connecter à une instance de DataLab en "
 "cours d'exécution depuis une application tierce, d'ajouter un signal et "
 "une image, puis d'exécuter des calculs. C'est le cas de la classe "
-"`RemoteClient` qui est fournie dans le module ``cdlapp.remote``."
+"`RemoteClient` qui est fournie dans le module ``cdl.remote``."
 
 #: ../../features/general/remotecontrol.rst:23
 msgid ""
@@ -176,12 +176,12 @@ msgstr ""
 #: ../../features/general/remotecontrol.rst:62
 #, fuzzy
 msgid "See module: ``cdl.tests.remoteclient_app``"
-msgstr "Voir le module ``cdlapp.tests.remoteclient_app``"
+msgstr "Voir le module ``cdl.tests.remoteclient_app``"
 
 #: ../../features/general/remotecontrol.rst:63
 #, fuzzy
 msgid "See module: ``cdl.tests.remoteclient_unit``"
-msgstr "Voir le module ``cdlapp.tests.remoteclient_unit``"
+msgstr "Voir le module ``cdl.tests.remoteclient_unit``"
 
 #: ../../features/general/remotecontrol.rst:67
 #, fuzzy
@@ -190,7 +190,7 @@ msgid ""
 "(``cdl.tests.remoteclient_app``)"
 msgstr ""
 "Copie d'écran du test applicatif du contrôle à distance "
-"(``cdlapp.tests.remoteclient_app``)"
+"(``cdl.tests.remoteclient_app``)"
 
 #: ../../features/general/remotecontrol.rst:70 cdl.remotecontrol.RemoteClient:5
 #: of
@@ -1002,7 +1002,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`~PyQt5.QtCore.QThread`, "
-#~ ":py:class:`~cdlapp.remotecontrol.BaseRPCServer`"
+#~ ":py:class:`~cdl.remotecontrol.BaseRPCServer`"
 #~ msgstr ""
 
 #~ msgid "int = ..., arguments: Sequence = ...) -> PYQT_SIGNAL"
@@ -1058,7 +1058,7 @@ msgstr ""
 
 #~ msgid ""
 #~ "Bases: :py:class:`PyQt5.QtCore.QThread`, "
-#~ ":py:class:`cdlapp.remotecontrol.BaseRPCServer`"
+#~ ":py:class:`cdl.remotecontrol.BaseRPCServer`"
 #~ msgstr ""
 
 #~ msgid "Bases: :py:class:`sip.wrappertype`, :py:class:`abc.ABCMeta`"
@@ -1220,4 +1220,3 @@ msgstr ""
 
 #~ msgid "DataLab Image Processor GUI module"
 #~ msgstr ""
-
