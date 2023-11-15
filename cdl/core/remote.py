@@ -398,6 +398,7 @@ class RemoteServer(QC.QThread):
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used. Defaults to None.
         """
+        group_num = 0 if group_num is None else group_num
         self.SIG_SELECT_OBJECTS.emit(selection, group_num, panel)
 
     @remote_call
