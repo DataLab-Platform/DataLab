@@ -773,6 +773,7 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
 def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
     """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
     res = []
+    num_cols = []
     for i_roi in image.iterate_roi_indexes():
         data_roi = image.get_data(i_roi)
         if args is None:
@@ -789,7 +790,20 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
             idx = np.ones((coords.shape[0], 1)) * i_roi
             coords = np.hstack([idx, coords])
             res.append(coords)
+            num_cols.append(coords.shape[1])
     if res:
+        if len(set(num_cols)) != 1:
+            # This happens when the number of columns is not the same for all ROIs.
+            # As of now, this happens only for polygon contours.
+            # We need to pad the arrays with NaNs.
+            max_cols = max(num_cols)
+            num_rows = sum(coords.shape[0] for coords in res)
+            out = np.full((num_rows, max_cols), np.nan)
+            row = 0
+            for coords in res:
+                out[row : row + coords.shape[0], : coords.shape[1]] = coords
+                row += coords.shape[0]
+            return out
         return np.vstack(res)
     return None
 

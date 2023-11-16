@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-01 17:34+0200\n"
+"POT-Creation-Date: 2023-11-16 15:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/image/menu/computing.rst:2
 msgid "\"Computing\" menu"
@@ -125,27 +125,30 @@ msgstr ""
 "Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../features/image/menu/computing.rst:54
+#: ../../features/image/menu/computing.rst:55
 msgid "Contour detection"
 msgstr "Détection de contours"
 
 #: ../../features/image/menu/computing.rst:47
-msgid "Automatically extract contours and fit them using a circle or an ellipse."
+msgid ""
+"Automatically extract contours and fit them using a circle or an ellipse,"
+" or directly represent them as a polygon."
 msgstr ""
-"Détecte automatiquement les contours et ajuste ces derniers par des "
-"cercles ou des ellipses."
+"Détecte automatiquement les contours et ajuste ces derniers par des cercles ou des ellipses, ou les représente directement par des polygones."
 
-#: ../../features/image/menu/computing.rst:51
+#: ../../features/image/menu/computing.rst:52
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
-#: ../../features/image/menu/computing.rst:54
+#: ../../features/image/menu/computing.rst:55
 msgid ""
 "See :ref:`ref-to-contour-detection` for more details on algorithm and "
 "associated parameters."
-msgstr "Voir :ref:`ref-to-contour-detection` pour plus de détails sur l'algorithme et les paramètres associés."
+msgstr ""
+"Voir :ref:`ref-to-contour-detection` pour plus de détails sur "
+"l'algorithme et les paramètres associés."
 
-#: ../../features/image/menu/computing.rst:56
+#: ../../features/image/menu/computing.rst:57
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to image and serialized with it when exporting current "
@@ -156,11 +159,11 @@ msgstr ""
 " cette dernière par exemple lors de l'export d'une session de DataLab "
 "vers un fichier HDF5."
 
-#: ../../features/image/menu/computing.rst:62
+#: ../../features/image/menu/computing.rst:63
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
-#: ../../features/image/menu/computing.rst:61
+#: ../../features/image/menu/computing.rst:62
 msgid ""
 "Detect circular shapes using circle Hough transform (implementation based"
 " on `skimage.transform.hough_circle_peaks <https://scikit-"
@@ -171,26 +174,29 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
 
-#: ../../features/image/menu/computing.rst:77
+#: ../../features/image/menu/computing.rst:78
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: ../../features/image/menu/computing.rst:67
+#: ../../features/image/menu/computing.rst:68
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (DOG)"
 
-#: ../../features/image/menu/computing.rst:66
+#: ../../features/image/menu/computing.rst:67
 msgid ""
 "Detect blobs using Difference of Gaussian (DOG) method (implementation "
 "based on `skimage.feature.blob_dog <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
-msgstr "Détection de taches basée sur la méthode de différence de gaussienne (DOG) (implementation basée sur `skimage.feature.blob_dog <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
+msgstr ""
+"Détection de taches basée sur la méthode de différence de gaussienne "
+"(DOG) (implementation basée sur `skimage.feature.blob_dog <https"
+"://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
 
-#: ../../features/image/menu/computing.rst:71
+#: ../../features/image/menu/computing.rst:72
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: ../../features/image/menu/computing.rst:70
+#: ../../features/image/menu/computing.rst:71
 msgid ""
 "Detect blobs using Determinant of Hessian (DOH) method (implementation "
 "based on `skimage.feature.blob_doh <https://scikit-"
@@ -200,22 +206,25 @@ msgstr ""
 "(implementation basée sur `skimage.feature.blob_doh <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
 
-#: ../../features/image/menu/computing.rst:75
+#: ../../features/image/menu/computing.rst:76
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
-#: ../../features/image/menu/computing.rst:74
+#: ../../features/image/menu/computing.rst:75
 msgid ""
 "Detect blobs using Laplacian of Gaussian (LOG) method (implementation "
 "based on `skimage.feature.blob_log <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
-msgstr "Détection de taches basée sur la méthode du laplacien de gaussienne (LOG) (implementation basée sur `skimage.feature.blob_log <https://scikit-image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
+msgstr ""
+"Détection de taches basée sur la méthode du laplacien de gaussienne (LOG)"
+" (implementation basée sur `skimage.feature.blob_log <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
 
-#: ../../features/image/menu/computing.rst:77
+#: ../../features/image/menu/computing.rst:78
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: ../../features/image/menu/computing.rst:78
+#: ../../features/image/menu/computing.rst:79
 msgid ""
 "Detect blobs using OpenCV implementation of `SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."

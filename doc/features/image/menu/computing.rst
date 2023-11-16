@@ -44,7 +44,8 @@ Minimum enclosing circle center
         See :ref:`ref-to-2d-peak-detection` for more details on algorithm and associated parameters.
 
 Contour detection
-    Automatically extract contours and fit them using a circle or an ellipse.
+    Automatically extract contours and fit them using a circle or an ellipse,
+    or directly represent them as a polygon.
 
     .. figure:: /images/shots/i_contour_test.png
 

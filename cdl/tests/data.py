@@ -553,4 +553,9 @@ def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
         RShape(SType.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
         RShape(SType.SEGMENT, [0, 50, 250, 400, 400], "segment"),
         RShape(SType.POINT, [[0, 500, 500], [0, 15, 400]], "point"),
+        RShape(
+            SType.POLYGON,
+            [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
+            "polygon",
+        ),
     )

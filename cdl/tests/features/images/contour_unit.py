@@ -33,14 +33,18 @@ def exec_contour_test(data):
         items.append(make.marker((x, y)))
     execenv.print(f"Calculation time: {int(dt * 1e3):d} ms\n", file=sys.stderr)
     execenv.print(f"Peak coordinates: {peak_coords}")
-    for shape in ("circle", "ellipse"):
+    for shape in ("circle", "ellipse", "polygon"):
         coords = get_contour_shapes(data, shape=shape)
         execenv.print(f"Coordinates ({shape}s): {coords}")
         for shapeargs in coords:
             if shape == "circle":
                 item = make.circle(*shapeargs)
-            else:
+            elif shape == "ellipse":
                 item = make.ellipse(*shapeargs)
+            else:
+                # `shapeargs` is a flattened array of x, y coordinates
+                x, y = shapeargs[::2], shapeargs[1::2]
+                item = make.polygon(x, y, closed=False)
             items.append(item)
     view_image_items(items)
 

@@ -805,7 +805,11 @@ class ImageProcessor(BaseProcessor):
     ) -> None:
         """Compute contour shape fit"""
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
-        shapetype = ShapeTypes.CIRCLE if param.shape == "circle" else ShapeTypes.ELLIPSE
+        shapetype = {
+            "ellipse": ShapeTypes.ELLIPSE,
+            "circle": ShapeTypes.CIRCLE,
+            "polygon": ShapeTypes.POLYGON,
+        }[param.shape]
         self.compute_10(
             cpi_det.compute_contour_shape,
             shapetype,

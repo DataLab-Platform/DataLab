@@ -242,7 +242,7 @@ def test_remote_client():
     env = os.environ.copy()
     env[execenv.DONOTQUIT_ENV] = "1"
     exec_script(app.__file__, wait=False, env=env)
-    with qt_app_context(exec_loop=True) as qapp:
+    with qt_app_context(exec_loop=True):
         window = HostWindow()
         window.resize(800, 800)
         window.show()

@@ -87,6 +87,8 @@ New features:
     * Farid filter (vertical, horizontal, both)
     * Laplace filter
     * Canny filter
+  * Contour detection: added support for polygonal contours (in addition to
+    circle and ellipse contours)
   * Added circle Hough transform (circle detection)
   * Added image intensity levels rescaling
   * Added histogram equalization

@@ -14,7 +14,7 @@ How to use the feature:
   - Create or open an image in DataLab workspace
   - Eventually create a ROI around the target area
   - Select "Contour detection" in "Computing" menu
-  - Enter parameter "Shape" ("Ellipse" or "Circle")
+  - Enter parameter "Shape" ("Ellipse", "Circle" or "Polygon")
 
 .. figure:: /images/contour_detection/contour_app_results.png
 
@@ -27,7 +27,7 @@ Results are shown in a table:
     4 columns for circles (coordinates of diameter),
     8 columns for ellipses (coordinates of diameters)
 
-.. figure:: /images/contour_detection/contour_app_zoom.png
+.. figure:: /images/contour_detection/contour_app.png
 
     Example of contour detection.
 

@@ -135,6 +135,7 @@ class ShapeTypes(enum.Enum):
     SEGMENT = enum.auto()
     MARKER = enum.auto()
     POINT = enum.auto()
+    POLYGON = enum.auto()
 
 
 def config_annotated_shape(
@@ -171,26 +172,6 @@ def set_plot_item_editable(item, state):
     item.set_readonly(not state)
 
 
-# TODO: [P0] Replace 'array' by 'datalist', a list of NumPy arrays
-# With this new data model, the old 'array' attribute row (each row is a result) is
-# replaced by an element of the new 'datalist' attribute. So, when this change is done,
-# each 'datalist' element is a result. This means that each result no longer has to be
-# an array with the same number of columns: in other words, each result may be an
-# arbitrary NumPy array, with an arbitrary shape. This is the opportunity to introduce
-# a new ShapeTypes type (e.g. FREEFORM) represented by an AnnotatedPolygon (new class
-# to be written using AnnotatedRectangle as a model). This also has been made possible
-# due to a recent change in DataLab HDF5 (de)serialization which now accepts nested
-# lists or dictionnaries.
-#
-# Additionnal note:
-# -----------------
-# Could we also use this opportunity to introduce support for custom shapes?
-# This could be done by specifying the class name of the shape to be used in the
-# key of the metadata dictionary entry (instead of "_xxx_label", the key would be
-# "_xxx_classname_label"). This would allow to use custom shapes in the same way
-# as the built-in shapes (e.g. rectangle, circle, etc.).
-# Custom shapes would have to be registered: for this, we could use the same
-# technique as for the extendable I/O formats (registry class).
 class ResultShape:
     """Object representing a geometrical shape serializable in signal/image metadata.
 
@@ -264,10 +245,13 @@ class ResultShape:
             ShapeTypes.RECTANGLE,
             ShapeTypes.CIRCLE,
             ShapeTypes.SEGMENT,
+            ShapeTypes.ELLIPSE,
+            ShapeTypes.POLYGON
         ):
-            labels = "ROI", "x0", "y0", "x1", "y1"
-        elif self.shapetype is ShapeTypes.ELLIPSE:
-            labels = "ROI", "x0", "y0", "x1", "y1", "x2", "y2", "x3", "y3"
+            labels = ["ROI"]
+            for index in range(0, self.array.shape[1] - 1, 2):
+                labels += [f"x{index//2}", f"y{index//2}"]
+            labels = tuple(labels)
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
         return labels[-self.array.shape[1] :]
@@ -309,14 +293,28 @@ class ResultShape:
             other = ResultShape.from_metadata_entry(self.key, other_value)
             assert other is not None
             other_array = np.array(other.array, copy=True)
-            if other_array.shape[1] > self.data_colnb:  # Column 0 is the ROI index
+            if other_array.shape[1] % 2:  # Column 0 is the ROI index
                 other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
-            self.array = np.vstack([self.array, other_array])
+            if other_array.shape[1] != self.array.shape[1]:
+                # This can only happen if the shape is a polygon
+                assert self.shapetype is ShapeTypes.POLYGON
+                # We must padd the array with NaNs
+                max_colnb = max(self.array.shape[1], other_array.shape[1])
+                new_array = np.full(
+                    (self.array.shape[0] + other_array.shape[0], max_colnb), np.nan
+                )
+                new_array[: self.array.shape[0], : self.array.shape[1]] = self.array
+                new_array[self.array.shape[0] :, : other_array.shape[1]] = other_array
+                self.array = new_array
+            else:
+                self.array = np.vstack([self.array, other_array])
         self.add_to(obj)
 
     @property
     def data_colnb(self):
         """Return raw data results column number"""
+        if self.shapetype == ShapeTypes.POLYGON:
+            raise ValueError("Polygon has an undefined number of data columns")
         return {
             ShapeTypes.MARKER: 2,
             ShapeTypes.POINT: 2,
@@ -329,12 +327,23 @@ class ResultShape:
     @property
     def data(self):
         """Return raw data (array without ROI informations)"""
-        return self.array[:, -self.data_colnb :]
+        if self.array.shape[1] % 2:
+            # Column 0 is the ROI index
+            return self.array[:, 1:]
+        # No ROI index
+        return self.array
 
     def check_array(self):
         """Check if array is valid"""
         assert len(self.array.shape) == 2
-        assert self.array.shape[1] == self.data_colnb + 1
+        if self.shapetype is ShapeTypes.POLYGON:
+            # Polygon is a special case: the number of data columns is variable
+            # (2 columns per point). So we only check if the number of columns
+            # is odd, which means that the first column is the ROI index, followed
+            # by an even number of data columns (flattened x, y coordinates).
+            assert self.array.shape[1] % 2 == 1
+        else:
+            assert self.array.shape[1] == self.data_colnb + 1
 
     def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
         """Iterate over metadata shape plot items.
@@ -389,6 +398,9 @@ class ResultShape:
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.show_label
             )
+        elif self.shapetype is ShapeTypes.POLYGON:
+            x, y = args[::2], args[1::2]
+            item = make.polygon(x, y, title=self.show_label, closed=False)
         else:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None

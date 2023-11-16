@@ -80,6 +80,7 @@ class ContourShapeParam(GenericDetectionParam):
     shapes = (
         ("ellipse", _("Ellipse")),
         ("circle", _("Circle")),
+        ("polygon", _("Polygon")),
     )
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 

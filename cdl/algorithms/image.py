@@ -292,14 +292,16 @@ def get_contour_shapes(
     then fit contours with shape ('ellipse' or 'circle')
 
     Args:
-        data (numpy.ndarray): Input data
-        shape (str | None): Shape to fit (default: "ellipse")
-        level (float | None): Relative level (default: 0.5)
+        data: Input data
+        shape: Shape to fit. Valid values: 'circle', 'ellipse', 'polygon'.
+         (default: 'ellipse')
+        level: Relative level (default: 0.5)
 
     Returns:
-        np.ndarray: Coordinates of shapes
+        Coordinates of shapes
     """
     # pylint: disable=too-many-locals
+    assert shape in ("circle", "ellipse", "polygon")
     contours = measure.find_contours(data, level=get_absolute_level(data, level))
     coords = []
     for contour in contours:
@@ -321,8 +323,21 @@ def get_contour_shapes(
                 x1, y1, x2, y2 = xc - dxa, yc - dya, xc + dxa, yc + dya
                 x3, y3, x4, y4 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
                 coords.append([x1, y1, x2, y2, x3, y3, x4, y4])
+        elif shape == "polygon":
+            # `contour` is a (N, 2) array (rows, cols): we need to convert it
+            # to a list of x, y coordinates flattened in a single list
+            coords.append(contour[:, ::-1].flatten())
         else:
             raise NotImplementedError(f"Invalid contour model {model}")
+    if shape == "polygon":
+        # `coords` is a list of arrays of shape (N, 2) where N is the number of points
+        # that can vary from one array to another, so we need to padd with NaNs each
+        # array to get a regular array:
+        max_len = max(coord.shape[0] for coord in coords)
+        arr = np.full((len(coords), max_len), np.nan)
+        for i_row, coord in enumerate(coords):
+            arr[i_row, : coord.shape[0]] = coord
+        return arr
     return np.array(coords)
 
 
