@@ -310,11 +310,8 @@ def bring_to_front(window: QW.QWidget) -> None:
     Args:
         window: Window to bring to front
     """
-    if sys.platform == "win32":
-        eflags = window.windowFlags()
-        window.setWindowFlags(eflags | QC.Qt.WindowStaysOnTopHint)
-        window.show()
-        window.setWindowFlags(eflags)
-        window.show()
-    window.raise_()
-    window.activateWindow()
+    eflags = window.windowFlags()
+    window.setWindowFlags(eflags | QC.Qt.WindowStaysOnTopHint)
+    window.show()
+    window.setWindowFlags(eflags)
+    window.show()
