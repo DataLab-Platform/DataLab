@@ -15,6 +15,7 @@ import os
 import os.path as osp
 
 from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
 
 from cdl import app
 from cdl.config import Conf
@@ -94,7 +95,7 @@ def assert_almost_equal(val1, val2, interval):
         raise AssertionError(f"Not true: {itv1} <= {val1} <= {itv2}") from exc
 
 
-def check_conf(conf, name, win, h5files):
+def check_conf(conf, name, win: QW.QMainWindow, h5files):
     """Check configuration"""
     execenv.print(f"  Checking configuration {name}: ")
     sec_main_name = SEC_MAIN.get_name()
@@ -105,10 +106,10 @@ def check_conf(conf, name, win, h5files):
     assert sec_main[OPT_MAX.option] == (win.windowState() == QC.Qt.WindowMaximized)
     execenv.print("OK")
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
-    if not sec_main[OPT_MAX.option]:
-        #  Check position/size only when not maximized
-        pos = win.pos() if os.name == "nt" else win.geometry()
-        assert sec_main[OPT_POS.option] == (pos.x(), pos.y())
+    if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
+        #  Check position
+        assert sec_main[OPT_POS.option] == (win.x(), win.y())
+        #  Check size
         assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
         assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
         execenv.print("OK")
