@@ -804,7 +804,7 @@ class BaseDataPanel(AbstractPanel):
         """Toggle show annotations option"""
         Conf.view.show_label.set(state)
         for obj in self.objmodel:
-            obj.metadata[obj.METADATA_LBL] = state
+            obj.set_metadata_option("showlabel", state)
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def create_new_dialog(

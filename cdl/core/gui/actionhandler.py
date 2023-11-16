@@ -48,7 +48,7 @@ from guidata.qthelpers import add_actions, create_action
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -493,7 +493,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.always,
                 toolbar_pos=-1,
             )
-            showlabel_action.setChecked(False)
+            showlabel_action.setChecked(Conf.view.show_label.get(False))
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
@@ -687,7 +687,7 @@ class ImageActionHandler(BaseActionHandler):
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
             )
-            showcontrast_action.setChecked(True)
+            showcontrast_action.setChecked(Conf.view.show_contrast.get(True))
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(

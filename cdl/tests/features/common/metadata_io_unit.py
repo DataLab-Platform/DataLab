@@ -30,7 +30,7 @@ from cdl.utils import tests
 def get_metadata_param_number_after_reset():
     """Return metadata parameters number after reset"""
     def_ima_nb = len(Conf.view.get_def_dict("ima"))
-    return def_ima_nb + 2  # +2 for 'METADATA_FMT' and 'METADATA_LBL' parameters
+    return def_ima_nb + 2  # +2 for metadata options (see BaseObj.get_metadata_option)
 
 
 def test():

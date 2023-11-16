@@ -52,7 +52,7 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
         self.__data = ROIDataParam.create(singleobj=singleobj)
 
-        self.fmt = obj.metadata.get(obj.METADATA_FMT, "%s")
+        self.fmt = obj.get_metadata_option("format")
         self.roi_items = list(obj.iterate_roi_items(self.fmt, True))
 
         for roi_item in self.roi_items:

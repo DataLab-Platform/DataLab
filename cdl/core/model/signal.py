@@ -69,7 +69,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
 
     PREFIX = "s"
     CONF_FMT = Conf.view.sig_format
-    DEFAULT_FMT = ".3f"
+    DEFAULT_FMT = "g"
     VALID_DTYPES = (np.float32, np.float64, np.complex128)
 
     _tabs = gds.BeginTabGroup("all")

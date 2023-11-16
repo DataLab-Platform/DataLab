@@ -246,7 +246,7 @@ class ResultShape:
             ShapeTypes.CIRCLE,
             ShapeTypes.SEGMENT,
             ShapeTypes.ELLIPSE,
-            ShapeTypes.POLYGON
+            ShapeTypes.POLYGON,
         ):
             labels = ["ROI"]
             for index in range(0, self.array.shape[1] - 1, 2):
@@ -518,18 +518,13 @@ class BaseObj(metaclass=BaseObjMeta):
     # This is overriden in children classes with a gds.DictItem instance:
     metadata: dict[str, Any] = {}
 
-    # Metadata dictionary keys for special properties:
-    METADATA_FMT = "__format"
-    METADATA_LBL = "__showlabel"
-    METADATA_FMT_DEFAULT = "%" + CONF_FMT.get(DEFAULT_FMT)
-    METADATA_LBL_DEFAULT = Conf.view.show_label.get(False)
-
     VALID_DTYPES = ()
 
     def __init__(self):
         self.uuid = str(uuid4())
         self.__onb = 0
         self.__roi_changed: bool | None = None
+        self.__metadata_options: dict[str, Any] | None = None
         self.reset_metadata_to_defaults()
 
     @property
@@ -872,8 +867,8 @@ class BaseObj(metaclass=BaseObjMeta):
         Yields:
             PlotItem: plot item
         """
-        fmt = self.metadata.get(self.METADATA_FMT, self.METADATA_FMT_DEFAULT)
-        lbl = self.metadata.get(self.METADATA_LBL, self.METADATA_LBL_DEFAULT)
+        fmt = self.get_metadata_option("format")
+        lbl = self.get_metadata_option("showlabel")
         for key, value in self.metadata.items():
             if key == ROI_KEY:
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
@@ -901,12 +896,54 @@ class BaseObj(metaclass=BaseObjMeta):
                 self.metadata.pop(key)
         self.annotations = None
 
+    def get_metadata_option(self, name: str) -> Any:
+        """Return metadata option value
+
+        A metadata option is a metadata entry starting with an underscore.
+        It is a way to store application-specific options in object metadata.
+
+        Args:
+            name (str): option name
+
+        Returns:
+            Option value
+
+        Valid option names:
+            'format': format string (str)
+            'showlabel': show label (bool)
+        """
+        if name not in self.__metadata_options:
+            raise ValueError(f"Invalid metadata option name `{name}`")
+        default = self.__metadata_options[name]
+        return self.metadata.get(f"__{name}", default)
+
+    def set_metadata_option(self, name: str, value: Any) -> None:
+        """Set metadata option value
+
+        A metadata option is a metadata entry starting with an underscore.
+        It is a way to store application-specific options in object metadata.
+
+        Args:
+            name (str): option name
+            value (Any): option value
+
+        Valid option names:
+            'format': format string (str)
+            'showlabel': show label (bool)
+        """
+        if name not in self.__metadata_options:
+            raise ValueError(f"Invalid metadata option name `{name}`")
+        self.metadata[f"__{name}"] = value
+
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
-        self.metadata = {
-            self.METADATA_FMT: self.METADATA_FMT_DEFAULT,
-            self.METADATA_LBL: self.METADATA_LBL_DEFAULT,
+        self.__metadata_options = {
+            "format": "%" + self.CONF_FMT.get(self.DEFAULT_FMT),
+            "showlabel": Conf.view.show_label.get(False),
         }
+        self.metadata = {}
+        for name, value in self.__metadata_options.items():
+            self.set_metadata_option(name, value)
         self.update_metadata_view_settings()
 
     def update_metadata_view_settings(self) -> None:
