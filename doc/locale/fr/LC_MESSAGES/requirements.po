@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 18:14+0200\n"
+"POT-Creation-Date: 2023-11-16 09:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -104,11 +104,11 @@ msgid "guidata"
 msgstr ""
 
 #: ../../requirements.rst:35
-msgid ">= 3.1"
+msgid ">= 3.2"
 msgstr ""
 
 #: ../../requirements.rst:37
-msgid "plotpy"
+msgid "PlotPy"
 msgstr ""
 
 #: ../../requirements.rst:38
@@ -198,3 +198,10 @@ msgstr ""
 #: ../../requirements.rst:89
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr ""
+
+#~ msgid ">= 3.1"
+#~ msgstr ""
+
+#~ msgid "plotpy"
+#~ msgstr ""
+
