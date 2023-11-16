@@ -37,7 +37,7 @@ CONFIGS = (
     {
         SEC_MAIN.get_name(): {
             OPT_MAX.option: False,
-            OPT_POS.option: (200, 200),
+            OPT_POS.option: (250, 250),
             OPT_SIZ.option: (1300, 700),
             OPT_DIR.option: "",
         },
@@ -48,7 +48,7 @@ CONFIGS = (
     {
         SEC_MAIN.get_name(): {
             OPT_MAX.option: False,
-            OPT_POS.option: (10, 10),
+            OPT_POS.option: (100, 100),
             OPT_SIZ.option: (750, 600),
             OPT_DIR.option: osp.dirname(__file__),
         },
