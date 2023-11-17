@@ -50,11 +50,11 @@ class RemoteCDLProxy(RemoteClient):
         True
         >>> proxy.get_object_titles()
         ['toto']
-        >>> proxy.get_object_from_title("toto")
+        >>> proxy.get_object("toto")  # from title
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> proxy.get_object(0)
+        >>> proxy.get_object(1)  # from number
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> proxy.get_object(0).data
+        >>> proxy.get_object(1).data
         array([1., 2., 3.])
     """
 
@@ -149,89 +149,42 @@ class CDLProxy(BaseProxy):
         """
         return self._cdl.calc(name, param)
 
-    def get_object_from_title(
-        self, title: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from title
-
-        Args:
-            title (str): object
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-            ValueError: if panel not found
-        """
-        return self._cdl.get_object_from_title(title, panel)
-
     def get_object(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
         Args:
-            index (int): Object index in current panel. Defaults to None.
-            group_index (int | None): Group index. Defaults to None.
-            panel (str | None): Panel name. Defaults to None.
-
-        If ``index`` is not specified, returns the currently selected object.
-        If ``group_index`` is not specified, return an object from the current group.
-        If ``panel`` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
-            Union[SignalObj, ImageObj]: object
+            Object
 
         Raises:
-            IndexError: if object not found
+            KeyError: if object not found
         """
-        return self._cdl.get_object(index, group_index, panel)
-
-    def get_object_from_uuid(
-        self, oid: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from uuid
-
-        Args:
-            oid (str): object uuid
-            panel (str | None): panel name (valid values: "signal", "image").
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-            ValueError: if panel not found
-        """
-        return self._cdl.get_object_from_uuid(oid, panel)
+        return self._cdl.get_object(nb_id_title, panel)
 
     def get_object_shapes(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> list:
         """Get plot item shapes associated to object (signal/image).
 
         Args:
-            index: Object index in current panel. Defaults to None.
-            group_index: Group index. Defaults to None.
-            panel: Panel name. Defaults to None.
-
-        If ``index`` is not specified, returns the currently selected object.
-        If ``group_index`` is not specified, return an object from the current group.
-        If ``panel`` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
             List of plot item shapes
         """
-        return self._cdl.get_object_shapes(index, group_index, panel)
+        return self._cdl.get_object_shapes(nb_id_title, panel)
 
     def add_annotations_from_items(
         self, items: list, refresh_plot: bool = True, panel: str | None = None

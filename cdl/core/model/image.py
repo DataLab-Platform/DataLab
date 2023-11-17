@@ -19,6 +19,7 @@ import re
 from collections.abc import ByteString, Iterator, Mapping, Sequence
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any
+from uuid import uuid4
 
 import guidata.dataset as gds
 import numpy as np
@@ -293,6 +294,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
+        self.uuid = str(uuid4())
         self._dicom_template = None
         self._maskdata_cache = None
 
@@ -352,6 +354,8 @@ class ImageObj(gds.DataSet, base.BaseObj):
                 self.dy, self.dx = float(pxs[0]), float(pxs[1])
             self.set_metadata_from(template)
             self._dicom_template = template
+
+    uuid = gds.StringItem("UUID").set_prop("display", hide=True)
 
     _tabs = gds.BeginTabGroup("all")
 

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from typing import TYPE_CHECKING
+from uuid import uuid4
 
 import guidata.dataset as gds
 import numpy as np
@@ -72,6 +73,8 @@ class SignalObj(gds.DataSet, base.BaseObj):
     DEFAULT_FMT = "g"
     VALID_DTYPES = (np.float32, np.float64, np.complex128)
 
+    uuid = gds.StringItem("UUID").set_prop("display", hide=True)
+
     _tabs = gds.BeginTabGroup("all")
 
     _datag = gds.BeginGroup(_("Data and metadata"))
@@ -106,6 +109,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
+        self.uuid = str(uuid4())
 
     def copy(
         self, title: str | None = None, dtype: np.dtype | None = None

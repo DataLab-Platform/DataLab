@@ -17,7 +17,6 @@ import json
 import sys
 from collections.abc import Iterable
 from typing import Any
-from uuid import uuid4
 
 import guidata.dataset as gds
 import numpy as np
@@ -521,7 +520,6 @@ class BaseObj(metaclass=BaseObjMeta):
     VALID_DTYPES = ()
 
     def __init__(self):
-        self.uuid = str(uuid4())
         self.__onb = 0
         self.__roi_changed: bool | None = None
         self.__metadata_options: dict[str, Any] | None = None

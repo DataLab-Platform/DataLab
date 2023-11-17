@@ -304,25 +304,22 @@ class ObjectModel:
         del self._objects[obj.uuid]
         self.reset_short_ids()
 
-    def get_object(self, index: int, group_index: int = 0) -> SignalObj | ImageObj:
-        """Return object with index.
+    def get_object_from_number(self, number: int) -> SignalObj | ImageObj:
+        """Return object from its number.
 
         Args:
-            index (int): object index
-            group_index (int | None): group index. Defaults to 0.
+            number: object number (unique in model)
 
         Returns:
-            object with index
+            Object
 
         Raises:
-            IndexError: if object with index not found
+            IndexError: if object with number not found
         """
-        try:
-            return self._groups[group_index][index]
-        except IndexError as exc:
-            raise IndexError(
-                f"Object with index {index} (group {group_index}) not found"
-            ) from exc
+        for obj in self._objects.values():
+            if obj.number == number:
+                return obj
+        raise IndexError(f"Object with number {number} not found")
 
     def get_objects(self, uuids: list[str]) -> list[SignalObj | ImageObj]:
         """Return objects with uuids"""

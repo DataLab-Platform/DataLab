@@ -50,15 +50,15 @@ def test():
         execenv.print(f"Object uuids:{os.linesep}{uuids}")
 
         # Get object from title
-        obj = win.get_object_from_title(titles[-1])
+        obj = win.get_object(titles[-1])
         execenv.print(f"Object (from title) '{obj.short_id}':{os.linesep}{obj}")
 
         # Get object
-        obj = win.get_object(0)
-        execenv.print(f"Object (from pos.)  '{obj.short_id}':{os.linesep}{obj}")
+        obj = win.get_object(1)
+        execenv.print(f"Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
 
         # Get object by uuid
-        obj = win.get_object_from_uuid(uuids[-1])
+        obj = win.get_object(uuids[-1])
         execenv.print(f"Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters

@@ -251,47 +251,23 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_object_from_title(
-        self, title: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from title
-
-        Args:
-            title (str): object
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-            ValueError: if panel not found
-        """
-
-    @abc.abstractmethod
     def get_object(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
         Args:
-            index (int): Object index in current panel. Defaults to None.
-            group_index (int | None): Group index. Defaults to None.
-            panel (str | None): Panel name. Defaults to None.
-
-        If ``index`` is not specified, returns the currently selected object.
-        If ``group_index`` is not specified, return an object from the current group.
-        If ``panel`` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
-            Union[SignalObj, ImageObj]: object
+            Object
 
         Raises:
-            IndexError: if object not found
+            KeyError: if object not found
         """
 
     @abc.abstractmethod
@@ -311,40 +287,17 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def get_object_from_uuid(
-        self, oid: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from uuid
-
-        Args:
-            oid (str): object uuid
-            panel (str | None): panel name (valid values: "signal", "image").
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-            ValueError: if panel not found
-        """
-
-    @abc.abstractmethod
     def get_object_shapes(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> list:
         """Get plot item shapes associated to object (signal/image).
 
         Args:
-            index: Object index in current panel. Defaults to None.
-            group_index: Group index. Defaults to None.
-            panel: Panel name. Defaults to None.
-
-        If ``index`` is not specified, returns the currently selected object.
-        If ``group_index`` is not specified, return an object from the current group.
-        If ``panel`` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
             List of plot item shapes

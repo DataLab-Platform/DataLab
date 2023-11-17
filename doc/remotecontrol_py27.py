@@ -123,13 +123,9 @@ class RemoteClient(object):
         """Get object (signal/image) list for current panel"""
         return self.serverproxy.get_object_titles(panel)
 
-    def get_object_from_title(self, title, panel=None):
-        """Get object (signal/image) by title"""
-        return self.serverproxy.get_object_from_title(title, panel)
-
-    def get_object(self, index=None, group_index=0, panel=None):
-        """Get object (signal/image) by index"""
-        return self.serverproxy.get_object(index, group_index, panel)
+    def get_object(self, nb_id_title=None, panel=None):
+        """Get object (signal/image) by number, id or title"""
+        return self.serverproxy.get_object(nb_id_title, panel)
 
     def get_object_uuids(self, panel=None):
         """Get object (signal/image) list for current panel"""

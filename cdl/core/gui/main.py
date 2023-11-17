@@ -235,54 +235,41 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         return self.__get_specific_panel(panel).objmodel.get_object_titles()
 
     @remote_controlled
-    def get_object_from_title(
-        self, title: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from title
-
-        Args:
-            title (str): object
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-            ValueError: if panel is unknown
-        """
-        return self.__get_specific_panel(panel).objmodel.get_object_from_title(title)
-
-    @remote_controlled
     def get_object(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> SignalObj | ImageObj:
         """Get object (signal/image) from index.
 
         Args:
-            index (int): Object index in current panel. Defaults to None.
-            group_index (int | None): Group index. Defaults to None.
-            panel (str | None): Panel name. Defaults to None.
-
-        If `index` is not specified, returns the currently selected object.
-        If `group_index` is not specified, return an object from the current group.
-        If `panel` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
-            Union[SignalObj, ImageObj]: object
+            Object
 
         Raises:
-            IndexError: if object not found
+            KeyError: if object not found
+            TypeError: if index_id_title type is invalid
         """
         panelw = self.__get_specific_panel(panel)
-        if index is None:
+        if nb_id_title is None:
             return panelw.objview.get_current_object()
-        group_index = 0 if group_index is None else group_index
-        return panelw.objmodel.get_object(index, group_index)
+        if isinstance(nb_id_title, int):
+            return panelw.objmodel.get_object_from_number(nb_id_title)
+        if isinstance(nb_id_title, str):
+            try:
+                return panelw.objmodel[nb_id_title]
+            except KeyError:
+                try:
+                    return panelw.objmodel.get_object_from_title(nb_id_title)
+                except KeyError as exc:
+                    raise KeyError(
+                        f"Invalid object index, id or title: {nb_id_title}"
+                    ) from exc
+        raise TypeError(f"Invalid index_id_title type: {type(nb_id_title)}")
 
     @remote_controlled
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
@@ -300,25 +287,6 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             ValueError: if panel is unknown
         """
         return self.__get_specific_panel(panel).objmodel.get_object_ids()
-
-    @remote_controlled
-    def get_object_from_uuid(
-        self, oid: str, panel: str | None = None
-    ) -> SignalObj | ImageObj:
-        """Get object (signal/image) from uuid
-
-        Args:
-            oid (str): object uuid
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
-
-        Returns:
-            Union[SignalObj, ImageObj]: object
-
-        Raises:
-            ValueError: if object not found
-        """
-        return self.__get_specific_panel(panel).objmodel[oid]
 
     @remote_controlled
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
@@ -378,25 +346,20 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     @remote_controlled
     def get_object_shapes(
         self,
-        index: int | None = None,
-        group_index: int | None = None,
+        nb_id_title: int | str | None = None,
         panel: str | None = None,
     ) -> list:
         """Get plot item shapes associated to object (signal/image).
 
         Args:
-            index: Object index in current panel. Defaults to None.
-            group_index: Group index. Defaults to None.
-            panel: Panel name. Defaults to None.
-
-        If ``index`` is not specified, returns the currently selected object.
-        If ``group_index`` is not specified, return an object from the current group.
-        If ``panel`` is not specified, return an object from the current panel.
+            nb_id_title: Object number, or object id, or object title.
+             Defaults to None (current object).
+            panel: Panel name. Defaults to None (current panel).
 
         Returns:
             List of plot item shapes
         """
-        obj = self.get_object(index, group_index, panel)
+        obj = self.get_object(nb_id_title, panel)
         return list(obj.iterate_shape_items(editable=False))
 
     @remote_controlled
