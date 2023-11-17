@@ -445,6 +445,7 @@ class RemoteServer(QC.QThread):
     @remote_call
     def get_object_titles(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): Panel name. Defaults to None.
@@ -496,6 +497,7 @@ class RemoteServer(QC.QThread):
     @remote_call
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
         """Get object (signal/image) list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): Panel name. Defaults to None.

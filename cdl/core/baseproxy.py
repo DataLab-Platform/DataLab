@@ -236,7 +236,8 @@ class AbstractCDLControl(abc.ABC):
 
     @abc.abstractmethod
     def get_object_titles(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel
+        """Get object (signal/image) list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): panel name (valid values: "signal", "image").
@@ -295,7 +296,8 @@ class AbstractCDLControl(abc.ABC):
 
     @abc.abstractmethod
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) uuid list for current panel
+        """Get object (signal/image) uuid list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): panel name (valid values: "signal", "image").
@@ -546,7 +548,8 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         self._cdl.delete_metadata(refresh_plot)
 
     def get_object_titles(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) list for current panel
+        """Get object (signal/image) list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): panel name (valid values: "signal", "image").
@@ -561,7 +564,8 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         return self._cdl.get_object_titles(panel)
 
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
-        """Get object (signal/image) uuid list for current panel
+        """Get object (signal/image) uuid list for current panel.
+        Objects are sorted by group number and object index in group.
 
         Args:
             panel (str | None): panel name (valid values: "signal", "image").

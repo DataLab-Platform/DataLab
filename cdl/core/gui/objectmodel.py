@@ -329,12 +329,12 @@ class ObjectModel:
         return [self._objects[uuid] for uuid in uuids]
 
     def get_object_ids(self) -> list[str]:
-        """Return object ids"""
-        return list(self._objects.keys())
+        """Return object ids, in order of appearance in groups"""
+        return [obj.uuid for obj in self.get_all_objects()]
 
     def get_object_titles(self) -> list[str]:
-        """Return object titles"""
-        return [obj.title for obj in self._objects.values()]
+        """Return object titles, in order of appearance in groups"""
+        return [obj.title for obj in self.get_all_objects()]
 
     def get_object_from_title(self, title: str) -> SignalObj | ImageObj:
         """Return object with title.
