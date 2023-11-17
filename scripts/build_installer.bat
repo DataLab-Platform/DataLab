@@ -8,26 +8,25 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 set ROOTPATH=%SCRIPTPATH%\..
 
 set RSCPATH=%ROOTPATH%\resources
+set NSISPATH=%ROOTPATH%\nsis
 
 @REM Generating images for NSIS installer
-set BMPPATH=%ROOTPATH%\nsis\images
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
-%INKSCAPE_PATH% "%RSCPATH%\win.svg" -o "%BMPPATH%\temp.png" -w 164 -h 314
-magick convert "%BMPPATH%\temp.png" bmp3:"%BMPPATH%\win.bmp"
-%INKSCAPE_PATH% "%RSCPATH%\banner.svg" -o "%BMPPATH%\temp.png" -w 150 -h 57
-magick convert "%BMPPATH%\temp.png" bmp3:"%BMPPATH%\banner.bmp"
-del "%BMPPATH%\temp.png"
+%INKSCAPE_PATH% "%RSCPATH%\win.svg" -o "%NSISPATH%\temp.png" -w 164 -h 314
+magick convert "%NSISPATH%\temp.png" bmp3:"%NSISPATH%\win.bmp"
+%INKSCAPE_PATH% "%RSCPATH%\banner.svg" -o "%NSISPATH%\temp.png" -w 150 -h 57
+magick convert "%NSISPATH%\temp.png" bmp3:"%NSISPATH%\banner.bmp"
+del "%NSISPATH%\temp.png"
 
 @REM Generating icons for NSIS installer
-set ICOPATH=%ROOTPATH%\nsis\icons
 for %%s in (16 24 32 48 128 256) do (
-  %INKSCAPE_PATH% "%RSCPATH%\install.svg" -o "%ICOPATH%\install-%%s.png" -w %%s -h %%s
-  %INKSCAPE_PATH% "%RSCPATH%\uninstall.svg" -o "%ICOPATH%\uninstall-%%s.png" -w %%s -h %%s
+  %INKSCAPE_PATH% "%RSCPATH%\install.svg" -o "%NSISPATH%\install-%%s.png" -w %%s -h %%s
+  %INKSCAPE_PATH% "%RSCPATH%\uninstall.svg" -o "%NSISPATH%\uninstall-%%s.png" -w %%s -h %%s
 )
-magick convert "%ICOPATH%\install-*.png" "%ICOPATH%\install.ico"
-magick convert "%ICOPATH%\uninstall-*.png" "%ICOPATH%\uninstall.ico"
-del "%ICOPATH%\install-*.png"
-del "%ICOPATH%\uninstall-*.png"
+magick convert "%NSISPATH%\install-*.png" "%NSISPATH%\install.ico"
+magick convert "%NSISPATH%\uninstall-*.png" "%NSISPATH%\uninstall.ico"
+del "%NSISPATH%\install-*.png"
+del "%NSISPATH%\uninstall-*.png"
 
 call %FUNC% GetLibName LIBNAME
 call %FUNC% SetPythonPath

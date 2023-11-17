@@ -77,4 +77,6 @@ cdl/data/doc/
 # PyBuilder
 target/
 
-/.spyproject
+# Files that are generated for NSIS installer
+nsis/images/*.bmp
+nsis/images/*.ico

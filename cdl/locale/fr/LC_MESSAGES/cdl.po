@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-11-16 15:08+0100\n"
+"POT-Creation-Date: 2023-11-17 13:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -989,7 +989,7 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1371
+#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1375
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1305,7 +1305,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:453 cdl\core\gui\main.py:1154
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:453 cdl\core\gui\main.py:1158
 #: cdl\plugins.py:160
 msgid "Warning"
 msgstr "Attention"
@@ -1487,7 +1487,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:745 cdl\core\gui\main.py:1405
+#: cdl\core\gui\main.py:745 cdl\core\gui\main.py:1409
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1547,56 +1547,56 @@ msgstr "Plugins"
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:842
+#: cdl\core\gui\main.py:846
+msgid "PDF documentation"
+msgstr "Documentation PDF"
+
+#: cdl\core\gui\main.py:854
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:845
-msgid "Local documentation"
-msgstr "Documentation locale"
-
-#: cdl\core\gui\main.py:860
+#: cdl\core\gui\main.py:864
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:867 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:871 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:873 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:877 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:880
+#: cdl\core\gui\main.py:884
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:886
+#: cdl\core\gui\main.py:890
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:892
+#: cdl\core\gui\main.py:896
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:897
+#: cdl\core\gui\main.py:901
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:930 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:934 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:939 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:943 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1122
+#: cdl\core\gui\main.py:1126
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1155
+#: cdl\core\gui\main.py:1159
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1604,56 +1604,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1166 cdl\core\gui\panel\base.py:660
+#: cdl\core\gui\main.py:1170 cdl\core\gui\panel\base.py:660
 #: cdl\core\gui\panel\macro.py:430
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1327
+#: cdl\core\gui\main.py:1331
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1329
+#: cdl\core\gui\main.py:1333
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1332
+#: cdl\core\gui\main.py:1336
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1334
+#: cdl\core\gui\main.py:1338
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1337
+#: cdl\core\gui\main.py:1341
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1338
+#: cdl\core\gui\main.py:1342
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1339
+#: cdl\core\gui\main.py:1343
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1343
+#: cdl\core\gui\main.py:1347
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1344
+#: cdl\core\gui\main.py:1348
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1348
+#: cdl\core\gui\main.py:1352
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1366
+#: cdl\core\gui\main.py:1370
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1367
+#: cdl\core\gui\main.py:1371
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1661,7 +1661,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1406
+#: cdl\core\gui\main.py:1410
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1718,7 +1718,7 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 #: cdl\core\gui\panel\base.py:921 cdl\core\gui\roieditor.py:185
-#: cdl\core\model\base.py:662
+#: cdl\core\model\base.py:657
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
@@ -2235,11 +2235,11 @@ msgstr "Moyenne de la distribution normale"
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: cdl\core\model\base.py:956
+#: cdl\core\model\base.py:993
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:957
+#: cdl\core\model\base.py:994
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 

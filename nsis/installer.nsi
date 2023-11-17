@@ -39,17 +39,17 @@ RequestExecutionLevel admin
 ; Interface Configuration
 ;------------------------------------------------------------------------------
 !define MUI_HEADERIMAGE
-!define MUI_HEADERIMAGE_BITMAP "images\banner.bmp"
-!define MUI_HEADERIMAGE_UNBITMAP "images\banner.bmp"
+!define MUI_HEADERIMAGE_BITMAP "banner.bmp"
+!define MUI_HEADERIMAGE_UNBITMAP "banner.bmp"
 !define MUI_ABORTWARNING
-!define MUI_ICON "icons\install.ico"
-!define MUI_UNICON "icons\uninstall.ico"
+!define MUI_ICON "install.ico"
+!define MUI_UNICON "uninstall.ico"
 
 ; Pages
 ;------------------------------------------------------------------------------
-!define MUI_WELCOMEFINISHPAGE_BITMAP "images\win.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "win.bmp"
 !define MUI_WELCOMEPAGE_TEXT "$(welcome_str)"
-!define MUI_UNWELCOMEFINISHPAGE_BITMAP "images\win.bmp"
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP "win.bmp"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES

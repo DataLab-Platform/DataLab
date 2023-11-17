@@ -16,7 +16,7 @@ os.environ["CDL_DOC"] = "1"
 project = "DataLab"
 author = "Pierre Raybaut"
 copyright = "2023, Codra - " + author
-html_logo = latex_logo = "_static/DataLab-title.png"
+html_logo = "_static/DataLab-title.png"
 release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
@@ -29,8 +29,11 @@ exclude_patterns = []
 
 html_theme = "pydata_sphinx_theme"
 html_theme_options = {"show_toc_level": 2}
-htmlhelp_basename = project
 html_static_path = ["_static"]
+
+# -- Options for LaTeX output ------------------------------------------------
+
+latex_logo = "_static/DataLab-Frontpage.png"
 
 # -- Options for sphinx-intl package -----------------------------------------
 

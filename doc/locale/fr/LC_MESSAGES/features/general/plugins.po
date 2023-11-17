@@ -65,19 +65,14 @@ msgstr ""
 
 #: ../../features/general/plugins.rst:16
 msgid "What is a plugin?"
-msgstr ""
+msgstr "Qu'est-ce qu'un plugin ?"
 
 #: ../../features/general/plugins.rst:18
-#, fuzzy
 msgid ""
 "A plugin is a Python module that is loaded at startup by DataLab. A "
 "plugin may add new features to DataLab, or modify existing features."
 msgstr ""
-"DataLab est une application modulaire. Il est possible d'ajouter de "
-"nouvelles fonctionnalités à DataLab en écrivant des plugins. Un plugin "
-"est un module Python qui est chargé au démarrage par DataLab. Un plugin "
-"peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des "
-"fonctionnalités existantes."
+"Un plugin est un module Python qui est chargé au démarrage par DataLab. Un plugin peut ajouter de nouvelles fonctionnalités à DataLab, ou modifier des fonctionnalités existantes."
 
 #: ../../features/general/plugins.rst:21
 msgid ""
@@ -87,40 +82,40 @@ msgid ""
 "attribute that is an instance of the `PluginInfo` class. The "
 "`PLUGIN_INFO` attribute is used by DataLab to retrieve information about "
 "the plugin."
-msgstr ""
+msgstr "Un plugin est un module Python qui contient une classe dérivée de la classe `PluginBase`. Le nom de la classe n'est pas important, tant qu'elle est dérivée de `PluginBase`. La classe doit avoir un attribut `PLUGIN_INFO` qui est une instance de la classe `PluginInfo`. L'attribut `PLUGIN_INFO` est utilisé par DataLab pour récupérer des informations sur le plugin."
 
 #: ../../features/general/plugins.rst:28
 msgid "Where to put a plugin?"
-msgstr ""
+msgstr "Où est positionné un plugin ?"
 
 #: ../../features/general/plugins.rst:30
 msgid ""
 "As plugins are Python modules, they can be put anywhere in the Python "
 "path of the DataLab installation."
-msgstr ""
+msgstr "Etant donné que les plugins sont des modules Python, ils peuvent être placés n'importe où dans le chemin Python de l'installation de DataLab."
 
 #: ../../features/general/plugins.rst:33
 msgid "Special additional locations are available for plugins:"
-msgstr ""
+msgstr "Des emplacements supplémentaires spéciaux sont disponibles pour les plugins :"
 
 #: ../../features/general/plugins.rst:35
 msgid ""
 "The `plugins` directory in the user configuration folder (e.g. "
 "`C:\\Users\\JohnDoe\\.DataLab\\plugins` on Windows or "
 "`~/.DataLab/plugins` on Linux)."
-msgstr ""
+msgstr "Le répertoire `plugins` dans le dossier de configuration de l'utilisateur (par exemple `C:\\Users\\JohnDoe\\.DataLab\\plugins` sur Windows ou `~/.DataLab/plugins` sur Linux)."
 
 #: ../../features/general/plugins.rst:39
 msgid ""
 "The `plugins` directory in the same folder as the `DataLab` executable in"
 " case of a standalone installation."
-msgstr ""
+msgstr "Le répertoire `plugins` dans le même dossier que l'exécutable `DataLab` en cas d'installation autonome."
 
 #: ../../features/general/plugins.rst:42
 msgid ""
 "The `plugins` directory in the `cdl` package in case for internal plugins"
 " only (i.e. it is not recommended to put your own plugins there)."
-msgstr ""
+msgstr "Le répertoire `plugins` dans le package `cdl` en cas de plugins internes uniquement (c'est-à-dire qu'il n'est pas recommandé d'y placer vos propres plugins)."
 
 #: ../../features/general/plugins.rst:47
 msgid "Example: processing plugin"

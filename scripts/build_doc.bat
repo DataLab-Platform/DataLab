@@ -16,24 +16,27 @@ call %FUNC% GetVersion CDL_VERSION
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_requirements.py
 
-@REM Build documentation in french =====================================================
-@REM Update screenshots
+@REM Set light mode for Qt applications and clean previous documentation ===============
 set QT_COLOR_MODE=light
-set LANG=fr
-%PYTHON% doc/update_screenshots.py
-@REM Build documentation
 if exist %MODNAME%\data\doc ( rmdir /s /q %MODNAME%\data\doc )
-sphinx-build -D language=fr -b singlehtml doc %MODNAME%\data\doc
-@REM Rename index.html to index_fr.html and update links
-ren %MODNAME%\data\doc\index.html index_fr.html
-pushd %MODNAME%\data\doc
-%PYTHON% -c "with open('index_fr.html', 'r+', encoding='utf-8') as f: content = f.read(); f.seek(0); f.write(content.replace('index.html', 'index_fr.html')); f.truncate()"
-popd
+mkdir %MODNAME%\data\doc
 
-@REM Build documentation in english ====================================================
-@REM Update screenshots
-set LANG=en
-%PYTHON% doc/update_screenshots.py
-sphinx-build -D language=en -b singlehtml doc %MODNAME%\data\doc
+@REM Build documentation ===============================================================
+for %%L in (fr en) do (
+    set LANG=%%L
+    %PYTHON% doc/update_screenshots.py
+    if exist build\doc ( rmdir /s /q build\doc )
+    sphinx-build -b latex -D language=%%L doc build\doc
+    cd build\doc
+    echo Building PDF documentation for %%L...
+    pdflatex -interaction=nonstopmode -quiet %LIBNAME%.tex
+    @REM Build again to fix table of contents (workaround)
+    pdflatex -interaction=nonstopmode -quiet %LIBNAME%.tex
+    echo Done.
+    cd ..\..
+    move build\doc\%LIBNAME%.pdf %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
+)
+
 @REM explorer %MODNAME%\data\doc
+
 call %FUNC% EndOfScript

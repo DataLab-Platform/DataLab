@@ -811,8 +811,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __get_local_doc_path() -> str | None:
         """Return local documentation path, if it exists"""
         locale = QC.QLocale.system().name()
-        for suffix in ("_" + locale[:2], ""):
-            path = osp.join(DATAPATH, "doc", f"index{suffix}.html")
+        for suffix in ("_" + locale[:2], "_en"):
+            path = osp.join(DATAPATH, "doc", f"{APP_NAME}{suffix}.pdf")
             if osp.isfile(path):
                 return path
         return None
@@ -837,31 +837,34 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.plugins_menu,
         ):
             menu.aboutToShow.connect(self.__update_generic_menu)
-        localdocpath = self.__get_local_doc_path()
-        if localdocpath is None:
-            label = _("Online documentation")
-            url = __docurl__
-        else:
-            label = _("Local documentation")
-            url = localdocpath
-        actions = [
+        help_menu_actions = [
             create_action(
                 self,
-                label,
+                _("Online documentation"),
                 icon=get_icon("libre-gui-help.svg"),
-                triggered=lambda: webbrowser.open(url),
+                triggered=lambda: webbrowser.open(__docurl__),
             ),
-            None,
         ]
+        localdocpath = self.__get_local_doc_path()
+        if localdocpath is not None:
+            help_menu_actions += [
+                create_action(
+                    self,
+                    _("PDF documentation"),
+                    icon=get_icon("help_pdf.svg"),
+                    triggered=lambda: webbrowser.open(localdocpath),
+                ),
+            ]
+        help_menu_actions += [None]
         if TEST_SEGFAULT_ERROR:
-            actions += [
+            help_menu_actions += [
                 create_action(
                     self,
                     _("Test segfault/Python error"),
                     triggered=self.test_segfault_error,
                 )
             ]
-        actions += [
+        help_menu_actions += [
             create_action(
                 self,
                 _("Log files") + "...",
@@ -899,7 +902,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 triggered=self.__about,
             ),
         ]
-        add_actions(self.help_menu, actions)
+        add_actions(self.help_menu, help_menu_actions)
 
     def __setup_console(self) -> None:
         """Add an internal console"""
