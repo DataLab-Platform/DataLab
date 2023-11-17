@@ -78,5 +78,5 @@ cdl/data/doc/
 target/
 
 # Files that are generated for NSIS installer
-nsis/images/*.bmp
-nsis/images/*.ico
+nsis/*.bmp
+nsis/*.ico
