@@ -13,6 +13,7 @@ pycodestyle
 pyinstaller
 sphinx
 sphinx-intl
+myst_parser
 pydata-sphinx-theme
 esbonio
 rstcheck

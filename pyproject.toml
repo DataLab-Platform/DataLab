@@ -57,7 +57,7 @@ cdl-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
 dev = ["black", "isort", "pylint", "Coverage"]
-doc = ["PyQt5", "sphinx", "sphinx_intl", "pydata-sphinx-theme"]
+doc = ["PyQt5", "sphinx", "sphinx_intl", "myst_parser", "pydata-sphinx-theme"]
 
 [tool.setuptools.packages.find]
 include = ["cdl*"]

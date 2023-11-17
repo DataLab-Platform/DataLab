@@ -49,6 +49,7 @@ External resources:
    features/signal/index
    features/image/index
    dev/index
+   changelog
 
 Copyrights and licensing
 ------------------------

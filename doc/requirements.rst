@@ -84,6 +84,9 @@ Optional modules for building the documentation:
     * - sphinx_intl
       - 
       - Sphinx utility that make it easy to translate and to apply translation.
+    * - myst_parser
+      - 
+      - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,
     * - pydata-sphinx-theme
       - 
       - Bootstrap-based Sphinx theme from the PyData community

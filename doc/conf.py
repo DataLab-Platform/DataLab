@@ -21,7 +21,12 @@ release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
 
-extensions = ["sphinx.ext.intersphinx", "sphinx.ext.napoleon", "sphinx.ext.mathjax"]
+extensions = [
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.mathjax",
+    "myst_parser",
+]
 templates_path = ["_templates"]
 exclude_patterns = []
 

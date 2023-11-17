@@ -1,4 +1,4 @@
-# DataLab Releases #
+# Changelog #
 
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
@@ -106,7 +106,9 @@ New features:
 * Console: added configurable external editor (default: VSCode) to follow the
   traceback links to the source code
 
-## CodraFT Version 2.2.0 ##
+## Older releases ##
+
+### CodraFT Version 2.2.0 ###
 
 New features:
 
@@ -119,7 +121,7 @@ New features:
 * Added default image visualization settings in .INI configuration file
 * Using guiqwt v4.3.2: fixed pixel position (first pixel is centered at (0,0) coords)
 
-## CodraFT Version 2.1.4 ##
+### CodraFT Version 2.1.4 ###
 
 Bug fixes:
 
@@ -136,7 +138,7 @@ Other changes:
 
 * Alpha/beta release: fixed installer, added warning
 
-## CodraFT Version 2.1.3 ##
+### CodraFT Version 2.1.3 ###
 
 Bug fixes:
 
@@ -156,7 +158,7 @@ Other changes:
 * Images: added support for `numpy.int32` datatype
 * Added unit tests for all curve fitting dialogs
 
-## CodraFT Version 2.1.2 ##
+### CodraFT Version 2.1.2 ###
 
 Bug fixes:
 
@@ -179,7 +181,7 @@ Other changes:
 * Dependencies hash check: feature is now OS-dependent (+ more explicit messages)
 * Slightly improved test coverage
 
-## CodraFT Version 2.1.1 ##
+### CodraFT Version 2.1.1 ###
 
 Changes:
 
@@ -211,7 +213,7 @@ Bug fixes:
 * Image ROI definition dialog: maximum rows and columns were erroneously truncated
 * Centralized argument parsing in DataLab exec env object, thus avoiding conflicts
 
-## CodraFT Version 2.0.3 ##
+### CodraFT Version 2.0.3 ###
 
 Bug fixes:
 
@@ -223,7 +225,7 @@ Other changes:
 * Installation configuration viewer: added info on dependency check result
 * Ignore when unable to save h5 in ima/sig test scenarios
 
-## CodraFT Version 2.0.2 ##
+### CodraFT Version 2.0.2 ###
 
 The following major changes were introduced with DataLab V2:
 
@@ -233,7 +235,7 @@ as embedding DataLab in a third-party software
 * Segmentation fault and Python exception logging
 * Customizable annotations for both signals and images
 
-### Release key features ###
+### Release key features ####
 
 * New data visualization and processing features:
 
@@ -250,7 +252,7 @@ scenarios, and enhanced public API for embedding DataLab into a third-party appl
 * Test Driven Development with high quality standards
 (pylint score >= 9.8/10, test coverage >= 90%)
 
-### Detailed feature list ###
+### Detailed feature list ####
 
 New data visualization and processing features:
 
@@ -353,7 +355,7 @@ Bug fixes:
   * Fixed plotting support for complex data
   * Fixed signal visualization parameters update from metadata
 
-## CodraFT Version 1.7.2 ##
+### CodraFT Version 1.7.2 ###
 
 Bug fixes:
 
@@ -372,7 +374,7 @@ Other changes:
 * Added more infos on uninstaller registry keys
 * Added documentation on key features
 
-## CodraFT Version 1.7.1 ##
+### CodraFT Version 1.7.1 ###
 
 Added first page of documentation (there is a beginning to everything...).
 
@@ -381,7 +383,7 @@ Bug fixes:
 * Cross section tool was working only on first image in item list
 * Separate view was broken since major refactoring
 
-## CodraFT Version 1.7.0 ##
+### CodraFT Version 1.7.0 ###
 
 New features:
 
@@ -395,7 +397,7 @@ New features:
 * Switched from cx_Freeze to pyinstaller for generating the stand-alone version
 * Improved pylint score up to 9.90/10 with strict quality criteria
 
-## CodraFT Version 1.6.0 ##
+### CodraFT Version 1.6.0 ###
 
 New features:
 
@@ -403,7 +405,7 @@ New features:
   has been altered (i.e. the application has not been qualified in this context)
 * Added py3compat (since QtPy is dropping Python 3 support)
 
-## CodraFT Version 1.5.0 ##
+### CodraFT Version 1.5.0 ###
 
 New features:
 
@@ -429,7 +431,7 @@ Bug fixes:
 
   * Fixed critical bug when clicking on "Check all".
 
-## CodraFT Version 1.4.4 ##
+### CodraFT Version 1.4.4 ###
 
 New experimental features:
 
@@ -443,14 +445,14 @@ New minor features:
 
 * Added contrast test (following issues with "eliminate_outliers")
 
-## CodraFT Version 1.4.3 ##
+### CodraFT Version 1.4.3 ###
 
 New minor features:
 
 * New test script for global application test (test_app.py).
 * Improved DataLab launcher (app.py).
 
-## CodraFT Version 1.4.2 ##
+### CodraFT Version 1.4.2 ###
 
 New minor features:
 
@@ -464,7 +466,7 @@ Bug fixes:
 
 * LMJ-formatted HDF5 file support: fixed truncated units.
 
-## CodraFT Version 1.4.1 ##
+### CodraFT Version 1.4.1 ###
 
 Bug fixes:
 
@@ -472,7 +474,7 @@ Bug fixes:
   which is not the expected behavior ("utf-8" is the expected
   encoding for ensuring better compatibility).
 
-## CodraFT Version 1.4.0 ##
+### CodraFT Version 1.4.0 ###
 
 New features:
 
@@ -485,7 +487,7 @@ Bug fixes:
 
 * Fixed LMJ-formatted HDF5 file support in DataLab data import feature.
 
-## CodraFT Version 1.3.1 ##
+### CodraFT Version 1.3.1 ###
 
 Bug fixes:
 
@@ -500,7 +502,7 @@ Bug fixes:
 * Patch/guiqwt.histogram: removing histogram curve (if necessary)
   when image item has been removed.
 
-## CodraFT Version 1.3.0 ##
+### CodraFT Version 1.3.0 ###
 
 New features:
 
@@ -511,7 +513,7 @@ Bug fixes:
 
 * Fixed image levels "Log scale" feature for Python 3 compatibility.
 
-## CodraFT Version 1.2.2 ##
+### CodraFT Version 1.2.2 ###
 
 New features:
 
@@ -527,7 +529,7 @@ Bug fixes:
 
 * The memory leak fix in app.py was accidentally commented before commit.
 
-## CodraFT Version 1.2.1 ##
+### CodraFT Version 1.2.1 ###
 
 Bug fixes:
 
@@ -540,7 +542,7 @@ Bug fixes:
 * When closing HDF5 import dialog box, preview signal/image widgets were not
   deleted, hence causing another memory leak.
 
-## CodraFT Version 1.2.0 ##
+### CodraFT Version 1.2.0 ###
 
 New features:
 
@@ -569,7 +571,7 @@ Bug fixes:
   of 2% to avoid display bug for noise background images for example (i.e.
   images with high contrast and very narrow histogram levels)
 
-## CodraFT Version 1.1.2 ##
+### CodraFT Version 1.1.2 ###
 
 Bug fixes:
 
@@ -577,14 +579,14 @@ Bug fixes:
   DataLab's, clicking on the "Process signal" button will send the signal to
   DataLab's signal panel for further processing, as expected.
 
-## CodraFT Version 1.1.1 ##
+### CodraFT Version 1.1.1 ###
 
 Bug fixes:
 
 * Fixed a bug leading to "None" titles when importing signals/images from HDF5
   files created outside DataLab.
 
-## CodraFT Version 1.1.0 ##
+### CodraFT Version 1.1.0 ###
 
 New features:
 
@@ -613,7 +615,7 @@ Bug fixes:
   * FWHM and FW1/e²: fixed amplitude computation for input fit parameters
       and output results
 
-## CodraFT Version 1.0.0 ##
+### CodraFT Version 1.0.0 ###
 
 First release of `CodraFT`.
 
