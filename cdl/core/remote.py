@@ -169,7 +169,7 @@ class RemoteServer(QC.QThread):
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
         self.SIG_DELETE_METADATA.connect(win.delete_metadata)
-        self.SIG_SWITCH_TO_PANEL.connect(win.switch_to_panel)
+        self.SIG_SWITCH_TO_PANEL.connect(win.set_current_panel)
         self.SIG_RESET_ALL.connect(win.reset_all)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
@@ -240,7 +240,7 @@ class RemoteServer(QC.QThread):
         self.SIG_RAISE_WINDOW.emit()
 
     @remote_call
-    def switch_to_panel(self, panel: str) -> None:
+    def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
 
         Args:

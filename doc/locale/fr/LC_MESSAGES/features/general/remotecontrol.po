@@ -273,7 +273,7 @@ msgstr ""
 #: cdl.remotecontrol.RemoteClient.open_h5_files
 #: cdl.remotecontrol.RemoteClient.open_object
 #: cdl.remotecontrol.RemoteClient.save_to_h5_file
-#: cdl.remotecontrol.RemoteClient.switch_to_panel of
+#: cdl.remotecontrol.RemoteClient.set_current_panel of
 msgid "Parameters"
 msgstr ""
 
@@ -584,11 +584,11 @@ msgstr ""
 msgid "Save to a DataLab HDF5 file."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.switch_to_panel:1 of
+#: cdl.remotecontrol.RemoteClient.set_current_panel:1 of
 msgid "Switch to panel."
 msgstr ""
 
-#: cdl.remotecontrol.RemoteClient.switch_to_panel:3 of
+#: cdl.remotecontrol.RemoteClient.set_current_panel:3 of
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
 msgstr ""
 

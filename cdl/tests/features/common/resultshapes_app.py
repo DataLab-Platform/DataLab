@@ -50,7 +50,7 @@ def test():
             panel.processor.compute_fw1e2()
         panel.objview.select_objects((0, 1))
         panel.show_results()
-        win.switch_to_panel("image")
+        win.set_current_panel("image")
         panel = win.imagepanel
         for obj in (obj1, obj2):
             panel.add_object(obj)

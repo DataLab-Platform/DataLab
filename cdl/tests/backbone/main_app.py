@@ -26,10 +26,10 @@ def test():
     with test_cdl_app_context(console=False) as win:
         # Switch from panel to panel
         for panelname in ("macro", "image", "signal"):
-            win.switch_to_panel(panelname)
+            win.set_current_panel(panelname)
         # Switch to an unknown panel
         try:
-            win.switch_to_panel("unknown_panel")
+            win.set_current_panel("unknown_panel")
             raise RuntimeError("Unknown panel should have raised an exception")
         except ValueError:
             pass

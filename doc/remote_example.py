@@ -37,7 +37,7 @@ proxy.compute_derivative()
 
 # %% Executing commands in DataLab (...)
 
-proxy.switch_to_panel("image")
+proxy.set_current_panel("image")
 
 # %% Executing commands in DataLab (...)
 

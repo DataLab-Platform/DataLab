@@ -70,9 +70,9 @@ class RemoteClient(object):
         """Raise DataLab window"""
         self.serverproxy.raise_window()
 
-    def switch_to_panel(self, panel):
+    def set_current_panel(self, panel):
         """Switch to panel"""
-        self.serverproxy.switch_to_panel(panel)
+        self.serverproxy.set_current_panel(panel)
 
     def reset_all(self):
         """Reset all application data"""

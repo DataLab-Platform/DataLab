@@ -286,7 +286,7 @@ msgstr ""
 #: cdl.core.remote.RemoteServer.save_to_h5_file
 #: cdl.core.remote.RemoteServer.select_groups
 #: cdl.core.remote.RemoteServer.select_objects
-#: cdl.core.remote.RemoteServer.switch_to_panel
+#: cdl.core.remote.RemoteServer.set_current_panel
 #: cdl.core.remote.array_to_rpcbinary cdl.core.remote.dataset_to_json
 #: cdl.core.remote.json_to_dataset cdl.core.remote.rpcbinary_to_array of
 msgid "Parameters"
@@ -420,12 +420,12 @@ msgstr "Depuis une application tierce"
 msgid "Raise DataLab window"
 msgstr ""
 
-#: cdl.core.remote.RemoteServer.switch_to_panel:1 of
+#: cdl.core.remote.RemoteServer.set_current_panel:1 of
 #, fuzzy
 msgid "Switch to panel."
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: cdl.core.remote.RemoteServer.switch_to_panel:3 of
+#: cdl.core.remote.RemoteServer.set_current_panel:3 of
 msgid "Panel name (valid values: 'signal', 'image', 'macro')"
 msgstr ""
 
@@ -1298,4 +1298,3 @@ msgstr ""
 
 #~ msgid "Error when trying to connect to DataLab XML-RPC server"
 #~ msgstr ""
-

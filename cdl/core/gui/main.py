@@ -759,9 +759,11 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.docks = {self.signalpanel: cdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
         self.signalpanel.SIG_OBJECT_ADDED.connect(
-            lambda: self.switch_to_panel("signal")
+            lambda: self.set_current_panel("signal")
         )
-        self.imagepanel.SIG_OBJECT_ADDED.connect(lambda: self.switch_to_panel("image"))
+        self.imagepanel.SIG_OBJECT_ADDED.connect(
+            lambda: self.set_current_panel("image")
+        )
         for panel in (self.signalpanel, self.imagepanel):
             panel.setup_panel()
 
@@ -933,7 +935,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     # ------Remote control
     @remote_controlled
-    def switch_to_panel(self, panel: str) -> None:
+    def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
 
         Args:

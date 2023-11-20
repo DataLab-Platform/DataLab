@@ -74,7 +74,7 @@ else:
 
 def test_various_image_features(win: CDLMainWindow):
     """Run image related tests."""
-    win.switch_to_panel("image")
+    win.set_current_panel("image")
     panel = win.imagepanel
     param = cdl.obj.new_image_param(height=150, width=150)
     for image in iterate_image_creation(param.width, non_zero=True, verbose=False):

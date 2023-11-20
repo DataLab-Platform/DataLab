@@ -29,7 +29,7 @@ def test_image_features(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True
 ) -> None:
     """Testing signal features"""
-    win.switch_to_panel("image")
+    win.set_current_panel("image")
     panel = win.imagepanel
 
     newparam = dlo.new_image_param(height=data_size, width=data_size)

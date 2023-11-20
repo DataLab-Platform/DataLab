@@ -97,7 +97,7 @@ def test_signal_features(
 ) -> None:
     """Testing signal features"""
     panel = win.signalpanel
-    win.switch_to_panel("signal")
+    win.set_current_panel("signal")
 
     if all_types:
         for signal in iterate_signal_creation(data_size, non_zero=True):

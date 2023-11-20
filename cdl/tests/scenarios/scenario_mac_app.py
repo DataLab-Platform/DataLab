@@ -44,7 +44,7 @@ def test() -> None:
     """Example of high-level test scenario with HDF5 file"""
     with temporary_directory() as tmpdir:
         with test_cdl_app_context(console=False) as win:
-            win.switch_to_panel("macro")
+            win.set_current_panel("macro")
             add_macro_sample(win, 0)
             win.macropanel.run_macro()
             time.sleep(1)
