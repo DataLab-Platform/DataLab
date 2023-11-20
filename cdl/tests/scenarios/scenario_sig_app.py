@@ -98,12 +98,12 @@ def test_signal_features(
     panel = win.signalpanel
     win.set_current_panel("signal")
 
-    # if all_types:
-    #     for signal in iterate_signal_creation(data_size, non_zero=True):
-    #         panel.add_object(create_paracetamol_signal(data_size))
-    #         panel.add_object(signal)
-    #         test_common_operations(panel)
-    #         panel.remove_all_objects()
+    if all_types:
+        for signal in iterate_signal_creation(data_size, non_zero=True):
+            panel.add_object(create_paracetamol_signal(data_size))
+            panel.add_object(signal)
+            test_common_operations(panel)
+            panel.remove_all_objects()
 
     sig1 = create_paracetamol_signal(data_size)
     win.add_object(sig1)
