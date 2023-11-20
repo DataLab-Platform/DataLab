@@ -104,6 +104,7 @@ class GenericArrayNode(BaseGenericNode):
             utils.is_supported_num_dtype(data)
             and isinstance(data, np.ndarray)
             and len(data.shape) in (1, 2)
+            and data.size > 1
         )
 
     @property
