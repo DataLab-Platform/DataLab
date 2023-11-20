@@ -49,10 +49,10 @@ def test_metadata_features(panel: BaseDataPanel):
     # Delete metadata of the first object
     panel.delete_metadata()
     # Select and copy metadata of the second object
-    panel.objview.select_objects([1])
+    panel.objview.select_objects([2])
     panel.copy_metadata()
     # Select and paste metadata to the first object
-    panel.objview.select_objects([0])
+    panel.objview.select_objects([1])
     panel.paste_metadata()
 
 

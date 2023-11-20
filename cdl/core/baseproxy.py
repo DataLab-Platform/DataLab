@@ -250,16 +250,14 @@ class AbstractCDLControl(abc.ABC):
     def select_objects(
         self,
         selection: list[int | str],
-        group_num: int | None = None,
         panel: str | None = None,
     ) -> None:
         """Select objects in current panel.
 
         Args:
-            selection (list[int | str]): List of object indices or uuids to select
-            group_num (int | None): Group number. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            selection: List of object numbers (1 to N) or uuids to select
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
 
     @abc.abstractmethod
@@ -524,18 +522,16 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
     def select_objects(
         self,
         selection: list[int | str],
-        group_num: int | None = None,
         panel: str | None = None,
     ) -> None:
         """Select objects in current panel.
 
         Args:
-            selection (list[int | str]): List of object indices or uuids to select
-            group_num (int | None): Group number. Defaults to None.
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used. Defaults to None.
+            selection: List of object numbers (1 to N) or uuids to select
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used. Defaults to None.
         """
-        self._cdl.select_objects(selection, group_num, panel)
+        self._cdl.select_objects(selection, panel)
 
     def select_groups(
         self, selection: list[int | str] | None = None, panel: str | None = None

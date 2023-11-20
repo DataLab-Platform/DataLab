@@ -386,18 +386,15 @@ class ObjectView(SimpleObjectTree):
     def select_objects(
         self,
         selection: list[SignalObj | ImageObj | int | str],
-        group_num: int | None = None,
     ) -> None:
         """Select multiple objects
 
         Args:
-            selection (list): list of objects, group numbers or uuids
-            group_num (int | None): group number. Defaults to None.
+            selection (list): list of objects, object numbers (1 to N) or object uuids
         """
         if all(isinstance(obj, int) for obj in selection):
-            groups = self.objmodel.get_groups()
-            group_num = 0 if group_num is None else group_num
-            uuids = [groups[group_num][num].uuid for num in selection]
+            all_uuids = self.objmodel.get_object_ids()
+            uuids = [all_uuids[num - 1] for num in selection]
         elif all(isinstance(obj, str) for obj in selection):
             uuids = selection
         else:

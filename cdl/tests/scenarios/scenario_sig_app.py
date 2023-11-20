@@ -29,12 +29,12 @@ from cdl.tests.features.common.newobject_unit import iterate_signal_creation
 from cdl.widgets import fitdialog
 
 
-def test_compute_11_operations(panel: SignalPanel | ImagePanel, index: int) -> None:
+def test_compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> None:
     """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
-    assert panel.object_number >= index - 1
-    panel.objview.select_objects((index,))
+    assert panel.object_number >= number - 1
+    panel.objview.select_objects((number,))
     panel.processor.compute_gaussian_filter(dlp.GaussianParam())
     panel.processor.compute_moving_average(dlp.MovingAverageParam())
     panel.processor.compute_moving_median(dlp.MovingMedianParam())
@@ -57,20 +57,20 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     """
     assert panel.object_number == 2
 
-    panel.objview.select_objects((1,))
+    panel.objview.select_objects((2,))
     panel.processor.compute_difference()  # difference with itself
     panel.remove_object()
-    panel.objview.select_objects((1,))
+    panel.objview.select_objects((2,))
     panel.processor.compute_quadratic_difference()  # quadratic difference with itself
     panel.delete_metadata()
-    panel.objview.select_objects((2,))
+    panel.objview.select_objects((3,))
     panel.remove_object()
 
-    panel.objview.select_objects((0, 1))
+    panel.objview.select_objects((1, 2))
     panel.processor.compute_sum()
-    panel.objview.select_objects((0, 1))
+    panel.objview.select_objects((1, 2))
     panel.processor.compute_sum()
-    panel.objview.select_objects((0, 1))
+    panel.objview.select_objects((1, 2))
     panel.processor.compute_product()
 
     obj = panel.objmodel.get_groups()[0][-1]
@@ -81,14 +81,14 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
-    panel.objview.select_objects((2, 6))
+    panel.objview.select_objects((3, 7))
     panel.processor.compute_division()
-    panel.objview.select_objects((0, 1, 2))
+    panel.objview.select_objects((1, 2, 3))
     panel.processor.compute_average()
 
     panel.add_label_with_title()
 
-    test_compute_11_operations(panel, 1)
+    test_compute_11_operations(panel, 2)
 
 
 def test_signal_features(
