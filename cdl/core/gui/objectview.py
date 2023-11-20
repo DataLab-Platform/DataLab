@@ -237,6 +237,7 @@ class GetObjectDialog(QW.QDialog):
 
     def __init__(self, parent: QW.QWidget, panel: BaseDataPanel, title: str) -> None:
         super().__init__(parent)
+        self.__current_object: SignalObj | ImageObj | None = None
         self.setWindowTitle(title)
         vlayout = QW.QVBoxLayout()
         self.setLayout(vlayout)
@@ -258,13 +259,12 @@ class GetObjectDialog(QW.QDialog):
 
     def get_current_object(self) -> SignalObj | ImageObj:
         """Return current object"""
-        return self.tree.get_current_object()
+        return self.__current_object
 
     def current_object_changed(self) -> None:
         """Item selection has changed"""
-        self.ok_btn.setEnabled(
-            isinstance(self.get_current_object(), (SignalObj, ImageObj))
-        )
+        self.__current_object = self.tree.get_current_object()
+        self.ok_btn.setEnabled(isinstance(self.__current_object, (SignalObj, ImageObj)))
 
 
 class ObjectView(SimpleObjectTree):

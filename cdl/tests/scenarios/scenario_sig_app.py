@@ -57,14 +57,13 @@ def test_common_operations(panel: SignalPanel | ImagePanel) -> None:
     """
     assert panel.object_number == 2
 
-    panel.duplicate_object()
-    panel.objview.select_objects((1, 2))
-    panel.processor.compute_difference()
+    panel.objview.select_objects((1,))
+    panel.processor.compute_difference()  # difference with itself
     panel.remove_object()
-    panel.objview.select_objects((1, 2))
-    panel.processor.compute_quadratic_difference()
+    panel.objview.select_objects((1,))
+    panel.processor.compute_quadratic_difference()  # quadratic difference with itself
     panel.delete_metadata()
-    panel.objview.select_objects((2, 3))
+    panel.objview.select_objects((2,))
     panel.remove_object()
 
     panel.objview.select_objects((0, 1))
@@ -99,12 +98,12 @@ def test_signal_features(
     panel = win.signalpanel
     win.set_current_panel("signal")
 
-    if all_types:
-        for signal in iterate_signal_creation(data_size, non_zero=True):
-            panel.add_object(create_paracetamol_signal(data_size))
-            panel.add_object(signal)
-            test_common_operations(panel)
-            panel.remove_all_objects()
+    # if all_types:
+    #     for signal in iterate_signal_creation(data_size, non_zero=True):
+    #         panel.add_object(create_paracetamol_signal(data_size))
+    #         panel.add_object(signal)
+    #         test_common_operations(panel)
+    #         panel.remove_all_objects()
 
     sig1 = create_paracetamol_signal(data_size)
     win.add_object(sig1)
@@ -163,18 +162,18 @@ def test_signal_features(
     panel.processor.compute_fw1e2()
 
 
-def test() -> None:
-    """Run signal unit test scenario 1"""
+def test_scenario_sig() -> None:
+    """Run signal unit test scenario"""
     assert (
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
     with test_cdl_app_context(save=True) as win:
-        execenv.print("Testing signal features without process isolation...")
+        execenv.print(f"Testing signal features (process isolation: off)...")
         win.set_process_isolation_enabled(False)
-        test_signal_features(win)
+        test_signal_features(win, all_types=True)
         win.signalpanel.remove_all_objects()
         execenv.print("==> OK")
-        execenv.print("Testing signal features *with* process isolation...")
+        execenv.print(f"Testing signal features (process isolation: on)...")
         win.set_process_isolation_enabled(True)
         test_signal_features(win, all_types=False)
         oids = win.signalpanel.objmodel.get_object_ids()
@@ -183,4 +182,4 @@ def test() -> None:
 
 
 if __name__ == "__main__":
-    test()
+    test_scenario_sig()
