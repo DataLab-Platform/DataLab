@@ -63,15 +63,15 @@ class AbstractCDLControl(abc.ABC):
         for uuid in uuids:
             yield self.get_object(uuid)
 
-    def __repr__(self) -> str:
-        """Return object representation"""
-        return self.__str__()
-
     def __str__(self) -> str:
         """Return object string representation"""
+        return super().__repr__()
+
+    def __repr__(self) -> str:
+        """Return object representation"""
         titles = self.get_object_titles()
         uuids = self.get_object_uuids()
-        text = f"{self.__class__.__name__} (DataLab instance, {len(titles)} items):\n"
+        text = f"{str(self)} (DataLab, {len(titles)} items):\n"
         for uuid, title in zip(uuids, titles):
             text += f"  {uuid}: {title}\n"
         return text
