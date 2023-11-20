@@ -113,7 +113,12 @@ Section "Uninstall"
     DeleteRegKey HKCU "${UINSTREG}"
     RMDir /r "$SMPROGRAMS\${PRODNAME}"
     Delete $INSTDIR\uninstaller.exe
-    RMDir /r $INSTDIR
+    ; **********************************************************************************
+    ; The following is adapted to a PyInstaller 6.0 "onedir mode" distribution
+    Delete "$INSTDIR\${PRODNAME}.exe"
+    RMDir /r $INSTDIR\_internal
+    RMDir $INSTDIR
+    ; **********************************************************************************
 SectionEnd
 
 

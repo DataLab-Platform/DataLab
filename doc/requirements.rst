@@ -65,6 +65,9 @@ Optional modules for development:
     * - Coverage
       - 
       - Code coverage measurement for Python
+    * - pyinstaller
+      - >=6.0
+      - PyInstaller bundles a Python application and all its dependencies into a single package.
 
 Optional modules for building the documentation:
 
