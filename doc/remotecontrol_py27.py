@@ -70,6 +70,10 @@ class RemoteClient(object):
         """Raise DataLab window"""
         self.serverproxy.raise_window()
 
+    def get_current_panel(self):
+        """Return current panel"""
+        return self.serverproxy.get_current_panel()
+
     def set_current_panel(self, panel):
         """Switch to panel"""
         self.serverproxy.set_current_panel(panel)

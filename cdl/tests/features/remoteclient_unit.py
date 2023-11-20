@@ -50,6 +50,7 @@ def multiple_commands(remote: RemoteCDLProxy):
         remote.open_h5_files([fname], True, False)
         remote.import_h5_file(fname, True)
         remote.set_current_panel("signal")
+        assert remote.get_current_panel() == "signal"
         remote.calc("log10")
 
         param = XYCalibrateParam.create(a=1.2, b=0.1)

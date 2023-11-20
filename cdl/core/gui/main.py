@@ -935,6 +935,20 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     # ------Remote control
     @remote_controlled
+    def get_current_panel(self) -> str:
+        """Return current panel name
+
+        Returns:
+            str: panel name (valid values: "signal", "image", "macro")
+        """
+        panel = self.tabwidget.currentWidget()
+        if panel is self.signalpanel:
+            return "signal"
+        if panel is self.imagepanel:
+            return "image"
+        return "macro"
+
+    @remote_controlled
     def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
 

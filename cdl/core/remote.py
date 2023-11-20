@@ -240,6 +240,15 @@ class RemoteServer(QC.QThread):
         self.SIG_RAISE_WINDOW.emit()
 
     @remote_call
+    def get_current_panel(self) -> str:
+        """Return current panel name.
+
+        Returns:
+            str: Panel name (valid values: 'signal', 'image', 'macro')
+        """
+        return self.win.get_current_panel()
+
+    @remote_call
     def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
 

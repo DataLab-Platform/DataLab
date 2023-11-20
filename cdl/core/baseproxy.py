@@ -114,6 +114,14 @@ class AbstractCDLControl(abc.ABC):
         """Raise DataLab window"""
 
     @abc.abstractmethod
+    def get_current_panel(self) -> str:
+        """Return current panel name.
+
+        Returns:
+            str: Panel name (valid values: "signal", "image", "macro"))
+        """
+
+    @abc.abstractmethod
     def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
 
@@ -439,6 +447,14 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
     def raise_window(self) -> None:
         """Raise DataLab window"""
         self._cdl.raise_window()
+
+    def get_current_panel(self) -> str:
+        """Return current panel name.
+
+        Returns:
+            str: Panel name (valid values: "signal", "image", "macro"))
+        """
+        return self._cdl.get_current_panel()
 
     def set_current_panel(self, panel: str) -> None:
         """Switch to panel.
