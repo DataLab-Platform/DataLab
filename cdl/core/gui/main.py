@@ -887,6 +887,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             "You can access the main window with the 'cdl' variable.\n"
             "Example:\n"
             "  o = cdl.get_object()  # returns currently selected object\n"
+            "  o = cdl[1]  # returns object number 1\n"
+            "  o = cdl['My image']  # returns object which title is 'My image'\n"
             "  o.data  # returns object data\n"
             "Modules imported at startup: "
             "os, sys, os.path as osp, time, "

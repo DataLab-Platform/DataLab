@@ -50,12 +50,13 @@ class RemoteCDLProxy(RemoteClient):
         True
         >>> proxy.get_object_titles()
         ['toto']
-        >>> proxy.get_object("toto")  # from title
+        >>> proxy["toto"]  # from title
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> proxy.get_object(1)  # from number
+        >>> proxy[1]  # from number
         <cdl.core.model.signal.SignalObj at 0x7f7f1c0b4a90>
-        >>> proxy.get_object(1).data
+        >>> proxy[1].data
         array([1., 2., 3.])
+        >>> proxy.switch_to_panel("image")
     """
 
     def __init__(self, autoconnect: bool = True) -> None:

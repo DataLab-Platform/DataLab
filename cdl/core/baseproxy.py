@@ -37,12 +37,52 @@ import numpy as np
 from cdl.obj import ImageObj, SignalObj
 
 if TYPE_CHECKING:  # pragma: no cover
+    from collections.abc import Iterator
+
     from cdl.core.gui.main import CDLMainWindow
     from cdl.core.remote import ServerProxy
 
 
 class AbstractCDLControl(abc.ABC):
     """Abstract base class for controlling DataLab (main window or remote server)"""
+
+    def __len__(self) -> int:
+        """Return number of objects"""
+        return len(self.get_object_uuids())
+
+    def __getitem__(
+        self,
+        nb_id_title: int | str | None = None,
+    ) -> SignalObj | ImageObj:
+        """Return object"""
+        return self.get_object(nb_id_title)
+
+    def __iter__(self) -> Iterator[SignalObj | ImageObj]:
+        """Iterate over objects"""
+        uuids = self.get_object_uuids()
+        for uuid in uuids:
+            yield self.get_object(uuid)
+
+    def __repr__(self) -> str:
+        """Return object representation"""
+        return self.__str__()
+
+    def __str__(self) -> str:
+        """Return object string representation"""
+        titles = self.get_object_titles()
+        uuids = self.get_object_uuids()
+        text = f"{self.__class__.__name__} (DataLab instance, {len(titles)} items):\n"
+        for uuid, title in zip(uuids, titles):
+            text += f"  {uuid}: {title}\n"
+        return text
+
+    def __bool__(self) -> bool:
+        """Return True if model is not empty"""
+        return bool(self.get_object_uuids())
+
+    def __contains__(self, id_title: str) -> bool:
+        """Return True if object (UUID or title) is in model"""
+        return id_title in (self.get_object_titles() + self.get_object_uuids())
 
     @classmethod
     def get_public_methods(cls) -> list[str]:

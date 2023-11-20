@@ -49,17 +49,29 @@ def test():
         uuids = win.get_object_uuids()
         execenv.print(f"Object uuids:{os.linesep}{uuids}")
 
+        # Testing `get_object`
+        execenv.print("*** Testing `get_object` ***")
         # Get object from title
         obj = win.get_object(titles[-1])
-        execenv.print(f"Object (from title) '{obj.short_id}':{os.linesep}{obj}")
-
+        execenv.print(f"  Object (from title) '{obj.short_id}':{os.linesep}{obj}")
         # Get object
         obj = win.get_object(1)
-        execenv.print(f"Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
-
+        execenv.print(f"  Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
         # Get object by uuid
         obj = win.get_object(uuids[-1])
-        execenv.print(f"Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
+        execenv.print(f"  Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
+
+        # Testing dict-like interface of main window:
+        execenv.print("*** Testing dict-like interface of proxy ***")
+        # Get object from title
+        obj = win[titles[-1]]
+        execenv.print(f"  Object (from title) '{obj.short_id}':{os.linesep}{obj}")
+        # Get object
+        obj = win[1]
+        execenv.print(f"  Object (from number)  '{obj.short_id}':{os.linesep}{obj}")
+        # Get object by uuid
+        obj = win[uuids[-1]]
+        execenv.print(f"  Object (from uuid)  '{obj.short_id}':{os.linesep}{obj}")
 
         # Use "calc" method with parameters
         param = MovingMedianParam.create(n=5)
