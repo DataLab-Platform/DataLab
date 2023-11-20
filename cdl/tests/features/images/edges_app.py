@@ -23,7 +23,7 @@ def test():
         panel.add_object(get_test_image("flower.npy"))
         proc = panel.processor
         proc.compute_all_edges()
-        panel.objview.select_groups([0])
+        panel.objview.select_groups()
         param = cdl.param.GridParam.create(cols=4)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()

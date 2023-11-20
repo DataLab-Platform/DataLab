@@ -406,14 +406,19 @@ class ObjectView(SimpleObjectTree):
         for idx, uuid in enumerate(uuids):
             self.set_current_item_id(uuid, extend=idx > 0)
 
-    def select_groups(self, groups: list[ObjectGroup | int | str]) -> None:
+    def select_groups(
+        self, groups: list[ObjectGroup | int | str] | None = None
+    ) -> None:
         """Select multiple groups
 
         Args:
-            groups (list): list of groups, group numbers or group names
+            groups: list of groups, group numbers (1 to N), group names or None
+             (select all groups). Defaults to None.
         """
-        if all(isinstance(group, int) for group in groups):
-            groups = [self.objmodel.get_groups()[grp_num] for grp_num in groups]
+        if groups is None:
+            groups = self.objmodel.get_groups()
+        elif all(isinstance(group, int) for group in groups):
+            groups = [self.objmodel.get_groups()[grp_num - 1] for grp_num in groups]
         elif all(isinstance(group, str) for group in groups):
             groups = self.objmodel.get_groups(groups)
         assert all(isinstance(group, ObjectGroup) for group in groups)

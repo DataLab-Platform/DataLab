@@ -147,6 +147,7 @@ class RemoteServer(QC.QThread):
     SIG_OPEN_OBJECT = QC.Signal(str)
     SIG_SELECT_OBJECTS = QC.Signal(list, int, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
+    SIG_SELECT_ALL_GROUPS = QC.Signal(str)
     SIG_DELETE_METADATA = QC.Signal(bool)
     SIG_SWITCH_TO_PANEL = QC.Signal(str)
     SIG_SWITCH_TO_IMAGE_PANEL = QC.Signal()
@@ -168,6 +169,7 @@ class RemoteServer(QC.QThread):
         self.SIG_OPEN_OBJECT.connect(win.open_object)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
+        self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel)
         self.SIG_DELETE_METADATA.connect(win.delete_metadata)
         self.SIG_SWITCH_TO_PANEL.connect(win.set_current_panel)
         self.SIG_RESET_ALL.connect(win.reset_all)
@@ -412,16 +414,20 @@ class RemoteServer(QC.QThread):
 
     @remote_call
     def select_groups(
-        self, selection: list[int | str], panel: str | None = None
+        self, selection: list[int | str] | None = None, panel: str | None = None
     ) -> None:
         """Select groups in current panel.
 
         Args:
-            selection (list[int|str]): List of group indices or group uuids to select
+            selection: List of group numbers (1 to N), or list of group uuids,
+             or None to select all groups. Defaults to None.
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used. Defaults to None.
         """
-        self.SIG_SELECT_GROUPS.emit(selection, panel)
+        if selection is None:
+            self.SIG_SELECT_ALL_GROUPS.emit(panel)
+        else:
+            self.SIG_SELECT_GROUPS.emit(selection, panel)
 
     @remote_call
     def delete_metadata(self, refresh_plot: bool = True) -> None:

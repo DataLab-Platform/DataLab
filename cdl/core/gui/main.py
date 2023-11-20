@@ -321,12 +321,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     @remote_controlled
     def select_groups(
-        self, selection: list[int | str], panel: str | None = None
+        self, selection: list[int | str] | None = None, panel: str | None = None
     ) -> None:
         """Select groups in current panel.
 
         Args:
-            selection (list[int | str]): List of group numbers or uuids to select
+            selection: List of group numbers (1 to N), or list of group uuids,
+             or None to select all groups. Defaults to None.
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used. Defaults to None.
         """

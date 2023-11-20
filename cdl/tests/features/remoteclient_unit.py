@@ -40,7 +40,7 @@ def multiple_commands(remote: RemoteCDLProxy):
         items = remote.get_object_shapes()
         assert len(items) == 1 and items[0].get_rect() == area
         remote.add_label_with_title(f"Image uuid: {uuid}")
-        remote.select_groups([0])
+        remote.select_groups([1])
         remote.select_objects([uuid])
         remote.delete_metadata()
 

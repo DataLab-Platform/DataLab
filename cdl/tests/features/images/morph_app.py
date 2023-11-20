@@ -24,7 +24,7 @@ def test():
         proc = panel.processor
         param = cdl.param.MorphologyParam.create(radius=10)
         proc.compute_all_morphology(param)
-        panel.objview.select_groups([0])
+        panel.objview.select_groups()
         param = cdl.param.GridParam.create(cols=4)
         proc.distribute_on_grid(param)
         panel.add_label_with_title()
