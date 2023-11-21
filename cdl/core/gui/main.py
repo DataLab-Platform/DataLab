@@ -1077,7 +1077,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def reset_all(self) -> None:
         """Reset all application data"""
         for panel in self.panels:
-            panel.remove_all_objects()
+            if panel is not None:
+                panel.remove_all_objects()
 
     @staticmethod
     def __check_h5file(filename: str, operation: str) -> str:
@@ -1401,7 +1402,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             elif answer == QW.QMessageBox.Cancel:
                 return False
         for panel in self.panels:
-            panel.close()
+            if panel is not None:
+                panel.close()
         if self.console is not None:
             try:
                 self.console.close()
