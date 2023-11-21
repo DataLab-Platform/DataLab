@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-11-17 13:48+0100\n"
+"POT-Creation-Date: 2023-11-21 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -158,7 +158,7 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:480 cdl\core\model\image.py:731
+#: cdl\core\computation\image\__init__.py:480 cdl\core\model\image.py:735
 msgid "Data type"
 msgstr "Type de données"
 
@@ -606,7 +606,7 @@ msgstr ""
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
-#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:267
+#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:268
 #: cdl\tests\data.py:380
 msgid "Radius"
 msgstr "Rayon"
@@ -686,15 +686,15 @@ msgstr "énergie"
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: cdl\core\computation\signal.py:345 cdl\core\model\image.py:377
-#: cdl\core\model\image.py:380 cdl\core\model\signal.py:86
-#: cdl\core\model\signal.py:89
+#: cdl\core\computation\signal.py:345 cdl\core\model\image.py:381
+#: cdl\core\model\image.py:384 cdl\core\model\signal.py:89
+#: cdl\core\model\signal.py:92
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: cdl\core\computation\signal.py:345 cdl\core\model\image.py:381
-#: cdl\core\model\image.py:384 cdl\core\model\signal.py:90
-#: cdl\core\model\signal.py:93
+#: cdl\core\computation\signal.py:345 cdl\core\model\image.py:385
+#: cdl\core\model\image.py:388 cdl\core\model\signal.py:93
+#: cdl\core\model\signal.py:96
 msgid "Y-axis"
 msgstr "Axe des Y"
 
@@ -706,13 +706,13 @@ msgstr "Étalonner"
 msgid "Degree"
 msgstr "Degré"
 
-#: cdl\core\computation\signal.py:489 cdl\core\model\signal.py:630
+#: cdl\core\computation\signal.py:489 cdl\core\model\signal.py:634
 #: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\demo.py:70
-#: cdl\tests\scenarios\scenario_sig_app.py:153
+#: cdl\tests\scenarios\scenario_sig_app.py:152
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: cdl\core\computation\signal.py:490 cdl\core\model\signal.py:631
+#: cdl\core\computation\signal.py:490 cdl\core\model\signal.py:635
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
@@ -950,17 +950,17 @@ msgid "Fitting"
 msgstr "Ajustement"
 
 #: cdl\core\gui\actionhandler.py:648 cdl\tests\scenarios\demo.py:68
-#: cdl\tests\scenarios\scenario_sig_app.py:149 cdl\widgets\fitdialog.py:116
+#: cdl\tests\scenarios\scenario_sig_app.py:148 cdl\widgets\fitdialog.py:116
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
 #: cdl\core\gui\actionhandler.py:649
-#: cdl\tests\scenarios\scenario_sig_app.py:150 cdl\widgets\fitdialog.py:144
+#: cdl\tests\scenarios\scenario_sig_app.py:149 cdl\widgets\fitdialog.py:144
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
 #: cdl\core\gui\actionhandler.py:650
-#: cdl\tests\scenarios\scenario_sig_app.py:151 cdl\widgets\fitdialog.py:172
+#: cdl\tests\scenarios\scenario_sig_app.py:150 cdl\widgets\fitdialog.py:172
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
@@ -989,7 +989,7 @@ msgstr "Largeur à "
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1375
+#: cdl\core\gui\actionhandler.py:676 cdl\core\gui\main.py:1357
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1305,7 +1305,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:453 cdl\core\gui\main.py:1158
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:417 cdl\core\gui\main.py:1140
 #: cdl\plugins.py:160
 msgid "Warning"
 msgstr "Attention"
@@ -1314,8 +1314,8 @@ msgstr "Attention"
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:156 cdl\core\model\image.py:375
-#: cdl\core\model\signal.py:78 cdl\core\model\signal.py:84
+#: cdl\core\gui\macroeditor.py:156 cdl\core\model\image.py:379
+#: cdl\core\model\signal.py:81 cdl\core\model\signal.py:87
 msgid "Untitled"
 msgstr "Sans titre"
 
@@ -1343,13 +1343,13 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
-#: cdl\core\gui\main.py:454
+#: cdl\core\gui\main.py:418
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: cdl\core\gui\main.py:468
+#: cdl\core\gui\main.py:432
 msgid ""
 "This software is in the <b>beta stage</b> of its release cycle. The focus of "
 "beta testing is providing a feature complete software for users interested "
@@ -1365,7 +1365,7 @@ msgstr ""
 "fonctionner correctement et présente plus d'anomalies résiduelles et de "
 "problèmes de performance que la version finale</u>."
 
-#: cdl\core\gui\main.py:478
+#: cdl\core\gui\main.py:442
 msgid ""
 "This software is in the <b>alpha stage</b> of its release cycle. The focus "
 "of alpha testing is providing an incomplete software for early testing of "
@@ -1379,15 +1379,15 @@ msgstr ""
 "Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests "
 "poussés avant sa diffusion</u>."
 
-#: cdl\core\gui\main.py:488
+#: cdl\core\gui\main.py:452
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:504 cdl\core\gui\main.py:519 cdl\plugins.py:168
+#: cdl\core\gui\main.py:468 cdl\core\gui\main.py:483 cdl\plugins.py:168
 msgid "Information"
 msgstr "Information"
 
-#: cdl\core\gui\main.py:505
+#: cdl\core\gui\main.py:469
 msgid ""
 "The dependency check feature is not relevant for the standalone version of "
 "DataLab."
@@ -1395,7 +1395,7 @@ msgstr ""
 "La vérification des dépendances n'est pas pertinente pour la version "
 "autonome de DataLab."
 
-#: cdl\core\gui\main.py:520
+#: cdl\core\gui\main.py:484
 msgid ""
 "All critical dependencies of DataLab have been qualified on this operating "
 "system."
@@ -1403,19 +1403,19 @@ msgstr ""
 "Toutes les dépendances critiques de DataLab ont été qualifiées sur ce "
 "système d'exploitation."
 
-#: cdl\core\gui\main.py:529
+#: cdl\core\gui\main.py:493
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: cdl\core\gui\main.py:531
+#: cdl\core\gui\main.py:495
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: cdl\core\gui\main.py:534
+#: cdl\core\gui\main.py:498
 msgid "DataLab has not yet been qualified on your operating system."
 msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: cdl\core\gui\main.py:540
+#: cdl\core\gui\main.py:504
 msgid ""
 "At least one dependency does not comply with DataLab qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -1427,7 +1427,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: cdl\core\gui\main.py:550
+#: cdl\core\gui\main.py:514
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -1435,168 +1435,168 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:569
+#: cdl\core\gui\main.py:533
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:685
+#: cdl\core\gui\main.py:649
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:703
+#: cdl\core\gui\main.py:667
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:705
+#: cdl\core\gui\main.py:669
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:710
+#: cdl\core\gui\main.py:674
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:712
+#: cdl\core\gui\main.py:676
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:717
+#: cdl\core\gui\main.py:681
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:719
+#: cdl\core\gui\main.py:683
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:724
+#: cdl\core\gui\main.py:688
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:726
+#: cdl\core\gui\main.py:690
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:729
+#: cdl\core\gui\main.py:693
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:742
+#: cdl\core\gui\main.py:706
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:743
+#: cdl\core\gui\main.py:707
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:745 cdl\core\gui\main.py:1409
+#: cdl\core\gui\main.py:709 cdl\core\gui\main.py:1391
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:746
+#: cdl\core\gui\main.py:710
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:758
+#: cdl\core\gui\main.py:722
 msgid "Signal Processing Toolbar"
 msgstr "Barre d'outils de traitement du signal"
 
-#: cdl\core\gui\main.py:770
+#: cdl\core\gui\main.py:734
 msgid "Image Processing Toolbar"
 msgstr "Barre d'outils de traitement d'image"
 
-#: cdl\core\gui\main.py:791
+#: cdl\core\gui\main.py:755
 msgid "Curve panel"
 msgstr "Panneau des signaux"
 
-#: cdl\core\gui\main.py:792 cdl\core\gui\panel\image.py:49
+#: cdl\core\gui\main.py:756 cdl\core\gui\panel\image.py:49
 msgid "Image panel"
 msgstr "Panneau des images"
 
-#: cdl\core\gui\main.py:806
+#: cdl\core\gui\main.py:772
 msgid "Signals"
 msgstr "Signaux"
 
-#: cdl\core\gui\main.py:807
+#: cdl\core\gui\main.py:773
 msgid "Images"
 msgstr "Images"
 
-#: cdl\core\gui\main.py:822
+#: cdl\core\gui\main.py:788
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:824
+#: cdl\core\gui\main.py:790
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:825
+#: cdl\core\gui\main.py:791
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:826 cdl\core\gui\settings.py:238
+#: cdl\core\gui\main.py:792 cdl\core\gui\settings.py:238
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:827
+#: cdl\core\gui\main.py:793
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:828
+#: cdl\core\gui\main.py:794
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:829
+#: cdl\core\gui\main.py:795
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:846
-msgid "PDF documentation"
-msgstr "Documentation PDF"
-
-#: cdl\core\gui\main.py:854
+#: cdl\core\gui\main.py:809
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:864
+#: cdl\core\gui\main.py:819
+msgid "PDF documentation"
+msgstr "Documentation PDF"
+
+#: cdl\core\gui\main.py:829
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:871 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:836 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:877 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:842 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:884
+#: cdl\core\gui\main.py:849
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:890
+#: cdl\core\gui\main.py:855
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:896
+#: cdl\core\gui\main.py:861
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:901
+#: cdl\core\gui\main.py:866
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:934 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:901 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:943 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:910 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1126
+#: cdl\core\gui\main.py:1108
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1159
+#: cdl\core\gui\main.py:1141
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1604,56 +1604,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1170 cdl\core\gui\panel\base.py:660
+#: cdl\core\gui\main.py:1152 cdl\core\gui\panel\base.py:660
 #: cdl\core\gui\panel\macro.py:430
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1331
+#: cdl\core\gui\main.py:1313
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1333
+#: cdl\core\gui\main.py:1315
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1336
+#: cdl\core\gui\main.py:1318
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1338
+#: cdl\core\gui\main.py:1320
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1341
+#: cdl\core\gui\main.py:1323
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1342
+#: cdl\core\gui\main.py:1324
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1343
+#: cdl\core\gui\main.py:1325
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1347
+#: cdl\core\gui\main.py:1329
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1348
+#: cdl\core\gui\main.py:1330
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1352
+#: cdl\core\gui\main.py:1334
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1370
+#: cdl\core\gui\main.py:1352
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1371
+#: cdl\core\gui\main.py:1353
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1661,7 +1661,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1410
+#: cdl\core\gui\main.py:1392
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -1718,7 +1718,7 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 #: cdl\core\gui\panel\base.py:921 cdl\core\gui\roieditor.py:185
-#: cdl\core\model\base.py:657
+#: cdl\core\model\base.py:655
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
@@ -2215,245 +2215,245 @@ msgstr "Fichiers binaires NumPy"
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: cdl\core\model\base.py:81 cdl\tests\data.py:89
+#: cdl\core\model\base.py:80 cdl\tests\data.py:89
 msgid "Seed"
 msgstr "Graine"
 
-#: cdl\core\model\base.py:92
+#: cdl\core\model\base.py:91
 msgid "Uniform distribution lower bound"
 msgstr "Borne inférieure de la distribution uniforme"
 
-#: cdl\core\model\base.py:95
+#: cdl\core\model\base.py:94
 msgid "Uniform distribution higher bound"
 msgstr "Borne supérieure de la distribution uniforme"
 
-#: cdl\core\model\base.py:112
+#: cdl\core\model\base.py:111
 msgid "Normal distribution mean"
 msgstr "Moyenne de la distribution normale"
 
-#: cdl\core\model\base.py:117
+#: cdl\core\model\base.py:116
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: cdl\core\model\base.py:993
+#: cdl\core\model\base.py:991
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:994
+#: cdl\core\model\base.py:992
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#: cdl\core\model\image.py:216 cdl\core\model\image.py:219
+#: cdl\core\model\image.py:217 cdl\core\model\image.py:220
 msgid "Top left corner"
 msgstr "Coin supérieur gauche"
 
-#: cdl\core\model\image.py:220 cdl\core\model\image.py:223
+#: cdl\core\model\image.py:221 cdl\core\model\image.py:224
 msgid "Bottom right corner"
 msgstr "Coin inférieur droit"
 
-#: cdl\core\model\image.py:263 cdl\core\model\image.py:266
+#: cdl\core\model\image.py:264 cdl\core\model\image.py:267
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: cdl\core\model\image.py:358 cdl\core\model\image.py:359
-#: cdl\core\model\image.py:361 cdl\core\model\signal.py:79
+#: cdl\core\model\image.py:362 cdl\core\model\image.py:363
+#: cdl\core\model\image.py:365 cdl\core\model\signal.py:82
 msgid "Data"
 msgstr "Données"
 
-#: cdl\core\model\image.py:360 cdl\core\model\signal.py:80
+#: cdl\core\model\image.py:364 cdl\core\model\signal.py:83
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: cdl\core\model\image.py:363 cdl\core\model\image.py:364
-#: cdl\core\model\image.py:367 cdl\core\model\image.py:372
+#: cdl\core\model\image.py:367 cdl\core\model\image.py:368
+#: cdl\core\model\image.py:371 cdl\core\model\image.py:376
 msgid "Origin"
 msgstr "Origine"
 
-#: cdl\core\model\image.py:363 cdl\core\model\image.py:368
-#: cdl\core\model\image.py:371 cdl\core\model\image.py:372
+#: cdl\core\model\image.py:367 cdl\core\model\image.py:372
+#: cdl\core\model\image.py:375 cdl\core\model\image.py:376
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: cdl\core\model\image.py:374 cdl\core\model\image.py:390
+#: cdl\core\model\image.py:378 cdl\core\model\image.py:394
 msgid "Titles"
 msgstr "Titres"
 
-#: cdl\core\model\image.py:374 cdl\core\model\image.py:390
+#: cdl\core\model\image.py:378 cdl\core\model\image.py:394
 msgid "Units"
 msgstr "Unités"
 
-#: cdl\core\model\image.py:375
+#: cdl\core\model\image.py:379
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: cdl\core\model\image.py:378 cdl\core\model\image.py:382
-#: cdl\core\model\image.py:386 cdl\core\model\image.py:724
-#: cdl\core\model\signal.py:87 cdl\core\model\signal.py:91
-#: cdl\core\model\signal.py:512
+#: cdl\core\model\image.py:382 cdl\core\model\image.py:386
+#: cdl\core\model\image.py:390 cdl\core\model\image.py:728
+#: cdl\core\model\signal.py:90 cdl\core\model\signal.py:94
+#: cdl\core\model\signal.py:516
 msgid "Title"
 msgstr "Titre"
 
-#: cdl\core\model\image.py:379 cdl\core\model\image.py:383
-#: cdl\core\model\image.py:387 cdl\core\model\signal.py:88
-#: cdl\core\model\signal.py:92 cdl\core\model\signal.py:494
+#: cdl\core\model\image.py:383 cdl\core\model\image.py:387
+#: cdl\core\model\image.py:391 cdl\core\model\signal.py:91
+#: cdl\core\model\signal.py:95 cdl\core\model\signal.py:498
 msgid "Unit"
 msgstr "Unité"
 
-#: cdl\core\model\image.py:385 cdl\core\model\image.py:388
+#: cdl\core\model\image.py:389 cdl\core\model\image.py:392
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:712 cdl\core\model\signal.py:442
+#: cdl\core\model\image.py:716 cdl\core\model\signal.py:446
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:713
+#: cdl\core\model\image.py:717
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:714 cdl\core\model\signal.py:443
+#: cdl\core\model\image.py:718 cdl\core\model\signal.py:447
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:715 cdl\core\model\signal.py:446
+#: cdl\core\model\image.py:719 cdl\core\model\signal.py:450
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:716 cdl\core\model\signal.py:447
+#: cdl\core\model\image.py:720 cdl\core\model\signal.py:451
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:726
+#: cdl\core\model\image.py:730
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:726
+#: cdl\core\model\image.py:730
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:729
+#: cdl\core\model\image.py:733
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:729 cdl\tests\data.py:379
+#: cdl\core\model\image.py:733 cdl\tests\data.py:379
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:732 cdl\core\model\signal.py:518
+#: cdl\core\model\image.py:736 cdl\core\model\signal.py:522
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:737
+#: cdl\core\model\image.py:741
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:833
+#: cdl\core\model\image.py:837
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:861
+#: cdl\core\model\image.py:865
 msgid "Image"
 msgstr "Image"
 
-#: cdl\core\model\signal.py:63
+#: cdl\core\model\signal.py:64
 msgid "First point index"
 msgstr "Indice du premier point"
 
-#: cdl\core\model\signal.py:64
+#: cdl\core\model\signal.py:65
 msgid "Last point index"
 msgstr "Indice du dernier point"
 
-#: cdl\core\model\signal.py:77 cdl\core\model\signal.py:81
+#: cdl\core\model\signal.py:80 cdl\core\model\signal.py:84
 msgid "Data and metadata"
 msgstr "Données et métadonnées"
 
-#: cdl\core\model\signal.py:78 cdl\core\model\signal.py:84
+#: cdl\core\model\signal.py:81 cdl\core\model\signal.py:87
 msgid "Signal title"
 msgstr "Titre du signal"
 
-#: cdl\core\model\signal.py:83 cdl\core\model\signal.py:95
+#: cdl\core\model\signal.py:86 cdl\core\model\signal.py:98
 msgid "Titles and units"
 msgstr "Titres et unités"
 
-#: cdl\core\model\signal.py:444
+#: cdl\core\model\signal.py:448
 msgid "lorentzian"
 msgstr "lorentzienne"
 
-#: cdl\core\model\signal.py:448
+#: cdl\core\model\signal.py:452
 msgid "sinus"
 msgstr "sinus"
 
-#: cdl\core\model\signal.py:449
+#: cdl\core\model\signal.py:453
 msgid "cosinus"
 msgstr "cosinus"
 
-#: cdl\core\model\signal.py:450
+#: cdl\core\model\signal.py:454
 msgid "sawtooth"
 msgstr "dent de scie"
 
-#: cdl\core\model\signal.py:451
+#: cdl\core\model\signal.py:455
 msgid "triangle"
 msgstr "triangle"
 
-#: cdl\core\model\signal.py:452
+#: cdl\core\model\signal.py:456
 msgid "square"
 msgstr "carré"
 
-#: cdl\core\model\signal.py:453
+#: cdl\core\model\signal.py:457
 msgid "cardinal sine"
 msgstr "sinus cardinal"
 
-#: cdl\core\model\signal.py:454
+#: cdl\core\model\signal.py:458
 msgid "step"
 msgstr "échelon"
 
-#: cdl\core\model\signal.py:492
+#: cdl\core\model\signal.py:496
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: cdl\core\model\signal.py:496
+#: cdl\core\model\signal.py:500
 msgid "Phase"
 msgstr "Phase"
 
-#: cdl\core\model\signal.py:516
+#: cdl\core\model\signal.py:520
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:516 cdl\tests\data.py:256 cdl\tests\data.py:376
+#: cdl\core\model\signal.py:520 cdl\tests\data.py:256 cdl\tests\data.py:376
 #: cdl\widgets\h5browser.py:210
 msgid "Size"
 msgstr "Taille"
 
-#: cdl\core\model\signal.py:523
+#: cdl\core\model\signal.py:527
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: cdl\core\model\signal.py:609
+#: cdl\core\model\signal.py:613
 msgid "Signal"
 msgstr "Signal"
 
-#: cdl\core\model\signal.py:654 cdl\core\model\signal.py:655
+#: cdl\core\model\signal.py:658 cdl\core\model\signal.py:659
 msgid "Sinusoid"
 msgstr "Sinusoïde"
 
-#: cdl\core\model\signal.py:656
+#: cdl\core\model\signal.py:660
 msgid "Sawtooth function"
 msgstr "Fontion dents de scie"
 
-#: cdl\core\model\signal.py:657
+#: cdl\core\model\signal.py:661
 msgid "Triangle function"
 msgstr "Fonction triangle"
 
-#: cdl\core\model\signal.py:658
+#: cdl\core\model\signal.py:662
 msgid "Square function"
 msgstr "Fonction carrée"
 
-#: cdl\core\model\signal.py:659
+#: cdl\core\model\signal.py:663
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
-#: cdl\core\model\signal.py:675
+#: cdl\core\model\signal.py:679
 msgid "Step function"
 msgstr "Fonction échelon"
 
@@ -2652,51 +2652,51 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 msgid "Remote client test"
 msgstr "Test du client distant"
 
-#: cdl\tests\features\remoteclient_app.py:138
+#: cdl\tests\features\remoteclient_app.py:142
 msgid "This the client application, which connects to DataLab."
 msgstr "Ceci l'application cliente, qui se connecte à DataLab."
 
-#: cdl\tests\features\remoteclient_app.py:139
+#: cdl\tests\features\remoteclient_app.py:143
 msgid "Connect to DataLab"
 msgstr "Se connecter à DataLab"
 
-#: cdl\tests\features\remoteclient_app.py:169
+#: cdl\tests\features\remoteclient_app.py:183
 msgid "Execute multiple commands"
 msgstr "Exécuter des commandes multiples"
 
-#: cdl\tests\features\remoteclient_app.py:170
+#: cdl\tests\features\remoteclient_app.py:184
 msgid "Get object titles"
 msgstr "Obtenir la liste des titres"
 
-#: cdl\tests\features\remoteclient_app.py:171
+#: cdl\tests\features\remoteclient_app.py:185
 msgid "Get object uuids"
 msgstr "Obtenir la liste des uuids"
 
-#: cdl\tests\features\remoteclient_app.py:172
+#: cdl\tests\features\remoteclient_app.py:186
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdl\tests\scenarios\demo.py:49 cdl\tests\scenarios\scenario_sig_app.py:115
+#: cdl\tests\scenarios\demo.py:49 cdl\tests\scenarios\scenario_sig_app.py:114
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: cdl\utils\qthelpers.py:176
+#: cdl\utils\qthelpers.py:180
 msgid "Cancel"
 msgstr "Annuler"
 
-#: cdl\utils\qthelpers.py:191
+#: cdl\utils\qthelpers.py:195
 msgid "Error:"
 msgstr "Erreur:"
 
-#: cdl\utils\qthelpers.py:191 cdl\widgets\warningerror.py:106
+#: cdl\utils\qthelpers.py:195 cdl\widgets\warningerror.py:106
 msgid "Context"
 msgstr "Contexte"
 
-#: cdl\utils\qthelpers.py:236
+#: cdl\utils\qthelpers.py:240
 msgid "%s could not be opened:"
 msgstr "%s n'a pas pu être ouvert:"
 
-#: cdl\utils\qthelpers.py:238
+#: cdl\utils\qthelpers.py:242
 msgid "%s could not be written:"
 msgstr "%s n'a pas pu être écrit:"
 

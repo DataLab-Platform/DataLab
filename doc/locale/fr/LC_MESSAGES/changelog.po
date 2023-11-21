@@ -1,0 +1,1784 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-21 12:08+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../../CHANGELOG.md:1
+msgid "Changelog"
+msgstr ""
+
+#: ../../../CHANGELOG.md:3
+msgid ""
+"See DataLab [roadmap "
+"page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html) for "
+"future and past milestones."
+msgstr ""
+
+#: ../../../CHANGELOG.md:6
+msgid "DataLab Version 0.9.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:8 ../../../CHANGELOG.md:310
+msgid "New dependencies:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:10
+msgid "DataLab is now powered by [PlotPyStack](https://github.com/PlotPyStack):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:11
+msgid "[PythonQwt](https://github.com/PlotPyStack/PythonQwt)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:12
+msgid "[guidata](https://github.com/PlotPyStack/guidata)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:13
+msgid "[PlotPy](https://github.com/PlotPyStack/PlotPy)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:14
+msgid ""
+"[opencv-python](https://pypi.org/project/opencv-python/) (algorithms for "
+"image processing)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:16
+msgid "New reference platform:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:18
+msgid "DataLab is validated on Windows 11 with Python 3.11 and PyQt 5.15"
+msgstr ""
+
+#: ../../../CHANGELOG.md:19
+msgid ""
+"DataLab is also compatible with other OS (Linux, MacOS) and other Python-"
+"Qt bindings and versions (Python 3.8-3.12, PyQt6, PySide6)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:22 ../../../CHANGELOG.md:113 ../../../CHANGELOG.md:388
+#: ../../../CHANGELOG.md:402 ../../../CHANGELOG.md:410
+#: ../../../CHANGELOG.md:479 ../../../CHANGELOG.md:507
+#: ../../../CHANGELOG.md:518 ../../../CHANGELOG.md:547
+#: ../../../CHANGELOG.md:591 ../../../CHANGELOG.md:622
+msgid "New features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:24
+msgid "DataLab is a platform:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:25
+msgid "Added support for plugins"
+msgstr ""
+
+#: ../../../CHANGELOG.md:26
+msgid "Custom processing features available in the \"Plugins\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:27
+msgid ""
+"Custom I/O features: new file formats can be added to the standard I/O "
+"features for signals and images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:29
+msgid ""
+"Custom HDF5 features: new HDF5 file formats can be added to the standard "
+"HDF5 import feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:31
+msgid "More features to come..."
+msgstr ""
+
+#: ../../../CHANGELOG.md:32
+msgid ""
+"Added remote control feature: DataLab can be controlled remotely via a "
+"TCP/IP connection (see [Remote "
+"control](https://cdlapp.readthedocs.io/en/latest/remote_control.html))"
+msgstr ""
+
+#: ../../../CHANGELOG.md:34
+msgid ""
+"Added macro commands: DataLab can be controlled via a macro file (see "
+"[Macro "
+"commands](https://cdlapp.readthedocs.io/en/latest/macro_commands.html))"
+msgstr ""
+
+#: ../../../CHANGELOG.md:36
+msgid "General features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:37
+msgid "Added settings dialog box (see \"Settings\" entry in \"File\" menu):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:38
+msgid "General settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:39
+msgid "Visualization settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:40
+msgid "Processing settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:41
+msgid "Etc."
+msgstr ""
+
+#: ../../../CHANGELOG.md:42
+msgid ""
+"New default layout: signal/image panels are on the right side of the main"
+" window, visualization panels are on the left side with a vertical "
+"toolbar"
+msgstr ""
+
+#: ../../../CHANGELOG.md:44
+msgid "Signal/Image features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:45
+msgid ""
+"Added process isolation: each signal/image is processed in a separate "
+"process, so that DataLab does not freeze anymore when processing large "
+"signals/images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:48
+msgid ""
+"Added support for groups: signals and images can be grouped together, and"
+" operations can be applied to all objects in a group, or between groups"
+msgstr ""
+
+#: ../../../CHANGELOG.md:50
+msgid ""
+"Added warning and error dialogs with detailed traceback links to the "
+"source code (warnings may be optionally ignored)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:52
+msgid "Drastically improved performance when selecting objects"
+msgstr ""
+
+#: ../../../CHANGELOG.md:53
+msgid "Optimized performance when showing large images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:54
+msgid "Added support for dropping files on signal/image panel"
+msgstr ""
+
+#: ../../../CHANGELOG.md:55
+msgid ""
+"Added \"Computing parameters\" group box to show last result input "
+"parameters"
+msgstr ""
+
+#: ../../../CHANGELOG.md:56
+msgid "Added \"Copy titles to clipboard\" feature in \"Edit\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:57
+msgid ""
+"For every single processing feature (operation, processing and computing "
+"menus), the entered parameters (dialog boxes) are stored in cache to be "
+"used as defaults the next time the feature is used"
+msgstr ""
+
+#: ../../../CHANGELOG.md:60
+msgid "Signal processing:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:61 ../../../CHANGELOG.md:105
+msgid "Added support for optional FFT shift (see Settings dialog box)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:62
+msgid "Image processing:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:63
+msgid ""
+"Added pixel binning operation (X/Y binning factors, operation: sum, mean,"
+" ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:64
+msgid ""
+"Added \"Distribute on a grid\" and \"Reset image positions\" in operation"
+" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:65
+msgid "Added Butterworth filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:66
+msgid "Added exposure processing features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:67
+msgid "Gamma correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:68
+msgid "Logarithmic correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:69
+msgid "Sigmoïd correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:70
+msgid "Added restoration processing features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:71
+msgid "Total variation denoising filter (TV Chambolle)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:72
+msgid "Bilateral filter (denoising)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:73
+msgid "Wavelet denoising filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:74
+msgid "White Top-Hat denoising filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:75
+msgid "Added morphological transforms (disk footprint):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:76
+msgid "White Top-Hat"
+msgstr ""
+
+#: ../../../CHANGELOG.md:77
+msgid "Black Top-Hat"
+msgstr ""
+
+#: ../../../CHANGELOG.md:78
+msgid "Erosion"
+msgstr ""
+
+#: ../../../CHANGELOG.md:79
+msgid "Dilation"
+msgstr ""
+
+#: ../../../CHANGELOG.md:80
+msgid "Opening"
+msgstr ""
+
+#: ../../../CHANGELOG.md:81
+msgid "Closing"
+msgstr ""
+
+#: ../../../CHANGELOG.md:82
+msgid "Added edge detection features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:83
+msgid "Roberts filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:84
+msgid "Prewitt filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:85
+msgid "Sobel filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:86
+msgid "Scharr filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:87
+msgid "Farid filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:88
+msgid "Laplace filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:89
+msgid "Canny filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:90
+msgid ""
+"Contour detection: added support for polygonal contours (in addition to "
+"circle and ellipse contours)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:92
+msgid "Added circle Hough transform (circle detection)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:93
+msgid "Added image intensity levels rescaling"
+msgstr ""
+
+#: ../../../CHANGELOG.md:94
+msgid "Added histogram equalization"
+msgstr ""
+
+#: ../../../CHANGELOG.md:95
+msgid "Added adaptative histogram equalization"
+msgstr ""
+
+#: ../../../CHANGELOG.md:96
+msgid "Added blob detection methods:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:97
+msgid "Difference of Gaussian"
+msgstr ""
+
+#: ../../../CHANGELOG.md:98
+msgid "Determinant of Hessian method"
+msgstr ""
+
+#: ../../../CHANGELOG.md:99
+msgid "Laplacian of Gaussian"
+msgstr ""
+
+#: ../../../CHANGELOG.md:100
+msgid "Blob detection using OpenCV"
+msgstr ""
+
+#: ../../../CHANGELOG.md:101
+msgid ""
+"Result shapes and annotations are now transformed (instead of removed) "
+"when executing one of the following operations:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:103
+msgid "Rotation (arbitrary angle, +90°, -90°)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:104
+msgid "Symetry (vertical/horizontal)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:106
+msgid ""
+"Console: added configurable external editor (default: VSCode) to follow "
+"the traceback links to the source code"
+msgstr ""
+
+#: ../../../CHANGELOG.md:109
+msgid "Older releases"
+msgstr ""
+
+#: ../../../CHANGELOG.md:111
+msgid "CodraFT Version 2.2.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:115
+msgid "Images: added support for XYZ image files"
+msgstr ""
+
+#: ../../../CHANGELOG.md:116
+msgid ""
+"All shapes: removed shape drag symbols, so that background image is no "
+"longer masked by small-sized shapes"
+msgstr ""
+
+#: ../../../CHANGELOG.md:118
+msgid "At startup, restoring last current panel (image or signal panel)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:119
+msgid "Plot cleanup and shape management: greatly optimized performance"
+msgstr ""
+
+#: ../../../CHANGELOG.md:120
+msgid ""
+"After removing object(s) (signal/image), the previous object in the list "
+"is selected"
+msgstr ""
+
+#: ../../../CHANGELOG.md:121
+msgid "Added default image visualization settings in .INI configuration file"
+msgstr ""
+
+#: ../../../CHANGELOG.md:122
+msgid ""
+"Using guiqwt v4.3.2: fixed pixel position (first pixel is centered at "
+"(0,0) coords)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:124
+msgid "CodraFT Version 2.1.4"
+msgstr ""
+
+#: ../../../CHANGELOG.md:126 ../../../CHANGELOG.md:143
+#: ../../../CHANGELOG.md:163 ../../../CHANGELOG.md:208
+#: ../../../CHANGELOG.md:218 ../../../CHANGELOG.md:337
+#: ../../../CHANGELOG.md:360 ../../../CHANGELOG.md:381
+#: ../../../CHANGELOG.md:419 ../../../CHANGELOG.md:462
+#: ../../../CHANGELOG.md:471 ../../../CHANGELOG.md:486
+#: ../../../CHANGELOG.md:492 ../../../CHANGELOG.md:512
+#: ../../../CHANGELOG.md:528 ../../../CHANGELOG.md:534
+#: ../../../CHANGELOG.md:564 ../../../CHANGELOG.md:576
+#: ../../../CHANGELOG.md:584 ../../../CHANGELOG.md:599
+#: ../../../CHANGELOG.md:681
+msgid "Bug fixes:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:128
+msgid "HDF5 import/browser features: added support for non-ASCII dataset names"
+msgstr ""
+
+#: ../../../CHANGELOG.md:129
+msgid "ANDOR SIF files:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:130
+msgid "Fixed compatibility issues for various SIF files"
+msgstr ""
+
+#: ../../../CHANGELOG.md:131
+msgid "Fixed unicode error"
+msgstr ""
+
+#: ../../../CHANGELOG.md:132
+msgid "Image Contour detection:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:133
+msgid "Fixed level default value for 8-bit data"
+msgstr ""
+
+#: ../../../CHANGELOG.md:134
+msgid "Added missing \"level\" parameter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:135
+msgid ""
+"Dev/VSCode: simplified `launch.json` and fixed environment variable "
+"substitution issue"
+msgstr ""
+
+#: ../../../CHANGELOG.md:137 ../../../CHANGELOG.md:156
+#: ../../../CHANGELOG.md:175 ../../../CHANGELOG.md:222
+#: ../../../CHANGELOG.md:371
+msgid "Other changes:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:139
+msgid "Alpha/beta release: fixed installer, added warning"
+msgstr ""
+
+#: ../../../CHANGELOG.md:141
+msgid "CodraFT Version 2.1.3"
+msgstr ""
+
+#: ../../../CHANGELOG.md:145
+msgid ""
+"Panel's object list `select_rows` method: fixed plot refresh behavior in "
+"case of multiple selection (refresh widget only once)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:147
+msgid "LMJ-formatted HDF5 file: now reading invalid compound datasets"
+msgstr ""
+
+#: ../../../CHANGELOG.md:148
+msgid ""
+"[Issue #16](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/16) - Embedding DataLab: \"add_object\" "
+"method call with invalid data should lead to app crash"
+msgstr ""
+
+#: ../../../CHANGELOG.md:149
+msgid ""
+"Panel's `add_object` method (public API): check data type before adding "
+"object to panel - this prevents DataLab from crashing when trying to plot"
+" invalid data type afterwards"
+msgstr ""
+
+#: ../../../CHANGELOG.md:152
+msgid "Now handling exceptions in `add_object` and `insert_object` methods"
+msgstr ""
+
+#: ../../../CHANGELOG.md:153
+msgid "Multigaussian curve fitting: fixed default fit parameters"
+msgstr ""
+
+#: ../../../CHANGELOG.md:154
+msgid "Improved I/O application test with respect to unsupported filetypes"
+msgstr ""
+
+#: ../../../CHANGELOG.md:158
+msgid "Images: added support for `numpy.int32` datatype"
+msgstr ""
+
+#: ../../../CHANGELOG.md:159
+msgid "Added unit tests for all curve fitting dialogs"
+msgstr ""
+
+#: ../../../CHANGELOG.md:161
+msgid "CodraFT Version 2.1.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:165
+msgid ""
+"[Pull Request #2](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/pull/2) - Load / Save conventional CSVs, by "
+"[@aanastasiou](https://github.com/aanastasiou)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:166
+msgid ""
+"[Issue #3](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/3) - Wrong units/titles are displayed"
+msgstr ""
+
+#: ../../../CHANGELOG.md:167
+msgid ""
+"[Issue #6](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/6) - 2D peak detection: GUI freezes when "
+"creating ROIs"
+msgstr ""
+
+#: ../../../CHANGELOG.md:168
+msgid ""
+"[Issue #4](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/4) - Processing multiple images/signals: "
+"avoid unnecessary time-consuming plot updates"
+msgstr ""
+
+#: ../../../CHANGELOG.md:169
+msgid ""
+"[Issue #7](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/7) - Image/Circular ROI: IndexError when "
+"circle exceeds the image size"
+msgstr ""
+
+#: ../../../CHANGELOG.md:170
+msgid ""
+"[Issue #5](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/5) - ROI dialog box: unable to remove all "
+"ROIs and validate"
+msgstr ""
+
+#: ../../../CHANGELOG.md:171
+msgid ""
+"[Issue #8](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/8) - HDF5 import: unable to easily "
+"distinguish datasets with the same name but different path"
+msgstr ""
+
+#: ../../../CHANGELOG.md:172
+msgid "Average operation now merges ROI data (i.e. same behavior as sum)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:173
+msgid "Fixed multiple regressions with ROI management (adding, removing ROI, ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:177
+msgid ""
+"Optimized load time (especially for images): avoid unnecessary refresh "
+"when adding objects"
+msgstr ""
+
+#: ../../../CHANGELOG.md:178
+msgid ""
+"Added \"Remove regions of interest\" entry to \"Computing\" menu (and "
+"context menu)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:179
+msgid ""
+"Signal/image list: added tooltip showing a summary of metadata values "
+"(e.g. when importing data from HDF5, this shows HDF5 filename and HDF5 "
+"dataset path) - Issue #8"
+msgstr ""
+
+#: ../../../CHANGELOG.md:181
+msgid ""
+"Dependencies hash check: feature is now OS-dependent (+ more explicit "
+"messages)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:182
+msgid "Slightly improved test coverage"
+msgstr ""
+
+#: ../../../CHANGELOG.md:184
+msgid "CodraFT Version 2.1.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:186
+msgid "Changes:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:188
+msgid "Image Regions Of Interest (ROI):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:189
+msgid "ROIs are now shown as masks (areas outside ROIs are shaded)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:190
+msgid "Added support for circular ROIs"
+msgstr ""
+
+#: ../../../CHANGELOG.md:191
+msgid "ROIs now take into account pixel size (dx, dy) as well as origin (x0, y0)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:192
+msgid "Signal and Image ROIs:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:193
+msgid ""
+"New default extract mode: creating as many signals/images as ROIs (each "
+"ROI is extracted into a single signal/image)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:195
+msgid ""
+"The old extract mode (single signal/image output) is still available and "
+"may be enabled using the new checkbox added in ROI extraction dialog box"
+msgstr ""
+
+#: ../../../CHANGELOG.md:197
+msgid "Image visualization:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:198
+msgid "Added \"Show contrast panel\" option in toolbar and view menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:199
+msgid "By default, contrast panel is now visible"
+msgstr ""
+
+#: ../../../CHANGELOG.md:200
+msgid ""
+"When multiple images are selected, the first image LUT range is applied "
+"to all"
+msgstr ""
+
+#: ../../../CHANGELOG.md:201
+msgid ""
+"\"View in a new window\": now opens non-modal dialogs, thus allowing to "
+"visualize multiple signals or images in separate windows"
+msgstr ""
+
+#: ../../../CHANGELOG.md:203
+msgid "Added demo mode (from command line, simply run: cdl-demo)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:204
+msgid "Command line option --h5 is now a positionnal argument (h5)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:205
+msgid ""
+"Added command line option -b (or --h5browser) to browse a HDF5 file at "
+"startup"
+msgstr ""
+
+#: ../../../CHANGELOG.md:206
+msgid "Added command line option --version to show DataLab version"
+msgstr ""
+
+#: ../../../CHANGELOG.md:210
+msgid ""
+"Image computations now takes into account origin (x0, y0), pixel size "
+"(dx, dy) as well as regions of interest (related features: centroid, "
+"enclosing circle, 2D peak detection and contour detection)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:213
+msgid ""
+"Image ROI definition dialog: maximum rows and columns were erroneously "
+"truncated"
+msgstr ""
+
+#: ../../../CHANGELOG.md:214
+msgid ""
+"Centralized argument parsing in DataLab exec env object, thus avoiding "
+"conflicts"
+msgstr ""
+
+#: ../../../CHANGELOG.md:216
+msgid "CodraFT Version 2.0.3"
+msgstr ""
+
+#: ../../../CHANGELOG.md:220
+msgid "Fixed pen.setWidth TypeError on Linux"
+msgstr ""
+
+#: ../../../CHANGELOG.md:224
+msgid "Added an option to ignore dependency check warning at startup"
+msgstr ""
+
+#: ../../../CHANGELOG.md:225
+msgid "Installation configuration viewer: added info on dependency check result"
+msgstr ""
+
+#: ../../../CHANGELOG.md:226
+msgid "Ignore when unable to save h5 in ima/sig test scenarios"
+msgstr ""
+
+#: ../../../CHANGELOG.md:228
+msgid "CodraFT Version 2.0.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:230
+msgid "The following major changes were introduced with DataLab V2:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:232
+msgid ""
+"Fully automated high-level processing features for internal testing "
+"purpose, as well as embedding DataLab in a third-party software"
+msgstr ""
+
+#: ../../../CHANGELOG.md:234
+#, python-format
+msgid ""
+"Extensive test suite (unit tests and application tests) with 90% feature "
+"coverage"
+msgstr ""
+
+#: ../../../CHANGELOG.md:235
+msgid "Segmentation fault and Python exception logging"
+msgstr ""
+
+#: ../../../CHANGELOG.md:236
+msgid "Customizable annotations for both signals and images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:238
+msgid "Release key features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:240 ../../../CHANGELOG.md:257
+msgid "New data visualization and processing features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Signal"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Image"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "•"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Automatic 2D-peak detection"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Automatic contour extraction (circle/ellipse fit)"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "Multiple Regions of Interest (ROIs)"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "User-defined annotations (labels and geometric shapes)"
+msgstr ""
+
+#: ../../../CHANGELOG.md
+msgid "\"Statistics\" computing feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:250
+msgid ""
+"Automation of high-level processing features: added fully automated high-"
+"level test scenarios, and enhanced public API for embedding DataLab into "
+"a third-party application"
+msgstr ""
+
+#: ../../../CHANGELOG.md:252
+msgid ""
+"Test Driven Development with high quality standards (pylint score >= "
+"9.8/10, test coverage >= 90%)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:255
+msgid "Detailed feature list"
+msgstr ""
+
+#: ../../../CHANGELOG.md:259 ../../../CHANGELOG.md:325
+#: ../../../CHANGELOG.md:343
+msgid "Image:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:260
+msgid ""
+"New automatic image contour detection feature returning fitted "
+"circle/ellipse"
+msgstr ""
+
+#: ../../../CHANGELOG.md:261
+msgid "New automatic 2D peak detection feature (optionally create ROIs)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:262
+msgid ""
+"\"View in a new window\": added customizable \"Annotations\" support for "
+"both signal and image panels - supports user-defined annotations (points,"
+" segments, circles, ellipses, labels,...) which are serialized in image "
+"metadata"
+msgstr ""
+
+#: ../../../CHANGELOG.md:265
+msgid ""
+"Added \"Show graphical object titles\" option in \"View\" menu to show or"
+" hide the title (or subtitle) of ROIs or any other graphical object"
+msgstr ""
+
+#: ../../../CHANGELOG.md:267
+msgid "Added support for **multiple** Regions of Interest (ROI):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:268
+msgid "All \"Computing\" menu features apply to multiple ROIs"
+msgstr ""
+
+#: ../../../CHANGELOG.md:269
+msgid ""
+"Computation result arrays now contains ROI index (first column) and one "
+"row per ROI"
+msgstr ""
+
+#: ../../../CHANGELOG.md:270
+msgid "ROI are merged when summing objects (signals or images)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:271
+msgid "ROI can be removed, modified or added at any time"
+msgstr ""
+
+#: ../../../CHANGELOG.md:272
+msgid ""
+"Added option \"Show graphical object titles\" (\"View\" menu) to show or "
+"hide ROI titles or any other geometrical shapes title (or subtitle)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:274
+msgid ""
+"New computing \"Statistics\" feature showing a table with statistics on "
+"image/signal and eventually regions of interest (min, max, mean, standard"
+" deviation, sum, ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:277
+msgid "New general purpose features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:279
+msgid "Memory management:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:280
+msgid "New available memory indicator on main window status bar"
+msgstr ""
+
+#: ../../../CHANGELOG.md:281
+msgid ""
+"New warning dialog box when trying to open/create data if available "
+"memory is below the \"available_memory_threshold\" defined in DataLab "
+"configuration file (default: 500MB)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:283
+msgid "Error handling:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:284
+msgid "New integrated log file viewer"
+msgstr ""
+
+#: ../../../CHANGELOG.md:285
+msgid ""
+"New warning dialog box at startup suggesting to view log files when logs "
+"were generated during last session"
+msgstr ""
+
+#: ../../../CHANGELOG.md:287
+msgid "Logging segmentation faults in \".DataLab_faulthandler.log\""
+msgstr ""
+
+#: ../../../CHANGELOG.md:288
+msgid "Logging Python exceptions in \".DataLabL_traceback.log\""
+msgstr ""
+
+#: ../../../CHANGELOG.md:289
+msgid "Signal/Image metadata:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:290
+msgid "New copy/paste feature: update object metadata from another one"
+msgstr ""
+
+#: ../../../CHANGELOG.md:291
+msgid ""
+"New import/export feature: import-export object metadata (JSON text file)"
+" using the new \"Import metadata into\" / \"Export metadata from\" "
+"entries in \"File\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:293
+msgid ""
+"HDF5 browser feature: complete redesign (better compatibility, evolutive "
+"design, ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:294
+msgid "Added support for multiple HDF5 files opening at once"
+msgstr ""
+
+#: ../../../CHANGELOG.md:295
+msgid "Added `.DataLab.ini` configuration file (user home directory):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:296
+msgid "New configuration file entry: current working directory"
+msgstr ""
+
+#: ../../../CHANGELOG.md:297
+msgid "New configuration file entry: current main window size and position"
+msgstr ""
+
+#: ../../../CHANGELOG.md:298
+msgid "New configuration file entry: embedded Python console enabled state"
+msgstr ""
+
+#: ../../../CHANGELOG.md:299
+msgid "New configuration file entry: available memory alarm threshold"
+msgstr ""
+
+#: ../../../CHANGELOG.md:301
+msgid "New test-related features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:303
+msgid ""
+"Added non-interactive tests, opening the way for unit tests with better "
+"coverage"
+msgstr ""
+
+#: ../../../CHANGELOG.md:304
+msgid ""
+"Added \"unattended\" and \"screenshot\" execution modes respectively for "
+"testing and documentation purpose"
+msgstr ""
+
+#: ../../../CHANGELOG.md:305
+msgid "Added automated high-level test scenarios (signal and image processing)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:306
+msgid ""
+"Tests are now splitted in two categories: unit tests (`*_unit.py`) and "
+"application tests (`*_app.py`)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:307
+msgid "Added Coverage.py support"
+msgstr ""
+
+#: ../../../CHANGELOG.md:308
+msgid "Added \"all_tests.py\" to run all tests in unattended mode"
+msgstr ""
+
+#: ../../../CHANGELOG.md:312
+msgid "[scikit-image](https://pypi.org/project/scikit-image/)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:313
+msgid "[psutil](https://pypi.org/project/psutil/)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:315
+msgid "Other changes (on existing features):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:317
+msgid "Image and Signal:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:318
+msgid ""
+"Object properties panel: added data type information (feature refactored "
+"upstream to guidata)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:319
+msgid ""
+"New random signal/image: added support for both Normal and Uniform "
+"distributions"
+msgstr ""
+
+#: ../../../CHANGELOG.md:320
+msgid "Operations \"sum\" and \"average\" now merge metadata results"
+msgstr ""
+
+#: ../../../CHANGELOG.md:321
+msgid ""
+"Computed titles \"s/i000\" are now renamed after inserting/removing an "
+"object"
+msgstr ""
+
+#: ../../../CHANGELOG.md:322
+msgid ""
+"Computing results (geometrical shapes: segment, circle, ellipse): "
+"numerical results are now automatically added to metadata (respectively: "
+"length, center and radius, center, a and b)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:326
+msgid "Added support for image origin and pixel size"
+msgstr ""
+
+#: ../../../CHANGELOG.md:327
+msgid "Flat field correction: added threshold parameter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:328
+msgid ""
+"\"New image\" now creates an image with the same data type as selected "
+"image"
+msgstr ""
+
+#: ../../../CHANGELOG.md:329
+msgid "\"New image\" now supports uint16 data type"
+msgstr ""
+
+#: ../../../CHANGELOG.md:330 ../../../CHANGELOG.md:352
+msgid "Signal:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:331
+msgid "Peak detection: added minimal distance parameter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:332
+msgid "Fit dialog / plot: do auto scale at startup"
+msgstr ""
+
+#: ../../../CHANGELOG.md:333
+msgid "Peak detection dialog: preselect horizontal cursor at startup"
+msgstr ""
+
+#: ../../../CHANGELOG.md:334
+msgid "`cdl.core.gui` code refactoring: added subpackage `core.gui.processor`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:335
+msgid ""
+"Added \"Browse HDF5\" action to main window (\"Open HDF5\" now imports "
+"all data)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:339
+msgid "HDF5 file import: converted `bytes` metadata to `str`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:340
+msgid "Added h5py to requirements (setup.py)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:341
+msgid ""
+"Plot: reintroduced pure white background in light mode (white background "
+"was removed unintentionally when introducing dark mode)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:344
+msgid "\"Clean-up data view\" feature was accidently removing grid"
+msgstr ""
+
+#: ../../../CHANGELOG.md:345
+msgid ""
+"Fixed hard crash when trying to visualize images with NaNs (use case: "
+"result of any filter on `uint8` image)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:347
+msgid "Fixed hard crash when using image Z-axis log scale on some images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:348
+msgid "Fixed DICOM support"
+msgstr ""
+
+#: ../../../CHANGELOG.md:349
+msgid "Fixed hard crash in \"to_codraft\" (cross section item with empty data)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:350
+msgid "Fixed image visualization parameters update from metadata"
+msgstr ""
+
+#: ../../../CHANGELOG.md:351
+msgid "MinEnclosingCircle: fixed sqrt(2) error"
+msgstr ""
+
+#: ../../../CHANGELOG.md:353
+msgid "\"Clean-up data view\" feature was accidently removing legend box and grid"
+msgstr ""
+
+#: ../../../CHANGELOG.md:354
+msgid "Fixed integral (missing initial point)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:355
+msgid "Fixed plotting support for complex data"
+msgstr ""
+
+#: ../../../CHANGELOG.md:356
+msgid "Fixed signal visualization parameters update from metadata"
+msgstr ""
+
+#: ../../../CHANGELOG.md:358
+msgid "CodraFT Version 1.7.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:362
+msgid "Fixed unit test \"app1_test.py\" (create a single QApp)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:363
+msgid ""
+"Fixed progress bar cancel issues (when passing HDF5 files to `app.run` "
+"function)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:364
+msgid "Fixed random hard crash when opening curve fitting dialog"
+msgstr ""
+
+#: ../../../CHANGELOG.md:365
+msgid "Fixed curve fitting dialog parenting"
+msgstr ""
+
+#: ../../../CHANGELOG.md:366
+msgid ""
+"ROI metadata is now removed (because potentially invalid) after "
+"performing a computation that changes X-axis or Y-axis data (e.g. ROI "
+"extraction, image flip, image rotation, etc.)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:369
+msgid "Fixed image creation features (broken since major refactoring)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:373
+msgid "Removed deprecated Qt `exec_` calls (replaced by `exec`)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:374
+msgid "Added more infos on uninstaller registry keys"
+msgstr ""
+
+#: ../../../CHANGELOG.md:375
+msgid "Added documentation on key features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:377
+msgid "CodraFT Version 1.7.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:379
+msgid "Added first page of documentation (there is a beginning to everything...)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:383
+msgid "Cross section tool was working only on first image in item list"
+msgstr ""
+
+#: ../../../CHANGELOG.md:384
+msgid "Separate view was broken since major refactoring"
+msgstr ""
+
+#: ../../../CHANGELOG.md:386
+msgid "CodraFT Version 1.7.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:390
+msgid "Python 3.8 is now the reference Python release"
+msgstr ""
+
+#: ../../../CHANGELOG.md:391
+msgid "Dropped Python 2 and PyQt 4 support"
+msgstr ""
+
+#: ../../../CHANGELOG.md:392
+msgid "Major code cleaning and refactoring"
+msgstr ""
+
+#: ../../../CHANGELOG.md:393
+msgid "Reorganized the whole code base"
+msgstr ""
+
+#: ../../../CHANGELOG.md:394
+msgid "Added more unit tests"
+msgstr ""
+
+#: ../../../CHANGELOG.md:395
+msgid "Added GUI-based test launcher"
+msgstr ""
+
+#: ../../../CHANGELOG.md:396
+msgid "Added isort/black code formatting"
+msgstr ""
+
+#: ../../../CHANGELOG.md:397
+msgid ""
+"Switched from cx_Freeze to pyinstaller for generating the stand-alone "
+"version"
+msgstr ""
+
+#: ../../../CHANGELOG.md:398
+msgid "Improved pylint score up to 9.90/10 with strict quality criteria"
+msgstr ""
+
+#: ../../../CHANGELOG.md:400
+msgid "CodraFT Version 1.6.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:404
+msgid ""
+"Added dependencies check on startup: warn the user if at least one "
+"dependency has been altered (i.e. the application has not been qualified "
+"in this context)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:406
+msgid "Added py3compat (since QtPy is dropping Python 3 support)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:408
+msgid "CodraFT Version 1.5.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:412
+msgid ""
+"Sum, average, difference, multiplication: re-converting data to initial "
+"type."
+msgstr ""
+
+#: ../../../CHANGELOG.md:414
+msgid ""
+"Now supporting PySide2/PyQt4/PyQt5 compatibility thanks to guidata >= "
+"v1.7.9 (using QtPy)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:417
+msgid "Now supporting Python 3.9 and NumPy 1.20."
+msgstr ""
+
+#: ../../../CHANGELOG.md:421
+msgid ""
+"Fixed cross section retrieval feature: in stand-alone mode, a new DataLab"
+" window was created (that is not the expected behavior)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:424
+msgid ""
+"Fixed crash when enabling cross sections on main window (needs PythonQwt "
+"0.9.2)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:426
+msgid "Fixed ValueError when generating a 2D-gaussian image with floats."
+msgstr ""
+
+#: ../../../CHANGELOG.md:428
+msgid "HDF5 file import feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:430
+msgid "Fixed unit processing (parsing) with Python 3."
+msgstr ""
+
+#: ../../../CHANGELOG.md:432
+msgid "Fixed critical bug when clicking on \"Check all\"."
+msgstr ""
+
+#: ../../../CHANGELOG.md:434
+msgid "CodraFT Version 1.4.4"
+msgstr ""
+
+#: ../../../CHANGELOG.md:436
+msgid "New experimental features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:438
+msgid ""
+"Experimental support for PySide2/PyQt4/PyQt5 thanks to guidata >= v1.7.9 "
+"(using QtPy)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:440
+msgid "Experimental support for Python 3.9 and NumPy 1.20."
+msgstr ""
+
+#: ../../../CHANGELOG.md:442 ../../../CHANGELOG.md:450
+#: ../../../CHANGELOG.md:457
+msgid "New minor features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:444
+msgid "ZAxisLogTool: update automatically Z-axis scale (+ showing real value)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:446
+msgid "Added contrast test (following issues with \"eliminate_outliers\")"
+msgstr ""
+
+#: ../../../CHANGELOG.md:448
+msgid "CodraFT Version 1.4.3"
+msgstr ""
+
+#: ../../../CHANGELOG.md:452
+msgid "New test script for global application test (test_app.py)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:453
+msgid "Improved DataLab launcher (app.py)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:455
+msgid "CodraFT Version 1.4.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:459
+msgid ""
+"LMJ-formatted HDF5 file import: tree widget item's tooltip now shows item"
+" data \"description\"."
+msgstr ""
+
+#: ../../../CHANGELOG.md:464
+msgid ""
+"Fixed runtime warnings when computing centroid coordinates on an image "
+"ROI filled with zeros."
+msgstr ""
+
+#: ../../../CHANGELOG.md:467
+msgid "LMJ-formatted HDF5 file support: fixed truncated units."
+msgstr ""
+
+#: ../../../CHANGELOG.md:469
+msgid "CodraFT Version 1.4.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:473
+msgid ""
+"Fixed LMJ-formatted HDF5 files: strings are encoded in \"latin-1\" which "
+"is not the expected behavior (\"utf-8\" is the expected encoding for "
+"ensuring better compatibility)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:477
+msgid "CodraFT Version 1.4.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:481
+msgid "LMJ-formatted HDF5 file import: added support for axis units and labels."
+msgstr ""
+
+#: ../../../CHANGELOG.md:483
+msgid ""
+"New curve style behavior (more readable): unselecting items by default, "
+"circling over curve colors when selecting multiple curve items."
+msgstr ""
+
+#: ../../../CHANGELOG.md:488
+msgid "Fixed LMJ-formatted HDF5 file support in DataLab data import feature."
+msgstr ""
+
+#: ../../../CHANGELOG.md:490
+msgid "CodraFT Version 1.3.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:494
+msgid "Improved support for LMJ-formatted HDF5 files."
+msgstr ""
+
+#: ../../../CHANGELOG.md:496
+msgid "Z-axis logscale feature: freeing memory when mode is off."
+msgstr ""
+
+#: ../../../CHANGELOG.md:498
+msgid "CDLMainWindow.get_instance: create instance if it doesn't already exist."
+msgstr ""
+
+#: ../../../CHANGELOG.md:500
+msgid "to_codraft: show DataLab main window on top, if not already visible."
+msgstr ""
+
+#: ../../../CHANGELOG.md:502
+msgid ""
+"Patch/guiqwt.histogram: removing histogram curve (if necessary) when "
+"image item has been removed."
+msgstr ""
+
+#: ../../../CHANGELOG.md:505
+msgid "CodraFT Version 1.3.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:509
+msgid ""
+"Image computations: added \"Smallest enclosing circle center\" "
+"computation."
+msgstr ""
+
+#: ../../../CHANGELOG.md:510
+msgid "Added support for FXD image file type."
+msgstr ""
+
+#: ../../../CHANGELOG.md:514
+msgid "Fixed image levels \"Log scale\" feature for Python 3 compatibility."
+msgstr ""
+
+#: ../../../CHANGELOG.md:516
+msgid "CodraFT Version 1.2.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:520
+msgid ""
+"Added \"Delete all\" entry to \"Edit\" menu: this removes all objects "
+"(signals or images) from current view."
+msgstr ""
+
+#: ../../../CHANGELOG.md:523
+msgid ""
+"Added an option \"hide_on_close\" to CDLMainWindow class constructor "
+"(default value is False): when set to True, DataLab main window will "
+"simply hide when \"Close\" button is clicked, which is the expected "
+"behavior when embedding DataLab in another application."
+msgstr ""
+
+#: ../../../CHANGELOG.md:530
+msgid "The memory leak fix in app.py was accidentally commented before commit."
+msgstr ""
+
+#: ../../../CHANGELOG.md:532
+msgid "CodraFT Version 1.2.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:536
+msgid ""
+"When quitting DataLab, objects were not deleted: this was causing a "
+"memory leak when embedding DataLab in another Qt window."
+msgstr ""
+
+#: ../../../CHANGELOG.md:539
+msgid ""
+"When canceling HDF5 import dialog box after selecting at least one signal"
+" or image, the progress bar was shown even if no data was being imported."
+msgstr ""
+
+#: ../../../CHANGELOG.md:542
+msgid ""
+"When closing HDF5 import dialog box, preview signal/image widgets were "
+"not deleted, hence causing another memory leak."
+msgstr ""
+
+#: ../../../CHANGELOG.md:545
+msgid "CodraFT Version 1.2.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:549
+msgid "Added support for uint32 images (converting to int32 data)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:551
+msgid ""
+"Added \"Z-axis logarithmic scale\" feature for image items (check out the"
+" new entries in standard image toolbar and context menu)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:554
+msgid ""
+"Added \"HDF5 I/O Toolbar\" to avoid a frequently reported user confusion "
+"between HDF5 I/O icons and Signal/Image specific I/O icons (i.e. open and"
+" save actions)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:558
+msgid ""
+"Cross-section panels are now configured to show only cross-section curves"
+" associated to the currently selected image (instead of showing all "
+"curves, including those associated to hidden images)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:562
+msgid "Image subtraction: now handling integer underflow"
+msgstr ""
+
+#: ../../../CHANGELOG.md:566
+msgid ""
+"When \"Clean up data view\" option was enabled, image histogram was not "
+"updated properly when changing image selection (histogram was the sum of "
+"all images histograms)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:570
+#, python-format
+msgid ""
+"Changed default image levels histogram \"eliminate outliers\" value: .1% "
+"instead of 2% to avoid display bug for noise background images for "
+"example (i.e. images with high contrast and very narrow histogram levels)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:574
+msgid "CodraFT Version 1.1.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:578
+msgid ""
+"When the X/Y Cross Section widget is embedded into a main window other "
+"than DataLab's, clicking on the \"Process signal\" button will send the "
+"signal to DataLab's signal panel for further processing, as expected."
+msgstr ""
+
+#: ../../../CHANGELOG.md:582
+msgid "CodraFT Version 1.1.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:586
+msgid ""
+"Fixed a bug leading to \"None\" titles when importing signals/images from"
+" HDF5 files created outside DataLab."
+msgstr ""
+
+#: ../../../CHANGELOG.md:589
+msgid "CodraFT Version 1.1.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:593
+msgid "Added new icons."
+msgstr ""
+
+#: ../../../CHANGELOG.md:595 ../../../CHANGELOG.md:607
+#: ../../../CHANGELOG.md:637
+msgid "Images:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:597
+msgid "Added support for SPIRICON image files (single-frame support only)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:601
+msgid ""
+"Fixed a critical bug when opening HDF5 file (bug from \"guidata\" "
+"package). Now guidata is patched inside DataLab to take into account the "
+"unusual/risky PyQt patch from Taurus package (PyQt API is set to 2 for "
+"QString objects and instead of raising an ImportError when importing "
+"QString from PyQt4.QtCore, QString still exists and is replaced by "
+"\"str\"...)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:609
+msgid "Centroid feature: coordinates were mixed up in DataLab application."
+msgstr ""
+
+#: ../../../CHANGELOG.md:611 ../../../CHANGELOG.md:643
+msgid "Signals:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:613
+msgid ""
+"Curve fitting (gaussian and lorentzian): fixed amplitude initial value   "
+"for automatic fitting feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:615
+msgid ""
+"FWHM and FW1/e²: fixed amplitude computation for input fit parameters   "
+"and output results"
+msgstr ""
+
+#: ../../../CHANGELOG.md:618
+msgid "CodraFT Version 1.0.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:620
+msgid "First release of `CodraFT`."
+msgstr ""
+
+#: ../../../CHANGELOG.md:624
+msgid "Added support for both Python 3 and Python 2.7, and both PyQt5 and PyQt4."
+msgstr ""
+
+#: ../../../CHANGELOG.md:626
+msgid ""
+"Added HDF5 file reading support, using a new HDF5 browser with embedded "
+"curve and image preview."
+msgstr ""
+
+#: ../../../CHANGELOG.md:629
+msgid "Signal and Image:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:631
+msgid "Added menu \"Computing\" for computing scalar values from signals/images."
+msgstr ""
+
+#: ../../../CHANGELOG.md:632
+msgid "Added \"ROI definition\" for \"Computing\" features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:633
+msgid "Added absolute value operation."
+msgstr ""
+
+#: ../../../CHANGELOG.md:634
+msgid "Added 10 base logarithm operation."
+msgstr ""
+
+#: ../../../CHANGELOG.md:635
+msgid "Added moving average/median filtering feature."
+msgstr ""
+
+#: ../../../CHANGELOG.md:639
+msgid "Added support for Andor SIF image files (support multiple frames)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:640
+msgid "Added centroid computing feature."
+msgstr ""
+
+#: ../../../CHANGELOG.md:641
+msgid "Added support for images containing NaN values."
+msgstr ""
+
+#: ../../../CHANGELOG.md:645
+msgid "Added FWHM computing feature (based on curve fitting)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:646
+msgid "Added Full Width at 1/e² computing feature (based on gaussian fitting)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:647
+msgid "Added derivative and integral computation features."
+msgstr ""
+
+#: ../../../CHANGELOG.md:648
+msgid "Added \"lorentzian\" and \"Voigt\" to \"new signals\" available."
+msgstr ""
+
+#: ../../../CHANGELOG.md:650
+msgid ""
+"Added curve fitting feature supporting various models (polynomial, "
+"gaussian, lorentzian, Voigt and multi-gaussian). Computed fitting "
+"parameters are stored in signal's metadata (a new dictionary item for the"
+" Signal objects)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:655
+msgid "Edit menu: added a new \"View in a new window\" action"
+msgstr ""
+
+#: ../../../CHANGELOG.md:657
+msgid "Added standard keyboard shortcuts (new, open, copy, etc.)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:659
+msgid "\"New image\": added new 2D-gaussian creation feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:661
+msgid "Added a GUI-based ROI extraction feature for both signal and image views"
+msgstr ""
+
+#: ../../../CHANGELOG.md:663
+msgid ""
+"Added a pop-up dialog when double-clicking on a signal/image to allow "
+"visualizing things on a possibly large window"
+msgstr ""
+
+#: ../../../CHANGELOG.md:666
+msgid "Added a peak detection feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:668
+msgid "Added centroid coordinates in image statistics tool"
+msgstr ""
+
+#: ../../../CHANGELOG.md:670
+msgid ""
+"Added support for curve/image titles, axis labels and axis units (those "
+"can be modified through the editable form within the \"Properties\" "
+"groupbox)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:673
+msgid ""
+"Added support for cross section extraction from the image widget to the "
+"signal tab ; the extracted curve's title shows the associated coordinates"
+msgstr ""
+
+#: ../../../CHANGELOG.md:676
+msgid ""
+"Added deployment script for building self-consistent executable "
+"distribution using the cx_Freeze tool"
+msgstr ""
+
+#: ../../../CHANGELOG.md:679
+msgid "Improved curve visual: background is now flat and white"
+msgstr ""
+
+#: ../../../CHANGELOG.md:683
+msgid ""
+"Console dockwidget is now created after the `View` menu so that it "
+"appears in it, as expected. It is now hidden by default."
+msgstr ""
+
+#: ../../../CHANGELOG.md:686
+msgid ""
+"Improved curve visual when selected: instead of adding big black squares "
+"along a selected curve, the curve line is simply broader when selected."
+msgstr ""
+

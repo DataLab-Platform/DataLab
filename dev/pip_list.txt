@@ -69,10 +69,6 @@ PyQt5                         5.15.10
 PyQt5-Qt5                     5.15.2
 PyQt5-sip                     12.13.0
 pyspellchecker                0.7.2
-pytest                        7.4.2
-pytest-cov                    4.1.0
-pytest-qt                     4.2.0
-pytest-xvfb                   3.0.0
 python-docs-theme             2023.9
 PythonQwt                     0.10.6
 PyVirtualDisplay              3.0

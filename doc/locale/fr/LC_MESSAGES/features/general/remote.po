@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-16 09:22+0100\n"
+"POT-Creation-Date: 2023-11-21 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -264,8 +264,6 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.add_object
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
 #: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_from_title
-#: cdl.core.remote.RemoteClient.get_object_from_uuid
 #: cdl.core.remote.RemoteClient.get_object_shapes
 #: cdl.core.remote.RemoteServer.add_annotations_from_items
 #: cdl.core.remote.RemoteServer.add_image
@@ -273,8 +271,6 @@ msgstr ""
 #: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
 #: cdl.core.remote.RemoteServer.delete_metadata
 #: cdl.core.remote.RemoteServer.get_object
-#: cdl.core.remote.RemoteServer.get_object_from_title
-#: cdl.core.remote.RemoteServer.get_object_from_uuid
 #: cdl.core.remote.RemoteServer.get_object_shapes
 #: cdl.core.remote.RemoteServer.get_object_titles
 #: cdl.core.remote.RemoteServer.get_object_uuids
@@ -299,14 +295,11 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.add_image
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
 #: cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_from_title
-#: cdl.core.remote.RemoteClient.get_object_from_uuid
 #: cdl.core.remote.RemoteClient.get_object_shapes
 #: cdl.core.remote.RemoteServer.add_image
 #: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
+#: cdl.core.remote.RemoteServer.get_current_panel
 #: cdl.core.remote.RemoteServer.get_object
-#: cdl.core.remote.RemoteServer.get_object_from_title
-#: cdl.core.remote.RemoteServer.get_object_from_uuid
 #: cdl.core.remote.RemoteServer.get_object_shapes
 #: cdl.core.remote.RemoteServer.get_object_titles
 #: cdl.core.remote.RemoteServer.get_object_uuids
@@ -420,14 +413,30 @@ msgstr "Depuis une application tierce"
 msgid "Raise DataLab window"
 msgstr ""
 
+#: cdl.core.remote.RemoteServer.get_current_panel:1 of
+#, fuzzy
+msgid "Return current panel name."
+msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
+
+#: cdl.core.remote.RemoteServer.get_current_panel:3
+#: cdl.core.remote.RemoteServer.set_current_panel:3 of
+msgid "Panel name (valid values: 'signal', 'image', 'macro')"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteServer.add_image
+#: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
+#: cdl.core.remote.RemoteServer.get_current_panel
+#: cdl.core.remote.RemoteServer.get_object_titles
+#: cdl.core.remote.RemoteServer.get_object_uuids of
+msgid "Return type"
+msgstr ""
+
 #: cdl.core.remote.RemoteServer.set_current_panel:1 of
 #, fuzzy
 msgid "Switch to panel."
 msgstr "Basculer vers le panneau de signal ou d'image"
-
-#: cdl.core.remote.RemoteServer.set_current_panel:3 of
-msgid "Panel name (valid values: 'signal', 'image', 'macro')"
-msgstr ""
 
 #: cdl.core.remote.RemoteServer.reset_all:1 of
 msgid "Reset all application data"
@@ -531,21 +540,6 @@ msgstr ""
 msgid "True if successful"
 msgstr ""
 
-#: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
-#: cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_from_title
-#: cdl.core.remote.RemoteClient.get_object_from_uuid
-#: cdl.core.remote.RemoteServer.add_image
-#: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
-#: cdl.core.remote.RemoteServer.get_object
-#: cdl.core.remote.RemoteServer.get_object_from_title
-#: cdl.core.remote.RemoteServer.get_object_from_uuid
-#: cdl.core.remote.RemoteServer.get_object_titles
-#: cdl.core.remote.RemoteServer.get_object_uuids of
-msgid "Return type"
-msgstr ""
-
 #: cdl.core.remote.RemoteClient.add_image:1
 #: cdl.core.remote.RemoteServer.add_image:1 of
 msgid "Add image data to DataLab."
@@ -587,15 +581,11 @@ msgid "Select objects in current panel."
 msgstr ""
 
 #: cdl.core.remote.RemoteServer.select_objects:3 of
-msgid "List of object indices or object uuids to select"
-msgstr ""
-
-#: cdl.core.remote.RemoteServer.select_objects:5 of
-msgid "Group number. Defaults to None."
+msgid "List of object numbers (1 to N) or uuids to select"
 msgstr ""
 
 #: cdl.core.remote.RemoteServer.select_groups:5
-#: cdl.core.remote.RemoteServer.select_objects:7 of
+#: cdl.core.remote.RemoteServer.select_objects:4 of
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used. Defaults to None."
@@ -606,7 +596,9 @@ msgid "Select groups in current panel."
 msgstr ""
 
 #: cdl.core.remote.RemoteServer.select_groups:3 of
-msgid "List of group indices or group uuids to select"
+msgid ""
+"List of group numbers (1 to N), or list of group uuids, or None to select"
+" all groups. Defaults to None."
 msgstr ""
 
 #: cdl.core.remote.RemoteServer.delete_metadata:1 of
@@ -631,39 +623,19 @@ msgstr ""
 
 #: cdl.core.remote.RemoteServer.get_object_titles:1
 #: cdl.core.remote.RemoteServer.get_object_uuids:1 of
-msgid "Get object (signal/image) list for current panel."
+msgid ""
+"Get object (signal/image) list for current panel. Objects are sorted by "
+"group number and object index in group."
 msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object:7
-#: cdl.core.remote.RemoteClient.get_object_shapes:5
-#: cdl.core.remote.RemoteServer.get_object:7
-#: cdl.core.remote.RemoteServer.get_object_from_title:5
-#: cdl.core.remote.RemoteServer.get_object_from_uuid:5
-#: cdl.core.remote.RemoteServer.get_object_shapes:5
-#: cdl.core.remote.RemoteServer.get_object_titles:3
-#: cdl.core.remote.RemoteServer.get_object_uuids:3 of
+#: cdl.core.remote.RemoteServer.get_object_titles:4
+#: cdl.core.remote.RemoteServer.get_object_uuids:4 of
 msgid "Panel name. Defaults to None."
 msgstr ""
 
-#: cdl.core.remote.RemoteServer.get_object_titles:6 of
+#: cdl.core.remote.RemoteServer.get_object_titles:7 of
 #, fuzzy
 msgid "Object titles"
-msgstr "Obtenir la liste des objets"
-
-#: cdl.core.remote.RemoteServer.get_object_from_title:1 of
-#, fuzzy
-msgid "Get object (signal/image) from title."
-msgstr "Ouvrir un signal ou une image à partir d'un fichier"
-
-#: cdl.core.remote.RemoteServer.get_object_from_title:3 of
-msgid "Object title"
-msgstr ""
-
-#: cdl.core.remote.RemoteServer.get_object:14
-#: cdl.core.remote.RemoteServer.get_object_from_title:8
-#: cdl.core.remote.RemoteServer.get_object_from_uuid:8 of
-#, fuzzy
-msgid "Object data"
 msgstr "Obtenir la liste des objets"
 
 #: cdl.core.remote.RemoteClient.get_object:1
@@ -675,56 +647,40 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.get_object_shapes:3
 #: cdl.core.remote.RemoteServer.get_object:3
 #: cdl.core.remote.RemoteServer.get_object_shapes:3 of
-msgid "Object index in current panel. Defaults to None."
+msgid ""
+"Object number, or object id, or object title. Defaults to None (current "
+"object)."
 msgstr ""
 
 #: cdl.core.remote.RemoteClient.get_object:5
-#: cdl.core.remote.RemoteClient.get_object_shapes:4
+#: cdl.core.remote.RemoteClient.get_object_shapes:5
 #: cdl.core.remote.RemoteServer.get_object:5
-#: cdl.core.remote.RemoteServer.get_object_shapes:4 of
-msgid "Group index. Defaults to None."
+#: cdl.core.remote.RemoteServer.get_object_shapes:5 of
+msgid "Panel name. Defaults to None (current panel)."
 msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object:10
-#: cdl.core.remote.RemoteClient.get_object_shapes:7
-#: cdl.core.remote.RemoteServer.get_object:10
-#: cdl.core.remote.RemoteServer.get_object_shapes:7 of
-msgid ""
-"If ``index`` is not specified, returns the currently selected object. If "
-"``group_index`` is not specified, return an object from the current "
-"group. If ``panel`` is not specified, return an object from the current "
-"panel."
-msgstr ""
+#: cdl.core.remote.RemoteClient.get_object:7
+#: cdl.core.remote.RemoteServer.get_object:7 of
+#, fuzzy
+msgid "Object"
+msgstr "Obtenir la liste des objets"
 
 #: cdl.core.remote.RemoteClient.add_image
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
 #: cdl.core.remote.RemoteClient.get_object
-#: cdl.core.remote.RemoteClient.get_object_from_title
-#: cdl.core.remote.RemoteClient.get_object_from_uuid
 #: cdl.core.remote.RemoteServer.get_object cdl.core.remote.get_cdl_xmlrpc_port
 #: of
 msgid "Raises"
 msgstr ""
 
-#: cdl.core.remote.RemoteClient.get_object:17
-#: cdl.core.remote.RemoteClient.get_object_from_title:12
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:11
-#: cdl.core.remote.RemoteServer.get_object:17 of
+#: cdl.core.remote.RemoteClient.get_object:9
+#: cdl.core.remote.RemoteServer.get_object:9 of
 msgid "if object not found"
 msgstr ""
 
-#: cdl.core.remote.RemoteServer.get_object_uuids:6 of
+#: cdl.core.remote.RemoteServer.get_object_uuids:7 of
 #, fuzzy
 msgid "Object uuids"
-msgstr "Obtenir la liste des objets"
-
-#: cdl.core.remote.RemoteServer.get_object_from_uuid:1 of
-msgid "Get object (signal/image) from uuid."
-msgstr ""
-
-#: cdl.core.remote.RemoteServer.get_object_from_uuid:3 of
-#, fuzzy
-msgid "Object uuid"
 msgstr "Obtenir la liste des objets"
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:1
@@ -732,8 +688,9 @@ msgstr "Obtenir la liste des objets"
 msgid "Get plot item shapes associated to object (signal/image)."
 msgstr ""
 
-#: cdl.core.remote.RemoteServer.get_object_shapes:11 of
-msgid "JSON string of annotation items or None if no items"
+#: cdl.core.remote.RemoteClient.get_object_shapes:7
+#: cdl.core.remote.RemoteServer.get_object_shapes:7 of
+msgid "List of plot item shapes"
 msgstr ""
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:1
@@ -751,7 +708,6 @@ msgid "refresh plot. Defaults to True."
 msgstr ""
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:7
-#: cdl.core.remote.RemoteClient.get_object_from_title:5
 #: cdl.core.remote.RemoteServer.add_annotations_from_items:7
 #: cdl.core.remote.RemoteServer.add_label_with_title:6 of
 msgid ""
@@ -825,6 +781,10 @@ msgstr ""
 msgid "Disconnect from DataLab XML-RPC server."
 msgstr ""
 
+#: cdl.core.remote.RemoteClient.is_connected:1 of
+msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
 #: cdl.core.remote.RemoteClient.get_method_list:1 of
 msgid "Return list of available methods."
 msgstr ""
@@ -859,38 +819,6 @@ msgstr ""
 
 #: cdl.core.remote.RemoteClient.calc:9 of
 msgid "Compute function result"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_from_title:1 of
-msgid "Get object (signal/image) from title"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object:14
-#: cdl.core.remote.RemoteClient.get_object_from_title:3
-#: cdl.core.remote.RemoteClient.get_object_from_title:9
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:8 of
-msgid "object"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_from_title:13
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:12 of
-msgid "if panel not found"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:1 of
-msgid "Get object (signal/image) from uuid"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:3 of
-msgid "object uuid"
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_from_uuid:5 of
-msgid "panel name (valid values: \"signal\", \"image\")."
-msgstr ""
-
-#: cdl.core.remote.RemoteClient.get_object_shapes:11 of
-msgid "List of plot item shapes"
 msgstr ""
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:3 of
@@ -1298,3 +1226,64 @@ msgstr ""
 
 #~ msgid "Error when trying to connect to DataLab XML-RPC server"
 #~ msgstr ""
+
+#~ msgid "List of object indices or object uuids to select"
+#~ msgstr ""
+
+#~ msgid "Group number. Defaults to None."
+#~ msgstr ""
+
+#~ msgid "List of group indices or group uuids to select"
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) list for current panel."
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) from title."
+#~ msgstr "Ouvrir un signal ou une image à partir d'un fichier"
+
+#~ msgid "Object title"
+#~ msgstr ""
+
+#~ msgid "Object data"
+#~ msgstr "Obtenir la liste des objets"
+
+#~ msgid "Object index in current panel. Defaults to None."
+#~ msgstr ""
+
+#~ msgid "Group index. Defaults to None."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If ``index`` is not specified, returns"
+#~ " the currently selected object. If "
+#~ "``group_index`` is not specified, return "
+#~ "an object from the current group. "
+#~ "If ``panel`` is not specified, return"
+#~ " an object from the current panel."
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) from uuid."
+#~ msgstr ""
+
+#~ msgid "JSON string of annotation items or None if no items"
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) from title"
+#~ msgstr ""
+
+#~ msgid "object"
+#~ msgstr ""
+
+#~ msgid "if panel not found"
+#~ msgstr ""
+
+#~ msgid "Get object (signal/image) from uuid"
+#~ msgstr ""
+
+#~ msgid "object uuid"
+#~ msgstr ""
+
+#~ msgid "panel name (valid values: \"signal\", \"image\")."
+#~ msgstr ""
+

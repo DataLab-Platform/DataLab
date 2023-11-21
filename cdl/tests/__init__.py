@@ -4,7 +4,15 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab unit tests
+DataLab test suite
+------------------
+
+.. warning::
+
+    This test suite is based on `guidata.guitest` discovery mechanism.
+    It is not compatible with `pytest` because most of the high level tests
+    have to be executed in a separate process (e.g. scenario tests will fail
+    if executed in the same process as other tests).
 """
 
 from __future__ import annotations

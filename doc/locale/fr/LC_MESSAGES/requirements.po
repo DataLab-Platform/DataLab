@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-16 09:22+0100\n"
+"POT-Creation-Date: 2023-11-21 12:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -23,15 +23,15 @@ msgstr ""
 msgid "The :mod:`cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
 
-#: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:75
+#: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:78
 msgid "Name"
 msgstr "Nom"
 
-#: ../../requirements.rst:8 ../../requirements.rst:54 ../../requirements.rst:76
+#: ../../requirements.rst:8 ../../requirements.rst:54 ../../requirements.rst:79
 msgid "Version"
 msgstr "Version"
 
-#: ../../requirements.rst:9 ../../requirements.rst:55 ../../requirements.rst:77
+#: ../../requirements.rst:9 ../../requirements.rst:55 ../../requirements.rst:80
 msgid "Summary"
 msgstr "Description"
 
@@ -123,7 +123,7 @@ msgstr ""
 msgid ">= 1.9"
 msgstr ""
 
-#: ../../requirements.rst:43 ../../requirements.rst:78
+#: ../../requirements.rst:43 ../../requirements.rst:81
 msgid "PyQt5"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid ">=5.11"
 msgstr ""
 
-#: ../../requirements.rst:45 ../../requirements.rst:80
+#: ../../requirements.rst:45 ../../requirements.rst:83
 msgid "Python bindings for the Qt cross platform application toolkit"
 msgstr ""
 
@@ -171,31 +171,53 @@ msgstr ""
 msgid "Code coverage measurement for Python"
 msgstr ""
 
+#: ../../requirements.rst:68
+msgid "pyinstaller"
+msgstr ""
+
 #: ../../requirements.rst:69
+msgid ">=6.0"
+msgstr ""
+
+#: ../../requirements.rst:70
+msgid ""
+"PyInstaller bundles a Python application and all its dependencies into a "
+"single package."
+msgstr ""
+
+#: ../../requirements.rst:72
 msgid "Optional modules for building the documentation:"
 msgstr ""
 
-#: ../../requirements.rst:81
+#: ../../requirements.rst:84
 msgid "sphinx"
 msgstr ""
 
-#: ../../requirements.rst:83
+#: ../../requirements.rst:86
 msgid "Python documentation generator"
 msgstr ""
 
-#: ../../requirements.rst:84
+#: ../../requirements.rst:87
 msgid "sphinx_intl"
 msgstr ""
 
-#: ../../requirements.rst:86
+#: ../../requirements.rst:89
 msgid "Sphinx utility that make it easy to translate and to apply translation."
 msgstr ""
 
-#: ../../requirements.rst:87
+#: ../../requirements.rst:90
+msgid "myst_parser"
+msgstr ""
+
+#: ../../requirements.rst:92
+msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
+msgstr ""
+
+#: ../../requirements.rst:93
 msgid "pydata-sphinx-theme"
 msgstr ""
 
-#: ../../requirements.rst:89
+#: ../../requirements.rst:95
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr ""
 
