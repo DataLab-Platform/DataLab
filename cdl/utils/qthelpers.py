@@ -35,7 +35,11 @@ from cdl.utils.misc import to_string
 def close_widgets_and_quit(screenshot=False) -> None:
     """Close Qt top level widgets and quit Qt event loop"""
     for widget in QW.QApplication.instance().topLevelWidgets():
-        wname = widget.objectName()
+        try:
+            wname = widget.objectName()
+        except RuntimeError:
+            # Object has been deleted
+            continue
         if screenshot and wname and widget.isVisible():  # pragma: no cover
             grab_save_window(widget, wname.lower())
         assert widget.close()
