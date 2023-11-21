@@ -48,10 +48,14 @@ def try_send_command():
             output = None
             try:
                 output = func(*args, **kwargs)
-            except ConnectionRefusedError:
+            except ConnectionRefusedError as exc:
                 self.cdl = None
                 message = "🔥 Connection refused 🔥 (server is not ready?)"
                 self.host.log(message)
+                if execenv.unattended:
+                    raise ConnectionRefusedError(
+                        "Connection refused (server is not ready?)"
+                    ) from exc
                 QW.QMessageBox.critical(self, APP_NAME, message)
             return output
 
@@ -141,10 +145,14 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
     def init_cdl(self):
         """Open DataLab test"""
         if self.cdl is None:
-            self.cdl = RemoteCDLProxy(autoconnect=False)
-            connect_dlg = DataLabConnectionDialog(self.cdl.connect, self)
-            connect_dlg.host_label.setText("Host: DataLab server")
-            ok = connect_dlg.exec()
+            if execenv.unattended:
+                self.cdl = RemoteCDLProxy()
+                ok = True
+            else:
+                self.cdl = RemoteCDLProxy(autoconnect=False)
+                connect_dlg = DataLabConnectionDialog(self.cdl.connect, self)
+                connect_dlg.host_label.setText("Host: DataLab server")
+                ok = connect_dlg.exec()
             if ok:
                 self.host.log("✨ Initialized DataLab connection ✨")
                 self.host.log(f"  Communication port: {self.cdl.port}")
@@ -154,6 +162,12 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             else:
                 self.cdl = None
                 self.host.log("🔥 Connection refused 🔥 (server is not ready?)")
+                if execenv.unattended:
+                    raise ConnectionRefusedError(
+                        "Connection refused (server is not ready?)"
+                    )
+        else:
+            self.host.log("=> Already connected to DataLab")
 
     @try_send_command()
     def close_cdl(self):
@@ -238,7 +252,7 @@ def qt_wait_print(dt: float, message: str, parent=None):
 
 
 def test_remote_client():
-    """Remote client test"""
+    """Remote client application test"""
     env = os.environ.copy()
     env[execenv.DONOTQUIT_ENV] = "1"
     exec_script(app.__file__, wait=False, env=env)
