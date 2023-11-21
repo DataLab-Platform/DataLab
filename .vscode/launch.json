@@ -47,7 +47,7 @@
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5",
                 // "C:/Dev/Projets/DataLab_Test_CEA/cdl_test_cea/data/lmj_cbfx.h5,/A/valeur"
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5,/DataLab_Ima/i002: i002+i004",
-                "--unattended",
+                // "--unattended",
                 // "--screenshot",
                 // "--verbose",
                 // "quiet",
@@ -58,7 +58,23 @@
                 // "DEBUG": "1",
                 // "TEST_SEGFAULT_ERROR": "1",
                 "LANG": "en",
-                "QT_COLOR_MODE": "light",
+                // "QT_COLOR_MODE": "light",
+            }
+        },
+        {
+            "name": "Run current file (unattended)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env",
+            "python": "${config:python.defaultInterpreterPath}",
+            "justMyCode": false,
+            "args": [
+                "--unattended",
+            ],
+            "env": {
+                // "DEBUG": "1",
             }
         },
         {
