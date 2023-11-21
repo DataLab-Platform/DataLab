@@ -84,7 +84,7 @@ def compare_centroid_funcs(data):
     view_image_items(items)
 
 
-def centroid_test():
+def test_centroid():
     """Centroid test"""
     with qt_app_context():
         for data in get_laser_spot_data():
@@ -94,4 +94,4 @@ def centroid_test():
 
 
 if __name__ == "__main__":
-    centroid_test()
+    test_centroid()

@@ -19,7 +19,7 @@ from cdl.tests.data import get_test_signal
 from cdl.widgets.signalpeakdialog import SignalPeakDetectionDialog
 
 
-def test():
+def test_peak1d():
     """Signal peak dialog test"""
     with qt_app_context():
         s = get_test_signal("paracetamol.txt")
@@ -36,4 +36,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_peak1d()

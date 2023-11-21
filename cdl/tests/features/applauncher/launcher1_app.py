@@ -16,7 +16,7 @@ from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
 
 
-def test():
+def test_launcher1():
     """Testing DataLab app launcher"""
     with cdl_app_context(exec_loop=True):
         execenv.print("Opening DataLab with no argument")
@@ -24,4 +24,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_launcher1()

@@ -20,7 +20,7 @@ from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
 from cdl.utils.vistools import view_curves
 
 
-def test():
+def test_fft1d_unit():
     """1D FFT unit test."""
     with qt_app_context():
         newparam = new_signal_param(stype=SignalTypes.COSINUS, size=10000)
@@ -36,4 +36,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_fft1d_unit()

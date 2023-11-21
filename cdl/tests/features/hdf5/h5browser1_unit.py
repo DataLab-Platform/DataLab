@@ -18,7 +18,7 @@ from cdl.tests.data import get_test_fnames
 from cdl.widgets.h5browser import H5BrowserDialog
 
 
-def h5browser_test(pattern=None):
+def test_h5browser(pattern=None):
     """HDF5 browser test"""
     with qt_app_context():
         fnames = get_test_fnames("*.h5" if pattern is None else pattern)
@@ -33,4 +33,4 @@ def h5browser_test(pattern=None):
 
 
 if __name__ == "__main__":
-    h5browser_test()
+    test_h5browser()

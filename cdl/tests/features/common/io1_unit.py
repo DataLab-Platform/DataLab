@@ -21,7 +21,7 @@ from cdl.utils.vistools import view_curve_items, view_images
 
 
 @try_open_test_data("Testing TXT file reader", "*.txt")
-def test_txt(fname=None):
+def open_txt(fname=None):
     """Testing TXT files"""
     signal = read_signal(fname)
     execenv.print(signal)
@@ -29,7 +29,7 @@ def test_txt(fname=None):
 
 
 @try_open_test_data("Testing CSV file reader", "*.csv")
-def test_csv(fname=None):
+def open_csv(fname=None):
     """Testing CSV files"""
     signal = read_signal(fname)
     execenv.print(signal)
@@ -37,7 +37,7 @@ def test_csv(fname=None):
 
 
 @try_open_test_data("Testing SIF file handler", "*.sif")
-def test_sif(fname=None):
+def open_sif(fname=None):
     """Testing SIF files"""
     execenv.print(image_funcs.SIFFile(fname))
     data = image_funcs.imread_sif(fname)[0]
@@ -45,21 +45,21 @@ def test_sif(fname=None):
 
 
 @try_open_test_data("Testing SCOR-DATA file handler", "*.scor-data")
-def test_scordata(fname=None):
+def open_scordata(fname=None):
     """Testing SCOR-DATA files"""
     execenv.print(image_funcs.SCORFile(fname))
     data = image_funcs.imread_scor(fname)
     view_images(data)
 
 
-def io_test():
+def test_io1():
     """I/O test"""
     with qt_app_context():
-        test_txt()
-        test_csv()
-        test_sif()
-        test_scordata()
+        open_txt()
+        open_csv()
+        open_sif()
+        open_scordata()
 
 
 if __name__ == "__main__":
-    io_test()
+    test_io1()

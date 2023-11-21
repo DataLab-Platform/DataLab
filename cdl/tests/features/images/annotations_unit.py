@@ -19,13 +19,13 @@ from qtpy import QtWidgets as QW
 
 from cdl.core.model.base import ANN_KEY
 from cdl.env import execenv
+from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from cdl.tests import test_cdl_app_context
 
 
-def test():
+def test_annotations_unit():
     """Run image tools test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
 
         # Create image with annotations
@@ -63,4 +63,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_annotations_unit()

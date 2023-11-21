@@ -13,6 +13,12 @@ from cdl.app import run
 from cdl.tests.features.utilities import logview_error
 from cdl.utils.tests import exec_script
 
-if __name__ == "__main__":
+
+def test_logviewer_app():
+    """Test log viewer"""
     exec_script(logview_error.__file__)
     run()
+
+
+if __name__ == "__main__":
+    test_logviewer_app()

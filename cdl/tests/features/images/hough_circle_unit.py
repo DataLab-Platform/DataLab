@@ -22,7 +22,7 @@ from cdl.tests.data import get_peak2d_data
 from cdl.utils.vistools import view_image_items
 
 
-def exec_hough_circle_test(data):
+def __exec_hough_circle_test(data):
     """Peak detection using circle Hough transform"""
     edges = canny(
         data,
@@ -52,11 +52,11 @@ def exec_hough_circle_test(data):
     view_image_items(items)
 
 
-def hough_circle_test():
+def test_hough_circle():
     """2D peak detection test"""
     with qt_app_context():
-        exec_hough_circle_test(get_peak2d_data(multi=False))
+        __exec_hough_circle_test(get_peak2d_data(multi=False))
 
 
 if __name__ == "__main__":
-    hough_circle_test()
+    test_hough_circle()

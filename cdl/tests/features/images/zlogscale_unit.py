@@ -20,7 +20,7 @@ from cdl.tests.data import create_2d_steps_data
 from cdl.utils.vistools import view_image_items
 
 
-def zlogscale_test():
+def test_zlogscale():
     """Z-log scale test"""
     with qt_app_context():
         data = create_2d_steps_data(1024, width=256, dtype=np.int32)
@@ -30,4 +30,4 @@ def zlogscale_test():
 
 
 if __name__ == "__main__":
-    zlogscale_test()
+    test_zlogscale()

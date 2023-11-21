@@ -55,7 +55,7 @@ def compare_binning_images(data):
     view_image_items(items)
 
 
-def binning_test():
+def test_binning():
     """Centroid test"""
     with qt_app_context():
         for data in get_laser_spot_data()[2:]:
@@ -64,4 +64,4 @@ def binning_test():
 
 
 if __name__ == "__main__":
-    binning_test()
+    test_binning()

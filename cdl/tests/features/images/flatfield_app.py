@@ -17,12 +17,12 @@ Testing the following:
 from cdl.config import _
 from cdl.obj import Gauss2DParam, ImageTypes, UniformRandomParam, new_image_param
 from cdl.param import FlatFieldParam
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 
 
-def test():
+def test_flatfield():
     """Run flat field test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
 
         ima0 = panel.new_object(
@@ -47,4 +47,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_flatfield()

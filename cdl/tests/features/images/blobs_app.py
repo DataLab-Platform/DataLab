@@ -12,13 +12,13 @@ Blob detection application test
 
 import cdl.param
 from cdl.obj import create_image
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import get_test_image
 
 
-def test():
+def test_blobs():
     """Run blob detection application test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
         proc = panel.processor
         data = get_test_image("flower.npy").data
@@ -50,4 +50,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_blobs()

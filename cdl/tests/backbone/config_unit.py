@@ -127,7 +127,7 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
         execenv.print("OK (changed to HDF5 file path)")
 
 
-def test():
+def test_config():
     """Testing DataLab configuration file"""
     execenv.unattended = True
     h5files = [get_test_fnames("*.h5")[1]]
@@ -144,4 +144,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_config()

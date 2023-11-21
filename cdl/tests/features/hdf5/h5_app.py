@@ -17,7 +17,7 @@ from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
 
 
-def test(pattern=None):
+def test_h5_app(pattern=None):
     """Testing DataLab app launcher"""
     if pattern is None:
         pattern = "*.h5"
@@ -33,4 +33,4 @@ def test(pattern=None):
 
 
 if __name__ == "__main__":
-    test()
+    test_h5_app()

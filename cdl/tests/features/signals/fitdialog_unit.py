@@ -20,7 +20,7 @@ from cdl.utils.tests import get_default_test_name
 from cdl.widgets import fitdialog as fdlg
 
 
-def test():
+def test_fit_dialog():
     """Test function"""
     with qt_app_context():
         # Multi-gaussian curve fitting test
@@ -47,4 +47,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_fit_dialog()

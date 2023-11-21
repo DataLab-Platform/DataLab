@@ -26,10 +26,10 @@ import os
 import cdl.obj
 from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
-from cdl.tests.scenarios.scenario_sig_app import test_common_operations
+from cdl.tests.scenarios.scenario_sig_app import do_common_operations
 
 if os.name == "nt":
     from ctypes import WinDLL
@@ -80,7 +80,7 @@ def test_various_image_features(win: CDLMainWindow):
     for image in iterate_image_creation(param.width, non_zero=True, verbose=False):
         panel.add_object(create_sincos_image(param))
         panel.add_object(image)
-        test_common_operations(panel)
+        do_common_operations(panel)
         panel.remove_all_objects()
         break
 
@@ -121,7 +121,7 @@ def test_gdi_count(win: CDLMainWindow) -> int | None:
 def load_test():
     """Load test."""
     execenv.unattended = True
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         gdi_count = []
         for iteration in range(4):
             execenv.print(f"Test iteration: {iteration}")

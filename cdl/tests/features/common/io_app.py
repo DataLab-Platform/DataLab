@@ -19,7 +19,7 @@ from cdl.core.io.base import BaseIORegistry, IOAction
 from cdl.core.io.image import ImageIORegistry
 from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.utils.tests import get_test_fnames, temporary_directory
 
 
@@ -56,13 +56,13 @@ def __test_func(
             execenv.print("OK")
 
 
-def test() -> None:
+def test_io_app() -> None:
     """Run image tools test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         execenv.print("I/O application test:")
         __test_func("Signals", win.signalpanel, SignalIORegistry, "curve_formats/*.*")
         __test_func("Images", win.imagepanel, ImageIORegistry, "image_formats/*.*")
 
 
 if __name__ == "__main__":
-    test()
+    test_io_app()

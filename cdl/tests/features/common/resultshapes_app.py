@@ -16,8 +16,8 @@ import numpy as np
 
 import cdl.obj
 import cdl.param
+from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from cdl.tests import test_cdl_app_context
 
 
 def create_image_with_resultshapes():
@@ -36,12 +36,12 @@ def create_image_with_resultshapes():
     return image
 
 
-def test():
+def test_resultshapes():
     """Result shapes test"""
     obj1 = test_data.create_sincos_image()
     obj2 = create_image_with_resultshapes()
     obj2.roi = np.array([[10, 10, 60, 400]], int)
-    with test_cdl_app_context(console=False) as win:
+    with cdltest_app_context(console=False) as win:
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)
@@ -58,4 +58,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_resultshapes()

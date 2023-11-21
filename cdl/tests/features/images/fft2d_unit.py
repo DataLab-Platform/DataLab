@@ -20,7 +20,7 @@ from cdl.tests.data import RingParam, create_ring_image
 from cdl.utils.vistools import view_images_side_by_side
 
 
-def test():
+def test_fft2d_unit():
     """2D FFT unit test."""
     with qt_app_context():
         # Create a 2D ring image
@@ -44,4 +44,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_fft2d_unit()

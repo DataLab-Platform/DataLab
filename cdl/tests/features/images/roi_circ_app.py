@@ -15,7 +15,7 @@ from skimage import draw
 
 from cdl.env import execenv
 from cdl.obj import RoiDataGeometries, create_image
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.features.common.roi_app import print_obj_shapes
 
 
@@ -37,9 +37,9 @@ def create_test_image_with_roi(roi_geometry: RoiDataGeometries):
     return ima
 
 
-def test():
+def test_roi_circ():
     """Run circular ROI application test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         execenv.print("Circular ROI test:")
         panel = win.imagepanel
         for geometry in RoiDataGeometries:
@@ -51,4 +51,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_roi_circ()

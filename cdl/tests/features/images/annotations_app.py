@@ -19,7 +19,7 @@ from cdl.app import run
 from cdl.tests import data as test_data
 
 
-def test():
+def test_annotations_app():
     """Annotations test"""
     obj1 = test_data.create_sincos_image()
     obj2 = test_data.create_annotated_image()
@@ -28,4 +28,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_annotations_app()

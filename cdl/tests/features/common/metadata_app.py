@@ -22,19 +22,19 @@ from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app
 
 
-def test_signal_features(panel: SignalPanel):
+def __test_signal_features(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
     panel.processor.compute_fwhm(cdl.param.FWHMParam())
     panel.processor.compute_fw1e2()
 
 
-def test_image_features(panel: ImagePanel):
+def __test_image_features(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
     panel.processor.compute_centroid()
@@ -42,7 +42,7 @@ def test_image_features(panel: ImagePanel):
     panel.processor.compute_peak_detection(cdl.param.Peak2DDetectionParam())
 
 
-def test_metadata_features(panel: BaseDataPanel):
+def __test_metadata_features(panel: BaseDataPanel):
     """Test all metadata features"""
     # Duplicate the first object
     panel.duplicate_object()
@@ -56,27 +56,27 @@ def test_metadata_features(panel: BaseDataPanel):
     panel.paste_metadata()
 
 
-def test():
+def test_metadata_app():
     """Run metadata application test scenario"""
     size = 200
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         execenv.print("Metadata application test:")
         # === Signal metadata features test ===
         panel = win.signalpanel
         sig = create_paracetamol_signal(size)
         sig.roi = np.array([[26, 41], [125, 146]], int)
         panel.add_object(sig)
-        test_signal_features(panel)
-        test_metadata_features(panel)
+        __test_signal_features(panel)
+        __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
         param = cdl.obj.new_image_param(height=size, width=size)
         ima = roi_app.create_test_image_with_roi(param)
         panel.add_object(ima)
-        test_image_features(panel)
-        test_metadata_features(panel)
+        __test_image_features(panel)
+        __test_metadata_features(panel)
         execenv.print("==> OK")
 
 
 if __name__ == "__main__":
-    test()
+    test_metadata_app()

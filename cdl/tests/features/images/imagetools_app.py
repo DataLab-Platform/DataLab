@@ -22,13 +22,13 @@ from qtpy import QtCore as QC
 
 import cdl.obj
 from cdl.patch import ZAxisLogTool, to_cdl
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
 
 
-def test():
+def test_image_tools_app():
     """Run image tools test scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
         newparam = cdl.obj.new_image_param(height=200, width=200)
         ima = create_multigauss_image(newparam)
@@ -57,4 +57,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_image_tools_app()

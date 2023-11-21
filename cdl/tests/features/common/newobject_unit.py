@@ -112,22 +112,22 @@ def all_combinations_test():
     execenv.print(f"{all_combinations_test.__name__} OK")
 
 
-def new_signal_test():
+def __new_signal_test():
     """Test new signal feature"""
     edit = not execenv.unattended
     signal = create_signal_from_param(None, edit=edit)
     if signal is not None:
         data = (signal.x, signal.y)
-        view_curves([data], name=new_signal_test.__name__, title=signal.title)
+        view_curves([data], name=__new_signal_test.__name__, title=signal.title)
 
 
-def new_image_test():
+def __new_image_test():
     """Test new image feature"""
     # Test with no input parameter
     edit = not execenv.unattended
     image = create_image_from_param(None, edit=edit)
     if image is not None:
-        view_images(image.data, name=new_image_test.__name__, title=image.title)
+        view_images(image.data, name=__new_image_test.__name__, title=image.title)
     # Test with parametered 2D-Gaussian
     newparam = new_image_param(itype=ImageTypes.GAUSS)
     addparam = Gauss2DParam()
@@ -135,16 +135,16 @@ def new_image_test():
     addparam.sigma = 5
     image = create_image_from_param(newparam, addparam=addparam, edit=edit)
     if image is not None:
-        view_images(image.data, name=new_image_test.__name__, title=image.title)
+        view_images(image.data, name=__new_image_test.__name__, title=image.title)
 
 
-def test():
+def test_new_object():
     """Test new signal/image feature"""
     all_combinations_test()
     with qt_app_context():
-        new_signal_test()
-        new_image_test()
+        __new_signal_test()
+        __new_image_test()
 
 
 if __name__ == "__main__":
-    test()
+    test_new_object()

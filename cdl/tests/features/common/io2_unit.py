@@ -54,7 +54,7 @@ def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:
                 execenv.print("Skipped (not implemented)")
 
 
-def io_test():
+def test_io2():
     """I/O test"""
     execenv.print("I/O unit test:")
     __test_func("Signals", SignalIORegistry, "curve_formats/*.*")
@@ -62,4 +62,4 @@ def io_test():
 
 
 if __name__ == "__main__":
-    io_test()
+    test_io2()

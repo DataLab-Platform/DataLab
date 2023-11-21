@@ -22,8 +22,8 @@ import numpy as np
 
 from cdl.config import Conf
 from cdl.env import execenv
+from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
-from cdl.tests import test_cdl_app_context
 from cdl.utils import tests
 
 
@@ -33,12 +33,12 @@ def get_metadata_param_number_after_reset():
     return def_ima_nb + 2  # +2 for metadata options (see BaseObj.get_metadata_option)
 
 
-def test():
+def test_metadata_io_unit():
     """Run image tools test scenario"""
     execenv.unattended = True
     with tests.temporary_directory() as tmpdir:
         fname = osp.join(tmpdir, "test.json")
-        with test_cdl_app_context() as win:
+        with cdltest_app_context() as win:
             panel = win.imagepanel
             ima = test_data.create_annotated_image()
             for mshape in test_data.create_resultshapes():
@@ -60,4 +60,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_metadata_io_unit()

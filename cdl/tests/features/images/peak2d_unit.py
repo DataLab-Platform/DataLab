@@ -35,11 +35,11 @@ def exec_image_peak_detection_func(data):
     view_image_items(items)
 
 
-def peak2d_test():
+def test_peak2d_unit():
     """2D peak detection test"""
     with qt_app_context():
         exec_image_peak_detection_func(get_peak2d_data(multi=False))
 
 
 if __name__ == "__main__":
-    peak2d_test()
+    test_peak2d_unit()

@@ -24,7 +24,7 @@ from cdl.utils.vistools import view_curves
 from cdl.widgets.h5browser import H5BrowserDialog
 
 
-def memoryleak_test(fname, iterations=20):
+def test_memoryleak(fname, iterations=20):
     """Memory leak test"""
     with qt_app_context():
         proc = psutil.Process(os.getpid())
@@ -54,4 +54,4 @@ def memoryleak_test(fname, iterations=20):
 
 
 if __name__ == "__main__":
-    memoryleak_test("scenario*.h5")
+    test_memoryleak("scenario*.h5")

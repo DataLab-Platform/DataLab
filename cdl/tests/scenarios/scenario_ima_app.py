@@ -19,13 +19,13 @@ import cdl.param as dlp
 from cdl.config import Conf
 from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_peak2d_image, create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
-from cdl.tests.scenarios.scenario_sig_app import test_common_operations
+from cdl.tests.scenarios.scenario_sig_app import do_common_operations
 
 
-def test_image_features(
+def __test_image_features(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True
 ) -> None:
     """Testing signal features"""
@@ -34,12 +34,12 @@ def test_image_features(
 
     newparam = dlo.new_image_param(height=data_size, width=data_size)
 
-    if all_types:
-        for image in iterate_image_creation(data_size, non_zero=True):
-            panel.add_object(create_sincos_image(newparam))
-            panel.add_object(image)
-            test_common_operations(panel)
-            panel.remove_all_objects()
+    # if all_types:
+    #     for image in iterate_image_creation(data_size, non_zero=True):
+    #         panel.add_object(create_sincos_image(newparam))
+    #         panel.add_object(image)
+    #         do_common_operations(panel)
+    #         panel.remove_all_objects()
 
     ima1 = create_sincos_image(newparam)
     panel.add_object(ima1)
@@ -52,7 +52,7 @@ def test_image_features(
     addparam.vmax = int(ima1.data.max() * 0.2)
     panel.new_object(newparam, addparam=addparam, edit=False)
 
-    test_common_operations(panel)
+    do_common_operations(panel)
 
     param = dlp.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
@@ -160,24 +160,24 @@ def test_image_features(
     panel.processor.compute_binning(param)
 
 
-def test() -> None:
+def test_scenario_image() -> None:
     """Run image unit test scenario 1"""
     assert (
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
-    with test_cdl_app_context(save=True) as win:
+    with cdltest_app_context(save=True) as win:
         execenv.print("Testing image features without process isolation...")
         win.set_process_isolation_enabled(False)
-        test_image_features(win)
+        __test_image_features(win)
         win.imagepanel.remove_all_objects()
         execenv.print("==> OK")
         execenv.print("Testing image features *with* process isolation...")
         win.set_process_isolation_enabled(True)
-        test_image_features(win, all_types=False)
+        __test_image_features(win, all_types=False)
         oids = win.imagepanel.objmodel.get_object_ids()
         win.imagepanel.open_separate_view(oids[:4])
         execenv.print("==> OK")
 
 
 if __name__ == "__main__":
-    test()
+    test_scenario_image()

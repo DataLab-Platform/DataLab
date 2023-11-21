@@ -14,13 +14,13 @@ Testing the following:
 # guitest: show
 
 import cdl.param
-from cdl.tests import take_plotwidget_screenshot, test_cdl_app_context
+from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_peak2d_image
 
 
-def test():
+def test_peak2d():
     """Run 2D peak detection scenario"""
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
         ima = create_peak2d_image()
         panel.add_object(ima)
@@ -31,4 +31,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_peak2d()

@@ -46,5 +46,10 @@ class HostWindow(embedded1_unit.AbstractHostWindow):
             event.ignore()
 
 
+def test_embedded_feature():
+    """Testing embedded feature"""
+    embedded1_unit.run_host_window(HostWindow)
+
+
 if __name__ == "__main__":
-    embedded1_unit.test_embedded_feature(HostWindow)
+    test_embedded_feature()

@@ -27,7 +27,7 @@ from cdl.utils import tests
 
 
 @contextmanager
-def test_cdl_app_context(
+def cdltest_app_context(
     size: tuple[int, int] = None,
     maximized: bool = False,
     save: bool = False,
@@ -64,7 +64,7 @@ def test_cdl_app_context(
                 try:
                     os.remove(path)
                     win.save_to_h5_file(path)
-                except PermissionError:
+                except (FileNotFoundError, PermissionError):
                     pass
             if not exec_loop:
                 # Closing main window properly

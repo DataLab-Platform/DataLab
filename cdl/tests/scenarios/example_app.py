@@ -19,7 +19,7 @@ from cdl.proxy import proxy_context
 from cdl.tests.data import get_test_image
 
 
-def test():
+def test_example_app():
     """Example of high-level test scenario using proxy interface, so that it may
     be run remotely inside an already running DataLab instance, or in a new
     dedicated instance."""
@@ -45,4 +45,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_example_app()

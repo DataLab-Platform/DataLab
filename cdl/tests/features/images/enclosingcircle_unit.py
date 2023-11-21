@@ -23,7 +23,7 @@ from cdl.tests.data import get_laser_spot_data
 from cdl.utils.vistools import view_image_items
 
 
-def test_enclosingcircle(data):
+def __enclosingcircle_test(data):
     """Enclosing circle test function"""
     items = []
     items += [make.image(data, interpolation="nearest", eliminate_outliers=1.0)]
@@ -49,12 +49,12 @@ def test_enclosingcircle(data):
     view_image_items(items)
 
 
-def enclosing_circle_test():
+def test_enclosing_circle():
     """Test"""
     with qt_app_context():
         for data in get_laser_spot_data():
-            test_enclosingcircle(data)
+            __enclosingcircle_test(data)
 
 
 if __name__ == "__main__":
-    enclosing_circle_test()
+    test_enclosing_circle()

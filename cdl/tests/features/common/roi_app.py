@@ -22,7 +22,7 @@ import numpy as np
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.env import execenv
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image, create_paracetamol_signal
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -30,14 +30,14 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.signal import SignalPanel
 
 
-def test_signal_features(panel: SignalPanel, singleobj: bool | None = None):
+def __test_signal_features(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(dlp.FWHMParam())
     panel.processor.compute_fw1e2()
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
 
-def test_image_features(panel: ImagePanel, singleobj: bool | None = None):
+def __test_image_features(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
@@ -87,16 +87,16 @@ def print_obj_shapes(obj):
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
 
-def test():
+def test_roi_app():
     """Run ROI application test scenario"""
     size = 200
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         execenv.print("ROI application test:")
         # === Signal ROI extraction test ===
         panel = win.signalpanel
         sig1 = create_paracetamol_signal(size)
         panel.add_object(sig1)
-        test_signal_features(panel)
+        __test_signal_features(panel)
         sig2 = create_paracetamol_signal(size)
         sig2.roi = np.array([[26, 41], [125, 146]], int)
         for singleobj in (False, True):
@@ -105,13 +105,13 @@ def test():
             print_obj_shapes(sig2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("s_roi_signal")
-            test_signal_features(panel, singleobj=singleobj)
+            __test_signal_features(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
         param = dlo.new_image_param(height=size, width=size)
         ima1 = create_multigauss_image(param)
         panel.add_object(ima1)
-        test_image_features(panel)
+        __test_image_features(panel)
         ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
             ima2_i = ima2.copy()
@@ -119,8 +119,8 @@ def test():
             print_obj_shapes(ima2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("i_roi_image")
-            test_image_features(panel, singleobj=singleobj)
+            __test_image_features(panel, singleobj=singleobj)
 
 
 if __name__ == "__main__":
-    test()
+    test_roi_app()

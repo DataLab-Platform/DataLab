@@ -14,11 +14,11 @@ from guidata.qthelpers import qt_app_context
 from cdl.widgets.logviewer import exec_cdl_logviewer_dialog
 
 
-def test_log_viewer():
+def test_logviewer_dialog():
     """Test log viewer window"""
     with qt_app_context():
         exec_cdl_logviewer_dialog()
 
 
 if __name__ == "__main__":
-    test_log_viewer()
+    test_logviewer_dialog()

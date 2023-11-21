@@ -18,7 +18,7 @@ from cdl.app import run
 from cdl.tests import data as test_data
 
 
-def test():
+def test_launcher2():
     """Simple test"""
     sig1 = test_data.create_paracetamol_signal()
     sig2 = test_data.create_noisy_signal()
@@ -29,4 +29,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_launcher2()

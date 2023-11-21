@@ -13,7 +13,13 @@ may be an issue with the Pool object being global.
 
 # guitest: show
 
-from cdl.tests.backbone.procisolation1_unit import test
+from cdl.tests.backbone import procisolation1_unit
+
+
+def test_procisolation():
+    """Test process isolation"""
+    procisolation1_unit.test()
+
 
 if __name__ == "__main__":
-    test()
+    test_procisolation()

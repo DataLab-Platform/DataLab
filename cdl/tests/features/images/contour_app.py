@@ -13,16 +13,16 @@ Contour finding application test
 import cdl.obj
 import cdl.param
 from cdl.env import execenv
-from cdl.tests import take_plotwidget_screenshot, test_cdl_app_context
+from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 from cdl.tests.data import create_multigauss_image
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
 
 
-def test():
+def test_contour_app():
     """Run contour finding application test scenario"""
     newparam = cdl.obj.new_image_param(height=200, width=200)
     shapes = ("polygon", "circle", "ellipse")
-    with test_cdl_app_context() as win:
+    with cdltest_app_context() as win:
         panel = win.imagepanel
         for shape in shapes:
             ima1 = create_multigauss_image(newparam)
@@ -41,4 +41,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_contour_app()

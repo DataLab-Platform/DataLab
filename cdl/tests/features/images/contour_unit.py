@@ -23,7 +23,7 @@ from cdl.tests.data import get_peak2d_data
 from cdl.utils.vistools import view_image_items
 
 
-def exec_contour_test(data):
+def __exec_contour_test(data):
     """Find contours"""
     items = [make.image(data, interpolation="linear", colormap="hsv")]
     t0 = time.time()
@@ -49,11 +49,11 @@ def exec_contour_test(data):
     view_image_items(items)
 
 
-def contour_test():
+def test_contour():
     """2D peak detection test"""
     with qt_app_context():
-        exec_contour_test(get_peak2d_data())
+        __exec_contour_test(get_peak2d_data())
 
 
 if __name__ == "__main__":
-    contour_test()
+    test_contour()

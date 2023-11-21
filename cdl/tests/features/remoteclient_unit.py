@@ -61,7 +61,7 @@ def multiple_commands(remote: RemoteCDLProxy):
         time.sleep(2)  # Avoid permission error when trying to clean-up temporary files
 
 
-def test():
+def test_remoteclient_unit():
     """Remote client test"""
     env = os.environ.copy()
     env[execenv.DONOTQUIT_ENV] = "1"
@@ -75,4 +75,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_remoteclient_unit()

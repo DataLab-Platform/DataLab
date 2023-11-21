@@ -25,13 +25,13 @@ A high-level test scenario producing beautiful screenshots.
 
 import cdl.obj as dlo
 import cdl.param as dlp
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 
 
 def run_beautiful_scenario(screenshots: bool = False):
     """High-level test scenario producing beautiful screenshots"""
     data_size = 500
-    with test_cdl_app_context(console=False, exec_loop=not screenshots) as win:
+    with cdltest_app_context(console=False, exec_loop=not screenshots) as win:
         # Beautiful screenshot of a signal
         panel = win.signalpanel
         newparam = dlo.new_signal_param(stype=dlo.SignalTypes.LORENTZ)

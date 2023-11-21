@@ -29,17 +29,17 @@ import os.path as osp
 
 from cdl.env import execenv
 from cdl.param import ClipParam
-from cdl.tests import test_cdl_app_context
+from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app
 from cdl.utils.misc import save_html_diff
 from cdl.utils.tests import temporary_directory
 
 
-def test():
+def test_scenario_h5():
     """Example of high-level test scenario with HDF5 file"""
     with temporary_directory() as tmpdir:
-        with test_cdl_app_context(console=False) as win:
+        with cdltest_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel
             sig1 = create_paracetamol_signal()
@@ -75,4 +75,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_scenario_h5()
