@@ -11,10 +11,12 @@ Remote client test
 # pylint: disable=duplicate-code
 # guitest: skip
 
+import os
 import os.path as osp
 import time
 
 import numpy as np
+from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
 from cdl import app
@@ -61,11 +63,14 @@ def multiple_commands(remote: RemoteCDLProxy):
 
 def test():
     """Remote client test"""
+    env = os.environ.copy()
+    env[execenv.DONOTQUIT_ENV] = "1"
     execenv.print("Launching DataLab in a separate process")
-    exec_script(app.__file__, wait=False)
+    exec_script(app.__file__, wait=False, env=env)
     remote = RemoteCDLProxy()
     execenv.print("Executing multiple commands...", end="")
-    multiple_commands(remote)
+    with qt_app_context():  # needed for building plot items
+        multiple_commands(remote)
     execenv.print("OK")
 
 
