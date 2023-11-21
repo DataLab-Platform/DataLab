@@ -27,7 +27,6 @@ from cdl.tests.features.common.newobject_unit import (
     iterate_image_creation,
     iterate_signal_creation,
 )
-from cdl.tests.scenarios.common import compute_common_operations
 from cdl.widgets import fitdialog
 
 
