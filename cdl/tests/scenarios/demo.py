@@ -27,7 +27,7 @@ from cdl.tests.data import (
     create_sincos_image,
 )
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
-from cdl.tests.scenarios.scenario_sig_app import do_common_operations
+from cdl.tests.scenarios.common import compute_common_operations
 from cdl.widgets import fitdialog
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 4
@@ -52,7 +52,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     sig2 = dlo.create_signal_from_param(newparam, addparam=addparam, edit=False)
     win.add_object(sig2)
 
-    do_common_operations(panel)
+    compute_common_operations(panel)
     panel.processor.compute_normalize()
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
@@ -100,7 +100,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
     ima2 = dlo.create_image_from_param(newparam, addparam=addparam, edit=False)
     panel.add_object(ima2)
 
-    do_common_operations(panel)
+    compute_common_operations(panel)
 
     ima1 = create_sincos_image(newparam)
     panel.add_object(ima1)

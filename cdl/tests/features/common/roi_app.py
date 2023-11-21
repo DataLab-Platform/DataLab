@@ -30,14 +30,14 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.panel.signal import SignalPanel
 
 
-def __test_signal_features(panel: SignalPanel, singleobj: bool | None = None):
+def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None):
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(dlp.FWHMParam())
     panel.processor.compute_fw1e2()
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
 
-def __test_image_features(panel: ImagePanel, singleobj: bool | None = None):
+def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
@@ -96,7 +96,7 @@ def test_roi_app():
         panel = win.signalpanel
         sig1 = create_paracetamol_signal(size)
         panel.add_object(sig1)
-        __test_signal_features(panel)
+        __run_signal_computations(panel)
         sig2 = create_paracetamol_signal(size)
         sig2.roi = np.array([[26, 41], [125, 146]], int)
         for singleobj in (False, True):
@@ -105,13 +105,13 @@ def test_roi_app():
             print_obj_shapes(sig2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("s_roi_signal")
-            __test_signal_features(panel, singleobj=singleobj)
+            __run_signal_computations(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
         param = dlo.new_image_param(height=size, width=size)
         ima1 = create_multigauss_image(param)
         panel.add_object(ima1)
-        __test_image_features(panel)
+        __run_image_computations(panel)
         ima2 = create_test_image_with_roi(param)
         for singleobj in (False, True):
             ima2_i = ima2.copy()
@@ -119,7 +119,7 @@ def test_roi_app():
             print_obj_shapes(ima2_i)
             panel.processor.edit_regions_of_interest()
             win.take_screenshot("i_roi_image")
-            __test_image_features(panel, singleobj=singleobj)
+            __run_image_computations(panel, singleobj=singleobj)
 
 
 if __name__ == "__main__":

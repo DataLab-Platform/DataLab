@@ -10,6 +10,7 @@ Functions creating test data: curves, images, ...
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: skip
 
 from __future__ import annotations
 

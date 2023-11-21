@@ -27,14 +27,14 @@ from cdl.tests.data import create_paracetamol_signal
 from cdl.tests.features.common import roi_app
 
 
-def __test_signal_features(panel: SignalPanel):
+def __run_signal_computations(panel: SignalPanel):
     """Test all signal features related to ROI"""
     execenv.print("  Signal features")
     panel.processor.compute_fwhm(cdl.param.FWHMParam())
     panel.processor.compute_fw1e2()
 
 
-def __test_image_features(panel: ImagePanel):
+def __run_image_computations(panel: ImagePanel):
     """Test all image features related to ROI"""
     execenv.print("  Image features")
     panel.processor.compute_centroid()
@@ -66,14 +66,14 @@ def test_metadata_app():
         sig = create_paracetamol_signal(size)
         sig.roi = np.array([[26, 41], [125, 146]], int)
         panel.add_object(sig)
-        __test_signal_features(panel)
+        __run_signal_computations(panel)
         __test_metadata_features(panel)
         # === Image metadata features test ===
         panel = win.imagepanel
         param = cdl.obj.new_image_param(height=size, width=size)
         ima = roi_app.create_test_image_with_roi(param)
         panel.add_object(ima)
-        __test_image_features(panel)
+        __run_image_computations(panel)
         __test_metadata_features(panel)
         execenv.print("==> OK")
 
