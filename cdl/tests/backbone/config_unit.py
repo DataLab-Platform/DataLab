@@ -108,7 +108,8 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
         #  Check position
-        assert sec_main[OPT_POS.option] == (win.x(), win.y())
+        assert sec_main[OPT_POS.option][0] == win.x()
+        assert_almost_equal(win.y(), sec_main[OPT_POS.option][1], 15)  # Linux
         #  Check size
         assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
         assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
