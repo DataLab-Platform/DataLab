@@ -29,7 +29,7 @@ from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
 from cdl.utils.qthelpers import bring_to_front
-from cdl.widgets.connection import DataLabConnectionDialog
+from cdl.widgets.connection import ConnectionDialog
 
 APP_NAME = _("Remote client test")
 
@@ -77,7 +77,7 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
                 ok = True
             else:
                 self.cdl = RemoteCDLProxy(autoconnect=False)
-                connect_dlg = DataLabConnectionDialog(self.cdl.connect, self)
+                connect_dlg = ConnectionDialog(self.cdl.connect, self)
                 ok = connect_dlg.exec()
             if ok:
                 self.host.log("✨ Initialized DataLab connection ✨")

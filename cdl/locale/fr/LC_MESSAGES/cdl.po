@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-11-21 12:08+0100\n"
+"POT-Creation-Date: 2023-11-22 18:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -607,7 +607,7 @@ msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
 #: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:268
-#: cdl\tests\data.py:380
+#: cdl\tests\data.py:381
 msgid "Radius"
 msgstr "Rayon"
 
@@ -707,8 +707,8 @@ msgid "Degree"
 msgstr "Degré"
 
 #: cdl\core\computation\signal.py:489 cdl\core\model\signal.py:634
-#: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\demo.py:70
-#: cdl\tests\scenarios\scenario_sig_app.py:152
+#: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\common.py:153
+#: cdl\tests\scenarios\demo.py:70
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -949,18 +949,18 @@ msgstr "Détection de pics"
 msgid "Fitting"
 msgstr "Ajustement"
 
-#: cdl\core\gui\actionhandler.py:648 cdl\tests\scenarios\demo.py:68
-#: cdl\tests\scenarios\scenario_sig_app.py:148 cdl\widgets\fitdialog.py:116
+#: cdl\core\gui\actionhandler.py:648 cdl\tests\scenarios\common.py:149
+#: cdl\tests\scenarios\demo.py:68 cdl\widgets\fitdialog.py:116
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
-#: cdl\core\gui\actionhandler.py:649
-#: cdl\tests\scenarios\scenario_sig_app.py:149 cdl\widgets\fitdialog.py:144
+#: cdl\core\gui\actionhandler.py:649 cdl\tests\scenarios\common.py:150
+#: cdl\widgets\fitdialog.py:144
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
-#: cdl\core\gui\actionhandler.py:650
-#: cdl\tests\scenarios\scenario_sig_app.py:150 cdl\widgets\fitdialog.py:172
+#: cdl\core\gui\actionhandler.py:650 cdl\tests\scenarios\common.py:151
+#: cdl\widgets\fitdialog.py:172
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
@@ -2215,7 +2215,7 @@ msgstr "Fichiers binaires NumPy"
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: cdl\core\model\base.py:80 cdl\tests\data.py:89
+#: cdl\core\model\base.py:80 cdl\tests\data.py:90
 msgid "Seed"
 msgstr "Graine"
 
@@ -2335,7 +2335,7 @@ msgstr "Hauteur de l'image (nombre de lignes)"
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:733 cdl\tests\data.py:379
+#: cdl\core\model\image.py:733 cdl\tests\data.py:380
 msgid "Width"
 msgstr "Largeur"
 
@@ -2420,7 +2420,7 @@ msgstr "Phase"
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:520 cdl\tests\data.py:256 cdl\tests\data.py:376
+#: cdl\core\model\signal.py:520 cdl\tests\data.py:257 cdl\tests\data.py:377
 #: cdl\widgets\h5browser.py:210
 msgid "Size"
 msgstr "Taille"
@@ -2546,56 +2546,56 @@ msgstr "Créer une image 2D échelon"
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
-#: cdl\tests\data.py:75 cdl\widgets\fitdialog.py:108
+#: cdl\tests\data.py:76 cdl\widgets\fitdialog.py:108
 #: cdl\widgets\fitdialog.py:136 cdl\widgets\fitdialog.py:164
 msgid "Mean"
 msgstr "Moyenne"
 
-#: cdl\tests\data.py:79 cdl\tests\data.py:265
+#: cdl\tests\data.py:80 cdl\tests\data.py:266
 msgid "Mean of the Gaussian distribution"
 msgstr "Moyenne de la distribution gaussienne"
 
-#: cdl\tests\data.py:82
+#: cdl\tests\data.py:83
 msgid "Standard deviation"
 msgstr "Ecart-type"
 
-#: cdl\tests\data.py:86 cdl\tests\data.py:270
+#: cdl\tests\data.py:87 cdl\tests\data.py:271
 msgid "Standard deviation of the Gaussian distribution"
 msgstr "Ecart-type de la distribution gaussienne"
 
-#: cdl\tests\data.py:93
+#: cdl\tests\data.py:94
 msgid "Seed for random number generator"
 msgstr "Graine du générateur de nombres aléatoires"
 
-#: cdl\tests\data.py:257
+#: cdl\tests\data.py:258
 msgid "Number"
 msgstr "Nombre"
 
-#: cdl\tests\data.py:257
+#: cdl\tests\data.py:258
 msgid "Number of points"
 msgstr "Nombre de points"
 
-#: cdl\tests\data.py:259
+#: cdl\tests\data.py:260
 msgid "Sigma of the 2D Gaussian"
 msgstr "Sigma de la gaussienne 2D"
 
-#: cdl\tests\data.py:262
+#: cdl\tests\data.py:263
 msgid "Amplitude of the 2D Gaussian"
 msgstr "Amplitude de la gaussienne 2D"
 
-#: cdl\tests\data.py:274
+#: cdl\tests\data.py:275
 msgid "Attenuation"
 msgstr "Atténuation"
 
-#: cdl\tests\data.py:377
+#: cdl\tests\data.py:378
 msgid "X<sub>center</sub>"
 msgstr "X<sub>centre</sub>"
 
-#: cdl\tests\data.py:378
+#: cdl\tests\data.py:379
 msgid "Y<sub>center</sub>"
 msgstr "Y<sub>centre</sub>"
 
-#: cdl\tests\data.py:381
+#: cdl\tests\data.py:382
 msgid "Intensity"
 msgstr "Intensité"
 
@@ -2648,35 +2648,35 @@ msgstr "Importer une image depuis DataLab"
 msgid "Flat data (Uniform random)"
 msgstr "Image d'homogénéité (Distribution uniforme)"
 
-#: cdl\tests\features\remoteclient_app.py:35
+#: cdl\tests\features\remoteclient_app.py:34
 msgid "Remote client test"
 msgstr "Test du client distant"
 
-#: cdl\tests\features\remoteclient_app.py:142
+#: cdl\tests\features\remoteclient_app.py:69
 msgid "This the client application, which connects to DataLab."
 msgstr "Ceci l'application cliente, qui se connecte à DataLab."
 
-#: cdl\tests\features\remoteclient_app.py:143
+#: cdl\tests\features\remoteclient_app.py:70
 msgid "Connect to DataLab"
 msgstr "Se connecter à DataLab"
 
-#: cdl\tests\features\remoteclient_app.py:183
+#: cdl\tests\features\remoteclient_app.py:109
 msgid "Execute multiple commands"
 msgstr "Exécuter des commandes multiples"
 
-#: cdl\tests\features\remoteclient_app.py:184
+#: cdl\tests\features\remoteclient_app.py:110
 msgid "Get object titles"
 msgstr "Obtenir la liste des titres"
 
-#: cdl\tests\features\remoteclient_app.py:185
+#: cdl\tests\features\remoteclient_app.py:111
 msgid "Get object uuids"
 msgstr "Obtenir la liste des uuids"
 
-#: cdl\tests\features\remoteclient_app.py:186
+#: cdl\tests\features\remoteclient_app.py:112
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdl\tests\scenarios\demo.py:49 cdl\tests\scenarios\scenario_sig_app.py:114
+#: cdl\tests\scenarios\common.py:115 cdl\tests\scenarios\demo.py:49
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
@@ -2703,6 +2703,11 @@ msgstr "%s n'a pas pu être écrit:"
 #: cdl\utils\vistools.py:35
 msgid "Test dialog"
 msgstr "Boîte de dialogue de test"
+
+#: cdl\widgets\connection.py:58
+#, fuzzy
+msgid "Connection to DataLab"
+msgstr "Se connecter à DataLab"
 
 #: cdl\widgets\fileviewer.py:56
 msgid "Contents of file"

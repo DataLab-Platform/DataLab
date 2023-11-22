@@ -87,6 +87,21 @@ Here is a Python 2.7 reimplementation of this class:
 
 .. literalinclude:: ../../remotecontrol_py27.py
 
+Connection dialog
+^^^^^^^^^^^^^^^^^
+
+The DataLab package also provides a connection dialog that may be used
+to connect to a running DataLab instance. It is exposed by the
+:py:class:`cdl.widgets.connection.ConnectionDialog` class.
+
+.. figure:: ../../images/shots/connect_dialog.png
+
+    Screenshot of connection dialog (``cdl.widgets.connection.ConnectionDialog``)
+
+Example of use:
+
+.. literalinclude:: ../../../cdl/tests/features/connect_dialog.py
+
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
