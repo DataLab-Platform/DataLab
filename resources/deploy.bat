@@ -11,6 +11,8 @@ copy DataLab-Splash.png ..\cdl\data\logo
 %INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdl\data\logo\DataLab-Watermark.png" -w 300
 %INKSCAPE_PATH% "DataLab-Banner.svg" -o "DataLab-Banner.png" -w 364
 copy DataLab-Banner.png ..\doc\images
+%INKSCAPE_PATH% "DataLab-Banner.svg" -o "DataLab-Banner-150.png" -w 150
+move DataLab-Banner-150.png ..\cdl\data\logo
 %INKSCAPE_PATH% "DataLab-Screenshot-Theme.svg" -o "DataLab-Screenshot-Theme.png" -w 982
 copy DataLab-Screenshot-Theme.png ..\doc\images
 %INKSCAPE_PATH% "DataLab-Overview.svg" -o "DataLab-Overview.png" -w 1250
