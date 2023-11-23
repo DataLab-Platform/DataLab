@@ -13,6 +13,10 @@ doc/extras_require-dev.txt
 doc/extras_require-doc.txt
 *.bak
 
+# Visual Studio Code
+.venv
+.env
+
 # Created by https://www.gitignore.io/api/python
 
 ### Python ###

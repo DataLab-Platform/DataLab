@@ -30,12 +30,12 @@ still under development (or for confidential data).
 Specific environment variables
 ------------------------------
 
-Enable the "debug" mode (no stdin/stdout redirection towards internal console) :
+Enable the "debug" mode (no stdin/stdout redirection towards internal console):
 
     @REM Mode DEBUG
     set DEBUG=1
 
-Adding support for mathematical equations in documentation:
+Building PDF documentation requires LaTeX. On Windows, the following environment:
 
     @REM LaTeX executable must be in Windows PATH, for mathematical equations rendering
     @REM Example with MiKTeX :
@@ -48,6 +48,14 @@ Visual Studio Code configuration used in `launch.json` and `tasks.json`
     set CDL_PYTHONEXE=C:\C2OIQ-DevCDL\python-3.8.10.amd64\python.exe
     @REM Folder containing additional working test data
     set CDL_DATA=C:\Dev\Projets\CDL_data
+
+Visual Studio Code `.env` file:
+
+* This file is used to set environment variables for the application.
+* It is used to set the `PYTHONPATH` environment variable to the root of the project.
+* This is required to be able to import the project modules from within VS Code.
+* To create this file, copy the `.env.template` file to `.env`
+  (and eventually add your own paths).
 
 Other requirements
 ------------------
