@@ -25,7 +25,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import _
 
 
-class DataLabConnectionThread(QC.QThread):
+class ConnectionThread(QC.QThread):
     """DataLab Connection thread"""
 
     SIG_CONNECTION_OK = QC.Signal()
@@ -78,7 +78,7 @@ class ConnectionDialog(QW.QDialog):
         layout.addWidget(self.progress_bar)
         layout.addWidget(status)
         self.setLayout(layout)
-        self.thread = DataLabConnectionThread(connect_callback)
+        self.thread = ConnectionThread(connect_callback)
         self.thread.SIG_CONNECTION_OK.connect(self.on_connection_successful)
         self.thread.SIG_CONNECTION_KO.connect(self.on_connection_failed)
         button_box = QW.QDialogButtonBox(QW.QDialogButtonBox.Cancel)
