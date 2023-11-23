@@ -24,16 +24,5 @@
         },
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "python.linting.pycodestyleArgs": [
-        "--max-line-length=88",
-        "--ignore=E203,W503"
-    ],
-    "python.linting.pycodestyleEnabled": true,
-    "python.formatting.provider": "none",
-    "esbonio.server.enabled": true,
-    "restructuredtext.linter.doc8.extraArgs": [
-        "--ignore=D004"
-    ],
-    "esbonio.sphinx.confDir": "${workspaceFolder}\\doc",
     "python.analysis.autoFormatStrings": true,
 }
