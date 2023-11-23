@@ -329,6 +329,23 @@ class ObjectModel:
         """Return object ids, in order of appearance in groups"""
         return [obj.uuid for obj in self.get_all_objects()]
 
+    def get_group_titles_with_object_infos(
+        self,
+    ) -> tuple[list[str], list[list[str]], list[list[str]]]:
+        """Return groups titles and lists of inner objects uuids and titles.
+
+        Returns:
+            Tuple: groups titles, lists of inner objects uuids and titles
+        """
+        grp_titles = []
+        obj_uuids = []
+        obj_titles = []
+        for group in self._groups:
+            grp_titles.append(group.title)
+            obj_uuids.append(group.get_object_ids())
+            obj_titles.append([obj.title for obj in group])
+        return grp_titles, obj_uuids, obj_titles
+
     def get_object_titles(self) -> list[str]:
         """Return object titles, in order of appearance in groups"""
         return [obj.title for obj in self.get_all_objects()]
