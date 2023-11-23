@@ -19,6 +19,7 @@ This module is thus a convenient way to import all the parameters at once.
 """
 
 # pylint:disable=unused-import
+# flake8: noqa
 
 from cdl.core.computation.base import (
     ClipParam,

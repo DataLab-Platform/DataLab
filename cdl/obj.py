@@ -20,6 +20,7 @@ This module is thus a convenient way to import all the objects at once.
 """
 
 # pylint:disable=unused-import
+# flake8: noqa
 
 from cdl.core.io import read_image, read_signal
 from cdl.core.model.base import (
