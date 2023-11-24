@@ -5,6 +5,15 @@ DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
 natively supported by Python (and many other languages). Remote controlling
 allows to access DataLab main features from a separate process.
 
+.. note::
+
+    If you are looking for a lighweight alternative solution to remote control
+    DataLab (i.e. without having to install the whole DataLab package and its
+    dependencies on your environment), please have a look at the
+    `DataLab Simple Client`_ package (`pip install cdlclient`).
+
+.. _DataLab Simple Client: https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient
+
 From an IDE
 ^^^^^^^^^^^
 

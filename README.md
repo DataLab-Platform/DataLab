@@ -23,7 +23,17 @@ libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interface
 [guidata](https://github.com/PlotPyStack/guidata) and
 [PlotPy](https://github.com/PlotPyStack/PlotPy) libraries).
 
-DataLab is available as a **stand-alone** application (see for example our all-in-one Windows installer) or as an **addon to your Python-Qt application** thanks to advanced automation and embedding features.
+DataLab is available as a **stand-alone** application (see for example our all-in-one
+Windows installer) or as an **addon to your Python-Qt application** thanks to advanced
+automation and embedding features.
+
+✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
+Spyder or any IDE):
+
+* Using the integrated [remote control](https://cdlapp.readthedocs.io/en/latest/features/general/remote.html)
+feature (this requires to install on your environment DataLab as a Python package and all its dependencies)
+
+* Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient).
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 [documentation](https://cdlapp.readthedocs.io/en/latest/) for more details on
