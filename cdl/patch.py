@@ -25,9 +25,8 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine
+from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
-from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
@@ -92,12 +91,29 @@ def select(self):
 
 #  Adding centroid parameter to the image stats tool
 @monkeypatch_method(plotpy.items.BaseImageItem, "ImageItem")
-def get_stats(self, x0, y0, x1, y1):
+def get_stats(
+    self,
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+    show_surface: bool = False,
+    show_integral: bool = False,
+) -> str:
     """Return formatted string with stats on image rectangular area
-    (output should be compatible with AnnotatedShape.get_infos)"""
+    (output should be compatible with AnnotatedShape.get_infos)
+
+    Args:
+        x0: X0
+        y0: Y0
+        x1: X1
+        y1: Y1
+        show_surface: Show surface (Default value = False)
+        show_integral: Show integral (Default value = False)
+    """
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)
-        txt = self._old_ImageItem_get_stats(x0, y0, x1, y1)
+        txt = self._old_ImageItem_get_stats(x0, y0, x1, y1, show_surface, show_integral)
     ix0, iy0, ix1, iy1 = self.get_closest_index_rect(x0, y0, x1, y1)
     data = self.data[iy0:iy1, ix0:ix1]
 
