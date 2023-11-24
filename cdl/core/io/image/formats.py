@@ -15,6 +15,7 @@ import skimage.io
 
 from cdl.config import _
 from cdl.core.io.base import FormatInfo
+from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.image import funcs
 from cdl.core.io.image.base import ImageFormatBase
 from cdl.core.model.image import ImageObj
@@ -67,7 +68,7 @@ class NumPyImageFormat(ImageFormatBase):
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
         """Read data and return it"""
-        return np.load(filename)
+        return convert_array_to_standard_type(np.load(filename))
 
     def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""

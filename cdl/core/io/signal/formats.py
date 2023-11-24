@@ -11,6 +11,7 @@ import numpy as np
 
 from cdl.config import _
 from cdl.core.io.base import FormatInfo
+from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.signal import funcs
 from cdl.core.io.signal.base import SignalFormatBase
 from cdl.core.model.signal import SignalObj
@@ -36,7 +37,7 @@ class NumPySignalFormat(SignalFormatBase):
         Returns:
             np.ndarray: xydata
         """
-        return np.load(filename)
+        return convert_array_to_standard_type(np.load(filename))
 
     def write(self, filename: str, obj: SignalObj) -> None:
         """Write data to file
