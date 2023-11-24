@@ -953,9 +953,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             str: panel name (valid values: "signal", "image", "macro")
         """
         panel = self.tabwidget.currentWidget()
-        if panel is self.signalpanel:
+        dock = self.docks[panel]
+        if panel is self.signalpanel and dock.isVisible():
             return "signal"
-        if panel is self.imagepanel:
+        if panel is self.imagepanel and dock.isVisible():
             return "image"
         return "macro"
 
@@ -969,6 +970,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: unknown panel
         """
+        if self.get_current_panel() == panel:
+            if panel in ("signal", "image"):
+                # Force tab index changed event to be sure that the dock associated
+                # to the current panel is raised
+                self.__tab_index_changed(self.tabwidget.currentIndex())
+            return
         if panel == "signal":
             self.tabwidget.setCurrentWidget(self.signalpanel)
         elif panel == "image":
