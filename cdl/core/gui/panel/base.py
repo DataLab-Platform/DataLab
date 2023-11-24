@@ -100,6 +100,15 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.signal import NewSignalParam, SignalObj
 
 
+def is_plot_item_serializable(item: ShapeTypes) -> bool:
+    """Return True if plot item is serializable"""
+    try:
+        plotpy.io.item_class_from_name(item.__class__.__name__)
+        return True
+    except AssertionError:
+        return False
+
+
 class ObjectProp(QW.QWidget):
     """Object handling panel properties"""
 
@@ -792,8 +801,10 @@ class BaseDataPanel(AbstractPanel):
         """Separate view was closed"""
         dlg: PlotDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
-            items = dlg.get_plot().get_items()
-            rw_items = [item for item in items if not item.is_readonly()]
+            rw_items = []
+            for item in dlg.get_plot().get_items():
+                if not item.is_readonly() and is_plot_item_serializable(item):
+                    rw_items.append(item)
             obj = self.__separate_views[dlg]
             obj.annotations = items_to_json(rw_items)
             self.selection_changed(update_items=True)
