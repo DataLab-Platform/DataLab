@@ -11,6 +11,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from plotpy.tools import (
+    HCursorTool,
+    HRangeTool,
+    LabelTool,
+    RectangleTool,
+    SegmentTool,
+    VCursorTool,
+    XCursorTool,
+)
+
 from cdl.config import _
 from cdl.core.gui import roieditor
 from cdl.core.gui.actionhandler import SignalActionHandler
@@ -18,11 +28,7 @@ from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.plothandler import SignalPlotHandler
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
-from cdl.core.model.signal import (
-    SignalObj,
-    create_signal_from_param,
-    new_signal_param,
-)
+from cdl.core.model.signal import SignalObj, create_signal_from_param, new_signal_param
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset as gds
@@ -38,6 +44,15 @@ class SignalPanel(BaseDataPanel):
 
     PANEL_STR = _("Signal panel")
     PARAMCLASS = SignalObj
+    ANNOTATION_TOOLS = (
+        LabelTool,
+        VCursorTool,
+        HCursorTool,
+        XCursorTool,
+        SegmentTool,
+        RectangleTool,
+        HRangeTool,
+    )
     IO_REGISTRY = SignalIORegistry
     H5_PREFIX = "DataLab_Sig"
     ROIDIALOGCLASS = roieditor.SignalROIEditor

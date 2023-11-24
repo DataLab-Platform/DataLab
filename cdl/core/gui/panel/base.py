@@ -53,19 +53,12 @@ from typing import TYPE_CHECKING
 
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
+import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import add_actions, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
-from plotpy.tools import (
-    HCursorTool,
-    LabelTool,
-    RectangleTool,
-    SegmentTool,
-    VCursorTool,
-    XCursorTool,
-)
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
@@ -248,14 +241,7 @@ class BaseDataPanel(AbstractPanel):
 
     PANEL_STR = ""  # e.g. "Signal Panel"
     PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
-    ANNOTATION_TOOLS = (
-        LabelTool,
-        VCursorTool,
-        HCursorTool,
-        XCursorTool,
-        SegmentTool,
-        RectangleTool,
-    )
+    ANNOTATION_TOOLS = ()
     DIALOGSIZE = (800, 600)
     # Replaced by the right class in child object:
     IO_REGISTRY: SignalIORegistry | ImageIORegistry | None = None
