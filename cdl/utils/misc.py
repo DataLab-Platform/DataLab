@@ -59,8 +59,9 @@ def go_to_error(text: str) -> None:
     if match:
         path = match.group(1)
         line_number = match.group(2)
-        if not osp.isfile(path):
-            otherpath = osp.join(get_mod_source_dir(), path)
+        mod_src_dir = get_mod_source_dir()
+        if not osp.isfile(path) and mod_src_dir is not None:
+            otherpath = osp.join(mod_src_dir, path)
             if not osp.isfile(otherpath):
                 # TODO: [P3] For frozen app, go to error is implemented only when the
                 # source code is available locally (development mode).
