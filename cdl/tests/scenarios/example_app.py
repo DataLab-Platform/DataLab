@@ -23,7 +23,7 @@ def test_example_app():
     """Example of high-level test scenario using proxy interface, so that it may
     be run remotely inside an already running DataLab instance, or in a new
     dedicated instance."""
-    with proxy_context("remote") as proxy:
+    with proxy_context("local") as proxy:
         data = get_test_image("flower.npy").data
         image = create_image("Test image with peaks", data)
         proxy.add_object(image)
