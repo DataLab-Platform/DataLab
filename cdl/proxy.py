@@ -221,23 +221,23 @@ def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
     """Context manager handling CDL proxy creation and destruction.
 
     Args:
-        what (str): proxy type ("gui" or "remote")
-            For remote proxy, the port can be specified as "remote:port"
+        what (str): proxy type ("local" or "remote")
+         For remote proxy, the port can be specified as "remote:port"
 
     Yields:
         Generator[LocalProxy | RemoteProxy, None, None]: proxy
-            LocalProxy if what == "gui"
+            LocalProxy if what == "local"
             RemoteProxy if what == "remote" or "remote:port"
 
     Example:
-        with proxy_context("gui") as proxy:
+        with proxy_context("local") as proxy:
             proxy.add_signal(...)
     """
-    assert what == "gui" or what.startswith("remote"), "Invalid proxy type"
+    assert what == "local" or what.startswith("remote"), "Invalid proxy type"
     port = None
     if ":" in what:
         port = int(what.split(":")[1].strip())
-    if what == "gui":
+    if what == "local":
         # pylint: disable=import-outside-toplevel, cyclic-import
         from cdl.core.gui.main import CDLMainWindow
 
