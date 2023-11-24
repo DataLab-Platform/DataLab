@@ -594,7 +594,7 @@ class BaseProcessor(QC.QObject):
             if edit and not param.edit(parent=self.panel.parent()):
                 return
         if obj2 is None:
-            obj2 = self.panel.get_object_dialog(_("Select %s") % obj2_name)
+            obj2 = self.panel.get_object_with_dialog(_("Select %s") % obj2_name)
             if obj2 is None:
                 return
         objs = self.panel.objview.get_sel_objects(include_groups=True)

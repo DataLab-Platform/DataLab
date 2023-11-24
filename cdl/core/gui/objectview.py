@@ -80,7 +80,7 @@ class SimpleObjectTree(QW.QTreeWidget):
                 textlist.append("    " + tl_item.child(index).text(0))
         return os.linesep.join(textlist)
 
-    def init_from(self, sobjlist: SimpleObjectTree) -> None:
+    def initialize_from(self, sobjlist: SimpleObjectTree) -> None:
         """Init from another SimpleObjectList, without making copies of objects"""
         self.objmodel = sobjlist.objmodel
         self.populate_tree()
@@ -104,22 +104,6 @@ class SimpleObjectTree(QW.QTreeWidget):
             if item.data(0, QC.Qt.UserRole) == item_id:
                 return item
         return None
-
-    # pylint: disable=unused-argument
-    def get_actions_from_items(self, items):
-        """Get actions from item"""
-        return []
-
-    def get_current_object(self) -> SignalObj | ImageObj | None:
-        """Return current object"""
-        oid = self.get_current_item_id(object_only=True)
-        if oid is not None:
-            return self.objmodel[oid]
-        return None
-
-    def set_current_object(self, obj: SignalObj | ImageObj) -> None:
-        """Set current object"""
-        self.set_current_item_id(obj.uuid)
 
     def get_current_item_id(self, object_only: bool = False) -> str | None:
         """Return current item id"""
@@ -237,15 +221,15 @@ class GetObjectDialog(QW.QDialog):
 
     def __init__(self, parent: QW.QWidget, panel: BaseDataPanel, title: str) -> None:
         super().__init__(parent)
-        self.__current_object: SignalObj | ImageObj | None = None
+        self.__current_object_uuid: str | None = None
         self.setWindowTitle(title)
         vlayout = QW.QVBoxLayout()
         self.setLayout(vlayout)
 
         self.tree = SimpleObjectTree(parent, panel.objmodel)
-        self.tree.init_from(panel.objview)
+        self.tree.initialize_from(panel.objview)
         self.tree.SIG_ITEM_DOUBLECLICKED.connect(lambda oid: self.accept())
-        self.tree.itemSelectionChanged.connect(self.current_object_changed)
+        self.tree.itemSelectionChanged.connect(self.__current_object_changed)
         vlayout.addWidget(self.tree)
 
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
@@ -255,16 +239,16 @@ class GetObjectDialog(QW.QDialog):
         vlayout.addSpacing(10)
         vlayout.addWidget(bbox)
         # Update OK button state:
-        self.current_object_changed()
+        self.__current_object_changed()
 
-    def get_current_object(self) -> SignalObj | ImageObj:
-        """Return current object"""
-        return self.__current_object
-
-    def current_object_changed(self) -> None:
+    def __current_object_changed(self) -> None:
         """Item selection has changed"""
-        self.__current_object = self.tree.get_current_object()
-        self.ok_btn.setEnabled(isinstance(self.__current_object, (SignalObj, ImageObj)))
+        self.__current_object_uuid = self.tree.get_current_item_id()
+        self.ok_btn.setEnabled(bool(self.__current_object_uuid))
+
+    def get_current_object_uuid(self) -> str:
+        """Return current object uuid"""
+        return self.__current_object_uuid
 
 
 class ObjectView(SimpleObjectTree):
@@ -313,6 +297,17 @@ class ObjectView(SimpleObjectTree):
             event.accept()
         else:
             event.ignore()
+
+    def get_current_object(self) -> SignalObj | ImageObj | None:
+        """Return current object"""
+        oid = self.get_current_item_id(object_only=True)
+        if oid is not None:
+            return self.objmodel[oid]
+        return None
+
+    def set_current_object(self, obj: SignalObj | ImageObj) -> None:
+        """Set current object"""
+        self.set_current_item_id(obj.uuid)
 
     def get_sel_group_items(self) -> list[QW.QTreeWidgetItem]:
         """Return selected group items"""
