@@ -14,10 +14,10 @@ DataLab base proxy module
 # 1.  Add the method to the AbstractCDLControl class, as an abstract method
 #
 # 2a. If the method requires any data conversion to get through the XML-RPC layer,
-#     implement the method in both CDLProxy and RemoteClient classes
+#     implement the method in both LocalProxy and RemoteClient classes
 #
 # 2b. If the method does not require any data conversion, implement the method
-#     directly in the BaseProxy class, so that it is available to both CDLProxy
+#     directly in the BaseProxy class, so that it is available to both LocalProxy
 #     and RemoteClient classes without any code duplication
 #
 # 3.  Implement the method in the CDLMainWindow class

@@ -55,9 +55,9 @@ class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
 
 import numpy as np
 
-from cdl.proxy import RemoteCDLProxy
+from cdl.proxy import RemoteProxy
 
-proxy = RemoteCDLProxy()
+proxy = RemoteProxy()
 
 z = np.random.rand(20, 20)
 proxy.add_image("toto", z)

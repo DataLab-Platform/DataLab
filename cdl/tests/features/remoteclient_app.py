@@ -24,7 +24,7 @@ from qtpy import QtWidgets as QW
 from cdl import app
 from cdl.config import _
 from cdl.env import execenv
-from cdl.proxy import RemoteCDLProxy
+from cdl.proxy import RemoteProxy
 from cdl.tests.features import embedded1_unit
 from cdl.tests.features.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
@@ -73,10 +73,10 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
         """Open DataLab test"""
         if self.cdl is None:
             if execenv.unattended:
-                self.cdl = RemoteCDLProxy()
+                self.cdl = RemoteProxy()
                 ok = True
             else:
-                self.cdl = RemoteCDLProxy(autoconnect=False)
+                self.cdl = RemoteProxy(autoconnect=False)
                 connect_dlg = ConnectionDialog(self.cdl.connect, self)
                 ok = connect_dlg.exec()
             if ok:

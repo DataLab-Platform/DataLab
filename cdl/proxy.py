@@ -24,10 +24,12 @@ from cdl.obj import ImageObj, SignalObj
 from cdl.utils import qthelpers as qth
 
 
-class RemoteCDLProxy(RemoteClient):
-    """DataLab proxy class.
+class RemoteProxy(RemoteClient):
+    """DataLab remote proxy class.
 
-    This class provides access to DataLab features from a proxy class.
+    This class provides access to DataLab features from a proxy class. This is the
+    remote version of proxy, which is used when DataLab is started from a different
+    process than the proxy.
 
     Args:
         autoconnect (bool): Automatically connect to DataLab XML-RPC server.
@@ -38,11 +40,11 @@ class RemoteCDLProxy(RemoteClient):
         ValueError: Invalid number of retries (must be >= 1)
 
     Examples:
-        Here is a simple example of how to use RemoteCDLProxy in a Python script
+        Here is a simple example of how to use RemoteProxy in a Python script
         or in a Jupyter notebook:
 
-        >>> from cdl.proxy import RemoteCDLProxy
-        >>> proxy = RemoteCDLProxy()
+        >>> from cdl.proxy import RemoteProxy
+        >>> proxy = RemoteProxy()
         Connecting to DataLab XML-RPC server...OK (port: 28867)
         >>> proxy.get_version()
         '1.0.0'
@@ -65,10 +67,12 @@ class RemoteCDLProxy(RemoteClient):
             self.connect()
 
 
-class CDLProxy(BaseProxy):
-    """DataLab proxy class.
+class LocalProxy(BaseProxy):
+    """DataLab local proxy class.
 
-    This class provides access to DataLab features from a proxy class.
+    This class provides access to DataLab features from a proxy class. This is the
+    local version of proxy, which is used when DataLab is started from the same
+    process as the proxy.
 
     Args:
         cdl (CDLMainWindow): CDLMainWindow instance.
@@ -213,7 +217,7 @@ class CDLProxy(BaseProxy):
 
 
 @contextmanager
-def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]:
+def proxy_context(what: str) -> Generator[LocalProxy | RemoteProxy, None, None]:
     """Context manager handling CDL proxy creation and destruction.
 
     Args:
@@ -221,9 +225,9 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
             For remote proxy, the port can be specified as "remote:port"
 
     Yields:
-        Generator[CDLProxy | RemoteCDLProxy, None, None]: proxy
-            CDLProxy if what == "gui"
-            RemoteCDLProxy if what == "remote" or "remote:port"
+        Generator[LocalProxy | RemoteProxy, None, None]: proxy
+            LocalProxy if what == "gui"
+            RemoteProxy if what == "remote" or "remote:port"
 
     Example:
         with proxy_context("gui") as proxy:
@@ -240,14 +244,14 @@ def proxy_context(what: str) -> Generator[CDLProxy | RemoteCDLProxy, None, None]
         with qth.cdl_app_context(exec_loop=True):
             try:
                 win = CDLMainWindow()
-                proxy = CDLProxy(win)
+                proxy = LocalProxy(win)
                 win.show()
                 yield proxy
             finally:
                 pass
     else:
         try:
-            proxy = RemoteCDLProxy(autoconnect=False)
+            proxy = RemoteProxy(autoconnect=False)
             proxy.connect(port)
             yield proxy
         finally:

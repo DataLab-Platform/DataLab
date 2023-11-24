@@ -22,12 +22,12 @@ from plotpy.builder import make
 from cdl import app
 from cdl.env import execenv
 from cdl.param import XYCalibrateParam
-from cdl.proxy import RemoteCDLProxy
+from cdl.proxy import RemoteProxy
 from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
 from cdl.utils.tests import exec_script, temporary_directory
 
 
-def multiple_commands(remote: RemoteCDLProxy):
+def multiple_commands(remote: RemoteProxy):
     """Execute multiple XML-RPC commands"""
     with temporary_directory() as tmpdir:
         x, y = create_paracetamol_signal().get_data()
@@ -67,7 +67,7 @@ def test_remoteclient_unit():
     env[execenv.DONOTQUIT_ENV] = "1"
     execenv.print("Launching DataLab in a separate process")
     exec_script(app.__file__, wait=False, env=env)
-    remote = RemoteCDLProxy()
+    remote = RemoteProxy()
     execenv.print("Executing multiple commands...", end="")
     with qt_app_context():  # needed for building plot items
         multiple_commands(remote)

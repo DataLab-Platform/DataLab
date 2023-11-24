@@ -36,17 +36,17 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
 from cdl.core.io.base import FormatInfo  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.image.base import (
-    ImageFormatBase,  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.image.base import (  # pylint: disable=W0611  # noqa: F401
+    ImageFormatBase,
 )
-from cdl.core.io.image.formats import (
-    ClassicsImageFormat,  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.image.formats import (  # pylint: disable=W0611  # noqa: F401
+    ClassicsImageFormat,
 )
-from cdl.core.io.signal.base import (
-    SignalFormatBase,  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.signal.base import (  # pylint: disable=W0611  # noqa: F401
+    SignalFormatBase,
 )
 from cdl.env import execenv
-from cdl.proxy import CDLProxy
+from cdl.proxy import LocalProxy
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui import main
@@ -145,7 +145,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
 
     def __init__(self):
         self.main: main.CDLMainWindow = None
-        self.proxy: CDLProxy = None
+        self.proxy: LocalProxy = None
         self._is_registered = False
         self.info = self.PLUGIN_INFO
         if self.info is None:
@@ -200,7 +200,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         PluginRegistry.register_plugin(self)
         self._is_registered = True
         self.main = main
-        self.proxy = CDLProxy(main)
+        self.proxy = LocalProxy(main)
         self.register_hooks()
 
     def unregister(self):

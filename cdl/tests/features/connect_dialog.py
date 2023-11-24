@@ -12,13 +12,13 @@ DataLab Remote client connection dialog example
 from guidata.qthelpers import qt_app_context
 from qtpy import QtWidgets as QW
 
-from cdl.proxy import RemoteCDLProxy
+from cdl.proxy import RemoteProxy
 from cdl.widgets.connection import ConnectionDialog
 
 
 def test_dialog():
     """Test connection dialog"""
-    proxy = RemoteCDLProxy(autoconnect=False)
+    proxy = RemoteProxy(autoconnect=False)
     with qt_app_context():
         dlg = ConnectionDialog(proxy.connect)
         if dlg.exec():

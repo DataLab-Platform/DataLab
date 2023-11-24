@@ -878,7 +878,7 @@ class RemoteClient(BaseProxy):
         #       BaseProxy
         #     - Implement add_object method in XML-RPC server
         #     - Remove add_object method from BaseProxy
-        #     - Rewrite add_object method in CDLProxy and RemoteClient to use
+        #     - Rewrite add_object method in LocalProxy and RemoteClient to use
         #       the remote method
 
         if isinstance(obj, SignalObj):

@@ -11,7 +11,7 @@ From an IDE
 DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any other
 IDE, or even a Jupyter Notebook) that runs a Python script. It allows to
 connect to a running DataLab instance, adds a signal and an image, and then
-runs calculations. This feature is exposed by the `RemoteCDLProxy` class that
+runs calculations. This feature is exposed by the `RemoteProxy` class that
 is provided in module ``cdl.proxy``.
 
 From a third-party application
@@ -21,9 +21,9 @@ DataLab may also be controlled remotely from a third-party application, for the
 same purpose.
 
 If the third-party application is written in Python 3, it may directly use the
-`RemoteCDLProxy` class as mentioned above. From another language, it is also
+`RemoteProxy` class as mentioned above. From another language, it is also
 achievable, but it requires to implement a XML-RPC client in this language
-using the same methods of proxy server as in the `RemoteCDLProxy` class.
+using the same methods of proxy server as in the `RemoteProxy` class.
 
 Data (signals and images) may also be exchanged between DataLab and the remote
 client application, in both directions.
@@ -74,7 +74,7 @@ between your application and DataLab:
 Examples
 ^^^^^^^^
 
-When using Python 3, you may directly use the `RemoteCDLProxy` class as in
+When using Python 3, you may directly use the `RemoteProxy` class as in
 examples cited above or below.
 
 Here is an example in Python 3 of a script that connects to a running DataLab
