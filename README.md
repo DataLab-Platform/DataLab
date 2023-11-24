@@ -33,7 +33,7 @@ Spyder or any IDE):
 * Using the integrated [remote control](https://cdlapp.readthedocs.io/en/latest/features/general/remote.html)
 feature (this requires to install on your environment DataLab as a Python package and all its dependencies)
 
-* Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient).
+* Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient) (`pip install cdlclient`)
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 [documentation](https://cdlapp.readthedocs.io/en/latest/) for more details on
