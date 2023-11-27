@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-22 18:30+0100\n"
+"POT-Creation-Date: 2023-11-27 10:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,11 +33,19 @@ msgstr ""
 "langages). Le contrôle à distance permet d'accéder aux principales "
 "fonctionnalités de DataLab à partir d'un processus séparé."
 
-#: ../../features/general/remote.rst:9
+#: ../../features/general/remote.rst:10
+msgid ""
+"If you are looking for a lighweight alternative solution to remote "
+"control DataLab (i.e. without having to install the whole DataLab package"
+" and its dependencies on your environment), please have a look at the "
+"`DataLab Simple Client`_ package (`pip install cdlclient`)."
+msgstr ""
+
+#: ../../features/general/remote.rst:18
 msgid "From an IDE"
 msgstr "Depuis un IDE"
 
-#: ../../features/general/remote.rst:11
+#: ../../features/general/remote.rst:20
 msgid ""
 "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any "
 "other IDE, or even a Jupyter Notebook) that runs a Python script. It "
@@ -52,11 +60,11 @@ msgstr ""
 "calculs. Cette fonctionnalité est exposée par la classe RemoteProxy "
 "fournie dans le module cdl.proxy."
 
-#: ../../features/general/remote.rst:18
+#: ../../features/general/remote.rst:27
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"
 
-#: ../../features/general/remote.rst:20
+#: ../../features/general/remote.rst:29
 msgid ""
 "DataLab may also be controlled remotely from a third-party application, "
 "for the same purpose."
@@ -64,21 +72,21 @@ msgstr ""
 "DataLab peut également être contrôlé à distance depuis une application "
 "tierce, dans le même but."
 
-#: ../../features/general/remote.rst:23
+#: ../../features/general/remote.rst:32
 msgid ""
 "If the third-party application is written in Python 3, it may directly "
-"use the `RemoteProxy` class as mentioned above. From another language,"
-" it is also achievable, but it requires to implement a XML-RPC client in "
+"use the `RemoteProxy` class as mentioned above. From another language, it"
+" is also achievable, but it requires to implement a XML-RPC client in "
 "this language using the same methods of proxy server as in the "
 "`RemoteProxy` class."
 msgstr ""
 "Si l'application tierce est écrite en Python 3, elle peut directement "
-"utiliser la classe RemoteProxy comme mentionné ci-dessus. Depuis un "
-"autre langage, c'est également réalisable, mais cela nécessite "
-"d'implémenter un client XML-RPC dans ce langage en utilisant les mêmes "
-"méthodes de serveur proxy que dans la classe RemoteProxy."
+"utiliser la classe RemoteProxy comme mentionné ci-dessus. Depuis un autre"
+" langage, c'est également réalisable, mais cela nécessite d'implémenter "
+"un client XML-RPC dans ce langage en utilisant les mêmes méthodes de "
+"serveur proxy que dans la classe RemoteProxy."
 
-#: ../../features/general/remote.rst:28
+#: ../../features/general/remote.rst:37
 msgid ""
 "Data (signals and images) may also be exchanged between DataLab and the "
 "remote client application, in both directions."
@@ -86,7 +94,7 @@ msgstr ""
 "Les données (signaux et images) peuvent également être échangées entre "
 "DataLab et l'application cliente distante, dans les deux sens."
 
-#: ../../features/general/remote.rst:31
+#: ../../features/general/remote.rst:40
 msgid ""
 "The remote client application may be written in any language that "
 "supports XML-RPC. For example, it is possible to write a remote client "
@@ -99,7 +107,7 @@ msgstr ""
 "L'application cliente distante peut être une application graphique ou une"
 " application en ligne de commande."
 
-#: ../../features/general/remote.rst:36
+#: ../../features/general/remote.rst:45
 msgid ""
 "The remote client application may be run on the same computer as DataLab "
 "or on a different computer. In the latter case, the remote client "
@@ -110,7 +118,7 @@ msgstr ""
 "l'application cliente distante doit connaître l'adresse IP de "
 "l'ordinateur exécutant DataLab."
 
-#: ../../features/general/remote.rst:40
+#: ../../features/general/remote.rst:49
 msgid ""
 "The remote client application may be run before or after DataLab. In the "
 "latter case, the remote client application must try to connect to DataLab"
@@ -120,55 +128,55 @@ msgstr ""
 " Dans ce dernier cas, l'application cliente distante doit essayer de se "
 "connecter à DataLab jusqu'à ce qu'elle réussisse."
 
-#: ../../features/general/remote.rst:45
+#: ../../features/general/remote.rst:54
 msgid "Supported features"
 msgstr "Fonctionnalités prises en charge"
 
-#: ../../features/general/remote.rst:47
+#: ../../features/general/remote.rst:56
 msgid "Supported features are the following:"
 msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
-#: ../../features/general/remote.rst:49
+#: ../../features/general/remote.rst:58
 msgid "Switch to signal or image panel"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: ../../features/general/remote.rst:50
+#: ../../features/general/remote.rst:59
 msgid "Remove all signals and images"
 msgstr "Supprimer tous les signaux et images"
 
-#: ../../features/general/remote.rst:51
+#: ../../features/general/remote.rst:60
 msgid "Save current session to a HDF5 file"
 msgstr "Enregistrer la session en cours dans un fichier HDF5"
 
-#: ../../features/general/remote.rst:52
+#: ../../features/general/remote.rst:61
 msgid "Open HDF5 files into current session"
 msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
 
-#: ../../features/general/remote.rst:53
+#: ../../features/general/remote.rst:62
 msgid "Browse HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: ../../features/general/remote.rst:54
+#: ../../features/general/remote.rst:63
 msgid "Open a signal or an image from file"
 msgstr "Ouvrir un signal ou une image à partir d'un fichier"
 
-#: ../../features/general/remote.rst:55
+#: ../../features/general/remote.rst:64
 msgid "Add a signal"
 msgstr "Ajouter un signal"
 
-#: ../../features/general/remote.rst:56
+#: ../../features/general/remote.rst:65
 msgid "Add an image"
 msgstr "Ajouter une image"
 
-#: ../../features/general/remote.rst:57
+#: ../../features/general/remote.rst:66
 msgid "Get object list"
 msgstr "Obtenir la liste des objets"
 
-#: ../../features/general/remote.rst:58
+#: ../../features/general/remote.rst:67
 msgid "Run calculation with parameters"
 msgstr "Exécuter un calcul avec des paramètres"
 
-#: ../../features/general/remote.rst:62
+#: ../../features/general/remote.rst:71
 msgid ""
 "The signal and image objects are described on this section: :ref:`ref-to-"
 "model`."
@@ -176,7 +184,7 @@ msgstr ""
 "Les objets signal et image sont décrits dans cette section : :ref:`ref-"
 "to-model`."
 
-#: ../../features/general/remote.rst:64
+#: ../../features/general/remote.rst:73
 msgid ""
 "Some examples are provided to help implementing such a communication "
 "between your application and DataLab:"
@@ -184,15 +192,15 @@ msgstr ""
 "Quelques exemples sont fournis pour aider à implémenter une telle "
 "communication entre votre application et DataLab :"
 
-#: ../../features/general/remote.rst:67
+#: ../../features/general/remote.rst:76
 msgid "See module: ``cdl.tests.remoteclient_app``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_app``"
 
-#: ../../features/general/remote.rst:68
+#: ../../features/general/remote.rst:77
 msgid "See module: ``cdl.tests.remoteclient_unit``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_unit``"
 
-#: ../../features/general/remote.rst:72
+#: ../../features/general/remote.rst:81
 msgid ""
 "Screenshot of remote client application test "
 "(``cdl.tests.remoteclient_app``)"
@@ -200,20 +208,20 @@ msgstr ""
 "Capture d'écran du test de l'application cliente distante "
 "(``cdl.tests.remoteclient_app``)"
 
-#: ../../features/general/remote.rst:75 cdl.core.remote.RemoteClient:5 of
+#: ../../features/general/remote.rst:84 cdl.core.remote.RemoteClient:5 of
 msgid "Examples"
 msgstr "Exemples"
 
-#: ../../features/general/remote.rst:77
+#: ../../features/general/remote.rst:86
 msgid ""
-"When using Python 3, you may directly use the `RemoteProxy` class as "
-"in examples cited above or below."
+"When using Python 3, you may directly use the `RemoteProxy` class as in "
+"examples cited above or below."
 msgstr ""
 "Lorsque vous utilisez Python 3, vous pouvez utiliser directement la "
 "classe `RemoteProxy` comme dans les exemples cités ci-dessus ou ci-"
 "dessous."
 
-#: ../../features/general/remote.rst:80
+#: ../../features/general/remote.rst:89
 msgid ""
 "Here is an example in Python 3 of a script that connects to a running "
 "DataLab instance, adds a signal and an image, and then runs calculations "
@@ -225,32 +233,38 @@ msgstr ""
 "exécute des calculs (la structure de cellule du script le rend pratique à"
 " utiliser dans l'IDE `Spyder`_):"
 
-#: ../../features/general/remote.rst:86
+#: ../../features/general/remote.rst:95
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
-#: ../../features/general/remote.rst:91
+#: ../../features/general/remote.rst:100
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 
-#: ../../features/general/remote.rst:93
+#: ../../features/general/remote.rst:102
 msgid ""
 "The DataLab package also provides a connection dialog that may be used to"
 " connect to a running DataLab instance. It is exposed by the "
 ":py:class:`cdl.widgets.connection.ConnectionDialog` class."
-msgstr "Le package DataLab fournit également une boîte de dialogue de connexion qui peut être utilisée pour se connecter à une instance de DataLab en cours d'exécution. Elle est exposée par la classe :py:class:`cdl.widgets.connection.ConnectionDialog`."
+msgstr ""
+"Le package DataLab fournit également une boîte de dialogue de connexion "
+"qui peut être utilisée pour se connecter à une instance de DataLab en "
+"cours d'exécution. Elle est exposée par la classe "
+":py:class:`cdl.widgets.connection.ConnectionDialog`."
 
-#: ../../features/general/remote.rst:99
+#: ../../features/general/remote.rst:108
 msgid ""
 "Screenshot of connection dialog "
 "(``cdl.widgets.connection.ConnectionDialog``)"
-msgstr "Capture d'écran de la boîte de dialogue de connexion (``cdl.widgets.connection.ConnectionDialog``)"
+msgstr ""
+"Capture d'écran de la boîte de dialogue de connexion "
+"(``cdl.widgets.connection.ConnectionDialog``)"
 
-#: ../../features/general/remote.rst:101
+#: ../../features/general/remote.rst:110
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"
 
-#: ../../features/general/remote.rst:106
+#: ../../features/general/remote.rst:115
 msgid "Public API: remote client"
 msgstr "API publique : client distant"
 
@@ -320,6 +334,7 @@ msgstr ""
 #: cdl.core.remote.RemoteServer.add_image
 #: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
 #: cdl.core.remote.RemoteServer.get_current_panel
+#: cdl.core.remote.RemoteServer.get_group_titles_with_object_infos
 #: cdl.core.remote.RemoteServer.get_object
 #: cdl.core.remote.RemoteServer.get_object_shapes
 #: cdl.core.remote.RemoteServer.get_object_titles
@@ -449,6 +464,7 @@ msgstr ""
 #: cdl.core.remote.RemoteServer.add_image
 #: cdl.core.remote.RemoteServer.add_signal cdl.core.remote.RemoteServer.calc
 #: cdl.core.remote.RemoteServer.get_current_panel
+#: cdl.core.remote.RemoteServer.get_group_titles_with_object_infos
 #: cdl.core.remote.RemoteServer.get_object_titles
 #: cdl.core.remote.RemoteServer.get_object_uuids of
 msgid "Return type"
@@ -640,6 +656,14 @@ msgstr ""
 
 #: cdl.core.remote.RemoteServer.calc:5 of
 msgid "Compute function parameters. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteServer.get_group_titles_with_object_infos:1 of
+msgid "Return groups titles and lists of inner objects uuids and titles."
+msgstr ""
+
+#: cdl.core.remote.RemoteServer.get_group_titles_with_object_infos:3 of
+msgid "groups titles, lists of inner objects uuids and titles"
 msgstr ""
 
 #: cdl.core.remote.RemoteServer.get_object_titles:1
@@ -855,11 +879,11 @@ msgstr ""
 msgid "Signal or image object"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: ../../features/general/remote.rst:112
+#: ../../features/general/remote.rst:121
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remote.rst:114
+#: ../../features/general/remote.rst:123
 msgid ""
 "The remote control class methods (either using the proxy or the remote "
 "client) may be completed with additional methods which are dynamically "
@@ -1307,3 +1331,4 @@ msgstr ""
 
 #~ msgid "panel name (valid values: \"signal\", \"image\")."
 #~ msgstr ""
+

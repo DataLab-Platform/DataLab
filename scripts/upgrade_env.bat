@@ -12,5 +12,5 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
 pip install --upgrade -r dev\requirements.txt
-pip list > dev\pip_list.txt
+pip list > pip_list.txt
 call %FUNC% EndOfScript

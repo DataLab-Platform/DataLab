@@ -1,0 +1,487 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-27 14:03+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../dev/environment.md:1
+msgid "Setting up Development Environment"
+msgstr "Mise en place de l'environnement de développement"
+
+#: ../../dev/environment.md:4
+msgid "Getting started with DataLab development is easy."
+msgstr "Démarrer le développement dans le cadre du projet DataLab est facile."
+
+#: ../../dev/environment.md:6
+msgid "Here is what you will need:"
+msgstr "Voici ce dont vous aurez besoin :"
+
+#: ../../dev/environment.md:8
+msgid ""
+"An integrated development environment (IDE) for Python. We recommend "
+"[Spyder](https://www.spyder-ide.org/) or [Visual Studio "
+"Code](https://code.visualstudio.com/), but any IDE will do."
+msgstr ""
+"Un environnement de développement intégré (IDE) pour Python. Nous "
+"recommandons [Spyder](https://www.spyder-ide.org/) ou [Visual Studio "
+"Code](https://code.visualstudio.com/), mais tout IDE fera l'affaire."
+
+#: ../../dev/environment.md:12
+msgid ""
+"A Python distribution. We recommend "
+"[WinPython](https://winpython.github.io/), on Windows, or "
+"[Anaconda](https://www.anaconda.com/), on Linux or Mac. But, again, any "
+"Python distribution will do."
+msgstr ""
+"Une distribution Python. Nous recommandons "
+"[WinPython](https://winpython.github.io/), sur Windows, ou "
+"[Anaconda](https://www.anaconda.com/), sur Linux ou Mac. Mais, encore une"
+" fois, n'importe quelle distribution Python fera l'affaire."
+
+#: ../../dev/environment.md:16
+msgid "A clean project structure (see below)."
+msgstr "Une structure de projet propre (voir ci-dessous)."
+
+#: ../../dev/environment.md:18
+msgid "Test data (see below)."
+msgstr "Des données de test (voir ci-dessous)."
+
+#: ../../dev/environment.md:20
+msgid "Environment variables (see below)."
+msgstr "Des variables d'environnement (voir ci-dessous)."
+
+#: ../../dev/environment.md:22
+msgid "Third-party software (see below)."
+msgstr "Des logiciels tiers (voir ci-dessous)."
+
+#: ../../dev/environment.md:24
+msgid "Development Environment"
+msgstr "Environnement de développement"
+
+#: ../../dev/environment.md:27
+msgid ""
+"If you are using [Spyder](https://www.spyder-ide.org/), thank you for "
+"supporting the scientific open-source Python community!"
+msgstr ""
+"Si vous utilisez [Spyder](https://www.spyder-ide.org/), merci de soutenir"
+" la communauté scientifique Python open-source !"
+
+#: ../../dev/environment.md:30
+msgid ""
+"If you are using Visual Studio Code, that's also an excellent choice (for"
+" other reasons). We recommend installing the following extensions:"
+msgstr ""
+"Si vous utilisez Visual Studio Code, c'est aussi un excellent choix (pour"
+" d'autres raisons). Nous recommandons d'installer les extensions "
+"suivantes :"
+
+#: ../../dev/environment.md
+msgid "Extension"
+msgstr "Extension"
+
+#: ../../dev/environment.md
+msgid "Description"
+msgstr "Description"
+
+#: ../../dev/environment.md
+msgid ""
+"[Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.black-formatter)"
+msgstr ""
+"[Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.black-formatter)"
+
+#: ../../dev/environment.md
+msgid "Python code formatter"
+msgstr "Formateur de code Python"
+
+#: ../../dev/environment.md
+msgid ""
+"[gettext](https://marketplace.visualstudio.com/items?itemName=mrorz"
+".language-gettext)"
+msgstr ""
+"[gettext](https://marketplace.visualstudio.com/items?itemName=mrorz"
+".language-gettext)"
+
+#: ../../dev/environment.md
+msgid "Gettext syntax highlighting"
+msgstr "Coloration syntaxique Gettext"
+
+#: ../../dev/environment.md
+msgid ""
+"[isort](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.isort)"
+msgstr "[isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort)"
+
+#: ../../dev/environment.md
+msgid "Python import sorter"
+msgstr "Classeur d'importations Python"
+
+#: ../../dev/environment.md
+msgid ""
+"[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python"
+".vscode-pylance)"
+msgstr "[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance)"
+
+#: ../../dev/environment.md
+msgid "Python language server"
+msgstr "Serveur de langage Python"
+
+#: ../../dev/environment.md
+msgid ""
+"[Python](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.python)"
+msgstr "[Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)"
+
+#: ../../dev/environment.md
+msgid "Python extension"
+msgstr "Extension Python"
+
+#: ../../dev/environment.md
+msgid ""
+"[reStructuredText Syntax "
+"highlighting](https://marketplace.visualstudio.com/items?itemName=trond-"
+"snekvik.simple-rst)"
+msgstr "[reStructuredText Syntax highlighting](https://marketplace.visualstudio.com/items?itemName=trond-snekvik.simple-rst)"
+
+#: ../../dev/environment.md
+msgid "reStructuredText syntax highlighting"
+msgstr "Coloration syntaxique reStructuredText"
+
+#: ../../dev/environment.md
+msgid "[Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)"
+msgstr "[Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)"
+
+#: ../../dev/environment.md
+msgid "Extremely fast Python linter and code formatter"
+msgstr "Linter et formateur de code Python extrêmement rapide"
+
+#: ../../dev/environment.md
+msgid ""
+"[Todo "
+"Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly"
+".todo-tree)"
+msgstr "[Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)"
+
+#: ../../dev/environment.md
+msgid "Todo tree"
+msgstr "Arbre de tâches"
+
+#: ../../dev/environment.md:44
+msgid "Python Environment"
+msgstr "Environnement Python"
+
+#: ../../dev/environment.md:47
+msgid "DataLab requires the following :"
+msgstr "DataLab nécessite les éléments suivants :"
+
+#: ../../dev/environment.md:49
+msgid "Python (e.g. WinPython)"
+msgstr "Python (p.ex. WinPython)"
+
+#: ../../dev/environment.md:51
+msgid "Additional Python packages"
+msgstr "Paquets Python supplémentaires"
+
+#: ../../dev/environment.md:53
+msgid "Installing all required packages :"
+msgstr "Installation de tous les paquets requis :"
+
+#: ../../dev/environment.md:57
+msgid ""
+"ℹ️ See "
+"[Installation](https://cdlapp.readthedocs.io/en/latest/intro/installation.html)"
+" for more details on reference Python and Qt versions."
+msgstr "Voir [Installation](https://cdlapp.readthedocs.io/en/latest/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
+
+#: ../../dev/environment.md:60
+msgid ""
+"If you are using [WinPython](https://winpython.github.io/), thank you for"
+" supporting the scientific open-source Python community!"
+msgstr "Si vous utilisez [WinPython](https://winpython.github.io/), merci de soutenir la communauté scientifique Python open-source !"
+
+#: ../../dev/environment.md:63
+msgid ""
+"The following table lists the currently officially used Python "
+"distributions:"
+msgstr "Le tableau suivant liste les distributions Python actuellement utilisées officiellement :"
+
+#: ../../dev/environment.md
+msgid "Python version"
+msgstr "Version de Python"
+
+#: ../../dev/environment.md
+msgid "Status"
+msgstr "Statut"
+
+#: ../../dev/environment.md
+msgid "WinPython version"
+msgstr "Version de WinPython"
+
+#: ../../dev/environment.md
+msgid "3.8"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "OK"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.8.10.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.9"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.9.10.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.10"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.10.11.1"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.11"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.11.5.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.12"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.12.0.1"
+msgstr ""
+
+#: ../../dev/environment.md:73
+msgid ""
+"⚠ We strongly recommend using the `.dot` versions of WinPython which are "
+"lightweight and can be customized to your needs (using `pip install -r "
+"requirements.txt`)."
+msgstr "⚠ Nous recommandons fortement d'utiliser les versions `.dot` de WinPython qui sont légères et peuvent être personnalisées selon vos besoins (en utilisant `pip install -r requirements.txt`)."
+
+#: ../../dev/environment.md:76
+msgid "✅ We also recommend using a dedicated WinPython instance for DataLab."
+msgstr "✅ Nous recommandons également d'utiliser une instance WinPython dédiée pour DataLab."
+
+#: ../../dev/environment.md:78
+msgid "Test data"
+msgstr "Données de test"
+
+#: ../../dev/environment.md:81
+msgid ""
+"DataLab test data are located in different folders, depending on their "
+"nature or origin."
+msgstr "Les données de test de DataLab sont situées dans différents dossiers, selon leur nature ou leur origine."
+
+#: ../../dev/environment.md:83
+msgid ""
+"Required data for unit tests are located in \"cdl\\data\\tests\" (public "
+"data)."
+msgstr "Les données requises pour les tests unitaires sont situées dans \"cdl\\data\\tests\" (données publiques).
+
+#: ../../dev/environment.md:85
+msgid ""
+"A second folder %CDL_DATA% (optional) may be defined for additional tests"
+" which are still under development (or for confidential data)."
+msgstr "Un second dossier %CDL_DATA% (facultatif) peut être défini pour des tests supplémentaires qui sont encore en cours de développement (ou pour des données confidentielles)."
+
+#: ../../dev/environment.md:88
+msgid "Specific environment variables"
+msgstr "Variables d'environnement spécifiques"
+
+#: ../../dev/environment.md:91
+msgid ""
+"Enable the \"debug\" mode (no stdin/stdout redirection towards internal "
+"console):"
+msgstr "Activer le mode \"debug\" (pas de redirection stdin/stdout vers la console interne) :"
+
+#: ../../dev/environment.md:96
+msgid ""
+"Building PDF documentation requires LaTeX. On Windows, the following "
+"environment:"
+msgstr "Générer la documentation PDF nécessite LaTeX. Sur Windows, l'environnement suivant :"
+
+#: ../../dev/environment.md:102
+msgid ""
+"Visual Studio Code configuration used in `launch.json` and `tasks.json` "
+"(examples) :"
+msgstr "La configuration de Visual Studio Code utilisée dans `launch.json` et `tasks.json` (exemples) :"
+
+#: ../../dev/environment.md:110
+msgid "Visual Studio Code `.env` file:"
+msgstr "Fichier `.env` de Visual Studio Code :"
+
+#: ../../dev/environment.md:112
+msgid "This file is used to set environment variables for the application."
+msgstr "Ce fichier est utilisé pour définir les variables d'environnement de l'application."
+
+#: ../../dev/environment.md:113
+msgid ""
+"It is used to set the `PYTHONPATH` environment variable to the root of "
+"the project."
+msgstr "Il est utilisé pour définir la variable d'environnement `PYTHONPATH` à la racine du projet."
+
+#: ../../dev/environment.md:114
+msgid ""
+"This is required to be able to import the project modules from within VS "
+"Code."
+msgstr "Cela est nécessaire pour pouvoir importer les modules du projet depuis VS Code."
+
+#: ../../dev/environment.md:115
+msgid ""
+"To create this file, copy the `.env.template` file to `.env` (and "
+"eventually add your own paths)."
+msgstr "Pour créer ce fichier, copiez le fichier `.env.template` en `.env` (et ajoutez éventuellement vos propres chemins)."
+
+#: ../../dev/environment.md:118
+msgid "Third-party Software"
+msgstr "Logiciels tiers"
+
+#: ../../dev/environment.md:121
+msgid "The following software may be required for maintaining the project:"
+msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
+
+#: ../../dev/environment.md
+msgid "Software"
+msgstr "Logiciel"
+
+#: ../../dev/environment.md
+msgid "[gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Translations"
+msgstr "Traductions"
+
+#: ../../dev/environment.md
+msgid "[Git](https://git-scm.com/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Version control system"
+msgstr "Système de contrôle de version"
+
+#: ../../dev/environment.md
+msgid "[ImageMagick](https://imagemagick.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Image manipulation utilities"
+msgstr "Utilitaires de manipulation d'images"
+
+#: ../../dev/environment.md
+msgid "[Inkscape](https://inkscape.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Vector graphics editor"
+msgstr "Editeur de graphiques vectoriels"
+
+#: ../../dev/environment.md
+msgid "[MikTeX](https://miktex.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "LaTeX distribution on Windows"
+msgstr "Distribution LaTeX sur Windows"
+
+#~ msgid "Some third-party software (see below)."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you are using Spyder, thank you"
+#~ " for supporting the scientific Python "
+#~ "community!"
+#~ msgstr ""
+
+#~ msgid "[GitBlame](https://marketplace.visualstudio.com/items?itemName=waderyan.gitblame)"
+#~ msgstr ""
+
+#~ msgid "Git blame information"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "[Git Extensions for VS "
+#~ "Code](https://marketplace.visualstudio.com/items?itemName=forevolve"
+#~ ".git-extensions-for-vs-code)"
+#~ msgstr ""
+
+#~ msgid "Git GUI"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "[Git "
+#~ "Graph](https://marketplace.visualstudio.com/items?itemName=mhutchie"
+#~ ".git-graph)"
+#~ msgstr ""
+
+#~ msgid "Git graph"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "[GitHub "
+#~ "Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot)"
+#~ msgstr ""
+
+#~ msgid "AI pair programmer"
+#~ msgstr ""
+
+#~ msgid "[NSIS](https://marketplace.visualstudio.com/items?itemName=idleberg.nsis)"
+#~ msgstr ""
+
+#~ msgid "NSIS syntax highlighting"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "[NSIS Plug-"
+#~ "ins](https://marketplace.visualstudio.com/items?itemName=idleberg"
+#~ ".nsis-plugins)"
+#~ msgstr ""
+
+#~ msgid "NSIS plug-ins syntax highlighting"
+#~ msgstr ""
+
+#~ msgid "reStructuredText preview"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If you are using WinPython, thank "
+#~ "you for supporting the scientific Python"
+#~ " community!"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "The following software is required/recommended"
+#~ " for maintaining the project:"
+#~ msgstr ""
+
+#~ msgid "GNU gettext utilities"
+#~ msgstr ""
+
+#~ msgid "Translations in source code or documentation"
+#~ msgstr ""

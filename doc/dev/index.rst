@@ -8,3 +8,4 @@ Development
    roadmap
    contribute
    guidelines
+   environment

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 11:13+0200\n"
+"POT-Creation-Date: 2023-11-27 10:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../index.rst:43
+#: ../../index.rst:45
 msgid "Contents:"
 msgstr "Table des matières :"
 
@@ -74,47 +74,50 @@ msgstr ""
 "dans votre propre application** (voir les \"embedded tests\" pour des "
 "exemples détaillés)."
 
-#: ../../index.rst:30
-msgid "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_"
-msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_"
+#: ../../index.rst:31
+msgid ""
+"DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
+"the Python-Qt visualization and scientific graphical user interface "
+"stack."
+msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_, la pile logicielle Python-Qt de visualisation et d'interface graphique scientifique."
 
-#: ../../index.rst:41
+#: ../../index.rst:43
 msgid "External resources:"
 msgstr "Ressources externes :"
 
-#: ../../index.rst:36
+#: ../../index.rst:38
 msgid "`Home`_"
 msgstr "`Home`_"
 
-#: ../../index.rst:37
+#: ../../index.rst:39
 msgid "DataLab home page"
 msgstr "Site de DataLab"
 
-#: ../../index.rst:38
+#: ../../index.rst:40
 msgid "`PyPI`_"
 msgstr "`PyPI`_"
 
-#: ../../index.rst:39
+#: ../../index.rst:41
 msgid "Python Package Index"
 msgstr "Paquet Python officiel"
 
-#: ../../index.rst:40
+#: ../../index.rst:42
 msgid "`GitHub`_"
 msgstr "`GitHub`_"
 
-#: ../../index.rst:41
+#: ../../index.rst:43
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:54
+#: ../../index.rst:57
 msgid "Copyrights and licensing"
 msgstr "Licence et copyrights"
 
-#: ../../index.rst:56
+#: ../../index.rst:59
 msgid "Copyright © 2023 `Codra`_, Pierre Raybaut"
 msgstr ""
 
-#: ../../index.rst:57
+#: ../../index.rst:60
 msgid "Licensed under the terms of the `BSD 3-Clause`_"
 msgstr "Distribué sous licence `BSD 3-Clause`_"
 
