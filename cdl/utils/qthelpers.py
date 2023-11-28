@@ -314,8 +314,12 @@ def bring_to_front(window: QW.QWidget) -> None:
     Args:
         window: Window to bring to front
     """
+    # Show window on top of others
     eflags = window.windowFlags()
     window.setWindowFlags(eflags | QC.Qt.WindowStaysOnTopHint)
     window.show()
     window.setWindowFlags(eflags)
     window.show()
+    # If window is minimized, restore it
+    if window.isMinimized():
+        window.showNormal()
