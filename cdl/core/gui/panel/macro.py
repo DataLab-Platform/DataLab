@@ -151,14 +151,17 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 obj = self.deserialize_object_from_hdf5(reader, name)
                 self.add_object(obj)
 
-    @property
-    def object_number(self) -> int:
-        """Return object number
-
-        Returns:
-            int: Number of objects
-        """
+    def __len__(self) -> int:
+        """Return number of objects"""
         return len(self.__macros)
+
+    def __getitem__(self, nb: int) -> Macro:
+        """Return object from its number (1 to N)"""
+        return self.__macros[nb - 1]
+
+    def __iter__(self):
+        """Iterate over objects"""
+        return iter(self.__macros)
 
     def create_object(self) -> Macro:
         """Create object.

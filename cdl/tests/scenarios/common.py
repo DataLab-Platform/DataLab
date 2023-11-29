@@ -34,7 +34,7 @@ def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> Non
     """Test compute_11 type operations on a signal or image
 
     Requires that one signal or image has been added at index."""
-    assert panel.object_number >= number - 1
+    assert len(panel) >= number - 1
     panel.objview.select_objects((number,))
     panel.processor.compute_gaussian_filter(dlp.GaussianParam())
     panel.processor.compute_moving_average(dlp.MovingAverageParam())
@@ -56,10 +56,10 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     First signal/image is supposed to be always the same (reference)
     Second signal/image is the tested object
     """
-    assert panel.object_number == 2
+    assert len(panel) == 2
 
     panel.objview.select_objects((2,))
-    panel.processor.compute_difference()  # difference with itself
+    panel.processor.compute_difference(panel[1])  # difference with obj #1
     panel.remove_object()
     panel.objview.select_objects((2,))
     panel.processor.compute_quadratic_difference()  # quadratic difference with itself

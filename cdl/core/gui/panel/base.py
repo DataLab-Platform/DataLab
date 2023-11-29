@@ -185,6 +185,12 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def __init__(self, parent):
         super().__init__(QC.Qt.Vertical, parent)
         self.setObjectName(self.__class__.__name__[0].lower())
+        # Check if the class implements __len__, __getitem__ and __iter__
+        for method in ("__len__", "__getitem__", "__iter__"):
+            if not hasattr(self, method):
+                raise NotImplementedError(
+                    f"Class {self.__class__.__name__} must implement method {method}"
+                )
 
     # pylint: disable=unused-argument
     def get_serializable_name(self, obj: ObjItf) -> str:
@@ -216,11 +222,6 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     @abc.abstractmethod
     def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
         """Deserialize whole panel from a HDF5 file"""
-
-    @property
-    @abc.abstractmethod
-    def object_number(self):
-        """Return object number"""
 
     @abc.abstractmethod
     def create_object(self) -> ObjItf:
@@ -296,14 +297,17 @@ class BaseDataPanel(AbstractPanel):
                         self.add_object(obj, group.uuid, set_current=False)
                     self.selection_changed()
 
-    @property
-    def object_number(self) -> int:
-        """Return number of objects in panel
-
-        Returns:
-            number of objects (signals or images)
-        """
+    def __len__(self) -> int:
+        """Return number of objects"""
         return len(self.objmodel)
+
+    def __getitem__(self, nb: int) -> SignalObj | ImageObj:
+        """Return object from its number (1 to N)"""
+        return self.objmodel.get_object_from_number(nb)
+
+    def __iter__(self):
+        """Iterate over objects"""
+        return iter(self.objmodel)
 
     def create_object(self) -> SignalObj | ImageObj:
         """Create object (signal or image)
@@ -481,7 +485,7 @@ class BaseDataPanel(AbstractPanel):
 
     def delete_all_objects(self) -> None:  # pragma: no cover
         """Confirm before removing all objects"""
-        if self.object_number == 0:
+        if len(self) == 0:
             return
         answer = QW.QMessageBox.warning(
             self,

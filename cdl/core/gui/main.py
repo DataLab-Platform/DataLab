@@ -1013,7 +1013,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     # ------GUI refresh
     def has_objects(self) -> bool:
         """Return True if sig/ima panels have any object"""
-        return sum(panel.object_number for panel in self.panels) > 0
+        return sum(len(panel) for panel in self.panels) > 0
 
     def set_modified(self, state: bool = True) -> None:
         """Set mainwindow modified state"""
@@ -1365,7 +1365,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     widget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
-            if option == "ima_defaults" and self.imagepanel.object_number > 0:
+            if option == "ima_defaults" and len(self.imagepanel) > 0:
                 answer = QW.QMessageBox.question(
                     self,
                     _("Visualization settings"),
