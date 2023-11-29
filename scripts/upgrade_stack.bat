@@ -1,7 +1,7 @@
 @echo off
 REM This script was derived from PythonQwt project
 REM ======================================================
-REM Update environment requirements
+REM Update only PlotPyStack required packages
 REM ======================================================
 REM Licensed under the terms of the MIT License
 REM Copyright (c) 2020 Pierre Raybaut
@@ -11,6 +11,5 @@ setlocal
 call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% UsePython
 cd %SCRIPTPATH%\..
-pip install --upgrade -r dev\requirements.txt
-pip list > pip_list.txt
+pip install --upgrade PythonQwt guidata PlotPy
 call %FUNC% EndOfScript
