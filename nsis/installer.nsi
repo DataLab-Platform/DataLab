@@ -117,6 +117,7 @@ Section "Uninstall"
     ; The following is adapted to a PyInstaller 6.0 "onedir mode" distribution
     Delete "$INSTDIR\${PRODNAME}.exe"
     RMDir /r $INSTDIR\_internal
+    RMDir $INSTDIR\plugins
     RMDir $INSTDIR
     ; **********************************************************************************
 SectionEnd
