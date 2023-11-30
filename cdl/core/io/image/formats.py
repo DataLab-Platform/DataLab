@@ -25,8 +25,8 @@ class ClassicsImageFormat(ImageFormatBase):
     """Object representing classic image file types"""
 
     FORMAT_INFO = FormatInfo(
-        name="BMP, JPEG, PNG, TIFF",
-        extensions="*.bmp *.jpg *.jpeg *.png *.tif *.tiff",
+        name="BMP, JPEG, PNG, TIFF JPEG2000",
+        extensions="*.bmp *.jpg *.jpeg *.png *.tif *.tiff *.jp2",
         readable=True,
         writeable=True,
     )
@@ -39,20 +39,14 @@ class ClassicsImageFormat(ImageFormatBase):
     def write(self, filename: str, obj: ImageObj) -> None:
         """Write data to file"""
         data = obj.data
-        if osp.splitext(filename)[1].lower() in (".bmp", ".jpg", ".jpeg", ".png"):
-            data = obj.data.astype(np.uint8)
+        ext = osp.splitext(filename)[1].lower()
+        if ext in (".bmp", ".jpg", ".jpeg", ".png"):
+            if data.dtype is not np.uint8:
+                data = obj.data.astype(np.uint8)
+        if ext in (".jp2",):
+            if data.dtype not in (np.uint8, np.uint16):
+                data = obj.data.astype(np.uint16)
         skimage.io.imsave(filename, data, check_contrast=False)
-
-
-class JPEG2000ImageFormat(ClassicsImageFormat):
-    """Object representing JPEG2000 image file type"""
-
-    FORMAT_INFO = FormatInfo(
-        name="JPEG2000",
-        extensions="*.jp2",
-        readable=True,
-        writeable=True,
-    )
 
 
 class NumPyImageFormat(ImageFormatBase):

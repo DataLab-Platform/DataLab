@@ -3,6 +3,12 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.9.1 ##
+
+🛠️ Bug fixes:
+
+* [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
+
 ## DataLab Version 0.9.0 ##
 
 New dependencies:
