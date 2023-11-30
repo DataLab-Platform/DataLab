@@ -131,7 +131,7 @@
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
-                    "DEBUG": "1",
+                    // "DEBUG": "1",
                     "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },
