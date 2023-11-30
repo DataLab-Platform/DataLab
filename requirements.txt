@@ -10,7 +10,7 @@ pylint
 black
 coverage
 pycodestyle
-pyinstaller
+pyinstaller>=6.2
 sphinx
 sphinx-intl
 myst_parser

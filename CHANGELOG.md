@@ -7,6 +7,7 @@ for future and past milestones.
 
 🛠️ Bug fixes:
 
+* [Issue #2](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/2) - French translation is not available on Windows/Stand alone version
 * [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
 
 ## DataLab Version 0.9.0 ##
