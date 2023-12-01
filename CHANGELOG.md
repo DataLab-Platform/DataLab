@@ -36,6 +36,9 @@ for future and past milestones.
   * In future releases, the installer will support installing shortcuts for all
     users if there is a demand for it (see [Issue #5](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/5))
   * [Issue #4](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu
+* Installation and configuration window for stand-alone version:
+  * Do not show ambiguous error message 'Invalid dependencies' anymore
+  * Dependencies are supposed to be checked when building the stand-alone version
 
 ## DataLab Version 0.9.0 ##
 

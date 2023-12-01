@@ -47,22 +47,22 @@ def get_install_infos() -> str:
     Returns:
         str: installation informations
     """
-    more_infos = ""
-    try:
-        state = dephash.check_dependencies_hash(DATAPATH)
-        bad_deps = [name for name in state if not state[name]]
-        if bad_deps:
-            more_infos += "Invalid dependencies: "
-            more_infos += ", ".join(bad_deps)
-        else:
-            more_infos += "Dependencies hash file: checked."
-    except IOError:
-        more_infos += "Unable to open dependencies hash file."
-    more_infos += os.linesep * 2
     if IS_FROZEN:
         #  Stand-alone version
-        more_infos += "This is the Stand-alone version of DataLab"
+        more_infos = "This is the Stand-alone version of DataLab"
     else:
+        more_infos = ""
+        try:
+            state = dephash.check_dependencies_hash(DATAPATH)
+            bad_deps = [name for name in state if not state[name]]
+            if bad_deps:
+                more_infos += "Invalid dependencies: "
+                more_infos += ", ".join(bad_deps)
+            else:
+                more_infos += "Dependencies hash file: checked."
+        except IOError:
+            more_infos += "Unable to open dependencies hash file."
+        more_infos += os.linesep * 2
         more_infos += get_pip_list()
     infos = os.linesep.join(
         [
