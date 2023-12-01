@@ -7,9 +7,35 @@ for future and past milestones.
 
 🛠️ Bug fixes:
 
-* [Issue #2](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/2) - French translation is not available on Windows/Stand alone version
-* [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
-* [Issue #4](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu
+* French translation is not available on Windows/Stand alone version:
+  * Locale was not properly detected on Windows for stand-alone version (frozen
+    with `pyinstaller`) due to an issue with `locale.getlocale()` (function
+    returning `None` instead of the expected locale on frozen applications)
+  * This is ultimately a `pyinstaller` issue, but a workaround has been
+    implemented in `guidata` V3.2.2 (see [guidata issue #68](https://github.com/PlotPyStack/guidata/issues/68) - Windows: gettext translation is not working on frozen applications)
+  * [Issue #2](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/2) - French translation is not available on Windows Stand alone version
+* Saving image to JPEG2000 fails for non integer data:
+  * JPEG2000 encoder does not support non integer data or signed integer data
+  * Before, DataLab was showing an error message when trying to save incompatible
+    data to JPEG2000: this was not a consistent behavior with other standard image
+    formats (e.g. PNG, JPG, etc.) for which DataLab was automatically converting
+    data to the appropriate format (8-bit unsigned integer)
+  * Current behavior is now consistent with other standard image formats: when
+    saving to JPEG2000, DataLab automatically converts data to 8-bit unsigned
+    integer or 16-bit unsigned integer (depending on the original data type)
+  * [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
+* Windows stand-alone version shortcuts not showing in current user start menu:
+  * When installing DataLab on Windows from a non-administrator account, the
+    shortcuts were not showing in the current user start menu but in the
+    administrator start menu instead (due to the elevated privileges of the
+    installer and the fact that the installer does not support installing
+    shortcuts for all users)
+  * Now, the installer *does not* ask for elevated privileges anymore, and
+    shortcuts are installed in the current user start menu (this also means that
+    the current user must have write access to the installation directory)
+  * In future releases, the installer will support installing shortcuts for all
+    users if there is a demand for it (see [Issue #5](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/5))
+  * [Issue #4](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu
 
 ## DataLab Version 0.9.0 ##
 
