@@ -4,7 +4,7 @@
 [![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdl.svg)](https://pypi.python.org/pypi/CDL/)
 
-ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
+ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team with the support of [Codra](https://codra.net/).
 
 ![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-Screenshot.png)
 

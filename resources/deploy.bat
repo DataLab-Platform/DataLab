@@ -1,3 +1,5 @@
+@echo off
+
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 
 @REM Deploying images and icons

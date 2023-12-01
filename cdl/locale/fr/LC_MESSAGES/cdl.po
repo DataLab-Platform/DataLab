@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-11-27 14:03+0100\n"
+"POT-Creation-Date: 2023-12-01 14:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -760,7 +760,7 @@ msgstr "Dupliquer"
 msgid "Remove"
 msgstr "Supprimer"
 
-#: cdl\core\gui\actionhandler.py:421 cdl\core\gui\panel\base.py:488
+#: cdl\core\gui\actionhandler.py:421 cdl\core\gui\panel\base.py:492
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -772,7 +772,7 @@ msgstr "Copier les métadonnées"
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:693
+#: cdl\core\gui\actionhandler.py:442 cdl\core\gui\panel\base.py:697
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -780,7 +780,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:450 cdl\core\gui\panel\base.py:716
+#: cdl\core\gui\actionhandler.py:450 cdl\core\gui\panel\base.py:720
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1604,8 +1604,8 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1171 cdl\core\gui\panel\base.py:655
-#: cdl\core\gui\panel\macro.py:430
+#: cdl\core\gui\main.py:1171 cdl\core\gui\panel\base.py:659
+#: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -1681,64 +1681,64 @@ msgstr "Propriétés"
 msgid "Computing parameters"
 msgstr "Paramètres de calcul"
 
-#: cdl\core\gui\panel\base.py:461
+#: cdl\core\gui\panel\base.py:465
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
 
-#: cdl\core\gui\panel\base.py:462
+#: cdl\core\gui\panel\base.py:466
 msgid "Are you sure you want to delete the selected group(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
-#: cdl\core\gui\panel\base.py:489
+#: cdl\core\gui\panel\base.py:493
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: cdl\core\gui\panel\base.py:535
+#: cdl\core\gui\panel\base.py:539
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:535 cdl\core\gui\panel\base.py:544
+#: cdl\core\gui\panel\base.py:539 cdl\core\gui\panel\base.py:548
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:544
+#: cdl\core\gui\panel\base.py:548
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:616 cdl\core\gui\panel\macro.py:410
+#: cdl\core\gui\panel\base.py:620 cdl\core\gui\panel\macro.py:413
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:756
+#: cdl\core\gui\panel\base.py:760
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:860 cdl\core\gui\plothandler.py:230
+#: cdl\core\gui\panel\base.py:864 cdl\core\gui\plothandler.py:230
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:918 cdl\core\gui\roieditor.py:185
+#: cdl\core\gui\panel\base.py:922 cdl\core\gui\roieditor.py:185
 #: cdl\core\model\base.py:655
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:955
+#: cdl\core\gui\panel\base.py:959
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\panel\base.py:956
+#: cdl\core\gui\panel\base.py:960
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:991 cdl\core\gui\processor\base.py:453
+#: cdl\core\gui\panel\base.py:995 cdl\core\gui\processor\base.py:453
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1005
+#: cdl\core\gui\panel\base.py:1009
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1007
+#: cdl\core\gui\panel\base.py:1011
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
@@ -1758,47 +1758,47 @@ msgstr "Fichiers Python"
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
-#: cdl\core\gui\panel\macro.py:202
+#: cdl\core\gui\panel\macro.py:205
 msgid "Run macro"
 msgstr "Exécuter la macro"
 
-#: cdl\core\gui\panel\macro.py:209
+#: cdl\core\gui\panel\macro.py:212
 msgid "Stop macro"
 msgstr "Arrêter la macro"
 
-#: cdl\core\gui\panel\macro.py:217
+#: cdl\core\gui\panel\macro.py:220
 msgid "New macro"
 msgstr "Nouvelle macro"
 
-#: cdl\core\gui\panel\macro.py:223
+#: cdl\core\gui\panel\macro.py:226
 msgid "Rename macro"
 msgstr "Renommer la macro"
 
-#: cdl\core\gui\panel\macro.py:229
+#: cdl\core\gui\panel\macro.py:232
 msgid "Import macro from file"
 msgstr "Importer la macro depuis un fichier"
 
-#: cdl\core\gui\panel\macro.py:235
+#: cdl\core\gui\panel\macro.py:238
 msgid "Export macro to file"
 msgstr "Exporter la macro vers un fichier"
 
-#: cdl\core\gui\panel\macro.py:241
+#: cdl\core\gui\panel\macro.py:244
 msgid "Remove macro"
 msgstr "Supprimer la macro"
 
-#: cdl\core\gui\panel\macro.py:255
+#: cdl\core\gui\panel\macro.py:258
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
 
-#: cdl\core\gui\panel\macro.py:385
+#: cdl\core\gui\panel\macro.py:388
 msgid "Rename"
 msgstr "Renommer"
 
-#: cdl\core\gui\panel\macro.py:386
+#: cdl\core\gui\panel\macro.py:389
 msgid "New title:"
 msgstr "Nouveau titre :"
 
-#: cdl\core\gui\panel\macro.py:450
+#: cdl\core\gui\panel\macro.py:453
 msgid ""
 "When closed, the macro is <u>permanently destroyed</u>, unless it has been "
 "exported first."
@@ -1806,7 +1806,7 @@ msgstr ""
 "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, "
 "sauf si elle a été exportée au préalable."
 
-#: cdl\core\gui\panel\macro.py:455
+#: cdl\core\gui\panel\macro.py:458
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
 
@@ -2203,7 +2203,7 @@ msgstr ""
 msgid "All supported files"
 msgstr "Tous les fichiers pris en charge"
 
-#: cdl\core\io\image\formats.py:82
+#: cdl\core\io\image\formats.py:76
 msgid "Text files"
 msgstr "Fichiers texte"
 
@@ -2705,9 +2705,8 @@ msgid "Test dialog"
 msgstr "Boîte de dialogue de test"
 
 #: cdl\widgets\connection.py:58
-#, fuzzy
 msgid "Connection to DataLab"
-msgstr "Se connecter à DataLab"
+msgstr "Connexion à DataLab"
 
 #: cdl\widgets\fileviewer.py:56
 msgid "Contents of file"

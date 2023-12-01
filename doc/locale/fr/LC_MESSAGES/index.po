@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-27 10:12+0100\n"
+"POT-Creation-Date: 2023-12-01 14:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../index.rst:45
+#: ../../index.rst:49
 msgid "Contents:"
 msgstr "Table des matières :"
 
@@ -77,47 +77,54 @@ msgstr ""
 #: ../../index.rst:31
 msgid ""
 "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
-"the Python-Qt visualization and scientific graphical user interface "
+"the scientific Python-Qt visualization and graphical user interface "
 "stack."
-msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_, la pile logicielle Python-Qt de visualisation et d'interface graphique scientifique."
+msgstr "DataLab est propulsé par `PlotPyStack <https://github.com/PlotPyStack>`_, les outils de visualisation et d'interface graphique scientifiques Python-Qt."
 
-#: ../../index.rst:43
+#: ../../index.rst:34
+msgid ""
+"DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
+"developed and maintained by DataLab open-source project team with the "
+"support of `Codra`_."
+msgstr "DataLab a été créé par `Codra`_/`Pierre Raybaut`_ en 2023. Il est développé et maintenu par l'équipe du projet open-source DataLab avec le soutien de `Codra`_."
+
+#: ../../index.rst:47
 msgid "External resources:"
 msgstr "Ressources externes :"
 
-#: ../../index.rst:38
+#: ../../index.rst:42
 msgid "`Home`_"
 msgstr "`Home`_"
 
-#: ../../index.rst:39
+#: ../../index.rst:43
 msgid "DataLab home page"
 msgstr "Site de DataLab"
 
-#: ../../index.rst:40
+#: ../../index.rst:44
 msgid "`PyPI`_"
 msgstr "`PyPI`_"
 
-#: ../../index.rst:41
+#: ../../index.rst:45
 msgid "Python Package Index"
 msgstr "Paquet Python officiel"
 
-#: ../../index.rst:42
+#: ../../index.rst:46
 msgid "`GitHub`_"
 msgstr "`GitHub`_"
 
-#: ../../index.rst:43
+#: ../../index.rst:47
 msgid "Bug reports and feature requests"
 msgstr "Signalement d'anomalies et demandes d'évolutions"
 
-#: ../../index.rst:57
+#: ../../index.rst:61
 msgid "Copyrights and licensing"
 msgstr "Licence et copyrights"
 
-#: ../../index.rst:59
-msgid "Copyright © 2023 `Codra`_, Pierre Raybaut"
+#: ../../index.rst:63
+msgid "Copyright © 2023 `Codra`_, `Pierre Raybaut`_"
 msgstr ""
 
-#: ../../index.rst:60
+#: ../../index.rst:64
 msgid "Licensed under the terms of the `BSD 3-Clause`_"
 msgstr "Distribué sous licence `BSD 3-Clause`_"
 
@@ -154,3 +161,6 @@ msgstr "Distribué sous licence `BSD 3-Clause`_"
 #~ " encore scikit-image) et sur les "
 #~ "interfaces graphiques Qt (grâce aux "
 #~ "bibliothèques `guidata`_ et `guiqwt`_)."
+
+#~ msgid "Copyright © 2023 `Codra`_, Pierre Raybaut"
+#~ msgstr ""
