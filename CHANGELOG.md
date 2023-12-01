@@ -39,6 +39,10 @@ for future and past milestones.
 * Installation and configuration window for stand-alone version:
   * Do not show ambiguous error message 'Invalid dependencies' anymore
   * Dependencies are supposed to be checked when building the stand-alone version
+* Added PDF documentation to stand-alone version:
+  * The PDF documentation was missing in previous release
+  * Now, the PDF documentation (in English and French) is included in the
+    stand-alone version
 
 ## DataLab Version 0.9.0 ##
 
