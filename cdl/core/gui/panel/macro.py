@@ -80,7 +80,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         self.tabwidget_tb = QW.QToolBar(self)
         self.tabwidget_tb.setOrientation(QC.Qt.Vertical)
 
-        self.console = PythonShellWidget(self)
+        self.console = PythonShellWidget(self, read_only=True)
         self.console.set_light_background(not is_dark_mode())
         self.console.setMaximumBlockCount(5000)
         font = get_font(CONF, "console")
