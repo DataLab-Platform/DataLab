@@ -3,6 +3,17 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.9.2 ##
+
+🛠️ Bug fixes:
+
+* Region of interest (ROI) extraction feature for images:
+  * ROI extraction was not working properly when the "Extract all regions of interest
+    into a single image object" option was enabled if there was only one defined ROI
+  * The result was an image positioned at the origin (0, 0) instead of the expected
+    position (x0, y0) and the ROI rectangle itself was not removed as expected
+  * [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI
+
 ## DataLab Version 0.9.1 ##
 
 🛠️ Bug fixes:
