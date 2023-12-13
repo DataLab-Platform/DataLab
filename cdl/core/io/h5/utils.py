@@ -46,6 +46,8 @@ def process_scalar_value(dset, name, callback):
     """Process dataset numeric/str value `name`"""
     try:
         scdata = dset[name][()]
+        if isinstance(scdata, np.ndarray):
+            scdata = scdata[0]
         if scdata is not None:
             return callback(scdata)
     except (KeyError, ValueError):
