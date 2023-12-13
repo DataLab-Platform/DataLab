@@ -12,6 +12,10 @@
 
 ![PlotPyStack](https://raw.githubusercontent.com/PlotPyStack/.github/main/data/plotpy-stack-powered.png)
 
+ℹ️ DataLab is built on Python and scientific libraries.
+
+![Python](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/Python.png) ![NumPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/NumPy.png) ![SciPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/SciPy.png) ![scikit-image](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/scikit-image.png) ![OpenCV](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/OpenCV.png) ![PlotPyStack](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/plotpystack.png)
+
 ----
 
 ## Overview
@@ -25,6 +29,9 @@ libraries (such as NumPy, SciPy or scikit-image) and Qt graphical user interface
 DataLab is available as a **stand-alone** application (see for example our all-in-one
 Windows installer) or as an **addon to your Python-Qt application** thanks to advanced
 automation and embedding features.
+
+✨ Add features to DataLab by writing your own [plugin](https://cdlapp.readthedocs.io/en/latest/features/general/plugins.html)
+(see [plugin examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples))
 
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
@@ -43,6 +50,7 @@ for recent history of changes.
 
 New key features in DataLab 0.9:
 
+* New third-party plugin system to add your own features to DataLab
 * New process isolation feature to run computations safely in a separate process
 * New remote control features to interact with DataLab from Spyder, Jupyter or any IDE
 * New remote control features to run computations with DataLab from a third-party application

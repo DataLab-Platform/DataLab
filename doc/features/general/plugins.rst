@@ -42,7 +42,6 @@ Special additional locations are available for plugins:
 - The `plugins` directory in the `cdl` package in case for internal plugins
   only (i.e. it is not recommended to put your own plugins there).
 
-
 Example: processing plugin
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -57,6 +56,11 @@ Here is a simple example of a plugin that adds a new file formats to DataLab.
 
 .. literalinclude:: ../../../cdl/plugins/cdl_imageformats.py
 
+Other examples
+^^^^^^^^^^^^^^
+
+Other examples of plugins can be found in the `plugins/examples` directory of
+the DataLab source code (explore `here on GitHub <https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples>`_).
 
 Public API
 ^^^^^^^^^^
