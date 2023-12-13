@@ -13,6 +13,10 @@ for future and past milestones.
   * The result was an image positioned at the origin (0, 0) instead of the expected
     position (x0, y0) and the ROI rectangle itself was not removed as expected
   * [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI
+* Macro-command console is now read-only:
+  * The macro-command panel Python console is currently not supporting standard input
+    stream (`stdin`) and this is intended (at least for now)
+  * Set Python console read-only to avoid confusion
 
 ## DataLab Version 0.9.1 ##
 
