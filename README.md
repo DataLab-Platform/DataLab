@@ -32,6 +32,7 @@ automation and embedding features.
 
 ✨ Add features to DataLab by writing your own [plugin](https://cdlapp.readthedocs.io/en/latest/features/general/plugins.html)
 (see [plugin examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples))
+or macro (see [macro examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/macros/examples))
 
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
