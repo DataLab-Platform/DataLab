@@ -13,6 +13,10 @@ for future and past milestones.
     The result was an image positioned at the origin (0, 0) instead of the expected
     position (x0, y0) and the ROI rectangle itself was not removed as expected.
     This is now fixed (see [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
+  * ROI rectangles with negative coordinates were not properly handled:
+    ROI extraction was raising a `ValueError` exception, and the image mask was not
+    displayed properly.
+    This is now fixed (see [Issue #7](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/7) - Image ROI extraction: `ValueError: zero-size array to reduction operation minimum which has no identity`)
   * ROI extraction was not taking into account the pixel size (dx, dy) and the origin
     (x0, y0) of the image.
     This is now fixed (see [Issue #8](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/8) - Image ROI extraction: take into account pixel size)

@@ -166,7 +166,7 @@ class RoiDataItem:
         roi_mask = np.ones_like(data, dtype=bool)
         x0, y0, x1, y1 = self.get_rect()
         if self.geometry is RoiDataGeometries.RECTANGLE:
-            roi_mask[y0:y1, x0:x1] = False
+            roi_mask[max(y0, 0) : y1, max(x0, 0) : x1] = False
         else:
             xc, yc = 0.5 * (x0 + x1), 0.5 * (y0 + y1)
             radius = 0.5 * (x1 - x0)

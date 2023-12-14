@@ -527,8 +527,8 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    x0 = min(p.x0 for p in group.datasets)
-    y0 = min(p.y0 for p in group.datasets)
+    x0 = max(min(p.x0 for p in group.datasets), 0)
+    y0 = max(min(p.y0 for p in group.datasets), 0)
     x1 = max(p.x1 for p in group.datasets)
     y1 = max(p.y1 for p in group.datasets)
     suffix = None
@@ -540,12 +540,11 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     dst.y0 += y0 * src.dy
     dst.roi = None
     if len(group.datasets) == 1:
-        p = group.datasets[0]
-        dst.data = src.data.copy()[p.y0 : p.y1, p.x0 : p.x1]
+        dst.data = src.data.copy()[y0:y1, x0:x1]
         return dst
     out = np.zeros_like(src.data)
     for p in group.datasets:
-        slice1, slice2 = slice(p.y0, p.y1 + 1), slice(p.x0, p.x1 + 1)
+        slice1, slice2 = slice(max(p.y0, 0), p.y1 + 1), slice(max(p.x0, 0), p.x1 + 1)
         out[slice1, slice2] = src.data[slice1, slice2]
     dst.data = out[y0:y1, x0:x1]
     return dst
@@ -560,9 +559,10 @@ def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
         ImageObj: output image object
     """
     dst = dst_11(src, "extract_single_roi", p.get_suffix())
-    dst.data = src.data.copy()[p.y0 : p.y1, p.x0 : p.x1]
-    dst.x0 += p.x0 * src.dx
-    dst.y0 += p.y0 * src.dy
+    x0, y0, x1, y1 = max(p.x0, 0), max(p.y0, 0), p.x1, p.y1
+    dst.data = src.data.copy()[y0:y1, x0:x1]
+    dst.x0 += x0 * src.dx
+    dst.y0 += y0 * src.dy
     dst.roi = None
     if p.geometry is RoiDataGeometries.CIRCLE:
         # Circular ROI
