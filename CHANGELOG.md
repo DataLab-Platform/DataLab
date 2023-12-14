@@ -9,10 +9,13 @@ for future and past milestones.
 
 * Region of interest (ROI) extraction feature for images:
   * ROI extraction was not working properly when the "Extract all regions of interest
-    into a single image object" option was enabled if there was only one defined ROI
-  * The result was an image positioned at the origin (0, 0) instead of the expected
-    position (x0, y0) and the ROI rectangle itself was not removed as expected
-  * [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI
+    into a single image object" option was enabled if there was only one defined ROI.
+    The result was an image positioned at the origin (0, 0) instead of the expected
+    position (x0, y0) and the ROI rectangle itself was not removed as expected.
+    This is now fixed (see [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
+  * ROI extraction was not taking into account the pixel size (dx, dy) and the origin
+    (x0, y0) of the image.
+    This is now fixed (see [Issue #8](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/8) - Image ROI extraction: take into account pixel size)
 * Macro-command console is now read-only:
   * The macro-command panel Python console is currently not supporting standard input
     stream (`stdin`) and this is intended (at least for now)
