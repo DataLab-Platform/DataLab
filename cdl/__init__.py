@@ -5,7 +5,7 @@
 
 """
 DataLab
-============
+=======
 
 DataLab is a generic signal and image processing software based on Python
 scientific libraries (such as NumPy, SciPy or scikit-image) and Qt graphical
