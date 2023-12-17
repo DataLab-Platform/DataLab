@@ -689,6 +689,16 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
+    def compute_re(self) -> None:
+        """Compute real part"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_im(self) -> None:
+        """Compute imaginary part"""
+
+    @abc.abstractmethod
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
 

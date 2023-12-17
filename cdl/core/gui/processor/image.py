@@ -234,6 +234,16 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_abs, title=_("Absolute value"))
 
     @qt_try_except()
+    def compute_re(self) -> None:
+        """Compute real part"""
+        self.compute_11(cpi.compute_re, title=_("Real part"))
+
+    @qt_try_except()
+    def compute_im(self) -> None:
+        """Compute imaginary part"""
+        self.compute_11(cpi.compute_im, title=_("Imaginary part"))
+
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")

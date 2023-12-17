@@ -3,6 +3,13 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.9.3 ##
+
+💥 New features:
+
+* Features common to signals and images:
+  * Added "Real part" and "Imaginary part" features to "Operation" menu
+
 ## DataLab Version 0.9.2 ##
 
 🛠️ Bug fixes:

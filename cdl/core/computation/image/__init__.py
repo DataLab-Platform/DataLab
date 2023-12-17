@@ -595,6 +595,30 @@ def compute_abs(src: ImageObj) -> ImageObj:
     return dst
 
 
+def compute_re(src: ImageObj) -> ImageObj:
+    """Compute real part
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "re")
+    dst.data = np.real(src.data)
+    return dst
+
+
+def compute_im(src: ImageObj) -> ImageObj:
+    """Compute imaginary part
+    Args:
+        src (ImageObj): input image object
+    Returns:
+        ImageObj: output image object
+    """
+    dst = dst_11(src, "im")
+    dst.data = np.imag(src.data)
+    return dst
+
+
 def compute_log10(src: ImageObj) -> ImageObj:
     """Compute log10
     Args:

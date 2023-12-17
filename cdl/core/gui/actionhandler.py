@@ -529,6 +529,10 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Absolute value"), triggered=self.panel.processor.compute_abs
             )
+            self.new_action(_("Real part"), triggered=self.panel.processor.compute_re)
+            self.new_action(
+                _("Imaginary part"), triggered=self.panel.processor.compute_im
+            )
             self.new_action("Log10(y)", triggered=self.panel.processor.compute_log10)
 
         with self.new_category(ActionCategory.PROCESSING):

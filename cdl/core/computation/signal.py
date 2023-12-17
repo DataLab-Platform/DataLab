@@ -247,6 +247,32 @@ def compute_abs(src: SignalObj) -> SignalObj:
     return dst
 
 
+def compute_re(src: SignalObj) -> SignalObj:
+    """Compute real part
+    Args:
+        src (SignalObj): source signal
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "re")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.real(y))
+    return dst
+
+
+def compute_im(src: SignalObj) -> SignalObj:
+    """Compute imaginary part
+    Args:
+        src (SignalObj): source signal
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "im")
+    x, y = src.get_data()
+    dst.set_xydata(x, np.imag(y))
+    return dst
+
+
 def compute_log10(src: SignalObj) -> SignalObj:
     """Compute Log10
     Args:
