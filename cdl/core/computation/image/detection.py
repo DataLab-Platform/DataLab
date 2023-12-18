@@ -82,6 +82,10 @@ class ContourShapeParam(GenericDetectionParam):
         ("circle", _("Circle")),
         ("polygon", _("Polygon")),
     )
+    # The following item is used to store the 'shape type' and is implicitly accessed by
+    # the `cdl.core.gui.processor.base.BaseProcessor.compute_10` method. The keys of the
+    # item choices must match the names of the `cdl.core.model.base.ShapeTypes` (modulo
+    # case).
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 

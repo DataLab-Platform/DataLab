@@ -5,6 +5,16 @@ for future and past milestones.
 
 ## DataLab Version 0.9.3 ##
 
+🛠️ Bug fixes:
+
+* Image contour detection feature ("Computing" menu):
+  * The contour detection feature was not taking into account the "shape" parameter
+    (circle, ellipse, polygon) when computing the contours. The parameter was stored
+    but really used only when calling the feature a second time.
+  * This unintentional behavior led to an `AssertionError` when choosing "polygon"
+    as the contour shape and trying to compute the contours for the first time.
+  * This is now fixed (see [Issue #9](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing "polygon" as the contour shape)
+
 💥 New features:
 
 * Features common to signals and images:

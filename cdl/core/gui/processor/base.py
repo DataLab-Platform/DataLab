@@ -386,7 +386,7 @@ class BaseProcessor(QC.QObject):
     def compute_10(
         self,
         func: Callable,
-        shapetype: ShapeTypes,
+        shapetype: ShapeTypes | None,
         param: gds.DataSet | None = None,
         paramclass: gds.DataSet | None = None,
         title: str | None = None,
@@ -398,7 +398,8 @@ class BaseProcessor(QC.QObject):
 
         Args:
             func (Callable): function to execute
-            shapetype (ShapeTypes): shape type
+            shapetype (ShapeTypes | None): shape type (if None, use `param.shape`
+             which must be a string and a valid `ShapeTypes` member name, modulo case)
             param (guidata.dataset.DataSet | None | None): parameters.
              Defaults to None.
             paramclass (guidata.dataset.DataSet | None | None): parameters
@@ -417,6 +418,11 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
+        if shapetype is None:
+            try:
+                shapetype = getattr(ShapeTypes, param.shape.upper())
+            except AttributeError:
+                raise ValueError("shapetype must be specified")
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
         name = func.__name__.replace("compute_", "")
