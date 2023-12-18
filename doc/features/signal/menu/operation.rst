@@ -40,6 +40,18 @@ Absolute value
     .. math::
         y_{k} = |y_{k-1}|
 
+Real part
+    Create a new signal which is the real part of each selected signal:
+
+    .. math::
+        y_{k} = \Re(y_{k-1})
+
+Imaginary part
+    Create a new signal which is the imaginary part of each selected signal:
+
+    .. math::
+        y_{k} = \Im(y_{k-1})
+
 Log10(y)
     Create a new signal which is the base 10 logarithm of each selected signal:
 

@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 09:58+0200\n"
+"POT-Creation-Date: 2023-12-18 08:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/signal/menu/operation.rst:2
 msgid "\"Operation\" menu"
@@ -112,10 +112,38 @@ msgid ""
 msgstr ""
 
 #: ../../features/signal/menu/operation.rst:47
+msgid "Real part"
+msgstr "Partie réelle"
+
+#: ../../features/signal/menu/operation.rst:44
+msgid "Create a new signal which is the real part of each selected signal:"
+msgstr "Crée un signal à partir de la partie réelle de chaque signal sélectionné :"
+
+#: ../../features/signal/menu/operation.rst:46
+msgid ""
+"y_{k} = \\Re(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:53
+msgid "Imaginary part"
+msgstr "Partie imaginaire"
+
+#: ../../features/signal/menu/operation.rst:50
+msgid "Create a new signal which is the imaginary part of each selected signal:"
+msgstr "Crée un signal à partir de la partie imaginaire de chaque signal sélectionné :"
+
+#: ../../features/signal/menu/operation.rst:52
+msgid ""
+"y_{k} = \\Im(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:59
 msgid "Log10(y)"
 msgstr ""
 
-#: ../../features/signal/menu/operation.rst:44
+#: ../../features/signal/menu/operation.rst:56
 msgid ""
 "Create a new signal which is the base 10 logarithm of each selected "
 "signal:"
@@ -123,17 +151,17 @@ msgstr ""
 "Crée un signal à partir du logarithme base 10 de chaque signal "
 "sélectionné :"
 
-#: ../../features/signal/menu/operation.rst:46
+#: ../../features/signal/menu/operation.rst:58
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menu/operation.rst:57
+#: ../../features/signal/menu/operation.rst:69
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: ../../features/signal/menu/operation.rst:50
+#: ../../features/signal/menu/operation.rst:62
 msgid ""
 "Create a new signal from semi-automatic peak detection of each selected "
 "signal."
@@ -141,7 +169,7 @@ msgstr ""
 "Crée un signal à partir de la détection automatique des pics de chaque "
 "signal sélectionné :"
 
-#: ../../features/signal/menu/operation.rst:55
+#: ../../features/signal/menu/operation.rst:67
 msgid ""
 "Peak detection dialog: threshold is adjustable by moving the horizontal "
 "marker, peaks are detected automatically (see vertical markers with "
@@ -152,17 +180,17 @@ msgstr ""
 "automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
 " leur position)"
 
-#: ../../features/signal/menu/operation.rst:65
+#: ../../features/signal/menu/operation.rst:77
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/signal/menu/operation.rst:60
+#: ../../features/signal/menu/operation.rst:72
 msgid "Create a new signal from a user-defined Region of Interest (ROI)."
 msgstr ""
 "Crée un signal à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/signal/menu/operation.rst:64
+#: ../../features/signal/menu/operation.rst:76
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the width of an horizontal range."
@@ -171,10 +199,10 @@ msgstr ""
 "définie en ajustant la position et la largeur de l'échelle horizontale de"
 " sélection."
 
-#: ../../features/signal/menu/operation.rst:67
+#: ../../features/signal/menu/operation.rst:79
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/signal/menu/operation.rst:68
+#: ../../features/signal/menu/operation.rst:80
 msgid "Create a new signal which is the result of swapping X/Y data."
 msgstr "Crée un signal à partir des données inversées X/Y du signal sélectionné."

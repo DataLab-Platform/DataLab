@@ -46,6 +46,18 @@ Absolute value
     .. math::
         z_{k} = |z_{k-1}|
 
+Real part
+    Create a new image which is the real part of each selected image:
+
+    .. math::
+        z_{k} = \Re(z_{k-1})
+
+Imaginary part
+    Create a new image which is the imaginary part of each selected image:
+
+    .. math::
+        z_{k} = \Im(z_{k-1})
+
 Log10(z)
     Create a new image which is the base 10 logarithm of each selected image:
 
