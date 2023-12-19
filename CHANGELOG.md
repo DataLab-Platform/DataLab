@@ -30,6 +30,14 @@ for future and past milestones.
           # Do something without refreshing the plot view
           proxy.compute_fft() # (...)
       ```
+  * Improved curve readability:
+    * Until this release, the curve style was automatically set by cycling through
+      **PlotPy** predefined styles
+    * However, some styles are not suitable for curve readability (e.g. "cyan" and
+      "yellow" colors are not readable on a white background, especially when combined
+      with a "dashed" line style)
+    * This release introduces a new curve style management with colors which are
+      distinguishable and accessible, even to color vision deficiency people
 * Added "Curve anti-aliasing" feature to "View" menu (and toolbar):
   * This feature allows to enable/disable curve anti-aliasing (default: enabled)
   * When enabled, the curve rendering is smoother but may lead to performance issues

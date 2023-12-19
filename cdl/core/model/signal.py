@@ -24,7 +24,6 @@ import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from plotpy.builder import make
-from plotpy.styles import COLORS, LINESTYLES
 
 from cdl.algorithms import fit
 from cdl.config import Conf, _
@@ -40,11 +39,25 @@ if TYPE_CHECKING:  # pragma: no cover
 class CurveStyles:
     """Object to manage curve styles"""
 
+    COLORS = (
+        "#1f77b4",  # muted blue
+        "#ff7f0e",  # safety orange
+        "#2ca02c",  # cooked asparagus green
+        "#d62728",  # brick red
+        "#9467bd",  # muted purple
+        "#8c564b",  # chestnut brown
+        "#e377c2",  # raspberry yogurt pink
+        "#7f7f7f",  # gray
+        "#bcbd22",  # curry yellow-green
+        "#17becf",  # blue-teal
+    )
+    LINESTYLES = ("SolidLine", "DashLine", "DashDotLine", "DashDotDotLine")
+
     def style_generator():  # pylint: disable=no-method-argument
         """Cycling through curve styles"""
         while True:
-            for linestyle in LINESTYLES:
-                for color in "bgrcmykG":
+            for linestyle in CurveStyles.LINESTYLES:
+                for color in CurveStyles.COLORS:
                     yield (color, linestyle)
 
     CURVE_STYLE = style_generator()
@@ -53,8 +66,8 @@ class CurveStyles:
     def apply_style(cls, param: CurveParam):
         """Apply style to curve"""
         color, linestyle = next(cls.CURVE_STYLE)
-        param.line.color = COLORS[color]
-        param.line.style = LINESTYLES[linestyle]
+        param.line.color = color
+        param.line.style = linestyle
         param.symbol.marker = "NoSymbol"
 
 
