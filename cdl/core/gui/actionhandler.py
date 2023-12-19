@@ -497,26 +497,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
                 toolbar_sep=True,
             )
-            showlabel_action = self.new_action(
-                _("Show graphical object titles"),
-                icon=get_icon("show_titles.svg"),
-                tip=_(
-                    "Show or hide ROI and other graphical object titles or subtitles"
-                ),
-                toggled=self.panel.toggle_show_titles,
-                select_condition=SelectCond.always,
-                toolbar_pos=-1,
-            )
-            showlabel_action.setChecked(Conf.view.show_label.get(False))
-            auto_refresh_action = self.new_action(
-                _("Auto-refresh"),
-                icon=get_icon("refresh-auto.svg"),
-                tip=_("Auto-refresh plot when object is modified, added or removed"),
-                toggled=self.panel.toggle_auto_refresh,
-                select_condition=SelectCond.always,
-                toolbar_pos=-1,
-            )
-            auto_refresh_action.setChecked(Conf.view.auto_refresh.get(True))
+            main = self.panel.mainwindow
+            for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):
+                self.add_to_action_list(main.auto_refresh_action, cat, -1)
             self.new_action(
                 _("Refresh manually"),
                 icon=get_icon("refresh-manual.svg"),
@@ -526,6 +509,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.always,
                 toolbar_pos=-1,
             )
+            for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):
+                self.add_to_action_list(main.showlabel_action, cat, -1)
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(

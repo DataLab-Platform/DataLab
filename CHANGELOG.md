@@ -40,6 +40,10 @@ for future and past milestones.
   * Besides, the shortcuts were not working at startup (when no panel had focus).
   * This is now fixed: the shortcuts are now working whatever the active panel is,
     and even at startup (see [Issue #10](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/10) - Keyboard shortcuts not working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
+* "Show graphical object titles" and "Auto-refresh" actions were not working properly:
+  * The "Show graphical object titles" and "Auto-refresh" actions were only working on
+    the active signal/image panel, and not on all panels.
+  * This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
 
 ## DataLab Version 0.9.2 ##
 

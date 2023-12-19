@@ -152,6 +152,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.browseh5_action: QW.QAction = None
         self.settings_action: QW.QAction = None
         self.quit_action: QW.QAction = None
+        self.auto_refresh_action: QW.QAction = None
+        self.showlabel_action: QW.QAction = None
 
         self.file_menu: QW.QMenu = None
         self.edit_menu: QW.QMenu = None
@@ -614,7 +616,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         self.__register_plugins()
         self.__configure_statusbar()
-        self.__setup_commmon_actions()
+        self.__setup_global_actions()
         self.__add_signal_image_panels()
         self.__create_plugins_actions()
         self.__setup_central_widget()
@@ -672,8 +674,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
 
-    def __setup_commmon_actions(self) -> None:
-        """Setup common actions"""
+    def __setup_global_actions(self) -> None:
+        """Setup global actions"""
         self.openh5_action = create_action(
             self,
             _("Open HDF5 files..."),
@@ -727,6 +729,21 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             icon=get_icon("libre-gui-close.svg"),
             tip=quit_tip,
             triggered=self.close,
+        )
+        # View menu actions
+        self.auto_refresh_action = create_action(
+            self,
+            _("Auto-refresh"),
+            icon=get_icon("refresh-auto.svg"),
+            tip=_("Auto-refresh plot when object is modified, added or removed"),
+            toggled=self.toggle_auto_refresh,
+        )
+        self.showlabel_action = create_action(
+            self,
+            _("Show graphical object titles"),
+            icon=get_icon("show_titles.svg"),
+            tip=_("Show or hide ROI and other graphical object titles or subtitles"),
+            toggled=self.toggle_show_titles,
         )
 
     def __add_signal_panel(self) -> None:
@@ -926,10 +943,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def __configure_panels(self) -> None:
         """Configure panels"""
+        # Connectings signals
         for panel in self.panels:
             panel.SIG_OBJECT_ADDED.connect(self.set_modified)
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
         self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
+        # Initializing common panel actions
+        self.auto_refresh_action.setChecked(Conf.view.auto_refresh.get(True))
+        self.showlabel_action.setChecked(Conf.view.show_label.get(False))
         # Restoring current tab from last session
         tab_idx = Conf.main.current_tab.get(None)
         if tab_idx is not None:
@@ -1092,6 +1113,28 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Update view menu before showing up"""
         self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
+
+    def toggle_show_titles(self, state: bool) -> None:
+        """Toggle show annotations option
+
+        Args:
+            state: state
+        """
+        Conf.view.show_label.set(state)
+        for datapanel in (self.signalpanel, self.imagepanel):
+            for obj in datapanel.objmodel:
+                obj.set_metadata_option("showlabel", state)
+            datapanel.SIG_REFRESH_PLOT.emit("selected", True)
+
+    def toggle_auto_refresh(self, state: bool) -> None:
+        """Toggle auto refresh option
+
+        Args:
+            state: state
+        """
+        Conf.view.auto_refresh.set(state)
+        for datapanel in (self.signalpanel, self.imagepanel):
+            datapanel.plothandler.set_auto_refresh(state)
 
     # ------Common features
     @remote_controlled
