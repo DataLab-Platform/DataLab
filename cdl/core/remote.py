@@ -150,7 +150,8 @@ class RemoteServer(QC.QThread):
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
     SIG_DELETE_METADATA = QC.Signal(bool)
     SIG_SWITCH_TO_PANEL = QC.Signal(str)
-    SIG_SWITCH_TO_IMAGE_PANEL = QC.Signal()
+    SIG_TOGGLE_AUTO_REFRESH = QC.Signal(bool)
+    SIG_TOGGLE_SHOW_TITLES = QC.Signal(bool)
     SIG_RESET_ALL = QC.Signal()
     SIG_SAVE_TO_H5 = QC.Signal(str)
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
@@ -172,6 +173,8 @@ class RemoteServer(QC.QThread):
         self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
         self.SIG_DELETE_METADATA.connect(win.delete_metadata)
         self.SIG_SWITCH_TO_PANEL.connect(win.set_current_panel)
+        self.SIG_TOGGLE_AUTO_REFRESH.connect(win.toggle_auto_refresh)
+        self.SIG_TOGGLE_SHOW_TITLES.connect(win.toggle_show_titles)
         self.SIG_RESET_ALL.connect(win.reset_all)
         self.SIG_SAVE_TO_H5.connect(win.save_to_h5_file)
         self.SIG_OPEN_H5.connect(win.open_h5_files)
@@ -258,6 +261,24 @@ class RemoteServer(QC.QThread):
             panel (str): Panel name (valid values: 'signal', 'image', 'macro')
         """
         self.SIG_SWITCH_TO_PANEL.emit(panel)
+
+    @remote_call
+    def toggle_auto_refresh(self, state: bool) -> None:
+        """Toggle auto refresh state.
+
+        Args:
+            state (bool): True to enable auto refresh, False to disable it
+        """
+        self.SIG_TOGGLE_AUTO_REFRESH.emit(state)
+
+    @remote_call
+    def toggle_show_titles(self, state: bool) -> None:
+        """Toggle show titles state.
+
+        Args:
+            state (bool): True to enable show titles, False to disable it
+        """
+        self.SIG_TOGGLE_SHOW_TITLES.emit(state)
 
     @remote_call
     def reset_all(self) -> None:

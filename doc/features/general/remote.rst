@@ -114,8 +114,8 @@ Example of use:
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: cdl.core.remote
-    :members: RemoteClient
+.. autoclass:: cdl.core.remote.RemoteClient
+    :inherited-members:
 
 Public API: additional methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

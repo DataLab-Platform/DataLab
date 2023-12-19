@@ -27,6 +27,7 @@ proxy.add_image("toto", z)
 
 # %% Executing commands in DataLab (...)
 
+proxy.toggle_auto_refresh(False)  # Turning off auto-refresh
 x = np.array([1.0, 2.0, 3.0])
 y = np.array([4.0, 5.0, -1.0])
 proxy.add_signal("toto", x, y)
@@ -34,11 +35,16 @@ proxy.add_signal("toto", x, y)
 # %% Executing commands in DataLab (...)
 
 proxy.compute_derivative()
+proxy.toggle_auto_refresh(True)  # Turning on auto-refresh
 
 # %% Executing commands in DataLab (...)
 
 proxy.set_current_panel("image")
 
-# %% Executing commands in DataLab (...)
+# %% Executing a lot of commands without refreshing DataLab
 
-proxy.compute_fft()
+z = np.random.rand(400, 400)
+proxy.add_image("foobar", z)
+with proxy.context_no_refresh():
+    for _idx in range(100):
+        proxy.compute_fft()

@@ -19,6 +19,20 @@ for future and past milestones.
     * When disabled, the plot view is not automatically refreshed. The user
       must manually refresh the plot view by clicking on the "Refresh manually" button
       in the main toolbar or by pressing the standard refresh key (e.g. "F5").
+  * Added `toggle_auto_refresh` method to DataLab proxy object:
+    * This method allows to toggle the "Auto-refresh" feature from a macro-command,
+      a plugin or a remote control client.
+    * A context manager `context_no_refresh` is also available to temporarily disable
+      the "Auto-refresh" feature from a macro-command, a plugin or a remote control
+      client. Typical usage:
+      ```python
+      with proxy.context_no_refresh():
+          # Do something without refreshing the plot view
+          proxy.compute_fft() # (...)
+      ```
+* Added `toggle_show_titles` method to DataLab proxy object. This method allows to
+  toggle the "Show graphical object titles" feature from a macro-command, a plugin
+  or a remote control client.
 
 🛠️ Bug fixes:
 

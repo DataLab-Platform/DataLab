@@ -1114,6 +1114,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__update_generic_menu(self.view_menu)
         add_actions(self.view_menu, [None] + self.createPopupMenu().actions())
 
+    @remote_controlled
     def toggle_show_titles(self, state: bool) -> None:
         """Toggle show annotations option
 
@@ -1126,6 +1127,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 obj.set_metadata_option("showlabel", state)
             datapanel.SIG_REFRESH_PLOT.emit("selected", True)
 
+    @remote_controlled
     def toggle_auto_refresh(self, state: bool) -> None:
         """Toggle auto refresh option
 

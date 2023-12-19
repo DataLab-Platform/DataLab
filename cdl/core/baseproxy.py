@@ -134,6 +134,22 @@ class AbstractCDLControl(abc.ABC):
         """Reset all application data"""
 
     @abc.abstractmethod
+    def toggle_auto_refresh(self, state: bool) -> None:
+        """Toggle auto refresh state.
+
+        Args:
+            state (bool): Auto refresh state
+        """
+
+    @abc.abstractmethod
+    def toggle_show_titles(self, state: bool) -> None:
+        """Toggle show titles state.
+
+        Args:
+            state (bool): Show titles state
+        """
+
+    @abc.abstractmethod
     def save_to_h5_file(self, filename: str) -> None:
         """Save to a DataLab HDF5 file.
 
@@ -476,6 +492,53 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
     def reset_all(self) -> None:
         """Reset all application data"""
         self._cdl.reset_all()
+
+    def toggle_auto_refresh(self, state: bool) -> None:
+        """Toggle auto refresh state.
+
+        Args:
+            state (bool): Auto refresh state
+        """
+        self._cdl.toggle_auto_refresh(state)
+
+    # Returns a context manager to temporarily disable autorefresh
+    def context_no_refresh(self) -> Callable:
+        """Return a context manager to temporarily disable auto refresh.
+
+        Returns:
+            Context manager
+
+        Example:
+
+            >>> with proxy.context_no_refresh():
+            ...     proxy.add_image("image1", data1)
+            ...     proxy.compute_fft()
+            ...     proxy.compute_wiener()
+            ...     proxy.compute_ifft()
+            ...     # Auto refresh is disabled during the above operations
+        """
+
+        class NoRefreshContextManager:
+            """Context manager to temporarily disable auto refresh"""
+
+            def __init__(self, cdl: AbstractCDLControl) -> None:
+                self._cdl = cdl
+
+            def __enter__(self) -> None:
+                self._cdl.toggle_auto_refresh(False)
+
+            def __exit__(self, exc_type, exc_value, traceback) -> None:
+                self._cdl.toggle_auto_refresh(True)
+
+        return NoRefreshContextManager(self)
+
+    def toggle_show_titles(self, state: bool) -> None:
+        """Toggle show titles state.
+
+        Args:
+            state (bool): Show titles state
+        """
+        self._cdl.toggle_show_titles(state)
 
     def save_to_h5_file(self, filename: str) -> None:
         """Save to a DataLab HDF5 file.

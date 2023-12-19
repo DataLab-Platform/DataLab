@@ -82,6 +82,14 @@ class RemoteClient(object):
         """Reset all application data"""
         self.serverproxy.reset_all()
 
+    def toggle_auto_refresh(self, state):
+        """Toggle auto refresh state"""
+        self.serverproxy.toggle_auto_refresh(state)
+
+    def toggle_show_titles(self, state):
+        """Toggle show titles state"""
+        self.serverproxy.toggle_show_titles(state)
+
     def save_to_h5_file(self, filename):
         """Save to a DataLab HDF5 file"""
         self.serverproxy.save_to_h5_file(filename)
