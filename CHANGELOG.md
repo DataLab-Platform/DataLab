@@ -30,6 +30,10 @@ for future and past milestones.
           # Do something without refreshing the plot view
           proxy.compute_fft() # (...)
       ```
+* Added "Curve anti-aliasing" feature to "View" menu (and toolbar):
+  * This feature allows to enable/disable curve anti-aliasing (default: enabled)
+  * When enabled, the curve rendering is smoother but may lead to performance issues
+    when working with large datasets (that's why it can be disabled)
 * Added `toggle_show_titles` method to DataLab proxy object. This method allows to
   toggle the "Show graphical object titles" feature from a macro-command, a plugin
   or a remote control client.

@@ -115,3 +115,12 @@ class SignalPanel(BaseDataPanel):
         if add_to_panel:
             self.add_object(signal)
         return signal
+
+    # ------Plotting--------------------------------------------------------------------
+    def toggle_anti_aliasing(self, state: bool) -> None:
+        """Toggle anti-aliasing on/off
+
+        Args:
+            state: state of the anti-aliasing
+        """
+        self.plothandler.toggle_anti_aliasing(state)

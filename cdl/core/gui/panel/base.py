@@ -82,7 +82,7 @@ if TYPE_CHECKING:  # pragma: no cover
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
-    from cdl.core.gui.plothandler import BasePlotHandler
+    from cdl.core.gui.plothandler import ImagePlotHandler, SignalPlotHandler
     from cdl.core.gui.processor.image import ImageProcessor
     from cdl.core.gui.processor.signal import SignalProcessor
     from cdl.core.io.image import ImageIORegistry
@@ -261,7 +261,7 @@ class BaseDataPanel(AbstractPanel):
         self.objview = objectview.ObjectView(self, self.objmodel)
         self.objview.SIG_IMPORT_FILES.connect(self.handle_dropped_files)
         self.objview.populate_tree()
-        self.plothandler: BasePlotHandler = None
+        self.plothandler: SignalPlotHandler | ImagePlotHandler = None
         self.processor: SignalProcessor | ImageProcessor = None
         self.acthandler: actionhandler.BaseActionHandler = None
         self.__metadata_clipboard = {}

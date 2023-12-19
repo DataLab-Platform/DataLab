@@ -31,5 +31,16 @@ Refresh manually
     Refresh the visualization manually. This triggers a refresh of the plot
     view, even if the auto-refresh feature is disabled.
 
+Curve anti-aliasing
+    Enable/disable anti-aliasing of curves. Anti-aliasing makes the curves
+    look smoother, but it may also make them look less sharp.
+
+    .. note::
+        Anti-aliasing is enabled by default.
+
+    .. warning::
+        Anti-aliasing may slow down the visualization, especially when
+        working with large data sets.
+
 Other menu entries
     Show/hide panels or toolbars.

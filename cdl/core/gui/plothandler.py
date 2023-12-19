@@ -327,6 +327,15 @@ class SignalPlotHandler(BasePlotHandler):
 
     PLOT_TYPE = PlotType.CURVE
 
+    def toggle_anti_aliasing(self, state: bool) -> None:
+        """Toggle anti-aliasing
+
+        Args:
+            state: if True, enable anti-aliasing
+        """
+        self.plot.set_antialiasing(state)
+        self.plot.replot()
+
 
 class ImagePlotHandler(BasePlotHandler):
     """Object handling image plot items, plot dialogs, plot options"""

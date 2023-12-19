@@ -181,6 +181,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     show_label = conf.Option()
     auto_refresh = conf.Option()
     show_contrast = conf.Option()
+    sig_antialiasing = conf.Option()
 
     # If True, images are shown with the same LUT range as the first selected image
     ima_ref_lut_range = conf.Option()

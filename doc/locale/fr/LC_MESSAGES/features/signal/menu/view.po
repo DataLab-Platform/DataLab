@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 11:13+0100\n"
+"POT-Creation-Date: 2023-12-19 17:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,7 +69,18 @@ msgid ""
 " when the data set is large. Therefore, you may want to disable the auto-"
 "refresh feature when you are working with large data sets, and enable it "
 "again when you are done. This will avoid unnecessary refreshes."
-msgstr "Rafraîchit automatiquement la visualisation quand les données changent. Quand ce réglage est activé (par défaut), la visualisation est automatiquement rafraîchie quand les données changent. Quand il est désactivé, la visualisation n'est pas rafraîchie tant que vous ne cliquez pas sur le bouton \"Rafraîchir manuellement\" dans la barre d'outils. Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
+msgstr ""
+"Rafraîchit automatiquement la visualisation quand les données changent. "
+"Quand ce réglage est activé (par défaut), la visualisation est "
+"automatiquement rafraîchie quand les données changent. Quand il est "
+"désactivé, la visualisation n'est pas rafraîchie tant que vous ne cliquez"
+" pas sur le bouton \"Rafraîchir manuellement\" dans la barre d'outils. "
+"Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du"
+" temps pour rafraîchir la visualisation quand les données changent, "
+"surtout quand le jeu de données est grand. Par conséquent, vous pouvez "
+"désactiver le rafraîchissement automatique quand vous travaillez avec des"
+" données volumineuses, et l'activer à nouveau quand vous avez terminé. "
+"Cela évitera des rafraîchissements inutiles."
 
 #: ../../features/signal/menu/view.rst:32
 msgid "Refresh manually"
@@ -79,13 +90,36 @@ msgstr "Rafraîchir manuellement"
 msgid ""
 "Refresh the visualization manually. This triggers a refresh of the plot "
 "view, even if the auto-refresh feature is disabled."
-msgstr "Rafraîchit la visualisation manuellement. Cela déclenche un rafraîchissement de la visualisation, même si le rafraîchissement automatique est désactivé."
+msgstr ""
+"Rafraîchit la visualisation manuellement. Cela déclenche un "
+"rafraîchissement de la visualisation, même si le rafraîchissement "
+"automatique est désactivé."
 
-#: ../../features/signal/menu/view.rst:34
+#: ../../features/signal/menu/view.rst:43
+msgid "Curve anti-aliasing"
+msgstr "Anticrénelage des courbes"
+
+#: ../../features/signal/menu/view.rst:35
+msgid ""
+"Enable/disable anti-aliasing of curves. Anti-aliasing makes the curves "
+"look smoother, but it may also make them look less sharp."
+msgstr "Active/désactive l'anticrénelage sur les courbes. L'anticrénelage rend les courbes plus lisses, mais peut aussi les rendre moins nettes."
+
+#: ../../features/signal/menu/view.rst:39
+msgid "Anti-aliasing is enabled by default."
+msgstr "L'anticrénelage est activé par défaut."
+
+#: ../../features/signal/menu/view.rst:42
+msgid ""
+"Anti-aliasing may slow down the visualization, especially when working "
+"with large data sets."
+msgstr "L'anticrénelage peut ralentir significativement l'affichage, surtout quand on travaille avec des données volumineuses."
+
+#: ../../features/signal/menu/view.rst:45
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/signal/menu/view.rst:35
+#: ../../features/signal/menu/view.rst:46
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 

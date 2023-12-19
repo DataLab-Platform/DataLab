@@ -690,6 +690,16 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute Full Width at Maximum") + "/e²",
             )
 
+        with self.new_category(ActionCategory.VIEW):
+            antialiasing_action = self.new_action(
+                _("Curve anti-aliasing"),
+                icon=get_icon("curve_antialiasing.svg"),
+                toggled=self.panel.toggle_anti_aliasing,
+                tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
+                toolbar_pos=-1,
+            )
+        antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+
 
 class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
