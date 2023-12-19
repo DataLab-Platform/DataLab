@@ -29,6 +29,17 @@ for future and past milestones.
   * This unintentional behavior led to an `AssertionError` when choosing "polygon"
     as the contour shape and trying to compute the contours for the first time.
   * This is now fixed (see [Issue #9](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing "polygon" as the contour shape)
+* Keyboard shortcuts:
+  * The keyboard shortcuts for "New", "Open", "Save", "Duplicate", "Remove",
+    "Delete all" and "Refresh manually" actions were not working properly.
+  * Those shortcuts were specific to each signal/image panel, and were working only
+    when the panel on which the shortcut was pressed for the first time was active
+    (when activated from another panel, the shortcut was not working and a warning
+    message was displayed in the console,
+    e.g. `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
+  * Besides, the shortcuts were not working at startup (when no panel had focus).
+  * This is now fixed: the shortcuts are now working whatever the active panel is,
+    and even at startup (see [Issue #10](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/10) - Keyboard shortcuts not working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
 
 ## DataLab Version 0.9.2 ##
 

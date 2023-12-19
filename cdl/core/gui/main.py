@@ -934,6 +934,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         tab_idx = Conf.main.current_tab.get(None)
         if tab_idx is not None:
             self.tabwidget.setCurrentIndex(tab_idx)
+        # Set focus on current panel, so that keyboard shortcuts work (Fixes #10)
+        self.tabwidget.currentWidget().setFocus()
 
     def set_process_isolation_enabled(self, state: bool) -> None:
         """Enable/disable process isolation

@@ -45,6 +45,7 @@ from typing import TYPE_CHECKING
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
+from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
@@ -257,9 +258,22 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         if isinstance(select_condition, str):
             assert select_condition in SelectCond.__dict__
             select_condition = getattr(SelectCond, select_condition)
+
         action = create_action(
-            self.panel, title, triggered, toggled, shortcut, icon, tip
+            parent=self.panel,
+            title=title,
+            triggered=triggered,
+            toggled=toggled,
+            shortcut=shortcut,
+            icon=icon,
+            tip=tip,
+            context=QC.Qt.WidgetWithChildrenShortcut,  # [1]
         )
+        self.panel.addAction(action)  # [1]
+        # [1] This is needed to make actions work with shortcuts for active panel,
+        # because some of the shortcuts are using the same keybindings for both panels.
+        # (Fixes #10)
+
         self.add_action(action, select_condition)
         self.add_to_action_list(action, None, position, separator)
         if context_menu_pos is not None:
