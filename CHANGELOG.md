@@ -3,7 +3,22 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.9.3 ##
+## DataLab Version 0.10.0 ##
+
+💥 New features:
+
+* Features common to signals and images:
+  * Added "Real part" and "Imaginary part" features to "Operation" menu
+* Features added following user requests (12/18/2023 meetup @ CEA):
+  * Added "Auto-refresh" and "Refresh manually" actions in "View" menu
+    (and main toolbar):
+    * When "Auto-refresh" is enabled (default), the plot view is automatically refreshed
+      when a signal/image is modified, added or removed. Even though the refresh is
+      optimized, this may lead to performance issues when working with large
+      datasets.
+    * When disabled, the plot view is not automatically refreshed. The user
+      must manually refresh the plot view by clicking on the "Refresh manually" button
+      in the main toolbar or by pressing the standard refresh key (e.g. "F5").
 
 🛠️ Bug fixes:
 
@@ -14,11 +29,6 @@ for future and past milestones.
   * This unintentional behavior led to an `AssertionError` when choosing "polygon"
     as the contour shape and trying to compute the contours for the first time.
   * This is now fixed (see [Issue #9](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing "polygon" as the contour shape)
-
-💥 New features:
-
-* Features common to signals and images:
-  * Added "Real part" and "Imaginary part" features to "Operation" menu
 
 ## DataLab Version 0.9.2 ##
 

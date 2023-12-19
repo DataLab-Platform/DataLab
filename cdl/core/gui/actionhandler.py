@@ -494,6 +494,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             showlabel_action.setChecked(Conf.view.show_label.get(False))
+            auto_refresh_action = self.new_action(
+                _("Auto-refresh"),
+                icon=get_icon("refresh-auto.svg"),
+                tip=_("Auto-refresh plot when object is modified, added or removed"),
+                toggled=self.panel.toggle_auto_refresh,
+                select_condition=SelectCond.always,
+                toolbar_pos=-1,
+            )
+            auto_refresh_action.setChecked(Conf.view.auto_refresh.get(True))
+            self.new_action(
+                _("Refresh manually"),
+                icon=get_icon("refresh-manual.svg"),
+                tip=_("Refresh plot, even if auto-refresh is enabled"),
+                shortcut=QG.QKeySequence(QG.QKeySequence.Refresh),
+                triggered=self.panel.manual_refresh,
+                select_condition=SelectCond.always,
+                toolbar_pos=-1,
+            )
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(

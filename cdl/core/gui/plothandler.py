@@ -76,6 +76,7 @@ class BasePlotHandler:
         self.__cached_hashes: WeakKeyDictionary[
             SignalObj | ImageObj, list[int]
         ] = WeakKeyDictionary()
+        self.__auto_refresh = False
 
     def __len__(self) -> int:
         """Return number of items"""
@@ -83,7 +84,17 @@ class BasePlotHandler:
 
     def __getitem__(self, oid: str) -> CurveItem | MaskedImageItem:
         """Return item associated to object uuid"""
-        return self.__plotitems[oid]
+        try:
+            return self.__plotitems[oid]
+        except KeyError as exc:
+            # Item does not exist: this may happen when "auto refresh" is disabled
+            # (object has been added to model but the corresponding plot item has not
+            # been created yet)
+            if not self.__auto_refresh:
+                self.refresh_plot("selected", True, force=True)
+                return self.__plotitems[oid]
+            # Item does not exist and auto refresh is enabled: this should not happen
+            raise exc
 
     def get(
         self, key: str, default: CurveItem | MaskedImageItem | None = None
@@ -103,7 +114,16 @@ class BasePlotHandler:
 
     def remove_item(self, oid: str) -> None:
         """Remove plot item associated to object uuid"""
-        item = self.__plotitems.pop(oid)
+        try:
+            item = self.__plotitems.pop(oid)
+        except KeyError as exc:
+            # Item does not exist: this may happen when "auto refresh" is disabled
+            # (object has been added to model but the corresponding plot item has not
+            # been created yet)
+            if not self.__auto_refresh:
+                return
+            # Item does not exist and auto refresh is enabled: this should not happen
+            raise exc
         self.plot.del_item(item)
 
     def clear(self) -> None:
@@ -187,21 +207,36 @@ class BasePlotHandler:
         """Update plot item according to reference item"""
         #  For now, nothing to do here: it's only used for images (contrast)
 
-    def refresh_plot(self, what: str, update_items: bool = True) -> None:
+    def set_auto_refresh(self, auto_refresh: bool) -> None:
+        """Set auto refresh mode.
+
+        Args:
+            auto_refresh (bool): if True, refresh plot items automatically
+        """
+        self.__auto_refresh = auto_refresh
+        if auto_refresh:
+            self.refresh_plot("selected")
+
+    def refresh_plot(
+        self, what: str, update_items: bool = True, force: bool = False
+    ) -> None:
         """Refresh plot.
 
         Args:
-            what (str | None): string describing the objects to refresh.
-                Valid values are "selected" (refresh the selected objects),
-                "all" (refresh all objects), or an object uuid.
-            update_items (bool | None): if True, update the items.
-                If False, only show the items (do not update them, except if the
-                option "Use reference item LUT range" is enabled and more than one
-                item is selected). Defaults to True.
+            what: string describing the objects to refresh.
+             Valid values are "selected" (refresh the selected objects),
+             "all" (refresh all objects), or an object uuid.
+            update_items: if True, update the items.
+             If False, only show the items (do not update them, except if the
+             option "Use reference item LUT range" is enabled and more than one
+             item is selected). Defaults to True.
+            force: if True, force refresh even if auto refresh is disabled.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
+        if not self.__auto_refresh and not force:
+            return
         if what == "selected":
             # Refresh selected objects
             oids = self.panel.objview.get_sel_object_uuids(include_groups=True)
@@ -308,22 +343,25 @@ class ImagePlotHandler(BasePlotHandler):
             plot: BasePlot = item.plot()
             plot.update_colormap_axis(item)
 
-    def refresh_plot(self, what: str, update_items: bool = True) -> None:
+    def refresh_plot(
+        self, what: str, update_items: bool = True, force: bool = False
+    ) -> None:
         """Refresh plot.
 
         Args:
-            what (str | None): string describing the objects to refresh.
-                Valid values are "selected" (refresh the selected objects),
-                "all" (refresh all objects), or an object uuid.
-            update_items (bool | None): if True, update the items.
-                If False, only show the items (do not update them, except if the
-                option "Use reference item LUT range" is enabled and more than one
-                item is selected). Defaults to True.
+            what: string describing the objects to refresh.
+             Valid values are "selected" (refresh the selected objects),
+             "all" (refresh all objects), or an object uuid.
+            update_items: if True, update the items.
+             If False, only show the items (do not update them, except if the
+             option "Use reference item LUT range" is enabled and more than one
+             item is selected). Defaults to True.
+            force: if True, force refresh even if auto refresh is disabled.
 
         Raises:
             ValueError: if `what` is not a valid value
         """
-        super().refresh_plot(what=what, update_items=update_items)
+        super().refresh_plot(what=what, update_items=update_items, force=force)
         self.plotwidget.contrast.setVisible(Conf.view.show_contrast.get(True))
 
     def cleanup_dataview(self) -> None:

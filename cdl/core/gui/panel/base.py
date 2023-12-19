@@ -788,7 +788,11 @@ class BaseDataPanel(AbstractPanel):
         return dlg
 
     def __separate_view_finished(self, result: int) -> None:
-        """Separate view was closed"""
+        """Separate view was closed
+
+        Args:
+            result: result
+        """
         dlg: PlotDialog = self.sender()
         if result == QW.QDialog.DialogCode.Accepted:
             rw_items = []
@@ -802,11 +806,28 @@ class BaseDataPanel(AbstractPanel):
         dlg.deleteLater()
 
     def toggle_show_titles(self, state: bool) -> None:
-        """Toggle show annotations option"""
+        """Toggle show annotations option
+
+        Args:
+            state: state
+        """
         Conf.view.show_label.set(state)
         for obj in self.objmodel:
             obj.set_metadata_option("showlabel", state)
         self.SIG_REFRESH_PLOT.emit("selected", True)
+
+    def toggle_auto_refresh(self, state: bool) -> None:
+        """Toggle auto refresh option
+
+        Args:
+            state: state
+        """
+        Conf.view.auto_refresh.set(state)
+        self.plothandler.set_auto_refresh(state)
+
+    def manual_refresh(self) -> None:
+        """Manual refresh"""
+        self.plothandler.refresh_plot("selected", True, force=True)
 
     def create_new_dialog(
         self,
