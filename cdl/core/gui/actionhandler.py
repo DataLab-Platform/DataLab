@@ -544,13 +544,19 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.at_least_one,
             )
             self.new_action(
-                _("Absolute value"), triggered=self.panel.processor.compute_abs
+                _("Absolute value"),
+                triggered=self.panel.processor.compute_abs,
+                separator=True,
             )
             self.new_action(_("Real part"), triggered=self.panel.processor.compute_re)
             self.new_action(
                 _("Imaginary part"), triggered=self.panel.processor.compute_im
             )
-            self.new_action("Log10(y)", triggered=self.panel.processor.compute_log10)
+            self.new_action(
+                "Log10(y)",
+                triggered=self.panel.processor.compute_log10,
+                separator=True,
+            )
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
@@ -653,6 +659,7 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Peak detection"),
+                separator=True,
                 triggered=self.panel.processor.compute_peak_detection,
                 icon=get_icon("peak_detect.svg"),
             )
@@ -727,6 +734,7 @@ class ImageActionHandler(BaseActionHandler):
             )
             self.new_action(
                 _("Flat-field correction"),
+                separator=True,
                 triggered=self.panel.processor.compute_flatfield,
                 select_condition=SelectCond.at_least_one,
             )
