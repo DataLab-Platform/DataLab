@@ -97,3 +97,30 @@ def save_html_diff(
     with open(filename, "w", encoding="utf-8") as file:
         file.write(diff_html)
     webbrowser.open("file://" + osp.realpath(filename))
+
+
+def is_version_at_least(version1: str, version2: str) -> bool:
+    """
+    Compare two version strings to check if the first version is at least
+    equal to the second.
+
+    Args:
+        version1 (str): The first version string.
+        version2 (str): The second version string.
+
+    Returns:
+        bool: True if version1 is greater than or equal to version2, False otherwise.
+    """
+    # Split the version strings into parts
+    parts1 = [int(part) for part in version1.split(".")]
+    parts2 = [int(part) for part in version2.split(".")]
+
+    # Compare each part
+    for part1, part2 in zip(parts1, parts2):
+        if part1 > part2:
+            return True
+        elif part1 < part2:
+            return False
+
+    # Check if version1 is shorter and thus less than version2
+    return len(parts1) >= len(parts2)

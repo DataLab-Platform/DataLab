@@ -33,6 +33,8 @@ for future and past milestones.
 * Added `toggle_show_titles` method to DataLab proxy object. This method allows to
   toggle the "Show graphical object titles" feature from a macro-command, a plugin
   or a remote control client.
+* Remote client is now checking the server version and shows a warning message if
+  the server version may not be fully compatible with the client version.
 
 🛠️ Bug fixes:
 

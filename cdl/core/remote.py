@@ -20,6 +20,7 @@ import importlib
 import sys
 import threading
 import time
+import warnings
 from collections.abc import Callable
 from io import BytesIO
 from typing import TYPE_CHECKING
@@ -38,6 +39,7 @@ from cdl.core.model.base import items_to_json, json_to_items
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.env import execenv
+from cdl.utils.misc import is_version_at_least
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.main import CDLMainWindow
@@ -671,9 +673,18 @@ class RemoteClient(BaseProxy):
         self.port = port
         self._cdl = ServerProxy(f"http://127.0.0.1:{port}", allow_none=True)
         try:
-            self.get_version()
+            version = self.get_version()
         except ConnectionRefusedError as exc:
             raise ConnectionRefusedError("DataLab is currently not running") from exc
+        # If DataLab version is not compatible with this client, show a warning using
+        # standard `warnings` module:
+        minor_version = ".".join(__version__.split(".")[:2])
+        if not is_version_at_least(version, minor_version):
+            warnings.warn(
+                f"DataLab server version ({version}) may not be fully compatible with "
+                f"this DataLab client version ({__version__}).\n"
+                f"Please upgrade the server to {minor_version} or higher."
+            )
 
     def connect(
         self,
