@@ -488,7 +488,27 @@ class ImageObj(gds.DataSet, base.BaseObj):
             shape = self.data.shape
             item.param.xmin, item.param.xmax = x0, x0 + dx * shape[1]
             item.param.ymin, item.param.ymax = y0, y0 + dy * shape[0]
+        lut_range = self.metadata.get("lut_range")
+        if lut_range is not None:
+            item.set_lut_range(lut_range)
         super().update_plot_item_parameters(item)
+
+    def update_metadata_from_plot_item(self, item: MaskedImageItem) -> None:
+        """Update metadata from plot item.
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been modified by the user through the plot item GUI. The goal is to
+        update the metadata accordingly.
+
+        This is *almost* the inverse operation of `update_plot_item_parameters`.
+
+        Args:
+            item: plot item
+        """
+        super().update_metadata_from_plot_item(item)
+        # Storing the LUT range in metadata:
+        lut_range = item.get_lut_range()
+        self.metadata["lut_range"] = lut_range
 
     def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
         """Make plot item from data.

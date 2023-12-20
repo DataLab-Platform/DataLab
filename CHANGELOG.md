@@ -18,6 +18,10 @@ for future and past milestones.
       were lost when saving and reloading the HDF5 file
     * Now, those properties are saved in the HDF5 file and are restored when
       reloading the HDF5 file
+  * Image LUT range is now saved in the HDF5 file:
+    * As for curve and image styles, the LUT range was already persistent during
+      the working session, but was lost when saving and reloading the HDF5 file
+    * Now, the LUT range is saved in the HDF5 file and is restored when reloading it
   * Added "Auto-refresh" and "Refresh manually" actions in "View" menu
     (and main toolbar):
     * When "Auto-refresh" is enabled (default), the plot view is automatically refreshed
