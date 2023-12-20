@@ -16,10 +16,11 @@ import enum
 import json
 import sys
 from collections.abc import Iterable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 import numpy as np
+from guidata.dataset import update_dataset
 from guidata.dataset.io import JSONHandler, JSONReader, JSONWriter
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
@@ -27,6 +28,9 @@ from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
 
 from cdl.config import Conf, _
 from cdl.utils.misc import is_integer_dtype
+
+if TYPE_CHECKING:
+    from plotpy.items import CurveItem, MaskedImageItem
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -944,10 +948,50 @@ class BaseObj(metaclass=BaseObjMeta):
             self.set_metadata_option(name, value)
         self.update_metadata_view_settings()
 
+    def __get_def_dict(self) -> dict[str, Any]:
+        """Return default visualization settings dictionary"""
+        return Conf.view.get_def_dict(self.__class__.__name__[:3].lower())
+
     def update_metadata_view_settings(self) -> None:
         """Update metadata view settings from Conf.view"""
-        def_dict = Conf.view.get_def_dict(self.__class__.__name__[:3].lower())
-        self.metadata.update(def_dict)
+        self.metadata.update(self.__get_def_dict())
+
+    def update_plot_item_parameters(self, item: CurveItem | MaskedImageItem) -> None:
+        """Update plot item parameters from object data/metadata
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been overriden by object metadata entries or other object data. The goal
+        is to update the plot item accordingly.
+
+        This is *almost* the inverse operation of `update_metadata_from_plot_item`.
+
+        Args:
+            item: plot item
+        """
+        # Subclasses have to override this method to update plot item parameters,
+        # then call this implementation of the method to update plot item.
+        update_dataset(item.param, self.metadata)
+        item.param.update_item(item)
+        if item.selected:
+            item.select()
+
+    def update_metadata_from_plot_item(self, item: CurveItem | MaskedImageItem) -> None:
+        """Update metadata from plot item.
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been modified by the user through the plot item GUI. The goal is to
+        update the metadata accordingly.
+
+        This is *almost* the inverse operation of `update_plot_item_parameters`.
+
+        Args:
+            item: plot item
+        """
+        for key in self.__get_def_dict():
+            self.metadata[key] = getattr(item.param, key)
+        # Subclasses may override this method to update metadata from plot item,
+        # then call this implementation of the method to update metadata standard
+        # entries.
 
     def export_metadata_to_file(self, filename: str) -> None:
         """Export object metadata to file (JSON).

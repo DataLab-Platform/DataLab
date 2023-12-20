@@ -10,6 +10,14 @@ for future and past milestones.
 * Features common to signals and images:
   * Added "Real part" and "Imaginary part" features to "Operation" menu
 * Features added following user requests (12/18/2023 meetup @ CEA):
+  * Curve and image styles are now saved in the HDF5 file:
+    * Curve style covers the following properties: color, line style, line width,
+      marker style, marker size, marker edge color, marker face color, etc.
+    * Image style covers the following properties: colormap, interpolation, etc.
+    * Those properties were already persistent during the working session, but
+      were lost when saving and reloading the HDF5 file
+    * Now, those properties are saved in the HDF5 file and are restored when
+      reloading the HDF5 file
   * Added "Auto-refresh" and "Refresh manually" actions in "View" menu
     (and main toolbar):
     * When "Auto-refresh" is enabled (default), the plot view is automatically refreshed

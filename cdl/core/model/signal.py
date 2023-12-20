@@ -22,7 +22,7 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
-from guidata.dataset import update_dataset
+from guidata.dataset import restore_dataset, update_dataset
 from plotpy.builder import make
 
 from cdl.algorithms import fit
@@ -252,14 +252,37 @@ class SignalObj(gds.DataSet, base.BaseObj):
         i1, i2 = self.roi[roi_index, :]
         return self.x[i1:i2], self.y[i1:i2]
 
-    def __update_item_params(self, item: CurveItem) -> None:
-        """Update item parameters.
+    def update_plot_item_parameters(self, item: CurveItem) -> None:
+        """Update plot item parameters from object data/metadata
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been overriden by object metadata entries or other object data. The goal
+        is to update the plot item accordingly.
+
+        This is *almost* the inverse operation of `update_metadata_from_plot_item`.
 
         Args:
-            item (CurveItem): plot item
+            item: plot item
         """
-        update_dataset(item.param, self.metadata)
-        item.update_params()
+        update_dataset(item.param.line, self.metadata)
+        update_dataset(item.param.symbol, self.metadata)
+        super().update_plot_item_parameters(item)
+
+    def update_metadata_from_plot_item(self, item: CurveItem) -> None:
+        """Update metadata from plot item.
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been modified by the user through the plot item GUI. The goal is to
+        update the metadata accordingly.
+
+        This is *almost* the inverse operation of `update_plot_item_parameters`.
+
+        Args:
+            item: plot item
+        """
+        super().update_metadata_from_plot_item(item)
+        restore_dataset(item.param.line, self.metadata)
+        restore_dataset(item.param.symbol, self.metadata)
 
     def make_item(self, update_from: CurveItem = None) -> CurveItem:
         """Make plot item from data.
@@ -286,7 +309,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         if update_from is None:
             if execenv.demo_mode:
                 item.param.line.width = 3
-            self.__update_item_params(item)
+            self.update_plot_item_parameters(item)
         else:
             update_dataset(item.param, update_from.param)
             item.update_params()
@@ -310,7 +333,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 x, y, dx, dy = self.xydata
                 item.set_data(x.real, y.real, dx.real, dy.real)
         item.param.label = self.title
-        self.__update_item_params(item)
+        self.update_plot_item_parameters(item)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
         """Convert ROI coordinates to indexes.

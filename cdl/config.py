@@ -19,6 +19,7 @@ import sys
 from guidata import configtools
 from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
+from plotpy.constants import LUTAlpha
 
 from cdl.utils import conf, tests
 
@@ -191,11 +192,17 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     ima_eliminate_outliers = conf.Option()
 
     # Default visualization settings, persisted in object metadata
-    # (e.g. see `create_image` in cdl/core/model/image.py)
+    # (e.g. see `SignalObj.update_metadata_view_settings`)
+    sig_def_shade = conf.Option()
+    sig_def_curvestyle = conf.Option()
+    sig_def_baseline = conf.Option()
+
+    # Default visualization settings, persisted in object metadata
+    # (e.g. see `ImageObj.update_metadata_view_settings`)
     ima_def_colormap = conf.Option()
     ima_def_interpolation = conf.Option()
     ima_def_alpha = conf.Option()
-    ima_def_alpha_mask = conf.Option()
+    ima_def_alpha_function = conf.Option()
 
     @classmethod
     def get_def_dict(cls, category: str) -> dict:
@@ -291,10 +298,13 @@ def initialize():
     assert tb_pos in ("top", "bottom", "left", "right")
     Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
+    Conf.view.sig_def_shade.get(0.0)
+    Conf.view.sig_def_curvestyle.get("Lines")
+    Conf.view.sig_def_baseline.get(0.0)
     Conf.view.ima_def_colormap.get("jet")
     Conf.view.ima_def_interpolation.get(0)
     Conf.view.ima_def_alpha.get(1.0)
-    Conf.view.ima_def_alpha_mask.get(False)
+    Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)
 
 
 def reset():

@@ -458,11 +458,17 @@ class ImageObj(gds.DataSet, base.BaseObj):
             data = np.nan_to_num(data, posinf=0, neginf=0)
         return data
 
-    def __update_item_params(self, item: MaskedImageItem) -> None:
-        """Update plot item parameters
+    def update_plot_item_parameters(self, item: MaskedImageItem) -> None:
+        """Update plot item parameters from object data/metadata
+
+        Takes into account a subset of plot item parameters. Those parameters may
+        have been overriden by object metadata entries or other object data. The goal
+        is to update the plot item accordingly.
+
+        This is *almost* the inverse operation of `update_metadata_from_plot_item`.
 
         Args:
-            item (MaskedImageItem): plot item
+            item: plot item
         """
         for axis in ("x", "y", "z"):
             unit = getattr(self, axis + "unit")
@@ -482,8 +488,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             shape = self.data.shape
             item.param.xmin, item.param.xmax = x0, x0 + dx * shape[1]
             item.param.ymin, item.param.ymax = y0, y0 + dy * shape[0]
-        update_dataset(item.param, self.metadata)
-        item.param.update_item(item)
+        super().update_plot_item_parameters(item)
 
     def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
         """Make plot item from data.
@@ -505,7 +510,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             show_mask=True,
         )
         if update_from is None:
-            self.__update_item_params(item)
+            self.update_plot_item_parameters(item)
         else:
             update_dataset(item.param, update_from.param)
             item.param.update_item(item)
@@ -522,7 +527,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
         item.set_mask(self.maskdata)
         item.param.label = self.title
-        self.__update_item_params(item)
+        self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
     def get_roi_param(self, title, *defaults) -> gds.DataSet:

@@ -274,6 +274,21 @@ class BaseDataPanel(AbstractPanel):
         super().closeEvent(event)
 
     # ------AbstractPanel interface-----------------------------------------------------
+    def serialize_object_to_hdf5(
+        self, obj: SignalObj | ImageObj, writer: NativeH5Writer
+    ) -> None:
+        """Serialize object to HDF5 file"""
+        # Before serializing, update metadata from plot item parameters, in order to
+        # save the latest visualization settings:
+        try:
+            item = self.plothandler[obj.uuid]
+            obj.update_metadata_from_plot_item(item)
+        except KeyError:
+            # Plot item has not been created yet (this happens when auto-refresh has
+            # been disabled)
+            pass
+        super().serialize_object_to_hdf5(obj, writer)
+
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize whole panel to a HDF5 file"""
         with writer.group(self.H5_PREFIX):
