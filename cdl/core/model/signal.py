@@ -122,6 +122,15 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
+        self.regenerate_uuid()
+
+    def regenerate_uuid(self):
+        """Regenerate UUID
+
+        This method is used to regenerate UUID after loading the object from a file.
+        This is required to avoid UUID conflicts when loading objects from file
+        without clearing the workspace first.
+        """
         self.uuid = str(uuid4())
 
     def copy(

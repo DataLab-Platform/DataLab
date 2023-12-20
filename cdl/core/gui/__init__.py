@@ -33,6 +33,15 @@ class ObjItf(abc.ABC):
         """Object title"""
 
     @abc.abstractmethod
+    def regenerate_uuid(self):
+        """Regenerate UUID
+
+        This method is used to regenerate UUID after loading the object from a file.
+        This is required to avoid UUID conflicts when loading objects from file
+        without clearing the workspace first.
+        """
+
+    @abc.abstractmethod
     def serialize(self, writer: BaseIOHandler):
         """Serialize this object"""
 

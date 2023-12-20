@@ -294,9 +294,18 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
-        self.uuid = str(uuid4())
+        self.regenerate_uuid()
         self._dicom_template = None
         self._maskdata_cache = None
+
+    def regenerate_uuid(self):
+        """Regenerate UUID
+
+        This method is used to regenerate UUID after loading the object from a file.
+        This is required to avoid UUID conflicts when loading objects from file
+        without clearing the workspace first.
+        """
+        self.uuid = str(uuid4())
 
     @property
     def size(self) -> tuple[int, int]:

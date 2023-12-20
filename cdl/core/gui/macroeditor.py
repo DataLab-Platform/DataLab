@@ -75,6 +75,15 @@ print("All done!")
         self.editor.modificationChanged.connect(self.modification_changed)
         self.process = None
 
+    def regenerate_uuid(self):
+        """Regenerate UUID
+
+        This method is used to regenerate UUID after loading the object from a file.
+        This is required to avoid UUID conflicts when loading objects from file
+        without clearing the workspace first.
+        """
+        # No UUID to regenerate for macro
+
     @property
     def title(self) -> str:
         """Return object title"""

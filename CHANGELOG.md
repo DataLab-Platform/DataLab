@@ -84,6 +84,7 @@ for future and past milestones.
   * The "Show graphical object titles" and "Auto-refresh" actions were only working on
     the active signal/image panel, and not on all panels.
   * This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
+* Fixed [Issue #14](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
 
 ## DataLab Version 0.9.2 ##
 

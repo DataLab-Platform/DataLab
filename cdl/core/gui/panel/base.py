@@ -199,20 +199,17 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
         name = f"{obj.short_id}: {title}"
         return name
 
-    def serialize_object_to_hdf5(
-        self, obj: SignalObj | ImageObj, writer: NativeH5Writer
-    ) -> None:
+    def serialize_object_to_hdf5(self, obj: ObjItf, writer: NativeH5Writer) -> None:
         """Serialize object to HDF5 file"""
         with writer.group(self.get_serializable_name(obj)):
             obj.serialize(writer)
 
-    def deserialize_object_from_hdf5(
-        self, reader: NativeH5Reader, name: str
-    ) -> SignalObj | ImageObj:
+    def deserialize_object_from_hdf5(self, reader: NativeH5Reader, name: str) -> ObjItf:
         """Deserialize object from a HDF5 file"""
         with reader.group(name):
             obj = self.create_object()
             obj.deserialize(reader)
+            obj.regenerate_uuid()
         return obj
 
     @abc.abstractmethod
