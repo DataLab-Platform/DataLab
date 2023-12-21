@@ -15,7 +15,7 @@ import numpy as np
 from cdl.core.io.h5 import common, utils
 from cdl.core.model.image import create_image
 from cdl.core.model.signal import create_signal
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 
 class BaseGenericNode(common.BaseNode):

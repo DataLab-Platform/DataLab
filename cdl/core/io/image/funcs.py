@@ -15,7 +15,7 @@ import time
 
 import numpy as np
 
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 
 # ==============================================================================

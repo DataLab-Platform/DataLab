@@ -29,7 +29,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import APP_NAME, DATETIME_FORMAT, SHOTPATH, Conf, _, get_old_log_fname
 from cdl.env import execenv
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 
 def close_widgets_and_quit(screenshot=False) -> None:

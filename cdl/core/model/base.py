@@ -26,8 +26,8 @@ from plotpy.builder import make
 from plotpy.io import load_items, save_items
 from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
 
+from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import Conf, _
-from cdl.utils.misc import is_integer_dtype
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem

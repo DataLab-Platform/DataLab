@@ -20,7 +20,7 @@ import numpy as np
 
 from cdl.config import Conf
 from cdl.core.io.conv import convert_array_to_standard_type, data_to_xy
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 
 class BaseNode(metaclass=abc.ABCMeta):

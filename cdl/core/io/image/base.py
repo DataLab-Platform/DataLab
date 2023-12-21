@@ -15,7 +15,7 @@ import numpy as np
 
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.image import ImageObj, create_image
-from cdl.utils.misc import reduce_path
+from cdl.utils.strings import reduce_path
 
 
 class ImageIORegistry(BaseIORegistry):

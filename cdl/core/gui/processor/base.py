@@ -32,11 +32,11 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 
 from cdl import env
+from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultShape, ShapeTypes
-from cdl.utils import misc
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 
@@ -517,7 +517,7 @@ class BaseProcessor(QC.QObject):
                 dst_obj = dst_objs.get(src_gid)
                 if dst_obj is None:
                     src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
-                    dst_dtype = complex if misc.is_complex_dtype(src_dtype) else float
+                    dst_dtype = complex if is_complex_dtype(src_dtype) else float
                     dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
                     src_objs[src_gid] = [src_obj]
                 else:
@@ -552,7 +552,7 @@ class BaseProcessor(QC.QObject):
             dst_gid = None
 
         for src_gid, dst_obj in dst_objs.items():
-            if misc.is_integer_dtype(src_dtypes[src_gid]):
+            if is_integer_dtype(src_dtypes[src_gid]):
                 dst_obj.set_data_type(dtype=src_dtypes[src_gid])
             if func_objs is not None:
                 func_objs(dst_obj, src_objs[src_gid])

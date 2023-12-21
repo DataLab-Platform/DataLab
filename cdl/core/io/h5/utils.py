@@ -11,7 +11,7 @@ DataLab Utilities for exogenous HDF5 format support
 
 import numpy as np
 
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 
 def fix_ldata(fuzzy):

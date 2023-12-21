@@ -25,7 +25,7 @@ import cdl
 from cdl.config import _
 from cdl.core.gui import ObjItf
 from cdl.env import execenv
-from cdl.utils.misc import to_string
+from cdl.utils.strings import to_string
 
 UNTITLED_NB = 0
 
