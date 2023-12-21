@@ -705,6 +705,11 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
+    def compute_astype(self) -> None:
+        """Convert data type"""
+
+    @abc.abstractmethod
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
 

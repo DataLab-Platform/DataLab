@@ -553,6 +553,11 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Imaginary part"), triggered=self.panel.processor.compute_im
             )
             self.new_action(
+                _("Convert data type"),
+                triggered=self.panel.processor.compute_astype,
+                separator=True,
+            )
+            self.new_action(
                 "Log10(y)",
                 triggered=self.panel.processor.compute_log10,
                 separator=True,

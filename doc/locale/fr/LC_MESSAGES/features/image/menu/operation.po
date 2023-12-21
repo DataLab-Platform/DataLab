@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 08:34+0100\n"
+"POT-Creation-Date: 2023-12-21 10:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,7 +147,9 @@ msgstr "Partie imaginaire"
 
 #: ../../features/image/menu/operation.rst:56
 msgid "Create a new image which is the imaginary part of each selected image:"
-msgstr "Crée une image à partir de la partie imaginaire de chaque image sélectionnée :"
+msgstr ""
+"Crée une image à partir de la partie imaginaire de chaque image "
+"sélectionnée :"
 
 #: ../../features/image/menu/operation.rst:58
 msgid ""
@@ -155,27 +157,43 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:65
+#: ../../features/image/menu/operation.rst:68
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+#: ../../features/image/menu/operation.rst:62
+msgid ""
+"Create a new image which is the result of converting data type of each "
+"selected image."
+msgstr "Crée une image à partir de la conversion du type de données de l'image sélectionnée."
+
+#: ../../features/image/menu/operation.rst:67
+msgid ""
+"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
+"with the default parameters (`casting='unsafe'`)."
+msgstr "La conversion du type de données utilise la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
+
+#: ../../features/image/menu/operation.rst:74
 msgid "Log10(z)"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:62
+#: ../../features/image/menu/operation.rst:71
 msgid "Create a new image which is the base 10 logarithm of each selected image:"
 msgstr ""
 "Crée une image à partir du logarithme base 10 de chaque image "
 "sélectionnée :"
 
-#: ../../features/image/menu/operation.rst:64
+#: ../../features/image/menu/operation.rst:73
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:72
+#: ../../features/image/menu/operation.rst:81
 msgid "Log10(z+n)"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:68
+#: ../../features/image/menu/operation.rst:77
 msgid ""
 "Create a new image which is the Log10(z+n) of each selected image (avoid "
 "Log10(0) on image background):"
@@ -184,17 +202,17 @@ msgstr ""
 " d'augmentation de la dynamique d'un logarithme en évitant de calculer "
 "Log10(0) sur l'arrière-plan de l'image) :"
 
-#: ../../features/image/menu/operation.rst:71
+#: ../../features/image/menu/operation.rst:80
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1}+n)\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:97
+#: ../../features/image/menu/operation.rst:106
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: ../../features/image/menu/operation.rst:75
+#: ../../features/image/menu/operation.rst:84
 msgid ""
 "Create a new image which is flat-field correction of the **two** selected"
 " images:"
@@ -202,7 +220,7 @@ msgstr ""
 "Calcule la correction de champ plat à partir des **deux** images "
 "sélectionnées :"
 
-#: ../../features/image/menu/operation.rst:78
+#: ../../features/image/menu/operation.rst:87
 msgid ""
 "z_{1} =\n"
 "\\begin{cases}\n"
@@ -213,7 +231,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:85
+#: ../../features/image/menu/operation.rst:94
 msgid ""
 "where :math:`z_{0}` is the raw image, :math:`z_{f}` is the flat field "
 "image, :math:`z_{threshold}` is an adjustable threshold and "
@@ -224,7 +242,7 @@ msgstr ""
 ":math:`\\overline{z_{f}}` est la valeur moyenne de l'image d'homogénéité "
 ":"
 
-#: ../../features/image/menu/operation.rst:90
+#: ../../features/image/menu/operation.rst:99
 msgid ""
 "\\overline{z_{f}}=\n"
 "\\dfrac{1}{N_{row}.N_{col}}.\\sum_{i=0}^{N_{row}}\\sum_{j=0}^{N_{col}}{z_{f}(i,j)}"
@@ -232,7 +250,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/image/menu/operation.rst:96
+#: ../../features/image/menu/operation.rst:105
 msgid ""
 "Raw image and flat field image are supposedly already corrected by "
 "performing a dark frame subtraction."
@@ -240,11 +258,11 @@ msgstr ""
 "L'image brute et l'image d'homogénéité sont supposées avoir déjà été "
 "corrigées par soustraction d'image de noir."
 
-#: ../../features/image/menu/operation.rst:101
+#: ../../features/image/menu/operation.rst:110
 msgid "Rotation"
 msgstr "Rotation"
 
-#: ../../features/image/menu/operation.rst:100
+#: ../../features/image/menu/operation.rst:109
 msgid ""
 "Create a new image which is the result of rotating (90°, 270° or "
 "arbitrary angle) or flipping (horizontally or vertically) data."
@@ -253,39 +271,39 @@ msgstr ""
 "arbitraire) ou de l'inversion (horizontale ou verticale) des données de "
 "l'image sélectionnée."
 
-#: ../../features/image/menu/operation.rst:104
+#: ../../features/image/menu/operation.rst:113
 msgid "Distribute on a grid"
 msgstr "Distribuer sur une grille"
 
-#: ../../features/image/menu/operation.rst:104
+#: ../../features/image/menu/operation.rst:113
 msgid "Distribute selected images on a regular grid."
 msgstr "Distribuer les images sélectionnées sur une grille régulière."
 
-#: ../../features/image/menu/operation.rst:107
+#: ../../features/image/menu/operation.rst:116
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions"
 
-#: ../../features/image/menu/operation.rst:107
+#: ../../features/image/menu/operation.rst:116
 msgid "Reset selected image positions to first image (x0, y0) coordinates."
 msgstr ""
 "Réinitialiser les positions des images sélectionnées sur les coordonnées "
 "(x0, y0) de la première image."
 
-#: ../../features/image/menu/operation.rst:110
+#: ../../features/image/menu/operation.rst:119
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: ../../features/image/menu/operation.rst:110
+#: ../../features/image/menu/operation.rst:119
 msgid "Create a new image which is a resized version of each selected image."
 msgstr ""
 "Crée une image qui est le résultat du redimensionnement de chaque image "
 "sélectionnée."
 
-#: ../../features/image/menu/operation.rst:115
+#: ../../features/image/menu/operation.rst:124
 msgid "Pixel binning"
 msgstr "Binning"
 
-#: ../../features/image/menu/operation.rst:113
+#: ../../features/image/menu/operation.rst:122
 msgid ""
 "Combine clusters of adjacent pixels, throughout the image, into single "
 "pixels. The result can be the sum, average, median, minimum, or maximum "
@@ -294,17 +312,17 @@ msgstr ""
 "Regroupe des pixels adjacents de l'image en un seul pixel (somme, "
 "moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
 
-#: ../../features/image/menu/operation.rst:123
+#: ../../features/image/menu/operation.rst:132
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/image/menu/operation.rst:118
+#: ../../features/image/menu/operation.rst:127
 msgid "Create a new image from a user-defined Region of Interest."
 msgstr ""
 "Crée une image à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/image/menu/operation.rst:122
+#: ../../features/image/menu/operation.rst:131
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the size of a rectangle shape."
@@ -312,11 +330,11 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
 
-#: ../../features/image/menu/operation.rst:125
+#: ../../features/image/menu/operation.rst:134
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/image/menu/operation.rst:126
+#: ../../features/image/menu/operation.rst:135
 msgid "Create a new image which is the result of swapping X/Y data."
 msgstr ""
 "Créee une image à partir des données inversées X/Y de l'image "

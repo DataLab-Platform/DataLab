@@ -93,6 +93,13 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_im, title=_("Imaginary part"))
 
     @qt_try_except()
+    def compute_astype(self, param: cdl.param.DataTypeSParam | None = None) -> None:
+        """Convert data type"""
+        self.compute_11(
+            cps.compute_astype, param, cps.DataTypeSParam, title=_("Convert data type")
+        )
+
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cps.compute_log10, title="Log10")

@@ -52,6 +52,15 @@ Imaginary part
     .. math::
         y_{k} = \Im(y_{k-1})
 
+Convert data type
+    Create a new signal which is the result of converting data type of each
+    selected signal.
+
+    .. note::
+
+        Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
+        the default parameters (`casting='unsafe'`).
+
 Log10(y)
     Create a new signal which is the base 10 logarithm of each selected signal:
 

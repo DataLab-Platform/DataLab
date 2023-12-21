@@ -45,6 +45,7 @@ def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> Non
     panel.processor.compute_abs()
     panel.processor.compute_re()
     panel.processor.compute_im()
+    panel.processor.compute_astype(dlp.DataTypeIParam.create(dtype="float64"))
     panel.processor.compute_log10()
     panel.processor.compute_swap_axes()
     panel.processor.compute_swap_axes()

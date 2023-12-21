@@ -244,6 +244,13 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_im, title=_("Imaginary part"))
 
     @qt_try_except()
+    def compute_astype(self, param: cdl.param.DataTypeIParam | None = None) -> None:
+        """Convert data type"""
+        self.compute_11(
+            cpi.compute_astype, param, cpi.DataTypeIParam, title=_("Convert data type")
+        )
+
+    @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")
@@ -282,7 +289,7 @@ class ImageProcessor(BaseProcessor):
     def compute_flatfield(
         self,
         obj2: ImageObj | None = None,
-        param: cdl.core.computation.param.FlatFieldParam | None = None,
+        param: cdl.param.FlatFieldParam | None = None,
     ) -> None:
         """Compute flat field correction"""
         edit, param = self.init_param(param, cpi.FlatFieldParam, _("Flat field"))

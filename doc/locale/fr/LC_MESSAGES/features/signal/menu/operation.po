@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-18 08:34+0100\n"
+"POT-Creation-Date: 2023-12-21 10:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -131,7 +131,9 @@ msgstr "Partie imaginaire"
 
 #: ../../features/signal/menu/operation.rst:50
 msgid "Create a new signal which is the imaginary part of each selected signal:"
-msgstr "Crée un signal à partir de la partie imaginaire de chaque signal sélectionné :"
+msgstr ""
+"Crée un signal à partir de la partie imaginaire de chaque signal "
+"sélectionné :"
 
 #: ../../features/signal/menu/operation.rst:52
 msgid ""
@@ -139,11 +141,27 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/signal/menu/operation.rst:59
+#: ../../features/signal/menu/operation.rst:62
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+#: ../../features/signal/menu/operation.rst:56
+msgid ""
+"Create a new signal which is the result of converting data type of each "
+"selected signal."
+msgstr "Crée un signal à partir de la conversion du type de données du signal sélectionné."
+
+#: ../../features/signal/menu/operation.rst:61
+msgid ""
+"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
+"with the default parameters (`casting='unsafe'`)."
+msgstr "La conversion du type de données utilise la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
+
+#: ../../features/signal/menu/operation.rst:68
 msgid "Log10(y)"
 msgstr ""
 
-#: ../../features/signal/menu/operation.rst:56
+#: ../../features/signal/menu/operation.rst:65
 msgid ""
 "Create a new signal which is the base 10 logarithm of each selected "
 "signal:"
@@ -151,17 +169,17 @@ msgstr ""
 "Crée un signal à partir du logarithme base 10 de chaque signal "
 "sélectionné :"
 
-#: ../../features/signal/menu/operation.rst:58
+#: ../../features/signal/menu/operation.rst:67
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menu/operation.rst:69
+#: ../../features/signal/menu/operation.rst:78
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: ../../features/signal/menu/operation.rst:62
+#: ../../features/signal/menu/operation.rst:71
 msgid ""
 "Create a new signal from semi-automatic peak detection of each selected "
 "signal."
@@ -169,7 +187,7 @@ msgstr ""
 "Crée un signal à partir de la détection automatique des pics de chaque "
 "signal sélectionné :"
 
-#: ../../features/signal/menu/operation.rst:67
+#: ../../features/signal/menu/operation.rst:76
 msgid ""
 "Peak detection dialog: threshold is adjustable by moving the horizontal "
 "marker, peaks are detected automatically (see vertical markers with "
@@ -180,17 +198,17 @@ msgstr ""
 "automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
 " leur position)"
 
-#: ../../features/signal/menu/operation.rst:77
+#: ../../features/signal/menu/operation.rst:86
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/signal/menu/operation.rst:72
+#: ../../features/signal/menu/operation.rst:81
 msgid "Create a new signal from a user-defined Region of Interest (ROI)."
 msgstr ""
 "Crée un signal à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/signal/menu/operation.rst:76
+#: ../../features/signal/menu/operation.rst:85
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the width of an horizontal range."
@@ -199,10 +217,10 @@ msgstr ""
 "définie en ajustant la position et la largeur de l'échelle horizontale de"
 " sélection."
 
-#: ../../features/signal/menu/operation.rst:79
+#: ../../features/signal/menu/operation.rst:88
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/signal/menu/operation.rst:80
+#: ../../features/signal/menu/operation.rst:89
 msgid "Create a new signal which is the result of swapping X/Y data."
 msgstr "Crée un signal à partir des données inversées X/Y du signal sélectionné."

@@ -51,6 +51,8 @@ from cdl.core.computation.base import (
 )
 from cdl.core.model.signal import SignalObj
 
+VALID_DTYPES_STRLIST = list(SignalObj.get_valid_dtypenames())
+
 
 def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
     """Create result signal object for compute_11 function
@@ -270,6 +272,29 @@ def compute_im(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "im")
     x, y = src.get_data()
     dst.set_xydata(x, np.imag(y))
+    return dst
+
+
+class DataTypeSParam(gds.DataSet):
+    """Convert signal data type parameters"""
+
+    dtype_str = gds.ChoiceItem(
+        _("Destination data type"),
+        list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
+        help=_("Output image data type."),
+    )
+
+
+def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
+    """Convert data type
+    Args:
+        src: source signal
+        p: parameters
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "astype", f"dtype={p.dtype_str}")
+    dst.xydata = src.xydata.astype(p.dtype_str)
     return dst
 
 

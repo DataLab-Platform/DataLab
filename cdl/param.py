@@ -33,6 +33,7 @@ from cdl.core.computation.base import (
 from cdl.core.computation.image import (
     BinningParam,
     ButterworthParam,
+    DataTypeIParam,
     FlatFieldParam,
     GridParam,
     HoughCircleParam,
@@ -65,6 +66,7 @@ from cdl.core.computation.image.restoration import (
     DenoiseWaveletParam,
 )
 from cdl.core.computation.signal import (
+    DataTypeSParam,
     FWHMParam,
     NormalizeYParam,
     PeakDetectionParam,

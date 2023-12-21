@@ -28,7 +28,6 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from plotpy.mathutils.geometry import vector_rotation
 from skimage import filters
-from skimage.util.dtype import dtype_range
 
 from cdl.algorithms.image import (
     BINNING_OPERATIONS,
@@ -52,9 +51,7 @@ from cdl.core.computation.base import (
 from cdl.core.model.base import BaseProcParam
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 
-VALID_DTYPES_STRLIST = [
-    dtype.__name__ for dtype in dtype_range if dtype in ImageObj.VALID_DTYPES
-]
+VALID_DTYPES_STRLIST = list(ImageObj.get_valid_dtypenames())
 
 
 def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
@@ -616,6 +613,29 @@ def compute_im(src: ImageObj) -> ImageObj:
     """
     dst = dst_11(src, "im")
     dst.data = np.imag(src.data)
+    return dst
+
+
+class DataTypeIParam(gds.DataSet):
+    """Convert image data type parameters"""
+
+    dtype_str = gds.ChoiceItem(
+        _("Destination data type"),
+        list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
+        help=_("Output image data type."),
+    )
+
+
+def compute_astype(src: ImageObj, p: DataTypeIParam) -> ImageObj:
+    """Convert image data type
+    Args:
+        src: input image object
+        p: parameters
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "astype", p.dtype_str)
+    dst.data = src.data.astype(p.dtype_str)
     return dst
 
 

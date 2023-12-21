@@ -9,6 +9,7 @@ for future and past milestones.
 
 * Features common to signals and images:
   * Added "Real part" and "Imaginary part" features to "Operation" menu
+  * Added "Convert data type" feature to "Operation" menu
 * Features added following user requests (12/18/2023 meetup @ CEA):
   * Curve and image styles are now saved in the HDF5 file:
     * Curve style covers the following properties: color, line style, line width,
