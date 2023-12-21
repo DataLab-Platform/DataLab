@@ -554,19 +554,17 @@ class BaseObj(metaclass=BaseObjMeta):
         """Data"""
 
     @classmethod
-    def get_valid_dtypenames(cls) -> tuple[str]:
+    def get_valid_dtypenames(cls) -> list[str]:
         """Get valid data type names
 
         Returns:
             Valid data type names supported by this class
         """
-        return tuple(
-            [
-                dtname
-                for dtname in np.sctypeDict.keys()
-                if dtname in (dtype.__name__ for dtype in cls.VALID_DTYPES)
-            ]
-        )
+        return [
+            dtname
+            for dtname in np.sctypeDict
+            if dtname in (dtype.__name__ for dtype in cls.VALID_DTYPES)
+        ]
 
     def check_data(self):
         """Check if data is valid, raise an exception if that's not the case

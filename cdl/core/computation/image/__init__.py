@@ -52,7 +52,7 @@ from cdl.core.model.base import BaseProcParam
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
-VALID_DTYPES_STRLIST = list(ImageObj.get_valid_dtypenames())
+VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
 
 def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:

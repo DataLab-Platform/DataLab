@@ -424,8 +424,8 @@ class BaseProcessor(QC.QObject):
         if shapetype is None:
             try:
                 shapetype = getattr(ShapeTypes, param.shape.upper())
-            except AttributeError:
-                raise ValueError("shapetype must be specified")
+            except AttributeError as exc:
+                raise ValueError("shapetype must be specified") from exc
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
         name = func.__name__.replace("compute_", "")

@@ -51,7 +51,7 @@ from cdl.core.computation.base import (
 )
 from cdl.core.model.signal import SignalObj
 
-VALID_DTYPES_STRLIST = list(SignalObj.get_valid_dtypenames())
+VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
 
 def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:

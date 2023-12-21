@@ -64,7 +64,7 @@ def is_version_at_least(version1: str, version2: str) -> bool:
     for part1, part2 in zip(parts1, parts2):
         if part1 > part2:
             return True
-        elif part1 < part2:
+        if part1 < part2:
             return False
 
     # Check if version1 is shorter and thus less than version2
