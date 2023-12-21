@@ -516,7 +516,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         super().update_metadata_from_plot_item(item)
         # Storing the LUT range in metadata:
-        lut_range = item.get_lut_range()
+        lut_range = list(item.get_lut_range())
         self.metadata["lut_range"] = lut_range
 
     def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:

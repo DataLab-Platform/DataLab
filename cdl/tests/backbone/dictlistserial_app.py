@@ -35,7 +35,10 @@ def __compare_metadata(dict1, dict2):
         if isinstance(dict_a[key], dict):
             same = same and __compare_metadata(dict_a[key], dict_b[key])
         else:
-            same = same and (str(dict_a[key]) == str(dict_b[key]))
+            same_value = str(dict_a[key]) == str(dict_b[key])
+            if not same_value:
+                print("Different values for key %s" % key)
+            same = same and same_value
     return same
 
 
