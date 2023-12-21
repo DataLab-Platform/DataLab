@@ -778,8 +778,22 @@ class ImageActionHandler(BaseActionHandler):
                 )
 
             self.new_action(
+                _("Extract profile..."),
+                triggered=self.panel.processor.compute_profile,
+                icon=get_icon("profile.svg"),
+                tip=_("Extract horizontal or vertical profile"),
+            )
+            self.new_action(
+                _("Extract average profile..."),
+                triggered=self.panel.processor.compute_average_profile,
+                icon=get_icon("profile_average.svg"),
+                tip=_("Extract average horizontal or vertical profile"),
+            )
+
+            self.new_action(
                 _("Distribute on a grid..."),
                 triggered=self.panel.processor.distribute_on_grid,
+                icon=get_icon("distribute_on_grid.svg"),
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
@@ -791,10 +805,12 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(
                 _("Resize"),
                 triggered=self.panel.processor.compute_resize,
+                icon=get_icon("resize.svg"),
                 separator=True,
             )
             self.new_action(
-                _("Pixel binning"), triggered=self.panel.processor.compute_binning
+                _("Pixel binning"), triggered=self.panel.processor.compute_binning,
+                icon=get_icon("binning.svg"),
             )
 
         with self.new_category(ActionCategory.PROCESSING):

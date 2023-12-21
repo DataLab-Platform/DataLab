@@ -378,7 +378,10 @@ class BaseProcessor(QC.QObject):
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_g = self.panel.add_group(f"{name}({old_g.short_id})")
                             new_gids[old_gid] = new_gid = new_g.uuid
-                    self.panel.add_object(new_obj, group_id=new_gid)
+                    if isinstance(new_obj, self.panel.PARAMCLASS):
+                        self.panel.add_object(new_obj, group_id=new_gid)
+                    else:
+                        self.panel.mainwindow.add_object(new_obj)
         # Select newly created groups, if any
         for group_id in new_gids.values():
             self.panel.objview.set_current_item_id(group_id, extend=True)

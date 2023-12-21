@@ -224,6 +224,25 @@ class ImageProcessor(BaseProcessor):
             self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
+    def compute_profile(self, param: cdl.param.ProfileParam | None = None) -> None:
+        """Compute profile"""
+        self.compute_11(
+            cpi.compute_profile, param, cdl.param.ProfileParam, title=_("Profile")
+        )
+
+    @qt_try_except()
+    def compute_average_profile(
+        self, param: cdl.param.AverageProfileParam | None = None
+    ) -> None:
+        """Compute average profile"""
+        self.compute_11(
+            cpi.compute_average_profile,
+            param,
+            cdl.param.AverageProfileParam,
+            title=_("Average profile"),
+        )
+
+    @qt_try_except()
     def compute_swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))

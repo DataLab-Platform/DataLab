@@ -50,6 +50,7 @@ from cdl.core.computation.base import (
 )
 from cdl.core.model.base import BaseProcParam
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
+from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = list(ImageObj.get_valid_dtypenames())
 
@@ -65,6 +66,24 @@ def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
         ImageObj: output image object
     """
     dst = src.copy(title=f"{name}({src.short_id})")
+    if suffix is not None:
+        dst.title += "|" + suffix
+    return dst
+
+
+def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> SignalObj:
+    """Create result signal object for compute_11 function
+
+    Args:
+        src (ImageObj): input image object
+        name (str): name of the processing function
+
+    Returns:
+        SignalObj: output signal object
+    """
+    title = f"{name}({src.short_id})"
+    dst = SignalObj(title=title)
+    dst.title = title
     if suffix is not None:
         dst.title += "|" + suffix
     return dst
@@ -564,6 +583,88 @@ def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
     if p.geometry is RoiDataGeometries.CIRCLE:
         # Circular ROI
         dst.roi = p.get_single_roi()
+    return dst
+
+
+class ProfileParam(gds.DataSet):
+    """Horizontal or vertical profile parameters"""
+
+    _prop = gds.GetAttrProp("direction")
+    _directions = (("horizontal", _("horizontal")), ("vertical", _("vertical")))
+    direction = gds.ChoiceItem(_("Direction"), _directions, radio=True).set_prop(
+        "display", store=_prop
+    )
+    row = gds.IntItem(_("Row"), default=0, min=0).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "horizontal")
+    )
+    col = gds.IntItem(_("Column"), default=0, min=0).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "vertical")
+    )
+
+
+def compute_profile(src: ImageObj, p: ProfileParam) -> ImageObj:
+    """Compute horizontal or vertical profile
+    Args:
+        src: input image object
+        p: parameters
+    Returns:
+        Output image object
+    """
+    p.row = min(p.row, src.data.shape[0] - 1)
+    p.col = min(p.col, src.data.shape[1] - 1)
+    if p.direction == "horizontal":
+        suffix = f"row={p.row}"
+        x, y = np.arange(src.data.shape[1]), np.array(src.data[p.row, :], dtype=float)
+    else:
+        suffix = f"col={p.col}"
+        x, y = np.arange(src.data.shape[0]), np.array(src.data[:, p.col], dtype=float)
+    dst = dst_11_signal(src, "profile", suffix)
+    dst.set_xydata(x, y)
+    return dst
+
+
+class AverageProfileParam(gds.DataSet):
+    """Average horizontal or vertical profile parameters"""
+
+    _directions = (("horizontal", _("horizontal")), ("vertical", _("vertical")))
+    direction = gds.ChoiceItem(_("Direction"), _directions, radio=True)
+    _hgroup_begin = gds.BeginGroup(_("Profile rectangular area"))
+    row1 = gds.IntItem(_("Row 1"), default=0, min=0)
+    row2 = gds.IntItem(_("Row 2"), default=-1, min=-1)
+    col1 = gds.IntItem(_("Column 1"), default=0, min=0)
+    col2 = gds.IntItem(_("Column 2"), default=-1, min=-1)
+    _hgroup_end = gds.EndGroup(_("Profile rectangular area"))
+
+
+def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
+    """Compute horizontal or vertical average profile
+    Args:
+        src: input image object
+        p: parameters
+    Returns:
+        Output image object
+    """
+    if p.row2 == -1:
+        p.row2 = src.data.shape[0] - 1
+    if p.col2 == -1:
+        p.col2 = src.data.shape[1] - 1
+    if p.row1 > p.row2:
+        p.row1, p.row2 = p.row2, p.row1
+    if p.col1 > p.col2:
+        p.col1, p.col2 = p.col2, p.col1
+    p.row1 = min(p.row1, src.data.shape[0] - 1)
+    p.row2 = min(p.row2, src.data.shape[0] - 1)
+    p.col1 = min(p.col1, src.data.shape[1] - 1)
+    p.col2 = min(p.col2, src.data.shape[1] - 1)
+    suffix = f"{p.direction}, rows=[{p.row1}, {p.row2}], cols=[{p.col1}, {p.col2}]"
+    if p.direction == "horizontal":
+        x = np.arange(p.col1, p.col2 + 1)
+        y = np.mean(src.data[p.row1 : p.row2 + 1, p.col1 : p.col2 + 1], axis=0)
+    else:
+        x = np.arange(p.row1, p.row2 + 1)
+        y = np.mean(src.data[p.row1 : p.row2 + 1, p.col1 : p.col2 + 1], axis=1)
+    dst = dst_11_signal(src, "average_profile", suffix)
+    dst.set_xydata(x, y)
     return dst
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 10:28+0100\n"
+"POT-Creation-Date: 2023-12-21 13:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,13 +165,18 @@ msgstr "Convertir le type de données"
 msgid ""
 "Create a new image which is the result of converting data type of each "
 "selected image."
-msgstr "Crée une image à partir de la conversion du type de données de l'image sélectionnée."
+msgstr ""
+"Crée une image à partir de la conversion du type de données de l'image "
+"sélectionnée."
 
 #: ../../features/image/menu/operation.rst:67
 msgid ""
 "Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
 "with the default parameters (`casting='unsafe'`)."
-msgstr "La conversion du type de données utilise la fonction :py:func:`numpy.ndarray.astype` avec les paramètres par défaut (`casting='unsafe'`)."
+msgstr ""
+"La conversion du type de données utilise la fonction "
+":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
+"(`casting='unsafe'`)."
 
 #: ../../features/image/menu/operation.rst:74
 msgid "Log10(z)"
@@ -271,39 +276,60 @@ msgstr ""
 "arbitraire) ou de l'inversion (horizontale ou verticale) des données de "
 "l'image sélectionnée."
 
+#: ../../features/image/menu/operation.rst:114
+msgid "Extract profile"
+msgstr "Extraire un profil"
+
 #: ../../features/image/menu/operation.rst:113
+msgid ""
+"Extract an horizontal or vertical profile from each selected image, and "
+"create new signals from these profiles."
+msgstr "Extraire un profil horizontal ou vertical de chaque image sélectionnée et créer un nouveau signal à partir de ces profils."
+
+#: ../../features/image/menu/operation.rst:118
+msgid "Extract average profile"
+msgstr "Extraire un profil moyen"
+
+#: ../../features/image/menu/operation.rst:117
+msgid ""
+"Extract an horizontal or vertical profile averaged over a rectangular "
+"area, from each selected image, and create new signals from these "
+"profiles."
+msgstr "Extraire un profil horizontal ou vertical moyenné sur une zone rectangulaire de chaque image sélectionnée et créer un nouveau signal à partir de ces profils."
+
+#: ../../features/image/menu/operation.rst:121
 msgid "Distribute on a grid"
 msgstr "Distribuer sur une grille"
 
-#: ../../features/image/menu/operation.rst:113
+#: ../../features/image/menu/operation.rst:121
 msgid "Distribute selected images on a regular grid."
 msgstr "Distribuer les images sélectionnées sur une grille régulière."
 
-#: ../../features/image/menu/operation.rst:116
+#: ../../features/image/menu/operation.rst:124
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions"
 
-#: ../../features/image/menu/operation.rst:116
+#: ../../features/image/menu/operation.rst:124
 msgid "Reset selected image positions to first image (x0, y0) coordinates."
 msgstr ""
 "Réinitialiser les positions des images sélectionnées sur les coordonnées "
 "(x0, y0) de la première image."
 
-#: ../../features/image/menu/operation.rst:119
+#: ../../features/image/menu/operation.rst:127
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: ../../features/image/menu/operation.rst:119
+#: ../../features/image/menu/operation.rst:127
 msgid "Create a new image which is a resized version of each selected image."
 msgstr ""
 "Crée une image qui est le résultat du redimensionnement de chaque image "
 "sélectionnée."
 
-#: ../../features/image/menu/operation.rst:124
+#: ../../features/image/menu/operation.rst:132
 msgid "Pixel binning"
 msgstr "Binning"
 
-#: ../../features/image/menu/operation.rst:122
+#: ../../features/image/menu/operation.rst:130
 msgid ""
 "Combine clusters of adjacent pixels, throughout the image, into single "
 "pixels. The result can be the sum, average, median, minimum, or maximum "
@@ -312,17 +338,17 @@ msgstr ""
 "Regroupe des pixels adjacents de l'image en un seul pixel (somme, "
 "moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
 
-#: ../../features/image/menu/operation.rst:132
+#: ../../features/image/menu/operation.rst:140
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/image/menu/operation.rst:127
+#: ../../features/image/menu/operation.rst:135
 msgid "Create a new image from a user-defined Region of Interest."
 msgstr ""
 "Crée une image à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/image/menu/operation.rst:131
+#: ../../features/image/menu/operation.rst:139
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the size of a rectangle shape."
@@ -330,11 +356,11 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
 
-#: ../../features/image/menu/operation.rst:134
+#: ../../features/image/menu/operation.rst:142
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/image/menu/operation.rst:135
+#: ../../features/image/menu/operation.rst:143
 msgid "Create a new image which is the result of swapping X/Y data."
 msgstr ""
 "Créee une image à partir des données inversées X/Y de l'image "

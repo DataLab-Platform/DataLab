@@ -31,6 +31,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
 )
 from cdl.core.computation.image import (
+    AverageProfileParam,
     BinningParam,
     ButterworthParam,
     DataTypeIParam,
@@ -38,6 +39,7 @@ from cdl.core.computation.image import (
     GridParam,
     HoughCircleParam,
     LogP1Param,
+    ProfileParam,
     ResizeParam,
     RotateParam,
     ZCalibrateParam,

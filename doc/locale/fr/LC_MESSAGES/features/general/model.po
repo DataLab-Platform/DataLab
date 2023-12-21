@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 18:14+0200\n"
+"POT-Creation-Date: 2023-12-21 10:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -173,6 +173,19 @@ msgstr ""
 msgid "Signal object"
 msgstr ""
 
+#: cdl.core.model.image.ImageObj.regenerate_uuid:1
+#: cdl.core.model.signal.SignalObj.regenerate_uuid:1 of
+msgid "Regenerate UUID"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.regenerate_uuid:3
+#: cdl.core.model.signal.SignalObj.regenerate_uuid:3 of
+msgid ""
+"This method is used to regenerate UUID after loading the object from a "
+"file. This is required to avoid UUID conflicts when loading objects from "
+"file without clearing the workspace first."
+msgstr ""
+
 #: cdl.core.model.image.ImageObj.copy:1 cdl.core.model.signal.SignalObj.copy:1
 #: of
 msgid "Copy object."
@@ -188,8 +201,10 @@ msgstr ""
 #: cdl.core.model.image.ImageObj.roi_coords_to_indexes
 #: cdl.core.model.image.ImageObj.set_data_type
 #: cdl.core.model.image.ImageObj.set_metadata_from
-#: cdl.core.model.image.ImageObj.update_item cdl.core.model.image.RoiDataItem
-#: cdl.core.model.image.RoiDataItem.apply_mask
+#: cdl.core.model.image.ImageObj.update_item
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters
+#: cdl.core.model.image.RoiDataItem cdl.core.model.image.RoiDataItem.apply_mask
 #: cdl.core.model.image.RoiDataItem.from_image
 #: cdl.core.model.image.RoiDataItem.get_masked_view
 #: cdl.core.model.image.RoiDataItem.make_roi_item
@@ -209,6 +224,8 @@ msgstr ""
 #: cdl.core.model.signal.SignalObj.set_data_type
 #: cdl.core.model.signal.SignalObj.set_xydata
 #: cdl.core.model.signal.SignalObj.update_item
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters
 #: cdl.core.model.signal.create_signal
 #: cdl.core.model.signal.create_signal_from_param
 #: cdl.core.model.signal.new_signal_param cdl.core.model.signal.triangle_func
@@ -335,6 +352,55 @@ msgstr ""
 msgid "data"
 msgstr ""
 
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:1
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:1 of
+msgid "Update plot item parameters from object data/metadata"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:3
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:3 of
+msgid ""
+"Takes into account a subset of plot item parameters. Those parameters may"
+" have been overriden by object metadata entries or other object data. The"
+" goal is to update the plot item accordingly."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:7
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:7 of
+msgid ""
+"This is *almost* the inverse operation of "
+"`update_metadata_from_plot_item`."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.make_item:6
+#: cdl.core.model.image.ImageObj.update_item:3
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:9
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:9
+#: cdl.core.model.signal.SignalObj.make_item:6
+#: cdl.core.model.signal.SignalObj.update_item:3
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:9
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:9 of
+msgid "plot item"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:1
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:1 of
+msgid "Update metadata from plot item."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:3
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:3 of
+msgid ""
+"Takes into account a subset of plot item parameters. Those parameters may"
+" have been modified by the user through the plot item GUI. The goal is to"
+" update the metadata accordingly."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:7
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:7 of
+msgid "This is *almost* the inverse operation of `update_plot_item_parameters`."
+msgstr ""
+
 #: cdl.core.model.image.ImageObj.make_item:1
 #: cdl.core.model.signal.SignalObj.make_item:1 of
 msgid "Make plot item from data."
@@ -342,13 +408,6 @@ msgstr ""
 
 #: cdl.core.model.signal.SignalObj.make_item:3 of
 msgid "plot item to update from"
-msgstr ""
-
-#: cdl.core.model.image.ImageObj.make_item:6
-#: cdl.core.model.image.ImageObj.update_item:3
-#: cdl.core.model.signal.SignalObj.make_item:6
-#: cdl.core.model.signal.SignalObj.update_item:3 of
-msgid "plot item"
 msgstr ""
 
 #: cdl.core.model.image.ImageObj.update_item:1
@@ -916,3 +975,4 @@ msgstr ""
 
 #~ msgid "Bases: :py:class:`enum.Enum`"
 #~ msgstr ""
+

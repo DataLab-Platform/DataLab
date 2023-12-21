@@ -19,6 +19,11 @@ for future and past milestones.
       were lost when saving and reloading the HDF5 file
     * Now, those properties are saved in the HDF5 file and are restored when
       reloading the HDF5 file
+  * New profile extraction features for images:
+    * Added "Extract profile" to "Operations" menu, to extract a profile from
+      an image along a row or a column
+    * Added "Extract average profile" to "Operations" menu, to extract the
+      average profile on a rectangular area of an image, along a row or a column
   * Image LUT range is now saved in the HDF5 file:
     * As for curve and image styles, the LUT range was already persistent during
       the working session, but was lost when saving and reloading the HDF5 file
