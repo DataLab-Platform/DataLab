@@ -722,14 +722,16 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         else:
             quit_text = _("Quit")
             quit_tip = _("Quit application")
-        self.quit_action = create_action(
-            self,
-            quit_text,
-            shortcut=QG.QKeySequence(QG.QKeySequence.Quit),
-            icon=get_icon("libre-gui-close.svg"),
-            tip=quit_tip,
-            triggered=self.close,
-        )
+        if sys.platform != 'darwin':
+            # On macOS, the "Quit" action is automatically added to the application menu
+            self.quit_action = create_action(
+                self,
+                quit_text,
+                shortcut=QG.QKeySequence(QG.QKeySequence.Quit),
+                icon=get_icon("libre-gui-close.svg"),
+                tip=quit_tip,
+                triggered=self.close,
+            )
         # View menu actions
         self.auto_refresh_action = create_action(
             self,
@@ -1104,10 +1106,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 self.browseh5_action,
                 None,
                 self.settings_action,
-                None,
-                self.quit_action,
-            ],
+            ]
         )
+        if self.quit_action is not None:
+            add_actions(self.file_menu, [None, self.quit_action])
 
     def __update_view_menu(self) -> None:
         """Update view menu before showing up"""
