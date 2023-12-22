@@ -102,7 +102,7 @@ class InstallConfigViewerWindow(QW.QDialog):
                 _("User configuration"),
             ),
         ):
-            viewer = FileViewerWidget(language="Python")
+            viewer = FileViewerWidget()
             viewer.set_data(title, contents)
             self.tabs.addTab(viewer, tab_icon, tab_title)
         layout = QW.QVBoxLayout()

@@ -100,6 +100,7 @@ for future and past milestones.
   dataset attributes were systematically copied to signal/image metadata: we now
   only copy the attributes which match standard data types (integers, floats, strings)
   to avoid errors when serializing/deserializing the signal/image object
+* Installation/configuration viewer: improved readability (removed syntax highlighting)
 
 ## DataLab Version 0.9.2 ##
 
