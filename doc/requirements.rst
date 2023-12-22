@@ -22,7 +22,7 @@ The :mod:`cdl` package requires the following Python modules:
     * - scikit-image 
       - >= 0.18
       - 
-    * - opencv-python 
+    * - opencv-python-headless 
       - >= 4.5
       - 
     * - PyWavelets 

@@ -3,7 +3,7 @@ guidata
 plotpy
 PythonQwt
 scikit-image
-opencv-python
+opencv-python-headless
 PyWavelets
 psutil
 pylint
