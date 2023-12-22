@@ -59,7 +59,7 @@ from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
 from cdl.utils.misc import go_to_error
-from cdl.utils.qthelpers import bring_to_front
+from cdl.utils.qthelpers import bring_to_front, configure_menu_about_to_show
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -722,7 +722,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         else:
             quit_text = _("Quit")
             quit_tip = _("Quit application")
-        if sys.platform != 'darwin':
+        if sys.platform != "darwin":
             # On macOS, the "Quit" action is automatically added to the application menu
             self.quit_action = create_action(
                 self,
@@ -817,14 +817,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_menus(self) -> None:
         """Adding menus"""
         self.file_menu = self.menuBar().addMenu(_("File"))
-        self.file_menu.aboutToShow.connect(self.__update_file_menu)
+        configure_menu_about_to_show(self.file_menu, self.__update_file_menu)
         self.edit_menu = self.menuBar().addMenu(_("&Edit"))
         self.operation_menu = self.menuBar().addMenu(_("Operations"))
         self.processing_menu = self.menuBar().addMenu(_("Processing"))
         self.computing_menu = self.menuBar().addMenu(_("Computing"))
         self.plugins_menu = self.menuBar().addMenu(_("Plugins"))
         self.view_menu = self.menuBar().addMenu(_("&View"))
-        self.view_menu.aboutToShow.connect(self.__update_view_menu)
+        configure_menu_about_to_show(self.view_menu, self.__update_view_menu)
         self.help_menu = self.menuBar().addMenu("?")
         for menu in (
             self.edit_menu,
@@ -833,7 +833,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.computing_menu,
             self.plugins_menu,
         ):
-            menu.aboutToShow.connect(self.__update_generic_menu)
+            configure_menu_about_to_show(menu, self.__update_generic_menu)
         help_menu_actions = [
             create_action(
                 self,
@@ -1106,7 +1106,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 self.browseh5_action,
                 None,
                 self.settings_action,
-            ]
+            ],
         )
         if self.quit_action is not None:
             add_actions(self.file_menu, [None, self.quit_action])

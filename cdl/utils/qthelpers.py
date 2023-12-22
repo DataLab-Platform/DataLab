@@ -17,7 +17,7 @@ import os.path as osp
 import shutil
 import sys
 import traceback
-from collections.abc import Generator
+from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from datetime import datetime
 
@@ -323,3 +323,21 @@ def bring_to_front(window: QW.QWidget) -> None:
     # If window is minimized, restore it
     if window.isMinimized():
         window.showNormal()
+
+
+def configure_menu_about_to_show(menu: QW.QMenu, slot: Callable) -> None:
+    """Configure menu about to show.
+    This method is only used to connect the "aboutToShow" signal of menus,
+    and more importantly to fix Issue #15 (Part 2) which is the fact that
+    dynamic menus are not supported on MacOS unless an action is added to
+    the menu before it is displayed.
+
+    Args:
+        menu: menu
+        slot: slot
+    """
+    # On MacOS, add an empty action to the menu before connecting the
+    # "aboutToShow" signal to the slot. This is required to fix Issue #15 (Part 2)
+    if sys.platform == "darwin":
+        menu.addAction(QW.QAction(menu))
+    menu.aboutToShow.connect(slot)
