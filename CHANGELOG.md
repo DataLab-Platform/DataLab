@@ -101,6 +101,8 @@ for future and past milestones.
   only copy the attributes which match standard data types (integers, floats, strings)
   to avoid errors when serializing/deserializing the signal/image object
 * Installation/configuration viewer: improved readability (removed syntax highlighting)
+* PyInstaller specification file: added missing `skimage` data files manually in order
+  to continue supporting Python 3.8 (see [Issue #12](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/12) - Stand-alone version on Windows 7: missing `api-ms-win-core-path-l1-1-0.dll`)
 
 ## DataLab Version 0.9.2 ##
 
