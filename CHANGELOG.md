@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.10.0 ##
+## DataLab Version 0.10.1 ##
 
 💥 New features:
 
@@ -103,6 +103,7 @@ for future and past milestones.
 * Installation/configuration viewer: improved readability (removed syntax highlighting)
 * PyInstaller specification file: added missing `skimage` data files manually in order
   to continue supporting Python 3.8 (see [Issue #12](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/12) - Stand-alone version on Windows 7: missing `api-ms-win-core-path-l1-1-0.dll`)
+* Fixed [Issue #13](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/13) - ArchLinux: `qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found`
 
 ## DataLab Version 0.9.2 ##
 
