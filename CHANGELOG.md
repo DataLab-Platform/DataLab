@@ -24,7 +24,7 @@ for future and past milestones.
       an image along a row or a column
     * Added "Extract average profile" to "Operations" menu, to extract the
       average profile on a rectangular area of an image, along a row or a column
-  * Image LUT range is now saved in the HDF5 file:
+  * Image LUT range (contrast/brightness settings) is now saved in the HDF5 file:
     * As for curve and image styles, the LUT range was already persistent during
       the working session, but was lost when saving and reloading the HDF5 file
     * Now, the LUT range is saved in the HDF5 file and is restored when reloading it
@@ -91,6 +91,11 @@ for future and past milestones.
     the active signal/image panel, and not on all panels.
   * This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
 * Fixed [Issue #14](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
+* Fixed [Issue #15](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
+  * Part 1: `pip install cdl` error on MacOS was actually a **PlotPy** issue
+    (https://github.com/PlotPyStack/PlotPy/issues/9), and was fixed in PlotPy v2.0.3
+    with an additional compilation flag indicating to use C++11 standard
+  * Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus
 
 ## DataLab Version 0.9.2 ##
 
