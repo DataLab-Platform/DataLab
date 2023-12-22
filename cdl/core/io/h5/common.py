@@ -99,7 +99,8 @@ class BaseNode(metaclass=abc.ABCMeta):
         for key, value in self.dset.attrs.items():
             if isinstance(value, bytes):
                 value = to_string(value)
-            obj.metadata[key] = value
+            if isinstance(value, (np.ndarray, str, float, int, bool)):
+                obj.metadata[key] = value
         obj.metadata.update(self.metadata)
 
     @property

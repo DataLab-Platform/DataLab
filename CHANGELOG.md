@@ -96,6 +96,10 @@ for future and past milestones.
     (https://github.com/PlotPyStack/PlotPy/issues/9), and was fixed in PlotPy v2.0.3
     with an additional compilation flag indicating to use C++11 standard
   * Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus
+* HDF5 file format: when importing an HDF5 dataset as a signal or an image, the
+  dataset attributes were systematically copied to signal/image metadata: we now
+  only copy the attributes which match standard data types (integers, floats, strings)
+  to avoid errors when serializing/deserializing the signal/image object
 
 ## DataLab Version 0.9.2 ##
 
