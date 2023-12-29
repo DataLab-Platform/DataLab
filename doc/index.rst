@@ -54,6 +54,7 @@ External resources:
    features/general/index
    features/signal/index
    features/image/index
+   api/index
    dev/index
    changelog
 

@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Computation / Image module
+.. Image Processing Algorithms (see parent package :mod:`cdl.algorithms`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

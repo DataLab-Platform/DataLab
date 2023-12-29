@@ -1,0 +1,273 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: cdl.param:2 of
+msgid "Parameters (:mod:`cdl.param`)"
+msgstr "Paramètres (:mod:`cdl.param`)"
+
+#: cdl.param:4 of
+msgid ""
+"The :mod:`cdl.param` module aims at providing all the dataset parameters "
+"that are used by the :mod:`cdl.core.computation` and "
+":mod:`cdl.core.gui.processor` packages."
+msgstr "Le module :mod:`cdl.param` fournit tous les paramètres de jeu de données utilisés par les modules :mod:`cdl.core.computation` et :mod:`cdl.core.gui.processor`."
+
+#: cdl.param:7 of
+msgid ""
+"Those datasets (:py:class:`guidata.dataset.datatypes.Dataset` subclasses)"
+" are defined in other modules:"
+msgstr "Ces jeux de données (sous-classes de :py:class:`guidata.dataset.datatypes.Dataset`) sont définis dans d'autres modules :"
+
+#: cdl.param:10 of
+msgid ":mod:`cdl.core.computation.base`"
+msgstr ""
+
+#: cdl.param:11 of
+msgid ":mod:`cdl.core.computation.image`"
+msgstr ""
+
+#: cdl.param:12 of
+msgid ":mod:`cdl.core.computation.signal`"
+msgstr ""
+
+#: cdl.param:14 of
+msgid ""
+"The :mod:`cdl.param` module is thus a convenient way to import all the "
+"sets of parameters at once."
+msgstr "Le module :mod:`cdl.param` est donc un moyen pratique d'importer tous les ensembles de paramètres en une seule fois."
+
+#: cdl.param:17 of
+msgid ""
+"As a matter of fact, the following import statement is equivalent to the "
+"previous one:"
+msgstr "En fait, l'instruction d'importation suivante est équivalente à la précédente :"
+
+#: cdl.param:30 of
+msgid "Common parameters"
+msgstr "Paramètres communs"
+
+#: cdl.core.computation.base.ClipParam:1 of
+msgid "Data clipping parameters"
+msgstr ""
+
+#: cdl.core.computation.base.FFTParam:1 of
+msgid "FFT parameters"
+msgstr ""
+
+#: cdl.core.computation.base.GaussianParam:1 of
+msgid "Gaussian filter parameters"
+msgstr ""
+
+#: cdl.core.computation.base.MovingAverageParam:1 of
+msgid "Moving average parameters"
+msgstr ""
+
+#: cdl.core.computation.base.MovingMedianParam:1 of
+msgid "Moving median parameters"
+msgstr ""
+
+#: cdl.core.computation.base.ROIDataParam:1 of
+msgid "ROI Editor data"
+msgstr ""
+
+#: cdl.core.computation.base.ROIDataParam.create:1 of
+msgid "Create ROIDataParam instance"
+msgstr ""
+
+#: cdl.param.ROIDataParam.is_empty:1 of
+msgid "Return True if there is no ROI"
+msgstr ""
+
+#: cdl.core.computation.base.ThresholdParam:1 of
+msgid "Threshold parameters"
+msgstr ""
+
+#: cdl.param:48 of
+msgid "Signal parameters"
+msgstr "Paramètres des signaux"
+
+#: cdl.core.computation.signal.DataTypeSParam:1 of
+msgid "Convert signal data type parameters"
+msgstr ""
+
+#: cdl.core.computation.signal.FWHMParam:1 of
+msgid "FWHM parameters"
+msgstr ""
+
+#: cdl.core.computation.signal.NormalizeYParam:1 of
+msgid "Normalize parameters"
+msgstr ""
+
+#: cdl.core.computation.image.detection.Peak2DDetectionParam:1
+#: cdl.core.computation.signal.PeakDetectionParam:1 of
+msgid "Peak detection parameters"
+msgstr ""
+
+#: cdl.core.computation.signal.PolynomialFitParam:1 of
+msgid "Polynomial fitting parameters"
+msgstr ""
+
+#: cdl.core.computation.signal.XYCalibrateParam:1 of
+msgid "Signal calibration parameters"
+msgstr ""
+
+#: cdl.param:64 of
+msgid "Image parameters"
+msgstr "Paramètres des images"
+
+#: cdl.param:67 of
+msgid "Base image parameters"
+msgstr "Paramètres de base des images"
+
+#: cdl.core.computation.image.AverageProfileParam:1 of
+msgid "Average horizontal or vertical profile parameters"
+msgstr ""
+
+#: cdl.core.computation.image.BinningParam:1 of
+msgid "Binning parameters"
+msgstr ""
+
+#: cdl.core.computation.image.ButterworthParam:1 of
+msgid "Butterworth filter parameters"
+msgstr ""
+
+#: cdl.core.computation.image.DataTypeIParam:1 of
+msgid "Convert image data type parameters"
+msgstr ""
+
+#: cdl.core.computation.image.FlatFieldParam:1 of
+msgid "Flat-field parameters"
+msgstr ""
+
+#: cdl.core.computation.image.GridParam:1 of
+msgid "Grid parameters"
+msgstr ""
+
+#: cdl.core.computation.image.HoughCircleParam:1 of
+msgid "Circle Hough transform parameters"
+msgstr ""
+
+#: cdl.core.computation.image.LogP1Param:1 of
+msgid "Log10 parameters"
+msgstr ""
+
+#: cdl.core.computation.image.ProfileParam:1 of
+msgid "Horizontal or vertical profile parameters"
+msgstr ""
+
+#: cdl.core.computation.image.ResizeParam:1 of
+msgid "Resize parameters"
+msgstr ""
+
+#: cdl.core.computation.image.RotateParam:1 of
+msgid "Rotate parameters"
+msgstr ""
+
+#: cdl.core.computation.image.ZCalibrateParam:1 of
+msgid "Image linear calibration parameters"
+msgstr ""
+
+#: cdl.param:95 of
+msgid "Exposure correction parameters"
+msgstr "Paramètres de correction d'exposition"
+
+#: cdl.core.computation.image.exposure.AdjustGammaParam:1 of
+msgid "Gamma adjustment parameters"
+msgstr ""
+
+#: cdl.core.computation.image.exposure.AdjustLogParam:1 of
+msgid "Logarithmic adjustment parameters"
+msgstr ""
+
+#: cdl.core.computation.image.exposure.AdjustSigmoidParam:1 of
+msgid "Sigmoid adjustment parameters"
+msgstr ""
+
+#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:1 of
+msgid "Adaptive histogram equalization parameters"
+msgstr ""
+
+#: cdl.core.computation.image.exposure.EqualizeHistParam:1 of
+msgid "Histogram equalization parameters"
+msgstr ""
+
+#: cdl.core.computation.image.exposure.RescaleIntensityParam:1 of
+msgid "Intensity rescaling parameters"
+msgstr ""
+
+#: cdl.param:111 of
+msgid "Restoration parameters"
+msgstr "Paramètres de restauration"
+
+#: cdl.core.computation.image.restoration.DenoiseBilateralParam:1 of
+msgid "Bilateral filter denoising parameters"
+msgstr ""
+
+#: cdl.core.computation.image.restoration.DenoiseTVParam:1 of
+msgid "Total Variation denoising parameters"
+msgstr ""
+
+#: cdl.core.computation.image.restoration.DenoiseWaveletParam:1 of
+msgid "Wavelet denoising parameters"
+msgstr ""
+
+#: cdl.param:121 of
+msgid "Morphological parameters"
+msgstr "Paramètres morphologiques"
+
+#: cdl.core.computation.image.morphology.MorphologyParam:1 of
+msgid "White Top-Hat parameters"
+msgstr ""
+
+#: cdl.param:127 of
+msgid "Edge detection parameters"
+msgstr "Paramètres de détection de contours"
+
+#: cdl.core.computation.image.edges.CannyParam:1 of
+msgid "Canny filter parameters"
+msgstr ""
+
+#: cdl.param:133 of
+msgid "Detection parameters"
+msgstr "Paramètres de détection"
+
+#: cdl.core.computation.image.detection.BlobDOGParam:1 of
+msgid "Blob detection using Difference of Gaussian method"
+msgstr ""
+
+#: cdl.core.computation.image.detection.BlobDOHParam:1 of
+msgid "Blob detection using Determinant of Hessian method"
+msgstr ""
+
+#: cdl.core.computation.image.detection.BlobLOGParam:1 of
+msgid "Blob detection using Laplacian of Gaussian method"
+msgstr ""
+
+#: cdl.core.computation.image.detection.BlobOpenCVParam:1 of
+msgid "Blob detection using OpenCV"
+msgstr ""
+
+#: cdl.core.computation.image.detection.ContourShapeParam:1 of
+msgid "Contour shape parameters"
+msgstr ""
+
+#~ msgid "Computation parameters module (:mod:`cdl.param`)"
+#~ msgstr ""

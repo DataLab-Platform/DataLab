@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Computation / Curve fitting module
+.. Curve Fitting Algorithms (see parent package :mod:`cdl.algorithms`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

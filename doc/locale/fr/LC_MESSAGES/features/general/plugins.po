@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 11:08+0100\n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../features/general/plugins.rst:2
 msgid "Plugins"
@@ -79,24 +79,24 @@ msgstr ""
 #: ../../features/general/plugins.rst:21
 msgid ""
 "A plugin is a Python module that contains a class derived from the "
-"`PluginBase` class. The name of the class is not important, as long as it"
-" is derived from `PluginBase`. The class must have a `PLUGIN_INFO` "
-"attribute that is an instance of the `PluginInfo` class. The "
-"`PLUGIN_INFO` attribute is used by DataLab to retrieve information about "
-"the plugin."
+":class:`cdl.plugins.PluginBase` class. The name of the class is not "
+"important, as long as it is derived from :class:`cdl.plugins.PluginBase` "
+"and has a ``PLUGIN_INFO`` attribute that is an instance of the "
+":class:`cdl.plugins.PluginInfo` class. The ``PLUGIN_INFO`` attribute is "
+"used by DataLab to retrieve information about the plugin."
 msgstr ""
 "Un plugin est un module Python qui contient une classe dérivée de la "
-"classe `PluginBase`. Le nom de la classe n'est pas important, tant "
-"qu'elle est dérivée de `PluginBase`. La classe doit avoir un attribut "
-"`PLUGIN_INFO` qui est une instance de la classe `PluginInfo`. L'attribut "
-"`PLUGIN_INFO` est utilisé par DataLab pour récupérer des informations sur"
+"classe :class:`cdl.plugins.PluginBase`. Le nom de la classe n'est pas important, tant "
+"qu'elle est dérivée de :class:`cdl.plugins.PluginBase` et qu'elle dispose d'un attribut "
+"``PLUGIN_INFO`` qui est une instance de la classe :class:`cdl.plugins.PluginInfo`. L'attribut "
+"``PLUGIN_INFO`` est utilisé par DataLab pour récupérer des informations sur"
 " le plugin."
 
-#: ../../features/general/plugins.rst:28
+#: ../../features/general/plugins.rst:29
 msgid "Where to put a plugin?"
 msgstr "Où est positionné un plugin ?"
 
-#: ../../features/general/plugins.rst:30
+#: ../../features/general/plugins.rst:31
 msgid ""
 "As plugins are Python modules, they can be put anywhere in the Python "
 "path of the DataLab installation."
@@ -104,13 +104,13 @@ msgstr ""
 "Etant donné que les plugins sont des modules Python, ils peuvent être "
 "placés n'importe où dans le chemin Python de l'installation de DataLab."
 
-#: ../../features/general/plugins.rst:33
+#: ../../features/general/plugins.rst:34
 msgid "Special additional locations are available for plugins:"
 msgstr ""
 "Des emplacements supplémentaires spéciaux sont disponibles pour les "
 "plugins :"
 
-#: ../../features/general/plugins.rst:35
+#: ../../features/general/plugins.rst:36
 msgid ""
 "The `plugins` directory in the user configuration folder (e.g. "
 "`C:\\Users\\JohnDoe\\.DataLab\\plugins` on Windows or "
@@ -120,7 +120,7 @@ msgstr ""
 " (par exemple `C:\\Users\\JohnDoe\\.DataLab\\plugins` sur Windows ou "
 "`~/.DataLab/plugins` sur Linux)."
 
-#: ../../features/general/plugins.rst:39
+#: ../../features/general/plugins.rst:40
 msgid ""
 "The `plugins` directory in the same folder as the `DataLab` executable in"
 " case of a standalone installation."
@@ -128,7 +128,7 @@ msgstr ""
 "Le répertoire `plugins` dans le même dossier que l'exécutable `DataLab` "
 "en cas d'installation autonome."
 
-#: ../../features/general/plugins.rst:42
+#: ../../features/general/plugins.rst:43
 msgid ""
 "The `plugins` directory in the `cdl` package in case for internal plugins"
 " only (i.e. it is not recommended to put your own plugins there)."
@@ -137,21 +137,21 @@ msgstr ""
 "uniquement (c'est-à-dire qu'il n'est pas recommandé d'y placer vos "
 "propres plugins)."
 
-#: ../../features/general/plugins.rst:46
+#: ../../features/general/plugins.rst:47
 msgid "Example: processing plugin"
 msgstr "Exemple : plugin de traitement"
 
-#: ../../features/general/plugins.rst:48
+#: ../../features/general/plugins.rst:49
 msgid "Here is a simple example of a plugin that adds a new features to DataLab."
 msgstr ""
 "Voici un exemple simple d'un plugin qui ajoute une nouvelle "
 "fonctionnalité à DataLab."
 
-#: ../../features/general/plugins.rst:53
+#: ../../features/general/plugins.rst:54
 msgid "Example: input/output plugin"
 msgstr "Exemple : plugin d'entrée/sortie"
 
-#: ../../features/general/plugins.rst:55
+#: ../../features/general/plugins.rst:56
 msgid ""
 "Here is a simple example of a plugin that adds a new file formats to "
 "DataLab."
@@ -159,11 +159,11 @@ msgstr ""
 "Voici un exemple simple d'un plugin qui ajoute de nouveaux formats de "
 "fichiers à DataLab."
 
-#: ../../features/general/plugins.rst:60
+#: ../../features/general/plugins.rst:61
 msgid "Other examples"
 msgstr ""
 
-#: ../../features/general/plugins.rst:62
+#: ../../features/general/plugins.rst:63
 msgid ""
 "Other examples of plugins can be found in the `plugins/examples` "
 "directory of the DataLab source code (explore `here on GitHub "
@@ -171,7 +171,7 @@ msgid ""
 "Informatique/DataLab/tree/main/plugins/examples>`_)."
 msgstr ""
 
-#: ../../features/general/plugins.rst:66
+#: ../../features/general/plugins.rst:67
 msgid "Public API"
 msgstr "API publique"
 
@@ -346,4 +346,3 @@ msgstr ""
 
 #~ msgid "Set signal xydata"
 #~ msgstr ""
-

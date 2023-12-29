@@ -18,11 +18,12 @@ What is a plugin?
 A plugin is a Python module that is loaded at startup by DataLab. A plugin may
 add new features to DataLab, or modify existing features.
 
-A plugin is a Python module that contains a class derived from the `PluginBase`
-class. The name of the class is not important, as long as it is derived from
-`PluginBase`. The class must have a `PLUGIN_INFO` attribute that is an instance
-of the `PluginInfo` class. The `PLUGIN_INFO` attribute is used by DataLab to
-retrieve information about the plugin.
+A plugin is a Python module that contains a class derived from the
+:class:`cdl.plugins.PluginBase` class. The name of the class is not important,
+as long as it is derived from :class:`cdl.plugins.PluginBase` and has a
+``PLUGIN_INFO`` attribute that is an instance of the :class:`cdl.plugins.PluginInfo`
+class. The ``PLUGIN_INFO`` attribute is used by DataLab to retrieve information
+about the plugin.
 
 Where to put a plugin?
 ^^^^^^^^^^^^^^^^^^^^^^

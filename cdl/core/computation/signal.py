@@ -4,15 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Signal Computation module
--------------------------------
-
-This module defines the signal parameters and functions used by the
-:mod:`cdl.core.gui.processor` module.
-
-It is based on the :mod:`cdl.algorithms` module, which defines the algorithms
-that are applied to the data, and on the :mod:`cdl.core.model` module, which
-defines the data model.
+.. Signal computation objects (see parent package :mod:`cdl.core.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

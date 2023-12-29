@@ -4,10 +4,52 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab proxy module
---------------------
+Proxy objects (:mod:`cdl.proxy`)
+--------------------------------
 
-This module provides a way to access DataLab features from a proxy class.
+The :mod:`cdl.proxy` module provides a way to access DataLab features from a proxy
+class.
+
+Remote proxy
+^^^^^^^^^^^^
+
+The remote proxy is used when DataLab is started from a different process than the
+proxy. In this case, the proxy connects to DataLab XML-RPC server.
+
+.. autoclass:: RemoteProxy
+    :members:
+    :inherited-members:
+
+Local proxy
+^^^^^^^^^^^
+
+The local proxy is used when DataLab is started from the same process as the proxy.
+In this case, the proxy is directly connected to DataLab main window instance. The
+typical use case is high-level scripting.
+
+.. autoclass:: LocalProxy
+    :members:
+    :inherited-members:
+
+Proxy context manager
+^^^^^^^^^^^^^^^^^^^^^
+
+The proxy context manager is a convenient way to handle proxy creation and
+destruction. It is used as follows:
+
+.. code-block:: python
+
+        with proxy_context("local") as proxy:
+            proxy.add_signal(...)
+
+The proxy type can be "local" or "remote". For remote proxy, the port can be
+specified as "remote:port".
+
+.. note:: The proxy context manager allows to use the proxy in various contexts
+    (Python script, Jupyter notebook, etc.). It also allows to switch seamlessly
+    between local and remote proxy, keeping the same code inside the context.
+
+.. autofunction:: proxy_context
 """
 
 from __future__ import annotations

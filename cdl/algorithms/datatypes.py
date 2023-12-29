@@ -4,7 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab data types conversion and utilities module
+.. Data Type Conversion Algorithms (see parent package :mod:`cdl.algorithms`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

@@ -1,0 +1,647 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: cdl.proxy:2 of
+msgid "Proxy objects (:mod:`cdl.proxy`)"
+msgstr "Objets proxy (:mod:`cdl.proxy`)"
+
+#: cdl.proxy:4 of
+msgid ""
+"The :mod:`cdl.proxy` module provides a way to access DataLab features "
+"from a proxy class."
+msgstr "Le module :mod:`cdl.proxy` fournit un moyen d'accéder aux fonctionnalités de DataLab à partir d'une classe proxy."
+
+#: cdl.proxy:8 of
+msgid "Remote proxy"
+msgstr "Proxy distant"
+
+#: cdl.proxy:10 of
+msgid ""
+"The remote proxy is used when DataLab is started from a different process"
+" than the proxy. In this case, the proxy connects to DataLab XML-RPC "
+"server."
+msgstr "Le proxy distant est utilisé lorsque DataLab est démarré à partir d'un processus différent du proxy. Dans ce cas, le proxy se connecte au serveur XML-RPC de DataLab."
+
+#: cdl.proxy.RemoteProxy:1 of
+msgid "DataLab remote proxy class."
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:3 of
+msgid ""
+"This class provides access to DataLab features from a proxy class. This "
+"is the remote version of proxy, which is used when DataLab is started "
+"from a different process than the proxy."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.add_label_with_title
+#: cdl.core.baseproxy.BaseProxy.delete_metadata
+#: cdl.core.baseproxy.BaseProxy.get_object_titles
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids
+#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
+#: cdl.core.baseproxy.BaseProxy.import_h5_file
+#: cdl.core.baseproxy.BaseProxy.open_h5_files
+#: cdl.core.baseproxy.BaseProxy.open_object
+#: cdl.core.baseproxy.BaseProxy.save_to_h5_file
+#: cdl.core.baseproxy.BaseProxy.select_groups
+#: cdl.core.baseproxy.BaseProxy.select_objects
+#: cdl.core.baseproxy.BaseProxy.set_current_panel
+#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh
+#: cdl.core.baseproxy.BaseProxy.toggle_show_titles
+#: cdl.core.remote.RemoteClient.add_annotations_from_items
+#: cdl.core.remote.RemoteClient.add_image
+#: cdl.core.remote.RemoteClient.add_object
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
+#: cdl.core.remote.RemoteClient.get_object_shapes cdl.proxy.LocalProxy
+#: cdl.proxy.LocalProxy.add_annotations_from_items
+#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_object
+#: cdl.proxy.LocalProxy.add_signal cdl.proxy.LocalProxy.calc
+#: cdl.proxy.LocalProxy.get_object cdl.proxy.LocalProxy.get_object_shapes
+#: cdl.proxy.RemoteProxy cdl.proxy.proxy_context of
+msgid "Parameters"
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:7 of
+msgid "Automatically connect to DataLab XML-RPC server."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_titles
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids
+#: cdl.core.remote.RemoteClient.add_image
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
+#: cdl.core.remote.RemoteClient.get_object cdl.proxy.LocalProxy.add_image
+#: cdl.proxy.LocalProxy.add_signal cdl.proxy.LocalProxy.get_object
+#: cdl.proxy.RemoteProxy of
+msgid "Raises"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:11 cdl.proxy.RemoteProxy:10 of
+msgid "Unable to connect to DataLab"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:12 cdl.proxy.RemoteProxy:11 of
+msgid "Invalid timeout (must be >= 0.0)"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:13 cdl.proxy.RemoteProxy:12 of
+msgid "Invalid number of retries (must be >= 1)"
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:15 of
+msgid "Examples"
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:16 of
+msgid ""
+"Here is a simple example of how to use RemoteProxy in a Python script or "
+"in a Jupyter notebook:"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_annotations_from_items:1
+#: cdl.proxy.LocalProxy.add_annotations_from_items:1 of
+msgid "Add object annotations (annotation plot items)."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_annotations_from_items:3
+#: cdl.proxy.LocalProxy.add_annotations_from_items:3 of
+msgid "annotation plot items"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_annotations_from_items:5
+#: cdl.proxy.LocalProxy.add_annotations_from_items:5 of
+msgid "refresh plot. Defaults to True."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.add_label_with_title:6
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:4
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids:4
+#: cdl.core.remote.RemoteClient.add_annotations_from_items:7
+#: cdl.proxy.LocalProxy.add_annotations_from_items:7 of
+msgid ""
+"panel name (valid values: \"signal\", \"image\"). If None, current panel "
+"is used."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:1 cdl.proxy.LocalProxy.add_image:1 of
+msgid "Add image data to DataLab."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:3 cdl.proxy.LocalProxy.add_image:3 of
+msgid "Image title"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:5 cdl.proxy.LocalProxy.add_image:5 of
+msgid "Image data"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:7
+#: cdl.core.remote.RemoteClient.add_signal:9 cdl.proxy.LocalProxy.add_image:7
+#: cdl.proxy.LocalProxy.add_signal:9 of
+msgid "X unit. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:9
+#: cdl.core.remote.RemoteClient.add_signal:11 cdl.proxy.LocalProxy.add_image:9
+#: cdl.proxy.LocalProxy.add_signal:11 of
+msgid "Y unit. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:11 cdl.proxy.LocalProxy.add_image:11
+#: of
+msgid "Z unit. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:13
+#: cdl.core.remote.RemoteClient.add_signal:13 cdl.proxy.LocalProxy.add_image:13
+#: cdl.proxy.LocalProxy.add_signal:13 of
+msgid "X label. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:15
+#: cdl.core.remote.RemoteClient.add_signal:15 cdl.proxy.LocalProxy.add_image:15
+#: cdl.proxy.LocalProxy.add_signal:15 of
+msgid "Y label. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:17 cdl.proxy.LocalProxy.add_image:17
+#: of
+msgid "Z label. Defaults to None."
+msgstr ""
+
+#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
+#: cdl.core.baseproxy.BaseProxy.context_no_refresh
+#: cdl.core.baseproxy.BaseProxy.get_current_panel
+#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
+#: cdl.core.baseproxy.BaseProxy.get_object_titles
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids
+#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
+#: cdl.core.baseproxy.BaseProxy.get_version
+#: cdl.core.remote.RemoteClient.add_image
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.get_object
+#: cdl.core.remote.RemoteClient.get_object_shapes
+#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
+#: cdl.proxy.LocalProxy.calc cdl.proxy.LocalProxy.get_object
+#: cdl.proxy.LocalProxy.get_object_shapes of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:20 cdl.proxy.LocalProxy.add_image:20
+#: of
+msgid "True if image was added successfully, False otherwise"
+msgstr ""
+
+#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
+#: cdl.core.baseproxy.BaseProxy.get_current_panel
+#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
+#: cdl.core.baseproxy.BaseProxy.get_object_titles
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids
+#: cdl.core.baseproxy.BaseProxy.get_version
+#: cdl.core.remote.RemoteClient.add_image
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
+#: cdl.proxy.LocalProxy.calc of
+msgid "Return type"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_image:23 cdl.proxy.LocalProxy.add_image:23
+#: of
+msgid "Invalid data dtype"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.add_label_with_title:1 of
+msgid "Add a label with object title on the associated plot"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.add_label_with_title:3 of
+msgid "Label title. Defaults to None. If None, the title is the object title."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_object:1 cdl.proxy.LocalProxy.add_object:1
+#: of
+msgid "Add object to DataLab."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_object:3 cdl.proxy.LocalProxy.add_object:3
+#: of
+msgid "Signal or image object"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:1 cdl.proxy.LocalProxy.add_signal:1
+#: of
+msgid "Add signal data to DataLab."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:3 cdl.proxy.LocalProxy.add_signal:3
+#: of
+msgid "Signal title"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:5 cdl.proxy.LocalProxy.add_signal:5
+#: of
+msgid "X data"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:7 cdl.proxy.LocalProxy.add_signal:7
+#: of
+msgid "Y data"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:18
+#: cdl.proxy.LocalProxy.add_signal:18 of
+msgid "True if signal was added successfully, False otherwise"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:21
+#: cdl.proxy.LocalProxy.add_signal:21 of
+msgid "Invalid xdata dtype"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.add_signal:22
+#: cdl.proxy.LocalProxy.add_signal:22 of
+msgid "Invalid ydata dtype"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.calc:1 cdl.proxy.LocalProxy.calc:1 of
+msgid "Call compute function ``name`` in current panel's processor."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.calc:3 cdl.proxy.LocalProxy.calc:3 of
+msgid "Compute function name"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.calc:5 of
+msgid "Compute function parameter. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.calc:9 cdl.proxy.LocalProxy.calc:9 of
+msgid "Compute function result"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.close_application:1 of
+msgid "Close DataLab application"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:1 of
+msgid "Try to connect to DataLab XML-RPC server."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:3 of
+msgid ""
+"XML-RPC port to connect to. If not specified, the port is automatically "
+"retrieved from DataLab configuration."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:6 of
+msgid "Timeout in seconds. Defaults to 5.0."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.connect:8 of
+msgid "Number of retries. Defaults to 10."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
+msgid "Return a context manager to temporarily disable auto refresh."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
+msgid "Context manager"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.context_no_refresh:6 cdl.proxy.proxy_context:14
+#: of
+msgid "Example"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.delete_metadata:1 of
+msgid "Delete metadata of selected objects"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.delete_metadata:3 of
+msgid "Refresh plot. Defaults to True."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.disconnect:1 of
+msgid "Disconnect from DataLab XML-RPC server."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_current_panel:1 of
+msgid "Return current panel name."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_current_panel:3
+#: cdl.core.baseproxy.BaseProxy.set_current_panel:3 of
+msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:1 of
+msgid "Return groups titles and lists of inner objects uuids and titles."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:3 of
+msgid "groups titles, lists of inner objects uuids and titles"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_method_list:1 of
+msgid "Return list of available methods."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object:1 cdl.proxy.LocalProxy.get_object:1
+#: of
+msgid "Get object (signal/image) from index."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object:3
+#: cdl.core.remote.RemoteClient.get_object_shapes:3
+#: cdl.proxy.LocalProxy.get_object:3 cdl.proxy.LocalProxy.get_object_shapes:3
+#: of
+msgid ""
+"Object number, or object id, or object title. Defaults to None (current "
+"object)."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object:5
+#: cdl.core.remote.RemoteClient.get_object_shapes:5
+#: cdl.proxy.LocalProxy.get_object:5 cdl.proxy.LocalProxy.get_object_shapes:5
+#: of
+msgid "Panel name. Defaults to None (current panel)."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object:7 cdl.proxy.LocalProxy.get_object:7
+#: of
+msgid "Object"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object:9 cdl.proxy.LocalProxy.get_object:9
+#: of
+msgid "if object not found"
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object_shapes:1
+#: cdl.proxy.LocalProxy.get_object_shapes:1 of
+msgid "Get plot item shapes associated to object (signal/image)."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.get_object_shapes:7
+#: cdl.proxy.LocalProxy.get_object_shapes:7 of
+msgid "List of plot item shapes"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:1 of
+msgid ""
+"Get object (signal/image) list for current panel. Objects are sorted by "
+"group number and object index in group."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:8 of
+msgid "list of object titles"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:11
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids:11 of
+msgid "if panel not found"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids:1 of
+msgid ""
+"Get object (signal/image) uuid list for current panel. Objects are sorted"
+" by group number and object index in group."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_object_uuids:8 of
+msgid "list of object uuids"
+msgstr ""
+
+#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:1 of
+msgid "Return all public methods of the class, except itself."
+msgstr ""
+
+#: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:3 of
+msgid "List of public methods"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:1 of
+msgid "Return selected objects uuids."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:3 of
+msgid "If True, also return objects from selected groups."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:5 of
+msgid "List of selected objects uuids."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_version:1 of
+msgid "Return DataLab version."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.get_version:3 of
+msgid "DataLab version"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.import_h5_file:1 of
+msgid "Open DataLab HDF5 browser to Import HDF5 file."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.import_h5_file:3
+#: cdl.core.baseproxy.BaseProxy.save_to_h5_file:3 of
+msgid "HDF5 file name"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.import_h5_file:5
+#: cdl.core.baseproxy.BaseProxy.open_h5_files:8 of
+msgid "Reset all application data. Defaults to None."
+msgstr ""
+
+#: cdl.core.remote.RemoteClient.is_connected:1 of
+msgid "Return True if connected to DataLab XML-RPC server."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
+msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.open_h5_files:3 of
+msgid "List of HDF5 files to open. Defaults to None."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.open_h5_files:5 of
+msgid "Import all objects from HDF5 files. Defaults to None."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.open_object:1 of
+msgid "Open object from file in current panel (signal/image)."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.open_object:3 of
+msgid "File name"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.raise_window:1 of
+msgid "Raise DataLab window"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.reset_all:1 of
+msgid "Reset all application data"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.save_to_h5_file:1 of
+msgid "Save to a DataLab HDF5 file."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.select_groups:1 of
+msgid "Select groups in current panel."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.select_groups:3 of
+msgid ""
+"List of group numbers (1 to N), or list of group uuids, or None to select"
+" all groups. Defaults to None."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.select_groups:5
+#: cdl.core.baseproxy.BaseProxy.select_objects:4 of
+msgid ""
+"panel name (valid values: \"signal\", \"image\"). If None, current panel "
+"is used. Defaults to None."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.select_objects:1 of
+msgid "Select objects in current panel."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.select_objects:3 of
+msgid "List of object numbers (1 to N) or uuids to select"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.set_current_panel:1 of
+msgid "Switch to panel."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:1 of
+msgid "Toggle auto refresh state."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:3 of
+msgid "Auto refresh state"
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.toggle_show_titles:1 of
+msgid "Toggle show titles state."
+msgstr ""
+
+#: cdl.core.baseproxy.BaseProxy.toggle_show_titles:3 of
+msgid "Show titles state"
+msgstr ""
+
+#: cdl.proxy:18 of
+msgid "Local proxy"
+msgstr "Proxy local"
+
+#: cdl.proxy:20 of
+msgid ""
+"The local proxy is used when DataLab is started from the same process as "
+"the proxy. In this case, the proxy is directly connected to DataLab main "
+"window instance. The typical use case is high-level scripting."
+msgstr "Le proxy local est utilisé lorsque DataLab est démarré à partir du même processus que le proxy. Dans ce cas, le proxy est directement connecté à l'instance de la fenêtre principale de DataLab. Le cas d'utilisation typique est le script de haut niveau."
+
+#: cdl.proxy.LocalProxy:1 of
+msgid "DataLab local proxy class."
+msgstr ""
+
+#: cdl.proxy.LocalProxy:3 of
+msgid ""
+"This class provides access to DataLab features from a proxy class. This "
+"is the local version of proxy, which is used when DataLab is started from"
+" the same process as the proxy."
+msgstr ""
+
+#: cdl.proxy.LocalProxy:7 of
+msgid "CDLMainWindow instance."
+msgstr ""
+
+#: cdl.proxy.LocalProxy.calc:5 of
+msgid "Compute function"
+msgstr ""
+
+#: cdl.proxy:29 of
+msgid "Proxy context manager"
+msgstr "Gestionnaire de contexte proxy"
+
+#: cdl.proxy:31 of
+msgid ""
+"The proxy context manager is a convenient way to handle proxy creation "
+"and destruction. It is used as follows:"
+msgstr "Le gestionnaire de contexte proxy est un moyen pratique de gérer la création et la destruction du proxy. Il est utilisé comme suit :"
+
+#: cdl.proxy:39 of
+msgid ""
+"The proxy type can be \"local\" or \"remote\". For remote proxy, the port"
+" can be specified as \"remote:port\"."
+msgstr "Le type de proxy peut être \"local\" ou \"remote\". Pour un proxy distant, le port peut être spécifié comme \"remote:port\"."
+
+#: cdl.proxy:42 of
+msgid ""
+"The proxy context manager allows to use the proxy in various contexts "
+"(Python script, Jupyter notebook, etc.). It also allows to switch "
+"seamlessly between local and remote proxy, keeping the same code inside "
+"the context."
+msgstr "Le gestionnaire de contexte proxy permet d'utiliser le proxy dans différents contextes (script Python, notebook Jupyter, etc.). Il permet également de passer sans heurts du proxy local au proxy distant, en conservant le même code à l'intérieur du contexte."
+
+#: cdl.proxy.proxy_context:1 of
+msgid "Context manager handling CDL proxy creation and destruction."
+msgstr ""
+
+#: cdl.proxy.proxy_context:3 of
+msgid ""
+"proxy type (\"local\" or \"remote\") For remote proxy, the port can be "
+"specified as \"remote:port\""
+msgstr ""
+
+#: cdl.proxy.proxy_context of
+msgid "Yields"
+msgstr ""
+
+#: cdl.proxy.proxy_context:7 of
+msgid "*Generator[LocalProxy | RemoteProxy, None, None]* --"
+msgstr ""
+
+#: cdl.proxy.proxy_context:11 of
+msgid "proxy"
+msgstr ""
+
+#: cdl.proxy.proxy_context:10 of
+msgid ""
+"LocalProxy if what == \"local\" RemoteProxy if what == \"remote\" or "
+"\"remote:port\""
+msgstr ""
+
+#: cdl.proxy.proxy_context:15 of
+msgid "with proxy_context(\"local\") as proxy:"
+msgstr ""
+
+#: cdl.proxy.proxy_context:16 of
+msgid "proxy.add_signal(...)"
+msgstr ""
+
+#~ msgid "Proxy module (:mod:`cdl.proxy`)"
+#~ msgstr ""

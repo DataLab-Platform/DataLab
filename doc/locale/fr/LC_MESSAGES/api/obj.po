@@ -1,0 +1,1241 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: cdl.obj:2 of
+msgid "Object model (:mod:`cdl.obj`)"
+msgstr "Modèle de données (:mod:`cdl.obj`)"
+
+#: cdl.obj:4 of
+msgid ""
+"The :mod:`cdl.obj` module aims at providing all the necessary classes and"
+" functions to create and manipulate DataLab signal and image objects."
+msgstr "Le module :mod:`cdl.obj` fournit les classes et fonctions nécessaires pour créer et manipuler des objets signal et image."
+
+#: cdl.obj:11 of
+msgid "Those classes and functions are defined in other modules:"
+msgstr "Ces classes et fonctions sont définies dans d'autres modules :"
+
+#: cdl.obj:8 of
+msgid ":mod:`cdl.core.model.base`"
+msgstr ""
+
+#: cdl.obj:9 of
+msgid ":mod:`cdl.core.model.image`"
+msgstr ""
+
+#: cdl.obj:10 of
+msgid ":mod:`cdl.core.model.signal`"
+msgstr ""
+
+#: cdl.obj:11 of
+msgid ":mod:`cdl.core.io`"
+msgstr ""
+
+#: cdl.obj:13 of
+msgid ""
+"The :mod:`cdl.obj` module is thus a convenient way to import all the "
+"objects at once. As a matter of fact, the following import statement is "
+"equivalent to the previous one:"
+msgstr "Le module :mod:`cdl.obj` est donc un moyen pratique d'importer tous les objets en une seule fois. En fait, l'instruction d'importation suivante est équivalente à la précédente :"
+
+#: cdl.obj:26 of
+msgid "Common objects"
+msgstr "Objets communs"
+
+#: cdl.core.model.base.ResultShape:1 of
+msgid ""
+"Object representing a geometrical shape serializable in signal/image "
+"metadata."
+msgstr ""
+
+#: cdl.core.model.base.ResultShape:3 of
+msgid ""
+"Result `array` is a NumPy 2-D array: each row is a result, optionnally "
+"associated to a ROI (first column value)."
+msgstr ""
+
+#: cdl.core.model.base.ResultShape:6 of
+msgid "ROI index is starting at 0 (or is simply 0 if there is no ROI)."
+msgstr ""
+
+#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.model.base.BaseObj.add_annotations_from_file
+#: cdl.core.model.base.BaseObj.add_annotations_from_items
+#: cdl.core.model.base.BaseObj.add_resultshape
+#: cdl.core.model.base.BaseObj.export_metadata_to_file
+#: cdl.core.model.base.BaseObj.get_metadata_option
+#: cdl.core.model.base.BaseObj.import_metadata_from_file
+#: cdl.core.model.base.BaseObj.iterate_shape_items
+#: cdl.core.model.base.BaseObj.roidata_to_params
+#: cdl.core.model.base.BaseObj.set_annotations_from_file
+#: cdl.core.model.base.BaseObj.set_metadata_option
+#: cdl.core.model.base.BaseObj.transform_shapes
+#: cdl.core.model.base.BaseObj.update_resultshapes_from
+#: cdl.core.model.base.ResultShape
+#: cdl.core.model.base.ResultShape.create_plot_item
+#: cdl.core.model.base.ResultShape.iterate_plot_items
+#: cdl.core.model.image.ImageObj.add_label_with_title
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.get_roi_param
+#: cdl.core.model.image.ImageObj.iterate_roi_items
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.new_roi_item
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.ImageObj.set_data_type
+#: cdl.core.model.image.ImageObj.set_metadata_from
+#: cdl.core.model.image.ImageObj.update_item
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param
+#: cdl.core.model.signal.SignalObj.add_label_with_title
+#: cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.get_roi_param
+#: cdl.core.model.signal.SignalObj.iterate_roi_items
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.new_roi_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.SignalObj.set_data_type
+#: cdl.core.model.signal.SignalObj.set_xydata
+#: cdl.core.model.signal.SignalObj.update_item
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param
+#: guidata.dataset.datatypes.DataSet.accept
+#: guidata.dataset.datatypes.DataSet.create
+#: guidata.dataset.datatypes.DataSet.deserialize
+#: guidata.dataset.datatypes.DataSet.edit
+#: guidata.dataset.datatypes.DataSet.read_config
+#: guidata.dataset.datatypes.DataSet.serialize
+#: guidata.dataset.datatypes.DataSet.set_global_prop
+#: guidata.dataset.datatypes.DataSet.to_string
+#: guidata.dataset.datatypes.DataSet.view
+#: guidata.dataset.datatypes.DataSet.write_config of
+msgid "Parameters"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:5
+#: cdl.core.model.base.ResultShape:8 of
+msgid "shape type"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape:9 of
+msgid ""
+"shape coordinates (multiple shapes: one shape per row), first column is "
+"ROI index (0 if there is no ROI)"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape:11 of
+msgid "shape label"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.check_data cdl.core.model.base.ResultShape of
+msgid "Raises"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape:13 of
+msgid "invalid argument"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.label_shapetype_from_key:1 of
+msgid "Return metadata shape label and shapetype from metadata key"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.from_metadata_entry:1 of
+msgid "Create metadata shape object from (key, value) metadata entry"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.match:1 of
+msgid "Return True if metadata dict entry (key, value) is a metadata result"
+msgstr ""
+
+#: cdl.obj.ResultShape.key:1 of
+msgid "Return metadata key associated to result"
+msgstr ""
+
+#: cdl.obj.ResultShape.xlabels:1 of
+msgid "Return labels for result array columns"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.add_to:1 of
+msgid "Add metadata shape to object (signal/image)"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.merge_with:1 of
+msgid ""
+"Merge object resultshape with another's: obj <-- other_obj or simply "
+"merge this resultshape with obj if other_obj is None"
+msgstr ""
+
+#: cdl.obj.ResultShape.data_colnb:1 of
+msgid "Return raw data results column number"
+msgstr ""
+
+#: cdl.obj.ResultShape.data:1 of
+msgid "Return raw data (array without ROI informations)"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.check_array:1 of
+msgid "Check if array is valid"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.iterate_plot_items:1 of
+msgid "Iterate over metadata shape plot items."
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:5
+#: cdl.core.model.base.ResultShape.iterate_plot_items:3 of
+#, python-format
+msgid "numeric format (e.g. \"%.3f\")"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:7
+#: cdl.core.model.base.ResultShape.iterate_plot_items:5 of
+msgid "if True, show shape labels"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:9
+#: cdl.core.model.base.ResultShape.iterate_plot_items:7 of
+msgid "shape style option (e.g. \"shape/drag\")"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_resultshapes
+#: cdl.core.model.base.BaseObj.iterate_shape_items
+#: cdl.core.model.base.ResultShape.iterate_plot_items
+#: cdl.core.model.image.ImageObj.iterate_roi_items
+#: cdl.core.model.signal.SignalObj.iterate_roi_items of
+msgid "Yields"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_shape_items:6
+#: cdl.core.model.base.ResultShape.iterate_plot_items:10
+#: cdl.core.model.image.ImageObj.iterate_roi_items:10
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:10 of
+msgid "*PlotItem* -- plot item"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:1 of
+msgid "Make plot item."
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:3 of
+msgid "shape data"
+msgstr ""
+
+#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.model.base.BaseObj.add_resultshape
+#: cdl.core.model.base.BaseObj.get_metadata_option
+#: cdl.core.model.base.BaseObj.get_valid_dtypenames
+#: cdl.core.model.base.BaseObj.metadata_to_html
+#: cdl.core.model.base.BaseObj.roi_has_changed
+#: cdl.core.model.base.BaseObj.roidata_to_params
+#: cdl.core.model.base.ResultShape.create_plot_item
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
+#: cdl.obj.ImageObj.roi cdl.obj.SignalObj.roi
+#: guidata.dataset.datatypes.DataSet.check
+#: guidata.dataset.datatypes.DataSet.create
+#: guidata.dataset.datatypes.DataSet.get_comment
+#: guidata.dataset.datatypes.DataSet.get_icon
+#: guidata.dataset.datatypes.DataSet.get_title
+#: guidata.dataset.datatypes.DataSet.to_string of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.create_plot_item:12
+#: cdl.core.model.image.ImageObj.make_item:6
+#: cdl.core.model.image.ImageObj.update_item:3
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:9
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:9
+#: cdl.core.model.signal.SignalObj.make_item:6
+#: cdl.core.model.signal.SignalObj.update_item:3
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:9
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:9 of
+msgid "plot item"
+msgstr ""
+
+#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.model.base.BaseObj.add_resultshape
+#: cdl.core.model.base.BaseObj.metadata_to_html
+#: cdl.core.model.base.BaseObj.roi_has_changed
+#: cdl.core.model.base.BaseObj.roidata_to_params
+#: cdl.core.model.base.ResultShape.create_plot_item
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
+#: cdl.obj.ImageObj.roi cdl.obj.SignalObj.roi
+#: guidata.dataset.datatypes.DataSet.check
+#: guidata.dataset.datatypes.DataSet.get_comment
+#: guidata.dataset.datatypes.DataSet.get_icon
+#: guidata.dataset.datatypes.DataSet.get_title
+#: guidata.dataset.datatypes.DataSet.to_string of
+msgid "Return type"
+msgstr ""
+
+#: cdl.core.model.base.ResultShape.make_marker_item:1 of
+msgid "Make marker item"
+msgstr ""
+
+#: cdl.core.model.base.ShapeTypes:1 of
+msgid "Shape types for image metadata"
+msgstr ""
+
+#: cdl.core.model.base.UniformRandomParam:1 of
+msgid "Uniform-law random signal/image parameters"
+msgstr ""
+
+#: cdl.core.model.base.NormalRandomParam.apply_integer_range:1
+#: cdl.core.model.base.UniformRandomParam.apply_integer_range:1 of
+msgid "Do something in case of integer min-max range"
+msgstr ""
+
+#: cdl.core.model.base.NormalRandomParam:1 of
+msgid "Normal-law random signal/image parameters"
+msgstr ""
+
+#: cdl.obj:36 of
+msgid "Signal model"
+msgstr "Modèle de signal"
+
+#: cdl.core.model.signal.SignalObj:1 of
+msgid "Signal object"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.regenerate_uuid:1
+#: cdl.core.model.signal.SignalObj.regenerate_uuid:1 of
+msgid "Regenerate UUID"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.regenerate_uuid:3
+#: cdl.core.model.signal.SignalObj.regenerate_uuid:3 of
+msgid ""
+"This method is used to regenerate UUID after loading the object from a "
+"file. This is required to avoid UUID conflicts when loading objects from "
+"file without clearing the workspace first."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy:1 cdl.core.model.signal.SignalObj.copy:1
+#: of
+msgid "Copy object."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy:3
+#: cdl.core.model.image.ImageObj.get_roi_param:3
+#: cdl.core.model.signal.SignalObj.copy:3
+#: cdl.core.model.signal.SignalObj.get_roi_param:3
+#: guidata.dataset.datatypes.DataSet.get_title:3 of
+msgid "title"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy:5
+#: cdl.core.model.image.ImageObj.set_data_type:3
+#: cdl.core.model.signal.SignalObj.copy:5
+#: cdl.core.model.signal.SignalObj.set_data_type:3 of
+msgid "data type"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.copy:8 cdl.core.model.signal.SignalObj.copy:8
+#: of
+msgid "copied object"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.set_data_type:1
+#: cdl.core.model.signal.SignalObj.set_data_type:1 of
+msgid "Change data type."
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:1 of
+msgid "Set xy data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:3 of
+msgid "x data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:5 of
+msgid "y data"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:7 of
+msgid "dx data (optional: error bars)"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.set_xydata:9 of
+msgid "dy data (optional: error bars)"
+msgstr ""
+
+#: cdl.obj.SignalObj.x:1 of
+msgid "Get x data"
+msgstr ""
+
+#: cdl.obj.SignalObj.data:1 cdl.obj.SignalObj.y:1 of
+msgid "Get y data"
+msgstr ""
+
+#: cdl.obj.SignalObj.dx:1 of
+msgid "Get dx data"
+msgstr ""
+
+#: cdl.obj.SignalObj.dy:1 of
+msgid "Get dy data"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_data:1
+#: cdl.core.model.signal.SignalObj.get_data:1 of
+msgid ""
+"Return original data (if ROI is not defined or `roi_index` is None), or "
+"ROI data (if both ROI and `roi_index` are defined)."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_data:4
+#: cdl.core.model.signal.SignalObj.get_data:4 of
+msgid "ROI index"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.get_data:7 of
+msgid "data"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:1
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:1 of
+msgid "Update plot item parameters from object data/metadata"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:3
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:3 of
+msgid ""
+"Takes into account a subset of plot item parameters. Those parameters may"
+" have been overriden by object metadata entries or other object data. The"
+" goal is to update the plot item accordingly."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:7
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:7 of
+msgid ""
+"This is *almost* the inverse operation of "
+"`update_metadata_from_plot_item`."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:1
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:1 of
+msgid "Update metadata from plot item."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:3
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:3 of
+msgid ""
+"Takes into account a subset of plot item parameters. Those parameters may"
+" have been modified by the user through the plot item GUI. The goal is to"
+" update the metadata accordingly."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:7
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:7 of
+msgid "This is *almost* the inverse operation of `update_plot_item_parameters`."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.make_item:1
+#: cdl.core.model.signal.SignalObj.make_item:1 of
+msgid "Make plot item from data."
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.make_item:3 of
+msgid "plot item to update from"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_item:1
+#: cdl.core.model.signal.SignalObj.update_item:1 of
+msgid "Update plot item from data."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.update_item:5
+#: cdl.core.model.signal.SignalObj.update_item:5 of
+msgid "if True, data has changed"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:1
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:1 of
+msgid "Convert ROI coordinates to indexes."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:3
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:3 of
+msgid "coordinates"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:6
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:6 of
+msgid "indexes"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_roi_param:1
+#: cdl.core.model.signal.SignalObj.get_roi_param:1 of
+msgid "Return ROI parameters dataset."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_roi_param:5
+#: cdl.core.model.signal.SignalObj.get_roi_param:5 of
+msgid "default values"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.params_to_roidata:1
+#: cdl.core.model.signal.SignalObj.params_to_roidata:1 of
+msgid "Convert ROI dataset group to ROI array data."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roidata_to_params:6
+#: cdl.core.model.image.ImageObj.params_to_roidata:3
+#: cdl.core.model.signal.SignalObj.params_to_roidata:3 of
+msgid "ROI dataset group"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roidata_to_params:3
+#: cdl.core.model.image.ImageObj.params_to_roidata:6
+#: cdl.core.model.signal.SignalObj.params_to_roidata:6 of
+msgid "ROI array data"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.new_roi_item:1
+#: cdl.core.model.signal.SignalObj.new_roi_item:1 of
+msgid "Return a new ROI item from scratch"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.iterate_roi_items:3
+#: cdl.core.model.image.ImageObj.new_roi_item:3
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:3
+#: cdl.core.model.signal.SignalObj.new_roi_item:3 of
+msgid "format string"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.iterate_roi_items:5
+#: cdl.core.model.image.ImageObj.new_roi_item:5
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
+#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
+msgid "if True, add label"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_shape_items:3
+#: cdl.core.model.image.ImageObj.iterate_roi_items:7
+#: cdl.core.model.image.ImageObj.new_roi_item:7
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
+#: cdl.core.model.signal.SignalObj.new_roi_item:7 of
+msgid "if True, ROI is editable"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.iterate_roi_items:1
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:1 of
+msgid "Make plot item representing a Region of Interest."
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.add_label_with_title:1
+#: cdl.core.model.signal.SignalObj.add_label_with_title:1 of
+msgid "Add label with title annotation"
+msgstr ""
+
+#: cdl.core.model.signal.SignalObj.add_label_with_title:3 of
+msgid "title (if None, use signal title)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.accept:1 of
+msgid ""
+"Helper function that passes the visitor to the accept methods of all the "
+"items in this dataset"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.accept:4 of
+msgid "visitor object"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_annotations_from_file:1 of
+msgid "Add object annotations from file (JSON)."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_annotations_from_file:3
+#: cdl.core.model.base.BaseObj.export_metadata_to_file:3
+#: cdl.core.model.base.BaseObj.import_metadata_from_file:3
+#: cdl.core.model.base.BaseObj.set_annotations_from_file:3 of
+msgid "filename"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_annotations_from_items:1 of
+msgid "Add object annotations (annotation plot items)."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_annotations_from_items:3 of
+msgid "annotation plot items"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:1 of
+msgid "Add geometric shape as metadata entry, and return ResultShape instance."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:3 of
+msgid "label"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:7 of
+msgid "array"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:9 of
+msgid "parameters"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.add_resultshape:12 of
+msgid "result shape"
+msgstr ""
+
+#: cdl.obj.ImageObj.annotations:1 cdl.obj.SignalObj.annotations:1 of
+msgid "Get object annotations (JSON string describing annotation plot items)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.check:1 of
+msgid "Check the dataset item values"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.check:3 of
+msgid "list of errors"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.check_data:1 of
+msgid "Check if data is valid, raise an exception if that's not the case"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.check_data:3 of
+msgid "if data type is not supported"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:1 of
+msgid "Create a new instance of the DataSet class"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:3 of
+msgid "keyword arguments to set the DataItem values"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.create:5 of
+msgid "DataSet instance"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.deserialize:1 of
+msgid "Deserialize the dataset"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.deserialize:3 of
+msgid "reader object"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.edit:1 of
+msgid "Open a dialog box to edit data set"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.edit:3
+#: guidata.dataset.datatypes.DataSet.view:3 of
+msgid "parent widget (default is None, meaning no parent)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.edit:4 of
+msgid "apply callback (default is None)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.edit:5
+#: guidata.dataset.datatypes.DataSet.view:4 of
+msgid "if True, comment text is wordwrapped"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.edit:6
+#: guidata.dataset.datatypes.DataSet.view:5 of
+msgid "dialog size (QSize object or integer tuple (width, height))"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.export_metadata_to_file:1 of
+msgid "Export object metadata to file (JSON)."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.get_comment:1 of
+msgid "Return data set comment"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.get_comment:3 of
+msgid "comment"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.get_icon:1 of
+msgid "Return data set icon"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.get_icon:3 of
+msgid "icon"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:1 of
+msgid "Return metadata option value"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:3
+#: cdl.core.model.base.BaseObj.set_metadata_option:3 of
+msgid ""
+"A metadata option is a metadata entry starting with an underscore. It is "
+"a way to store application-specific options in object metadata."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:6
+#: cdl.core.model.base.BaseObj.set_metadata_option:6
+#: guidata.dataset.datatypes.DataSet.read_config:7
+#: guidata.dataset.datatypes.DataSet.write_config:7 of
+msgid "option name"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:9 of
+msgid "Option value"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:12
+#: cdl.core.model.base.BaseObj.set_metadata_option:12 of
+msgid "Valid option names:"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_metadata_option:12
+#: cdl.core.model.base.BaseObj.set_metadata_option:12 of
+msgid "'format': format string (str) 'showlabel': show label (bool)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.get_title:1 of
+msgid "Return data set title"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_valid_dtypenames:1 of
+msgid "Get valid data type names"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.get_valid_dtypenames:3 of
+msgid "Valid data type names supported by this class"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.import_metadata_from_file:1 of
+msgid "Import object metadata from file (JSON)."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_resultshapes:1 of
+msgid "Iterate over object result shapes."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_resultshapes:3 of
+msgid "*ResultShape* -- result shape"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_roi_indexes:1 of
+msgid "Iterate over object ROI indexes ([0] if there is no ROI)"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.iterate_shape_items:1 of
+msgid "Iterate over computing items encoded in metadata (if any)."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.metadata_to_html:1 of
+msgid "Convert metadata to human-readable string."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.metadata_to_html:3 of
+msgid "HTML string"
+msgstr ""
+
+#: cdl.obj.ImageObj.number:1 cdl.obj.SignalObj.number:1 of
+msgid "Return object number (used for short ID)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.read_config:1 of
+msgid "Read configuration from a UserConfig instance"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.read_config:3
+#: guidata.dataset.datatypes.DataSet.write_config:3 of
+msgid "UserConfig instance"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.read_config:5
+#: guidata.dataset.datatypes.DataSet.write_config:5 of
+msgid "section name"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.remove_all_shapes:1 of
+msgid "Remove metadata shapes and ROIs"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.reset_metadata_to_defaults:1 of
+msgid "Reset metadata to default values"
+msgstr ""
+
+#: cdl.obj.ImageObj.roi:1 cdl.obj.SignalObj.roi:1 of
+msgid "Return object regions of interest array (one ROI per line)."
+msgstr ""
+
+#: cdl.obj.ImageObj.roi:3 cdl.obj.SignalObj.roi:3 of
+msgid "regions of interest array"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roi_has_changed:1 of
+msgid "Return True if ROI has changed since last call to this method."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roi_has_changed:3 of
+msgid ""
+"The first call to this method will return True if ROI has not yet been "
+"set, or if ROI has been set and has changed since the last call to this "
+"method. The next call to this method will always return False if ROI has "
+"not changed in the meantime."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roi_has_changed:8 of
+msgid "True if ROI has changed"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.roidata_to_params:1 of
+msgid "Convert ROI array data to ROI dataset group."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.serialize:1 of
+msgid "Serialize the dataset"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.serialize:3 of
+msgid "writer object"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.set_annotations_from_file:1 of
+msgid "Set object annotations from file (JSON)."
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.set_defaults:1 of
+msgid "Set default values"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.set_global_prop:1 of
+msgid "Set global properties for all data items in the dataset"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.set_global_prop:3 of
+msgid "realm name"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.set_global_prop:5 of
+msgid "properties to set"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.set_metadata_option:1 of
+msgid "Set metadata option value"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.set_metadata_option:8 of
+msgid "option value"
+msgstr ""
+
+#: cdl.obj.ImageObj.short_id:1 cdl.obj.SignalObj.short_id:1 of
+msgid "Short object ID"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.text_edit:1 of
+msgid "Edit data set with text input only"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:1 of
+msgid ""
+"Return readable string representation of the data set If debug is True, "
+"add more details on data items"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:4 of
+msgid "if True, add more details on data items"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:6 of
+msgid "indentation string (default is None, meaning no indentation)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:9 of
+msgid "if True, align data items (default is False)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:11 of
+msgid "if True, show hidden data items (default is True)"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.to_string:15 of
+msgid "string representation of the data set"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.transform_shapes:1 of
+msgid "Apply transform function to result shape / annotations coordinates."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.transform_shapes:3 of
+msgid "original object"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.transform_shapes:5 of
+msgid "transform function"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.transform_shapes:7 of
+msgid "transform function parameter"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.update_metadata_view_settings:1 of
+msgid "Update metadata view settings from Conf.view"
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.update_resultshapes_from:1 of
+msgid "Update geometric shape from another object (merge metadata)."
+msgstr ""
+
+#: cdl.core.model.base.BaseObj.update_resultshapes_from:3 of
+msgid "other object"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.view:1 of
+msgid "Open a dialog box to view data set"
+msgstr ""
+
+#: guidata.dataset.datatypes.DataSet.write_config:1 of
+msgid "Write configuration to a UserConfig instance"
+msgstr ""
+
+#: cdl.core.io.read_signal:1 of
+msgid "Read a signal from a file."
+msgstr ""
+
+#: cdl.core.io.read_image:3 cdl.core.io.read_signal:3 of
+msgid "File name."
+msgstr ""
+
+#: cdl.core.io.read_signal:6 of
+msgid "Signal."
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:1 of
+msgid "Create a new Signal object."
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:3 of
+msgid "signal title"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:5 of
+msgid "X data"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:7 of
+msgid "Y data"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:9 of
+msgid "dX data (optional: error bars)"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:11 of
+msgid "dY data (optional: error bars)"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:13 of
+msgid "signal metadata"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:15 of
+msgid "X, Y units (tuple of strings)"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:17 of
+msgid "X, Y labels (tuple of strings)"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal:20 of
+msgid "signal object"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_from_param:1 of
+msgid "Create a new Signal object from a dialog box."
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_from_param:3 of
+msgid "new signal parameters"
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:5
+#: cdl.core.model.signal.create_signal_from_param:5 of
+msgid "additional parameters"
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:7
+#: cdl.core.model.signal.create_signal_from_param:7 of
+msgid "Open a dialog box to edit parameters (default: False)"
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:9
+#: cdl.core.model.signal.create_signal_from_param:9 of
+msgid "parent widget"
+msgstr ""
+
+#: cdl.core.model.signal.create_signal_from_param:12 of
+msgid "signal object or None if canceled"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:1 of
+msgid "Create a new Signal dataset instance."
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:3
+#: cdl.core.model.signal.new_signal_param:3 of
+msgid "dataset title (default: None, uses default title)"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:5 of
+msgid "signal type (default: None, uses default type)"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:7 of
+msgid "X min (default: None, uses default value)"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:9 of
+msgid "X max (default: None, uses default value)"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:11 of
+msgid "signal size (default: None, uses default value)"
+msgstr ""
+
+#: cdl.core.model.signal.new_signal_param:14 of
+msgid "new signal dataset instance"
+msgstr ""
+
+#: cdl.core.model.signal.SignalTypes:1 of
+msgid "Signal types"
+msgstr ""
+
+#: cdl.core.model.signal.NewSignalParam:1 of
+msgid "New signal dataset"
+msgstr ""
+
+#: cdl.core.model.signal.GaussLorentzVoigtParam:1 of
+msgid "Parameters for Gaussian and Lorentzian functions"
+msgstr ""
+
+#: cdl.core.model.signal.StepParam:1 of
+msgid "Parameters for step function"
+msgstr ""
+
+#: cdl.core.model.signal.PeriodicParam:1 of
+msgid "Parameters for periodic functions"
+msgstr ""
+
+#: cdl.core.model.signal.PeriodicParam.get_frequency_in_hz:1 of
+msgid "Return frequency in Hz"
+msgstr ""
+
+#: cdl.obj:52 of
+msgid "Image model"
+msgstr "Modèle d'image"
+
+#: cdl.core.model.image.ImageObj:1 of
+msgid "Image object"
+msgstr ""
+
+#: cdl.obj.ImageObj.size:1 of
+msgid "Returns (width, height)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.set_metadata_from:1 of
+msgid ""
+"Set metadata from object: dict-like (only string keys are considered) or "
+"any other object (iterating over supported attributes)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.set_metadata_from:4 of
+msgid "object"
+msgstr ""
+
+#: cdl.obj.ImageObj.dicom_template:1 of
+msgid "Get DICOM template"
+msgstr ""
+
+#: cdl.obj.ImageObj.xc:1 of
+msgid "Return image center X-axis coordinate"
+msgstr ""
+
+#: cdl.obj.ImageObj.yc:1 of
+msgid "Return image center Y-axis coordinate"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.get_data:7 cdl.obj.ImageObj.maskdata:3 of
+msgid "masked data"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.make_item:3 of
+msgid "update from plot item"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.new_roi_item:9 of
+msgid "ROI geometry"
+msgstr ""
+
+#: cdl.obj.ImageObj.maskdata:1 of
+msgid "Return masked data (areas outside defined regions of interest)"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
+msgid "Invalidate mask data cache: force to rebuild it"
+msgstr ""
+
+#: cdl.core.model.image.ImageObj.add_label_with_title:3 of
+msgid "title (if None, use image title)"
+msgstr ""
+
+#: cdl.core.io.read_image:1 of
+msgid "Read an image from a file."
+msgstr ""
+
+#: cdl.core.io.read_image:6 of
+msgid "Image."
+msgstr ""
+
+#: cdl.core.model.image.create_image:1 of
+msgid "Create a new Image object"
+msgstr ""
+
+#: cdl.core.model.image.create_image:3 of
+msgid "image title"
+msgstr ""
+
+#: cdl.core.model.image.create_image:5 of
+msgid "image data"
+msgstr ""
+
+#: cdl.core.model.image.create_image:7 of
+msgid "image metadata"
+msgstr ""
+
+#: cdl.core.model.image.create_image:9 of
+msgid "X, Y, Z units (tuple of strings)"
+msgstr ""
+
+#: cdl.core.model.image.create_image:11 of
+msgid "X, Y, Z labels (tuple of strings)"
+msgstr ""
+
+#: cdl.core.model.image.create_image:14 of
+msgid "image object"
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:1 of
+msgid "Create a new Image object from dialog box."
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:3 of
+msgid "new image parameters"
+msgstr ""
+
+#: cdl.core.model.image.create_image_from_param:12 of
+msgid "new image object or None if user cancelled"
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:1 of
+msgid "Create a new Image dataset instance."
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:5 of
+msgid "image type (default: None, uses default type)"
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:7 of
+msgid "image height (default: None, uses default height)"
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:9 of
+msgid "image width (default: None, uses default width)"
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:11 of
+msgid "image data type (default: None, uses default data type)"
+msgstr ""
+
+#: cdl.core.model.image.new_image_param:14 of
+msgid "new image dataset instance"
+msgstr ""
+
+#: cdl.core.model.image.ImageTypes:1 of
+msgid "Image types"
+msgstr ""
+
+#: cdl.core.model.image.NewImageParam:1 of
+msgid "New image dataset"
+msgstr ""
+
+#: cdl.core.model.image.Gauss2DParam:1 of
+msgid "2D Gaussian parameters"
+msgstr ""
+
+#: cdl.core.model.image.RoiDataGeometries:1 of
+msgid "ROI data geometry types"
+msgstr ""
+
+#: cdl.core.model.image.ImageDatatypes:1 of
+msgid "Image data types"
+msgstr ""
+
+#: cdl.core.model.image.ImageDatatypes.from_dtype:1 of
+msgid "Return member from NumPy dtype"
+msgstr ""
+
+#: cdl.core.model.image.ImageDatatypes.check:1 of
+msgid "Check if data types are valid"
+msgstr ""
+
+#~ msgid "Object model module (:mod:`cdl.obj`)"
+#~ msgstr ""

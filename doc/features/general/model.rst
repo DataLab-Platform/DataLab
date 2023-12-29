@@ -15,23 +15,6 @@ Also, DataLab uses many different datasets (based on guidata's `DataSet` class)
 to store the parameters of the computations. These datasets are defined in
 different modules but are exposed publicly in the `cdl.param` package.
 
-Public API
-^^^^^^^^^^
+.. seealso::
 
-The public API is the following:
-
-.. automodule:: cdl.obj
-    :members:
-    :show-inheritance:
-
-.. automodule:: cdl.param
-    :members:
-    :show-inheritance:
-
-.. automodule:: cdl.core.model.signal
-    :members:
-    :show-inheritance:
-
-.. automodule:: cdl.core.model.image
-    :members:
-    :show-inheritance:
+    The :ref:`api` section for more information on the public API.

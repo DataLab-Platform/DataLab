@@ -1,0 +1,93 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../api/index.rst:33
+msgid "Contents:"
+msgstr "Table des matières :"
+
+#: ../../api/index.rst:4
+msgid "API"
+msgstr "API"
+
+#: ../../api/index.rst:6
+msgid ""
+"The public Application Programming Interface (API) of DataLab offers a "
+"set of functions to access the DataLab features. Those functions are "
+"available in various submodules of the `cdl` package. The following table"
+" lists the available submodules and their purpose:"
+msgstr "L'interface de programmation d'application (API) publique de DataLab offre un ensemble de fonctions pour accéder aux fonctionnalités de DataLab. Ces fonctions sont disponibles dans divers sous-modules du package `cdl`. Le tableau suivant répertorie les sous-modules disponibles et leurs contenus respectifs :"
+
+#: ../../api/index.rst:15
+msgid "Submodule"
+msgstr "Sous-module"
+
+#: ../../api/index.rst:16
+msgid "Purpose"
+msgstr "Contenu"
+
+#: ../../api/index.rst:18
+msgid ":mod:`cdl.algorithms`"
+msgstr ""
+
+#: ../../api/index.rst:19
+msgid "Algorithms for data analysis, which operates on NumPy arrays"
+msgstr "Algorithmes pour l'analyse de données, qui opèrent sur des tableaux NumPy"
+
+#: ../../api/index.rst:21
+msgid ":mod:`cdl.param`"
+msgstr ""
+
+#: ../../api/index.rst:22
+msgid ""
+"Convenience module to access the DataLab sets of parameters (instances of"
+" :class:`guidata.dataset.DataSet` objects)"
+msgstr "Module de commodité pour accéder aux ensembles de paramètres DataLab (instances d'objets :class:`guidata.dataset.DataSet`)"
+
+#: ../../api/index.rst:24
+msgid ":mod:`cdl.obj`"
+msgstr ""
+
+#: ../../api/index.rst:25
+msgid ""
+"Convenience module to access the DataLab objects "
+"(:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related "
+"functions"
+msgstr "Module de commodité pour accéder aux objets DataLab (:class:`cdl.obj.SignalObj` ou :class:`cdl.obj.ImageObj`) et fonctions associées"
+
+#: ../../api/index.rst:27
+msgid ":mod:`cdl.core.computation`"
+msgstr ""
+
+#: ../../api/index.rst:28
+msgid ""
+"Computation functions, which operate on DataLab objects "
+"(:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)"
+msgstr "Fonctions de calcul, qui opèrent sur les objets DataLab (:class:`cdl.obj.SignalObj` ou :class:`cdl.obj.ImageObj`)"
+
+#: ../../api/index.rst:30
+msgid ":mod:`cdl.proxy`"
+msgstr ""
+
+#: ../../api/index.rst:31
+msgid ""
+"Proxy objects to access the DataLab interface from a Python script or a "
+"remote application"
+msgstr "Objets proxy pour accéder à l'interface DataLab à partir d'un script Python ou d'une application distante"

@@ -25,4 +25,5 @@
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "python.analysis.autoFormatStrings": true,
+    "esbonio.sphinx.confDir": "",
 }
