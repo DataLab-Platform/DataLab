@@ -3,7 +3,25 @@
 See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.11.0 ##
+
+📚 Documentation:
+
+* New [API section](https://cdlapp.readthedocs.io/en/latest/api/index.html) in the documentation:
+  * This section explains how to use DataLab as a Python library, by covering the
+  following topics:
+    * How to use DataLab algorithms on NumPy arrays
+    * How to use DataLab computation features on DataLab objects (signals and images)
+    * How to use DataLab I/O features
+    * How to use proxy objects to control DataLab remotely
+  * This section also provides a complete API reference for DataLab objects and
+  features
+  * This fixes [Issue #19](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)
+
 ## DataLab Version 0.10.1 ##
+
+*Note*: V0.10.0 was almost immediately replaced by V0.10.1 due to a last minute
+bug fix
 
 💥 New features:
 
@@ -43,11 +61,13 @@ for future and past milestones.
     * A context manager `context_no_refresh` is also available to temporarily disable
       the "Auto-refresh" feature from a macro-command, a plugin or a remote control
       client. Typical usage:
+
       ```python
       with proxy.context_no_refresh():
           # Do something without refreshing the plot view
           proxy.compute_fft() # (...)
       ```
+
   * Improved curve readability:
     * Until this release, the curve style was automatically set by cycling through
       **PlotPy** predefined styles
@@ -92,9 +112,9 @@ for future and past milestones.
   * This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
 * Fixed [Issue #14](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
 * Fixed [Issue #15](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
-  * Part 1: `pip install cdl` error on MacOS was actually a **PlotPy** issue
-    (https://github.com/PlotPyStack/PlotPy/issues/9), and was fixed in PlotPy v2.0.3
-    with an additional compilation flag indicating to use C++11 standard
+  * Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see
+    [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed
+    in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
   * Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding dynamic menus
 * HDF5 file format: when importing an HDF5 dataset as a signal or an image, the
   dataset attributes were systematically copied to signal/image metadata: we now
