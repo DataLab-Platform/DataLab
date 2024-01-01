@@ -14,6 +14,7 @@ for future and past milestones.
   * The feature also supports multi-selection (using the standard Ctrl and Shift
     modifiers), so that multiple signals/images/groups can be moved at once, not
     necessarily with contiguous positions
+  * This fixes [Issue #17](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
 
 📚 Documentation:
 
