@@ -366,3 +366,87 @@ class ObjectModel:
             if obj.title == title:
                 return obj
         raise KeyError(f"Object with title '{title}' not found")
+
+    def __get_group_object_mapping_to_shortid(self) -> dict[str, str]:
+        """Return dictionary mapping group/object uuids to their short ID"""
+        mapping = {}
+        for group in self._groups:
+            mapping[group.uuid] = group.short_id
+            for obj in group:
+                mapping[obj.uuid] = obj.short_id
+        return mapping
+
+    def __replace_short_ids_by_uuids_in_titles(self) -> None:
+        """Replace short IDs by uuids in titles
+
+        This method is called before reorganizing groups or objects. It replaces
+        the short IDs in titles by the uuids. This is needed because the short IDs
+        are used to reflect in the title the operation performed on the object/group,
+        e.g. "fft(s001)" or "g001 + g002". But when reorganizing groups or objects,
+        the short IDs may change, so we need to replace them by the uuids, which
+        are stable. Once the reorganization is done, we will replace the uuids by the
+        new short IDs thanks to the `__replace_uuids_by_short_ids_in_titles` method.
+        """
+        mapping = self.__get_group_object_mapping_to_shortid()
+        for obj in self._objects.values():
+            for obj_uuid, short_id in mapping.items():
+                obj.title = obj.title.replace(short_id, obj_uuid)
+        for group in self._groups:
+            for grp_uuid, short_id in mapping.items():
+                group.title = group.title.replace(short_id, grp_uuid)
+
+    def __replace_uuids_by_short_ids_in_titles(self) -> None:
+        """Replace uuids by short IDs in titles
+
+        This method is called after reorganizing groups or objects. It replaces
+        the uuids in titles by the short IDs.
+        """
+        mapping = self.__get_group_object_mapping_to_shortid()
+        for obj in self._objects.values():
+            for obj_uuid, short_id in mapping.items():
+                obj.title = obj.title.replace(obj_uuid, short_id)
+        for group in self._groups:
+            for grp_uuid, short_id in mapping.items():
+                group.title = group.title.replace(grp_uuid, short_id)
+        # Replace remaining UUIDs with f"{obj.PREFIX}xxx"
+        # (this may happen if groups or objects were removed in the meantime):
+        pattern = re.compile(r"\b[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\b")
+        for obj in self._objects.values():
+            obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
+        for group in self._groups:
+            for obj in group:
+                obj.title = pattern.sub(f"{obj.PREFIX}xxx", obj.title)
+
+    def reorder_groups(self, group_ids: list[str]) -> None:
+        """Reorder groups.
+
+        Args:
+            group_ids: list of group uuids
+        """
+        # Replace short IDs by uuids in titles:
+        self.__replace_short_ids_by_uuids_in_titles()
+        # Reordering groups:
+        self._groups = [self.get_group(group_id) for group_id in group_ids]
+        # Reset short IDs:
+        self.reset_short_ids()
+        # Replace uuids by short IDs in titles:
+        self.__replace_uuids_by_short_ids_in_titles()
+
+    def reorder_objects(self, obj_ids: dict[str, list[str]]) -> None:
+        """Reorder objects in groups.
+
+        Args:
+            obj_ids: dict of group uuids and list of object uuids
+        """
+        # Replace short IDs by uuids in titles:
+        self.__replace_short_ids_by_uuids_in_titles()
+        # Reordering objects in groups:
+        for group_id, obj_uuids in obj_ids.items():
+            group = self.get_group(group_id)
+            group.clear()
+            for obj_uuid in obj_uuids:
+                group.append(self._objects[obj_uuid])
+        # Reset short IDs:
+        self.reset_short_ids()
+        # Replace uuids by short IDs in titles:
+        self.__replace_uuids_by_short_ids_in_titles()

@@ -5,6 +5,16 @@ for future and past milestones.
 
 ## DataLab Version 0.11.0 ##
 
+💥 New features:
+
+* Signals and images are now movable thanks to the new "drag and drop" feature:
+  * Signals and images can be dragged and dropped inside their own panel to change
+    their order
+  * Groups can also be dragged and dropped inside their panel
+  * The feature also supports multi-selection (using the standard Ctrl and Shift
+    modifiers), so that multiple signals/images/groups can be moved at once, not
+    necessarily with contiguous positions
+
 📚 Documentation:
 
 * New [API section](https://cdlapp.readthedocs.io/en/latest/api/index.html) in the documentation:

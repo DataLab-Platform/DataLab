@@ -13,6 +13,9 @@
             "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
+            // "args": [
+            //     "${workspaceFolder}/cdl/data/tests/reordering_test.h5",
+            // ],
             "env": {
                 // "DEBUG": "1",
                 // "LANG": "fr",

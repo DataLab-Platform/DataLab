@@ -261,7 +261,12 @@ class ObjectView(SimpleObjectTree):
         super().__init__(parent, objmodel)
         self.setSelectionMode(QW.QAbstractItemView.ExtendedSelection)
         self.setAcceptDrops(True)
+        self.setDragEnabled(True)
+        self.setDragDropMode(QW.QAbstractItemView.InternalMove)
         self.itemSelectionChanged.connect(self.item_selection_changed)
+        self.__dragged_objects: list[QW.QListWidgetItem] = []
+        self.__dragged_groups: list[QW.QListWidgetItem] = []
+        self.__dragged_expanded_states: dict[QW.QListWidgetItem, bool] = {}
 
     def paintEvent(self, event):  # pylint: disable=C0103
         """Reimplement Qt method"""
@@ -271,7 +276,88 @@ class ObjectView(SimpleObjectTree):
         painter = QG.QPainter(self.viewport())
         painter.drawText(self.rect(), QC.Qt.AlignCenter, _("Drag files here to open"))
 
-    def dropEvent(self, event):  # pylint: disable=C0103
+    # pylint: disable=unused-argument
+    def dragEnterEvent(self, event: QG.QDragEnterEvent) -> None:
+        """Reimplement Qt method"""
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            super().dragEnterEvent(event)
+            self.__dragged_groups = self.get_sel_group_items()
+            self.__dragged_objects = self.get_sel_object_items()
+            self.__dragged_expanded_states = {
+                item.data(0, QC.Qt.UserRole): item.isExpanded()
+                for item in self.__dragged_groups
+            }
+
+    def dragLeaveEvent(self, event: QG.QDragLeaveEvent) -> None:
+        """Reimplement Qt method"""
+        super().dragLeaveEvent(event)
+        self.__dragged_groups = []
+        self.__dragged_objects = []
+        self.__dragged_expanded_states = {}
+
+    # pylint: disable=unused-argument
+    def dragMoveEvent(self, event: QG.QDragMoveEvent) -> None:
+        """Reimplement Qt method"""
+        self.setDropIndicatorShown(True)
+        if event.mimeData().hasUrls():
+            event.setDropAction(QC.Qt.CopyAction)
+            event.accept()
+        else:
+            super().dragMoveEvent(event)
+            self.setDropIndicatorShown(self.__is_drop_allowed(event))
+
+    def __is_drop_allowed(self, event: QG.QDropEvent | QG.QDragMoveEvent) -> bool:
+        """Return True if drop is allowed"""
+        if event.mimeData().hasUrls():
+            return True
+        drop_pos = self.dropIndicatorPosition()
+        on_item = drop_pos == QW.QAbstractItemView.OnItem
+        above_item = drop_pos == QW.QAbstractItemView.AboveItem
+        below_item = drop_pos == QW.QAbstractItemView.BelowItem
+        on_viewport = drop_pos == QW.QAbstractItemView.OnViewport
+        target_item = self.itemAt(event.pos())
+        # If moved items are objects, refuse the drop on the viewport
+        if self.__dragged_objects and on_viewport:
+            return False
+        # If drop indicator is on an item, refuse the drop if the target item
+        # is anything but a group
+        elif on_item and (target_item is None or target_item.parent() is not None):
+            return False
+        # If drop indicator is on an item, refuse the drop if the moved items
+        # are groups
+        elif on_item and self.__dragged_groups:
+            return False
+        # If target item is None, it means that the drop position is
+        # outside of the tree. In this case, we accept the drop and move
+        # the objects to the end of the list.
+        elif target_item is None or on_viewport:
+            return True
+        # If moved items are groups, refuse the drop if the target item is
+        # not a group
+        elif self.__dragged_groups and target_item.parent() is not None:
+            return False
+        # If moved items are groups, refuse the drop if the target item is
+        # a group but the target position is below the target instead of above
+        elif self.__dragged_groups and below_item:
+            return False
+        # If moved items are objects, refuse the drop if the target item is
+        # a group and the target position is above the target instead of below
+        elif self.__dragged_objects and target_item.parent() is None and above_item:
+            return False
+        # If moved items are objects, refuse the drop if the target item is
+        # the first group item and the drop position is above the target item
+        elif (
+            self.__dragged_objects
+            and target_item.parent() is None
+            and self.indexFromItem(target_item).row() == 0
+            and above_item
+        ):
+            return False
+        return True
+
+    def dropEvent(self, event: QG.QDropEvent) -> None:  # pylint: disable=C0103
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
             fnames = [url.toLocalFile() for url in event.mimeData().urls()]
@@ -279,24 +365,73 @@ class ObjectView(SimpleObjectTree):
             event.setDropAction(QC.Qt.CopyAction)
             event.accept()
         else:
-            event.ignore()
+            is_allowed = self.__is_drop_allowed(event)
+            if not is_allowed:
+                event.ignore()
+            else:
 
-    # pylint: disable=unused-argument
-    def dragEnterEvent(self, event):
-        """Reimplement Qt method"""
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore()
+                drop_pos = self.dropIndicatorPosition()
+                on_viewport = drop_pos == QW.QAbstractItemView.OnViewport
+                target_item = self.itemAt(event.pos())
+                # If target item is None, it means that the drop position is
+                # outside of the tree. In this case, we accept the drop and move
+                # the objects to the end of the list.
+                if target_item is None or on_viewport:
+                    # If moved items are groups, move them to the end of the list
+                    if self.__dragged_groups:
+                        for item in self.__dragged_groups:
+                            self.takeTopLevelItem(self.indexOfTopLevelItem(item))
+                            self.addTopLevelItem(item)
+                    # If moved items are objects, move them to the last group
+                    if self.__dragged_objects:
+                        lastgrp_item = self.topLevelItem(self.topLevelItemCount() - 1)
+                        for item in self.__dragged_objects:
+                            item.parent().removeChild(item)
+                            lastgrp_item.addChild(item)
 
-    # pylint: disable=unused-argument
-    def dragMoveEvent(self, event):
-        """Reimplement Qt method"""
-        if event.mimeData().hasUrls():
-            event.setDropAction(QC.Qt.CopyAction)
-            event.accept()
-        else:
-            event.ignore()
+                    event.accept()
+                else:
+                    super().dropEvent(event)
+
+            if event.isAccepted():
+                # Ok, the drop was accepted, so we need to update the model accordingly
+                # (at this stage, the model has not been updated yet but the tree has
+                # been updated already, e.g. by the super().dropEvent(event) calls).
+                # Thus, we have to loop over all tree items and reproduce the tree
+                # structure in the model, by reordering the groups and objects.
+                # We have two cases to consider (that mutually exclude each other):
+                # 1. Groups are moved: we need to reorder the groups in the model
+                # 2. Objects are moved: we need to reorder the objects in all groups
+                #    in the model
+                # Let's start with case 1:
+                if self.__dragged_groups:
+                    # First, we need to get the list of all groups in the model
+                    # (in the correct order)
+                    gids: list[str] = []
+                    for index in range(self.topLevelItemCount()):
+                        gids.append(self.topLevelItem(index).data(0, QC.Qt.UserRole))
+                    # Then, we need to reorder the groups in the model
+                    self.objmodel.reorder_groups(gids)
+                # Now, let's consider case 2:
+                if self.__dragged_objects:
+                    # First, we need to get a dictionary that maps group ids to
+                    # the list of objects in each group (in the correct order)
+                    oids: dict[str, list[str]] = {}
+                    for index in range(self.topLevelItemCount()):
+                        group_item = self.topLevelItem(index)
+                        oids[group_item.data(0, QC.Qt.UserRole)] = [
+                            group_item.child(idx).data(0, QC.Qt.UserRole)
+                            for idx in range(group_item.childCount())
+                        ]
+                    # Then, we need to reorder the objects in all groups in the model
+                    self.objmodel.reorder_objects(oids)
+                # Finally, we need to update tree
+                self.update_tree()
+                # Restore expanded states of moved groups
+                for item in self.__dragged_groups:
+                    item.setExpanded(
+                        self.__dragged_expanded_states[item.data(0, QC.Qt.UserRole)]
+                    )
 
     def get_current_object(self) -> SignalObj | ImageObj | None:
         """Return current object"""
