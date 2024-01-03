@@ -47,6 +47,10 @@ See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
 the library and [changelog](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/CHANGELOG.md)
 for recent history of changes.
 
+💡*About **DataLab** Windows installers:*
+* **DataLab** Windows installer is available for Windows 8, 10 and 11 (main release, based on Python 3.11) and also for Windows 7 (Python 3.8 based release)
+* ⚠️ On Windows 7, before running **DataLab** (or any other Python 3 application), you must install Microsoft Update `KB2533623` (`Windows6.1-KB2533623-x64.msu`) and also may need to install [Microsoft Visual C++ 2015-2022 Redistribuable package](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170).
+
 ### New in DataLab 0.9
 
 New key features in DataLab 0.9:
