@@ -15,6 +15,12 @@ for future and past milestones.
     modifiers), so that multiple signals/images/groups can be moved at once, not
     necessarily with contiguous positions
   * This fixes [Issue #17](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
+* Automated test suite:
+  * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
+    to toggle the "Auto-refresh" feature. This feature may be useful to improve
+    performance during the execution of test scripts
+  * Test scenarios on signals and images are now using this feature to improve
+    performance
 
 📚 Documentation:
 

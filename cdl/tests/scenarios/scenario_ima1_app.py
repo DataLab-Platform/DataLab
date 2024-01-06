@@ -25,9 +25,11 @@ def test_scenario_image() -> None:
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
     with cdltest_app_context(save=True) as win:
+        win.toggle_auto_refresh(False)
         execenv.print("Testing image features without process isolation...")
         win.set_process_isolation_enabled(False)
         common.run_image_computations(win)
+        win.toggle_auto_refresh(True)  # Just to test the auto-refresh feature
         win.imagepanel.remove_all_objects()
         execenv.print("==> OK")
 
