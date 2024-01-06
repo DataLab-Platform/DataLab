@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-02 11:38+0200\n"
+"POT-Creation-Date: 2024-01-06 15:46+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../features/signal/menu/processing.rst:2
 msgid "\"Processing\" menu"
@@ -205,49 +205,139 @@ msgstr ""
 "Crée un signal à partir de la transformée de Fourier rapide inverse (FFT "
 "inverse) de chaque signal sélectionné."
 
+#: ../../features/signal/menu/processing.rst:96
+msgid "Interpolation"
+msgstr "Interpolation"
+
+#: ../../features/signal/menu/processing.rst:73
+msgid ""
+"Create a new signal which is the interpolation of each selected signal "
+"with respect to a second signal X-axis (which might be the same as one of"
+" the selected signals)."
+msgstr "Crée un signal à partir de l'interpolation de chaque signal sélectionné, par rapport à l'axe X d'un second signal (qui peut être l'un des signaux sélectionnés)."
+
+#: ../../features/signal/menu/processing.rst:77
+msgid "The following interpolation methods are available:"
+msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
+
+#: ../../features/signal/menu/processing.rst:83
+msgid "Method"
+msgstr "Méthode"
+
+#: ../../features/signal/menu/processing.rst:84
+msgid "Description"
+msgstr "Description"
+
+#: ../../features/signal/menu/processing.rst:85
+msgid "Linear"
+msgstr "Linéaire"
+
+#: ../../features/signal/menu/processing.rst:86
+msgid ""
+"Linear interpolation, using using NumPy's `interp "
+"<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
+" function"
+msgstr "Interpolation linéaire, utilisant la fonction `interp <https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_ de NumPy."
+
 #: ../../features/signal/menu/processing.rst:87
+msgid "Spline"
+msgstr "Spline"
+
+#: ../../features/signal/menu/processing.rst:88
+msgid ""
+"Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
+" function"
+msgstr "Interpolation par spline cubique, utilisant la fonction `scipy.interpolate.splev <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:89
+msgid "Quadratic"
+msgstr "Quadratique"
+
+#: ../../features/signal/menu/processing.rst:90
+msgid ""
+"Quadratic interpolation, using using NumPy's `polyval "
+"<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
+" function"
+msgstr "Interpolation quadratique, utilisant la fonction `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ de NumPy."
+
+#: ../../features/signal/menu/processing.rst:91
+msgid "Cubic"
+msgstr "Cubique"
+
+#: ../../features/signal/menu/processing.rst:92
+msgid ""
+"Cubic interpolation, using using SciPy's `Akima1DInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
+" class"
+msgstr "Interpolation cubique, utilisant la classe `Akima1DInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:93
+msgid "Barycentric"
+msgstr "Barycentrique"
+
+#: ../../features/signal/menu/processing.rst:94
+msgid ""
+"Barycentric interpolation, using using SciPy's `BarycentricInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
+" class"
+msgstr "Interpolation barycentrique, utilisant la classe `BarycentricInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:95
+msgid "PCHIP"
+msgstr "PCHIP"
+
+#: ../../features/signal/menu/processing.rst:96
+msgid ""
+"Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, "
+"using using SciPy's `PchipInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_"
+" class"
+msgstr "Interpolation par polynôme de Hermite cubique par morceaux (PCHIP), utilisant la classe `PchipInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:113
 msgid "Lorentzian, Voigt, Polynomial and Multi-Gaussian fit"
 msgstr "Ajustements lorentzien, Voigt, polynomial et multi-gaussien"
 
-#: ../../features/signal/menu/processing.rst:73
+#: ../../features/signal/menu/processing.rst:99
 msgid "Open an interactive curve fitting tool in a modal dialog box."
 msgstr ""
 "Ouvre une boîte de dialogue permettant de réaliser des ajustements de "
 "courbe de manière interactive."
 
-#: ../../features/signal/menu/processing.rst:79
+#: ../../features/signal/menu/processing.rst:105
 msgid "Model"
 msgstr "Modèle"
 
-#: ../../features/signal/menu/processing.rst:80
+#: ../../features/signal/menu/processing.rst:106
 msgid "Equation"
 msgstr "Equation"
 
-#: ../../features/signal/menu/processing.rst:81
+#: ../../features/signal/menu/processing.rst:107
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: ../../features/signal/menu/processing.rst:82
+#: ../../features/signal/menu/processing.rst:108
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
 msgstr ""
 
-#: ../../features/signal/menu/processing.rst:83
+#: ../../features/signal/menu/processing.rst:109
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
-#: ../../features/signal/menu/processing.rst:84
+#: ../../features/signal/menu/processing.rst:110
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
 msgstr ""
 
-#: ../../features/signal/menu/processing.rst:85
+#: ../../features/signal/menu/processing.rst:111
 msgid "Voigt"
 msgstr "Voigt"
 
-#: ../../features/signal/menu/processing.rst:86
+#: ../../features/signal/menu/processing.rst:112
 msgid ""
 ":math:`y = "
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
@@ -257,11 +347,11 @@ msgstr ""
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
 ":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 
-#: ../../features/signal/menu/processing.rst:87
+#: ../../features/signal/menu/processing.rst:113
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-#: ../../features/signal/menu/processing.rst:88
+#: ../../features/signal/menu/processing.rst:114
 msgid ""
 ":math:`y = "
 "y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"

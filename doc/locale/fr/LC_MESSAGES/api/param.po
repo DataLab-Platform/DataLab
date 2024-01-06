@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"POT-Creation-Date: 2024-01-06 15:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,13 +28,19 @@ msgid ""
 "The :mod:`cdl.param` module aims at providing all the dataset parameters "
 "that are used by the :mod:`cdl.core.computation` and "
 ":mod:`cdl.core.gui.processor` packages."
-msgstr "Le module :mod:`cdl.param` fournit tous les paramètres de jeu de données utilisés par les modules :mod:`cdl.core.computation` et :mod:`cdl.core.gui.processor`."
+msgstr ""
+"Le module :mod:`cdl.param` fournit tous les paramètres de jeu de données "
+"utilisés par les modules :mod:`cdl.core.computation` et "
+":mod:`cdl.core.gui.processor`."
 
 #: cdl.param:7 of
 msgid ""
 "Those datasets (:py:class:`guidata.dataset.datatypes.Dataset` subclasses)"
 " are defined in other modules:"
-msgstr "Ces jeux de données (sous-classes de :py:class:`guidata.dataset.datatypes.Dataset`) sont définis dans d'autres modules :"
+msgstr ""
+"Ces jeux de données (sous-classes de "
+":py:class:`guidata.dataset.datatypes.Dataset`) sont définis dans d'autres"
+" modules :"
 
 #: cdl.param:10 of
 msgid ":mod:`cdl.core.computation.base`"
@@ -52,13 +58,17 @@ msgstr ""
 msgid ""
 "The :mod:`cdl.param` module is thus a convenient way to import all the "
 "sets of parameters at once."
-msgstr "Le module :mod:`cdl.param` est donc un moyen pratique d'importer tous les ensembles de paramètres en une seule fois."
+msgstr ""
+"Le module :mod:`cdl.param` est donc un moyen pratique d'importer tous les"
+" ensembles de paramètres en une seule fois."
 
 #: cdl.param:17 of
 msgid ""
 "As a matter of fact, the following import statement is equivalent to the "
 "previous one:"
-msgstr "En fait, l'instruction d'importation suivante est équivalente à la précédente :"
+msgstr ""
+"En fait, l'instruction d'importation suivante est équivalente à la "
+"précédente :"
 
 #: cdl.param:30 of
 msgid "Common parameters"
@@ -129,11 +139,16 @@ msgstr ""
 msgid "Signal calibration parameters"
 msgstr ""
 
-#: cdl.param:64 of
+#: cdl.core.computation.signal.InterpolationParam:1 of
+#, fuzzy
+msgid "Interpolation parameters"
+msgstr "Paramètres de restauration"
+
+#: cdl.param:66 of
 msgid "Image parameters"
 msgstr "Paramètres des images"
 
-#: cdl.param:67 of
+#: cdl.param:69 of
 msgid "Base image parameters"
 msgstr "Paramètres de base des images"
 
@@ -185,7 +200,7 @@ msgstr ""
 msgid "Image linear calibration parameters"
 msgstr ""
 
-#: cdl.param:95 of
+#: cdl.param:97 of
 msgid "Exposure correction parameters"
 msgstr "Paramètres de correction d'exposition"
 
@@ -213,7 +228,7 @@ msgstr ""
 msgid "Intensity rescaling parameters"
 msgstr ""
 
-#: cdl.param:111 of
+#: cdl.param:113 of
 msgid "Restoration parameters"
 msgstr "Paramètres de restauration"
 
@@ -229,7 +244,7 @@ msgstr ""
 msgid "Wavelet denoising parameters"
 msgstr ""
 
-#: cdl.param:121 of
+#: cdl.param:123 of
 msgid "Morphological parameters"
 msgstr "Paramètres morphologiques"
 
@@ -237,7 +252,7 @@ msgstr "Paramètres morphologiques"
 msgid "White Top-Hat parameters"
 msgstr ""
 
-#: cdl.param:127 of
+#: cdl.param:129 of
 msgid "Edge detection parameters"
 msgstr "Paramètres de détection de contours"
 
@@ -245,7 +260,7 @@ msgstr "Paramètres de détection de contours"
 msgid "Canny filter parameters"
 msgstr ""
 
-#: cdl.param:133 of
+#: cdl.param:135 of
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 
@@ -271,3 +286,4 @@ msgstr ""
 
 #~ msgid "Computation parameters module (:mod:`cdl.param`)"
 #~ msgstr ""
+

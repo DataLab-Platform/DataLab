@@ -248,6 +248,22 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()
+    def compute_interpolation(
+        self,
+        obj2: SignalObj | None = None,
+        param: cdl.param.InterpolationParam | None = None,
+    ):
+        """Compute interpolation"""
+        self.compute_n1n(
+            obj2,
+            _("signal for X values"),
+            cps.compute_interpolation,
+            param,
+            cps.InterpolationParam,
+            title=_("Interpolation"),
+        )
+
+    @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
         """Compute fitting curve"""
         for obj in self.panel.objview.get_sel_objects():

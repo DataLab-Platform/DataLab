@@ -12,6 +12,8 @@ Scenarios common functions
 
 from __future__ import annotations
 
+import numpy as np
+
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.config import _
@@ -167,6 +169,20 @@ def run_signal_computations(
         param.fittype = fittype
         panel.processor.compute_fwhm(param)
     panel.processor.compute_fw1e2()
+
+    # Create a new signal which X values are a subset of sig1
+    x = np.linspace(sig1.x.min(), sig1.x.max(), data_size // 2)[: data_size // 4]
+    y = x * 0.0
+    sig2 = dlo.create_signal("X values for interpolation", x, y)
+    panel.add_object(sig2)
+
+    for method_choice_tuple in dlp.InterpolationParam._methods:
+        method = method_choice_tuple[0]
+        for fill_value in (None, 0.0):
+            print(f"Interpolation method: {method}, fill_value: {fill_value}")
+            panel.objview.set_current_object(sig1)
+            param = dlp.InterpolationParam.create(method=method, fill_value=fill_value)
+            panel.processor.compute_interpolation(sig2, param)
 
 
 def run_image_computations(

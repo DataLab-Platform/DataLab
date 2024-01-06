@@ -15,6 +15,11 @@ for future and past milestones.
     modifiers), so that multiple signals/images/groups can be moved at once, not
     necessarily with contiguous positions
   * This fixes [Issue #17](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
+* New 1D interpolation features:
+  * Added "Interpolate" feature to signal panel's "Processing" menu
+  * Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP
+  * Thanks to @marcel-goldschen-ohm for the contribution to spline interpolation
+  * This fixes [Issue #20](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/20) - Add 1D interpolation features
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve

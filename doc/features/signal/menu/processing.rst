@@ -69,6 +69,32 @@ FFT
 Inverse FFT
     Create a new signal which is the inverse FFT of each selected signal.
 
+Interpolation
+    Create a new signal which is the interpolation of each selected signal
+    with respect to a second signal X-axis (which might be the same as one of
+    the selected signals).
+
+    The following interpolation methods are available:
+
+    .. list-table::
+        :header-rows: 1
+        :widths: 25, 75
+
+        * - Method
+          - Description
+        * - Linear
+          - Linear interpolation, using using NumPy's `interp <https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_ function
+        * - Spline
+          - Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_ function
+        * - Quadratic
+          - Quadratic interpolation, using using NumPy's `polyval <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_ function
+        * - Cubic
+          - Cubic interpolation, using using SciPy's `Akima1DInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_ class
+        * - Barycentric
+          - Barycentric interpolation, using using SciPy's `BarycentricInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_ class
+        * - PCHIP
+          - Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, using using SciPy's `PchipInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_ class
+
 Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
     Open an interactive curve fitting tool in a modal dialog box.
 

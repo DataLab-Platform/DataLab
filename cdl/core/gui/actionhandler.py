@@ -669,6 +669,12 @@ class SignalActionHandler(BaseActionHandler):
                 icon=get_icon("peak_detect.svg"),
             )
 
+        with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Interpolation"),
+                triggered=self.panel.processor.compute_interpolation,
+            )
+
         def cra_fit(title, fitdlgfunc):
             """Create curve fitting action"""
             return self.new_action(

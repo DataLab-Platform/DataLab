@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"POT-Creation-Date: 2024-01-06 15:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -30,7 +30,12 @@ msgid ""
 ":class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`) and are "
 "designed to be used in the DataLab pipeline, but can be used "
 "independently as well."
-msgstr "Ce paquet contient les fonctions de calcul utilisées par le projet DataLab. Ces fonctions opèrent directement sur les objets DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`) et sont conçues pour être utilisées dans le pipeline DataLab, mais peuvent également être utilisées indépendamment."
+msgstr ""
+"Ce paquet contient les fonctions de calcul utilisées par le projet "
+"DataLab. Ces fonctions opèrent directement sur les objets DataLab "
+"(c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`) et"
+" sont conçues pour être utilisées dans le pipeline DataLab, mais peuvent "
+"également être utilisées indépendamment."
 
 #: cdl.core.computation:11 of
 msgid ""
@@ -38,7 +43,11 @@ msgid ""
 "DataLab computation functions when manipulating DataLab objects. See the "
 ":mod:`cdl.algorithms` package for algorithms that operate directly on "
 "NumPy arrays."
-msgstr "Le module :mod:`cdl.core.computation` est le point d'entrée principal pour les fonctions de calcul DataLab lors de la manipulation d'objets DataLab. Voir le module :mod:`cdl.algorithms` pour les algorithmes qui opèrent directement sur les tableaux NumPy."
+msgstr ""
+"Le module :mod:`cdl.core.computation` est le point d'entrée principal "
+"pour les fonctions de calcul DataLab lors de la manipulation d'objets "
+"DataLab. Voir le module :mod:`cdl.algorithms` pour les algorithmes qui "
+"opèrent directement sur les tableaux NumPy."
 
 #: cdl.core.computation:16 of
 msgid ""
@@ -52,7 +61,17 @@ msgid ""
 "object as output (the result of the computation). The parameter object is"
 " used to configure the computation function (e.g. the size of the moving "
 "average window)."
-msgstr "Chaque module de calcul définit un ensemble d'objets de calcul, c'est-à-dire des fonctions qui implémentent des fonctionnalités de traitement et des classes qui implémentent les paramètres correspondants (sous la forme de sous-classes :py:class:`guidata.dataset.datatypes.Dataset`). Les fonctions de calcul prennent un objet DataLab (par exemple :class:`cdl.obj.SignalObj`) et un objet de paramètre (par exemple :py:class:`cdl.param.MovingAverageParam`) en entrée et renvoient un objet DataLab en sortie (le résultat du calcul). L'objet de paramètre est utilisé pour configurer la fonction de calcul (par exemple, la taille de la fenêtre de moyenne mobile)."
+msgstr ""
+"Chaque module de calcul définit un ensemble d'objets de calcul, "
+"c'est-à-dire des fonctions qui implémentent des fonctionnalités de "
+"traitement et des classes qui implémentent les paramètres correspondants "
+"(sous la forme de sous-classes "
+":py:class:`guidata.dataset.datatypes.Dataset`). Les fonctions de calcul "
+"prennent un objet DataLab (par exemple :class:`cdl.obj.SignalObj`) et un "
+"objet de paramètre (par exemple :py:class:`cdl.param.MovingAverageParam`)"
+" en entrée et renvoient un objet DataLab en sortie (le résultat du "
+"calcul). L'objet de paramètre est utilisé pour configurer la fonction de "
+"calcul (par exemple, la taille de la fenêtre de moyenne mobile)."
 
 #: cdl.core.computation:25 of
 msgid ""
@@ -61,13 +80,20 @@ msgid ""
 ":mod:`cdl.core.gui.processor` module, based on the algorithms defined in "
 "the :mod:`cdl.algorithms` module and on the data model defined in the "
 ":mod:`cdl.obj` (or :mod:`cdl.core.model`) module."
-msgstr "Dans l'architecture globale de DataLab, le but de ce paquet est de fournir les fonctions de calcul qui sont utilisées par le module :mod:`cdl.core.gui.processor`, basé sur les algorithmes définis dans le module :mod:`cdl.algorithms` et sur le modèle de données défini dans le module :mod:`cdl.obj` (ou :mod:`cdl.core.model`)."
+msgstr ""
+"Dans l'architecture globale de DataLab, le but de ce paquet est de "
+"fournir les fonctions de calcul qui sont utilisées par le module "
+":mod:`cdl.core.gui.processor`, basé sur les algorithmes définis dans le "
+"module :mod:`cdl.algorithms` et sur le modèle de données défini dans le "
+"module :mod:`cdl.obj` (ou :mod:`cdl.core.model`)."
 
 #: cdl.core.computation:30 of
 msgid ""
 "The computation modules are organized in subpackages according to their "
 "purpose. The following subpackages are available:"
-msgstr "Les modules de calcul sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"
+msgstr ""
+"Les modules de calcul sont organisés en sous-paquets en fonction de leur "
+"objectif. Les sous-paquets suivants sont disponibles :"
 
 #: cdl.core.computation:33 of
 msgid ":mod:`cdl.core.computation.base`: Common processing features"
@@ -75,7 +101,9 @@ msgstr ":mod:`cdl.core.computation.base` : fonctionnalités de traitement commun
 
 #: cdl.core.computation:34 of
 msgid ":mod:`cdl.core.computation.signal`: Signal processing features"
-msgstr ":mod:`cdl.core.computation.signal` : fonctionnalités de traitement du signal"
+msgstr ""
+":mod:`cdl.core.computation.signal` : fonctionnalités de traitement du "
+"signal"
 
 #: cdl.core.computation:35 of
 msgid ":mod:`cdl.core.computation.image`: Image processing features"
@@ -234,6 +262,7 @@ msgstr ""
 #: cdl.core.computation.signal.compute_ifft
 #: cdl.core.computation.signal.compute_im
 #: cdl.core.computation.signal.compute_integral
+#: cdl.core.computation.signal.compute_interpolation
 #: cdl.core.computation.signal.compute_log10
 #: cdl.core.computation.signal.compute_moving_average
 #: cdl.core.computation.signal.compute_moving_median
@@ -261,6 +290,7 @@ msgstr ""
 #: cdl.core.computation.signal.compute_ifft:7
 #: cdl.core.computation.signal.compute_im:5
 #: cdl.core.computation.signal.compute_integral:5
+#: cdl.core.computation.signal.compute_interpolation:9
 #: cdl.core.computation.signal.compute_log10:5
 #: cdl.core.computation.signal.compute_moving_average:7
 #: cdl.core.computation.signal.compute_moving_median:7
@@ -360,6 +390,7 @@ msgstr ""
 #: cdl.core.computation.signal.compute_ifft
 #: cdl.core.computation.signal.compute_im
 #: cdl.core.computation.signal.compute_integral
+#: cdl.core.computation.signal.compute_interpolation
 #: cdl.core.computation.signal.compute_log10
 #: cdl.core.computation.signal.compute_moving_average
 #: cdl.core.computation.signal.compute_moving_median
@@ -571,6 +602,17 @@ msgstr ""
 
 #: cdl.core.computation.signal.compute_fw1e2:1 of
 msgid "Compute FW at 1/e²"
+msgstr ""
+
+#: cdl.core.computation.signal.InterpolationParam:1 of
+msgid "Interpolation parameters"
+msgstr ""
+
+#: cdl.core.computation.signal.compute_interpolation:1 of
+msgid ""
+"Interpolate data :param src1: source signal 1 :type src1: SignalObj "
+":param src2: source signal 2 :type src2: SignalObj :param p: parameters "
+":type p: InterpolationParam"
 msgstr ""
 
 #: cdl.core.computation:50 of
@@ -1316,3 +1358,4 @@ msgstr ""
 
 #~ msgid "Computation Package (:mod:`cdl.core.computation`)"
 #~ msgstr ""
+
