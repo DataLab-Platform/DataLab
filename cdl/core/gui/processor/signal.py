@@ -264,6 +264,28 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_resampling(self, param: cdl.param.ResamplingParam | None = None):
+        """Compute resampling"""
+        edit, param = self.init_param(param, cps.ResamplingParam, _("Resampling"))
+        if edit:
+            obj = self.panel.objview.get_sel_objects()[0]
+            if param.xmin is None:
+                param.xmin = obj.x[0]
+            if param.xmax is None:
+                param.xmax = obj.x[-1]
+            if param.dx is None:
+                param.dx = obj.x[1] - obj.x[0]
+            if param.nbpts is None:
+                param.nbpts = len(obj.x)
+        self.compute_11(
+            cps.compute_resampling,
+            param,
+            cps.ResamplingParam,
+            title=_("Resampling"),
+            edit=edit,
+        )
+
+    @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
         """Compute fitting curve"""
         for obj in self.panel.objview.get_sel_objects():

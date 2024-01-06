@@ -176,6 +176,7 @@ def run_signal_computations(
     sig2 = dlo.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
 
+    # Test interpolation
     for method_choice_tuple in dlp.InterpolationParam._methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
@@ -183,6 +184,15 @@ def run_signal_computations(
             panel.objview.set_current_object(sig1)
             param = dlp.InterpolationParam.create(method=method, fill_value=fill_value)
             panel.processor.compute_interpolation(sig2, param)
+
+    # Test resampling
+    xmin, xmax = x[0], x[-1]
+    for mode, dx, nbpts in (("dx", 0.1, 10), ("nbpts", 0.0, 100)):
+        panel.objview.set_current_object(sig1)
+        param = dlp.ResamplingParam.create(
+            xmin=xmin, xmax=xmax, mode=mode, dx=dx, nbpts=nbpts
+        )
+        panel.processor.compute_resampling(param)
 
 
 def run_image_computations(

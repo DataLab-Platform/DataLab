@@ -674,6 +674,9 @@ class SignalActionHandler(BaseActionHandler):
                 _("Interpolation"),
                 triggered=self.panel.processor.compute_interpolation,
             )
+            self.new_action(
+                _("Resampling"), triggered=self.panel.processor.compute_resampling
+            )
 
         def cra_fit(title, fitdlgfunc):
             """Create curve fitting action"""
@@ -815,7 +818,8 @@ class ImageActionHandler(BaseActionHandler):
                 separator=True,
             )
             self.new_action(
-                _("Pixel binning"), triggered=self.panel.processor.compute_binning,
+                _("Pixel binning"),
+                triggered=self.panel.processor.compute_binning,
                 icon=get_icon("binning.svg"),
             )
 

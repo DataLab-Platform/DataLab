@@ -16,10 +16,15 @@ for future and past milestones.
     necessarily with contiguous positions
   * This fixes [Issue #17](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
 * New 1D interpolation features:
-  * Added "Interpolate" feature to signal panel's "Processing" menu
+  * Added "Interpolation" feature to signal panel's "Processing" menu
   * Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP
   * Thanks to @marcel-goldschen-ohm for the contribution to spline interpolation
   * This fixes [Issue #20](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/20) - Add 1D interpolation features
+* New 1D resampling feature:
+  * Added "Resampling" feature to signal panel's "Processing" menu
+  * Same interpolation methods as for the "Interpolation" feature
+  * Possibility to specify the resampling step or the number of points
+  * This fixes [Issue #21](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/21) - Add 1D resampling feature
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable

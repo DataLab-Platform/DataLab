@@ -95,6 +95,32 @@ Interpolation
         * - PCHIP
           - Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, using using SciPy's `PchipInterpolator <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_ class
 
+Resampling
+    Create a new signal which is the resampling of each selected signal.
+
+    The following parameters are available:
+
+    .. list-table::
+        :header-rows: 1
+        :widths: 25, 75
+
+        * - Parameter
+          - Description
+        * - Method
+          - Interpolation method (see previous section)
+        * - Fill value
+          - Interpolation fill value (see previous section)
+        * - Xmin
+          - Minimum X value
+        * - Xmax
+          - Maximum X value
+        * - Mode
+          - Resampling mode: step size or number of points
+        * - Step size
+          - Resampling step size
+        * - Number of points
+          - Resampling number of points
+
 Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
     Open an interactive curve fitting tool in a modal dialog box.
 

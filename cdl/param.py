@@ -67,6 +67,8 @@ Signal parameters
     :no-index:
 .. autoclass:: cdl.param.InterpolationParam
     :no-index:
+.. autoclass:: cdl.param.ResamplingParam
+    :no-index:
 
 Image parameters
 ^^^^^^^^^^^^^^^^
@@ -210,5 +212,6 @@ from cdl.core.computation.signal import (
     NormalizeYParam,
     PeakDetectionParam,
     PolynomialFitParam,
+    ResamplingParam,
     XYCalibrateParam,
 )

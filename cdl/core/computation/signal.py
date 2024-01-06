@@ -624,11 +624,55 @@ def compute_interpolation(
         SignalObj: result signal object
     """
     suffix = f"method={p.method}"
-    if p.fill_value is not None:
+    if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
         suffix += f", fill_value={p.fill_value}"
     dst = dst_n1n(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
     ynew = interpolate(x1, y1, xnew, p.method, p.fill_value)
+    dst.set_xydata(xnew, ynew)
+    return dst
+
+
+class ResamplingParam(InterpolationParam):
+    """Resample parameters"""
+
+    xmin = gds.FloatItem(_("X<sub>min</sub>"))
+    xmax = gds.FloatItem(_("X<sub>max</sub>"))
+    _prop = gds.GetAttrProp("dx_or_nbpts")
+    _modes = (("dx", _("ΔX")), ("nbpts", _("Number of points")))
+    mode = gds.ChoiceItem(_("Mode"), _modes, default="nbpts", radio=True).set_prop(
+        "display", store=_prop
+    )
+    dx = gds.FloatItem(_("ΔX")).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "dx")
+    )
+    nbpts = gds.IntItem(_("Number of points")).set_prop(
+        "display", active=gds.FuncProp(_prop, lambda x: x == "nbpts")
+    )
+
+
+def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
+    """Resample data
+    Args:
+        src (SignalObj): source signal
+        p (ResampleParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    suffix = f"method={p.method}"
+    if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
+        suffix += f", fill_value={p.fill_value}"
+    if p.mode == "dx":
+        suffix += f", dx={p.dx:.3f}"
+    else:
+        suffix += f", nbpts={p.nbpts:d}"
+    dst = dst_11(src, "resample", suffix)
+    x, y = src.get_data()
+    if p.mode == "dx":
+        xnew = np.arange(p.xmin, p.xmax, p.dx)
+    else:
+        xnew = np.linspace(p.xmin, p.xmax, p.nbpts)
+    ynew = interpolate(x, y, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
