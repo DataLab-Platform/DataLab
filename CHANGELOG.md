@@ -20,6 +20,9 @@ for future and past milestones.
   * Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP
   * Thanks to @marcel-goldschen-ohm for the contribution to spline interpolation
   * This fixes [Issue #20](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/20) - Add 1D interpolation features
+* Increased default width of the object selection dialog box:
+  * The object selection dialog box is now wider by default, so that the full
+    signal/image/group titles may be more easily readable
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve

@@ -217,9 +217,22 @@ class SimpleObjectTree(QW.QTreeWidget):
 
 
 class GetObjectDialog(QW.QDialog):
-    """Get object dialog box"""
+    """Get object dialog box
 
-    def __init__(self, parent: QW.QWidget, panel: BaseDataPanel, title: str) -> None:
+    Args:
+        parent: parent widget
+        panel: data panel
+        title: dialog title
+        minimum_size: minimum size (width, height)
+    """
+
+    def __init__(
+        self,
+        parent: QW.QWidget,
+        panel: BaseDataPanel,
+        title: str,
+        minimum_size: tuple[int, int] = None,
+    ) -> None:
         super().__init__(parent)
         self.__current_object_uuid: str | None = None
         self.setWindowTitle(title)
@@ -240,6 +253,11 @@ class GetObjectDialog(QW.QDialog):
         vlayout.addWidget(bbox)
         # Update OK button state:
         self.__current_object_changed()
+
+        if minimum_size is not None:
+            self.setMinimumSize(*minimum_size)
+        else:
+            self.setMinimumWidth(400)
 
     def __current_object_changed(self) -> None:
         """Item selection has changed"""
@@ -369,7 +387,6 @@ class ObjectView(SimpleObjectTree):
             if not is_allowed:
                 event.ignore()
             else:
-
                 drop_pos = self.dropIndicatorPosition()
                 on_viewport = drop_pos == QW.QAbstractItemView.OnViewport
                 target_item = self.itemAt(event.pos())
