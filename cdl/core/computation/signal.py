@@ -18,7 +18,6 @@ from __future__ import annotations
 import guidata.dataset as gds
 import numpy as np
 import scipy.integrate as spt
-import scipy.interpolate
 import scipy.ndimage as spi
 import scipy.optimize as spo
 import scipy.signal as sps
@@ -26,6 +25,7 @@ import scipy.signal as sps
 from cdl.algorithms import fit
 from cdl.algorithms.signal import (
     derivative,
+    interpolate,
     moving_average,
     normalize,
     peak_indexes,
@@ -629,34 +629,6 @@ def compute_interpolation(
     dst = dst_n1n(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
-    interpolator_extrap = None
-    if p.method == "linear":
-        # Linear interpolation using NumPy's interp function:
-        ynew = np.interp(xnew, x1, y1, left=p.fill_value, right=p.fill_value)
-    elif p.method == "spline":
-        # Spline using 1-D interpolation with SciPy's interpolate package:
-        knots, coeffs, degree = scipy.interpolate.splrep(x1, y1, s=0)
-        ynew = scipy.interpolate.splev(xnew, (knots, coeffs, degree), der=0)
-    elif p.method == "quadratic":
-        # Quadratic interpolation using NumPy's polyval function:
-        coeffs = np.polyfit(x1, y1, 2)
-        ynew = np.polyval(coeffs, xnew)
-    elif p.method == "cubic":
-        # Cubic interpolation using SciPy's Akima1DInterpolator class:
-        interpolator_extrap = scipy.interpolate.Akima1DInterpolator(x1, y1)
-    elif p.method == "barycentric":
-        # Barycentric interpolation using SciPy's BarycentricInterpolator class:
-        interpolator = scipy.interpolate.BarycentricInterpolator(x1, y1)
-        ynew = interpolator(xnew)
-    elif p.method == "pchip":
-        # PCHIP interpolation using SciPy's PchipInterpolator class:
-        interpolator_extrap = scipy.interpolate.PchipInterpolator(x1, y1)
-    else:
-        raise ValueError(f"Invalid interpolation method {p.method}")
-    if interpolator_extrap is not None:
-        ynew = interpolator_extrap(xnew, extrapolate=p.fill_value is None)
-        if p.fill_value is not None:
-            ynew[xnew < x1[0]] = p.fill_value
-            ynew[xnew > x1[-1]] = p.fill_value
+    ynew = interpolate(x1, y1, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst

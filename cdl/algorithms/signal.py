@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import numpy as np
+import scipy.interpolate
 
 
 # ----- Filtering functions ----------------------------------------------------
@@ -234,3 +235,55 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     if peaks.size == 1:
         return x[peaks[0]]
     return np.average(x, weights=y)
+
+
+def interpolate(
+    x: np.ndarray,
+    y: np.ndarray,
+    xnew: np.ndarray,
+    method: str,
+    fill_value: float | None = None,
+) -> np.ndarray:
+    """Interpolate data.
+
+    Args:
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        xnew (numpy.ndarray): New X data
+        method (str): Interpolation method. Valid values are 'linear', 'spline',
+         'quadratic', 'cubic', 'barycentric', 'pchip'
+        fill_value (float | None): Fill value. Defaults to None.
+         This value is used to fill in for requested points outside of the
+         X data range. It is only used if the method argument is 'linear',
+         'cubic' or 'pchip'.
+    """
+    interpolator_extrap = None
+    if method == "linear":
+        # Linear interpolation using NumPy's interp function:
+        ynew = np.interp(xnew, x, y, left=fill_value, right=fill_value)
+    elif method == "spline":
+        # Spline using 1-D interpolation with SciPy's interpolate package:
+        knots, coeffs, degree = scipy.interpolate.splrep(x, y, s=0)
+        ynew = scipy.interpolate.splev(xnew, (knots, coeffs, degree), der=0)
+    elif method == "quadratic":
+        # Quadratic interpolation using NumPy's polyval function:
+        coeffs = np.polyfit(x, y, 2)
+        ynew = np.polyval(coeffs, xnew)
+    elif method == "cubic":
+        # Cubic interpolation using SciPy's Akima1DInterpolator class:
+        interpolator_extrap = scipy.interpolate.Akima1DInterpolator(x, y)
+    elif method == "barycentric":
+        # Barycentric interpolation using SciPy's BarycentricInterpolator class:
+        interpolator = scipy.interpolate.BarycentricInterpolator(x, y)
+        ynew = interpolator(xnew)
+    elif method == "pchip":
+        # PCHIP interpolation using SciPy's PchipInterpolator class:
+        interpolator_extrap = scipy.interpolate.PchipInterpolator(x, y)
+    else:
+        raise ValueError(f"Invalid interpolation method {method}")
+    if interpolator_extrap is not None:
+        ynew = interpolator_extrap(xnew, extrapolate=fill_value is None)
+        if fill_value is not None:
+            ynew[xnew < x[0]] = fill_value
+            ynew[xnew > x[-1]] = fill_value
+    return ynew
