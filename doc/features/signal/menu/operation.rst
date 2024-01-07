@@ -77,6 +77,12 @@ Peak detection
         horizontal marker, peaks are detected automatically (see vertical
         markers with labels indicating peak position)
 
+Convolution
+    Create a new signal which is the convolution of each selected signal
+    with respect to another signal.
+
+    This feature is based on SciPy's `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_ function.
+
 ROI extraction
     Create a new signal from a user-defined Region of Interest (ROI).
 

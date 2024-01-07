@@ -662,6 +662,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("ROI extraction"),
                 triggered=self.panel.processor.compute_roi_extraction,
                 icon=get_icon(f"{self.OBJECT_STR}_roi.svg"),
+                separator=True,
             )
             self.new_action(
                 _("Swap X/Y axes"), triggered=self.panel.processor.compute_swap_axes
@@ -747,6 +748,16 @@ class SignalActionHandler(BaseActionHandler):
                 toolbar_pos=-1,
             )
         antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+
+    def create_last_actions(self):
+        """Create actions that are added to the menus in the end"""
+        with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Convolution"),
+                triggered=self.panel.processor.compute_convolution,
+                separator=True,
+            )
+        super().create_last_actions()
 
 
 class ImageActionHandler(BaseActionHandler):

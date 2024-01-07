@@ -194,6 +194,11 @@ def run_signal_computations(
         )
         panel.processor.compute_resampling(param)
 
+    # Test convolution
+    panel.objview.set_current_object(sig1)
+    panel.processor.compute_derivative()
+    panel.processor.compute_convolution(sig1)
+
 
 def run_image_computations(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True

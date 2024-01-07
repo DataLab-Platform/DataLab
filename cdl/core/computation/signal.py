@@ -676,3 +676,19 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     ynew = interpolate(x, y, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
+
+
+def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
+    """Compute convolution of two signals
+    Args:
+        src1 (SignalObj): source signal 1
+        src2 (SignalObj): source signal 2
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_n1n(src1, src2, "convolution")
+    x1, y1 = src1.get_data()
+    _x2, y2 = src2.get_data()
+    ynew = np.real(sps.convolve(y1, y2, mode="same"))
+    dst.set_xydata(x1, ynew)
+    return dst

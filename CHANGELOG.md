@@ -29,6 +29,9 @@ for future and past milestones.
   * Same interpolation methods as for the "Interpolation" feature
   * Possibility to specify the resampling step or the number of points
   * This fixes [Issue #21](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/21) - Add 1D resampling feature
+* New 1D convolution feature:
+  * Added "Convolution" feature to signal panel's "Operation" menu
+  * This fixes [Issue #23](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/23) - Add 1D convolution feature
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable
