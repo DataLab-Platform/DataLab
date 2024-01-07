@@ -199,6 +199,12 @@ def run_signal_computations(
     panel.processor.compute_derivative()
     panel.processor.compute_convolution(sig1)
 
+    # Test detrending
+    panel.objview.set_current_object(sig1)
+    for method_choice_tuple in dlp.DetrendingParam._methods:
+        param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
+        panel.processor.compute_detrending(param)
+
 
 def run_image_computations(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True

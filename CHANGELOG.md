@@ -32,6 +32,10 @@ for future and past milestones.
 * New 1D convolution feature:
   * Added "Convolution" feature to signal panel's "Operation" menu
   * This fixes [Issue #23](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/23) - Add 1D convolution feature
+* New 1D detrending feature:
+  * Added "Detrending" feature to signal panel's "Processing" menu
+  * Methods available: linear or constant
+  * This fixes [Issue #24](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/24) - Add 1D detrending feature
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-06 16:57+0100\n"
+"POT-Creation-Date: 2024-01-07 17:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,7 @@ msgstr ""
 #: ../../features/signal/menu/processing.rst:14
 #: ../../features/signal/menu/processing.rst:39
 #: ../../features/signal/menu/processing.rst:107
+#: ../../features/signal/menu/processing.rst:135
 msgid "Parameter"
 msgstr "Paramètre"
 
@@ -226,11 +227,13 @@ msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
 
 #: ../../features/signal/menu/processing.rst:83
 #: ../../features/signal/menu/processing.rst:109
+#: ../../features/signal/menu/processing.rst:137
 msgid "Method"
 msgstr "Méthode"
 
 #: ../../features/signal/menu/processing.rst:84
 #: ../../features/signal/menu/processing.rst:108
+#: ../../features/signal/menu/processing.rst:136
 msgid "Description"
 msgstr "Description"
 
@@ -331,6 +334,7 @@ msgid "Create a new signal which is the resampling of each selected signal."
 msgstr "Crée un signal à partir du rééchantillonnage de chaque signal."
 
 #: ../../features/signal/menu/processing.rst:101
+#: ../../features/signal/menu/processing.rst:129
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
 
@@ -386,49 +390,69 @@ msgstr "Nombre de points"
 msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
 
-#: ../../features/signal/menu/processing.rst:139
+#: ../../features/signal/menu/processing.rst:124
+msgid "Detrending"
+msgstr "Elimination de tendance"
+
+#: ../../features/signal/menu/processing.rst:126
+msgid ""
+"Create a new signal which is the detrending of each selected signal. This"
+" features is based on SciPy's `scipy.signal.detrend "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
+" function."
+msgstr "Crée un signal à partir de l'élimination de tendance de chaque signal. Cette fonctionnalité est basée sur la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:138
+msgid ""
+"Detrending method: 'linear' or 'constant'. See SciPy's "
+"`scipy.signal.detrend "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
+" function."
+msgstr "Méthode d'élimination de tendance : 'linéaire' ou 'constante'. Voir la fonction `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ de SciPy."
+
+#: ../../features/signal/menu/processing.rst:155
 msgid "Lorentzian, Voigt, Polynomial and Multi-Gaussian fit"
 msgstr "Ajustements lorentzien, Voigt, polynomial et multi-gaussien"
 
-#: ../../features/signal/menu/processing.rst:125
+#: ../../features/signal/menu/processing.rst:141
 msgid "Open an interactive curve fitting tool in a modal dialog box."
 msgstr ""
 "Ouvre une boîte de dialogue permettant de réaliser des ajustements de "
 "courbe de manière interactive."
 
-#: ../../features/signal/menu/processing.rst:131
+#: ../../features/signal/menu/processing.rst:147
 msgid "Model"
 msgstr "Modèle"
 
-#: ../../features/signal/menu/processing.rst:132
+#: ../../features/signal/menu/processing.rst:148
 msgid "Equation"
 msgstr "Equation"
 
-#: ../../features/signal/menu/processing.rst:133
+#: ../../features/signal/menu/processing.rst:149
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: ../../features/signal/menu/processing.rst:134
+#: ../../features/signal/menu/processing.rst:150
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
 msgstr ""
 
-#: ../../features/signal/menu/processing.rst:135
+#: ../../features/signal/menu/processing.rst:151
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
-#: ../../features/signal/menu/processing.rst:136
+#: ../../features/signal/menu/processing.rst:152
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
 msgstr ""
 
-#: ../../features/signal/menu/processing.rst:137
+#: ../../features/signal/menu/processing.rst:153
 msgid "Voigt"
 msgstr "Voigt"
 
-#: ../../features/signal/menu/processing.rst:138
+#: ../../features/signal/menu/processing.rst:154
 msgid ""
 ":math:`y = "
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
@@ -438,11 +462,11 @@ msgstr ""
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
 ":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 
-#: ../../features/signal/menu/processing.rst:139
+#: ../../features/signal/menu/processing.rst:155
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-#: ../../features/signal/menu/processing.rst:140
+#: ../../features/signal/menu/processing.rst:156
 msgid ""
 ":math:`y = "
 "y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"

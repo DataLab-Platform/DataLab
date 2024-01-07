@@ -121,6 +121,22 @@ Resampling
         * - Number of points
           - Resampling number of points
 
+Detrending
+
+    Create a new signal which is the detrending of each selected signal.
+    This features is based on SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
+
+    The following parameters are available:
+
+    .. list-table::
+        :header-rows: 1
+        :widths: 25, 75
+
+        * - Parameter
+          - Description
+        * - Method
+          - Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
+
 Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
     Open an interactive curve fitting tool in a modal dialog box.
 

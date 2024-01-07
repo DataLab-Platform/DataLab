@@ -69,6 +69,8 @@ Signal parameters
     :no-index:
 .. autoclass:: cdl.param.ResamplingParam
     :no-index:
+.. autoclass:: cdl.param.DetrendingParam
+    :no-index:
 
 Image parameters
 ^^^^^^^^^^^^^^^^
@@ -207,6 +209,7 @@ from cdl.core.computation.image.restoration import (
 )
 from cdl.core.computation.signal import (
     DataTypeSParam,
+    DetrendingParam,
     FWHMParam,
     InterpolationParam,
     NormalizeYParam,

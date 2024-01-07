@@ -678,6 +678,27 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     return dst
 
 
+class DetrendingParam(gds.DataSet):
+    """Detrending parameters"""
+
+    _methods = (("linear", _("Linear")), ("constant", _("Constant")))
+    method = gds.ChoiceItem(_("Detrending method"), _methods, default="linear")
+
+
+def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
+    """Detrend data
+    Args:
+        src (SignalObj): source signal
+        p (DetrendingParam): parameters
+    Returns:
+        SignalObj: result signal object
+    """
+    dst = dst_11(src, "detrending", f"method={p.method}")
+    x, y = src.get_data()
+    dst.set_xydata(x, sps.detrend(y, type=p.method))
+    return dst
+
+
 def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
     Args:

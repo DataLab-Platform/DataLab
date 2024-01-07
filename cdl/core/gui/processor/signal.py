@@ -286,6 +286,16 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_detrending(self, param: cdl.param.DetrendingParam | None = None):
+        """Compute detrending"""
+        self.compute_11(
+            cps.compute_detrending,
+            param,
+            cps.DetrendingParam,
+            title=_("Detrending"),
+        )
+
+    @qt_try_except()
     def compute_convolution(self, obj2: SignalObj | None = None) -> None:
         """Compute convolution"""
         self.compute_n1n(

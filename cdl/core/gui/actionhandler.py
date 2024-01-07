@@ -705,6 +705,9 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Resampling"), triggered=self.panel.processor.compute_resampling
             )
+            self.new_action(
+                _("Detrending"), triggered=self.panel.processor.compute_detrending
+            )
 
         def cra_fit(title, fitdlgfunc):
             """Create curve fitting action"""
