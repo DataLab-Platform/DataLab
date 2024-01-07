@@ -399,6 +399,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("New group..."),
                 icon=get_icon("new_group.svg"),
+                tip=_("Create a new group"),
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
                 context_menu_pos=-1,
@@ -407,14 +408,34 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Rename group..."),
                 icon=get_icon("rename_group.svg"),
+                tip=_("Rename selected group"),
                 triggered=self.panel.rename_group,
                 select_condition=SelectCond.exactly_one_group,
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
             self.new_action(
+                _("Move up"),
+                icon=get_icon("move_up.svg"),
+                tip=_("Move up selection (groups or objects)"),
+                triggered=self.panel.objview.move_up,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
+                _("Move down"),
+                icon=get_icon("move_down.svg"),
+                tip=_("Move down selection (groups or objects)"),
+                triggered=self.panel.objview.move_down,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+                context_menu_pos=-1,
+                toolbar_pos=-1,
+            )
+            self.new_action(
                 _("Duplicate"),
                 icon=get_icon("duplicate.svg"),
+                tip=_("Duplicate selected %s") % self.OBJECT_STR,
                 separator=True,
                 triggered=self.panel.duplicate_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Copy),
@@ -425,6 +446,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Remove"),
                 icon=get_icon("delete.svg"),
+                tip=_("Remove selected %s") % self.OBJECT_STR,
                 triggered=self.panel.remove_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
                 select_condition=SelectCond.at_least_one_group_or_one_object,
@@ -434,6 +456,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Delete all"),
                 shortcut="Shift+Ctrl+Suppr",
+                tip=_("Delete all groups and objects"),
                 icon=get_icon("delete_all.svg"),
                 triggered=self.panel.delete_all_objects,
                 toolbar_pos=-1,
@@ -442,6 +465,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Copy metadata"),
                 separator=True,
                 icon=get_icon("metadata_copy.svg"),
+                tip=_("Copy metadata from selected %s") % self.OBJECT_STR,
                 triggered=self.panel.copy_metadata,
                 select_condition=SelectCond.exactly_one,
                 toolbar_pos=-1,
@@ -449,6 +473,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Paste metadata"),
                 icon=get_icon("metadata_paste.svg"),
+                tip=_("Paste metadata into selected %s") % self.OBJECT_STR,
                 triggered=self.panel.paste_metadata,
                 toolbar_pos=-1,
             )
@@ -484,6 +509,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Copy titles to clipboard"),
                 icon=get_icon("copy_titles.svg"),
+                tip=_("Copy titles of selected objects to clipboard"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )
 
@@ -491,6 +517,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("View in a new window"),
                 icon=get_icon("new_window.svg"),
+                tip=_("View selected %s in a new window") % self.OBJECT_STR,
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
                 context_menu_sep=True,

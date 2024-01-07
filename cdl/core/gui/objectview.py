@@ -375,6 +375,24 @@ class ObjectView(SimpleObjectTree):
             return False
         return True
 
+    def get_all_group_uuids(self) -> list[str]:
+        """Return all group uuids, in a list ordered by group position in the tree"""
+        return [
+            self.topLevelItem(index).data(0, QC.Qt.UserRole)
+            for index in range(self.topLevelItemCount())
+        ]
+
+    def get_all_object_uuids(self) -> dict[str, list[str]]:
+        """Return all object uuids, in a dictionary that maps group uuids to the
+        list of object uuids in each group, in the correct order"""
+        return {
+            group_id: [
+                self.topLevelItem(index).child(idx).data(0, QC.Qt.UserRole)
+                for idx in range(self.topLevelItem(index).childCount())
+            ]
+            for index, group_id in enumerate(self.get_all_group_uuids())
+        }
+
     def dropEvent(self, event: QG.QDropEvent) -> None:  # pylint: disable=C0103
         """Reimplement Qt method"""
         if event.mimeData().hasUrls():
@@ -424,22 +442,14 @@ class ObjectView(SimpleObjectTree):
                 if self.__dragged_groups:
                     # First, we need to get the list of all groups in the model
                     # (in the correct order)
-                    gids: list[str] = []
-                    for index in range(self.topLevelItemCount()):
-                        gids.append(self.topLevelItem(index).data(0, QC.Qt.UserRole))
+                    gids = self.get_all_group_uuids()
                     # Then, we need to reorder the groups in the model
                     self.objmodel.reorder_groups(gids)
                 # Now, let's consider case 2:
                 if self.__dragged_objects:
                     # First, we need to get a dictionary that maps group ids to
                     # the list of objects in each group (in the correct order)
-                    oids: dict[str, list[str]] = {}
-                    for index in range(self.topLevelItemCount()):
-                        group_item = self.topLevelItem(index)
-                        oids[group_item.data(0, QC.Qt.UserRole)] = [
-                            group_item.child(idx).data(0, QC.Qt.UserRole)
-                            for idx in range(group_item.childCount())
-                        ]
+                    oids = self.get_all_object_uuids()
                     # Then, we need to reorder the objects in all groups in the model
                     self.objmodel.reorder_objects(oids)
                 # Finally, we need to update tree
@@ -568,3 +578,99 @@ class ObjectView(SimpleObjectTree):
         assert all(isinstance(group, ObjectGroup) for group in groups)
         for idx, group in enumerate(groups):
             self.set_current_item_id(group.uuid, extend=idx > 0)
+
+    def __reorder_model(self) -> None:
+        """Reorder model"""
+        self.objmodel.reorder_groups(self.get_all_group_uuids())
+        self.objmodel.reorder_objects(self.get_all_object_uuids())
+        self.update_tree()
+
+    def move_up(self):
+        """Move selected objects/groups up"""
+        sel_objs = self.get_sel_object_items()
+        sel_groups = self.get_sel_group_items()
+        # Sort selected objects/groups by their position in the tree
+        sel_objs.sort(key=lambda item: self.indexFromItem(item).row())
+        sel_groups.sort(key=lambda item: self.indexFromItem(item).row())
+        if not sel_objs and not sel_groups:
+            return
+        if sel_objs:
+            for item in sel_objs:
+                parent = item.parent()
+                idx_item = parent.indexOfChild(item)
+                idx_parent = self.indexOfTopLevelItem(parent)
+                if idx_item > 0:
+                    parent.takeChild(idx_item)
+                    parent.insertChild(idx_item - 1, item)
+                elif idx_parent > 0:
+                    # If the object is the first child of its parent, we check if
+                    # there is a group above the parent. If so, we move the object
+                    # to the end of the group above.
+                    parent.takeChild(idx_item)
+                    self.topLevelItem(idx_parent - 1).addChild(item)
+                else:
+                    return
+        else:
+            # Store groups expanded state
+            expstates = {
+                item.data(0, QC.Qt.UserRole): item.isExpanded() for item in sel_groups
+            }
+            for item in sel_groups:
+                idx_item = self.indexOfTopLevelItem(item)
+                if idx_item > 0:
+                    self.takeTopLevelItem(idx_item)
+                    self.insertTopLevelItem(idx_item - 1, item)
+                else:
+                    return
+            # Restore groups expanded state
+            for item in sel_groups:
+                item.setExpanded(expstates[item.data(0, QC.Qt.UserRole)])
+        self.__reorder_model()
+        # Restore selection
+        for item in sel_objs + sel_groups:
+            item.setSelected(True)
+
+    def move_down(self):
+        """Move selected objects/groups down"""
+        sel_objs = self.get_sel_object_items()
+        sel_groups = self.get_sel_group_items()
+        # Sort selected objects/groups by their position in the tree
+        sel_objs.sort(key=lambda item: self.indexFromItem(item).row(), reverse=True)
+        sel_groups.sort(key=lambda item: self.indexFromItem(item).row(), reverse=True)
+        if not sel_objs and not sel_groups:
+            return
+        if sel_objs:
+            for item in sel_objs:
+                parent = item.parent()
+                idx_item = parent.indexOfChild(item)
+                idx_parent = self.indexOfTopLevelItem(parent)
+                if idx_item < parent.childCount() - 1:
+                    parent.takeChild(idx_item)
+                    parent.insertChild(idx_item + 1, item)
+                elif idx_parent < self.topLevelItemCount() - 1:
+                    # If the object is the last child of its parent, we check if
+                    # there is a group below the parent. If so, we move the object
+                    # to the beginning of the group below.
+                    parent.takeChild(idx_item)
+                    self.topLevelItem(idx_parent + 1).insertChild(0, item)
+                else:
+                    return
+        else:
+            # Store groups expanded state
+            expstates = {
+                item.data(0, QC.Qt.UserRole): item.isExpanded() for item in sel_groups
+            }
+            for item in sel_groups:
+                idx_item = self.indexOfTopLevelItem(item)
+                if idx_item < self.topLevelItemCount() - 1:
+                    self.takeTopLevelItem(idx_item)
+                    self.insertTopLevelItem(idx_item + 1, item)
+                else:
+                    return
+            # Restore groups expanded state
+            for item in sel_groups:
+                item.setExpanded(expstates[item.data(0, QC.Qt.UserRole)])
+        self.__reorder_model()
+        # Restore selection
+        for item in sel_objs + sel_groups:
+            item.setSelected(True)

@@ -3,6 +3,25 @@
 
 .. image:: /images/shots/i_edit.png
 
+New group
+    Create a new group of images. Images may be moved from one group to another
+    by drag and drop.
+
+Rename group
+    Rename currently selected group.
+
+Move up
+    Move current selection up in the list (groups or images may be selected). If
+    multiple objects are selected, they are moved together. If a selected image
+    is already at the top of its group, it is moved to the bottom of the previous
+    group.
+
+Move down
+    Move current selection down in the list (groups or images may be selected). If
+    multiple objects are selected, they are moved together. If a selected image
+    is already at the bottom of its group, it is moved to the top of the next
+    group.
+
 Duplicate
     Create a new image which is identical to the currently selected object.
 

@@ -7,7 +7,11 @@ for future and past milestones.
 
 💥 New features:
 
-* Signals and images are now movable thanks to the new "drag and drop" feature:
+* Signals and images may now be reordered in the tree view:
+  * Using the new "Move up" and "Move down" actions in the "Edit" menu (or using the
+    corresponding toolbar buttons):
+  * This fixes [Issue #22](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22) - Add "move up/down" actions in "Edit" menu, for signals/images and groups
+* Signals and images may also be reordered using drag and drop:
   * Signals and images can be dragged and dropped inside their own panel to change
     their order
   * Groups can also be dragged and dropped inside their panel

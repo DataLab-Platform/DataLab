@@ -8,80 +8,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-06 17:29+0200\n"
+"POT-Creation-Date: 2024-01-07 14:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../features/signal/menu/edit.rst:2
 msgid "\"Edit\" menu"
 msgstr "Menu \"Edition\""
 
+#: ../../features/signal/menu/edit.rst:8
+msgid "New group"
+msgstr "Nouveau groupe"
+
 #: ../../features/signal/menu/edit.rst:7
+msgid ""
+"Create a new group of signals. Images may be moved from one group to "
+"another by drag and drop."
+msgstr "Crée un nouveau groupe de signaux. Les images peuvent être déplacées d'un groupe à un autre par glisser-déposer."
+
+#: ../../features/signal/menu/edit.rst:11
+msgid "Rename group"
+msgstr "Renommer le groupe"
+
+#: ../../features/signal/menu/edit.rst:11
+msgid "Rename currently selected group."
+msgstr "Renomme le groupe sélectionné."
+
+#: ../../features/signal/menu/edit.rst:17
+msgid "Move up"
+msgstr "Déplacer vers le haut"
+
+#: ../../features/signal/menu/edit.rst:14
+msgid ""
+"Move current selection up in the list (groups or signals may be "
+"selected). If multiple objects are selected, they are moved together. If "
+"a selected signal is already at the top of its group, it is moved to the "
+"bottom of the previous group."
+msgstr "Déplace la sélection vers le haut dans la liste (groupes ou signaux peuvent être sélectionnés). Si plusieurs objets sont sélectionnés, ils sont déplacés ensemble. Si un signal sélectionné est déjà en haut de son groupe, il est déplacé en bas du groupe précédent."
+
+#: ../../features/signal/menu/edit.rst:23
+msgid "Move down"
+msgstr "Déplacer vers le bas"
+
+#: ../../features/signal/menu/edit.rst:20
+msgid ""
+"Move current selection down in the list (groups or signals may be "
+"selected). If multiple objects are selected, they are moved together. If "
+"a selected signal is already at the bottom of its group, it is moved to "
+"the top of the next group."
+msgstr "Déplace la sélection vers le bas dans la liste (groupes ou signaux peuvent être sélectionnés). Si plusieurs objets sont sélectionnés, ils sont déplacés ensemble. Si un signal sélectionné est déjà en bas de son groupe, il est déplacé en haut du groupe suivant."
+
+#: ../../features/signal/menu/edit.rst:26
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: ../../features/signal/menu/edit.rst:7
+#: ../../features/signal/menu/edit.rst:26
 msgid "Create a new signal which is identical to the currently selected object."
 msgstr "Crée un nouveau signal identique à l'objet sélectionné."
 
-#: ../../features/signal/menu/edit.rst:10
+#: ../../features/signal/menu/edit.rst:29
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../../features/signal/menu/edit.rst:10
+#: ../../features/signal/menu/edit.rst:29
 msgid "Remove currently selected signal."
 msgstr "Supprimer le signal sélectionné."
 
-#: ../../features/signal/menu/edit.rst:13
+#: ../../features/signal/menu/edit.rst:32
 msgid "Delete all"
 msgstr "Supprimer tout"
 
-#: ../../features/signal/menu/edit.rst:13
+#: ../../features/signal/menu/edit.rst:32
 msgid "Delete all signals."
 msgstr "Supprimer tous les signaux."
 
-#: ../../features/signal/menu/edit.rst:16
+#: ../../features/signal/menu/edit.rst:35
 msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
-#: ../../features/signal/menu/edit.rst:16
-msgid "Copy metadata from currently selected image into clipboard."
+#: ../../features/signal/menu/edit.rst:35
+#, fuzzy
+msgid "Copy metadata from currently selected signal into clipboard."
 msgstr "Copier les métadonnées de l'image sélectionnée vers le presse-papier."
 
-#: ../../features/signal/menu/edit.rst:19
+#: ../../features/signal/menu/edit.rst:38
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: ../../features/signal/menu/edit.rst:19
-msgid "Paste metadata from clipboard into selected image."
+#: ../../features/signal/menu/edit.rst:38
+#, fuzzy
+msgid "Paste metadata from clipboard into selected signal."
 msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
 
-#: ../../features/signal/menu/edit.rst:22
+#: ../../features/signal/menu/edit.rst:41
 msgid "Import metadata into signal"
 msgstr "Importer les métadonnées dans le signal"
 
-#: ../../features/signal/menu/edit.rst:22
+#: ../../features/signal/menu/edit.rst:41
 msgid "Import metadata from a JSON text file."
 msgstr "Importer les métadonnées depuis un fichier texte JSON."
 
-#: ../../features/signal/menu/edit.rst:25
+#: ../../features/signal/menu/edit.rst:44
 msgid "Export metadata from signal"
 msgstr "Exporter les métadonnées du signal"
 
-#: ../../features/signal/menu/edit.rst:25
+#: ../../features/signal/menu/edit.rst:44
 msgid "Export metadata to a JSON text file."
 msgstr "Exporter les métadonnées vers un fichier texte JSON."
 
-#: ../../features/signal/menu/edit.rst:30
+#: ../../features/signal/menu/edit.rst:49
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: ../../features/signal/menu/edit.rst:28
+#: ../../features/signal/menu/edit.rst:47
 msgid ""
 "Delete metadata from currently selected signal. Metadata contains "
 "additionnal information such as Region of Interest or results of "
@@ -91,19 +135,19 @@ msgstr ""
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
 
-#: ../../features/signal/menu/edit.rst:33
+#: ../../features/signal/menu/edit.rst:52
 msgid "Add object title to plot"
 msgstr "Ajouter le titre de l'objet au graphique"
 
-#: ../../features/signal/menu/edit.rst:33
+#: ../../features/signal/menu/edit.rst:52
 msgid "Add currently selected signal title to the associated plot."
 msgstr "Ajoute le titre du signal sélectionné au graphique associé."
 
-#: ../../features/signal/menu/edit.rst:36
+#: ../../features/signal/menu/edit.rst:55
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/signal/menu/edit.rst:36
+#: ../../features/signal/menu/edit.rst:55
 msgid ""
 "Copy all signal titles to clipboard as a multiline text. This text may be"
 " used for reproducing a processing chain, for example."
