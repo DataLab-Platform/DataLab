@@ -361,8 +361,12 @@ class ObjectView(SimpleObjectTree):
         elif self.__dragged_groups and below_item:
             return False
         # If moved items are objects, refuse the drop if the target item is
-        # a group and the target position is above the target instead of below
-        elif self.__dragged_objects and target_item.parent() is None and above_item:
+        # a group and the drop indicator is anything but on the target item
+        elif (
+            self.__dragged_objects
+            and target_item.parent() is None
+            and not on_item
+        ):
             return False
         # If moved items are objects, refuse the drop if the target item is
         # the first group item and the drop position is above the target item
