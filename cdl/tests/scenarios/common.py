@@ -180,7 +180,6 @@ def run_signal_computations(
     for method_choice_tuple in dlp.InterpolationParam._methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
-            print(f"Interpolation method: {method}, fill_value: {fill_value}")
             panel.objview.set_current_object(sig1)
             param = dlp.InterpolationParam.create(method=method, fill_value=fill_value)
             panel.processor.compute_interpolation(sig2, param)
