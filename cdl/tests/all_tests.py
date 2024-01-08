@@ -80,6 +80,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
     print("  ⚡ Environment:")
     for vname in ("CDL_DATA", "PYTHONPATH", "DEBUG"):
         print(f"    {vname}={os.environ.get(vname, '')}")
+    print(f"  ⚡ Timeout: {timeout} s")
     print("")
     print("Please wait while test scripts are executed (a few minutes).")
     print("Only error messages will be printed out (no message = test OK).")
