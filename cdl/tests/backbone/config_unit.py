@@ -107,13 +107,21 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
     execenv.print("OK")
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
-        #  Check position
-        assert sec_main[OPT_POS.option][0] == win.x()
-        assert_almost_equal(win.y(), sec_main[OPT_POS.option][1], 15)  # Linux
+        #  Check position, taking into account screen offset (e.g. Linux/Gnome)
+        available_go = QW.QDesktopWidget().availableGeometry()
+        x_offset, y_offset = available_go.x(), available_go.y()
+        assert sec_main[OPT_POS.option][0] == win.x() + x_offset
+        exp_y1 = sec_main[OPT_POS.option][1]
+        exp_y2 = exp_y1 - y_offset
+        if win.y() not in (exp_y1, exp_y2):
+            try:
+                assert_almost_equal(win.y(), exp_y1, 15)
+            except AssertionError:
+                assert_almost_equal(win.y(), exp_y2, 15)
         #  Check size
         assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
         assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
-        execenv.print("OK")
+        execenv.print(f"OK {win.x(), win.y(), win.width(), win.height()}")
     else:
         execenv.print("Passed (maximized)")
     execenv.print(f"    Checking [{sec_cons_name}][{OPT_CON.option}]: ", end="")
