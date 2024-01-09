@@ -463,6 +463,14 @@ class ObjectView(SimpleObjectTree):
                     item.setExpanded(
                         self.__dragged_expanded_states[item.data(0, QC.Qt.UserRole)]
                     )
+                # Restore selection, either of groups or objects
+                sel_items = self.__dragged_groups or self.__dragged_objects
+                extend = len(sel_items) > 1
+                for item in sel_items:
+                    if extend:
+                        self.setCurrentItem(item, 0, QC.QItemSelectionModel.Select)
+                    else:
+                        self.setCurrentItem(item)
 
     def get_current_object(self) -> SignalObj | ImageObj | None:
         """Return current object"""
