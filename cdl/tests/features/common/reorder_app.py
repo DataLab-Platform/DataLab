@@ -11,11 +11,15 @@ Groups/signals/images reorder test:
       "move down" actions
     - When executed in interactive mode, the user has to test the "drag and
       drop" actions manually
+    - In unattended mode only, we take the opportunity to test other methods of
+      the `ObjectModel` class (e.g. `get_group`, `remove_group`, ...) for maximizing
+      the code coverage
 """
 
 # guitest: show
 
 from cdl import app
+from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
 
@@ -52,6 +56,20 @@ def test_reorder():
         # Move down
         view.move_down()
         assert [group.number for group in groups] == [2, 3]
+
+        # Testing other methods of the `ObjectModel` class in unattended mode only
+        if execenv.unattended:
+            # Get group
+            group = model.get_group_from_number(2)
+            assert group.number == 2
+            # Get the same group from its uuid
+            group = model.get_group(group.uuid)
+            assert group.number == 2
+            group = model.get_object_or_group(group.uuid)
+            assert group.number == 2
+            # Remove group
+            model.remove_group(group)
+            assert len(model.get_groups()) == 2
 
 
 if __name__ == "__main__":
