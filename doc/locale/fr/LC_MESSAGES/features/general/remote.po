@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-21 13:04+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/general/remote.rst:2
+#: ../../features/general/remote.rst:4
 msgid "Remote controlling"
 msgstr "Contrôle à distance"
 
-#: ../../features/general/remote.rst:4
+#: ../../features/general/remote.rst:6
 msgid ""
 "DataLab may be controlled remotely using the `XML-RPC`_ protocol which is"
 " natively supported by Python (and many other languages). Remote "
@@ -33,19 +33,19 @@ msgstr ""
 "langages). Le contrôle à distance permet d'accéder aux principales "
 "fonctionnalités de DataLab à partir d'un processus séparé."
 
-#: ../../features/general/remote.rst:10
+#: ../../features/general/remote.rst:12
 msgid ""
 "If you are looking for a lighweight alternative solution to remote "
 "control DataLab (i.e. without having to install the whole DataLab package"
 " and its dependencies on your environment), please have a look at the "
 "`DataLab Simple Client`_ package (`pip install cdlclient`)."
-msgstr ""
+msgstr "Si vous recherchez une solution alternative légère pour contrôler DataLab à distance (c'est-à-dire sans avoir à installer l'ensemble du package DataLab et ses dépendances sur votre environnement), veuillez consulter le package `DataLab Simple Client`_ (`pip install cdlclient`)."
 
-#: ../../features/general/remote.rst:18
+#: ../../features/general/remote.rst:20
 msgid "From an IDE"
 msgstr "Depuis un IDE"
 
-#: ../../features/general/remote.rst:20
+#: ../../features/general/remote.rst:22
 msgid ""
 "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any "
 "other IDE, or even a Jupyter Notebook) that runs a Python script. It "
@@ -60,11 +60,11 @@ msgstr ""
 "calculs. Cette fonctionnalité est exposée par la classe RemoteProxy "
 "fournie dans le module cdl.proxy."
 
-#: ../../features/general/remote.rst:27
+#: ../../features/general/remote.rst:29
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"
 
-#: ../../features/general/remote.rst:29
+#: ../../features/general/remote.rst:31
 msgid ""
 "DataLab may also be controlled remotely from a third-party application, "
 "for the same purpose."
@@ -72,7 +72,7 @@ msgstr ""
 "DataLab peut également être contrôlé à distance depuis une application "
 "tierce, dans le même but."
 
-#: ../../features/general/remote.rst:32
+#: ../../features/general/remote.rst:34
 msgid ""
 "If the third-party application is written in Python 3, it may directly "
 "use the `RemoteProxy` class as mentioned above. From another language, it"
@@ -86,7 +86,7 @@ msgstr ""
 "un client XML-RPC dans ce langage en utilisant les mêmes méthodes de "
 "serveur proxy que dans la classe RemoteProxy."
 
-#: ../../features/general/remote.rst:37
+#: ../../features/general/remote.rst:39
 msgid ""
 "Data (signals and images) may also be exchanged between DataLab and the "
 "remote client application, in both directions."
@@ -94,7 +94,7 @@ msgstr ""
 "Les données (signaux et images) peuvent également être échangées entre "
 "DataLab et l'application cliente distante, dans les deux sens."
 
-#: ../../features/general/remote.rst:40
+#: ../../features/general/remote.rst:42
 msgid ""
 "The remote client application may be written in any language that "
 "supports XML-RPC. For example, it is possible to write a remote client "
@@ -107,7 +107,7 @@ msgstr ""
 "L'application cliente distante peut être une application graphique ou une"
 " application en ligne de commande."
 
-#: ../../features/general/remote.rst:45
+#: ../../features/general/remote.rst:47
 msgid ""
 "The remote client application may be run on the same computer as DataLab "
 "or on a different computer. In the latter case, the remote client "
@@ -118,7 +118,7 @@ msgstr ""
 "l'application cliente distante doit connaître l'adresse IP de "
 "l'ordinateur exécutant DataLab."
 
-#: ../../features/general/remote.rst:49
+#: ../../features/general/remote.rst:51
 msgid ""
 "The remote client application may be run before or after DataLab. In the "
 "latter case, the remote client application must try to connect to DataLab"
@@ -128,55 +128,55 @@ msgstr ""
 " Dans ce dernier cas, l'application cliente distante doit essayer de se "
 "connecter à DataLab jusqu'à ce qu'elle réussisse."
 
-#: ../../features/general/remote.rst:54
+#: ../../features/general/remote.rst:56
 msgid "Supported features"
 msgstr "Fonctionnalités prises en charge"
 
-#: ../../features/general/remote.rst:56
+#: ../../features/general/remote.rst:58
 msgid "Supported features are the following:"
 msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
-#: ../../features/general/remote.rst:58
+#: ../../features/general/remote.rst:60
 msgid "Switch to signal or image panel"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: ../../features/general/remote.rst:59
+#: ../../features/general/remote.rst:61
 msgid "Remove all signals and images"
 msgstr "Supprimer tous les signaux et images"
 
-#: ../../features/general/remote.rst:60
+#: ../../features/general/remote.rst:62
 msgid "Save current session to a HDF5 file"
 msgstr "Enregistrer la session en cours dans un fichier HDF5"
 
-#: ../../features/general/remote.rst:61
+#: ../../features/general/remote.rst:63
 msgid "Open HDF5 files into current session"
 msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
 
-#: ../../features/general/remote.rst:62
+#: ../../features/general/remote.rst:64
 msgid "Browse HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: ../../features/general/remote.rst:63
+#: ../../features/general/remote.rst:65
 msgid "Open a signal or an image from file"
 msgstr "Ouvrir un signal ou une image à partir d'un fichier"
 
-#: ../../features/general/remote.rst:64
+#: ../../features/general/remote.rst:66
 msgid "Add a signal"
 msgstr "Ajouter un signal"
 
-#: ../../features/general/remote.rst:65
+#: ../../features/general/remote.rst:67
 msgid "Add an image"
 msgstr "Ajouter une image"
 
-#: ../../features/general/remote.rst:66
+#: ../../features/general/remote.rst:68
 msgid "Get object list"
 msgstr "Obtenir la liste des objets"
 
-#: ../../features/general/remote.rst:67
+#: ../../features/general/remote.rst:69
 msgid "Run calculation with parameters"
 msgstr "Exécuter un calcul avec des paramètres"
 
-#: ../../features/general/remote.rst:71
+#: ../../features/general/remote.rst:73
 msgid ""
 "The signal and image objects are described on this section: :ref:`ref-to-"
 "model`."
@@ -184,7 +184,7 @@ msgstr ""
 "Les objets signal et image sont décrits dans cette section : :ref:`ref-"
 "to-model`."
 
-#: ../../features/general/remote.rst:73
+#: ../../features/general/remote.rst:75
 msgid ""
 "Some examples are provided to help implementing such a communication "
 "between your application and DataLab:"
@@ -192,15 +192,15 @@ msgstr ""
 "Quelques exemples sont fournis pour aider à implémenter une telle "
 "communication entre votre application et DataLab :"
 
-#: ../../features/general/remote.rst:76
+#: ../../features/general/remote.rst:78
 msgid "See module: ``cdl.tests.remoteclient_app``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_app``"
 
-#: ../../features/general/remote.rst:77
+#: ../../features/general/remote.rst:79
 msgid "See module: ``cdl.tests.remoteclient_unit``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_unit``"
 
-#: ../../features/general/remote.rst:81
+#: ../../features/general/remote.rst:83
 msgid ""
 "Screenshot of remote client application test "
 "(``cdl.tests.remoteclient_app``)"
@@ -208,11 +208,11 @@ msgstr ""
 "Capture d'écran du test de l'application cliente distante "
 "(``cdl.tests.remoteclient_app``)"
 
-#: ../../features/general/remote.rst:84 cdl.core.remote.RemoteClient:5 of
+#: ../../features/general/remote.rst:86 cdl.core.remote.RemoteClient:5 of
 msgid "Examples"
 msgstr "Exemples"
 
-#: ../../features/general/remote.rst:86
+#: ../../features/general/remote.rst:88
 msgid ""
 "When using Python 3, you may directly use the `RemoteProxy` class as in "
 "examples cited above or below."
@@ -221,7 +221,7 @@ msgstr ""
 "classe `RemoteProxy` comme dans les exemples cités ci-dessus ou ci-"
 "dessous."
 
-#: ../../features/general/remote.rst:89
+#: ../../features/general/remote.rst:91
 msgid ""
 "Here is an example in Python 3 of a script that connects to a running "
 "DataLab instance, adds a signal and an image, and then runs calculations "
@@ -233,15 +233,15 @@ msgstr ""
 "exécute des calculs (la structure de cellule du script le rend pratique à"
 " utiliser dans l'IDE `Spyder`_):"
 
-#: ../../features/general/remote.rst:95
+#: ../../features/general/remote.rst:97
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
-#: ../../features/general/remote.rst:100
+#: ../../features/general/remote.rst:102
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 
-#: ../../features/general/remote.rst:102
+#: ../../features/general/remote.rst:104
 msgid ""
 "The DataLab package also provides a connection dialog that may be used to"
 " connect to a running DataLab instance. It is exposed by the "
@@ -252,7 +252,7 @@ msgstr ""
 "cours d'exécution. Elle est exposée par la classe "
 ":py:class:`cdl.widgets.connection.ConnectionDialog`."
 
-#: ../../features/general/remote.rst:108
+#: ../../features/general/remote.rst:110
 msgid ""
 "Screenshot of connection dialog "
 "(``cdl.widgets.connection.ConnectionDialog``)"
@@ -260,11 +260,11 @@ msgstr ""
 "Capture d'écran de la boîte de dialogue de connexion "
 "(``cdl.widgets.connection.ConnectionDialog``)"
 
-#: ../../features/general/remote.rst:110
+#: ../../features/general/remote.rst:112
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"
 
-#: ../../features/general/remote.rst:115
+#: ../../features/general/remote.rst:117
 msgid "Public API: remote client"
 msgstr "API publique : client distant"
 
@@ -272,17 +272,17 @@ msgstr "API publique : client distant"
 msgid ""
 "Object representing a proxy/client to DataLab XML-RPC server. This object"
 " is used to call DataLab functions from a Python script."
-msgstr ""
+msgstr "Objet représentant un proxy/client vers le serveur XML-RPC de DataLab. Cet objet est utilisé pour appeler les fonctions de DataLab à partir d'un script Python."
 
 #: cdl.core.remote.RemoteClient:6 of
 msgid ""
 "Here is a simple example of how to use RemoteClient in a Python script or"
 " in a Jupyter notebook:"
-msgstr ""
+msgstr "Voici un exemple simple de l'utilisation de RemoteClient dans un script Python ou dans un notebook Jupyter :"
 
 #: cdl.core.remote.RemoteClient.connect:1 of
 msgid "Try to connect to DataLab XML-RPC server."
-msgstr ""
+msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title
 #: cdl.core.baseproxy.BaseProxy.delete_metadata
@@ -305,21 +305,21 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
 #: cdl.core.remote.RemoteClient.get_object_shapes of
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 #: cdl.core.remote.RemoteClient.connect:3 of
 msgid ""
 "XML-RPC port to connect to. If not specified, the port is automatically "
 "retrieved from DataLab configuration."
-msgstr ""
+msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré à partir de la configuration de DataLab."
 
 #: cdl.core.remote.RemoteClient.connect:6 of
 msgid "Timeout in seconds. Defaults to 5.0."
-msgstr ""
+msgstr "Délai d'attente en secondes. Par défaut, 5.0."
 
 #: cdl.core.remote.RemoteClient.connect:8 of
 msgid "Number of retries. Defaults to 10."
-msgstr ""
+msgstr "Nombre de tentatives. Par défaut, 10."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
@@ -327,67 +327,67 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
 #: cdl.core.remote.RemoteClient.get_object of
 msgid "Raises"
-msgstr ""
+msgstr "Lève"
 
 #: cdl.core.remote.RemoteClient.connect:11 of
 msgid "Unable to connect to DataLab"
-msgstr ""
+msgstr "Impossible de se connecter à DataLab"
 
 #: cdl.core.remote.RemoteClient.connect:12 of
 msgid "Invalid timeout (must be >= 0.0)"
-msgstr ""
+msgstr "Délai d'attente non valide (doit être >= 0.0)"
 
 #: cdl.core.remote.RemoteClient.connect:13 of
 msgid "Invalid number of retries (must be >= 1)"
-msgstr ""
+msgstr "Nombre de tentatives non valide (doit être >= 1)"
 
 #: cdl.core.remote.RemoteClient.disconnect:1 of
 msgid "Disconnect from DataLab XML-RPC server."
-msgstr ""
+msgstr "Déconnexion du serveur XML-RPC de DataLab."
 
 #: cdl.core.remote.RemoteClient.is_connected:1 of
 msgid "Return True if connected to DataLab XML-RPC server."
-msgstr ""
+msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
 
 #: cdl.core.remote.RemoteClient.get_method_list:1 of
 msgid "Return list of available methods."
-msgstr ""
+msgstr "Renvoie la liste des méthodes disponibles."
 
 #: cdl.core.remote.RemoteClient.add_signal:1 of
 msgid "Add signal data to DataLab."
-msgstr ""
+msgstr "Ajouter des données de signal à DataLab."
 
 #: cdl.core.remote.RemoteClient.add_signal:3 of
 msgid "Signal title"
-msgstr ""
+msgstr "Titre du signal"
 
 #: cdl.core.remote.RemoteClient.add_signal:5 of
 msgid "X data"
-msgstr ""
+msgstr "Données X"
 
 #: cdl.core.remote.RemoteClient.add_signal:7 of
 msgid "Y data"
-msgstr ""
+msgstr "Données Y"
 
 #: cdl.core.remote.RemoteClient.add_image:7
 #: cdl.core.remote.RemoteClient.add_signal:9 of
 msgid "X unit. Defaults to None."
-msgstr ""
+msgstr "Unité X. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.add_image:9
 #: cdl.core.remote.RemoteClient.add_signal:11 of
 msgid "Y unit. Defaults to None."
-msgstr ""
+msgstr "Unité Y. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.add_image:13
 #: cdl.core.remote.RemoteClient.add_signal:13 of
 msgid "X label. Defaults to None."
-msgstr ""
+msgstr "Libellé X. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.add_image:15
 #: cdl.core.remote.RemoteClient.add_signal:15 of
 msgid "Y label. Defaults to None."
-msgstr ""
+msgstr "Libellé Y. Par défaut, None."
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh
@@ -402,11 +402,11 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.get_object
 #: cdl.core.remote.RemoteClient.get_object_shapes of
 msgid "Returns"
-msgstr ""
+msgstr "Renvoie"
 
 #: cdl.core.remote.RemoteClient.add_signal:18 of
 msgid "True if signal was added successfully, False otherwise"
-msgstr ""
+msgstr "True si le signal a été ajouté avec succès, False sinon"
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
 #: cdl.core.baseproxy.BaseProxy.get_current_panel
@@ -417,104 +417,103 @@ msgstr ""
 #: cdl.core.remote.RemoteClient.add_image
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc of
 msgid "Return type"
-msgstr ""
+msgstr "Type de retour"
 
 #: cdl.core.remote.RemoteClient.add_signal:21 of
 msgid "Invalid xdata dtype"
-msgstr ""
+msgstr "Type de données xdata non valide"
 
 #: cdl.core.remote.RemoteClient.add_signal:22 of
 msgid "Invalid ydata dtype"
-msgstr ""
+msgstr "Type de données ydata non valide"
 
 #: cdl.core.remote.RemoteClient.add_image:1 of
 msgid "Add image data to DataLab."
-msgstr ""
+msgstr "Ajouter des données d'image à DataLab."
 
 #: cdl.core.remote.RemoteClient.add_image:3 of
 msgid "Image title"
-msgstr ""
+msgstr "Titre de l'image"
 
 #: cdl.core.remote.RemoteClient.add_image:5 of
 msgid "Image data"
-msgstr ""
+msgstr "Données de l'image"
 
 #: cdl.core.remote.RemoteClient.add_image:11 of
 msgid "Z unit. Defaults to None."
-msgstr ""
+msgstr "Unité Z. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.add_image:17 of
 msgid "Z label. Defaults to None."
-msgstr ""
+msgstr "Libellé Z. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.add_image:20 of
 msgid "True if image was added successfully, False otherwise"
-msgstr ""
+msgstr "True si l'image a été ajoutée avec succès, False sinon"
 
 #: cdl.core.remote.RemoteClient.add_image:23 of
 msgid "Invalid data dtype"
-msgstr ""
+msgstr "Type de données non valide"
 
 #: cdl.core.remote.RemoteClient.calc:1 of
 msgid "Call compute function ``name`` in current panel's processor."
-msgstr ""
+msgstr "Appeler la fonction de calcul ``name`` dans le processeur du panneau en cours."
 
 #: cdl.core.remote.RemoteClient.calc:3 of
 msgid "Compute function name"
-msgstr ""
+msgstr "Nom de la fonction de calcul"
 
 #: cdl.core.remote.RemoteClient.calc:5 of
 msgid "Compute function parameter. Defaults to None."
-msgstr ""
+msgstr "Paramètre de la fonction de calcul. Par défaut, None."
 
 #: cdl.core.remote.RemoteClient.calc:9 of
 msgid "Compute function result"
-msgstr ""
+msgstr "Résultat de la fonction de calcul"
 
 #: cdl.core.remote.RemoteClient.get_object:1 of
 msgid "Get object (signal/image) from index."
-msgstr ""
+msgstr "Obtenir un objet (signal/image) à partir de l'index."
 
 #: cdl.core.remote.RemoteClient.get_object:3
 #: cdl.core.remote.RemoteClient.get_object_shapes:3 of
 msgid ""
 "Object number, or object id, or object title. Defaults to None (current "
 "object)."
-msgstr ""
+msgstr "Numéro d'objet, ou identifiant d'objet, ou titre d'objet. Par défaut, None (objet en cours)."
 
 #: cdl.core.remote.RemoteClient.get_object:5
 #: cdl.core.remote.RemoteClient.get_object_shapes:5 of
 msgid "Panel name. Defaults to None (current panel)."
-msgstr ""
+msgstr "Nom du panneau. Par défaut, None (panneau en cours)."
 
 #: cdl.core.remote.RemoteClient.get_object:7 of
-#, fuzzy
 msgid "Object"
-msgstr "Obtenir la liste des objets"
+msgstr "Objet"
 
 #: cdl.core.remote.RemoteClient.get_object:9 of
 msgid "if object not found"
-msgstr ""
+msgstr "si l'objet n'est pas trouvé"
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:1 of
 msgid "Get plot item shapes associated to object (signal/image)."
-msgstr ""
+msgstr "Obtenir les formes géométriques des éléments de tracé associés à l'objet (signal/image)."
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:7 of
 msgid "List of plot item shapes"
-msgstr ""
+msgstr "Liste des formes géométriques des éléments de tracé"
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:1 of
 msgid "Add object annotations (annotation plot items)."
-msgstr ""
+msgstr "Ajouter des annotations d'objet (éléments de tracé d'annotation)."
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:3 of
 msgid "annotation plot items"
-msgstr ""
+msgstr "éléments de tracé d'annotation"
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:5 of
 msgid "refresh plot. Defaults to True."
-msgstr ""
+msgstr "rafraîchir le tracé. Par défaut, True."
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:6
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:4
@@ -523,829 +522,634 @@ msgstr ""
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used."
-msgstr ""
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé."
 
 #: cdl.core.remote.RemoteClient.add_object:1 of
 msgid "Add object to DataLab."
-msgstr ""
+msgstr "Ajouter un objet à DataLab."
 
 #: cdl.core.remote.RemoteClient.add_object:3 of
-#, fuzzy
 msgid "Signal or image object"
-msgstr "Basculer vers le panneau de signal ou d'image"
+msgstr "Objet signal ou image"
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:1 of
 msgid "Add a label with object title on the associated plot"
-msgstr ""
+msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:3 of
 msgid "Label title. Defaults to None. If None, the title is the object title."
-msgstr ""
+msgstr "Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de l'objet."
 
 #: cdl.core.baseproxy.BaseProxy.close_application:1 of
-#, fuzzy
 msgid "Close DataLab application"
-msgstr "Depuis une application tierce"
+msgstr "Fermer l'application DataLab"
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
-msgstr ""
+msgstr "Renvoie un gestionnaire de contexte pour désactiver temporairement le rafraîchissement automatique."
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
 msgid "Context manager"
-msgstr ""
+msgstr "Gestionnaire de contexte"
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:6 of
-#, fuzzy
 msgid "Example"
-msgstr "Exemples"
+msgstr "Exemple"
 
 #: cdl.core.baseproxy.BaseProxy.delete_metadata:1 of
 msgid "Delete metadata of selected objects"
-msgstr ""
+msgstr "Supprimer les métadonnées des objets sélectionnés"
 
 #: cdl.core.baseproxy.BaseProxy.delete_metadata:3 of
 msgid "Refresh plot. Defaults to True."
-msgstr ""
+msgstr "Rafraîchir le tracé. Par défaut, True."
 
 #: cdl.core.baseproxy.BaseProxy.get_current_panel:1 of
-#, fuzzy
 msgid "Return current panel name."
-msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
+msgstr "Renvoie le nom du panneau en cours."
 
 #: cdl.core.baseproxy.BaseProxy.get_current_panel:3
 #: cdl.core.baseproxy.BaseProxy.set_current_panel:3 of
 msgid "Panel name (valid values: \"signal\", \"image\", \"macro\"))"
-msgstr ""
+msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"))"
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:1 of
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr ""
+msgstr "Renvoie les titres des groupes et les listes des uuids et titres des objets internes."
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:3 of
 msgid "groups titles, lists of inner objects uuids and titles"
-msgstr ""
+msgstr "titres des groupes, listes des uuids et titres des objets internes"
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:1 of
 msgid ""
 "Get object (signal/image) list for current panel. Objects are sorted by "
 "group number and object index in group."
-msgstr ""
+msgstr "Obtenir la liste des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:8 of
-#, fuzzy
 msgid "list of object titles"
-msgstr "Obtenir la liste des objets"
+msgstr "liste des titres des objets"
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:11
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:11 of
 msgid "if panel not found"
-msgstr ""
+msgstr "si le panneau n'est pas trouvé"
 
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:1 of
 msgid ""
 "Get object (signal/image) uuid list for current panel. Objects are sorted"
 " by group number and object index in group."
-msgstr ""
+msgstr "Obtenir la liste des uuids des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:8 of
-#, fuzzy
 msgid "list of object uuids"
-msgstr "Obtenir la liste des objets"
+msgstr "liste des uuids des objets"
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:1 of
 msgid "Return all public methods of the class, except itself."
-msgstr ""
+msgstr "Renvoie toutes les méthodes publiques de la classe, sauf elle-même."
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:3 of
 msgid "List of public methods"
-msgstr ""
+msgstr "Liste des méthodes publiques"
 
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:1 of
 msgid "Return selected objects uuids."
-msgstr ""
+msgstr "Renvoie les uuids des objets sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:3 of
 msgid "If True, also return objects from selected groups."
-msgstr ""
+msgstr "Si True, renvoie également les objets des groupes sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids:5 of
 msgid "List of selected objects uuids."
-msgstr ""
+msgstr "Liste des uuids des objets sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:1 of
 msgid "Return DataLab version."
-msgstr ""
+msgstr "Renvoie la version de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:3 of
 msgid "DataLab version"
-msgstr ""
+msgstr "Version de DataLab"
 
 #: cdl.core.baseproxy.BaseProxy.import_h5_file:1 of
 msgid "Open DataLab HDF5 browser to Import HDF5 file."
-msgstr ""
+msgstr "Ouvrir le navigateur HDF5 de DataLab pour importer un fichier HDF5."
 
 #: cdl.core.baseproxy.BaseProxy.import_h5_file:3
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file:3 of
-#, fuzzy
 msgid "HDF5 file name"
-msgstr "Parcourir un fichier HDF5"
+msgstr "Nom du fichier HDF5"
 
 #: cdl.core.baseproxy.BaseProxy.import_h5_file:5
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:8 of
 msgid "Reset all application data. Defaults to None."
-msgstr ""
+msgstr "Réinitialiser toutes les données de l'application. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
-msgstr ""
+msgstr "Ouvrir un fichier HDF5 de DataLab ou importer à partir de tout autre fichier HDF5."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:3 of
 msgid "List of HDF5 files to open. Defaults to None."
-msgstr ""
+msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:5 of
 msgid "Import all objects from HDF5 files. Defaults to None."
-msgstr ""
+msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.open_object:1 of
-#, fuzzy
 msgid "Open object from file in current panel (signal/image)."
-msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
+msgstr "Ouvrir un objet à partir d'un fichier dans le panneau en cours (signal/image)."
 
 #: cdl.core.baseproxy.BaseProxy.open_object:3 of
 msgid "File name"
-msgstr ""
+msgstr "Nom du fichier"
 
 #: cdl.core.baseproxy.BaseProxy.raise_window:1 of
 msgid "Raise DataLab window"
-msgstr ""
+msgstr "Faire apparaître la fenêtre de DataLab"
 
 #: cdl.core.baseproxy.BaseProxy.reset_all:1 of
 msgid "Reset all application data"
-msgstr ""
+msgstr "Réinitialiser toutes les données de l'application"
 
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file:1 of
-#, fuzzy
 msgid "Save to a DataLab HDF5 file."
-msgstr "Enregistrer la session en cours dans un fichier HDF5"
+msgstr "Enregistrer dans un fichier HDF5 de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.select_groups:1 of
 msgid "Select groups in current panel."
-msgstr ""
+msgstr "Sélectionner des groupes dans le panneau en cours."
 
 #: cdl.core.baseproxy.BaseProxy.select_groups:3 of
 msgid ""
 "List of group numbers (1 to N), or list of group uuids, or None to select"
 " all groups. Defaults to None."
-msgstr ""
+msgstr "Liste des numéros de groupe (1 à N), ou liste des uuids de groupe, ou None pour sélectionner tous les groupes. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_groups:5
 #: cdl.core.baseproxy.BaseProxy.select_objects:4 of
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used. Defaults to None."
-msgstr ""
+msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_objects:1 of
 msgid "Select objects in current panel."
-msgstr ""
+msgstr "Sélectionner des objets dans le panneau en cours."
 
 #: cdl.core.baseproxy.BaseProxy.select_objects:3 of
 msgid "List of object numbers (1 to N) or uuids to select"
-msgstr ""
+msgstr "Liste des numéros d'objet (1 à N) ou uuids à sélectionner"
 
 #: cdl.core.baseproxy.BaseProxy.set_current_panel:1 of
-#, fuzzy
 msgid "Switch to panel."
-msgstr "Basculer vers le panneau de signal ou d'image"
+msgstr "Basculer vers le panneau."
 
 #: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:1 of
 msgid "Toggle auto refresh state."
-msgstr ""
+msgstr "Basculer l'état du rafraîchissement automatique."
 
 #: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:3 of
 msgid "Auto refresh state"
-msgstr ""
+msgstr "État du rafraîchissement automatique"
 
 #: cdl.core.baseproxy.BaseProxy.toggle_show_titles:1 of
 msgid "Toggle show titles state."
-msgstr ""
+msgstr "Basculer l'état d'affichage des titres."
 
 #: cdl.core.baseproxy.BaseProxy.toggle_show_titles:3 of
 msgid "Show titles state"
-msgstr ""
+msgstr "État d'affichage des titres"
 
-#: ../../features/general/remote.rst:121
+#: ../../features/general/remote.rst:123
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remote.rst:123
+#: ../../features/general/remote.rst:125
 msgid ""
 "The remote control class methods (either using the proxy or the remote "
 "client) may be completed with additional methods which are dynamically "
 "added at runtime. This mechanism allows to access the methods of the "
 "\"processor\" objects of DataLab."
-msgstr ""
+msgstr "Les méthodes de la classe de contrôle à distance (en utilisant le proxy ou le client distant) peuvent être complétées par des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des objets \"processeur\" de DataLab."
 
 #: cdl.core.gui.processor.signal:2 of
 msgid "Signal Processor"
-msgstr ""
+msgstr "Processeur de signal"
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
 msgid "Object handling signal processing: operations, processing, computing"
-msgstr ""
+msgstr "Objet de traitement de signal : opérations, traitement, calcul"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
 msgid "Compute sum"
-msgstr ""
+msgstr "Calculer la somme"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_average:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_average:1 of
 msgid "Compute average"
-msgstr ""
+msgstr "Calculer la moyenne"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_product:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_product:1 of
 msgid "Compute product"
-msgstr ""
+msgstr "Calculer le produit"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction:1 of
 msgid "Extract Region Of Interest (ROI) from data"
-msgstr ""
+msgstr "Extraire une région d'intérêt (ROI) des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes:1 of
 msgid "Swap data axes"
-msgstr ""
+msgstr "Permuter les axes des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_abs:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_abs:1 of
 msgid "Compute absolute value"
-msgstr ""
+msgstr "Calculer la valeur absolue"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_re:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_re:1 of
 msgid "Compute real part"
-msgstr ""
+msgstr "Calculer la partie réelle"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_im:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_im:1 of
 msgid "Compute imaginary part"
-msgstr ""
+msgstr "Calculer la partie imaginaire"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_astype:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_astype:1 of
 msgid "Convert data type"
-msgstr ""
+msgstr "Convertir le type de données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
 msgid "Compute Log10"
-msgstr ""
+msgstr "Calculer Log10"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
 msgid "Compute difference between two signals"
-msgstr ""
+msgstr "Calculer la différence entre deux signaux"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference:1
 #: of
 msgid "Compute quadratic difference between two signals"
-msgstr ""
+msgstr "Calculer la différence quadratique entre deux signaux"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_division:1 of
 msgid "Compute division between two signals"
-msgstr ""
+msgstr "Calculer la division entre deux signaux"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection:1 of
 msgid "Detect peaks from data"
-msgstr ""
+msgstr "Détecter les pics à partir des données"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
 msgid "Normalize data"
-msgstr ""
+msgstr "Normaliser les données"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_derivative:1 of
 msgid "Compute derivative"
-msgstr ""
+msgstr "Calculer la dérivée"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_integral:1 of
 msgid "Compute integral"
-msgstr ""
+msgstr "Calculer l'intégrale"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_calibration:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_calibration:1 of
 msgid "Compute data linear calibration"
-msgstr ""
+msgstr "Calculer l'étalonnage linéaire des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_threshold:1 of
 msgid "Compute threshold clipping"
-msgstr ""
+msgstr "Calculer le seuillage des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
 msgid "Compute maximum data clipping"
-msgstr ""
+msgstr "Calculer le seuillage maximum des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter:1 of
 msgid "Compute gaussian filter"
-msgstr ""
+msgstr "Calculer le filtre gaussien"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_moving_average:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average:1 of
 msgid "Compute moving average"
-msgstr ""
+msgstr "Calculer la moyenne mobile"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_moving_median:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median:1 of
 msgid "Compute moving median"
-msgstr ""
+msgstr "Calculer la médiane mobile"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_wiener:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_wiener:1 of
 msgid "Compute Wiener filter"
-msgstr ""
+msgstr "Calculer le filtre de Wiener"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_ifft:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fft:1 of
 msgid "Compute iFFT"
-msgstr ""
+msgstr "Calculer l'iFFT"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_fft:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_ifft:1 of
 msgid "Compute FFT"
-msgstr ""
+msgstr "Calculer la FFT"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation:1 of
+msgid "Compute interpolation"
+msgstr "Calculer l'interpolation"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_resampling:1 of
+msgid "Compute resampling"
+msgstr "Calculer le rééchantillonnage"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_detrending:1 of
+msgid "Compute detrending"
+msgstr "Calculer l'élimination de la tendance"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_convolution:1 of
+msgid "Compute convolution"
+msgstr "Calculer la convolution"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
 msgid "Compute fitting curve"
-msgstr ""
+msgstr "Calculer la courbe de régression"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit:1 of
 msgid "Compute polynomial fitting curve"
-msgstr ""
+msgstr "Calculer la courbe de régression polynomiale"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit:1 of
 msgid "Compute multi-Gaussian fitting curve"
-msgstr ""
+msgstr "Calculer la courbe de régression multi-Gaussienne"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm:1 of
 msgid "Compute FWHM"
-msgstr ""
+msgstr "Calculer la LMH"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2:1 of
 msgid "Compute FW at 1/e²"
-msgstr ""
+msgstr "Calculer la largeur à 1/e²"
 
 #: cdl.core.gui.processor.image:2 of
 msgid "Image Processor"
-msgstr ""
+msgstr "Processeur d'image"
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
 msgid "Object handling image processing: operations, processing, computing"
-msgstr ""
+msgstr "Objet de traitement d'image : opérations, traitement, calcul"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
 msgid "Compute base 10 logarithm"
-msgstr ""
+msgstr "Calculer le logarithme en base 10"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_rotate:1 of
 msgid "Rotate data arbitrarily"
-msgstr ""
+msgstr "Rotation arbitraire des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_rotate90:1 of
 msgid "Rotate data 90°"
-msgstr ""
+msgstr "Rotation des données de 90°"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_rotate270:1 of
 msgid "Rotate data 270°"
-msgstr ""
+msgstr "Rotation des données de 270°"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_fliph:1 of
 msgid "Flip data horizontally"
-msgstr ""
+msgstr "Retournement horizontal des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_flipv:1 of
 msgid "Flip data vertically"
-msgstr ""
+msgstr "Retournement vertical des données"
 
 #: cdl.core.gui.processor.image.ImageProcessor.distribute_on_grid:1 of
 msgid "Distribute images on a grid"
-msgstr ""
+msgstr "Distribuer les images sur une grille"
 
 #: cdl.core.gui.processor.image.ImageProcessor.reset_positions:1 of
 msgid "Reset image positions"
-msgstr ""
+msgstr "Réinitialiser les positions des images"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_resize:1 of
 msgid "Resize image"
-msgstr ""
+msgstr "Redimensionner l'image"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_binning:1 of
 msgid "Binning image"
-msgstr ""
+msgstr "Binning de l'image"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_profile:1 of
 msgid "Compute profile"
-msgstr ""
+msgstr "Calculer le profil"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_average_profile:1 of
 msgid "Compute average profile"
-msgstr ""
+msgstr "Calculer le profil moyen"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_difference:1 of
 msgid "Compute difference between two images"
-msgstr ""
+msgstr "Calculer la différence entre deux images"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference:1
 #: of
 msgid "Compute quadratic difference between two images"
-msgstr ""
+msgstr "Calculer la différence quadratique entre deux images"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_division:1 of
 msgid "Compute division between two images"
-msgstr ""
+msgstr "Calculer la division entre deux images"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
 msgid "Compute flat field correction"
-msgstr ""
+msgstr "Calculer la correction de champ plat"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
 msgid "Compute Butterworth filter"
-msgstr ""
+msgstr "Calculer le filtre de Butterworth"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
 msgid "Compute gamma correction"
-msgstr ""
+msgstr "Calculer la correction gamma"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log:1 of
 msgid "Compute log correction"
-msgstr ""
+msgstr "Calculer la correction logarithmique"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid:1 of
 msgid "Compute sigmoid correction"
-msgstr ""
+msgstr "Calculer la correction sigmoïde"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity:1 of
 msgid "Rescale image intensity levels"
-msgstr ""
+msgstr "Rééchelonner les niveaux d'intensité de l'image"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist:1 of
 msgid "Histogram equalization"
-msgstr ""
+msgstr "Égalisation d'histogramme"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist:1 of
 msgid "Adaptive histogram equalization"
-msgstr ""
+msgstr "Égalisation d'histogramme adaptative"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv:1 of
 msgid "Compute Total Variation denoising"
-msgstr ""
+msgstr "Calculer le débruitage par variation totale"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral:1 of
 msgid "Compute bilateral filter denoising"
-msgstr ""
+msgstr "Calculer le débruitage par filtre bilatéral"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet:1 of
 msgid "Compute Wavelet denoising"
-msgstr ""
+msgstr "Calculer le débruitage par ondelettes"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat:1 of
 msgid "Denoise using White Top-Hat"
-msgstr ""
+msgstr "Débruitage par White Top-Hat"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise:1 of
 msgid "Compute all denoising filters"
-msgstr ""
+msgstr "Calculer tous les filtres de débruitage"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat:1 of
 msgid "Compute White Top-Hat"
-msgstr ""
+msgstr "Calculer le White Top-Hat"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat:1 of
 msgid "Compute Black Top-Hat"
-msgstr ""
+msgstr "Calculer le Black Top-Hat"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_erosion:1 of
 msgid "Compute Erosion"
-msgstr ""
+msgstr "Calculer l'érosion"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_dilation:1 of
 msgid "Compute Dilation"
-msgstr ""
+msgstr "Calculer la dilatation"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_opening:1 of
 msgid "Compute morphological opening"
-msgstr ""
+msgstr "Calculer l'ouverture morphologique"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_closing:1 of
 msgid "Compute morphological closing"
-msgstr ""
+msgstr "Calculer la fermeture morphologique"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology:1 of
 msgid "Compute all morphology filters"
-msgstr ""
+msgstr "Calculer tous les filtres de morphologie"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_canny:1 of
 msgid "Compute Canny filter"
-msgstr ""
+msgstr "Calculer le filtre de Canny"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_roberts:1 of
 msgid "Compute Roberts filter"
-msgstr ""
+msgstr "Calculer le filtre de Roberts"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt:1 of
 msgid "Compute Prewitt filter"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h:1 of
 msgid "Compute Prewitt filter (horizontal)"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt (horizontal)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v:1 of
 msgid "Compute Prewitt filter (vertical)"
-msgstr ""
+msgstr "Calculer le filtre de Prewitt (vertical)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sobel:1 of
 msgid "Compute Sobel filter"
-msgstr ""
+msgstr "Calculer le filtre de Sobel"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h:1 of
 msgid "Compute Sobel filter (horizontal)"
-msgstr ""
+msgstr "Calculer le filtre de Sobel (horizontal)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v:1 of
 msgid "Compute Sobel filter (vertical)"
-msgstr ""
+msgstr "Calculer le filtre de Sobel (vertical)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_scharr:1 of
 msgid "Compute Scharr filter"
-msgstr ""
+msgstr "Calculer le filtre de Scharr"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h:1 of
 msgid "Compute Scharr filter (horizontal)"
-msgstr ""
+msgstr "Calculer le filtre de Scharr (horizontal)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v:1 of
 msgid "Compute Scharr filter (vertical)"
-msgstr ""
+msgstr "Calculer le filtre de Scharr (vertical)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_farid:1 of
 msgid "Compute Farid filter"
-msgstr ""
+msgstr "Calculer le filtre de Farid"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_farid_h:1 of
 msgid "Compute Farid filter (horizontal)"
-msgstr ""
+msgstr "Calculer le filtre de Farid (horizontal)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_farid_v:1 of
 msgid "Compute Farid filter (vertical)"
-msgstr ""
+msgstr "Calculer le filtre de Farid (vertical)"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_laplace:1 of
 msgid "Compute Laplace filter"
-msgstr ""
+msgstr "Calculer le filtre de Laplace"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_all_edges:1 of
 msgid "Compute all edges"
-msgstr ""
+msgstr "Calculer tous les contours"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_centroid:1 of
 msgid "Compute image centroid"
-msgstr ""
+msgstr "Calculer le centre de gravité de l'image"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle:1 of
 msgid "Compute minimum enclosing circle"
-msgstr ""
+msgstr "Calculer le cercle d'encadrement minimum"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection:1 of
 msgid "Compute 2D peak detection"
-msgstr ""
+msgstr "Calculer la détection de pics 2D"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape:1 of
 msgid "Compute contour shape fit"
-msgstr ""
+msgstr "Calculer l'ajustement de la forme du contour"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks:1 of
 msgid "Compute peak detection based on a circle Hough transform"
-msgstr ""
+msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog:1 of
 msgid "Compute blob detection using Difference of Gaussian method"
-msgstr ""
+msgstr "Calculer la détection de taches en utilisant la méthode de différence de Gaussienne"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh:1 of
 msgid "Compute blob detection using Determinant of Hessian method"
-msgstr ""
+msgstr "Calculer la détection de taches en utilisant la méthode du déterminant de Hessian"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_log:1 of
 msgid "Compute blob detection using Laplacian of Gaussian method"
-msgstr ""
+msgstr "Calculer la détection de taches en utilisant la méthode du Laplacien de Gaussienne"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
 msgid "Compute blob detection using OpenCV"
-msgstr ""
-
-#~ msgid "Error when trying to connect to DataLab XML-RPC server"
-#~ msgstr ""
-
-#~ msgid "List of object indices or object uuids to select"
-#~ msgstr ""
-
-#~ msgid "Group number. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "List of group indices or group uuids to select"
-#~ msgstr ""
-
-#~ msgid "Get object (signal/image) list for current panel."
-#~ msgstr ""
-
-#~ msgid "Get object (signal/image) from title."
-#~ msgstr "Ouvrir un signal ou une image à partir d'un fichier"
-
-#~ msgid "Object title"
-#~ msgstr ""
-
-#~ msgid "Object data"
-#~ msgstr "Obtenir la liste des objets"
-
-#~ msgid "Object index in current panel. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "Group index. Defaults to None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If ``index`` is not specified, returns"
-#~ " the currently selected object. If "
-#~ "``group_index`` is not specified, return "
-#~ "an object from the current group. "
-#~ "If ``panel`` is not specified, return"
-#~ " an object from the current panel."
-#~ msgstr ""
-
-#~ msgid "Get object (signal/image) from uuid."
-#~ msgstr ""
-
-#~ msgid "JSON string of annotation items or None if no items"
-#~ msgstr ""
-
-#~ msgid "Get object (signal/image) from title"
-#~ msgstr ""
-
-#~ msgid "object"
-#~ msgstr ""
-
-#~ msgid "if panel not found"
-#~ msgstr ""
-
-#~ msgid "Get object (signal/image) from uuid"
-#~ msgstr ""
-
-#~ msgid "object uuid"
-#~ msgstr ""
-
-#~ msgid "panel name (valid values: \"signal\", \"image\")."
-#~ msgstr ""
-
-#~ msgid "DataLab remote control"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This module provides utilities to "
-#~ "control DataLab from a Python script "
-#~ "(e.g. with Spyder) or from a "
-#~ "Jupyter notebook."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The :class:`RemoteClient` class provides the"
-#~ " main interface to DataLab XML-RPC"
-#~ " server."
-#~ msgstr ""
-
-#~ msgid "Convert NumPy array to XML-RPC Binary object, with shape and dtype."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The array is converted to a binary"
-#~ " string using NumPy's native binary "
-#~ "format."
-#~ msgstr ""
-
-#~ msgid "NumPy array to convert"
-#~ msgstr ""
-
-#~ msgid "XML-RPC Binary object"
-#~ msgstr ""
-
-#~ msgid "Convert XML-RPC binary to NumPy array."
-#~ msgstr ""
-
-#~ msgid "NumPy array"
-#~ msgstr ""
-
-#~ msgid "Convert guidata DataSet to JSON data."
-#~ msgstr ""
-
-#~ msgid "The JSON data is a list of three elements:"
-#~ msgstr ""
-
-#~ msgid "The first element is the module name of the DataSet class"
-#~ msgstr ""
-
-#~ msgid "The second element is the class name of the DataSet class"
-#~ msgstr ""
-
-#~ msgid "The third element is the JSON data of the DataSet instance"
-#~ msgstr ""
-
-#~ msgid "guidata DataSet to convert"
-#~ msgstr ""
-
-#~ msgid "JSON data"
-#~ msgstr ""
-
-#~ msgid "Convert JSON data to guidata DataSet."
-#~ msgstr ""
-
-#~ msgid "guidata DataSet"
-#~ msgstr ""
-
-#~ msgid "Decorator for method calling DataLab main window remotely"
-#~ msgstr ""
-
-#~ msgid "XML-RPC server QThread"
-#~ msgstr ""
-
-#~ msgid "Start server and serve forever"
-#~ msgstr ""
-
-#~ msgid "Notify automatically attributed port."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This method is called after the "
-#~ "server port has been automatically "
-#~ "attributed. It notifies the port number"
-#~ " to the main window."
-#~ msgstr ""
-
-#~ msgid "Server port number"
-#~ msgstr ""
-
-#~ msgid "Check if all AbstractCDLControl methods are implemented in RemoteServer"
-#~ msgstr ""
-
-#~ msgid "Register functions"
-#~ msgstr ""
-
-#~ msgid "Thread execution method"
-#~ msgstr ""
-
-#~ msgid "Called when DataLab is ready to process new requests"
-#~ msgstr ""
-
-#~ msgid "Return DataLab version"
-#~ msgstr ""
-
-#~ msgid "Panel name (valid values: 'signal', 'image', 'macro')"
-#~ msgstr ""
-
-#~ msgid "HDF5 file name (with extension .h5)"
-#~ msgstr ""
-
-#~ msgid "HDF5 file names. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "Import all objects from HDF5 file. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "True if successful"
-#~ msgstr ""
-
-#~ msgid "Z data"
-#~ msgstr ""
-
-#~ msgid "Compute function parameters. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "Panel name. Defaults to None."
-#~ msgstr ""
-
-#~ msgid "JSON string of annotation items"
-#~ msgstr ""
-
-#~ msgid "Return DataLab current XML-RPC port"
-#~ msgstr ""
-
-#~ msgid "XML-RPC port"
-#~ msgstr ""
-
-#~ msgid "DataLab has not yet been executed"
-#~ msgstr ""
-
+msgstr "Calculer la détection de taches en utilisant OpenCV"

@@ -1,3 +1,5 @@
+.. _ref-to-remote-control:
+
 Remote controlling
 ==================
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.algorithms:2 of
 msgid "Algorithms (:mod:`cdl.algorithms`)"
@@ -28,7 +28,11 @@ msgid ""
 "This package contains the algorithms used by the DataLab project. Those "
 "algorithms operate directly on NumPy arrays and are designed to be used "
 "in the DataLab pipeline, but can be used independently as well."
-msgstr "Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces algorithmes opèrent directement sur des tableaux NumPy et sont conçus pour être utilisés dans le pipeline DataLab, mais peuvent également être utilisés indépendamment."
+msgstr ""
+"Ce paquet contient les algorithmes utilisés par le projet DataLab. Ces "
+"algorithmes opèrent directement sur des tableaux NumPy et sont conçus "
+"pour être utilisés dans le pipeline DataLab, mais peuvent également être "
+"utilisés indépendamment."
 
 #: cdl.algorithms:10 of
 msgid ""
@@ -37,13 +41,20 @@ msgid ""
 ":mod:`cdl.core.computation` package for algorithms that operate directly "
 "on DataLab objects (i.e. :class:`cdl.obj.SignalObj` and "
 ":class:`cdl.obj.ImageObj`)."
-msgstr "Le module :mod:`cdl.algorithms` est le point d'entrée principal pour les algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le module :mod:`cdl.core.computation` pour les algorithmes qui opèrent directement sur les objets DataLab (c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
+msgstr ""
+"Le module :mod:`cdl.algorithms` est le point d'entrée principal pour les "
+"algorithmes DataLab lors de la manipulation de tableaux NumPy. Voir le "
+"module :mod:`cdl.core.computation` pour les algorithmes qui opèrent "
+"directement sur les objets DataLab (c'est-à-dire "
+":class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`)."
 
 #: cdl.algorithms:15 of
 msgid ""
 "The algorithms are organized in subpackages according to their purpose. "
 "The following subpackages are available:"
-msgstr "Les algorithmes sont organisés en sous-paquets en fonction de leur objectif. Les sous-paquets suivants sont disponibles :"
+msgstr ""
+"Les algorithmes sont organisés en sous-paquets en fonction de leur "
+"objectif. Les sous-paquets suivants sont disponibles :"
 
 #: cdl.algorithms:18 of
 msgid ":mod:`cdl.algorithms.signal`: Signal processing algorithms"
@@ -55,7 +66,9 @@ msgstr ":mod:`cdl.algorithms.image` : algorithmes de traitement d'image"
 
 #: cdl.algorithms:20 of
 msgid ":mod:`cdl.algorithms.datatypes`: Data type conversion algorithms"
-msgstr ":mod:`cdl.algorithms.datatypes` : algorithmes de conversion de type de données"
+msgstr ""
+":mod:`cdl.algorithms.datatypes` : algorithmes de conversion de type de "
+"données"
 
 #: cdl.algorithms:21 of
 msgid ":mod:`cdl.algorithms.fit`: Fitting algorithms"
@@ -67,7 +80,7 @@ msgstr "Algorithmes de traitement du signal"
 
 #: cdl.algorithms.signal.moving_average:1 of
 msgid "Compute moving average."
-msgstr ""
+msgstr "Calculer la moyenne mobile."
 
 #: cdl.algorithms.datatypes.is_complex_dtype
 #: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
@@ -83,19 +96,20 @@ msgstr ""
 #: cdl.algorithms.image.remove_overlapping_disks
 #: cdl.algorithms.image.scale_data_to_min_max cdl.algorithms.image.z_fft
 #: cdl.algorithms.image.z_ifft cdl.algorithms.signal.derivative
-#: cdl.algorithms.signal.moving_average cdl.algorithms.signal.normalize
-#: cdl.algorithms.signal.peak_indexes cdl.algorithms.signal.xpeak
-#: cdl.algorithms.signal.xy_fft cdl.algorithms.signal.xy_ifft of
+#: cdl.algorithms.signal.interpolate cdl.algorithms.signal.moving_average
+#: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indexes
+#: cdl.algorithms.signal.xpeak cdl.algorithms.signal.xy_fft
+#: cdl.algorithms.signal.xy_ifft of
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 #: cdl.algorithms.signal.moving_average:3 cdl.algorithms.signal.normalize:3 of
 msgid "Input array"
-msgstr ""
+msgstr "Tableau d'entrée"
 
 #: cdl.algorithms.signal.moving_average:5 of
 msgid "Window size"
-msgstr ""
+msgstr "Taille de la fenêtre"
 
 #: cdl.algorithms.datatypes.is_complex_dtype
 #: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
@@ -115,11 +129,11 @@ msgstr ""
 #: cdl.algorithms.signal.peak_indexes cdl.algorithms.signal.xpeak
 #: cdl.algorithms.signal.xy_fft cdl.algorithms.signal.xy_ifft of
 msgid "Returns"
-msgstr ""
+msgstr "Retourne"
 
 #: cdl.algorithms.signal.moving_average:8 of
 msgid "Moving average"
-msgstr ""
+msgstr "Moyenne mobile"
 
 #: cdl.algorithms.image.binning cdl.algorithms.image.distance_matrix
 #: cdl.algorithms.image.find_blobs_dog cdl.algorithms.image.find_blobs_doh
@@ -136,100 +150,123 @@ msgstr ""
 #: cdl.algorithms.signal.peak_indexes cdl.algorithms.signal.xpeak
 #: cdl.algorithms.signal.xy_fft cdl.algorithms.signal.xy_ifft of
 msgid "Return type"
-msgstr ""
+msgstr "Type de retour"
 
 #: cdl.algorithms.signal.derivative:1 of
 msgid "Compute numerical derivative."
-msgstr ""
+msgstr "Calculer la dérivée numérique."
 
-#: cdl.algorithms.signal.derivative:3 cdl.algorithms.signal.xpeak:3
-#: cdl.algorithms.signal.xy_fft:3 cdl.algorithms.signal.xy_ifft:3 of
+#: cdl.algorithms.signal.derivative:3 cdl.algorithms.signal.interpolate:3
+#: cdl.algorithms.signal.xpeak:3 cdl.algorithms.signal.xy_fft:3
+#: cdl.algorithms.signal.xy_ifft:3 of
 msgid "X data"
-msgstr ""
+msgstr "Données X"
 
-#: cdl.algorithms.signal.derivative:5 cdl.algorithms.signal.xpeak:5
-#: cdl.algorithms.signal.xy_fft:5 cdl.algorithms.signal.xy_ifft:5 of
+#: cdl.algorithms.signal.derivative:5 cdl.algorithms.signal.interpolate:5
+#: cdl.algorithms.signal.xpeak:5 cdl.algorithms.signal.xy_fft:5
+#: cdl.algorithms.signal.xy_ifft:5 of
 msgid "Y data"
-msgstr ""
+msgstr "Données Y"
 
 #: cdl.algorithms.signal.derivative:8 of
 msgid "Numerical derivative"
-msgstr ""
+msgstr "Dérivée numérique"
 
 #: cdl.algorithms.signal.normalize:1 of
 msgid "Normalize input array to a given parameter."
-msgstr ""
+msgstr "Normaliser le tableau d'entrée à un paramètre donné."
 
 #: cdl.algorithms.signal.normalize:5 of
 msgid ""
 "Normalization parameter. Defaults to \"maximum\". Supported values: "
 "'maximum', 'amplitude', 'sum', 'energy'"
-msgstr ""
+msgstr "Normalisation du paramètre. Par défaut : \"maximum\". Valeurs prises en charge : 'maximum', 'amplitude', 'sum', 'energy'"
 
 #: cdl.algorithms.signal.normalize:9 of
 msgid "Normalized array"
-msgstr ""
+msgstr "Tableau normalisé"
 
 #: cdl.algorithms.signal.xy_fft:1 of
 msgid "Compute FFT on X,Y data."
-msgstr ""
+msgstr "Calculer la FFT sur les données X,Y."
 
 #: cdl.algorithms.signal.xy_fft:7 cdl.algorithms.signal.xy_ifft:7 of
 msgid "Shift the zero frequency to the center of the spectrum. Defaults to True."
-msgstr ""
+msgstr "Décaler la fréquence nulle vers le centre du spectre. Par défaut : True."
 
 #: cdl.algorithms.signal.xy_fft:11 cdl.algorithms.signal.xy_ifft:11 of
 msgid "X,Y data"
-msgstr ""
+msgstr "Données X,Y"
 
 #: cdl.algorithms.signal.xy_ifft:1 of
 msgid "Compute iFFT on X,Y data."
-msgstr ""
+msgstr "Calculer la iFFT sur les données X,Y."
 
 #: cdl.algorithms.signal.peak_indexes:1 of
 msgid "Peak detection routine."
-msgstr ""
+msgstr "Routine de détection de pics."
 
 #: cdl.algorithms.signal.peak_indexes:3 of
 msgid ""
 "Finds the numeric index of the peaks in *y* by taking its first order "
 "difference. By using *thres* and *min_dist* parameters, it is possible to"
 " reduce the number of detected peaks. *y* must be signed."
-msgstr ""
+msgstr "Recherche l'index numérique des pics dans *y* en prenant sa première différence d'ordre. En utilisant les paramètres *thres* et *min_dist*, il est possible de réduire le nombre de pics détectés. *y* doit être signé."
 
 #: cdl.algorithms.signal.peak_indexes:7 of
 msgid "1D amplitude data to search for peaks."
-msgstr ""
+msgstr "Données d'amplitude 1D à rechercher pour les pics."
 
 #: cdl.algorithms.signal.peak_indexes:9 of
 msgid ""
 "Normalized threshold. Only the peaks with amplitude higher than the "
 "threshold will be detected."
-msgstr ""
+msgstr "Seuil normalisé. Seuls les pics dont l'amplitude est supérieure au seuil seront détectés."
 
 #: cdl.algorithms.signal.peak_indexes:12 of
 msgid ""
 "Minimum distance between each detected peak. The peak with the highest "
 "amplitude is preferred to satisfy this constraint."
-msgstr ""
+msgstr "Distance minimale entre chaque pic détecté. Le pic avec l'amplitude la plus élevée est préféré pour satisfaire cette contrainte."
 
 #: cdl.algorithms.signal.peak_indexes:15 of
 msgid ""
 "If True, the thres value will be interpreted as an absolute value, "
 "instead of a normalized threshold."
-msgstr ""
+msgstr "Si True, la valeur thres sera interprétée comme une valeur absolue, au lieu d'un seuil normalisé."
 
 #: cdl.algorithms.signal.peak_indexes:19 of
 msgid "Array containing the numeric indexes of the peaks that were detected"
-msgstr ""
+msgstr "Tableau contenant les index numériques des pics qui ont été détectés"
 
 #: cdl.algorithms.signal.xpeak:1 of
 msgid "Return default peak X-position (assuming a single peak)."
-msgstr ""
+msgstr "Retourne la position X du pic par défaut (en supposant un seul pic)."
 
 #: cdl.algorithms.signal.xpeak:8 of
 msgid "Peak X-position"
-msgstr ""
+msgstr "Position X du pic"
+
+#: cdl.algorithms.signal.interpolate:1 of
+msgid "Interpolate data."
+msgstr "Interpoler les données."
+
+#: cdl.algorithms.signal.interpolate:7 of
+msgid "New X data"
+msgstr "Nouvelles données X"
+
+#: cdl.algorithms.signal.interpolate:9 of
+msgid ""
+"Interpolation method. Valid values are 'linear', 'spline', 'quadratic', "
+"'cubic', 'barycentric', 'pchip'"
+msgstr "Méthode d'interpolation. Les valeurs valides sont 'linear', 'spline', 'quadratic', 'cubic', 'barycentric', 'pchip'"
+
+#: cdl.algorithms.signal.interpolate:12 of
+msgid ""
+"Fill value. Defaults to None. This value is used to fill in for requested"
+" points outside of the X data range. It is only used if the method "
+"argument is 'linear', 'cubic' or 'pchip'."
+msgstr "Valeur de remplissage. Par défaut : None. Cette valeur est utilisée pour remplir les points demandés en dehors de la plage de données X. Elle n'est utilisée que si l'argument de méthode est 'linear', 'cubic' ou 'pchip'."
 
 #: cdl.algorithms:30 of
 msgid "Image Processing Algorithms"
@@ -237,7 +274,7 @@ msgstr "Algorithmes de traitement d'image"
 
 #: cdl.algorithms.image.scale_data_to_min_max:1 of
 msgid "Scale array `data` to fit [zmin, zmax] dynamic range"
-msgstr ""
+msgstr "Mettre à l'échelle le tableau `data` pour s'adapter à la plage dynamique [zmin, zmax]"
 
 #: cdl.algorithms.image.binning:3 cdl.algorithms.image.get_2d_peaks_coords:9
 #: cdl.algorithms.image.get_absolute_level:3
@@ -248,227 +285,227 @@ msgstr ""
 #: cdl.algorithms.image.scale_data_to_min_max:3 cdl.algorithms.image.z_fft:3
 #: cdl.algorithms.image.z_ifft:3 of
 msgid "Input data"
-msgstr ""
+msgstr "Données d'entrée"
 
 #: cdl.algorithms.image.scale_data_to_min_max:5 of
 msgid "Minimum value of output data"
-msgstr ""
+msgstr "Valeur minimale des données de sortie"
 
 #: cdl.algorithms.image.scale_data_to_min_max:7 of
 msgid "Maximum value of output data"
-msgstr ""
+msgstr "Valeur maximale des données de sortie"
 
 #: cdl.algorithms.image.scale_data_to_min_max:10 of
 msgid "Scaled data"
-msgstr ""
+msgstr "Données mises à l'échelle"
 
 #: cdl.algorithms.image.z_fft:1 of
 msgid "Compute FFT of complex array `z`"
-msgstr ""
+msgstr "Calculer la FFT du tableau complexe `z`"
 
 #: cdl.algorithms.image.z_fft:5 cdl.algorithms.image.z_ifft:5 of
 msgid "Shift zero frequency to center (default: True)"
-msgstr ""
+msgstr "Décaler la fréquence nulle vers le centre (par défaut : True)"
 
 #: cdl.algorithms.image.z_fft:8 of
 msgid "FFT of input data"
-msgstr ""
+msgstr "FFT des données d'entrée"
 
 #: cdl.algorithms.image.z_ifft:1 of
 msgid "Compute inverse FFT of complex array `z`"
-msgstr ""
+msgstr "Calculer la FFT inverse du tableau complexe `z`"
 
 #: cdl.algorithms.image.z_ifft:8 of
 msgid "Inverse FFT of input data"
-msgstr ""
+msgstr "FFT inverse des données d'entrée"
 
 #: cdl.algorithms.image.binning:1 of
 msgid "Perform image pixel binning"
-msgstr ""
+msgstr "Effectuer le binning des pixels de l'image"
 
 #: cdl.algorithms.image.binning:5 of
 msgid "Binning factor along x-axis"
-msgstr ""
+msgstr "Facteur de binning le long de l'axe x"
 
 #: cdl.algorithms.image.binning:7 of
 msgid "Binning factor along y-axis"
-msgstr ""
+msgstr "Facteur de binning le long de l'axe y"
 
 #: cdl.algorithms.image.binning:9 of
 msgid "Binning operation (sum, average, median, min, max)"
-msgstr ""
+msgstr "Opération de binning (sum, average, median, min, max)"
 
 #: cdl.algorithms.image.binning:11 of
 msgid "Output data type (default: None, i.e. same as input)"
-msgstr ""
+msgstr "Type de données de sortie (par défaut : None, c'est-à-dire identique à l'entrée)"
 
 #: cdl.algorithms.image.binning:14 of
 msgid "Binned data"
-msgstr ""
+msgstr "Données binnées"
 
 #: cdl.algorithms.image.flatfield:1 of
 msgid "Compute flat-field correction"
-msgstr ""
+msgstr "Calculer la correction du champ plat"
 
 #: cdl.algorithms.image.flatfield:3 of
 msgid "Raw data"
-msgstr ""
+msgstr "Données brutes"
 
 #: cdl.algorithms.image.flatfield:5 of
 msgid "Flat-field data"
-msgstr ""
+msgstr "Données de champ plat"
 
 #: cdl.algorithms.image.flatfield:7 of
 msgid "Threshold for flat-field correction (default: None)"
-msgstr ""
+msgstr "Seuil de correction du champ plat (par défaut : None)"
 
 #: cdl.algorithms.image.flatfield:10 of
 msgid "Flat-field corrected data"
-msgstr ""
+msgstr "Données corrigées du champ plat"
 
 #: cdl.algorithms.image.get_centroid_fourier:1 of
 msgid "Return image centroid using Fourier algorithm"
-msgstr ""
+msgstr "Retourne le centre de gravité de l'image en utilisant l'algorithme de Fourier"
 
 #: cdl.algorithms.image.get_centroid_fourier:6 of
 msgid "Centroid coordinates"
-msgstr ""
+msgstr "Coordonnées du centre de gravité"
 
 #: cdl.algorithms.image.get_absolute_level:1 of
 msgid "Return absolute level"
-msgstr ""
+msgstr "Retourne le niveau absolu"
 
 #: cdl.algorithms.image.get_absolute_level:5 of
 msgid "Relative level (0.0 to 1.0)"
-msgstr ""
+msgstr "Niveau relatif (0.0 à 1.0)"
 
 #: cdl.algorithms.image.get_absolute_level:8 of
 msgid "Absolute level"
-msgstr ""
+msgstr "Niveau absolu"
 
 #: cdl.algorithms.image.get_enclosing_circle:1 of
 msgid ""
 "Return (x, y, radius) for the circle contour enclosing image values above"
 " threshold relative level (.5 means FWHM)"
-msgstr ""
+msgstr "Retourne (x, y, rayon) pour le contour du cercle contenant les valeurs d'image au-dessus du niveau relatif du seuil (.5 signifie FWHM)"
 
 #: cdl.algorithms.image.get_2d_peaks_coords:13
 #: cdl.algorithms.image.get_contour_shapes:7
 #: cdl.algorithms.image.get_enclosing_circle:6 of
 msgid "Relative level (default: 0.5)"
-msgstr ""
+msgstr "Niveau relatif (par défaut : 0.5)"
 
 #: cdl.algorithms.image.get_enclosing_circle:9 of
 msgid "(x, y, radius)"
-msgstr ""
+msgstr "(x, y, rayon)"
 
 #: cdl.algorithms.image.get_enclosing_circle of
 msgid "Raises"
-msgstr ""
+msgstr "Lève"
 
 #: cdl.algorithms.image.get_enclosing_circle:12 of
 msgid "No contour was found"
-msgstr ""
+msgstr "Aucun contour n'a été trouvé"
 
 #: cdl.algorithms.image.distance_matrix:1 of
 msgid "Return distance matrix from coords"
-msgstr ""
+msgstr "Retourne la matrice de distance à partir des coordonnées"
 
 #: cdl.algorithms.image.distance_matrix:3 of
 msgid "List of coordinates"
-msgstr ""
+msgstr "Liste des coordonnées"
 
 #: cdl.algorithms.image.distance_matrix:6 of
 msgid "Distance matrix"
-msgstr ""
+msgstr "Matrice de distance"
 
 #: cdl.algorithms.image.get_2d_peaks_coords:1 of
 msgid "Detect peaks in image data, return coordinates."
-msgstr ""
+msgstr "Détecte les pics dans les données d'image, retourne les coordonnées."
 
 #: cdl.algorithms.image.get_2d_peaks_coords:3 of
 msgid ""
 "If neighborhoods size is None, default value is the highest value between"
 " 50 pixels and the 1/40th of the smallest image dimension."
-msgstr ""
+msgstr "Si la taille du voisinage est None, la valeur par défaut est la plus élevée entre 50 pixels et le 1/40ème de la plus petite dimension de l'image."
 
 #: cdl.algorithms.image.get_2d_peaks_coords:6 of
 msgid ""
 "Detection threshold level is relative to difference between data maximum "
 "and minimum values."
-msgstr ""
+msgstr "Le niveau de seuil de détection est relatif à la différence entre les valeurs maximales et minimales des données."
 
 #: cdl.algorithms.image.get_2d_peaks_coords:11 of
 msgid "Neighborhood size (default: None)"
-msgstr ""
+msgstr "Taille du voisinage (par défaut : None)"
 
 #: cdl.algorithms.image.get_2d_peaks_coords:16 of
 msgid "Coordinates of peaks"
-msgstr ""
+msgstr "Coordonnées des pics"
 
 #: cdl.algorithms.image.get_contour_shapes:1 of
 msgid ""
 "Find iso-valued contours in a 2D array, above relative level (.5 means "
 "FWHM), then fit contours with shape ('ellipse' or 'circle')"
-msgstr ""
+msgstr "Trouve les contours de valeur iso dans un tableau 2D, au-dessus du niveau relatif (.5 signifie FWHM), puis ajuste les contours avec la forme ('ellipse' ou 'cercle')"
 
 #: cdl.algorithms.image.get_contour_shapes:5 of
 msgid ""
 "Shape to fit. Valid values: 'circle', 'ellipse', 'polygon'. (default: "
 "'ellipse')"
-msgstr ""
+msgstr "Forme à ajuster. Valeurs valides : 'circle', 'ellipse', 'polygon'. (par défaut : 'ellipse')"
 
 #: cdl.algorithms.image.get_contour_shapes:9 of
 msgid "Coordinates of shapes"
-msgstr ""
+msgstr "Coordonnées des formes"
 
 #: cdl.algorithms.image.get_hough_circle_peaks:1 of
 msgid ""
 "Detect peaks in image from circle Hough transform, return circle "
 "coordinates."
-msgstr ""
+msgstr "Détecte les pics dans l'image à partir de la transformée de Hough du cercle, retourne les coordonnées du cercle."
 
 #: cdl.algorithms.image.get_hough_circle_peaks:5 of
 msgid "Minimum radius (default: None)"
-msgstr ""
+msgstr "Rayon minimum (par défaut : None)"
 
 #: cdl.algorithms.image.get_hough_circle_peaks:7 of
 msgid "Maximum radius (default: None)"
-msgstr ""
+msgstr "Rayon maximum (par défaut : None)"
 
 #: cdl.algorithms.image.get_hough_circle_peaks:9 of
 msgid "Number of radii (default: None)"
-msgstr ""
+msgstr "Nombre de rayons (par défaut : None)"
 
 #: cdl.algorithms.image.get_hough_circle_peaks:11 of
 msgid "Minimum distance between circles (default: 1)"
-msgstr ""
+msgstr "Distance minimale entre les cercles (par défaut : 1)"
 
 #: cdl.algorithms.image.get_hough_circle_peaks:14 of
 msgid "Coordinates of circles"
-msgstr ""
+msgstr "Coordonnées des cercles"
 
 #: cdl.algorithms.image.find_blobs_dog:1 of
 msgid ""
 "Finds blobs in the given grayscale image using the Difference of "
 "Gaussians (DoG) method."
-msgstr ""
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode de différence de Gauss (DoG)."
 
 #: cdl.algorithms.image.find_blobs_dog:4 cdl.algorithms.image.find_blobs_doh:4
 #: cdl.algorithms.image.find_blobs_log:4
 #: cdl.algorithms.image.find_blobs_opencv:3 of
 msgid "The grayscale input image."
-msgstr ""
+msgstr "L'image d'entrée en niveaux de gris."
 
 #: cdl.algorithms.image.find_blobs_dog:6 cdl.algorithms.image.find_blobs_doh:6
 #: cdl.algorithms.image.find_blobs_log:6 of
 msgid "The minimum blob radius in pixels."
-msgstr ""
+msgstr "Le rayon minimum de la tache en pixels."
 
 #: cdl.algorithms.image.find_blobs_dog:8 cdl.algorithms.image.find_blobs_doh:8
 #: cdl.algorithms.image.find_blobs_log:8 of
 msgid "The maximum blob radius in pixels."
-msgstr ""
+msgstr "Le rayon maximum de la tache en pixels."
 
 #: cdl.algorithms.image.find_blobs_dog:10
 #: cdl.algorithms.image.find_blobs_doh:10
@@ -478,7 +515,7 @@ msgid ""
 "blobs are detected with radii of 10 and 12 respectively, and the "
 "``overlap`` is set to 0.5, then the area of the smaller blob will be "
 "ignored and only the area of the larger blob will be returned."
-msgstr ""
+msgstr "Le chevauchement minimum entre deux taches en pixels. Par exemple, si deux taches sont détectées avec des rayons de 10 et 12 respectivement, et que le chevauchement est défini sur 0,5, alors la zone de la plus petite tache sera ignorée et seule la zone de la plus grande tache sera retournée."
 
 #: cdl.algorithms.image.find_blobs_dog:16
 #: cdl.algorithms.image.find_blobs_doh:19
@@ -487,130 +524,130 @@ msgid ""
 "The absolute lower bound for scale space maxima. Local maxima smaller "
 "than ``threshold_rel`` are ignored. Reduce this to detect blobs with less"
 " intensities."
-msgstr ""
+msgstr "La limite inférieure absolue pour les maxima de l'espace d'échelle. Les maxima locaux plus petits que ``threshold_rel`` sont ignorés. Réduisez ceci pour détecter les taches avec moins d'intensité."
 
 #: cdl.algorithms.image.find_blobs_dog:20
 #: cdl.algorithms.image.find_blobs_log:23 of
 msgid ""
 "If ``True``, exclude blobs from detection if they are too close to the "
 "border of the image. Border size is ``min_sigma``."
-msgstr ""
+msgstr "Si ``True``, exclure les taches de la détection si elles sont trop proches du bord de l'image. La taille de la bordure est ``min_sigma``."
 
 #: cdl.algorithms.image.find_blobs_dog:25
 #: cdl.algorithms.image.find_blobs_doh:24
 #: cdl.algorithms.image.find_blobs_log:28
 #: cdl.algorithms.image.find_blobs_opencv:47 of
 msgid "Coordinates of blobs"
-msgstr ""
+msgstr "Coordonnées des taches"
 
 #: cdl.algorithms.image.find_blobs_doh:1 of
 msgid ""
 "Finds blobs in the given grayscale image using the Determinant of Hessian"
 " (DoH) method."
-msgstr ""
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode du déterminant de Hessian (DoH)."
 
 #: cdl.algorithms.image.find_blobs_doh:16
 #: cdl.algorithms.image.find_blobs_log:16 of
 msgid ""
 "If ``True``, the radius of each blob is returned as ``sqrt(sigma)`` for "
 "each detected blob."
-msgstr ""
+msgstr "Si ``True``, le rayon de chaque tache est retourné comme ``sqrt(sigma)`` pour chaque tache détectée."
 
 #: cdl.algorithms.image.find_blobs_log:1 of
 msgid ""
 "Finds blobs in the given grayscale image using the Laplacian of Gaussian "
 "(LoG) method."
-msgstr ""
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant la méthode du Laplacien de Gauss (LoG)."
 
 #: cdl.algorithms.image.remove_overlapping_disks:1 of
 msgid "Remove overlapping disks among coordinates"
-msgstr ""
+msgstr "Supprimer les disques qui se chevauchent parmi les coordonnées"
 
 #: cdl.algorithms.image.remove_overlapping_disks:3 of
 msgid "The coordinates of the disks"
-msgstr ""
+msgstr "Les coordonnées des disques"
 
 #: cdl.algorithms.image.remove_overlapping_disks:6 of
 msgid "The coordinates of the disks with overlapping disks removed"
-msgstr ""
+msgstr "Les coordonnées des disques avec les disques qui se chevauchent supprimés"
 
 #: cdl.algorithms.image.find_blobs_opencv:1 of
 msgid ""
 "Finds blobs in the given grayscale image using OpenCV's "
 "SimpleBlobDetector."
-msgstr ""
+msgstr "Recherche les taches dans l'image en niveaux de gris donnée en utilisant le détecteur de taches simples d'OpenCV."
 
 #: cdl.algorithms.image.find_blobs_opencv:5 of
 msgid "The minimum blob intensity."
-msgstr ""
+msgstr "L'intensité minimale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:7 of
 msgid "The maximum blob intensity."
-msgstr ""
+msgstr "L'intensité maximale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:9 of
 msgid "The minimum number of times a blob is detected before it is reported."
-msgstr ""
+msgstr "Le nombre minimum de fois qu'une tache est détectée avant qu'elle ne soit signalée."
 
 #: cdl.algorithms.image.find_blobs_opencv:12 of
 msgid "The minimum distance between blobs."
-msgstr ""
+msgstr "La distance minimale entre les taches."
 
 #: cdl.algorithms.image.find_blobs_opencv:15 of
 msgid "If ``True``, blobs are filtered by color."
-msgstr ""
+msgstr "Si ``True``, les taches sont filtrées par couleur."
 
 #: cdl.algorithms.image.find_blobs_opencv:17 of
 msgid "The color of the blobs to filter by."
-msgstr ""
+msgstr "La couleur des taches à filtrer par."
 
 #: cdl.algorithms.image.find_blobs_opencv:19 of
 msgid "If ``True``, blobs are filtered by area."
-msgstr ""
+msgstr "Si ``True``, les taches sont filtrées par zone."
 
 #: cdl.algorithms.image.find_blobs_opencv:21 of
 msgid "The minimum blob area."
-msgstr ""
+msgstr "La zone minimale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:23 of
 msgid "The maximum blob area."
-msgstr ""
+msgstr "La zone maximale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:25 of
 msgid "If ``True``, blobs are filtered by circularity."
-msgstr ""
+msgstr "Si ``True``, les taches sont filtrées par circularité."
 
 #: cdl.algorithms.image.find_blobs_opencv:28 of
 msgid "The minimum blob circularity."
-msgstr ""
+msgstr "La circularité minimale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:30 of
 msgid "The maximum blob circularity."
-msgstr ""
+msgstr "La circularité maximale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:32 of
 msgid "If ``True``, blobs are filtered by inertia."
-msgstr ""
+msgstr "Si ``True``, les taches sont filtrées par inertie."
 
 #: cdl.algorithms.image.find_blobs_opencv:35 of
 msgid "The minimum blob inertia ratio."
-msgstr ""
+msgstr "Le rapport d'inertie minimale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:37 of
 msgid "The maximum blob inertia ratio."
-msgstr ""
+msgstr "Le rapport d'inertie maximale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:39 of
 msgid "If ``True``, blobs are filtered by convexity."
-msgstr ""
+msgstr "Si ``True``, les taches sont filtrées par convexité."
 
 #: cdl.algorithms.image.find_blobs_opencv:42 of
 msgid "The minimum blob convexity."
-msgstr ""
+msgstr "La convexité minimale de la tache."
 
 #: cdl.algorithms.image.find_blobs_opencv:44 of
 msgid "The maximum blob convexity."
-msgstr ""
+msgstr "La convexité maximale de la tache."
 
 #: cdl.algorithms:36 of
 msgid "Data Type Conversion Algorithms"
@@ -618,24 +655,24 @@ msgstr "Algorithmes de conversion de type de données"
 
 #: cdl.algorithms.datatypes.is_integer_dtype:1 of
 msgid "Return True if data type is an integer type"
-msgstr ""
+msgstr "Retourne True si le type de données est un type entier"
 
 #: cdl.algorithms.datatypes.is_complex_dtype:3
 #: cdl.algorithms.datatypes.is_integer_dtype:3 of
 msgid "Data type to check"
-msgstr ""
+msgstr "Type de données à vérifier"
 
 #: cdl.algorithms.datatypes.is_integer_dtype:5 of
 msgid "True if data type is an integer type"
-msgstr ""
+msgstr "True si le type de données est un type entier"
 
 #: cdl.algorithms.datatypes.is_complex_dtype:1 of
 msgid "Return True if data type is a complex type"
-msgstr ""
+msgstr "Retourne True si le type de données est un type complexe"
 
 #: cdl.algorithms.datatypes.is_complex_dtype:5 of
 msgid "True if data type is a complex type"
-msgstr ""
+msgstr "True si le type de données est un type complexe"
 
 #: cdl.algorithms:42 of
 msgid "Curve Fitting Algorithms"
@@ -643,47 +680,44 @@ msgstr "Algorithmes de régression"
 
 #: cdl.algorithms.fit.FitModel:1 of
 msgid "Curve fitting model base class"
-msgstr ""
+msgstr "Classe de base du modèle de régression"
 
 #: cdl.algorithms.fit.FitModel.func:1 cdl.algorithms.fit.GaussianModel.func:1
 #: cdl.algorithms.fit.LorentzianModel.func:1
 #: cdl.algorithms.fit.VoigtModel.func:1 of
 msgid "Return fitting function"
-msgstr ""
+msgstr "Retourne la fonction de régression"
 
 #: cdl.algorithms.fit.FitModel.get_amp_from_amplitude:1
 #: cdl.algorithms.fit.GaussianModel.get_amp_from_amplitude:1
 #: cdl.algorithms.fit.LorentzianModel.get_amp_from_amplitude:1 of
 msgid "Return amp from function amplitude and sigma"
-msgstr ""
+msgstr "Retourne amp à partir de l'amplitude de la fonction et de sigma"
 
 #: cdl.algorithms.fit.FitModel.amplitude:1
 #: cdl.algorithms.fit.GaussianModel.amplitude:1
 #: cdl.algorithms.fit.LorentzianModel.amplitude:1 of
 msgid "Return function amplitude"
-msgstr ""
+msgstr "Retourne l'amplitude de la fonction"
 
 #: cdl.algorithms.fit.FitModel.fwhm:1 cdl.algorithms.fit.GaussianModel.fwhm:1
 #: cdl.algorithms.fit.LorentzianModel.fwhm:1
 #: cdl.algorithms.fit.VoigtModel.fwhm:1 of
 msgid "Return function FWHM"
-msgstr ""
+msgstr "Retourne la LMH de la fonction"
 
 #: cdl.algorithms.fit.FitModel.half_max_segment:1 of
 msgid "Return segment coordinates for y=half-maximum intersection"
-msgstr ""
+msgstr "Retourne les coordonnées du segment pour l'intersection y=half-maximum"
 
 #: cdl.algorithms.fit.GaussianModel:1 of
 msgid "1-dimensional Gaussian fit model"
-msgstr ""
+msgstr "Modèle de régression gaussien à 1 dimension"
 
 #: cdl.algorithms.fit.LorentzianModel:1 of
 msgid "1-dimensional Lorentzian fit model"
-msgstr ""
+msgstr "Modèle de régression lorentzien à 1 dimension"
 
 #: cdl.algorithms.fit.VoigtModel:1 of
 msgid "1-dimensional Voigt fit model"
-msgstr ""
-
-#~ msgid "Algorithms Package (:mod:`cdl.algorithms`)"
-#~ msgstr ""
+msgstr "Modèle de régression Voigt à 1 dimension"

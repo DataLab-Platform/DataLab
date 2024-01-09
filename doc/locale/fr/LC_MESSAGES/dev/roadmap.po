@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 13:24+0100\n"
+"POT-Creation-Date: 2024-01-08 16:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,271 +19,431 @@ msgstr ""
 
 #: ../../dev/roadmap.rst:2
 msgid "Roadmap"
-msgstr ""
+msgstr "Feuille de route"
 
 #: ../../dev/roadmap.rst:5
 msgid "Future milestones"
-msgstr ""
+msgstr "Jalons futurs"
 
 #: ../../dev/roadmap.rst:8
 msgid "Features"
-msgstr ""
-
-#: ../../dev/roadmap.rst:10
-msgid "Add support for multichannel timeseries"
-msgstr ""
+msgstr "Fonctionnalités"
 
 #: ../../dev/roadmap.rst:12
-msgid ""
-"Develop a Jupyter plugin for interactive data analysis connected with "
-"DataLab"
-msgstr ""
+msgid "Add a Jupyter kernel interface to DataLab:"
+msgstr "Ajouter une interface de noyau Jupyter à DataLab :"
 
 #: ../../dev/roadmap.rst:14
 msgid ""
-"Develop a Spyder plugin for interactive data analysis connected with "
-"DataLab"
-msgstr ""
+"This would allow to use DataLab from other software, such as Jupyter "
+"notebooks, Spyder or Visual Studio Code"
+msgstr "Cela permettrait d'utiliser DataLab à partir d'autres logiciels, tels que des notebooks Jupyter, Spyder ou Visual Studio Code"
 
 #: ../../dev/roadmap.rst:16
-msgid "Image computing results (`cdl.model.base.ResultShape`):"
-msgstr ""
-
-#: ../../dev/roadmap.rst:18
 msgid ""
-"Add support for \"free form\" geometrical shapes (this could be used to "
-"draw the result of a segmentation algorithm, or the result of an edge "
-"detection)"
-msgstr ""
+"This would also allow to share data between DataLab and other software "
+"(e.g. display DataLab numerical results in Jupyter notebooks or the other"
+" way around, display Jupyter results in DataLab, etc.)"
+msgstr "Cela permettrait également de partager des données entre DataLab et d'autres logiciels (par exemple, afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa, afficher les résultats de Jupyter dans DataLab, etc.)"
 
-#: ../../dev/roadmap.rst:21
-msgid ""
-"Add support for custom geometrical shapes (this could be used to draw the"
-" result of a specific algorithm, e.g. a pattern recognition algorithm)"
-msgstr ""
+#: ../../dev/roadmap.rst:20
+msgid "Create a Jupyter plugin for interactive data analysis with DataLab:"
+msgstr "Créer un plugin Jupyter pour l'analyse de données interactive avec DataLab :"
 
-#: ../../dev/roadmap.rst:24
+#: ../../dev/roadmap.rst:22
 msgid ""
-"See \"TODO\" comment just above ``cdl.model.base.ResultShape`` class "
-"definition for more details about how to implement this feature."
-msgstr ""
+"Using DataLab from a Jupyter notebook is already possible, thanks to the "
+"remote control features (see :ref:`ref-to-remote-control`), but it would "
+"be nice to have a dedicated plugin"
+msgstr "Il est déjà possible d'utiliser DataLab à partir d'un notebook Jupyter, grâce aux fonctionnalités de contrôle à distance (voir :ref:`ref-to-remote-control`), mais il serait utile d'avoir un plugin dédié"
+
+#: ../../dev/roadmap.rst:25
+msgid ""
+"This plugin would allow to use DataLab as a Jupyter kernel, and to "
+"display DataLab numerical results in Jupyter notebooks or the other way "
+"around (e.g. display Jupyter results in DataLab)"
+msgstr "Ce plugin permettrait d'utiliser DataLab comme noyau Jupyter, et d'afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa (par exemple, afficher les résultats de Jupyter dans DataLab)"
 
 #: ../../dev/roadmap.rst:28
-msgid "Maintenance"
-msgstr ""
+msgid ""
+"This plugin would also allow to use DataLab's processing features from "
+"Jupyter notebooks"
+msgstr "Ce plugin permettrait également d'utiliser les fonctionnalités de traitement de DataLab à partir de notebooks Jupyter"
 
 #: ../../dev/roadmap.rst:30
+msgid ""
+"A typical use case could also consist in using DataLab for manipulating "
+"signals or images efficiently, and using Jupyter for custom data analysis"
+" based on specific / home-made algorithms"
+msgstr "Un cas d'utilisation typique pourrait également consister à utiliser DataLab pour manipuler des signaux ou des images de manière efficace, et à utiliser Jupyter pour l'analyse de données personnalisée basée sur des algorithmes spécifiques / faits maison"
+
+#: ../../dev/roadmap.rst:33
+msgid ""
+"This plugin could be implemented by using the Jupyter kernel interface "
+"(see above)"
+msgstr "Ce plugin pourrait être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
+
+#: ../../dev/roadmap.rst:36
+msgid ""
+"Create a Spyder plugin for interactive data analysis connected with "
+"DataLab:"
+msgstr "Créer un plugin Spyder pour l'analyse de données interactive connectée à DataLab :"
+
+#: ../../dev/roadmap.rst:38
+msgid ""
+"This is exactly the same use case as for the Jupyter plugin, but for "
+"Spyder"
+msgstr "Il s'agit exactement du même cas d'utilisation que pour le plugin Jupyter, mais pour Spyder"
+
+#: ../../dev/roadmap.rst:40
+msgid ""
+"This plugin could also be implemented by using the Jupyter kernel "
+"interface (see above)"
+msgstr "Ce plugin pourrait également être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
+
+#: ../../dev/roadmap.rst:43
+msgid ""
+"Add support for time series (see `Issue #27 <https://github.com/Codra-"
+"Ingenierie-Informatique/DataLab/issues/27>`_)"
+msgstr "Ajouter la prise en charge des séries temporelles (voir `Issue #27 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/27>`_)"
+
+#: ../../dev/roadmap.rst:47
+msgid "Maintenance"
+msgstr "Maintenance"
+
+#: ../../dev/roadmap.rst:49
+msgid ""
+"2024: switch to gRPC for remote control (instead of XML-RPC), if there is"
+" a need for a more efficient communication protocol (see `Issue #18 "
+"<https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)"
+msgstr "2024 : passer à gRPC pour le contrôle à distance (au lieu de XML-RPC), s'il y a besoin d'un protocole de communication plus efficace (voir `Issue #18 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)"
+
+#: ../../dev/roadmap.rst:53
 msgid ""
 "2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ; "
 "this should be straightforward, thanks to the `qtpy` compatibility layer "
 "and to the fact that `PlotPyStack` is already compatible with PyQt6)"
-msgstr ""
+msgstr "2025 : abandonner le support de PyQt5 (fin de vie : mi-2025), et passer à PyQt6 ; cela devrait être simple, grâce à la couche de compatibilité `qtpy` et au fait que `PlotPyStack` est déjà compatible avec PyQt6)"
 
-#: ../../dev/roadmap.rst:35
+#: ../../dev/roadmap.rst:58
 msgid "Other tasks"
-msgstr ""
+msgstr "Autres tâches"
 
-#: ../../dev/roadmap.rst:37
-msgid "Develop a very simple DataLab plugin to demonstrate the plugin system"
-msgstr ""
+#: ../../dev/roadmap.rst:60
+msgid ""
+"Create a DataLab plugin template (see `Issue #26 <https://github.com"
+"/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)"
+msgstr "Créer un modèle de plugin DataLab (voir `Issue #26 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)"
 
-#: ../../dev/roadmap.rst:39
-msgid "Develop a DataLab plugin template"
-msgstr ""
+#: ../../dev/roadmap.rst:63
+msgid ""
+"Make tutorial videos: plugin system, remote control features, etc. (see "
+"`Issue #25 <https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/25>`_)"
+msgstr "Réaliser des vidéos de démonstration : système de plugins, fonctionnalités de contrôle à distance, etc. (voir `Issue #25 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/25>`_)"
 
-#: ../../dev/roadmap.rst:41
-msgid "Make a video tutorial about the plugin system and remote control features"
-msgstr ""
-
-#: ../../dev/roadmap.rst:44
+#: ../../dev/roadmap.rst:67
 msgid "Past milestones"
-msgstr ""
+msgstr "Jalons passés"
 
-#: ../../dev/roadmap.rst:47
+#: ../../dev/roadmap.rst:70
+msgid "DataLab 0.11"
+msgstr "DataLab 0.11"
+
+#: ../../dev/roadmap.rst:72
+msgid ""
+"Add a drag-and-drop feature to the signal and image panels, to allow "
+"reordering signals and images (see `Issue #17 <https://github.com/Codra-"
+"Ingenierie-Informatique/DataLab/issues/17>`_)"
+msgstr "Ajouter une fonctionnalité de glisser-déposer aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #17 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17>`_)"
+
+#: ../../dev/roadmap.rst:76
+msgid ""
+"Add \"Move up\" and \"Move down\" buttons to the signal and image panels,"
+" to allow reordering signals and images (see `Issue #22 "
+"<https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)"
+msgstr "Ajouter des boutons \"Monter\" et \"Descendre\" aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #22 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)"
+
+#: ../../dev/roadmap.rst:80
+msgid "Add 1D convolution, interpolation, resampling and detrending features"
+msgstr "Ajouter des fonctionnalités de convolution 1D, d'interpolation, de rééchantillonnage et d'élimination des tendances"
+
+#: ../../dev/roadmap.rst:83
+msgid "DataLab 0.10"
+msgstr "DataLab 0.10"
+
+#: ../../dev/roadmap.rst:85
+msgid "Develop a very simple DataLab plugin to demonstrate the plugin system"
+msgstr "Développer un plugin DataLab très simple pour démontrer le système de plugins"
+
+#: ../../dev/roadmap.rst:87
+msgid "Serialize curve and image styles in HDF5 files"
+msgstr "Sérialiser les styles de courbes et d'images dans les fichiers HDF5"
+
+#: ../../dev/roadmap.rst:89
+msgid ""
+"Add an \"Auto-refresh\" global option, to be able to disable the "
+"automatic refresh of the main window when doing multiple processing "
+"steps, thus improving performance"
+msgstr "Ajouter une option globale \"Rafraîchissement automatique\", pour pouvoir désactiver le rafraîchissement automatique de la fenêtre principale lors de l'exécution de plusieurs étapes de traitement, améliorant ainsi les performances"
+
+#: ../../dev/roadmap.rst:93
+msgid ""
+"Improve curve readability (e.g. avoid dashed lines, use contrasted "
+"colors, and use anti-aliasing)"
+msgstr "Améliorer la lisibilité des courbes (par exemple, éviter les lignes en pointillés, utiliser des couleurs contrastées et utiliser l'anti-crénelage)"
+
+#: ../../dev/roadmap.rst:97
 msgid "DataLab 0.9"
-msgstr ""
+msgstr "DataLab 0.9"
 
-#: ../../dev/roadmap.rst:49
+#: ../../dev/roadmap.rst:99
 msgid "Python 3.11 is the new reference"
-msgstr ""
+msgstr "Python 3.11 est la nouvelle référence"
 
-#: ../../dev/roadmap.rst:51
+#: ../../dev/roadmap.rst:101
 msgid "Run computations in a separate process:"
-msgstr ""
+msgstr "Exécuter les calculs dans un processus séparé :"
 
-#: ../../dev/roadmap.rst:53
+#: ../../dev/roadmap.rst:103
 msgid "Execute a \"computing server\" in background, in another process"
-msgstr ""
+msgstr "Exécuter un \"serveur de calcul\" en arrière-plan, dans un autre processus"
 
-#: ../../dev/roadmap.rst:54
+#: ../../dev/roadmap.rst:104
 msgid ""
 "For each computation, send serialized data and computing function to the "
 "server and wait for the result"
-msgstr ""
+msgstr "Pour chaque calcul, envoyer les données sérialisées et la fonction de calcul au serveur et attendre le résultat"
 
-#: ../../dev/roadmap.rst:56
+#: ../../dev/roadmap.rst:106
 msgid ""
 "It is then possible to stop any computation at any time by killing the "
 "server process and restarting it (eventually after incrementing the "
 "communication port number)"
-msgstr ""
+msgstr "Il est alors possible d'arrêter n'importe quel calcul à tout moment en tuant le processus du serveur et en le redémarrant (éventuellement après avoir incrémenté le numéro de port de communication)"
 
-#: ../../dev/roadmap.rst:60
+#: ../../dev/roadmap.rst:110
 msgid "Optimize image displaying performance"
-msgstr ""
+msgstr "Optimiser les performances d'affichage des images"
 
-#: ../../dev/roadmap.rst:62
+#: ../../dev/roadmap.rst:112
 msgid "Add preferences dialog box"
-msgstr ""
+msgstr "Ajouter une boîte de dialogue de préférences"
 
-#: ../../dev/roadmap.rst:64
+#: ../../dev/roadmap.rst:114
 msgid "Add new image processing features: denoising, ..."
-msgstr ""
+msgstr "Ajouter de nouvelles fonctionnalités de traitement d'images : débruitage, ..."
 
-#: ../../dev/roadmap.rst:66
+#: ../../dev/roadmap.rst:116
+msgid ""
+"Image processing results: added support for polygon shapes (e.g. for "
+"contour detection)"
+msgstr "Résultats du traitement d'images : ajout de la prise en charge des formes polygonales (par exemple, pour la détection des contours)"
+
+#: ../../dev/roadmap.rst:119
 msgid "New plugin system: API for third-party extensions"
-msgstr ""
+msgstr "Nouveau système de plugins : API pour les extensions tierces"
 
-#: ../../dev/roadmap.rst:68
+#: ../../dev/roadmap.rst:121
 msgid ""
 "Objective #1: a plugin must be manageable using a single Python script, "
 "which includes an extension of `ImageProcessor`, `ActionHandler` and new "
 "file format support"
-msgstr ""
+msgstr "Objectif n°1 : un plugin doit être gérable à l'aide d'un seul script Python, qui inclut une extension de `ImageProcessor`, `ActionHandler` et une nouvelle prise en charge du format de fichier"
 
-#: ../../dev/roadmap.rst:71
+#: ../../dev/roadmap.rst:124
 msgid ""
 "Objective #2: plugins must be simply stored in a folder wich defaults to "
 "the user directory (same folder as \".DataLab.ini\" configuration file)"
-msgstr ""
+msgstr "Objectif n°2 : les plugins doivent simplement être stockés dans un dossier qui est par défaut le répertoire de l'utilisateur (même dossier que le fichier de configuration \".DataLab.ini\")"
 
-#: ../../dev/roadmap.rst:75
+#: ../../dev/roadmap.rst:128
 msgid "Add a macro-command system:"
-msgstr ""
+msgstr "Ajouter un système de macro-commandes :"
 
-#: ../../dev/roadmap.rst:77
+#: ../../dev/roadmap.rst:130
 msgid "New embedded Python editor"
-msgstr ""
+msgstr "Nouvel éditeur Python intégré"
 
-#: ../../dev/roadmap.rst:78
+#: ../../dev/roadmap.rst:131
 msgid "Scripts using the same API as high-level applicative test scenarios"
-msgstr ""
+msgstr "Scripts utilisant la même API que les scénarios de test applicatifs de haut niveau"
 
-#: ../../dev/roadmap.rst:79
+#: ../../dev/roadmap.rst:132
 msgid "Support for macro recording"
-msgstr ""
+msgstr "Prise en charge de l'enregistrement de macro"
 
-#: ../../dev/roadmap.rst:81
+#: ../../dev/roadmap.rst:134
 msgid "Add an xmlrpc server to allow DataLab remote control:"
-msgstr ""
+msgstr "Ajouter un serveur xmlrpc pour permettre le contrôle à distance de DataLab :"
 
-#: ../../dev/roadmap.rst:83
+#: ../../dev/roadmap.rst:136
 msgid ""
 "Controlling DataLab main features (open a signal or an image, open a HDF5"
 " file, etc.) and processing features (run a computation, etc.)"
-msgstr ""
+msgstr "Contrôle des principales fonctionnalités de DataLab (ouvrir un signal ou une image, ouvrir un fichier HDF5, etc.) et des fonctionnalités de traitement (exécuter un calcul, etc.)"
 
-#: ../../dev/roadmap.rst:86
+#: ../../dev/roadmap.rst:139
 msgid "Take control of DataLab from a third-party software"
-msgstr ""
+msgstr "Prendre le contrôle de DataLab à partir d'un logiciel tiers"
 
-#: ../../dev/roadmap.rst:87
+#: ../../dev/roadmap.rst:140
 msgid ""
 "Run interactive calculations from an IDE (e.g. Spyder or Visual Studio "
 "Code)"
-msgstr ""
-
-#: ../../dev/roadmap.rst:91
-msgid "CodraFT 2.2"
-msgstr ""
-
-#: ../../dev/roadmap.rst:93
-msgid "Add default image visualization settings in .INI configuration file"
-msgstr ""
-
-#: ../../dev/roadmap.rst:96
-msgid "CodraFT 2.1"
-msgstr ""
-
-#: ../../dev/roadmap.rst:98
-msgid ""
-"\"Open in a new window\" feature: add support for multiple separate "
-"windows, thus allowing to visualize for example two images side by side"
-msgstr ""
-
-#: ../../dev/roadmap.rst:101
-msgid "New demo mode"
-msgstr ""
-
-#: ../../dev/roadmap.rst:103
-msgid "New command line option features (open/browse HDF5 files at startup)"
-msgstr ""
-
-#: ../../dev/roadmap.rst:105
-msgid "ROI features:"
-msgstr ""
-
-#: ../../dev/roadmap.rst:107
-msgid ""
-"Add an option to extract multiples ROI on either one signal/image "
-"(current behavior) or one signal/image per ROI"
-msgstr ""
-
-#: ../../dev/roadmap.rst:109
-msgid "Images: create ROI using array masks"
-msgstr ""
-
-#: ../../dev/roadmap.rst:110
-msgid "Images: add support for circular ROI"
-msgstr ""
-
-#: ../../dev/roadmap.rst:113
-msgid "CodraFT 2.0"
-msgstr ""
-
-#: ../../dev/roadmap.rst:115
-msgid "New data processing and visualization features (see below)"
-msgstr ""
-
-#: ../../dev/roadmap.rst:117
-msgid ""
-"Fully automated high-level processing features for internal testing "
-"purpose, as well as embedding DataLab in a third-party software"
-msgstr ""
-
-#: ../../dev/roadmap.rst:120
-#, python-format
-msgid ""
-"Extensive test suite (unit tests and application tests) with 90% feature "
-"coverage"
-msgstr ""
-
-#: ../../dev/roadmap.rst:124
-msgid "CodraFT 1.7"
-msgstr ""
-
-#: ../../dev/roadmap.rst:126
-msgid "Major redesign"
-msgstr ""
-
-#: ../../dev/roadmap.rst:128
-msgid "Python 3.8 is the new reference"
-msgstr ""
-
-#: ../../dev/roadmap.rst:130
-msgid "Dropped Python 2 support"
-msgstr ""
-
-#: ../../dev/roadmap.rst:133
-msgid "CodraFT 1.6"
-msgstr ""
-
-#: ../../dev/roadmap.rst:135
-msgid "Last release supporting Python 2"
-msgstr ""
+msgstr "Exécuter des calculs interactifs à partir d'un IDE (par exemple Spyder ou Visual Studio Code)"
 
 #~ msgid "DataLab 0.9"
 #~ msgstr ""
 
 #~ msgid "DataLab 1.0"
+#~ msgstr ""
+
+#~ msgid "Add support for multichannel timeseries"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Develop a Jupyter plugin for interactive"
+#~ " data analysis connected with DataLab"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Develop a Spyder plugin for interactive"
+#~ " data analysis connected with DataLab"
+#~ msgstr ""
+
+#~ msgid "Image computing results (`cdl.model.base.ResultShape`):"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Add support for \"free form\" "
+#~ "geometrical shapes (this could be used"
+#~ " to draw the result of a "
+#~ "segmentation algorithm, or the result of"
+#~ " an edge detection)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Add support for custom geometrical "
+#~ "shapes (this could be used to draw"
+#~ " the result of a specific algorithm,"
+#~ " e.g. a pattern recognition algorithm)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "See \"TODO\" comment just above "
+#~ "``cdl.model.base.ResultShape`` class definition for"
+#~ " more details about how to implement"
+#~ " this feature."
+#~ msgstr ""
+
+#~ msgid "Develop a DataLab plugin template"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Make a video tutorial about the "
+#~ "plugin system and remote control "
+#~ "features"
+#~ msgstr ""
+
+#~ msgid "CodraFT 2.2"
+#~ msgstr ""
+
+#~ msgid "Add default image visualization settings in .INI configuration file"
+#~ msgstr ""
+
+#~ msgid "CodraFT 2.1"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\"Open in a new window\" feature: "
+#~ "add support for multiple separate "
+#~ "windows, thus allowing to visualize for"
+#~ " example two images side by side"
+#~ msgstr ""
+
+#~ msgid "New demo mode"
+#~ msgstr ""
+
+#~ msgid "New command line option features (open/browse HDF5 files at startup)"
+#~ msgstr ""
+
+#~ msgid "ROI features:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Add an option to extract multiples "
+#~ "ROI on either one signal/image (current"
+#~ " behavior) or one signal/image per "
+#~ "ROI"
+#~ msgstr ""
+
+#~ msgid "Images: create ROI using array masks"
+#~ msgstr ""
+
+#~ msgid "Images: add support for circular ROI"
+#~ msgstr ""
+
+#~ msgid "CodraFT 2.0"
+#~ msgstr ""
+
+#~ msgid "New data processing and visualization features (see below)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Fully automated high-level processing "
+#~ "features for internal testing purpose, "
+#~ "as well as embedding DataLab in a"
+#~ " third-party software"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Extensive test suite (unit tests and "
+#~ "application tests) with 90% feature "
+#~ "coverage"
+#~ msgstr ""
+
+#~ msgid "CodraFT 1.7"
+#~ msgstr ""
+
+#~ msgid "Major redesign"
+#~ msgstr ""
+
+#~ msgid "Python 3.8 is the new reference"
+#~ msgstr ""
+
+#~ msgid "Dropped Python 2 support"
+#~ msgstr ""
+
+#~ msgid "CodraFT 1.6"
+#~ msgstr ""
+
+#~ msgid "Last release supporting Python 2"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Using DataLab from a Jupyter notebook"
+#~ " is already possible, thanks to the"
+#~ " remote control features (see :ref"
+#~ ":`_ref-to-remote-control`), but it "
+#~ "would be nice to have a dedicated"
+#~ " plugin"
+#~ msgstr ""
+
+#~ msgid "Add a Jupyter kernel interface to DataLab:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This would allow to use DataLab "
+#~ "from other software, such as Jupyter "
+#~ "notebooks, Spyder or Visual Studio Code"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This would also allow to share "
+#~ "data between DataLab and other software"
+#~ " (e.g. display DataLab numerical results"
+#~ " in Jupyter notebooks or the other"
+#~ " way around, display Jupyter results "
+#~ "in DataLab, etc.)"
 #~ msgstr ""

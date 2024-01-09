@@ -92,18 +92,16 @@ msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
 #: ../../features/signal/menu/edit.rst:35
-#, fuzzy
 msgid "Copy metadata from currently selected signal into clipboard."
-msgstr "Copier les métadonnées de l'image sélectionnée vers le presse-papier."
+msgstr "Copier les métadonnées du signal sélectionné dans le presse-papier."
 
 #: ../../features/signal/menu/edit.rst:38
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
 #: ../../features/signal/menu/edit.rst:38
-#, fuzzy
 msgid "Paste metadata from clipboard into selected signal."
-msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
+msgstr "Coller les métadonnées depuis le presse-papier vers le signal sélectionné."
 
 #: ../../features/signal/menu/edit.rst:41
 msgid "Import metadata into signal"

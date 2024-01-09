@@ -161,7 +161,7 @@ msgstr ""
 
 #: ../../features/general/plugins.rst:61
 msgid "Other examples"
-msgstr ""
+msgstr "Autres exemples"
 
 #: ../../features/general/plugins.rst:63
 msgid ""
@@ -169,7 +169,7 @@ msgid ""
 "directory of the DataLab source code (explore `here on GitHub "
 "<https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/tree/main/plugins/examples>`_)."
-msgstr ""
+msgstr "D'autres exemples de plugins peuvent être trouvés dans le répertoire `plugins/examples` du code source de DataLab (explorez `ici sur GitHub <https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples>`_)."
 
 #: ../../features/general/plugins.rst:67
 msgid "Public API"
@@ -177,25 +177,25 @@ msgstr "API publique"
 
 #: cdl.plugins:2 of
 msgid "DataLab plugin system"
-msgstr ""
+msgstr "Système de plugins de DataLab"
 
 #: cdl.plugins:4 of
 msgid ""
 "DataLab plugin system provides a way to extend the application with new "
 "functionalities."
-msgstr ""
+msgstr "Le système de plugins de DataLab fournit un moyen d'étendre l'application avec de nouvelles fonctionnalités."
 
 #: cdl.plugins:7 of
 msgid "Plugins are Python modules that relies on two classes:"
-msgstr ""
+msgstr "Les plugins sont des modules Python qui reposent sur deux classes :"
 
 #: cdl.plugins:9 of
 msgid ":class:`PluginInfo`, which stores information about the plugin"
-msgstr ""
+msgstr ":class:`PluginInfo`, qui stocke des informations sur le plugin"
 
 #: cdl.plugins:10 of
 msgid ":class:`PluginBase`, which is the base class for all plugins"
-msgstr ""
+msgstr ":class:`PluginBase`, qui est la classe de base pour tous les plugins"
 
 #: cdl.plugins:12 of
 msgid ""
@@ -203,93 +203,93 @@ msgid ""
 "signal formats. To do so, they must provide a subclass of "
 ":class:`ImageFormatBase` or :class:`SignalFormatBase`, in which format "
 "infos are defined using the :class:`FormatInfo` class."
-msgstr ""
+msgstr "Les plugins peuvent également étendre les fonctionnalités d'entrée/sortie de DataLab en fournissant de nouveaux formats d'image ou de signal. Pour ce faire, ils doivent fournir une sous-classe de :class:`ImageFormatBase` ou :class:`SignalFormatBase`, dans laquelle les informations de format sont définies à l'aide de la classe :class:`FormatInfo`."
 
 #: cdl.plugins.PluginRegistry:1 of
 msgid "Metaclass for registering plugins"
-msgstr ""
+msgstr "Métaclasse pour l'enregistrement des plugins"
 
 #: cdl.plugins.PluginRegistry.get_plugin_classes:1 of
 msgid "Return plugin classes"
-msgstr ""
+msgstr "Retourne les classes de plugins"
 
 #: cdl.plugins.PluginRegistry.get_plugins:1 of
 msgid "Return plugin instances"
-msgstr ""
+msgstr "Retourne les instances de plugins"
 
 #: cdl.plugins.PluginRegistry.get_plugin:1 of
 msgid "Return plugin instance"
-msgstr ""
+msgstr "Retourne l'instance de plugin"
 
 #: cdl.plugins.PluginBase.register:1
 #: cdl.plugins.PluginRegistry.register_plugin:1 of
 msgid "Register plugin"
-msgstr ""
+msgstr "Enregistrer le plugin"
 
 #: cdl.plugins.PluginBase.unregister:1
 #: cdl.plugins.PluginRegistry.unregister_plugin:1 of
 msgid "Unregister plugin"
-msgstr ""
+msgstr "Désenregistrer le plugin"
 
 #: cdl.plugins.PluginRegistry.get_plugin_infos:1 of
 msgid "Return plugin infos (names, versions, descriptions) in html format"
-msgstr ""
+msgstr "Retourne les informations sur les plugins (noms, versions, descriptions) au format html"
 
 #: cdl.plugins.PluginInfo:1 of
 msgid "Plugin info"
-msgstr ""
+msgstr "Informations sur le plugin"
 
 #: cdl.plugins.PluginBaseMeta:1 of
 msgid "Mixed metaclass to avoid conflicts"
-msgstr ""
+msgstr "Métaclasse mixte pour éviter les conflits"
 
 #: cdl.plugins.PluginBase:1 of
 msgid "Plugin base class"
-msgstr ""
+msgstr "Classe de base du plugin"
 
 #: cdl.plugins.PluginBase.signalpanel:1 of
 msgid "Return signal panel"
-msgstr ""
+msgstr "Retourne le panneau de signal"
 
 #: cdl.plugins.PluginBase.imagepanel:1 of
 msgid "Return image panel"
-msgstr ""
+msgstr "Retourne le panneau d'image"
 
 #: cdl.plugins.PluginBase.show_warning:1 of
 msgid "Show warning message"
-msgstr ""
+msgstr "Afficher un message d'avertissement"
 
 #: cdl.plugins.PluginBase.show_error:1 of
 msgid "Show error message"
-msgstr ""
+msgstr "Afficher un message d'erreur"
 
 #: cdl.plugins.PluginBase.show_info:1 of
 msgid "Show info message"
-msgstr ""
+msgstr "Afficher un message d'information"
 
 #: cdl.plugins.PluginBase.ask_yesno:1 of
 msgid "Ask yes/no question"
-msgstr ""
+msgstr "Poser une question oui/non"
 
 #: cdl.plugins.PluginBase.is_registered:1 of
 msgid "Return True if plugin is registered"
-msgstr ""
+msgstr "Retourne True si le plugin est enregistré"
 
 #: cdl.plugins.PluginBase.register_hooks:1 of
 msgid "Register plugin hooks"
-msgstr ""
+msgstr "Enregistrer les hooks du plugin"
 
 #: cdl.plugins.PluginBase.unregister_hooks:1 of
 msgid "Unregister plugin hooks"
-msgstr ""
+msgstr "Désenregistrer les hooks du plugin"
 
 #: cdl.plugins.PluginBase.create_actions:1 of
 msgid "Create actions"
-msgstr ""
+msgstr "Créer des actions"
 
 #: cdl.plugins.discover_plugins:1 of
 msgid "Discover plugins using naming convention"
-msgstr ""
+msgstr "Découvrir les plugins en utilisant la convention de nommage"
 
 #~ msgid "Example"
 #~ msgstr "Exemple"

@@ -633,7 +633,7 @@ class RemoteClient(BaseProxy):
         Here is a simple example of how to use RemoteClient in a Python script
         or in a Jupyter notebook:
 
-        >>> from cdl.remotecontrol import RemoteClient
+        >>> from cdl.core.remote import RemoteClient
         >>> proxy = RemoteClient()
         >>> proxy.connect()
         Connecting to DataLab XML-RPC server...OK (port: 28867)

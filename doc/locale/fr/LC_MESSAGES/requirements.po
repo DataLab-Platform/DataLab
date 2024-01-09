@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-21 12:08+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -76,7 +76,7 @@ msgid ">= 0.18"
 msgstr ""
 
 #: ../../requirements.rst:25
-msgid "opencv-python"
+msgid "opencv-python-headless"
 msgstr ""
 
 #: ../../requirements.rst:26
@@ -133,11 +133,11 @@ msgstr ""
 
 #: ../../requirements.rst:45 ../../requirements.rst:83
 msgid "Python bindings for the Qt cross platform application toolkit"
-msgstr ""
+msgstr "Paquet Python pour la bibliothèque d'interfaces graphiques Qt"
 
 #: ../../requirements.rst:47
 msgid "Optional modules for development:"
-msgstr ""
+msgstr "Modules optionnels pour le développement :"
 
 #: ../../requirements.rst:56
 msgid "black"
@@ -145,7 +145,7 @@ msgstr ""
 
 #: ../../requirements.rst:58
 msgid "The uncompromising code formatter."
-msgstr ""
+msgstr "Le formateur de code sans compromis."
 
 #: ../../requirements.rst:59
 msgid "isort"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: ../../requirements.rst:61
 msgid "A Python utility / library to sort Python imports."
-msgstr ""
+msgstr "Utilitaire / bibliothèque Python pour trier les imports Python."
 
 #: ../../requirements.rst:62
 msgid "pylint"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: ../../requirements.rst:64
 msgid "python code static checker"
-msgstr ""
+msgstr "Analyseur statique de code Python"
 
 #: ../../requirements.rst:65
 msgid "Coverage"
@@ -169,7 +169,7 @@ msgstr ""
 
 #: ../../requirements.rst:67
 msgid "Code coverage measurement for Python"
-msgstr ""
+msgstr "Mesure de la couverture de code pour Python"
 
 #: ../../requirements.rst:68
 msgid "pyinstaller"
@@ -184,10 +184,12 @@ msgid ""
 "PyInstaller bundles a Python application and all its dependencies into a "
 "single package."
 msgstr ""
+"PyInstaller regroupe une application Python et toutes ses dépendances "
+"dans un seul paquet."
 
 #: ../../requirements.rst:72
 msgid "Optional modules for building the documentation:"
-msgstr ""
+msgstr "Modules optionnels pour construire la documentation :"
 
 #: ../../requirements.rst:84
 msgid "sphinx"
@@ -195,7 +197,7 @@ msgstr ""
 
 #: ../../requirements.rst:86
 msgid "Python documentation generator"
-msgstr ""
+msgstr "Générateur de documentation Python"
 
 #: ../../requirements.rst:87
 msgid "sphinx_intl"
@@ -204,6 +206,8 @@ msgstr ""
 #: ../../requirements.rst:89
 msgid "Sphinx utility that make it easy to translate and to apply translation."
 msgstr ""
+"Utilitaire Sphinx qui facilite la traduction et l'application de la "
+"traduction."
 
 #: ../../requirements.rst:90
 msgid "myst_parser"
@@ -211,7 +215,7 @@ msgstr ""
 
 #: ../../requirements.rst:92
 msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
-msgstr ""
+msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org/),"
 
 #: ../../requirements.rst:93
 msgid "pydata-sphinx-theme"
@@ -219,11 +223,14 @@ msgstr ""
 
 #: ../../requirements.rst:95
 msgid "Bootstrap-based Sphinx theme from the PyData community"
-msgstr ""
+msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
 #~ msgid ">= 3.1"
 #~ msgstr ""
 
 #~ msgid "plotpy"
+#~ msgstr ""
+
+#~ msgid "opencv-python"
 #~ msgstr ""
 

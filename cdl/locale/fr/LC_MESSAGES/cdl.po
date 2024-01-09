@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-07 17:53+0100\n"
+"POT-Creation-Date: 2024-01-09 08:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -819,10 +819,6 @@ msgstr "X<sub>min</sub>"
 #: cdl\core\computation\signal.py:641
 msgid "X<sub>max</sub>"
 msgstr "X<sub>max</sub>"
-
-#: cdl\core\computation\signal.py:643 cdl\core\computation\signal.py:647
-msgid "ΔX"
-msgstr "ΔX"
 
 #: cdl\core\computation\signal.py:643 cdl\core\computation\signal.py:650
 #: cdl\tests\data.py:258

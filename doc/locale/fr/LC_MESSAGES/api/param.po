@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-06 15:44+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.param:2 of
 msgid "Parameters (:mod:`cdl.param`)"
@@ -76,39 +76,39 @@ msgstr "Paramètres communs"
 
 #: cdl.core.computation.base.ClipParam:1 of
 msgid "Data clipping parameters"
-msgstr ""
+msgstr "Paramètres d'écrêtage"
 
 #: cdl.core.computation.base.FFTParam:1 of
 msgid "FFT parameters"
-msgstr ""
+msgstr "Paramètres FFT"
 
 #: cdl.core.computation.base.GaussianParam:1 of
 msgid "Gaussian filter parameters"
-msgstr ""
+msgstr "Paramètres de filtre gaussien"
 
 #: cdl.core.computation.base.MovingAverageParam:1 of
 msgid "Moving average parameters"
-msgstr ""
+msgstr "Paramètres de moyenne mobile"
 
 #: cdl.core.computation.base.MovingMedianParam:1 of
 msgid "Moving median parameters"
-msgstr ""
+msgstr "Paramètres de médiane mobile"
 
 #: cdl.core.computation.base.ROIDataParam:1 of
 msgid "ROI Editor data"
-msgstr ""
+msgstr "Données de l'éditeur de ROI"
 
 #: cdl.core.computation.base.ROIDataParam.create:1 of
 msgid "Create ROIDataParam instance"
-msgstr ""
+msgstr "Créer une instance de ROIDataParam"
 
 #: cdl.param.ROIDataParam.is_empty:1 of
 msgid "Return True if there is no ROI"
-msgstr ""
+msgstr "Retourne True s'il n'y a pas de ROI"
 
 #: cdl.core.computation.base.ThresholdParam:1 of
 msgid "Threshold parameters"
-msgstr ""
+msgstr "Paramètres de seuillage"
 
 #: cdl.param:48 of
 msgid "Signal parameters"
@@ -116,174 +116,177 @@ msgstr "Paramètres des signaux"
 
 #: cdl.core.computation.signal.DataTypeSParam:1 of
 msgid "Convert signal data type parameters"
-msgstr ""
+msgstr "Convertir les paramètres de type de données du signal"
 
 #: cdl.core.computation.signal.FWHMParam:1 of
 msgid "FWHM parameters"
-msgstr ""
+msgstr "Paramètres de LMH"
 
 #: cdl.core.computation.signal.NormalizeYParam:1 of
 msgid "Normalize parameters"
-msgstr ""
+msgstr "Paramètres de normalisation"
 
 #: cdl.core.computation.image.detection.Peak2DDetectionParam:1
 #: cdl.core.computation.signal.PeakDetectionParam:1 of
 msgid "Peak detection parameters"
-msgstr ""
+msgstr "Paramètres de détection de pics"
 
 #: cdl.core.computation.signal.PolynomialFitParam:1 of
 msgid "Polynomial fitting parameters"
-msgstr ""
+msgstr "Paramètres de régression polynomiale"
 
 #: cdl.core.computation.signal.XYCalibrateParam:1 of
 msgid "Signal calibration parameters"
-msgstr ""
+msgstr "Paramètres de calibration du signal"
 
 #: cdl.core.computation.signal.InterpolationParam:1 of
-#, fuzzy
 msgid "Interpolation parameters"
-msgstr "Paramètres de restauration"
+msgstr "Paramètres d'interpolation"
 
-#: cdl.param:66 of
+#: cdl.core.computation.signal.ResamplingParam:1 of
+msgid "Resample parameters"
+msgstr "Paramètres de rééchantillonnage"
+
+#: cdl.core.computation.signal.DetrendingParam:1 of
+msgid "Detrending parameters"
+msgstr "Elimination de tendance"
+
+#: cdl.param:70 of
 msgid "Image parameters"
 msgstr "Paramètres des images"
 
-#: cdl.param:69 of
+#: cdl.param:73 of
 msgid "Base image parameters"
 msgstr "Paramètres de base des images"
 
 #: cdl.core.computation.image.AverageProfileParam:1 of
 msgid "Average horizontal or vertical profile parameters"
-msgstr ""
+msgstr "Paramètres de profil horizontal ou vertical moyen"
 
 #: cdl.core.computation.image.BinningParam:1 of
 msgid "Binning parameters"
-msgstr ""
+msgstr "Paramètres de binning"
 
 #: cdl.core.computation.image.ButterworthParam:1 of
 msgid "Butterworth filter parameters"
-msgstr ""
+msgstr "Paramètres de filtre Butterworth"
 
 #: cdl.core.computation.image.DataTypeIParam:1 of
 msgid "Convert image data type parameters"
-msgstr ""
+msgstr "Convertir les paramètres de type de données de l'image"
 
 #: cdl.core.computation.image.FlatFieldParam:1 of
 msgid "Flat-field parameters"
-msgstr ""
+msgstr "Paramètres de correction de champ plat"
 
 #: cdl.core.computation.image.GridParam:1 of
 msgid "Grid parameters"
-msgstr ""
+msgstr "Paramètres de grille"
 
 #: cdl.core.computation.image.HoughCircleParam:1 of
 msgid "Circle Hough transform parameters"
-msgstr ""
+msgstr "Paramètres de transformation de Hough circulaire"
 
 #: cdl.core.computation.image.LogP1Param:1 of
 msgid "Log10 parameters"
-msgstr ""
+msgstr "Paramètres de log10"
 
 #: cdl.core.computation.image.ProfileParam:1 of
 msgid "Horizontal or vertical profile parameters"
-msgstr ""
+msgstr "Paramètres de profil horizontal ou vertical"
 
 #: cdl.core.computation.image.ResizeParam:1 of
 msgid "Resize parameters"
-msgstr ""
+msgstr "Paramètres de redimensionnement"
 
 #: cdl.core.computation.image.RotateParam:1 of
 msgid "Rotate parameters"
-msgstr ""
+msgstr "Paramètres de rotation"
 
 #: cdl.core.computation.image.ZCalibrateParam:1 of
 msgid "Image linear calibration parameters"
-msgstr ""
+msgstr "Paramètres de calibration linéaire de l'image"
 
-#: cdl.param:97 of
+#: cdl.param:101 of
 msgid "Exposure correction parameters"
 msgstr "Paramètres de correction d'exposition"
 
 #: cdl.core.computation.image.exposure.AdjustGammaParam:1 of
 msgid "Gamma adjustment parameters"
-msgstr ""
+msgstr "Paramètres d'ajustement gamma"
 
 #: cdl.core.computation.image.exposure.AdjustLogParam:1 of
 msgid "Logarithmic adjustment parameters"
-msgstr ""
+msgstr "Paramètres d'ajustement logarithmique"
 
 #: cdl.core.computation.image.exposure.AdjustSigmoidParam:1 of
 msgid "Sigmoid adjustment parameters"
-msgstr ""
+msgstr "Paramètres d'ajustement sigmoïde"
 
 #: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:1 of
 msgid "Adaptive histogram equalization parameters"
-msgstr ""
+msgstr "Paramètres d'égalisation d'histogramme adaptatif"
 
 #: cdl.core.computation.image.exposure.EqualizeHistParam:1 of
 msgid "Histogram equalization parameters"
-msgstr ""
+msgstr "Paramètres d'égalisation d'histogramme"
 
 #: cdl.core.computation.image.exposure.RescaleIntensityParam:1 of
 msgid "Intensity rescaling parameters"
-msgstr ""
+msgstr "Paramètres de rééchelonnement d'intensité"
 
-#: cdl.param:113 of
+#: cdl.param:117 of
 msgid "Restoration parameters"
 msgstr "Paramètres de restauration"
 
 #: cdl.core.computation.image.restoration.DenoiseBilateralParam:1 of
 msgid "Bilateral filter denoising parameters"
-msgstr ""
+msgstr "Paramètres de débruitage par filtre bilatéral"
 
 #: cdl.core.computation.image.restoration.DenoiseTVParam:1 of
 msgid "Total Variation denoising parameters"
-msgstr ""
+msgstr "Paramètres de débruitage par variation totale"
 
 #: cdl.core.computation.image.restoration.DenoiseWaveletParam:1 of
 msgid "Wavelet denoising parameters"
-msgstr ""
+msgstr "Paramètres de débruitage par ondelettes"
 
-#: cdl.param:123 of
+#: cdl.param:127 of
 msgid "Morphological parameters"
 msgstr "Paramètres morphologiques"
 
 #: cdl.core.computation.image.morphology.MorphologyParam:1 of
 msgid "White Top-Hat parameters"
-msgstr ""
+msgstr "Paramètres de White Top-Hat"
 
-#: cdl.param:129 of
+#: cdl.param:133 of
 msgid "Edge detection parameters"
 msgstr "Paramètres de détection de contours"
 
 #: cdl.core.computation.image.edges.CannyParam:1 of
 msgid "Canny filter parameters"
-msgstr ""
+msgstr "Paramètres de filtre Canny"
 
-#: cdl.param:135 of
+#: cdl.param:139 of
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 
 #: cdl.core.computation.image.detection.BlobDOGParam:1 of
 msgid "Blob detection using Difference of Gaussian method"
-msgstr ""
+msgstr "Détection de taches par méthode de différence de gaussiennes"
 
 #: cdl.core.computation.image.detection.BlobDOHParam:1 of
 msgid "Blob detection using Determinant of Hessian method"
-msgstr ""
+msgstr "Détection de taches par méthode du déterminant du Hessien"
 
 #: cdl.core.computation.image.detection.BlobLOGParam:1 of
 msgid "Blob detection using Laplacian of Gaussian method"
-msgstr ""
+msgstr "Détection de taches par méthode du Laplacien de gaussiennes"
 
 #: cdl.core.computation.image.detection.BlobOpenCVParam:1 of
 msgid "Blob detection using OpenCV"
-msgstr ""
+msgstr "Détection de taches par OpenCV"
 
 #: cdl.core.computation.image.detection.ContourShapeParam:1 of
 msgid "Contour shape parameters"
-msgstr ""
-
-#~ msgid "Computation parameters module (:mod:`cdl.param`)"
-#~ msgstr ""
-
+msgstr "Paramètres de forme de contour"

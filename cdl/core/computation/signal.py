@@ -640,11 +640,11 @@ class ResamplingParam(InterpolationParam):
     xmin = gds.FloatItem(_("X<sub>min</sub>"))
     xmax = gds.FloatItem(_("X<sub>max</sub>"))
     _prop = gds.GetAttrProp("dx_or_nbpts")
-    _modes = (("dx", _("ΔX")), ("nbpts", _("Number of points")))
+    _modes = (("dx", "ΔX"), ("nbpts", _("Number of points")))
     mode = gds.ChoiceItem(_("Mode"), _modes, default="nbpts", radio=True).set_prop(
         "display", store=_prop
     )
-    dx = gds.FloatItem(_("ΔX")).set_prop(
+    dx = gds.FloatItem("ΔX").set_prop(
         "display", active=gds.FuncProp(_prop, lambda x: x == "dx")
     )
     nbpts = gds.IntItem(_("Number of points")).set_prop(

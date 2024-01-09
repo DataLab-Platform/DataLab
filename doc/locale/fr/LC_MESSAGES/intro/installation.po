@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-21 12:08+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgid ">= 0.18"
 msgstr ""
 
 #: ../../requirements.rst:25
-msgid "opencv-python"
+msgid "opencv-python-headless"
 msgstr ""
 
 #: ../../requirements.rst:26
@@ -186,9 +186,8 @@ msgid "Code coverage measurement for Python"
 msgstr ""
 
 #: ../../requirements.rst:68
-#, fuzzy
 msgid "pyinstaller"
-msgstr "Installation"
+msgstr ""
 
 #: ../../requirements.rst:69
 msgid ">=6.0"
@@ -339,3 +338,5 @@ msgstr ""
 #~ msgid "plotpy"
 #~ msgstr ""
 
+#~ msgid "opencv-python"
+#~ msgstr ""

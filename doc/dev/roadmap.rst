@@ -7,25 +7,46 @@ Future milestones
 Features
 ^^^^^^^^
 
-* Add support for multichannel timeseries
+* Add a Jupyter kernel interface to DataLab:
 
-* Develop a Jupyter plugin for interactive data analysis connected with DataLab
+  - This would allow to use DataLab from other software, such as Jupyter
+    notebooks, Spyder or Visual Studio Code
+  - This would also allow to share data between DataLab and other software
+    (e.g. display DataLab numerical results in Jupyter notebooks or the other
+    way around, display Jupyter results in DataLab, etc.)
 
-* Develop a Spyder plugin for interactive data analysis connected with DataLab
+* Create a Jupyter plugin for interactive data analysis with DataLab:
 
-* Image computing results (`cdl.model.base.ResultShape`):
+  - Using DataLab from a Jupyter notebook is already possible, thanks to the
+    remote control features (see :ref:`ref-to-remote-control`), but it would
+    be nice to have a dedicated plugin
+  - This plugin would allow to use DataLab as a Jupyter kernel, and to
+    display DataLab numerical results in Jupyter notebooks or the other way
+    around (e.g. display Jupyter results in DataLab)
+  - This plugin would also allow to use DataLab's processing features from
+    Jupyter notebooks
+  - A typical use case could also consist in using DataLab for manipulating
+    signals or images efficiently, and using Jupyter for custom data analysis
+    based on specific / home-made algorithms
+  - This plugin could be implemented by using the Jupyter kernel interface
+    (see above)
 
-  - Add support for "free form" geometrical shapes (this could be used to draw
-    the result of a segmentation algorithm, or the result of an edge detection)
+* Create a Spyder plugin for interactive data analysis connected with DataLab:
 
-  - Add support for custom geometrical shapes (this could be used to draw
-    the result of a specific algorithm, e.g. a pattern recognition algorithm)
+  - This is exactly the same use case as for the Jupyter plugin, but for
+    Spyder
+  - This plugin could also be implemented by using the Jupyter kernel interface
+    (see above)
 
-  .. note:: See "TODO" comment just above ``cdl.model.base.ResultShape`` class definition
-        for more details about how to implement this feature.
+* Add support for time series (see
+  `Issue #27 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/27>`_)
 
 Maintenance
 ^^^^^^^^^^^
+
+* 2024: switch to gRPC for remote control (instead of XML-RPC), if there is a
+  need for a more efficient communication protocol (see
+  `Issue #18 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)
 
 * 2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ;
   this should be straightforward, thanks to the `qtpy` compatibility layer
@@ -34,14 +55,41 @@ Maintenance
 Other tasks
 ^^^^^^^^^^^
 
-* Develop a very simple DataLab plugin to demonstrate the plugin system
+* Create a DataLab plugin template (see
+  `Issue #26 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)
 
-* Develop a DataLab plugin template
-
-* Make a video tutorial about the plugin system and remote control features
+* Make tutorial videos: plugin system, remote control features, etc. (see
+  `Issue #25 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/25>`_)
 
 Past milestones
 ---------------
+
+DataLab 0.11
+^^^^^^^^^^^^
+
+* Add a drag-and-drop feature to the signal and image panels, to allow reordering
+  signals and images (see
+  `Issue #17 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17>`_)
+
+* Add "Move up" and "Move down" buttons to the signal and image panels, to allow
+  reordering signals and images (see
+  `Issue #22 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)
+
+* Add 1D convolution, interpolation, resampling and detrending features
+
+DataLab 0.10
+^^^^^^^^^^^^
+
+* Develop a very simple DataLab plugin to demonstrate the plugin system
+
+* Serialize curve and image styles in HDF5 files
+
+* Add an "Auto-refresh" global option, to be able to disable the automatic
+  refresh of the main window when doing multiple processing steps, thus
+  improving performance
+
+* Improve curve readability (e.g. avoid dashed lines, use contrasted colors,
+  and use anti-aliasing)
 
 DataLab 0.9
 ^^^^^^^^^^^
@@ -62,6 +110,9 @@ DataLab 0.9
 * Add preferences dialog box
 
 * Add new image processing features: denoising, ...
+
+* Image processing results: added support for polygon shapes (e.g. for
+  contour detection)
 
 * New plugin system: API for third-party extensions
 
@@ -86,50 +137,3 @@ DataLab 0.9
   - Take control of DataLab from a third-party software
   - Run interactive calculations from an IDE
     (e.g. Spyder or Visual Studio Code)
-
-CodraFT 2.2
-^^^^^^^^^^^
-
-* Add default image visualization settings in .INI configuration file
-
-CodraFT 2.1
-^^^^^^^^^^^
-
-* "Open in a new window" feature: add support for multiple separate windows,
-  thus allowing to visualize for example two images side by side
-
-* New demo mode
-
-* New command line option features (open/browse HDF5 files at startup)
-
-* ROI features:
-
-  - Add an option to extract multiples ROI on either
-    one signal/image (current behavior) or one signal/image per ROI
-  - Images: create ROI using array masks
-  - Images: add support for circular ROI
-
-CodraFT 2.0
-^^^^^^^^^^^
-
-* New data processing and visualization features (see below)
-
-* Fully automated high-level processing features for internal testing purpose,
-  as well as embedding DataLab in a third-party software
-
-* Extensive test suite (unit tests and application tests)
-  with 90% feature coverage
-
-CodraFT 1.7
-^^^^^^^^^^^
-
-* Major redesign
-
-* Python 3.8 is the new reference
-
-* Dropped Python 2 support
-
-CodraFT 1.6
-^^^^^^^^^^^
-
-* Last release supporting Python 2
