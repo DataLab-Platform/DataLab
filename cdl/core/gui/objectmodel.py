@@ -238,6 +238,23 @@ class ObjectModel:
                 return group
         raise KeyError(f"Group with uuid {uuid} not found")
 
+    def get_group_from_number(self, number: int) -> ObjectGroup:
+        """Return group from its number.
+
+        Args:
+            number: group number (unique in model)
+
+        Returns:
+            Group
+
+        Raises:
+            IndexError: if group with number not found
+        """
+        for group in self._groups:
+            if group.number == number:
+                return group
+        raise IndexError(f"Group with number {number} not found")
+
     def get_groups(self, uuids: list[str] | None = None) -> list[ObjectGroup]:
         """Return groups"""
         if uuids is None:
