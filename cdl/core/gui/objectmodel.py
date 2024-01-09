@@ -50,6 +50,15 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.signal import SignalObj
 
 
+# TODO: [P1] Remove this function and use the same mechanism as in reordering methods
+#
+# This mechanism is as follows (see `reorder_groups` and `reorder_objects` in
+# `ObjectModel` class):
+# - Replace short IDs by uuids in titles (`__replace_short_ids_by_uuids_in_titles`)
+# - Do the operation (object/group removal or any other operation)
+# - Reset short IDs (`reset_short_ids`)
+# - Replace uuids by short IDs in titles (`__replace_uuids_by_short_ids_in_titles`)
+# This would be a cleaner solution.
 def fix_titles(
     objlist: list[ObjectGroup | SignalObj | ImageObj],
     obj: ObjectGroup | SignalObj | ImageObj,
