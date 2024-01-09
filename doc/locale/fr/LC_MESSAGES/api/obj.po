@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"POT-Creation-Date: 2024-01-08 15:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.obj:2 of
 msgid "Object model (:mod:`cdl.obj`)"
@@ -27,7 +27,9 @@ msgstr "Modèle de données (:mod:`cdl.obj`)"
 msgid ""
 "The :mod:`cdl.obj` module aims at providing all the necessary classes and"
 " functions to create and manipulate DataLab signal and image objects."
-msgstr "Le module :mod:`cdl.obj` fournit les classes et fonctions nécessaires pour créer et manipuler des objets signal et image."
+msgstr ""
+"Le module :mod:`cdl.obj` fournit les classes et fonctions nécessaires "
+"pour créer et manipuler des objets signal et image."
 
 #: cdl.obj:11 of
 msgid "Those classes and functions are defined in other modules:"
@@ -54,7 +56,10 @@ msgid ""
 "The :mod:`cdl.obj` module is thus a convenient way to import all the "
 "objects at once. As a matter of fact, the following import statement is "
 "equivalent to the previous one:"
-msgstr "Le module :mod:`cdl.obj` est donc un moyen pratique d'importer tous les objets en une seule fois. En fait, l'instruction d'importation suivante est équivalente à la précédente :"
+msgstr ""
+"Le module :mod:`cdl.obj` est donc un moyen pratique d'importer tous les "
+"objets en une seule fois. En fait, l'instruction d'importation suivante "
+"est équivalente à la précédente :"
 
 #: cdl.obj:26 of
 msgid "Common objects"
@@ -64,17 +69,24 @@ msgstr "Objets communs"
 msgid ""
 "Object representing a geometrical shape serializable in signal/image "
 "metadata."
-msgstr "Objet représentant une forme géométrique sérialisable dans les métadonnées du signal/image."
+msgstr ""
+"Objet représentant une forme géométrique sérialisable dans les "
+"métadonnées du signal/image."
 
 #: cdl.core.model.base.ResultShape:3 of
 msgid ""
 "Result `array` is a NumPy 2-D array: each row is a result, optionnally "
 "associated to a ROI (first column value)."
-msgstr "Le tableau de résultats `array` est un tableau NumPy 2-D : chaque ligne est un résultat, éventuellement associé à une ROI (valeur de la première colonne)."
+msgstr ""
+"Le tableau de résultats `array` est un tableau NumPy 2-D : chaque ligne "
+"est un résultat, éventuellement associé à une ROI (valeur de la première "
+"colonne)."
 
 #: cdl.core.model.base.ResultShape:6 of
 msgid "ROI index is starting at 0 (or is simply 0 if there is no ROI)."
-msgstr "L'index de la ROI commence à 0 (ou est simplement 0 s'il n'y a pas de ROI)."
+msgstr ""
+"L'index de la ROI commence à 0 (ou est simplement 0 s'il n'y a pas de "
+"ROI)."
 
 #: cdl.core.io.read_image cdl.core.io.read_signal
 #: cdl.core.model.base.BaseObj.add_annotations_from_file
@@ -147,7 +159,9 @@ msgstr "type de forme"
 msgid ""
 "shape coordinates (multiple shapes: one shape per row), first column is "
 "ROI index (0 if there is no ROI)"
-msgstr "coordonnées de la forme (plusieurs formes : une forme par ligne), la première colonne est l'index de la ROI (0 s'il n'y a pas de ROI)"
+msgstr ""
+"coordonnées de la forme (plusieurs formes : une forme par ligne), la "
+"première colonne est l'index de la ROI (0 s'il n'y a pas de ROI)"
 
 #: cdl.core.model.base.ResultShape:11 of
 msgid "shape label"
@@ -163,15 +177,21 @@ msgstr "argument invalide"
 
 #: cdl.core.model.base.ResultShape.label_shapetype_from_key:1 of
 msgid "Return metadata shape label and shapetype from metadata key"
-msgstr "Retourne l'étiquette de la forme et le type de forme à partir de la clé des métadonnées"
+msgstr ""
+"Retourne l'étiquette de la forme et le type de forme à partir de la clé "
+"des métadonnées"
 
 #: cdl.core.model.base.ResultShape.from_metadata_entry:1 of
 msgid "Create metadata shape object from (key, value) metadata entry"
-msgstr "Crée un objet de forme de métadonnées à partir de l'entrée de métadonnées (clé, valeur)"
+msgstr ""
+"Crée un objet de forme de métadonnées à partir de l'entrée de métadonnées"
+" (clé, valeur)"
 
 #: cdl.core.model.base.ResultShape.match:1 of
 msgid "Return True if metadata dict entry (key, value) is a metadata result"
-msgstr "Retourne True si l'entrée du dictionnaire de métadonnées (clé, valeur) est un résultat de métadonnées"
+msgstr ""
+"Retourne True si l'entrée du dictionnaire de métadonnées (clé, valeur) "
+"est un résultat de métadonnées"
 
 #: cdl.obj.ResultShape.key:1 of
 msgid "Return metadata key associated to result"
@@ -189,7 +209,10 @@ msgstr "Ajoute une forme de métadonnées à l'objet (signal/image)"
 msgid ""
 "Merge object resultshape with another's: obj <-- other_obj or simply "
 "merge this resultshape with obj if other_obj is None"
-msgstr "Fusionne la forme de résultat de l'objet avec celle d'un autre : obj <-- other_obj ou fusionne simplement cette forme de résultat avec obj si other_obj est None"
+msgstr ""
+"Fusionne la forme de résultat de l'objet avec celle d'un autre : obj <-- "
+"other_obj ou fusionne simplement cette forme de résultat avec obj si "
+"other_obj est None"
 
 #: cdl.obj.ResultShape.data_colnb:1 of
 msgid "Return raw data results column number"
@@ -359,7 +382,11 @@ msgid ""
 "This method is used to regenerate UUID after loading the object from a "
 "file. This is required to avoid UUID conflicts when loading objects from "
 "file without clearing the workspace first."
-msgstr "Cette méthode est utilisée pour régénérer l'UUID après avoir chargé l'objet à partir d'un fichier. Cela est nécessaire pour éviter les conflits d'UUID lors du chargement d'objets à partir d'un fichier sans effacer l'espace de travail au préalable."
+msgstr ""
+"Cette méthode est utilisée pour régénérer l'UUID après avoir chargé "
+"l'objet à partir d'un fichier. Cela est nécessaire pour éviter les "
+"conflits d'UUID lors du chargement d'objets à partir d'un fichier sans "
+"effacer l'espace de travail au préalable."
 
 #: cdl.core.model.image.ImageObj.copy:1 cdl.core.model.signal.SignalObj.copy:1
 #: of
@@ -432,7 +459,10 @@ msgstr "Récupère les données dy"
 msgid ""
 "Return original data (if ROI is not defined or `roi_index` is None), or "
 "ROI data (if both ROI and `roi_index` are defined)."
-msgstr "Renvoie les données originales (si la ROI n'est pas définie ou si l'`roi_index` est None), ou les données de la ROI (si la ROI et l'`roi_index` sont définis)."
+msgstr ""
+"Renvoie les données originales (si la ROI n'est pas définie ou si "
+"l'`roi_index` est None), ou les données de la ROI (si la ROI et "
+"l'`roi_index` sont définis)."
 
 #: cdl.core.model.image.ImageObj.get_data:4
 #: cdl.core.model.signal.SignalObj.get_data:4 of
@@ -446,7 +476,9 @@ msgstr "données"
 #: cdl.core.model.image.ImageObj.update_plot_item_parameters:1
 #: cdl.core.model.signal.SignalObj.update_plot_item_parameters:1 of
 msgid "Update plot item parameters from object data/metadata"
-msgstr "Met à jour les paramètres de l'élément de tracé à partir des données/métadonnées de l'objet"
+msgstr ""
+"Met à jour les paramètres de l'élément de tracé à partir des "
+"données/métadonnées de l'objet"
 
 #: cdl.core.model.image.ImageObj.update_plot_item_parameters:3
 #: cdl.core.model.signal.SignalObj.update_plot_item_parameters:3 of
@@ -454,7 +486,11 @@ msgid ""
 "Takes into account a subset of plot item parameters. Those parameters may"
 " have been overriden by object metadata entries or other object data. The"
 " goal is to update the plot item accordingly."
-msgstr "Prend en compte un sous-ensemble de paramètres d'élément de tracé. Ces paramètres peuvent avoir été remplacés par des entrées de métadonnées d'objet ou d'autres données d'objet. Le but est de mettre à jour l'élément de tracé en conséquence."
+msgstr ""
+"Prend en compte un sous-ensemble de paramètres d'élément de tracé. Ces "
+"paramètres peuvent avoir été remplacés par des entrées de métadonnées "
+"d'objet ou d'autres données d'objet. Le but est de mettre à jour "
+"l'élément de tracé en conséquence."
 
 #: cdl.core.model.image.ImageObj.update_plot_item_parameters:7
 #: cdl.core.model.signal.SignalObj.update_plot_item_parameters:7 of
@@ -474,7 +510,11 @@ msgid ""
 "Takes into account a subset of plot item parameters. Those parameters may"
 " have been modified by the user through the plot item GUI. The goal is to"
 " update the metadata accordingly."
-msgstr "Prend en compte un sous-ensemble de paramètres d'élément de tracé. Ces paramètres peuvent avoir été modifiés par l'utilisateur via l'interface graphique de l'élément de tracé. Le but est de mettre à jour les métadonnées en conséquence."
+msgstr ""
+"Prend en compte un sous-ensemble de paramètres d'élément de tracé. Ces "
+"paramètres peuvent avoir été modifiés par l'utilisateur via l'interface "
+"graphique de l'élément de tracé. Le but est de mettre à jour les "
+"métadonnées en conséquence."
 
 #: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:7
 #: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:7 of
@@ -588,8 +628,8 @@ msgid ""
 "Helper function that passes the visitor to the accept methods of all the "
 "items in this dataset"
 msgstr ""
-"Fonction d'aide qui transmet le visiteur aux méthodes accept des éléments "
-"dans cet ensemble de données"
+"Fonction d'aide qui transmet le visiteur aux méthodes accept des éléments"
+" dans cet ensemble de données"
 
 #: guidata.dataset.datatypes.DataSet.accept:4 of
 msgid "visitor object"
@@ -616,7 +656,9 @@ msgstr "éléments de tracé d'annotation"
 
 #: cdl.core.model.base.BaseObj.add_resultshape:1 of
 msgid "Add geometric shape as metadata entry, and return ResultShape instance."
-msgstr "Ajouter une forme géométrique en tant qu'entrée de métadonnées et renvoyer une instance ResultShape."
+msgstr ""
+"Ajouter une forme géométrique en tant qu'entrée de métadonnées et "
+"renvoyer une instance ResultShape."
 
 #: cdl.core.model.base.BaseObj.add_resultshape:3 of
 msgid "label"
@@ -636,7 +678,9 @@ msgstr "forme de résultat"
 
 #: cdl.obj.ImageObj.annotations:1 cdl.obj.SignalObj.annotations:1 of
 msgid "Get object annotations (JSON string describing annotation plot items)"
-msgstr "Obtenir les annotations d'objet (chaîne JSON décrivant les éléments de tracé d'annotation)"
+msgstr ""
+"Obtenir les annotations d'objet (chaîne JSON décrivant les éléments de "
+"tracé d'annotation)"
 
 #: guidata.dataset.datatypes.DataSet.check:1 of
 msgid "Check the dataset item values"
@@ -648,7 +692,9 @@ msgstr "liste des erreurs"
 
 #: cdl.core.model.base.BaseObj.check_data:1 of
 msgid "Check if data is valid, raise an exception if that's not the case"
-msgstr "Vérifier si les données sont valides, lever une exception si ce n'est pas le cas"
+msgstr ""
+"Vérifier si les données sont valides, lever une exception si ce n'est pas"
+" le cas"
 
 #: cdl.core.model.base.BaseObj.check_data:3 of
 msgid "if data type is not supported"
@@ -695,7 +741,9 @@ msgstr "si True, le texte du commentaire est enveloppé"
 #: guidata.dataset.datatypes.DataSet.edit:6
 #: guidata.dataset.datatypes.DataSet.view:5 of
 msgid "dialog size (QSize object or integer tuple (width, height))"
-msgstr "taille de la boîte de dialogue (objet QSize ou tuple d'entiers (largeur, hauteur))"
+msgstr ""
+"taille de la boîte de dialogue (objet QSize ou tuple d'entiers (largeur, "
+"hauteur))"
 
 #: cdl.core.model.base.BaseObj.export_metadata_to_file:1 of
 msgid "Export object metadata to file (JSON)."
@@ -727,9 +775,9 @@ msgid ""
 "A metadata option is a metadata entry starting with an underscore. It is "
 "a way to store application-specific options in object metadata."
 msgstr ""
-"Une option de métadonnées est une entrée de métadonnées commençant par un "
-"underscore. C'est un moyen de stocker des options spécifiques à l'application "
-"dans les métadonnées de l'objet."
+"Une option de métadonnées est une entrée de métadonnées commençant par un"
+" underscore. C'est un moyen de stocker des options spécifiques à "
+"l'application dans les métadonnées de l'objet."
 
 #: cdl.core.model.base.BaseObj.get_metadata_option:6
 #: cdl.core.model.base.BaseObj.set_metadata_option:6
@@ -782,7 +830,9 @@ msgstr "Itérer sur les index de ROI de l'objet ([0] s'il n'y a pas de ROI)"
 
 #: cdl.core.model.base.BaseObj.iterate_shape_items:1 of
 msgid "Iterate over computing items encoded in metadata (if any)."
-msgstr "Itérer sur les éléments de calcul encodés dans les métadonnées (s'il y en a)."
+msgstr ""
+"Itérer sur les éléments de calcul encodés dans les métadonnées (s'il y en"
+" a)."
 
 #: cdl.core.model.base.BaseObj.metadata_to_html:1 of
 msgid "Convert metadata to human-readable string."
@@ -837,10 +887,10 @@ msgid ""
 "method. The next call to this method will always return False if ROI has "
 "not changed in the meantime."
 msgstr ""
-"Le premier appel à cette méthode renverra True si la ROI n'a pas encore été "
-"définie, ou si la ROI a été définie et a changé depuis le dernier appel à "
-"cette méthode. Le prochain appel à cette méthode renverra toujours False si "
-"la ROI n'a pas changé entre-temps."
+"Le premier appel à cette méthode renverra True si la ROI n'a pas encore "
+"été définie, ou si la ROI a été définie et a changé depuis le dernier "
+"appel à cette méthode. Le prochain appel à cette méthode renverra "
+"toujours False si la ROI n'a pas changé entre-temps."
 
 #: cdl.core.model.base.BaseObj.roi_has_changed:8 of
 msgid "True if ROI has changed"
@@ -868,7 +918,9 @@ msgstr "Définir les valeurs par défaut"
 
 #: guidata.dataset.datatypes.DataSet.set_global_prop:1 of
 msgid "Set global properties for all data items in the dataset"
-msgstr "Définir les propriétés globales pour tous les éléments de données du jeu de données"
+msgstr ""
+"Définir les propriétés globales pour tous les éléments de données du jeu "
+"de données"
 
 #: guidata.dataset.datatypes.DataSet.set_global_prop:3 of
 msgid "realm name"
@@ -924,7 +976,9 @@ msgstr "représentation sous forme de chaîne du jeu de données"
 
 #: cdl.core.model.base.BaseObj.transform_shapes:1 of
 msgid "Apply transform function to result shape / annotations coordinates."
-msgstr "Appliquer la fonction de transformation aux coordonnées de la forme / des annotations du résultat."
+msgstr ""
+"Appliquer la fonction de transformation aux coordonnées de la forme / des"
+" annotations du résultat."
 
 #: cdl.core.model.base.BaseObj.transform_shapes:3 of
 msgid "original object"
@@ -940,11 +994,15 @@ msgstr "paramètre de la fonction de transformation"
 
 #: cdl.core.model.base.BaseObj.update_metadata_view_settings:1 of
 msgid "Update metadata view settings from Conf.view"
-msgstr "Mettre à jour les paramètres d'affichage des métadonnées à partir de Conf.view"
+msgstr ""
+"Mettre à jour les paramètres d'affichage des métadonnées à partir de "
+"Conf.view"
 
 #: cdl.core.model.base.BaseObj.update_resultshapes_from:1 of
 msgid "Update geometric shape from another object (merge metadata)."
-msgstr "Mettre à jour la forme géométrique à partir d'un autre objet (fusionner les métadonnées)."
+msgstr ""
+"Mettre à jour la forme géométrique à partir d'un autre objet (fusionner "
+"les métadonnées)."
 
 #: cdl.core.model.base.BaseObj.update_resultshapes_from:3 of
 msgid "other object"
@@ -1018,6 +1076,21 @@ msgstr "Créer un nouvel objet Signal à partir d'une boîte de dialogue."
 msgid "new signal parameters"
 msgstr "nouveaux paramètres du signal"
 
+#: cdl.core.model.image.create_image_from_param:5
+#: cdl.core.model.signal.create_signal_from_param:5 of
+msgid "additional parameters"
+msgstr "paramètres supplémentaires"
+
+#: cdl.core.model.image.create_image_from_param:7
+#: cdl.core.model.signal.create_signal_from_param:7 of
+msgid "Open a dialog box to edit parameters (default: False)"
+msgstr "Ouvrir une boîte de dialogue pour modifier les paramètres (par défaut : False)"
+
+#: cdl.core.model.image.create_image_from_param:9
+#: cdl.core.model.signal.create_signal_from_param:9 of
+msgid "parent widget"
+msgstr "widget parent"
+
 #: cdl.core.model.signal.create_signal_from_param:12 of
 msgid "signal object or None if canceled"
 msgstr "objet signal ou None si annulé"
@@ -1026,6 +1099,7 @@ msgstr "objet signal ou None si annulé"
 msgid "Create a new Signal dataset instance."
 msgstr "Créer une nouvelle instance de jeu de données Signal."
 
+#: cdl.core.model.image.new_image_param:3
 #: cdl.core.model.signal.new_signal_param:3 of
 msgid "dataset title (default: None, uses default title)"
 msgstr "titre du jeu de données (par défaut : None, utilise le titre par défaut)"
@@ -1090,10 +1164,7 @@ msgstr "Renvoie (largeur, hauteur)"
 msgid ""
 "Set metadata from object: dict-like (only string keys are considered) or "
 "any other object (iterating over supported attributes)"
-msgstr ""
-"Définir les métadonnées à partir de l'objet : semblable à un dictionnaire "
-(seules les clés de chaînes sont prises en compte) ou tout autre objet "
-(parcourant les attributs pris en charge)"
+msgstr "Définir les métadonnées à partir de l'objet : semblable à un dictionnaire "
 
 #: cdl.core.model.image.ImageObj.set_metadata_from:4 of
 msgid "object"
@@ -1125,7 +1196,9 @@ msgstr "géométrie de la ROI"
 
 #: cdl.obj.ImageObj.maskdata:1 of
 msgid "Return masked data (areas outside defined regions of interest)"
-msgstr "Renvoie les données masquées (zones en dehors des régions d'intérêt définies)"
+msgstr ""
+"Renvoie les données masquées (zones en dehors des régions d'intérêt "
+"définies)"
 
 #: cdl.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
 msgid "Invalidate mask data cache: force to rebuild it"
@@ -1201,7 +1274,9 @@ msgstr "largeur de l'image (par défaut : None, utilise la largeur par défaut)"
 
 #: cdl.core.model.image.new_image_param:11 of
 msgid "image data type (default: None, uses default data type)"
-msgstr "type de données de l'image (par défaut : None, utilise le type de données par défaut)"
+msgstr ""
+"type de données de l'image (par défaut : None, utilise le type de données"
+" par défaut)"
 
 #: cdl.core.model.image.new_image_param:14 of
 msgid "new image dataset instance"
@@ -1234,5 +1309,3 @@ msgstr "Renvoie le membre à partir du dtype NumPy"
 #: cdl.core.model.image.ImageDatatypes.check:1 of
 msgid "Check if data types are valid"
 msgstr "Vérifie si les types de données sont valides"
-#~ msgid "Object model module (:mod:`cdl.obj`)"
-#~ msgstr ""
