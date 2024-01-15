@@ -1,28 +1,22 @@
-DataLab User Guide
-==================
+DataLab documentation
+=====================
 
-DataLab is a **generic signal and image processing software**
-with unique features designed to meet industrial requirements
+DataLab is an **open-source platform for scientific and technical data processing
+and visualization** with unique features designed to meet industrial requirements
 (see :ref:`key_strengths`: Extensibility, Interoperability, ...).
-It is based on Python scientific libraries (such as NumPy,
-SciPy or scikit-image) and Qt graphical user interfaces (thanks to
-the powerful `PlotPyStack`_ - mostly the `guidata`_ and `PlotPy`_ libraries).
-
-With its user-friendly experience and versatile :ref:`usage_modes`,
-DataLab enables efficient development of your data processing and
-visualization applications while benefiting from an industrial-grade
-technological platform.
+It is based on Python scientific libraries (such as NumPy, SciPy or scikit-image)
+and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_, and
+especially the `guidata`_ and `PlotPy`_ libraries).
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light
 
     Signal and image visualization in DataLab
 
-DataLab :ref:`main_features` are available not only using the
-**stand-alone application**
-(easily installed thanks to the Windows installer or the Python package)
-but also by **embedding it into your own application**
-(see the "embedded tests" for detailed examples of how to do so).
+With its user-friendly experience and versatile :ref:`usage_modes`,
+DataLab enables efficient development of your data processing and
+visualization applications while benefiting from an industrial-grade
+technological platform.
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center
@@ -31,38 +25,18 @@ but also by **embedding it into your own application**
     DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_,
     the scientific Python-Qt visualization and graphical user interface stack.
 
-.. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
-          developed and maintained by DataLab open-source project team with
-          the support of `Codra`_.
-
-External resources:
-    .. list-table::
-        :widths: 20, 80
-
-        * - `Home`_
-          - DataLab home page
-        * - `PyPI`_
-          - Python Package Index
-        * - `GitHub`_
-          - Bug reports and feature requests
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    intro/index
-   features/general/index
-   features/signal/index
-   features/image/index
+   features/index
    api/index
    dev/index
-   changelog
 
-Copyrights and licensing
-------------------------
-
-- Copyright © 2023 `Codra`_, `Pierre Raybaut`_
-- Licensed under the terms of the `BSD 3-Clause`_
+.. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
+          developed and maintained by DataLab open-source project team with
+          the support of `Codra`_.
 
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _guidata: https://pypi.python.org/pypi/guidata

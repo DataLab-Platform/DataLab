@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-15 09:58+0200\n"
+"POT-Creation-Date: 2024-01-15 16:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/signal/annotations.rst:4
 msgid "Annotations (Signals)"
@@ -41,7 +41,9 @@ msgstr "Créer ou ouvrir un signal dans l'espace de travail de DataLab"
 msgid ""
 "Double-click on the signal or select \"View in a new window\" in \"View\""
 " menu"
-msgstr "Double-cliquer sur le signal ou sélectionner \"Voir dans une nouvelle fenêtre\" dans le menu \"Affichage\""
+msgstr ""
+"Double-cliquer sur le signal ou sélectionner \"Voir dans une nouvelle "
+"fenêtre\" dans le menu \"Affichage\""
 
 #: ../../features/signal/annotations.rst:13
 msgid "Add annotations (labels, cursors, rectangles and segments)"
@@ -64,8 +66,8 @@ msgstr ""
 "sauvegardées avec l'espace de travail DataLab."
 
 #: ../../features/signal/annotations.rst:21
-msgid "Example of annotations."
-msgstr "Exemple d'annotations."
+msgid "Annotations may be added in the separate view."
+msgstr "Les annotations peuvent être ajoutées dans la fenêtre séparée."
 
 #: ../../features/signal/annotations.rst:23
 msgid ""
@@ -76,10 +78,17 @@ msgstr ""
 "(cf. ci-dessus), elles sont intégrées aux métadonnées de l'objet signal "
 "(cf. ci-desous)."
 
-#: ../../features/signal/annotations.rst:29
+#: ../../features/signal/annotations.rst:28
+msgid "Annotations are now part of the signal metadata."
+msgstr "Les annotations font maintenant partie des métadonnées du signal."
+
+#: ../../features/signal/annotations.rst:31
 msgid ""
 "Annotations may be copied from a signal to another by using the "
 "\"copy/paste metadata\" features."
 msgstr ""
 "Les annotations peuvent être copiées d'un signal à l'autre en utilisant "
 "la fonctionnalité de \"Copier/coller\" des métadonnées."
+
+#~ msgid "Example of annotations."
+#~ msgstr "Exemple d'annotations."

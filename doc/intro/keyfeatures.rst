@@ -1,5 +1,5 @@
-Overview
-========
+Key features
+============
 
 This page presents briefly DataLab key features.
 
@@ -7,8 +7,8 @@ This page presents briefly DataLab key features.
 
     DataLab supports dark and light mode depending on your OS settings
 
-Data visualization key features
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Data visualization
+^^^^^^^^^^^^^^^^^^
 
 ====== ====== ==============================
 Signal Image  Feature
@@ -32,8 +32,8 @@ Signal Image  Feature
 
     Semi-automatic peak detection
 
-Data processing key features
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Data processing
+^^^^^^^^^^^^^^^
 
 ====== ====== ==================================================
 Signal Image  Feature

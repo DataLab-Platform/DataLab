@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-15 16:41+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../features/index.rst:18
+msgid "General features:"
+msgstr "Fonctionnalités générales :"
+
+#: ../../features/index.rst:40
+msgid "Signal processing features:"
+msgstr "Fonctionnalités de traitement du signal :"
+
+#: ../../features/index.rst:64
+msgid "Image processing features:"
+msgstr "Fonctionnalités de traitement d'image :"
+
+#: ../../features/index.rst:2
+msgid "Features"
+msgstr "Fonctionnalités"
+
+#: ../../features/index.rst:4
+msgid ""
+"DataLab features are detailed in the following sections. The first "
+"section describes the general features of DataLab, then the two following"
+" sections describe the features specific to the signal and image "
+"processing panels."
+msgstr "Les fonctionnalités de DataLab sont détaillées dans les sections suivantes. La première section décrit les fonctionnalités générales de DataLab, puis les deux sections suivantes décrivent les fonctionnalités spécifiques aux panneaux de traitement du signal et d'image."
+
+#: ../../features/index.rst:9
+msgid "General"
+msgstr "Général"
+
+#: ../../features/index.rst:11
+msgid ""
+"This section describes the general features of DataLab, which concern "
+"both the signal and image processing panels."
+msgstr "Cette section décrit les fonctionnalités générales de DataLab, qui concernent à la fois les panneaux de traitement du signal et d'image."
+
+#: ../../features/index.rst:16
+msgid "DataLab main window"
+msgstr "Fenêtre principale de DataLab"
+
+#: ../../features/index.rst:31
+msgid "Signal processing"
+msgstr "Traitement du signal"
+
+#: ../../features/index.rst:33
+msgid ""
+"This section describes the features specific to the signal processing "
+"panel. The signal processing panel is the default panel when DataLab is "
+"started."
+msgstr "Cette section décrit les fonctionnalités spécifiques au panneau de traitement du signal. Le panneau de traitement du signal est le panneau par défaut lorsque DataLab est démarré."
+
+#: ../../features/index.rst:38
+msgid "DataLab main window: Signal processing view"
+msgstr "Fenêtre principale de DataLab : vue du traitement du signal"
+
+#: ../../features/index.rst:54
+msgid "Image processing"
+msgstr "Traitement d'image"
+
+#: ../../features/index.rst:56
+msgid ""
+"This section describes the features specific to the image processing "
+"panel. The image processing panel can be selected by clicking on the "
+"\"Images\" tab at the bottom-right of the DataLab main window."
+msgstr "Cette section décrit les fonctionnalités spécifiques au panneau de traitement d'image. Le panneau de traitement d'image peut être sélectionné en cliquant sur l'onglet \"Images\" en bas à droite de la fenêtre principale de DataLab."
+
+#: ../../features/index.rst:62
+msgid "DataLab main window: Image processing view"
+msgstr "Fenêtre principale de DataLab : vue du traitement d'image"

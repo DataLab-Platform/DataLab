@@ -18,12 +18,14 @@ How to use the feature:
 
 .. figure:: /images/annotations/image_annotations1.png
 
-    Example of annotations.
+    Annotations may be added in the separate view.
 
 Once the annotations have been added in the separate view (see above),
 they are part of the object (image) metadata (see below).
 
 .. figure:: /images/annotations/image_annotations2.png
+
+    Annotations are now part of the image metadata.
 
 .. note::
     Annotations may be copied from an image to another by using the

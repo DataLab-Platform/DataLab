@@ -18,12 +18,14 @@ How to use the feature:
 
 .. figure:: /images/annotations/signal_annotations1.png
 
-    Example of annotations.
+    Annotations may be added in the separate view.
 
 Once the annotations have been added in the separate view (see above),
 they are part of the object (signal) metadata (see below).
 
 .. figure:: /images/annotations/signal_annotations2.png
+
+    Annotations are now part of the signal metadata.
 
 .. note::
     Annotations may be copied from a signal to another by using the

@@ -1,21 +1,6 @@
 Installation
 ============
 
-Dependencies
-------------
-
-.. note::
-
-    The DataLab all-in-one installer already include all those required
-    libraries as well as Python itself.
-
-.. include:: ../requirements.rst
-
-.. note::
-
-    Python 3.11 and PyQt5 are the reference for production release
-
-
 How to install
 --------------
 
@@ -120,3 +105,17 @@ by running the following command from the root directory of the source package
     $ pip install build wheel  # Install build and wheel packages (if needed)
     $ python -m build  # Build the wheel package
     $ pip install --upgrade dist/cdl-0.11.1-py2.py3-none-any.whl  # Install the wheel package
+
+Dependencies
+------------
+
+.. note::
+
+    The DataLab all-in-one installer already include all those required
+    libraries as well as Python itself.
+
+.. include:: ../requirements.rst
+
+.. note::
+
+    Python 3.11 and PyQt5 are the reference for production release

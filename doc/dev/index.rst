@@ -9,3 +9,4 @@ Development
    contribute
    guidelines
    environment
+   changelog

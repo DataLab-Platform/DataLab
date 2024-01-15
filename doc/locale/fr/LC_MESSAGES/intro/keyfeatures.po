@@ -8,189 +8,194 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-18 15:39+0200\n"
+"POT-Creation-Date: 2024-01-15 17:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.13.0\n"
 
-#: ../../intro/overview.rst:2
-msgid "Overview"
-msgstr "Aperçu"
+#: ../../intro/keyfeatures.rst:2
+msgid "Key features"
+msgstr "Fonctionnalités principales"
 
-#: ../../intro/overview.rst:4
+#: ../../intro/keyfeatures.rst:4
 msgid "This page presents briefly DataLab key features."
 msgstr "Cette page présente brièvement les principales fonctionnalités de DataLab."
 
-#: ../../intro/overview.rst:8
+#: ../../intro/keyfeatures.rst:8
 msgid "DataLab supports dark and light mode depending on your OS settings"
-msgstr "DataLab prend en charge le mode sombre et le mode clair en fonction des paramètres de votre système d'exploitation"
+msgstr ""
+"DataLab prend en charge le mode sombre et le mode clair en fonction des "
+"paramètres de votre système d'exploitation"
 
-#: ../../intro/overview.rst:11
-msgid "Data visualization key features"
-msgstr "Principales fonctionnalités de visualisation des données"
+#: ../../intro/keyfeatures.rst:11
+msgid "Data visualization"
+msgstr "Visualisation de données"
 
-#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+#: ../../intro/keyfeatures.rst:14 ../../intro/keyfeatures.rst:39
 msgid "Signal"
 msgstr "Signal"
 
-#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+#: ../../intro/keyfeatures.rst:14 ../../intro/keyfeatures.rst:39
 msgid "Image"
 msgstr "Image"
 
-#: ../../intro/overview.rst:14 ../../intro/overview.rst:39
+#: ../../intro/keyfeatures.rst:14 ../../intro/keyfeatures.rst:39
 msgid "Feature"
 msgstr "Fonctionnalité"
 
-#: ../../intro/overview.rst:16 ../../intro/overview.rst:17
-#: ../../intro/overview.rst:18 ../../intro/overview.rst:19
-#: ../../intro/overview.rst:20 ../../intro/overview.rst:21
-#: ../../intro/overview.rst:22 ../../intro/overview.rst:23
-#: ../../intro/overview.rst:24 ../../intro/overview.rst:41
-#: ../../intro/overview.rst:42 ../../intro/overview.rst:43
-#: ../../intro/overview.rst:44 ../../intro/overview.rst:45
-#: ../../intro/overview.rst:46 ../../intro/overview.rst:47
-#: ../../intro/overview.rst:48 ../../intro/overview.rst:49
-#: ../../intro/overview.rst:50 ../../intro/overview.rst:51
-#: ../../intro/overview.rst:52 ../../intro/overview.rst:53
-#: ../../intro/overview.rst:54 ../../intro/overview.rst:55
-#: ../../intro/overview.rst:56 ../../intro/overview.rst:57
-#: ../../intro/overview.rst:58 ../../intro/overview.rst:59
-#: ../../intro/overview.rst:60
+#: ../../intro/keyfeatures.rst:16 ../../intro/keyfeatures.rst:17
+#: ../../intro/keyfeatures.rst:18 ../../intro/keyfeatures.rst:19
+#: ../../intro/keyfeatures.rst:20 ../../intro/keyfeatures.rst:21
+#: ../../intro/keyfeatures.rst:22 ../../intro/keyfeatures.rst:23
+#: ../../intro/keyfeatures.rst:24 ../../intro/keyfeatures.rst:41
+#: ../../intro/keyfeatures.rst:42 ../../intro/keyfeatures.rst:43
+#: ../../intro/keyfeatures.rst:44 ../../intro/keyfeatures.rst:45
+#: ../../intro/keyfeatures.rst:46 ../../intro/keyfeatures.rst:47
+#: ../../intro/keyfeatures.rst:48 ../../intro/keyfeatures.rst:49
+#: ../../intro/keyfeatures.rst:50 ../../intro/keyfeatures.rst:51
+#: ../../intro/keyfeatures.rst:52 ../../intro/keyfeatures.rst:53
+#: ../../intro/keyfeatures.rst:54 ../../intro/keyfeatures.rst:55
+#: ../../intro/keyfeatures.rst:56 ../../intro/keyfeatures.rst:57
+#: ../../intro/keyfeatures.rst:58 ../../intro/keyfeatures.rst:59
+#: ../../intro/keyfeatures.rst:60
 msgid "✓"
 msgstr ""
 
-#: ../../intro/overview.rst:16
+#: ../../intro/keyfeatures.rst:16
 msgid "Screenshots (save, copy)"
 msgstr "Captures d'écran (enregistrer, copier)"
 
-#: ../../intro/overview.rst:17
+#: ../../intro/keyfeatures.rst:17
 msgid "Z-axis"
 msgstr "Axe Z"
 
-#: ../../intro/overview.rst:17
+#: ../../intro/keyfeatures.rst:17
 msgid "Lin/log scales"
 msgstr "Échelles linéaire/logarithmique"
 
-#: ../../intro/overview.rst:18
+#: ../../intro/keyfeatures.rst:18
 msgid "Data table editing"
 msgstr "Édition de table de données"
 
-#: ../../intro/overview.rst:19
+#: ../../intro/keyfeatures.rst:19
 msgid "Statistics on user-defined ROI"
 msgstr "Statistiques sur ROI défini par l'utilisateur"
 
-#: ../../intro/overview.rst:20
+#: ../../intro/keyfeatures.rst:20
 msgid "Markers"
 msgstr "Marqueurs"
 
-#: ../../intro/overview.rst:21
+#: ../../intro/keyfeatures.rst:21
 msgid "Aspect ratio (1:1, custom)"
 msgstr "Ratio d'aspect (1:1, personnalisé)"
 
-#: ../../intro/overview.rst:22
+#: ../../intro/keyfeatures.rst:22
 msgid "50+ available colormaps"
 msgstr "Plus de 50 échelles de couleurs disponibles"
 
-#: ../../intro/overview.rst:23
+#: ../../intro/keyfeatures.rst:23
 msgid "X/Y raw/averaged profiles"
 msgstr "Profils X/Y bruts/moyennés"
 
-#: ../../intro/overview.rst:24
+#: ../../intro/keyfeatures.rst:24
 msgid "Annotations"
 msgstr "Annotations"
 
-#: ../../intro/overview.rst:29
+#: ../../intro/keyfeatures.rst:29
 msgid "Example of a multi-gaussian curve fit"
 msgstr "Exemple d'ajustement d'une courbe multi-gaussienne"
 
-#: ../../intro/overview.rst:33
+#: ../../intro/keyfeatures.rst:33
 msgid "Semi-automatic peak detection"
 msgstr "Détection de pics semi-automatique"
 
-#: ../../intro/overview.rst:36
-msgid "Data processing key features"
-msgstr "Principales fonctionnalités de traitement des données"
+#: ../../intro/keyfeatures.rst:36
+msgid "Data processing"
+msgstr "Traitement de données"
 
-#: ../../intro/overview.rst:41
+#: ../../intro/keyfeatures.rst:41
 msgid "Process isolation for running computations"
 msgstr "Processus isolé pour l'exécution des calculs"
 
-#: ../../intro/overview.rst:42
+#: ../../intro/keyfeatures.rst:42
 msgid "Remote control from Jupyter, Spyder or any IDE"
 msgstr "Contrôle à distance depuis Jupyter, Spyder ou tout autre IDE"
 
-#: ../../intro/overview.rst:43
+#: ../../intro/keyfeatures.rst:43
 msgid "Remote control from a third-party application"
 msgstr "Contrôle à distance depuis une application tierce"
 
-#: ../../intro/overview.rst:44
+#: ../../intro/keyfeatures.rst:44
 msgid "Sum, average, difference, product, ..."
 msgstr "Somme, moyenne, différence, produit, ..."
 
-#: ../../intro/overview.rst:45
+#: ../../intro/keyfeatures.rst:45
 msgid "ROI extraction, Swap X/Y axes"
 msgstr "Extraction de ROI, permutation des axes X/Y"
 
-#: ../../intro/overview.rst:46
+#: ../../intro/keyfeatures.rst:46
 msgid "Semi-automatic multi-peak detection"
 msgstr "Détection de pics semi-automatique"
 
-#: ../../intro/overview.rst:47
+#: ../../intro/keyfeatures.rst:47
 msgid "Rotation (flip, rotate), resize, ..."
 msgstr "Rotation (retournement, rotation), redimensionnement, ..."
 
-#: ../../intro/overview.rst:48
+#: ../../intro/keyfeatures.rst:48
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: ../../intro/overview.rst:49
+#: ../../intro/keyfeatures.rst:49
 msgid "Normalize, derivative, integral"
 msgstr "Normalisation, dérivée, intégrale"
 
-#: ../../intro/overview.rst:50
+#: ../../intro/keyfeatures.rst:50
 msgid "Linear calibration"
 msgstr "Calibration linéaire"
 
-#: ../../intro/overview.rst:51
+#: ../../intro/keyfeatures.rst:51
 msgid "Thresholding, clipping"
 msgstr "Seuillage, rognage"
 
-#: ../../intro/overview.rst:52
+#: ../../intro/keyfeatures.rst:52
 msgid "Gaussian filter, Wiener filter"
 msgstr "Filtre gaussien, filtre de Wiener"
 
-#: ../../intro/overview.rst:53
+#: ../../intro/keyfeatures.rst:53
 msgid "Moving average, moving median"
 msgstr "Moyenne mobile, médiane mobile"
 
-#: ../../intro/overview.rst:54
+#: ../../intro/keyfeatures.rst:54
 msgid "FFT, inverse FFT"
 msgstr "FFT, FFT inverse"
 
-#: ../../intro/overview.rst:55
+#: ../../intro/keyfeatures.rst:55
 msgid "Interactive fit: Gauss, Lorenzt, Voigt, polynomial"
 msgstr "Ajustement interactif : Gauss, Lorenzt, Voigt, polynôme"
 
-#: ../../intro/overview.rst:56
+#: ../../intro/keyfeatures.rst:56
 msgid "Interactive multigaussian fit"
 msgstr "Ajustement interactif multi-gaussien"
 
-#: ../../intro/overview.rst:57
+#: ../../intro/keyfeatures.rst:57
 msgid "Computing on custom ROI"
 msgstr "Calcul sur ROI personnalisé"
 
-#: ../../intro/overview.rst:58
+#: ../../intro/keyfeatures.rst:58
 msgid "FWHM, FW @ 1/e²"
 msgstr "FWHM, FW @ 1/e²"
 
-#: ../../intro/overview.rst:59
+#: ../../intro/keyfeatures.rst:59
 msgid "Centroid (robust method w/r noise)"
 msgstr "Barycentre (méthode robuste par rapport au bruit)"
 
-#: ../../intro/overview.rst:60
+#: ../../intro/keyfeatures.rst:60
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle d'encadrement minimal"
+
+#~ msgid "Overview"
+#~ msgstr "Aperçu"

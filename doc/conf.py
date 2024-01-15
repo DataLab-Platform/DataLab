@@ -16,7 +16,6 @@ os.environ["CDL_DOC"] = "1"
 project = "DataLab"
 author = ""
 copyright = "2023, Codra - Pierre Raybaut"
-html_logo = "_static/DataLab-title.png"
 release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
@@ -33,7 +32,29 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 
 html_theme = "pydata_sphinx_theme"
-html_theme_options = {"show_toc_level": 2}
+html_logo = "_static/DataLab-Title.svg"
+html_title = f"{project} v{cdl.__version__} Manual"
+html_theme_options = {
+    "show_toc_level": 2,
+    "github_url": cdl.__homeurl__,
+    "logo": {
+        "text": f"v{cdl.__version__}",
+    },
+    "icon_links": [
+        {
+            "name": "PyPI",
+            "url": "https://pypi.org/project/cdl",
+            "icon": "fa-custom fa-pypi",
+        },
+        {
+            "name": "Codra",
+            "url": "https://codra.net",
+            "icon": "_static/codra.png",
+            "type": "local",
+            "attributes": {"target": "_blank"},
+        },
+    ],
+}
 html_static_path = ["_static"]
 
 # -- Options for LaTeX output ------------------------------------------------
