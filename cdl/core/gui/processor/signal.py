@@ -318,7 +318,7 @@ class SignalProcessor(BaseProcessor):
         """Compute polynomial fitting curve"""
         txt = _("Polynomial fit")
         edit, param = self.init_param(param, cps.PolynomialFitParam, txt)
-        if not edit or param.edit(self):
+        if not edit or param.edit(self.panel.parent()):
             dlgfunc = fitdialog.polynomialfit
             self.compute_fit(
                 txt,

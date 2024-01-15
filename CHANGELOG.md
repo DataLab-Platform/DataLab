@@ -59,6 +59,10 @@ for future and past milestones.
   features
   * This fixes [Issue #19](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)
 
+🛠️ Bug fixes:
+
+* Fixed [Issue #29](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`
+
 ## DataLab Version 0.10.1 ##
 
 *Note*: V0.10.0 was almost immediately replaced by V0.10.1 due to a last minute
