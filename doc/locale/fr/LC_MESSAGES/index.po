@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 17:36+0100\n"
+"POT-Creation-Date: 2024-01-15 18:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../index.rst:39
+#: ../../index.rst:56
 msgid "Contents:"
 msgstr "Table des matières :"
 
 #: ../../index.rst:2
-msgid "DataLab documentation"
-msgstr "Documentation de DataLab"
+msgid "DataLab"
+msgstr "DataLab"
 
 #: ../../index.rst:4
 msgid ""
@@ -33,15 +33,53 @@ msgid ""
 "industrial requirements (see :ref:`key_strengths`: Extensibility, "
 "Interoperability, ...). It is based on Python scientific libraries (such "
 "as NumPy, SciPy or scikit-image) and Qt graphical user interfaces (thanks"
-" to the powerful `PlotPyStack`_, and especially the `guidata`_ and "
-"`PlotPy`_ libraries)."
-msgstr "DataLab est une **plateforme open-source de traitement et de visualisation de données scientifiques et techniques** avec des fonctionnalités uniques conçues pour répondre à des niveaux d'exigence industriels (cf. :ref:`key_strengths` : Extensibilité, Interopérabilité, ...). Il est basé sur des bibliothèques scientifiques Python (telles que NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt (grâce à la puissante pile logicielle `PlotPyStack`_, et plus particulièrement aux bibliothèques `guidata`_ et `PlotPy`_)."
+" to the powerful `PlotPyStack`_)."
+msgstr ""
+"DataLab est une **plateforme open-source de traitement et de "
+"visualisation de données scientifiques et techniques** avec des "
+"fonctionnalités uniques conçues pour répondre à des niveaux d'exigence "
+"industriels (cf. :ref:`key_strengths` : Extensibilité, Interopérabilité, "
+"...). Il est basé sur des bibliothèques scientifiques Python (telles que "
+"NumPy, SciPy ou encore scikit-image) et sur les interfaces graphiques Qt "
+"(grâce à la puissante pile logicielle `PlotPyStack`_)."
 
-#: ../../index.rst:14
+#: ../../index.rst:13
 msgid "Signal and image visualization in DataLab"
 msgstr "Visualisation de signaux et d'images dans DataLab"
 
-#: ../../index.rst:16
+#: ../../index.rst:20
+msgid "Getting started"
+msgstr "Premiers pas"
+
+#: ../../index.rst:24
+msgid "Installation, use cases, key strengths, ..."
+msgstr "Installation, cas d'usage, points forts, ..."
+
+#: ../../index.rst:26
+msgid "Features"
+msgstr "Fonctionnalités"
+
+#: ../../index.rst:30
+msgid "In-depth description of DataLab features"
+msgstr "Description détaillée des fonctionnalités de DataLab"
+
+#: ../../index.rst:32
+msgid "API"
+msgstr "API"
+
+#: ../../index.rst:36
+msgid "Reference documentation of DataLab API"
+msgstr "Documentation de référence de l'API de DataLab"
+
+#: ../../index.rst:38
+msgid "Development"
+msgstr "Développement"
+
+#: ../../index.rst:42
+msgid "Roadmap, contributing, ..."
+msgstr "Feuille de route, contribution, ..."
+
+#: ../../index.rst:44
 msgid ""
 "With its user-friendly experience and versatile :ref:`usage_modes`, "
 "DataLab enables efficient development of your data processing and "
@@ -53,7 +91,7 @@ msgstr ""
 " de traitement et de visualisation de données tout en bénéficiant d'une "
 "plateforme technologique de qualité industrielle."
 
-#: ../../index.rst:25
+#: ../../index.rst:53
 msgid ""
 "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
 "the scientific Python-Qt visualization and graphical user interface "
@@ -63,35 +101,7 @@ msgstr ""
 " les outils de visualisation et d'interface graphique scientifiques "
 "Python-Qt."
 
-#: ../../index.rst:37
-msgid "External resources:"
-msgstr "Ressources externes :"
-
-#: ../../index.rst:32
-msgid "`Home`_"
-msgstr "`Home`_"
-
-#: ../../index.rst:33
-msgid "DataLab home page"
-msgstr "Site de DataLab"
-
-#: ../../index.rst:34
-msgid "`PyPI`_"
-msgstr "`PyPI`_"
-
-#: ../../index.rst:35
-msgid "Python Package Index"
-msgstr "Paquet Python officiel"
-
-#: ../../index.rst:36
-msgid "`GitHub`_"
-msgstr "`GitHub`_"
-
-#: ../../index.rst:37
-msgid "Bug reports and feature requests"
-msgstr "Signalement d'anomalies et demandes d'évolutions"
-
-#: ../../index.rst:48
+#: ../../index.rst:65
 msgid ""
 "DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
 "developed and maintained by DataLab open-source project team with the "
@@ -174,3 +184,33 @@ msgstr ""
 
 #~ msgid "Licensed under the terms of the `BSD 3-Clause`_"
 #~ msgstr "Distribué sous licence `BSD 3-Clause`_"
+
+#~ msgid "DataLab documentation"
+#~ msgstr "Documentation de DataLab"
+
+#~ msgid "External resources:"
+#~ msgstr "Ressources externes :"
+
+#~ msgid "`Home`_"
+#~ msgstr "`Home`_"
+
+#~ msgid "DataLab home page"
+#~ msgstr "Site de DataLab"
+
+#~ msgid "`PyPI`_"
+#~ msgstr "`PyPI`_"
+
+#~ msgid "Python Package Index"
+#~ msgstr "Paquet Python officiel"
+
+#~ msgid "`GitHub`_"
+#~ msgstr "`GitHub`_"
+
+#~ msgid "Bug reports and feature requests"
+#~ msgstr "Signalement d'anomalies et demandes d'évolutions"
+
+#~ msgid "Developer guide"
+#~ msgstr ""
+
+#~ msgid "About DataLab development and contribution"
+#~ msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 15:51+0100\n"
+"POT-Creation-Date: 2024-01-15 18:32+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -218,10 +218,20 @@ msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
 msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org/),"
 
 #: ../../requirements.rst:93
-msgid "pydata-sphinx-theme"
+msgid "sphinx_design"
 msgstr ""
 
 #: ../../requirements.rst:95
+msgid ""
+"A sphinx extension for designing beautiful, view size responsive web "
+"components."
+msgstr "Une extension sphinx pour concevoir de beaux composants web."
+
+#: ../../requirements.rst:96
+msgid "pydata-sphinx-theme"
+msgstr ""
+
+#: ../../requirements.rst:98
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
@@ -233,4 +243,3 @@ msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
 #~ msgid "opencv-python"
 #~ msgstr ""
-

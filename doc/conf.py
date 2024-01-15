@@ -25,6 +25,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
     "myst_parser",
+    "sphinx_design",
 ]
 templates_path = ["_templates"]
 exclude_patterns = []

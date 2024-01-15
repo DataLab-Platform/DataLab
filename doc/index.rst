@@ -1,17 +1,45 @@
-DataLab documentation
-=====================
+DataLab
+=======
 
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements
 (see :ref:`key_strengths`: Extensibility, Interoperability, ...).
 It is based on Python scientific libraries (such as NumPy, SciPy or scikit-image)
-and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_, and
-especially the `guidata`_ and `PlotPy`_ libraries).
+and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_).
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light
 
     Signal and image visualization in DataLab
+
+
+.. only:: html and not latex
+
+    .. grid:: 4
+
+        .. grid-item-card:: Getting started
+            :link: intro/index
+            :link-type: doc
+
+            Installation, use cases, key strengths, ...
+
+        .. grid-item-card:: Features
+            :link: features/index
+            :link-type: doc
+
+            In-depth description of DataLab features
+
+        .. grid-item-card:: API
+            :link: api/index
+            :link-type: doc
+
+            Reference documentation of DataLab API
+
+        .. grid-item-card:: Development
+            :link: dev/index
+            :link-type: doc
+
+            Roadmap, contributing, ...
 
 With its user-friendly experience and versatile :ref:`usage_modes`,
 DataLab enables efficient development of your data processing and

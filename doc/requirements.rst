@@ -90,6 +90,9 @@ Optional modules for building the documentation:
     * - myst_parser
       - 
       - An extended [CommonMark](https://spec.commonmark.org/) compliant parser,
+    * - sphinx_design
+      - 
+      - A sphinx extension for designing beautiful, view size responsive web components.
     * - pydata-sphinx-theme
       - 
       - Bootstrap-based Sphinx theme from the PyData community
