@@ -44,7 +44,9 @@ html_theme_options = {
         {
             "name": "PyPI",
             "url": "https://pypi.org/project/cdl",
-            "icon": "fa-custom fa-pypi",
+            "icon": "_static/pypi.svg",
+            "type": "local",
+            "attributes": {"target": "_blank"},
         },
         {
             "name": "Codra",
