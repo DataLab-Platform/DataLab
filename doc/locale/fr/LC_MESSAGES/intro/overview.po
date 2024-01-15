@@ -19,31 +19,31 @@ msgstr ""
 
 #: ../../intro/overview.rst:2
 msgid "Overview"
-msgstr ""
+msgstr "Aperçu"
 
 #: ../../intro/overview.rst:4
 msgid "This page presents briefly DataLab key features."
-msgstr ""
+msgstr "Cette page présente brièvement les principales fonctionnalités de DataLab."
 
 #: ../../intro/overview.rst:8
 msgid "DataLab supports dark and light mode depending on your OS settings"
-msgstr ""
+msgstr "DataLab prend en charge le mode sombre et le mode clair en fonction des paramètres de votre système d'exploitation"
 
 #: ../../intro/overview.rst:11
 msgid "Data visualization key features"
-msgstr ""
+msgstr "Principales fonctionnalités de visualisation des données"
 
 #: ../../intro/overview.rst:14 ../../intro/overview.rst:39
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 #: ../../intro/overview.rst:14 ../../intro/overview.rst:39
 msgid "Image"
-msgstr ""
+msgstr "Image"
 
 #: ../../intro/overview.rst:14 ../../intro/overview.rst:39
 msgid "Feature"
-msgstr ""
+msgstr "Fonctionnalité"
 
 #: ../../intro/overview.rst:16 ../../intro/overview.rst:17
 #: ../../intro/overview.rst:18 ../../intro/overview.rst:19
@@ -65,133 +65,132 @@ msgstr ""
 
 #: ../../intro/overview.rst:16
 msgid "Screenshots (save, copy)"
-msgstr ""
+msgstr "Captures d'écran (enregistrer, copier)"
 
 #: ../../intro/overview.rst:17
 msgid "Z-axis"
-msgstr ""
+msgstr "Axe Z"
 
 #: ../../intro/overview.rst:17
 msgid "Lin/log scales"
-msgstr ""
+msgstr "Échelles linéaire/logarithmique"
 
 #: ../../intro/overview.rst:18
 msgid "Data table editing"
-msgstr ""
+msgstr "Édition de table de données"
 
 #: ../../intro/overview.rst:19
 msgid "Statistics on user-defined ROI"
-msgstr ""
+msgstr "Statistiques sur ROI défini par l'utilisateur"
 
 #: ../../intro/overview.rst:20
 msgid "Markers"
-msgstr ""
+msgstr "Marqueurs"
 
 #: ../../intro/overview.rst:21
 msgid "Aspect ratio (1:1, custom)"
-msgstr ""
+msgstr "Ratio d'aspect (1:1, personnalisé)"
 
 #: ../../intro/overview.rst:22
 msgid "50+ available colormaps"
-msgstr ""
+msgstr "Plus de 50 échelles de couleurs disponibles"
 
 #: ../../intro/overview.rst:23
 msgid "X/Y raw/averaged profiles"
-msgstr ""
+msgstr "Profils X/Y bruts/moyennés"
 
 #: ../../intro/overview.rst:24
 msgid "Annotations"
-msgstr ""
+msgstr "Annotations"
 
 #: ../../intro/overview.rst:29
 msgid "Example of a multi-gaussian curve fit"
-msgstr ""
+msgstr "Exemple d'ajustement d'une courbe multi-gaussienne"
 
 #: ../../intro/overview.rst:33
 msgid "Semi-automatic peak detection"
-msgstr ""
+msgstr "Détection de pics semi-automatique"
 
 #: ../../intro/overview.rst:36
 msgid "Data processing key features"
-msgstr ""
+msgstr "Principales fonctionnalités de traitement des données"
 
 #: ../../intro/overview.rst:41
 msgid "Process isolation for running computations"
-msgstr ""
+msgstr "Processus isolé pour l'exécution des calculs"
 
 #: ../../intro/overview.rst:42
 msgid "Remote control from Jupyter, Spyder or any IDE"
-msgstr ""
+msgstr "Contrôle à distance depuis Jupyter, Spyder ou tout autre IDE"
 
 #: ../../intro/overview.rst:43
 msgid "Remote control from a third-party application"
-msgstr ""
+msgstr "Contrôle à distance depuis une application tierce"
 
 #: ../../intro/overview.rst:44
 msgid "Sum, average, difference, product, ..."
-msgstr ""
+msgstr "Somme, moyenne, différence, produit, ..."
 
 #: ../../intro/overview.rst:45
 msgid "ROI extraction, Swap X/Y axes"
-msgstr ""
+msgstr "Extraction de ROI, permutation des axes X/Y"
 
 #: ../../intro/overview.rst:46
 msgid "Semi-automatic multi-peak detection"
-msgstr ""
+msgstr "Détection de pics semi-automatique"
 
 #: ../../intro/overview.rst:47
 msgid "Rotation (flip, rotate), resize, ..."
-msgstr ""
+msgstr "Rotation (retournement, rotation), redimensionnement, ..."
 
 #: ../../intro/overview.rst:48
 msgid "Flat-field correction"
-msgstr ""
+msgstr "Correction de champ plat"
 
 #: ../../intro/overview.rst:49
 msgid "Normalize, derivative, integral"
-msgstr ""
+msgstr "Normalisation, dérivée, intégrale"
 
 #: ../../intro/overview.rst:50
 msgid "Linear calibration"
-msgstr ""
+msgstr "Calibration linéaire"
 
 #: ../../intro/overview.rst:51
 msgid "Thresholding, clipping"
-msgstr ""
+msgstr "Seuillage, rognage"
 
 #: ../../intro/overview.rst:52
 msgid "Gaussian filter, Wiener filter"
-msgstr ""
+msgstr "Filtre gaussien, filtre de Wiener"
 
 #: ../../intro/overview.rst:53
 msgid "Moving average, moving median"
-msgstr ""
+msgstr "Moyenne mobile, médiane mobile"
 
 #: ../../intro/overview.rst:54
 msgid "FFT, inverse FFT"
-msgstr ""
+msgstr "FFT, FFT inverse"
 
 #: ../../intro/overview.rst:55
 msgid "Interactive fit: Gauss, Lorenzt, Voigt, polynomial"
-msgstr ""
+msgstr "Ajustement interactif : Gauss, Lorenzt, Voigt, polynôme"
 
 #: ../../intro/overview.rst:56
 msgid "Interactive multigaussian fit"
-msgstr ""
+msgstr "Ajustement interactif multi-gaussien"
 
 #: ../../intro/overview.rst:57
 msgid "Computing on custom ROI"
-msgstr ""
+msgstr "Calcul sur ROI personnalisé"
 
 #: ../../intro/overview.rst:58
 msgid "FWHM, FW @ 1/e²"
-msgstr ""
+msgstr "FWHM, FW @ 1/e²"
 
 #: ../../intro/overview.rst:59
 msgid "Centroid (robust method w/r noise)"
-msgstr ""
+msgstr "Barycentre (méthode robuste par rapport au bruit)"
 
 #: ../../intro/overview.rst:60
 msgid "Minimum enclosing circle center"
-msgstr ""
-
+msgstr "Centre du cercle d'encadrement minimal"
