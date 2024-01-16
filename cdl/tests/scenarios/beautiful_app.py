@@ -46,6 +46,7 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.compute_fft()
         panel.processor.compute_derivative()
         if screenshots:
+            win.statusBar().hide()
             win.take_screenshot("s_beautiful")
         # Beautiful screenshot of an image
         panel = win.imagepanel
