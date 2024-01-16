@@ -12,6 +12,7 @@ doc/install_requires.txt
 doc/extras_require-dev.txt
 doc/extras_require-doc.txt
 *.bak
+/tutorialnotes*.md
 
 # Visual Studio Code
 .venv
