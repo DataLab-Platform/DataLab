@@ -38,7 +38,7 @@ html_logo = "_static/DataLab-Title.svg"
 html_title = f"{project} v{cdl.__version__} Manual"
 html_theme_options = {
     "show_toc_level": 2,
-    "github_url": cdl.__homeurl__,
+    "github_url": "https://github.com/Codra-Ingenierie-Informatique/DataLab/",
     "logo": {
         "text": f"v{cdl.__version__}",
     },
