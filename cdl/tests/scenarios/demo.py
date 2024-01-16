@@ -21,13 +21,12 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import (
-    create_noisygauss_image,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
+    get_test_image,
 )
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
-from cdl.tests.scenarios.common import compute_common_operations
 from cdl.widgets import fitdialog
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 4
@@ -44,6 +43,8 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     sig1 = create_paracetamol_signal(data_size)
     win.add_object(sig1)
 
+    qt_wait(DELAY1)
+
     panel.objview.set_current_object(sig1)
     newparam = dlo.new_signal_param(
         _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
@@ -52,18 +53,28 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     sig2 = dlo.create_signal_from_param(newparam, addparam=addparam, edit=False)
     win.add_object(sig2)
 
-    compute_common_operations(panel)
+    # compute_common_operations(panel)
+    panel.objview.select_objects((1, 2))
+    panel.processor.compute_sum()
+    qt_wait(DELAY1)
+
     panel.processor.compute_normalize()
     panel.processor.compute_derivative()
     panel.processor.compute_integral()
 
-    param = dlp.Peak2DDetectionParam()
+    panel.objview.set_current_object(sig1)
+    qt_wait(DELAY1)
+    panel.processor.compute_detrending()
+    sig3 = panel.objview.get_current_object()
+
+    param = dlp.PeakDetectionParam()
     panel.processor.compute_peak_detection(param)
+    sig4 = panel.objview.get_current_object()
+    panel.objview.select_objects([sig3, sig4])
 
     qt_wait(DELAY2)
 
-    param = dlp.PolynomialFitParam()
-    panel.processor.compute_polyfit(param)
+    panel.processor.compute_multigaussianfit()
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
 
@@ -79,29 +90,38 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
     qt_wait(DELAY2)
 
 
-def test_image_features(win: CDLMainWindow, data_size: int = 1000) -> None:
+def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     """Testing signal features"""
     win.set_current_panel("image")
     panel = win.imagepanel
 
     newparam = dlo.new_image_param(height=data_size, width=data_size)
 
-    ima1 = create_noisygauss_image(newparam)
-    panel.add_object(ima1)
+    # ima1 = create_noisygauss_image(newparam)
+    # panel.add_object(ima1)
+
+    panel.add_object(get_test_image("flower.npy"))
+    ima1 = panel.objview.get_current_object()
 
     qt_wait(DELAY2)
 
     panel.objview.set_current_object(ima1)
 
-    newparam = dlo.new_image_param(itype=dlo.ImageTypes.UNIFORMRANDOM)
+    newparam = dlo.new_image_param(
+        itype=dlo.ImageTypes.UNIFORMRANDOM, height=newparam.height, width=newparam.width
+    )
     addparam = dlo.UniformRandomParam()
     addparam.set_from_datatype(ima1.data.dtype)
     addparam.vmax = int(ima1.data.max() * 0.2)
     ima2 = dlo.create_image_from_param(newparam, addparam=addparam, edit=False)
     panel.add_object(ima2)
 
-    compute_common_operations(panel)
+    panel.objview.select_objects((1, 2))
+    panel.processor.compute_sum()
+    qt_wait(DELAY2)
+    # compute_common_operations(panel)
 
+    newparam.title = None
     ima1 = create_sincos_image(newparam)
     panel.add_object(ima1)
 
@@ -151,7 +171,7 @@ def run():
     execenv.enable_demo_mode(DELAY1)
     with cdltest_app_context(console=False) as win:
         QW.QMessageBox.information(win, "Demo", "Click OK to start demo")
-        test_signal_features(win)
+        # test_signal_features(win)
         test_image_features(win)
         qt_wait(DELAY3)
         QW.QMessageBox.information(win, "Demo", "Click OK to end demo")

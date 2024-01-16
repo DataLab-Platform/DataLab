@@ -316,8 +316,6 @@ class SignalObj(gds.DataSet, base.BaseObj):
         else:
             raise RuntimeError("data not supported")
         if update_from is None:
-            if execenv.demo_mode:
-                item.param.line.width = 3
             self.update_plot_item_parameters(item)
         else:
             update_dataset(item.param, update_from.param)
