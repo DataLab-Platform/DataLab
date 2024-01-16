@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 16:41+0100\n"
+"POT-Creation-Date: 2024-01-16 15:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/index.rst:18
+#: ../../features/index.rst:27
 msgid "General features:"
 msgstr "Fonctionnalités générales :"
 
-#: ../../features/index.rst:40
+#: ../../features/index.rst:53
 msgid "Signal processing features:"
 msgstr "Fonctionnalités de traitement du signal :"
 
-#: ../../features/index.rst:64
+#: ../../features/index.rst:81
 msgid "Image processing features:"
 msgstr "Fonctionnalités de traitement d'image :"
 
@@ -41,48 +41,82 @@ msgid ""
 "section describes the general features of DataLab, then the two following"
 " sections describe the features specific to the signal and image "
 "processing panels."
-msgstr "Les fonctionnalités de DataLab sont détaillées dans les sections suivantes. La première section décrit les fonctionnalités générales de DataLab, puis les deux sections suivantes décrivent les fonctionnalités spécifiques aux panneaux de traitement du signal et d'image."
+msgstr ""
+"Les fonctionnalités de DataLab sont détaillées dans les sections "
+"suivantes. La première section décrit les fonctionnalités générales de "
+"DataLab, puis les deux sections suivantes décrivent les fonctionnalités "
+"spécifiques aux panneaux de traitement du signal et d'image."
 
-#: ../../features/index.rst:9
+#: ../../features/index.rst:8
+msgid ""
+"Before jumping into the details of other parts of the documentation, it "
+"is recommended to start with the :ref:`workspace` page, which describes "
+"the basic concepts of DataLab."
+msgstr "Avant de plonger dans les détails des autres parties de la documentation, il est recommandé de commencer par la page :ref:`workspace`, qui décrit les concepts de base de DataLab."
+
+#: ../../features/index.rst:14
+msgid ""
+"For a synthetic overview of the features of DataLab, please refer to the "
+":ref:`key_features` page."
+msgstr "Pour une vue d'ensemble synthétique des fonctionnalités de DataLab, veuillez vous référer à la page :ref:`key_features`."
+
+#: ../../features/index.rst:18
 msgid "General"
 msgstr "Général"
 
-#: ../../features/index.rst:11
+#: ../../features/index.rst:20
 msgid ""
 "This section describes the general features of DataLab, which concern "
 "both the signal and image processing panels."
-msgstr "Cette section décrit les fonctionnalités générales de DataLab, qui concernent à la fois les panneaux de traitement du signal et d'image."
+msgstr ""
+"Cette section décrit les fonctionnalités générales de DataLab, qui "
+"concernent à la fois les panneaux de traitement du signal et d'image."
 
-#: ../../features/index.rst:16
+#: ../../features/index.rst:25
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
-#: ../../features/index.rst:31
+#: ../../features/index.rst:44
 msgid "Signal processing"
 msgstr "Traitement du signal"
 
-#: ../../features/index.rst:33
+#: ../../features/index.rst:46
 msgid ""
 "This section describes the features specific to the signal processing "
 "panel. The signal processing panel is the default panel when DataLab is "
 "started."
-msgstr "Cette section décrit les fonctionnalités spécifiques au panneau de traitement du signal. Le panneau de traitement du signal est le panneau par défaut lorsque DataLab est démarré."
+msgstr ""
+"Cette section décrit les fonctionnalités spécifiques au panneau de "
+"traitement du signal. Le panneau de traitement du signal est le panneau "
+"par défaut lorsque DataLab est démarré."
 
-#: ../../features/index.rst:38
+#: ../../features/index.rst:51
 msgid "DataLab main window: Signal processing view"
 msgstr "Fenêtre principale de DataLab : vue du traitement du signal"
 
-#: ../../features/index.rst:54
+#: ../../features/index.rst:71
 msgid "Image processing"
 msgstr "Traitement d'image"
 
-#: ../../features/index.rst:56
+#: ../../features/index.rst:73
 msgid ""
 "This section describes the features specific to the image processing "
 "panel. The image processing panel can be selected by clicking on the "
 "\"Images\" tab at the bottom-right of the DataLab main window."
-msgstr "Cette section décrit les fonctionnalités spécifiques au panneau de traitement d'image. Le panneau de traitement d'image peut être sélectionné en cliquant sur l'onglet \"Images\" en bas à droite de la fenêtre principale de DataLab."
+msgstr ""
+"Cette section décrit les fonctionnalités spécifiques au panneau de "
+"traitement d'image. Le panneau de traitement d'image peut être "
+"sélectionné en cliquant sur l'onglet \"Images\" en bas à droite de la "
+"fenêtre principale de DataLab."
 
-#: ../../features/index.rst:62
+#: ../../features/index.rst:79
 msgid "DataLab main window: Image processing view"
 msgstr "Fenêtre principale de DataLab : vue du traitement d'image"
+
+#~ msgid ""
+#~ "Before jumping into the details in "
+#~ "other parts of the documentation, it "
+#~ "is recommended to start with the "
+#~ ":ref:`workspace` page, which describes the "
+#~ "basic concepts of DataLab."
+#~ msgstr ""

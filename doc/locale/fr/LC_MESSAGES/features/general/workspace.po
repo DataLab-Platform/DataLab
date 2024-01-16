@@ -1,0 +1,142 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-16 15:11+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../features/general/workspace.rst:4
+msgid "Workspace"
+msgstr "Espace de travail"
+
+#: ../../features/general/workspace.rst:7
+msgid "Basic concepts"
+msgstr "Concepts de base"
+
+#: ../../features/general/workspace.rst:9
+msgid ""
+"Working with DataLab is very easy. The user interface is intuitive and "
+"self-explanatory. The main window is divided into two main areas:"
+msgstr "Travailler avec DataLab est très simple. L'interface est intuitive et appréhendable facilement. La fenêtre principale est divisée en deux zones principales :"
+
+#: ../../features/general/workspace.rst:12
+msgid ""
+"The right area shows the list of data sets which are currently loaded in "
+"DataLab, distibuted over two tabs: **Signals** and **Images**. The user "
+"can switch between the two tabs by clicking on the corresponding tab: "
+"this switches the main window to the corresponding panel, as well as the "
+"menu and toolbar contents. Below the list of data sets, a **Properties** "
+"view shows information about the currently selected data set."
+msgstr "La zone de droite affiche la liste des jeux de données actuellement chargés dans DataLab, répartis sur deux onglets : **Signaux** et **Images**. L'utilisateur peut basculer entre les deux onglets en cliquant sur l'onglet correspondant : cela bascule la fenêtre principale vers le panneau correspondant, ainsi que le contenu du menu et de la barre d'outils. Sous la liste des jeux de données, une vue **Propriétés** affiche des informations sur le jeu de données actuellement sélectionné."
+
+#: ../../features/general/workspace.rst:19
+msgid ""
+"The left area shows the visualization of the currently selected data set."
+" The visualization is updated automatically when the user selects a new "
+"data set in the list of data sets."
+msgstr "La zone de gauche affiche la visualisation du jeu de données actuellement sélectionné. La visualisation est mise à jour automatiquement lorsque l'utilisateur sélectionne un nouveau jeu de données dans la liste des jeux de données."
+
+#: ../../features/general/workspace.rst:25
+msgid "DataLab main window, at startup."
+msgstr "Fenêtre principale de DataLab, au démarrage."
+
+#: ../../features/general/workspace.rst:27
+msgid ""
+"DataLab has its own internal data model, in which data sets are organized"
+" around a tree structure. Each panel in the main window corresponds to a "
+"branch of the tree. Each data set shown in the panels corresponds to a "
+"leaf of the tree. Inside the data set, the data is organized in an "
+"object-oriented way, with a set of attributes and methods. The data model"
+" is described in more details in the API section (see :mod:`cdl.obj`)."
+msgstr "DataLab a son propre modèle de données interne, dans lequel les jeux de données sont organisés autour d'une structure arborescente. Chaque panneau de la fenêtre principale correspond à une branche de l'arbre. Chaque jeu de données affiché dans les panneaux correspond à une feuille de l'arbre. À l'intérieur du jeu de données, les données sont organisées de manière orientée objet, avec un ensemble d'attributs et de méthodes. Le modèle de données est décrit plus en détail dans la section API (voir :mod:`cdl.obj`)."
+
+#: ../../features/general/workspace.rst:34
+msgid ""
+"For each data set (1D signal or 2D image), not only the data itself is "
+"stored, but also a set of metadata, which describes the data or the way "
+"it has to be displayed. The metadata is stored in a dictionary, which is "
+"accessible through the ``metadata`` attribute of the data set (and may "
+"also be browsed in the **Properties** view, with the **Metadata** "
+"button)."
+msgstr "Pour chaque jeu de données (signal 1D ou image 2D), non seulement les données elles-mêmes sont stockées, mais aussi un ensemble de métadonnées, qui décrit les données ou la façon dont elles doivent être affichées. Les métadonnées sont stockées dans un dictionnaire, qui est accessible via l'attribut ``metadata`` du jeu de données (et peuvent également être parcourues dans la vue **Propriétés**, avec le bouton **Métadonnées**)."
+
+#: ../../features/general/workspace.rst:40
+msgid ""
+"The DataLab **Workspace** is defined as the collection of all data sets "
+"which are currently loaded in DataLab, in both the **Signals** and "
+"**Images** panels. The workspace may be saved to an HDF5 file, and "
+"reloaded later. It is also possible to import data sets from an HDF5 file"
+" into the workspace, using the :ref:`h5browser`."
+msgstr "L'**Espace de travail** de DataLab est défini comme l'ensemble de tous les jeux de données qui sont actuellement chargés dans DataLab, dans les panneaux **Signaux** et **Images**. L'espace de travail peut être enregistré dans un fichier HDF5, puis rechargé ultérieurement. Il est également possible d'importer des jeux de données à partir d'un fichier HDF5 dans l'espace de travail, en utilisant l':ref:`h5browser`."
+
+#: ../../features/general/workspace.rst:48
+msgid ""
+"Data sets may also be saved or loaded individually, using data formats "
+"such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the "
+"list of supported formats), , or `.tiff` or `.dcm` for 2D images (see "
+":ref:`open_image` for the list of supported formats)."
+msgstr "Les jeux de données peuvent également être enregistrés ou chargés individuellement, en utilisant des formats de données tels que `.txt` ou `.npy` pour les signaux 1D (voir :ref:`open_signal` pour la liste des formats pris en charge), ou `.tiff` ou `.dcm` pour les images 2D (voir :ref:`open_image` pour la liste des formats pris en charge)."
+
+#: ../../features/general/workspace.rst:56
+msgid "HDF5 Browser"
+msgstr "Explorateur HDF5"
+
+#: ../../features/general/workspace.rst:58
+msgid ""
+"The \"HDF5 Browser\" is a modal dialog box allowing to import almost any "
+"1D and 2D data into DataLab workspace (and eventually metadata)."
+msgstr ""
+"L'explorateur HDF5 est une boîte de dialogue modale permettant d'importer"
+" presque n'importe quelles données à 1 ou 2 dimensions dans l'espace de "
+"travail de DataLab. Dans certains cas, des métadonnées sont également "
+"importées."
+
+#: ../../features/general/workspace.rst:63
+msgid ""
+"Compatible curve or image data are displayed in a hierarchical view on "
+"the left panel, as well as other scalar data (scalar values are just "
+"shown for context purpose and may not be imported into DataLab "
+"workspace)."
+msgstr ""
+"Les données de type courbe ou image sont affichées sous la forme d'une "
+"vue hiérarchique dans le panneau de gauche, de même que les données "
+"scalaires (les valeurs scalaires sont simplement affichées à titre "
+"d'informations contextuelles et ne peuvent pas être importées dans "
+"l'espace de travail de DataLab)."
+
+#: ../../features/general/workspace.rst:70
+msgid "The HDF5 browser is fairly simple to use:"
+msgstr "L'explorateur de fichiers HDF5 est très simple à utiliser :"
+
+#: ../../features/general/workspace.rst:68
+msgid "On the left panel, select the curve or image data you want to import"
+msgstr "Dans le panneau de gauche, sélectionner la courbe ou l'image à importer"
+
+#: ../../features/general/workspace.rst:69
+msgid "Selected data is plotted on the right panel"
+msgstr ""
+"Les données sélectionnées peuvent être visualisées graphiquement dans le "
+"panneau de droite"
+
+#: ../../features/general/workspace.rst:70
+msgid "Click on \"Check all\" if you want to import all compatible data"
+msgstr "Cliquer sur \"Cocher tout\" pour importer toutes les données compatibles"
+
+#: ../../features/general/workspace.rst:71
+msgid "Then validate by clicking on \"OK\""
+msgstr "Valider ensuite en cliquant sur \"OK\""
+
+#~ msgid "It is fairly simple to use:"
+#~ msgstr ""

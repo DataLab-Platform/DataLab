@@ -16,11 +16,15 @@ from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
 
 
-def test_launcher1():
+def test_launcher1(screenshots: bool = False):
     """Testing DataLab app launcher"""
-    with cdl_app_context(exec_loop=True):
+    with cdl_app_context(exec_loop=not screenshots):
         execenv.print("Opening DataLab with no argument")
-        app.create()
+        win = app.create()
+        if screenshots:
+            win.statusBar().hide()
+            win.take_screenshot("s_app_at_startup")
+            win.close()
 
 
 if __name__ == "__main__":

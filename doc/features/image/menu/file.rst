@@ -22,6 +22,8 @@ New image
         * - 2D Gaussian
           - :math:`z = A.exp(-\dfrac{(\sqrt{(x-x0)^2+(y-y0)^2}-\mu)^2}{2\sigma^2})`
 
+.. _open_image:
+
 Open image
     Create a new image from the following supported filetypes:
 

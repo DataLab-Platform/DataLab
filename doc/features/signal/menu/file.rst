@@ -23,6 +23,8 @@ New signal
         * - Voigt
           - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
 
+.. _open_signal:
+
 Open signal
     Create a new signal from the following supported filetypes:
 

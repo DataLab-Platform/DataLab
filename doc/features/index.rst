@@ -5,6 +5,15 @@ DataLab features are detailed in the following sections. The first section
 describes the general features of DataLab, then the two following sections
 describe the features specific to the signal and image processing panels.
 
+Before jumping into the details of other parts of the documentation, it is
+recommended to start with the :ref:`workspace` page, which describes the
+basic concepts of DataLab.
+
+.. seealso::
+
+    For a synthetic overview of the features of DataLab, please refer to the
+    :ref:`key_features` page.
+
 General
 -------
 
@@ -19,13 +28,13 @@ signal and image processing panels.
    :maxdepth: 2
    :caption: General features:
 
-   general/command
-   general/h5browser
+   general/workspace
    general/remote
    general/model
    general/plugins
    general/logviewer
    general/instviewer
+   general/command
 
 .. raw:: latex
 
