@@ -61,6 +61,17 @@ It supports automatic uninstall and upgrade feature (no need to uninstall
 DataLab before runinng the installer of another version of the
 application).
 
+.. warning::
+
+    DataLab Windows installer is available for Windows 8, 10 and 11 (main release,
+    based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 based release, see
+    file ending with ``-Win7.exe``).
+
+    :octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running DataLab
+    (or any other Python 3 application), you must install Microsoft Update `KB2533623`
+    (`Windows6.1-KB2533623-x64.msu`) and also may need to install
+    `Microsoft Visual C++ 2015-2022 Redistribuable package <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_.
+
 .. _Releases: https://github.com/Codra-Ingenierie-Informatique/DataLab/releases
 
 .. _install_wheel:

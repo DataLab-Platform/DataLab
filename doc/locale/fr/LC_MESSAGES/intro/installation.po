@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 12:06+0100\n"
+"POT-Creation-Date: 2024-01-16 17:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,26 +38,33 @@ msgid ""
 ":bdg-info-line:`Windows` As a stand-alone application, which does not "
 "require any Python distribution to be installed. Just run the "
 ":ref:`install_aioinstaller` and you're good to go!"
-msgstr ":bdg-info-line:`Windows` En tant qu'application autonome, qui ne nécessite pas d'installation de Python. Il suffit d'exécuter l':ref:`install_aioinstaller` et le tour est joué !"
+msgstr ""
+":bdg-info-line:`Windows` En tant qu'application autonome, qui ne "
+"nécessite pas d'installation de Python. Il suffit d'exécuter "
+"l':ref:`install_aioinstaller` et le tour est joué !"
 
 #: ../../intro/installation.rst:15
 msgid ""
 "As a precompiled :ref:`install_wheel`, which can be installed using "
 "``pip``."
-msgstr "En tant que :ref:`install_wheel` précompilé, qui peut être installé à l'aide de ``pip``."
+msgstr ""
+"En tant que :ref:`install_wheel` précompilé, qui peut être installé à "
+"l'aide de ``pip``."
 
 #: ../../intro/installation.rst:17
 msgid ""
 "As a :ref:`install_source`, which can be installed using ``pip`` or "
 "manually."
-msgstr "En tant que :ref:`install_source`, qui peut être installé à l'aide de ``pip`` ou manuellement."
+msgstr ""
+"En tant que :ref:`install_source`, qui peut être installé à l'aide de "
+"``pip`` ou manuellement."
 
 #: ../../intro/installation.rst:22
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
 
-#: ../../intro/installation.rst:24 ../../intro/installation.rst:71
-#: ../../intro/installation.rst:85
+#: ../../intro/installation.rst:24 ../../intro/installation.rst:82
+#: ../../intro/installation.rst:96
 msgid ""
 ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-"
 "line:`Windows` :bdg-info-line:`macOS`"
@@ -120,11 +127,32 @@ msgstr ""
 "besoin de désinstaller DataLab avant d'exécuter l'installateur d'une "
 "autre version de l'application)."
 
-#: ../../intro/installation.rst:69
+#: ../../intro/installation.rst:66
+msgid ""
+"DataLab Windows installer is available for Windows 8, 10 and 11 (main "
+"release, based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 "
+"based release, see file ending with ``-Win7.exe``)."
+msgstr ""
+"L'installateur Windows de DataLab est disponible pour Windows 8, 10 et 11"
+" (version principale, basée sur Python 3.11) et également pour Windows 7 "
+"SP1 (version basée sur Python 3.8, voir le fichier se terminant par "
+"``-Win7.exe``)."
+
+#: ../../intro/installation.rst:70
+msgid ""
+":octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running "
+"DataLab (or any other Python 3 application), you must install Microsoft "
+"Update `KB2533623` (`Windows6.1-KB2533623-x64.msu`) and also may need to "
+"install `Microsoft Visual C++ 2015-2022 Redistribuable package "
+"<https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-"
+"redist?view=msvc-170>`_."
+msgstr ":octicon:`alert;1em;sd-text-warning` Sur Windows 7 SP1, avant d'exécuter DataLab (ou toute autre application Python 3), vous devez installer la mise à jour Microsoft `KB2533623` (`Windows6.1-KB2533623-x64.msu`) et vous devrez peut-être également installer le `package redistribuable Microsoft Visual C++ 2015-2022 <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_."
+
+#: ../../intro/installation.rst:80
 msgid "Wheel package"
 msgstr "Paquet Wheel"
 
-#: ../../intro/installation.rst:73
+#: ../../intro/installation.rst:84
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
 "way to install DataLab on an existing Python distribution:"
@@ -133,11 +161,11 @@ msgstr ""
 "paquet Wheel est le moyen le plus simple d'installer DataLab sur une "
 "distribution Python existante :"
 
-#: ../../intro/installation.rst:83
+#: ../../intro/installation.rst:94
 msgid "Source package"
 msgstr "Paquet source"
 
-#: ../../intro/installation.rst:87
+#: ../../intro/installation.rst:98
 msgid ""
 "Installing DataLab directly from the source package may be done using "
 "``pip``:"
@@ -145,7 +173,7 @@ msgstr ""
 "L'installation de DataLab directement depuis le paquet source peut être "
 "effectuée à l'aide de ``pip`` :"
 
-#: ../../intro/installation.rst:93
+#: ../../intro/installation.rst:104
 msgid ""
 "Or, if you prefer, you can install it manually by running the following "
 "command from the root directory of the source package:"
@@ -153,7 +181,7 @@ msgstr ""
 "Ou, si vous préférez, vous pouvez l'installer manuellement en exécutant "
 "la commande suivante depuis le répertoire racine du paquet source :"
 
-#: ../../intro/installation.rst:100
+#: ../../intro/installation.rst:111
 msgid ""
 "Finally, you can also build your own Wheel package and install it using "
 "``pip``, by running the following command from the root directory of the "
@@ -165,11 +193,11 @@ msgstr ""
 " le répertoire racine du paquet source (cela nécessite que les paquets "
 "``build`` et ``wheel`` soient installés) :"
 
-#: ../../intro/installation.rst:111
+#: ../../intro/installation.rst:122
 msgid "Dependencies"
 msgstr "Dépendances"
 
-#: ../../intro/installation.rst:115
+#: ../../intro/installation.rst:126
 msgid ""
 "The DataLab all-in-one installer already include all those required "
 "libraries as well as Python itself."
@@ -393,7 +421,7 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
-#: ../../intro/installation.rst:122
+#: ../../intro/installation.rst:133
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
 
@@ -475,3 +503,15 @@ msgstr "Python 3.11 et PyQt5 sont les références pour la version de production
 
 #~ msgid "Supported platforms: Windows"
 #~ msgstr "Plateformes prises en charge : Windows"
+
+#~ msgid ""
+#~ "{octicon}`alert;1em;sd-text-warning` On "
+#~ "Windows 7 SP1, before running DataLab"
+#~ " (or any other Python 3 application),"
+#~ " you must install Microsoft Update "
+#~ "`KB2533623` (`Windows6.1-KB2533623-x64.msu`) and "
+#~ "also may need to install `Microsoft "
+#~ "Visual C++ 2015-2022 Redistribuable package"
+#~ " <https://learn.microsoft.com/en-us/cpp/windows/latest-"
+#~ "supported-vc-redist?view=msvc-170>`_."
+#~ msgstr ""
