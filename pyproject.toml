@@ -45,7 +45,7 @@ dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://codra-ingenierie-informatique.github.io/DataLab/"
-Documentation = "https://cdlapp.readthedocs.io/en/stable/"
+Documentation = "https://codra-ingenierie-informatique.github.io/DataLab/"
 
 [project.scripts]
 cdl-alltests = "cdl.tests.all_tests:run"

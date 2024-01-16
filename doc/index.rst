@@ -71,11 +71,5 @@ benefiting from an industrial-grade technological platform.
           the support of `Codra`_.
 
 .. _PlotPyStack: https://github.com/PlotPyStack
-.. _guidata: https://pypi.python.org/pypi/guidata
-.. _PlotPy: https://pypi.python.org/pypi/PlotPy
-.. _PyPI: https://pypi.python.org/pypi/CDL
-.. _Home: https://codra-ingenierie-informatique.github.io/DataLab/
-.. _GitHub: https://github.com/Codra-Ingenierie-Informatique/DataLab
 .. _Codra: https://codra.net/
-.. _BSD 3-Clause: https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/master/LICENSE
 .. _Pierre Raybaut: https://github.com/PierreRaybaut/

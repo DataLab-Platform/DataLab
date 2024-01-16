@@ -30,20 +30,20 @@ DataLab is available as a **stand-alone** application (see for example our all-i
 Windows installer) or as an **addon to your Python-Qt application** thanks to advanced
 automation and embedding features.
 
-✨ Add features to DataLab by writing your own [plugin](https://cdlapp.readthedocs.io/en/latest/features/general/plugins.html)
+✨ Add features to DataLab by writing your own [plugin](https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/plugins.html)
 (see [plugin examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples))
 or macro (see [macro examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/macros/examples))
 
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
 
-* Using the integrated [remote control](https://cdlapp.readthedocs.io/en/latest/features/general/remote.html)
+* Using the integrated [remote control](https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/remote.html)
 feature (this requires to install on your environment DataLab as a Python package and all its dependencies)
 
 * Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient) (`pip install cdlclient`)
 
 See [home page](https://codra-ingenierie-informatique.github.io/DataLab/) and
-[documentation](https://cdlapp.readthedocs.io/en/latest/) for more details on
+[documentation](https://codra-ingenierie-informatique.github.io/DataLab/en/) for more details on
 the library and [changelog](https://github.com/Codra-Ingenierie-Informatique/DataLab/blob/main/CHANGELOG.md)
 for recent history of changes.
 
@@ -137,5 +137,5 @@ The installer package is available in the [Releases](https://github.com/Codra-In
 
 ### Dependencies and other installation methods
 
-See [Installation](https://cdlapp.readthedocs.io/en/latest/intro/installation.html)
+See [Installation](https://codra-ingenierie-informatique.github.io/DataLab/en/intro/installation.html)
 section in the documentation for more details.

@@ -26,11 +26,11 @@ msgstr "Historique des modifications"
 #: ../../../CHANGELOG.md:3
 msgid ""
 "See DataLab [roadmap "
-"page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html) for "
+"page](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html) for "
 "future and past milestones."
 msgstr ""
 "Voir la page de la [feuille de "
-"route](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html) de "
+"route](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html) de "
 "DataLab pour les jalons futurs et passés."
 
 #: ../../../CHANGELOG.md:6
@@ -255,11 +255,11 @@ msgstr "📚 Documentation :"
 
 #: ../../../CHANGELOG.md:51
 msgid ""
-"New [API section](https://cdlapp.readthedocs.io/en/latest/api/index.html)"
+"New [API section](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html)"
 " in the documentation:"
 msgstr ""
 "Nouvelle [section "
-"API](https://cdlapp.readthedocs.io/en/latest/api/index.html) dans la "
+"API](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html) dans la "
 "documentation :"
 
 #: ../../../CHANGELOG.md:52
@@ -1129,21 +1129,21 @@ msgstr "D'autres fonctionnalités à venir..."
 msgid ""
 "Added remote control feature: DataLab can be controlled remotely via a "
 "TCP/IP connection (see [Remote "
-"control](https://cdlapp.readthedocs.io/en/latest/remote_control.html))"
+"control](https://codra-ingenierie-informatique.github.io/DataLab/en/remote_control.html))"
 msgstr ""
 "Ajout de la fonctionnalité de contrôle à distance : DataLab peut être "
 "contrôlé à distance via une connexion TCP/IP (voir [Contrôle à "
-"distance](https://cdlapp.readthedocs.io/en/latest/remote_control.html))"
+"distance](https://codra-ingenierie-informatique.github.io/DataLab/en/remote_control.html))"
 
 #: ../../../CHANGELOG.md:264
 msgid ""
 "Added macro commands: DataLab can be controlled via a macro file (see "
 "[Macro "
-"commands](https://cdlapp.readthedocs.io/en/latest/macro_commands.html))"
+"commands](https://codra-ingenierie-informatique.github.io/DataLab/en/macro_commands.html))"
 msgstr ""
 "Ajout de commandes de macro : DataLab peut être contrôlé via un fichier "
 "macro (voir [Commandes de "
-"macro](https://cdlapp.readthedocs.io/en/latest/macro_commands.html))"
+"macro](https://codra-ingenierie-informatique.github.io/DataLab/en/macro_commands.html))"
 
 #: ../../../CHANGELOG.md:266
 msgid "General features:"

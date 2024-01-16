@@ -1,6 +1,6 @@
 # Changelog #
 
-See DataLab [roadmap page](https://cdlapp.readthedocs.io/en/latest/dev/roadmap.html)
+See DataLab [roadmap page](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 0.11.0 ##
@@ -48,7 +48,7 @@ for future and past milestones.
 
 📚 Documentation:
 
-* New [API section](https://cdlapp.readthedocs.io/en/latest/api/index.html) in the documentation:
+* New [API section](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html) in the documentation:
   * This section explains how to use DataLab as a Python library, by covering the
   following topics:
     * How to use DataLab algorithms on NumPy arrays
@@ -260,9 +260,9 @@ New features:
       HDF5 import feature
     * More features to come...
   * Added remote control feature: DataLab can be controlled remotely via a
-    TCP/IP connection (see [Remote control](https://cdlapp.readthedocs.io/en/latest/remote_control.html))
+    TCP/IP connection (see [Remote control](https://codra-ingenierie-informatique.github.io/DataLab/en/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
-    [Macro commands](https://cdlapp.readthedocs.io/en/latest/macro_commands.html))
+    [Macro commands](https://codra-ingenierie-informatique.github.io/DataLab/en/macro_commands.html))
 * General features:
   * Added settings dialog box (see "Settings" entry in "File" menu):
     * General settings

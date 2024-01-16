@@ -267,7 +267,7 @@
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                     "NSIS_COPYRIGHT_INFO": "Copyright (c) Codra 2023",
-                    "NSIS_HELP_LINK": "https://cdlapp.readthedocs.io/en/stable/",
+                    "NSIS_HELP_LINK": "https://codra-ingenierie-informatique.github.io/DataLab",
                     "NSIS_URLUPDATEINFO": "https://github.com/Codra-Ingenierie-Informatique/DataLab/releases",
                     "NSIS_URLINFOABOUT": "https://github.com/Codra-Ingenierie-Informatique/DataLab"
                 }

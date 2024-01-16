@@ -13,7 +13,7 @@ This sub-menu contains two actions, "Preprocess image" and "Detect blobs".
 
     This plugin is not installed by default. To install it, copy this file to
     your DataLab plugins directory (see `DataLab documentation
-    <https://cdlapp.readthedocs.io/en/latest/features/general/plugins.html>`_).
+    <https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/plugins.html>`_).
 """
 
 import numpy as np
