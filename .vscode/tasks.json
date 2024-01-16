@@ -291,7 +291,7 @@
             }
         },
         {
-            "label": "Build documentation",
+            "label": "Build PDF documentation",
             "type": "shell",
             "command": "cmd",
             "options": {
@@ -321,7 +321,7 @@
             }
         },
         {
-            "label": "Build HTML documentation",
+            "label": "HTML documentation: quick preview",
             "type": "shell",
             "command": "cmd",
             "options": {
@@ -349,6 +349,104 @@
                 "showReuseMessage": true,
                 "clear": true
             }
+        },
+        {
+            "label": "GitHub Pages: build",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "QT_COLOR_MODE": "light",
+                    "UNATTENDED": "1"
+                }
+            },
+            "args": [
+                "/c",
+                "build_ghpages.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "GitHub Pages: preview",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "QT_COLOR_MODE": "light",
+                    "UNATTENDED": "1"
+                }
+            },
+            "args": [
+                "/c",
+                "preview_ghpages.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "GitHub Pages: build"
+            ]
+        },
+        {
+            "label": "GitHub Pages: upload",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "QT_COLOR_MODE": "light",
+                    "UNATTENDED": "1"
+                }
+            },
+            "args": [
+                "/c",
+                "upload_ghpages.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "GitHub Pages: build"
+            ]
         },
         {
             "label": "Build Python packages",
