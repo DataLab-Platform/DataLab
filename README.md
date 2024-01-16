@@ -14,7 +14,7 @@
 
 ℹ️ DataLab is built on Python and scientific libraries.
 
-![Python](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/Python.png) ![NumPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/NumPy.png) ![SciPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/SciPy.png) ![scikit-image](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/scikit-image.png) ![OpenCV](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/OpenCV.png) ![PlotPyStack](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/gh-pages/logos/plotpystack.png)
+![Python](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/Python.png) ![NumPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/NumPy.png) ![SciPy](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/SciPy.png) ![scikit-image](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/scikit-image.png) ![OpenCV](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/OpenCV.png) ![PlotPyStack](https://raw.githubusercontent.com/CODRA-Ingenierie-Informatique/DataLab/main/doc/images/logos/plotpystack.png)
 
 ----
 
