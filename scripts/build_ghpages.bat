@@ -8,6 +8,8 @@ REM Copyright (c) 2020 Pierre Raybaut
 REM (see PythonQwt LICENSE file for more details)
 REM ======================================================
 
+setlocal enabledelayedexpansion
+
 @REM Get the target path for GitHub Pages from `CDL_GHPAGES` environment variable:
 @REM if this variable is not defined, interrupt the script and show an error message
 if not defined CDL_GHPAGES (
@@ -26,22 +28,18 @@ call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
 call %FUNC% GetVersion CDL_VERSION
-
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_requirements.py
 
-@REM Set light mode for Qt applications and clean previous documentation ===============
 set QT_COLOR_MODE=light
-if exist %MODNAME%\data\doc ( rmdir /s /q %MODNAME%\data\doc )
-mkdir %MODNAME%\data\doc
 
 @REM Build documentation ===============================================================
 for %%L in (fr en) do (
     set LANG=%%L
-    %PYTHON% doc/update_screenshots.py
     set TARGET=%CDL_GHPAGES%\%%L
-    if exist %TARGET% ( rmdir /s /q %TARGET% )
-    sphinx-build -b html -D language=%%L doc %TARGET%
+    %PYTHON% doc/update_screenshots.py
+    if exist !TARGET! ( rmdir /s /q !TARGET! )
+    sphinx-build -b html -D language=%%L doc !TARGET!
 )
 
 call %FUNC% EndOfScript
