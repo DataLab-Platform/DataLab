@@ -15,7 +15,8 @@ and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_).
 
 .. only:: html and not latex
 
-    .. grid:: 4
+    .. grid:: 2 2 4 4
+        :gutter: 1 2 3 4
 
         .. grid-item-card:: Getting started
             :link: intro/index
