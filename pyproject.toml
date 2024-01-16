@@ -52,7 +52,7 @@ cdl-alltests = "cdl.tests.all_tests:run"
 
 [project.gui-scripts]
 cdl = "cdl.app:run"
-cdl-demo = "cdl.tests.demo:run"
+cdl-demo = "cdl.tests.scenarios.demo:run"
 cdl-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
