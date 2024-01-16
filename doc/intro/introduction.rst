@@ -36,11 +36,43 @@ Depending on the application, DataLab can be used in three different modes:
   allowing it to benefit from its functionality without disrupting
   the user experience.
 
+.. _use_cases:
+
+Use cases
+^^^^^^^^^
+
+DataLab is a versatile tool that can be used in many different contexts:
+
+- **Data processing**: DataLab is a powerful tool for processing signals and
+  images. It can be used to develop complex algorithms, or to quickly
+  prototype a processing chain.
+
+- **Companion tool for scientific/technical work**: DataLab can be used as
+  a companion tool for scientific/technical work. It allows you to visualize
+  and process data, and to share your results with your colleagues. It can
+  easily be adapted to your needs through the addition of plugins, and it may
+  even be used together with your every day tools (e.g., Visual Studio Code,
+  Spyder, ... or Jupyter notebooks).
+
+- **Prototyping a data processing application**: DataLab can be used to
+  quickly prototype a data processing application. It can then be used as
+  a basis for the development of a full-fledged application.
+
+- **Debugging a data processing application**: DataLab can be used as an
+  advanced debugging tool for your data processing applications, independently
+  from the development environment or the language used (Python, C#, C++, ...).
+  All you need is to be able to communicate with DataLab via its remote control
+  interface (standard XML-RPC protocol). This allows you to send data to DataLab
+  (signals, images or even geometric shapes), visualize the data at each step of
+  the processing chain, manipulate them to better understand the behavior of your
+  algorithms, and even modify them to test the robustness of your code.
+
 .. note::
 
     DataLab can also be controlled from your familiar development environment
-    (e.g., Visual Studio Code, Spyder, ...) to perform calculations using
-    your processing functions while leveraging the advanced features of DataLab.
+    (e.g., Visual Studio Code, Spyder, ...) or from a Jupyter notebook, in order
+    to perform calculations using your processing functions while leveraging the
+    advanced features of DataLab.
 
 With its user-friendly experience and versatile usage modes, DataLab enables
 efficient development of your data processing and visualization applications

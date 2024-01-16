@@ -2,10 +2,14 @@ DataLab
 =======
 
 DataLab is an **open-source platform for scientific and technical data processing
-and visualization** with unique features designed to meet industrial requirements
-(see :ref:`key_strengths`: Extensibility, Interoperability, ...).
-It is based on Python scientific libraries (such as NumPy, SciPy or scikit-image)
-and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_).
+and visualization** with unique features designed to meet industrial requirements,
+extendable with :bdg-ref-success-line:`Plugins <about_plugins>` and working
+seamlessly with :bdg-ref-success-line:`Your IDE <use_cases>` or
+:bdg-ref-success-line:`Jupyter notebooks <use_cases>`, ...
+(see :ref:`key_strengths` or :ref:`use_cases`).
+
+DataLab leverages the richness of the scientific Python ecosystem (NumPy, SciPy,
+scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user interfaces.
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light
@@ -42,10 +46,9 @@ and Qt graphical user interfaces (thanks to the powerful `PlotPyStack`_).
 
             Roadmap, contributing, ...
 
-With its user-friendly experience and versatile :ref:`usage_modes`,
-DataLab enables efficient development of your data processing and
-visualization applications while benefiting from an industrial-grade
-technological platform.
+With its user-friendly experience and versatile :ref:`usage_modes`, DataLab enables
+efficient development of your data processing and visualization applications while
+benefiting from an industrial-grade technological platform.
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center

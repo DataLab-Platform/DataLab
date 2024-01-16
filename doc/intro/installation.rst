@@ -6,22 +6,22 @@ How to install
 
 DataLab is available in several forms:
 
--   As a Python package, which can be installed on GNU/Linux, macOS and
-    Windows using the package manager ``pip``.
+-   As a Python package, which can be installed using the :ref:`install_pip`.
 
--   As a stand-alone application for Windows, which does not require any
-    Python distribution to be installed. Just run the installer and
-    you're good to go!
+-   :bdg-info-line:`Windows` As a stand-alone application, which does not require any
+    Python distribution to be installed. Just run the :ref:`install_aioinstaller`
+    and you're good to go!
 
--   As a source package, which can be installed on GNU/Linux, macOS and
-    Windows using ``pip`` or manually.
+-   As a precompiled :ref:`install_wheel`, which can be installed using ``pip``.
 
-Package manager
-^^^^^^^^^^^^^^^
+-   As a :ref:`install_source`, which can be installed using ``pip`` or manually.
 
-.. note::
+.. _install_pip:
 
-    Supported platforms: GNU/Linux, macOS, Windows
+Package manager ``pip``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
 DataLab's package ``cdl`` is available on the Python Package Index (PyPI)
 on the following URL: https://pypi.python.org/pypi/cdl.
@@ -41,18 +41,20 @@ Installing DataLab from PyPI is as simple as running this command:
 
         $ pip install --upgrade cdl
 
+.. _install_aioinstaller:
+
 All-in-one installer
 ^^^^^^^^^^^^^^^^^^^^
 
-.. note::
-
-    Supported platforms: Windows
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`
 
 DataLab is available as a stand-alone application for Windows,
 which does not require any Python distribution to be installed.
 Just run the installer and you're good to go!
 
-.. image:: /images/shots/windows_installer.png
+.. figure:: /images/shots/windows_installer.png
+
+    DataLab all-in-one installer for Windows
 
 The installer package is available in the `Releases`_ section.
 It supports automatic uninstall and upgrade feature (no need to uninstall
@@ -61,12 +63,12 @@ application).
 
 .. _Releases: https://github.com/Codra-Ingenierie-Informatique/DataLab/releases
 
+.. _install_wheel:
+
 Wheel package
 ^^^^^^^^^^^^^
 
-.. note::
-
-    Supported platforms: GNU/Linux, macOS, Windows
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
 On any operating system, using pip and the Wheel package is the easiest way to
 install DataLab on an existing Python distribution:
@@ -75,13 +77,12 @@ install DataLab on an existing Python distribution:
 
     $ pip install --upgrade DataLab-0.11.1-py2.py3-none-any.whl
 
+.. _install_source:
 
 Source package
 ^^^^^^^^^^^^^^
 
-.. note::
-
-    Supported platforms: GNU/Linux, macOS, Windows
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
 
 Installing DataLab directly from the source package may be done using ``pip``:
 
