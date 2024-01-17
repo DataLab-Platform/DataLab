@@ -22,25 +22,25 @@ scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user interfaces.
     .. grid:: 2 2 4 4
         :gutter: 1 2 3 4
 
-        .. grid-item-card:: Getting started
+        .. grid-item-card:: :octicon:`rocket;1em;sd-text-info`  Getting started
             :link: intro/index
             :link-type: doc
 
             Installation, use cases, key strengths, ...
 
-        .. grid-item-card:: Features
+        .. grid-item-card:: :octicon:`tools;1em;sd-text-info`  Features
             :link: features/index
             :link-type: doc
 
             In-depth description of DataLab features
 
-        .. grid-item-card:: API
+        .. grid-item-card:: :octicon:`book;1em;sd-text-info`  API
             :link: api/index
             :link-type: doc
 
             Reference documentation of DataLab API
 
-        .. grid-item-card:: Development
+        .. grid-item-card:: :octicon:`gear;1em;sd-text-info`  Development
             :link: dev/index
             :link-type: doc
 
