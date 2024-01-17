@@ -62,6 +62,17 @@ for future and past milestones.
 🛠️ Bug fixes:
 
 * Fixed [Issue #29](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`
+* Image ROI extraction feature:
+  * Before this release, when extracting a single circular ROI from an image with the
+    "Extract all regions of interest into a single image object" option enabled, the
+    result was a single image without the ROI mask (the ROI mask was only available
+    when extracting ROI with the option disabled)
+  * This was leading to an unexpected behavior, because one could interpret the result
+    (a square image without the ROI mask) as the result of a single rectangular ROI
+  * Now, when extracting a single circular ROI from an image with the "Extract all
+    regions of interest into a single image object" option enabled, the result is a
+    single image with the ROI mask (as if the option was disabled)
+  * This fixes [Issue #31](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
 
 ## DataLab Version 0.10.1 ##
 
