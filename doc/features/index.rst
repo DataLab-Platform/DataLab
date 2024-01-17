@@ -14,8 +14,8 @@ basic concepts of DataLab.
     For a synthetic overview of the features of DataLab, please refer to the
     :ref:`key_features` page.
 
-General
--------
+General features
+----------------
 
 This section describes the general features of DataLab, which concern both the
 signal and image processing panels.
@@ -52,15 +52,9 @@ signal processing panel is the default panel when DataLab is started.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Signal processing features:
+   :caption: Signal processing:
 
-   signal/menu/file
-   signal/menu/edit
-   signal/menu/operation
-   signal/menu/processing
-   signal/menu/computing
-   signal/menu/view
-   signal/menu/help
+   signal/menus
    signal/annotations
 
 .. raw:: latex
@@ -80,15 +74,9 @@ bottom-right of the DataLab main window.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Image processing features:
+   :caption: Image processing:
 
-   image/menu/file
-   image/menu/edit
-   image/menu/operation
-   image/menu/processing
-   image/menu/computing
-   image/menu/view
-   image/menu/help
+   image/menus
    image/2d_peak_detection
    image/contour_detection
    image/annotations
