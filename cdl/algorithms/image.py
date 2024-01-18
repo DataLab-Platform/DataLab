@@ -285,6 +285,60 @@ def get_2d_peaks_coords(
     return np.array(coords)
 
 
+def is_circle_outside_mask(array: np.ma.MaskedArray, xc: int, yc: int, r: int) -> bool:
+    """
+    Check if a circular disk is outside the masked areas of a NumPy masked array.
+
+    Args:
+        array: The masked array.
+        xc: The x-coordinate of the disk's center.
+        yc: The y-coordinate of the disk's center.
+        r: The radius of the disk.
+
+    Returns:
+        True if the disk is outside the masked areas, False otherwise.
+    """
+    y, x = np.ogrid[: array.shape[0], : array.shape[1]]
+    mask = (y - yc) ** 2 + (x - xc) ** 2 <= r**2
+    return array.mask[mask].all()
+
+
+def is_ellipse_outside_mask(
+    array: np.ma.MaskedArray, xc: int, yc: int, a: int, b: int, theta: float
+) -> bool:
+    """
+    Check if an elliptical disk is outside the masked areas of a NumPy masked array.
+
+    Args:
+        array: The masked array.
+        xc: The x-coordinate of the ellipse's center.
+        yc: The y-coordinate of the ellipse's center.
+        a: The full length of the major axis of the ellipse.
+        b: The full length of the minor axis of the ellipse.
+        theta: The rotation angle of the ellipse in radians.
+
+    Returns:
+        True if the ellipse is outside the masked areas, False otherwise.
+    """
+    y, x = np.ogrid[: array.shape[0], : array.shape[1]]
+    cos_theta = np.cos(theta)
+    sin_theta = np.sin(theta)
+
+    # Coordinate transformation
+    x_prime = cos_theta * (x - xc) + sin_theta * (y - yc)
+    y_prime = -sin_theta * (x - xc) + cos_theta * (y - yc)
+
+    # Adjust for semi-major and semi-minor axes
+    a /= 2
+    b /= 2
+
+    # Ellipse equation
+    mask = (x_prime**2 / a**2) + (y_prime**2 / b**2) <= 1
+
+    # Check if any point within the ellipse is masked
+    return array.mask[mask].all()
+
+
 def get_contour_shapes(
     data: np.ndarray, shape: str = "ellipse", level: float = 0.5
 ) -> np.ndarray:
@@ -309,14 +363,18 @@ def get_contour_shapes(
             model = measure.CircleModel()
             if model.estimate(contour):
                 yc, xc, r = model.params
-                if r <= 1.0:
+                if r <= 1.0 or is_circle_outside_mask(data, xc, yc, r):
                     continue
                 coords.append([xc - r, yc, xc + r, yc])
         elif shape == "ellipse":
             model = measure.EllipseModel()
             if model.estimate(contour):
                 yc, xc, b, a, theta = model.params
-                if a <= 1.0 or b <= 1.0:
+                if (
+                    a <= 1.0
+                    or b <= 1.0
+                    or is_ellipse_outside_mask(data, xc, yc, a, b, theta)
+                ):
                     continue
                 dxa, dya = a * np.cos(theta), a * np.sin(theta)
                 dxb, dyb = b * np.sin(theta), b * np.cos(theta)
