@@ -30,6 +30,7 @@ from cdl.algorithms.image import (
 )
 from cdl.config import _
 from cdl.core.computation.image import calc_with_osr
+from cdl.core.model.base import ShapeTypes
 from cdl.core.model.image import ImageObj
 
 
@@ -82,10 +83,15 @@ class ContourShapeParam(GenericDetectionParam):
         ("circle", _("Circle")),
         ("polygon", _("Polygon")),
     )
+
     # The following item is used to store the 'shape type' and is implicitly accessed by
     # the `cdl.core.gui.processor.base.BaseProcessor.compute_10` method. The keys of the
-    # item choices must match the names of the `cdl.core.model.base.ShapeTypes` (modulo
-    # case).
+    # item choices (i.e. the first element of each tuple of `shapes`) must match the
+    # names of the `cdl.core.model.base.ShapeTypes` (when uppercased).
+    assert set([_shape[0].upper() for _shape in shapes]).issubset(
+        set(ShapeTypes.__members__.keys())
+    )
+
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
