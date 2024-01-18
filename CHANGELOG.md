@@ -85,8 +85,7 @@ for future and past milestones.
   * Before this release, when defining a ROI and running contour detection on it, some
     contours were detected outside the ROI (it may be due to a limitation of the
     scikit-image `find_contours` function).
-  * Now, thanks to the new `is_circle_outside_mask` and `is_ellipse_outside_mask`
-    functions, the erroneous contours are filtered out.
+  * Now, thanks a workaround, the erroneous contours are filtered out.
   * A new test module `cdl.tests.features.images.contour_fabryperot_app` has been
     added to test the contour detection feature on a Fabry-Perot image (thanks to
     @emarin2642 for the contribution)
