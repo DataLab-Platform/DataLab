@@ -36,6 +36,15 @@ for future and past milestones.
   * Added "Detrending" feature to signal panel's "Processing" menu
   * Methods available: linear or constant
   * This fixes [Issue #24](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/24) - Add 1D detrending feature
+* 2D computing results:
+  * Before this release, 2D computing results such as contours, blobs, etc. were
+    stored in image metadata dictionary as coordinates (x0, y0, x1, y1, ...) even
+    for circles and ellipses (i.e. the coordinates of the bounding rectangles).
+  * For convenience, the circle and ellipse coordinates are now stored in image
+    metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) respectively.
+  * These results are also shown as such in the "Results" dialog box (either at the
+    end of the computing process or when clicking on the "Show results" button).
+  * This fixes [Issue #32](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable

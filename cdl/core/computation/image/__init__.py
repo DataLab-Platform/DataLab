@@ -908,22 +908,60 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
 
 
 def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
-    """Exec computation taking into account image x0, y0, dx, dy and ROIs"""
+    """Exec computation taking into account image x0, y0, dx, dy and ROIs
+
+    Args:
+        image: input image object
+        func: computation function
+        *args: computation function arguments
+
+    Returns:
+        Computation result
+
+    .. warning::
+
+        The computation function must take either a single argument (the data) or
+        multiple arguments (the data followed by the computation parameters).
+
+        Moreover, the computation function must return a single value or a NumPy array
+        containing the result of the computation. This array contains the coordinates
+        of points, polygons, circles or ellipses in the form [[x, y], ...], or
+        [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or
+        [[x0, y0, a, b, theta], ...].
+    """
     res = []
     num_cols = []
     for i_roi in image.iterate_roi_indexes():
         data_roi = image.get_data(i_roi)
         if args is None:
-            coords = func(data_roi)
+            coords: np.ndarray = func(data_roi)
         else:
-            coords = func(data_roi, *args)
+            coords: np.ndarray = func(data_roi, *args)
+        if (
+            not isinstance(coords, np.ndarray)
+            or coords.ndim != 2
+            or coords.shape[1] < 2
+            or (coords.shape[1] > 5 and coords.shape[1] % 2 != 0)
+        ):
+            raise ValueError(
+                f"Computation function {func.__name__} must return a NumPy array "
+                f"containing coordinates of points, polygons, circles or ellipses "
+                f"(in the form [[x, y], ...], or [[x0, y0, x1, y1, ...], ...], or "
+                f"[[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...])"
+            )
         if coords.size:
+            if coords.shape[1] % 2 == 0:
+                # Coordinates are in the form [x0, y0, x1, y1, ...]
+                colx, coly = slice(None, None, 2), slice(1, None, 2)
+            else:
+                # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
+                colx, coly = 0, 1
             if image.roi is not None:
                 x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
-                coords[:, ::2] += x0
-                coords[:, 1::2] += y0
-            coords[:, ::2] = image.dx * coords[:, ::2] + image.x0
-            coords[:, 1::2] = image.dy * coords[:, 1::2] + image.y0
+                coords[:, colx] += x0
+                coords[:, coly] += y0
+            coords[:, colx] = image.dx * coords[:, colx] + image.x0
+            coords[:, coly] = image.dy * coords[:, coly] + image.y0
             idx = np.ones((coords.shape[0], 1)) * i_roi
             coords = np.hstack([idx, coords])
             res.append(coords)
@@ -975,7 +1013,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
         np.ndarray: diameter coords
     """
     x, y, r = get_enclosing_circle(data)
-    return np.array([[x - r, y, x + r, y]])
+    return np.array([[x, y, r]])
 
 
 def compute_enclosing_circle(image: ImageObj) -> np.ndarray:

@@ -317,18 +317,14 @@ def get_contour_shapes(
                 yc, xc, r = model.params
                 if r <= 1.0:
                     continue
-                coords.append([xc - r, yc, xc + r, yc])
+                coords.append([xc, yc, r])
         elif shape == "ellipse":
             model = measure.EllipseModel()
             if model.estimate(contour):
                 yc, xc, b, a, theta = model.params
                 if a <= 1.0 or b <= 1.0:
                     continue
-                dxa, dya = a * np.cos(theta), a * np.sin(theta)
-                dxb, dyb = b * np.sin(theta), b * np.cos(theta)
-                x1, y1, x2, y2 = xc - dxa, yc - dya, xc + dxa, yc + dya
-                x3, y3, x4, y4 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
-                coords.append([x1, y1, x2, y2, x3, y3, x4, y4])
+                coords.append([xc, yc, a, b, theta])
         elif shape == "polygon":
             # `contour` is a (N, 2) array (rows, cols): we need to convert it
             # to a list of x, y coordinates flattened in a single list
@@ -376,7 +372,7 @@ def get_hough_circle_peaks(
     _accums, cx, cy, radii = transform.hough_circle_peaks(
         hough_res, hough_radii, min_xdistance=min_distance, min_ydistance=min_distance
     )
-    return np.vstack([cx - radii, cy, cx + radii, cy]).T
+    return np.vstack([cx, cy, radii]).T
 
 
 def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:
@@ -389,7 +385,7 @@ def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:
         Coordinates
     """
     cy, cx, radii = blobs.T
-    coords = np.vstack([cx - radii, cy, cx + radii, cy]).T
+    coords = np.vstack([cx, cy, radii]).T
     return coords
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 15:51+0100\n"
+"POT-Creation-Date: 2024-01-18 14:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -217,6 +217,10 @@ msgstr ""
 #: cdl.obj.ResultShape.data_colnb:1 of
 msgid "Return raw data results column number"
 msgstr "Retourne le numéro de colonne des résultats de données brutes"
+
+#: cdl.core.model.base.ResultShape.is_first_column_roi_index:1 of
+msgid "Return True if first column is ROI index"
+msgstr "Retourne True si la première colonne est l'index de la ROI"
 
 #: cdl.obj.ResultShape.data:1 of
 msgid "Return raw data (array without ROI informations)"
@@ -1084,7 +1088,9 @@ msgstr "paramètres supplémentaires"
 #: cdl.core.model.image.create_image_from_param:7
 #: cdl.core.model.signal.create_signal_from_param:7 of
 msgid "Open a dialog box to edit parameters (default: False)"
-msgstr "Ouvrir une boîte de dialogue pour modifier les paramètres (par défaut : False)"
+msgstr ""
+"Ouvrir une boîte de dialogue pour modifier les paramètres (par défaut : "
+"False)"
 
 #: cdl.core.model.image.create_image_from_param:9
 #: cdl.core.model.signal.create_signal_from_param:9 of

@@ -246,15 +246,17 @@ class ResultShape:
             labels = "ROI", "x", "y"
         elif self.shapetype in (
             ShapeTypes.RECTANGLE,
-            ShapeTypes.CIRCLE,
             ShapeTypes.SEGMENT,
-            ShapeTypes.ELLIPSE,
             ShapeTypes.POLYGON,
         ):
             labels = ["ROI"]
             for index in range(0, self.array.shape[1] - 1, 2):
                 labels += [f"x{index//2}", f"y{index//2}"]
             labels = tuple(labels)
+        elif self.shapetype is ShapeTypes.CIRCLE:
+            labels = "ROI", "x", "y", "r"
+        elif self.shapetype is ShapeTypes.ELLIPSE:
+            labels = "ROI", "x", "y", "a", "b", "θ"
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
         return labels[-self.array.shape[1] :]
@@ -274,15 +276,16 @@ class ResultShape:
             arr = self.array
             results = np.zeros((arr.shape[0], colnb), dtype=arr.dtype)
             results[:, 0] = arr[:, 0]  # ROI indexes
-            dx1, dy1 = arr[:, 3] - arr[:, 1], arr[:, 4] - arr[:, 2]
-            results[:, 1] = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
-            if self.shapetype is ShapeTypes.ELLIPSE:
-                dx2, dy2 = arr[:, 7] - arr[:, 5], arr[:, 8] - arr[:, 6]
-                results[:, 2] = np.linalg.norm(np.vstack([dx2, dy2]).T, axis=1)
             label = self.label
-            if self.shapetype is ShapeTypes.CIRCLE:
+            if self.shapetype is ShapeTypes.SEGMENT:
+                dx1, dy1 = arr[:, 3] - arr[:, 1], arr[:, 4] - arr[:, 2]
+                results[:, 1] = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
+            elif self.shapetype is ShapeTypes.CIRCLE:
+                results[:, 1] = arr[:, 3] * 2
                 label += "Diameter"
-            if self.shapetype is ShapeTypes.ELLIPSE:
+            elif self.shapetype is ShapeTypes.ELLIPSE:
+                results[:, 1] = arr[:, 3] * 2
+                results[:, 2] = arr[:, 4] * 2
                 label += "Diameters"
             obj.metadata[label] = results
 
@@ -296,7 +299,7 @@ class ResultShape:
             other = ResultShape.from_metadata_entry(self.key, other_value)
             assert other is not None
             other_array = np.array(other.array, copy=True)
-            if other_array.shape[1] % 2:  # Column 0 is the ROI index
+            if other.is_first_column_roi_index():  # Column 0 is the ROI index
                 other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
             if other_array.shape[1] != self.array.shape[1]:
                 # This can only happen if the shape is a polygon
@@ -322,15 +325,25 @@ class ResultShape:
             ShapeTypes.MARKER: 2,
             ShapeTypes.POINT: 2,
             ShapeTypes.RECTANGLE: 4,
-            ShapeTypes.CIRCLE: 4,
+            ShapeTypes.CIRCLE: 3,
             ShapeTypes.SEGMENT: 4,
-            ShapeTypes.ELLIPSE: 8,
+            ShapeTypes.ELLIPSE: 5,
         }[self.shapetype]
+
+    def is_first_column_roi_index(self) -> bool:
+        """Return True if first column is ROI index"""
+        if self.shapetype is ShapeTypes.POLYGON:
+            # Polygon is a special case: the number of data columns is variable
+            # (2 columns per point). So we only check if the number of columns
+            # is odd, which means that the first column is the ROI index, followed
+            # by an even number of data columns (flattened x, y coordinates).
+            return self.array.shape[1] % 2 == 1
+        return self.array.shape[1] == self.data_colnb + 1
 
     @property
     def data(self):
         """Return raw data (array without ROI informations)"""
-        if self.array.shape[1] % 2:
+        if self.is_first_column_roi_index():
             # Column 0 is the ROI index
             return self.array[:, 1:]
         # No ROI index
@@ -339,14 +352,7 @@ class ResultShape:
     def check_array(self):
         """Check if array is valid"""
         assert len(self.array.shape) == 2
-        if self.shapetype is ShapeTypes.POLYGON:
-            # Polygon is a special case: the number of data columns is variable
-            # (2 columns per point). So we only check if the number of columns
-            # is odd, which means that the first column is the ROI index, followed
-            # by an even number of data columns (flattened x, y coordinates).
-            assert self.array.shape[1] % 2 == 1
-        else:
-            assert self.array.shape[1] == self.data_colnb + 1
+        assert self.is_first_column_roi_index()
 
     def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
         """Iterate over metadata shape plot items.
@@ -391,13 +397,17 @@ class ResultShape:
             x0, y0, x1, y1 = args
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            x0, y0, x1, y1 = args
-            item = make.annotated_circle(x0, y0, x1, y1, title=self.show_label)
+            xc, yc, r = args
+            item = make.annotated_circle(xc - r, yc, xc + r, yc, title=self.show_label)
         elif self.shapetype is ShapeTypes.SEGMENT:
             x0, y0, x1, y1 = args
             item = make.annotated_segment(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            x0, y0, x1, y1, x2, y2, x3, y3 = args
+            xc, yc, a, b, theta = args
+            dxa, dya = a * np.cos(theta), a * np.sin(theta)
+            dxb, dyb = b * np.sin(theta), b * np.cos(theta)
+            x0, y0, x1, y1 = xc - dxa, yc - dya, xc + dxa, yc + dya
+            x2, y2, x3, y3 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.show_label
             )

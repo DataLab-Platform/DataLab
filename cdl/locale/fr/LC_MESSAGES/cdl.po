@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-17 18:49+0100\n"
+"POT-Creation-Date: 2024-01-18 14:40+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,7 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:488 cdl\core\model\image.py:769
+#: cdl\core\computation\image\__init__.py:488 cdl\core\model\image.py:770
 msgid "Data type"
 msgstr "Type de données"
 
@@ -248,62 +248,62 @@ msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
 msgid "Order of the Butterworth filter."
 msgstr "Ordre du filtre de Butterworth."
 
-#: cdl\core\computation\image\__init__.py:995
+#: cdl\core\computation\image\__init__.py:1033
 msgid "Radius<sub>min</sub>"
 msgstr "Rayon<sub>min</sub>"
 
-#: cdl\core\computation\image\__init__.py:998
+#: cdl\core\computation\image\__init__.py:1036
 msgid "Radius<sub>max</sub>"
 msgstr "Rayon<sub>max</sub>"
 
-#: cdl\core\computation\image\__init__.py:1000
+#: cdl\core\computation\image\__init__.py:1038
 msgid "Minimal distance"
 msgstr "Distance minimale"
 
-#: cdl\core\computation\image\detection.py:40
-#: cdl\core\computation\image\detection.py:123
+#: cdl\core\computation\image\detection.py:41
+#: cdl\core\computation\image\detection.py:129
 msgid "Relative threshold"
 msgstr "Seuil relatif"
 
-#: cdl\core\computation\image\detection.py:44
+#: cdl\core\computation\image\detection.py:45
 msgid ""
 "Detection threshold, relative to difference between data maximum and minimum"
 msgstr ""
 "Seuil de détection, relatif à la différence entre le maximum et le minimum "
 "des données de l'image"
 
-#: cdl\core\computation\image\detection.py:55
+#: cdl\core\computation\image\detection.py:56
 msgid "Neighborhoods size"
 msgstr "Taille du voisinage"
 
-#: cdl\core\computation\image\detection.py:59
+#: cdl\core\computation\image\detection.py:60
 msgid "Size of the sliding window used in maximum/minimum filtering algorithm"
 msgstr ""
 "Taille de la fenêtre glissante utilisée dans l'algorithme de filtrage "
 "maximum/minimum"
 
-#: cdl\core\computation\image\detection.py:63
+#: cdl\core\computation\image\detection.py:64
 #: cdl\core\gui\processor\image.py:818
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
-#: cdl\core\computation\image\detection.py:81
+#: cdl\core\computation\image\detection.py:82
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: cdl\core\computation\image\detection.py:82
+#: cdl\core\computation\image\detection.py:83
 msgid "Circle"
 msgstr "Cercle"
 
-#: cdl\core\computation\image\detection.py:83
+#: cdl\core\computation\image\detection.py:84
 msgid "Polygon"
 msgstr "Polygone"
 
-#: cdl\core\computation\image\detection.py:89
+#: cdl\core\computation\image\detection.py:95
 msgid "Shape"
 msgstr "Forme"
 
-#: cdl\core\computation\image\detection.py:106
+#: cdl\core\computation\image\detection.py:112
 msgid ""
 "The minimum standard deviation for Gaussian Kernel. Keep this low to detect "
 "smaller blobs."
@@ -311,7 +311,7 @@ msgstr ""
 "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible "
 "pour détecter de petites taches."
 
-#: cdl\core\computation\image\detection.py:117
+#: cdl\core\computation\image\detection.py:123
 msgid ""
 "The maximum standard deviation for Gaussian Kernel. Keep this high to detect "
 "larger blobs."
@@ -319,15 +319,15 @@ msgstr ""
 "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée "
 "pour détecter de grandes taches."
 
-#: cdl\core\computation\image\detection.py:127
+#: cdl\core\computation\image\detection.py:133
 msgid "Minimum intensity of blobs."
 msgstr "Intensité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:130
+#: cdl\core\computation\image\detection.py:136
 msgid "Overlap"
 msgstr "Recouvrement"
 
-#: cdl\core\computation\image\detection.py:134
+#: cdl\core\computation\image\detection.py:140
 msgid ""
 "If two blobs overlap by a fraction greater than this value, the smaller blob "
 "is eliminated."
@@ -335,21 +335,21 @@ msgstr ""
 "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la "
 "plus petite tache est éliminée."
 
-#: cdl\core\computation\image\detection.py:145
-#: cdl\core\computation\image\detection.py:207
+#: cdl\core\computation\image\detection.py:151
+#: cdl\core\computation\image\detection.py:213
 msgid "Exclude border"
 msgstr "Exclure la bordure"
 
-#: cdl\core\computation\image\detection.py:147
-#: cdl\core\computation\image\detection.py:209
+#: cdl\core\computation\image\detection.py:153
+#: cdl\core\computation\image\detection.py:215
 msgid "If True, exclude blobs from the border of the image."
 msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
 
-#: cdl\core\computation\image\detection.py:174
+#: cdl\core\computation\image\detection.py:180
 msgid "Log scale"
 msgstr "Echelle logarithmique"
 
-#: cdl\core\computation\image\detection.py:176
+#: cdl\core\computation\image\detection.py:182
 msgid ""
 "If set intermediate values of standard deviations are interpolated using a "
 "logarithmic scale to the base 10. If not, linear interpolation is used."
@@ -357,11 +357,11 @@ msgstr ""
 "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une "
 "échelle linéaire ou logarithmique."
 
-#: cdl\core\computation\image\detection.py:237
+#: cdl\core\computation\image\detection.py:243
 msgid "Min. threshold"
 msgstr "Seuil min."
 
-#: cdl\core\computation\image\detection.py:240
+#: cdl\core\computation\image\detection.py:246
 msgid ""
 "The minimum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -371,11 +371,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\computation\image\detection.py:248
+#: cdl\core\computation\image\detection.py:254
 msgid "Max. threshold"
 msgstr "Seuil max."
 
-#: cdl\core\computation\image\detection.py:251
+#: cdl\core\computation\image\detection.py:257
 msgid ""
 "The maximum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -385,11 +385,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\computation\image\detection.py:259
+#: cdl\core\computation\image\detection.py:265
 msgid "Min. repeatability"
 msgstr "Répétabilité min."
 
-#: cdl\core\computation\image\detection.py:262
+#: cdl\core\computation\image\detection.py:268
 msgid ""
 "The minimum number of times a blob needs to be detected in a sequence of "
 "images to be considered valid."
@@ -397,11 +397,11 @@ msgstr ""
 "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence "
 "d'images pour être considérée valide."
 
-#: cdl\core\computation\image\detection.py:268
+#: cdl\core\computation\image\detection.py:274
 msgid "Min. distance between blobs"
 msgstr "Distance min. entre taches"
 
-#: cdl\core\computation\image\detection.py:272
+#: cdl\core\computation\image\detection.py:278
 msgid ""
 "The minimum distance between two blobs. If blobs are found closer together "
 "than this distance, the smaller blob is removed."
@@ -409,118 +409,118 @@ msgstr ""
 "La distance minimale entre deux taches. Si deux taches sont détectées à une "
 "distance inférieure à celle-ci, alors la plus petite tache est éliminée."
 
-#: cdl\core\computation\image\detection.py:279
+#: cdl\core\computation\image\detection.py:285
 msgid "Filter by color"
 msgstr "Filtrer par couleur"
 
-#: cdl\core\computation\image\detection.py:281
+#: cdl\core\computation\image\detection.py:287
 msgid "If true, the image is filtered by color instead of intensity."
 msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
 
-#: cdl\core\computation\image\detection.py:284
+#: cdl\core\computation\image\detection.py:290
 msgid "Blob color"
 msgstr "Couleur de la tache"
 
-#: cdl\core\computation\image\detection.py:286
+#: cdl\core\computation\image\detection.py:292
 msgid ""
 "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
 msgstr ""
 "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les "
 "taches claires)."
 
-#: cdl\core\computation\image\detection.py:292
+#: cdl\core\computation\image\detection.py:298
 msgid "Filter by area"
 msgstr "Filtrer par aire"
 
-#: cdl\core\computation\image\detection.py:294
+#: cdl\core\computation\image\detection.py:300
 msgid "If true, the image is filtered by blob area."
 msgstr "Si vrai, l'image est filtrée par l'aire des taches."
 
-#: cdl\core\computation\image\detection.py:297
+#: cdl\core\computation\image\detection.py:303
 msgid "Min. area"
 msgstr "Aire min."
 
-#: cdl\core\computation\image\detection.py:300
+#: cdl\core\computation\image\detection.py:306
 msgid "The minimum blob area."
 msgstr "L'aire minimale des taches."
 
-#: cdl\core\computation\image\detection.py:303
+#: cdl\core\computation\image\detection.py:309
 msgid "Max. area"
 msgstr "Aire max."
 
-#: cdl\core\computation\image\detection.py:306
+#: cdl\core\computation\image\detection.py:312
 msgid "The maximum blob area."
 msgstr "L'aire maximale des taches."
 
-#: cdl\core\computation\image\detection.py:310
+#: cdl\core\computation\image\detection.py:316
 msgid "Filter by circularity"
 msgstr "Filtrer par circularité"
 
-#: cdl\core\computation\image\detection.py:312
+#: cdl\core\computation\image\detection.py:318
 msgid "If true, the image is filtered by blob circularity."
 msgstr "Si vrai, l'image est filtrée par la circularité des taches."
 
-#: cdl\core\computation\image\detection.py:315
+#: cdl\core\computation\image\detection.py:321
 msgid "Min. circularity"
 msgstr "Circularité min."
 
-#: cdl\core\computation\image\detection.py:319
+#: cdl\core\computation\image\detection.py:325
 msgid "The minimum circularity of the blobs."
 msgstr "La circularité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:322
+#: cdl\core\computation\image\detection.py:328
 msgid "Max. circularity"
 msgstr "Circularité max."
 
-#: cdl\core\computation\image\detection.py:326
+#: cdl\core\computation\image\detection.py:332
 msgid "The maximum circularity of the blobs."
 msgstr "La circularité maximale des taches."
 
-#: cdl\core\computation\image\detection.py:330
+#: cdl\core\computation\image\detection.py:336
 msgid "Filter by inertia"
 msgstr "Filtrer par inertie"
 
-#: cdl\core\computation\image\detection.py:332
+#: cdl\core\computation\image\detection.py:338
 msgid "If true, the image is filtered by blob inertia."
 msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
 
-#: cdl\core\computation\image\detection.py:335
+#: cdl\core\computation\image\detection.py:341
 msgid "Min. inertia ratio"
 msgstr "Ratio d'inertie min."
 
-#: cdl\core\computation\image\detection.py:339
+#: cdl\core\computation\image\detection.py:345
 msgid "The minimum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie minimal des taches."
 
-#: cdl\core\computation\image\detection.py:342
+#: cdl\core\computation\image\detection.py:348
 msgid "Max. inertia ratio"
 msgstr "Ratio d'inertie max."
 
-#: cdl\core\computation\image\detection.py:346
+#: cdl\core\computation\image\detection.py:352
 msgid "The maximum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie maximal des taches."
 
-#: cdl\core\computation\image\detection.py:350
+#: cdl\core\computation\image\detection.py:356
 msgid "Filter by convexity"
 msgstr "Filtrer par convexité"
 
-#: cdl\core\computation\image\detection.py:352
+#: cdl\core\computation\image\detection.py:358
 msgid "If true, the image is filtered by blob convexity."
 msgstr "Si vrai, l'image est filtrée par la convexité des taches."
 
-#: cdl\core\computation\image\detection.py:355
+#: cdl\core\computation\image\detection.py:361
 msgid "Min. convexity"
 msgstr "Convexité min."
 
-#: cdl\core\computation\image\detection.py:359
+#: cdl\core\computation\image\detection.py:365
 msgid "The minimum convexity of the blobs."
 msgstr "La convexité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:362
+#: cdl\core\computation\image\detection.py:368
 msgid "Max. convexity"
 msgstr "Convexité max."
 
-#: cdl\core\computation\image\detection.py:366
+#: cdl\core\computation\image\detection.py:372
 msgid "The maximum convexity of the blobs."
 msgstr "La convexité maximale des taches."
 
@@ -658,7 +658,7 @@ msgstr ""
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
-#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:268
+#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:269
 #: cdl\tests\data.py:381
 msgid "Radius"
 msgstr "Rayon"
@@ -738,14 +738,14 @@ msgstr "énergie"
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:390
-#: cdl\core\model\image.py:393 cdl\core\model\signal.py:102
+#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:391
+#: cdl\core\model\image.py:394 cdl\core\model\signal.py:102
 #: cdl\core\model\signal.py:105
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:394
-#: cdl\core\model\image.py:397 cdl\core\model\signal.py:106
+#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:395
+#: cdl\core\model\image.py:398 cdl\core\model\signal.py:106
 #: cdl\core\model\signal.py:109
 msgid "Y-axis"
 msgstr "Axe des Y"
@@ -1534,7 +1534,7 @@ msgstr "Attention"
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:165 cdl\core\model\image.py:388
+#: cdl\core\gui\macroeditor.py:165 cdl\core\model\image.py:389
 #: cdl\core\model\signal.py:94 cdl\core\model\signal.py:100
 msgid "Untitled"
 msgstr "Sans titre"
@@ -1958,7 +1958,7 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 #: cdl\core\gui\panel\base.py:935 cdl\core\gui\roieditor.py:185
-#: cdl\core\model\base.py:672
+#: cdl\core\model\base.py:682
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
@@ -2491,124 +2491,124 @@ msgstr "Moyenne de la distribution normale"
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: cdl\core\model\base.py:1048
+#: cdl\core\model\base.py:1058
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:1049
+#: cdl\core\model\base.py:1059
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#: cdl\core\model\image.py:217 cdl\core\model\image.py:220
+#: cdl\core\model\image.py:218 cdl\core\model\image.py:221
 msgid "Top left corner"
 msgstr "Coin supérieur gauche"
 
-#: cdl\core\model\image.py:221 cdl\core\model\image.py:224
+#: cdl\core\model\image.py:222 cdl\core\model\image.py:225
 msgid "Bottom right corner"
 msgstr "Coin inférieur droit"
 
-#: cdl\core\model\image.py:264 cdl\core\model\image.py:267
+#: cdl\core\model\image.py:265 cdl\core\model\image.py:268
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: cdl\core\model\image.py:371 cdl\core\model\image.py:372
-#: cdl\core\model\image.py:374 cdl\core\model\signal.py:95
+#: cdl\core\model\image.py:372 cdl\core\model\image.py:373
+#: cdl\core\model\image.py:375 cdl\core\model\signal.py:95
 msgid "Data"
 msgstr "Données"
 
-#: cdl\core\model\image.py:373 cdl\core\model\signal.py:96
+#: cdl\core\model\image.py:374 cdl\core\model\signal.py:96
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: cdl\core\model\image.py:376 cdl\core\model\image.py:377
-#: cdl\core\model\image.py:380 cdl\core\model\image.py:385
+#: cdl\core\model\image.py:377 cdl\core\model\image.py:378
+#: cdl\core\model\image.py:381 cdl\core\model\image.py:386
 msgid "Origin"
 msgstr "Origine"
 
-#: cdl\core\model\image.py:376 cdl\core\model\image.py:381
-#: cdl\core\model\image.py:384 cdl\core\model\image.py:385
+#: cdl\core\model\image.py:377 cdl\core\model\image.py:382
+#: cdl\core\model\image.py:385 cdl\core\model\image.py:386
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: cdl\core\model\image.py:387 cdl\core\model\image.py:403
+#: cdl\core\model\image.py:388 cdl\core\model\image.py:404
 msgid "Titles"
 msgstr "Titres"
 
-#: cdl\core\model\image.py:387 cdl\core\model\image.py:403
+#: cdl\core\model\image.py:388 cdl\core\model\image.py:404
 msgid "Units"
 msgstr "Unités"
 
-#: cdl\core\model\image.py:388
+#: cdl\core\model\image.py:389
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: cdl\core\model\image.py:391 cdl\core\model\image.py:395
-#: cdl\core\model\image.py:399 cdl\core\model\image.py:762
+#: cdl\core\model\image.py:392 cdl\core\model\image.py:396
+#: cdl\core\model\image.py:400 cdl\core\model\image.py:763
 #: cdl\core\model\signal.py:103 cdl\core\model\signal.py:107
 #: cdl\core\model\signal.py:559
 msgid "Title"
 msgstr "Titre"
 
-#: cdl\core\model\image.py:392 cdl\core\model\image.py:396
-#: cdl\core\model\image.py:400 cdl\core\model\signal.py:104
+#: cdl\core\model\image.py:393 cdl\core\model\image.py:397
+#: cdl\core\model\image.py:401 cdl\core\model\signal.py:104
 #: cdl\core\model\signal.py:108 cdl\core\model\signal.py:541
 msgid "Unit"
 msgstr "Unité"
 
-#: cdl\core\model\image.py:398 cdl\core\model\image.py:401
+#: cdl\core\model\image.py:399 cdl\core\model\image.py:402
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:750 cdl\core\model\signal.py:489
+#: cdl\core\model\image.py:751 cdl\core\model\signal.py:489
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:751
+#: cdl\core\model\image.py:752
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:752 cdl\core\model\signal.py:490
+#: cdl\core\model\image.py:753 cdl\core\model\signal.py:490
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:753 cdl\core\model\signal.py:493
+#: cdl\core\model\image.py:754 cdl\core\model\signal.py:493
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:754 cdl\core\model\signal.py:494
+#: cdl\core\model\image.py:755 cdl\core\model\signal.py:494
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:764
+#: cdl\core\model\image.py:765
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:764
+#: cdl\core\model\image.py:765
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:767
+#: cdl\core\model\image.py:768
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:767 cdl\tests\data.py:380
+#: cdl\core\model\image.py:768 cdl\tests\data.py:380
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:770 cdl\core\model\signal.py:565
+#: cdl\core\model\image.py:771 cdl\core\model\signal.py:565
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:775
+#: cdl\core\model\image.py:776
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:871
+#: cdl\core\model\image.py:872
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:899
+#: cdl\core\model\image.py:900
 msgid "Image"
 msgstr "Image"
 

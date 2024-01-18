@@ -23,7 +23,7 @@ def test_contour_app():
     with cdltest_app_context() as win:
         panel = win.imagepanel
 
-        shape = "ellipse"
+        shape = "circle"
 
         ima1 = get_test_image("fabry-perot1.jpg")
         ima1.metadata["colormap"] = "gray"

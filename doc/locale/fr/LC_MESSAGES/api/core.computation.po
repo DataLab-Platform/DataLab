@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 15:51+0100\n"
+"POT-Creation-Date: 2024-01-18 14:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -158,6 +158,7 @@ msgstr "Fonctionnalités de traitement du signal"
 msgid "Create result signal object for compute_11 function"
 msgstr "Créer un objet de signal résultant pour la fonction compute_11"
 
+#: cdl.core.computation.image.calc_with_osr
 #: cdl.core.computation.image.compute_add
 #: cdl.core.computation.image.compute_product cdl.core.computation.image.dst_11
 #: cdl.core.computation.image.dst_11_signal cdl.core.computation.image.dst_n1n
@@ -174,6 +175,7 @@ msgstr "signal source"
 msgid "name of the function"
 msgstr "nom de la fonction"
 
+#: cdl.core.computation.image.calc_with_osr
 #: cdl.core.computation.image.compute_abs
 #: cdl.core.computation.image.compute_astype
 #: cdl.core.computation.image.compute_average_profile
@@ -432,39 +434,54 @@ msgstr "signal source 2"
 msgid ""
 "Add signal to result signal :param dst: destination signal :type dst: "
 "SignalObj :param src: source signal :type src: SignalObj"
-msgstr "Ajouter un signal au signal résultant :param dst: signal de destination :type dst: SignalObj :param src: signal source :type src: SignalObj"
+msgstr ""
+"Ajouter un signal au signal résultant :param dst: signal de destination "
+":type dst: SignalObj :param src: signal source :type src: SignalObj"
 
 #: cdl.core.computation.signal.compute_product:1 of
 msgid ""
 "Multiply signal to result signal :param dst: destination signal :type "
 "dst: SignalObj :param src: source signal :type src: SignalObj"
-msgstr "Multiplier le signal au signal résultant :param dst: signal de destination :type dst: SignalObj :param src: signal source :type src: SignalObj"
+msgstr ""
+"Multiplier le signal au signal résultant :param dst: signal de "
+"destination :type dst: SignalObj :param src: signal source :type src: "
+"SignalObj"
 
 #: cdl.core.computation.signal.compute_difference:1 of
 msgid ""
 "Compute difference between two signals :param src1: source signal 1 :type"
 " src1: SignalObj :param src2: source signal 2 :type src2: SignalObj"
-msgstr "Calculer la différence entre deux signaux :param src1: signal source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
+msgstr ""
+"Calculer la différence entre deux signaux :param src1: signal source 1 "
+":type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
 
 #: cdl.core.computation.signal.compute_quadratic_difference:1 of
 msgid ""
 "Compute quadratic difference between two signals :param src1: source "
 "signal 1 :type src1: SignalObj :param src2: source signal 2 :type src2: "
 "SignalObj"
-msgstr "Calculer la différence quadratique entre deux signaux :param src1: signal source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
+msgstr ""
+"Calculer la différence quadratique entre deux signaux :param src1: signal"
+" source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: "
+"SignalObj"
 
 #: cdl.core.computation.signal.compute_division:1 of
 msgid ""
 "Compute division between two signals :param src1: source signal 1 :type "
 "src1: SignalObj :param src2: source signal 2 :type src2: SignalObj"
-msgstr "Calculer la division entre deux signaux :param src1: signal source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
+msgstr ""
+"Calculer la division entre deux signaux :param src1: signal source 1 "
+":type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
 
 #: cdl.core.computation.signal.extract_multiple_roi:1 of
 msgid ""
 "Extract multiple regions of interest from data :param src: source signal "
 ":type src: SignalObj :param group: group of parameters :type group: "
 "gds.DataSetGroup"
-msgstr "Extraire plusieurs régions d'intérêt des données :param src: signal source :type src: SignalObj :param group: groupe de paramètres :type group: gds.DataSetGroup"
+msgstr ""
+"Extraire plusieurs régions d'intérêt des données :param src: signal "
+"source :type src: SignalObj :param group: groupe de paramètres :type "
+"group: gds.DataSetGroup"
 
 #: cdl.core.computation.signal.extract_multiple_roi:7 of
 msgid "signal with multiple regions of interest"
@@ -474,7 +491,9 @@ msgstr "signal avec plusieurs régions d'intérêt"
 msgid ""
 "Extract single region of interest from data :param src: source signal "
 ":type src: SignalObj :param p: parameters :type p: gds.DataSet"
-msgstr "Extraire une seule région d'intérêt des données :param src: signal source :type src: SignalObj :param p: paramètres :type p: gds.DataSet"
+msgstr ""
+"Extraire une seule région d'intérêt des données :param src: signal source"
+" :type src: SignalObj :param p: paramètres :type p: gds.DataSet"
 
 #: cdl.core.computation.signal.extract_single_roi:7 of
 msgid "signal with single region of interest"
@@ -494,7 +513,9 @@ msgstr "Calculer la partie réelle :param src: signal source :type src: SignalOb
 
 #: cdl.core.computation.signal.compute_im:1 of
 msgid "Compute imaginary part :param src: source signal :type src: SignalObj"
-msgstr "Calculer la partie imaginaire :param src: signal source :type src: SignalObj"
+msgstr ""
+"Calculer la partie imaginaire :param src: signal source :type src: "
+"SignalObj"
 
 #: cdl.core.computation.signal.DataTypeSParam:1 of
 msgid "Convert signal data type parameters"
@@ -502,7 +523,9 @@ msgstr "Convertir les paramètres du type de données du signal"
 
 #: cdl.core.computation.signal.compute_astype:1 of
 msgid "Convert data type :param src: source signal :param p: parameters"
-msgstr "Convertir le type de données :param src: signal source :param p: paramètres"
+msgstr ""
+"Convertir le type de données :param src: signal source :param p: "
+"paramètres"
 
 #: cdl.core.computation.signal.compute_astype:5 of
 msgid "Result signal object"
@@ -521,7 +544,9 @@ msgstr "Paramètres de détection de pics"
 msgid ""
 "Peak detection :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: PeakDetectionParam"
-msgstr "Détection de pics :param src: signal source :type src: SignalObj :param p: paramètres :type p: PeakDetectionParam"
+msgstr ""
+"Détection de pics :param src: signal source :type src: SignalObj :param "
+"p: paramètres :type p: PeakDetectionParam"
 
 #: cdl.core.computation.signal.NormalizeYParam:1 of
 msgid "Normalize parameters"
@@ -531,7 +556,9 @@ msgstr "Paramètres de normalisation"
 msgid ""
 "Normalize data :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: NormalizeYParam"
-msgstr "Normaliser les données :param src: signal source :type src: SignalObj :param p: paramètres :type p: NormalizeYParam"
+msgstr ""
+"Normaliser les données :param src: signal source :type src: SignalObj "
+":param p: paramètres :type p: NormalizeYParam"
 
 #: cdl.core.computation.signal.compute_derivative:1 of
 msgid "Compute derivative :param src: source signal :type src: SignalObj"
@@ -549,53 +576,71 @@ msgstr "Paramètres d'étalonnage du signal"
 msgid ""
 "Compute linear calibration :param src: source signal :type src: SignalObj"
 " :param p: parameters :type p: XYCalibrateParam"
-msgstr "Calculer l'étalonnage linéaire :param src: signal source :type src: SignalObj :param p: paramètres :type p: XYCalibrateParam"
+msgstr ""
+"Calculer l'étalonnage linéaire :param src: signal source :type src: "
+"SignalObj :param p: paramètres :type p: XYCalibrateParam"
 
 #: cdl.core.computation.signal.compute_threshold:1 of
 msgid ""
 "Compute threshold clipping :param src: source signal :type src: SignalObj"
 " :param p: parameters :type p: ThresholdParam"
-msgstr "Calculer le rognage du seuil :param src: signal source :type src: SignalObj :param p: paramètres :type p: ThresholdParam"
+msgstr ""
+"Calculer le rognage du seuil :param src: signal source :type src: "
+"SignalObj :param p: paramètres :type p: ThresholdParam"
 
 #: cdl.core.computation.signal.compute_clip:1 of
 msgid ""
 "Compute maximum data clipping :param src: source signal :type src: "
 "SignalObj :param p: parameters :type p: ClipParam"
-msgstr "Calculer le rognage des données maximales :param src: signal source :type src: SignalObj :param p: paramètres :type p: ClipParam"
+msgstr ""
+"Calculer le rognage des données maximales :param src: signal source :type"
+" src: SignalObj :param p: paramètres :type p: ClipParam"
 
 #: cdl.core.computation.signal.compute_gaussian_filter:1 of
 msgid ""
 "Compute gaussian filter :param src: source signal :type src: SignalObj "
 ":param p: parameters :type p: GaussianParam"
-msgstr "Calculer le filtre gaussien :param src: signal source :type src: SignalObj :param p: paramètres :type p: GaussianParam"
+msgstr ""
+"Calculer le filtre gaussien :param src: signal source :type src: "
+"SignalObj :param p: paramètres :type p: GaussianParam"
 
 #: cdl.core.computation.signal.compute_moving_average:1 of
 msgid ""
 "Compute moving average :param src: source signal :type src: SignalObj "
 ":param p: parameters :type p: MovingAverageParam"
-msgstr "Calculer la moyenne mobile :param src: signal source :type src: SignalObj :param p: paramètres :type p: MovingAverageParam"
+msgstr ""
+"Calculer la moyenne mobile :param src: signal source :type src: SignalObj"
+" :param p: paramètres :type p: MovingAverageParam"
 
 #: cdl.core.computation.signal.compute_moving_median:1 of
 msgid ""
 "Compute moving median :param src: source signal :type src: SignalObj "
 ":param p: parameters :type p: MovingMedianParam"
-msgstr "Calculer la médiane mobile :param src: signal source :type src: SignalObj :param p: paramètres :type p: MovingMedianParam"
+msgstr ""
+"Calculer la médiane mobile :param src: signal source :type src: SignalObj"
+" :param p: paramètres :type p: MovingMedianParam"
 
 #: cdl.core.computation.signal.compute_wiener:1 of
 msgid "Compute Wiener filter :param src: source signal :type src: SignalObj"
-msgstr "Calculer le filtre de Wiener :param src: signal source :type src: SignalObj"
+msgstr ""
+"Calculer le filtre de Wiener :param src: signal source :type src: "
+"SignalObj"
 
 #: cdl.core.computation.signal.compute_fft:1 of
 msgid ""
 "Compute FFT :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: FFTParam"
-msgstr "Calculer FFT :param src: signal source :type src: SignalObj :param p: paramètres :type p: FFTParam"
+msgstr ""
+"Calculer FFT :param src: signal source :type src: SignalObj :param p: "
+"paramètres :type p: FFTParam"
 
 #: cdl.core.computation.signal.compute_ifft:1 of
 msgid ""
 "Compute iFFT :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: FFTParam"
-msgstr "Calculer iFFT :param src: signal source :type src: SignalObj :param p: paramètres :type p: FFTParam"
+msgstr ""
+"Calculer iFFT :param src: signal source :type src: SignalObj :param p: "
+"paramètres :type p: FFTParam"
 
 #: cdl.core.computation.signal.PolynomialFitParam:1 of
 msgid "Polynomial fitting parameters"
@@ -622,7 +667,10 @@ msgid ""
 "Interpolate data :param src1: source signal 1 :type src1: SignalObj "
 ":param src2: source signal 2 :type src2: SignalObj :param p: parameters "
 ":type p: InterpolationParam"
-msgstr "Interpoler les données :param src1: signal source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj :param p: paramètres :type p: InterpolationParam"
+msgstr ""
+"Interpoler les données :param src1: signal source 1 :type src1: SignalObj"
+" :param src2: signal source 2 :type src2: SignalObj :param p: paramètres "
+":type p: InterpolationParam"
 
 #: cdl.core.computation.signal.ResamplingParam:1 of
 msgid "Resample parameters"
@@ -632,7 +680,9 @@ msgstr "Paramètres de rééchantillonnage"
 msgid ""
 "Resample data :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: ResampleParam"
-msgstr "Rééchantillonner les données :param src: signal source :type src: SignalObj :param p: paramètres :type p: ResampleParam"
+msgstr ""
+"Rééchantillonner les données :param src: signal source :type src: "
+"SignalObj :param p: paramètres :type p: ResampleParam"
 
 #: cdl.core.computation.signal.DetrendingParam:1 of
 msgid "Detrending parameters"
@@ -642,13 +692,17 @@ msgstr "Paramètres d'élimination de tendance"
 msgid ""
 "Detrend data :param src: source signal :type src: SignalObj :param p: "
 "parameters :type p: DetrendingParam"
-msgstr "Éliminer la tendance des données :param src: signal source :type src: SignalObj :param p: paramètres :type p: DetrendingParam"
+msgstr ""
+"Éliminer la tendance des données :param src: signal source :type src: "
+"SignalObj :param p: paramètres :type p: DetrendingParam"
 
 #: cdl.core.computation.signal.compute_convolution:1 of
 msgid ""
 "Compute convolution of two signals :param src1: source signal 1 :type "
 "src1: SignalObj :param src2: source signal 2 :type src2: SignalObj"
-msgstr "Calculer la convolution de deux signaux :param src1: signal source 1 :type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
+msgstr ""
+"Calculer la convolution de deux signaux :param src1: signal source 1 "
+":type src1: SignalObj :param src2: signal source 2 :type src2: SignalObj"
 
 #: cdl.core.computation:50 of
 msgid "Image processing features"
@@ -662,6 +716,7 @@ msgstr "Fonctionnalités de traitement d'image de base"
 msgid "Create result image object for compute_11 function"
 msgstr "Créer un objet d'image résultant pour la fonction compute_11"
 
+#: cdl.core.computation.image.calc_with_osr:3
 #: cdl.core.computation.image.compute_add:5
 #: cdl.core.computation.image.compute_product:5
 #: cdl.core.computation.image.dst_11:3
@@ -762,20 +817,29 @@ msgstr "Calculer le produit entre deux images"
 msgid ""
 "Compute difference between two images :param src1: input image object "
 ":type src1: ImageObj :param src2: input image object :type src2: ImageObj"
-msgstr "Calculer la différence entre deux images :param src1: objet d'image d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée :type src2: ImageObj"
+msgstr ""
+"Calculer la différence entre deux images :param src1: objet d'image "
+"d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée :type "
+"src2: ImageObj"
 
 #: cdl.core.computation.image.compute_quadratic_difference:1 of
 msgid ""
 "Compute quadratic difference between two images :param src1: input image "
 "object :type src1: ImageObj :param src2: input image object :type src2: "
 "ImageObj"
-msgstr "Calculer la différence quadratique entre deux images :param src1: objet d'image d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée :type src2: ImageObj"
+msgstr ""
+"Calculer la différence quadratique entre deux images :param src1: objet "
+"d'image d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée"
+" :type src2: ImageObj"
 
 #: cdl.core.computation.image.compute_division:1 of
 msgid ""
 "Compute division between two images :param src1: input image object :type"
 " src1: ImageObj :param src2: input image object :type src2: ImageObj"
-msgstr "Calculer la division entre deux images :param src1: objet d'image d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée :type src2: ImageObj"
+msgstr ""
+"Calculer la division entre deux images :param src1: objet d'image "
+"d'entrée :type src1: ImageObj :param src2: objet d'image d'entrée :type "
+"src2: ImageObj"
 
 #: cdl.core.computation.image.FlatFieldParam:1 of
 msgid "Flat-field parameters"
@@ -786,7 +850,11 @@ msgid ""
 "Compute flat field correction :param src1: raw data image object :type "
 "src1: ImageObj :param src2: flat field image object :type src2: ImageObj "
 ":param p: flat field parameters :type p: FlatFieldParam"
-msgstr "Calculer la correction de champ plat :param src1: objet d'image de données brutes :type src1: ImageObj :param src2: objet d'image de champ plat :type src2: ImageObj :param p: paramètres de champ plat :type p: FlatFieldParam"
+msgstr ""
+"Calculer la correction de champ plat :param src1: objet d'image de "
+"données brutes :type src1: ImageObj :param src2: objet d'image de champ "
+"plat :type src2: ImageObj :param p: paramètres de champ plat :type p: "
+"FlatFieldParam"
 
 #: cdl.core.computation.image.LogP1Param:1 of
 msgid "Log10 parameters"
@@ -796,7 +864,9 @@ msgstr "Paramètres Log10"
 msgid ""
 "Compute log10(z+n) :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: LogP1Param"
-msgstr "Calculer log10(z+n) :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: LogP1Param"
+msgstr ""
+"Calculer log10(z+n) :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: LogP1Param"
 
 #: cdl.core.computation.image.RotateParam:1 of
 msgid "Rotate parameters"
@@ -808,7 +878,12 @@ msgid ""
 "angle (in degrees) :type angle: float :param obj: image object :type obj:"
 " ImageObj :param orig: original image object :type orig: ImageObj :param "
 "coords: coordinates to rotate :type coords: numpy.ndarray"
-msgstr "Appliquer la rotation aux coordonnées associées à l'objet d'image :param angle: angle de rotation (en degrés) :type angle: float :param obj: objet d'image :type obj: ImageObj :param orig: objet d'image original :type orig: ImageObj :param coords: coordonnées à faire pivoter :type coords: numpy.ndarray"
+msgstr ""
+"Appliquer la rotation aux coordonnées associées à l'objet d'image :param "
+"angle: angle de rotation (en degrés) :type angle: float :param obj: objet"
+" d'image :type obj: ImageObj :param orig: objet d'image original :type "
+"orig: ImageObj :param coords: coordonnées à faire pivoter :type coords: "
+"numpy.ndarray"
 
 #: cdl.core.computation.image.rotate_obj_coords:11 of
 msgid "output data"
@@ -824,15 +899,21 @@ msgstr "Appliquer la rotation aux coordonnées associées à l'objet d'image"
 msgid ""
 "Rotate data :param src: input image object :type src: ImageObj :param p: "
 "parameters :type p: RotateParam"
-msgstr "Rotation des données :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: RotateParam"
+msgstr ""
+"Rotation des données :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: RotateParam"
 
 #: cdl.core.computation.image.compute_rotate90:1 of
 msgid "Rotate data 90° :param src: input image object :type src: ImageObj"
-msgstr "Rotation des données 90° :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Rotation des données 90° :param src: objet d'image d'entrée :type src: "
+"ImageObj"
 
 #: cdl.core.computation.image.compute_rotate270:1 of
 msgid "Rotate data 270° :param src: input image object :type src: ImageObj"
-msgstr "Rotation des données 270° :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Rotation des données 270° :param src: objet d'image d'entrée :type src: "
+"ImageObj"
 
 #: cdl.core.computation.image.hflip_coords:1 of
 msgid "Apply HFlip to coords"
@@ -840,7 +921,9 @@ msgstr "Appliquer HFlip aux coordonnées"
 
 #: cdl.core.computation.image.compute_fliph:1 of
 msgid "Flip data horizontally :param src: input image object :type src: ImageObj"
-msgstr "Retourner les données horizontalement :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Retourner les données horizontalement :param src: objet d'image d'entrée "
+":type src: ImageObj"
 
 #: cdl.core.computation.image.vflip_coords:1 of
 msgid "Apply VFlip to coords"
@@ -848,7 +931,9 @@ msgstr "Appliquer VFlip aux coordonnées"
 
 #: cdl.core.computation.image.compute_flipv:1 of
 msgid "Flip data vertically :param src: input image object :type src: ImageObj"
-msgstr "Retourner les données verticalement :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Retourner les données verticalement :param src: objet d'image d'entrée "
+":type src: ImageObj"
 
 #: cdl.core.computation.image.GridParam:1 of
 msgid "Grid parameters"
@@ -862,7 +947,9 @@ msgstr "Paramètres de redimensionnement"
 msgid ""
 "Zooming function :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: ResizeParam"
-msgstr "Fonction de zoom :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: ResizeParam"
+msgstr ""
+"Fonction de zoom :param src: objet d'image d'entrée :type src: ImageObj "
+":param p: paramètres :type p: ResizeParam"
 
 #: cdl.core.computation.image.BinningParam:1 of
 msgid "Binning parameters"
@@ -872,20 +959,28 @@ msgstr "Paramètres de binning"
 msgid ""
 "Binning function on data :param src: input image object :type src: "
 "ImageObj :param param: parameters :type param: BinningParam"
-msgstr "Fonction de binning sur les données :param src: objet d'image d'entrée :type src: ImageObj :param param: paramètres :type param: BinningParam"
+msgstr ""
+"Fonction de binning sur les données :param src: objet d'image d'entrée "
+":type src: ImageObj :param param: paramètres :type param: BinningParam"
 
 #: cdl.core.computation.image.extract_multiple_roi:1 of
 msgid ""
 "Extract multiple regions of interest from data :param src: input image "
 "object :type src: ImageObj :param group: parameters defining the regions "
 "of interest :type group: gds.DataSetGroup"
-msgstr "Extraire plusieurs régions d'intérêt des données :param src: objet d'image d'entrée :type src: ImageObj :param group: paramètres définissant les régions d'intérêt :type group: gds.DataSetGroup"
+msgstr ""
+"Extraire plusieurs régions d'intérêt des données :param src: objet "
+"d'image d'entrée :type src: ImageObj :param group: paramètres définissant"
+" les régions d'intérêt :type group: gds.DataSetGroup"
 
 #: cdl.core.computation.image.extract_single_roi:1 of
 msgid ""
 "Extract single ROI :param src: input image object :type src: ImageObj "
 ":param p: ROI parameters :type p: gds.DataSet"
-msgstr "Extraire une seule région d'intérêt :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres de la région d'intérêt :type p: gds.DataSet"
+msgstr ""
+"Extraire une seule région d'intérêt :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres de la région d'intérêt :type p: "
+"gds.DataSet"
 
 #: cdl.core.computation.image.ProfileParam:1 of
 msgid "Horizontal or vertical profile parameters"
@@ -895,7 +990,9 @@ msgstr "Paramètres de profil horizontal ou vertical"
 msgid ""
 "Compute horizontal or vertical profile :param src: input image object "
 ":param p: parameters"
-msgstr "Calculer le profil horizontal ou vertical :param src: objet d'image d'entrée :param p: paramètres"
+msgstr ""
+"Calculer le profil horizontal ou vertical :param src: objet d'image "
+"d'entrée :param p: paramètres"
 
 #: cdl.core.computation.image.compute_astype:5
 #: cdl.core.computation.image.compute_average_profile:5
@@ -911,23 +1008,33 @@ msgstr "Paramètres de profil horizontal ou vertical moyen"
 msgid ""
 "Compute horizontal or vertical average profile :param src: input image "
 "object :param p: parameters"
-msgstr "Calculer le profil horizontal ou vertical moyen :param src: objet d'image d'entrée :param p: paramètres"
+msgstr ""
+"Calculer le profil horizontal ou vertical moyen :param src: objet d'image"
+" d'entrée :param p: paramètres"
 
 #: cdl.core.computation.image.compute_swap_axes:1 of
 msgid "Swap image axes :param src: input image object :type src: ImageObj"
-msgstr "Permuter les axes de l'image :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Permuter les axes de l'image :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.compute_abs:1 of
 msgid "Compute absolute value :param src: input image object :type src: ImageObj"
-msgstr "Calculer la valeur absolue :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer la valeur absolue :param src: objet d'image d'entrée :type src: "
+"ImageObj"
 
 #: cdl.core.computation.image.compute_re:1 of
 msgid "Compute real part :param src: input image object :type src: ImageObj"
-msgstr "Calculer la partie réelle :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer la partie réelle :param src: objet d'image d'entrée :type src: "
+"ImageObj"
 
 #: cdl.core.computation.image.compute_im:1 of
 msgid "Compute imaginary part :param src: input image object :type src: ImageObj"
-msgstr "Calculer la partie imaginaire :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer la partie imaginaire :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.DataTypeIParam:1 of
 msgid "Convert image data type parameters"
@@ -937,7 +1044,9 @@ msgstr "Convertir les paramètres du type de données de l'image"
 msgid ""
 "Convert image data type :param src: input image object :param p: "
 "parameters"
-msgstr "Convertir le type de données de l'image :param src: objet d'image d'entrée :param p: paramètres"
+msgstr ""
+"Convertir le type de données de l'image :param src: objet d'image "
+"d'entrée :param p: paramètres"
 
 #: cdl.core.computation.image.compute_log10:1 of
 msgid "Compute log10 :param src: input image object :type src: ImageObj"
@@ -952,53 +1061,72 @@ msgid ""
 "Compute linear calibration :param src: input image object :type src: "
 "ImageObj :param param: calibration parameters :type param: "
 "ZCalibrateParam"
-msgstr "Calculer l'étalonnage linéaire :param src: objet d'image d'entrée :type src: ImageObj :param param: paramètres d'étalonnage :type param: ZCalibrateParam"
+msgstr ""
+"Calculer l'étalonnage linéaire :param src: objet d'image d'entrée :type "
+"src: ImageObj :param param: paramètres d'étalonnage :type param: "
+"ZCalibrateParam"
 
 #: cdl.core.computation.image.compute_threshold:1 of
 msgid ""
 "Apply thresholding :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: ThresholdParam"
-msgstr "Appliquer le seuillage :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: ThresholdParam"
+msgstr ""
+"Appliquer le seuillage :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: ThresholdParam"
 
 #: cdl.core.computation.image.compute_clip:1 of
 msgid ""
 "Apply clipping :param src: input image object :type src: ImageObj :param "
 "p: parameters :type p: ClipParam"
-msgstr "Appliquer le rognage :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: ClipParam"
+msgstr ""
+"Appliquer le rognage :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: ClipParam"
 
 #: cdl.core.computation.image.compute_gaussian_filter:1 of
 msgid ""
 "Compute gaussian filter :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: GaussianParam"
-msgstr "Calculer le filtre gaussien :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: GaussianParam"
+msgstr ""
+"Calculer le filtre gaussien :param src: objet d'image d'entrée :type src:"
+" ImageObj :param p: paramètres :type p: GaussianParam"
 
 #: cdl.core.computation.image.compute_moving_average:1 of
 msgid ""
 "Compute moving average :param src: input image object :type src: ImageObj"
 " :param p: parameters :type p: MovingAverageParam"
-msgstr "Calculer la moyenne mobile :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MovingAverageParam"
+msgstr ""
+"Calculer la moyenne mobile :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: MovingAverageParam"
 
 #: cdl.core.computation.image.compute_moving_median:1 of
 msgid ""
 "Compute moving median :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: MovingMedianParam"
-msgstr "Calculer la médiane mobile :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MovingMedianParam"
+msgstr ""
+"Calculer la médiane mobile :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: MovingMedianParam"
 
 #: cdl.core.computation.image.compute_wiener:1 of
 msgid "Compute Wiener filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Wiener :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Wiener :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.compute_fft:1 of
 msgid ""
 "Compute FFT :param src: input image object :type src: ImageObj :param p: "
 "parameters :type p: FFTParam"
-msgstr "Calculer FFT :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: FFTParam"
+msgstr ""
+"Calculer FFT :param src: objet d'image d'entrée :type src: ImageObj "
+":param p: paramètres :type p: FFTParam"
 
 #: cdl.core.computation.image.compute_ifft:1 of
 msgid ""
 "Compute inverse FFT :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: FFTParam"
-msgstr "Calculer l'inverse de FFT :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: FFTParam"
+msgstr ""
+"Calculer l'inverse de FFT :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: FFTParam"
 
 #: cdl.core.computation.image.ButterworthParam:1 of
 msgid "Butterworth filter parameters"
@@ -1008,17 +1136,48 @@ msgstr "Paramètres du filtre de Butterworth"
 msgid ""
 "Compute Butterworth filter :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: ButterworthParam"
-msgstr "Calculer le filtre de Butterworth :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: ButterworthParam"
+msgstr ""
+"Calculer le filtre de Butterworth :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: ButterworthParam"
 
 #: cdl.core.computation.image.calc_with_osr:1 of
 msgid "Exec computation taking into account image x0, y0, dx, dy and ROIs"
 msgstr "Exécuter le calcul en tenant compte de l'image x0, y0, dx, dy et ROIs"
 
+#: cdl.core.computation.image.calc_with_osr:4 of
+msgid "computation function"
+msgstr "fonction de calcul"
+
+#: cdl.core.computation.image.calc_with_osr:5 of
+msgid "computation function arguments"
+msgstr "arguments de la fonction de calcul"
+
+#: cdl.core.computation.image.calc_with_osr:7 of
+msgid "Computation result"
+msgstr "Résultat du calcul"
+
+#: cdl.core.computation.image.calc_with_osr:11 of
+msgid ""
+"The computation function must take either a single argument (the data) or"
+" multiple arguments (the data followed by the computation parameters)."
+msgstr "La fonction de calcul doit prendre un seul argument (les données) ou de multiples arguments (les données suivies des paramètres de calcul)."
+
+#: cdl.core.computation.image.calc_with_osr:14 of
+msgid ""
+"Moreover, the computation function must return a single value or a NumPy "
+"array containing the result of the computation. This array contains the "
+"coordinates of points, polygons, circles or ellipses in the form [[x, y],"
+" ...], or [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or [[x0, "
+"y0, a, b, theta], ...]."
+msgstr "De plus, la fonction de calcul doit renvoyer une seule valeur ou un tableau NumPy contenant le résultat du calcul. Ce tableau contient les coordonnées des points, des polygones, des cercles ou des ellipses sous la forme [[x, y], ...], ou [[x0, y0, x1, y1, ...], ...], ou [[x0, y0, r], ...], ou [[x0, y0, a, b, theta], ...]."
+
 #: cdl.core.computation.image.get_centroid_coords:1 of
 msgid ""
 "Return centroid coordinates :param data: input data :type data: "
 "numpy.ndarray"
-msgstr "Retourner les coordonnées du centre de gravité :param data: données d'entrée :type data: numpy.ndarray"
+msgstr ""
+"Retourner les coordonnées du centre de gravité :param data: données "
+"d'entrée :type data: numpy.ndarray"
 
 #: cdl.core.computation.image.compute_centroid:5
 #: cdl.core.computation.image.get_centroid_coords:5 of
@@ -1027,13 +1186,18 @@ msgstr "coordonnées du centre de gravité"
 
 #: cdl.core.computation.image.compute_centroid:1 of
 msgid "Compute centroid :param image: input image :type image: ImageObj"
-msgstr "Calculer le centre de gravité :param image: image d'entrée :type image: ImageObj"
+msgstr ""
+"Calculer le centre de gravité :param image: image d'entrée :type image: "
+"ImageObj"
 
 #: cdl.core.computation.image.get_enclosing_circle_coords:1 of
 msgid ""
 "Return diameter coords for the circle contour enclosing image values "
 "above threshold (FWHM) :param data: input data :type data: numpy.ndarray"
-msgstr "Retourner les coordonnées du diamètre pour le contour du cercle contenant les valeurs d'image au-dessus du seuil (LMH) :param data: données d'entrée :type data: numpy.ndarray"
+msgstr ""
+"Retourner les coordonnées du diamètre pour le contour du cercle contenant"
+" les valeurs d'image au-dessus du seuil (LMH) :param data: données "
+"d'entrée :type data: numpy.ndarray"
 
 #: cdl.core.computation.image.compute_enclosing_circle:5
 #: cdl.core.computation.image.get_enclosing_circle_coords:6 of
@@ -1044,7 +1208,9 @@ msgstr "coordonnées du diamètre"
 msgid ""
 "Compute minimum enclosing circle :param image: input image :type image: "
 "ImageObj"
-msgstr "Calculer le cercle minimum contenant :param image: image d'entrée :type image: ImageObj"
+msgstr ""
+"Calculer le cercle minimum contenant :param image: image d'entrée :type "
+"image: ImageObj"
 
 #: cdl.core.computation.image.HoughCircleParam:1 of
 msgid "Circle Hough transform parameters"
@@ -1054,7 +1220,9 @@ msgstr "Paramètres de transformation de Hough circulaire"
 msgid ""
 "Compute Hough circles :param image: input image :type image: ImageObj "
 ":param p: parameters :type p: HoughCircleParam"
-msgstr "Calculer les cercles de Hough :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: HoughCircleParam"
+msgstr ""
+"Calculer les cercles de Hough :param image: image d'entrée :type image: "
+"ImageObj :param p: paramètres :type p: HoughCircleParam"
 
 #: cdl.core.computation.image.compute_hough_circle_peaks:7 of
 msgid "circle coordinates"
@@ -1076,7 +1244,9 @@ msgstr "Paramètres d'ajustement gamma"
 msgid ""
 "Gamma correction :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: AdjustGammaParam"
-msgstr "Correction gamma :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: AdjustGammaParam"
+msgstr ""
+"Correction gamma :param src: objet d'image d'entrée :type src: ImageObj "
+":param p: paramètres :type p: AdjustGammaParam"
 
 #: cdl.core.computation.image.exposure.AdjustLogParam:1 of
 msgid "Logarithmic adjustment parameters"
@@ -1086,7 +1256,9 @@ msgstr "Paramètres d'ajustement logarithmique"
 msgid ""
 "Compute log correction :param src: input image object :type src: ImageObj"
 " :param p: parameters :type p: AdjustLogParam"
-msgstr "Calculer la correction logarithmique :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: AdjustLogParam"
+msgstr ""
+"Calculer la correction logarithmique :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: AdjustLogParam"
 
 #: cdl.core.computation.image.exposure.AdjustSigmoidParam:1 of
 msgid "Sigmoid adjustment parameters"
@@ -1096,7 +1268,9 @@ msgstr "Paramètres d'ajustement sigmoïde"
 msgid ""
 "Compute sigmoid correction :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: AdjustSigmoidParam"
-msgstr "Calculer la correction sigmoïde :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: AdjustSigmoidParam"
+msgstr ""
+"Calculer la correction sigmoïde :param src: objet d'image d'entrée :type "
+"src: ImageObj :param p: paramètres :type p: AdjustSigmoidParam"
 
 #: cdl.core.computation.image.exposure.RescaleIntensityParam:1 of
 msgid "Intensity rescaling parameters"
@@ -1106,7 +1280,10 @@ msgstr "Paramètres de rééchelonnement d'intensité"
 msgid ""
 "Rescale image intensity levels :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: RescaleIntensityParam"
-msgstr "Rééchelonner les niveaux d'intensité de l'image :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: RescaleIntensityParam"
+msgstr ""
+"Rééchelonner les niveaux d'intensité de l'image :param src: objet d'image"
+" d'entrée :type src: ImageObj :param p: paramètres :type p: "
+"RescaleIntensityParam"
 
 #: cdl.core.computation.image.exposure.EqualizeHistParam:1 of
 msgid "Histogram equalization parameters"
@@ -1116,7 +1293,9 @@ msgstr "Paramètres d'égalisation d'histogramme"
 msgid ""
 "Histogram equalization :param src: input image object :type src: ImageObj"
 " :param p: parameters :type p: EqualizeHistParam"
-msgstr "Égalisation d'histogramme :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: EqualizeHistParam"
+msgstr ""
+"Égalisation d'histogramme :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: EqualizeHistParam"
 
 #: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:1 of
 msgid "Adaptive histogram equalization parameters"
@@ -1126,7 +1305,9 @@ msgstr "Paramètres d'égalisation d'histogramme adaptatif"
 msgid ""
 "Adaptive histogram equalization :param src: input image object :type src:"
 " ImageObj :param p: parameters :type p: EqualizeAdaptHistParam"
-msgstr "Égalisation d'histogramme adaptatif :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: EqualizeAdaptHistParam"
+msgstr ""
+"Égalisation d'histogramme adaptatif :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: EqualizeAdaptHistParam"
 
 #: cdl.core.computation:65 of
 msgid "Restoration features"
@@ -1144,7 +1325,9 @@ msgstr "Paramètres de débruitage de variation totale"
 msgid ""
 "Compute Total Variation denoising :param src: input image object :type "
 "src: ImageObj :param p: parameters :type p: DenoiseTVParam"
-msgstr "Calculer le débruitage de variation totale :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: DenoiseTVParam"
+msgstr ""
+"Calculer le débruitage de variation totale :param src: objet d'image "
+"d'entrée :type src: ImageObj :param p: paramètres :type p: DenoiseTVParam"
 
 #: cdl.core.computation.image.restoration.DenoiseBilateralParam:1 of
 msgid "Bilateral filter denoising parameters"
@@ -1154,7 +1337,10 @@ msgstr "Paramètres de débruitage du filtre bilatéral"
 msgid ""
 "Compute bilateral filter denoising :param src: input image object :type "
 "src: ImageObj :param p: parameters :type p: DenoiseBilateralParam"
-msgstr "Calculer le débruitage du filtre bilatéral :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: DenoiseBilateralParam"
+msgstr ""
+"Calculer le débruitage du filtre bilatéral :param src: objet d'image "
+"d'entrée :type src: ImageObj :param p: paramètres :type p: "
+"DenoiseBilateralParam"
 
 #: cdl.core.computation.image.restoration.DenoiseWaveletParam:1 of
 msgid "Wavelet denoising parameters"
@@ -1164,13 +1350,17 @@ msgstr "Paramètres de débruitage d'ondelettes"
 msgid ""
 "Compute Wavelet denoising :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: DenoiseWaveletParam"
-msgstr "Calculer le débruitage d'ondelettes :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: DenoiseWaveletParam"
+msgstr ""
+"Calculer le débruitage d'ondelettes :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: DenoiseWaveletParam"
 
 #: cdl.core.computation.image.restoration.compute_denoise_tophat:1 of
 msgid ""
 "Denoise using White Top-Hat :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: MorphologyParam"
-msgstr "Débruitage à l'aide de White Top-Hat :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Débruitage à l'aide de White Top-Hat :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation:71 of
 msgid "Morphological features"
@@ -1188,37 +1378,49 @@ msgstr "Paramètres de White Top-Hat"
 msgid ""
 "Compute White Top-Hat :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: MorphologyParam"
-msgstr "Calculer White Top-Hat :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer White Top-Hat :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation.image.morphology.compute_black_tophat:1 of
 msgid ""
 "Compute Black Top-Hat :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: MorphologyParam"
-msgstr "Calculer Black Top-Hat :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer Black Top-Hat :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation.image.morphology.compute_erosion:1 of
 msgid ""
 "Compute Erosion :param src: input image object :type src: ImageObj :param"
 " p: parameters :type p: MorphologyParam"
-msgstr "Calculer l'érosion :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer l'érosion :param src: objet d'image d'entrée :type src: ImageObj"
+" :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation.image.morphology.compute_dilation:1 of
 msgid ""
 "Compute Dilation :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: MorphologyParam"
-msgstr "Calculer la dilatation :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer la dilatation :param src: objet d'image d'entrée :type src: "
+"ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation.image.morphology.compute_opening:1 of
 msgid ""
 "Compute morphological opening :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: MorphologyParam"
-msgstr "Calculer l'ouverture morphologique :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer l'ouverture morphologique :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation.image.morphology.compute_closing:1 of
 msgid ""
 "Compute morphological closing :param src: input image object :type src: "
 "ImageObj :param p: parameters :type p: MorphologyParam"
-msgstr "Calculer la fermeture morphologique :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: MorphologyParam"
+msgstr ""
+"Calculer la fermeture morphologique :param src: objet d'image d'entrée "
+":type src: ImageObj :param p: paramètres :type p: MorphologyParam"
 
 #: cdl.core.computation:77 of
 msgid "Edge detection features"
@@ -1236,79 +1438,109 @@ msgstr "Paramètres du filtre de Canny"
 msgid ""
 "Compute Canny filter :param src: input image object :type src: ImageObj "
 ":param p: parameters :type p: CannyParam"
-msgstr "Calculer le filtre de Canny :param src: objet d'image d'entrée :type src: ImageObj :param p: paramètres :type p: CannyParam"
+msgstr ""
+"Calculer le filtre de Canny :param src: objet d'image d'entrée :type src:"
+" ImageObj :param p: paramètres :type p: CannyParam"
 
 #: cdl.core.computation.image.edges.compute_roberts:1 of
 msgid "Compute Roberts filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Roberts :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Roberts :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_prewitt:1 of
 msgid "Compute Prewitt filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Prewitt :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Prewitt :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_prewitt_h:1 of
 msgid ""
 "Compute horizontal Prewitt filter :param src: input image object :type "
 "src: ImageObj"
-msgstr "Calculer le filtre de Prewitt horizontal :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Prewitt horizontal :param src: objet d'image "
+"d'entrée :type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_prewitt_v:1 of
 msgid ""
 "Compute vertical Prewitt filter :param src: input image object :type src:"
 " ImageObj"
-msgstr "Calculer le filtre de Prewitt vertical :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Prewitt vertical :param src: objet d'image d'entrée"
+" :type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_sobel:1 of
 msgid "Compute Sobel filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Sobel :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Sobel :param src: objet d'image d'entrée :type src:"
+" ImageObj"
 
 #: cdl.core.computation.image.edges.compute_sobel_h:1 of
 msgid ""
 "Compute horizontal Sobel filter :param src: input image object :type src:"
 " ImageObj"
-msgstr "Calculer le filtre de Sobel horizontal :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Sobel horizontal :param src: objet d'image d'entrée"
+" :type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_sobel_v:1 of
 msgid ""
 "Compute vertical Sobel filter :param src: input image object :type src: "
 "ImageObj"
-msgstr "Calculer le filtre de Sobel vertical :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Sobel vertical :param src: objet d'image d'entrée "
+":type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_scharr:1 of
 msgid "Compute Scharr filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Scharr :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Scharr :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_scharr_h:1 of
 msgid ""
 "Compute horizontal Scharr filter :param src: input image object :type "
 "src: ImageObj"
-msgstr "Calculer le filtre de Scharr horizontal :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Scharr horizontal :param src: objet d'image "
+"d'entrée :type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_scharr_v:1 of
 msgid ""
 "Compute vertical Scharr filter :param src: input image object :type src: "
 "ImageObj"
-msgstr "Calculer le filtre de Scharr vertical :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Scharr vertical :param src: objet d'image d'entrée "
+":type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_farid:1 of
 msgid "Compute Farid filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Farid :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Farid :param src: objet d'image d'entrée :type src:"
+" ImageObj"
 
 #: cdl.core.computation.image.edges.compute_farid_h:1 of
 msgid ""
 "Compute horizontal Farid filter :param src: input image object :type src:"
 " ImageObj"
-msgstr "Calculer le filtre de Farid horizontal :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Farid horizontal :param src: objet d'image d'entrée"
+" :type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_farid_v:1 of
 msgid ""
 "Compute vertical Farid filter :param src: input image object :type src: "
 "ImageObj"
-msgstr "Calculer le filtre de Farid vertical :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Farid vertical :param src: objet d'image d'entrée "
+":type src: ImageObj"
 
 #: cdl.core.computation.image.edges.compute_laplace:1 of
 msgid "Compute Laplace filter :param src: input image object :type src: ImageObj"
-msgstr "Calculer le filtre de Laplace :param src: objet d'image d'entrée :type src: ImageObj"
+msgstr ""
+"Calculer le filtre de Laplace :param src: objet d'image d'entrée :type "
+"src: ImageObj"
 
 #: cdl.core.computation:82 of
 msgid "Detection features"
@@ -1326,7 +1558,9 @@ msgstr "Paramètres de détection génériques"
 msgid ""
 "Compute 2D peak detection :param image: input image :type image: ImageObj"
 " :param p: parameters :type p: Peak2DDetectionParam"
-msgstr "Calculer la détection de pics 2D :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: Peak2DDetectionParam"
+msgstr ""
+"Calculer la détection de pics 2D :param image: image d'entrée :type "
+"image: ImageObj :param p: paramètres :type p: Peak2DDetectionParam"
 
 #: cdl.core.computation.image.detection.compute_peak_detection:7 of
 msgid "peak coordinates"
@@ -1352,7 +1586,10 @@ msgstr "Détection de taches à l'aide de la méthode de différence de Gauss"
 msgid ""
 "Compute blobs using Difference of Gaussian method :param image: input "
 "image :type image: ImageObj :param p: parameters :type p: BlobDOGParam"
-msgstr "Calculer les taches à l'aide de la méthode de différence de Gauss :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: BlobDOGParam"
+msgstr ""
+"Calculer les taches à l'aide de la méthode de différence de Gauss :param "
+"image: image d'entrée :type image: ImageObj :param p: paramètres :type p:"
+" BlobDOGParam"
 
 #: cdl.core.computation.image.detection.compute_blob_dog:7
 #: cdl.core.computation.image.detection.compute_blob_doh:7
@@ -1369,7 +1606,10 @@ msgstr "Détection de taches à l'aide de la méthode du déterminant de Hessian
 msgid ""
 "Compute blobs using Determinant of Hessian method :param image: input "
 "image :type image: ImageObj :param p: parameters :type p: BlobDOHParam"
-msgstr "Calculer les taches à l'aide de la méthode du déterminant de Hessian :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: BlobDOHParam"
+msgstr ""
+"Calculer les taches à l'aide de la méthode du déterminant de Hessian "
+":param image: image d'entrée :type image: ImageObj :param p: paramètres "
+":type p: BlobDOHParam"
 
 #: cdl.core.computation.image.detection.BlobLOGParam:1 of
 msgid "Blob detection using Laplacian of Gaussian method"
@@ -1379,7 +1619,10 @@ msgstr "Détection de taches à l'aide de la méthode du Laplacien de Gauss"
 msgid ""
 "Compute blobs using Laplacian of Gaussian method :param image: input "
 "image :type image: ImageObj :param p: parameters :type p: BlobLOGParam"
-msgstr "Calculer les taches à l'aide de la méthode du Laplacien de Gauss :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: BlobLOGParam"
+msgstr ""
+"Calculer les taches à l'aide de la méthode du Laplacien de Gauss :param "
+"image: image d'entrée :type image: ImageObj :param p: paramètres :type p:"
+" BlobLOGParam"
 
 #: cdl.core.computation.image.detection.BlobOpenCVParam:1 of
 msgid "Blob detection using OpenCV"
@@ -1389,4 +1632,6 @@ msgstr "Détection de taches à l'aide d'OpenCV"
 msgid ""
 "Compute blobs using OpenCV :param image: input image :type image: "
 "ImageObj :param p: parameters :type p: BlobOpenCVParam"
-msgstr "Calculer les taches à l'aide d'OpenCV :param image: image d'entrée :type image: ImageObj :param p: paramètres :type p: BlobOpenCVParam"
+msgstr ""
+"Calculer les taches à l'aide d'OpenCV :param image: image d'entrée :type "
+"image: ImageObj :param p: paramètres :type p: BlobOpenCVParam"
