@@ -770,15 +770,26 @@ class BaseObj(metaclass=BaseObjMeta):
             if ResultShape.match(key, value):
                 yield ResultShape.from_metadata_entry(key, value)
 
-    def update_resultshapes_from(self, other):
+    def update_resultshapes_from(self, other: BaseObj) -> None:
         """Update geometric shape from another object (merge metadata).
 
         Args:
-            other (BaseObj): other object
+            other: other object, from which to update this object
         """
+        # The following code is merging the result shapes of the `other` object
+        # with the result shapes of this object, but it is merging only the result
+        # shapes of the same type (`mshape.key`). Thus, if the `other` object has
+        # a result shape that is not present in this object, it will not be merged,
+        # and we will have to add it to this object manually.
         for mshape in self.iterate_resultshapes():
             assert mshape is not None
             mshape.merge_with(self, other)
+        # Iterating on `other` object result shapes to find result shapes that are
+        # not present in this object, and add them to this object.
+        for mshape in other.iterate_resultshapes():
+            assert mshape is not None
+            if mshape.key not in self.metadata:
+                mshape.add_to(self)
 
     def transform_shapes(self, orig, func, param=None):
         """Apply transform function to result shape / annotations coordinates.

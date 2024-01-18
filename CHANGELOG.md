@@ -99,6 +99,13 @@ for future and past milestones.
     added to test the contour detection feature on a Fabry-Perot image (thanks to
     [@emarin2642](https://github.com/emarin2642) for the contribution)
   * This fixes [Issue #34](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/34) - Contour detection: unexpected results outside ROI
+* Computing result merging:
+  * Before this release, when doing a `1->N` computation (sum, average, product) on
+    a group of signals/images, the computing results associated to each signal/image
+    were merged into a single result, but only the type of result present in the
+    first signal/image was kept.
+  * Now, the computing results associated to each signal/image are merged into a
+    single result, whatever the type of result is.
 
 ## DataLab Version 0.10.1 ##
 

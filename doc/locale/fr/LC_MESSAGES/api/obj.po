@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 14:37+0100\n"
+"POT-Creation-Date: 2024-01-18 15:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1009,8 +1009,8 @@ msgstr ""
 "les métadonnées)."
 
 #: cdl.core.model.base.BaseObj.update_resultshapes_from:3 of
-msgid "other object"
-msgstr "autre objet"
+msgid "other object, from which to update this object"
+msgstr "autre objet, à partir duquel mettre à jour cet objet"
 
 #: guidata.dataset.datatypes.DataSet.view:1 of
 msgid "Open a dialog box to view data set"
@@ -1315,3 +1315,6 @@ msgstr "Renvoie le membre à partir du dtype NumPy"
 #: cdl.core.model.image.ImageDatatypes.check:1 of
 msgid "Check if data types are valid"
 msgstr "Vérifie si les types de données sont valides"
+
+#~ msgid "other object"
+#~ msgstr "autre objet"
