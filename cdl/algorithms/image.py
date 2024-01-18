@@ -26,12 +26,12 @@ def scale_data_to_min_max(
     """Scale array `data` to fit [zmin, zmax] dynamic range
 
     Args:
-        data (numpy.ndarray): Input data
-        zmin (float|int): Minimum value of output data
-        zmax (float|int): Maximum value of output data
+        data: Input data
+        zmin: Minimum value of output data
+        zmax: Maximum value of output data
 
     Returns:
-        np.ndarray: Scaled data
+        Scaled data
     """
     dmin = data.min()
     dmax = data.max()
@@ -46,11 +46,11 @@ def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute FFT of complex array `z`
 
     Args:
-        z (numpy.ndarray): Input data
-        shift (bool | None): Shift zero frequency to center (default: True)
+        z: Input data
+        shift: Shift zero frequency to center (default: True)
 
     Returns:
-        np.ndarray: FFT of input data
+        FFT of input data
     """
     z1 = np.fft.fft2(z)
     if shift:
@@ -62,11 +62,11 @@ def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute inverse FFT of complex array `z`
 
     Args:
-        z (numpy.ndarray): Input data
-        shift (bool | None): Shift zero frequency to center (default: True)
+        z: Input data
+        shift: Shift zero frequency to center (default: True)
 
     Returns:
-        np.ndarray: Inverse FFT of input data
+        Inverse FFT of input data
     """
     if shift:
         z = np.fft.ifftshift(z)
@@ -83,14 +83,14 @@ def binning(
     """Perform image pixel binning
 
     Args:
-        data (numpy.ndarray): Input data
-        binning_x (int): Binning factor along x-axis
-        binning_y (int): Binning factor along y-axis
-        operation (str): Binning operation (sum, average, median, min, max)
-        dtype (str | None): Output data type (default: None, i.e. same as input)
+        data: Input data
+        binning_x: Binning factor along x-axis
+        binning_y: Binning factor along y-axis
+        operation: Binning operation (sum, average, median, min, max)
+        dtype: Output data type (default: None, i.e. same as input)
 
     Returns:
-        np.ndarray: Binned data
+        Binned data
     """
     ny, nx = data.shape
     shape = (ny // binning_y, binning_y, nx // binning_x, binning_x)
@@ -120,12 +120,12 @@ def flatfield(
     """Compute flat-field correction
 
     Args:
-        rawdata (numpy.ndarray): Raw data
-        flatdata (numpy.ndarray): Flat-field data
-        threshold (float | None): Threshold for flat-field correction (default: None)
+        rawdata: Raw data
+        flatdata: Flat-field data
+        threshold: Threshold for flat-field correction (default: None)
 
     Returns:
-        np.ndarray: Flat-field corrected data
+        Flat-field corrected data
     """
     dtemp = np.array(rawdata, dtype=np.float64, copy=True) * flatdata.mean()
     dunif = np.array(flatdata, dtype=np.float64, copy=True)
@@ -140,10 +140,10 @@ def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:
     """Return image centroid using Fourier algorithm
 
     Args:
-        data (numpy.ndarray): Input data
+        data: Input data
 
     Returns:
-        tuple[float, float]: Centroid coordinates
+        Centroid coordinates
     """
     # Fourier transform method as discussed by Weisshaar et al.
     # (http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf)
@@ -187,11 +187,11 @@ def get_absolute_level(data: np.ndarray, level: float) -> float:
     """Return absolute level
 
     Args:
-        data (numpy.ndarray): Input data
-        level (float): Relative level (0.0 to 1.0)
+        data: Input data
+        level: Relative level (0.0 to 1.0)
 
     Returns:
-        float: Absolute level
+        Absolute level
     """
     if not isinstance(level, float) or level < 0.0 or level > 1.0:
         raise ValueError("Level must be a float between 0. and 1.")
@@ -205,11 +205,11 @@ def get_enclosing_circle(
     values above threshold relative level (.5 means FWHM)
 
     Args:
-        data (numpy.ndarray): Input data
-        level (float | None): Relative level (default: 0.5)
+        data: Input data
+        level: Relative level (default: 0.5)
 
     Returns:
-        tuple[int, int, float]: (x, y, radius)
+        A tuple (x, y, radius)
 
     Raises:
         ValueError: No contour was found
@@ -235,10 +235,10 @@ def distance_matrix(coords: list) -> np.ndarray:
     """Return distance matrix from coords
 
     Args:
-        coords (list): List of coordinates
+        coords: List of coordinates
 
     Returns:
-        np.ndarray: Distance matrix
+        Distance matrix
     """
     return np.triu(spt.distance.cdist(coords, coords, "euclidean"))
 
@@ -255,12 +255,12 @@ def get_2d_peaks_coords(
     between data maximum and minimum values.
 
     Args:
-        data (numpy.ndarray): Input data
-        size (int | None): Neighborhood size (default: None)
-        level (float | None): Relative level (default: 0.5)
+        data: Input data
+        size: Neighborhood size (default: None)
+        level: Relative level (default: 0.5)
 
     Returns:
-        np.ndarray: Coordinates of peaks
+        Coordinates of peaks
     """
     if size is None:
         size = max(min(data.shape) // 40, 50)
@@ -357,14 +357,14 @@ def get_hough_circle_peaks(
     """Detect peaks in image from circle Hough transform, return circle coordinates.
 
     Args:
-        data (numpy.ndarray): Input data
-        min_radius (float | None): Minimum radius (default: None)
-        max_radius (float | None): Maximum radius (default: None)
-        nb_radius (int | None): Number of radii (default: None)
-        min_distance (int | None): Minimum distance between circles (default: 1)
+        data: Input data
+        min_radius: Minimum radius (default: None)
+        max_radius: Maximum radius (default: None)
+        nb_radius: Number of radii (default: None)
+        min_distance: Minimum distance between circles (default: 1)
 
     Returns:
-        np.ndarray: Coordinates of circles
+        Coordinates of circles
     """
     assert min_radius is not None and max_radius is not None and max_radius > min_radius
     if nb_radius is None:
@@ -383,10 +383,10 @@ def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:
     """Convert blobs to coordinates
 
     Args:
-        blobs (numpy.ndarray): Blobs
+        blobs: Blobs
 
     Returns:
-        np.ndarray: Coordinates
+        Coordinates
     """
     cy, cx, radii = blobs.T
     coords = np.vstack([cx - radii, cy, cx + radii, cy]).T
@@ -406,23 +406,21 @@ def find_blobs_dog(
     (DoG) method.
 
     Args:
-        data (numpy.ndarray): The grayscale input image.
-        min_sigma (float | None): The minimum blob radius in pixels.
-        max_sigma (float | None): The maximum blob radius in pixels.
-        overlap (float | None): The minimum overlap between two blobs in
-            pixels. For instance, if two blobs are detected with radii of 10 and
-            12 respectively, and the ``overlap`` is set to 0.5, then the area of
-            the smaller blob will be ignored and only the area of the larger blob
-            will be returned.
-        threshold_rel (float | None): The absolute lower bound for scale space
-            maxima. Local maxima smaller than ``threshold_rel`` are ignored. Reduce
-            this to detect blobs with less intensities.
-        exclude_border (bool | None): If ``True``, exclude blobs from
-            detection if they are too close to the border of the image. Border
-            size is ``min_sigma``.
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap between two blobs in pixels. For instance, if two
+         blobs are detected with radii of 10 and 12 respectively, and the ``overlap``
+         is set to 0.5, then the area of the smaller blob will be ignored and only the
+         area of the larger blob will be returned.
+        threshold_rel: The absolute lower bound for scale space maxima. Local maxima
+         smaller than ``threshold_rel`` are ignored. Reduce this to detect blobs with
+         less intensities.
+        exclude_border: If ``True``, exclude blobs from detection if they are too
+         close to the border of the image. Border size is ``min_sigma``.
 
     Returns:
-        np.ndarray: Coordinates of blobs
+        Coordinates of blobs
     """
     # Use scikit-image's Difference of Gaussians (DoG) method
     blobs = feature.blob_dog(
@@ -449,22 +447,21 @@ def find_blobs_doh(
     (DoH) method.
 
     Args:
-        data (numpy.ndarray): The grayscale input image.
-        min_sigma (float | None): The minimum blob radius in pixels.
-        max_sigma (float | None): The maximum blob radius in pixels.
-        overlap (float | None): The minimum overlap between two blobs in
-            pixels. For instance, if two blobs are detected with radii of 10 and
-            12 respectively, and the ``overlap`` is set to 0.5, then the area of
-            the smaller blob will be ignored and only the area of the larger blob
-            will be returned.
-        log_scale (bool | None): If ``True``, the radius of each blob is
-            returned as ``sqrt(sigma)`` for each detected blob.
-        threshold_rel (float | None): The absolute lower bound for scale space
-            maxima. Local maxima smaller than ``threshold_rel`` are ignored. Reduce
-            this to detect blobs with less intensities.
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap between two blobs in pixels. For instance, if two
+         blobs are detected with radii of 10 and 12 respectively, and the ``overlap``
+         is set to 0.5, then the area of the smaller blob will be ignored and only the
+         area of the larger blob will be returned.
+        log_scale: If ``True``, the radius of each blob is returned as ``sqrt(sigma)``
+         for each detected blob.
+        threshold_rel: The absolute lower bound for scale space maxima. Local maxima
+         smaller than ``threshold_rel`` are ignored. Reduce this to detect blobs with
+         less intensities.
 
     Returns:
-        np.ndarray: Coordinates of blobs
+        Coordinates of blobs
     """
     # Use scikit-image's Determinant of Hessian (DoH) method to detect blobs
     blobs = feature.blob_doh(
@@ -493,25 +490,23 @@ def find_blobs_log(
     (LoG) method.
 
     Args:
-        data (numpy.ndarray): The grayscale input image.
-        min_sigma (float | None): The minimum blob radius in pixels.
-        max_sigma (float | None): The maximum blob radius in pixels.
-        overlap (float | None): The minimum overlap between two blobs in
-            pixels. For instance, if two blobs are detected with radii of 10 and
-            12 respectively, and the ``overlap`` is set to 0.5, then the area of
-            the smaller blob will be ignored and only the area of the larger blob
-            will be returned.
-        log_scale (bool | None): If ``True``, the radius of each blob is
-            returned as ``sqrt(sigma)`` for each detected blob.
-        threshold_rel (float | None): The absolute lower bound for scale space
-            maxima. Local maxima smaller than ``threshold_rel`` are ignored. Reduce
-            this to detect blobs with less intensities.
-        exclude_border (bool | None): If ``True``, exclude blobs from
-            detection if they are too close to the border of the image. Border
-            size is ``min_sigma``.
+        data: The grayscale input image.
+        min_sigma: The minimum blob radius in pixels.
+        max_sigma: The maximum blob radius in pixels.
+        overlap: The minimum overlap between two blobs in pixels. For instance, if
+         two blobs are detected with radii of 10 and 12 respectively, and the
+         ``overlap`` is set to 0.5, then the area of the smaller blob will be ignored
+         and only the area of the larger blob will be returned.
+        log_scale: If ``True``, the radius of each blob is returned as ``sqrt(sigma)``
+         for each detected blob.
+        threshold_rel: The absolute lower bound for scale space maxima. Local maxima
+         smaller than ``threshold_rel`` are ignored. Reduce this to detect blobs with
+         less intensities.
+        exclude_border: If ``True``, exclude blobs from detection if they are too
+         close to the border of the image. Border size is ``min_sigma``.
 
     Returns:
-        np.ndarray: Coordinates of blobs
+        Coordinates of blobs
     """
     # Use scikit-image's Laplacian of Gaussian (LoG) method to detect blobs
     blobs = feature.blob_log(
@@ -532,10 +527,10 @@ def remove_overlapping_disks(coords: np.ndarray) -> np.ndarray:
     """Remove overlapping disks among coordinates
 
     Args:
-        coords (numpy.ndarray): The coordinates of the disks
+        coords: The coordinates of the disks
 
     Returns:
-        np.ndarray: The coordinates of the disks with overlapping disks removed
+        The coordinates of the disks with overlapping disks removed
     """
     # Get the radii of each disk from the coordinates
     radii = coords[:, 2]
@@ -583,33 +578,29 @@ def find_blobs_opencv(
     Finds blobs in the given grayscale image using OpenCV's SimpleBlobDetector.
 
     Args:
-        data (numpy.ndarray): The grayscale input image.
-        min_threshold (float | None): The minimum blob intensity.
-        max_threshold (float | None): The maximum blob intensity.
-        min_repeatability (int | None): The minimum number of times a blob is
-            detected before it is reported.
-        min_dist_between_blobs (float | None): The minimum distance between
-            blobs.
-        filter_by_color (bool | None): If ``True``, blobs are filtered by color.
-        blob_color (int | None): The color of the blobs to filter by.
-        filter_by_area (bool | None): If ``True``, blobs are filtered by area.
-        min_area (float | None): The minimum blob area.
-        max_area (float | None): The maximum blob area.
-        filter_by_circularity (bool | None): If ``True``, blobs are filtered by
-            circularity.
-        min_circularity (float | None): The minimum blob circularity.
-        max_circularity (float | None): The maximum blob circularity.
-        filter_by_inertia (bool | None): If ``True``, blobs are filtered by
-            inertia.
-        min_inertia_ratio (float | None): The minimum blob inertia ratio.
-        max_inertia_ratio (float | None): The maximum blob inertia ratio.
-        filter_by_convexity (bool | None): If ``True``, blobs are filtered by
-            convexity.
-        min_convexity (float | None): The minimum blob convexity.
-        max_convexity (float | None): The maximum blob convexity.
+        data: The grayscale input image.
+        min_threshold: The minimum blob intensity.
+        max_threshold: The maximum blob intensity.
+        min_repeatability: The minimum number of times a blob is detected
+         before it is reported.
+        min_dist_between_blobs: The minimum distance between blobs.
+        filter_by_color: If ``True``, blobs are filtered by color.
+        blob_color: The color of the blobs to filter by.
+        filter_by_area: If ``True``, blobs are filtered by area.
+        min_area: The minimum blob area.
+        max_area: The maximum blob area.
+        filter_by_circularity: If ``True``, blobs are filtered by circularity.
+        min_circularity: The minimum blob circularity.
+        max_circularity: The maximum blob circularity.
+        filter_by_inertia: If ``True``, blobs are filtered by inertia.
+        min_inertia_ratio: The minimum blob inertia ratio.
+        max_inertia_ratio: The maximum blob inertia ratio.
+        filter_by_convexity: If ``True``, blobs are filtered by convexity.
+        min_convexity: The minimum blob convexity.
+        max_convexity: The maximum blob convexity.
 
     Returns:
-        np.ndarray: Coordinates of blobs
+        Coordinates of blobs
     """
     params = cv2.SimpleBlobDetector_Params()
     if min_threshold is not None:
