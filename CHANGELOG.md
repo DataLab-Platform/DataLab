@@ -73,6 +73,14 @@ for future and past milestones.
     regions of interest into a single image object" option enabled, the result is a
     single image with the ROI mask (as if the option was disabled)
   * This fixes [Issue #31](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
+* Computing on circular ROI:
+  * Before this release, when defining a circular ROI and running computations on it,
+    the results were unexpected in terms of coordinates (results seemed to be computed
+    in a region located above the actual ROI).
+  * This was due to a regression introduced in an earlier release.
+  * Now, when defining a circular ROI and running computations on it, the results are
+    computed on the actual ROI
+  * Fixed [Issue #32](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/32) - Computing on circular ROI: unexpected results
 
 ## DataLab Version 0.10.1 ##
 

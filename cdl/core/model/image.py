@@ -140,8 +140,9 @@ class RoiDataItem:
         """Get rectangle coordinates"""
         x0, y0, x1, y1 = self._data
         if self.geometry is RoiDataGeometries.CIRCLE:
-            y0 -= x1 - x0
-            y1 += x1 - x0
+            radius = int(round(0.5 * (x1 - x0)))
+            y0 -= radius
+            y1 += radius
         return x0, y0, x1, y1
 
     def get_masked_view(self, data: np.ndarray, maskdata: np.ndarray) -> np.ndarray:
