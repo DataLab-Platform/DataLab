@@ -16,6 +16,12 @@ DataLab is available in several forms:
 
 -   As a :ref:`install_source`, which can be installed using ``pip`` or manually.
 
+.. seealso::
+
+    Impatient to try the next version of DataLab? You can also install the
+    latest development version of DataLab from the master branch of the
+    Git repository. See :ref:`install_development` for more information.
+
 .. _install_pip:
 
 Package manager ``pip``
@@ -117,6 +123,36 @@ by running the following command from the root directory of the source package
     $ pip install build wheel  # Install build and wheel packages (if needed)
     $ python -m build  # Build the wheel package
     $ pip install --upgrade dist/cdl-0.11.1-py2.py3-none-any.whl  # Install the wheel package
+
+.. _install_development:
+
+Development version
+^^^^^^^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-line:`Windows` :bdg-info-line:`macOS`
+
+If you want to try the latest development version of DataLab, you can install
+it directly from the master branch of the Git repository.
+
+The first time you install DataLab from the Git repository, enter the following
+command:
+
+.. code-block:: console
+
+    $ pip install git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git
+
+Then, if at some point you want to upgrade to the latest version of DataLab,
+just run the same command with options to force the reinstall of the package
+without handling dependencies (because it would reinstall all dependencies):
+
+.. code-block:: console
+
+    $ pip install --force-reinstall --no-deps git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git
+
+.. note::
+
+    If dependencies have changed, you may need to execute the same command as above,
+    but without the ``--no-deps`` option.
 
 Dependencies
 ------------

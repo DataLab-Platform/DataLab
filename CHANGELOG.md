@@ -83,7 +83,7 @@ for future and past milestones.
     single image with the ROI mask (as if the option was disabled)
   * This fixes [Issue #31](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
 * Computing on circular ROI:
-  * Before this release, when defining a circular ROI and running computations on it,
+  * Before this release, when running computations on a circular ROI,
     the results were unexpected in terms of coordinates (results seemed to be computed
     in a region located above the actual ROI).
   * This was due to a regression introduced in an earlier release.
@@ -91,7 +91,7 @@ for future and past milestones.
     computed on the actual ROI
   * This fixes [Issue #33](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/33) - Computing on circular ROI: unexpected results
 * Contour detection on ROI:
-  * Before this release, when defining a ROI and running contour detection on it, some
+  * Before this release, when running contour detection on a ROI, some
     contours were detected outside the ROI (it may be due to a limitation of the
     scikit-image `find_contours` function).
   * Now, thanks a workaround, the erroneous contours are filtered out.
