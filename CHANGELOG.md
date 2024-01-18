@@ -22,7 +22,7 @@ for future and past milestones.
 * New 1D interpolation features:
   * Added "Interpolation" feature to signal panel's "Processing" menu
   * Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP
-  * Thanks to @marcel-goldschen-ohm for the contribution to spline interpolation
+  * Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the contribution to spline interpolation
   * This fixes [Issue #20](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/20) - Add 1D interpolation features
 * New 1D resampling feature:
   * Added "Resampling" feature to signal panel's "Processing" menu
@@ -97,7 +97,7 @@ for future and past milestones.
   * Now, thanks a workaround, the erroneous contours are filtered out.
   * A new test module `cdl.tests.features.images.contour_fabryperot_app` has been
     added to test the contour detection feature on a Fabry-Perot image (thanks to
-    @emarin2642 for the contribution)
+    [@emarin2642](https://github.com/emarin2642) for the contribution)
   * This fixes [Issue #34](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/34) - Contour detection: unexpected results outside ROI
 
 ## DataLab Version 0.10.1 ##
