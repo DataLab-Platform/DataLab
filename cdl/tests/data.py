@@ -548,7 +548,7 @@ def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
     return (
         RShape(
             SType.CIRCLE,
-            [[0, 100, 100, 400, 400], [0, 150, 150, 350, 350]],
+            [[0, 250, 250, 200], [0, 250, 250, 140]],
             "circle",
         ),
         RShape(SType.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
