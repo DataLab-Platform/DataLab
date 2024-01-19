@@ -47,7 +47,8 @@ def __exec_hough_circle_test(data):
     )
     execenv.print(f"Coordinates: {coords}")
     for shapeargs in coords:
-        item = make.circle(*shapeargs)
+        xc, yc, r = shapeargs
+        item = make.circle(xc - r, yc, xc + r, yc)
         items.append(item)
     view_image_items(items)
 
