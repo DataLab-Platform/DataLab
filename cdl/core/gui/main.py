@@ -347,14 +347,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         panel.objview.select_groups(selection)
 
     @remote_controlled
-    def delete_metadata(self, refresh_plot: bool = True) -> None:
+    def delete_metadata(
+        self, refresh_plot: bool = True, keep_roi: bool = False
+    ) -> None:
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool | None): Refresh plot. Defaults to True.
+            refresh_plot: Refresh plot. Defaults to True.
+            keep_roi: Keep ROI. Defaults to False.
         """
         panel = self.__get_current_basedatapanel()
-        panel.delete_metadata(refresh_plot)
+        panel.delete_metadata(refresh_plot, keep_roi)
 
     @remote_controlled
     def get_object_shapes(

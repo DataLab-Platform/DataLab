@@ -48,6 +48,11 @@ for future and past milestones.
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable
+* Delete metadata feature:
+  * Before this release, the feature was deleting all metadata, including the Regions
+    Of Interest (ROI) metadata, if any.
+  * Now a confirmation dialog box is shown to the user before deleting all metadata if
+    the signal/image has ROI metadata: this allows to keep the ROI metadata if needed.
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve

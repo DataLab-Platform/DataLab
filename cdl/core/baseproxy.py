@@ -290,11 +290,14 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def delete_metadata(self, refresh_plot: bool = True) -> None:
+    def delete_metadata(
+        self, refresh_plot: bool = True, keep_roi: bool = False
+    ) -> None:
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool | None): Refresh plot. Defaults to True.
+            refresh_plot: Refresh plot. Defaults to True.
+            keep_roi: Keep ROI. Defaults to False.
         """
 
     @abc.abstractmethod
@@ -619,13 +622,16 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.select_groups(selection, panel)
 
-    def delete_metadata(self, refresh_plot: bool = True) -> None:
+    def delete_metadata(
+        self, refresh_plot: bool = True, keep_roi: bool = False
+    ) -> None:
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool | None): Refresh plot. Defaults to True.
+            refresh_plot: Refresh plot. Defaults to True.
+            keep_roi: Keep ROI. Defaults to False.
         """
-        self._cdl.delete_metadata(refresh_plot)
+        self._cdl.delete_metadata(refresh_plot, keep_roi)
 
     def get_group_titles_with_object_infos(
         self,

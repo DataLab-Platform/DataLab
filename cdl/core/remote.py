@@ -150,7 +150,7 @@ class RemoteServer(QC.QThread):
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
-    SIG_DELETE_METADATA = QC.Signal(bool)
+    SIG_DELETE_METADATA = QC.Signal(bool, bool)
     SIG_SWITCH_TO_PANEL = QC.Signal(str)
     SIG_TOGGLE_AUTO_REFRESH = QC.Signal(bool)
     SIG_TOGGLE_SHOW_TITLES = QC.Signal(bool)
@@ -450,13 +450,16 @@ class RemoteServer(QC.QThread):
             self.SIG_SELECT_GROUPS.emit(selection, panel)
 
     @remote_call
-    def delete_metadata(self, refresh_plot: bool = True) -> None:
+    def delete_metadata(
+        self, refresh_plot: bool = True, keep_roi: bool = False
+    ) -> None:
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool | None): Refresh plot. Defaults to True.
+            refresh_plot: Refresh plot. Defaults to True.
+            keep_roi: Keep ROI. Defaults to False.
         """
-        self.SIG_DELETE_METADATA.emit(refresh_plot)
+        self.SIG_DELETE_METADATA.emit(refresh_plot, keep_roi)
 
     @remote_call
     def calc(self, name: str, param_data: list[str] | None = None) -> bool:

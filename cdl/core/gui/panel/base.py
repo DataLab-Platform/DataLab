@@ -508,14 +508,39 @@ class BaseDataPanel(AbstractPanel):
         if answer == QW.QMessageBox.Yes:
             self.remove_all_objects()
 
-    def delete_metadata(self, refresh_plot: bool = True) -> None:
+    def delete_metadata(
+        self, refresh_plot: bool = True, keep_roi: bool | None = None
+    ) -> None:
         """Delete metadata of selected objects
 
         Args:
-            refresh_plot (bool | None): Refresh plot. Defaults to True.
+            refresh_plot: Refresh plot. Defaults to True.
+            keep_roi: Keep regions of interest, if any. Defaults to None (ask user).
         """
-        for index, obj in enumerate(self.objview.get_sel_objects(include_groups=True)):
+        sel_objs = self.objview.get_sel_objects(include_groups=True)
+        # Check if there are regions of interest first:
+        roi_backup: dict[SignalObj | ImageObj, np.ndarray] = {}
+        if any([obj.roi is not None for obj in sel_objs]):
+            if keep_roi is None:
+                answer = QW.QMessageBox.warning(
+                    self,
+                    _("Delete metadata"),
+                    _(
+                        "Some selected objects have regions of interest. "
+                        "Do you want to delete them as well?"
+                    ),
+                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                )
+                keep_roi = answer == QW.QMessageBox.No
+            if keep_roi:
+                for obj in sel_objs:
+                    if obj.roi is not None:
+                        roi_backup[obj] = obj.roi
+        # Delete metadata:
+        for index, obj in enumerate(sel_objs):
             obj.reset_metadata_to_defaults()
+            if obj in roi_backup:
+                obj.roi = roi_backup[obj]
             if index == 0:
                 self.selection_changed()
         if refresh_plot:
