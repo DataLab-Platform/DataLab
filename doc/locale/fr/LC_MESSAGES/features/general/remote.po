@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 15:51+0100\n"
+"POT-Creation-Date: 2024-01-19 15:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,11 @@ msgid ""
 "control DataLab (i.e. without having to install the whole DataLab package"
 " and its dependencies on your environment), please have a look at the "
 "`DataLab Simple Client`_ package (`pip install cdlclient`)."
-msgstr "Si vous recherchez une solution alternative légère pour contrôler DataLab à distance (c'est-à-dire sans avoir à installer l'ensemble du package DataLab et ses dépendances sur votre environnement), veuillez consulter le package `DataLab Simple Client`_ (`pip install cdlclient`)."
+msgstr ""
+"Si vous recherchez une solution alternative légère pour contrôler DataLab"
+" à distance (c'est-à-dire sans avoir à installer l'ensemble du package "
+"DataLab et ses dépendances sur votre environnement), veuillez consulter "
+"le package `DataLab Simple Client`_ (`pip install cdlclient`)."
 
 #: ../../features/general/remote.rst:20
 msgid "From an IDE"
@@ -272,13 +276,18 @@ msgstr "API publique : client distant"
 msgid ""
 "Object representing a proxy/client to DataLab XML-RPC server. This object"
 " is used to call DataLab functions from a Python script."
-msgstr "Objet représentant un proxy/client vers le serveur XML-RPC de DataLab. Cet objet est utilisé pour appeler les fonctions de DataLab à partir d'un script Python."
+msgstr ""
+"Objet représentant un proxy/client vers le serveur XML-RPC de DataLab. "
+"Cet objet est utilisé pour appeler les fonctions de DataLab à partir d'un"
+" script Python."
 
 #: cdl.core.remote.RemoteClient:6 of
 msgid ""
 "Here is a simple example of how to use RemoteClient in a Python script or"
 " in a Jupyter notebook:"
-msgstr "Voici un exemple simple de l'utilisation de RemoteClient dans un script Python ou dans un notebook Jupyter :"
+msgstr ""
+"Voici un exemple simple de l'utilisation de RemoteClient dans un script "
+"Python ou dans un notebook Jupyter :"
 
 #: cdl.core.remote.RemoteClient.connect:1 of
 msgid "Try to connect to DataLab XML-RPC server."
@@ -311,7 +320,9 @@ msgstr "Paramètres"
 msgid ""
 "XML-RPC port to connect to. If not specified, the port is automatically "
 "retrieved from DataLab configuration."
-msgstr "Port XML-RPC auquel se connecter. Si non spécifié, le port est automatiquement récupéré à partir de la configuration de DataLab."
+msgstr ""
+"Port XML-RPC auquel se connecter. Si non spécifié, le port est "
+"automatiquement récupéré à partir de la configuration de DataLab."
 
 #: cdl.core.remote.RemoteClient.connect:6 of
 msgid "Timeout in seconds. Defaults to 5.0."
@@ -457,7 +468,9 @@ msgstr "Type de données non valide"
 
 #: cdl.core.remote.RemoteClient.calc:1 of
 msgid "Call compute function ``name`` in current panel's processor."
-msgstr "Appeler la fonction de calcul ``name`` dans le processeur du panneau en cours."
+msgstr ""
+"Appeler la fonction de calcul ``name`` dans le processeur du panneau en "
+"cours."
 
 #: cdl.core.remote.RemoteClient.calc:3 of
 msgid "Compute function name"
@@ -480,7 +493,9 @@ msgstr "Obtenir un objet (signal/image) à partir de l'index."
 msgid ""
 "Object number, or object id, or object title. Defaults to None (current "
 "object)."
-msgstr "Numéro d'objet, ou identifiant d'objet, ou titre d'objet. Par défaut, None (objet en cours)."
+msgstr ""
+"Numéro d'objet, ou identifiant d'objet, ou titre d'objet. Par défaut, "
+"None (objet en cours)."
 
 #: cdl.core.remote.RemoteClient.get_object:5
 #: cdl.core.remote.RemoteClient.get_object_shapes:5 of
@@ -497,7 +512,9 @@ msgstr "si l'objet n'est pas trouvé"
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:1 of
 msgid "Get plot item shapes associated to object (signal/image)."
-msgstr "Obtenir les formes géométriques des éléments de tracé associés à l'objet (signal/image)."
+msgstr ""
+"Obtenir les formes géométriques des éléments de tracé associés à l'objet "
+"(signal/image)."
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:7 of
 msgid "List of plot item shapes"
@@ -522,7 +539,9 @@ msgstr "rafraîchir le tracé. Par défaut, True."
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé."
+msgstr ""
+"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
+"panneau en cours est utilisé."
 
 #: cdl.core.remote.RemoteClient.add_object:1 of
 msgid "Add object to DataLab."
@@ -538,7 +557,9 @@ msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:3 of
 msgid "Label title. Defaults to None. If None, the title is the object title."
-msgstr "Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de l'objet."
+msgstr ""
+"Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de"
+" l'objet."
 
 #: cdl.core.baseproxy.BaseProxy.close_application:1 of
 msgid "Close DataLab application"
@@ -546,7 +567,9 @@ msgstr "Fermer l'application DataLab"
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
-msgstr "Renvoie un gestionnaire de contexte pour désactiver temporairement le rafraîchissement automatique."
+msgstr ""
+"Renvoie un gestionnaire de contexte pour désactiver temporairement le "
+"rafraîchissement automatique."
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
 msgid "Context manager"
@@ -564,6 +587,11 @@ msgstr "Supprimer les métadonnées des objets sélectionnés"
 msgid "Refresh plot. Defaults to True."
 msgstr "Rafraîchir le tracé. Par défaut, True."
 
+#: cdl.core.baseproxy.BaseProxy.delete_metadata:4 of
+#, fuzzy
+msgid "Keep ROI. Defaults to False."
+msgstr "Unité Z. Par défaut, None."
+
 #: cdl.core.baseproxy.BaseProxy.get_current_panel:1 of
 msgid "Return current panel name."
 msgstr "Renvoie le nom du panneau en cours."
@@ -575,7 +603,9 @@ msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"))"
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:1 of
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr "Renvoie les titres des groupes et les listes des uuids et titres des objets internes."
+msgstr ""
+"Renvoie les titres des groupes et les listes des uuids et titres des "
+"objets internes."
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:3 of
 msgid "groups titles, lists of inner objects uuids and titles"
@@ -585,7 +615,9 @@ msgstr "titres des groupes, listes des uuids et titres des objets internes"
 msgid ""
 "Get object (signal/image) list for current panel. Objects are sorted by "
 "group number and object index in group."
-msgstr "Obtenir la liste des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+msgstr ""
+"Obtenir la liste des objets (signal/image) pour le panneau en cours. Les "
+"objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:8 of
 msgid "list of object titles"
@@ -600,7 +632,10 @@ msgstr "si le panneau n'est pas trouvé"
 msgid ""
 "Get object (signal/image) uuid list for current panel. Objects are sorted"
 " by group number and object index in group."
-msgstr "Obtenir la liste des uuids des objets (signal/image) pour le panneau en cours. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+msgstr ""
+"Obtenir la liste des uuids des objets (signal/image) pour le panneau en "
+"cours. Les objets sont triés par numéro de groupe et index d'objet dans "
+"le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:8 of
 msgid "list of object uuids"
@@ -650,7 +685,9 @@ msgstr "Réinitialiser toutes les données de l'application. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
-msgstr "Ouvrir un fichier HDF5 de DataLab ou importer à partir de tout autre fichier HDF5."
+msgstr ""
+"Ouvrir un fichier HDF5 de DataLab ou importer à partir de tout autre "
+"fichier HDF5."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:3 of
 msgid "List of HDF5 files to open. Defaults to None."
@@ -662,7 +699,9 @@ msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None.
 
 #: cdl.core.baseproxy.BaseProxy.open_object:1 of
 msgid "Open object from file in current panel (signal/image)."
-msgstr "Ouvrir un objet à partir d'un fichier dans le panneau en cours (signal/image)."
+msgstr ""
+"Ouvrir un objet à partir d'un fichier dans le panneau en cours "
+"(signal/image)."
 
 #: cdl.core.baseproxy.BaseProxy.open_object:3 of
 msgid "File name"
@@ -688,14 +727,18 @@ msgstr "Sélectionner des groupes dans le panneau en cours."
 msgid ""
 "List of group numbers (1 to N), or list of group uuids, or None to select"
 " all groups. Defaults to None."
-msgstr "Liste des numéros de groupe (1 à N), ou liste des uuids de groupe, ou None pour sélectionner tous les groupes. Par défaut, None."
+msgstr ""
+"Liste des numéros de groupe (1 à N), ou liste des uuids de groupe, ou "
+"None pour sélectionner tous les groupes. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_groups:5
 #: cdl.core.baseproxy.BaseProxy.select_objects:4 of
 msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used. Defaults to None."
-msgstr "nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau en cours est utilisé. Par défaut, None."
+msgstr ""
+"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
+"panneau en cours est utilisé. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_objects:1 of
 msgid "Select objects in current panel."
@@ -735,7 +778,12 @@ msgid ""
 "client) may be completed with additional methods which are dynamically "
 "added at runtime. This mechanism allows to access the methods of the "
 "\"processor\" objects of DataLab."
-msgstr "Les méthodes de la classe de contrôle à distance (en utilisant le proxy ou le client distant) peuvent être complétées par des méthodes supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce mécanisme permet d'accéder aux méthodes des objets \"processeur\" de DataLab."
+msgstr ""
+"Les méthodes de la classe de contrôle à distance (en utilisant le proxy "
+"ou le client distant) peuvent être complétées par des méthodes "
+"supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce "
+"mécanisme permet d'accéder aux méthodes des objets \"processeur\" de "
+"DataLab."
 
 #: cdl.core.gui.processor.signal:2 of
 msgid "Signal Processor"
@@ -1136,20 +1184,29 @@ msgstr "Calculer l'ajustement de la forme du contour"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks:1 of
 msgid "Compute peak detection based on a circle Hough transform"
-msgstr "Calculer la détection de pics basée sur une transformée de Hough circulaire"
+msgstr ""
+"Calculer la détection de pics basée sur une transformée de Hough "
+"circulaire"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog:1 of
 msgid "Compute blob detection using Difference of Gaussian method"
-msgstr "Calculer la détection de taches en utilisant la méthode de différence de Gaussienne"
+msgstr ""
+"Calculer la détection de taches en utilisant la méthode de différence de "
+"Gaussienne"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh:1 of
 msgid "Compute blob detection using Determinant of Hessian method"
-msgstr "Calculer la détection de taches en utilisant la méthode du déterminant de Hessian"
+msgstr ""
+"Calculer la détection de taches en utilisant la méthode du déterminant de"
+" Hessian"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_log:1 of
 msgid "Compute blob detection using Laplacian of Gaussian method"
-msgstr "Calculer la détection de taches en utilisant la méthode du Laplacien de Gaussienne"
+msgstr ""
+"Calculer la détection de taches en utilisant la méthode du Laplacien de "
+"Gaussienne"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
 msgid "Compute blob detection using OpenCV"
 msgstr "Calculer la détection de taches en utilisant OpenCV"
+

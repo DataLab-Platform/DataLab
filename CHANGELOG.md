@@ -64,6 +64,7 @@ for future and past milestones.
 
 📚 Documentation:
 
+* New [Tutorial section](https://codra-ingenierie-informatique.github.io/DataLab/en/intro/tutorials/index.html) in the documentation: this section provides a set of tutorials to learn how to use DataLab
 * New [API section](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html) in the documentation:
   * This section explains how to use DataLab as a Python library, by covering the
   following topics:

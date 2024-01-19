@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 15:53+0100\n"
+"POT-Creation-Date: 2024-01-19 15:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.proxy:2 of
 msgid "Proxy objects (:mod:`cdl.proxy`)"
@@ -27,7 +27,9 @@ msgstr "Objets proxy (:mod:`cdl.proxy`)"
 msgid ""
 "The :mod:`cdl.proxy` module provides a way to access DataLab features "
 "from a proxy class."
-msgstr "Le module :mod:`cdl.proxy` fournit un moyen d'accéder aux fonctionnalités de DataLab à partir d'une classe proxy."
+msgstr ""
+"Le module :mod:`cdl.proxy` fournit un moyen d'accéder aux fonctionnalités"
+" de DataLab à partir d'une classe proxy."
 
 #: cdl.proxy:8 of
 msgid "Remote proxy"
@@ -38,7 +40,10 @@ msgid ""
 "The remote proxy is used when DataLab is started from a different process"
 " than the proxy. In this case, the proxy connects to DataLab XML-RPC "
 "server."
-msgstr "Le proxy distant est utilisé lorsque DataLab est démarré à partir d'un processus différent du proxy. Dans ce cas, le proxy se connecte au serveur XML-RPC de DataLab."
+msgstr ""
+"Le proxy distant est utilisé lorsque DataLab est démarré à partir d'un "
+"processus différent du proxy. Dans ce cas, le proxy se connecte au "
+"serveur XML-RPC de DataLab."
 
 #: cdl.proxy.RemoteProxy:1 of
 msgid "DataLab remote proxy class."
@@ -49,7 +54,11 @@ msgid ""
 "This class provides access to DataLab features from a proxy class. This "
 "is the remote version of proxy, which is used when DataLab is started "
 "from a different process than the proxy."
-msgstr "Cette classe fournit un accès aux fonctionnalités de DataLab à partir d'une classe proxy. Il s'agit de la version distante du proxy, qui est utilisée lorsque DataLab est démarré à partir d'un processus différent du proxy."
+msgstr ""
+"Cette classe fournit un accès aux fonctionnalités de DataLab à partir "
+"d'une classe proxy. Il s'agit de la version distante du proxy, qui est "
+"utilisée lorsque DataLab est démarré à partir d'un processus différent du"
+" proxy."
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title
 #: cdl.core.baseproxy.BaseProxy.delete_metadata
@@ -93,6 +102,18 @@ msgstr "Connexion automatique au serveur XML-RPC de DataLab."
 msgid "Raises"
 msgstr "Lève"
 
+#: cdl.core.remote.RemoteClient.connect:11 cdl.proxy.RemoteProxy:10 of
+msgid "Unable to connect to DataLab"
+msgstr "Impossible de se connecter à DataLab"
+
+#: cdl.core.remote.RemoteClient.connect:12 cdl.proxy.RemoteProxy:11 of
+msgid "Invalid timeout (must be >= 0.0)"
+msgstr "Délai d'attente invalide (doit être >= 0.0)"
+
+#: cdl.core.remote.RemoteClient.connect:13 cdl.proxy.RemoteProxy:12 of
+msgid "Invalid number of retries (must be >= 1)"
+msgstr "Nombre de tentatives invalide (doit être >= 1)"
+
 #: cdl.proxy.RemoteProxy:15 of
 msgid "Examples"
 msgstr "Exemples"
@@ -102,8 +123,8 @@ msgid ""
 "Here is a simple example of how to use RemoteProxy in a Python script or "
 "in a Jupyter notebook:"
 msgstr ""
-"Voici un exemple simple de l'utilisation de RemoteProxy dans un script Python "
-"ou dans un notebook Jupyter :"
+"Voici un exemple simple de l'utilisation de RemoteProxy dans un script "
+"Python ou dans un notebook Jupyter :"
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:1
 #: cdl.proxy.LocalProxy.add_annotations_from_items:1 of
@@ -129,8 +150,8 @@ msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used."
 msgstr ""
-"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau "
-"actuel est utilisé."
+"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
+"panneau actuel est utilisé."
 
 #: cdl.core.remote.RemoteClient.add_image:1 cdl.proxy.LocalProxy.add_image:1 of
 msgid "Add image data to DataLab."
@@ -226,7 +247,8 @@ msgstr "Ajouter une étiquette avec le titre de l'objet sur le tracé associé"
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:3 of
 msgid "Label title. Defaults to None. If None, the title is the object title."
 msgstr ""
-"Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de l'objet."
+"Titre de l'étiquette. Par défaut, None. Si None, le titre est le titre de"
+" l'objet."
 
 #: cdl.core.remote.RemoteClient.add_object:1 cdl.proxy.LocalProxy.add_object:1
 #: of
@@ -263,18 +285,6 @@ msgstr "Données Y"
 msgid "True if signal was added successfully, False otherwise"
 msgstr "Vrai si le signal a été ajouté avec succès, Faux sinon"
 
-#: cdl.core.remote.RemoteClient.connect:11 cdl.proxy.RemoteProxy:10 of
-msgid "Unable to connect to DataLab"
-msgstr "Impossible de se connecter à DataLab"
-
-#: cdl.core.remote.RemoteClient.connect:12 cdl.proxy.RemoteProxy:11 of
-msgid "Invalid timeout (must be >= 0.0)"
-msgstr "Délai d'attente invalide (doit être >= 0.0)"
-
-#: cdl.core.remote.RemoteClient.connect:13 cdl.proxy.RemoteProxy:12 of
-msgid "Invalid number of retries (must be >= 1)"
-msgstr "Nombre de tentatives invalide (doit être >= 1)"
-
 #: cdl.core.remote.RemoteClient.add_signal:21
 #: cdl.proxy.LocalProxy.add_signal:21 of
 msgid "Invalid xdata dtype"
@@ -287,7 +297,9 @@ msgstr "Type de données ydata invalide"
 
 #: cdl.core.remote.RemoteClient.calc:1 cdl.proxy.LocalProxy.calc:1 of
 msgid "Call compute function ``name`` in current panel's processor."
-msgstr "Appeler la fonction de calcul ``name`` dans le processeur du panneau actuel."
+msgstr ""
+"Appeler la fonction de calcul ``name`` dans le processeur du panneau "
+"actuel."
 
 #: cdl.core.remote.RemoteClient.calc:3 cdl.proxy.LocalProxy.calc:3 of
 msgid "Compute function name"
@@ -327,7 +339,9 @@ msgstr "Nombre de tentatives. Par défaut, 10."
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
-msgstr "Renvoie un gestionnaire de contexte pour désactiver temporairement le rafraîchissement automatique."
+msgstr ""
+"Renvoie un gestionnaire de contexte pour désactiver temporairement le "
+"rafraîchissement automatique."
 
 #: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
 msgid "Context manager"
@@ -346,6 +360,11 @@ msgstr "Supprimer les métadonnées des objets sélectionnés"
 msgid "Refresh plot. Defaults to True."
 msgstr "Actualiser le tracé. Par défaut, True."
 
+#: cdl.core.baseproxy.BaseProxy.delete_metadata:4 of
+#, fuzzy
+msgid "Keep ROI. Defaults to False."
+msgstr "Unité Z. Par défaut, None."
+
 #: cdl.core.remote.RemoteClient.disconnect:1 of
 msgid "Disconnect from DataLab XML-RPC server."
 msgstr "Déconnexion du serveur XML-RPC de DataLab."
@@ -361,7 +380,9 @@ msgstr "Nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\")"
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:1 of
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr "Renvoie les titres des groupes et les listes des UUID et des titres des objets internes."
+msgstr ""
+"Renvoie les titres des groupes et les listes des UUID et des titres des "
+"objets internes."
 
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos:3 of
 msgid "groups titles, lists of inner objects uuids and titles"
@@ -384,7 +405,8 @@ msgid ""
 "Object number, or object id, or object title. Defaults to None (current "
 "object)."
 msgstr ""
-"Numéro de l'objet, ou ID de l'objet, ou titre de l'objet. Par défaut, None (objet actuel)."
+"Numéro de l'objet, ou ID de l'objet, ou titre de l'objet. Par défaut, "
+"None (objet actuel)."
 
 #: cdl.core.remote.RemoteClient.get_object:5
 #: cdl.core.remote.RemoteClient.get_object_shapes:5
@@ -406,7 +428,9 @@ msgstr "si l'objet n'est pas trouvé"
 #: cdl.core.remote.RemoteClient.get_object_shapes:1
 #: cdl.proxy.LocalProxy.get_object_shapes:1 of
 msgid "Get plot item shapes associated to object (signal/image)."
-msgstr "Obtenir les formes des éléments de tracé associées à l'objet (signal/image)."
+msgstr ""
+"Obtenir les formes des éléments de tracé associées à l'objet "
+"(signal/image)."
 
 #: cdl.core.remote.RemoteClient.get_object_shapes:7
 #: cdl.proxy.LocalProxy.get_object_shapes:7 of
@@ -418,7 +442,8 @@ msgid ""
 "Get object (signal/image) list for current panel. Objects are sorted by "
 "group number and object index in group."
 msgstr ""
-"Obtenir la liste des objets (signal/image) pour le panneau actuel. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+"Obtenir la liste des objets (signal/image) pour le panneau actuel. Les "
+"objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles:8 of
 msgid "list of object titles"
@@ -434,7 +459,9 @@ msgid ""
 "Get object (signal/image) uuid list for current panel. Objects are sorted"
 " by group number and object index in group."
 msgstr ""
-"Obtenir la liste des UUID des objets (signal/image) pour le panneau actuel. Les objets sont triés par numéro de groupe et index d'objet dans le groupe."
+"Obtenir la liste des UUID des objets (signal/image) pour le panneau "
+"actuel. Les objets sont triés par numéro de groupe et index d'objet dans "
+"le groupe."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:8 of
 msgid "list of object uuids"
@@ -442,7 +469,9 @@ msgstr "liste des UUID des objets"
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:1 of
 msgid "Return all public methods of the class, except itself."
-msgstr "Renvoie toutes les méthodes publiques de la classe, à l'exception de celle-ci."
+msgstr ""
+"Renvoie toutes les méthodes publiques de la classe, à l'exception de "
+"celle-ci."
 
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods:3 of
 msgid "List of public methods"
@@ -488,7 +517,9 @@ msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
-msgstr "Ouvrir un fichier HDF5 DataLab ou importer à partir de tout autre fichier HDF5."
+msgstr ""
+"Ouvrir un fichier HDF5 DataLab ou importer à partir de tout autre fichier"
+" HDF5."
 
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:3 of
 msgid "List of HDF5 files to open. Defaults to None."
@@ -500,7 +531,9 @@ msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None.
 
 #: cdl.core.baseproxy.BaseProxy.open_object:1 of
 msgid "Open object from file in current panel (signal/image)."
-msgstr "Ouvrir un objet à partir d'un fichier dans le panneau actuel (signal/image)."
+msgstr ""
+"Ouvrir un objet à partir d'un fichier dans le panneau actuel "
+"(signal/image)."
 
 #: cdl.core.baseproxy.BaseProxy.open_object:3 of
 msgid "File name"
@@ -527,7 +560,8 @@ msgid ""
 "List of group numbers (1 to N), or list of group uuids, or None to select"
 " all groups. Defaults to None."
 msgstr ""
-"Liste de numéros de groupe (1 à N), ou liste d'UUID de groupe, ou None pour sélectionner tous les groupes. Par défaut, None."
+"Liste de numéros de groupe (1 à N), ou liste d'UUID de groupe, ou None "
+"pour sélectionner tous les groupes. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_groups:5
 #: cdl.core.baseproxy.BaseProxy.select_objects:4 of
@@ -535,7 +569,8 @@ msgid ""
 "panel name (valid values: \"signal\", \"image\"). If None, current panel "
 "is used. Defaults to None."
 msgstr ""
-"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le panneau actuel est utilisé. Par défaut, None."
+"nom du panneau (valeurs valides : \"signal\", \"image\"). Si None, le "
+"panneau actuel est utilisé. Par défaut, None."
 
 #: cdl.core.baseproxy.BaseProxy.select_objects:1 of
 msgid "Select objects in current panel."
@@ -574,7 +609,11 @@ msgid ""
 "The local proxy is used when DataLab is started from the same process as "
 "the proxy. In this case, the proxy is directly connected to DataLab main "
 "window instance. The typical use case is high-level scripting."
-msgstr "Le proxy local est utilisé lorsque DataLab est démarré à partir du même processus que le proxy. Dans ce cas, le proxy est directement connecté à l'instance de la fenêtre principale de DataLab. Le cas d'utilisation typique est le script de haut niveau."
+msgstr ""
+"Le proxy local est utilisé lorsque DataLab est démarré à partir du même "
+"processus que le proxy. Dans ce cas, le proxy est directement connecté à "
+"l'instance de la fenêtre principale de DataLab. Le cas d'utilisation "
+"typique est le script de haut niveau."
 
 #: cdl.proxy.LocalProxy:1 of
 msgid "DataLab local proxy class."
@@ -585,7 +624,10 @@ msgid ""
 "This class provides access to DataLab features from a proxy class. This "
 "is the local version of proxy, which is used when DataLab is started from"
 " the same process as the proxy."
-msgstr "Cette classe permet d'accéder aux fonctionnalités de DataLab à partir d'une classe proxy. Il s'agit de la version locale du proxy, utilisée lorsque DataLab est démarré à partir du même processus que le proxy."
+msgstr ""
+"Cette classe permet d'accéder aux fonctionnalités de DataLab à partir "
+"d'une classe proxy. Il s'agit de la version locale du proxy, utilisée "
+"lorsque DataLab est démarré à partir du même processus que le proxy."
 
 #: cdl.proxy.LocalProxy:7 of
 msgid "CDLMainWindow instance."
@@ -603,13 +645,17 @@ msgstr "Gestionnaire de contexte proxy"
 msgid ""
 "The proxy context manager is a convenient way to handle proxy creation "
 "and destruction. It is used as follows:"
-msgstr "Le gestionnaire de contexte proxy est un moyen pratique de gérer la création et la destruction du proxy. Il est utilisé comme suit :"
+msgstr ""
+"Le gestionnaire de contexte proxy est un moyen pratique de gérer la "
+"création et la destruction du proxy. Il est utilisé comme suit :"
 
 #: cdl.proxy:39 of
 msgid ""
 "The proxy type can be \"local\" or \"remote\". For remote proxy, the port"
 " can be specified as \"remote:port\"."
-msgstr "Le type de proxy peut être \"local\" ou \"remote\". Pour un proxy distant, le port peut être spécifié comme \"remote:port\"."
+msgstr ""
+"Le type de proxy peut être \"local\" ou \"remote\". Pour un proxy "
+"distant, le port peut être spécifié comme \"remote:port\"."
 
 #: cdl.proxy:42 of
 msgid ""
@@ -617,18 +663,25 @@ msgid ""
 "(Python script, Jupyter notebook, etc.). It also allows to switch "
 "seamlessly between local and remote proxy, keeping the same code inside "
 "the context."
-msgstr "Le gestionnaire de contexte proxy permet d'utiliser le proxy dans différents contextes (script Python, notebook Jupyter, etc.). Il permet également de passer sans heurts du proxy local au proxy distant, en conservant le même code à l'intérieur du contexte."
+msgstr ""
+"Le gestionnaire de contexte proxy permet d'utiliser le proxy dans "
+"différents contextes (script Python, notebook Jupyter, etc.). Il permet "
+"également de passer sans heurts du proxy local au proxy distant, en "
+"conservant le même code à l'intérieur du contexte."
 
 #: cdl.proxy.proxy_context:1 of
 msgid "Context manager handling CDL proxy creation and destruction."
-msgstr "Gestionnaire de contexte gérant la création et la destruction du proxy CDL."
+msgstr ""
+"Gestionnaire de contexte gérant la création et la destruction du proxy "
+"CDL."
 
 #: cdl.proxy.proxy_context:3 of
 msgid ""
 "proxy type (\"local\" or \"remote\") For remote proxy, the port can be "
 "specified as \"remote:port\""
 msgstr ""
-"type de proxy (\"local\" ou \"remote\"). Pour un proxy distant, le port peut être spécifié comme \"remote:port\"."
+"type de proxy (\"local\" ou \"remote\"). Pour un proxy distant, le port "
+"peut être spécifié comme \"remote:port\"."
 
 #: cdl.proxy.proxy_context of
 msgid "Yields"
@@ -657,5 +710,7 @@ msgstr "avec proxy_context(\"local\") en tant que proxy :"
 #: cdl.proxy.proxy_context:16 of
 msgid "proxy.add_signal(...)"
 msgstr "proxy.add_signal(...)"
+
 #~ msgid "Proxy module (:mod:`cdl.proxy`)"
 #~ msgstr ""
+

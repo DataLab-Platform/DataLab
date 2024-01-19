@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 09:21+0100\n"
+"POT-Creation-Date: 2024-01-19 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -24,5 +24,276 @@ msgid "Measuring Fabry-Perot fringes"
 msgstr "Mesure de franges de Fabry-Perot"
 
 #: ../../intro/tutorials/fabry_perot.rst:4
-msgid ":octicon:`book;1em;sd-text-info` This is a work in progress."
-msgstr ":octicon:`book;1em;sd-text-info` Ceci est un travail en cours."
+msgid ""
+"This example shows how to measure Fabry-Perot fringes using the image "
+"processing features of DataLab:"
+msgstr "Cet exemple montre comment mesurer des franges de Fabry-Perot à l'aide des fonctionnalités de traitement d'image de DataLab :"
+
+#: ../../intro/tutorials/fabry_perot.rst:7
+msgid "Load an image of a Fabry-Perot interferometer"
+msgstr "Charger une image d'un interféromètre de Fabry-Perot"
+
+#: ../../intro/tutorials/fabry_perot.rst:8
+msgid "Define a circular region of interest (ROI) around the central fringe"
+msgstr "Définir une région d'intérêt circulaire (ROI) autour de la frange centrale"
+
+#: ../../intro/tutorials/fabry_perot.rst:9
+msgid "Detect contours in the ROI and fit them to circles"
+msgstr "Détecter les contours dans la ROI et les ajuster à des cercles"
+
+#: ../../intro/tutorials/fabry_perot.rst:10
+msgid "Show the radius of the circles"
+msgstr "Afficher le rayon des cercles"
+
+#: ../../intro/tutorials/fabry_perot.rst:11
+msgid "Annotate the image"
+msgstr "Annoter l'image"
+
+#: ../../intro/tutorials/fabry_perot.rst:12
+msgid "Copy/paste the ROI to another image"
+msgstr "Copier/coller la ROI dans une autre image"
+
+#: ../../intro/tutorials/fabry_perot.rst:13
+msgid "Save the workspace"
+msgstr "Sauvegarder l'espace de travail"
+
+#: ../../intro/tutorials/fabry_perot.rst:15
+msgid "First, we open DataLab and load the images:"
+msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
+
+#: ../../intro/tutorials/fabry_perot.rst:19
+msgid ""
+"Open the image files with \"File > Open...\", or with the |fileopen_ima| "
+"button in the toolbar, or by dragging and dropping the files into DataLab"
+" (on the panel on the right)."
+msgstr "Ouvrir les fichiers d'image avec \"Fichier > Ouvrir...\", ou avec le bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser-déposer les fichiers dans DataLab (sur le panneau de droite)."
+
+#: ../../intro/tutorials/fabry_perot.rst:23
+msgid "fileopen_ima"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:29
+msgid ""
+"Select the test images \"fabry_perot1.jpg\" and \"fabry_perot2.jpg\" and "
+"click \"Open\"."
+msgstr "Sélectionnez les images de test \"fabry_perot1.jpg\" et \"fabry_perot2.jpg\" et cliquez sur \"Ouvrir\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:31
+msgid ""
+"The selected image is displayed in the main window. We can zoom in and "
+"out by pressing the right mouse button and dragging the mouse up and "
+"down. We can also pan the image by pressing the middle mouse button and "
+"dragging the mouse."
+msgstr "L'image sélectionnée est affichée dans la fenêtre principale. Nous pouvons zoomer en appuyant sur le bouton droit de la souris et en faisant glisser la souris vers le haut et vers le bas. Nous pouvons également déplacer l'image en appuyant sur le bouton du milieu de la souris et en faisant glisser la souris."
+
+#: ../../intro/tutorials/fabry_perot.rst:37
+msgid ""
+"Zoom in and out with the right mouse button. Pan the image with the "
+"middle mouse button."
+msgstr "Zoomer avec le bouton droit de la souris. Déplacer l'image avec le bouton du milieu de la souris."
+
+#: ../../intro/tutorials/fabry_perot.rst:40
+msgid ""
+"Then, let's define a circular region of interest (ROI) around the central"
+" fringe."
+msgstr "Ensuite, définissons une région d'intérêt circulaire (ROI) autour de la frange centrale."
+
+#: ../../intro/tutorials/fabry_perot.rst:44
+msgid "Select the \"Edit regions of interest\" tool in the \"Computing\" menu."
+msgstr "Sélectionnez l'outil \"Modifier les régions d'intérêt\" dans le menu \"Calcul\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:48
+msgid ""
+"The \"Regions of interest\" dialog opens. Click \"Add region of "
+"interest\" and select a circular ROI. Resize the predefined ROI by "
+"dragging the handles. Note that you may change the ROI radius while "
+"keeping its center fixed by pressing the \"Ctrl\" key. Click \"OK\" to "
+"close the dialog."
+msgstr "La boîte de dialogue \"Régions d'intérêt\" s'ouvre. Cliquez sur \"Ajouter une région d'intérêt\" et sélectionnez une ROI circulaire. Redimensionnez la ROI prédéfinie en faisant glisser les poignées. Notez que vous pouvez modifier le rayon de la ROI tout en gardant son centre fixe en appuyant sur la touche \"Ctrl\". Cliquez sur \"OK\" pour fermer la boîte de dialogue."
+
+#: ../../intro/tutorials/fabry_perot.rst:55
+msgid ""
+"Another dialog box opens, and asks you to confirm the ROI parameters. "
+"Click \"OK\"."
+msgstr "Une autre boîte de dialogue s'ouvre et vous demande de confirmer les paramètres de la ROI. Cliquez sur \"OK\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:59
+msgid ""
+"The ROI is displayed on the image: masked pixels are grayed out, and the "
+"ROI boundary is displayed in blue (note that, internally, the ROI is "
+"defined by a binary mask, i.e. image data is represented as a NumPy "
+"masked array)."
+msgstr "La ROI est affichée sur l'image : les pixels masqués sont grisés, et la limite de la ROI est affichée en bleu (notez que, en interne, la ROI est définie par un masque binaire, c'est-à-dire que les données d'image sont représentées sous la forme d'un tableau masqué NumPy)."
+
+#: ../../intro/tutorials/fabry_perot.rst:63
+msgid "Now, let's detect the contours in the ROI and fit them to circles."
+msgstr "A présent, détectons les contours dans la ROI et ajustons-les à des cercles."
+
+#: ../../intro/tutorials/fabry_perot.rst:67
+msgid "Select the \"Contour detection\" tool in the \"Computing\" menu."
+msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu \"Calcul\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:71
+msgid ""
+"The \"Contour\" parameters dialog opens. Select the shape \"Circle\" and "
+"click \"OK\"."
+msgstr "La boîte de dialogue \"Contour\" s'ouvre. Sélectionnez la forme \"Cercle\" et cliquez sur \"OK\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:75
+msgid ""
+"The \"Results\" dialog opens, and displays the fitted circle parameters. "
+"Click \"OK\"."
+msgstr "La boîte de dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle ajusté. Cliquez sur \"OK\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:79
+#: ../../intro/tutorials/fabry_perot.rst:169
+msgid "The fitted circles are displayed on the image."
+msgstr "Les cercles ajustés sont affichés sur l'image."
+
+#: ../../intro/tutorials/fabry_perot.rst:83
+msgid ""
+"If you want to show the results again, click on the \"Show results\" "
+"button, below the image list:"
+msgstr "Si vous souhaitez afficher à nouveau les résultats, cliquez sur le bouton \"Afficher les résultats\", en dessous de la liste des images :"
+
+#: ../../intro/tutorials/fabry_perot.rst:88
+msgid ""
+"The images (or signals) can also be displayed in a separate window, by "
+"clicking on the \"View in a new window\" entry in the \"View\" menu (or "
+"the |new_window| button in the toolbar). This is useful to compare side "
+"by side images or signals."
+msgstr "Les images (ou signaux) peuvent également être affichés dans une fenêtre séparée, en cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu \"Affichage\" (ou le bouton |new_window| dans la barre d'outils). Ceci est utile pour comparer côte à côte des images ou des signaux."
+
+#: ../../intro/tutorials/fabry_perot.rst:92
+msgid "new_window"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:98
+msgid ""
+"The image is displayed in a separate window. The ROI and the fitted "
+"circles are also displayed. Annotations can be added to the image by "
+"clicking on the buttons at the bottom of the window. The annotations are "
+"stored in the metadata of the image, and together with the image data "
+"when the workspace is saved. Click on \"OK\" to close the window."
+msgstr "L'image est affichée dans une fenêtre séparée. La ROI et les cercles ajustés sont également affichés. Des annotations peuvent être ajoutées à l'image en cliquant sur les boutons en bas de la fenêtre. Les annotations sont stockées dans les métadonnées de l'image, et avec les données de l'image lorsque l'espace de travail est sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
+
+#: ../../intro/tutorials/fabry_perot.rst:106
+msgid "The image is displayed in the main window, together with the annotations."
+msgstr "L'image est affichée dans la fenêtre principale, avec les annotations."
+
+#: ../../intro/tutorials/fabry_perot.rst:108
+msgid ""
+"If you want to take a closer look at the metadata, you can open the "
+"\"Metadata\" dialog."
+msgstr "Si vous souhaitez examiner de plus près les métadonnées, vous pouvez ouvrir la boîte de dialogue \"Métadonnées\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:112
+msgid "The \"Metadata\" button is located below the image list."
+msgstr "Le bouton \"Métadonnées\" est situé en dessous de la liste des images."
+
+#: ../../intro/tutorials/fabry_perot.rst:116
+msgid ""
+"The \"Metadata\" dialog opens. Among other information, it displays the "
+"annotations (in a JSON format), some style information (e.g. the "
+"colormap), and the ROI."
+msgstr "La boîte de dialogue \"Métadonnées\" s'ouvre. Parmi d'autres informations, elle affiche les annotations (dans un format JSON), des informations de style (par exemple la colormap), et la ROI."
+
+#: ../../intro/tutorials/fabry_perot.rst:119
+msgid ""
+"Now, let's delete the image metadata (including the annotations) to clean"
+" up the image."
+msgstr "Maintenant, supprimons les métadonnées de l'image (y compris les annotations) pour nettoyer l'image."
+
+#: ../../intro/tutorials/fabry_perot.rst:123
+msgid ""
+"Select the \"Delete metadata\" entry in the \"Edit\" menu, or the "
+"|metadata_delete| button in the toolbar."
+msgstr "Sélectionnez l'entrée \"Supprimer les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_delete| dans la barre d'outils."
+
+#: ../../intro/tutorials/fabry_perot.rst:126
+msgid "metadata_delete"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:132
+msgid ""
+"The \"Delete metadata\" dialog opens. Click \"No\" to keep the ROI and "
+"delete the rest of the metadata."
+msgstr "La boîte de dialogue \"Supprimer les métadonnées\" s'ouvre. Cliquez sur \"Non\" pour conserver la ROI et supprimer le reste des métadonnées."
+
+#: ../../intro/tutorials/fabry_perot.rst:135
+msgid ""
+"If we want to define the exact same ROI on the second image, we can "
+"copy/paste the ROI from the first image to the second image, using the "
+"metadata."
+msgstr "Si nous voulons définir la même ROI sur la deuxième image, nous pouvons copier/coller la ROI de la première image vers la deuxième image, en utilisant les métadonnées."
+
+#: ../../intro/tutorials/fabry_perot.rst:140
+msgid ""
+"Select the \"Copy metadata\" entry in the \"Edit\" menu, or the "
+"|metadata_copy| button in the toolbar."
+msgstr "Sélectionnez l'entrée \"Copier les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_copy| dans la barre d'outils."
+
+#: ../../intro/tutorials/fabry_perot.rst:143
+msgid "metadata_copy"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:149
+msgid ""
+"Select the second image in the \"Images\" panel, then select the \"Paste "
+"metadata\" entry in the \"Edit\" menu, or the |metadata_paste| button in "
+"the toolbar."
+msgstr "Sélectionnez la deuxième image dans le panneau \"Images\", puis sélectionnez l'entrée \"Coller les métadonnées\" dans le menu \"Edition\", ou le bouton |metadata_paste| dans la barre d'outils."
+
+#: ../../intro/tutorials/fabry_perot.rst:152
+msgid "metadata_paste"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:158
+msgid "The ROI is added to the second image."
+msgstr "La ROI est ajoutée à la deuxième image."
+
+#: ../../intro/tutorials/fabry_perot.rst:162
+msgid ""
+"Select the \"Contour detection\" tool in the \"Computing\" menu, with the"
+" same parameters as before (shape \"Circle\"). On this image, there are "
+"two fringes, so four circles are fitted. The \"Results\" dialog opens, "
+"and displays the fitted circle parameters. Click \"OK\"."
+msgstr "Sélectionnez l'outil \"Détection de contour\" dans le menu \"Calcul\", avec les mêmes paramètres qu'auparavant (forme \"Cercle\"). Sur cette image, il y a deux franges, donc quatre cercles sont ajustés. La boîte de dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle ajusté. Cliquez sur \"OK\"."
+
+#: ../../intro/tutorials/fabry_perot.rst:171
+msgid ""
+"Finally, we can save the workspace to a file. The workspace contains all "
+"the images that were loaded in DataLab, as well as the processing "
+"results. It also contains the visualization settings (colormaps, "
+"contrast, etc.), the metadata, and the annotations."
+msgstr "Enfin, nous pouvons sauvegarder l'espace de travail dans un fichier. L'espace de travail contient toutes les images qui ont été chargées dans DataLab, ainsi que les résultats du traitement. Il contient également les paramètres de visualisation (colormaps, contraste, etc.), les métadonnées et les annotations."
+
+#: ../../intro/tutorials/fabry_perot.rst:177
+msgid ""
+"Save the workspace to a file with \"File > Save to HDF5 file...\", or the"
+" |filesave_h5| button in the toolbar."
+msgstr "Sauvegardez l'espace de travail dans un fichier avec \"Fichier > Sauvegarder dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la barre d'outils."
+
+#: ../../intro/tutorials/fabry_perot.rst:180
+msgid "filesave_h5"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:184
+msgid ""
+"If you want to load the workspace again, you can use the \"File > Open "
+"HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
+"whole workspace, or the \"File > Browse HDF5 file...\" (or the "
+"|h5browser| button in the toolbar) to load only a selection of data sets "
+"from the workspace."
+msgstr "Si vous souhaitez charger à nouveau l'espace de travail, vous pouvez utiliser \"Fichier > Ouvrir un fichier HDF5...\" (ou le bouton |fileopen_h5| dans la barre d'outils) pour charger l'ensemble de l'espace de travail, ou \"Fichier > Parcourir un fichier HDF5...\" (ou le bouton |h5browser| dans la barre d'outils) pour charger uniquement une sélection d'ensembles de données de l'espace de travail."
+
+#: ../../intro/tutorials/fabry_perot.rst:189
+msgid "fileopen_h5"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:193
+msgid "h5browser"
+msgstr ""
+
+#~ msgid ":octicon:`book;1em;sd-text-info` This is a work in progress."
+#~ msgstr ":octicon:`book;1em;sd-text-info` Ceci est un travail en cours."
