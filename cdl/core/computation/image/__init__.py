@@ -937,17 +937,20 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
             coords: np.ndarray = func(data_roi)
         else:
             coords: np.ndarray = func(data_roi, *args)
-        if (
-            not isinstance(coords, np.ndarray)
-            or coords.ndim != 2
-            or coords.shape[1] < 2
-            or (coords.shape[1] > 5 and coords.shape[1] % 2 != 0)
+        if not isinstance(coords, np.ndarray) or (
+            (
+                coords.ndim != 2
+                or coords.shape[1] < 2
+                or (coords.shape[1] > 5 and coords.shape[1] % 2 != 0)
+            )
+            and coords.size > 0
         ):
             raise ValueError(
                 f"Computation function {func.__name__} must return a NumPy array "
                 f"containing coordinates of points, polygons, circles or ellipses "
                 f"(in the form [[x, y], ...], or [[x0, y0, x1, y1, ...], ...], or "
-                f"[[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...])"
+                f"[[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...]), or an empty "
+                f"array."
             )
         if coords.size:
             if coords.shape[1] % 2 == 0:
