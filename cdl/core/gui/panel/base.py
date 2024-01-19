@@ -526,11 +526,13 @@ class BaseDataPanel(AbstractPanel):
                     self,
                     _("Delete metadata"),
                     _(
-                        "Some selected objects have regions of interest. "
+                        "Some selected objects have regions of interest.<br>"
                         "Do you want to delete them as well?"
                     ),
-                    QW.QMessageBox.Yes | QW.QMessageBox.No,
+                    QW.QMessageBox.Yes | QW.QMessageBox.No | QW.QMessageBox.Cancel,
                 )
+                if answer == QW.QMessageBox.Cancel:
+                    return
                 keep_roi = answer == QW.QMessageBox.No
             if keep_roi:
                 for obj in sel_objs:

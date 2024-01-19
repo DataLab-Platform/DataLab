@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-19 15:08+0100\n"
+"POT-Creation-Date: 2024-01-19 15:23+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -929,7 +929,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:481 cdl\core\gui\panel\base.py:734
+#: cdl\core\gui\actionhandler.py:481 cdl\core\gui\panel\base.py:736
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -937,7 +937,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:489 cdl\core\gui\panel\base.py:757
+#: cdl\core\gui\actionhandler.py:489 cdl\core\gui\panel\base.py:759
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1856,7 +1856,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1223 cdl\core\gui\panel\base.py:696
+#: cdl\core\gui\main.py:1223 cdl\core\gui\panel\base.py:698
 #: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
@@ -1951,56 +1951,57 @@ msgstr "Supprimer les métadonnées"
 
 #: cdl\core\gui\panel\base.py:528
 msgid ""
-"Some selected objects have regions of interest. Do you want to delete them "
-"as well?"
-msgstr "Certains objets sélectionnés ont des régions d'intérêt. Souhaitez-vous les supprimer également ?"
+"Some selected objects have regions of interest.<br>Do you want to delete "
+"them as well?"
+msgstr ""
+"Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous les supprimer également ?"
 
-#: cdl\core\gui\panel\base.py:576
+#: cdl\core\gui\panel\base.py:578
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:576 cdl\core\gui\panel\base.py:585
+#: cdl\core\gui\panel\base.py:578 cdl\core\gui\panel\base.py:587
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:585
+#: cdl\core\gui\panel\base.py:587
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:657 cdl\core\gui\panel\macro.py:413
+#: cdl\core\gui\panel\base.py:659 cdl\core\gui\panel\macro.py:413
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:797
+#: cdl\core\gui\panel\base.py:799
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:902 cdl\core\gui\plothandler.py:265
+#: cdl\core\gui\panel\base.py:904 cdl\core\gui\plothandler.py:265
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:960 cdl\core\gui\roieditor.py:185
+#: cdl\core\gui\panel\base.py:962 cdl\core\gui\roieditor.py:185
 #: cdl\core\model\base.py:682
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:997
+#: cdl\core\gui\panel\base.py:999
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\panel\base.py:998
+#: cdl\core\gui\panel\base.py:1000
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:1033 cdl\core\gui\processor\base.py:462
+#: cdl\core\gui\panel\base.py:1035 cdl\core\gui\processor\base.py:462
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1047
+#: cdl\core\gui\panel\base.py:1049
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1049
+#: cdl\core\gui\panel\base.py:1051
 msgid ""
 "This feature shows result arrays as displayed after calling one of the "
 "computing feature (see \"Compute\" menu)."
