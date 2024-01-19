@@ -455,6 +455,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Delete all"),
+                select_condition=SelectCond.always,
                 shortcut="Shift+Ctrl+Suppr",
                 tip=_("Delete all groups and objects"),
                 icon=get_icon("delete_all.svg"),

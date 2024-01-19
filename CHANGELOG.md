@@ -113,6 +113,8 @@ for future and past milestones.
     first signal/image was kept.
   * Now, the computing results associated to each signal/image are merged into a
     single result, whatever the type of result is.
+* Fixed [Issue #36](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/36) - "Delete all" action enable state is sometimes not refreshed
+
 
 ## DataLab Version 0.10.1 ##
 
