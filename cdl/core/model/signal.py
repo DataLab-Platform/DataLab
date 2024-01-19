@@ -70,6 +70,11 @@ class CurveStyles:
         param.line.style = linestyle
         param.symbol.marker = "NoSymbol"
 
+    @classmethod
+    def reset_styles(cls):
+        """Reset styles"""
+        cls.CURVE_STYLE = cls.style_generator()
+
 
 class ROIParam(gds.DataSet):
     """Signal ROI parameters"""

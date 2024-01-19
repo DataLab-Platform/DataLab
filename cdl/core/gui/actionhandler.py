@@ -750,7 +750,18 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
                 toolbar_pos=-1,
             )
-        antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+            antialiasing_action.setChecked(Conf.view.sig_antialiasing.get(True))
+            self.new_action(
+                _("Reset curve styles"),
+                select_condition=SelectCond.always,
+                icon=get_icon("reset_curve_styles.svg"),
+                triggered=self.panel.reset_curve_styles,
+                tip=_(
+                    "Curve styles are looped over a list of predefined styles.\n"
+                    "This action resets the list to its initial state."
+                ),
+                toolbar_pos=-1,
+            )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""

@@ -28,7 +28,12 @@ from cdl.core.gui.panel.base import BaseDataPanel
 from cdl.core.gui.plothandler import SignalPlotHandler
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
-from cdl.core.model.signal import SignalObj, create_signal_from_param, new_signal_param
+from cdl.core.model.signal import (
+    CurveStyles,
+    SignalObj,
+    create_signal_from_param,
+    new_signal_param,
+)
 
 if TYPE_CHECKING:  # pragma: no cover
     import guidata.dataset as gds
@@ -124,3 +129,7 @@ class SignalPanel(BaseDataPanel):
             state: state of the anti-aliasing
         """
         self.plothandler.toggle_anti_aliasing(state)
+
+    def reset_curve_styles(self) -> None:
+        """Reset curve styles"""
+        CurveStyles.reset_styles()

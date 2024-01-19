@@ -53,6 +53,8 @@ for future and past milestones.
     Of Interest (ROI) metadata, if any.
   * Now a confirmation dialog box is shown to the user before deleting all metadata if
     the signal/image has ROI metadata: this allows to keep the ROI metadata if needed.
+* Curve style: added "Reset curve styles" in "View" menu.
+  This feature allows to reset the curve style cycle to its initial state.
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve
