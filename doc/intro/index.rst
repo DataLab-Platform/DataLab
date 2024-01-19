@@ -17,3 +17,4 @@ of industrial-grade software.
    installation
    introduction
    keyfeatures
+   tutorials/index
