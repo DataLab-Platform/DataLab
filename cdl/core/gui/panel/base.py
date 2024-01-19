@@ -68,6 +68,7 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
 from cdl.core.model.base import ResultShape, items_to_json
+from cdl.env import execenv
 from cdl.utils.qthelpers import (
     create_progress_bar,
     qt_try_except,
@@ -517,6 +518,8 @@ class BaseDataPanel(AbstractPanel):
             refresh_plot: Refresh plot. Defaults to True.
             keep_roi: Keep regions of interest, if any. Defaults to None (ask user).
         """
+        if execenv.unattended:
+            keep_roi = False
         sel_objs = self.objview.get_sel_objects(include_groups=True)
         # Check if there are regions of interest first:
         roi_backup: dict[SignalObj | ImageObj, np.ndarray] = {}
