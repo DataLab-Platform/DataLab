@@ -623,6 +623,17 @@ look smoother, but it may also make them look less sharp.
     Anti-aliasing may slow down the visualization, especially when
     working with large data sets.
 
+Reset curve styles
+^^^^^^^^^^^^^^^^^^
+
+When plotting curves, DataLab automatically assigns a color and a line style to
+each curve. Both parameters are chosen from a predefined list of colors and
+line styles, and are assigned in a round-robin fashion.
+
+This menu entry allows you to reset the curve styles, so that the next time
+you plot curves, the first curve will be assigned the first color and the first
+line style of the predefined lists, and the loop will start again from there.
+
 Other menu entries
 ^^^^^^^^^^^^^^^^^^
 

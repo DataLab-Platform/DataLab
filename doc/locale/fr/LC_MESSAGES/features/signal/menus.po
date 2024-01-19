@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-17 09:46+0100\n"
+"POT-Creation-Date: 2024-01-19 18:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,9 @@ msgstr "Menus"
 msgid ""
 "This section describes the signal related feature of DataLab, by "
 "presenting the different menus and their entries."
-msgstr "Cette section décrit les fonctionnalités liées aux signaux de DataLab, en présentant les différents menus et leurs entrées."
+msgstr ""
+"Cette section décrit les fonctionnalités liées aux signaux de DataLab, en"
+" présentant les différents menus et leurs entrées."
 
 #: ../../features/signal/menus.rst:8
 msgid "\"File\" menu"
@@ -40,7 +42,11 @@ msgid ""
 "The \"File\" menu allows you to create, open, save and close signals. It "
 "also allows you to import and export data from/to HDF5 files, and to edit"
 " the settings of the current session."
-msgstr "Le menu \"Fichier\" permet de créer, ouvrir, enregistrer et fermer des signaux. Il permet également d'importer et d'exporter des données depuis/vers des fichiers HDF5, et d'éditer les paramètres de la session courante."
+msgstr ""
+"Le menu \"Fichier\" permet de créer, ouvrir, enregistrer et fermer des "
+"signaux. Il permet également d'importer et d'exporter des données "
+"depuis/vers des fichiers HDF5, et d'éditer les paramètres de la session "
+"courante."
 
 #: ../../features/signal/menus.rst:19
 msgid "New signal"
@@ -207,7 +213,11 @@ msgid ""
 "The \"Edit\" menu allows you to edit the current signal or group of "
 "signals, by adding, removing, renaming, moving up or down, or duplicating"
 " signals. It also manipulates metadata, or handles signal titles."
-msgstr "Le menu \"Edition\" permet d'éditer le signal ou le groupe de signaux courant, en ajoutant, supprimant, renommant, déplaçant vers le haut ou vers le bas, ou dupliquant des signaux. Il permet également de manipuler les métadonnées, ou de gérer les titres des signaux."
+msgstr ""
+"Le menu \"Edition\" permet d'éditer le signal ou le groupe de signaux "
+"courant, en ajoutant, supprimant, renommant, déplaçant vers le haut ou "
+"vers le bas, ou dupliquant des signaux. Il permet également de manipuler "
+"les métadonnées, ou de gérer les titres des signaux."
 
 #: ../../features/signal/menus.rst:104
 msgid "New group"
@@ -365,7 +375,10 @@ msgid ""
 "The \"Operation\" menu allows you to perform various operations on the "
 "selected signals, such as arithmetic operations, peak detection, or "
 "convolution."
-msgstr "Le menu \"Opérations\" permet d'effectuer diverses opérations sur les signaux sélectionnés, telles que des opérations arithmétiques, la détection de pics, ou encore la convolution."
+msgstr ""
+"Le menu \"Opérations\" permet d'effectuer diverses opérations sur les "
+"signaux sélectionnés, telles que des opérations arithmétiques, la "
+"détection de pics, ou encore la convolution."
 
 #: ../../features/signal/menus.rst:195 ../../features/signal/menus.rst:336
 msgid "Sum"
@@ -610,7 +623,10 @@ msgstr "Capture d'écran du menu \"Traitement\"."
 msgid ""
 "The \"Processing\" menu allows you to perform various processing on the "
 "selected signals, such as smoothing, normalization, or interpolation."
-msgstr "Le menu \"Traitement\" permet d'effectuer divers traitements sur les signaux sélectionnés, tels que le lissage, la normalisation, ou encore l'interpolation."
+msgstr ""
+"Le menu \"Traitement\" permet d'effectuer divers traitements sur les "
+"signaux sélectionnés, tels que le lissage, la normalisation, ou encore "
+"l'interpolation."
 
 #: ../../features/signal/menus.rst:321
 msgid "Normalize"
@@ -1032,7 +1048,10 @@ msgid ""
 "The \"Computing\" menu allows you to perform various computations on the "
 "selected signals, such as statistics, full width at half-maximum, or full"
 " width at 1/e²."
-msgstr "Le menu \"Calculs\" permet d'effectuer divers calculs sur les signaux sélectionnés, tels que des statistiques, la largeur à mi-hauteur, ou encore la largeur à 1/e²."
+msgstr ""
+"Le menu \"Calculs\" permet d'effectuer divers calculs sur les signaux "
+"sélectionnés, tels que des statistiques, la largeur à mi-hauteur, ou "
+"encore la largeur à 1/e²."
 
 #: ../../features/signal/menus.rst:511
 msgid ""
@@ -1040,7 +1059,12 @@ msgid ""
 "scalar result from a signal. This result is stored as metadata, and thus "
 "attached to signal. This is different from a \"processing\" which creates"
 " a new signal from an existing one."
-msgstr "Dans le vocabulaire de DataLab, un \"calcul\" est une fonctionnalité qui calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké sous la forme de métadonnées ; il est donc attaché au signal. Cela diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un signal existant."
+msgstr ""
+"Dans le vocabulaire de DataLab, un \"calcul\" est une fonctionnalité qui "
+"calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké"
+" sous la forme de métadonnées ; il est donc attaché au signal. Cela "
+"diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
+"signal existant."
 
 #: ../../features/signal/menus.rst:517
 msgid "Edit regions of interest"
@@ -1153,7 +1177,11 @@ msgid ""
 "The \"View\" menu allows you to visualize the current signal or group of "
 "signals. It also allows you to show/hide titles, to enable/disable anti-"
 "aliasing, or to refresh the visualization."
-msgstr "Le menu \"Affichage\" permet de visualiser le signal ou le groupe de signaux courant. Il permet également d'afficher/cacher les titres, d'activer/désactiver l'anticrénelage, ou encore de rafraîchir la visualisation."
+msgstr ""
+"Le menu \"Affichage\" permet de visualiser le signal ou le groupe de "
+"signaux courant. Il permet également d'afficher/cacher les titres, "
+"d'activer/désactiver l'anticrénelage, ou encore de rafraîchir la "
+"visualisation."
 
 #: ../../features/signal/menus.rst:578
 msgid "View in a new window"
@@ -1254,55 +1282,78 @@ msgstr ""
 "quand on travaille avec des données volumineuses."
 
 #: ../../features/signal/menus.rst:627
+msgid "Reset curve styles"
+msgstr "Réinitialiser les styles de courbes"
+
+#: ../../features/signal/menus.rst:629
+msgid ""
+"When plotting curves, DataLab automatically assigns a color and a line "
+"style to each curve. Both parameters are chosen from a predefined list of"
+" colors and line styles, and are assigned in a round-robin fashion."
+msgstr "Lors de l'affichage de courbes, DataLab attribue automatiquement une couleur et un style de ligne à chaque courbe. Les deux paramètres sont choisis dans une liste prédéfinie de couleurs et de styles de ligne, et sont attribués de manière cyclique."
+
+#: ../../features/signal/menus.rst:633
+msgid ""
+"This menu entry allows you to reset the curve styles, so that the next "
+"time you plot curves, the first curve will be assigned the first color "
+"and the first line style of the predefined lists, and the loop will start"
+" again from there."
+msgstr "Cette entrée de menu permet de réinitialiser les styles de courbes, de sorte que la prochaine fois que vous afficherez des courbes, la première courbe sera attribuée la première couleur et le premier style de ligne de la liste prédéfinie, et la boucle recommencera à partir de là."
+
+#: ../../features/signal/menus.rst:638
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/signal/menus.rst:629
+#: ../../features/signal/menus.rst:640
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#: ../../features/signal/menus.rst:632
+#: ../../features/signal/menus.rst:643
 msgid "\"?\" menu"
 msgstr "Menu \"?\""
 
-#: ../../features/signal/menus.rst:636
+#: ../../features/signal/menus.rst:647
 msgid "Screenshot of the \"?\" menu."
 msgstr "Capture d'écran du menu \"?\"."
 
-#: ../../features/signal/menus.rst:638
+#: ../../features/signal/menus.rst:649
 msgid ""
 "The \"?\" menu allows you to access the online documentation, to show log"
 " files, to show information regarding your DataLab installation, and to "
 "show the \"About DataLab\" dialog box."
-msgstr "Le menu \"?\" permet d'accéder à la documentation en ligne, d'afficher les journaux de bords, d'afficher des informations sur votre configuration d'installation de DataLab, et d'afficher la boîte de dialogue \"A propos de DataLab\"."
+msgstr ""
+"Le menu \"?\" permet d'accéder à la documentation en ligne, d'afficher "
+"les journaux de bords, d'afficher des informations sur votre "
+"configuration d'installation de DataLab, et d'afficher la boîte de "
+"dialogue \"A propos de DataLab\"."
 
-#: ../../features/signal/menus.rst:643
+#: ../../features/signal/menus.rst:654
 msgid "Online or Local documentation"
 msgstr "Documentation en ligne ou locale"
 
-#: ../../features/signal/menus.rst:645
+#: ../../features/signal/menus.rst:656
 msgid "Open the online or local documentation:"
 msgstr "Affiche la documentation en ligne ou locale :"
 
-#: ../../features/signal/menus.rst:650
+#: ../../features/signal/menus.rst:661
 msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
-#: ../../features/signal/menus.rst:652
+#: ../../features/signal/menus.rst:663
 msgid "Open DataLab log viewer"
 msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
-#: ../../features/signal/menus.rst:655
+#: ../../features/signal/menus.rst:666
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
 msgstr ""
 "Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
 "journaux de bord."
 
-#: ../../features/signal/menus.rst:658
+#: ../../features/signal/menus.rst:669
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: ../../features/signal/menus.rst:660
+#: ../../features/signal/menus.rst:671
 msgid ""
 "Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
@@ -1311,17 +1362,17 @@ msgstr ""
 "DataLab (particulièrement utile pour signaler des anomalies de manière "
 "efficace)."
 
-#: ../../features/signal/menus.rst:664
+#: ../../features/signal/menus.rst:675
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
 msgstr ""
 "Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
 "boîte de dialogue."
 
-#: ../../features/signal/menus.rst:667
+#: ../../features/signal/menus.rst:678
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/signal/menus.rst:669
+#: ../../features/signal/menus.rst:680
 msgid "Open the \"About DataLab\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 
