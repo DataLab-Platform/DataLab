@@ -122,6 +122,9 @@ for future and past milestones.
 * Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not
   removed and not swapped either (ROI are now removed, until we implement the swap
   feature, if requested)
+* "Properties" group box: the "Apply" button was enabled by default, even when no
+  property was modified, which was confusing for the user (the "Apply" button is now
+  disabled by default, and is enabled only when a property is modified)
 
 ## DataLab Version 0.10.1 ##
 

@@ -164,6 +164,7 @@ class ObjectProp(QW.QWidget):
         update_dataset(self.properties.dataset, param)
         self.properties.get()
         self.set_param_label(param)
+        self.properties.apply_button.setEnabled(False)
 
 
 class AbstractPanelMeta(type(QW.QSplitter), abc.ABCMeta):

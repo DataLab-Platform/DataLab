@@ -13,6 +13,7 @@ doc/extras_require-dev.txt
 doc/extras_require-doc.txt
 *.bak
 /tutorialnotes*.md
+doc/locale/pot/_sphinx_design_static/
 
 # Visual Studio Code
 .venv
