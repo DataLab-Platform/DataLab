@@ -14,10 +14,10 @@ Contour finding test
 import sys
 import time
 
-import numpy as np
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
+from cdl.algorithms import coordinates
 from cdl.algorithms.image import get_2d_peaks_coords, get_contour_shapes
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
@@ -40,13 +40,14 @@ def find_contours(data):
         for shapeargs in coords:
             if shape == "circle":
                 xc, yc, r = shapeargs
-                item = make.circle(xc - r, yc, xc + r, yc)
+                x0, y0, x1, y1 = coordinates.circle_center_radius_to_diameter(xc, yc, r)
+                item = make.circle(x0, y0, x1, y1)
             elif shape == "ellipse":
                 xc, yc, a, b, theta = shapeargs
-                dxa, dya = a * np.cos(theta), a * np.sin(theta)
-                dxb, dyb = b * np.sin(theta), b * np.cos(theta)
-                x0, y0, x1, y1 = xc - dxa, yc - dya, xc + dxa, yc + dya
-                x2, y2, x3, y3 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
+                coords = coordinates.ellipse_center_axes_angle_to_diameters(
+                    xc, yc, a, b, theta
+                )
+                x0, y0, x1, y1, x2, y2, x3, y3 = coords
                 item = make.ellipse(x0, y0, x1, y1, x2, y2, x3, y3)
             else:
                 # `shapeargs` is a flattened array of x, y coordinates

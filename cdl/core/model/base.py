@@ -26,6 +26,7 @@ from plotpy.builder import make
 from plotpy.io import load_items, save_items
 from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
 
+from cdl.algorithms import coordinates
 from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import Conf, _
 
@@ -398,16 +399,15 @@ class ResultShape:
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.CIRCLE:
             xc, yc, r = args
-            item = make.annotated_circle(xc - r, yc, xc + r, yc, title=self.show_label)
+            x0, y0, x1, y1 = coordinates.circle_center_radius_to_diameter(xc, yc, r)
+            item = make.annotated_circle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.SEGMENT:
             x0, y0, x1, y1 = args
             item = make.annotated_segment(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            xc, yc, a, b, theta = args
-            dxa, dya = a * np.cos(theta), a * np.sin(theta)
-            dxb, dyb = b * np.sin(theta), b * np.cos(theta)
-            x0, y0, x1, y1 = xc - dxa, yc - dya, xc + dxa, yc + dya
-            x2, y2, x3, y3 = xc - dxb, yc - dyb, xc + dxb, yc + dyb
+            xc, yc, a, b, t = args
+            coords = coordinates.ellipse_center_axes_angle_to_diameters(xc, yc, a, b, t)
+            x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.show_label
             )
