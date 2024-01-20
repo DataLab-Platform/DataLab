@@ -263,6 +263,7 @@ def interpolate(
         ynew = np.interp(xnew, x, y, left=fill_value, right=fill_value)
     elif method == "spline":
         # Spline using 1-D interpolation with SciPy's interpolate package:
+        # pylint: disable=unbalanced-tuple-unpacking
         knots, coeffs, degree = scipy.interpolate.splrep(x, y, s=0)
         ynew = scipy.interpolate.splev(xnew, (knots, coeffs, degree), der=0)
     elif method == "quadratic":

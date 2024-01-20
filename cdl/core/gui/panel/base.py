@@ -523,7 +523,7 @@ class BaseDataPanel(AbstractPanel):
         sel_objs = self.objview.get_sel_objects(include_groups=True)
         # Check if there are regions of interest first:
         roi_backup: dict[SignalObj | ImageObj, np.ndarray] = {}
-        if any([obj.roi is not None for obj in sel_objs]):
+        if any(obj.roi is not None for obj in sel_objs):
             if keep_roi is None:
                 answer = QW.QMessageBox.warning(
                     self,

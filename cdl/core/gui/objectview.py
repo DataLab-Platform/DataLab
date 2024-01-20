@@ -328,6 +328,13 @@ class ObjectView(SimpleObjectTree):
 
     def __is_drop_allowed(self, event: QG.QDropEvent | QG.QDragMoveEvent) -> bool:
         """Return True if drop is allowed"""
+
+        # Yes, this method has too many return statements.
+        # But it's still quite readable, so let's focus on other things and just disable
+        # the pylint warning.
+        #
+        # pylint: disable=too-many-return-statements
+
         if event.mimeData().hasUrls():
             return True
         drop_pos = self.dropIndicatorPosition()
@@ -341,36 +348,32 @@ class ObjectView(SimpleObjectTree):
             return False
         # If drop indicator is on an item, refuse the drop if the target item
         # is anything but a group
-        elif on_item and (target_item is None or target_item.parent() is not None):
+        if on_item and (target_item is None or target_item.parent() is not None):
             return False
         # If drop indicator is on an item, refuse the drop if the moved items
         # are groups
-        elif on_item and self.__dragged_groups:
+        if on_item and self.__dragged_groups:
             return False
         # If target item is None, it means that the drop position is
         # outside of the tree. In this case, we accept the drop and move
         # the objects to the end of the list.
-        elif target_item is None or on_viewport:
+        if target_item is None or on_viewport:
             return True
         # If moved items are groups, refuse the drop if the target item is
         # not a group
-        elif self.__dragged_groups and target_item.parent() is not None:
+        if self.__dragged_groups and target_item.parent() is not None:
             return False
         # If moved items are groups, refuse the drop if the target item is
         # a group but the target position is below the target instead of above
-        elif self.__dragged_groups and below_item:
+        if self.__dragged_groups and below_item:
             return False
         # If moved items are objects, refuse the drop if the target item is
         # a group and the drop indicator is anything but on the target item
-        elif (
-            self.__dragged_objects
-            and target_item.parent() is None
-            and not on_item
-        ):
+        if self.__dragged_objects and target_item.parent() is None and not on_item:
             return False
         # If moved items are objects, refuse the drop if the target item is
         # the first group item and the drop position is above the target item
-        elif (
+        if (
             self.__dragged_objects
             and target_item.parent() is None
             and self.indexFromItem(target_item).row() == 0

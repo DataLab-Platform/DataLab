@@ -177,6 +177,7 @@ def run_signal_computations(
     panel.add_object(sig2)
 
     # Test interpolation
+    # pylint: disable=protected-access
     for method_choice_tuple in dlp.InterpolationParam._methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
@@ -200,6 +201,7 @@ def run_signal_computations(
 
     # Test detrending
     panel.objview.set_current_object(sig1)
+    # pylint: disable=protected-access
     for method_choice_tuple in dlp.DetrendingParam._methods:
         param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.compute_detrending(param)

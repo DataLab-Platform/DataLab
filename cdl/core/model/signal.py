@@ -28,7 +28,6 @@ from plotpy.builder import make
 from cdl.algorithms import fit
 from cdl.config import Conf, _
 from cdl.core.model import base
-from cdl.env import execenv
 
 if TYPE_CHECKING:  # pragma: no cover
     from plotpy.items import CurveItem

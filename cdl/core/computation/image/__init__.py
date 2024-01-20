@@ -16,9 +16,9 @@ from typing import Any
 
 import guidata.dataset as gds
 import numpy as np
-import numpy.ma as ma
 import scipy.ndimage as spi
 import scipy.signal as sps
+from numpy import ma
 from plotpy.mathutils.geometry import vector_rotation
 from skimage import filters
 
@@ -941,6 +941,11 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
             coords: np.ndarray = func(data_roi)
         else:
             coords: np.ndarray = func(data_roi, *args)
+
+        # This is a very long condition, but it's still quite readable, so we keep it
+        # as is and disable the pylint warning.
+        #
+        # pylint: disable=too-many-boolean-expressions
         if not isinstance(coords, np.ndarray) or (
             (
                 coords.ndim != 2
@@ -956,6 +961,7 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
                 f"[[x0, y0, r], ...], or [[x0, y0, a, b, theta], ...]), or an empty "
                 f"array."
             )
+
         if coords.size:
             if coords.shape[1] % 2 == 0:
                 # Coordinates are in the form [x0, y0, x1, y1, ...]
