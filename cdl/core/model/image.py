@@ -145,17 +145,14 @@ class RoiDataItem:
             y1 += radius
         return x0, y0, x1, y1
 
-    def get_masked_view(self, data: np.ndarray, maskdata: np.ndarray) -> np.ndarray:
+    def get_image_masked_view(self, obj: ImageObj) -> np.ndarray:
         """Return masked view for data
 
         Args:
-            data (numpy.ndarray): data
-            maskdata (numpy.ndarray): mask data
+            obj: image object
         """
         x0, y0, x1, y1 = self.get_rect()
-        masked_view = data.view(ma.MaskedArray)
-        masked_view.mask = maskdata
-        return masked_view[y0:y1, x0:x1]
+        return obj.get_masked_view()[y0:y1, x0:x1]
 
     def apply_mask(self, data: np.ndarray, yxratio: float) -> np.ndarray:
         """Apply ROI to data as a mask and return masked array
@@ -429,7 +426,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         if self.roi is None or roi_index is None:
             return self.data
         roidataitem = RoiDataItem(self.roi[roi_index])
-        return roidataitem.get_masked_view(self.data, self.maskdata)
+        return roidataitem.get_image_masked_view(self)
 
     def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> ImageObj:
         """Copy object.
@@ -671,6 +668,17 @@ class ImageObj(gds.DataSet, base.BaseObj):
                 mask &= roi_mask
             self._maskdata_cache = mask
         return self._maskdata_cache
+
+    def get_masked_view(self) -> ma.MaskedArray:
+        """Return masked view for data
+
+        Returns:
+            Masked view
+        """
+        self.data: np.ndarray
+        view = self.data.view(ma.MaskedArray)
+        view.mask = self.maskdata
+        return view
 
     def invalidate_maskdata_cache(self) -> None:
         """Invalidate mask data cache: force to rebuild it"""

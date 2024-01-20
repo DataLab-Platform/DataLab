@@ -16,6 +16,7 @@ from typing import Any
 
 import guidata.dataset as gds
 import numpy as np
+import numpy.ma as ma
 import scipy.ndimage as spi
 import scipy.signal as sps
 from plotpy.mathutils.geometry import vector_rotation
@@ -602,14 +603,16 @@ def compute_profile(src: ImageObj, p: ProfileParam) -> ImageObj:
     Returns:
         Output image object
     """
-    p.row = min(p.row, src.data.shape[0] - 1)
-    p.col = min(p.col, src.data.shape[1] - 1)
+    data = src.get_masked_view()
+    p.row = min(p.row, data.shape[0] - 1)
+    p.col = min(p.col, data.shape[1] - 1)
     if p.direction == "horizontal":
-        suffix = f"row={p.row}"
-        x, y = np.arange(src.data.shape[1]), np.array(src.data[p.row, :], dtype=float)
+        suffix, shape_index, pdata = f"row={p.row}", 1, data[p.row, :]
     else:
-        suffix = f"col={p.col}"
-        x, y = np.arange(src.data.shape[0]), np.array(src.data[:, p.col], dtype=float)
+        suffix, shape_index, pdata = f"col={p.col}", 0, data[:, p.col]
+    pdata: ma.MaskedArray
+    x = np.arange(data.shape[shape_index])[~pdata.mask]
+    y = np.array(pdata, dtype=float)[~pdata.mask]
     dst = dst_11_signal(src, "profile", suffix)
     dst.set_xydata(x, y)
     return dst
@@ -636,25 +639,25 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
     Returns:
         Output image object
     """
+    data = src.get_masked_view()
     if p.row2 == -1:
-        p.row2 = src.data.shape[0] - 1
+        p.row2 = data.shape[0] - 1
     if p.col2 == -1:
-        p.col2 = src.data.shape[1] - 1
+        p.col2 = data.shape[1] - 1
     if p.row1 > p.row2:
         p.row1, p.row2 = p.row2, p.row1
     if p.col1 > p.col2:
         p.col1, p.col2 = p.col2, p.col1
-    p.row1 = min(p.row1, src.data.shape[0] - 1)
-    p.row2 = min(p.row2, src.data.shape[0] - 1)
-    p.col1 = min(p.col1, src.data.shape[1] - 1)
-    p.col2 = min(p.col2, src.data.shape[1] - 1)
+    p.row1 = min(p.row1, data.shape[0] - 1)
+    p.row2 = min(p.row2, data.shape[0] - 1)
+    p.col1 = min(p.col1, data.shape[1] - 1)
+    p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"{p.direction}, rows=[{p.row1}, {p.row2}], cols=[{p.col1}, {p.col2}]"
     if p.direction == "horizontal":
-        x = np.arange(p.col1, p.col2 + 1)
-        y = np.mean(src.data[p.row1 : p.row2 + 1, p.col1 : p.col2 + 1], axis=0)
+        x, axis = np.arange(p.col1, p.col2 + 1), 0
     else:
-        x = np.arange(p.row1, p.row2 + 1)
-        y = np.mean(src.data[p.row1 : p.row2 + 1, p.col1 : p.col2 + 1], axis=1)
+        x, axis = np.arange(p.row1, p.row2 + 1), 1
+    y = ma.mean(data[p.row1 : p.row2 + 1, p.col1 : p.col2 + 1], axis=axis)
     dst = dst_11_signal(src, "average_profile", suffix)
     dst.set_xydata(x, y)
     return dst

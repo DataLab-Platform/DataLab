@@ -41,6 +41,14 @@ def test_contour_app():
         panel.add_object(ima2)
         panel.processor.compute_contour_shape(param)
 
+        param = cdl.param.ProfileParam.create(direction="horizontal", row=554)
+        panel.processor.compute_profile(param)
+
+        param = cdl.param.AverageProfileParam.create(
+            direction="horizontal", row1=550, row2=560
+        )
+        panel.processor.compute_average_profile(param)
+
 
 if __name__ == "__main__":
     test_contour_app()
