@@ -672,7 +672,8 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
     """
     dst = dst_11(src, "swap_axes")
     dst.data = np.transpose(src.data)
-    src.remove_all_shapes()
+    # TODO: [P2] Instead of removing geometric shapes, apply swap
+    dst.remove_all_shapes()
     return dst
 
 

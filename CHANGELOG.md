@@ -53,6 +53,10 @@ for future and past milestones.
     Of Interest (ROI) metadata, if any.
   * Now a confirmation dialog box is shown to the user before deleting all metadata if
     the signal/image has ROI metadata: this allows to keep the ROI metadata if needed.
+* Image profile extraction feature: added support for masked images (when defining
+  regions of interest, the areas outside the ROIs are masked, and the profile is
+  extracted only on the unmasked areas, or averaged on the unmasked areas in the case
+  of average profile extraction)
 * Curve style: added "Reset curve styles" in "View" menu.
   This feature allows to reset the curve style cycle to its initial state.
 * Automated test suite:
@@ -115,7 +119,9 @@ for future and past milestones.
   * Now, the computing results associated to each signal/image are merged into a
     single result, whatever the type of result is.
 * Fixed [Issue #36](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/36) - "Delete all" action enable state is sometimes not refreshed
-
+* Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not
+  removed and not swapped either (ROI are now removed, until we implement the swap
+  feature, if requested)
 
 ## DataLab Version 0.10.1 ##
 
