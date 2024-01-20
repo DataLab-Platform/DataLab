@@ -10,6 +10,7 @@ features of DataLab:
 - Show the radius of the circles
 - Annotate the image
 - Copy/paste the ROI to another image
+- Extract the intensity profile along the X axis
 - Save the workspace
 
 First, we open DataLab and load the images:
@@ -168,11 +169,83 @@ ROI from the first image to the second image, using the metadata.
 
     The fitted circles are displayed on the image.
 
-Finally, we can save the workspace to a file. The workspace contains all the images
-that were loaded in DataLab, as well as the processing results. It also contains the
-visualization settings (colormaps, contrast, etc.), the metadata, and the annotations.
+To extract the intensity profile along the X axis, we have two options:
+
+- Either select the "Extract profile..." entry |profile| in the "Operations" menu.
+
+- Or activate the "Cross section" tool |cross_section| in the vertical toolbar
+  on the left of the visualization panel.
+
+.. |profile| image:: ../../../cdl/data/icons/profile.svg
+    :width: 24px
+    :height: 24px
+
+.. |cross_section| image:: ../../images/tutorials/csection.png
+
+Let's try the first option, by selecting the "Extract profile..." entry |profile|:
+that is the most straightforward way to extract a profile from an image, and it
+corresponds to the ``compute_profile`` method of DataLab's API (so it can be used
+in a script, a plugin or a macro).
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
+
+    Select the "Extract profile..." entry |profile| in the "Operations" menu.
+
+.. figure:: ../../images/tutorials/fabry_perot/25.png
+
+    The "Profile" dialog opens. Enter the row of the horizontal profile
+    (or the column of the vertical profile) in the dialog box that opens. Click "OK".
+
+.. figure:: ../../images/tutorials/fabry_perot/26.png
+
+    The intensity profile is added to the "Signals" panel, and DataLab switches to
+    this panel to display the profile.
+
+If you want to do some measurements on the profile, or add annotations, you can
+open the signal in a separate window, by clicking on the "View in a new window"
+entry in the "View" menu (or the |new_window| button in the toolbar).
+
+.. figure:: ../../images/tutorials/fabry_perot/27.png
+
+    The signal is displayed in a separate window. Here, we added vertical cursors
+    and a very interesting text label. As for the images, the annotations are stored
+    in the metadata of the signal, and together with the signal data when the workspace
+    is saved. Click on "OK" to close the window.
+
+Now, let's try the second option for extracting the intensity profile along the X axis,
+by activating the "Cross section" tool |cross_section| in the vertical toolbar on the
+left of the visualization panel (this tool is a
+`PlotPy <https://github.com/PlotPyStack/plotpy>`_ feature). Before being able to use
+it, we need to select the image in the visualization panel (otherwise the tool is
+grayed out). Then, we can click on the image to display the intensity profile along
+the X axis. DataLab integrates a modified version of this tool, that allows to
+transfer the profile to the "Signals" panel for further processing.
+
+.. figure:: ../../images/tutorials/fabry_perot/28.png
+
+    Switch back to the "Images" panel, and select the image *in the visualization
+    panel* (otherwise the "Cross section" |cross_section| tool is grayed out).
+    Select the "Cross section" tool |cross_section| in the vertical toolbar, and
+    click on the image to display the intensity profiles along the X and Y axes.
+
+Then, click on the "Process signal" button |to_signal| in the toolbar near the
+profile to transfer the profile to the "Signals" panel.
+
+.. |to_signal| image:: ../../../cdl/data/icons/to_signal.svg
+    :width: 24px
+    :height: 24px
+
+.. figure:: ../../images/tutorials/fabry_perot/29.png
+
+    The intensity profile is added to the "Signals" panel, and DataLab switches to
+    this panel to display the profile.
+
+Finally, we can save the workspace to a file. The workspace contains all the images
+and signals that were loaded or processed in DataLab. It also contains the computing
+results, the visualization settings (colormaps, contrast, etc.), the metadata, and
+the annotations.
+
+.. figure:: ../../images/tutorials/fabry_perot/30.png
 
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.

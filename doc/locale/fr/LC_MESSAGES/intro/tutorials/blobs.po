@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 17:20+0100\n"
+"POT-Creation-Date: 2024-01-20 11:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -228,28 +228,16 @@ msgid ""
 "Finally, we can save the workspace to a file. The workspace contains all "
 "the images that were loaded in DataLab, as well as the processing "
 "results. It also contains the visualization settings (colormaps, "
-"contrast, etc.), the metadata, and the annotations."
-msgstr ""
-"Enfin, nous pouvons enregistrer l'espace de travail dans un fichier. "
-"L'espace de travail contient toutes les images qui ont été chargées dans "
-"DataLab, ainsi que les résultats du traitement. Il contient également les"
-" paramètres de visualisation (palettes de couleurs, contraste, etc.), les"
-" métadonnées et les annotations."
+"contrast, etc.), the metadata, and the annotations. To save the "
+"workspace, click on \"File > Save to HDF5 file...\", or the |filesave_h5|"
+" button in the toolbar."
+msgstr "Enfin, nous pouvons enregistrer l'espace de travail dans un fichier. L'espace de travail contient toutes les images qui ont été chargées dans DataLab, ainsi que les résultats de traitement. Il contient également les paramètres de visualisation (palettes de couleurs, contraste, etc.), les métadonnées et les annotations. Pour enregistrer l'espace de travail, cliquez sur \"Fichier > Enregistrer dans un fichier HDF5...\", ou sur le bouton |filesave_h5| dans la barre d'outils."
 
 #: ../../intro/tutorials/blobs.rst:127
-msgid ""
-"Save the workspace to a file with \"File > Save to HDF5 file...\", or the"
-" |filesave_h5| button in the toolbar."
-msgstr ""
-"Enregistrez l'espace de travail dans un fichier avec \"Fichier > "
-"Enregistrer dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la"
-" barre d'outils."
-
-#: ../../intro/tutorials/blobs.rst:130
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:134
+#: ../../intro/tutorials/blobs.rst:131
 msgid ""
 "If you want to load the workspace again, you can use the \"File > Open "
 "HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
@@ -264,16 +252,10 @@ msgstr ""
 "|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
 " d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/blobs.rst:139
+#: ../../intro/tutorials/blobs.rst:136
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:143
+#: ../../intro/tutorials/blobs.rst:140
 msgid "h5browser"
 msgstr ""
-
-#~ msgid ":ref:`about_plugins`"
-#~ msgstr ""
-
-#~ msgid "The plugin system is described in the :ref:`plugins` section."
-#~ msgstr ""

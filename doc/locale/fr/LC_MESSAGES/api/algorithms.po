@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 14:37+0100\n"
+"POT-Creation-Date: 2024-01-20 12:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -58,23 +58,27 @@ msgstr ""
 
 #: cdl.algorithms:18 of
 msgid ":mod:`cdl.algorithms.signal`: Signal processing algorithms"
-msgstr ":mod:`cdl.algorithms.signal` : algorithmes de traitement du signal"
+msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de traitement du signal"
 
 #: cdl.algorithms:19 of
 msgid ":mod:`cdl.algorithms.image`: Image processing algorithms"
-msgstr ":mod:`cdl.algorithms.image` : algorithmes de traitement d'image"
+msgstr ":mod:`cdl.algorithms.image` : Algorithmes de traitement d'image"
 
 #: cdl.algorithms:20 of
 msgid ":mod:`cdl.algorithms.datatypes`: Data type conversion algorithms"
 msgstr ""
-":mod:`cdl.algorithms.datatypes` : algorithmes de conversion de type de "
+":mod:`cdl.algorithms.datatypes` : Algorithmes de conversion de type de "
 "données"
 
 #: cdl.algorithms:21 of
-msgid ":mod:`cdl.algorithms.fit`: Fitting algorithms"
-msgstr ":mod:`cdl.algorithms.fit` : algorithmes de régression"
+msgid ":mod:`cdl.algorithms.coordinates`: Coordinate conversion algorithms"
+msgstr ":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
 
-#: cdl.algorithms:24 of
+#: cdl.algorithms:22 of
+msgid ":mod:`cdl.algorithms.fit`: Fitting algorithms"
+msgstr ":mod:`cdl.algorithms.fit` : Algorithmes de régression"
+
+#: cdl.algorithms:25 of
 msgid "Signal Processing Algorithms"
 msgstr "Algorithmes de traitement du signal"
 
@@ -82,6 +86,8 @@ msgstr "Algorithmes de traitement du signal"
 msgid "Compute moving average."
 msgstr "Calculer la moyenne mobile."
 
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters
 #: cdl.algorithms.datatypes.is_complex_dtype
 #: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
 #: cdl.algorithms.image.distance_matrix cdl.algorithms.image.find_blobs_dog
@@ -111,6 +117,8 @@ msgstr "Tableau d'entrée"
 msgid "Window size"
 msgstr "Taille de la fenêtre"
 
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters
 #: cdl.algorithms.datatypes.is_complex_dtype
 #: cdl.algorithms.datatypes.is_integer_dtype cdl.algorithms.image.binning
 #: cdl.algorithms.image.distance_matrix cdl.algorithms.image.find_blobs_dog
@@ -135,6 +143,7 @@ msgstr "Retourne"
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter
 #: cdl.algorithms.signal.derivative cdl.algorithms.signal.moving_average
 #: cdl.algorithms.signal.normalize cdl.algorithms.signal.peak_indexes
 #: cdl.algorithms.signal.xpeak cdl.algorithms.signal.xy_fft
@@ -275,7 +284,7 @@ msgstr ""
 "n'est utilisée que si l'argument de méthode est 'linear', 'cubic' ou "
 "'pchip'."
 
-#: cdl.algorithms:30 of
+#: cdl.algorithms:31 of
 msgid "Image Processing Algorithms"
 msgstr "Algorithmes de traitement d'image"
 
@@ -697,7 +706,7 @@ msgstr "La convexité minimale de la tache."
 msgid "The maximum blob convexity."
 msgstr "La convexité maximale de la tache."
 
-#: cdl.algorithms:36 of
+#: cdl.algorithms:37 of
 msgid "Data Type Conversion Algorithms"
 msgstr "Algorithmes de conversion de type de données"
 
@@ -722,7 +731,61 @@ msgstr "Retourne True si le type de données est un type complexe"
 msgid "True if data type is a complex type"
 msgstr "True si le type de données est un type complexe"
 
-#: cdl.algorithms:42 of
+#: cdl.algorithms:43 of
+msgid "Coordinate Conversion Algorithms"
+msgstr "Algorithmes de conversion de coordonnées"
+
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter:1 of
+msgid "Convert circle center and radius to X diameter coordinates"
+msgstr "Convertit le centre et le rayon du cercle en coordonnées de diamètre X"
+
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter:3 of
+msgid "Circle center X coordinate"
+msgstr "Abscisse du centre du cercle"
+
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter:4 of
+msgid "Circle center Y coordinate"
+msgstr "Ordonnée du centre du cercle"
+
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter:5 of
+msgid "Circle radius"
+msgstr "Rayon du cercle"
+
+#: cdl.algorithms.coordinates.circle_center_radius_to_diameter:7 of
+msgid "Circle X diameter coordinates"
+msgstr "Coordonnées de diamètre X du cercle"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:1 of
+msgid "Convert ellipse center, axes and angle to X/Y diameters coordinates"
+msgstr ""
+"Convertit le centre, les axes et l'angle de l'ellipse en coordonnées de "
+"diamètres X/Y"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:3 of
+msgid "Ellipse center X coordinate"
+msgstr "Abscisse du centre de l'ellipse"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:4 of
+msgid "Ellipse center Y coordinate"
+msgstr "Ordonnée du centre de l'ellipse"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:5 of
+msgid "Ellipse half larger axis"
+msgstr "Demi grand axe de l'ellipse"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:6 of
+msgid "Ellipse half smaller axis"
+msgstr "Demi petit axe de l'ellipse"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:7 of
+msgid "Ellipse angle"
+msgstr "Angle de l'ellipse"
+
+#: cdl.algorithms.coordinates.ellipse_center_axes_angle_to_diameters:9 of
+msgid "Ellipse X/Y diameters coordinates"
+msgstr "Coordonnées de diamètres X/Y de l'ellipse"
+
+#: cdl.algorithms:49 of
 msgid "Curve Fitting Algorithms"
 msgstr "Algorithmes de régression"
 

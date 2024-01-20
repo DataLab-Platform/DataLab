@@ -121,11 +121,8 @@ Now, let's detect the blobs on the image.
 Finally, we can save the workspace to a file. The workspace contains all the images
 that were loaded in DataLab, as well as the processing results. It also contains the
 visualization settings (colormaps, contrast, etc.), the metadata, and the annotations.
-
-.. figure:: ../../images/tutorials/fabry_perot/24.png
-
-    Save the workspace to a file with "File > Save to HDF5 file...",
-    or the |filesave_h5| button in the toolbar.
+To save the workspace, click on "File > Save to HDF5 file...", or the |filesave_h5|
+button in the toolbar.
 
 .. |filesave_h5| image:: ../../../cdl/data/icons/filesave_h5.svg
     :width: 24px

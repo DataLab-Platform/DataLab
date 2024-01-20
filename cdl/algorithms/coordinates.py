@@ -38,8 +38,8 @@ def ellipse_center_axes_angle_to_diameters(
     Args:
         xc: Ellipse center X coordinate
         yc: Ellipse center Y coordinate
-        a: Ellipse greater axis
-        b: Ellipse smaller axis
+        a: Ellipse half larger axis
+        b: Ellipse half smaller axis
         theta: Ellipse angle
 
     Returns:

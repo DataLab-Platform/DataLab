@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 15:35+0100\n"
+"POT-Creation-Date: 2024-01-20 11:41+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -141,6 +141,7 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create
 #: guidata.dataset.datatypes.DataSet.deserialize
 #: guidata.dataset.datatypes.DataSet.edit
+#: guidata.dataset.datatypes.DataSet.get_items
 #: guidata.dataset.datatypes.DataSet.read_config
 #: guidata.dataset.datatypes.DataSet.serialize
 #: guidata.dataset.datatypes.DataSet.set_global_prop
@@ -300,6 +301,7 @@ msgstr "données de forme"
 #: guidata.dataset.datatypes.DataSet.create
 #: guidata.dataset.datatypes.DataSet.get_comment
 #: guidata.dataset.datatypes.DataSet.get_icon
+#: guidata.dataset.datatypes.DataSet.get_items
 #: guidata.dataset.datatypes.DataSet.get_title
 #: guidata.dataset.datatypes.DataSet.to_string of
 msgid "Returns"
@@ -768,6 +770,21 @@ msgstr "Renvoyer l'icône de l'ensemble de données"
 #: guidata.dataset.datatypes.DataSet.get_icon:3 of
 msgid "icon"
 msgstr "icône"
+
+#: guidata.dataset.datatypes.DataSet.get_items:1 of
+msgid ""
+"Returns all the DataItem objects from the DataSet instance. Ignore "
+"private items that have a name starting with an underscore (e.g. "
+"'_private_item = ...')"
+msgstr "Retourne tous les objets DataItem de l'instance DataSet. Ignore les éléments privés qui ont un nom commençant par un tiret bas (par exemple '_private_item = ...')"
+
+#: guidata.dataset.datatypes.DataSet.get_items:4 of
+msgid "If True, deepcopy the DataItem list, else return the original."
+msgstr "Si True, copie en profondeur la liste DataItem, sinon renvoie l'original."
+
+#: guidata.dataset.datatypes.DataSet.get_items:7 of
+msgid "_description_"
+msgstr ""
 
 #: cdl.core.model.base.BaseObj.get_metadata_option:1 of
 msgid "Return metadata option value"
