@@ -38,6 +38,27 @@ by pressing the middle mouse button and dragging the mouse.
    Zoom in and out with the right mouse button. Pan the image with the middle mouse
    button.
 
+.. note::
+
+    When working on application-specific images (e.g. X-ray radiography images,
+    or optical microscopy images), it is often useful to change the colormap to
+    a grayscale colormap.
+    If you see a different image colormap than the one shown in the figure, you can
+    change it by selecting the image in the visualization panel, and the selecting
+    the colormap in the vertical toolbar on the left of the visualization panel.
+
+    Or, even better, you can change the default colormap in the DataLab settings
+    by selecting "Edit > Settings..." in the menu, or the |libre-gui-settings|
+    button in the toolbar.
+
+    .. figure:: ../../images/tutorials/fabry_perot/default_colormap.png
+
+       Select the "Visualization" tab, and select the "gray" colormap.
+
+.. |libre-gui-settings| image:: ../../../cdl/data/icons/libre-gui-settings.svg
+    :width: 24px
+    :height: 24px
+
 Then, let's define a circular region of interest (ROI) around the central fringe.
 
 .. figure:: ../../images/tutorials/fabry_perot/04.png

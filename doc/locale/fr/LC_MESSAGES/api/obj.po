@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 11:41+0100\n"
+"POT-Creation-Date: 2024-01-20 14:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -283,6 +283,7 @@ msgstr "données de forme"
 #: cdl.core.model.base.BaseObj.roidata_to_params
 #: cdl.core.model.base.ResultShape.create_plot_item
 #: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.get_masked_view
 #: cdl.core.model.image.ImageObj.make_item
 #: cdl.core.model.image.ImageObj.params_to_roidata
 #: cdl.core.model.image.ImageObj.roi_coords_to_indexes
@@ -776,7 +777,10 @@ msgid ""
 "Returns all the DataItem objects from the DataSet instance. Ignore "
 "private items that have a name starting with an underscore (e.g. "
 "'_private_item = ...')"
-msgstr "Retourne tous les objets DataItem de l'instance DataSet. Ignore les éléments privés qui ont un nom commençant par un tiret bas (par exemple '_private_item = ...')"
+msgstr ""
+"Retourne tous les objets DataItem de l'instance DataSet. Ignore les "
+"éléments privés qui ont un nom commençant par un tiret bas (par exemple "
+"'_private_item = ...')"
 
 #: guidata.dataset.datatypes.DataSet.get_items:4 of
 msgid "If True, deepcopy the DataItem list, else return the original."
@@ -1222,6 +1226,14 @@ msgid "Return masked data (areas outside defined regions of interest)"
 msgstr ""
 "Renvoie les données masquées (zones en dehors des régions d'intérêt "
 "définies)"
+
+#: cdl.core.model.image.ImageObj.get_masked_view:1 of
+msgid "Return masked view for data"
+msgstr "Retourne une vue masquée des données"
+
+#: cdl.core.model.image.ImageObj.get_masked_view:3 of
+msgid "Masked view"
+msgstr "Vue masquée"
 
 #: cdl.core.model.image.ImageObj.invalidate_maskdata_cache:1 of
 msgid "Invalidate mask data cache: force to rebuild it"

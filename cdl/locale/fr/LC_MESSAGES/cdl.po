@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-20 11:54+0100\n"
+"POT-Creation-Date: 2024-01-20 14:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Size of the moving window"
 msgstr "Taille de la fenêtre glissante"
 
-#: cdl\core\computation\base.py:45 cdl\core\computation\image\__init__.py:186
+#: cdl\core\computation\base.py:45 cdl\core\computation\image\__init__.py:187
 #: cdl\core\computation\signal.py:311
 msgid "Threshold"
 msgstr "Seuil"
@@ -52,12 +52,12 @@ msgstr "Décalage"
 msgid "Shift zero frequency to center"
 msgstr "Décaler la fréquence nulle au centre"
 
-#: cdl\core\computation\image\__init__.py:233
+#: cdl\core\computation\image\__init__.py:234
 msgid "Angle"
 msgstr "Angle"
 
-#: cdl\core\computation\image\__init__.py:235
-#: cdl\core\computation\image\__init__.py:420
+#: cdl\core\computation\image\__init__.py:236
+#: cdl\core\computation\image\__init__.py:421
 #: cdl\core\computation\image\edges.py:63
 #: cdl\core\computation\image\restoration.py:100
 #: cdl\core\computation\image\restoration.py:142
@@ -65,13 +65,13 @@ msgstr "Angle"
 msgid "Mode"
 msgstr "Mode"
 
-#: cdl\core\computation\image\__init__.py:238
-#: cdl\core\computation\image\__init__.py:423
+#: cdl\core\computation\image\__init__.py:239
+#: cdl\core\computation\image\__init__.py:424
 msgid "cval"
 msgstr "cval"
 
-#: cdl\core\computation\image\__init__.py:240
-#: cdl\core\computation\image\__init__.py:425
+#: cdl\core\computation\image\__init__.py:241
+#: cdl\core\computation\image\__init__.py:426
 msgid ""
 "Value used for points outside the boundaries of the input if mode is "
 "'constant'"
@@ -79,11 +79,11 @@ msgstr ""
 "Valeur utilisée pour les points situés en dehors des frontières de l'image "
 "d'origine (si le mode est 'constant')"
 
-#: cdl\core\computation\image\__init__.py:247
+#: cdl\core\computation\image\__init__.py:248
 msgid "Reshape the output array"
 msgstr "Redimensionner l'image de destination"
 
-#: cdl\core\computation\image\__init__.py:249
+#: cdl\core\computation\image\__init__.py:250
 msgid ""
 "Reshape the output array so that the input array is contained completely in "
 "the output"
@@ -91,172 +91,172 @@ msgstr ""
 "Redimensionner l'image de destination de sorte qu'elle puisse contenir la "
 "totalité de l'image source"
 
-#: cdl\core\computation\image\__init__.py:255
-#: cdl\core\computation\image\__init__.py:431
+#: cdl\core\computation\image\__init__.py:256
+#: cdl\core\computation\image\__init__.py:432
 msgid "Prefilter the input image"
 msgstr "Prétraitement de l'image d'origine (spline)"
 
-#: cdl\core\computation\image\__init__.py:259
-#: cdl\core\computation\image\__init__.py:435
-#: cdl\core\computation\image\__init__.py:886
+#: cdl\core\computation\image\__init__.py:260
+#: cdl\core\computation\image\__init__.py:436
+#: cdl\core\computation\image\__init__.py:890
 msgid "Order"
 msgstr "Ordre"
 
-#: cdl\core\computation\image\__init__.py:263
-#: cdl\core\computation\image\__init__.py:439
+#: cdl\core\computation\image\__init__.py:264
+#: cdl\core\computation\image\__init__.py:440
 msgid "Spline interpolation order"
 msgstr "Ordre de l'interpolation de type spline"
 
-#: cdl\core\computation\image\__init__.py:398
+#: cdl\core\computation\image\__init__.py:399
 msgid "columns"
 msgstr "colonnes"
 
-#: cdl\core\computation\image\__init__.py:398
+#: cdl\core\computation\image\__init__.py:399
 msgid "rows"
 msgstr "lignes"
 
-#: cdl\core\computation\image\__init__.py:399
+#: cdl\core\computation\image\__init__.py:400
 msgid "Distribute over"
 msgstr "Distribuer selon les"
 
-#: cdl\core\computation\image\__init__.py:402
+#: cdl\core\computation\image\__init__.py:403
 msgid "Columns"
 msgstr "Colonnes"
 
-#: cdl\core\computation\image\__init__.py:405
+#: cdl\core\computation\image\__init__.py:406
 msgid "Rows"
 msgstr "Lignes"
 
-#: cdl\core\computation\image\__init__.py:408
+#: cdl\core\computation\image\__init__.py:409
 msgid "Column spacing"
 msgstr "Espace entre chaque colonne"
 
-#: cdl\core\computation\image\__init__.py:409
+#: cdl\core\computation\image\__init__.py:410
 msgid "Row spacing"
 msgstr "Espace entre chaque ligne"
 
-#: cdl\core\computation\image\__init__.py:418
+#: cdl\core\computation\image\__init__.py:419
 msgid "Zoom"
 msgstr "Zoom"
 
-#: cdl\core\computation\image\__init__.py:469
+#: cdl\core\computation\image\__init__.py:470
 msgid "Cluster size (X)"
 msgstr "Nombre de pixels (X)"
 
-#: cdl\core\computation\image\__init__.py:472
+#: cdl\core\computation\image\__init__.py:473
 msgid "Number of adjacent pixels to be combined together along X-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
 
-#: cdl\core\computation\image\__init__.py:475
+#: cdl\core\computation\image\__init__.py:476
 msgid "Cluster size (Y)"
 msgstr "Nombre de pixels (Y)"
 
-#: cdl\core\computation\image\__init__.py:478
+#: cdl\core\computation\image\__init__.py:479
 msgid "Number of adjacent pixels to be combined together along Y-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 
-#: cdl\core\computation\image\__init__.py:482
+#: cdl\core\computation\image\__init__.py:483
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:488 cdl\core\model\image.py:770
+#: cdl\core\computation\image\__init__.py:489 cdl\core\model\image.py:778
 msgid "Data type"
 msgstr "Type de données"
 
-#: cdl\core\computation\image\__init__.py:490
-#: cdl\core\computation\image\__init__.py:718
+#: cdl\core\computation\image\__init__.py:491
+#: cdl\core\computation\image\__init__.py:722
 #: cdl\core\computation\signal.py:277
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
-#: cdl\core\computation\image\__init__.py:493
+#: cdl\core\computation\image\__init__.py:494
 msgid "Change pixel size"
 msgstr "Modifier la taille des pixels"
 
-#: cdl\core\computation\image\__init__.py:495
+#: cdl\core\computation\image\__init__.py:496
 msgid "Change pixel size so that overall image size remains the same."
 msgstr ""
 "Modification de la taille des pixels de sorte que les dimensions de l'images "
 "restent les mêmes après l'opération."
 
-#: cdl\core\computation\image\__init__.py:585
-#: cdl\core\computation\image\__init__.py:621
+#: cdl\core\computation\image\__init__.py:586
+#: cdl\core\computation\image\__init__.py:624
 msgid "horizontal"
 msgstr "horizontal"
 
-#: cdl\core\computation\image\__init__.py:585
-#: cdl\core\computation\image\__init__.py:621
+#: cdl\core\computation\image\__init__.py:586
+#: cdl\core\computation\image\__init__.py:624
 msgid "vertical"
 msgstr "vertical"
 
-#: cdl\core\computation\image\__init__.py:586
-#: cdl\core\computation\image\__init__.py:622
+#: cdl\core\computation\image\__init__.py:587
+#: cdl\core\computation\image\__init__.py:625
 msgid "Direction"
 msgstr "Direction"
 
-#: cdl\core\computation\image\__init__.py:589
+#: cdl\core\computation\image\__init__.py:590
 msgid "Row"
 msgstr "Ligne"
 
-#: cdl\core\computation\image\__init__.py:592
+#: cdl\core\computation\image\__init__.py:593
 msgid "Column"
 msgstr "Colonne"
 
-#: cdl\core\computation\image\__init__.py:623
-#: cdl\core\computation\image\__init__.py:628
+#: cdl\core\computation\image\__init__.py:626
+#: cdl\core\computation\image\__init__.py:631
 msgid "Profile rectangular area"
 msgstr "Zone rectangulaire du profil"
 
-#: cdl\core\computation\image\__init__.py:624
+#: cdl\core\computation\image\__init__.py:627
 msgid "Row 1"
 msgstr "Ligne 1"
 
-#: cdl\core\computation\image\__init__.py:625
+#: cdl\core\computation\image\__init__.py:628
 msgid "Row 2"
 msgstr "Ligne 2"
 
-#: cdl\core\computation\image\__init__.py:626
+#: cdl\core\computation\image\__init__.py:629
 msgid "Column 1"
 msgstr "Colonne 1"
 
-#: cdl\core\computation\image\__init__.py:627
+#: cdl\core\computation\image\__init__.py:630
 msgid "Column 2"
 msgstr "Colonne 2"
 
-#: cdl\core\computation\image\__init__.py:716
+#: cdl\core\computation\image\__init__.py:720
 #: cdl\core\computation\signal.py:275
 msgid "Destination data type"
 msgstr "Type de données de destination"
 
-#: cdl\core\computation\image\__init__.py:874
+#: cdl\core\computation\image\__init__.py:878
 msgid "Cut-off frequency ratio"
 msgstr "Fréquence de coupure relative"
 
-#: cdl\core\computation\image\__init__.py:878
+#: cdl\core\computation\image\__init__.py:882
 msgid "Cut-off frequency ratio (0.0 - 1.0)."
 msgstr "Fréquence de coupure relative (0.0 - 1.0)."
 
-#: cdl\core\computation\image\__init__.py:881
+#: cdl\core\computation\image\__init__.py:885
 msgid "High-pass filter"
 msgstr "Filtre passe-haut"
 
-#: cdl\core\computation\image\__init__.py:883
+#: cdl\core\computation\image\__init__.py:887
 msgid "If True, apply high-pass filter instead of low-pass."
 msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
 
-#: cdl\core\computation\image\__init__.py:889
+#: cdl\core\computation\image\__init__.py:893
 msgid "Order of the Butterworth filter."
 msgstr "Ordre du filtre de Butterworth."
 
-#: cdl\core\computation\image\__init__.py:1036
+#: cdl\core\computation\image\__init__.py:1040
 msgid "Radius<sub>min</sub>"
 msgstr "Rayon<sub>min</sub>"
 
-#: cdl\core\computation\image\__init__.py:1039
+#: cdl\core\computation\image\__init__.py:1043
 msgid "Radius<sub>max</sub>"
 msgstr "Rayon<sub>max</sub>"
 
-#: cdl\core\computation\image\__init__.py:1041
+#: cdl\core\computation\image\__init__.py:1045
 msgid "Minimal distance"
 msgstr "Distance minimale"
 
@@ -658,7 +658,7 @@ msgstr ""
 msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
-#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:269
+#: cdl\core\computation\image\morphology.py:32 cdl\core\model\image.py:266
 #: cdl\tests\data.py:381
 msgid "Radius"
 msgstr "Rayon"
@@ -738,14 +738,14 @@ msgstr "énergie"
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:391
-#: cdl\core\model\image.py:394 cdl\core\model\signal.py:107
+#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:388
+#: cdl\core\model\image.py:391 cdl\core\model\signal.py:107
 #: cdl\core\model\signal.py:110
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:395
-#: cdl\core\model\image.py:398 cdl\core\model\signal.py:111
+#: cdl\core\computation\signal.py:389 cdl\core\model\image.py:392
+#: cdl\core\model\image.py:395 cdl\core\model\signal.py:111
 #: cdl\core\model\signal.py:114
 msgid "Y-axis"
 msgstr "Axe des Y"
@@ -1546,7 +1546,7 @@ msgstr "Attention"
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:165 cdl\core\model\image.py:389
+#: cdl\core\gui\macroeditor.py:165 cdl\core\model\image.py:386
 #: cdl\core\model\signal.py:99 cdl\core\model\signal.py:105
 msgid "Untitled"
 msgstr "Sans titre"
@@ -2523,116 +2523,116 @@ msgstr "Métadonnées de l'objet"
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
-#: cdl\core\model\image.py:218 cdl\core\model\image.py:221
+#: cdl\core\model\image.py:215 cdl\core\model\image.py:218
 msgid "Top left corner"
 msgstr "Coin supérieur gauche"
 
-#: cdl\core\model\image.py:222 cdl\core\model\image.py:225
+#: cdl\core\model\image.py:219 cdl\core\model\image.py:222
 msgid "Bottom right corner"
 msgstr "Coin inférieur droit"
 
-#: cdl\core\model\image.py:265 cdl\core\model\image.py:268
+#: cdl\core\model\image.py:262 cdl\core\model\image.py:265
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: cdl\core\model\image.py:372 cdl\core\model\image.py:373
-#: cdl\core\model\image.py:375 cdl\core\model\signal.py:100
+#: cdl\core\model\image.py:369 cdl\core\model\image.py:370
+#: cdl\core\model\image.py:372 cdl\core\model\signal.py:100
 msgid "Data"
 msgstr "Données"
 
-#: cdl\core\model\image.py:374 cdl\core\model\signal.py:101
+#: cdl\core\model\image.py:371 cdl\core\model\signal.py:101
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: cdl\core\model\image.py:377 cdl\core\model\image.py:378
-#: cdl\core\model\image.py:381 cdl\core\model\image.py:386
+#: cdl\core\model\image.py:374 cdl\core\model\image.py:375
+#: cdl\core\model\image.py:378 cdl\core\model\image.py:383
 msgid "Origin"
 msgstr "Origine"
 
-#: cdl\core\model\image.py:377 cdl\core\model\image.py:382
-#: cdl\core\model\image.py:385 cdl\core\model\image.py:386
+#: cdl\core\model\image.py:374 cdl\core\model\image.py:379
+#: cdl\core\model\image.py:382 cdl\core\model\image.py:383
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: cdl\core\model\image.py:388 cdl\core\model\image.py:404
+#: cdl\core\model\image.py:385 cdl\core\model\image.py:401
 msgid "Titles"
 msgstr "Titres"
 
-#: cdl\core\model\image.py:388 cdl\core\model\image.py:404
+#: cdl\core\model\image.py:385 cdl\core\model\image.py:401
 msgid "Units"
 msgstr "Unités"
 
-#: cdl\core\model\image.py:389
+#: cdl\core\model\image.py:386
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: cdl\core\model\image.py:392 cdl\core\model\image.py:396
-#: cdl\core\model\image.py:400 cdl\core\model\image.py:763
+#: cdl\core\model\image.py:389 cdl\core\model\image.py:393
+#: cdl\core\model\image.py:397 cdl\core\model\image.py:771
 #: cdl\core\model\signal.py:108 cdl\core\model\signal.py:112
 #: cdl\core\model\signal.py:564
 msgid "Title"
 msgstr "Titre"
 
-#: cdl\core\model\image.py:393 cdl\core\model\image.py:397
-#: cdl\core\model\image.py:401 cdl\core\model\signal.py:109
+#: cdl\core\model\image.py:390 cdl\core\model\image.py:394
+#: cdl\core\model\image.py:398 cdl\core\model\signal.py:109
 #: cdl\core\model\signal.py:113 cdl\core\model\signal.py:546
 msgid "Unit"
 msgstr "Unité"
 
-#: cdl\core\model\image.py:399 cdl\core\model\image.py:402
+#: cdl\core\model\image.py:396 cdl\core\model\image.py:399
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:751 cdl\core\model\signal.py:494
+#: cdl\core\model\image.py:759 cdl\core\model\signal.py:494
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:752
+#: cdl\core\model\image.py:760
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:753 cdl\core\model\signal.py:495
+#: cdl\core\model\image.py:761 cdl\core\model\signal.py:495
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:754 cdl\core\model\signal.py:498
+#: cdl\core\model\image.py:762 cdl\core\model\signal.py:498
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:755 cdl\core\model\signal.py:499
+#: cdl\core\model\image.py:763 cdl\core\model\signal.py:499
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:765
+#: cdl\core\model\image.py:773
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:765
+#: cdl\core\model\image.py:773
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:768
+#: cdl\core\model\image.py:776
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:768 cdl\tests\data.py:380
+#: cdl\core\model\image.py:776 cdl\tests\data.py:380
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:771 cdl\core\model\signal.py:570
+#: cdl\core\model\image.py:779 cdl\core\model\signal.py:570
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:776
+#: cdl\core\model\image.py:784
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:872
+#: cdl\core\model\image.py:880
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:900
+#: cdl\core\model\image.py:908
 msgid "Image"
 msgstr "Image"
 
