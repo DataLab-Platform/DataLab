@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-20 16:37+0100\n"
+"POT-Creation-Date: 2024-01-21 17:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,7 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:489 cdl\core\model\image.py:778
+#: cdl\core\computation\image\__init__.py:489 cdl\core\model\image.py:779
 msgid "Data type"
 msgstr "Type de données"
 
@@ -1538,7 +1538,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:434 cdl\core\gui\main.py:1211
-#: cdl\plugins.py:166
+#: cdl\plugins.py:168
 msgid "Warning"
 msgstr "Attention"
 
@@ -1546,32 +1546,32 @@ msgstr "Attention"
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:165 cdl\core\model\image.py:386
+#: cdl\core\gui\macroeditor.py:166 cdl\core\model\image.py:386
 #: cdl\core\model\signal.py:98 cdl\core\model\signal.py:104
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: cdl\core\gui\macroeditor.py:253
+#: cdl\core\gui\macroeditor.py:254
 msgid "# ==> Unable to run '%s' macro"
 msgstr "# ==> Impossible d'exécuter la macro '%s'"
 
-#: cdl\core\gui\macroeditor.py:255
+#: cdl\core\gui\macroeditor.py:256
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-#: cdl\core\gui\macroeditor.py:255 cdl\plugins.py:170
+#: cdl\core\gui\macroeditor.py:256 cdl\plugins.py:172
 msgid "Error"
 msgstr "Erreur"
 
-#: cdl\core\gui\macroeditor.py:258
+#: cdl\core\gui\macroeditor.py:259
 msgid "# ==> Running '%s' macro..."
 msgstr "# ==> Exécution de la macro '%s'..."
 
-#: cdl\core\gui\macroeditor.py:274
+#: cdl\core\gui\macroeditor.py:275
 msgid "Terminating '%s' macro"
 msgstr "Arrêt de la macro '%s'"
 
-#: cdl\core\gui\macroeditor.py:285
+#: cdl\core\gui\macroeditor.py:286
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
@@ -1615,7 +1615,7 @@ msgstr ""
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:485 cdl\core\gui\main.py:500 cdl\plugins.py:174
+#: cdl\core\gui\main.py:485 cdl\core\gui\main.py:500 cdl\plugins.py:176
 msgid "Information"
 msgstr "Information"
 
@@ -2567,7 +2567,7 @@ msgid "Image title"
 msgstr "Titre de l'image"
 
 #: cdl\core\model\image.py:389 cdl\core\model\image.py:393
-#: cdl\core\model\image.py:397 cdl\core\model\image.py:771
+#: cdl\core\model\image.py:397 cdl\core\model\image.py:772
 #: cdl\core\model\signal.py:107 cdl\core\model\signal.py:111
 #: cdl\core\model\signal.py:563
 msgid "Title"
@@ -2603,36 +2603,36 @@ msgstr "aléatoire (loi uniforme)"
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:773
+#: cdl\core\model\image.py:774
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:773
+#: cdl\core\model\image.py:774
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:776
+#: cdl\core\model\image.py:777
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:776 cdl\tests\data.py:380
+#: cdl\core\model\image.py:777 cdl\tests\data.py:380
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:779 cdl\core\model\signal.py:569
+#: cdl\core\model\image.py:782 cdl\core\model\signal.py:569
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:784
+#: cdl\core\model\image.py:787
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:880
+#: cdl\core\model\image.py:883
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:908
+#: cdl\core\model\image.py:911
 msgid "Image"
 msgstr "Image"
 
@@ -2745,24 +2745,24 @@ msgstr "Axe Z en échelle logarithmique"
 msgid "Process signal"
 msgstr "Traiter le signal"
 
-#: cdl\plugins.py:114
+#: cdl\plugins.py:116
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
-#: cdl\plugins.py:121
+#: cdl\plugins.py:123
 msgid "No plugins available"
 msgstr "Aucun plugin disponible"
 
-#: cdl\plugins.py:123
+#: cdl\plugins.py:125
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
-#: cdl\plugins.py:181
+#: cdl\plugins.py:183
 msgid "Question"
 msgstr "Question"
 
-#: cdl\plugins\cdl_testdata.py:47 cdl\plugins\cdl_testdata.py:147
-#: cdl\plugins\cdl_testdata.py:162
+#: cdl\plugins\cdl_testdata.py:47 cdl\plugins\cdl_testdata.py:139
+#: cdl\plugins\cdl_testdata.py:154
 msgid "Test data"
 msgstr "Données de test"
 
@@ -2778,51 +2778,51 @@ msgstr "Ajouter du bruit"
 msgid "Noise"
 msgstr "Bruit"
 
-#: cdl\plugins\cdl_testdata.py:132
+#: cdl\plugins\cdl_testdata.py:124
 msgid "Ring"
 msgstr "Anneau"
 
-#: cdl\plugins\cdl_testdata.py:148
+#: cdl\plugins\cdl_testdata.py:140
 msgid "Add noise to signal"
 msgstr "Ajouter du bruit au signal"
 
-#: cdl\plugins\cdl_testdata.py:150
+#: cdl\plugins\cdl_testdata.py:142
 msgid "Load spectrum of paracetamol"
 msgstr "Charger le spectre du paracétamol"
 
-#: cdl\plugins\cdl_testdata.py:156
+#: cdl\plugins\cdl_testdata.py:148
 msgid "Create noisy signal"
 msgstr "Créer un signal bruité"
 
-#: cdl\plugins\cdl_testdata.py:163
+#: cdl\plugins\cdl_testdata.py:155
 msgid "Add noise to image"
 msgstr "Ajouter du bruit à l'image"
 
-#: cdl\plugins\cdl_testdata.py:166
+#: cdl\plugins\cdl_testdata.py:158
 msgid "Create image with peaks"
 msgstr "Créer une image avec des pics"
 
-#: cdl\plugins\cdl_testdata.py:172
+#: cdl\plugins\cdl_testdata.py:164
 msgid "Create 2D sin cos image"
 msgstr "Créer une image 2D sin cos"
 
-#: cdl\plugins\cdl_testdata.py:177
+#: cdl\plugins\cdl_testdata.py:169
 msgid "Create 2D noisy gauss image"
 msgstr "Créer une image 2D gaussienne bruitée"
 
-#: cdl\plugins\cdl_testdata.py:182
+#: cdl\plugins\cdl_testdata.py:174
 msgid "Create 2D multi gauss image"
 msgstr "Créer une image 2D multi-gaussienne"
 
-#: cdl\plugins\cdl_testdata.py:187
+#: cdl\plugins\cdl_testdata.py:179
 msgid "Create annotated image"
 msgstr "Créer une image annotée"
 
-#: cdl\plugins\cdl_testdata.py:192
+#: cdl\plugins\cdl_testdata.py:184
 msgid "Create 2D step image"
 msgstr "Créer une image 2D échelon"
 
-#: cdl\plugins\cdl_testdata.py:197
+#: cdl\plugins\cdl_testdata.py:189
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
