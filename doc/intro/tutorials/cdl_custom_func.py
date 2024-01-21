@@ -24,16 +24,21 @@ import cdl.param
 import cdl.plugins
 
 
-def weighted_average_denoise(values: np.ndarray) -> float:
+def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
     """Apply a custom denoising filter to an image.
 
     This filter averages the pixels in a 5x5 neighborhood, but gives less weight
     to pixels that significantly differ from the central pixel.
     """
-    central_pixel = values[len(values) // 2]
-    differences = np.abs(values - central_pixel)
-    weights = np.exp(-differences / np.mean(differences))
-    return np.average(values, weights=weights)
+
+    def filter_func(values: np.ndarray) -> float:
+        """Filter function"""
+        central_pixel = values[len(values) // 2]
+        differences = np.abs(values - central_pixel)
+        weights = np.exp(-differences / np.mean(differences))
+        return np.average(values, weights=weights)
+
+    return spi.generic_filter(data, filter_func, size=5)
 
 
 def compute_weighted_average_denoise(src: cdl.obj.ImageObj) -> cdl.obj.ImageObj:
@@ -49,7 +54,7 @@ def compute_weighted_average_denoise(src: cdl.obj.ImageObj) -> cdl.obj.ImageObj:
         ImageObj: output image object
     """
     dst = cpi.dst_11(src, weighted_average_denoise.__name__)
-    dst.data = spi.generic_filter(src.data, weighted_average_denoise, size=5)
+    dst.data = weighted_average_denoise(src.data)
     return dst
 
 
@@ -62,15 +67,14 @@ class CustomFilters(cdl.plugins.PluginBase):
         description="This is an example plugin",
     )
 
-    def apply_func(self, func, title) -> None:
-        """Apply custom function"""
-        self.imagepanel.processor.compute_11(func, title=title)
-
     def create_actions(self) -> None:
         """Create actions"""
         acth = self.imagepanel.acthandler
+        proc = self.imagepanel.processor
         with acth.new_menu(self.PLUGIN_INFO.name):
             for name, func in (
                 ("Weighted average denoise", compute_weighted_average_denoise),
             ):
-                acth.new_action(name, triggered=lambda: self.apply_func(func, name))
+                acth.new_action(
+                    name, triggered=lambda: proc.compute_11(func, title=name)
+                )

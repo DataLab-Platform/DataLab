@@ -23,16 +23,21 @@ edge or noise.
 
 Here is the code of the ``weighted_average_denoise`` function::
 
-    def weighted_average_denoise(values: np.ndarray) -> float:
+    def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
         """Apply a custom denoising filter to an image.
 
         This filter averages the pixels in a 5x5 neighborhood, but gives less weight
         to pixels that significantly differ from the central pixel.
         """
-        central_pixel = values[len(values) // 2]
-        differences = np.abs(values - central_pixel)
-        weights = np.exp(-differences / np.mean(differences))
-        return np.average(values, weights=weights)
+
+        def filter_func(values: np.ndarray) -> float:
+            """Filter function"""
+            central_pixel = values[len(values) // 2]
+            differences = np.abs(values - central_pixel)
+            weights = np.exp(-differences / np.mean(differences))
+            return np.average(values, weights=weights)
+
+        return spi.generic_filter(data, filter_func, size=5)
 
 For testing our processing function, we will use a generated image from a DataLab
 plugin example (`plugins/examples/cdl_example_imageproc.py`). Before starting,

@@ -21,17 +21,24 @@ proxy.connect()
 
 # %% Executing commands in DataLab (...)
 
+
 # Define our custom processing function
-def weighted_average_denoise(values: np.ndarray) -> float:
+def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
     """Apply a custom denoising filter to an image.
 
     This filter averages the pixels in a 5x5 neighborhood, but gives less weight
     to pixels that significantly differ from the central pixel.
     """
-    central_pixel = values[len(values) // 2]
-    differences = np.abs(values - central_pixel)
-    weights = np.exp(-differences / np.mean(differences))
-    return np.average(values, weights=weights)
+
+    def filter_func(values: np.ndarray) -> float:
+        """Filter function"""
+        central_pixel = values[len(values) // 2]
+        differences = np.abs(values - central_pixel)
+        weights = np.exp(-differences / np.mean(differences))
+        return np.average(values, weights=weights)
+
+    return spi.generic_filter(data, filter_func, size=5)
+
 
 # Switch to the "Image panel" and get the current image
 proxy.set_current_panel("image")
@@ -42,7 +49,7 @@ if image is None:
 
 # Get a copy of the image data, and apply the function to it
 data = np.array(image.data, copy=True)
-data = spi.generic_filter(data, weighted_average_denoise, size=5)
+data = weighted_average_denoise(data)
 
 # Add new image to the panel
 proxy.add_image("Filtered using Spyder", data)
