@@ -52,6 +52,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui import main
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
+    from cdl.core.model.image import NewImageParam
+    from cdl.core.model.signal import NewSignalParam
 
 
 PLUGINS_DEFAULT_PATH = Conf.get_path("plugins")
@@ -187,6 +189,61 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             return True
         if answer == QW.QMessageBox.No:
             return False
+        return None
+
+    def edit_new_signal_parameters(
+        self,
+        title: str | None = None,
+        size: int | None = None,
+        hide_signal_type: bool = True,
+    ) -> NewSignalParam:
+        """Create and edit new signal parameter dataset
+
+        Args:
+            title: title of the new signal
+            size: size of the new signal (default: None, get from current signal)
+            hide_signal_type: hide signal type parameter (default: True)
+
+        Returns:
+            New signal parameter dataset (or None if canceled)
+        """
+        newparam = self.signalpanel.get_newparam_from_current()
+        if title is not None:
+            newparam.title = title
+        if size is not None:
+            newparam.size = size
+        newparam.hide_signal_type = hide_signal_type
+        if newparam.edit(self.signalpanel):
+            return newparam
+        return None
+
+    def edit_new_image_parameters(
+        self,
+        title: str | None = None,
+        shape: tuple[int, int] | None = None,
+        hide_image_type: bool = True,
+        hide_image_dtype: bool = False,
+    ) -> NewImageParam | None:
+        """Create and edit new image parameter dataset
+
+        Args:
+            title: title of the new image
+            shape: shape of the new image (default: None, get from current image)
+            hide_image_type: hide image type parameter (default: True)
+            hide_image_dtype: hide image data type parameter (default: False)
+
+        Returns:
+            New image parameter dataset (or None if canceled)
+        """
+        newparam = self.imagepanel.get_newparam_from_current()
+        if title is not None:
+            newparam.title = title
+        if shape is not None:
+            newparam.width, newparam.height = shape
+        newparam.hide_image_type = hide_image_type
+        newparam.hide_image_dtype = hide_image_dtype
+        if newparam.edit(self.imagepanel):
+            return newparam
         return None
 
     def is_registered(self):

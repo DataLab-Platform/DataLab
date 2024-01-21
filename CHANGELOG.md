@@ -59,6 +59,11 @@ for future and past milestones.
   of average profile extraction)
 * Curve style: added "Reset curve styles" in "View" menu.
   This feature allows to reset the curve style cycle to its initial state.
+* Plugin base classe `PluginBase`:
+  * Added `edit_new_signal_parameters` method for showing a dialog box to edit
+    parameters for a new signal
+  * Added `edit_new_image_parameters` method for showing a dialog box to edit
+    parameters for a new image (updated the *cdl_testdata.py* plugin accordingly)
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve

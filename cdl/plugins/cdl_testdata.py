@@ -91,38 +91,30 @@ class PluginTestData(PluginBase):
             obj.data = test_data.get_peak2d_data(param)
             self.proxy.add_object(obj)
 
-    def __get_newimageparam(self):
-        """Create new image parameter dataset"""
-        newparam = self.imagepanel.get_newparam_from_current()
-        newparam.hide_image_type = True
-        if newparam.edit(self.imagepanel):
-            return newparam
-        return None
-
     def create_sincos_image(self) -> None:
         """Create 2D sin cos image"""
-        newparam = self.__get_newimageparam()
+        newparam = self.edit_new_image_parameters(hide_image_type=True)
         if newparam is not None:
             obj = test_data.create_sincos_image(newparam)
             self.proxy.add_object(obj)
 
     def create_noisygauss_image(self) -> None:
         """Create 2D noisy gauss image"""
-        newparam = self.__get_newimageparam()
+        newparam = self.edit_new_image_parameters(hide_image_type=True)
         if newparam is not None:
             obj = test_data.create_noisygauss_image(newparam)
             self.proxy.add_object(obj)
 
     def create_multigauss_image(self) -> None:
         """Create 2D multi gauss image"""
-        newparam = self.__get_newimageparam()
+        newparam = self.edit_new_image_parameters(hide_image_type=True)
         if newparam is not None:
             obj = test_data.create_multigauss_image(newparam)
             self.proxy.add_object(obj)
 
     def create_2dstep_image(self) -> None:
         """Create 2D step image"""
-        newparam = self.__get_newimageparam()
+        newparam = self.edit_new_image_parameters(hide_image_type=True)
         if newparam is not None:
             obj = test_data.create_2dstep_image(newparam)
             self.proxy.add_object(obj)

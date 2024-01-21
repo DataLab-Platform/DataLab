@@ -35,21 +35,26 @@ class ExtractBlobs(cdl.plugins.PluginBase):
 
     def generate_test_image(self) -> None:
         """Generate test image"""
-        # Create a NumPy array:
-        arr = np.random.normal(10000, 1000, (2048, 2048))
-        for _ in range(10):
-            row = np.random.randint(0, arr.shape[0])
-            col = np.random.randint(0, arr.shape[1])
-            rr, cc = skimage.draw.disk((row, col), 40, shape=arr.shape)
-            arr[rr, cc] -= np.random.randint(5000, 6000)
-        icenter = arr.shape[0] // 2
-        rr, cc = skimage.draw.disk((icenter, icenter), 200, shape=arr.shape)
-        arr[rr, cc] -= np.random.randint(5000, 8000)
-        data = np.clip(arr, 0, 65535).astype(np.uint16)
+        newparam = self.edit_new_image_parameters(
+            title="Test image", hide_image_dtype=True, shape=(2048, 2048)
+        )
+        if newparam is not None:
+            # Create a NumPy array:
+            shape = (newparam.height, newparam.width)
+            arr = np.random.normal(10000, 1000, shape)
+            for _ in range(10):
+                row = np.random.randint(0, shape[0])
+                col = np.random.randint(0, shape[1])
+                rr, cc = skimage.draw.disk((row, col), min(shape) // 50, shape=shape)
+                arr[rr, cc] -= np.random.randint(5000, 6000)
+            center = (shape[0] // 2,) * 2
+            rr, cc = skimage.draw.disk(center, min(shape) // 10, shape=shape)
+            arr[rr, cc] -= np.random.randint(5000, 8000)
+            data = np.clip(arr, 0, 65535).astype(np.uint16)
 
-        # Create a new image object and add it to the image panel
-        image = cdl.obj.create_image("Test image", data, units=("mm", "mm", "lsb"))
-        self.proxy.add_object(image)
+            # Create a new image object and add it to the image panel
+            obj = cdl.obj.create_image(newparam.title, data, units=("mm", "mm", "lsb"))
+            self.proxy.add_object(obj)
 
     def preprocess(self) -> None:
         """Preprocess image"""
