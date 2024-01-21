@@ -80,19 +80,22 @@ class ImagePanel(BaseDataPanel):
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(
-        self, newparam: NewImageParam | None = None
+        self, newparam: NewImageParam | None = None, title: str | None = None
     ) -> NewImageParam | None:
         """Get new object parameters from the current object.
 
         Args:
             newparam (guidata.dataset.DataSet): new object parameters.
              If None, create a new one.
+            title: new object title. If None, use the current object title, or the
+             default title.
 
         Returns:
             New object parameters
         """
         curobj: ImageObj = self.objview.get_current_object()
-        newparam = new_image_param() if newparam is None else newparam
+        if newparam is None:
+            newparam = new_image_param(title=title)
         if curobj is not None:
             newparam.width, newparam.height = curobj.size
             newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)

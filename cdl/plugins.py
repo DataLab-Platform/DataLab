@@ -207,9 +207,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         Returns:
             New signal parameter dataset (or None if canceled)
         """
-        newparam = self.signalpanel.get_newparam_from_current()
-        if title is not None:
-            newparam.title = title
+        newparam = self.signalpanel.get_newparam_from_current(title=title)
         if size is not None:
             newparam.size = size
         newparam.hide_signal_type = hide_signal_type
@@ -235,9 +233,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         Returns:
             New image parameter dataset (or None if canceled)
         """
-        newparam = self.imagepanel.get_newparam_from_current()
-        if title is not None:
-            newparam.title = title
+        newparam = self.imagepanel.get_newparam_from_current(title=title)
         if shape is not None:
             newparam.width, newparam.height = shape
         newparam.hide_image_type = hide_image_type

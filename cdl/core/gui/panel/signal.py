@@ -72,19 +72,22 @@ class SignalPanel(BaseDataPanel):
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(
-        self, newparam: NewSignalParam | None = None
+        self, newparam: NewSignalParam | None = None, title: str | None = None
     ) -> NewSignalParam | None:
         """Get new object parameters from the current object.
 
         Args:
             newparam (guidata.dataset.DataSet): new object parameters.
              If None, create a new one.
+            title: new object title. If None, use the current object title, or the
+             default title.
 
         Returns:
             New object parameters
         """
         curobj: SignalObj = self.objview.get_current_object()
-        newparam = new_signal_param() if newparam is None else newparam
+        if newparam is None:
+            newparam = new_signal_param(title=title)
         if curobj is not None:
             newparam.size = len(curobj.data)
             newparam.xmin = curobj.x.min()
