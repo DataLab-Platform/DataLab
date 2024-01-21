@@ -17,3 +17,4 @@ Other Tutorials
    spectrum
    blobs
    fabry_perot
+   custom_func

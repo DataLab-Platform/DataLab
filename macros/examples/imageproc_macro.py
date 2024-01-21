@@ -11,17 +11,14 @@ import scipy.ndimage as spi
 from cdl.proxy import RemoteProxy
 
 proxy = RemoteProxy()
-
 proxy.set_current_panel("image")
-if len(proxy.get_object_uuids()) == 0:
+image = proxy.get_object()
+if image is None:
     raise RuntimeError("No image to process!")
-
-uuid = proxy.get_sel_object_uuids()[0]
-image = proxy.get_object(uuid)
 
 
 # Filter image with a custom kernel
-def filter_func(values: np.ndarray) -> float:
+def weighted_average_denoise(values: np.ndarray) -> float:
     """Apply a custom denoising filter to an image.
 
     This filter averages the pixels in a 5x5 neighborhood, but gives less weight
@@ -34,7 +31,7 @@ def filter_func(values: np.ndarray) -> float:
 
 
 data = np.array(image.data, copy=True)
-data = spi.generic_filter(data, filter_func, size=5)
+data = spi.generic_filter(data, weighted_average_denoise, size=5)
 
 # Add new image to the panel
 proxy.add_image("My custom filtered data", data)

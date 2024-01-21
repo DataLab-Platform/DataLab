@@ -1,3 +1,5 @@
+.. _tutorial_blobs:
+
 Detecting blobs on an image
 ===========================
 
