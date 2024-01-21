@@ -71,6 +71,7 @@ print("All done!")
         self.console = console
         self.title = self.get_untitled_title() if title is None else title
         self.editor = CodeEditor(language="python")
+        self.editor.setLineWrapMode(QW.QPlainTextEdit.NoWrap)
         self.set_code(self.MACRO_SAMPLE)
         self.editor.modificationChanged.connect(self.modification_changed)
         self.process = None
