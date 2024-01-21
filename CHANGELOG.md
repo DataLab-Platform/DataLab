@@ -125,6 +125,8 @@ for future and past milestones.
 * "Properties" group box: the "Apply" button was enabled by default, even when no
   property was modified, which was confusing for the user (the "Apply" button is now
   disabled by default, and is enabled only when a property is modified)
+* Fixed proxy `get_object` method when there is no object to return
+  (`None` is returned instead of an exception)
 
 ## DataLab Version 0.10.1 ##
 

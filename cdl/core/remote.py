@@ -523,7 +523,10 @@ class RemoteServer(QC.QThread):
         Raises:
             KeyError: if object not found
         """
-        return dataset_to_json(self.win.get_object(nb_id_title, panel))
+        obj = self.win.get_object(nb_id_title, panel)
+        if obj is None:
+            return None
+        return dataset_to_json(obj)
 
     @remote_call
     def get_object_uuids(self, panel: str | None = None) -> list[str]:
@@ -856,6 +859,8 @@ class RemoteClient(BaseProxy):
             KeyError: if object not found
         """
         param_data = self._cdl.get_object(nb_id_title, panel)
+        if param_data is None:
+            return None
         return json_to_dataset(param_data)
 
     def get_object_shapes(
