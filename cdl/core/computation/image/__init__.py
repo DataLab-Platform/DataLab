@@ -64,6 +64,44 @@ def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
     return dst
 
 
+class Wrap11Func:
+    """Wrap a 1 array -> 1 array function to produce a 1 ``ImageObj`` -> 1 ``ImageObj``
+    function, which can be used inside DataLab's infrastructure to perform computations
+    with ``ImageProcessor``.
+
+    This wrapping mechanism using a class is necessary for the resulted function to be
+    pickable by the ``multiprocessing`` module.
+
+    The instance of this wrapper is callable and returns a ``ImageObj`` object.
+
+    Example:
+
+        >>> import numpy as np
+        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> import cdl.obj
+        >>> def add_noise(data):
+        ...     return data + np.random.random(data.shape)
+        >>> compute_add_noise = Wrap11Func(add_noise)
+        >>> data= np.ones((100, 100))
+        >>> ima0 = cdl.obj.create_image("Example", data)
+        >>> ima1 = compute_add_noise(ima0)
+
+    Args:
+        func: 1 array -> 1 array function
+    """
+
+    def __init__(self, func: Callable) -> None:
+        self.func = func
+        self.__name__ = func.__name__
+        self.__doc__ = func.__doc__
+        self.__call__.__func__.__doc__ = self.func.__doc__
+
+    def __call__(self, src: ImageObj) -> ImageObj:
+        dst = dst_11(src, self.func.__name__)
+        dst.data = self.func(src.data)
+        return dst
+
+
 def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> SignalObj:
     """Create result signal object for compute_11 function
 
@@ -366,8 +404,7 @@ def compute_fliph(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "fliph")
-    dst.data = np.fliplr(src.data)
+    dst = Wrap11Func(np.fliplr)(src)
     dst.transform_shapes(src, hflip_coords)
     return dst
 
@@ -386,8 +423,7 @@ def compute_flipv(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "flipv")
-    dst.data = np.flipud(src.data)
+    dst = Wrap11Func(np.flipud)(src)
     dst.transform_shapes(src, vflip_coords)
     return dst
 
@@ -670,8 +706,7 @@ def compute_swap_axes(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "swap_axes")
-    dst.data = np.transpose(src.data)
+    dst = Wrap11Func(np.transpose)(src)
     # TODO: [P2] Instead of removing geometric shapes, apply swap
     dst.remove_all_shapes()
     return dst
@@ -684,9 +719,7 @@ def compute_abs(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "abs")
-    dst.data = np.abs(src.data)
-    return dst
+    return Wrap11Func(np.abs)(src)
 
 
 def compute_re(src: ImageObj) -> ImageObj:
@@ -696,9 +729,7 @@ def compute_re(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "re")
-    dst.data = np.real(src.data)
-    return dst
+    return Wrap11Func(np.real)(src)
 
 
 def compute_im(src: ImageObj) -> ImageObj:
@@ -708,9 +739,7 @@ def compute_im(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "im")
-    dst.data = np.imag(src.data)
-    return dst
+    return Wrap11Func(np.imag)(src)
 
 
 class DataTypeIParam(gds.DataSet):
@@ -743,9 +772,7 @@ def compute_log10(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "log10")
-    dst.data = np.log10(src.data)
-    return dst
+    return Wrap11Func(np.log10)(src)
 
 
 class ZCalibrateParam(gds.DataSet):
@@ -840,9 +867,7 @@ def compute_wiener(src: ImageObj) -> ImageObj:
     Returns:
         ImageObj: output image object
     """
-    dst = dst_11(src, "wiener")
-    dst.data = sps.wiener(src.data)
-    return dst
+    return Wrap11Func(sps.wiener)(src)
 
 
 def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:

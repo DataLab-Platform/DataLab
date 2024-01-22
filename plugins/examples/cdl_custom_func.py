@@ -41,23 +41,6 @@ def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
     return spi.generic_filter(data, filter_func, size=5)
 
 
-def compute_weighted_average_denoise(src: cdl.obj.ImageObj) -> cdl.obj.ImageObj:
-    """Compute Weighted average denoise
-
-    This function is a wrapper around the ``weighted_average_denoise`` function,
-    allowing to process an image object (instead of a NumPy array).
-    It is required to use the function in DataLab.
-
-    Args:
-        src (ImageObj): input image object
-    Returns:
-        ImageObj: output image object
-    """
-    dst = cpi.dst_11(src, weighted_average_denoise.__name__)
-    dst.data = weighted_average_denoise(src.data)
-    return dst
-
-
 class CustomFilters(cdl.plugins.PluginBase):
     """DataLab Custom Filters Plugin"""
 
@@ -72,9 +55,9 @@ class CustomFilters(cdl.plugins.PluginBase):
         acth = self.imagepanel.acthandler
         proc = self.imagepanel.processor
         with acth.new_menu(self.PLUGIN_INFO.name):
-            for name, func in (
-                ("Weighted average denoise", compute_weighted_average_denoise),
-            ):
+            for name, func in (("Weighted average denoise", weighted_average_denoise),):
+                # Wrap function to handle ``ImageObj`` objects instead of NumPy arrays
+                wrapped_func = cpi.Wrap11Func(func)
                 acth.new_action(
-                    name, triggered=lambda: proc.compute_11(func, title=name)
+                    name, triggered=lambda: proc.compute_11(wrapped_func, title=name)
                 )

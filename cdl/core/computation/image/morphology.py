@@ -35,11 +35,13 @@ class MorphologyParam(gds.DataSet):
 
 def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute White Top-Hat
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "white_tophat", f"radius={p.radius}")
     dst.data = morphology.white_tophat(src.data, morphology.disk(p.radius))
@@ -48,11 +50,13 @@ def compute_white_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Black Top-Hat
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "black_tophat", f"radius={p.radius}")
     dst.data = morphology.black_tophat(src.data, morphology.disk(p.radius))
@@ -61,11 +65,13 @@ def compute_black_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Erosion
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "erosion", f"radius={p.radius}")
     dst.data = morphology.erosion(src.data, morphology.disk(p.radius))
@@ -74,11 +80,13 @@ def compute_erosion(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute Dilation
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "dilation", f"radius={p.radius}")
     dst.data = morphology.dilation(src.data, morphology.disk(p.radius))
@@ -87,11 +95,13 @@ def compute_dilation(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological opening
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "opening", f"radius={p.radius}")
     dst.data = morphology.opening(src.data, morphology.disk(p.radius))
@@ -100,11 +110,13 @@ def compute_opening(src: ImageObj, p: MorphologyParam) -> ImageObj:
 
 def compute_closing(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Compute morphological closing
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "closing", f"radius={p.radius}")
     dst.data = morphology.closing(src.data, morphology.disk(p.radius))

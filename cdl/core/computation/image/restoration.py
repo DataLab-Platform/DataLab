@@ -63,11 +63,13 @@ class DenoiseTVParam(gds.DataSet):
 
 def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     """Compute Total Variation denoising
+
     Args:
-        src (ImageObj): input image object
-        p (DenoiseTVParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src,
@@ -111,11 +113,13 @@ class DenoiseBilateralParam(gds.DataSet):
 
 def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageObj:
     """Compute bilateral filter denoising
+
     Args:
-        src (ImageObj): input image object
-        p (DenoiseBilateralParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src,
@@ -148,11 +152,13 @@ class DenoiseWaveletParam(gds.DataSet):
 
 def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     """Compute Wavelet denoising
+
     Args:
-        src (ImageObj): input image object
-        p (DenoiseWaveletParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src,
@@ -170,11 +176,13 @@ def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
 
 def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:
     """Denoise using White Top-Hat
+
     Args:
-        src (ImageObj): input image object
-        p (MorphologyParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "denoise_tophat", f"radius={p.radius}")
     dst.data = src.data - morphology.white_tophat(src.data, morphology.disk(p.radius))

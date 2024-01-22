@@ -66,11 +66,13 @@ class Peak2DDetectionParam(GenericDetectionParam):
 
 def compute_peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> np.ndarray:
     """Compute 2D peak detection
+
     Args:
-        image (ImageObj): input image
-        p (Peak2DDetectionParam): parameters
+        imageOutput: input image
+        p: parameters
+
     Returns:
-        np.ndarray: peak coordinates
+        Peak coordinates
     """
     return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
 
@@ -155,11 +157,13 @@ class BlobDOGParam(BaseBlobParam):
 
 def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
     """Compute blobs using Difference of Gaussian method
+
     Args:
-        image (ImageObj): input image
-        p (BlobDOGParam): parameters
+        imageOutput: input image
+        p: parameters
+
     Returns:
-        np.ndarray: blobs coordinates
+        Blobs coordinates
     """
     return calc_with_osr(
         image,
@@ -188,11 +192,13 @@ class BlobDOHParam(BaseBlobParam):
 
 def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
     """Compute blobs using Determinant of Hessian method
+
     Args:
-        image (ImageObj): input image
-        p (BlobDOHParam): parameters
+        imageOutput: input image
+        p: parameters
+
     Returns:
-        np.ndarray: blobs coordinates
+        Blobs coordinates
     """
     return calc_with_osr(
         image,
@@ -217,11 +223,13 @@ class BlobLOGParam(BlobDOHParam):
 
 def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
     """Compute blobs using Laplacian of Gaussian method
+
     Args:
-        image (ImageObj): input image
-        p (BlobLOGParam): parameters
+        imageOutput: input image
+        p: parameters
+
     Returns:
-        np.ndarray: blobs coordinates
+        Blobs coordinates
     """
     return calc_with_osr(
         image,
@@ -374,11 +382,13 @@ class BlobOpenCVParam(gds.DataSet):
 
 def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
     """Compute blobs using OpenCV
+
     Args:
-        image (ImageObj): input image
-        p (BlobOpenCVParam): parameters
+        imageOutput: input image
+        p: parameters
+
     Returns:
-        np.ndarray: blobs coordinates
+        Blobs coordinates
     """
     return calc_with_osr(
         image,

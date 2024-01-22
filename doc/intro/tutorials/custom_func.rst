@@ -285,7 +285,7 @@ way (see below):
 
 Here is the plugin code:
 
-.. literalinclude:: cdl_custom_func.py
+.. literalinclude:: ../../../plugins/examples/cdl_custom_func.py
     :language: python
     :linenos:
 

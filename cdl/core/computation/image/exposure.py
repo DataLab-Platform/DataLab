@@ -44,11 +44,13 @@ class AdjustGammaParam(gds.DataSet):
 
 def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
     """Gamma correction
+
     Args:
-        src (ImageObj): input image object
+        src: input image object
         p (AdjustGammaParam): parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "adjust_gamma", f"gamma={p.gamma}, gain={p.gain}")
     dst.data = exposure.adjust_gamma(src.data, gamma=p.gamma, gain=p.gain)
@@ -73,11 +75,13 @@ class AdjustLogParam(gds.DataSet):
 
 def compute_adjust_log(src: ImageObj, p: AdjustLogParam) -> ImageObj:
     """Compute log correction
+
     Args:
-        src (ImageObj): input image object
-        p (AdjustLogParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "adjust_log", f"gain={p.gain}, inv={p.inv}")
     dst.data = exposure.adjust_log(src.data, gain=p.gain, inv=p.inv)
@@ -109,11 +113,13 @@ class AdjustSigmoidParam(gds.DataSet):
 
 def compute_adjust_sigmoid(src: ImageObj, p: AdjustSigmoidParam) -> ImageObj:
     """Compute sigmoid correction
+
     Args:
-        src (ImageObj): input image object
-        p (AdjustSigmoidParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src, "adjust_sigmoid", f"cutoff={p.cutoff}, gain={p.gain}, inv={p.inv}"
@@ -150,11 +156,13 @@ class RescaleIntensityParam(gds.DataSet):
 
 def compute_rescale_intensity(src: ImageObj, p: RescaleIntensityParam) -> ImageObj:
     """Rescale image intensity levels
+
     Args:
-        src (ImageObj): input image object
-        p (RescaleIntensityParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src,
@@ -180,11 +188,13 @@ class EqualizeHistParam(gds.DataSet):
 
 def compute_equalize_hist(src: ImageObj, p: EqualizeHistParam) -> ImageObj:
     """Histogram equalization
+
     Args:
-        src (ImageObj): input image object
-        p (EqualizeHistParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(src, "equalize_hist", f"nbins={p.nbins}")
     dst.data = exposure.equalize_hist(src.data, nbins=p.nbins)
@@ -205,11 +215,13 @@ class EqualizeAdaptHistParam(EqualizeHistParam):
 
 def compute_equalize_adapthist(src: ImageObj, p: EqualizeAdaptHistParam) -> ImageObj:
     """Adaptive histogram equalization
+
     Args:
-        src (ImageObj): input image object
-        p (EqualizeAdaptHistParam): parameters
+        src: input image object
+        p: parameters
+
     Returns:
-        ImageObj: output image object
+        Output image object
     """
     dst = dst_11(
         src, "equalize_adapthist", f"nbins={p.nbins}, clip_limit={p.clip_limit}"

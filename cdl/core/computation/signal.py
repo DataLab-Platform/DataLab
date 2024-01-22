@@ -15,6 +15,8 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import guidata.dataset as gds
 import numpy as np
 import scipy.integrate as spt
@@ -61,6 +63,46 @@ def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
     if suffix is not None:
         dst.title += "|" + suffix
     return dst
+
+
+class Wrap11Func:
+    """Wrap a 1 array -> 1 array function (the simple case of y1 = f(y0))
+    to produce a 1 ``SignalObj`` -> 1 ``SignalObj`` function, which can be used
+    inside DataLab's infrastructure to perform computations with ``SignalProcessor``.
+
+    This wrapping mechanism using a class is necessary for the resulted function to be
+    pickable by the ``multiprocessing`` module.
+
+    The instance of this wrapper is callable and returns a ``SignalObj`` object.
+
+    Example:
+
+        >>> import numpy as np
+        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> import cdl.obj
+        >>> def square(y):
+        ...     return y**2
+        >>> compute_square = Wrap11Func(square)
+        >>> x = np.linspace(0, 10, 100)
+        >>> y = np.sin(x)
+        >>> sig0 = cdl.obj.create_signal("Example", x, y)
+        >>> sig1 = compute_square(sig0)
+
+    Args:
+        func: 1 array -> 1 array function
+    """
+
+    def __init__(self, func: Callable) -> None:
+        self.func = func
+        self.__name__ = func.__name__
+        self.__doc__ = func.__doc__
+        self.__call__.__func__.__doc__ = self.func.__doc__
+
+    def __call__(self, src: SignalObj) -> SignalObj:
+        dst = dst_11(src, self.func.__name__)
+        x, y = src.get_data()
+        dst.set_xydata(x, self.func(y))
+        return dst
 
 
 def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = None):
@@ -236,10 +278,7 @@ def compute_abs(src: SignalObj) -> SignalObj:
     Returns:
         SignalObj: result signal object
     """
-    dst = dst_11(src, "abs")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.abs(y))
-    return dst
+    return Wrap11Func(np.abs)(src)
 
 
 def compute_re(src: SignalObj) -> SignalObj:
@@ -249,10 +288,7 @@ def compute_re(src: SignalObj) -> SignalObj:
     Returns:
         SignalObj: result signal object
     """
-    dst = dst_11(src, "re")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.real(y))
-    return dst
+    return Wrap11Func(np.real)(src)
 
 
 def compute_im(src: SignalObj) -> SignalObj:
@@ -262,10 +298,7 @@ def compute_im(src: SignalObj) -> SignalObj:
     Returns:
         SignalObj: result signal object
     """
-    dst = dst_11(src, "im")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.imag(y))
-    return dst
+    return Wrap11Func(np.imag)(src)
 
 
 class DataTypeSParam(gds.DataSet):
@@ -298,10 +331,7 @@ def compute_log10(src: SignalObj) -> SignalObj:
     Returns:
         SignalObj: result signal object
     """
-    dst = dst_11(src, "log10")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.log10(y))
-    return dst
+    return Wrap11Func(np.log10)(src)
 
 
 class PeakDetectionParam(gds.DataSet):
@@ -486,10 +516,7 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     Returns:
         SignalObj: result signal object
     """
-    dst = dst_11(src, "wiener")
-    x, y = src.get_data()
-    dst.set_xydata(x, sps.wiener(y))
-    return dst
+    return Wrap11Func(sps.wiener)(src)
 
 
 def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
