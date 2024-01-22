@@ -30,6 +30,7 @@ from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_sincos_image
 from cdl.tests.features.common.newobject_unit import iterate_image_creation
 from cdl.tests.scenarios.common import compute_common_operations
+from cdl.utils.tests import get_test_fnames
 
 if os.name == "nt":
     from ctypes import WinDLL
@@ -105,6 +106,11 @@ def test_gdi_count(win: CDLMainWindow) -> int | None:
 
     # Create widgets during the test
     test_various_image_features(win)
+
+    # Import HDF5 file using the HDF5 browser
+    win.open_h5_files(get_test_fnames("*.h5")[:5], import_all=True, reset_all=False)
+    for panel in (win.signalpanel, win.imagepanel):
+        panel.remove_all_objects()
 
     # Get the GDI count after creating the widget
     gdi_count_after: int = get_gdi_count()
