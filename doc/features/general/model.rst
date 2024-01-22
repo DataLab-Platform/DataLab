@@ -5,15 +5,15 @@ Internal data model
 
 In its internal data model, DataLab stores data using two main classes:
 
-* `cdl.core.model.signal.SignalObj`, which represents a signal object, and
-* `cdl.core.model.image.ImageObj`, which represents an image object.
+* :class:`cdl.obj.SignalObj`, which represents a signal object, and
+* :class:`cdl.obj.ImageObj`, which represents an image object.
 
-These classes are defined in the `cdl.core.model` package but are exposed
-publicly in the `cdl.obj` package.
+These classes are defined in the ``cdl.core.model`` package but are exposed
+publicly in the :mod:`cdl.obj` package.
 
-Also, DataLab uses many different datasets (based on guidata's `DataSet` class)
+Also, DataLab uses many different datasets (based on guidata's ``DataSet`` class)
 to store the parameters of the computations. These datasets are defined in
-different modules but are exposed publicly in the `cdl.param` package.
+different modules but are exposed publicly in the :mod:`cdl.param` package.
 
 .. seealso::
 

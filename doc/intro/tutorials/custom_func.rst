@@ -283,6 +283,21 @@ way (see below):
 -   Warnings and errors will be handled by DataLab, so we don't need to handle them
     ourselves.
 
+The most significant change is that we need to define a function that will be
+operating on DataLab's native image objects (:class:`cdl.obj.ImageObj`), instead of
+operating on NumPy arrays. So we need to find a way to call our custom function
+``weighted_average_denoise`` with a :class:`cdl.obj.ImageObj` as input and output.
+To avoid writing a lot of boilerplate code, we can use the function wrapper provided
+by DataLab: :class:`cdl.core.computation.image.Wrap11Func`.
+
+Besides we need to define a class that describes our plugin, which must inherit
+from :class:`cdl.plugins.PluginBase` and name the Python script that contains the
+plugin code with a name that starts with ``cdl_`` (e.g. ``cdl_custom_func.py``), so
+that DataLab can discover it at startup.
+
+Moreover, inside the plugin code, we want to add an entry in the "Plugins" menu, so
+that the user can access our plugin from the GUI.
+
 Here is the plugin code:
 
 .. literalinclude:: ../../../plugins/examples/cdl_custom_func.py
