@@ -55,7 +55,7 @@ msgstr ""
 "Par ailleurs, DataLab utilise de nombreux jeux de données différents "
 "(basés sur la classe ``DataSet`` de guidata) pour stocker les paramètres "
 "des calculs. Ces jeux de données sont définis dans différents modules "
-"mais sont exposés publiquement dans le paquet `cdl.param`."
+"mais sont exposés publiquement dans le paquet :mod:`cdl.param`."
 
 #: ../../features/general/model.rst:20
 msgid "The :ref:`api` section for more information on the public API."
