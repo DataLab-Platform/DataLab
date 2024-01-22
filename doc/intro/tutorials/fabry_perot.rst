@@ -1,5 +1,5 @@
-Measuring Fabry-Perot fringes
-=============================
+:octicon:`book;1em;sd-text-info` Measuring Fabry-Perot fringes
+==============================================================
 
 This example shows how to measure Fabry-Perot fringes using the image processing
 features of DataLab:

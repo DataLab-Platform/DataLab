@@ -1,5 +1,5 @@
-Part 2: Add your own features
-=============================
+:octicon:`video;1em;sd-text-info` Add your own features
+=======================================================
 
 .. only:: html and not latex
 

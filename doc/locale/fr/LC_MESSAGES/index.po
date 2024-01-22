@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 14:26+0100\n"
+"POT-Creation-Date: 2024-01-22 17:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../index.rst:60
+#: ../../index.rst:59
 msgid "Contents:"
 msgstr "Table des matières :"
 
@@ -31,19 +31,12 @@ msgid ""
 "DataLab is an **open-source platform for scientific and technical data "
 "processing and visualization** with unique features designed to meet "
 "industrial requirements, extendable with :bdg-ref-success-line:`Plugins "
-"<about_plugins>` and working seamlessly with :bdg-ref-success-line:`Your "
-"IDE <use_cases>` or :bdg-ref-success-line:`Jupyter notebooks "
-"<use_cases>`, ... (see :ref:`key_strengths` or :ref:`use_cases`)."
-msgstr ""
-"DataLab est une **plateforme open-source de traitement et de "
-"visualisation de données scientifiques et techniques** avec des "
-"fonctionnalités uniques conçues pour répondre à des niveaux d'exigence "
-"industriels, extensible avec des :bdg-ref-success-line:`Plugins "
-"<about_plugins>` et fonctionnant parfaitement avec :bdg-ref-success-"
-"line:`Votre IDE <use_cases>` ou vos :bdg-ref-success-line:`Notebooks "
-"Jupyter <use_cases>`, ... (cf. :ref:`key_strengths` ou :ref:`use_cases`)."
+"<about_plugins>` and working seamlessly with :ref:`your IDE <use_cases>` "
+"or :ref:`Jupyter notebooks <use_cases>`, ... (see our :bdg-ref-success-"
+"line:`Tutorials <tutorials>` for illustrated examples)."
+msgstr "DataLab est une **plateforme open-source de traitement et de visualisation de données scientifiques et techniques** avec des fonctionnalités uniques conçues pour répondre à des niveaux d'exigence industriels, extensible avec :bdg-ref-success-line:`Plugins "<about_plugins>` et fonctionnant parfaitement avec :ref:`votre IDE <use_cases>` ou :ref:`Jupyter notebooks <use_cases>`, ... (voir nos :bdg-ref-success-line:`Tutoriels <tutorials>` pour des exemples illustrés)."
 
-#: ../../index.rst:11
+#: ../../index.rst:10
 msgid ""
 "DataLab leverages the richness of the scientific Python ecosystem (NumPy,"
 " SciPy, scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user "
@@ -53,11 +46,11 @@ msgstr ""
 "SciPy, scikit-image, OpenCV, `PlotPyStack`_, ...) et les interfaces "
 "graphiques Qt."
 
-#: ../../index.rst:17
+#: ../../index.rst:16
 msgid "Signal and image visualization in DataLab"
 msgstr "Visualisation de signaux et d'images dans DataLab"
 
-#: ../../index.rst:25
+#: ../../index.rst:24
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-rocket sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -81,11 +74,11 @@ msgid ""
 "started"
 msgstr "Premiers pas"
 
-#: ../../index.rst:29
+#: ../../index.rst:28
 msgid "Installation, use cases, key strengths, ..."
 msgstr "Installation, cas d'usage, points forts, ..."
 
-#: ../../index.rst:31
+#: ../../index.rst:30
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-tools sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -106,11 +99,11 @@ msgid ""
 "Features"
 msgstr "Fonctionnalités"
 
-#: ../../index.rst:35
+#: ../../index.rst:34
 msgid "In-depth description of DataLab features"
 msgstr "Description détaillée des fonctionnalités de DataLab"
 
-#: ../../index.rst:37
+#: ../../index.rst:36
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-book sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -124,11 +117,11 @@ msgid ""
 " 0 011.994.574z\"></path></svg>  API"
 msgstr "API"
 
-#: ../../index.rst:41
+#: ../../index.rst:40
 msgid "Reference documentation of DataLab API"
 msgstr "Documentation de référence de l'API de DataLab"
 
-#: ../../index.rst:43
+#: ../../index.rst:42
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-gear sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -172,11 +165,11 @@ msgid ""
 " 013 0zM11 8a3 3 0 11-6 0 3 3 0 016 0z\"></path></svg>  Development"
 msgstr "Développement"
 
-#: ../../index.rst:47
+#: ../../index.rst:46
 msgid "Roadmap, contributing, ..."
 msgstr "Feuille de route, contribution, ..."
 
-#: ../../index.rst:49
+#: ../../index.rst:48
 msgid ""
 "With its user-friendly experience and versatile :ref:`usage_modes`, "
 "DataLab enables efficient development of your data processing and "
@@ -188,7 +181,7 @@ msgstr ""
 " de traitement et de visualisation de données tout en bénéficiant d'une "
 "plateforme technologique de qualité industrielle."
 
-#: ../../index.rst:57
+#: ../../index.rst:56
 msgid ""
 "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
 "the scientific Python-Qt visualization and graphical user interface "
@@ -198,7 +191,7 @@ msgstr ""
 " les outils de visualisation et d'interface graphique scientifiques "
 "Python-Qt."
 
-#: ../../index.rst:69
+#: ../../index.rst:68
 msgid ""
 "DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
 "developed and maintained by DataLab open-source project team with the "
@@ -207,174 +200,3 @@ msgstr ""
 "DataLab a été créé par `Codra`_/`Pierre Raybaut`_ en 2023. Il est "
 "développé et maintenu par l'équipe du projet open-source DataLab avec le "
 "soutien de `Codra`_."
-
-#~ msgid "Copyright © 2018 `CEA`_ - `Codra`_, Pierre Raybaut"
-#~ msgstr ""
-
-#~ msgid "Indices and tables"
-#~ msgstr "Index et recherche"
-
-#~ msgid ":ref:`genindex`"
-#~ msgstr ""
-
-#~ msgid ":ref:`modindex`"
-#~ msgstr ""
-
-#~ msgid ":ref:`search`"
-#~ msgstr ""
-
-#~ msgid "Copyright © 2022 `CEA`_ - `Codra`_, Pierre Raybaut"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "DataLab is a **generic signal and "
-#~ "image processing software**. It is based"
-#~ " on Python scientific libraries (such "
-#~ "as NumPy, SciPy or scikit-image) "
-#~ "and Qt graphical user interfaces (thanks"
-#~ " to `guidata`_ and `guiqwt`_ libraries)."
-#~ msgstr ""
-#~ "DataLab est un **logiciel générique de"
-#~ " traitement du signal et de l'image**"
-#~ " basé sur des bibliothèques scientifiques"
-#~ " Python (telles que NumPy, SciPy ou"
-#~ " encore scikit-image) et sur les "
-#~ "interfaces graphiques Qt (grâce aux "
-#~ "bibliothèques `guidata`_ et `guiqwt`_)."
-
-#~ msgid "Copyright © 2023 `Codra`_, Pierre Raybaut"
-#~ msgstr ""
-
-#~ msgid "DataLab User Guide"
-#~ msgstr "Manuel Utilisateur de DataLab"
-
-#~ msgid ""
-#~ "DataLab is an open-source platform "
-#~ "for scientific and technical data "
-#~ "processing and visualization."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "DataLab :ref:`main_features` are available not"
-#~ " only using the **stand-alone "
-#~ "application** (easily installed thanks to "
-#~ "the Windows installer or the Python "
-#~ "package) but also by **embedding it "
-#~ "into your own application** (see the "
-#~ "\"embedded tests\" for detailed examples "
-#~ "of how to do so)."
-#~ msgstr ""
-#~ "Les :ref:`main_features` de DataLab sont "
-#~ "disponibles non seulement en utilisant "
-#~ "l'**application autonome** (facilement installée "
-#~ "grâce à l'installateur Windows ou au "
-#~ "paquet Python) mais aussi en "
-#~ "l'**intégrant dans votre propre application**"
-#~ " (voir les \"embedded tests\" pour "
-#~ "des exemples détaillés)."
-
-#~ msgid "Copyrights and licensing"
-#~ msgstr "Licence et copyrights"
-
-#~ msgid "Copyright © 2023 `Codra`_, `Pierre Raybaut`_"
-#~ msgstr ""
-
-#~ msgid "Licensed under the terms of the `BSD 3-Clause`_"
-#~ msgstr "Distribué sous licence `BSD 3-Clause`_"
-
-#~ msgid "DataLab documentation"
-#~ msgstr "Documentation de DataLab"
-
-#~ msgid "External resources:"
-#~ msgstr "Ressources externes :"
-
-#~ msgid "`Home`_"
-#~ msgstr "`Home`_"
-
-#~ msgid "DataLab home page"
-#~ msgstr "Site de DataLab"
-
-#~ msgid "`PyPI`_"
-#~ msgstr "`PyPI`_"
-
-#~ msgid "Python Package Index"
-#~ msgstr "Paquet Python officiel"
-
-#~ msgid "`GitHub`_"
-#~ msgstr "`GitHub`_"
-
-#~ msgid "Bug reports and feature requests"
-#~ msgstr "Signalement d'anomalies et demandes d'évolutions"
-
-#~ msgid "Developer guide"
-#~ msgstr ""
-
-#~ msgid "About DataLab development and contribution"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "DataLab is an **open-source platform "
-#~ "for scientific and technical data "
-#~ "processing and visualization** with unique "
-#~ "features designed to meet industrial "
-#~ "requirements (see :ref:`key_strengths`: "
-#~ "Extensibility, Interoperability, ...). It is"
-#~ " based on Python scientific libraries "
-#~ "(such as NumPy, SciPy or scikit-"
-#~ "image) and Qt graphical user interfaces"
-#~ " (thanks to the powerful `PlotPyStack`_)."
-#~ msgstr ""
-#~ "DataLab est une **plateforme open-source"
-#~ " de traitement et de visualisation de"
-#~ " données scientifiques et techniques** avec"
-#~ " des fonctionnalités uniques conçues pour"
-#~ " répondre à des niveaux d'exigence "
-#~ "industriels (cf. :ref:`key_strengths` : "
-#~ "Extensibilité, Interopérabilité, ...). Il est"
-#~ " basé sur des bibliothèques scientifiques"
-#~ " Python (telles que NumPy, SciPy ou"
-#~ " encore scikit-image) et sur les "
-#~ "interfaces graphiques Qt (grâce à la "
-#~ "puissante pile logicielle `PlotPyStack`_)."
-
-#~ msgid "Getting started"
-#~ msgstr "Premiers pas"
-
-#~ msgid "Features"
-#~ msgstr "Fonctionnalités"
-
-#~ msgid "API"
-#~ msgstr "API"
-
-#~ msgid "Development"
-#~ msgstr "Développement"
-
-#~ msgid ""
-#~ "<svg version=\"1.1\" width=\"1.0em\" "
-#~ "height=\"1.0em\" class=\"sd-octicon sd-"
-#~ "octicon-rocket sd-text-info\" viewBox=\"0"
-#~ " 0 16 16\" aria-hidden=\"true\"><path "
-#~ "fill-rule=\"evenodd\" d=\"M14.064 0a8.75 8.75"
-#~ " 0 00-6.187 "
-#~ "2.563l-.459.458c-.314.314-.616.641-.904.979H3.31a1.75 1.75 "
-#~ "0 00-1.49.833L.11 7.607a.75.75 0 00.418 "
-#~ "1.11l3.102.954c.037.051.079.1.124.145l2.429 "
-#~ "2.428c.046.046.094.088.145.125l.954 3.102a.75.75 0 "
-#~ "001.11.418l2.774-1.707a1.75 1.75 0 "
-#~ "00.833-1.49V9.485c.338-.288.665-.59.979-.904l.458-.459A8.75 8.75"
-#~ " 0 0016 1.936V1.75A1.75 1.75 0 "
-#~ "0014.25 0h-.186zM10.5 "
-#~ "10.625c-.088.06-.177.118-.266.175l-2.35 1.521.548 1.783"
-#~ " 1.949-1.2a.25.25 0 00.119-.213v-2.066zM3.678 "
-#~ "8.116L5.2 5.766c.058-.09.117-.178.176-.266H3.309a.25.25 0"
-#~ " 00-.213.119l-1.2 1.95 1.782.547zm5.26-4.493A7.25 "
-#~ "7.25 0 0114.063 1.5h.186a.25.25 0 "
-#~ "01.25.25v.186a7.25 7.25 0 01-2.123 "
-#~ "5.127l-.459.458a15.21 15.21 0 01-2.499 "
-#~ "2.02l-2.317 1.5-2.143-2.143 1.5-2.317a15.25 15.25"
-#~ " 0 012.02-2.5l.458-.458h.002zM12 5a1 1 0"
-#~ " 11-2 0 1 1 0 012 0zm-8.44 "
-#~ "9.56a1.5 1.5 0 10-2.12-2.12c-.734.73-1.047 "
-#~ "2.332-1.15 3.003a.23.23 0 00.265.265c.671-.103 "
-#~ "2.273-.416 3.005-1.148z\"></path></svg>  GettingStarted"
-#~ msgstr ""

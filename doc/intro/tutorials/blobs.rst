@@ -1,7 +1,7 @@
 .. _tutorial_blobs:
 
-Detecting blobs on an image
-===========================
+:octicon:`book;1em;sd-text-info` Detecting blobs on an image
+============================================================
 
 This example shows how to detect blobs on an image with DataLab,
 and also covers other features such as the plugin system:

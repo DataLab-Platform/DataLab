@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 16:15+0100\n"
+"POT-Creation-Date: 2024-01-22 17:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -20,19 +20,30 @@ msgstr ""
 "Generated-By: Babel 2.13.0\n"
 
 #: ../../intro/tutorials/videos/p1_quick_demo.rst:2
-msgid "Part 1: Quick demo"
-msgstr "Partie 1 : démo rapide"
+msgid ":octicon:`video;1em;sd-text-info` Quick demo"
+msgstr ":octicon:`video;1em;sd-text-info` Démo rapide"
 
-#: ../../intro/tutorials/videos/p1_quick_demo.rst:9
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:16
 msgid ""
 "In this first video, we will quickly go through the main features of "
 "DataLab, and show how to do some basic signal and image processing."
-msgstr "Dans cette première vidéo, nous allons rapidement passer en revue les principales fonctionnalités de DataLab, et montrer comment effectuer un traitement de signal et d'image de base."
+msgstr ""
+"Dans cette première vidéo, nous allons rapidement passer en revue les "
+"principales fonctionnalités de DataLab, et montrer comment effectuer un "
+"traitement de signal et d'image de base."
 
-#: ../../intro/tutorials/videos/p1_quick_demo.rst:14
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:21
 msgid ""
 "This video is intentionally short and does not cover all the features of "
 "DataLab. It is meant to give you a quick overview of the software. For a "
 "more detailed description of the features, please watch the other videos "
 "or read the documentation."
-msgstr "Cette vidéo est volontairement courte et ne couvre pas toutes les fonctionnalités de DataLab. Elle a pour but de vous donner un aperçu rapide du logiciel. Pour une description plus détaillée des fonctionnalités, veuillez regarder les autres vidéos ou lire la documentation."
+msgstr ""
+"Cette vidéo est volontairement courte et ne couvre pas toutes les "
+"fonctionnalités de DataLab. Elle a pour but de vous donner un aperçu "
+"rapide du logiciel. Pour une description plus détaillée des "
+"fonctionnalités, veuillez regarder les autres vidéos ou lire la "
+"documentation."
+
+#~ msgid "Part 1: Quick demo"
+#~ msgstr "Partie 1 : démo rapide"

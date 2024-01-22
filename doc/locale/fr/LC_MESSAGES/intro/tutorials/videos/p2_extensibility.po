@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 16:15+0100\n"
+"POT-Creation-Date: 2024-01-22 17:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -20,30 +20,34 @@ msgstr ""
 "Generated-By: Babel 2.13.0\n"
 
 #: ../../intro/tutorials/videos/p2_extensibility.rst:2
-msgid "Part 2: Add your own features"
-msgstr "Partie 2 : Ajouter vos propres fonctionnalités"
+msgid ":octicon:`video;1em;sd-text-info` Add your own features"
+msgstr ":octicon:`video;1em;sd-text-info` Ajouter vos propres fonctionnalités"
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:9
+#: ../../intro/tutorials/videos/p2_extensibility.rst:16
 msgid ""
 "In this tutorial, we will show how to add your own features to DataLab "
 "using three different approaches:"
-msgstr "Dans ce tutoriel, nous allons montrer comment ajouter vos propres fonctionnalités à DataLab en utilisant trois approches différentes :"
+msgstr ""
+"Dans ce tutoriel, nous allons montrer comment ajouter vos propres "
+"fonctionnalités à DataLab en utilisant trois approches différentes :"
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:12
+#: ../../intro/tutorials/videos/p2_extensibility.rst:19
 msgid "Macro-commands, using the integrated macro manager"
 msgstr "Les macro-commandes, en utilisant le gestionnaire de macro intégré"
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:13
+#: ../../intro/tutorials/videos/p2_extensibility.rst:20
 msgid ""
 "Remote control of DataLab from an external IDE (e.g. Spyder) or a Jupyter"
 " notebook"
-msgstr "Le contrôle à distance de DataLab depuis un IDE externe (par exemple Spyder) ou un notebook Jupyter"
+msgstr ""
+"Le contrôle à distance de DataLab depuis un IDE externe (par exemple "
+"Spyder) ou un notebook Jupyter"
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:14
+#: ../../intro/tutorials/videos/p2_extensibility.rst:21
 msgid "Plugins"
 msgstr "Les plugins"
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:16
+#: ../../intro/tutorials/videos/p2_extensibility.rst:23
 msgid ""
 "The first common point between these three approaches is that they all "
 "rely on DataLab's high-level API, which allow to interact with almost "
@@ -51,11 +55,24 @@ msgid ""
 "scripts, but it may also be accessed using any other language when using "
 "the remote control approach (because it relies on a standard "
 "communication protocol, XML-RPC)."
-msgstr "Le premier point commun entre ces trois approches est qu'elles reposent toutes sur l'API de haut niveau de DataLab, qui permet d'interagir avec presque tous les aspects du logiciel. Cette API est ici accédée à l'aide de scripts Python, mais elle peut également être accédée à l'aide de n'importe quel autre langage lors de l'utilisation de l'approche de contrôle à distance (car elle repose sur un protocole de communication standard, XML-RPC)."
+msgstr ""
+"Le premier point commun entre ces trois approches est qu'elles reposent "
+"toutes sur l'API de haut niveau de DataLab, qui permet d'interagir avec "
+"presque tous les aspects du logiciel. Cette API est ici accédée à l'aide "
+"de scripts Python, mais elle peut également être accédée à l'aide de "
+"n'importe quel autre langage lors de l'utilisation de l'approche de "
+"contrôle à distance (car elle repose sur un protocole de communication "
+"standard, XML-RPC)."
 
-#: ../../intro/tutorials/videos/p2_extensibility.rst:22
+#: ../../intro/tutorials/videos/p2_extensibility.rst:29
 msgid ""
 "The second common point is that they all use Python code, and compatible "
 "proxy objects, so that the same code can be at least partially reused in "
 "the three approaches."
-msgstr "Le second point commun est qu'ils utilisent tous du code Python et des objets proxy compatibles, de sorte que le même code peut être au moins partiellement réutilisé dans les trois approches."
+msgstr ""
+"Le second point commun est qu'ils utilisent tous du code Python et des "
+"objets proxy compatibles, de sorte que le même code peut être au moins "
+"partiellement réutilisé dans les trois approches."
+
+#~ msgid "Part 2: Add your own features"
+#~ msgstr "Partie 2 : Ajouter vos propres fonctionnalités"

@@ -1,5 +1,5 @@
-Part 1: Quick demo
-==================
+:octicon:`video;1em;sd-text-info` Quick demo
+============================================
 
 .. only:: html and not latex
 

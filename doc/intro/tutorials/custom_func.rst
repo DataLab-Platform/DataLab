@@ -1,5 +1,5 @@
-Prototyping a custom processing pipeline
-========================================
+:octicon:`book;1em;sd-text-info` Prototyping a custom processing pipeline
+=========================================================================
 
 This example shows how to prototype a custom image processing pipeline using DataLab:
 

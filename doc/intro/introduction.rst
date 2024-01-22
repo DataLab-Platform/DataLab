@@ -41,7 +41,11 @@ Depending on the application, DataLab can be used in three different modes:
 Use cases
 ^^^^^^^^^
 
-DataLab is a versatile tool that can be used in many different contexts:
+.. seealso::
+
+    For practical examples of use cases, see the :ref:`tutorials` section.
+
+DataLab is a versatile tool that can be used in different contexts:
 
 - **Data processing**: DataLab is a powerful tool for processing signals and
   images. It can be used to develop complex algorithms, or to quickly

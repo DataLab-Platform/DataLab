@@ -1,5 +1,5 @@
-Processing a spectrum
-=====================
+:octicon:`book;1em;sd-text-info` Processing a spectrum
+======================================================
 
 This example shows how to process a spectrum with DataLab:
 
