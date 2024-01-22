@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 09:21+0100\n"
+"POT-Creation-Date: 2024-01-22 16:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -29,10 +29,18 @@ msgstr "Tutoriels vidéo"
 
 #: ../../intro/tutorials/index.rst:9
 msgid ""
-":octicon:`device-camera-video;1em;sd-text-info` This is a work in "
-"progress."
-msgstr ":octicon:`device-camera-video;1em;sd-text-info` Ceci est un travail en cours."
+"DataLab video tutorials intend to provide a complementary material to the"
+" documentation and other tutorials available here."
+msgstr "Les tutoriels vidéo de DataLab ont pour but de fournir une aide complémentaire à la documentation et aux autres tutoriels disponibles ici."
 
-#: ../../intro/tutorials/index.rst:12
+#: ../../intro/tutorials/index.rst:20
 msgid "Other Tutorials"
 msgstr "Autres tutoriels"
+
+#~ msgid ""
+#~ ":octicon:`device-camera-video;1em;sd-text-"
+#~ "info` This is a work in progress."
+#~ msgstr ""
+#~ ":octicon:`device-camera-video;1em;sd-text-"
+#~ "info` Ceci est un travail en "
+#~ "cours."

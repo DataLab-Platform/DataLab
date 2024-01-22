@@ -6,13 +6,21 @@ Tutorials
 Video Tutorials
 ---------------
 
-:octicon:`device-camera-video;1em;sd-text-info` This is a work in progress.
+DataLab video tutorials intend to provide a complementary material to the
+documentation and other tutorials available here.
+
+.. toctree::
+   :maxdepth: 1
+
+   videos/p1_quick_demo
+   videos/p2_extensibility
+
 
 Other Tutorials
 ---------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    spectrum
    blobs
