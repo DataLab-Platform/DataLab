@@ -143,7 +143,7 @@ def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:
         data: Input data
 
     Returns:
-        Centroid coordinates
+        Centroid coordinates (row, col)
     """
     # Fourier transform method as discussed by Weisshaar et al.
     # (http://www.mnd-umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf)

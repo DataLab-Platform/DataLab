@@ -250,6 +250,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_radial_profile(self) -> None:
+        """Compute radial profile"""
+        self.compute_11(cpi.compute_radial_profile, title=_("Radial profile"))
+
+    @qt_try_except()
     def compute_swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))

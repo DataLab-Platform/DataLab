@@ -72,6 +72,9 @@ for future and past milestones.
   * This simplifies DataLab's internals and makes it easier to create new computing
     features inside plugins
   * See the *cdl_custom_func.py* example plugin for a practical use case
+* Added "Extract radial profile" feature to image panel's "Operation" menu:
+  * This feature allows to extract a radially averaged profile from an image
+    around the centroid of the image
 * Automated test suite:
   * Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` method
     to toggle the "Auto-refresh" feature. This feature may be useful to improve

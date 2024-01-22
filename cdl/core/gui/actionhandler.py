@@ -851,6 +851,11 @@ class ImageActionHandler(BaseActionHandler):
                 icon=get_icon("profile_average.svg"),
                 tip=_("Extract average horizontal or vertical profile"),
             )
+            self.new_action(
+                _("Extract radial profile..."),
+                triggered=self.panel.processor.compute_radial_profile,
+                tip=_("Extract radial profile around image centroid"),
+            )
 
             self.new_action(
                 _("Distribute on a grid..."),

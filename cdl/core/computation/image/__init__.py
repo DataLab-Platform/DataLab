@@ -699,6 +699,37 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
     return dst
 
 
+def compute_radial_profile(src: ImageObj) -> ImageObj:
+    """Compute radial profile around the centroid
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    data = src.get_masked_view()
+    y0, x0 = get_centroid_fourier(data)
+    suffix = f"center=({x0:.3f}, {y0:.3f})"
+    dst = dst_11_signal(src, "radial_profile", suffix)
+
+    y, x = np.indices((data.shape))  # Get the indices of pixels
+    r = np.sqrt((x - x0) ** 2 + (y - y0) ** 2)  # Calculate distance to the center
+    r = r.astype(int)
+
+    # Average over the same distance
+    tbin = np.bincount(r.ravel(), data.ravel())  # Sum of pixel values at each distance
+    nr = np.bincount(r.ravel())  # Number of pixels at each distance
+
+    yprofile = tbin / nr  # this is the half radial profile
+    # Let's mirror it to get the full radial profile (the first element is the center)
+    yprofile = np.concatenate((yprofile[::-1], yprofile[1:]))
+    # The x axis is the distance from the center (0 is the center)
+    xprofile = np.arange(len(yprofile)) - len(yprofile) // 2
+    dst.set_xydata(xprofile, yprofile)
+    return dst
+
+
 def compute_swap_axes(src: ImageObj) -> ImageObj:
     """Swap image axes
     Args:
