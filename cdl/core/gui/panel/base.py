@@ -1027,7 +1027,7 @@ class BaseDataPanel(AbstractPanel):
                 rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
                 title = f"{result.label}"
                 rdata.results.append(result)
-                rdata.xlabels = result.xlabels
+                rdata.xlabels = result.shown_xlabels
                 for _i_row_res in range(result.array.shape[0]):
                     ylabel = f"{obj.short_id}: {result.label}"
                     rdata.ylabels.append(ylabel)
@@ -1038,7 +1038,7 @@ class BaseDataPanel(AbstractPanel):
                     dlg = ArrayEditor(self.parent())
                     title = _("Results")
                     dlg.setup_and_check(
-                        np.vstack([result.array for result in rdata.results]),
+                        np.vstack([result.shown_array for result in rdata.results]),
                         title,
                         readonly=True,
                         xlabels=rdata.xlabels,

@@ -451,7 +451,7 @@ class BaseProcessor(QC.QObject):
                     continue
                 resultshape = obj.add_resultshape(name, shapetype, result_array, param)
                 results[obj.uuid] = resultshape
-                xlabels = resultshape.xlabels
+                xlabels = resultshape.shown_xlabels
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
@@ -464,7 +464,7 @@ class BaseProcessor(QC.QObject):
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([rshape.array for rshape in results.values()])
+                res = np.vstack([rshape.shown_array for rshape in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )

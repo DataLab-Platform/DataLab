@@ -187,7 +187,7 @@ class ResultShape:
     Args:
         shapetype: shape type
         array: shape coordinates (multiple shapes: one shape per row),
-            first column is ROI index (0 if there is no ROI)
+         first column is ROI index (0 if there is no ROI)
         label: shape label
 
     Raises:
@@ -241,7 +241,7 @@ class ResultShape:
         return self.shapetype.value + self.label
 
     @property
-    def xlabels(self) -> tuple[str]:
+    def shown_xlabels(self) -> tuple[str]:
         """Return labels for result array columns"""
         if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
             labels = "ROI", "x", "y"
@@ -260,7 +260,56 @@ class ResultShape:
             labels = "ROI", "x", "y", "a", "b", "θ"
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
-        return labels[-self.array.shape[1] :]
+        labels += self.__get_complementary_xlabels() or ()
+        return labels[-self.shown_array.shape[1] :]
+
+    @property
+    def shown_array(self) -> np.ndarray:
+        """Return array of shown results, i.e. including the complementary array
+
+        Returns:
+            Array of shown results
+        """
+        arr = self.array
+        comp_arr = self.__get_complementary_array()
+        if comp_arr is None:
+            return arr
+        return np.hstack([arr, comp_arr])
+
+    def __get_complementary_xlabels(self) -> tuple[str] | None:
+        """Return complementary labels for result array columns
+
+        Returns:
+            Complementary labels for result array columns, or None if there is no
+            complementary labels
+        """
+        if self.shapetype is ShapeTypes.SEGMENT:
+            return ("L", "Xc", "Yc")
+        if self.shapetype in (ShapeTypes.CIRCLE, ShapeTypes.ELLIPSE):
+            return ("A",)
+        return None
+
+    def __get_complementary_array(self) -> np.ndarray | None:
+        """Return the complementary array of results, e.g. the array of lengths
+        for a segment result shape, or the array of areas for a circle result shape
+
+        Returns:
+            Complementary array of results, or None if there is no complementary array
+        """
+        arr = self.array
+        if self.shapetype is ShapeTypes.SEGMENT:
+            dx1, dy1 = arr[:, 3] - arr[:, 1], arr[:, 4] - arr[:, 2]
+            length = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
+            xc = (arr[:, 1] + arr[:, 3]) / 2
+            yc = (arr[:, 2] + arr[:, 4]) / 2
+            return np.vstack([length, xc, yc]).T
+        if self.shapetype is ShapeTypes.CIRCLE:
+            area = np.pi * arr[:, 3] ** 2
+            return area.reshape(-1, 1)
+        if self.shapetype is ShapeTypes.ELLIPSE:
+            area = np.pi * arr[:, 3] * arr[:, 4]
+            return area.reshape(-1, 1)
+        return None
 
     def add_to(self, obj: BaseObj):
         """Add metadata shape to object (signal/image)"""
@@ -271,21 +320,15 @@ class ResultShape:
             ShapeTypes.ELLIPSE,
         ):
             #  Automatically adds segment norm / circle area to object metadata
-            colnb = 2
             arr = self.array
-            results = np.zeros((arr.shape[0], colnb), dtype=arr.dtype)
-            results[:, 0] = arr[:, 0]  # ROI indexes
-            label = self.label
-            if self.shapetype is ShapeTypes.SEGMENT:
-                dx1, dy1 = arr[:, 3] - arr[:, 1], arr[:, 4] - arr[:, 2]
-                results[:, 1] = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
-            elif self.shapetype is ShapeTypes.CIRCLE:
-                results[:, 1] = np.pi * arr[:, 3] ** 2
-                label += "Area"
-            elif self.shapetype is ShapeTypes.ELLIPSE:
-                results[:, 1] = np.pi * arr[:, 3] * arr[:, 4]
-                label += "Area"
-            obj.metadata[label] = results
+            comp_arr = self.__get_complementary_array()
+            comp_lbl = self.__get_complementary_xlabels()
+            assert comp_lbl is not None and comp_arr is not None
+            for index, label in enumerate(comp_lbl):
+                results = np.zeros((arr.shape[0], 2), dtype=arr.dtype)
+                results[:, 0] = arr[:, 0]  # ROI indexes
+                results[:, 1] = comp_arr[:, index]
+                obj.metadata[self.label + label] = results
 
     def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
         """Merge object resultshape with another's: obj <-- other_obj

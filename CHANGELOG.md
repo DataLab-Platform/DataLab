@@ -45,6 +45,12 @@ for future and past milestones.
   * These results are also shown as such in the "Results" dialog box (either at the
     end of the computing process or when clicking on the "Show results" button).
   * This fixes [Issue #32](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
+* 1D and 2D computing results:
+  * Additionnaly to the previous enhancement, more computing results are now shown
+    in the "Results" dialog box
+  * This concerns both 1D (FHWM, ...) and 2D computing results (contours, blobs, ...):
+    * Segment results now also show length (L) and center coordinates (Xc, Yc)
+    * Circle and ellipse results now also show area (A)
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable

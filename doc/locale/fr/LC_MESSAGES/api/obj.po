@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 14:02+0100\n"
+"POT-Creation-Date: 2024-01-23 13:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -198,9 +198,51 @@ msgstr ""
 msgid "Return metadata key associated to result"
 msgstr "Retourne la clé de métadonnées associée au résultat"
 
-#: cdl.obj.ResultShape.xlabels:1 of
+#: cdl.obj.ResultShape.shown_xlabels:1 of
 msgid "Return labels for result array columns"
 msgstr "Retourne les étiquettes pour les colonnes du tableau de résultats"
+
+#: cdl.obj.ResultShape.shown_array:1 of
+msgid "Return array of shown results, i.e. including the complementary array"
+msgstr "Retourne le tableau des résultats affichés, c'est-à-dire incluant le tableau complémentaire"
+
+#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.model.base.BaseObj.add_resultshape
+#: cdl.core.model.base.BaseObj.get_metadata_option
+#: cdl.core.model.base.BaseObj.get_valid_dtypenames
+#: cdl.core.model.base.BaseObj.metadata_to_html
+#: cdl.core.model.base.BaseObj.roi_has_changed
+#: cdl.core.model.base.BaseObj.roidata_to_params
+#: cdl.core.model.base.ResultShape.create_plot_item
+#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
+#: cdl.core.model.image.ImageObj.get_masked_view
+#: cdl.core.model.image.ImageObj.make_item
+#: cdl.core.model.image.ImageObj.params_to_roidata
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
+#: cdl.core.model.image.create_image
+#: cdl.core.model.image.create_image_from_param
+#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
+#: cdl.core.model.signal.SignalObj.get_data
+#: cdl.core.model.signal.SignalObj.make_item
+#: cdl.core.model.signal.SignalObj.params_to_roidata
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
+#: cdl.core.model.signal.create_signal
+#: cdl.core.model.signal.create_signal_from_param
+#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
+#: cdl.obj.ImageObj.roi cdl.obj.ResultShape.shown_array cdl.obj.SignalObj.roi
+#: guidata.dataset.datatypes.DataSet.check
+#: guidata.dataset.datatypes.DataSet.create
+#: guidata.dataset.datatypes.DataSet.get_comment
+#: guidata.dataset.datatypes.DataSet.get_icon
+#: guidata.dataset.datatypes.DataSet.get_items
+#: guidata.dataset.datatypes.DataSet.get_title
+#: guidata.dataset.datatypes.DataSet.to_string of
+msgid "Returns"
+msgstr "Renvoie"
+
+#: cdl.obj.ResultShape.shown_array:3 of
+msgid "Array of shown results"
+msgstr "Tableau des résultats affichés"
 
 #: cdl.core.model.base.ResultShape.add_to:1 of
 msgid "Add metadata shape to object (signal/image)"
@@ -273,40 +315,6 @@ msgstr "Crée un élément de tracé."
 #: cdl.core.model.base.ResultShape.create_plot_item:3 of
 msgid "shape data"
 msgstr "données de forme"
-
-#: cdl.core.io.read_image cdl.core.io.read_signal
-#: cdl.core.model.base.BaseObj.add_resultshape
-#: cdl.core.model.base.BaseObj.get_metadata_option
-#: cdl.core.model.base.BaseObj.get_valid_dtypenames
-#: cdl.core.model.base.BaseObj.metadata_to_html
-#: cdl.core.model.base.BaseObj.roi_has_changed
-#: cdl.core.model.base.BaseObj.roidata_to_params
-#: cdl.core.model.base.ResultShape.create_plot_item
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.get_masked_view
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
-#: cdl.obj.ImageObj.roi cdl.obj.SignalObj.roi
-#: guidata.dataset.datatypes.DataSet.check
-#: guidata.dataset.datatypes.DataSet.create
-#: guidata.dataset.datatypes.DataSet.get_comment
-#: guidata.dataset.datatypes.DataSet.get_icon
-#: guidata.dataset.datatypes.DataSet.get_items
-#: guidata.dataset.datatypes.DataSet.get_title
-#: guidata.dataset.datatypes.DataSet.to_string of
-msgid "Returns"
-msgstr "Renvoie"
 
 #: cdl.core.model.base.ResultShape.create_plot_item:12
 #: cdl.core.model.image.ImageObj.make_item:6
