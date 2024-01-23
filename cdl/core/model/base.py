@@ -270,10 +270,8 @@ class ResultShape:
             ShapeTypes.CIRCLE,
             ShapeTypes.ELLIPSE,
         ):
-            #  Automatically adds segment norm / circle diameter to object metadata
+            #  Automatically adds segment norm / circle area to object metadata
             colnb = 2
-            if self.shapetype is ShapeTypes.ELLIPSE:
-                colnb += 1
             arr = self.array
             results = np.zeros((arr.shape[0], colnb), dtype=arr.dtype)
             results[:, 0] = arr[:, 0]  # ROI indexes
@@ -282,12 +280,11 @@ class ResultShape:
                 dx1, dy1 = arr[:, 3] - arr[:, 1], arr[:, 4] - arr[:, 2]
                 results[:, 1] = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
             elif self.shapetype is ShapeTypes.CIRCLE:
-                results[:, 1] = arr[:, 3] * 2
-                label += "Diameter"
+                results[:, 1] = np.pi * arr[:, 3] ** 2
+                label += "Area"
             elif self.shapetype is ShapeTypes.ELLIPSE:
-                results[:, 1] = arr[:, 3] * 2
-                results[:, 2] = arr[:, 4] * 2
-                label += "Diameters"
+                results[:, 1] = np.pi * arr[:, 3] * arr[:, 4]
+                label += "Area"
             obj.metadata[label] = results
 
     def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
