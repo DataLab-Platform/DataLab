@@ -717,6 +717,7 @@ class RadialProfileParam(gds.DataSet):
         self.y0 = obj.yc
 
     def choice_callback(self, item, value):
+        """Callback for choice item"""
         if value == "centroid":
             self.y0, self.x0 = get_centroid_fourier(self.__obj.get_masked_view())
         elif value == "center":
