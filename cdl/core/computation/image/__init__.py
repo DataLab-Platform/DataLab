@@ -703,14 +703,8 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
 class RadialProfileParam(gds.DataSet):
     """Radial profile parameters"""
 
-    def __init__(
-        self,
-        title: str | None = None,
-        comment: str | None = None,
-        icon: str = "",
-        readonly: bool = False,
-    ):
-        super().__init__(title, comment, icon, readonly)
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.__obj: ImageObj | None = None
 
     def update_from_image(self, obj: ImageObj) -> None:
