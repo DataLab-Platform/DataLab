@@ -170,7 +170,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_resize(self, param: cdl.param.ResizeParam | None = None) -> None:
         """Resize image"""
-        obj0 = self.panel.objview.get_sel_objects()[0]
+        obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         for obj in self.panel.objview.get_sel_objects():
             if obj.size != obj0.size:
                 QW.QMessageBox.warning(
@@ -216,7 +216,7 @@ class ImageProcessor(BaseProcessor):
         param = self._get_roidataparam(param)
         if param is None or param.is_empty:
             return
-        obj = self.panel.objview.get_sel_objects()[0]
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         group = obj.roidata_to_params(param.roidata)
         if param.singleobj and len(group.datasets) > 1:
             # Extract multiple ROIs into a single object (remove all the ROIs),
@@ -257,7 +257,7 @@ class ImageProcessor(BaseProcessor):
         title = _("Radial profile")
         edit, param = self.init_param(param, cpi.RadialProfileParam, title)
         if edit:
-            obj = self.panel.objview.get_sel_objects()[0]
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.update_from_image(obj)
 
         self.compute_11(cpi.compute_radial_profile, param, title=title, edit=edit)
@@ -333,7 +333,7 @@ class ImageProcessor(BaseProcessor):
         """Compute flat field correction"""
         edit, param = self.init_param(param, cpi.FlatFieldParam, _("Flat field"))
         if edit:
-            obj = self.panel.objview.get_sel_objects()[0]
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.set_from_datatype(obj.data.dtype)
         self.compute_n1n(
             obj2,
@@ -818,7 +818,7 @@ class ImageProcessor(BaseProcessor):
             param, cpi_det.Peak2DDetectionParam, _("Peak detection")
         )
         if edit:
-            data = self.panel.objview.get_sel_objects()[0].data
+            data = self.panel.objview.get_sel_objects(include_groups=True)[0].data
             param.size = max(min(data.shape) // 40, 50)
 
         results = self.compute_10(

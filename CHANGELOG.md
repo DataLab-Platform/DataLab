@@ -144,6 +144,9 @@ for future and past milestones.
   disabled by default, and is enabled only when a property is modified)
 * Fixed proxy `get_object` method when there is no object to return
   (`None` is returned instead of an exception)
+* Fixed `IndexError: list index out of range` when performing some operations or
+  computations on groups of signals/images (e.g. "ROI extraction", "Peak detection",
+  "Resize", etc.)
 
 ## DataLab Version 0.10.1 ##
 

@@ -65,7 +65,7 @@ class SignalProcessor(BaseProcessor):
         param = self._get_roidataparam(param)
         if param is None or param.is_empty:
             return
-        obj = self.panel.objview.get_sel_objects()[0]
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         group = obj.roidata_to_params(param.roidata)
         if param.singleobj:
             self.compute_11(cps.extract_multiple_roi, group, title=_("Extract ROI"))
@@ -139,7 +139,7 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.PeakDetectionParam | None = None
     ) -> None:
         """Detect peaks from data"""
-        obj = self.panel.objview.get_sel_objects()[0]
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
         edit, param = self.init_param(
             param, cps.PeakDetectionParam, _("Peak detection")
         )
@@ -268,7 +268,7 @@ class SignalProcessor(BaseProcessor):
         """Compute resampling"""
         edit, param = self.init_param(param, cps.ResamplingParam, _("Resampling"))
         if edit:
-            obj = self.panel.objview.get_sel_objects()[0]
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             if param.xmin is None:
                 param.xmin = obj.x[0]
             if param.xmax is None:
