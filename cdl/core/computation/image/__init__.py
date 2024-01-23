@@ -44,7 +44,7 @@ from cdl.core.computation.base import (
 )
 from cdl.core.model.base import BaseProcParam
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
-from cdl.core.model.signal import SignalObj
+from cdl.core.model.signal import SignalObj, create_signal
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
@@ -114,8 +114,9 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
         SignalObj: output signal object
     """
     title = f"{name}({src.short_id})"
-    dst = SignalObj(title=title)
-    dst.title = title
+    dst = create_signal(
+        title=title, units=(src.xunit, src.zunit), labels=(src.xlabel, src.zlabel)
+    )
     if suffix is not None:
         dst.title += "|" + suffix
     dst.metadata["source"] = src.metadata["source"]  # Keep track of the source image

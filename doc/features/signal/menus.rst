@@ -563,6 +563,18 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
+Show results
+^^^^^^^^^^^^
+
+Show the results of all computations performed on the selected signals. This shows the
+same table as the one shown after having performed a computation.
+
+Plot results
+^^^^^^^^^^^^
+
+Plot the results of computations performed on the selected signals, with user-defined
+X and Y axes (e.g. plot the FWHM as a function of the signal index).
+
 "View" menu
 -----------
 

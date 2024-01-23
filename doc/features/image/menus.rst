@@ -734,6 +734,18 @@ Blob detection (LOG)
 Blob detection (OpenCV)
     Detect blobs using OpenCV implementation of `SimpleBlobDetector <https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_.
 
+Show results
+^^^^^^^^^^^^
+
+Show the results of all computations performed on the selected images. This shows the
+same table as the one shown after having performed a computation.
+
+Plot results
+^^^^^^^^^^^^
+
+Plot the results of computations performed on the selected images, with user-defined
+X and Y axes (e.g. plot the contour circle radius as a function of the image number).
+
 "View" menu
 -----------
 

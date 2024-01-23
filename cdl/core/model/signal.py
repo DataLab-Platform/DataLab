@@ -475,7 +475,7 @@ def create_signal(
         SignalObj: signal object
     """
     assert isinstance(title, str)
-    signal = SignalObj()
+    signal = SignalObj(title=title)
     signal.title = title
     signal.set_xydata(x, y, dx=dx, dy=dy)
     if units is not None:

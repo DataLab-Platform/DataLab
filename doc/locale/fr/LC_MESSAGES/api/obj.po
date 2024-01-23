@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 13:27+0100\n"
+"POT-Creation-Date: 2024-01-23 15:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -141,7 +141,6 @@ msgstr ""
 #: guidata.dataset.datatypes.DataSet.create
 #: guidata.dataset.datatypes.DataSet.deserialize
 #: guidata.dataset.datatypes.DataSet.edit
-#: guidata.dataset.datatypes.DataSet.get_items
 #: guidata.dataset.datatypes.DataSet.read_config
 #: guidata.dataset.datatypes.DataSet.serialize
 #: guidata.dataset.datatypes.DataSet.set_global_prop
@@ -204,7 +203,9 @@ msgstr "Retourne les étiquettes pour les colonnes du tableau de résultats"
 
 #: cdl.obj.ResultShape.shown_array:1 of
 msgid "Return array of shown results, i.e. including the complementary array"
-msgstr "Retourne le tableau des résultats affichés, c'est-à-dire incluant le tableau complémentaire"
+msgstr ""
+"Retourne le tableau des résultats affichés, c'est-à-dire incluant le "
+"tableau complémentaire"
 
 #: cdl.core.io.read_image cdl.core.io.read_signal
 #: cdl.core.model.base.BaseObj.add_resultshape
@@ -234,7 +235,6 @@ msgstr "Retourne le tableau des résultats affichés, c'est-à-dire incluant le 
 #: guidata.dataset.datatypes.DataSet.create
 #: guidata.dataset.datatypes.DataSet.get_comment
 #: guidata.dataset.datatypes.DataSet.get_icon
-#: guidata.dataset.datatypes.DataSet.get_items
 #: guidata.dataset.datatypes.DataSet.get_title
 #: guidata.dataset.datatypes.DataSet.to_string of
 msgid "Returns"
@@ -779,24 +779,6 @@ msgstr "Renvoyer l'icône de l'ensemble de données"
 #: guidata.dataset.datatypes.DataSet.get_icon:3 of
 msgid "icon"
 msgstr "icône"
-
-#: guidata.dataset.datatypes.DataSet.get_items:1 of
-msgid ""
-"Returns all the DataItem objects from the DataSet instance. Ignore "
-"private items that have a name starting with an underscore (e.g. "
-"'_private_item = ...')"
-msgstr ""
-"Retourne tous les objets DataItem de l'instance DataSet. Ignore les "
-"éléments privés qui ont un nom commençant par un tiret bas (par exemple "
-"'_private_item = ...')"
-
-#: guidata.dataset.datatypes.DataSet.get_items:4 of
-msgid "If True, deepcopy the DataItem list, else return the original."
-msgstr "Si True, copie en profondeur la liste DataItem, sinon renvoie l'original."
-
-#: guidata.dataset.datatypes.DataSet.get_items:7 of
-msgid "_description_"
-msgstr ""
 
 #: cdl.core.model.base.BaseObj.get_metadata_option:1 of
 msgid "Return metadata option value"
@@ -1355,3 +1337,25 @@ msgstr "Vérifie si les types de données sont valides"
 
 #~ msgid "other object"
 #~ msgstr "autre objet"
+
+#~ msgid ""
+#~ "Returns all the DataItem objects from"
+#~ " the DataSet instance. Ignore private "
+#~ "items that have a name starting "
+#~ "with an underscore (e.g. '_private_item "
+#~ "= ...')"
+#~ msgstr ""
+#~ "Retourne tous les objets DataItem de "
+#~ "l'instance DataSet. Ignore les éléments "
+#~ "privés qui ont un nom commençant "
+#~ "par un tiret bas (par exemple "
+#~ "'_private_item = ...')"
+
+#~ msgid "If True, deepcopy the DataItem list, else return the original."
+#~ msgstr ""
+#~ "Si True, copie en profondeur la "
+#~ "liste DataItem, sinon renvoie l'original."
+
+#~ msgid "_description_"
+#~ msgstr ""
+

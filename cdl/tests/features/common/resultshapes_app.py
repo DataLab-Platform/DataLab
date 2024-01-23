@@ -50,11 +50,13 @@ def test_resultshapes():
             panel.processor.compute_fw1e2()
         panel.objview.select_objects((1, 2))
         panel.show_results()
+        panel.plot_results()
         win.set_current_panel("image")
         panel = win.imagepanel
         for obj in (obj1, obj2):
             panel.add_object(obj)
         panel.show_results()
+        panel.plot_results()
 
 
 if __name__ == "__main__":

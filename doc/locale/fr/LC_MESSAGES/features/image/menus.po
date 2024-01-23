@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 10:13+0100\n"
+"POT-Creation-Date: 2024-01-23 15:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -714,7 +714,9 @@ msgstr "Extraire un profil radial"
 msgid ""
 "Extract a radial profile from each selected image, and create new signals"
 " from these profiles."
-msgstr "Extraire un profil radial de chaque image sélectionnée et créer un nouveau signal à partir de ces profils."
+msgstr ""
+"Extraire un profil radial de chaque image sélectionnée et créer un "
+"nouveau signal à partir de ces profils."
 
 #: ../../features/image/menus.rst:352
 msgid "The following parameters are available:"
@@ -736,7 +738,9 @@ msgstr "Centre"
 msgid ""
 "Center around which the radial profile is computed: centroid, image "
 "center, or manual"
-msgstr "Centre autour duquel le profil radial est calculé : centre de gravité, centre de l'image, ou manuel"
+msgstr ""
+"Centre autour duquel le profil radial est calculé : centre de gravité, "
+"centre de l'image, ou manuel"
 
 #: ../../features/image/menus.rst:362
 msgid "X"
@@ -1721,14 +1725,36 @@ msgstr ""
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
 
 #: ../../features/image/menus.rst:738
+msgid "Show results"
+msgstr "Afficher les résultats"
+
+#: ../../features/image/menus.rst:740
+msgid ""
+"Show the results of all computations performed on the selected images. "
+"This shows the same table as the one shown after having performed a "
+"computation."
+msgstr "Affiche les résultats des calculs effectués sur les images sélectionnées. Cela affiche le même tableau que celui affiché après avoir effectué un calcul."
+
+#: ../../features/image/menus.rst:744
+msgid "Plot results"
+msgstr "Tracer les résultats"
+
+#: ../../features/image/menus.rst:746
+msgid ""
+"Plot the results of computations performed on the selected images, with "
+"user-defined X and Y axes (e.g. plot the contour circle radius as a "
+"function of the image number)."
+msgstr "Trace les résultats des calculs effectués sur les images sélectionnées, avec des axes X et Y définis par l'utilisateur (p.ex. trace le rayon du cercle de contour en fonction du numéro de l'image)."
+
+#: ../../features/image/menus.rst:750
 msgid "\"View\" menu"
 msgstr "Menu \"Affichage\""
 
-#: ../../features/image/menus.rst:742
+#: ../../features/image/menus.rst:754
 msgid "Screenshot of the \"View\" menu."
 msgstr "Capture d'écran du menu \"Affichage\"."
 
-#: ../../features/image/menus.rst:744
+#: ../../features/image/menus.rst:756
 msgid ""
 "The \"View\" menu allows you to visualize the current image or group of "
 "images. It also allows you to show/hide titles, to show/hide the contrast"
@@ -1739,15 +1765,15 @@ msgstr ""
 "d'afficher/cacher le panneau de contraste, de rafraîchir la "
 "visualisation, etc."
 
-#: ../../features/image/menus.rst:749
+#: ../../features/image/menus.rst:761
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
-#: ../../features/image/menus.rst:751
+#: ../../features/image/menus.rst:763
 msgid "Open a new window to visualize and the selected images."
 msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionées."
 
-#: ../../features/image/menus.rst:753
+#: ../../features/image/menus.rst:765
 msgid ""
 "In the separate window, you may visualize your data more comfortably "
 "(e.g., by maximizing the window) and you may also annotate the data."
@@ -1756,27 +1782,27 @@ msgstr ""
 "(p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées"
 " aux données."
 
-#: ../../features/image/menus.rst:757
+#: ../../features/image/menus.rst:769
 msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
 msgstr ""
 "Voir :ref:`ref-to-image-annotations` pour plus de détails sur les "
 "annotations."
 
-#: ../../features/image/menus.rst:760
+#: ../../features/image/menus.rst:772
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: ../../features/image/menus.rst:762
+#: ../../features/image/menus.rst:774
 msgid "Show/hide titles of computing results or annotations."
 msgstr ""
 "Affiche/cache les titres des objets graphiques liés aux résultats de "
 "calculs et aux annotations."
 
-#: ../../features/image/menus.rst:765
+#: ../../features/image/menus.rst:777
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: ../../features/image/menus.rst:767
+#: ../../features/image/menus.rst:779
 msgid ""
 "Automatically refresh the visualization when the data changes. When "
 "enabled (default), the plot view is automatically refreshed when the data"
@@ -1800,11 +1826,11 @@ msgstr ""
 " données volumineuses, et l'activer à nouveau quand vous avez terminé. "
 "Cela évitera des rafraîchissements inutiles."
 
-#: ../../features/image/menus.rst:779
+#: ../../features/image/menus.rst:791
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
 
-#: ../../features/image/menus.rst:781
+#: ../../features/image/menus.rst:793
 msgid ""
 "Refresh the visualization manually. This triggers a refresh of the plot "
 "view, even if the auto-refresh feature is disabled."
@@ -1813,31 +1839,31 @@ msgstr ""
 "rafraîchissement de la visualisation, même si le rafraîchissement "
 "automatique est désactivé."
 
-#: ../../features/image/menus.rst:785
+#: ../../features/image/menus.rst:797
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
 
-#: ../../features/image/menus.rst:787
+#: ../../features/image/menus.rst:799
 msgid "Show/hide contrast adjustment panel."
 msgstr "Affiche/cache le panneau de réglage du contraste."
 
-#: ../../features/image/menus.rst:790
+#: ../../features/image/menus.rst:802
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/image/menus.rst:792
+#: ../../features/image/menus.rst:804
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#: ../../features/image/menus.rst:795
+#: ../../features/image/menus.rst:807
 msgid "\"?\" menu"
 msgstr "Menu \"?\""
 
-#: ../../features/image/menus.rst:799
+#: ../../features/image/menus.rst:811
 msgid "Screenshot of the \"?\" menu."
 msgstr "Capture d'écran du menu \"?\"."
 
-#: ../../features/image/menus.rst:801
+#: ../../features/image/menus.rst:813
 msgid ""
 "The \"?\" menu allows you to access the online documentation, to show log"
 " files, to show information regarding your DataLab installation, and to "
@@ -1848,33 +1874,33 @@ msgstr ""
 "configuration d'installation de DataLab, et d'afficher la boîte de "
 "dialogue \"A propos de DataLab\"."
 
-#: ../../features/image/menus.rst:806
+#: ../../features/image/menus.rst:818
 msgid "Online or Local documentation"
 msgstr "Documentation en ligne ou locale"
 
-#: ../../features/image/menus.rst:808
+#: ../../features/image/menus.rst:820
 msgid "Open the online or local documentation:"
 msgstr "Affiche la documentation en ligne ou locale :"
 
-#: ../../features/image/menus.rst:813
+#: ../../features/image/menus.rst:825
 msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
-#: ../../features/image/menus.rst:815
+#: ../../features/image/menus.rst:827
 msgid "Open DataLab log viewer"
 msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
-#: ../../features/image/menus.rst:818
+#: ../../features/image/menus.rst:830
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
 msgstr ""
 "Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
 "journaux de bord."
 
-#: ../../features/image/menus.rst:821
+#: ../../features/image/menus.rst:833
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: ../../features/image/menus.rst:823
+#: ../../features/image/menus.rst:835
 msgid ""
 "Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
@@ -1883,17 +1909,17 @@ msgstr ""
 "DataLab (particulièrement utile pour signaler des anomalies de manière "
 "efficace)."
 
-#: ../../features/image/menus.rst:827
+#: ../../features/image/menus.rst:839
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
 msgstr ""
 "Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
 "boîte de dialogue."
 
-#: ../../features/image/menus.rst:830
+#: ../../features/image/menus.rst:842
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/image/menus.rst:832
+#: ../../features/image/menus.rst:844
 msgid "Open the \"About DataLab\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 

@@ -669,6 +669,21 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Swap X/Y axes"), triggered=self.panel.processor.compute_swap_axes
             )
 
+        with self.new_category(ActionCategory.COMPUTING):
+            self.new_action(
+                _("Show results") + "...",
+                triggered=self.panel.show_results,
+                icon=get_icon("show_results.svg"),
+                separator=True,
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
+            self.new_action(
+                _("Plot results") + "...",
+                triggered=self.panel.plot_results,
+                icon=get_icon("plot_results.svg"),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
+
 
 class SignalActionHandler(BaseActionHandler):
     """Object handling signal panel GUI interactions: actions, menus, ..."""

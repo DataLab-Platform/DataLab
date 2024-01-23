@@ -51,6 +51,10 @@ for future and past milestones.
   * This concerns both 1D (FHWM, ...) and 2D computing results (contours, blobs, ...):
     * Segment results now also show length (L) and center coordinates (Xc, Yc)
     * Circle and ellipse results now also show area (A)
+* Added "Plot results" entry in "Computing" menu:
+  * This feature allows to plot computing results (1D or 2D)
+  * It creates a new signal with X and Y axes corresponding to user-defined
+    parameters (e.g. X = indexes and Y = radius for circle results)
 * Increased default width of the object selection dialog box:
   * The object selection dialog box is now wider by default, so that the full
     signal/image/group titles may be more easily readable

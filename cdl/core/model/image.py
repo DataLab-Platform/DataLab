@@ -717,7 +717,7 @@ def create_image(
     """
     assert isinstance(title, str)
     assert data is None or isinstance(data, np.ndarray)
-    image = ImageObj()
+    image = ImageObj(title=title)
     image.title = title
     image.data = data
     if units is not None:

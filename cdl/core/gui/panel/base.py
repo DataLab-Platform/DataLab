@@ -51,6 +51,7 @@ import re
 import warnings
 from typing import TYPE_CHECKING
 
+import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
 import plotpy.io
@@ -68,6 +69,7 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.io.base import IOAction
 from cdl.core.model.base import ResultShape, items_to_json
+from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
     create_progress_bar,
@@ -77,7 +79,6 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover
-    import guidata.dataset as gds
     from plotpy.plot import PlotWidget
     from plotpy.tools import GuiTool
 
@@ -234,6 +235,15 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
     def remove_all_objects(self):
         """Remove all objects"""
         self.SIG_OBJECT_REMOVED.emit()
+
+
+@dataclasses.dataclass
+class ResultData:
+    """Result data associated to a shapetype"""
+
+    results: list[ResultShape] = None
+    xlabels: list[str] = None
+    ylabels: list[str] = None
 
 
 class BaseDataPanel(AbstractPanel):
@@ -1010,37 +1020,49 @@ class BaseDataPanel(AbstractPanel):
             select_condition=actionhandler.SelectCond.at_least_one,
         )
 
-    def show_results(self) -> None:
-        """Show results"""
-
-        @dataclasses.dataclass
-        class ResultData:
-            """Result data associated to a shapetype"""
-
-            results: list[ResultShape] = None
-            xlabels: list[str] = None
-            ylabels: list[str] = None
-
+    def __get_resultdata_dict(
+        self, objs: list[SignalObj | ImageObj]
+    ) -> dict[ShapeTypes, ResultData]:
+        """Return result data dictionary"""
         rdatadict: dict[ShapeTypes, ResultData] = {}
-        objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:
             for result in obj.iterate_resultshapes():
                 rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
-                title = f"{result.label}"
                 rdata.results.append(result)
                 rdata.xlabels = result.shown_xlabels
                 for _i_row_res in range(result.array.shape[0]):
                     ylabel = f"{obj.short_id}: {result.label}"
                     rdata.ylabels.append(ylabel)
+        return rdatadict
+
+    def __show_no_result_warning(self):
+        """Show no result warning"""
+        msg = "<br>".join(
+            [
+                _("No result currently available for this object."),
+                "",
+                _(
+                    "This feature leverages the results of previous computations "
+                    "performed on the selected object(s).<br><br>"
+                    "To compute results, select one or more objects and choose "
+                    "a computing feature in the <u>Compute</u> menu."
+                ),
+            ]
+        )
+        QW.QMessageBox.information(self, APP_NAME, msg)
+
+    def show_results(self) -> None:
+        """Show results"""
+        objs = self.objview.get_sel_objects(include_groups=True)
+        rdatadict = self.__get_resultdata_dict(objs)
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
                 for rdata in rdatadict.values():
                     dlg = ArrayEditor(self.parent())
-                    title = _("Results")
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
-                        title,
+                        _("Results"),
                         readonly=True,
                         xlabels=rdata.xlabels,
                         ylabels=rdata.ylabels,
@@ -1049,17 +1071,68 @@ class BaseDataPanel(AbstractPanel):
                     dlg.resize(750, 300)
                     exec_dialog(dlg)
         else:
-            msg = "<br>".join(
-                [
-                    _("No result currently available for this object."),
-                    "",
+            self.__show_no_result_warning()
+
+    def plot_results(self) -> None:
+        """Plot results"""
+        objs = self.objview.get_sel_objects(include_groups=True)
+        rdatadict = self.__get_resultdata_dict(objs)
+        if rdatadict:
+            for shapetype, rdata in rdatadict.items():
+                xchoices = (("indexes", _("Indexes")),)
+                for xlabel in rdata.xlabels[1:]:
+                    xchoices += ((xlabel, xlabel),)
+                ychoices = xchoices[1:]
+
+                class PlotResultParam(gds.DataSet):
+                    """Plot results parameters"""
+
+                    xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indexes")
+                    yaxis = gds.ChoiceItem(
+                        _("Y axis"), ychoices, default=ychoices[0][0]
+                    )
+
+                comment = (
                     _(
-                        "This feature shows result arrays as displayed after "
-                        'calling one of the computing feature (see "Compute" menu).'
-                    ),
-                ]
-            )
-            QW.QMessageBox.information(self, APP_NAME, msg)
+                        "Plot results obtained from previous computations.<br><br>"
+                        "This plot is based on the results under the form of '%s'."
+                    )
+                    % shapetype.name.lower()
+                )
+                param = PlotResultParam(_("Plot results"), comment=comment)
+                if not param.edit(parent=self):
+                    return
+
+                # Regrouping ResultShape results by their `label` attribute:
+                grouped_results: dict[str, list[ResultShape]] = {}
+                for result in rdata.results:
+                    grouped_results.setdefault(result.label, []).append(result)
+
+                # Plotting each group of results:
+                for label, results in grouped_results.items():
+                    x, y = [], []
+                    for index, result in enumerate(results):
+                        if param.xaxis == "indexes":
+                            x.append(index)
+                        else:
+                            x.append(
+                                result.shown_array[0][rdata.xlabels.index(param.xaxis)]
+                            )
+                        y.append(
+                            result.shown_array[0][rdata.xlabels.index(param.yaxis)]
+                        )
+                    xdata = np.array(x, dtype=float)
+                    ydata = np.array(y, dtype=float)
+
+                    obj = create_signal(
+                        title=f"{label}: {param.yaxis} = f({param.xaxis})",
+                        x=xdata,
+                        y=ydata,
+                        labels=[param.xaxis, param.yaxis],
+                    )
+                    self.mainwindow.signalpanel.add_object(obj)
+        else:
+            self.__show_no_result_warning()
 
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add a label with object title on the associated plot
