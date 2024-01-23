@@ -574,18 +574,18 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam):
         dy = np.max(y) - np.min(y)
         base = np.min(y)
         sigma, mu = dx * 0.1, xpeak(x, y)
-        FitModel = getattr(fit, param.fittype)
-        amp = FitModel.get_amp_from_amplitude(dy, sigma)
+        FitModelClass: fit.FitModel = getattr(fit, param.fittype)
+        amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
 
         def func(params):
             """Fitting model function"""
             # pylint: disable=cell-var-from-loop
-            return y - FitModel.func(x, *params)
+            return y - FitModelClass.func(x, *params)
 
         (amp, sigma, mu, base), _ier = spo.leastsq(
             func, np.array([amp, sigma, mu, base])
         )
-        x0, y0, x1, y1 = FitModel.half_max_segment(amp, sigma, mu, base)
+        x0, y0, x1, y1 = FitModelClass.half_max_segment(amp, sigma, mu, base)
         res.append([i_roi, x0, y0, x1, y1])
     return np.array(res)
 
