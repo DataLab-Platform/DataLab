@@ -369,8 +369,14 @@ class BaseProcessor(QC.QObject):
                     new_obj = self.handle_output(result, _("Computing: %s") % i_title)
                     if new_obj is None:
                         continue
+
+                    # Is new object a native object (i.e. a Signal object for a Signal
+                    # panel, or an Image object for an Image panel) ?
+                    # (example of non-native object use case: image profile extraction)
+                    is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
+
                     new_gid = None
-                    if grps:
+                    if grps and is_new_obj_native:
                         # If groups are selected, then it means that there is no
                         # individual object selected: we work on groups only
                         old_gid = self.panel.objmodel.get_object_group_id(obj)
@@ -380,7 +386,7 @@ class BaseProcessor(QC.QObject):
                             old_g = self.panel.objmodel.get_group(old_gid)
                             new_g = self.panel.add_group(f"{name}({old_g.short_id})")
                             new_gids[old_gid] = new_gid = new_g.uuid
-                    if isinstance(new_obj, self.panel.PARAMCLASS):
+                    if is_new_obj_native:
                         self.panel.add_object(new_obj, group_id=new_gid)
                     else:
                         self.panel.mainwindow.add_object(new_obj)
