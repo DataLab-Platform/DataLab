@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-08 15:51+0100\n"
+"POT-Creation-Date: 2024-01-23 10:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -163,6 +163,14 @@ msgstr "Paramètres de base des images"
 msgid "Average horizontal or vertical profile parameters"
 msgstr "Paramètres de profil horizontal ou vertical moyen"
 
+#: cdl.core.computation.image.RadialProfileParam:1 of
+msgid "Radial profile parameters"
+msgstr "Paramètres de profil radial"
+
+#: cdl.core.computation.image.RadialProfileParam.update_from_image:1 of
+msgid "Update parameters from image"
+msgstr "Mettre à jour les paramètres à partir de l'image"
+
 #: cdl.core.computation.image.BinningParam:1 of
 msgid "Binning parameters"
 msgstr "Paramètres de binning"
@@ -207,7 +215,7 @@ msgstr "Paramètres de rotation"
 msgid "Image linear calibration parameters"
 msgstr "Paramètres de calibration linéaire de l'image"
 
-#: cdl.param:101 of
+#: cdl.param:103 of
 msgid "Exposure correction parameters"
 msgstr "Paramètres de correction d'exposition"
 
@@ -235,7 +243,7 @@ msgstr "Paramètres d'égalisation d'histogramme"
 msgid "Intensity rescaling parameters"
 msgstr "Paramètres de rééchelonnement d'intensité"
 
-#: cdl.param:117 of
+#: cdl.param:119 of
 msgid "Restoration parameters"
 msgstr "Paramètres de restauration"
 
@@ -251,7 +259,7 @@ msgstr "Paramètres de débruitage par variation totale"
 msgid "Wavelet denoising parameters"
 msgstr "Paramètres de débruitage par ondelettes"
 
-#: cdl.param:127 of
+#: cdl.param:129 of
 msgid "Morphological parameters"
 msgstr "Paramètres morphologiques"
 
@@ -259,7 +267,7 @@ msgstr "Paramètres morphologiques"
 msgid "White Top-Hat parameters"
 msgstr "Paramètres de White Top-Hat"
 
-#: cdl.param:133 of
+#: cdl.param:135 of
 msgid "Edge detection parameters"
 msgstr "Paramètres de détection de contours"
 
@@ -267,7 +275,7 @@ msgstr "Paramètres de détection de contours"
 msgid "Canny filter parameters"
 msgstr "Paramètres de filtre Canny"
 
-#: cdl.param:139 of
+#: cdl.param:141 of
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 

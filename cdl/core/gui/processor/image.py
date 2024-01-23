@@ -32,7 +32,7 @@ import cdl.param
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ShapeTypes
+from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
@@ -250,9 +250,17 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_radial_profile(self) -> None:
+    def compute_radial_profile(
+        self, param: cdl.param.RadialProfileParam | None = None
+    ) -> None:
         """Compute radial profile"""
-        self.compute_11(cpi.compute_radial_profile, title=_("Radial profile"))
+        title = _("Radial profile")
+        edit, param = self.init_param(param, cpi.RadialProfileParam, title)
+        if edit:
+            obj = self.panel.objview.get_sel_objects()[0]
+            param.update_from_image(obj)
+
+        self.compute_11(cpi.compute_radial_profile, param, title=title, edit=edit)
 
     @qt_try_except()
     def compute_swap_axes(self) -> None:
@@ -786,23 +794,25 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
-    def compute_centroid(self) -> None:
+    def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
-        self.compute_10(cpi.compute_centroid, ShapeTypes.MARKER, title=_("Centroid"))
+        return self.compute_10(
+            cpi.compute_centroid, ShapeTypes.MARKER, title=_("Centroid")
+        )
 
     @qt_try_except()
-    def compute_enclosing_circle(self) -> None:
+    def compute_enclosing_circle(self) -> dict[str, ResultShape]:
         """Compute minimum enclosing circle"""
         # TODO: [P2] Find a way to add the circle to the computing results
         #  as in "enclosingcircle_test.py"
-        self.compute_10(
+        return self.compute_10(
             cpi.compute_enclosing_circle, ShapeTypes.CIRCLE, title=_("Enclosing circle")
         )
 
     @qt_try_except()
     def compute_peak_detection(
         self, param: cdl.param.Peak2DDetectionParam | None = None
-    ) -> None:
+    ) -> dict[str, ResultShape]:
         """Compute 2D peak detection"""
         edit, param = self.init_param(
             param, cpi_det.Peak2DDetectionParam, _("Peak detection")
@@ -846,14 +856,15 @@ class ImageProcessor(BaseProcessor):
                     obj.roi = np.array(roicoords, int)
                     self.SIG_ADD_SHAPE.emit(obj.uuid)
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
+        return results
 
     @qt_try_except()
     def compute_contour_shape(
         self, param: cdl.param.ContourShapeParam | None = None
-    ) -> None:
+    ) -> dict[str, ResultShape]:
         """Compute contour shape fit"""
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
-        self.compute_10(
+        return self.compute_10(
             cpi_det.compute_contour_shape,
             shapetype=None,  # Shape is defined by the dataset ContourShapeParam
             param=param,
@@ -864,9 +875,9 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_hough_circle_peaks(
         self, param: cdl.param.HoughCircleParam | None = None
-    ) -> None:
+    ) -> dict[str, ResultShape]:
         """Compute peak detection based on a circle Hough transform"""
-        self.compute_10(
+        return self.compute_10(
             cpi.compute_hough_circle_peaks,
             ShapeTypes.CIRCLE,
             param,
@@ -875,9 +886,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_dog(self, param: cdl.param.BlobDOGParam | None = None) -> None:
+    def compute_blob_dog(
+        self, param: cdl.param.BlobDOGParam | None = None
+    ) -> dict[str, ResultShape]:
         """Compute blob detection using Difference of Gaussian method"""
-        self.compute_10(
+        return self.compute_10(
             cpi_det.compute_blob_dog,
             ShapeTypes.CIRCLE,
             param,
@@ -886,9 +899,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_doh(self, param: cdl.param.BlobDOHParam | None = None) -> None:
+    def compute_blob_doh(
+        self, param: cdl.param.BlobDOHParam | None = None
+    ) -> dict[str, ResultShape]:
         """Compute blob detection using Determinant of Hessian method"""
-        self.compute_10(
+        return self.compute_10(
             cpi_det.compute_blob_doh,
             ShapeTypes.CIRCLE,
             param,
@@ -897,9 +912,11 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_blob_log(self, param: cdl.param.BlobLOGParam | None = None) -> None:
+    def compute_blob_log(
+        self, param: cdl.param.BlobLOGParam | None = None
+    ) -> dict[str, ResultShape]:
         """Compute blob detection using Laplacian of Gaussian method"""
-        self.compute_10(
+        return self.compute_10(
             cpi_det.compute_blob_log,
             ShapeTypes.CIRCLE,
             param,
@@ -911,9 +928,9 @@ class ImageProcessor(BaseProcessor):
     def compute_blob_opencv(
         self,
         param: cdl.param.BlobOpenCVParam | None = None,
-    ) -> None:
+    ) -> dict[str, ResultShape]:
         """Compute blob detection using OpenCV"""
-        self.compute_10(
+        return self.compute_10(
             cpi_det.compute_blob_opencv,
             ShapeTypes.CIRCLE,
             param,

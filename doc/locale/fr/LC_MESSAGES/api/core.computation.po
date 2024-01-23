@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 10:18+0100\n"
+"POT-Creation-Date: 2024-01-23 10:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -162,6 +162,7 @@ msgstr "Créer un objet de signal résultant pour la fonction compute_11"
 #: cdl.core.computation.image.calc_with_osr
 #: cdl.core.computation.image.compute_add
 #: cdl.core.computation.image.compute_product
+#: cdl.core.computation.image.compute_radial_profile
 #: cdl.core.computation.image.detection.compute_blob_dog
 #: cdl.core.computation.image.detection.compute_blob_doh
 #: cdl.core.computation.image.detection.compute_blob_log
@@ -240,6 +241,7 @@ msgstr "nom de la fonction"
 #: cdl.core.computation.image.compute_moving_median
 #: cdl.core.computation.image.compute_profile
 #: cdl.core.computation.image.compute_quadratic_difference
+#: cdl.core.computation.image.compute_radial_profile
 #: cdl.core.computation.image.compute_re
 #: cdl.core.computation.image.compute_resize
 #: cdl.core.computation.image.compute_rotate
@@ -426,30 +428,30 @@ msgid ""
 "produce a 1 ``SignalObj`` -> 1 ``SignalObj`` function, which can be used "
 "inside DataLab's infrastructure to perform computations with "
 "``SignalProcessor``."
-msgstr ""
+msgstr "Encapsule une fonction 1 tableau -> 1 tableau (le cas simple de y1 = f(y0)) pour produire une fonction 1 ``SignalObj`` -> 1 ``SignalObj``, qui peut être utilisée à l'intérieur de l'infrastructure de DataLab pour effectuer des calculs avec ``SignalProcessor``."
 
 #: cdl.core.computation.image.Wrap11Func:5
 #: cdl.core.computation.signal.Wrap11Func:5 of
 msgid ""
 "This wrapping mechanism using a class is necessary for the resulted "
 "function to be pickable by the ``multiprocessing`` module."
-msgstr ""
+msgstr "Ce mécanisme d'encapsulation à l'aide d'une classe est nécessaire pour que la fonction résultante puisse être sélectionnée par le module ``multiprocessing``."
 
 #: cdl.core.computation.signal.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a ``SignalObj`` "
 "object."
-msgstr ""
+msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet ``SignalObj``."
 
 #: cdl.core.computation.image.Wrap11Func:11
 #: cdl.core.computation.signal.Wrap11Func:11 of
 msgid "Example"
-msgstr ""
+msgstr "Exemple"
 
 #: cdl.core.computation.image.Wrap11Func:22
 #: cdl.core.computation.signal.Wrap11Func:23 of
 msgid "1 array -> 1 array function"
-msgstr ""
+msgstr "Fonction 1 tableau -> 1 tableau"
 
 #: cdl.core.computation.signal.dst_n1n:1 of
 msgid "Create result signal object for compute_n1n function"
@@ -752,6 +754,7 @@ msgstr "Créer un objet d'image résultant pour la fonction compute_11"
 #: cdl.core.computation.image.calc_with_osr:3
 #: cdl.core.computation.image.compute_add:5
 #: cdl.core.computation.image.compute_product:5
+#: cdl.core.computation.image.compute_radial_profile:3
 #: cdl.core.computation.image.dst_11:3
 #: cdl.core.computation.image.dst_11_signal:3
 #: cdl.core.computation.image.dst_n1n:3 cdl.core.computation.image.dst_n1n:5
@@ -835,13 +838,13 @@ msgid ""
 "Wrap a 1 array -> 1 array function to produce a 1 ``ImageObj`` -> 1 "
 "``ImageObj`` function, which can be used inside DataLab's infrastructure "
 "to perform computations with ``ImageProcessor``."
-msgstr ""
+msgstr "Encapsule une fonction 1 tableau -> 1 tableau pour produire une fonction 1 ``ImageObj`` -> 1 ``ImageObj``, qui peut être utilisée à l'intérieur de l'infrastructure de DataLab pour effectuer des calculs avec ``ImageProcessor``."
 
 #: cdl.core.computation.image.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a ``ImageObj`` "
 "object."
-msgstr ""
+msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet ``ImageObj``."
 
 #: cdl.core.computation.image.dst_11_signal:8 of
 msgid "output signal object"
@@ -1043,6 +1046,7 @@ msgstr ""
 #: cdl.core.computation.image.compute_astype:5
 #: cdl.core.computation.image.compute_average_profile:5
 #: cdl.core.computation.image.compute_profile:5
+#: cdl.core.computation.image.compute_radial_profile:6
 #: cdl.core.computation.image.edges.compute_canny:6
 #: cdl.core.computation.image.edges.compute_farid:5
 #: cdl.core.computation.image.edges.compute_farid_h:5
@@ -1088,6 +1092,44 @@ msgid ""
 msgstr ""
 "Calculer le profil horizontal ou vertical moyen :param src: objet d'image"
 " d'entrée :param p: paramètres"
+
+#: cdl.core.computation.image.RadialProfileParam:1 of
+msgid "Radial profile parameters"
+msgstr "Paramètres de profil radial"
+
+#: cdl.core.computation.image.RadialProfileParam.update_from_image:1 of
+msgid "Update parameters from image"
+msgstr "Mettre à jour les paramètres à partir de l'image"
+
+#: cdl.core.computation.image.compute_radial_profile:1 of
+msgid "Compute radial profile around the centroid"
+msgstr "Calculer le profil radial autour du centre de gravité"
+
+#: cdl.core.computation.image.compute_radial_profile:4
+#: cdl.core.computation.image.detection.compute_blob_dog:4
+#: cdl.core.computation.image.detection.compute_blob_doh:4
+#: cdl.core.computation.image.detection.compute_blob_log:4
+#: cdl.core.computation.image.detection.compute_blob_opencv:4
+#: cdl.core.computation.image.detection.compute_peak_detection:4
+#: cdl.core.computation.image.edges.compute_canny:4
+#: cdl.core.computation.image.exposure.compute_adjust_gamma:4
+#: cdl.core.computation.image.exposure.compute_adjust_log:4
+#: cdl.core.computation.image.exposure.compute_adjust_sigmoid:4
+#: cdl.core.computation.image.exposure.compute_equalize_adapthist:4
+#: cdl.core.computation.image.exposure.compute_equalize_hist:4
+#: cdl.core.computation.image.exposure.compute_rescale_intensity:4
+#: cdl.core.computation.image.morphology.compute_black_tophat:4
+#: cdl.core.computation.image.morphology.compute_closing:4
+#: cdl.core.computation.image.morphology.compute_dilation:4
+#: cdl.core.computation.image.morphology.compute_erosion:4
+#: cdl.core.computation.image.morphology.compute_opening:4
+#: cdl.core.computation.image.morphology.compute_white_tophat:4
+#: cdl.core.computation.image.restoration.compute_denoise_bilateral:4
+#: cdl.core.computation.image.restoration.compute_denoise_tophat:4
+#: cdl.core.computation.image.restoration.compute_denoise_tv:4
+#: cdl.core.computation.image.restoration.compute_denoise_wavelet:4 of
+msgid "parameters"
+msgstr "paramètres"
 
 #: cdl.core.computation.image.compute_swap_axes:1 of
 msgid "Swap image axes :param src: input image object :type src: ImageObj"
@@ -1326,32 +1368,7 @@ msgstr "Paramètres d'ajustement gamma"
 
 #: cdl.core.computation.image.exposure.compute_adjust_gamma:1 of
 msgid "Gamma correction"
-msgstr ""
-
-#: cdl.core.computation.image.detection.compute_blob_dog:4
-#: cdl.core.computation.image.detection.compute_blob_doh:4
-#: cdl.core.computation.image.detection.compute_blob_log:4
-#: cdl.core.computation.image.detection.compute_blob_opencv:4
-#: cdl.core.computation.image.detection.compute_peak_detection:4
-#: cdl.core.computation.image.edges.compute_canny:4
-#: cdl.core.computation.image.exposure.compute_adjust_gamma:4
-#: cdl.core.computation.image.exposure.compute_adjust_log:4
-#: cdl.core.computation.image.exposure.compute_adjust_sigmoid:4
-#: cdl.core.computation.image.exposure.compute_equalize_adapthist:4
-#: cdl.core.computation.image.exposure.compute_equalize_hist:4
-#: cdl.core.computation.image.exposure.compute_rescale_intensity:4
-#: cdl.core.computation.image.morphology.compute_black_tophat:4
-#: cdl.core.computation.image.morphology.compute_closing:4
-#: cdl.core.computation.image.morphology.compute_dilation:4
-#: cdl.core.computation.image.morphology.compute_erosion:4
-#: cdl.core.computation.image.morphology.compute_opening:4
-#: cdl.core.computation.image.morphology.compute_white_tophat:4
-#: cdl.core.computation.image.restoration.compute_denoise_bilateral:4
-#: cdl.core.computation.image.restoration.compute_denoise_tophat:4
-#: cdl.core.computation.image.restoration.compute_denoise_tv:4
-#: cdl.core.computation.image.restoration.compute_denoise_wavelet:4 of
-msgid "parameters"
-msgstr "paramètres"
+msgstr "Correction gamma"
 
 #: cdl.core.computation.image.exposure.AdjustLogParam:1 of
 msgid "Logarithmic adjustment parameters"

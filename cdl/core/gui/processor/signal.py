@@ -24,7 +24,7 @@ import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ShapeTypes
+from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
@@ -367,16 +367,20 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Computing
     @qt_try_except()
-    def compute_fwhm(self, param: cdl.param.FWHMParam | None = None) -> None:
+    def compute_fwhm(
+        self, param: cdl.param.FWHMParam | None = None
+    ) -> dict[str, ResultShape]:
         """Compute FWHM"""
-        self.compute_10(
+        return self.compute_10(
             cps.compute_fwhm, ShapeTypes.SEGMENT, param, cps.FWHMParam, title=_("FWHM")
         )
 
     @qt_try_except()
-    def compute_fw1e2(self) -> None:
+    def compute_fw1e2(self) -> dict[str, ResultShape]:
         """Compute FW at 1/e²"""
-        self.compute_10(cps.compute_fw1e2, ShapeTypes.SEGMENT, title=_("FW") + "1/e²")
+        return self.compute_10(
+            cps.compute_fw1e2, ShapeTypes.SEGMENT, title=_("FW") + "1/e²"
+        )
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

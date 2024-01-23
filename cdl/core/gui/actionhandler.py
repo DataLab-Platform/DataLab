@@ -854,6 +854,7 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(
                 _("Extract radial profile..."),
                 triggered=self.panel.processor.compute_radial_profile,
+                icon=get_icon("profile_radial.svg"),
                 tip=_("Extract radial profile around image centroid"),
             )
 

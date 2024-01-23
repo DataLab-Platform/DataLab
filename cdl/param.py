@@ -80,6 +80,8 @@ Base image parameters
 
 .. autoclass:: cdl.param.AverageProfileParam
     :no-index:
+.. autoclass:: cdl.param.RadialProfileParam
+    :no-index:
 .. autoclass:: cdl.param.BinningParam
     :no-index:
 .. autoclass:: cdl.param.ButterworthParam
@@ -180,6 +182,7 @@ from cdl.core.computation.image import (
     HoughCircleParam,
     LogP1Param,
     ProfileParam,
+    RadialProfileParam,
     ResizeParam,
     RotateParam,
     ZCalibrateParam,

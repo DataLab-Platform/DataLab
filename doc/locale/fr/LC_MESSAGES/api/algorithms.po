@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-20 12:00+0100\n"
+"POT-Creation-Date: 2024-01-23 10:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -72,7 +72,9 @@ msgstr ""
 
 #: cdl.algorithms:21 of
 msgid ":mod:`cdl.algorithms.coordinates`: Coordinate conversion algorithms"
-msgstr ":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de coordonnées"
+msgstr ""
+":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de "
+"coordonnées"
 
 #: cdl.algorithms:22 of
 msgid ":mod:`cdl.algorithms.fit`: Fitting algorithms"
@@ -99,6 +101,7 @@ msgstr "Calculer la moyenne mobile."
 #: cdl.algorithms.image.get_contour_shapes
 #: cdl.algorithms.image.get_enclosing_circle
 #: cdl.algorithms.image.get_hough_circle_peaks
+#: cdl.algorithms.image.get_radial_profile
 #: cdl.algorithms.image.remove_overlapping_disks
 #: cdl.algorithms.image.scale_data_to_min_max cdl.algorithms.image.z_fft
 #: cdl.algorithms.image.z_ifft cdl.algorithms.signal.derivative
@@ -130,6 +133,7 @@ msgstr "Taille de la fenêtre"
 #: cdl.algorithms.image.get_contour_shapes
 #: cdl.algorithms.image.get_enclosing_circle
 #: cdl.algorithms.image.get_hough_circle_peaks
+#: cdl.algorithms.image.get_radial_profile
 #: cdl.algorithms.image.remove_overlapping_disks
 #: cdl.algorithms.image.scale_data_to_min_max cdl.algorithms.image.z_fft
 #: cdl.algorithms.image.z_ifft cdl.algorithms.signal.derivative
@@ -390,8 +394,8 @@ msgstr ""
 "Fourier"
 
 #: cdl.algorithms.image.get_centroid_fourier:5 of
-msgid "Centroid coordinates"
-msgstr "Coordonnées du centre de gravité"
+msgid "Centroid coordinates (row, col)"
+msgstr "Coordonnées du centre de gravité (ligne, colonne)"
 
 #: cdl.algorithms.image.get_absolute_level:1 of
 msgid "Return absolute level"
@@ -430,6 +434,24 @@ msgstr "Lève"
 #: cdl.algorithms.image.get_enclosing_circle:9 of
 msgid "No contour was found"
 msgstr "Aucun contour n'a été trouvé"
+
+#: cdl.algorithms.image.get_radial_profile:1 of
+msgid "Return radial profile of image data"
+msgstr "Retourne le profil radial des données d'image"
+
+#: cdl.algorithms.image.get_radial_profile:3 of
+msgid "Input data (2D array)"
+msgstr "Tableau d'entrée (2D)"
+
+#: cdl.algorithms.image.get_radial_profile:4 of
+msgid "Coordinates of the center of the profile (x, y)"
+msgstr "Coordonnées du centre du profil (x, y)"
+
+#: cdl.algorithms.image.get_radial_profile:6 of
+msgid ""
+"Radial profile (X, Y) where X is the distance from the center (1D array) "
+"and Y is the average value of pixels at this distance (1D array)"
+msgstr "Profil radial (X, Y) où X est la distance du centre (tableau 1D) et Y est la valeur moyenne des pixels à cette distance (tableau 1D)"
 
 #: cdl.algorithms.image.distance_matrix:1 of
 msgid "Return distance matrix from coords"

@@ -29,6 +29,7 @@ from cdl.algorithms.image import (
     get_centroid_fourier,
     get_enclosing_circle,
     get_hough_circle_peaks,
+    get_radial_profile,
     z_fft,
     z_ifft,
 )
@@ -699,34 +700,70 @@ def compute_average_profile(src: ImageObj, p: AverageProfileParam) -> ImageObj:
     return dst
 
 
-def compute_radial_profile(src: ImageObj) -> ImageObj:
+class RadialProfileParam(gds.DataSet):
+    """Radial profile parameters"""
+
+    def __init__(
+        self,
+        title: str | None = None,
+        comment: str | None = None,
+        icon: str = "",
+        readonly: bool = False,
+    ):
+        super().__init__(title, comment, icon, readonly)
+        self.__obj: ImageObj | None = None
+
+    def update_from_image(self, obj: ImageObj) -> None:
+        """Update parameters from image"""
+        self.__obj = obj
+        self.x0 = obj.xc
+        self.y0 = obj.yc
+
+    def choice_callback(self, item, value):
+        if value == "centroid":
+            self.y0, self.x0 = get_centroid_fourier(self.__obj.get_masked_view())
+        elif value == "center":
+            self.x0, self.y0 = self.__obj.xc, self.__obj.yc
+
+    _prop = gds.GetAttrProp("center")
+    center = gds.ChoiceItem(
+        _("Radial profile center"),
+        (
+            ("centroid", _("Image centroid")),
+            ("center", _("Image center")),
+            ("manual", _("Manual")),
+        ),
+        default="centroid",
+    ).set_prop("display", store=_prop, callback=choice_callback)
+
+    _hgroup_begin = gds.BeginGroup(_("Center"))
+    _func_prop = gds.FuncProp(_prop, lambda x: x == "manual")
+    x0 = gds.FloatItem(_("X"), unit="pixel").set_prop("display", active=_func_prop)
+    y0 = gds.FloatItem(_("Y"), unit="pixel").set_prop("display", active=_func_prop)
+    _hgroup_end = gds.EndGroup(_("Center"))
+
+
+def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> ImageObj:
     """Compute radial profile around the centroid
 
     Args:
         src: input image object
+        p: parameters
 
     Returns:
         Output image object
     """
     data = src.get_masked_view()
-    y0, x0 = get_centroid_fourier(data)
+    if p.center == "centroid":
+        y0, x0 = get_centroid_fourier(data)
+    elif p.center == "center":
+        x0, y0 = src.xc, src.yc
+    else:
+        x0, y0 = p.x0, p.y0
     suffix = f"center=({x0:.3f}, {y0:.3f})"
     dst = dst_11_signal(src, "radial_profile", suffix)
-
-    y, x = np.indices((data.shape))  # Get the indices of pixels
-    r = np.sqrt((x - x0) ** 2 + (y - y0) ** 2)  # Calculate distance to the center
-    r = r.astype(int)
-
-    # Average over the same distance
-    tbin = np.bincount(r.ravel(), data.ravel())  # Sum of pixel values at each distance
-    nr = np.bincount(r.ravel())  # Number of pixels at each distance
-
-    yprofile = tbin / nr  # this is the half radial profile
-    # Let's mirror it to get the full radial profile (the first element is the center)
-    yprofile = np.concatenate((yprofile[::-1], yprofile[1:]))
-    # The x axis is the distance from the center (0 is the center)
-    xprofile = np.arange(len(yprofile)) - len(yprofile) // 2
-    dst.set_xydata(xprofile, yprofile)
+    x, y = get_radial_profile(data, (x0, y0))
+    dst.set_xydata(x, y)
     return dst
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 15:08+0100\n"
+"POT-Creation-Date: 2024-01-23 10:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -588,9 +588,8 @@ msgid "Refresh plot. Defaults to True."
 msgstr "Rafraîchir le tracé. Par défaut, True."
 
 #: cdl.core.baseproxy.BaseProxy.delete_metadata:4 of
-#, fuzzy
 msgid "Keep ROI. Defaults to False."
-msgstr "Unité Z. Par défaut, None."
+msgstr "Conserver la ROI. Par défaut, False."
 
 #: cdl.core.baseproxy.BaseProxy.get_current_panel:1 of
 msgid "Return current panel name."
@@ -1009,6 +1008,10 @@ msgstr "Calculer le profil"
 msgid "Compute average profile"
 msgstr "Calculer le profil moyen"
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile:1 of
+msgid "Compute radial profile"
+msgstr "Calculer le profil radial"
+
 #: cdl.core.gui.processor.image.ImageProcessor.compute_difference:1 of
 msgid "Compute difference between two images"
 msgstr "Calculer la différence entre deux images"
@@ -1209,4 +1212,3 @@ msgstr ""
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
 msgid "Compute blob detection using OpenCV"
 msgstr "Calculer la détection de taches en utilisant OpenCV"
-

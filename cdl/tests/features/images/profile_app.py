@@ -5,6 +5,15 @@
 
 """
 Profile extraction test
+=======================
+
+Testing the profile extraction features of the image panel:
+
+- Compute a profile along a horizontal line
+- Compute a profile along a vertical line
+- Compute an average profile between two points along a horizontal line
+- Compute an average profile between two points along a vertical line
+- Compute a radial profile
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -12,7 +21,7 @@ Profile extraction test
 
 import cdl.param
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import get_test_image
+from cdl.tests.data import create_noisygauss_image, get_test_image
 
 
 def test_profile():
@@ -41,6 +50,19 @@ def test_profile():
                 col2=col2,
             )
             proc.compute_average_profile(avgprofparam)
+        image2 = create_noisygauss_image(center=(0.0, 0.0), add_annotations=False)
+        panel.add_object(image2)
+        for center, x0, y0 in (
+            (None, None, None),
+            ("centroid", None, None),
+            ("center", None, None),
+            ("manual", 800, 900),
+        ):
+            if center is None:
+                proc.compute_radial_profile()
+            else:
+                param = cdl.param.RadialProfileParam.create(center=center, x0=x0, y0=y0)
+                proc.compute_radial_profile(param)
 
 
 if __name__ == "__main__":
