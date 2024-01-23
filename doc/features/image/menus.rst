@@ -331,20 +331,20 @@ Rotation
 Create a new image which is the result of rotating (90°, 270° or
 arbitrary angle) or flipping (horizontally or vertically) data.
 
-Extract profile
-^^^^^^^^^^^^^^^
+Line profile extraction
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Extract an horizontal or vertical profile from each selected image, and create
 new signals from these profiles.
 
-Extract average profile
-^^^^^^^^^^^^^^^^^^^^^^^
+Average profile extraction
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Extract an horizontal or vertical profile averaged over a rectangular area, from
 each selected image, and create new signals from these profiles.
 
-Extract radial profile
-^^^^^^^^^^^^^^^^^^^^^^
+Radial profile extraction
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Extract a radial profile from each selected image, and create new signals from
 these profiles.

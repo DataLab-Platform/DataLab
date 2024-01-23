@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 17:38+0100\n"
+"POT-Creation-Date: 2024-01-23 10:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -382,17 +382,15 @@ msgstr ""
 
 #: ../../intro/tutorials/fabry_perot.rst:195
 msgid ""
-"Either select the \"Extract profile...\" entry |profile| in the "
-"\"Operations\" menu."
-msgstr ""
-"Soit sélectionner l'entrée \"Extraire le profil...\" |profile| dans le "
-"menu \"Opérations\"."
+"Either select the \"Line profile extraction...\" entry |profile| in the "
+"\"Operations > Intensity profiles\" menu."
+msgstr "Soit sélectionner l'entrée \"Extraire le profil...\" |profile| dans le menu \"Opérations > Profils d'intensité\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:200
+#: ../../intro/tutorials/fabry_perot.rst:201
 msgid "profile"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:197
+#: ../../intro/tutorials/fabry_perot.rst:198
 msgid ""
 "Or activate the \"Cross section\" tool |cross_section| in the vertical "
 "toolbar on the left of the visualization panel."
@@ -400,16 +398,17 @@ msgstr ""
 "Soit activer l'outil \"Profil rectiligne\" |cross_section| dans la barre "
 "d'outils verticale à gauche du panneau de visualisation."
 
-#: ../../intro/tutorials/fabry_perot.rst:204
+#: ../../intro/tutorials/fabry_perot.rst:205
 msgid "cross_section"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:206
+#: ../../intro/tutorials/fabry_perot.rst:207
 msgid ""
-"Let's try the first option, by selecting the \"Extract profile...\" entry"
-" |profile|: that is the most straightforward way to extract a profile "
-"from an image, and it corresponds to the ``compute_profile`` method of "
-"DataLab's API (so it can be used in a script, a plugin or a macro)."
+"Let's try the first option, by selecting the \"Line profile "
+"extraction...\" entry |profile|: that is the most straightforward way to "
+"extract a profile from an image, and it corresponds to the "
+"``compute_profile`` method of DataLab's API (so it can be used in a "
+"script, a plugin or a macro)."
 msgstr ""
 "Essayons la première option, en sélectionnant l'entrée \"Extraire le "
 "profil...\" |profile| : c'est la façon la plus simple d'extraire un "
@@ -417,15 +416,15 @@ msgstr ""
 "de l'API de DataLab (donc elle peut être utilisée dans un script, un "
 "plugin ou une macro)."
 
-#: ../../intro/tutorials/fabry_perot.rst:213
+#: ../../intro/tutorials/fabry_perot.rst:214
 msgid ""
-"Select the \"Extract profile...\" entry |profile| in the \"Operations\" "
-"menu."
+"Select the \"Line profile extraction...\" entry |profile| in the "
+"\"Operations\" menu."
 msgstr ""
 "Sélectionnez l'entrée \"Extraire le profil...\" |profile| dans le menu "
 "\"Opérations\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:217
+#: ../../intro/tutorials/fabry_perot.rst:218
 msgid ""
 "The \"Profile\" dialog opens. Enter the row of the horizontal profile (or"
 " the column of the vertical profile) in the dialog box that opens. Click "
@@ -435,8 +434,8 @@ msgstr ""
 "horizontal (ou la colonne du profil vertical) dans la boîte de dialogue "
 "qui s'ouvre. Cliquez sur \"OK\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:222
-#: ../../intro/tutorials/fabry_perot.rst:261
+#: ../../intro/tutorials/fabry_perot.rst:223
+#: ../../intro/tutorials/fabry_perot.rst:262
 msgid ""
 "The intensity profile is added to the \"Signals\" panel, and DataLab "
 "switches to this panel to display the profile."
@@ -444,7 +443,7 @@ msgstr ""
 "Le profil d'intensité est ajouté au panneau \"Signaux\", et DataLab "
 "bascule vers ce panneau pour afficher le profil."
 
-#: ../../intro/tutorials/fabry_perot.rst:225
+#: ../../intro/tutorials/fabry_perot.rst:226
 msgid ""
 "If you want to do some measurements on the profile, or add annotations, "
 "you can open the signal in a separate window, by clicking on the \"View "
@@ -456,7 +455,7 @@ msgstr ""
 "cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu"
 " \"Affichage\" (ou le bouton |new_window| dans la barre d'outils)."
 
-#: ../../intro/tutorials/fabry_perot.rst:231
+#: ../../intro/tutorials/fabry_perot.rst:232
 msgid ""
 "The signal is displayed in a separate window. Here, we added vertical "
 "cursors and a very interesting text label. As for the images, the "
@@ -470,7 +469,7 @@ msgstr ""
 "signal, et avec les données du signal lorsque l'espace de travail est "
 "sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
 
-#: ../../intro/tutorials/fabry_perot.rst:236
+#: ../../intro/tutorials/fabry_perot.rst:237
 msgid ""
 "Now, let's try the second option for extracting the intensity profile "
 "along the X axis, by activating the \"Cross section\" tool "
@@ -493,7 +492,7 @@ msgstr ""
 "version modifiée de cet outil, qui permet de transférer le profil vers le"
 " panneau \"Signaux\" pour un traitement ultérieur."
 
-#: ../../intro/tutorials/fabry_perot.rst:247
+#: ../../intro/tutorials/fabry_perot.rst:248
 msgid ""
 "Switch back to the \"Images\" panel, and select the image *in the "
 "visualization panel* (otherwise the \"Cross section\" |cross_section| "
@@ -507,7 +506,7 @@ msgstr ""
 "|cross_section| dans la barre d'outils verticale, et cliquez sur l'image "
 "pour afficher les profils d'intensité le long des axes X et Y."
 
-#: ../../intro/tutorials/fabry_perot.rst:252
+#: ../../intro/tutorials/fabry_perot.rst:253
 msgid ""
 "Then, click on the \"Process signal\" button |to_signal| in the toolbar "
 "near the profile to transfer the profile to the \"Signals\" panel."
@@ -516,11 +515,11 @@ msgstr ""
 "barre d'outils près du profil pour transférer le profil vers le panneau "
 "\"Signaux\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:255
+#: ../../intro/tutorials/fabry_perot.rst:256
 msgid "to_signal"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:264
+#: ../../intro/tutorials/fabry_perot.rst:265
 msgid ""
 "Finally, we can save the workspace to a file. The workspace contains all "
 "the images and signals that were loaded or processed in DataLab. It also "
@@ -533,7 +532,7 @@ msgstr ""
 "calcul, les paramètres de visualisation (colormaps, contraste, etc.), les"
 " métadonnées et les annotations."
 
-#: ../../intro/tutorials/fabry_perot.rst:271
+#: ../../intro/tutorials/fabry_perot.rst:272
 msgid ""
 "Save the workspace to a file with \"File > Save to HDF5 file...\", or the"
 " |filesave_h5| button in the toolbar."
@@ -542,11 +541,11 @@ msgstr ""
 "Sauvegarder dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la"
 " barre d'outils."
 
-#: ../../intro/tutorials/fabry_perot.rst:274
+#: ../../intro/tutorials/fabry_perot.rst:275
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:278
+#: ../../intro/tutorials/fabry_perot.rst:279
 msgid ""
 "If you want to load the workspace again, you can use the \"File > Open "
 "HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
@@ -561,11 +560,11 @@ msgstr ""
 "|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
 " d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/fabry_perot.rst:283
+#: ../../intro/tutorials/fabry_perot.rst:284
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:287
+#: ../../intro/tutorials/fabry_perot.rst:288
 msgid "h5browser"
 msgstr ""
 

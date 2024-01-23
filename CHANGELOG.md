@@ -72,7 +72,7 @@ for future and past milestones.
   * This simplifies DataLab's internals and makes it easier to create new computing
     features inside plugins
   * See the *cdl_custom_func.py* example plugin for a practical use case
-* Added "Extract radial profile" feature to image panel's "Operation" menu:
+* Added "Radial profile extraction" feature to image panel's "Operation" menu:
   * This feature allows to extract a radially averaged profile from an image
   * The profile is extracted around a user-defined center (x0, y0)
   * The center may also be computed (centroid or image center)
@@ -168,9 +168,9 @@ bug fix
     * Now, those properties are saved in the HDF5 file and are restored when
       reloading the HDF5 file
   * New profile extraction features for images:
-    * Added "Extract profile" to "Operations" menu, to extract a profile from
+    * Added "Line profile extraction" to "Operations" menu, to extract a profile from
       an image along a row or a column
-    * Added "Extract average profile" to "Operations" menu, to extract the
+    * Added "Average profile extraction" to "Operations" menu, to extract the
       average profile on a rectangular area of an image, along a row or a column
   * Image LUT range (contrast/brightness settings) is now saved in the HDF5 file:
     * As for curve and image styles, the LUT range was already persistent during

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-16 15:11+0100\n"
+"POT-Creation-Date: 2024-01-23 10:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,8 +163,8 @@ msgid "Rotation (flip, rotate), resize, ..."
 msgstr "Rotation (retournement, rotation), redimensionnement, ..."
 
 #: ../../intro/keyfeatures.rst:50
-msgid "Extract profile, extract average profile"
-msgstr "Extraire le profil, extraire le profil moyen"
+msgid "Intensity profiles (line, average, radial)"
+msgstr "Profils d'intensité (ligne, moyen, radial)"
 
 #: ../../intro/keyfeatures.rst:51
 msgid "Pixel binning"
@@ -261,16 +261,3 @@ msgstr ""
 #: ../../intro/keyfeatures.rst:74
 msgid "Blob detection (OpenCV, Laplacian of Gaussian, ...)"
 msgstr "Détection de taches (OpenCV, Laplacien de Gauss, ...)"
-
-#~ msgid "Overview"
-#~ msgstr "Aperçu"
-
-#~ msgid "DataLab supports dark and light mode depending on your OS settings"
-#~ msgstr ""
-#~ "DataLab prend en charge le mode "
-#~ "sombre et le mode clair en "
-#~ "fonction des paramètres de votre système"
-#~ " d'exploitation"
-
-#~ msgid "Example of a multi-gaussian curve fit"
-#~ msgstr "Exemple d'ajustement d'une courbe multi-gaussienne"

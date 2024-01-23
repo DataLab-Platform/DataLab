@@ -839,24 +839,25 @@ class ImageActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_rotate,
                 )
 
-            self.new_action(
-                _("Extract profile..."),
-                triggered=self.panel.processor.compute_profile,
-                icon=get_icon("profile.svg"),
-                tip=_("Extract horizontal or vertical profile"),
-            )
-            self.new_action(
-                _("Extract average profile..."),
-                triggered=self.panel.processor.compute_average_profile,
-                icon=get_icon("profile_average.svg"),
-                tip=_("Extract average horizontal or vertical profile"),
-            )
-            self.new_action(
-                _("Extract radial profile..."),
-                triggered=self.panel.processor.compute_radial_profile,
-                icon=get_icon("profile_radial.svg"),
-                tip=_("Extract radial profile around image centroid"),
-            )
+            with self.new_menu(_("Intensity profiles")):
+                self.new_action(
+                    _("Line profile extraction..."),
+                    triggered=self.panel.processor.compute_profile,
+                    icon=get_icon("profile.svg"),
+                    tip=_("Extract horizontal or vertical profile"),
+                )
+                self.new_action(
+                    _("Average profile extraction..."),
+                    triggered=self.panel.processor.compute_average_profile,
+                    icon=get_icon("profile_average.svg"),
+                    tip=_("Extract average horizontal or vertical profile"),
+                )
+                self.new_action(
+                    _("Radial profile extraction..."),
+                    triggered=self.panel.processor.compute_radial_profile,
+                    icon=get_icon("profile_radial.svg"),
+                    tip=_("Radial profile extraction around image centroid"),
+                )
 
             self.new_action(
                 _("Distribute on a grid..."),

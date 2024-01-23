@@ -681,7 +681,7 @@ msgstr ""
 "l'image sélectionnée."
 
 #: ../../features/image/menus.rst:335
-msgid "Extract profile"
+msgid "Line profile extraction"
 msgstr "Extraire un profil"
 
 #: ../../features/image/menus.rst:337
@@ -693,7 +693,7 @@ msgstr ""
 " créer un nouveau signal à partir de ces profils."
 
 #: ../../features/image/menus.rst:341
-msgid "Extract average profile"
+msgid "Average profile extraction"
 msgstr "Extraire un profil moyen"
 
 #: ../../features/image/menus.rst:343
@@ -707,7 +707,7 @@ msgstr ""
 "partir de ces profils."
 
 #: ../../features/image/menus.rst:347
-msgid "Extract radial profile"
+msgid "Radial profile extraction"
 msgstr "Extraire un profil radial"
 
 #: ../../features/image/menus.rst:349

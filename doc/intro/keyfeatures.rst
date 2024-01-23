@@ -47,7 +47,7 @@ Signal Image  Feature
 ✓      ..     Convolution
 ..     ✓      Flat-field correction
 ..     ✓      Rotation (flip, rotate), resize, ...
-..     ✓      Extract profile, extract average profile
+..     ✓      Intensity profiles (line, average, radial)
 ..     ✓      Pixel binning
 ✓      ..     Normalize, derivative, integral
 ✓      ✓      Linear calibration
