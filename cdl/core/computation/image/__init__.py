@@ -118,6 +118,7 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
     dst.title = title
     if suffix is not None:
         dst.title += "|" + suffix
+    dst.metadata["source"] = src.metadata["source"]  # Keep track of the source image
     return dst
 
 

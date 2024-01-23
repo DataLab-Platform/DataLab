@@ -88,6 +88,11 @@ for future and past milestones.
     performance during the execution of test scripts
   * Test scenarios on signals and images are now using this feature to improve
     performance
+* Signal and image metadata:
+  * Added "source" entry to the metadata dictionary, to store the source file path
+    when importing a signal or an image from a file
+  * This field is kept while processing the signal/image, in order to keep track of
+    the source file path
 
 📚 Documentation:
 
