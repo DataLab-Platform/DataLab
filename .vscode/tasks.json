@@ -478,7 +478,7 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "Build documentation"
+                "Build PDF documentation"
             ]
         },
         {
