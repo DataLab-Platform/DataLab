@@ -771,7 +771,7 @@ class BaseProcessor(QC.QObject):
         """
         roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
         if roieditordata is not None:
-            obj = self.panel.objview.get_sel_objects()[0]
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             roigroup = obj.roidata_to_params(roieditordata.roidata)
             if (
                 env.execenv.unattended
