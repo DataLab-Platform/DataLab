@@ -331,38 +331,35 @@ Rotation
 Create a new image which is the result of rotating (90°, 270° or
 arbitrary angle) or flipping (horizontally or vertically) data.
 
-Line profile extraction
-^^^^^^^^^^^^^^^^^^^^^^^
+Intensity profiles
+^^^^^^^^^^^^^^^^^^
 
-Extract an horizontal or vertical profile from each selected image, and create
-new signals from these profiles.
+Line profile extraction
+    Extract an horizontal or vertical profile from each selected image, and create
+    new signals from these profiles.
 
 Average profile extraction
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Extract an horizontal or vertical profile averaged over a rectangular area, from
-each selected image, and create new signals from these profiles.
+    Extract an horizontal or vertical profile averaged over a rectangular area, from
+    each selected image, and create new signals from these profiles.
 
 Radial profile extraction
-^^^^^^^^^^^^^^^^^^^^^^^^^
+    Extract a radial profile from each selected image, and create new signals from
+    these profiles.
 
-Extract a radial profile from each selected image, and create new signals from
-these profiles.
+    The following parameters are available:
 
-The following parameters are available:
+    .. list-table::
+        :header-rows: 1
+        :widths: 25, 75
 
-.. list-table::
-    :header-rows: 1
-    :widths: 25, 75
-
-    * - Parameter
-      - Description
-    * - Center
-      - Center around which the radial profile is computed: centroid, image center, or manual
-    * - X
-      - X coordinate of the center (if manual), in pixels
-    * - Y
-      - Y coordinate of the center (if manual), in pixels
+        * - Parameter
+          - Description
+        * - Center
+          - Center around which the radial profile is computed: centroid, image center, or manual
+        * - X
+          - X coordinate of the center (if manual), in pixels
+        * - Y
+          - Y coordinate of the center (if manual), in pixels
 
 Distribute on a grid
 ^^^^^^^^^^^^^^^^^^^^
