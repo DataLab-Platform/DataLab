@@ -687,7 +687,7 @@ class BaseDataPanel(AbstractPanel):
             None
         """
         h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
-        other_fnames = list(set(filenames) - set(h5_fnames))
+        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
         if h5_fnames:
             self.mainwindow.open_h5_files(h5_fnames, import_all=True)
         if other_fnames:

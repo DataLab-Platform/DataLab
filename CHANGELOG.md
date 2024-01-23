@@ -162,6 +162,7 @@ for future and past milestones.
 * Fixed `IndexError: list index out of range` when performing some operations or
   computations on groups of signals/images (e.g. "ROI extraction", "Peak detection",
   "Resize", etc.)
+* Drag and drop from a file manager: filenames are now sorted alphabetically
 
 ## DataLab Version 0.10.1 ##
 
