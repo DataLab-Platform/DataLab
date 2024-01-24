@@ -520,5 +520,70 @@
                 "Create installer"
             ]
         },
+        {
+            "label": "Create Windows 7 executable",
+            "type": "shell",
+            "command": "cmd",
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
+                    "UNATTENDED": "1"
+                }
+            },
+            "args": [
+                "/c",
+                "build_exe.bat"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Create Windows 7 executable/installer",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "release.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
+                    "RELEASE": "1",
+                    "UNATTENDED": "1"
+                }
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Clean Up",
+                "Create Windows 7 executable",
+                "Create installer"
+            ]
+        },
     ]
 }
