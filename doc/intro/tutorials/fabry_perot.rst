@@ -102,10 +102,15 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
 .. note::
 
-    If you want to show the results again, click on the "Show results" button, below
-    the image list:
+    If you want to show the computing results again, you can select the "Show results"
+    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    button, below the image list:
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
+
+.. |show_results| image:: ../../../cdl/data/icons/show_results.svg
+    :width: 24px
+    :height: 24px
 
 The images (or signals) can also be displayed in a separate window, by clicking on
 the "View in a new window" entry in the "View" menu (or the |new_window| button in

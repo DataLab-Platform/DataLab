@@ -28,9 +28,8 @@ principle is the same.
 .. figure:: ../../images/tutorials/spectrum/02.png
 
     Using the "Test data" plugin is a convenient way to generate test
-    data for tutorials, but it is not necessary to use it in real
-    life. You can use any file containing a spectrum, such as a
-    spectrum from a real experiment.
+    data for tutorials, but you can use any file containing a spectrum,
+    such as a spectrum from a real experiment.
 
 The spectrum is displayed in the main window.
 

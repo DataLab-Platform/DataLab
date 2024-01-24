@@ -164,8 +164,15 @@ the whole group "g001").
 .. figure:: ../../images/tutorials/laser_beam/15.png
 
     We can compute the FWHM of all the radial intensity profiles: the "Results" dialog
-    displays the FWHM values for all the profiles. This dialog box can be shown
-    again with "Computing > Show results..." |show_results|.
+    displays the FWHM values for all the profiles.
+
+.. note::
+
+    If you want to show the computing results again, you can select the "Show results"
+    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    button, below the image list:
+
+    .. image:: ../../images/tutorials/fabry_perot/12.png
 
 .. |show_results| image:: ../../../cdl/data/icons/show_results.svg
     :width: 24px

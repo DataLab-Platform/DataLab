@@ -115,6 +115,18 @@ Now, let's detect the blobs on the image.
     The "Results" dialog opens, showing the detected blobs: one line per blob, with
     the blob coordinates and radius.
 
+.. note::
+
+    If you want to show the computing results again, you can select the "Show results"
+    |show_results| entry in the "Computing" menu, or the "Show results" |show_results|
+    button, below the image list:
+
+    .. image:: ../../images/tutorials/fabry_perot/12.png
+
+.. |show_results| image:: ../../../cdl/data/icons/show_results.svg
+    :width: 24px
+    :height: 24px
+
 .. figure:: ../../images/tutorials/blobs/13.png
 
     The detected blobs are also added to the image metadata, and can be seen in the

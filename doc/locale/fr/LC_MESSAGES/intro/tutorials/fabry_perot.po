@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 10:59+0100\n"
+"POT-Creation-Date: 2024-01-24 16:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -223,19 +223,22 @@ msgstr ""
 "cercle ajusté. Cliquez sur \"OK\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:101
-#: ../../intro/tutorials/fabry_perot.rst:191
+#: ../../intro/tutorials/fabry_perot.rst:196
 msgid "The fitted circles are displayed on the image."
 msgstr "Les cercles ajustés sont affichés sur l'image."
 
 #: ../../intro/tutorials/fabry_perot.rst:105
 msgid ""
-"If you want to show the results again, click on the \"Show results\" "
-"button, below the image list:"
-msgstr ""
-"Si vous souhaitez afficher à nouveau les résultats, cliquez sur le bouton"
-" \"Afficher les résultats\", en dessous de la liste des images :"
+"If you want to show the computing results again, you can select the "
+"\"Show results\" |show_results| entry in the \"Computing\" menu, or the "
+"\"Show results\" |show_results| button, below the image list:"
+msgstr "Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, en dessous de la liste des images :"
 
-#: ../../intro/tutorials/fabry_perot.rst:110
+#: ../../intro/tutorials/fabry_perot.rst:111
+msgid "show_results"
+msgstr ""
+
+#: ../../intro/tutorials/fabry_perot.rst:115
 msgid ""
 "The images (or signals) can also be displayed in a separate window, by "
 "clicking on the \"View in a new window\" entry in the \"View\" menu (or "
@@ -248,11 +251,11 @@ msgstr ""
 "d'outils). Ceci est utile pour comparer côte à côte des images ou des "
 "signaux."
 
-#: ../../intro/tutorials/fabry_perot.rst:114
+#: ../../intro/tutorials/fabry_perot.rst:119
 msgid "new_window"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:120
+#: ../../intro/tutorials/fabry_perot.rst:125
 msgid ""
 "The image is displayed in a separate window. The ROI and the fitted "
 "circles are also displayed. Annotations can be added to the image by "
@@ -267,11 +270,11 @@ msgstr ""
 "l'image lorsque l'espace de travail est sauvegardé. Cliquez sur \"OK\" "
 "pour fermer la fenêtre."
 
-#: ../../intro/tutorials/fabry_perot.rst:128
+#: ../../intro/tutorials/fabry_perot.rst:133
 msgid "The image is displayed in the main window, together with the annotations."
 msgstr "L'image est affichée dans la fenêtre principale, avec les annotations."
 
-#: ../../intro/tutorials/fabry_perot.rst:130
+#: ../../intro/tutorials/fabry_perot.rst:135
 msgid ""
 "If you want to take a closer look at the metadata, you can open the "
 "\"Metadata\" dialog."
@@ -279,11 +282,11 @@ msgstr ""
 "Si vous souhaitez examiner de plus près les métadonnées, vous pouvez "
 "ouvrir la boîte de dialogue \"Métadonnées\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:134
+#: ../../intro/tutorials/fabry_perot.rst:139
 msgid "The \"Metadata\" button is located below the image list."
 msgstr "Le bouton \"Métadonnées\" est situé en dessous de la liste des images."
 
-#: ../../intro/tutorials/fabry_perot.rst:138
+#: ../../intro/tutorials/fabry_perot.rst:143
 msgid ""
 "The \"Metadata\" dialog opens. Among other information, it displays the "
 "annotations (in a JSON format), some style information (e.g. the "
@@ -293,7 +296,7 @@ msgstr ""
 "informations, elle affiche les annotations (dans un format JSON), des "
 "informations de style (par exemple la colormap), et la ROI."
 
-#: ../../intro/tutorials/fabry_perot.rst:141
+#: ../../intro/tutorials/fabry_perot.rst:146
 msgid ""
 "Now, let's delete the image metadata (including the annotations) to clean"
 " up the image."
@@ -301,7 +304,7 @@ msgstr ""
 "Maintenant, supprimons les métadonnées de l'image (y compris les "
 "annotations) pour nettoyer l'image."
 
-#: ../../intro/tutorials/fabry_perot.rst:145
+#: ../../intro/tutorials/fabry_perot.rst:150
 msgid ""
 "Select the \"Delete metadata\" entry in the \"Edit\" menu, or the "
 "|metadata_delete| button in the toolbar."
@@ -309,11 +312,11 @@ msgstr ""
 "Sélectionnez l'entrée \"Supprimer les métadonnées\" dans le menu "
 "\"Edition\", ou le bouton |metadata_delete| dans la barre d'outils."
 
-#: ../../intro/tutorials/fabry_perot.rst:148
+#: ../../intro/tutorials/fabry_perot.rst:153
 msgid "metadata_delete"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:154
+#: ../../intro/tutorials/fabry_perot.rst:159
 msgid ""
 "The \"Delete metadata\" dialog opens. Click \"No\" to keep the ROI and "
 "delete the rest of the metadata."
@@ -321,7 +324,7 @@ msgstr ""
 "La boîte de dialogue \"Supprimer les métadonnées\" s'ouvre. Cliquez sur "
 "\"Non\" pour conserver la ROI et supprimer le reste des métadonnées."
 
-#: ../../intro/tutorials/fabry_perot.rst:157
+#: ../../intro/tutorials/fabry_perot.rst:162
 msgid ""
 "If we want to define the exact same ROI on the second image, we can "
 "copy/paste the ROI from the first image to the second image, using the "
@@ -331,7 +334,7 @@ msgstr ""
 "copier/coller la ROI de la première image vers la deuxième image, en "
 "utilisant les métadonnées."
 
-#: ../../intro/tutorials/fabry_perot.rst:162
+#: ../../intro/tutorials/fabry_perot.rst:167
 msgid ""
 "Select the \"Copy metadata\" entry in the \"Edit\" menu, or the "
 "|metadata_copy| button in the toolbar."
@@ -339,11 +342,11 @@ msgstr ""
 "Sélectionnez l'entrée \"Copier les métadonnées\" dans le menu "
 "\"Edition\", ou le bouton |metadata_copy| dans la barre d'outils."
 
-#: ../../intro/tutorials/fabry_perot.rst:165
+#: ../../intro/tutorials/fabry_perot.rst:170
 msgid "metadata_copy"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:171
+#: ../../intro/tutorials/fabry_perot.rst:176
 msgid ""
 "Select the second image in the \"Images\" panel, then select the \"Paste "
 "metadata\" entry in the \"Edit\" menu, or the |metadata_paste| button in "
@@ -353,15 +356,15 @@ msgstr ""
 "sélectionnez l'entrée \"Coller les métadonnées\" dans le menu "
 "\"Edition\", ou le bouton |metadata_paste| dans la barre d'outils."
 
-#: ../../intro/tutorials/fabry_perot.rst:174
+#: ../../intro/tutorials/fabry_perot.rst:179
 msgid "metadata_paste"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:180
+#: ../../intro/tutorials/fabry_perot.rst:185
 msgid "The ROI is added to the second image."
 msgstr "La ROI est ajoutée à la deuxième image."
 
-#: ../../intro/tutorials/fabry_perot.rst:184
+#: ../../intro/tutorials/fabry_perot.rst:189
 msgid ""
 "Select the \"Contour detection\" tool in the \"Computing\" menu, with the"
 " same parameters as before (shape \"Circle\"). On this image, there are "
@@ -374,23 +377,25 @@ msgstr ""
 " dialogue \"Résultats\" s'ouvre et affiche les paramètres du cercle "
 "ajusté. Cliquez sur \"OK\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:193
+#: ../../intro/tutorials/fabry_perot.rst:198
 msgid "To extract the intensity profile along the X axis, we have two options:"
 msgstr ""
 "Pour extraire le profil d'intensité le long de l'axe X, nous avons deux "
 "options :"
 
-#: ../../intro/tutorials/fabry_perot.rst:195
+#: ../../intro/tutorials/fabry_perot.rst:200
 msgid ""
 "Either select the \"Line profile extraction...\" entry |profile| in the "
 "\"Operations > Intensity profiles\" menu."
-msgstr "Soit sélectionner l'entrée \"Extraire le profil...\" |profile| dans le menu \"Opérations > Profils d'intensité\"."
+msgstr ""
+"Soit sélectionner l'entrée \"Extraire le profil...\" |profile| dans le "
+"menu \"Opérations > Profils d'intensité\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:201
+#: ../../intro/tutorials/fabry_perot.rst:206
 msgid "profile"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:198
+#: ../../intro/tutorials/fabry_perot.rst:203
 msgid ""
 "Or activate the \"Cross section\" tool |cross_section| in the vertical "
 "toolbar on the left of the visualization panel."
@@ -398,11 +403,11 @@ msgstr ""
 "Soit activer l'outil \"Profil rectiligne\" |cross_section| dans la barre "
 "d'outils verticale à gauche du panneau de visualisation."
 
-#: ../../intro/tutorials/fabry_perot.rst:205
+#: ../../intro/tutorials/fabry_perot.rst:210
 msgid "cross_section"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:207
+#: ../../intro/tutorials/fabry_perot.rst:212
 msgid ""
 "Let's try the first option, by selecting the \"Line profile "
 "extraction...\" entry |profile|: that is the most straightforward way to "
@@ -416,7 +421,7 @@ msgstr ""
 "de l'API de DataLab (donc elle peut être utilisée dans un script, un "
 "plugin ou une macro)."
 
-#: ../../intro/tutorials/fabry_perot.rst:214
+#: ../../intro/tutorials/fabry_perot.rst:219
 msgid ""
 "Select the \"Line profile extraction...\" entry |profile| in the "
 "\"Operations\" menu."
@@ -424,7 +429,7 @@ msgstr ""
 "Sélectionnez l'entrée \"Extraire le profil...\" |profile| dans le menu "
 "\"Opérations\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:218
+#: ../../intro/tutorials/fabry_perot.rst:223
 msgid ""
 "The \"Profile\" dialog opens. Enter the row of the horizontal profile (or"
 " the column of the vertical profile) in the dialog box that opens. Click "
@@ -434,8 +439,8 @@ msgstr ""
 "horizontal (ou la colonne du profil vertical) dans la boîte de dialogue "
 "qui s'ouvre. Cliquez sur \"OK\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:223
-#: ../../intro/tutorials/fabry_perot.rst:262
+#: ../../intro/tutorials/fabry_perot.rst:228
+#: ../../intro/tutorials/fabry_perot.rst:267
 msgid ""
 "The intensity profile is added to the \"Signals\" panel, and DataLab "
 "switches to this panel to display the profile."
@@ -443,7 +448,7 @@ msgstr ""
 "Le profil d'intensité est ajouté au panneau \"Signaux\", et DataLab "
 "bascule vers ce panneau pour afficher le profil."
 
-#: ../../intro/tutorials/fabry_perot.rst:226
+#: ../../intro/tutorials/fabry_perot.rst:231
 msgid ""
 "If you want to do some measurements on the profile, or add annotations, "
 "you can open the signal in a separate window, by clicking on the \"View "
@@ -455,7 +460,7 @@ msgstr ""
 "cliquant sur l'entrée \"Afficher dans une nouvelle fenêtre\" dans le menu"
 " \"Affichage\" (ou le bouton |new_window| dans la barre d'outils)."
 
-#: ../../intro/tutorials/fabry_perot.rst:232
+#: ../../intro/tutorials/fabry_perot.rst:237
 msgid ""
 "The signal is displayed in a separate window. Here, we added vertical "
 "cursors and a very interesting text label. As for the images, the "
@@ -469,7 +474,7 @@ msgstr ""
 "signal, et avec les données du signal lorsque l'espace de travail est "
 "sauvegardé. Cliquez sur \"OK\" pour fermer la fenêtre."
 
-#: ../../intro/tutorials/fabry_perot.rst:237
+#: ../../intro/tutorials/fabry_perot.rst:242
 msgid ""
 "Now, let's try the second option for extracting the intensity profile "
 "along the X axis, by activating the \"Cross section\" tool "
@@ -492,7 +497,7 @@ msgstr ""
 "version modifiée de cet outil, qui permet de transférer le profil vers le"
 " panneau \"Signaux\" pour un traitement ultérieur."
 
-#: ../../intro/tutorials/fabry_perot.rst:248
+#: ../../intro/tutorials/fabry_perot.rst:253
 msgid ""
 "Switch back to the \"Images\" panel, and select the image *in the "
 "visualization panel* (otherwise the \"Cross section\" |cross_section| "
@@ -506,7 +511,7 @@ msgstr ""
 "|cross_section| dans la barre d'outils verticale, et cliquez sur l'image "
 "pour afficher les profils d'intensité le long des axes X et Y."
 
-#: ../../intro/tutorials/fabry_perot.rst:253
+#: ../../intro/tutorials/fabry_perot.rst:258
 msgid ""
 "Then, click on the \"Process signal\" button |to_signal| in the toolbar "
 "near the profile to transfer the profile to the \"Signals\" panel."
@@ -515,11 +520,11 @@ msgstr ""
 "barre d'outils près du profil pour transférer le profil vers le panneau "
 "\"Signaux\"."
 
-#: ../../intro/tutorials/fabry_perot.rst:256
+#: ../../intro/tutorials/fabry_perot.rst:261
 msgid "to_signal"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:265
+#: ../../intro/tutorials/fabry_perot.rst:270
 msgid ""
 "Finally, we can save the workspace to a file. The workspace contains all "
 "the images and signals that were loaded or processed in DataLab. It also "
@@ -532,7 +537,7 @@ msgstr ""
 "calcul, les paramètres de visualisation (colormaps, contraste, etc.), les"
 " métadonnées et les annotations."
 
-#: ../../intro/tutorials/fabry_perot.rst:272
+#: ../../intro/tutorials/fabry_perot.rst:277
 msgid ""
 "Save the workspace to a file with \"File > Save to HDF5 file...\", or the"
 " |filesave_h5| button in the toolbar."
@@ -541,11 +546,11 @@ msgstr ""
 "Sauvegarder dans un fichier HDF5...\", ou le bouton |filesave_h5| dans la"
 " barre d'outils."
 
-#: ../../intro/tutorials/fabry_perot.rst:275
+#: ../../intro/tutorials/fabry_perot.rst:280
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:279
+#: ../../intro/tutorials/fabry_perot.rst:284
 msgid ""
 "If you want to load the workspace again, you can use the \"File > Open "
 "HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
@@ -560,11 +565,11 @@ msgstr ""
 "|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
 " d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/fabry_perot.rst:284
+#: ../../intro/tutorials/fabry_perot.rst:289
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/fabry_perot.rst:288
+#: ../../intro/tutorials/fabry_perot.rst:293
 msgid "h5browser"
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 17:38+0100\n"
+"POT-Creation-Date: 2024-01-24 16:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -217,13 +217,24 @@ msgstr ""
 
 #: ../../intro/tutorials/blobs.rst:120
 msgid ""
+"If you want to show the computing results again, you can select the "
+"\"Show results\" |show_results| entry in the \"Computing\" menu, or the "
+"\"Show results\" |show_results| button, below the image list:"
+msgstr "Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, en dessous de la liste des images :"
+
+#: ../../intro/tutorials/blobs.rst:126
+msgid "show_results"
+msgstr ""
+
+#: ../../intro/tutorials/blobs.rst:132
+msgid ""
 "The detected blobs are also added to the image metadata, and can be seen "
 "in the visualization panel on the left."
 msgstr ""
 "Les taches détectées sont également ajoutées aux métadonnées de l'image, "
 "et peuvent être vues dans le panneau de visualisation à gauche."
 
-#: ../../intro/tutorials/blobs.rst:123
+#: ../../intro/tutorials/blobs.rst:135
 msgid ""
 "Finally, we can save the workspace to a file. The workspace contains all "
 "the images that were loaded in DataLab, as well as the processing "
@@ -240,11 +251,11 @@ msgstr ""
 "cliquez sur \"Fichier > Enregistrer dans un fichier HDF5...\", ou sur le "
 "bouton |filesave_h5| dans la barre d'outils."
 
-#: ../../intro/tutorials/blobs.rst:129
+#: ../../intro/tutorials/blobs.rst:141
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:133
+#: ../../intro/tutorials/blobs.rst:145
 msgid ""
 "If you want to load the workspace again, you can use the \"File > Open "
 "HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
@@ -259,10 +270,10 @@ msgstr ""
 "|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
 " d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/blobs.rst:138
+#: ../../intro/tutorials/blobs.rst:150
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/blobs.rst:142
+#: ../../intro/tutorials/blobs.rst:154
 msgid "h5browser"
 msgstr ""
