@@ -3,6 +3,12 @@
 See DataLab [roadmap page](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.11.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
+
 ## DataLab Version 0.11.0 ##
 
 💥 New features:

@@ -355,11 +355,11 @@ Radial profile extraction
         * - Parameter
           - Description
         * - Center
-          - Center around which the radial profile is computed: centroid, image center, or manual
+          - Center around which the radial profile is computed: centroid, image center, or user-defined
         * - X
-          - X coordinate of the center (if manual), in pixels
+          - X coordinate of the center (if user-defined), in pixels
         * - Y
-          - Y coordinate of the center (if manual), in pixels
+          - Y coordinate of the center (if user-defined), in pixels
 
 Distribute on a grid
 ^^^^^^^^^^^^^^^^^^^^

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-23 15:15+0100\n"
+"POT-Creation-Date: 2024-01-24 16:00+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Size of the moving window"
 msgstr "Taille de la fenêtre glissante"
 
-#: cdl\core\computation\base.py:45 cdl\core\computation\image\__init__.py:228
+#: cdl\core\computation\base.py:45 cdl\core\computation\image\__init__.py:229
 #: cdl\core\computation\signal.py:341
 msgid "Threshold"
 msgstr "Seuil"
@@ -52,12 +52,12 @@ msgstr "Décalage"
 msgid "Shift zero frequency to center"
 msgstr "Décaler la fréquence nulle au centre"
 
-#: cdl\core\computation\image\__init__.py:275
+#: cdl\core\computation\image\__init__.py:276
 msgid "Angle"
 msgstr "Angle"
 
-#: cdl\core\computation\image\__init__.py:277
-#: cdl\core\computation\image\__init__.py:460
+#: cdl\core\computation\image\__init__.py:278
+#: cdl\core\computation\image\__init__.py:461
 #: cdl\core\computation\image\edges.py:63
 #: cdl\core\computation\image\restoration.py:102
 #: cdl\core\computation\image\restoration.py:146
@@ -65,13 +65,13 @@ msgstr "Angle"
 msgid "Mode"
 msgstr "Mode"
 
-#: cdl\core\computation\image\__init__.py:280
-#: cdl\core\computation\image\__init__.py:463
+#: cdl\core\computation\image\__init__.py:281
+#: cdl\core\computation\image\__init__.py:464
 msgid "cval"
 msgstr "cval"
 
-#: cdl\core\computation\image\__init__.py:282
-#: cdl\core\computation\image\__init__.py:465
+#: cdl\core\computation\image\__init__.py:283
+#: cdl\core\computation\image\__init__.py:466
 msgid ""
 "Value used for points outside the boundaries of the input if mode is "
 "'constant'"
@@ -79,11 +79,11 @@ msgstr ""
 "Valeur utilisée pour les points situés en dehors des frontières de l'image "
 "d'origine (si le mode est 'constant')"
 
-#: cdl\core\computation\image\__init__.py:289
+#: cdl\core\computation\image\__init__.py:290
 msgid "Reshape the output array"
 msgstr "Redimensionner l'image de destination"
 
-#: cdl\core\computation\image\__init__.py:291
+#: cdl\core\computation\image\__init__.py:292
 msgid ""
 "Reshape the output array so that the input array is contained completely in "
 "the output"
@@ -91,201 +91,192 @@ msgstr ""
 "Redimensionner l'image de destination de sorte qu'elle puisse contenir la "
 "totalité de l'image source"
 
-#: cdl\core\computation\image\__init__.py:297
-#: cdl\core\computation\image\__init__.py:471
+#: cdl\core\computation\image\__init__.py:298
+#: cdl\core\computation\image\__init__.py:472
 msgid "Prefilter the input image"
 msgstr "Prétraitement de l'image d'origine (spline)"
 
-#: cdl\core\computation\image\__init__.py:301
-#: cdl\core\computation\image\__init__.py:475
-#: cdl\core\computation\image\__init__.py:979
+#: cdl\core\computation\image\__init__.py:302
+#: cdl\core\computation\image\__init__.py:476
+#: cdl\core\computation\image\__init__.py:980
 msgid "Order"
 msgstr "Ordre"
 
-#: cdl\core\computation\image\__init__.py:305
-#: cdl\core\computation\image\__init__.py:479
+#: cdl\core\computation\image\__init__.py:306
+#: cdl\core\computation\image\__init__.py:480
 msgid "Spline interpolation order"
 msgstr "Ordre de l'interpolation de type spline"
 
-#: cdl\core\computation\image\__init__.py:438
+#: cdl\core\computation\image\__init__.py:439
 msgid "columns"
 msgstr "colonnes"
 
-#: cdl\core\computation\image\__init__.py:438
+#: cdl\core\computation\image\__init__.py:439
 msgid "rows"
 msgstr "lignes"
 
-#: cdl\core\computation\image\__init__.py:439
+#: cdl\core\computation\image\__init__.py:440
 msgid "Distribute over"
 msgstr "Distribuer selon les"
 
-#: cdl\core\computation\image\__init__.py:442
+#: cdl\core\computation\image\__init__.py:443
 msgid "Columns"
 msgstr "Colonnes"
 
-#: cdl\core\computation\image\__init__.py:445
+#: cdl\core\computation\image\__init__.py:446
 msgid "Rows"
 msgstr "Lignes"
 
-#: cdl\core\computation\image\__init__.py:448
+#: cdl\core\computation\image\__init__.py:449
 msgid "Column spacing"
 msgstr "Espace entre chaque colonne"
 
-#: cdl\core\computation\image\__init__.py:449
+#: cdl\core\computation\image\__init__.py:450
 msgid "Row spacing"
 msgstr "Espace entre chaque ligne"
 
-#: cdl\core\computation\image\__init__.py:458
+#: cdl\core\computation\image\__init__.py:459
 msgid "Zoom"
 msgstr "Zoom"
 
-#: cdl\core\computation\image\__init__.py:509
+#: cdl\core\computation\image\__init__.py:510
 msgid "Cluster size (X)"
 msgstr "Nombre de pixels (X)"
 
-#: cdl\core\computation\image\__init__.py:512
+#: cdl\core\computation\image\__init__.py:513
 msgid "Number of adjacent pixels to be combined together along X-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
 
-#: cdl\core\computation\image\__init__.py:515
+#: cdl\core\computation\image\__init__.py:516
 msgid "Cluster size (Y)"
 msgstr "Nombre de pixels (Y)"
 
-#: cdl\core\computation\image\__init__.py:518
+#: cdl\core\computation\image\__init__.py:519
 msgid "Number of adjacent pixels to be combined together along Y-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 
-#: cdl\core\computation\image\__init__.py:522
+#: cdl\core\computation\image\__init__.py:523
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:528 cdl\core\model\image.py:779
+#: cdl\core\computation\image\__init__.py:529 cdl\core\model\image.py:779
 msgid "Data type"
 msgstr "Type de données"
 
-#: cdl\core\computation\image\__init__.py:530
-#: cdl\core\computation\image\__init__.py:815
+#: cdl\core\computation\image\__init__.py:531
+#: cdl\core\computation\image\__init__.py:816
 #: cdl\core\computation\signal.py:310
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
-#: cdl\core\computation\image\__init__.py:533
+#: cdl\core\computation\image\__init__.py:534
 msgid "Change pixel size"
 msgstr "Modifier la taille des pixels"
 
-#: cdl\core\computation\image\__init__.py:535
+#: cdl\core\computation\image\__init__.py:536
 msgid "Change pixel size so that overall image size remains the same."
 msgstr ""
 "Modification de la taille des pixels de sorte que les dimensions de l'images "
 "restent les mêmes après l'opération."
 
-#: cdl\core\computation\image\__init__.py:625
-#: cdl\core\computation\image\__init__.py:663
+#: cdl\core\computation\image\__init__.py:626
+#: cdl\core\computation\image\__init__.py:664
 msgid "horizontal"
 msgstr "horizontal"
 
-#: cdl\core\computation\image\__init__.py:625
-#: cdl\core\computation\image\__init__.py:663
+#: cdl\core\computation\image\__init__.py:626
+#: cdl\core\computation\image\__init__.py:664
 msgid "vertical"
 msgstr "vertical"
 
-#: cdl\core\computation\image\__init__.py:626
-#: cdl\core\computation\image\__init__.py:664
+#: cdl\core\computation\image\__init__.py:627
+#: cdl\core\computation\image\__init__.py:665
 msgid "Direction"
 msgstr "Direction"
 
-#: cdl\core\computation\image\__init__.py:629
+#: cdl\core\computation\image\__init__.py:630
 msgid "Row"
 msgstr "Ligne"
 
-#: cdl\core\computation\image\__init__.py:632
+#: cdl\core\computation\image\__init__.py:633
 msgid "Column"
 msgstr "Colonne"
 
-#: cdl\core\computation\image\__init__.py:665
-#: cdl\core\computation\image\__init__.py:670
+#: cdl\core\computation\image\__init__.py:666
+#: cdl\core\computation\image\__init__.py:671
 msgid "Profile rectangular area"
 msgstr "Zone rectangulaire du profil"
 
-#: cdl\core\computation\image\__init__.py:666
+#: cdl\core\computation\image\__init__.py:667
 msgid "Row 1"
 msgstr "Ligne 1"
 
-#: cdl\core\computation\image\__init__.py:667
+#: cdl\core\computation\image\__init__.py:668
 msgid "Row 2"
 msgstr "Ligne 2"
 
-#: cdl\core\computation\image\__init__.py:668
+#: cdl\core\computation\image\__init__.py:669
 msgid "Column 1"
 msgstr "Colonne 1"
 
-#: cdl\core\computation\image\__init__.py:669
+#: cdl\core\computation\image\__init__.py:670
 msgid "Column 2"
 msgstr "Colonne 2"
 
-#: cdl\core\computation\image\__init__.py:726
-msgid "Radial profile center"
-msgstr "Centre du profil radial"
-
 #: cdl\core\computation\image\__init__.py:728
+msgid "Center position"
+msgstr "Position du centre"
+
+#: cdl\core\computation\image\__init__.py:730
 msgid "Image centroid"
 msgstr "Barycentre de l'image"
 
-#: cdl\core\computation\image\__init__.py:729
+#: cdl\core\computation\image\__init__.py:731
 msgid "Image center"
 msgstr "Centre de l'image"
 
-#: cdl\core\computation\image\__init__.py:730
-msgid "Manual"
-msgstr "Manuel"
+#: cdl\core\computation\image\__init__.py:732
+msgid "User-defined"
+msgstr "Défini par l'utilisateur"
 
-#: cdl\core\computation\image\__init__.py:735
-#: cdl\core\computation\image\__init__.py:739
+#: cdl\core\computation\image\__init__.py:738
 msgid "Center"
 msgstr "Centre"
 
-#: cdl\core\computation\image\__init__.py:737
-msgid "X"
-msgstr "X"
-
-#: cdl\core\computation\image\__init__.py:738
-msgid "Y"
-msgstr "Y"
-
-#: cdl\core\computation\image\__init__.py:813
+#: cdl\core\computation\image\__init__.py:814
 #: cdl\core\computation\signal.py:308
 msgid "Destination data type"
 msgstr "Type de données de destination"
 
-#: cdl\core\computation\image\__init__.py:967
+#: cdl\core\computation\image\__init__.py:968
 msgid "Cut-off frequency ratio"
 msgstr "Fréquence de coupure relative"
 
-#: cdl\core\computation\image\__init__.py:971
+#: cdl\core\computation\image\__init__.py:972
 msgid "Cut-off frequency ratio (0.0 - 1.0)."
 msgstr "Fréquence de coupure relative (0.0 - 1.0)."
 
-#: cdl\core\computation\image\__init__.py:974
+#: cdl\core\computation\image\__init__.py:975
 msgid "High-pass filter"
 msgstr "Filtre passe-haut"
 
-#: cdl\core\computation\image\__init__.py:976
+#: cdl\core\computation\image\__init__.py:977
 msgid "If True, apply high-pass filter instead of low-pass."
 msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
 
-#: cdl\core\computation\image\__init__.py:982
+#: cdl\core\computation\image\__init__.py:983
 msgid "Order of the Butterworth filter."
 msgstr "Ordre du filtre de Butterworth."
 
-#: cdl\core\computation\image\__init__.py:1135
+#: cdl\core\computation\image\__init__.py:1136
 msgid "Radius<sub>min</sub>"
 msgstr "Rayon<sub>min</sub>"
 
-#: cdl\core\computation\image\__init__.py:1138
+#: cdl\core\computation\image\__init__.py:1139
 msgid "Radius<sub>max</sub>"
 msgstr "Rayon<sub>max</sub>"
 
-#: cdl\core\computation\image\__init__.py:1140
+#: cdl\core\computation\image\__init__.py:1141
 msgid "Minimal distance"
 msgstr "Distance minimale"
 
@@ -1136,7 +1127,7 @@ msgstr "Permuter les axes X/Y"
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1100
+#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1102
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
@@ -1284,9 +1275,8 @@ msgid "Rotate arbitrarily..."
 msgstr "Rotation arbitraire..."
 
 #: cdl\core\gui\actionhandler.py:857
-#, fuzzy
 msgid "Intensity profiles"
-msgstr "Ajustement des niveaux"
+msgstr "Profils d'intensité"
 
 #: cdl\core\gui\actionhandler.py:859
 msgid "Line profile extraction..."
@@ -2049,7 +2039,7 @@ msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
 "and choose a computing feature in the <u>Compute</u> menu."
-msgstr ""
+msgstr "Cette fonctionnalité exploite les résultats de calculs précédents.<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
 #: cdl\core\gui\panel\base.py:1065 cdl\core\gui\processor\base.py:466
 msgid "Results"
@@ -2057,23 +2047,21 @@ msgstr "Résultats"
 
 #: cdl\core\gui\panel\base.py:1082
 msgid "Indexes"
-msgstr ""
+msgstr "Indices"
 
 #: cdl\core\gui\panel\base.py:1090
-#, fuzzy
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1091
-#, fuzzy
+#: cdl\core\gui\panel\base.py:1092
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1094
+#: cdl\core\gui\panel\base.py:1096
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on the results under the form of '%s'."
-msgstr ""
+msgstr "Tracer les résultats obtenus avec des calculs réalisés précédemment.<br><br>Ce graphique est basé sur les résultats sous la forme de '%s'."
 
 #: cdl\core\gui\panel\macro.py:65
 msgid "Macro panel"
@@ -3213,6 +3201,18 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid "Radial profile center"
+#~ msgstr "Centre du profil radial"
+
+#~ msgid "Manual"
+#~ msgstr "Manuel"
+
+#~ msgid "X"
+#~ msgstr "X"
+
+#~ msgid "Y"
+#~ msgstr "Y"
 
 #~ msgid ""
 #~ "This feature shows result arrays as displayed after calling one of the "

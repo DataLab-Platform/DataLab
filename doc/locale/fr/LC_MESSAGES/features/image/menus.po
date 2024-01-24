@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 19:39+0100\n"
+"POT-Creation-Date: 2024-01-24 15:55+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -741,26 +741,24 @@ msgstr "Centre"
 #: ../../features/image/menus.rst:358
 msgid ""
 "Center around which the radial profile is computed: centroid, image "
-"center, or manual"
-msgstr ""
-"Centre autour duquel le profil radial est calculé : centre de gravité, "
-"centre de l'image, ou manuel"
+"center, or user-defined"
+msgstr "Centre autour duquel le profil radial est calculé : centre de masse, centre de l'image, ou défini par l'utilisateur"
 
 #: ../../features/image/menus.rst:359
 msgid "X"
 msgstr "X"
 
 #: ../../features/image/menus.rst:360
-msgid "X coordinate of the center (if manual), in pixels"
-msgstr "Coordonnée X du centre (si manuel), en pixels"
+msgid "X coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée X du centre (si défini par l'utilisateur), en pixels"
 
 #: ../../features/image/menus.rst:361
 msgid "Y"
 msgstr "Y"
 
 #: ../../features/image/menus.rst:362
-msgid "Y coordinate of the center (if manual), in pixels"
-msgstr "Coordonnée Y du centre (si manuel), en pixels"
+msgid "Y coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée Y du centre (si défini par l'utilisateur), en pixels"
 
 #: ../../features/image/menus.rst:365
 msgid "Distribute on a grid"

@@ -725,20 +725,19 @@ class RadialProfileParam(gds.DataSet):
 
     _prop = gds.GetAttrProp("center")
     center = gds.ChoiceItem(
-        _("Radial profile center"),
+        _("Center position"),
         (
             ("centroid", _("Image centroid")),
             ("center", _("Image center")),
-            ("manual", _("Manual")),
+            ("user", _("User-defined")),
         ),
         default="centroid",
     ).set_prop("display", store=_prop, callback=choice_callback)
 
-    _hgroup_begin = gds.BeginGroup(_("Center"))
-    _func_prop = gds.FuncProp(_prop, lambda x: x == "manual")
-    x0 = gds.FloatItem(_("X"), unit="pixel").set_prop("display", active=_func_prop)
-    y0 = gds.FloatItem(_("Y"), unit="pixel").set_prop("display", active=_func_prop)
-    _hgroup_end = gds.EndGroup(_("Center"))
+    _func_prop = gds.FuncProp(_prop, lambda x: x == "user")
+    _xyl = "<sub>%s</sub>" % _("Center")
+    x0 = gds.FloatItem(f"X{_xyl}", unit="pixel").set_prop("display", active=_func_prop)
+    y0 = gds.FloatItem(f"X{_xyl}", unit="pixel").set_prop("display", active=_func_prop)
 
 
 def compute_radial_profile(src: ImageObj, p: RadialProfileParam) -> ImageObj:
