@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 10:13+0100\n"
+"POT-Creation-Date: 2024-01-24 11:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -428,20 +428,29 @@ msgid ""
 "produce a 1 ``SignalObj`` -> 1 ``SignalObj`` function, which can be used "
 "inside DataLab's infrastructure to perform computations with "
 "``SignalProcessor``."
-msgstr "Encapsule une fonction 1 tableau -> 1 tableau (le cas simple de y1 = f(y0)) pour produire une fonction 1 ``SignalObj`` -> 1 ``SignalObj``, qui peut être utilisée à l'intérieur de l'infrastructure de DataLab pour effectuer des calculs avec ``SignalProcessor``."
+msgstr ""
+"Encapsule une fonction 1 tableau -> 1 tableau (le cas simple de y1 = "
+"f(y0)) pour produire une fonction 1 ``SignalObj`` -> 1 ``SignalObj``, qui"
+" peut être utilisée à l'intérieur de l'infrastructure de DataLab pour "
+"effectuer des calculs avec ``SignalProcessor``."
 
 #: cdl.core.computation.image.Wrap11Func:5
 #: cdl.core.computation.signal.Wrap11Func:5 of
 msgid ""
 "This wrapping mechanism using a class is necessary for the resulted "
 "function to be pickable by the ``multiprocessing`` module."
-msgstr "Ce mécanisme d'encapsulation à l'aide d'une classe est nécessaire pour que la fonction résultante puisse être sélectionnée par le module ``multiprocessing``."
+msgstr ""
+"Ce mécanisme d'encapsulation à l'aide d'une classe est nécessaire pour "
+"que la fonction résultante puisse être sélectionnée par le module "
+"``multiprocessing``."
 
 #: cdl.core.computation.signal.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a ``SignalObj`` "
 "object."
-msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet ``SignalObj``."
+msgstr ""
+"L'instance de cet encapsuleur est appelable et renvoie un objet "
+"``SignalObj``."
 
 #: cdl.core.computation.image.Wrap11Func:11
 #: cdl.core.computation.signal.Wrap11Func:11 of
@@ -838,13 +847,19 @@ msgid ""
 "Wrap a 1 array -> 1 array function to produce a 1 ``ImageObj`` -> 1 "
 "``ImageObj`` function, which can be used inside DataLab's infrastructure "
 "to perform computations with ``ImageProcessor``."
-msgstr "Encapsule une fonction 1 tableau -> 1 tableau pour produire une fonction 1 ``ImageObj`` -> 1 ``ImageObj``, qui peut être utilisée à l'intérieur de l'infrastructure de DataLab pour effectuer des calculs avec ``ImageProcessor``."
+msgstr ""
+"Encapsule une fonction 1 tableau -> 1 tableau pour produire une fonction "
+"1 ``ImageObj`` -> 1 ``ImageObj``, qui peut être utilisée à l'intérieur de"
+" l'infrastructure de DataLab pour effectuer des calculs avec "
+"``ImageProcessor``."
 
 #: cdl.core.computation.image.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a ``ImageObj`` "
 "object."
-msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet ``ImageObj``."
+msgstr ""
+"L'instance de cet encapsuleur est appelable et renvoie un objet "
+"``ImageObj``."
 
 #: cdl.core.computation.image.dst_11_signal:8 of
 msgid "output signal object"
@@ -1100,6 +1115,10 @@ msgstr "Paramètres de profil radial"
 #: cdl.core.computation.image.RadialProfileParam.update_from_image:1 of
 msgid "Update parameters from image"
 msgstr "Mettre à jour les paramètres à partir de l'image"
+
+#: cdl.core.computation.image.RadialProfileParam.choice_callback:1 of
+msgid "Callback for choice item"
+msgstr "Callback pour l'item de choix"
 
 #: cdl.core.computation.image.compute_radial_profile:1 of
 msgid "Compute radial profile around the centroid"

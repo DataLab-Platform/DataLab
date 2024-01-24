@@ -47,4 +47,5 @@ on a specific aspect of the software and is intended to be self-contained.
    spectrum
    blobs
    fabry_perot
+   laser_beam
    custom_func

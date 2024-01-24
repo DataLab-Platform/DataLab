@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 10:13+0100\n"
+"POT-Creation-Date: 2024-01-24 11:05+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -170,6 +170,10 @@ msgstr "Paramètres de profil radial"
 #: cdl.core.computation.image.RadialProfileParam.update_from_image:1 of
 msgid "Update parameters from image"
 msgstr "Mettre à jour les paramètres à partir de l'image"
+
+#: cdl.core.computation.image.RadialProfileParam.choice_callback:1 of
+msgid "Callback for choice item"
+msgstr "Callback pour l'item de choix"
 
 #: cdl.core.computation.image.BinningParam:1 of
 msgid "Binning parameters"
