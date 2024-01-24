@@ -550,12 +550,12 @@
             }
         },
         {
-            "label": "Create Windows 7 executable/installer",
+            "label": "New Windows 7 release",
             "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
-                "release.bat"
+                "release_win7.bat"
             ],
             "options": {
                 "cwd": "scripts",
@@ -585,5 +585,28 @@
                 "Create installer"
             ]
         },
+        {
+            "label": "Global release",
+            "type": "shell",
+            "command": "echo 'Global release'",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "New release",
+                "New Windows 7 release"
+            ]
+        }
     ]
 }
