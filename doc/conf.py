@@ -38,6 +38,7 @@ html_logo = "_static/DataLab-Title.svg"
 html_title = project
 html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
+templates_path = ["_templates"]
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/Codra-Ingenierie-Informatique/DataLab/",

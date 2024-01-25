@@ -1,0 +1,9 @@
+{% extends "!layout.html" %}
+
+{% block htmltitle %}
+{% if pagename == 'index' %}
+<title>DataLab</title>
+{% else %}
+{{ super() }}
+{% endif %}
+{% endblock %}
