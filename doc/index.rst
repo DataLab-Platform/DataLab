@@ -66,8 +66,7 @@ benefiting from an industrial-grade technological platform.
    dev/index
 
 .. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
-          developed and maintained by DataLab open-source project team with
-          the support of `Codra`_.
+          developed and maintained by DataLab open-source project team.
 
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _Codra: https://codra.net/
