@@ -36,6 +36,7 @@ exclude_patterns = []
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/DataLab-Title.svg"
 html_title = project
+html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 html_theme_options = {
     "show_toc_level": 2,
