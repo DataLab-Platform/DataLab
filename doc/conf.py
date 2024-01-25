@@ -35,7 +35,7 @@ exclude_patterns = []
 
 html_theme = "pydata_sphinx_theme"
 html_logo = "_static/DataLab-Title.svg"
-html_title = f"{project} v{cdl.__version__} Manual"
+html_title = project
 html_show_sourcelink = False
 html_theme_options = {
     "show_toc_level": 2,
