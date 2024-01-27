@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/image/menu/file.rst:2
+msgid "\"File\" menu"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:23
+msgid "New image"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:7
+msgid ""
+"Create a new image from various models (supported datatypes: uint8, "
+"uint16, int16, float32, float64):"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:14
+msgid "Model"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:15
+msgid "Equation"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:16
+msgid "Zeros"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:17
+msgid ":math:`z[i] = 0`"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:18
+msgid "Empty"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:19
+msgid "Data is directly taken from memory as it is"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:20
+msgid "Random"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:21
+msgid ""
+":math:`z[i] \\in [0, z_{max})` where :math:`z_{max}` is the datatype "
+"maximum value"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:22
+msgid "2D Gaussian"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:23
+msgid ""
+":math:`z = "
+"A.exp(-\\dfrac{(\\sqrt{(x-x0)^2+(y-y0)^2}-\\mu)^2}{2\\sigma^2})`"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:50
+msgid "Open image"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:26
+msgid "Create a new image from the following supported filetypes:"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:31
+msgid "File type"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:32
+msgid "Extensions"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:33
+msgid "PNG files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:34
+msgid ".png"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:35
+msgid "TIFF files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:36
+msgid ".tif, .tiff"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:37
+msgid "8-bit images"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:38
+msgid ".jpg, .gif"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:39
+msgid "NumPy arrays"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:40
+msgid ".npy"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:41
+msgid "Text files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:42
+msgid ".txt, .csv, .asc"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:43
+msgid "Andor SIF files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:44
+msgid ".sif"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:45
+msgid "SPIRICON files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:46
+msgid ".scor-data"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:47
+msgid "FXD files"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:48
+msgid ".fxd"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:49
+msgid "Bitmap images"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:50
+msgid ".bmp"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:53
+msgid "Save image"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:53
+msgid "Save current image (see \"Open image\" supported filetypes)."
+msgstr ""
+
+#: ../../features/image/menu/file.rst:56
+msgid "Open HDF5 file"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:56
+msgid "Import data from a HDF5 file."
+msgstr ""
+
+#: ../../features/image/menu/file.rst:59
+msgid "Save to HDF5 file"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:59
+msgid ""
+"Export the whole DataLab session (all signals and images) into a HDF5 "
+"file."
+msgstr ""
+
+#: ../../features/image/menu/file.rst:63
+msgid "Browse HDF5 file"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:62
+msgid ""
+"Open the :ref:`h5browser` in a new window to browse and import data from "
+"HDF5 file."
+msgstr ""
+
+#: ../../features/image/menu/file.rst:67
+msgid "Settings"
+msgstr ""
+
+#: ../../features/image/menu/file.rst:66
+msgid "Open the the \"Settings\" dialog box."
+msgstr ""
+

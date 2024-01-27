@@ -1,11 +1,20 @@
-How to contribute
-=================
+.. _contribute_code:
+
+Contribute code
+===============
+
+This page explains how you can contribute code to the project.
+
+.. seealso::
+
+    The :ref:`guidelines` page presents the coding guidelines that you
+    should follow when contributing to the project.
 
 Fork the project
 ----------------
 
 The first step is to fork the project on GitHub.
-You can do that by visiting `DataLab project <https://codra-ingenierie-informatique.github.io/DataLab/>`_
+You can do that by visiting `DataLab GitHub project <https://github.com/Codra-Ingenierie-Informatique/DataLab/>`_
 and clicking on the "Fork" button on the top right corner of the page.
 
 Once you have forked the project, you will have a copy of the project
@@ -27,8 +36,3 @@ During the review process, the project maintainers will check that your
 code follows the coding guidelines and that it does not break the existing
 tests. If your code does not follow the coding guidelines, you will have
 to fix it before your pull request can be merged.
-
-.. seealso::
-
-    The :ref:`guidelines` page presents the coding guidelines that you
-    should follow when contributing to the project.

@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/signal/menu/file.rst:2
+msgid "\"File\" menu"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:24
+msgid "New signal"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:7
+msgid "Create a new signal from various models:"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:13
+msgid "Model"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:14
+msgid "Equation"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:15
+msgid "Zeros"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:16
+msgid ":math:`y[i] = 0`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:17
+msgid "Random"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:18
+msgid ":math:`y[i] \\in [-0.5, 0.5]`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:19
+msgid "Gaussian"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:20
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:21
+msgid "Lorentzian"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:22
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:23
+msgid "Voigt"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:24
+msgid ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:37
+msgid "Open signal"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:27
+msgid "Create a new signal from the following supported filetypes:"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:32
+#: ../../features/signal/menu/file.rst:45
+msgid "File type"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:33
+#: ../../features/signal/menu/file.rst:46
+msgid "Extensions"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:34
+#: ../../features/signal/menu/file.rst:47
+msgid "Text files"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:35
+msgid ".txt, .csv"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:36
+msgid "NumPy arrays"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:37
+msgid ".npy"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:48
+msgid "Save signal"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:40
+msgid "Save current signal to the following supported filetypes:"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:48
+msgid ".csv"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:51
+msgid "Open HDF5 file"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:51
+msgid "Import data from a HDF5 file."
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:54
+msgid "Save to HDF5 file"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:54
+msgid ""
+"Export the whole DataLab session (all signals and images) into a HDF5 "
+"file."
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:58
+msgid "Browse HDF5 file"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:57
+msgid ""
+"Open the :ref:`h5browser` in a new window to browse and import data from "
+"HDF5 file."
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:62
+msgid "Settings"
+msgstr ""
+
+#: ../../features/signal/menu/file.rst:61
+msgid "Open the the \"Settings\" dialog box."
+msgstr ""
+

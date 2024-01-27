@@ -1,0 +1,99 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/signal/menu/computing.rst:2
+msgid "\"Computing\" menu"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:16
+msgid "Edit regions of interest"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:7
+msgid ""
+"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
+"stored as metadata, and thus attached to signal."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:10
+msgid ""
+"ROI definition dialog is exactly the same as ROI extraction (see above): "
+"the ROI is defined by moving the position and adjusting the width of an "
+"horizontal range."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:16
+msgid "A signal with an ROI."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:19
+msgid "Remove regions of interest"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:19
+msgid "Remove all defined ROI for selected object(s)."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:27
+msgid "Statistics"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:22
+msgid "Compute statistics on selected signal and show a summary table."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:26
+msgid ""
+"Example of statistical summary table: each row is associated to an ROI "
+"(the first row gives the statistics for the whole data)."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:36
+msgid "Full width at half-maximum"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:30
+msgid ""
+"Fit data to a Gaussian, Lorentzian or Voigt model using least-square "
+"method. Then, compute the full width at half-maximum value."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:36
+msgid "The computed result is displayed as an annotated segment."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:40
+msgid "Full width at 1/e²"
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:39
+msgid ""
+"Fit data to a Gaussian model using least-square method. Then, compute the"
+" full width at 1/e²."
+msgstr ""
+
+#: ../../features/signal/menu/computing.rst:42
+msgid ""
+"Computed scalar results are systematically stored as metadata. Metadata "
+"is attached to signal and serialized with it when exporting current "
+"session in a HDF5 file."
+msgstr ""
+

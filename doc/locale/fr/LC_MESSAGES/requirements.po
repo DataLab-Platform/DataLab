@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-15 18:32+0100\n"
+"POT-Creation-Date: 2024-01-27 14:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
@@ -221,12 +221,6 @@ msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org
 msgid "sphinx_design"
 msgstr ""
 
-#: ../../requirements.rst:95
-msgid ""
-"A sphinx extension for designing beautiful, view size responsive web "
-"components."
-msgstr "Une extension sphinx pour concevoir de beaux composants web."
-
 #: ../../requirements.rst:96
 msgid "pydata-sphinx-theme"
 msgstr ""
@@ -243,3 +237,10 @@ msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
 #~ msgid "opencv-python"
 #~ msgstr ""
+
+#~ msgid ""
+#~ "A sphinx extension for designing "
+#~ "beautiful, view size responsive web "
+#~ "components."
+#~ msgstr "Une extension sphinx pour concevoir de beaux composants web."
+

@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/signal/menu/help.rst:2
+msgid "\"?\" menu"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:9
+msgid "Online or Local documentation"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:7
+msgid "Open the online or local documentation (english only for online version):"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:15
+msgid "Show log files"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:12
+msgid "Open DataLab log viewer"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:15
+msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:22
+msgid "About DataLab installation"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:18
+msgid ""
+"Show information regarding your DataLab installation (this is typically "
+"needed for submitting a bug report)."
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:22
+msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:26
+msgid "About"
+msgstr ""
+
+#: ../../features/signal/menu/help.rst:25
+msgid "Open the \"About DataLab\" dialog box:"
+msgstr ""
+

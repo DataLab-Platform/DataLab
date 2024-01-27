@@ -1,0 +1,152 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-07 14:50+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/image/menu/edit.rst:2
+msgid "\"Edit\" menu"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:8
+msgid "New group"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:7
+msgid ""
+"Create a new group of images. Images may be moved from one group to "
+"another by drag and drop."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:11
+msgid "Rename group"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:11
+msgid "Rename currently selected group."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:17
+msgid "Move up"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:14
+msgid ""
+"Move current selection up in the list (groups or images may be selected)."
+" If multiple objects are selected, they are moved together. If a selected"
+" image is already at the top of its group, it is moved to the bottom of "
+"the previous group."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:23
+msgid "Move down"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:20
+msgid ""
+"Move current selection down in the list (groups or images may be "
+"selected). If multiple objects are selected, they are moved together. If "
+"a selected image is already at the bottom of its group, it is moved to "
+"the top of the next group."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:26
+msgid "Duplicate"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:26
+msgid "Create a new image which is identical to the currently selected object."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:29
+msgid "Remove"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:29
+msgid "Remove currently selected image."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:32
+msgid "Delete all"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:32
+msgid "Delete all images."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:35
+msgid "Copy metadata"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:35
+msgid "Copy metadata from currently selected image into clipboard."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:38
+msgid "Paste metadata"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:38
+msgid "Paste metadata from clipboard into selected image."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:41
+msgid "Import metadata into image"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:41
+msgid "Import metadata from a JSON text file."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:44
+msgid "Export metadata from image"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:44
+msgid "Export metadata to a JSON text file."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:49
+msgid "Delete object metadata"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:47
+msgid ""
+"Delete metadata from currently selected image. Metadata contains "
+"additionnal information such as Region of Interest or results of "
+"computations"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:52
+msgid "Add object title to plot"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:52
+msgid "Add currently selected image title to the associated plot."
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:55
+msgid "Copy titles to clipboard"
+msgstr ""
+
+#: ../../features/image/menu/edit.rst:55
+msgid ""
+"Copy all image titles to clipboard as a multiline text. This text may be "
+"used for reproducing a processing chain, for example."
+msgstr ""
+

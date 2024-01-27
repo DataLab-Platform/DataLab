@@ -1,0 +1,426 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-07 17:53+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/signal/menu/processing.rst:2
+msgid "\"Processing\" menu"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:23
+msgid "Normalize"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:7
+msgid ""
+"Create a new signal which is the normalization of each selected signal by"
+" maximum, amplitude, sum or energy:"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:14
+#: ../../features/signal/menu/processing.rst:39
+#: ../../features/signal/menu/processing.rst:107
+#: ../../features/signal/menu/processing.rst:135
+msgid "Parameter"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:15
+msgid "Normalization"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:16
+msgid "Maximum"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:17
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{max(y_{0})}`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:18
+msgid "Amplitude"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:19
+msgid ""
+":math:`y_{1}= \\dfrac{y_{0}'}{max(y_{0}')}` with "
+":math:`y_{0}'=y_{0}-min(y_{0})`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:20
+msgid "Sum"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:21
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}y_{0}[n]}`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:22
+msgid "Energy"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:23
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}|y_{0}[n]|^2}`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:26
+msgid "Derivative"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:26
+msgid "Create a new signal which is the derivative of each selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:29
+msgid "Integral"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:29
+msgid "Create a new signal which is the integral of each selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:40
+#: ../../features/signal/menu/processing.rst:44
+msgid "Linear calibration"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:32
+msgid ""
+"Create a new signal which is a linear calibration of each selected signal"
+" with respect to X or Y axis:"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:41
+msgid "X-axis"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:42
+msgid ":math:`x_{1} = a.x_{0} + b`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:43
+msgid "Y-axis"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:44
+msgid ":math:`y_{1} = a.y_{0} + b`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:48
+msgid "Gaussian filter"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:47
+msgid ""
+"Compute 1D-Gaussian filter of each selected signal (implementation based "
+"on `scipy.ndimage.gaussian_filter1d "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter1d.html>`_)."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:55
+msgid "Moving average"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:51
+msgid ""
+"Compute moving average on :math:`M` points of each selected signal, "
+"without border effect:"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:54
+msgid ""
+"y_{1}[i]=\\dfrac{1}{M}\\sum_{j=0}^{M-1}y_{0}[i+j]\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:59
+msgid "Moving median"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:58
+msgid ""
+"Compute moving median of each selected signal (implementation based on "
+"`scipy.signal.medfilt "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:63
+msgid "Wiener filter"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:62
+msgid ""
+"Compute Wiener filter of each selected signal (implementation based on "
+"`scipy.signal.wiener "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:67
+msgid "FFT"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:66
+msgid ""
+"Create a new signal which is the Fast Fourier Transform (FFT) of each "
+"selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:70
+msgid "Inverse FFT"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:70
+msgid "Create a new signal which is the inverse FFT of each selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:96
+msgid "Interpolation"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:73
+msgid ""
+"Create a new signal which is the interpolation of each selected signal "
+"with respect to a second signal X-axis (which might be the same as one of"
+" the selected signals)."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:77
+msgid "The following interpolation methods are available:"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:83
+#: ../../features/signal/menu/processing.rst:109
+#: ../../features/signal/menu/processing.rst:137
+msgid "Method"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:84
+#: ../../features/signal/menu/processing.rst:108
+#: ../../features/signal/menu/processing.rst:136
+msgid "Description"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:85
+msgid "Linear"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:86
+msgid ""
+"Linear interpolation, using using NumPy's `interp "
+"<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
+" function"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:87
+msgid "Spline"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:88
+msgid ""
+"Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
+" function"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:89
+msgid "Quadratic"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:90
+msgid ""
+"Quadratic interpolation, using using NumPy's `polyval "
+"<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
+" function"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:91
+msgid "Cubic"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:92
+msgid ""
+"Cubic interpolation, using using SciPy's `Akima1DInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
+" class"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:93
+msgid "Barycentric"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:94
+msgid ""
+"Barycentric interpolation, using using SciPy's `BarycentricInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
+" class"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:95
+msgid "PCHIP"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:96
+msgid ""
+"Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, "
+"using using SciPy's `PchipInterpolator "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_"
+" class"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:122
+msgid "Resampling"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:99
+msgid "Create a new signal which is the resampling of each selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:101
+#: ../../features/signal/menu/processing.rst:129
+msgid "The following parameters are available:"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:110
+msgid "Interpolation method (see previous section)"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:111
+msgid "Fill value"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:112
+msgid "Interpolation fill value (see previous section)"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:113
+msgid "Xmin"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:114
+msgid "Minimum X value"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:115
+msgid "Xmax"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:116
+msgid "Maximum X value"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:117
+msgid "Mode"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:118
+msgid "Resampling mode: step size or number of points"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:119
+msgid "Step size"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:120
+msgid "Resampling step size"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:121
+msgid "Number of points"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:122
+msgid "Resampling number of points"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:124
+msgid "Detrending"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:126
+msgid ""
+"Create a new signal which is the detrending of each selected signal. This"
+" features is based on SciPy's `scipy.signal.detrend "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
+" function."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:138
+msgid ""
+"Detrending method: 'linear' or 'constant'. See SciPy's "
+"`scipy.signal.detrend "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
+" function."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:155
+msgid "Lorentzian, Voigt, Polynomial and Multi-Gaussian fit"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:141
+msgid "Open an interactive curve fitting tool in a modal dialog box."
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:147
+msgid "Model"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:148
+msgid "Equation"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:149
+msgid "Gaussian"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:150
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:151
+msgid "Lorentzian"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:152
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:153
+msgid "Voigt"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:154
+msgid ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:155
+msgid "Multi-Gaussian"
+msgstr ""
+
+#: ../../features/signal/menu/processing.rst:156
+msgid ""
+":math:`y = "
+"y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"
+msgstr ""
+

@@ -1,0 +1,227 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-07 17:38+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/signal/menu/operation.rst:2
+msgid "\"Operation\" menu"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:10
+msgid "Sum"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:7
+msgid "Create a new signal which is the sum of all selected signals:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:9
+msgid ""
+"y_{M} = \\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:16
+msgid "Average"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:13
+msgid "Create a new signal which is the average of all selected signals:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:15
+msgid ""
+"y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:23
+msgid "Difference"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:19
+msgid ""
+"Create a new signal which is the difference of the **two** selected "
+"signals:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:22
+msgid ""
+"y_{2} = y_{1} - y_{0}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:29
+msgid "Product"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:26
+msgid "Create a new signal which is the product of all selected signals:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:28
+msgid ""
+"y_{M} = \\prod_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:35
+msgid "Division"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:32
+msgid "Create a new signal which is the division of the **two** selected signals:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:34
+msgid ""
+"y_{2} = \\dfrac{y_{1}}{y_{0}}\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:41
+msgid "Absolute value"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:38
+msgid "Create a new signal which is the absolute value of each selected signal:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:40
+msgid ""
+"y_{k} = |y_{k-1}|\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:47
+msgid "Real part"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:44
+msgid "Create a new signal which is the real part of each selected signal:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:46
+msgid ""
+"y_{k} = \\Re(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:53
+msgid "Imaginary part"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:50
+msgid "Create a new signal which is the imaginary part of each selected signal:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:52
+msgid ""
+"y_{k} = \\Im(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:62
+msgid "Convert data type"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:56
+msgid ""
+"Create a new signal which is the result of converting data type of each "
+"selected signal."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:61
+msgid ""
+"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
+"with the default parameters (`casting='unsafe'`)."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:68
+msgid "Log10(y)"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:65
+msgid ""
+"Create a new signal which is the base 10 logarithm of each selected "
+"signal:"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:67
+msgid ""
+"z_{k} = \\log_{10}(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:78
+msgid "Peak detection"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:71
+msgid ""
+"Create a new signal from semi-automatic peak detection of each selected "
+"signal."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:76
+msgid ""
+"Peak detection dialog: threshold is adjustable by moving the horizontal "
+"marker, peaks are detected automatically (see vertical markers with "
+"labels indicating peak position)"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:84
+msgid "Convolution"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:81
+msgid ""
+"Create a new signal which is the convolution of each selected signal with"
+" respect to another signal."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:84
+msgid ""
+"This feature is based on SciPy's `scipy.signal.convolve "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+" function."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:92
+msgid "ROI extraction"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:87
+msgid "Create a new signal from a user-defined Region of Interest (ROI)."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:91
+msgid ""
+"ROI extraction dialog: the ROI is defined by moving the position and "
+"adjusting the width of an horizontal range."
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:94
+msgid "Swap X/Y axes"
+msgstr ""
+
+#: ../../features/signal/menu/operation.rst:95
+msgid "Create a new signal which is the result of swapping X/Y data."
+msgstr ""
+

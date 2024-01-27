@@ -1,0 +1,519 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/image/menu/processing.rst:2
+msgid "\"Processing\" menu"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:15
+#: ../../features/image/menu/processing.rst:17
+msgid "Linear calibration"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:7
+msgid ""
+"Create a new image which is a linear calibration of each selected image "
+"with respect to Z axis:"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:14
+msgid "Parameter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:16
+msgid "Z-axis"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:17
+msgid ":math:`z_{1} = a.z_{0} + b`"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:20
+msgid "Thresholding"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:20
+msgid "Apply the thresholding to each selected image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:23
+msgid "Clipping"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:23
+msgid "Apply the clipping to each selected image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:27
+msgid "Moving average"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:26
+msgid ""
+"Compute moving average of each selected image (implementation based on "
+"`scipy.ndimage.uniform_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_)."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:31
+msgid "Moving median"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:30
+msgid ""
+"Compute moving median of each selected image (implementation based on "
+"`scipy.signal.medfilt "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:35
+msgid "Wiener filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:34
+msgid ""
+"Compute Wiener filter of each selected image (implementation based on "
+"`scipy.signal.wiener "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:39
+msgid "FFT"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:38
+msgid ""
+"Create a new image which is the Fast Fourier Transform (FFT) of each "
+"selected image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:42
+msgid "Inverse FFT"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:42
+msgid "Create a new image which is the inverse FFT of each selected image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:46
+msgid "Butterworth filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:45
+msgid ""
+"Perform Butterworth filter on an image (implementation based on "
+"`skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:71
+msgid "Exposure"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:51
+msgid "Gamma correction"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:50
+msgid ""
+"Apply gamma correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_gamma <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:55
+msgid "Logarithmic correction"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:54
+msgid ""
+"Apply logarithmic correction to each selected image (implementation based"
+" on `skimage.exposure.adjust_log <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:59
+msgid "Sigmoid correction"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:58
+msgid ""
+"Apply sigmoid correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_sigmoid <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:63
+msgid "Histogram equalization"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:62
+msgid ""
+"Equalize image histogram levels (implementation based on "
+"`skimage.exposure.equalize_hist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:67
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:66
+msgid ""
+"Equalize image histogram levels using Contrast Limited Adaptive Histogram"
+" Equalization (CLAHE) algorithm (implementation based on "
+"`skimage.exposure.equalize_adapthist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:71
+msgid "Intensity rescaling"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:70
+msgid ""
+"Stretch or shrink image intensity levels (implementation based on "
+"`skimage.exposure.rescale_intensity <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:93
+msgid "Restoration"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:76
+msgid "Total variation denoising"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:75
+msgid ""
+"Denoise image using Total Variation algorithm (implementation based on "
+"`skimage.restoration.denoise_tv_chambolle <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
+"chambolle>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:80
+msgid "Bilateral filter denoising"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:79
+msgid ""
+"Denoise image using bilateral filter (implementation based on "
+"`skimage.restoration.denoise_bilateral <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:84
+msgid "Wavelet denoising"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:83
+msgid ""
+"Perform wavelet denoising on image (implementation based on "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:88
+msgid "White Top-Hat denoising"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:87
+msgid ""
+"Denoise image by subtracting its white top hat transform (using a disk "
+"footprint)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:93
+msgid "All denoising methods"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:91
+msgid ""
+"Perform all denoising methods on image. Combined with the \"distribute on"
+" a grid\" option, this allows to compare the different denoising methods "
+"on the same image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:123
+msgid "Morphology"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:98
+msgid "White Top-Hat (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:97
+msgid ""
+"Perform white top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.white_tophat <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:102
+msgid "Black Top-Hat (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:101
+msgid ""
+"Perform black top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.black_tophat <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:106
+msgid "Erosion (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:105
+msgid ""
+"Perform morphological erosion on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.erosion <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:110
+msgid "Dilation (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:109
+msgid ""
+"Perform morphological dilation on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.dilation <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:114
+msgid "Opening (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:113
+msgid ""
+"Perform morphological opening on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.opening <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:118
+msgid "Closing (disk)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:117
+msgid ""
+"Perform morphological closing on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.closing <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:123
+msgid "All morphological operations"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:121
+msgid ""
+"Perform all morphological operations on an image, using a disk footprint."
+" Combined with the \"distribute on a grid\" option, this allows to "
+"compare the different morphological operations on the same image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:188
+msgid "Edges"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:128
+msgid "Roberts filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:127
+msgid ""
+"Perform edge filtering on an image, using the Roberts algorithm "
+"(implementation based on `skimage.filters.roberts <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:132
+msgid "Prewitt filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:131
+msgid ""
+"Perform edge filtering on an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:136
+msgid "Prewitt filter (horizontal)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:135
+msgid ""
+"Find the horizontal edges of an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:140
+msgid "Prewitt filter (vertical)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:139
+msgid ""
+"Find the vertical edges of an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:144
+msgid "Sobel filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:143
+msgid ""
+"Perform edge filtering on an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:148
+msgid "Sobel filter (horizontal)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:147
+msgid ""
+"Find the horizontal edges of an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:152
+msgid "Sobel filter (vertical)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:151
+msgid ""
+"Find the vertical edges of an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:156
+msgid "Scharr filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:155
+msgid ""
+"Perform edge filtering on an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:160
+msgid "Scharr filter (horizontal)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:159
+msgid ""
+"Find the horizontal edges of an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:164
+msgid "Scharr filter (vertical)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:163
+msgid ""
+"Find the vertical edges of an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:168
+msgid "Farid filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:167
+msgid ""
+"Perform edge filtering on an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:172
+msgid "Farid filter (horizontal)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:171
+msgid ""
+"Find the horizontal edges of an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:176
+msgid "Farid filter (vertical)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:175
+msgid ""
+"Find the vertical edges of an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:180
+msgid "Laplace filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:179
+msgid ""
+"Perform edge filtering on an image, using the Laplace algorithm "
+"(implementation based on `skimage.filters.laplace <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:185
+msgid "All edges filters"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:183
+msgid ""
+"Perform all edge filtering algorithms (see above) on an image. Combined "
+"with the \"distribute on a grid\" option, this allows to compare the "
+"different edge filters on the same image."
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:188
+msgid "Canny filter"
+msgstr ""
+
+#: ../../features/image/menu/processing.rst:188
+msgid ""
+"Perform edge filtering on an image, using the Canny algorithm "
+"(implementation based on `skimage.feature.canny <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
+msgstr ""
+

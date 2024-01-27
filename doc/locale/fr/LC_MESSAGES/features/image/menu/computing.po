@@ -1,0 +1,192 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/image/menu/computing.rst:2
+msgid "\"Computing\" menu"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:14
+msgid "Edit regions of interest"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:7
+msgid ""
+"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
+"stored as metadata, and thus attached to image."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:10
+msgid "ROI definition dialog is exactly the same as ROI extraction (see above)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:14
+msgid "An image with ROI."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:17
+msgid "Remove regions of interest"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:17
+msgid "Remove all defined ROI for selected object(s)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:25
+msgid "Statistics"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:20
+msgid "Compute statistics on selected image and show a summary table."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:24
+msgid ""
+"Example of statistical summary table: each row is associated to an ROI "
+"(the first row gives the statistics for the whole data)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:30
+msgid "Centroid"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:28
+msgid ""
+"Compute image centroid using a Fourier transform method (as discussed by "
+"`Weisshaar et al. <http://www.mnd-umwelttechnik.fh-"
+"wiesbaden.de/pig/weisshaar_u5.pdf>`_). This method is quite insensitive "
+"to background noise."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:34
+msgid "Minimum enclosing circle center"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:33
+msgid ""
+"Compute the circle contour enclosing image values above a threshold level"
+" defined as the half-maximum value."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:44
+msgid "2D peak detection"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:37
+msgid ""
+"Automatically find peaks on image using a minimum-maximum filter "
+"algorithm."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:41
+msgid "Example of 2D peak detection."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:44
+msgid ""
+"See :ref:`ref-to-2d-peak-detection` for more details on algorithm and "
+"associated parameters."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:55
+msgid "Contour detection"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:47
+msgid ""
+"Automatically extract contours and fit them using a circle or an ellipse,"
+" or directly represent them as a polygon."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:52
+msgid "Example of contour detection."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:55
+msgid ""
+"See :ref:`ref-to-contour-detection` for more details on algorithm and "
+"associated parameters."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:57
+msgid ""
+"Computed scalar results are systematically stored as metadata. Metadata "
+"is attached to image and serialized with it when exporting current "
+"session in a HDF5 file."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:63
+msgid "Circle Hough transform"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:62
+msgid ""
+"Detect circular shapes using circle Hough transform (implementation based"
+" on `skimage.transform.hough_circle_peaks <https://scikit-"
+"image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:78
+msgid "Blob detection"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:68
+msgid "Blob detection (DOG)"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:67
+msgid ""
+"Detect blobs using Difference of Gaussian (DOG) method (implementation "
+"based on `skimage.feature.blob_dog <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:72
+msgid "Blob detection (DOH)"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:71
+msgid ""
+"Detect blobs using Determinant of Hessian (DOH) method (implementation "
+"based on `skimage.feature.blob_doh <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:76
+msgid "Blob detection (LOG)"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:75
+msgid ""
+"Detect blobs using Laplacian of Gaussian (LOG) method (implementation "
+"based on `skimage.feature.blob_log <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:78
+msgid "Blob detection (OpenCV)"
+msgstr ""
+
+#: ../../features/image/menu/computing.rst:79
+msgid ""
+"Detect blobs using OpenCV implementation of `SimpleBlobDetector "
+"<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
+msgstr ""
+

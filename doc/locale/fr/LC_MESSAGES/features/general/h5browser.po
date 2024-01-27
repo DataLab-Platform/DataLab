@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-29 15:46+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../features/general/h5browser.rst:4
+msgid "HDF5 Browser"
+msgstr ""
+
+#: ../../features/general/h5browser.rst:6
+msgid ""
+"The \"HDF5 Browser\" is a modal dialog box allowing to import almost any "
+"1D and 2D data into DataLab workspace (and eventually metadata)."
+msgstr ""
+
+#: ../../features/general/h5browser.rst:11
+msgid ""
+"Compatible curve or image data are displayed in a hierarchical view on "
+"the left panel, as well as other scalar data (scalar values are just "
+"shown for context purpose and may not be imported into DataLab "
+"workspace)."
+msgstr ""
+
+#: ../../features/general/h5browser.rst:18
+msgid "The HDF5 browser is fairly simple to use:"
+msgstr ""
+
+#: ../../features/general/h5browser.rst:16
+msgid "On the left panel, select the curve or image data you want to import"
+msgstr ""
+
+#: ../../features/general/h5browser.rst:17
+msgid "Selected data is plotted on the right panel"
+msgstr ""
+
+#: ../../features/general/h5browser.rst:18
+msgid "Click on \"Check all\" if you want to import all compatible data"
+msgstr ""
+
+#: ../../features/general/h5browser.rst:19
+msgid "Then validate by clicking on \"OK\""
+msgstr ""
+
