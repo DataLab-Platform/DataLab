@@ -8,7 +8,12 @@ seamlessly with :ref:`your IDE <use_cases>` or :ref:`Jupyter notebooks <use_case
 (see our :bdg-ref-success-line:`Tutorials <tutorials>` for illustrated examples).
 
 DataLab leverages the richness of the scientific Python ecosystem (NumPy, SciPy,
-scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user interfaces.
+scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user interfaces. --
+Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
+
+.. |binder| image:: https://mybinder.org/badge_logo.svg
+    :target: https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments
+    :class: new-window
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light

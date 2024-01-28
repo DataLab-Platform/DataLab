@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-28 12:24+0100\n"
+"POT-Creation-Date: 2024-01-28 21:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -44,7 +44,11 @@ msgstr ""
 "L'exemple est assez simple, mais il illustre les concepts de base du "
 "travail avec DataLab *et* `Spyder`_."
 
-#: ../../intro/tutorials/work_with_spyder.rst:14
+#: ../../intro/tutorials/work_with_spyder.rst:-1
+msgid "DataLab and Spyder: a perfect match"
+msgstr "DataLab et Spyder : un mariage parfait"
+
+#: ../../intro/tutorials/work_with_spyder.rst:19
 msgid ""
 "DataLab and `Spyder`_ are **complementary** tools. While `Spyder`_ is a "
 "powerful development environment with interactive scientific computing "
@@ -66,11 +70,11 @@ msgstr ""
 "développer des algorithmes, puis utiliser DataLab pour analyser les "
 "données avec ces algorithmes."
 
-#: ../../intro/tutorials/work_with_spyder.rst:23
+#: ../../intro/tutorials/work_with_spyder.rst:28
 msgid "Basic concepts"
 msgstr "Concepts de base"
 
-#: ../../intro/tutorials/work_with_spyder.rst:25
+#: ../../intro/tutorials/work_with_spyder.rst:30
 msgid ""
 "In the context of your research or technical work, we assume that you are"
 " developing a software to process data (signals or images): this software"
@@ -87,37 +91,37 @@ msgstr ""
 "Dans tous les cas, vous devrez suivre un processus de développement qui "
 "comprendra les étapes suivantes :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:31
+#: ../../intro/tutorials/work_with_spyder.rst:36
 msgid "Prototype the algorithm in a development environment, such as `Spyder`_."
 msgstr ""
 "Prototyper l'algorithme dans un environnement de développement, tel que "
 "`Spyder`_."
 
-#: ../../intro/tutorials/work_with_spyder.rst:32
+#: ../../intro/tutorials/work_with_spyder.rst:37
 msgid "Develop the algorithm in a development environment, such as `Spyder`_."
 msgstr ""
 "Développer l'algorithme dans un environnement de développement, tel que "
 "`Spyder`_."
 
-#: ../../intro/tutorials/work_with_spyder.rst:33
+#: ../../intro/tutorials/work_with_spyder.rst:38
 msgid "Test the algorithm with some data."
 msgstr "Tester l'algorithme avec des données."
 
-#: ../../intro/tutorials/work_with_spyder.rst:34
+#: ../../intro/tutorials/work_with_spyder.rst:39
 msgid "Debug the algorithm if necessary."
 msgstr "Déboguer l'algorithme si nécessaire."
 
-#: ../../intro/tutorials/work_with_spyder.rst:35
+#: ../../intro/tutorials/work_with_spyder.rst:40
 msgid "Repeat steps 2 and 3 until the algorithm works as expected."
 msgstr ""
 "Répéter les étapes 2 et 3 jusqu'à ce que l'algorithme fonctionne comme "
 "prévu."
 
-#: ../../intro/tutorials/work_with_spyder.rst:36
+#: ../../intro/tutorials/work_with_spyder.rst:41
 msgid "Use the algorithm in your application."
 msgstr "Utiliser l'algorithme dans votre application."
 
-#: ../../intro/tutorials/work_with_spyder.rst:40
+#: ../../intro/tutorials/work_with_spyder.rst:45
 msgid ""
 "DataLab can help you with step 0 because it provides all the processing "
 "primitives that you need to prototype your algorithm: you can load data, "
@@ -132,7 +136,7 @@ msgstr ""
 " dans les paragraphes suivants car la documentation de DataLab fournit "
 "déjà beaucoup d'informations à ce sujet."
 
-#: ../../intro/tutorials/work_with_spyder.rst:46
+#: ../../intro/tutorials/work_with_spyder.rst:51
 msgid ""
 "In this tutorial, we will see how to use DataLab to perform steps 2 and "
 "3. We assume that you already have prototyped (preferably in DataLab!) "
@@ -149,7 +153,7 @@ msgstr ""
 "algorithme et le re-tester. De plus, votre flux de travail est déjà "
 "configuré dans `Spyder`_ et vous ne voulez pas le changer."
 
-#: ../../intro/tutorials/work_with_spyder.rst:54
+#: ../../intro/tutorials/work_with_spyder.rst:59
 msgid ""
 "In this tutorial, we assume that you have already installed DataLab and "
 "that you have started it. If you haven't done it yet, please refer to the"
@@ -159,7 +163,7 @@ msgstr ""
 "que vous l'avez démarré. Si vous ne l'avez pas encore fait, veuillez vous"
 " référer à la section :ref:`installation` de la documentation."
 
-#: ../../intro/tutorials/work_with_spyder.rst:58
+#: ../../intro/tutorials/work_with_spyder.rst:63
 msgid ""
 "Besides, we assume that you have already installed `Spyder`_ and that you"
 " have started it. If you haven't done it yet, please refer to the "
@@ -178,11 +182,11 @@ msgstr ""
 " n'avez besoin d'installer que le client DataLab Simple (`pip install "
 "cdlclient`) dans le même environnement que `Spyder`_."
 
-#: ../../intro/tutorials/work_with_spyder.rst:67
+#: ../../intro/tutorials/work_with_spyder.rst:72
 msgid "Testing your algorithm with DataLab"
 msgstr "Tester votre algorithme avec DataLab"
 
-#: ../../intro/tutorials/work_with_spyder.rst:69
+#: ../../intro/tutorials/work_with_spyder.rst:74
 msgid ""
 "Let's assume that you have developed algorithms in the ``my_work`` module"
 " of your project. You have already prototyped them in DataLab, and you "
@@ -196,7 +200,7 @@ msgstr ""
 "prennent des données en entrée et renvoient des données traitées en "
 "sortie. Maintenant, vous voulez tester ces algorithmes avec des données."
 
-#: ../../intro/tutorials/work_with_spyder.rst:74
+#: ../../intro/tutorials/work_with_spyder.rst:79
 msgid ""
 "To test these algorithms, you have written two functions in the "
 "``my_work`` module:"
@@ -204,7 +208,7 @@ msgstr ""
 "Pour tester ces algorithmes, vous avez écrit deux fonctions dans le "
 "module ``my_work`` :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:76
+#: ../../intro/tutorials/work_with_spyder.rst:81
 msgid ""
 "``test_my_1d_algorithm``: this function returns some 1D data that will "
 "allow you to validate your first algorithm which works on 1D data."
@@ -213,7 +217,7 @@ msgstr ""
 " permettront de valider votre premier algorithme qui fonctionne sur des "
 "données 1D."
 
-#: ../../intro/tutorials/work_with_spyder.rst:79
+#: ../../intro/tutorials/work_with_spyder.rst:84
 msgid ""
 "``test_my_2d_algorithm``: this function returns some 2D data that will "
 "allow you to validate your second algorithm which works on 2D data."
@@ -222,7 +226,7 @@ msgstr ""
 " permettront de valider votre deuxième algorithme qui fonctionne sur des "
 "données 2D."
 
-#: ../../intro/tutorials/work_with_spyder.rst:82
+#: ../../intro/tutorials/work_with_spyder.rst:87
 msgid ""
 "You can now use DataLab to visualize the data returned by these functions"
 " directly from `Spyder`_:"
@@ -230,11 +234,11 @@ msgstr ""
 "Vous pouvez maintenant utiliser DataLab pour visualiser les données "
 "renvoyées par ces fonctions directement depuis `Spyder`_ :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:85
+#: ../../intro/tutorials/work_with_spyder.rst:90
 msgid "First, you need to start both DataLab and `Spyder`_."
 msgstr "Tout d'abord, vous devez démarrer DataLab et `Spyder`_."
 
-#: ../../intro/tutorials/work_with_spyder.rst:86
+#: ../../intro/tutorials/work_with_spyder.rst:91
 msgid ""
 "Remember that DataLab is a stand-alone application that can be used from "
 "any environment, so you don't need to install it in the same environment "
@@ -247,11 +251,11 @@ msgstr ""
 "connexion entre ces deux applications se fait via un protocole de "
 "communication."
 
-#: ../../intro/tutorials/work_with_spyder.rst:91
+#: ../../intro/tutorials/work_with_spyder.rst:96
 msgid "Here is how to do it:"
 msgstr "Voici comment faire :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:97
+#: ../../intro/tutorials/work_with_spyder.rst:102
 msgid ""
 "If we execute the first two cells, we will see the following output in "
 "the `Spyder`_ console:"
@@ -259,7 +263,7 @@ msgstr ""
 "Si nous exécutons les deux premières cellules, nous verrons la sortie "
 "suivante dans la console `Spyder`_ :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:115
+#: ../../intro/tutorials/work_with_spyder.rst:120
 msgid ""
 "On this screenshot, we can see the result of evaluating the first two "
 "cells: the first cell connects to DataLab, and the second cell visualizes"
@@ -270,7 +274,7 @@ msgstr ""
 "et la deuxième cellule visualise les données 1D renvoyées par la fonction"
 " ``test_my_1d_algorithm``."
 
-#: ../../intro/tutorials/work_with_spyder.rst:121
+#: ../../intro/tutorials/work_with_spyder.rst:126
 msgid ""
 "On this screenshot, we can see the result of evaluating the third cell: "
 "the ``test_my_2d_algorithm`` function returns a 2D array, and we can "
@@ -280,11 +284,11 @@ msgstr ""
 "de la troisième cellule : la fonction ``test_my_2d_algorithm`` renvoie un"
 " tableau 2D, et nous pouvons le visualiser directement dans DataLab."
 
-#: ../../intro/tutorials/work_with_spyder.rst:126
+#: ../../intro/tutorials/work_with_spyder.rst:131
 msgid "Debugging your algorithm with DataLab"
 msgstr "Déboguer votre algorithme avec DataLab"
 
-#: ../../intro/tutorials/work_with_spyder.rst:128
+#: ../../intro/tutorials/work_with_spyder.rst:133
 msgid ""
 "Now that you have tested your algorithms with some data, you may want to "
 "debug them if necessary. To do so, you can combine the `Spyder`_ "
@@ -294,7 +298,7 @@ msgstr ""
 "voudrez peut-être les déboguer si nécessaire. Pour ce faire, vous pouvez "
 "combiner les capacités de débogage de `Spyder`_ avec DataLab."
 
-#: ../../intro/tutorials/work_with_spyder.rst:132
+#: ../../intro/tutorials/work_with_spyder.rst:137
 msgid ""
 "Here is the code of the fake algorithm that we want to debug, in which we"
 " have introduced an optional ``debug_with_datalab`` parameter that - if "
@@ -306,7 +310,7 @@ msgstr ""
 " qui - s'il est défini sur ``True`` - créera un objet proxy permettant de"
 " visualiser les données étape par étape dans DataLab :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:140
+#: ../../intro/tutorials/work_with_spyder.rst:145
 msgid ""
 "The corresponding ``test_my_2d_algorithm`` function also has an optional "
 "``debug_with_datalab`` parameter that is simply passed to the "
@@ -316,13 +320,13 @@ msgstr ""
 "paramètre optionnel ``debug_with_datalab`` qui est simplement passé à la "
 "fonction ``generate_2d_data``."
 
-#: ../../intro/tutorials/work_with_spyder.rst:144
+#: ../../intro/tutorials/work_with_spyder.rst:149
 msgid "Now, we can use `Spyder`_ to debug the ``test_my_2d_algorithm`` function:"
 msgstr ""
 "Maintenant, nous pouvons utiliser `Spyder`_ pour déboguer la fonction "
 "``test_my_2d_algorithm`` :"
 
-#: ../../intro/tutorials/work_with_spyder.rst:150
+#: ../../intro/tutorials/work_with_spyder.rst:155
 msgid ""
 "In this simple example, the algorithm is just iterating 10 times and "
 "generating a 1D array at each iteration. Each 1D array is then stacked in"
@@ -338,7 +342,7 @@ msgstr ""
 "pouvons visualiser chaque tableau 1D dans DataLab : de cette façon, nous "
 "pouvons vérifier que l'algorithme fonctionne comme prévu."
 
-#: ../../intro/tutorials/work_with_spyder.rst:158
+#: ../../intro/tutorials/work_with_spyder.rst:163
 msgid ""
 "On this screenshot, we can see the result of evaluating the first cell: "
 "the ``test_my_2d_algorithm`` function is called with the "
@@ -350,7 +354,7 @@ msgstr ""
 " avec le paramètre ``debug_with_datalab`` défini sur ``True`` : 10 "
 "tableaux 1D sont générés et visualisés dans DataLab."
 
-#: ../../intro/tutorials/work_with_spyder.rst:164
+#: ../../intro/tutorials/work_with_spyder.rst:169
 msgid ""
 "If we had executed the script using `Spyder`_ debugger and set a "
 "breakpoint in the ``generate_2d_data`` function, we would have seen the "
