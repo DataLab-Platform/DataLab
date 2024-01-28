@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cp -r binder/Desktop ${HOME}/Desktop
+chmod +x ${HOME}/Desktop/*.desktop
+
+sed -i '1s/^/export XDG_RUNTIME_DIR=~/.config/\n/' ~/.bashrc
+
+ln -s $(dirname $(python -c "import cdl; print(cdl.__file__)"))/data/tests ${HOME}/Desktop/test_data
+
+# Apply our Xfce settings
+mkdir -p ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml
+cp binder/xsettings.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
+cp binder/xfce4-panel.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
+
+# For nbgitpuller
+jupyter serverextension enable --py nbgitpuller --sys-prefix
