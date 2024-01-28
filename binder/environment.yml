@@ -1,0 +1,16 @@
+channels:
+  - conda-forge
+dependencies:
+  - websockify
+  - pip
+  - pip:
+      - jupyter-remote-desktop-proxy
+      - PyQt5
+      - guidata
+      - PlotPy
+      - PythonQwt
+      - scikit-image
+      - opencv-python-headless
+      - PyWavelets
+      - psutil
+      - cdl
