@@ -4,6 +4,11 @@
 [![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdl.svg)](https://pypi.python.org/pypi/CDL/)
 
+DataLab is an **open-source platform for scientific and technical data processing
+and visualization** with unique features designed to meet industrial requirements.
+
+See [DataLab website](https://codra-ingenierie-informatique.github.io/DataLab/) for more details.
+
 ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
 
 ![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-Screenshot.png)
@@ -18,10 +23,11 @@
 
 ----
 
-DataLab is an **open-source platform for scientific and technical data processing
-and visualization** with unique features designed to meet industrial requirements.
+Try DataLab online, without installing anything, using Binder:
 
-See [DataLab website](https://codra-ingenierie-informatique.github.io/DataLab/) for more details.
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments)
+
+----
 
 ✨ Add features to DataLab by writing your own [plugin](https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/plugins.html)
 (see [plugin examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples))
@@ -34,9 +40,3 @@ Spyder or any IDE):
 feature (this requires to install DataLab as a Python package)
 
 * Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient) (`pip install cdlclient`)
-
-----
-
-Experimental Binder:
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments)
