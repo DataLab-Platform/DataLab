@@ -25,7 +25,7 @@ See [DataLab website](https://codra-ingenierie-informatique.github.io/DataLab/) 
 
 Try DataLab online, without installing anything, using Binder:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments)
 
 ----
 
