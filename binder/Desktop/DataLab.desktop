@@ -4,4 +4,4 @@ Type=Application
 Name=DataLab
 Exec=cdl
 Icon=/home/jovyan/resources/DataLab.svg
-Path=/home/jovyan/Desktop
+Path=/home/jovyan/cdl/data/tests
