@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DataLab
+Exec=/bin/bash -c "exec ${HOME}/bootstrap.py"
+Icon=/home/jovyan/resources/DataLab.svg
+Path=/home/jovyan/Desktop

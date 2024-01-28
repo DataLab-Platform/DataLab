@@ -1,0 +1,10 @@
+PyQt5
+guidata
+plotpy
+PythonQwt
+scikit-image
+opencv-python-headless
+PyWavelets
+psutil
+cdl
+cdlclient
