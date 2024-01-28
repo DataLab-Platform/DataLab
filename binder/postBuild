@@ -5,7 +5,7 @@ set -euo pipefail
 cp -r binder/Desktop ${HOME}/Desktop
 chmod +x ${HOME}/Desktop/*.desktop
 
-sed -i '1s/^/export XDG_RUNTIME_DIR=~/.config/\n/' ~/.bashrc
+echo "export XDG_RUNTIME_DIR=${HOME}/.config/" >> ${HOME}/.bashrc
 
 ln -s $(dirname $(python -c "import cdl; print(cdl.__file__)"))/data/tests ${HOME}/Desktop/test_data
 
