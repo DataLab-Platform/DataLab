@@ -9,6 +9,11 @@ some data, and how to debug them if necessary.
 The example is quite simple, but it illustrates the basic concepts of working
 with DataLab *and* `Spyder`_.
 
+.. image:: ../../images/tutorials/work_with_spyder/spyder_and_datalab.png
+    :class: dark-light
+    :alt: DataLab and Spyder: a perfect match
+
+
 .. note::
 
     DataLab and `Spyder`_ are **complementary** tools. While `Spyder`_ is a powerful
