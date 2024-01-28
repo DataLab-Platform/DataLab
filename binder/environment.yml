@@ -2,9 +2,10 @@ channels:
   - conda-forge
 dependencies:
   - websockify
+  - nbgitpuller
   - pip
   - pip:
-      - jupyter-remote-desktop-proxy
+      - jupyter-desktop-server
       - PyQt5
       - guidata
       - PlotPy
@@ -13,4 +14,5 @@ dependencies:
       - opencv-python-headless
       - PyWavelets
       - psutil
+      - cdlclient
       - cdl
