@@ -34,3 +34,9 @@ Spyder or any IDE):
 feature (this requires to install DataLab as a Python package)
 
 * Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient) (`pip install cdlclient`)
+
+----
+
+Experimental Binder:
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dmain)
