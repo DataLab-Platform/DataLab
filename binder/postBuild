@@ -10,7 +10,7 @@ export CDL_DIR=$(dirname $(python -c "import cdl; print(cdl.__file__)"))
 echo "export XDG_RUNTIME_DIR=${HOME}/.config/" >> ${HOME}/.bashrc
 echo "export CDL_DIR=${CDL_DIR}" >> ${HOME}/.bashrc
 
-ln -s ${CDL_DIR}/data/logo/DataLab.svg ~/.local/share/icons/DataLab.svg
+cp ${CDL_DIR}/data/logo/DataLab.svg ${HOME}
 
 ln -s ${CDL_DIR}/data/tests ${HOME}/Desktop/test_data
 
