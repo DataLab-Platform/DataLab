@@ -276,43 +276,42 @@ msgstr ""
 " de `(x0, y0, x1, x1, ...)`"
 
 #: ../../../CHANGELOG.md:54
-#, fuzzy
 msgid "1D and 2D computing results:"
-msgstr "Résultats de calcul 2D :"
+msgstr "Résultats de calcul 1D et 2D :"
 
 #: ../../../CHANGELOG.md:55
 msgid ""
 "Additionnaly to the previous enhancement, more computing results are now "
 "shown in the \"Results\" dialog box"
-msgstr ""
+msgstr "En complément de l'amélioration précédente, plus de résultats de calcul sont désormais affichés dans la boîte de dialogue \"Résultats\""
 
 #: ../../../CHANGELOG.md:57
 msgid ""
 "This concerns both 1D (FHWM, ...) and 2D computing results (contours, "
 "blobs, ...):"
-msgstr ""
+msgstr "Cela concerne à la fois les résultats de calcul 1D (FHWM, ...) et 2D (contours, blobs, ...) :"
 
 #: ../../../CHANGELOG.md:58
 msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
-msgstr ""
+msgstr "Les résultats de type segment affichent désormais également la longueur (L) et les coordonnées du centre (Xc, Yc)"
 
 #: ../../../CHANGELOG.md:59
 msgid "Circle and ellipse results now also show area (A)"
-msgstr ""
+msgstr "Les résultats de type cercle et ellipse affichent désormais également l'aire (A)"
 
 #: ../../../CHANGELOG.md:60
 msgid "Added \"Plot results\" entry in \"Computing\" menu:"
-msgstr ""
+msgstr "Ajout de l'entrée \"Tracer les résultats\" dans le menu \"Calculs\" :"
 
 #: ../../../CHANGELOG.md:61
 msgid "This feature allows to plot computing results (1D or 2D)"
-msgstr ""
+msgstr "Cette fonctionnalité permet de tracer les résultats de calcul (1D ou 2D)"
 
 #: ../../../CHANGELOG.md:62
 msgid ""
 "It creates a new signal with X and Y axes corresponding to user-defined "
 "parameters (e.g. X = indexes and Y = radius for circle results)"
-msgstr ""
+msgstr "Cela crée un nouveau signal avec des axes X et Y correspondant à des paramètres définis par l'utilisateur (par exemple X = index et Y = rayon pour les résultats de cercle)"
 
 #: ../../../CHANGELOG.md:64
 msgid "Increased default width of the object selection dialog box:"
@@ -429,26 +428,22 @@ msgstr ""
 "pratique"
 
 #: ../../../CHANGELOG.md:91
-#, fuzzy
 msgid ""
 "Added \"Radial profile extraction\" feature to image panel's "
 "\"Operation\" menu:"
-msgstr ""
-"Ajout de la fonctionnalité \"Extraction du profil radial\" au menu "
-"\"Opération\" du panneau d'image :"
+msgstr "Ajout de la fonctionnalité \"Extraction du profil radial\" au menu \"Opération\" du panneau d'image :"
 
 #: ../../../CHANGELOG.md:92
-#, fuzzy
 msgid "This feature allows to extract a radially averaged profile from an image"
-msgstr "Cette fonctionnalité permet d'extraire un profil radial moyen d'une image"
+msgstr "Cette fonctionnalité permet d'extraire un profil moyenné radialement à partir d'une image"
 
 #: ../../../CHANGELOG.md:93
 msgid "The profile is extracted around a user-defined center (x0, y0)"
-msgstr ""
+msgstr "Le profil est extrait autour d'un centre défini par l'utilisateur (x0, y0)"
 
 #: ../../../CHANGELOG.md:94
 msgid "The center may also be computed (centroid or image center)"
-msgstr ""
+msgstr "Le centre peut également être calculé (centre de gravité ou centre de l'image)"
 
 #: ../../../CHANGELOG.md:95
 msgid "Automated test suite:"
@@ -474,21 +469,20 @@ msgstr ""
 "cette fonctionnalité pour améliorer les performances"
 
 #: ../../../CHANGELOG.md:101
-#, fuzzy
 msgid "Signal and image metadata:"
-msgstr "Fonctionnalités de signal/image :"
+msgstr "Métadonnées des signaux et des images :"
 
 #: ../../../CHANGELOG.md:102
 msgid ""
 "Added \"source\" entry to the metadata dictionary, to store the source "
 "file path when importing a signal or an image from a file"
-msgstr ""
+msgstr "Ajout de l'entrée \"source\" dans le dictionnaire de métadonnées, pour stocker le chemin du fichier source lors de l'importation d'un signal ou d'une image à partir d'un fichier"
 
 #: ../../../CHANGELOG.md:104
 msgid ""
 "This field is kept while processing the signal/image, in order to keep "
 "track of the source file path"
-msgstr ""
+msgstr "Ce champ est conservé lors du traitement du signal/image, afin de garder une trace du chemin du fichier source"
 
 #: ../../../CHANGELOG.md:107
 msgid "📚 Documentation:"
@@ -771,11 +765,11 @@ msgid ""
 "Fixed `IndexError: list index out of range` when performing some "
 "operations or computations on groups of signals/images (e.g. \"ROI "
 "extraction\", \"Peak detection\", \"Resize\", etc.)"
-msgstr ""
+msgstr "Correction de `IndexError: list index out of range` lors de certaines opérations ou calculs sur des groupes de signaux/images (par exemple \"Extraction de ROI\", \"Détection de pics\", \"Redimensionnement\", etc.)"
 
 #: ../../../CHANGELOG.md:171
 msgid "Drag and drop from a file manager: filenames are now sorted alphabetically"
-msgstr ""
+msgstr "Glisser-déposer depuis un gestionnaire de fichiers : les noms de fichiers sont désormais triés par ordre alphabétique"
 
 #: ../../../CHANGELOG.md:173
 msgid "DataLab Version 0.10.1"
@@ -855,24 +849,17 @@ msgid "New profile extraction features for images:"
 msgstr "Nouvelles fonctionnalités d'extraction de profil pour les images :"
 
 #: ../../../CHANGELOG.md:193
-#, fuzzy
 msgid ""
 "Added \"Line profile extraction\" to \"Operations\" menu, to extract a "
 "profile from an image along a row or a column"
-msgstr ""
-"Ajout de la fonctionnalité \"Extraire le profil\" au menu \"Opérations\","
-" pour extraire un profil d'une image le long d'une ligne ou d'une colonne"
+msgstr "Ajout de la fonctionnalité \"Extraction du profil de ligne\" au menu \"Opérations\", pour extraire un profil d'une image le long d'une ligne ou d'une colonne"
 
 #: ../../../CHANGELOG.md:195
-#, fuzzy
 msgid ""
 "Added \"Average profile extraction\" to \"Operations\" menu, to extract "
 "the average profile on a rectangular area of an image, along a row or a "
 "column"
-msgstr ""
-"Ajout de la fonctionnalité \"Extraire le profil moyen\" au menu "
-"\"Opérations\", pour extraire le profil moyen sur une zone rectangulaire "
-"d'une image, le long d'une ligne ou d'une colonne"
+msgstr "Ajout de la fonctionnalité \"Extraction du profil moyen\" au menu \"Opérations\", pour extraire le profil moyen sur une zone rectangulaire d'une image, le long d'une ligne ou d'une colonne"
 
 #: ../../../CHANGELOG.md:197
 msgid ""
