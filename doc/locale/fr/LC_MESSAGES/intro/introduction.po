@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 08:50+0100\n"
+"POT-Creation-Date: 2024-01-29 16:08+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -52,28 +52,54 @@ msgstr ""
 "travaux pouvant être réalisés avec DataLab :"
 
 #: ../../intro/introduction.rst:18
-msgid "Processing of experimental signals acquired on a scientific facility"
+msgid ""
+"Processing of experimental data (signals and images) acquired on a "
+"scientific facility in the nuclear field"
 msgstr ""
-"Traitement de signaux expérimentaux acquis sur une installation "
-"scientifique"
-
-#: ../../intro/introduction.rst:19
-msgid "Automatic detection laser spot positions in a scene"
-msgstr "Détection automatique des positions des tâches laser dans une scène"
+"Traitement de données expérimentales (signaux et images) acquises sur une"
+" installation scientifique dans le domaine nucléaire"
 
 #: ../../intro/introduction.rst:20
+msgid "Processing of data acquired by a sensor in an industrial context"
+msgstr "Traitement de données acquises par un capteur dans un contexte industriel"
+
+#: ../../intro/introduction.rst:21
+msgid "Processing of images acquired by a camera in a medical context"
+msgstr "Traitement d'images acquises par une caméra dans un contexte médical"
+
+#: ../../intro/introduction.rst:22
+msgid ""
+"Automatic detection of defects on a surface, in the context of quality "
+"control"
+msgstr ""
+"Détection automatique de défauts sur une surface, dans le contexte du "
+"contrôle qualité"
+
+#: ../../intro/introduction.rst:23
+msgid ""
+"Automatic detection of laser spots on a target, in the context of laser "
+"alignment"
+msgstr ""
+"Détection automatique des positions des tâches laser dans une scène, dans"
+" le contexte de l'alignement laser"
+
+#: ../../intro/introduction.rst:24
 msgid "Instrument alignment through image processing"
 msgstr "Alignement d'instrument par traitement d'image"
 
-#: ../../intro/introduction.rst:21
-msgid "Automatic pattern detection and geometric corrections"
-msgstr "Détection automatique de motifs et corrections géométriques"
+#: ../../intro/introduction.rst:25
+msgid ""
+"Automatic pattern detection on images and geometric correction of the "
+"images, in the context of non destructive testing"
+msgstr ""
+"Détection automatique de motifs et corrections géométriques d'images, "
+"dans le contexte du contrôle non destructif"
 
-#: ../../intro/introduction.rst:26
+#: ../../intro/introduction.rst:31
 msgid "Usage modes"
 msgstr "Modes d'utilisation"
 
-#: ../../intro/introduction.rst:28
+#: ../../intro/introduction.rst:33
 msgid ""
 "Depending on the application, DataLab can be used in three different "
 "modes:"
@@ -81,7 +107,7 @@ msgstr ""
 "Selon l'application, DataLab peut être utilisé selon trois modes "
 "différents :"
 
-#: ../../intro/introduction.rst:30
+#: ../../intro/introduction.rst:35
 msgid ""
 "**Stand-alone mode**: DataLab is a full-fledged processing application "
 "that can be adapted to the client's needs through the addition of "
@@ -91,7 +117,7 @@ msgstr ""
 "entière qui peut être adaptée aux besoins du client par l'ajout de "
 "plugins spécifiques à son métier."
 
-#: ../../intro/introduction.rst:33
+#: ../../intro/introduction.rst:38
 msgid ""
 "**Embedded mode**: DataLab is integrated into your application to provide"
 " the necessary processing and visualization features."
@@ -100,7 +126,7 @@ msgstr ""
 "apporter les fonctionnalités de traitement et de visualisation "
 "nécessaires."
 
-#: ../../intro/introduction.rst:35
+#: ../../intro/introduction.rst:40
 msgid ""
 "**Remote-controlled mode**: DataLab communicates with your application, "
 "allowing it to benefit from its functionality without disrupting the user"
@@ -110,116 +136,175 @@ msgstr ""
 " lui permettant de bénéficier de ses fonctionnalités sans perturber "
 "l'expérience utilisateur."
 
-#: ../../intro/introduction.rst:42
+#: ../../intro/introduction.rst:47
 msgid "Use cases"
 msgstr "Cas d'usage"
 
-#: ../../intro/introduction.rst:46
+#: ../../intro/introduction.rst:51
 msgid "For practical examples of use cases, see the :ref:`tutorials` section:"
-msgstr "Pour des exemples pratiques de cas d'usage, voir la section :ref:`tutorials` :"
+msgstr ""
+"Pour des exemples pratiques de cas d'usage, voir la section "
+":ref:`tutorials` :"
 
-#: ../../intro/introduction.rst:48
+#: ../../intro/introduction.rst:53
 msgid ""
 "Most of the tutorials are describing concrete examples of use of DataLab "
 "in a scientific or technical context."
-msgstr "La plupart des tutoriels décrivent des exemples concrets d'utilisation de DataLab dans un contexte scientifique ou technique."
+msgstr ""
+"La plupart des tutoriels décrivent des exemples concrets d'utilisation de"
+" DataLab dans un contexte scientifique ou technique."
 
-#: ../../intro/introduction.rst:51
+#: ../../intro/introduction.rst:56
 msgid ""
 "Regarding the use of DataLab with an IDE (Integrated Development "
 "Environment) such as Visual Studio Code or Spyder, see the tutorial "
 ":ref:`tutorial_spyder`."
-msgstr "Concernant l'utilisation de DataLab avec un IDE (Integrated Development Environment) tel que Visual Studio Code ou Spyder, voir le tutoriel :ref:`tutorial_spyder`."
+msgstr ""
+"Concernant l'utilisation de DataLab avec un IDE (Integrated Development "
+"Environment) tel que Visual Studio Code ou Spyder, voir le tutoriel "
+":ref:`tutorial_spyder`."
 
-#: ../../intro/introduction.rst:54
+#: ../../intro/introduction.rst:59
 msgid ""
 "As for the use of DataLab with Jupyter notebooks, that is one of the "
 "topics covered in the tutorial :ref:`tutorial_extensibility`."
-msgstr "Quant à l'utilisation de DataLab avec des notebooks Jupyter, c'est l'un des sujets abordés dans le tutoriel :ref:`tutorial_extensibility`."
+msgstr ""
+"Quant à l'utilisation de DataLab avec des notebooks Jupyter, c'est l'un "
+"des sujets abordés dans le tutoriel :ref:`tutorial_extensibility`."
 
-#: ../../intro/introduction.rst:57
+#: ../../intro/introduction.rst:62
 msgid "DataLab is a versatile tool that can be used in different contexts:"
 msgstr ""
 "DataLab est un outil polyvalent qui peut être utilisé dans différents "
 "contextes :"
 
-#: ../../intro/introduction.rst:59
-msgid ""
-"**Data processing**: DataLab is a powerful tool for processing signals "
-"and images. It can be used to develop complex algorithms, or to quickly "
-"prototype a processing chain."
-msgstr ""
-"**Traitement de données** : DataLab est un outil puissant pour le "
-"traitement de signaux et d'images. Il peut être utilisé pour développer "
-"des algorithmes complexes, ou pour prototyper rapidement une chaîne de "
-"traitement."
+#: ../../intro/introduction.rst:69
+msgid "Data processing"
+msgstr "Traitement de données"
 
-#: ../../intro/introduction.rst:63
+#: ../../intro/introduction.rst:65
 msgid ""
-"**Companion tool for scientific/technical work**: DataLab can be used as "
-"a companion tool for scientific/technical work. It allows you to "
-"visualize and process data, and to share your results with your "
-"colleagues. It can easily be adapted to your needs through the addition "
-"of plugins, and it may even be used together with your every day tools "
-"(e.g., Visual Studio Code, Spyder, ... or Jupyter notebooks)."
+"DataLab is a powerful tool for processing signals and images. It can be "
+"used to develop complex algorithms, or to quickly prototype a processing "
+"chain."
 msgstr ""
-"**Outil de soutien aux travaux scientifiques/techniques** : DataLab peut "
-"être utilisé comme un outil de soutien aux travaux "
+"DataLab est un outil puissant pour le traitement de signaux et d'images. "
+"Il peut être utilisé pour développer des algorithmes complexes, ou pour "
+"prototyper rapidement une chaîne de traitement."
+
+#: ../../intro/introduction.rst:68
+msgid ""
+":octicon:`book;1em;sd-text-info` See our :bdg-ref-success-line:`Tutorials"
+" <tutorials>` for practical examples of use in data processing."
+msgstr ""
+":octicon:`book;1em;sd-text-info` Voir nos :bdg-ref-success-"
+"line:`Tutoriels <tutorials>` pour des exemples pratiques d'utilisation "
+"dans le traitement de données."
+
+#: ../../intro/introduction.rst:79
+msgid "Companion tool for scientific/technical work"
+msgstr "Outil de soutien aux travaux scientifiques/techniques"
+
+#: ../../intro/introduction.rst:72
+msgid ""
+"DataLab can be used as a companion tool for scientific/technical work. It"
+" allows you to visualize and process data, and to share your results with"
+" your colleagues. It can easily be adapted to your needs through the "
+"addition of plugins, and it may even be used together with your every day"
+" tools (e.g., Visual Studio Code, Spyder, ... or Jupyter notebooks)."
+msgstr ""
+"DataLab peut être utilisé comme un outil de soutien aux travaux "
 "scientifiques/techniques. Il vous permet de visualiser et de traiter des "
 "données, et de partager vos résultats avec vos collègues. Il peut "
 "facilement être adapté à vos besoins par l'ajout de plugins, et peut même"
 " être utilisé avec vos outils quotidiens (par exemple Visual Studio Code,"
 " Spyder, ... ou des notebooks Jupyter)."
 
-#: ../../intro/introduction.rst:70
+#: ../../intro/introduction.rst:78
 msgid ""
-"**Prototyping a data processing application**: DataLab can be used to "
-"quickly prototype a data processing application. It can then be used as a"
-" basis for the development of a full-fledged application."
+":octicon:`book;1em;sd-text-info` See our :bdg-ref-success-line:`Tutorials"
+" <tutorials>` for practical examples of use in a scientific/technical "
+"context."
 msgstr ""
-"**Prototypage d'une application de traitement de données** : DataLab peut"
-" être utilisé pour prototyper rapidement une application de traitement de"
-" données. Il peut ensuite être utilisé comme base pour le développement "
-"d'une application à part entière."
+":octicon:`book;1em;sd-text-info` Voir nos :bdg-ref-success-"
+"line:`Tutoriels <tutorials>` pour des exemples pratiques d'utilisation "
+"dans un contexte scientifique/technique."
 
-#: ../../intro/introduction.rst:74
+#: ../../intro/introduction.rst:86
+msgid "Prototyping a data processing application"
+msgstr "Prototypage d'une application de traitement de données"
+
+#: ../../intro/introduction.rst:82
 msgid ""
-"**Debugging a data processing application**: DataLab can be used as an "
-"advanced debugging tool for your data processing applications, "
-"independently from the development environment or the language used "
-"(Python, C#, C++, ...). All you need is to be able to communicate with "
-"DataLab via its remote control interface (standard XML-RPC protocol). "
-"This allows you to send data to DataLab (signals, images or even "
-"geometric shapes), visualize the data at each step of the processing "
-"chain, manipulate them to better understand the behavior of your "
-"algorithms, and even modify them to test the robustness of your code."
+"DataLab can be used to quickly prototype a data processing application. "
+"It can then be used as a basis for the development of a full-fledged "
+"application."
 msgstr ""
-"**Débogage d'une application de traitement de données** : DataLab peut "
-"être utilisé comme un outil de débogage avancé pour vos applications de "
-"traitement de données, indépendamment de l'environnement de développement"
-" ou du langage utilisé (Python, C#, C++, ...). Tout ce dont vous avez "
-"besoin est de pouvoir communiquer avec DataLab via son interface de "
-"pilotage à distance (protocole XML-RPC standard). Cela vous permet "
-"d'envoyer des données à DataLab (signaux, images ou même des formes "
-"géométriques), de visualiser les données à chaque étape de la chaîne de "
-"traitement, de les manipuler pour mieux comprendre le comportement de vos"
-" algorithmes, et même de les modifier pour tester la robustesse de votre "
-"code."
+"DataLab peut être utilisé pour prototyper rapidement une application de "
+"traitement de données. Il peut ensuite être utilisé comme base pour le "
+"développement d'une application à part entière."
 
 #: ../../intro/introduction.rst:85
+msgid ""
+":octicon:`book;1em;sd-text-info` See the tutorial "
+":ref:`tutorial_custom_func` for a concrete example."
+msgstr ""
+":octicon:`book;1em;sd-text-info` Voir le tutoriel "
+":ref:`tutorial_custom_func` pour un exemple concret."
+
+#: ../../intro/introduction.rst:99
+msgid "Debugging a data processing application"
+msgstr "Débogage d'une application de traitement de données"
+
+#: ../../intro/introduction.rst:89
+msgid ""
+"DataLab can be used as an advanced debugging tool for your data "
+"processing applications, independently from the development environment "
+"or the language used (Python, C#, C++, ...). All you need is to be able "
+"to communicate with DataLab via its remote control interface (standard "
+"XML-RPC protocol). This allows you to send data to DataLab (signals, "
+"images or even geometric shapes), visualize the data at each step of the "
+"processing chain, manipulate them to better understand the behavior of "
+"your algorithms, and even modify them to test the robustness of your "
+"code."
+msgstr ""
+"DataLab peut être utilisé comme un outil de débogage avancé pour vos "
+"applications de traitement de données, indépendamment de l'environnement "
+"de développement ou du langage utilisé (Python, C#, C++, ...). Tout ce "
+"dont vous avez besoin est de pouvoir communiquer avec DataLab via son "
+"interface de pilotage à distance (protocole XML-RPC standard). Cela vous "
+"permet d'envoyer des données à DataLab (signaux, images ou même des "
+"formes géométriques), de visualiser les données à chaque étape de la "
+"chaîne de traitement, de les manipuler pour mieux comprendre le "
+"comportement de vos algorithmes, et même de les modifier pour tester la "
+"robustesse de votre code."
+
+#: ../../intro/introduction.rst:98
+msgid ""
+":octicon:`bug;1em;sd-text-warning` See the tutorial :ref:`debug_spyder` "
+"for a quick overview of this feature."
+msgstr ""
+":octicon:`bug;1em;sd-text-warning` Voir le tutoriel :ref:`debug_spyder` "
+"pour un aperçu rapide de cette fonctionnalité."
+
+#: ../../intro/introduction.rst:103
 msgid ""
 "DataLab can also be controlled from your familiar development environment"
 " (e.g., Visual Studio Code, Spyder, ...) or from a Jupyter notebook, in "
 "order to perform calculations using your processing functions while "
-"leveraging the advanced features of DataLab."
+"leveraging the advanced features of DataLab. :octicon:`book;1em;sd-text-"
+"info` See the tutorials :ref:`tutorial_custom_func` or "
+":ref:`tutorial_spyder` for examples of use."
 msgstr ""
 "DataLab peut également être piloté depuis votre environnement de "
 "développement familier (par exemple Visual Studio Code, Spyder, ...) ou "
 "depuis un notebook Jupyter, afin d'effectuer des calculs en utilisant vos"
 " fonctions de traitement tout en bénéficiant des fonctionnalités avancées"
-" de DataLab."
+" de DataLab. :octicon:`book;1em;sd-text-info` Voir les tutoriels "
+":ref:`tutorial_custom_func` ou :ref:`tutorial_spyder` pour des exemples "
+"d'utilisation."
 
-#: ../../intro/introduction.rst:90
+#: ../../intro/introduction.rst:110
 msgid ""
 "With its user-friendly experience and versatile usage modes, DataLab "
 "enables efficient development of your data processing and visualization "
@@ -231,19 +316,19 @@ msgstr ""
 " de traitement et de visualisation de données tout en bénéficiant d'une "
 "plateforme technologique industrielle."
 
-#: ../../intro/introduction.rst:97
+#: ../../intro/introduction.rst:117
 msgid "Main features"
 msgstr "Principales fonctionnalités"
 
-#: ../../intro/introduction.rst:99
+#: ../../intro/introduction.rst:119
 msgid "The main technical features of DataLab include:"
 msgstr "Les principales fonctionnalités techniques de DataLab sont :"
 
-#: ../../intro/introduction.rst:101
+#: ../../intro/introduction.rst:121
 msgid "Support for numerous standard and proprietary data formats"
 msgstr "Prise en charge de nombreux formats de données standards et propriétaires"
 
-#: ../../intro/introduction.rst:102
+#: ../../intro/introduction.rst:122
 msgid ""
 "Opening an arbitrary number of objects (signals or images) for batch "
 "processing, with the possibility of defining groups of objects"
@@ -251,101 +336,103 @@ msgstr ""
 "Ouverture d'un nombre arbitraire d'objets (signaux ou images) pour un "
 "traitement par lot, avec possibilité de définir des groupes d'objets"
 
-#: ../../intro/introduction.rst:104
+#: ../../intro/introduction.rst:124
 msgid "Simultaneous viewing of multiple objects with annotation support"
 msgstr ""
 "Visualisation simultanée de plusieurs objets avec prise en charge des "
 "annotations"
 
-#: ../../intro/introduction.rst:105
+#: ../../intro/introduction.rst:125
 msgid "Standard operations and processing on signals and images"
 msgstr "Opérations et traitements standards sur les signaux et les images"
 
-#: ../../intro/introduction.rst:106
+#: ../../intro/introduction.rst:126
 msgid "Advanced image processing (restoration, morphology, edge detection, etc.)"
 msgstr ""
 "Traitement d'image avancé (restauration, morphologie, détection de "
 "contours, etc.)"
 
-#: ../../intro/introduction.rst:107
+#: ../../intro/introduction.rst:127
 msgid "Management of multiple regions of interest (calculations, extractions)"
 msgstr "Gestion de plusieurs régions d'intérêt (calculs, extractions)"
 
-#: ../../intro/introduction.rst:108
+#: ../../intro/introduction.rst:128
 msgid "Macro-command editor"
 msgstr "Éditeur de macro-commandes"
 
-#: ../../intro/introduction.rst:109
+#: ../../intro/introduction.rst:129
 msgid "Remote-controllable API"
 msgstr "API pilotable à distance"
 
-#: ../../intro/introduction.rst:110
+#: ../../intro/introduction.rst:130
 msgid "Embedded interactive Python console"
 msgstr "Console Python interactive embarquée"
 
-#: ../../intro/introduction.rst:115
+#: ../../intro/introduction.rst:135
 msgid "Key strengths"
 msgstr "Points forts"
 
-#: ../../intro/introduction.rst:117
-msgid "DataLab highlights four key strengths:"
-msgstr "DataLab met en avant quatre points forts :"
+#: ../../intro/introduction.rst:137
+msgid "To summarize, the four key strengths of DataLab are:"
+msgstr "Pour résumer, les quatre points forts de DataLab sont les suivants :"
 
-#: ../../intro/introduction.rst:119
+#: ../../intro/introduction.rst:142
+msgid "Extensibility"
+msgstr "Extensibilité"
+
+#: ../../intro/introduction.rst:140
 msgid ""
-"**Extensibility**: The DataLab plugin system makes it easy to code new "
-"features (specific processing, specific file formats, custom graphical "
-"interfaces). It can also be used as a customizable platform."
+"The DataLab plugin system makes it easy to code new features (specific "
+"processing, specific file formats, custom graphical interfaces). It can "
+"also be used as a customizable platform."
 msgstr ""
-"**Extensibilité** : Le système de plugins de DataLab permet de coder "
-"facilement de nouvelles fonctionnalités (traitement spécifique, formats "
-"de fichiers spécifiques, interfaces graphiques personnalisées). Il peut "
-"également être utilisé comme une plateforme personnalisable."
+"Le système de plugins de DataLab permet de coder facilement de nouvelles "
+"fonctionnalités (traitement spécifique, formats de fichiers spécifiques, "
+"interfaces graphiques personnalisées). Il peut également être utilisé "
+"comme une plateforme personnalisable."
 
-#: ../../intro/introduction.rst:123
+#: ../../intro/introduction.rst:147
+msgid "Interoperability"
+msgstr "Interopérabilité"
+
+#: ../../intro/introduction.rst:145
 msgid ""
-"**Interoperability**: DataLab can also be embedded in your own "
-"application. For example, within data processing software, machine-level "
-"control systems, or test bench applications."
+"DataLab can also be embedded in your own application. For example, within"
+" data processing software, machine-level control systems, or test bench "
+"applications."
 msgstr ""
-"**Interopérabilité** : DataLab peut également être intégré dans votre "
-"propre application. Par exemple, au sein de logiciels de traitement de "
-"données, de systèmes de contrôle de niveau machine ou d'applications de "
-"banc d'essai."
+"DataLab peut également être intégré dans votre propre application. Par "
+"exemple, au sein de logiciels de traitement de données, de systèmes de "
+"contrôle de niveau machine ou d'applications de banc d'essai."
 
-#: ../../intro/introduction.rst:127
+#: ../../intro/introduction.rst:151
+msgid "Automation"
+msgstr "Automatisation"
+
+#: ../../intro/introduction.rst:150
 msgid ""
-"**Automation**: a high-level public API allows for full remote control of"
-" DataLab to open and process data."
+"A high-level public API allows for full remote control of DataLab to open"
+" and process data."
 msgstr ""
-"**Automatisation** : une API publique de haut niveau permet de piloter à "
-"distance DataLab pour ouvrir et traiter des données."
+"Une API publique de haut niveau permet de piloter à distance DataLab pour"
+" ouvrir et traiter des données."
 
-#: ../../intro/introduction.rst:130
+#: ../../intro/introduction.rst:156
+msgid "Maintainability and testability"
+msgstr "Maintenabilité et testabilité"
+
+#: ../../intro/introduction.rst:154
 #, python-format
 msgid ""
-"**Maintainability and testability**: DataLab is an industrial-grade "
-"scientific and technical processing software. The built-in automated "
-"tests in DataLab cover 90% of its features, which is significant for "
-"software with graphical interfaces and helps mitigate regression risks."
+"DataLab is an industrial-grade scientific and technical processing "
+"software. The built-in automated tests in DataLab cover 90% of its "
+"features, which is significant for software with graphical interfaces and"
+" helps mitigate regression risks."
 msgstr ""
-"**Maintenabilité et testabilité** : DataLab est un logiciel de traitement"
-" scientifique et technique industriel. Les tests automatisés intégrés à "
-"DataLab couvrent 90 % de ses fonctionnalités, ce qui est significatif "
-"pour un logiciel avec des interfaces graphiques et permet de réduire les "
-"risques de régression."
-
-#: ../../intro/introduction.rst:135
-msgid ""
-"Researchers, engineers, scientists, you will undoubtedly benefit from the"
-" capabilities of DataLab. Its open-source software model will also allow "
-"you to reinvest your achievements in the open-source community, of which "
-"any reputable publisher should be an active member."
-msgstr ""
-"Chercheurs, ingénieurs, scientifiques, vous bénéficierez sans aucun doute"
-" des capacités de DataLab. Son modèle de logiciel open source vous "
-"permettra également de réinvestir vos réalisations dans la communauté "
-"open source, dont tout éditeur de renom devrait être un membre actif."
+"DataLab est un logiciel de traitement scientifique et technique "
+"industriel. Les tests automatisés intégrés à DataLab couvrent 90 % de ses"
+" fonctionnalités, ce qui est significatif pour un logiciel avec des "
+"interfaces graphiques et permet de réduire les risques de régression."
 
 #~ msgid "DataLab in a nutshell"
 #~ msgstr "DataLab en bref"
@@ -383,3 +470,25 @@ msgstr ""
 
 #~ msgid "Introduction"
 #~ msgstr "Introduction"
+
+#~ msgid ""
+#~ "Researchers, engineers, scientists, you will"
+#~ " undoubtedly benefit from the capabilities"
+#~ " of DataLab. Its open-source software"
+#~ " model will also allow you to "
+#~ "reinvest your achievements in the "
+#~ "open-source community, of which any "
+#~ "reputable publisher should be an active"
+#~ " member."
+#~ msgstr ""
+#~ "Chercheurs, ingénieurs, scientifiques, vous "
+#~ "bénéficierez sans aucun doute des "
+#~ "capacités de DataLab. Son modèle de "
+#~ "logiciel open source vous permettra "
+#~ "également de réinvestir vos réalisations "
+#~ "dans la communauté open source, dont "
+#~ "tout éditeur de renom devrait être "
+#~ "un membre actif."
+
+#~ msgid "DataLab highlights has four key strengths:"
+#~ msgstr "DataLab met en avant quatre points forts :"

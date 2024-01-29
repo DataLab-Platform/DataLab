@@ -129,6 +129,8 @@ console:
     ``test_my_2d_algorithm`` function returns a 2D array, and we can visualize it
     directly in DataLab.
 
+.. _debug_spyder:
+
 Debugging your algorithm with DataLab
 -------------------------------------
 

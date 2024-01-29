@@ -1,3 +1,5 @@
+.. _tutorial_custom_func:
+
 :octicon:`book;1em;sd-text-info` Prototyping a custom processing pipeline
 =========================================================================
 

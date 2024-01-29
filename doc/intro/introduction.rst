@@ -15,10 +15,15 @@ Real world examples
 A few concrete and specific examples illustrate the nature of the work
 that can be carried out with DataLab:
 
-- Processing of experimental signals acquired on a scientific facility
-- Automatic detection laser spot positions in a scene
+- Processing of experimental data (signals and images) acquired on a scientific facility
+  in the nuclear field
+- Processing of data acquired by a sensor in an industrial context
+- Processing of images acquired by a camera in a medical context
+- Automatic detection of defects on a surface, in the context of quality control
+- Automatic detection of laser spots on a target, in the context of laser alignment
 - Instrument alignment through image processing
-- Automatic pattern detection and geometric corrections
+- Automatic pattern detection on images and geometric correction of the images, in
+  the context of non destructive testing
 
 .. _usage_modes:
 
@@ -56,36 +61,51 @@ Use cases
 
 DataLab is a versatile tool that can be used in different contexts:
 
-- **Data processing**: DataLab is a powerful tool for processing signals and
-  images. It can be used to develop complex algorithms, or to quickly
-  prototype a processing chain.
+Data processing
+  DataLab is a powerful tool for processing signals and images. It can be used
+  to develop complex algorithms, or to quickly prototype a processing chain.
 
-- **Companion tool for scientific/technical work**: DataLab can be used as
-  a companion tool for scientific/technical work. It allows you to visualize
-  and process data, and to share your results with your colleagues. It can
-  easily be adapted to your needs through the addition of plugins, and it may
-  even be used together with your every day tools (e.g., Visual Studio Code,
-  Spyder, ... or Jupyter notebooks).
+  :octicon:`book;1em;sd-text-info` See our :bdg-ref-success-line:`Tutorials <tutorials>`
+  for practical examples of use in data processing.
 
-- **Prototyping a data processing application**: DataLab can be used to
-  quickly prototype a data processing application. It can then be used as
-  a basis for the development of a full-fledged application.
+Companion tool for scientific/technical work
+  DataLab can be used as a companion tool for scientific/technical work. It
+  allows you to visualize and process data, and to share your results with your
+  colleagues. It can easily be adapted to your needs through the addition of
+  plugins, and it may even be used together with your every day tools (e.g.,
+  Visual Studio Code, Spyder, ... or Jupyter notebooks).
 
-- **Debugging a data processing application**: DataLab can be used as an
-  advanced debugging tool for your data processing applications, independently
-  from the development environment or the language used (Python, C#, C++, ...).
-  All you need is to be able to communicate with DataLab via its remote control
-  interface (standard XML-RPC protocol). This allows you to send data to DataLab
-  (signals, images or even geometric shapes), visualize the data at each step of
-  the processing chain, manipulate them to better understand the behavior of your
-  algorithms, and even modify them to test the robustness of your code.
+  :octicon:`book;1em;sd-text-info` See our :bdg-ref-success-line:`Tutorials <tutorials>`
+  for practical examples of use in a scientific/technical context.
+
+Prototyping a data processing application
+  DataLab can be used to quickly prototype a data processing application. It can
+  then be used as a basis for the development of a full-fledged application.
+
+  :octicon:`book;1em;sd-text-info` See the tutorial :ref:`tutorial_custom_func`
+  for a concrete example.
+
+Debugging a data processing application
+  DataLab can be used as an advanced debugging tool for your data processing
+  applications, independently from the development environment or the language
+  used (Python, C#, C++, ...). All you need is to be able to communicate with
+  DataLab via its remote control interface (standard XML-RPC protocol). This
+  allows you to send data to DataLab (signals, images or even geometric shapes),
+  visualize the data at each step of the processing chain, manipulate them to
+  better understand the behavior of your algorithms, and even modify them to
+  test the robustness of your code.
+
+  :octicon:`bug;1em;sd-text-warning` See the tutorial :ref:`debug_spyder`
+  for a quick overview of this feature.
 
 .. note::
 
     DataLab can also be controlled from your familiar development environment
     (e.g., Visual Studio Code, Spyder, ...) or from a Jupyter notebook, in order
     to perform calculations using your processing functions while leveraging the
-    advanced features of DataLab.
+    advanced features of DataLab. :octicon:`book;1em;sd-text-info`
+    See the tutorials :ref:`tutorial_custom_func` or :ref:`tutorial_spyder`
+    for examples of use.
 
 With its user-friendly experience and versatile usage modes, DataLab enables
 efficient development of your data processing and visualization applications
@@ -114,25 +134,24 @@ The main technical features of DataLab include:
 Key strengths
 -------------
 
-DataLab highlights four key strengths:
+To summarize, the four key strengths of DataLab are:
 
-1. **Extensibility**: The DataLab plugin system makes it easy to code new
-   features (specific processing, specific file formats, custom graphical
-   interfaces). It can also be used as a customizable platform.
+Extensibility
+  The DataLab plugin system makes it easy to code new features (specific
+  processing, specific file formats, custom graphical interfaces). It can also
+  be used as a customizable platform.
 
-2. **Interoperability**: DataLab can also be embedded in your own application.
-   For example, within data processing software, machine-level control systems,
-   or test bench applications.
+Interoperability
+  DataLab can also be embedded in your own application. For example, within data
+  processing software, machine-level control systems, or test bench
+  applications.
 
-3. **Automation**: a high-level public API allows for full remote control of
-   DataLab to open and process data.
+Automation
+  A high-level public API allows for full remote control of DataLab to open and
+  process data.
 
-4. **Maintainability and testability**: DataLab is an industrial-grade
-   scientific and technical processing software. The built-in automated tests
-   in DataLab cover 90% of its features, which is significant for software
-   with graphical interfaces and helps mitigate regression risks.
-
-Researchers, engineers, scientists, you will undoubtedly benefit from the
-capabilities of DataLab. Its open-source software model will also allow you
-to reinvest your achievements in the open-source community, of which any
-reputable publisher should be an active member.
+Maintainability and testability
+  DataLab is an industrial-grade scientific and technical processing software.
+  The built-in automated tests in DataLab cover 90% of its features, which is
+  significant for software with graphical interfaces and helps mitigate
+  regression risks.
