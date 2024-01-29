@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "DataLab exploite la richesse de l'écosystème scientifique Python (NumPy, "
 "SciPy, scikit-image, OpenCV, `PlotPyStack`_, ...) et les interfaces "
-"graphiques Qt. -- Essayez DataLab en ligne, sans installation : "
+"graphiques Qt. -- Essayez DataLab en ligne, sans installation : :octicon:`rocket;1em;sd-text-info` |binder|."
 
 #: ../../index.rst
 msgid "binder"
