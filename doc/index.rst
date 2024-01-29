@@ -2,18 +2,28 @@ DataLab
 =======
 
 DataLab is an **open-source platform for scientific and technical data processing
-and visualization** with unique features designed to meet industrial requirements,
-extendable with :bdg-ref-success-line:`Plugins <about_plugins>` and working
-seamlessly with :ref:`your IDE <use_cases>` or :ref:`Jupyter notebooks <use_cases>`, ...
-(see our :bdg-ref-success-line:`Tutorials <tutorials>` for illustrated examples).
+and visualization** with unique features designed to meet industrial requirements.
+Leveraging the richness of the scientific Python ecosystem [#f1]_ and the Qt
+graphical user interfaces, DataLab is a versatile tool, extendable with
+:bdg-ref-success-line:`Plugins <about_plugins>` and working seamlessly with
+:ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
 
-DataLab leverages the richness of the scientific Python ecosystem (NumPy, SciPy,
-scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user interfaces. --
-Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
+.. only:: html and not latex
+
+    :octicon:`play;1em;sd-text-info` Want to know more?
+    See our :bdg-ref-success-line:`Tutorials <tutorials>` --
+    Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
 
 .. |binder| image:: https://mybinder.org/badge_logo.svg
     :target: https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments
     :class: new-window
+
+.. only:: latex and not html
+
+    To immediately see DataLab in action, you have two options:
+
+    - Read or view our :ref:`Tutorials <tutorials>`,
+    - Try DataLab online, without installation, using our `Binder environment <https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments>`_.
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light
@@ -65,7 +75,7 @@ benefiting from an industrial-grade technological platform.
 
     .. toctree::
         :maxdepth: 2
-        :caption: Contents:
+        :caption: Contents
 
         intro/index
         features/index
@@ -75,6 +85,18 @@ benefiting from an industrial-grade technological platform.
     .. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
             developed and maintained by DataLab open-source project team.
 
+.. rubric:: Footnotes
+
+.. [#f1] DataLab processing features are mainly based on `NumPy`_, `SciPy`_,
+   `scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab visualization
+   capabilities are based on `PlotPyStack`_ toolkit, a set of Python libraries
+   for building scientific applications with Qt graphical user interfaces.
+
+.. _NumPy: https://numpy.org/
+.. _SciPy: https://www.scipy.org/
+.. _scikit-image: https://scikit-image.org/
+.. _OpenCV: https://opencv.org/
+.. _PyWavelets: https://pywavelets.readthedocs.io/
 .. _PlotPyStack: https://github.com/PlotPyStack
 .. _Codra: https://codra.net/
 .. _Pierre Raybaut: https://github.com/PierreRaybaut/

@@ -1,3 +1,5 @@
+.. _tutorial_spyder:
+
 :octicon:`book;1em;sd-text-info` DataLab and Spyder: a perfect match
 ====================================================================
 

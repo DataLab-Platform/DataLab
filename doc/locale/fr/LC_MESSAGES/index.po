@@ -9,17 +9,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-28 21:57+0100\n"
+"POT-Creation-Date: 2024-01-29 09:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
-#: ../../index.rst:66
-msgid "Contents:"
+#: ../../index.rst:76
+#, fuzzy
+msgid "Contents"
 msgstr "Table des matières :"
 
 #: ../../index.rst:2
@@ -30,39 +31,59 @@ msgstr "DataLab"
 msgid ""
 "DataLab is an **open-source platform for scientific and technical data "
 "processing and visualization** with unique features designed to meet "
-"industrial requirements, extendable with :bdg-ref-success-line:`Plugins "
+"industrial requirements. Leveraging the richness of the scientific Python"
+" ecosystem [#f1]_ and the Qt graphical user interfaces, DataLab is a "
+"versatile tool, extendable with :bdg-ref-success-line:`Plugins "
 "<about_plugins>` and working seamlessly with :ref:`your IDE <use_cases>` "
-"or :ref:`Jupyter notebooks <use_cases>`, ... (see our :bdg-ref-success-"
-"line:`Tutorials <tutorials>` for illustrated examples)."
+"or :ref:`your Jupyter notebooks <use_cases>`."
 msgstr ""
 "DataLab est une **plateforme open-source de traitement et de "
 "visualisation de données scientifiques et techniques** avec des "
 "fonctionnalités uniques conçues pour répondre à des niveaux d'exigence "
-"industriels, extensible avec des :bdg-ref-success-line:`Plugins "
-"\"<about_plugins>` et fonctionnant parfaitement avec :ref:`votre IDE "
-"<use_cases>` ou :ref:`Jupyter notebooks <use_cases>`, ... (voir nos :bdg-"
-"ref-success-line:`Tutoriels <tutorials>` pour des exemples illustrés)."
+"industriels. Exploitant la richesse de l'écosystème scientifique Python "
+"[#f1]_ et des interfaces graphiques Qt, DataLab est un outil polyvalent, "
+"extensible avec des :bdg-ref-success-line:`Plugins <about_plugins>` et "
+"fonctionnant parfaitement avec :ref:`votre IDE <use_cases>` ou :ref:`vos "
+"notebooks Jupyter <use_cases>`."
 
-#: ../../index.rst:10
+#: ../../index.rst:13
 msgid ""
-"DataLab leverages the richness of the scientific Python ecosystem (NumPy,"
-" SciPy, scikit-image, OpenCV, `PlotPyStack`_,...) and Qt graphical user "
-"interfaces. -- Try DataLab online, without installation: "
-":octicon:`rocket;1em;sd-text-info` |binder|."
+":octicon:`play;1em;sd-text-info` Want to know more? See our :bdg-ref-"
+"success-line:`Tutorials <tutorials>` -- Try DataLab online, without "
+"installation: :octicon:`rocket;1em;sd-text-info` |binder|."
 msgstr ""
-"DataLab exploite la richesse de l'écosystème scientifique Python (NumPy, "
-"SciPy, scikit-image, OpenCV, `PlotPyStack`_, ...) et les interfaces "
-"graphiques Qt. -- Essayez DataLab en ligne, sans installation : :octicon:`rocket;1em;sd-text-info` |binder|."
+":octicon:`play;1em;sd-text-info` Vous voulez en savoir plus ? Consultez "
+"nos :bdg-ref-success-line:`Tutoriels <tutorials>` -- Essayez DataLab en "
+"ligne, sans installation : :octicon:`rocket;1em;sd-text-info` |binder|."
 
 #: ../../index.rst
 msgid "binder"
 msgstr ""
 
-#: ../../index.rst:21
+#: ../../index.rst:23
+msgid "To immediately see DataLab in action, you have two options:"
+msgstr "Pour voir DataLab en action immédiatement, vous avez deux options :"
+
+#: ../../index.rst:25
+msgid "Read or view our :ref:`Tutorials <tutorials>`,"
+msgstr "Lisez ou regardez nos :ref:`Tutoriels <tutorials>`,"
+
+#: ../../index.rst:26
+#, python-format
+msgid ""
+"Try DataLab online, without installation, using our `Binder environment "
+"<https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-"
+"environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com"
+"%252FCodra-Ingenierie-"
+"Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-"
+"environments>`_."
+msgstr "Essayez DataLab en ligne, sans installation, en utilisant notre `environnement Binder <https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments>`_."
+
+#: ../../index.rst:31
 msgid "Signal and image visualization in DataLab"
 msgstr "Visualisation de signaux et d'images dans DataLab"
 
-#: ../../index.rst:29
+#: ../../index.rst:39
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-rocket sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -86,11 +107,11 @@ msgid ""
 "started"
 msgstr "Premiers pas"
 
-#: ../../index.rst:33
+#: ../../index.rst:43
 msgid "Installation, use cases, key strengths, ..."
 msgstr "Installation, cas d'usage, points forts, ..."
 
-#: ../../index.rst:35
+#: ../../index.rst:45
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-tools sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -111,11 +132,11 @@ msgid ""
 "Features"
 msgstr "Fonctionnalités"
 
-#: ../../index.rst:39
+#: ../../index.rst:49
 msgid "In-depth description of DataLab features"
 msgstr "Description détaillée des fonctionnalités de DataLab"
 
-#: ../../index.rst:41
+#: ../../index.rst:51
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-book sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -129,11 +150,11 @@ msgid ""
 " 0 011.994.574z\"></path></svg>  API"
 msgstr "API"
 
-#: ../../index.rst:45
+#: ../../index.rst:55
 msgid "Reference documentation of DataLab API"
 msgstr "Documentation de référence de l'API de DataLab"
 
-#: ../../index.rst:47
+#: ../../index.rst:57
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-gear sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -177,11 +198,11 @@ msgid ""
 " 013 0zM11 8a3 3 0 11-6 0 3 3 0 016 0z\"></path></svg>  Contributing"
 msgstr "Contribuer"
 
-#: ../../index.rst:51
+#: ../../index.rst:61
 msgid "Getting involved in DataLab project"
 msgstr "S'impliquer dans le projet DataLab"
 
-#: ../../index.rst:53
+#: ../../index.rst:63
 msgid ""
 "With its user-friendly experience and versatile :ref:`usage_modes`, "
 "DataLab enables efficient development of your data processing and "
@@ -193,7 +214,7 @@ msgstr ""
 " de traitement et de visualisation de données tout en bénéficiant d'une "
 "plateforme technologique de qualité industrielle."
 
-#: ../../index.rst:61
+#: ../../index.rst:71
 msgid ""
 "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
 "the scientific Python-Qt visualization and graphical user interface "
@@ -203,7 +224,7 @@ msgstr ""
 " les outils de visualisation et d'interface graphique scientifiques "
 "Python-Qt."
 
-#: ../../index.rst:75
+#: ../../index.rst:85
 msgid ""
 "DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
 "developed and maintained by DataLab open-source project team."
@@ -211,5 +232,21 @@ msgstr ""
 "DataLab a été créé par `Codra`_/`Pierre Raybaut`_ en 2023. Il est "
 "développé et maintenu par l'équipe du projet open-source DataLab."
 
-#~ msgid "Roadmap, contributing, ..."
-#~ msgstr "Feuille de route, contribution, ..."
+#: ../../index.rst:89
+msgid "Footnotes"
+msgstr "Notes de bas de page"
+
+#: ../../index.rst:90
+msgid ""
+"DataLab processing features are mainly based on `NumPy`_, `SciPy`_, "
+"`scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab "
+"visualization capabilities are based on `PlotPyStack`_ toolkit, a set of "
+"Python libraries for building scientific applications with Qt graphical "
+"user interfaces."
+msgstr ""
+"Les fonctionnalités de traitement de DataLab sont principalement basées "
+"sur les bibliothèques `NumPy`_, `SciPy`_, `scikit-image`_, `OpenCV`_ et "
+"`PyWavelets`_. Les capacités de visualisation de DataLab sont basées sur "
+"la boîte à outils `PlotPyStack`_, un ensemble de bibliothèques Python "
+"pour la réalisation d'applications scientifiques avec des interfaces "
+"graphiques Qt."

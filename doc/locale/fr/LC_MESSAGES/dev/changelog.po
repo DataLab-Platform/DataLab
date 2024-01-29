@@ -1,0 +1,1454 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-24 16:00+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../../CHANGELOG.md:1
+msgid "Changelog"
+msgstr ""
+
+#: ../../../CHANGELOG.md:3
+msgid ""
+"See DataLab [roadmap page](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/dev/roadmap.html) for future and past "
+"milestones."
+msgstr ""
+
+#: ../../../CHANGELOG.md:6
+msgid "DataLab Version 0.11.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:8 ../../../CHANGELOG.md:121 ../../../CHANGELOG.md:241
+#: ../../../CHANGELOG.md:282 ../../../CHANGELOG.md:304
+msgid "🛠️ Bug fixes:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:10
+msgid ""
+"Fixed [Issue #41](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/41) - Radial profile extraction: unable to "
+"enter user-defined center coordinates"
+msgstr ""
+
+#: ../../../CHANGELOG.md:12
+msgid "DataLab Version 0.11.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:14 ../../../CHANGELOG.md:178
+msgid "💥 New features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:16
+msgid "Signals and images may now be reordered in the tree view:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:17
+msgid ""
+"Using the new \"Move up\" and \"Move down\" actions in the \"Edit\" menu "
+"(or using the corresponding toolbar buttons):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:19
+msgid ""
+"This fixes [Issue #22](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/22) - Add \"move up/down\" actions in "
+"\"Edit\" menu, for signals/images and groups"
+msgstr ""
+
+#: ../../../CHANGELOG.md:20
+msgid "Signals and images may also be reordered using drag and drop:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:21
+msgid ""
+"Signals and images can be dragged and dropped inside their own panel to "
+"change their order"
+msgstr ""
+
+#: ../../../CHANGELOG.md:23
+msgid "Groups can also be dragged and dropped inside their panel"
+msgstr ""
+
+#: ../../../CHANGELOG.md:24
+msgid ""
+"The feature also supports multi-selection (using the standard Ctrl and "
+"Shift modifiers), so that multiple signals/images/groups can be moved at "
+"once, not necessarily with contiguous positions"
+msgstr ""
+
+#: ../../../CHANGELOG.md:27
+msgid ""
+"This fixes [Issue #17](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/17) - Add Drag and Drop feature to "
+"Signals/Images tree views"
+msgstr ""
+
+#: ../../../CHANGELOG.md:28
+msgid "New 1D interpolation features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:29
+msgid "Added \"Interpolation\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:30
+msgid "Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP"
+msgstr ""
+
+#: ../../../CHANGELOG.md:31
+msgid ""
+"Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-"
+"ohm) for the contribution to spline interpolation"
+msgstr ""
+
+#: ../../../CHANGELOG.md:32
+msgid ""
+"This fixes [Issue #20](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/20) - Add 1D interpolation features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:33
+msgid "New 1D resampling feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:34
+msgid "Added \"Resampling\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:35
+msgid "Same interpolation methods as for the \"Interpolation\" feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:36
+msgid "Possibility to specify the resampling step or the number of points"
+msgstr ""
+
+#: ../../../CHANGELOG.md:37
+msgid ""
+"This fixes [Issue #21](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/21) - Add 1D resampling feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:38
+msgid "New 1D convolution feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:39
+msgid "Added \"Convolution\" feature to signal panel's \"Operation\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:40
+msgid ""
+"This fixes [Issue #23](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/23) - Add 1D convolution feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:41
+msgid "New 1D detrending feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:42
+msgid "Added \"Detrending\" feature to signal panel's \"Processing\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:43
+msgid "Methods available: linear or constant"
+msgstr ""
+
+#: ../../../CHANGELOG.md:44
+msgid ""
+"This fixes [Issue #24](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/24) - Add 1D detrending feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:45
+msgid "2D computing results:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:46
+msgid ""
+"Before this release, 2D computing results such as contours, blobs, etc. "
+"were stored in image metadata dictionary as coordinates (x0, y0, x1, y1, "
+"...) even for circles and ellipses (i.e. the coordinates of the bounding "
+"rectangles)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:49
+msgid ""
+"For convenience, the circle and ellipse coordinates are now stored in "
+"image metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) "
+"respectively."
+msgstr ""
+
+#: ../../../CHANGELOG.md:51
+msgid ""
+"These results are also shown as such in the \"Results\" dialog box "
+"(either at the end of the computing process or when clicking on the "
+"\"Show results\" button)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:53
+msgid ""
+"This fixes [Issue #32](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/32) - Contour detection: show circle `(x, y, "
+"r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:54
+msgid "1D and 2D computing results:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:55
+msgid ""
+"Additionnaly to the previous enhancement, more computing results are now "
+"shown in the \"Results\" dialog box"
+msgstr ""
+
+#: ../../../CHANGELOG.md:57
+msgid ""
+"This concerns both 1D (FHWM, ...) and 2D computing results (contours, "
+"blobs, ...):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:58
+msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:59
+msgid "Circle and ellipse results now also show area (A)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:60
+msgid "Added \"Plot results\" entry in \"Computing\" menu:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:61
+msgid "This feature allows to plot computing results (1D or 2D)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:62
+msgid ""
+"It creates a new signal with X and Y axes corresponding to user-defined "
+"parameters (e.g. X = indexes and Y = radius for circle results)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:64
+msgid "Increased default width of the object selection dialog box:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:65
+msgid ""
+"The object selection dialog box is now wider by default, so that the full"
+" signal/image/group titles may be more easily readable"
+msgstr ""
+
+#: ../../../CHANGELOG.md:67
+msgid "Delete metadata feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:68
+msgid ""
+"Before this release, the feature was deleting all metadata, including the"
+" Regions Of Interest (ROI) metadata, if any."
+msgstr ""
+
+#: ../../../CHANGELOG.md:70
+msgid ""
+"Now a confirmation dialog box is shown to the user before deleting all "
+"metadata if the signal/image has ROI metadata: this allows to keep the "
+"ROI metadata if needed."
+msgstr ""
+
+#: ../../../CHANGELOG.md:72
+msgid ""
+"Image profile extraction feature: added support for masked images (when "
+"defining regions of interest, the areas outside the ROIs are masked, and "
+"the profile is extracted only on the unmasked areas, or averaged on the "
+"unmasked areas in the case of average profile extraction)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:76
+msgid ""
+"Curve style: added \"Reset curve styles\" in \"View\" menu. This feature "
+"allows to reset the curve style cycle to its initial state."
+msgstr ""
+
+#: ../../../CHANGELOG.md:78
+msgid "Plugin base classe `PluginBase`:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:79
+msgid ""
+"Added `edit_new_signal_parameters` method for showing a dialog box to "
+"edit parameters for a new signal"
+msgstr ""
+
+#: ../../../CHANGELOG.md:81
+msgid ""
+"Added `edit_new_image_parameters` method for showing a dialog box to edit"
+" parameters for a new image (updated the *cdl_testdata.py* plugin "
+"accordingly)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:83
+msgid "Signal and image computations API (`cdl.core.computations`):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:84
+msgid "Added wrappers for signal and image 1 -> 1 computations"
+msgstr ""
+
+#: ../../../CHANGELOG.md:85
+msgid ""
+"These wrappers aim at simplifying the creation of a basic computation "
+"function operating on DataLab's native objects (`SignalObj` and "
+"`ImageObj`) from a function operating on NumPy arrays"
+msgstr ""
+
+#: ../../../CHANGELOG.md:88
+msgid ""
+"This simplifies DataLab's internals and makes it easier to create new "
+"computing features inside plugins"
+msgstr ""
+
+#: ../../../CHANGELOG.md:90
+msgid "See the *cdl_custom_func.py* example plugin for a practical use case"
+msgstr ""
+
+#: ../../../CHANGELOG.md:91
+msgid ""
+"Added \"Radial profile extraction\" feature to image panel's "
+"\"Operation\" menu:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:92
+msgid "This feature allows to extract a radially averaged profile from an image"
+msgstr ""
+
+#: ../../../CHANGELOG.md:93
+msgid "The profile is extracted around a user-defined center (x0, y0)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:94
+msgid "The center may also be computed (centroid or image center)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:95
+msgid "Automated test suite:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:96
+msgid ""
+"Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` "
+"method to toggle the \"Auto-refresh\" feature. This feature may be useful"
+" to improve performance during the execution of test scripts"
+msgstr ""
+
+#: ../../../CHANGELOG.md:99
+msgid ""
+"Test scenarios on signals and images are now using this feature to "
+"improve performance"
+msgstr ""
+
+#: ../../../CHANGELOG.md:101
+msgid "Signal and image metadata:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:102
+msgid ""
+"Added \"source\" entry to the metadata dictionary, to store the source "
+"file path when importing a signal or an image from a file"
+msgstr ""
+
+#: ../../../CHANGELOG.md:104
+msgid ""
+"This field is kept while processing the signal/image, in order to keep "
+"track of the source file path"
+msgstr ""
+
+#: ../../../CHANGELOG.md:107
+msgid "📚 Documentation:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:109
+msgid ""
+"New [Tutorial section](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/intro/tutorials/index.html) in the "
+"documentation: this section provides a set of tutorials to learn how to "
+"use DataLab"
+msgstr ""
+
+#: ../../../CHANGELOG.md:110
+msgid ""
+"New [API section](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/api/index.html) in the documentation:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:111
+msgid ""
+"This section explains how to use DataLab as a Python library, by covering"
+" the following topics:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:113
+msgid "How to use DataLab algorithms on NumPy arrays"
+msgstr ""
+
+#: ../../../CHANGELOG.md:114
+msgid ""
+"How to use DataLab computation features on DataLab objects (signals and "
+"images)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:115
+msgid "How to use DataLab I/O features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:116
+msgid "How to use proxy objects to control DataLab remotely"
+msgstr ""
+
+#: ../../../CHANGELOG.md:117
+msgid ""
+"This section also provides a complete API reference for DataLab objects "
+"and features"
+msgstr ""
+
+#: ../../../CHANGELOG.md:119
+msgid ""
+"This fixes [Issue #19](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/19) - Add API documentation (data model, "
+"functions on arrays or signal/image objects, ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:123
+msgid ""
+"Fixed [Issue #29](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/29) - Polynomial fit error: `QDialog [...] "
+"argument 1 has an unexpected type 'SignalProcessor'`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:124
+msgid "Image ROI extraction feature:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:125
+msgid ""
+"Before this release, when extracting a single circular ROI from an image "
+"with the \"Extract all regions of interest into a single image object\" "
+"option enabled, the result was a single image without the ROI mask (the "
+"ROI mask was only available when extracting ROI with the option disabled)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:129
+msgid ""
+"This was leading to an unexpected behavior, because one could interpret "
+"the result (a square image without the ROI mask) as the result of a "
+"single rectangular ROI"
+msgstr ""
+
+#: ../../../CHANGELOG.md:131
+msgid ""
+"Now, when extracting a single circular ROI from an image with the "
+"\"Extract all regions of interest into a single image object\" option "
+"enabled, the result is a single image with the ROI mask (as if the option"
+" was disabled)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:134
+msgid ""
+"This fixes [Issue #31](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/31) - Single circular ROI extraction: "
+"automatically switch to `extract_single_roi` function"
+msgstr ""
+
+#: ../../../CHANGELOG.md:135
+msgid "Computing on circular ROI:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:136
+msgid ""
+"Before this release, when running computations on a circular ROI, the "
+"results were unexpected in terms of coordinates (results seemed to be "
+"computed in a region located above the actual ROI)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:139
+msgid "This was due to a regression introduced in an earlier release."
+msgstr ""
+
+#: ../../../CHANGELOG.md:140
+msgid ""
+"Now, when defining a circular ROI and running computations on it, the "
+"results are computed on the actual ROI"
+msgstr ""
+
+#: ../../../CHANGELOG.md:142
+msgid ""
+"This fixes [Issue #33](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/33) - Computing on circular ROI: unexpected "
+"results"
+msgstr ""
+
+#: ../../../CHANGELOG.md:143
+msgid "Contour detection on ROI:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:144
+msgid ""
+"Before this release, when running contour detection on a ROI, some "
+"contours were detected outside the ROI (it may be due to a limitation of "
+"the scikit-image `find_contours` function)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:147
+msgid "Now, thanks a workaround, the erroneous contours are filtered out."
+msgstr ""
+
+#: ../../../CHANGELOG.md:148
+msgid ""
+"A new test module `cdl.tests.features.images.contour_fabryperot_app` has "
+"been added to test the contour detection feature on a Fabry-Perot image "
+"(thanks to [@emarin2642](https://github.com/emarin2642) for the "
+"contribution)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:151
+msgid ""
+"This fixes [Issue #34](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/34) - Contour detection: unexpected results "
+"outside ROI"
+msgstr ""
+
+#: ../../../CHANGELOG.md:152
+msgid "Computing result merging:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:153
+msgid ""
+"Before this release, when doing a `1->N` computation (sum, average, "
+"product) on a group of signals/images, the computing results associated "
+"to each signal/image were merged into a single result, but only the type "
+"of result present in the first signal/image was kept."
+msgstr ""
+
+#: ../../../CHANGELOG.md:157
+msgid ""
+"Now, the computing results associated to each signal/image are merged "
+"into a single result, whatever the type of result is."
+msgstr ""
+
+#: ../../../CHANGELOG.md:159
+msgid ""
+"Fixed [Issue #36](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/36) - \"Delete all\" action enable state is "
+"sometimes not refreshed"
+msgstr ""
+
+#: ../../../CHANGELOG.md:160
+msgid ""
+"Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI)"
+" were not removed and not swapped either (ROI are now removed, until we "
+"implement the swap feature, if requested)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:163
+msgid ""
+"\"Properties\" group box: the \"Apply\" button was enabled by default, "
+"even when no property was modified, which was confusing for the user (the"
+" \"Apply\" button is now disabled by default, and is enabled only when a "
+"property is modified)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:166
+msgid ""
+"Fixed proxy `get_object` method when there is no object to return (`None`"
+" is returned instead of an exception)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:168
+msgid ""
+"Fixed `IndexError: list index out of range` when performing some "
+"operations or computations on groups of signals/images (e.g. \"ROI "
+"extraction\", \"Peak detection\", \"Resize\", etc.)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:171
+msgid "Drag and drop from a file manager: filenames are now sorted alphabetically"
+msgstr ""
+
+#: ../../../CHANGELOG.md:173
+msgid "DataLab Version 0.10.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:175
+msgid ""
+"*Note*: V0.10.0 was almost immediately replaced by V0.10.1 due to a last "
+"minute bug fix"
+msgstr ""
+
+#: ../../../CHANGELOG.md:180
+msgid "Features common to signals and images:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:181
+msgid "Added \"Real part\" and \"Imaginary part\" features to \"Operation\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:182
+msgid "Added \"Convert data type\" feature to \"Operation\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:183
+msgid "Features added following user requests (12/18/2023 meetup @ CEA):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:184
+msgid "Curve and image styles are now saved in the HDF5 file:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:185
+msgid ""
+"Curve style covers the following properties: color, line style, line "
+"width, marker style, marker size, marker edge color, marker face color, "
+"etc."
+msgstr ""
+
+#: ../../../CHANGELOG.md:187
+msgid "Image style covers the following properties: colormap, interpolation, etc."
+msgstr ""
+
+#: ../../../CHANGELOG.md:188
+msgid ""
+"Those properties were already persistent during the working session, but "
+"were lost when saving and reloading the HDF5 file"
+msgstr ""
+
+#: ../../../CHANGELOG.md:190
+msgid ""
+"Now, those properties are saved in the HDF5 file and are restored when "
+"reloading the HDF5 file"
+msgstr ""
+
+#: ../../../CHANGELOG.md:192
+msgid "New profile extraction features for images:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:193
+msgid ""
+"Added \"Line profile extraction\" to \"Operations\" menu, to extract a "
+"profile from an image along a row or a column"
+msgstr ""
+
+#: ../../../CHANGELOG.md:195
+msgid ""
+"Added \"Average profile extraction\" to \"Operations\" menu, to extract "
+"the average profile on a rectangular area of an image, along a row or a "
+"column"
+msgstr ""
+
+#: ../../../CHANGELOG.md:197
+msgid ""
+"Image LUT range (contrast/brightness settings) is now saved in the HDF5 "
+"file:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:198
+msgid ""
+"As for curve and image styles, the LUT range was already persistent "
+"during the working session, but was lost when saving and reloading the "
+"HDF5 file"
+msgstr ""
+
+#: ../../../CHANGELOG.md:200
+msgid ""
+"Now, the LUT range is saved in the HDF5 file and is restored when "
+"reloading it"
+msgstr ""
+
+#: ../../../CHANGELOG.md:201
+msgid ""
+"Added \"Auto-refresh\" and \"Refresh manually\" actions in \"View\" menu "
+"(and main toolbar):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:203
+msgid ""
+"When \"Auto-refresh\" is enabled (default), the plot view is "
+"automatically refreshed when a signal/image is modified, added or "
+"removed. Even though the refresh is optimized, this may lead to "
+"performance issues when working with large datasets."
+msgstr ""
+
+#: ../../../CHANGELOG.md:207
+msgid ""
+"When disabled, the plot view is not automatically refreshed. The user "
+"must manually refresh the plot view by clicking on the \"Refresh "
+"manually\" button in the main toolbar or by pressing the standard refresh"
+" key (e.g. \"F5\")."
+msgstr ""
+
+#: ../../../CHANGELOG.md:210
+msgid "Added `toggle_auto_refresh` method to DataLab proxy object:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:211
+msgid ""
+"This method allows to toggle the \"Auto-refresh\" feature from a macro-"
+"command, a plugin or a remote control client."
+msgstr ""
+
+#: ../../../CHANGELOG.md:213
+msgid ""
+"A context manager `context_no_refresh` is also available to temporarily "
+"disable the \"Auto-refresh\" feature from a macro-command, a plugin or a "
+"remote control client. Typical usage:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:223
+msgid "Improved curve readability:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:224
+msgid ""
+"Until this release, the curve style was automatically set by cycling "
+"through **PlotPy** predefined styles"
+msgstr ""
+
+#: ../../../CHANGELOG.md:226
+msgid ""
+"However, some styles are not suitable for curve readability (e.g. "
+"\"cyan\" and \"yellow\" colors are not readable on a white background, "
+"especially when combined with a \"dashed\" line style)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:229
+msgid ""
+"This release introduces a new curve style management with colors which "
+"are distinguishable and accessible, even to color vision deficiency "
+"people"
+msgstr ""
+
+#: ../../../CHANGELOG.md:231
+msgid "Added \"Curve anti-aliasing\" feature to \"View\" menu (and toolbar):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:232
+msgid ""
+"This feature allows to enable/disable curve anti-aliasing (default: "
+"enabled)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:233
+msgid ""
+"When enabled, the curve rendering is smoother but may lead to performance"
+" issues when working with large datasets (that's why it can be disabled)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:235
+msgid ""
+"Added `toggle_show_titles` method to DataLab proxy object. This method "
+"allows to toggle the \"Show graphical object titles\" feature from a "
+"macro-command, a plugin or a remote control client."
+msgstr ""
+
+#: ../../../CHANGELOG.md:238
+msgid ""
+"Remote client is now checking the server version and shows a warning "
+"message if the server version may not be fully compatible with the client"
+" version."
+msgstr ""
+
+#: ../../../CHANGELOG.md:243
+msgid "Image contour detection feature (\"Computing\" menu):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:244
+msgid ""
+"The contour detection feature was not taking into account the \"shape\" "
+"parameter (circle, ellipse, polygon) when computing the contours. The "
+"parameter was stored but really used only when calling the feature a "
+"second time."
+msgstr ""
+
+#: ../../../CHANGELOG.md:247
+msgid ""
+"This unintentional behavior led to an `AssertionError` when choosing "
+"\"polygon\" as the contour shape and trying to compute the contours for "
+"the first time."
+msgstr ""
+
+#: ../../../CHANGELOG.md:249
+msgid ""
+"This is now fixed (see [Issue #9](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/9) - Image contour detection: "
+"`AssertionError` when choosing \"polygon\" as the contour shape)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:250
+msgid "Keyboard shortcuts:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:251
+msgid ""
+"The keyboard shortcuts for \"New\", \"Open\", \"Save\", \"Duplicate\", "
+"\"Remove\", \"Delete all\" and \"Refresh manually\" actions were not "
+"working properly."
+msgstr ""
+
+#: ../../../CHANGELOG.md:253
+msgid ""
+"Those shortcuts were specific to each signal/image panel, and were "
+"working only when the panel on which the shortcut was pressed for the "
+"first time was active (when activated from another panel, the shortcut "
+"was not working and a warning message was displayed in the console, e.g. "
+"`QAction::event: Ambiguous shortcut overload: Ctrl+C`)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:258
+msgid ""
+"Besides, the shortcuts were not working at startup (when no panel had "
+"focus)."
+msgstr ""
+
+#: ../../../CHANGELOG.md:259
+msgid ""
+"This is now fixed: the shortcuts are now working whatever the active "
+"panel is, and even at startup (see [Issue #10](https://github.com/Codra-"
+"Ingenierie-Informatique/DataLab/issues/10) - Keyboard shortcuts not "
+"working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:261
+msgid ""
+"\"Show graphical object titles\" and \"Auto-refresh\" actions were not "
+"working properly:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:262
+msgid ""
+"The \"Show graphical object titles\" and \"Auto-refresh\" actions were "
+"only working on the active signal/image panel, and not on all panels."
+msgstr ""
+
+#: ../../../CHANGELOG.md:264
+msgid ""
+"This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/11) - \"Show graphical object titles\" and "
+"\"Auto-refresh\" actions were working only on current signal/image panel)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:265
+msgid ""
+"Fixed [Issue #14](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/14) - Saving/Reopening HDF5 project without "
+"cleaning-up leads to `ValueError`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:266
+msgid ""
+"Fixed [Issue #15](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. "
+"Missing menus:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:267
+msgid ""
+"Part 1: `pip install cdl` error on MacOS was actually an issue from "
+"**PlotPy** (see [this "
+"issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been "
+"fixed in PlotPy v2.0.3 with an additional compilation flag indicating to "
+"use C++11 standard"
+msgstr ""
+
+#: ../../../CHANGELOG.md:270
+msgid ""
+"Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding "
+"dynamic menus"
+msgstr ""
+
+#: ../../../CHANGELOG.md:271
+msgid ""
+"HDF5 file format: when importing an HDF5 dataset as a signal or an image,"
+" the dataset attributes were systematically copied to signal/image "
+"metadata: we now only copy the attributes which match standard data types"
+" (integers, floats, strings) to avoid errors when "
+"serializing/deserializing the signal/image object"
+msgstr ""
+
+#: ../../../CHANGELOG.md:275
+msgid ""
+"Installation/configuration viewer: improved readability (removed syntax "
+"highlighting)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:276
+msgid ""
+"PyInstaller specification file: added missing `skimage` data files "
+"manually in order to continue supporting Python 3.8 (see [Issue "
+"#12](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/12) "
+"- Stand-alone version on Windows 7: missing `api-ms-win-core-"
+"path-l1-1-0.dll`)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:278
+msgid ""
+"Fixed [Issue #13](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/13) - ArchLinux: `qt.qpa.plugin: Could not "
+"load the Qt platform plugin \"xcb\" in \"\" even though it was found`"
+msgstr ""
+
+#: ../../../CHANGELOG.md:280
+msgid "DataLab Version 0.9.2"
+msgstr ""
+
+#: ../../../CHANGELOG.md:284
+msgid "Region of interest (ROI) extraction feature for images:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:285
+msgid ""
+"ROI extraction was not working properly when the \"Extract all regions of"
+" interest into a single image object\" option was enabled if there was "
+"only one defined ROI. The result was an image positioned at the origin "
+"(0, 0) instead of the expected position (x0, y0) and the ROI rectangle "
+"itself was not removed as expected. This is now fixed (see [Issue "
+"#6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - "
+"'Extract multiple ROI' feature: unexpected result for a single ROI)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:290
+msgid ""
+"ROI rectangles with negative coordinates were not properly handled: ROI "
+"extraction was raising a `ValueError` exception, and the image mask was "
+"not displayed properly. This is now fixed (see [Issue "
+"#7](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/7) - "
+"Image ROI extraction: `ValueError: zero-size array to reduction operation"
+" minimum which has no identity`)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:294
+msgid ""
+"ROI extraction was not taking into account the pixel size (dx, dy) and "
+"the origin (x0, y0) of the image. This is now fixed (see [Issue "
+"#8](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/8) - "
+"Image ROI extraction: take into account pixel size)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:297
+msgid "Macro-command console is now read-only:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:298
+msgid ""
+"The macro-command panel Python console is currently not supporting "
+"standard input stream (`stdin`) and this is intended (at least for now)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:300
+msgid "Set Python console read-only to avoid confusion"
+msgstr ""
+
+#: ../../../CHANGELOG.md:302
+msgid "DataLab Version 0.9.1"
+msgstr ""
+
+#: ../../../CHANGELOG.md:306
+msgid "French translation is not available on Windows/Stand alone version:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:307
+msgid ""
+"Locale was not properly detected on Windows for stand-alone version "
+"(frozen with `pyinstaller`) due to an issue with `locale.getlocale()` "
+"(function returning `None` instead of the expected locale on frozen "
+"applications)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:310
+msgid ""
+"This is ultimately a `pyinstaller` issue, but a workaround has been "
+"implemented in `guidata` V3.2.2 (see [guidata issue "
+"#68](https://github.com/PlotPyStack/guidata/issues/68) - Windows: gettext"
+" translation is not working on frozen applications)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:312
+msgid ""
+"[Issue #2](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/2) - French translation is not available on "
+"Windows Stand alone version"
+msgstr ""
+
+#: ../../../CHANGELOG.md:313
+msgid "Saving image to JPEG2000 fails for non integer data:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:314
+msgid "JPEG2000 encoder does not support non integer data or signed integer data"
+msgstr ""
+
+#: ../../../CHANGELOG.md:315
+msgid ""
+"Before, DataLab was showing an error message when trying to save "
+"incompatible data to JPEG2000: this was not a consistent behavior with "
+"other standard image formats (e.g. PNG, JPG, etc.) for which DataLab was "
+"automatically converting data to the appropriate format (8-bit unsigned "
+"integer)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:319
+msgid ""
+"Current behavior is now consistent with other standard image formats: "
+"when saving to JPEG2000, DataLab automatically converts data to 8-bit "
+"unsigned integer or 16-bit unsigned integer (depending on the original "
+"data type)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:322
+msgid ""
+"[Issue #3](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: "
+"encoder error -2 when writing image file'"
+msgstr ""
+
+#: ../../../CHANGELOG.md:323
+msgid ""
+"Windows stand-alone version shortcuts not showing in current user start "
+"menu:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:324
+msgid ""
+"When installing DataLab on Windows from a non-administrator account, the "
+"shortcuts were not showing in the current user start menu but in the "
+"administrator start menu instead (due to the elevated privileges of the "
+"installer and the fact that the installer does not support installing "
+"shortcuts for all users)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:329
+msgid ""
+"Now, the installer *does not* ask for elevated privileges anymore, and "
+"shortcuts are installed in the current user start menu (this also means "
+"that the current user must have write access to the installation "
+"directory)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:332
+msgid ""
+"In future releases, the installer will support installing shortcuts for "
+"all users if there is a demand for it (see [Issue #5](https://github.com"
+"/Codra-Ingenierie-Informatique/DataLab/issues/5))"
+msgstr ""
+
+#: ../../../CHANGELOG.md:334
+msgid ""
+"[Issue #4](https://github.com/Codra-Ingenierie-"
+"Informatique/DataLab/issues/4) - Windows: stand-alone version shortcuts "
+"not showing in current user start menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:335
+msgid "Installation and configuration window for stand-alone version:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:336
+msgid "Do not show ambiguous error message 'Invalid dependencies' anymore"
+msgstr ""
+
+#: ../../../CHANGELOG.md:337
+msgid ""
+"Dependencies are supposed to be checked when building the stand-alone "
+"version"
+msgstr ""
+
+#: ../../../CHANGELOG.md:338
+msgid "Added PDF documentation to stand-alone version:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:339
+msgid "The PDF documentation was missing in previous release"
+msgstr ""
+
+#: ../../../CHANGELOG.md:340
+msgid ""
+"Now, the PDF documentation (in English and French) is included in the "
+"stand-alone version"
+msgstr ""
+
+#: ../../../CHANGELOG.md:343
+msgid "DataLab Version 0.9.0"
+msgstr ""
+
+#: ../../../CHANGELOG.md:345
+msgid "New dependencies:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:347
+msgid "DataLab is now powered by [PlotPyStack](https://github.com/PlotPyStack):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:348
+msgid "[PythonQwt](https://github.com/PlotPyStack/PythonQwt)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:349
+msgid "[guidata](https://github.com/PlotPyStack/guidata)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:350
+msgid "[PlotPy](https://github.com/PlotPyStack/PlotPy)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:351
+msgid ""
+"[opencv-python](https://pypi.org/project/opencv-python/) (algorithms for "
+"image processing)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:353
+msgid "New reference platform:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:355
+msgid "DataLab is validated on Windows 11 with Python 3.11 and PyQt 5.15"
+msgstr ""
+
+#: ../../../CHANGELOG.md:356
+msgid ""
+"DataLab is also compatible with other OS (Linux, MacOS) and other Python-"
+"Qt bindings and versions (Python 3.8-3.12, PyQt6, PySide6)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:359
+msgid "New features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:361
+msgid "DataLab is a platform:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:362
+msgid "Added support for plugins"
+msgstr ""
+
+#: ../../../CHANGELOG.md:363
+msgid "Custom processing features available in the \"Plugins\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:364
+msgid ""
+"Custom I/O features: new file formats can be added to the standard I/O "
+"features for signals and images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:366
+msgid ""
+"Custom HDF5 features: new HDF5 file formats can be added to the standard "
+"HDF5 import feature"
+msgstr ""
+
+#: ../../../CHANGELOG.md:368
+msgid "More features to come..."
+msgstr ""
+
+#: ../../../CHANGELOG.md:369
+msgid ""
+"Added remote control feature: DataLab can be controlled remotely via a "
+"TCP/IP connection (see [Remote control](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/remote_control.html))"
+msgstr ""
+
+#: ../../../CHANGELOG.md:371
+msgid ""
+"Added macro commands: DataLab can be controlled via a macro file (see "
+"[Macro commands](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/macro_commands.html))"
+msgstr ""
+
+#: ../../../CHANGELOG.md:373
+msgid "General features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:374
+msgid "Added settings dialog box (see \"Settings\" entry in \"File\" menu):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:375
+msgid "General settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:376
+msgid "Visualization settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:377
+msgid "Processing settings"
+msgstr ""
+
+#: ../../../CHANGELOG.md:378
+msgid "Etc."
+msgstr ""
+
+#: ../../../CHANGELOG.md:379
+msgid ""
+"New default layout: signal/image panels are on the right side of the main"
+" window, visualization panels are on the left side with a vertical "
+"toolbar"
+msgstr ""
+
+#: ../../../CHANGELOG.md:381
+msgid "Signal/Image features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:382
+msgid ""
+"Added process isolation: each signal/image is processed in a separate "
+"process, so that DataLab does not freeze anymore when processing large "
+"signals/images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:385
+msgid ""
+"Added support for groups: signals and images can be grouped together, and"
+" operations can be applied to all objects in a group, or between groups"
+msgstr ""
+
+#: ../../../CHANGELOG.md:387
+msgid ""
+"Added warning and error dialogs with detailed traceback links to the "
+"source code (warnings may be optionally ignored)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:389
+msgid "Drastically improved performance when selecting objects"
+msgstr ""
+
+#: ../../../CHANGELOG.md:390
+msgid "Optimized performance when showing large images"
+msgstr ""
+
+#: ../../../CHANGELOG.md:391
+msgid "Added support for dropping files on signal/image panel"
+msgstr ""
+
+#: ../../../CHANGELOG.md:392
+msgid ""
+"Added \"Computing parameters\" group box to show last result input "
+"parameters"
+msgstr ""
+
+#: ../../../CHANGELOG.md:393
+msgid "Added \"Copy titles to clipboard\" feature in \"Edit\" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:394
+msgid ""
+"For every single processing feature (operation, processing and computing "
+"menus), the entered parameters (dialog boxes) are stored in cache to be "
+"used as defaults the next time the feature is used"
+msgstr ""
+
+#: ../../../CHANGELOG.md:397
+msgid "Signal processing:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:398 ../../../CHANGELOG.md:442
+msgid "Added support for optional FFT shift (see Settings dialog box)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:399
+msgid "Image processing:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:400
+msgid ""
+"Added pixel binning operation (X/Y binning factors, operation: sum, mean,"
+" ...)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:401
+msgid ""
+"Added \"Distribute on a grid\" and \"Reset image positions\" in operation"
+" menu"
+msgstr ""
+
+#: ../../../CHANGELOG.md:402
+msgid "Added Butterworth filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:403
+msgid "Added exposure processing features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:404
+msgid "Gamma correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:405
+msgid "Logarithmic correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:406
+msgid "Sigmoïd correction"
+msgstr ""
+
+#: ../../../CHANGELOG.md:407
+msgid "Added restoration processing features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:408
+msgid "Total variation denoising filter (TV Chambolle)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:409
+msgid "Bilateral filter (denoising)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:410
+msgid "Wavelet denoising filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:411
+msgid "White Top-Hat denoising filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:412
+msgid "Added morphological transforms (disk footprint):"
+msgstr ""
+
+#: ../../../CHANGELOG.md:413
+msgid "White Top-Hat"
+msgstr ""
+
+#: ../../../CHANGELOG.md:414
+msgid "Black Top-Hat"
+msgstr ""
+
+#: ../../../CHANGELOG.md:415
+msgid "Erosion"
+msgstr ""
+
+#: ../../../CHANGELOG.md:416
+msgid "Dilation"
+msgstr ""
+
+#: ../../../CHANGELOG.md:417
+msgid "Opening"
+msgstr ""
+
+#: ../../../CHANGELOG.md:418
+msgid "Closing"
+msgstr ""
+
+#: ../../../CHANGELOG.md:419
+msgid "Added edge detection features:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:420
+msgid "Roberts filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:421
+msgid "Prewitt filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:422
+msgid "Sobel filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:423
+msgid "Scharr filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:424
+msgid "Farid filter (vertical, horizontal, both)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:425
+msgid "Laplace filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:426
+msgid "Canny filter"
+msgstr ""
+
+#: ../../../CHANGELOG.md:427
+msgid ""
+"Contour detection: added support for polygonal contours (in addition to "
+"circle and ellipse contours)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:429
+msgid "Added circle Hough transform (circle detection)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:430
+msgid "Added image intensity levels rescaling"
+msgstr ""
+
+#: ../../../CHANGELOG.md:431
+msgid "Added histogram equalization"
+msgstr ""
+
+#: ../../../CHANGELOG.md:432
+msgid "Added adaptative histogram equalization"
+msgstr ""
+
+#: ../../../CHANGELOG.md:433
+msgid "Added blob detection methods:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:434
+msgid "Difference of Gaussian"
+msgstr ""
+
+#: ../../../CHANGELOG.md:435
+msgid "Determinant of Hessian method"
+msgstr ""
+
+#: ../../../CHANGELOG.md:436
+msgid "Laplacian of Gaussian"
+msgstr ""
+
+#: ../../../CHANGELOG.md:437
+msgid "Blob detection using OpenCV"
+msgstr ""
+
+#: ../../../CHANGELOG.md:438
+msgid ""
+"Result shapes and annotations are now transformed (instead of removed) "
+"when executing one of the following operations:"
+msgstr ""
+
+#: ../../../CHANGELOG.md:440
+msgid "Rotation (arbitrary angle, +90°, -90°)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:441
+msgid "Symetry (vertical/horizontal)"
+msgstr ""
+
+#: ../../../CHANGELOG.md:443
+msgid ""
+"Console: added configurable external editor (default: VSCode) to follow "
+"the traceback links to the source code"
+msgstr ""
+

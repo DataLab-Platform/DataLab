@@ -1,0 +1,396 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-16 15:11+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../dev/environment.md:1
+msgid "Setting up Development Environment"
+msgstr ""
+
+#: ../../dev/environment.md:4
+msgid "Getting started with DataLab development is easy."
+msgstr ""
+
+#: ../../dev/environment.md:6
+msgid "Here is what you will need:"
+msgstr ""
+
+#: ../../dev/environment.md:8
+msgid ""
+"An integrated development environment (IDE) for Python. We recommend "
+"[Spyder](https://www.spyder-ide.org/) or [Visual Studio "
+"Code](https://code.visualstudio.com/), but any IDE will do."
+msgstr ""
+
+#: ../../dev/environment.md:12
+msgid ""
+"A Python distribution. We recommend "
+"[WinPython](https://winpython.github.io/), on Windows, or "
+"[Anaconda](https://www.anaconda.com/), on Linux or Mac. But, again, any "
+"Python distribution will do."
+msgstr ""
+
+#: ../../dev/environment.md:16
+msgid "A clean project structure (see below)."
+msgstr ""
+
+#: ../../dev/environment.md:18
+msgid "Test data (see below)."
+msgstr ""
+
+#: ../../dev/environment.md:20
+msgid "Environment variables (see below)."
+msgstr ""
+
+#: ../../dev/environment.md:22
+msgid "Third-party software (see below)."
+msgstr ""
+
+#: ../../dev/environment.md:24
+msgid "Development Environment"
+msgstr ""
+
+#: ../../dev/environment.md:27
+msgid ""
+"If you are using [Spyder](https://www.spyder-ide.org/), thank you for "
+"supporting the scientific open-source Python community!"
+msgstr ""
+
+#: ../../dev/environment.md:30
+msgid ""
+"If you are using Visual Studio Code, that's also an excellent choice (for"
+" other reasons). We recommend installing the following extensions:"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Extension"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Description"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.black-formatter)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Python code formatter"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[gettext](https://marketplace.visualstudio.com/items?itemName=mrorz"
+".language-gettext)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Gettext syntax highlighting"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[isort](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.isort)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Python import sorter"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python"
+".vscode-pylance)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Python language server"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[Python](https://marketplace.visualstudio.com/items?itemName=ms-"
+"python.python)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Python extension"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[reStructuredText Syntax "
+"highlighting](https://marketplace.visualstudio.com/items?itemName=trond-"
+"snekvik.simple-rst)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "reStructuredText syntax highlighting"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Extremely fast Python linter and code formatter"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid ""
+"[Todo "
+"Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly"
+".todo-tree)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Todo tree"
+msgstr ""
+
+#: ../../dev/environment.md:44
+msgid "Python Environment"
+msgstr ""
+
+#: ../../dev/environment.md:47
+msgid "DataLab requires the following :"
+msgstr ""
+
+#: ../../dev/environment.md:49
+msgid "Python (e.g. WinPython)"
+msgstr ""
+
+#: ../../dev/environment.md:51
+msgid "Additional Python packages"
+msgstr ""
+
+#: ../../dev/environment.md:53
+msgid "Installing all required packages :"
+msgstr ""
+
+#: ../../dev/environment.md:57
+msgid ""
+"ℹ️ See [Installation](https://codra-ingenierie-"
+"informatique.github.io/DataLab/en/intro/installation.html) for more "
+"details on reference Python and Qt versions."
+msgstr ""
+
+#: ../../dev/environment.md:60
+msgid ""
+"If you are using [WinPython](https://winpython.github.io/), thank you for"
+" supporting the scientific open-source Python community!"
+msgstr ""
+
+#: ../../dev/environment.md:63
+msgid ""
+"The following table lists the currently officially used Python "
+"distributions:"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Python version"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Status"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "WinPython version"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.8"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "OK"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.8.10.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.9"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.9.10.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.10"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.10.11.1"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.11"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.11.5.0"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.12"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "3.12.0.1"
+msgstr ""
+
+#: ../../dev/environment.md:73
+msgid ""
+"⚠ We strongly recommend using the `.dot` versions of WinPython which are "
+"lightweight and can be customized to your needs (using `pip install -r "
+"requirements.txt`)."
+msgstr ""
+
+#: ../../dev/environment.md:76
+msgid "✅ We also recommend using a dedicated WinPython instance for DataLab."
+msgstr ""
+
+#: ../../dev/environment.md:78
+msgid "Test data"
+msgstr ""
+
+#: ../../dev/environment.md:81
+msgid ""
+"DataLab test data are located in different folders, depending on their "
+"nature or origin."
+msgstr ""
+
+#: ../../dev/environment.md:83
+msgid ""
+"Required data for unit tests are located in \"cdl\\data\\tests\" (public "
+"data)."
+msgstr ""
+
+#: ../../dev/environment.md:85
+msgid ""
+"A second folder %CDL_DATA% (optional) may be defined for additional tests"
+" which are still under development (or for confidential data)."
+msgstr ""
+
+#: ../../dev/environment.md:88
+msgid "Specific environment variables"
+msgstr ""
+
+#: ../../dev/environment.md:91
+msgid ""
+"Enable the \"debug\" mode (no stdin/stdout redirection towards internal "
+"console):"
+msgstr ""
+
+#: ../../dev/environment.md:96
+msgid ""
+"Building PDF documentation requires LaTeX. On Windows, the following "
+"environment:"
+msgstr ""
+
+#: ../../dev/environment.md:102
+msgid ""
+"Visual Studio Code configuration used in `launch.json` and `tasks.json` "
+"(examples) :"
+msgstr ""
+
+#: ../../dev/environment.md:110
+msgid "Visual Studio Code `.env` file:"
+msgstr ""
+
+#: ../../dev/environment.md:112
+msgid "This file is used to set environment variables for the application."
+msgstr ""
+
+#: ../../dev/environment.md:113
+msgid ""
+"It is used to set the `PYTHONPATH` environment variable to the root of "
+"the project."
+msgstr ""
+
+#: ../../dev/environment.md:114
+msgid ""
+"This is required to be able to import the project modules from within VS "
+"Code."
+msgstr ""
+
+#: ../../dev/environment.md:115
+msgid ""
+"To create this file, copy the `.env.template` file to `.env` (and "
+"eventually add your own paths)."
+msgstr ""
+
+#: ../../dev/environment.md:118
+msgid "Third-party Software"
+msgstr ""
+
+#: ../../dev/environment.md:121
+msgid "The following software may be required for maintaining the project:"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Software"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[gettext](https://mlocati.github.io/articles/gettext-iconv-windows.html)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Translations"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[Git](https://git-scm.com/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Version control system"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[ImageMagick](https://imagemagick.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Image manipulation utilities"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[Inkscape](https://inkscape.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "Vector graphics editor"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "[MikTeX](https://miktex.org/)"
+msgstr ""
+
+#: ../../dev/environment.md
+msgid "LaTeX distribution on Windows"
+msgstr ""
+

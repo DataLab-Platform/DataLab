@@ -1,3 +1,5 @@
+.. _tutorial_extensibility:
+
 :octicon:`video;1em;sd-text-info` Add your own features
 =======================================================
 

@@ -43,7 +43,16 @@ Use cases
 
 .. seealso::
 
-    For practical examples of use cases, see the :ref:`tutorials` section.
+    For practical examples of use cases, see the :ref:`tutorials` section:
+
+    - Most of the tutorials are describing concrete examples of use of DataLab
+      in a scientific or technical context.
+
+    - Regarding the use of DataLab with an IDE (Integrated Development Environment)
+      such as Visual Studio Code or Spyder, see the tutorial :ref:`tutorial_spyder`.
+
+    - As for the use of DataLab with Jupyter notebooks, that is one of the topics
+      covered in the tutorial :ref:`tutorial_extensibility`.
 
 DataLab is a versatile tool that can be used in different contexts:
 
