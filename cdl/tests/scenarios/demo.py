@@ -11,13 +11,16 @@ DataLab Demo
 # pylint: disable=duplicate-code
 # guitest: show,skip
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from guidata.qthelpers import qt_wait
 from qtpy import QtWidgets as QW
 
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.config import _, reset
-from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import (
@@ -29,7 +32,10 @@ from cdl.tests.data import (
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
 from cdl.widgets import fitdialog
 
-DELAY1, DELAY2, DELAY3 = 1, 2, 4
+if TYPE_CHECKING:
+    from cdl.core.gui.main import CDLMainWindow
+
+DELAY1, DELAY2, DELAY3 = 1, 2, 3
 # DELAY1, DELAY2, DELAY3 = 0, 0, 0
 
 
@@ -155,26 +161,47 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     param = dlp.Peak2DDetectionParam.create(create_rois=True)
     panel.processor.compute_peak_detection(param)
 
-    qt_wait(DELAY3)
+    qt_wait(DELAY2)
 
     param = dlp.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
-    qt_wait(DELAY3)
+    qt_wait(DELAY2)
 
     panel.processor.compute_roi_extraction()
+
+
+def play_demo(win: CDLMainWindow) -> None:
+    """Play demo
+
+    Args:
+        win: CDLMainWindow instance
+    """
+    ret = QW.QMessageBox.information(
+        win,
+        _("Demo"),
+        _(
+            "Click OK to start the demo.<br><br><u>Note:</u><br>"
+            "- Demo will cover a <i>selection</i> of DataLab features "
+            "(for a complete list of features, please refer to the documentation).<br>"
+            "- It won't require any user interaction."
+        ),
+        QW.QMessageBox.Ok | QW.QMessageBox.Cancel,
+    )
+    if ret == QW.QMessageBox.Ok:
+        execenv.enable_demo_mode(DELAY1)
+        test_signal_features(win)
+        test_image_features(win)
+        qt_wait(DELAY3)
+        execenv.disable_demo_mode()
+        QW.QMessageBox.information(win, _("Demo"), _("Click OK to end demo."))
 
 
 def run():
     """Run demo"""
     reset()  # Reset configuration (remove configuration file and initialize it)
-    execenv.enable_demo_mode(DELAY1)
     with cdltest_app_context(console=False) as win:
-        QW.QMessageBox.information(win, "Demo", "Click OK to start demo")
-        # test_signal_features(win)
-        test_image_features(win)
-        qt_wait(DELAY3)
-        QW.QMessageBox.information(win, "Demo", "Click OK to end demo")
+        play_demo(win)
 
 
 if __name__ == "__main__":

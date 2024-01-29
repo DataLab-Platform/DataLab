@@ -177,6 +177,12 @@ class CDLExecEnv:
         self.unattended = True
         self.delay = delay
 
+    def disable_demo_mode(self):
+        """Disable demo mode"""
+        self.demo_mode = False
+        self.unattended = False
+        self.delay = 0
+
     @staticmethod
     def __get_mode(env):
         """Get mode value"""

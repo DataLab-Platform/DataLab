@@ -855,7 +855,15 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     triggered=lambda: webbrowser.open(localdocpath),
                 ),
             ]
-        help_menu_actions += [None]
+        help_menu_actions += [
+            create_action(
+                self,
+                _("Demo") + "...",
+                icon=get_icon("play_demo.svg"),
+                triggered=self.__play_demo,
+            ),
+            None,
+        ]
         if TEST_SEGFAULT_ERROR:
             help_menu_actions += [
                 create_action(
@@ -1434,6 +1442,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __show_logviewer(self) -> None:
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)
+
+    def __play_demo(self) -> None:
+        """Play demo"""
+        from cdl.tests.scenarios import demo  # pylint: disable=import-outside-toplevel
+
+        demo.play_demo(self)
 
     @staticmethod
     def test_segfault_error() -> None:

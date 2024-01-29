@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-27 14:21+0100\n"
+"POT-Creation-Date: 2024-01-29 15:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -780,7 +780,7 @@ msgstr "Degré"
 
 #: cdl\core\computation\signal.py:560 cdl\core\model\signal.py:681
 #: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\common.py:161
-#: cdl\tests\scenarios\demo.py:81
+#: cdl\tests\scenarios\demo.py:87
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -1170,7 +1170,7 @@ msgid "Fitting"
 msgstr "Ajustement"
 
 #: cdl\core\gui\actionhandler.py:737 cdl\tests\scenarios\common.py:157
-#: cdl\tests\scenarios\demo.py:79 cdl\widgets\fitdialog.py:116
+#: cdl\tests\scenarios\demo.py:85 cdl\widgets\fitdialog.py:116
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
@@ -1233,7 +1233,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1428
+#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1436
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1577,7 +1577,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:434 cdl\core\gui\main.py:1211
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:434 cdl\core\gui\main.py:1219
 #: cdl\plugins.py:168
 msgid "Warning"
 msgstr "Attention"
@@ -1759,7 +1759,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:726 cdl\core\gui\main.py:1462
+#: cdl\core\gui\main.py:726 cdl\core\gui\main.py:1476
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1847,48 +1847,53 @@ msgstr "Documentation en ligne"
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:863
+#: cdl\core\gui\main.py:861 cdl\tests\scenarios\demo.py:182
+#: cdl\tests\scenarios\demo.py:197
+msgid "Demo"
+msgstr "Démo"
+
+#: cdl\core\gui\main.py:871
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:870 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:878 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:876 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:884 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:883
+#: cdl\core\gui\main.py:891
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:889
+#: cdl\core\gui\main.py:897
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:895
+#: cdl\core\gui\main.py:903
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:900
+#: cdl\core\gui\main.py:908
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:935 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:943 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:944 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:952 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1179
+#: cdl\core\gui\main.py:1187
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1212
+#: cdl\core\gui\main.py:1220
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1896,56 +1901,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1223 cdl\core\gui\panel\base.py:713
+#: cdl\core\gui\main.py:1231 cdl\core\gui\panel\base.py:713
 #: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1384
+#: cdl\core\gui\main.py:1392
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1386
+#: cdl\core\gui\main.py:1394
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1389
+#: cdl\core\gui\main.py:1397
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1391
+#: cdl\core\gui\main.py:1399
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1394
+#: cdl\core\gui\main.py:1402
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1395
+#: cdl\core\gui\main.py:1403
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1396
+#: cdl\core\gui\main.py:1404
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1400
+#: cdl\core\gui\main.py:1408
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1401
+#: cdl\core\gui\main.py:1409
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1405
+#: cdl\core\gui\main.py:1413
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1423
+#: cdl\core\gui\main.py:1431
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1424
+#: cdl\core\gui\main.py:1432
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1953,7 +1958,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1463
+#: cdl\core\gui\main.py:1477
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -3014,9 +3019,25 @@ msgstr "Obtenir la liste des uuids"
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdl\tests\scenarios\common.py:123 cdl\tests\scenarios\demo.py:50
+#: cdl\tests\scenarios\common.py:123 cdl\tests\scenarios\demo.py:56
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
+
+#: cdl\tests\scenarios\demo.py:183
+msgid ""
+"Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a "
+"<i>selection</i> of DataLab features (for a complete list of features, "
+"please refer to the documentation).<br>- It won't require any user "
+"interaction."
+msgstr ""
+"Cliquer sur OK pour démarrer la démo.<br><br><u>Note :</u><br>- La démo "
+"couvre une <i>sélection</i> des fonctionnalités de DataLab (pour une liste "
+"complète des fonctionnalités, veuillez vous référer à la documentation)."
+"<br>- Elle ne nécessite aucune interaction de l'utilisateur."
+
+#: cdl\tests\scenarios\demo.py:197
+msgid "Click OK to end demo."
+msgstr "Cliquer sur OK pour terminer la démo."
 
 #: cdl\utils\qthelpers.py:180
 msgid "Cancel"
