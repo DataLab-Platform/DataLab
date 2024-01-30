@@ -93,6 +93,9 @@ Optional modules for building the documentation:
     * - sphinx_design
       - 
       - A sphinx extension for designing beautiful, view size responsive web components.
+    * - sphinx-copybutton
+      - 
+      - Add a copy button to each of your code cells.
     * - pydata-sphinx-theme
       - 
       - Bootstrap-based Sphinx theme from the PyData community

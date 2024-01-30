@@ -15,6 +15,7 @@ sphinx
 sphinx-intl
 myst_parser
 sphinx_design
+sphinx-copybutton
 pydata-sphinx-theme
 esbonio
 rstcheck

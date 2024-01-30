@@ -27,6 +27,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "myst_parser",
     "sphinx_design",
+    "sphinx_copybutton",
 ]
 templates_path = ["_templates"]
 exclude_patterns = []
