@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=DataLab (light)
+Name=DataLab
 Exec=cdl
 Icon=/home/jovyan/DataLab.svg
 Path=/home/jovyan/Desktop/test_data

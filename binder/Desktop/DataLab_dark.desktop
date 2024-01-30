@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=DataLab
+Name=DataLab (dark theme)
 Exec=bash -c 'export QT_COLOR_MODE=dark; cdl'
 Icon=/home/jovyan/DataLab.svg
 Path=/home/jovyan/Desktop/test_data
