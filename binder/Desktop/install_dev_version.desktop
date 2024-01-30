@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=DataLab
+Name=Development version
 Exec=bash -c 'pip install --force-reinstall --no-deps git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git'
 Icon=system-software-update
 Path=
