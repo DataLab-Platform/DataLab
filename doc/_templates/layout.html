@@ -1,6 +1,15 @@
 {% extends "!layout.html" %}
 
 {% block htmltitle %}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8TG8R0SXX2"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-8TG8R0SXX2');
+</script>
 {% if pagename == 'index' %}
 <title>DataLab</title>
 {% else %}
