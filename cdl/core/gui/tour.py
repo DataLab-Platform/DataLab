@@ -57,6 +57,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.configtools import get_image_file_path
+from guidata.qthelpers import is_dark_mode
 from PyQt5.QtGui import QShowEvent
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -78,19 +79,19 @@ class Cover(QW.QWidget):
         super().__init__(parent)
         self.setWindowFlags(QC.Qt.Tool | QC.Qt.FramelessWindowHint)
         self.setAttribute(QC.Qt.WA_TranslucentBackground)
-        # Widget to be excluded from the grayed out area:
-        self.__excluded_widget: QW.QWidget | None = None
+        # Widgets to be excluded from the grayed out area:
+        self.__excluded_widgets: list[QW.QWidget] | None = None
         # Path to be grayed out:
         self.__path: QG.QPainterPath = QG.QPainterPath()
 
-    def exclude_widget(self, widget: QW.QWidget) -> None:
+    def exclude(self, widgets: list[QW.QWidget]) -> None:
         """
-        Exclude widget from the grayed out area.
+        Exclude widgets from the grayed out area.
 
         Args:
-            widget: Widget to be excluded.
+            widgets: Widgets to be excluded.
         """
-        self.__excluded_widget = widget
+        self.__excluded_widgets = widgets
 
     def update_geometry(self) -> None:
         """
@@ -103,17 +104,17 @@ class Cover(QW.QWidget):
         # Path is defined as the rectangle of the main window minus the rectangles of
         # the excluded widgets:
         self.__path.addRect(QC.QRectF(self.parent().rect()))
-        if self.__excluded_widget is not None:
-            widget = self.__excluded_widget
-            widget.raise_()
-            widget.show()
-            geometry = widget.frameGeometry()
-            width, height = geometry.width(), geometry.height()
-            point = widget.mapTo(self.parent(), QC.QPoint(0, 0))
-            x, y = point.x(), point.y()
-            widget_path = QG.QPainterPath()
-            widget_path.addRect(QC.QRectF(x, y, width, height))
-            self.__path -= QG.QPainterPath(widget_path)
+        if self.__excluded_widgets is not None:
+            for widget in self.__excluded_widgets:
+                widget.raise_()
+                widget.show()
+                geometry = widget.frameGeometry()
+                width, height = geometry.width(), geometry.height()
+                point = widget.mapTo(self.parent(), QC.QPoint(0, 0))
+                x, y = point.x(), point.y()
+                widget_path = QG.QPainterPath()
+                widget_path.addRect(QC.QRectF(x, y, width, height))
+                self.__path -= QG.QPainterPath(widget_path)
         self.repaint()
 
     def showEvent(self, a0: QShowEvent | None) -> None:
@@ -135,7 +136,7 @@ class Cover(QW.QWidget):
         """
         super().paintEvent(event)
         painter = QG.QPainter(self)
-        painter.setOpacity(0.5)
+        painter.setOpacity(0.75 if is_dark_mode() else 0.5)
         painter.setBrush(QG.QBrush(QC.Qt.black))
         painter.setPen(QC.Qt.NoPen)
         painter.drawPath(self.__path)
@@ -286,10 +287,12 @@ class StepDialog(QW.QDialog):
             logo.setPixmap(QG.QPixmap(get_image_file_path("DataLab-Banner2-100.png")))
             logo.setAlignment(QC.Qt.AlignCenter)
             self._layout.addWidget(logo)
-        title = self.__create_label(self.step.title, 1, QC.Qt.darkGray, True)
+        title_color = QC.Qt.lightGray if is_dark_mode() else QC.Qt.darkGray
+        title = self.__create_label(self.step.title, 1, title_color, True)
         self._layout.addWidget(title)
         self._layout.addWidget(self.__create_horizontal_line())
-        label = self.__create_label(self.step.text, 4, QC.Qt.darkBlue)
+        label_color = QC.Qt.cyan if is_dark_mode() else QC.Qt.darkBlue
+        label = self.__create_label(self.step.text, 3, label_color)
         self._layout.addWidget(label)
         self._layout.addWidget(bbox)
         self.setLayout(self._layout)
@@ -355,8 +358,8 @@ class TourStep:
         tour: Tour.
         title: Step title.
         text: Step text.
-        widget: Widget to be highlighted. If None, no widget is highlighted, meaning
-         that the step is an introduction or a conclusion.
+        widgets: Widgets to be highlighted. If None, no widget is highlighted, meaning
+         that the step is probably an introduction or a conclusion.
         callback: Callback function to be called before the step is displayed,
             which takes a single argument, the `CDLMainWindow` instance.
         step_type: Step type. Can be "regular", "introduction" or "conclusion".
@@ -367,14 +370,14 @@ class TourStep:
         tour: BaseTour,
         title: str,
         text: str,
-        widget: QW.QWidget | None = None,
+        widgets: list[QW.QWidget] | None = None,
         callback: Callable | None = None,
         step_type: str = "regular",
     ) -> None:
         self.tour = tour
         self.title = title
         self.text = text
-        self.widget = widget
+        self.widgets = widgets
         self.callback = callback
         self.step_type = step_type
         assert step_type in ["regular", "introduction", "conclusion"]
@@ -400,7 +403,7 @@ class TourStep:
         Args:
             cover: Cover widget.
         """
-        cover.exclude_widget(self.widget)
+        cover.exclude(self.widgets)
         cover.update_geometry()
 
 
@@ -463,8 +466,9 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         self,
         title: str,
         text: str,
-        widget: QW.QWidget | None = None,
+        widgets: list[QW.QWidget] | None = None,
         callback: Callable | None = None,
+        step_type: str | None = None,
     ) -> None:
         """
         Add a step to the tour.
@@ -472,16 +476,19 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         Args:
             title: Step title.
             text: Step text.
-            widget: Widget to be highlighted. If None, no widget is highlighted, meaning
-             that the step is an introduction or a conclusion.
+            widgets: Widgets to be highlighted. If None, no widget is highlighted,
+             meaning that the step is probably an introduction or a conclusion.
             callback: Callback function to be called before the step is displayed,
              which takes a single argument, the `CDLMainWindow` instance.
+            step_type: Step type. Can be "regular", "introduction" or "conclusion".
+             Defaults to None.
         """
-        if self._steps:
-            step_type = "regular" if widget is not None else "conclusion"
-        else:
-            step_type = "introduction"
-        step = TourStep(self, title, text, widget, callback, step_type)
+        if step_type is None:
+            if self._steps:
+                step_type = "regular"
+            else:
+                step_type = "introduction"
+        step = TourStep(self, title, text, widgets, callback, step_type)
         self._steps.append(step)
 
     def show_current_step(self) -> None:
@@ -584,22 +591,71 @@ class Tour(BaseTour):
             _("This tour will guide you through the main features of DataLab."),
         )
         self.add_step(
-            _("Signal panel"),
+            _("DataLab main window"),
             _(
-                "The signal panel is used to display the signals of the current dataset."
+                "This is the DataLab main window. It is composed of several parts. "
+                "(Hit Enter to continue to the next step.)"
             ),
-            win.signalpanel,
+        )
+        self.add_step(
+            _("DataLab main window"),
+            _(
+                "The main menu bar is located at the top of the window. It contains "
+                "menus and toolbars, which we will describe later."
+            ),
+            [win.menuBar(), win.main_toolbar, win.signal_toolbar, win.image_toolbar],
+        )
+        self.add_step(
+            _("DataLab main window"),
+            _(
+                "The main window is composed of two main panels: the signal panel, "
+                "and the image panel. The highlighted tab indicates the current "
+                "panel - menus and toolbars are adapted to the current panel."
+            ),
+            [win.tabwidget.tabBar()],
+        )
+        self.add_step(
+            _("Signal panel") + " 1/2",
+            _(
+                "The signal panel is used to handle 1D signals, which are listed in "
+                "the up-right part of the window. Signals are numbered starting "
+                "from 001, and may be put together in numbered groups."
+            ),
+            [win.signalpanel],
             self.prepare_signalpanel,
         )
         self.add_step(
-            _("Image panel"),
-            _("The image panel is used to display the images of the current dataset."),
-            win.imagepanel,
+            _("Signal panel") + " 2/2",
+            _(
+                "Signals are plotted in the left part of the window. The plotted "
+                "curves may be customized using context menus or the vertical "
+                "toolbar on the left."
+            ),
+            [win.docks[win.signalpanel]],
+        )
+        self.add_step(
+            _("Image panel") + " 1/2",
+            _(
+                "The image panel is used to handle 2D images. Images are listed in "
+                "the up-right part of the window. Images are numbered starting "
+                "from 001, and may be put together in numbered groups."
+            ),
+            [win.imagepanel],
             self.prepare_imagepanel,
+        )
+        self.add_step(
+            _("Image panel") + " 2/2",
+            _(
+                "Images are shown in the left part of the window. The displayed "
+                "images may be customized using context menus or the vertical "
+                "toolbar on the left."
+            ),
+            [win.docks[win.imagepanel]],
         )
         self.add_step(
             _("This is the end of the tour!"),
             _("You can show the tour again, or close this dialog box."),
+            step_type="conclusion",
         )
 
 

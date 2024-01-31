@@ -139,6 +139,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.console = None
         self.macropanel: MacroPanel = None
 
+        self.main_toolbar: QW.QToolBar = None
         self.signal_toolbar: QW.QToolBar = None
         self.image_toolbar: QW.QToolBar = None
         self.signalpanel: SignalPanel = None
@@ -707,9 +708,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
-        main_toolbar = self.addToolBar(_("Main Toolbar"))
+        self.main_toolbar = self.addToolBar(_("Main Toolbar"))
         add_actions(
-            main_toolbar,
+            self.main_toolbar,
             [
                 self.openh5_action,
                 self.saveh5_action,
