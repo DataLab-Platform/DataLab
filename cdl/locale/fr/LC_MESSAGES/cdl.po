@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-01 10:15+0100\n"
+"POT-Creation-Date: 2024-02-01 11:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1804,12 +1804,16 @@ msgid "Image View"
 msgstr "Vue Image"
 
 #: cdl\core\gui\main.py:808 cdl\core\gui\panel\signal.py:50
-#: cdl\core\gui\tour.py:629 cdl\core\gui\tour.py:640
+#: cdl\core\gui\tour.py:652 cdl\core\gui\tour.py:660 cdl\core\gui\tour.py:671
+#: cdl\core\gui\tour.py:681 cdl\core\gui\tour.py:691 cdl\core\gui\tour.py:701
+#: cdl\core\gui\tour.py:711 cdl\core\gui\tour.py:718
 msgid "Signal Panel"
 msgstr "Panneau Signal"
 
 #: cdl\core\gui\main.py:810 cdl\core\gui\panel\image.py:49
-#: cdl\core\gui\tour.py:649 cdl\core\gui\tour.py:659
+#: cdl\core\gui\tour.py:729 cdl\core\gui\tour.py:739 cdl\core\gui\tour.py:749
+#: cdl\core\gui\tour.py:759 cdl\core\gui\tour.py:769 cdl\core\gui\tour.py:779
+#: cdl\core\gui\tour.py:789 cdl\core\gui\tour.py:799
 msgid "Image Panel"
 msgstr "Panneau Image"
 
@@ -1833,7 +1837,7 @@ msgstr "Traitement"
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:831
+#: cdl\core\gui\main.py:831 cdl\core\gui\tour.py:827
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -1849,7 +1853,7 @@ msgstr "Documentation en ligne"
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:864 cdl\core\gui\tour.py:272
+#: cdl\core\gui\main.py:864 cdl\core\gui\tour.py:271
 #: cdl\tests\scenarios\demo.py:182 cdl\tests\scenarios\demo.py:197
 msgid "Demo"
 msgstr "Démo"
@@ -2544,90 +2548,285 @@ msgstr ""
 "\n"
 "Un redémarrage est nécessaire pour que ces changements prennent effet."
 
-#: cdl\core\gui\tour.py:266
-msgid "Start tour"
-msgstr "Démarrer la visite guidée"
+#: cdl\core\gui\tour.py:265
+msgid "Start"
+msgstr "Démarrer"
 
-#: cdl\core\gui\tour.py:301
+#: cdl\core\gui\tour.py:303
 msgid ""
 "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the "
 "tour."
-msgstr "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour fermer la visite guidée."
+msgstr ""
+"Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour "
+"fermer la visite guidée."
 
-#: cdl\core\gui\tour.py:575
+#: cdl\core\gui\tour.py:588
 msgid "Test signal, for the tour"
 msgstr "Signal de test, pour la visite guidée"
 
-#: cdl\core\gui\tour.py:591
+#: cdl\core\gui\tour.py:604
 msgid "Test image, for the tour"
 msgstr "Image de test, pour la visite guidée"
 
-#: cdl\core\gui\tour.py:600
+#: cdl\core\gui\tour.py:623
 msgid "Welcome to DataLab!"
 msgstr "Bienvenue dans DataLab !"
 
-#: cdl\core\gui\tour.py:601
+#: cdl\core\gui\tour.py:624
 msgid "This tour will guide you through the main features of DataLab."
 msgstr ""
 "Cette visite guidée vous présentera les principales fonctionnalités de "
 "DataLab."
 
-#: cdl\core\gui\tour.py:604 cdl\core\gui\tour.py:611 cdl\core\gui\tour.py:620
+#: cdl\core\gui\tour.py:627 cdl\core\gui\tour.py:634 cdl\core\gui\tour.py:643
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
-#: cdl\core\gui\tour.py:605
+#: cdl\core\gui\tour.py:628
 msgid ""
 "This is the main window of DataLab. It is composed of several parts that we "
 "will describe in the following steps."
-msgstr "Ceci est la fenêtre principale de DataLab. Elle est composée de plusieurs parties que nous décrirons dans les étapes suivantes."
+msgstr ""
+"Ceci est la fenêtre principale de DataLab. Elle est composée de plusieurs "
+"parties que nous décrirons dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:612
+#: cdl\core\gui\tour.py:635
 msgid ""
 "Menus and toolbars regroup the main actions that can be performed in "
 "DataLab. Their content is adapted to the current panel, as we will see in "
 "the following steps."
-msgstr "Les menus et barres d'outils regroupent les principales actions qui peuvent être réalisées dans DataLab. Leur contenu est adapté au panneau courant, comme nous le verrons dans les étapes suivantes."
+msgstr ""
+"Les menus et barres d'outils regroupent les principales actions qui peuvent "
+"être réalisées dans DataLab. Leur contenu est adapté au panneau courant, "
+"comme nous le verrons dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:621
+#: cdl\core\gui\tour.py:644
 msgid ""
 "The main window is composed of two main panels: the Signal Panel, and the "
 "Image Panel.<br>Switching between panels is done using the highlighted tabs."
-msgstr "La fenêtre principale est composée de deux panneaux principaux : le panneau Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en utilisant les onglets surlignés."
+msgstr ""
+"La fenêtre principale est composée de deux panneaux principaux : le panneau "
+"Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en "
+"utilisant les onglets surlignés."
 
-#: cdl\core\gui\tour.py:630
+#: cdl\core\gui\tour.py:653
 msgid ""
-"In the highlighted area, 1D signals are listed at the top, and their "
-"properties may be displayed and edited at the bottom.<br>Signals are "
-"numbered starting from 001, and may be put together in numbered groups."
-msgstr "Dans la zone surlignée, les signaux 1D sont listés en haut, et leurs propriétés peuvent être affichées et éditées en bas.<br>Les signaux sont numérotés à partir de 001, et peuvent être regroupés dans des groupes numérotés."
+"The <b>Signal Panel</b> is used to manage 1D signals.<br>It is composed of a "
+"list of signals, and a view of the signals, as well as menus and toolbars to "
+"perform actions on the signals."
+msgstr ""
+"Le <b>Panneau Signal</b> est utilisé pour gérer les signaux 1D.<br>Il est "
+"composé d'une liste de signaux, et d'une vue des signaux, ainsi que de menus "
+"et barres d'outils pour effectuer des actions sur les signaux."
 
-#: cdl\core\gui\tour.py:641
-msgid ""
-"Signals are plotted in the left part of the window. The plotted curves may "
-"be customized using context menus or the vertical toolbar on the left."
-msgstr "Les signaux sont tracés dans la partie gauche de la fenêtre. Les courbes tracées peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale située à gauche."
+#: cdl\core\gui\tour.py:660 cdl\core\gui\tour.py:739
+msgid "List and properties"
+msgstr "Liste et propriétés"
 
-#: cdl\core\gui\tour.py:650
+#: cdl\core\gui\tour.py:661
 msgid ""
-"The image panel is used to handle 2D images. Images are listed in the up-"
-"right part of the window. Images are numbered starting from 001, and may be "
+"1D signals are listed at the top, and their properties may be displayed and "
+"edited at the bottom.<br>Signals are numbered starting from 001, and may be "
 "put together in numbered groups."
 msgstr ""
+"Les signaux 1D sont listés en haut, et leurs propriétés peuvent être "
+"affichées et éditées en bas.<br>Les signaux sont numérotés à partir de 001, "
+"et peuvent être regroupés dans des groupes numérotés."
 
-#: cdl\core\gui\tour.py:660
+#: cdl\core\gui\tour.py:671 cdl\core\gui\tour.py:749
+msgid "View"
+msgstr "Vue"
+
+#: cdl\core\gui\tour.py:672
 msgid ""
-"Images are shown in the left part of the window. The displayed images may be "
-"customized using context menus or the vertical toolbar on the left."
+"Signals are plotted in the <b>Signal View</b>.<br>Curves may be customized "
+"using context menus or the vertical toolbar on the left (those appearance "
+"settings are saved in the signal metadata)."
 msgstr ""
+"Les signaux sont tracés dans la partie gauche de la fenêtre. Les courbes "
+"tracées peuvent être personnalisées en utilisant les menus contextuels ou la "
+"barre d'outils verticale située à gauche."
 
-#: cdl\core\gui\tour.py:668
+#: cdl\core\gui\tour.py:681 cdl\core\gui\tour.py:759
+msgid "File menu"
+msgstr "Menu Fichier"
+
+#: cdl\core\gui\tour.py:682
+msgid ""
+"The <b>File</b> menu contains actions to import and export signals "
+"individually (various formats) or in groups (HDF5 files)."
+msgstr ""
+"Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
+"signaux individuellement (divers formats) ou en groupes (fichiers HDF5)."
+
+#: cdl\core\gui\tour.py:691 cdl\core\gui\tour.py:769
+msgid "Edit menu"
+msgstr "Menu Edition"
+
+#: cdl\core\gui\tour.py:692
+msgid ""
+"The <b>Edit</b> menu contains actions to edit signals individually or in "
+"groups."
+msgstr ""
+"Le menu <b>Edition</b> contient les actions pour éditer des signaux "
+"individuellement ou en groupes."
+
+#: cdl\core\gui\tour.py:701 cdl\core\gui\tour.py:779
+msgid "Operations menu"
+msgstr "Menu Opérations"
+
+#: cdl\core\gui\tour.py:702
+msgid ""
+"The <b>Operations</b> menu is focused on arithmetic operations, data type "
+"conversions, peak detection, ROI extraction, ..."
+msgstr ""
+"Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
+"conversions de type de données, la détection de pics, l'extraction de "
+"ROI, ..."
+
+#: cdl\core\gui\tour.py:711 cdl\core\gui\tour.py:789
+msgid "Processing menu"
+msgstr "Menu Traitement"
+
+#: cdl\core\gui\tour.py:712
+msgid "The <b>Processing</b> menu regroups 1->1 signal processing actions."
+msgstr ""
+"Le menu <b>Traitement</b> regroupe les actions de traitement de signaux 1->1."
+
+#: cdl\core\gui\tour.py:718 cdl\core\gui\tour.py:799
+msgid "Computing menu"
+msgstr "Menu Calculs"
+
+#: cdl\core\gui\tour.py:719
+msgid ""
+"The <b>Computing</b> menu regroups 1->0 signal computing actions (that is, "
+"actions that do not modify the signals, but compute a result, e.g. scalar "
+"values), with optionnal ROI selection."
+msgstr ""
+"Le menu <b>Calculs</b> regroupe les actions de calculs de signaux 1->0 "
+"(c'est-à-dire les actions qui ne modifient pas les signaux, mais qui "
+"calculent un résultat, par exemple des valeurs scalaires), avec une "
+"sélection optionnelle de ROI."
+
+#: cdl\core\gui\tour.py:730
+msgid ""
+"The <b>Image Panel</b> is used to manage 2D images.<br>It is composed of a "
+"list of images, and a view of the images, as well as menus and toolbars to "
+"perform actions on the images."
+msgstr ""
+"Le <b>Panneau Image</b> est utilisé pour gérer les images 2D.<br>Il est "
+"composé d'une liste d'images, et d'une vue des images, ainsi que de menus et "
+"barres d'outils pour effectuer des actions sur les images."
+
+#: cdl\core\gui\tour.py:740
+msgid ""
+"2D images are listed at the top, and their properties may be displayed and "
+"edited at the bottom.<br>Like signals, images are numbered, and may be put "
+"together in groups."
+msgstr ""
+"Les images 2D sont listées en haut, et leurs propriétés peuvent être "
+"affichées et éditées en bas.<br>Tout comme les signaux, les images sont "
+"numérotées, et peuvent être regroupées."
+
+#: cdl\core\gui\tour.py:750
+msgid ""
+"Images are shown in the <b>Image View</b>.<br>The displayed images may be "
+"customized using context menus or the vertical toolbar on the left (those "
+"appearance settings are saved in the image metadata)."
+msgstr ""
+"Les images sont affichées dans la partie droite de la fenêtre. Les images "
+"affichées peuvent être personnalisées en utilisant les menus contextuels ou "
+"la barre d'outils verticale située à gauche."
+
+#: cdl\core\gui\tour.py:760
+msgid ""
+"The <b>File</b> menu contains actions to import and export images "
+"individually (various formats) or in groups (HDF5 files)."
+msgstr ""
+"Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
+"images individuellement (divers formats) ou en groupes (fichiers HDF5)."
+
+#: cdl\core\gui\tour.py:770
+msgid ""
+"The <b>Edit</b> menu contains actions to edit images individually or in "
+"groups."
+msgstr ""
+"Le menu <b>Edition</b> contient les actions pour éditer des images "
+"individuellement ou en groupes."
+
+#: cdl\core\gui\tour.py:780
+msgid ""
+"The <b>Operations</b> menu is focused on arithmetic operations, data type "
+"conversions, pixel binning, resize, ROI extraction ..."
+msgstr ""
+"Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
+"conversions de type de données, le binning de pixels, le redimensionnement, "
+"l'extraction de ROI ..."
+
+#: cdl\core\gui\tour.py:790
+msgid ""
+"The <b>Processing</b> menu regroups 1->1 image processing actions (that is, "
+"actions that modify the images)."
+msgstr ""
+"Le menu <b>Traitement</b> regroupe les actions de traitement d'images 1->1 "
+"(c'est-à-dire les actions qui modifient les images)."
+
+#: cdl\core\gui\tour.py:800
+msgid ""
+"The <b>Computing</b> menu regroups 1->0 image computing actions (that is, "
+"actions that do not modify the images, but compute a result, e.g. circle "
+"coordinates), with optionnal ROI selection."
+msgstr ""
+"Le menu <b>Calculs</b> regroupe les actions de calculs d'images 1->0 (c'est-"
+"à-dire les actions qui ne modifient pas les images, mais qui calculent un "
+"résultat, par exemple les coordonnées d'un cercle), avec une sélection "
+"optionnelle de ROI."
+
+#: cdl\core\gui\tour.py:810 cdl\core\gui\tour.py:817 cdl\core\gui\tour.py:827
+msgid "Extensions"
+msgstr "Extensions"
+
+#: cdl\core\gui\tour.py:811
+msgid ""
+"DataLab is designed to be easily extended with new features, by using "
+"<b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>."
+msgstr ""
+"DataLab est conçu pour être facilement étendu avec de nouvelles "
+"fonctionnalités, en utilisant des <b>Macros</b>, des <b>Plugins</b> ou le "
+"<b>Contrôle à distance</b>."
+
+#: cdl\core\gui\tour.py:817
+msgid "Macros"
+msgstr "Macros"
+
+#: cdl\core\gui\tour.py:818
+msgid ""
+"The <b>Macro manager</b> allows to create, edit and run macros.<br>Macros "
+"are saved together with the DataLab workspace (HDF5 file)."
+msgstr ""
+"Le <b>Gestionnaire de macros</b> permet de créer, éditer et exécuter des "
+"macros.<br>Les macros sont sauvegardées avec l'espace de travail DataLab "
+"(fichier HDF5)."
+
+#: cdl\core\gui\tour.py:828
+msgid ""
+"The <b>Plugins</b> menu regroups features that are not part of the core of "
+"DataLab, but that are provided as plugins.<br>(See the documentation for "
+"more information about plugins.)"
+msgstr ""
+"Le menu <b>Plugins</b> regroupe des fonctionnalités qui ne font pas partie "
+"du coeur de DataLab, mais qui sont fournies sous forme de plugins.<br>(Voir "
+"la documentation pour plus d'informations sur les plugins.)"
+
+#: cdl\core\gui\tour.py:838
 msgid "This is the end of the tour!"
-msgstr ""
+msgstr "C'est la fin de la visite guidée !"
 
-#: cdl\core\gui\tour.py:669
+#: cdl\core\gui\tour.py:839
 msgid "You can show the tour again, or close this dialog box."
 msgstr ""
+"Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de "
+"dialogue."
 
 #: cdl\core\io\base.py:73
 msgid "All supported files"

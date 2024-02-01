@@ -5,7 +5,6 @@
 
 # TODO: Add a "Show tour" entry in the "?" menu of the main window.
 # TODO: Automatically start the tour when DataLab is launched for the first time.
-# TODO: Add more steps to the tour.
 # TODO: Update CHANGELOG.md.
 
 """
@@ -24,7 +23,7 @@ The tour user experience is the following:
   the DataLab main window while the tour is running.
 
 - A first modal dialog box is displayed with a short description of DataLab, and two
-  buttons: "Start tour" and "Close". If the user clicks on "Start tour", the tour
+  buttons: "Start" and "Close". If the user clicks on "Start", the tour
   starts. If the user clicks on "Close", the tour is not started and the dialog box
   is closed.
 
@@ -263,7 +262,7 @@ class StepDialog(QW.QDialog):
         self._bbox = bbox = QW.QDialogButtonBox()
         role = QW.QDialogButtonBox.AcceptRole
         if self.step.step_type == "introduction":
-            next_btn = bbox.addButton(_("Start tour"), role)
+            next_btn = bbox.addButton(_("Start"), role)
             self._btnmap[next_btn] = StepResult.NEXT
             self.__set_default_button(next_btn)
         elif self.step.step_type == "conclusion":
@@ -273,7 +272,7 @@ class StepDialog(QW.QDialog):
         else:
             self._btnmap[bbox.addButton("<<", role)] = StepResult.RESTART
             self._btnmap[bbox.addButton("<", role)] = StepResult.PREVIOUS
-            next_btn = bbox.addButton(_(">"), role)
+            next_btn = bbox.addButton(">", role)
             self._btnmap[next_btn] = StepResult.NEXT
             self.__set_default_button(next_btn)
         close_btn = bbox.addButton("X", role)
@@ -292,9 +291,22 @@ class StepDialog(QW.QDialog):
         self._layout.addWidget(title)
         self._layout.addWidget(self.__create_horizontal_line())
         label_color = QC.Qt.cyan if is_dark_mode() else QC.Qt.darkBlue
-        label = self.__create_label(self.step.text, 3, label_color)
+        label_dsize = 3 if self.step.step_type == "regular" else 4
+        label = self.__create_label(self.step.text, label_dsize, label_color)
+        if self.step.step_type == "regular":
+            label.setAlignment(QC.Qt.AlignLeft)
         self._layout.addWidget(label)
+        self._layout.addSpacing(5)
         self._layout.addWidget(bbox)
+        if self.step.step_type == "introduction":
+            self._layout.addSpacing(5)
+            help_text = _(
+                "Hit <b>Enter</b> to continue to the next step, or "
+                "<b>Esc</b> to close the tour."
+            )
+            help_label = self.__create_label(help_text, -1, title_color)
+            help_label.setAlignment(QC.Qt.AlignLeft)
+            self._layout.addWidget(help_label)
         self.setLayout(self._layout)
 
     def button_clicked(self, button: QW.QAbstractButton) -> None:
@@ -360,8 +372,10 @@ class TourStep:
         text: Step text.
         widgets: Widgets to be highlighted. If None, no widget is highlighted, meaning
          that the step is probably an introduction or a conclusion.
-        callback: Callback function to be called before the step is displayed,
-            which takes a single argument, the `CDLMainWindow` instance.
+        setup_callback: Callback function to be called before the step is displayed,
+          which takes a single argument, the `CDLMainWindow` instance.
+        teardown_callback: Callback function to be called after the step is displayed,
+          which takes a single argument, the `CDLMainWindow` instance.
         step_type: Step type. Can be "regular", "introduction" or "conclusion".
     """
 
@@ -371,14 +385,16 @@ class TourStep:
         title: str,
         text: str,
         widgets: list[QW.QWidget] | None = None,
-        callback: Callable | None = None,
+        setup_callback: Callable | None = None,
+        teardown_callback: Callable | None = None,
         step_type: str = "regular",
     ) -> None:
         self.tour = tour
         self.title = title
         self.text = text
         self.widgets = widgets
-        self.callback = callback
+        self.setup_callback = setup_callback
+        self.teardown_callback = teardown_callback
         self.step_type = step_type
         assert step_type in ["regular", "introduction", "conclusion"]
 
@@ -389,11 +405,13 @@ class TourStep:
         Returns:
             Result of the step.
         """
-        if self.callback is not None:
-            self.callback(self.tour.win)
+        if self.setup_callback is not None:
+            self.setup_callback(self.tour.win)
         self.update_cover(self.tour.cover)
         dialog = StepDialog(self.tour.win, self)
         dialog.exec()
+        if self.teardown_callback is not None:
+            self.teardown_callback(self.tour.win)
         return dialog.result
 
     def update_cover(self, cover: Cover) -> None:
@@ -467,7 +485,8 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         title: str,
         text: str,
         widgets: list[QW.QWidget] | None = None,
-        callback: Callable | None = None,
+        setup_callback: Callable | None = None,
+        teardown_callback: Callable | None = None,
         step_type: str | None = None,
     ) -> None:
         """
@@ -478,7 +497,9 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
             text: Step text.
             widgets: Widgets to be highlighted. If None, no widget is highlighted,
              meaning that the step is probably an introduction or a conclusion.
-            callback: Callback function to be called before the step is displayed,
+            setup_callback: Callback function to be called before the step is displayed,
+             which takes a single argument, the `CDLMainWindow` instance.
+            teardown_callback: Callback function to be called after the step is displayed,
              which takes a single argument, the `CDLMainWindow` instance.
             step_type: Step type. Can be "regular", "introduction" or "conclusion".
              Defaults to None.
@@ -488,7 +509,9 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
                 step_type = "regular"
             else:
                 step_type = "introduction"
-        step = TourStep(self, title, text, widgets, callback, step_type)
+        step = TourStep(
+            self, title, text, widgets, setup_callback, teardown_callback, step_type
+        )
         self._steps.append(step)
 
     def show_current_step(self) -> None:
@@ -582,6 +605,16 @@ class Tour(BaseTour):
         win.add_object(img)
         win.set_current_panel("image")
 
+    def popup_menu(self, win: CDLMainWindow, menu: QW.QMenu) -> None:
+        """
+        Popup a menu.
+
+        Args:
+            win: DataLab main window.
+            menu_name: Name of the menu to popup.
+        """
+        menu.popup(win.mapToGlobal(QC.QPoint(50, 50)))
+
     def setup_tour(self, win: CDLMainWindow) -> None:
         """
         Setup the tour: add steps to the tour.
@@ -616,43 +649,190 @@ class Tour(BaseTour):
             [win.tabwidget.tabBar()],
         )
         self.add_step(
-            _("Signal Panel") + " 1/2",
+            _("Signal Panel"),
             _(
-                "In the highlighted area, 1D signals are listed at the top, and "
-                "their properties may be displayed and edited at the bottom.<br>"
+                "The <b>Signal Panel</b> is used to manage 1D signals.<br>"
+                "It is composed of a list of signals, and a view of the signals, "
+                "as well as menus and toolbars to perform actions on the signals."
+            ),
+        )
+        self.add_step(
+            _("Signal Panel") + " – " + _("List and properties"),
+            _(
+                "1D signals are listed at the top, and their properties may be "
+                "displayed and edited at the bottom.<br>"
                 "Signals are numbered starting from 001, and may be put together "
                 "in numbered groups."
             ),
-            [win.signalpanel],
+            [win.tabwidget.tabBar(), win.signalpanel],
             self.prepare_signalpanel,
         )
         self.add_step(
-            _("Signal Panel") + " 2/2",
+            _("Signal Panel") + " – " + _("View"),
             _(
-                "Signals are plotted in the left part of the window. The plotted "
-                "curves may be customized using context menus or the vertical "
-                "toolbar on the left."
+                "Signals are plotted in the <b>Signal View</b>.<br>"
+                "Curves may be customized using context menus or the vertical "
+                "toolbar on the left (those appearance settings are saved in the "
+                "signal metadata)."
             ),
             [win.docks[win.signalpanel]],
         )
         self.add_step(
-            _("Image Panel") + " 1/2",
+            _("Signal Panel") + " – " + _("File menu"),
             _(
-                "In the highlighted area, 2D images are listed at the top, and "
-                "their properties may be displayed and edited at the bottom.<br>"
-                "As signals, images are numbered, and may be put together in groups."
+                "The <b>File</b> menu contains actions to import and export signals "
+                "individually (various formats) or in groups (HDF5 files)."
             ),
-            [win.imagepanel],
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.file_menu),
+            lambda win: win.file_menu.hide(),
+        )
+        self.add_step(
+            _("Signal Panel") + " – " + _("Edit menu"),
+            _(
+                "The <b>Edit</b> menu contains actions to edit signals individually "
+                "or in groups."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.edit_menu),
+            lambda win: win.edit_menu.hide(),
+        )
+        self.add_step(
+            _("Signal Panel") + " – " + _("Operations menu"),
+            _(
+                "The <b>Operations</b> menu is focused on arithmetic operations, "
+                "data type conversions, peak detection, ROI extraction, ..."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.operation_menu),
+            lambda win: win.operation_menu.hide(),
+        )
+        self.add_step(
+            _("Signal Panel") + " – " + _("Processing menu"),
+            _("The <b>Processing</b> menu regroups 1->1 signal processing actions."),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.processing_menu),
+            lambda win: win.processing_menu.hide(),
+        )
+        self.add_step(
+            _("Signal Panel") + " – " + _("Computing menu"),
+            _(
+                "The <b>Computing</b> menu regroups 1->0 signal computing actions "
+                "(that is, actions that do not modify the signals, but compute "
+                "a result, e.g. scalar values), with optionnal ROI selection."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.computing_menu),
+            lambda win: win.computing_menu.hide(),
+        )
+        self.add_step(
+            _("Image Panel"),
+            _(
+                "The <b>Image Panel</b> is used to manage 2D images.<br>"
+                "It is composed of a list of images, and a view of the images, "
+                "as well as menus and toolbars to perform actions on the images."
+            ),
+            [],
+            lambda win: win.set_current_panel("image"),
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("List and properties"),
+            _(
+                "2D images are listed at the top, and their properties may be "
+                "displayed and edited at the bottom.<br>"
+                "Like signals, images are numbered, and may be put together in groups."
+            ),
+            [win.tabwidget.tabBar(), win.imagepanel],
             self.prepare_imagepanel,
         )
         self.add_step(
-            _("Image Panel") + " 2/2",
+            _("Image Panel") + " – " + _("View"),
             _(
-                "Images are shown in the left part of the window. The displayed "
-                "images may be customized using context menus or the vertical "
-                "toolbar on the left."
+                "Images are shown in the <b>Image View</b>.<br>"
+                "The displayed images may be customized using context menus "
+                "or the vertical toolbar on the left (those appearance settings "
+                "are saved in the image metadata)."
             ),
             [win.docks[win.imagepanel]],
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("File menu"),
+            _(
+                "The <b>File</b> menu contains actions to import and export images "
+                "individually (various formats) or in groups (HDF5 files)."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.file_menu),
+            lambda win: win.file_menu.hide(),
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("Edit menu"),
+            _(
+                "The <b>Edit</b> menu contains actions to edit images individually "
+                "or in groups."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.edit_menu),
+            lambda win: win.edit_menu.hide(),
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("Operations menu"),
+            _(
+                "The <b>Operations</b> menu is focused on arithmetic operations, "
+                "data type conversions, pixel binning, resize, ROI extraction ..."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.operation_menu),
+            lambda win: win.operation_menu.hide(),
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("Processing menu"),
+            _(
+                "The <b>Processing</b> menu regroups 1->1 image processing actions "
+                "(that is, actions that modify the images)."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.processing_menu),
+            lambda win: win.processing_menu.hide(),
+        )
+        self.add_step(
+            _("Image Panel") + " – " + _("Computing menu"),
+            _(
+                "The <b>Computing</b> menu regroups 1->0 image computing actions "
+                "(that is, actions that do not modify the images, but compute "
+                "a result, e.g. circle coordinates), with optionnal ROI selection."
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.computing_menu),
+            lambda win: win.computing_menu.hide(),
+        )
+        self.add_step(
+            _("Extensions"),
+            _(
+                "DataLab is designed to be easily extended with new features, "
+                "by using <b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>."
+            ),
+        )
+        self.add_step(
+            _("Extensions") + " – " + _("Macros"),
+            _(
+                "The <b>Macro manager</b> allows to create, edit and run macros.<br>"
+                "Macros are saved together with the DataLab workspace (HDF5 file)."
+            ),
+            [win.docks[win.macropanel]],
+            lambda win: win.set_current_panel("macro"),
+            lambda win: win.set_current_panel("signal"),
+        )
+        self.add_step(
+            _("Extensions") + " – " + _("Plugins"),
+            _(
+                "The <b>Plugins</b> menu regroups features that are not part of "
+                "the core of DataLab, but that are provided as plugins.<br>"
+                "(See the documentation for more information about plugins.)"
+            ),
+            [win.menuBar()],
+            lambda win: self.popup_menu(win, win.plugins_menu),
+            lambda win: win.plugins_menu.hide(),
         )
         self.add_step(
             _("This is the end of the tour!"),
