@@ -112,6 +112,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     current_tab = conf.Option()
     plugins_enabled = conf.Option()
     plugins_path = conf.Option()
+    tour_enabled = conf.Option()
 
 
 class ConsoleSection(conf.Section, metaclass=conf.SectionMeta):
@@ -282,6 +283,7 @@ def initialize():
     Conf.main.available_memory_threshold.get(500)
     Conf.main.plugins_enabled.get(True)
     Conf.main.plugins_path.get(Conf.get_path("plugins"))
+    Conf.main.tour_enabled.get(True)
     # Console section
     Conf.console.console_enabled.get(True)
     Conf.console.external_editor_path.get("code")

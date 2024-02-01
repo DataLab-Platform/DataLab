@@ -863,13 +863,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 self,
                 _("Tour") + "...",
                 icon=get_icon("tour.svg"),
-                triggered=self.__show_tour,
+                triggered=self.show_tour,
             ),
             create_action(
                 self,
                 _("Demo") + "...",
                 icon=get_icon("play_demo.svg"),
-                triggered=self.__play_demo,
+                triggered=self.play_demo,
             ),
             None,
         ]
@@ -1452,13 +1452,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Show error logs"""
         logviewer.exec_cdl_logviewer_dialog(self)
 
-    def __play_demo(self) -> None:
+    def play_demo(self) -> None:
         """Play demo"""
         from cdl.tests.scenarios import demo  # pylint: disable=import-outside-toplevel
 
         demo.play_demo(self)
 
-    def __show_tour(self) -> None:
+    def show_tour(self) -> None:
         """Show tour"""
         from cdl.core.gui import tour  # pylint: disable=import-outside-toplevel
 

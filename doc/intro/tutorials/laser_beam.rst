@@ -107,7 +107,7 @@ might be useful to apply a threshold to the images.
 
 .. figure:: ../../images/tutorials/laser_beam/10.png
 
-    The FWHM is also displayed on the curve, with an optionnal label (here, the
+    The FWHM is also displayed on the curve, with an optional label (here, the
     title of this measurement has been displayed with
     "View > Show graphical object titles" or the |show_titles| button in the toolbar).
 

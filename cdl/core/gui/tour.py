@@ -3,9 +3,6 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
-# TODO: Automatically start the tour when DataLab is launched for the first time.
-# TODO: Update CHANGELOG.md.
-
 """
 Tour of DataLab features
 ------------------------
@@ -725,7 +722,7 @@ class Tour(BaseTour):
             _(
                 "The <b>Computing</b> menu regroups 1->0 signal computing actions "
                 "(that is, actions that do not modify the signals, but compute "
-                "a result, e.g. scalar values), with optionnal ROI selection."
+                "a result, e.g. scalar values), with optional ROI selection."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.computing_menu),
@@ -806,7 +803,7 @@ class Tour(BaseTour):
             _(
                 "The <b>Computing</b> menu regroups 1->0 image computing actions "
                 "(that is, actions that do not modify the images, but compute "
-                "a result, e.g. circle coordinates), with optionnal ROI selection."
+                "a result, e.g. circle coordinates), with optional ROI selection."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.computing_menu),

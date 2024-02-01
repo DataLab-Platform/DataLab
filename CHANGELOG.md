@@ -15,6 +15,25 @@ for future and past milestones.
 * The data panel toolbar has been renamed to "Signal Toolbar" and "Image Toolbar"
   (instead of "Signal Processing Toolbar" and "Image Processing Toolbar")
 
+✨ New tour and demo feature:
+
+* When starting DataLab for the first time, an optional tour is now shown to the user
+  to introduce the main features of the application
+* The tour can be started again at any time from the "?" menu
+* Also added a new "Demo" feature to the "?" menu
+
+🚀 New Binder environment to test DataLab online without installing anything
+
+📚 Documentation:
+
+* New text tutorials are available:
+  * Measuring Laser Beam Size
+  * DataLab and Spyder: a perfect match
+* "Getting started" section: added more explanations and links to the tutorials
+* New "Contributing" section explaining how to contribute to DataLab, whether you
+  are a developer or not
+* Added "Copy" button to code blocks in the documentation
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
@@ -116,7 +135,16 @@ for future and past milestones.
 
 📚 Documentation:
 
-* New [Tutorial section](https://codra-ingenierie-informatique.github.io/DataLab/en/intro/tutorials/index.html) in the documentation: this section provides a set of tutorials to learn how to use DataLab
+* New [Tutorial section](https://codra-ingenierie-informatique.github.io/DataLab/en/intro/tutorials/index.html) in the documentation:
+  * This section provides a set of tutorials to learn how to use DataLab
+  * The following video tutorials are available:
+    * Quick demo
+    * Adding your own features
+  * The following text tutorials are available:
+    * Processing a spectrum
+    * Detecting blobs on an image
+    * Measuring Fabry-Perot fringes
+    * Prototyping a custom processing pipeline
 * New [API section](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html) in the documentation:
   * This section explains how to use DataLab as a Python library, by covering the
   following topics:

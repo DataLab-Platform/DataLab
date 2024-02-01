@@ -251,7 +251,7 @@ msgstr ""
 
 #: ../../intro/tutorials/laser_beam.rst:110
 msgid ""
-"The FWHM is also displayed on the curve, with an optionnal label (here, "
+"The FWHM is also displayed on the curve, with an optional label (here, "
 "the title of this measurement has been displayed with \"View > Show "
 "graphical object titles\" or the |show_titles| button in the toolbar)."
 msgstr ""
