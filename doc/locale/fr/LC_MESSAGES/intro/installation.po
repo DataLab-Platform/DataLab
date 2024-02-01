@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 08:50+0100\n"
+"POT-Creation-Date: 2024-02-01 10:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -381,7 +381,7 @@ msgstr "Bibliothèque d'interfaces graphiques Qt pour Python"
 
 #: ../../requirements.rst:47
 msgid "Optional modules for development:"
-msgstr ""
+msgstr "Modules optionnels pour le développement :"
 
 #: ../../requirements.rst:56
 msgid "black"
@@ -469,114 +469,24 @@ msgstr ""
 msgid ""
 "A sphinx extension for designing beautiful, view size responsive web "
 "components."
-msgstr ""
+msgstr "Extension sphinx pour la conception de composants web réactifs."
 
 #: ../../requirements.rst:96
-msgid "pydata-sphinx-theme"
+msgid "sphinx-copybutton"
 msgstr ""
 
 #: ../../requirements.rst:98
+msgid "Add a copy button to each of your code cells."
+msgstr "Extension sphinx ajoutant un bouton de copie à chaque cellule de code."
+
+#: ../../requirements.rst:99
+msgid "pydata-sphinx-theme"
+msgstr ""
+
+#: ../../requirements.rst:101
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
 #: ../../intro/installation.rst:171
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-
-#~ msgid ""
-#~ "DataLab requirements are the following "
-#~ "*(Note: the Windows installer package "
-#~ "already include all those required "
-#~ "libraries as well as Python itself)*:"
-#~ msgstr ""
-
-#~ msgid "Version (min.)"
-#~ msgstr ""
-
-#~ msgid "3.8"
-#~ msgstr ""
-
-#~ msgid "5.15"
-#~ msgstr ""
-
-#~ msgid "3.0"
-#~ msgstr ""
-
-#~ msgid "1.21"
-#~ msgstr ""
-
-#~ msgid "1.7"
-#~ msgstr ""
-
-#~ msgid "0.18"
-#~ msgstr ""
-
-#~ msgid "4.5"
-#~ msgstr ""
-
-#~ msgid "5.5"
-#~ msgstr ""
-
-#~ msgid "guiqwt"
-#~ msgstr ""
-
-#~ msgid "4.4"
-#~ msgstr ""
-
-#~ msgid "1.9"
-#~ msgstr ""
-
-#~ msgid "Optional modules for development and testing:"
-#~ msgstr ""
-
-#~ msgid "sphinx_qt_documentation"
-#~ msgstr ""
-
-#~ msgid "Python 3.8 is the reference for production release"
-#~ msgstr ""
-
-#~ msgid ">= 3.1"
-#~ msgstr ""
-
-#~ msgid "plotpy"
-#~ msgstr ""
-
-#~ msgid "opencv-python"
-#~ msgstr ""
-
-#~ msgid "Windows installer:"
-#~ msgstr ""
-
-#~ msgid "Wheel package:"
-#~ msgstr ""
-
-#~ msgid "Source package:"
-#~ msgstr ""
-
-#~ msgid "Installing DataLab directly from the source package is straigthforward:"
-#~ msgstr ""
-
-#~ msgid "Supported platforms: GNU/Linux, macOS, Windows"
-#~ msgstr "Plateformes prises en charge : GNU/Linux, macOS, Windows"
-
-#~ msgid "Supported platforms: Windows"
-#~ msgstr "Plateformes prises en charge : Windows"
-
-#~ msgid ""
-#~ "{octicon}`alert;1em;sd-text-warning` On "
-#~ "Windows 7 SP1, before running DataLab"
-#~ " (or any other Python 3 application),"
-#~ " you must install Microsoft Update "
-#~ "`KB2533623` (`Windows6.1-KB2533623-x64.msu`) and "
-#~ "also may need to install `Microsoft "
-#~ "Visual C++ 2015-2022 Redistribuable package"
-#~ " <https://learn.microsoft.com/en-us/cpp/windows/latest-"
-#~ "supported-vc-redist?view=msvc-170>`_."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "A sphinx extension for designing "
-#~ "beautiful, view size responsive web "
-#~ "components."
-#~ msgstr ""
-

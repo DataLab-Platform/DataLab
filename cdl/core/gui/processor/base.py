@@ -371,7 +371,7 @@ class BaseProcessor(QC.QObject):
                         continue
 
                     # Is new object a native object (i.e. a Signal object for a Signal
-                    # panel, or an Image object for an Image panel) ?
+                    # Panel, or an Image object for an Image Panel) ?
                     # (example of non-native object use case: image profile extraction)
                     is_new_obj_native = isinstance(new_obj, self.panel.PARAMCLASS)
 

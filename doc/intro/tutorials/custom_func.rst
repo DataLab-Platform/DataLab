@@ -48,7 +48,7 @@ tutorial :ref:`tutorial_blobs`).
 
 .. figure:: ../../images/tutorials/custom_func/01.png
 
-    To begin, we reorganize the window layout of DataLab to have the "Image panel" on
+    To begin, we reorganize the window layout of DataLab to have the "Image Panel" on
     the left and the "Macro manager" on the right.
 
 .. figure:: ../../images/tutorials/custom_func/02.png
@@ -63,7 +63,7 @@ tutorial :ref:`tutorial_blobs`).
 
 .. figure:: ../../images/tutorials/custom_func/04.png
 
-    We can now see the generated image in the "Image panel".
+    We can now see the generated image in the "Image Panel".
 
 Create a macro-command
 ----------------------
@@ -77,7 +77,7 @@ click on the "New macro" |libre-gui-add| button.
     :height: 24px
 
 DataLab creates a new macro-command which is not empty: it contains a sample code
-that shows how to create a new image and add it to the "Image panel". We can remove
+that shows how to create a new image and add it to the "Image Panel". We can remove
 this code and replace it with our own code::
 
     # Import the necessary modules
@@ -100,7 +100,7 @@ this code and replace it with our own code::
     # Initialize the proxy to DataLab
     proxy = RemoteProxy()
 
-    # Switch to the "Image panel" and get the current image
+    # Switch to the "Image Panel" and get the current image
     proxy.set_current_panel("image")
     image = proxy.get_object()
     if image is None:
@@ -179,7 +179,7 @@ Now, let's execute the macro-command by clicking on the "Run macro"
 
 .. figure:: ../../images/tutorials/custom_func/05.png
 
-    When the macro-command has finished, we can see the new image in the "Image panel".
+    When the macro-command has finished, we can see the new image in the "Image Panel".
     Our filter has been applied to the image, and we can see that the noise has been
     reduced.
 
@@ -220,7 +220,7 @@ Once the client is installed, we can start Spyder and create a new Python script
 
 .. figure:: ../../images/tutorials/custom_func/06.png
 
-    We go back to DataLab and select the first image in the "Image panel".
+    We go back to DataLab and select the first image in the "Image Panel".
 
 .. figure:: ../../images/tutorials/custom_func/07.png
 
@@ -229,7 +229,7 @@ Once the client is installed, we can start Spyder and create a new Python script
 
 .. figure:: ../../images/tutorials/custom_func/08.png
 
-    We can see in DataLab that a new image has been added to the "Image panel". This
+    We can see in DataLab that a new image has been added to the "Image Panel". This
     image is the result of the execution of the script in Spyder. Here we have used
     the script without any modification, but we could have modified it to test new
     ideas, and then use the modified script in DataLab.
@@ -251,13 +251,13 @@ for Spyder or any other IDE like Visual Studio Code, for example).
 
 .. figure:: ../../images/tutorials/custom_func/06.png
 
-    We go back to DataLab and select the first image in the "Image panel".
+    We go back to DataLab and select the first image in the "Image Panel".
 
 .. figure:: ../../images/tutorials/custom_func/09.png
 
     Then, we execute the notebook in Jupyter, step-by-step (using the defined cells),
     and we can see the result in DataLab. Once again, we can see in DataLab that a new
-    image has been added to the "Image panel". This image is the result of the
+    image has been added to the "Image Panel". This image is the result of the
     execution of the notebook in Jupyter. As for the script in Spyder, we could have
     modified the notebook to test new ideas, and then use the modified notebook in
     DataLab.

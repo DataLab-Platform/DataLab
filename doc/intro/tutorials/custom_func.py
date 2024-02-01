@@ -40,7 +40,7 @@ def weighted_average_denoise(data: np.ndarray) -> np.ndarray:
     return spi.generic_filter(data, filter_func, size=5)
 
 
-# Switch to the "Image panel" and get the current image
+# Switch to the "Image Panel" and get the current image
 proxy.set_current_panel("image")
 image = proxy.get_object()
 if image is None:

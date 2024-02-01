@@ -593,39 +593,41 @@ class Tour(BaseTour):
         self.add_step(
             _("DataLab main window"),
             _(
-                "This is the DataLab main window. It is composed of several parts. "
-                "(Hit Enter to continue to the next step.)"
+                "This is the main window of DataLab. It is composed of several parts "
+                "that we will describe in the following steps."
             ),
         )
         self.add_step(
             _("DataLab main window"),
             _(
-                "The main menu bar is located at the top of the window. It contains "
-                "menus and toolbars, which we will describe later."
+                "Menus and toolbars regroup the main actions that can be performed "
+                "in DataLab. Their content is adapted to the current panel, as we "
+                "will see in the following steps."
             ),
             [win.menuBar(), win.main_toolbar, win.signal_toolbar, win.image_toolbar],
         )
         self.add_step(
             _("DataLab main window"),
             _(
-                "The main window is composed of two main panels: the signal panel, "
-                "and the image panel. The highlighted tab indicates the current "
-                "panel - menus and toolbars are adapted to the current panel."
+                "The main window is composed of two main panels: the Signal Panel, "
+                "and the Image Panel.<br>"
+                "Switching between panels is done using the highlighted tabs."
             ),
             [win.tabwidget.tabBar()],
         )
         self.add_step(
-            _("Signal panel") + " 1/2",
+            _("Signal Panel") + " 1/2",
             _(
-                "The signal panel is used to handle 1D signals, which are listed in "
-                "the up-right part of the window. Signals are numbered starting "
-                "from 001, and may be put together in numbered groups."
+                "In the highlighted area, 1D signals are listed at the top, and "
+                "their properties may be displayed and edited at the bottom.<br>"
+                "Signals are numbered starting from 001, and may be put together "
+                "in numbered groups."
             ),
             [win.signalpanel],
             self.prepare_signalpanel,
         )
         self.add_step(
-            _("Signal panel") + " 2/2",
+            _("Signal Panel") + " 2/2",
             _(
                 "Signals are plotted in the left part of the window. The plotted "
                 "curves may be customized using context menus or the vertical "
@@ -634,17 +636,17 @@ class Tour(BaseTour):
             [win.docks[win.signalpanel]],
         )
         self.add_step(
-            _("Image panel") + " 1/2",
+            _("Image Panel") + " 1/2",
             _(
-                "The image panel is used to handle 2D images. Images are listed in "
-                "the up-right part of the window. Images are numbered starting "
-                "from 001, and may be put together in numbered groups."
+                "In the highlighted area, 2D images are listed at the top, and "
+                "their properties may be displayed and edited at the bottom.<br>"
+                "As signals, images are numbered, and may be put together in groups."
             ),
             [win.imagepanel],
             self.prepare_imagepanel,
         )
         self.add_step(
-            _("Image panel") + " 2/2",
+            _("Image Panel") + " 2/2",
             _(
                 "Images are shown in the left part of the window. The displayed "
                 "images may be customized using context menus or the vertical "

@@ -46,7 +46,7 @@ class ImagePanel(BaseDataPanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Image objects"""
 
-    PANEL_STR = _("Image panel")
+    PANEL_STR = _("Image Panel")
     PARAMCLASS = ImageObj
     DIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (

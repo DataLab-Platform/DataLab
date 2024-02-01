@@ -134,7 +134,7 @@ class PluginTestData(PluginBase):
     # Plugin menu entries ------------------------------------------------------
     def create_actions(self) -> None:
         """Create actions"""
-        # Signal panel ----------------------------------------------------------
+        # Signal Panel ----------------------------------------------------------
         sah = self.signalpanel.acthandler
         with sah.new_menu(_("Test data")):
             sah.new_action(_("Add noise to signal"), triggered=self.add_noise_to_signal)
@@ -149,7 +149,7 @@ class PluginTestData(PluginBase):
                 triggered=self.create_noisy_signal,
                 select_condition="always",
             )
-        # Image panel -----------------------------------------------------------
+        # Image Panel -----------------------------------------------------------
         iah = self.imagepanel.acthandler
         with iah.new_menu(_("Test data")):
             iah.new_action(_("Add noise to image"), triggered=self.add_noise_to_image)

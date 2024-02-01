@@ -47,7 +47,7 @@ class SignalPanel(BaseDataPanel):
     """Object handling the item list, the selected item properties and plot,
     specialized for Signal objects"""
 
-    PANEL_STR = _("Signal panel")
+    PANEL_STR = _("Signal Panel")
     PARAMCLASS = SignalObj
     ANNOTATION_TOOLS = (
         LabelTool,

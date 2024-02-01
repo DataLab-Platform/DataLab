@@ -754,7 +754,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
-        self.signal_toolbar = self.addToolBar(_("Signal Processing Toolbar"))
+        self.signal_toolbar = self.addToolBar(_("Signal Toolbar"))
         curvewidget = DockablePlotWidget(self, PlotType.CURVE)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
@@ -766,7 +766,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
-        self.image_toolbar = self.addToolBar(_("Image Processing Toolbar"))
+        self.image_toolbar = self.addToolBar(_("Image Toolbar"))
         imagewidget = DockablePlotWidget(self, PlotType.IMAGE)
         self.imagepanel = image.ImagePanel(
             self, imagewidget.plotwidget, self.image_toolbar
@@ -787,8 +787,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_signal_image_panels(self) -> None:
         """Add signal and image panels"""
         self.tabwidget = QW.QTabWidget()
-        cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Curve panel"))
-        idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image panel"))
+        cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Signal View"))
+        idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image View"))
         self.tabifyDockWidget(cdock, idock)
         self.docks = {self.signalpanel: cdock, self.imagepanel: idock}
         self.tabwidget.currentChanged.connect(self.__tab_index_changed)
@@ -804,8 +804,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __setup_central_widget(self) -> None:
         """Setup central widget (main panel)"""
         self.tabwidget.setMaximumWidth(500)
-        self.tabwidget.addTab(self.signalpanel, get_icon("signal.svg"), _("Signals"))
-        self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Images"))
+        self.tabwidget.addTab(
+            self.signalpanel, get_icon("signal.svg"), _("Signal Panel")
+        )
+        self.tabwidget.addTab(self.imagepanel, get_icon("image.svg"), _("Image Panel"))
         self.setCentralWidget(self.tabwidget)
 
     @staticmethod

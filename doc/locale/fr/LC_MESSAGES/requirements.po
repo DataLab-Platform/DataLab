@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 16:35+0100\n"
+"POT-Creation-Date: 2024-02-01 10:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -228,10 +228,18 @@ msgid ""
 msgstr ""
 
 #: ../../requirements.rst:96
-msgid "pydata-sphinx-theme"
+msgid "sphinx-copybutton"
 msgstr ""
 
 #: ../../requirements.rst:98
+msgid "Add a copy button to each of your code cells."
+msgstr ""
+
+#: ../../requirements.rst:99
+msgid "pydata-sphinx-theme"
+msgstr ""
+
+#: ../../requirements.rst:101
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 

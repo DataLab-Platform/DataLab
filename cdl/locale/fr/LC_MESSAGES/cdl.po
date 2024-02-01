@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-29 15:20+0100\n"
+"POT-Creation-Date: 2024-02-01 10:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1233,7 +1233,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1436
+#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1439
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1577,7 +1577,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:434 cdl\core\gui\main.py:1219
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:435 cdl\core\gui\main.py:1222
 #: cdl\plugins.py:168
 msgid "Warning"
 msgstr "Attention"
@@ -1615,13 +1615,13 @@ msgstr "Arrêt de la macro '%s'"
 msgid "# <== '%s' macro has finished"
 msgstr "# <== La macro '%s' a terminé son exécution"
 
-#: cdl\core\gui\main.py:435
+#: cdl\core\gui\main.py:436
 msgid "Available memory is below %d MB.<br><br>Do you want to continue?"
 msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: cdl\core\gui\main.py:449
+#: cdl\core\gui\main.py:450
 msgid ""
 "This software is in the <b>beta stage</b> of its release cycle. The focus of "
 "beta testing is providing a feature complete software for users interested "
@@ -1637,7 +1637,7 @@ msgstr ""
 "fonctionner correctement et présente plus d'anomalies résiduelles et de "
 "problèmes de performance que la version finale</u>."
 
-#: cdl\core\gui\main.py:459
+#: cdl\core\gui\main.py:460
 msgid ""
 "This software is in the <b>alpha stage</b> of its release cycle. The focus "
 "of alpha testing is providing an incomplete software for early testing of "
@@ -1651,15 +1651,15 @@ msgstr ""
 "Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests "
 "poussés avant sa diffusion</u>."
 
-#: cdl\core\gui\main.py:469
+#: cdl\core\gui\main.py:470
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:485 cdl\core\gui\main.py:500 cdl\plugins.py:176
+#: cdl\core\gui\main.py:486 cdl\core\gui\main.py:501 cdl\plugins.py:176
 msgid "Information"
 msgstr "Information"
 
-#: cdl\core\gui\main.py:486
+#: cdl\core\gui\main.py:487
 msgid ""
 "The dependency check feature is not relevant for the standalone version of "
 "DataLab."
@@ -1667,7 +1667,7 @@ msgstr ""
 "La vérification des dépendances n'est pas pertinente pour la version "
 "autonome de DataLab."
 
-#: cdl\core\gui\main.py:501
+#: cdl\core\gui\main.py:502
 msgid ""
 "All critical dependencies of DataLab have been qualified on this operating "
 "system."
@@ -1675,19 +1675,19 @@ msgstr ""
 "Toutes les dépendances critiques de DataLab ont été qualifiées sur ce "
 "système d'exploitation."
 
-#: cdl\core\gui\main.py:510
+#: cdl\core\gui\main.py:511
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: cdl\core\gui\main.py:512
+#: cdl\core\gui\main.py:513
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: cdl\core\gui\main.py:515
+#: cdl\core\gui\main.py:516
 msgid "DataLab has not yet been qualified on your operating system."
 msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: cdl\core\gui\main.py:521
+#: cdl\core\gui\main.py:522
 msgid ""
 "At least one dependency does not comply with DataLab qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -1699,7 +1699,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: cdl\core\gui\main.py:531
+#: cdl\core\gui\main.py:532
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -1707,193 +1707,195 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:550
+#: cdl\core\gui\main.py:551
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:666
+#: cdl\core\gui\main.py:667
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:684
+#: cdl\core\gui\main.py:685
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:686
+#: cdl\core\gui\main.py:687
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:691
+#: cdl\core\gui\main.py:692
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:693
+#: cdl\core\gui\main.py:694
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:698
+#: cdl\core\gui\main.py:699
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:700
+#: cdl\core\gui\main.py:701
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:705
+#: cdl\core\gui\main.py:706
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:707
+#: cdl\core\gui\main.py:708
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:710
+#: cdl\core\gui\main.py:711
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:723
+#: cdl\core\gui\main.py:724
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:724
+#: cdl\core\gui\main.py:725
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:726 cdl\core\gui\main.py:1476
+#: cdl\core\gui\main.py:727 cdl\core\gui\main.py:1479
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:727
+#: cdl\core\gui\main.py:728
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:741
+#: cdl\core\gui\main.py:742
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: cdl\core\gui\main.py:743
+#: cdl\core\gui\main.py:744
 msgid "Auto-refresh plot when object is modified, added or removed"
 msgstr ""
 "Rafraîchir le graphique automatiquement lors de la modification, de l'ajout "
 "ou de la suppression d'un objet"
 
-#: cdl\core\gui\main.py:748
+#: cdl\core\gui\main.py:749
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: cdl\core\gui\main.py:750
+#: cdl\core\gui\main.py:751
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr ""
 "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et "
 "autres objets graphiques"
 
-#: cdl\core\gui\main.py:756
-msgid "Signal Processing Toolbar"
-msgstr "Barre d'outils de traitement du signal"
+#: cdl\core\gui\main.py:757
+msgid "Signal Toolbar"
+msgstr "Barre d'outils signal"
 
-#: cdl\core\gui\main.py:768
-msgid "Image Processing Toolbar"
-msgstr "Barre d'outils de traitement d'image"
+#: cdl\core\gui\main.py:769
+msgid "Image Toolbar"
+msgstr "Barre d'outils image"
 
-#: cdl\core\gui\main.py:789
-msgid "Curve panel"
-msgstr "Panneau des signaux"
+#: cdl\core\gui\main.py:790
+msgid "Signal View"
+msgstr "Vue Signal"
 
-#: cdl\core\gui\main.py:790 cdl\core\gui\panel\image.py:49
-msgid "Image panel"
-msgstr "Panneau des images"
+#: cdl\core\gui\main.py:791
+msgid "Image View"
+msgstr "Vue Image"
 
-#: cdl\core\gui\main.py:806
-msgid "Signals"
-msgstr "Signaux"
+#: cdl\core\gui\main.py:808 cdl\core\gui\panel\signal.py:50
+#: cdl\core\gui\tour.py:629 cdl\core\gui\tour.py:640
+msgid "Signal Panel"
+msgstr "Panneau Signal"
 
-#: cdl\core\gui\main.py:807
-msgid "Images"
-msgstr "Images"
+#: cdl\core\gui\main.py:810 cdl\core\gui\panel\image.py:49
+#: cdl\core\gui\tour.py:649 cdl\core\gui\tour.py:659
+msgid "Image Panel"
+msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:822
+#: cdl\core\gui\main.py:825
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:824
+#: cdl\core\gui\main.py:827
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:825
+#: cdl\core\gui\main.py:828
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:826 cdl\core\gui\settings.py:238
+#: cdl\core\gui\main.py:829 cdl\core\gui\settings.py:238
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:827
+#: cdl\core\gui\main.py:830
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:828
+#: cdl\core\gui\main.py:831
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:829
+#: cdl\core\gui\main.py:832
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:843
+#: cdl\core\gui\main.py:846
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:853
+#: cdl\core\gui\main.py:856
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:861 cdl\tests\scenarios\demo.py:182
-#: cdl\tests\scenarios\demo.py:197
+#: cdl\core\gui\main.py:864 cdl\core\gui\tour.py:272
+#: cdl\tests\scenarios\demo.py:182 cdl\tests\scenarios\demo.py:197
 msgid "Demo"
 msgstr "Démo"
 
-#: cdl\core\gui\main.py:871
+#: cdl\core\gui\main.py:874
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:878 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:881 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:884 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:887 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:891
+#: cdl\core\gui\main.py:894
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:897
+#: cdl\core\gui\main.py:900
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:903
+#: cdl\core\gui\main.py:906
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:908
+#: cdl\core\gui\main.py:911
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:943 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:946 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:952 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:955 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1187
+#: cdl\core\gui\main.py:1190
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1220
+#: cdl\core\gui\main.py:1223
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1901,56 +1903,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1231 cdl\core\gui\panel\base.py:713
+#: cdl\core\gui\main.py:1234 cdl\core\gui\panel\base.py:713
 #: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1392
+#: cdl\core\gui\main.py:1395
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1394
+#: cdl\core\gui\main.py:1397
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1397
+#: cdl\core\gui\main.py:1400
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1399
+#: cdl\core\gui\main.py:1402
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1402
+#: cdl\core\gui\main.py:1405
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1403
+#: cdl\core\gui\main.py:1406
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1404
+#: cdl\core\gui\main.py:1407
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1408
+#: cdl\core\gui\main.py:1411
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1409
+#: cdl\core\gui\main.py:1412
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1413
+#: cdl\core\gui\main.py:1416
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1431
+#: cdl\core\gui\main.py:1434
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1432
+#: cdl\core\gui\main.py:1435
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1958,7 +1960,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1477
+#: cdl\core\gui\main.py:1480
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2136,10 +2138,6 @@ msgstr ""
 #: cdl\core\gui\panel\macro.py:458
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
-
-#: cdl\core\gui\panel\signal.py:50
-msgid "Signal panel"
-msgstr "Panneau des signaux"
 
 #: cdl\core\gui\plothandler.py:148
 msgid "Creating geometric shapes"
@@ -2545,6 +2543,91 @@ msgstr ""
 "- %s\n"
 "\n"
 "Un redémarrage est nécessaire pour que ces changements prennent effet."
+
+#: cdl\core\gui\tour.py:266
+msgid "Start tour"
+msgstr "Démarrer la visite guidée"
+
+#: cdl\core\gui\tour.py:301
+msgid ""
+"Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the "
+"tour."
+msgstr "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour fermer la visite guidée."
+
+#: cdl\core\gui\tour.py:575
+msgid "Test signal, for the tour"
+msgstr "Signal de test, pour la visite guidée"
+
+#: cdl\core\gui\tour.py:591
+msgid "Test image, for the tour"
+msgstr "Image de test, pour la visite guidée"
+
+#: cdl\core\gui\tour.py:600
+msgid "Welcome to DataLab!"
+msgstr "Bienvenue dans DataLab !"
+
+#: cdl\core\gui\tour.py:601
+msgid "This tour will guide you through the main features of DataLab."
+msgstr ""
+"Cette visite guidée vous présentera les principales fonctionnalités de "
+"DataLab."
+
+#: cdl\core\gui\tour.py:604 cdl\core\gui\tour.py:611 cdl\core\gui\tour.py:620
+msgid "DataLab main window"
+msgstr "Fenêtre principale de DataLab"
+
+#: cdl\core\gui\tour.py:605
+msgid ""
+"This is the main window of DataLab. It is composed of several parts that we "
+"will describe in the following steps."
+msgstr "Ceci est la fenêtre principale de DataLab. Elle est composée de plusieurs parties que nous décrirons dans les étapes suivantes."
+
+#: cdl\core\gui\tour.py:612
+msgid ""
+"Menus and toolbars regroup the main actions that can be performed in "
+"DataLab. Their content is adapted to the current panel, as we will see in "
+"the following steps."
+msgstr "Les menus et barres d'outils regroupent les principales actions qui peuvent être réalisées dans DataLab. Leur contenu est adapté au panneau courant, comme nous le verrons dans les étapes suivantes."
+
+#: cdl\core\gui\tour.py:621
+msgid ""
+"The main window is composed of two main panels: the Signal Panel, and the "
+"Image Panel.<br>Switching between panels is done using the highlighted tabs."
+msgstr "La fenêtre principale est composée de deux panneaux principaux : le panneau Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en utilisant les onglets surlignés."
+
+#: cdl\core\gui\tour.py:630
+msgid ""
+"In the highlighted area, 1D signals are listed at the top, and their "
+"properties may be displayed and edited at the bottom.<br>Signals are "
+"numbered starting from 001, and may be put together in numbered groups."
+msgstr "Dans la zone surlignée, les signaux 1D sont listés en haut, et leurs propriétés peuvent être affichées et éditées en bas.<br>Les signaux sont numérotés à partir de 001, et peuvent être regroupés dans des groupes numérotés."
+
+#: cdl\core\gui\tour.py:641
+msgid ""
+"Signals are plotted in the left part of the window. The plotted curves may "
+"be customized using context menus or the vertical toolbar on the left."
+msgstr "Les signaux sont tracés dans la partie gauche de la fenêtre. Les courbes tracées peuvent être personnalisées en utilisant les menus contextuels ou la barre d'outils verticale située à gauche."
+
+#: cdl\core\gui\tour.py:650
+msgid ""
+"The image panel is used to handle 2D images. Images are listed in the up-"
+"right part of the window. Images are numbered starting from 001, and may be "
+"put together in numbered groups."
+msgstr ""
+
+#: cdl\core\gui\tour.py:660
+msgid ""
+"Images are shown in the left part of the window. The displayed images may be "
+"customized using context menus or the vertical toolbar on the left."
+msgstr ""
+
+#: cdl\core\gui\tour.py:668
+msgid "This is the end of the tour!"
+msgstr ""
+
+#: cdl\core\gui\tour.py:669
+msgid "You can show the tour again, or close this dialog box."
+msgstr ""
 
 #: cdl\core\io\base.py:73
 msgid "All supported files"
@@ -3227,6 +3310,12 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid "Signals"
+#~ msgstr "Signaux"
+
+#~ msgid "Images"
+#~ msgstr "Images"
 
 #~ msgid "Radial profile center"
 #~ msgstr "Centre du profil radial"

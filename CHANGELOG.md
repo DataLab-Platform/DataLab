@@ -5,6 +5,16 @@ for future and past milestones.
 
 ## DataLab Version 0.11.1 ##
 
+🧹 Clarity-Enhanced Interface Update:
+
+* The tabs used to switch between the data panels (signals and images) and the
+  visualization components ("Curve panel" and "Image panel") have been renamed
+  to "Signal Panel" and "Image Panel" (instead of "Signals" and "Images")
+* The visualization components have been renamed to "Signal View" and "Image View"
+  (instead of "Curve panel" and "Image panel")
+* The data panel toolbar has been renamed to "Signal Toolbar" and "Image Toolbar"
+  (instead of "Signal Processing Toolbar" and "Image Processing Toolbar")
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
