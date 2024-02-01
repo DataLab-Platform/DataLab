@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-01 13:41+0100\n"
+"POT-Creation-Date: 2024-02-01 21:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1233,7 +1233,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1445
+#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1454
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1577,7 +1577,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:435 cdl\core\gui\main.py:1228
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:435 cdl\core\gui\main.py:1237
 #: cdl\plugins.py:168
 msgid "Warning"
 msgstr "Attention"
@@ -1711,199 +1711,199 @@ msgstr ""
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:667
+#: cdl\core\gui\main.py:676
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:685
+#: cdl\core\gui\main.py:694
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:687
+#: cdl\core\gui\main.py:696
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:692
+#: cdl\core\gui\main.py:701
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:694
+#: cdl\core\gui\main.py:703
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:699
+#: cdl\core\gui\main.py:708
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:701
+#: cdl\core\gui\main.py:710
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:706
+#: cdl\core\gui\main.py:715
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:708
+#: cdl\core\gui\main.py:717
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:711
+#: cdl\core\gui\main.py:720
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:724
+#: cdl\core\gui\main.py:733
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:725
+#: cdl\core\gui\main.py:734
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:727 cdl\core\gui\main.py:1491
+#: cdl\core\gui\main.py:736 cdl\core\gui\main.py:1500
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:728
+#: cdl\core\gui\main.py:737
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:742
+#: cdl\core\gui\main.py:751
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: cdl\core\gui\main.py:744
+#: cdl\core\gui\main.py:753
 msgid "Auto-refresh plot when object is modified, added or removed"
 msgstr ""
 "Rafraîchir le graphique automatiquement lors de la modification, de l'ajout "
 "ou de la suppression d'un objet"
 
-#: cdl\core\gui\main.py:749
+#: cdl\core\gui\main.py:758
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: cdl\core\gui\main.py:751
+#: cdl\core\gui\main.py:760
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr ""
 "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et "
 "autres objets graphiques"
 
-#: cdl\core\gui\main.py:757
+#: cdl\core\gui\main.py:766
 msgid "Signal Toolbar"
 msgstr "Barre d'outils signal"
 
-#: cdl\core\gui\main.py:769
+#: cdl\core\gui\main.py:778
 msgid "Image Toolbar"
 msgstr "Barre d'outils image"
 
-#: cdl\core\gui\main.py:790
+#: cdl\core\gui\main.py:799
 msgid "Signal View"
 msgstr "Vue Signal"
 
-#: cdl\core\gui\main.py:791
+#: cdl\core\gui\main.py:800
 msgid "Image View"
 msgstr "Vue Image"
 
-#: cdl\core\gui\main.py:808 cdl\core\gui\panel\signal.py:50
-#: cdl\core\gui\tour.py:655 cdl\core\gui\tour.py:663 cdl\core\gui\tour.py:674
-#: cdl\core\gui\tour.py:684 cdl\core\gui\tour.py:694 cdl\core\gui\tour.py:704
-#: cdl\core\gui\tour.py:714 cdl\core\gui\tour.py:721
+#: cdl\core\gui\main.py:817 cdl\core\gui\panel\signal.py:50
+#: cdl\core\gui\tour.py:666 cdl\core\gui\tour.py:673 cdl\core\gui\tour.py:684
+#: cdl\core\gui\tour.py:694 cdl\core\gui\tour.py:705 cdl\core\gui\tour.py:715
+#: cdl\core\gui\tour.py:725 cdl\core\gui\tour.py:732
 msgid "Signal Panel"
 msgstr "Panneau Signal"
 
-#: cdl\core\gui\main.py:810 cdl\core\gui\panel\image.py:49
-#: cdl\core\gui\tour.py:732 cdl\core\gui\tour.py:742 cdl\core\gui\tour.py:752
-#: cdl\core\gui\tour.py:762 cdl\core\gui\tour.py:772 cdl\core\gui\tour.py:782
-#: cdl\core\gui\tour.py:792 cdl\core\gui\tour.py:802
+#: cdl\core\gui\main.py:819 cdl\core\gui\panel\image.py:49
+#: cdl\core\gui\tour.py:743 cdl\core\gui\tour.py:752 cdl\core\gui\tour.py:763
+#: cdl\core\gui\tour.py:773 cdl\core\gui\tour.py:784 cdl\core\gui\tour.py:794
+#: cdl\core\gui\tour.py:804 cdl\core\gui\tour.py:814
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:825
+#: cdl\core\gui\main.py:834
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:827
+#: cdl\core\gui\main.py:836
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:828
+#: cdl\core\gui\main.py:837
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:829 cdl\core\gui\settings.py:238
+#: cdl\core\gui\main.py:838 cdl\core\gui\settings.py:238
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:830
+#: cdl\core\gui\main.py:839
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:831 cdl\core\gui\tour.py:830
+#: cdl\core\gui\main.py:840 cdl\core\gui\tour.py:842
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:832
+#: cdl\core\gui\main.py:841
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:846
+#: cdl\core\gui\main.py:855
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:856
+#: cdl\core\gui\main.py:865
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:864
+#: cdl\core\gui\main.py:873
 msgid "Tour"
 msgstr "Visite guidée"
 
-#: cdl\core\gui\main.py:870 cdl\core\gui\tour.py:267
+#: cdl\core\gui\main.py:879 cdl\core\gui\tour.py:277
 #: cdl\tests\scenarios\demo.py:182 cdl\tests\scenarios\demo.py:197
 msgid "Demo"
 msgstr "Démo"
 
-#: cdl\core\gui\main.py:880
+#: cdl\core\gui\main.py:889
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:887 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:896 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:893 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:902 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:900
+#: cdl\core\gui\main.py:909
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:906
+#: cdl\core\gui\main.py:915
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:912
+#: cdl\core\gui\main.py:921
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:917
+#: cdl\core\gui\main.py:926
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:952 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:961 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:961 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:970 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1196
+#: cdl\core\gui\main.py:1205
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1229
+#: cdl\core\gui\main.py:1238
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1911,56 +1911,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1240 cdl\core\gui\panel\base.py:713
+#: cdl\core\gui\main.py:1249 cdl\core\gui\panel\base.py:713
 #: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1401
+#: cdl\core\gui\main.py:1410
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1403
+#: cdl\core\gui\main.py:1412
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1406
+#: cdl\core\gui\main.py:1415
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1408
+#: cdl\core\gui\main.py:1417
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1411
+#: cdl\core\gui\main.py:1420
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1412
+#: cdl\core\gui\main.py:1421
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1413
+#: cdl\core\gui\main.py:1422
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1417
+#: cdl\core\gui\main.py:1426
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1418
+#: cdl\core\gui\main.py:1427
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1422
+#: cdl\core\gui\main.py:1431
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1440
+#: cdl\core\gui\main.py:1449
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1441
+#: cdl\core\gui\main.py:1450
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1968,7 +1968,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1492
+#: cdl\core\gui\main.py:1501
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2552,16 +2552,16 @@ msgstr ""
 "\n"
 "Un redémarrage est nécessaire pour que ces changements prennent effet."
 
-#: cdl\core\gui\tour.py:261
+#: cdl\core\gui\tour.py:271
 msgid "Start"
 msgstr "Démarrer"
 
-#: cdl\core\gui\tour.py:276
+#: cdl\core\gui\tour.py:286
 #, fuzzy
 msgid "Close"
 msgstr "Fermeture"
 
-#: cdl\core\gui\tour.py:301
+#: cdl\core\gui\tour.py:311
 msgid ""
 "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the "
 "tour."
@@ -2569,29 +2569,29 @@ msgstr ""
 "Taper <b>Entrée</b> pour passer à l'étape suivante, ou <b>Echap</b> pour "
 "fermer la visite guidée."
 
-#: cdl\core\gui\tour.py:575
+#: cdl\core\gui\tour.py:586
 msgid "Test signal, for the tour"
 msgstr "Signal de test, pour la visite guidée"
 
-#: cdl\core\gui\tour.py:591
+#: cdl\core\gui\tour.py:602
 msgid "Test image, for the tour"
 msgstr "Image de test, pour la visite guidée"
 
-#: cdl\core\gui\tour.py:626
+#: cdl\core\gui\tour.py:637
 msgid "Welcome to DataLab!"
 msgstr "Bienvenue dans DataLab !"
 
-#: cdl\core\gui\tour.py:627
+#: cdl\core\gui\tour.py:638
 msgid "This tour will guide you through the main features of DataLab."
 msgstr ""
 "Cette visite guidée vous présentera les principales fonctionnalités de "
 "DataLab."
 
-#: cdl\core\gui\tour.py:630 cdl\core\gui\tour.py:637 cdl\core\gui\tour.py:646
+#: cdl\core\gui\tour.py:641 cdl\core\gui\tour.py:648 cdl\core\gui\tour.py:657
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
-#: cdl\core\gui\tour.py:631
+#: cdl\core\gui\tour.py:642
 msgid ""
 "This is the main window of DataLab. It is composed of several parts that we "
 "will describe in the following steps."
@@ -2599,7 +2599,7 @@ msgstr ""
 "Ceci est la fenêtre principale de DataLab. Elle est composée de plusieurs "
 "parties que nous décrirons dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:638
+#: cdl\core\gui\tour.py:649
 msgid ""
 "Menus and toolbars regroup the main actions that can be performed in "
 "DataLab. Their content is adapted to the current panel, as we will see in "
@@ -2609,7 +2609,7 @@ msgstr ""
 "être réalisées dans DataLab. Leur contenu est adapté au panneau courant, "
 "comme nous le verrons dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:647
+#: cdl\core\gui\tour.py:658
 msgid ""
 "The main window is composed of two main panels: the Signal Panel, and the "
 "Image Panel.<br>Switching between panels is done using the highlighted tabs."
@@ -2618,61 +2618,63 @@ msgstr ""
 "Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en "
 "utilisant les onglets surlignés."
 
-#: cdl\core\gui\tour.py:656
+#: cdl\core\gui\tour.py:667
 msgid ""
-"The <b>Signal Panel</b> is used to manage 1D signals.<br>It is composed of a "
-"list of signals, and a view of the signals, as well as menus and toolbars to "
-"perform actions on the signals."
+"The <b>Signal Panel</b> is used to manage 1D signals.It is composed of the "
+"elements shown in the following steps."
 msgstr ""
-"Le <b>Panneau Signal</b> est utilisé pour gérer les signaux 1D.<br>Il est "
-"composé d'une liste de signaux, et d'une vue des signaux, ainsi que de menus "
-"et barres d'outils pour effectuer des actions sur les signaux."
+"Le <b>Panneau Signal</b> est utilisé pour gérer les signaux 1D. Il est "
+"composé des éléments décrits dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:663 cdl\core\gui\tour.py:742
+#: cdl\core\gui\tour.py:673 cdl\core\gui\tour.py:752
 msgid "List and properties"
 msgstr "Liste et propriétés"
 
-#: cdl\core\gui\tour.py:664
+#: cdl\core\gui\tour.py:674
 msgid ""
-"1D signals are listed at the top, and their properties may be displayed and "
-"edited at the bottom.<br>Signals are numbered starting from 001, and may be "
-"put together in numbered groups."
+"In the highlighted area, signals are listed at the top, and their properties "
+"may be displayed and edited at the bottom.<br><br>Signals are numbered (but "
+"may be reorganized) and put together in numbered groups."
 msgstr ""
-"Les signaux 1D sont listés en haut, et leurs propriétés peuvent être "
-"affichées et éditées en bas.<br>Les signaux sont numérotés à partir de 001, "
-"et peuvent être regroupés dans des groupes numérotés."
+"Dans la zone surlignée, les signaux sont listés en haut, et leurs propriétés "
+"peuvent être affichées et éditées en bas.<br><br>Les signaux sont numérotés "
+"(mais peuvent être réorganisés) et peuvent être regroupés dans des groupes "
+"numérotés."
 
-#: cdl\core\gui\tour.py:674 cdl\core\gui\tour.py:752
+#: cdl\core\gui\tour.py:684 cdl\core\gui\tour.py:763
 msgid "View"
 msgstr "Vue"
 
-#: cdl\core\gui\tour.py:675
+#: cdl\core\gui\tour.py:685
 msgid ""
-"Signals are plotted in the <b>Signal View</b>.<br>Curves may be customized "
-"using context menus or the vertical toolbar on the left (those appearance "
-"settings are saved in the signal metadata)."
+"Signals are plotted in the <b>Signal View</b>.<br><br>Curves may be "
+"customized using context menus or the vertical toolbar on the left "
+"(appearance settings are saved in the signal metadata)."
 msgstr ""
-"Les signaux sont tracés dans la partie gauche de la fenêtre. Les courbes "
-"tracées peuvent être personnalisées en utilisant les menus contextuels ou la "
-"barre d'outils verticale située à gauche."
+"Les signaux sont tracés dans la <b>Vues Signal</b>.<br><br>Les courbes "
+"peuvent être personnalisées en utilisant les menus contextuels ou la barre "
+"d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans "
+"les métadonnées du signal)."
 
-#: cdl\core\gui\tour.py:684 cdl\core\gui\tour.py:762
+#: cdl\core\gui\tour.py:694 cdl\core\gui\tour.py:773
 msgid "File menu"
 msgstr "Menu Fichier"
 
-#: cdl\core\gui\tour.py:685
+#: cdl\core\gui\tour.py:695
 msgid ""
 "The <b>File</b> menu contains actions to import and export signals "
-"individually (various formats) or in groups (HDF5 files)."
+"individually (various formats) or to save or restore the whole workspace "
+"(HDF5 files)."
 msgstr ""
 "Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
-"signaux individuellement (divers formats) ou en groupes (fichiers HDF5)."
+"signaux individuellement (divers formats) ou pour enregistrer ou restaurer "
+"l'ensemble de l'espace de travail (fichiers HDF5)."
 
-#: cdl\core\gui\tour.py:694 cdl\core\gui\tour.py:772
+#: cdl\core\gui\tour.py:705 cdl\core\gui\tour.py:784
 msgid "Edit menu"
 msgstr "Menu Edition"
 
-#: cdl\core\gui\tour.py:695
+#: cdl\core\gui\tour.py:706
 msgid ""
 "The <b>Edit</b> menu contains actions to edit signals individually or in "
 "groups."
@@ -2680,11 +2682,11 @@ msgstr ""
 "Le menu <b>Edition</b> contient les actions pour éditer des signaux "
 "individuellement ou en groupes."
 
-#: cdl\core\gui\tour.py:704 cdl\core\gui\tour.py:782
+#: cdl\core\gui\tour.py:715 cdl\core\gui\tour.py:794
 msgid "Operations menu"
 msgstr "Menu Opérations"
 
-#: cdl\core\gui\tour.py:705
+#: cdl\core\gui\tour.py:716
 msgid ""
 "The <b>Operations</b> menu is focused on arithmetic operations, data type "
 "conversions, peak detection, ROI extraction, ..."
@@ -2693,20 +2695,20 @@ msgstr ""
 "conversions de type de données, la détection de pics, l'extraction de "
 "ROI, ..."
 
-#: cdl\core\gui\tour.py:714 cdl\core\gui\tour.py:792
+#: cdl\core\gui\tour.py:725 cdl\core\gui\tour.py:804
 msgid "Processing menu"
 msgstr "Menu Traitement"
 
-#: cdl\core\gui\tour.py:715
+#: cdl\core\gui\tour.py:726
 msgid "The <b>Processing</b> menu regroups 1->1 signal processing actions."
 msgstr ""
 "Le menu <b>Traitement</b> regroupe les actions de traitement de signaux 1->1."
 
-#: cdl\core\gui\tour.py:721 cdl\core\gui\tour.py:802
+#: cdl\core\gui\tour.py:732 cdl\core\gui\tour.py:814
 msgid "Computing menu"
 msgstr "Menu Calculs"
 
-#: cdl\core\gui\tour.py:722
+#: cdl\core\gui\tour.py:733
 msgid ""
 "The <b>Computing</b> menu regroups 1->0 signal computing actions (that is, "
 "actions that do not modify the signals, but compute a result, e.g. scalar "
@@ -2717,45 +2719,47 @@ msgstr ""
 "calculent un résultat, par exemple des valeurs scalaires), avec une "
 "sélection optionnelle de ROI."
 
-#: cdl\core\gui\tour.py:733
+#: cdl\core\gui\tour.py:744
 msgid ""
-"The <b>Image Panel</b> is used to manage 2D images.<br>It is composed of a "
-"list of images, and a view of the images, as well as menus and toolbars to "
-"perform actions on the images."
+"The <b>Image Panel</b> is used to manage 2D images. It is composed of the "
+"elements shown in the following steps."
 msgstr ""
-"Le <b>Panneau Image</b> est utilisé pour gérer les images 2D.<br>Il est "
-"composé d'une liste d'images, et d'une vue des images, ainsi que de menus et "
-"barres d'outils pour effectuer des actions sur les images."
-
-#: cdl\core\gui\tour.py:743
-msgid ""
-"2D images are listed at the top, and their properties may be displayed and "
-"edited at the bottom.<br>Like signals, images are numbered, and may be put "
-"together in groups."
-msgstr ""
-"Les images 2D sont listées en haut, et leurs propriétés peuvent être "
-"affichées et éditées en bas.<br>Tout comme les signaux, les images sont "
-"numérotées, et peuvent être regroupées."
+"Le <b>Panneau Image</b> est utilisé pour gérer les images 2D. Il est composé "
+"des éléments décrits dans les étapes suivantes."
 
 #: cdl\core\gui\tour.py:753
 msgid ""
-"Images are shown in the <b>Image View</b>.<br>The displayed images may be "
-"customized using context menus or the vertical toolbar on the left (those "
-"appearance settings are saved in the image metadata)."
+"In the highlighted area, images are listed at the top, and their properties "
+"may be displayed and edited at the bottom.<br><br>Images are numbered (but "
+"may be reorganized) and put together in numbered groups."
 msgstr ""
-"Les images sont affichées dans la partie droite de la fenêtre. Les images "
-"affichées peuvent être personnalisées en utilisant les menus contextuels ou "
-"la barre d'outils verticale située à gauche."
+"Dans la zone surlignée, les images sont listées en haut, et leurs propriétés "
+"peuvent être affichées et éditées en bas.<br><br>Les images sont numérotées "
+"(mais peuvent être réorganisées) et peuvent être regroupées dans des groupes "
+"numérotés."
 
-#: cdl\core\gui\tour.py:763
+#: cdl\core\gui\tour.py:764
+msgid ""
+"Images are shown in the <b>Image View</b>.<br><br>The displayed images may "
+"be customized using context menus or the vertical toolbar on the left "
+"(appearance settings are saved in the image metadata)."
+msgstr ""
+"Les images sont affichées dans la <b>Vues Image</b>.<br><br>Les images "
+"affichées peuvent être personnalisées en utilisant les menus contextuels ou "
+"la barre d'outils verticale à gauche (ces réglages d'apparence sont "
+"enregistrés dans les métadonnées de l'image)."
+
+#: cdl\core\gui\tour.py:774
 msgid ""
 "The <b>File</b> menu contains actions to import and export images "
-"individually (various formats) or in groups (HDF5 files)."
+"individually (various formats) or to save or restore the whole workspace "
+"(HDF5 files)."
 msgstr ""
 "Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
-"images individuellement (divers formats) ou en groupes (fichiers HDF5)."
+"images individuellement (divers formats) ou pour enregistrer ou restaurer "
+"l'ensemble de l'espace de travail (fichiers HDF5)."
 
-#: cdl\core\gui\tour.py:773
+#: cdl\core\gui\tour.py:785
 msgid ""
 "The <b>Edit</b> menu contains actions to edit images individually or in "
 "groups."
@@ -2763,7 +2767,7 @@ msgstr ""
 "Le menu <b>Edition</b> contient les actions pour éditer des images "
 "individuellement ou en groupes."
 
-#: cdl\core\gui\tour.py:783
+#: cdl\core\gui\tour.py:795
 msgid ""
 "The <b>Operations</b> menu is focused on arithmetic operations, data type "
 "conversions, pixel binning, resize, ROI extraction ..."
@@ -2772,7 +2776,7 @@ msgstr ""
 "conversions de type de données, le binning de pixels, le redimensionnement, "
 "l'extraction de ROI ..."
 
-#: cdl\core\gui\tour.py:793
+#: cdl\core\gui\tour.py:805
 msgid ""
 "The <b>Processing</b> menu regroups 1->1 image processing actions (that is, "
 "actions that modify the images)."
@@ -2780,7 +2784,7 @@ msgstr ""
 "Le menu <b>Traitement</b> regroupe les actions de traitement d'images 1->1 "
 "(c'est-à-dire les actions qui modifient les images)."
 
-#: cdl\core\gui\tour.py:803
+#: cdl\core\gui\tour.py:815
 msgid ""
 "The <b>Computing</b> menu regroups 1->0 image computing actions (that is, "
 "actions that do not modify the images, but compute a result, e.g. circle "
@@ -2791,11 +2795,11 @@ msgstr ""
 "résultat, par exemple les coordonnées d'un cercle), avec une sélection "
 "optionnelle de ROI."
 
-#: cdl\core\gui\tour.py:813 cdl\core\gui\tour.py:820 cdl\core\gui\tour.py:830
+#: cdl\core\gui\tour.py:825 cdl\core\gui\tour.py:832 cdl\core\gui\tour.py:842
 msgid "Extensions"
 msgstr "Extensions"
 
-#: cdl\core\gui\tour.py:814
+#: cdl\core\gui\tour.py:826
 msgid ""
 "DataLab is designed to be easily extended with new features, by using "
 "<b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>."
@@ -2804,11 +2808,11 @@ msgstr ""
 "fonctionnalités, en utilisant des <b>Macros</b>, des <b>Plugins</b> ou le "
 "<b>Contrôle à distance</b>."
 
-#: cdl\core\gui\tour.py:820
+#: cdl\core\gui\tour.py:832
 msgid "Macros"
 msgstr "Macros"
 
-#: cdl\core\gui\tour.py:821
+#: cdl\core\gui\tour.py:833
 msgid ""
 "The <b>Macro manager</b> allows to create, edit and run macros.<br>Macros "
 "are saved together with the DataLab workspace (HDF5 file)."
@@ -2817,7 +2821,7 @@ msgstr ""
 "macros.<br>Les macros sont sauvegardées avec l'espace de travail DataLab "
 "(fichier HDF5)."
 
-#: cdl\core\gui\tour.py:831
+#: cdl\core\gui\tour.py:843
 msgid ""
 "The <b>Plugins</b> menu regroups features that are not part of the core of "
 "DataLab, but that are provided as plugins.<br>(See the documentation for "
@@ -2827,11 +2831,11 @@ msgstr ""
 "du coeur de DataLab, mais qui sont fournies sous forme de plugins.<br>(Voir "
 "la documentation pour plus d'informations sur les plugins.)"
 
-#: cdl\core\gui\tour.py:841
+#: cdl\core\gui\tour.py:853
 msgid "This is the end of the tour!"
 msgstr "C'est la fin de la visite guidée !"
 
-#: cdl\core\gui\tour.py:842
+#: cdl\core\gui\tour.py:854
 msgid "You can show the tour again, or close this dialog box."
 msgstr ""
 "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de "
@@ -3518,6 +3522,15 @@ msgid "Please click on the 'Ignore' button to ignore this warning next time."
 msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
+
+#~ msgid ""
+#~ "2D images are listed at the top, and their properties may be displayed "
+#~ "and edited at the bottom.<br>Like signals, images are numbered, and may "
+#~ "be put together in groups."
+#~ msgstr ""
+#~ "Les images 2D sont listées en haut, et leurs propriétés peuvent être "
+#~ "affichées et éditées en bas.<br>Tout comme les signaux, les images sont "
+#~ "numérotées, et peuvent être regroupées."
 
 #~ msgid "Signals"
 #~ msgstr "Signaux"

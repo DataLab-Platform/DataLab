@@ -74,10 +74,20 @@ class Cover(QW.QWidget):
         super().__init__(parent)
         self.setWindowFlags(QC.Qt.Tool | QC.Qt.FramelessWindowHint)
         self.setAttribute(QC.Qt.WA_TranslucentBackground)
+        self.__opacity_factor = 1.0
         # Widgets to be excluded from the grayed out area:
         self.__excluded_widgets: list[QW.QWidget] | None = None
         # Path to be grayed out:
         self.__path: QG.QPainterPath = QG.QPainterPath()
+
+    def set_opacity_factor(self, opacity_factor: float) -> None:
+        """
+        Set the opacity factor of the grayed out area.
+
+        Args:
+            opacity_factor: Opacity factor.
+        """
+        self.__opacity_factor = opacity_factor
 
     def exclude(self, widgets: list[QW.QWidget]) -> None:
         """
@@ -131,7 +141,7 @@ class Cover(QW.QWidget):
         """
         super().paintEvent(event)
         painter = QG.QPainter(self)
-        painter.setOpacity(0.75 if is_dark_mode() else 0.5)
+        painter.setOpacity((0.75 if is_dark_mode() else 0.5) * self.__opacity_factor)
         painter.setBrush(QG.QBrush(QC.Qt.black))
         painter.setPen(QC.Qt.NoPen)
         painter.drawPath(self.__path)
@@ -397,6 +407,7 @@ class TourStep:
         Args:
             cover: Cover widget.
         """
+        cover.set_opacity_factor(1.0 if self.step_type == "regular" else 0.7)
         cover.exclude(self.widgets)
         cover.update_geometry()
 
@@ -654,18 +665,17 @@ class Tour(BaseTour):
         self.add_step(
             _("Signal Panel"),
             _(
-                "The <b>Signal Panel</b> is used to manage 1D signals.<br>"
-                "It is composed of a list of signals, and a view of the signals, "
-                "as well as menus and toolbars to perform actions on the signals."
+                "The <b>Signal Panel</b> is used to manage 1D signals."
+                "It is composed of the elements shown in the following steps."
             ),
         )
         self.add_step(
             _("Signal Panel") + " – " + _("List and properties"),
             _(
-                "1D signals are listed at the top, and their properties may be "
-                "displayed and edited at the bottom.<br>"
-                "Signals are numbered starting from 001, and may be put together "
-                "in numbered groups."
+                "In the highlighted area, signals are listed at the top, and their "
+                "properties may be displayed and edited at the bottom.<br><br>"
+                "Signals are numbered (but may be reorganized) and put together in "
+                "numbered groups."
             ),
             [win.tabwidget.tabBar(), win.signalpanel],
             self.prepare_signalpanel,
@@ -673,9 +683,9 @@ class Tour(BaseTour):
         self.add_step(
             _("Signal Panel") + " – " + _("View"),
             _(
-                "Signals are plotted in the <b>Signal View</b>.<br>"
+                "Signals are plotted in the <b>Signal View</b>.<br><br>"
                 "Curves may be customized using context menus or the vertical "
-                "toolbar on the left (those appearance settings are saved in the "
+                "toolbar on the left (appearance settings are saved in the "
                 "signal metadata)."
             ),
             [win.docks[win.signalpanel]],
@@ -684,7 +694,8 @@ class Tour(BaseTour):
             _("Signal Panel") + " – " + _("File menu"),
             _(
                 "The <b>File</b> menu contains actions to import and export signals "
-                "individually (various formats) or in groups (HDF5 files)."
+                "individually (various formats) or to save or restore the whole "
+                "workspace (HDF5 files)."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.file_menu),
@@ -731,9 +742,8 @@ class Tour(BaseTour):
         self.add_step(
             _("Image Panel"),
             _(
-                "The <b>Image Panel</b> is used to manage 2D images.<br>"
-                "It is composed of a list of images, and a view of the images, "
-                "as well as menus and toolbars to perform actions on the images."
+                "The <b>Image Panel</b> is used to manage 2D images. It is composed "
+                "of the elements shown in the following steps."
             ),
             [],
             lambda win: win.set_current_panel("image"),
@@ -741,9 +751,10 @@ class Tour(BaseTour):
         self.add_step(
             _("Image Panel") + " – " + _("List and properties"),
             _(
-                "2D images are listed at the top, and their properties may be "
-                "displayed and edited at the bottom.<br>"
-                "Like signals, images are numbered, and may be put together in groups."
+                "In the highlighted area, images are listed at the top, and their "
+                "properties may be displayed and edited at the bottom.<br><br>"
+                "Images are numbered (but may be reorganized) and put together in "
+                "numbered groups."
             ),
             [win.tabwidget.tabBar(), win.imagepanel],
             self.prepare_imagepanel,
@@ -751,9 +762,9 @@ class Tour(BaseTour):
         self.add_step(
             _("Image Panel") + " – " + _("View"),
             _(
-                "Images are shown in the <b>Image View</b>.<br>"
+                "Images are shown in the <b>Image View</b>.<br><br>"
                 "The displayed images may be customized using context menus "
-                "or the vertical toolbar on the left (those appearance settings "
+                "or the vertical toolbar on the left (appearance settings "
                 "are saved in the image metadata)."
             ),
             [win.docks[win.imagepanel]],
@@ -762,7 +773,8 @@ class Tour(BaseTour):
             _("Image Panel") + " – " + _("File menu"),
             _(
                 "The <b>File</b> menu contains actions to import and export images "
-                "individually (various formats) or in groups (HDF5 files)."
+                "individually (various formats) or to save or restore the whole "
+                "workspace (HDF5 files)."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.file_menu),
