@@ -3,7 +3,6 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
-# TODO: Add a "Show tour" entry in the "?" menu of the main window.
 # TODO: Automatically start the tour when DataLab is launched for the first time.
 # TODO: Update CHANGELOG.md.
 

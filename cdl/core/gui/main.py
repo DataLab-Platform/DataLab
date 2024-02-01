@@ -861,6 +861,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         help_menu_actions += [
             create_action(
                 self,
+                _("Tour") + "...",
+                icon=get_icon("tour.svg"),
+                triggered=self.__show_tour,
+            ),
+            create_action(
+                self,
                 _("Demo") + "...",
                 icon=get_icon("play_demo.svg"),
                 triggered=self.__play_demo,
@@ -1451,6 +1457,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         from cdl.tests.scenarios import demo  # pylint: disable=import-outside-toplevel
 
         demo.play_demo(self)
+
+    def __show_tour(self) -> None:
+        """Show tour"""
+        from cdl.core.gui import tour  # pylint: disable=import-outside-toplevel
+
+        tour.start(self)
 
     @staticmethod
     def test_segfault_error() -> None:

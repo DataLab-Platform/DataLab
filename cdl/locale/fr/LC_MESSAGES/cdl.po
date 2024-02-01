@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-01 11:48+0100\n"
+"POT-Creation-Date: 2024-02-01 11:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1233,7 +1233,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1439
+#: cdl\core\gui\actionhandler.py:796 cdl\core\gui\main.py:1445
 #: cdl\core\gui\roieditor.py:210
 msgid "image"
 msgstr "image"
@@ -1577,7 +1577,7 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:435 cdl\core\gui\main.py:1222
+#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:435 cdl\core\gui\main.py:1228
 #: cdl\plugins.py:168
 msgid "Warning"
 msgstr "Attention"
@@ -1759,7 +1759,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:727 cdl\core\gui\main.py:1479
+#: cdl\core\gui\main.py:727 cdl\core\gui\main.py:1491
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1853,53 +1853,57 @@ msgstr "Documentation en ligne"
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:864 cdl\core\gui\tour.py:271
+#: cdl\core\gui\main.py:864
+msgid "Tour"
+msgstr "Visite guidée"
+
+#: cdl\core\gui\main.py:870 cdl\core\gui\tour.py:271
 #: cdl\tests\scenarios\demo.py:182 cdl\tests\scenarios\demo.py:197
 msgid "Demo"
 msgstr "Démo"
 
-#: cdl\core\gui\main.py:874
+#: cdl\core\gui\main.py:880
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:881 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:887 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:887 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:893 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:894
+#: cdl\core\gui\main.py:900
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:900
+#: cdl\core\gui\main.py:906
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:906
+#: cdl\core\gui\main.py:912
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:911
+#: cdl\core\gui\main.py:917
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:946 cdl\core\gui\panel\macro.py:102
+#: cdl\core\gui\main.py:952 cdl\core\gui\panel\macro.py:102
 #: cdl\core\gui\settings.py:241
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:955 cdl\core\gui\panel\macro.py:75
+#: cdl\core\gui\main.py:961 cdl\core\gui\panel\macro.py:75
 msgid "Macro manager"
 msgstr "Gestionnaire de macros"
 
-#: cdl\core\gui\main.py:1190
+#: cdl\core\gui\main.py:1196
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1223
+#: cdl\core\gui\main.py:1229
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -1907,56 +1911,56 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1234 cdl\core\gui\panel\base.py:713
+#: cdl\core\gui\main.py:1240 cdl\core\gui\panel\base.py:713
 #: cdl\core\gui\panel\macro.py:433
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1395
+#: cdl\core\gui\main.py:1401
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1397
+#: cdl\core\gui\main.py:1403
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1400
+#: cdl\core\gui\main.py:1406
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1402
+#: cdl\core\gui\main.py:1408
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1405
+#: cdl\core\gui\main.py:1411
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1406
+#: cdl\core\gui\main.py:1412
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1407
+#: cdl\core\gui\main.py:1413
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1411
+#: cdl\core\gui\main.py:1417
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1412
+#: cdl\core\gui\main.py:1418
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1416
+#: cdl\core\gui\main.py:1422
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1434
+#: cdl\core\gui\main.py:1440
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1435
+#: cdl\core\gui\main.py:1441
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1964,7 +1968,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1480
+#: cdl\core\gui\main.py:1492
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
