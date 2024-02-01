@@ -275,6 +275,8 @@ class StepDialog(QW.QDialog):
             self._btnmap[next_btn] = StepResult.NEXT
             self.__set_default_button(next_btn)
         close_btn = bbox.addButton("X", role)
+        if self.step.step_type == "introduction":
+            close_btn.setText(_("Close"))
         self._btnmap[close_btn] = StepResult.CLOSE
         if self.step.step_type == "conclusion":
             self.__set_default_button(close_btn)
@@ -324,28 +326,6 @@ class StepDialog(QW.QDialog):
         """
         self.result = StepResult.CLOSE
         super().reject()
-
-    def showEvent(self, event: QG.QShowEvent) -> None:
-        """
-        Event handler for the "show" event.
-
-        Args:
-            event: Show event.
-        """
-        super().showEvent(event)
-        self.adjustSize()
-        self.move_to_center()
-
-    def move_to_center(self) -> None:
-        """
-        Move the dialog box to the center of the screen.
-        """
-        desktop = QW.QApplication.desktop()
-        screen = desktop.screenNumber(desktop.cursor().pos())
-        screen_geometry = desktop.screenGeometry(screen)
-        self.move(
-            screen_geometry.center() - QC.QPoint(self.width() // 2, self.height() // 2)
-        )
 
     def paintEvent(self, event: QG.QPaintEvent) -> None:
         """
@@ -444,9 +424,7 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         self.cover = Cover(win)
         self.cover.show()
         self.__window_geometry: tuple[tuple[int, int], tuple[int, int]] | None = None
-        self.__save_window_geometry()
-        self.__resize_window(0.7)
-        self.cover.update_geometry()
+        self.__window_prepared = False
         self.setup_tour(win)
 
     def __resize_window(self, factor: float) -> None:
@@ -471,12 +449,19 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
 
     def __restore_window_geometry(self) -> None:
         """Restore the window geometry (size and position)."""
-        self.win.restoreGeometry(self.__window_geometry)
+        if self.__window_geometry is not None:
+            self.win.restoreGeometry(self.__window_geometry)
 
     @abc.abstractmethod
     def setup_tour(self, win: CDLMainWindow) -> None:
         """
         Setup the tour: add steps to the tour.
+        """
+
+    @abc.abstractmethod
+    def cleanup_tour(self, win: CDLMainWindow) -> None:
+        """
+        Cleanup the tour.
         """
 
     def add_step(
@@ -549,12 +534,18 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
         End the tour.
         """
         self.cover.close()
+        self.cleanup_tour(self.win)
         self.__restore_window_geometry()
 
     def next_step(self) -> None:
         """
         Go to the next step.
         """
+        if self._current_step == 0 and not self.__window_prepared:
+            self.__save_window_geometry()
+            self.__resize_window(0.7)
+            self.cover.update_geometry()
+            self.__window_prepared = True
         self._current_step += 1
         self.show_current_step()
 
@@ -613,6 +604,22 @@ class Tour(BaseTour):
             menu_name: Name of the menu to popup.
         """
         menu.popup(win.mapToGlobal(QC.QPoint(50, 50)))
+
+    def cleanup_tour(self, win: CDLMainWindow) -> None:
+        """
+        Cleanup the tour.
+
+        Args:
+            win: DataLab main window.
+        """
+        if len(win.signalpanel.objmodel) == 1:
+            win.signalpanel.remove_all_objects()
+        else:
+            win.signalpanel.remove_object()
+        if len(win.imagepanel.objmodel) == 1:
+            win.imagepanel.remove_all_objects()
+        else:
+            win.imagepanel.remove_object()
 
     def setup_tour(self, win: CDLMainWindow) -> None:
         """
