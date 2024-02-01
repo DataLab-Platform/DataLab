@@ -556,6 +556,15 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             if choice == QW.QMessageBox.StandardButton.Yes:
                 self.__show_logviewer()
 
+    def execute_post_show_actions(self) -> None:
+        """Execute post-show actions"""
+        self.check_stable_release()
+        self.check_for_previous_crash()
+        tour = Conf.main.tour_enabled.get()
+        if tour:
+            Conf.main.tour_enabled.set(False)
+            self.show_tour()
+
     def take_screenshot(self, name: str) -> None:  # pragma: no cover
         """Take main window screenshot"""
         self.memorystatus.set_demo_mode(True)
