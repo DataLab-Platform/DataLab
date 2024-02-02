@@ -34,6 +34,11 @@ for future and past milestones.
   are a developer or not
 * Added "Copy" button to code blocks in the documentation
 
+💥 New features:
+
+* Signal statistics feature: added `<y>/σ(y)` to the "Statistics" result table
+  (in addition to the mean, median, standard deviation, etc.)
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
