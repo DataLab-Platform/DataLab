@@ -25,9 +25,8 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine
+from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
-from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
@@ -320,11 +319,11 @@ def to_cdl(cs_plot):
 @monkeypatch_method(cswidget.XCrossSection, "XCrossSection")
 def add_actions_to_toolbar(self):
     """Add actions to toolbar"""
-    to_codraft_ac = create_action(
+    to_signal_ac = create_action(
         self,
         _("Process signal"),
         icon=get_icon("to_signal.svg"),
         triggered=lambda: to_cdl(self.cs_plot),
     )
-    add_actions(self.toolbar, (to_codraft_ac, None))
+    add_actions(self.toolbar, (to_signal_ac, None))
     self._old_XCrossSection_add_actions_to_toolbar()
