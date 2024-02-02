@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Run DataLab",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/cdl/app.py",
             "console": "integratedTerminal",
@@ -18,13 +18,13 @@
             // ],
             "env": {
                 // "DEBUG": "1",
-                // "LANG": "fr",
+                // "LANG": "en",
                 "QT_COLOR_MODE": "light",
             }
         },
         {
             "name": "Run Test Launcher",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/cdl/tests/__init__.py",
             "console": "integratedTerminal",
@@ -38,7 +38,7 @@
         },
         {
             "name": "Run current file",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -48,7 +48,6 @@
             "args": [
                 // "--h5browser",
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5",
-                // "C:/Dev/Projets/DataLab_Test_CEA/cdl_test_cea/data/lmj_cbfx.h5,/A/valeur"
                 // "${workspaceFolder}/cdl/data/tests/format_v1.7.h5,/DataLab_Ima/i002: i002+i004",
                 // "--unattended",
                 // "--screenshot",
@@ -60,13 +59,13 @@
             "env": {
                 // "DEBUG": "1",
                 // "TEST_SEGFAULT_ERROR": "1",
-                "LANG": "en",
+                // "LANG": "en",
                 // "QT_COLOR_MODE": "light",
             }
         },
         {
             "name": "Run current file (unattended)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
@@ -85,7 +84,7 @@
         },
         {
             "name": "Profile current file",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "cProfile",
             "console": "integratedTerminal",
@@ -99,9 +98,9 @@
         },
         {
             "name": "Run H5browser",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/cdl_test_cea/tests/h5browser1_test.py",
+            "program": "${workspaceFolder}/cdl/tests/features/hdf5/h5browser1_unit.py",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env",
             "python": "${config:python.defaultInterpreterPath}",
