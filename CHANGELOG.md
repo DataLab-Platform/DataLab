@@ -38,6 +38,8 @@ for future and past milestones.
 
 * Signal statistics feature: added `<y>/σ(y)` to the "Statistics" result table
   (in addition to the mean, median, standard deviation, etc.)
+* Curve fitting feature: fit results are now stored in a dictionary in the signal
+  metadata (instead of being stored individually in the signal metadata)
 
 🛠️ Bug fixes:
 
