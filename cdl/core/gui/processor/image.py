@@ -943,11 +943,12 @@ class ImageProcessor(BaseProcessor):
         # Be careful to use systematically functions adapted to masked arrays
         # (e.g. numpy.ma median, and *not* numpy.median)
         return [
-            ("min(z)", lambda z: z.min()),
-            ("max(z)", lambda z: z.max()),
-            ("<z>", lambda z: z.mean()),
-            ("Median(z)", ma.median),
-            ("σ(z)", lambda z: z.std()),
-            ("<z>/σ(z)", lambda z: z.mean() / z.std()),
-            ("Σ(z)", lambda z: z.sum()),
+            ("min(z)", ma.min),
+            ("max(z)", ma.max),
+            ("<z>", ma.mean),
+            ("median(z)", ma.median),
+            ("σ(z)", ma.std),
+            ("<z>/σ(z)", lambda z: ma.mean(z) / ma.std(z)),
+            ("peak-to-peak(z)", ma.ptp),
+            ("Σ(z)", ma.sum),
         ]

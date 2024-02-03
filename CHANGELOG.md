@@ -36,8 +36,10 @@ for future and past milestones.
 
 💥 New features:
 
-* Signal statistics feature: added `<y>/σ(y)` to the "Statistics" result table
-  (in addition to the mean, median, standard deviation, etc.)
+* Statistics feature:
+  * Added `<y>/σ(y)` to the signal "Statistics" result table
+    (in addition to the mean, median, standard deviation, etc.)
+  * Added `peak-to-peak` to the signal and image "Statistics" result table
 * Curve fitting feature: fit results are now stored in a dictionary in the signal
   metadata (instead of being stored individually in the signal metadata)
 

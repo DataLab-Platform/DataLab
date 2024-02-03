@@ -325,7 +325,7 @@ class SignalProcessor(BaseProcessor):
                 """Polynomial fit dialog function"""
                 return dlgfunc(x, y, param.degree, parent=parent)
 
-            self.compute_fit(txt,polynomialfit)
+            self.compute_fit(txt, polynomialfit)
 
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
@@ -389,9 +389,10 @@ class SignalProcessor(BaseProcessor):
             ("min(y)", lambda xy: xy[1].min()),
             ("max(y)", lambda xy: xy[1].max()),
             ("<y>", lambda xy: xy[1].mean()),
-            ("Median(y)", lambda xy: np.median(xy[1])),
+            ("median(y)", lambda xy: np.median(xy[1])),
             ("σ(y)", lambda xy: xy[1].std()),
             ("<y>/σ(y)", lambda xy: xy[1].mean() / xy[1].std()),
+            ("peak-to-peak", lambda xy: xy[1].ptp()),
             ("Σ(y)", lambda xy: xy[1].sum()),
             ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
         ]
