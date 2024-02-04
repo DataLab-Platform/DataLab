@@ -362,6 +362,7 @@ class SignalProcessor(BaseProcessor):
 
                 def multigaussianfit(x, y, parent=None):
                     """Multi-Gaussian fit dialog function"""
+                    # pylint: disable=cell-var-from-loop
                     return fitdlgfunc(x, y, peaks, parent=parent)
 
                 self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
