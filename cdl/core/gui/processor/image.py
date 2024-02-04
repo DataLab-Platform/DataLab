@@ -32,6 +32,7 @@ import cdl.param
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
+from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
@@ -233,21 +234,38 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_profile(self, param: cdl.param.ProfileParam | None = None) -> None:
         """Compute profile"""
-        self.compute_11(
-            cpi.compute_profile, param, cdl.param.ProfileParam, title=_("Profile")
-        )
+        title = _("Profile")
+        add_initial_shape = self.has_param_defaults(cdl.param.ProfileParam)
+        edit, param = self.init_param(param, cpi.ProfileParam, title)
+        if edit:
+            options = self.panel.plothandler.get_current_plot_options()
+            dlg = ProfileExtractionDialog(
+                "line", param, options, self.panel.parent(), add_initial_shape
+            )
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg.set_obj(obj)
+            if not exec_dialog(dlg):
+                return
+        self.compute_11(cpi.compute_profile, param, title=title, edit=False)
 
     @qt_try_except()
     def compute_average_profile(
         self, param: cdl.param.AverageProfileParam | None = None
     ) -> None:
         """Compute average profile"""
-        self.compute_11(
-            cpi.compute_average_profile,
-            param,
-            cdl.param.AverageProfileParam,
-            title=_("Average profile"),
-        )
+        title = _("Average profile")
+        add_initial_shape = self.has_param_defaults(cdl.param.AverageProfileParam)
+        edit, param = self.init_param(param, cpi.AverageProfileParam, title)
+        if edit:
+            options = self.panel.plothandler.get_current_plot_options()
+            dlg = ProfileExtractionDialog(
+                "rectangle", param, options, self.panel.parent(), add_initial_shape
+            )
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg.set_obj(obj)
+            if not exec_dialog(dlg):
+                return
+        self.compute_11(cpi.compute_average_profile, param, title=title, edit=False)
 
     @qt_try_except()
     def compute_radial_profile(

@@ -36,6 +36,12 @@ for future and past milestones.
 
 💥 New features:
 
+* Intensity profile extraction feature:
+  * Added graphical user interface to extract intensity profiles from images, for
+    both line and averaged profiles
+  * Parameters are still directly editable by the user ("Edit profile parameters"
+    button)
+  * Parameters are now stored from one profile extraction to another
 * Statistics feature:
   * Added `<y>/σ(y)` to the signal "Statistics" result table
     (in addition to the mean, median, standard deviation, etc.)

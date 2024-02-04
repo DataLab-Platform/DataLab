@@ -193,6 +193,17 @@ class BaseProcessor(QC.QObject):
                 self.worker.terminate_pool()
                 self.worker = None
 
+    def has_param_defaults(self, paramclass: type[gds.DataSet]) -> bool:
+        """Return True if parameter defaults are available.
+
+        Args:
+            paramclass: parameter class
+
+        Returns:
+            bool: True if parameter defaults are available
+        """
+        return paramclass.__name__ in self.PARAM_DEFAULTS
+
     def update_param_defaults(self, param: gds.DataSet) -> None:
         """Update parameter defaults.
 
