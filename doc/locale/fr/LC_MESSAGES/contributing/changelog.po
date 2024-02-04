@@ -1053,20 +1053,20 @@ msgstr "Nouvelles fonctionnalités d'extraction de profil pour les images :"
 
 #: ../../../CHANGELOG.md:246
 msgid ""
-"Added \"Line profile extraction\" to \"Operations\" menu, to extract a "
+"Added \"Line profile\" to \"Operations\" menu, to extract a "
 "profile from an image along a row or a column"
 msgstr ""
-"Ajout de la fonctionnalité \"Extraction du profil de ligne\" au menu "
+"Ajout de la fonctionnalité \"Profil rectiligne\" au menu "
 "\"Opérations\", pour extraire un profil d'une image le long d'une ligne "
 "ou d'une colonne"
 
 #: ../../../CHANGELOG.md:248
 msgid ""
-"Added \"Average profile extraction\" to \"Operations\" menu, to extract "
+"Added \"Average profile\" to \"Operations\" menu, to extract "
 "the average profile on a rectangular area of an image, along a row or a "
 "column"
 msgstr ""
-"Ajout de la fonctionnalité \"Extraction du profil moyen\" au menu "
+"Ajout de la fonctionnalité \"Profil moyen\" au menu "
 "\"Opérations\", pour extraire le profil moyen sur une zone rectangulaire "
 "d'une image, le long d'une ligne ou d'une colonne"
 

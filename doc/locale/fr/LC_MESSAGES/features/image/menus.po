@@ -685,8 +685,8 @@ msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
 #: ../../features/image/menus.rst:344
-msgid "Line profile extraction"
-msgstr "Extraire un profil"
+msgid "Line profile"
+msgstr "Profil rectiligne"
 
 #: ../../features/image/menus.rst:338
 msgid ""
@@ -698,13 +698,13 @@ msgstr ""
 
 #: ../../features/image/menus.rst:343
 msgid ""
-"Line profile extraction dialog. Parameters may also be set manually "
+"Line profile dialog. Parameters may also be set manually "
 "(\"Edit profile parameters\" button)."
 msgstr "Boîte de dialogue d'extraction de profil. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."
 
 #: ../../features/image/menus.rst:353
-msgid "Average profile extraction"
-msgstr "Extraire un profil moyen"
+msgid "Average profile"
+msgstr "Profil moyen"
 
 #: ../../features/image/menus.rst:347
 msgid ""
@@ -718,7 +718,7 @@ msgstr ""
 
 #: ../../features/image/menus.rst:352
 msgid ""
-"Average profile extraction dialog: the area is defined by a rectangle "
+"Average profile dialog: the area is defined by a rectangle "
 "shape. Parameters may also be set manually (\"Edit profile parameters\" "
 "button)."
 msgstr "Boîte de dialogue d'extraction de profil moyen : la zone est définie par un rectangle. Les paramètres peuvent être également définis manuellement (bouton \"Editer les paramètres du profil\")."

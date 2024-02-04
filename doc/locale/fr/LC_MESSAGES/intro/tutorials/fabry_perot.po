@@ -385,10 +385,10 @@ msgstr ""
 
 #: ../../intro/tutorials/fabry_perot.rst:200
 msgid ""
-"Either select the \"Line profile extraction...\" entry |profile| in the "
+"Either select the \"Line profile...\" entry |profile| in the "
 "\"Operations > Intensity profiles\" menu."
 msgstr ""
-"Soit sélectionner l'entrée \"Extraire le profil...\" |profile| dans le "
+"Soit sélectionner l'entrée \"Profil rectiligne...\" |profile| dans le "
 "menu \"Opérations > Profils d'intensité\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:206
@@ -423,10 +423,10 @@ msgstr ""
 
 #: ../../intro/tutorials/fabry_perot.rst:219
 msgid ""
-"Select the \"Line profile extraction...\" entry |profile| in the "
+"Select the \"Line profile...\" entry |profile| in the "
 "\"Operations\" menu."
 msgstr ""
-"Sélectionnez l'entrée \"Extraire le profil...\" |profile| dans le menu "
+"Sélectionnez l'entrée \"Profil rectiligne...\" |profile| dans le menu "
 "\"Opérations\"."
 
 #: ../../intro/tutorials/fabry_perot.rst:223

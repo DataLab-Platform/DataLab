@@ -1279,16 +1279,16 @@ msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
 #: cdl\core\gui\actionhandler.py:859
-msgid "Line profile extraction..."
-msgstr "Extraire un profil..."
+msgid "Line profile..."
+msgstr "Profil rectiligne..."
 
 #: cdl\core\gui\actionhandler.py:862
 msgid "Extract horizontal or vertical profile"
 msgstr "Extraire un profil horizontal ou vertical"
 
 #: cdl\core\gui\actionhandler.py:865
-msgid "Average profile extraction..."
-msgstr "Extraire un profil moyen..."
+msgid "Average profile..."
+msgstr "Profil moyen..."
 
 #: cdl\core\gui\actionhandler.py:868
 msgid "Extract average horizontal or vertical profile"

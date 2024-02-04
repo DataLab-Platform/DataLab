@@ -243,9 +243,9 @@ bug fix
     * Now, those properties are saved in the HDF5 file and are restored when
       reloading the HDF5 file
   * New profile extraction features for images:
-    * Added "Line profile extraction" to "Operations" menu, to extract a profile from
+    * Added "Line profile" to "Operations" menu, to extract a profile from
       an image along a row or a column
-    * Added "Average profile extraction" to "Operations" menu, to extract the
+    * Added "Average profile" to "Operations" menu, to extract the
       average profile on a rectangular area of an image, along a row or a column
   * Image LUT range (contrast/brightness settings) is now saved in the HDF5 file:
     * As for curve and image styles, the LUT range was already persistent during
