@@ -338,9 +338,19 @@ Line profile extraction
     Extract an horizontal or vertical profile from each selected image, and create
     new signals from these profiles.
 
+    .. figure:: /images/shots/i_profile.png
+
+        Line profile extraction dialog. Parameters may also be set manually
+        ("Edit profile parameters" button).
+
 Average profile extraction
     Extract an horizontal or vertical profile averaged over a rectangular area, from
     each selected image, and create new signals from these profiles.
+
+    .. figure:: /images/shots/i_profile_average.png
+
+        Average profile extraction dialog: the area is defined by a rectangle shape.
+        Parameters may also be set manually ("Edit profile parameters" button).
 
 Radial profile extraction
     Extract a radial profile from each selected image, and create new signals from

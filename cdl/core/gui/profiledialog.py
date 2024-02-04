@@ -61,8 +61,7 @@ class ProfileExtractionDialog(PlotDialog):
         toolklass = CrossSectionTool if mode == "line" else AverageCrossSectionTool
         super().__init__(title=title, edit=True, options=options, parent=parent)
         self.setObjectName("profileextraction")
-        if parent is None:
-            self.setWindowIcon(get_icon("DataLab.svg"))
+        self.setWindowIcon(get_icon("DataLab.svg"))
         self.resize(800, 800)
         tool: CrossSectionTool | AverageCrossSectionTool = self.get_manager().get_tool(
             toolklass

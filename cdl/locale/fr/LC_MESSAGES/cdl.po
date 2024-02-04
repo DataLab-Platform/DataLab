@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-04 17:04+0100\n"
+"POT-Creation-Date: 2024-02-04 17:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1188,7 +1188,7 @@ msgstr "Ajustement Voigt"
 msgid "Polynomial fit"
 msgstr "Ajustement polynomial"
 
-#: cdl\core\gui\actionhandler.py:745 cdl\core\gui\processor\signal.py:367
+#: cdl\core\gui\actionhandler.py:745 cdl\core\gui\processor\signal.py:368
 #: cdl\widgets\fitdialog.py:235
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
@@ -1857,7 +1857,7 @@ msgstr "Documentation PDF"
 msgid "Tour"
 msgstr "Visite guidée"
 
-#: cdl\core\gui\main.py:879 cdl\core\gui\tour.py:277
+#: cdl\core\gui\main.py:879 cdl\core\gui\tour.py:278
 #: cdl\tests\scenarios\demo.py:182 cdl\tests\scenarios\demo.py:197
 msgid "Demo"
 msgstr "Démo"
@@ -2306,19 +2306,19 @@ msgstr "signal pour les valeurs X"
 msgid "signal to convolve with"
 msgstr "signal à convoluer"
 
-#: cdl\core\gui\processor\signal.py:376
+#: cdl\core\gui\processor\signal.py:377
 msgid "FWHM"
 msgstr "LMH"
 
-#: cdl\core\gui\processor\signal.py:383
+#: cdl\core\gui\processor\signal.py:384
 msgid "FW"
 msgstr "LH"
 
-#: cdl\core\gui\profiledialog.py:72
+#: cdl\core\gui\profiledialog.py:71
 msgid "Edit profile parameters"
 msgstr "Modifier les paramètres du profil"
 
-#: cdl\core\gui\profiledialog.py:79
+#: cdl\core\gui\profiledialog.py:78
 msgid "Reset selection"
 msgstr "Réinitialiser la sélection"
 
@@ -2560,15 +2560,15 @@ msgstr ""
 "\n"
 "Un redémarrage est nécessaire pour que ces changements prennent effet."
 
-#: cdl\core\gui\tour.py:271
+#: cdl\core\gui\tour.py:272
 msgid "Start"
 msgstr "Démarrer"
 
-#: cdl\core\gui\tour.py:286
+#: cdl\core\gui\tour.py:287
 msgid "Close"
 msgstr "Fermer"
 
-#: cdl\core\gui\tour.py:311
+#: cdl\core\gui\tour.py:312
 msgid ""
 "Hit <b>Enter</b> to continue to the next step, or <b>Esc</b> to close the "
 "tour."
