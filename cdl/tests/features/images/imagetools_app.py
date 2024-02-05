@@ -7,7 +7,7 @@
 Image tools application test:
 
   - Testing `ZAxisLogTool`
-  - Testing `to_cdl` function (image cross section -> curve)
+  - Testing `profile_to_signal` function (image cross section -> curve)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -21,7 +21,7 @@ from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
 import cdl.obj
-from cdl.patch import ZAxisLogTool, to_cdl
+from cdl.patch import ZAxisLogTool, profile_to_signal
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
 
@@ -53,7 +53,7 @@ def test_image_tools_app():
         pos = QC.QPointF(*axes_to_canvas(active_item, x, y))
         cstool.end_rect(plot.filter, pos, pos)
         for csw in (plotwidget.xcsw, plotwidget.ycsw):
-            to_cdl(csw.cs_plot)
+            profile_to_signal(csw.cs_plot)
 
 
 if __name__ == "__main__":
