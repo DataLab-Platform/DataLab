@@ -16,7 +16,7 @@ user interfaces (thanks to `PlotPyStack`_ libraries).
 
 import os
 
-__version__ = "0.11.1"
+__version__ = "0.12.0"
 __docurl__ = __homeurl__ = "https://codra-ingenierie-informatique.github.io/DataLab/"
 __supporturl__ = (
     "https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose"

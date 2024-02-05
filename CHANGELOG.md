@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.11.1 ##
+## DataLab Version 0.12.0 ##
 
 🧹 Clarity-Enhanced Interface Update:
 
