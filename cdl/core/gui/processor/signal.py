@@ -320,12 +320,12 @@ class SignalProcessor(BaseProcessor):
         edit, param = self.init_param(param, cps.PolynomialFitParam, txt)
         if not edit or param.edit(self.panel.parent()):
             dlgfunc = fitdialog.polynomialfit
-            self.compute_fit(
-                txt,
-                lambda x, y, degree=param.degree, parent=self.panel.parent(): dlgfunc(
-                    x, y, degree, parent=parent
-                ),
-            )
+
+            def polynomialfit(x, y, parent=None):
+                """Polynomial fit dialog function"""
+                return dlgfunc(x, y, param.degree, parent=parent)
+
+            self.compute_fit(txt, polynomialfit)
 
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
@@ -334,16 +334,18 @@ class SignalProcessor(BaseProcessor):
         output = fitdlgfunc(obj.x, obj.y, parent=self.panel.parent())
         if output is not None:
             y, params = output
-            results = {}
+            params: list[fitdialog.FitParam]
+            pvalues = {}
             for param in params:
                 if re.match(r"[\S\_]*\d{2}$", param.name):
                     shname = param.name[:-2]
-                    value = results.get(shname, np.array([]))
-                    results[shname] = np.array(list(value) + [param.value])
+                    value = pvalues.get(shname, np.array([]))
+                    pvalues[shname] = np.array(list(value) + [param.value])
                 else:
-                    results[param.name] = param.value
+                    pvalues[param.name] = param.value
             # Creating new signal
-            signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=results)
+            metadata = {fitdlgfunc.__name__: pvalues}
+            signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
             # Creating new plot item
             self.panel.add_object(signal)
 
@@ -357,13 +359,13 @@ class SignalProcessor(BaseProcessor):
             if exec_dialog(dlg):
                 # Computing x, y
                 peaks = dlg.get_peak_indexes()
-                self.__row_compute_fit(
-                    obj,
-                    _("Multi-Gaussian fit"),
-                    lambda x, y, peaks=peaks, parent=self.panel.parent(): fitdlgfunc(
-                        x, y, peaks, parent=parent
-                    ),
-                )
+
+                def multigaussianfit(x, y, parent=None):
+                    """Multi-Gaussian fit dialog function"""
+                    # pylint: disable=cell-var-from-loop
+                    return fitdlgfunc(x, y, peaks, parent=parent)
+
+                self.__row_compute_fit(obj, _("Multi-Gaussian fit"), multigaussianfit)
 
     # ------Signal Computing
     @qt_try_except()
@@ -388,9 +390,10 @@ class SignalProcessor(BaseProcessor):
             ("min(y)", lambda xy: xy[1].min()),
             ("max(y)", lambda xy: xy[1].max()),
             ("<y>", lambda xy: xy[1].mean()),
-            ("Median(y)", lambda xy: np.median(xy[1])),
+            ("median(y)", lambda xy: np.median(xy[1])),
             ("σ(y)", lambda xy: xy[1].std()),
             ("<y>/σ(y)", lambda xy: xy[1].mean() / xy[1].std()),
+            ("peak-to-peak", lambda xy: xy[1].ptp()),
             ("Σ(y)", lambda xy: xy[1].sum()),
             ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
         ]

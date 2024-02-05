@@ -197,7 +197,7 @@ ROI from the first image to the second image, using the metadata.
 
 To extract the intensity profile along the X axis, we have two options:
 
-- Either select the "Line profile extraction..." entry |profile| in the
+- Either select the "Line profile..." entry |profile| in the
   "Operations > Intensity profiles" menu.
 
 - Or activate the "Cross section" tool |cross_section| in the vertical toolbar
@@ -209,14 +209,14 @@ To extract the intensity profile along the X axis, we have two options:
 
 .. |cross_section| image:: ../../images/tutorials/csection.png
 
-Let's try the first option, by selecting the "Line profile extraction..." entry |profile|:
+Let's try the first option, by selecting the "Line profile..." entry |profile|:
 that is the most straightforward way to extract a profile from an image, and it
 corresponds to the ``compute_profile`` method of DataLab's API (so it can be used
 in a script, a plugin or a macro).
 
 .. figure:: ../../images/tutorials/fabry_perot/24.png
 
-    Select the "Line profile extraction..." entry |profile| in the "Operations" menu.
+    Select the "Line profile..." entry |profile| in the "Operations" menu.
 
 .. figure:: ../../images/tutorials/fabry_perot/25.png
 

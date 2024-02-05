@@ -36,8 +36,18 @@ for future and past milestones.
 
 💥 New features:
 
-* Signal statistics feature: added `<y>/σ(y)` to the "Statistics" result table
-  (in addition to the mean, median, standard deviation, etc.)
+* Intensity profile extraction feature:
+  * Added graphical user interface to extract intensity profiles from images, for
+    both line and averaged profiles
+  * Parameters are still directly editable by the user ("Edit profile parameters"
+    button)
+  * Parameters are now stored from one profile extraction to another
+* Statistics feature:
+  * Added `<y>/σ(y)` to the signal "Statistics" result table
+    (in addition to the mean, median, standard deviation, etc.)
+  * Added `peak-to-peak` to the signal and image "Statistics" result table
+* Curve fitting feature: fit results are now stored in a dictionary in the signal
+  metadata (instead of being stored individually in the signal metadata)
 
 🛠️ Bug fixes:
 
@@ -233,9 +243,9 @@ bug fix
     * Now, those properties are saved in the HDF5 file and are restored when
       reloading the HDF5 file
   * New profile extraction features for images:
-    * Added "Line profile extraction" to "Operations" menu, to extract a profile from
+    * Added "Line profile" to "Operations" menu, to extract a profile from
       an image along a row or a column
-    * Added "Average profile extraction" to "Operations" menu, to extract the
+    * Added "Average profile" to "Operations" menu, to extract the
       average profile on a rectangular area of an image, along a row or a column
   * Image LUT range (contrast/brightness settings) is now saved in the HDF5 file:
     * As for curve and image styles, the LUT range was already persistent during

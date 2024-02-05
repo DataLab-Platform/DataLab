@@ -735,7 +735,7 @@ class RadialProfileParam(gds.DataSet):
     ).set_prop("display", store=_prop, callback=choice_callback)
 
     _func_prop = gds.FuncProp(_prop, lambda x: x == "user")
-    _xyl = "<sub>%s</sub>" % _("Center")
+    _xyl = "<sub>" + _("Center") + "</sub>"
     x0 = gds.FloatItem(f"X{_xyl}", unit="pixel").set_prop("display", active=_func_prop)
     y0 = gds.FloatItem(f"X{_xyl}", unit="pixel").set_prop("display", active=_func_prop)
 

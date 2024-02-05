@@ -3,6 +3,8 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+
 """
 Tour of DataLab features
 ------------------------
@@ -53,7 +55,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 from guidata.configtools import get_image_file_path
 from guidata.qthelpers import is_dark_mode
-from PyQt5.QtGui import QShowEvent
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -122,7 +123,7 @@ class Cover(QW.QWidget):
                 self.__path -= QG.QPainterPath(widget_path)
         self.repaint()
 
-    def showEvent(self, a0: QShowEvent | None) -> None:
+    def showEvent(self, a0: QG.QShowEvent | None) -> None:
         """
         Event handler for the "show" event.
 
@@ -491,8 +492,8 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
              meaning that the step is probably an introduction or a conclusion.
             setup_callback: Callback function to be called before the step is displayed,
              which takes a single argument, the `CDLMainWindow` instance.
-            teardown_callback: Callback function to be called after the step is displayed,
-             which takes a single argument, the `CDLMainWindow` instance.
+            teardown_callback: Callback function to be called after the step is
+             displayed, which takes a single argument, the `CDLMainWindow` instance.
             step_type: Step type. Can be "regular", "introduction" or "conclusion".
              Defaults to None.
         """
@@ -520,9 +521,8 @@ class BaseTour(QW.QWidget, metaclass=BaseTourMeta):
             self.end()
         elif result is StepResult.DEMO:
             self.end()
-            from cdl.tests.scenarios import (
-                demo,  # pylint: disable=import-outside-toplevel
-            )
+            # pylint: disable=import-outside-toplevel
+            from cdl.tests.scenarios import demo
 
             demo.play_demo(self.win)
         elif result is StepResult.RESTART:
@@ -867,31 +867,11 @@ def start(win: CDLMainWindow) -> None:
     tour.start()
 
 
-def test_dialogs() -> None:
-    """
-    Test the tour dialog boxes.
-    """
-    # pylint: disable=wrong-import-position
-    from guidata.qthelpers import qt_app_context
-
-    from cdl.core.gui.main import CDLMainWindow
-
-    with qt_app_context():
-        win = CDLMainWindow()
-        win.show()
-        base_dlg = StepDialog(win, "Title", "Text")
-        base_dlg._cover.exclude_widget(win.docks[win.signalpanel])
-        base_dlg._cover.update_geometry()
-        # QC.QTimer.singleShot(0, base_dlg._cover.update_geometry)
-        base_dlg.exec()
-        win.close()
-
-
 def test_tour() -> None:
     """
     Test the tour of DataLab features.
     """
-    # pylint: disable=wrong-import-position
+    # pylint: disable=import-outside-toplevel
     from cdl.tests import cdltest_app_context
 
     with cdltest_app_context() as win:
@@ -899,5 +879,4 @@ def test_tour() -> None:
 
 
 if __name__ == "__main__":
-    # test_dialogs()
     test_tour()

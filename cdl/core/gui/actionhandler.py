@@ -856,16 +856,19 @@ class ImageActionHandler(BaseActionHandler):
 
             with self.new_menu(_("Intensity profiles")):
                 self.new_action(
-                    _("Line profile extraction..."),
+                    _("Line profile..."),
                     triggered=self.panel.processor.compute_profile,
                     icon=get_icon("profile.svg"),
                     tip=_("Extract horizontal or vertical profile"),
+                    context_menu_pos=-1,
+                    context_menu_sep=True,
                 )
                 self.new_action(
-                    _("Average profile extraction..."),
+                    _("Average profile..."),
                     triggered=self.panel.processor.compute_average_profile,
                     icon=get_icon("profile_average.svg"),
                     tip=_("Extract average horizontal or vertical profile"),
+                    context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Radial profile extraction..."),
