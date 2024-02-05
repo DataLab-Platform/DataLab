@@ -25,10 +25,12 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.mathjax",
     "sphinx.ext.githubpages",
+    "sphinx_sitemap",
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
 ]
+html_baseurl = cdl.__homeurl__  # for sitemap extension
 templates_path = ["_templates"]
 exclude_patterns = []
 
