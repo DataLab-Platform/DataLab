@@ -341,3 +341,27 @@ def configure_menu_about_to_show(menu: QW.QMenu, slot: Callable) -> None:
     if sys.platform == "darwin":
         menu.addAction(QW.QAction(menu))
     menu.aboutToShow.connect(slot)
+
+
+def add_corner_menu(
+    tabwidget: QW.QTabWidget, corner: QC.Qt.Corner | None = None
+) -> QW.QMenu:
+    """Add menu as corner widget to tab widget
+
+    Args:
+        tabwidget: Tab widget
+        corner: Corner
+
+    Returns:
+        Menu
+    """
+    if corner is None:
+        corner = QC.Qt.TopRightCorner
+    menu = QW.QMenu(tabwidget)
+    btn = QW.QToolButton(tabwidget)
+    btn.setMenu(menu)
+    btn.setPopupMode(QW.QToolButton.InstantPopup)
+    btn.setIcon(get_icon("menu.svg"))
+    btn.setToolTip(_("Open tab menu"))
+    tabwidget.setCornerWidget(btn, corner)
+    return menu

@@ -412,15 +412,20 @@ class BaseDataPanel(AbstractPanel):
         """Return actions for category"""
         return self.acthandler.feature_actions.get(category, [])
 
-    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
-        """Popup context menu at position"""
+    def get_context_menu(self) -> QW.QMenu:
+        """Update and return context menu"""
         # Note: For now, this is completely unnecessary to clear context menu everytime,
         # but implementing it this way could be useful in the future in menu contents
         # should take into account current object selection
         self.context_menu.clear()
         actions = self.get_category_actions(actionhandler.ActionCategory.CONTEXT_MENU)
         add_actions(self.context_menu, actions)
-        self.context_menu.popup(position)
+        return self.context_menu
+
+    def __popup_contextmenu(self, position: QC.QPoint) -> None:  # pragma: no cover
+        """Popup context menu at position"""
+        menu = self.get_context_menu()
+        menu.popup(position)
 
     # ------Creating, adding, removing objects------------------------------------------
     def add_group(self, title: str) -> objectmodel.ObjectGroup:

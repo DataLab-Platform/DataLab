@@ -59,7 +59,11 @@ from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
 from cdl.utils.misc import go_to_error
-from cdl.utils.qthelpers import bring_to_front, configure_menu_about_to_show
+from cdl.utils.qthelpers import (
+    add_corner_menu,
+    bring_to_front,
+    configure_menu_about_to_show,
+)
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -132,40 +136,41 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.ready_flag = True
 
         self.hide_on_close = hide_on_close
-        self.__old_size = None
+        self.__old_size: tuple[int, int] | None = None
         self.__memory_warning = False
-        self.memorystatus = None
+        self.memorystatus: status.MemoryStatus | None = None
 
-        self.console = None
-        self.macropanel: MacroPanel = None
+        self.console: DockableConsole | None = None
+        self.macropanel: MacroPanel | None = None
 
-        self.main_toolbar: QW.QToolBar = None
-        self.signal_toolbar: QW.QToolBar = None
-        self.image_toolbar: QW.QToolBar = None
-        self.signalpanel: SignalPanel = None
-        self.imagepanel: ImagePanel = None
-        self.tabwidget: QW.QTabWidget = None
-        self.docks: dict[AbstractPanel, QW.QDockWidget] = None
+        self.main_toolbar: QW.QToolBar | None = None
+        self.signal_toolbar: QW.QToolBar | None = None
+        self.image_toolbar: QW.QToolBar | None = None
+        self.signalpanel: SignalPanel | None = None
+        self.imagepanel: ImagePanel | None = None
+        self.tabwidget: QW.QTabWidget | None = None
+        self.tabmenu: QW.QMenu | None = None
+        self.docks: dict[AbstractPanel, QW.QDockWidget] | None = None
         self.h5inputoutput = H5InputOutput(self)
 
-        self.openh5_action: QW.QAction = None
-        self.saveh5_action: QW.QAction = None
-        self.browseh5_action: QW.QAction = None
-        self.settings_action: QW.QAction = None
-        self.quit_action: QW.QAction = None
-        self.auto_refresh_action: QW.QAction = None
-        self.showlabel_action: QW.QAction = None
+        self.openh5_action: QW.QAction | None = None
+        self.saveh5_action: QW.QAction | None = None
+        self.browseh5_action: QW.QAction | None = None
+        self.settings_action: QW.QAction | None = None
+        self.quit_action: QW.QAction | None = None
+        self.auto_refresh_action: QW.QAction | None = None
+        self.showlabel_action: QW.QAction | None = None
 
-        self.file_menu: QW.QMenu = None
-        self.edit_menu: QW.QMenu = None
-        self.operation_menu: QW.QMenu = None
-        self.processing_menu: QW.QMenu = None
-        self.computing_menu: QW.QMenu = None
-        self.plugins_menu: QW.QMenu = None
-        self.view_menu: QW.QMenu = None
-        self.help_menu: QW.QMenu = None
+        self.file_menu: QW.QMenu | None = None
+        self.edit_menu: QW.QMenu | None = None
+        self.operation_menu: QW.QMenu | None = None
+        self.processing_menu: QW.QMenu | None = None
+        self.computing_menu: QW.QMenu | None = None
+        self.plugins_menu: QW.QMenu | None = None
+        self.view_menu: QW.QMenu | None = None
+        self.help_menu: QW.QMenu | None = None
 
-        self.__is_modified = None
+        self.__is_modified = False
         self.set_modified(False)
 
         # Starting XML-RPC server thread
@@ -793,9 +798,16 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         return imagewidget
 
+    def __update_tab_menu(self) -> None:
+        """Update tab menu"""
+        current_panel: BaseDataPanel = self.tabwidget.currentWidget()
+        add_actions(self.tabmenu, current_panel.get_context_menu().actions())
+
     def __add_signal_image_panels(self) -> None:
         """Add signal and image panels"""
         self.tabwidget = QW.QTabWidget()
+        self.tabmenu = add_corner_menu(self.tabwidget)
+        configure_menu_about_to_show(self.tabmenu, self.__update_tab_menu)
         cdock = self.__add_dockwidget(self.__add_signal_panel(), title=_("Signal View"))
         idock = self.__add_dockwidget(self.__add_image_panel(), title=_("Image View"))
         self.tabifyDockWidget(cdock, idock)
