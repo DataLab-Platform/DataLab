@@ -45,13 +45,14 @@ def test_image_tools_app():
             lstool.activate()
             qt_wait(1, except_unattended=True)
 
-        # === Testing "to_cdl" -----------------------------------------------------
-        cstool = plotmanager.get_tool(CrossSectionTool)
-        cstool.activate()
+        # === Testing "profile_to_signal" ----------------------------------------------
+        cstool: CrossSectionTool = plotmanager.get_tool(CrossSectionTool)
+        for panel in (plotmanager.get_xcs_panel(), plotmanager.get_ycs_panel()):
+            panel.setVisible(True)
         x, y = newparam.width // 2, newparam.height // 2
         active_item = plot.get_active_item()
         pos = QC.QPointF(*axes_to_canvas(active_item, x, y))
-        cstool.end_rect(plot.filter, pos, pos)
+        cstool.add_shape_to_plot(plot, pos, pos)
         for csw in (plotwidget.xcsw, plotwidget.ycsw):
             profile_to_signal(csw.cs_plot)
 

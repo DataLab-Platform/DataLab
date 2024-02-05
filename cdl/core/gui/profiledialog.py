@@ -58,6 +58,7 @@ class ProfileExtractionDialog(PlotDialog):
         self.__add_initial_shape = add_initial_shape
         if options is None:
             options = PlotOptions(show_contrast=True)
+        options.show_xsection = options.show_ysection = True
         toolklass = CrossSectionTool if mode == "line" else AverageCrossSectionTool
         super().__init__(title=title, edit=True, options=options, parent=parent)
         self.setObjectName("profileextraction")
@@ -234,7 +235,6 @@ class ProfileExtractionDialog(PlotDialog):
         plot.add_item(item)
         plot.set_active_item(item)
         item.unselect()
-        self.cstool.activate()
         if self.__add_initial_shape:
             plot = self.get_plot()
             self.show()  # To be able to convert axes to canvas coordinates
@@ -246,4 +246,6 @@ class ProfileExtractionDialog(PlotDialog):
                 y1, y2 = sorted([self.param.row1, self.param.row2])
                 p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
                 p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
-            self.cstool.end_rect(plot.filter, p0, p1)
+            self.cstool.add_shape_to_plot(plot, p0, p1)
+        else:
+            self.cstool.activate()
