@@ -231,6 +231,7 @@ class ProfileExtractionDialog(PlotDialog):
         item.set_readonly(True)
         item.set_resizable(False)
         item.set_rotatable(False)
+        item.set_selectable(False)
         plot = self.get_plot()
         plot.add_item(item)
         plot.set_active_item(item)
