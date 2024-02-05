@@ -61,7 +61,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         parent (QWidget): Parent widget
     """
 
-    LOCATION = QC.Qt.LeftDockWidgetArea
+    LOCATION = QC.Qt.RightDockWidgetArea
     PANEL_STR = _("Macro panel")
 
     H5_PREFIX = "DataLab_Mac"

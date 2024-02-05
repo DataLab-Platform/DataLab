@@ -14,6 +14,11 @@ for future and past milestones.
   (instead of "Curve panel" and "Image panel")
 * The data panel toolbar has been renamed to "Signal Toolbar" and "Image Toolbar"
   (instead of "Signal Processing Toolbar" and "Image Processing Toolbar")
+* Ergonomics improvements: the "Signal Panel" and "Image Panel" are now displayed
+  on the left side of the main window, and the "Signal View" and "Image View" are
+  displayed on the right side of the main window. This reduces the distance between
+  the list of objects (signals and images) and the associated actions (toolbars and
+  menus), and makes the interface more intuitive and easier to use
 
 ✨ New tour and demo feature:
 
@@ -36,6 +41,8 @@ for future and past milestones.
 
 💥 New features:
 
+* Added menu on the "Signal Panel" and "Image Panel" tabs corner to quickly access the
+  most used features (e.g. "Add", "Remove", "Duplicate", etc.)
 * Intensity profile extraction feature:
   * Added graphical user interface to extract intensity profiles from images, for
     both line and averaged profiles

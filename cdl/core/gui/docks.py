@@ -29,7 +29,7 @@ if TYPE_CHECKING:  # pragma: no cover
 class DockablePlotWidget(DockableWidget):
     """Docked plotting widget"""
 
-    LOCATION = QC.Qt.LeftDockWidgetArea
+    LOCATION = QC.Qt.RightDockWidgetArea
 
     def __init__(
         self,
