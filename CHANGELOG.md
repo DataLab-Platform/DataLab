@@ -64,6 +64,7 @@ for future and past milestones.
 🛠️ Bug fixes:
 
 * Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
+* Fixed [Issue #49](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image
 
 ## DataLab Version 0.11.0 ##
 
