@@ -55,6 +55,11 @@ for future and past milestones.
   * Added `peak-to-peak` to the signal and image "Statistics" result table
 * Curve fitting feature: fit results are now stored in a dictionary in the signal
   metadata (instead of being stored individually in the signal metadata)
+* Window state:
+  * The toolbars and dock widgets state (visibility, position, etc.) are now stored
+    in the configuration file and restored at startup (size and position were already
+    stored and restored)
+  * This implements part of [Issue #30](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/30) - Save/restore main window layout
 
 🛠️ Bug fixes:
 

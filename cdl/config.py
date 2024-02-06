@@ -107,6 +107,7 @@ class MainSection(conf.Section, metaclass=conf.SectionMeta):
     window_maximized = conf.Option()
     window_position = conf.Option()
     window_size = conf.Option()
+    window_state = conf.Option()
     base_dir = conf.WorkingDirOption()
     available_memory_threshold = conf.Option()
     current_tab = conf.Option()

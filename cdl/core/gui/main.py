@@ -616,8 +616,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 posy = min(max(posy, 0), sgeo.height() - height)
                 self.move(QC.QPoint(posx, posy))
 
-    def __save_pos_and_size(self) -> None:
-        """Save main window position and size to configuration"""
+    def __restore_state(self) -> None:
+        """Restore main window state from configuration"""
+        state = Conf.main.window_state.get(None)
+        if state is not None:
+            self.restoreState(QC.QByteArray(state))
+            for widget in self.children():
+                if isinstance(widget, QW.QDockWidget):
+                    self.restoreDockWidget(widget)
+
+    def __save_pos_size_and_state(self) -> None:
+        """Save main window position, size and state to configuration"""
         is_maximized = self.windowState() == QC.Qt.WindowMaximized
         Conf.main.window_maximized.set(is_maximized)
         if not is_maximized:
@@ -625,6 +634,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             Conf.main.window_size.set((size.width(), size.height()))
             pos = self.pos()
             Conf.main.window_position.set((pos.x(), pos.y()))
+        Conf.main.window_state.set(self.saveState().data())
 
     def setup(self, console: bool = False) -> None:
         """Setup main window
@@ -644,6 +654,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__update_actions()
         self.__add_macro_panel()
         self.__configure_panels()
+        # Now that everything is set up, we can restore the window state:
+        self.__restore_state()
 
     def __register_plugins(self) -> None:
         """Register plugins"""
@@ -723,6 +735,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             triggered=self.__edit_settings,
         )
         self.main_toolbar = self.addToolBar(_("Main Toolbar"))
+        self.main_toolbar.setObjectName("main_toolbar")
         add_actions(
             self.main_toolbar,
             [
@@ -769,6 +782,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Toolbar"))
+        self.signal_toolbar.setObjectName("signal_toolbar")
         curvewidget = DockablePlotWidget(self, PlotType.CURVE)
         curveplot = curvewidget.get_plot()
         curveplot.add_item(make.legend("TR"))
@@ -781,6 +795,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Toolbar"))
+        self.image_toolbar.setObjectName("image_toolbar")
         imagewidget = DockablePlotWidget(self, PlotType.IMAGE)
         self.imagepanel = image.ImagePanel(
             self, imagewidget.plotwidget, self.image_toolbar
@@ -1090,6 +1105,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
         """Add QDockWidget and toggleViewAction"""
         dockwidget, location = child.create_dockwidget(title)
+        dockwidget.setObjectName(title)
         self.addDockWidget(location, dockwidget)
         return dockwidget
 
@@ -1539,7 +1555,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 # configurations only.
                 pass
         self.reset_all()
-        self.__save_pos_and_size()
+        self.__save_pos_size_and_state()
         self.__unregister_plugins()
 
         # Saving current tab for next session
