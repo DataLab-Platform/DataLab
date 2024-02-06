@@ -24,6 +24,8 @@ def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
     Returns:
         list[np.ndarray]: list of 1-D array data (x, y, dx, dy)
     """
+    if len(data.ravel()) == len(data):
+        return np.arange(len(data)), data.ravel(), None, None
     rows, cols = data.shape
     for colnb in (2, 3, 4):
         if cols == colnb and rows > colnb:
