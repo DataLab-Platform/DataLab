@@ -13,6 +13,7 @@ pycodestyle
 pyinstaller>=6.2
 sphinx
 sphinx-intl
+sphinx-sitemap
 myst_parser
 sphinx_design
 sphinx-copybutton
