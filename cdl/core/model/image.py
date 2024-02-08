@@ -307,11 +307,6 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         self.uuid = str(uuid4())
 
-    @property
-    def size(self) -> tuple[int, int]:
-        """Returns (width, height)"""
-        return self.data.shape[1], self.data.shape[0]
-
     def __add_metadata(self, key: str, value: Any) -> None:
         """Add value to metadata if value can be converted into builtin/NumPy type
 

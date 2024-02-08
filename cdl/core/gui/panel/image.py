@@ -97,7 +97,7 @@ class ImagePanel(BaseDataPanel):
         if newparam is None:
             newparam = new_image_param(title=title)
         if curobj is not None:
-            newparam.width, newparam.height = curobj.size
+            newparam.width, newparam.height = curobj.data.shape
             newparam.dtype = ImageDatatypes.from_dtype(curobj.data.dtype)
         return newparam
 

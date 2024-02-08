@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 15:09+0100\n"
+"POT-Creation-Date: 2024-02-08 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -1173,10 +1173,6 @@ msgstr "Modèle d'image"
 msgid "Image object"
 msgstr "Objet image"
 
-#: cdl.obj.ImageObj.size:1 of
-msgid "Returns (width, height)"
-msgstr "Renvoie (largeur, hauteur)"
-
 #: cdl.core.model.image.ImageObj.set_metadata_from:1 of
 msgid ""
 "Set metadata from object: dict-like (only string keys are considered) or "
@@ -1359,4 +1355,7 @@ msgstr "Vérifie si les types de données sont valides"
 
 #~ msgid "_description_"
 #~ msgstr ""
+
+#~ msgid "Returns (width, height)"
+#~ msgstr "Renvoie (largeur, hauteur)"
 

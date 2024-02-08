@@ -50,7 +50,7 @@ def test_stat_app():
         inew = new_image_param(_("Raw data (2D-Gaussian)"), ImageTypes.GAUSS)
         addparam = Gauss2DParam()
         ima = create_image_from_param(inew, addparam=addparam, edit=False)
-        dy, dx = ima.size
+        dy, dx = ima.data.shape
         ima.roi = np.array(
             [
                 [dx // 2, 0, dx, dy],

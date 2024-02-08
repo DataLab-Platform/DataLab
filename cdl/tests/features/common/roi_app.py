@@ -57,7 +57,7 @@ def create_test_image_with_roi(
         cdl.obj.ImageObj: Image object with ROIs
     """
     ima = create_multigauss_image(newimageparam)
-    dy, dx = ima.size
+    dy, dx = ima.data.shape
     roi1 = [dx // 2, dy // 2, dx - 25, dy]
     roi2 = [dx // 4, dy // 2, dx // 2, dy // 2]
     ima.roi = np.array([roi1, roi2], int)

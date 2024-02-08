@@ -173,7 +173,7 @@ class ImageProcessor(BaseProcessor):
         """Resize image"""
         obj0 = self.panel.objview.get_sel_objects(include_groups=True)[0]
         for obj in self.panel.objview.get_sel_objects():
-            if obj.size != obj0.size:
+            if obj.data.shape != obj0.data.shape:
                 QW.QMessageBox.warning(
                     self.panel.parent(),
                     APP_NAME,
@@ -183,7 +183,7 @@ class ImageProcessor(BaseProcessor):
                 )
         edit, param = self.init_param(param, cpi.ResizeParam, _("Resize"))
         if edit:
-            original_size = obj0.size
+            original_size = obj0.data.shape
             dlg = ResizeDialog(
                 self.plotwidget,
                 new_size=original_size,
