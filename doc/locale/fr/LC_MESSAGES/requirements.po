@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:09+0100\n"
+"POT-Creation-Date: 2024-02-08 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -210,36 +210,44 @@ msgstr ""
 "traduction."
 
 #: ../../requirements.rst:90
-msgid "myst_parser"
+msgid "sphinx-sitemap"
 msgstr ""
 
 #: ../../requirements.rst:92
-msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
-msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org/),"
+msgid "Sitemap generator for Sphinx"
+msgstr "Générateur de plan de site pour Sphinx"
 
 #: ../../requirements.rst:93
-msgid "sphinx_design"
+msgid "myst_parser"
 msgstr ""
 
 #: ../../requirements.rst:95
+msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
+msgstr "Un analyseur étendu compatible [CommonMark](https://spec.commonmark.org/),"
+
+#: ../../requirements.rst:96
+msgid "sphinx_design"
+msgstr ""
+
+#: ../../requirements.rst:98
 msgid ""
 "A sphinx extension for designing beautiful, view size responsive web "
 "components."
 msgstr ""
 
-#: ../../requirements.rst:96
+#: ../../requirements.rst:99
 msgid "sphinx-copybutton"
 msgstr ""
 
-#: ../../requirements.rst:98
+#: ../../requirements.rst:101
 msgid "Add a copy button to each of your code cells."
-msgstr ""
+msgstr "Extension Sphinx pour ajouter un bouton de copie aux cellules de code."
 
-#: ../../requirements.rst:99
+#: ../../requirements.rst:102
 msgid "pydata-sphinx-theme"
 msgstr ""
 
-#: ../../requirements.rst:101
+#: ../../requirements.rst:104
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
@@ -257,4 +265,3 @@ msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 #~ "beautiful, view size responsive web "
 #~ "components."
 #~ msgstr "Une extension sphinx pour concevoir de beaux composants web."
-

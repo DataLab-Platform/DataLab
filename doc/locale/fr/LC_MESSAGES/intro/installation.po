@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:09+0100\n"
+"POT-Creation-Date: 2024-02-08 18:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -452,41 +452,50 @@ msgid "Sphinx utility that make it easy to translate and to apply translation."
 msgstr "Utilitaire pour la traduction de la documentation générée par Sphinx."
 
 #: ../../requirements.rst:90
-msgid "myst_parser"
+msgid "sphinx-sitemap"
 msgstr ""
 
 #: ../../requirements.rst:92
+msgid "Sitemap generator for Sphinx"
+msgstr ""
+
+#: ../../requirements.rst:93
+msgid "myst_parser"
+msgstr ""
+
+#: ../../requirements.rst:95
 msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
 msgstr ""
 "Un parseur étendu compatible avec "
 "[CommonMark](https://spec.commonmark.org/)"
 
-#: ../../requirements.rst:93
+#: ../../requirements.rst:96
 msgid "sphinx_design"
 msgstr ""
 
-#: ../../requirements.rst:95
+#: ../../requirements.rst:98
 msgid ""
 "A sphinx extension for designing beautiful, view size responsive web "
 "components."
 msgstr "Extension sphinx pour la conception de composants web réactifs."
 
-#: ../../requirements.rst:96
+#: ../../requirements.rst:99
 msgid "sphinx-copybutton"
 msgstr ""
 
-#: ../../requirements.rst:98
+#: ../../requirements.rst:101
 msgid "Add a copy button to each of your code cells."
 msgstr "Extension sphinx ajoutant un bouton de copie à chaque cellule de code."
 
-#: ../../requirements.rst:99
+#: ../../requirements.rst:102
 msgid "pydata-sphinx-theme"
 msgstr ""
 
-#: ../../requirements.rst:101
+#: ../../requirements.rst:104
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
 #: ../../intro/installation.rst:171
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+
