@@ -806,7 +806,7 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, oids: list[str] | None = None) -> QW.QDialog | None:
+    def open_separate_view(self, oids: list[str] | None = None) -> PlotDialog | None:
         """
         Open separate view for visualizing selected objects
 
@@ -942,7 +942,7 @@ class BaseDataPanel(AbstractPanel):
         options: dict[str, any] = None,
         toolbar: bool = False,
         tools: list[GuiTool] = None,
-    ) -> tuple[QW.QDialog | None, SignalObj | ImageObj]:
+    ) -> tuple[PlotDialog | None, SignalObj | ImageObj]:
         """Create new pop-up dialog for the currently selected signal/image.
 
         Args:
@@ -989,7 +989,9 @@ class BaseDataPanel(AbstractPanel):
         for item in plot.items:
             item.set_selectable(False)
         # pylint: disable=not-callable
-        roi_editor = self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
+        roi_editor: roieditor.SignalROIEditor | roieditor.ImageROIEditor = (
+            self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
+        )
         dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
         if exec_dialog(dlg):
             return roi_editor.get_data()

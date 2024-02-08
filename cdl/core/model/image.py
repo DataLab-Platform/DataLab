@@ -113,7 +113,7 @@ class RoiDataItem:
         self._data = data
 
     @classmethod
-    def from_image(cls, obj, geometry: RoiDataGeometries) -> RoiDataItem:
+    def from_image(cls, obj: ImageObj, geometry: RoiDataGeometries) -> RoiDataItem:
         """Construct roi data item from image object: called for making new ROI items
 
         Args:

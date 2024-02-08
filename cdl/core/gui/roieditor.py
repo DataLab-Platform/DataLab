@@ -12,6 +12,7 @@ ROI editor widgets
 from __future__ import annotations
 
 import abc
+from typing import TYPE_CHECKING, Union
 
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
@@ -22,8 +23,14 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
-from cdl.core.model.base import BaseObj
 from cdl.core.model.image import RoiDataGeometries
+
+if TYPE_CHECKING:
+    from plotpy.plot import PlotDialog
+
+    from cdl.obj import ImageObj, SignalObj
+
+    AnyObj = Union[SignalObj, ImageObj]
 
 
 class BaseROIEditorMeta(type(QW.QWidget), abc.ABCMeta):
@@ -38,8 +45,8 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
 
     def __init__(
         self,
-        parent: QW.QDialog,
-        obj: BaseObj,
+        parent: PlotDialog,
+        obj: AnyObj,
         extract: bool,
         singleobj: bool | None = None,
     ):
