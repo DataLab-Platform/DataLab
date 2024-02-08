@@ -120,11 +120,13 @@ class RoiDataItem:
             obj (ImageObj): image object
             geometry (RoiDataGeometries): ROI geometry
         """
-        x0, x1 = obj.x0, obj.size[0] + obj.x0
+        width, height = obj.data.shape[1] * obj.dx, obj.data.shape[0] * obj.dy
+        frac = 0.2
+        x0, x1 = obj.x0 + frac * width, obj.x0 + (1 - frac) * width
         if geometry is RoiDataGeometries.RECTANGLE:
-            y0, y1 = obj.y0, obj.size[1] + obj.y0
+            y0, y1 = obj.y0 + frac * height, obj.y0 + (1 - frac) * height
         else:
-            y0 = y1 = 0.5 * (2 * obj.y0 + obj.size[1])
+            y0 = y1 = obj.yc
         coords = x0, y0, x1, y1
         return cls(coords)
 
