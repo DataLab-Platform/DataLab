@@ -53,7 +53,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import numpy as np
-from guidata.configtools import get_image_file_path
+from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import is_dark_mode
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -180,35 +180,44 @@ class StepDialog(QW.QDialog):
         self.setModal(True)
         self.step = step
         self.result: StepResult | None = None
-        self._btnmap: dict[QW.QAbstractButton, StepResult] = {}
-        self._bbox: QW.QDialogButtonBox | None = None
+        self.__btnmap: dict[QW.QPushButton, StepResult] = {}
+        self.__btnlayout = QW.QHBoxLayout()
         self._setup_ui()
 
-    def _btn(self, text: str, default: bool = False) -> QW.QPushButton:
+    def __btn(self, text: str, result: StepResult, default: bool = False) -> None:
         """
         Create a button.
 
         Args:
             text: Button text.
-
-        Returns:
-            Button.
+            result: Result of the button.
+            default: Default button. Defaults to False.
         """
         btn = QW.QPushButton(text)
         btn.setAutoDefault(default)
         btn.setDefault(default)
-        return btn
+        icon = {
+            "<<": "rewind.svg",
+            "<": "previous.svg",
+            ">": "next.svg",
+            "X": "stop.svg",
+        }.get(text)
+        if icon is not None:
+            btn.setIcon(get_icon(icon))
+            btn.setText("")
+            btn.setMinimumWidth(100)
+        btn.clicked.connect(lambda: self.button_clicked(btn))
+        self.__btnmap[btn] = result
+        self.__btnlayout.addWidget(btn)
 
-    def __set_default_button(self, btn: QW.QPushButton) -> None:
+    def __btn_spacing(self, spacing: int) -> None:
         """
-        Set the default button in the button box.
+        Add spacing between buttons.
 
         Args:
-            btn: Button.
+            spacing: Spacing.
         """
-        for button in self._bbox.buttons():
-            button.setAutoDefault(button is btn)
-            button.setDefault(button is btn)
+        self.__btnlayout.addSpacing(spacing)
 
     def __create_label(
         self,
@@ -266,29 +275,21 @@ class StepDialog(QW.QDialog):
         """
         Setup the user interface.
         """
-        self._bbox = bbox = QW.QDialogButtonBox()
-        role = QW.QDialogButtonBox.AcceptRole
         if self.step.step_type == "introduction":
-            next_btn = bbox.addButton(_("Start"), role)
-            self._btnmap[next_btn] = StepResult.NEXT
-            self.__set_default_button(next_btn)
+            self.__btn_spacing(50)
+            self.__btn(_("Start"), StepResult.NEXT, True)
+            self.__btn(_("Close"), StepResult.CLOSE)
+            self.__btn_spacing(50)
         elif self.step.step_type == "conclusion":
-            self._btnmap[bbox.addButton("<<", role)] = StepResult.RESTART
-            self._btnmap[bbox.addButton("<", role)] = StepResult.PREVIOUS
-            self._btnmap[bbox.addButton(_("Demo"), role)] = StepResult.DEMO
+            self.__btn("<<", StepResult.RESTART)
+            self.__btn("<", StepResult.PREVIOUS)
+            self.__btn(_("Demo"), StepResult.DEMO)
+            self.__btn("X", StepResult.CLOSE, True)
         else:
-            self._btnmap[bbox.addButton("<<", role)] = StepResult.RESTART
-            self._btnmap[bbox.addButton("<", role)] = StepResult.PREVIOUS
-            next_btn = bbox.addButton(">", role)
-            self._btnmap[next_btn] = StepResult.NEXT
-            self.__set_default_button(next_btn)
-        close_btn = bbox.addButton("X", role)
-        if self.step.step_type == "introduction":
-            close_btn.setText(_("Close"))
-        self._btnmap[close_btn] = StepResult.CLOSE
-        if self.step.step_type == "conclusion":
-            self.__set_default_button(close_btn)
-        bbox.clicked.connect(self.button_clicked)
+            self.__btn("<<", StepResult.RESTART)
+            self.__btn("<", StepResult.PREVIOUS)
+            self.__btn(">", StepResult.NEXT, True)
+            self.__btn("X", StepResult.CLOSE)
         self._layout = QW.QVBoxLayout()
         if self.step.step_type in ("introduction", "conclusion"):
             logo = QW.QLabel()
@@ -306,7 +307,7 @@ class StepDialog(QW.QDialog):
             label.setAlignment(QC.Qt.AlignLeft)
         self._layout.addWidget(label)
         self._layout.addSpacing(5)
-        self._layout.addWidget(bbox)
+        self._layout.addLayout(self.__btnlayout)
         if self.step.step_type == "introduction":
             self._layout.addSpacing(5)
             help_text = _(
@@ -318,15 +319,18 @@ class StepDialog(QW.QDialog):
             self._layout.addWidget(help_label)
         self.setLayout(self._layout)
 
-    def button_clicked(self, button: QW.QAbstractButton) -> None:
+    def button_clicked(self, button: QW.QPushButton) -> None:
         """
         Event handler for the "clicked" event on the buttons.
 
         Args:
             button: Button that was clicked.
         """
-        self.result = self._btnmap[button]
-        self.accept()
+        self.result = self.__btnmap[button]
+        if self.result is StepResult.CLOSE:
+            self.reject()
+        else:
+            self.accept()
 
     def reject(self) -> None:
         """
