@@ -25,8 +25,9 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine, QwtScaleDraw
+from qwt import QwtLinearScaleEngine
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
+from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
@@ -259,7 +260,9 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
 # ==============================================================================
 #  Cross section : add a button to send curve to DataLab's signal panel
 # ==============================================================================
-def profile_to_signal(cs_plot: csplot.CrossSectionPlot) -> None:
+def profile_to_signal(
+    cs_plot: csplot.HorizontalCrossSectionPlot | csplot.VerticalCrossSectionPlot,
+) -> None:
     """Send cross section curve to DataLab's signal list"""
     win = None
     for win in QApplication.topLevelWidgets():
