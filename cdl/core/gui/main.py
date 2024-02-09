@@ -603,9 +603,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             posx, posy = pos
             self.move(QC.QPoint(posx, posy))
         size = Conf.main.window_size.get(None)
-        if size is not None:
-            width, height = size
-            self.resize(QC.QSize(width, height))
+        if size is None:
+            size = 1200, 700
+        width, height = size
+        self.resize(QC.QSize(width, height))
         if pos is not None and size is not None:
             sgeo = self.screen().availableGeometry()
             out_inf = posx < -int(0.9 * width) or posy < -int(0.9 * height)
