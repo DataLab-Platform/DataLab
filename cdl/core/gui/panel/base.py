@@ -79,7 +79,7 @@ from cdl.utils.qthelpers import (
 )
 
 if TYPE_CHECKING:  # pragma: no cover
-    from plotpy.plot import PlotWidget
+    from plotpy.plot import BasePlot, PlotWidget
     from plotpy.tools import GuiTool
 
     from cdl.core.gui import ObjItf
@@ -283,6 +283,15 @@ class BaseDataPanel(AbstractPanel):
         super().closeEvent(event)
 
     # ------AbstractPanel interface-----------------------------------------------------
+    def plot_items_changed(self, plot: BasePlot) -> None:
+        """Plot items changed: update metadata of all objects from plot items"""
+        items = plot.get_items()
+        for item in items:
+            # Find the object corresponding to the plot item
+            obj = self.plothandler.get_obj_from_item(item)
+            if obj is not None:
+                obj.update_metadata_from_plot_item(item)
+
     def serialize_object_to_hdf5(
         self, obj: SignalObj | ImageObj, writer: NativeH5Writer
     ) -> None:

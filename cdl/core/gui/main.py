@@ -783,23 +783,21 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Setup signal toolbar, widgets and panel"""
         self.signal_toolbar = self.addToolBar(_("Signal Toolbar"))
         self.signal_toolbar.setObjectName("signal_toolbar")
-        curvewidget = DockablePlotWidget(self, PlotType.CURVE)
-        curveplot = curvewidget.get_plot()
-        curveplot.add_item(make.legend("TR"))
-        self.signalpanel = signal.SignalPanel(
-            self, curvewidget.plotwidget, self.signal_toolbar
-        )
+        dpw = DockablePlotWidget(self, PlotType.CURVE)
+        plot = dpw.get_plot()
+        plot.add_item(make.legend("TR"))
+        self.signalpanel = signal.SignalPanel(self, dpw.plotwidget, self.signal_toolbar)
         self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
-        return curvewidget
+        plot.SIG_ITEMS_CHANGED.connect(self.signalpanel.plot_items_changed)
+        return dpw
 
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
         self.image_toolbar = self.addToolBar(_("Image Toolbar"))
         self.image_toolbar.setObjectName("image_toolbar")
-        imagewidget = DockablePlotWidget(self, PlotType.IMAGE)
-        self.imagepanel = image.ImagePanel(
-            self, imagewidget.plotwidget, self.image_toolbar
-        )
+        dpw = DockablePlotWidget(self, PlotType.IMAGE)
+        plot = dpw.get_plot()
+        self.imagepanel = image.ImagePanel(self, dpw.plotwidget, self.image_toolbar)
         # -----------------------------------------------------------------------------
         # # Before eventually disabling the "peritem" mode by default, wait for the
         # # plotpy bug to be fixed (peritem mode is not compatible with multiple image
@@ -811,7 +809,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         #     cspanel.peritem_ac.setChecked(False)
         # -----------------------------------------------------------------------------
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
-        return imagewidget
+        plot.SIG_ITEMS_CHANGED.connect(self.imagepanel.plot_items_changed)
+        return dpw
 
     def __update_tab_menu(self) -> None:
         """Update tab menu"""

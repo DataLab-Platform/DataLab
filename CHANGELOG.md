@@ -66,6 +66,13 @@ for future and past milestones.
 * Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
 * Fixed [Issue #49](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image
 * Fixed [Issue #51](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/51) - Unexpected dimensions when adding new ROI on an image with X/Y arbitrary units (not pixels)
+* Improved plot item style serialization management:
+  * Before this release, the plot item style was stored in the signal/image metadata
+    only when saving the workspace to an HDF5 file. So, when modifying the style of a
+    signal/image from the "Parameters" button (view toolbar), the style was not kept
+    in some cases (e.g. when duplicating the signal/image).
+  * Now, the plot item style is stored in the signal/image metadata whenever the style
+    is modified, and is restored when reloading the workspace
 
 ## DataLab Version 0.11.0 ##
 

@@ -73,9 +73,9 @@ class BasePlotHandler:
         self.__plotitems: dict[str, CurveItem | MaskedImageItem] = {}
 
         self.__shapeitems = []
-        self.__cached_hashes: WeakKeyDictionary[
-            SignalObj | ImageObj, list[int]
-        ] = WeakKeyDictionary()
+        self.__cached_hashes: WeakKeyDictionary[SignalObj | ImageObj, list[int]] = (
+            WeakKeyDictionary()
+        )
         self.__auto_refresh = False
 
     def __len__(self) -> int:
@@ -104,11 +104,27 @@ class BasePlotHandler:
         otherwise None is returned."""
         return self.__plotitems.get(key, default)
 
+    def get_obj_from_item(
+        self, item: CurveItem | MaskedImageItem
+    ) -> SignalObj | ImageObj | None:
+        """Return object associated to plot item
+
+        Args:
+            item: plot item
+
+        Returns:
+            Object associated to plot item
+        """
+        for obj in self.panel.objmodel:
+            if self.get(obj.uuid) is item:
+                return obj
+        return None
+
     def __setitem__(self, oid: str, item: CurveItem | MaskedImageItem) -> None:
         """Set item associated to object uuid"""
         self.__plotitems[oid] = item
 
-    def __iter__(self) -> Iterator[str]:
+    def __iter__(self) -> Iterator[CurveItem | MaskedImageItem]:
         """Return an iterator over plothandler values (plot items)"""
         return iter(self.__plotitems.values())
 

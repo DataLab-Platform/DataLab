@@ -92,9 +92,9 @@ class DockablePlotWidget(DockableWidget):
         """Return plot instance"""
         return self.plotwidget.get_plot()
 
-    def update_watermark(self) -> None:
+    def update_watermark(self, plot: BasePlot) -> None:
         """Update watermark visibility"""
-        items = self.get_plot().get_items()
+        items = plot.get_items()
         if self.plotwidget.options.type == PlotType.IMAGE:
             enabled = len(items) <= 1
         else:
