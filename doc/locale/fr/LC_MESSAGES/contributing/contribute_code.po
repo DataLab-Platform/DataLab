@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "La première étape est de forker le projet sur GitHub. Vous pouvez le "
 "faire en visitant le projet DataLab et en cliquant sur le bouton \"Fork\""
-" en haut à droite de la `page GitHub du projet <https://github.com/Codra-Ingenierie-Informatique/DataLab/>`_."
+" en haut à droite de la `page GitHub du projet <https://github.com/DataLab-Platform/DataLab/>`_."
 
 #: ../../contributing/contribute_code.rst:20
 msgid ""

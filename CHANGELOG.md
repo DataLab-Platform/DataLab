@@ -1,6 +1,6 @@
 # Changelog #
 
-See DataLab [roadmap page](https://codra-ingenierie-informatique.github.io/DataLab/en/dev/roadmap.html)
+See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 0.12.0 ##
@@ -60,13 +60,13 @@ for future and past milestones.
   * The toolbars and dock widgets state (visibility, position, etc.) are now stored
     in the configuration file and restored at startup (size and position were already
     stored and restored)
-  * This implements part of [Issue #30](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/30) - Save/restore main window layout
+  * This implements part of [Issue #30](https://github.com/DataLab-Platform/DataLab/issues/30) - Save/restore main window layout
 
 🛠️ Bug fixes:
 
-* Fixed [Issue #41](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
-* Fixed [Issue #49](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image
-* Fixed [Issue #51](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/51) - Unexpected dimensions when adding new ROI on an image with X/Y arbitrary units (not pixels)
+* Fixed [Issue #41](https://github.com/DataLab-Platform/DataLab/issues/41) - Radial profile extraction: unable to enter user-defined center coordinates
+* Fixed [Issue #49](https://github.com/DataLab-Platform/DataLab/issues/49) - Error when trying to open a (UTF-8 BOM) text file as an image
+* Fixed [Issue #51](https://github.com/DataLab-Platform/DataLab/issues/51) - Unexpected dimensions when adding new ROI on an image with X/Y arbitrary units (not pixels)
 * Improved plot item style serialization management:
   * Before this release, the plot item style was stored in the signal/image metadata
     only when saving the workspace to an HDF5 file. So, when modifying the style of a
@@ -82,7 +82,7 @@ for future and past milestones.
 * Signals and images may now be reordered in the tree view:
   * Using the new "Move up" and "Move down" actions in the "Edit" menu (or using the
     corresponding toolbar buttons):
-  * This fixes [Issue #22](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22) - Add "move up/down" actions in "Edit" menu, for signals/images and groups
+  * This fixes [Issue #22](https://github.com/DataLab-Platform/DataLab/issues/22) - Add "move up/down" actions in "Edit" menu, for signals/images and groups
 * Signals and images may also be reordered using drag and drop:
   * Signals and images can be dragged and dropped inside their own panel to change
     their order
@@ -90,24 +90,24 @@ for future and past milestones.
   * The feature also supports multi-selection (using the standard Ctrl and Shift
     modifiers), so that multiple signals/images/groups can be moved at once, not
     necessarily with contiguous positions
-  * This fixes [Issue #17](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
+  * This fixes [Issue #17](https://github.com/DataLab-Platform/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images tree views
 * New 1D interpolation features:
   * Added "Interpolation" feature to signal panel's "Processing" menu
   * Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP
   * Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the contribution to spline interpolation
-  * This fixes [Issue #20](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/20) - Add 1D interpolation features
+  * This fixes [Issue #20](https://github.com/DataLab-Platform/DataLab/issues/20) - Add 1D interpolation features
 * New 1D resampling feature:
   * Added "Resampling" feature to signal panel's "Processing" menu
   * Same interpolation methods as for the "Interpolation" feature
   * Possibility to specify the resampling step or the number of points
-  * This fixes [Issue #21](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/21) - Add 1D resampling feature
+  * This fixes [Issue #21](https://github.com/DataLab-Platform/DataLab/issues/21) - Add 1D resampling feature
 * New 1D convolution feature:
   * Added "Convolution" feature to signal panel's "Operation" menu
-  * This fixes [Issue #23](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/23) - Add 1D convolution feature
+  * This fixes [Issue #23](https://github.com/DataLab-Platform/DataLab/issues/23) - Add 1D convolution feature
 * New 1D detrending feature:
   * Added "Detrending" feature to signal panel's "Processing" menu
   * Methods available: linear or constant
-  * This fixes [Issue #24](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/24) - Add 1D detrending feature
+  * This fixes [Issue #24](https://github.com/DataLab-Platform/DataLab/issues/24) - Add 1D detrending feature
 * 2D computing results:
   * Before this release, 2D computing results such as contours, blobs, etc. were
     stored in image metadata dictionary as coordinates (x0, y0, x1, y1, ...) even
@@ -116,7 +116,7 @@ for future and past milestones.
     metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) respectively.
   * These results are also shown as such in the "Results" dialog box (either at the
     end of the computing process or when clicking on the "Show results" button).
-  * This fixes [Issue #32](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
+  * This fixes [Issue #32](https://github.com/DataLab-Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` and ellipse `(x, y, a, b, theta)` instead of `(x0, y0, x1, x1, ...)`
 * 1D and 2D computing results:
   * Additionnaly to the previous enhancement, more computing results are now shown
     in the "Results" dialog box
@@ -172,7 +172,7 @@ for future and past milestones.
 
 📚 Documentation:
 
-* New [Tutorial section](https://codra-ingenierie-informatique.github.io/DataLab/en/intro/tutorials/index.html) in the documentation:
+* New [Tutorial section](https://DataLab-Platform.github.io/en/intro/tutorials/index.html) in the documentation:
   * This section provides a set of tutorials to learn how to use DataLab
   * The following video tutorials are available:
     * Quick demo
@@ -182,7 +182,7 @@ for future and past milestones.
     * Detecting blobs on an image
     * Measuring Fabry-Perot fringes
     * Prototyping a custom processing pipeline
-* New [API section](https://codra-ingenierie-informatique.github.io/DataLab/en/api/index.html) in the documentation:
+* New [API section](https://DataLab-Platform.github.io/en/api/index.html) in the documentation:
   * This section explains how to use DataLab as a Python library, by covering the
   following topics:
     * How to use DataLab algorithms on NumPy arrays
@@ -191,11 +191,11 @@ for future and past milestones.
     * How to use proxy objects to control DataLab remotely
   * This section also provides a complete API reference for DataLab objects and
   features
-  * This fixes [Issue #19](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)
+  * This fixes [Issue #19](https://github.com/DataLab-Platform/DataLab/issues/19) - Add API documentation (data model, functions on arrays or signal/image objects, ...)
 
 🛠️ Bug fixes:
 
-* Fixed [Issue #29](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`
+* Fixed [Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) - Polynomial fit error: `QDialog [...] argument 1 has an unexpected type 'SignalProcessor'`
 * Image ROI extraction feature:
   * Before this release, when extracting a single circular ROI from an image with the
     "Extract all regions of interest into a single image object" option enabled, the
@@ -206,7 +206,7 @@ for future and past milestones.
   * Now, when extracting a single circular ROI from an image with the "Extract all
     regions of interest into a single image object" option enabled, the result is a
     single image with the ROI mask (as if the option was disabled)
-  * This fixes [Issue #31](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
+  * This fixes [Issue #31](https://github.com/DataLab-Platform/DataLab/issues/31) - Single circular ROI extraction: automatically switch to `extract_single_roi` function
 * Computing on circular ROI:
   * Before this release, when running computations on a circular ROI,
     the results were unexpected in terms of coordinates (results seemed to be computed
@@ -214,7 +214,7 @@ for future and past milestones.
   * This was due to a regression introduced in an earlier release.
   * Now, when defining a circular ROI and running computations on it, the results are
     computed on the actual ROI
-  * This fixes [Issue #33](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/33) - Computing on circular ROI: unexpected results
+  * This fixes [Issue #33](https://github.com/DataLab-Platform/DataLab/issues/33) - Computing on circular ROI: unexpected results
 * Contour detection on ROI:
   * Before this release, when running contour detection on a ROI, some
     contours were detected outside the ROI (it may be due to a limitation of the
@@ -223,7 +223,7 @@ for future and past milestones.
   * A new test module `cdl.tests.features.images.contour_fabryperot_app` has been
     added to test the contour detection feature on a Fabry-Perot image (thanks to
     [@emarin2642](https://github.com/emarin2642) for the contribution)
-  * This fixes [Issue #34](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/34) - Contour detection: unexpected results outside ROI
+  * This fixes [Issue #34](https://github.com/DataLab-Platform/DataLab/issues/34) - Contour detection: unexpected results outside ROI
 * Computing result merging:
   * Before this release, when doing a `1->N` computation (sum, average, product) on
     a group of signals/images, the computing results associated to each signal/image
@@ -231,7 +231,7 @@ for future and past milestones.
     first signal/image was kept.
   * Now, the computing results associated to each signal/image are merged into a
     single result, whatever the type of result is.
-* Fixed [Issue #36](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/36) - "Delete all" action enable state is sometimes not refreshed
+* Fixed [Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) - "Delete all" action enable state is sometimes not refreshed
 * Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI) were not
   removed and not swapped either (ROI are now removed, until we implement the swap
   feature, if requested)
@@ -321,7 +321,7 @@ bug fix
     but really used only when calling the feature a second time.
   * This unintentional behavior led to an `AssertionError` when choosing "polygon"
     as the contour shape and trying to compute the contours for the first time.
-  * This is now fixed (see [Issue #9](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing "polygon" as the contour shape)
+  * This is now fixed (see [Issue #9](https://github.com/DataLab-Platform/DataLab/issues/9) - Image contour detection: `AssertionError` when choosing "polygon" as the contour shape)
 * Keyboard shortcuts:
   * The keyboard shortcuts for "New", "Open", "Save", "Duplicate", "Remove",
     "Delete all" and "Refresh manually" actions were not working properly.
@@ -332,13 +332,13 @@ bug fix
     e.g. `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
   * Besides, the shortcuts were not working at startup (when no panel had focus).
   * This is now fixed: the shortcuts are now working whatever the active panel is,
-    and even at startup (see [Issue #10](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/10) - Keyboard shortcuts not working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
+    and even at startup (see [Issue #10](https://github.com/DataLab-Platform/DataLab/issues/10) - Keyboard shortcuts not working properly: `QAction::event: Ambiguous shortcut overload: Ctrl+C`)
 * "Show graphical object titles" and "Auto-refresh" actions were not working properly:
   * The "Show graphical object titles" and "Auto-refresh" actions were only working on
     the active signal/image panel, and not on all panels.
-  * This is now fixed (see [Issue #11](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
-* Fixed [Issue #14](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
-* Fixed [Issue #15](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
+  * This is now fixed (see [Issue #11](https://github.com/DataLab-Platform/DataLab/issues/11) - "Show graphical object titles" and "Auto-refresh" actions were working only on current signal/image panel)
+* Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) - Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`
+* Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) - MacOS: 1. `pip install cdl` error - 2. Missing menus:
   * Part 1: `pip install cdl` error on MacOS was actually an issue from **PlotPy** (see
     [this issue](https://github.com/PlotPyStack/PlotPy/issues/9)), and has been fixed
     in PlotPy v2.0.3 with an additional compilation flag indicating to use C++11 standard
@@ -349,8 +349,8 @@ bug fix
   to avoid errors when serializing/deserializing the signal/image object
 * Installation/configuration viewer: improved readability (removed syntax highlighting)
 * PyInstaller specification file: added missing `skimage` data files manually in order
-  to continue supporting Python 3.8 (see [Issue #12](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/12) - Stand-alone version on Windows 7: missing `api-ms-win-core-path-l1-1-0.dll`)
-* Fixed [Issue #13](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/13) - ArchLinux: `qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found`
+  to continue supporting Python 3.8 (see [Issue #12](https://github.com/DataLab-Platform/DataLab/issues/12) - Stand-alone version on Windows 7: missing `api-ms-win-core-path-l1-1-0.dll`)
+* Fixed [Issue #13](https://github.com/DataLab-Platform/DataLab/issues/13) - ArchLinux: `qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found`
 
 ## DataLab Version 0.9.2 ##
 
@@ -361,14 +361,14 @@ bug fix
     into a single image object" option was enabled if there was only one defined ROI.
     The result was an image positioned at the origin (0, 0) instead of the expected
     position (x0, y0) and the ROI rectangle itself was not removed as expected.
-    This is now fixed (see [Issue #6](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
+    This is now fixed (see [Issue #6](https://github.com/DataLab-Platform/DataLab/issues/6) - 'Extract multiple ROI' feature: unexpected result for a single ROI)
   * ROI rectangles with negative coordinates were not properly handled:
     ROI extraction was raising a `ValueError` exception, and the image mask was not
     displayed properly.
-    This is now fixed (see [Issue #7](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/7) - Image ROI extraction: `ValueError: zero-size array to reduction operation minimum which has no identity`)
+    This is now fixed (see [Issue #7](https://github.com/DataLab-Platform/DataLab/issues/7) - Image ROI extraction: `ValueError: zero-size array to reduction operation minimum which has no identity`)
   * ROI extraction was not taking into account the pixel size (dx, dy) and the origin
     (x0, y0) of the image.
-    This is now fixed (see [Issue #8](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/8) - Image ROI extraction: take into account pixel size)
+    This is now fixed (see [Issue #8](https://github.com/DataLab-Platform/DataLab/issues/8) - Image ROI extraction: take into account pixel size)
 * Macro-command console is now read-only:
   * The macro-command panel Python console is currently not supporting standard input
     stream (`stdin`) and this is intended (at least for now)
@@ -384,7 +384,7 @@ bug fix
     returning `None` instead of the expected locale on frozen applications)
   * This is ultimately a `pyinstaller` issue, but a workaround has been
     implemented in `guidata` V3.2.2 (see [guidata issue #68](https://github.com/PlotPyStack/guidata/issues/68) - Windows: gettext translation is not working on frozen applications)
-  * [Issue #2](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/2) - French translation is not available on Windows Stand alone version
+  * [Issue #2](https://github.com/DataLab-Platform/DataLab/issues/2) - French translation is not available on Windows Stand alone version
 * Saving image to JPEG2000 fails for non integer data:
   * JPEG2000 encoder does not support non integer data or signed integer data
   * Before, DataLab was showing an error message when trying to save incompatible
@@ -394,7 +394,7 @@ bug fix
   * Current behavior is now consistent with other standard image formats: when
     saving to JPEG2000, DataLab automatically converts data to 8-bit unsigned
     integer or 16-bit unsigned integer (depending on the original data type)
-  * [Issue #3](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
+  * [Issue #3](https://github.com/DataLab-Platform/DataLab/issues/3) - Save image to JPEG2000: 'OSError: encoder error -2 when writing image file'
 * Windows stand-alone version shortcuts not showing in current user start menu:
   * When installing DataLab on Windows from a non-administrator account, the
     shortcuts were not showing in the current user start menu but in the
@@ -405,8 +405,8 @@ bug fix
     shortcuts are installed in the current user start menu (this also means that
     the current user must have write access to the installation directory)
   * In future releases, the installer will support installing shortcuts for all
-    users if there is a demand for it (see [Issue #5](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/5))
-  * [Issue #4](https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu
+    users if there is a demand for it (see [Issue #5](https://github.com/DataLab-Platform/DataLab/issues/5))
+  * [Issue #4](https://github.com/DataLab-Platform/DataLab/issues/4) - Windows: stand-alone version shortcuts not showing in current user start menu
 * Installation and configuration window for stand-alone version:
   * Do not show ambiguous error message 'Invalid dependencies' anymore
   * Dependencies are supposed to be checked when building the stand-alone version
@@ -442,9 +442,9 @@ New features:
       HDF5 import feature
     * More features to come...
   * Added remote control feature: DataLab can be controlled remotely via a
-    TCP/IP connection (see [Remote control](https://codra-ingenierie-informatique.github.io/DataLab/en/remote_control.html))
+    TCP/IP connection (see [Remote control](https://DataLab-Platform.github.io/en/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
-    [Macro commands](https://codra-ingenierie-informatique.github.io/DataLab/en/macro_commands.html))
+    [Macro commands](https://DataLab-Platform.github.io/en/macro_commands.html))
 * General features:
   * Added settings dialog box (see "Settings" entry in "File" menu):
     * General settings

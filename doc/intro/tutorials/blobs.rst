@@ -29,7 +29,7 @@ or the |libre-gui-settings| icon in the toolbar).
     The plugin system is described in the :ref:`about_plugins` section.
 
 Let's add the `cdl_example_imageproc.py` plugin to DataLab (this is an example plugin
-that is shipped with DataLab source package, or may be downloaded from `here on GitHub <https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples>`_).
+that is shipped with DataLab source package, or may be downloaded from `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
 If we close and reopen DataLab, we can see that the plugin is now available in the
 "Plugins" menu: there is a new "Extract blobs (example)" entry.

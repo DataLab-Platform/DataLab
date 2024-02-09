@@ -17,277 +17,277 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../dev/roadmap.rst:2
+#: ../../contributing/roadmap.rst:2
 msgid "Roadmap"
 msgstr "Feuille de route"
 
-#: ../../dev/roadmap.rst:5
+#: ../../contributing/roadmap.rst:5
 msgid "Future milestones"
 msgstr "Jalons futurs"
 
-#: ../../dev/roadmap.rst:8
+#: ../../contributing/roadmap.rst:8
 msgid "Features"
 msgstr "Fonctionnalités"
 
-#: ../../dev/roadmap.rst:12
+#: ../../contributing/roadmap.rst:12
 msgid "Add a Jupyter kernel interface to DataLab:"
 msgstr "Ajouter une interface de noyau Jupyter à DataLab :"
 
-#: ../../dev/roadmap.rst:14
+#: ../../contributing/roadmap.rst:14
 msgid ""
 "This would allow to use DataLab from other software, such as Jupyter "
 "notebooks, Spyder or Visual Studio Code"
 msgstr "Cela permettrait d'utiliser DataLab à partir d'autres logiciels, tels que des notebooks Jupyter, Spyder ou Visual Studio Code"
 
-#: ../../dev/roadmap.rst:16
+#: ../../contributing/roadmap.rst:16
 msgid ""
 "This would also allow to share data between DataLab and other software "
 "(e.g. display DataLab numerical results in Jupyter notebooks or the other"
 " way around, display Jupyter results in DataLab, etc.)"
 msgstr "Cela permettrait également de partager des données entre DataLab et d'autres logiciels (par exemple, afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa, afficher les résultats de Jupyter dans DataLab, etc.)"
 
-#: ../../dev/roadmap.rst:20
+#: ../../contributing/roadmap.rst:20
 msgid "Create a Jupyter plugin for interactive data analysis with DataLab:"
 msgstr "Créer un plugin Jupyter pour l'analyse de données interactive avec DataLab :"
 
-#: ../../dev/roadmap.rst:22
+#: ../../contributing/roadmap.rst:22
 msgid ""
 "Using DataLab from a Jupyter notebook is already possible, thanks to the "
 "remote control features (see :ref:`ref-to-remote-control`), but it would "
 "be nice to have a dedicated plugin"
 msgstr "Il est déjà possible d'utiliser DataLab à partir d'un notebook Jupyter, grâce aux fonctionnalités de contrôle à distance (voir :ref:`ref-to-remote-control`), mais il serait utile d'avoir un plugin dédié"
 
-#: ../../dev/roadmap.rst:25
+#: ../../contributing/roadmap.rst:25
 msgid ""
 "This plugin would allow to use DataLab as a Jupyter kernel, and to "
 "display DataLab numerical results in Jupyter notebooks or the other way "
 "around (e.g. display Jupyter results in DataLab)"
 msgstr "Ce plugin permettrait d'utiliser DataLab comme noyau Jupyter, et d'afficher les résultats numériques de DataLab dans des notebooks Jupyter ou vice versa (par exemple, afficher les résultats de Jupyter dans DataLab)"
 
-#: ../../dev/roadmap.rst:28
+#: ../../contributing/roadmap.rst:28
 msgid ""
 "This plugin would also allow to use DataLab's processing features from "
 "Jupyter notebooks"
 msgstr "Ce plugin permettrait également d'utiliser les fonctionnalités de traitement de DataLab à partir de notebooks Jupyter"
 
-#: ../../dev/roadmap.rst:30
+#: ../../contributing/roadmap.rst:30
 msgid ""
 "A typical use case could also consist in using DataLab for manipulating "
 "signals or images efficiently, and using Jupyter for custom data analysis"
 " based on specific / home-made algorithms"
 msgstr "Un cas d'utilisation typique pourrait également consister à utiliser DataLab pour manipuler des signaux ou des images de manière efficace, et à utiliser Jupyter pour l'analyse de données personnalisée basée sur des algorithmes spécifiques / faits maison"
 
-#: ../../dev/roadmap.rst:33
+#: ../../contributing/roadmap.rst:33
 msgid ""
 "This plugin could be implemented by using the Jupyter kernel interface "
 "(see above)"
 msgstr "Ce plugin pourrait être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
 
-#: ../../dev/roadmap.rst:36
+#: ../../contributing/roadmap.rst:36
 msgid ""
 "Create a Spyder plugin for interactive data analysis connected with "
 "DataLab:"
 msgstr "Créer un plugin Spyder pour l'analyse de données interactive connectée à DataLab :"
 
-#: ../../dev/roadmap.rst:38
+#: ../../contributing/roadmap.rst:38
 msgid ""
 "This is exactly the same use case as for the Jupyter plugin, but for "
 "Spyder"
 msgstr "Il s'agit exactement du même cas d'utilisation que pour le plugin Jupyter, mais pour Spyder"
 
-#: ../../dev/roadmap.rst:40
+#: ../../contributing/roadmap.rst:40
 msgid ""
 "This plugin could also be implemented by using the Jupyter kernel "
 "interface (see above)"
 msgstr "Ce plugin pourrait également être implémenté en utilisant l'interface du noyau Jupyter (voir ci-dessus)"
 
-#: ../../dev/roadmap.rst:43
+#: ../../contributing/roadmap.rst:43
 msgid ""
 "Add support for time series (see `Issue #27 <https://github.com/Codra-"
 "Ingenierie-Informatique/DataLab/issues/27>`_)"
-msgstr "Ajouter la prise en charge des séries temporelles (voir `Issue #27 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/27>`_)"
+msgstr "Ajouter la prise en charge des séries temporelles (voir `Issue #27 <https://github.com/DataLab-Platform/DataLab/issues/27>`_)"
 
-#: ../../dev/roadmap.rst:47
+#: ../../contributing/roadmap.rst:47
 msgid "Maintenance"
 msgstr "Maintenance"
 
-#: ../../dev/roadmap.rst:49
+#: ../../contributing/roadmap.rst:49
 msgid ""
 "2024: switch to gRPC for remote control (instead of XML-RPC), if there is"
 " a need for a more efficient communication protocol (see `Issue #18 "
-"<https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)"
-msgstr "2024 : passer à gRPC pour le contrôle à distance (au lieu de XML-RPC), s'il y a besoin d'un protocole de communication plus efficace (voir `Issue #18 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)"
+"<https://github.com/DataLab-Platform/DataLab/issues/18>`_)"
+msgstr "2024 : passer à gRPC pour le contrôle à distance (au lieu de XML-RPC), s'il y a besoin d'un protocole de communication plus efficace (voir `Issue #18 <https://github.com/DataLab-Platform/DataLab/issues/18>`_)"
 
-#: ../../dev/roadmap.rst:53
+#: ../../contributing/roadmap.rst:53
 msgid ""
 "2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ; "
 "this should be straightforward, thanks to the `qtpy` compatibility layer "
 "and to the fact that `PlotPyStack` is already compatible with PyQt6)"
 msgstr "2025 : abandonner le support de PyQt5 (fin de vie : mi-2025), et passer à PyQt6 ; cela devrait être simple, grâce à la couche de compatibilité `qtpy` et au fait que `PlotPyStack` est déjà compatible avec PyQt6)"
 
-#: ../../dev/roadmap.rst:58
+#: ../../contributing/roadmap.rst:58
 msgid "Other tasks"
 msgstr "Autres tâches"
 
-#: ../../dev/roadmap.rst:60
+#: ../../contributing/roadmap.rst:60
 msgid ""
 "Create a DataLab plugin template (see `Issue #26 <https://github.com"
 "/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)"
-msgstr "Créer un modèle de plugin DataLab (voir `Issue #26 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)"
+msgstr "Créer un modèle de plugin DataLab (voir `Issue #26 <https://github.com/DataLab-Platform/DataLab/issues/26>`_)"
 
-#: ../../dev/roadmap.rst:63
+#: ../../contributing/roadmap.rst:63
 msgid ""
 "Make tutorial videos: plugin system, remote control features, etc. (see "
 "`Issue #25 <https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/issues/25>`_)"
-msgstr "Réaliser des vidéos de démonstration : système de plugins, fonctionnalités de contrôle à distance, etc. (voir `Issue #25 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/25>`_)"
+msgstr "Réaliser des vidéos de démonstration : système de plugins, fonctionnalités de contrôle à distance, etc. (voir `Issue #25 <https://github.com/DataLab-Platform/DataLab/issues/25>`_)"
 
-#: ../../dev/roadmap.rst:67
+#: ../../contributing/roadmap.rst:67
 msgid "Past milestones"
 msgstr "Jalons passés"
 
-#: ../../dev/roadmap.rst:70
+#: ../../contributing/roadmap.rst:70
 msgid "DataLab 0.11"
 msgstr "DataLab 0.11"
 
-#: ../../dev/roadmap.rst:72
+#: ../../contributing/roadmap.rst:72
 msgid ""
 "Add a drag-and-drop feature to the signal and image panels, to allow "
 "reordering signals and images (see `Issue #17 <https://github.com/Codra-"
 "Ingenierie-Informatique/DataLab/issues/17>`_)"
-msgstr "Ajouter une fonctionnalité de glisser-déposer aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #17 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17>`_)"
+msgstr "Ajouter une fonctionnalité de glisser-déposer aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #17 <https://github.com/DataLab-Platform/DataLab/issues/17>`_)"
 
-#: ../../dev/roadmap.rst:76
+#: ../../contributing/roadmap.rst:76
 msgid ""
 "Add \"Move up\" and \"Move down\" buttons to the signal and image panels,"
 " to allow reordering signals and images (see `Issue #22 "
-"<https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)"
-msgstr "Ajouter des boutons \"Monter\" et \"Descendre\" aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #22 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)"
+"<https://github.com/DataLab-Platform/DataLab/issues/22>`_)"
+msgstr "Ajouter des boutons \"Monter\" et \"Descendre\" aux panneaux de signaux et d'images, pour permettre de réorganiser les signaux et les images (voir `Issue #22 <https://github.com/DataLab-Platform/DataLab/issues/22>`_)"
 
-#: ../../dev/roadmap.rst:80
+#: ../../contributing/roadmap.rst:80
 msgid "Add 1D convolution, interpolation, resampling and detrending features"
 msgstr "Ajouter des fonctionnalités de convolution 1D, d'interpolation, de rééchantillonnage et d'élimination des tendances"
 
-#: ../../dev/roadmap.rst:83
+#: ../../contributing/roadmap.rst:83
 msgid "DataLab 0.10"
 msgstr "DataLab 0.10"
 
-#: ../../dev/roadmap.rst:85
+#: ../../contributing/roadmap.rst:85
 msgid "Develop a very simple DataLab plugin to demonstrate the plugin system"
 msgstr "Développer un plugin DataLab très simple pour démontrer le système de plugins"
 
-#: ../../dev/roadmap.rst:87
+#: ../../contributing/roadmap.rst:87
 msgid "Serialize curve and image styles in HDF5 files"
 msgstr "Sérialiser les styles de courbes et d'images dans les fichiers HDF5"
 
-#: ../../dev/roadmap.rst:89
+#: ../../contributing/roadmap.rst:89
 msgid ""
 "Add an \"Auto-refresh\" global option, to be able to disable the "
 "automatic refresh of the main window when doing multiple processing "
 "steps, thus improving performance"
 msgstr "Ajouter une option globale \"Rafraîchissement automatique\", pour pouvoir désactiver le rafraîchissement automatique de la fenêtre principale lors de l'exécution de plusieurs étapes de traitement, améliorant ainsi les performances"
 
-#: ../../dev/roadmap.rst:93
+#: ../../contributing/roadmap.rst:93
 msgid ""
 "Improve curve readability (e.g. avoid dashed lines, use contrasted "
 "colors, and use anti-aliasing)"
 msgstr "Améliorer la lisibilité des courbes (par exemple, éviter les lignes en pointillés, utiliser des couleurs contrastées et utiliser l'anti-crénelage)"
 
-#: ../../dev/roadmap.rst:97
+#: ../../contributing/roadmap.rst:97
 msgid "DataLab 0.9"
 msgstr "DataLab 0.9"
 
-#: ../../dev/roadmap.rst:99
+#: ../../contributing/roadmap.rst:99
 msgid "Python 3.11 is the new reference"
 msgstr "Python 3.11 est la nouvelle référence"
 
-#: ../../dev/roadmap.rst:101
+#: ../../contributing/roadmap.rst:101
 msgid "Run computations in a separate process:"
 msgstr "Exécuter les calculs dans un processus séparé :"
 
-#: ../../dev/roadmap.rst:103
+#: ../../contributing/roadmap.rst:103
 msgid "Execute a \"computing server\" in background, in another process"
 msgstr "Exécuter un \"serveur de calcul\" en arrière-plan, dans un autre processus"
 
-#: ../../dev/roadmap.rst:104
+#: ../../contributing/roadmap.rst:104
 msgid ""
 "For each computation, send serialized data and computing function to the "
 "server and wait for the result"
 msgstr "Pour chaque calcul, envoyer les données sérialisées et la fonction de calcul au serveur et attendre le résultat"
 
-#: ../../dev/roadmap.rst:106
+#: ../../contributing/roadmap.rst:106
 msgid ""
 "It is then possible to stop any computation at any time by killing the "
 "server process and restarting it (eventually after incrementing the "
 "communication port number)"
 msgstr "Il est alors possible d'arrêter n'importe quel calcul à tout moment en tuant le processus du serveur et en le redémarrant (éventuellement après avoir incrémenté le numéro de port de communication)"
 
-#: ../../dev/roadmap.rst:110
+#: ../../contributing/roadmap.rst:110
 msgid "Optimize image displaying performance"
 msgstr "Optimiser les performances d'affichage des images"
 
-#: ../../dev/roadmap.rst:112
+#: ../../contributing/roadmap.rst:112
 msgid "Add preferences dialog box"
 msgstr "Ajouter une boîte de dialogue de préférences"
 
-#: ../../dev/roadmap.rst:114
+#: ../../contributing/roadmap.rst:114
 msgid "Add new image processing features: denoising, ..."
 msgstr "Ajouter de nouvelles fonctionnalités de traitement d'images : débruitage, ..."
 
-#: ../../dev/roadmap.rst:116
+#: ../../contributing/roadmap.rst:116
 msgid ""
 "Image processing results: added support for polygon shapes (e.g. for "
 "contour detection)"
 msgstr "Résultats du traitement d'images : ajout de la prise en charge des formes polygonales (par exemple, pour la détection des contours)"
 
-#: ../../dev/roadmap.rst:119
+#: ../../contributing/roadmap.rst:119
 msgid "New plugin system: API for third-party extensions"
 msgstr "Nouveau système de plugins : API pour les extensions tierces"
 
-#: ../../dev/roadmap.rst:121
+#: ../../contributing/roadmap.rst:121
 msgid ""
 "Objective #1: a plugin must be manageable using a single Python script, "
 "which includes an extension of `ImageProcessor`, `ActionHandler` and new "
 "file format support"
 msgstr "Objectif n°1 : un plugin doit être gérable à l'aide d'un seul script Python, qui inclut une extension de `ImageProcessor`, `ActionHandler` et une nouvelle prise en charge du format de fichier"
 
-#: ../../dev/roadmap.rst:124
+#: ../../contributing/roadmap.rst:124
 msgid ""
 "Objective #2: plugins must be simply stored in a folder wich defaults to "
 "the user directory (same folder as \".DataLab.ini\" configuration file)"
 msgstr "Objectif n°2 : les plugins doivent simplement être stockés dans un dossier qui est par défaut le répertoire de l'utilisateur (même dossier que le fichier de configuration \".DataLab.ini\")"
 
-#: ../../dev/roadmap.rst:128
+#: ../../contributing/roadmap.rst:128
 msgid "Add a macro-command system:"
 msgstr "Ajouter un système de macro-commandes :"
 
-#: ../../dev/roadmap.rst:130
+#: ../../contributing/roadmap.rst:130
 msgid "New embedded Python editor"
 msgstr "Nouvel éditeur Python intégré"
 
-#: ../../dev/roadmap.rst:131
+#: ../../contributing/roadmap.rst:131
 msgid "Scripts using the same API as high-level applicative test scenarios"
 msgstr "Scripts utilisant la même API que les scénarios de test applicatifs de haut niveau"
 
-#: ../../dev/roadmap.rst:132
+#: ../../contributing/roadmap.rst:132
 msgid "Support for macro recording"
 msgstr "Prise en charge de l'enregistrement de macro"
 
-#: ../../dev/roadmap.rst:134
+#: ../../contributing/roadmap.rst:134
 msgid "Add an xmlrpc server to allow DataLab remote control:"
 msgstr "Ajouter un serveur xmlrpc pour permettre le contrôle à distance de DataLab :"
 
-#: ../../dev/roadmap.rst:136
+#: ../../contributing/roadmap.rst:136
 msgid ""
 "Controlling DataLab main features (open a signal or an image, open a HDF5"
 " file, etc.) and processing features (run a computation, etc.)"
 msgstr "Contrôle des principales fonctionnalités de DataLab (ouvrir un signal ou une image, ouvrir un fichier HDF5, etc.) et des fonctionnalités de traitement (exécuter un calcul, etc.)"
 
-#: ../../dev/roadmap.rst:139
+#: ../../contributing/roadmap.rst:139
 msgid "Take control of DataLab from a third-party software"
 msgstr "Prendre le contrôle de DataLab à partir d'un logiciel tiers"
 
-#: ../../dev/roadmap.rst:140
+#: ../../contributing/roadmap.rst:140
 msgid ""
 "Run interactive calculations from an IDE (e.g. Spyder or Visual Studio "
 "Code)"

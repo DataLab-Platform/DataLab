@@ -39,14 +39,14 @@ Features
     (see above)
 
 * Add support for time series (see
-  `Issue #27 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/27>`_)
+  `Issue #27 <https://github.com/DataLab-Platform/DataLab/issues/27>`_)
 
 Maintenance
 ^^^^^^^^^^^
 
 * 2024: switch to gRPC for remote control (instead of XML-RPC), if there is a
   need for a more efficient communication protocol (see
-  `Issue #18 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/18>`_)
+  `Issue #18 <https://github.com/DataLab-Platform/DataLab/issues/18>`_)
 
 * 2025: drop PyQt5 support (end-of-life: mid-2025), and switch to PyQt6 ;
   this should be straightforward, thanks to the `qtpy` compatibility layer
@@ -56,10 +56,10 @@ Other tasks
 ^^^^^^^^^^^
 
 * Create a DataLab plugin template (see
-  `Issue #26 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/26>`_)
+  `Issue #26 <https://github.com/DataLab-Platform/DataLab/issues/26>`_)
 
 * Make tutorial videos: plugin system, remote control features, etc. (see
-  `Issue #25 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/25>`_)
+  `Issue #25 <https://github.com/DataLab-Platform/DataLab/issues/25>`_)
 
 Past milestones
 ---------------
@@ -69,11 +69,11 @@ DataLab 0.11
 
 * Add a drag-and-drop feature to the signal and image panels, to allow reordering
   signals and images (see
-  `Issue #17 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/17>`_)
+  `Issue #17 <https://github.com/DataLab-Platform/DataLab/issues/17>`_)
 
 * Add "Move up" and "Move down" buttons to the signal and image panels, to allow
   reordering signals and images (see
-  `Issue #22 <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/22>`_)
+  `Issue #22 <https://github.com/DataLab-Platform/DataLab/issues/22>`_)
 
 * Add 1D convolution, interpolation, resampling and detrending features
 

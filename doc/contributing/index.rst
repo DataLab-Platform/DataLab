@@ -25,22 +25,22 @@ you would like to share with the community, please let us know.
        :gutter: 1 2 3 4
 
        .. grid-item-card:: :octicon:`bug;1em;sd-text-info` Bugs
-           :link: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=
+           :link: https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=
 
            Reporting a bug
 
        .. grid-item-card:: :octicon:`light-bulb;1em;sd-text-info` Enhancements
-           :link: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=
+           :link: https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=
 
            Suggesting an enhancement
 
        .. grid-item-card:: :octicon:`book;1em;sd-text-info` Documentation
-           :link: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=
+           :link: https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=
 
            Suggesting a documentation topic
 
        .. grid-item-card:: :octicon:`mortar-board;1em;sd-text-info` Tutorial
-           :link: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=
+           :link: https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=
 
            Suggesting a tutorial topic
 
@@ -49,10 +49,10 @@ you would like to share with the community, please let us know.
 
    Without coding, you can contribute to DataLab project by:
 
-   - `Reporting a bug <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_
-   - `Suggesting an enhancement <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_
-   - `Suggesting a documentation topic <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_
-   - `Suggesting a tutorial topic <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_
+   - `Reporting a bug <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_
+   - `Suggesting an enhancement <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_
+   - `Suggesting a documentation topic <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_
+   - `Suggesting a tutorial topic <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_
 
 Share your scientific/technical knowledge
 -----------------------------------------

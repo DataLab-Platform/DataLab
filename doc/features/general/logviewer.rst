@@ -24,4 +24,4 @@ will be greatly appreciated, especially if those log file contents
 are attached to the report (as information on your installation
 configuration, see :ref:`ref-to-instviewer`).
 
-.. _GitHub Issues: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose
+.. _GitHub Issues: https://github.com/DataLab-Platform/DataLab/issues/new/choose

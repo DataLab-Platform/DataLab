@@ -6,6 +6,6 @@ the project, whether you are a developer or not.
 There are many ways to contribute to DataLab project, depending on how much time you
 have, your experience with open source projects, and your skills.
 
-To get started, please refer to our [contributing documentation](https://codra-ingenierie-informatique.github.io/DataLab/en/contributing/index.html) for detailed instructions on how to contribute to the project.
+To get started, please refer to our [contributing documentation](https://DataLab-Platform.github.io/en/contributing/index.html) for detailed instructions on how to contribute to the project.
 
 Happy contributing!

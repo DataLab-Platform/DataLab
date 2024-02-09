@@ -14,7 +14,7 @@ Fork the project
 ----------------
 
 The first step is to fork the project on GitHub.
-You can do that by visiting `DataLab GitHub project <https://github.com/Codra-Ingenierie-Informatique/DataLab/>`_
+You can do that by visiting `DataLab GitHub project <https://github.com/DataLab-Platform/DataLab/>`_
 and clicking on the "Fork" button on the top right corner of the page.
 
 Once you have forked the project, you will have a copy of the project

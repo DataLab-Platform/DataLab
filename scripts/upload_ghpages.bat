@@ -14,7 +14,7 @@ if not defined CDL_GHPAGES (
     echo ERROR: CDL_GHPAGES environment variable is not defined.
     echo Please define it to the path of the local clone of the GitHub Pages repository.
     echo For instance:
-    echo     set CDL_GHPAGES=C:\Dev\DataLab_GitHub_Pages
+    echo     set CDL_GHPAGES=C:\Dev\DataLab-Platform.github.io
     echo.
     echo Then, run this script again.
     exit /b 1
@@ -23,10 +23,10 @@ if not defined CDL_GHPAGES (
 call %~dp0utils GetScriptPath SCRIPTPATH
 
 pushd %CDL_GHPAGES%
-git checkout gh-pages
+git checkout main
 git add .
 git commit -m "Update documentation"
-git push origin gh-pages
+git push origin main
 popd
 
 call %FUNC% EndOfScript

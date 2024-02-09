@@ -18,4 +18,4 @@ Reporting unexpected behavior or any other bug on `GitHub Issues`_
 will be greatly appreciated, especially if above contents are attached
 to the report (as well log files, see :ref:`ref-to-logviewer`).
 
-.. _GitHub Issues: https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new/choose
+.. _GitHub Issues: https://github.com/DataLab-Platform/DataLab/issues/new/choose

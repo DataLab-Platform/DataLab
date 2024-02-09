@@ -63,7 +63,7 @@ Other examples
 ^^^^^^^^^^^^^^
 
 Other examples of plugins can be found in the `plugins/examples` directory of
-the DataLab source code (explore `here on GitHub <https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples>`_).
+the DataLab source code (explore `here on GitHub <https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples>`_).
 
 Public API
 ^^^^^^^^^^

@@ -145,25 +145,25 @@ msgstr "Sans coder une seule ligne, vous pouvez contribuer au projet DataLab en 
 msgid ""
 "`Reporting a bug <https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
-msgstr "`Signaler une anomalie <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
+msgstr "`Signaler une anomalie <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
 
 #: ../../contributing/index.rst:51
 msgid ""
 "`Suggesting an enhancement <https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
-msgstr "`Suggérer une amélioration <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
+msgstr "`Suggérer une amélioration <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
 
 #: ../../contributing/index.rst:52
 msgid ""
 "`Suggesting a documentation topic <https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
-msgstr "`Suggérer un sujet de documentation <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
+msgstr "`Suggérer un sujet de documentation <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
 
 #: ../../contributing/index.rst:53
 msgid ""
 "`Suggesting a tutorial topic <https://github.com/Codra-Ingenierie-"
 "Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
-msgstr "`Suggérer un sujet de tutoriel <https://github.com/Codra-Ingenierie-Informatique/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
+msgstr "`Suggérer un sujet de tutoriel <https://github.com/DataLab-Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
 
 #: ../../contributing/index.rst:56
 msgid "Share your scientific/technical knowledge"

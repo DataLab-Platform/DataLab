@@ -44,7 +44,7 @@ html_show_sourcelink = False
 templates_path = ["_templates"]
 html_theme_options = {
     "show_toc_level": 2,
-    "github_url": "https://github.com/Codra-Ingenierie-Informatique/DataLab/",
+    "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
         "text": f"v{cdl.__version__}",
     },

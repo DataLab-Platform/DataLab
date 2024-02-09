@@ -1,13 +1,13 @@
 ![DataLab](https://raw.githubusercontent.com/Codra-Ingenierie-Informatique/DataLab/main/doc/images/DataLab-banner.png)
 
 [![pypi version](https://img.shields.io/pypi/v/cdl.svg)](https://pypi.org/project/CDL/)
-[![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/Codra-Ingenierie-Informatique/DataLab)
+[![PyPI status](https://img.shields.io/pypi/status/cdl.svg)](https://github.com/DataLab-Platform/DataLab)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/cdl.svg)](https://pypi.python.org/pypi/CDL/)
 
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements.
 
-See [DataLab website](https://codra-ingenierie-informatique.github.io/DataLab/) for more details.
+See [DataLab website](https://DataLab-Platform.github.io/) for more details.
 
 ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab open-source project team.
 
@@ -29,14 +29,14 @@ Try DataLab online, without installing anything, using Binder:
 
 ----
 
-✨ Add features to DataLab by writing your own [plugin](https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/plugins.html)
-(see [plugin examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/plugins/examples))
-or macro (see [macro examples](https://github.com/Codra-Ingenierie-Informatique/DataLab/tree/main/macros/examples))
+✨ Add features to DataLab by writing your own [plugin](https://DataLab-Platform.github.io/en/features/general/plugins.html)
+(see [plugin examples](https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples))
+or macro (see [macro examples](https://github.com/DataLab-Platform/DataLab/tree/main/macros/examples))
 
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
 
-* Using the integrated [remote control](https://codra-ingenierie-informatique.github.io/DataLab/en/features/general/remote.html)
+* Using the integrated [remote control](https://DataLab-Platform.github.io/en/features/general/remote.html)
 feature (this requires to install DataLab as a Python package)
 
-* Using the lightweight [DataLab Simple Client](https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient) (`pip install cdlclient`)
+* Using the lightweight [DataLab Simple Client](https://github.com/DataLab-Platform/DataLabSimpleClient) (`pip install cdlclient`)

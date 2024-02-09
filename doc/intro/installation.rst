@@ -80,7 +80,7 @@ application).
     (`Windows6.1-KB2533623-x64.msu`) and also may need to install
     `Microsoft Visual C++ 2015-2022 Redistribuable package <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_.
 
-.. _Releases: https://github.com/Codra-Ingenierie-Informatique/DataLab/releases
+.. _Releases: https://github.com/DataLab-Platform/DataLab/releases
 
 .. _install_wheel:
 
@@ -141,7 +141,7 @@ command:
 
 .. code-block:: console
 
-    $ pip install git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git
+    $ pip install git+https://github.com/DataLab-Platform/DataLab.git
 
 Then, if at some point you want to upgrade to the latest version of DataLab,
 just run the same command with options to force the reinstall of the package
@@ -149,7 +149,7 @@ without handling dependencies (because it would reinstall all dependencies):
 
 .. code-block:: console
 
-    $ pip install --force-reinstall --no-deps git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git
+    $ pip install --force-reinstall --no-deps git+https://github.com/DataLab-Platform/DataLab.git
 
 .. note::
 

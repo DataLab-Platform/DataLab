@@ -14,7 +14,7 @@ allows to access DataLab main features from a separate process.
     dependencies on your environment), please have a look at the
     `DataLab Simple Client`_ package (`pip install cdlclient`).
 
-.. _DataLab Simple Client: https://github.com/Codra-Ingenierie-Informatique/DataLabSimpleClient
+.. _DataLab Simple Client: https://github.com/DataLab-Platform/DataLabSimpleClient
 
 From an IDE
 ^^^^^^^^^^^
