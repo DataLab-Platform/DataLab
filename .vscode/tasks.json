@@ -581,6 +581,7 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Clean Up",
+                "Upgrade PlotPyStack packages",
                 "Create Windows 7 executable",
                 "Create installer"
             ]
