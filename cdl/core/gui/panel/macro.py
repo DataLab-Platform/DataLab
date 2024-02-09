@@ -55,7 +55,7 @@ class MacroTabs(QW.QTabWidget):
 
 
 class MacroPanel(AbstractPanel, DockableWidgetMixin):
-    """Macro manager widget
+    """Macro Panel widget
 
     Args:
         parent (QWidget): Parent widget
@@ -72,7 +72,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
-        self.setWindowTitle(_("Macro manager"))
+        self.setWindowTitle(_("Macro Panel"))
         self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
         self.setOrientation(QC.Qt.Vertical)
 

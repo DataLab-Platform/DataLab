@@ -835,7 +835,7 @@ class Tour(BaseTour):
         self.add_step(
             _("Extensions") + " – " + _("Macros"),
             _(
-                "The <b>Macro manager</b> allows to create, edit and run macros.<br>"
+                "The <b>Macro Panel</b> allows to create, edit and run macros.<br>"
                 "Macros are saved together with the DataLab workspace (HDF5 file)."
             ),
             [win.docks[win.macropanel]],

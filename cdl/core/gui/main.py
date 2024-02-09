@@ -993,7 +993,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def __add_macro_panel(self) -> None:
         """Add macro panel"""
         self.macropanel = macro.MacroPanel()
-        mdock = self.__add_dockwidget(self.macropanel, _("Macro manager"))
+        mdock = self.__add_dockwidget(self.macropanel, _("Macro Panel"))
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
         self.docks[self.signalpanel].raise_()

@@ -49,7 +49,7 @@ tutorial :ref:`tutorial_blobs`).
 .. figure:: ../../images/tutorials/custom_func/01.png
 
     To begin, we reorganize the window layout of DataLab to have the "Image Panel" on
-    the left and the "Macro manager" on the right.
+    the left and the "Macro Panel" on the right.
 
 .. figure:: ../../images/tutorials/custom_func/02.png
 
@@ -69,7 +69,7 @@ Create a macro-command
 ----------------------
 
 Let's get back to our custom function. We can create a new macro-command that will
-apply the function to the current image. To do so, we open the "Macro manager" and
+apply the function to the current image. To do so, we open the "Macro Panel" and
 click on the "New macro" |libre-gui-add| button.
 
 .. |libre-gui-add| image:: ../../../cdl/data/icons/libre-gui-add.svg
@@ -162,7 +162,7 @@ Now, let's execute the macro-command by clicking on the "Run macro"
     |libre-camera-flash-off| button.
 
 -   During the execution of the macro-command, we can see the progress in the
-    "Macro manager" window: the process standard output is displayed in the
+    "Macro Panel" window: the process standard output is displayed in the
     "Console" below the macro editor. We can see the following messages:
 
     - ``---[...]---[# ==> Running 'Untitled 01' macro...]``: the macro-command starts
