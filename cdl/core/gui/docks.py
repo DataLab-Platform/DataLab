@@ -16,6 +16,19 @@ from guidata.qthelpers import is_dark_mode
 from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
 from plotpy.plot import PlotOptions, PlotWidget
+from plotpy.tools import (
+    BasePlotMenuTool,
+    DeleteItemTool,
+    DisplayCoordsTool,
+    DoAutoscaleTool,
+    EditItemDataTool,
+    ExportItemDataTool,
+    ItemCenterTool,
+    ItemListPanelTool,
+    RectangularSelectionTool,
+    RectZoomTool,
+    SelectTool,
+)
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -24,6 +37,56 @@ from cdl.config import Conf
 
 if TYPE_CHECKING:  # pragma: no cover
     from plotpy.plot import BasePlot
+
+
+class DataLabPlotWidget(PlotWidget):
+    """DataLab PlotWidget"""
+
+    def __init__(self, plot_type: PlotType) -> None:
+        super().__init__(options=PlotOptions(type=plot_type), toolbar=True)
+
+    def __register_standard_tools(self) -> None:
+        """Register standard tools
+
+        The only difference with the `manager.register_standard_tools` method
+        is the fact that we don't register the `BasePlotMenuTool, "axes"` tool,
+        because it is not compatible with DataLab's approach to axes management.
+        """
+        mgr = self.manager
+        select_tool = mgr.add_tool(SelectTool)
+        mgr.set_default_tool(select_tool)
+        mgr.add_tool(RectangularSelectionTool, intersect=False)
+        mgr.add_tool(RectZoomTool)
+        mgr.add_tool(DoAutoscaleTool)
+        mgr.add_tool(BasePlotMenuTool, "item")
+        mgr.add_tool(ExportItemDataTool)
+        mgr.add_tool(EditItemDataTool)
+        mgr.add_tool(ItemCenterTool)
+        mgr.add_tool(DeleteItemTool)
+        mgr.add_separator_tool()
+        mgr.add_tool(BasePlotMenuTool, "grid")
+        mgr.add_tool(DisplayCoordsTool)
+        if mgr.get_itemlist_panel():
+            mgr.add_tool(ItemListPanelTool)
+
+    def __register_other_tools(self) -> None:
+        """Register other tools"""
+        mgr = self.manager
+        mgr.add_separator_tool()
+        if self.options.type == PlotType.CURVE:
+            mgr.register_curve_tools()
+        else:
+            mgr.register_image_tools()
+        mgr.add_separator_tool()
+        mgr.register_other_tools()
+        mgr.add_separator_tool()
+        mgr.update_tools_status()
+        mgr.get_default_tool().activate()
+
+    def register_tools(self) -> None:
+        """Register the plotting tools according to the plot type"""
+        self.__register_standard_tools()
+        self.__register_other_tools()
 
 
 class DockablePlotWidget(DockableWidget):
@@ -37,7 +100,7 @@ class DockablePlotWidget(DockableWidget):
         plot_type: PlotType,
     ) -> None:
         super().__init__(parent)
-        self.plotwidget = PlotWidget(toolbar=True, options=PlotOptions(type=plot_type))
+        self.plotwidget = DataLabPlotWidget(plot_type)
         self.toolbar = self.plotwidget.get_toolbar()
         self.watermark = QW.QLabel()
         original_image = QG.QPixmap(get_image_file_path("DataLab-watermark.png"))
