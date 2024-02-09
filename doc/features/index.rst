@@ -29,6 +29,7 @@ signal and image processing panels.
    :caption: General features:
 
    general/workspace
+   general/macros
    general/remote
    general/model
    general/plugins

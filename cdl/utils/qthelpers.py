@@ -258,9 +258,7 @@ def grab_save_window(widget: QW.QWidget, name: str) -> None:  # pragma: no cover
     widget.raise_()
     QW.QApplication.processEvents()
     pixmap = widget.grab()
-    suffix = ""
-    if not name[-1].isdigit() and not name.startswith(("s_", "i_")):
-        suffix = "_" + datetime.now().strftime("%Y-%m-%d-%H%M%S")
+    suffix = datetime.now().strftime("%Y-%m-%d-%H%M%S") if name.endswith("_") else ""
     pixmap.save(osp.join(SHOTPATH, f"{name}{suffix}.png"))
 
 

@@ -1,0 +1,153 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, Codra - Pierre Raybaut
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-09 15:31+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../features/general/macros.rst:4
+msgid "Macros"
+msgstr "Macros"
+
+#: ../../features/general/macros.rst:7
+msgid "Overview"
+msgstr "Généralités"
+
+#: ../../features/general/macros.rst:9
+msgid ""
+"There are many ways to extend DataLab with new functionality (see "
+":ref:`about_plugins` or :ref:`ref-to-remote-control`). The easiest way to"
+" do so is by using macros. Macros are small Python scripts that can be "
+"executed from the \"Macro Panel\" in DataLab."
+msgstr "Plusieurs méthodes permettent d'étendre les fonctionnalités de DataLab (voir :ref:`about_plugins` ou :ref:`ref-to-remote-control`). La manière la plus simple de le faire est d'utiliser des macros. Les macros sont de petits scripts Python qui peuvent être exécutés depuis le \"Gestionnaire de Macros\" dans DataLab."
+
+#: ../../features/general/macros.rst:17
+msgid "Macro Panel"
+msgstr "Gestionnaire de Macros"
+
+#: ../../features/general/macros.rst:17
+msgid "The Macro Panel in DataLab."
+msgstr "Le Gestonnaire de Macros dans DataLab."
+
+#: ../../features/general/macros.rst:19
+msgid ""
+"Macros can be used to automate repetitive tasks, or to create new "
+"functionality. As the plugin and remote control system, macros rely on "
+"the DataLab high-level API to interact with the application. This means "
+"that you can reuse the same code snippets in macros, plugins, and remote "
+"control scripts."
+msgstr "Les macros peuvent être utilisées pour automatiser des tâches répétitives, ou pour créer de nouvelles fonctionnalités. Comme le système de plugins et de contrôle à distance, les macros reposent sur l'API de haut niveau de DataLab pour interagir avec l'application. Cela signifie que vous pouvez réutiliser les mêmes extraits de code dans les macros, les plugins et les scripts de contrôle à distance."
+
+#: ../../features/general/macros.rst:26
+msgid ""
+"DataLab handles macros as Python scripts. This means that you can use the"
+" full power of Python to create your macros. Even though this is a "
+"powerful feature, it also means that you should be careful when running "
+"macros from unknown sources, as they can potentially harm your system."
+msgstr "DataLab gère les macros comme des scripts Python. Cela signifie que vous pouvez utiliser toute la puissance de Python pour créer vos macros. Même si c'est une fonctionnalité puissante, cela signifie également que vous devez être prudent lorsque vous exécutez des macros à partir de sources inconnues, car elles peuvent potentiellement endommager votre système."
+
+#: ../../features/general/macros.rst:33
+msgid ""
+"The DataLab high-level API is documented in the :ref:`api` section. The "
+"plugin system is documented in the :ref:`about_plugins` section, and the "
+"remote control system is documented in the :ref:`ref-to-remote-control` "
+"section."
+msgstr "L'API de haut niveau de DataLab est documentée dans la section :ref:`api`. Le système de plugins est documenté dans la section :ref:`about_plugins`, et le système de contrôle à distance est documenté dans la section :ref:`ref-to-remote-control`."
+
+#: ../../features/general/macros.rst:38
+msgid "Main features"
+msgstr "Fonctionnalités principales"
+
+#: ../../features/general/macros.rst:40
+msgid "The Macro Panel is a simple interface to:"
+msgstr "Le Gestionnaire de Macros est une interface simple pour :"
+
+#: ../../features/general/macros.rst:42
+msgid "Create new macros, using the \"New macro\" |libre-gui-add| button."
+msgstr "Créer de nouvelles macros, en utilisant le bouton \"Nouvelle macro\" |libre-gui-add|."
+
+#: ../../features/general/macros.rst:49
+msgid "libre-gui-add"
+msgstr ""
+
+#: ../../features/general/macros.rst:43
+msgid ""
+"Rename existing macros, using the \"Rename macro\" |libre-gui-pencil| "
+"button."
+msgstr "Renommer des macros existantes, en utilisant le bouton \"Renommer macro\" |libre-gui-pencil|."
+
+#: ../../features/general/macros.rst:53
+msgid "libre-gui-pencil"
+msgstr ""
+
+#: ../../features/general/macros.rst:44
+msgid ""
+"Import/export macros from/to files, using the \"Import macro\" "
+"|fileopen_py| and \"Export macro\" |filesave_py| buttons."
+msgstr "Importer/exporter des macros depuis/vers des fichiers, en utilisant les boutons \"Importer macro\" |fileopen_py| et \"Exporter macro\" |filesave_py|."
+
+#: ../../features/general/macros.rst:57
+msgid "fileopen_py"
+msgstr ""
+
+#: ../../features/general/macros.rst:61
+msgid "filesave_py"
+msgstr ""
+
+#: ../../features/general/macros.rst:46
+msgid "Execute macros, using the \"Run macro\" |libre-camera-flash-on| button."
+msgstr "Exécuter des macros, en utilisant le bouton \"Exécuter macro\" |libre-camera-flash-on|."
+
+#: ../../features/general/macros.rst:65
+msgid "libre-camera-flash-on"
+msgstr ""
+
+#: ../../features/general/macros.rst:47
+msgid ""
+"Stop the execution of a macro, using the \"Stop macro\" |libre-camera-"
+"flash-off| button."
+msgstr "Arrêter l'exécution d'une macro, en utilisant le bouton \"Arrêter macro\" |libre-camera-flash-off|."
+
+#: ../../features/general/macros.rst:69
+msgid "libre-camera-flash-off"
+msgstr ""
+
+#: ../../features/general/macros.rst:73
+msgid ""
+"Macros are embedded in the DataLab workspace, so they are saved together "
+"with the rest of the data (i.e. with signals and images) when exporting "
+"the workspace to a HDF5 file. This means that you can share your macros "
+"with other users simply by sharing the workspace file."
+msgstr "Les macros sont intégrées dans l'espace de travail de DataLab, elles sont donc enregistrées avec le reste des données (c'est-à-dire avec les signaux et les images) lors de l'exportation de l'espace de travail vers un fichier HDF5. Cela signifie que vous pouvez partager vos macros avec d'autres utilisateurs simplement en partageant le fichier d'espace de travail."
+
+#: ../../features/general/macros.rst:80
+msgid ""
+"Macro are executed in a separate process, so they won't block the main "
+"DataLab application. This means that you can continue working with "
+"DataLab while a macro is running and that *you can stop a macro at any "
+"time* using the |libre-camera-flash-off| button."
+msgstr "Les macros sont exécutées dans un processus séparé, elles ne bloqueront donc pas l'application principale de DataLab. Cela signifie que vous pouvez continuer à travailler avec DataLab pendant qu'une macro est en cours d'exécution et que *vous pouvez arrêter une macro à tout moment* en utilisant le bouton |libre-camera-flash-off|."
+
+#: ../../features/general/macros.rst:86
+msgid "Example"
+msgstr "Exemple"
+
+#: ../../features/general/macros.rst:88
+msgid ""
+"For a detailed example of how to create a macro, see the "
+":ref:`tutorial_custom_func` tutorial."
+msgstr "Pour un exemple détaillé de création d'une macro, voir le tutoriel :ref:`tutorial_custom_func`."

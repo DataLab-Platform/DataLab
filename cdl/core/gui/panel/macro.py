@@ -109,9 +109,8 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         for widget in (tabwidget_with_tb, console_frame):
             self.addWidget(widget)
-        # Ensure that the tabwidget and the console have the same height
-        self.setStretchFactor(0, 1)
-        self.setStretchFactor(1, 0)
+        self.setStretchFactor(0, 2)
+        self.setStretchFactor(1, 1)
 
         self.run_action = None
         self.stop_action = None

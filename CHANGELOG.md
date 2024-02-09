@@ -37,6 +37,7 @@ for future and past milestones.
 * "Getting started" section: added more explanations and links to the tutorials
 * New "Contributing" section explaining how to contribute to DataLab, whether you
   are a developer or not
+* New "Macros" section explaining how to use the macro commands feature
 * Added "Copy" button to code blocks in the documentation
 
 💥 New features:
