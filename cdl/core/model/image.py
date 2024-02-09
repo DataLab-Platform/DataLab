@@ -442,7 +442,12 @@ class ImageObj(gds.DataSet, base.BaseObj):
         obj.y0 = self.y0
         obj.dx = self.dx
         obj.dy = self.dy
+
+        # Copying metadata, but not the LUT range (which is specific to the data:
+        # when processing the image, the LUT range may not be appropriate anymore):
         obj.metadata = deepcopy(self.metadata)
+        obj.metadata.pop("lut_range", None)
+
         obj.data = np.array(self.data, copy=True, dtype=dtype)
         obj.dicom_template = self.dicom_template
         return obj
