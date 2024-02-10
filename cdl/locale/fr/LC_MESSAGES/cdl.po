@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-09 15:40+0100\n"
+"POT-Creation-Date: 2024-02-10 17:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,13 +159,14 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:529 cdl\core\model\image.py:776
+#: cdl\core\computation\image\__init__.py:529 cdl\core\model\image.py:781
+#: cdl\widgets\importwizard.py:257 cdl\widgets\importwizard.py:269
 msgid "Data type"
 msgstr "Type de données"
 
 #: cdl\core\computation\image\__init__.py:531
 #: cdl\core\computation\image\__init__.py:816
-#: cdl\core\computation\signal.py:310
+#: cdl\core\computation\signal.py:310 cdl\widgets\importwizard.py:271
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
@@ -1817,7 +1818,7 @@ msgstr "Panneau Signal"
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:861
+#: cdl\core\gui\main.py:861 cdl\widgets\importwizard.py:200
 msgid "File"
 msgstr "Fichier"
 
@@ -1912,7 +1913,7 @@ msgstr ""
 "données depuis un fichier HDF5 ?"
 
 #: cdl\core\gui\main.py:1277 cdl\core\gui\panel\base.py:727
-#: cdl\core\gui\panel\macro.py:433
+#: cdl\core\gui\panel\macro.py:432
 msgid "Open"
 msgstr "Ouvrir"
 
@@ -2024,7 +2025,7 @@ msgstr "Nom du groupe :"
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:688 cdl\core\gui\panel\macro.py:413
+#: cdl\core\gui\panel\base.py:688 cdl\core\gui\panel\macro.py:412
 msgid "Save as"
 msgstr "Enregistrer sous"
 
@@ -2095,47 +2096,47 @@ msgstr "Fichiers Python"
 msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
-#: cdl\core\gui\panel\macro.py:205
+#: cdl\core\gui\panel\macro.py:204
 msgid "Run macro"
 msgstr "Exécuter la macro"
 
-#: cdl\core\gui\panel\macro.py:212
+#: cdl\core\gui\panel\macro.py:211
 msgid "Stop macro"
 msgstr "Arrêter la macro"
 
-#: cdl\core\gui\panel\macro.py:220
+#: cdl\core\gui\panel\macro.py:219
 msgid "New macro"
 msgstr "Nouvelle macro"
 
-#: cdl\core\gui\panel\macro.py:226
+#: cdl\core\gui\panel\macro.py:225
 msgid "Rename macro"
 msgstr "Renommer la macro"
 
-#: cdl\core\gui\panel\macro.py:232
+#: cdl\core\gui\panel\macro.py:231
 msgid "Import macro from file"
 msgstr "Importer la macro depuis un fichier"
 
-#: cdl\core\gui\panel\macro.py:238
+#: cdl\core\gui\panel\macro.py:237
 msgid "Export macro to file"
 msgstr "Exporter la macro vers un fichier"
 
-#: cdl\core\gui\panel\macro.py:244
+#: cdl\core\gui\panel\macro.py:243
 msgid "Remove macro"
 msgstr "Supprimer la macro"
 
-#: cdl\core\gui\panel\macro.py:258
+#: cdl\core\gui\panel\macro.py:257
 msgid "Macro editor toolbar"
 msgstr "Barre d'outils des macros"
 
-#: cdl\core\gui\panel\macro.py:388
+#: cdl\core\gui\panel\macro.py:387
 msgid "Rename"
 msgstr "Renommer"
 
-#: cdl\core\gui\panel\macro.py:389
+#: cdl\core\gui\panel\macro.py:388
 msgid "New title:"
 msgstr "Nouveau titre :"
 
-#: cdl\core\gui\panel\macro.py:453
+#: cdl\core\gui\panel\macro.py:452
 msgid ""
 "When closed, the macro is <u>permanently destroyed</u>, unless it has been "
 "exported first."
@@ -2143,7 +2144,7 @@ msgstr ""
 "Lorsqu'elle est fermée, une macro est <u>détruite de manière définitive</u>, "
 "sauf si elle a été exportée au préalable."
 
-#: cdl\core\gui\panel\macro.py:458
+#: cdl\core\gui\panel\macro.py:457
 msgid "Do you want to continue?"
 msgstr "Souhaitez-vous vraiment continuer ?"
 
@@ -2936,7 +2937,7 @@ msgid "Image title"
 msgstr "Titre de l'image"
 
 #: cdl\core\model\image.py:386 cdl\core\model\image.py:390
-#: cdl\core\model\image.py:394 cdl\core\model\image.py:769
+#: cdl\core\model\image.py:394 cdl\core\model\image.py:774
 #: cdl\core\model\signal.py:107 cdl\core\model\signal.py:111
 #: cdl\core\model\signal.py:563
 msgid "Title"
@@ -2952,56 +2953,56 @@ msgstr "Unité"
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:756 cdl\core\model\signal.py:493
+#: cdl\core\model\image.py:761 cdl\core\model\signal.py:493
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:757
+#: cdl\core\model\image.py:762
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:758 cdl\core\model\signal.py:494
+#: cdl\core\model\image.py:763 cdl\core\model\signal.py:494
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:759 cdl\core\model\signal.py:497
+#: cdl\core\model\image.py:764 cdl\core\model\signal.py:497
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:760 cdl\core\model\signal.py:498
+#: cdl\core\model\image.py:765 cdl\core\model\signal.py:498
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:771
+#: cdl\core\model\image.py:776
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:771
+#: cdl\core\model\image.py:776
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:774
+#: cdl\core\model\image.py:779
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:774 cdl\tests\data.py:378
+#: cdl\core\model\image.py:779 cdl\tests\data.py:378
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:779 cdl\core\model\signal.py:569
+#: cdl\core\model\image.py:784 cdl\core\model\signal.py:569
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:784
+#: cdl\core\model\image.py:789
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:880
+#: cdl\core\model\image.py:885
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:908
+#: cdl\core\model\image.py:913
 msgid "Image"
 msgstr "Image"
 
@@ -3341,7 +3342,7 @@ msgstr ""
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-#: cdl\utils\qthelpers.py:180
+#: cdl\utils\qthelpers.py:180 cdl\widgets\importwizard.py:143
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -3447,6 +3448,131 @@ msgstr "Cocher tout"
 #: cdl\widgets\h5browser.py:477
 msgid "Uncheck all"
 msgstr "Décocher tout"
+
+#: cdl\widgets\importwizard.py:137
+msgid "Back"
+msgstr "Précédent"
+
+#: cdl\widgets\importwizard.py:139
+msgid "Next"
+msgstr "Suivant"
+
+#: cdl\widgets\importwizard.py:141
+msgid "Finish"
+msgstr "Terminer"
+
+#: cdl\widgets\importwizard.py:199
+msgid "Source"
+msgstr "Source"
+
+#: cdl\widgets\importwizard.py:200
+msgid "Clipboard"
+msgstr "Presse-papiers"
+
+#: cdl\widgets\importwizard.py:201
+msgid "Source of the data to be imported."
+msgstr "Source des données à importer."
+
+#: cdl\widgets\importwizard.py:205
+msgid "Path"
+msgstr "Chemin"
+
+#: cdl\widgets\importwizard.py:208
+msgid "Path to the file to be imported."
+msgstr "Chemin du fichier à importer."
+
+#: cdl\widgets\importwizard.py:215
+msgid "Delimiter"
+msgstr "Délimiteur"
+
+#: cdl\widgets\importwizard.py:219
+msgid "Tab"
+msgstr "Tabulation"
+
+#: cdl\widgets\importwizard.py:220
+msgid "Space"
+msgstr "Espace"
+
+#: cdl\widgets\importwizard.py:222
+msgid "Column delimiter character"
+msgstr "Caractère délimiteur de colonne"
+
+#: cdl\widgets\importwizard.py:225
+msgid "Comments"
+msgstr "Commentaires"
+
+#: cdl\widgets\importwizard.py:227
+msgid "Character that indicates a comment line"
+msgstr "Caractère indiquant une ligne de commentaire"
+
+#: cdl\widgets\importwizard.py:231
+msgid "Rows to Skip"
+msgstr "Lignes à sauter"
+
+#: cdl\widgets\importwizard.py:233
+msgid ""
+"Number of rows to skip at the beginning of the file (including comments)"
+msgstr "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
+
+#: cdl\widgets\importwizard.py:238
+msgid "Maximum Number of Rows"
+msgstr "Nombre maximum de lignes"
+
+#: cdl\widgets\importwizard.py:242
+msgid "Maximum number of rows to import"
+msgstr "Nombre maximum de lignes à importer"
+
+#: cdl\widgets\importwizard.py:245
+msgid "Transpose"
+msgstr "Transposer"
+
+#: cdl\widgets\importwizard.py:247
+msgid "Transpose the data (swap rows and columns)"
+msgstr "Transposer les données (échanger les lignes et les colonnes)"
+
+#: cdl\widgets\importwizard.py:259
+msgid "Output signal data type."
+msgstr "Type de données du signal de sortie."
+
+#: cdl\widgets\importwizard.py:285
+msgid "Raw Data"
+msgstr "Données brutes"
+
+#: cdl\widgets\importwizard.py:287
+msgid "Prefiltered Data"
+msgstr "Données préfiltrées"
+
+#: cdl\widgets\importwizard.py:291
+msgid "Preview"
+msgstr "Aperçu"
+
+#: cdl\widgets\importwizard.py:371
+msgid "Data Preview"
+msgstr "Aperçu des données"
+
+#: cdl\widgets\importwizard.py:372
+msgid "Preview and modify the import settings:"
+msgstr "Aperçu et modification des paramètres d'importation :"
+
+#: cdl\widgets\importwizard.py:376
+msgid "Import Parameters"
+msgstr "Paramètres d'importation"
+
+#: cdl\widgets\importwizard.py:427
+msgid "Graphical Representation"
+msgstr "Représentation graphique"
+
+#: cdl\widgets\importwizard.py:428
+msgid "This is the final page."
+msgstr "Ceci est la dernière page."
+
+#: cdl\widgets\importwizard.py:432
+msgid "Graphical representation of the imported data:"
+msgstr "Représentation graphique des données importées :"
+
+#: cdl\widgets\importwizard.py:480
+msgid "DataLab Import Wizard"
+msgstr "Assistant d'importation de DataLab"
 
 #: cdl\widgets\instconfviewer.py:93 cdl\widgets\instconfviewer.py:96
 msgid "Installation configuration"
