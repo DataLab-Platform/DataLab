@@ -63,12 +63,10 @@ class WizardPage(QW.QWidget):
         horiz_line.setFrameShape(QW.QFrame.HLine)
         horiz_line.setFrameShadow(QW.QFrame.Sunken)
         self._subtitle_label = QW.QLabel("")
-        self._subtitle_label.setWordWrap(True)
         self._main_layout.addWidget(self._title_label)
         self._main_layout.addWidget(self._subtitle_label)
         self._main_layout.addWidget(horiz_line)
         self._main_layout.addLayout(self._user_layout)
-        # self._main_layout.addStretch()
         self.setLayout(self._main_layout)
 
     def set_wizard(self, wizard: Wizard) -> None:

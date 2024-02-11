@@ -27,13 +27,13 @@ def test_import_wizard():
     """Test the import wizard"""
     with qt_app_context():
         for destination, fname in (
-            ("signal", "paracetamol.txt"),
             ("image", "fiber.txt"),
+            ("signal", "paracetamol.txt"),
         ):
             path = get_test_fnames(fname)[0]
             file_to_clipboard(path)
             wizard = TextImportWizard(destination=destination)
-            wizard.resize(800, 600)
+            # wizard.resize(800, 600)
             if exec_dialog(wizard):
                 for obj in wizard.get_objs():
                     print(obj)

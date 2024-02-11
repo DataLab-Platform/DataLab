@@ -438,6 +438,7 @@ class GraphicalRepresentationPage(WizardPage):
             options=PlotOptions(
                 type=plot_type,
                 show_itemlist=True,
+                show_contrast=True,
             ),
         )
         plot = self.plot_widget.get_plot()
