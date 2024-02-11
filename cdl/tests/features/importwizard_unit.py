@@ -13,7 +13,7 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
 from cdl.tests.data import get_test_fnames
-from cdl.widgets.importwizard import ImportWizard
+from cdl.widgets.textimport import TextImportWizard
 
 
 def file_to_clipboard(filename: str) -> None:
@@ -23,18 +23,21 @@ def file_to_clipboard(filename: str) -> None:
     QW.QApplication.clipboard().setText(text)
 
 
-def test_wizard():
+def test_import_wizard():
     """Test the import wizard"""
-
-    fname = get_test_fnames("paracetamol.txt")[0]
-
     with qt_app_context():
-        file_to_clipboard(fname)
-        wizard = ImportWizard("signal")
-        if exec_dialog(wizard):
-            for obj in wizard.get_objs():
-                print(obj)
+        for destination, fname in (
+            ("signal", "paracetamol.txt"),
+            ("image", "fiber.txt"),
+        ):
+            path = get_test_fnames(fname)[0]
+            file_to_clipboard(path)
+            wizard = TextImportWizard(destination=destination)
+            wizard.resize(800, 600)
+            if exec_dialog(wizard):
+                for obj in wizard.get_objs():
+                    print(obj)
 
 
 if __name__ == "__main__":
-    test_wizard()
+    test_import_wizard()
