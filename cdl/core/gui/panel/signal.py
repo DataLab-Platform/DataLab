@@ -48,6 +48,7 @@ class SignalPanel(BaseDataPanel):
     specialized for Signal objects"""
 
     PANEL_STR = _("Signal Panel")
+    PANEL_STR_ID = "signal"
     PARAMCLASS = SignalObj
     ANNOTATION_TOOLS = (
         LabelTool,
@@ -116,7 +117,7 @@ class SignalPanel(BaseDataPanel):
             return None
         newparam = self.get_newparam_from_current(newparam)
         signal = create_signal_from_param(
-            newparam, addparam=addparam, edit=edit, parent=self
+            newparam, addparam=addparam, edit=edit, parent=self.parent()
         )
         if signal is None:
             return None

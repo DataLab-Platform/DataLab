@@ -42,6 +42,11 @@ for future and past milestones.
 
 💥 New features:
 
+* New "Text file import assistant" feature:
+  * This feature allows to import text files as signals or images
+  * The user can define the source (clipboard or texte file)
+  * Then, it is possible to define the delimiter, the number of rows to skip,
+    the destination data type, etc.
 * Added menu on the "Signal Panel" and "Image Panel" tabs corner to quickly access the
   most used features (e.g. "Add", "Remove", "Duplicate", etc.)
 * Intensity profile extraction feature:

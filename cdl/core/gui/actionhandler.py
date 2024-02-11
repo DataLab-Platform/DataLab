@@ -394,6 +394,11 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
                 toolbar_pos=-1,
             )
+            self.new_action(
+                _("Text file import wizard..."),
+                triggered=self.panel.exec_import_wizard,
+                select_condition=SelectCond.always,
+            )
 
         with self.new_category(ActionCategory.EDIT):
             self.new_action(

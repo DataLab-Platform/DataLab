@@ -62,11 +62,16 @@ class SourceWidget(QW.QGroupBox):
         layout.addWidget(file_button)
         file_button.setChecked(True)
         self.file_edit = QW.QLineEdit()
+        self.file_edit.textChanged.connect(self.__text_changed)
         layout.addWidget(self.file_edit)
         self.browse_button = QW.QPushButton(_("Browse"))
         layout.addWidget(self.browse_button)
         file_button.toggled.connect(self.__update_path)
         self.browse_button.clicked.connect(self.__browse)
+
+    def __text_changed(self, text: str) -> None:
+        """Text changed"""
+        self.SIG_VALIDITY_CHANGED.emit(osp.isfile(self.file_edit.text()))
 
     def __update_path(self, checked: bool) -> None:
         """Update the path"""
@@ -519,8 +524,8 @@ class TextImportWizard(Wizard):
         destination: Destination type ('signal' or 'image')
     """
 
-    def __init__(self, destination: str) -> None:
-        super().__init__()
+    def __init__(self, destination: str, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
         assert destination in ("signal", "image")
         self.setWindowTitle(_("DataLab Import Wizard"))
         self.source_page = SourcePage()

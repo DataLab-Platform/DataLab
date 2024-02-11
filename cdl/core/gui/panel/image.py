@@ -47,6 +47,7 @@ class ImagePanel(BaseDataPanel):
     specialized for Image objects"""
 
     PANEL_STR = _("Image Panel")
+    PANEL_STR_ID = "image"
     PARAMCLASS = ImageObj
     DIALOGSIZE = (800, 800)
     ANNOTATION_TOOLS = (
@@ -123,7 +124,7 @@ class ImagePanel(BaseDataPanel):
             return None
         newparam = self.get_newparam_from_current(newparam)
         image = create_image_from_param(
-            newparam, addparam=addparam, edit=edit, parent=self
+            newparam, addparam=addparam, edit=edit, parent=self.parent()
         )
         if image is None:
             return None

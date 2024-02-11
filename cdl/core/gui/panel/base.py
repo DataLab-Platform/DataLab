@@ -77,6 +77,7 @@ from cdl.utils.qthelpers import (
     qt_try_loadsave_file,
     save_restore_stds,
 )
+from cdl.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:  # pragma: no cover
     from plotpy.plot import BasePlot, PlotWidget
@@ -250,6 +251,7 @@ class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
     PANEL_STR = ""  # e.g. "Signal Panel"
+    PANEL_STR_ID = ""  # e.g. "signal"
     PARAMCLASS: SignalObj | ImageObj = None  # Replaced in child object
     ANNOTATION_TOOLS = ()
     DIALOGSIZE = (800, 600)
@@ -748,6 +750,21 @@ class BaseDataPanel(AbstractPanel):
         for index, obj in enumerate(objs):
             filename = filenames[index]
             self.save_object(obj, filename)
+
+    def exec_import_wizard(self) -> None:
+        """Execute import wizard"""
+        wizard = TextImportWizard(self.PANEL_STR_ID, parent=self.parent())
+        if exec_dialog(wizard):
+            objs = wizard.get_objs()
+            if objs:
+                with create_progress_bar(
+                    self, _("Adding objects to workspace"), max_=len(objs) - 1
+                ) as progress:
+                    for idx, obj in enumerate(objs):
+                        progress.setValue(idx)
+                        if progress.wasCanceled():
+                            break
+                        self.add_object(obj)
 
     def import_metadata_from_file(self, filename: str | None = None) -> None:
         """Import metadata from file (JSON).

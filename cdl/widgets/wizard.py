@@ -119,7 +119,6 @@ class Wizard(QW.QDialog):
 
     def __init__(self, parent: QWidget | None = None) -> None:
         super().__init__(parent)
-        self.setWindowIcon(get_icon("DataLab.svg"))
 
         _main_layout = QW.QVBoxLayout()
         self.setLayout(_main_layout)
