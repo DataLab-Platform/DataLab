@@ -1,0 +1,68 @@
+.. _ref-to-signal-text-file-import:
+
+Signal Text File Import
+=======================
+
+DataLab can natively import signal files (e.g. CSV, NPY, etc.). However some specific
+text file formats may not be supported. In this case, you can use the `Import text file`
+feature, which allows you to import a text file and convert it to a signal.
+
+This feature is accessible from the `File` menu, under the `Import text file` option.
+
+It opens an import wizard that guides you through the process of importing the text
+file.
+
+Step 1: Select the source
+-------------------------
+
+The first step is to select the source of the text file. You can either select a file
+from your computer or the clipboard if you have copied the text from another
+application.
+
+.. figure:: ../../images/import_text_file/s_01.png
+   :alt: Step 1: Select the source
+   :align: center
+
+   Step 1: Select the source
+
+Step 2: Preview and configure the import
+-----------------------------------------
+
+The second step consists of configuring the import and previewing the result. You can
+configure the following options:
+
+- **Delimiter**: The character used to separate the values in the text file.
+- **Comments**: The character used to indicate that the line is a comment and should be
+  ignored.
+- **Rows to Skip**: The number of rows to skip at the beginning of the file.
+- **Maximum Number of Rows**: The maximum number of rows to import. If the file contains
+  more rows, they will be ignored.
+- **Transpose**: If checked, the rows and columns will be transposed.
+- **Data type**: The destination data type of the imported data.
+- **First Column is X**: If checked, the first column will be used as the X axis.
+
+When you are done configuring the import, click the `Apply` button to see the result.
+
+.. figure:: ../../images/import_text_file/s_02.png
+   :alt: Step 2: Configure the import
+   :align: center
+
+   Step 2: Configure the import
+
+.. figure:: ../../images/import_text_file/s_03.png
+   :alt: Step 2: Preview the result
+   :align: center
+
+   Step 2: Preview the result
+
+Step 3: Show graphical representation
+-------------------------------------
+
+The third step shows a graphical representation of the imported data. You can use the
+`Finish` button to import the data into DataLab workspace.
+
+.. figure:: ../../images/import_text_file/s_04.png
+   :alt: Step 3: Show graphical representation
+   :align: center
+
+   Step 3: Show graphical representation

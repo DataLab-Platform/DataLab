@@ -67,6 +67,15 @@ Save current signal to the following supported filetypes:
     * - Text files
       - .csv
 
+Import text file
+^^^^^^^^^^^^^^^^
+
+Import data from a text file.
+
+.. seealso::
+
+    See :ref:`ref-to-signal-text-file-import` page for more details on importing text files.
+
 Open HDF5 file
 ^^^^^^^^^^^^^^
 

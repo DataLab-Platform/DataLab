@@ -56,6 +56,7 @@ signal processing panel is the default panel when DataLab is started.
    :caption: Signal processing:
 
    signal/menus
+   signal/text_import
    signal/annotations
 
 .. raw:: latex
@@ -78,6 +79,7 @@ bottom-right of the DataLab main window.
    :caption: Image processing:
 
    image/menus
+   image/text_import
    image/2d_peak_detection
    image/contour_detection
    image/annotations

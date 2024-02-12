@@ -72,6 +72,15 @@ Save image
 
 Save current image (see "Open image" supported filetypes).
 
+Import text file
+^^^^^^^^^^^^^^^^
+
+Import data from a text file.
+
+.. seealso::
+
+    See :ref:`ref-to-image-text-file-import` page for more details on importing text files.
+
 Open HDF5 file
 ^^^^^^^^^^^^^^
 

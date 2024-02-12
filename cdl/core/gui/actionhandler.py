@@ -395,7 +395,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 toolbar_pos=-1,
             )
             self.new_action(
-                _("Text file import wizard..."),
+                _("Import text file..."),
                 triggered=self.panel.exec_import_wizard,
                 select_condition=SelectCond.always,
             )

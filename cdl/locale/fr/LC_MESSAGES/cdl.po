@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-11 18:17+0100\n"
+"POT-Creation-Date: 2024-02-12 18:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -779,13 +779,13 @@ msgstr "Étalonner"
 msgid "Degree"
 msgstr "Degré"
 
-#: cdl\core\computation\signal.py:560 cdl\core\model\signal.py:681
+#: cdl\core\computation\signal.py:560 cdl\core\model\signal.py:687
 #: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\common.py:161
 #: cdl\tests\scenarios\demo.py:87
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: cdl\core\computation\signal.py:561 cdl\core\model\signal.py:682
+#: cdl\core\computation\signal.py:561 cdl\core\model\signal.py:688
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
@@ -879,8 +879,8 @@ msgid "Save selected %s"
 msgstr "Enregistrer l'objet %s sélectionné"
 
 #: cdl\core\gui\actionhandler.py:398
-msgid "Text file import wizard..."
-msgstr "Assistant d'importation de fichier texte..."
+msgid "Import text file..."
+msgstr "Importer un fichier texte..."
 
 #: cdl\core\gui\actionhandler.py:405
 msgid "New group..."
@@ -2947,13 +2947,13 @@ msgstr "Titre de l'image"
 #: cdl\core\model\image.py:386 cdl\core\model\image.py:390
 #: cdl\core\model\image.py:394 cdl\core\model\image.py:774
 #: cdl\core\model\signal.py:107 cdl\core\model\signal.py:111
-#: cdl\core\model\signal.py:563
+#: cdl\core\model\signal.py:569
 msgid "Title"
 msgstr "Titre"
 
 #: cdl\core\model\image.py:387 cdl\core\model\image.py:391
 #: cdl\core\model\image.py:395 cdl\core\model\signal.py:108
-#: cdl\core\model\signal.py:112 cdl\core\model\signal.py:545
+#: cdl\core\model\signal.py:112 cdl\core\model\signal.py:551
 msgid "Unit"
 msgstr "Unité"
 
@@ -2961,7 +2961,7 @@ msgstr "Unité"
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:761 cdl\core\model\signal.py:493
+#: cdl\core\model\image.py:761 cdl\core\model\signal.py:499
 msgid "zeros"
 msgstr "zéros"
 
@@ -2969,15 +2969,15 @@ msgstr "zéros"
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:763 cdl\core\model\signal.py:494
+#: cdl\core\model\image.py:763 cdl\core\model\signal.py:500
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:764 cdl\core\model\signal.py:497
+#: cdl\core\model\image.py:764 cdl\core\model\signal.py:503
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:765 cdl\core\model\signal.py:498
+#: cdl\core\model\image.py:765 cdl\core\model\signal.py:504
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
@@ -2997,7 +2997,7 @@ msgstr "Largeur de l'image (nombre de colonnes)"
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:784 cdl\core\model\signal.py:569
+#: cdl\core\model\image.py:784 cdl\core\model\signal.py:575
 #: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
@@ -3034,84 +3034,84 @@ msgstr "Titre du signal"
 msgid "Titles and units"
 msgstr "Titres et unités"
 
-#: cdl\core\model\signal.py:495
+#: cdl\core\model\signal.py:501
 msgid "lorentzian"
 msgstr "lorentzienne"
 
-#: cdl\core\model\signal.py:499
+#: cdl\core\model\signal.py:505
 msgid "sinus"
 msgstr "sinus"
 
-#: cdl\core\model\signal.py:500
+#: cdl\core\model\signal.py:506
 msgid "cosinus"
 msgstr "cosinus"
 
-#: cdl\core\model\signal.py:501
+#: cdl\core\model\signal.py:507
 msgid "sawtooth"
 msgstr "dent de scie"
 
-#: cdl\core\model\signal.py:502
+#: cdl\core\model\signal.py:508
 msgid "triangle"
 msgstr "triangle"
 
-#: cdl\core\model\signal.py:503
+#: cdl\core\model\signal.py:509
 msgid "square"
 msgstr "carré"
 
-#: cdl\core\model\signal.py:504
+#: cdl\core\model\signal.py:510
 msgid "cardinal sine"
 msgstr "sinus cardinal"
 
-#: cdl\core\model\signal.py:505
+#: cdl\core\model\signal.py:511
 msgid "step"
 msgstr "échelon"
 
-#: cdl\core\model\signal.py:543
+#: cdl\core\model\signal.py:549
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: cdl\core\model\signal.py:547
+#: cdl\core\model\signal.py:553
 msgid "Phase"
 msgstr "Phase"
 
-#: cdl\core\model\signal.py:567
+#: cdl\core\model\signal.py:573
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:567 cdl\tests\data.py:256 cdl\tests\data.py:375
+#: cdl\core\model\signal.py:573 cdl\tests\data.py:256 cdl\tests\data.py:375
 #: cdl\widgets\h5browser.py:210
 msgid "Size"
 msgstr "Taille"
 
-#: cdl\core\model\signal.py:574
+#: cdl\core\model\signal.py:580
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: cdl\core\model\signal.py:660
+#: cdl\core\model\signal.py:666
 msgid "Signal"
 msgstr "Signal"
 
-#: cdl\core\model\signal.py:705 cdl\core\model\signal.py:706
+#: cdl\core\model\signal.py:711 cdl\core\model\signal.py:712
 msgid "Sinusoid"
 msgstr "Sinusoïde"
 
-#: cdl\core\model\signal.py:707
+#: cdl\core\model\signal.py:713
 msgid "Sawtooth function"
 msgstr "Fontion dents de scie"
 
-#: cdl\core\model\signal.py:708
+#: cdl\core\model\signal.py:714
 msgid "Triangle function"
 msgstr "Fonction triangle"
 
-#: cdl\core\model\signal.py:709
+#: cdl\core\model\signal.py:715
 msgid "Square function"
 msgstr "Fonction carrée"
 
-#: cdl\core\model\signal.py:710
+#: cdl\core\model\signal.py:716
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
-#: cdl\core\model\signal.py:726
+#: cdl\core\model\signal.py:732
 msgid "Step function"
 msgstr "Fonction échelon"
 
