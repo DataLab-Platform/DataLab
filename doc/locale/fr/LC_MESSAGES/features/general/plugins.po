@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 15:01+0100\n"
+"POT-Creation-Date: 2024-02-12 17:49+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -167,13 +167,13 @@ msgstr "Autres exemples"
 msgid ""
 "Other examples of plugins can be found in the `plugins/examples` "
 "directory of the DataLab source code (explore `here on GitHub "
-"<https://github.com/Codra-Ingenierie-"
-"Informatique/DataLab/tree/main/plugins/examples>`_)."
+"<https://github.com/DataLab-"
+"Platform/DataLab/tree/main/plugins/examples>`_)."
 msgstr ""
 "D'autres exemples de plugins peuvent être trouvés dans le répertoire "
 "`plugins/examples` du code source de DataLab (explorez `ici sur GitHub "
-"<https://github.com/Codra-Ingenierie-"
-"Informatique/DataLab/tree/main/plugins/examples>`_)."
+"<https://github.com/DataLab-"
+"Platform/DataLab/tree/main/plugins/examples>`_)."
 
 #: ../../features/general/plugins.rst:69
 msgid "Public API"
@@ -300,7 +300,9 @@ msgstr "titre du nouveau signal"
 
 #: cdl.plugins.PluginBase.edit_new_signal_parameters:4 of
 msgid "size of the new signal (default: None, get from current signal)"
-msgstr "taille du nouveau signal (par défaut : None, obtenue à partir du signal actuel)"
+msgstr ""
+"taille du nouveau signal (par défaut : None, obtenue à partir du signal "
+"actuel)"
 
 #: cdl.plugins.PluginBase.edit_new_signal_parameters:5 of
 msgid "hide signal type parameter (default: True)"
@@ -325,7 +327,9 @@ msgstr "titre de la nouvelle image"
 
 #: cdl.plugins.PluginBase.edit_new_image_parameters:4 of
 msgid "shape of the new image (default: None, get from current image)"
-msgstr "dimensions de la nouvelle image (par défaut : None, obtenues à partir de l'image actuelle)"
+msgstr ""
+"dimensions de la nouvelle image (par défaut : None, obtenues à partir de "
+"l'image actuelle)"
 
 #: cdl.plugins.PluginBase.edit_new_image_parameters:5 of
 msgid "hide image type parameter (default: True)"
