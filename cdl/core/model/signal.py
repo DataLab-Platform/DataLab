@@ -405,7 +405,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         # We take the real part of the x data to avoid `ComplexWarning` warnings
         # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
-        coords = self.x.real.min(), self.x.real.max()
+        xmin, xmax = self.x.real.min(), self.x.real.max()
+        xdelta = (xmax - xmin) * 0.2
+        coords = xmin + xdelta, xmax - xdelta
         return base.make_roi_item(
             lambda x, y, _title: make.range(x, y),
             coords,
