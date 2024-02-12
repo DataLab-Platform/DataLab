@@ -79,6 +79,8 @@ for future and past milestones.
     in some cases (e.g. when duplicating the signal/image).
   * Now, the plot item style is stored in the signal/image metadata whenever the style
     is modified, and is restored when reloading the workspace
+* Handled `ComplexWarning` cast warning when adding regions of interest (ROI)
+  to a signal with complex data
 
 ## DataLab Version 0.11.0 ##
 

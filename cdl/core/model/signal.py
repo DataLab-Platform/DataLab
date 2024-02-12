@@ -403,7 +403,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
             lbl (bool): if True, add label
             editable (bool): if True, ROI is editable
         """
-        coords = self.x.min(), self.x.max()
+        # We take the real part of the x data to avoid `ComplexWarning` warnings
+        # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
+        coords = self.x.real.min(), self.x.real.max()
         return base.make_roi_item(
             lambda x, y, _title: make.range(x, y),
             coords,
@@ -426,7 +428,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
             PlotItem: plot item
         """
         if self.roi is not None:
-            for index, coords in enumerate(self.x[self.roi]):
+            # We take the real part of the x data to avoid `ComplexWarning` warnings
+            # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
+            for index, coords in enumerate(self.x.real[self.roi]):
                 yield base.make_roi_item(
                     lambda x, y, _title: make.range(x, y),
                     coords,
