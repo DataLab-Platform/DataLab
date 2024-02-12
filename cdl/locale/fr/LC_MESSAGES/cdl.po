@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-12 18:09+0100\n"
+"POT-Creation-Date: 2024-02-12 21:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -160,13 +160,13 @@ msgid "Operation"
 msgstr "Opération"
 
 #: cdl\core\computation\image\__init__.py:529 cdl\core\model\image.py:781
-#: cdl\widgets\textimport.py:185 cdl\widgets\textimport.py:208
+#: cdl\widgets\textimport.py:186 cdl\widgets\textimport.py:209
 msgid "Data type"
 msgstr "Type de données"
 
 #: cdl\core\computation\image\__init__.py:531
 #: cdl\core\computation\image\__init__.py:816
-#: cdl\core\computation\signal.py:310 cdl\widgets\textimport.py:210
+#: cdl\core\computation\signal.py:310 cdl\widgets\textimport.py:211
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
@@ -1583,7 +1583,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:440 cdl\core\gui\main.py:1265
-#: cdl\plugins.py:168 cdl\widgets\textimport.py:409
+#: cdl\plugins.py:168 cdl\widgets\textimport.py:410
 msgid "Warning"
 msgstr "Attention"
 
@@ -2175,7 +2175,7 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:289
+#: cdl\core\gui\processor\base.py:289 cdl\widgets\textimport.py:552
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -2947,7 +2947,8 @@ msgstr "Titre de l'image"
 #: cdl\core\model\image.py:386 cdl\core\model\image.py:390
 #: cdl\core\model\image.py:394 cdl\core\model\image.py:774
 #: cdl\core\model\signal.py:107 cdl\core\model\signal.py:111
-#: cdl\core\model\signal.py:569
+#: cdl\core\model\signal.py:569 cdl\widgets\textimport.py:522
+#: cdl\widgets\textimport.py:532
 msgid "Title"
 msgstr "Titre"
 
@@ -3513,121 +3514,121 @@ msgstr "Plugins :"
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
-#: cdl\widgets\textimport.py:56 cdl\widgets\textimport.py:109
+#: cdl\widgets\textimport.py:57 cdl\widgets\textimport.py:110
 msgid "Source"
 msgstr "Source"
 
-#: cdl\widgets\textimport.py:59 cdl\widgets\wizard.py:223
+#: cdl\widgets\textimport.py:60 cdl\widgets\wizard.py:223
 msgid "Clipboard"
 msgstr "Presse-papiers"
 
-#: cdl\widgets\textimport.py:60
+#: cdl\widgets\textimport.py:61
 msgid "File:"
 msgstr "Fichier :"
 
-#: cdl\widgets\textimport.py:67
+#: cdl\widgets\textimport.py:68
 msgid "Browse"
 msgstr "Parcourir"
 
-#: cdl\widgets\textimport.py:90
+#: cdl\widgets\textimport.py:91
 msgid "Text files (*.txt *.csv *.dat *.asc);;All files (*.*)"
 msgstr "Fichiers texte (*.txt *.csv *.dat *.asc);;Tous les fichiers (*.*)"
 
-#: cdl\widgets\textimport.py:92
+#: cdl\widgets\textimport.py:93
 msgid "Select a file"
 msgstr "Sélectionner un fichier"
 
-#: cdl\widgets\textimport.py:110
+#: cdl\widgets\textimport.py:111
 msgid "Select the source of the data:"
 msgstr "Sélectionner la source des données :"
 
-#: cdl\widgets\textimport.py:143
+#: cdl\widgets\textimport.py:144
 msgid "Delimiter"
 msgstr "Délimiteur"
 
-#: cdl\widgets\textimport.py:147
+#: cdl\widgets\textimport.py:148
 msgid "Tab"
 msgstr "Tabulation"
 
-#: cdl\widgets\textimport.py:148
+#: cdl\widgets\textimport.py:149
 msgid "Space"
 msgstr "Espace"
 
-#: cdl\widgets\textimport.py:150
+#: cdl\widgets\textimport.py:151
 msgid "Column delimiter character"
 msgstr "Caractère délimiteur de colonne"
 
-#: cdl\widgets\textimport.py:153
+#: cdl\widgets\textimport.py:154
 msgid "Comments"
 msgstr "Commentaires"
 
-#: cdl\widgets\textimport.py:155
+#: cdl\widgets\textimport.py:156
 msgid "Character that indicates a comment line"
 msgstr "Caractère indiquant une ligne de commentaire"
 
-#: cdl\widgets\textimport.py:159
+#: cdl\widgets\textimport.py:160
 msgid "Rows to Skip"
 msgstr "Lignes à sauter"
 
-#: cdl\widgets\textimport.py:161
+#: cdl\widgets\textimport.py:162
 msgid ""
 "Number of rows to skip at the beginning of the file (including comments)"
 msgstr ""
 "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
 
-#: cdl\widgets\textimport.py:166
+#: cdl\widgets\textimport.py:167
 msgid "Maximum Number of Rows"
 msgstr "Nombre maximum de lignes"
 
-#: cdl\widgets\textimport.py:170
+#: cdl\widgets\textimport.py:171
 msgid "Maximum number of rows to import"
 msgstr "Nombre maximum de lignes à importer"
 
-#: cdl\widgets\textimport.py:173
+#: cdl\widgets\textimport.py:174
 msgid "Transpose"
 msgstr "Transposer"
 
-#: cdl\widgets\textimport.py:175
+#: cdl\widgets\textimport.py:176
 msgid "Transpose the data (swap rows and columns)"
 msgstr "Transposer les données (échanger les lignes et les colonnes)"
 
-#: cdl\widgets\textimport.py:187
+#: cdl\widgets\textimport.py:188
 msgid "Output signal data type."
 msgstr "Type de données du signal de sortie."
 
-#: cdl\widgets\textimport.py:191
+#: cdl\widgets\textimport.py:192
 msgid "First Column is X"
 msgstr "La première colonne est X"
 
-#: cdl\widgets\textimport.py:226
+#: cdl\widgets\textimport.py:227
 msgid "Raw Data"
 msgstr "Données brutes"
 
-#: cdl\widgets\textimport.py:232
+#: cdl\widgets\textimport.py:233
 msgid "Prefiltered Data"
 msgstr "Données préfiltrées"
 
-#: cdl\widgets\textimport.py:237
+#: cdl\widgets\textimport.py:238
 msgid "Preview"
 msgstr "Aperçu"
 
-#: cdl\widgets\textimport.py:279
+#: cdl\widgets\textimport.py:280
 msgid "Adding data to the preview table"
 msgstr "Ajout des données au tableau d'aperçu"
 
-#: cdl\widgets\textimport.py:351
+#: cdl\widgets\textimport.py:352
 msgid "Data Preview"
 msgstr "Aperçu des données"
 
-#: cdl\widgets\textimport.py:352
+#: cdl\widgets\textimport.py:353
 msgid "Preview and modify the import settings:"
 msgstr "Aperçu et modification des paramètres d'importation :"
 
-#: cdl\widgets\textimport.py:355
+#: cdl\widgets\textimport.py:356
 msgid "Import Parameters"
 msgstr "Paramètres d'importation"
 
-#: cdl\widgets\textimport.py:410
+#: cdl\widgets\textimport.py:411
 msgid ""
 "The number of signals to import is very high (%d).\n"
 "This may be an error.\n"
@@ -3639,35 +3640,63 @@ msgstr ""
 "\n"
 "Etes-vous sûr de vouloir continuer ?"
 
-#: cdl\widgets\textimport.py:432
+#: cdl\widgets\textimport.py:433
 msgid "Graphical Representation"
 msgstr "Représentation graphique"
 
-#: cdl\widgets\textimport.py:433
-msgid "This is the final page."
-msgstr "Ceci est la dernière page."
+#: cdl\widgets\textimport.py:434
+msgid "Graphical representation of the imported data"
+msgstr "Représentation graphique des données importées"
 
-#: cdl\widgets\textimport.py:437
-msgid "Graphical representation of the imported data:"
-msgstr "Représentation graphique des données importées :"
+#: cdl\widgets\textimport.py:439
+msgid "Unselect the %s that you do not want to import:"
+msgstr "Désélectionner les %s que vous ne voulez pas importer :"
 
-#: cdl\widgets\textimport.py:453
-msgid "Unselect the %s that you do not want to import."
-msgstr "Désélectionner les %s que vous ne voulez pas importer."
-
-#: cdl\widgets\textimport.py:454
+#: cdl\widgets\textimport.py:440
 msgid "images"
 msgstr "images"
 
-#: cdl\widgets\textimport.py:454
+#: cdl\widgets\textimport.py:440
 msgid "signals"
 msgstr "signaux"
 
-#: cdl\widgets\textimport.py:489
+#: cdl\widgets\textimport.py:488
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
-#: cdl\widgets\textimport.py:530
+#: cdl\widgets\textimport.py:523 cdl\widgets\textimport.py:533
+msgid "X label"
+msgstr "Titre X"
+
+#: cdl\widgets\textimport.py:524 cdl\widgets\textimport.py:534
+msgid "Y label"
+msgstr "Titre Y"
+
+#: cdl\widgets\textimport.py:525 cdl\widgets\textimport.py:536
+msgid "X unit"
+msgstr "Unité X"
+
+#: cdl\widgets\textimport.py:526 cdl\widgets\textimport.py:537
+msgid "Y unit"
+msgstr "Unité Y"
+
+#: cdl\widgets\textimport.py:535
+msgid "Z label"
+msgstr "Titre Z"
+
+#: cdl\widgets\textimport.py:538
+msgid "Z unit"
+msgstr "Unité Z"
+
+#: cdl\widgets\textimport.py:549
+msgid "Labels and units"
+msgstr "Titres et unités"
+
+#: cdl\widgets\textimport.py:550
+msgid "Set the labels and units for the imported data"
+msgstr "Définir les titres et unités pour les données importées"
+
+#: cdl\widgets\textimport.py:589
 msgid "DataLab Import Wizard"
 msgstr "Assistant d'importation de DataLab"
 
@@ -3750,6 +3779,9 @@ msgstr "Merci de sélectionner le fichier à importer."
 #: cdl\widgets\wizard.py:273
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+#~ msgid "This is the final page."
+#~ msgstr "Ceci est la dernière page."
 
 #~ msgid "Path"
 #~ msgstr "Chemin"

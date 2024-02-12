@@ -12,6 +12,7 @@ Import wizard test
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
+from cdl.env import execenv
 from cdl.tests.data import get_test_fnames
 from cdl.widgets.textimport import TextImportWizard
 
@@ -33,10 +34,9 @@ def test_import_wizard():
             path = get_test_fnames(fname)[0]
             file_to_clipboard(path)
             wizard = TextImportWizard(destination=destination)
-            # wizard.resize(800, 600)
             if exec_dialog(wizard):
                 for obj in wizard.get_objs():
-                    print(obj)
+                    execenv.print(obj)
 
 
 if __name__ == "__main__":

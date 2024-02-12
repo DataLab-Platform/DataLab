@@ -10,11 +10,11 @@ Profile extraction unit test
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
-from guidata.env import execenv
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 import cdl.param
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
+from cdl.env import execenv
 from cdl.tests.data import create_noisygauss_image
 
 

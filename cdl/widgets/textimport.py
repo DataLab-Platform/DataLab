@@ -28,6 +28,7 @@ import guidata.dataset.qtwidgets as gdq
 import numpy as np
 import qtpy.QtCore as QC
 from guidata.configtools import get_icon
+from guidata.dataset import restore_dataset
 from guidata.widgets.codeeditor import CodeEditor
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtGui as QG
@@ -430,12 +431,15 @@ class GraphicalRepresentationPage(WizardPage):
             tuple[SignalObj | ImageObj, CurveItem | MaskedImageItem]
         ] = []
         self.set_title(_("Graphical Representation"))
-        self.set_subtitle(_("This is the final page."))
+        self.set_subtitle(_("Graphical representation of the imported data"))
         self.data_page = data_page
         self.destination = destination
         layout = QW.QVBoxLayout()
-        label = QW.QLabel(_("Graphical representation of the imported data:"))
-        layout.addWidget(label)
+        instruction = QW.QLabel(
+            _("Unselect the %s that you do not want to import:")
+            % (_("signals") if destination == "signal" else _("images"))
+        )
+        layout.addWidget(instruction)
         plot_type = "curve" if destination == "signal" else "image"
         self.plot_widget = PlotWidget(
             self,
@@ -449,11 +453,6 @@ class GraphicalRepresentationPage(WizardPage):
         plot = self.plot_widget.get_plot()
         plot.SIG_ITEMS_CHANGED.connect(self.items_changed)
         layout.addWidget(self.plot_widget)
-        instruction = QW.QLabel(
-            _("Unselect the %s that you do not want to import.")
-            % (_("signals") if destination == "signal" else _("images"))
-        )
-        layout.addWidget(instruction)
         self.add_to_layout(layout)
 
     def items_changed(self, _plot: BasePlot) -> None:
@@ -517,6 +516,66 @@ class GraphicalRepresentationPage(WizardPage):
         return super().validate_page()
 
 
+class SignalParam(gds.DataSet):
+    """Signal parameters dataset"""
+
+    title = gds.StringItem(_("Title"), default="").set_pos(col=0, colspan=2)
+    xlabel = gds.StringItem(_("X label"), default="")
+    ylabel = gds.StringItem(_("Y label"), default="").set_pos(col=1)
+    xunit = gds.StringItem(_("X unit"), default="")
+    yunit = gds.StringItem(_("Y unit"), default="").set_pos(col=1)
+
+
+class ImageParam(gds.DataSet):
+    """Image parameters dataset"""
+
+    title = gds.StringItem(_("Title"), default="").set_pos(col=0, colspan=3)
+    xlabel = gds.StringItem(_("X label"), default="")
+    ylabel = gds.StringItem(_("Y label"), default="").set_pos(col=1)
+    zlabel = gds.StringItem(_("Z label"), default="").set_pos(col=2)
+    xunit = gds.StringItem(_("X unit"), default="")
+    yunit = gds.StringItem(_("Y unit"), default="").set_pos(col=1)
+    zunit = gds.StringItem(_("Z unit"), default="").set_pos(col=2)
+
+
+class LabelsPage(WizardPage):
+    """Labels page"""
+
+    def __init__(
+        self, plot_page: GraphicalRepresentationPage, destination: str
+    ) -> None:
+        super().__init__()
+        self.plot_page = plot_page
+        self.set_title(_("Labels and units"))
+        self.set_subtitle(_("Set the labels and units for the imported data"))
+        self.param_widget = gdq.DataSetEditGroupBox(
+            _("Parameters"),
+            SignalParam if destination == "signal" else ImageParam,
+            show_button=False,
+        )
+        self.param = self.param_widget.dataset
+        self.add_to_layout(self.param_widget)
+        self.add_stretch()
+
+    def get_objs(self) -> list[SignalObj | ImageObj]:
+        """Return the objects"""
+        objs = self.plot_page.get_objs()
+        for idx, obj in enumerate(objs):
+            restore_dataset(self.param, obj)
+            if len(objs) > 1:
+                obj.title = f"{obj.title} {idx + 1:02d}"
+        return objs
+
+    def initialize_page(self) -> None:
+        """Initialize the page"""
+        return super().initialize_page()
+
+    def validate_page(self) -> bool:
+        """Validate the page"""
+        self.param_widget.set()
+        return super().validate_page()
+
+
 class TextImportWizard(Wizard):
     """Text data import wizard
 
@@ -533,8 +592,10 @@ class TextImportWizard(Wizard):
         self.data_page = DataPreviewPage(self.source_page, destination)
         self.add_page(self.data_page)
         self.plot_page = GraphicalRepresentationPage(self.data_page, destination)
-        self.add_page(self.plot_page, last_page=True)
+        self.add_page(self.plot_page)
+        self.labels_page = LabelsPage(self.plot_page, destination)
+        self.add_page(self.labels_page, last_page=True)
 
     def get_objs(self) -> list[SignalObj | ImageObj]:
         """Return the objects"""
-        return self.plot_page.get_objs()
+        return self.labels_page.get_objs()
