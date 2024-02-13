@@ -115,6 +115,10 @@ class SourcePage(WizardPage):
         self.add_stretch()
         self.set_valid(False)
 
+    def get_source_path(self) -> str | None:
+        """Return the selected source path, or None if clipboard is selected"""
+        return self.source_widget.get_source_path()
+
     def get_source_text(self) -> str:
         """Return the source text"""
         return self.__text
@@ -123,7 +127,7 @@ class SourcePage(WizardPage):
         """Validate the page"""
         self.__text = ""
         if self.source_widget.file_edit.isEnabled():
-            path = self.source_widget.get_source_path()
+            path = self.get_source_path()
             if path is not None and osp.isfile(path):
                 try:
                     with open(path, "r") as file:
@@ -542,12 +546,16 @@ class LabelsPage(WizardPage):
     """Labels page"""
 
     def __init__(
-        self, plot_page: GraphicalRepresentationPage, destination: str
+        self,
+        source_page: SourcePage,
+        plot_page: GraphicalRepresentationPage,
+        destination: str,
     ) -> None:
         super().__init__()
-        self.plot_page = plot_page
         self.set_title(_("Labels and units"))
         self.set_subtitle(_("Set the labels and units for the imported data"))
+        self.source_page = source_page
+        self.plot_page = plot_page
         self.param_widget = gdq.DataSetEditGroupBox(
             _("Parameters"),
             SignalParam if destination == "signal" else ImageParam,
@@ -568,6 +576,13 @@ class LabelsPage(WizardPage):
 
     def initialize_page(self) -> None:
         """Initialize the page"""
+        path = self.source_page.get_source_path()
+        if path is None:
+            path = _("clipboard")
+        else:
+            path = osp.basename(path)
+        self.param.title = _("Imported from:") + " " + path
+        self.param_widget.get()
         return super().initialize_page()
 
     def validate_page(self) -> bool:
@@ -593,7 +608,7 @@ class TextImportWizard(Wizard):
         self.add_page(self.data_page)
         self.plot_page = GraphicalRepresentationPage(self.data_page, destination)
         self.add_page(self.plot_page)
-        self.labels_page = LabelsPage(self.plot_page, destination)
+        self.labels_page = LabelsPage(self.source_page, self.plot_page, destination)
         self.add_page(self.labels_page, last_page=True)
 
     def get_objs(self) -> list[SignalObj | ImageObj]:
