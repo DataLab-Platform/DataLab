@@ -30,9 +30,13 @@ extensions = [
     "sphinx_design",
     "sphinx_copybutton",
 ]
-html_baseurl = cdl.__homeurl__  # for sitemap extension
 templates_path = ["_templates"]
 exclude_patterns = []
+
+# -- Options for sitemap extension -------------------------------------------
+html_baseurl = cdl.__homeurl__  # for sitemap extension
+sitemap_locales = ["en", "fr"]
+sitemap_filename = "../sitemap.xml"
 
 # -- Options for HTML output -------------------------------------------------
 
