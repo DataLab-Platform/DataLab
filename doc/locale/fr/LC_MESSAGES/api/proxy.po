@@ -361,9 +361,8 @@ msgid "Refresh plot. Defaults to True."
 msgstr "Actualiser le tracé. Par défaut, True."
 
 #: cdl.core.baseproxy.BaseProxy.delete_metadata:4 of
-#, fuzzy
 msgid "Keep ROI. Defaults to False."
-msgstr "Unité Z. Par défaut, None."
+msgstr "Conserver la ROI. Par défaut, False."
 
 #: cdl.core.remote.RemoteClient.disconnect:1 of
 msgid "Disconnect from DataLab XML-RPC server."
@@ -713,4 +712,3 @@ msgstr "proxy.add_signal(...)"
 
 #~ msgid "Proxy module (:mod:`cdl.proxy`)"
 #~ msgstr ""
-

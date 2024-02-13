@@ -15,7 +15,7 @@ graphical user interfaces, DataLab is a versatile tool, extendable with
     Try DataLab online, without installation: :octicon:`rocket;1em;sd-text-info` |binder|.
 
 .. |binder| image:: https://mybinder.org/badge_logo.svg
-    :target: https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments
+    :target: https://mybinder.org/v2/gh/DataLab-Platform/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FDataLab-Platform%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments
     :class: new-window
 
 .. only:: latex and not html
@@ -23,7 +23,7 @@ graphical user interfaces, DataLab is a versatile tool, extendable with
     To immediately see DataLab in action, you have two options:
 
     - Read or view our :ref:`Tutorials <tutorials>`,
-    - Try DataLab online, without installation, using our `Binder environment <https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments>`_.
+    - Try DataLab online, without installation, using our `Binder environment <https://mybinder.org/v2/gh/DataLab-Platform/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FDataLab-Platform%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments>`_.
 
 .. figure:: images/DataLab-Overview.png
     :class: dark-light

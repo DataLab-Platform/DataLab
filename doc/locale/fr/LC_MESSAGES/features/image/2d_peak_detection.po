@@ -146,10 +146,7 @@ msgid "\"Relative threshold\": detection threshold"
 msgstr "\"Seuil relatif\": seuil de détection"
 
 #: ../../features/image/2d_peak_detection.rst:49
-#, fuzzy
 msgid ""
 "Feature is based on ``get_2d_peaks_coords`` function from "
 "``cdl.algorithms`` module:"
-msgstr ""
-"La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du "
-"module ``cdl.core.computation`` :"
+msgstr "La fonctionnalité est basée sur la fonction ``get_2d_peaks_coords`` du module ``cdl.algorithms`` :"

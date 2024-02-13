@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 09:51+0100\n"
+"POT-Creation-Date: 2024-02-13 11:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,9 +19,8 @@ msgstr ""
 "Generated-By: Babel 2.13.0\n"
 
 #: ../../index.rst:76
-#, fuzzy
 msgid "Contents"
-msgstr "Table des matières :"
+msgstr "Table des matières"
 
 #: ../../index.rst:2
 msgid "DataLab"
@@ -69,15 +68,19 @@ msgid "Read or view our :ref:`Tutorials <tutorials>`,"
 msgstr "Lisez ou regardez nos :ref:`Tutoriels <tutorials>`,"
 
 #: ../../index.rst:26
-#, python-format
 msgid ""
 "Try DataLab online, without installation, using our `Binder environment "
-"<https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-"
+"<https://mybinder.org/v2/gh/DataLab-Platform/DataLab/binder-"
 "environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com"
-"%252FCodra-Ingenierie-"
-"Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-"
+"%252FDataLab-Platform%252FDataLab%26urlpath%3Ddesktop%252F%26branch"
+"%3Dbinder-environments>`_."
+msgstr ""
+"Essayez DataLab en ligne, sans installation, en utilisant notre "
+"`environnement Binder <https://mybinder.org/v2/gh/DataLab-"
+"Platform/DataLab/binder-environments?urlpath=git-"
+"pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FDataLab-"
+"Platform%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-"
 "environments>`_."
-msgstr "Essayez DataLab en ligne, sans installation, en utilisant notre `environnement Binder <https://mybinder.org/v2/gh/Codra-Ingenierie-Informatique/DataLab/binder-environments?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252FCodra-Ingenierie-Informatique%252FDataLab%26urlpath%3Ddesktop%252F%26branch%3Dbinder-environments>`_."
 
 #: ../../index.rst:31
 msgid "Signal and image visualization in DataLab"
