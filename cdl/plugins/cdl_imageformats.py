@@ -144,7 +144,7 @@ class XYZImageFormat(ImageFormatBase):
         name="Dürr NDT",
         extensions="*.xyz",
         readable=True,
-        writeable=False,
+        writeable=True,
     )
 
     @staticmethod
@@ -163,3 +163,17 @@ class XYZImageFormat(ImageFormatBase):
             arr = np.fromfile(fdesc, dtype=np.uint16, count=cols * rows)
             arr = arr.reshape((rows, cols))
         return np.fliplr(arr)
+
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
+        data = np.fliplr(data)
+        with open(filename, "wb") as fdesc:
+            fdesc.write(np.array(data.shape[1], dtype=np.uint16).tobytes())
+            fdesc.write(np.array(data.shape[0], dtype=np.uint16).tobytes())
+            fdesc.write(data.tobytes())

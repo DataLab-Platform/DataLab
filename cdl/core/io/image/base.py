@@ -36,11 +36,11 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         """Create empty object
 
         Args:
-            filename (str): File name
-            index (int | None): Index of object in file
+            filename: File name
+            index: Index of object in file
 
         Returns:
-            ImageObj: Image object
+            Image object
         """
         name = reduce_path(filename)
         if index is not None:
@@ -51,10 +51,10 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         """Read data from file, return one or more objects
 
         Args:
-            filename (str): File name
+            filename: File name
 
         Returns:
-            ImageObj: Image object
+            Image object
         """
         obj = self.create_object(filename)
         obj.data = self.read_data(filename)
@@ -66,8 +66,31 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         """Read data and return it
 
         Args:
-            filename (str): File name
+            filename: File name
 
         Returns:
-            np.ndarray: Image data
+            Image array data
         """
+
+    def write(self, filename: str, obj: ImageObj) -> None:
+        """Write data to file
+
+        Args:
+            filename: file name
+            obj: native object (signal or image)
+
+        Raises:
+            NotImplementedError: if format is not supported
+        """
+        data = obj.data
+        self.write_data(filename, data)
+
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
+        raise NotImplementedError(f"Writing to {filename} is not supported")

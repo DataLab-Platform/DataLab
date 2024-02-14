@@ -36,16 +36,21 @@ class ClassicsImageFormat(ImageFormatBase):
         """Read data and return it"""
         return skimage.io.imread(filename, as_gray=True)
 
-    def write(self, filename: str, obj: ImageObj) -> None:
-        """Write data to file"""
-        data = obj.data
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
         ext = osp.splitext(filename)[1].lower()
         if ext in (".bmp", ".jpg", ".jpeg", ".png"):
             if data.dtype is not np.uint8:
-                data = obj.data.astype(np.uint8)
+                data = data.astype(np.uint8)
         if ext in (".jp2",):
             if data.dtype not in (np.uint8, np.uint16):
-                data = obj.data.astype(np.uint16)
+                data = data.astype(np.uint16)
         skimage.io.imsave(filename, data, check_contrast=False)
 
 
@@ -64,9 +69,15 @@ class NumPyImageFormat(ImageFormatBase):
         """Read data and return it"""
         return convert_array_to_standard_type(np.load(filename))
 
-    def write(self, filename: str, obj: ImageObj) -> None:
-        """Write data to file"""
-        np.save(filename, obj.data)
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
+        np.save(filename, data)
 
 
 class TextImageFormat(ImageFormatBase):
@@ -90,9 +101,15 @@ class TextImageFormat(ImageFormatBase):
                     continue
         raise ValueError(f"Could not read file {filename} as text file")
 
-    def write(self, filename: str, obj: ImageObj) -> None:
-        """Write data to file"""
-        if obj.data.dtype in (
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
+        if data.dtype in (
             np.int8,
             np.uint8,
             np.int16,
@@ -105,9 +122,9 @@ class TextImageFormat(ImageFormatBase):
             fmt = "%.18e"
         ext = osp.splitext(filename)[1]
         if ext.lower() in (".txt", ".asc", ""):
-            np.savetxt(filename, obj.data, fmt=fmt)
+            np.savetxt(filename, data, fmt=fmt)
         elif ext.lower() == ".csv":
-            np.savetxt(filename, obj.data, fmt=fmt, delimiter=",")
+            np.savetxt(filename, data, fmt=fmt, delimiter=",")
         else:
             raise ValueError(f"Unknown text file extension {ext}")
 
