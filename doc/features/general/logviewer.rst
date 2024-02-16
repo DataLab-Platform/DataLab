@@ -3,6 +3,10 @@
 Log viewer
 ==========
 
+.. meta::
+  :description: DataLab's log viewer
+  :keywords: DataLab, log, viewer, crash, bug, report
+
 Despite countless efforts (unit testing, test coverage, ...),
 DataLab might crash or behave unexpectedly.
 

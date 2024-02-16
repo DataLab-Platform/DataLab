@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-21 12:08+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,31 +17,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/general/command.rst:2
+#: ../../features/general/command.rst:-1
+msgid "DataLab command line features"
+msgstr "Options ligne de commande de DataLab"
+
+#: ../../features/general/command.rst:-1
+msgid "command line, cdl, datalab, run, test, demo"
+msgstr "ligne de commande, cdl, datalab, exécuter, test, démo"
+
+#: ../../features/general/command.rst:4
 msgid "Command line features"
 msgstr "Ligne de commande"
 
-#: ../../features/general/command.rst:5
+#: ../../features/general/command.rst:11
 msgid "Run DataLab"
 msgstr "Exécuter DataLab"
 
-#: ../../features/general/command.rst:7
+#: ../../features/general/command.rst:13
 msgid "To run DataLab from the command line, type the following::"
 msgstr ""
 "Pour exécuter DataLab depuis la ligne de commande, taper la commande "
 "suivante::"
 
-#: ../../features/general/command.rst:11
+#: ../../features/general/command.rst:17
 msgid "To show help on command line usage, simply run::"
 msgstr ""
 "Pour afficher l'aide de l'utilisation en ligne de commande, taper "
 "simplement::"
 
-#: ../../features/general/command.rst:37
+#: ../../features/general/command.rst:43
 msgid "Open HDF5 file at startup"
 msgstr "Ouvrir un fichier HDF5 au démarrage"
 
-#: ../../features/general/command.rst:39
+#: ../../features/general/command.rst:45
 msgid ""
 "To open HDF5 files, or even import only a specified HDF5 dataset, use the"
 " following::"
@@ -49,49 +57,54 @@ msgstr ""
 "Pour ouvrir des fichiers HDF5, en important éventuellement un dataset "
 "précis du fichier HDF5, utiliser l'une des commmandes suivantes::"
 
-#: ../../features/general/command.rst:46
+#: ../../features/general/command.rst:52
 msgid "Open HDF5 browser at startup"
 msgstr "Ouvrir l'explorateur de fichiers HDF5 au démarrage"
 
-#: ../../features/general/command.rst:48
+#: ../../features/general/command.rst:54
 msgid "To open the HDF5 browser at startup, use one of the following commands::"
 msgstr ""
 "Pour ouvrir l'explorateur de fichiers HDF5 au démarrage, utiliser l'une "
 "des commandes suivantes::"
 
-#: ../../features/general/command.rst:54
+#: ../../features/general/command.rst:60
 msgid "Run DataLab demo"
 msgstr "Mode démonstration de DataLab"
 
-#: ../../features/general/command.rst:56
+#: ../../features/general/command.rst:62
 msgid "To execute DataLab demo, run the following::"
 msgstr ""
 "Pour exécuter le mode de démonstration de DataLab, taper la commande "
 "suivante::"
 
-#: ../../features/general/command.rst:61
+#: ../../features/general/command.rst:67
 msgid "Run unit tests"
 msgstr "Exécuter les tests unitaires"
 
-#: ../../features/general/command.rst:65
+#: ../../features/general/command.rst:71
 msgid ""
 "This test suite is based on `guidata.guitest` discovery mechanism. It is "
 "not compatible with `pytest` because most of the high level tests have to"
 " be executed in a separate process (e.g. scenario tests will fail if "
 "executed in the same process as other tests)."
-msgstr "Cette suite de tests est basée sur le mécanisme de découverte de `guidata.guitest`. Elle n'est pas compatible avec `pytest` car la plupart des tests de haut niveau doivent être exécutés dans un processus séparé (par exemple, les tests de scénario échoueront s'ils sont exécutés dans le même processus que les autres tests)."
+msgstr ""
+"Cette suite de tests est basée sur le mécanisme de découverte de "
+"`guidata.guitest`. Elle n'est pas compatible avec `pytest` car la plupart"
+" des tests de haut niveau doivent être exécutés dans un processus séparé "
+"(par exemple, les tests de scénario échoueront s'ils sont exécutés dans "
+"le même processus que les autres tests)."
 
-#: ../../features/general/command.rst:70
+#: ../../features/general/command.rst:76
 msgid "To execute all DataLab unit tests, simply run::"
 msgstr ""
 "Pour exécuter l'ensemble des tests unitaires de DataLab, taper la "
 "commande suivante::"
 
-#: ../../features/general/command.rst:114
+#: ../../features/general/command.rst:120
 msgid "Run interactive tests"
 msgstr "Exécuter les tests interactifs"
 
-#: ../../features/general/command.rst:116
+#: ../../features/general/command.rst:122
 msgid "To execute DataLab interactive tests, run the following::"
 msgstr ""
 "Pour exécuter les tests interactifs de DataLab, taper la commande "

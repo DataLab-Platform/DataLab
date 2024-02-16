@@ -3,6 +3,10 @@
 Installation
 ============
 
+.. meta::
+    :description: How to install DataLab, the open-source data analysis and visualization platform
+    :keywords: DataLab, installation, install, pip, wheel, source, Windows, Linux, macOS
+
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
 or by clicking on the DataLab shortcut in the Start menu (on Windows).

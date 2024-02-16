@@ -1,6 +1,10 @@
 :octicon:`book;1em;sd-text-info` Processing a spectrum
 ======================================================
 
+.. meta::
+    :description: Tutorial on how to process a spectrum with DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: spectrum, signal processing, data analysis, scientific data, visualization, open-source, software, DataLab, tutorial
+
 This example shows how to process a spectrum with DataLab:
 
 -   Read the spectrum from a file

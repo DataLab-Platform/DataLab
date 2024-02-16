@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 20:50+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,19 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../intro/tutorials/custom_func.rst:-1
+msgid ""
+"Tutorial on how to prototype a custom image processing pipeline using "
+"DataLab (macro, plugin, external IDE, Jupyter notebook)"
+msgstr "Tutoriel: prototyper une chaîne de traitement d'image avec DataLab (macro, plugin, IDE externe, notebook Jupyter)"
+
+#: ../../intro/tutorials/custom_func.rst:-1
+msgid ""
+"DataLab, custom function, macro-command, plugin, image processing, "
+"prototype, Spyder, Jupyter"
+msgstr "DataLab, fonction personnalisée, macro-commande, plugin, traitement d'image, prototype, Spyder, Jupyter"
 
 #: ../../intro/tutorials/custom_func.rst:4
 msgid ":octicon:`book;1em;sd-text-info` Prototyping a custom processing pipeline"
@@ -25,7 +37,7 @@ msgstr ""
 ":octicon:`book;1em;sd-text-info`  Prototypage d'une chaîne de traitement "
 "personnalisée"
 
-#: ../../intro/tutorials/custom_func.rst:6
+#: ../../intro/tutorials/custom_func.rst:10
 msgid ""
 "This example shows how to prototype a custom image processing pipeline "
 "using DataLab:"
@@ -33,28 +45,28 @@ msgstr ""
 "Cet exemple montre comment prototyper une chaîne de traitement d'image "
 "personnalisée en utilisant DataLab :"
 
-#: ../../intro/tutorials/custom_func.rst:8
-#: ../../intro/tutorials/custom_func.rst:14
+#: ../../intro/tutorials/custom_func.rst:12
+#: ../../intro/tutorials/custom_func.rst:18
 msgid "Define a custom processing function"
 msgstr "Définir une fonction de traitement personnalisée"
 
-#: ../../intro/tutorials/custom_func.rst:9
+#: ../../intro/tutorials/custom_func.rst:13
 msgid "Create a macro-command to apply the function to an image"
 msgstr "Créer une macro-commande pour appliquer la fonction à une image"
 
-#: ../../intro/tutorials/custom_func.rst:10
+#: ../../intro/tutorials/custom_func.rst:14
 msgid "Use the same code from an external IDE (e.g. Spyder) or a Jupyter notebook"
 msgstr ""
 "Utiliser le même code à partir d'un IDE externe (par exemple Spyder) ou "
 "d'un notebook Jupyter"
 
-#: ../../intro/tutorials/custom_func.rst:11
+#: ../../intro/tutorials/custom_func.rst:15
 msgid "Create a plugin to integrate the function in the DataLab GUI"
 msgstr ""
 "Créer un plugin pour intégrer la fonction dans l'interface graphique de "
 "DataLab"
 
-#: ../../intro/tutorials/custom_func.rst:16
+#: ../../intro/tutorials/custom_func.rst:20
 msgid ""
 "For illustrating the extensibility of DataLab, we will use a simple image"
 " processing function that is not available in the standard DataLab "
@@ -66,7 +78,7 @@ msgstr ""
 "distribution standard de DataLab, et qui représente un cas d'utilisation "
 "typique pour le prototypage d'une chaîne de traitement personnalisée."
 
-#: ../../intro/tutorials/custom_func.rst:20
+#: ../../intro/tutorials/custom_func.rst:24
 msgid ""
 "The function that we will work on is a denoising filter that combines the"
 " ideas of averaging and edge detection. This filter will average the "
@@ -81,11 +93,11 @@ msgstr ""
 "sont significativement différents du pixel central, en supposant qu'ils "
 "pourraient faire partie d'un bord ou d'un bruit."
 
-#: ../../intro/tutorials/custom_func.rst:26
+#: ../../intro/tutorials/custom_func.rst:30
 msgid "Here is the code of the ``weighted_average_denoise`` function::"
 msgstr "Voici le code de la fonction ``weighted_average_denoise`` :"
 
-#: ../../intro/tutorials/custom_func.rst:44
+#: ../../intro/tutorials/custom_func.rst:48
 msgid ""
 "For testing our processing function, we will use a generated image from a"
 " DataLab plugin example (`plugins/examples/cdl_example_imageproc.py`). "
@@ -98,16 +110,16 @@ msgstr ""
 "vous que le plugin est installé dans DataLab (voir les premières étapes "
 "du tutoriel :ref:`tutorial_blobs`)."
 
-#: ../../intro/tutorials/custom_func.rst:51
+#: ../../intro/tutorials/custom_func.rst:55
 msgid ""
 "To begin, we reorganize the window layout of DataLab to have the \"Image "
 "Panel\" on the left and the \"Macro Panel\" on the right."
 msgstr ""
 "Pour commencer, nous réorganisons la disposition de la fenêtre de DataLab"
-" pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de Macros\""
-" à droite."
+" pour avoir le \"Panneau Image\" à gauche et le \"Gestionnaire de "
+"Macros\" à droite."
 
-#: ../../intro/tutorials/custom_func.rst:56
+#: ../../intro/tutorials/custom_func.rst:60
 msgid ""
 "We generate a new image using the \"Plugins > Extract blobs (example) > "
 "Generate test image\" menu."
@@ -115,7 +127,7 @@ msgstr ""
 "Nous générons une nouvelle image en utilisant le menu \"Plugins > Extract"
 " blobs (example) > Generate test image\"."
 
-#: ../../intro/tutorials/custom_func.rst:61
+#: ../../intro/tutorials/custom_func.rst:65
 msgid ""
 "We select a limited size for the image (e.g. 512x512 pixels) because our "
 "algorithm is quite slow, and click on \"OK\"."
@@ -123,15 +135,15 @@ msgstr ""
 "Nous sélectionnons une taille limitée pour l'image (par exemple 512x512 "
 "pixels) car notre algorithme est assez lent, et cliquons sur \"OK\"."
 
-#: ../../intro/tutorials/custom_func.rst:66
+#: ../../intro/tutorials/custom_func.rst:70
 msgid "We can now see the generated image in the \"Image Panel\"."
 msgstr "Nous pouvons maintenant voir l'image générée dans le \"Panneau Image\"."
 
-#: ../../intro/tutorials/custom_func.rst:69
+#: ../../intro/tutorials/custom_func.rst:73
 msgid "Create a macro-command"
 msgstr "Créer une macro-commande"
 
-#: ../../intro/tutorials/custom_func.rst:71
+#: ../../intro/tutorials/custom_func.rst:75
 msgid ""
 "Let's get back to our custom function. We can create a new macro-command "
 "that will apply the function to the current image. To do so, we open the "
@@ -142,11 +154,11 @@ msgstr ""
 "faire, nous ouvrons le \"Gestionnaire de Macros\" et cliquons sur le "
 "bouton \"Nouvelle macro\" |libre-gui-add|."
 
-#: ../../intro/tutorials/custom_func.rst:75
+#: ../../intro/tutorials/custom_func.rst:79
 msgid "libre-gui-add"
 msgstr ""
 
-#: ../../intro/tutorials/custom_func.rst:79
+#: ../../intro/tutorials/custom_func.rst:83
 msgid ""
 "DataLab creates a new macro-command which is not empty: it contains a "
 "sample code that shows how to create a new image and add it to the "
@@ -158,11 +170,11 @@ msgstr ""
 " l'ajouter au \"Panneau Image\". Nous pouvons supprimer ce code et le "
 "remplacer par le nôtre :"
 
-#: ../../intro/tutorials/custom_func.rst:117
+#: ../../intro/tutorials/custom_func.rst:121
 msgid "In DataLab, macro-commands are simply Python scripts:"
 msgstr "Dans DataLab, les macro-commandes sont simplement des scripts Python :"
 
-#: ../../intro/tutorials/custom_func.rst:119
+#: ../../intro/tutorials/custom_func.rst:123
 msgid ""
 "Macros are part of DataLab's **workspace**, which means that they are "
 "saved and restored when exporting and importing to/from an HDF5 file."
@@ -171,7 +183,7 @@ msgstr ""
 "signifie qu'elles sont sauvegardées et restaurées lors de l'exportation "
 "et de l'importation vers/depuis un fichier HDF5."
 
-#: ../../intro/tutorials/custom_func.rst:122
+#: ../../intro/tutorials/custom_func.rst:126
 msgid ""
 "Macros are executed in a separate process, so we need to import the "
 "necessary modules and initialize the proxy to DataLab. The proxy is a "
@@ -181,7 +193,7 @@ msgstr ""
 "importer les modules nécessaires et initialiser le proxy vers DataLab. Le"
 " proxy est un objet spécial qui permet de communiquer avec DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:126
+#: ../../intro/tutorials/custom_func.rst:130
 msgid ""
 "As a consequence, **when defining a plugin or when controlling DataLab "
 "from an external IDE, we can use exactly the same code as in the macro-"
@@ -196,7 +208,7 @@ msgstr ""
 "dans DataLab, puis utiliser le même code dans un plugin ou dans un IDE "
 "externe pour le développer davantage."
 
-#: ../../intro/tutorials/custom_func.rst:134
+#: ../../intro/tutorials/custom_func.rst:138
 msgid ""
 "The macro-command is executed in DataLab's Python environment, so we can "
 "use the modules that are available in DataLab. However, we can also use "
@@ -210,7 +222,7 @@ msgstr ""
 "qu'ils sont installés dans l'environnement Python de DataLab ou dans une "
 "distribution Python compatible avec l'environnement Python de DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:139
+#: ../../intro/tutorials/custom_func.rst:143
 msgid ""
 "If your custom modules are not installed in DataLab's Python environment,"
 " and if they are compatible with DataLab's Python version, you can "
@@ -222,7 +234,7 @@ msgstr ""
 "DataLab, vous pouvez préfixer ``sys.path`` avec le chemin vers la "
 "distribution Python qui contient vos modules :"
 
-#: ../../intro/tutorials/custom_func.rst:147
+#: ../../intro/tutorials/custom_func.rst:151
 msgid ""
 "This will allow you to import your modules in the macro-command and mix "
 "them with the modules that are available in DataLab."
@@ -230,7 +242,7 @@ msgstr ""
 "Cela vous permettra d'importer vos modules dans la macro-commande et de "
 "les mélanger avec les modules disponibles dans DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:152
+#: ../../intro/tutorials/custom_func.rst:156
 msgid ""
 "If you use this method, make sure that your modules are compatible with "
 "DataLab's Python version. Otherwise, you will get errors when importing "
@@ -240,7 +252,7 @@ msgstr ""
 "compatibles avec la version Python de DataLab. Sinon, vous obtiendrez des"
 " erreurs lors de leur importation."
 
-#: ../../intro/tutorials/custom_func.rst:156
+#: ../../intro/tutorials/custom_func.rst:160
 msgid ""
 "Now, let's execute the macro-command by clicking on the \"Run macro\" "
 "|libre-camera-flash-on| button:"
@@ -248,11 +260,11 @@ msgstr ""
 "Maintenant, exécutons la macro-commande en cliquant sur le bouton "
 "\"Exécuter la macro\" |libre-camera-flash-on| :"
 
-#: ../../intro/tutorials/custom_func.rst:172
+#: ../../intro/tutorials/custom_func.rst:176
 msgid "libre-camera-flash-on"
 msgstr ""
 
-#: ../../intro/tutorials/custom_func.rst:159
+#: ../../intro/tutorials/custom_func.rst:163
 msgid ""
 "The macro-command is executed in a separate process, so we can continue "
 "to work in DataLab while the macro-command is running. And, if the macro-"
@@ -265,23 +277,22 @@ msgstr ""
 "nous pouvons l'arrêter en cliquant sur le bouton \"Arrêter la macro\" "
 "|libre-camera-flash-off|."
 
-#: ../../intro/tutorials/custom_func.rst:176
+#: ../../intro/tutorials/custom_func.rst:180
 msgid "libre-camera-flash-off"
 msgstr ""
 
-#: ../../intro/tutorials/custom_func.rst:164
+#: ../../intro/tutorials/custom_func.rst:168
 msgid ""
 "During the execution of the macro-command, we can see the progress in the"
-" \"Macro Panel\" window: the process standard output is displayed in "
-"the \"Console\" below the macro editor. We can see the following "
-"messages:"
+" \"Macro Panel\" window: the process standard output is displayed in the "
+"\"Console\" below the macro editor. We can see the following messages:"
 msgstr ""
 "Pendant l'exécution de la macro-commande, nous pouvons voir la "
 "progression dans la fenêtre \"Gestionnaire de Macros\" : la sortie "
 "standard du processus est affichée dans la \"Console\" en dessous de "
 "l'éditeur de macro. Nous pouvons voir les messages suivants :"
 
-#: ../../intro/tutorials/custom_func.rst:168
+#: ../../intro/tutorials/custom_func.rst:172
 msgid ""
 "``---[...]---[# ==> Running 'Untitled 01' macro...]``: the macro-command "
 "starts"
@@ -289,7 +300,7 @@ msgstr ""
 "``---[...]---[# ==> Running 'Untitled 01' macro...]`` : la macro-commande"
 " démarre"
 
-#: ../../intro/tutorials/custom_func.rst:169
+#: ../../intro/tutorials/custom_func.rst:173
 msgid ""
 "``Connecting to DataLab XML-RPC server...OK [...]``: the proxy is "
 "connected to DataLab"
@@ -297,7 +308,7 @@ msgstr ""
 "``Connecting to DataLab XML-RPC server...OK [...]`` : le proxy est "
 "connecté à DataLab"
 
-#: ../../intro/tutorials/custom_func.rst:170
+#: ../../intro/tutorials/custom_func.rst:174
 msgid ""
 "``---[...]---[# <== 'Untitled 01' macro has finished]``: the macro-"
 "command ends"
@@ -305,7 +316,7 @@ msgstr ""
 "``---[...]---[# <== 'Untitled 01' macro has finished]`` : la macro-"
 "commande se termine"
 
-#: ../../intro/tutorials/custom_func.rst:182
+#: ../../intro/tutorials/custom_func.rst:186
 msgid ""
 "When the macro-command has finished, we can see the new image in the "
 "\"Image Panel\". Our filter has been applied to the image, and we can see"
@@ -315,11 +326,11 @@ msgstr ""
 "image dans le \"Panneau Image\". Notre filtre a été appliqué à l'image, "
 "et nous pouvons voir que le bruit a été réduit."
 
-#: ../../intro/tutorials/custom_func.rst:187
+#: ../../intro/tutorials/custom_func.rst:191
 msgid "Prototyping with an external IDE"
 msgstr "Prototypage avec un IDE externe"
 
-#: ../../intro/tutorials/custom_func.rst:189
+#: ../../intro/tutorials/custom_func.rst:193
 msgid ""
 "Now that we have a working prototype of our processing pipeline, we can "
 "use the same code in an external IDE to develop it further."
@@ -328,7 +339,7 @@ msgstr ""
 "traitement, nous pouvons utiliser le même code dans un IDE externe pour "
 "le développer davantage."
 
-#: ../../intro/tutorials/custom_func.rst:192
+#: ../../intro/tutorials/custom_func.rst:196
 msgid ""
 "For example, we can use the Spyder IDE to debug our code. To do so, we "
 "need to install Spyder but not necessarily in DataLab's Python "
@@ -340,7 +351,7 @@ msgstr ""
 " l'environnement Python de DataLab (dans le cas de la version autonome de"
 " DataLab, ce ne serait de toute façon pas possible)."
 
-#: ../../intro/tutorials/custom_func.rst:196
+#: ../../intro/tutorials/custom_func.rst:200
 msgid ""
 "The only requirement is to install a DataLab client in Spyder's Python "
 "environment:"
@@ -348,7 +359,7 @@ msgstr ""
 "Le seul prérequis est d'installer un client DataLab dans l'environnement "
 "Python de Spyder :"
 
-#: ../../intro/tutorials/custom_func.rst:198
+#: ../../intro/tutorials/custom_func.rst:202
 msgid ""
 "If you use the stand-alone version of DataLab or if you want or need to "
 "keep DataLab and Spyder in separate Python environments, you can install "
@@ -361,7 +372,7 @@ msgstr ""
 "<https://pypi.org/project/cdlclient/>`_ (``cdl-client``) en utilisant le "
 "gestionnaire de paquets ``pip`` :"
 
-#: ../../intro/tutorials/custom_func.rst:205
+#: ../../intro/tutorials/custom_func.rst:209
 msgid ""
 "Or you may also install the `DataLab Python package "
 "<https://pypi.org/project/cdl/>`_ (``cdl``) which includes the client "
@@ -374,7 +385,7 @@ msgstr ""
 "vous n'avez pas besoin de toutes les fonctionnalités de DataLab dans cet "
 "environnement Python) :"
 
-#: ../../intro/tutorials/custom_func.rst:211
+#: ../../intro/tutorials/custom_func.rst:215
 msgid ""
 "If you use the DataLab Python package, you may run Spyder in the same "
 "Python environment as DataLab, so you don't need to install the client: "
@@ -386,7 +397,7 @@ msgstr ""
 "besoin d'installer le client : il est déjà disponible dans le paquet "
 "principal DataLab (le paquet ``cdl``)."
 
-#: ../../intro/tutorials/custom_func.rst:215
+#: ../../intro/tutorials/custom_func.rst:219
 msgid ""
 "Once the client is installed, we can start Spyder and create a new Python"
 " script:"
@@ -394,14 +405,14 @@ msgstr ""
 "Une fois le client installé, nous pouvons démarrer Spyder et créer un "
 "nouveau script Python :"
 
-#: ../../intro/tutorials/custom_func.rst:223
-#: ../../intro/tutorials/custom_func.rst:254
+#: ../../intro/tutorials/custom_func.rst:227
+#: ../../intro/tutorials/custom_func.rst:258
 msgid "We go back to DataLab and select the first image in the \"Image Panel\"."
 msgstr ""
 "Nous retournons à DataLab et sélectionnons la première image dans le "
 "\"Panneau Image\"."
 
-#: ../../intro/tutorials/custom_func.rst:227
+#: ../../intro/tutorials/custom_func.rst:231
 msgid ""
 "Then, we execute the script in Spyder, step-by-step (using the defined "
 "cells), and we can see the result in DataLab."
@@ -410,7 +421,7 @@ msgstr ""
 "utilisant les cellules définies), et nous pouvons voir le résultat dans "
 "DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:232
+#: ../../intro/tutorials/custom_func.rst:236
 msgid ""
 "We can see in DataLab that a new image has been added to the \"Image "
 "Panel\". This image is the result of the execution of the script in "
@@ -424,11 +435,11 @@ msgstr ""
 "mais nous aurions pu le modifier pour tester de nouvelles idées, puis "
 "utiliser le script modifié dans DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:238
+#: ../../intro/tutorials/custom_func.rst:242
 msgid "Prototyping with a Jupyter notebook"
 msgstr "Prototypage avec un notebook Jupyter"
 
-#: ../../intro/tutorials/custom_func.rst:240
+#: ../../intro/tutorials/custom_func.rst:244
 msgid ""
 "We can also use a Jupyter notebook to prototype our processing pipeline. "
 "To do so, we need to install Jupyter but not necessarily in DataLab's "
@@ -441,7 +452,7 @@ msgstr ""
 " la version autonome de DataLab, ce ne serait de toute façon pas "
 "possible)."
 
-#: ../../intro/tutorials/custom_func.rst:244
+#: ../../intro/tutorials/custom_func.rst:248
 msgid ""
 "The only requirement is to install a DataLab client in Jupyter's Python "
 "environment (see the previous section for more details: that is exactly "
@@ -453,7 +464,7 @@ msgstr ""
 "c'est exactement la même procédure que pour Spyder ou tout autre IDE "
 "comme Visual Studio Code, par exemple)."
 
-#: ../../intro/tutorials/custom_func.rst:250
+#: ../../intro/tutorials/custom_func.rst:254
 msgid ""
 "Once the client is installed, we can start Jupyter and create a new "
 "notebook."
@@ -461,7 +472,7 @@ msgstr ""
 "Une fois le client installé, nous pouvons démarrer Jupyter et créer un "
 "nouveau notebook."
 
-#: ../../intro/tutorials/custom_func.rst:258
+#: ../../intro/tutorials/custom_func.rst:262
 msgid ""
 "Then, we execute the notebook in Jupyter, step-by-step (using the defined"
 " cells), and we can see the result in DataLab. Once again, we can see in "
@@ -478,11 +489,11 @@ msgstr ""
 "nous aurions pu modifier le notebook pour tester de nouvelles idées, puis"
 " utiliser le notebook modifié dans DataLab."
 
-#: ../../intro/tutorials/custom_func.rst:266
+#: ../../intro/tutorials/custom_func.rst:270
 msgid "Creating a plugin"
 msgstr "Création d'un plugin"
 
-#: ../../intro/tutorials/custom_func.rst:268
+#: ../../intro/tutorials/custom_func.rst:272
 msgid ""
 "Now that we have a working prototype of our processing pipeline, we can "
 "create a plugin to integrate it in DataLab's GUI. To do so, we need to "
@@ -496,11 +507,11 @@ msgstr ""
 "code que dans la macro-commande, mais nous devons apporter quelques "
 "modifications."
 
-#: ../../intro/tutorials/custom_func.rst:275
+#: ../../intro/tutorials/custom_func.rst:279
 msgid "The plugin system is described in the :ref:`about_plugins` section."
 msgstr "Le système de plugins est décrit dans la section :ref:`about_plugins`."
 
-#: ../../intro/tutorials/custom_func.rst:277
+#: ../../intro/tutorials/custom_func.rst:281
 msgid ""
 "Apart from integrating the feature to DataLab's GUI which is more "
 "convenient for the user, the advantage of creating a plugin is that we "
@@ -513,7 +524,7 @@ msgstr ""
 "si nous encapsulons notre fonction de traitement d'une certaine manière "
 "(voir ci-dessous) :"
 
-#: ../../intro/tutorials/custom_func.rst:282
+#: ../../intro/tutorials/custom_func.rst:286
 msgid ""
 "Our function will be executed in a separate process, so we can interrupt "
 "it if it takes too long to execute."
@@ -521,7 +532,7 @@ msgstr ""
 "Notre fonction sera exécutée dans un processus séparé, nous pouvons donc "
 "l'interrompre si elle prend trop de temps à s'exécuter."
 
-#: ../../intro/tutorials/custom_func.rst:285
+#: ../../intro/tutorials/custom_func.rst:289
 msgid ""
 "Warnings and errors will be handled by DataLab, so we don't need to "
 "handle them ourselves."
@@ -529,7 +540,7 @@ msgstr ""
 "Les avertissements et les erreurs seront gérés par DataLab, nous n'avons "
 "donc pas besoin de les gérer nous-mêmes."
 
-#: ../../intro/tutorials/custom_func.rst:288
+#: ../../intro/tutorials/custom_func.rst:292
 msgid ""
 "The most significant change is that we need to define a function that "
 "will be operating on DataLab's native image objects "
@@ -549,7 +560,7 @@ msgstr ""
 "beaucoup de code de base, nous pouvons utiliser l'enveloppe de fonction "
 "fournie par DataLab : :class:`cdl.core.computation.image.Wrap11Func`."
 
-#: ../../intro/tutorials/custom_func.rst:295
+#: ../../intro/tutorials/custom_func.rst:299
 msgid ""
 "Besides we need to define a class that describes our plugin, which must "
 "inherit from :class:`cdl.plugins.PluginBase` and name the Python script "
@@ -562,7 +573,7 @@ msgstr ""
 "``cdl_`` (par exemple ``cdl_custom_func.py``), afin que DataLab puisse le"
 " découvrir au démarrage."
 
-#: ../../intro/tutorials/custom_func.rst:300
+#: ../../intro/tutorials/custom_func.rst:304
 msgid ""
 "Moreover, inside the plugin code, we want to add an entry in the "
 "\"Plugins\" menu, so that the user can access our plugin from the GUI."
@@ -571,11 +582,11 @@ msgstr ""
 "menu \"Plugins\", afin que l'utilisateur puisse accéder à notre plugin "
 "depuis l'interface graphique."
 
-#: ../../intro/tutorials/custom_func.rst:303
+#: ../../intro/tutorials/custom_func.rst:307
 msgid "Here is the plugin code:"
 msgstr "Voici le code du plugin :"
 
-#: ../../intro/tutorials/custom_func.rst:309
+#: ../../intro/tutorials/custom_func.rst:313
 msgid ""
 "To test it, we have to add the plugin script to one of the plugin "
 "directories that are discovered by DataLab at startup (see the "
@@ -587,11 +598,11 @@ msgstr ""
 " la section :ref:`about_plugins` pour plus de détails, ou le "
 ":ref:`tutorial_blobs` pour un exemple)."
 
-#: ../../intro/tutorials/custom_func.rst:315
+#: ../../intro/tutorials/custom_func.rst:319
 msgid "We restart DataLab and we can see that the plugin has been loaded."
 msgstr "Nous redémarrons DataLab et nous pouvons voir que le plugin a été chargé."
 
-#: ../../intro/tutorials/custom_func.rst:319
+#: ../../intro/tutorials/custom_func.rst:323
 msgid ""
 "We generate again our test image using (see the first steps of the "
 "tutorial), and we process it using the plugin: \"Plugins > My custom "

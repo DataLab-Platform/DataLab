@@ -3,6 +3,10 @@
 :octicon:`video;1em;sd-text-info` Add your own features
 =======================================================
 
+.. meta::
+    :description: Tutorial video on how to add your own features to DataLab, the open-source platform for scientific data analysis
+    :keywords: DataLab, scientific data analysis, Python, macro-commands, remote control, plugins
+
 .. only:: html and not latex
 
     .. raw:: html

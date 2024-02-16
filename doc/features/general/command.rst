@@ -3,6 +3,10 @@
 Command line features
 =====================
 
+.. meta::
+    :description: DataLab command line features
+    :keywords: command line, cdl, datalab, run, test, demo
+
 Run DataLab
 -----------
 

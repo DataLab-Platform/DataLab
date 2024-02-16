@@ -1,6 +1,10 @@
 :octicon:`book;1em;sd-text-info` Measuring Laser Beam Size
 ==========================================================
 
+.. meta::
+    :description: Tutorial on how to measure the size of a laser beam using DataLab, the open-source scientific analysis and visualization platform
+    :keywords: DataLab, tutorial, laser beam, size, FWHM, Gaussian fit, radial profile, line profile, thresholding, centroid, image statistics, linear calibration, HDF5, workspace
+
 This example shows how to measure the size of a laser beam along the propagation
 axis, using using DataLab:
 

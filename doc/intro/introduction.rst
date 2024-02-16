@@ -1,6 +1,10 @@
 Use cases, main features and key strengths
 ==========================================
 
+.. meta::
+    :description: Use cases, main features and key strengths of DataLab, the open-source platform for data processing and visualization
+    :keywords: DataLab, use cases, main features, key strengths, data processing, data visualization, scientific data, technical data, signals, images, data formats, plugin system, interoperability, automation, maintainability, testability
+
 DataLab is a platform for data processing and visualization (signals or images)
 that includes many functions. Developed in Python, it benefits from the
 richness of the associated ecosystem in terms of scientific and

@@ -3,6 +3,10 @@
 Installation and configuration viewer
 =====================================
 
+.. meta::
+    :description: DataLab's installation and configuration viewer
+    :keywords: installation, configuration, viewer, DataLab
+
 Because of the multiple ways of installing DataLab on your machine,
 understanding why the application behaves unexpectedly without any
 information on your configuration could be very challenging.

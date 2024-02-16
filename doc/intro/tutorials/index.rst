@@ -3,6 +3,10 @@
 Tutorials
 =========
 
+.. meta::
+    :description: Tutorials to learn how to use DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, tutorials, scientific data analysis, visualization, open-source
+
 Video Tutorials
 ---------------
 

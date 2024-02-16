@@ -3,6 +3,10 @@
 :octicon:`book;1em;sd-text-info` Prototyping a custom processing pipeline
 =========================================================================
 
+.. meta::
+    :description: Tutorial on how to prototype a custom image processing pipeline using DataLab (macro, plugin, external IDE, Jupyter notebook)
+    :keywords: DataLab, custom function, macro-command, plugin, image processing, prototype, Spyder, Jupyter
+
 This example shows how to prototype a custom image processing pipeline using DataLab:
 
 -   Define a custom processing function

@@ -3,6 +3,10 @@
 Workspace
 =========
 
+.. meta::
+    :description: Workspace and HDF5 Browser in DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, workspace, HDF5, browser, scientific, data, analysis, visualization, platform
+
 Basic concepts
 --------------
 

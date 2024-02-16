@@ -3,6 +3,10 @@
 Plugins
 =======
 
+.. meta::
+    :description: Plugin system for DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, plugin, processing, input/output, HDF5, file format, data analysis, visualization, scientific, open-source, platform
+
 DataLab is a modular application. It is possible to add new features to DataLab
 by writing plugins. A plugin is a Python module that is loaded at startup by
 DataLab. A plugin may add new features to DataLab, or modify existing features.

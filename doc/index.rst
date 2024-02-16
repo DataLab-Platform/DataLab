@@ -1,6 +1,10 @@
 DataLab
 =======
 
+.. meta::
+    :description: Home of DataLab, the open-source platform for scientific and technical data processing and visualization
+    :keywords: DataLab, scientific, data, processing, visualization, open-source, platform, Python, Qt, NumPy, SciPy, scikit-image, OpenCV, PlotPyStack, Codra, Pierre Raybaut
+
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements.
 Leveraging the richness of the scientific Python ecosystem [#f1]_ and the Qt

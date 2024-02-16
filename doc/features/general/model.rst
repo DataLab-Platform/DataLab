@@ -3,6 +3,10 @@
 Internal data model
 ===================
 
+.. meta::
+    :description: Internal model of DataLab, the open-source scientific data analysis and visualisation platform
+    :keywords: DataLab, internal model, data model, signal, image, dataset, parameter, computation, scientific data analysis, visualisation, platform
+
 In its internal data model, DataLab stores data using two main classes:
 
 * :class:`cdl.obj.SignalObj`, which represents a signal object, and

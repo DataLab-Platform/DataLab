@@ -1,6 +1,10 @@
 :octicon:`book;1em;sd-text-info` Measuring Fabry-Perot fringes
 ==============================================================
 
+.. meta::
+    :description: Tutorial on how to measure Fabry-Perot fringes using DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, fabry-perot, interferometer, fringe, image processing, contour detection, circle fitting, intensity profile, signal processing, metadata, annotations, workspace, hdf5
+
 This example shows how to measure Fabry-Perot fringes using the image processing
 features of DataLab:
 

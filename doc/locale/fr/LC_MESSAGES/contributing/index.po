@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 17:49+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
+#: ../../contributing/index.rst:-1
+msgid ""
+"Contribute to DataLab project, the open-source scientific data analysis "
+"platform"
+msgstr "Contribuer au projet DataLab, la plateforme open-source d'analyse de données scientifiques"
+
+#: ../../contributing/index.rst:-1
+msgid ""
+"DataLab, contribute, open-source, scientific, data, analysis, platform, "
+"signal processing, image processing"
+msgstr "DataLab, contribuer, open-source, scientifique, données, analyse, plateforme, traitement du signal, traitement d'images"
+
 #: ../../contributing/index.rst:2
 msgid "Contributing"
 msgstr "Contribuer"
 
-#: ../../contributing/index.rst:4
+#: ../../contributing/index.rst:8
 msgid ""
 "DataLab is **your** platform. If you want it to be improved, you **can** "
 "contribute to the project, whether you are a developer or not."
@@ -29,7 +41,7 @@ msgstr ""
 "DataLab est **votre** plateforme. Si vous souhaitez qu'elle s'améliore, "
 "vous **pouvez** contribuer au projet, que vous soyez développeur ou non."
 
-#: ../../contributing/index.rst:7
+#: ../../contributing/index.rst:11
 msgid ""
 "There are many ways to contribute to DataLab project, depending on how "
 "much time you have, your experience with open source projects, and your "
@@ -39,15 +51,15 @@ msgstr ""
 "fonction du temps dont vous disposez, de votre expérience avec les "
 "projets open source et de vos compétences."
 
-#: ../../contributing/index.rst:11
+#: ../../contributing/index.rst:15
 msgid "Share your ideas and experiences"
 msgstr "Partagez vos idées et vos expériences"
 
-#: ../../contributing/index.rst:15 ../../contributing/index.rst:62
+#: ../../contributing/index.rst:19 ../../contributing/index.rst:66
 msgid ":octicon:`info;1em;sd-text-info` :bdg-success-line:`No coding required`"
 msgstr ":octicon:`info;1em;sd-text-info` :bdg-success-line:`Aucun codage requis`"
 
-#: ../../contributing/index.rst:17
+#: ../../contributing/index.rst:21
 msgid ""
 "Besides the classic bug reports and feature requests, you can share your "
 "ideas and experiences for improving DataLab. In particular, we are very "
@@ -62,7 +74,7 @@ msgstr ""
 " un cas d'utilisation que vous souhaitez partager avec la communauté, "
 "faites-le nous savoir."
 
-#: ../../contributing/index.rst:27
+#: ../../contributing/index.rst:31
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-bug sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -82,11 +94,11 @@ msgid ""
 "0V7.25a.75.75 0 00-.75-.75h-5.5z\"></path></svg> Bugs"
 msgstr "Anomalies"
 
-#: ../../contributing/index.rst:30
+#: ../../contributing/index.rst:34
 msgid "Reporting a bug"
 msgstr "Signaler une anomalie"
 
-#: ../../contributing/index.rst:32
+#: ../../contributing/index.rst:36
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-light-bulb sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -104,11 +116,11 @@ msgid ""
 "000-1.5h-4.5z\"></path></svg> Enhancements"
 msgstr "Améliorations"
 
-#: ../../contributing/index.rst:35
+#: ../../contributing/index.rst:39
 msgid "Suggesting an enhancement"
 msgstr "Suggérer une amélioration"
 
-#: ../../contributing/index.rst:37
+#: ../../contributing/index.rst:41
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-book sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -122,11 +134,11 @@ msgid ""
 " 0 011.994.574z\"></path></svg> Documentation"
 msgstr "Documentation"
 
-#: ../../contributing/index.rst:40
+#: ../../contributing/index.rst:44
 msgid "Suggesting a documentation topic"
 msgstr "Suggérer un sujet de documentation"
 
-#: ../../contributing/index.rst:42
+#: ../../contributing/index.rst:46
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-mortar-board sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -144,15 +156,15 @@ msgid ""
 "Tutorial"
 msgstr "Tutoriel"
 
-#: ../../contributing/index.rst:45
+#: ../../contributing/index.rst:49
 msgid "Suggesting a tutorial topic"
 msgstr "Suggérer un sujet de tutoriel"
 
-#: ../../contributing/index.rst:50
+#: ../../contributing/index.rst:54
 msgid "Without coding, you can contribute to DataLab project by:"
 msgstr "Sans coder une seule ligne, vous pouvez contribuer au projet DataLab en :"
 
-#: ../../contributing/index.rst:52
+#: ../../contributing/index.rst:56
 msgid ""
 "`Reporting a bug <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
@@ -160,7 +172,7 @@ msgstr ""
 "`Signaler une anomalie <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=bug&projects=&template=bug_report.md&title=>`_"
 
-#: ../../contributing/index.rst:53
+#: ../../contributing/index.rst:57
 msgid ""
 "`Suggesting an enhancement <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
@@ -168,7 +180,7 @@ msgstr ""
 "`Suggérer une amélioration <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.md&title=>`_"
 
-#: ../../contributing/index.rst:54
+#: ../../contributing/index.rst:58
 msgid ""
 "`Suggesting a documentation topic <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
@@ -176,7 +188,7 @@ msgstr ""
 "`Suggérer un sujet de documentation <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=doc_request.md&title=>`_"
 
-#: ../../contributing/index.rst:55
+#: ../../contributing/index.rst:59
 msgid ""
 "`Suggesting a tutorial topic <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
@@ -184,11 +196,11 @@ msgstr ""
 "`Suggérer un sujet de tutoriel <https://github.com/DataLab-"
 "Platform/DataLab/issues/new?assignees=&labels=documentation&projects=&template=tutorial_request.md&title=>`_"
 
-#: ../../contributing/index.rst:58
+#: ../../contributing/index.rst:62
 msgid "Share your scientific/technical knowledge"
 msgstr "Partagez vos connaissances scientifiques/techniques"
 
-#: ../../contributing/index.rst:64
+#: ../../contributing/index.rst:68
 msgid ""
 "Your technical or scientific knowledge is also very valuable to us, as "
 "you may directly contribute to the documentation or tutorials. Or, "
@@ -199,23 +211,23 @@ msgstr ""
 "documentation ou aux tutoriels. Ou, mieux encore, si vous souhaitez "
 "rédiger un tutoriel, nous serons heureux de vous aider."
 
-#: ../../contributing/index.rst:68
+#: ../../contributing/index.rst:72
 msgid "Again without coding, you can contribute to DataLab project by:"
 msgstr "Encore une fois sans coder, vous pouvez contribuer au projet DataLab en :"
 
-#: ../../contributing/index.rst:70
+#: ../../contributing/index.rst:74
 msgid "Writing documentation"
 msgstr "Ecrire de la documentation"
 
-#: ../../contributing/index.rst:71
+#: ../../contributing/index.rst:75
 msgid "Writing a tutorial"
 msgstr "Ecrire un tutoriel"
 
-#: ../../contributing/index.rst:74
+#: ../../contributing/index.rst:78
 msgid "Contribute to new features"
 msgstr "Contribuer aux nouvelles fonctionnalités"
 
-#: ../../contributing/index.rst:78
+#: ../../contributing/index.rst:82
 msgid ""
 ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Coding (beginner)` :bdg-"
 "warning-line:`Coding (advanced)`"
@@ -223,31 +235,31 @@ msgstr ""
 ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Codage (débutant)` :bdg-"
 "warning-line:`Codage (avancé)`"
 
-#: ../../contributing/index.rst:80
+#: ../../contributing/index.rst:84
 msgid "Even if you are not a developer, you can contribute to the project by:"
 msgstr "Même si vous n'êtes pas développeur, vous pouvez contribuer au projet en :"
 
-#: ../../contributing/index.rst:82
+#: ../../contributing/index.rst:86
 msgid "Testing new features"
 msgstr "Testant de nouvelles fonctionnalités"
 
-#: ../../contributing/index.rst:83
+#: ../../contributing/index.rst:87
 msgid "Writing and submitting new Plugins"
 msgstr "Ecrivant et soumettant de nouveaux plugins"
 
-#: ../../contributing/index.rst:84
+#: ../../contributing/index.rst:88
 msgid "Writing and submitting macro-commands"
 msgstr "Ecivant et soumettant des macro-commandes"
 
-#: ../../contributing/index.rst:87
+#: ../../contributing/index.rst:91
 msgid "Develop new features"
 msgstr "Développer de nouvelles fonctionnalités"
 
-#: ../../contributing/index.rst:91
+#: ../../contributing/index.rst:95
 msgid ":octicon:`info;1em;sd-text-info` :bdg-warning-line:`Coding (advanced)`"
 msgstr ":octicon:`info;1em;sd-text-info` :bdg-warning-line:`Codage (avancé)`"
 
-#: ../../contributing/index.rst:93
+#: ../../contributing/index.rst:97
 msgid ""
 "If you are a developer, you can contribute to the core of the project by "
 "fixing bugs or implementing new features."
@@ -255,7 +267,7 @@ msgstr ""
 "Si vous êtes développeur, vous pouvez contribuer au cœur du projet en "
 "corrigeant des anomalies ou en implémentant de nouvelles fonctionnalités."
 
-#: ../../contributing/index.rst:101
+#: ../../contributing/index.rst:105
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-terminal sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -269,11 +281,11 @@ msgid ""
 "3z\"></path></svg> Code"
 msgstr "Code"
 
-#: ../../contributing/index.rst:105
+#: ../../contributing/index.rst:109
 msgid "Contributing to the code"
 msgstr "Contribuer au code"
 
-#: ../../contributing/index.rst:109
+#: ../../contributing/index.rst:113
 msgid "See :ref:`contribute_code` section for more information."
 msgstr "Voir la section :ref:`contribute_code` pour plus d'informations."
 

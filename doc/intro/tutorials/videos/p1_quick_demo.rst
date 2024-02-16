@@ -1,6 +1,10 @@
 :octicon:`video;1em;sd-text-info` Quick demo
 ============================================
 
+.. meta::
+    :description: Quick demo video of DataLab, the open-source platform for scientific data analysis
+    :keywords: DataLab, scientific data analysis, open-source, platform, video, demo
+
 .. only:: html and not latex
 
     .. raw:: html

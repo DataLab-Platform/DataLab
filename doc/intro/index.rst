@@ -1,6 +1,10 @@
 Getting started
 ===============
 
+.. meta::
+    :description: Getting started with DataLab, the open platform for signal and image processing
+    :keywords: DataLab, signal processing, image processing, open platform, scientific data, industrial data, industrial-grade software
+
 DataLab is an open platform for signal and image processing.
 Its functional scope is intentionally broad. With its many functions,
 some of them technically advanced, DataLab enables the processing and

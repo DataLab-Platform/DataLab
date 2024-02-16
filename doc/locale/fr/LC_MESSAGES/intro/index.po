@@ -8,24 +8,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-27 14:21+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
-#: ../../intro/index.rst:41
+#: ../../intro/index.rst:45
 msgid "Contents:"
 msgstr "Sommaire :"
+
+#: ../../intro/index.rst:-1
+msgid ""
+"Getting started with DataLab, the open platform for signal and image "
+"processing"
+msgstr "Premiers pas avec DataLab, la plateforme open-source de traitement de signaux et d'images"
+
+#: ../../intro/index.rst:-1
+msgid ""
+"DataLab, signal processing, image processing, open platform, scientific "
+"data, industrial data, industrial-grade software"
+msgstr "DataLab, traitement de signaux, traitement d'images, plateforme ouverte, données scientifiques, données industrielles, logiciel industriel"
 
 #: ../../intro/index.rst:2
 msgid "Getting started"
 msgstr "Premiers pas"
 
-#: ../../intro/index.rst:4
+#: ../../intro/index.rst:8
 msgid ""
 "DataLab is an open platform for signal and image processing. Its "
 "functional scope is intentionally broad. With its many functions, some of"
@@ -43,7 +55,7 @@ msgstr ""
 "d'un outil facile à utiliser, simple à adapter et offrant la fiabilité "
 "d'un logiciel industriel."
 
-#: ../../intro/index.rst:17
+#: ../../intro/index.rst:21
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-package sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -57,11 +69,11 @@ msgid ""
 "8.432v5.516z\"></path></svg>  Installation"
 msgstr "Installation"
 
-#: ../../intro/index.rst:21
+#: ../../intro/index.rst:25
 msgid "How to install DataLab on your computer"
 msgstr "Comment installer DataLab sur votre ordinateur"
 
-#: ../../intro/index.rst:23
+#: ../../intro/index.rst:27
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-gift sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -81,11 +93,11 @@ msgid ""
 "01-.25-.25V9.5h4.75z\"></path></svg>  Introduction"
 msgstr "Introduction"
 
-#: ../../intro/index.rst:27
+#: ../../intro/index.rst:31
 msgid "Use cases and key strengths of DataLab"
 msgstr "Cas d'utilisation et points forts de DataLab"
 
-#: ../../intro/index.rst:29
+#: ../../intro/index.rst:33
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-star sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -100,11 +112,11 @@ msgid ""
 "2.694v.001z\"></path></svg>  Key features"
 msgstr "Fonctionnalités clés"
 
-#: ../../intro/index.rst:33
+#: ../../intro/index.rst:37
 msgid "Feature matrix of DataLab"
 msgstr "Matrice des fonctionnalités de DataLab"
 
-#: ../../intro/index.rst:35
+#: ../../intro/index.rst:39
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-mortar-board sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -122,7 +134,7 @@ msgid ""
 "Tutorials"
 msgstr "Tutoriels"
 
-#: ../../intro/index.rst:39
+#: ../../intro/index.rst:43
 msgid "Tutorials to learn how to use DataLab"
 msgstr "Tutoriels pour apprendre à utiliser DataLab"
 

@@ -3,6 +3,10 @@
 Key features
 ============
 
+.. meta::
+    :description: Key features of DataLab, the open-source data visualization and processing platform for scientists and engineers
+    :keywords: DataLab, key features, signal processing, image processing, data visualization
+
 This page presents briefly DataLab key features.
 
 .. figure:: ../images/DataLab-Screenshot-Theme.png

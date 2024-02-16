@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 17:38+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,15 +19,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
+#: ../../intro/tutorials/index.rst:-1
+msgid ""
+"Tutorials to learn how to use DataLab, the open-source scientific data "
+"analysis and visualization platform"
+msgstr ""
+
+#: ../../intro/tutorials/index.rst:-1
+msgid "DataLab, tutorials, scientific data analysis, visualization, open-source"
+msgstr ""
+
 #: ../../intro/tutorials/index.rst:4
 msgid "Tutorials"
 msgstr "Tutoriels"
 
-#: ../../intro/tutorials/index.rst:7
+#: ../../intro/tutorials/index.rst:11
 msgid "Video Tutorials"
 msgstr "Tutoriels vidéo"
 
-#: ../../intro/tutorials/index.rst:9
+#: ../../intro/tutorials/index.rst:13
 msgid ""
 ":octicon:`video;1em;sd-text-info`  DataLab video tutorials intend to "
 "provide a complementary material to the documentation and other tutorials"
@@ -37,19 +47,19 @@ msgstr ""
 "pour but de fournir un matériel complémentaire à la documentation et aux "
 "autres tutoriels disponibles ici."
 
-#: ../../intro/tutorials/index.rst:17
+#: ../../intro/tutorials/index.rst:21
 msgid "Quick demo"
 msgstr "Démo rapide"
 
-#: ../../intro/tutorials/index.rst:22
+#: ../../intro/tutorials/index.rst:26
 msgid "Extensibility"
 msgstr "Extensibilité"
 
-#: ../../intro/tutorials/index.rst:37
+#: ../../intro/tutorials/index.rst:41
 msgid "Other Tutorials"
 msgstr "Autres tutoriels"
 
-#: ../../intro/tutorials/index.rst:39
+#: ../../intro/tutorials/index.rst:43
 msgid ""
 ":octicon:`book;1em;sd-text-info`  The following tutorials are detailed "
 "step-by-step guides to perform specific tasks with DataLab, or to "
@@ -63,3 +73,4 @@ msgstr ""
 "contexte d'un problème scientifique ou technique. Chaque tutoriel se "
 "concentre sur un aspect spécifique du logiciel et est destiné à être "
 "autonome."
+

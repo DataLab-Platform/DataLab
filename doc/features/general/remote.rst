@@ -3,6 +3,10 @@
 Remote controlling
 ==================
 
+.. meta::
+    :description: How to remote control DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-party application, signal, image, HDF5, calculation, processor
+
 DataLab may be controlled remotely using the `XML-RPC`_ protocol which is
 natively supported by Python (and many other languages). Remote controlling
 allows to access DataLab main features from a separate process.

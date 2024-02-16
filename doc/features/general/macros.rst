@@ -3,6 +3,10 @@
 Macros
 ======
 
+.. meta::
+    :description: How to use macros in DataLab, the open-source data analysis and visualization platform
+    :keywords: DataLab, data analysis, data visualization, open-source, Python, macros
+
 Overview
 --------
 

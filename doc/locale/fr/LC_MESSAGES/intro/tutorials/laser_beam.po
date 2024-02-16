@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 20:50+0100\n"
+"POT-Creation-Date: 2024-02-16 14:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,13 +17,26 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../intro/tutorials/laser_beam.rst:-1
+msgid ""
+"Tutorial on how to measure the size of a laser beam using DataLab, the "
+"open-source scientific analysis and visualization platform"
+msgstr "Tutoriel: mesurer la taille d'un faisceau laser avec DataLab, la plateforme d'analyse et de visualisation scientifique open-source"
+
+#: ../../intro/tutorials/laser_beam.rst:-1
+msgid ""
+"DataLab, tutorial, laser beam, size, FWHM, Gaussian fit, radial profile, "
+"line profile, thresholding, centroid, image statistics, linear "
+"calibration, HDF5, workspace"
+msgstr "DataLab, tutoriel, faisceau laser, taille, FWHM, ajustement gaussien, profil radial, profil de ligne, seuillage, centre de gravité, statistiques de l'image, étalonnage linéaire, HDF5, espace de travail"
 
 #: ../../intro/tutorials/laser_beam.rst:2
 msgid ":octicon:`book;1em;sd-text-info` Measuring Laser Beam Size"
 msgstr ":octicon:`book;1em;sd-text-info` Mesurer la taille d'un faisceau laser"
 
-#: ../../intro/tutorials/laser_beam.rst:4
+#: ../../intro/tutorials/laser_beam.rst:8
 msgid ""
 "This example shows how to measure the size of a laser beam along the "
 "propagation axis, using using DataLab:"
@@ -31,35 +44,35 @@ msgstr ""
 "Cet exemple montre comment mesurer la taille d'un faisceau laser le long "
 "de l'axe de propagation, en utilisant DataLab :"
 
-#: ../../intro/tutorials/laser_beam.rst:7
+#: ../../intro/tutorials/laser_beam.rst:11
 msgid "Load all the images in a folder"
 msgstr "Ouvrir toutes les images d'un dossier"
 
-#: ../../intro/tutorials/laser_beam.rst:8
+#: ../../intro/tutorials/laser_beam.rst:12
 msgid "Apply a threshold to the images"
 msgstr "Appliquer un seuillage aux images"
 
-#: ../../intro/tutorials/laser_beam.rst:9
+#: ../../intro/tutorials/laser_beam.rst:13
 msgid "Extract the intensity profile along an horizontal line"
 msgstr "Extraire le profil d'intensité le long d'une ligne horizontale"
 
-#: ../../intro/tutorials/laser_beam.rst:10
+#: ../../intro/tutorials/laser_beam.rst:14
 msgid "Fit the intensity profile to a Gaussian function"
 msgstr "Ajuster le profil d'intensité à une fonction gaussienne"
 
-#: ../../intro/tutorials/laser_beam.rst:11
+#: ../../intro/tutorials/laser_beam.rst:15
 msgid "Compute the full width at half maximum (FWHM) of intensity profile"
 msgstr "Calculer la largeur à mi-hauteur (FWHM) du profil d'intensité"
 
-#: ../../intro/tutorials/laser_beam.rst:12
+#: ../../intro/tutorials/laser_beam.rst:16
 msgid "Try another method: extract the radial intensity profile"
 msgstr "Essayer une autre méthode : extraire le profil d'intensité radial"
 
-#: ../../intro/tutorials/laser_beam.rst:13
+#: ../../intro/tutorials/laser_beam.rst:17
 msgid "Compute the FWHM of the radial intensity profile"
 msgstr "Calculer la FWHM du profil d'intensité radial"
 
-#: ../../intro/tutorials/laser_beam.rst:14
+#: ../../intro/tutorials/laser_beam.rst:18
 msgid ""
 "Perform the same analysis on a stack of images and on the resulting "
 "profiles"
@@ -67,7 +80,7 @@ msgstr ""
 "Effectuer la même analyse sur une pile d'images et sur les profils "
 "résultants"
 
-#: ../../intro/tutorials/laser_beam.rst:15
+#: ../../intro/tutorials/laser_beam.rst:19
 msgid ""
 "Plot the beam size as a function of the position along the propagation "
 "axis"
@@ -75,11 +88,11 @@ msgstr ""
 "Tracer la taille du faisceau en fonction de la position le long de l'axe "
 "de propagation"
 
-#: ../../intro/tutorials/laser_beam.rst:17
+#: ../../intro/tutorials/laser_beam.rst:21
 msgid "First, we open DataLab and load the images:"
 msgstr "Tout d'abord, nous ouvrons DataLab et chargeons les images :"
 
-#: ../../intro/tutorials/laser_beam.rst:21
+#: ../../intro/tutorials/laser_beam.rst:25
 msgid ""
 "Open the image files with \"File > Open...\", or with the |fileopen_ima| "
 "button in the toolbar, or by dragging and dropping the files into DataLab"
@@ -89,17 +102,17 @@ msgstr ""
 "bouton |fileopen_ima| dans la barre d'outils, ou en faisant glisser et "
 "déposer les fichiers dans DataLab (sur le panneau de droite)."
 
-#: ../../intro/tutorials/laser_beam.rst:25
+#: ../../intro/tutorials/laser_beam.rst:29
 msgid "fileopen_ima"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:31
+#: ../../intro/tutorials/laser_beam.rst:35
 msgid "Select the test images \"TEM00_z_*.jpg\" and click \"Open\"."
 msgstr ""
 "Sélectionnez les images de test \"TEM00_z_*.jpg\" et cliquez sur "
 "\"Ouvrir\"."
 
-#: ../../intro/tutorials/laser_beam.rst:33
+#: ../../intro/tutorials/laser_beam.rst:37
 msgid ""
 "The selected images are loaded in the \"Images\" panel. The last image is"
 " displayed in the main window. On each image, we can zoom in and out by "
@@ -114,7 +127,7 @@ msgstr ""
 "également déplacer l'image en appuyant sur le bouton du milieu de la "
 "souris et en faisant glisser la souris."
 
-#: ../../intro/tutorials/laser_beam.rst:40
+#: ../../intro/tutorials/laser_beam.rst:44
 msgid ""
 "Zoom in and out with the right mouse button. Pan the image with the "
 "middle mouse button."
@@ -122,7 +135,7 @@ msgstr ""
 "Zoomer avec le bouton droit de la souris. Déplacer l'image avec le bouton"
 " du milieu de la souris."
 
-#: ../../intro/tutorials/laser_beam.rst:45
+#: ../../intro/tutorials/laser_beam.rst:49
 msgid ""
 "If we want to display the images side by side, we can select the "
 "\"Distribute on a grid\" entry |distribute_on_grid| in the \"Operations\""
@@ -132,15 +145,15 @@ msgstr ""
 "sélectionner l'entrée \"Distribuer sur une grille\" |distribute_on_grid| "
 "dans le menu \"Opérations\"."
 
-#: ../../intro/tutorials/laser_beam.rst:55
+#: ../../intro/tutorials/laser_beam.rst:59
 msgid "distribute_on_grid"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:50
+#: ../../intro/tutorials/laser_beam.rst:54
 msgid "Images distributed on a 4 rows grid"
 msgstr "Images distribuées sur une grille de 4 lignes"
 
-#: ../../intro/tutorials/laser_beam.rst:52
+#: ../../intro/tutorials/laser_beam.rst:56
 msgid ""
 "But, let's go back to the initial display by selecting the \"Reset image "
 "positions\" entry in the \"Operations\" menu."
@@ -148,7 +161,7 @@ msgstr ""
 "Mais, revenons à l'affichage initial en sélectionnant l'entrée "
 "\"Réinitialiser les positions des images\" dans le menu \"Opérations\"."
 
-#: ../../intro/tutorials/laser_beam.rst:59
+#: ../../intro/tutorials/laser_beam.rst:63
 msgid ""
 "If we select on of the images, we can see that there is background noise,"
 " so it might be useful to apply a threshold to the images."
@@ -157,7 +170,7 @@ msgstr ""
 "bruit de fond, il peut donc être utile d'appliquer un seuillage aux "
 "images."
 
-#: ../../intro/tutorials/laser_beam.rst:64
+#: ../../intro/tutorials/laser_beam.rst:68
 msgid ""
 "Select one of the images in the \"Images\" panel, select the associated "
 "image in the visualization panel, and enable the \"Cross section\" tool "
@@ -179,11 +192,11 @@ msgstr ""
 "le menu contextuel, puis sélectionner \"Marqueurs > Lié à l'élément "
 "actif\")."
 
-#: ../../intro/tutorials/laser_beam.rst:72
+#: ../../intro/tutorials/laser_beam.rst:76
 msgid "cross_section"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:76
+#: ../../intro/tutorials/laser_beam.rst:80
 msgid ""
 "Another way to measure the background noise is to use the \"Image "
 "statistics\" tool |imagestats| in the vertical toolbar on the left of the"
@@ -197,11 +210,11 @@ msgstr ""
 "une zone rectangulaire définie en faisant glisser la souris sur l'image. "
 "Cela confirme que le bruit de fond est d'environ 30 lsb."
 
-#: ../../intro/tutorials/laser_beam.rst:81
+#: ../../intro/tutorials/laser_beam.rst:85
 msgid "imagestats"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:85
+#: ../../intro/tutorials/laser_beam.rst:89
 msgid ""
 "After applying a threshold at 35 lsb (with \"Processing > "
 "Thresholding...\"), we can compute a more accurate position of the beam "
@@ -211,7 +224,7 @@ msgstr ""
 "Seuillage...\"), nous pouvons calculer une position plus précise du "
 "centre du faisceau en utilisant \"Calcul > Centre de gravité\"."
 
-#: ../../intro/tutorials/laser_beam.rst:90
+#: ../../intro/tutorials/laser_beam.rst:94
 msgid ""
 "Then we can extract a line profile along the horizontal axis with "
 "\"Operations > Intensity profiles > Line profile\". We set the row "
@@ -222,7 +235,7 @@ msgstr ""
 "Nous définissons la position de la ligne sur la position du centre de "
 "gravité calculée précédemment (c'est-à-dire 668)."
 
-#: ../../intro/tutorials/laser_beam.rst:96
+#: ../../intro/tutorials/laser_beam.rst:100
 msgid ""
 "The intensity profile is displayed in the \"Signals\" panel. We can fit "
 "the profile to a Gaussian function with \"Processing > Fitting > Gaussian"
@@ -233,7 +246,7 @@ msgstr ""
 "Ajustement > Ajustement gaussien\". Ici, nous avons sélectionné les deux "
 "signaux."
 
-#: ../../intro/tutorials/laser_beam.rst:102
+#: ../../intro/tutorials/laser_beam.rst:106
 msgid ""
 "If we go back to the first signal, the intensity profile, we can also "
 "directly compute the FWHM with \"Computing > Full width at half "
@@ -249,26 +262,26 @@ msgstr ""
 "colonne `L`, \"L\" pour \"Longueur\" car la forme du résultat est un "
 "segment et FWHM est la longueur du segment)."
 
-#: ../../intro/tutorials/laser_beam.rst:110
+#: ../../intro/tutorials/laser_beam.rst:114
 msgid ""
 "The FWHM is also displayed on the curve, with an optional label (here, "
 "the title of this measurement has been displayed with \"View > Show "
 "graphical object titles\" or the |show_titles| button in the toolbar)."
 msgstr ""
-"La largeur à mi-hauteur est également affichée sur la courbe, avec une étiquette "
-"optionnelle (ici, le titre de cette mesure a été affiché avec \"Affichage"
-" > Afficher les titres des objets graphiques\" ou le bouton |show_titles|"
-" dans la barre d'outils)."
+"La largeur à mi-hauteur est également affichée sur la courbe, avec une "
+"étiquette optionnelle (ici, le titre de cette mesure a été affiché avec "
+"\"Affichage > Afficher les titres des objets graphiques\" ou le bouton "
+"|show_titles| dans la barre d'outils)."
 
-#: ../../intro/tutorials/laser_beam.rst:114
+#: ../../intro/tutorials/laser_beam.rst:118
 msgid "show_titles"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:118
+#: ../../intro/tutorials/laser_beam.rst:122
 msgid "Now, let's try another method to measure the beam size."
 msgstr "Maintenant, essayons une autre méthode pour mesurer la taille du faisceau."
 
-#: ../../intro/tutorials/laser_beam.rst:120
+#: ../../intro/tutorials/laser_beam.rst:124
 msgid ""
 "From the \"Images\" panel, we can extract the radial intensity profile "
 "with \"Operations > Intensity profiles > Radial profile\"."
@@ -277,7 +290,7 @@ msgstr ""
 "d'intensité radial avec \"Opérations > Profils d'intensité > Profil "
 "radial\"."
 
-#: ../../intro/tutorials/laser_beam.rst:125
+#: ../../intro/tutorials/laser_beam.rst:129
 msgid ""
 "The radial intensity profile may be computed around the centroid "
 "position, or around the center of the image, or around a user-defined "
@@ -288,7 +301,7 @@ msgstr ""
 "position définie par l'utilisateur. Ici, nous avons sélectionné la "
 "position du centre de gravité."
 
-#: ../../intro/tutorials/laser_beam.rst:131
+#: ../../intro/tutorials/laser_beam.rst:135
 msgid ""
 "The radial intensity profile is displayed in the \"Signals\" panel. It is"
 " smoother than the line profile, because it is computed from a larger "
@@ -298,7 +311,7 @@ msgstr ""
 "est plus lisse que le profil de ligne, car il est calculé à partir d'un "
 "plus grand nombre de pixels, ce qui permet de lisser le bruit."
 
-#: ../../intro/tutorials/laser_beam.rst:135
+#: ../../intro/tutorials/laser_beam.rst:139
 msgid ""
 "All these operations and computations that we have performed on a single "
 "image can be applied to all the images in the \"Images\" panel."
@@ -306,7 +319,7 @@ msgstr ""
 "Toutes ces opérations et calculs que nous avons effectués sur une seule "
 "image peuvent être appliqués à toutes les images du panneau \"Images\"."
 
-#: ../../intro/tutorials/laser_beam.rst:138
+#: ../../intro/tutorials/laser_beam.rst:142
 msgid ""
 "To do that, we begin by cleaning the \"Signals\" panel (with \"Edit > "
 "Delete all\" or the |delete_all| button in the toolbar). We alse clean "
@@ -321,15 +334,15 @@ msgstr ""
 "prototypage et en les supprimant individuellement (avec \"Édition > "
 "Supprimer\" ou le bouton |delete|)."
 
-#: ../../intro/tutorials/laser_beam.rst:143
+#: ../../intro/tutorials/laser_beam.rst:147
 msgid "delete_all"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:147
+#: ../../intro/tutorials/laser_beam.rst:151
 msgid "delete"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:151
+#: ../../intro/tutorials/laser_beam.rst:155
 msgid ""
 "Then, we select all the images in the \"Images\" panel (individually, or "
 "by selecting the whole group \"g001\")."
@@ -337,7 +350,7 @@ msgstr ""
 "Ensuite, nous sélectionnons toutes les images dans le panneau \"Images\" "
 "(individuellement, ou en sélectionnant l'ensemble du groupe \"g001\")."
 
-#: ../../intro/tutorials/laser_beam.rst:156
+#: ../../intro/tutorials/laser_beam.rst:160
 msgid ""
 "We apply the threshold to all the images, and the we extract the radial "
 "intensity profile for all the images (after selecting the whole group "
@@ -350,13 +363,13 @@ msgstr ""
 "sélectionné si vous aviez sélectionné \"g001\" avant d'appliquer le "
 "seuil)."
 
-#: ../../intro/tutorials/laser_beam.rst:162
+#: ../../intro/tutorials/laser_beam.rst:166
 msgid "The \"Signals\" panel now contains all the radial intensity profiles."
 msgstr ""
 "Le panneau \"Signaux\" contient maintenant tous les profils d'intensité "
 "radiaux."
 
-#: ../../intro/tutorials/laser_beam.rst:166
+#: ../../intro/tutorials/laser_beam.rst:170
 msgid ""
 "We can compute the FWHM of all the radial intensity profiles: the "
 "\"Results\" dialog displays the FWHM values for all the profiles."
@@ -365,7 +378,7 @@ msgstr ""
 "la boîte de dialogue \"Résultats\" affiche les valeurs FWHM pour tous les"
 " profils."
 
-#: ../../intro/tutorials/laser_beam.rst:171
+#: ../../intro/tutorials/laser_beam.rst:175
 msgid ""
 "If you want to show the computing results again, you can select the "
 "\"Show results\" |show_results| entry in the \"Computing\" menu, or the "
@@ -376,11 +389,11 @@ msgstr ""
 "menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
 "en dessous de la liste des images :"
 
-#: ../../intro/tutorials/laser_beam.rst:177
+#: ../../intro/tutorials/laser_beam.rst:181
 msgid "show_results"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:183
+#: ../../intro/tutorials/laser_beam.rst:187
 msgid ""
 "Finally, we can plot the beam size as a function of the position along "
 "the propagation axis. To do that, we use the \"Plot results\" feature "
@@ -397,11 +410,11 @@ msgstr ""
 " Ici, nous choisissons de tracer les valeurs FWHM (`L`) en fonction de "
 "l'index de l'image (`Indexes`)."
 
-#: ../../intro/tutorials/laser_beam.rst:189
+#: ../../intro/tutorials/laser_beam.rst:193
 msgid "plot_results"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:195
+#: ../../intro/tutorials/laser_beam.rst:199
 msgid ""
 "The plot is displayed in the \"Signals\" panel and shows that the beam "
 "size increases with the position along the propagation axis (the position"
@@ -411,7 +424,7 @@ msgstr ""
 "du faisceau augmente avec la position le long de l'axe de propagation (la"
 " position est ici en unités arbitraires, l'index de l'image)."
 
-#: ../../intro/tutorials/laser_beam.rst:201
+#: ../../intro/tutorials/laser_beam.rst:205
 msgid ""
 "We can also calibrate the X and Y axis using \"Processing > Linear "
 "calibration\". Here we have set the X axis to the position in mm (and "
@@ -422,7 +435,7 @@ msgstr ""
 "la position en mm (et entré le titre et l'unité dans le groupe de boîtes "
 "\"Propriétés\")."
 
-#: ../../intro/tutorials/laser_beam.rst:205
+#: ../../intro/tutorials/laser_beam.rst:209
 msgid ""
 "Finally, we can save the workspace to a file |filesave_h5|. The workspace"
 " contains all the images and signals that were loaded or processed in "
@@ -435,11 +448,11 @@ msgstr ""
 "résultats des calculs, les paramètres de visualisation (cartes de "
 "couleurs, contraste, etc.), les métadonnées et les annotations."
 
-#: ../../intro/tutorials/laser_beam.rst:210
+#: ../../intro/tutorials/laser_beam.rst:214
 msgid "filesave_h5"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:214
+#: ../../intro/tutorials/laser_beam.rst:218
 msgid ""
 "If you want to load the workspace again, you can use the \"File > Open "
 "HDF5 file...\" (or the |fileopen_h5| button in the toolbar) to load the "
@@ -454,10 +467,10 @@ msgstr ""
 "|h5browser| dans la barre d'outils) pour charger uniquement une sélection"
 " d'ensembles de données de l'espace de travail."
 
-#: ../../intro/tutorials/laser_beam.rst:219
+#: ../../intro/tutorials/laser_beam.rst:223
 msgid "fileopen_h5"
 msgstr ""
 
-#: ../../intro/tutorials/laser_beam.rst:223
+#: ../../intro/tutorials/laser_beam.rst:227
 msgid "h5browser"
 msgstr ""

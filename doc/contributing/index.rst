@@ -1,6 +1,10 @@
 Contributing
 ============
 
+.. meta::
+   :description: Contribute to DataLab project, the open-source scientific data analysis platform
+   :keywords: DataLab, contribute, open-source, scientific, data, analysis, platform, signal processing, image processing
+
 DataLab is **your** platform. If you want it to be improved, you **can** contribute to
 the project, whether you are a developer or not.
 

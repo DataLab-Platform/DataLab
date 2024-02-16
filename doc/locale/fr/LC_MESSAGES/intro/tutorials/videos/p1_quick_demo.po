@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-22 17:38+0100\n"
+"POT-Creation-Date: 2024-02-16 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,11 +19,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:-1
+msgid ""
+"Quick demo video of DataLab, the open-source platform for scientific data"
+" analysis"
+msgstr "Video de démo rapide de DataLab, la plateforme open-source pour l'analyse de données scientifiques"
+
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:-1
+msgid "DataLab, scientific data analysis, open-source, platform, video, demo"
+msgstr "DataLab, analyse de données scientifiques, open-source, plateforme, vidéo, démo"
+
 #: ../../intro/tutorials/videos/p1_quick_demo.rst:2
 msgid ":octicon:`video;1em;sd-text-info` Quick demo"
 msgstr ":octicon:`video;1em;sd-text-info` Démo rapide"
 
-#: ../../intro/tutorials/videos/p1_quick_demo.rst:16
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:20
 msgid ""
 "In this first video, we will quickly go through the main features of "
 "DataLab, and show how to do some basic signal and image processing."
@@ -32,7 +42,7 @@ msgstr ""
 "principales fonctionnalités de DataLab, et montrer comment effectuer un "
 "traitement de signal et d'image de base."
 
-#: ../../intro/tutorials/videos/p1_quick_demo.rst:21
+#: ../../intro/tutorials/videos/p1_quick_demo.rst:25
 msgid ""
 "This video is intentionally short and does not cover all the features of "
 "DataLab. It is meant to give you a quick overview of the software. For a "

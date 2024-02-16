@@ -1,6 +1,10 @@
 Features
 ========
 
+.. meta::
+    :description: DataLab features
+    :keywords: DataLab, features, signal processing, image processing
+
 DataLab features are detailed in the following sections. The first section
 describes the general features of DataLab, then the two following sections
 describe the features specific to the signal and image processing panels.

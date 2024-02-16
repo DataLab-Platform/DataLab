@@ -3,6 +3,10 @@
 :octicon:`book;1em;sd-text-info` DataLab and Spyder: a perfect match
 ====================================================================
 
+.. meta::
+    :description: Tutorial showing how to use Spyder to work with DataLab, the open-source data analysis and visualization platform
+    :keywords: DataLab, Spyder, tutorial, data analysis, data visualization, data processing, data science, scientific computing, scientific visualization
+
 This tutorial shows how to use `Spyder`_ to work with DataLab through an example,
 using fake algorithms and data that represent an hypothetical research/technical
 work. The goal is to illustrate how to use DataLab to test your algorithms with
