@@ -95,6 +95,15 @@ def cdl_app_context(
     if QAPP_INSTANCE is None:
         QAPP_INSTANCE = guidata.qapplication()
 
+    # === Set application name and version ---------------------------------------------
+    # pylint: disable=import-outside-toplevel
+    from cdl import __version__
+
+    QAPP_INSTANCE.setApplicationName(APP_NAME)
+    QAPP_INSTANCE.setApplicationDisplayName(APP_NAME)
+    QAPP_INSTANCE.setApplicationVersion(__version__)
+    QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
+
     if enable_logs:
         # === Create a logger for standard exceptions ----------------------------------
         tb_log_fname = Conf.main.traceback_log_path.get()
