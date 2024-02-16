@@ -47,7 +47,14 @@ Package manager ``pip``
 DataLab's package ``cdl`` is available on the Python Package Index (PyPI)
 on the following URL: https://pypi.python.org/pypi/cdl.
 
-Installing DataLab from PyPI is as simple as running this command:
+Installing DataLab from PyPI with Qt is as simple as running this command
+(you may need to use ``pip3`` instead of ``pip`` on some systems):
+
+.. code-block:: console
+
+    $ pip install cdl[qt]
+
+Or, if you prefer, you can install DataLab without the Qt library (not recommended):
 
 .. code-block:: console
 
@@ -60,7 +67,7 @@ Installing DataLab from PyPI is as simple as running this command:
 
     .. code-block:: console
 
-        $ pip install --upgrade cdl
+        $ pip install --upgrade cdl[qt]
 
 .. _install_aioinstaller:
 

@@ -56,6 +56,7 @@ cdl-demo = "cdl.tests.scenarios.demo:run"
 cdl-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
+qt = ["PyQt5"]
 dev = ["black", "isort", "pylint", "Coverage", "pyinstaller>=6.0"]
 doc = ["PyQt5", "sphinx", "sphinx_intl", "sphinx-sitemap", "myst_parser", "sphinx_design", "sphinx-copybutton", "pydata-sphinx-theme"]
 
