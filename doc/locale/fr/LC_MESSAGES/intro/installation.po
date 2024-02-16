@@ -37,7 +37,7 @@ msgstr "Pour plus de détails sur l'exécution de DataLab et ses options en lign
 
 #: ../../intro/installation.rst:16
 msgid "How to install"
-msgstr "Installation"
+msgstr "Modes d'installation"
 
 #: ../../intro/installation.rst:18
 msgid "DataLab is available in several forms:"
