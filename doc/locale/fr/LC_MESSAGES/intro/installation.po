@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 18:07+0100\n"
+"POT-Creation-Date: 2024-02-16 12:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,19 +21,33 @@ msgstr ""
 msgid "Installation"
 msgstr "Installation"
 
-#: ../../intro/installation.rst:7
+#: ../../intro/installation.rst:6
+msgid ""
+"This section provides information on how to install DataLab on your "
+"system. Once installed, you can start DataLab by running the ``cdl`` "
+"command in a terminal, or by clicking on the DataLab shortcut in the "
+"Start menu (on Windows)."
+msgstr "Cette section fournit des informations sur l'installation de DataLab sur votre système. Une fois installé, vous pouvez démarrer DataLab en exécutant la commande ``cdl`` dans un terminal, ou en cliquant sur le raccourci DataLab dans le menu Démarrer (sous Windows)."
+
+#: ../../intro/installation.rst:12
+msgid ""
+"For more details on how to execute DataLab and its command-line options, "
+"see :ref:`ref-to-command-line-features`."
+msgstr "Pour plus de détails sur l'exécution de DataLab et ses options en ligne de commande, voir :ref:`ref-to-command-line-features`."
+
+#: ../../intro/installation.rst:16
 msgid "How to install"
 msgstr "Installation"
 
-#: ../../intro/installation.rst:9
+#: ../../intro/installation.rst:18
 msgid "DataLab is available in several forms:"
 msgstr "DataLab est disponible sous plusieurs formes :"
 
-#: ../../intro/installation.rst:11
+#: ../../intro/installation.rst:20
 msgid "As a Python package, which can be installed using the :ref:`install_pip`."
 msgstr "Un paquet Python qui peut être installé à l'aide du :ref:`install_pip`."
 
-#: ../../intro/installation.rst:13
+#: ../../intro/installation.rst:22
 msgid ""
 ":bdg-info-line:`Windows` As a stand-alone application, which does not "
 "require any Python distribution to be installed. Just run the "
@@ -43,7 +57,7 @@ msgstr ""
 "nécessite pas d'installation de Python. Il suffit d'exécuter "
 "l':ref:`install_aioinstaller` et le tour est joué !"
 
-#: ../../intro/installation.rst:17
+#: ../../intro/installation.rst:26
 msgid ""
 "As a precompiled :ref:`install_wheel`, which can be installed using "
 "``pip``."
@@ -51,7 +65,7 @@ msgstr ""
 "En tant que :ref:`install_wheel` précompilé, qui peut être installé à "
 "l'aide de ``pip``."
 
-#: ../../intro/installation.rst:19
+#: ../../intro/installation.rst:28
 msgid ""
 "As a :ref:`install_source`, which can be installed using ``pip`` or "
 "manually."
@@ -59,7 +73,7 @@ msgstr ""
 "En tant que :ref:`install_source`, qui peut être installé à l'aide de "
 "``pip`` ou manuellement."
 
-#: ../../intro/installation.rst:23
+#: ../../intro/installation.rst:32
 msgid ""
 "Impatient to try the next version of DataLab? You can also install the "
 "latest development version of DataLab from the master branch of the Git "
@@ -70,18 +84,18 @@ msgstr ""
 "partir de la branche principale du dépôt Git. Voir "
 ":ref:`install_development` pour plus d'informations."
 
-#: ../../intro/installation.rst:30
+#: ../../intro/installation.rst:39
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
 
-#: ../../intro/installation.rst:32 ../../intro/installation.rst:90
-#: ../../intro/installation.rst:104 ../../intro/installation.rst:134
+#: ../../intro/installation.rst:41 ../../intro/installation.rst:99
+#: ../../intro/installation.rst:113 ../../intro/installation.rst:143
 msgid ""
 ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-"
 "line:`Windows` :bdg-info-line:`macOS`"
 msgstr ""
 
-#: ../../intro/installation.rst:34
+#: ../../intro/installation.rst:43
 msgid ""
 "DataLab's package ``cdl`` is available on the Python Package Index (PyPI)"
 " on the following URL: https://pypi.python.org/pypi/cdl."
@@ -89,13 +103,13 @@ msgstr ""
 "Le paquet ``cdl`` de DataLab est disponible sur l'index des paquets "
 "Python (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/cdl."
 
-#: ../../intro/installation.rst:37
+#: ../../intro/installation.rst:46
 msgid "Installing DataLab from PyPI is as simple as running this command:"
 msgstr ""
 "L'installation de DataLab depuis PyPI est aussi simple que d'exécuter "
 "cette commande :"
 
-#: ../../intro/installation.rst:45
+#: ../../intro/installation.rst:54
 msgid ""
 "If you already have a previous version of DataLab installed, you can "
 "upgrade it by running the same command with the ``--upgrade`` option:"
@@ -104,15 +118,15 @@ msgstr ""
 "pouvez la mettre à jour en exécutant la même commande avec l'option "
 "``--upgrade`` :"
 
-#: ../../intro/installation.rst:55
+#: ../../intro/installation.rst:64
 msgid "All-in-one installer"
 msgstr "Installateur tout-en-un"
 
-#: ../../intro/installation.rst:57
+#: ../../intro/installation.rst:66
 msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`"
 msgstr ""
 
-#: ../../intro/installation.rst:59
+#: ../../intro/installation.rst:68
 msgid ""
 "DataLab is available as a stand-alone application for Windows, which does"
 " not require any Python distribution to be installed. Just run the "
@@ -122,11 +136,11 @@ msgstr ""
 "Windows qui ne nécessite pas d'installation de Python. Il suffit "
 "d'exécuter l'installateur et vous êtes prêt à partir !"
 
-#: ../../intro/installation.rst:65
+#: ../../intro/installation.rst:74
 msgid "DataLab all-in-one installer for Windows"
 msgstr "Installateur tout-en-un de DataLab pour Windows"
 
-#: ../../intro/installation.rst:67
+#: ../../intro/installation.rst:76
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
@@ -138,7 +152,7 @@ msgstr ""
 "besoin de désinstaller DataLab avant d'exécuter l'installateur d'une "
 "autre version de l'application)."
 
-#: ../../intro/installation.rst:74
+#: ../../intro/installation.rst:83
 msgid ""
 "DataLab Windows installer is available for Windows 8, 10 and 11 (main "
 "release, based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 "
@@ -149,7 +163,7 @@ msgstr ""
 "SP1 (version basée sur Python 3.8, voir le fichier se terminant par "
 "``-Win7.exe``)."
 
-#: ../../intro/installation.rst:78
+#: ../../intro/installation.rst:87
 msgid ""
 ":octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running "
 "DataLab (or any other Python 3 application), you must install Microsoft "
@@ -165,11 +179,11 @@ msgstr ""
 "Microsoft Visual C++ 2015-2022 <https://learn.microsoft.com/en-"
 "us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_."
 
-#: ../../intro/installation.rst:88
+#: ../../intro/installation.rst:97
 msgid "Wheel package"
 msgstr "Paquet Wheel"
 
-#: ../../intro/installation.rst:92
+#: ../../intro/installation.rst:101
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
 "way to install DataLab on an existing Python distribution:"
@@ -178,11 +192,11 @@ msgstr ""
 "paquet Wheel est le moyen le plus simple d'installer DataLab sur une "
 "distribution Python existante :"
 
-#: ../../intro/installation.rst:102
+#: ../../intro/installation.rst:111
 msgid "Source package"
 msgstr "Paquet source"
 
-#: ../../intro/installation.rst:106
+#: ../../intro/installation.rst:115
 msgid ""
 "Installing DataLab directly from the source package may be done using "
 "``pip``:"
@@ -190,7 +204,7 @@ msgstr ""
 "L'installation de DataLab directement depuis le paquet source peut être "
 "effectuée à l'aide de ``pip`` :"
 
-#: ../../intro/installation.rst:112
+#: ../../intro/installation.rst:121
 msgid ""
 "Or, if you prefer, you can install it manually by running the following "
 "command from the root directory of the source package:"
@@ -198,7 +212,7 @@ msgstr ""
 "Ou, si vous préférez, vous pouvez l'installer manuellement en exécutant "
 "la commande suivante depuis le répertoire racine du paquet source :"
 
-#: ../../intro/installation.rst:119
+#: ../../intro/installation.rst:128
 msgid ""
 "Finally, you can also build your own Wheel package and install it using "
 "``pip``, by running the following command from the root directory of the "
@@ -210,11 +224,11 @@ msgstr ""
 " le répertoire racine du paquet source (cela nécessite que les paquets "
 "``build`` et ``wheel`` soient installés) :"
 
-#: ../../intro/installation.rst:132
+#: ../../intro/installation.rst:141
 msgid "Development version"
 msgstr "Version de développement"
 
-#: ../../intro/installation.rst:136
+#: ../../intro/installation.rst:145
 msgid ""
 "If you want to try the latest development version of DataLab, you can "
 "install it directly from the master branch of the Git repository."
@@ -223,7 +237,7 @@ msgstr ""
 "DataLab, vous pouvez l'installer directement depuis la branche principale"
 " du dépôt Git."
 
-#: ../../intro/installation.rst:139
+#: ../../intro/installation.rst:148
 msgid ""
 "The first time you install DataLab from the Git repository, enter the "
 "following command:"
@@ -231,7 +245,7 @@ msgstr ""
 "La première fois que vous installez DataLab depuis le dépôt Git, entrez "
 "la commande suivante :"
 
-#: ../../intro/installation.rst:146
+#: ../../intro/installation.rst:155
 msgid ""
 "Then, if at some point you want to upgrade to the latest version of "
 "DataLab, just run the same command with options to force the reinstall of"
@@ -243,7 +257,7 @@ msgstr ""
 "forcer la réinstallation du paquet sans gérer les dépendances (car cela "
 "réinstallerait toutes les dépendances) :"
 
-#: ../../intro/installation.rst:156
+#: ../../intro/installation.rst:165
 msgid ""
 "If dependencies have changed, you may need to execute the same command as"
 " above, but without the ``--no-deps`` option."
@@ -251,11 +265,11 @@ msgstr ""
 "Si les dépendances ont changé, vous devrez peut-être exécuter la même "
 "commande que ci-dessus, mais sans l'option ``--no-deps``."
 
-#: ../../intro/installation.rst:160
+#: ../../intro/installation.rst:169
 msgid "Dependencies"
 msgstr "Dépendances"
 
-#: ../../intro/installation.rst:164
+#: ../../intro/installation.rst:173
 msgid ""
 "The DataLab all-in-one installer already include all those required "
 "libraries as well as Python itself."
@@ -495,7 +509,6 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
-#: ../../intro/installation.rst:171
+#: ../../intro/installation.rst:180
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-

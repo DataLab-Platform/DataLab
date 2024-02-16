@@ -3,6 +3,15 @@
 Installation
 ============
 
+This section provides information on how to install DataLab on your system.
+Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
+or by clicking on the DataLab shortcut in the Start menu (on Windows).
+
+.. seealso::
+
+    For more details on how to execute DataLab and its command-line options,
+    see :ref:`ref-to-command-line-features`.
+
 How to install
 --------------
 

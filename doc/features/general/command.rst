@@ -1,3 +1,5 @@
+.. _ref-to-command-line-features:
+
 Command line features
 =====================
 
