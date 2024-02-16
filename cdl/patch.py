@@ -11,6 +11,8 @@ Module patching *guidata* and *plotpy* to adapt it to DataLab
 # Allows accessing protecting members, unused arguments, unused variables
 # pylint: disable=W0212,W0613,W0612,E0102
 
+from __future__ import annotations
+
 import sys
 import warnings
 
@@ -25,9 +27,8 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine
+from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
-from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
