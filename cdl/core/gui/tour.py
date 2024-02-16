@@ -54,7 +54,8 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.qthelpers import is_dark_mode
+from guidata.env import execenv
+from guidata.qthelpers import exec_dialog, is_dark_mode
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -400,7 +401,9 @@ class TourStep:
             self.setup_callback(self.tour.win)
         self.update_cover(self.tour.cover)
         dialog = StepDialog(self.tour.win, self)
-        dialog.exec()
+        exec_dialog(dialog)
+        if execenv.unattended and self.step_type != "conclusion":
+            dialog.result = StepResult.NEXT
         if self.teardown_callback is not None:
             self.teardown_callback(self.tour.win)
         return dialog.result
@@ -869,18 +872,3 @@ def start(win: CDLMainWindow) -> None:
     """
     tour = Tour(win)
     tour.start()
-
-
-def test_tour() -> None:
-    """
-    Test the tour of DataLab features.
-    """
-    # pylint: disable=import-outside-toplevel
-    from cdl.tests import cdltest_app_context
-
-    with cdltest_app_context() as win:
-        start(win)
-
-
-if __name__ == "__main__":
-    test_tour()
