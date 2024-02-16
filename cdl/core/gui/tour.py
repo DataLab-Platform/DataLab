@@ -55,7 +55,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 from guidata.configtools import get_icon, get_image_file_path
 from guidata.env import execenv
-from guidata.qthelpers import exec_dialog, is_dark_mode
+from guidata.qthelpers import is_dark_mode
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -401,9 +401,14 @@ class TourStep:
             self.setup_callback(self.tour.win)
         self.update_cover(self.tour.cover)
         dialog = StepDialog(self.tour.win, self)
-        exec_dialog(dialog)
-        if execenv.unattended and self.step_type != "conclusion":
+        if not execenv.unattended:
+            dialog.exec()
+        elif self.step_type != "conclusion":
             dialog.result = StepResult.NEXT
+            dialog.accept()
+        else:
+            dialog.result = StepResult.CLOSE
+            dialog.reject()
         if self.teardown_callback is not None:
             self.teardown_callback(self.tour.win)
         return dialog.result
