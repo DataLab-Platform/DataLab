@@ -12,6 +12,7 @@ DataLab main window
 from __future__ import annotations
 
 import abc
+import base64
 import functools
 import os
 import os.path as osp
@@ -621,6 +622,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """Restore main window state from configuration"""
         state = Conf.main.window_state.get(None)
         if state is not None:
+            state = base64.b64decode(state)
             self.restoreState(QC.QByteArray(state))
             for widget in self.children():
                 if isinstance(widget, QW.QDockWidget):
@@ -635,7 +637,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             Conf.main.window_size.set((size.width(), size.height()))
             pos = self.pos()
             Conf.main.window_position.set((pos.x(), pos.y()))
-        Conf.main.window_state.set(self.saveState().data())
+        # Encoding window state into base64 string to avoid sending binary data
+        # to the configuration file:
+        state = base64.b64encode(self.saveState().data()).decode("ascii")
+        Conf.main.window_state.set(state)
 
     def setup(self, console: bool = False) -> None:
         """Setup main window
