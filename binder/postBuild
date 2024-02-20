@@ -14,10 +14,11 @@ cp ${CDL_DIR}/data/logo/DataLab.svg ${HOME}
 
 ln -s ${CDL_DIR}/data/tests ${HOME}/Desktop/test_data
 
-# Apply our Xfce settings
+# Customize Xfce settings
 mkdir -p ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml
 cp binder/xsettings.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
 cp binder/xfce4-panel.xml ${HOME}/.config/xfce4/xfconf/xfce-perchannel-xml/
+xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitorVNC-0/workspace0/last-image -s binder/DataLab-banner2.png
 
 # For nbgitpuller
 jupyter serverextension enable --py nbgitpuller --sys-prefix
