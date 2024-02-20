@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Name=Development version
-Exec=bash -c 'pip install --force-reinstall --no-deps git+https://github.com/Codra-Ingenierie-Informatique/DataLab.git'
+Exec=bash -c 'pip install --force-reinstall --no-deps git+https://github.com/DataLab-Platform/DataLab.git'
 Icon=system-software-update
 Path=
 Terminal=true
