@@ -518,6 +518,15 @@ class ImageObj(gds.DataSet, base.BaseObj):
         # Storing the LUT range in metadata:
         lut_range = list(item.get_lut_range())
         self.metadata["lut_range"] = lut_range
+        # Updating origin and pixel spacing:
+        shape = self.data.shape
+        param = item.param
+        xmin, xmax, ymin, ymax = param.xmin, param.xmax, param.ymin, param.ymax
+        if xmin == 0 and ymin == 0 and xmax == shape[1] and ymax == shape[0]:
+            self.x0, self.y0, self.dx, self.dy = 0.0, 0.0, 1.0, 1.0
+        else:
+            self.x0, self.y0 = xmin, ymin
+            self.dx, self.dy = (xmax - xmin) / shape[1], (ymax - ymin) / shape[0]
 
     def make_item(self, update_from: MaskedImageItem | None = None) -> MaskedImageItem:
         """Make plot item from data.

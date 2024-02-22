@@ -293,6 +293,8 @@ class BaseDataPanel(AbstractPanel):
             obj = self.plothandler.get_obj_from_item(item)
             if obj is not None:
                 obj.update_metadata_from_plot_item(item)
+                if obj is self.objview.get_current_object():
+                    self.objprop.update_properties_from(obj)
 
     def serialize_object_to_hdf5(
         self, obj: SignalObj | ImageObj, writer: NativeH5Writer

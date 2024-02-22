@@ -3,6 +3,12 @@
 See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.12.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties
+
 ## DataLab Version 0.12.0 ##
 
 🧹 Clarity-Enhanced Interface Update:
