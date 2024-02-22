@@ -136,6 +136,7 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
 
 def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Add signal to result signal
+
     Args:
         dst (SignalObj): destination signal
         src (SignalObj): source signal
@@ -148,6 +149,7 @@ def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
 
 def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Multiply signal to result signal
+
     Args:
         dst (SignalObj): destination signal
         src (SignalObj): source signal
@@ -165,9 +167,11 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
 
 def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute difference between two signals
+
     Args:
         src1 (SignalObj): source signal 1
         src2 (SignalObj): source signal 2
+
     Returns:
         SignalObj: result signal object
     """
@@ -180,9 +184,11 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
 
 def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute quadratic difference between two signals
+
     Args:
         src1 (SignalObj): source signal 1
         src2 (SignalObj): source signal 2
+
     Returns:
         SignalObj: result signal object
     """
@@ -199,9 +205,11 @@ def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
 
 def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute division between two signals
+
     Args:
         src1 (SignalObj): source signal 1
         src2 (SignalObj): source signal 2
+
     Returns:
         SignalObj: result signal object
     """
@@ -219,9 +227,11 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
 
 def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
+
     Args:
         src (SignalObj): source signal
         group (gds.DataSetGroup): group of parameters
+
     Returns:
         SignalObj: signal with multiple regions of interest
     """
@@ -244,9 +254,11 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
 
 def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
     """Extract single region of interest from data
+
     Args:
         src (SignalObj): source signal
         p (gds.DataSet): parameters
+
     Returns:
         SignalObj: signal with single region of interest
     """
@@ -260,8 +272,10 @@ def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
 
 def compute_swap_axes(src: SignalObj) -> SignalObj:
     """Swap axes
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -273,8 +287,10 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
 
 def compute_abs(src: SignalObj) -> SignalObj:
     """Compute absolute value
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -283,8 +299,10 @@ def compute_abs(src: SignalObj) -> SignalObj:
 
 def compute_re(src: SignalObj) -> SignalObj:
     """Compute real part
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -293,8 +311,10 @@ def compute_re(src: SignalObj) -> SignalObj:
 
 def compute_im(src: SignalObj) -> SignalObj:
     """Compute imaginary part
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -313,9 +333,11 @@ class DataTypeSParam(gds.DataSet):
 
 def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
     """Convert data type
+
     Args:
         src: source signal
         p: parameters
+
     Returns:
         Result signal object
     """
@@ -326,8 +348,10 @@ def compute_astype(src: SignalObj, p: DataTypeSParam) -> SignalObj:
 
 def compute_log10(src: SignalObj) -> SignalObj:
     """Compute Log10
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -345,9 +369,11 @@ class PeakDetectionParam(gds.DataSet):
 
 def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     """Peak detection
+
     Args:
         src (SignalObj): source signal
         p (PeakDetectionParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -375,9 +401,11 @@ class NormalizeYParam(gds.DataSet):
 
 def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
     """Normalize data
+
     Args:
         src (SignalObj): source signal
         p (NormalizeYParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -389,8 +417,10 @@ def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
 
 def compute_derivative(src: SignalObj) -> SignalObj:
     """Compute derivative
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -402,8 +432,10 @@ def compute_derivative(src: SignalObj) -> SignalObj:
 
 def compute_integral(src: SignalObj) -> SignalObj:
     """Compute integral
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -424,9 +456,11 @@ class XYCalibrateParam(gds.DataSet):
 
 def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     """Compute linear calibration
+
     Args:
         src (SignalObj): source signal
         p (XYCalibrateParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -441,9 +475,11 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
 
 def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
     """Compute threshold clipping
+
     Args:
         src (SignalObj): source signal
         p (ThresholdParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -455,9 +491,11 @@ def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
 
 def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     """Compute maximum data clipping
+
     Args:
         src (SignalObj): source signal
         p (ClipParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -469,9 +507,11 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
 
 def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     """Compute gaussian filter
+
     Args:
         src (SignalObj): source signal
         p (GaussianParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -483,9 +523,11 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
 
 def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     """Compute moving average
+
     Args:
         src (SignalObj): source signal
         p (MovingAverageParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -497,9 +539,11 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     """Compute moving median
+
     Args:
         src (SignalObj): source signal
         p (MovingMedianParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -511,8 +555,10 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
 
 def compute_wiener(src: SignalObj) -> SignalObj:
     """Compute Wiener filter
+
     Args:
         src (SignalObj): source signal
+
     Returns:
         SignalObj: result signal object
     """
@@ -521,9 +567,11 @@ def compute_wiener(src: SignalObj) -> SignalObj:
 
 def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute FFT
+
     Args:
         src (SignalObj): source signal
         p (FFTParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -535,9 +583,11 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
 
 def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute iFFT
+
     Args:
         src (SignalObj): source signal
         p (FFTParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -643,10 +693,12 @@ def compute_interpolation(
     src1: SignalObj, src2: SignalObj, p: InterpolationParam
 ) -> SignalObj:
     """Interpolate data
+
     Args:
         src1 (SignalObj): source signal 1
         src2 (SignalObj): source signal 2
         p (InterpolationParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -681,9 +733,11 @@ class ResamplingParam(InterpolationParam):
 
 def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     """Resample data
+
     Args:
         src (SignalObj): source signal
         p (ResampleParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -714,9 +768,11 @@ class DetrendingParam(gds.DataSet):
 
 def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     """Detrend data
+
     Args:
         src (SignalObj): source signal
         p (DetrendingParam): parameters
+
     Returns:
         SignalObj: result signal object
     """
@@ -728,9 +784,11 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
 
 def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
+
     Args:
         src1 (SignalObj): source signal 1
         src2 (SignalObj): source signal 2
+
     Returns:
         SignalObj: result signal object
     """

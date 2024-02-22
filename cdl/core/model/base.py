@@ -148,11 +148,11 @@ def config_annotated_shape(
     """Configurate annotated shape.
 
     Args:
-        item (AnnotatedShape): Annotated shape item
-        fmt (str): Format string
-        lbl (bool): Show label
-        option (str): Shape style option (e.g. "shape/drag")
-        cmp (bool | None): Show computations
+        item: Annotated shape item
+        fmt: Format string
+        lbl: Show label
+        option: Shape style option (e.g. "shape/drag")
+        cmp: Show computations
     """
     param = item.annotationparam
     param.format = fmt
@@ -167,8 +167,8 @@ def set_plot_item_editable(item, state):
     """Set plot item editable state.
 
     Args:
-        item (PlotItem): Plot item
-        state (bool): State
+        item: Plot item
+        state: State
     """
     item.set_movable(state)
     item.set_resizable(state)
@@ -399,12 +399,12 @@ class ResultShape:
         """Iterate over metadata shape plot items.
 
         Args:
-            fmt (str): numeric format (e.g. "%.3f")
-            lbl (bool): if True, show shape labels
-            option (str): shape style option (e.g. "shape/drag")
+            fmt: numeric format (e.g. "%.3f")
+            lbl: if True, show shape labels
+            option: shape style option (e.g. "shape/drag")
 
         Yields:
-            PlotItem: plot item
+            Plot item
         """
         for args in self.data:
             yield self.create_plot_item(args, fmt, lbl, option)
@@ -413,13 +413,13 @@ class ResultShape:
         """Make plot item.
 
         Args:
-            args (numpy.ndarray): shape data
-            fmt (str): numeric format (e.g. "%.3f")
-            lbl (bool): if True, show shape labels
-            option (str): shape style option (e.g. "shape/drag")
+            args: shape data
+            fmt: numeric format (e.g. "%.3f")
+            lbl: if True, show shape labels
+            option: shape style option (e.g. "shape/drag")
 
         Returns:
-            PlotItem: plot item
+            Plot item
         """
         if self.shapetype is ShapeTypes.MARKER:
             item = self.make_marker_item(args, fmt)
@@ -499,16 +499,16 @@ def make_roi_item(
     """Make ROI item shape.
 
     Args:
-        func (function): function to create ROI item
-        coords (list): coordinates
-        title (str): title
-        fmt (str): numeric format (e.g. "%.3f")
-        lbl (bool): if True, show shape labels
-        editable (bool): if True, make shape editable
-        option (str): shape style option (e.g. "shape/drag")
+        func: function to create ROI item
+        coords: coordinates
+        title: title
+        fmt: numeric format (e.g. "%.3f")
+        lbl: if True, show shape labels
+        editable: if True, make shape editable
+        option: shape style option (e.g. "shape/drag")
 
     Returns:
-        PlotItem: plot item
+        Plot item
     """
     item = func(*coords, title)
     if not editable:
@@ -525,10 +525,10 @@ def items_to_json(items: list) -> str | None:
     """Convert plot items to JSON string.
 
     Args:
-        items (list): list of plot items
+        items: list of plot items
 
     Returns:
-        str: JSON string or None if items is empty
+        JSON string or None if items is empty
     """
     if items:
         writer = JSONWriter(None)
@@ -541,10 +541,10 @@ def json_to_items(json_str: str | None) -> list:
     """Convert JSON string to plot items.
 
     Args:
-        json_str (str): JSON string or None
+        json_str: JSON string or None
 
     Returns:
-        list: list of plot items
+        List of plot items
     """
     items = []
     if json_str:
@@ -589,7 +589,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Set object number (used for short ID).
 
         Args:
-            onb (int): object number
+            onb: object number
         """
         self.__onb = onb
 
@@ -640,10 +640,10 @@ class BaseObj(metaclass=BaseObjMeta):
         or ROI data (if both ROI and `roi_index` are defined).
 
         Args:
-            roi_index (int): ROI index
+            roi_index: ROI index
 
         Returns:
-            numpy.ndarray: data
+            Data
         """
 
     @abc.abstractmethod
@@ -651,11 +651,11 @@ class BaseObj(metaclass=BaseObjMeta):
         """Copy object.
 
         Args:
-            title (str): title
-            dtype (numpy.dtype): data type
+            title: title
+            dtype: data type
 
         Returns:
-            BaseObj: copied object
+            Copied object
         """
 
     @abc.abstractmethod
@@ -663,7 +663,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Change data type.
 
         Args:
-            dtype (numpy.dtype): data type
+            dtype: data type
         """
 
     @abc.abstractmethod
@@ -671,10 +671,10 @@ class BaseObj(metaclass=BaseObjMeta):
         """Make plot item from data.
 
         Args:
-            update_from (BaseObj): update
+            update_from: update
 
         Returns:
-            PlotItem: plot item
+            Plot item
         """
 
     @abc.abstractmethod
@@ -682,8 +682,8 @@ class BaseObj(metaclass=BaseObjMeta):
         """Update plot item from data.
 
         Args:
-            item (PlotItem): plot item
-            data_changed (bool): if True, data has changed
+            item: plot item
+            data_changed: if True, data has changed
         """
 
     @abc.abstractmethod
@@ -691,10 +691,10 @@ class BaseObj(metaclass=BaseObjMeta):
         """Convert ROI coordinates to indexes.
 
         Args:
-            coords (list): coordinates
+            coords: coordinates
 
         Returns:
-            numpy.ndarray: indexes
+            Indexes
         """
 
     @abc.abstractmethod
@@ -702,7 +702,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Return ROI parameters dataset.
 
         Args:
-            title (str): title
+            title: title
             *defaults: default values
         """
 
@@ -710,10 +710,10 @@ class BaseObj(metaclass=BaseObjMeta):
         """Convert ROI array data to ROI dataset group.
 
         Args:
-            roidata (numpy.ndarray): ROI array data
+            roidata: ROI array data
 
         Returns:
-            DataSetGroup: ROI dataset group
+            ROI dataset group
         """
         roi_params = []
         for index, parameters in enumerate(roidata):
@@ -728,10 +728,10 @@ class BaseObj(metaclass=BaseObjMeta):
         """Convert ROI dataset group to ROI array data.
 
         Args:
-            params (DataSetGroup): ROI dataset group
+            params: ROI dataset group
 
         Returns:
-            numpy.ndarray: ROI array data
+            ROI array data
         """
 
     def roi_has_changed(self) -> bool:
@@ -743,7 +743,7 @@ class BaseObj(metaclass=BaseObjMeta):
         in the meantime.
 
         Returns:
-            bool: True if ROI has changed
+            True if ROI has changed
         """
         if self.__roi_changed is None:
             self.__roi_changed = True
@@ -756,7 +756,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Return object regions of interest array (one ROI per line).
 
         Returns:
-            numpy.ndarray: regions of interest array
+            Regions of interest array
         """
         roidata = self.metadata.get(ROI_KEY)
         assert roidata is None or isinstance(roidata, np.ndarray)
@@ -767,7 +767,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Set object regions of interest array, using a list or ROI dataset params.
 
         Args:
-            roidata (numpy.ndarray): regions of interest array
+            roidata: regions of interest array
         """
         if roidata is None:
             if ROI_KEY in self.metadata:
@@ -786,13 +786,13 @@ class BaseObj(metaclass=BaseObjMeta):
         """Add geometric shape as metadata entry, and return ResultShape instance.
 
         Args:
-            label (str): label
-            shapetype (ShapeTypes): shape type
-            array (numpy.ndarray): array
-            param (guidata.dataset.DataSet): parameters
+            label: label
+            shapetype: shape type
+            array: array
+            param: parameters
 
         Returns:
-            ResultShape: result shape
+            Result shape
         """
         mshape = ResultShape(shapetype, array, label)
         mshape.add_to(self)
@@ -804,7 +804,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Iterate over object result shapes.
 
         Yields:
-            ResultShape: result shape
+            Result shape
         """
         for key, value in self.metadata.items():
             if ResultShape.match(key, value):
@@ -835,9 +835,9 @@ class BaseObj(metaclass=BaseObjMeta):
         """Apply transform function to result shape / annotations coordinates.
 
         Args:
-            orig (BaseObj): original object
-            func (callable): transform function
-            param (object): transform function parameter
+            orig: original object
+            func: transform function
+            param: transform function parameter
         """
 
         def transform(coords: np.ndarray):
@@ -870,20 +870,20 @@ class BaseObj(metaclass=BaseObjMeta):
         """Make plot item representing a Region of Interest.
 
         Args:
-            fmt (str): format string
-            lbl (bool): if True, add label
-            editable (bool): if True, ROI is editable
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
 
         Yields:
-            PlotItem: plot item
+            Plot item
         """
 
     def __set_annotations(self, annotations: str | None) -> None:
         """Set object annotations (JSON string describing annotation plot items)
 
         Args:
-            annotations (str | None): JSON string describing annotation plot items,
-                or None to remove annotations
+            annotations: JSON string describing annotation plot items,
+             or None to remove annotations
         """
         if annotations is None:
             if ANN_KEY in self.metadata:
@@ -901,7 +901,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Set object annotations from file (JSON).
 
         Args:
-            filename (str): filename
+            filename: filename
         """
         with open(filename, mode="rb") as fdesc:
             self.annotations = fdesc.read().decode()
@@ -910,7 +910,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
+            items: annotation plot items
         """
         ann_items = json_to_items(self.annotations)
         ann_items.extend(items)
@@ -921,7 +921,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Add object annotations from file (JSON).
 
         Args:
-            filename (str): filename
+            filename: filename
         """
         items = load_items(JSONReader(filename))
         self.add_annotations_from_items(items)
@@ -931,17 +931,17 @@ class BaseObj(metaclass=BaseObjMeta):
         """Add label with title annotation
 
         Args:
-            title (str): title (if None, use object title)
+            title: title (if None, use object title)
         """
 
     def iterate_shape_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).
 
         Args:
-            editable (bool): if True, ROI is editable
+            editable: if True, ROI is editable
 
         Yields:
-            PlotItem: plot item
+            Plot item
         """
         fmt = self.get_metadata_option("format")
         lbl = self.get_metadata_option("showlabel")
@@ -979,14 +979,14 @@ class BaseObj(metaclass=BaseObjMeta):
         It is a way to store application-specific options in object metadata.
 
         Args:
-            name (str): option name
+            name: option name
 
         Returns:
             Option value
 
         Valid option names:
-            'format': format string (str)
-            'showlabel': show label (bool)
+            'format': format string
+            'showlabel': show label
         """
         if name not in self.__metadata_options:
             raise ValueError(f"Invalid metadata option name `{name}`")
@@ -1000,12 +1000,12 @@ class BaseObj(metaclass=BaseObjMeta):
         It is a way to store application-specific options in object metadata.
 
         Args:
-            name (str): option name
-            value (Any): option value
+            name: option name
+            value: option value
 
         Valid option names:
-            'format': format string (str)
-            'showlabel': show label (bool)
+            'format': format string
+            'showlabel': show label
         """
         if name not in self.__metadata_options:
             raise ValueError(f"Invalid metadata option name `{name}`")
@@ -1071,7 +1071,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Export object metadata to file (JSON).
 
         Args:
-            filename (str): filename
+            filename: filename
         """
         handler = JSONHandler(filename)
         handler.set_json_dict(self.metadata)
@@ -1081,7 +1081,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Import object metadata from file (JSON).
 
         Args:
-            filename (str): filename
+            filename: filename
         """
         handler = JSONHandler(filename)
         handler.load()
@@ -1091,7 +1091,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """Convert metadata to human-readable string.
 
         Returns:
-            str: HTML string
+            HTML string
         """
         textlines = []
         for key, value in self.metadata.items():

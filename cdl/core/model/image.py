@@ -44,11 +44,11 @@ def make_roi_rectangle(
     """Make and return the annnotated rectangle associated to ROI
 
     Args:
-        x0 (int): top left corner X coordinate
-        y0 (int): top left corner Y coordinate
-        x1 (int): bottom right corner X coordinate
-        y1 (int): bottom right corner Y coordinate
-        title (str): title
+        x0: top left corner X coordinate
+        y0: top left corner Y coordinate
+        x1: bottom right corner X coordinate
+        y1: bottom right corner Y coordinate
+        title: title
     """
     roi_item: AnnotatedRectangle = make.annotated_rectangle(x0, y0, x1, y1, title)
     param = roi_item.label.labelparam
@@ -62,11 +62,11 @@ def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> Annotated
     """Make and return the annnotated circle associated to ROI
 
     Args:
-        x0 (int): top left corner X coordinate
-        y0 (int): top left corner Y coordinate
-        x1 (int): bottom right corner X coordinate
-        y1 (int): bottom right corner Y coordinate
-        title (str): title
+        x0: top left corner X coordinate
+        y0: top left corner Y coordinate
+        x1: bottom right corner X coordinate
+        y1: bottom right corner Y coordinate
+        title: title
     """
     item = AnnotatedCircle(x0, y0, x1, y1)
     item.annotationparam.title = title
@@ -106,7 +106,7 @@ class RoiDataItem:
     """Object representing an image ROI.
 
     Args:
-        data (numpy.ndarray | list | tuple): ROI data
+        data: ROI data
     """
 
     def __init__(self, data: np.ndarray | list | tuple):
@@ -117,8 +117,8 @@ class RoiDataItem:
         """Construct roi data item from image object: called for making new ROI items
 
         Args:
-            obj (ImageObj): image object
-            geometry (RoiDataGeometries): ROI geometry
+            obj: image object
+            geometry: ROI geometry
         """
         width, height = obj.data.shape[1] * obj.dx, obj.data.shape[0] * obj.dy
         frac = 0.2
@@ -160,8 +160,8 @@ class RoiDataItem:
         """Apply ROI to data as a mask and return masked array
 
         Args:
-            data (numpy.ndarray): data
-            yxratio (float): Y/X ratio
+            data: data
+            yxratio: Y/X ratio
         """
         roi_mask = np.ones_like(data, dtype=bool)
         x0, y0, x1, y1 = self.get_rect()
@@ -180,10 +180,10 @@ class RoiDataItem:
         """Make ROI plot item
 
         Args:
-            index (int | None): ROI index
-            fmt (str): format string
-            lbl (bool): if True, show label
-            editable (bool): if True, ROI is editable
+            index: ROI index
+            fmt: format string
+            lbl: if True, show label
+            editable: if True, ROI is editable
         """
         coords = self._data
         if self.geometry is RoiDataGeometries.RECTANGLE:
@@ -288,9 +288,9 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Constructor
 
         Args:
-            title (str): title
-            comment (str): comment
-            icon (str): icon
+            title: title
+            comment: comment
+            icon: icon
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
@@ -311,8 +311,8 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Add value to metadata if value can be converted into builtin/NumPy type
 
         Args:
-            key (str): key
-            value (Any): value
+            key: key
+            value: value
         """
         stored_val = to_builtin(value)
         if stored_val is not None:
@@ -323,7 +323,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         or any other object (iterating over supported attributes)
 
         Args:
-            obj (Mapping | dict): object
+            obj: object
         """
         self.reset_metadata_to_defaults()
         ptn = r"__[\S_]*__$"
@@ -415,10 +415,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
         or ROI data (if both ROI and `roi_index` are defined).
 
         Args:
-            roi_index (int): ROI index
+            roi_index: ROI index
 
         Returns:
-            numpy.ndarray: masked data
+            Masked data
         """
         if self.roi is None or roi_index is None:
             return self.data
@@ -429,11 +429,11 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Copy object.
 
         Args:
-            title (str): title
-            dtype (numpy.dtype): data type
+            title: title
+            dtype: data type
 
         Returns:
-            ImageObj: copied object
+            Copied object
         """
         title = self.title if title is None else title
         obj = ImageObj(title=title)
@@ -456,7 +456,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Change data type.
 
         Args:
-            dtype (numpy.dtype): data type
+            Data type
         """
         self.data = np.array(self.data, dtype=dtype)
 
@@ -532,10 +532,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Make plot item from data.
 
         Args:
-            update_from (MaskedImageItem | None): update from plot item
+            update_from: update from plot item
 
         Returns:
-            MaskedImageItem: plot item
+            Plot item
         """
         data = self.__viewable_data()
         item = make.maskedimage(
@@ -558,8 +558,8 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Update plot item from data.
 
         Args:
-            item (MaskedImageItem): plot item
-            data_changed (bool): if True, data has changed
+            item: plot item
+            data_changed: if True, data has changed
         """
         if data_changed:
             item.set_data(self.__viewable_data(), lut_range=[item.min, item.max])
@@ -572,7 +572,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Return ROI parameters dataset.
 
         Args:
-            title (str): title
+            title: title
             *defaults: default values
         """
         roidataitem = RoiDataItem(defaults)
@@ -595,10 +595,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Convert ROI dataset group to ROI array data.
 
         Args:
-            params (DataSetGroup): ROI dataset group
+            params: ROI dataset group
 
         Returns:
-            numpy.ndarray: ROI array data
+            ROI array data
         """
         roilist = []
         for roiparam in params.datasets:
@@ -614,10 +614,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Return a new ROI item from scratch
 
         Args:
-            fmt (str): format string
-            lbl (bool): if True, add label
-            editable (bool): if True, ROI is editable
-            geometry (RoiDataGeometries): ROI geometry
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
+            geometry: ROI geometry
         """
         roidataitem = RoiDataItem.from_image(self, geometry)
         return roidataitem.make_roi_item(None, fmt, lbl, editable)
@@ -626,10 +626,10 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Convert ROI coordinates to indexes.
 
         Args:
-            coords (list): coordinates
+            coords: coordinates
 
         Returns:
-            numpy.ndarray: indexes
+            Indexes
         """
         indexes = np.array(coords)
         if indexes.size > 0:
@@ -643,12 +643,12 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Make plot item representing a Region of Interest.
 
         Args:
-            fmt (str): format string
-            lbl (bool): if True, add label
-            editable (bool): if True, ROI is editable
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
 
         Yields:
-            PlotItem: plot item
+            Plot item
         """
         if self.roi is not None:
             roicoords = np.array(self.roi, float)
@@ -665,7 +665,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Return masked data (areas outside defined regions of interest)
 
         Returns:
-            numpy.ndarray: masked data
+            Masked data
         """
         roi_changed = self.roi_has_changed()
         if self.roi is None:
@@ -699,7 +699,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """Add label with title annotation
 
         Args:
-            title (str): title (if None, use image title)
+            title: title (if None, use image title)
         """
         title = self.title if title is None else title
         if title:
@@ -717,14 +717,14 @@ def create_image(
     """Create a new Image object
 
     Args:
-        title (str): image title
-        data (numpy.ndarray): image data
-        metadata (dict): image metadata
-        units (tuple): X, Y, Z units (tuple of strings)
-        labels (tuple): X, Y, Z labels (tuple of strings)
+        title: image title
+        data: image data
+        metadata: image metadata
+        units: X, Y, Z units (tuple of strings)
+        labels: X, Y, Z labels (tuple of strings)
 
     Returns:
-        ImageObj: image object
+        Image object
     """
     assert isinstance(title, str)
     assert data is None or isinstance(data, np.ndarray)
@@ -808,14 +808,14 @@ def new_image_param(
     """Create a new Image dataset instance.
 
     Args:
-        title (str): dataset title (default: None, uses default title)
-        itype (ImageTypes): image type (default: None, uses default type)
-        height (int): image height (default: None, uses default height)
-        width (int): image width (default: None, uses default width)
-        dtype (ImageDatatypes): image data type (default: None, uses default data type)
+        title: dataset title (default: None, uses default title)
+        itype: image type (default: None, uses default type)
+        height: image height (default: None, uses default height)
+        width: image width (default: None, uses default width)
+        dtype: image data type (default: None, uses default data type)
 
     Returns:
-        NewImageParam: new image dataset instance
+        New image dataset instance
     """
     title = DEFAULT_TITLE if title is None else title
     param = NewImageParam(title=title, icon=get_icon("new_image.svg"))
@@ -857,13 +857,13 @@ def create_image_from_param(
     """Create a new Image object from dialog box.
 
     Args:
-        newparam (NewImageParam): new image parameters
-        addparam (guidata.dataset.DataSet): additional parameters
-        edit (bool): Open a dialog box to edit parameters (default: False)
-        parent (QWidget): parent widget
+        newparam: new image parameters
+        addparam: additional parameters
+        edit: Open a dialog box to edit parameters (default: False)
+        parent: parent widget
 
     Returns:
-        ImageObj: new image object or None if user cancelled
+        New image object or None if user cancelled
     """
     global IMG_NB  # pylint: disable=global-statement
     if newparam is None:

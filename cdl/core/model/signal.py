@@ -120,9 +120,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Constructor
 
         Args:
-            title (str): title
-            comment (str): comment
-            icon (str): icon
+            title: title
+            comment: comment
+            icon: icon
         """
         gds.DataSet.__init__(self, title, comment, icon)
         base.BaseObj.__init__(self)
@@ -143,11 +143,11 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Copy object.
 
         Args:
-            title (str): title
-            dtype (numpy.dtype): data type
+            title: title
+            dtype: data type
 
         Returns:
-            SignalObj: copied object
+            Copied object
         """
         title = self.title if title is None else title
         obj = SignalObj(title=title)
@@ -162,7 +162,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Change data type.
 
         Args:
-            dtype (numpy.dtype): data type
+            Data type
         """
         raise RuntimeError("Setting data type is not support for signals")
 
@@ -176,10 +176,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Set xy data
 
         Args:
-            x (numpy.ndarray): x data
-            y (numpy.ndarray): y data
-            dx (numpy.ndarray): dx data (optional: error bars)
-            dy (numpy.ndarray): dy data (optional: error bars)
+            x: x data
+            y: y data
+            dx: dx data (optional: error bars)
+            dy: dy data (optional: error bars)
         """
         if x is not None:
             x = np.array(x)
@@ -255,10 +255,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         or ROI data (if both ROI and `roi_index` are defined).
 
         Args:
-            roi_index (int): ROI index
+            roi_index: ROI index
 
         Returns:
-            numpy.ndarray: data
+            Data
         """
         if self.roi is None or roi_index is None:
             return self.x, self.y
@@ -301,10 +301,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Make plot item from data.
 
         Args:
-            update_from (CurveItem): plot item to update from
+            update_from: plot item to update from
 
         Returns:
-            CurveItem: plot item
+            Plot item
         """
         if len(self.xydata) in (2, 3, 4):
             if len(self.xydata) == 2:  # x, y signal
@@ -330,8 +330,8 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Update plot item from data.
 
         Args:
-            item (CurveItem): plot item
-            data_changed (bool): if True, data has changed
+            item: plot item
+            data_changed: if True, data has changed
         """
         if data_changed:
             if len(self.xydata) == 2:  # x, y signal
@@ -350,10 +350,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Convert ROI coordinates to indexes.
 
         Args:
-            coords (list): coordinates
+            coords: coordinates
 
         Returns:
-            numpy.ndarray: indexes
+            Indexes
         """
         indexes = np.array(coords, int)
         for row in range(indexes.shape[0]):
@@ -366,7 +366,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Return ROI parameters dataset.
 
         Args:
-            title (str): title
+            title: title
             *defaults: default values
         """
         imax = len(self.x) - 1
@@ -382,10 +382,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Convert ROI dataset group to ROI array data.
 
         Args:
-            params (DataSetGroup): ROI dataset group
+            params: ROI dataset group
 
         Returns:
-            numpy.ndarray: ROI array data
+            ROI array data
         """
         roilist = []
         for roiparam in params.datasets:
@@ -399,9 +399,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Return a new ROI item from scratch
 
         Args:
-            fmt (str): format string
-            lbl (bool): if True, add label
-            editable (bool): if True, ROI is editable
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
         """
         # We take the real part of the x data to avoid `ComplexWarning` warnings
         # when creating and manipulating the `XRangeSelection` shape (`plotpy`)
@@ -422,12 +422,12 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Make plot item representing a Region of Interest.
 
         Args:
-            fmt (str): format string
-            lbl (bool): if True, add label
-            editable (bool): if True, ROI is editable
+            fmt: format string
+            lbl: if True, add label
+            editable: if True, ROI is editable
 
         Yields:
-            PlotItem: plot item
+            Plot item
         """
         if self.roi is not None:
             # We take the real part of the x data to avoid `ComplexWarning` warnings
@@ -447,7 +447,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """Add label with title annotation
 
         Args:
-            title (str): title (if None, use signal title)
+            title: title (if None, use signal title)
         """
         title = self.title if title is None else title
         if title:
@@ -462,23 +462,23 @@ def create_signal(
     dx: np.ndarray | None = None,
     dy: np.ndarray | None = None,
     metadata: dict | None = None,
-    units: tuple | None = None,
-    labels: tuple | None = None,
+    units: tuple[str, str] | None = None,
+    labels: tuple[str, str] | None = None,
 ) -> SignalObj:
     """Create a new Signal object.
 
     Args:
-        title (str): signal title
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        dx (numpy.ndarray): dX data (optional: error bars)
-        dy (numpy.ndarray): dY data (optional: error bars)
-        metadata (dict): signal metadata
-        units (tuple): X, Y units (tuple of strings)
-        labels (tuple): X, Y labels (tuple of strings)
+        title: signal title
+        x: X data
+        y: Y data
+        dx: dX data (optional: error bars)
+        dy: dY data (optional: error bars)
+        metadata: signal metadata
+        units: X, Y units (tuple of strings)
+        labels: X, Y labels (tuple of strings)
 
     Returns:
-        SignalObj: signal object
+        Signal object
     """
     assert isinstance(title, str)
     signal = SignalObj(title=title)
@@ -590,11 +590,11 @@ def new_signal_param(
     """Create a new Signal dataset instance.
 
     Args:
-        title (str): dataset title (default: None, uses default title)
-        stype (str): signal type (default: None, uses default type)
-        xmin (float): X min (default: None, uses default value)
-        xmax (float): X max (default: None, uses default value)
-        size (int): signal size (default: None, uses default value)
+        title: dataset title (default: None, uses default title)
+        stype: signal type (default: None, uses default type)
+        xmin: X min (default: None, uses default value)
+        xmax: X max (default: None, uses default value)
+        size: signal size (default: None, uses default value)
 
     Returns:
         NewSignalParam: new signal dataset instance
@@ -620,7 +620,7 @@ def triangle_func(xarr: np.ndarray) -> np.ndarray:
     """Triangle function
 
     Args:
-        xarr (numpy.ndarray): x data
+        xarr: x data
     """
     return sps.sawtooth(xarr, width=0.5)
 
@@ -634,13 +634,13 @@ def create_signal_from_param(
     """Create a new Signal object from a dialog box.
 
     Args:
-        newparam (NewSignalParam): new signal parameters
-        addparam (guidata.dataset.DataSet): additional parameters
-        edit (bool): Open a dialog box to edit parameters (default: False)
-        parent (QWidget): parent widget
+        newparam: new signal parameters
+        addparam: additional parameters
+        edit: Open a dialog box to edit parameters (default: False)
+        parent: parent widget
 
     Returns:
-        SignalObj: signal object or None if canceled
+        Signal object or None if canceled
     """
     global SIG_NB  # pylint: disable=global-statement
     if newparam is None:
