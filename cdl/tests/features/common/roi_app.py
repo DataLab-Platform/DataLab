@@ -34,6 +34,8 @@ def __run_signal_computations(panel: SignalPanel, singleobj: bool | None = None)
     """Test all signal features related to ROI"""
     panel.processor.compute_fwhm(dlp.FWHMParam())
     panel.processor.compute_fw1e2()
+    panel.processor.compute_histogram(dlp.HistogramParam())
+    panel.remove_object()
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
 
@@ -41,6 +43,7 @@ def __run_image_computations(panel: ImagePanel, singleobj: bool | None = None):
     """Test all image features related to ROI"""
     panel.processor.compute_centroid()
     panel.processor.compute_enclosing_circle()
+    panel.processor.compute_histogram(dlp.HistogramParam())
     panel.processor.compute_peak_detection(dlp.Peak2DDetectionParam())
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(singleobj=singleobj))
 
@@ -87,7 +90,7 @@ def print_obj_shapes(obj):
             execenv.print(f"    ROI[{idx}]: {func(roi_data)}")
 
 
-def test_roi_app():
+def test_roi_app(screenshots: bool = False):
     """Run ROI application test scenario"""
     size = 200
     with cdltest_app_context() as win:
@@ -104,7 +107,9 @@ def test_roi_app():
             panel.add_object(sig2_i)
             print_obj_shapes(sig2_i)
             panel.processor.edit_regions_of_interest()
-            win.take_screenshot("s_roi_signal")
+            if screenshots:
+                win.statusBar().hide()
+                win.take_screenshot("s_roi_signal")
             __run_signal_computations(panel, singleobj=singleobj)
         # === Image ROI extraction test ===
         panel = win.imagepanel
@@ -118,9 +123,11 @@ def test_roi_app():
             panel.add_object(ima2_i)
             print_obj_shapes(ima2_i)
             panel.processor.edit_regions_of_interest()
-            win.take_screenshot("i_roi_image")
+            if screenshots:
+                win.statusBar().hide()
+                win.take_screenshot("i_roi_image")
             __run_image_computations(panel, singleobj=singleobj)
 
 
 if __name__ == "__main__":
-    test_roi_app()
+    test_roi_app(screenshots=True)

@@ -397,3 +397,12 @@ class SignalProcessor(BaseProcessor):
             ("Σ(y)", lambda xy: xy[1].sum()),
             ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
         ]
+
+    @qt_try_except()
+    def compute_histogram(
+        self, param: cdl.param.HistogramParam | None = None
+    ) -> dict[str, ResultShape]:
+        """Compute histogram"""
+        return self.compute_11(
+            cps.compute_histogram, param, cps.HistogramParam, title=_("Histogram")
+        )

@@ -660,6 +660,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_pos=-1,
                 context_menu_sep=True,
             )
+            self.new_action(
+                _("Histogram") + "...",
+                triggered=self.panel.processor.compute_histogram,
+                icon=get_icon("histogram.svg"),
+                context_menu_pos=-1,
+            )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""

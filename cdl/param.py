@@ -167,6 +167,7 @@ from cdl.core.computation.base import (
     ClipParam,
     FFTParam,
     GaussianParam,
+    HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
     ROIDataParam,

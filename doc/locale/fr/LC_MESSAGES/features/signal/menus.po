@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 18:09+0100\n"
+"POT-Creation-Date: 2024-02-22 11:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -172,7 +172,9 @@ msgstr "Importer les données depuis un fichier texte."
 msgid ""
 "See :ref:`ref-to-signal-text-file-import` page for more details on "
 "importing text files."
-msgstr "Voir la page :ref:`ref-to-signal-text-file-import` pour plus de détails sur l'importation de fichiers texte."
+msgstr ""
+"Voir la page :ref:`ref-to-signal-text-file-import` pour plus de détails "
+"sur l'importation de fichiers texte."
 
 #: ../../features/signal/menus.rst:80
 msgid "Open HDF5 file"
@@ -656,6 +658,7 @@ msgstr ""
 
 #: ../../features/signal/menus.rst:339 ../../features/signal/menus.rst:370
 #: ../../features/signal/menus.rst:453 ../../features/signal/menus.rst:482
+#: ../../features/signal/menus.rst:565
 msgid "Parameter"
 msgstr "Paramètre"
 
@@ -845,7 +848,7 @@ msgid "Method"
 msgstr "Méthode"
 
 #: ../../features/signal/menus.rst:428 ../../features/signal/menus.rst:454
-#: ../../features/signal/menus.rst:483
+#: ../../features/signal/menus.rst:483 ../../features/signal/menus.rst:566
 msgid "Description"
 msgstr "Description"
 
@@ -1138,10 +1141,50 @@ msgstr ""
 "statistiques calculées sur la totalité des données)."
 
 #: ../../features/signal/menus.rst:555
+msgid "Histogram"
+msgstr "Histogramme"
+
+#: ../../features/signal/menus.rst:557
+msgid "Compute histogram of selected signal and show it."
+msgstr "Calcule l'histogramme du signal sélectionné et l'affiche."
+
+#: ../../features/signal/menus.rst:559
+msgid "Parameters are:"
+msgstr "Paramètres :"
+
+#: ../../features/signal/menus.rst:567
+msgid "Bins"
+msgstr "Classes"
+
+#: ../../features/signal/menus.rst:568
+msgid "Number of bins"
+msgstr "Nombre de classes"
+
+#: ../../features/signal/menus.rst:569
+msgid "Lower limit"
+msgstr "Limite inférieure"
+
+#: ../../features/signal/menus.rst:570
+msgid "Lower limit of the histogram"
+msgstr "Limite inférieure de l'histogramme"
+
+#: ../../features/signal/menus.rst:571
+msgid "Upper limit"
+msgstr "Limite supérieure"
+
+#: ../../features/signal/menus.rst:572
+msgid "Upper limit of the histogram"
+msgstr "Limite supérieure de l'histogramme"
+
+#: ../../features/signal/menus.rst:576
+msgid "Example of histogram."
+msgstr "Exemple d'histogramme."
+
+#: ../../features/signal/menus.rst:579
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
-#: ../../features/signal/menus.rst:557
+#: ../../features/signal/menus.rst:581
 msgid ""
 "Fit data to a Gaussian, Lorentzian or Voigt model using least-square "
 "method. Then, compute the full width at half-maximum value."
@@ -1150,15 +1193,15 @@ msgstr ""
 "une courbe de Voigt en utilisant un algorithme de moindres carrés. "
 "Calcule ensuite la largeur à mi-hauteur du modèle d'ajustement."
 
-#: ../../features/signal/menus.rst:563
+#: ../../features/signal/menus.rst:587
 msgid "The computed result is displayed as an annotated segment."
 msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
 
-#: ../../features/signal/menus.rst:566
+#: ../../features/signal/menus.rst:590
 msgid "Full width at 1/e²"
 msgstr "Largeur à 1/e²"
 
-#: ../../features/signal/menus.rst:568
+#: ../../features/signal/menus.rst:592
 msgid ""
 "Fit data to a Gaussian model using least-square method. Then, compute the"
 " full width at 1/e²."
@@ -1167,7 +1210,7 @@ msgstr ""
 "algorithme de moindres carrés. Calcule ensuite la largeur à 1/e² du "
 "modèle d'ajustement."
 
-#: ../../features/signal/menus.rst:571
+#: ../../features/signal/menus.rst:595
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to signal and serialized with it when exporting current "
@@ -1178,11 +1221,11 @@ msgstr ""
 " ce dernier par exemple lors de l'export d'une session de DataLab vers un"
 " fichier HDF5."
 
-#: ../../features/signal/menus.rst:576
+#: ../../features/signal/menus.rst:600
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: ../../features/signal/menus.rst:578
+#: ../../features/signal/menus.rst:602
 msgid ""
 "Show the results of all computations performed on the selected signals. "
 "This shows the same table as the one shown after having performed a "
@@ -1192,11 +1235,11 @@ msgstr ""
 "sélectionnés. Cela affiche le même tableau que celui affiché après avoir "
 "effectué un calcul."
 
-#: ../../features/signal/menus.rst:582
+#: ../../features/signal/menus.rst:606
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: ../../features/signal/menus.rst:584
+#: ../../features/signal/menus.rst:608
 msgid ""
 "Plot the results of computations performed on the selected signals, with "
 "user-defined X and Y axes (e.g. plot the FWHM as a function of the signal"
@@ -1206,15 +1249,15 @@ msgstr ""
 "avec des axes X et Y définis par l'utilisateur (p.ex. trace la largeur à "
 "mi-hauteur en fonction de l'indice du signal)."
 
-#: ../../features/signal/menus.rst:588
+#: ../../features/signal/menus.rst:612
 msgid "\"View\" menu"
 msgstr "Menu \"Affichage\""
 
-#: ../../features/signal/menus.rst:592
+#: ../../features/signal/menus.rst:616
 msgid "Screenshot of the \"View\" menu."
 msgstr "Capture d'écran du menu \"Affichage\"."
 
-#: ../../features/signal/menus.rst:594
+#: ../../features/signal/menus.rst:618
 msgid ""
 "The \"View\" menu allows you to visualize the current signal or group of "
 "signals. It also allows you to show/hide titles, to enable/disable anti-"
@@ -1225,15 +1268,15 @@ msgstr ""
 "d'activer/désactiver l'anticrénelage, ou encore de rafraîchir la "
 "visualisation."
 
-#: ../../features/signal/menus.rst:599
+#: ../../features/signal/menus.rst:623
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
-#: ../../features/signal/menus.rst:601
+#: ../../features/signal/menus.rst:625
 msgid "Open a new window to visualize and the selected signals."
 msgstr "Ouvre une nouvelle fenêtre pour visualiser les signaux sélectionées."
 
-#: ../../features/signal/menus.rst:603
+#: ../../features/signal/menus.rst:627
 msgid ""
 "In the separate window, you may visualize your data more comfortably "
 "(e.g., by maximizing the window) and you may also annotate the data."
@@ -1242,27 +1285,27 @@ msgstr ""
 "(p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées"
 " aux données."
 
-#: ../../features/signal/menus.rst:607
+#: ../../features/signal/menus.rst:631
 msgid "See :ref:`ref-to-signal-annotations` for more details on annotations."
 msgstr ""
 "Voir :ref:`ref-to-signal-annotations` pour plus de détails sur les "
 "annotations."
 
-#: ../../features/signal/menus.rst:610
+#: ../../features/signal/menus.rst:634
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: ../../features/signal/menus.rst:612
+#: ../../features/signal/menus.rst:636
 msgid "Show/hide titles of computing results or annotations."
 msgstr ""
 "Affiche/cache les titres des objets graphiques liés aux résultats de "
 "calculs et aux annotations."
 
-#: ../../features/signal/menus.rst:615
+#: ../../features/signal/menus.rst:639
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: ../../features/signal/menus.rst:617
+#: ../../features/signal/menus.rst:641
 msgid ""
 "Automatically refresh the visualization when the data changes. When "
 "enabled (default), the plot view is automatically refreshed when the data"
@@ -1286,11 +1329,11 @@ msgstr ""
 " données volumineuses, et l'activer à nouveau quand vous avez terminé. "
 "Cela évitera des rafraîchissements inutiles."
 
-#: ../../features/signal/menus.rst:629
+#: ../../features/signal/menus.rst:653
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
 
-#: ../../features/signal/menus.rst:631
+#: ../../features/signal/menus.rst:655
 msgid ""
 "Refresh the visualization manually. This triggers a refresh of the plot "
 "view, even if the auto-refresh feature is disabled."
@@ -1299,11 +1342,11 @@ msgstr ""
 "rafraîchissement de la visualisation, même si le rafraîchissement "
 "automatique est désactivé."
 
-#: ../../features/signal/menus.rst:635
+#: ../../features/signal/menus.rst:659
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
 
-#: ../../features/signal/menus.rst:637
+#: ../../features/signal/menus.rst:661
 msgid ""
 "Enable/disable anti-aliasing of curves. Anti-aliasing makes the curves "
 "look smoother, but it may also make them look less sharp."
@@ -1311,11 +1354,11 @@ msgstr ""
 "Active/désactive l'anticrénelage sur les courbes. L'anticrénelage rend "
 "les courbes plus lisses, mais peut aussi les rendre moins nettes."
 
-#: ../../features/signal/menus.rst:641
+#: ../../features/signal/menus.rst:665
 msgid "Anti-aliasing is enabled by default."
 msgstr "L'anticrénelage est activé par défaut."
 
-#: ../../features/signal/menus.rst:644
+#: ../../features/signal/menus.rst:668
 msgid ""
 "Anti-aliasing may slow down the visualization, especially when working "
 "with large data sets."
@@ -1323,11 +1366,11 @@ msgstr ""
 "L'anticrénelage peut ralentir significativement l'affichage, surtout "
 "quand on travaille avec des données volumineuses."
 
-#: ../../features/signal/menus.rst:648
+#: ../../features/signal/menus.rst:672
 msgid "Reset curve styles"
 msgstr "Réinitialiser les styles de courbes"
 
-#: ../../features/signal/menus.rst:650
+#: ../../features/signal/menus.rst:674
 msgid ""
 "When plotting curves, DataLab automatically assigns a color and a line "
 "style to each curve. Both parameters are chosen from a predefined list of"
@@ -1338,7 +1381,7 @@ msgstr ""
 "choisis dans une liste prédéfinie de couleurs et de styles de ligne, et "
 "sont attribués de manière cyclique."
 
-#: ../../features/signal/menus.rst:654
+#: ../../features/signal/menus.rst:678
 msgid ""
 "This menu entry allows you to reset the curve styles, so that the next "
 "time you plot curves, the first curve will be assigned the first color "
@@ -1350,23 +1393,23 @@ msgstr ""
 "courbe sera attribuée la première couleur et le premier style de ligne de"
 " la liste prédéfinie, et la boucle recommencera à partir de là."
 
-#: ../../features/signal/menus.rst:659
+#: ../../features/signal/menus.rst:683
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/signal/menus.rst:661
+#: ../../features/signal/menus.rst:685
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#: ../../features/signal/menus.rst:664
+#: ../../features/signal/menus.rst:688
 msgid "\"?\" menu"
 msgstr "Menu \"?\""
 
-#: ../../features/signal/menus.rst:668
+#: ../../features/signal/menus.rst:692
 msgid "Screenshot of the \"?\" menu."
 msgstr "Capture d'écran du menu \"?\"."
 
-#: ../../features/signal/menus.rst:670
+#: ../../features/signal/menus.rst:694
 msgid ""
 "The \"?\" menu allows you to access the online documentation, to show log"
 " files, to show information regarding your DataLab installation, and to "
@@ -1377,33 +1420,33 @@ msgstr ""
 "configuration d'installation de DataLab, et d'afficher la boîte de "
 "dialogue \"A propos de DataLab\"."
 
-#: ../../features/signal/menus.rst:675
+#: ../../features/signal/menus.rst:699
 msgid "Online or Local documentation"
 msgstr "Documentation en ligne ou locale"
 
-#: ../../features/signal/menus.rst:677
+#: ../../features/signal/menus.rst:701
 msgid "Open the online or local documentation:"
 msgstr "Affiche la documentation en ligne ou locale :"
 
-#: ../../features/signal/menus.rst:682
+#: ../../features/signal/menus.rst:706
 msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
-#: ../../features/signal/menus.rst:684
+#: ../../features/signal/menus.rst:708
 msgid "Open DataLab log viewer"
 msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
-#: ../../features/signal/menus.rst:687
+#: ../../features/signal/menus.rst:711
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
 msgstr ""
 "Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
 "journaux de bord."
 
-#: ../../features/signal/menus.rst:690
+#: ../../features/signal/menus.rst:714
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: ../../features/signal/menus.rst:692
+#: ../../features/signal/menus.rst:716
 msgid ""
 "Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
@@ -1412,17 +1455,17 @@ msgstr ""
 "DataLab (particulièrement utile pour signaler des anomalies de manière "
 "efficace)."
 
-#: ../../features/signal/menus.rst:696
+#: ../../features/signal/menus.rst:720
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
 msgstr ""
 "Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
 "boîte de dialogue."
 
-#: ../../features/signal/menus.rst:699
+#: ../../features/signal/menus.rst:723
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/signal/menus.rst:701
+#: ../../features/signal/menus.rst:725
 msgid "Open the \"About DataLab\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 

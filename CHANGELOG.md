@@ -5,6 +5,14 @@ for future and past milestones.
 
 ## DataLab Version 0.12.1 ##
 
+💥 New features:
+
+* New "Histogram" feature in "Computing" menu:
+  * Added histogram computation feature for both signals and images
+  * The histogram is computed on the regions of interest (ROI) if any, or on the
+    whole signal/image if no ROI is defined
+  * Editable parameters: number of bins, lower and upper bounds
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties

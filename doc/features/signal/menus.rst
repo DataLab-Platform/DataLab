@@ -551,6 +551,30 @@ Compute statistics on selected signal and show a summary table.
     Example of statistical summary table: each row is associated to an ROI
     (the first row gives the statistics for the whole data).
 
+Histogram
+^^^^^^^^^
+
+Compute histogram of selected signal and show it.
+
+Parameters are:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Bins
+      - Number of bins
+    * - Lower limit
+      - Lower limit of the histogram
+    * - Upper limit
+      - Upper limit of the histogram
+
+.. figure:: /images/shots/s_histogram.png
+
+    Example of histogram.
+
 Full width at half-maximum
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

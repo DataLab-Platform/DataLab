@@ -206,6 +206,11 @@ def run_signal_computations(
         param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.compute_detrending(param)
 
+    # Test histogram
+    panel.objview.set_current_object(sig1)
+    param = dlp.HistogramParam.create(bins=100)
+    panel.processor.compute_histogram(param)
+
 
 def run_image_computations(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True
@@ -340,3 +345,8 @@ def run_image_computations(
 
     param = dlp.BinningParam.create(binning_x=2, binning_y=2, operation="average")
     panel.processor.compute_binning(param)
+
+    # Test histogram
+    panel.objview.set_current_object(ima)
+    param = dlp.HistogramParam.create(bins=100)
+    panel.processor.compute_histogram(param)

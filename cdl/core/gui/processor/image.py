@@ -281,6 +281,13 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_radial_profile, param, title=title, edit=edit)
 
     @qt_try_except()
+    def compute_histogram(self, param: cdl.param.HistogramParam | None = None) -> None:
+        """Compute histogram"""
+        self.compute_11(
+            cpi.compute_histogram, param, cpi.HistogramParam, title=_("Histogram")
+        )
+
+    @qt_try_except()
     def compute_swap_axes(self) -> None:
         """Swap data axes"""
         self.compute_11(cpi.compute_swap_axes, title=_("Swap axes"))

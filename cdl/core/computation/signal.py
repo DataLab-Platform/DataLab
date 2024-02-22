@@ -40,9 +40,11 @@ from cdl.core.computation.base import (
     ClipParam,
     FFTParam,
     GaussianParam,
+    HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
     ThresholdParam,
+    new_signal_result,
 )
 from cdl.core.model.signal import SignalObj
 
@@ -664,6 +666,43 @@ def compute_fw1e2(signal: SignalObj):
         yhm = amplitude / np.e**2 + base
         res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
     return np.array(res)
+
+
+def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
+    """Compute histogram
+
+    Args:
+        src (SignalObj): source signal
+        p (HistogramParam): parameters
+
+    Returns:
+        SignalObj: result signal object
+    """
+    # Extract data from ROIs:
+    datalist = []
+    for i_roi in src.iterate_roi_indexes():
+        datalist.append(src.get_data(i_roi)[1])
+    data = np.concatenate(datalist)
+
+    suffix = p.get_suffix(data)  # Also updates p.lower and p.upper
+
+    # Compute histogram:
+    y, bin_edges = np.histogram(data, bins=p.bins, range=(p.lower, p.upper))
+    x = (bin_edges[:-1] + bin_edges[1:]) / 2
+
+    # Note: we use the `new_signal_result` function to create the result signal object
+    # because the `dst_11` would copy the source signal, which is not what we want here
+    # (we want a brand new signal object).
+    dst = new_signal_result(
+        src,
+        "histogram",
+        suffix=suffix,
+        units=(src.yunit, ""),
+        labels=(src.ylabel, _("Counts")),
+    )
+    dst.set_xydata(x, y)
+    dst.metadata["shade"] = 0.5
+    return dst
 
 
 class InterpolationParam(gds.DataSet):

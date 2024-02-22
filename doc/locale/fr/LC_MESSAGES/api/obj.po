@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-12 17:49+0100\n"
+"POT-Creation-Date: 2024-02-22 11:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -151,7 +151,7 @@ msgstr ""
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl.core.model.base.BaseObj.add_resultshape:5
+#: cdl.core.model.base.BaseObj.add_resultshape:4
 #: cdl.core.model.base.ResultShape:8 of
 msgid "shape type"
 msgstr "type de forme"
@@ -255,8 +255,8 @@ msgid ""
 "Merge object resultshape with another's: obj <-- other_obj or simply "
 "merge this resultshape with obj if other_obj is None"
 msgstr ""
-"Fusionne la forme de résultat de l'objet avec celle d'un autre : obj <-- "
-"other_obj ou fusionne simplement cette forme de résultat avec obj si "
+"Fusionne la forme résultat de l'objet avec celle d'un autre : obj <-- "
+"other_obj ou fusionne simplement cette forme résultat avec obj si "
 "other_obj est None"
 
 #: cdl.obj.ResultShape.data_colnb:1 of
@@ -279,19 +279,19 @@ msgstr "Vérifie si le tableau est valide"
 msgid "Iterate over metadata shape plot items."
 msgstr "Itère sur les éléments de tracé de la forme de métadonnées."
 
-#: cdl.core.model.base.ResultShape.create_plot_item:5
+#: cdl.core.model.base.ResultShape.create_plot_item:4
 #: cdl.core.model.base.ResultShape.iterate_plot_items:3 of
 #, python-format
 msgid "numeric format (e.g. \"%.3f\")"
 msgstr "format numérique (par exemple \"%.3f\")"
 
-#: cdl.core.model.base.ResultShape.create_plot_item:7
-#: cdl.core.model.base.ResultShape.iterate_plot_items:5 of
+#: cdl.core.model.base.ResultShape.create_plot_item:5
+#: cdl.core.model.base.ResultShape.iterate_plot_items:4 of
 msgid "if True, show shape labels"
 msgstr "si True, affiche les étiquettes de forme"
 
-#: cdl.core.model.base.ResultShape.create_plot_item:9
-#: cdl.core.model.base.ResultShape.iterate_plot_items:7 of
+#: cdl.core.model.base.ResultShape.create_plot_item:6
+#: cdl.core.model.base.ResultShape.iterate_plot_items:5 of
 msgid "shape style option (e.g. \"shape/drag\")"
 msgstr "option de style de forme (par exemple \"shape/drag\")"
 
@@ -303,12 +303,15 @@ msgstr "option de style de forme (par exemple \"shape/drag\")"
 msgid "Yields"
 msgstr "Produit (`yield`)"
 
-#: cdl.core.model.base.BaseObj.iterate_shape_items:6
-#: cdl.core.model.base.ResultShape.iterate_plot_items:10
-#: cdl.core.model.image.ImageObj.iterate_roi_items:10
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:10 of
-msgid "*PlotItem* -- plot item"
-msgstr "*PlotItem* -- élément de tracé"
+#: cdl.core.model.base.BaseObj.iterate_shape_items:5
+#: cdl.core.model.base.ResultShape.create_plot_item:8
+#: cdl.core.model.base.ResultShape.iterate_plot_items:7
+#: cdl.core.model.image.ImageObj.iterate_roi_items:7
+#: cdl.core.model.image.ImageObj.make_item:5
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
+#: cdl.core.model.signal.SignalObj.make_item:5 of
+msgid "Plot item"
+msgstr "Item graphique"
 
 #: cdl.core.model.base.ResultShape.create_plot_item:1 of
 msgid "Make plot item."
@@ -317,47 +320,6 @@ msgstr "Crée un élément de tracé."
 #: cdl.core.model.base.ResultShape.create_plot_item:3 of
 msgid "shape data"
 msgstr "données de forme"
-
-#: cdl.core.model.base.ResultShape.create_plot_item:12
-#: cdl.core.model.image.ImageObj.make_item:6
-#: cdl.core.model.image.ImageObj.update_item:3
-#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:9
-#: cdl.core.model.image.ImageObj.update_plot_item_parameters:9
-#: cdl.core.model.signal.SignalObj.make_item:6
-#: cdl.core.model.signal.SignalObj.update_item:3
-#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:9
-#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:9 of
-msgid "plot item"
-msgstr "élément de tracé"
-
-#: cdl.core.io.read_image cdl.core.io.read_signal
-#: cdl.core.model.base.BaseObj.add_resultshape
-#: cdl.core.model.base.BaseObj.metadata_to_html
-#: cdl.core.model.base.BaseObj.roi_has_changed
-#: cdl.core.model.base.BaseObj.roidata_to_params
-#: cdl.core.model.base.ResultShape.create_plot_item
-#: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
-#: cdl.core.model.image.ImageObj.make_item
-#: cdl.core.model.image.ImageObj.params_to_roidata
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes
-#: cdl.core.model.image.create_image
-#: cdl.core.model.image.create_image_from_param
-#: cdl.core.model.image.new_image_param cdl.core.model.signal.SignalObj.copy
-#: cdl.core.model.signal.SignalObj.get_data
-#: cdl.core.model.signal.SignalObj.make_item
-#: cdl.core.model.signal.SignalObj.params_to_roidata
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes
-#: cdl.core.model.signal.create_signal
-#: cdl.core.model.signal.create_signal_from_param
-#: cdl.core.model.signal.new_signal_param cdl.obj.ImageObj.maskdata
-#: cdl.obj.ImageObj.roi cdl.obj.SignalObj.roi
-#: guidata.dataset.datatypes.DataSet.check
-#: guidata.dataset.datatypes.DataSet.get_comment
-#: guidata.dataset.datatypes.DataSet.get_icon
-#: guidata.dataset.datatypes.DataSet.get_title
-#: guidata.dataset.datatypes.DataSet.to_string of
-msgid "Return type"
-msgstr "Type de retour"
 
 #: cdl.core.model.base.ResultShape.make_marker_item:1 of
 msgid "Make marker item"
@@ -384,7 +346,7 @@ msgstr "Paramètres de signal/image aléatoire de loi normale"
 msgid "Signal model"
 msgstr "Modèle de signal"
 
-#: cdl.core.model.signal.SignalObj:1 of
+#: cdl.core.model.signal.SignalObj:1 cdl.core.model.signal.create_signal:12 of
 msgid "Signal object"
 msgstr "Objet signal"
 
@@ -418,17 +380,15 @@ msgstr "Copie l'objet."
 msgid "title"
 msgstr "titre"
 
-#: cdl.core.model.image.ImageObj.copy:5
-#: cdl.core.model.image.ImageObj.set_data_type:3
-#: cdl.core.model.signal.SignalObj.copy:5
-#: cdl.core.model.signal.SignalObj.set_data_type:3 of
+#: cdl.core.model.image.ImageObj.copy:4 cdl.core.model.signal.SignalObj.copy:4
+#: of
 msgid "data type"
 msgstr "type de données"
 
-#: cdl.core.model.image.ImageObj.copy:8 cdl.core.model.signal.SignalObj.copy:8
+#: cdl.core.model.image.ImageObj.copy:6 cdl.core.model.signal.SignalObj.copy:6
 #: of
-msgid "copied object"
-msgstr "objet copié"
+msgid "Copied object"
+msgstr "Objet copié"
 
 #: cdl.core.model.image.ImageObj.set_data_type:1
 #: cdl.core.model.signal.SignalObj.set_data_type:1 of
@@ -443,15 +403,15 @@ msgstr "Définit les données xy"
 msgid "x data"
 msgstr "données x"
 
-#: cdl.core.model.signal.SignalObj.set_xydata:5 of
+#: cdl.core.model.signal.SignalObj.set_xydata:4 of
 msgid "y data"
 msgstr "données y"
 
-#: cdl.core.model.signal.SignalObj.set_xydata:7 of
+#: cdl.core.model.signal.SignalObj.set_xydata:5 of
 msgid "dx data (optional: error bars)"
 msgstr "données dx (optionnel : barres d'erreur)"
 
-#: cdl.core.model.signal.SignalObj.set_xydata:9 of
+#: cdl.core.model.signal.SignalObj.set_xydata:6 of
 msgid "dy data (optional: error bars)"
 msgstr "données dy (optionnel : barres d'erreur)"
 
@@ -486,9 +446,9 @@ msgstr ""
 msgid "ROI index"
 msgstr "index de la ROI"
 
-#: cdl.core.model.signal.SignalObj.get_data:7 of
-msgid "data"
-msgstr "données"
+#: cdl.core.model.signal.SignalObj.get_data:6 of
+msgid "Data"
+msgstr "Données"
 
 #: cdl.core.model.image.ImageObj.update_plot_item_parameters:1
 #: cdl.core.model.signal.SignalObj.update_plot_item_parameters:1 of
@@ -515,6 +475,15 @@ msgid ""
 "This is *almost* the inverse operation of "
 "`update_metadata_from_plot_item`."
 msgstr "C'est *presque* l'opération inverse de `update_metadata_from_plot_item`."
+
+#: cdl.core.model.image.ImageObj.update_item:3
+#: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:9
+#: cdl.core.model.image.ImageObj.update_plot_item_parameters:9
+#: cdl.core.model.signal.SignalObj.update_item:3
+#: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:9
+#: cdl.core.model.signal.SignalObj.update_plot_item_parameters:9 of
+msgid "plot item"
+msgstr "élément de tracé"
 
 #: cdl.core.model.image.ImageObj.update_metadata_from_plot_item:1
 #: cdl.core.model.signal.SignalObj.update_metadata_from_plot_item:1 of
@@ -552,8 +521,8 @@ msgstr "élément de tracé à mettre à jour à partir de"
 msgid "Update plot item from data."
 msgstr "Met à jour l'élément de tracé à partir des données."
 
-#: cdl.core.model.image.ImageObj.update_item:5
-#: cdl.core.model.signal.SignalObj.update_item:5 of
+#: cdl.core.model.image.ImageObj.update_item:4
+#: cdl.core.model.signal.SignalObj.update_item:4 of
 msgid "if True, data has changed"
 msgstr "si True, les données ont changé"
 
@@ -567,18 +536,18 @@ msgstr "Convertit les coordonnées de la ROI en index."
 msgid "coordinates"
 msgstr "coordonnées"
 
-#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:6
-#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:6 of
-msgid "indexes"
-msgstr "index"
+#: cdl.core.model.image.ImageObj.roi_coords_to_indexes:5
+#: cdl.core.model.signal.SignalObj.roi_coords_to_indexes:5 of
+msgid "Indexes"
+msgstr "Indices"
 
 #: cdl.core.model.image.ImageObj.get_roi_param:1
 #: cdl.core.model.signal.SignalObj.get_roi_param:1 of
 msgid "Return ROI parameters dataset."
 msgstr "Renvoie le jeu de données de paramètres de la ROI."
 
-#: cdl.core.model.image.ImageObj.get_roi_param:5
-#: cdl.core.model.signal.SignalObj.get_roi_param:5 of
+#: cdl.core.model.image.ImageObj.get_roi_param:4
+#: cdl.core.model.signal.SignalObj.get_roi_param:4 of
 msgid "default values"
 msgstr "valeurs par défaut"
 
@@ -587,15 +556,15 @@ msgstr "valeurs par défaut"
 msgid "Convert ROI dataset group to ROI array data."
 msgstr "Convertit le groupe de données de la ROI en données de tableau de la ROI."
 
-#: cdl.core.model.base.BaseObj.roidata_to_params:6
+#: cdl.core.model.base.BaseObj.roidata_to_params:5
 #: cdl.core.model.image.ImageObj.params_to_roidata:3
 #: cdl.core.model.signal.SignalObj.params_to_roidata:3 of
 msgid "ROI dataset group"
 msgstr "groupe de données de la ROI"
 
 #: cdl.core.model.base.BaseObj.roidata_to_params:3
-#: cdl.core.model.image.ImageObj.params_to_roidata:6
-#: cdl.core.model.signal.SignalObj.params_to_roidata:6 of
+#: cdl.core.model.image.ImageObj.params_to_roidata:5
+#: cdl.core.model.signal.SignalObj.params_to_roidata:5 of
 msgid "ROI array data"
 msgstr "données de tableau de la ROI"
 
@@ -611,18 +580,18 @@ msgstr "Renvoyer un nouvel élément ROI à partir de zéro"
 msgid "format string"
 msgstr "chaîne de format"
 
-#: cdl.core.model.image.ImageObj.iterate_roi_items:5
-#: cdl.core.model.image.ImageObj.new_roi_item:5
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
-#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
+#: cdl.core.model.image.ImageObj.iterate_roi_items:4
+#: cdl.core.model.image.ImageObj.new_roi_item:4
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:4
+#: cdl.core.model.signal.SignalObj.new_roi_item:4 of
 msgid "if True, add label"
 msgstr "si True, ajouter une étiquette"
 
 #: cdl.core.model.base.BaseObj.iterate_shape_items:3
-#: cdl.core.model.image.ImageObj.iterate_roi_items:7
-#: cdl.core.model.image.ImageObj.new_roi_item:7
-#: cdl.core.model.signal.SignalObj.iterate_roi_items:7
-#: cdl.core.model.signal.SignalObj.new_roi_item:7 of
+#: cdl.core.model.image.ImageObj.iterate_roi_items:5
+#: cdl.core.model.image.ImageObj.new_roi_item:5
+#: cdl.core.model.signal.SignalObj.iterate_roi_items:5
+#: cdl.core.model.signal.SignalObj.new_roi_item:5 of
 msgid "if True, ROI is editable"
 msgstr "si True, ROI est modifiable"
 
@@ -681,17 +650,18 @@ msgstr ""
 msgid "label"
 msgstr "étiquette"
 
-#: cdl.core.model.base.BaseObj.add_resultshape:7 of
+#: cdl.core.model.base.BaseObj.add_resultshape:5 of
 msgid "array"
 msgstr "tableau"
 
-#: cdl.core.model.base.BaseObj.add_resultshape:9 of
+#: cdl.core.model.base.BaseObj.add_resultshape:6 of
 msgid "parameters"
 msgstr "paramètres"
 
-#: cdl.core.model.base.BaseObj.add_resultshape:12 of
-msgid "result shape"
-msgstr "forme de résultat"
+#: cdl.core.model.base.BaseObj.add_resultshape:8
+#: cdl.core.model.base.BaseObj.iterate_resultshapes:3 of
+msgid "Result shape"
+msgstr "Forme résultat"
 
 #: cdl.obj.ImageObj.annotations:1 cdl.obj.SignalObj.annotations:1 of
 msgid "Get object annotations (JSON string describing annotation plot items)"
@@ -706,6 +676,16 @@ msgstr "Vérifier les valeurs des éléments de l'ensemble de données"
 #: guidata.dataset.datatypes.DataSet.check:3 of
 msgid "list of errors"
 msgstr "liste des erreurs"
+
+#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.model.signal.new_signal_param
+#: guidata.dataset.datatypes.DataSet.check
+#: guidata.dataset.datatypes.DataSet.get_comment
+#: guidata.dataset.datatypes.DataSet.get_icon
+#: guidata.dataset.datatypes.DataSet.get_title
+#: guidata.dataset.datatypes.DataSet.to_string of
+msgid "Return type"
+msgstr "Type de retour"
 
 #: cdl.core.model.base.BaseObj.check_data:1 of
 msgid "Check if data is valid, raise an exception if that's not the case"
@@ -787,11 +767,11 @@ msgid ""
 "Returns all the DataItem objects from the DataSet instance. Ignore "
 "private items that have a name starting with an underscore (e.g. "
 "'_private_item = ...')"
-msgstr ""
+msgstr "Renvoie tous les objets DataItem de l'instance DataSet. Ignore les objets privés qui ont un nom commençant par un tiret bas (par exemple '_private_item = ...')"
 
 #: guidata.dataset.datatypes.DataSet.get_items:4 of
 msgid "If True, deepcopy the DataItem list, else return the original."
-msgstr ""
+msgstr "Si True, effectue une copie profonde de la liste DataItem, sinon renvoie l'original."
 
 #: guidata.dataset.datatypes.DataSet.get_items:7 of
 msgid "_description_"
@@ -818,19 +798,19 @@ msgstr ""
 msgid "option name"
 msgstr "nom de l'option"
 
-#: cdl.core.model.base.BaseObj.get_metadata_option:9 of
+#: cdl.core.model.base.BaseObj.get_metadata_option:8 of
 msgid "Option value"
 msgstr "Valeur de l'option"
 
-#: cdl.core.model.base.BaseObj.get_metadata_option:12
-#: cdl.core.model.base.BaseObj.set_metadata_option:12 of
+#: cdl.core.model.base.BaseObj.get_metadata_option:11
+#: cdl.core.model.base.BaseObj.set_metadata_option:10 of
 msgid "Valid option names:"
 msgstr "Noms d'options valides :"
 
-#: cdl.core.model.base.BaseObj.get_metadata_option:12
-#: cdl.core.model.base.BaseObj.set_metadata_option:12 of
-msgid "'format': format string (str) 'showlabel': show label (bool)"
-msgstr "'format': chaîne de format (str) 'showlabel': afficher l'étiquette (bool)"
+#: cdl.core.model.base.BaseObj.get_metadata_option:11
+#: cdl.core.model.base.BaseObj.set_metadata_option:10 of
+msgid "'format': format string 'showlabel': show label"
+msgstr "'format': chaîne de format 'showlabel': afficher l'étiquette"
 
 #: guidata.dataset.datatypes.DataSet.get_title:1 of
 msgid "Return data set title"
@@ -851,10 +831,6 @@ msgstr "Importer les métadonnées de l'objet à partir d'un fichier (JSON)."
 #: cdl.core.model.base.BaseObj.iterate_resultshapes:1 of
 msgid "Iterate over object result shapes."
 msgstr "Itérer sur les formes de résultat de l'objet."
-
-#: cdl.core.model.base.BaseObj.iterate_resultshapes:3 of
-msgid "*ResultShape* -- result shape"
-msgstr "*ResultShape* -- forme de résultat"
 
 #: cdl.core.model.base.BaseObj.iterate_roi_indexes:1 of
 msgid "Iterate over object ROI indexes ([0] if there is no ROI)"
@@ -905,8 +881,8 @@ msgid "Return object regions of interest array (one ROI per line)."
 msgstr "Renvoie le tableau des régions d'intérêt de l'objet (une ROI par ligne)."
 
 #: cdl.obj.ImageObj.roi:3 cdl.obj.SignalObj.roi:3 of
-msgid "regions of interest array"
-msgstr "tableau des régions d'intérêt"
+msgid "Regions of interest array"
+msgstr "Tableau des régions d'intérêt"
 
 #: cdl.core.model.base.BaseObj.roi_has_changed:1 of
 msgid "Return True if ROI has changed since last call to this method."
@@ -966,7 +942,7 @@ msgstr "propriétés à définir"
 msgid "Set metadata option value"
 msgstr "Définir la valeur de l'option de métadonnées"
 
-#: cdl.core.model.base.BaseObj.set_metadata_option:8 of
+#: cdl.core.model.base.BaseObj.set_metadata_option:7 of
 msgid "option value"
 msgstr "valeur de l'option"
 
@@ -1016,11 +992,11 @@ msgstr ""
 msgid "original object"
 msgstr "objet d'origine"
 
-#: cdl.core.model.base.BaseObj.transform_shapes:5 of
+#: cdl.core.model.base.BaseObj.transform_shapes:4 of
 msgid "transform function"
 msgstr "fonction de transformation"
 
-#: cdl.core.model.base.BaseObj.transform_shapes:7 of
+#: cdl.core.model.base.BaseObj.transform_shapes:5 of
 msgid "transform function parameter"
 msgstr "paramètre de la fonction de transformation"
 
@@ -1068,37 +1044,33 @@ msgstr "Créer un nouvel objet Signal."
 msgid "signal title"
 msgstr "titre du signal"
 
-#: cdl.core.model.signal.create_signal:5 of
+#: cdl.core.model.signal.create_signal:4 of
 msgid "X data"
 msgstr "données X"
 
-#: cdl.core.model.signal.create_signal:7 of
+#: cdl.core.model.signal.create_signal:5 of
 msgid "Y data"
 msgstr "données Y"
 
-#: cdl.core.model.signal.create_signal:9 of
+#: cdl.core.model.signal.create_signal:6 of
 msgid "dX data (optional: error bars)"
 msgstr "données dX (facultatif : barres d'erreur)"
 
-#: cdl.core.model.signal.create_signal:11 of
+#: cdl.core.model.signal.create_signal:7 of
 msgid "dY data (optional: error bars)"
 msgstr "données dY (facultatif : barres d'erreur)"
 
-#: cdl.core.model.signal.create_signal:13 of
+#: cdl.core.model.signal.create_signal:8 of
 msgid "signal metadata"
 msgstr "métadonnées du signal"
 
-#: cdl.core.model.signal.create_signal:15 of
+#: cdl.core.model.signal.create_signal:9 of
 msgid "X, Y units (tuple of strings)"
 msgstr "unités X, Y (tuple de chaînes)"
 
-#: cdl.core.model.signal.create_signal:17 of
+#: cdl.core.model.signal.create_signal:10 of
 msgid "X, Y labels (tuple of strings)"
 msgstr "étiquettes X, Y (tuple de chaînes)"
-
-#: cdl.core.model.signal.create_signal:20 of
-msgid "signal object"
-msgstr "objet signal"
 
 #: cdl.core.model.signal.create_signal_from_param:1 of
 msgid "Create a new Signal object from a dialog box."
@@ -1108,26 +1080,26 @@ msgstr "Créer un nouvel objet Signal à partir d'une boîte de dialogue."
 msgid "new signal parameters"
 msgstr "nouveaux paramètres du signal"
 
-#: cdl.core.model.image.create_image_from_param:5
-#: cdl.core.model.signal.create_signal_from_param:5 of
+#: cdl.core.model.image.create_image_from_param:4
+#: cdl.core.model.signal.create_signal_from_param:4 of
 msgid "additional parameters"
 msgstr "paramètres supplémentaires"
 
-#: cdl.core.model.image.create_image_from_param:7
-#: cdl.core.model.signal.create_signal_from_param:7 of
+#: cdl.core.model.image.create_image_from_param:5
+#: cdl.core.model.signal.create_signal_from_param:5 of
 msgid "Open a dialog box to edit parameters (default: False)"
 msgstr ""
 "Ouvrir une boîte de dialogue pour modifier les paramètres (par défaut : "
 "False)"
 
-#: cdl.core.model.image.create_image_from_param:9
-#: cdl.core.model.signal.create_signal_from_param:9 of
+#: cdl.core.model.image.create_image_from_param:6
+#: cdl.core.model.signal.create_signal_from_param:6 of
 msgid "parent widget"
 msgstr "widget parent"
 
-#: cdl.core.model.signal.create_signal_from_param:12 of
-msgid "signal object or None if canceled"
-msgstr "objet signal ou None si annulé"
+#: cdl.core.model.signal.create_signal_from_param:8 of
+msgid "Signal object or None if canceled"
+msgstr "Objet Signal ou None si annulé"
 
 #: cdl.core.model.signal.new_signal_param:1 of
 msgid "Create a new Signal dataset instance."
@@ -1138,23 +1110,23 @@ msgstr "Créer une nouvelle instance de jeu de données Signal."
 msgid "dataset title (default: None, uses default title)"
 msgstr "titre du jeu de données (par défaut : None, utilise le titre par défaut)"
 
-#: cdl.core.model.signal.new_signal_param:5 of
+#: cdl.core.model.signal.new_signal_param:4 of
 msgid "signal type (default: None, uses default type)"
 msgstr "type de signal (par défaut : None, utilise le type par défaut)"
 
-#: cdl.core.model.signal.new_signal_param:7 of
+#: cdl.core.model.signal.new_signal_param:5 of
 msgid "X min (default: None, uses default value)"
 msgstr "X min (par défaut : None, utilise la valeur par défaut)"
 
-#: cdl.core.model.signal.new_signal_param:9 of
+#: cdl.core.model.signal.new_signal_param:6 of
 msgid "X max (default: None, uses default value)"
 msgstr "X max (par défaut : None, utilise la valeur par défaut)"
 
-#: cdl.core.model.signal.new_signal_param:11 of
+#: cdl.core.model.signal.new_signal_param:7 of
 msgid "signal size (default: None, uses default value)"
 msgstr "taille du signal (par défaut : None, utilise la valeur par défaut)"
 
-#: cdl.core.model.signal.new_signal_param:14 of
+#: cdl.core.model.signal.new_signal_param:9 of
 msgid "new signal dataset instance"
 msgstr "nouvelle instance de jeu de données signal"
 
@@ -1186,7 +1158,7 @@ msgstr "Renvoie la fréquence en Hz"
 msgid "Image model"
 msgstr "Modèle d'image"
 
-#: cdl.core.model.image.ImageObj:1 of
+#: cdl.core.model.image.ImageObj:1 cdl.core.model.image.create_image:9 of
 msgid "Image object"
 msgstr "Objet image"
 
@@ -1212,15 +1184,15 @@ msgstr "Renvoie la coordonnée X du centre de l'image"
 msgid "Return image center Y-axis coordinate"
 msgstr "Renvoie la coordonnée Y du centre de l'image"
 
-#: cdl.core.model.image.ImageObj.get_data:7 cdl.obj.ImageObj.maskdata:3 of
-msgid "masked data"
-msgstr "données masquées"
+#: cdl.core.model.image.ImageObj.get_data:6 cdl.obj.ImageObj.maskdata:3 of
+msgid "Masked data"
+msgstr "Données masquées"
 
 #: cdl.core.model.image.ImageObj.make_item:3 of
 msgid "update from plot item"
 msgstr "mettre à jour à partir de l'élément de tracé"
 
-#: cdl.core.model.image.ImageObj.new_roi_item:9 of
+#: cdl.core.model.image.ImageObj.new_roi_item:6 of
 msgid "ROI geometry"
 msgstr "géométrie de la ROI"
 
@@ -1262,25 +1234,21 @@ msgstr "Créer un nouvel objet Image"
 msgid "image title"
 msgstr "titre de l'image"
 
-#: cdl.core.model.image.create_image:5 of
+#: cdl.core.model.image.create_image:4 of
 msgid "image data"
 msgstr "données de l'image"
 
-#: cdl.core.model.image.create_image:7 of
+#: cdl.core.model.image.create_image:5 of
 msgid "image metadata"
 msgstr "métadonnées de l'image"
 
-#: cdl.core.model.image.create_image:9 of
+#: cdl.core.model.image.create_image:6 of
 msgid "X, Y, Z units (tuple of strings)"
 msgstr "unités X, Y, Z (tuple de chaînes)"
 
-#: cdl.core.model.image.create_image:11 of
+#: cdl.core.model.image.create_image:7 of
 msgid "X, Y, Z labels (tuple of strings)"
 msgstr "étiquettes X, Y, Z (tuple de chaînes)"
-
-#: cdl.core.model.image.create_image:14 of
-msgid "image object"
-msgstr "objet image"
 
 #: cdl.core.model.image.create_image_from_param:1 of
 msgid "Create a new Image object from dialog box."
@@ -1290,35 +1258,35 @@ msgstr "Créer un nouvel objet Image à partir d'une boîte de dialogue."
 msgid "new image parameters"
 msgstr "nouveaux paramètres de l'image"
 
-#: cdl.core.model.image.create_image_from_param:12 of
-msgid "new image object or None if user cancelled"
-msgstr "nouvel objet image ou None si l'utilisateur a annulé"
+#: cdl.core.model.image.create_image_from_param:8 of
+msgid "New image object or None if user cancelled"
+msgstr "Nouvel objet image ou None si l'utilisateur a annulé"
 
 #: cdl.core.model.image.new_image_param:1 of
 msgid "Create a new Image dataset instance."
 msgstr "Créer une nouvelle instance de jeu de données Image."
 
-#: cdl.core.model.image.new_image_param:5 of
+#: cdl.core.model.image.new_image_param:4 of
 msgid "image type (default: None, uses default type)"
 msgstr "type d'image (par défaut : None, utilise le type par défaut)"
 
-#: cdl.core.model.image.new_image_param:7 of
+#: cdl.core.model.image.new_image_param:5 of
 msgid "image height (default: None, uses default height)"
 msgstr "hauteur de l'image (par défaut : None, utilise la hauteur par défaut)"
 
-#: cdl.core.model.image.new_image_param:9 of
+#: cdl.core.model.image.new_image_param:6 of
 msgid "image width (default: None, uses default width)"
 msgstr "largeur de l'image (par défaut : None, utilise la largeur par défaut)"
 
-#: cdl.core.model.image.new_image_param:11 of
+#: cdl.core.model.image.new_image_param:7 of
 msgid "image data type (default: None, uses default data type)"
 msgstr ""
 "type de données de l'image (par défaut : None, utilise le type de données"
 " par défaut)"
 
-#: cdl.core.model.image.new_image_param:14 of
-msgid "new image dataset instance"
-msgstr "nouvelle instance de jeu de données image"
+#: cdl.core.model.image.new_image_param:9 of
+msgid "New image dataset instance"
+msgstr "Nouvelle instance de jeu de données image"
 
 #: cdl.core.model.image.ImageTypes:1 of
 msgid "Image types"
@@ -1376,3 +1344,14 @@ msgstr "Vérifie si les types de données sont valides"
 #~ msgid "Returns (width, height)"
 #~ msgstr "Renvoie (largeur, hauteur)"
 
+#~ msgid "*PlotItem* -- plot item"
+#~ msgstr "*PlotItem* -- élément de tracé"
+
+#~ msgid "*ResultShape* -- result shape"
+#~ msgstr "*ResultShape* -- forme résultat"
+
+#~ msgid "signal object"
+#~ msgstr "objet signal"
+
+#~ msgid "image object"
+#~ msgstr "objet image"

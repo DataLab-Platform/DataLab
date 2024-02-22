@@ -61,6 +61,7 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     # compute_common_operations(panel)
     panel.objview.select_objects((1, 2))
+    qt_wait(DELAY1)
     panel.processor.compute_sum()
     qt_wait(DELAY1)
 
@@ -80,9 +81,8 @@ def test_signal_features(win: CDLMainWindow, data_size: int = 500) -> None:
 
     qt_wait(DELAY2)
 
+    panel.objview.set_current_object(sig3)
     panel.processor.compute_multigaussianfit()
-
-    panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
 
     newparam = dlo.new_signal_param(_("Gaussian"), stype=dlo.SignalTypes.GAUSS)
     sig = dlo.create_signal_from_param(
@@ -126,6 +126,9 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
     panel.processor.compute_sum()
     qt_wait(DELAY2)
     # compute_common_operations(panel)
+
+    panel.processor.compute_histogram()
+    qt_wait(DELAY2)
 
     newparam.title = None
     ima1 = create_sincos_image(newparam)

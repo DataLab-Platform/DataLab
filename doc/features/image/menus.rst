@@ -684,6 +684,30 @@ Compute statistics on selected image and show a summary table.
     Example of statistical summary table: each row is associated to an ROI
     (the first row gives the statistics for the whole data).
 
+Histogram
+^^^^^^^^^
+
+Compute histogram of selected image and show it in the Signal Panel.
+
+Parameters are:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Bins
+      - Number of bins
+    * - Lower limit
+      - Lower limit of the histogram
+    * - Upper limit
+      - Upper limit of the histogram
+
+.. figure:: /images/shots/i_histogram.png
+
+    Example of histogram.
+
 Centroid
 ^^^^^^^^
 

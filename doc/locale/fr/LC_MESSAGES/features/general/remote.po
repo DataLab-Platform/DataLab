@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 14:01+0100\n"
+"POT-Creation-Date: 2024-02-22 11:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,13 +21,17 @@ msgstr ""
 msgid ""
 "How to remote control DataLab, the open-source scientific data analysis "
 "and visualization platform"
-msgstr "Comment contrôler à distance DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+msgstr ""
+"Comment contrôler à distance DataLab, la plateforme open-source d'analyse"
+" et de visualisation de données scientifiques"
 
 #: ../../features/general/remote.rst:-1
 msgid ""
 "DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-"
 "party application, signal, image, HDF5, calculation, processor"
-msgstr "DataLab, contrôle à distance, XML-RPC, Python, IDE, Spyder, Jupyter, application tierce, signal, image, HDF5, calcul, processeur"
+msgstr ""
+"DataLab, contrôle à distance, XML-RPC, Python, IDE, Spyder, Jupyter, "
+"application tierce, signal, image, HDF5, calcul, processeur"
 
 #: ../../features/general/remote.rst:4
 msgid "Remote controlling"
@@ -963,6 +967,11 @@ msgstr "Calculer la LMH"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2:1 of
 msgid "Compute FW at 1/e²"
 msgstr "Calculer la largeur à 1/e²"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_histogram:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
+msgid "Compute histogram"
+msgstr "Calcule l'intégrale"
 
 #: cdl.core.gui.processor.image:2 of
 msgid "Image Processor"
