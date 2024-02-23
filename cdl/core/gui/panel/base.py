@@ -80,8 +80,9 @@ from cdl.utils.qthelpers import (
 from cdl.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:  # pragma: no cover
-    from plotpy.plot import BasePlot, PlotWidget
-    from plotpy.tools import GuiTool
+    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.plot import PlotWidget
+    from plotpy.tools.base import GuiTool
 
     from cdl.core.gui import ObjItf
     from cdl.core.gui.main import CDLMainWindow
@@ -285,16 +286,14 @@ class BaseDataPanel(AbstractPanel):
         super().closeEvent(event)
 
     # ------AbstractPanel interface-----------------------------------------------------
-    def plot_items_changed(self, plot: BasePlot) -> None:
+    def plot_item_parameters_changed(self, item: CurveItem | MaskedImageItem) -> None:
         """Plot items changed: update metadata of all objects from plot items"""
-        items = plot.get_items()
-        for item in items:
-            # Find the object corresponding to the plot item
-            obj = self.plothandler.get_obj_from_item(item)
-            if obj is not None:
-                obj.update_metadata_from_plot_item(item)
-                if obj is self.objview.get_current_object():
-                    self.objprop.update_properties_from(obj)
+        # Find the object corresponding to the plot item
+        obj = self.plothandler.get_obj_from_item(item)
+        if obj is not None:
+            obj.update_metadata_from_plot_item(item)
+            if obj is self.objview.get_current_object():
+                self.objprop.update_properties_from(obj)
 
     def serialize_object_to_hdf5(
         self, obj: SignalObj | ImageObj, writer: NativeH5Writer
