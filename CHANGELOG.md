@@ -16,6 +16,7 @@ for future and past milestones.
 🛠️ Bug fixes:
 
 * Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties
+* Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - "Test data" plugin: `AttributeError: 'NoneType' object has no attribute 'data'` when canceling "Create image with peaks"
 
 ## DataLab Version 0.12.0 ##
 

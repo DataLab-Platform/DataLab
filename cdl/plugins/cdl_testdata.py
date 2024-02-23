@@ -85,11 +85,12 @@ class PluginTestData(PluginBase):
     def create_peak2d_image(self) -> None:
         """Create 2D peak image"""
         obj = self.imagepanel.new_object(add_to_panel=False)
-        param = test_data.PeakDataParam.create(size=max(obj.data.shape))
-        self.imagepanel.processor.update_param_defaults(param)
-        if param.edit(self.imagepanel):
-            obj.data = test_data.get_peak2d_data(param)
-            self.proxy.add_object(obj)
+        if obj is not None:
+            param = test_data.PeakDataParam.create(size=max(obj.data.shape))
+            self.imagepanel.processor.update_param_defaults(param)
+            if param.edit(self.imagepanel):
+                obj.data = test_data.get_peak2d_data(param)
+                self.proxy.add_object(obj)
 
     def create_sincos_image(self) -> None:
         """Create 2D sin cos image"""
