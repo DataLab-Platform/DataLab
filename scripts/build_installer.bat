@@ -2,7 +2,8 @@
 REM ======================================================
 REM Generic Python Installer build script
 REM ------------------------------------------
-REM Copyright (c) 2021-2023 Codra
+REM Licensed under the terms of the BSD 3-Clause
+REM (see cdl/LICENSE for details)
 REM ======================================================
 call %~dp0utils GetScriptPath SCRIPTPATH
 set ROOTPATH=%SCRIPTPATH%\..

@@ -15,7 +15,7 @@ os.environ["CDL_DOC"] = "1"
 
 project = "DataLab"
 author = ""
-copyright = "2023, Codra - Pierre Raybaut"
+copyright = "2023, DataLab Platform Developers"
 release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright © 2022 Codra
-# Pierre Raybaut
+# Licensed under the terms of the BSD 3-Clause
+# (see cdl/LICENSE for details)
 
 """
 Module providing a file viewer widget

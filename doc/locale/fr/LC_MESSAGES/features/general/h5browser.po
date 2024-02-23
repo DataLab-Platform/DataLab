@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
@@ -56,4 +56,3 @@ msgstr ""
 #: ../../features/general/h5browser.rst:19
 msgid "Then validate by clicking on \"OK\""
 msgstr ""
-

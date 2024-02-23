@@ -1472,12 +1472,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         pinfos = PluginRegistry.get_plugin_infos()
         created_by = _("Created by")
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
-        copyrght = "2023 Codra"
+        copyright = "2023 DataLab Platform Developers"
         QW.QMessageBox.about(
             self,
             _("About") + " " + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}
-              <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {copyrght}
+              <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {copyright}
               <p>{adv_conf}<br><br>{pinfos}""",
         )
 

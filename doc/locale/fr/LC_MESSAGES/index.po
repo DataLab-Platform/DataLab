@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2022, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab
 # package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
@@ -244,10 +244,10 @@ msgstr ""
 #: ../../index.rst:89
 msgid ""
 "DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
-"developed and maintained by DataLab open-source project team."
+"developed and maintained by DataLab Platform Developers."
 msgstr ""
 "DataLab a été créé par `Codra`_/`Pierre Raybaut`_ en 2023. Il est "
-"développé et maintenu par l'équipe du projet open-source DataLab."
+"développé et maintenu par l'équipe de développement de la plateforme DataLab."
 
 #: ../../index.rst:93
 msgid "Footnotes"

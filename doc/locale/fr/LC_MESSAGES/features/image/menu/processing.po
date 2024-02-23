@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
@@ -516,4 +516,3 @@ msgid ""
 "(implementation based on `skimage.feature.canny <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
 msgstr ""
-

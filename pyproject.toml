@@ -6,7 +6,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cdl"
-authors = [{ name = "Codra", email = "p.raybaut@codra.fr" }]
+authors = [{ name = "Pierre Raybaut", email = "p.raybaut@codra.fr" }]
+maintainers = [{ name = "DataLab Platform Developers", email = "p.raybaut@codra.fr" }]
 description = "DataLab (CDL) is a data processing and analysis software for scientific and industrial applications"
 readme = "README.md"
 license = { file = "LICENSE" }

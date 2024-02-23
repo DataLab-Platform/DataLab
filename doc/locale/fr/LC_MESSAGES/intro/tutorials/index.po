@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
@@ -73,4 +73,3 @@ msgstr ""
 "contexte d'un problème scientifique ou technique. Chaque tutoriel se "
 "concentre sur un aspect spécifique du logiciel et est destiné à être "
 "autonome."
-

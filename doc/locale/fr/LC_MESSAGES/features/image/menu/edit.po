@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
@@ -149,4 +149,3 @@ msgid ""
 "Copy all image titles to clipboard as a multiline text. This text may be "
 "used for reproducing a processing chain, for example."
 msgstr ""
-

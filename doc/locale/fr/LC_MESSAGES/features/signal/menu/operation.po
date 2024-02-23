@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2023, Codra - Pierre Raybaut
+# Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
@@ -224,4 +224,3 @@ msgstr ""
 #: ../../features/signal/menu/operation.rst:95
 msgid "Create a new signal which is the result of swapping X/Y data."
 msgstr ""
-

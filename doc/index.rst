@@ -87,7 +87,7 @@ benefiting from an industrial-grade technological platform.
         contributing/index
 
     .. note:: DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is
-            developed and maintained by DataLab open-source project team.
+            developed and maintained by DataLab Platform Developers.
 
 .. rubric:: Footnotes
 
