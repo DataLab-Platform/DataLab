@@ -39,12 +39,7 @@ def test_blobs():
 
         # Testing distribute_on_grid and reset_positions
         # ==============================================
-        # We begin by selecting all objects, then we reset their positions. This does
-        # not make sense except for coverage (because the objects are already at their
-        # default positions) and it allows to finish by testing the distribution on
-        # grid, which is more appropriate for the eventual final screenshot.
         panel.objview.selectAll()
-        proc.reset_positions()  # No sense except for coverage
         param = cdl.param.GridParam.create(cols=2, colspac=10, rowspac=10)
         proc.distribute_on_grid(param)
 

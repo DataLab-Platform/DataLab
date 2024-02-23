@@ -40,13 +40,11 @@ def find_contours(data):
         for shapeargs in coords:
             if shape == "circle":
                 xc, yc, r = shapeargs
-                x0, y0, x1, y1 = coordinates.circle_center_radius_to_diameter(xc, yc, r)
+                x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
                 item = make.circle(x0, y0, x1, y1)
             elif shape == "ellipse":
                 xc, yc, a, b, theta = shapeargs
-                coords = coordinates.ellipse_center_axes_angle_to_diameters(
-                    xc, yc, a, b, theta
-                )
+                coords = coordinates.ellipse_to_diameters(xc, yc, a, b, theta)
                 x0, y0, x1, y1, x2, y2, x3, y3 = coords
                 item = make.ellipse(x0, y0, x1, y1, x2, y2, x3, y3)
             else:

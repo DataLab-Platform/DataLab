@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 11:18+0100\n"
+"POT-Creation-Date: 2024-02-23 16:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -104,6 +104,7 @@ msgstr ""
 #: cdl.core.model.base.ResultShape
 #: cdl.core.model.base.ResultShape.create_plot_item
 #: cdl.core.model.base.ResultShape.iterate_plot_items
+#: cdl.core.model.base.ResultShape.transform_coordinates
 #: cdl.core.model.image.ImageObj.add_label_with_title
 #: cdl.core.model.image.ImageObj.copy cdl.core.model.image.ImageObj.get_data
 #: cdl.core.model.image.ImageObj.get_roi_param
@@ -270,6 +271,14 @@ msgstr "Retourne True si la première colonne est l'index de la ROI"
 #: cdl.obj.ResultShape.data:1 of
 msgid "Return raw data (array without ROI informations)"
 msgstr "Retourne les données brutes (tableau sans informations sur la ROI)"
+
+#: cdl.core.model.base.ResultShape.transform_coordinates:1 of
+msgid "Transform shape coordinates."
+msgstr "Transforme les coordonnées de la forme."
+
+#: cdl.core.model.base.ResultShape.transform_coordinates:3 of
+msgid "function to transform coordinates"
+msgstr "fonction pour transformer les coordonnées"
 
 #: cdl.core.model.base.ResultShape.check_array:1 of
 msgid "Check if array is valid"
@@ -767,11 +776,16 @@ msgid ""
 "Returns all the DataItem objects from the DataSet instance. Ignore "
 "private items that have a name starting with an underscore (e.g. "
 "'_private_item = ...')"
-msgstr "Renvoie tous les objets DataItem de l'instance DataSet. Ignore les objets privés qui ont un nom commençant par un tiret bas (par exemple '_private_item = ...')"
+msgstr ""
+"Renvoie tous les objets DataItem de l'instance DataSet. Ignore les objets"
+" privés qui ont un nom commençant par un tiret bas (par exemple "
+"'_private_item = ...')"
 
 #: guidata.dataset.datatypes.DataSet.get_items:4 of
 msgid "If True, deepcopy the DataItem list, else return the original."
-msgstr "Si True, effectue une copie profonde de la liste DataItem, sinon renvoie l'original."
+msgstr ""
+"Si True, effectue une copie profonde de la liste DataItem, sinon renvoie "
+"l'original."
 
 #: guidata.dataset.datatypes.DataSet.get_items:7 of
 msgid "_description_"
@@ -1315,43 +1329,3 @@ msgstr "Renvoie le membre à partir du dtype NumPy"
 #: cdl.core.model.image.ImageDatatypes.check:1 of
 msgid "Check if data types are valid"
 msgstr "Vérifie si les types de données sont valides"
-
-#~ msgid "other object"
-#~ msgstr "autre objet"
-
-#~ msgid ""
-#~ "Returns all the DataItem objects from"
-#~ " the DataSet instance. Ignore private "
-#~ "items that have a name starting "
-#~ "with an underscore (e.g. '_private_item "
-#~ "= ...')"
-#~ msgstr ""
-#~ "Retourne tous les objets DataItem de "
-#~ "l'instance DataSet. Ignore les objets "
-#~ "privés qui ont un nom commençant "
-#~ "par un tiret bas (par exemple, "
-#~ "'_private_item = ...')"
-
-#~ msgid "If True, deepcopy the DataItem list, else return the original."
-#~ msgstr ""
-#~ "Si True, effectue une copie profonde "
-#~ "de la liste DataItem, sinon renvoie "
-#~ "l'original."
-
-#~ msgid "_description_"
-#~ msgstr ""
-
-#~ msgid "Returns (width, height)"
-#~ msgstr "Renvoie (largeur, hauteur)"
-
-#~ msgid "*PlotItem* -- plot item"
-#~ msgstr "*PlotItem* -- élément de tracé"
-
-#~ msgid "*ResultShape* -- result shape"
-#~ msgstr "*ResultShape* -- forme résultat"
-
-#~ msgid "signal object"
-#~ msgstr "objet signal"
-
-#~ msgid "image object"
-#~ msgstr "objet image"

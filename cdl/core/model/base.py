@@ -15,7 +15,7 @@ import abc
 import enum
 import json
 import sys
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
@@ -390,6 +390,31 @@ class ResultShape:
         # No ROI index
         return self.array
 
+    def transform_coordinates(self, func: Callable[[np.ndarray], None]) -> None:
+        """Transform shape coordinates.
+
+        Args:
+            func: function to transform coordinates
+        """
+        if self.shapetype in (
+            ShapeTypes.MARKER,
+            ShapeTypes.POINT,
+            ShapeTypes.POLYGON,
+            ShapeTypes.RECTANGLE,
+            ShapeTypes.SEGMENT,
+        ):
+            func(self.data)
+        elif self.shapetype is ShapeTypes.CIRCLE:
+            coords = coordinates.array_circle_to_diameter(self.data)
+            func(coords)
+            self.data[:] = coordinates.array_circle_to_center_radius(coords)
+        elif self.shapetype is ShapeTypes.ELLIPSE:
+            coords = coordinates.array_ellipse_to_diameters(self.data)
+            func(coords)
+            self.data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
+        else:
+            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
+
     def check_array(self):
         """Check if array is valid"""
         assert len(self.array.shape) == 2
@@ -439,14 +464,14 @@ class ResultShape:
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.CIRCLE:
             xc, yc, r = args
-            x0, y0, x1, y1 = coordinates.circle_center_radius_to_diameter(xc, yc, r)
+            x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
             item = make.annotated_circle(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.SEGMENT:
             x0, y0, x1, y1 = args
             item = make.annotated_segment(x0, y0, x1, y1, title=self.show_label)
         elif self.shapetype is ShapeTypes.ELLIPSE:
             xc, yc, a, b, t = args
-            coords = coordinates.ellipse_center_axes_angle_to_diameters(xc, yc, a, b, t)
+            coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.show_label
@@ -849,7 +874,7 @@ class BaseObj(metaclass=BaseObjMeta):
 
         for mshape in self.iterate_resultshapes():
             assert mshape is not None
-            transform(mshape.data)
+            mshape.transform_coordinates(transform)
         items = []
         for item in json_to_items(self.annotations):
             if isinstance(item, AnnotatedShape):
