@@ -68,7 +68,7 @@ def test_scenario_h5():
             for key, value in obj.metadata.items():
                 execenv.print(f'  metadata["{key}"] = {value}')
             # === Checking macro code
-            lcode = win.macropanel.get_macro(0).get_code()
+            lcode = win.macropanel.get_macro(1).get_code()
             if lcode != scode:
                 save_html_diff(scode, lcode, "Saved code", "Loaded code", "macro0.html")
                 raise AssertionError("Macro code is not the same as saved")

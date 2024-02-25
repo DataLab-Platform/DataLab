@@ -12,6 +12,8 @@ for future and past milestones.
   * The histogram is computed on the regions of interest (ROI) if any, or on the
     whole signal/image if no ROI is defined
   * Editable parameters: number of bins, lower and upper bounds
+* Macro Panel:
+  * Macro commands are now numbered, starting from 1, like signals and images
 
 🛠️ Bug fixes:
 

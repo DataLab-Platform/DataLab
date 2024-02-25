@@ -51,9 +51,10 @@ def test_scenario_macro() -> None:
             win.macropanel.stop_macro()
             code2 = add_macro_sample(win, 1).get_code()
             fname = osp.join(tmpdir, "test.macro")
-            win.macropanel.export_macro_to_file(1, fname)
+            win.macropanel.export_macro_to_file(2, fname)
             win.macropanel.remove_macro()
-            macro2 = win.macropanel.import_macro_from_file(fname)
+            macro_nb = win.macropanel.import_macro_from_file(fname)
+            macro2 = win.macropanel.get_macro(macro_nb)
             assert macro2.get_code() == code2, "Macro code is not the same"
 
 
