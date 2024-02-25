@@ -205,15 +205,15 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel = self.signalpanel
         return panel
 
-    def __get_specific_panel(self, panel: str | None) -> BaseDataPanel:
+    def __get_datapanel(self, panel: str | None) -> BaseDataPanel:
         """Return a specific BaseDataPanel.
 
         Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            panel: panel name (valid values: "signal", "image").
+             If None, current panel is used.
 
         Returns:
-            BaseDataPanel: panel
+            Panel widget
 
         Raises:
             ValueError: if panel is unknown
@@ -244,16 +244,20 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): panel name (valid values: "signal", "image").
-                If None, current panel is used.
+            panel: panel name (valid values: "signal", "image", "macro").
+             If None, current data panel is used (i.e. signal or image panel).
 
         Returns:
-            list[str]: list of object titles
+            List of object titles
 
         Raises:
             ValueError: if panel is unknown
         """
-        return self.__get_specific_panel(panel).objmodel.get_object_titles()
+        if not panel or panel in ("signal", "image"):
+            return self.__get_datapanel(panel).objmodel.get_object_titles()
+        if panel == "macro":
+            return self.macropanel.get_macro_titles()
+        raise ValueError(f"Unknown panel: {panel}")
 
     @remote_controlled
     def get_object(
@@ -275,7 +279,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             KeyError: if object not found
             TypeError: if index_id_title type is invalid
         """
-        panelw = self.__get_specific_panel(panel)
+        panelw = self.__get_datapanel(panel)
         if nb_id_title is None:
             return panelw.objview.get_current_object()
         if isinstance(nb_id_title, int):
@@ -307,7 +311,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: if panel is unknown
         """
-        return self.__get_specific_panel(panel).objmodel.get_object_ids()
+        return self.__get_datapanel(panel).objmodel.get_object_ids()
 
     @remote_controlled
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
@@ -335,7 +339,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel: panel name (valid values: "signal", "image").
              If None, current panel is used. Defaults to None.
         """
-        panel = self.__get_specific_panel(panel)
+        panel = self.__get_datapanel(panel)
         panel.objview.select_objects(selection)
 
     @remote_controlled
@@ -350,7 +354,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used. Defaults to None.
         """
-        panel = self.__get_specific_panel(panel)
+        panel = self.__get_datapanel(panel)
         panel.objview.select_groups(selection)
 
     @remote_controlled
@@ -397,7 +401,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used.
         """
-        panel = self.__get_specific_panel(panel)
+        panel = self.__get_datapanel(panel)
         panel.add_annotations_from_items(items, refresh_plot)
 
     @remote_controlled
@@ -412,7 +416,36 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel (str | None): panel name (valid values: "signal", "image").
                 If None, current panel is used.
         """
-        self.__get_specific_panel(panel).add_label_with_title(title)
+        self.__get_datapanel(panel).add_label_with_title(title)
+
+    @remote_controlled
+    def run_macro(self, number_or_title: int | str | None = None) -> None:
+        """Run macro.
+
+       Args:
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
+         """
+        self.macropanel.run_macro(number_or_title)
+
+    @remote_controlled
+    def stop_macro(self, number_or_title: int | str | None = None) -> None:
+        """Stop macro.
+
+        Args:
+            number: Number of the macro (starting at 1). Defaults to None (stop
+             current macro, or does nothing if there is no macro).
+        """
+        self.macropanel.stop_macro(number_or_title)
+
+    @remote_controlled
+    def import_macro_from_file(self, filename: str) -> None:
+        """Import macro from file
+
+        Args:
+            filename: Filename.
+        """
+        self.macropanel.import_macro_from_file(filename)
 
     # ------Misc.
     @property

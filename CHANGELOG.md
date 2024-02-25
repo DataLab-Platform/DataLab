@@ -14,6 +14,10 @@ for future and past milestones.
   * Editable parameters: number of bins, lower and upper bounds
 * Macro Panel:
   * Macro commands are now numbered, starting from 1, like signals and images
+* Remote control API (`RemoteProxy` and `LocalProxy`):
+  * `get_object_titles` method now accepts "macro" as panel name and returns
+    the list of macro titles
+  * New `run_macro`, `stop_macro` and `import_macro_from_file` methods
 
 🛠️ Bug fixes:
 

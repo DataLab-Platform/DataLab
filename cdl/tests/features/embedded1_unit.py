@@ -14,6 +14,7 @@ It is rebuilt from scratch when reopening application.
 # guitest: show
 
 import abc
+import os.path as osp
 
 from guidata.qthelpers import (
     get_std_icon,
@@ -27,6 +28,9 @@ import cdl.obj
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
+
+MACRO_EXAMPLE_FILENAME = osp.join(osp.dirname(__file__), "macro_example.py")
+assert osp.isfile(MACRO_EXAMPLE_FILENAME), f"File not found: {MACRO_EXAMPLE_FILENAME}"
 
 
 class HostWidget(QW.QWidget):
@@ -127,6 +131,11 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
         add_btn(_("Add signal objects"), self.add_signals, 10, "CommandLink")
         add_btn(_("Add image objects"), self.add_images, 0, "CommandLink")
         add_btn(_("Remove all objects"), self.remove_all, 5, "MessageBoxWarning")
+        add_btn(_("Run macro"), self.run_macro, 10, "CommandLink")
+        add_btn(_("Stop macro"), self.stop_macro, 0, "CommandLink")
+        add_btn(
+            _("Import macro from file (example)"), self.import_macro, 0, "CommandLink"
+        )
         add_btn(_("Close DataLab"), self.close_cdl, 10, "DialogCloseButton")
 
     def add_additional_buttons(self):
@@ -178,6 +187,34 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     @abc.abstractmethod
     def remove_all(self):
         """Remove all objects from DataLab"""
+
+    def __has_macro(self):
+        """Check if there is a macro in DataLab"""
+        return len(self.cdl.get_object_titles("macro")) > 0
+
+    def run_macro(self):
+        """Run macro in DataLab"""
+        if self.cdl is not None:
+            if self.__has_macro():
+                self.cdl.run_macro()
+                self.host.log("=> Running macro")
+            else:
+                self.host.log("No macro to run")
+
+    def stop_macro(self):
+        """Stop macro in DataLab"""
+        if self.cdl is not None:
+            if self.__has_macro():
+                self.cdl.stop_macro()
+                self.host.log("=> Stopping macro")
+            else:
+                self.host.log("No macro to stop")
+
+    def import_macro(self):
+        """Import macro in DataLab"""
+        if self.cdl is not None:
+            self.cdl.import_macro_from_file(MACRO_EXAMPLE_FILENAME)
+            self.host.log(f"=> Imported macro: {MACRO_EXAMPLE_FILENAME}")
 
 
 class AbstractHostWindow(AbstractClientWindow):  # pylint: disable=abstract-method

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-23 16:48+0100\n"
+"POT-Creation-Date: 2024-02-25 22:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../../CHANGELOG.md:1
 msgid "Changelog"
@@ -37,8 +37,8 @@ msgstr ""
 msgid "DataLab Version 0.12.1"
 msgstr "DataLab Version 0.12.1"
 
-#: ../../../CHANGELOG.md:8 ../../../CHANGELOG.md:59 ../../../CHANGELOG.md:103
-#: ../../../CHANGELOG.md:276
+#: ../../../CHANGELOG.md:8 ../../../CHANGELOG.md:65 ../../../CHANGELOG.md:109
+#: ../../../CHANGELOG.md:282
 msgid "💥 New features:"
 msgstr "💥 Nouvelles fonctionnalités :"
 
@@ -66,13 +66,39 @@ msgstr ""
 "Paramètres modifiables : nombre de classes, limites inférieure et "
 "supérieure"
 
-#: ../../../CHANGELOG.md:16 ../../../CHANGELOG.md:86 ../../../CHANGELOG.md:219
-#: ../../../CHANGELOG.md:339 ../../../CHANGELOG.md:380
-#: ../../../CHANGELOG.md:402
+#: ../../../CHANGELOG.md:15
+msgid "Macro Panel:"
+msgstr "Panneau de macro-commandes :"
+
+#: ../../../CHANGELOG.md:16
+msgid "Macro commands are now numbered, starting from 1, like signals and images"
+msgstr ""
+"Les macro-commandes sont désormais numérotées, à partir de 1, comme les "
+"signaux et les images"
+
+#: ../../../CHANGELOG.md:17
+msgid "Remote control API (`RemoteProxy` and `LocalProxy`):"
+msgstr "API de contrôle à distance (`RemoteProxy` et `LocalProxy`) :"
+
+#: ../../../CHANGELOG.md:18
+msgid ""
+"`get_object_titles` method now accepts \"macro\" as panel name and "
+"returns the list of macro titles"
+msgstr ""
+"`get_object_titles` accepte désormais \"macro\" comme nom de panneau et "
+"retourne la liste des titres de macro"
+
+#: ../../../CHANGELOG.md:20
+msgid "New `run_macro`, `stop_macro` and `import_macro_from_file` methods"
+msgstr "Nouvelles méthodes `run_macro`, `stop_macro` et `import_macro_from_file`"
+
+#: ../../../CHANGELOG.md:22 ../../../CHANGELOG.md:92 ../../../CHANGELOG.md:225
+#: ../../../CHANGELOG.md:345 ../../../CHANGELOG.md:386
+#: ../../../CHANGELOG.md:408
 msgid "🛠️ Bug fixes:"
 msgstr "🛠️ Corrections de bugs :"
 
-#: ../../../CHANGELOG.md:18
+#: ../../../CHANGELOG.md:24
 msgid ""
 "Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) "
 "- Changing image bounds in Image View has no effect on the associated "
@@ -82,7 +108,7 @@ msgstr ""
 "Platform/DataLab/issues/55) - Changer les limites de l'image dans la vue "
 "d'image n'a aucun effet sur les propriétés de l'objet image associé"
 
-#: ../../../CHANGELOG.md:19
+#: ../../../CHANGELOG.md:25
 msgid ""
 "Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) "
 "- \"Test data\" plugin: `AttributeError: 'NoneType' object has no "
@@ -93,21 +119,24 @@ msgstr ""
 "`AttributeError: 'NoneType' object has no attribute 'data'` lors de "
 "l'annulation de \"Créer une image avec des pics\""
 
-#: ../../../CHANGELOG.md:20
+#: ../../../CHANGELOG.md:26
 msgid ""
 "Fixed [Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) "
 "- Circle and ellipse result shapes are not transformed properly"
-msgstr "Ceci corrige l'[Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Les formes résultat cercle et ellipse ne sont pas transformées correctement"
+msgstr ""
+"Ceci corrige l'[Issue #57](https://github.com/DataLab-"
+"Platform/DataLab/issues/57) - Les formes résultat cercle et ellipse ne "
+"sont pas transformées correctement"
 
-#: ../../../CHANGELOG.md:22
+#: ../../../CHANGELOG.md:28
 msgid "DataLab Version 0.12.0"
 msgstr "DataLab Version 0.12.0"
 
-#: ../../../CHANGELOG.md:24
+#: ../../../CHANGELOG.md:30
 msgid "🧹 Clarity-Enhanced Interface Update:"
 msgstr "🧹 Clarification de certains libellés des interfaces graphiques :"
 
-#: ../../../CHANGELOG.md:26
+#: ../../../CHANGELOG.md:32
 msgid ""
 "The tabs used to switch between the data panels (signals and images) and "
 "the visualization components (\"Curve panel\" and \"Image panel\") have "
@@ -119,7 +148,7 @@ msgstr ""
 " \"Panneau d'images\") ont été renommés en \"Panneau Signal\" et "
 "\"Panneau Image\" (au lieu de \"Signaux\" et \"Images\")"
 
-#: ../../../CHANGELOG.md:29
+#: ../../../CHANGELOG.md:35
 msgid ""
 "The visualization components have been renamed to \"Signal View\" and "
 "\"Image View\" (instead of \"Curve panel\" and \"Image panel\")"
@@ -127,7 +156,7 @@ msgstr ""
 "Les composants de visualisation ont été renommés en \"Vue Signal\" et "
 "\"Vue Image\" (au lieu de \"Panneau de courbes\" et \"Panneau d'images\")"
 
-#: ../../../CHANGELOG.md:31
+#: ../../../CHANGELOG.md:37
 msgid ""
 "The data panel toolbar has been renamed to \"Signal Toolbar\" and \"Image"
 " Toolbar\" (instead of \"Signal Processing Toolbar\" and \"Image "
@@ -137,7 +166,7 @@ msgstr ""
 "d'outils Signal\" et \"Barre d'outils Image\" (au lieu de \"Barre "
 "d'outils Traitement du Signal\" et \"Barre d'outils Traitement d'Image\")"
 
-#: ../../../CHANGELOG.md:33
+#: ../../../CHANGELOG.md:39
 msgid ""
 "Ergonomics improvements: the \"Signal Panel\" and \"Image Panel\" are now"
 " displayed on the left side of the main window, and the \"Signal View\" "
@@ -154,11 +183,11 @@ msgstr ""
 "d'outils et menus), et rend l'interface plus intuitive et plus facile à "
 "utiliser"
 
-#: ../../../CHANGELOG.md:39
+#: ../../../CHANGELOG.md:45
 msgid "✨ New tour and demo feature:"
 msgstr "✨ Nouvelle fonctionnalité de visite guidée et de démonstration :"
 
-#: ../../../CHANGELOG.md:41
+#: ../../../CHANGELOG.md:47
 msgid ""
 "When starting DataLab for the first time, an optional tour is now shown "
 "to the user to introduce the main features of the application"
@@ -167,15 +196,15 @@ msgstr ""
 "affichée à l'utilisateur pour présenter les principales fonctionnalités "
 "de l'application"
 
-#: ../../../CHANGELOG.md:43
+#: ../../../CHANGELOG.md:49
 msgid "The tour can be started again at any time from the \"?\" menu"
 msgstr "La visite guidée peut être relancée à tout moment depuis le menu \"?\""
 
-#: ../../../CHANGELOG.md:44
+#: ../../../CHANGELOG.md:50
 msgid "Also added a new \"Demo\" feature to the \"?\" menu"
 msgstr "Ajout d'une nouvelle fonctionnalité \"Démonstration\" dans le menu \"?\""
 
-#: ../../../CHANGELOG.md:46
+#: ../../../CHANGELOG.md:52
 msgid ""
 "🚀 New Binder environment to test DataLab online without installing "
 "anything"
@@ -183,23 +212,23 @@ msgstr ""
 "🚀 Nouvel environnement Binder pour tester DataLab en ligne sans rien "
 "installer"
 
-#: ../../../CHANGELOG.md:48 ../../../CHANGELOG.md:196
+#: ../../../CHANGELOG.md:54 ../../../CHANGELOG.md:202
 msgid "📚 Documentation:"
 msgstr "📚 Documentation :"
 
-#: ../../../CHANGELOG.md:50
+#: ../../../CHANGELOG.md:56
 msgid "New text tutorials are available:"
 msgstr "De nouveaux tutoriels textuels sont disponibles :"
 
-#: ../../../CHANGELOG.md:51
+#: ../../../CHANGELOG.md:57
 msgid "Measuring Laser Beam Size"
 msgstr "Mesure de la taille d'un faisceau laser"
 
-#: ../../../CHANGELOG.md:52
+#: ../../../CHANGELOG.md:58
 msgid "DataLab and Spyder: a perfect match"
 msgstr "DataLab et Spyder : un mariage parfait"
 
-#: ../../../CHANGELOG.md:53
+#: ../../../CHANGELOG.md:59
 msgid ""
 "\"Getting started\" section: added more explanations and links to the "
 "tutorials"
@@ -207,7 +236,7 @@ msgstr ""
 "Section \"Premiers pas\" : ajout de plus d'explications et de liens vers "
 "les tutoriels"
 
-#: ../../../CHANGELOG.md:54
+#: ../../../CHANGELOG.md:60
 msgid ""
 "New \"Contributing\" section explaining how to contribute to DataLab, "
 "whether you are a developer or not"
@@ -215,31 +244,31 @@ msgstr ""
 "Nouvelle section \"Contribuer\" expliquant comment contribuer à DataLab, "
 "que vous soyez développeur ou non"
 
-#: ../../../CHANGELOG.md:56
+#: ../../../CHANGELOG.md:62
 msgid "New \"Macros\" section explaining how to use the macro commands feature"
 msgstr ""
 "Nouvelle section \"Macros\" expliquant comment utiliser la fonctionnalité"
 " de macro-commandes"
 
-#: ../../../CHANGELOG.md:57
+#: ../../../CHANGELOG.md:63
 msgid "Added \"Copy\" button to code blocks in the documentation"
 msgstr "Ajout du bouton \"Copier\" aux blocs de code dans la documentation"
 
-#: ../../../CHANGELOG.md:61
+#: ../../../CHANGELOG.md:67
 msgid "New \"Text file import assistant\" feature:"
 msgstr "Nouvelle fonctionnalité d'assistant d'importation de fichiers texte :"
 
-#: ../../../CHANGELOG.md:62
+#: ../../../CHANGELOG.md:68
 msgid "This feature allows to import text files as signals or images"
 msgstr ""
 "Cette fonctionnalité permet d'importer des fichiers texte en tant que "
 "signaux ou images"
 
-#: ../../../CHANGELOG.md:63
+#: ../../../CHANGELOG.md:69
 msgid "The user can define the source (clipboard or texte file)"
 msgstr "L'utilisateur peut définir la source (presse-papiers ou fichier texte)"
 
-#: ../../../CHANGELOG.md:64
+#: ../../../CHANGELOG.md:70
 msgid ""
 "Then, it is possible to define the delimiter, the number of rows to skip,"
 " the destination data type, etc."
@@ -247,7 +276,7 @@ msgstr ""
 "Ensuite, il est possible de définir le délimiteur, le nombre de lignes à "
 "sauter, le type de données de destination, etc."
 
-#: ../../../CHANGELOG.md:66
+#: ../../../CHANGELOG.md:72
 msgid ""
 "Added menu on the \"Signal Panel\" and \"Image Panel\" tabs corner to "
 "quickly access the most used features (e.g. \"Add\", \"Remove\", "
@@ -257,11 +286,11 @@ msgstr ""
 "Image\" pour accéder rapidement aux fonctionnalités les plus utilisées "
 "(par exemple \"Ajouter\", \"Supprimer\", \"Dupliquer\", etc.)"
 
-#: ../../../CHANGELOG.md:68
+#: ../../../CHANGELOG.md:74
 msgid "Intensity profile extraction feature:"
 msgstr "Fonctionnalité d'extraction de profil d'intensité :"
 
-#: ../../../CHANGELOG.md:69
+#: ../../../CHANGELOG.md:75
 msgid ""
 "Added graphical user interface to extract intensity profiles from images,"
 " for both line and averaged profiles"
@@ -269,7 +298,7 @@ msgstr ""
 "Ajout d'une interface graphique pour extraire des profils d'intensité des"
 " images, pour les profils linéaires et moyennés"
 
-#: ../../../CHANGELOG.md:71
+#: ../../../CHANGELOG.md:77
 msgid ""
 "Parameters are still directly editable by the user (\"Edit profile "
 "parameters\" button)"
@@ -277,15 +306,15 @@ msgstr ""
 "Les paramètres sont toujours directement modifiables par l'utilisateur "
 "(bouton \"Modifier les paramètres du profil\")"
 
-#: ../../../CHANGELOG.md:73
+#: ../../../CHANGELOG.md:79
 msgid "Parameters are now stored from one profile extraction to another"
 msgstr "Les paramètres sont désormais stockés d'une extraction de profil à l'autre"
 
-#: ../../../CHANGELOG.md:74
+#: ../../../CHANGELOG.md:80
 msgid "Statistics feature:"
 msgstr "Fonctionnalité de statistiques :"
 
-#: ../../../CHANGELOG.md:75
+#: ../../../CHANGELOG.md:81
 msgid ""
 "Added `<y>/σ(y)` to the signal \"Statistics\" result table (in addition "
 "to the mean, median, standard deviation, etc.)"
@@ -293,13 +322,13 @@ msgstr ""
 "Ajout de `<y>/σ(y)` au tableau de résultats \"Statistiques\" du signal "
 "(en plus de la moyenne, de la médiane, de l'écart-type, etc.)"
 
-#: ../../../CHANGELOG.md:77
+#: ../../../CHANGELOG.md:83
 msgid "Added `peak-to-peak` to the signal and image \"Statistics\" result table"
 msgstr ""
 "Ajout de `peak-to-peak` au tableau de résultats \"Statistiques\" du "
 "signal et de l'image"
 
-#: ../../../CHANGELOG.md:78
+#: ../../../CHANGELOG.md:84
 msgid ""
 "Curve fitting feature: fit results are now stored in a dictionary in the "
 "signal metadata (instead of being stored individually in the signal "
@@ -310,11 +339,11 @@ msgstr ""
 "signal (au lieu d'être stockés individuellement dans les métadonnées du "
 "signal)"
 
-#: ../../../CHANGELOG.md:80
+#: ../../../CHANGELOG.md:86
 msgid "Window state:"
 msgstr "État de la fenêtre :"
 
-#: ../../../CHANGELOG.md:81
+#: ../../../CHANGELOG.md:87
 msgid ""
 "The toolbars and dock widgets state (visibility, position, etc.) are now "
 "stored in the configuration file and restored at startup (size and "
@@ -325,7 +354,7 @@ msgstr ""
 "au démarrage (la taille et la position étaient déjà stockées et "
 "restaurées)"
 
-#: ../../../CHANGELOG.md:84
+#: ../../../CHANGELOG.md:90
 msgid ""
 "This implements part of [Issue #30](https://github.com/DataLab-"
 "Platform/DataLab/issues/30) - Save/restore main window layout"
@@ -334,7 +363,7 @@ msgstr ""
 "Platform/DataLab/issues/30) - Sauvegarder/restaurer la disposition de la "
 "fenêtre principale"
 
-#: ../../../CHANGELOG.md:88
+#: ../../../CHANGELOG.md:94
 msgid ""
 "Fixed [Issue #41](https://github.com/DataLab-Platform/DataLab/issues/41) "
 "- Radial profile extraction: unable to enter user-defined center "
@@ -344,7 +373,7 @@ msgstr ""
 "Platform/DataLab/issues/41) - Extraction du profil radial : impossible "
 "d'entrer les coordonnées du centre définies par l'utilisateur"
 
-#: ../../../CHANGELOG.md:89
+#: ../../../CHANGELOG.md:95
 msgid ""
 "Fixed [Issue #49](https://github.com/DataLab-Platform/DataLab/issues/49) "
 "- Error when trying to open a (UTF-8 BOM) text file as an image"
@@ -353,7 +382,7 @@ msgstr ""
 "Platform/DataLab/issues/49) - Erreur lors de l'ouverture d'un fichier "
 "texte (UTF-8 BOM) en tant qu'image"
 
-#: ../../../CHANGELOG.md:90
+#: ../../../CHANGELOG.md:96
 msgid ""
 "Fixed [Issue #51](https://github.com/DataLab-Platform/DataLab/issues/51) "
 "- Unexpected dimensions when adding new ROI on an image with X/Y "
@@ -364,13 +393,13 @@ msgstr ""
 "d'une nouvelle ROI sur une image avec des unités X/Y arbitraires (pas des"
 " pixels)"
 
-#: ../../../CHANGELOG.md:91
+#: ../../../CHANGELOG.md:97
 msgid "Improved plot item style serialization management:"
 msgstr ""
 "Amélioration de la gestion de la sérialisation du style des items "
 "graphiques :"
 
-#: ../../../CHANGELOG.md:92
+#: ../../../CHANGELOG.md:98
 msgid ""
 "Before this release, the plot item style was stored in the signal/image "
 "metadata only when saving the workspace to an HDF5 file. So, when "
@@ -385,7 +414,7 @@ msgstr ""
 " vue), le style n'était pas conservé dans certains cas (par exemple lors "
 "de la duplication du signal/image)."
 
-#: ../../../CHANGELOG.md:96
+#: ../../../CHANGELOG.md:102
 msgid ""
 "Now, the plot item style is stored in the signal/image metadata whenever "
 "the style is modified, and is restored when reloading the workspace"
@@ -394,7 +423,7 @@ msgstr ""
 "du signal/image chaque fois que le style est modifié, et est restauré "
 "lors du rechargement de l'espace de travail"
 
-#: ../../../CHANGELOG.md:98
+#: ../../../CHANGELOG.md:104
 msgid ""
 "Handled `ComplexWarning` cast warning when adding regions of interest "
 "(ROI) to a signal with complex data"
@@ -402,17 +431,17 @@ msgstr ""
 "Traitement de l'avertissement de conversion `ComplexWarning` lors de "
 "l'ajout de régions d'intérêt (ROI) à un signal avec des données complexes"
 
-#: ../../../CHANGELOG.md:101
+#: ../../../CHANGELOG.md:107
 msgid "DataLab Version 0.11.0"
 msgstr "DataLab Version 0.11.0"
 
-#: ../../../CHANGELOG.md:105
+#: ../../../CHANGELOG.md:111
 msgid "Signals and images may now be reordered in the tree view:"
 msgstr ""
 "Les signaux et les images peuvent maintenant être réorganisés dans la vue"
 " arborescente :"
 
-#: ../../../CHANGELOG.md:106
+#: ../../../CHANGELOG.md:112
 msgid ""
 "Using the new \"Move up\" and \"Move down\" actions in the \"Edit\" menu "
 "(or using the corresponding toolbar buttons):"
@@ -421,7 +450,7 @@ msgstr ""
 "menu \"Édition\" (ou en utilisant les boutons de la barre d'outils "
 "correspondants) :"
 
-#: ../../../CHANGELOG.md:108
+#: ../../../CHANGELOG.md:114
 msgid ""
 "This fixes [Issue #22](https://github.com/DataLab-"
 "Platform/DataLab/issues/22) - Add \"move up/down\" actions in \"Edit\" "
@@ -431,13 +460,13 @@ msgstr ""
 "Platform/DataLab/issues/22) - Ajout des actions \"monter/descendre\" dans"
 " le menu \"Édition\", pour les signaux/images et les groupes"
 
-#: ../../../CHANGELOG.md:109
+#: ../../../CHANGELOG.md:115
 msgid "Signals and images may also be reordered using drag and drop:"
 msgstr ""
 "Les signaux et les images peuvent également être réorganisés par glisser-"
 "déposer :"
 
-#: ../../../CHANGELOG.md:110
+#: ../../../CHANGELOG.md:116
 msgid ""
 "Signals and images can be dragged and dropped inside their own panel to "
 "change their order"
@@ -445,11 +474,11 @@ msgstr ""
 "Les signaux et les images peuvent être déplacés et déposés dans leur "
 "propre panneau pour changer leur ordre"
 
-#: ../../../CHANGELOG.md:112
+#: ../../../CHANGELOG.md:118
 msgid "Groups can also be dragged and dropped inside their panel"
 msgstr "Les groupes peuvent également être déplacés et déposés dans leur panneau"
 
-#: ../../../CHANGELOG.md:113
+#: ../../../CHANGELOG.md:119
 msgid ""
 "The feature also supports multi-selection (using the standard Ctrl and "
 "Shift modifiers), so that multiple signals/images/groups can be moved at "
@@ -460,7 +489,7 @@ msgstr ""
 "plusieurs signaux/images/groupes peuvent être déplacés à la fois, pas "
 "nécessairement avec des positions contiguës"
 
-#: ../../../CHANGELOG.md:116
+#: ../../../CHANGELOG.md:122
 msgid ""
 "This fixes [Issue #17](https://github.com/DataLab-"
 "Platform/DataLab/issues/17) - Add Drag and Drop feature to Signals/Images"
@@ -470,23 +499,23 @@ msgstr ""
 "Platform/DataLab/issues/17) - Ajout de la fonctionnalité de glisser-"
 "déposer aux vues arborescentes des signaux/images"
 
-#: ../../../CHANGELOG.md:117
+#: ../../../CHANGELOG.md:123
 msgid "New 1D interpolation features:"
 msgstr "Nouvelles fonctionnalités d'interpolation 1D :"
 
-#: ../../../CHANGELOG.md:118
+#: ../../../CHANGELOG.md:124
 msgid "Added \"Interpolation\" feature to signal panel's \"Processing\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Interpolation\" au menu \"Traitement\" du "
 "panneau de signal"
 
-#: ../../../CHANGELOG.md:119
+#: ../../../CHANGELOG.md:125
 msgid "Methods available: linear, spline, quadratic, cubic, barycentric and PCHIP"
 msgstr ""
 "Méthodes disponibles : linéaire, spline, quadratique, cubique, "
 "barycentrique et PCHIP"
 
-#: ../../../CHANGELOG.md:120
+#: ../../../CHANGELOG.md:126
 msgid ""
 "Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-"
 "ohm) for the contribution to spline interpolation"
@@ -494,7 +523,7 @@ msgstr ""
 "Merci à [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) "
 "pour sa contribution à l'interpolation spline"
 
-#: ../../../CHANGELOG.md:121
+#: ../../../CHANGELOG.md:127
 msgid ""
 "This fixes [Issue #20](https://github.com/DataLab-"
 "Platform/DataLab/issues/20) - Add 1D interpolation features"
@@ -503,29 +532,29 @@ msgstr ""
 "Platform/DataLab/issues/20) - Ajout des fonctionnalités d'interpolation "
 "1D"
 
-#: ../../../CHANGELOG.md:122
+#: ../../../CHANGELOG.md:128
 msgid "New 1D resampling feature:"
 msgstr "Nouvelle fonctionnalité de rééchantillonnage 1D :"
 
-#: ../../../CHANGELOG.md:123
+#: ../../../CHANGELOG.md:129
 msgid "Added \"Resampling\" feature to signal panel's \"Processing\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Rééchantillonnage\" au menu \"Traitement\" "
 "du panneau de signal"
 
-#: ../../../CHANGELOG.md:124
+#: ../../../CHANGELOG.md:130
 msgid "Same interpolation methods as for the \"Interpolation\" feature"
 msgstr ""
 "Mêmes méthodes d'interpolation que pour la fonctionnalité "
 "\"Interpolation\""
 
-#: ../../../CHANGELOG.md:125
+#: ../../../CHANGELOG.md:131
 msgid "Possibility to specify the resampling step or the number of points"
 msgstr ""
 "Possibilité de spécifier le pas de rééchantillonnage ou le nombre de "
 "points"
 
-#: ../../../CHANGELOG.md:126
+#: ../../../CHANGELOG.md:132
 msgid ""
 "This fixes [Issue #21](https://github.com/DataLab-"
 "Platform/DataLab/issues/21) - Add 1D resampling feature"
@@ -534,17 +563,17 @@ msgstr ""
 "Platform/DataLab/issues/21) - Ajout de la fonctionnalité de "
 "rééchantillonnage 1D"
 
-#: ../../../CHANGELOG.md:127
+#: ../../../CHANGELOG.md:133
 msgid "New 1D convolution feature:"
 msgstr "Nouvelle fonctionnalité de convolution 1D :"
 
-#: ../../../CHANGELOG.md:128
+#: ../../../CHANGELOG.md:134
 msgid "Added \"Convolution\" feature to signal panel's \"Operation\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Convolution\" au menu \"Opération\" du "
 "panneau de signal"
 
-#: ../../../CHANGELOG.md:129
+#: ../../../CHANGELOG.md:135
 msgid ""
 "This fixes [Issue #23](https://github.com/DataLab-"
 "Platform/DataLab/issues/23) - Add 1D convolution feature"
@@ -553,21 +582,21 @@ msgstr ""
 "Platform/DataLab/issues/23) - Ajout de la fonctionnalité de convolution "
 "1D"
 
-#: ../../../CHANGELOG.md:130
+#: ../../../CHANGELOG.md:136
 msgid "New 1D detrending feature:"
 msgstr "Nouvelle fonctionnalité de d'élimination de tendance 1D :"
 
-#: ../../../CHANGELOG.md:131
+#: ../../../CHANGELOG.md:137
 msgid "Added \"Detrending\" feature to signal panel's \"Processing\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Élimination de tendance\" au menu "
 "\"Traitement\" du panneau de signal"
 
-#: ../../../CHANGELOG.md:132
+#: ../../../CHANGELOG.md:138
 msgid "Methods available: linear or constant"
 msgstr "Méthodes disponibles : linéaire ou constante"
 
-#: ../../../CHANGELOG.md:133
+#: ../../../CHANGELOG.md:139
 msgid ""
 "This fixes [Issue #24](https://github.com/DataLab-"
 "Platform/DataLab/issues/24) - Add 1D detrending feature"
@@ -576,11 +605,11 @@ msgstr ""
 "Platform/DataLab/issues/24) - Ajout de la fonctionnalité d'élimination de"
 " tendance 1D"
 
-#: ../../../CHANGELOG.md:134
+#: ../../../CHANGELOG.md:140
 msgid "2D computing results:"
 msgstr "Résultats de calcul 2D :"
 
-#: ../../../CHANGELOG.md:135
+#: ../../../CHANGELOG.md:141
 msgid ""
 "Before this release, 2D computing results such as contours, blobs, etc. "
 "were stored in image metadata dictionary as coordinates (x0, y0, x1, y1, "
@@ -593,7 +622,7 @@ msgstr ""
 "cercles et les ellipses (c'est-à-dire les coordonnées des rectangles "
 "englobants)."
 
-#: ../../../CHANGELOG.md:138
+#: ../../../CHANGELOG.md:144
 msgid ""
 "For convenience, the circle and ellipse coordinates are now stored in "
 "image metadata dictionary as (x0, y0, radius) and (x0, y0, a, b, theta) "
@@ -603,7 +632,7 @@ msgstr ""
 "désormais stockées dans le dictionnaire de métadonnées de l'image sous la"
 " forme (x0, y0, rayon) et (x0, y0, a, b, theta) respectivement."
 
-#: ../../../CHANGELOG.md:140
+#: ../../../CHANGELOG.md:146
 msgid ""
 "These results are also shown as such in the \"Results\" dialog box "
 "(either at the end of the computing process or when clicking on the "
@@ -613,7 +642,7 @@ msgstr ""
 "dialogue \"Résultats\" (à la fin du processus de calcul ou en cliquant "
 "sur le bouton \"Afficher les résultats\")."
 
-#: ../../../CHANGELOG.md:142
+#: ../../../CHANGELOG.md:148
 msgid ""
 "This fixes [Issue #32](https://github.com/DataLab-"
 "Platform/DataLab/issues/32) - Contour detection: show circle `(x, y, r)` "
@@ -624,11 +653,11 @@ msgstr ""
 " `(x, y, r)` et l'ellipse `(x, y, a, b, theta)` au lieu de `(x0, y0, x1, "
 "x1, ...)`"
 
-#: ../../../CHANGELOG.md:143
+#: ../../../CHANGELOG.md:149
 msgid "1D and 2D computing results:"
 msgstr "Résultats de calcul 1D et 2D :"
 
-#: ../../../CHANGELOG.md:144
+#: ../../../CHANGELOG.md:150
 msgid ""
 "Additionnaly to the previous enhancement, more computing results are now "
 "shown in the \"Results\" dialog box"
@@ -636,7 +665,7 @@ msgstr ""
 "En complément de l'amélioration précédente, plus de résultats de calcul "
 "sont désormais affichés dans la boîte de dialogue \"Résultats\""
 
-#: ../../../CHANGELOG.md:146
+#: ../../../CHANGELOG.md:152
 msgid ""
 "This concerns both 1D (FHWM, ...) and 2D computing results (contours, "
 "blobs, ...):"
@@ -644,27 +673,27 @@ msgstr ""
 "Cela concerne à la fois les résultats de calcul 1D (FHWM, ...) et 2D "
 "(contours, blobs, ...) :"
 
-#: ../../../CHANGELOG.md:147
+#: ../../../CHANGELOG.md:153
 msgid "Segment results now also show length (L) and center coordinates (Xc, Yc)"
 msgstr ""
 "Les résultats de type segment affichent désormais également la longueur "
 "(L) et les coordonnées du centre (Xc, Yc)"
 
-#: ../../../CHANGELOG.md:148
+#: ../../../CHANGELOG.md:154
 msgid "Circle and ellipse results now also show area (A)"
 msgstr ""
 "Les résultats de type cercle et ellipse affichent désormais également "
 "l'aire (A)"
 
-#: ../../../CHANGELOG.md:149
+#: ../../../CHANGELOG.md:155
 msgid "Added \"Plot results\" entry in \"Computing\" menu:"
 msgstr "Ajout de l'entrée \"Tracer les résultats\" dans le menu \"Calculs\" :"
 
-#: ../../../CHANGELOG.md:150
+#: ../../../CHANGELOG.md:156
 msgid "This feature allows to plot computing results (1D or 2D)"
 msgstr "Cette fonctionnalité permet de tracer les résultats de calcul (1D ou 2D)"
 
-#: ../../../CHANGELOG.md:151
+#: ../../../CHANGELOG.md:157
 msgid ""
 "It creates a new signal with X and Y axes corresponding to user-defined "
 "parameters (e.g. X = indexes and Y = radius for circle results)"
@@ -673,13 +702,13 @@ msgstr ""
 "paramètres définis par l'utilisateur (par exemple X = index et Y = rayon "
 "pour les résultats de cercle)"
 
-#: ../../../CHANGELOG.md:153
+#: ../../../CHANGELOG.md:159
 msgid "Increased default width of the object selection dialog box:"
 msgstr ""
 "Augmentation de la largeur par défaut de la boîte de dialogue de "
 "sélection d'objet :"
 
-#: ../../../CHANGELOG.md:154
+#: ../../../CHANGELOG.md:160
 msgid ""
 "The object selection dialog box is now wider by default, so that the full"
 " signal/image/group titles may be more easily readable"
@@ -688,11 +717,11 @@ msgstr ""
 "défaut, de sorte que les titres complets des signaux/images/groupes "
 "soient plus facilement lisibles"
 
-#: ../../../CHANGELOG.md:156
+#: ../../../CHANGELOG.md:162
 msgid "Delete metadata feature:"
 msgstr "Fonctionnalité de suppression de métadonnées :"
 
-#: ../../../CHANGELOG.md:157
+#: ../../../CHANGELOG.md:163
 msgid ""
 "Before this release, the feature was deleting all metadata, including the"
 " Regions Of Interest (ROI) metadata, if any."
@@ -700,7 +729,7 @@ msgstr ""
 "Avant cette version, la fonctionnalité supprimait toutes les métadonnées,"
 " y compris les métadonnées des régions d'intérêt (ROI), le cas échéant."
 
-#: ../../../CHANGELOG.md:159
+#: ../../../CHANGELOG.md:165
 msgid ""
 "Now a confirmation dialog box is shown to the user before deleting all "
 "metadata if the signal/image has ROI metadata: this allows to keep the "
@@ -711,7 +740,7 @@ msgstr ""
 "signal/l'image a des métadonnées ROI : cela permet de conserver les "
 "métadonnées ROI si nécessaire."
 
-#: ../../../CHANGELOG.md:161
+#: ../../../CHANGELOG.md:167
 msgid ""
 "Image profile extraction feature: added support for masked images (when "
 "defining regions of interest, the areas outside the ROIs are masked, and "
@@ -724,7 +753,7 @@ msgstr ""
 " zones non masquées, ou moyenné sur les zones non masquées dans le cas de"
 " l'extraction du profil moyen)"
 
-#: ../../../CHANGELOG.md:165
+#: ../../../CHANGELOG.md:171
 msgid ""
 "Curve style: added \"Reset curve styles\" in \"View\" menu. This feature "
 "allows to reset the curve style cycle to its initial state."
@@ -733,11 +762,11 @@ msgstr ""
 " menu \"Affichage\". Cette fonctionnalité permet de réinitialiser le "
 "cycle de style de courbe à son état initial."
 
-#: ../../../CHANGELOG.md:167
+#: ../../../CHANGELOG.md:173
 msgid "Plugin base classe `PluginBase`:"
 msgstr "Classe de base des plugins `PluginBase` :"
 
-#: ../../../CHANGELOG.md:168
+#: ../../../CHANGELOG.md:174
 msgid ""
 "Added `edit_new_signal_parameters` method for showing a dialog box to "
 "edit parameters for a new signal"
@@ -745,7 +774,7 @@ msgstr ""
 "Ajout de la méthode `edit_new_signal_parameters` pour afficher une boîte "
 "de dialogue pour éditer les paramètres d'un nouveau signal"
 
-#: ../../../CHANGELOG.md:170
+#: ../../../CHANGELOG.md:176
 msgid ""
 "Added `edit_new_image_parameters` method for showing a dialog box to edit"
 " parameters for a new image (updated the *cdl_testdata.py* plugin "
@@ -755,15 +784,15 @@ msgstr ""
 "de dialogue pour éditer les paramètres d'une nouvelle image (mise à jour "
 "du plugin *cdl_testdata.py* en conséquence)"
 
-#: ../../../CHANGELOG.md:172
+#: ../../../CHANGELOG.md:178
 msgid "Signal and image computations API (`cdl.core.computations`):"
 msgstr "API de calculs sur les signaux et les images (`cdl.core.computations`) :"
 
-#: ../../../CHANGELOG.md:173
+#: ../../../CHANGELOG.md:179
 msgid "Added wrappers for signal and image 1 -> 1 computations"
 msgstr "Ajout de wrappers pour les calculs 1 -> 1 sur les signaux et les images"
 
-#: ../../../CHANGELOG.md:174
+#: ../../../CHANGELOG.md:180
 msgid ""
 "These wrappers aim at simplifying the creation of a basic computation "
 "function operating on DataLab's native objects (`SignalObj` and "
@@ -773,7 +802,7 @@ msgstr ""
 "base opérant sur les objets natifs de DataLab (`SignalObj` et `ImageObj`)"
 " à partir d'une fonction opérant sur des tableaux NumPy"
 
-#: ../../../CHANGELOG.md:177
+#: ../../../CHANGELOG.md:183
 msgid ""
 "This simplifies DataLab's internals and makes it easier to create new "
 "computing features inside plugins"
@@ -781,13 +810,13 @@ msgstr ""
 "Cela simplifie les fonctionnalités internes de DataLab et facilite la "
 "création de nouvelles fonctionnalités de calcul dans les plugins"
 
-#: ../../../CHANGELOG.md:179
+#: ../../../CHANGELOG.md:185
 msgid "See the *cdl_custom_func.py* example plugin for a practical use case"
 msgstr ""
 "Voir le plugin d'exemple *cdl_custom_func.py* pour un cas d'utilisation "
 "pratique"
 
-#: ../../../CHANGELOG.md:180
+#: ../../../CHANGELOG.md:186
 msgid ""
 "Added \"Radial profile extraction\" feature to image panel's "
 "\"Operation\" menu:"
@@ -795,27 +824,27 @@ msgstr ""
 "Ajout de la fonctionnalité \"Extraction du profil radial\" au menu "
 "\"Opération\" du panneau d'image :"
 
-#: ../../../CHANGELOG.md:181
+#: ../../../CHANGELOG.md:187
 msgid "This feature allows to extract a radially averaged profile from an image"
 msgstr ""
 "Cette fonctionnalité permet d'extraire un profil moyenné radialement à "
 "partir d'une image"
 
-#: ../../../CHANGELOG.md:182
+#: ../../../CHANGELOG.md:188
 msgid "The profile is extracted around a user-defined center (x0, y0)"
 msgstr "Le profil est extrait autour d'un centre défini par l'utilisateur (x0, y0)"
 
-#: ../../../CHANGELOG.md:183
+#: ../../../CHANGELOG.md:189
 msgid "The center may also be computed (centroid or image center)"
 msgstr ""
 "Le centre peut également être calculé (centre de gravité ou centre de "
 "l'image)"
 
-#: ../../../CHANGELOG.md:184
+#: ../../../CHANGELOG.md:190
 msgid "Automated test suite:"
 msgstr "Suite de tests automatisés :"
 
-#: ../../../CHANGELOG.md:185
+#: ../../../CHANGELOG.md:191
 msgid ""
 "Since version 0.10, DataLab's proxy object has a `toggle_auto_refresh` "
 "method to toggle the \"Auto-refresh\" feature. This feature may be useful"
@@ -826,7 +855,7 @@ msgstr ""
 "refresh\". Cette fonctionnalité peut être utile pour améliorer les "
 "performances lors de l'exécution de scripts de test"
 
-#: ../../../CHANGELOG.md:188
+#: ../../../CHANGELOG.md:194
 msgid ""
 "Test scenarios on signals and images are now using this feature to "
 "improve performance"
@@ -834,11 +863,11 @@ msgstr ""
 "Les scénarios de test sur les signaux et les images utilisent désormais "
 "cette fonctionnalité pour améliorer les performances"
 
-#: ../../../CHANGELOG.md:190
+#: ../../../CHANGELOG.md:196
 msgid "Signal and image metadata:"
 msgstr "Métadonnées des signaux et des images :"
 
-#: ../../../CHANGELOG.md:191
+#: ../../../CHANGELOG.md:197
 msgid ""
 "Added \"source\" entry to the metadata dictionary, to store the source "
 "file path when importing a signal or an image from a file"
@@ -847,7 +876,7 @@ msgstr ""
 "stocker le chemin du fichier source lors de l'importation d'un signal ou "
 "d'une image à partir d'un fichier"
 
-#: ../../../CHANGELOG.md:193
+#: ../../../CHANGELOG.md:199
 msgid ""
 "This field is kept while processing the signal/image, in order to keep "
 "track of the source file path"
@@ -855,7 +884,7 @@ msgstr ""
 "Ce champ est conservé lors du traitement du signal/image, afin de garder "
 "une trace du chemin du fichier source"
 
-#: ../../../CHANGELOG.md:198
+#: ../../../CHANGELOG.md:204
 msgid ""
 "New [Tutorial section](https://DataLab-"
 "Platform.github.io/en/intro/tutorials/index.html) in the documentation:"
@@ -863,45 +892,45 @@ msgstr ""
 "Nouvelle [section Tutoriels](https://DataLab-"
 "Platform.github.io/fr/intro/tutorials/index.html) dans la documentation :"
 
-#: ../../../CHANGELOG.md:199
+#: ../../../CHANGELOG.md:205
 msgid "This section provides a set of tutorials to learn how to use DataLab"
 msgstr ""
 "Cette section fournit un ensemble de tutoriels pour apprendre à utiliser "
 "DataLab"
 
-#: ../../../CHANGELOG.md:200
+#: ../../../CHANGELOG.md:206
 msgid "The following video tutorials are available:"
 msgstr "Les tutoriels vidéo suivants sont disponibles :"
 
-#: ../../../CHANGELOG.md:201
+#: ../../../CHANGELOG.md:207
 msgid "Quick demo"
 msgstr "Démo rapide"
 
-#: ../../../CHANGELOG.md:202
+#: ../../../CHANGELOG.md:208
 msgid "Adding your own features"
 msgstr "Ajout de vos propres fonctionnalités"
 
-#: ../../../CHANGELOG.md:203
+#: ../../../CHANGELOG.md:209
 msgid "The following text tutorials are available:"
 msgstr "Les tutoriels textuels suivants sont disponibles :"
 
-#: ../../../CHANGELOG.md:204
+#: ../../../CHANGELOG.md:210
 msgid "Processing a spectrum"
 msgstr "Traitement d'un spectre"
 
-#: ../../../CHANGELOG.md:205
+#: ../../../CHANGELOG.md:211
 msgid "Detecting blobs on an image"
 msgstr "Détection de taches sur une image"
 
-#: ../../../CHANGELOG.md:206
+#: ../../../CHANGELOG.md:212
 msgid "Measuring Fabry-Perot fringes"
 msgstr "Mesure de franges Fabry-Perot"
 
-#: ../../../CHANGELOG.md:207
+#: ../../../CHANGELOG.md:213
 msgid "Prototyping a custom processing pipeline"
 msgstr "Prototypage d'un pipeline de traitement personnalisé"
 
-#: ../../../CHANGELOG.md:208
+#: ../../../CHANGELOG.md:214
 msgid ""
 "New [API section](https://DataLab-Platform.github.io/en/api/index.html) "
 "in the documentation:"
@@ -909,7 +938,7 @@ msgstr ""
 "Nouvelle [section API](https://DataLab-"
 "Platform.github.io/fr/api/index.html) dans la documentation :"
 
-#: ../../../CHANGELOG.md:209
+#: ../../../CHANGELOG.md:215
 msgid ""
 "This section explains how to use DataLab as a Python library, by covering"
 " the following topics:"
@@ -917,11 +946,11 @@ msgstr ""
 "Cette section explique comment utiliser DataLab comme une bibliothèque "
 "Python, en abordant les sujets suivants :"
 
-#: ../../../CHANGELOG.md:211
+#: ../../../CHANGELOG.md:217
 msgid "How to use DataLab algorithms on NumPy arrays"
 msgstr "Comment utiliser les algorithmes DataLab sur les tableaux NumPy"
 
-#: ../../../CHANGELOG.md:212
+#: ../../../CHANGELOG.md:218
 msgid ""
 "How to use DataLab computation features on DataLab objects (signals and "
 "images)"
@@ -929,15 +958,15 @@ msgstr ""
 "Comment utiliser les fonctionnalités de calcul de DataLab sur les objets "
 "DataLab (signaux et images)"
 
-#: ../../../CHANGELOG.md:213
+#: ../../../CHANGELOG.md:219
 msgid "How to use DataLab I/O features"
 msgstr "Comment utiliser les fonctionnalités d'entrée/sortie de DataLab"
 
-#: ../../../CHANGELOG.md:214
+#: ../../../CHANGELOG.md:220
 msgid "How to use proxy objects to control DataLab remotely"
 msgstr "Comment utiliser les objets proxy pour contrôler DataLab à distance"
 
-#: ../../../CHANGELOG.md:215
+#: ../../../CHANGELOG.md:221
 msgid ""
 "This section also provides a complete API reference for DataLab objects "
 "and features"
@@ -945,7 +974,7 @@ msgstr ""
 "Cette section fournit également une référence complète de l'API pour les "
 "objets et les fonctionnalités de DataLab"
 
-#: ../../../CHANGELOG.md:217
+#: ../../../CHANGELOG.md:223
 msgid ""
 "This fixes [Issue #19](https://github.com/DataLab-"
 "Platform/DataLab/issues/19) - Add API documentation (data model, "
@@ -956,7 +985,7 @@ msgstr ""
 "de données, fonctions sur les tableaux ou les objets de signaux/images, "
 "...)"
 
-#: ../../../CHANGELOG.md:221
+#: ../../../CHANGELOG.md:227
 msgid ""
 "Fixed [Issue #29](https://github.com/DataLab-Platform/DataLab/issues/29) "
 "- Polynomial fit error: `QDialog [...] argument 1 has an unexpected type "
@@ -966,11 +995,11 @@ msgstr ""
 "Platform/DataLab/issues/29) - Erreur d'ajustement polynomial : `QDialog "
 "[...] argument 1 has an unexpected type 'SignalProcessor'`"
 
-#: ../../../CHANGELOG.md:222
+#: ../../../CHANGELOG.md:228
 msgid "Image ROI extraction feature:"
 msgstr "Fonctionnalité d'extraction de ROI d'image :"
 
-#: ../../../CHANGELOG.md:223
+#: ../../../CHANGELOG.md:229
 msgid ""
 "Before this release, when extracting a single circular ROI from an image "
 "with the \"Extract all regions of interest into a single image object\" "
@@ -983,7 +1012,7 @@ msgstr ""
 "masque de ROI (le masque de ROI n'était disponible que lors de "
 "l'extraction de ROI avec l'option désactivée)"
 
-#: ../../../CHANGELOG.md:227
+#: ../../../CHANGELOG.md:233
 msgid ""
 "This was leading to an unexpected behavior, because one could interpret "
 "the result (a square image without the ROI mask) as the result of a "
@@ -993,7 +1022,7 @@ msgstr ""
 "le résultat (une image carrée sans le masque de ROI) comme le résultat "
 "d'une seule ROI rectangulaire"
 
-#: ../../../CHANGELOG.md:229
+#: ../../../CHANGELOG.md:235
 msgid ""
 "Now, when extracting a single circular ROI from an image with the "
 "\"Extract all regions of interest into a single image object\" option "
@@ -1005,7 +1034,7 @@ msgstr ""
 "d'image\" activée, le résultat est une seule image avec le masque de ROI "
 "(comme si l'option était désactivée)"
 
-#: ../../../CHANGELOG.md:232
+#: ../../../CHANGELOG.md:238
 msgid ""
 "This fixes [Issue #31](https://github.com/DataLab-"
 "Platform/DataLab/issues/31) - Single circular ROI extraction: "
@@ -1015,11 +1044,11 @@ msgstr ""
 "Platform/DataLab/issues/31) - Extraction d'une seule ROI circulaire : "
 "bascule automatique vers la fonction `extract_single_roi`"
 
-#: ../../../CHANGELOG.md:233
+#: ../../../CHANGELOG.md:239
 msgid "Computing on circular ROI:"
 msgstr "Calcul sur ROI circulaire :"
 
-#: ../../../CHANGELOG.md:234
+#: ../../../CHANGELOG.md:240
 msgid ""
 "Before this release, when running computations on a circular ROI, the "
 "results were unexpected in terms of coordinates (results seemed to be "
@@ -1030,11 +1059,11 @@ msgstr ""
 "(les résultats semblaient être calculés dans une région située au-dessus "
 "de la ROI réelle)."
 
-#: ../../../CHANGELOG.md:237
+#: ../../../CHANGELOG.md:243
 msgid "This was due to a regression introduced in an earlier release."
 msgstr "Cela était dû à une régression introduite dans une version antérieure."
 
-#: ../../../CHANGELOG.md:238
+#: ../../../CHANGELOG.md:244
 msgid ""
 "Now, when defining a circular ROI and running computations on it, the "
 "results are computed on the actual ROI"
@@ -1042,7 +1071,7 @@ msgstr ""
 "A présent, lors de la définition d'une ROI circulaire et de l'exécution "
 "de calculs sur celle-ci, les résultats sont calculés sur la ROI réelle"
 
-#: ../../../CHANGELOG.md:240
+#: ../../../CHANGELOG.md:246
 msgid ""
 "This fixes [Issue #33](https://github.com/DataLab-"
 "Platform/DataLab/issues/33) - Computing on circular ROI: unexpected "
@@ -1052,11 +1081,11 @@ msgstr ""
 "Platform/DataLab/issues/33) - Calcul sur ROI circulaire : résultats "
 "inattendus"
 
-#: ../../../CHANGELOG.md:241
+#: ../../../CHANGELOG.md:247
 msgid "Contour detection on ROI:"
 msgstr "Détection des contours sur ROI :"
 
-#: ../../../CHANGELOG.md:242
+#: ../../../CHANGELOG.md:248
 msgid ""
 "Before this release, when running contour detection on a ROI, some "
 "contours were detected outside the ROI (it may be due to a limitation of "
@@ -1067,13 +1096,13 @@ msgstr ""
 "peut être dû à une limitation de la fonction `find_contours` de scikit-"
 "image)."
 
-#: ../../../CHANGELOG.md:245
+#: ../../../CHANGELOG.md:251
 msgid "Now, thanks a workaround, the erroneous contours are filtered out."
 msgstr ""
 "A présent, grâce à une solution de contournement, les contours erronés "
 "sont filtrés."
 
-#: ../../../CHANGELOG.md:246
+#: ../../../CHANGELOG.md:252
 msgid ""
 "A new test module `cdl.tests.features.images.contour_fabryperot_app` has "
 "been added to test the contour detection feature on a Fabry-Perot image "
@@ -1086,7 +1115,7 @@ msgstr ""
 "Perot (merci à [@emarin2642](https://github.com/emarin2642) pour sa "
 "contribution)"
 
-#: ../../../CHANGELOG.md:249
+#: ../../../CHANGELOG.md:255
 msgid ""
 "This fixes [Issue #34](https://github.com/DataLab-"
 "Platform/DataLab/issues/34) - Contour detection: unexpected results "
@@ -1096,11 +1125,11 @@ msgstr ""
 "Platform/DataLab/issues/34) - Détection des contours : résultats "
 "inattendus en dehors de la ROI"
 
-#: ../../../CHANGELOG.md:250
+#: ../../../CHANGELOG.md:256
 msgid "Computing result merging:"
 msgstr "Fusion des résultats de calcul :"
 
-#: ../../../CHANGELOG.md:251
+#: ../../../CHANGELOG.md:257
 msgid ""
 "Before this release, when doing a `1->N` computation (sum, average, "
 "product) on a group of signals/images, the computing results associated "
@@ -1112,7 +1141,7 @@ msgstr ""
 "chaque signal/image étaient fusionnés en un seul résultat, mais seul le "
 "type de résultat présent dans le premier signal/image était conservé."
 
-#: ../../../CHANGELOG.md:255
+#: ../../../CHANGELOG.md:261
 msgid ""
 "Now, the computing results associated to each signal/image are merged "
 "into a single result, whatever the type of result is."
@@ -1120,7 +1149,7 @@ msgstr ""
 "A présent, les résultats de calcul associés à chaque signal/image sont "
 "fusionnés en un seul résultat, quel que soit le type de résultat."
 
-#: ../../../CHANGELOG.md:257
+#: ../../../CHANGELOG.md:263
 msgid ""
 "Fixed [Issue #36](https://github.com/DataLab-Platform/DataLab/issues/36) "
 "- \"Delete all\" action enable state is sometimes not refreshed"
@@ -1129,7 +1158,7 @@ msgstr ""
 "Platform/DataLab/issues/36) - L'état d'activation de l'action \"Tout "
 "supprimer\" n'est parfois pas rafraîchi"
 
-#: ../../../CHANGELOG.md:258
+#: ../../../CHANGELOG.md:264
 msgid ""
 "Image X/Y swap: when swapping X and Y axes, the regions of interest (ROI)"
 " were not removed and not swapped either (ROI are now removed, until we "
@@ -1140,7 +1169,7 @@ msgstr ""
 "sont désormais supprimées, jusqu'à ce que nous implémentions la fonction "
 "d'inversion, si demandé)"
 
-#: ../../../CHANGELOG.md:261
+#: ../../../CHANGELOG.md:267
 msgid ""
 "\"Properties\" group box: the \"Apply\" button was enabled by default, "
 "even when no property was modified, which was confusing for the user (the"
@@ -1152,7 +1181,7 @@ msgstr ""
 " pour l'utilisateur (le bouton \"Appliquer\" est désormais désactivé par "
 "défaut, et n'est activé que lorsqu'une propriété est modifiée)"
 
-#: ../../../CHANGELOG.md:264
+#: ../../../CHANGELOG.md:270
 msgid ""
 "Fixed proxy `get_object` method when there is no object to return (`None`"
 " is returned instead of an exception)"
@@ -1160,7 +1189,7 @@ msgstr ""
 "Correction de la méthode `get_object` du proxy lorsqu'il n'y a pas "
 "d'objet à retourner (`None` est retourné au lieu d'une exception)"
 
-#: ../../../CHANGELOG.md:266
+#: ../../../CHANGELOG.md:272
 msgid ""
 "Fixed `IndexError: list index out of range` when performing some "
 "operations or computations on groups of signals/images (e.g. \"ROI "
@@ -1171,17 +1200,17 @@ msgstr ""
 "\"Extraction de ROI\", \"Détection de pics\", \"Redimensionnement\", "
 "etc.)"
 
-#: ../../../CHANGELOG.md:269
+#: ../../../CHANGELOG.md:275
 msgid "Drag and drop from a file manager: filenames are now sorted alphabetically"
 msgstr ""
 "Glisser-déposer depuis un gestionnaire de fichiers : les noms de fichiers"
 " sont désormais triés par ordre alphabétique"
 
-#: ../../../CHANGELOG.md:271
+#: ../../../CHANGELOG.md:277
 msgid "DataLab Version 0.10.1"
 msgstr "DataLab Version 0.10.1"
 
-#: ../../../CHANGELOG.md:273
+#: ../../../CHANGELOG.md:279
 msgid ""
 "*Note*: V0.10.0 was almost immediately replaced by V0.10.1 due to a last "
 "minute bug fix"
@@ -1189,35 +1218,35 @@ msgstr ""
 "*Note* : la version 0.10.0 a été presque immédiatement remplacée par la "
 "version 0.10.1 en raison d'une correction de bogue de dernière minute"
 
-#: ../../../CHANGELOG.md:278
+#: ../../../CHANGELOG.md:284
 msgid "Features common to signals and images:"
 msgstr "Fonctionnalités communes aux signaux et aux images :"
 
-#: ../../../CHANGELOG.md:279
+#: ../../../CHANGELOG.md:285
 msgid "Added \"Real part\" and \"Imaginary part\" features to \"Operation\" menu"
 msgstr ""
 "Ajout des fonctionnalités \"Partie réelle\" et \"Partie imaginaire\" au "
 "menu \"Opération\""
 
-#: ../../../CHANGELOG.md:280
+#: ../../../CHANGELOG.md:286
 msgid "Added \"Convert data type\" feature to \"Operation\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Convertir le type de données\" au menu "
 "\"Opération\""
 
-#: ../../../CHANGELOG.md:281
+#: ../../../CHANGELOG.md:287
 msgid "Features added following user requests (12/18/2023 meetup @ CEA):"
 msgstr ""
 "Fonctionnalités ajoutées suite aux demandes des utilisateurs (rencontre "
 "du 18/12/2023 au CEA) :"
 
-#: ../../../CHANGELOG.md:282
+#: ../../../CHANGELOG.md:288
 msgid "Curve and image styles are now saved in the HDF5 file:"
 msgstr ""
 "Les styles de courbe et d'image sont désormais enregistrés dans le "
 "fichier HDF5 :"
 
-#: ../../../CHANGELOG.md:283
+#: ../../../CHANGELOG.md:289
 msgid ""
 "Curve style covers the following properties: color, line style, line "
 "width, marker style, marker size, marker edge color, marker face color, "
@@ -1227,13 +1256,13 @@ msgstr ""
 "ligne, largeur de ligne, style de marqueur, taille de marqueur, couleur "
 "de bordure de marqueur, couleur de remplissage de marqueur, etc."
 
-#: ../../../CHANGELOG.md:285
+#: ../../../CHANGELOG.md:291
 msgid "Image style covers the following properties: colormap, interpolation, etc."
 msgstr ""
 "Le style d'image couvre les propriétés suivantes : colormap, "
 "interpolation, etc."
 
-#: ../../../CHANGELOG.md:286
+#: ../../../CHANGELOG.md:292
 msgid ""
 "Those properties were already persistent during the working session, but "
 "were lost when saving and reloading the HDF5 file"
@@ -1242,7 +1271,7 @@ msgstr ""
 "mais étaient perdues lors de l'enregistrement et du rechargement du "
 "fichier HDF5"
 
-#: ../../../CHANGELOG.md:288
+#: ../../../CHANGELOG.md:294
 msgid ""
 "Now, those properties are saved in the HDF5 file and are restored when "
 "reloading the HDF5 file"
@@ -1250,11 +1279,11 @@ msgstr ""
 "Désormais, ces propriétés sont enregistrées dans le fichier HDF5 et sont "
 "restaurées lors du rechargement du fichier HDF5"
 
-#: ../../../CHANGELOG.md:290
+#: ../../../CHANGELOG.md:296
 msgid "New profile extraction features for images:"
 msgstr "Nouvelles fonctionnalités d'extraction de profil pour les images :"
 
-#: ../../../CHANGELOG.md:291
+#: ../../../CHANGELOG.md:297
 msgid ""
 "Added \"Line profile\" to \"Operations\" menu, to extract a profile from "
 "an image along a row or a column"
@@ -1262,7 +1291,7 @@ msgstr ""
 "Ajout de la fonctionnalité \"Profil rectiligne\" au menu \"Opérations\", "
 "pour extraire un profil d'une image le long d'une ligne ou d'une colonne"
 
-#: ../../../CHANGELOG.md:293
+#: ../../../CHANGELOG.md:299
 msgid ""
 "Added \"Average profile\" to \"Operations\" menu, to extract the average "
 "profile on a rectangular area of an image, along a row or a column"
@@ -1271,7 +1300,7 @@ msgstr ""
 "extraire le profil moyen sur une zone rectangulaire d'une image, le long "
 "d'une ligne ou d'une colonne"
 
-#: ../../../CHANGELOG.md:295
+#: ../../../CHANGELOG.md:301
 msgid ""
 "Image LUT range (contrast/brightness settings) is now saved in the HDF5 "
 "file:"
@@ -1279,7 +1308,7 @@ msgstr ""
 "La plage LUT de l'image (paramètres de contraste/luminosité) est "
 "désormais enregistrée dans le fichier HDF5 :"
 
-#: ../../../CHANGELOG.md:296
+#: ../../../CHANGELOG.md:302
 msgid ""
 "As for curve and image styles, the LUT range was already persistent "
 "during the working session, but was lost when saving and reloading the "
@@ -1289,7 +1318,7 @@ msgstr ""
 "persistante pendant la session de travail, mais était perdue lors de "
 "l'enregistrement et du rechargement du fichier HDF5"
 
-#: ../../../CHANGELOG.md:298
+#: ../../../CHANGELOG.md:304
 msgid ""
 "Now, the LUT range is saved in the HDF5 file and is restored when "
 "reloading it"
@@ -1297,7 +1326,7 @@ msgstr ""
 "Désormais, la plage LUT est enregistrée dans le fichier HDF5 et est "
 "restaurée lors du rechargement"
 
-#: ../../../CHANGELOG.md:299
+#: ../../../CHANGELOG.md:305
 msgid ""
 "Added \"Auto-refresh\" and \"Refresh manually\" actions in \"View\" menu "
 "(and main toolbar):"
@@ -1305,7 +1334,7 @@ msgstr ""
 "Ajout des actions \"Rafraîchissement automatique\" et \"Rafraîchissement "
 "manuel\" dans le menu \"Affichage\" (et la barre d'outils principale) :"
 
-#: ../../../CHANGELOG.md:301
+#: ../../../CHANGELOG.md:307
 msgid ""
 "When \"Auto-refresh\" is enabled (default), the plot view is "
 "automatically refreshed when a signal/image is modified, added or "
@@ -1318,7 +1347,7 @@ msgstr ""
 "cela peut entraîner des problèmes de performances lors de l'utilisation "
 "de grands ensembles de données."
 
-#: ../../../CHANGELOG.md:305
+#: ../../../CHANGELOG.md:311
 msgid ""
 "When disabled, the plot view is not automatically refreshed. The user "
 "must manually refresh the plot view by clicking on the \"Refresh "
@@ -1331,11 +1360,11 @@ msgstr ""
 "barre d'outils principale ou en appuyant sur la touche de "
 "rafraîchissement standard (par exemple \"F5\")."
 
-#: ../../../CHANGELOG.md:308
+#: ../../../CHANGELOG.md:314
 msgid "Added `toggle_auto_refresh` method to DataLab proxy object:"
 msgstr "Ajout de la méthode `toggle_auto_refresh` à l'objet proxy de DataLab :"
 
-#: ../../../CHANGELOG.md:309
+#: ../../../CHANGELOG.md:315
 msgid ""
 "This method allows to toggle the \"Auto-refresh\" feature from a macro-"
 "command, a plugin or a remote control client."
@@ -1344,7 +1373,7 @@ msgstr ""
 "\"Rafraîchissement automatique\" à partir d'une macro-commande, d'un "
 "plugin ou d'un client de contrôle à distance."
 
-#: ../../../CHANGELOG.md:311
+#: ../../../CHANGELOG.md:317
 msgid ""
 "A context manager `context_no_refresh` is also available to temporarily "
 "disable the \"Auto-refresh\" feature from a macro-command, a plugin or a "
@@ -1355,11 +1384,11 @@ msgstr ""
 "automatique\" à partir d'une macro-commande, d'un plugin ou d'un client "
 "de contrôle à distance. Utilisation typique :"
 
-#: ../../../CHANGELOG.md:321
+#: ../../../CHANGELOG.md:327
 msgid "Improved curve readability:"
 msgstr "Amélioration de la lisibilité des courbes :"
 
-#: ../../../CHANGELOG.md:322
+#: ../../../CHANGELOG.md:328
 msgid ""
 "Until this release, the curve style was automatically set by cycling "
 "through **PlotPy** predefined styles"
@@ -1367,7 +1396,7 @@ msgstr ""
 "Jusqu'à cette version, le style de la courbe était automatiquement défini"
 " en faisant défiler les styles prédéfinis de **PlotPy**"
 
-#: ../../../CHANGELOG.md:324
+#: ../../../CHANGELOG.md:330
 msgid ""
 "However, some styles are not suitable for curve readability (e.g. "
 "\"cyan\" and \"yellow\" colors are not readable on a white background, "
@@ -1378,7 +1407,7 @@ msgstr ""
 "lisibles sur un fond blanc, en particulier lorsqu'elles sont combinées "
 "avec un style de ligne \"pointillée\")"
 
-#: ../../../CHANGELOG.md:327
+#: ../../../CHANGELOG.md:333
 msgid ""
 "This release introduces a new curve style management with colors which "
 "are distinguishable and accessible, even to color vision deficiency "
@@ -1388,13 +1417,13 @@ msgstr ""
 "couleurs qui sont distinguables et accessibles, même pour les personnes "
 "atteintes de déficience de la vision des couleurs"
 
-#: ../../../CHANGELOG.md:329
+#: ../../../CHANGELOG.md:335
 msgid "Added \"Curve anti-aliasing\" feature to \"View\" menu (and toolbar):"
 msgstr ""
 "Ajout de la fonctionnalité \"Anti-aliasing de la courbe\" au menu "
 "\"Affichage\" (et à la barre d'outils) :"
 
-#: ../../../CHANGELOG.md:330
+#: ../../../CHANGELOG.md:336
 msgid ""
 "This feature allows to enable/disable curve anti-aliasing (default: "
 "enabled)"
@@ -1402,7 +1431,7 @@ msgstr ""
 "Cette fonctionnalité permet d'activer/désactiver l'anti-aliasing de la "
 "courbe (par défaut : activé)"
 
-#: ../../../CHANGELOG.md:331
+#: ../../../CHANGELOG.md:337
 msgid ""
 "When enabled, the curve rendering is smoother but may lead to performance"
 " issues when working with large datasets (that's why it can be disabled)"
@@ -1411,7 +1440,7 @@ msgstr ""
 "entraîner des problèmes de performances lors de l'utilisation de grands "
 "ensembles de données (c'est pourquoi il peut être désactivé)"
 
-#: ../../../CHANGELOG.md:333
+#: ../../../CHANGELOG.md:339
 msgid ""
 "Added `toggle_show_titles` method to DataLab proxy object. This method "
 "allows to toggle the \"Show graphical object titles\" feature from a "
@@ -1422,7 +1451,7 @@ msgstr ""
 "les titres des objets graphiques\" à partir d'une macro-commande, d'un "
 "plugin ou d'un client de contrôle à distance."
 
-#: ../../../CHANGELOG.md:336
+#: ../../../CHANGELOG.md:342
 msgid ""
 "Remote client is now checking the server version and shows a warning "
 "message if the server version may not be fully compatible with the client"
@@ -1432,11 +1461,11 @@ msgstr ""
 "message d'avertissement si la version du serveur n'est peut-être pas "
 "entièrement compatible avec la version du client."
 
-#: ../../../CHANGELOG.md:341
+#: ../../../CHANGELOG.md:347
 msgid "Image contour detection feature (\"Computing\" menu):"
 msgstr "Fonctionnalité de détection des contours de l'image (menu \"Calculer\") :"
 
-#: ../../../CHANGELOG.md:342
+#: ../../../CHANGELOG.md:348
 msgid ""
 "The contour detection feature was not taking into account the \"shape\" "
 "parameter (circle, ellipse, polygon) when computing the contours. The "
@@ -1448,7 +1477,7 @@ msgstr ""
 "contours. Le paramètre était stocké mais vraiment utilisé uniquement lors"
 " de l'appel de la fonctionnalité une deuxième fois."
 
-#: ../../../CHANGELOG.md:345
+#: ../../../CHANGELOG.md:351
 msgid ""
 "This unintentional behavior led to an `AssertionError` when choosing "
 "\"polygon\" as the contour shape and trying to compute the contours for "
@@ -1458,7 +1487,7 @@ msgstr ""
 "choix de \"polygone\" comme forme de contour et de la tentative de calcul"
 " des contours pour la première fois."
 
-#: ../../../CHANGELOG.md:347
+#: ../../../CHANGELOG.md:353
 msgid ""
 "This is now fixed (see [Issue #9](https://github.com/DataLab-"
 "Platform/DataLab/issues/9) - Image contour detection: `AssertionError` "
@@ -1468,11 +1497,11 @@ msgstr ""
 "Platform/DataLab/issues/9) - Détection des contours de l'image : "
 "`AssertionError` lors du choix de \"polygone\" comme forme de contour)"
 
-#: ../../../CHANGELOG.md:348
+#: ../../../CHANGELOG.md:354
 msgid "Keyboard shortcuts:"
 msgstr "Raccourcis clavier :"
 
-#: ../../../CHANGELOG.md:349
+#: ../../../CHANGELOG.md:355
 msgid ""
 "The keyboard shortcuts for \"New\", \"Open\", \"Save\", \"Duplicate\", "
 "\"Remove\", \"Delete all\" and \"Refresh manually\" actions were not "
@@ -1482,7 +1511,7 @@ msgstr ""
 "\"Enregistrer\", \"Dupliquer\", \"Supprimer\", \"Tout supprimer\" et "
 "\"Rafraîchir manuellement\" ne fonctionnaient pas correctement."
 
-#: ../../../CHANGELOG.md:351
+#: ../../../CHANGELOG.md:357
 msgid ""
 "Those shortcuts were specific to each signal/image panel, and were "
 "working only when the panel on which the shortcut was pressed for the "
@@ -1497,7 +1526,7 @@ msgstr ""
 "d'avertissement était affiché dans la console, par exemple "
 "`QAction::event: Ambiguous shortcut overload: Ctrl+C`)"
 
-#: ../../../CHANGELOG.md:356
+#: ../../../CHANGELOG.md:362
 msgid ""
 "Besides, the shortcuts were not working at startup (when no panel had "
 "focus)."
@@ -1505,7 +1534,7 @@ msgstr ""
 "De plus, les raccourcis ne fonctionnaient pas au démarrage (lorsqu'aucun "
 "panneau n'avait le focus)."
 
-#: ../../../CHANGELOG.md:357
+#: ../../../CHANGELOG.md:363
 msgid ""
 "This is now fixed: the shortcuts are now working whatever the active "
 "panel is, and even at startup (see [Issue #10](https://github.com"
@@ -1518,7 +1547,7 @@ msgstr ""
 "clavier ne fonctionnant pas correctement : `QAction::event: Ambiguous "
 "shortcut overload: Ctrl+C`)"
 
-#: ../../../CHANGELOG.md:359
+#: ../../../CHANGELOG.md:365
 msgid ""
 "\"Show graphical object titles\" and \"Auto-refresh\" actions were not "
 "working properly:"
@@ -1526,7 +1555,7 @@ msgstr ""
 "Les actions \"Afficher les titres des objets graphiques\" et "
 "\"Rafraîchissement automatique\" ne fonctionnaient pas correctement :"
 
-#: ../../../CHANGELOG.md:360
+#: ../../../CHANGELOG.md:366
 msgid ""
 "The \"Show graphical object titles\" and \"Auto-refresh\" actions were "
 "only working on the active signal/image panel, and not on all panels."
@@ -1535,7 +1564,7 @@ msgstr ""
 "\"Rafraîchissement automatique\" ne fonctionnaient que sur le panneau de "
 "signal/image actif, et non sur tous les panneaux."
 
-#: ../../../CHANGELOG.md:362
+#: ../../../CHANGELOG.md:368
 msgid ""
 "This is now fixed (see [Issue #11](https://github.com/DataLab-"
 "Platform/DataLab/issues/11) - \"Show graphical object titles\" and "
@@ -1546,7 +1575,7 @@ msgstr ""
 "objets graphiques\" et \"Rafraîchissement automatique\" ne fonctionnaient"
 " que sur le panneau de signal/image actuel)"
 
-#: ../../../CHANGELOG.md:363
+#: ../../../CHANGELOG.md:369
 msgid ""
 "Fixed [Issue #14](https://github.com/DataLab-Platform/DataLab/issues/14) "
 "- Saving/Reopening HDF5 project without cleaning-up leads to `ValueError`"
@@ -1555,7 +1584,7 @@ msgstr ""
 "Platform/DataLab/issues/14) - Enregistrer/Réouvrir le projet HDF5 sans "
 "nettoyage entraîne une `ValueError`"
 
-#: ../../../CHANGELOG.md:364
+#: ../../../CHANGELOG.md:370
 msgid ""
 "Fixed [Issue #15](https://github.com/DataLab-Platform/DataLab/issues/15) "
 "- MacOS: 1. `pip install cdl` error - 2. Missing menus:"
@@ -1564,7 +1593,7 @@ msgstr ""
 "Platform/DataLab/issues/15) - MacOS : 1. Erreur `pip install cdl` - 2. "
 "Menus manquants :"
 
-#: ../../../CHANGELOG.md:365
+#: ../../../CHANGELOG.md:371
 msgid ""
 "Part 1: `pip install cdl` error on MacOS was actually an issue from "
 "**PlotPy** (see [this "
@@ -1575,7 +1604,7 @@ msgstr ""
 "Partie 1 : l'erreur `pip install cdl` sur MacOS était en fait un problème"
 " de **PlotPy** (voir [ce problème]"
 
-#: ../../../CHANGELOG.md:368
+#: ../../../CHANGELOG.md:374
 msgid ""
 "Part 2: Missing menus on MacOS was due to a PyQt/MacOS bug regarding "
 "dynamic menus"
@@ -1583,7 +1612,7 @@ msgstr ""
 "Partie 2 : les menus manquants sur MacOS étaient dus à un bogue "
 "PyQt/MacOS concernant les menus dynamiques"
 
-#: ../../../CHANGELOG.md:369
+#: ../../../CHANGELOG.md:375
 msgid ""
 "HDF5 file format: when importing an HDF5 dataset as a signal or an image,"
 " the dataset attributes were systematically copied to signal/image "
@@ -1599,7 +1628,7 @@ msgstr ""
 "éviter les erreurs lors de la sérialisation/désérialisation de l'objet "
 "signal/image"
 
-#: ../../../CHANGELOG.md:373
+#: ../../../CHANGELOG.md:379
 msgid ""
 "Installation/configuration viewer: improved readability (removed syntax "
 "highlighting)"
@@ -1607,7 +1636,7 @@ msgstr ""
 "Visionneuse d'installation/configuration : amélioration de la lisibilité "
 "(suppression de la coloration syntaxique)"
 
-#: ../../../CHANGELOG.md:374
+#: ../../../CHANGELOG.md:380
 msgid ""
 "PyInstaller specification file: added missing `skimage` data files "
 "manually in order to continue supporting Python 3.8 (see [Issue "
@@ -1620,7 +1649,7 @@ msgstr ""
 "Platform/DataLab/issues/12) - Version autonome sur Windows 7 : `api-ms-"
 "win-core-path-l1-1-0.dll` manquant)"
 
-#: ../../../CHANGELOG.md:376
+#: ../../../CHANGELOG.md:382
 msgid ""
 "Fixed [Issue #13](https://github.com/DataLab-Platform/DataLab/issues/13) "
 "- ArchLinux: `qt.qpa.plugin: Could not load the Qt platform plugin "
@@ -1630,15 +1659,15 @@ msgstr ""
 "Platform/DataLab/issues/13) - ArchLinux : `qt.qpa.plugin: Could not load "
 "the Qt platform plugin \"xcb\" in \"\" even though it was found`"
 
-#: ../../../CHANGELOG.md:378
+#: ../../../CHANGELOG.md:384
 msgid "DataLab Version 0.9.2"
 msgstr "DataLab Version 0.9.2"
 
-#: ../../../CHANGELOG.md:382
+#: ../../../CHANGELOG.md:388
 msgid "Region of interest (ROI) extraction feature for images:"
 msgstr "Fonctionnalité d'extraction de la région d'intérêt (ROI) pour les images :"
 
-#: ../../../CHANGELOG.md:383
+#: ../../../CHANGELOG.md:389
 msgid ""
 "ROI extraction was not working properly when the \"Extract all regions of"
 " interest into a single image object\" option was enabled if there was "
@@ -1657,7 +1686,7 @@ msgstr ""
 "Platform/DataLab/issues/6) - Fonctionnalité 'Extraire plusieurs ROI' : "
 "résultat inattendu pour une seule ROI)"
 
-#: ../../../CHANGELOG.md:388
+#: ../../../CHANGELOG.md:394
 msgid ""
 "ROI rectangles with negative coordinates were not properly handled: ROI "
 "extraction was raising a `ValueError` exception, and the image mask was "
@@ -1674,7 +1703,7 @@ msgstr ""
 "`ValueError: zero-size array to reduction operation minimum which has no "
 "identity`)"
 
-#: ../../../CHANGELOG.md:392
+#: ../../../CHANGELOG.md:398
 msgid ""
 "ROI extraction was not taking into account the pixel size (dx, dy) and "
 "the origin (x0, y0) of the image. This is now fixed (see [Issue "
@@ -1686,11 +1715,11 @@ msgstr ""
 "[Issue #8](https://github.com/DataLab-Platform/DataLab/issues/8) - "
 "Extraction de la ROI de l'image : prendre en compte la taille des pixels)"
 
-#: ../../../CHANGELOG.md:395
+#: ../../../CHANGELOG.md:401
 msgid "Macro-command console is now read-only:"
 msgstr "La console de macro-commande est désormais en lecture seule :"
 
-#: ../../../CHANGELOG.md:396
+#: ../../../CHANGELOG.md:402
 msgid ""
 "The macro-command panel Python console is currently not supporting "
 "standard input stream (`stdin`) and this is intended (at least for now)"
@@ -1699,21 +1728,21 @@ msgstr ""
 "en charge le flux d'entrée standard (`stdin`) et c'est voulu (du moins "
 "pour l'instant)"
 
-#: ../../../CHANGELOG.md:398
+#: ../../../CHANGELOG.md:404
 msgid "Set Python console read-only to avoid confusion"
 msgstr "Définir la console Python en lecture seule pour éviter toute confusion"
 
-#: ../../../CHANGELOG.md:400
+#: ../../../CHANGELOG.md:406
 msgid "DataLab Version 0.9.1"
 msgstr "DataLab Version 0.9.1"
 
-#: ../../../CHANGELOG.md:404
+#: ../../../CHANGELOG.md:410
 msgid "French translation is not available on Windows/Stand alone version:"
 msgstr ""
 "La traduction française n'est pas disponible sur Windows/Version autonome"
 " :"
 
-#: ../../../CHANGELOG.md:405
+#: ../../../CHANGELOG.md:411
 msgid ""
 "Locale was not properly detected on Windows for stand-alone version "
 "(frozen with `pyinstaller`) due to an issue with `locale.getlocale()` "
@@ -1725,7 +1754,7 @@ msgstr ""
 "`locale.getlocale()` (fonction renvoyant `None` au lieu de la locale "
 "attendue sur les applications gelées)"
 
-#: ../../../CHANGELOG.md:408
+#: ../../../CHANGELOG.md:414
 msgid ""
 "This is ultimately a `pyinstaller` issue, but a workaround has been "
 "implemented in `guidata` V3.2.2 (see [guidata issue "
@@ -1737,7 +1766,7 @@ msgstr ""
 "guidata #68](https://github.com/PlotPyStack/guidata/issues/68) - Windows "
 ": la traduction gettext ne fonctionne pas sur les applications gelées)"
 
-#: ../../../CHANGELOG.md:410
+#: ../../../CHANGELOG.md:416
 msgid ""
 "[Issue #2](https://github.com/DataLab-Platform/DataLab/issues/2) - French"
 " translation is not available on Windows Stand alone version"
@@ -1746,19 +1775,19 @@ msgstr ""
 "traduction française n'est pas disponible sur la version autonome de "
 "Windows"
 
-#: ../../../CHANGELOG.md:411
+#: ../../../CHANGELOG.md:417
 msgid "Saving image to JPEG2000 fails for non integer data:"
 msgstr ""
 "L'enregistrement d'une image au format JPEG2000 échoue pour les données "
 "non entières :"
 
-#: ../../../CHANGELOG.md:412
+#: ../../../CHANGELOG.md:418
 msgid "JPEG2000 encoder does not support non integer data or signed integer data"
 msgstr ""
 "L'encodeur JPEG2000 ne prend pas en charge les données non entières ou "
 "les données entières signées"
 
-#: ../../../CHANGELOG.md:413
+#: ../../../CHANGELOG.md:419
 msgid ""
 "Before, DataLab was showing an error message when trying to save "
 "incompatible data to JPEG2000: this was not a consistent behavior with "
@@ -1773,7 +1802,7 @@ msgstr ""
 "automatiquement les données au format approprié (entier non signé sur 8 "
 "bits)"
 
-#: ../../../CHANGELOG.md:417
+#: ../../../CHANGELOG.md:423
 msgid ""
 "Current behavior is now consistent with other standard image formats: "
 "when saving to JPEG2000, DataLab automatically converts data to 8-bit "
@@ -1785,7 +1814,7 @@ msgstr ""
 "convertit automatiquement les données en entier non signé sur 8 bits ou "
 "en entier non signé sur 16 bits (en fonction du type de données original)"
 
-#: ../../../CHANGELOG.md:420
+#: ../../../CHANGELOG.md:426
 msgid ""
 "[Issue #3](https://github.com/DataLab-Platform/DataLab/issues/3) - Save "
 "image to JPEG2000: 'OSError: encoder error -2 when writing image file'"
@@ -1794,7 +1823,7 @@ msgstr ""
 "Sauvegarde d'image au format JPEG2000 : 'OSError: erreur d'encodeur -2 "
 "lors de l'écriture du fichier image'"
 
-#: ../../../CHANGELOG.md:421
+#: ../../../CHANGELOG.md:427
 msgid ""
 "Windows stand-alone version shortcuts not showing in current user start "
 "menu:"
@@ -1802,7 +1831,7 @@ msgstr ""
 "Les raccourcis de la version autonome de Windows ne s'affichent pas dans "
 "le menu de démarrage de l'utilisateur actuel :"
 
-#: ../../../CHANGELOG.md:422
+#: ../../../CHANGELOG.md:428
 msgid ""
 "When installing DataLab on Windows from a non-administrator account, the "
 "shortcuts were not showing in the current user start menu but in the "
@@ -1817,7 +1846,7 @@ msgstr ""
 " fait que l'installateur ne prend pas en charge l'installation de "
 "raccourcis pour tous les utilisateurs)"
 
-#: ../../../CHANGELOG.md:427
+#: ../../../CHANGELOG.md:433
 msgid ""
 "Now, the installer *does not* ask for elevated privileges anymore, and "
 "shortcuts are installed in the current user start menu (this also means "
@@ -1829,7 +1858,7 @@ msgstr ""
 "actuel (cela signifie également que l'utilisateur actuel doit disposer "
 "d'un accès en écriture au répertoire d'installation)"
 
-#: ../../../CHANGELOG.md:430
+#: ../../../CHANGELOG.md:436
 msgid ""
 "In future releases, the installer will support installing shortcuts for "
 "all users if there is a demand for it (see [Issue #5](https://github.com"
@@ -1840,7 +1869,7 @@ msgstr ""
 "demande à cet effet (voir [Issue #5](https://github.com/DataLab-"
 "Platform/DataLab/issues/5))"
 
-#: ../../../CHANGELOG.md:432
+#: ../../../CHANGELOG.md:438
 msgid ""
 "[Issue #4](https://github.com/DataLab-Platform/DataLab/issues/4) - "
 "Windows: stand-alone version shortcuts not showing in current user start "
@@ -1850,15 +1879,15 @@ msgstr ""
 "Windows : les raccourcis de la version autonome ne s'affichent pas dans "
 "le menu de démarrage de l'utilisateur actuel"
 
-#: ../../../CHANGELOG.md:433
+#: ../../../CHANGELOG.md:439
 msgid "Installation and configuration window for stand-alone version:"
 msgstr "Fenêtre d'installation et de configuration pour la version autonome :"
 
-#: ../../../CHANGELOG.md:434
+#: ../../../CHANGELOG.md:440
 msgid "Do not show ambiguous error message 'Invalid dependencies' anymore"
 msgstr "Ne plus afficher le message d'erreur ambigu 'Dépendances invalides'"
 
-#: ../../../CHANGELOG.md:435
+#: ../../../CHANGELOG.md:441
 msgid ""
 "Dependencies are supposed to be checked when building the stand-alone "
 "version"
@@ -1866,15 +1895,15 @@ msgstr ""
 "Les dépendances sont censées être vérifiées lors de la construction de la"
 " version autonome"
 
-#: ../../../CHANGELOG.md:436
+#: ../../../CHANGELOG.md:442
 msgid "Added PDF documentation to stand-alone version:"
 msgstr "Ajout de la documentation PDF à la version autonome :"
 
-#: ../../../CHANGELOG.md:437
+#: ../../../CHANGELOG.md:443
 msgid "The PDF documentation was missing in previous release"
 msgstr "La documentation PDF était manquante dans la version précédente"
 
-#: ../../../CHANGELOG.md:438
+#: ../../../CHANGELOG.md:444
 msgid ""
 "Now, the PDF documentation (in English and French) is included in the "
 "stand-alone version"
@@ -1882,33 +1911,33 @@ msgstr ""
 "Désormais, la documentation PDF (en anglais et en français) est incluse "
 "dans la version autonome"
 
-#: ../../../CHANGELOG.md:441
+#: ../../../CHANGELOG.md:447
 msgid "DataLab Version 0.9.0"
 msgstr "DataLab Version 0.9.0"
 
-#: ../../../CHANGELOG.md:443
+#: ../../../CHANGELOG.md:449
 msgid "New dependencies:"
 msgstr "Nouvelles dépendances :"
 
-#: ../../../CHANGELOG.md:445
+#: ../../../CHANGELOG.md:451
 msgid "DataLab is now powered by [PlotPyStack](https://github.com/PlotPyStack):"
 msgstr ""
 "DataLab est désormais alimenté par "
 "[PlotPyStack](https://github.com/PlotPyStack) :"
 
-#: ../../../CHANGELOG.md:446
+#: ../../../CHANGELOG.md:452
 msgid "[PythonQwt](https://github.com/PlotPyStack/PythonQwt)"
 msgstr "[PythonQwt](https://github.com/PlotPyStack/PythonQwt)"
 
-#: ../../../CHANGELOG.md:447
+#: ../../../CHANGELOG.md:453
 msgid "[guidata](https://github.com/PlotPyStack/guidata)"
 msgstr "[guidata](https://github.com/PlotPyStack/guidata)"
 
-#: ../../../CHANGELOG.md:448
+#: ../../../CHANGELOG.md:454
 msgid "[PlotPy](https://github.com/PlotPyStack/PlotPy)"
 msgstr "[PlotPy](https://github.com/PlotPyStack/PlotPy)"
 
-#: ../../../CHANGELOG.md:449
+#: ../../../CHANGELOG.md:455
 msgid ""
 "[opencv-python](https://pypi.org/project/opencv-python/) (algorithms for "
 "image processing)"
@@ -1916,15 +1945,15 @@ msgstr ""
 "[opencv-python](https://pypi.org/project/opencv-python/) (algorithmes de "
 "traitement d'image)"
 
-#: ../../../CHANGELOG.md:451
+#: ../../../CHANGELOG.md:457
 msgid "New reference platform:"
 msgstr "Nouvelle plateforme de référence :"
 
-#: ../../../CHANGELOG.md:453
+#: ../../../CHANGELOG.md:459
 msgid "DataLab is validated on Windows 11 with Python 3.11 and PyQt 5.15"
 msgstr "DataLab est validé sur Windows 11 avec Python 3.11 et PyQt 5.15"
 
-#: ../../../CHANGELOG.md:454
+#: ../../../CHANGELOG.md:460
 msgid ""
 "DataLab is also compatible with other OS (Linux, MacOS) and other Python-"
 "Qt bindings and versions (Python 3.8-3.12, PyQt6, PySide6)"
@@ -1933,25 +1962,25 @@ msgstr ""
 "(Linux, MacOS) et d'autres liaisons Python-Qt et versions (Python "
 "3.8-3.12, PyQt6, PySide6)"
 
-#: ../../../CHANGELOG.md:457
+#: ../../../CHANGELOG.md:463
 msgid "New features:"
 msgstr "Nouvelles fonctionnalités :"
 
-#: ../../../CHANGELOG.md:459
+#: ../../../CHANGELOG.md:465
 msgid "DataLab is a platform:"
 msgstr "DataLab est une plateforme :"
 
-#: ../../../CHANGELOG.md:460
+#: ../../../CHANGELOG.md:466
 msgid "Added support for plugins"
 msgstr "Ajout de la prise en charge des plugins"
 
-#: ../../../CHANGELOG.md:461
+#: ../../../CHANGELOG.md:467
 msgid "Custom processing features available in the \"Plugins\" menu"
 msgstr ""
 "Fonctionnalités de traitement personnalisées disponibles dans le menu "
 "\"Plugins\""
 
-#: ../../../CHANGELOG.md:462
+#: ../../../CHANGELOG.md:468
 msgid ""
 "Custom I/O features: new file formats can be added to the standard I/O "
 "features for signals and images"
@@ -1960,7 +1989,7 @@ msgstr ""
 "peuvent être ajoutés aux fonctionnalités d'E/S standard pour les signaux "
 "et les images"
 
-#: ../../../CHANGELOG.md:464
+#: ../../../CHANGELOG.md:470
 msgid ""
 "Custom HDF5 features: new HDF5 file formats can be added to the standard "
 "HDF5 import feature"
@@ -1968,11 +1997,11 @@ msgstr ""
 "Fonctionnalités HDF5 personnalisées : de nouveaux formats de fichier HDF5"
 " peuvent être ajoutés à la fonctionnalité d'importation HDF5 standard"
 
-#: ../../../CHANGELOG.md:466
+#: ../../../CHANGELOG.md:472
 msgid "More features to come..."
 msgstr "D'autres fonctionnalités à venir..."
 
-#: ../../../CHANGELOG.md:467
+#: ../../../CHANGELOG.md:473
 msgid ""
 "Added remote control feature: DataLab can be controlled remotely via a "
 "TCP/IP connection (see [Remote control](https://DataLab-"
@@ -1982,7 +2011,7 @@ msgstr ""
 "contrôlé à distance via une connexion TCP/IP (voir [Contrôle à "
 "distance](https://DataLab-Platform.github.io/fr/remote_control.html))"
 
-#: ../../../CHANGELOG.md:469
+#: ../../../CHANGELOG.md:475
 msgid ""
 "Added macro commands: DataLab can be controlled via a macro file (see "
 "[Macro commands](https://DataLab-"
@@ -1992,33 +2021,33 @@ msgstr ""
 "macro (voir [Commandes de macro](https://DataLab-"
 "Platform.github.io/fr/macro_commands.html))"
 
-#: ../../../CHANGELOG.md:471
+#: ../../../CHANGELOG.md:477
 msgid "General features:"
 msgstr "Fonctionnalités générales :"
 
-#: ../../../CHANGELOG.md:472
+#: ../../../CHANGELOG.md:478
 msgid "Added settings dialog box (see \"Settings\" entry in \"File\" menu):"
 msgstr ""
 "Ajout de la boîte de dialogue des paramètres (voir l'entrée "
 "\"Paramètres\" dans le menu \"Fichier\") :"
 
-#: ../../../CHANGELOG.md:473
+#: ../../../CHANGELOG.md:479
 msgid "General settings"
 msgstr "Paramètres généraux"
 
-#: ../../../CHANGELOG.md:474
+#: ../../../CHANGELOG.md:480
 msgid "Visualization settings"
 msgstr "Paramètres de visualisation"
 
-#: ../../../CHANGELOG.md:475
+#: ../../../CHANGELOG.md:481
 msgid "Processing settings"
 msgstr "Paramètres de traitement"
 
-#: ../../../CHANGELOG.md:476
+#: ../../../CHANGELOG.md:482
 msgid "Etc."
 msgstr "Etc."
 
-#: ../../../CHANGELOG.md:477
+#: ../../../CHANGELOG.md:483
 msgid ""
 "New default layout: signal/image panels are on the right side of the main"
 " window, visualization panels are on the left side with a vertical "
@@ -2028,11 +2057,11 @@ msgstr ""
 " le côté droit de la fenêtre principale, les panneaux de visualisation "
 "sont sur le côté gauche avec une barre d'outils verticale"
 
-#: ../../../CHANGELOG.md:479
+#: ../../../CHANGELOG.md:485
 msgid "Signal/Image features:"
 msgstr "Fonctionnalités de signal/image :"
 
-#: ../../../CHANGELOG.md:480
+#: ../../../CHANGELOG.md:486
 msgid ""
 "Added process isolation: each signal/image is processed in a separate "
 "process, so that DataLab does not freeze anymore when processing large "
@@ -2042,7 +2071,7 @@ msgstr ""
 "un processus séparé, de sorte que DataLab ne se fige plus lors du "
 "traitement de signaux/images volumineux"
 
-#: ../../../CHANGELOG.md:483
+#: ../../../CHANGELOG.md:489
 msgid ""
 "Added support for groups: signals and images can be grouped together, and"
 " operations can be applied to all objects in a group, or between groups"
@@ -2051,7 +2080,7 @@ msgstr ""
 "peuvent être regroupés, et des opérations peuvent être appliquées à tous "
 "les objets d'un groupe ou entre les groupes"
 
-#: ../../../CHANGELOG.md:485
+#: ../../../CHANGELOG.md:491
 msgid ""
 "Added warning and error dialogs with detailed traceback links to the "
 "source code (warnings may be optionally ignored)"
@@ -2060,21 +2089,21 @@ msgstr ""
 " poursuite détaillés vers le code source (les avertissements peuvent être"
 " ignorés en option)"
 
-#: ../../../CHANGELOG.md:487
+#: ../../../CHANGELOG.md:493
 msgid "Drastically improved performance when selecting objects"
 msgstr "Amélioration significative des performances lors de la sélection d'objets"
 
-#: ../../../CHANGELOG.md:488
+#: ../../../CHANGELOG.md:494
 msgid "Optimized performance when showing large images"
 msgstr "Optimisation des performances lors de l'affichage d'images volumineuses"
 
-#: ../../../CHANGELOG.md:489
+#: ../../../CHANGELOG.md:495
 msgid "Added support for dropping files on signal/image panel"
 msgstr ""
 "Ajout de la prise en charge du dépôt de fichiers sur le panneau de "
 "signal/image"
 
-#: ../../../CHANGELOG.md:490
+#: ../../../CHANGELOG.md:496
 msgid ""
 "Added \"Computing parameters\" group box to show last result input "
 "parameters"
@@ -2082,13 +2111,13 @@ msgstr ""
 "Ajout de la boîte de groupe \"Paramètres de calcul\" pour afficher les "
 "paramètres d'entrée du dernier résultat"
 
-#: ../../../CHANGELOG.md:491
+#: ../../../CHANGELOG.md:497
 msgid "Added \"Copy titles to clipboard\" feature in \"Edit\" menu"
 msgstr ""
 "Ajout de la fonctionnalité \"Copier les titres dans le presse-papiers\" "
 "dans le menu \"Édition\""
 
-#: ../../../CHANGELOG.md:492
+#: ../../../CHANGELOG.md:498
 msgid ""
 "For every single processing feature (operation, processing and computing "
 "menus), the entered parameters (dialog boxes) are stored in cache to be "
@@ -2099,21 +2128,21 @@ msgstr ""
 "stockés en cache pour être utilisés par défaut la prochaine fois que la "
 "fonctionnalité est utilisée"
 
-#: ../../../CHANGELOG.md:495
+#: ../../../CHANGELOG.md:501
 msgid "Signal processing:"
 msgstr "Traitement de signal :"
 
-#: ../../../CHANGELOG.md:496 ../../../CHANGELOG.md:540
+#: ../../../CHANGELOG.md:502 ../../../CHANGELOG.md:546
 msgid "Added support for optional FFT shift (see Settings dialog box)"
 msgstr ""
 "Ajout de la prise en charge du décalage FFT facultatif (voir la boîte de "
 "dialogue des paramètres)"
 
-#: ../../../CHANGELOG.md:497
+#: ../../../CHANGELOG.md:503
 msgid "Image processing:"
 msgstr "Traitement d'image :"
 
-#: ../../../CHANGELOG.md:498
+#: ../../../CHANGELOG.md:504
 msgid ""
 "Added pixel binning operation (X/Y binning factors, operation: sum, mean,"
 " ...)"
@@ -2121,7 +2150,7 @@ msgstr ""
 "Ajout de l'opération de binning de pixels (facteurs de binning X/Y, "
 "opération : somme, moyenne, ...)"
 
-#: ../../../CHANGELOG.md:499
+#: ../../../CHANGELOG.md:505
 msgid ""
 "Added \"Distribute on a grid\" and \"Reset image positions\" in operation"
 " menu"
@@ -2129,107 +2158,107 @@ msgstr ""
 "Ajout des options \"Distribuer sur une grille\" et \"Réinitialiser les "
 "positions des images\" dans le menu des opérations"
 
-#: ../../../CHANGELOG.md:500
+#: ../../../CHANGELOG.md:506
 msgid "Added Butterworth filter"
 msgstr "Ajout du filtre de Butterworth"
 
-#: ../../../CHANGELOG.md:501
+#: ../../../CHANGELOG.md:507
 msgid "Added exposure processing features:"
 msgstr "Ajout des fonctionnalités de traitement de l'exposition :"
 
-#: ../../../CHANGELOG.md:502
+#: ../../../CHANGELOG.md:508
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
-#: ../../../CHANGELOG.md:503
+#: ../../../CHANGELOG.md:509
 msgid "Logarithmic correction"
 msgstr "Correction logarithmique"
 
-#: ../../../CHANGELOG.md:504
+#: ../../../CHANGELOG.md:510
 msgid "Sigmoïd correction"
 msgstr "Correction sigmoïde"
 
-#: ../../../CHANGELOG.md:505
+#: ../../../CHANGELOG.md:511
 msgid "Added restoration processing features:"
 msgstr "Ajout des fonctionnalités de traitement de la restauration :"
 
-#: ../../../CHANGELOG.md:506
+#: ../../../CHANGELOG.md:512
 msgid "Total variation denoising filter (TV Chambolle)"
 msgstr "Filtre de débruitage par variation totale (TV Chambolle)"
 
-#: ../../../CHANGELOG.md:507
+#: ../../../CHANGELOG.md:513
 msgid "Bilateral filter (denoising)"
 msgstr "Filtre bilatéral (débruitage)"
 
-#: ../../../CHANGELOG.md:508
+#: ../../../CHANGELOG.md:514
 msgid "Wavelet denoising filter"
 msgstr "Filtre de débruitage par ondelettes"
 
-#: ../../../CHANGELOG.md:509
+#: ../../../CHANGELOG.md:515
 msgid "White Top-Hat denoising filter"
 msgstr "Filtre de débruitage White Top-Hat"
 
-#: ../../../CHANGELOG.md:510
+#: ../../../CHANGELOG.md:516
 msgid "Added morphological transforms (disk footprint):"
 msgstr "Ajout des transformations morphologiques (empreinte de disque) :"
 
-#: ../../../CHANGELOG.md:511
+#: ../../../CHANGELOG.md:517
 msgid "White Top-Hat"
 msgstr "White Top-Hat"
 
-#: ../../../CHANGELOG.md:512
+#: ../../../CHANGELOG.md:518
 msgid "Black Top-Hat"
 msgstr "Black Top-Hat"
 
-#: ../../../CHANGELOG.md:513
+#: ../../../CHANGELOG.md:519
 msgid "Erosion"
 msgstr "Érosion"
 
-#: ../../../CHANGELOG.md:514
+#: ../../../CHANGELOG.md:520
 msgid "Dilation"
 msgstr "Dilatation"
 
-#: ../../../CHANGELOG.md:515
+#: ../../../CHANGELOG.md:521
 msgid "Opening"
 msgstr "Ouverture"
 
-#: ../../../CHANGELOG.md:516
+#: ../../../CHANGELOG.md:522
 msgid "Closing"
 msgstr "Fermeture"
 
-#: ../../../CHANGELOG.md:517
+#: ../../../CHANGELOG.md:523
 msgid "Added edge detection features:"
 msgstr "Ajout des fonctionnalités de détection des contours :"
 
-#: ../../../CHANGELOG.md:518
+#: ../../../CHANGELOG.md:524
 msgid "Roberts filter"
 msgstr "Filtre de Roberts"
 
-#: ../../../CHANGELOG.md:519
+#: ../../../CHANGELOG.md:525
 msgid "Prewitt filter (vertical, horizontal, both)"
 msgstr "Filtre de Prewitt (vertical, horizontal, les deux)"
 
-#: ../../../CHANGELOG.md:520
+#: ../../../CHANGELOG.md:526
 msgid "Sobel filter (vertical, horizontal, both)"
 msgstr "Filtre de Sobel (vertical, horizontal, les deux)"
 
-#: ../../../CHANGELOG.md:521
+#: ../../../CHANGELOG.md:527
 msgid "Scharr filter (vertical, horizontal, both)"
 msgstr "Filtre de Scharr (vertical, horizontal, les deux)"
 
-#: ../../../CHANGELOG.md:522
+#: ../../../CHANGELOG.md:528
 msgid "Farid filter (vertical, horizontal, both)"
 msgstr "Filtre de Farid (vertical, horizontal, les deux)"
 
-#: ../../../CHANGELOG.md:523
+#: ../../../CHANGELOG.md:529
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-#: ../../../CHANGELOG.md:524
+#: ../../../CHANGELOG.md:530
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: ../../../CHANGELOG.md:525
+#: ../../../CHANGELOG.md:531
 msgid ""
 "Contour detection: added support for polygonal contours (in addition to "
 "circle and ellipse contours)"
@@ -2237,45 +2266,45 @@ msgstr ""
 "Détection des contours : ajout de la prise en charge des contours "
 "polygonaux (en plus des contours de cercle et d'ellipse)"
 
-#: ../../../CHANGELOG.md:527
+#: ../../../CHANGELOG.md:533
 msgid "Added circle Hough transform (circle detection)"
 msgstr ""
 "Ajout de la transformation de Hough pour les cercles (détection de "
 "cercles)"
 
-#: ../../../CHANGELOG.md:528
+#: ../../../CHANGELOG.md:534
 msgid "Added image intensity levels rescaling"
 msgstr "Ajout du rééchelonnement des niveaux d'intensité de l'image"
 
-#: ../../../CHANGELOG.md:529
+#: ../../../CHANGELOG.md:535
 msgid "Added histogram equalization"
 msgstr "Ajout de l'égalisation d'histogramme"
 
-#: ../../../CHANGELOG.md:530
+#: ../../../CHANGELOG.md:536
 msgid "Added adaptative histogram equalization"
 msgstr "Ajout de l'égalisation d'histogramme adaptative"
 
-#: ../../../CHANGELOG.md:531
+#: ../../../CHANGELOG.md:537
 msgid "Added blob detection methods:"
 msgstr "Ajout des méthodes de détection de blobs :"
 
-#: ../../../CHANGELOG.md:532
+#: ../../../CHANGELOG.md:538
 msgid "Difference of Gaussian"
 msgstr "Différence de Gaussienne"
 
-#: ../../../CHANGELOG.md:533
+#: ../../../CHANGELOG.md:539
 msgid "Determinant of Hessian method"
 msgstr "Méthode du déterminant de Hessian"
 
-#: ../../../CHANGELOG.md:534
+#: ../../../CHANGELOG.md:540
 msgid "Laplacian of Gaussian"
 msgstr "Laplacien de Gaussienne"
 
-#: ../../../CHANGELOG.md:535
+#: ../../../CHANGELOG.md:541
 msgid "Blob detection using OpenCV"
 msgstr "Détection de blobs à l'aide d'OpenCV"
 
-#: ../../../CHANGELOG.md:536
+#: ../../../CHANGELOG.md:542
 msgid ""
 "Result shapes and annotations are now transformed (instead of removed) "
 "when executing one of the following operations:"
@@ -2284,15 +2313,15 @@ msgstr ""
 "(au lieu d'être supprimées) lors de l'exécution de l'une des opérations "
 "suivantes :"
 
-#: ../../../CHANGELOG.md:538
+#: ../../../CHANGELOG.md:544
 msgid "Rotation (arbitrary angle, +90°, -90°)"
 msgstr "Rotation (angle arbitraire, +90°, -90°)"
 
-#: ../../../CHANGELOG.md:539
+#: ../../../CHANGELOG.md:545
 msgid "Symetry (vertical/horizontal)"
 msgstr "Symétrie (verticale/horizontale)"
 
-#: ../../../CHANGELOG.md:541
+#: ../../../CHANGELOG.md:547
 msgid ""
 "Console: added configurable external editor (default: VSCode) to follow "
 "the traceback links to the source code"

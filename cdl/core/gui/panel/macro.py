@@ -375,35 +375,29 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         for action in self.obj_actions:
             action.setEnabled(not_empty)
         if not_empty:
-            try:
-                macro = self.get_macro()
+            macro = self.get_macro()
+            if macro is not None:
+                macro: Macro
                 self.macro_state_changed(macro, macro.is_running())
-            except ValueError:
-                pass
 
-    def get_macro(self, number_or_title: int | str | None = None) -> Macro:
+    def get_macro(self, number_or_title: int | str | None = None) -> Macro | None:
         """Return macro at number (if number is None, return current macro)
 
         Args:
             number: Number of the macro (starting at 1) or title of the macro.
              Defaults to None (current macro).
 
-        Raises:
-            ValueError: If title is not found, or if macro is not found
-
         Returns:
-            Macro object
+            Macro object or None (if not found)
         """
         if number_or_title is None:
             number_or_title = self.tabwidget.get_current_number()
-            if number_or_title == 0:
-                raise ValueError("No macro found")
         if isinstance(number_or_title, str):
             return self.get_macro(self.get_number_from_title(number_or_title))
         for macro in self.__macros:
             if self.tabwidget.get_widget(number_or_title) is macro.editor:
                 return macro
-        raise ValueError(f"Macro not found: {number_or_title}")
+        return None
 
     def get_number_from_title(self, title: str) -> int | None:
         """Return macro number from title
@@ -413,14 +407,11 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
         Returns:
             Number of the macro (starting at 1) or None (if not found)
-
-        Raises:
-            ValueError: If title is not found
         """
         for number in range(1, self.tabwidget.count() + 1):
             if self.tabwidget.tabText(number - 1).endswith(title):
                 return number
-        raise ValueError(f"Macro with title '{title}' not found")
+        return None
 
     def get_number_from_macro(self, macro: Macro) -> int | None:
         """Return macro number from macro object
@@ -436,6 +427,10 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
                 return number
         return None
 
+    def get_macro_titles(self) -> list[str]:
+        """Return list of macro titles"""
+        return [macro.title for macro in self.__macros]
+
     def macro_contents_changed(self) -> None:
         """One of the macro contents has changed"""
         self.SIG_OBJECT_MODIFIED.emit()
@@ -444,22 +439,25 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         """Run current macro
 
         Args:
-            number: Number of the macro (starting at 1). Defaults to None.
-
-        Raises:
-            ValueError: If title is not found, or if macro is not found
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
         """
         macro = self.get_macro(number_or_title)
-        macro.run()
+        if macro is not None:
+            macro: Macro
+            macro.run()
 
     def stop_macro(self, number_or_title: int | str | None = None) -> None:
         """Stop current macro
 
-        Raises:
-            ValueError: If title is not found, or if macro is not found
+        Args:
+            number: Number of the macro (starting at 1). Defaults to None (run
+             current macro, or does nothing if there is no macro).
         """
         macro = self.get_macro(number_or_title)
-        macro.kill()
+        if macro is not None:
+            macro: Macro
+            macro.kill()
 
     def macro_state_changed(self, orig_macro: Macro, state: bool) -> None:
         """Macro state has changed (True: started, False: stopped)
@@ -502,6 +500,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             number: Number of the macro (starting at 1). Defaults to None.
         """
         macro = self.get_macro(number)
+        assert isinstance(macro, Macro)
         title, valid = QW.QInputDialog.getText(
             self,
             _("Rename"),
@@ -528,6 +527,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
             ValueError: If title is not found
         """
         macro = self.get_macro(number_or_title)
+        assert isinstance(macro, Macro)
         if filename is None:
             basedir = Conf.main.base_dir.get()
             with save_restore_stds():

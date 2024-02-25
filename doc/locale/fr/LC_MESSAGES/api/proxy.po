@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-19 15:08+0100\n"
+"POT-Creation-Date: 2024-02-25 22:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: cdl.proxy:2 of
 msgid "Proxy objects (:mod:`cdl.proxy`)"
@@ -66,12 +66,15 @@ msgstr ""
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
 #: cdl.core.baseproxy.BaseProxy.import_h5_file
+#: cdl.core.baseproxy.BaseProxy.import_macro_from_file
 #: cdl.core.baseproxy.BaseProxy.open_h5_files
 #: cdl.core.baseproxy.BaseProxy.open_object
+#: cdl.core.baseproxy.BaseProxy.run_macro
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file
 #: cdl.core.baseproxy.BaseProxy.select_groups
 #: cdl.core.baseproxy.BaseProxy.select_objects
 #: cdl.core.baseproxy.BaseProxy.set_current_panel
+#: cdl.core.baseproxy.BaseProxy.stop_macro
 #: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh
 #: cdl.core.baseproxy.BaseProxy.toggle_show_titles
 #: cdl.core.remote.RemoteClient.add_annotations_from_items
@@ -94,6 +97,8 @@ msgstr "Connexion automatique au serveur XML-RPC de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.get_object_titles
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
+#: cdl.core.baseproxy.BaseProxy.run_macro
+#: cdl.core.baseproxy.BaseProxy.stop_macro
 #: cdl.core.remote.RemoteClient.add_image
 #: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
 #: cdl.core.remote.RemoteClient.get_object cdl.proxy.LocalProxy.add_image
@@ -142,7 +147,6 @@ msgid "refresh plot. Defaults to True."
 msgstr "rafraîchir le tracé. Par défaut, True."
 
 #: cdl.core.baseproxy.BaseProxy.add_label_with_title:6
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:4
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:4
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:7
 #: cdl.proxy.LocalProxy.add_annotations_from_items:7 of
@@ -225,7 +229,6 @@ msgstr "Vrai si l'image a été ajoutée avec succès, Faux sinon"
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
 #: cdl.core.baseproxy.BaseProxy.get_current_panel
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
-#: cdl.core.baseproxy.BaseProxy.get_object_titles
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_version
 #: cdl.core.remote.RemoteClient.add_image
@@ -444,11 +447,20 @@ msgstr ""
 "Obtenir la liste des objets (signal/image) pour le panneau actuel. Les "
 "objets sont triés par numéro de groupe et index d'objet dans le groupe."
 
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:8 of
-msgid "list of object titles"
-msgstr "liste des titres des objets"
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:4 of
+msgid ""
+"panel name (valid values: \"signal\", \"image\", \"macro\"). If None, "
+"current data panel is used (i.e. signal or image panel)."
+msgstr ""
+"nom du panneau (valeurs valides : \"signal\", \"image\", \"macro\"). Si "
+"None, le panneau de données actuel est utilisé (c'est-à-dire le panneau "
+"signal ou image)."
 
-#: cdl.core.baseproxy.BaseProxy.get_object_titles:11
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:7 of
+msgid "List of object titles"
+msgstr "Liste des titres des objets"
+
+#: cdl.core.baseproxy.BaseProxy.get_object_titles:9
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids:11 of
 msgid "if panel not found"
 msgstr "si le panneau n'est pas trouvé"
@@ -510,6 +522,14 @@ msgstr "Nom du fichier HDF5"
 msgid "Reset all application data. Defaults to None."
 msgstr "Réinitialiser toutes les données de l'application. Par défaut, None."
 
+#: cdl.core.baseproxy.BaseProxy.import_macro_from_file:1 of
+msgid "Import macro from file"
+msgstr "Importer une macro à partir d'un fichier"
+
+#: cdl.core.baseproxy.BaseProxy.import_macro_from_file:3 of
+msgid "Filename."
+msgstr "Nom de fichier."
+
 #: cdl.core.remote.RemoteClient.is_connected:1 of
 msgid "Return True if connected to DataLab XML-RPC server."
 msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
@@ -545,6 +565,20 @@ msgstr "Afficher la fenêtre DataLab"
 #: cdl.core.baseproxy.BaseProxy.reset_all:1 of
 msgid "Reset all application data"
 msgstr "Réinitialiser toutes les données de l'application"
+
+#: cdl.core.baseproxy.BaseProxy.run_macro:1 of
+msgid "Run macro."
+msgstr "Exécute la macro."
+
+#: cdl.core.baseproxy.BaseProxy.run_macro:3
+#: cdl.core.baseproxy.BaseProxy.stop_macro:3 of
+msgid "Macro number, or macro title. Defaults to None (current macro)."
+msgstr "Numéro de macro, ou titre de macro. Par défaut, None (macro actuelle)."
+
+#: cdl.core.baseproxy.BaseProxy.run_macro:6
+#: cdl.core.baseproxy.BaseProxy.stop_macro:6 of
+msgid "if macro not found"
+msgstr "si la macro n'est pas trouvée"
 
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file:1 of
 msgid "Save to a DataLab HDF5 file."
@@ -582,6 +616,10 @@ msgstr "Liste de numéros d'objet (1 à N) ou d'UUID à sélectionner"
 #: cdl.core.baseproxy.BaseProxy.set_current_panel:1 of
 msgid "Switch to panel."
 msgstr "Passer au panneau."
+
+#: cdl.core.baseproxy.BaseProxy.stop_macro:1 of
+msgid "Stop macro."
+msgstr "Arrête la macro."
 
 #: cdl.core.baseproxy.BaseProxy.toggle_auto_refresh:1 of
 msgid "Toggle auto refresh state."
@@ -709,6 +747,3 @@ msgstr "avec proxy_context(\"local\") en tant que proxy :"
 #: cdl.proxy.proxy_context:16 of
 msgid "proxy.add_signal(...)"
 msgstr "proxy.add_signal(...)"
-
-#~ msgid "Proxy module (:mod:`cdl.proxy`)"
-#~ msgstr ""

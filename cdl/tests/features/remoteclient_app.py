@@ -150,8 +150,11 @@ class HostWindow(embedded1_unit.AbstractClientWindow):
             titles = self.cdl.get_object_titles()
             if titles:
                 obj = self.cdl.get_object()
-                self.host.log(f"Object '{obj.title}'")
-                self.host.log(str(obj))
+                if obj is not None:
+                    self.host.log(f"Object '{obj.title}'")
+                    self.host.log(str(obj))
+                else:
+                    self.host.log("🏴‍☠️ Object is None! (no selection)")
             else:
                 self.host.log("🏴‍☠️ Object list is empty!")
 
@@ -195,6 +198,8 @@ def test_remote_client():
             bring_to_front(window)
             with qt_wait_print(dt, "Raising DataLab window"):
                 window.raise_cdl()
+            with qt_wait_print(dt, "Import macro"):
+                window.import_macro()
             with qt_wait_print(dt, "Getting object titles"):
                 window.get_object_titles()
             with qt_wait_print(dt, "Getting object uuids"):
@@ -205,6 +210,10 @@ def test_remote_client():
                 window.add_signals()
             with qt_wait_print(dt, "Adding images"):
                 window.add_images()
+            with qt_wait_print(dt, "Run macro"):
+                window.run_macro()
+            with qt_wait_print(dt * 2, "Stop macro"):
+                window.stop_macro()
             with qt_wait_print(dt, "Removing all objects"):
                 window.remove_all()
             with qt_wait_print(dt, "Closing DataLab"):

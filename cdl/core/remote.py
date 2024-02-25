@@ -159,6 +159,9 @@ class RemoteServer(QC.QThread):
     SIG_OPEN_H5 = QC.Signal(list, bool, bool)
     SIG_IMPORT_H5 = QC.Signal(str, bool)
     SIG_CALC = QC.Signal(str, object)
+    SIG_RUN_MACRO = QC.Signal(str)
+    SIG_STOP_MACRO = QC.Signal(str)
+    SIG_IMPORT_MACRO_FROM_FILE = QC.Signal(str)
 
     def __init__(self, win: CDLMainWindow) -> None:
         QC.QThread.__init__(self)
@@ -182,6 +185,9 @@ class RemoteServer(QC.QThread):
         self.SIG_OPEN_H5.connect(win.open_h5_files)
         self.SIG_IMPORT_H5.connect(win.import_h5_file)
         self.SIG_CALC.connect(win.calc)
+        self.SIG_RUN_MACRO.connect(win.run_macro)
+        self.SIG_STOP_MACRO.connect(win.stop_macro)
+        self.SIG_IMPORT_MACRO_FROM_FILE.connect(win.import_macro_from_file)
 
     def serve(self) -> None:
         """Start server and serve forever"""
@@ -497,10 +503,11 @@ class RemoteServer(QC.QThread):
         Objects are sorted by group number and object index in group.
 
         Args:
-            panel (str | None): Panel name. Defaults to None.
+            panel: panel name (valid values: "signal", "image", "macro").
+             If None, current data panel is used (i.e. signal or image panel).
 
         Returns:
-            list[str]: Object titles
+            List of object titles
         """
         return self.win.get_object_titles(panel)
 
@@ -589,6 +596,35 @@ class RemoteServer(QC.QThread):
                 If None, current panel is used.
         """
         self.win.add_label_with_title(title, panel)
+
+    @remote_call
+    def run_macro(self, number_or_title: int | str | None = None) -> None:
+        """Run macro.
+
+        Args:
+             number: Number of the macro (starting at 1). Defaults to None (run
+              current macro, or does nothing if there is no macro).
+        """
+        self.SIG_RUN_MACRO.emit(number_or_title)
+
+    @remote_call
+    def stop_macro(self, number_or_title: int | str | None = None) -> None:
+        """Stop macro.
+
+        Args:
+            number: Number of the macro (starting at 1). Defaults to None (stop
+             current macro, or does nothing if there is no macro).
+        """
+        self.SIG_STOP_MACRO.emit(number_or_title)
+
+    @remote_call
+    def import_macro_from_file(self, filename: str) -> None:
+        """Import macro from file
+
+        Args:
+            filename: Filename.
+        """
+        self.SIG_IMPORT_MACRO_FROM_FILE.emit(filename)
 
 
 RemoteServer.check_remote_functions()
