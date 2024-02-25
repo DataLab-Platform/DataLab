@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.12.1 ##
+## DataLab Version 0.13.0 ##
 
 💥 New features:
 
