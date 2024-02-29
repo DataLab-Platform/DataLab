@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.13.0 ##
+## DataLab Version 0.14.0 ##
 
 💥 New features:
 
@@ -21,6 +21,9 @@ for future and past milestones.
 
 🛠️ Bug fixes:
 
+* Stand-alone version - Integration in Windows start menu:
+  * Fixed "Uninstall" shortcut (unclickable due to a generic name)
+  * Translated "Browse installation directory" and "Uninstall" shortcuts
 * Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties
 * Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - "Test data" plugin: `AttributeError: 'NoneType' object has no attribute 'data'` when canceling "Create image with peaks"
 * Fixed [Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Circle and ellipse result shapes are not transformed properly
