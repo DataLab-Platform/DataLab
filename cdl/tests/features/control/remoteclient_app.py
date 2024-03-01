@@ -25,8 +25,8 @@ from cdl import app
 from cdl.config import _
 from cdl.env import execenv
 from cdl.proxy import RemoteProxy
-from cdl.tests.features import embedded1_unit
-from cdl.tests.features.remoteclient_unit import multiple_commands
+from cdl.tests.features.control import embedded1_unit
+from cdl.tests.features.control.remoteclient_unit import multiple_commands
 from cdl.tests.features.utilities.logview_app import exec_script
 from cdl.utils.qthelpers import bring_to_front
 from cdl.widgets.connection import ConnectionDialog

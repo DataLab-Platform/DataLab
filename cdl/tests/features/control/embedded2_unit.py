@@ -13,7 +13,7 @@ It is shown and raised above other windows when reopening application.
 # guitest: show
 
 from cdl.core.gui.main import CDLMainWindow
-from cdl.tests.features import embedded1_unit
+from cdl.tests.features.control import embedded1_unit
 
 
 class HostWindow(embedded1_unit.AbstractHostWindow):
