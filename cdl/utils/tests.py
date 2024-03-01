@@ -9,6 +9,7 @@ Module providing test utilities
 
 from __future__ import annotations
 
+import atexit
 import functools
 import os
 import os.path as osp
@@ -98,6 +99,15 @@ def get_output_data_path(extension: str, suffix: str | None = None) -> str:
     return osp.join(TST_PATH[0], f"{name}.{extension}")
 
 
+class CustomTemporaryDirectory(tempfile.TemporaryDirectory):
+    def cleanup(self) -> None:
+        """Cleanup temporary directory and ignore errors"""
+        try:
+            super().cleanup()
+        except (PermissionError, RecursionError):
+            pass
+
+
 @contextmanager
 def temporary_directory() -> Generator[str, None, None]:
     """Create a temporary directory and clean-up afterwards"""
@@ -105,14 +115,18 @@ def temporary_directory() -> Generator[str, None, None]:
     #  errors occuring when cleaning up directory at exit
     #  TODO: [P4] Requires Python 3.10 / Use "ignore_cleanup_errors=True" instead
     #  In other words: this function will be replaced by TemporaryDirectory context mgr
-    tmp = tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
+    tmp = CustomTemporaryDirectory()  # pylint: disable=consider-using-with
     try:
         yield tmp.name
     finally:
-        try:
-            tmp.cleanup()
-        except (PermissionError, RecursionError):
-            pass
+        tmp.cleanup()
+
+
+def get_temporary_directory() -> str:
+    """Return path to a temporary directory, and clean-up at exit"""
+    tmp = CustomTemporaryDirectory()
+    atexit.register(tmp.cleanup)
+    return tmp.name
 
 
 def exec_script(

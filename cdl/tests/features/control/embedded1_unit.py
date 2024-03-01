@@ -28,9 +28,31 @@ import cdl.obj
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
+from cdl.utils.tests import get_temporary_directory
 
-MACRO_EXAMPLE_FILENAME = osp.join(osp.dirname(__file__), "macro_example.py")
-assert osp.isfile(MACRO_EXAMPLE_FILENAME), f"File not found: {MACRO_EXAMPLE_FILENAME}"
+
+def get_macro_example_path() -> str:
+    """Return macro example path"""
+    path = get_temporary_directory()
+    contents = """
+# Simple DataLab macro example
+
+import numpy as np
+
+from cdl.proxy import RemoteProxy
+
+proxy = RemoteProxy()
+
+z = np.random.rand(20, 20)
+proxy.add_image("toto", z)
+proxy.compute_fft()
+
+print("All done! :)")
+"""
+    filename = osp.join(path, "macro_example.py")
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(contents)
+    return filename
 
 
 class HostWidget(QW.QWidget):
@@ -213,8 +235,9 @@ class AbstractClientWindow(QW.QMainWindow, metaclass=AbstractClientWindowMeta):
     def import_macro(self):
         """Import macro in DataLab"""
         if self.cdl is not None:
-            self.cdl.import_macro_from_file(MACRO_EXAMPLE_FILENAME)
-            self.host.log(f"=> Imported macro: {MACRO_EXAMPLE_FILENAME}")
+            fname = get_macro_example_path()
+            self.cdl.import_macro_from_file(fname)
+            self.host.log(f"=> Imported macro: {fname}")
 
 
 class AbstractHostWindow(AbstractClientWindow):  # pylint: disable=abstract-method
