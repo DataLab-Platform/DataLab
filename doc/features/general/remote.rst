@@ -115,7 +115,7 @@ to connect to a running DataLab instance. It is exposed by the
 
 Example of use:
 
-.. literalinclude:: ../../../cdl/tests/features/connect_dialog.py
+.. literalinclude:: ../../../cdl/tests/features/control/connect_dialog.py
 
 Public API: remote client
 ^^^^^^^^^^^^^^^^^^^^^^^^^
