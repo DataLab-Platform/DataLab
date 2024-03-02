@@ -23,7 +23,7 @@ def test_h5browser_all_files(pattern=None):
     with qt_app_context():
         fnames = get_test_fnames("*.h5" if pattern is None else pattern)
         for index, fname in enumerate(fnames):
-            dlg = create_h5browser_dialog(fname)
+            dlg = create_h5browser_dialog(fname, toggle_all=True, select_all=True)
             dlg.setObjectName(dlg.objectName() + f"_{index:02d}")
             exec_dialog(dlg)
 

@@ -19,7 +19,9 @@ from cdl.tests.data import get_test_fnames
 from cdl.widgets.h5browser import H5BrowserDialog
 
 
-def create_h5browser_dialog(fname: str) -> H5BrowserDialog:
+def create_h5browser_dialog(
+    fname: str, toggle_all: bool = False, select_all: bool = False
+) -> H5BrowserDialog:
     """Create HDF5 browser dialog with all nodes expanded and selected
 
     Args:
@@ -29,17 +31,17 @@ def create_h5browser_dialog(fname: str) -> H5BrowserDialog:
         H5BrowserDialog instance
     """
     execenv.print(f"Opening: {fname}")
-    dlg = H5BrowserDialog(None, size=(1050, 450))
+    dlg = H5BrowserDialog(None)
     dlg.setup(fname)
-    dlg.browser.tree.toggle_all(True)
-    dlg.browser.tree.select_all(True)
+    dlg.browser.tree.toggle_all(toggle_all)
+    dlg.browser.tree.select_all(select_all)
     return dlg
 
 
 def test_h5browser() -> None:
     """Test HDF5 browser"""
     with qt_app_context():
-        dlg = create_h5browser_dialog(get_test_fnames("*.h5")[-1])
+        dlg = create_h5browser_dialog(get_test_fnames("*.h5")[-2])
         exec_dialog(dlg)
 
 

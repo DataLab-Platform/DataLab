@@ -19,8 +19,7 @@ DATALAB_VERSION_NAME = "DataLab_Version"
 
 
 class NativeH5Writer(HDF5Writer):
-    """DataLab signal/image objects HDF5 guidata Dataset Writer class,
-    supporting dictionary serialization
+    """DataLab signal/image objects HDF5 guidata Dataset Writer class
 
     Args:
         filename (str): HDF5 file name
@@ -32,8 +31,7 @@ class NativeH5Writer(HDF5Writer):
 
 
 class NativeH5Reader(HDF5Reader):
-    """DataLab signal/image objects HDF5 guidata dataset Writer class,
-    supporting dictionary deserialization
+    """DataLab signal/image objects HDF5 guidata dataset Writer class
 
     Args:
         filename (str): HDF5 file name

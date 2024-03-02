@@ -12,6 +12,11 @@ for future and past milestones.
   * The histogram is computed on the regions of interest (ROI) if any, or on the
     whole signal/image if no ROI is defined
   * Editable parameters: number of bins, lower and upper bounds
+* HDF5 browser:
+  * Improved tree view layout (more compact and readable)
+  * Added tabs with information below the graphical preview:
+    * Group info: path, textual preview, etc.
+    * Attributes info: name, value
 * Macro Panel:
   * Macro commands are now numbered, starting from 1, like signals and images
 * Remote control API (`RemoteProxy` and `LocalProxy`):

@@ -131,6 +131,7 @@ class GenericArrayNode(BaseGenericNode):
     @property
     def text(self):
         """Return node textual representation"""
+        return str(self.data)
 
     def create_native_object(self):
         """Create native object, if supported"""

@@ -14,6 +14,7 @@ from __future__ import annotations
 import abc
 import os
 import os.path as osp
+from typing import TYPE_CHECKING, Any
 
 from guidata.qthelpers import (
     add_actions,
@@ -29,17 +30,21 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
+from cdl.core.model.signal import CurveStyles
 from cdl.env import execenv
-from cdl.obj import SignalObj
+from cdl.obj import ImageObj, SignalObj
 from cdl.utils.qthelpers import qt_handle_error_message
 from cdl.utils.strings import to_string
 
+if TYPE_CHECKING:
+    from cdl.core.io.h5.common import BaseNode
 
-class BaseTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
+
+class AbstractTreeWidgetMeta(type(QW.QTreeWidget), abc.ABCMeta):
     """Mixed metaclass to avoid conflicts"""
 
 
-class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
+class AbstractTreeWidget(QW.QTreeWidget, metaclass=AbstractTreeWidgetMeta):
     """One-column tree widget with context menu, ..."""
 
     def __init__(self, parent: QW.QWidget) -> None:
@@ -197,44 +202,68 @@ class BaseTreeWidget(QW.QTreeWidget, metaclass=BaseTreeWidgetMeta):
         self.menu.popup(event.globalPos())
 
 
-class H5TreeWidget(BaseTreeWidget):
-    """HDF5 Browser Tree Widget"""
+class H5TreeWidget(AbstractTreeWidget):
+    """HDF5 Browser Tree Widget
+
+    Args:
+        parent: Parent widget
+    """
 
     SIG_SELECTED = QC.Signal(QW.QTreeWidgetItem)
 
-    def __init__(self, parent):
+    def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
         title = _("HDF5 Browser")
         self.setColumnCount(4)
         self.setWindowTitle(title)
-        self.setHeaderLabels([_("Name"), _("Size"), _("Type"), _("Textual preview")])
+        self.setHeaderLabels([_("Name"), _("Size"), _("Type"), _("Value")])
+        self.header().setSectionResizeMode(0, QW.QHeaderView.Stretch)
+        self.header().setStretchLastSection(False)
         self.fname = None
         self.h5importer = None
 
-    def setup(self, fname):
-        """Setup H5TreeWidget"""
+    def setup(self, fname: str) -> None:
+        """Setup H5TreeWidget
+
+        Args:
+            fname: HDF5 file name
+        """
         self.fname = osp.abspath(fname)
         self.h5importer = H5Importer(self.fname)
         self.clear()
         self.populate_tree()
         self.expandAll()
-        for col in range(3):
+        for col in range(1, 4):
             self.resizeColumnToContents(col)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Clean up widget"""
         self.h5importer.close()
         self.h5importer = None
 
-    def get_node(self, item):
-        """Get HDF5 dataset associated to item"""
+    def get_node(self, item: QW.QTreeWidgetItem) -> BaseNode:
+        """Get HDF5 dataset associated to item
+
+        Args:
+            item: Tree item
+
+        Returns:
+            HDF5 node
+        """
         node_id = item.data(0, QC.Qt.UserRole)
         if node_id:
             return self.h5importer.get(node_id)
         return None
 
-    def get_nodes(self, only_checked_items=True):
-        """Get all nodes associated to checked items"""
+    def get_nodes(self, only_checked_items: bool = True) -> list[BaseNode]:
+        """Get all nodes associated to checked items
+
+        Args:
+            only_checked_items: If True, only checked items are returned
+
+        Returns:
+            List of HDF5 nodes
+        """
         datasets = []
         for item in self.find_all_items():
             if item.flags() & QC.Qt.ItemIsUserCheckable:
@@ -245,12 +274,12 @@ class H5TreeWidget(BaseTreeWidget):
                     datasets.append(self.h5importer.get(node_id))
         return datasets
 
-    def activated(self, item):
+    def activated(self, item: QW.QTreeWidgetItem) -> None:
         """Double-click event"""
         if item is not self.topLevelItem(0):
             self.SIG_SELECTED.emit(item)
 
-    def clicked(self, item):
+    def clicked(self, item: QW.QTreeWidgetItem) -> None:
         """Click event"""
         self.activated(item)
 
@@ -258,40 +287,53 @@ class H5TreeWidget(BaseTreeWidget):
         """Get actions from item"""
         return []
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         """Return True if tree is empty"""
         return len(self.find_all_items()) == 1
 
-    def is_any_item_checked(self):
+    def is_any_item_checked(self) -> bool:
         """Return True if any item is checked"""
         for item in self.find_all_items():
             if item.checkState(0) > 0:
                 return True
         return False
 
-    def select_all(self, state):
-        """Select all items"""
+    def select_all(self, state: bool) -> None:
+        """Select all items
+
+        Args:
+            state: If True, all items are selected
+        """
         for item in self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive):
             if item.flags() & QC.Qt.ItemIsUserCheckable:
                 item.setSelected(state)
                 if state:
                     self.clicked(item)
 
-    def toggle_all(self, state):
+    def toggle_all(self, state: bool) -> None:
         """Toggle all item state from 'unchecked' to 'checked'
-        (or vice-versa)"""
+        (or vice-versa)
+
+        Args:
+            state: If True, all items are checked
+        """
         for item in self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive):
             if item.flags() & QC.Qt.ItemIsUserCheckable:
                 item.setCheckState(0, QC.Qt.Checked if state else QC.Qt.Unchecked)
 
     @staticmethod
-    def __create_node(node):
+    def __create_node(node: BaseNode) -> QW.QTreeWidgetItem:
+        """Create tree node from HDF5 node
+
+        Args:
+            node: HDF5 node
+
+        Returns:
+            Tree widget node
+        """
         text = to_string(node.text)
-        if text:
-            lines = text.splitlines()[:5]
-            if len(lines) == 5:
-                lines += ["[...]"]
-            text = os.linesep.join(lines)
+        if len(text) > 10:
+            text = text[:10] + "..."
         treeitem = QW.QTreeWidgetItem([node.name, node.shape_str, node.dtype_str, text])
         treeitem.setData(0, QC.Qt.UserRole, node.id)
         if node.description:
@@ -300,8 +342,13 @@ class H5TreeWidget(BaseTreeWidget):
         return treeitem
 
     @staticmethod
-    def __recursive_popfunc(parent_item, node):
-        """Recursive HDF5 analysis"""
+    def __recursive_popfunc(parent_item: QW.QTreeWidgetItem, node: BaseNode) -> None:
+        """Recursive HDF5 analysis
+
+        Args:
+            parent_item: Parent tree item
+            node: HDF5 node
+        """
         tree_item = H5TreeWidget.__create_node(node)
         if node.IS_ARRAY:
             tree_item.setCheckState(0, QC.Qt.Unchecked)
@@ -312,7 +359,7 @@ class H5TreeWidget(BaseTreeWidget):
         for child in node.children:
             H5TreeWidget.__recursive_popfunc(tree_item, child)
 
-    def populate_tree(self):
+    def populate_tree(self) -> None:
         """Populate tree"""
         root = self.h5importer.root
         rootitem = QW.QTreeWidgetItem([root.name])
@@ -325,46 +372,24 @@ class H5TreeWidget(BaseTreeWidget):
             self.__recursive_popfunc(rootitem, node)
 
 
-class H5Browser(QW.QSplitter):
-    """HDF5 Browser Widget"""
+class VisualPreview(QW.QStackedWidget):
+    """Visual preview"""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
-        self.tree = H5TreeWidget(self)
-        self.tree.SIG_SELECTED.connect(self.view_selected_item)
-        self.addWidget(self.tree)
-        self.stack = QW.QStackedWidget(self)
-        self.addWidget(self.stack)
-        self.curvewidget = PlotWidget(self.stack, options=PlotOptions(type="curve"))
-        self.stack.addWidget(self.curvewidget)
+        self.curvewidget = PlotWidget(self, options=PlotOptions(type="curve"))
+        self.addWidget(self.curvewidget)
         self.imagewidget = PlotWidget(
-            self.stack, options=PlotOptions(type="image", show_contrast=True)
+            self, options=PlotOptions(type="image", show_contrast=True)
         )
-        self.stack.addWidget(self.imagewidget)
+        self.addWidget(self.imagewidget)
 
-    def setup(self, fname):
-        """Setup widget"""
-        self.tree.setup(fname)
-
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Clean up widget"""
         for widget in (self.imagewidget, self.curvewidget):
             widget.get_plot().del_all_items()
-        self.tree.cleanup()
 
-    def get_node(self, item=None):
-        """Return (selected) dataset"""
-        if item is None:
-            item = self.tree.currentItem()
-        return self.tree.get_node(item)
-
-    def view_selected_item(self, item):
-        """View selected item"""
-        node = self.get_node(item)
-        if node.IS_ARRAY:
-            self.update_visual_preview(node)
-
-    def update_visual_preview(self, node):
+    def update_visual_preview(self, node: BaseNode) -> None:
         """Update visual preview widget"""
         try:
             obj = node.get_native_object()
@@ -375,8 +400,11 @@ class H5Browser(QW.QSplitter):
             # An error occurred while creating the object (invalid data, ...)
             return
         if isinstance(obj, SignalObj):
+            obj: SignalObj
             widget = self.curvewidget
+            CurveStyles.reset_styles()
         else:
+            obj: ImageObj
             widget = self.imagewidget
         item = obj.make_item()
         plot = widget.get_plot()
@@ -393,13 +421,161 @@ class H5Browser(QW.QSplitter):
         #        be added to the plot.
         obj.update_item(item)
 
-        self.stack.setCurrentWidget(widget)
+        self.setCurrentWidget(widget)
+
+
+class TablePreview(QW.QWidget):
+    """Table preview
+
+    Args:
+        title: Group title
+        parent: Parent widget
+    """
+
+    def __init__(self, parent: QW.QWidget) -> None:
+        super().__init__(parent)
+        self.setLayout(QW.QVBoxLayout())
+        self.table = QW.QTableWidget(self)
+        self.table.setEditTriggers(QW.QAbstractItemView.NoEditTriggers)
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.layout().addWidget(self.table)
+
+    def clear(self) -> None:
+        """Clear table"""
+        self.table.clear()
+
+    def update_table_preview(self, data: dict[str, Any]) -> None:
+        """Update table preview widget
+
+        Args:
+            node: HDF5 node
+        """
+        self.clear()
+        self.table.setRowCount(len(data))
+        self.table.setColumnCount(1)
+        self.table.setHorizontalHeaderLabels([_("Value")])
+        self.table.setVerticalHeaderLabels(list(data.keys()))
+        for row, value in enumerate(data.values()):
+            self.table.setItem(row, 0, QW.QTableWidgetItem(str(value)))
+        self.table.resizeRowsToContents()
+
+
+class GroupAndAttributes(QW.QTabWidget):
+    """Group and attributes"""
+
+    def __init__(self, parent: QW.QWidget) -> None:
+        super().__init__(parent)
+        self.group = TablePreview(self)
+        self.addTab(self.group, get_icon("h5group.svg"), _("Group"))
+        self.attrs = TablePreview(self)
+        self.addTab(self.attrs, get_icon("h5attrs.svg"), _("Attributes"))
+
+    def cleanup(self) -> None:
+        """Clean up widget"""
+        self.group.clear()
+        self.attrs.clear()
+
+    def update_group(self, node: BaseNode) -> None:
+        """Update group widget
+
+        Args:
+            node: HDF5 node
+        """
+        text = to_string(node.text)
+        if text:
+            lines = text.splitlines()[:5]
+            if len(lines) == 5:
+                lines += ["[...]"]
+            text = os.linesep.join(lines)
+        data = {
+            _("Path"): node.id,
+            _("Name"): node.name,
+            _("Description"): node.description,
+            _("Textual preview"): text,
+            # "Raw": repr(node.data),
+        }
+        self.group.update_table_preview(data)
+
+    def update_attrs(self, node: BaseNode) -> None:
+        """Update attributes widget
+
+        Args:
+            node: HDF5 node
+        """
+        self.attrs.update_table_preview(node.metadata)
+
+
+class H5Browser(QW.QSplitter):
+    """HDF5 Browser Widget
+
+    Args:
+        parent: Parent widget
+    """
+
+    def __init__(self, parent: QW.QWidget | None = None) -> None:
+        super().__init__(parent)
+        self.tree = H5TreeWidget(self)
+        self.tree.SIG_SELECTED.connect(self.view_selected_item)
+        self.addWidget(self.tree)
+        preview = QW.QSplitter(self)
+        preview.setOrientation(QC.Qt.Vertical)
+        self.addWidget(preview)
+        self.visualpreview = VisualPreview(self)
+        preview.addWidget(self.visualpreview)
+        self.groupandattrs = GroupAndAttributes(self)
+        preview.addWidget(self.groupandattrs)
+        preview.setSizes([int(self.size().height() / 2)] * 2)
+
+    def setup(self, fname: str) -> None:
+        """Setup widget
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.tree.setup(fname)
+
+    def cleanup(self) -> None:
+        """Clean up widget"""
+        self.tree.cleanup()
+        self.visualpreview.cleanup()
+
+    def get_node(self, item: QW.QTreeWidgetItem | None = None) -> BaseNode:
+        """Return (selected) dataset
+
+        Args:
+            item: Tree item
+
+        Returns:
+            HDF5 node
+        """
+        if item is None:
+            item = self.tree.currentItem()
+        return self.tree.get_node(item)
+
+    def view_selected_item(self, item: QW.QTreeWidgetItem) -> None:
+        """View selected item
+
+        Args:
+            item: Tree item
+        """
+        node = self.get_node(item)
+        if node.IS_ARRAY:
+            self.visualpreview.update_visual_preview(node)
+        self.groupandattrs.update_group(node)
+        self.groupandattrs.update_attrs(node)
 
 
 class H5BrowserDialog(QW.QDialog):
-    """HDF5 Browser Dialog"""
+    """HDF5 Browser Dialog
 
-    def __init__(self, parent=None, size=(1550, 600)):
+    Args:
+        parent: Parent widget
+        size: Dialog size
+    """
+
+    def __init__(
+        self, parent: QW.QWidget | None = None, size: tuple[int, int] = (1280, 720)
+    ) -> None:
         super().__init__(parent)
         self.setWindowFlags(QC.Qt.Window)
         self.setObjectName("h5browser")
@@ -419,26 +595,31 @@ class H5BrowserDialog(QW.QDialog):
 
         self.install_button_layout()
 
+        self.setMinimumSize(QC.QSize(900, 500))
         self.resize(QC.QSize(*size))
-        self.browser.setSizes([int(size[1] / 2)] * 2)
+        self.browser.setSizes([int(self.size().height() / 2)] * 2)
         self.refresh_buttons()
 
-    def accept(self):
+    def accept(self) -> None:
         """Accept changes"""
         self.nodes = self.browser.tree.get_nodes()
         QW.QDialog.accept(self)
 
-    def cleanup(self):
+    def cleanup(self) -> None:
         """Cleanup dialog"""
         self.browser.cleanup()
 
-    def refresh_buttons(self):
+    def refresh_buttons(self) -> None:
         """Refresh buttons"""
         state = self.browser.tree.is_any_item_checked()
         self.bbox.button(QW.QDialogButtonBox.Ok).setEnabled(state)
 
-    def setup(self, fname):
-        """Setup dialog"""
+    def setup(self, fname: str) -> None:
+        """Setup dialog
+
+        Args:
+            fname: HDF5 file name
+        """
         self.browser.setup(fname)
         if self.browser.tree.is_empty():
             if not execenv.unattended:
@@ -451,15 +632,23 @@ class H5BrowserDialog(QW.QDialog):
                 )
             QC.QTimer.singleShot(0, self.reject)
 
-    def get_all_nodes(self):
-        """Return all supported datasets"""
+    def get_all_nodes(self) -> list[BaseNode]:
+        """Return all supported datasets
+
+        Returns:
+            List of HDF5 nodes
+        """
         return self.browser.tree.get_nodes(only_checked_items=False)
 
-    def get_nodes(self):
-        """Return datasets"""
+    def get_nodes(self) -> list[BaseNode]:
+        """Return datasets
+
+        Returns:
+            List of HDF5 nodes
+        """
         return self.nodes
 
-    def install_button_layout(self):
+    def install_button_layout(self) -> None:
         """Install button layout"""
         bbox = QW.QDialogButtonBox(QW.QDialogButtonBox.Ok | QW.QDialogButtonBox.Cancel)
         bbox.accepted.connect(self.accept)
@@ -486,6 +675,6 @@ class H5BrowserDialog(QW.QDialog):
         self.button_layout.addWidget(bbox)
         self.bbox = bbox
 
-        vlayout = self.layout()
+        vlayout: QW.QVBoxLayout = self.layout()
         vlayout.addSpacing(10)
         vlayout.addLayout(self.button_layout)

@@ -68,6 +68,7 @@ class BaseNode(metaclass=abc.ABCMeta):
     @property
     def text(self):
         """Return node textual representation"""
+        return ""
 
     @property
     def description(self):
@@ -91,16 +92,19 @@ class BaseNode(metaclass=abc.ABCMeta):
             self.__obj = obj
         return self.__obj
 
+    def collect_attributes(self):
+        """Collect attributes from node"""
+        for key, value in self.dset.attrs.items():
+            if isinstance(value, bytes):
+                value = to_string(value)
+            if isinstance(value, (np.ndarray, str, float, int, bool)):
+                self.metadata[key] = value
+
     def __process_metadata(self, obj):
         """Process metadata from dataset to obj"""
         obj.reset_metadata_to_defaults()
         obj.metadata["HDF5Path"] = self.h5file.filename
         obj.metadata["HDF5Dataset"] = self.id
-        for key, value in self.dset.attrs.items():
-            if isinstance(value, bytes):
-                value = to_string(value)
-            if isinstance(value, (np.ndarray, str, float, int, bool)):
-                obj.metadata[key] = value
         obj.metadata.update(self.metadata)
 
     @property
@@ -238,11 +242,7 @@ class GroupNode(BaseNode):
                 self.children.append(child)
                 if isinstance(child, GroupNode):
                     child.collect_children(node_dict)
-
-    @property
-    def text(self):
-        """Return node textual representation"""
-        return self.dset.name
+                child.collect_attributes()
 
 
 class RootNode(GroupNode):
