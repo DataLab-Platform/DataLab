@@ -4,7 +4,8 @@
 # (see cdl/LICENSE for details)
 
 """
-Application launcher test 1
+HDF5 Importer Application test
+------------------------------
 
 Running application a few times in a row with different entry parameters.
 """
@@ -17,7 +18,7 @@ from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
 
 
-def test_h5_app(pattern=None):
+def test_h5importer_app(pattern=None):
     """Testing DataLab app launcher"""
     if pattern is None:
         pattern = "*.h5"
@@ -33,4 +34,4 @@ def test_h5_app(pattern=None):
 
 
 if __name__ == "__main__":
-    test_h5_app()
+    test_h5importer_app()

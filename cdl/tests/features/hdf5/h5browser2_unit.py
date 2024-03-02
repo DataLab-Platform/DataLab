@@ -4,7 +4,8 @@
 # (see cdl/LICENSE for details)
 
 """
-HDF5 browser test 2
+HDF5 browser unit tests 2
+-------------------------
 
 Testing for memory leak
 """
