@@ -12,6 +12,7 @@ from __future__ import annotations
 import abc
 import os
 import os.path as osp
+import re
 import sys
 import time
 
@@ -48,7 +49,22 @@ class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
     FINISHED = QC.Signal()
     MODIFIED = QC.Signal()
     FILE_HEADER = os.linesep.join(
-        ["# -*- coding: utf-8 -*-", "", '"""DataLab Macro"""', "", ""]
+        [
+            "# -*- coding: utf-8 -*-",
+            "",
+            '''"""
+DataLab Macro: "%s"
+-------------
+
+This file is a DataLab macro. It can be executed from DataLab's Macro Panel, or
+from any Python environment, provided that the ``cdl`` package is installed.
+
+Please do not modify this file header. It is used to identify the file as a
+DataLab macro, and to store the macro's title.
+"""''',
+            "",
+            "",
+        ]
     )
     MACRO_TITLE = _("Macro simple example")
     MACRO_SAMPLE = f"""# {MACRO_TITLE}
@@ -136,7 +152,7 @@ print("All done!")
         Args:
             filename (str): File name
         """
-        code = self.FILE_HEADER + self.get_code()
+        code = self.FILE_HEADER % self.title + self.get_code()
         with open(filename, "wb") as fdesc:
             fdesc.write(code.encode("utf-8"))
 
@@ -148,11 +164,24 @@ print("All done!")
         """
         with open(filename, "rb") as fdesc:
             code = to_string(fdesc.read()).strip()
-        header = self.FILE_HEADER.strip()
+
+        # Retrieve title from header:
+        lines = code.splitlines()
+        for line in lines:
+            # Match a line exactly like 'DataLab Macro: "Macro title"':
+            if re.match(r"DataLab Macro: \".*\"", line):
+                self.title = line.split('"')[1]
+                break
+        else:
+            self.title = osp.basename(filename)
+
+        # Remove header:
+        header = (self.FILE_HEADER % self.title).strip()
         if code.startswith(header):
             code = code[len(header) :].strip()
+
+        # Set code:
         self.set_code(code)
-        self.title = osp.basename(filename)
 
     @staticmethod
     def get_untitled_title() -> str:
