@@ -14,7 +14,6 @@ It is rebuilt from scratch when reopening application.
 # guitest: show
 
 import abc
-import os.path as osp
 
 from guidata.qthelpers import (
     get_std_icon,
@@ -28,31 +27,7 @@ import cdl.obj
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
-from cdl.utils.tests import get_temporary_directory
-
-
-def get_macro_example_path() -> str:
-    """Return macro example path"""
-    path = get_temporary_directory()
-    contents = """
-# Simple DataLab macro example
-
-import numpy as np
-
-from cdl.proxy import RemoteProxy
-
-proxy = RemoteProxy()
-
-z = np.random.rand(20, 20)
-proxy.add_image("toto", z)
-proxy.compute_fft()
-
-print("All done! :)")
-"""
-    filename = osp.join(path, "macro_example.py")
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(contents)
-    return filename
+from cdl.tests.features.macros.macroeditor_unit import get_macro_example_path
 
 
 class HostWidget(QW.QWidget):

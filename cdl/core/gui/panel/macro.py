@@ -493,22 +493,25 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if number is not None:
             self.tabwidget.set_tab_title(number, name)
 
-    def rename_macro(self, number: int | None = None) -> None:
+    def rename_macro(self, number: int | None = None, title: str | None = None) -> None:
         """Rename macro
 
         Args:
             number: Number of the macro (starting at 1). Defaults to None.
+            title: Title of the macro. Defaults to None.
         """
         macro = self.get_macro(number)
         assert isinstance(macro, Macro)
-        title, valid = QW.QInputDialog.getText(
-            self,
-            _("Rename"),
-            _("New title:"),
-            QW.QLineEdit.Normal,
-            macro.title,
-        )
-        if valid:
+        if title is None:
+            title, valid = QW.QInputDialog.getText(
+                self,
+                _("Rename"),
+                _("New title:"),
+                QW.QLineEdit.Normal,
+                macro.title,
+            )
+            title = title if valid else None
+        if title:
             macro.title = title
             if number is not None:
                 self.tabwidget.set_current_number(number)
