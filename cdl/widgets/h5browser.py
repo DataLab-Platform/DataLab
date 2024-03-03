@@ -332,8 +332,8 @@ class H5TreeWidget(AbstractTreeWidget):
             Tree widget node
         """
         text = to_string(node.text)
-        if len(text) > 10:
-            text = text[:10] + "..."
+        if len(text) > 40:
+            text = text[:40] + "..."
         treeitem = QW.QTreeWidgetItem([node.name, node.shape_str, node.dtype_str, text])
         treeitem.setData(0, QC.Qt.UserRole, node.id)
         if node.description:
@@ -574,7 +574,7 @@ class H5BrowserDialog(QW.QDialog):
     """
 
     def __init__(
-        self, parent: QW.QWidget | None = None, size: tuple[int, int] = (1280, 720)
+        self, parent: QW.QWidget | None = None, size: tuple[int, int] = (1150, 700)
     ) -> None:
         super().__init__(parent)
         self.setWindowFlags(QC.Qt.Window)
