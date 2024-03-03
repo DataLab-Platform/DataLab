@@ -31,8 +31,14 @@ def test_import_wizard():
             ("image", "fiber.txt"),
             ("signal", "paracetamol.txt"),
         ):
-            path = get_test_fnames(fname)[0]
-            file_to_clipboard(path)
+            if not execenv.unattended:
+                # Do not test clipboard in unattended mode, would fail:
+                # - Windows: OleSetClipboard: Failed to set mime data (text/plain)
+                #            on clipboard: COM error 0xffffffff800401d0
+                # - Linux:  QXcbClipboard: Unable to receive an event from the clipboard
+                #           manager in a reasonable time
+                path = get_test_fnames(fname)[0]
+                file_to_clipboard(path)
             wizard = TextImportWizard(destination=destination)
             if exec_dialog(wizard):
                 for obj in wizard.get_objs():
