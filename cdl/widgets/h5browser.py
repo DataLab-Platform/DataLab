@@ -372,8 +372,8 @@ class H5TreeWidget(AbstractTreeWidget):
             self.__recursive_popfunc(rootitem, node)
 
 
-class VisualPreview(QW.QStackedWidget):
-    """Visual preview"""
+class PlotPreview(QW.QStackedWidget):
+    """Plot preview"""
 
     def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
@@ -389,8 +389,8 @@ class VisualPreview(QW.QStackedWidget):
         for widget in (self.imagewidget, self.curvewidget):
             widget.get_plot().del_all_items()
 
-    def update_visual_preview(self, node: BaseNode) -> None:
-        """Update visual preview widget"""
+    def update_plot_preview(self, node: BaseNode) -> None:
+        """Update plot preview widget"""
         try:
             obj = node.get_native_object()
         except Exception as msg:  # pylint: disable=broad-except
@@ -520,8 +520,8 @@ class H5Browser(QW.QSplitter):
         preview = QW.QSplitter(self)
         preview.setOrientation(QC.Qt.Vertical)
         self.addWidget(preview)
-        self.visualpreview = VisualPreview(self)
-        preview.addWidget(self.visualpreview)
+        self.plotpreview = PlotPreview(self)
+        preview.addWidget(self.plotpreview)
         self.groupandattrs = GroupAndAttributes(self)
         preview.addWidget(self.groupandattrs)
         preview.setSizes([int(self.size().height() / 2)] * 2)
@@ -537,7 +537,7 @@ class H5Browser(QW.QSplitter):
     def cleanup(self) -> None:
         """Clean up widget"""
         self.tree.cleanup()
-        self.visualpreview.cleanup()
+        self.plotpreview.cleanup()
 
     def get_node(self, item: QW.QTreeWidgetItem | None = None) -> BaseNode:
         """Return (selected) dataset
@@ -560,7 +560,7 @@ class H5Browser(QW.QSplitter):
         """
         node = self.get_node(item)
         if node.IS_ARRAY:
-            self.visualpreview.update_visual_preview(node)
+            self.plotpreview.update_plot_preview(node)
         self.groupandattrs.update_group(node)
         self.groupandattrs.update_attrs(node)
 
