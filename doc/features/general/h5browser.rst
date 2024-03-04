@@ -16,6 +16,9 @@ Compatible curve or image data are displayed in a hierarchical view
 on the left panel, as well as other scalar data (scalar values are just
 shown for context purpose and may not be imported into DataLab workspace).
 
+The right panel displays the selected curve or image data. It also shows information
+on "Group" (path, description, etc.) and "Attributes" (names and values).
+
 The HDF5 browser is fairly simple to use:
   * On the left panel, select the curve or image data you want to import
   * Selected data is plotted on the right panel

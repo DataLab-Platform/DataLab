@@ -304,7 +304,7 @@ class H5TreeWidget(AbstractTreeWidget):
         Args:
             state: If True, all items are selected
         """
-        for item in self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive):
+        for item in self.find_all_items():
             if item.flags() & QC.Qt.ItemIsUserCheckable:
                 item.setSelected(state)
                 if state:
@@ -317,7 +317,7 @@ class H5TreeWidget(AbstractTreeWidget):
         Args:
             state: If True, all items are checked
         """
-        for item in self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive):
+        for item in self.find_all_items():
             if item.flags() & QC.Qt.ItemIsUserCheckable:
                 item.setCheckState(0, QC.Qt.Checked if state else QC.Qt.Unchecked)
 
@@ -370,6 +370,24 @@ class H5TreeWidget(AbstractTreeWidget):
         self.addTopLevelItem(rootitem)
         for node in root.children:
             self.__recursive_popfunc(rootitem, node)
+
+    def toggle_show_only_checkable_items(self, state: bool) -> None:
+        """Show only checkable items
+
+        Args:
+            state: If True, only checkable items are shown
+        """
+        for item in self.find_all_items():
+            item.setHidden(state)
+        if state:
+            # Iterate over checkable items and show them (and their parents)
+            for item in self.find_all_items():
+                if item.flags() & QC.Qt.ItemIsUserCheckable:
+                    item.setHidden(False)
+                    parent = item.parent()
+                    while parent:
+                        parent.setHidden(False)
+                        parent = parent.parent()
 
 
 class PlotPreview(QW.QStackedWidget):
@@ -656,6 +674,7 @@ class H5BrowserDialog(QW.QDialog):
 
         btn_check_all = create_toolbutton(
             self,
+            icon=get_icon("check_all.svg"),
             text=_("Check all"),
             autoraise=False,
             shortcut=QG.QKeySequence.SelectAll,
@@ -663,12 +682,19 @@ class H5BrowserDialog(QW.QDialog):
         )
         btn_uncheck_all = create_toolbutton(
             self,
+            icon=get_icon("uncheck_all.svg"),
             text=_("Uncheck all"),
             autoraise=False,
             triggered=lambda checked=False: self.browser.tree.toggle_all(checked),
         )
+        checkbox_show_only = QW.QCheckBox(_("Show only supported data"))
+        checkbox_show_only.stateChanged.connect(
+            self.browser.tree.toggle_show_only_checkable_items
+        )
 
         self.button_layout = QW.QHBoxLayout()
+        self.button_layout.addWidget(checkbox_show_only)
+        self.button_layout.addSpacing(10)
         self.button_layout.addWidget(btn_check_all)
         self.button_layout.addWidget(btn_uncheck_all)
         self.button_layout.addStretch()
