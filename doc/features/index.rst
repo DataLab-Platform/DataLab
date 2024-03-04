@@ -33,6 +33,7 @@ signal and image processing panels.
    :caption: General features:
 
    general/workspace
+   general/h5browser
    general/macros
    general/remote
    general/model

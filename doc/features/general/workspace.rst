@@ -4,11 +4,8 @@ Workspace
 =========
 
 .. meta::
-    :description: Workspace and HDF5 Browser in DataLab, the open-source scientific data analysis and visualization platform
-    :keywords: DataLab, workspace, HDF5, browser, scientific, data, analysis, visualization, platform
-
-Basic concepts
---------------
+    :description: Workspace in DataLab, the open-source scientific data analysis and visualization platform
+    :keywords: DataLab, workspace, scientific, data, analysis, visualization, platform
 
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
@@ -53,23 +50,3 @@ possible to import data sets from an HDF5 file into the workspace, using the
     such as `.txt` or `.npy` for 1D signals (see :ref:`open_signal` for the
     list of supported formats), , or `.tiff` or `.dcm` for 2D images
     (see :ref:`open_image` for the list of supported formats).
-
-.. _h5browser:
-
-HDF5 Browser
-------------
-
-The "HDF5 Browser" is a modal dialog box allowing to import almost any
-1D and 2D data into DataLab workspace (and eventually metadata).
-
-.. image:: /images/h5browser.png
-
-Compatible curve or image data are displayed in a hierarchical view
-on the left panel, as well as other scalar data (scalar values are just
-shown for context purpose and may not be imported into DataLab workspace).
-
-The HDF5 browser is fairly simple to use:
-  * On the left panel, select the curve or image data you want to import
-  * Selected data is plotted on the right panel
-  * Click on "Check all" if you want to import all compatible data
-  * Then validate by clicking on "OK"
