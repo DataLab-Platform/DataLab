@@ -23,7 +23,7 @@ import numpy as np
 from cdl.config import _
 from cdl.core.model.signal import create_signal
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.model.image import ImageObj
     from cdl.core.model.signal import SignalObj
 

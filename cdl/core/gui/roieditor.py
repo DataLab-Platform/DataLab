@@ -25,7 +25,7 @@ from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
 from cdl.core.model.image import RoiDataGeometries
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from plotpy.plot import PlotDialog
 
     from cdl.obj import ImageObj, SignalObj

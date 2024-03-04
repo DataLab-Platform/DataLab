@@ -32,7 +32,7 @@ from cdl.tests.data import (
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
 from cdl.widgets import fitdialog
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.main import CDLMainWindow
 
 DELAY1, DELAY2, DELAY3 = 1, 2, 3

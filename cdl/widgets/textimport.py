@@ -41,7 +41,7 @@ from cdl.obj import ImageObj, SignalObj, create_image, create_signal
 from cdl.utils.qthelpers import create_progress_bar, save_restore_stds
 from cdl.widgets.wizard import Wizard, WizardPage
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from plotpy.items import CurveItem, MaskedImageItem
     from plotpy.plot import BasePlot
     from qtpy.QtWidgets import QWidget
