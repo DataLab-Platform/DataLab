@@ -36,7 +36,7 @@ from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
 
 from cdl.config import Conf, _
-from cdl.core.model.signal import CurveStyles
+from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
 from cdl.utils.qthelpers import create_progress_bar, save_restore_stds
 from cdl.widgets.wizard import Wizard, WizardPage
@@ -476,12 +476,12 @@ class GraphicalRepresentationPage(WizardPage):
         plot = self.plot_widget.get_plot()
         plot.del_all_items()
         if self.destination == "signal":
-            CurveStyles.reset_styles()
             xydata = data.T
             x = np.arange(len(xydata[0]))
             if len(xydata) == 1:
                 obj = create_signal("", x=x, y=xydata[0])
-                item = obj.make_item()
+                with CURVESTYLES.suspend():
+                    item = obj.make_item()
                 plot.add_item(item)
                 self.__objitmlist = [(obj, item)]
             else:
@@ -497,7 +497,8 @@ class GraphicalRepresentationPage(WizardPage):
                             break
                         yidx = ycol if param.first_col_is_x else ycol - 1
                         obj = create_signal("", x=x, y=xydata[yidx])
-                        item = obj.make_item()
+                        with CURVESTYLES.suspend():
+                            item = obj.make_item()
                         plot.add_item(item)
                         self.__objitmlist.append((obj, item))
                         QW.QApplication.processEvents()

@@ -14,8 +14,9 @@ Signal object and related classes
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 from copy import deepcopy
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generator
 from uuid import uuid4
 
 import guidata.dataset as gds
@@ -52,27 +53,42 @@ class CurveStyles:
     )
     LINESTYLES = ("SolidLine", "DashLine", "DashDotLine", "DashDotDotLine")
 
-    def style_generator():  # pylint: disable=no-method-argument
+    def __init__(self) -> None:
+        self.__suspend = False
+        self.curve_style = self.style_generator()
+
+    @staticmethod
+    def style_generator() -> Generator[tuple[str, str], None, None]:
         """Cycling through curve styles"""
         while True:
             for linestyle in CurveStyles.LINESTYLES:
                 for color in CurveStyles.COLORS:
                     yield (color, linestyle)
 
-    CURVE_STYLE = style_generator()
-
-    @classmethod
-    def apply_style(cls, param: CurveParam):
+    def apply_style(self, param: CurveParam) -> None:
         """Apply style to curve"""
-        color, linestyle = next(cls.CURVE_STYLE)
+        if self.__suspend:
+            # Suspend mode: always apply the first style
+            color, linestyle = CurveStyles.COLORS[0], CurveStyles.LINESTYLES[0]
+        else:
+            color, linestyle = next(self.curve_style)
         param.line.color = color
         param.line.style = linestyle
         param.symbol.marker = "NoSymbol"
 
-    @classmethod
-    def reset_styles(cls):
+    def reset_styles(self) -> None:
         """Reset styles"""
-        cls.CURVE_STYLE = cls.style_generator()
+        self.curve_style = self.style_generator()
+
+    @contextmanager
+    def suspend(self) -> Generator[None, None, None]:
+        """Suspend style generator"""
+        self.__suspend = True
+        yield
+        self.__suspend = False
+
+
+CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
 
 
 class ROIParam(gds.DataSet):
@@ -316,7 +332,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
             elif len(self.xydata) == 4:  # x, y, dx, dy error bar signal
                 x, y, dx, dy = self.xydata
                 item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
-            CurveStyles.apply_style(item.param)
+            CURVESTYLES.apply_style(item.param)
         else:
             raise RuntimeError("data not supported")
         if update_from is None:

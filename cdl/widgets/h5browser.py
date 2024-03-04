@@ -30,7 +30,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
-from cdl.core.model.signal import CurveStyles
+from cdl.core.model.signal import CURVESTYLES
 from cdl.env import execenv
 from cdl.obj import ImageObj, SignalObj
 from cdl.utils.qthelpers import qt_handle_error_message
@@ -402,11 +402,11 @@ class PlotPreview(QW.QStackedWidget):
         if isinstance(obj, SignalObj):
             obj: SignalObj
             widget = self.curvewidget
-            CurveStyles.reset_styles()
         else:
             obj: ImageObj
             widget = self.imagewidget
-        item = obj.make_item()
+        with CURVESTYLES.suspend():
+            item = obj.make_item()
         plot = widget.get_plot()
         plot.del_all_items()
         plot.add_item(item)

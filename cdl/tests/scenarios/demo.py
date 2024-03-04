@@ -30,7 +30,6 @@ from cdl.tests.data import (
     get_test_image,
 )
 from cdl.tests.features.common.roi_app import create_test_image_with_roi
-from cdl.widgets import fitdialog
 
 if TYPE_CHECKING:  # pragma: no cover
     from cdl.core.gui.main import CDLMainWindow

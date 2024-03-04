@@ -29,7 +29,7 @@ from cdl.core.gui.plothandler import SignalPlotHandler
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
 from cdl.core.model.signal import (
-    CurveStyles,
+    CURVESTYLES,
     SignalObj,
     create_signal_from_param,
     new_signal_param,
@@ -136,4 +136,4 @@ class SignalPanel(BaseDataPanel):
 
     def reset_curve_styles(self) -> None:
         """Reset curve styles"""
-        CurveStyles.reset_styles()
+        CURVESTYLES.reset_styles()

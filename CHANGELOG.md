@@ -32,6 +32,12 @@ for future and past milestones.
 * Fixed [Issue #55](https://github.com/DataLab-Platform/DataLab/issues/55) - Changing image bounds in Image View has no effect on the associated image object properties
 * Fixed [Issue #56](https://github.com/DataLab-Platform/DataLab/issues/56) - "Test data" plugin: `AttributeError: 'NoneType' object has no attribute 'data'` when canceling "Create image with peaks"
 * Fixed [Issue #57](https://github.com/DataLab-Platform/DataLab/issues/57) - Circle and ellipse result shapes are not transformed properly
+* Curve color and style cycle:
+  * Before this release, this cycle was handled by the same mechanism either for the
+    Signal Panel or the HDF5 Browser, which was not the expected behavior
+  * Now, the cycle is handled separately: the HDF5 Browser or the Text Import
+    Wizard use always the same color and style for curves, and they don't interfere
+    with the Signal Panel cycle
 
 ## DataLab Version 0.12.0 ##
 
