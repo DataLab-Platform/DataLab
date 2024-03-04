@@ -47,7 +47,8 @@ def __test_metadata_features(panel: BaseDataPanel):
     # Duplicate the first object
     panel.duplicate_object()
     # Delete metadata of the first object
-    panel.delete_metadata()
+    for keep_roi in (True, False):  # Test both cases (coverage test)
+        panel.delete_metadata(keep_roi=keep_roi)
     # Select and copy metadata of the second object
     panel.objview.select_objects([2])
     panel.copy_metadata()

@@ -500,7 +500,7 @@ class BaseDataPanel(AbstractPanel):
     def remove_object(self) -> None:
         """Remove signal/image object"""
         sel_groups = self.objview.get_sel_groups()
-        if sel_groups:
+        if sel_groups and not execenv.unattended:
             answer = QW.QMessageBox.warning(
                 self,
                 _("Delete group(s)"),
