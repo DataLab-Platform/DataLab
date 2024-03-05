@@ -24,3 +24,7 @@ The HDF5 browser is fairly simple to use:
   * Selected data is plotted on the right panel
   * Click on "Check all" if you want to import all compatible data
   * Then validate by clicking on "OK"
+
+.. note::
+    The HDF5 browser may be used to explore multiple HDF5 files at once, thus allowing
+    to import data from different files into the same DataLab workspace.

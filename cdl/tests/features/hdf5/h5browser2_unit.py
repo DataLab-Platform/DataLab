@@ -34,7 +34,7 @@ def test_memoryleak(fname, iterations=20):
         memlist = []
         for i in range(iterations):
             t0 = time.time()
-            dlg.setup(fname)
+            dlg.open_file(fname)
             memdata = proc.memory_info().vms / 1024**2
             memlist.append(memdata)
             execenv.print(i + 1, ":", memdata, "MB")

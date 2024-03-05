@@ -422,10 +422,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     def run_macro(self, number_or_title: int | str | None = None) -> None:
         """Run macro.
 
-       Args:
-            number: Number of the macro (starting at 1). Defaults to None (run
-             current macro, or does nothing if there is no macro).
-         """
+        Args:
+             number: Number of the macro (starting at 1). Defaults to None (run
+              current macro, or does nothing if there is no macro).
+        """
         self.macropanel.run_macro(number_or_title)
 
     @remote_controlled
@@ -1327,11 +1327,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
                 h5files, _fl = getopenfilenames(self, _("Open"), basedir, "HDF5 (*.h5)")
+        filenames, dsetnames = [], []
         for fname_with_dset in h5files:
             if "," in fname_with_dset:
                 filename, dsetname = fname_with_dset.split(",")
+                dsetnames.append(dsetname)
             else:
-                filename, dsetname = fname_with_dset, None
+                filename = fname_with_dset
+                dsetnames.append(None)
+            filenames.append(filename)
+        if import_all is None and all([dsetname is None for dsetname in dsetnames]):
+            self.browse_h5_files(filenames, reset_all)
+            return
+        for filename, dsetname in zip(filenames, dsetnames):
             if import_all is None and dsetname is None:
                 self.import_h5_file(filename, reset_all)
             else:
@@ -1342,6 +1350,20 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     else:
                         self.h5inputoutput.import_dataset_from_file(filename, dsetname)
             reset_all = False
+
+    def browse_h5_files(self, filenames: list[str], reset_all: bool) -> None:
+        """Browse HDF5 files
+
+        Args:
+            filenames (list): HDF5 filenames
+            reset_all (bool): Reset all application data before importing
+
+        Returns:
+            None
+        """
+        for filename in filenames:
+            self.__check_h5file(filename, "load")
+        self.h5inputoutput.import_files(filenames, False, reset_all)
 
     @remote_controlled
     def import_h5_file(self, filename: str, reset_all: bool | None = None) -> None:
@@ -1357,7 +1379,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         """
         with qth.qt_try_loadsave_file(self, filename, "load"):
             filename = self.__check_h5file(filename, "load")
-            self.h5inputoutput.import_file(filename, False, reset_all)
+            self.h5inputoutput.import_files([filename], False, reset_all)
 
     # This method is intentionally *not* remote controlled
     # (see TODO regarding RemoteClient.add_object method)

@@ -33,7 +33,7 @@ def create_h5browser_dialog(
     """
     execenv.print(f"Opening: {fname}")
     dlg = H5BrowserDialog(None)
-    dlg.setup(fname)
+    dlg.open_file(fname)
     dlg.browser.tree.toggle_all(toggle_all)
     dlg.browser.tree.select_all(select_all)
     return dlg
@@ -42,7 +42,7 @@ def create_h5browser_dialog(
 def test_h5browser() -> None:
     """Test HDF5 browser"""
     with qt_app_context():
-        dlg = create_h5browser_dialog(get_test_fnames("*.h5")[-2])
+        dlg = create_h5browser_dialog(get_test_fnames("*.h5")[0])
 
         # Test all buttons:
         dlg.show()

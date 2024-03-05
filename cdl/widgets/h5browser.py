@@ -21,8 +21,10 @@ from guidata.qthelpers import (
     create_action,
     create_toolbutton,
     get_icon,
+    get_std_icon,
     win32_fix_title_bar_background,
 )
+from plotpy.builder import make
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -37,6 +39,8 @@ from cdl.utils.qthelpers import qt_handle_error_message
 from cdl.utils.strings import to_string
 
 if TYPE_CHECKING:  # pragma: no cover
+    from plotpy.plot import BasePlot
+
     from cdl.core.io.h5.common import BaseNode
 
 
@@ -219,27 +223,57 @@ class H5TreeWidget(AbstractTreeWidget):
         self.setHeaderLabels([_("Name"), _("Size"), _("Type"), _("Value")])
         self.header().setSectionResizeMode(0, QW.QHeaderView.Stretch)
         self.header().setStretchLastSection(False)
-        self.fname = None
-        self.h5importer = None
+        self.fnames: list[str] = []
+        self.h5importers: list[H5Importer] = []
 
-    def setup(self, fname: str) -> None:
-        """Setup H5TreeWidget
+    def add_root(self, fname: str) -> None:
+        """Add HDF5 root (new file)
 
         Args:
             fname: HDF5 file name
         """
-        self.fname = osp.abspath(fname)
-        self.h5importer = H5Importer(self.fname)
-        self.clear()
-        self.populate_tree()
-        self.expandAll()
+        self.fnames.append(osp.abspath(fname))
+        importer = H5Importer(fname)
+        self.h5importers.append(importer)
+        self.add_root_to_tree(importer)
         for col in range(1, 4):
             self.resizeColumnToContents(col)
 
+    def remove_root(self, fname: str) -> None:
+        """Remove HDF5 root
+
+        Args:
+            fname: HDF5 file name
+        """
+        index = self.fnames.index(osp.abspath(fname))
+        self.fnames.pop(index)
+        importer = self.h5importers.pop(index)
+        importer.close()
+        # Remove root item associated with file
+        item = self.topLevelItem(index)
+        self.takeTopLevelItem(index)
+        del item
+
     def cleanup(self) -> None:
         """Clean up widget"""
-        self.h5importer.close()
-        self.h5importer = None
+        for importer in self.h5importers:
+            importer.close()
+        self.fnames: list[str] = []
+        self.h5importers: list[H5Importer] = []
+        self.clear()
+
+    def __get_top_level_item(self, item: QW.QTreeWidgetItem) -> QW.QTreeWidgetItem:
+        """Get top level item associated to item
+
+        Args:
+            item: Tree item
+
+        Returns:
+            Top level item
+        """
+        while item.parent():
+            item = item.parent()
+        return item
 
     def get_node(self, item: QW.QTreeWidgetItem) -> BaseNode:
         """Get HDF5 dataset associated to item
@@ -250,9 +284,12 @@ class H5TreeWidget(AbstractTreeWidget):
         Returns:
             HDF5 node
         """
+        toplevel_item = self.__get_top_level_item(item)
+        toplevel_index = self.indexOfTopLevelItem(toplevel_item)
         node_id = item.data(0, QC.Qt.UserRole)
         if node_id:
-            return self.h5importer.get(node_id)
+            importer = self.h5importers[toplevel_index]
+            return importer.get(node_id)
         return None
 
     def get_nodes(self, only_checked_items: bool = True) -> list[BaseNode]:
@@ -270,8 +307,8 @@ class H5TreeWidget(AbstractTreeWidget):
                 if only_checked_items and item.checkState(0) == 0:
                     continue
                 if item is not self.topLevelItem(0):
-                    node_id = item.data(0, QC.Qt.UserRole)
-                    datasets.append(self.h5importer.get(node_id))
+                    node = self.get_node(item)
+                    datasets.append(node)
         return datasets
 
     def activated(self, item: QW.QTreeWidgetItem) -> None:
@@ -332,8 +369,8 @@ class H5TreeWidget(AbstractTreeWidget):
             Tree widget node
         """
         text = to_string(node.text)
-        if len(text) > 40:
-            text = text[:40] + "..."
+        if len(text) > 30:
+            text = text[:30] + "..."
         treeitem = QW.QTreeWidgetItem([node.name, node.shape_str, node.dtype_str, text])
         treeitem.setData(0, QC.Qt.UserRole, node.id)
         if node.description:
@@ -359,9 +396,24 @@ class H5TreeWidget(AbstractTreeWidget):
         for child in node.children:
             H5TreeWidget.__recursive_popfunc(tree_item, child)
 
-    def populate_tree(self) -> None:
-        """Populate tree"""
-        root = self.h5importer.root
+    def expand_all_children(self, item: QW.QTreeWidgetItem) -> None:
+        """Expand all children (recursively)
+
+        Args:
+            item: Tree item
+        """
+        self.expandItem(item)
+        for index in range(item.childCount()):
+            child = item.child(index)
+            self.expand_all_children(child)
+
+    def add_root_to_tree(self, importer: H5Importer) -> None:
+        """Add root to tree
+
+        Args:
+            importer: HDF5 importer
+        """
+        root = importer.root
         rootitem = QW.QTreeWidgetItem([root.name])
         rootitem.setToolTip(0, root.description)
         rootitem.setData(0, QC.Qt.UserRole, root.id)
@@ -370,6 +422,7 @@ class H5TreeWidget(AbstractTreeWidget):
         self.addTopLevelItem(rootitem)
         for node in root.children:
             self.__recursive_popfunc(rootitem, node)
+        self.expand_all_children(rootitem)
 
     def toggle_show_only_checkable_items(self, state: bool) -> None:
         """Show only checkable items
@@ -388,6 +441,26 @@ class H5TreeWidget(AbstractTreeWidget):
                     while parent:
                         parent.setHidden(False)
                         parent = parent.parent()
+
+    def toggle_show_values(self, state: bool) -> None:
+        """Show values
+
+        Args:
+            state: If True, values are shown
+        """
+        # Hide or show the "Value" column
+        self.setColumnHidden(3, not state)
+
+    def set_current_file(self, fname: str) -> None:
+        """Set current file
+
+        Args:
+            fname: HDF5 file name
+        """
+        index = self.fnames.index(osp.abspath(fname))
+        item = self.topLevelItem(index)
+        self.setCurrentItem(item)
+        self.scrollToItem(item, QW.QAbstractItemView.PositionAtTop)
 
 
 class PlotPreview(QW.QStackedWidget):
@@ -416,6 +489,11 @@ class PlotPreview(QW.QStackedWidget):
             return
         if obj is None:
             # An error occurred while creating the object (invalid data, ...)
+            label = make.label(_("Unsupported data"), "C", (0, 0), "C")
+            plot: BasePlot = self.currentWidget().get_plot()
+            plot.del_all_items()
+            plot.add_item(label)
+            plot.replot()
             return
         if isinstance(obj, SignalObj):
             obj: SignalObj
@@ -431,14 +509,6 @@ class PlotPreview(QW.QStackedWidget):
         plot.set_active_item(item)
         item.unselect()
         plot.do_autoscale()
-
-        # FIXME: This is strange: why do we need to update the item here?
-        #        It reveals a design flaw in the way we handle items: we should
-        #        not have to update the item just after adding it to the plot.
-        #        The `make_item` method should return an item that is ready to
-        #        be added to the plot.
-        obj.update_item(item)
-
         self.setCurrentWidget(widget)
 
 
@@ -523,6 +593,110 @@ class GroupAndAttributes(QW.QTabWidget):
         self.attrs.update_table_preview(node.metadata)
 
 
+class H5FileSelector(QW.QWidget):
+    """HDF5 file selector
+
+    Args:
+        parent: Parent widget
+    """
+
+    SIG_ADD_FILENAME = QC.Signal(str)
+    SIG_REMOVE_FILENAME = QC.Signal(str)
+    SIG_CURRENT_CHANGED = QC.Signal(str)
+
+    def __init__(self, parent: QW.QWidget) -> None:
+        super().__init__(parent)
+        self.setLayout(QW.QHBoxLayout())
+        self.layout().setContentsMargins(0, 0, 0, 0)
+        self.combo = QW.QComboBox(self)
+        self.combo.currentTextChanged.connect(self.current_file_changed)
+        self.layout().addWidget(self.combo)
+        self.btn_add = create_toolbutton(
+            self,
+            icon=get_std_icon("DirOpenIcon"),
+            text=_("Open") + " ...",
+            autoraise=False,
+            triggered=self.add_file,
+        )
+        self.btn_add.setSizePolicy(QW.QSizePolicy.Fixed, QW.QSizePolicy.Fixed)
+        self.layout().addWidget(self.btn_add)
+        self.btn_rmv = create_toolbutton(
+            self,
+            icon=get_std_icon("DialogCloseButton"),
+            text=_("Close"),
+            autoraise=False,
+            triggered=self.remove_file,
+        )
+        self.btn_rmv.setSizePolicy(QW.QSizePolicy.Fixed, QW.QSizePolicy.Fixed)
+        self.layout().addWidget(self.btn_rmv)
+        self.btn_rmv.setEnabled(False)
+
+    def set_current_fname(self, fname: str) -> None:
+        """Set current file name
+
+        Args:
+            fname: HDF5 file name
+        """
+        index = self.combo.findText(fname)
+        if index >= 0:
+            self.combo.setCurrentIndex(index)
+
+    def get_current_fname(self) -> str:
+        """Return current file name
+
+        Returns:
+            HDF5 file name
+        """
+        return self.combo.currentText()
+
+    def current_file_changed(self, fname: str) -> None:
+        """Current file changed
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.SIG_CURRENT_CHANGED.emit(fname)
+
+    def add_fname(self, fname: str) -> None:
+        """Add file name
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.combo.addItem(get_icon("h5file.svg"), fname)
+        self.btn_rmv.setEnabled(True)
+
+    def remove_fname(self, fname: str) -> None:
+        """Remove file name
+
+        Args:
+            fname: HDF5 file name
+        """
+        index = self.combo.findText(fname)
+        if index >= 0:
+            self.combo.removeItem(index)
+        if self.combo.count() == 0:
+            self.btn_rmv.setEnabled(False)
+
+    def add_file(self) -> None:
+        """Browse file"""
+        fname = QW.QFileDialog.getOpenFileName(
+            self, _("Select HDF5 file"), "", _("HDF5 files (*.h5 *.hdf5)")
+        )[0]
+        if fname:
+            self.SIG_ADD_FILENAME.emit(osp.abspath(fname))
+
+    def remove_file(self, fname: str | None = None) -> None:
+        """Remove file name
+
+        Args:
+            fname: HDF5 file name
+        """
+        if fname is None:
+            fname = self.combo.currentText()
+        self.SIG_REMOVE_FILENAME.emit(fname)
+
+
 class H5Browser(QW.QSplitter):
     """HDF5 Browser Widget
 
@@ -530,11 +704,23 @@ class H5Browser(QW.QSplitter):
         parent: Parent widget
     """
 
+    SIG_SELECT_NEW_FILE = QC.Signal(str)
+    SIG_REMOVE_FILE = QC.Signal(str)
+
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
+        self.selector = H5FileSelector(self)
+        self.selector.SIG_ADD_FILENAME.connect(self.__add_new_file)
+        self.selector.SIG_REMOVE_FILENAME.connect(self.__remove_file)
+        self.selector.SIG_CURRENT_CHANGED.connect(self.__selector_current_file_changed)
         self.tree = H5TreeWidget(self)
-        self.tree.SIG_SELECTED.connect(self.view_selected_item)
-        self.addWidget(self.tree)
+        self.tree.SIG_SELECTED.connect(self.__item_selected_on_tree)
+        selectorandtree = QW.QFrame(self)
+        selectorandtree.setLayout(QW.QVBoxLayout())
+        selectorandtree.layout().addWidget(self.selector)
+        selectorandtree.layout().addWidget(self.tree)
+        selectorandtree.layout().setContentsMargins(0, 0, 0, 0)
+        self.addWidget(selectorandtree)
         preview = QW.QSplitter(self)
         preview.setOrientation(QC.Qt.Vertical)
         self.addWidget(preview)
@@ -544,13 +730,42 @@ class H5Browser(QW.QSplitter):
         preview.addWidget(self.groupandattrs)
         preview.setSizes([int(self.size().height() / 2)] * 2)
 
-    def setup(self, fname: str) -> None:
-        """Setup widget
+    def open_file(self, fname: str) -> None:
+        """Open HDF5 file
 
         Args:
             fname: HDF5 file name
         """
-        self.tree.setup(fname)
+        self.tree.add_root(fname)
+        self.selector.add_fname(fname)
+
+    def close_file(self, fname: str) -> None:
+        """Close HDF5 file
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.tree.remove_root(fname)
+        self.selector.remove_fname(fname)
+
+    def __add_new_file(self, fname: str) -> None:
+        """Add new file
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.open_file(fname)
+        self.selector.set_current_fname(fname)
+        self.SIG_SELECT_NEW_FILE.emit(fname)
+
+    def __remove_file(self, fname: str) -> None:
+        """Remove file
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.close_file(fname)
+        self.SIG_REMOVE_FILE.emit(fname)
 
     def cleanup(self) -> None:
         """Clean up widget"""
@@ -570,17 +785,29 @@ class H5Browser(QW.QSplitter):
             item = self.tree.currentItem()
         return self.tree.get_node(item)
 
-    def view_selected_item(self, item: QW.QTreeWidgetItem) -> None:
-        """View selected item
+    def __item_selected_on_tree(self, item: QW.QTreeWidgetItem) -> None:
+        """Item selected on tree
 
         Args:
             item: Tree item
         """
+        # View the selected item
         node = self.get_node(item)
         if node.IS_ARRAY:
             self.plotpreview.update_plot_preview(node)
         self.groupandattrs.update_group(node)
         self.groupandattrs.update_attrs(node)
+        # Update the file selector combo box
+        self.selector.set_current_fname(node.h5file.filename)
+
+    def __selector_current_file_changed(self, fname: str) -> None:
+        """Selector current file changed
+
+        Args:
+            fname: HDF5 file name
+        """
+        if fname:
+            self.tree.set_current_file(fname)
 
 
 class H5BrowserDialog(QW.QDialog):
@@ -602,11 +829,15 @@ class H5BrowserDialog(QW.QDialog):
         win32_fix_title_bar_background(self)
         vlayout = QW.QVBoxLayout()
         self.setLayout(vlayout)
-        self.button_layout = None
-        self.bbox = None
-        self.nodes = None
+        self.button_layout: QW.QHBoxLayout | None = None
+        self.bbox: QW.QDialogButtonBox | None = None
+        self.nodes: list[BaseNode] = []
+        self.checkbox_show_only: QW.QCheckBox | None = None
+        self.checkbox_show_values: QW.QCheckBox | None = None
 
         self.browser = H5Browser(self)
+        self.browser.SIG_SELECT_NEW_FILE.connect(self.select_new_file)
+        self.browser.SIG_REMOVE_FILE.connect(self.remove_file)
         vlayout.addWidget(self.browser)
 
         self.browser.tree.itemChanged.connect(lambda item: self.refresh_buttons())
@@ -623,6 +854,10 @@ class H5BrowserDialog(QW.QDialog):
         self.nodes = self.browser.tree.get_nodes()
         QW.QDialog.accept(self)
 
+    def is_empty(self) -> bool:
+        """Return True if tree is empty"""
+        return self.browser.tree.is_empty()
+
     def cleanup(self) -> None:
         """Cleanup dialog"""
         self.browser.cleanup()
@@ -632,23 +867,58 @@ class H5BrowserDialog(QW.QDialog):
         state = self.browser.tree.is_any_item_checked()
         self.bbox.button(QW.QDialogButtonBox.Ok).setEnabled(state)
 
-    def setup(self, fname: str) -> None:
-        """Setup dialog
+    def show_only_checkable_items(self, state: int) -> None:
+        """Show only checkable items
+
+        Args:
+            state: If True, only checkable items are shown
+        """
+        self.browser.tree.toggle_show_only_checkable_items(state)
+        fname = self.browser.selector.get_current_fname()
+        if fname:
+            self.browser.tree.set_current_file(fname)
+
+    def __finalize_setup(self) -> None:
+        """Finalize setup"""
+        tree = self.browser.tree
+        tree.toggle_show_only_checkable_items(self.checkbox_show_only.isChecked())
+        tree.toggle_show_values(self.checkbox_show_values.isChecked())
+
+    def open_file(self, fname: str) -> None:
+        """Open file
 
         Args:
             fname: HDF5 file name
         """
-        self.browser.setup(fname)
-        if self.browser.tree.is_empty():
-            if not execenv.unattended:
-                QW.QMessageBox.warning(
-                    self.parent(),
-                    self.windowTitle(),
-                    _("Warning:")
-                    + "\n"
-                    + _("No supported data available in HDF5 file."),
-                )
-            QC.QTimer.singleShot(0, self.reject)
+        self.browser.open_file(fname)
+        self.__finalize_setup()
+
+    def open_files(self, fnames: list[str]) -> None:
+        """Open files
+
+        Args:
+            fnames: HDF5 file names
+        """
+        for fname in fnames:
+            self.browser.open_file(fname)
+        self.__finalize_setup()
+
+    def select_new_file(self, fname: str) -> None:
+        """Select new file
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.__finalize_setup()
+        self.refresh_buttons()
+
+    def remove_file(self, fname: str) -> None:
+        """Remove file
+
+        Args:
+            fname: HDF5 file name
+        """
+        self.refresh_buttons()
 
     def get_all_nodes(self) -> list[BaseNode]:
         """Return all supported datasets
@@ -687,13 +957,16 @@ class H5BrowserDialog(QW.QDialog):
             autoraise=False,
             triggered=lambda checked=False: self.browser.tree.toggle_all(checked),
         )
-        checkbox_show_only = QW.QCheckBox(_("Show only supported data"))
-        checkbox_show_only.stateChanged.connect(
-            self.browser.tree.toggle_show_only_checkable_items
+        self.checkbox_show_only = QW.QCheckBox(_("Show only supported data"))
+        self.checkbox_show_only.stateChanged.connect(self.show_only_checkable_items)
+        self.checkbox_show_values = QW.QCheckBox(_("Show values"))
+        self.checkbox_show_values.stateChanged.connect(
+            self.browser.tree.toggle_show_values
         )
 
         self.button_layout = QW.QHBoxLayout()
-        self.button_layout.addWidget(checkbox_show_only)
+        self.button_layout.addWidget(self.checkbox_show_only)
+        self.button_layout.addWidget(self.checkbox_show_values)
         self.button_layout.addSpacing(10)
         self.button_layout.addWidget(btn_check_all)
         self.button_layout.addWidget(btn_uncheck_all)

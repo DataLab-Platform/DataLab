@@ -14,11 +14,13 @@ for future and past milestones.
   * Editable parameters: number of bins, lower and upper bounds
 * HDF5 browser:
   * Improved tree view layout (more compact and readable)
+  * Multiple files can now be opened at once, using the file selection dialog box
   * Added tabs with information below the graphical preview:
     * Group info: path, textual preview, etc.
     * Attributes info: name, value
   * Added "Show only supported data" check box: when checked, only supported data
     (signals and images) are shown in the tree view
+  * Added "Show values" check box, to show/hide the values in the tree view
 * Macro Panel:
   * Macro commands are now numbered, starting from 1, like signals and images
 * Remote control API (`RemoteProxy` and `LocalProxy`):

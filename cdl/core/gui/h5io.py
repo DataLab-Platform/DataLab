@@ -70,11 +70,15 @@ class H5InputOutput:
                 # KeyError was encoutered when deserializing datasets (DataLab data
                 # model is not compatible with this version)
                 progress.close()
-            self.import_file(filename, import_all, reset_all)
+            self.import_files([filename], import_all, reset_all)
 
     def __add_object_from_node(self, node: BaseNode) -> None:
         """Add DataLab object from h5 node"""
         obj = node.get_native_object()
+        if obj is None:
+            # TODO: Add a warning message to be shown after all imports?
+            # (e.g. "No supported data available in HDF5 file(s)."
+            return
         self.uint32_wng = self.uint32_wng or node.uint32_wng
         if isinstance(obj, SignalObj):
             self.mainwindow.signalpanel.add_object(obj)
@@ -88,39 +92,46 @@ class H5InputOutput:
                 self.mainwindow, _("Warning"), _("Clipping uint32 data to int32.")
             )
 
-    def import_file(self, filename: str, import_all: bool, reset_all: bool) -> None:
-        """Import HDF5 file"""
+    def import_files(
+        self, filenames: list[str], import_all: bool, reset_all: bool
+    ) -> None:
+        """Import HDF5 files"""
         h5browser = H5BrowserDialog(self.mainwindow)
-
-        with qt_try_loadsave_file(self.mainwindow, filename, "load"):
-            h5browser.setup(filename)
-            if execenv.unattended:
-                # Unattended mode: import all datasets (for testing)
-                import_all = True
-            if not import_all and not exec_dialog(h5browser):
-                h5browser.cleanup()
-                return
-            if import_all:
-                nodes = h5browser.get_all_nodes()
-            else:
-                nodes = h5browser.get_nodes()
-            if nodes is None:
-                h5browser.cleanup()
-                return
-            if reset_all:
-                self.mainwindow.reset_all()
-            with create_progress_bar(
-                self.mainwindow, self.__progbartitle(filename), len(nodes)
-            ) as progress:
+        for filename in filenames:
+            with qt_try_loadsave_file(self.mainwindow, filename, "load"):
+                h5browser.open_file(filename)
+        if h5browser.is_empty():
+            if not execenv.unattended:
+                QW.QMessageBox.warning(
+                    self.mainwindow,
+                    _("Warning"),
+                    _("No supported data available in HDF5 file(s)."),
+                )
+            return
+        if execenv.unattended:
+            # Unattended mode: import all datasets (for testing)
+            import_all = True
+        if not import_all and not exec_dialog(h5browser):
+            return
+        if import_all:
+            nodes = h5browser.get_all_nodes()
+        else:
+            nodes = h5browser.get_nodes()
+        if nodes is None:
+            return
+        if reset_all:
+            self.mainwindow.reset_all()
+        with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
+            with create_progress_bar(self.mainwindow, "", len(nodes)) as progress:
                 self.uint32_wng = False
                 for idx, node in enumerate(nodes):
+                    progress.setLabelText(self.__progbartitle(node.h5file.filename))
                     progress.setValue(idx + 1)
                     QW.QApplication.processEvents()
                     if progress.wasCanceled():
                         break
                     self.__add_object_from_node(node)
-            h5browser.cleanup()
-            self.__eventually_show_warnings()
+        self.__eventually_show_warnings()
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
         """Import dataset from HDF5 file"""

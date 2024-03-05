@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-04 18:20+0100\n"
+"POT-Creation-Date: 2024-03-05 14:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:807 cdl\core\gui\main.py:1534
+#: cdl\core\gui\actionhandler.py:807 cdl\core\gui\main.py:1556
 #: cdl\core\gui\roieditor.py:217
 msgid "image"
 msgstr "image"
@@ -1596,14 +1596,18 @@ msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 msgid "Loading data from %s..."
 msgstr "Chargement des données depuis %s..."
 
-#: cdl\core\gui\h5io.py:88
+#: cdl\core\gui\h5io.py:92
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:88 cdl\core\gui\main.py:474 cdl\core\gui\main.py:1317
-#: cdl\plugins.py:168 cdl\widgets\textimport.py:414
+#: cdl\core\gui\h5io.py:92 cdl\core\gui\h5io.py:107 cdl\core\gui\main.py:474
+#: cdl\core\gui\main.py:1317 cdl\plugins.py:168 cdl\widgets\textimport.py:414
 msgid "Warning"
 msgstr "Attention"
+
+#: cdl\core\gui\h5io.py:108
+msgid "No supported data available in HDF5 file(s)."
+msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
 #: cdl\core\gui\macroeditor.py:69
 msgid "Macro simple example"
@@ -1782,7 +1786,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:793 cdl\core\gui\main.py:1580
+#: cdl\core\gui\main.py:793 cdl\core\gui\main.py:1602
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1935,55 +1939,55 @@ msgstr ""
 "données depuis un fichier HDF5 ?"
 
 #: cdl\core\gui\main.py:1329 cdl\core\gui\panel\base.py:730
-#: cdl\core\gui\panel\macro.py:558
+#: cdl\core\gui\panel\macro.py:558 cdl\widgets\h5browser.py:617
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1490
+#: cdl\core\gui\main.py:1512
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1492
+#: cdl\core\gui\main.py:1514
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1495
+#: cdl\core\gui\main.py:1517
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1497
+#: cdl\core\gui\main.py:1519
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1500
+#: cdl\core\gui\main.py:1522
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1501
+#: cdl\core\gui\main.py:1523
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1502
+#: cdl\core\gui\main.py:1524
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1506
+#: cdl\core\gui\main.py:1528
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1507
+#: cdl\core\gui\main.py:1529
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1511
+#: cdl\core\gui\main.py:1533
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1529
+#: cdl\core\gui\main.py:1551
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1530
+#: cdl\core\gui\main.py:1552
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1991,7 +1995,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1581
+#: cdl\core\gui\main.py:1603
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2215,7 +2219,7 @@ msgstr "Sélectionner %s"
 msgid "Distribute on grid"
 msgstr "Distribuer sur grille"
 
-#: cdl\core\gui\processor\image.py:180 cdl\widgets\h5browser.py:647
+#: cdl\core\gui\processor\image.py:180
 msgid "Warning:"
 msgstr "Attention :"
 
@@ -2593,7 +2597,7 @@ msgstr ""
 msgid "Start"
 msgstr "Démarrer"
 
-#: cdl\core\gui\tour.py:282
+#: cdl\core\gui\tour.py:282 cdl\widgets\h5browser.py:626
 msgid "Close"
 msgstr "Fermer"
 
@@ -3019,7 +3023,7 @@ msgid "Width"
 msgstr "Largeur"
 
 #: cdl\core\model\image.py:793 cdl\core\model\signal.py:591
-#: cdl\widgets\h5browser.py:219
+#: cdl\widgets\h5browser.py:223
 msgid "Type"
 msgstr "Type"
 
@@ -3100,7 +3104,7 @@ msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
 #: cdl\core\model\signal.py:589 cdl\tests\data.py:256 cdl\tests\data.py:375
-#: cdl\widgets\h5browser.py:219
+#: cdl\widgets\h5browser.py:223
 msgid "Size"
 msgstr "Taille"
 
@@ -3434,77 +3438,89 @@ msgstr "Ecart-type"
 msgid "Y0"
 msgstr "Y0"
 
-#: cdl\widgets\h5browser.py:86
+#: cdl\widgets\h5browser.py:90
 msgid "Collapse all"
 msgstr "Replier tout"
 
-#: cdl\widgets\h5browser.py:91
+#: cdl\widgets\h5browser.py:95
 msgid "Expand all"
 msgstr "Déplier tout"
 
-#: cdl\widgets\h5browser.py:95
+#: cdl\widgets\h5browser.py:99
 msgid "Restore"
 msgstr "Restaurer"
 
-#: cdl\widgets\h5browser.py:96
+#: cdl\widgets\h5browser.py:100
 msgid "Restore original tree layout"
 msgstr "Restaurer l'organisation initiale de l'arbre"
 
-#: cdl\widgets\h5browser.py:102
+#: cdl\widgets\h5browser.py:106
 msgid "Collapse selection"
 msgstr "Replier la sélection"
 
-#: cdl\widgets\h5browser.py:108
+#: cdl\widgets\h5browser.py:112
 msgid "Expand selection"
 msgstr "Déplier la sélection"
 
-#: cdl\widgets\h5browser.py:216 cdl\widgets\h5browser.py:600
+#: cdl\widgets\h5browser.py:220 cdl\widgets\h5browser.py:826
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-#: cdl\widgets\h5browser.py:219 cdl\widgets\h5browser.py:474
+#: cdl\widgets\h5browser.py:223 cdl\widgets\h5browser.py:544
 msgid "Value"
 msgstr "Valeur"
 
-#: cdl\widgets\h5browser.py:219 cdl\widgets\h5browser.py:510
+#: cdl\widgets\h5browser.py:223 cdl\widgets\h5browser.py:580
 msgid "Name"
 msgstr "Nom"
 
-#: cdl\widgets\h5browser.py:487
+#: cdl\widgets\h5browser.py:492
+msgid "Unsupported data"
+msgstr "Données non prises en charge"
+
+#: cdl\widgets\h5browser.py:557
 msgid "Group"
 msgstr "Groupe"
 
-#: cdl\widgets\h5browser.py:489
+#: cdl\widgets\h5browser.py:559
 msgid "Attributes"
 msgstr "Attributs"
 
-#: cdl\widgets\h5browser.py:509
+#: cdl\widgets\h5browser.py:579
 msgid "Path"
 msgstr "Chemin"
 
-#: cdl\widgets\h5browser.py:511
+#: cdl\widgets\h5browser.py:581
 msgid "Description"
 msgstr "Description"
 
-#: cdl\widgets\h5browser.py:512
+#: cdl\widgets\h5browser.py:582
 msgid "Textual preview"
 msgstr "Aperçu textuel"
 
-#: cdl\widgets\h5browser.py:649
-msgid "No supported data available in HDF5 file."
-msgstr "Ce fichier HDF5 ne contient aucune donnée prise en charge."
+#: cdl\widgets\h5browser.py:684
+msgid "HDF5 files (*.h5 *.hdf5)"
+msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
 
-#: cdl\widgets\h5browser.py:678
+#: cdl\widgets\h5browser.py:684
+msgid "Select HDF5 file"
+msgstr "Sélectionner un fichier HDF5"
+
+#: cdl\widgets\h5browser.py:947
 msgid "Check all"
 msgstr "Cocher tout"
 
-#: cdl\widgets\h5browser.py:686
+#: cdl\widgets\h5browser.py:955
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: cdl\widgets\h5browser.py:690
+#: cdl\widgets\h5browser.py:959
 msgid "Show only supported data"
 msgstr "Afficher uniquement les données prises en charge"
+
+#: cdl\widgets\h5browser.py:961
+msgid "Show values"
+msgstr "Afficher les valeurs"
 
 #: cdl\widgets\instconfviewer.py:93 cdl\widgets\instconfviewer.py:96
 msgid "Installation configuration"

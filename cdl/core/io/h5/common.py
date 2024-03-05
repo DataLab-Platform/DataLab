@@ -147,7 +147,7 @@ class H5Importer:
         self.h5file = h5py.File(filename)
         self.__nodes = {}
         self.root = RootNode(self.h5file)
-        self.__nodes[self.root.id] = self.root.dset
+        self.__nodes[self.root.id] = self.root
         self.root.collect_children(self.__nodes)
         NODE_FACTORY.run_post_triggers(self)
 
