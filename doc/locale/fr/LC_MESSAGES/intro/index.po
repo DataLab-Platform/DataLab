@@ -42,7 +42,6 @@ msgid "Getting started"
 msgstr "Premiers pas"
 
 #: ../../intro/index.rst:8
-#, fuzzy
 msgid ""
 "DataLab is an open platform for signal and image processing. Its "
 "functional scope is intentionally broad. With its many functions, some of"

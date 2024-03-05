@@ -19,6 +19,8 @@ move DataLab-Banner-150.png ..\cdl\data\logo
 copy DataLab-Screenshot-Theme.png ..\doc\images
 %INKSCAPE_PATH% "DataLab-Overview.svg" -o "DataLab-Overview.png" -w 1250
 copy DataLab-Overview.png ..\doc\images
+%INKSCAPE_PATH% "DataLab-Windows-Installer.svg" -o "windows_installer.png" -w 900
+move windows_installer.png ..\doc\images\shots
 
 @REM Generating icon
 for %%s in (16 24 32 48 128 256) do (
