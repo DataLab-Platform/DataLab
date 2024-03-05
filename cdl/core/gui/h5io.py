@@ -101,6 +101,7 @@ class H5InputOutput:
             with qt_try_loadsave_file(self.mainwindow, filename, "load"):
                 h5browser.open_file(filename)
         if h5browser.is_empty():
+            h5browser.cleanup()
             if not execenv.unattended:
                 QW.QMessageBox.warning(
                     self.mainwindow,
@@ -111,27 +112,26 @@ class H5InputOutput:
         if execenv.unattended:
             # Unattended mode: import all datasets (for testing)
             import_all = True
-        if not import_all and not exec_dialog(h5browser):
-            return
-        if import_all:
-            nodes = h5browser.get_all_nodes()
-        else:
-            nodes = h5browser.get_nodes()
-        if nodes is None:
-            return
-        if reset_all:
-            self.mainwindow.reset_all()
-        with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
-            with create_progress_bar(self.mainwindow, "", len(nodes)) as progress:
-                self.uint32_wng = False
-                for idx, node in enumerate(nodes):
-                    progress.setLabelText(self.__progbartitle(node.h5file.filename))
-                    progress.setValue(idx + 1)
-                    QW.QApplication.processEvents()
-                    if progress.wasCanceled():
-                        break
-                    self.__add_object_from_node(node)
-        self.__eventually_show_warnings()
+        if import_all or exec_dialog(h5browser):
+            if import_all:
+                nodes = h5browser.get_all_nodes()
+            else:
+                nodes = h5browser.get_nodes()
+            if nodes is not None:
+                if reset_all:
+                    self.mainwindow.reset_all()
+                with qt_try_loadsave_file(self.mainwindow, "*.h5", "load"):
+                    with create_progress_bar(self.mainwindow, "", len(nodes)) as prog:
+                        self.uint32_wng = False
+                        for idx, node in enumerate(nodes):
+                            prog.setLabelText(self.__progbartitle(node.h5file.filename))
+                            prog.setValue(idx + 1)
+                            QW.QApplication.processEvents()
+                            if prog.wasCanceled():
+                                break
+                            self.__add_object_from_node(node)
+                self.__eventually_show_warnings()
+        h5browser.cleanup()
 
     def import_dataset_from_file(self, filename: str, dsetname: str) -> None:
         """Import dataset from HDF5 file"""
