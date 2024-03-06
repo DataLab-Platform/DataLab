@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-05 14:03+0100\n"
+"POT-Creation-Date: 2024-03-06 09:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1600,12 +1600,12 @@ msgstr "Chargement des données depuis %s..."
 msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
-#: cdl\core\gui\h5io.py:92 cdl\core\gui\h5io.py:107 cdl\core\gui\main.py:474
+#: cdl\core\gui\h5io.py:92 cdl\core\gui\h5io.py:108 cdl\core\gui\main.py:474
 #: cdl\core\gui\main.py:1317 cdl\plugins.py:168 cdl\widgets\textimport.py:414
 msgid "Warning"
 msgstr "Attention"
 
-#: cdl\core\gui\h5io.py:108
+#: cdl\core\gui\h5io.py:109
 msgid "No supported data available in HDF5 file(s)."
 msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 
@@ -3462,7 +3462,7 @@ msgstr "Replier la sélection"
 msgid "Expand selection"
 msgstr "Déplier la sélection"
 
-#: cdl\widgets\h5browser.py:220 cdl\widgets\h5browser.py:826
+#: cdl\widgets\h5browser.py:220 cdl\widgets\h5browser.py:827
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
@@ -3506,19 +3506,19 @@ msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
 msgid "Select HDF5 file"
 msgstr "Sélectionner un fichier HDF5"
 
-#: cdl\widgets\h5browser.py:947
+#: cdl\widgets\h5browser.py:948
 msgid "Check all"
 msgstr "Cocher tout"
 
-#: cdl\widgets\h5browser.py:955
+#: cdl\widgets\h5browser.py:956
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: cdl\widgets\h5browser.py:959
+#: cdl\widgets\h5browser.py:960
 msgid "Show only supported data"
 msgstr "Afficher uniquement les données prises en charge"
 
-#: cdl\widgets\h5browser.py:961
+#: cdl\widgets\h5browser.py:962
 msgid "Show values"
 msgstr "Afficher les valeurs"
 

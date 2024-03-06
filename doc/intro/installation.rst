@@ -27,6 +27,9 @@ DataLab is available in several forms:
     Python distribution to be installed. Just run the :ref:`install_aioinstaller`
     and you're good to go!
 
+-   :bdg-info-line:`Windows` Within a ready-to-use :ref:`install_winpython`, based on
+    `WinPython <https://winpython.github.io/>`_.
+
 -   As a precompiled :ref:`install_wheel`, which can be installed using ``pip``.
 
 -   As a :ref:`install_source`, which can be installed using ``pip`` or manually.
@@ -101,6 +104,40 @@ application).
     `Microsoft Visual C++ 2015-2022 Redistribuable package <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_.
 
 .. _Releases: https://github.com/DataLab-Platform/DataLab/releases
+
+.. _install_winpython:
+
+Python distribution
+^^^^^^^^^^^^^^^^^^^
+
+:octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`
+
+DataLab is also available within a ready-to-use Python distribution, based on
+`WinPython <https://winpython.github.io/>`_. This distribution is called
+`DataLab-WinPython <https://github.com/DataLab-Platform/DataLab-WinPython?tab=readme-ov-file#datalab-winpython>`_
+and is available in the `DataLab-WinPython Releases <https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_
+section.
+
+.. figure:: /images/logos/DataLab-WinPython.png
+
+    DataLab-WinPython is a ready-to-use Python distribution including the DataLab platform.
+
+The main difference with the all-in-one installer is that you can use the Python
+distribution for other purposes than running DataLab, and you may also extend it
+with additional packages. On the downside, it is also *much bigger* than the
+all-in-one installer because it includes a full Python distribution.
+
+.. figure:: /images/shots/wpcp.png
+
+    DataLab-WinPython Control Panel
+
+.. warning::
+
+    Whereas the all-in-one installer provides a monolithic package that guarantees
+    the compatibility of all its components because it cannot be modified by the user,
+    the WinPython distribution is more flexible and thus can be broken by a bad
+    manipulation of the Python distribution by the user. This should be taken into
+    account when choosing the installation method.
 
 .. _install_wheel:
 
