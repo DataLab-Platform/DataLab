@@ -542,7 +542,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             data,
             self.maskdata,
             title=self.title,
-            colormap="jet",
+            colormap="viridis",
             eliminate_outliers=Conf.view.ima_eliminate_outliers.get(),
             interpolation="nearest",
             show_mask=True,

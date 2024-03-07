@@ -304,7 +304,7 @@ def initialize():
     Conf.view.sig_def_shade.get(0.0)
     Conf.view.sig_def_curvestyle.get("Lines")
     Conf.view.sig_def_baseline.get(0.0)
-    Conf.view.ima_def_colormap.get("jet")
+    Conf.view.ima_def_colormap.get("viridis")
     Conf.view.ima_def_invert_colormap.get(False)
     Conf.view.ima_def_interpolation.get(0)
     Conf.view.ima_def_alpha.get(1.0)
