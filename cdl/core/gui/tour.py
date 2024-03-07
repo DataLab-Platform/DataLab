@@ -63,7 +63,7 @@ from qtpy import QtWidgets as QW
 import cdl.obj
 from cdl.config import _
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
 
 

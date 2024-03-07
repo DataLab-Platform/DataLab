@@ -35,7 +35,7 @@ from cdl.core.model.signal import (
     new_signal_param,
 )
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     import guidata.dataset as gds
     from plotpy.plot import PlotWidget
     from qtpy import QtWidgets as QW

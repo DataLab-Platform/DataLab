@@ -30,7 +30,7 @@ from cdl.algorithms import fit
 from cdl.config import Conf, _
 from cdl.core.model import base
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.items import CurveItem
     from plotpy.styles import CurveParam
     from qtpy import QtWidgets as QW

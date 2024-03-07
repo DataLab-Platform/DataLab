@@ -41,7 +41,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import Conf, _
 from cdl.utils.qthelpers import block_signals, create_progress_bar
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
     from plotpy.plot import BasePlot, PlotWidget
 

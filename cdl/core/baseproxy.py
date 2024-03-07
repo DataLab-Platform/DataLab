@@ -36,7 +36,7 @@ import numpy as np
 
 from cdl.obj import ImageObj, SignalObj
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from cdl.core.gui.main import CDLMainWindow
@@ -409,10 +409,10 @@ class AbstractCDLControl(abc.ABC):
     def run_macro(self, number_or_title: int | str | None = None) -> None:
         """Run macro.
 
-       Args:
-            number: Number of the macro (starting at 1). Defaults to None (run
-             current macro, or does nothing if there is no macro).
-         """
+        Args:
+             number: Number of the macro (starting at 1). Defaults to None (run
+              current macro, or does nothing if there is no macro).
+        """
 
     @abc.abstractmethod
     def stop_macro(self, number_or_title: int | str | None = None) -> None:

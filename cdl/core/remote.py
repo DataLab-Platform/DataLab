@@ -41,7 +41,7 @@ from cdl.core.model.signal import SignalObj, create_signal
 from cdl.env import execenv
 from cdl.utils.misc import is_version_at_least
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

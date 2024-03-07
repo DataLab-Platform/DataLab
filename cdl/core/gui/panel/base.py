@@ -79,7 +79,7 @@ from cdl.utils.qthelpers import (
 )
 from cdl.widgets.textimport import TextImportWizard
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
     from plotpy.plot import PlotWidget
     from plotpy.tools.base import GuiTool

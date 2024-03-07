@@ -40,7 +40,7 @@ from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from multiprocessing.pool import AsyncResult
 
     from plotpy.plot import PlotWidget

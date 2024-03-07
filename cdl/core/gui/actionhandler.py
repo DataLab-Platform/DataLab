@@ -52,7 +52,7 @@ from qtpy import QtWidgets as QW
 from cdl.config import Conf, _
 from cdl.widgets import fitdialog
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui.objectmodel import ObjectGroup
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel

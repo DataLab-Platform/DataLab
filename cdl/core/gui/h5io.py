@@ -23,7 +23,7 @@ from cdl.env import execenv
 from cdl.utils.qthelpers import create_progress_bar, qt_try_loadsave_file
 from cdl.widgets.h5browser import H5BrowserDialog
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
     from cdl.core.io.h5.common import BaseNode
 

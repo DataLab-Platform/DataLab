@@ -30,7 +30,7 @@ from cdl.algorithms import coordinates
 from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import Conf, _
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
 
 ROI_KEY = "_roi_"

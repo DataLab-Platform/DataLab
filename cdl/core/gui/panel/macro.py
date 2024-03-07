@@ -31,7 +31,7 @@ from cdl.utils.qthelpers import (
     save_restore_stds,
 )
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from guidata.widgets.codeeditor import CodeEditor
 
     from cdl.core.io.native import NativeH5Reader, NativeH5Writer

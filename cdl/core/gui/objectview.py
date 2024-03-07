@@ -51,7 +51,7 @@ from cdl.core.model.image import ImageObj
 from cdl.core.model.signal import SignalObj
 from cdl.utils.qthelpers import block_signals
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui.objectmodel import ObjectModel
     from cdl.core.gui.panel.base import BaseDataPanel
 

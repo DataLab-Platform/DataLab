@@ -48,7 +48,7 @@ from cdl.core.io.signal.base import (  # pylint: disable=W0611  # noqa: F401
 from cdl.env import execenv
 from cdl.proxy import LocalProxy
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from cdl.core.gui import main
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel

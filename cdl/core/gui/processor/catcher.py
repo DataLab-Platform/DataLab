@@ -19,7 +19,7 @@ from typing import TYPE_CHECKING, Any
 
 from cdl.env import execenv
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     import numpy as np
 
     from cdl.core.model.image import ImageObj

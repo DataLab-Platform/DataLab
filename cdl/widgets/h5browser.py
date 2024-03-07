@@ -38,7 +38,7 @@ from cdl.obj import ImageObj, SignalObj
 from cdl.utils.qthelpers import qt_handle_error_message
 from cdl.utils.strings import to_string
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.plot import BasePlot
 
     from cdl.core.io.h5.common import BaseNode

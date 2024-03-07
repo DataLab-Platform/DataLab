@@ -25,7 +25,7 @@ from qtpy.QtWidgets import QWidget
 import cdl.param
 from cdl.config import _
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.items import CurveItem
     from plotpy.panels import XCrossSection, YCrossSection
     from plotpy.plot import BasePlot

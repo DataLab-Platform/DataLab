@@ -35,7 +35,7 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import Conf
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from plotpy.plot import BasePlot
 
 
