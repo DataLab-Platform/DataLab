@@ -19,6 +19,10 @@ omit =
     ./config.py
     #---
 
-exclude_lines =
+[report]
+exclude_also =
+    def __repr__
     if __name__ == .__main__.:
     if TYPE_CHECKING:
+    if DEBUG[\s]*:
+    if self.__debug[\s]*:
