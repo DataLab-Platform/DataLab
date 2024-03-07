@@ -15,6 +15,7 @@ from __future__ import annotations
 import os
 import os.path as osp
 import sys
+from typing import Literal
 
 from guidata import configtools
 from plotpy.config import CONF as PLOTPY_CONF
@@ -23,7 +24,7 @@ from plotpy.constants import LUTAlpha
 
 from cdl.utils import conf, tests
 
-CONF_VERSION = "1.0.0"
+CONF_VERSION = "0.2.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "cdl"
@@ -202,20 +203,20 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     # Default visualization settings, persisted in object metadata
     # (e.g. see `ImageObj.update_metadata_view_settings`)
     ima_def_colormap = conf.Option()
+    ima_def_invert_colormap = conf.Option()
     ima_def_interpolation = conf.Option()
     ima_def_alpha = conf.Option()
     ima_def_alpha_function = conf.Option()
 
     @classmethod
-    def get_def_dict(cls, category: str) -> dict:
+    def get_def_dict(cls, category: Literal["ima", "sig"]) -> dict:
         """Get default visualization settings as a dictionary
 
         Args:
-            category (str): category ("ima" or "sig", respectively for image
-                and signal)
+            category: category ("ima" or "sig", respectively for image and signal)
 
         Returns:
-            dict: default visualization settings as a dictionary
+            Default visualization settings as a dictionary
         """
         assert category in ("ima", "sig")
         prefix = f"{category}_def_"
@@ -230,13 +231,12 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
         return def_dict
 
     @classmethod
-    def set_def_dict(cls, category: str, def_dict: dict) -> None:
+    def set_def_dict(cls, category: Literal["ima", "sig"], def_dict: dict) -> None:
         """Set default visualization settings from a dictionary
 
         Args:
-            category (str): category ("ima" or "sig", respectively for image
-                and signal)
-            def_dict (dict): default visualization settings as a dictionary
+            category: category ("ima" or "sig", respectively for image and signal)
+            def_dict: default visualization settings as a dictionary
         """
         assert category in ("ima", "sig")
         prefix = f"{category}_def_"
@@ -305,6 +305,7 @@ def initialize():
     Conf.view.sig_def_curvestyle.get("Lines")
     Conf.view.sig_def_baseline.get(0.0)
     Conf.view.ima_def_colormap.get("jet")
+    Conf.view.ima_def_invert_colormap.get(False)
     Conf.view.ima_def_interpolation.get(0)
     Conf.view.ima_def_alpha.get(1.0)
     Conf.view.ima_def_alpha_function.get(LUTAlpha.NONE.value)

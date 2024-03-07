@@ -1087,7 +1087,8 @@ class BaseObj(metaclass=BaseObjMeta):
             item: plot item
         """
         for key in self.__get_def_dict():
-            self.metadata[key] = getattr(item.param, key)
+            if hasattr(item.param, key):  # In case the PlotPy version is not up-to-date
+                self.metadata[key] = getattr(item.param, key)
         # Subclasses may override this method to update metadata from plot item,
         # then call this implementation of the method to update metadata standard
         # entries.

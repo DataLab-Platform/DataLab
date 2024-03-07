@@ -11,7 +11,7 @@ DataLab settings
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Generator
 
 import guidata.dataset as gds
 from guidata.dataset import restore_dataset, update_dataset
@@ -167,7 +167,9 @@ class ViewSettings(gds.DataSet):
 
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
-def _iter_conf(paramdict: dict[str, gds.DataSet]) -> tuple[gds.DataSet, str, str]:
+def _iter_conf(
+    paramdict: dict[str, gds.DataSet]
+) -> Generator[tuple[gds.DataSet, str, str], None, None]:
     """Iterate over configuration parameters"""
     confdict = Conf.to_dict()
     for section_name, section in confdict.items():

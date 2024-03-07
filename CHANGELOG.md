@@ -3,6 +3,15 @@
 See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.14.1 ##
+
+💥 New features:
+
+* Added support for colormap inversion in Image View:
+  * New "Invert colormap" entry in plot context menu, image parameters, and in the
+    default image view settings
+  * This requires `PlotPy` v2.3 or later
+
 ## DataLab Version 0.14.0 ##
 
 💥 New features:
