@@ -167,8 +167,10 @@ class RemoteServer(QC.QThread):
         QC.QThread.__init__(self)
         self.port: int = None
         self.is_ready = True
+        self.server: SimpleXMLRPCServer | None = None
         self.win = win
         win.SIG_READY.connect(self.cdl_is_ready)
+        win.SIG_CLOSING.connect(self.shutdown_server)
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
@@ -194,12 +196,19 @@ class RemoteServer(QC.QThread):
         with SimpleXMLRPCServer(
             ("127.0.0.1", 0), logRequests=False, allow_none=True
         ) as server:
+            self.server = server
             server.register_introspection_functions()
             self.register_functions(server)
             self.port = server.server_address[1]
             self.notify_port(self.port)
-            execenv.xmlrpcport = self.port
-            server.serve_forever()
+            with execenv.context(xmlrpcport=self.port):
+                server.serve_forever()
+
+    def shutdown_server(self) -> None:
+        """Shutdown server"""
+        if self.server is not None:
+            self.server.shutdown()
+            self.server = None
 
     def notify_port(self, port: int) -> None:
         """Notify automatically attributed port.
