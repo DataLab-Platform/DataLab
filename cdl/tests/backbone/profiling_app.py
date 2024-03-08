@@ -15,15 +15,15 @@ from cdl.tests import cdltest_app_context
 
 def test():
     """Profiling test"""
-    execenv.unattended = True
-    with cdltest_app_context() as win:
-        win.open_h5_files(
-            [
-                "C:/Dev/Projets/X-GRID_data/Projets_Oasis/XGRID5/"
-                "VS000001-blobs_doh_profiling.h5"
-            ],
-            import_all=True,
-        )
+    with execenv.context(unattended=True):
+        with cdltest_app_context() as win:
+            win.open_h5_files(
+                [
+                    "C:/Dev/Projets/X-GRID_data/Projets_Oasis/XGRID5/"
+                    "VS000001-blobs_doh_profiling.h5"
+                ],
+                import_all=True,
+            )
 
 
 if __name__ == "__main__":

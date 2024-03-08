@@ -13,7 +13,8 @@ import os
 import platform
 import pprint
 import sys
-from typing import Any
+from contextlib import contextmanager
+from typing import Any, Generator
 
 from guidata.env import ExecEnv as GuiDataExecEnv
 
@@ -132,12 +133,18 @@ class CDLExecEnv:
     """Object representing DataLab test environment"""
 
     UNATTENDED_ARG = "unattended"
+    ACCEPT_DIALOGS_ARG = "accept_dialogs"
     VERBOSE_ARG = "verbose"
     SCREENSHOT_ARG = "screenshot"
     DELAY_ARG = "delay"
     XMLRPCPORT_ARG = "xmlrpcport"
-    DONOTQUIT_ENV = "CDL_DO_NOT_QUIT"
+    DO_NOT_QUIT_ENV = "CDL_DO_NOT_QUIT"
     UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
+
+    # TODO: When guidata V3.4.0 is released, replace the following with
+    #       GuiDataExecEnv.ACCEPT_DIALOGS_ENV
+    ACCEPT_DIALOGS_ENV = "GUIDATA_ACCEPT_DIALOGS"
+
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
     SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
     DELAY_ENV = GuiDataExecEnv.DELAY_ENV
@@ -149,22 +156,46 @@ class CDLExecEnv:
         self.h5browser_file = None
         self.demo_mode = False
         self.parse_args()
+        if self.unattended:  # Do not run this code in production
+            # Check that calling `to_dict` do not raise any exception
+            self.to_dict()
+
+    def iterate_over_attrs_envvars(self) -> Generator[tuple[str, str], None, None]:
+        """Iterate over CDL environment variables
+
+        Yields:
+            A tuple (attribute name, environment variable name)
+        """
+        for name in dir(self):
+            if name.endswith("_ENV"):
+                envvar: str = getattr(self, name)
+                attrname = "_".join(name.split("_")[:-1]).lower()
+                yield attrname, envvar
 
     def to_dict(self):
         """Return a dictionary representation of the object"""
-        # Return textual representation of object attributes and properties
-        props = [
+        # The list of properties match the list of environment variable attribute names,
+        # modulo the "_ENV" suffix:
+        props = [attrname for attrname, _envvar in self.iterate_over_attrs_envvars()]
+
+        # Check that all properties are defined in the class and that they are
+        # really properties:
+        for prop in props:
+            assert hasattr(
+                self, prop
+            ), f"Property {prop} is not defined in class {self.__class__.__name__}"
+            assert isinstance(
+                getattr(self.__class__, prop), property
+            ), f"Attribute {prop} is not a property in class {self.__class__.__name__}"
+
+        # Add complementary properties:
+        props += [
             "h5files",
             "h5browser_file",
             "demo_mode",
-            "do_not_quit",
-            "unattended",
-            "catcher_test",
-            "screenshot",
-            "verbose",
-            "delay",
-            "xmlrpcport",
         ]
+
+        # Return a dictionary with the properties as keys and their values as values:
         return {p: getattr(self, p) for p in props}
 
     def __str__(self):
@@ -207,12 +238,12 @@ class CDLExecEnv:
         during the test] but we also need to keep the QApplication running to
         be able to send commands to the remote client API).
         """
-        return self.__get_mode(self.DONOTQUIT_ENV)
+        return self.__get_mode(self.DO_NOT_QUIT_ENV)
 
     @do_not_quit.setter
     def do_not_quit(self, value):
         """Set do_not_quit value"""
-        self.__set_mode(self.DONOTQUIT_ENV, value)
+        self.__set_mode(self.DO_NOT_QUIT_ENV, value)
 
     @property
     def unattended(self):
@@ -223,6 +254,16 @@ class CDLExecEnv:
     def unattended(self, value):
         """Set unattended value"""
         self.__set_mode(self.UNATTENDED_ENV, value)
+
+    @property
+    def accept_dialogs(self):
+        """Whether to accept dialogs in unattended mode"""
+        return self.__get_mode(self.ACCEPT_DIALOGS_ENV)
+
+    @accept_dialogs.setter
+    def accept_dialogs(self, value):
+        """Set whether to accept dialogs in unattended mode"""
+        self.__set_mode(self.ACCEPT_DIALOGS_ENV, value)
 
     @property
     def catcher_test(self):
@@ -316,6 +357,12 @@ class CDLExecEnv:
             default=None,
         )
         parser.add_argument(
+            "--" + self.ACCEPT_DIALOGS_ARG,
+            action="store_true",
+            help="accept dialogs in unattended mode",
+            default=None,
+        )
+        parser.add_argument(
             "--" + self.SCREENSHOT_ARG,
             action="store_true",
             help="automatic screenshots",
@@ -355,6 +402,7 @@ class CDLExecEnv:
         """Set appropriate environment variables"""
         for argname in (
             self.UNATTENDED_ARG,
+            self.ACCEPT_DIALOGS_ARG,
             self.SCREENSHOT_ARG,
             self.VERBOSE_ARG,
             self.DELAY_ARG,
@@ -401,6 +449,47 @@ class CDLExecEnv:
                 compact=compact,
                 sort_dicts=sort_dicts,
             )
+
+    @contextmanager
+    def context(
+        self,
+        unattended=None,
+        accept_dialogs=None,
+        screenshot=None,
+        delay=None,
+        verbose=None,
+    ) -> Generator[None, None, None]:
+        """Return a context manager that sets some execenv properties at enter,
+        and restores them at exit. This is useful to run some code in a
+        controlled environment, for example to accept dialogs in unattended
+        mode, and restore the previous value at exit.
+
+        Args:
+            unattended: whether to run in unattended mode
+            accept_dialogs: whether to accept dialogs in unattended mode
+            screenshot: whether to take screenshots
+            delay: delay (seconds) before quitting application in unattended mode
+            verbose: verbosity level
+
+        .. note::
+            If a passed value is None, the corresponding property is not changed.
+        """
+        old_values = self.to_dict()
+        new_values = {
+            "unattended": unattended,
+            "accept_dialogs": accept_dialogs,
+            "screenshot": screenshot,
+            "delay": delay,
+            "verbose": verbose,
+        }
+        for key, value in new_values.items():
+            if value is not None:
+                setattr(self, key, value)
+        try:
+            yield
+        finally:
+            for key, value in old_values.items():
+                setattr(self, key, value)
 
 
 execenv = CDLExecEnv()

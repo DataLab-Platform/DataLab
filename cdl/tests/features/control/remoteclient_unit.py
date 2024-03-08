@@ -64,7 +64,7 @@ def multiple_commands(remote: RemoteProxy):
 def test_remoteclient_unit():
     """Remote client test"""
     env = os.environ.copy()
-    env[execenv.DONOTQUIT_ENV] = "1"
+    env[execenv.DO_NOT_QUIT_ENV] = "1"
     execenv.print("Launching DataLab in a separate process")
     exec_script(app.__file__, wait=False, env=env)
     remote = RemoteProxy()

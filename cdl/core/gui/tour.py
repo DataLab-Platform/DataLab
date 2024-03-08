@@ -54,7 +54,6 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from guidata.configtools import get_icon, get_image_file_path
-from guidata.env import execenv
 from guidata.qthelpers import is_dark_mode
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
@@ -62,6 +61,7 @@ from qtpy import QtWidgets as QW
 
 import cdl.obj
 from cdl.config import _
+from cdl.env import execenv
 
 if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow

@@ -44,45 +44,53 @@ def __compare_metadata(dict1, dict2):
 
 def test_dict_serialization():
     """Dictionnary/List in metadata (de)serialization test"""
-    execenv.unattended = True
-    with temporary_directory() as tmpdir:
-        with cdltest_app_context(console=False) as win:
-            panel = win.imagepanel
+    with execenv.context(unattended=True):
+        with temporary_directory() as tmpdir:
+            with cdltest_app_context(console=False) as win:
+                panel = win.imagepanel
 
-            data = get_test_image("flower.npy").data
-            image = create_image("Test image with peaks", data)
-            image.metadata["tata"] = {
-                "lkl": 2,
-                "tototo": 3,
-                "arrdata": np.array([0, 1, 2, 3, 4, 5]),
-                "zzzz": "lklk",
-                "bool": True,
-                "float": 1.234,
-                "list": [1, 2.5, 3, "str", False, 5],
-                "d": {
+                data = get_test_image("flower.npy").data
+                image = create_image("Test image with peaks", data)
+                image.metadata["tata"] = {
                     "lkl": 2,
                     "tototo": 3,
+                    "arrdata": np.array([0, 1, 2, 3, 4, 5]),
                     "zzzz": "lklk",
                     "bool": True,
                     "float": 1.234,
-                    "list": [1, 2.5, 3, "str", False, 5, {"lkl": 2, "l": [1, 2, 3]}],
-                },
-            }
-            image.metadata["toto"] = [
-                np.array([[1, 2], [-3, 0]]),
-                np.array([[1, 2], [-3, 0], [99, 241]]),
-            ]
-            image.metadata["array"] = np.array([-5, -4, -3, -2, -1])
-            panel.add_object(image)
-            fname = osp.join(tmpdir, "test.h5")
-            win.save_to_h5_file(fname)
-            win.reset_all()
-            win.open_h5_files([fname], import_all=True)
-            execenv.print("Dictionary/List (de)serialization: ", end="")
-            oids = panel.objmodel.get_object_ids()
-            first_image = panel.objmodel[oids[0]]
-            assert __compare_metadata(image.metadata, first_image.metadata.copy())
-            execenv.print("OK")
+                    "list": [1, 2.5, 3, "str", False, 5],
+                    "d": {
+                        "lkl": 2,
+                        "tototo": 3,
+                        "zzzz": "lklk",
+                        "bool": True,
+                        "float": 1.234,
+                        "list": [
+                            1,
+                            2.5,
+                            3,
+                            "str",
+                            False,
+                            5,
+                            {"lkl": 2, "l": [1, 2, 3]},
+                        ],
+                    },
+                }
+                image.metadata["toto"] = [
+                    np.array([[1, 2], [-3, 0]]),
+                    np.array([[1, 2], [-3, 0], [99, 241]]),
+                ]
+                image.metadata["array"] = np.array([-5, -4, -3, -2, -1])
+                panel.add_object(image)
+                fname = osp.join(tmpdir, "test.h5")
+                win.save_to_h5_file(fname)
+                win.reset_all()
+                win.open_h5_files([fname], import_all=True)
+                execenv.print("Dictionary/List (de)serialization: ", end="")
+                oids = panel.objmodel.get_object_ids()
+                first_image = panel.objmodel[oids[0]]
+                assert __compare_metadata(image.metadata, first_image.metadata.copy())
+                execenv.print("OK")
 
 
 if __name__ == "__main__":

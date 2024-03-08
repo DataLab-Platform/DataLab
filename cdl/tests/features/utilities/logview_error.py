@@ -17,10 +17,10 @@ from cdl.env import execenv
 
 def error():
     """Raise an exception and create a seg fault in DataLab"""
-    execenv.unattended = True
-    with qt_app_context(exec_loop=True):
-        win = CDLMainWindow()
-        win.test_segfault_error()
+    with execenv.context(unattended=True):
+        with qt_app_context(exec_loop=True):
+            win = CDLMainWindow()
+            win.test_segfault_error()
 
 
 if __name__ == "__main__":

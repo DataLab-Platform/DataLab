@@ -76,7 +76,7 @@ def test_cli():
     assert execenvdict == execenv.to_dict()
     # Testing boolean arguments
     execenv.print("  Testing boolean arguments:")
-    for argname in ("unattended", "screenshot"):
+    for argname in ("unattended", "accept_dialogs", "screenshot"):
         execenv.print(f"    {argname}:", end="")
         for val in (True, False):
             execenv.print(f" {val}", end="")
@@ -163,18 +163,9 @@ def test_cli():
     execenv.print("=> Everything is OK")
 
 
-def iterate_over_attrs_envvars():
-    """Iterate over CDL environment variables"""
-    for attrname in dir(execenv):
-        if attrname.endswith("_ENV"):
-            envvar = getattr(execenv, attrname)
-            attrname = envvar[4:].lower()
-            yield attrname, envvar
-
-
 def remove_all_cdl_envvars():
     """Remove all CDL environment variables"""
-    for _attrname, envvar in iterate_over_attrs_envvars():
+    for _attrname, envvar in execenv.iterate_over_attrs_envvars():
         os.environ.pop(envvar, None)
 
 
@@ -216,6 +207,7 @@ def get_attr_to_envvar(
 
 ATTR_TO_ENVVAR = {
     "unattended": get_attr_to_envvar(bool, False),
+    "accept_dialogs": get_attr_to_envvar(bool, False),
     "screenshot": get_attr_to_envvar(bool, False),
     "do_not_quit": get_attr_to_envvar(bool, False),
     "catcher_test": get_attr_to_envvar(bool, False),
@@ -231,7 +223,7 @@ def test_envvar():
     """Testing DataLab configuration file"""
     assert execenv.unattended is False, "This test must be run with unattended=False"
     print("Testing DataLab execution environment:")
-    for attrname, envvar in iterate_over_attrs_envvars():
+    for attrname, envvar in execenv.iterate_over_attrs_envvars():
         attr_to_envvar = ATTR_TO_ENVVAR[attrname]
         print(f"  Testing {attrname}:")
         for value, envvals in attr_to_envvar:

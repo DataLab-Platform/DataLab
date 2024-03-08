@@ -138,18 +138,18 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
 
 def test_config():
     """Testing DataLab configuration file"""
-    execenv.unattended = True
-    h5files = [get_test_fnames("*.h5")[1]]
-    execenv.print("Testing DataLab configuration settings:")
-    for index, conf in enumerate(CONFIGS):
-        name = f"CONFIG{index}"
-        apply_conf(conf, name)
-        with cdl_app_context(exec_loop=True) as qapp:
-            win = app.create(splash=False, h5files=h5files)
-            qapp.processEvents()
-            check_conf(conf, name, win, h5files)
-        h5files = None
-    execenv.print("=> Everything is OK")
+    with execenv.context(unattended=True):
+        h5files = [get_test_fnames("*.h5")[1]]
+        execenv.print("Testing DataLab configuration settings:")
+        for index, conf in enumerate(CONFIGS):
+            name = f"CONFIG{index}"
+            apply_conf(conf, name)
+            with cdl_app_context(exec_loop=True) as qapp:
+                win = app.create(splash=False, h5files=h5files)
+                qapp.processEvents()
+                check_conf(conf, name, win, h5files)
+            h5files = None
+        execenv.print("=> Everything is OK")
 
 
 if __name__ == "__main__":
