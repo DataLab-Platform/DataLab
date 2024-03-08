@@ -9,6 +9,8 @@ DataLab I/O image functions
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import os
 import re
 import time
@@ -226,7 +228,7 @@ class SIFFile:
         with open(self.filepath, "rb") as sif_file:
             sif_file.seek(self.m_offset)
             block = sif_file.read(self.width * self.height * self.stacksize * 4)
-            data = np.fromstring(block, dtype=np.float32)
+            data = np.frombuffer(block, dtype=np.float32)
         return data.reshape(self.stacksize, self.height, self.width)
 
 
@@ -311,7 +313,7 @@ class SCORFile:
         with open(self.filepath, "rb") as data_file:
             data_file.seek(self.m_offset)
             block = data_file.read(self.datasize)
-            data = np.fromstring(block, dtype=np.int16)
+            data = np.frombuffer(block, dtype=np.int16)
         return data.reshape(self.height, self.width)
 
 
