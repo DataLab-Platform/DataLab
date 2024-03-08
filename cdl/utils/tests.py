@@ -99,32 +99,26 @@ def get_output_data_path(extension: str, suffix: str | None = None) -> str:
     return osp.join(TST_PATH[0], f"{name}.{extension}")
 
 
-class CustomTemporaryDirectory(tempfile.TemporaryDirectory):
+class CDLTemporaryDirectory(tempfile.TemporaryDirectory):
+    """DataLab's temporary directory class that ignores errors when cleaning up,
+    and restores the current working directory after cleanup"""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.__cwd = os.getcwd()
+
     def cleanup(self) -> None:
         """Cleanup temporary directory and ignore errors"""
+        os.chdir(self.__cwd)
         try:
             super().cleanup()
         except (PermissionError, RecursionError):
             pass
 
 
-@contextmanager
-def temporary_directory() -> Generator[str, None, None]:
-    """Create a temporary directory and clean-up afterwards"""
-    #  TemporaryDirectory is not used within a "with" statement in order to ignore
-    #  errors occuring when cleaning up directory at exit
-    #  TODO: [P4] Requires Python 3.10 / Use "ignore_cleanup_errors=True" instead
-    #  In other words: this function will be replaced by TemporaryDirectory context mgr
-    tmp = CustomTemporaryDirectory()  # pylint: disable=consider-using-with
-    try:
-        yield tmp.name
-    finally:
-        tmp.cleanup()
-
-
 def get_temporary_directory() -> str:
     """Return path to a temporary directory, and clean-up at exit"""
-    tmp = CustomTemporaryDirectory()
+    tmp = CDLTemporaryDirectory()
     atexit.register(tmp.cleanup)
     return tmp.name
 

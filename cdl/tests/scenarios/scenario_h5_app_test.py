@@ -33,12 +33,12 @@ from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
 from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
-from cdl.utils.tests import temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory
 
 
 def test_scenario_h5():
     """Example of high-level test scenario with HDF5 file"""
-    with temporary_directory() as tmpdir:
+    with CDLTemporaryDirectory() as tmpdir:
         with cdltest_app_context(console=False) as win:
             # === Creating two test signals
             panel = win.signalpanel

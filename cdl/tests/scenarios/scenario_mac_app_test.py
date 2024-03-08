@@ -19,7 +19,7 @@ import time
 from cdl.core.gui.macroeditor import Macro
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory
 
 
 def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:
@@ -42,7 +42,7 @@ def add_macro_sample(win: CDLMainWindow, index: int) -> Macro:
 
 def test_scenario_macro() -> None:
     """Example of high-level test scenario with HDF5 file"""
-    with temporary_directory() as tmpdir:
+    with CDLTemporaryDirectory() as tmpdir:
         with cdltest_app_context(console=False) as win:
             win.set_current_panel("macro")
             add_macro_sample(win, 0)

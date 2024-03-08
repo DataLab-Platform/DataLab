@@ -17,7 +17,7 @@ from cdl.env import execenv
 from cdl.obj import create_image
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import get_test_image
-from cdl.utils.tests import temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory
 
 
 def __compare_metadata(dict1, dict2):
@@ -45,7 +45,7 @@ def __compare_metadata(dict1, dict2):
 def test_dict_serialization():
     """Dictionnary/List in metadata (de)serialization test"""
     with execenv.context(unattended=True):
-        with temporary_directory() as tmpdir:
+        with CDLTemporaryDirectory() as tmpdir:
             with cdltest_app_context(console=False) as win:
                 panel = win.imagepanel
 

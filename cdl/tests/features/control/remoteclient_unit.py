@@ -24,12 +24,12 @@ from cdl.env import execenv
 from cdl.param import XYCalibrateParam
 from cdl.proxy import RemoteProxy
 from cdl.tests.data import create_2d_gaussian, create_paracetamol_signal
-from cdl.utils.tests import exec_script, temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory, exec_script
 
 
 def multiple_commands(remote: RemoteProxy):
     """Execute multiple XML-RPC commands"""
-    with temporary_directory() as tmpdir:
+    with CDLTemporaryDirectory() as tmpdir:
         x, y = create_paracetamol_signal().get_data()
         remote.add_signal("tutu", x, y)
 

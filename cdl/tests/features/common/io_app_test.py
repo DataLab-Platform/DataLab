@@ -20,7 +20,7 @@ from cdl.core.io.image import ImageIORegistry
 from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.utils.tests import get_test_fnames, temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
 
 
 def __test_func(
@@ -28,7 +28,7 @@ def __test_func(
 ) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
-    with temporary_directory() as tmpdir:
+    with CDLTemporaryDirectory() as tmpdir:
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern)
         execenv.print("    Opening:")

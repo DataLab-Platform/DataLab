@@ -19,7 +19,7 @@ from cdl.core.io.signal import SignalIORegistry
 from cdl.env import execenv
 from cdl.plugins import discover_plugins
 from cdl.utils.strings import reduce_path
-from cdl.utils.tests import get_test_fnames, temporary_directory
+from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
 
 discover_plugins()
 
@@ -27,7 +27,7 @@ discover_plugins()
 def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
-    with temporary_directory() as tmpdir:
+    with CDLTemporaryDirectory() as tmpdir:
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern)
         execenv.print("    Opening:")
