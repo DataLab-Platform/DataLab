@@ -19,7 +19,7 @@ import multiprocessing
 import time
 import warnings
 from collections.abc import Callable
-from multiprocessing import Pool
+from multiprocessing.pool import Pool
 from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset as gds
@@ -73,7 +73,7 @@ COMPUTATION_TIP = _(
 )
 
 
-POOL: Pool = None
+POOL: Pool | None = None
 
 
 class Worker:
