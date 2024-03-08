@@ -11,7 +11,22 @@ for future and past milestones.
   * New "Invert colormap" entry in plot context menu, image parameters, and in the
     default image view settings
   * This requires `PlotPy` v2.3 or later
-* DataLab's unit tests are now using [pytest](https://pytest.org)
+* Testability and maintainability:
+  * DataLab's unit tests are now using [pytest](https://pytest.org). This has required
+    a lot of work for the transition, especially to readapt the tests so that they may
+    be executed in the same process. For instance, a particular attention has been
+    given to sandboxing the tests, so that they do not interfere with each other.
+  * Added continuous integration (CI) with GitHub Actions
+
+🛠️ Bug fixes:
+
+* XML-RPC server was not shut down properly when closing DataLab
+* Fixed test-related issues: some edge cases were hidden by the old test suite, and
+  have been revealed by the transition to `pytest`. This has led to some bug fixes
+  and improvements in the code.
+* Deprecation issues:
+  * Fixed `scipy.ndimage.filters` deprecation warning
+  * Fixed `numpy.fromstring` deprecation warning
 
 ## DataLab Version 0.14.0 ##
 
