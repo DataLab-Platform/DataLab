@@ -14,7 +14,6 @@ from __future__ import annotations
 import cv2
 import numpy as np
 import scipy.ndimage as spi
-import scipy.ndimage.filters as spf
 import scipy.spatial as spt
 from numpy import ma
 from skimage import exposure, feature, measure, transform
@@ -295,8 +294,8 @@ def get_2d_peaks_coords(
     """
     if size is None:
         size = max(min(data.shape) // 40, 50)
-    data_max = spf.maximum_filter(data, size)
-    data_min = spf.minimum_filter(data, size)
+    data_max = spi.maximum_filter(data, size)
+    data_min = spi.minimum_filter(data, size)
     data_diff = data_max - data_min
     diff = (data_max - data_min) > get_absolute_level(data_diff, level)
     maxima = data == data_max
