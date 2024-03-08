@@ -70,7 +70,7 @@ class SourceWidget(QW.QGroupBox):
         file_button.toggled.connect(self.__update_path)
         self.browse_button.clicked.connect(self.__browse)
 
-    def __text_changed(self, text: str) -> None:
+    def __text_changed(self, text: str) -> None:  # pylint:disable=unused-argument
         """Text changed"""
         self.SIG_VALIDITY_CHANGED.emit(osp.isfile(self.file_edit.text()))
 
@@ -130,9 +130,9 @@ class SourcePage(WizardPage):
             path = self.get_source_path()
             if path is not None and osp.isfile(path):
                 try:
-                    with open(path, "r") as file:
+                    with open(path, "r", encoding="utf-8") as file:
                         self.__text = file.read()
-                except Exception:
+                except Exception:  # pylint:disable=broad-except
                     return False
             else:
                 return False
@@ -335,7 +335,7 @@ def str_to_array(
             delimiter=delimiter,
             unpack=param.transpose,
         )
-    except Exception:
+    except Exception:  # pylint:disable=broad-except
         return None
     return data.astype(param.dtype_str)
 

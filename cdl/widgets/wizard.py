@@ -25,10 +25,9 @@ This module is strongly inspired from Qt's `QWizard` and `QWizardPage` classes.
 
 from __future__ import annotations
 
-from guidata.configtools import get_icon
-from PyQt5.QtWidgets import QWidget
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from qtpy.QtWidgets import QWidget
 
 from cdl.config import _
 
@@ -243,7 +242,7 @@ class ExamplePage2(WizardPage):
 
     def browse_file(self) -> None:
         """Browse file"""
-        file_name, _ = QW.QFileDialog.getOpenFileName(
+        file_name, _filt = QW.QFileDialog.getOpenFileName(
             self,
             _("Select the File to Import"),
             "",

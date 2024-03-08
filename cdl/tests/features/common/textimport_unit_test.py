@@ -20,7 +20,7 @@ from cdl.widgets.textimport import TextImportWizard
 
 def file_to_clipboard(filename: str) -> None:
     """Copy file content to clipboard"""
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         text = file.read()
     QW.QApplication.clipboard().setText(text)
 

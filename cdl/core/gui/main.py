@@ -1336,7 +1336,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 filename = fname_with_dset
                 dsetnames.append(None)
             filenames.append(filename)
-        if import_all is None and all([dsetname is None for dsetname in dsetnames]):
+        if import_all is None and all(dsetname is None for dsetname in dsetnames):
             self.browse_h5_files(filenames, reset_all)
             return
         for filename, dsetname in zip(filenames, dsetnames):
@@ -1527,12 +1527,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         pinfos = PluginRegistry.get_plugin_infos()
         created_by = _("Created by")
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
-        copyright = "2023 DataLab Platform Developers"
+        cprght = "2023 DataLab Platform Developers"
         QW.QMessageBox.about(
             self,
             _("About") + " " + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}
-              <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {copyright}
+              <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {cprght}
               <p>{adv_conf}<br><br>{pinfos}""",
         )
 

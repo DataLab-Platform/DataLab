@@ -33,7 +33,6 @@ from qtpy import QtWidgets as QW
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
 from cdl.core.model.signal import CURVESTYLES
-from cdl.env import execenv
 from cdl.obj import ImageObj, SignalObj
 from cdl.utils.qthelpers import qt_handle_error_message
 from cdl.utils.strings import to_string
@@ -903,7 +902,7 @@ class H5BrowserDialog(QW.QDialog):
             self.browser.open_file(fname)
         self.__finalize_setup()
 
-    def select_new_file(self, fname: str) -> None:
+    def select_new_file(self, fname: str) -> None:  # pylint:disable=unused-argument
         """Select new file
 
         Args:
@@ -912,7 +911,7 @@ class H5BrowserDialog(QW.QDialog):
         self.__finalize_setup()
         self.refresh_buttons()
 
-    def remove_file(self, fname: str) -> None:
+    def remove_file(self, fname: str) -> None:  # pylint:disable=unused-argument
         """Remove file
 
         Args:

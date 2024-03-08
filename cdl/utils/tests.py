@@ -17,8 +17,7 @@ import pathlib
 import subprocess
 import sys
 import tempfile
-from collections.abc import Callable, Generator
-from contextlib import contextmanager
+from collections.abc import Callable
 
 from guidata.configtools import get_module_data_path
 
