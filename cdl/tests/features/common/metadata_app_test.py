@@ -24,7 +24,7 @@ from cdl.core.gui.panel.signal import SignalPanel
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_paracetamol_signal
-from cdl.tests.features.common import roi_app
+from cdl.tests.features.common import roi_app_test
 
 
 def __run_signal_computations(panel: SignalPanel):
@@ -72,7 +72,7 @@ def test_metadata_app():
         # === Image metadata features test ===
         panel = win.imagepanel
         param = cdl.obj.new_image_param(height=size, width=size)
-        ima = roi_app.create_test_image_with_roi(param)
+        ima = roi_app_test.create_test_image_with_roi(param)
         panel.add_object(ima)
         __run_image_computations(panel)
         __test_metadata_features(panel)

@@ -15,7 +15,7 @@ from qtpy import QtWidgets as QW
 from cdl.widgets.warningerror import WarningErrorMessageBox
 
 
-def test_error_message_box(category: str):
+def error_message_box(category: str):
     """Test error message box
 
     Args:
@@ -43,6 +43,11 @@ def test_error_message_box(category: str):
             raise ValueError(f"Invalid category: {category}")
 
 
+def test_error_message_box():
+    """Test error message box"""
+    error_message_box("error")
+    error_message_box("warning")
+
+
 if __name__ == "__main__":
-    test_error_message_box("error")
-    test_error_message_box("warning")
+    test_error_message_box()

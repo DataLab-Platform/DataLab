@@ -11,6 +11,7 @@ for future and past milestones.
   * New "Invert colormap" entry in plot context menu, image parameters, and in the
     default image view settings
   * This requires `PlotPy` v2.3 or later
+* DataLab's unit tests are now using [pytest](https://pytest.org)
 
 ## DataLab Version 0.14.0 ##
 

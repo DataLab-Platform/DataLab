@@ -120,18 +120,46 @@
             }
         },
         {
-            "label": "Run all tests",
+            "label": "Run pytest",
             "type": "shell",
             "command": "cmd",
             "args": [
                 "/c",
-                "run_all_tests.bat"
+                "run_pytest.bat"
             ],
             "options": {
                 "cwd": "scripts",
                 "env": {
                     "UNATTENDED": "1",
                     // "DEBUG": "1",
+                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "Run pytest on all environments",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "run_pytest_on_all.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
                     "PYTHON": "${env:CDL_PYTHONEXE}"
                 }
             },

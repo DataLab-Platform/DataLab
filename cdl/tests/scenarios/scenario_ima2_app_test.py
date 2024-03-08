@@ -24,6 +24,7 @@ def test_scenario_image2() -> None:
     assert (
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
+
     with cdltest_app_context(save=True) as win:
         execenv.print("Testing image features *with* process isolation...")
         common.run_image_computations(win, all_types=False)

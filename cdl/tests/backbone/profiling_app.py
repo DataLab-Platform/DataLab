@@ -13,7 +13,7 @@ from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 
 
-def test():
+def test_profiling():
     """Profiling test"""
     with execenv.context(unattended=True):
         with cdltest_app_context() as win:
@@ -27,4 +27,4 @@ def test():
 
 
 if __name__ == "__main__":
-    test()
+    test_profiling()

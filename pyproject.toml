@@ -60,6 +60,7 @@ cdl-tests = "cdl.tests:run"
 qt = ["PyQt5"]
 dev = ["black", "isort", "pylint", "Coverage", "pyinstaller>=6.0"]
 doc = ["PyQt5", "sphinx", "sphinx_intl", "sphinx-sitemap", "myst_parser", "sphinx_design", "sphinx-copybutton", "pydata-sphinx-theme"]
+test = ["pytest", "pytest-cov", "pytest-xvfb"]
 
 [tool.setuptools.packages.find]
 include = ["cdl*"]

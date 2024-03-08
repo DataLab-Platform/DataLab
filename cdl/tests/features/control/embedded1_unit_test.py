@@ -27,7 +27,7 @@ import cdl.obj
 from cdl.config import _
 from cdl.core.gui.main import CDLMainWindow
 from cdl.tests import data as test_data
-from cdl.tests.features.macros.macroeditor_unit import get_macro_example_path
+from cdl.tests.features.macros.macroeditor_unit_test import get_macro_example_path
 
 
 class HostWidget(QW.QWidget):

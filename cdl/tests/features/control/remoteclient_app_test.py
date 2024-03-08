@@ -25,9 +25,9 @@ from cdl import app
 from cdl.config import _
 from cdl.env import execenv
 from cdl.proxy import RemoteProxy
-from cdl.tests.features.control import embedded1_unit
+from cdl.tests.features.control import embedded1_unit_test
 from cdl.tests.features.control.remoteclient_unit import multiple_commands
-from cdl.tests.features.utilities.logview_app import exec_script
+from cdl.tests.features.utilities.logview_app_test import exec_script
 from cdl.utils.qthelpers import bring_to_front
 from cdl.widgets.connection import ConnectionDialog
 
@@ -63,7 +63,7 @@ def try_send_command():
     return try_send_command_decorator
 
 
-class HostWindow(embedded1_unit.AbstractClientWindow):
+class HostWindow(embedded1_unit_test.AbstractClientWindow):
     """Test main view"""
 
     PURPOSE = _("This the client application, which connects to DataLab.")
@@ -184,6 +184,9 @@ def test_remote_client():
     """Remote client application test"""
     env = os.environ.copy()
     env[execenv.DO_NOT_QUIT_ENV] = "1"
+    if execenv.XMLRPCPORT_ENV in env:
+        # May happen when executing other tests before
+        env.pop(execenv.XMLRPCPORT_ENV)
     exec_script(app.__file__, wait=False, env=env)
     with qt_app_context(exec_loop=True):
         window = HostWindow()

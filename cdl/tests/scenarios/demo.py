@@ -29,7 +29,7 @@ from cdl.tests.data import (
     create_sincos_image,
     get_test_image,
 )
-from cdl.tests.features.common.roi_app import create_test_image_with_roi
+from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
 
 if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow

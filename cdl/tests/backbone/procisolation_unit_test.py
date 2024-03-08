@@ -18,7 +18,7 @@ from cdl.tests.backbone import procisolation1_unit
 
 def test_procisolation():
     """Test process isolation"""
-    procisolation1_unit.test()
+    procisolation1_unit.test_multiprocessing1()
 
 
 if __name__ == "__main__":

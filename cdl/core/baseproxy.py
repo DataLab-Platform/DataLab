@@ -29,7 +29,8 @@ from __future__ import annotations
 
 import abc
 from collections.abc import Callable
-from typing import TYPE_CHECKING
+from contextlib import contextmanager
+from typing import TYPE_CHECKING, Generator
 
 import guidata.dataset as gds
 import numpy as np
@@ -94,7 +95,8 @@ class AbstractCDLControl(abc.ABC):
         return [
             method
             for method in dir(cls)
-            if not method.startswith("_") and method != "get_public_methods"
+            if not method.startswith(("_", "context_"))
+            and method != "get_public_methods"
         ]
 
     @abc.abstractmethod
@@ -140,6 +142,29 @@ class AbstractCDLControl(abc.ABC):
         Args:
             state (bool): Auto refresh state
         """
+
+    # Returns a context manager to temporarily disable autorefresh
+    @contextmanager
+    def context_no_refresh(self) -> Generator[None, None, None]:
+        """Return a context manager to temporarily disable auto refresh.
+
+        Returns:
+            Context manager
+
+        Example:
+
+            >>> with proxy.context_no_refresh():
+            ...     proxy.add_image("image1", data1)
+            ...     proxy.compute_fft()
+            ...     proxy.compute_wiener()
+            ...     proxy.compute_ifft()
+            ...     # Auto refresh is disabled during the above operations
+        """
+        self.toggle_auto_refresh(False)
+        try:
+            yield
+        finally:
+            self.toggle_auto_refresh(True)
 
     @abc.abstractmethod
     def toggle_show_titles(self, state: bool) -> None:
@@ -529,37 +554,6 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
             state (bool): Auto refresh state
         """
         self._cdl.toggle_auto_refresh(state)
-
-    # Returns a context manager to temporarily disable autorefresh
-    def context_no_refresh(self) -> Callable:
-        """Return a context manager to temporarily disable auto refresh.
-
-        Returns:
-            Context manager
-
-        Example:
-
-            >>> with proxy.context_no_refresh():
-            ...     proxy.add_image("image1", data1)
-            ...     proxy.compute_fft()
-            ...     proxy.compute_wiener()
-            ...     proxy.compute_ifft()
-            ...     # Auto refresh is disabled during the above operations
-        """
-
-        class NoRefreshContextManager:
-            """Context manager to temporarily disable auto refresh"""
-
-            def __init__(self, cdl: AbstractCDLControl) -> None:
-                self._cdl = cdl
-
-            def __enter__(self) -> None:
-                self._cdl.toggle_auto_refresh(False)
-
-            def __exit__(self, exc_type, exc_value, traceback) -> None:
-                self._cdl.toggle_auto_refresh(True)
-
-        return NoRefreshContextManager(self)
 
     def toggle_show_titles(self, state: bool) -> None:
         """Toggle show titles state.

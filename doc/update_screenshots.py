@@ -8,13 +8,13 @@ Module for taking DataLab screenshots
 """
 
 from cdl import config
-from cdl.tests.features.applauncher import launcher1_app
+from cdl.tests.features.applauncher import launcher1_app_test
 from cdl.tests.scenarios import beautiful_app
 
 if __name__ == "__main__":
     print("Updating screenshots...", end=" ")
     config.reset()  # Reset configuration (remove configuration file and initialize it)
-    launcher1_app.test_launcher1(screenshots=True)
+    launcher1_app_test.test_launcher1(screenshots=True)
     config.reset()
     beautiful_app.run_beautiful_scenario(screenshots=True)
     print("done.")

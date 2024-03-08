@@ -155,7 +155,7 @@ class MainWindow(QW.QMainWindow):
         super().closeEvent(event)
 
 
-def test() -> None:
+def test_multiprocessing2() -> None:
     """
     Creates a PyQt application context, shows the main window,
     and starts the event loop.
@@ -170,4 +170,4 @@ def test() -> None:
 
 if __name__ == "__main__":
     POOL = Pool(processes=1)  # pylint: disable=not-callable,consider-using-with
-    test()
+    test_multiprocessing2()

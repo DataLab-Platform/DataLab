@@ -16,8 +16,7 @@ from __future__ import annotations
 
 import time
 from collections.abc import Callable
-from multiprocessing import Pool
-from multiprocessing.pool import AsyncResult
+from multiprocessing.pool import AsyncResult, Pool
 from typing import Any
 
 import numpy as np
@@ -31,7 +30,7 @@ from cdl.env import execenv
 from cdl.tests.data import create_2d_random, create_noisygauss_image
 from cdl.utils.qthelpers import create_progress_bar
 
-POOL: Pool = None
+POOL: Pool | None = None
 
 
 class Worker:
@@ -89,7 +88,7 @@ def testfunc(data: np.ndarray, size: int, error: bool) -> np.ndarray:
     return sps.medfilt(data, size) + create_2d_random(data.shape[0], data.dtype)
 
 
-def test(iterations: int = 4) -> None:
+def test_multiprocessing1(iterations: int = 4) -> None:
     """Multiprocessing test"""
     Worker.create_pool()
     with qt_app_context(exec_loop=True):
@@ -126,4 +125,4 @@ def test(iterations: int = 4) -> None:
 
 
 if __name__ == "__main__":
-    test()
+    test_multiprocessing1()

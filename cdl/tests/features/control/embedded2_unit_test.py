@@ -13,10 +13,10 @@ It is shown and raised above other windows when reopening application.
 # guitest: show
 
 from cdl.core.gui.main import CDLMainWindow
-from cdl.tests.features.control import embedded1_unit
+from cdl.tests.features.control import embedded1_unit_test
 
 
-class HostWindow(embedded1_unit.AbstractHostWindow):
+class HostWindow(embedded1_unit_test.AbstractHostWindow):
     """Test main view"""
 
     def init_cdl(self) -> None:
@@ -48,7 +48,7 @@ class HostWindow(embedded1_unit.AbstractHostWindow):
 
 def test_embedded_feature():
     """Testing embedded feature"""
-    embedded1_unit.run_host_window(HostWindow)
+    embedded1_unit_test.run_host_window(HostWindow)
 
 
 if __name__ == "__main__":

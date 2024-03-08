@@ -1,23 +1,25 @@
 @echo off
 REM This script was derived from PythonQwt project
 REM ======================================================
-REM Run coverage code analysis tool
+REM Run pytest script
 REM ======================================================
 REM Licensed under the terms of the MIT License
 REM Copyright (c) 2020 Pierre Raybaut
 REM (see PythonQwt LICENSE file for more details)
 REM ======================================================
-setlocal
+setlocal enabledelayedexpansion
 call %~dp0utils GetScriptPath SCRIPTPATH
-call %FUNC% GetLibName LIBNAME
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
-call %FUNC% UsePython
-if exist sitecustomize.py ( del /q sitecustomize.py )
-echo import coverage> sitecustomize.py
-echo coverage.process_startup()>> sitecustomize.py
-set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
-pytest -v --cov --cov-report=html %MODNAME%
-start .\htmlcov\index.html
-if exist sitecustomize.py ( del /q sitecustomize.py )
+
+:: Iterate over all directories in the grandparent directory
+:: (WinPython base directories)
+call %FUNC% GetPythonExeGrandParentDir DIR0
+for /D %%d in ("%DIR0%*") do (
+    set WINPYDIRBASE=%%d
+    call !WINPYDIRBASE!\scripts\env.bat
+    echo Running pytest from "%%d":
+    pytest --ff -q %MODNAME%
+    echo ----
+)
 call %FUNC% EndOfScript

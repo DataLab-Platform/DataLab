@@ -15,7 +15,7 @@ Try and open all HDF5 test data available.
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.tests.data import get_test_fnames
-from cdl.tests.features.hdf5.h5browser_app import create_h5browser_dialog
+from cdl.tests.features.hdf5.h5browser_app_test import create_h5browser_dialog
 
 
 def test_h5browser_all_files(pattern=None):

@@ -31,7 +31,7 @@ from cdl.env import execenv
 from cdl.param import ClipParam
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_noisygauss_image, create_paracetamol_signal
-from cdl.tests.scenarios import scenario_mac_app
+from cdl.tests.scenarios import scenario_mac_app_test
 from cdl.utils.strings import save_html_diff
 from cdl.utils.tests import temporary_directory
 
@@ -52,8 +52,8 @@ def test_scenario_h5():
             param = ClipParam.create(value=ima1.data.mean())
             panel.processor.compute_clip(param)
             # === Creating a macro
-            scode = scenario_mac_app.add_macro_sample(win, 0).get_code()
-            scenario_mac_app.add_macro_sample(win, 1)
+            scode = scenario_mac_app_test.add_macro_sample(win, 0).get_code()
+            scenario_mac_app_test.add_macro_sample(win, 1)
             # === Saving project
             fname = osp.join(tmpdir, "test.h5")
             win.save_to_h5_file(fname)

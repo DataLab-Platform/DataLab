@@ -101,7 +101,7 @@ from `Spyder`_:
 
 Here is how to do it:
 
-.. literalinclude:: my_work_test.py
+.. literalinclude:: my_work_test_with_cdl.py
     :language: python
     :start-after: # ---- Begin of the example code ----
 
@@ -115,10 +115,10 @@ console:
 
     IPython 8.15.0 -- An enhanced Interactive Python.
 
-    In [1]: runcell('Connecting to DataLab current session', 'my_work_test.py')
+    In [1]: runcell('Connecting to DataLab current session', 'my_work_test_with_cdl.py')
     Connecting to DataLab XML-RPC server...OK (port: 54577)
 
-    In [2]: runcell('Visualizing 1D data from my work', 'my_work_test.py')
+    In [2]: runcell('Visualizing 1D data from my work', 'my_work_test_with_cdl.py')
     Out[2]: True
 
 .. figure:: ../../images/tutorials/work_with_spyder/01.png
@@ -156,7 +156,7 @@ function.
 
 Now, we can use `Spyder`_ to debug the ``test_my_2d_algorithm`` function:
 
-.. literalinclude:: my_work_debug.py
+.. literalinclude:: my_work_debug_with_cdl.py
     :language: python
     :start-after: # ---- Begin of the example code ----
 

@@ -1,7 +1,7 @@
 @echo off
 REM This script was copied from PythonQwt project
 REM ======================================================
-REM Unattended test script
+REM Run pytest script
 REM ======================================================
 REM Licensed under the terms of the MIT License
 REM Copyright (c) 2020 Pierre Raybaut
@@ -12,5 +12,5 @@ call %~dp0utils GetScriptPath SCRIPTPATH
 call %FUNC% GetModName MODNAME
 call %FUNC% SetPythonPath
 call %FUNC% UsePython
-python -m %MODNAME%.tests.all_tests
+pytest --ff -q %MODNAME%
 call %FUNC% EndOfScript

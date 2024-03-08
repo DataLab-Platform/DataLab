@@ -90,8 +90,9 @@ class Option:
         """Set configuration option value"""
         CONF.set(self.section, self.option, value)
 
-    def reset(self):
-        """Reset configuration option"""
+    def remove(self):
+        """Remove configuration option"""
+        # No use case for this method yet (quite dangerous!)
         CONF.remove_option(self.section, self.option)
 
 

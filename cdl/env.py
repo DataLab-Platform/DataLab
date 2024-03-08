@@ -155,7 +155,10 @@ class CDLExecEnv:
         self.h5files = None
         self.h5browser_file = None
         self.demo_mode = False
-        self.parse_args()
+        if not sys.argv[0].endswith("pytest"):
+            # Do not parse command line arguments when running tests with pytest
+            # (otherwise, pytest arguments are parsed as DataLab arguments)
+            self.parse_args()
         if self.unattended:  # Do not run this code in production
             # Check that calling `to_dict` do not raise any exception
             self.to_dict()

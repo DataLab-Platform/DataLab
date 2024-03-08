@@ -27,11 +27,10 @@ def test_scenario_signal1() -> None:
         Conf.main.process_isolation_enabled.get()
     ), "Process isolation must be enabled"
     with cdltest_app_context(save=True) as win:
-        win.toggle_auto_refresh(False)
-        execenv.print("Testing signal features (process isolation: off)...")
-        win.set_process_isolation_enabled(False)
-        common.run_signal_computations(win, all_types=True)
-        win.toggle_auto_refresh(True)  # Just to test the auto-refresh feature
+        with win.context_no_refresh():
+            execenv.print("Testing signal features (process isolation: off)...")
+            win.set_process_isolation_enabled(False)
+            common.run_signal_computations(win, all_types=True)
         win.signalpanel.remove_all_objects()
         execenv.print("==> OK")
 

@@ -28,7 +28,7 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_sincos_image
-from cdl.tests.features.common.newobject_unit import iterate_image_creation
+from cdl.tests.features.common.newobject_unit_test import iterate_image_creation
 from cdl.tests.scenarios.common import compute_common_operations
 from cdl.utils.tests import get_test_fnames
 

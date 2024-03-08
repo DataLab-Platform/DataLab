@@ -25,7 +25,7 @@ from cdl.tests.data import (
     create_peak2d_image,
     create_sincos_image,
 )
-from cdl.tests.features.common.newobject_unit import (
+from cdl.tests.features.common.newobject_unit_test import (
     iterate_image_creation,
     iterate_signal_creation,
 )
@@ -70,7 +70,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_difference(panel[1])  # difference with obj #1
     panel.remove_object()
     panel.objview.select_objects((2,))
-    panel.processor.compute_quadratic_difference()  # quadratic difference with itself
+    panel.processor.compute_quadratic_difference(panel[2])
     panel.delete_metadata()
     panel.objview.select_objects((3,))
     panel.remove_object()

@@ -16,7 +16,7 @@ from skimage import draw
 from cdl.env import execenv
 from cdl.obj import RoiDataGeometries, create_image
 from cdl.tests import cdltest_app_context
-from cdl.tests.features.common.roi_app import print_obj_shapes
+from cdl.tests.features.common.roi_app_test import print_obj_shapes
 
 
 def create_test_image_with_roi(roi_geometry: RoiDataGeometries):

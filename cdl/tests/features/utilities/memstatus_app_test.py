@@ -12,7 +12,7 @@ Memory status widget application test
 import numpy as np
 import psutil
 
-from cdl.config import Conf
+from cdl import config
 from cdl.env import execenv
 from cdl.obj import Gauss2DParam, ImageTypes, new_image_param
 from cdl.tests import cdltest_app_context
@@ -20,7 +20,7 @@ from cdl.tests import cdltest_app_context
 
 def memory_alarm(threshold):
     """Memory alarm test"""
-    Conf.main.available_memory_threshold.set(threshold)
+    config.Conf.main.available_memory_threshold.set(threshold)
     rng = np.random.default_rng()
     with cdltest_app_context() as win:
         panel = win.imagepanel
@@ -39,7 +39,7 @@ def test_mem_status():
     for index, threshold in enumerate((mem_available * 2, mem_available - 100)):
         execenv.print(f"    Threshold {index}: {threshold} MB")
         memory_alarm(threshold)
-    Conf.main.available_memory_threshold.reset()
+    config.reset()
 
 
 if __name__ == "__main__":
