@@ -49,18 +49,18 @@ def comp_no_error(src: SignalObj) -> SignalObj:  # pylint: disable=unused-argume
 
 def test_catcher():
     """Catch error and warning test"""
-    execenv.catcher_test = True
-    with cdltest_app_context() as win:
-        panel = win.signalpanel
-        sig = test_data.create_paracetamol_signal()
-        panel.add_object(sig)
-        panel.processor.compute_11(comp_no_error, title="Test no error")
-        panel.processor.compute_11(comp_error, title="Test error")
-        Conf.proc.ignore_warnings.set(True)
-        panel.processor.compute_11(comp_warning, title="Test warning (ignored)")
-        Conf.proc.ignore_warnings.set(False)
-        panel.processor.compute_11(comp_warning, title="Test warning (not ignored)")
-        panel.processor.compute_11(comp_warning_error, title="Test warning and error")
+    with execenv.context(catcher_test=True):
+        with cdltest_app_context() as win:
+            panel = win.signalpanel
+            sig = test_data.create_paracetamol_signal()
+            panel.add_object(sig)
+            panel.processor.compute_11(comp_no_error, title="Test no error")
+            panel.processor.compute_11(comp_error, title="Test error")
+            Conf.proc.ignore_warnings.set(True)
+            panel.processor.compute_11(comp_warning, title="Test warning (ignored)")
+            Conf.proc.ignore_warnings.set(False)
+            panel.processor.compute_11(comp_warning, title="Test warning (not ignored)")
+            panel.processor.compute_11(comp_warning_error, title="Test warning + error")
 
 
 if __name__ == "__main__":

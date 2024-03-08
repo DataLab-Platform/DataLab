@@ -458,6 +458,7 @@ class CDLExecEnv:
         screenshot=None,
         delay=None,
         verbose=None,
+        catcher_test=None,
     ) -> Generator[None, None, None]:
         """Return a context manager that sets some execenv properties at enter,
         and restores them at exit. This is useful to run some code in a
@@ -470,6 +471,7 @@ class CDLExecEnv:
             screenshot: whether to take screenshots
             delay: delay (seconds) before quitting application in unattended mode
             verbose: verbosity level
+            catcher_test: whether to run catcher test
 
         .. note::
             If a passed value is None, the corresponding property is not changed.
@@ -481,6 +483,7 @@ class CDLExecEnv:
             "screenshot": screenshot,
             "delay": delay,
             "verbose": verbose,
+            "catcher_test": catcher_test,
         }
         for key, value in new_values.items():
             if value is not None:
