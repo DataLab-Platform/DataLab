@@ -103,7 +103,9 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
     sec_main = conf[sec_main_name]
     sec_cons = conf[sec_cons_name]
     execenv.print(f"    Checking [{sec_main_name}][{OPT_MAX.option}]: ", end="")
-    assert sec_main[OPT_MAX.option] == (win.windowState() == QC.Qt.WindowMaximized)
+    assert sec_main[OPT_MAX.option] == (
+        win.windowState() == QC.Qt.WindowState.WindowMaximized
+    )
     execenv.print("OK")
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
