@@ -17,7 +17,7 @@ if exist sitecustomize.py ( del /q sitecustomize.py )
 echo import coverage> sitecustomize.py
 echo coverage.process_startup()>> sitecustomize.py
 set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
-coverage run -m pytest -k control
+coverage run -m pytest %*
 coverage combine
 coverage html
 start .\htmlcov\index.html

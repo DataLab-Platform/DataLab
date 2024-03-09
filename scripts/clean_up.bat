@@ -31,9 +31,10 @@ set PUBLIC=%SCRIPTPATH%\..\..\%LIBNAME%_public
 if exist %TEMP% ( rmdir /s /q %TEMP% )
 if exist %PUBLIC% ( rmdir /s /q %PUBLIC% )
 
-@REM Removing files/directories related to Coverage
+@REM Removing files/directories related to Coverage and pytest
 if exist .coverage ( del /q .coverage )
 if exist coverage.xml ( del /q coverage.xml )
 if exist htmlcov ( rmdir /s /q htmlcov )
 del /q .coverage.* 1>nul 2>&1
 if exist sitecustomize.py ( del /q sitecustomize.py )
+if exist .pytest_cache ( rmdir /s /q .pytest_cache )
