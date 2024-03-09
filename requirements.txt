@@ -10,7 +10,6 @@ pylint
 black
 coverage
 pytest
-pytest-cov
 pytest-xvfb
 pycodestyle
 pyinstaller>=6.2

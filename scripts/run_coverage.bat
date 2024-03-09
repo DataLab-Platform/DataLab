@@ -17,7 +17,9 @@ if exist sitecustomize.py ( del /q sitecustomize.py )
 echo import coverage> sitecustomize.py
 echo coverage.process_startup()>> sitecustomize.py
 set COVERAGE_PROCESS_START=%SCRIPTPATH%\..\.coveragerc
-pytest -v --cov --cov-report=html %MODNAME%
+coverage run -m pytest -k control
+coverage combine
+coverage html
 start .\htmlcov\index.html
 if exist sitecustomize.py ( del /q sitecustomize.py )
 call %FUNC% EndOfScript
