@@ -22,8 +22,11 @@ import cdl.obj
 import cdl.param
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
-from cdl.tests.data import create_paracetamol_signal
-
+from cdl.tests.data import (
+    create_2dstep_image,
+    create_paracetamol_signal,
+    get_test_fnames,
+)
 
 if TYPE_CHECKING:
     from cdl.core.gui.main import CDLMainWindow
@@ -93,6 +96,68 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     __print_test_result("Properties changed")
     objview.select_objects([sig.uuid])
     panel.properties_changed()
+
+    # Get object titles:
+    __print_test_result("Get object titles")
+    execenv.print(win.get_object_titles())
+
+    # Get object titles with info:
+    __print_test_result("Get group titles with object infos")
+    execenv.print(win.get_group_titles_with_object_infos())
+
+    # Pop up tab menu:
+    __print_test_result("Pop up tab menu")
+    win.tabmenu.popup(win.mapToGlobal(win.tabmenu.pos()))
+
+    # Repopulate panel trees:
+    __print_test_result("Repopulate panel trees")
+    win.repopulate_panel_trees()
+
+    # Browse HDF5 files:
+    __print_test_result("Browse HDF5 files")
+    win.browse_h5_files([], False)
+
+    # Open object
+    __print_test_result("Open object")
+    fname = get_test_fnames("*.csv")[0]
+    win.open_object(fname)
+
+    # Open objects from signal panel
+    __print_test_result("Open objects from signal panel")
+    win.signalpanel.open_objects(get_test_fnames("curve_formats/*.*"))
+
+    # Get version
+    __print_test_result("Get version")
+    execenv.print(win.get_version())
+
+    # Add signal
+    __print_test_result("Add signal")
+    win.add_signal(
+        sig.title, sig.x, sig.y, sig.xunit, sig.yunit, sig.xlabel, sig.ylabel
+    )
+
+    # Add image
+    __print_test_result("Add image")
+    ima = create_2dstep_image()
+    win.add_image(
+        ima.title,
+        ima.data,
+        ima.xunit,
+        ima.yunit,
+        ima.zunit,
+        ima.xlabel,
+        ima.ylabel,
+        ima.zlabel,
+    )
+
+    # Signal and Image ROI extraction test: test adding a default ROI
+    __print_test_result("Adding a default ROI to signal and image")
+    for panel in (win.signalpanel, win.imagepanel):
+        panel.processor.edit_regions_of_interest(add_roi=True)
+
+    # Close application
+    __print_test_result("Close application")
+    win.close_application()
 
 
 def test_misc_app() -> None:

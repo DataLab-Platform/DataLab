@@ -995,13 +995,14 @@ class BaseDataPanel(AbstractPanel):
         return dlg, obj
 
     def get_roi_dialog(
-        self, extract: bool, singleobj: bool
+        self, extract: bool, singleobj: bool, add_roi: bool = False
     ) -> cdl.core.computation.base.ROIDataParam:
         """Get ROI data (array) from specific dialog box.
 
         Args:
-            extract (bool): Extract ROI from data
-            singleobj (bool): Single object
+            extract: Extract ROI from data
+            singleobj: Single object
+            add_roi: Add ROI immediately after opening the dialog (default: False)
 
         Returns:
             ROI data
@@ -1020,6 +1021,8 @@ class BaseDataPanel(AbstractPanel):
             self.ROIDIALOGCLASS(dlg, obj, extract, singleobj)
         )
         dlg.plot_layout.addWidget(roi_editor, 1, 0, 1, 1)
+        if add_roi:
+            roi_editor.add_roi()
         if exec_dialog(dlg):
             return roi_editor.get_data()
         return None

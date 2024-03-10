@@ -17,6 +17,7 @@ for future and past milestones.
     be executed in the same process. For instance, a particular attention has been
     given to sandboxing the tests, so that they do not interfere with each other.
   * Added continuous integration (CI) with GitHub Actions
+  * For this release, test coverage is 87%
 
 🛠️ Bug fixes:
 

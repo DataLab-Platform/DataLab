@@ -181,20 +181,6 @@ class AbstractTreeWidget(QW.QTreeWidget, metaclass=AbstractTreeWidgetMeta):
         """Iterate over top level items"""
         return [self.topLevelItem(_i) for _i in range(self.topLevelItemCount())]
 
-    def get_items(self) -> list[QW.QTreeWidgetItem]:
-        """Return items (excluding top level items)"""
-        itemlist = []
-
-        def add_to_itemlist(item: QW.QTreeWidgetItem):
-            for index in range(item.childCount()):
-                citem = item.child(index)
-                itemlist.append(citem)
-                add_to_itemlist(citem)
-
-        for tlitem in self.get_top_level_items():
-            add_to_itemlist(tlitem)
-        return itemlist
-
     def find_all_items(self):
         """Find all items"""
         return self.findItems("", QC.Qt.MatchContains | QC.Qt.MatchRecursive)
@@ -615,7 +601,7 @@ class H5FileSelector(QW.QWidget):
             icon=get_std_icon("DirOpenIcon"),
             text=_("Open") + " ...",
             autoraise=False,
-            triggered=self.add_file,
+            triggered=lambda: self.add_file(),
         )
         self.btn_add.setSizePolicy(QW.QSizePolicy.Fixed, QW.QSizePolicy.Fixed)
         self.layout().addWidget(self.btn_add)
@@ -677,11 +663,17 @@ class H5FileSelector(QW.QWidget):
         if self.combo.count() == 0:
             self.btn_rmv.setEnabled(False)
 
-    def add_file(self) -> None:
-        """Browse file"""
-        fname = QW.QFileDialog.getOpenFileName(
-            self, _("Select HDF5 file"), "", _("HDF5 files (*.h5 *.hdf5)")
-        )[0]
+    def add_file(self, fname: str | None = None) -> None:
+        """Browse file
+
+        Args:
+            fname: HDF5 file name. Default is None.
+             (this is used for testing only)
+        """
+        if fname is None:
+            fname = QW.QFileDialog.getOpenFileName(
+                self, _("Select HDF5 file"), "", _("HDF5 files (*.h5 *.hdf5)")
+            )[0]
         if fname:
             self.SIG_ADD_FILENAME.emit(osp.abspath(fname))
 

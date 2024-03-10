@@ -772,7 +772,10 @@ class BaseProcessor(QC.QObject):
     # ------Computing-------------------------------------------------------------------
 
     def edit_regions_of_interest(
-        self, extract: bool = False, singleobj: bool | None = None
+        self,
+        extract: bool = False,
+        singleobj: bool | None = None,
+        add_roi: bool = False,
     ) -> ROIDataParam:
         """Define Region Of Interest (ROI) for computing functions.
 
@@ -782,11 +785,15 @@ class BaseProcessor(QC.QObject):
              If False, ROI is extracted from all selected objects. If None, ROI is
              extracted from all selected objects only if they all have the same ROI.
              Defaults to None.
+            add_roi: If True, add ROI to data immediately after opening the ROI editor.
+             Defaults to False.
 
         Returns:
             ROI data parameters.
         """
-        roieditordata = self.panel.get_roi_dialog(extract=extract, singleobj=singleobj)
+        roieditordata = self.panel.get_roi_dialog(
+            extract=extract, singleobj=singleobj, add_roi=add_roi
+        )
         if roieditordata is not None:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             roigroup = obj.roidata_to_params(roieditordata.roidata)

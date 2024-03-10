@@ -225,7 +225,7 @@ class ImageROIEditor(BaseROIEditor):
         rectact = create_action(
             self,
             _("Rectangular ROI"),
-            lambda: self.add_roi(RoiDataGeometries.RECTANGLE),
+            self.add_roi,
             icon=get_icon("rectangle.png"),
         )
         circact = create_action(
@@ -237,7 +237,7 @@ class ImageROIEditor(BaseROIEditor):
         add_actions(menu, (rectact, circact))
         self.add_btn.setMenu(menu)
 
-    def add_roi(self, geometry: RoiDataGeometries):
+    def add_roi(self, geometry: RoiDataGeometries = RoiDataGeometries.RECTANGLE):
         """Add new ROI"""
         item = self.obj.new_roi_item(self.fmt, True, editable=True, geometry=geometry)
         self.add_roi_item(item)

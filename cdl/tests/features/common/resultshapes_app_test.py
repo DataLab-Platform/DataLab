@@ -12,6 +12,8 @@ Result shapes application test:
 
 # guitest: show
 
+from __future__ import annotations
+
 import numpy as np
 
 import cdl.obj
@@ -36,6 +38,25 @@ def create_image_with_resultshapes():
     return image
 
 
+def __check_resultshapes_merge(
+    obj1: cdl.obj.SignalObj | cdl.obj.ImageObj,
+    obj2: cdl.obj.SignalObj | cdl.obj.ImageObj,
+) -> None:
+    """Check if result shapes merge properly: the scenario is to duplicate an object,
+    then compute average. We thus have to check if the second object (average) has the
+    expected result shapes (i.e. twice the number of result shapes of the original
+    object for each result shape type).
+
+    Args:
+        obj1: Original object
+        obj2: Merged object
+    """
+    rshapes1 = [rshape for rshape in obj1.iterate_resultshapes()]
+    rshapes2 = [rshape for rshape in obj2.iterate_resultshapes()]
+    for rs1, rs2 in zip(rshapes1, rshapes2):
+        assert np.all(np.vstack([rs1.array, rs1.array])[:, 1:] == rs2.array[:, 1:])
+
+
 def test_resultshapes():
     """Result shapes test"""
     obj1 = test_data.create_sincos_image()
@@ -57,6 +78,13 @@ def test_resultshapes():
             panel.add_object(obj)
         panel.show_results()
         panel.plot_results()
+        # Test merging result shapes (duplicate obj, then compute average):
+        for panel in (win.signalpanel, win.imagepanel):
+            panel.objview.select_objects((2,))
+            panel.duplicate_object()
+            panel.objview.select_objects((2, len(panel)))
+            panel.processor.compute_average()
+            __check_resultshapes_merge(panel[2], panel[len(panel)])
 
 
 if __name__ == "__main__":
