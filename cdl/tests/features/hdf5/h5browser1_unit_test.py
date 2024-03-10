@@ -12,6 +12,8 @@ Try and open all HDF5 test data available.
 
 # guitest: show
 
+from __future__ import annotations
+
 from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.tests.data import get_test_fnames

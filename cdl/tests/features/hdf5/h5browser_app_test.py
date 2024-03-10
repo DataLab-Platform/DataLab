@@ -12,6 +12,8 @@ HDF5 Browser Application test
 
 # guitest: show
 
+from __future__ import annotations
+
 from guidata.qthelpers import exec_dialog, qt_app_context
 from qtpy import QtWidgets as QW
 
