@@ -157,7 +157,8 @@ class CDLExecEnv:
         self.h5files = None
         self.h5browser_file = None
         self.demo_mode = False
-        if not sys.argv[0].endswith("pytest"):
+        # Check if "pytest" is in the command line arguments:
+        if "pytest" not in sys.argv[0]:
             # Do not parse command line arguments when running tests with pytest
             # (otherwise, pytest arguments are parsed as DataLab arguments)
             self.parse_args()

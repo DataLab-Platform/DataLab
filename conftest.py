@@ -8,9 +8,11 @@ executed before running any tests.
 
 import os
 
+import guidata
+import plotpy
 import pytest
 
-from cdl import __version__
+import cdl
 from cdl.env import execenv
 from cdl.plugins import get_available_plugins
 
@@ -27,7 +29,10 @@ def pytest_report_header(config):
         f"{plugin.info.name} {plugin.info.version}"
         for plugin in get_available_plugins()
     )
-    return f"DataLab {__version__} [Available plugins: {nfstr if nfstr else 'None'}]"
+    return [
+        f"DataLab {cdl.__version__} [Plugins: {nfstr if nfstr else 'None'}]",
+        f"guidata {guidata.__version__}, PlotPy {plotpy.__version__}",
+    ]
 
 
 @pytest.fixture(autouse=True)
