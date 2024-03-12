@@ -166,12 +166,12 @@ def create_2d_steps_data(size: int, width: int, dtype: np.dtype) -> np.ndarray:
     data = np.zeros((size, size), dtype=dtype)
     value = 1
     for col in range(0, size - width + 1, width):
-        data[:, col : col + width] = value
+        data[:, col : col + width] = np.array(value).astype(dtype)
         value *= 10
     data2 = np.zeros_like(data)
     value = 1
     for row in range(0, size - width + 1, width):
-        data2[row : row + width, :] = value
+        data2[row : row + width, :] = np.array(value).astype(dtype)
         value *= 10
     data += data2
     return data
