@@ -50,6 +50,13 @@ REM ======================================================
     del _tmp_.txt
     goto:eof
 
+:GetCDLModulePath
+call:SetPythonPath
+python -c "import cdl;print(cdl.__path__[0])" > _tmp_.txt
+set /p %1=<_tmp_.txt
+del _tmp_.txt
+goto:eof
+
 :SetPythonPath
     set ORIGINAL_PYTHONPATH=%PYTHONPATH%
     cd %~dp0..
