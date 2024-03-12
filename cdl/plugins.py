@@ -293,3 +293,11 @@ def discover_plugins() -> list[PluginBase]:
             if name.startswith(f"{MOD_NAME}_")
         ]
     return []
+
+
+def get_available_plugins() -> list[PluginBase]:
+    """Instantiate available plugins and return them"""
+    # Note: this function is not used by DataLab itself, but it is used by the
+    #       test suite to get a list of available plugins
+    discover_plugins()
+    return [plugin_class() for plugin_class in PluginRegistry.get_plugin_classes()]
