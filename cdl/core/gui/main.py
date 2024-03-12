@@ -578,7 +578,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def check_for_previous_crash(self) -> None:  # pragma: no cover
         """Check for previous crash"""
-        if execenv.unattended:
+        if execenv.unattended and not execenv.do_not_quit:
+            # Showing the log viewer for testing purpose (unattended mode) but only
+            # if option 'do_not_quit' is not set, to avoid blocking the test suite
             self.__show_logviewer()
         elif Conf.main.faulthandler_log_available.get(
             False
