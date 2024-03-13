@@ -66,7 +66,7 @@ if not osp.isdir(PLUGINS_DEFAULT_PATH):
 class PluginRegistry(type):
     """Metaclass for registering plugins"""
 
-    _plugin_classes: list[PluginBase] = []
+    _plugin_classes: list[type[PluginBase]] = []
     _plugin_instances: list[PluginBase] = []
 
     def __init__(cls, name, bases, attrs):
@@ -75,7 +75,7 @@ class PluginRegistry(type):
             cls._plugin_classes.append(cls)
 
     @classmethod
-    def get_plugin_classes(cls) -> list[PluginBase]:
+    def get_plugin_classes(cls) -> list[type[PluginBase]]:
         """Return plugin classes"""
         return cls._plugin_classes
 
@@ -85,7 +85,7 @@ class PluginRegistry(type):
         return cls._plugin_instances
 
     @classmethod
-    def get_plugin(cls, name_or_class) -> PluginBase | None:
+    def get_plugin(cls, name_or_class: str | type[PluginBase]) -> PluginBase | None:
         """Return plugin instance"""
         for plugin in cls._plugin_instances:
             if name_or_class in (plugin.info.name, plugin.__class__):
@@ -277,8 +277,12 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         """Create actions"""
 
 
-def discover_plugins() -> list[PluginBase]:
-    """Discover plugins using naming convention"""
+def discover_plugins() -> list[type[PluginBase]]:
+    """Discover plugins using naming convention
+
+    Returns:
+        List of discovered plugins (as classes)
+    """
     if Conf.main.plugins_enabled.get():
         for path in [
             Conf.main.plugins_path.get(),
@@ -296,7 +300,11 @@ def discover_plugins() -> list[PluginBase]:
 
 
 def get_available_plugins() -> list[PluginBase]:
-    """Instantiate available plugins and return them"""
+    """Instantiate and get available plugins
+
+    Returns:
+        List of available plugins (as instances)
+    """
     # Note: this function is not used by DataLab itself, but it is used by the
     #       test suite to get a list of available plugins
     discover_plugins()
