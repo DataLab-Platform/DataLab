@@ -17,7 +17,7 @@ user interfaces (thanks to `PlotPyStack`_ libraries).
 import os
 
 __version__ = "0.14.1"
-__docurl__ = __homeurl__ = "https://DataLab-Platform.github.io/"
+__docurl__ = __homeurl__ = "https://datalab-platform.com/"
 __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 
 os.environ["CDL_VERSION"] = __version__

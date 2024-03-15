@@ -7,7 +7,7 @@
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements.
 
-See [DataLab website](https://DataLab-Platform.github.io/) for more details.
+See [DataLab website](https://datalab-platform.com/) for more details.
 
 ℹ️ Created by [Codra](https://codra.net/)/[Pierre Raybaut](https://github.com/PierreRaybaut) in 2023, developed and maintained by DataLab Platform Developers.
 
@@ -29,14 +29,14 @@ Try DataLab online, without installing anything, using Binder:
 
 ----
 
-✨ Add features to DataLab by writing your own [plugin](https://DataLab-Platform.github.io/en/features/general/plugins.html)
+✨ Add features to DataLab by writing your own [plugin](https://datalab-platform.com/en/features/general/plugins.html)
 (see [plugin examples](https://github.com/DataLab-Platform/DataLab/tree/main/plugins/examples))
 or macro (see [macro examples](https://github.com/DataLab-Platform/DataLab/tree/main/macros/examples))
 
 ✨ DataLab may be remotely controlled from a third-party application (such as Jupyter,
 Spyder or any IDE):
 
-* Using the integrated [remote control](https://DataLab-Platform.github.io/en/features/general/remote.html)
+* Using the integrated [remote control](https://datalab-platform.com/en/features/general/remote.html)
 feature (this requires to install DataLab as a Python package)
 
 * Using the lightweight [DataLab Simple Client](https://github.com/DataLab-Platform/DataLabSimpleClient) (`pip install cdlclient`)

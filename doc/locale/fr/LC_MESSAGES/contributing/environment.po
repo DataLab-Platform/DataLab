@@ -205,9 +205,9 @@ msgstr "Installation de tous les paquets requis :"
 #: ../../dev/environment.md:57
 msgid ""
 "ℹ️ See "
-"[Installation](https://DataLab-Platform.github.io/en/intro/installation.html)"
+"[Installation](https://datalab-platform.com/en/intro/installation.html)"
 " for more details on reference Python and Qt versions."
-msgstr "Voir [Installation](https://DataLab-Platform.github.io/en/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
+msgstr "Voir [Installation](https://datalab-platform.com/en/intro/installation.html) pour plus de détails sur les versions de référence de Python et Qt."
 
 #: ../../dev/environment.md:60
 msgid ""

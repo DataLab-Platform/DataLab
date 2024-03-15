@@ -54,7 +54,7 @@ Installing all required packages :
 
     pip install --upgrade -r dev\requirements.txt
 
-ℹ️ See [Installation](https://DataLab-Platform.github.io/en/intro/installation.html)
+ℹ️ See [Installation](https://datalab-platform.com/en/intro/installation.html)
 for more details on reference Python and Qt versions.
 
 If you are using [WinPython](https://winpython.github.io/), thank you for supporting

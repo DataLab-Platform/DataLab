@@ -1,9 +1,11 @@
 # Changelog #
 
-See DataLab [roadmap page](https://DataLab-Platform.github.io/en/contributing/roadmap.html)
+See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
 ## DataLab Version 0.14.1 ##
+
+🎉 New domain name: [datalab-platform.com](https://datalab-platform.com)
 
 💥 New features:
 
@@ -245,7 +247,7 @@ for future and past milestones.
 
 📚 Documentation:
 
-* New [Tutorial section](https://DataLab-Platform.github.io/en/intro/tutorials/index.html) in the documentation:
+* New [Tutorial section](https://datalab-platform.com/en/intro/tutorials/index.html) in the documentation:
   * This section provides a set of tutorials to learn how to use DataLab
   * The following video tutorials are available:
     * Quick demo
@@ -255,7 +257,7 @@ for future and past milestones.
     * Detecting blobs on an image
     * Measuring Fabry-Perot fringes
     * Prototyping a custom processing pipeline
-* New [API section](https://DataLab-Platform.github.io/en/api/index.html) in the documentation:
+* New [API section](https://datalab-platform.com/en/api/index.html) in the documentation:
   * This section explains how to use DataLab as a Python library, by covering the
   following topics:
     * How to use DataLab algorithms on NumPy arrays
@@ -515,9 +517,9 @@ New features:
       HDF5 import feature
     * More features to come...
   * Added remote control feature: DataLab can be controlled remotely via a
-    TCP/IP connection (see [Remote control](https://DataLab-Platform.github.io/en/remote_control.html))
+    TCP/IP connection (see [Remote control](https://datalab-platform.com/en/remote_control.html))
   * Added macro commands: DataLab can be controlled via a macro file (see
-    [Macro commands](https://DataLab-Platform.github.io/en/macro_commands.html))
+    [Macro commands](https://datalab-platform.com/en/macro_commands.html))
 * General features:
   * Added settings dialog box (see "Settings" entry in "File" menu):
     * General settings

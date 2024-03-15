@@ -295,7 +295,7 @@
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "UNATTENDED": "1",
                     "NSIS_COPYRIGHT_INFO": "Copyright (c) DataLab Project 2023",
-                    "NSIS_HELP_LINK": "https://datalab-platform.github.io/",
+                    "NSIS_HELP_LINK": "https://datalab-platform.com/",
                     "NSIS_URLUPDATEINFO": "https://github.com/DataLab-Platform/DataLab/releases",
                     "NSIS_URLINFOABOUT": "https://github.com/DataLab-Platform/DataLab"
                 }

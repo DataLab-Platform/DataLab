@@ -1097,7 +1097,7 @@ msgstr "Prototypage d'un pipeline de traitement personnalisé"
 
 #: ../../../CHANGELOG.md:258
 msgid ""
-"New [API section](https://DataLab-Platform.github.io/en/api/index.html) "
+"New [API section](https://datalab-platform.com/en/api/index.html) "
 "in the documentation:"
 msgstr ""
 "Nouvelle [section API](https://DataLab-"
@@ -2173,7 +2173,7 @@ msgid ""
 msgstr ""
 "Ajout de la fonctionnalité de contrôle à distance : DataLab peut être "
 "contrôlé à distance via une connexion TCP/IP (voir [Contrôle à "
-"distance](https://DataLab-Platform.github.io/fr/remote_control.html))"
+"distance](https://datalab-platform.com/fr/remote_control.html))"
 
 #: ../../../CHANGELOG.md:519
 msgid ""

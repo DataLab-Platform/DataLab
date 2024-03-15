@@ -12,7 +12,7 @@ It is part of the DataLab custom function tutorial.
 
     This plugin is not installed by default. To install it, copy this file to
     your DataLab plugins directory (see `DataLab documentation
-    <https://DataLab-Platform.github.io/en/features/general/plugins.html>`_).
+    <https://datalab-platform.com/en/features/general/plugins.html>`_).
 """
 
 import numpy as np

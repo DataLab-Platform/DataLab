@@ -45,8 +45,8 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://DataLab-Platform.github.io/"
-Documentation = "https://DataLab-Platform.github.io/"
+Homepage = "https://datalab-platform.com/"
+Documentation = "https://datalab-platform.com/"
 
 [project.scripts]
 cdl-alltests = "cdl.tests.all_tests:run"
