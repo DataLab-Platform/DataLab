@@ -97,7 +97,9 @@ class BaseNode(metaclass=abc.ABCMeta):
         for key, value in self.dset.attrs.items():
             if isinstance(value, bytes):
                 value = to_string(value)
-            if isinstance(value, (np.ndarray, str, float, int, bool)):
+            if isinstance(value, (np.ndarray, str, float, int, bool)) or np.isscalar(
+                value
+            ):
                 self.metadata[key] = value
 
     def __process_metadata(self, obj):

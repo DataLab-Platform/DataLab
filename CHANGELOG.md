@@ -17,6 +17,7 @@ for future and past milestones.
   * Added "Show array" button at the corner of the "Group" and "Attributes" tabs,
     to show the array in a separate window (useful for copy/pasting data to other
     applications, for instance)
+  * Attributes: added support for more scalar data types
 * Testability and maintainability:
   * DataLab's unit tests are now using [pytest](https://pytest.org). This has required
     a lot of work for the transition, especially to readapt the tests so that they may
