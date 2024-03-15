@@ -14,16 +14,18 @@ from __future__ import annotations
 import abc
 import os
 import os.path as osp
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 
 from guidata.qthelpers import (
     add_actions,
     create_action,
     create_toolbutton,
+    exec_dialog,
     get_icon,
     get_std_icon,
     win32_fix_title_bar_background,
 )
+from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.builder import make
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
@@ -534,26 +536,41 @@ class TablePreview(QW.QWidget):
 
 
 class GroupAndAttributes(QW.QTabWidget):
-    """Group and attributes"""
+    """Group and attributes
 
-    def __init__(self, parent: QW.QWidget) -> None:
+    Args:
+        parent: Parent widget
+        show_array_callback: Callback to show array
+    """
+
+    def __init__(self, parent: QW.QWidget, show_array_callback: Callable) -> None:
         super().__init__(parent)
         self.group = TablePreview(self)
         self.addTab(self.group, get_icon("h5group.svg"), _("Group"))
         self.attrs = TablePreview(self)
         self.addTab(self.attrs, get_icon("h5attrs.svg"), _("Attributes"))
+        # Add a button as corner widget to show the array (if any):
+        self.__show_array_btn = create_toolbutton(
+            self,
+            icon=get_icon("show_results.svg"),
+            text=_("Show array"),
+            autoraise=False,
+            triggered=show_array_callback,
+        )
+        self.setCornerWidget(self.__show_array_btn, QC.Qt.TopRightCorner)
 
     def cleanup(self) -> None:
         """Clean up widget"""
         self.group.clear()
         self.attrs.clear()
 
-    def update_group(self, node: BaseNode) -> None:
-        """Update group widget
+    def update_from_node(self, node: BaseNode) -> None:
+        """Update widget from node
 
         Args:
             node: HDF5 node
         """
+        # Update group =================================================================
         text = to_string(node.text)
         if text:
             lines = text.splitlines()[:5]
@@ -569,13 +586,11 @@ class GroupAndAttributes(QW.QTabWidget):
         }
         self.group.update_table_preview(data)
 
-    def update_attrs(self, node: BaseNode) -> None:
-        """Update attributes widget
-
-        Args:
-            node: HDF5 node
-        """
+        # Update attributes ============================================================
         self.attrs.update_table_preview(node.metadata)
+
+        # Update show array button =====================================================
+        self.__show_array_btn.setEnabled(node.IS_ARRAY)
 
 
 class H5FileSelector(QW.QWidget):
@@ -717,7 +732,7 @@ class H5Browser(QW.QSplitter):
         self.addWidget(preview)
         self.plotpreview = PlotPreview(self)
         preview.addWidget(self.plotpreview)
-        self.groupandattrs = GroupAndAttributes(self)
+        self.groupandattrs = GroupAndAttributes(self, self.show_array)
         preview.addWidget(self.groupandattrs)
         preview.setSizes([int(self.size().height() / 2)] * 2)
 
@@ -786,8 +801,7 @@ class H5Browser(QW.QSplitter):
         node = self.get_node(item)
         if node.IS_ARRAY:
             self.plotpreview.update_plot_preview(node)
-        self.groupandattrs.update_group(node)
-        self.groupandattrs.update_attrs(node)
+        self.groupandattrs.update_from_node(node)
         # Update the file selector combo box
         self.selector.set_current_fname(node.h5file.filename)
 
@@ -799,6 +813,14 @@ class H5Browser(QW.QSplitter):
         """
         if fname:
             self.tree.set_current_file(fname)
+
+    def show_array(self) -> None:
+        """Show array"""
+        node = self.get_node()
+        assert node.IS_ARRAY
+        arrayeditor = ArrayEditor(self)
+        arrayeditor.setup_and_check(node.data, title=node.name, readonly=True)
+        exec_dialog(arrayeditor)
 
 
 class H5BrowserDialog(QW.QDialog):

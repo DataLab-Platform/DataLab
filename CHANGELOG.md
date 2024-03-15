@@ -13,6 +13,10 @@ for future and past milestones.
   * New "Invert colormap" entry in plot context menu, image parameters, and in the
     default image view settings
   * This requires `PlotPy` v2.3 or later
+* HDF5 Browser:
+  * Added "Show array" button at the corner of the "Group" and "Attributes" tabs,
+    to show the array in a separate window (useful for copy/pasting data to other
+    applications, for instance)
 * Testability and maintainability:
   * DataLab's unit tests are now using [pytest](https://pytest.org). This has required
     a lot of work for the transition, especially to readapt the tests so that they may

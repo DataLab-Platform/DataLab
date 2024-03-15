@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-06 09:58+0100\n"
+"POT-Creation-Date: 2024-03-15 18:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Transfer-Encoding: utf-8\n"
 "Generated-By: pygettext.py 1.5\n"
 
-#: cdl\config.py:32
+#: cdl\config.py:33
 msgid "DataLab is a generic signal and image processing platform"
 msgstr ""
 "DataLab est une plateforme générique de traitement du signal et de l'image"
@@ -793,8 +793,8 @@ msgid "Degree"
 msgstr "Degré"
 
 #: cdl\core\computation\signal.py:612 cdl\core\model\signal.py:703
-#: cdl\tests\features\common\stat_app.py:40 cdl\tests\scenarios\common.py:161
-#: cdl\tests\scenarios\demo.py:86
+#: cdl\tests\features\common\stat_app_test.py:40
+#: cdl\tests\scenarios\common.py:161 cdl\tests\scenarios\demo.py:86
 msgid "Gaussian"
 msgstr "Gaussienne"
 
@@ -1129,7 +1129,7 @@ msgstr "Modifier les régions d'intérêt..."
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: cdl\core\gui\actionhandler.py:656 cdl\core\gui\processor\base.py:843
+#: cdl\core\gui\actionhandler.py:656 cdl\core\gui\processor\base.py:850
 msgid "Statistics"
 msgstr "Statistiques"
 
@@ -1146,11 +1146,11 @@ msgstr "Extraction de ROI"
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: cdl\core\gui\actionhandler.py:685 cdl\core\gui\panel\base.py:1048
+#: cdl\core\gui\actionhandler.py:685 cdl\core\gui\panel\base.py:1051
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:692 cdl\core\gui\panel\base.py:1136
+#: cdl\core\gui\actionhandler.py:692 cdl\core\gui\panel\base.py:1139
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
@@ -1514,8 +1514,8 @@ msgid "Canny filter"
 msgstr "Filtre de Canny"
 
 #: cdl\core\gui\actionhandler.py:1074 cdl\core\gui\processor\image.py:825
-#: cdl\tests\features\images\centroid_unit.py:58
-#: cdl\tests\features\images\enclosingcircle_unit.py:33
+#: cdl\tests\features\images\centroid_unit_test.py:58
+#: cdl\tests\features\images\enclosingcircle_unit_test.py:33
 msgid "Centroid"
 msgstr "Barycentre"
 
@@ -1626,7 +1626,7 @@ msgstr "# ==> Impossible d'exécuter la macro '%s'"
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-#: cdl\core\gui\macroeditor.py:285 cdl\plugins.py:172 cdl\widgets\wizard.py:260
+#: cdl\core\gui\macroeditor.py:285 cdl\plugins.py:172 cdl\widgets\wizard.py:259
 msgid "Error"
 msgstr "Erreur"
 
@@ -1734,195 +1734,195 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:590
+#: cdl\core\gui\main.py:592
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:732
+#: cdl\core\gui\main.py:734
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:750
+#: cdl\core\gui\main.py:752
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:752
+#: cdl\core\gui\main.py:754
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:757
+#: cdl\core\gui\main.py:759
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:759
+#: cdl\core\gui\main.py:761
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:764
+#: cdl\core\gui\main.py:766
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:766
+#: cdl\core\gui\main.py:768
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:771
+#: cdl\core\gui\main.py:773
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:773
+#: cdl\core\gui\main.py:775
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:776
+#: cdl\core\gui\main.py:778
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:790
+#: cdl\core\gui\main.py:792
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:791
+#: cdl\core\gui\main.py:793
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:793 cdl\core\gui\main.py:1602
+#: cdl\core\gui\main.py:795 cdl\core\gui\main.py:1602
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:794
+#: cdl\core\gui\main.py:796
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:808
+#: cdl\core\gui\main.py:810
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: cdl\core\gui\main.py:810
+#: cdl\core\gui\main.py:812
 msgid "Auto-refresh plot when object is modified, added or removed"
 msgstr ""
 "Rafraîchir le graphique automatiquement lors de la modification, de l'ajout "
 "ou de la suppression d'un objet"
 
-#: cdl\core\gui\main.py:815
+#: cdl\core\gui\main.py:817
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: cdl\core\gui\main.py:817
+#: cdl\core\gui\main.py:819
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr ""
 "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et "
 "autres objets graphiques"
 
-#: cdl\core\gui\main.py:823
+#: cdl\core\gui\main.py:825
 msgid "Signal Toolbar"
 msgstr "Barre d'outils signal"
 
-#: cdl\core\gui\main.py:842
+#: cdl\core\gui\main.py:844
 msgid "Image Toolbar"
 msgstr "Barre d'outils image"
 
-#: cdl\core\gui\main.py:878
+#: cdl\core\gui\main.py:880
 msgid "Signal View"
 msgstr "Vue Signal"
 
-#: cdl\core\gui\main.py:879
+#: cdl\core\gui\main.py:881
 msgid "Image View"
 msgstr "Vue Image"
 
-#: cdl\core\gui\main.py:896 cdl\core\gui\panel\signal.py:50
+#: cdl\core\gui\main.py:898 cdl\core\gui\panel\signal.py:50
 #: cdl\core\gui\tour.py:678 cdl\core\gui\tour.py:685 cdl\core\gui\tour.py:696
 #: cdl\core\gui\tour.py:706 cdl\core\gui\tour.py:717 cdl\core\gui\tour.py:727
 #: cdl\core\gui\tour.py:737 cdl\core\gui\tour.py:744
 msgid "Signal Panel"
 msgstr "Panneau Signal"
 
-#: cdl\core\gui\main.py:898 cdl\core\gui\panel\image.py:49
+#: cdl\core\gui\main.py:900 cdl\core\gui\panel\image.py:49
 #: cdl\core\gui\tour.py:755 cdl\core\gui\tour.py:764 cdl\core\gui\tour.py:775
 #: cdl\core\gui\tour.py:785 cdl\core\gui\tour.py:796 cdl\core\gui\tour.py:806
 #: cdl\core\gui\tour.py:816 cdl\core\gui\tour.py:826
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:913 cdl\widgets\wizard.py:224
+#: cdl\core\gui\main.py:915 cdl\widgets\wizard.py:223
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:915
+#: cdl\core\gui\main.py:917
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:916
+#: cdl\core\gui\main.py:918
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:917 cdl\core\gui\settings.py:238
+#: cdl\core\gui\main.py:919 cdl\core\gui\settings.py:240
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:918
+#: cdl\core\gui\main.py:920
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:919 cdl\core\gui\tour.py:854
+#: cdl\core\gui\main.py:921 cdl\core\gui\tour.py:854
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:920
+#: cdl\core\gui\main.py:922
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:934
+#: cdl\core\gui\main.py:936
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:944
+#: cdl\core\gui\main.py:946
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:952
+#: cdl\core\gui\main.py:954
 msgid "Tour"
 msgstr "Visite guidée"
 
-#: cdl\core\gui\main.py:958 cdl\core\gui\tour.py:287
+#: cdl\core\gui\main.py:960 cdl\core\gui\tour.py:287
 #: cdl\tests\scenarios\demo.py:184 cdl\tests\scenarios\demo.py:199
 msgid "Demo"
 msgstr "Démo"
 
-#: cdl\core\gui\main.py:968
+#: cdl\core\gui\main.py:970
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:975 cdl\widgets\logviewer.py:29
+#: cdl\core\gui\main.py:977 cdl\widgets\logviewer.py:29
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:981 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:983 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:988
+#: cdl\core\gui\main.py:990
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:994
+#: cdl\core\gui\main.py:996
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:1000
+#: cdl\core\gui\main.py:1002
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:1005
+#: cdl\core\gui\main.py:1007
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:1040 cdl\core\gui\panel\macro.py:196
-#: cdl\core\gui\settings.py:241
+#: cdl\core\gui\main.py:1042 cdl\core\gui\panel\macro.py:196
+#: cdl\core\gui\settings.py:243
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:1049 cdl\core\gui\panel\macro.py:169
+#: cdl\core\gui\main.py:1051 cdl\core\gui\panel\macro.py:169
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
 
@@ -2067,20 +2067,20 @@ msgstr "Annotations"
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:1009 cdl\core\gui\roieditor.py:192
+#: cdl\core\gui\panel\base.py:1010 cdl\core\gui\roieditor.py:192
 #: cdl\core\model\base.py:747
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1049
+#: cdl\core\gui\panel\base.py:1052
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:1076
+#: cdl\core\gui\panel\base.py:1079
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1078
+#: cdl\core\gui\panel\base.py:1081
 msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2090,23 +2090,23 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
-#: cdl\core\gui\panel\base.py:1099 cdl\core\gui\processor\base.py:477
+#: cdl\core\gui\panel\base.py:1102 cdl\core\gui\processor\base.py:477
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1116
+#: cdl\core\gui\panel\base.py:1119
 msgid "Indexes"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1124
+#: cdl\core\gui\panel\base.py:1127
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1126
+#: cdl\core\gui\panel\base.py:1129
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1130
+#: cdl\core\gui\panel\base.py:1133
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on the results under the form of '%s'."
@@ -2127,12 +2127,12 @@ msgid "-***- Macro Console -***-"
 msgstr "-***- Console des macros -***-"
 
 #: cdl\core\gui\panel\macro.py:298
-#: cdl\tests\features\control\embedded1_unit.py:131
+#: cdl\tests\features\control\embedded1_unit_test.py:131
 msgid "Run macro"
 msgstr "Exécuter la macro"
 
 #: cdl\core\gui\panel\macro.py:305
-#: cdl\tests\features\control\embedded1_unit.py:132
+#: cdl\tests\features\control\embedded1_unit_test.py:132
 msgid "Stop macro"
 msgstr "Arrêter la macro"
 
@@ -2539,47 +2539,47 @@ msgstr ""
 "l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à "
 "1%</i>"
 
-#: cdl\core\gui\settings.py:196
+#: cdl\core\gui\settings.py:198
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
-#: cdl\core\gui\settings.py:197
+#: cdl\core\gui\settings.py:199
 msgid "RPC server enable status"
 msgstr "Etat d'activation du serveur XML-RPC"
 
-#: cdl\core\gui\settings.py:198
+#: cdl\core\gui\settings.py:200
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
 
-#: cdl\core\gui\settings.py:199
+#: cdl\core\gui\settings.py:201
 msgid "Third-party plugins support"
 msgstr "Prise en charge des plugins tiers"
 
-#: cdl\core\gui\settings.py:200
+#: cdl\core\gui\settings.py:202
 msgid "Third-party plugins path"
 msgstr "Chemin des plugins tiers"
 
-#: cdl\core\gui\settings.py:237
+#: cdl\core\gui\settings.py:239
 msgid "General"
 msgstr "Général"
 
-#: cdl\core\gui\settings.py:239
+#: cdl\core\gui\settings.py:241
 msgid "Visualization"
 msgstr "Visualisation"
 
-#: cdl\core\gui\settings.py:240
+#: cdl\core\gui\settings.py:242
 msgid "I/O"
 msgstr "Entrée/sortie"
 
-#: cdl\core\gui\settings.py:246
+#: cdl\core\gui\settings.py:248
 msgid "Settings"
 msgstr "Préférences"
 
-#: cdl\core\gui\settings.py:260
+#: cdl\core\gui\settings.py:262
 msgid "Restart required"
 msgstr "Redémarrage requis"
 
-#: cdl\core\gui\settings.py:261
+#: cdl\core\gui\settings.py:263
 msgid ""
 "The following options have been changed:\n"
 "\n"
@@ -2917,11 +2917,11 @@ msgstr "Moyenne de la distribution normale"
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: cdl\core\model\base.py:1134
+#: cdl\core\model\base.py:1135
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:1135
+#: cdl\core\model\base.py:1136
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
@@ -3023,7 +3023,7 @@ msgid "Width"
 msgstr "Largeur"
 
 #: cdl\core\model\image.py:793 cdl\core\model\signal.py:591
-#: cdl\widgets\h5browser.py:223
+#: cdl\widgets\h5browser.py:210
 msgid "Type"
 msgstr "Type"
 
@@ -3104,7 +3104,7 @@ msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
 #: cdl\core\model\signal.py:589 cdl\tests\data.py:256 cdl\tests\data.py:375
-#: cdl\widgets\h5browser.py:223
+#: cdl\widgets\h5browser.py:210
 msgid "Size"
 msgstr "Taille"
 
@@ -3278,84 +3278,84 @@ msgstr "Y<sub>centre</sub>"
 msgid "Intensity"
 msgstr "Intensité"
 
-#: cdl\tests\features\common\stat_app.py:50
-#: cdl\tests\features\images\flatfield_app.py:29
+#: cdl\tests\features\common\stat_app_test.py:50
+#: cdl\tests\features\images\flatfield_app_test.py:29
 msgid "Raw data (2D-Gaussian)"
 msgstr "Image brute (gaussienne 2D)"
 
-#: cdl\tests\features\control\embedded1_unit.py:99
+#: cdl\tests\features\control\embedded1_unit_test.py:99
 msgid "Host application"
 msgstr "Application hôte"
 
-#: cdl\tests\features\control\embedded1_unit.py:126
+#: cdl\tests\features\control\embedded1_unit_test.py:126
 msgid "Raise window"
 msgstr "Placer la fenêtre au premier plan"
 
-#: cdl\tests\features\control\embedded1_unit.py:128
+#: cdl\tests\features\control\embedded1_unit_test.py:128
 msgid "Add signal objects"
 msgstr "Ajouter des objets signaux"
 
-#: cdl\tests\features\control\embedded1_unit.py:129
+#: cdl\tests\features\control\embedded1_unit_test.py:129
 msgid "Add image objects"
 msgstr "Ajouter des objets images"
 
-#: cdl\tests\features\control\embedded1_unit.py:130
+#: cdl\tests\features\control\embedded1_unit_test.py:130
 msgid "Remove all objects"
 msgstr "Supprimer tous les objets"
 
-#: cdl\tests\features\control\embedded1_unit.py:134
+#: cdl\tests\features\control\embedded1_unit_test.py:134
 msgid "Import macro from file (example)"
 msgstr "Importer une macro depuis un fichier (exemple)"
 
-#: cdl\tests\features\control\embedded1_unit.py:136
+#: cdl\tests\features\control\embedded1_unit_test.py:136
 msgid "Close DataLab"
 msgstr "Fermer DataLab"
 
-#: cdl\tests\features\control\embedded1_unit.py:221
+#: cdl\tests\features\control\embedded1_unit_test.py:221
 msgid "This the host application, which embeds DataLab."
 msgstr "Ceci est une application embarquant DataLab."
 
-#: cdl\tests\features\control\embedded1_unit.py:222
+#: cdl\tests\features\control\embedded1_unit_test.py:222
 msgid "Open DataLab"
 msgstr "Ouvrir DataLab"
 
-#: cdl\tests\features\control\embedded1_unit.py:234
+#: cdl\tests\features\control\embedded1_unit_test.py:234
 msgid "Import signal from DataLab"
 msgstr "Importer un signal depuis DataLab"
 
-#: cdl\tests\features\control\embedded1_unit.py:235
+#: cdl\tests\features\control\embedded1_unit_test.py:235
 msgid "Import image from DataLab"
 msgstr "Importer une image depuis DataLab"
 
-#: cdl\tests\features\control\remoteclient_app.py:34
+#: cdl\tests\features\control\remoteclient_app_test.py:34
 msgid "Remote client test"
 msgstr "Test du client distant"
 
-#: cdl\tests\features\control\remoteclient_app.py:69
+#: cdl\tests\features\control\remoteclient_app_test.py:69
 msgid "This the client application, which connects to DataLab."
 msgstr "Ceci l'application cliente, qui se connecte à DataLab."
 
-#: cdl\tests\features\control\remoteclient_app.py:70
+#: cdl\tests\features\control\remoteclient_app_test.py:70
 msgid "Connect to DataLab"
 msgstr "Se connecter à DataLab"
 
-#: cdl\tests\features\control\remoteclient_app.py:109
+#: cdl\tests\features\control\remoteclient_app_test.py:109
 msgid "Execute multiple commands"
 msgstr "Exécuter des commandes multiples"
 
-#: cdl\tests\features\control\remoteclient_app.py:110
+#: cdl\tests\features\control\remoteclient_app_test.py:110
 msgid "Get object titles"
 msgstr "Obtenir la liste des titres"
 
-#: cdl\tests\features\control\remoteclient_app.py:111
+#: cdl\tests\features\control\remoteclient_app_test.py:111
 msgid "Get object uuids"
 msgstr "Obtenir la liste des uuids"
 
-#: cdl\tests\features\control\remoteclient_app.py:112
+#: cdl\tests\features\control\remoteclient_app_test.py:112
 msgid "Get object"
 msgstr "Obtenir un objet"
 
-#: cdl\tests\features\images\flatfield_app.py:37
+#: cdl\tests\features\images\flatfield_app_test.py:37
 msgid "Flat data (Uniform random)"
 msgstr "Image d'homogénéité (Distribution uniforme)"
 
@@ -3379,7 +3379,7 @@ msgstr ""
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
-#: cdl\utils\qthelpers.py:189 cdl\widgets\wizard.py:136
+#: cdl\utils\qthelpers.py:189 cdl\widgets\wizard.py:135
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -3438,87 +3438,91 @@ msgstr "Ecart-type"
 msgid "Y0"
 msgstr "Y0"
 
-#: cdl\widgets\h5browser.py:90
+#: cdl\widgets\h5browser.py:91
 msgid "Collapse all"
 msgstr "Replier tout"
 
-#: cdl\widgets\h5browser.py:95
+#: cdl\widgets\h5browser.py:96
 msgid "Expand all"
 msgstr "Déplier tout"
 
-#: cdl\widgets\h5browser.py:99
+#: cdl\widgets\h5browser.py:100
 msgid "Restore"
 msgstr "Restaurer"
 
-#: cdl\widgets\h5browser.py:100
+#: cdl\widgets\h5browser.py:101
 msgid "Restore original tree layout"
 msgstr "Restaurer l'organisation initiale de l'arbre"
 
-#: cdl\widgets\h5browser.py:106
+#: cdl\widgets\h5browser.py:107
 msgid "Collapse selection"
 msgstr "Replier la sélection"
 
-#: cdl\widgets\h5browser.py:112
+#: cdl\widgets\h5browser.py:113
 msgid "Expand selection"
 msgstr "Déplier la sélection"
 
-#: cdl\widgets\h5browser.py:220 cdl\widgets\h5browser.py:827
+#: cdl\widgets\h5browser.py:207 cdl\widgets\h5browser.py:840
 msgid "HDF5 Browser"
 msgstr "Explorateur HDF5"
 
-#: cdl\widgets\h5browser.py:223 cdl\widgets\h5browser.py:544
+#: cdl\widgets\h5browser.py:210 cdl\widgets\h5browser.py:531
 msgid "Value"
 msgstr "Valeur"
 
-#: cdl\widgets\h5browser.py:223 cdl\widgets\h5browser.py:580
+#: cdl\widgets\h5browser.py:210 cdl\widgets\h5browser.py:582
 msgid "Name"
 msgstr "Nom"
 
-#: cdl\widgets\h5browser.py:492
+#: cdl\widgets\h5browser.py:479
 msgid "Unsupported data"
 msgstr "Données non prises en charge"
 
-#: cdl\widgets\h5browser.py:557
+#: cdl\widgets\h5browser.py:549
 msgid "Group"
 msgstr "Groupe"
 
-#: cdl\widgets\h5browser.py:559
+#: cdl\widgets\h5browser.py:551
 msgid "Attributes"
 msgstr "Attributs"
 
-#: cdl\widgets\h5browser.py:579
+#: cdl\widgets\h5browser.py:556
+msgid "Show array"
+msgstr "Afficher le tableau"
+
+#: cdl\widgets\h5browser.py:581
 msgid "Path"
 msgstr "Chemin"
 
-#: cdl\widgets\h5browser.py:581
+#: cdl\widgets\h5browser.py:583
 msgid "Description"
 msgstr "Description"
 
-#: cdl\widgets\h5browser.py:582
+#: cdl\widgets\h5browser.py:584
 msgid "Textual preview"
 msgstr "Aperçu textuel"
 
-#: cdl\widgets\h5browser.py:684
+#: cdl\widgets\h5browser.py:690
 msgid "HDF5 files (*.h5 *.hdf5)"
 msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
 
-#: cdl\widgets\h5browser.py:684
+#: cdl\widgets\h5browser.py:690
 msgid "Select HDF5 file"
 msgstr "Sélectionner un fichier HDF5"
 
-#: cdl\widgets\h5browser.py:948
+#: cdl\widgets\h5browser.py:961
 msgid "Check all"
 msgstr "Cocher tout"
 
-#: cdl\widgets\h5browser.py:956
+#: cdl\widgets\h5browser.py:969
 msgid "Uncheck all"
 msgstr "Décocher tout"
 
-#: cdl\widgets\h5browser.py:960
+#: cdl\widgets\h5browser.py:973
 msgid "Show only supported data"
 msgstr "Afficher uniquement les données prises en charge"
 
-#: cdl\widgets\h5browser.py:962
+#: cdl\widgets\h5browser.py:975
 msgid "Show values"
 msgstr "Afficher les valeurs"
 
@@ -3582,7 +3586,7 @@ msgstr "XML-RPC :"
 msgid "Source"
 msgstr "Source"
 
-#: cdl\widgets\textimport.py:60 cdl\widgets\wizard.py:223
+#: cdl\widgets\textimport.py:60 cdl\widgets\wizard.py:222
 msgid "Clipboard"
 msgstr "Presse-papiers"
 
@@ -3802,53 +3806,53 @@ msgstr ""
 "Merci de cliquer sur le bouton 'Ignorer' pour ignorer cet avertissement la "
 "prochaine fois."
 
-#: cdl\widgets\wizard.py:130
+#: cdl\widgets\wizard.py:129
 msgid "Back"
 msgstr "Précédent"
 
-#: cdl\widgets\wizard.py:132
+#: cdl\widgets\wizard.py:131
 msgid "Next"
 msgstr "Suivant"
 
-#: cdl\widgets\wizard.py:134
+#: cdl\widgets\wizard.py:133
 msgid "Finish"
 msgstr "Terminer"
 
-#: cdl\widgets\wizard.py:198
+#: cdl\widgets\wizard.py:197
 msgid "Welcome to the Example Wizard"
 msgstr "Bienvenue dans l'assistant exemple"
 
-#: cdl\widgets\wizard.py:200
+#: cdl\widgets\wizard.py:199
 msgid "This wizard will guide you through the process of importing data."
 msgstr ""
 "Cet assistant vous guidera à travers le processus d'importation de données."
 
-#: cdl\widgets\wizard.py:219
+#: cdl\widgets\wizard.py:218
 msgid "Select the Source of the Data"
 msgstr "Sélectionner la source des données"
 
-#: cdl\widgets\wizard.py:221
+#: cdl\widgets\wizard.py:220
 msgid "Select the source of the data to be imported (clipboard or file)."
 msgstr ""
 "Sélectionner la source des données à importer (presse-papiers ou fichier)."
 
-#: cdl\widgets\wizard.py:227
+#: cdl\widgets\wizard.py:226
 msgid "Browse..."
 msgstr "Parcourir..."
 
-#: cdl\widgets\wizard.py:248
+#: cdl\widgets\wizard.py:247
 msgid "Select the File to Import"
 msgstr "Sélectionner le fichier à importer"
 
-#: cdl\widgets\wizard.py:250
+#: cdl\widgets\wizard.py:249
 msgid "CSV Files (*.csv);;Text Files (*.txt);;All Files (*)"
 msgstr "Fichiers CSV (*.csv);;Fichiers texte (*.txt);;Tous les fichiers (*)"
 
-#: cdl\widgets\wizard.py:261
+#: cdl\widgets\wizard.py:260
 msgid "Please select the file to import."
 msgstr "Merci de sélectionner le fichier à importer."
 
-#: cdl\widgets\wizard.py:273
+#: cdl\widgets\wizard.py:272
 msgid "Example Wizard"
 msgstr "Assistant exemple"
 
