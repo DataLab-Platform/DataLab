@@ -25,12 +25,12 @@ msgstr "Historique des modifications"
 
 #: ../../../CHANGELOG.md:3
 msgid ""
-"See DataLab [roadmap page](https://DataLab-"
-"Platform.github.io/en/contributing/roadmap.html) for future and past "
+"See DataLab [roadmap page](https://datalab-"
+"platform.com/en/contributing/roadmap.html) for future and past "
 "milestones."
 msgstr ""
-"Voir la page de la [feuille de route](https://DataLab-"
-"Platform.github.io/fr/contributing/roadmap.html) de DataLab pour les "
+"Voir la page de la [feuille de route](https://datalab-"
+"platform.com/fr/contributing/roadmap.html) de DataLab pour les "
 "jalons futurs et passés."
 
 #: ../../../CHANGELOG.md:6
@@ -1051,11 +1051,11 @@ msgstr ""
 
 #: ../../../CHANGELOG.md:248
 msgid ""
-"New [Tutorial section](https://DataLab-"
-"Platform.github.io/en/intro/tutorials/index.html) in the documentation:"
+"New [Tutorial section](https://datalab-"
+"platform.com/en/intro/tutorials/index.html) in the documentation:"
 msgstr ""
-"Nouvelle [section Tutoriels](https://DataLab-"
-"Platform.github.io/fr/intro/tutorials/index.html) dans la documentation :"
+"Nouvelle [section Tutoriels](https://datalab-"
+"platform.com/fr/intro/tutorials/index.html) dans la documentation :"
 
 #: ../../../CHANGELOG.md:249
 msgid "This section provides a set of tutorials to learn how to use DataLab"
@@ -1100,8 +1100,8 @@ msgid ""
 "New [API section](https://datalab-platform.com/en/api/index.html) "
 "in the documentation:"
 msgstr ""
-"Nouvelle [section API](https://DataLab-"
-"Platform.github.io/fr/api/index.html) dans la documentation :"
+"Nouvelle [section API](https://datalab-"
+"platform.com/fr/api/index.html) dans la documentation :"
 
 #: ../../../CHANGELOG.md:259
 msgid ""
@@ -2168,8 +2168,8 @@ msgstr "D'autres fonctionnalités à venir..."
 #: ../../../CHANGELOG.md:517
 msgid ""
 "Added remote control feature: DataLab can be controlled remotely via a "
-"TCP/IP connection (see [Remote control](https://DataLab-"
-"Platform.github.io/en/remote_control.html))"
+"TCP/IP connection (see [Remote control](https://datalab-"
+"platform.com/en/remote_control.html))"
 msgstr ""
 "Ajout de la fonctionnalité de contrôle à distance : DataLab peut être "
 "contrôlé à distance via une connexion TCP/IP (voir [Contrôle à "
@@ -2178,12 +2178,10 @@ msgstr ""
 #: ../../../CHANGELOG.md:519
 msgid ""
 "Added macro commands: DataLab can be controlled via a macro file (see "
-"[Macro commands](https://DataLab-"
-"Platform.github.io/en/macro_commands.html))"
+"[Macro commands](https://datalab-platform.com/en/macro_commands.html))"
 msgstr ""
 "Ajout de commandes de macro : DataLab peut être contrôlé via un fichier "
-"macro (voir [Commandes de macro](https://DataLab-"
-"Platform.github.io/fr/macro_commands.html))"
+"macro (voir [Commandes de macro](https://datalab-platform.com/fr/macro_commands.html))"
 
 #: ../../../CHANGELOG.md:521
 msgid "General features:"
