@@ -27,6 +27,7 @@ for future and past milestones.
 * Fixed test-related issues: some edge cases were hidden by the old test suite, and
   have been revealed by the transition to `pytest`. This has led to some bug fixes
   and improvements in the code.
+* Fixed [Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` when trying to open an HDF5 file with an extension other than ".h5"
 * Deprecation issues:
   * Fixed `scipy.ndimage.filters` deprecation warning
   * Fixed `numpy.fromstring` deprecation warning

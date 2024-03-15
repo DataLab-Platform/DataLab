@@ -1266,8 +1266,6 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         bname = osp.basename(filename)
         if operation == "load" and not osp.isfile(filename):
             raise IOError(f'File not found "{bname}"')
-        if not filename.endswith(".h5"):
-            raise IOError(f'Invalid HDF5 file "{bname}"')
         Conf.main.base_dir.set(filename)
         return filename
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 14:01+0100\n"
+"POT-Creation-Date: 2024-03-15 17:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,13 +21,17 @@ msgstr ""
 msgid ""
 "Plugin system for DataLab, the open-source scientific data analysis and "
 "visualization platform"
-msgstr "Systeme de plugins de DataLab, la plateforme open-source d'analyse et de visualisation de données scientifiques"
+msgstr ""
+"Systeme de plugins de DataLab, la plateforme open-source d'analyse et de "
+"visualisation de données scientifiques"
 
 #: ../../features/general/plugins.rst:-1
 msgid ""
 "DataLab, plugin, processing, input/output, HDF5, file format, data "
 "analysis, visualization, scientific, open-source, platform"
-msgstr "DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, analyse de données, visualisation, scientifique, open-source, plateforme"
+msgstr ""
+"DataLab, plugin, traitement, entrée/sortie, HDF5, format de fichier, "
+"analyse de données, visualisation, scientifique, open-source, plateforme"
 
 #: ../../features/general/plugins.rst:4
 msgid "Plugins"
@@ -321,7 +325,8 @@ msgid "hide signal type parameter (default: True)"
 msgstr "masquer le paramètre de type de signal (par défaut : True)"
 
 #: cdl.plugins.PluginBase.edit_new_image_parameters
-#: cdl.plugins.PluginBase.edit_new_signal_parameters of
+#: cdl.plugins.PluginBase.edit_new_signal_parameters
+#: cdl.plugins.discover_plugins cdl.plugins.get_available_plugins of
 msgid "Returns"
 msgstr "Retourne"
 
@@ -374,6 +379,18 @@ msgstr "Créer des actions"
 #: cdl.plugins.discover_plugins:1 of
 msgid "Discover plugins using naming convention"
 msgstr "Découvrir les plugins en utilisant la convention de nommage"
+
+#: cdl.plugins.discover_plugins:3 of
+msgid "List of discovered plugins (as classes)"
+msgstr "Liste des plugins découverts (en tant que classes)"
+
+#: cdl.plugins.get_available_plugins:1 of
+msgid "Instantiate and get available plugins"
+msgstr "Instancier et obtenir les plugins disponibles"
+
+#: cdl.plugins.get_available_plugins:3 of
+msgid "List of available plugins (as instances)"
+msgstr "Liste des plugins disponibles (en tant qu'instances)"
 
 #~ msgid "Example"
 #~ msgstr "Exemple"
