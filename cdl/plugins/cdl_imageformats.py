@@ -104,7 +104,7 @@ class FXDFile:
             else:
                 raise NotImplementedError(f"Unsupported pixel type: {self.pixeltype}")
             block = data_file.read(self.nbrows * self.nbcols * size)
-        data = np.fromstring(block, dtype=dtype)
+        data = np.frombuffer(block, dtype=dtype)
         self.data = data.reshape(self.nbrows, self.nbcols)
 
 
