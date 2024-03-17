@@ -225,6 +225,8 @@ class ArrayModel(QC.QAbstractTableModel):
         horizontal_headers: Horizontal headers
     """
 
+    # pylint: disable=invalid-name
+
     def __init__(
         self,
         parent: QWidget,
@@ -236,21 +238,25 @@ class ArrayModel(QC.QAbstractTableModel):
         self.__horizontal_headers = horizontal_headers
 
     def rowCount(self, _parent: QC.QModelIndex) -> int:
-        """Return the row count"""
+        """Return the row count
+        (reimplement the `QC.QAbstractTableModel` method)"""
         return self.__data.shape[0]
 
     def columnCount(self, _parent: QC.QModelIndex) -> int:
-        """Return the column count"""
+        """Return the column count
+        (reimplement the `QC.QAbstractTableModel` method)"""
         return self.__data.shape[1]
 
     def data(self, index: QC.QModelIndex, role: int) -> str | None:
-        """Return the data"""
+        """Return the data
+        (reimplement the `QC.QAbstractTableModel` method)"""
         if role == QC.Qt.DisplayRole:
             return str(self.__data[index.row(), index.column()])
         return None
 
     def headerData(self, section: int, orientation: int, role: int) -> str | None:
-        """Return the header data"""
+        """Return the header data
+        (reimplement the `QC.QAbstractTableModel` method)"""
         if (
             role == QC.Qt.DisplayRole
             and orientation == QC.Qt.Horizontal

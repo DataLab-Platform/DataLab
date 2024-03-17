@@ -51,9 +51,7 @@ def __check_resultshapes_merge(
         obj1: Original object
         obj2: Merged object
     """
-    rshapes1 = [rshape for rshape in obj1.iterate_resultshapes()]
-    rshapes2 = [rshape for rshape in obj2.iterate_resultshapes()]
-    for rs1, rs2 in zip(rshapes1, rshapes2):
+    for rs1, rs2 in zip(obj1.iterate_resultshapes(), obj2.iterate_resultshapes()):
         assert np.all(np.vstack([rs1.array, rs1.array])[:, 1:] == rs2.array[:, 1:])
 
 

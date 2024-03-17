@@ -617,7 +617,7 @@ class H5FileSelector(QW.QWidget):
             icon=get_std_icon("DirOpenIcon"),
             text=_("Open") + " ...",
             autoraise=False,
-            triggered=lambda: self.add_file(),
+            triggered=lambda _checked=False: self.add_file(),
         )
         self.btn_add.setSizePolicy(QW.QSizePolicy.Fixed, QW.QSizePolicy.Fixed)
         self.layout().addWidget(self.btn_add)
