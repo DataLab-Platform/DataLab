@@ -557,6 +557,7 @@ class GroupAndAttributes(QW.QTabWidget):
             autoraise=False,
             triggered=show_array_callback,
         )
+        self.__show_array_btn.setEnabled(False)
         self.setCornerWidget(self.__show_array_btn, QC.Qt.TopRightCorner)
 
     def cleanup(self) -> None:
