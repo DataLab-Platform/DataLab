@@ -216,6 +216,75 @@ class ImageImportParam(BaseImportParam):
     ).set_pos(col=1)
 
 
+class ArrayModel(QC.QAbstractTableModel):
+    """Array model
+
+    Args:
+        parent: Parent widget
+        data: Data array
+        horizontal_headers: Horizontal headers
+    """
+
+    def __init__(
+        self,
+        parent: QWidget,
+        data: np.ndarray,
+        horizontal_headers: list[str] | None = None,
+    ) -> None:
+        super().__init__(parent)
+        self.__data = data
+        self.__horizontal_headers = horizontal_headers
+
+    def rowCount(self, _parent: QC.QModelIndex) -> int:
+        """Return the row count"""
+        return self.__data.shape[0]
+
+    def columnCount(self, _parent: QC.QModelIndex) -> int:
+        """Return the column count"""
+        return self.__data.shape[1]
+
+    def data(self, index: QC.QModelIndex, role: int) -> str | None:
+        """Return the data"""
+        if role == QC.Qt.DisplayRole:
+            return str(self.__data[index.row(), index.column()])
+        return None
+
+    def headerData(self, section: int, orientation: int, role: int) -> str | None:
+        """Return the header data"""
+        if (
+            role == QC.Qt.DisplayRole
+            and orientation == QC.Qt.Horizontal
+            and self.__horizontal_headers is not None
+        ):
+            return self.__horizontal_headers[section]
+        return super().headerData(section, orientation, role)
+
+
+class ArrayView(QW.QTableView):
+    """Array view
+
+    Args:
+        parent: Parent widget
+    """
+
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent)
+        self.setShowGrid(True)
+        self.setAlternatingRowColors(True)
+
+    def set_data(
+        self, data: np.ndarray, horizontal_headers: list[str] | None = None
+    ) -> None:
+        """Set the data
+
+        Args:
+            data: Data array
+            horizontal_headers: Horizontal headers
+        """
+        model = ArrayModel(self, data, horizontal_headers)
+        self.setModel(model)
+
+
 class PreviewWidget(QW.QWidget):
     """Widget showing the raw data, the prefiltered data and a preview of the data"""
 
@@ -236,7 +305,7 @@ class PreviewWidget(QW.QWidget):
             get_icon("libre-gui-file-document.svg"),
             _("Prefiltered Data"),
         )
-        self._preview_table = QW.QTableWidget()
+        self._preview_table = ArrayView(self)
         self._preview_table.setFont(self._raw_text_edit.font())
         self._preview_table.setEditTriggers(QW.QAbstractItemView.NoEditTriggers)
         tw.addTab(self._preview_table, get_icon("table.svg"), _("Preview"))
@@ -262,7 +331,7 @@ class PreviewWidget(QW.QWidget):
 
     def __clear_preview_table(self, enable: bool) -> None:
         """Clear the preview table"""
-        self._preview_table.clear()
+        self._preview_table.setModel(None)
         self._preview_table.setEnabled(enable)
         idx = self.tabwidget.indexOf(self._preview_table)
         icon_name = "table.svg" if enable else "table_unavailable.svg"
@@ -278,33 +347,20 @@ class PreviewWidget(QW.QWidget):
             self.__clear_preview_table(False)
         else:
             self.__clear_preview_table(True)
-            self._preview_table.setRowCount(len(data))
-            self._preview_table.setColumnCount(len(data[0]))
-            with create_progress_bar(
-                self, _("Adding data to the preview table"), max_=len(data) - 1
-            ) as progress:
-                for i, row in enumerate(data):
-                    progress.setValue(i)
-                    if progress.wasCanceled():
-                        break
-                    for j, cell in enumerate(row):
-                        self._preview_table.setItem(
-                            i, j, QW.QTableWidgetItem(str(cell))
-                        )
-                    QW.QApplication.processEvents()
-            # Add column headers, only for signals:
             if self.destination == "signal":
                 assert first_col_is_x is not None
                 if len(data.shape) == 1:
-                    headers = ["Y"]
+                    h_headers = ["Y"]
                 elif first_col_is_x:
                     if len(data.shape) == 2:
-                        headers = ["X", "Y"]
+                        h_headers = ["X", "Y"]
                     else:
-                        headers = ["X"] + [f"Y{i+1}" for i in range(len(data[0]) - 1)]
+                        h_headers = ["X"] + [f"Y{i+1}" for i in range(len(data[0]) - 1)]
                 else:
-                    headers = [f"Y{i+1}" for i in range(len(data[0]))]
-                self._preview_table.setHorizontalHeaderLabels(headers)
+                    h_headers = [f"Y{i+1}" for i in range(len(data[0]))]
+            else:
+                h_headers = None
+            self._preview_table.set_data(data, horizontal_headers=h_headers)
 
 
 def prefilter_data(raw_data: str, param: SignalImportParam | ImageImportParam) -> str:

@@ -25,6 +25,10 @@ for future and past milestones.
     given to sandboxing the tests, so that they do not interfere with each other.
   * Added continuous integration (CI) with GitHub Actions
   * For this release, test coverage is 87%
+* Text file import assistant:
+  * Drastically improved the performance of the array preview when importing large
+    text files (no more progress bar, and the preview is now displayed almost
+    instantaneously)
 
 🛠️ Bug fixes:
 
