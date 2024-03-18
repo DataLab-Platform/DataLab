@@ -63,6 +63,16 @@ if TYPE_CHECKING:
 # Enable multiprocessing support for Windows, with frozen executable (e.g. PyInstaller)
 multiprocessing.freeze_support()
 
+# Set start method to 'spawn' for Linux (default is 'fork' which is not safe here
+# because of the use of Qt and multithreading) - for other OS, the default is
+# 'spawn' anyway
+try:
+    multiprocessing.set_start_method("spawn")
+except RuntimeError:
+    # This exception is raised if the method is already set (this may happen because
+    # this module is imported more than once, e.g. when running tests)
+    pass
+
 
 COMPUTATION_TIP = _(
     "DataLab relies on various libraries to perform the computation. During the "

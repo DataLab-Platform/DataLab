@@ -36,6 +36,13 @@ for future and past milestones.
 * Fixed test-related issues: some edge cases were hidden by the old test suite, and
   have been revealed by the transition to `pytest`. This has led to some bug fixes
   and improvements in the code.
+* On Linux, when running a computation on a signal or an image, and on rare occasions,
+  the computation was stuck as if it was running indefinitely. Even though the graphical
+  user interface was still responsive, the computation was not progressing and the user
+  had to cancel the operation and restart it. This was due to the start method of the
+  separate process used for the computation (default method was "fork" on Linux). This
+  is now fixed by using the "spawn" method instead, which is the recommended method for
+  latest versions of Python on Linux when multithreading is involved.
 * Fixed [Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` when trying to open an HDF5 file with an extension other than ".h5"
 * Deprecation issues:
   * Fixed `scipy.ndimage.filters` deprecation warning
