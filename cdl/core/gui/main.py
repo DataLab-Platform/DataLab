@@ -1326,7 +1326,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if h5files is None:
             basedir = Conf.main.base_dir.get()
             with qth.save_restore_stds():
-                h5files, _fl = getopenfilenames(self, _("Open"), basedir, "HDF5 (*.h5)")
+                h5files, _fl = getopenfilenames(
+                    self, _("Open"), basedir, _("HDF5 files (*.h5 *.hdf5)")
+                )
         filenames, dsetnames = [], []
         for fname_with_dset in h5files:
             if "," in fname_with_dset:

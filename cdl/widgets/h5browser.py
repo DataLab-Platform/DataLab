@@ -31,6 +31,7 @@ from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilename
 
 from cdl.config import _
 from cdl.core.io.h5 import H5Importer
@@ -687,7 +688,7 @@ class H5FileSelector(QW.QWidget):
              (this is used for testing only)
         """
         if fname is None:
-            fname = QW.QFileDialog.getOpenFileName(
+            fname = getopenfilename(
                 self, _("Select HDF5 file"), "", _("HDF5 files (*.h5 *.hdf5)")
             )[0]
         if fname:

@@ -27,6 +27,7 @@ from __future__ import annotations
 
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
+from qtpy.compat import getopenfilename
 from qtpy.QtWidgets import QWidget
 
 from cdl.config import _
@@ -242,7 +243,7 @@ class ExamplePage2(WizardPage):
 
     def browse_file(self) -> None:
         """Browse file"""
-        file_name, _filt = QW.QFileDialog.getOpenFileName(
+        file_name, _filt = getopenfilename(
             self,
             _("Select the File to Import"),
             "",
