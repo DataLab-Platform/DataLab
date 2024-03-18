@@ -32,10 +32,10 @@ The :mod:`cdl` package requires the following Python modules:
       - >= 5.5
       - 
     * - guidata 
-      - >= 3.2
+      - >= 3.4
       - 
     * - PlotPy 
-      - >= 2.0
+      - >= 2.3
       - 
     * - QtPy 
       - >= 1.9
@@ -102,3 +102,19 @@ Optional modules for building the documentation:
     * - pydata-sphinx-theme
       - 
       - Bootstrap-based Sphinx theme from the PyData community
+
+Optional modules for running test suite:
+
+.. list-table::
+    :header-rows: 1
+    :align: left
+
+    * - Name
+      - Version
+      - Summary
+    * - pytest
+      - 
+      - pytest: simple powerful testing with Python
+    * - pytest-xvfb
+      - 
+      - A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests.

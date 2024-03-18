@@ -45,8 +45,8 @@ dependencies = [
     "opencv-python-headless >= 4.5",
     "PyWavelets >= 1.1",
     "psutil >= 5.5",
-    "guidata >= 3.2",
-    "PlotPy >= 2.0",
+    "guidata >= 3.4",
+    "PlotPy >= 2.3",
     "QtPy >= 1.9",
 ]
 dynamic = ["version"]

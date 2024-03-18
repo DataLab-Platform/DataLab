@@ -829,14 +829,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         plot.add_item(make.legend("TR"))
         self.signalpanel = signal.SignalPanel(self, dpw.plotwidget, self.signal_toolbar)
         self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
-        try:
-            plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
-                self.signalpanel.plot_item_parameters_changed
-            )
-        except AttributeError:
-            # PlotPy < 2.2: SIG_ITEM_PARAMETERS_CHANGED does not exist, so we pass
-            # (this affects the plot item parameters persistence feature)
-            pass
+        plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
+            self.signalpanel.plot_item_parameters_changed
+        )
         return dpw
 
     def __add_image_panel(self) -> None:
@@ -857,14 +852,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         #     cspanel.peritem_ac.setChecked(False)
         # -----------------------------------------------------------------------------
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
-        try:
-            plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
-                self.imagepanel.plot_item_parameters_changed
-            )
-        except AttributeError:
-            # PlotPy < 2.2: SIG_ITEM_PARAMETERS_CHANGED does not exist, so we pass
-            # (this affects the plot item parameters persistence feature)
-            pass
+        plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
+            self.imagepanel.plot_item_parameters_changed
+        )
         return dpw
 
     def __update_tab_menu(self) -> None:
