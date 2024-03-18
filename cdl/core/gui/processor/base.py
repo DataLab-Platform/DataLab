@@ -815,6 +815,7 @@ class BaseProcessor(QC.QObject):
             ):
                 roidata = obj.params_to_roidata(roigroup)
                 if roieditordata.modified:
+                    roieditordata.roidata = roidata
                     # If ROI has been modified, save ROI (even in "extract mode")
                     obj.roi = roidata
                     self.SIG_ADD_SHAPE.emit(obj.uuid)

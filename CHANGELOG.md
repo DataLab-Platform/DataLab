@@ -44,6 +44,9 @@ for future and past milestones.
   is now fixed by using the "spawn" method instead, which is the recommended method for
   latest versions of Python on Linux when multithreading is involved.
 * Fixed [Issue #60](https://github.com/DataLab-Platform/DataLab/issues/60) - `OSError: Invalid HDF5 file [...]` when trying to open an HDF5 file with an extension other than ".h5"
+* Image Region of Interest (ROI) extraction: when modifying the image bounds in the
+  confirmation dialog box, the ROI was not updated accordingly until the operation was
+  run again
 * Deprecation issues:
   * Fixed `scipy.ndimage.filters` deprecation warning
   * Fixed `numpy.fromstring` deprecation warning

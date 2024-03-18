@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-08 18:07+0100\n"
+"POT-Creation-Date: 2024-03-18 17:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -24,14 +24,17 @@ msgid "The :mod:`cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
 
 #: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:78
+#: ../../requirements.rst:112
 msgid "Name"
 msgstr "Nom"
 
 #: ../../requirements.rst:8 ../../requirements.rst:54 ../../requirements.rst:79
+#: ../../requirements.rst:113
 msgid "Version"
 msgstr "Version"
 
 #: ../../requirements.rst:9 ../../requirements.rst:55 ../../requirements.rst:80
+#: ../../requirements.rst:114
 msgid "Summary"
 msgstr "Description"
 
@@ -104,7 +107,7 @@ msgid "guidata"
 msgstr ""
 
 #: ../../requirements.rst:35
-msgid ">= 3.2"
+msgid ">= 3.4"
 msgstr ""
 
 #: ../../requirements.rst:37
@@ -112,7 +115,7 @@ msgid "PlotPy"
 msgstr ""
 
 #: ../../requirements.rst:38
-msgid ">= 2.0"
+msgid ">= 2.3"
 msgstr ""
 
 #: ../../requirements.rst:40
@@ -251,6 +254,27 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
+#: ../../requirements.rst:106
+#, fuzzy
+msgid "Optional modules for running test suite:"
+msgstr "Modules optionnels pour construire la documentation :"
+
+#: ../../requirements.rst:115
+msgid "pytest"
+msgstr ""
+
+#: ../../requirements.rst:117
+msgid "pytest: simple powerful testing with Python"
+msgstr ""
+
+#: ../../requirements.rst:118
+msgid "pytest-xvfb"
+msgstr ""
+
+#: ../../requirements.rst:120
+msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
+msgstr ""
+
 #~ msgid ">= 3.1"
 #~ msgstr ""
 
@@ -265,3 +289,10 @@ msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 #~ "beautiful, view size responsive web "
 #~ "components."
 #~ msgstr "Une extension sphinx pour concevoir de beaux composants web."
+
+#~ msgid ">= 3.2"
+#~ msgstr ""
+
+#~ msgid ">= 2.0"
+#~ msgstr ""
+

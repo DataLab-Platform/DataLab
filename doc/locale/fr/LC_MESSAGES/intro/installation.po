@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-06 09:58+0100\n"
+"POT-Creation-Date: 2024-03-18 17:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,7 +81,10 @@ msgstr ""
 msgid ""
 ":bdg-info-line:`Windows` Within a ready-to-use :ref:`install_winpython`, "
 "based on `WinPython <https://winpython.github.io/>`_."
-msgstr ":bdg-info-line:`Windows` Dans une distribution prête à l'emploi :ref:`install_winpython`, basée sur `WinPython <https://winpython.github.io/>`_."
+msgstr ""
+":bdg-info-line:`Windows` Dans une distribution prête à l'emploi "
+":ref:`install_winpython`, basée sur `WinPython "
+"<https://winpython.github.io/>`_."
 
 #: ../../intro/installation.rst:33
 msgid ""
@@ -186,8 +189,8 @@ msgid ""
 msgstr ""
 "Le paquet d'installation est disponible dans la section `Releases`_. Il "
 "prend en charge la désinstallation et la mise à jour automatiques (pas "
-"besoin de désinstaller DataLab avant d'exécuter l'installeur d'une "
-"autre version de l'application)."
+"besoin de désinstaller DataLab avant d'exécuter l'installeur d'une autre "
+"version de l'application)."
 
 #: ../../intro/installation.rst:97
 msgid ""
@@ -195,8 +198,8 @@ msgid ""
 "release, based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 "
 "based release, see file ending with ``-Win7.exe``)."
 msgstr ""
-"L'installeur Windows de DataLab est disponible pour Windows 8, 10 et 11"
-" (version principale, basée sur Python 3.11) et également pour Windows 7 "
+"L'installeur Windows de DataLab est disponible pour Windows 8, 10 et 11 "
+"(version principale, basée sur Python 3.11) et également pour Windows 7 "
 "SP1 (version basée sur Python 3.8, voir le fichier se terminant par "
 "``-Win7.exe``)."
 
@@ -228,13 +231,21 @@ msgid ""
 "/DataLab-WinPython?tab=readme-ov-file#datalab-winpython>`_ and is "
 "available in the `DataLab-WinPython Releases <https://github.com/DataLab-"
 "Platform/DataLab-WinPython/releases>`_ section."
-msgstr "DataLab est également disponible dans une distribution Python prête à l'emploi, basée sur `WinPython <https://winpython.github.io/>`_. Cette distribution s'appelle `DataLab-WinPython <https://github.com/DataLab-Platform/DataLab-WinPython?tab=readme-ov-file#datalab-winpython>`_ et est disponible dans la section `DataLab-WinPython Releases <https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_."
+msgstr ""
+"DataLab est également disponible dans une distribution Python prête à "
+"l'emploi, basée sur `WinPython <https://winpython.github.io/>`_. Cette "
+"distribution s'appelle `DataLab-WinPython <https://github.com/DataLab-"
+"Platform/DataLab-WinPython?tab=readme-ov-file#datalab-winpython>`_ et est"
+" disponible dans la section `DataLab-WinPython Releases "
+"<https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_."
 
 #: ../../intro/installation.rst:123
 msgid ""
 "DataLab-WinPython is a ready-to-use Python distribution including the "
 "DataLab platform."
-msgstr "DataLab-WinPython est une distribution Python prête à l'emploi incluant la plateforme DataLab."
+msgstr ""
+"DataLab-WinPython est une distribution Python prête à l'emploi incluant "
+"la plateforme DataLab."
 
 #: ../../intro/installation.rst:125
 msgid ""
@@ -243,7 +254,13 @@ msgid ""
 " also extend it with additional packages. On the downside, it is also "
 "*much bigger* than the all-in-one installer because it includes a full "
 "Python distribution."
-msgstr "La principale différence avec l'installeur tout-en-un est que vous pouvez utiliser la distribution Python à d'autres fins que l'exécution de DataLab, et vous pouvez également l'étendre avec des paquets supplémentaires. En revanche, elle est également *beaucoup plus volumineuse* que l'installeur tout-en-un car elle inclut une distribution Python complète."
+msgstr ""
+"La principale différence avec l'installeur tout-en-un est que vous pouvez"
+" utiliser la distribution Python à d'autres fins que l'exécution de "
+"DataLab, et vous pouvez également l'étendre avec des paquets "
+"supplémentaires. En revanche, elle est également *beaucoup plus "
+"volumineuse* que l'installeur tout-en-un car elle inclut une distribution"
+" Python complète."
 
 #: ../../intro/installation.rst:132
 msgid "DataLab-WinPython Control Panel"
@@ -257,7 +274,13 @@ msgid ""
 "thus can be broken by a bad manipulation of the Python distribution by "
 "the user. This should be taken into account when choosing the "
 "installation method."
-msgstr "Alors que l'installeur tout-en-un fournit un paquet monolithique qui garantit la compatibilité de tous ses composants car il ne peut pas être modifié par l'utilisateur, la distribution WinPython est plus flexible et peut donc être endommagée par une mauvaise manipulation de la distribution Python par l'utilisateur. Cela doit être pris en compte lors du choix de la méthode d'installation."
+msgstr ""
+"Alors que l'installeur tout-en-un fournit un paquet monolithique qui "
+"garantit la compatibilité de tous ses composants car il ne peut pas être "
+"modifié par l'utilisateur, la distribution WinPython est plus flexible et"
+" peut donc être endommagée par une mauvaise manipulation de la "
+"distribution Python par l'utilisateur. Cela doit être pris en compte lors"
+" du choix de la méthode d'installation."
 
 #: ../../intro/installation.rst:145
 msgid "Wheel package"
@@ -362,14 +385,17 @@ msgid "The :mod:`cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
 
 #: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:78
+#: ../../requirements.rst:112
 msgid "Name"
 msgstr "Nom"
 
 #: ../../requirements.rst:8 ../../requirements.rst:54 ../../requirements.rst:79
+#: ../../requirements.rst:113
 msgid "Version"
 msgstr "Version"
 
 #: ../../requirements.rst:9 ../../requirements.rst:55 ../../requirements.rst:80
+#: ../../requirements.rst:114
 msgid "Summary"
 msgstr "Description"
 
@@ -442,7 +468,7 @@ msgid "guidata"
 msgstr ""
 
 #: ../../requirements.rst:35
-msgid ">= 3.2"
+msgid ">= 3.4"
 msgstr ""
 
 #: ../../requirements.rst:37
@@ -450,7 +476,7 @@ msgid "PlotPy"
 msgstr ""
 
 #: ../../requirements.rst:38
-msgid ">= 2.0"
+msgid ">= 2.3"
 msgstr ""
 
 #: ../../requirements.rst:40
@@ -589,6 +615,34 @@ msgstr ""
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
+#: ../../requirements.rst:106
+#, fuzzy
+msgid "Optional modules for running test suite:"
+msgstr "Modules optionnels pour la génération de la documentation :"
+
+#: ../../requirements.rst:115
+msgid "pytest"
+msgstr ""
+
+#: ../../requirements.rst:117
+msgid "pytest: simple powerful testing with Python"
+msgstr ""
+
+#: ../../requirements.rst:118
+msgid "pytest-xvfb"
+msgstr ""
+
+#: ../../requirements.rst:120
+msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
+msgstr ""
+
 #: ../../intro/installation.rst:228
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+
+#~ msgid ">= 3.2"
+#~ msgstr ""
+
+#~ msgid ">= 2.0"
+#~ msgstr ""
+
