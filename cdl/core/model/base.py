@@ -21,7 +21,7 @@ from typing import TYPE_CHECKING, Any
 import guidata.dataset as gds
 import numpy as np
 from guidata.dataset import update_dataset
-from guidata.dataset.io import JSONHandler, JSONReader, JSONWriter
+from guidata.io import JSONHandler, JSONReader, JSONWriter
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
 from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem

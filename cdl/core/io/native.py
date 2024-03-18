@@ -11,7 +11,7 @@ DataLab Native I/O module (native HDF5/JSON formats)
 
 from __future__ import annotations
 
-from guidata.dataset.io import HDF5Reader, HDF5Writer
+from guidata.io import HDF5Reader, HDF5Writer
 
 from cdl import __version__
 

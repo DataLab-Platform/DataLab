@@ -21,7 +21,7 @@ This module handles all GUI features which are specific to DataLab (CDL):
 
 import abc
 
-from guidata.dataset.io import BaseIOHandler
+from guidata.io import BaseIOHandler
 
 
 class ObjItf(abc.ABC):

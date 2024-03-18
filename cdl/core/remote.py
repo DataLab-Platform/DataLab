@@ -29,7 +29,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 
 import guidata.dataset as gds
 import numpy as np
-from guidata.dataset.io import JSONReader, JSONWriter
+from guidata.io import JSONReader, JSONWriter
 from qtpy import QtCore as QC
 
 from cdl import __version__

@@ -16,7 +16,7 @@ import re
 import sys
 import time
 
-from guidata.dataset.io import BaseIOHandler
+from guidata.io import BaseIOHandler
 from guidata.widgets.codeeditor import CodeEditor
 from guidata.widgets.console.shell import PythonShellWidget
 from qtpy import QtCore as QC
