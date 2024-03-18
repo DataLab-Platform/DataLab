@@ -54,6 +54,7 @@ def run_beautiful_scenario(screenshots: bool = False):
             height=data_size, width=data_size, itype=dlo.ImageTypes.GAUSS
         )
         ima = dlo.create_image_from_param(newparam)
+        ima.metadata["colormap"] = "jet"
         panel.add_object(ima)
         panel.processor.compute_equalize_hist(dlp.EqualizeHistParam())
         panel.processor.compute_equalize_adapthist(dlp.EqualizeAdaptHistParam())
@@ -61,10 +62,9 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.compute_denoise_wavelet(dlp.DenoiseWaveletParam())
         panel.processor.compute_white_tophat(dlp.MorphologyParam())
         panel.processor.compute_denoise_tv(dlp.DenoiseTVParam())
-        n = data_size // 5
-        m = int(n * 1.25)
+        n = data_size // 3
         panel.processor.compute_roi_extraction(
-            dlp.ROIDataParam.create([[n, m, data_size - n, data_size - m]])
+            dlp.ROIDataParam.create([[n, n, data_size - n, data_size - n]])
         )
         if screenshots:
             win.take_screenshot("i_beautiful")
