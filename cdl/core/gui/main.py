@@ -1329,6 +1329,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 h5files, _fl = getopenfilenames(
                     self, _("Open"), basedir, _("HDF5 files (*.h5 *.hdf5)")
                 )
+        if not h5files:
+            return
         filenames, dsetnames = [], []
         for fname_with_dset in h5files:
             if "," in fname_with_dset:
