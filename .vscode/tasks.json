@@ -233,6 +233,34 @@
             }
         },
         {
+            "label": "Upgrade PlotPyStack packages (Python 3.8)",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "upgrade_stack.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "UNATTENDED": "1",
+                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
             "label": "Clean Up",
             "type": "shell",
             "command": "cmd",
@@ -609,7 +637,7 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "Clean Up",
-                "Upgrade PlotPyStack packages",
+                "Upgrade PlotPyStack packages (Python 3.8)",
                 "Create Windows 7 executable",
                 "Create installer"
             ]
