@@ -4,7 +4,21 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Dockable widgets
+Docks
+=====
+
+The :mod:`cdl.core.gui.docks` module provides the dockable widgets for the
+DataLab main window.
+
+Plot widget
+-----------
+
+.. autoclass:: DataLabPlotWidget
+
+Dockable plot widget
+--------------------
+
+.. autoclass:: DockablePlotWidget
 """
 
 from __future__ import annotations
@@ -40,7 +54,15 @@ if TYPE_CHECKING:
 
 
 class DataLabPlotWidget(PlotWidget):
-    """DataLab PlotWidget"""
+    """DataLab PlotWidget
+
+    This class is a subclass of `plotpy.plot.PlotWidget` that provides a
+    customized widget for DataLab, with a specific set of tools and a
+    customized appearance.
+
+    Args:
+        plot_type: Plot type
+    """
 
     def __init__(self, plot_type: PlotType) -> None:
         super().__init__(options=PlotOptions(type=plot_type), toolbar=True)
@@ -90,7 +112,12 @@ class DataLabPlotWidget(PlotWidget):
 
 
 class DockablePlotWidget(DockableWidget):
-    """Docked plotting widget"""
+    """Docked plotting widget
+
+    Args:
+        parent: Parent widget
+        plot_type: Plot type
+    """
 
     LOCATION = QC.Qt.RightDockWidgetArea
 

@@ -4,25 +4,24 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Action handler module
------------------------------
+Action handler
+==============
 
-This module handles all application actions (menus, toolbars, context menu).
-These actions point to DataLab panels, processors, objecthandler, ...
+The :mod:`cdl.core.gui.actionhandler` module handles all application actions
+(menus, toolbars, context menu). These actions point to DataLab panels, processors,
+objecthandler, ...
 
-.. autosummary::
-    :toctree:
-
-    SelectCond
-    ActionCategory
-    SignalActionHandler
-    ImageActionHandler
+Utility classes
+---------------
 
 .. autoclass:: SelectCond
     :members:
 
 .. autoclass:: ActionCategory
     :members:
+
+Handler classes
+---------------
 
 .. autoclass:: SignalActionHandler
     :members:

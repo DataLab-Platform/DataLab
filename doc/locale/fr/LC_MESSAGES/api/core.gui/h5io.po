@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.h5io:2 of
+msgid "HDF5 I/O"
+msgstr "E/S HDF5"
+
+#: cdl.core.gui.h5io:4 of
+msgid ""
+"The :mod:`cdl.core.gui.h5io` module provides the HDF5 file open/save "
+"into/from DataLab data model/main window."
+msgstr "Le module :mod:`cdl.core.gui.h5io` fournit l'ouverture/enregistrement de fichiers HDF5 dans/depuis le modèle de données de DataLab/fenêtre principale."
+
+#: cdl.core.gui.h5io.H5InputOutput:1 of
+msgid ""
+"Object handling HDF5 file open/save into/from DataLab data model/main "
+"window"
+msgstr ""
+"Objet gérant l'ouverture/enregistrement de fichiers HDF5 dans/depuis le "
+"modèle de données de DataLab/fenêtre principale"
+
+#: cdl.core.gui.h5io.H5InputOutput of
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: cdl.core.gui.h5io.H5InputOutput:3 of
+msgid "Main window"
+msgstr "Fenêtre principale"
+
+#: cdl.core.gui.h5io.H5InputOutput.save_file:1 of
+msgid "Save all signals and images from DataLab model into a HDF5 file"
+msgstr ""
+"Enregistrer tous les signaux et images du modèle DataLab dans un fichier "
+"HDF5"
+
+#: cdl.core.gui.h5io.H5InputOutput.open_file:1 of
+msgid "Open HDF5 file"
+msgstr "Ouvrir un fichier HDF5"
+
+#: cdl.core.gui.h5io.H5InputOutput.import_files:1 of
+msgid "Import HDF5 files"
+msgstr "Importer des fichiers HDF5"
+
+#: cdl.core.gui.h5io.H5InputOutput.import_dataset_from_file:1 of
+msgid "Import dataset from HDF5 file"
+msgstr "Importer un jeu de données depuis un fichier HDF5"
+
+#~ msgid "HDF5 I/O (:mod:`cdl.core.gui.h5io`)"
+#~ msgstr "E/S HDF5 (:mod:`cdl.core.gui.h5io`)"

@@ -1,0 +1,272 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.actionhandler:2 of
+msgid "Action handler"
+msgstr "Gestionnaire d'actions"
+
+#: cdl.core.gui.actionhandler:4 of
+msgid ""
+"The :mod:`cdl.core.gui.actionhandler` module handles all application "
+"actions (menus, toolbars, context menu). These actions point to DataLab "
+"panels, processors, objecthandler, ..."
+msgstr "Le module :mod:`cdl.core.gui.actionhandler` gère toutes les actions de l'application (menus, barres d'outils, menu contextuel). Ces actions pointent vers les panneaux, les processeurs, les gestionnaires d'objets, ..."
+
+#: cdl.core.gui.actionhandler:9 of
+msgid "Utility classes"
+msgstr "Classes utilitaires"
+
+#: cdl.core.gui.actionhandler.SelectCond:1 of
+msgid "Signal or image select conditions"
+msgstr "Conditions de sélection de signaux ou d'images"
+
+#: cdl.core.gui.actionhandler.SelectCond.always:1 of
+msgid "Always true"
+msgstr "Toujours vrai"
+
+#: cdl.core.gui.actionhandler.SelectCond.exactly_one:1 of
+msgid "Exactly one signal or image is selected"
+msgstr "Exactement un signal ou une image est sélectionné"
+
+#: cdl.core.gui.actionhandler.SelectCond.exactly_one_group:1 of
+msgid "Exactly one group is selected"
+msgstr "Exactement un groupe est sélectionné"
+
+#: cdl.core.gui.actionhandler.SelectCond.at_least_one_group_or_one_object:1 of
+msgid "At least one group or one signal or image is selected"
+msgstr "Au moins un groupe ou un signal ou une image est sélectionné"
+
+#: cdl.core.gui.actionhandler.SelectCond.at_least_one:1 of
+msgid "At least one signal or image is selected"
+msgstr "Au moins un signal ou une image est sélectionné"
+
+#: cdl.core.gui.actionhandler.SelectCond.at_least_two:1 of
+msgid "At least two signals or images are selected"
+msgstr "Au moins deux signaux ou images sont sélectionnés"
+
+#: cdl.core.gui.actionhandler.SelectCond.with_roi:1 of
+msgid "At least one signal or image has a ROI"
+msgstr "Au moins un signal ou une image a une ROI"
+
+#: cdl.core.gui.actionhandler.ActionCategory:1 of
+msgid "Action categories"
+msgstr "Catégories d'actions"
+
+#: cdl.core.gui.actionhandler:18 of
+msgid "Handler classes"
+msgstr "Classes de gestion"
+
+#: cdl.core.gui.actionhandler.SignalActionHandler:1 of
+msgid "Object handling signal panel GUI interactions: actions, menus, ..."
+msgstr ""
+"Objet gérant les interactions GUI du panneau de signaux : actions, menus,"
+" ..."
+
+#: cdl.core.gui.actionhandler.ImageActionHandler.create_first_actions:1
+#: cdl.core.gui.actionhandler.SignalActionHandler.create_first_actions:1 of
+msgid "Create actions that are added to the menus in the first place"
+msgstr "Créer des actions qui sont ajoutées aux menus en premier lieu"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.create_last_actions:1
+#: cdl.core.gui.actionhandler.SignalActionHandler.create_last_actions:1 of
+msgid "Create actions that are added to the menus in the end"
+msgstr "Créer des actions qui sont ajoutées aux menus à la fin"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_action:1
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:1 of
+msgid "Add action to list of actions."
+msgstr "Ajouter une action à la liste des actions."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_action
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_category
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu
+#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed of
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_action:3
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:3 of
+msgid "action to add"
+msgstr "action à ajouter"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_action:5 of
+msgid ""
+"condition to enable action. Defaults to None. If None, action is enabled "
+"if at least one object is selected."
+msgstr ""
+"condition pour activer l'action. Par défaut à None. Si None, l'action est"
+" activée si au moins un objet est sélectionné."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:5 of
+msgid ""
+"action category. Defaults to None. If None, action is added to the "
+"current category."
+msgstr ""
+"catégorie d'action. Par défaut à None. Si None, l'action est ajoutée à la"
+" catégorie actuelle."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:8 of
+msgid ""
+"add action to menu at this position. Defaults to None. If None, action is"
+" added at the end of the list."
+msgstr ""
+"ajouter l'action au menu à cette position. Par défaut à None. Si None, "
+"l'action est ajoutée à la fin de la liste."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:12
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:8 of
+msgid ""
+"add separator before action in menu (or after if pos is positive). "
+"Defaults to False."
+msgstr ""
+"ajouter un séparateur avant l'action dans le menu (ou après si pos est "
+"positif). Par défaut à False."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.create_all_actions:1 of
+msgid "Create all actions"
+msgstr "Créer toutes les actions"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:1 of
+msgid "Create new action and add it to list of actions."
+msgstr "Créer une nouvelle action et l'ajouter à la liste des actions."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:3 of
+msgid "action title"
+msgstr "titre de l'action"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:5 of
+msgid "add action to menu at this position. Defaults to None."
+msgstr "ajouter l'action au menu à cette position. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:11 of
+msgid "triggered callback. Defaults to None."
+msgstr "callback déclenché. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:13 of
+msgid "toggled callback. Defaults to None."
+msgstr "callback de type toggle. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:15 of
+msgid "shortcut. Defaults to None."
+msgstr "raccourci. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:17 of
+msgid "icon. Defaults to None."
+msgstr "icône. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:19 of
+msgid "tooltip. Defaults to None."
+msgstr "info-bulle. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:21 of
+msgid ""
+"selection condition. Defaults to None. If str, must be the name of a "
+"method of SelectCond, i.e. one of \"always\", \"exactly_one\", "
+"\"exactly_one_group\", \"at_least_one_group_or_one_object\", "
+"\"at_least_one\", \"at_least_two\", \"with_roi\"."
+msgstr ""
+"condition de sélection. Par défaut à None. Si str, doit être le nom d'une"
+" méthode de SelectCond, c'est-à-dire l'une des valeurs suivantes : "
+"\"always\", \"exactly_one\", \"exactly_one_group\", "
+"\"at_least_one_group_or_one_object\", \"at_least_one\", \"at_least_two\","
+" \"with_roi\"."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:28 of
+msgid "add action to context menu at this position. Defaults to None."
+msgstr "ajouter l'action au menu contextuel à cette position. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:31 of
+msgid ""
+"add separator before action in context menu (or after if context_menu_pos"
+" is positive). Defaults to False."
+msgstr ""
+"ajouter un séparateur avant l'action dans le menu contextuel (ou après si"
+" context_menu_pos est positif). Par défaut à False."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:35 of
+msgid "add action to toolbar at this position. Defaults to None."
+msgstr "ajouter l'action à la barre d'outils à cette position. Par défaut à None."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:38 of
+msgid ""
+"add separator before action in toolbar (or after if toolbar_pos is "
+"positive). Defaults to False."
+msgstr ""
+"ajouter un séparateur avant l'action dans la barre d'outils (ou après si "
+"toolbar_pos est positif). Par défaut à False."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
+msgid "Returns"
+msgstr "Renvoie"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:42 of
+msgid "new action"
+msgstr "nouvelle action"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
+msgid "Return type"
+msgstr "Type de retour"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_category:1
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:1 of
+msgid "Context manager for creating a new menu."
+msgstr "Gestionnaire de contexte pour créer un nouveau menu."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_category:3 of
+msgid "Action category"
+msgstr "Catégorie d'action"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_category
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu of
+msgid "Yields"
+msgstr "Renvoie (Yields)"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_category:5
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:5 of
+msgid "None"
+msgstr "None"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:3 of
+msgid "Menu title"
+msgstr "Titre du menu"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:1 of
+msgid "Update actions based on selected objects."
+msgstr "Mettre à jour les actions en fonction des objets sélectionnés."
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:3 of
+msgid "selected groups"
+msgstr "groupes sélectionnés"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:5 of
+msgid "selected objects"
+msgstr "objets sélectionnés"
+
+#: cdl.core.gui.actionhandler.ImageActionHandler:1 of
+msgid "Object handling image panel GUI interactions: actions, menus, ..."
+msgstr ""
+"Objet gérant les interactions GUI du panneau d'images : actions, menus, "
+"..."
+
+#~ msgid "Action handler (:mod:`cdl.core.gui.actionhandler`)"
+#~ msgstr "Gestionnaire d'actions (:mod:`cdl.core.gui.actionhandler`)"

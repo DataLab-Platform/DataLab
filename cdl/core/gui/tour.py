@@ -6,10 +6,10 @@
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 """
-Tour of DataLab features
-------------------------
+Tour
+====
 
-This module implements a tour of DataLab features.
+The :mod:`cdl.core.gui.tour` module implements a tour of DataLab features.
 
 A dialog box is displayed when the user launches DataLab for the first time or
 when the user clicks on the "Show tour" entry in the "?" menu.
@@ -42,6 +42,9 @@ The tour user experience is the following:
   stopped and the dialog box is closed. If the user clicks on "Show demo", the demo
   is started.
 
+.. autoclass:: Tour
+    :members:
+    :inherited-members:
 """
 
 from __future__ import annotations

@@ -1,0 +1,72 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.roieditor:2 of
+msgid "ROI editor"
+msgstr "Editeur de ROI"
+
+#: cdl.core.gui.roieditor:4 of
+msgid ""
+"The :mod:`cdl.core.gui.roieditor` module provides the ROI editor widgets "
+"for signals and images."
+msgstr "Le module :mod:`cdl.core.gui.roieditor` fournit les widgets de l'éditeur de ROI pour les signaux et les images."
+
+#: cdl.core.gui.roieditor:8 of
+msgid "Signal ROI editor"
+msgstr "Editeur de ROI de signal"
+
+#: cdl.core.gui.roieditor.SignalROIEditor:1 of
+msgid "Signal ROI Editor"
+msgstr "Editeur de ROI de signal"
+
+#: cdl.core.gui.roieditor.ImageROIEditor.setup_widget:1
+#: cdl.core.gui.roieditor.SignalROIEditor.setup_widget:1 of
+msgid "Setup ROI editor widget"
+msgstr "Configurer le widget de l'éditeur de ROI"
+
+#: cdl.core.gui.roieditor.SignalROIEditor.add_roi:1 of
+msgid "Simply add an ROI"
+msgstr "Ajouter simplement une ROI"
+
+#: cdl.core.gui.roieditor.ImageROIEditor.update_roi_titles:1
+#: cdl.core.gui.roieditor.SignalROIEditor.update_roi_titles:1 of
+msgid "Update ROI annotation titles"
+msgstr "Mettre à jour les titres des annotations de ROI"
+
+#: cdl.core.gui.roieditor.ImageROIEditor.get_roi_item_coords:1
+#: cdl.core.gui.roieditor.SignalROIEditor.get_roi_item_coords:1 of
+msgid "Return ROI item coords"
+msgstr "Retourner les coordonnées de l'élément ROI"
+
+#: cdl.core.gui.roieditor:14 of
+msgid "Image ROI editor"
+msgstr "Editeur de ROI d'image"
+
+#: cdl.core.gui.roieditor.ImageROIEditor:1 of
+msgid "Image ROI Editor"
+msgstr "Editeur de ROI d'image"
+
+#: cdl.core.gui.roieditor.ImageROIEditor.add_roi:1 of
+msgid "Add new ROI"
+msgstr "Ajouter une nouvelle ROI"
+
+#~ msgid "ROI editor (:mod:`cdl.core.gui.roieditor`)"
+#~ msgstr "Editeur de ROI (:mod:`cdl.core.gui.roieditor`)"

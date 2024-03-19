@@ -52,7 +52,8 @@ VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
 
 def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
-    """Create result image object for compute_11 function
+    """Create a result image object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
 
     Args:
         src: input image object
@@ -68,14 +69,15 @@ def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
 
 
 class Wrap11Func:
-    """Wrap a 1 array -> 1 array function to produce a 1 ``ImageObj`` -> 1 ``ImageObj``
-    function, which can be used inside DataLab's infrastructure to perform computations
-    with ``ImageProcessor``.
+    """Wrap a 1 array → 1 array function to produce a 1 image → 1 image function,
+    which can be used inside DataLab's infrastructure to perform computations with
+    :class:`cdl.core.gui.processor.signal.ImageProcessor`.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
 
-    The instance of this wrapper is callable and returns a ``ImageObj`` object.
+    The instance of this wrapper is callable and returns a :class:`cdl.obj.ImageObj`
+    object.
 
     Example:
 
@@ -90,7 +92,7 @@ class Wrap11Func:
         >>> ima1 = compute_add_noise(ima0)
 
     Args:
-        func: 1 array -> 1 array function
+        func: 1 array → 1 array function
     """
 
     def __init__(self, func: Callable) -> None:
@@ -106,7 +108,8 @@ class Wrap11Func:
 
 
 def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> SignalObj:
-    """Create result signal object for compute_11 function
+    """Create a result signal object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
 
     Args:
         src: input image object
@@ -123,7 +126,8 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
 def dst_n1n(
     src1: ImageObj, src2: ImageObj, name: str, suffix: str | None = None
 ) -> ImageObj:
-    """Create result image object for compute_n1n function
+    """Create a result image object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
 
     Args:
         src1: input image object
@@ -152,22 +156,28 @@ def dst_n1n(
 
 
 def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
-    """Compute addition between two images
+    """Add **dst** and **src** images and return **dst** image modified in place
 
     Args:
         dst: output image object
         src: input image object
+
+    Returns:
+        Output image object
     """
     dst.data += np.array(src.data, dtype=dst.data.dtype)
     return dst
 
 
 def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
-    """Compute product between two images
+    """Multiply **dst** and **src** images and return **dst** image modified in place
 
     Args:
         dst: output image object
         src: input image object
+
+    Returns:
+        Output image object
     """
     dst.data *= np.array(src.data, dtype=dst.data.dtype)
     return dst
@@ -186,7 +196,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Output image object
+        Result image object **src1** - **src2**
     """
     dst = dst_n1n(src1, src2, "difference")
     dst.data = src1.data - src2.data
@@ -201,7 +211,7 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Output image object
+        Result image object (**src1** - **src2**) / sqrt(2.0)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
     dst.data = (src1.data - src2.data) / np.sqrt(2.0)
@@ -218,7 +228,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Output image object
+        Result image object **src1** / **src2**
     """
     dst = dst_n1n(src1, src2, "division")
     dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)

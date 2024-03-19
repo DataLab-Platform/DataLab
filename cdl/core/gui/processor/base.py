@@ -4,10 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Base Processor GUI module
----------------------------------
-
-This module defines the base class for data processing GUIs.
+.. Base processor object (see parent package :mod:`cdl.core.gui.processor`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -260,7 +257,7 @@ class BaseProcessor(QC.QObject):
         comment: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Compute 11 function: 1 object in --> 1 object out.
+        """Compute 11 function: 1 object in → 1 object out.
 
         Args:
             func: function
@@ -284,7 +281,7 @@ class BaseProcessor(QC.QObject):
         title: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Compute 1n function: 1 object in --> n objects out.
+        """Compute 1n function: 1 object in → n objects out.
 
         Args:
             funcs: list of functions
@@ -425,7 +422,7 @@ class BaseProcessor(QC.QObject):
         comment: str | None = None,
         edit: bool | None = None,
     ) -> dict[str, ResultShape]:
-        """Compute 10 function: 1 object in --> 0 object out
+        """Compute 10 function: 1 object in → 0 object out
         (the result of this method is stored in original object's metadata).
 
         Args:
@@ -505,7 +502,7 @@ class BaseProcessor(QC.QObject):
         func_objs: Callable | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Compute n1 function: N(>=2) objects in --> 1 object out.
+        """Compute n1 function: N(>=2) objects in → 1 object out.
 
         Args:
             name: name of function
@@ -599,7 +596,7 @@ class BaseProcessor(QC.QObject):
         comment: str | None = None,
         edit: bool | None = None,
     ) -> None:
-        """Compute n1n function: N(>=1) objects + 1 object in --> N objects out.
+        """Compute n1n function: N(>=1) objects + 1 object in → N objects out.
 
         Examples: subtract, divide
 

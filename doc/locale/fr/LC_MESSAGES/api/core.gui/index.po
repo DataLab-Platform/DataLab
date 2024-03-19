@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui:2 of
+msgid "GUI"
+msgstr "GUI"
+
+#: cdl.core.gui:4 of
+msgid ""
+"The :mod:`cdl.core.gui` package contains functionnalities related to the "
+"graphical user interface (GUI) of the DataLab (CDL) project. Those "
+"features are mostly specific to DataLab and are not intended to be used "
+"independently."
+msgstr "Le paquet :mod:`cdl.core.gui` contient des fonctionnalités liées à l'interface graphique (GUI) du projet DataLab (CDL). Ces fonctionnalités sont principalement spécifiques à DataLab et ne sont pas destinées à être utilisées indépendamment."
+
+#: cdl.core.gui:8 of
+msgid ""
+"The purpose of this section of the documentation is to provide an "
+"overview of the DataLab GUI architecture and to describe the main "
+"features of the modules contained in this package. It is not intended to "
+"provide a detailed description of the GUI features, but rather to provide"
+" a starting point for the reader who wants to understand the DataLab "
+"internal architecture."
+msgstr ""
+"Le but de cette section de la documentation est de fournir un aperçu de "
+"l'architecture de l'interface graphique de DataLab et de décrire les "
+"principales fonctionnalités des modules contenus dans ce paquet. Il ne "
+"vise pas à fournir une description détaillée des fonctionnalités de "
+"l'interface graphique, mais plutôt à fournir un point de départ pour le "
+"lecteur qui souhaite comprendre l'architecture interne de DataLab."
+
+#: cdl.core.gui:14 of
+msgid ""
+"DataLab's main window is composed of several parts, each of them being "
+"handled by a specific module of this package:"
+msgstr ""
+"La fenêtre principale de DataLab est composée de plusieurs parties, "
+"chacune d'elles étant gérée par un module spécifique de ce paquet :"
+
+#: cdl.core.gui:17 of
+msgid ""
+"**Signal and image panels**: those panels are used to display signals and"
+" images and to provide a set of tools to manipulate them. Each data panel"
+" relies on a set of modules to handle the GUI features "
+"(:mod:`cdl.core.gui.actionhandler` and :mod:`cdl.core.gui.objectview`), "
+"the data model (:mod:`cdl.core.gui.objectmodel`), the data visualization "
+"(:mod:`cdl.core.gui.plothandler`), and the data processing "
+"(:mod:`cdl.core.gui.processor`)."
+msgstr ""
+"Les **Panneaux Signal et Image** : ces panneaux sont utilisés pour "
+"afficher des signaux et des images et pour fournir un ensemble d'outils "
+"pour les manipuler. Chaque panneau de données repose sur un ensemble de "
+"modules pour gérer les fonctionnalités de l'interface graphique "
+"(:mod:`cdl.core.gui.actionhandler` et :mod:`cdl.core.gui.objectview`), le"
+" modèle de données (:mod:`cdl.core.gui.objectmodel`), la visualisation "
+"des données (:mod:`cdl.core.gui.plothandler`), et le traitement des "
+"données (:mod:`cdl.core.gui.processor`)."
+
+#: cdl.core.gui:24 of
+msgid ""
+"**Macro panel**: this panel is used to display and run macros. It relies "
+"on the :mod:`cdl.core.gui.macroeditor` module to handle the macro edition"
+" and execution."
+msgstr ""
+"Le **Panneau Macro** : ce panneau est utilisé pour afficher et exécuter "
+"des macros. Il repose sur le module :mod:`cdl.core.gui.macroeditor` pour "
+"gérer l'édition et l'exécution des macros."
+
+#: cdl.core.gui:27 of
+msgid ""
+"**Specialized widgets**: those widgets are used to handle specific "
+"features such as ROI edition (:mod:`cdl.core.gui.roieditor`), Intensity "
+"profile edition (:mod:`cdl.core.gui.profiledialog`), etc."
+msgstr ""
+"Les **widgets spécialisés** : ces widgets sont utilisés pour gérer des "
+"fonctionnalités spécifiques telles que l'édition des ROI "
+"(:mod:`cdl.core.gui.roieditor`), l'édition des profils d'intensité "
+"(:mod:`cdl.core.gui.profiledialog`), etc."
+
+#: cdl.core.gui:35 of
+msgid "Submodule"
+msgstr "Sous-module"
+
+#: cdl.core.gui:36 of
+msgid "Purpose"
+msgstr "Objectif"
+
+#: cdl.core.gui:38 of
+msgid ":mod:`cdl.core.gui.main`"
+msgstr ""
+
+#: cdl.core.gui:39 of
+msgid "DataLab main window and application"
+msgstr "Fenêtre principale et application DataLab"
+
+#: cdl.core.gui:41 of
+msgid ":mod:`cdl.core.gui.panel`"
+msgstr ""
+
+#: cdl.core.gui:42 of
+msgid "Signal, image and macro panels"
+msgstr "Panneaux Signal, Image et Macro"
+
+#: cdl.core.gui:44 of
+msgid ":mod:`cdl.core.gui.actionhandler`"
+msgstr ""
+
+#: cdl.core.gui:45 of
+msgid "Application actions (menus, toolbars, context menu)"
+msgstr "Actions de l'application (menus, barres d'outils, menu contextuel)"
+
+#: cdl.core.gui:47 of
+msgid ":mod:`cdl.core.gui.objectview`"
+msgstr ""
+
+#: cdl.core.gui:48 of
+msgid "Widgets to display object (signal/image) trees"
+msgstr "Widgets pour afficher les arbres d'objets (signal/image)"
+
+#: cdl.core.gui:50 of
+msgid ":mod:`cdl.core.gui.plothandler`"
+msgstr ""
+
+#: cdl.core.gui:51 of
+msgid "`PlotPy` plot items for representing signals and images"
+msgstr "Items de visualisation `PlotPy` pour représenter des signaux et des images"
+
+#: cdl.core.gui:53 of
+msgid ":mod:`cdl.core.gui.roieditor`"
+msgstr ""
+
+#: cdl.core.gui:54 of
+msgid "ROI editor"
+msgstr "Editeur de ROI"
+
+#: cdl.core.gui:56 of
+msgid ":mod:`cdl.core.gui.processor`"
+msgstr ""
+
+#: cdl.core.gui:57 of
+msgid "Processor"
+msgstr "Processeur"
+
+#: cdl.core.gui:59 of
+msgid ":mod:`cdl.core.gui.docks`"
+msgstr ""
+
+#: cdl.core.gui:60 of
+msgid "Dock widgets"
+msgstr "Widgets dockables"
+
+#: cdl.core.gui:62 of
+msgid ":mod:`cdl.core.gui.h5io`"
+msgstr ""
+
+#: cdl.core.gui:63 of
+msgid "HDF5 input/output"
+msgstr "Entrée/sortie HDF5"
+
+#~ msgid "GUI (:mod:`cdl.core.gui`)"
+#~ msgstr "GUI (:mod:`cdl.core.gui`)"

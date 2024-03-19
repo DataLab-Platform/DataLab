@@ -52,14 +52,15 @@ VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
 
 def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
-    """Create result signal object for compute_11 function
+    """Create a result signal object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
 
     Args:
-        src (SignalObj): source signal
-        name (str): name of the function
+        src: source signal
+        name: name of the function
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = src.copy(title=f"{name}({src.short_id})")
     if suffix is not None:
@@ -68,14 +69,15 @@ def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
 
 
 class Wrap11Func:
-    """Wrap a 1 array -> 1 array function (the simple case of y1 = f(y0))
-    to produce a 1 ``SignalObj`` -> 1 ``SignalObj`` function, which can be used
-    inside DataLab's infrastructure to perform computations with ``SignalProcessor``.
+    """Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to produce
+    a 1 signal → 1 signal function, which can be used inside DataLab's infrastructure
+    to perform computations with :class:`cdl.core.gui.processor.signal.SignalProcessor`.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
 
-    The instance of this wrapper is callable and returns a ``SignalObj`` object.
+    The instance of this wrapper is callable and returns a :class:`cdl.obj.SignalObj`
+    object.
 
     Example:
 
@@ -91,7 +93,7 @@ class Wrap11Func:
         >>> sig1 = compute_square(sig0)
 
     Args:
-        func: 1 array -> 1 array function
+        func: 1 array → 1 array function
     """
 
     def __init__(self, func: Callable) -> None:
@@ -108,15 +110,16 @@ class Wrap11Func:
 
 
 def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = None):
-    """Create result signal object for compute_n1n function
+    """Create a result signal object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
 
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
-        name (str): name of the function
+        src1: source signal 1
+        src2: source signal 2
+        name: name of the function
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
     if suffix is not None:
@@ -137,11 +140,14 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
 
 
 def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Add signal to result signal
+    """Add **dst** and **src** signals and return **dst** signal modified in place
 
     Args:
-        dst (SignalObj): destination signal
-        src (SignalObj): source signal
+        dst: destination signal
+        src: source signal
+
+    Returns:
+        Modified **dst** signal
     """
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
@@ -150,11 +156,14 @@ def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
 
 
 def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Multiply signal to result signal
+    """Multiply **dst** and **src** signals and return **dst** signal modified in place
 
     Args:
-        dst (SignalObj): destination signal
-        src (SignalObj): source signal
+        dst: destination signal
+        src: source signal
+
+    Returns:
+        Modified **dst** signal
     """
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
@@ -170,12 +179,16 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
 def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute difference between two signals
 
+    .. note::
+
+        If uncertainty is available, it is propagated.
+
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
+        src1: source signal 1
+        src2: source signal 2
 
     Returns:
-        SignalObj: result signal object
+        Result signal object **src1** - **src2**
     """
     dst = dst_n1n(src1, src2, "difference")
     dst.y = src1.y - src2.y
@@ -187,12 +200,16 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
 def compute_quadratic_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute quadratic difference between two signals
 
+    .. note::
+
+        If uncertainty is available, it is propagated.
+
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
+        src1: source signal 1
+        src2: source signal 2
 
     Returns:
-        SignalObj: result signal object
+        Result signal object (**src1** - **src2**) / sqrt(2.0)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
     x1, y1 = src1.get_data()
@@ -209,11 +226,11 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute division between two signals
 
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
+        src1: source signal 1
+        src2: source signal 2
 
     Returns:
-        SignalObj: result signal object
+        Result signal object **src1** / **src2**
     """
     dst = dst_n1n(src1, src2, "division")
     x1, y1 = src1.get_data()
@@ -231,11 +248,11 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """Extract multiple regions of interest from data
 
     Args:
-        src (SignalObj): source signal
-        group (gds.DataSetGroup): group of parameters
+        src: source signal
+        group: group of parameters
 
     Returns:
-        SignalObj: signal with multiple regions of interest
+        Signal with multiple regions of interest
     """
     suffix = None
     if len(group.datasets) == 1:
@@ -258,11 +275,11 @@ def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
     """Extract single region of interest from data
 
     Args:
-        src (SignalObj): source signal
-        p (gds.DataSet): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: signal with single region of interest
+        Signal with single region of interest
     """
     dst = dst_11(src, "extract_single_roi", f"indexes={p.col1:d}:{p.col2:d}")
     x, y = src.get_data()
@@ -276,10 +293,10 @@ def compute_swap_axes(src: SignalObj) -> SignalObj:
     """Swap axes
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "swap_axes")
     x, y = src.get_data()
@@ -291,10 +308,10 @@ def compute_abs(src: SignalObj) -> SignalObj:
     """Compute absolute value
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     return Wrap11Func(np.abs)(src)
 
@@ -303,10 +320,10 @@ def compute_re(src: SignalObj) -> SignalObj:
     """Compute real part
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     return Wrap11Func(np.real)(src)
 
@@ -315,10 +332,10 @@ def compute_im(src: SignalObj) -> SignalObj:
     """Compute imaginary part
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     return Wrap11Func(np.imag)(src)
 
@@ -352,10 +369,10 @@ def compute_log10(src: SignalObj) -> SignalObj:
     """Compute Log10
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     return Wrap11Func(np.log10)(src)
 
@@ -373,11 +390,11 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     """Peak detection
 
     Args:
-        src (SignalObj): source signal
-        p (PeakDetectionParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
@@ -405,11 +422,11 @@ def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
     """Normalize data
 
     Args:
-        src (SignalObj): source signal
-        p (NormalizeYParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
@@ -421,10 +438,10 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     """Compute derivative
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
@@ -436,10 +453,10 @@ def compute_integral(src: SignalObj) -> SignalObj:
     """Compute integral
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "integral")
     x, y = src.get_data()
@@ -460,11 +477,11 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     """Compute linear calibration
 
     Args:
-        src (SignalObj): source signal
-        p (XYCalibrateParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "calibration", f"{p.axis}={p.a}*{p.axis}+{p.b}")
     x, y = src.get_data()
@@ -479,11 +496,11 @@ def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
     """Compute threshold clipping
 
     Args:
-        src (SignalObj): source signal
-        p (ThresholdParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "threshold", f"min={p.value}")
     x, y = src.get_data()
@@ -495,11 +512,11 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     """Compute maximum data clipping
 
     Args:
-        src (SignalObj): source signal
-        p (ClipParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "clip", f"max={p.value}")
     x, y = src.get_data()
@@ -511,11 +528,11 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     """Compute gaussian filter
 
     Args:
-        src (SignalObj): source signal
-        p (GaussianParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f}")
     x, y = src.get_data()
@@ -527,11 +544,11 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     """Compute moving average
 
     Args:
-        src (SignalObj): source signal
-        p (MovingAverageParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "moving_average", f"n={p.n:d}")
     x, y = src.get_data()
@@ -543,11 +560,11 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     """Compute moving median
 
     Args:
-        src (SignalObj): source signal
-        p (MovingMedianParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "moving_median", f"n={p.n:d}")
     x, y = src.get_data()
@@ -559,10 +576,10 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     """Compute Wiener filter
 
     Args:
-        src (SignalObj): source signal
+        src: source signal
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     return Wrap11Func(sps.wiener)(src)
 
@@ -571,11 +588,11 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute FFT
 
     Args:
-        src (SignalObj): source signal
-        p (FFTParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
@@ -587,11 +604,11 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """Compute iFFT
 
     Args:
-        src (SignalObj): source signal
-        p (FFTParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
@@ -672,11 +689,11 @@ def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     """Compute histogram
 
     Args:
-        src (SignalObj): source signal
-        p (HistogramParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     # Extract data from ROIs:
     datalist = []
@@ -734,12 +751,12 @@ def compute_interpolation(
     """Interpolate data
 
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
-        p (InterpolationParam): parameters
+        src1: source signal 1
+        src2: source signal 2
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     suffix = f"method={p.method}"
     if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
@@ -774,11 +791,11 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
     """Resample data
 
     Args:
-        src (SignalObj): source signal
-        p (ResampleParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     suffix = f"method={p.method}"
     if p.fill_value is not None and p.method in ("linear", "cubic", "pchip"):
@@ -809,11 +826,11 @@ def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
     """Detrend data
 
     Args:
-        src (SignalObj): source signal
-        p (DetrendingParam): parameters
+        src: source signal
+        p: parameters
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_11(src, "detrending", f"method={p.method}")
     x, y = src.get_data()
@@ -825,11 +842,11 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     """Compute convolution of two signals
 
     Args:
-        src1 (SignalObj): source signal 1
-        src2 (SignalObj): source signal 2
+        src1: source signal 1
+        src2: source signal 2
 
     Returns:
-        SignalObj: result signal object
+        Result signal object
     """
     dst = dst_n1n(src1, src2, "convolution")
     x1, y1 = src1.get_data()

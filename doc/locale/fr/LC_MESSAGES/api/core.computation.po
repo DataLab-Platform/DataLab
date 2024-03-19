@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 11:38+0100\n"
+"POT-Creation-Date: 2024-03-19 17:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -302,9 +302,9 @@ msgid "input signal or image object"
 msgstr "objet de signal ou d'image d'entrée"
 
 #: cdl.core.computation.base.new_signal_result:7
-#: cdl.core.computation.image.dst_11:4
-#: cdl.core.computation.image.dst_11_signal:4
-#: cdl.core.computation.image.dst_n1n:5 of
+#: cdl.core.computation.image.dst_11:5
+#: cdl.core.computation.image.dst_11_signal:5
+#: cdl.core.computation.image.dst_n1n:6 of
 msgid "name of the processing function"
 msgstr "nom de la fonction de traitement"
 
@@ -323,6 +323,7 @@ msgstr "étiquettes du signal de sortie"
 #: cdl.core.computation.base.new_signal_result
 #: cdl.core.computation.image.calc_with_osr
 #: cdl.core.computation.image.compute_abs
+#: cdl.core.computation.image.compute_add
 #: cdl.core.computation.image.compute_astype
 #: cdl.core.computation.image.compute_average_profile
 #: cdl.core.computation.image.compute_binning
@@ -346,6 +347,7 @@ msgstr "étiquettes du signal de sortie"
 #: cdl.core.computation.image.compute_logp1
 #: cdl.core.computation.image.compute_moving_average
 #: cdl.core.computation.image.compute_moving_median
+#: cdl.core.computation.image.compute_product
 #: cdl.core.computation.image.compute_profile
 #: cdl.core.computation.image.compute_quadratic_difference
 #: cdl.core.computation.image.compute_radial_profile
@@ -401,6 +403,7 @@ msgstr "étiquettes du signal de sortie"
 #: cdl.core.computation.image.restoration.compute_denoise_wavelet
 #: cdl.core.computation.image.rotate_obj_coords
 #: cdl.core.computation.signal.compute_abs
+#: cdl.core.computation.signal.compute_add
 #: cdl.core.computation.signal.compute_astype
 #: cdl.core.computation.signal.compute_calibration
 #: cdl.core.computation.signal.compute_clip
@@ -421,6 +424,7 @@ msgstr "étiquettes du signal de sortie"
 #: cdl.core.computation.signal.compute_moving_median
 #: cdl.core.computation.signal.compute_normalize
 #: cdl.core.computation.signal.compute_peak_detection
+#: cdl.core.computation.signal.compute_product
 #: cdl.core.computation.signal.compute_quadratic_difference
 #: cdl.core.computation.signal.compute_re
 #: cdl.core.computation.signal.compute_resampling
@@ -435,7 +439,7 @@ msgstr "Renvoie"
 
 #: cdl.core.computation.base.new_signal_result:12
 #: cdl.core.computation.image.compute_histogram:6
-#: cdl.core.computation.image.dst_11_signal:6 of
+#: cdl.core.computation.image.dst_11_signal:7 of
 msgid "Output signal object"
 msgstr "Objet de signal de sortie"
 
@@ -445,11 +449,13 @@ msgstr "Fonctionnalités de traitement du signal"
 
 #: cdl.core.computation.image.dst_11_signal:1
 #: cdl.core.computation.signal.dst_11:1 of
-msgid "Create result signal object for compute_11 function"
-msgstr "Créer un objet de signal résultant pour la fonction compute_11"
+msgid ""
+"Create a result signal object, as returned by the callback function of "
+"the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method"
+msgstr ""
 
 #: cdl.core.computation.signal.compute_abs:3
-#: cdl.core.computation.signal.compute_add:5
+#: cdl.core.computation.signal.compute_add:4
 #: cdl.core.computation.signal.compute_astype:3
 #: cdl.core.computation.signal.compute_calibration:3
 #: cdl.core.computation.signal.compute_clip:3
@@ -466,97 +472,63 @@ msgstr "Créer un objet de signal résultant pour la fonction compute_11"
 #: cdl.core.computation.signal.compute_moving_median:3
 #: cdl.core.computation.signal.compute_normalize:3
 #: cdl.core.computation.signal.compute_peak_detection:3
-#: cdl.core.computation.signal.compute_product:5
+#: cdl.core.computation.signal.compute_product:4
 #: cdl.core.computation.signal.compute_re:3
 #: cdl.core.computation.signal.compute_resampling:3
 #: cdl.core.computation.signal.compute_swap_axes:3
 #: cdl.core.computation.signal.compute_threshold:3
 #: cdl.core.computation.signal.compute_wiener:3
-#: cdl.core.computation.signal.dst_11:3
+#: cdl.core.computation.signal.dst_11:4
 #: cdl.core.computation.signal.extract_multiple_roi:3
 #: cdl.core.computation.signal.extract_single_roi:3 of
 msgid "source signal"
 msgstr "signal source"
 
-#: cdl.core.computation.signal.dst_11:5 cdl.core.computation.signal.dst_n1n:7
+#: cdl.core.computation.signal.dst_11:5 cdl.core.computation.signal.dst_n1n:6
 #: of
 msgid "name of the function"
 msgstr "nom de la fonction"
 
-#: cdl.core.computation.signal.compute_abs:6
-#: cdl.core.computation.signal.compute_calibration:8
-#: cdl.core.computation.signal.compute_clip:8
-#: cdl.core.computation.signal.compute_convolution:8
-#: cdl.core.computation.signal.compute_derivative:6
-#: cdl.core.computation.signal.compute_detrending:8
-#: cdl.core.computation.signal.compute_difference:8
-#: cdl.core.computation.signal.compute_division:8
-#: cdl.core.computation.signal.compute_fft:8
-#: cdl.core.computation.signal.compute_gaussian_filter:8
-#: cdl.core.computation.signal.compute_histogram:8
-#: cdl.core.computation.signal.compute_ifft:8
-#: cdl.core.computation.signal.compute_im:6
-#: cdl.core.computation.signal.compute_integral:6
-#: cdl.core.computation.signal.compute_interpolation:10
-#: cdl.core.computation.signal.compute_log10:6
-#: cdl.core.computation.signal.compute_moving_average:8
-#: cdl.core.computation.signal.compute_moving_median:8
-#: cdl.core.computation.signal.compute_normalize:8
-#: cdl.core.computation.signal.compute_peak_detection:8
-#: cdl.core.computation.signal.compute_quadratic_difference:8
-#: cdl.core.computation.signal.compute_re:6
-#: cdl.core.computation.signal.compute_resampling:8
-#: cdl.core.computation.signal.compute_swap_axes:6
-#: cdl.core.computation.signal.compute_threshold:8
-#: cdl.core.computation.signal.compute_wiener:6
-#: cdl.core.computation.signal.dst_11:8 cdl.core.computation.signal.dst_n1n:10
+#: cdl.core.computation.signal.compute_abs:5
+#: cdl.core.computation.signal.compute_astype:6
+#: cdl.core.computation.signal.compute_calibration:6
+#: cdl.core.computation.signal.compute_clip:6
+#: cdl.core.computation.signal.compute_convolution:6
+#: cdl.core.computation.signal.compute_derivative:5
+#: cdl.core.computation.signal.compute_detrending:6
+#: cdl.core.computation.signal.compute_fft:6
+#: cdl.core.computation.signal.compute_gaussian_filter:6
+#: cdl.core.computation.signal.compute_histogram:6
+#: cdl.core.computation.signal.compute_ifft:6
+#: cdl.core.computation.signal.compute_im:5
+#: cdl.core.computation.signal.compute_integral:5
+#: cdl.core.computation.signal.compute_interpolation:7
+#: cdl.core.computation.signal.compute_log10:5
+#: cdl.core.computation.signal.compute_moving_average:6
+#: cdl.core.computation.signal.compute_moving_median:6
+#: cdl.core.computation.signal.compute_normalize:6
+#: cdl.core.computation.signal.compute_peak_detection:6
+#: cdl.core.computation.signal.compute_re:5
+#: cdl.core.computation.signal.compute_resampling:6
+#: cdl.core.computation.signal.compute_swap_axes:5
+#: cdl.core.computation.signal.compute_threshold:6
+#: cdl.core.computation.signal.compute_wiener:5
+#: cdl.core.computation.signal.dst_11:7 cdl.core.computation.signal.dst_n1n:8
 #: of
-msgid "result signal object"
-msgstr "objet de signal résultant"
-
-#: cdl.core.computation.signal.compute_abs
-#: cdl.core.computation.signal.compute_calibration
-#: cdl.core.computation.signal.compute_clip
-#: cdl.core.computation.signal.compute_convolution
-#: cdl.core.computation.signal.compute_derivative
-#: cdl.core.computation.signal.compute_detrending
-#: cdl.core.computation.signal.compute_difference
-#: cdl.core.computation.signal.compute_division
-#: cdl.core.computation.signal.compute_fft
-#: cdl.core.computation.signal.compute_gaussian_filter
-#: cdl.core.computation.signal.compute_histogram
-#: cdl.core.computation.signal.compute_ifft
-#: cdl.core.computation.signal.compute_im
-#: cdl.core.computation.signal.compute_integral
-#: cdl.core.computation.signal.compute_interpolation
-#: cdl.core.computation.signal.compute_log10
-#: cdl.core.computation.signal.compute_moving_average
-#: cdl.core.computation.signal.compute_moving_median
-#: cdl.core.computation.signal.compute_normalize
-#: cdl.core.computation.signal.compute_peak_detection
-#: cdl.core.computation.signal.compute_quadratic_difference
-#: cdl.core.computation.signal.compute_re
-#: cdl.core.computation.signal.compute_resampling
-#: cdl.core.computation.signal.compute_swap_axes
-#: cdl.core.computation.signal.compute_threshold
-#: cdl.core.computation.signal.compute_wiener
-#: cdl.core.computation.signal.dst_11 cdl.core.computation.signal.dst_n1n
-#: cdl.core.computation.signal.extract_multiple_roi
-#: cdl.core.computation.signal.extract_single_roi of
-msgid "Return type"
-msgstr "Type de retour"
+msgid "Result signal object"
+msgstr "Objet signal résultat"
 
 #: cdl.core.computation.signal.Wrap11Func:1 of
 msgid ""
-"Wrap a 1 array -> 1 array function (the simple case of y1 = f(y0)) to "
-"produce a 1 ``SignalObj`` -> 1 ``SignalObj`` function, which can be used "
-"inside DataLab's infrastructure to perform computations with "
-"``SignalProcessor``."
+"Wrap a 1 array → 1 array function (the simple case of y1 = f(y0)) to "
+"produce a 1 signal → 1 signal function, which can be used inside "
+"DataLab's infrastructure to perform computations with "
+":class:`cdl.core.gui.processor.signal.SignalProcessor`."
 msgstr ""
-"Encapsule une fonction 1 tableau -> 1 tableau (le cas simple de y1 = "
-"f(y0)) pour produire une fonction 1 ``SignalObj`` -> 1 ``SignalObj``, qui"
+"Encapsule une fonction 1 tableau → 1 tableau (le cas simple de y1 = "
+"f(y0)) pour produire une fonction 1 signal → 1 signal, qui"
 " peut être utilisée à l'intérieur de l'infrastructure de DataLab pour "
-"effectuer des calculs avec ``SignalProcessor``."
+"effectuer des calculs avec :class:`cdl.core.gui.processor.signal.SignalProcessor`."
 
 #: cdl.core.computation.image.Wrap11Func:5
 #: cdl.core.computation.signal.Wrap11Func:5 of
@@ -570,81 +542,107 @@ msgstr ""
 
 #: cdl.core.computation.signal.Wrap11Func:8 of
 msgid ""
-"The instance of this wrapper is callable and returns a ``SignalObj`` "
-"object."
-msgstr ""
-"L'instance de cet encapsuleur est appelable et renvoie un objet "
-"``SignalObj``."
+"The instance of this wrapper is callable and returns a "
+":class:`cdl.obj.SignalObj` object."
+msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet :class:`cdl.obj.SignalObj`."
 
-#: cdl.core.computation.image.Wrap11Func:11
-#: cdl.core.computation.signal.Wrap11Func:11 of
+#: cdl.core.computation.image.Wrap11Func:12
+#: cdl.core.computation.signal.Wrap11Func:12 of
 msgid "Example"
 msgstr "Exemple"
 
-#: cdl.core.computation.image.Wrap11Func:22
-#: cdl.core.computation.signal.Wrap11Func:23 of
-msgid "1 array -> 1 array function"
-msgstr "Fonction 1 tableau -> 1 tableau"
+#: cdl.core.computation.image.Wrap11Func:23
+#: cdl.core.computation.signal.Wrap11Func:24 of
+msgid "1 array → 1 array function"
+msgstr "Fonction 1 tableau → 1 tableau"
 
 #: cdl.core.computation.signal.dst_n1n:1 of
-msgid "Create result signal object for compute_n1n function"
-msgstr "Créer un objet de signal résultant pour la fonction compute_n1n"
+msgid ""
+"Create a result signal object, as returned by the callback function of "
+"the :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method"
+msgstr "Crée un objet signal résultat, tel que renvoyé par la fonction de rappel de la méthode :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n`"
 
 #: cdl.core.computation.signal.compute_convolution:3
-#: cdl.core.computation.signal.compute_difference:3
+#: cdl.core.computation.signal.compute_difference:7
 #: cdl.core.computation.signal.compute_division:3
 #: cdl.core.computation.signal.compute_interpolation:3
-#: cdl.core.computation.signal.compute_quadratic_difference:3
-#: cdl.core.computation.signal.dst_n1n:3 of
+#: cdl.core.computation.signal.compute_quadratic_difference:7
+#: cdl.core.computation.signal.dst_n1n:4 of
 msgid "source signal 1"
 msgstr "signal source 1"
 
-#: cdl.core.computation.signal.compute_convolution:5
-#: cdl.core.computation.signal.compute_difference:5
-#: cdl.core.computation.signal.compute_division:5
-#: cdl.core.computation.signal.compute_interpolation:5
-#: cdl.core.computation.signal.compute_quadratic_difference:5
+#: cdl.core.computation.signal.compute_convolution:4
+#: cdl.core.computation.signal.compute_difference:8
+#: cdl.core.computation.signal.compute_division:4
+#: cdl.core.computation.signal.compute_interpolation:4
+#: cdl.core.computation.signal.compute_quadratic_difference:8
 #: cdl.core.computation.signal.dst_n1n:5 of
 msgid "source signal 2"
 msgstr "signal source 2"
 
 #: cdl.core.computation.signal.compute_add:1 of
-msgid "Add signal to result signal"
-msgstr "Ajoute un signal au signal résultant"
+msgid ""
+"Add **dst** and **src** signals and return **dst** signal modified in "
+"place"
+msgstr "Ajoute les signaux **dst** et **src** et renvoie le signal **dst** modifié sur place"
 
 #: cdl.core.computation.signal.compute_add:3
 #: cdl.core.computation.signal.compute_product:3 of
 msgid "destination signal"
 msgstr "signal de destination"
 
+#: cdl.core.computation.signal.compute_add:6
+#: cdl.core.computation.signal.compute_product:6 of
+msgid "Modified **dst** signal"
+msgstr "Signal **dst** modifié"
+
 #: cdl.core.computation.signal.compute_product:1 of
-msgid "Multiply signal to result signal"
-msgstr "Multiplie un signal au signal résultant"
+msgid ""
+"Multiply **dst** and **src** signals and return **dst** signal modified "
+"in place"
+msgstr "Multiplie les signaux **dst** et **src** et renvoie le signal **dst** modifié sur place"
 
 #: cdl.core.computation.signal.compute_difference:1 of
 msgid "Compute difference between two signals"
 msgstr "Calculer la différence entre deux signaux"
 
+#: cdl.core.computation.signal.compute_difference:5
+#: cdl.core.computation.signal.compute_quadratic_difference:5 of
+msgid "If uncertainty is available, it is propagated."
+msgstr "Si une incertitude est disponible, elle est propagée."
+
+#: cdl.core.computation.signal.compute_difference:10 of
+msgid "Result signal object **src1** - **src2**"
+msgstr "Objet signal résultat **src1** - **src2**"
+
 #: cdl.core.computation.signal.compute_quadratic_difference:1 of
 msgid "Compute quadratic difference between two signals"
 msgstr "Calculer la différence quadratique entre deux signaux"
 
+#: cdl.core.computation.signal.compute_quadratic_difference:10 of
+msgid "Result signal object (**src1** - **src2**) / sqrt(2.0)"
+msgstr "Objet signal résultat (**src1** - **src2**) / sqrt(2.0)"
+
 #: cdl.core.computation.signal.compute_division:1 of
 msgid "Compute division between two signals"
 msgstr "Calculer la division entre deux signaux"
+
+#: cdl.core.computation.signal.compute_division:6 of
+msgid "Result signal object **src1** / **src2**"
+msgstr "Objet signal résultat **src1** / **src2**"
 
 #: cdl.core.computation.image.extract_multiple_roi:1
 #: cdl.core.computation.signal.extract_multiple_roi:1 of
 msgid "Extract multiple regions of interest from data"
 msgstr "Extrait plusieurs régions d'intérêt des données"
 
-#: cdl.core.computation.signal.extract_multiple_roi:5 of
+#: cdl.core.computation.signal.extract_multiple_roi:4 of
 msgid "group of parameters"
 msgstr "groupe de paramètres"
 
-#: cdl.core.computation.signal.extract_multiple_roi:8 of
-msgid "signal with multiple regions of interest"
-msgstr "signal avec plusieurs régions d'intérêt"
+#: cdl.core.computation.signal.extract_multiple_roi:6 of
+msgid "Signal with multiple regions of interest"
+msgstr "Signal avec plusieurs régions d'intérêt"
 
 #: cdl.core.computation.signal.extract_single_roi:1 of
 msgid "Extract single region of interest from data"
@@ -691,27 +689,27 @@ msgstr "Extrait une seule région d'intérêt des données"
 #: cdl.core.computation.image.restoration.compute_denoise_tv:4
 #: cdl.core.computation.image.restoration.compute_denoise_wavelet:4
 #: cdl.core.computation.signal.compute_astype:4
-#: cdl.core.computation.signal.compute_calibration:5
-#: cdl.core.computation.signal.compute_clip:5
-#: cdl.core.computation.signal.compute_detrending:5
-#: cdl.core.computation.signal.compute_fft:5
-#: cdl.core.computation.signal.compute_gaussian_filter:5
-#: cdl.core.computation.signal.compute_histogram:5
-#: cdl.core.computation.signal.compute_ifft:5
-#: cdl.core.computation.signal.compute_interpolation:7
-#: cdl.core.computation.signal.compute_moving_average:5
-#: cdl.core.computation.signal.compute_moving_median:5
-#: cdl.core.computation.signal.compute_normalize:5
-#: cdl.core.computation.signal.compute_peak_detection:5
-#: cdl.core.computation.signal.compute_resampling:5
-#: cdl.core.computation.signal.compute_threshold:5
-#: cdl.core.computation.signal.extract_single_roi:5 of
+#: cdl.core.computation.signal.compute_calibration:4
+#: cdl.core.computation.signal.compute_clip:4
+#: cdl.core.computation.signal.compute_detrending:4
+#: cdl.core.computation.signal.compute_fft:4
+#: cdl.core.computation.signal.compute_gaussian_filter:4
+#: cdl.core.computation.signal.compute_histogram:4
+#: cdl.core.computation.signal.compute_ifft:4
+#: cdl.core.computation.signal.compute_interpolation:5
+#: cdl.core.computation.signal.compute_moving_average:4
+#: cdl.core.computation.signal.compute_moving_median:4
+#: cdl.core.computation.signal.compute_normalize:4
+#: cdl.core.computation.signal.compute_peak_detection:4
+#: cdl.core.computation.signal.compute_resampling:4
+#: cdl.core.computation.signal.compute_threshold:4
+#: cdl.core.computation.signal.extract_single_roi:4 of
 msgid "parameters"
 msgstr "paramètres"
 
-#: cdl.core.computation.signal.extract_single_roi:8 of
-msgid "signal with single region of interest"
-msgstr "signal avec une seule région d'intérêt"
+#: cdl.core.computation.signal.extract_single_roi:6 of
+msgid "Signal with single region of interest"
+msgstr "Signal avec une seule région d'intérêt"
 
 #: cdl.core.computation.signal.compute_swap_axes:1 of
 msgid "Swap axes"
@@ -739,10 +737,6 @@ msgstr "Convertir les paramètres du type de données du signal"
 #: cdl.core.computation.signal.compute_astype:1 of
 msgid "Convert data type"
 msgstr "Convertit le type de données"
-
-#: cdl.core.computation.signal.compute_astype:6 of
-msgid "Result signal object"
-msgstr "Objet de signal résultant"
 
 #: cdl.core.computation.signal.compute_log10:1 of
 msgid "Compute Log10"
@@ -876,8 +870,10 @@ msgid "Base image processing features"
 msgstr "Fonctionnalités de traitement d'image de base"
 
 #: cdl.core.computation.image.dst_11:1 of
-msgid "Create result image object for compute_11 function"
-msgstr "Créer un objet d'image résultant pour la fonction compute_11"
+msgid ""
+"Create a result image object, as returned by the callback function of the"
+" :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method"
+msgstr "Crée un objet image résultat, tel que renvoyé par la fonction de rappel de la méthode :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11`"
 
 #: cdl.core.computation.image.calc_with_osr:3
 #: cdl.core.computation.image.compute_abs:3
@@ -916,9 +912,9 @@ msgstr "Créer un objet d'image résultant pour la fonction compute_11"
 #: cdl.core.computation.image.compute_swap_axes:3
 #: cdl.core.computation.image.compute_threshold:3
 #: cdl.core.computation.image.compute_wiener:3
-#: cdl.core.computation.image.dst_11:3
-#: cdl.core.computation.image.dst_11_signal:3
-#: cdl.core.computation.image.dst_n1n:3 cdl.core.computation.image.dst_n1n:4
+#: cdl.core.computation.image.dst_11:4
+#: cdl.core.computation.image.dst_11_signal:4
+#: cdl.core.computation.image.dst_n1n:4 cdl.core.computation.image.dst_n1n:5
 #: cdl.core.computation.image.edges.compute_canny:3
 #: cdl.core.computation.image.edges.compute_farid:3
 #: cdl.core.computation.image.edges.compute_farid_h:3
@@ -956,14 +952,13 @@ msgid "input image object"
 msgstr "objet d'image d'entrée"
 
 #: cdl.core.computation.image.compute_abs:5
+#: cdl.core.computation.image.compute_add:6
 #: cdl.core.computation.image.compute_astype:6
 #: cdl.core.computation.image.compute_average_profile:6
 #: cdl.core.computation.image.compute_binning:6
 #: cdl.core.computation.image.compute_butterworth:6
 #: cdl.core.computation.image.compute_calibration:6
 #: cdl.core.computation.image.compute_clip:6
-#: cdl.core.computation.image.compute_difference:6
-#: cdl.core.computation.image.compute_division:6
 #: cdl.core.computation.image.compute_fft:6
 #: cdl.core.computation.image.compute_flatfield:7
 #: cdl.core.computation.image.compute_fliph:5
@@ -975,8 +970,8 @@ msgstr "objet d'image d'entrée"
 #: cdl.core.computation.image.compute_logp1:6
 #: cdl.core.computation.image.compute_moving_average:6
 #: cdl.core.computation.image.compute_moving_median:6
+#: cdl.core.computation.image.compute_product:6
 #: cdl.core.computation.image.compute_profile:6
-#: cdl.core.computation.image.compute_quadratic_difference:6
 #: cdl.core.computation.image.compute_radial_profile:6
 #: cdl.core.computation.image.compute_re:5
 #: cdl.core.computation.image.compute_resize:6
@@ -986,7 +981,7 @@ msgstr "objet d'image d'entrée"
 #: cdl.core.computation.image.compute_swap_axes:5
 #: cdl.core.computation.image.compute_threshold:6
 #: cdl.core.computation.image.compute_wiener:5
-#: cdl.core.computation.image.dst_11:6 cdl.core.computation.image.dst_n1n:7
+#: cdl.core.computation.image.dst_11:7 cdl.core.computation.image.dst_n1n:8
 #: cdl.core.computation.image.edges.compute_canny:6
 #: cdl.core.computation.image.edges.compute_farid:5
 #: cdl.core.computation.image.edges.compute_farid_h:5
@@ -1002,7 +997,7 @@ msgstr "objet d'image d'entrée"
 #: cdl.core.computation.image.edges.compute_sobel:5
 #: cdl.core.computation.image.edges.compute_sobel_h:5
 #: cdl.core.computation.image.edges.compute_sobel_v:5
-#: cdl.core.computation.image.exposure.compute_adjust_gamma:7
+#: cdl.core.computation.image.exposure.compute_adjust_gamma:6
 #: cdl.core.computation.image.exposure.compute_adjust_log:6
 #: cdl.core.computation.image.exposure.compute_adjust_sigmoid:6
 #: cdl.core.computation.image.exposure.compute_equalize_adapthist:6
@@ -1025,30 +1020,30 @@ msgstr "Objet d'image de sortie"
 
 #: cdl.core.computation.image.Wrap11Func:1 of
 msgid ""
-"Wrap a 1 array -> 1 array function to produce a 1 ``ImageObj`` -> 1 "
-"``ImageObj`` function, which can be used inside DataLab's infrastructure "
-"to perform computations with ``ImageProcessor``."
+"Wrap a 1 array → 1 array function to produce a 1 image → 1 image "
+"function, which can be used inside DataLab's infrastructure to perform "
+"computations with :class:`cdl.core.gui.processor.signal.ImageProcessor`."
 msgstr ""
-"Encapsule une fonction 1 tableau -> 1 tableau pour produire une fonction "
-"1 ``ImageObj`` -> 1 ``ImageObj``, qui peut être utilisée à l'intérieur de"
+"Encapsule une fonction 1 tableau → 1 tableau pour produire une fonction "
+"1 image → 1 image, qui peut être utilisée à l'intérieur de"
 " l'infrastructure de DataLab pour effectuer des calculs avec "
-"``ImageProcessor``."
+":class:`cdl.core.gui.processor.signal.ImageProcessor`."
 
 #: cdl.core.computation.image.Wrap11Func:8 of
 msgid ""
-"The instance of this wrapper is callable and returns a ``ImageObj`` "
-"object."
-msgstr ""
-"L'instance de cet encapsuleur est appelable et renvoie un objet "
-"``ImageObj``."
+"The instance of this wrapper is callable and returns a "
+":class:`cdl.obj.ImageObj` object."
+msgstr "L'instance de cet encapsuleur est appelable et renvoie un objet :class:`cdl.obj.ImageObj`."
 
 #: cdl.core.computation.image.dst_n1n:1 of
-msgid "Create result image object for compute_n1n function"
-msgstr "Créer un objet d'image résultant pour la fonction compute_n1n"
+msgid ""
+"Create a result image object, as returned by the callback function of the"
+" :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method"
+msgstr "Crée un objet image résultat, tel que renvoyé par la fonction de rappel de la méthode :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n`"
 
 #: cdl.core.computation.image.compute_add:1 of
-msgid "Compute addition between two images"
-msgstr "Calculer l'addition entre deux images"
+msgid "Add **dst** and **src** images and return **dst** image modified in place"
+msgstr "Ajoute les images **dst** et **src** et renvoie l'image **dst** modifiée sur place"
 
 #: cdl.core.computation.image.compute_add:3
 #: cdl.core.computation.image.compute_product:3 of
@@ -1056,20 +1051,34 @@ msgid "output image object"
 msgstr "objet d'image résultant"
 
 #: cdl.core.computation.image.compute_product:1 of
-msgid "Compute product between two images"
-msgstr "Calculer le produit entre deux images"
+msgid ""
+"Multiply **dst** and **src** images and return **dst** image modified in "
+"place"
+msgstr "Multiplie les images **dst** et **src** et renvoie l'image **dst** modifiée sur place"
 
 #: cdl.core.computation.image.compute_difference:1 of
 msgid "Compute difference between two images"
 msgstr "Calcule la différence entre deux images"
 
+#: cdl.core.computation.image.compute_difference:6 of
+msgid "Result image object **src1** - **src2**"
+msgstr "Objet image résultat **src1** - **src2**"
+
 #: cdl.core.computation.image.compute_quadratic_difference:1 of
 msgid "Compute quadratic difference between two images"
 msgstr "Calcule la différence quadratique entre deux images"
 
+#: cdl.core.computation.image.compute_quadratic_difference:6 of
+msgid "Result image object (**src1** - **src2**) / sqrt(2.0)"
+msgstr "Objet image résultat (**src1** - **src2**) / sqrt(2.0)"
+
 #: cdl.core.computation.image.compute_division:1 of
 msgid "Compute division between two images"
 msgstr "Calcule la division entre deux images"
+
+#: cdl.core.computation.image.compute_division:6 of
+msgid "Result image object **src1** / **src2**"
+msgstr "Objet image résultat **src1** / **src2**"
 
 #: cdl.core.computation.image.FlatFieldParam:1 of
 msgid "Flat-field parameters"
@@ -1341,7 +1350,9 @@ msgstr "image d'entrée"
 msgid ""
 "Return diameter coords for the circle contour enclosing image values "
 "above threshold (FWHM)"
-msgstr "Retourne les coordonnées du diamètre pour le contour de cercle contenant les valeurs d'image au-dessus du seuil (LMH)"
+msgstr ""
+"Retourne les coordonnées du diamètre pour le contour de cercle contenant "
+"les valeurs d'image au-dessus du seuil (LMH)"
 
 #: cdl.core.computation.image.compute_enclosing_circle:5
 #: cdl.core.computation.image.get_enclosing_circle_coords:6 of
@@ -1634,944 +1645,3 @@ msgstr "Détection de taches à l'aide d'OpenCV"
 #: cdl.core.computation.image.detection.compute_blob_opencv:1 of
 msgid "Compute blobs using OpenCV"
 msgstr "Détection de taches à l'aide d'OpenCV"
-
-#~ msgid ""
-#~ "Gamma correction :param src: input image"
-#~ " object :type src: ImageObj :param p:"
-#~ " parameters :type p: AdjustGammaParam"
-#~ msgstr ""
-#~ "Correction gamma :param src: objet "
-#~ "d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "AdjustGammaParam"
-
-#~ msgid ""
-#~ "Compute log correction :param src: input"
-#~ " image object :type src: ImageObj "
-#~ ":param p: parameters :type p: "
-#~ "AdjustLogParam"
-#~ msgstr ""
-#~ "Calculer la correction logarithmique :param"
-#~ " src: objet d'image d'entrée :type "
-#~ "src: ImageObj :param p: paramètres :type"
-#~ " p: AdjustLogParam"
-
-#~ msgid ""
-#~ "Compute sigmoid correction :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "AdjustSigmoidParam"
-#~ msgstr ""
-#~ "Calculer la correction sigmoïde :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj :param p: paramètres :type "
-#~ "p: AdjustSigmoidParam"
-
-#~ msgid ""
-#~ "Rescale image intensity levels :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj :param p: parameters :type p:"
-#~ " RescaleIntensityParam"
-#~ msgstr ""
-#~ "Rééchelonner les niveaux d'intensité de "
-#~ "l'image :param src: objet d'image "
-#~ "d'entrée :type src: ImageObj :param p:"
-#~ " paramètres :type p: RescaleIntensityParam"
-
-#~ msgid ""
-#~ "Histogram equalization :param src: input "
-#~ "image object :type src: ImageObj :param"
-#~ " p: parameters :type p: EqualizeHistParam"
-#~ msgstr ""
-#~ "Égalisation d'histogramme :param src: objet"
-#~ " d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "EqualizeHistParam"
-
-#~ msgid ""
-#~ "Adaptive histogram equalization :param src:"
-#~ " input image object :type src: "
-#~ "ImageObj :param p: parameters :type p:"
-#~ " EqualizeAdaptHistParam"
-#~ msgstr ""
-#~ "Égalisation d'histogramme adaptatif :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj :param p: paramètres :type "
-#~ "p: EqualizeAdaptHistParam"
-
-#~ msgid ""
-#~ "Compute Total Variation denoising :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj :param p: parameters :type p:"
-#~ " DenoiseTVParam"
-#~ msgstr ""
-#~ "Calculer le débruitage de variation "
-#~ "totale :param src: objet d'image "
-#~ "d'entrée :type src: ImageObj :param p:"
-#~ " paramètres :type p: DenoiseTVParam"
-
-#~ msgid ""
-#~ "Compute bilateral filter denoising :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj :param p: parameters :type p:"
-#~ " DenoiseBilateralParam"
-#~ msgstr ""
-#~ "Calculer le débruitage du filtre "
-#~ "bilatéral :param src: objet d'image "
-#~ "d'entrée :type src: ImageObj :param p:"
-#~ " paramètres :type p: DenoiseBilateralParam"
-
-#~ msgid ""
-#~ "Compute Wavelet denoising :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "DenoiseWaveletParam"
-#~ msgstr ""
-#~ "Calculer le débruitage d'ondelettes :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj :param p: paramètres :type "
-#~ "p: DenoiseWaveletParam"
-
-#~ msgid ""
-#~ "Denoise using White Top-Hat :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj :param p: parameters :type p:"
-#~ " MorphologyParam"
-#~ msgstr ""
-#~ "Débruitage à l'aide de White Top-"
-#~ "Hat :param src: objet d'image d'entrée"
-#~ " :type src: ImageObj :param p: "
-#~ "paramètres :type p: MorphologyParam"
-
-#~ msgid ""
-#~ "Compute White Top-Hat :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "MorphologyParam"
-#~ msgstr ""
-#~ "Calculer White Top-Hat :param src: "
-#~ "objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " MorphologyParam"
-
-#~ msgid ""
-#~ "Compute Black Top-Hat :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "MorphologyParam"
-#~ msgstr ""
-#~ "Calculer Black Top-Hat :param src: "
-#~ "objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " MorphologyParam"
-
-#~ msgid ""
-#~ "Compute Erosion :param src: input image"
-#~ " object :type src: ImageObj :param p:"
-#~ " parameters :type p: MorphologyParam"
-#~ msgstr ""
-#~ "Calculer l'érosion :param src: objet "
-#~ "d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "MorphologyParam"
-
-#~ msgid ""
-#~ "Compute Dilation :param src: input image"
-#~ " object :type src: ImageObj :param p:"
-#~ " parameters :type p: MorphologyParam"
-#~ msgstr ""
-#~ "Calculer la dilatation :param src: objet"
-#~ " d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "MorphologyParam"
-
-#~ msgid ""
-#~ "Compute morphological opening :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "MorphologyParam"
-#~ msgstr ""
-#~ "Calculer l'ouverture morphologique :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " MorphologyParam"
-
-#~ msgid ""
-#~ "Compute morphological closing :param src: "
-#~ "input image object :type src: ImageObj"
-#~ " :param p: parameters :type p: "
-#~ "MorphologyParam"
-#~ msgstr ""
-#~ "Calculer la fermeture morphologique :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj :param p: paramètres :type "
-#~ "p: MorphologyParam"
-
-#~ msgid ""
-#~ "Compute Canny filter :param src: input"
-#~ " image object :type src: ImageObj "
-#~ ":param p: parameters :type p: CannyParam"
-#~ msgstr ""
-#~ "Calculer le filtre de Canny :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj :param p: paramètres :type "
-#~ "p: CannyParam"
-
-#~ msgid ""
-#~ "Compute Roberts filter :param src: input"
-#~ " image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Roberts :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute Prewitt filter :param src: input"
-#~ " image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Prewitt :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute horizontal Prewitt filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Prewitt horizontal"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid ""
-#~ "Compute vertical Prewitt filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Prewitt vertical"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid "Compute Sobel filter :param src: input image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Sobel :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute horizontal Sobel filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Sobel horizontal"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid ""
-#~ "Compute vertical Sobel filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Sobel vertical "
-#~ ":param src: objet d'image d'entrée :type"
-#~ " src: ImageObj"
-
-#~ msgid ""
-#~ "Compute Scharr filter :param src: input"
-#~ " image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Scharr :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute horizontal Scharr filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Scharr horizontal"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid ""
-#~ "Compute vertical Scharr filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Scharr vertical"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid "Compute Farid filter :param src: input image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Farid :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute horizontal Farid filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Farid horizontal"
-#~ " :param src: objet d'image d'entrée "
-#~ ":type src: ImageObj"
-
-#~ msgid ""
-#~ "Compute vertical Farid filter :param "
-#~ "src: input image object :type src: "
-#~ "ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Farid vertical "
-#~ ":param src: objet d'image d'entrée :type"
-#~ " src: ImageObj"
-
-#~ msgid ""
-#~ "Compute Laplace filter :param src: input"
-#~ " image object :type src: ImageObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Laplace :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute 2D peak detection :param image:"
-#~ " input image :type image: ImageObj "
-#~ ":param p: parameters :type p: "
-#~ "Peak2DDetectionParam"
-#~ msgstr ""
-#~ "Calculer la détection de pics 2D "
-#~ ":param image: image d'entrée :type "
-#~ "image: ImageObj :param p: paramètres "
-#~ ":type p: Peak2DDetectionParam"
-
-#~ msgid ""
-#~ "Compute blobs using Difference of "
-#~ "Gaussian method :param image: input "
-#~ "image :type image: ImageObj :param p:"
-#~ " parameters :type p: BlobDOGParam"
-#~ msgstr ""
-#~ "Calculer les taches à l'aide de la"
-#~ " méthode de différence de Gauss "
-#~ ":param image: image d'entrée :type "
-#~ "image: ImageObj :param p: paramètres "
-#~ ":type p: BlobDOGParam"
-
-#~ msgid ""
-#~ "Compute blobs using Determinant of "
-#~ "Hessian method :param image: input image"
-#~ " :type image: ImageObj :param p: "
-#~ "parameters :type p: BlobDOHParam"
-#~ msgstr ""
-#~ "Calculer les taches à l'aide de la"
-#~ " méthode du déterminant de Hessian "
-#~ ":param image: image d'entrée :type "
-#~ "image: ImageObj :param p: paramètres "
-#~ ":type p: BlobDOHParam"
-
-#~ msgid ""
-#~ "Compute blobs using Laplacian of "
-#~ "Gaussian method :param image: input "
-#~ "image :type image: ImageObj :param p:"
-#~ " parameters :type p: BlobLOGParam"
-#~ msgstr ""
-#~ "Calculer les taches à l'aide de la"
-#~ " méthode du Laplacien de Gauss :param"
-#~ " image: image d'entrée :type image: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " BlobLOGParam"
-
-#~ msgid ""
-#~ "Compute blobs using OpenCV :param image:"
-#~ " input image :type image: ImageObj "
-#~ ":param p: parameters :type p: "
-#~ "BlobOpenCVParam"
-#~ msgstr ""
-#~ "Calculer les taches à l'aide d'OpenCV"
-#~ " :param image: image d'entrée :type "
-#~ "image: ImageObj :param p: paramètres "
-#~ ":type p: BlobOpenCVParam"
-
-#~ msgid ""
-#~ "Add signal to result signal :param "
-#~ "dst: destination signal :type dst: "
-#~ "SignalObj :param src: source signal "
-#~ ":type src: SignalObj"
-#~ msgstr ""
-#~ "Ajouter un signal au signal résultant"
-#~ " :param dst: signal de destination "
-#~ ":type dst: SignalObj :param src: signal"
-#~ " source :type src: SignalObj"
-
-#~ msgid ""
-#~ "Multiply signal to result signal :param"
-#~ " dst: destination signal :type dst: "
-#~ "SignalObj :param src: source signal "
-#~ ":type src: SignalObj"
-#~ msgstr ""
-#~ "Multiplier le signal au signal résultant"
-#~ " :param dst: signal de destination "
-#~ ":type dst: SignalObj :param src: signal"
-#~ " source :type src: SignalObj"
-
-#~ msgid ""
-#~ "Compute difference between two signals "
-#~ ":param src1: source signal 1 :type "
-#~ "src1: SignalObj :param src2: source "
-#~ "signal 2 :type src2: SignalObj"
-#~ msgstr ""
-#~ "Calculer la différence entre deux "
-#~ "signaux :param src1: signal source 1 "
-#~ ":type src1: SignalObj :param src2: "
-#~ "signal source 2 :type src2: SignalObj"
-
-#~ msgid ""
-#~ "Compute quadratic difference between two "
-#~ "signals :param src1: source signal 1 "
-#~ ":type src1: SignalObj :param src2: "
-#~ "source signal 2 :type src2: SignalObj"
-#~ msgstr ""
-#~ "Calculer la différence quadratique entre "
-#~ "deux signaux :param src1: signal source"
-#~ " 1 :type src1: SignalObj :param src2:"
-#~ " signal source 2 :type src2: "
-#~ "SignalObj"
-
-#~ msgid ""
-#~ "Compute division between two signals "
-#~ ":param src1: source signal 1 :type "
-#~ "src1: SignalObj :param src2: source "
-#~ "signal 2 :type src2: SignalObj"
-#~ msgstr ""
-#~ "Calculer la division entre deux signaux"
-#~ " :param src1: signal source 1 :type"
-#~ " src1: SignalObj :param src2: signal "
-#~ "source 2 :type src2: SignalObj"
-
-#~ msgid ""
-#~ "Extract multiple regions of interest "
-#~ "from data :param src: source signal "
-#~ ":type src: SignalObj :param group: group"
-#~ " of parameters :type group: "
-#~ "gds.DataSetGroup"
-#~ msgstr ""
-#~ "Extraire plusieurs régions d'intérêt des "
-#~ "données :param src: signal source :type"
-#~ " src: SignalObj :param group: groupe "
-#~ "de paramètres :type group: gds.DataSetGroup"
-
-#~ msgid ""
-#~ "Extract single region of interest from"
-#~ " data :param src: source signal :type"
-#~ " src: SignalObj :param p: parameters "
-#~ ":type p: gds.DataSet"
-#~ msgstr ""
-#~ "Extraire une seule région d'intérêt des"
-#~ " données :param src: signal source "
-#~ ":type src: SignalObj :param p: "
-#~ "paramètres :type p: gds.DataSet"
-
-#~ msgid "Swap axes :param src: source signal :type src: SignalObj"
-#~ msgstr "Permuter les axes :param src: signal source :type src: SignalObj"
-
-#~ msgid "Compute absolute value :param src: source signal :type src: SignalObj"
-#~ msgstr ""
-#~ "Calculer la valeur absolue :param src:"
-#~ " signal source :type src: SignalObj"
-
-#~ msgid "Compute real part :param src: source signal :type src: SignalObj"
-#~ msgstr ""
-#~ "Calculer la partie réelle :param src:"
-#~ " signal source :type src: SignalObj"
-
-#~ msgid "Compute imaginary part :param src: source signal :type src: SignalObj"
-#~ msgstr ""
-#~ "Calculer la partie imaginaire :param "
-#~ "src: signal source :type src: SignalObj"
-
-#~ msgid "Convert data type :param src: source signal :param p: parameters"
-#~ msgstr ""
-#~ "Convertir le type de données :param "
-#~ "src: signal source :param p: paramètres"
-
-#~ msgid "Compute Log10 :param src: source signal :type src: SignalObj"
-#~ msgstr "Calculer Log10 :param src: signal source :type src: SignalObj"
-
-#~ msgid ""
-#~ "Peak detection :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: PeakDetectionParam"
-#~ msgstr ""
-#~ "Détection de pics :param src: signal "
-#~ "source :type src: SignalObj :param p:"
-#~ " paramètres :type p: PeakDetectionParam"
-
-#~ msgid ""
-#~ "Normalize data :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: NormalizeYParam"
-#~ msgstr ""
-#~ "Normaliser les données :param src: "
-#~ "signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "NormalizeYParam"
-
-#~ msgid "Compute derivative :param src: source signal :type src: SignalObj"
-#~ msgstr "Calculer la dérivée :param src: signal source :type src: SignalObj"
-
-#~ msgid "Compute integral :param src: source signal :type src: SignalObj"
-#~ msgstr "Calculer l'intégrale :param src: signal source :type src: SignalObj"
-
-#~ msgid ""
-#~ "Compute linear calibration :param src: "
-#~ "source signal :type src: SignalObj "
-#~ ":param p: parameters :type p: "
-#~ "XYCalibrateParam"
-#~ msgstr ""
-#~ "Calculer l'étalonnage linéaire :param src: "
-#~ "signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "XYCalibrateParam"
-
-#~ msgid ""
-#~ "Compute threshold clipping :param src: "
-#~ "source signal :type src: SignalObj "
-#~ ":param p: parameters :type p: "
-#~ "ThresholdParam"
-#~ msgstr ""
-#~ "Calculer le rognage du seuil :param "
-#~ "src: signal source :type src: SignalObj"
-#~ " :param p: paramètres :type p: "
-#~ "ThresholdParam"
-
-#~ msgid ""
-#~ "Compute maximum data clipping :param "
-#~ "src: source signal :type src: SignalObj"
-#~ " :param p: parameters :type p: "
-#~ "ClipParam"
-#~ msgstr ""
-#~ "Calculer le rognage des données "
-#~ "maximales :param src: signal source "
-#~ ":type src: SignalObj :param p: "
-#~ "paramètres :type p: ClipParam"
-
-#~ msgid ""
-#~ "Compute gaussian filter :param src: "
-#~ "source signal :type src: SignalObj "
-#~ ":param p: parameters :type p: "
-#~ "GaussianParam"
-#~ msgstr ""
-#~ "Calculer le filtre gaussien :param src:"
-#~ " signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "GaussianParam"
-
-#~ msgid ""
-#~ "Compute moving average :param src: "
-#~ "source signal :type src: SignalObj "
-#~ ":param p: parameters :type p: "
-#~ "MovingAverageParam"
-#~ msgstr ""
-#~ "Calculer la moyenne mobile :param src:"
-#~ " signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "MovingAverageParam"
-
-#~ msgid ""
-#~ "Compute moving median :param src: source"
-#~ " signal :type src: SignalObj :param "
-#~ "p: parameters :type p: MovingMedianParam"
-#~ msgstr ""
-#~ "Calculer la médiane mobile :param src:"
-#~ " signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "MovingMedianParam"
-
-#~ msgid "Compute Wiener filter :param src: source signal :type src: SignalObj"
-#~ msgstr ""
-#~ "Calculer le filtre de Wiener :param "
-#~ "src: signal source :type src: SignalObj"
-
-#~ msgid ""
-#~ "Compute FFT :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: FFTParam"
-#~ msgstr ""
-#~ "Calculer FFT :param src: signal source"
-#~ " :type src: SignalObj :param p: "
-#~ "paramètres :type p: FFTParam"
-
-#~ msgid ""
-#~ "Compute iFFT :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: FFTParam"
-#~ msgstr ""
-#~ "Calculer iFFT :param src: signal source"
-#~ " :type src: SignalObj :param p: "
-#~ "paramètres :type p: FFTParam"
-
-#~ msgid ""
-#~ "Interpolate data :param src1: source "
-#~ "signal 1 :type src1: SignalObj :param"
-#~ " src2: source signal 2 :type src2:"
-#~ " SignalObj :param p: parameters :type "
-#~ "p: InterpolationParam"
-#~ msgstr ""
-#~ "Interpoler les données :param src1: "
-#~ "signal source 1 :type src1: SignalObj"
-#~ " :param src2: signal source 2 :type"
-#~ " src2: SignalObj :param p: paramètres "
-#~ ":type p: InterpolationParam"
-
-#~ msgid ""
-#~ "Resample data :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: ResampleParam"
-#~ msgstr ""
-#~ "Rééchantillonner les données :param src: "
-#~ "signal source :type src: SignalObj "
-#~ ":param p: paramètres :type p: "
-#~ "ResampleParam"
-
-#~ msgid ""
-#~ "Detrend data :param src: source signal"
-#~ " :type src: SignalObj :param p: "
-#~ "parameters :type p: DetrendingParam"
-#~ msgstr ""
-#~ "Éliminer la tendance des données :param"
-#~ " src: signal source :type src: "
-#~ "SignalObj :param p: paramètres :type p:"
-#~ " DetrendingParam"
-
-#~ msgid ""
-#~ "Compute convolution of two signals "
-#~ ":param src1: source signal 1 :type "
-#~ "src1: SignalObj :param src2: source "
-#~ "signal 2 :type src2: SignalObj"
-#~ msgstr ""
-#~ "Calculer la convolution de deux signaux"
-#~ " :param src1: signal source 1 :type"
-#~ " src1: SignalObj :param src2: signal "
-#~ "source 2 :type src2: SignalObj"
-
-#~ msgid ""
-#~ "Compute difference between two images "
-#~ ":param src1: input image object :param"
-#~ " src2: input image object"
-#~ msgstr ""
-#~ "Calculer la différence entre deux images"
-#~ " :param src1: objet d'image d'entrée "
-#~ ":type src1: ImageObj :param src2: objet"
-#~ " d'image d'entrée :type src2: ImageObj"
-
-#~ msgid ""
-#~ "Compute quadratic difference between two "
-#~ "images :param src1: input image object"
-#~ " :param src2: input image object"
-#~ msgstr ""
-#~ "Calculer la différence quadratique entre "
-#~ "deux images :param src1: objet d'image"
-#~ " d'entrée :type src1: ImageObj :param "
-#~ "src2: objet d'image d'entrée :type src2:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute division between two images "
-#~ ":param src1: input image object :param"
-#~ " src2: input image object"
-#~ msgstr ""
-#~ "Calculer la division entre deux images"
-#~ " :param src1: objet d'image d'entrée "
-#~ ":type src1: ImageObj :param src2: objet"
-#~ " d'image d'entrée :type src2: ImageObj"
-
-#~ msgid ""
-#~ "Compute flat field correction :param "
-#~ "src1: raw data image object :param "
-#~ "src2: flat field image object :param "
-#~ "p: flat field parameters :type p: "
-#~ "FlatFieldParam"
-#~ msgstr ""
-#~ "Calculer la correction de champ plat "
-#~ ":param src1: objet d'image de données"
-#~ " brutes :type src1: ImageObj :param "
-#~ "src2: objet d'image de champ plat "
-#~ ":type src2: ImageObj :param p: "
-#~ "paramètres de champ plat :type p: "
-#~ "FlatFieldParam"
-
-#~ msgid ""
-#~ "Compute log10(z+n) :param src: input "
-#~ "image object :param p: parameters :type"
-#~ " p: LogP1Param"
-#~ msgstr ""
-#~ "Calculer log10(z+n) :param src: objet "
-#~ "d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: LogP1Param"
-
-#~ msgid ""
-#~ "Apply rotation to coords associated to"
-#~ " image obj :param angle: rotation "
-#~ "angle (in degrees) :type angle: float"
-#~ " :param obj: image object :param "
-#~ "orig: original image object :param "
-#~ "coords: coordinates to rotate :type "
-#~ "coords: numpy.ndarray"
-#~ msgstr ""
-#~ "Appliquer la rotation aux coordonnées "
-#~ "associées à l'objet d'image :param "
-#~ "angle: angle de rotation (en degrés) "
-#~ ":type angle: float :param obj: objet "
-#~ "d'image :type obj: ImageObj :param orig:"
-#~ " objet d'image original :type orig: "
-#~ "ImageObj :param coords: coordonnées à "
-#~ "faire pivoter :type coords: numpy.ndarray"
-
-#~ msgid ""
-#~ "Rotate data :param src: input image "
-#~ "object :param p: parameters :type p: "
-#~ "RotateParam"
-#~ msgstr ""
-#~ "Rotation des données :param src: objet"
-#~ " d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "RotateParam"
-
-#~ msgid "Rotate data 90° :param src: input image object"
-#~ msgstr ""
-#~ "Rotation des données 90° :param src: "
-#~ "objet d'image d'entrée :type src: "
-#~ "ImageObj"
-
-#~ msgid "Rotate data 270° :param src: input image object"
-#~ msgstr ""
-#~ "Rotation des données 270° :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj"
-
-#~ msgid "Flip data horizontally :param src: input image object"
-#~ msgstr ""
-#~ "Retourner les données horizontalement :param"
-#~ " src: objet d'image d'entrée :type "
-#~ "src: ImageObj"
-
-#~ msgid "Flip data vertically :param src: input image object"
-#~ msgstr ""
-#~ "Retourner les données verticalement :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Zooming function :param src: input image"
-#~ " object :param p: parameters :type p:"
-#~ " ResizeParam"
-#~ msgstr ""
-#~ "Fonction de zoom :param src: objet "
-#~ "d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "ResizeParam"
-
-#~ msgid ""
-#~ "Binning function on data :param src: "
-#~ "input image object :param param: "
-#~ "parameters :type param: BinningParam"
-#~ msgstr ""
-#~ "Fonction de binning sur les données "
-#~ ":param src: objet d'image d'entrée :type"
-#~ " src: ImageObj :param param: paramètres "
-#~ ":type param: BinningParam"
-
-#~ msgid ""
-#~ "Extract multiple regions of interest "
-#~ "from data :param src: input image "
-#~ "object :param group: parameters defining "
-#~ "the regions of interest :type group: "
-#~ "gds.DataSetGroup"
-#~ msgstr ""
-#~ "Extraire plusieurs régions d'intérêt des "
-#~ "données :param src: objet d'image "
-#~ "d'entrée :type src: ImageObj :param "
-#~ "group: paramètres définissant les régions "
-#~ "d'intérêt :type group: gds.DataSetGroup"
-
-#~ msgid ""
-#~ "Extract single ROI :param src: input "
-#~ "image object :param p: ROI parameters"
-#~ " :type p: gds.DataSet"
-#~ msgstr ""
-#~ "Extraire une seule région d'intérêt "
-#~ ":param src: objet d'image d'entrée :type"
-#~ " src: ImageObj :param p: paramètres "
-#~ "de la région d'intérêt :type p: "
-#~ "gds.DataSet"
-
-#~ msgid ""
-#~ "Compute horizontal or vertical profile "
-#~ ":param src: input image object :param"
-#~ " p: parameters"
-#~ msgstr ""
-#~ "Calculer le profil horizontal ou "
-#~ "vertical :param src: objet d'image "
-#~ "d'entrée :param p: paramètres"
-
-#~ msgid ""
-#~ "Compute horizontal or vertical average "
-#~ "profile :param src: input image object"
-#~ " :param p: parameters"
-#~ msgstr ""
-#~ "Calculer le profil horizontal ou "
-#~ "vertical moyen :param src: objet d'image"
-#~ " d'entrée :param p: paramètres"
-
-#~ msgid "Swap image axes :param src: input image object"
-#~ msgstr ""
-#~ "Permuter les axes de l'image :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid "Compute absolute value :param src: input image object"
-#~ msgstr ""
-#~ "Calculer la valeur absolue :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj"
-
-#~ msgid "Compute real part :param src: input image object"
-#~ msgstr ""
-#~ "Calculer la partie réelle :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj"
-
-#~ msgid "Compute imaginary part :param src: input image object"
-#~ msgstr ""
-#~ "Calculer la partie imaginaire :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Convert image data type :param src: "
-#~ "input image object :param p: parameters"
-#~ msgstr ""
-#~ "Convertir le type de données de "
-#~ "l'image :param src: objet d'image "
-#~ "d'entrée :param p: paramètres"
-
-#~ msgid "Compute log10 :param src: input image object"
-#~ msgstr "Calculer log10 :param src: objet d'image d'entrée :type src: ImageObj"
-
-#~ msgid ""
-#~ "Compute linear calibration :param src: "
-#~ "input image object :param param: "
-#~ "calibration parameters :type param: "
-#~ "ZCalibrateParam"
-#~ msgstr ""
-#~ "Calculer l'étalonnage linéaire :param src: "
-#~ "objet d'image d'entrée :type src: "
-#~ "ImageObj :param param: paramètres d'étalonnage"
-#~ " :type param: ZCalibrateParam"
-
-#~ msgid ""
-#~ "Apply thresholding :param src: input "
-#~ "image object :param p: parameters :type"
-#~ " p: ThresholdParam"
-#~ msgstr ""
-#~ "Appliquer le seuillage :param src: objet"
-#~ " d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: "
-#~ "ThresholdParam"
-
-#~ msgid ""
-#~ "Apply clipping :param src: input image"
-#~ " object :param p: parameters :type p:"
-#~ " ClipParam"
-#~ msgstr ""
-#~ "Appliquer le rognage :param src: objet"
-#~ " d'image d'entrée :type src: ImageObj "
-#~ ":param p: paramètres :type p: ClipParam"
-
-#~ msgid ""
-#~ "Compute gaussian filter :param src: "
-#~ "input image object :param p: parameters"
-#~ " :type p: GaussianParam"
-#~ msgstr ""
-#~ "Calculer le filtre gaussien :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " GaussianParam"
-
-#~ msgid ""
-#~ "Compute moving average :param src: input"
-#~ " image object :param p: parameters "
-#~ ":type p: MovingAverageParam"
-#~ msgstr ""
-#~ "Calculer la moyenne mobile :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " MovingAverageParam"
-
-#~ msgid ""
-#~ "Compute moving median :param src: input"
-#~ " image object :param p: parameters "
-#~ ":type p: MovingMedianParam"
-#~ msgstr ""
-#~ "Calculer la médiane mobile :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " MovingMedianParam"
-
-#~ msgid "Compute Wiener filter :param src: input image object"
-#~ msgstr ""
-#~ "Calculer le filtre de Wiener :param "
-#~ "src: objet d'image d'entrée :type src:"
-#~ " ImageObj"
-
-#~ msgid ""
-#~ "Compute FFT :param src: input image "
-#~ "object :param p: parameters :type p: "
-#~ "FFTParam"
-#~ msgstr ""
-#~ "Calculer FFT :param src: objet d'image"
-#~ " d'entrée :type src: ImageObj :param "
-#~ "p: paramètres :type p: FFTParam"
-
-#~ msgid ""
-#~ "Compute inverse FFT :param src: input"
-#~ " image object :param p: parameters "
-#~ ":type p: FFTParam"
-#~ msgstr ""
-#~ "Calculer l'inverse de FFT :param src:"
-#~ " objet d'image d'entrée :type src: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " FFTParam"
-
-#~ msgid ""
-#~ "Compute Butterworth filter :param src: "
-#~ "input image object :param p: parameters"
-#~ " :type p: ButterworthParam"
-#~ msgstr ""
-#~ "Calculer le filtre de Butterworth :param"
-#~ " src: objet d'image d'entrée :type "
-#~ "src: ImageObj :param p: paramètres :type"
-#~ " p: ButterworthParam"
-
-#~ msgid ""
-#~ "Return centroid coordinates :param data: "
-#~ "input data :type data: numpy.ndarray"
-#~ msgstr ""
-#~ "Retourner les coordonnées du centre de"
-#~ " gravité :param data: données d'entrée "
-#~ ":type data: numpy.ndarray"
-
-#~ msgid "Compute centroid :param image: input image"
-#~ msgstr ""
-#~ "Calculer le centre de gravité :param "
-#~ "image: image d'entrée :type image: "
-#~ "ImageObj"
-
-#~ msgid ""
-#~ "Compute Hough circles :param image: "
-#~ "input image :param p: parameters :type"
-#~ " p: HoughCircleParam"
-#~ msgstr ""
-#~ "Calculer les cercles de Hough :param "
-#~ "image: image d'entrée :type image: "
-#~ "ImageObj :param p: paramètres :type p:"
-#~ " HoughCircleParam"

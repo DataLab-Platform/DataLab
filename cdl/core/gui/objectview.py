@@ -4,32 +4,34 @@
 # (see cdl/LICENSE for details)
 
 """
-Object (signal/image) view widgets
-----------------------------------
+Object view
+===========
 
-This module provides widgets to display object (signal/image) trees.
+The :mod:`cdl.core.gui.objectview` module provides widgets to display object
+(signal/image) trees.
 
-.. autosummary::
-    :toctree:
+.. note::
 
-    SimpleObjectTree
-    GetObjectDialog
-    ObjectView
-
-.. autoclass:: SimpleObjectTree
-    :members:
-
-.. autoclass:: GetObjectDialog
-    :members:
-
-.. autoclass:: ObjectView
-    :members:
-
-.. note:: This module provides tree widgets to display signals, images and groups. It
+    This module provides tree widgets to display signals, images and groups. It
     is important to note that, by design, the user can only select either individual
     signals/images or groups, but not both at the same time. This is an important
     design choice, as it allows to simplify the user experience, and to avoid
     potential confusion between the two types of selection.
+
+Simple object tree
+------------------
+
+.. autoclass:: SimpleObjectTree
+
+Get object dialog
+-----------------
+
+.. autoclass:: GetObjectDialog
+
+Object view
+-----------
+
+.. autoclass:: ObjectView
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

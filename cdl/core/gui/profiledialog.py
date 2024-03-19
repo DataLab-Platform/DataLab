@@ -3,7 +3,14 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
-"""Profile extraction dialog feature"""
+"""
+Profile dialog
+==============
+
+The :mod:`cdl.core.gui.profiledialog` module provides the profile extraction dialog.
+
+.. autoclass:: ProfileExtractionDialog
+"""
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 

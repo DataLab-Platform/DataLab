@@ -4,7 +4,11 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab settings
+Settings
+========
+
+The :mod:`cdl.core.gui.settings` module provides the DataLab settings dialog
+and related classes.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

@@ -4,7 +4,12 @@
 # (see cdl/LICENSE for details)
 
 """
-Module providing DataLab Macro editor widget
+Macro editor
+============
+
+The :mod:`cdl.core.gui.macroeditor` module provides the macro editor widget for DataLab.
+
+.. autoclass:: Macro
 """
 
 from __future__ import annotations
@@ -39,8 +44,8 @@ class Macro(QC.QObject, ObjItf, metaclass=MacroMeta):
     """Object representing a macro: editor, path, open/save actions, etc.
 
     Args:
-        console (PythonShellWidget): Python shell widget
-        name (str | None): Macro name. Defaults to None.
+        console: Python shell widget
+        name: Macro name. Defaults to None.
     """
 
     PREFIX = "m"

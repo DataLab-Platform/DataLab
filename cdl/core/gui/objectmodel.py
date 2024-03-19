@@ -4,36 +4,34 @@
 # (see cdl/LICENSE for details)
 
 """
-Object (signal/image/group) data model
---------------------------------------
+Object model
+============
 
-This module defines the object data model used by the GUI to store signals,
-images and groups.
+The :mod:`cdl.core.gui.objectmodel` module defines the object data model used by the
+GUI to store signals, images and groups.
 
 The model is based on a hierarchical tree of objects, with two levels:
 
-- The top level is a list of groups (ObjectGroup instances)
-- The second level is a list of objects (SignalObj or ImageObj instances)
+- The top level is a list of groups (`ObjectGroup` instances)
+- The second level is a list of objects (`SignalObj` or `ImageObj` instances)
 
-The model is implemented by the ObjectModel class.
+The model is implemented by the `ObjectModel` class.
 
-The ObjectGroup class represents a group of objects. It is a container for
-SignalObj and ImageObj instances.
+Object group
+------------
 
-The ObjectModel class is a container for ObjectGroup instances, as well as
-a container for SignalObj and ImageObj instances.
-
-.. autosummary::
-    :toctree:
-
-    ObjectModel
-    ObjectGroup
-
-.. autoclass:: ObjectModel
-    :members:
+The `ObjectGroup` class represents a group of objects. It is a container for
+`SignalObj` and `ImageObj` instances.
 
 .. autoclass:: ObjectGroup
-    :members:
+
+Object model
+------------
+
+The `ObjectModel` class is a container for ObjectGroup instances, as well as
+a container for `SignalObj` and `ImageObj` instances.
+
+.. autoclass:: ObjectModel
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -91,7 +89,12 @@ def fix_titles(
 
 
 class ObjectGroup:
-    """Represents a DataLab object group"""
+    """Represents a DataLab object group
+
+    Args:
+        title: group title
+        model: object model
+    """
 
     PREFIX = "g"
 

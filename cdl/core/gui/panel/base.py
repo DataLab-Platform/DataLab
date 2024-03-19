@@ -4,41 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Panel widgets (core.gui.panel)
---------------------------------------
-
-Signal and Image Panel widgets relie on components:
-
-  * `ObjectProp`: widget handling signal/image properties
-  using a guidata DataSet
-
-  * `core.gui.panel.objecthandler.ObjectHandler`: widget handling signal/image list
-
-  * `core.gui.panel.actionhandler.SignalActionHandler` or `ImageActionHandler`:
-  classes handling Qt actions
-
-  * `core.gui.panel.plothandler.SignalPlotHandler` or `ImagePlotHandler`:
-  classes handling PlotPy plot items
-
-  * `core.gui.panel.processor.signal.SignalProcessor` or
-  `core.gui.panel.processor.image.ImageProcessor`: classes handling computing features
-
-  * `core.gui.panel.roieditor.SignalROIEditor` or `ImageROIEditor`:
-  classes handling ROI editor widgets
-
-.. autosummary::
-    :toctree:
-
-    ObjectProp
-    BaseDataPanel
-
-.. autoclass:: ObjectProp
-    :members:
-
-.. autoclass:: BaseDataPanel
-    :members:
-    :inherited-members:
-
+.. Base panel objects (see parent package :mod:`cdl.core.gui.processor`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

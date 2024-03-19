@@ -32,10 +32,25 @@ and their purpose:
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Public features:
 
    algorithms
    param
    obj
    core.computation
    proxy
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Internal features:
+
+   core.gui/index
+   core.gui/main
+   core.gui/panel
+   core.gui/actionhandler
+   core.gui/objectview
+   core.gui/plothandler
+   core.gui/roieditor
+   core.gui/processor
+   core.gui/docks
+   core.gui/h5io

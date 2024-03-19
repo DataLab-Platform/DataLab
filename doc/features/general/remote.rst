@@ -128,15 +128,28 @@ Public API: additional methods
 
 The remote control class methods (either using the proxy or the remote client)
 may be completed with additional methods which are dynamically added at
-runtime. This mechanism allows to access the methods of the "processor"
-objects of DataLab.
+runtime. This mechanism allows to access the methods of the processors of DataLab
+(see :mod:`cdl.core.gui.processor`).
+
+Signal processor
+~~~~~~~~~~~~~~~~
+
+When working with signals, the methods of :class:`cdl.core.gui.processor.signal.SignalProcessor`
+may be accessed.
 
 .. automodule:: cdl.core.gui.processor.signal
     :members:
+    :no-index:
+
+Image processor
+~~~~~~~~~~~~~~~
+
+When working with images, the methods of :class:`cdl.core.gui.processor.image.ImageProcessor`
+may be accessed.
 
 .. automodule:: cdl.core.gui.processor.image
     :members:
-
+    :no-index:
 
 .. _XML-RPC: https://docs.python.org/3/library/xmlrpc.html
 

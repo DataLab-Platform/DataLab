@@ -4,7 +4,13 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab HDF5 open/save module
+HDF5 I/O
+========
+
+The :mod:`cdl.core.gui.h5io` module provides the HDF5 file open/save into/from
+DataLab data model/main window.
+
+.. autoclass:: H5InputOutput
 """
 
 from __future__ import annotations
@@ -29,8 +35,11 @@ if TYPE_CHECKING:
 
 
 class H5InputOutput:
-    """Object handling HDF5 file open/save
-    into/from DataLab data model/main window"""
+    """Object handling HDF5 file open/save into/from DataLab data model/main window
+
+    Args:
+        mainwindow: Main window
+    """
 
     def __init__(self, mainwindow: CDLMainWindow) -> None:
         self.mainwindow = mainwindow

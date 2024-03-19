@@ -4,19 +4,22 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab Plot item list classes
-------------------------------
+Plot handler
+============
 
-These classes handle PlotPy plot items for signal and image panels.
+The :mod:`cdl.core.gui.plothandler` module provides plot handlers for signal
+and image panels, that is, classes handling `PlotPy` plot items for representing
+signals and images.
 
-.. autosummary::
-
-    SignalPlotHandler
-    ImagePlotHandler
+Signal plot handler
+-------------------
 
 .. autoclass:: SignalPlotHandler
     :members:
     :inherited-members:
+
+Image plot handler
+------------------
 
 .. autoclass:: ImagePlotHandler
     :members:

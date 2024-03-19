@@ -1,0 +1,886 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:40+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.processor:2 of
+msgid "Processor"
+msgstr "Processeur"
+
+#: cdl.core.gui.processor:4 of
+msgid ""
+"The :mod:`cdl.core.gui.processor` package provides the **processor "
+"objects** for signals and images."
+msgstr "Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur** pour les signaux et les images."
+
+#: cdl.core.gui.processor:7 of
+msgid ""
+"Processor objects are the bridge between the computation modules (in "
+":mod:`cdl.core.computation`) and the GUI modules (in "
+":mod:`cdl.core.gui`). They are used to call the computation functions and"
+" to update the GUI from inside the data panel objects."
+msgstr ""
+"Les objets processeur sont le pont entre les modules de calcul (dans "
+":mod:`cdl.core.computation`) et les modules GUI (dans "
+":mod:`cdl.core.gui`). Ils sont utilisés pour appeler les fonctions de "
+"calcul et pour mettre à jour l'interface utilisateur depuis l'intérieur "
+"des objets de panneau de données."
+
+#: cdl.core.gui.processor:12 of
+msgid ""
+"When implementing a processing feature in DataLab, the steps are usually "
+"the following:"
+msgstr ""
+"Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les "
+"étapes sont généralement les suivantes :"
+
+#: cdl.core.gui.processor:14 of
+msgid ""
+"Add an action in the :mod:`cdl.core.gui.actionhandler` module to trigger "
+"the processing feature from the GUI (e.g. a menu item or a toolbar "
+"button)."
+msgstr ""
+"Ajout d'une action dans le module :mod:`cdl.core.gui.actionhandler` pour "
+"déclencher la fonction de traitement depuis l'interface utilisateur (par "
+"exemple, un élément de menu ou un bouton de barre d'outils)."
+
+#: cdl.core.gui.processor:17 of
+msgid ""
+"Implement the computation function in the :mod:`cdl.core.computation` "
+"module (that would eventually call the algorithm from the "
+":mod:`cdl.algorithms` module)."
+msgstr ""
+"Implémentation de la fonction de calcul dans le module "
+":mod:`cdl.core.computation` (qui appellerait éventuellement l'algorithme "
+"du module :mod:`cdl.algorithms`)."
+
+#: cdl.core.gui.processor:20 of
+msgid ""
+"Implement the processor object method in this package to call the "
+"computation function and eventually update the GUI."
+msgstr ""
+"Implémentation de la méthode de l'objet processeur dans ce paquet pour "
+"appeler la fonction de calcul et éventuellement mettre à jour l'interface"
+" utilisateur."
+
+#: cdl.core.gui.processor:23 of
+msgid ""
+"The processor objects are organized in submodules according to their "
+"purpose."
+msgstr ""
+"Les objets processeur sont organisés en sous-modules en fonction de leur "
+"objectif."
+
+#: cdl.core.gui.processor:25 of
+msgid "The following submodules are available:"
+msgstr "Les sous-modules suivants sont disponibles :"
+
+#: cdl.core.gui.processor:27 of
+msgid ":mod:`cdl.core.gui.processor.base`: Common processing features"
+msgstr ":mod:`cdl.core.gui.processor.base`: Fonctions de traitement communes"
+
+#: cdl.core.gui.processor:28 of
+msgid ":mod:`cdl.core.gui.processor.signal`: Signal processing features"
+msgstr ":mod:`cdl.core.gui.processor.signal`: Fonctions de traitement de signaux"
+
+#: cdl.core.gui.processor:29 of
+msgid ":mod:`cdl.core.gui.processor.image`: Image processing features"
+msgstr ":mod:`cdl.core.gui.processor.image`: Fonctions de traitement d'images"
+
+#: cdl.core.gui.processor:32 of
+msgid "Common features"
+msgstr "Fonctions communes"
+
+#: cdl.core.gui.processor.base.Worker:1 of
+msgid "Multiprocessing worker, to run long-running tasks in a separate process"
+msgstr ""
+"Travailleur de traitement parallèle, pour exécuter des tâches de longue "
+"durée dans un processus séparé"
+
+#: cdl.core.gui.processor.base.Worker.create_pool:1 of
+msgid "Create multiprocessing pool"
+msgstr "Créer un pool de traitement parallèle"
+
+#: cdl.core.gui.processor.base.Worker.terminate_pool:1 of
+msgid "Terminate multiprocessing pool."
+msgstr "Terminer le pool de traitement parallèle."
+
+#: cdl.core.gui.processor.base.BaseProcessor
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
+#: cdl.core.gui.processor.base.BaseProcessor.init_param
+#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled
+#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults
+#: cdl.core.gui.processor.base.Worker.run
+#: cdl.core.gui.processor.base.Worker.terminate_pool of
+msgid "Parameters"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.terminate_pool:3 of
+msgid "wait for all tasks to finish. Defaults to False."
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.restart_pool:1 of
+msgid "Terminate and recreate the pool"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.run:1 of
+msgid "Run computation."
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.run:3 of
+msgid "function to run"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.run:4 of
+msgid "arguments"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.close:1 of
+msgid "Close worker: close pool properly and wait for all tasks to finish"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.is_computation_finished:1 of
+msgid "Return True if computation is finished."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
+#: cdl.core.gui.processor.base.BaseProcessor.init_param
+#: cdl.core.gui.processor.base.Worker.get_result
+#: cdl.core.gui.processor.base.Worker.is_computation_finished of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.is_computation_finished:3 of
+msgid "True if computation is finished"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults
+#: cdl.core.gui.processor.base.Worker.get_result
+#: cdl.core.gui.processor.base.Worker.is_computation_finished of
+msgid "Return type"
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.get_result:1 of
+msgid "Return computation result."
+msgstr ""
+
+#: cdl.core.gui.processor.base.Worker.get_result:3 of
+msgid "computation result"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor:1 of
+msgid "Object handling data processing: operations, processing, computing."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor:3 of
+msgid "panel"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor:4 of
+msgid "plot widget"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.close:1 of
+msgid "Close processor properly"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled:1 of
+msgid "Set process isolation enabled."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.set_process_isolation_enabled:3 of
+msgid "enabled"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:1 of
+msgid "Return True if parameter defaults are available."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:5
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:3
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:4 of
+msgid "parameter class"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.has_param_defaults:5 of
+msgid "True if parameter defaults are available"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults:1 of
+msgid "Update parameter defaults."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.update_param_defaults:3 of
+msgid "parameters"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:1 of
+msgid "Initialize processing parameters."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:4
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:3 of
+msgid "parameter"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:6
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:5
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:5 of
+msgid "title"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:7
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:6 of
+msgid "comment"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.init_param:8 of
+msgid ""
+"Tuple (edit, param) where edit is True if parameters have been edited, "
+"False otherwise."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:1 of
+msgid "Compute 11 function: 1 object in → 1 object out."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:3 of
+msgid "function"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_11:8
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:6 of
+msgid "edit parameters"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:1 of
+msgid "Compute 1n function: 1 object in → n objects out."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:3 of
+msgid "list of functions"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_1n:4 of
+msgid "list of parameters"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:1 of
+msgid ""
+"Handle computation output: if error, display error message, if warning, "
+"display warning message."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:4 of
+msgid "computation output"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:5 of
+msgid "context (e.g. \"Computing: Gaussian filter\")"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:7 of
+msgid "a signal or image object, or a numpy array, or None if error"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:1 of
+msgid ""
+"Compute 10 function: 1 object in → 0 object out (the result of this "
+"method is stored in original object's metadata)."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:4
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:4
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:7 of
+msgid "function to execute"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:5 of
+msgid ""
+"shape type (if None, use `param.shape` which must be a string and a valid"
+" `ShapeTypes` member name, modulo case)"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:7
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:5
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:8 of
+msgid "parameters. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:8
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:6
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:9 of
+msgid "parameters class. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:9
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:7
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:10 of
+msgid "title of progress bar. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:10
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:8
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:11 of
+msgid "comment. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:11
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:10
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:12 of
+msgid "if True, edit parameters. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:13 of
+msgid "object uuid, values: ResultShape objects)"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:1 of
+msgid "Compute n1 function: N(>=2) objects in → 1 object out."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:3 of
+msgid "name of function"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1:9 of
+msgid "function to execute on objects. Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:1 of
+msgid "Compute n1n function: N(>=1) objects + 1 object in → N objects out."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:3 of
+msgid "Examples: subtract, divide"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:5 of
+msgid "second object"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:6 of
+msgid "name of second object"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_sum:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
+msgid "Compute sum"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_average:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_average:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_average:1 of
+msgid "Compute average"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_product:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_product:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product:1 of
+msgid "Compute product"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_difference:1 of
+msgid "Compute difference"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_quadratic_difference:1 of
+msgid "Compute quadratic difference"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_division:1 of
+msgid "Compute division"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_roi_extraction:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction:1 of
+msgid "Extract Region Of Interest (ROI) from data"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_swap_axes:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_swap_axes:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_swap_axes:1 of
+msgid "Swap data axes"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_abs:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_abs:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_abs:1 of
+msgid "Compute absolute value"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_re:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_re:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_re:1 of
+msgid "Compute real part"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_im:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_im:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_im:1 of
+msgid "Compute imaginary part"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_astype:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_astype:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_astype:1 of
+msgid "Convert data type"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_log10:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
+msgid "Compute Log10"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_calibration:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_calibration:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_calibration:1 of
+msgid "Compute data linear calibration"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_threshold:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_threshold:1 of
+msgid "Compute threshold clipping"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_clip:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
+msgid "Compute maximum data clipping"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_gaussian_filter:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter:1 of
+msgid "Compute gaussian filter"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_moving_average:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_average:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_average:1 of
+msgid "Compute moving average"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_moving_median:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_moving_median:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_moving_median:1 of
+msgid "Compute moving median"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_wiener:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_wiener:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_wiener:1 of
+msgid "Compute Wiener filter"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_fft:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_ifft:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fft:1 of
+msgid "Compute iFFT"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_ifft:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_fft:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_ifft:1 of
+msgid "Compute FFT"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:1 of
+msgid "Define Region Of Interest (ROI) for computing functions."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:3 of
+msgid "If True, ROI is extracted from data. Defaults to False."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:4 of
+msgid ""
+"If True, ROI is extracted from first selected object only. If False, ROI "
+"is extracted from all selected objects. If None, ROI is extracted from "
+"all selected objects only if they all have the same ROI. Defaults to "
+"None."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:8 of
+msgid ""
+"If True, add ROI to data immediately after opening the ROI editor. "
+"Defaults to False."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:11 of
+msgid "ROI data parameters."
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.delete_regions_of_interest:1 of
+msgid "Delete Regions Of Interest"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_stats:1 of
+msgid "Compute data statistics"
+msgstr ""
+
+#: cdl.core.gui.processor:37 of
+msgid "Signal processing features"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor:1 of
+msgid "Object handling signal processing: operations, processing, computing"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
+msgid "Compute difference between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference:1
+#: of
+msgid "Compute quadratic difference between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division:1 of
+msgid "Compute division between two signals"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection:1 of
+msgid "Detect peaks from data"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
+msgid "Normalize data"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_derivative:1 of
+msgid "Compute derivative"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_integral:1 of
+msgid "Compute integral"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation:1 of
+msgid "Compute interpolation"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_resampling:1 of
+msgid "Compute resampling"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_detrending:1 of
+msgid "Compute detrending"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_convolution:1 of
+msgid "Compute convolution"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
+msgid "Compute fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_polyfit:1 of
+msgid "Compute polynomial fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_multigaussianfit:1 of
+msgid "Compute multi-Gaussian fitting curve"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fwhm:1 of
+msgid "Compute FWHM"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_fw1e2:1 of
+msgid "Compute FW at 1/e²"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_histogram:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
+msgid "Compute histogram"
+msgstr ""
+
+#: cdl.core.gui.processor:42 of
+msgid "Image processing features"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor:1 of
+msgid "Object handling image processing: operations, processing, computing"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_logp1:1 of
+msgid "Compute base 10 logarithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate:1 of
+msgid "Rotate data arbitrarily"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate90:1 of
+msgid "Rotate data 90°"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rotate270:1 of
+msgid "Rotate data 270°"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_fliph:1 of
+msgid "Flip data horizontally"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_flipv:1 of
+msgid "Flip data vertically"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.distribute_on_grid:1 of
+msgid "Distribute images on a grid"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.reset_positions:1 of
+msgid "Reset image positions"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_resize:1 of
+msgid "Resize image"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_binning:1 of
+msgid "Binning image"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_profile:1 of
+msgid "Compute profile"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_average_profile:1 of
+msgid "Compute average profile"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_radial_profile:1 of
+msgid "Compute radial profile"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_difference:1 of
+msgid "Compute difference between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_quadratic_difference:1
+#: of
+msgid "Compute quadratic difference between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_division:1 of
+msgid "Compute division between two images"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
+msgid "Compute flat field correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
+msgid "Compute Butterworth filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
+msgid "Compute gamma correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_log:1 of
+msgid "Compute log correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_sigmoid:1 of
+msgid "Compute sigmoid correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_rescale_intensity:1 of
+msgid "Rescale image intensity levels"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_hist:1 of
+msgid "Histogram equalization"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_equalize_adapthist:1 of
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tv:1 of
+msgid "Compute Total Variation denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_bilateral:1 of
+msgid "Compute bilateral filter denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_wavelet:1 of
+msgid "Compute Wavelet denoising"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_denoise_tophat:1 of
+msgid "Denoise using White Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_denoise:1 of
+msgid "Compute all denoising filters"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_white_tophat:1 of
+msgid "Compute White Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_black_tophat:1 of
+msgid "Compute Black Top-Hat"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_erosion:1 of
+msgid "Compute Erosion"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_dilation:1 of
+msgid "Compute Dilation"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_opening:1 of
+msgid "Compute morphological opening"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_closing:1 of
+msgid "Compute morphological closing"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_morphology:1 of
+msgid "Compute all morphology filters"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_canny:1 of
+msgid "Compute Canny filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_roberts:1 of
+msgid "Compute Roberts filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt:1 of
+msgid "Compute Prewitt filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_h:1 of
+msgid "Compute Prewitt filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_prewitt_v:1 of
+msgid "Compute Prewitt filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel:1 of
+msgid "Compute Sobel filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_h:1 of
+msgid "Compute Sobel filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_sobel_v:1 of
+msgid "Compute Sobel filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr:1 of
+msgid "Compute Scharr filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_h:1 of
+msgid "Compute Scharr filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_scharr_v:1 of
+msgid "Compute Scharr filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid:1 of
+msgid "Compute Farid filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_h:1 of
+msgid "Compute Farid filter (horizontal)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_farid_v:1 of
+msgid "Compute Farid filter (vertical)"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_laplace:1 of
+msgid "Compute Laplace filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_edges:1 of
+msgid "Compute all edges"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_centroid:1 of
+msgid "Compute image centroid"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_enclosing_circle:1 of
+msgid "Compute minimum enclosing circle"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_peak_detection:1 of
+msgid "Compute 2D peak detection"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_contour_shape:1 of
+msgid "Compute contour shape fit"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_hough_circle_peaks:1 of
+msgid "Compute peak detection based on a circle Hough transform"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_dog:1 of
+msgid "Compute blob detection using Difference of Gaussian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_doh:1 of
+msgid "Compute blob detection using Determinant of Hessian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_log:1 of
+msgid "Compute blob detection using Laplacian of Gaussian method"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
+msgid "Compute blob detection using OpenCV"
+msgstr ""
+
+#~ msgid "Processor (:mod:`cdl.core.gui.processor`)"
+#~ msgstr "Processeur (:mod:`cdl.core.gui.processor`)"

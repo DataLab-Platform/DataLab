@@ -4,7 +4,13 @@
 # (see cdl/LICENSE for details)
 
 """
-DataLab main window
+Main window
+===========
+
+The :mod:`cdl.core.gui.main` module provides the main window of the
+DataLab (CDL) project.
+
+.. autoclass:: CDLMainWindow
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

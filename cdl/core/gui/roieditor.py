@@ -4,7 +4,23 @@
 # (see cdl/LICENSE for details)
 
 """
-ROI editor widgets
+ROI editor
+==========
+
+The :mod:`cdl.core.gui.roieditor` module provides the ROI editor widgets
+for signals and images.
+
+Signal ROI editor
+-----------------
+
+.. autoclass:: SignalROIEditor
+    :members:
+
+Image ROI editor
+----------------
+
+.. autoclass:: ImageROIEditor
+    :members:
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

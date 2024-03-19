@@ -1,0 +1,101 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.docks:2 of
+msgid "Docks"
+msgstr "Docks"
+
+#: cdl.core.gui.docks:4 of
+msgid ""
+"The :mod:`cdl.core.gui.docks` module provides the dockable widgets for "
+"the DataLab main window."
+msgstr "Le module :mod:`cdl.core.gui.docks` fournit les widgets dockables pour la fenêtre principale de DataLab."
+
+#: cdl.core.gui.docks:8 of
+msgid "Plot widget"
+msgstr "Widget de visualisation"
+
+#: cdl.core.gui.docks.DataLabPlotWidget:1 of
+msgid "DataLab PlotWidget"
+msgstr ""
+
+#: cdl.core.gui.docks.DataLabPlotWidget:3 of
+msgid ""
+"This class is a subclass of `plotpy.plot.PlotWidget` that provides a "
+"customized widget for DataLab, with a specific set of tools and a "
+"customized appearance."
+msgstr ""
+"Cette classe est une sous-classe de `plotpy.plot.PlotWidget` qui fournit "
+"un widget personnalisé pour DataLab, avec un ensemble spécifique d'outils"
+" et une apparence personnalisée."
+
+#: cdl.core.gui.docks.DataLabPlotWidget cdl.core.gui.docks.DockablePlotWidget
+#: of
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: cdl.core.gui.docks.DataLabPlotWidget:7
+#: cdl.core.gui.docks.DockablePlotWidget:4 of
+msgid "Plot type"
+msgstr "Type de visualisation"
+
+#: cdl.core.gui.docks.DataLabPlotWidget.register_tools:1 of
+msgid "Register the plotting tools according to the plot type"
+msgstr "Inscrire les outils de visualisation en fonction du type de visualisation"
+
+#: cdl.core.gui.docks:13 of
+msgid "Dockable plot widget"
+msgstr "Widget de visualisation dockable"
+
+#: cdl.core.gui.docks.DockablePlotWidget:1 of
+msgid "Docked plotting widget"
+msgstr "Widget de visualisation docké"
+
+#: cdl.core.gui.docks.DockablePlotWidget:3 of
+msgid "Parent widget"
+msgstr "Widget parent"
+
+#: cdl.core.gui.docks.DockablePlotWidget.setup_layout:1 of
+msgid "Setup layout"
+msgstr "Configurer la disposition"
+
+#: cdl.core.gui.docks.DockablePlotWidget.update_toolbar_position:1 of
+msgid "Update toolbar position"
+msgstr "Mettre à jour la position de la barre d'outils"
+
+#: cdl.core.gui.docks.DockablePlotWidget.setup_plotwidget:1 of
+msgid "Setup plotting widget"
+msgstr "Configurer le widget de visualisation"
+
+#: cdl.core.gui.docks.DockablePlotWidget.get_plot:1 of
+msgid "Return plot instance"
+msgstr "Renvoyer l'instance de visualisation"
+
+#: cdl.core.gui.docks.DockablePlotWidget.update_watermark:1 of
+msgid "Update watermark visibility"
+msgstr "Mettre à jour la visibilité du filigrane"
+
+#: cdl.core.gui.docks.DockablePlotWidget.visibility_changed:1 of
+msgid "DockWidget visibility has changed"
+msgstr "La visibilité du DockWidget a changé"
+
+#~ msgid "Docks (:mod:`cdl.core.gui.docks`)"
+#~ msgstr "Docks (:mod:`cdl.core.gui.docks`)"

@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 22:24+0100\n"
+"POT-Creation-Date: 2024-03-19 17:03+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../features/general/remote.rst:-1
 msgid ""
@@ -421,8 +421,8 @@ msgstr "Libellé X. Par défaut, None."
 msgid "Y label. Defaults to None."
 msgstr "Libellé Y. Par défaut, None."
 
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh
 #: cdl.core.baseproxy.BaseProxy.get_current_panel
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
 #: cdl.core.baseproxy.BaseProxy.get_object_titles
@@ -584,17 +584,17 @@ msgstr ""
 msgid "Close DataLab application"
 msgstr "Fermer l'application DataLab"
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
 msgstr ""
 "Renvoie un gestionnaire de contexte pour désactiver temporairement le "
 "rafraîchissement automatique."
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:3 of
 msgid "Context manager"
 msgstr "Gestionnaire de contexte"
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:6 of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:6 of
 msgid "Example"
 msgstr "Exemple"
 
@@ -830,17 +830,22 @@ msgid ""
 "The remote control class methods (either using the proxy or the remote "
 "client) may be completed with additional methods which are dynamically "
 "added at runtime. This mechanism allows to access the methods of the "
-"\"processor\" objects of DataLab."
+"processors of DataLab (see :mod:`cdl.core.gui.processor`)."
 msgstr ""
 "Les méthodes de la classe de contrôle à distance (en utilisant le proxy "
 "ou le client distant) peuvent être complétées par des méthodes "
 "supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce "
-"mécanisme permet d'accéder aux méthodes des objets \"processeur\" de "
-"DataLab."
+"mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir :mod:`cdl.core.gui.processor`)."
 
-#: cdl.core.gui.processor.signal:2 of
-msgid "Signal Processor"
+#: ../../features/general/remote.rst:135
+msgid "Signal processor"
 msgstr "Processeur de signal"
+
+#: ../../features/general/remote.rst:137
+msgid ""
+"When working with signals, the methods of "
+":class:`cdl.core.gui.processor.signal.SignalProcessor` may be accessed."
+msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`cdl.core.gui.processor.signal.SignalProcessor` peuvent être accédées."
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
 msgid "Object handling signal processing: operations, processing, computing"
@@ -1011,9 +1016,15 @@ msgstr "Calculer la largeur à 1/e²"
 msgid "Compute histogram"
 msgstr "Calcule l'intégrale"
 
-#: cdl.core.gui.processor.image:2 of
-msgid "Image Processor"
+#: ../../features/general/remote.rst:145
+msgid "Image processor"
 msgstr "Processeur d'image"
+
+#: ../../features/general/remote.rst:147
+msgid ""
+"When working with images, the methods of "
+":class:`cdl.core.gui.processor.image.ImageProcessor` may be accessed."
+msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`cdl.core.gui.processor.image.ImageProcessor` peuvent être accédées."
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
 msgid "Object handling image processing: operations, processing, computing"

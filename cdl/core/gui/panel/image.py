@@ -3,7 +3,9 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
-"""DataLab Image Panel"""
+"""
+.. Image panel (see parent package :mod:`cdl.core.gui.processor`)
+"""
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 

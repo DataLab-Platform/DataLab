@@ -47,7 +47,7 @@ def compute_adjust_gamma(src: ImageObj, p: AdjustGammaParam) -> ImageObj:
 
     Args:
         src: input image object
-        p (AdjustGammaParam): parameters
+        p: parameters
 
     Returns:
         Output image object

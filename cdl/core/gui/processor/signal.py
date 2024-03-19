@@ -4,9 +4,7 @@
 # (see cdl/LICENSE for details)
 
 """
-Signal Processor
-----------------
-
+.. Signal processor object (see parent package :mod:`cdl.core.gui.processor`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

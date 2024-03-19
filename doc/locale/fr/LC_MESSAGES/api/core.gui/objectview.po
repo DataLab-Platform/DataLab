@@ -1,0 +1,257 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.objectview:2 cdl.core.gui.objectview:26 of
+msgid "Object view"
+msgstr "Vue des objets"
+
+#: cdl.core.gui.objectview:4 of
+msgid ""
+"The :mod:`cdl.core.gui.objectview` module provides widgets to display "
+"object (signal/image) trees."
+msgstr "Le module :mod:`cdl.core.gui.objectview` fournit des widgets pour afficher des arbres d'objets (signal/image)."
+
+#: cdl.core.gui.objectview:9 of
+msgid ""
+"This module provides tree widgets to display signals, images and groups. "
+"It is important to note that, by design, the user can only select either "
+"individual signals/images or groups, but not both at the same time. This "
+"is an important design choice, as it allows to simplify the user "
+"experience, and to avoid potential confusion between the two types of "
+"selection."
+msgstr ""
+
+#: cdl.core.gui.objectview:16 of
+msgid "Simple object tree"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree:1 of
+msgid "Base object handling panel list widget, object (sig/ima) lists"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.initialize_from:1 of
+msgid "Init from another SimpleObjectList, without making copies of objects"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.iter_items:1 of
+msgid "Recursively iterate over all items"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.get_item_from_id:1 of
+msgid "Return QTreeWidgetItem from id (stored in item's data)"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.get_current_item_id:1 of
+msgid "Return current item id"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.set_current_item_id:1 of
+msgid "Set current item by id"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.get_current_group_id:1 of
+msgid "Return current group ID"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.populate_tree:1 of
+msgid "Populate tree with objects"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.update_tree:1 of
+msgid "Update tree"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.add_group_item:1 of
+msgid "Add group item"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.add_object_item:1 of
+msgid "Add item"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.update_item:1 of
+msgid "Update item"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.remove_item:1 of
+msgid "Remove item"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.item_double_clicked:1 of
+msgid "Item was double-clicked: open a pop-up plot dialog"
+msgstr ""
+
+#: cdl.core.gui.objectview.SimpleObjectTree.contextMenuEvent:1 of
+msgid "Override Qt method"
+msgstr ""
+
+#: cdl.core.gui.objectview:21 of
+msgid "Get object dialog"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog:1 of
+msgid "Get object dialog box"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_uuids
+#: cdl.core.gui.objectview.ObjectView.select_groups
+#: cdl.core.gui.objectview.ObjectView.select_objects of
+msgid "Parameters"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog:3 of
+msgid "parent widget"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog:4 of
+msgid "data panel"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog:5 of
+msgid "dialog title"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog:6 of
+msgid "minimum size (width, height)"
+msgstr ""
+
+#: cdl.core.gui.objectview.GetObjectDialog.get_current_object_uuid:1 of
+msgid "Return current object uuid"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView:1 of
+msgid "Object handling panel list widget, object (sig/ima) lists"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.dragEnterEvent:1
+#: cdl.core.gui.objectview.ObjectView.dragLeaveEvent:1
+#: cdl.core.gui.objectview.ObjectView.dragMoveEvent:1
+#: cdl.core.gui.objectview.ObjectView.dropEvent:1
+#: cdl.core.gui.objectview.ObjectView.paintEvent:1 of
+msgid "Reimplement Qt method"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_all_group_uuids:1 of
+msgid "Return all group uuids, in a list ordered by group position in the tree"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_all_object_uuids:1 of
+msgid ""
+"Return all object uuids, in a dictionary that maps group uuids to the "
+"list of object uuids in each group, in the correct order"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_current_object:1 of
+msgid "Return current object"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.set_current_object:1 of
+msgid "Set current object"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_group_items:1 of
+msgid "Return selected group items"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_group_uuids:1 of
+msgid "Return selected group uuids"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_items:1 of
+msgid "Return selected object items"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_uuids:1 of
+msgid "Return selected objects uuids."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_uuids:3 of
+msgid "If True, also return objects from selected groups."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_uuids of
+msgid "Returns"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_object_uuids:5 of
+msgid "List of selected objects uuids."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_objects:1 of
+msgid "Return selected objects."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_objects:3 of
+msgid "If include_groups is True, also return objects from selected groups."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.get_sel_groups:1 of
+msgid "Return selected groups"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.item_selection_changed:1 of
+msgid ""
+"Refreshing the selection of objects and groups, emitting the "
+"SIG_SELECTION_CHANGED signal which triggers the update of the object "
+"properties panel, the plot items and the actions of the toolbar and menu "
+"bar."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.item_selection_changed:6 of
+msgid ""
+"This method is called when the user selects or deselects items in the "
+"tree. It is also called when the user clicks on an item that was already "
+"selected."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.item_selection_changed:9 of
+msgid "This method emits the SIG_SELECTION_CHANGED signal."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.select_objects:1 of
+msgid "Select multiple objects"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.select_objects:3 of
+msgid "list of objects, object numbers (1 to N) or object uuids"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.select_groups:1 of
+msgid "Select multiple groups"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.select_groups:3 of
+msgid ""
+"list of groups, group numbers (1 to N), group names or None (select all "
+"groups). Defaults to None."
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.move_up:1 of
+msgid "Move selected objects/groups up"
+msgstr ""
+
+#: cdl.core.gui.objectview.ObjectView.move_down:1 of
+msgid "Move selected objects/groups down"
+msgstr ""
+
+#~ msgid "Object view (:mod:`cdl.core.gui.objectview`)"
+#~ msgstr "Vue des objets (:mod:`cdl.core.gui.objectview`)"

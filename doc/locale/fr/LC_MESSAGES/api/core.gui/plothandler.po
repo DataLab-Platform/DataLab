@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: cdl.core.gui.plothandler:2 of
+msgid "Plot handler"
+msgstr "Gestionnaire de visualisation"
+
+#: cdl.core.gui.plothandler:4 of
+msgid ""
+"The :mod:`cdl.core.gui.plothandler` module provides plot handlers for "
+"signal and image panels, that is, classes handling `PlotPy` plot items "
+"for representing signals and images."
+msgstr "Le module :mod:`cdl.core.gui.plothandler` fournit des gestionnaires de visualisation pour les panneaux de signaux et d'images, c'est-à-dire des classes gérant les items de visualisation `PlotPy` pour représenter les signaux et les images."
+
+#: cdl.core.gui.plothandler:9 of
+msgid "Signal plot handler"
+msgstr "Gestionnaire de visualisation de signaux"
+
+#: cdl.core.gui.plothandler.SignalPlotHandler:1 of
+msgid "Object handling signal plot items, plot dialogs, plot options"
+msgstr ""
+"Objet gérant les items de visualisation de signaux, les dialogues de "
+"visualisation et les options de visualisation"
+
+#: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing:1 of
+msgid "Toggle anti-aliasing"
+msgstr "Activer/désactiver l'anti-crénelage"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot
+#: cdl.core.gui.plothandler.BasePlotHandler.set_auto_refresh
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot
+#: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing of
+msgid "Parameters"
+msgstr "Paramètres"
+
+#: cdl.core.gui.plothandler.SignalPlotHandler.toggle_anti_aliasing:3 of
+msgid "if True, enable anti-aliasing"
+msgstr "si True, activer l'anti-crénelage"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.add_shapes:1 of
+msgid ""
+"Add geometric shape items associated to computed results and annotations,"
+" for the object with the given uuid"
+msgstr ""
+"Ajouter des items de formes géométriques associés aux résultats calculés "
+"et aux annotations, pour l'objet avec l'uuid donné"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.cleanup_dataview:1
+#: cdl.core.gui.plothandler.ImagePlotHandler.cleanup_dataview:1 of
+msgid "Clean up data view"
+msgstr "Nettoyer la vue de données"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.clear:1 of
+msgid "Clear plot items"
+msgstr "Effacer les items de visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get:1 of
+msgid ""
+"Return item associated to object uuid. If the key is not found, default "
+"is returned if given, otherwise None is returned."
+msgstr ""
+"Renvoie l'item associé à l'uuid de l'objet. Si la clé n'est pas trouvée, "
+"la valeur par défaut est renvoyée si elle est donnée, sinon None est "
+"renvoyé."
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_current_plot_options:1
+#: cdl.core.gui.plothandler.ImagePlotHandler.get_current_plot_options:1 of
+msgid "Return standard signal/image plot options"
+msgstr "Renvoyer les options de visualisation standard pour les signaux/images"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item:1 of
+msgid "Return object associated to plot item"
+msgstr "Renvoyer l'objet associé à l'item de visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item:3 of
+msgid "plot item"
+msgstr "item de visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item of
+msgid "Returns"
+msgstr "Renvoie"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.get_obj_from_item:5 of
+msgid "Object associated to plot item"
+msgstr "Objet associé à l'item de visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:1
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:1 of
+msgid "Refresh plot."
+msgstr "Actualiser la visualisation"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:3
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:3 of
+msgid ""
+"string describing the objects to refresh. Valid values are \"selected\" "
+"(refresh the selected objects), \"all\" (refresh all objects), or an "
+"object uuid."
+msgstr ""
+"chaîne décrivant les objets à actualiser. Les valeurs valides sont "
+"\"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser "
+"tous les objets), ou un uuid d'objet."
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:6
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:6 of
+msgid ""
+"if True, update the items. If False, only show the items (do not update "
+"them, except if the option \"Use reference item LUT range\" is enabled "
+"and more than one item is selected). Defaults to True."
+msgstr ""
+"si True, mettre à jour les items. Si False, seulement afficher les items "
+"(ne pas les mettre à jour, sauf si l'option \"Utiliser la plage LUT de "
+"l'item de référence\" est activée et que plus d'un item est sélectionné)."
+" Par défaut à True."
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:10
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:10 of
+msgid "if True, force refresh even if auto refresh is disabled."
+msgstr ""
+"si True, forcer l'actualisation même si l'actualisation automatique est "
+"désactivée."
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot of
+msgid "Raises"
+msgstr "Lève"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:12
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:12 of
+msgid "if `what` is not a valid value"
+msgstr "si `what` n'est pas une valeur valide"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.remove_all_shape_items:1 of
+msgid "Remove all geometric shapes associated to result items"
+msgstr "Supprimer toutes les formes géométriques associées aux items de résultats"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.remove_item:1 of
+msgid "Remove plot item associated to object uuid"
+msgstr "Supprimer l'item de visualisation associé à l'uuid de l'objet"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.set_auto_refresh:1 of
+msgid "Set auto refresh mode."
+msgstr "Définir le mode d'actualisation automatique."
+
+#: cdl.core.gui.plothandler.BasePlotHandler.set_auto_refresh:3 of
+msgid "if True, refresh plot items automatically"
+msgstr "si True, actualiser les items de visualisation automatiquement"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.update_item_according_to_ref_item:1
+#: cdl.core.gui.plothandler.ImagePlotHandler.update_item_according_to_ref_item:1
+#: of
+msgid "Update plot item according to reference item"
+msgstr "Mettre à jour l'item de visualisation selon l'item de référence"
+
+#: cdl.core.gui.plothandler:16 of
+msgid "Image plot handler"
+msgstr "Gestionnaire de visualisation d'images"
+
+#: cdl.core.gui.plothandler.ImagePlotHandler:1 of
+msgid "Object handling image plot items, plot dialogs, plot options"
+msgstr ""
+"Objet gérant les items de visualisation d'images, les dialogues de "
+"visualisation et les options de visualisation"
+
+#~ msgid "Plot handler (:mod:`cdl.core.gui.plothandler`)"
+#~ msgstr "Gestionnaire de visualisation (:mod:`cdl.core.gui.plothandler`)"
+
+#~ msgid "These classes handle PlotPy plot items for signal and image panels."
+#~ msgstr ""
+#~ "Ces classes gèrent les items de "
+#~ "visualisation PlotPy pour les panneaux "
+#~ "de signaux et d'images."
