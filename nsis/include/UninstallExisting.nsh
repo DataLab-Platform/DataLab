@@ -1,4 +1,5 @@
 ; https://nsis.sourceforge.io/Auto-uninstall_old_before_installing_new
+; License: zlib/libpng (https://nsis.sourceforge.io/License)
 
 !include LogicLib.nsh
 

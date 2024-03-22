@@ -3,6 +3,7 @@
     @AUTHORS    = Zinthose, Iceman_K
     @REVISIONS  = zenpoy[http://forums.winamp.com/member.php?u=401997]
     @URL        = http://nsis.sourceforge.net/mediawiki/index.php?title=Enumerate_INI
+    @LICENSE    = zlib/libpng License (https://nsis.sourceforge.io/License)
 */
 !ifndef __EnumIni__
 !define __EnumIni__
@@ -13,19 +14,19 @@
             !include "StrFunc.nsh"
             ${StrLoc}
         !endif
-    
+
     ## Macro to remove leading and trailing whitespaces from a string.
-    ## Derived from the function originaly posted by Iceman_K at: 
+    ## Derived from the function originaly posted by Iceman_K at:
     ##  http://nsis.sourceforge.net/Remove_leading_and_trailing_whitespaces_from_a_string
         !ifmacrondef _Trim
             !macro _Trim _UserVar _OriginalString
                 !define Trim_UID ${__LINE__}
-                
+
                 Push $R1
                 Push $R2
                 Push `${_OriginalString}`
                 Pop $R1
-                
+
                 Loop_${Trim_UID}:
                     StrCpy $R2 "$R1" 1
                     StrCmp "$R2" " " TrimLeft_${Trim_UID}
@@ -33,10 +34,10 @@
                     StrCmp "$R2" "$\n" TrimLeft_${Trim_UID}
                     StrCmp "$R2" "$\t" TrimLeft_${Trim_UID}
                     GoTo Loop2_${Trim_UID}
-                TrimLeft_${Trim_UID}:   
+                TrimLeft_${Trim_UID}:
                     StrCpy $R1 "$R1" "" 1
                     Goto Loop_${Trim_UID}
-             
+
                 Loop2_${Trim_UID}:
                     StrCpy $R2 "$R1" 1 -1
                     StrCmp "$R2" " " TrimRight_${Trim_UID}
@@ -44,10 +45,10 @@
                     StrCmp "$R2" "$\n" TrimRight_${Trim_UID}
                     StrCmp "$R2" "$\t" TrimRight_${Trim_UID}
                     GoTo Done_${Trim_UID}
-                TrimRight_${Trim_UID}:  
+                TrimRight_${Trim_UID}:
                     StrCpy $R1 "$R1" -1
                     Goto Loop2_${Trim_UID}
-                 
+
                 Done_${Trim_UID}:
                     Pop $R2
                     Exch $R1
@@ -60,7 +61,7 @@
                 !define Trim `!insertmacro _Trim`
             !endif
         !endif
-    
+
     ## Global variable needed for indexing the enumerations
         !ifmacrondef EnumIni_IDX_VAR
             !macro EnumIni_IDX_VAR
@@ -68,13 +69,13 @@
                     VAR /GLOBAL EnumIni_IDX_VAR
                     !define EnumIni_IDX_VAR $EnumIni_IDX_VAR
                 !endif
-            !macroend 
+            !macroend
         !endif
-        
+
     /*  ## EnumIniKey ##
-            Nearly identical in use to the builtin EnumRegKey function, the EnumIniKey macro 
+            Nearly identical in use to the builtin EnumRegKey function, the EnumIniKey macro
             allows for enumeration of an existing ini file's sections.
-        
+
         ## Example ##
             StrCpy $0 0
             loop:
@@ -89,18 +90,18 @@
         !macro _EnumIniKey _UserVar _IniFilePath _Index
             !define EnumIniKey_UID ${__LINE__}
             ClearErrors
-            
+
             Push $R0
             Push $R1
-            
+
             Push `${_IniFilePath}`
             Push `${_Index}`
-            
+
             Pop $R1 ; ${_Index}
             Pop $R0 ; ${_IniFilePath}
-			
+
             IfFileExists $R0 0 Else_IfFileExists_${EnumIniKey_UID}
-                StrCpy $EnumIni_IDX_VAR -1 
+                StrCpy $EnumIni_IDX_VAR -1
                 ## PATCH Added to Correct 0 length file infinite loop issue discovered by zenpoy
                 ## [http://forums.winamp.com/member.php?u=401997] on January 9th 2012
                     ${LineSum} $R0 $R1
@@ -114,11 +115,11 @@
                 StrCpy $R0 ''
                 SetErrors
             EndIf_FileExists_${EnumIniKey_UID}:
-    
+
             Pop $R1
             Exch $R0
             Pop ${_UserVar}
-            
+
             !undef EnumIniKey_UID
         !macroend
         !ifndef EnumIniKey
@@ -129,7 +130,7 @@
             !verbose 0
             Function EnumIniKey_CALLBACK
                 !insertmacro _Trim $R9 $R9
-                
+
                 StrCmp $R9 '' End
                 StrCpy $R0 $R9 1
                 StrCmp $R0 '[' 0 End
@@ -143,18 +144,18 @@
                     Return
                 End:
                 StrCpy $R0 ''
-                Push '' 
+                Push ''
             FunctionEnd
             !verbose pop
         !else
             !Error `An illegal attempt was made to insert the EnumIniValue_CALLBACK function outside the Global namespace!`
         !endif
     !endif
-    
+
     /*  ## EnumIniValue ##
-            Nearly identical in use to the builtin EnumRegValue function, the EnumIniValue macro 
+            Nearly identical in use to the builtin EnumRegValue function, the EnumIniValue macro
             allows for enumeration of an existing ini file section.
-        
+
         ## Example ##
             StrCpy $0 0
             loop:
@@ -170,22 +171,22 @@
         !macro _EnumIniValue _UserVar _IniFilePath _Section _Index
             !define EnumIniValue_UID ${__LINE__}
             ClearErrors
-            
+
             Push $R0
             Push $R1
             Push $R2
             Push $R3
-    
+
             Push `${_IniFilePath}`
             Push `${_Section}`
             Push `${_Index}`
-                
+
             Pop $R2 ; ${_Index}
             Pop $R1 ; ${_Section}
             Pop $R0 ; ${_IniFilePath}
-    
+
             IfFileExists $R0 0 Else_IfFileExists_${EnumIniValue_UID}
-                StrCpy $EnumIni_IDX_VAR -1 
+                StrCpy $EnumIni_IDX_VAR -1
                 ${LineFind} $R0 "/NUL" "1:-1" "EnumIniValue_CALLBACK"
                 IfErrors Else_IfFileExists_${EnumIniValue_UID}
                 Goto EndIf_FileExists_${EnumIniValue_UID}
@@ -193,7 +194,7 @@
                 StrCpy $R0 ''
                 SetErrors
             EndIf_FileExists_${EnumIniValue_UID}:
-    
+
             Pop $R3
             Pop $R2
             Pop $R1
@@ -209,7 +210,7 @@
             !verbose 0
             Function EnumIniValue_CALLBACK
                 !insertmacro _Trim $R9 $R9
-                
+
                 StrCmp $R9 '' End
                 StrCpy $R0 $R9 1
                 StrCmp $R0 ';' End
@@ -229,7 +230,7 @@
                     StrCpy $R3 $R9
                 End:
                 StrCpy $R0 ''
-                Push '' 
+                Push ''
             FunctionEnd
             !verbose pop
         !else
