@@ -676,7 +676,7 @@ class BaseDataPanel(AbstractPanel):
                 objs += self.__load_from_file(filename)
         return objs
 
-    def save_to_files(self, obj, filenames: list[str] | str | None = None) -> None:
+    def save_to_files(self, filenames: list[str] | str | None = None) -> None:
         """Save selected objects to files (signal/image).
 
         Args:
