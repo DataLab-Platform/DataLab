@@ -551,8 +551,8 @@ class BaseDataPanel(AbstractPanel):
         """Add object annotations (annotation plot items).
 
         Args:
-            items (list): annotation plot items
-            refresh_plot (bool | None): refresh plot. Defaults to True.
+            items: annotation plot items
+            refresh_plot: refresh plot. Defaults to True.
         """
         for obj in self.objview.get_sel_objects(include_groups=True):
             obj.add_annotations_from_items(items)
@@ -594,8 +594,7 @@ class BaseDataPanel(AbstractPanel):
         """Get new object parameters from the current object.
 
         Args:
-            newparam (guidata.dataset.DataSet): new object parameters.
-             If None, create a new one.
+            newparam: new object parameters. If None, create a new one.
 
         Returns:
             New object parameters
@@ -612,10 +611,10 @@ class BaseDataPanel(AbstractPanel):
         """Create a new object (signal/image).
 
         Args:
-            newparam (guidata.dataset.DataSet): new object parameters
-            addparam (guidata.dataset.DataSet): additional parameters
-            edit (bool): Open a dialog box to edit parameters (default: True)
-            add_to_panel (bool): Add object to panel (default: True)
+            newparam: new object parameters
+            addparam: additional parameters
+            edit: Open a dialog box to edit parameters (default: True)
+            add_to_panel: Add object to panel (default: True)
 
         Returns:
             New object
@@ -627,62 +626,38 @@ class BaseDataPanel(AbstractPanel):
         obj.title = title
         self.objview.update_item(obj.uuid)
 
-    def open_object(
-        self, filename: str
-    ) -> SignalObj | ImageObj | list[SignalObj | ImageObj]:
-        """Open object from file (signal/image), add it to DataLab and return it.
+    def __load_from_file(self, filename: str) -> list[SignalObj] | list[ImageObj]:
+        """Open objects from file (signal/image), add them to DataLab and return them.
 
         Args:
-            filename (str): file name
+            filename: file name
 
         Returns:
             New object or list of new objects
         """
-        obj_or_objlist = self.IO_REGISTRY.read(filename)
-        objs = obj_or_objlist if isinstance(obj_or_objlist, list) else [obj_or_objlist]
+        objs = self.IO_REGISTRY.read(filename)
         for obj in objs:
             obj.metadata["source"] = filename
             self.add_object(obj, set_current=obj is objs[-1])
         self.selection_changed()
-        if len(objs) == 1:
-            return objs[0]
         return objs
 
-    def save_object(self, obj, filename: str | None = None) -> None:
-        """Save object to file (signal/image)"""
-        if filename is None:
-            basedir = Conf.main.base_dir.get()
-            filters = self.IO_REGISTRY.get_filters(IOAction.SAVE)
-            with save_restore_stds():
-                filename, _filt = getsavefilename(self, _("Save as"), basedir, filters)
-        if filename:
-            with qt_try_loadsave_file(self.parent(), filename, "save"):
-                Conf.main.base_dir.set(filename)
-                self.IO_REGISTRY.write(filename, obj)
-
-    def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
-        """Handle dropped files
+    def __save_to_file(self, obj: SignalObj | ImageObj, filename: str) -> None:
+        """Save object to file (signal/image).
 
         Args:
-            filenames (list(str)): File names
-
-        Returns:
-            None
+            obj: object
+            filename: file name
         """
-        h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
-        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
-        if h5_fnames:
-            self.mainwindow.open_h5_files(h5_fnames, import_all=True)
-        if other_fnames:
-            self.open_objects(other_fnames)
+        self.IO_REGISTRY.write(filename, obj)
 
-    def open_objects(
+    def load_from_files(
         self, filenames: list[str] | None = None
     ) -> list[SignalObj | ImageObj]:
         """Open objects from file (signals/images), add them to DataLab and return them.
 
         Args:
-            filenames (list(str)): File names
+            filenames: File names
 
         Returns:
             list of new objects
@@ -698,25 +673,50 @@ class BaseDataPanel(AbstractPanel):
         for filename in filenames:
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
-                objs.append(self.open_object(filename))
+                objs += self.__load_from_file(filename)
         return objs
 
-    def save_objects(self, filenames: list[str] | None = None) -> None:
-        """Save selected objects to file (signal/image).
+    def save_to_files(self, obj, filenames: list[str] | str | None = None) -> None:
+        """Save selected objects to files (signal/image).
 
         Args:
-            filenames (list(str)): File names
-
-        Returns:
-            None
+            filenames: File names
         """
         objs = self.objview.get_sel_objects(include_groups=True)
         if filenames is None:  # pragma: no cover
             filenames = [None] * len(objs)
-        assert len(filenames) == len(objs)
+        assert len(filenames) == len(
+            objs
+        ), "Number of filenames must match number of objects"
         for index, obj in enumerate(objs):
             filename = filenames[index]
-            self.save_object(obj, filename)
+            if filename is None:
+                basedir = Conf.main.base_dir.get()
+                filters = self.IO_REGISTRY.get_filters(IOAction.SAVE)
+                with save_restore_stds():
+                    filename, _filt = getsavefilename(
+                        self, _("Save as"), basedir, filters
+                    )
+            if filename:
+                with qt_try_loadsave_file(self.parent(), filename, "save"):
+                    Conf.main.base_dir.set(filename)
+                    self.__save_to_file(obj, filename)
+
+    def handle_dropped_files(self, filenames: list[str] | None = None) -> None:
+        """Handle dropped files
+
+        Args:
+            filenames: File names
+
+        Returns:
+            None
+        """
+        h5_fnames = [fname for fname in filenames if fname.endswith(".h5")]
+        other_fnames = sorted(list(set(filenames) - set(h5_fnames)))
+        if h5_fnames:
+            self.mainwindow.open_h5_files(h5_fnames, import_all=True)
+        if other_fnames:
+            self.load_from_files(other_fnames)
 
     def exec_import_wizard(self) -> None:
         """Execute import wizard"""
@@ -737,10 +737,7 @@ class BaseDataPanel(AbstractPanel):
         """Import metadata from file (JSON).
 
         Args:
-            filename (str): File name
-
-        Returns:
-            None
+            filename: File name
         """
         if filename is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
@@ -759,10 +756,7 @@ class BaseDataPanel(AbstractPanel):
         """Export metadata to file (JSON).
 
         Args:
-            filename (str): File name
-
-        Returns:
-            None
+            filename: File name
         """
         obj = self.objview.get_sel_objects(include_groups=True)[0]
         if filename is None:  # pragma: no cover
@@ -782,7 +776,7 @@ class BaseDataPanel(AbstractPanel):
         object view.
 
         Args:
-            update_items (bool): Update plot items (default: False)
+            update_items: Update plot items (default: False)
         """
         selected_objects = self.objview.get_sel_objects(include_groups=True)
         selected_groups = self.objview.get_sel_groups()
@@ -804,7 +798,7 @@ class BaseDataPanel(AbstractPanel):
         Open separate view for visualizing selected objects
 
         Args:
-            oids (list(str)): Object IDs
+            oids: Object IDs
 
         Returns:
             QDialog instance
@@ -874,13 +868,13 @@ class BaseDataPanel(AbstractPanel):
         """Create new pop-up signal/image plot dialog.
 
         Args:
-            oids (list(str)): Object IDs
-            edit (bool): Edit mode
-            toolbar (bool): Show toolbar
-            title (str): Dialog title
-            tools (list(GuiTool)): list of tools to add to the toolbar
-            name (str): Dialog name
-            options (dict): Plot options
+            oids: Object IDs
+            edit: Edit mode
+            toolbar: Show toolbar
+            title: Dialog title
+            tools: list of tools to add to the toolbar
+            name: Dialog name
+            options: Plot options
 
         Returns:
             QDialog instance
@@ -939,11 +933,11 @@ class BaseDataPanel(AbstractPanel):
         """Create new pop-up dialog for the currently selected signal/image.
 
         Args:
-            title (str): Dialog title
-            name (str): Dialog name
-            options (dict): Plot options
-            toolbar (bool): Show toolbar
-            tools (list(GuiTool)): list of tools to add to the toolbar
+            title: Dialog title
+            name: Dialog name
+            options: Plot options
+            toolbar: Show toolbar
+            tools: list of tools to add to the toolbar
 
         Returns:
             QDialog instance, selected object
@@ -1141,8 +1135,8 @@ class BaseDataPanel(AbstractPanel):
         """Add a label with object title on the associated plot
 
         Args:
-            title (str | None): Label title. Defaults to None.
-                If None, the title is the object title.
+            title: Label title. Defaults to None.
+             If None, the title is the object title.
         """
         objs = self.objview.get_sel_objects(include_groups=True)
         for obj in objs:

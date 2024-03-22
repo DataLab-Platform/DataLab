@@ -1399,17 +1399,14 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 raise TypeError(f"Unsupported object type {type(obj)}")
 
     @remote_controlled
-    def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image)
+    def load_from_files(self, filenames: list[str]) -> None:
+        """Open objects from files in current panel (signals/images)
 
         Args:
-            filename (str): HDF5 filename
-
-        Returns:
-            None
+            filenames: list of filenames
         """
-        panel = self.tabwidget.currentWidget()
-        panel.open_object(filename)
+        panel = self.__get_current_basedatapanel()
+        panel.load_from_files(filenames)
 
     # ------Other methods related to AbstractCDLControl interface
     def get_version(self) -> str:

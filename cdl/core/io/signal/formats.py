@@ -27,12 +27,11 @@ class NumPySignalFormat(SignalFormatBase):
         writeable=True,
     )  # pylint: disable=duplicate-code
 
-    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
+    def read_xydata(self, filename: str) -> np.ndarray:
         """Read data and metadata from file, write metadata to object, return xydata
 
         Args:
             filename (str): Name of file to read
-            obj (SignalObj): Signal object to write metadata to
 
         Returns:
             np.ndarray: xydata
@@ -59,24 +58,32 @@ class CSVSignalFormat(SignalFormatBase):
         writeable=True,
     )
 
-    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
-        """Read data and metadata from file, write metadata to object, return xydata
+    def read(self, filename: str) -> list[SignalObj]:
+        """Read list of signal objects from file
 
         Args:
-            filename (str): Name of file to read
-            obj (SignalObj): Signal object to write metadata to
+            filename: File name
 
         Returns:
-            np.ndarray: xydata
+            List of signal objects
         """
-        xydata, xlabel, xunit, ylabel, yunit, header = funcs.read_csv(filename)
-        obj.xlabel = xlabel
-        obj.xunit = xunit
-        obj.ylabel = ylabel
-        obj.yunit = yunit
-        if header:
-            obj.metadata[self.HEADER_KEY] = header
-        return xydata
+        xydata, xlabel, xunit, ylabels, yunits, header = funcs.read_csv(filename)
+        if ylabels:
+            # If y labels are present, we are sure that the data contains at least
+            # two columns (x and y)
+            objs = []
+            for i, (ylabel, yunit) in enumerate(zip(ylabels, yunits)):
+                obj = self.create_object(filename, i if len(ylabels) > 1 else None)
+                obj.set_xydata(xydata[:, 0], xydata[:, i + 1])
+                obj.xlabel = xlabel or ""
+                obj.xunit = xunit or ""
+                obj.ylabel = ylabel or ""
+                obj.yunit = yunit or ""
+                if header:
+                    obj.metadata[self.HEADER_KEY] = header
+                objs.append(obj)
+            return objs
+        return self.create_signals_from(xydata, filename)
 
     def write(self, filename: str, obj: SignalObj) -> None:
         """Write data to file
@@ -87,10 +94,10 @@ class CSVSignalFormat(SignalFormatBase):
         """
         funcs.write_csv(
             filename,
-            obj.xydata.T,
+            obj.xydata,
             obj.xlabel,
             obj.xunit,
-            obj.ylabel,
-            obj.yunit,
+            [obj.ylabel],
+            [obj.yunit],
             obj.metadata.get(self.HEADER_KEY, ""),
         )

@@ -17,40 +17,42 @@ from guidata.qthelpers import qt_app_context
 
 from cdl.core.io.image import funcs as image_funcs
 from cdl.env import execenv
-from cdl.obj import ImageObj, SignalObj, read_image, read_signal
+from cdl.obj import ImageObj, SignalObj, read_images, read_signals
 from cdl.utils.tests import try_open_test_data
 from cdl.utils.vistools import view_curve_items, view_images
 
 
-def __read_obj(fname: str) -> SignalObj | ImageObj:
-    """Read an object from a file"""
+def __read_objs(fname: str) -> list[ImageObj] | list[SignalObj]:
+    """Read objects from a file"""
     if "curve_formats" in fname:
-        return read_signal(fname)
-    return read_image(fname)
+        return read_signals(fname)
+    return read_images(fname)
 
 
 @try_open_test_data("Testing TXT file reader", "*.txt")
 def open_txt(fname: str | None = None) -> None:
     """Testing TXT files"""
-    obj = __read_obj(fname)
-    execenv.print(obj)
-    view_curve_items([obj.make_item()])
+    objs = __read_objs(fname)
+    for obj in objs:
+        execenv.print(obj)
+    view_curve_items([obj.make_item() for obj in objs])
 
 
 @try_open_test_data("Testing CSV file reader", "*.csv")
 def open_csv(fname: str | None = None) -> None:
     """Testing CSV files"""
-    obj = __read_obj(fname)
-    execenv.print(obj)
-    view_curve_items([obj.make_item()])
+    objs = __read_objs(fname)
+    for obj in objs:
+        execenv.print(obj)
+    view_curve_items([obj.make_item() for obj in objs])
 
 
 @try_open_test_data("Testing SIF file handler", "*.sif")
 def open_sif(fname: str | None = None) -> None:
     """Testing SIF files"""
     execenv.print(image_funcs.SIFFile(fname))
-    data = image_funcs.imread_sif(fname)[0]
-    view_images(data)
+    datalist = image_funcs.imread_sif(fname)
+    view_images(datalist)
 
 
 @try_open_test_data("Testing SCOR-DATA file handler", "*.scor-data")

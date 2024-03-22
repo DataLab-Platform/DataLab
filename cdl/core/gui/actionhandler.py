@@ -377,7 +377,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 # icon: fileopen_signal.svg or fileopen_image.svg
                 icon=get_icon(f"fileopen_{self.__class__.__name__[:3].lower()}.svg"),
                 tip=_("Open %s") % self.OBJECT_STR,
-                triggered=self.panel.open_objects,
+                triggered=self.panel.load_from_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
                 select_condition=SelectCond.always,
                 toolbar_pos=-1,
@@ -387,7 +387,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 # icon: filesave_signal.svg or filesave_image.svg
                 icon=get_icon(f"filesave_{self.__class__.__name__[:3].lower()}.svg"),
                 tip=_("Save selected %s") % self.OBJECT_STR,
-                triggered=self.panel.save_objects,
+                triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
                 select_condition=SelectCond.at_least_one,
                 context_menu_pos=-1,

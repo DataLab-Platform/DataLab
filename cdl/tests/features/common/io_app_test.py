@@ -32,6 +32,10 @@ def __test_func(
         # os.startfile(tmpdir)
         fnames = get_test_fnames(pattern)
         execenv.print("    Opening:")
+        # TODO: This test does not support formats that return multiple objects
+        # (e.g. SIF files with multiple images). As a consequence, it will not test
+        # thoroughly the I/O functionalities for these formats (it will keep only the
+        # first object in the list of returned objects)
         objs = []
         for fname in fnames:
             execenv.print(f"      {fname}: ", end="")
@@ -40,7 +44,7 @@ def __test_func(
             except NotImplementedError:
                 execenv.print("Skipped (not supported)")
                 continue
-            objs.append(panel.open_object(fname))
+            objs.append(panel.load_from_files([fname])[0])
             execenv.print("OK")
         execenv.print("    Saving:")
         for fname, obj in zip(fnames, objs):
@@ -52,7 +56,7 @@ def __test_func(
             except NotImplementedError:
                 execenv.print("Skipped (not supported)")
                 continue
-            panel.save_objects([path])
+            panel.save_to_files([path])
             execenv.print("OK")
 
 

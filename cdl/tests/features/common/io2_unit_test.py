@@ -35,7 +35,7 @@ def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:
         for fname in fnames:
             try:
                 execenv.print(f"      {reduce_path(fname)}: ", end="")
-                obj = registry.read(fname)
+                obj = registry.read(fname)[0]
                 objects[fname] = obj
                 execenv.print("OK")
             except NotImplementedError:

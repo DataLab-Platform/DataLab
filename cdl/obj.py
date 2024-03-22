@@ -45,6 +45,7 @@ Signal model
     :members:
     :inherited-members:
 .. autofunction:: cdl.obj.read_signal
+.. autofunction:: cdl.obj.read_signals
 .. autofunction:: cdl.obj.create_signal
 .. autofunction:: cdl.obj.create_signal_from_param
 .. autofunction:: cdl.obj.new_signal_param
@@ -61,6 +62,7 @@ Image model
     :members:
     :inherited-members:
 .. autofunction:: cdl.obj.read_image
+.. autofunction:: cdl.obj.read_images
 .. autofunction:: cdl.obj.create_image
 .. autofunction:: cdl.obj.create_image_from_param
 .. autofunction:: cdl.obj.new_image_param
@@ -74,7 +76,7 @@ Image model
 # pylint:disable=unused-import
 # flake8: noqa
 
-from cdl.core.io import read_image, read_signal
+from cdl.core.io import read_image, read_images, read_signal, read_signals
 from cdl.core.model.base import (
     NormalRandomParam,
     ResultShape,

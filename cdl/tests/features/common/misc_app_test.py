@@ -120,11 +120,11 @@ def __misc_unit_function(win: CDLMainWindow) -> None:
     # Open object
     __print_test_result("Open object")
     fname = get_test_fnames("*.csv")[0]
-    win.open_object(fname)
+    win.load_from_files([fname])
 
     # Open objects from signal panel
     __print_test_result("Open objects from signal panel")
-    win.signalpanel.open_objects(get_test_fnames("curve_formats/*.*"))
+    win.signalpanel.load_from_files(get_test_fnames("curve_formats/*.*"))
 
     # Get version
     __print_test_result("Get version")

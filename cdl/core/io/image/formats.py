@@ -156,8 +156,15 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(self, filename: str) -> ImageObj:
-        """Read data from file, return one or more objects"""
+    def read(self, filename: str) -> list[ImageObj]:
+        """Read list of image objects from file
+
+        Args:
+            filename: File name
+
+        Returns:
+            List of image objects
+        """
         data = self.read_data(filename)
         if len(data.shape) == 3:
             objlist = []
@@ -168,7 +175,7 @@ class AndorSIFImageFormat(ImageFormatBase):
             return objlist
         obj = self.create_object(filename)
         obj.data = data
-        return obj
+        return [obj]
 
     @staticmethod
     def read_data(filename: str) -> np.ndarray:

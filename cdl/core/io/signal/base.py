@@ -16,7 +16,6 @@ import abc
 import numpy as np
 
 from cdl.core.io.base import BaseIORegistry, FormatBase
-from cdl.core.io.conv import data_to_xy
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.strings import reduce_path
 
@@ -41,55 +40,65 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
         """Create empty object
 
         Args:
-            filename (str): File name
-            index (int | None): Index of object in file
+            filename: File name
+            index: Index of object in file
 
         Returns:
-            SignalObj: Signal object
+            Signal object
         """
         name = reduce_path(filename)
         if index is not None:
-            name += f"_{index}"
+            name += f" {index:02d}"
         return create_signal(name)
 
-    def read(self, filename: str) -> SignalObj:
-        """Read data from file, return one or more objects
+    def create_signals_from(self, xydata: np.ndarray, filename: str) -> list[SignalObj]:
+        """Create signal objects from xydata and filename
 
         Args:
-            filename (str): File name
+            xydata: XY data
+            filename: File name
 
         Returns:
-            SignalObj: Signal object
-        """
-        obj = self.create_object(filename)
-        xydata = self.read_xydata(filename, obj)
-        self.set_signal_xydata(obj, xydata)
-        return obj
-
-    @staticmethod
-    def set_signal_xydata(signal: SignalObj, xydata: np.ndarray) -> None:
-        """Set signal xydata
-
-        Args:
-            signal (SignalObj): Signal object
-            xydata (numpy.ndarray): XY data
+            List of signal objects
         """
         assert isinstance(xydata, np.ndarray), "Data type not supported"
         assert len(xydata.shape) in (1, 2), "Data not supported"
         if len(xydata.shape) == 1:
-            signal.set_xydata(np.arange(xydata.size), xydata)
-        else:
-            x, y, dx, dy = data_to_xy(xydata)
-            signal.set_xydata(x, y, dx, dy)
+            # 1D data
+            obj = self.create_object(filename)
+            obj.set_xydata(np.arange(xydata.size), xydata)
+            return [obj]
+        # 2D data: x, y1, y2, ...
+        # Eventually transpose data:
+        if xydata.shape[1] > xydata.shape[0]:
+            xydata = xydata.T
+        objs = []
+        # Create objects for each y column
+        for i in range(1, xydata.shape[1]):
+            obj = self.create_object(filename, i)
+            obj.set_xydata(xydata[:, 0], xydata[:, i])
+            objs.append(obj)
+        return objs
 
-    @abc.abstractmethod
-    def read_xydata(self, filename: str, obj: SignalObj) -> np.ndarray:
+    def read(self, filename: str) -> list[SignalObj]:
+        """Read list of signal objects from file
+
+        Args:
+            filename: File name
+
+        Returns:
+            List of signal objects
+        """
+        xydata = self.read_xydata(filename)
+        return self.create_signals_from(xydata, filename)
+
+    def read_xydata(self, filename: str) -> np.ndarray:
         """Read data and metadata from file, write metadata to object, return xydata
 
         Args:
-            filename (str): File name
-            obj (SignalObj): Signal object
+            filename: File name
 
         Returns:
-            np.ndarray: XY data
+            XY data
         """
+        raise NotImplementedError(f"Reading from {self.info.name} is not supported")

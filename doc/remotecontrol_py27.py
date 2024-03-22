@@ -102,9 +102,9 @@ class RemoteClient(object):
         """Open DataLab HDF5 browser to Import HDF5 file"""
         self.serverproxy.import_h5_file(filename, reset_all)
 
-    def open_object(self, filename):
-        """Open object from file in current panel (signal/image)"""
-        self.serverproxy.open_object(filename)
+    def load_from_files(self, filenames):
+        """Open objects from files in current panel (signals/images)"""
+        self.serverproxy.load_from_files(filenames)
 
     def add_signal(
         self, title, xdata, ydata, xunit=None, yunit=None, xlabel=None, ylabel=None

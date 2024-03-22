@@ -16,30 +16,20 @@ import re
 import numpy as np
 
 
-def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
-    """Read CSV data, and return tuple (xydata, xlabel, xunit, ylabel, yunit, header).
+def read_csv(
+    filename: str,
+) -> tuple[
+    np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
+]:
+    """Read CSV data, and return tuple (xydata, xlabel, xunit, ylabels, yunits, header).
 
-    Parameters
-    ----------
-    filename: str
-        CSV file name.
+    Args:
+        filename: CSV file name
 
-    Returns
-    -------
-    data: np.ndarray
-        Data array.
-    xlabel: str
-        X axis label.
-    xunit: str
-        X axis unit.
-    ylabel: str
-        Y axis label.
-    yunit: str
-        Y axis unit.
-    header: str
-        Header.
+    Returns:
+        Tuple (xydata, xlabel, xunit, ylabels, yunits, header)
     """
-    xydata, xlabel, xunit, ylabel, yunit, header = None, "", "", "", "", ""
+    xydata, xlabel, xunit, ylabels, yunits, header = None, None, None, None, None, None
     for delimiter, comments in (
         (x, y) for x in (";", "\t", ",", " ") for y in ("#", None)
     ):
@@ -57,7 +47,9 @@ def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
             if xydata.size == 0:
                 raise ValueError("No data")
             # Trying to read X,Y titles
-            line0 = delimiter.join([str(val) for val in xydata[0]])
+            vals0 = [str(val) for val in xydata[0]]
+            nb_of_y_columns = len(vals0) - 1
+            line0 = delimiter.join(vals0)
             header = ""
             with open(filename, "r", encoding="utf-8") as fdesc:
                 lines = fdesc.readlines()
@@ -69,64 +61,72 @@ def read_csv(filename: str) -> tuple[np.ndarray, str, str, str, str, str]:
                     if line == line0:
                         break
                     try:
-                        xlabel, ylabel = rawline.split(delimiter)[:2]
-                        xlabel = xlabel.strip()
-                        ylabel = ylabel.strip()
-                        # Trying to parse X,Y units
-                        pattern = r"([\S ]*) \(([\S]*)\)"  # Matching "Label (unit)"
-                        match = re.match(pattern, xlabel)
-                        if match is not None:
-                            xlabel, xunit = match.groups()
-                        match = re.match(pattern, ylabel)
-                        if match is not None:
-                            ylabel, yunit = match.groups()
+                        labels = rawline.split(delimiter)
+                        if len(labels) == nb_of_y_columns + 1:
+                            xlabel = labels[0]
+                            ylabels = labels[1:]
+                            xlabel = xlabel.strip()
+                            ylabels = [label.strip() for label in ylabels]
+                            yunits = [""] * len(ylabels)
+
+                            # Trying to parse X,Y units
+                            pattern = r"([\S ]*) \(([\S]*)\)"
+                            match = re.match(pattern, xlabel)
+                            if match is not None:
+                                xlabel, xunit = match.groups()
+                            for i, ylabel in enumerate(ylabels):
+                                match = re.match(pattern, ylabel)
+                                if match is not None:
+                                    ylabels[i], yunits[i] = match.groups()
                     except ValueError:
                         pass
                     break
             break
         except ValueError:
             continue
-    return xydata, xlabel, xunit, ylabel, yunit, header
+    return xydata, xlabel, xunit, ylabels, yunits, header
 
 
 def write_csv(
     filename: str,
     xydata: np.ndarray,
-    xlabel: str,
-    xunit: str,
-    ylabel: str,
-    yunit: str,
-    header: str,
+    xlabel: str | None,
+    xunit: str | None,
+    ylabels: list[str] | None,
+    yunits: list[str] | None,
+    header: str | None,
 ) -> None:
     """Write CSV data.
 
-    Parameters
-    ----------
-    filename: str
-        CSV file name.
-    xydata: np.ndarray
-        Data array.
-    xlabel: str
-        X axis label.
-    xunit: str
-        X axis unit.
-    ylabel: str
-        Y axis label.
-    yunit: str
-        Y axis unit.
-    header: str
-        Header.
+    Args:
+        filename: CSV file name
+        xydata: XY data
+        xlabel: X label
+        xunit: X unit
+        ylabels: Y labels
+        yunits: Y units
+        header: Header
     """
-    xlabel, ylabel = xlabel or "X", ylabel or "Y"
-    if xunit:
-        xlabel += f" ({xunit})"
-    if yunit:
-        ylabel += f" ({yunit})"
+    labels = ""
     delimiter = ","
+    if len(ylabels) == 1:
+        ylabels = ["Y"] if not ylabels[0] else ylabels
+    elif ylabels:
+        ylabels = [f"Y{i+1}" if not label else label for i, label in enumerate(ylabels)]
+        if yunits:
+            ylabels = [
+                f"{label} ({unit})" if unit else label
+                for label, unit in zip(ylabels, yunits)
+            ]
+    if ylabels:
+        xlabel = xlabel or "X"
+        if xunit:
+            xlabel += f" ({xunit})"
+        labels = delimiter.join([xlabel] + ylabels)
     np.savetxt(
         filename,
-        xydata.T,
-        header=delimiter.join([xlabel, ylabel]),
+        xydata,
+        header=labels,
         delimiter=delimiter,
         comments=header,
     )

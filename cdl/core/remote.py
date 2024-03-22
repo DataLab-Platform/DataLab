@@ -146,7 +146,7 @@ class RemoteServer(QC.QThread):
     SIG_CLOSE_APP = QC.Signal()
     SIG_RAISE_WINDOW = QC.Signal()
     SIG_ADD_OBJECT = QC.Signal(object)
-    SIG_OPEN_OBJECT = QC.Signal(str)
+    SIG_LOAD_FROM_FILES = QC.Signal(list)
     SIG_SELECT_OBJECTS = QC.Signal(list, str)
     SIG_SELECT_GROUPS = QC.Signal(list, str)
     SIG_SELECT_ALL_GROUPS = QC.Signal(str)
@@ -174,7 +174,7 @@ class RemoteServer(QC.QThread):
         self.SIG_CLOSE_APP.connect(win.close)
         self.SIG_RAISE_WINDOW.connect(win.raise_window)
         self.SIG_ADD_OBJECT.connect(win.add_object)
-        self.SIG_OPEN_OBJECT.connect(win.open_object)
+        self.SIG_LOAD_FROM_FILES.connect(win.load_from_files)
         self.SIG_SELECT_OBJECTS.connect(win.select_objects)
         self.SIG_SELECT_GROUPS.connect(win.select_groups)
         self.SIG_SELECT_ALL_GROUPS.connect(lambda panel: win.select_groups(None, panel))
@@ -339,13 +339,13 @@ class RemoteServer(QC.QThread):
         self.SIG_IMPORT_H5.emit(filename, reset_all)
 
     @remote_call
-    def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image).
+    def load_from_files(self, filenames: list[str]) -> None:
+        """Open objects from files in current panel (signals/images).
 
         Args:
-            filename (str): File name
+            filenames: list of file names
         """
-        self.SIG_OPEN_OBJECT.emit(filename)
+        self.SIG_LOAD_FROM_FILES.emit(filenames)
 
     @remote_call
     def add_signal(

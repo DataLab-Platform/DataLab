@@ -44,21 +44,22 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         """
         name = reduce_path(filename)
         if index is not None:
-            name += f"_{index}"
+            name += f" {index:02d}"
         return create_image(name)
 
-    def read(self, filename: str) -> ImageObj:
-        """Read data from file, return one or more objects
+    def read(self, filename: str) -> list[ImageObj]:
+        """Read list of image objects from file
 
         Args:
             filename: File name
 
         Returns:
-            Image object
+            List of image objects
         """
+        # Default implementation covers the case of a single image:
         obj = self.create_object(filename)
         obj.data = self.read_data(filename)
-        return obj
+        return [obj]
 
     @staticmethod
     @abc.abstractmethod

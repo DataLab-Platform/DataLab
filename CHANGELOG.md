@@ -5,6 +5,16 @@ for future and past milestones.
 
 ## DataLab Version 0.14.2 ##
 
+⚠️ API changes required for fixing support for multiple signals loading feature:
+  * Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
+    classes, main window and data panels
+  * For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
+  * To sum up, those changes lead to the following situation:
+    * `load_from_files`: load a sequence of objects from multiple files
+    * `save_to_files`: save a sequence of objects to multiple files (at the moment,
+      it only supports saving a single object to a single file, but it may be extended
+      in the future to support saving multiple objects to a single file)
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #61](https://github.com/DataLab-Platform/DataLab/issues/61) - Text file import wizard: application crash when importing a multiple curve text file:

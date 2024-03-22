@@ -208,11 +208,11 @@ class AbstractCDLControl(abc.ABC):
         """
 
     @abc.abstractmethod
-    def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image).
+    def load_from_files(self, filenames: list[str]) -> None:
+        """Open objects from files in current panel (signals/images).
 
         Args:
-            filename (str): File name
+            filenames: list of file names
         """
 
     @abc.abstractmethod
@@ -596,13 +596,13 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         """
         self._cdl.import_h5_file(filename, reset_all)
 
-    def open_object(self, filename: str) -> None:
-        """Open object from file in current panel (signal/image).
+    def load_from_files(self, filenames: list[str]) -> None:
+        """Open objects from files in current panel (signals/images).
 
         Args:
-            filename (str): File name
+            filenames: list of file names
         """
-        self._cdl.open_object(filename)
+        self._cdl.load_from_files(filenames)
 
     def get_sel_object_uuids(self, include_groups: bool = False) -> list[str]:
         """Return selected objects uuids.
