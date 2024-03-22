@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-25 22:24+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.proxy:2 of
 msgid "Proxy objects (:mod:`cdl.proxy`)"
@@ -67,8 +67,8 @@ msgstr ""
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
 #: cdl.core.baseproxy.BaseProxy.import_h5_file
 #: cdl.core.baseproxy.BaseProxy.import_macro_from_file
+#: cdl.core.baseproxy.BaseProxy.load_from_files
 #: cdl.core.baseproxy.BaseProxy.open_h5_files
-#: cdl.core.baseproxy.BaseProxy.open_object
 #: cdl.core.baseproxy.BaseProxy.run_macro
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file
 #: cdl.core.baseproxy.BaseProxy.select_groups
@@ -203,8 +203,8 @@ msgstr "Libellé Y. Par défaut, None."
 msgid "Z label. Defaults to None."
 msgstr "Libellé Z. Par défaut, None."
 
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh
 #: cdl.core.baseproxy.AbstractCDLControl.get_public_methods
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh
 #: cdl.core.baseproxy.BaseProxy.get_current_panel
 #: cdl.core.baseproxy.BaseProxy.get_group_titles_with_object_infos
 #: cdl.core.baseproxy.BaseProxy.get_object_titles
@@ -340,18 +340,18 @@ msgstr "Délai d'attente en secondes. Par défaut, 5.0."
 msgid "Number of retries. Defaults to 10."
 msgstr "Nombre de tentatives. Par défaut, 10."
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:1 of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:1 of
 msgid "Return a context manager to temporarily disable auto refresh."
 msgstr ""
 "Renvoie un gestionnaire de contexte pour désactiver temporairement le "
 "rafraîchissement automatique."
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:3 of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:3 of
 msgid "Context manager"
 msgstr "Gestionnaire de contexte"
 
-#: cdl.core.baseproxy.BaseProxy.context_no_refresh:6 cdl.proxy.proxy_context:14
-#: of
+#: cdl.core.baseproxy.AbstractCDLControl.context_no_refresh:6
+#: cdl.proxy.proxy_context:14 of
 msgid "Example"
 msgstr "Exemple"
 
@@ -534,6 +534,14 @@ msgstr "Nom de fichier."
 msgid "Return True if connected to DataLab XML-RPC server."
 msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
 
+#: cdl.core.baseproxy.BaseProxy.load_from_files:1 of
+msgid "Open objects from files in current panel (signals/images)."
+msgstr "Ouvrir des objets à partir de fichiers dans le panneau actuel (signaux/images)."
+
+#: cdl.core.baseproxy.BaseProxy.load_from_files:3 of
+msgid "list of file names"
+msgstr "liste de noms de fichiers"
+
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr ""
@@ -547,16 +555,6 @@ msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut, None."
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:5 of
 msgid "Import all objects from HDF5 files. Defaults to None."
 msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None."
-
-#: cdl.core.baseproxy.BaseProxy.open_object:1 of
-msgid "Open object from file in current panel (signal/image)."
-msgstr ""
-"Ouvrir un objet à partir d'un fichier dans le panneau actuel "
-"(signal/image)."
-
-#: cdl.core.baseproxy.BaseProxy.open_object:3 of
-msgid "File name"
-msgstr "Nom du fichier"
 
 #: cdl.core.baseproxy.BaseProxy.raise_window:1 of
 msgid "Raise DataLab window"
@@ -747,3 +745,6 @@ msgstr "avec proxy_context(\"local\") en tant que proxy :"
 #: cdl.proxy.proxy_context:16 of
 msgid "proxy.add_signal(...)"
 msgstr "proxy.add_signal(...)"
+
+#~ msgid "File name"
+#~ msgstr "Nom du fichier"

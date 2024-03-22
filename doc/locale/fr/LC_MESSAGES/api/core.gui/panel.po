@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:40+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -27,7 +27,9 @@ msgstr "Panneau"
 msgid ""
 "The :mod:`cdl.core.gui.panel` package provides the **panel objects** for "
 "signals and images."
-msgstr "Le paquet :mod:`cdl.core.gui.panel` fournit les **objets panneaux** pour les signaux et les images."
+msgstr ""
+"Le paquet :mod:`cdl.core.gui.panel` fournit les **objets panneaux** pour "
+"les signaux et les images."
 
 #: cdl.core.gui.panel:7 of
 msgid "Three types of panels are available:"
@@ -49,59 +51,59 @@ msgstr ":class:`cdl.core.gui.panel.macro.MacroPanel`: Panneau Macro"
 msgid ""
 "Signal and Image Panels are called **Data Panels** and are used to "
 "display and handle signals and images in the main window of DataLab."
-msgstr ""
+msgstr "Les panneaux Signal et Image sont appelés **Panneaux de données** et sont utilisés pour afficher et gérer les signaux et les images dans la fenêtre principale de DataLab."
 
 #: cdl.core.gui.panel:16 of
 msgid ""
 "Data Panels rely on the :class:`cdl.core.gui.panel.base.ObjectProp` class"
 " (managing the object properties) and a set of modules to handle the GUI "
 "features:"
-msgstr ""
+msgstr "Les Panneaux de données reposent sur la classe :class:`cdl.core.gui.panel.base.ObjectProp` (gestion des propriétés de l'objet) et un ensemble de modules pour gérer les fonctionnalités de l'interface graphique :"
 
 #: cdl.core.gui.panel:19 of
 msgid ""
 ":mod:`cdl.core.gui.actionhandler`: Application actions (menus, toolbars, "
 "context menu)"
-msgstr ""
+msgstr ":mod:`cdl.core.gui.actionhandler`: Actions de l'application (menus, barres d'outils, menu contextuel)"
 
 #: cdl.core.gui.panel:20 of
 msgid ""
 ":mod:`cdl.core.gui.objectview`: Widgets to display object (signal/image) "
 "trees"
-msgstr ""
+msgstr ":mod:`cdl.core.gui.objectview`: Widgets pour afficher les arbres d'objets (signaux/images)"
 
 #: cdl.core.gui.panel:21 of
 msgid ""
 ":mod:`cdl.core.gui.plothandler`: `PlotPy` plot items for representing "
 "signals and images"
-msgstr ""
+msgstr ":mod:`cdl.core.gui.plothandler`: `PlotPy` éléments de tracé pour représenter les signaux et les images"
 
 #: cdl.core.gui.panel:22 of
 msgid ":mod:`cdl.core.gui.processor`: Processor (computation)"
-msgstr ""
+msgstr ":mod:`cdl.core.gui.processor`: Processeur (calcul)"
 
 #: cdl.core.gui.panel:23 of
 msgid ":mod:`cdl.core.gui.panel.roieditor`: ROI editor"
-msgstr ""
+msgstr ":mod:`cdl.core.gui.panel.roieditor`: Éditeur de ROI"
 
 #: cdl.core.gui.panel:25 of
 msgid ""
 "The Macro Panel is used to display and run macros. It relies on the "
 ":mod:`cdl.core.gui.macroeditor` module to handle the macro edition and "
 "execution."
-msgstr ""
+msgstr "Le Panneau Macro est utilisé pour afficher et exécuter des macros. Il repose sur le module :mod:`cdl.core.gui.macroeditor` pour gérer l'édition et l'exécution des macros."
 
 #: cdl.core.gui.panel:29 of
 msgid "Base features"
-msgstr ""
+msgstr "Fonctionnalités de base"
 
 #: cdl.core.gui.panel.base.is_plot_item_serializable:1 of
 msgid "Return True if plot item is serializable"
-msgstr ""
+msgstr "Renvoie True si l'élément de tracé est sérialisable"
 
 #: cdl.core.gui.panel.base.ObjectProp:1 of
 msgid "Object handling panel properties"
-msgstr ""
+msgstr "Objet gérant les propriétés du panneau"
 
 #: cdl.core.gui.panel.base.ObjectProp.add_button:1 of
 msgid "Add additional button on bottom of properties panel"
@@ -194,17 +196,13 @@ msgstr ""
 #: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection
 #: cdl.core.gui.panel.base.BaseDataPanel.create_object
-#: cdl.core.gui.panel.base.BaseDataPanel.export_metadata_from_file
 #: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current
 #: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files
-#: cdl.core.gui.panel.base.BaseDataPanel.import_metadata_from_file
+#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files
 #: cdl.core.gui.panel.base.BaseDataPanel.new_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_objects
 #: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view
-#: cdl.core.gui.panel.base.BaseDataPanel.save_objects
 #: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current
 #: cdl.core.gui.panel.image.ImagePanel.new_object
 #: cdl.core.gui.panel.macro.MacroPanel.add_macro
@@ -242,11 +240,10 @@ msgstr ""
 #: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files
 #: cdl.core.gui.panel.base.BaseDataPanel.import_metadata_from_file
+#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files
 #: cdl.core.gui.panel.base.BaseDataPanel.new_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_object
-#: cdl.core.gui.panel.base.BaseDataPanel.open_objects
 #: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view
-#: cdl.core.gui.panel.base.BaseDataPanel.save_objects
+#: cdl.core.gui.panel.base.BaseDataPanel.save_to_files
 #: cdl.core.gui.panel.base.BaseDataPanel.selection_changed
 #: cdl.core.gui.panel.image.ImagePanel.delete_metadata
 #: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current
@@ -345,7 +342,7 @@ msgstr ""
 msgid "annotation plot items"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.add_annotations_from_items:5 of
+#: cdl.core.gui.panel.base.BaseDataPanel.add_annotations_from_items:4 of
 msgid "refresh plot. Defaults to True."
 msgstr ""
 
@@ -377,7 +374,7 @@ msgstr ""
 msgid "new object parameters. If None, create a new one."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current:7
+#: cdl.core.gui.panel.base.BaseDataPanel.get_newparam_from_current:5
 #: cdl.core.gui.panel.image.ImagePanel.get_newparam_from_current:9
 #: cdl.core.gui.panel.signal.SignalPanel.get_newparam_from_current:9 of
 msgid "New object parameters"
@@ -393,23 +390,23 @@ msgstr ""
 msgid "new object parameters"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object:5
+#: cdl.core.gui.panel.base.BaseDataPanel.new_object:4
 #: cdl.core.gui.panel.image.ImagePanel.new_object:5
 #: cdl.core.gui.panel.signal.SignalPanel.new_object:5 of
 msgid "additional parameters"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object:7
+#: cdl.core.gui.panel.base.BaseDataPanel.new_object:5
 #: cdl.core.gui.panel.image.ImagePanel.new_object:7
 #: cdl.core.gui.panel.signal.SignalPanel.new_object:7 of
 msgid "Open a dialog box to edit parameters (default: True)"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object:9 of
+#: cdl.core.gui.panel.base.BaseDataPanel.new_object:6 of
 msgid "Add object to panel (default: True)"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.new_object:12
+#: cdl.core.gui.panel.base.BaseDataPanel.new_object:8
 #: cdl.core.gui.panel.image.ImagePanel.new_object:12
 #: cdl.core.gui.panel.signal.SignalPanel.new_object:12 of
 msgid "New object"
@@ -419,51 +416,32 @@ msgstr ""
 msgid "Set current object title"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.open_object:1 of
-msgid "Open object from file (signal/image), add it to DataLab and return it."
+#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files:1 of
+msgid ""
+"Open objects from file (signals/images), add them to DataLab and return "
+"them."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.open_object:3 of
-msgid "file name"
+#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files:3
+#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files:3
+#: cdl.core.gui.panel.base.BaseDataPanel.save_to_files:3 of
+msgid "File names"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.open_object:6 of
-msgid "New object or list of new objects"
+#: cdl.core.gui.panel.base.BaseDataPanel.load_from_files:5 of
+msgid "list of new objects"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.save_object:1 of
-msgid "Save object to file (signal/image)"
+#: cdl.core.gui.panel.base.BaseDataPanel.save_to_files:1 of
+msgid "Save selected objects to files (signal/image)."
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files:1 of
 msgid "Handle dropped files"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files:3
-#: cdl.core.gui.panel.base.BaseDataPanel.open_objects:3
-#: cdl.core.gui.panel.base.BaseDataPanel.save_objects:3 of
-msgid "File names"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.export_metadata_from_file:6
-#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files:6
-#: cdl.core.gui.panel.base.BaseDataPanel.import_metadata_from_file:6
-#: cdl.core.gui.panel.base.BaseDataPanel.save_objects:6 of
+#: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files:5 of
 msgid "None"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.open_objects:1 of
-msgid ""
-"Open objects from file (signals/images), add them to DataLab and return "
-"them."
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.open_objects:6 of
-msgid "list of new objects"
-msgstr ""
-
-#: cdl.core.gui.panel.base.BaseDataPanel.save_objects:1 of
-msgid "Save selected objects to file (signal/image)."
 msgstr ""
 
 #: cdl.core.gui.panel.base.BaseDataPanel.exec_import_wizard:1 of
@@ -508,8 +486,8 @@ msgstr ""
 msgid "Object IDs"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:18
-#: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view:6 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:11
+#: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view:5 of
 msgid "QDialog instance"
 msgstr ""
 
@@ -521,33 +499,33 @@ msgstr ""
 msgid "Create new pop-up signal/image plot dialog."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:5 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:4 of
 msgid "Edit mode"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:7
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:9 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:5
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:6 of
 msgid "Show toolbar"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:9
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:6
 #: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:3
 #: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog:3 of
 msgid "Dialog title"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:11
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:11 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:7
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:7 of
 msgid "list of tools to add to the toolbar"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:13
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:5 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:8
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:4 of
 msgid "Dialog name"
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:15
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:7 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog:9
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:5 of
 msgid "Plot options"
 msgstr ""
 
@@ -555,7 +533,7 @@ msgstr ""
 msgid "Create new pop-up dialog for the currently selected signal/image."
 msgstr ""
 
-#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:14 of
+#: cdl.core.gui.panel.base.BaseDataPanel.create_new_dialog_for_selection:9 of
 msgid "QDialog instance, selected object"
 msgstr ""
 
@@ -892,3 +870,18 @@ msgstr ""
 
 #~ msgid "Panel (:mod:`cdl.core.gui.panel`)"
 #~ msgstr "Panneau (:mod:`cdl.core.gui.panel`)"
+
+#~ msgid "Open object from file (signal/image), add it to DataLab and return it."
+#~ msgstr ""
+
+#~ msgid "file name"
+#~ msgstr ""
+
+#~ msgid "New object or list of new objects"
+#~ msgstr ""
+
+#~ msgid "Save object to file (signal/image)"
+#~ msgstr ""
+
+#~ msgid "Save selected objects to file (signal/image)."
+#~ msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-23 16:48+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -88,7 +88,8 @@ msgstr ""
 "L'index de la ROI commence à 0 (ou est simplement 0 s'il n'y a pas de "
 "ROI)."
 
-#: cdl.core.io.read_image cdl.core.io.read_signal
+#: cdl.core.io.read_image cdl.core.io.read_images cdl.core.io.read_signal
+#: cdl.core.io.read_signals
 #: cdl.core.model.base.BaseObj.add_annotations_from_file
 #: cdl.core.model.base.BaseObj.add_annotations_from_items
 #: cdl.core.model.base.BaseObj.add_resultshape
@@ -209,8 +210,8 @@ msgstr ""
 "Retourne le tableau des résultats affichés, c'est-à-dire incluant le "
 "tableau complémentaire"
 
-#: cdl.core.io.read_image cdl.core.io.read_signal
-#: cdl.core.model.base.BaseObj.add_resultshape
+#: cdl.core.io.read_image cdl.core.io.read_images cdl.core.io.read_signal
+#: cdl.core.io.read_signals cdl.core.model.base.BaseObj.add_resultshape
 #: cdl.core.model.base.BaseObj.get_metadata_option
 #: cdl.core.model.base.BaseObj.get_valid_dtypenames
 #: cdl.core.model.base.BaseObj.metadata_to_html
@@ -686,7 +687,6 @@ msgstr "Vérifier les valeurs des éléments de l'ensemble de données"
 msgid "list of errors"
 msgstr "liste des erreurs"
 
-#: cdl.core.io.read_image cdl.core.io.read_signal
 #: cdl.core.model.signal.new_signal_param
 #: guidata.dataset.datatypes.DataSet.check
 #: guidata.dataset.datatypes.DataSet.get_comment
@@ -1042,13 +1042,22 @@ msgstr "Écrire la configuration dans une instance UserConfig"
 msgid "Read a signal from a file."
 msgstr "Lire un signal à partir d'un fichier."
 
-#: cdl.core.io.read_image:3 cdl.core.io.read_signal:3 of
+#: cdl.core.io.read_image:3 cdl.core.io.read_images:3 cdl.core.io.read_signal:3
+#: cdl.core.io.read_signals:3 of
 msgid "File name."
 msgstr "Nom de fichier."
 
-#: cdl.core.io.read_signal:6 of
+#: cdl.core.io.read_signal:5 of
 msgid "Signal."
 msgstr "Signal."
+
+#: cdl.core.io.read_signals:1 of
+msgid "Read a list of signals from a file."
+msgstr "Lire une liste de signaux à partir d'un fichier."
+
+#: cdl.core.io.read_signals:5 of
+msgid "List of signals."
+msgstr "Liste de signaux."
 
 #: cdl.core.model.signal.create_signal:1 of
 msgid "Create a new Signal object."
@@ -1168,7 +1177,7 @@ msgstr "Paramètres pour les fonctions périodiques"
 msgid "Return frequency in Hz"
 msgstr "Renvoie la fréquence en Hz"
 
-#: cdl.obj:52 of
+#: cdl.obj:53 of
 msgid "Image model"
 msgstr "Modèle d'image"
 
@@ -1236,9 +1245,17 @@ msgstr "titre (si None, utilise le titre de l'image)"
 msgid "Read an image from a file."
 msgstr "Lire une image à partir d'un fichier."
 
-#: cdl.core.io.read_image:6 of
+#: cdl.core.io.read_image:5 of
 msgid "Image."
 msgstr "Image."
+
+#: cdl.core.io.read_images:1 of
+msgid "Read a list of images from a file."
+msgstr "Lire une liste d'images à partir d'un fichier."
+
+#: cdl.core.io.read_images:5 of
+msgid "List of images."
+msgstr "Liste d'images."
 
 #: cdl.core.model.image.create_image:1 of
 msgid "Create a new Image object"

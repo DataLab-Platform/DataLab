@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -27,11 +27,13 @@ msgstr "Fenêtre principale"
 msgid ""
 "The :mod:`cdl.core.gui.main` module provides the main window of the "
 "DataLab (CDL) project."
-msgstr "Le module :mod:`cdl.core.gui.main` fournit la fenêtre principale du projet DataLab (CDL)."
+msgstr ""
+"Le module :mod:`cdl.core.gui.main` fournit la fenêtre principale du "
+"projet DataLab (CDL)."
 
 #: cdl.core.gui.main.CDLMainWindow:1 of
 msgid "DataLab main window"
-msgstr ""
+msgstr "Fenêtre principale de DataLab"
 
 #: cdl.core.gui.main.CDLMainWindow
 #: cdl.core.gui.main.CDLMainWindow.add_annotations_from_items
@@ -49,8 +51,8 @@ msgstr ""
 #: cdl.core.gui.main.CDLMainWindow.get_sel_object_uuids
 #: cdl.core.gui.main.CDLMainWindow.import_h5_file
 #: cdl.core.gui.main.CDLMainWindow.import_macro_from_file
+#: cdl.core.gui.main.CDLMainWindow.load_from_files
 #: cdl.core.gui.main.CDLMainWindow.open_h5_files
-#: cdl.core.gui.main.CDLMainWindow.open_object
 #: cdl.core.gui.main.CDLMainWindow.run_macro
 #: cdl.core.gui.main.CDLMainWindow.save_to_h5_file
 #: cdl.core.gui.main.CDLMainWindow.select_groups
@@ -62,27 +64,27 @@ msgstr ""
 #: cdl.core.gui.main.CDLMainWindow.toggle_auto_refresh
 #: cdl.core.gui.main.CDLMainWindow.toggle_show_titles of
 msgid "Parameters"
-msgstr ""
+msgstr "Paramètres"
 
 #: cdl.core.gui.main.CDLMainWindow:3 of
 msgid "enable internal console"
-msgstr ""
+msgstr "activer la console interne"
 
 #: cdl.core.gui.main.CDLMainWindow:4 of
 msgid "True to hide window on close"
-msgstr ""
+msgstr "True pour masquer la fenêtre à la fermeture"
 
 #: cdl.core.gui.main.CDLMainWindow.get_instance:1 of
 msgid "Return singleton instance"
-msgstr ""
+msgstr "Retourne l'instance singleton"
 
 #: cdl.core.gui.main.CDLMainWindow.xmlrpc_server_started:1 of
 msgid "XML-RPC server has started, writing comm port in configuration file"
-msgstr ""
+msgstr "Le serveur XML-RPC a démarré, écriture du port de communication dans le fichier de configuration"
 
 #: cdl.core.gui.main.CDLMainWindow.get_group_titles_with_object_infos:1 of
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr ""
+msgstr "Retourne les titres des groupes et les listes des uuids et titres des objets internes."
 
 #: cdl.core.gui.main.CDLMainWindow.add_image
 #: cdl.core.gui.main.CDLMainWindow.add_signal
@@ -99,7 +101,6 @@ msgstr ""
 #: cdl.core.gui.main.CDLMainWindow.get_version
 #: cdl.core.gui.main.CDLMainWindow.import_h5_file
 #: cdl.core.gui.main.CDLMainWindow.open_h5_files
-#: cdl.core.gui.main.CDLMainWindow.open_object
 #: cdl.core.gui.main.CDLMainWindow.panels of
 msgid "Returns"
 msgstr ""
@@ -448,8 +449,7 @@ msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.browse_h5_files:8
 #: cdl.core.gui.main.CDLMainWindow.import_h5_file:9
-#: cdl.core.gui.main.CDLMainWindow.open_h5_files:9
-#: cdl.core.gui.main.CDLMainWindow.open_object:6 of
+#: cdl.core.gui.main.CDLMainWindow.open_h5_files:9 of
 msgid "None"
 msgstr ""
 
@@ -485,12 +485,12 @@ msgstr ""
 msgid "object to add (signal or image)"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.open_object:1 of
-msgid "Open object from file in current panel (signal/image)"
+#: cdl.core.gui.main.CDLMainWindow.load_from_files:1 of
+msgid "Open objects from files in current panel (signals/images)"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.open_object:3 of
-msgid "HDF5 filename"
+#: cdl.core.gui.main.CDLMainWindow.load_from_files:3 of
+msgid "list of filenames"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_version:1 of
@@ -612,3 +612,9 @@ msgstr ""
 
 #~ msgid "Main window (:mod:`cdl.core.gui.main`)"
 #~ msgstr "Fenêtre principale (:mod:`cdl.core.gui.main`)"
+
+#~ msgid "Open object from file in current panel (signal/image)"
+#~ msgstr ""
+
+#~ msgid "HDF5 filename"
+#~ msgstr ""

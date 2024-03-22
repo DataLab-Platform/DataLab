@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:03+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -316,8 +316,8 @@ msgstr "Tentative de connexion au serveur XML-RPC de DataLab."
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
 #: cdl.core.baseproxy.BaseProxy.import_h5_file
 #: cdl.core.baseproxy.BaseProxy.import_macro_from_file
+#: cdl.core.baseproxy.BaseProxy.load_from_files
 #: cdl.core.baseproxy.BaseProxy.open_h5_files
-#: cdl.core.baseproxy.BaseProxy.open_object
 #: cdl.core.baseproxy.BaseProxy.run_macro
 #: cdl.core.baseproxy.BaseProxy.save_to_h5_file
 #: cdl.core.baseproxy.BaseProxy.select_groups
@@ -718,6 +718,14 @@ msgstr "Importer une macro à partir d'un fichier"
 msgid "Filename."
 msgstr "Nom du fichier."
 
+#: cdl.core.baseproxy.BaseProxy.load_from_files:1 of
+msgid "Open objects from files in current panel (signals/images)."
+msgstr "Ouvrir des objets à partir de fichiers dans le panneau en cours "
+
+#: cdl.core.baseproxy.BaseProxy.load_from_files:3 of
+msgid "list of file names"
+msgstr "liste des noms de fichiers"
+
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:1 of
 msgid "Open a DataLab HDF5 file or import from any other HDF5 file."
 msgstr ""
@@ -731,16 +739,6 @@ msgstr "Liste des fichiers HDF5 à ouvrir. Par défaut, None."
 #: cdl.core.baseproxy.BaseProxy.open_h5_files:5 of
 msgid "Import all objects from HDF5 files. Defaults to None."
 msgstr "Importer tous les objets à partir des fichiers HDF5. Par défaut, None."
-
-#: cdl.core.baseproxy.BaseProxy.open_object:1 of
-msgid "Open object from file in current panel (signal/image)."
-msgstr ""
-"Ouvrir un objet à partir d'un fichier dans le panneau en cours "
-"(signal/image)."
-
-#: cdl.core.baseproxy.BaseProxy.open_object:3 of
-msgid "File name"
-msgstr "Nom du fichier"
 
 #: cdl.core.baseproxy.BaseProxy.raise_window:1 of
 msgid "Raise DataLab window"
@@ -835,7 +833,8 @@ msgstr ""
 "Les méthodes de la classe de contrôle à distance (en utilisant le proxy "
 "ou le client distant) peuvent être complétées par des méthodes "
 "supplémentaires qui sont ajoutées dynamiquement à l'exécution. Ce "
-"mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir :mod:`cdl.core.gui.processor`)."
+"mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir "
+":mod:`cdl.core.gui.processor`)."
 
 #: ../../features/general/remote.rst:135
 msgid "Signal processor"
@@ -845,7 +844,10 @@ msgstr "Processeur de signal"
 msgid ""
 "When working with signals, the methods of "
 ":class:`cdl.core.gui.processor.signal.SignalProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des signaux, les méthodes de :class:`cdl.core.gui.processor.signal.SignalProcessor` peuvent être accédées."
+msgstr ""
+"Lorsque vous travaillez avec des signaux, les méthodes de "
+":class:`cdl.core.gui.processor.signal.SignalProcessor` peuvent être "
+"accédées."
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
 msgid "Object handling signal processing: operations, processing, computing"
@@ -1024,7 +1026,10 @@ msgstr "Processeur d'image"
 msgid ""
 "When working with images, the methods of "
 ":class:`cdl.core.gui.processor.image.ImageProcessor` may be accessed."
-msgstr "Lorsque vous travaillez avec des images, les méthodes de :class:`cdl.core.gui.processor.image.ImageProcessor` peuvent être accédées."
+msgstr ""
+"Lorsque vous travaillez avec des images, les méthodes de "
+":class:`cdl.core.gui.processor.image.ImageProcessor` peuvent être "
+"accédées."
 
 #: cdl.core.gui.processor.image.ImageProcessor:1 of
 msgid "Object handling image processing: operations, processing, computing"
@@ -1282,3 +1287,6 @@ msgstr ""
 #: cdl.core.gui.processor.image.ImageProcessor.compute_blob_opencv:1 of
 msgid "Compute blob detection using OpenCV"
 msgstr "Calculer la détection de taches en utilisant OpenCV"
+
+#~ msgid "File name"
+#~ msgstr "Nom du fichier"

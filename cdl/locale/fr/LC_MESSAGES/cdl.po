@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-19 17:40+0100\n"
+"POT-Creation-Date: 2024-03-22 18:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -943,7 +943,7 @@ msgstr "Supprimer"
 msgid "Remove selected %s"
 msgstr "Supprimer l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:461 cdl\core\gui\panel\base.py:499
+#: cdl\core\gui\actionhandler.py:461 cdl\core\gui\panel\base.py:502
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -975,7 +975,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:494 cdl\core\gui\panel\base.py:772
+#: cdl\core\gui\actionhandler.py:494 cdl\core\gui\panel\base.py:769
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1146,11 +1146,11 @@ msgstr "Extraction de ROI"
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: cdl\core\gui\actionhandler.py:684 cdl\core\gui\panel\base.py:1017
+#: cdl\core\gui\actionhandler.py:684 cdl\core\gui\panel\base.py:1014
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:691 cdl\core\gui\panel\base.py:1105
+#: cdl\core\gui\actionhandler.py:691 cdl\core\gui\panel\base.py:1102
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:806 cdl\core\gui\main.py:1556
+#: cdl\core\gui\actionhandler.py:806 cdl\core\gui\main.py:1553
 #: cdl\core\gui\roieditor.py:233
 msgid "image"
 msgstr "image"
@@ -1786,7 +1786,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:801 cdl\core\gui\main.py:1602
+#: cdl\core\gui\main.py:801 cdl\core\gui\main.py:1599
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1938,7 +1938,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1326 cdl\core\gui\panel\base.py:696
+#: cdl\core\gui\main.py:1326 cdl\core\gui\panel\base.py:674
 #: cdl\core\gui\panel\macro.py:560 cdl\widgets\h5browser.py:619
 msgid "Open"
 msgstr "Ouvrir"
@@ -1947,51 +1947,51 @@ msgstr "Ouvrir"
 msgid "HDF5 files (*.h5 *.hdf5)"
 msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
 
-#: cdl\core\gui\main.py:1512
+#: cdl\core\gui\main.py:1509
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1514
+#: cdl\core\gui\main.py:1511
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1517
+#: cdl\core\gui\main.py:1514
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1519
+#: cdl\core\gui\main.py:1516
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1522
+#: cdl\core\gui\main.py:1519
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1523
+#: cdl\core\gui\main.py:1520
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1524
+#: cdl\core\gui\main.py:1521
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1528
+#: cdl\core\gui\main.py:1525
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1529
+#: cdl\core\gui\main.py:1526
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1533
+#: cdl\core\gui\main.py:1530
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1551
+#: cdl\core\gui\main.py:1548
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1552
+#: cdl\core\gui\main.py:1549
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -1999,7 +1999,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1603
+#: cdl\core\gui\main.py:1600
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2027,15 +2027,15 @@ msgstr "Supprimer le(s) groupe(s)"
 msgid "Are you sure you want to delete the selected group(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
-#: cdl\core\gui\panel\base.py:500
+#: cdl\core\gui\panel\base.py:503
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: cdl\core\gui\panel\base.py:524
+#: cdl\core\gui\panel\base.py:527
 msgid "Delete metadata"
 msgstr "Supprimer les métadonnées"
 
-#: cdl\core\gui\panel\base.py:525
+#: cdl\core\gui\panel\base.py:528
 msgid ""
 "Some selected objects have regions of interest.<br>Do you want to delete "
 "them as well?"
@@ -2043,48 +2043,48 @@ msgstr ""
 "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous "
 "les supprimer également ?"
 
-#: cdl\core\gui\panel\base.py:575
+#: cdl\core\gui\panel\base.py:578
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:575 cdl\core\gui\panel\base.py:584
+#: cdl\core\gui\panel\base.py:578 cdl\core\gui\panel\base.py:587
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:584
+#: cdl\core\gui\panel\base.py:587
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:657 cdl\core\gui\panel\macro.py:540
+#: cdl\core\gui\panel\base.py:701 cdl\core\gui\panel\macro.py:540
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:728
+#: cdl\core\gui\panel\base.py:731
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:812
+#: cdl\core\gui\panel\base.py:809
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:917 cdl\core\gui\plothandler.py:284
+#: cdl\core\gui\panel\base.py:914 cdl\core\gui\plothandler.py:284
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:976 cdl\core\gui\roieditor.py:208
+#: cdl\core\gui\panel\base.py:973 cdl\core\gui\roieditor.py:208
 #: cdl\core\model\base.py:747
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1018
+#: cdl\core\gui\panel\base.py:1015
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:1045
+#: cdl\core\gui\panel\base.py:1042
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1047
+#: cdl\core\gui\panel\base.py:1044
 msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2094,23 +2094,23 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
-#: cdl\core\gui\panel\base.py:1068 cdl\core\gui\processor\base.py:484
+#: cdl\core\gui\panel\base.py:1065 cdl\core\gui\processor\base.py:484
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1085
+#: cdl\core\gui\panel\base.py:1082
 msgid "Indexes"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1093
+#: cdl\core\gui\panel\base.py:1090
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1095
+#: cdl\core\gui\panel\base.py:1092
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1099
+#: cdl\core\gui\panel\base.py:1096
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on the results under the form of '%s'."
@@ -2889,15 +2889,15 @@ msgstr ""
 msgid "All supported files"
 msgstr "Tous les fichiers pris en charge"
 
-#: cdl\core\io\image\formats.py:87
+#: cdl\core\io\image\formats.py:89
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: cdl\core\io\signal\formats.py:24
+#: cdl\core\io\signal\formats.py:26
 msgid "NumPy binary files"
 msgstr "Fichiers binaires NumPy"
 
-#: cdl\core\io\signal\formats.py:56
+#: cdl\core\io\signal\formats.py:57
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
