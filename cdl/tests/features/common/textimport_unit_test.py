@@ -30,6 +30,7 @@ def test_import_wizard():
     with qt_app_context():
         for destination, fname, otype in (
             ("image", "fiber.txt", ImageObj),
+            ("signal", "multiple_curves.csv", SignalObj),
             ("signal", "paracetamol.txt", SignalObj),
         ):
             path = get_test_fnames(fname)[0]
@@ -48,8 +49,13 @@ def test_import_wizard():
                 srcpge.source_widget.file_edit.editingFinished.emit()
                 wizard.go_to_next_page()
                 datapge = wizard.data_page
+                n_objs = 1
                 if fname == "fiber.txt":
                     datapge.param.delimiter_choice = " "
+                elif fname == "multiple_curves.csv":
+                    datapge.param.delimiter_choice = ";"
+                    datapge.param.skip_rows = 1
+                    n_objs = 5
                 else:
                     datapge.param.skip_rows = 10
                 datapge.param_widget.get()
@@ -59,7 +65,7 @@ def test_import_wizard():
                 wizard.go_to_next_page()
                 wizard.go_to_next_page()
                 wizard.accept()
-                assert len(wizard.get_objs()) == 1
+                assert len(wizard.get_objs()) == n_objs
                 assert isinstance(wizard.get_objs()[0], otype)
             elif exec_dialog(wizard):
                 for obj in wizard.get_objs():

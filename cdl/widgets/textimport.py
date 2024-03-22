@@ -358,7 +358,7 @@ class PreviewWidget(QW.QWidget):
                 if len(data.shape) == 1:
                     h_headers = ["Y"]
                 elif first_col_is_x:
-                    if len(data.shape) == 2:
+                    if len(data[0]) == 2:
                         h_headers = ["X", "Y"]
                     else:
                         h_headers = ["X"] + [f"Y{i+1}" for i in range(len(data[0]) - 1)]

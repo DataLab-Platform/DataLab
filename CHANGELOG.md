@@ -3,6 +3,14 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.14.2 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #61](https://github.com/DataLab-Platform/DataLab/issues/61) - Text file import wizard: application crash when importing a multiple curve text file:
+  * This issue concerns a use case where the text file contains multiple curves
+  * This is now fixed and an automatic test has been added to prevent regressions
+
 ## DataLab Version 0.14.1 ##
 
 🎉 New domain name: [datalab-platform.com](https://datalab-platform.com)
