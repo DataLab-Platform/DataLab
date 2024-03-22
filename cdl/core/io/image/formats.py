@@ -7,6 +7,8 @@
 DataLab I/O image formats
 """
 
+from __future__ import annotations
+
 import os.path as osp
 
 import numpy as np

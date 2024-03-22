@@ -7,6 +7,8 @@
 DataLab I/O signal formats
 """
 
+from __future__ import annotations
+
 import numpy as np
 
 from cdl.config import _

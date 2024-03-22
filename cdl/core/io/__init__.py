@@ -7,6 +7,8 @@
 DataLab I/O module
 """
 
+from __future__ import annotations
+
 # Registering dynamic I/O features:
 import cdl.core.io.h5  # pylint: disable=unused-import
 import cdl.core.io.image  # pylint: disable=unused-import
