@@ -477,9 +477,12 @@ class BaseDataPanel(AbstractPanel):
                 return
         sel_objects = self.objview.get_sel_objects(include_groups=True)
         for obj in sorted(sel_objects, key=lambda obj: obj.short_id, reverse=True):
+            dlg_list: list[QW.QDialog] = []
             for dlg, obj_i in self.__separate_views.items():
                 if obj_i is obj:
-                    dlg.done(QW.QDialog.DialogCode.Rejected)
+                    dlg_list.append(dlg)
+            for dlg in dlg_list:
+                dlg.done(QW.QDialog.DialogCode.Rejected)
             self.plothandler.remove_item(obj.uuid)
             self.objview.remove_item(obj.uuid, refresh=False)
             self.objmodel.remove_object(obj)
