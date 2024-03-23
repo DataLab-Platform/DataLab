@@ -46,6 +46,10 @@ html_title = project
 html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
+if "language=fr" in sys.argv:
+    ann = "ℹ️ Le paquet Debian 📦 de DataLab est en cours de préparation! ▫️ ▫️ ▫️ Restez à l'écoute pour les mises à jour!"
+else:
+    ann = "ℹ️ DataLab's Debian package 📦 is underway! ▫️ ▫️ ▫️ Stay tuned for updates!"
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
@@ -68,6 +72,7 @@ html_theme_options = {
             "attributes": {"target": "_blank"},
         },
     ],
+    "announcement": ann,
 }
 html_static_path = ["_static"]
 
