@@ -14,8 +14,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -43,8 +43,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -74,8 +74,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -102,8 +102,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -130,9 +130,9 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
                     // "DEBUG": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -159,8 +159,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -187,8 +187,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -215,8 +215,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE}"
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -243,8 +243,8 @@
             "options": {
                 "cwd": "scripts",
                 "env": {
-                    "UNATTENDED": "1",
-                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}"
+                    "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
+                    "UNATTENDED": "1"
                 }
             },
             "group": {
@@ -292,6 +292,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -355,6 +356,7 @@
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "QT_COLOR_MODE": "light",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -385,6 +387,7 @@
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "QT_COLOR_MODE": "light",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -415,6 +418,7 @@
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "QT_COLOR_MODE": "light",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -445,6 +449,7 @@
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
                     "QT_COLOR_MODE": "light",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -512,6 +517,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
@@ -584,6 +590,7 @@
                 "cwd": "scripts",
                 "env": {
                     "PYTHON": "${env:CDL_PYTHONEXE_PY38}",
+                    "RELEASE": "1",
                     "UNATTENDED": "1"
                 }
             },
