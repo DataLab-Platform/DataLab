@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-18 17:14+0100\n"
+"POT-Creation-Date: 2024-03-25 18:09+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -407,6 +407,10 @@ msgstr "Python"
 msgid ">=3.8, <4"
 msgstr ""
 
+#: ../../requirements.rst:12
+msgid "Python programming language"
+msgstr "Langage de programmation Python"
+
 #: ../../requirements.rst:13
 msgid "h5py"
 msgstr ""
@@ -414,6 +418,10 @@ msgstr ""
 #: ../../requirements.rst:14
 msgid ">= 3.0"
 msgstr ""
+
+#: ../../requirements.rst:15
+msgid "Read and write HDF5 files from Python"
+msgstr "Ecriture et lecture de fichiers HDF5 depuis Python"
 
 #: ../../requirements.rst:16
 msgid "NumPy"
@@ -423,6 +431,10 @@ msgstr ""
 msgid ">= 1.21"
 msgstr ""
 
+#: ../../requirements.rst:18
+msgid "Fundamental package for array computing in Python"
+msgstr "Calcul matriciel et algèbre linéaire en Python"
+
 #: ../../requirements.rst:19
 msgid "SciPy"
 msgstr ""
@@ -430,6 +442,10 @@ msgstr ""
 #: ../../requirements.rst:20
 msgid ">= 1.7"
 msgstr ""
+
+#: ../../requirements.rst:21
+msgid "Fundamental algorithms for scientific computing in Python"
+msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 
 #: ../../requirements.rst:22
 msgid "scikit-image"
@@ -439,6 +455,10 @@ msgstr ""
 msgid ">= 0.18"
 msgstr ""
 
+#: ../../requirements.rst:24
+msgid "Image processing in Python"
+msgstr "Traitement d'images en Python"
+
 #: ../../requirements.rst:25
 msgid "opencv-python-headless"
 msgstr ""
@@ -446,6 +466,10 @@ msgstr ""
 #: ../../requirements.rst:26
 msgid ">= 4.5"
 msgstr ""
+
+#: ../../requirements.rst:27
+msgid "Wrapper package for OpenCV python bindings."
+msgstr "Interface Python pour OpenCV"
 
 #: ../../requirements.rst:28
 msgid "PyWavelets"
@@ -455,6 +479,10 @@ msgstr ""
 msgid ">= 1.1"
 msgstr ""
 
+#: ../../requirements.rst:30
+msgid "PyWavelets, wavelet transform module"
+msgstr "PyWavelets, module de transformation en ondelettes"
+
 #: ../../requirements.rst:31
 msgid "psutil"
 msgstr ""
@@ -462,6 +490,10 @@ msgstr ""
 #: ../../requirements.rst:32
 msgid ">= 5.5"
 msgstr ""
+
+#: ../../requirements.rst:33
+msgid "Cross-platform lib for process and system monitoring in Python."
+msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
 
 #: ../../requirements.rst:34
 msgid "guidata"
@@ -471,6 +503,10 @@ msgstr ""
 msgid ">= 3.4"
 msgstr ""
 
+#: ../../requirements.rst:36
+msgid "Automatic GUI generation for easy dataset editing and display"
+msgstr "Génération automatique d'interfaces graphiques pour l'édition et l'affichage de jeux de données"
+
 #: ../../requirements.rst:37
 msgid "PlotPy"
 msgstr ""
@@ -479,6 +515,10 @@ msgstr ""
 msgid ">= 2.3"
 msgstr ""
 
+#: ../../requirements.rst:39
+msgid "Curve and image plotting tools for Python/Qt applications"
+msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
+
 #: ../../requirements.rst:40
 msgid "QtPy"
 msgstr ""
@@ -486,6 +526,12 @@ msgstr ""
 #: ../../requirements.rst:41
 msgid ">= 1.9"
 msgstr ""
+
+#: ../../requirements.rst:42
+msgid ""
+"Provides an abstraction layer on top of the various Qt bindings (PyQt5/6 "
+"and PySide2/6)."
+msgstr "Couche d'abstraction pour les différentes bibliothèques Qt (PyQt5/6 et PySide2/6)."
 
 #: ../../requirements.rst:43 ../../requirements.rst:81
 msgid "PyQt5"
@@ -616,9 +662,8 @@ msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
 #: ../../requirements.rst:106
-#, fuzzy
 msgid "Optional modules for running test suite:"
-msgstr "Modules optionnels pour la génération de la documentation :"
+msgstr "Modules optionnels pour l'exécution de la suite de tests :"
 
 #: ../../requirements.rst:115
 msgid "pytest"
@@ -626,7 +671,7 @@ msgstr ""
 
 #: ../../requirements.rst:117
 msgid "pytest: simple powerful testing with Python"
-msgstr ""
+msgstr "pytest : tests simples et puissants avec Python"
 
 #: ../../requirements.rst:118
 msgid "pytest-xvfb"
@@ -634,7 +679,7 @@ msgstr ""
 
 #: ../../requirements.rst:120
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
-msgstr ""
+msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
 #: ../../intro/installation.rst:228
 msgid "Python 3.11 and PyQt5 are the reference for production release"
@@ -645,4 +690,3 @@ msgstr "Python 3.11 et PyQt5 sont les références pour la version de production
 
 #~ msgid ">= 2.0"
 #~ msgstr ""
-
