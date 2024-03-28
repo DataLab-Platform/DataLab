@@ -3,6 +3,15 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.14.3 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - HDF5 browser does not show datasets with 1x1 size:
+  * HDF5 datasets with a size of 1x1 were not shown in the HDF5 browser
+  * Even if those datasets should not be considered as signals or images, they are now
+    shown in the HDF5 browser (but not checkable, i.e. not importable as signals or images)
+
 ## DataLab Version 0.14.2 ##
 
 ⚠️ API changes required for fixing support for multiple signals loading feature:

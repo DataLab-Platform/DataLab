@@ -104,11 +104,14 @@ class GenericArrayNode(BaseGenericNode):
             utils.is_supported_num_dtype(data)
             and isinstance(data, np.ndarray)
             and len(data.shape) in (1, 2)
-            and data.size > 1
         )
 
+    def is_supported(self) -> bool:
+        """Return True if node is associated to supported data"""
+        return self.data.size > 1
+
     @property
-    def is_signal(self):
+    def __is_signal(self):
         """Return True if array represents a signal"""
         shape = self.data.shape
         return len(shape) == 1 or shape[0] in (1, 2) or shape[1] in (1, 2)
@@ -116,7 +119,9 @@ class GenericArrayNode(BaseGenericNode):
     @property
     def icon_name(self):
         """Icon name associated to node"""
-        return "signal.svg" if self.is_signal else "image.svg"
+        if self.is_supported():
+            return "signal.svg" if self.__is_signal else "image.svg"
+        return "h5array.svg"
 
     @property
     def shape_str(self):
@@ -135,7 +140,7 @@ class GenericArrayNode(BaseGenericNode):
 
     def create_native_object(self):
         """Create native object, if supported"""
-        if self.is_signal:
+        if self.__is_signal:
             obj = create_signal(self.object_title)
             try:
                 self.set_signal_data(obj)

@@ -79,6 +79,10 @@ class BaseNode(metaclass=abc.ABCMeta):
     def match(cls, dset):
         """Return True if h5 dataset match node pattern"""
 
+    def is_supported(self) -> bool:
+        """Return True if node is associated to supported data"""
+        return False
+
     def create_native_object(self):
         """Create native object, if supported"""
         return None

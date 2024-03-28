@@ -375,7 +375,7 @@ class H5TreeWidget(AbstractTreeWidget):
             node: HDF5 node
         """
         tree_item = H5TreeWidget.__create_node(node)
-        if node.IS_ARRAY:
+        if node.is_supported():
             tree_item.setCheckState(0, QC.Qt.Unchecked)
         else:
             tree_item.setFlags(QC.Qt.ItemIsEnabled)
@@ -801,7 +801,7 @@ class H5Browser(QW.QSplitter):
         """
         # View the selected item
         node = self.get_node(item)
-        if node.IS_ARRAY:
+        if node.is_supported():
             self.plotpreview.update_plot_preview(node)
         self.groupandattrs.update_from_node(node)
         # Update the file selector combo box
