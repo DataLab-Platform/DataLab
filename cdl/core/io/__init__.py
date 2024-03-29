@@ -12,7 +12,7 @@ from __future__ import annotations
 # Registering dynamic I/O features:
 import cdl.core.io.h5  # pylint: disable=unused-import
 import cdl.core.io.image  # pylint: disable=unused-import
-import cdl.core.io.signal  # pylint: disable=unused-import
+import cdl.core.io.signal  # pylint: disable=unused-import  # noqa: F401
 
 # Other imports:
 from cdl.core.io.image.base import ImageIORegistry

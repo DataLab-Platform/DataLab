@@ -15,7 +15,7 @@ import numpy as np
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-from cdl import patch  # pylint: disable=unused-import
+from cdl import patch  # pylint: disable=unused-import  # noqa: F401
 from cdl.tests.data import create_2d_steps_data
 from cdl.utils.vistools import view_image_items
 

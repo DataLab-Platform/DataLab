@@ -7,5 +7,6 @@
 DataLab signal I/O features
 """
 
-import cdl.core.io.signal.formats  # pylint: disable=unused-import
-from cdl.core.io.signal.base import SignalIORegistry  # pylint: disable=unused-import
+# pylint: disable=unused-import
+import cdl.core.io.signal.formats  # noqa: F401
+from cdl.core.io.signal.base import SignalIORegistry  # noqa: F401

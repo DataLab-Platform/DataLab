@@ -7,5 +7,6 @@
 DataLab image I/O features
 """
 
-import cdl.core.io.image.formats  # pylint: disable=unused-import
-from cdl.core.io.image.base import ImageIORegistry  # pylint: disable=unused-import
+# pylint: disable=unused-import
+import cdl.core.io.image.formats  # noqa: F401
+from cdl.core.io.image.base import ImageIORegistry  # noqa: F401

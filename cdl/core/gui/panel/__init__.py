@@ -19,7 +19,7 @@ the object properties) and a set of modules to handle the GUI features:
 
 - :mod:`cdl.core.gui.actionhandler`: Application actions (menus, toolbars, context menu)
 - :mod:`cdl.core.gui.objectview`: Widgets to display object (signal/image) trees
-- :mod:`cdl.core.gui.plothandler`: `PlotPy` plot items for representing signals and images
+- :mod:`cdl.core.gui.plothandler`: `PlotPy` items for representing signals and images
 - :mod:`cdl.core.gui.processor`: Processor (computation)
 - :mod:`cdl.core.gui.panel.roieditor`: ROI editor
 
