@@ -25,9 +25,7 @@ class FitModel(abc.ABC):
         """Return fitting function"""
 
     @classmethod
-    def get_amp_from_amplitude(
-        cls, amplitude, sigma
-    ):  # pylint: disable=unused-argument
+    def get_amp_from_amplitude(cls, amplitude, sigma):  # pylint: disable=unused-argument
         """Return amp from function amplitude and sigma"""
         return amplitude
 

@@ -172,7 +172,7 @@ class ViewSettings(gds.DataSet):
 
 # Generator yielding (param, section, option) tuples from configuration dictionary
 def _iter_conf(
-    paramdict: dict[str, gds.DataSet]
+    paramdict: dict[str, gds.DataSet],
 ) -> Generator[tuple[gds.DataSet, str, str], None, None]:
     """Iterate over configuration parameters"""
     confdict = Conf.to_dict()

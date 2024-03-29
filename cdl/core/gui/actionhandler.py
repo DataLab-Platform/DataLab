@@ -846,15 +846,13 @@ class ImageActionHandler(BaseActionHandler):
                     context_menu_pos=-1,
                 )
                 self.new_action(
-                    _("Rotate %s right")
-                    % "90°",  # pylint: disable=consider-using-f-string
+                    _("Rotate %s right") % "90°",  # pylint: disable=consider-using-f-string
                     triggered=self.panel.processor.compute_rotate270,
                     icon=get_icon("rotate_right.svg"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
-                    _("Rotate %s left")
-                    % "90°",  # pylint: disable=consider-using-f-string
+                    _("Rotate %s left") % "90°",  # pylint: disable=consider-using-f-string
                     triggered=self.panel.processor.compute_rotate90,
                     icon=get_icon("rotate_left.svg"),
                     context_menu_pos=-1,

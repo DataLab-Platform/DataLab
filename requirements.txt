@@ -7,7 +7,7 @@ opencv-python-headless
 PyWavelets
 psutil
 pylint
-black
+ruff
 coverage
 pytest
 pytest-xvfb

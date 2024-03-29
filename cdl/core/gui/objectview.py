@@ -211,9 +211,7 @@ class SimpleObjectTree(QW.QTreeWidget):
             oid = item.data(0, QC.Qt.UserRole)
             self.SIG_ITEM_DOUBLECLICKED.emit(oid)
 
-    def contextMenuEvent(
-        self, event: QG.QContextMenuEvent
-    ) -> None:  # pylint: disable=C0103
+    def contextMenuEvent(self, event: QG.QContextMenuEvent) -> None:  # pylint: disable=C0103
         """Override Qt method"""
         self.SIG_CONTEXT_MENU.emit(event.globalPos())
 

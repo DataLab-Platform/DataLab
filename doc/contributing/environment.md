@@ -32,9 +32,7 @@ reasons). We recommend installing the following extensions:
 
 | Extension | Description |
 | --------- | ----------- |
-| [Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter) | Python code formatter |
 | [gettext](https://marketplace.visualstudio.com/items?itemName=mrorz.language-gettext) | Gettext syntax highlighting |
-| [isort](https://marketplace.visualstudio.com/items?itemName=ms-python.isort) | Python import sorter |
 | [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance) | Python language server |
 | [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) | Python extension |
 | [reStructuredText Syntax highlighting](https://marketplace.visualstudio.com/items?itemName=trond-snekvik.simple-rst) | reStructuredText syntax highlighting |

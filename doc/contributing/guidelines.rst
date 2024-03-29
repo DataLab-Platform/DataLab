@@ -16,29 +16,19 @@ In particular, we are especially strict about the following guidelines:
 
 To enforce these guidelines, the following tools are mandatory:
 
-- `black <https://pypi.org/project/black/>`_ for code formatting.
-- `isort <https://pypi.org/project/isort/>`_ for import sorting.
+- `ruff <https://pypi.org/project/ruff/>`_ for code formatting and static code analysis.
 - `pylint <https://pypi.org/project/pylint/>`_ for static code analysis.
 
-black
-^^^^^
+ruff
+^^^^
 
 If you are using `Visual Studio Code <https://code.visualstudio.com/>`_,
-the project settings will automatically format your code on save.
+the project settings will automatically format your code with `ruff` on save
+(you may also run the task "Run Ruff" to run `ruff` on the project).
 
-Or you may use `black` manually. To format your code, run the following command::
+To run `ruff`, run the following command::
 
-    black .
-
-isort
-^^^^^
-
-Again, if you are using `Visual Studio Code <https://code.visualstudio.com/>`_,
-the project settings will automatically sort your imports on save.
-
-Or you may use `isort` manually. To sort your imports, run the following command::
-
-    isort .
+    ruff check
 
 pylint
 ^^^^^^

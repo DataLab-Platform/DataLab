@@ -67,7 +67,7 @@ cdl-tests = "cdl.tests:run"
 
 [project.optional-dependencies]
 qt = ["PyQt5"]
-dev = ["black", "isort", "pylint", "Coverage", "pyinstaller>=6.0"]
+dev = ["ruff", "pylint", "Coverage", "pyinstaller>=6.0"]
 doc = [
     "PyQt5",
     "sphinx",

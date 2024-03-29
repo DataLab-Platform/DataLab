@@ -7,7 +7,6 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
