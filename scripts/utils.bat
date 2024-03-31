@@ -61,9 +61,12 @@ goto:eof
     set ORIGINAL_PYTHONPATH=%PYTHONPATH%
     cd %~dp0..
     if not defined RELEASE (set RELEASE=0)
-    if %RELEASE%==1 (goto:eof)
-    for /F "tokens=*" %%A in (.env) do (
-        set %%A
+    if %RELEASE%==1 (
+        set PYTHONPATH=%CD%
+    ) else (
+        for /F "tokens=*" %%A in (.env) do (
+            set %%A
+        )
     )
     set PYTHONPATH=%PYTHONPATH%;%ORIGINAL_PYTHONPATH%
     goto:eof
