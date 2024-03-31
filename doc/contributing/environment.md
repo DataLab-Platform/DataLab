@@ -113,6 +113,30 @@ Visual Studio Code `.env` file:
 * To create this file, copy the `.env.template` file to `.env`
   (and eventually add your own paths).
 
+Windows installer
+-----------------
+
+The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5.
+Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum.
+
+You may install .NET SDK using `winget`:
+
+    winget install Microsoft.DotNet.SDK.8
+
+Once .NET SDK is installed, the WiX Toolset can be installed and configured using the
+following commands:
+
+    dotnet tool install --global wix --version 4.0.5
+    wix extension add WixToolset.UI.wixext/4.0.5
+
+First, you need to generate the installer script from a generic template:
+
+    python wix/makewxs.py
+
+Building the installer is done using the following command:
+
+    wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext
+
 Third-party Software
 --------------------
 
