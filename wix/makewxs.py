@@ -17,10 +17,14 @@ import xml.etree.ElementTree as ET
 
 from cdl import __version__
 
+COUNT = 0
 
-def get_guid() -> str:
-    """Generate a unique GUID."""
-    return f"ID_{uuid.uuid4().hex}"
+
+def generate_id() -> str:
+    """Generate an ID for a WiX Toolset XML element."""
+    global COUNT
+    COUNT += 1
+    return f"ID_{COUNT:04d}"
 
 
 def make_wxs() -> None:
@@ -38,16 +42,16 @@ def make_wxs() -> None:
     for root, dirs, filenames in os.walk(dist_dir):
         for dpath in dirs:
             relpath = osp.relpath(osp.join(root, dpath), root_dir)
-            dir_ids[relpath] = get_guid()
+            dir_ids[relpath] = generate_id()
             files_dict.setdefault(osp.dirname(relpath), [])
         for filename in filenames:
             relpath = osp.relpath(osp.join(root, filename), root_dir)
-            file_ids[relpath] = get_guid()
+            file_ids[relpath] = generate_id()
             files_dict.setdefault(osp.dirname(relpath), []).append(relpath)
 
     # Create the base directory structure in XML:
     base_name = osp.basename(dist_dir)
-    base_id = dir_ids[osp.relpath(dist_dir, root_dir)] = get_guid()
+    base_id = dir_ids[osp.relpath(dist_dir, root_dir)] = generate_id()
     dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
 
     # Nesting directories, recursively, in XML:
@@ -64,27 +68,27 @@ def make_wxs() -> None:
     dir_str = ET.tostring(dir_xml, encoding="unicode").replace("><", ">\n<")
     # print("Directory structure:\n", dir_str)
 
-    # TODO: Refactor the following two code blocks (regarding components)
-
     # Create additionnal components for each file in the directory structure:
     comp_str_list: list[str] = []
-    for dpath, files in files_dict.items():
+    for dpath in sorted(dir_ids.keys())[1:]:
         did = dir_ids[dpath]
-        for path in files:
-            fid = file_ids[path]
+        files = files_dict.get(dpath, [])
+        if files:
+            # This is a directory with files, so we need to create components:
+            for path in files:
+                fid = file_ids[path]
+                guid = str(uuid.uuid4())
+                comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
+                ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
+                comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
+        else:
+            # This is an empty directory, so we need to create a folder:
             guid = str(uuid.uuid4())
-            comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
-            ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
-            comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
-    # Create additionnal components for the empty directories:
-    for dpath in dir_ids.keys():
-        if dpath not in files_dict:
-            did = dir_ids[dpath]
             cdid = f"CreateFolder_{did}"
-            guid = str(uuid.uuid4())
             comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
             ET.SubElement(comp_xml, "CreateFolder")
             comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
+
     comp_str = "\n".join(comp_str_list).replace("><", ">\n<")
     # print("Component structure:\n", comp_str)
 
