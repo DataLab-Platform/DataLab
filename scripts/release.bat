@@ -17,7 +17,7 @@ mkdir %destdir%
 move "dist\*.whl" %destdir%
 move "dist\*.gz" %destdir%
 move "dist\*.zip" %destdir%
-move %LIBNAME%-%VERSION%.exe %destdir%
+move "wix\%LIBNAME%-%VERSION%.msi" %destdir%
 copy "CHANGELOG.md" %destdir%
 copy %MODNAME%\data\doc\*.pdf %destdir%
 explorer %destdir%
