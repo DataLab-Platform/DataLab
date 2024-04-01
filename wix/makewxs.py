@@ -5,6 +5,11 @@
 
 """Make a WiX Toolset .wxs file for the DataLab Windows installer."""
 
+# TODO: Localization?
+# TODO: Uninstall previous version is not working.
+# TODO: Remove everything regarding NSIS over the whole project.
+# TODO: Icon for the installer?
+
 import os
 import os.path as osp
 import uuid
@@ -32,34 +37,36 @@ def make_wxs() -> None:
     files_dict: dict[str, list[str]] = {}
     for root, dirs, filenames in os.walk(dist_dir):
         for dpath in dirs:
-            relpath = osp.relpath(osp.join(root, dpath))
+            relpath = osp.relpath(osp.join(root, dpath), root_dir)
             dir_ids[relpath] = get_guid()
             files_dict.setdefault(osp.dirname(relpath), [])
         for filename in filenames:
-            relpath = osp.relpath(osp.join(root, filename))
+            relpath = osp.relpath(osp.join(root, filename), root_dir)
             file_ids[relpath] = get_guid()
             files_dict.setdefault(osp.dirname(relpath), []).append(relpath)
 
-    dir_xml = None
+    # Create the base directory structure in XML:
+    base_name = osp.basename(dist_dir)
+    base_id = dir_ids[osp.relpath(dist_dir, root_dir)] = get_guid()
+    dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
+
     # Nesting directories, recursively, in XML:
-    for dpath in sorted(files_dict.keys()):
+    for dpath in sorted(dir_ids.keys())[1:]:
         dname = osp.basename(dpath)
-        if dir_xml is None:
-            dir_ids[dpath] = get_guid()
-            dir_xml = ET.Element("Directory", Id=dir_ids[dpath], Name=dname)
+        parent = dir_xml
+        for element in parent.iter():
+            if element.get("Id") == dir_ids[osp.dirname(dpath)]:
+                parent = element
+                break
         else:
-            parent = dir_xml
-            for element in parent.iter():
-                if element.get("Id") == dir_ids[osp.dirname(dpath)]:
-                    parent = element
-                    break
-            else:
-                raise ValueError(f"Parent directory not found for {dpath}")
-            ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
+            raise ValueError(f"Parent directory not found for {dpath}")
+        ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
     dir_str = ET.tostring(dir_xml, encoding="unicode").replace("><", ">\n<")
     # print("Directory structure:\n", dir_str)
 
-    # Create additionnal components for each directory:
+    # TODO: Refactor the following two code blocks (regarding components)
+
+    # Create additionnal components for each file in the directory structure:
     comp_str_list: list[str] = []
     for dpath, files in files_dict.items():
         did = dir_ids[dpath]
@@ -68,6 +75,15 @@ def make_wxs() -> None:
             guid = str(uuid.uuid4())
             comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
             ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
+            comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
+    # Create additionnal components for the empty directories:
+    for dpath in dir_ids.keys():
+        if dpath not in files_dict:
+            did = dir_ids[dpath]
+            cdid = f"CreateFolder_{did}"
+            guid = str(uuid.uuid4())
+            comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
+            ET.SubElement(comp_xml, "CreateFolder")
             comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
     comp_str = "\n".join(comp_str_list).replace("><", ">\n<")
     # print("Component structure:\n", comp_str)
