@@ -1,6 +1,6 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-    <Package Name="DataLab" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="538c2966-2bcd-4bd4-b20a-9acb161a1614" InstallerVersion="200" Scope="perUser">
+    <Package Name="DataLab" ProductCode="4ad79deb-5cf7-481c-a242-28c66b8a53ef" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="538c2966-2bcd-4bd4-b20a-9acb161a1614" InstallerVersion="200" Scope="perUser">
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\resources\DataLab.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
