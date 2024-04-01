@@ -48,8 +48,8 @@ def insert_text_after(text: str, containing: str, content: str) -> str:
 def make_wxs(product_name: str, version: str) -> None:
     """Make a .wxs file for the DataLab Windows installer."""
     wix_dir = osp.dirname(__file__)
-    root_dir = osp.join(wix_dir, os.pardir)
-    dist_dir = osp.join(root_dir, "dist", product_name, "_internal")
+    proj_dir = osp.join(wix_dir, os.pardir)
+    dist_dir = osp.join(proj_dir, "dist", product_name)
     wxs_path = osp.join(wix_dir, f"generic-{product_name}.wxs")
     output_path = osp.join(wix_dir, f"{product_name}-{version}.wxs")
 
@@ -57,63 +57,73 @@ def make_wxs(product_name: str, version: str) -> None:
     file_ids: dict[str, str] = {}
 
     files_dict: dict[str, list[str]] = {}
-    for root, dirs, filenames in os.walk(dist_dir):
-        for dpath in dirs:
-            relpath = osp.relpath(osp.join(root, dpath), root_dir)
-            dir_ids[relpath] = generate_id()
-            files_dict.setdefault(osp.dirname(relpath), [])
-        for filename in filenames:
-            relpath = osp.relpath(osp.join(root, filename), root_dir)
-            file_ids[relpath] = generate_id()
-            files_dict.setdefault(osp.dirname(relpath), []).append(relpath)
 
-    # Create the base directory structure in XML:
-    base_name = osp.basename(dist_dir)
-    base_path = osp.relpath(dist_dir, root_dir)
-    base_id = dir_ids[base_path] = generate_id()
-    dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
-
-    # Nesting directories, recursively, in XML:
-    for dpath in sorted(dir_ids.keys())[1:]:
-        dname = osp.basename(dpath)
-        parent = dir_xml
-        for element in parent.iter():
-            if element.get("Id") == dir_ids[osp.dirname(dpath)]:
-                parent = element
-                break
-        else:
-            raise ValueError(f"Parent directory not found for {dpath}")
-        ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
-    space = " " * 4
-    ET.indent(dir_xml, space=space, level=4)
-    dir_str = space * 4 + ET.tostring(dir_xml, encoding="unicode")
-    # print("Directory structure:\n", dir_str)
-
-    # Create additionnal components for each file in the directory structure:
+    dir_str_list: list[str] = []
     comp_str_list: list[str] = []
-    for dpath in sorted(dir_ids.keys()):
-        did = dir_ids[dpath]
-        files = files_dict.get(dpath, [])
-        if files:
-            # This is a directory with files, so we need to create components:
-            for path in files:
-                fid = file_ids[path]
+
+    for pth in os.listdir(dist_dir):
+        root_dir = osp.join(dist_dir, pth)
+
+        if not osp.isdir(root_dir):
+            continue
+
+        for root, dirs, filenames in os.walk(root_dir):
+            for dpath in dirs:
+                relpath = osp.relpath(osp.join(root, dpath), proj_dir)
+                dir_ids[relpath] = generate_id()
+                files_dict.setdefault(osp.dirname(relpath), [])
+            for filename in filenames:
+                relpath = osp.relpath(osp.join(root, filename), proj_dir)
+                file_ids[relpath] = generate_id()
+                files_dict.setdefault(osp.dirname(relpath), []).append(relpath)
+
+        # Create the base directory structure in XML:
+        base_name = osp.basename(root_dir)
+        base_path = osp.relpath(root_dir, proj_dir)
+        base_id = dir_ids[base_path] = generate_id()
+        dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
+
+        # Nesting directories, recursively, in XML:
+        for dpath in sorted(dir_ids.keys())[1:]:
+            dname = osp.basename(dpath)
+            parent = dir_xml
+            for element in parent.iter():
+                if element.get("Id") == dir_ids[osp.dirname(dpath)]:
+                    parent = element
+                    break
+            else:
+                raise ValueError(f"Parent directory not found for {dpath}")
+            ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
+        space = " " * 4
+        ET.indent(dir_xml, space=space, level=4)
+        dir_str_list.append(space * 4 + ET.tostring(dir_xml, encoding="unicode"))
+
+        # Create additionnal components for each file in the directory structure:
+        for dpath in sorted(dir_ids.keys()):
+            did = dir_ids[dpath]
+            files = files_dict.get(dpath, [])
+            if files:
+                # This is a directory with files, so we need to create components:
+                for path in files:
+                    fid = file_ids[path]
+                    guid = str(uuid.uuid4())
+                    comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
+                    ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
+                    ET.indent(comp_xml, space=space, level=3)
+                    comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
+                    comp_str_list.append(comp_str)
+            elif dpath != base_path:
+                # This is an empty directory, so we need to create a folder:
                 guid = str(uuid.uuid4())
-                comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
-                ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
+                cdid = f"CreateFolder_{did}"
+                comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
+                ET.SubElement(comp_xml, "CreateFolder")
                 ET.indent(comp_xml, space=space, level=3)
                 comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
                 comp_str_list.append(comp_str)
-        elif dpath != base_path:
-            # This is an empty directory, so we need to create a folder:
-            guid = str(uuid.uuid4())
-            cdid = f"CreateFolder_{did}"
-            comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
-            ET.SubElement(comp_xml, "CreateFolder")
-            ET.indent(comp_xml, space=space, level=3)
-            comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
-            comp_str_list.append(comp_str)
 
+    dir_str = "\n".join(dir_str_list).replace("><", ">\n<")
+    # print("Directory structure:\n", dir_str)
     comp_str = "\n".join(comp_str_list).replace("><", ">\n<")
     # print("Component structure:\n", comp_str)
 
