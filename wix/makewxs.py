@@ -11,11 +11,9 @@ History:
     Initial version.
 """
 
-# TODO: Updated batch scripts for building the installer.
-# TODO: Remove everything regarding NSIS over the whole project.
-# TODO: Icon for the installer?
-# TODO: Localization?
+# TODO: Localization, eventually.
 
+import argparse
 import os
 import os.path as osp
 import uuid
@@ -53,7 +51,7 @@ def make_wxs(product_name: str, version: str) -> None:
     root_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(root_dir, "dist", product_name, "_internal")
     wxs_path = osp.join(wix_dir, f"{product_name}-generic.wxs")
-    output_path = osp.join(wix_dir, f"{product_name}.wxs")
+    output_path = osp.join(wix_dir, f"{product_name}-{version}.wxs")
 
     dir_ids: dict[str, str] = {}
     file_ids: dict[str, str] = {}
@@ -130,9 +128,23 @@ def make_wxs(product_name: str, version: str) -> None:
     print("Modified .wxs file has been created:", output_path)
 
 
-if __name__ == "__main__":
-    from cdl import __version__
+def run() -> None:
+    """Run the script."""
+    parser = argparse.ArgumentParser(
+        description="Make a WiX Toolset .wxs file for the DataLab Windows installer."
+    )
+    parser.add_argument("product_name", help="Product name")
+    parser.add_argument("version", help="Product version")
+    args = parser.parse_args()
+    make_wxs(args.product_name, args.version)
 
-    make_wxs("DataLab", __version__)
+
+if __name__ == "__main__":
+    if len(os.sys.argv) == 1:
+        # For testing purposes:
+        make_wxs("DataLab", "0.14.2")
+    else:
+        run()
+
     # After making the .wxs file, run the following command to create the .msi file:
     #   wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext

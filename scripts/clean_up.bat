@@ -42,5 +42,6 @@ if exist .pytest_cache ( rmdir /s /q .pytest_cache )
 @REM Removing files/directories related to WiX installer
 if exist wix\bin ( rmdir /s /q wix\bin )
 if exist wix\obj ( rmdir /s /q wix\obj )
+if exist wix\*.bmp ( del /q wix\*.bmp )
 if exist wix\*.wixpdb ( del /q wix\*.wixpdb )
 if exist wix\%LIBNAME%.wxs ( del /q wix\%LIBNAME%.wxs )

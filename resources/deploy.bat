@@ -36,14 +36,3 @@ magick convert "temp.png" bmp3:"banner.bmp"
 magick convert "temp.png" bmp3:"dialog.bmp"
 del "temp.png"
 move /y *.bmp ..\wix
-
-@REM Generating icons for NSIS installer
-for %%s in (16 24 32 48 128 256) do (
-  %INKSCAPE_PATH% "install.svg" -o "install-%%s.png" -w %%s -h %%s
-  %INKSCAPE_PATH% "uninstall.svg" -o "uninstall-%%s.png" -w %%s -h %%s
-)
-magick convert "install-*.png" "install.ico"
-magick convert "uninstall-*.png" "uninstall.ico"
-del "install-*.png"
-del "uninstall-*.png"
-move /y *install.ico ..\nsis
