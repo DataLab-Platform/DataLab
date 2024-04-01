@@ -71,7 +71,8 @@ def make_wxs(product_name: str, version: str) -> None:
 
     # Create the base directory structure in XML:
     base_name = osp.basename(dist_dir)
-    base_id = dir_ids[osp.relpath(dist_dir, root_dir)] = generate_id()
+    base_path = osp.relpath(dist_dir, root_dir)
+    base_id = dir_ids[base_path] = generate_id()
     dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
 
     # Nesting directories, recursively, in XML:
@@ -92,7 +93,7 @@ def make_wxs(product_name: str, version: str) -> None:
 
     # Create additionnal components for each file in the directory structure:
     comp_str_list: list[str] = []
-    for dpath in sorted(dir_ids.keys())[1:]:
+    for dpath in sorted(dir_ids.keys()):
         did = dir_ids[dpath]
         files = files_dict.get(dpath, [])
         if files:
@@ -105,7 +106,7 @@ def make_wxs(product_name: str, version: str) -> None:
                 ET.indent(comp_xml, space=space, level=3)
                 comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
                 comp_str_list.append(comp_str)
-        else:
+        elif dpath != base_path:
             # This is an empty directory, so we need to create a folder:
             guid = str(uuid.uuid4())
             cdid = f"CreateFolder_{did}"
