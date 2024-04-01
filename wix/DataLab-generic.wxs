@@ -15,6 +15,7 @@
     <Fragment>
         <StandardDirectory Id="ProgramFilesFolder">
             <Directory Id="INSTALLFOLDER" Name="DataLab">
+                <!-- Automatically inserted directories -->
             </Directory>
         </StandardDirectory>
         <StandardDirectory Id="ProgramMenuFolder">
@@ -26,6 +27,7 @@
             <Component Id="PC_Files" Directory="INSTALLFOLDER">
                 <File Source=".\dist\DataLab\DataLab.exe" KeyPath="yes" />
             </Component>
+            <!-- Automatically inserted components -->
             <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="858c3c36-978e-4edb-a2c3-cf5c91588bcf">
                 <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
                 <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />

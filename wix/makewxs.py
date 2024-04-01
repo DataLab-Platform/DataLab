@@ -6,7 +6,6 @@
 """Make a WiX Toolset .wxs file for the DataLab Windows installer."""
 
 # TODO: Localization?
-# TODO: Uninstall previous version is not working.
 # TODO: Remove everything regarding NSIS over the whole project.
 # TODO: Icon for the installer?
 
@@ -14,8 +13,6 @@ import os
 import os.path as osp
 import uuid
 import xml.etree.ElementTree as ET
-
-from cdl import __version__
 
 COUNT = 0
 
@@ -27,13 +24,29 @@ def generate_id() -> str:
     return f"ID_{COUNT:04d}"
 
 
-def make_wxs() -> None:
+def insert_text_after(text: str, containing: str, content: str) -> str:
+    """Insert line of text after the line containing a specific text."""
+    if os.linesep in content:
+        linesep = os.linesep
+    elif "\r\n" in content:
+        linesep = "\r\n"
+    else:
+        linesep = "\n"
+    lines = content.splitlines()
+    for i_line, line in enumerate(lines):
+        if containing in line:
+            lines.insert(i_line + 1, text)
+            break
+    return linesep.join(lines)
+
+
+def make_wxs(product_name: str, version: str) -> None:
     """Make a .wxs file for the DataLab Windows installer."""
     wix_dir = osp.dirname(__file__)
     root_dir = osp.join(wix_dir, os.pardir)
-    dist_dir = osp.join(root_dir, "dist", "DataLab", "_internal")
-    wxs_path = osp.join(wix_dir, "DataLab-generic.wxs")
-    output_path = osp.join(wix_dir, "DataLab.wxs")
+    dist_dir = osp.join(root_dir, "dist", product_name, "_internal")
+    wxs_path = osp.join(wix_dir, f"{product_name}-generic.wxs")
+    output_path = osp.join(wix_dir, f"{product_name}.wxs")
 
     dir_ids: dict[str, str] = {}
     file_ids: dict[str, str] = {}
@@ -65,7 +78,9 @@ def make_wxs() -> None:
         else:
             raise ValueError(f"Parent directory not found for {dpath}")
         ET.SubElement(parent, "Directory", Id=dir_ids[dpath], Name=dname)
-    dir_str = ET.tostring(dir_xml, encoding="unicode").replace("><", ">\n<")
+    space = " " * 4
+    ET.indent(dir_xml, space=space, level=4)
+    dir_str = space * 4 + ET.tostring(dir_xml, encoding="unicode")
     # print("Directory structure:\n", dir_str)
 
     # Create additionnal components for each file in the directory structure:
@@ -80,44 +95,36 @@ def make_wxs() -> None:
                 guid = str(uuid.uuid4())
                 comp_xml = ET.Element("Component", Id=fid, Directory=did, Guid=guid)
                 ET.SubElement(comp_xml, "File", Source=path, KeyPath="yes")
-                comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
+                ET.indent(comp_xml, space=space, level=3)
+                comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
+                comp_str_list.append(comp_str)
         else:
             # This is an empty directory, so we need to create a folder:
             guid = str(uuid.uuid4())
             cdid = f"CreateFolder_{did}"
             comp_xml = ET.Element("Component", Id=cdid, Directory=did, Guid=guid)
             ET.SubElement(comp_xml, "CreateFolder")
-            comp_str_list.append(ET.tostring(comp_xml, encoding="unicode"))
+            ET.indent(comp_xml, space=space, level=3)
+            comp_str = space * 3 + ET.tostring(comp_xml, encoding="unicode")
+            comp_str_list.append(comp_str)
 
     comp_str = "\n".join(comp_str_list).replace("><", ">\n<")
     # print("Component structure:\n", comp_str)
 
-    # Read the .wxs file:
+    # Create the .wxs file:
     with open(wxs_path, "r", encoding="utf-8") as fd:
-        wxs_content = fd.read()
-
-    # Insert the directory structure into the .wxs file:
-    start = wxs_content.find('<Directory Id="INSTALLFOLDER" Name="DataLab">')
-    end = wxs_content.find("</Directory>", start)
-    wxs_content = wxs_content[:end] + dir_str + "\n" + wxs_content[end:]
-    # Insert the component structure into the .wxs file:
-    start = wxs_content.find(
-        r'<File Source=".\dist\DataLab\DataLab.exe" KeyPath="yes" />'
-    )
-    start = wxs_content.find("</Component>", start) + len("</Component>")
-    wxs_content = wxs_content[:start] + "\n" + comp_str + wxs_content[start:]
-
-    # Replace the version number in the .wxs file:
-    wxs_content = wxs_content.replace("{version}", __version__)
-
-    # Write the modified .wxs file:
+        wxs = fd.read()
+    wxs = insert_text_after(dir_str, "<!-- Automatically inserted directories -->", wxs)
+    wxs = insert_text_after(comp_str, "<!-- Automatically inserted components -->", wxs)
+    wxs = wxs.replace("{version}", version)
     with open(output_path, "w", encoding="utf-8") as fd:
-        fd.write(wxs_content)
-
+        fd.write(wxs)
     print("Modified .wxs file has been created:", output_path)
 
 
 if __name__ == "__main__":
-    make_wxs()
+    from cdl import __version__
+
+    make_wxs("DataLab", __version__)
     # After making the .wxs file, run the following command to create the .msi file:
     #   wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext
