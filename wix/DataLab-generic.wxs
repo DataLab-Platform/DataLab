@@ -4,6 +4,8 @@
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
         <Icon Id="DataLab.exe" SourceFile=".\resources\DataLab.ico" />
         <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value=".\wix\dialog.bmp" />
+        <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
         <MediaTemplate EmbedCab="yes" />
         <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
         <Feature Id="ProductFeature" Title="DataLab" Level="1">
