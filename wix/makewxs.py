@@ -3,11 +3,18 @@
 # Licensed under the terms of the BSD 3-Clause
 # (see cdl/LICENSE for details)
 
-"""Make a WiX Toolset .wxs file for the DataLab Windows installer."""
+"""Make a WiX Toolset .wxs file for the DataLab Windows installer.
 
-# TODO: Localization?
+History:
+
+- Version 1.0.0 (2024-04-01)
+    Initial version.
+"""
+
+# TODO: Updated batch scripts for building the installer.
 # TODO: Remove everything regarding NSIS over the whole project.
 # TODO: Icon for the installer?
+# TODO: Localization?
 
 import os
 import os.path as osp
