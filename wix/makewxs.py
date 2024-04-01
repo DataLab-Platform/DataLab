@@ -50,7 +50,7 @@ def make_wxs(product_name: str, version: str) -> None:
     wix_dir = osp.dirname(__file__)
     root_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(root_dir, "dist", product_name, "_internal")
-    wxs_path = osp.join(wix_dir, f"{product_name}-generic.wxs")
+    wxs_path = osp.join(wix_dir, f"generic-{product_name}.wxs")
     output_path = osp.join(wix_dir, f"{product_name}-{version}.wxs")
 
     dir_ids: dict[str, str] = {}

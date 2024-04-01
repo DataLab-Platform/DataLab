@@ -27,6 +27,6 @@ call %FUNC% GetVersion VERSION
 %PYTHON% "%WIXPATH%\makewxs.py" %LIBNAME% %VERSION%
 
 @REM Building WiX Installer
-wix build "%WIXPATH%\DataLab.wxs" -ext WixToolset.UI.wixext
+wix build "%WIXPATH%\%LIBNAME%-%VERSION%.wxs" -ext WixToolset.UI.wixext
 
 call %FUNC% EndOfScript
