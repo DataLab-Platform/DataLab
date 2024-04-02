@@ -101,7 +101,7 @@ def make_wxs(product_name: str, version: str) -> None:
         dir_str_list.append(space * 4 + ET.tostring(dir_xml, encoding="unicode"))
 
         # Create additionnal components for each file in the directory structure:
-        for dpath in sorted(dpath_list):
+        for dpath in sorted([base_path] + dpath_list):
             did = dir_ids[dpath]
             files = files_dict.get(dpath, [])
             if files:
