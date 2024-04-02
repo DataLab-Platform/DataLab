@@ -30,9 +30,9 @@ magick convert "tmp-*.png" "DataLab.ico"
 del "tmp-*.png"
 
 @REM Generating images for WiX installer
-%INKSCAPE_PATH% "DataLab-WixUIBanner.svg" -o "temp.png" -w 493 -h 58
+%INKSCAPE_PATH% "WixUIBanner.svg" -o "temp.png" -w 493 -h 58
 magick convert "temp.png" bmp3:"banner.bmp"
-%INKSCAPE_PATH% "DataLab-WixUIDialog.svg" -o "temp.png" -w 493 -h 312
+%INKSCAPE_PATH% "WixUIDialog.svg" -o "temp.png" -w 493 -h 312
 magick convert "temp.png" bmp3:"dialog.bmp"
 del "temp.png"
 move /y *.bmp ..\wix

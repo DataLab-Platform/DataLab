@@ -17,9 +17,9 @@ set WIXPATH=%ROOTPATH%\wix
 
 echo Generating images for WiX installer...
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
-%INKSCAPE_PATH% "%RSCPATH%\DataLab-WixUIDialog.svg" -o "temp.png" -w 493 -h 312
+%INKSCAPE_PATH% "%RSCPATH%\WixUIDialog.svg" -o "temp.png" -w 493 -h 312
 magick convert "temp.png" bmp3:"%WIXPATH%\dialog.bmp"
-%INKSCAPE_PATH% "%RSCPATH%\DataLab-WixUIBanner.svg" -o "temp.png" -w 493 -h 58
+%INKSCAPE_PATH% "%RSCPATH%\WixUIBanner.svg" -o "temp.png" -w 493 -h 58
 magick convert "temp.png" bmp3:"%WIXPATH%\banner.bmp"
 del "temp.png"
 
