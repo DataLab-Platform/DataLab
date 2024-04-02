@@ -67,9 +67,11 @@ def make_wxs(product_name: str, version: str) -> None:
         if not osp.isdir(root_dir):
             continue
 
+        dpath_list: list[str] = []
         for root, dirs, filenames in os.walk(root_dir):
             for dpath in dirs:
                 relpath = osp.relpath(osp.join(root, dpath), proj_dir)
+                dpath_list.append(relpath)
                 dir_ids[relpath] = generate_id()
                 files_dict.setdefault(osp.dirname(relpath), [])
             for filename in filenames:
@@ -84,7 +86,7 @@ def make_wxs(product_name: str, version: str) -> None:
         dir_xml = ET.Element("Directory", Id=base_id, Name=base_name)
 
         # Nesting directories, recursively, in XML:
-        for dpath in sorted(dir_ids.keys())[1:]:
+        for dpath in sorted(dpath_list):
             dname = osp.basename(dpath)
             parent = dir_xml
             for element in parent.iter():
@@ -99,7 +101,7 @@ def make_wxs(product_name: str, version: str) -> None:
         dir_str_list.append(space * 4 + ET.tostring(dir_xml, encoding="unicode"))
 
         # Create additionnal components for each file in the directory structure:
-        for dpath in sorted(dir_ids.keys()):
+        for dpath in sorted(dpath_list):
             did = dir_ids[dpath]
             files = files_dict.get(dpath, [])
             if files:
