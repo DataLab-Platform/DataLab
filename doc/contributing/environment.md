@@ -38,6 +38,8 @@ reasons). We recommend installing the following extensions:
 | [reStructuredText Syntax highlighting](https://marketplace.visualstudio.com/items?itemName=trond-snekvik.simple-rst) | reStructuredText syntax highlighting |
 | [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) | Extremely fast Python linter and code formatter |
 | [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree) | Todo tree |
+| [Insert GUID](https://marketplace.visualstudio.com/items?itemName=heaths.vscode-guid) | Insert GUID |
+| [XML Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml) | XML Tools |
 
 Python Environment
 ------------------
