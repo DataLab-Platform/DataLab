@@ -47,7 +47,7 @@ def insert_text_after(text: str, containing: str, content: str) -> str:
 
 def make_wxs(product_name: str, version: str) -> None:
     """Make a .wxs file for the DataLab Windows installer."""
-    wix_dir = osp.dirname(__file__)
+    wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(proj_dir, "dist", product_name)
     wxs_path = osp.join(wix_dir, f"generic-{product_name}.wxs")
@@ -135,7 +135,7 @@ def make_wxs(product_name: str, version: str) -> None:
     wxs = wxs.replace("{version}", version)
     with open(output_path, "w", encoding="utf-8") as fd:
         fd.write(wxs)
-    print("Modified .wxs file has been created:", output_path)
+    print("Successfully created:", output_path)
 
 
 def run() -> None:
