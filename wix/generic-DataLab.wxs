@@ -14,6 +14,18 @@
         </Feature>
     </Package>
     <Fragment>
+        <Property Id="NSIS_UNINSTALL_STRING">
+            <!-- Detect DataLab installation using the old NSIS installer -->
+            <RegistrySearch Id="PreviousDataLabSearch"
+                            Root="HKCU"
+                            Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\DataLab"
+                            Name="QuietUninstallString"
+                            Type="raw" />
+        </Property>
+        <CustomAction Id="PreviousVersionFoundMsg" Error="A previous version of DataLab was detected. Please uninstall it before proceeding with this installation." Execute="immediate" />
+        <InstallUISequence>
+            <Custom Action="PreviousVersionFoundMsg" After="CostInitialize" Condition="NSIS_UNINSTALL_STRING" />
+        </InstallUISequence>
         <StandardDirectory Id="ProgramFilesFolder">
             <Directory Id="INSTALLFOLDER" Name="DataLab">
                 <!-- Automatically inserted directories -->
