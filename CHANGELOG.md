@@ -5,6 +5,16 @@ for future and past milestones.
 
 ## DataLab Version 0.14.3 ##
 
+🎁 New installer for the stand-alone version on Windows:
+  * The stand-alone version on Windows is now distributed as an MSI installer (instead
+    of an EXE installer)
+  * This avoids the false positive detection of the stand-alone version as a
+    potential threat by some antivirus software
+  * The installer now requires administrator privileges to install DataLab and aims at
+    installing it for all users on the system (instead of the current user only)
+  * MSI installer allows to integrate DataLab's installation seemlessly in an
+    organization's deployment system
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - HDF5 browser does not show datasets with 1x1 size:

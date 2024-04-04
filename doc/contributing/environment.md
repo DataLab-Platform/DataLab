@@ -38,6 +38,8 @@ reasons). We recommend installing the following extensions:
 | [reStructuredText Syntax highlighting](https://marketplace.visualstudio.com/items?itemName=trond-snekvik.simple-rst) | reStructuredText syntax highlighting |
 | [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff) | Extremely fast Python linter and code formatter |
 | [Todo Tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree) | Todo tree |
+| [Insert GUID](https://marketplace.visualstudio.com/items?itemName=heaths.vscode-guid) | Insert GUID |
+| [XML Tools](https://marketplace.visualstudio.com/items?itemName=DotJoshJohnson.xml) | XML Tools |
 
 Python Environment
 ------------------
@@ -112,6 +114,30 @@ Visual Studio Code `.env` file:
 * This is required to be able to import the project modules from within VS Code.
 * To create this file, copy the `.env.template` file to `.env`
   (and eventually add your own paths).
+
+Windows installer
+-----------------
+
+The Windows installer is built using [WiX Toolset](https://wixtoolset.org/) V4.0.5.
+Using the WiX Toolset requires [.NET SDK](https://dotnet.microsoft.com/download/dotnet/) V6.0 minimum.
+
+You may install .NET SDK using `winget`:
+
+    winget install Microsoft.DotNet.SDK.8
+
+Once .NET SDK is installed, the WiX Toolset can be installed and configured using the
+following commands:
+
+    dotnet tool install --global wix --version 4.0.5
+    wix extension add WixToolset.UI.wixext/4.0.5
+
+First, you need to generate the installer script from a generic template:
+
+    python wix/makewxs.py
+
+Building the installer is done using the following command:
+
+    wix build .\wix\DataLab.wxs -ext WixToolset.UI.wixext
 
 Third-party Software
 --------------------

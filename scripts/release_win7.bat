@@ -13,8 +13,10 @@ echo ===========================================================================
 
 set destdir=releases\%LIBNAME%-v%VERSION%-release
 if not exist %destdir% ( mkdir %destdir% )
-ren %LIBNAME%-%VERSION%.exe %LIBNAME%-%VERSION%-Win7.exe
-move %LIBNAME%-%VERSION%-Win7.exe %destdir%
+pushd "wix"
+ren %LIBNAME%-%VERSION%.msi %LIBNAME%-%VERSION%-Win7.msi
+popd
+move wix\%LIBNAME%-%VERSION%-Win7.msi %destdir%
 explorer %destdir%
 
 call %FUNC% EndOfScript

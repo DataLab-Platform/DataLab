@@ -83,6 +83,11 @@ cdl/data/doc/
 # PyBuilder
 target/
 
-# Files that are generated for NSIS installer
-nsis/*.bmp
-nsis/*.ico
+# Files related to WiX
+.wix/
+wix/DataLab-*.wxs
+wix/bin/
+wix/obj/
+wix/*.bmp
+*.wixpdb
+*.msi

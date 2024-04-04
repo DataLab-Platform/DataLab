@@ -1,0 +1,52 @@
+﻿<!-- Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file. -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+    xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+    <Package Name="DataLab" ProductCode="4ad79deb-5cf7-481c-a242-28c66b8a53ef" Language="1033" Version="{version}" Codepage="1252" Manufacturer="DataLab Platform Developers" UpgradeCode="538c2966-2bcd-4bd4-b20a-9acb161a1614" InstallerVersion="200" Scope="perMachine">
+        <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+        <Icon Id="DataLab.exe" SourceFile=".\resources\DataLab.ico" />
+        <WixVariable Id="WixUILicenseRtf" Value=".\wix\license.rtf" />
+        <WixVariable Id="WixUIDialogBmp" Value=".\wix\dialog.bmp" />
+        <WixVariable Id="WixUIBannerBmp" Value=".\wix\banner.bmp" />
+        <MediaTemplate EmbedCab="yes" />
+        <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER"/>
+        <Feature Id="ProductFeature" Title="DataLab" Level="1">
+            <ComponentGroupRef Id="ProductComponents" />
+        </Feature>
+    </Package>
+    <Fragment>
+        <Property Id="NSIS_UNINSTALL_STRING">
+            <!-- Detect DataLab installation using the old NSIS installer -->
+            <RegistrySearch Id="PreviousDataLabSearch"
+                            Root="HKCU"
+                            Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\DataLab"
+                            Name="QuietUninstallString"
+                            Type="raw" />
+        </Property>
+        <CustomAction Id="PreviousVersionFoundMsg" Error="A previous version of DataLab was detected. Please uninstall it before proceeding with this installation." Execute="immediate" />
+        <InstallUISequence>
+            <Custom Action="PreviousVersionFoundMsg" After="CostInitialize" Condition="NSIS_UNINSTALL_STRING" />
+        </InstallUISequence>
+        <StandardDirectory Id="ProgramFilesFolder">
+            <Directory Id="INSTALLFOLDER" Name="DataLab">
+                <!-- Automatically inserted directories -->
+            </Directory>
+        </StandardDirectory>
+        <StandardDirectory Id="ProgramMenuFolder">
+            <Directory Id="ApplicationProgramsFolder" Name="DataLab" />
+        </StandardDirectory>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="ProductComponents">
+            <Component Id="PC_Files" Directory="INSTALLFOLDER">
+                <File Source=".\dist\DataLab\DataLab.exe" KeyPath="yes" />
+            </Component>
+            <!-- Automatically inserted components -->
+            <Component Id="PC_Shortcuts" Directory="ApplicationProgramsFolder" Guid="858c3c36-978e-4edb-a2c3-cf5c91588bcf">
+                <Shortcut Id="ApplicationStartMenuShortcut" Name="DataLab" Description="DataLab" Target="[INSTALLFOLDER]\DataLab.exe" WorkingDirectory="INSTALLFOLDER" />
+                <Shortcut Id="UninstallProductShortcut" Name="Uninstall DataLab" Description="Uninstalls DataLab" Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]" WorkingDirectory="INSTALLFOLDER" />
+                <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall" />
+                <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\DataLab" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+            </Component>
+        </ComponentGroup>
+    </Fragment>
+</Wix>
