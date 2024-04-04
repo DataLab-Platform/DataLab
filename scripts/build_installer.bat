@@ -15,7 +15,7 @@ set ROOTPATH=%SCRIPTPATH%\..
 set RSCPATH=%ROOTPATH%\resources
 set WIXPATH=%ROOTPATH%\wix
 
-echo Generating images for WiX installer...
+echo Generating images for MSI installer...
 set INKSCAPE_PATH="C:\Program Files\Inkscape\bin\inkscape.exe"
 %INKSCAPE_PATH% "%RSCPATH%\WixUIDialog.svg" -o "temp.png" -w 493 -h 312
 magick convert "temp.png" bmp3:"%WIXPATH%\dialog.bmp"
@@ -23,10 +23,10 @@ magick convert "temp.png" bmp3:"%WIXPATH%\dialog.bmp"
 magick convert "temp.png" bmp3:"%WIXPATH%\banner.bmp"
 del "temp.png"
 
-echo Generating .wxs file for WiX installer...
+echo Generating .wxs file for MSI installer...
 %PYTHON% "%WIXPATH%\makewxs.py" %LIBNAME% %VERSION%
 
-echo Building WiX Installer...
+echo Building MSI installer...
 wix build "%WIXPATH%\%LIBNAME%-%VERSION%.wxs" -ext WixToolset.UI.wixext
 
 call %FUNC% EndOfScript
