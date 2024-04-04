@@ -23,11 +23,12 @@ from typing import TYPE_CHECKING
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
 import numpy as np
-import qtpy.QtCore as QC
+import pandas as pd
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset
 from guidata.widgets.codeeditor import CodeEditor
 from plotpy.plot import PlotOptions, PlotWidget
+from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename
@@ -389,14 +390,14 @@ def str_to_array(
     delimiter = param.delimiter_choice or param.delimiter_custom
     file_obj = io.StringIO(raw_data)
     try:
-        data = np.loadtxt(
-            file_obj,
-            delimiter=delimiter,
-            unpack=param.transpose,
-        )
+        data = pd.read_csv(
+            file_obj, delimiter=delimiter, dtype=np.dtype(param.dtype_str)
+        ).to_numpy(dtype=np.dtype(param.dtype_str))
     except Exception:  # pylint:disable=broad-except
         return None
-    return data.astype(param.dtype_str)
+    if param.transpose:
+        return data.T
+    return data
 
 
 class DataPreviewPage(WizardPage):

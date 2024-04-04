@@ -4,6 +4,7 @@ plotpy
 PythonQwt
 scikit-image
 opencv-python-headless
+pandas
 PyWavelets
 psutil
 pylint

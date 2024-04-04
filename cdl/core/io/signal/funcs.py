@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 
 import numpy as np
+import pandas as pd
 
 
 def read_csv(
@@ -30,12 +31,27 @@ def read_csv(
     for delimiter, comments in (
         (x, y) for x in (";", "\t", ",", " ") for y in ("#", None)
     ):
+        # Load everything readable (titles are eventually converted as NaNs)
         try:
-            # Load everything readable (titles are eventually converted as NaNs)
-            xydata = np.genfromtxt(
-                filename, delimiter=delimiter, comments=comments, dtype=float
-            )
-            if np.all(np.isnan(xydata)):
+            # Headers are generally in the first 10 lines, so we try to skip the
+            # minimum number of lines before reading the data:
+            for skiprows in range(20):
+                try:
+                    df = pd.read_csv(
+                        filename,
+                        dtype=float,
+                        delimiter=delimiter,
+                        comment=comments,
+                        skiprows=skiprows,
+                    )
+                    xydata = df.to_numpy(float)
+                    break
+                except (pd.errors.ParserError, ValueError):
+                    pass
+            try:
+                if np.all(np.isnan(xydata)):
+                    continue
+            except TypeError:
                 continue
             # Removing columns with all but NaNs
             xydata = xydata[:, ~np.all(np.isnan(xydata), axis=0)]
@@ -81,6 +97,8 @@ def read_csv(
             break
         except ValueError:
             continue
+    if xydata is None:
+        raise ValueError("Unable to read CSV file")
     return xydata, xlabel, xunit, ylabels, yunits, header
 
 
