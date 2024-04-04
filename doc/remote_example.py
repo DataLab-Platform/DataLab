@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Example of remote control of DataLab current session,
 from a Python script running outside DataLab (e.g. in Spyder)

@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Licensed under the terms of the BSD 3-Clause
-# (see cdl/LICENSE for details)
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
 Module patching *guidata* and *plotpy* to adapt it to DataLab
@@ -27,8 +24,9 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine, QwtScaleDraw
+from qwt import QwtLinearScaleEngine
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
+from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal

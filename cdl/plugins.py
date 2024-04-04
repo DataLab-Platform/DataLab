@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-#
-# Licensed under the terms of the BSD 3-Clause
-# (see cdl/LICENSE for details)
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
 DataLab plugin system
@@ -36,15 +33,9 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
 from cdl.core.io.base import FormatInfo  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.image.base import (  # pylint: disable=W0611  # noqa: F401
-    ImageFormatBase,
-)
-from cdl.core.io.image.formats import (  # pylint: disable=W0611  # noqa: F401
-    ClassicsImageFormat,
-)
-from cdl.core.io.signal.base import (  # pylint: disable=W0611  # noqa: F401
-    SignalFormatBase,
-)
+from cdl.core.io.image.base import ImageFormatBase  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.image.formats import ClassicsImageFormat  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.signal.base import SignalFormatBase  # pylint: disable=W0611  # noqa: F401
 from cdl.env import execenv
 from cdl.proxy import LocalProxy
 
