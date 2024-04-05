@@ -15,6 +15,15 @@ for future and past milestones.
   * MSI installer allows to integrate DataLab's installation seemlessly in an
     organization's deployment system
 
+💥 New features and enhancements:
+
+* CSV format handling:
+  * Improved support for CSV files with a header row (column names)
+  * Added support for CSV files with empty columns
+* Open/save file error handling:
+  * Error messages are now more explicit when opening or saving a file fails
+  * Added a link to the folder containing the file in the error message
+
 🛠️ Bug fixes:
 
 * Fixed [Issue #64](https://github.com/DataLab-Platform/DataLab/issues/64) - HDF5 browser does not show datasets with 1x1 size:
