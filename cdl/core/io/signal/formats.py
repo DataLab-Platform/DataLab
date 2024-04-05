@@ -16,37 +16,6 @@ from cdl.core.io.signal.base import SignalFormatBase
 from cdl.core.model.signal import SignalObj
 
 
-class NumPySignalFormat(SignalFormatBase):
-    """Object representing a NumPy signal file type"""
-
-    FORMAT_INFO = FormatInfo(
-        name=_("NumPy binary files"),
-        extensions="*.npy",
-        readable=True,
-        writeable=True,
-    )  # pylint: disable=duplicate-code
-
-    def read_xydata(self, filename: str) -> np.ndarray:
-        """Read data and metadata from file, write metadata to object, return xydata
-
-        Args:
-            filename (str): Name of file to read
-
-        Returns:
-            np.ndarray: xydata
-        """
-        return convert_array_to_standard_type(np.load(filename))
-
-    def write(self, filename: str, obj: SignalObj) -> None:
-        """Write data to file
-
-        Args:
-            filename (str): Name of file to write
-            obj (SignalObj): Signal object to read data from
-        """
-        np.save(filename, obj.xydata.T)
-
-
 class CSVSignalFormat(SignalFormatBase):
     """Object representing a CSV signal file type"""
 
@@ -100,3 +69,34 @@ class CSVSignalFormat(SignalFormatBase):
             [obj.yunit],
             obj.metadata.get(self.HEADER_KEY, ""),
         )
+
+
+class NumPySignalFormat(SignalFormatBase):
+    """Object representing a NumPy signal file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name=_("NumPy binary files"),
+        extensions="*.npy",
+        readable=True,
+        writeable=True,
+    )  # pylint: disable=duplicate-code
+
+    def read_xydata(self, filename: str) -> np.ndarray:
+        """Read data and metadata from file, write metadata to object, return xydata
+
+        Args:
+            filename (str): Name of file to read
+
+        Returns:
+            np.ndarray: xydata
+        """
+        return convert_array_to_standard_type(np.load(filename))
+
+    def write(self, filename: str, obj: SignalObj) -> None:
+        """Write data to file
+
+        Args:
+            filename (str): Name of file to write
+            obj (SignalObj): Signal object to read data from
+        """
+        np.save(filename, obj.xydata.T)
