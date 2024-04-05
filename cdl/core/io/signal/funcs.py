@@ -28,11 +28,25 @@ def read_csv(
         Tuple (xydata, xlabel, xunit, ylabels, yunits, header)
     """
     xydata, xlabel, xunit, ylabels, yunits, header = None, None, None, None, None, None
-    for delimiter, comments in (
-        (x, y) for x in (";", "\t", ",", " ") for y in ("#", None)
-    ):
-        # Load everything readable (titles are eventually converted as NaNs)
+
+    # The first attempt is to read the CSV file assuming it has no header because it
+    # won't raise an error if the first line is data. If it fails, we try to read it
+    # with a header, and if it fails again, we try to skip some lines before reading
+    # the data.
+
+    # First attempt: no header (try to read with different delimiters)
+    for delimiter in (",", ";", "\t", " "):
         try:
+            df = pd.read_csv(
+                filename, dtype=float, comment="#", header=None, delimiter=delimiter
+            )
+            break
+        except (pd.errors.ParserError, ValueError):
+            df = None
+
+    # Second attempt: with header
+    if df is None:
+        for delimiter in (",", ";", "\t", " "):
             # Headers are generally in the first 10 lines, so we try to skip the
             # minimum number of lines before reading the data:
             for skiprows in range(20):
@@ -40,65 +54,74 @@ def read_csv(
                     df = pd.read_csv(
                         filename,
                         dtype=float,
+                        comment="#",
                         delimiter=delimiter,
-                        comment=comments,
                         skiprows=skiprows,
                     )
-                    xydata = df.to_numpy(float)
                     break
                 except (pd.errors.ParserError, ValueError):
-                    pass
-            try:
-                if np.all(np.isnan(xydata)):
-                    continue
-            except TypeError:
-                continue
-            # Removing columns with all but NaNs
-            xydata = xydata[:, ~np.all(np.isnan(xydata), axis=0)]
-            # Removing lines with NaNs
-            xydata = xydata[~np.isnan(xydata).any(axis=1), :]
-            if xydata.size == 0:
-                raise ValueError("No data")
-            # Trying to read X,Y titles
-            vals0 = [str(val) for val in xydata[0]]
-            nb_of_y_columns = len(vals0) - 1
-            line0 = delimiter.join(vals0)
-            header = ""
-            with open(filename, "r", encoding="utf-8") as fdesc:
-                lines = fdesc.readlines()
-                for rawline in lines:
-                    if comments is not None and rawline.startswith(comments):
-                        header += rawline
-                        continue
-                    line = rawline.replace(" ", "")
-                    if line == line0:
-                        break
-                    try:
-                        labels = rawline.split(delimiter)
-                        if len(labels) == nb_of_y_columns + 1:
-                            xlabel = labels[0]
-                            ylabels = labels[1:]
-                            xlabel = xlabel.strip()
-                            ylabels = [label.strip() for label in ylabels]
-                            yunits = [""] * len(ylabels)
+                    df = None
+            if df is not None:
+                break
 
-                            # Trying to parse X,Y units
-                            pattern = r"([\S ]*) \(([\S]*)\)"
-                            match = re.match(pattern, xlabel)
-                            if match is not None:
-                                xlabel, xunit = match.groups()
-                            for i, ylabel in enumerate(ylabels):
-                                match = re.match(pattern, ylabel)
-                                if match is not None:
-                                    ylabels[i], yunits[i] = match.groups()
-                    except ValueError:
-                        pass
-                    break
-            break
+        if df is None:
+            raise ValueError("Unable to read CSV file (format not supported)")
+
+        # At this stage, we have a DataFrame with column names, but we don't know
+        # if the first line is a header or data. We try to read the first line as
+        # a header, and if it fails, we read it as data.
+        try:
+            df.columns.astype(float)
+            # This means that the first line is data, so we have to read it again, but
+            # without the header:
+            df = pd.read_csv(
+                filename, dtype=float, comment="#", skiprows=skiprows, header=None
+            )
         except ValueError:
-            continue
-    if xydata is None:
-        raise ValueError("Unable to read CSV file")
+            # This means that the first line is a header, so we already have the data
+            # without missing values.
+            # However, it also means that there could be text information preceding
+            # the header. Let's try to read it and put it in `header` variable.
+
+            # 1. We read only the first 1000 lines to avoid reading the whole file
+            # 2. We keep only the lines beginning with a comment character
+            # 3. We join the lines to create a single string
+            header = ""
+            with open(filename, "r") as file:
+                for _ in range(1000):
+                    line = file.readline()
+                    if line.startswith("#"):
+                        header += line
+                    else:
+                        break
+            # Remove the last line if it contains the column names:
+            if header and df.columns[0] in header.splitlines()[-1]:
+                header = "\n".join(header.splitlines()[:-1])
+
+    # Remove rows and columns where all values are NaN in the DataFrame:
+    df = df.dropna(axis=0, how="all").dropna(axis=1, how="all")
+
+    # Converting to NumPy array
+    xydata = df.to_numpy(float)
+    if xydata.size == 0:
+        raise ValueError("Unable to read CSV file (no supported data after cleaning)")
+
+    # Reading X,Y labels
+    xlabel = str(df.columns[0])
+    ylabels = [str(col) for col in df.columns[1:]]
+
+    # Retrieving units from labels
+    xunit = ""
+    yunits = [""] * len(ylabels)
+    pattern = r"([\S ]*) \(([\S]*)\)"
+    match = re.match(pattern, xlabel)
+    if match is not None:
+        xlabel, xunit = match.groups()
+    for i, ylabel in enumerate(ylabels):
+        match = re.match(pattern, ylabel)
+        if match is not None:
+            ylabels[i], yunits[i] = match.groups()
+
     return xydata, xlabel, xunit, ylabels, yunits, header
 
 
@@ -138,10 +161,11 @@ def write_csv(
         if xunit:
             xlabel += f" ({xunit})"
         labels = delimiter.join([xlabel] + ylabels)
-    np.savetxt(
-        filename,
-        xydata,
-        header=labels,
-        delimiter=delimiter,
-        comments=header,
-    )
+    df = pd.DataFrame(xydata.T, columns=[xlabel] + ylabels)
+    df.to_csv(filename, index=False, header=labels, sep=delimiter)
+    # Add header if present
+    if header:
+        with open(filename, "r+") as file:
+            content = file.read()
+            file.seek(0, 0)
+            file.write(header + "\n" + content)
