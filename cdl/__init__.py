@@ -13,7 +13,7 @@ user interfaces (thanks to `PlotPyStack`_ libraries).
 
 import os
 
-__version__ = "0.14.3"
+__version__ = "0.15.0"
 __docurl__ = __homeurl__ = "https://datalab-platform.com/"
 __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 

@@ -3,7 +3,7 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
-## DataLab Version 0.14.3 ##
+## DataLab Version 0.15.0 ##
 
 🎁 New installer for the stand-alone version on Windows:
   * The stand-alone version on Windows is now distributed as an MSI installer (instead
