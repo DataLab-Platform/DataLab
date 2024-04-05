@@ -98,7 +98,7 @@ class TextImageFormat(ImageFormatBase):
                     return np.loadtxt(filename, delimiter=delimiter, encoding=encoding)
                 except ValueError:
                     continue
-        raise ValueError(f"Could not read file {filename} as text file")
+        raise ValueError(f"Could not read image data from file {filename} as text file")
 
     @staticmethod
     def write_data(filename: str, data: np.ndarray) -> None:

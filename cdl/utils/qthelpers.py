@@ -242,18 +242,23 @@ def qt_try_loadsave_file(
     parent: QW.QWidget, filename: str, operation: str
 ) -> Generator[str, None, None]:
     """Try and open file (operation: "load" or "save")"""
-    if operation == "load":
-        text = _("%s could not be opened:")
-    elif operation == "save":
-        text = _("%s could not be written:")
-    else:
+    if operation not in ("load", "save"):
         raise ValueError("operation argument must be 'load' or 'save'")
     try:
         yield filename
     except Exception as msg:  # pylint: disable=broad-except
         traceback.print_exc()
-        message = (text % osp.basename(filename)) + "\n" + str(msg)
-        QW.QMessageBox.critical(parent, APP_NAME, message)
+        url = osp.dirname(filename).replace("\\", "/")
+        if operation == "load":
+            text = _("The file %s could not be read:")
+        else:
+            text = _("The file %s could not be written:")
+        in_folder = _("in this folder")
+        message = text % (
+            f"<span style='font-weight:bold;color:#555555;'>{osp.basename(filename)}"
+            f"</span> (<a href='file:///{url}'>{in_folder}</a>)"
+        )
+        QW.QMessageBox.critical(parent, APP_NAME, f"{message}<br><br>{str(msg)}")
     finally:
         pass
 
