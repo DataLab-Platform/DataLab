@@ -77,11 +77,11 @@ def read_first_n_lines(filename: str, n: int = 100000) -> str:
 class SourceParam(gds.DataSet):
     """Source parameters dataset"""
 
-    def __init__(self, source_page: SourcePage):
+    def __init__(self, source_page: SourcePage) -> None:
         super().__init__()
         self.source_page = source_page
 
-    def source_callback(self, item, value):
+    def source_callback(self, item: gds.ChoiceItem, value: str) -> None:
         """Source callback"""
         if value == "clipboard":
             is_valid = bool(QW.QApplication.clipboard().text())
@@ -89,7 +89,7 @@ class SourceParam(gds.DataSet):
             is_valid = self.path is not None and osp.isfile(self.path)
         self.source_page.set_valid(is_valid)
 
-    def file_callback(self, item, value):
+    def file_callback(self, item: gds.FileOpenItem, value: str | None) -> None:
         """File callback"""
         self.source_page.set_valid(value is not None and osp.isfile(value))
 
@@ -201,7 +201,6 @@ class BaseImportParam(gds.DataSet):
         default="#",
         help=_("Character that indicates a comment line"),
     ).set_pos(col=1)
-
     skip_rows = gds.IntItem(
         _("Rows to Skip"),
         default=0,
@@ -232,8 +231,8 @@ class SignalImportParam(BaseImportParam):
         _("Data type"),
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output signal data type."),
+        default="float64",
     ).set_pos(col=1)
-
     first_col_is_x = gds.BoolItem(
         _("First Column is X"),
         default=True,
@@ -255,6 +254,7 @@ class ImageImportParam(BaseImportParam):
         _("Data type"),
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output image data type."),
+        default="uint16",
     ).set_pos(col=1)
 
 
@@ -433,10 +433,10 @@ def str_to_array(
         return None
     delimiter = param.delimiter_choice or param.delimiter_custom
     file_obj = io.StringIO(raw_data)
+    dtype = np.dtype(param.dtype_str)
     try:
-        data = pd.read_csv(
-            file_obj, delimiter=delimiter, dtype=np.dtype(param.dtype_str)
-        ).to_numpy(dtype=np.dtype(param.dtype_str))
+        df = pd.read_csv(file_obj, delimiter=delimiter, dtype=dtype)
+        data = df.to_numpy(dtype=dtype)
     except Exception:  # pylint:disable=broad-except
         return None
     if param.transpose:
