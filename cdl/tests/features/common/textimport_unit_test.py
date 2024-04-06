@@ -42,8 +42,8 @@ def test_import_wizard():
             if execenv.unattended:
                 wizard.show()
                 srcpge = wizard.source_page
-                srcpge.source_widget.file_edit.setText(path)
-                srcpge.source_widget.file_edit.editingFinished.emit()
+                srcpge.param.path = path
+                srcpge.param_widget.get()
                 wizard.go_to_next_page()
                 datapge = wizard.data_page
                 n_objs = 1

@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import io
 import os.path as osp
+from itertools import islice
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
@@ -31,12 +32,11 @@ from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
-from qtpy.compat import getopenfilename
 
 from cdl.config import Conf, _
 from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
-from cdl.utils.qthelpers import create_progress_bar, save_restore_stds
+from cdl.utils.qthelpers import create_progress_bar
 from cdl.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
@@ -45,58 +45,85 @@ if TYPE_CHECKING:
     from qtpy.QtWidgets import QWidget
 
 
-class SourceWidget(QW.QGroupBox):
-    """Widget to select text source: clipboard or file"""
+def count_lines(filename: str) -> int:
+    """Count the number of lines in a file
 
-    SIG_VALIDITY_CHANGED = QC.Signal(bool)
+    Args:
+        filename: File name
 
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
-        self.setTitle(_("Source"))
-        layout = QW.QHBoxLayout()
-        self.setLayout(layout)
-        clipboard_button = QW.QRadioButton(_("Clipboard"))
-        file_button = QW.QRadioButton(_("File:"))
-        layout.addWidget(clipboard_button)
-        layout.addWidget(file_button)
-        file_button.setChecked(True)
-        self.file_edit = QW.QLineEdit()
-        self.file_edit.textChanged.connect(self.__text_changed)
-        layout.addWidget(self.file_edit)
-        self.browse_button = QW.QPushButton(_("Browse"))
-        layout.addWidget(self.browse_button)
-        file_button.toggled.connect(self.__update_path)
-        self.browse_button.clicked.connect(self.__browse)
+    Returns:
+        The number of lines in the file
+    """
+    with open(filename, "r") as file:
+        line_count = sum(1 for line in file)
+    return line_count
 
-    def __text_changed(self, text: str) -> None:  # pylint:disable=unused-argument
-        """Text changed"""
-        self.SIG_VALIDITY_CHANGED.emit(osp.isfile(self.file_edit.text()))
 
-    def __update_path(self, checked: bool) -> None:
-        """Update the path"""
-        self.file_edit.setEnabled(checked)
-        self.browse_button.setEnabled(checked)
-        if checked:
-            self.file_edit.setFocus()
-            is_valid = osp.isfile(self.file_edit.text())
-        else:
+def read_first_n_lines(filename: str, n: int = 100000) -> str:
+    """Read the first n lines of a file
+
+    Args:
+        filename: File name
+        n: Number of lines to read
+
+    Returns:
+        The first n lines of the file
+    """
+    with open(filename, "r", encoding="utf-8") as file:
+        lines = list(islice(file, n))
+    return "".join(lines)
+
+
+class SourceParam(gds.DataSet):
+    """Source parameters dataset"""
+
+    def __init__(self, source_page: SourcePage):
+        super().__init__()
+        self.source_page = source_page
+
+    def source_callback(self, item, value):
+        """Source callback"""
+        if value == "clipboard":
             is_valid = bool(QW.QApplication.clipboard().text())
-        self.SIG_VALIDITY_CHANGED.emit(is_valid)
+        else:
+            is_valid = self.path is not None and osp.isfile(self.path)
+        self.source_page.set_valid(is_valid)
 
-    def __browse(self) -> None:
-        """Browse for a file"""
-        basedir = Conf.main.base_dir.get()
-        filters = _("Text files (*.txt *.csv *.dat *.asc);;All files (*.*)")
-        with save_restore_stds():
-            path, _filter = getopenfilename(self, _("Select a file"), basedir, filters)
-        if path:
-            self.file_edit.setText(path)
+    def file_callback(self, item, value):
+        """File callback"""
+        self.source_page.set_valid(value is not None and osp.isfile(value))
 
-    def get_source_path(self) -> str | None:
-        """Return the selected source path, or None if clipboard is selected"""
-        if self.file_edit.isEnabled():
-            return self.file_edit.text()
-        return None
+    _prop = gds.GetAttrProp("choice")
+    source = (
+        gds.ChoiceItem(
+            _("Source"),
+            [("clipboard", _("Clipboard")), ("file", _("File"))],
+            default="file",
+            help=_("Source of the data"),
+            radio=True,
+        )
+        .set_prop("display", store=_prop)
+        .set_prop("display", callback=source_callback)
+    )
+    path = (
+        gds.FileOpenItem(
+            _("File"),
+            formats=("txt", "csv", "dat", "asc"),
+            check=False,
+            help=_("File containing the data"),
+        )
+        .set_prop("display", active=gds.FuncProp(_prop, lambda x: x == "file"))
+        .set_prop("display", callback=file_callback)
+    )
+    _bg = gds.BeginGroup(_("Preview parameters"))
+    preview_max_rows = gds.IntItem(
+        _("Maximum Number of Rows"),
+        default=100000,
+        min=1,
+        check=False,
+        help=_("Maximum number of rows to display"),
+    ).set_prop("display", active=gds.FuncProp(_prop, lambda x: x == "file"))
+    _eg = gds.EndGroup(_("Preview parameters"))
 
 
 class SourcePage(WizardPage):
@@ -105,37 +132,54 @@ class SourcePage(WizardPage):
     def __init__(self) -> None:
         super().__init__()
         self.__text = ""
+        self.__path = ""
+        self.__loaded_partially = True
         self.set_title(_("Source"))
         self.set_subtitle(_("Select the source of the data:"))
-        self.source_widget = SourceWidget(self)
-        self.source_widget.SIG_VALIDITY_CHANGED.connect(self.set_valid)
-        self.add_to_layout(self.source_widget)
+
+        self.param_widget = gdq.DataSetEditGroupBox(
+            _("Source Parameters"), SourceParam, show_button=False, source_page=self
+        )
+        self.param = self.param_widget.dataset
+        self.add_to_layout(self.param_widget)
+
         self.add_stretch()
         self.set_valid(False)
 
     def get_source_path(self) -> str | None:
         """Return the selected source path, or None if clipboard is selected"""
-        return self.source_widget.get_source_path()
+        return self.param.path if self.param.source == "file" else None
 
-    def get_source_text(self) -> str:
+    def get_source_text(self, preview: bool) -> str:
         """Return the source text"""
+        if not self.__loaded_partially or preview:
+            return self.__text
+        with open(self.__path, "r", encoding="utf-8") as file:
+            self.__text = file.read()
+        self.__loaded_partially = False
         return self.__text
 
     def validate_page(self) -> bool:
         """Validate the page"""
         self.__text = ""
-        if self.source_widget.file_edit.isEnabled():
-            path = self.get_source_path()
-            if path is not None and osp.isfile(path):
+        self.param_widget.set()
+        if self.param.source == "file":
+            self.__path = self.get_source_path()
+            if self.__path is not None and osp.isfile(self.__path):
                 try:
-                    with open(path, "r", encoding="utf-8") as file:
-                        self.__text = file.read()
+                    self.__text = read_first_n_lines(
+                        self.__path, n=self.param.preview_max_rows
+                    )
                 except Exception:  # pylint:disable=broad-except
                     return False
+                self.__loaded_partially = (
+                    count_lines(self.__path) > self.param.preview_max_rows
+                )
             else:
                 return False
         else:
             self.__text = QW.QApplication.clipboard().text()
+            self.__loaded_partially = False
         return bool(self.__text)
 
 
@@ -412,7 +456,7 @@ class DataPreviewPage(WizardPage):
         self.__quick_update = False
         self.source_page = source_page
         self.destination = destination
-        self.__data: np.ndarray | None = None
+        self.__previewdata: np.ndarray | None = None
         self.set_title(_("Data Preview"))
         self.set_subtitle(_("Preview and modify the import settings:"))
 
@@ -421,6 +465,7 @@ class DataPreviewPage(WizardPage):
             SignalImportParam if destination == "signal" else ImageImportParam,
         )
         self.param_widget.SIG_APPLY_BUTTON_CLICKED.connect(self.update_preview)
+        self.param_widget.set_apply_button_state(False)
         self.param = self.param_widget.dataset
         self.add_to_layout(self.param_widget)
 
@@ -432,12 +477,14 @@ class DataPreviewPage(WizardPage):
 
     def get_data(self) -> np.ndarray | None:
         """Return the data"""
-        return self.__data
+        raw_data = self.source_page.get_source_text(preview=False)
+        pre_data = prefilter_data(raw_data, self.param)
+        return str_to_array(pre_data, self.param)
 
     def update_preview(self) -> None:
         """Update the preview"""
         # Raw data
-        raw_data = self.source_page.get_source_text()
+        raw_data = self.source_page.get_source_text(preview=True)
         self.preview_widget.set_raw_data(raw_data)
         # Prefiltered data
         pre_data = prefilter_data(raw_data, self.param)
@@ -449,7 +496,7 @@ class DataPreviewPage(WizardPage):
             first_col_is_x = self.param.first_col_is_x
         if not self.__quick_update:
             self.preview_widget.set_preview_data(data, first_col_is_x=first_col_is_x)
-        self.__data = data
+        self.__previewdata = data
         self.set_valid(data is not None)
 
     def initialize_page(self) -> None:
@@ -464,7 +511,7 @@ class DataPreviewPage(WizardPage):
         self.param_widget.set()
         self.__quick_update = False
         if self.destination == "signal":
-            nb_sig = len(self.__data.T)
+            nb_sig = len(self.__previewdata.T)
             if self.param.first_col_is_x:
                 nb_sig -= 1
             if (
