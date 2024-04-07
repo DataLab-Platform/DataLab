@@ -543,6 +543,10 @@ class GraphicalRepresentationPage(WizardPage):
             % (_("signals") if destination == "signal" else _("images"))
         )
         layout.addWidget(instruction)
+        cb_all = QW.QCheckBox(_("Select all"))
+        cb_all.setChecked(True)
+        cb_all.stateChanged.connect(self.toggle_all)
+        layout.addWidget(cb_all)
         plot_type = "curve" if destination == "signal" else "image"
         self.plot_widget = PlotWidget(
             self,
@@ -557,6 +561,13 @@ class GraphicalRepresentationPage(WizardPage):
         plot.SIG_ITEMS_CHANGED.connect(self.items_changed)
         layout.addWidget(self.plot_widget)
         self.add_to_layout(layout)
+
+    def toggle_all(self, state: int) -> None:
+        """Toggle all items selection"""
+        plot = self.plot_widget.get_plot()
+        for _obj, item in self.__objitmlist:
+            plot.set_item_visible(item, state == QC.Qt.Checked, replot=False)
+        plot.replot()
 
     def items_changed(self, _plot: BasePlot) -> None:
         """Item selection changed"""

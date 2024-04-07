@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-07 14:40+0200\n"
+"POT-Creation-Date: 2024-04-07 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2204,7 +2204,7 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:685
+#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:696
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -2976,8 +2976,8 @@ msgstr "Titre de l'image"
 #: cdl\core\model\image.py:383 cdl\core\model\image.py:387
 #: cdl\core\model\image.py:391 cdl\core\model\image.py:780
 #: cdl\core\model\signal.py:120 cdl\core\model\signal.py:124
-#: cdl\core\model\signal.py:582 cdl\widgets\textimport.py:637
-#: cdl\widgets\textimport.py:647
+#: cdl\core\model\signal.py:582 cdl\widgets\textimport.py:648
+#: cdl\widgets\textimport.py:658
 msgid "Title"
 msgstr "Titre"
 
@@ -3753,43 +3753,47 @@ msgstr "images"
 msgid "signals"
 msgstr "signaux"
 
-#: cdl\widgets\textimport.py:595
+#: cdl\widgets\textimport.py:546
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+#: cdl\widgets\textimport.py:606
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
-#: cdl\widgets\textimport.py:638 cdl\widgets\textimport.py:648
+#: cdl\widgets\textimport.py:649 cdl\widgets\textimport.py:659
 msgid "X label"
 msgstr "Titre X"
 
-#: cdl\widgets\textimport.py:639 cdl\widgets\textimport.py:649
+#: cdl\widgets\textimport.py:650 cdl\widgets\textimport.py:660
 msgid "Y label"
 msgstr "Titre Y"
 
-#: cdl\widgets\textimport.py:640 cdl\widgets\textimport.py:651
+#: cdl\widgets\textimport.py:651 cdl\widgets\textimport.py:662
 msgid "X unit"
 msgstr "Unité X"
 
-#: cdl\widgets\textimport.py:641 cdl\widgets\textimport.py:652
+#: cdl\widgets\textimport.py:652 cdl\widgets\textimport.py:663
 msgid "Y unit"
 msgstr "Unité Y"
 
-#: cdl\widgets\textimport.py:650
+#: cdl\widgets\textimport.py:661
 msgid "Z label"
 msgstr "Titre Z"
 
-#: cdl\widgets\textimport.py:653
+#: cdl\widgets\textimport.py:664
 msgid "Z unit"
 msgstr "Unité Z"
 
-#: cdl\widgets\textimport.py:680
+#: cdl\widgets\textimport.py:691
 msgid "Labels and units"
 msgstr "Titres et unités"
 
-#: cdl\widgets\textimport.py:681
+#: cdl\widgets\textimport.py:692
 msgid "Set the labels and units for the imported data"
 msgstr "Définir les titres et unités pour les données importées"
 
-#: cdl\widgets\textimport.py:691
+#: cdl\widgets\textimport.py:702
 msgid ""
 "The following title, labels and units will be applied to the data."
 "<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default "
@@ -3800,15 +3804,15 @@ msgstr ""
 "conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été "
 "déduites des données)."
 
-#: cdl\widgets\textimport.py:715
+#: cdl\widgets\textimport.py:726
 msgid "clipboard"
 msgstr "presse-papiers"
 
-#: cdl\widgets\textimport.py:718
+#: cdl\widgets\textimport.py:729
 msgid "Imported from:"
 msgstr "Importer depuis :"
 
-#: cdl\widgets\textimport.py:738
+#: cdl\widgets\textimport.py:749
 msgid "DataLab Import Wizard"
 msgstr "Assistant d'importation de DataLab"
 
