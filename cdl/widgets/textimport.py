@@ -26,7 +26,6 @@ import guidata.dataset.qtwidgets as gdq
 import numpy as np
 import pandas as pd
 from guidata.configtools import get_icon
-from guidata.dataset import restore_dataset
 from guidata.widgets.codeeditor import CodeEditor
 from plotpy.plot import PlotOptions, PlotWidget
 from qtpy import QtCore as QC
@@ -34,6 +33,7 @@ from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
 from cdl.config import Conf, _
+from cdl.core.io.signal.funcs import get_labels_units_from_dataframe
 from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
 from cdl.utils.qthelpers import create_progress_bar
@@ -207,19 +207,25 @@ class BaseImportParam(gds.DataSet):
         help=_(
             "Number of rows to skip at the beginning of the file (including comments)"
         ),
-    )
+    ).set_pos(col=2)
     max_rows = gds.IntItem(
-        _("Maximum Number of Rows"),
+        _("Max. nb of rows"),
         default=None,
         min=1,
         check=False,
         help=_("Maximum number of rows to import"),
+    )
+    header = gds.ChoiceItem(
+        _("Header"),
+        ((None, _("None")), ("infer", _("Infer")), (0, _("First row"))),
+        default="infer",
+        help=_("Row index to use as the column names"),
     ).set_pos(col=1)
     transpose = gds.BoolItem(
         _("Transpose"),
         default=False,
         help=_("Transpose the data (swap rows and columns)"),
-    )
+    ).set_pos(col=2)
 
 
 class SignalImportParam(BaseImportParam):
@@ -232,7 +238,7 @@ class SignalImportParam(BaseImportParam):
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output signal data type."),
         default="float64",
-    ).set_pos(col=1)
+    )
     first_col_is_x = gds.BoolItem(
         _("First Column is X"),
         default=True,
@@ -242,7 +248,7 @@ class SignalImportParam(BaseImportParam):
                 "(ignored if there is only one column)"
             )
         ),
-    )
+    ).set_pos(col=1)
 
 
 class ImageImportParam(BaseImportParam):
@@ -255,7 +261,7 @@ class ImageImportParam(BaseImportParam):
         list(zip(VALID_DTYPES_STRLIST, VALID_DTYPES_STRLIST)),
         help=_("Output image data type."),
         default="uint16",
-    ).set_pos(col=1)
+    )
 
 
 class ArrayModel(QC.QAbstractTableModel):
@@ -347,12 +353,6 @@ class PreviewWidget(QW.QWidget):
         tw.addTab(
             self._raw_text_edit, get_icon("libre-gui-questions.svg"), _("Raw Data")
         )
-        self._pre_text_edit = self.create_editor()
-        tw.addTab(
-            self._pre_text_edit,
-            get_icon("libre-gui-file-document.svg"),
-            _("Prefiltered Data"),
-        )
         self._preview_table = ArrayView(self)
         self._preview_table.setFont(self._raw_text_edit.font())
         self._preview_table.setEditTriggers(QW.QAbstractItemView.NoEditTriggers)
@@ -373,10 +373,6 @@ class PreviewWidget(QW.QWidget):
         """Set the raw data"""
         self._raw_text_edit.setPlainText(data)
 
-    def set_prefiltered_data(self, data: str) -> None:
-        """Set the prefiltered data"""
-        self._pre_text_edit.setPlainText(data)
-
     def __clear_preview_table(self, enable: bool) -> None:
         """Clear the preview table"""
         self._preview_table.setModel(None)
@@ -388,60 +384,56 @@ class PreviewWidget(QW.QWidget):
             self.tabwidget.setCurrentIndex(idx)
 
     def set_preview_data(
-        self, data: np.ndarray | None, first_col_is_x: bool | None
+        self, df: pd.DataFrame | None, first_col_is_x: bool | None
     ) -> None:
         """Set the preview data"""
+        data = df.to_numpy() if df is not None else None
         if data is None or len(data.shape) not in (1, 2) or data.size == 0:
             self.__clear_preview_table(False)
         else:
             self.__clear_preview_table(True)
             if self.destination == "signal":
                 assert first_col_is_x is not None
-                if len(data.shape) == 1:
-                    h_headers = ["Y"]
-                elif first_col_is_x:
-                    if len(data[0]) == 2:
-                        h_headers = ["X", "Y"]
-                    else:
-                        h_headers = ["X"] + [f"Y{i+1}" for i in range(len(data[0]) - 1)]
-                else:
-                    h_headers = [f"Y{i+1}" for i in range(len(data[0]))]
+                h_headers = df.columns.tolist()
             else:
                 h_headers = None
             self._preview_table.set_data(data, horizontal_headers=h_headers)
 
 
-def prefilter_data(raw_data: str, param: SignalImportParam | ImageImportParam) -> str:
-    """Prefilter the data"""
-    lines = raw_data.splitlines()
-    # Remove the first `skip_rows` lines
-    if param.skip_rows:
-        lines = lines[param.skip_rows :]
-    # Remove all lines starting with the comment character
-    lines = [line for line in lines if not line.startswith(param.comment_char)]
-    # Keep only the first `max_rows` lines
-    if param.max_rows:
-        lines = lines[: param.max_rows]
-    return "\n".join(lines)
+def str_to_dataframe(
+    raw_data: str,
+    param: SignalImportParam | ImageImportParam,
+) -> pd.DataFrame | None:
+    """Convert raw data to a DataFrame
 
+    Args:
+        raw_data: Raw data
+        param: Import parameters
 
-def str_to_array(
-    raw_data: str, param: SignalImportParam | ImageImportParam
-) -> np.ndarray | None:
-    """Convert raw data to array"""
+    Returns:
+        The DataFrame, or None if the conversion failed
+    """
     if not raw_data:
         return None
-    delimiter = param.delimiter_choice or param.delimiter_custom
     file_obj = io.StringIO(raw_data)
     dtype = np.dtype(param.dtype_str)
     try:
-        df = pd.read_csv(file_obj, delimiter=delimiter, dtype=dtype)
-        data = df.to_numpy(dtype=dtype)
+        df = pd.read_csv(
+            file_obj,
+            delimiter=param.delimiter_choice,
+            skiprows=param.skip_rows,
+            nrows=param.max_rows,
+            comment=param.comment_char,
+            dtype=dtype,
+            header=param.header,
+        )
     except Exception:  # pylint:disable=broad-except
         return None
+    # Remove rows and columns where all values are NaN in the DataFrame:
+    df = df.dropna(axis=0, how="all").dropna(axis=1, how="all")
     if param.transpose:
-        return data.T
-    return data
+        return df.T
+    return df
 
 
 class DataPreviewPage(WizardPage):
@@ -456,7 +448,7 @@ class DataPreviewPage(WizardPage):
         self.__quick_update = False
         self.source_page = source_page
         self.destination = destination
-        self.__previewdata: np.ndarray | None = None
+        self.__preview_df: pd.DataFrame | None = None
         self.set_title(_("Data Preview"))
         self.set_subtitle(_("Preview and modify the import settings:"))
 
@@ -475,29 +467,29 @@ class DataPreviewPage(WizardPage):
         )
         self.add_to_layout(self.preview_widget)
 
-    def get_data(self) -> np.ndarray | None:
-        """Return the data"""
-        raw_data = self.source_page.get_source_text(preview=False)
-        pre_data = prefilter_data(raw_data, self.param)
-        return str_to_array(pre_data, self.param)
+    def get_dataframe(self) -> pd.DataFrame | None:
+        """Return the data
+
+        Returns:
+            The data frame, or None if the data could not be converted
+        """
+        source_text = self.source_page.get_source_text(preview=False)
+        return str_to_dataframe(source_text, self.param)
 
     def update_preview(self) -> None:
         """Update the preview"""
         # Raw data
         raw_data = self.source_page.get_source_text(preview=True)
         self.preview_widget.set_raw_data(raw_data)
-        # Prefiltered data
-        pre_data = prefilter_data(raw_data, self.param)
-        self.preview_widget.set_prefiltered_data(pre_data)
         # Preview
-        data = str_to_array(pre_data, self.param)
+        df = str_to_dataframe(raw_data, self.param)
         first_col_is_x = None
         if isinstance(self.param, SignalImportParam):
             first_col_is_x = self.param.first_col_is_x
         if not self.__quick_update:
-            self.preview_widget.set_preview_data(data, first_col_is_x=first_col_is_x)
-        self.__previewdata = data
-        self.set_valid(data is not None)
+            self.preview_widget.set_preview_data(df, first_col_is_x=first_col_is_x)
+        self.__preview_df = df
+        self.set_valid(df is not None)
 
     def initialize_page(self) -> None:
         """Initialize the page"""
@@ -511,7 +503,7 @@ class DataPreviewPage(WizardPage):
         self.param_widget.set()
         self.__quick_update = False
         if self.destination == "signal":
-            nb_sig = len(self.__previewdata.T)
+            nb_sig = len(self.__preview_df.columns)
             if self.param.first_col_is_x:
                 nb_sig -= 1
             if (
@@ -577,9 +569,10 @@ class GraphicalRepresentationPage(WizardPage):
 
     def initialize_page(self) -> None:
         """Initialize the page"""
-        data = self.data_page.get_data()
+        df = self.data_page.get_dataframe()
+        assert df is not None
+        data = df.to_numpy()
         param = self.data_page.param
-        assert data is not None
         plot = self.plot_widget.get_plot()
         plot.del_all_items()
         if self.destination == "signal":
@@ -592,9 +585,12 @@ class GraphicalRepresentationPage(WizardPage):
                 plot.add_item(item)
                 self.__objitmlist = [(obj, item)]
             else:
+                xlabel, ylabels, xunit, yunits = get_labels_units_from_dataframe(df)
                 if param.first_col_is_x:
                     x = xydata[0]
+                    plot.set_axis_title("bottom", xlabel)
                 self.__objitmlist = []
+                zorder = 1000
                 with create_progress_bar(
                     self, _("Adding data to the plot"), max_=len(xydata) - 1
                 ) as progress:
@@ -603,10 +599,17 @@ class GraphicalRepresentationPage(WizardPage):
                         if progress.wasCanceled():
                             break
                         yidx = ycol if param.first_col_is_x else ycol - 1
-                        obj = create_signal("", x=x, y=xydata[yidx])
+                        obj = create_signal(
+                            ylabels[ycol - 1],
+                            x=x,
+                            y=xydata[yidx],
+                            labels=(xlabel, ylabels[ycol - 1]),
+                            units=(xunit, yunits[ycol - 1]),
+                        )
                         with CURVESTYLES.suspend():
                             item = obj.make_item()
-                        plot.add_item(item)
+                        plot.add_item(item, z=zorder)
+                        zorder -= 1
                         self.__objitmlist.append((obj, item))
                         QW.QApplication.processEvents()
         else:
@@ -650,6 +653,20 @@ class ImageParam(gds.DataSet):
     zunit = gds.StringItem(_("Z unit"), default="").set_pos(col=2)
 
 
+def update_dataset_non_empty_values(dest: gds.DataSet, source: gds.DataSet) -> None:
+    """Update the destination dataset from the non-empty values of the source dataset
+
+    Args:
+        dest: Destination dataset
+        source: Source dataset
+    """
+    for item in source.get_items():
+        key = item.get_name()
+        value = getattr(source, key)
+        if value in (None, "") and hasattr(dest, key):
+            setattr(dest, key, value)
+
+
 class LabelsPage(WizardPage):
     """Labels page"""
 
@@ -670,6 +687,15 @@ class LabelsPage(WizardPage):
             show_button=False,
         )
         self.param = self.param_widget.dataset
+        label = QW.QLabel(
+            _(
+                "The following title, labels and units will be applied to the data."
+                "<br><br><i><u>Note</u>: "
+                "Leave empty the labels and units to keep the default values "
+                "(i.e. the values which were inferred from the data).</i>"
+            )
+        )
+        self.add_to_layout(label)
         self.add_to_layout(self.param_widget)
         self.add_stretch()
 
@@ -677,7 +703,7 @@ class LabelsPage(WizardPage):
         """Return the objects"""
         objs = self.plot_page.get_objs()
         for idx, obj in enumerate(objs):
-            restore_dataset(self.param, obj)
+            update_dataset_non_empty_values(obj, self.param)
             if len(objs) > 1:
                 obj.title = f"{obj.title} {idx + 1:02d}"
         return objs

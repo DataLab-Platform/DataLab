@@ -14,6 +14,36 @@ import numpy as np
 import pandas as pd
 
 
+def get_labels_units_from_dataframe(
+    df: pd.DataFrame,
+) -> tuple[str, list[str], str, list[str]]:
+    """Get labels and units from a DataFrame.
+
+    Args:
+        df: DataFrame
+
+    Returns:
+        Tuple (xlabel, ylabels, xunit, yunits)
+    """
+    # Reading X,Y labels
+    xlabel = str(df.columns[0])
+    ylabels = [str(col) for col in df.columns[1:]]
+
+    # Retrieving units from labels
+    xunit = ""
+    yunits = [""] * len(ylabels)
+    pattern = r"([\S ]*) \(([\S]*)\)"
+    match = re.match(pattern, xlabel)
+    if match is not None:
+        xlabel, xunit = match.groups()
+    for i, ylabel in enumerate(ylabels):
+        match = re.match(pattern, ylabel)
+        if match is not None:
+            ylabels[i], yunits[i] = match.groups()
+
+    return xlabel, ylabels, xunit, yunits
+
+
 def read_csv(
     filename: str,
 ) -> tuple[
@@ -106,22 +136,7 @@ def read_csv(
     if xydata.size == 0:
         raise ValueError("Unable to read CSV file (no supported data after cleaning)")
 
-    # Reading X,Y labels
-    xlabel = str(df.columns[0])
-    ylabels = [str(col) for col in df.columns[1:]]
-
-    # Retrieving units from labels
-    xunit = ""
-    yunits = [""] * len(ylabels)
-    pattern = r"([\S ]*) \(([\S]*)\)"
-    match = re.match(pattern, xlabel)
-    if match is not None:
-        xlabel, xunit = match.groups()
-    for i, ylabel in enumerate(ylabels):
-        match = re.match(pattern, ylabel)
-        if match is not None:
-            ylabels[i], yunits[i] = match.groups()
-
+    xlabel, ylabels, xunit, yunits = get_labels_units_from_dataframe(df)
     return xydata, xlabel, xunit, ylabels, yunits, header
 
 
