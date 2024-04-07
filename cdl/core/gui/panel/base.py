@@ -635,7 +635,18 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             New object or list of new objects
         """
-        objs = self.IO_REGISTRY.read(filename)
+
+        def progress_callback(progbar: QW.QProgressDialog, ratio: float) -> bool:
+            """Progress callback"""
+            progbar.setValue(int(ratio * 100))
+            return progbar.wasCanceled()
+
+        with create_progress_bar(
+            self, _("Adding objects to workspace"), max_=100
+        ) as progress:
+            objs = self.IO_REGISTRY.read(
+                filename, lambda ratio: progress_callback(progress, ratio)
+            )
         for obj in objs:
             obj.metadata["source"] = filename
             self.add_object(obj, set_current=obj is objs[-1])

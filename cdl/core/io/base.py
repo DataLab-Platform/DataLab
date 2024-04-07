@@ -12,6 +12,7 @@ import dataclasses
 import enum
 import os.path as osp
 import re
+from typing import Callable
 
 from cdl.config import _
 from cdl.core.model.base import BaseObj
@@ -132,12 +133,17 @@ class BaseIORegistry(type):
         )
 
     @classmethod
-    def read(cls, filename: str) -> list[BaseObj]:
+    def read(
+        cls, filename: str, progress_callback: Callable | None = None
+    ) -> list[BaseObj]:
         """Read data from file, return native object (signal or image) list.
         For single object, return a list with one object.
 
         Args:
             filename: file name
+            progress_callback: progress callback function (a function that takes a float
+             between 0 and 1 as argument representing the progress, and returns a
+             boolean indicating whether to cancel the operation)
 
         Raises:
             NotImplementedError: if file data type is not supported
@@ -146,7 +152,7 @@ class BaseIORegistry(type):
             List of native objects (signal or image)
         """
         fmt = cls.get_format(filename, IOAction.LOAD)
-        return fmt.read(filename)
+        return fmt.read(filename, progress_callback)
 
     @classmethod
     def write(cls, filename: str, obj: BaseObj) -> None:
@@ -231,12 +237,15 @@ class FormatBase:
             return ""
         return f"{self.info.name} ({self.info.extensions})"
 
-    def read(self, filename: str) -> list[BaseObj]:
+    def read(self, filename: str, progress_callback: Callable) -> list[BaseObj]:
         """Read list of native objects (signal or image) from file.
         For single object, return a list with one object.
 
         Args:
             filename: file name
+            progress_callback: progress callback function (a function that takes a float
+             between 0 and 1 as argument representing the progress, and returns a
+             boolean indicating whether to cancel the operation)
 
         Raises:
             NotImplementedError: if format is not supported

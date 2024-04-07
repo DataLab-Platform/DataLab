@@ -9,9 +9,12 @@ DataLab I/O signal functions
 from __future__ import annotations
 
 import re
+from typing import Callable
 
 import numpy as np
 import pandas as pd
+
+from cdl.utils.io import count_lines
 
 
 def get_labels_units_from_dataframe(
@@ -44,8 +47,59 @@ def get_labels_units_from_dataframe(
     return xlabel, ylabels, xunit, yunits
 
 
+def __read_csv_primitive(
+    filename: str,
+    progress_callback: Callable | None = None,
+    delimiter: str | None = None,
+    header: int | None = "infer",
+    skiprows: int | None = None,
+    nrows: int | None = None,
+    comment: str | None = None,
+    chunksize: int = 1000,
+) -> pd.DataFrame:
+    """Read CSV data with primitive options, using pandas read_csv function defaults,
+    and reading data in chunks, using the iterator interface.
+
+    Args:
+        filename: CSV file name
+        progress_callback: progress callback function (a function that takes a float
+            between 0 and 1 as argument representing the progress, and returns a
+            boolean indicating whether to cancel the operation)
+        delimiter: Delimiter
+        header: Header line
+        skiprows: Skip rows
+        nrows: Number of rows to read
+        comment: Comment character
+        chunksize: Chunk size
+
+    Returns:
+        DataFrame
+    """
+    nlines = count_lines(filename)
+    # Read data in chunks, and concatenate them at the end, thus allowing to call the
+    # progress callback function at each chunk read and to return an intermediate result
+    # if the operation is canceled.
+    chunks = []
+    for chunk in pd.read_csv(
+        filename,
+        delimiter=delimiter,
+        header=header,
+        skiprows=skiprows,
+        nrows=nrows,
+        comment=comment,
+        chunksize=chunksize,
+    ):
+        chunks.append(chunk)
+        # Compute the progression based on the number of lines read so far
+        progress = sum(len(chunk) for chunk in chunks) / nlines
+        if progress_callback is not None and progress_callback(progress):
+            break
+    return pd.concat(chunks)
+
+
 def read_csv(
     filename: str,
+    progress_callback: Callable,
 ) -> tuple[
     np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
 ]:
@@ -53,6 +107,9 @@ def read_csv(
 
     Args:
         filename: CSV file name
+        progress_callback: progress callback function (a function that takes a float
+         between 0 and 1 as argument representing the progress, and returns a
+         boolean indicating whether to cancel the operation)
 
     Returns:
         Tuple (xydata, xlabel, xunit, ylabels, yunits, header)
@@ -64,12 +121,20 @@ def read_csv(
     # with a header, and if it fails again, we try to skip some lines before reading
     # the data.
 
+    skiprows = None
+
     # First attempt: no header (try to read with different delimiters)
     for delimiter in (",", ";", "\t", " "):
         try:
             df = pd.read_csv(
-                filename, dtype=float, comment="#", header=None, delimiter=delimiter
+                filename,
+                dtype=float,
+                delimiter=delimiter,
+                header=None,
+                comment="#",
+                nrows=1000,  # Read only the first 1000 lines
             )
+            read_without_header = True
             break
         except (pd.errors.ParserError, ValueError):
             df = None
@@ -84,9 +149,10 @@ def read_csv(
                     df = pd.read_csv(
                         filename,
                         dtype=float,
-                        comment="#",
                         delimiter=delimiter,
                         skiprows=skiprows,
+                        comment="#",
+                        nrows=1000,  # Read only the first 1000 lines
                     )
                     break
                 except (pd.errors.ParserError, ValueError):
@@ -104,10 +170,9 @@ def read_csv(
             df.columns.astype(float)
             # This means that the first line is data, so we have to read it again, but
             # without the header:
-            df = pd.read_csv(
-                filename, dtype=float, comment="#", skiprows=skiprows, header=None
-            )
+            read_without_header = True
         except ValueError:
+            read_without_header = False
             # This means that the first line is a header, so we already have the data
             # without missing values.
             # However, it also means that there could be text information preceding
@@ -127,6 +192,16 @@ def read_csv(
             # Remove the last line if it contains the column names:
             if header and df.columns[0] in header.splitlines()[-1]:
                 header = "\n".join(header.splitlines()[:-1])
+
+    # Now we read the whole file with the correct options
+    df = __read_csv_primitive(
+        filename,
+        progress_callback,
+        delimiter=delimiter,
+        header=None if read_without_header else "infer",
+        skiprows=skiprows,
+        comment="#",
+    )
 
     # Remove rows and columns where all values are NaN in the DataFrame:
     df = df.dropna(axis=0, how="all").dropna(axis=1, how="all")

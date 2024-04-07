@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import io
 import os.path as osp
-from itertools import islice
 from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
@@ -36,6 +35,7 @@ from cdl.config import Conf, _
 from cdl.core.io.signal.funcs import get_labels_units_from_dataframe
 from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
+from cdl.utils.io import count_lines, read_first_n_lines
 from cdl.utils.qthelpers import create_progress_bar
 from cdl.widgets.wizard import Wizard, WizardPage
 
@@ -43,35 +43,6 @@ if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
     from plotpy.plot import BasePlot
     from qtpy.QtWidgets import QWidget
-
-
-def count_lines(filename: str) -> int:
-    """Count the number of lines in a file
-
-    Args:
-        filename: File name
-
-    Returns:
-        The number of lines in the file
-    """
-    with open(filename, "r") as file:
-        line_count = sum(1 for line in file)
-    return line_count
-
-
-def read_first_n_lines(filename: str, n: int = 100000) -> str:
-    """Read the first n lines of a file
-
-    Args:
-        filename: File name
-        n: Number of lines to read
-
-    Returns:
-        The first n lines of the file
-    """
-    with open(filename, "r", encoding="utf-8") as file:
-        lines = list(islice(file, n))
-    return "".join(lines)
 
 
 class SourceParam(gds.DataSet):

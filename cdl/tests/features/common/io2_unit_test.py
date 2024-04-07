@@ -21,6 +21,12 @@ from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
 discover_plugins()
 
 
+def progress_callback(progress: float) -> bool:
+    """Progress callback"""
+    execenv.print(f"Progress: {int(progress * 100):3d}%")
+    return False
+
+
 def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
@@ -32,7 +38,7 @@ def __test_func(title: str, registry: BaseIORegistry, pattern: str) -> None:
         for fname in fnames:
             try:
                 execenv.print(f"      {reduce_path(fname)}: ", end="")
-                obj = registry.read(fname)[0]
+                obj = registry.read(fname, progress_callback)[0]
                 objects[fname] = obj
                 execenv.print("OK")
             except NotImplementedError:

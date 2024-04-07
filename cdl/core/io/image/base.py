@@ -7,6 +7,7 @@ DataLab image I/O registry
 from __future__ import annotations
 
 import abc
+from typing import Callable
 
 import numpy as np
 
@@ -44,11 +45,14 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
             name += f" {index:02d}"
         return create_image(name)
 
-    def read(self, filename: str) -> list[ImageObj]:
+    def read(self, filename: str, progress_callback: Callable) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:
             filename: File name
+            progress_callback: progress callback function (a function that takes a float
+             between 0 and 1 as argument representing the progress, and returns a
+             boolean indicating whether to cancel the operation)
 
         Returns:
             List of image objects

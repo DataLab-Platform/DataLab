@@ -6,6 +6,8 @@ DataLab I/O signal formats
 
 from __future__ import annotations
 
+from typing import Callable
+
 import numpy as np
 
 from cdl.config import _
@@ -26,16 +28,21 @@ class CSVSignalFormat(SignalFormatBase):
         writeable=True,
     )
 
-    def read(self, filename: str) -> list[SignalObj]:
+    def read(self, filename: str, progress_callback: Callable) -> list[SignalObj]:
         """Read list of signal objects from file
 
         Args:
             filename: File name
+            progress_callback: progress callback function (a function that takes a float
+             between 0 and 1 as argument representing the progress, and returns a
+             boolean indicating whether to cancel the operation)
 
         Returns:
             List of signal objects
         """
-        xydata, xlabel, xunit, ylabels, yunits, header = funcs.read_csv(filename)
+        xydata, xlabel, xunit, ylabels, yunits, header = funcs.read_csv(
+            filename, progress_callback
+        )
         if ylabels:
             # If y labels are present, we are sure that the data contains at least
             # two columns (x and y)

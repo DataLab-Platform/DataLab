@@ -7,6 +7,7 @@ DataLab I/O image formats
 from __future__ import annotations
 
 import os.path as osp
+from typing import Callable
 
 import numpy as np
 import plotpy.io
@@ -155,11 +156,14 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(self, filename: str) -> list[ImageObj]:
+    def read(self, filename: str, progress_callback: Callable) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:
             filename: File name
+            progress_callback: progress callback function (a function that takes a float
+             between 0 and 1 as argument representing the progress, and returns a
+             boolean indicating whether to cancel the operation)
 
         Returns:
             List of image objects
@@ -171,6 +175,8 @@ class AndorSIFImageFormat(ImageFormatBase):
                 obj = self.create_object(filename, index=idx)
                 obj.data = data[idx, ::]
                 objlist.append(obj)
+                if progress_callback((idx + 1) / data.shape[0]):
+                    break
             return objlist
         obj = self.create_object(filename)
         obj.data = data
