@@ -92,7 +92,7 @@ include = ["cdl*"]
     "*.mo",
     "*.txt",
     "*.json",
-    "*.h5",
+    "*_test.h5",
     "*.npy",
     "*.dcm",
     "*.scor-data",
