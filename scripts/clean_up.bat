@@ -25,11 +25,8 @@ del /s /q *.pyc 1>nul 2>&1
 del /s /q *.pyo 1>nul 2>&1
 FOR /d /r %%d IN ("__pycache__") DO @IF EXIST "%%d" rd /s /q "%%d"
 
-@REM Removing directories related to public repository upload
-set TEMP=%SCRIPTPATH%\..\..\%LIBNAME%_temp
-set PUBLIC=%SCRIPTPATH%\..\..\%LIBNAME%_public
-if exist %TEMP% ( rmdir /s /q %TEMP% )
-if exist %PUBLIC% ( rmdir /s /q %PUBLIC% )
+@REM Removing localization template files
+if exist doc\locale\pot ( rmdir /s /q doc\locale\pot )
 
 @REM Removing files/directories related to Coverage and pytest
 if exist .coverage ( del /q .coverage )

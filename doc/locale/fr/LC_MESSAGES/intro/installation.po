@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-25 18:09+0100\n"
+"POT-Creation-Date: 2024-04-09 09:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../intro/installation.rst:-1
+#: ../../doc/intro/installation.rst:-1
 msgid ""
 "How to install DataLab, the open-source data analysis and visualization "
 "platform"
@@ -25,17 +25,17 @@ msgstr ""
 "Comment installer DataLab, la plateforme d'analyse et de visualisation de"
 " données open-source"
 
-#: ../../intro/installation.rst:-1
+#: ../../doc/intro/installation.rst:-1
 msgid "DataLab, installation, install, pip, wheel, source, Windows, Linux, macOS"
 msgstr ""
 "DataLab, installation, installer, pip, wheel, source, Windows, Linux, "
 "macOS"
 
-#: ../../intro/installation.rst:4
+#: ../../doc/intro/installation.rst:4
 msgid "Installation"
 msgstr "Installation"
 
-#: ../../intro/installation.rst:10
+#: ../../doc/intro/installation.rst:10
 msgid ""
 "This section provides information on how to install DataLab on your "
 "system. Once installed, you can start DataLab by running the ``cdl`` "
@@ -47,7 +47,7 @@ msgstr ""
 "exécutant la commande ``cdl`` dans un terminal, ou en cliquant sur le "
 "raccourci DataLab dans le menu Démarrer (sous Windows)."
 
-#: ../../intro/installation.rst:16
+#: ../../doc/intro/installation.rst:16
 msgid ""
 "For more details on how to execute DataLab and its command-line options, "
 "see :ref:`ref-to-command-line-features`."
@@ -55,19 +55,19 @@ msgstr ""
 "Pour plus de détails sur l'exécution de DataLab et ses options en ligne "
 "de commande, voir :ref:`ref-to-command-line-features`."
 
-#: ../../intro/installation.rst:20
+#: ../../doc/intro/installation.rst:20
 msgid "How to install"
 msgstr "Modes d'installation"
 
-#: ../../intro/installation.rst:22
+#: ../../doc/intro/installation.rst:22
 msgid "DataLab is available in several forms:"
 msgstr "DataLab est disponible sous plusieurs formes :"
 
-#: ../../intro/installation.rst:24
+#: ../../doc/intro/installation.rst:24
 msgid "As a Python package, which can be installed using the :ref:`install_pip`."
 msgstr "Un paquet Python qui peut être installé à l'aide du :ref:`install_pip`."
 
-#: ../../intro/installation.rst:26
+#: ../../doc/intro/installation.rst:26
 msgid ""
 ":bdg-info-line:`Windows` As a stand-alone application, which does not "
 "require any Python distribution to be installed. Just run the "
@@ -77,7 +77,7 @@ msgstr ""
 "nécessite pas d'installation de Python. Il suffit d'exécuter "
 "l':ref:`install_aioinstaller` et le tour est joué !"
 
-#: ../../intro/installation.rst:30
+#: ../../doc/intro/installation.rst:30
 msgid ""
 ":bdg-info-line:`Windows` Within a ready-to-use :ref:`install_winpython`, "
 "based on `WinPython <https://winpython.github.io/>`_."
@@ -86,7 +86,7 @@ msgstr ""
 ":ref:`install_winpython`, basée sur `WinPython "
 "<https://winpython.github.io/>`_."
 
-#: ../../intro/installation.rst:33
+#: ../../doc/intro/installation.rst:33
 msgid ""
 "As a precompiled :ref:`install_wheel`, which can be installed using "
 "``pip``."
@@ -94,7 +94,7 @@ msgstr ""
 "En tant que :ref:`install_wheel` précompilé, qui peut être installé à "
 "l'aide de ``pip``."
 
-#: ../../intro/installation.rst:35
+#: ../../doc/intro/installation.rst:35
 msgid ""
 "As a :ref:`install_source`, which can be installed using ``pip`` or "
 "manually."
@@ -102,7 +102,7 @@ msgstr ""
 "En tant que :ref:`install_source`, qui peut être installé à l'aide de "
 "``pip`` ou manuellement."
 
-#: ../../intro/installation.rst:39
+#: ../../doc/intro/installation.rst:39
 msgid ""
 "Impatient to try the next version of DataLab? You can also install the "
 "latest development version of DataLab from the master branch of the Git "
@@ -113,18 +113,18 @@ msgstr ""
 "partir de la branche principale du dépôt Git. Voir "
 ":ref:`install_development` pour plus d'informations."
 
-#: ../../intro/installation.rst:46
+#: ../../doc/intro/installation.rst:46
 msgid "Package manager ``pip``"
 msgstr "Gestionnaire de paquets ``pip``"
 
-#: ../../intro/installation.rst:48 ../../intro/installation.rst:147
-#: ../../intro/installation.rst:161 ../../intro/installation.rst:191
+#: ../../doc/intro/installation.rst:48 ../../doc/intro/installation.rst:147
+#: ../../doc/intro/installation.rst:161 ../../doc/intro/installation.rst:191
 msgid ""
 ":octicon:`info;1em;sd-text-info` :bdg-info-line:`GNU/Linux` :bdg-info-"
 "line:`Windows` :bdg-info-line:`macOS`"
 msgstr ""
 
-#: ../../intro/installation.rst:50
+#: ../../doc/intro/installation.rst:50
 msgid ""
 "DataLab's package ``cdl`` is available on the Python Package Index (PyPI)"
 " on the following URL: https://pypi.python.org/pypi/cdl."
@@ -132,7 +132,7 @@ msgstr ""
 "Le paquet ``cdl`` de DataLab est disponible sur l'index des paquets "
 "Python (PyPI) à l'adresse suivante : https://pypi.python.org/pypi/cdl."
 
-#: ../../intro/installation.rst:53
+#: ../../doc/intro/installation.rst:53
 msgid ""
 "Installing DataLab from PyPI with Qt is as simple as running this command"
 " (you may need to use ``pip3`` instead of ``pip`` on some systems):"
@@ -141,7 +141,7 @@ msgstr ""
 "d'exécuter cette commande (vous devrez peut-être utiliser ``pip3`` au "
 "lieu de ``pip`` sur certains systèmes) :"
 
-#: ../../intro/installation.rst:60
+#: ../../doc/intro/installation.rst:60
 msgid ""
 "Or, if you prefer, you can install DataLab without the Qt library (not "
 "recommended):"
@@ -149,7 +149,7 @@ msgstr ""
 "Ou, si vous préférez, vous pouvez installer DataLab sans la bibliothèque "
 "Qt (non recommandé) :"
 
-#: ../../intro/installation.rst:68
+#: ../../doc/intro/installation.rst:68
 msgid ""
 "If you already have a previous version of DataLab installed, you can "
 "upgrade it by running the same command with the ``--upgrade`` option:"
@@ -158,15 +158,15 @@ msgstr ""
 "pouvez la mettre à jour en exécutant la même commande avec l'option "
 "``--upgrade`` :"
 
-#: ../../intro/installation.rst:78
+#: ../../doc/intro/installation.rst:78
 msgid "All-in-one installer"
 msgstr "Installeur tout-en-un"
 
-#: ../../intro/installation.rst:80 ../../intro/installation.rst:113
+#: ../../doc/intro/installation.rst:80 ../../doc/intro/installation.rst:113
 msgid ":octicon:`info;1em;sd-text-info` :bdg-info-line:`Windows`"
 msgstr ""
 
-#: ../../intro/installation.rst:82
+#: ../../doc/intro/installation.rst:82
 msgid ""
 "DataLab is available as a stand-alone application for Windows, which does"
 " not require any Python distribution to be installed. Just run the "
@@ -176,11 +176,11 @@ msgstr ""
 "Windows qui ne nécessite pas d'installation de Python. Il suffit "
 "d'exécuter l'installeur et vous êtes prêt à partir !"
 
-#: ../../intro/installation.rst:88
+#: ../../doc/intro/installation.rst:88
 msgid "DataLab all-in-one installer for Windows"
 msgstr "Installeur tout-en-un de DataLab pour Windows"
 
-#: ../../intro/installation.rst:90
+#: ../../doc/intro/installation.rst:90
 msgid ""
 "The installer package is available in the `Releases`_ section. It "
 "supports automatic uninstall and upgrade feature (no need to uninstall "
@@ -192,7 +192,7 @@ msgstr ""
 "besoin de désinstaller DataLab avant d'exécuter l'installeur d'une autre "
 "version de l'application)."
 
-#: ../../intro/installation.rst:97
+#: ../../doc/intro/installation.rst:97
 msgid ""
 "DataLab Windows installer is available for Windows 8, 10 and 11 (main "
 "release, based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 "
@@ -203,7 +203,7 @@ msgstr ""
 "SP1 (version basée sur Python 3.8, voir le fichier se terminant par "
 "``-Win7.exe``)."
 
-#: ../../intro/installation.rst:101
+#: ../../doc/intro/installation.rst:101
 msgid ""
 ":octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running "
 "DataLab (or any other Python 3 application), you must install Microsoft "
@@ -219,11 +219,11 @@ msgstr ""
 "Microsoft Visual C++ 2015-2022 <https://learn.microsoft.com/en-"
 "us/cpp/windows/latest-supported-vc-redist?view=msvc-170>`_."
 
-#: ../../intro/installation.rst:111
+#: ../../doc/intro/installation.rst:111
 msgid "Python distribution"
 msgstr "Distribution Python"
 
-#: ../../intro/installation.rst:115
+#: ../../doc/intro/installation.rst:115
 msgid ""
 "DataLab is also available within a ready-to-use Python distribution, "
 "based on `WinPython <https://winpython.github.io/>`_. This distribution "
@@ -239,7 +239,7 @@ msgstr ""
 " disponible dans la section `DataLab-WinPython Releases "
 "<https://github.com/DataLab-Platform/DataLab-WinPython/releases>`_."
 
-#: ../../intro/installation.rst:123
+#: ../../doc/intro/installation.rst:123
 msgid ""
 "DataLab-WinPython is a ready-to-use Python distribution including the "
 "DataLab platform."
@@ -247,7 +247,7 @@ msgstr ""
 "DataLab-WinPython est une distribution Python prête à l'emploi incluant "
 "la plateforme DataLab."
 
-#: ../../intro/installation.rst:125
+#: ../../doc/intro/installation.rst:125
 msgid ""
 "The main difference with the all-in-one installer is that you can use the"
 " Python distribution for other purposes than running DataLab, and you may"
@@ -262,11 +262,11 @@ msgstr ""
 "volumineuse* que l'installeur tout-en-un car elle inclut une distribution"
 " Python complète."
 
-#: ../../intro/installation.rst:132
+#: ../../doc/intro/installation.rst:132
 msgid "DataLab-WinPython Control Panel"
 msgstr "Panneau de contrôle DataLab-WinPython"
 
-#: ../../intro/installation.rst:136
+#: ../../doc/intro/installation.rst:136
 msgid ""
 "Whereas the all-in-one installer provides a monolithic package that "
 "guarantees the compatibility of all its components because it cannot be "
@@ -282,11 +282,11 @@ msgstr ""
 "distribution Python par l'utilisateur. Cela doit être pris en compte lors"
 " du choix de la méthode d'installation."
 
-#: ../../intro/installation.rst:145
+#: ../../doc/intro/installation.rst:145
 msgid "Wheel package"
 msgstr "Paquet Wheel"
 
-#: ../../intro/installation.rst:149
+#: ../../doc/intro/installation.rst:149
 msgid ""
 "On any operating system, using pip and the Wheel package is the easiest "
 "way to install DataLab on an existing Python distribution:"
@@ -295,11 +295,11 @@ msgstr ""
 "paquet Wheel est le moyen le plus simple d'installer DataLab sur une "
 "distribution Python existante :"
 
-#: ../../intro/installation.rst:159
+#: ../../doc/intro/installation.rst:159
 msgid "Source package"
 msgstr "Paquet source"
 
-#: ../../intro/installation.rst:163
+#: ../../doc/intro/installation.rst:163
 msgid ""
 "Installing DataLab directly from the source package may be done using "
 "``pip``:"
@@ -307,7 +307,7 @@ msgstr ""
 "L'installation de DataLab directement depuis le paquet source peut être "
 "effectuée à l'aide de ``pip`` :"
 
-#: ../../intro/installation.rst:169
+#: ../../doc/intro/installation.rst:169
 msgid ""
 "Or, if you prefer, you can install it manually by running the following "
 "command from the root directory of the source package:"
@@ -315,7 +315,7 @@ msgstr ""
 "Ou, si vous préférez, vous pouvez l'installer manuellement en exécutant "
 "la commande suivante depuis le répertoire racine du paquet source :"
 
-#: ../../intro/installation.rst:176
+#: ../../doc/intro/installation.rst:176
 msgid ""
 "Finally, you can also build your own Wheel package and install it using "
 "``pip``, by running the following command from the root directory of the "
@@ -327,11 +327,11 @@ msgstr ""
 " le répertoire racine du paquet source (cela nécessite que les paquets "
 "``build`` et ``wheel`` soient installés) :"
 
-#: ../../intro/installation.rst:189
+#: ../../doc/intro/installation.rst:189
 msgid "Development version"
 msgstr "Version de développement"
 
-#: ../../intro/installation.rst:193
+#: ../../doc/intro/installation.rst:193
 msgid ""
 "If you want to try the latest development version of DataLab, you can "
 "install it directly from the master branch of the Git repository."
@@ -340,7 +340,7 @@ msgstr ""
 "DataLab, vous pouvez l'installer directement depuis la branche principale"
 " du dépôt Git."
 
-#: ../../intro/installation.rst:196
+#: ../../doc/intro/installation.rst:196
 msgid ""
 "The first time you install DataLab from the Git repository, enter the "
 "following command:"
@@ -348,7 +348,7 @@ msgstr ""
 "La première fois que vous installez DataLab depuis le dépôt Git, entrez "
 "la commande suivante :"
 
-#: ../../intro/installation.rst:203
+#: ../../doc/intro/installation.rst:203
 msgid ""
 "Then, if at some point you want to upgrade to the latest version of "
 "DataLab, just run the same command with options to force the reinstall of"
@@ -360,7 +360,7 @@ msgstr ""
 "forcer la réinstallation du paquet sans gérer les dépendances (car cela "
 "réinstallerait toutes les dépendances) :"
 
-#: ../../intro/installation.rst:213
+#: ../../doc/intro/installation.rst:213
 msgid ""
 "If dependencies have changed, you may need to execute the same command as"
 " above, but without the ``--no-deps`` option."
@@ -368,11 +368,11 @@ msgstr ""
 "Si les dépendances ont changé, vous devrez peut-être exécuter la même "
 "commande que ci-dessus, mais sans l'option ``--no-deps``."
 
-#: ../../intro/installation.rst:217
+#: ../../doc/intro/installation.rst:217
 msgid "Dependencies"
 msgstr "Dépendances"
 
-#: ../../intro/installation.rst:221
+#: ../../doc/intro/installation.rst:221
 msgid ""
 "The DataLab all-in-one installer already include all those required "
 "libraries as well as Python itself."
@@ -380,216 +380,226 @@ msgstr ""
 "L'installeur tout-en-un de DataLab inclut déjà toutes ces dépendances "
 "ainsi que Python lui-même."
 
-#: ../../requirements.rst:1
+#: ../../doc/requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
 msgstr "Le paquet :mod:`cdl` requiert les modules Python suivants :"
 
-#: ../../requirements.rst:7 ../../requirements.rst:53 ../../requirements.rst:78
-#: ../../requirements.rst:112
+#: ../../doc/requirements.rst:7 ../../doc/requirements.rst:56
+#: ../../doc/requirements.rst:78 ../../doc/requirements.rst:112
 msgid "Name"
 msgstr "Nom"
 
-#: ../../requirements.rst:8 ../../requirements.rst:54 ../../requirements.rst:79
-#: ../../requirements.rst:113
+#: ../../doc/requirements.rst:8 ../../doc/requirements.rst:57
+#: ../../doc/requirements.rst:79 ../../doc/requirements.rst:113
 msgid "Version"
 msgstr "Version"
 
-#: ../../requirements.rst:9 ../../requirements.rst:55 ../../requirements.rst:80
-#: ../../requirements.rst:114
+#: ../../doc/requirements.rst:9 ../../doc/requirements.rst:58
+#: ../../doc/requirements.rst:80 ../../doc/requirements.rst:114
 msgid "Summary"
 msgstr "Description"
 
-#: ../../requirements.rst:10
+#: ../../doc/requirements.rst:10
 msgid "Python"
 msgstr "Python"
 
-#: ../../requirements.rst:11
+#: ../../doc/requirements.rst:11
 msgid ">=3.8, <4"
 msgstr ""
 
-#: ../../requirements.rst:12
+#: ../../doc/requirements.rst:12
 msgid "Python programming language"
 msgstr "Langage de programmation Python"
 
-#: ../../requirements.rst:13
+#: ../../doc/requirements.rst:13
 msgid "h5py"
 msgstr ""
 
-#: ../../requirements.rst:14
+#: ../../doc/requirements.rst:14
 msgid ">= 3.0"
 msgstr ""
 
-#: ../../requirements.rst:15
+#: ../../doc/requirements.rst:15
 msgid "Read and write HDF5 files from Python"
 msgstr "Ecriture et lecture de fichiers HDF5 depuis Python"
 
-#: ../../requirements.rst:16
+#: ../../doc/requirements.rst:16
 msgid "NumPy"
 msgstr ""
 
-#: ../../requirements.rst:17
+#: ../../doc/requirements.rst:17
 msgid ">= 1.21"
 msgstr ""
 
-#: ../../requirements.rst:18
+#: ../../doc/requirements.rst:18
 msgid "Fundamental package for array computing in Python"
 msgstr "Calcul matriciel et algèbre linéaire en Python"
 
-#: ../../requirements.rst:19
+#: ../../doc/requirements.rst:19
 msgid "SciPy"
 msgstr ""
 
-#: ../../requirements.rst:20
+#: ../../doc/requirements.rst:20
 msgid ">= 1.7"
 msgstr ""
 
-#: ../../requirements.rst:21
+#: ../../doc/requirements.rst:21
 msgid "Fundamental algorithms for scientific computing in Python"
 msgstr "Algorithmes fondamentaux pour le calcul scientifique en Python"
 
-#: ../../requirements.rst:22
+#: ../../doc/requirements.rst:22
 msgid "scikit-image"
 msgstr ""
 
-#: ../../requirements.rst:23
+#: ../../doc/requirements.rst:23
 msgid ">= 0.18"
 msgstr ""
 
-#: ../../requirements.rst:24
+#: ../../doc/requirements.rst:24
 msgid "Image processing in Python"
 msgstr "Traitement d'images en Python"
 
-#: ../../requirements.rst:25
+#: ../../doc/requirements.rst:25
 msgid "opencv-python-headless"
 msgstr ""
 
-#: ../../requirements.rst:26
+#: ../../doc/requirements.rst:26
 msgid ">= 4.5"
 msgstr ""
 
-#: ../../requirements.rst:27
+#: ../../doc/requirements.rst:27
 msgid "Wrapper package for OpenCV python bindings."
 msgstr "Interface Python pour OpenCV"
 
-#: ../../requirements.rst:28
+#: ../../doc/requirements.rst:28
+msgid "pandas"
+msgstr ""
+
+#: ../../doc/requirements.rst:29
+msgid ">= 1.3"
+msgstr ""
+
+#: ../../doc/requirements.rst:30
+msgid "Powerful data structures for data analysis, time series, and statistics"
+msgstr "Analyse de données, séries temporelles et statistiques"
+
+#: ../../doc/requirements.rst:31
 msgid "PyWavelets"
 msgstr ""
 
-#: ../../requirements.rst:29
+#: ../../doc/requirements.rst:32
 msgid ">= 1.1"
 msgstr ""
 
-#: ../../requirements.rst:30
+#: ../../doc/requirements.rst:33
 msgid "PyWavelets, wavelet transform module"
 msgstr "PyWavelets, module de transformation en ondelettes"
 
-#: ../../requirements.rst:31
+#: ../../doc/requirements.rst:34
 msgid "psutil"
 msgstr ""
 
-#: ../../requirements.rst:32
+#: ../../doc/requirements.rst:35
 msgid ">= 5.5"
 msgstr ""
 
-#: ../../requirements.rst:33
+#: ../../doc/requirements.rst:36
 msgid "Cross-platform lib for process and system monitoring in Python."
-msgstr "Bibliothèque multiplateforme pour la surveillance des processus et du système en Python."
+msgstr ""
+"Bibliothèque multiplateforme pour la surveillance des processus et du "
+"système en Python."
 
-#: ../../requirements.rst:34
+#: ../../doc/requirements.rst:37
 msgid "guidata"
 msgstr ""
 
-#: ../../requirements.rst:35
+#: ../../doc/requirements.rst:38
 msgid ">= 3.4"
 msgstr ""
 
-#: ../../requirements.rst:36
+#: ../../doc/requirements.rst:39
 msgid "Automatic GUI generation for easy dataset editing and display"
-msgstr "Génération automatique d'interfaces graphiques pour l'édition et l'affichage de jeux de données"
+msgstr ""
+"Génération automatique d'interfaces graphiques pour l'édition et "
+"l'affichage de jeux de données"
 
-#: ../../requirements.rst:37
+#: ../../doc/requirements.rst:40
 msgid "PlotPy"
 msgstr ""
 
-#: ../../requirements.rst:38
+#: ../../doc/requirements.rst:41
 msgid ">= 2.3"
 msgstr ""
 
-#: ../../requirements.rst:39
+#: ../../doc/requirements.rst:42
 msgid "Curve and image plotting tools for Python/Qt applications"
 msgstr "Outils de tracé de courbes et d'images pour les applications Python/Qt"
 
-#: ../../requirements.rst:40
+#: ../../doc/requirements.rst:43
 msgid "QtPy"
 msgstr ""
 
-#: ../../requirements.rst:41
+#: ../../doc/requirements.rst:44
 msgid ">= 1.9"
 msgstr ""
 
-#: ../../requirements.rst:42
+#: ../../doc/requirements.rst:45
 msgid ""
 "Provides an abstraction layer on top of the various Qt bindings (PyQt5/6 "
 "and PySide2/6)."
-msgstr "Couche d'abstraction pour les différentes bibliothèques Qt (PyQt5/6 et PySide2/6)."
+msgstr ""
+"Couche d'abstraction pour les différentes bibliothèques Qt (PyQt5/6 et "
+"PySide2/6)."
 
-#: ../../requirements.rst:43 ../../requirements.rst:81
+#: ../../doc/requirements.rst:46 ../../doc/requirements.rst:81
 msgid "PyQt5"
 msgstr ""
 
-#: ../../requirements.rst:44
+#: ../../doc/requirements.rst:47
 msgid ">=5.11"
 msgstr ""
 
-#: ../../requirements.rst:45 ../../requirements.rst:83
+#: ../../doc/requirements.rst:48 ../../doc/requirements.rst:83
 msgid "Python bindings for the Qt cross platform application toolkit"
 msgstr "Bibliothèque d'interfaces graphiques Qt pour Python"
 
-#: ../../requirements.rst:47
+#: ../../doc/requirements.rst:50
 msgid "Optional modules for development:"
 msgstr "Modules optionnels pour le développement :"
 
-#: ../../requirements.rst:56
-msgid "black"
+#: ../../doc/requirements.rst:59
+msgid "ruff"
 msgstr ""
 
-#: ../../requirements.rst:58
-msgid "The uncompromising code formatter."
-msgstr "Le formateur de code sans compromis."
+#: ../../doc/requirements.rst:61
+msgid "An extremely fast Python linter and code formatter, written in Rust."
+msgstr "Analyseur de code et formateur Python extrêmement rapide, écrit en Rust."
 
-#: ../../requirements.rst:59
-msgid "isort"
-msgstr ""
-
-#: ../../requirements.rst:61
-msgid "A Python utility / library to sort Python imports."
-msgstr "Un utilitaire Python pour trier les imports Python."
-
-#: ../../requirements.rst:62
+#: ../../doc/requirements.rst:62
 msgid "pylint"
 msgstr ""
 
-#: ../../requirements.rst:64
+#: ../../doc/requirements.rst:64
 msgid "python code static checker"
 msgstr "Analyseur statique de code Python"
 
-#: ../../requirements.rst:65
+#: ../../doc/requirements.rst:65
 msgid "Coverage"
 msgstr ""
 
-#: ../../requirements.rst:67
+#: ../../doc/requirements.rst:67
 msgid "Code coverage measurement for Python"
 msgstr "Mesure de la couverture de code pour Python"
 
-#: ../../requirements.rst:68
+#: ../../doc/requirements.rst:68
 msgid "pyinstaller"
 msgstr ""
 
-#: ../../requirements.rst:69
+#: ../../doc/requirements.rst:69
 msgid ">=6.0"
 msgstr ""
 
-#: ../../requirements.rst:70
+#: ../../doc/requirements.rst:70
 msgid ""
 "PyInstaller bundles a Python application and all its dependencies into a "
 "single package."
@@ -597,96 +607,90 @@ msgstr ""
 "PyInstaller permet de créer un exécutable unique à partir d'une "
 "application Python et de ses dépendances."
 
-#: ../../requirements.rst:72
+#: ../../doc/requirements.rst:72
 msgid "Optional modules for building the documentation:"
 msgstr "Modules optionnels pour la génération de la documentation :"
 
-#: ../../requirements.rst:84
+#: ../../doc/requirements.rst:84
 msgid "sphinx"
 msgstr ""
 
-#: ../../requirements.rst:86
+#: ../../doc/requirements.rst:86
 msgid "Python documentation generator"
 msgstr "Générateur de documentation Python"
 
-#: ../../requirements.rst:87
+#: ../../doc/requirements.rst:87
 msgid "sphinx_intl"
 msgstr ""
 
-#: ../../requirements.rst:89
+#: ../../doc/requirements.rst:89
 msgid "Sphinx utility that make it easy to translate and to apply translation."
 msgstr "Utilitaire pour la traduction de la documentation générée par Sphinx."
 
-#: ../../requirements.rst:90
+#: ../../doc/requirements.rst:90
 msgid "sphinx-sitemap"
 msgstr ""
 
-#: ../../requirements.rst:92
+#: ../../doc/requirements.rst:92
 msgid "Sitemap generator for Sphinx"
 msgstr ""
 
-#: ../../requirements.rst:93
+#: ../../doc/requirements.rst:93
 msgid "myst_parser"
 msgstr ""
 
-#: ../../requirements.rst:95
+#: ../../doc/requirements.rst:95
 msgid "An extended [CommonMark](https://spec.commonmark.org/) compliant parser,"
 msgstr ""
 "Un parseur étendu compatible avec "
 "[CommonMark](https://spec.commonmark.org/)"
 
-#: ../../requirements.rst:96
+#: ../../doc/requirements.rst:96
 msgid "sphinx_design"
 msgstr ""
 
-#: ../../requirements.rst:98
+#: ../../doc/requirements.rst:98
 msgid ""
 "A sphinx extension for designing beautiful, view size responsive web "
 "components."
 msgstr "Extension sphinx pour la conception de composants web réactifs."
 
-#: ../../requirements.rst:99
+#: ../../doc/requirements.rst:99
 msgid "sphinx-copybutton"
 msgstr ""
 
-#: ../../requirements.rst:101
+#: ../../doc/requirements.rst:101
 msgid "Add a copy button to each of your code cells."
 msgstr "Extension sphinx ajoutant un bouton de copie à chaque cellule de code."
 
-#: ../../requirements.rst:102
+#: ../../doc/requirements.rst:102
 msgid "pydata-sphinx-theme"
 msgstr ""
 
-#: ../../requirements.rst:104
+#: ../../doc/requirements.rst:104
 msgid "Bootstrap-based Sphinx theme from the PyData community"
 msgstr "Thème Bootstrap pour Sphinx de la communauté PyData"
 
-#: ../../requirements.rst:106
+#: ../../doc/requirements.rst:106
 msgid "Optional modules for running test suite:"
 msgstr "Modules optionnels pour l'exécution de la suite de tests :"
 
-#: ../../requirements.rst:115
+#: ../../doc/requirements.rst:115
 msgid "pytest"
 msgstr ""
 
-#: ../../requirements.rst:117
+#: ../../doc/requirements.rst:117
 msgid "pytest: simple powerful testing with Python"
 msgstr "pytest : tests simples et puissants avec Python"
 
-#: ../../requirements.rst:118
+#: ../../doc/requirements.rst:118
 msgid "pytest-xvfb"
 msgstr ""
 
-#: ../../requirements.rst:120
+#: ../../doc/requirements.rst:120
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 
-#: ../../intro/installation.rst:228
+#: ../../doc/intro/installation.rst:228
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
-
-#~ msgid ">= 3.2"
-#~ msgstr ""
-
-#~ msgid ">= 2.0"
-#~ msgstr ""

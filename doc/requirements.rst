@@ -25,6 +25,9 @@ The :mod:`cdl` package requires the following Python modules:
     * - opencv-python-headless
       -  >= 4.5
       - Wrapper package for OpenCV python bindings.
+    * - pandas
+      -  >= 1.3
+      - Powerful data structures for data analysis, time series, and statistics
     * - PyWavelets
       -  >= 1.1
       - PyWavelets, wavelet transform module
@@ -53,12 +56,9 @@ Optional modules for development:
     * - Name
       - Version
       - Summary
-    * - black
+    * - ruff
       - 
-      - The uncompromising code formatter.
-    * - isort
-      - 
-      - A Python utility / library to sort Python imports.
+      - An extremely fast Python linter and code formatter, written in Rust.
     * - pylint
       - 
       - python code static checker
