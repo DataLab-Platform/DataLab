@@ -130,12 +130,19 @@ class ShapeTypes(enum.Enum):
     def _generate_next_value_(name, start, count, last_values):
         return f"_{name.lower()[:3]}_"
 
+    #: Rectangle shape
     RECTANGLE = enum.auto()
+    #: Circle shape
     CIRCLE = enum.auto()
+    #: Ellipse shape
     ELLIPSE = enum.auto()
+    #: Segment shape
     SEGMENT = enum.auto()
+    #: Marker shape
     MARKER = enum.auto()
+    #: Point shape
     POINT = enum.auto()
+    #: Polygon shape
     POLYGON = enum.auto()
 
 

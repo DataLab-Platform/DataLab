@@ -36,6 +36,7 @@ if TYPE_CHECKING:
 class CurveStyles:
     """Object to manage curve styles"""
 
+    #: Curve colors
     COLORS = (
         "#1f77b4",  # muted blue
         "#ff7f0e",  # safety orange
@@ -48,6 +49,7 @@ class CurveStyles:
         "#bcbd22",  # curry yellow-green
         "#17becf",  # blue-teal
     )
+    #: Curve line styles
     LINESTYLES = ("SolidLine", "DashLine", "DashDotLine", "DashDotDotLine")
 
     def __init__(self) -> None:
@@ -509,18 +511,31 @@ def create_signal(
 class SignalTypes(base.Choices):
     """Signal types"""
 
+    #: Signal filled with zeros
     ZEROS = _("zeros")
+    #: Gaussian function
     GAUSS = _("gaussian")
+    #: Lorentzian function
     LORENTZ = _("lorentzian")
+    #: Voigt function
     VOIGT = "Voigt"
+    #: Random signal (uniform law)
     UNIFORMRANDOM = _("random (uniform law)")
+    #: Random signal (normal law)
     NORMALRANDOM = _("random (normal law)")
+    #: Sinusoid
     SINUS = _("sinus")
+    #: Cosinusoid
     COSINUS = _("cosinus")
+    #: Sawtooth function
     SAWTOOTH = _("sawtooth")
+    #: Triangle function
     TRIANGLE = _("triangle")
+    #: Square function
     SQUARE = _("square")
+    #: Cardinal sine
     SINC = _("cardinal sine")
+    #: Step function
     STEP = _("step")
 
 

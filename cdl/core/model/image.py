@@ -751,10 +751,15 @@ class ImageDatatypes(base.Choices):
         for member in cls:
             assert hasattr(np, member.value)
 
+    #: Unsigned integer number stored with 8 bits
     UINT8 = enum.auto()
+    #: Unsigned integer number stored with 16 bits
     UINT16 = enum.auto()
+    #: Signed integer number stored with 16 bits
     INT16 = enum.auto()
+    #: Float number stored with 32 bits
     FLOAT32 = enum.auto()
+    #: Float number stored with 64 bits
     FLOAT64 = enum.auto()
 
 
@@ -764,10 +769,15 @@ ImageDatatypes.check()
 class ImageTypes(base.Choices):
     """Image types"""
 
+    #: Image filled with zeros
     ZEROS = _("zeros")
+    #: Empty image (filled with data from memory state)
     EMPTY = _("empty")
+    #: 2D Gaussian image
     GAUSS = _("gaussian")
+    #: Image filled with random data (uniform law)
     UNIFORMRANDOM = _("random (uniform law)")
+    #: Image filled with random data (normal law)
     NORMALRANDOM = _("random (normal law)")
 
 
