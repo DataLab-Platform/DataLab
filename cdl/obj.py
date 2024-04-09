@@ -38,7 +38,7 @@ Common objects
 Signal model
 ^^^^^^^^^^^^
 
-.. autoclass:: cdl.obj.SignalObj
+.. autodataset:: cdl.obj.SignalObj
     :members:
     :inherited-members:
 .. autofunction:: cdl.obj.read_signal
@@ -47,15 +47,15 @@ Signal model
 .. autofunction:: cdl.obj.create_signal_from_param
 .. autofunction:: cdl.obj.new_signal_param
 .. autoclass:: cdl.obj.SignalTypes
-.. autoclass:: cdl.obj.NewSignalParam
-.. autoclass:: cdl.obj.GaussLorentzVoigtParam
-.. autoclass:: cdl.obj.StepParam
-.. autoclass:: cdl.obj.PeriodicParam
+.. autodataset:: cdl.obj.NewSignalParam
+.. autodataset:: cdl.obj.GaussLorentzVoigtParam
+.. autodataset:: cdl.obj.StepParam
+.. autodataset:: cdl.obj.PeriodicParam
 
 Image model
 ^^^^^^^^^^^
 
-.. autoclass:: cdl.obj.ImageObj
+.. autodataset:: cdl.obj.ImageObj
     :members:
     :inherited-members:
 .. autofunction:: cdl.obj.read_image
@@ -64,8 +64,8 @@ Image model
 .. autofunction:: cdl.obj.create_image_from_param
 .. autofunction:: cdl.obj.new_image_param
 .. autoclass:: cdl.obj.ImageTypes
-.. autoclass:: cdl.obj.NewImageParam
-.. autoclass:: cdl.obj.Gauss2DParam
+.. autodataset:: cdl.obj.NewImageParam
+.. autodataset:: cdl.obj.Gauss2DParam
 .. autoclass:: cdl.obj.RoiDataGeometries
 .. autoclass:: cdl.obj.ImageDatatypes
 """
