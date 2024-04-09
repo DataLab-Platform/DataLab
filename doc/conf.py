@@ -29,6 +29,7 @@ extensions = [
     "myst_parser",
     "sphinx_design",
     "sphinx_copybutton",
+    "guidata.dataset.autodoc",
 ]
 templates_path = ["_templates"]
 exclude_patterns = []
