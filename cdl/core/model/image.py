@@ -565,7 +565,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         self.update_plot_item_parameters(item)
         item.plot().update_colormap_axis(item)
 
-    def get_roi_param(self, title, *defaults) -> gds.DataSet:
+    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
         """Return ROI parameters dataset.
 
         Args:

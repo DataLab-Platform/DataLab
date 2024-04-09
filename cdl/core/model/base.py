@@ -720,7 +720,7 @@ class BaseObj(metaclass=BaseObjMeta):
         """
 
     @abc.abstractmethod
-    def get_roi_param(self, title, *defaults):
+    def get_roi_param(self, title, *defaults: int) -> gds.DataSet:
         """Return ROI parameters dataset.
 
         Args:
@@ -728,17 +728,26 @@ class BaseObj(metaclass=BaseObjMeta):
             *defaults: default values
         """
 
-    def roidata_to_params(self, roidata: np.ndarray) -> gds.DataSetGroup:
+    def roidata_to_params(
+        self, roidata: np.ndarray | list[list[int]]
+    ) -> gds.DataSetGroup:
         """Convert ROI array data to ROI dataset group.
 
         Args:
-            roidata: ROI array data
+            roidata: ROI array data (array or list of lists, floating point values
+             are accepted and will be converted to integers)
 
         Returns:
             ROI dataset group
         """
         roi_params = []
-        for index, parameters in enumerate(roidata):
+        try:
+            data = np.array(roidata, int)
+        except (ValueError, TypeError) as exc:
+            raise TypeError(f"Invalid ROI data: {roidata}") from exc
+        if len(data.shape) != 2 and data.size != 0:
+            raise ValueError(f"Invalid ROI data shape: {data.shape}")
+        for index, parameters in enumerate(data):
             roi_param = self.get_roi_param(f"ROI{index:02d}", *parameters)
             roi_params.append(roi_param)
         group = gds.DataSetGroup(roi_params, title=_("Regions of interest"))

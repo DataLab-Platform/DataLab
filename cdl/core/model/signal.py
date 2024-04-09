@@ -375,7 +375,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 indexes[row, col] = np.abs(self.x - x0).argmin()
         return indexes
 
-    def get_roi_param(self, title: str, *defaults) -> gds.DataSet:
+    def get_roi_param(self, title: str, *defaults: int) -> ROIParam:
         """Return ROI parameters dataset.
 
         Args:

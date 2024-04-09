@@ -82,19 +82,18 @@ class HistogramParam(gds.DataSet):
 class ROIDataParam(gds.DataSet):
     """ROI Editor data"""
 
-    roidata = gds.FloatArrayItem(_("ROI data"))
-    singleobj = gds.BoolItem(_("Single object"))
-
-    # pylint: disable=arguments-differ
-    @classmethod
-    def create(cls, roidata: np.ndarray | None = None, singleobj: bool | None = None):
-        """Create ROIDataParam instance"""
-        if roidata is not None:
-            roidata = np.array(roidata, dtype=int)
-        instance = cls()
-        instance.roidata = roidata
-        instance.singleobj = singleobj
-        return instance
+    roidata = gds.FloatArrayItem(
+        _("ROI data"),
+        help=_(
+            "For convenience, this item accepts a 2D NumPy array, a list of list "
+            "of numbers, or None. In the end, the data is converted to a 2D NumPy "
+            "array of integers (if not None)."
+        ),
+    )
+    singleobj = gds.BoolItem(
+        _("Single object"),
+        help=_("Whether to extract the ROI as a single object or not."),
+    )
 
     @property
     def is_empty(self) -> bool:
