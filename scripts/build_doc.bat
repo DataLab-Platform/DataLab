@@ -23,6 +23,11 @@ mkdir %MODNAME%\data\doc
 
 @REM Build documentation ===============================================================
 for %%L in (fr en) do (
+    @REM -------------------------------------------------------------------------------
+    @REM Create dummy PDF file, otherwise the PDF menu entry in "?" menu
+    @REM won't be visible in the automatic screenshot
+    echo Dummy PDF file > %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
+    @REM -------------------------------------------------------------------------------
     set LANG=%%L
     %PYTHON% doc/update_screenshots.py
     if exist build\doc ( rmdir /s /q build\doc )
@@ -34,7 +39,7 @@ for %%L in (fr en) do (
     pdflatex -interaction=nonstopmode -quiet %LIBNAME%.tex
     echo Done.
     cd ..\..
-    move build\doc\%LIBNAME%.pdf %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
+    move /Y build\doc\%LIBNAME%.pdf %MODNAME%\data\doc\%LIBNAME%_%%L.pdf
 )
 
 @REM explorer %MODNAME%\data\doc
