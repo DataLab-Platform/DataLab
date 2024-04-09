@@ -183,6 +183,8 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     auto_refresh = conf.Option()
     show_contrast = conf.Option()
     sig_antialiasing = conf.Option()
+    sig_autodownsampling = conf.Option()
+    sig_autodownsampling_maxpoints = conf.Option()
 
     # If True, images are shown with the same LUT range as the first selected image
     ima_ref_lut_range = conf.Option()
@@ -196,6 +198,8 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
     sig_def_shade = conf.Option()
     sig_def_curvestyle = conf.Option()
     sig_def_baseline = conf.Option()
+    # ⚠️ Do not add "sig_def_use_dsamp" and "sig_def_dsamp_factor" options here
+    # because it would not be compatible with the auto-downsampling feature.
 
     # Default visualization settings, persisted in object metadata
     # (e.g. see `ImageObj.update_metadata_view_settings`)
@@ -296,6 +300,8 @@ def initialize():
     # View section
     tb_pos = Conf.view.plot_toolbar_position.get("left")
     assert tb_pos in ("top", "bottom", "left", "right")
+    Conf.view.sig_autodownsampling.get(True)
+    Conf.view.sig_autodownsampling_maxpoints.get(100000)
     Conf.view.ima_ref_lut_range.get(False)
     Conf.view.ima_eliminate_outliers.get(0.1)
     Conf.view.sig_def_shade.get(0.0)

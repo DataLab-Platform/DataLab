@@ -241,7 +241,8 @@ class BasePlotHandler:
         Args:
             what: string describing the objects to refresh.
              Valid values are "selected" (refresh the selected objects),
-             "all" (refresh all objects), or an object uuid.
+             "all" (refresh all objects), "existing" (refresh existing plot items),
+             or an object uuid.
             update_items: if True, update the items.
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one
@@ -262,6 +263,9 @@ class BasePlotHandler:
             for item in self:
                 if item is not None:
                     item.hide()
+        elif what == "existing":
+            # Refresh existing objects
+            oids = self.__plotitems.keys()
         elif what == "all":
             # Refresh all objects
             oids = self.panel.objmodel.get_object_ids()
@@ -301,9 +305,10 @@ class BasePlotHandler:
                         )
                         if ref_item is None:
                             ref_item = item
-                    self.plot.set_item_visible(item, True, replot=False)
-                    self.plot.set_active_item(item)
-                    item.unselect()
+                    if what != "existing" or item.isVisible():
+                        self.plot.set_item_visible(item, True, replot=False)
+                        self.plot.set_active_item(item)
+                        item.unselect()
                     self.add_shapes(oid, do_autoscale=True)
             self.plot.replot()
         else:
@@ -376,7 +381,8 @@ class ImagePlotHandler(BasePlotHandler):
         Args:
             what: string describing the objects to refresh.
              Valid values are "selected" (refresh the selected objects),
-             "all" (refresh all objects), or an object uuid.
+             "all" (refresh all objects), "existing" (refresh existing plot items),
+             or an object uuid.
             update_items: if True, update the items.
              If False, only show the items (do not update them, except if the
              option "Use reference item LUT range" is enabled and more than one

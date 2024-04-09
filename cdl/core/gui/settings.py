@@ -130,7 +130,7 @@ def edit_default_image_settings(
 class ViewSettings(gds.DataSet):
     """DataLab Visualization settings"""
 
-    g0 = gds.BeginGroup(_("Image visualization settings"))
+    g0 = gds.BeginGroup(_("Common"))
     plot_toolbar_position = gds.ImageChoiceItem(
         _("Plot toolbar position"),
         (
@@ -140,6 +140,23 @@ class ViewSettings(gds.DataSet):
             ("right", _("Right (of plot)"), "libre-gui-arrow-right.svg"),
         ),
     )
+    _g0 = gds.EndGroup("")
+
+    g1 = gds.BeginGroup(_("Signal"))
+    _prop_ads = gds.ValueProp(False)
+    sig_autodownsampling = gds.BoolItem(
+        "",
+        _("Use auto downsampling"),
+        help=_("Use auto downsampling for large signals"),
+    ).set_prop("display", store=_prop_ads)
+    sig_autodownsampling_maxpoints = gds.IntItem(
+        _("Downsampling max points"),
+        min=1000,
+        help=_("Maximum number of points for downsampling"),
+    ).set_prop("display", active=_prop_ads)
+    _g1 = gds.EndGroup("")
+
+    g2 = gds.BeginGroup(_("Image"))
     ima_ref_lut_range = gds.BoolItem(
         "",
         _("Use reference image LUT range"),
@@ -164,7 +181,7 @@ class ViewSettings(gds.DataSet):
         icon="image.svg",
         default=False,
     )
-    _g0 = gds.EndGroup("")
+    _g2 = gds.EndGroup("")
 
 
 # Generator yielding (param, section, option) tuples from configuration dictionary

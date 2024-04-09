@@ -588,6 +588,11 @@ class GraphicalRepresentationPage(WizardPage):
                             labels=(xlabel, ylabels[ycol - 1]),
                             units=(xunit, yunits[ycol - 1]),
                         )
+                        # TODO: [P0] Find a way to cycle through the colors
+                        # without affecting the "Signal View" mechanism.
+                        # Here, we are simply suspending this mechanism to avoid
+                        # the color cycling: this is not a good solution because
+                        # all curves will have the same color.
                         with CURVESTYLES.suspend():
                             item = obj.make_item()
                         plot.add_item(item, z=zorder)

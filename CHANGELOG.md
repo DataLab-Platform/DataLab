@@ -20,6 +20,15 @@ for future and past milestones.
 * CSV format handling:
   * Improved support for CSV files with a header row (column names)
   * Added support for CSV files with empty columns
+* Auto downsampling feature:
+  * Added "Auto downsampling" feature to signal visualization settings (see "Settings"
+    dialog box)
+  * This feature allows to automatically downsample the signal data for visualization
+    when the number of points is too high and would lead to a slow rendering
+  * The downsampling factor is automatically computed based on the configured
+    maximum number of points to display
+  * This feature is enabled by default and may be disabled in the signal visualization
+    settings
 * Open/save file error handling:
   * Error messages are now more explicit when opening or saving a file fails
   * Added a link to the folder containing the file in the error message

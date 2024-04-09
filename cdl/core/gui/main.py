@@ -1539,6 +1539,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     widget = dock.widget()
                     if isinstance(widget, DockablePlotWidget):
                         widget.update_toolbar_position()
+            if option.startswith("sig_autodownsampling"):
+                self.signalpanel.SIG_REFRESH_PLOT.emit("existing", True)
             if option == "ima_defaults" and len(self.imagepanel) > 0:
                 answer = QW.QMessageBox.question(
                     self,

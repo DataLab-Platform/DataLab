@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-07 14:58+0200\n"
+"POT-Creation-Date: 2024-04-09 19:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -171,14 +171,14 @@ msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:556 cdl\core\model\image.py:787
-#: cdl\widgets\textimport.py:237 cdl\widgets\textimport.py:260
+#: cdl\core\computation\image\__init__.py:556 cdl\core\model\image.py:797
+#: cdl\widgets\textimport.py:208 cdl\widgets\textimport.py:231
 msgid "Data type"
 msgstr "Type de données"
 
 #: cdl\core\computation\image\__init__.py:558
 #: cdl\core\computation\image\__init__.py:887
-#: cdl\core\computation\signal.py:346 cdl\widgets\textimport.py:262
+#: cdl\core\computation\signal.py:346 cdl\widgets\textimport.py:233
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
@@ -773,14 +773,14 @@ msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
 #: cdl\core\computation\signal.py:467 cdl\core\model\image.py:382
-#: cdl\core\model\image.py:385 cdl\core\model\signal.py:119
-#: cdl\core\model\signal.py:122
+#: cdl\core\model\image.py:385 cdl\core\model\signal.py:141
+#: cdl\core\model\signal.py:144
 msgid "X-axis"
 msgstr "Axe des X"
 
 #: cdl\core\computation\signal.py:467 cdl\core\model\image.py:386
-#: cdl\core\model\image.py:389 cdl\core\model\signal.py:123
-#: cdl\core\model\signal.py:126
+#: cdl\core\model\image.py:389 cdl\core\model\signal.py:145
+#: cdl\core\model\signal.py:148
 msgid "Y-axis"
 msgstr "Axe des Y"
 
@@ -792,13 +792,13 @@ msgstr "Étalonner"
 msgid "Degree"
 msgstr "Degré"
 
-#: cdl\core\computation\signal.py:626 cdl\core\model\signal.py:700
+#: cdl\core\computation\signal.py:626 cdl\core\model\signal.py:737
 #: cdl\tests\features\common\stat_app_test.py:37
 #: cdl\tests\scenarios\common.py:158 cdl\tests\scenarios\demo.py:83
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: cdl\core\computation\signal.py:627 cdl\core\model\signal.py:701
+#: cdl\core\computation\signal.py:627 cdl\core\model\signal.py:738
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
@@ -967,7 +967,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:483 cdl\core\gui\panel\base.py:746
+#: cdl\core\gui\actionhandler.py:483 cdl\core\gui\panel\base.py:757
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -975,7 +975,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:491 cdl\core\gui\panel\base.py:766
+#: cdl\core\gui\actionhandler.py:491 cdl\core\gui\panel\base.py:777
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1146,11 +1146,11 @@ msgstr "Extraction de ROI"
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1011
+#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1022
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:688 cdl\core\gui\panel\base.py:1099
+#: cdl\core\gui\actionhandler.py:688 cdl\core\gui\panel\base.py:1110
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
@@ -1256,7 +1256,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:803 cdl\core\gui\main.py:1550
+#: cdl\core\gui\actionhandler.py:803 cdl\core\gui\main.py:1552
 #: cdl\core\gui\roieditor.py:230
 msgid "image"
 msgstr "image"
@@ -1601,7 +1601,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: cdl\core\gui\h5io.py:98 cdl\core\gui\h5io.py:114 cdl\core\gui\main.py:477
-#: cdl\core\gui\main.py:1310 cdl\plugins.py:159 cdl\widgets\textimport.py:513
+#: cdl\core\gui\main.py:1310 cdl\plugins.py:159 cdl\widgets\textimport.py:484
 msgid "Warning"
 msgstr "Attention"
 
@@ -1614,7 +1614,7 @@ msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
 #: cdl\core\gui\macroeditor.py:197 cdl\core\model\image.py:380
-#: cdl\core\model\signal.py:111 cdl\core\model\signal.py:117
+#: cdl\core\model\signal.py:133 cdl\core\model\signal.py:139
 msgid "Untitled"
 msgstr "Sans titre"
 
@@ -1786,7 +1786,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:798 cdl\core\gui\main.py:1596
+#: cdl\core\gui\main.py:798 cdl\core\gui\main.py:1598
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1844,8 +1844,8 @@ msgstr "Panneau Signal"
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:908 cdl\widgets\textimport.py:100
-#: cdl\widgets\textimport.py:110 cdl\widgets\wizard.py:221
+#: cdl\core\gui\main.py:908 cdl\widgets\textimport.py:71
+#: cdl\widgets\textimport.py:81 cdl\widgets\wizard.py:221
 msgid "File"
 msgstr "Fichier"
 
@@ -1857,7 +1857,7 @@ msgstr "&Édition"
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:912 cdl\core\gui\settings.py:241
+#: cdl\core\gui\main.py:912 cdl\core\gui\settings.py:258
 msgid "Processing"
 msgstr "Traitement"
 
@@ -1919,7 +1919,7 @@ msgid "About..."
 msgstr "À propos..."
 
 #: cdl\core\gui\main.py:1035 cdl\core\gui\panel\macro.py:195
-#: cdl\core\gui\settings.py:244
+#: cdl\core\gui\settings.py:261
 msgid "Console"
 msgstr "Console"
 
@@ -1939,7 +1939,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1323 cdl\core\gui\panel\base.py:671
+#: cdl\core\gui\main.py:1323 cdl\core\gui\panel\base.py:682
 #: cdl\core\gui\panel\macro.py:557 cdl\widgets\h5browser.py:616
 msgid "Open"
 msgstr "Ouvrir"
@@ -1988,11 +1988,11 @@ msgstr "Développé et maintenu par l'équipe du projet libre %s"
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1545
+#: cdl\core\gui\main.py:1547
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1546
+#: cdl\core\gui\main.py:1548
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -2000,7 +2000,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1597
+#: cdl\core\gui\main.py:1599
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2056,36 +2056,36 @@ msgstr "Nom du groupe :"
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:698 cdl\core\gui\panel\macro.py:537
-msgid "Save as"
-msgstr "Enregistrer sous"
-
-#: cdl\core\gui\panel\base.py:728
+#: cdl\core\gui\panel\base.py:645 cdl\core\gui\panel\base.py:739
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:806
+#: cdl\core\gui\panel\base.py:709 cdl\core\gui\panel\macro.py:537
+msgid "Save as"
+msgstr "Enregistrer sous"
+
+#: cdl\core\gui\panel\base.py:817
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:911 cdl\core\gui\plothandler.py:281
+#: cdl\core\gui\panel\base.py:922 cdl\core\gui\plothandler.py:285
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:970 cdl\core\gui\roieditor.py:205
-#: cdl\core\model\base.py:744
+#: cdl\core\gui\panel\base.py:981 cdl\core\gui\roieditor.py:205
+#: cdl\core\model\base.py:751
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1012
+#: cdl\core\gui\panel\base.py:1023
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:1039
+#: cdl\core\gui\panel\base.py:1050
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1041
+#: cdl\core\gui\panel\base.py:1052
 msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2095,23 +2095,23 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
-#: cdl\core\gui\panel\base.py:1062 cdl\core\gui\processor\base.py:481
+#: cdl\core\gui\panel\base.py:1073 cdl\core\gui\processor\base.py:481
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1079
+#: cdl\core\gui\panel\base.py:1090
 msgid "Indexes"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1087
+#: cdl\core\gui\panel\base.py:1098
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1089
+#: cdl\core\gui\panel\base.py:1100
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1093
+#: cdl\core\gui\panel\base.py:1104
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on the results under the form of '%s'."
@@ -2204,7 +2204,7 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:696
+#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:672
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -2487,13 +2487,13 @@ msgstr "Extraire les ROI dans un seul objet"
 msgid "Ignore warnings"
 msgstr "Ignorer les avertissements"
 
-#: cdl\core\gui\settings.py:120 cdl\core\gui\settings.py:162
+#: cdl\core\gui\settings.py:120 cdl\core\gui\settings.py:179
 msgid "Default image visualization settings"
 msgstr "Réglages d'affichage d'images par défaut"
 
 #: cdl\core\gui\settings.py:133
-msgid "Image visualization settings"
-msgstr "Réglages d'affichage d'images"
+msgid "Common"
+msgstr "Commun"
 
 #: cdl\core\gui\settings.py:135
 msgid "Plot toolbar position"
@@ -2515,11 +2515,35 @@ msgstr "Gauche (à gauche du graphique)"
 msgid "Right (of plot)"
 msgstr "Droite (à droite du graphique)"
 
-#: cdl\core\gui\settings.py:145
+#: cdl\core\gui\settings.py:145 cdl\core\model\signal.py:716
+msgid "Signal"
+msgstr "Signal"
+
+#: cdl\core\gui\settings.py:149
+msgid "Use auto downsampling"
+msgstr "Utiliser l'auto-sous-échantillonnage"
+
+#: cdl\core\gui\settings.py:150
+msgid "Use auto downsampling for large signals"
+msgstr "Utiliser l'auto-sous-échantillonnage pour les signaux volumineux"
+
+#: cdl\core\gui\settings.py:153
+msgid "Downsampling max points"
+msgstr "Nombre max. de points"
+
+#: cdl\core\gui\settings.py:155
+msgid "Maximum number of points for downsampling"
+msgstr "Nombre maximum de points pour le sous-échantillonnage"
+
+#: cdl\core\gui\settings.py:159 cdl\core\model\image.py:929
+msgid "Image"
+msgstr "Image"
+
+#: cdl\core\gui\settings.py:162
 msgid "Use reference image LUT range"
 msgstr "Utiliser la LUT de l'image de référence"
 
-#: cdl\core\gui\settings.py:146
+#: cdl\core\gui\settings.py:163
 msgid ""
 "If this setting is enabled, images are shown<br>with the same LUT range as "
 "the first selected image"
@@ -2527,15 +2551,15 @@ msgstr ""
 "Si cette option est activée, les images sont affichées<br>avec la même LUT "
 "que la première image sélectionnée"
 
-#: cdl\core\gui\settings.py:152
+#: cdl\core\gui\settings.py:169
 msgid "Eliminate outliers"
 msgstr "Eliminer les bords"
 
-#: cdl\core\gui\settings.py:153
+#: cdl\core\gui\settings.py:170
 msgid "%"
 msgstr "%"
 
-#: cdl\core\gui\settings.py:156
+#: cdl\core\gui\settings.py:173
 msgid ""
 "Eliminate a percentage of the highest and lowest values<br>of the image "
 "histogram - <i>recommanded values are below 1%</i>"
@@ -2544,47 +2568,47 @@ msgstr ""
 "l'histogramme de l'image - <i>les valeurs recommandées sont inférieures à "
 "1%</i>"
 
-#: cdl\core\gui\settings.py:199
+#: cdl\core\gui\settings.py:216
 msgid "Process isolation enable status"
 msgstr "Etat d'activation de l'isolation de processus"
 
-#: cdl\core\gui\settings.py:200
+#: cdl\core\gui\settings.py:217
 msgid "RPC server enable status"
 msgstr "Etat d'activation du serveur XML-RPC"
 
-#: cdl\core\gui\settings.py:201
+#: cdl\core\gui\settings.py:218
 msgid "Console enable status"
 msgstr "Etat d'activation de la console"
 
-#: cdl\core\gui\settings.py:202
+#: cdl\core\gui\settings.py:219
 msgid "Third-party plugins support"
 msgstr "Prise en charge des plugins tiers"
 
-#: cdl\core\gui\settings.py:203
+#: cdl\core\gui\settings.py:220
 msgid "Third-party plugins path"
 msgstr "Chemin des plugins tiers"
 
-#: cdl\core\gui\settings.py:240
+#: cdl\core\gui\settings.py:257
 msgid "General"
 msgstr "Général"
 
-#: cdl\core\gui\settings.py:242
+#: cdl\core\gui\settings.py:259
 msgid "Visualization"
 msgstr "Visualisation"
 
-#: cdl\core\gui\settings.py:243
+#: cdl\core\gui\settings.py:260
 msgid "I/O"
 msgstr "Entrée/sortie"
 
-#: cdl\core\gui\settings.py:249
+#: cdl\core\gui\settings.py:266
 msgid "Settings"
 msgstr "Préférences"
 
-#: cdl\core\gui\settings.py:263
+#: cdl\core\gui\settings.py:280
 msgid "Restart required"
 msgstr "Redémarrage requis"
 
-#: cdl\core\gui\settings.py:264
+#: cdl\core\gui\settings.py:281
 msgid ""
 "The following options have been changed:\n"
 "\n"
@@ -2886,19 +2910,19 @@ msgstr ""
 "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de "
 "dialogue."
 
-#: cdl\core\io\base.py:70
+#: cdl\core\io\base.py:71
 msgid "All supported files"
 msgstr "Tous les fichiers pris en charge"
 
-#: cdl\core\io\image\formats.py:86
+#: cdl\core\io\image\formats.py:87
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: cdl\core\io\signal\formats.py:23
+#: cdl\core\io\signal\formats.py:25
 msgid "CSV files"
 msgstr "Fichiers CSV"
 
-#: cdl\core\io\signal\formats.py:78
+#: cdl\core\io\signal\formats.py:85
 msgid "NumPy binary files"
 msgstr "Fichiers binaires NumPy"
 
@@ -2922,11 +2946,11 @@ msgstr "Moyenne de la distribution normale"
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
-#: cdl\core\model\base.py:1132
+#: cdl\core\model\base.py:1139
 msgid "Object metadata"
 msgstr "Métadonnées de l'objet"
 
-#: cdl\core\model\base.py:1133
+#: cdl\core\model\base.py:1140
 msgid "(click on Metadata button for more details)"
 msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 
@@ -2943,11 +2967,11 @@ msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
 #: cdl\core\model\image.py:363 cdl\core\model\image.py:364
-#: cdl\core\model\image.py:366 cdl\core\model\signal.py:112
+#: cdl\core\model\image.py:366 cdl\core\model\signal.py:134
 msgid "Data"
 msgstr "Données"
 
-#: cdl\core\model\image.py:365 cdl\core\model\signal.py:113
+#: cdl\core\model\image.py:365 cdl\core\model\signal.py:135
 msgid "Metadata"
 msgstr "Métadonnées"
 
@@ -2974,16 +2998,16 @@ msgid "Image title"
 msgstr "Titre de l'image"
 
 #: cdl\core\model\image.py:383 cdl\core\model\image.py:387
-#: cdl\core\model\image.py:391 cdl\core\model\image.py:780
-#: cdl\core\model\signal.py:120 cdl\core\model\signal.py:124
-#: cdl\core\model\signal.py:582 cdl\widgets\textimport.py:648
-#: cdl\widgets\textimport.py:658
+#: cdl\core\model\image.py:391 cdl\core\model\image.py:790
+#: cdl\core\model\signal.py:142 cdl\core\model\signal.py:146
+#: cdl\core\model\signal.py:619 cdl\widgets\textimport.py:624
+#: cdl\widgets\textimport.py:634
 msgid "Title"
 msgstr "Titre"
 
 #: cdl\core\model\image.py:384 cdl\core\model\image.py:388
-#: cdl\core\model\image.py:392 cdl\core\model\signal.py:121
-#: cdl\core\model\signal.py:125 cdl\core\model\signal.py:564
+#: cdl\core\model\image.py:392 cdl\core\model\signal.py:143
+#: cdl\core\model\signal.py:147 cdl\core\model\signal.py:601
 msgid "Unit"
 msgstr "Unité"
 
@@ -2991,157 +3015,149 @@ msgstr "Unité"
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:767 cdl\core\model\signal.py:512
+#: cdl\core\model\image.py:773 cdl\core\model\signal.py:537
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:768
+#: cdl\core\model\image.py:775
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:769 cdl\core\model\signal.py:513
+#: cdl\core\model\image.py:777 cdl\core\model\signal.py:539
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:770 cdl\core\model\signal.py:516
+#: cdl\core\model\image.py:779 cdl\core\model\signal.py:545
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:771 cdl\core\model\signal.py:517
+#: cdl\core\model\image.py:781 cdl\core\model\signal.py:547
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:782
+#: cdl\core\model\image.py:792
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:782
+#: cdl\core\model\image.py:792
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:785
+#: cdl\core\model\image.py:795
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:785 cdl\tests\data.py:375
+#: cdl\core\model\image.py:795 cdl\tests\data.py:375
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:790 cdl\core\model\signal.py:588
+#: cdl\core\model\image.py:800 cdl\core\model\signal.py:625
 #: cdl\widgets\h5browser.py:208
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:795
+#: cdl\core\model\image.py:805
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:891
+#: cdl\core\model\image.py:901
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
-#: cdl\core\model\image.py:919
-msgid "Image"
-msgstr "Image"
-
-#: cdl\core\model\signal.py:94
+#: cdl\core\model\signal.py:96
 msgid "First point index"
 msgstr "Indice du premier point"
 
-#: cdl\core\model\signal.py:95
+#: cdl\core\model\signal.py:97
 msgid "Last point index"
 msgstr "Indice du dernier point"
 
-#: cdl\core\model\signal.py:110 cdl\core\model\signal.py:114
+#: cdl\core\model\signal.py:132 cdl\core\model\signal.py:136
 msgid "Data and metadata"
 msgstr "Données et métadonnées"
 
-#: cdl\core\model\signal.py:111 cdl\core\model\signal.py:117
+#: cdl\core\model\signal.py:133 cdl\core\model\signal.py:139
 msgid "Signal title"
 msgstr "Titre du signal"
 
-#: cdl\core\model\signal.py:116 cdl\core\model\signal.py:128
+#: cdl\core\model\signal.py:138 cdl\core\model\signal.py:150
 msgid "Titles and units"
 msgstr "Titres et unités"
 
-#: cdl\core\model\signal.py:514
+#: cdl\core\model\signal.py:541
 msgid "lorentzian"
 msgstr "lorentzienne"
 
-#: cdl\core\model\signal.py:518
+#: cdl\core\model\signal.py:549
 msgid "sinus"
 msgstr "sinus"
 
-#: cdl\core\model\signal.py:519
+#: cdl\core\model\signal.py:551
 msgid "cosinus"
 msgstr "cosinus"
 
-#: cdl\core\model\signal.py:520
+#: cdl\core\model\signal.py:553
 msgid "sawtooth"
 msgstr "dent de scie"
 
-#: cdl\core\model\signal.py:521
+#: cdl\core\model\signal.py:555
 msgid "triangle"
 msgstr "triangle"
 
-#: cdl\core\model\signal.py:522
+#: cdl\core\model\signal.py:557
 msgid "square"
 msgstr "carré"
 
-#: cdl\core\model\signal.py:523
+#: cdl\core\model\signal.py:559
 msgid "cardinal sine"
 msgstr "sinus cardinal"
 
-#: cdl\core\model\signal.py:524
+#: cdl\core\model\signal.py:561
 msgid "step"
 msgstr "échelon"
 
-#: cdl\core\model\signal.py:562
+#: cdl\core\model\signal.py:599
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: cdl\core\model\signal.py:566
+#: cdl\core\model\signal.py:603
 msgid "Phase"
 msgstr "Phase"
 
-#: cdl\core\model\signal.py:586
+#: cdl\core\model\signal.py:623
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:586 cdl\tests\data.py:253 cdl\tests\data.py:372
+#: cdl\core\model\signal.py:623 cdl\tests\data.py:253 cdl\tests\data.py:372
 #: cdl\widgets\h5browser.py:208
 msgid "Size"
 msgstr "Taille"
 
-#: cdl\core\model\signal.py:593
+#: cdl\core\model\signal.py:630
 msgid "Untitled signal"
 msgstr "Signal sans titre"
 
-#: cdl\core\model\signal.py:679
-msgid "Signal"
-msgstr "Signal"
-
-#: cdl\core\model\signal.py:724 cdl\core\model\signal.py:725
+#: cdl\core\model\signal.py:761 cdl\core\model\signal.py:762
 msgid "Sinusoid"
 msgstr "Sinusoïde"
 
-#: cdl\core\model\signal.py:726
+#: cdl\core\model\signal.py:763
 msgid "Sawtooth function"
 msgstr "Fontion dents de scie"
 
-#: cdl\core\model\signal.py:727
+#: cdl\core\model\signal.py:764
 msgid "Triangle function"
 msgstr "Fonction triangle"
 
-#: cdl\core\model\signal.py:728
+#: cdl\core\model\signal.py:765
 msgid "Square function"
 msgstr "Fonction carrée"
 
-#: cdl\core\model\signal.py:729
+#: cdl\core\model\signal.py:766
 msgid "Cardinal sine"
 msgstr "Sinus cardinal"
 
-#: cdl\core\model\signal.py:745
+#: cdl\core\model\signal.py:782
 msgid "Step function"
 msgstr "Fonction échelon"
 
@@ -3587,141 +3603,141 @@ msgstr "Plugins :"
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
-#: cdl\widgets\textimport.py:99 cdl\widgets\textimport.py:137
+#: cdl\widgets\textimport.py:70 cdl\widgets\textimport.py:108
 msgid "Source"
 msgstr "Source"
 
-#: cdl\widgets\textimport.py:100 cdl\widgets\wizard.py:220
+#: cdl\widgets\textimport.py:71 cdl\widgets\wizard.py:220
 msgid "Clipboard"
 msgstr "Presse-papiers"
 
-#: cdl\widgets\textimport.py:102
+#: cdl\widgets\textimport.py:73
 msgid "Source of the data"
 msgstr "Source des données"
 
-#: cdl\widgets\textimport.py:113
+#: cdl\widgets\textimport.py:84
 msgid "File containing the data"
 msgstr "Fichier contenant les données"
 
-#: cdl\widgets\textimport.py:118 cdl\widgets\textimport.py:126
+#: cdl\widgets\textimport.py:89 cdl\widgets\textimport.py:97
 msgid "Preview parameters"
 msgstr "Paramètres de l'aperçu"
 
-#: cdl\widgets\textimport.py:120
+#: cdl\widgets\textimport.py:91
 msgid "Maximum Number of Rows"
 msgstr "Nombre maximum de lignes"
 
-#: cdl\widgets\textimport.py:124
+#: cdl\widgets\textimport.py:95
 msgid "Maximum number of rows to display"
 msgstr "Nombre maximum de lignes à afficher"
 
-#: cdl\widgets\textimport.py:138
+#: cdl\widgets\textimport.py:109
 msgid "Select the source of the data:"
 msgstr "Sélectionner la source des données :"
 
-#: cdl\widgets\textimport.py:141
+#: cdl\widgets\textimport.py:112
 msgid "Source Parameters"
 msgstr "Paramètres de la source"
 
-#: cdl\widgets\textimport.py:190
+#: cdl\widgets\textimport.py:161
 msgid "Delimiter"
 msgstr "Délimiteur"
 
-#: cdl\widgets\textimport.py:194
+#: cdl\widgets\textimport.py:165
 msgid "Tab"
 msgstr "Tabulation"
 
-#: cdl\widgets\textimport.py:195
+#: cdl\widgets\textimport.py:166
 msgid "Space"
 msgstr "Espace"
 
-#: cdl\widgets\textimport.py:197
+#: cdl\widgets\textimport.py:168
 msgid "Column delimiter character"
 msgstr "Caractère délimiteur de colonne"
 
-#: cdl\widgets\textimport.py:200
+#: cdl\widgets\textimport.py:171
 msgid "Comments"
 msgstr "Commentaires"
 
-#: cdl\widgets\textimport.py:202
+#: cdl\widgets\textimport.py:173
 msgid "Character that indicates a comment line"
 msgstr "Caractère indiquant une ligne de commentaire"
 
-#: cdl\widgets\textimport.py:205
+#: cdl\widgets\textimport.py:176
 msgid "Rows to Skip"
 msgstr "Lignes à sauter"
 
-#: cdl\widgets\textimport.py:207
+#: cdl\widgets\textimport.py:178
 msgid ""
 "Number of rows to skip at the beginning of the file (including comments)"
 msgstr ""
 "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
 
-#: cdl\widgets\textimport.py:212
+#: cdl\widgets\textimport.py:183
 msgid "Max. nb of rows"
 msgstr "Nb max. de lignes"
 
-#: cdl\widgets\textimport.py:216
+#: cdl\widgets\textimport.py:187
 msgid "Maximum number of rows to import"
 msgstr "Nombre maximum de lignes à importer"
 
-#: cdl\widgets\textimport.py:219
+#: cdl\widgets\textimport.py:190
 msgid "Header"
 msgstr "En-tête"
 
-#: cdl\widgets\textimport.py:220
+#: cdl\widgets\textimport.py:191
 msgid "First row"
 msgstr "Première ligne"
 
-#: cdl\widgets\textimport.py:220
+#: cdl\widgets\textimport.py:191
 msgid "Infer"
 msgstr "Inférer"
 
-#: cdl\widgets\textimport.py:220
+#: cdl\widgets\textimport.py:191
 msgid "None"
 msgstr "Aucun"
 
-#: cdl\widgets\textimport.py:222
+#: cdl\widgets\textimport.py:193
 msgid "Row index to use as the column names"
 msgstr "Indice de ligne à utiliser comme noms de colonnes"
 
-#: cdl\widgets\textimport.py:225
+#: cdl\widgets\textimport.py:196
 msgid "Transpose"
 msgstr "Transposer"
 
-#: cdl\widgets\textimport.py:227
+#: cdl\widgets\textimport.py:198
 msgid "Transpose the data (swap rows and columns)"
 msgstr "Transposer les données (échanger les lignes et les colonnes)"
 
-#: cdl\widgets\textimport.py:239
+#: cdl\widgets\textimport.py:210
 msgid "Output signal data type."
 msgstr "Type de données du signal de sortie."
 
-#: cdl\widgets\textimport.py:243
+#: cdl\widgets\textimport.py:214
 msgid "First Column is X"
 msgstr "La première colonne est X"
 
-#: cdl\widgets\textimport.py:354
+#: cdl\widgets\textimport.py:325
 msgid "Raw Data"
 msgstr "Données brutes"
 
-#: cdl\widgets\textimport.py:359
+#: cdl\widgets\textimport.py:330
 msgid "Preview"
 msgstr "Aperçu"
 
-#: cdl\widgets\textimport.py:452
+#: cdl\widgets\textimport.py:423
 msgid "Data Preview"
 msgstr "Aperçu des données"
 
-#: cdl\widgets\textimport.py:453
+#: cdl\widgets\textimport.py:424
 msgid "Preview and modify the import settings:"
 msgstr "Aperçu et modification des paramètres d'importation :"
 
-#: cdl\widgets\textimport.py:456
+#: cdl\widgets\textimport.py:427
 msgid "Import Parameters"
 msgstr "Paramètres d'importation"
 
-#: cdl\widgets\textimport.py:514
+#: cdl\widgets\textimport.py:485
 msgid ""
 "The number of signals to import is very high (%d).\n"
 "This may be an error.\n"
@@ -3733,67 +3749,67 @@ msgstr ""
 "\n"
 "Etes-vous sûr de vouloir continuer ?"
 
-#: cdl\widgets\textimport.py:536
+#: cdl\widgets\textimport.py:507
 msgid "Graphical Representation"
 msgstr "Représentation graphique"
 
-#: cdl\widgets\textimport.py:537
+#: cdl\widgets\textimport.py:508
 msgid "Graphical representation of the imported data"
 msgstr "Représentation graphique des données importées"
 
-#: cdl\widgets\textimport.py:542
+#: cdl\widgets\textimport.py:513
 msgid "Unselect the %s that you do not want to import:"
 msgstr "Désélectionner les %s que vous ne voulez pas importer :"
 
-#: cdl\widgets\textimport.py:543
+#: cdl\widgets\textimport.py:514
 msgid "images"
 msgstr "images"
 
-#: cdl\widgets\textimport.py:543
+#: cdl\widgets\textimport.py:514
 msgid "signals"
 msgstr "signaux"
 
-#: cdl\widgets\textimport.py:546
+#: cdl\widgets\textimport.py:517
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: cdl\widgets\textimport.py:606
+#: cdl\widgets\textimport.py:577
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
-#: cdl\widgets\textimport.py:649 cdl\widgets\textimport.py:659
+#: cdl\widgets\textimport.py:625 cdl\widgets\textimport.py:635
 msgid "X label"
 msgstr "Titre X"
 
-#: cdl\widgets\textimport.py:650 cdl\widgets\textimport.py:660
+#: cdl\widgets\textimport.py:626 cdl\widgets\textimport.py:636
 msgid "Y label"
 msgstr "Titre Y"
 
-#: cdl\widgets\textimport.py:651 cdl\widgets\textimport.py:662
+#: cdl\widgets\textimport.py:627 cdl\widgets\textimport.py:638
 msgid "X unit"
 msgstr "Unité X"
 
-#: cdl\widgets\textimport.py:652 cdl\widgets\textimport.py:663
+#: cdl\widgets\textimport.py:628 cdl\widgets\textimport.py:639
 msgid "Y unit"
 msgstr "Unité Y"
 
-#: cdl\widgets\textimport.py:661
+#: cdl\widgets\textimport.py:637
 msgid "Z label"
 msgstr "Titre Z"
 
-#: cdl\widgets\textimport.py:664
+#: cdl\widgets\textimport.py:640
 msgid "Z unit"
 msgstr "Unité Z"
 
-#: cdl\widgets\textimport.py:691
+#: cdl\widgets\textimport.py:667
 msgid "Labels and units"
 msgstr "Titres et unités"
 
-#: cdl\widgets\textimport.py:692
+#: cdl\widgets\textimport.py:668
 msgid "Set the labels and units for the imported data"
 msgstr "Définir les titres et unités pour les données importées"
 
-#: cdl\widgets\textimport.py:702
+#: cdl\widgets\textimport.py:678
 msgid ""
 "The following title, labels and units will be applied to the data."
 "<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default "
@@ -3804,15 +3820,15 @@ msgstr ""
 "conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été "
 "déduites des données)."
 
-#: cdl\widgets\textimport.py:726
+#: cdl\widgets\textimport.py:702
 msgid "clipboard"
 msgstr "presse-papiers"
 
-#: cdl\widgets\textimport.py:729
+#: cdl\widgets\textimport.py:705
 msgid "Imported from:"
 msgstr "Importer depuis :"
 
-#: cdl\widgets\textimport.py:749
+#: cdl\widgets\textimport.py:725
 msgid "DataLab Import Wizard"
 msgstr "Assistant d'importation de DataLab"
 
@@ -3895,6 +3911,12 @@ msgstr "Merci de sélectionner le fichier à importer."
 #: cdl\widgets\wizard.py:270
 msgid "Example Wizard"
 msgstr "Assistant exemple"
+
+#~ msgid "Signal visualization settings"
+#~ msgstr "Réglages d'affichage des signaux"
+
+#~ msgid "Image visualization settings"
+#~ msgstr "Réglages d'affichage d'images"
 
 #~ msgid "File:"
 #~ msgstr "Fichier :"

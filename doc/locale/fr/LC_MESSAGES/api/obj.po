@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 18:50+0100\n"
+"POT-Creation-Date: 2024-04-09 18:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -338,6 +338,34 @@ msgstr "Crée un élément de marqueur"
 #: cdl.core.model.base.ShapeTypes:1 of
 msgid "Shape types for image metadata"
 msgstr "Types de formes pour les métadonnées d'image"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.RECTANGLE:1 of
+msgid "Rectangle shape"
+msgstr "Forme rectangulaire"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.CIRCLE:1 of
+msgid "Circle shape"
+msgstr "Forme circulaire"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.ELLIPSE:1 of
+msgid "Ellipse shape"
+msgstr "Forme elliptique"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.SEGMENT:1 of
+msgid "Segment shape"
+msgstr "Forme segment"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.MARKER:1 of
+msgid "Marker shape"
+msgstr "Forme marqueur"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.POINT:1 of
+msgid "Point shape"
+msgstr "Forme point"
+
+#: ../../doc/docstring cdl.obj.ShapeTypes.POLYGON:1 of
+msgid "Polygon shape"
+msgstr "Forme polygonale"
 
 #: cdl.core.model.base.UniformRandomParam:1 of
 msgid "Uniform-law random signal/image parameters"
@@ -1157,6 +1185,58 @@ msgstr "nouvelle instance de jeu de données signal"
 msgid "Signal types"
 msgstr "Types de signal"
 
+#: ../../doc/docstring cdl.obj.SignalTypes.ZEROS:1 of
+msgid "Signal filled with zeros"
+msgstr "Signal rempli de zéros"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.GAUSS:1 of
+msgid "Gaussian function"
+msgstr "Fonction gaussienne"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.LORENTZ:1 of
+msgid "Lorentzian function"
+msgstr "Fonction lorentzienne"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.VOIGT:1 of
+msgid "Voigt function"
+msgstr "Fonction de Voigt"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.UNIFORMRANDOM:1 of
+msgid "Random signal (uniform law)"
+msgstr "Signal aléatoire (loi uniforme)"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.NORMALRANDOM:1 of
+msgid "Random signal (normal law)"
+msgstr "Signal aléatoire (loi normale)"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.SINUS:1 of
+msgid "Sinusoid"
+msgstr "Fonction sinus"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.COSINUS:1 of
+msgid "Cosinusoid"
+msgstr "Fonction cosinus"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.SAWTOOTH:1 of
+msgid "Sawtooth function"
+msgstr "Fonction en dents de scie"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.TRIANGLE:1 of
+msgid "Triangle function"
+msgstr "Fonction triangle"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.SQUARE:1 of
+msgid "Square function"
+msgstr "Fonction carrée"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.SINC:1 of
+msgid "Cardinal sine"
+msgstr "Sinus cardinal"
+
+#: ../../doc/docstring cdl.obj.SignalTypes.STEP:1 of
+msgid "Step function"
+msgstr "Fonction échelon"
+
 #: cdl.core.model.signal.NewSignalParam:1 of
 msgid "New signal dataset"
 msgstr "Nouveau jeu de données signal"
@@ -1323,6 +1403,26 @@ msgstr "Nouvelle instance de jeu de données image"
 msgid "Image types"
 msgstr "Types d'image"
 
+#: ../../doc/docstring cdl.obj.ImageTypes.ZEROS:1 of
+msgid "Image filled with zeros"
+msgstr "Image remplie de zéros"
+
+#: ../../doc/docstring cdl.obj.ImageTypes.EMPTY:1 of
+msgid "Empty image (filled with data from memory state)"
+msgstr "Image vide (remplie de données de l'état de la mémoire)"
+
+#: ../../doc/docstring cdl.obj.ImageTypes.GAUSS:1 of
+msgid "2D Gaussian image"
+msgstr "Image gaussienne 2D"
+
+#: ../../doc/docstring cdl.obj.ImageTypes.UNIFORMRANDOM:1 of
+msgid "Image filled with random data (uniform law)"
+msgstr "Image remplie de données aléatoires (loi uniforme)"
+
+#: ../../doc/docstring cdl.obj.ImageTypes.NORMALRANDOM:1 of
+msgid "Image filled with random data (normal law)"
+msgstr "Image remplie de données aléatoires (loi normale)"
+
 #: cdl.core.model.image.NewImageParam:1 of
 msgid "New image dataset"
 msgstr "Nouveau jeu de données image"
@@ -1346,3 +1446,23 @@ msgstr "Renvoie le membre à partir du dtype NumPy"
 #: cdl.core.model.image.ImageDatatypes.check:1 of
 msgid "Check if data types are valid"
 msgstr "Vérifie si les types de données sont valides"
+
+#: ../../doc/docstring cdl.obj.ImageDatatypes.UINT8:1 of
+msgid "Unsigned integer number stored with 8 bits"
+msgstr "Entier non signé stocké avec 8 bits"
+
+#: ../../doc/docstring cdl.obj.ImageDatatypes.UINT16:1 of
+msgid "Unsigned integer number stored with 16 bits"
+msgstr "Entier non signé stocké avec 16 bits"
+
+#: ../../doc/docstring cdl.obj.ImageDatatypes.INT16:1 of
+msgid "Signed integer number stored with 16 bits"
+msgstr "Entier signé stocké avec 16 bits"
+
+#: ../../doc/docstring cdl.obj.ImageDatatypes.FLOAT32:1 of
+msgid "Float number stored with 32 bits"
+msgstr "Nombre flottant stocké avec 32 bits"
+
+#: ../../doc/docstring cdl.obj.ImageDatatypes.FLOAT64:1 of
+msgid "Float number stored with 64 bits"
+msgstr "Nombre flottant stocké avec 64 bits"

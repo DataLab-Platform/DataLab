@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"POT-Creation-Date: 2024-04-09 18:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,7 +28,11 @@ msgid ""
 "The :mod:`cdl.core.gui.plothandler` module provides plot handlers for "
 "signal and image panels, that is, classes handling `PlotPy` plot items "
 "for representing signals and images."
-msgstr "Le module :mod:`cdl.core.gui.plothandler` fournit des gestionnaires de visualisation pour les panneaux de signaux et d'images, c'est-à-dire des classes gérant les items de visualisation `PlotPy` pour représenter les signaux et les images."
+msgstr ""
+"Le module :mod:`cdl.core.gui.plothandler` fournit des gestionnaires de "
+"visualisation pour les panneaux de signaux et d'images, c'est-à-dire des "
+"classes gérant les items de visualisation `PlotPy` pour représenter les "
+"signaux et les images."
 
 #: cdl.core.gui.plothandler:9 of
 msgid "Signal plot handler"
@@ -112,15 +116,12 @@ msgstr "Actualiser la visualisation"
 #: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:3 of
 msgid ""
 "string describing the objects to refresh. Valid values are \"selected\" "
-"(refresh the selected objects), \"all\" (refresh all objects), or an "
-"object uuid."
-msgstr ""
-"chaîne décrivant les objets à actualiser. Les valeurs valides sont "
-"\"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser "
-"tous les objets), ou un uuid d'objet."
+"(refresh the selected objects), \"all\" (refresh all objects), "
+"\"existing\" (refresh existing plot items), or an object uuid."
+msgstr "chaîne décrivant les objets à actualiser. Les valeurs valides sont \"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser tous les objets), \"existing\" (actualiser les items de visualisation existants), ou un uuid d'objet."
 
-#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:6
-#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:6 of
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:7
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:7 of
 msgid ""
 "if True, update the items. If False, only show the items (do not update "
 "them, except if the option \"Use reference item LUT range\" is enabled "
@@ -131,8 +132,8 @@ msgstr ""
 "l'item de référence\" est activée et que plus d'un item est sélectionné)."
 " Par défaut à True."
 
-#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:10
-#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:10 of
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:11
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:11 of
 msgid "if True, force refresh even if auto refresh is disabled."
 msgstr ""
 "si True, forcer l'actualisation même si l'actualisation automatique est "
@@ -143,8 +144,8 @@ msgstr ""
 msgid "Raises"
 msgstr "Lève"
 
-#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:12
-#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:12 of
+#: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:13
+#: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:13 of
 msgid "if `what` is not a valid value"
 msgstr "si `what` n'est pas une valeur valide"
 

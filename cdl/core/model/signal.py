@@ -97,6 +97,26 @@ class ROIParam(gds.DataSet):
     col2 = gds.IntItem(_("Last point index"))
 
 
+def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
+    """Apply downsampling to curve item
+
+    Args:
+        item: curve item
+        do_not_update: if True, do not update the item even if the downsampling
+         parameters have changed
+    """
+    old_use_dsamp = item.param.use_dsamp
+    item.param.use_dsamp = False
+    if Conf.view.sig_autodownsampling.get():
+        nbpoints = item.get_data()[0].size
+        maxpoints = Conf.view.sig_autodownsampling_maxpoints.get()
+        if nbpoints > 5 * maxpoints:
+            item.param.use_dsamp = True
+            item.param.dsamp_factor = nbpoints // maxpoints
+    if not do_not_update and old_use_dsamp != item.param.use_dsamp:
+        item.update_data()
+
+
 class SignalObj(gds.DataSet, base.BaseObj):
     """Signal object"""
 
@@ -332,6 +352,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 x, y, dx, dy = self.xydata
                 item = make.merror(x.real, y.real, dx.real, dy.real, label=self.title)
             CURVESTYLES.apply_style(item.param)
+            apply_downsampling(item, do_not_update=True)
         else:
             raise RuntimeError("data not supported")
         if update_from is None:
@@ -359,6 +380,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 x, y, dx, dy = self.xydata
                 item.set_data(x.real, y.real, dx.real, dy.real)
         item.param.label = self.title
+        apply_downsampling(item)
         self.update_plot_item_parameters(item)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
