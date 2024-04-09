@@ -84,7 +84,6 @@ class ROIDataParam(gds.DataSet):
 
     roidata = gds.FloatArrayItem(_("ROI data"))
     singleobj = gds.BoolItem(_("Single object"))
-    modified = gds.BoolItem(_("Modified")).set_prop("display", hide=True)
 
     # pylint: disable=arguments-differ
     @classmethod

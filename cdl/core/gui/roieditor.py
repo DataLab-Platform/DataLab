@@ -120,11 +120,16 @@ class BaseROIEditor(QW.QWidget, metaclass=BaseROIEditorMeta):
             singleobj = self.singleobj_btn.isChecked()
             self.__data.singleobj = singleobj
             Conf.proc.extract_roi_singleobj.set(singleobj)
-        self.__data.modified = self.modified
 
-    def get_data(self) -> ROIDataParam:
-        """Get ROI Editor data (results of the dialog box)"""
-        return self.__data
+    def get_roieditor_results(self) -> tuple[ROIDataParam, bool]:
+        """Get ROI editor results
+
+        Returns:
+            A tuple containing the ROI data parameters and ROI modified state.
+            ROI modified state is True if the ROI data has been modified within
+            the dialog box.
+        """
+        return self.__data, self.modified
 
     def setup_widget(self):
         """Setup ROI editor widget"""
