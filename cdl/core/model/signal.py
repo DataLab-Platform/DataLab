@@ -80,6 +80,16 @@ class CurveStyles:
         self.curve_style = self.style_generator()
 
     @contextmanager
+    def alternative(
+        self, other_style_generator: Generator[tuple[str, str], None, None]
+    ) -> Generator[None, None, None]:
+        """Use an alternative style generator"""
+        old_style_generator = self.curve_style
+        self.curve_style = other_style_generator
+        yield
+        self.curve_style = old_style_generator
+
+    @contextmanager
     def suspend(self) -> Generator[None, None, None]:
         """Suspend style generator"""
         self.__suspend = True

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import io
 import os.path as osp
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Generator
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -510,6 +510,7 @@ class GraphicalRepresentationPage(WizardPage):
 
     def __init__(self, data_page: DataPreviewPage, destination: str) -> None:
         super().__init__()
+        self.__curve_styles: Generator[tuple[str, str], None, None] | None = None
         self.__objitmlist: list[
             tuple[SignalObj | ImageObj, CurveItem | MaskedImageItem]
         ] = []
@@ -569,12 +570,7 @@ class GraphicalRepresentationPage(WizardPage):
     ) -> None:
         """Plot signals"""
         obj = create_signal(title, x=x, y=y, labels=labels, units=units)
-        with CURVESTYLES.suspend():
-            # TODO: [P0] Find a way to cycle through the colors
-            # without affecting the "Signal View" mechanism.
-            # Here, we are simply suspending this mechanism to avoid
-            # the color cycling: this is not a good solution because
-            # all curves will have the same color.
+        with CURVESTYLES.alternative(self.__curve_styles):
             item = obj.make_item()
         plot = self.plot_widget.get_plot()
         plot.add_item(item, z=zorder)
@@ -596,6 +592,7 @@ class GraphicalRepresentationPage(WizardPage):
 
     def initialize_page(self) -> None:
         """Initialize the page"""
+        self.__curve_styles = CURVESTYLES.style_generator()
         df = self.data_page.get_dataframe()
         assert df is not None
         data = df.to_numpy()
