@@ -780,7 +780,7 @@ class BaseProcessor(QC.QObject):
         extract: bool = False,
         singleobj: bool | None = None,
         add_roi: bool = False,
-    ) -> ROIDataParam:
+    ) -> ROIDataParam | None:
         """Define Region Of Interest (ROI) for computing functions.
 
         Args:
@@ -793,27 +793,29 @@ class BaseProcessor(QC.QObject):
              Defaults to False.
 
         Returns:
-            ROI data parameters.
+            ROI data parameters or None if ROI dialog has been canceled.
         """
-        roieditordata = self.panel.get_roi_dialog(
+        results = self.panel.get_roi_dialog(
             extract=extract, singleobj=singleobj, add_roi=add_roi
         )
-        if roieditordata is not None:
-            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
-            roigroup = obj.roidata_to_params(roieditordata.roidata)
-            if (
-                env.execenv.unattended
-                or roieditordata.roidata.size == 0
-                or not self.EDIT_ROI_PARAMS
-                or roigroup.edit(parent=self.panel)
-            ):
-                roidata = obj.params_to_roidata(roigroup)
-                if roieditordata.modified:
-                    roieditordata.roidata = roidata
-                    # If ROI has been modified, save ROI (even in "extract mode")
-                    obj.roi = roidata
-                    self.SIG_ADD_SHAPE.emit(obj.uuid)
-                    self.panel.selection_changed(update_items=True)
+        if results is None:
+            return None
+        roieditordata, modified = results
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        roigroup = obj.roidata_to_params(roieditordata.roidata)
+        if (
+            env.execenv.unattended
+            or roieditordata.roidata.size == 0
+            or not self.EDIT_ROI_PARAMS
+            or roigroup.edit(parent=self.panel)
+        ):
+            roidata = obj.params_to_roidata(roigroup)
+            if modified:
+                roieditordata.roidata = roidata
+                # If ROI has been modified, save ROI (even in "extract mode")
+                obj.roi = roidata
+                self.SIG_ADD_SHAPE.emit(obj.uuid)
+                self.panel.selection_changed(update_items=True)
         return roieditordata
 
     def delete_regions_of_interest(self) -> None:

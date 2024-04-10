@@ -78,6 +78,7 @@ doc = [
     "sphinx_design",
     "sphinx-copybutton",
     "pydata-sphinx-theme",
+    "guidata >= 3.5",      # For the autodoc Sphinx extension
 ]
 test = ["pytest", "pytest-xvfb"]
 

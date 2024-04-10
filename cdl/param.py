@@ -7,8 +7,7 @@ Parameters (:mod:`cdl.param`)
 The :mod:`cdl.param` module aims at providing all the dataset parameters that are used
 by the :mod:`cdl.core.computation` and :mod:`cdl.core.gui.processor` packages.
 
-Those datasets (:py:class:`guidata.dataset.datatypes.Dataset` subclasses) are defined
-in other modules:
+Those datasets are defined in other modules:
 
     - :mod:`cdl.core.computation.base`
     - :mod:`cdl.core.computation.image`
@@ -29,44 +28,60 @@ As a matter of fact, the following import statement is equivalent to the previou
     # Equivalent import statement
     from cdl.param import MovingAverageParam, PolynomialFitParam, EqualizeHistParam
 
+Introduction to `DataSet` parameters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The datasets listed in the following sections are used to define the parameters
+necessary for the various computations and processing operations available in DataLab.
+
+Each dataset is a subclass of :py:class:`guidata.dataset.datatypes.DataSet` and thus
+needs to be instantiated before being used.
+
+Here is a complete example of how to instantiate a dataset and access its parameters
+with the :py:class:`cdl.param.BinningParam` dataset:
+
+    .. autodataset:: cdl.param.BinningParam
+        :no-index:
+        :shownote:
+
 Common parameters
 ^^^^^^^^^^^^^^^^^
 
-.. autoclass:: cdl.param.ClipParam
+.. autodataset:: cdl.param.ClipParam
     :no-index:
-.. autoclass:: cdl.param.FFTParam
+.. autodataset:: cdl.param.FFTParam
     :no-index:
-.. autoclass:: cdl.param.GaussianParam
+.. autodataset:: cdl.param.GaussianParam
     :no-index:
-.. autoclass:: cdl.param.MovingAverageParam
+.. autodataset:: cdl.param.MovingAverageParam
     :no-index:
-.. autoclass:: cdl.param.MovingMedianParam
+.. autodataset:: cdl.param.MovingMedianParam
     :no-index:
-.. autoclass:: cdl.param.ROIDataParam
+.. autodataset:: cdl.param.ROIDataParam
     :no-index:
-.. autoclass:: cdl.param.ThresholdParam
+.. autodataset:: cdl.param.ThresholdParam
     :no-index:
 
 Signal parameters
 ^^^^^^^^^^^^^^^^^
 
-.. autoclass:: cdl.param.DataTypeSParam
+.. autodataset:: cdl.param.DataTypeSParam
     :no-index:
-.. autoclass:: cdl.param.FWHMParam
+.. autodataset:: cdl.param.FWHMParam
     :no-index:
-.. autoclass:: cdl.param.NormalizeYParam
+.. autodataset:: cdl.param.NormalizeYParam
     :no-index:
-.. autoclass:: cdl.param.PeakDetectionParam
+.. autodataset:: cdl.param.PeakDetectionParam
     :no-index:
-.. autoclass:: cdl.param.PolynomialFitParam
+.. autodataset:: cdl.param.PolynomialFitParam
     :no-index:
-.. autoclass:: cdl.param.XYCalibrateParam
+.. autodataset:: cdl.param.XYCalibrateParam
     :no-index:
-.. autoclass:: cdl.param.InterpolationParam
+.. autodataset:: cdl.param.InterpolationParam
     :no-index:
-.. autoclass:: cdl.param.ResamplingParam
+.. autodataset:: cdl.param.ResamplingParam
     :no-index:
-.. autoclass:: cdl.param.DetrendingParam
+.. autodataset:: cdl.param.DetrendingParam
     :no-index:
 
 Image parameters
@@ -75,85 +90,85 @@ Image parameters
 Base image parameters
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.AverageProfileParam
+.. autodataset:: cdl.param.AverageProfileParam
     :no-index:
-.. autoclass:: cdl.param.RadialProfileParam
+.. autodataset:: cdl.param.RadialProfileParam
     :no-index:
-.. autoclass:: cdl.param.BinningParam
+.. autodataset:: cdl.param.BinningParam
     :no-index:
-.. autoclass:: cdl.param.ButterworthParam
+.. autodataset:: cdl.param.ButterworthParam
     :no-index:
-.. autoclass:: cdl.param.DataTypeIParam
+.. autodataset:: cdl.param.DataTypeIParam
     :no-index:
-.. autoclass:: cdl.param.FlatFieldParam
+.. autodataset:: cdl.param.FlatFieldParam
     :no-index:
-.. autoclass:: cdl.param.GridParam
+.. autodataset:: cdl.param.GridParam
     :no-index:
-.. autoclass:: cdl.param.HoughCircleParam
+.. autodataset:: cdl.param.HoughCircleParam
     :no-index:
-.. autoclass:: cdl.param.LogP1Param
+.. autodataset:: cdl.param.LogP1Param
     :no-index:
-.. autoclass:: cdl.param.ProfileParam
+.. autodataset:: cdl.param.ProfileParam
     :no-index:
-.. autoclass:: cdl.param.ResizeParam
+.. autodataset:: cdl.param.ResizeParam
     :no-index:
-.. autoclass:: cdl.param.RotateParam
+.. autodataset:: cdl.param.RotateParam
     :no-index:
-.. autoclass:: cdl.param.ZCalibrateParam
+.. autodataset:: cdl.param.ZCalibrateParam
     :no-index:
 
 Exposure correction parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.AdjustGammaParam
+.. autodataset:: cdl.param.AdjustGammaParam
     :no-index:
-.. autoclass:: cdl.param.AdjustLogParam
+.. autodataset:: cdl.param.AdjustLogParam
     :no-index:
-.. autoclass:: cdl.param.AdjustSigmoidParam
+.. autodataset:: cdl.param.AdjustSigmoidParam
     :no-index:
-.. autoclass:: cdl.param.EqualizeAdaptHistParam
+.. autodataset:: cdl.param.EqualizeAdaptHistParam
     :no-index:
-.. autoclass:: cdl.param.EqualizeHistParam
+.. autodataset:: cdl.param.EqualizeHistParam
     :no-index:
-.. autoclass:: cdl.param.RescaleIntensityParam
+.. autodataset:: cdl.param.RescaleIntensityParam
     :no-index:
 
 Restoration parameters
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.DenoiseBilateralParam
+.. autodataset:: cdl.param.DenoiseBilateralParam
     :no-index:
-.. autoclass:: cdl.param.DenoiseTVParam
+.. autodataset:: cdl.param.DenoiseTVParam
     :no-index:
-.. autoclass:: cdl.param.DenoiseWaveletParam
+.. autodataset:: cdl.param.DenoiseWaveletParam
     :no-index:
 
 Morphological parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.MorphologyParam
+.. autodataset:: cdl.param.MorphologyParam
     :no-index:
 
 Edge detection parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.CannyParam
+.. autodataset:: cdl.param.CannyParam
     :no-index:
 
 Detection parameters
 ~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: cdl.param.BlobDOGParam
+.. autodataset:: cdl.param.BlobDOGParam
     :no-index:
-.. autoclass:: cdl.param.BlobDOHParam
+.. autodataset:: cdl.param.BlobDOHParam
     :no-index:
-.. autoclass:: cdl.param.BlobLOGParam
+.. autodataset:: cdl.param.BlobLOGParam
     :no-index:
-.. autoclass:: cdl.param.BlobOpenCVParam
+.. autodataset:: cdl.param.BlobOpenCVParam
     :no-index:
-.. autoclass:: cdl.param.ContourShapeParam
+.. autodataset:: cdl.param.ContourShapeParam
     :no-index:
-.. autoclass:: cdl.param.Peak2DDetectionParam
+.. autodataset:: cdl.param.Peak2DDetectionParam
     :no-index:
 """
 
