@@ -10,16 +10,22 @@ for future and past milestones.
     of an EXE installer)
   * This avoids the false positive detection of the stand-alone version as a
     potential threat by some antivirus software
-  * The installer now requires administrator privileges to install DataLab and aims at
-    installing it for all users on the system (instead of the current user only)
+  * The program will install files and shortcuts:
+    * For current user, if the user has no administrator privileges
+    * For all users, if the user has administrator privileges
+    * Installation directory may be customized
   * MSI installer allows to integrate DataLab's installation seemlessly in an
     organization's deployment system
 
 💥 New features and enhancements:
 
-* CSV format handling:
-  * Improved support for CSV files with a header row (column names)
-  * Added support for CSV files with empty columns
+* Added support for large text/CSV files:
+  * Files over 1 GB (and with reasonable number of lines) can now be imported
+    as signals or images without crashing the application or even slowing it down
+  * The file is read by chunks and, for signals, the data is downsampled to a
+    reasonable number of points for visualization
+  * Large files are supported when opening a file (or dragging and dropping a file
+    in the Signal Panel) and when importing a file in the Text Import Wizard
 * Auto downsampling feature:
   * Added "Auto downsampling" feature to signal visualization settings (see "Settings"
     dialog box)
@@ -29,6 +35,9 @@ for future and past milestones.
     maximum number of points to display
   * This feature is enabled by default and may be disabled in the signal visualization
     settings
+* CSV format handling:
+  * Improved support for CSV files with a header row (column names)
+  * Added support for CSV files with empty columns
 * Open/save file error handling:
   * Error messages are now more explicit when opening or saving a file fails
   * Added a link to the folder containing the file in the error message
