@@ -98,7 +98,7 @@ class ROIDataParam(gds.DataSet):
     @property
     def is_empty(self) -> bool:
         """Return True if there is no ROI"""
-        return self.roidata is None or self.roidata.size == 0
+        return self.roidata is None or np.array(self.roidata).size == 0
 
 
 class FFTParam(gds.DataSet):
