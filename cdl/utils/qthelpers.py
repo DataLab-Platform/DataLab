@@ -17,6 +17,7 @@ import traceback
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
 from datetime import datetime
+from typing import Any
 
 import guidata
 from guidata.configtools import get_icon
@@ -191,6 +192,76 @@ def create_progress_bar(
     finally:
         prog.close()
         prog.deleteLater()
+
+
+class CallbackWorker(QC.QThread):
+    """Worker for executing long computations in a separate thread"""
+
+    SIG_PROGRESS_UPDATE = QC.Signal(int)
+
+    def __init__(self, callback: Callable, **kwargs) -> None:
+        super().__init__()
+        self.callback = callback
+        self.kwargs = kwargs
+        self.result: Any | None = None
+        self.__canceled = False
+
+    def run(self) -> None:
+        """Start thread"""
+        self.result = self.callback(self, **self.kwargs)
+
+    def cancel(self) -> None:
+        """Progress bar was canceled"""
+        self.__canceled = True
+
+    def was_canceled(self) -> bool:
+        """Return whether the progress dialog was canceled by user"""
+        return self.__canceled
+
+    def set_progress(self, value: int) -> None:
+        """Set progress bar value"""
+        self.SIG_PROGRESS_UPDATE.emit(value)
+
+    def get_result(self) -> Any:
+        """Return result"""
+        return self.result
+
+
+def qt_long_callback(
+    parent: QW.QWidget, label: str, worker: CallbackWorker, progress_max: int = 0
+) -> Any:
+    """Handle long callbacks: run in a separate thread while showing a busy bar"""
+    if progress_max > 0:
+        prog = QW.QProgressDialog(
+            label, _("Cancel"), 0, progress_max, parent, QC.Qt.SplashScreen
+        )
+        worker.SIG_PROGRESS_UPDATE.connect(prog.setValue)
+        prog.canceled.connect(worker.cancel)
+    else:
+        prog = QW.QProgressDialog(label, None, 0, 0, parent, QC.Qt.SplashScreen)
+        prog.setMinimumDuration(0)
+        prog.setCancelButton(None)
+        prog.setRange(0, 0)
+    prog.setWindowModality(QC.Qt.WindowModal)
+    prog.show()
+
+    timer = QC.QTimer(parent)
+    timer.setInterval(100)
+    timer.timeout.connect(QW.QApplication.processEvents)
+    timer.start()
+
+    worker.finished.connect(prog.accept)
+    worker.finished.connect(timer.stop)
+
+    worker.start()
+    prog.exec()
+    if progress_max > 0:
+        worker.wait()
+    result = worker.get_result()
+
+    prog.close()
+    prog.deleteLater()
+    return result
 
 
 def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):
