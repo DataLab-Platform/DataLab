@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import faulthandler
 import functools
+import inspect
 import logging
 import os
 import os.path as osp
@@ -195,20 +196,35 @@ def create_progress_bar(
 
 
 class CallbackWorker(QC.QThread):
-    """Worker for executing long computations in a separate thread"""
+    """Worker for executing long operations in a separate thread (this must not be
+    confused with the :py:class:`cdl.core.gui.processor.base.Worker` class, which
+    handles the execution of computations in a another process)
+
+    Args:
+        callback: The function to be executed in a separate thread, that takes
+         optionnally 'worker' as argument (instance of this class), and any other
+         argument passed with **kwargs
+        kwargs: Callback keyword arguments
+    """
 
     SIG_PROGRESS_UPDATE = QC.Signal(int)
 
     def __init__(self, callback: Callable, **kwargs) -> None:
         super().__init__()
         self.callback = callback
+        if "worker" in inspect.signature(callback).parameters:
+            kwargs["worker"] = self
         self.kwargs = kwargs
         self.result: Any | None = None
         self.__canceled = False
+        self.__exc = None
 
     def run(self) -> None:
         """Start thread"""
-        self.result = self.callback(self, **self.kwargs)
+        try:
+            self.result = self.callback(**self.kwargs)
+        except Exception as exc:  # pylint: disable=broad-except
+            self.__exc = exc
 
     def cancel(self) -> None:
         """Progress bar was canceled"""
@@ -218,22 +234,44 @@ class CallbackWorker(QC.QThread):
         """Return whether the progress dialog was canceled by user"""
         return self.__canceled
 
-    def set_progress(self, value: int) -> None:
-        """Set progress bar value"""
-        self.SIG_PROGRESS_UPDATE.emit(value)
+    def set_progress(self, value: float) -> None:
+        """Set progress bar value
+
+        Args:
+            value: float between 0.0 and 1.0
+        """
+        self.SIG_PROGRESS_UPDATE.emit(int(100 * value))
 
     def get_result(self) -> Any:
-        """Return result"""
+        """Return callback result"""
+        if self.__exc is not None:
+            raise self.__exc
         return self.result
 
 
 def qt_long_callback(
-    parent: QW.QWidget, label: str, worker: CallbackWorker, progress_max: int = 0
+    parent: QW.QWidget, label: str, worker: CallbackWorker, progress: bool
 ) -> Any:
-    """Handle long callbacks: run in a separate thread while showing a busy bar"""
-    if progress_max > 0:
+    """Handle long callbacks: run in a separate thread while showing a busy bar
+
+    Args:
+        parent: Parent widget
+        label: Progress dialog title
+        worker: Callback worker handling the function execution in a separate thread
+        progress: Whether the progress feature is handled or not. If True, a progress
+         bar and a 'Cancel' button are shown on the progress dialog. The progress value
+         is updated by the `worker.set_progress` method (which takes a float between
+         0.0 and 1.0). Moreover, if `progress` is True, we wait for the callback
+         function to return (it means that the callback function must implement a
+         mechanism to return an intermediate result or `None` if the
+         `worker.was_canceled` method returns True).
+
+    Returns:
+        Callback result
+    """
+    if progress:
         prog = QW.QProgressDialog(
-            label, _("Cancel"), 0, progress_max, parent, QC.Qt.SplashScreen
+            label, _("Cancel"), 0, 100, parent, QC.Qt.SplashScreen
         )
         worker.SIG_PROGRESS_UPDATE.connect(prog.setValue)
         prog.canceled.connect(worker.cancel)
@@ -255,13 +293,42 @@ def qt_long_callback(
 
     worker.start()
     prog.exec()
-    if progress_max > 0:
+    if progress:
         worker.wait()
     result = worker.get_result()
 
     prog.close()
     prog.deleteLater()
     return result
+
+
+# For testing purposes:
+def long_callback(label: str, worker: CallbackWorker, progress: bool) -> Any:
+    """Handle long callbacks: run in a separate thread while showing a busy bar
+
+    Args:
+        label: Progress dialog title
+        worker: Callback worker handling the function execution in a separate thread
+        progress: Whether the progress feature is handled or not. If True, a progress
+         bar and a 'Cancel' button are shown on the progress dialog. The progress value
+         is updated by the `worker.set_progress` method (which takes a float between
+         0.0 and 1.0). Moreover, if `progress` is True, we wait for the callback
+         function to return (it means that the callback function must implement a
+         mechanism to return an intermediate result or `None` if the
+         `worker.was_canceled` method returns True).
+
+    Returns:
+        Callback result
+    """
+    app = QC.QCoreApplication([])
+    if progress:
+        worker.SIG_PROGRESS_UPDATE.connect(lambda value: execenv.print(">", end=""))
+    worker.start()
+    execenv.print(label + ": ", end="")
+    worker.finished.connect(app.quit)
+    app.exec()
+    execenv.print("Canceled" if worker.was_canceled() else "OK")
+    return worker.get_result()
 
 
 def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):

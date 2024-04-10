@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import io
 import os.path as osp
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -36,7 +36,7 @@ from cdl.core.io.signal.funcs import get_labels_units_from_dataframe, read_csv_b
 from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
 from cdl.utils.io import count_lines, read_first_n_lines
-from cdl.utils.qthelpers import create_progress_bar, qt_long_callback
+from cdl.utils.qthelpers import CallbackWorker, create_progress_bar, qt_long_callback
 from cdl.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
@@ -374,14 +374,14 @@ class PreviewWidget(QW.QWidget):
 def str_to_dataframe(
     raw_data: str,
     param: SignalImportParam | ImageImportParam,
-    progress_callback: Callable | None = None,
+    worker: CallbackWorker | None = None,
 ) -> pd.DataFrame | None:
     """Convert raw data to a DataFrame
 
     Args:
         raw_data: Raw data
         param: Import parameters
-        progress_callback: Progress callback
+        worker: Callback worker object
         parent: Parent widget
 
     Returns:
@@ -395,7 +395,7 @@ def str_to_dataframe(
         df = read_csv_by_chunks(
             textstream,
             nlines,
-            progress_callback=progress_callback,
+            worker=worker,
             delimiter=param.delimiter_choice,
             skiprows=param.skip_rows,
             nrows=param.max_rows,
@@ -450,20 +450,13 @@ class DataPreviewPage(WizardPage):
             The data frame, or None if the data could not be converted
         """
 
-        def progress_callback(progbar: QW.QProgressDialog, ratio: float) -> bool:
-            """Progress callback"""
-            progbar.setValue(int(ratio * 100))
-            QW.QApplication.processEvents()
-            return progbar.wasCanceled()
-
-        # TODO [P0] Use `qt_long_callback` instead of `create_progress_bar`
-        with create_progress_bar(self, _("Reading data"), max_=100) as progress:
+        def callback(worker: CallbackWorker) -> pd.DataFrame:
             source_text = self.source_page.get_source_text(preview=False)
-            df = str_to_dataframe(
-                source_text,
-                self.param,
-                lambda ratio: progress_callback(progress, ratio),
-            )
+            df = str_to_dataframe(source_text, self.param, worker)
+            return df
+
+        worker = CallbackWorker(callback)
+        df = qt_long_callback(self, _("Reading data"), worker, 100)
         return df
 
     def update_preview(self) -> None:

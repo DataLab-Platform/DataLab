@@ -42,14 +42,19 @@ def add_test_module_path(modname: str, relpath: str) -> None:
     TST_PATH.append(get_module_data_path(modname, relpath=relpath))
 
 
-def get_test_fnames(pattern: str) -> list[str]:
+def get_test_fnames(pattern: str, in_folder: str | None = None) -> list[str]:
     """
     Return the absolute path list to test files with specified pattern
 
     Pattern may be a file name (basename), a wildcard (e.g. *.txt)...
+
+    Args:
+        pattern: pattern to match
+        in_folder: folder to search in, in test data path (default: None,
+         search in all test data paths)
     """
     pathlist = []
-    for pth in TST_PATH:
+    for pth in [osp.join(TST_PATH[0], in_folder)] if in_folder else TST_PATH:
         pathlist += sorted(pathlib.Path(pth).rglob(pattern))
     if not pathlist:
         raise FileNotFoundError(f"Test file(s) {pattern} not found")

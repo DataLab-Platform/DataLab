@@ -9,12 +9,12 @@ DataLab signal I/O registry
 from __future__ import annotations
 
 import abc
-from typing import Callable
 
 import numpy as np
 
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.signal import SignalObj, create_signal
+from cdl.utils.qthelpers import CallbackWorker
 from cdl.utils.strings import reduce_path
 
 
@@ -78,14 +78,12 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
             objs.append(obj)
         return objs
 
-    def read(self, filename: str, progress_callback: Callable) -> list[SignalObj]:
+    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
         """Read list of signal objects from file
 
         Args:
             filename: File name
-            progress_callback: progress callback function (a function that takes a float
-             between 0 and 1 as argument representing the progress, and returns a
-             boolean indicating whether to cancel the operation)
+            worker: Callback worker object
 
         Returns:
             List of signal objects

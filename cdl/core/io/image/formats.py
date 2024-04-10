@@ -19,6 +19,7 @@ from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.image import funcs
 from cdl.core.io.image.base import ImageFormatBase
 from cdl.core.model.image import ImageObj
+from cdl.utils.qthelpers import CallbackWorker
 
 
 class ClassicsImageFormat(ImageFormatBase):
@@ -156,14 +157,12 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(self, filename: str, progress_callback: Callable) -> list[ImageObj]:
+    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:
             filename: File name
-            progress_callback: progress callback function (a function that takes a float
-             between 0 and 1 as argument representing the progress, and returns a
-             boolean indicating whether to cancel the operation)
+            worker: Callback worker object
 
         Returns:
             List of image objects
@@ -175,7 +174,8 @@ class AndorSIFImageFormat(ImageFormatBase):
                 obj = self.create_object(filename, index=idx)
                 obj.data = data[idx, ::]
                 objlist.append(obj)
-                if progress_callback((idx + 1) / data.shape[0]):
+                worker.set_progress((idx + 1) / data.shape[0])
+                if worker.was_canceled():
                     break
             return objlist
         obj = self.create_object(filename)

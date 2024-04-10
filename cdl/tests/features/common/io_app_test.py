@@ -20,14 +20,18 @@ from cdl.tests import cdltest_app_context
 from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
 
 
-def __test_func(
-    title: str, panel: BaseDataPanel, registry: BaseIORegistry, pattern: str
+def __testfunc(
+    title: str,
+    panel: BaseDataPanel,
+    registry: BaseIORegistry,
+    pattern: str,
+    in_folder: str,
 ) -> None:
     """Test I/O features"""
     execenv.print(f"  {title}:")
     with CDLTemporaryDirectory() as tmpdir:
         # os.startfile(tmpdir)
-        fnames = get_test_fnames(pattern)
+        fnames = get_test_fnames(pattern, in_folder)
         execenv.print("    Opening:")
         # TODO: This test does not support formats that return multiple objects
         # (e.g. SIF files with multiple images). As a consequence, it will not test
@@ -61,8 +65,8 @@ def test_io_app() -> None:
     """Run image tools test scenario"""
     with cdltest_app_context() as win:
         execenv.print("I/O application test:")
-        __test_func("Signals", win.signalpanel, SignalIORegistry, "curve_formats/*.*")
-        __test_func("Images", win.imagepanel, ImageIORegistry, "image_formats/*.*")
+        __testfunc("Signals", win.signalpanel, SignalIORegistry, "*.*", "curve_formats")
+        __testfunc("Images", win.imagepanel, ImageIORegistry, "*.*", "image_formats")
 
 
 if __name__ == "__main__":

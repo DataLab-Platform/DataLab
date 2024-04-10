@@ -9,12 +9,13 @@ DataLab I/O signal functions
 from __future__ import annotations
 
 import re
-from typing import Callable, TextIO
+from typing import TextIO
 
 import numpy as np
 import pandas as pd
 
 from cdl.utils.io import count_lines
+from cdl.utils.qthelpers import CallbackWorker
 
 
 def get_labels_units_from_dataframe(
@@ -50,7 +51,7 @@ def get_labels_units_from_dataframe(
 def read_csv_by_chunks(
     fname_or_fileobj: str | TextIO,
     nlines: int | None = None,
-    progress_callback: Callable | None = None,
+    worker: CallbackWorker | None = None,
     delimiter: str | None = None,
     header: int | None = "infer",
     skiprows: int | None = None,
@@ -67,9 +68,7 @@ def read_csv_by_chunks(
          `fname_or_fileobj` is a text stream object: counting line numbers from a
          text stream is not efficient, especially if one already has access to the
          initial text content from which the text stream was made)
-        progress_callback: progress callback function (a function that takes a float
-            between 0 and 1 as argument representing the progress, and returns a
-            boolean indicating whether to cancel the operation)
+        worker: Callback worker object
         delimiter: Delimiter
         header: Header line
         skiprows: Skip rows
@@ -80,8 +79,6 @@ def read_csv_by_chunks(
     Returns:
         DataFrame
     """
-    if progress_callback is not None:
-        progress_callback(0)
     if isinstance(fname_or_fileobj, str):
         nlines = count_lines(fname_or_fileobj)
     elif nlines is None:
@@ -101,15 +98,16 @@ def read_csv_by_chunks(
     ):
         chunks.append(chunk)
         # Compute the progression based on the number of lines read so far
-        progress = sum(len(chunk) for chunk in chunks) / nlines
-        if progress_callback is not None and progress_callback(progress):
-            break
+        if worker is not None:
+            worker.set_progress(sum(len(chunk) for chunk in chunks) / nlines)
+            if worker.was_canceled():
+                break
     return pd.concat(chunks)
 
 
 def read_csv(
     filename: str,
-    progress_callback: Callable,
+    worker: CallbackWorker,
 ) -> tuple[
     np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
 ]:
@@ -117,9 +115,7 @@ def read_csv(
 
     Args:
         filename: CSV file name
-        progress_callback: progress callback function (a function that takes a float
-         between 0 and 1 as argument representing the progress, and returns a
-         boolean indicating whether to cancel the operation)
+        worker: Callback worker object
 
     Returns:
         Tuple (xydata, xlabel, xunit, ylabels, yunits, header)
@@ -206,7 +202,7 @@ def read_csv(
     # Now we read the whole file with the correct options
     df = read_csv_by_chunks(
         filename,
-        progress_callback=progress_callback,
+        worker=worker,
         delimiter=delimiter,
         header=None if read_without_header else "infer",
         skiprows=skiprows,

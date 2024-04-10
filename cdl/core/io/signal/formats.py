@@ -6,7 +6,7 @@ DataLab I/O signal formats
 
 from __future__ import annotations
 
-from typing import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
 
@@ -15,7 +15,10 @@ from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.signal import funcs
 from cdl.core.io.signal.base import SignalFormatBase
-from cdl.core.model.signal import SignalObj
+
+if TYPE_CHECKING:
+    from cdl.core.model.signal import SignalObj
+    from cdl.utils.qthelpers import CallbackWorker
 
 
 class CSVSignalFormat(SignalFormatBase):
@@ -28,20 +31,18 @@ class CSVSignalFormat(SignalFormatBase):
         writeable=True,
     )
 
-    def read(self, filename: str, progress_callback: Callable) -> list[SignalObj]:
+    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
         """Read list of signal objects from file
 
         Args:
             filename: File name
-            progress_callback: progress callback function (a function that takes a float
-             between 0 and 1 as argument representing the progress, and returns a
-             boolean indicating whether to cancel the operation)
+            worker: Callback worker object
 
         Returns:
             List of signal objects
         """
         xydata, xlabel, xunit, ylabels, yunits, header = funcs.read_csv(
-            filename, progress_callback
+            filename, worker
         )
         if ylabels:
             # If y labels are present, we are sure that the data contains at least
@@ -64,8 +65,8 @@ class CSVSignalFormat(SignalFormatBase):
         """Write data to file
 
         Args:
-            filename (str): Name of file to write
-            obj (SignalObj): Signal object to read data from
+            filename: Name of file to write
+            obj: Signal object to read data from
         """
         funcs.write_csv(
             filename,
@@ -92,10 +93,10 @@ class NumPySignalFormat(SignalFormatBase):
         """Read data and metadata from file, write metadata to object, return xydata
 
         Args:
-            filename (str): Name of file to read
+            filename: Name of file to read
 
         Returns:
-            np.ndarray: xydata
+            NumPy array xydata
         """
         return convert_array_to_standard_type(np.load(filename))
 
@@ -103,7 +104,7 @@ class NumPySignalFormat(SignalFormatBase):
         """Write data to file
 
         Args:
-            filename (str): Name of file to write
-            obj (SignalObj): Signal object to read data from
+            filename: Name of file to write
+            obj: Signal object to read data from
         """
         np.save(filename, obj.xydata.T)

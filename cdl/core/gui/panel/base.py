@@ -35,7 +35,9 @@ from cdl.core.model.base import ResultShape, items_to_json
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
+    CallbackWorker,
     create_progress_bar,
+    qt_long_callback,
     qt_try_except,
     qt_try_loadsave_file,
     save_restore_stds,
@@ -636,17 +638,12 @@ class BaseDataPanel(AbstractPanel):
             New object or list of new objects
         """
 
-        def progress_callback(progbar: QW.QProgressDialog, ratio: float) -> bool:
-            """Progress callback"""
-            progbar.setValue(int(ratio * 100))
-            return progbar.wasCanceled()
+        def callback(worker: CallbackWorker) -> list[SignalObj] | list[ImageObj]:
+            """Callback function"""
+            return self.IO_REGISTRY.read(filename, worker)
 
-        with create_progress_bar(
-            self, _("Adding objects to workspace"), max_=100
-        ) as progress:
-            objs = self.IO_REGISTRY.read(
-                filename, lambda ratio: progress_callback(progress, ratio)
-            )
+        worker = CallbackWorker(callback)
+        objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         for obj in objs:
             obj.metadata["source"] = filename
             self.add_object(obj, set_current=obj is objs[-1])
