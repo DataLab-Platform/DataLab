@@ -8,6 +8,8 @@ Testing DataLab specific formats.
 
 # guitest: show
 
+from __future__ import annotations
+
 import os.path as osp
 
 from guidata.qthelpers import qt_app_context
