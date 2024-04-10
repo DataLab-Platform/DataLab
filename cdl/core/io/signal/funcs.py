@@ -9,7 +9,7 @@ DataLab I/O signal functions
 from __future__ import annotations
 
 import re
-from typing import Callable
+from typing import Callable, TextIO
 
 import numpy as np
 import pandas as pd
@@ -47,8 +47,9 @@ def get_labels_units_from_dataframe(
     return xlabel, ylabels, xunit, yunits
 
 
-def __read_csv_primitive(
-    filename: str,
+def read_csv_by_chunks(
+    fname_or_fileobj: str | TextIO,
+    nlines: int | None = None,
     progress_callback: Callable | None = None,
     delimiter: str | None = None,
     header: int | None = "infer",
@@ -61,7 +62,11 @@ def __read_csv_primitive(
     and reading data in chunks, using the iterator interface.
 
     Args:
-        filename: CSV file name
+        fname_or_fileobj: CSV file name or text stream object
+        nlines: Number of lines contained in file (this argument is mandatory if
+         `fname_or_fileobj` is a text stream object: counting line numbers from a
+         text stream is not efficient, especially if one already has access to the
+         initial text content from which the text stream was made)
         progress_callback: progress callback function (a function that takes a float
             between 0 and 1 as argument representing the progress, and returns a
             boolean indicating whether to cancel the operation)
@@ -75,13 +80,18 @@ def __read_csv_primitive(
     Returns:
         DataFrame
     """
-    nlines = count_lines(filename)
+    if progress_callback is not None:
+        progress_callback(0)
+    if isinstance(fname_or_fileobj, str):
+        nlines = count_lines(fname_or_fileobj)
+    elif nlines is None:
+        raise ValueError("Argument `nlines` must be passed for text streams")
     # Read data in chunks, and concatenate them at the end, thus allowing to call the
     # progress callback function at each chunk read and to return an intermediate result
     # if the operation is canceled.
     chunks = []
     for chunk in pd.read_csv(
-        filename,
+        fname_or_fileobj,
         delimiter=delimiter,
         header=header,
         skiprows=skiprows,
@@ -194,9 +204,9 @@ def read_csv(
                 header = "\n".join(header.splitlines()[:-1])
 
     # Now we read the whole file with the correct options
-    df = __read_csv_primitive(
+    df = read_csv_by_chunks(
         filename,
-        progress_callback,
+        progress_callback=progress_callback,
         delimiter=delimiter,
         header=None if read_without_header else "infer",
         skiprows=skiprows,

@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import io
 import os.path as osp
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 import guidata.dataset as gds
 import guidata.dataset.qtwidgets as gdq
@@ -31,12 +31,12 @@ from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
-from cdl.config import Conf, _
-from cdl.core.io.signal.funcs import get_labels_units_from_dataframe
+from cdl.config import _
+from cdl.core.io.signal.funcs import get_labels_units_from_dataframe, read_csv_by_chunks
 from cdl.core.model.signal import CURVESTYLES
 from cdl.obj import ImageObj, SignalObj, create_image, create_signal
 from cdl.utils.io import count_lines, read_first_n_lines
-from cdl.utils.qthelpers import create_progress_bar
+from cdl.utils.qthelpers import create_progress_bar, qt_long_callback
 from cdl.widgets.wizard import Wizard, WizardPage
 
 if TYPE_CHECKING:
@@ -355,16 +355,16 @@ class PreviewWidget(QW.QWidget):
             self.tabwidget.setCurrentIndex(idx)
 
     def set_preview_data(
-        self, df: pd.DataFrame | None, first_col_is_x: bool | None
+        self, df: pd.DataFrame | None, param: SignalImportParam | ImageImportParam
     ) -> None:
         """Set the preview data"""
-        data = df.to_numpy() if df is not None else None
+        data = df.to_numpy(np.dtype(param.dtype_str)) if df is not None else None
         if data is None or len(data.shape) not in (1, 2) or data.size == 0:
             self.__clear_preview_table(False)
         else:
             self.__clear_preview_table(True)
             if self.destination == "signal":
-                assert first_col_is_x is not None
+                assert param.first_col_is_x is not None
                 h_headers = df.columns.tolist()
             else:
                 h_headers = None
@@ -374,30 +374,35 @@ class PreviewWidget(QW.QWidget):
 def str_to_dataframe(
     raw_data: str,
     param: SignalImportParam | ImageImportParam,
+    progress_callback: Callable | None = None,
 ) -> pd.DataFrame | None:
     """Convert raw data to a DataFrame
 
     Args:
         raw_data: Raw data
         param: Import parameters
+        progress_callback: Progress callback
+        parent: Parent widget
 
     Returns:
         The DataFrame, or None if the conversion failed
     """
     if not raw_data:
         return None
-    file_obj = io.StringIO(raw_data)
-    dtype = np.dtype(param.dtype_str)
+    textstream = io.StringIO(raw_data)
+    nlines = raw_data.count("\n") + (not raw_data.endswith("\n"))
     try:
-        df = pd.read_csv(
-            file_obj,
+        df = read_csv_by_chunks(
+            textstream,
+            nlines,
+            progress_callback=progress_callback,
             delimiter=param.delimiter_choice,
             skiprows=param.skip_rows,
             nrows=param.max_rows,
             comment=param.comment_char,
-            dtype=dtype,
             header=param.header,
         )
+        df.to_numpy(np.dtype(param.dtype_str))  # To eventually raise ValueError
     except Exception:  # pylint:disable=broad-except
         return None
     # Remove rows and columns where all values are NaN in the DataFrame:
@@ -444,8 +449,22 @@ class DataPreviewPage(WizardPage):
         Returns:
             The data frame, or None if the data could not be converted
         """
-        source_text = self.source_page.get_source_text(preview=False)
-        return str_to_dataframe(source_text, self.param)
+
+        def progress_callback(progbar: QW.QProgressDialog, ratio: float) -> bool:
+            """Progress callback"""
+            progbar.setValue(int(ratio * 100))
+            QW.QApplication.processEvents()
+            return progbar.wasCanceled()
+
+        # TODO [P0] Use `qt_long_callback` instead of `create_progress_bar`
+        with create_progress_bar(self, _("Reading data"), max_=100) as progress:
+            source_text = self.source_page.get_source_text(preview=False)
+            df = str_to_dataframe(
+                source_text,
+                self.param,
+                lambda ratio: progress_callback(progress, ratio),
+            )
+        return df
 
     def update_preview(self) -> None:
         """Update the preview"""
@@ -454,11 +473,8 @@ class DataPreviewPage(WizardPage):
         self.preview_widget.set_raw_data(raw_data)
         # Preview
         df = str_to_dataframe(raw_data, self.param)
-        first_col_is_x = None
-        if isinstance(self.param, SignalImportParam):
-            first_col_is_x = self.param.first_col_is_x
         if not self.__quick_update:
-            self.preview_widget.set_preview_data(df, first_col_is_x=first_col_is_x)
+            self.preview_widget.set_preview_data(df, param=self.param)
         self.__preview_df = df
         self.set_valid(df is not None)
 
@@ -549,6 +565,42 @@ class GraphicalRepresentationPage(WizardPage):
         """Return the objects"""
         return [obj for obj, item in self.__objitmlist if item.isVisible()]
 
+    def __plot_signal(
+        self,
+        x: np.ndarray,
+        y: np.ndarray,
+        title: str,
+        labels: tuple[str, str] | None = None,
+        units: tuple[str, str] | None = None,
+        zorder: int | None = None,
+    ) -> None:
+        """Plot signals"""
+        obj = create_signal(title, x=x, y=y, labels=labels, units=units)
+        with CURVESTYLES.suspend():
+            # TODO: [P0] Find a way to cycle through the colors
+            # without affecting the "Signal View" mechanism.
+            # Here, we are simply suspending this mechanism to avoid
+            # the color cycling: this is not a good solution because
+            # all curves will have the same color.
+            item = obj.make_item()
+        plot = self.plot_widget.get_plot()
+        plot.add_item(item, z=zorder)
+        maxpoints = 20000
+        if len(x) >= 2 * maxpoints:
+            item.param.use_dsamp = True
+            item.param.dsamp_factor = len(x) // maxpoints
+        self.__objitmlist.append((obj, item))
+
+    def __show_image(self, data: np.ndarray) -> None:
+        """Show image"""
+        obj = create_image("", data)
+        item = obj.make_item()
+        plot = self.plot_widget.get_plot()
+        plot.add_item(item)
+        self.__objitmlist.append((obj, item))
+        plot.set_active_item(item)
+        item.unselect()
+
     def initialize_page(self) -> None:
         """Initialize the page"""
         df = self.data_page.get_dataframe()
@@ -557,21 +609,17 @@ class GraphicalRepresentationPage(WizardPage):
         param = self.data_page.param
         plot = self.plot_widget.get_plot()
         plot.del_all_items()
+        self.__objitmlist = []
         if self.destination == "signal":
             xydata = data.T
             x = np.arange(len(xydata[0]))
             if len(xydata) == 1:
-                obj = create_signal("", x=x, y=xydata[0])
-                with CURVESTYLES.suspend():
-                    item = obj.make_item()
-                plot.add_item(item)
-                self.__objitmlist = [(obj, item)]
+                self.__plot_signal(x, xydata[0], "")
             else:
                 xlabel, ylabels, xunit, yunits = get_labels_units_from_dataframe(df)
                 if param.first_col_is_x:
                     x = xydata[0]
                     plot.set_axis_title("bottom", xlabel)
-                self.__objitmlist = []
                 zorder = 1000
                 with create_progress_bar(
                     self, _("Adding data to the plot"), max_=len(xydata) - 1
@@ -581,31 +629,18 @@ class GraphicalRepresentationPage(WizardPage):
                         if progress.wasCanceled():
                             break
                         yidx = ycol if param.first_col_is_x else ycol - 1
-                        obj = create_signal(
+                        self.__plot_signal(
+                            x,
+                            xydata[yidx],
                             ylabels[ycol - 1],
-                            x=x,
-                            y=xydata[yidx],
                             labels=(xlabel, ylabels[ycol - 1]),
                             units=(xunit, yunits[ycol - 1]),
+                            zorder=zorder,
                         )
-                        # TODO: [P0] Find a way to cycle through the colors
-                        # without affecting the "Signal View" mechanism.
-                        # Here, we are simply suspending this mechanism to avoid
-                        # the color cycling: this is not a good solution because
-                        # all curves will have the same color.
-                        with CURVESTYLES.suspend():
-                            item = obj.make_item()
-                        plot.add_item(item, z=zorder)
                         zorder -= 1
-                        self.__objitmlist.append((obj, item))
                         QW.QApplication.processEvents()
         else:
-            obj = create_image("", data)
-            item = obj.make_item()
-            plot.add_item(item)
-            self.__objitmlist = [(obj, item)]
-            plot.set_active_item(item)
-            item.unselect()
+            self.__show_image(data)
         plot.do_autoscale()
         self.items_changed(plot)
         return super().initialize_page()
