@@ -10,6 +10,8 @@ Testing DataLab specific formats.
 
 import os.path as osp
 
+from guidata.qthelpers import qt_app_context
+
 from cdl.core.io.base import BaseIORegistry
 from cdl.core.io.image import ImageIORegistry
 from cdl.core.io.signal import SignalIORegistry
@@ -17,7 +19,7 @@ from cdl.core.model.image import ImageObj
 from cdl.core.model.signal import SignalObj
 from cdl.env import execenv
 from cdl.plugins import discover_plugins
-from cdl.utils.qthelpers import CallbackWorker, long_callback
+from cdl.utils.qthelpers import CallbackWorker, qt_long_callback
 from cdl.utils.strings import reduce_path
 from cdl.utils.tests import CDLTemporaryDirectory, get_test_fnames
 
@@ -41,8 +43,11 @@ def __testfunc(
 
             worker = CallbackWorker(callback)
             label = f"    Opening {reduce_path(fname)}"
+            execenv.print(label + ": ", end="")
+            worker.SIG_PROGRESS_UPDATE.connect(lambda value: execenv.print(">", end=""))
             try:
-                obj = long_callback(label, worker, fname.endswith(".sif"))
+                obj = qt_long_callback(None, label, worker, fname.endswith(".sif"))
+                execenv.print("Canceled" if worker.was_canceled() else "OK")
                 objects[fname] = obj
             except NotImplementedError:
                 execenv.print("Skipped (not implemented)")
@@ -63,8 +68,9 @@ def __testfunc(
 def test_io2():
     """I/O test"""
     execenv.print("I/O unit test:")
-    __testfunc("Signals", SignalIORegistry, "*.*", "curve_formats")
-    __testfunc("Images", ImageIORegistry, "*.*", "image_formats")
+    with qt_app_context():
+        __testfunc("Signals", SignalIORegistry, "*.*", "curve_formats")
+        __testfunc("Images", ImageIORegistry, "*.*", "image_formats")
 
 
 if __name__ == "__main__":

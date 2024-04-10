@@ -302,35 +302,6 @@ def qt_long_callback(
     return result
 
 
-# For testing purposes:
-def long_callback(label: str, worker: CallbackWorker, progress: bool) -> Any:
-    """Handle long callbacks: run in a separate thread while showing a busy bar
-
-    Args:
-        label: Progress dialog title
-        worker: Callback worker handling the function execution in a separate thread
-        progress: Whether the progress feature is handled or not. If True, a progress
-         bar and a 'Cancel' button are shown on the progress dialog. The progress value
-         is updated by the `worker.set_progress` method (which takes a float between
-         0.0 and 1.0). Moreover, if `progress` is True, we wait for the callback
-         function to return (it means that the callback function must implement a
-         mechanism to return an intermediate result or `None` if the
-         `worker.was_canceled` method returns True).
-
-    Returns:
-        Callback result
-    """
-    app = QC.QCoreApplication([])
-    if progress:
-        worker.SIG_PROGRESS_UPDATE.connect(lambda value: execenv.print(">", end=""))
-    worker.start()
-    execenv.print(label + ": ", end="")
-    worker.finished.connect(app.quit)
-    app.exec()
-    execenv.print("Canceled" if worker.was_canceled() else "OK")
-    return worker.get_result()
-
-
 def qt_handle_error_message(widget: QW.QWidget, message: str, context: str = None):
     """Handles application (QWidget) error message"""
     traceback.print_exc()
