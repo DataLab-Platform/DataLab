@@ -19,7 +19,7 @@ from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
 
-from cdl.utils import conf, tests
+from cdl.utils import conf
 
 CONF_VERSION = "0.2.0"
 
@@ -321,7 +321,6 @@ def reset():
 
 
 initialize()
-tests.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 PLOTPY_DEFAULTS = {
