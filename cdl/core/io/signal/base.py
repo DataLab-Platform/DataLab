@@ -12,6 +12,7 @@ import abc
 
 import numpy as np
 
+from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import CallbackWorker
@@ -20,6 +21,8 @@ from cdl.utils.strings import reduce_path
 
 class SignalIORegistry(BaseIORegistry):
     """Metaclass for registering signal I/O handler classes"""
+
+    REGISTRY_INFO: str = _("Signal I/O formats")
 
     _io_format_instances: list[SignalFormatBase] = []
 

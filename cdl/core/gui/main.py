@@ -1518,7 +1518,6 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 "• " + _("Process isolation:") + " " + pistate,
             ]
         )
-        pinfos = PluginRegistry.get_plugin_infos()
         created_by = _("Created by")
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
         cprght = "2023 DataLab Platform Developers"
@@ -1527,7 +1526,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             _("About") + " " + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}
               <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {cprght}
-              <p>{adv_conf}<br><br>{pinfos}""",
+              <p>{adv_conf}""",
         )
 
     def __edit_settings(self) -> None:

@@ -30,7 +30,6 @@ from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
-from cdl.core.io.base import IOAction
 from cdl.core.model.base import ResultShape, items_to_json
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
@@ -669,7 +668,7 @@ class BaseDataPanel(AbstractPanel):
             return []
         if filenames is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
-            filters = self.IO_REGISTRY.get_filters(IOAction.LOAD)
+            filters = self.IO_REGISTRY.get_read_filters()
             with save_restore_stds():
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         objs = []
@@ -695,7 +694,7 @@ class BaseDataPanel(AbstractPanel):
             filename = filenames[index]
             if filename is None:
                 basedir = Conf.main.base_dir.get()
-                filters = self.IO_REGISTRY.get_filters(IOAction.SAVE)
+                filters = self.IO_REGISTRY.get_write_filters()
                 with save_restore_stds():
                     filename, _filt = getsavefilename(
                         self, _("Save as"), basedir, filters

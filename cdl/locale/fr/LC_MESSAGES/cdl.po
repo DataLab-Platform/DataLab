@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-10 17:29+0200\n"
+"POT-Creation-Date: 2024-04-11 11:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,7 +53,7 @@ msgid ""
 "For convenience, this item accepts a 2D NumPy array, a list of list of "
 "numbers, or None. In the end, the data is converted to a 2D NumPy array of "
 "integers (if not None)."
-msgstr ""
+msgstr "Pour plus de commodité, cet élément accepte un tableau NumPy 2D, une liste de listes de nombres, ou None. En fin de compte, les données sont converties en un tableau NumPy 2D d'entiers (si non nul)."
 
 #: cdl\core\computation\base.py:94
 msgid "Single object"
@@ -179,13 +179,13 @@ msgid "Operation"
 msgstr "Opération"
 
 #: cdl\core\computation\image\__init__.py:556 cdl\core\model\image.py:797
-#: cdl\widgets\textimport.py:208 cdl\widgets\textimport.py:231
+#: cdl\widgets\textimport.py:209 cdl\widgets\textimport.py:232
 msgid "Data type"
 msgstr "Type de données"
 
 #: cdl\core\computation\image\__init__.py:558
 #: cdl\core\computation\image\__init__.py:887
-#: cdl\core\computation\signal.py:346 cdl\widgets\textimport.py:233
+#: cdl\core\computation\signal.py:346 cdl\widgets\textimport.py:234
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
@@ -950,7 +950,7 @@ msgstr "Supprimer"
 msgid "Remove selected %s"
 msgstr "Supprimer l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:458 cdl\core\gui\panel\base.py:501
+#: cdl\core\gui\actionhandler.py:458 cdl\core\gui\panel\base.py:500
 msgid "Delete all"
 msgstr "Supprimer tout"
 
@@ -974,7 +974,7 @@ msgstr "Coller les métadonnées"
 msgid "Paste metadata into selected %s"
 msgstr "Coller les métadonnées dans l'objet %s sélectionné"
 
-#: cdl\core\gui\actionhandler.py:483 cdl\core\gui\panel\base.py:754
+#: cdl\core\gui\actionhandler.py:483 cdl\core\gui\panel\base.py:748
 msgid "Import metadata"
 msgstr "Importer les métadonnées"
 
@@ -982,7 +982,7 @@ msgstr "Importer les métadonnées"
 msgid "Import metadata into %s"
 msgstr "Importer les métadonnées dans l'objet %s"
 
-#: cdl\core\gui\actionhandler.py:491 cdl\core\gui\panel\base.py:774
+#: cdl\core\gui\actionhandler.py:491 cdl\core\gui\panel\base.py:768
 msgid "Export metadata"
 msgstr "Exporter les métadonnées"
 
@@ -1153,11 +1153,11 @@ msgstr "Extraction de ROI"
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1019
+#: cdl\core\gui\actionhandler.py:681 cdl\core\gui\panel\base.py:1013
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:688 cdl\core\gui\panel\base.py:1107
+#: cdl\core\gui\actionhandler.py:688 cdl\core\gui\panel\base.py:1101
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
@@ -1263,7 +1263,7 @@ msgstr ""
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:803 cdl\core\gui\main.py:1552
+#: cdl\core\gui\actionhandler.py:803 cdl\core\gui\main.py:1551
 #: cdl\core\gui\roieditor.py:235
 msgid "image"
 msgstr "image"
@@ -1608,7 +1608,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: cdl\core\gui\h5io.py:98 cdl\core\gui\h5io.py:114 cdl\core\gui\main.py:477
-#: cdl\core\gui\main.py:1310 cdl\plugins.py:159 cdl\widgets\textimport.py:493
+#: cdl\core\gui\main.py:1310 cdl\plugins.py:179 cdl\widgets\textimport.py:501
 msgid "Warning"
 msgstr "Attention"
 
@@ -1633,7 +1633,7 @@ msgstr "# ==> Impossible d'exécuter la macro '%s'"
 msgid "Macro Python interpreter failed to start!"
 msgstr "Le démarrage de l'interpréteur Python des macros a échoué !"
 
-#: cdl\core\gui\macroeditor.py:287 cdl\plugins.py:163 cdl\widgets\wizard.py:257
+#: cdl\core\gui\macroeditor.py:287 cdl\plugins.py:183 cdl\widgets\wizard.py:257
 msgid "Error"
 msgstr "Erreur"
 
@@ -1689,7 +1689,7 @@ msgstr ""
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:528 cdl\core\gui\main.py:543 cdl\plugins.py:167
+#: cdl\core\gui\main.py:528 cdl\core\gui\main.py:543 cdl\plugins.py:187
 msgid "Information"
 msgstr "Information"
 
@@ -1793,7 +1793,7 @@ msgstr "Cacher la fenêtre"
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:798 cdl\core\gui\main.py:1598
+#: cdl\core\gui\main.py:798 cdl\core\gui\main.py:1597
 msgid "Quit"
 msgstr "Quitter"
 
@@ -1851,8 +1851,8 @@ msgstr "Panneau Signal"
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:908 cdl\widgets\textimport.py:71
-#: cdl\widgets\textimport.py:81 cdl\widgets\wizard.py:221
+#: cdl\core\gui\main.py:908 cdl\widgets\textimport.py:72
+#: cdl\widgets\textimport.py:82 cdl\widgets\wizard.py:221
 msgid "File"
 msgstr "Fichier"
 
@@ -1905,7 +1905,7 @@ msgstr "Tester un plantage/une erreur Python"
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:976 cdl\widgets\instconfviewer.py:84
+#: cdl\core\gui\main.py:976 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
@@ -1946,7 +1946,7 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1323 cdl\core\gui\panel\base.py:679
+#: cdl\core\gui\main.py:1323 cdl\core\gui\panel\base.py:673
 #: cdl\core\gui\panel\macro.py:557 cdl\widgets\h5browser.py:616
 msgid "Open"
 msgstr "Ouvrir"
@@ -1983,23 +1983,23 @@ msgstr "Serveur XML-RPC :"
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1522
+#: cdl\core\gui\main.py:1521
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1523
+#: cdl\core\gui\main.py:1522
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1527
+#: cdl\core\gui\main.py:1526
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1547
+#: cdl\core\gui\main.py:1546
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1548
+#: cdl\core\gui\main.py:1547
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -2007,7 +2007,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1599
+#: cdl\core\gui\main.py:1598
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2019,31 +2019,31 @@ msgstr ""
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
-#: cdl\core\gui\panel\base.py:80
+#: cdl\core\gui\panel\base.py:79
 msgid "Properties"
 msgstr "Propriétés"
 
-#: cdl\core\gui\panel\base.py:104
+#: cdl\core\gui\panel\base.py:103
 msgid "Computing parameters"
 msgstr "Paramètres de calcul"
 
-#: cdl\core\gui\panel\base.py:471
+#: cdl\core\gui\panel\base.py:470
 msgid "Delete group(s)"
 msgstr "Supprimer le(s) groupe(s)"
 
-#: cdl\core\gui\panel\base.py:472
+#: cdl\core\gui\panel\base.py:471
 msgid "Are you sure you want to delete the selected group(s)?"
 msgstr "Êtes-vous sûr de vouloir supprimer le(s) groupe(s) sélectionné(s) ?"
 
-#: cdl\core\gui\panel\base.py:502
+#: cdl\core\gui\panel\base.py:501
 msgid "Do you want to delete all objects (%s)?"
 msgstr "Souhaitez-vous supprimer tous les objets (%s) ?"
 
-#: cdl\core\gui\panel\base.py:526
+#: cdl\core\gui\panel\base.py:525
 msgid "Delete metadata"
 msgstr "Supprimer les métadonnées"
 
-#: cdl\core\gui\panel\base.py:527
+#: cdl\core\gui\panel\base.py:526
 msgid ""
 "Some selected objects have regions of interest.<br>Do you want to delete "
 "them as well?"
@@ -2051,48 +2051,48 @@ msgstr ""
 "Certains objets sélectionnés ont des régions d'intérêt.<br>Souhaitez-vous "
 "les supprimer également ?"
 
-#: cdl\core\gui\panel\base.py:577
+#: cdl\core\gui\panel\base.py:576
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: cdl\core\gui\panel\base.py:577 cdl\core\gui\panel\base.py:586
+#: cdl\core\gui\panel\base.py:576 cdl\core\gui\panel\base.py:585
 msgid "Group name:"
 msgstr "Nom du groupe :"
 
-#: cdl\core\gui\panel\base.py:586
+#: cdl\core\gui\panel\base.py:585
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: cdl\core\gui\panel\base.py:646 cdl\core\gui\panel\base.py:736
+#: cdl\core\gui\panel\base.py:640 cdl\core\gui\panel\base.py:730
 msgid "Adding objects to workspace"
 msgstr "Ajout d'objets à l'espace de travail"
 
-#: cdl\core\gui\panel\base.py:706 cdl\core\gui\panel\macro.py:537
+#: cdl\core\gui\panel\base.py:700 cdl\core\gui\panel\macro.py:537
 msgid "Save as"
 msgstr "Enregistrer sous"
 
-#: cdl\core\gui\panel\base.py:814
+#: cdl\core\gui\panel\base.py:808
 msgid "Annotations"
 msgstr "Annotations"
 
-#: cdl\core\gui\panel\base.py:919 cdl\core\gui\plothandler.py:285
+#: cdl\core\gui\panel\base.py:913 cdl\core\gui\plothandler.py:285
 msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
-#: cdl\core\gui\panel\base.py:978 cdl\core\gui\roieditor.py:210
+#: cdl\core\gui\panel\base.py:972 cdl\core\gui\roieditor.py:210
 #: cdl\core\model\base.py:760
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1020
+#: cdl\core\gui\panel\base.py:1014
 msgid "Show results obtained from previous computations"
 msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemment"
 
-#: cdl\core\gui\panel\base.py:1047
+#: cdl\core\gui\panel\base.py:1041
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1049
+#: cdl\core\gui\panel\base.py:1043
 msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2102,23 +2102,23 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
-#: cdl\core\gui\panel\base.py:1070 cdl\core\gui\processor\base.py:481
+#: cdl\core\gui\panel\base.py:1064 cdl\core\gui\processor\base.py:481
 msgid "Results"
 msgstr "Résultats"
 
-#: cdl\core\gui\panel\base.py:1087
+#: cdl\core\gui\panel\base.py:1081
 msgid "Indexes"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1095
+#: cdl\core\gui\panel\base.py:1089
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1097
+#: cdl\core\gui\panel\base.py:1091
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1101
+#: cdl\core\gui\panel\base.py:1095
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on the results under the form of '%s'."
@@ -2211,7 +2211,7 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:697
+#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:705
 msgid "Parameters"
 msgstr "Paramètres"
 
@@ -2917,13 +2917,21 @@ msgstr ""
 "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de "
 "dialogue."
 
-#: cdl\core\io\base.py:71
+#: cdl\core\io\base.py:87
 msgid "All supported files"
 msgstr "Tous les fichiers pris en charge"
 
-#: cdl\core\io\image\formats.py:88
+#: cdl\core\io\image\base.py:23
+msgid "Image I/O formats"
+msgstr "Formats d'entrée/sortie d'images"
+
+#: cdl\core\io\image\formats.py:87
 msgid "Text files"
 msgstr "Fichiers texte"
+
+#: cdl\core\io\signal\base.py:25
+msgid "Signal I/O formats"
+msgstr "Formats d'entrée/sortie de signaux"
 
 #: cdl\core\io\signal\formats.py:28
 msgid "CSV files"
@@ -3007,8 +3015,8 @@ msgstr "Titre de l'image"
 #: cdl\core\model\image.py:383 cdl\core\model\image.py:387
 #: cdl\core\model\image.py:391 cdl\core\model\image.py:790
 #: cdl\core\model\signal.py:152 cdl\core\model\signal.py:156
-#: cdl\core\model\signal.py:629 cdl\widgets\textimport.py:649
-#: cdl\widgets\textimport.py:659
+#: cdl\core\model\signal.py:629 cdl\widgets\textimport.py:657
+#: cdl\widgets\textimport.py:667
 msgid "Title"
 msgstr "Titre"
 
@@ -3176,19 +3184,23 @@ msgstr "Axe Z en échelle logarithmique"
 msgid "Process signal"
 msgstr "Traiter le signal"
 
-#: cdl\plugins.py:107
+#: cdl\plugins.py:119
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
 
-#: cdl\plugins.py:114
+#: cdl\plugins.py:127
 msgid "No plugins available"
 msgstr "Aucun plugin disponible"
 
-#: cdl\plugins.py:116
+#: cdl\plugins.py:129
 msgid "Plugins are disabled (see DataLab settings)"
 msgstr "Les plugins sont désactivés (voir les préférences de DataLab)"
 
-#: cdl\plugins.py:174
+#: cdl\plugins.py:133 cdl\widgets\status.py:132
+msgid "Plugins:"
+msgstr "Plugins :"
+
+#: cdl\plugins.py:194
 msgid "Question"
 msgstr "Question"
 
@@ -3555,13 +3567,17 @@ msgstr "Afficher uniquement les données prises en charge"
 msgid "Show values"
 msgstr "Afficher les valeurs"
 
-#: cdl\widgets\instconfviewer.py:90 cdl\widgets\instconfviewer.py:93
+#: cdl\widgets\instconfviewer.py:97 cdl\widgets\instconfviewer.py:100
 msgid "Installation configuration"
 msgstr "Configuration d'installation"
 
-#: cdl\widgets\instconfviewer.py:99
+#: cdl\widgets\instconfviewer.py:106
 msgid "User configuration"
 msgstr "Configuration utilisateur"
+
+#: cdl\widgets\instconfviewer.py:109 cdl\widgets\instconfviewer.py:112
+msgid "Plugins and I/O features"
+msgstr "Plugins et fonctionnalités d'entrée/sortie"
 
 #: cdl\widgets\logviewer.py:63
 msgid "Log files were generated during current session."
@@ -3603,153 +3619,149 @@ msgstr "Seuil d'alarme :"
 msgid "Memory:"
 msgstr "Mémoire :"
 
-#: cdl\widgets\status.py:132
-msgid "Plugins:"
-msgstr "Plugins :"
-
 #: cdl\widgets\status.py:166
 msgid "XML-RPC:"
 msgstr "XML-RPC :"
 
-#: cdl\widgets\textimport.py:70 cdl\widgets\textimport.py:108
+#: cdl\widgets\textimport.py:71 cdl\widgets\textimport.py:109
 msgid "Source"
 msgstr "Source"
 
-#: cdl\widgets\textimport.py:71 cdl\widgets\wizard.py:220
+#: cdl\widgets\textimport.py:72 cdl\widgets\wizard.py:220
 msgid "Clipboard"
 msgstr "Presse-papiers"
 
-#: cdl\widgets\textimport.py:73
+#: cdl\widgets\textimport.py:74
 msgid "Source of the data"
 msgstr "Source des données"
 
-#: cdl\widgets\textimport.py:84
+#: cdl\widgets\textimport.py:85
 msgid "File containing the data"
 msgstr "Fichier contenant les données"
 
-#: cdl\widgets\textimport.py:89 cdl\widgets\textimport.py:97
+#: cdl\widgets\textimport.py:90 cdl\widgets\textimport.py:98
 msgid "Preview parameters"
 msgstr "Paramètres de l'aperçu"
 
-#: cdl\widgets\textimport.py:91
+#: cdl\widgets\textimport.py:92
 msgid "Maximum Number of Rows"
 msgstr "Nombre maximum de lignes"
 
-#: cdl\widgets\textimport.py:95
+#: cdl\widgets\textimport.py:96
 msgid "Maximum number of rows to display"
 msgstr "Nombre maximum de lignes à afficher"
 
-#: cdl\widgets\textimport.py:109
+#: cdl\widgets\textimport.py:110
 msgid "Select the source of the data:"
 msgstr "Sélectionner la source des données :"
 
-#: cdl\widgets\textimport.py:112
+#: cdl\widgets\textimport.py:113
 msgid "Source Parameters"
 msgstr "Paramètres de la source"
 
-#: cdl\widgets\textimport.py:161
+#: cdl\widgets\textimport.py:162
 msgid "Delimiter"
 msgstr "Délimiteur"
 
-#: cdl\widgets\textimport.py:165
+#: cdl\widgets\textimport.py:166
 msgid "Tab"
 msgstr "Tabulation"
 
-#: cdl\widgets\textimport.py:166
+#: cdl\widgets\textimport.py:167
 msgid "Space"
 msgstr "Espace"
 
-#: cdl\widgets\textimport.py:168
+#: cdl\widgets\textimport.py:169
 msgid "Column delimiter character"
 msgstr "Caractère délimiteur de colonne"
 
-#: cdl\widgets\textimport.py:171
+#: cdl\widgets\textimport.py:172
 msgid "Comments"
 msgstr "Commentaires"
 
-#: cdl\widgets\textimport.py:173
+#: cdl\widgets\textimport.py:174
 msgid "Character that indicates a comment line"
 msgstr "Caractère indiquant une ligne de commentaire"
 
-#: cdl\widgets\textimport.py:176
+#: cdl\widgets\textimport.py:177
 msgid "Rows to Skip"
 msgstr "Lignes à sauter"
 
-#: cdl\widgets\textimport.py:178
+#: cdl\widgets\textimport.py:179
 msgid ""
 "Number of rows to skip at the beginning of the file (including comments)"
 msgstr ""
 "Nombre de lignes à sauter au début du fichier (y compris les commentaires)"
 
-#: cdl\widgets\textimport.py:183
+#: cdl\widgets\textimport.py:184
 msgid "Max. nb of rows"
 msgstr "Nb max. de lignes"
 
-#: cdl\widgets\textimport.py:187
+#: cdl\widgets\textimport.py:188
 msgid "Maximum number of rows to import"
 msgstr "Nombre maximum de lignes à importer"
 
-#: cdl\widgets\textimport.py:190
+#: cdl\widgets\textimport.py:191
 msgid "Header"
 msgstr "En-tête"
 
-#: cdl\widgets\textimport.py:191
+#: cdl\widgets\textimport.py:192
 msgid "First row"
 msgstr "Première ligne"
 
-#: cdl\widgets\textimport.py:191
+#: cdl\widgets\textimport.py:192
 msgid "Infer"
 msgstr "Inférer"
 
-#: cdl\widgets\textimport.py:191
+#: cdl\widgets\textimport.py:192
 msgid "None"
 msgstr "Aucun"
 
-#: cdl\widgets\textimport.py:193
+#: cdl\widgets\textimport.py:194
 msgid "Row index to use as the column names"
 msgstr "Indice de ligne à utiliser comme noms de colonnes"
 
-#: cdl\widgets\textimport.py:196
+#: cdl\widgets\textimport.py:197
 msgid "Transpose"
 msgstr "Transposer"
 
-#: cdl\widgets\textimport.py:198
+#: cdl\widgets\textimport.py:199
 msgid "Transpose the data (swap rows and columns)"
 msgstr "Transposer les données (échanger les lignes et les colonnes)"
 
-#: cdl\widgets\textimport.py:210
+#: cdl\widgets\textimport.py:211
 msgid "Output signal data type."
 msgstr "Type de données du signal de sortie."
 
-#: cdl\widgets\textimport.py:214
+#: cdl\widgets\textimport.py:215
 msgid "First Column is X"
 msgstr "La première colonne est X"
 
-#: cdl\widgets\textimport.py:325
+#: cdl\widgets\textimport.py:326
 msgid "Raw Data"
 msgstr "Données brutes"
 
-#: cdl\widgets\textimport.py:330
+#: cdl\widgets\textimport.py:331
 msgid "Preview"
 msgstr "Aperçu"
 
-#: cdl\widgets\textimport.py:428
+#: cdl\widgets\textimport.py:429
 msgid "Data Preview"
 msgstr "Aperçu des données"
 
-#: cdl\widgets\textimport.py:429
+#: cdl\widgets\textimport.py:430
 msgid "Preview and modify the import settings:"
 msgstr "Aperçu et modification des paramètres d'importation :"
 
-#: cdl\widgets\textimport.py:432
+#: cdl\widgets\textimport.py:433
 msgid "Import Parameters"
 msgstr "Paramètres d'importation"
 
-#: cdl\widgets\textimport.py:459
+#: cdl\widgets\textimport.py:467
 msgid "Reading data"
 msgstr "Lecture des données"
 
-#: cdl\widgets\textimport.py:494
+#: cdl\widgets\textimport.py:502
 msgid ""
 "The number of signals to import is very high (%d).\n"
 "This may be an error.\n"
@@ -3761,67 +3773,67 @@ msgstr ""
 "\n"
 "Etes-vous sûr de vouloir continuer ?"
 
-#: cdl\widgets\textimport.py:517
+#: cdl\widgets\textimport.py:525
 msgid "Graphical Representation"
 msgstr "Représentation graphique"
 
-#: cdl\widgets\textimport.py:518
+#: cdl\widgets\textimport.py:526
 msgid "Graphical representation of the imported data"
 msgstr "Représentation graphique des données importées"
 
-#: cdl\widgets\textimport.py:523
+#: cdl\widgets\textimport.py:531
 msgid "Unselect the %s that you do not want to import:"
 msgstr "Désélectionner les %s que vous ne voulez pas importer :"
 
-#: cdl\widgets\textimport.py:524
+#: cdl\widgets\textimport.py:532
 msgid "images"
 msgstr "images"
 
-#: cdl\widgets\textimport.py:524
+#: cdl\widgets\textimport.py:532
 msgid "signals"
 msgstr "signaux"
 
-#: cdl\widgets\textimport.py:527
+#: cdl\widgets\textimport.py:535
 msgid "Select all"
 msgstr "Tout sélectionner"
 
-#: cdl\widgets\textimport.py:615
+#: cdl\widgets\textimport.py:623
 msgid "Adding data to the plot"
 msgstr "Ajout des données au graphique"
 
-#: cdl\widgets\textimport.py:650 cdl\widgets\textimport.py:660
+#: cdl\widgets\textimport.py:658 cdl\widgets\textimport.py:668
 msgid "X label"
 msgstr "Titre X"
 
-#: cdl\widgets\textimport.py:651 cdl\widgets\textimport.py:661
+#: cdl\widgets\textimport.py:659 cdl\widgets\textimport.py:669
 msgid "Y label"
 msgstr "Titre Y"
 
-#: cdl\widgets\textimport.py:652 cdl\widgets\textimport.py:663
+#: cdl\widgets\textimport.py:660 cdl\widgets\textimport.py:671
 msgid "X unit"
 msgstr "Unité X"
 
-#: cdl\widgets\textimport.py:653 cdl\widgets\textimport.py:664
+#: cdl\widgets\textimport.py:661 cdl\widgets\textimport.py:672
 msgid "Y unit"
 msgstr "Unité Y"
 
-#: cdl\widgets\textimport.py:662
+#: cdl\widgets\textimport.py:670
 msgid "Z label"
 msgstr "Titre Z"
 
-#: cdl\widgets\textimport.py:665
+#: cdl\widgets\textimport.py:673
 msgid "Z unit"
 msgstr "Unité Z"
 
-#: cdl\widgets\textimport.py:692
+#: cdl\widgets\textimport.py:700
 msgid "Labels and units"
 msgstr "Titres et unités"
 
-#: cdl\widgets\textimport.py:693
+#: cdl\widgets\textimport.py:701
 msgid "Set the labels and units for the imported data"
 msgstr "Définir les titres et unités pour les données importées"
 
-#: cdl\widgets\textimport.py:703
+#: cdl\widgets\textimport.py:711
 msgid ""
 "The following title, labels and units will be applied to the data."
 "<br><br><i><u>Note</u>: Leave empty the labels and units to keep the default "
@@ -3832,15 +3844,15 @@ msgstr ""
 "conserver les valeurs par défaut (c'est-à-dire les valeurs qui ont été "
 "déduites des données)."
 
-#: cdl\widgets\textimport.py:727
+#: cdl\widgets\textimport.py:735
 msgid "clipboard"
 msgstr "presse-papiers"
 
-#: cdl\widgets\textimport.py:730
+#: cdl\widgets\textimport.py:738
 msgid "Imported from:"
 msgstr "Importer depuis :"
 
-#: cdl\widgets\textimport.py:750
+#: cdl\widgets\textimport.py:758
 msgid "DataLab Import Wizard"
 msgstr "Assistant d'importation de DataLab"
 

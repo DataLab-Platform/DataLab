@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import dataclasses
 import enum
+import os
 import os.path as osp
 import re
 
@@ -28,6 +29,8 @@ class IOAction(enum.Enum):
 #  pylint: disable=bad-mcs-classmethod-argument
 class BaseIORegistry(type):
     """Metaclass for registering I/O handler classes"""
+
+    REGISTRY_INFO: str = ""  # Registry info, override in subclasses
 
     _io_format_instances: list[FormatBase] = []
 
@@ -49,6 +52,19 @@ class BaseIORegistry(type):
             List of I/O format handlers
         """
         return cls._io_format_instances
+
+    @classmethod
+    def get_format_infos(cls) -> str:
+        """Return I/O format info
+
+        Returns:
+            Text description for all I/O formats
+        """
+        text = f"{cls.REGISTRY_INFO}:{os.linesep}"
+        indent = " " * 4
+        finfos = os.linesep.join([str(fmt.info) for fmt in cls.get_formats()])
+        text += os.linesep.join([indent + line for line in finfos.splitlines()])
+        return text
 
     @classmethod
     def get_all_filters(cls, action: IOAction) -> str:
@@ -188,6 +204,14 @@ class FormatInfo:
     readable: bool = False  # True if format can be read
     writeable: bool = False  # True if format can be written
     requires: list[str] = None  # e.g. ["foobar"] if format requires foobar package
+
+    def __str__(self) -> str:
+        """Return string representation of format info"""
+        return f"""{self.name}:
+    Extensions: {self.extensions}
+    Readable:   {'Yes' if self.readable else 'No'}
+    Writeable:  {'Yes' if self.writeable else 'No'}
+    Requires:   {', '.join(self.requires) if self.requires else 'None'}"""
 
 
 class FormatBase:

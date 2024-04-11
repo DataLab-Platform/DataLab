@@ -10,6 +10,7 @@ import abc
 
 import numpy as np
 
+from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.image import ImageObj, create_image
 from cdl.utils.qthelpers import CallbackWorker
@@ -18,6 +19,8 @@ from cdl.utils.strings import reduce_path
 
 class ImageIORegistry(BaseIORegistry):
     """Metaclass for registering image I/O handler classes"""
+
+    REGISTRY_INFO: str = _("Image I/O formats")
 
     _io_format_instances: list[ImageFormatBase] = []
 
