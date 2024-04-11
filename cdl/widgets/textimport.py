@@ -443,19 +443,26 @@ class DataPreviewPage(WizardPage):
         )
         self.add_to_layout(self.preview_widget)
 
+    def read_data_callback(self, worker: CallbackWorker) -> pd.DataFrame:
+        """Read data callback
+
+        Args:
+            worker: Callback worker object
+
+        Returns:
+            The DataFrame
+        """
+        source_text = self.source_page.get_source_text(preview=False)
+        df = str_to_dataframe(source_text, self.param, worker)
+        return df
+
     def get_dataframe(self) -> pd.DataFrame | None:
         """Return the data
 
         Returns:
             The data frame, or None if the data could not be converted
         """
-
-        def callback(worker: CallbackWorker) -> pd.DataFrame:
-            source_text = self.source_page.get_source_text(preview=False)
-            df = str_to_dataframe(source_text, self.param, worker)
-            return df
-
-        worker = CallbackWorker(callback)
+        worker = CallbackWorker(self.read_data_callback)
         df = qt_long_callback(self, _("Reading data"), worker, 100)
         return df
 

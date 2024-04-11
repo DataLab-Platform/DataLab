@@ -637,12 +637,7 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             New object or list of new objects
         """
-
-        def callback(worker: CallbackWorker) -> list[SignalObj] | list[ImageObj]:
-            """Callback function"""
-            return self.IO_REGISTRY.read(filename, worker)
-
-        worker = CallbackWorker(callback)
+        worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         for obj in objs:
             obj.metadata["source"] = filename
