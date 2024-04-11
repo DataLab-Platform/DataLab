@@ -139,11 +139,7 @@ class CDLExecEnv:
     XMLRPCPORT_ARG = "xmlrpcport"
     DO_NOT_QUIT_ENV = "CDL_DO_NOT_QUIT"
     UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
-
-    # TODO: When guidata V3.4.0 is released, replace the following with
-    #       GuiDataExecEnv.ACCEPT_DIALOGS_ENV
-    ACCEPT_DIALOGS_ENV = "GUIDATA_ACCEPT_DIALOGS"
-
+    ACCEPT_DIALOGS_ENV = GuiDataExecEnv.ACCEPT_DIALOGS_ENV
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
     SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
     DELAY_ENV = GuiDataExecEnv.DELAY_ENV
