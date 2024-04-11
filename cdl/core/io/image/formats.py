@@ -7,7 +7,6 @@ DataLab I/O image formats
 from __future__ import annotations
 
 import os.path as osp
-from typing import Callable
 
 import numpy as np
 import plotpy.io

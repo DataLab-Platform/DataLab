@@ -52,6 +52,7 @@ class SourceParam(gds.DataSet):
         super().__init__()
         self.source_page = source_page
 
+    # pylint: disable=unused-argument
     def source_callback(self, item: gds.ChoiceItem, value: str) -> None:
         """Source callback"""
         if value == "clipboard":
