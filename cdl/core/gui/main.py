@@ -1560,13 +1560,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def play_demo(self) -> None:
         """Play demo"""
-        from cdl.tests.scenarios import demo  # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.tests.scenarios import demo
 
         demo.play_demo(self)
 
     def show_tour(self) -> None:
         """Show tour"""
-        from cdl.core.gui import tour  # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.core.gui import tour
 
         tour.start(self)
 
