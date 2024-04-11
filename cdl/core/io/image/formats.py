@@ -156,7 +156,9 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:
@@ -173,9 +175,10 @@ class AndorSIFImageFormat(ImageFormatBase):
                 obj = self.create_object(filename, index=idx)
                 obj.data = data[idx, ::]
                 objlist.append(obj)
-                worker.set_progress((idx + 1) / data.shape[0])
-                if worker.was_canceled():
-                    break
+                if worker is not None:
+                    worker.set_progress((idx + 1) / data.shape[0])
+                    if worker.was_canceled():
+                        break
             return objlist
         obj = self.create_object(filename)
         obj.data = data

@@ -48,7 +48,9 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
             name += f" {index:02d}"
         return create_image(name)
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:

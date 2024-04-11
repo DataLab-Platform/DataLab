@@ -257,7 +257,9 @@ class FormatBase:
             return ""
         return f"{self.info.name} ({self.info.extensions})"
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[BaseObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[BaseObj]:
         """Read list of native objects (signal or image) from file.
         For single object, return a list with one object.
 

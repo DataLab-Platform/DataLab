@@ -107,7 +107,7 @@ def read_csv_by_chunks(
 
 def read_csv(
     filename: str,
-    worker: CallbackWorker,
+    worker: CallbackWorker | None = None,
 ) -> tuple[
     np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
 ]:
