@@ -41,6 +41,13 @@ for future and past milestones.
 * Open/save file error handling:
   * Error messages are now more explicit when opening or saving a file fails
   * Added a link to the folder containing the file in the error message
+* Added "Plugins and I/O formats" page to the Installation and Configuration Viewer
+  (see "Help" menu)
+* Reset DataLab configuration:
+  * In some cases, it may be useful to reset the DataLab configuration file to its
+    default values (e.g. when the configuration file is corrupted)
+  * Added new `--reset` command line option to remove the configuration folder
+  * Added new "Reset DataLab" Start Menu shortcut to the Windows installer
 
 🛠️ Bug fixes:
 
