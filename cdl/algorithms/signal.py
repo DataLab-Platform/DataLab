@@ -77,7 +77,7 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
 
 
 def xy_fft(
-    x: np.ndarray, y: np.ndarray, shift: bool = True, bode: bool = True
+    x: np.ndarray, y: np.ndarray, shift: bool = True, bode: bool = False
 ) -> tuple[np.ndarray, np.ndarray]:
     """Compute FFT on X,Y data.
 
@@ -86,13 +86,15 @@ def xy_fft(
         y (numpy.ndarray): Y data
         shift (bool | None): Shift the zero frequency to the center of the spectrum.
             Defaults to True.
-        bode (bool | None): Plot magnitude in dB. Defaults to True.
+        bode (bool | None): Plot magnitude in dB. Defaults to False.
 
     Returns:
         tuple[np.ndarray, np.ndarray]: X,Y data
     """
-    y1 = np.fft.fft(20 * np.log(y)) if bode else np.fft.fft(y)
+    y1 = np.fft.fft(y)
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
+    if bode:
+        y1 = 20 * np.log10(np.abs(y1))
     if shift:
         x1 = np.fft.fftshift(x1)
         y1 = np.fft.fftshift(y1)
@@ -100,7 +102,7 @@ def xy_fft(
 
 
 def xy_ifft(
-    x: np.ndarray, y: np.ndarray, shift: bool = True, bode: bool = True
+    x: np.ndarray, y: np.ndarray, shift: bool = True, bode: bool = False
 ) -> tuple[np.ndarray, np.ndarray]:
     """Compute iFFT on X,Y data.
 
@@ -108,16 +110,17 @@ def xy_ifft(
         x (numpy.ndarray): X data
         y (numpy.ndarray): Y data
         shift (bool | None): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
+            Defaults to False.
+        bode (bool | None): Plot magnitude in dB. Defaults to False.
 
     Returns:
         tuple[np.ndarray, np.ndarray]: X,Y data
     """
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
+    y1 = np.fft.ifft(10 ** (y / 20)) if bode else np.fft.ifft(y)
     if shift:
         x1 = np.fft.ifftshift(x1)
-        y = np.fft.ifftshift(y)
-    y1 = np.fft.ifft(10 ** (y / 20)) if bode else np.fft.ifft(y)
+        y1 = np.fft.ifftshift(y1)
     return x1, y1.real
 
 

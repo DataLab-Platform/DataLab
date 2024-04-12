@@ -236,7 +236,7 @@ class SignalProcessor(BaseProcessor):
                 shift=Conf.proc.fft_shift_enabled.get(),
                 bode=Conf.proc.fft_bode_enabled.get(),
             )
-        self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
+        self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=True)
 
     @qt_try_except()
     def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
@@ -246,7 +246,7 @@ class SignalProcessor(BaseProcessor):
                 shift=Conf.proc.fft_shift_enabled.get(),
                 bode=Conf.proc.fft_bode_enabled.get(),
             )
-        self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
+        self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=True)
 
     @qt_try_except()
     def compute_interpolation(
