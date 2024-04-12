@@ -726,6 +726,11 @@ class BaseProcessor(QC.QObject):
     def compute_log10(self) -> None:
         """Compute Log10"""
 
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute exponential"""
+
     # ------Data Processing-------------------------------------------------------------
 
     @abc.abstractmethod

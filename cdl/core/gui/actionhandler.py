@@ -592,6 +592,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
 
+            self.new_action(
+                _("Exponential(y)"),
+                triggered=self.panel.processor.compute_exp,
+                separator=False,
+            )
+
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
                 _("Thresholding"),

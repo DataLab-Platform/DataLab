@@ -100,6 +100,11 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_log10, title="Log10")
 
     @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cps.compute_exp, title=_("Exponential"))
+
+    @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals"""
         self.compute_n1n(
