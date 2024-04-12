@@ -157,6 +157,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: FFT shift is disabled
     fft_shift_enabled = conf.Option()
 
+    # Method to compute Bode plot from FFT data:
+    # - True: FFT bode method is used
+    # - False: FFT bode method is disabled (default)
+    fft_bode_enabled = conf.Option()
+
     # Ignore warnings during computation:
     # - True: ignore warnings
     # - False: do not ignore warnings
@@ -295,6 +300,7 @@ def initialize():
     Conf.io.h5_fname_in_title.get(True)
     # Proc section
     Conf.proc.fft_shift_enabled.get(True)
+    Conf.proc.fft_bode_enabled.get(False)
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.ignore_warnings.get(False)
     # View section

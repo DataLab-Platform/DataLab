@@ -91,6 +91,7 @@ class ProcSettings(gds.DataSet):
 
     g0 = gds.BeginGroup(_("Settings for computations"))
     fft_shift_enabled = gds.BoolItem("", _("FFT shift"))
+    fft_bode_enabled = gds.BoolItem("", _("FFT Bode"))
     extract_roi_singleobj = gds.BoolItem("", _("Extract ROI in single object"))
     ignore_warnings = gds.BoolItem("", _("Ignore warnings"))
     _g0 = gds.EndGroup("")

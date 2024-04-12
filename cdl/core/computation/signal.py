@@ -593,7 +593,7 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_fft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_fft(x, y, shift=p.shift, bode=p.bode))
     return dst
 
 
@@ -609,7 +609,7 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_ifft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_ifft(x, y, shift=p.shift, bode=p.bode))
     return dst
 
 

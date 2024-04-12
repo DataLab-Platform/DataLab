@@ -232,14 +232,20 @@ class SignalProcessor(BaseProcessor):
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute iFFT"""
         if param is None:
-            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
+            param = cpb.FFTParam.create(
+                shift=Conf.proc.fft_shift_enabled.get(),
+                bode=Conf.proc.fft_bode_enabled.get(),
+            )
         self.compute_11(cps.compute_fft, param, title=_("FFT"), edit=False)
 
     @qt_try_except()
     def compute_ifft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute FFT"""
         if param is None:
-            param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
+            param = cpb.FFTParam.create(
+                shift=Conf.proc.fft_shift_enabled.get(),
+                bode=Conf.proc.fft_bode_enabled.get(),
+            )
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()

@@ -105,6 +105,7 @@ class FFTParam(gds.DataSet):
     """FFT parameters"""
 
     shift = gds.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))
+    bode = gds.BoolItem(_("Bode"), help=_("Use bode method to compute FFT"), default=False)
 
 
 def new_signal_result(
