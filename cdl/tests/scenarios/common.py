@@ -124,6 +124,8 @@ def run_signal_computations(
 
     compute_common_operations(panel)
 
+    panel.processor.compute_sqrt()
+
     win.add_object(create_paracetamol_signal(data_size))
 
     param = dlp.NormalizeYParam()

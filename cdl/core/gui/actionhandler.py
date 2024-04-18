@@ -720,6 +720,12 @@ class SignalActionHandler(BaseActionHandler):
                 icon=get_icon("peak_detect.svg"),
             )
 
+            self.new_action(
+                _("Sqrt(y)"),
+                triggered=self.panel.processor.compute_sqrt,
+                separator=False,
+            )
+
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
                 _("Interpolation"),

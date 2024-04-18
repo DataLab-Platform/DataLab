@@ -100,6 +100,11 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_log10, title="Log10")
 
     @qt_try_except()
+    def compute_sqrt(self) -> None:
+        """Compute square root"""
+        self.compute_11(cps.compute_sqrt, title=_("Square root"))
+
+    @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals"""
         self.compute_n1n(

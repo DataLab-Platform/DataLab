@@ -373,6 +373,17 @@ def compute_log10(src: SignalObj) -> SignalObj:
     """
     return Wrap11Func(np.log10)(src)
 
+def compute_sqrt(src: SignalObj) -> SignalObj:
+    """Compute square root
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.sqrt)(src)
+
 
 class PeakDetectionParam(gds.DataSet):
     """Peak detection parameters"""
