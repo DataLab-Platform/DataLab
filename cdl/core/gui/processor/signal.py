@@ -9,10 +9,12 @@
 from __future__ import annotations
 
 import re
+import warnings
 from collections.abc import Callable
 
 import numpy as np
-from guidata.qthelpers import exec_dialog
+from guidata.qthelpers import exec_dialog, get_icon
+from guidata.widgets.arrayeditor import ArrayEditor
 
 import cdl.core.computation.base as cpb
 import cdl.core.computation.signal as cps
@@ -401,3 +403,30 @@ class SignalProcessor(BaseProcessor):
         return self.compute_11(
             cps.compute_histogram, param, cps.HistogramParam, title=_("Histogram")
         )
+
+    @qt_try_except()
+    def compute_bandwidth_3db(self) -> None:
+        """Compute bandwidth"""
+        signals: list[SignalObj] = self.panel.objview.get_sel_objects()  # type: ignore
+        bandwidths: list[float] = []
+        ylabels: list[str] = []
+        for sig in signals:
+            bw = cps.compute_bandwidth_3db(sig)
+            bandwidths.append(bw)
+            ylabels.append(sig.get_title())
+        size_offset = len(bandwidths) - 1
+        arr = np.array(bandwidths).reshape(-1, 1)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)
+            dlg = ArrayEditor(self.panel.parent())  # type: ignore
+            title = _("Bandwidth -3dB")
+            dlg.setup_and_check(
+                arr,
+                title,
+                readonly=True,
+                ylabels=ylabels,
+                xlabels=["Bandwidth"],
+            )
+            dlg.setWindowIcon(get_icon("stats.svg"))
+            dlg.resize(300, 400 + size_offset * 50)
+            exec_dialog(dlg)

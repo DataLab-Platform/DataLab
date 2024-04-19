@@ -764,6 +764,12 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_fw1e2,
                 tip=_("Compute Full Width at Maximum") + "/e²",
             )
+            self.new_action(
+                _("Bandwith -3dB") + "...",
+                triggered=self.panel.processor.compute_bandwidth_3db,
+                icon=get_icon("stats.svg"),
+                context_menu_pos=-1,
+            )
 
         with self.new_category(ActionCategory.VIEW):
             antialiasing_action = self.new_action(

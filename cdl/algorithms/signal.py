@@ -285,3 +285,28 @@ def interpolate(
             ynew[xnew < x[0]] = fill_value
             ynew[xnew > x[-1]] = fill_value
     return ynew
+
+
+def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0):
+    half_max = np.max(y) - level
+
+    y_hm = y - half_max
+
+    # Find where the sign is changing
+    xa = np.array(
+        np.where(
+            (y_hm[:-1] >= 0) & (y_hm[1:] <= 0) | (y_hm[:-1] <= 0) & (y_hm[1:] >= 0)
+        )
+    )  # before the change
+    xb = xa + 1  # after the change
+
+    if len(xa[0]) == 0:
+        return 0.0
+
+    # Linear interpolation
+    # line slope
+    ia: int = xa[0]
+    ib: int = xb[0]
+    p: float = (y_hm[ib] - y_hm[ia]) / (x[ib] - x[ia])
+    ori: float = y_hm[ib] - p * x[ib]
+    return -ori / p  # where the curve cut the absissa

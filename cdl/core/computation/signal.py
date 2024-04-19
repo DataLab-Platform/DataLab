@@ -23,6 +23,7 @@ import scipy.signal as sps
 
 from cdl.algorithms import fit
 from cdl.algorithms.signal import (
+    bandwidth,
     derivative,
     interpolate,
     moving_average,
@@ -611,6 +612,11 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     x, y = src.get_data()
     dst.set_xydata(*xy_ifft(x, y, shift=p.shift))
     return dst
+
+
+def compute_bandwidth_3db(src: SignalObj) -> float:
+    """Compute bandwith"""
+    return bandwidth(src.x, src.y, 3.0)
 
 
 class PolynomialFitParam(gds.DataSet):
