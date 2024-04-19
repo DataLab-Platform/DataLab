@@ -373,6 +373,7 @@ def compute_log10(src: SignalObj) -> SignalObj:
     """
     return Wrap11Func(np.log10)(src)
 
+
 def compute_sqrt(src: SignalObj) -> SignalObj:
     """Compute square root
 
@@ -383,6 +384,28 @@ def compute_sqrt(src: SignalObj) -> SignalObj:
         Result signal object
     """
     return Wrap11Func(np.sqrt)(src)
+
+
+class PowParam(gds.DataSet):
+    """Power parameters"""
+
+    power = gds.FloatItem(_("Power"), default=2.0)
+
+
+def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
+    """Compute power
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "pow", f"n={p.power}")
+    x, y = src.get_data()
+    dst.set_xydata(x, y**p.power)
+    return dst
 
 
 class PeakDetectionParam(gds.DataSet):

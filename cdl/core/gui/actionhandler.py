@@ -721,6 +721,11 @@ class SignalActionHandler(BaseActionHandler):
             )
 
             self.new_action(
+                _("Pow(y)"),
+                triggered=self.panel.processor.compute_pow,
+                separator=True,
+            )
+            self.new_action(
                 _("Sqrt(y)"),
                 triggered=self.panel.processor.compute_sqrt,
                 separator=False,
