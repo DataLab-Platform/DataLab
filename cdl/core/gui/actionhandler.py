@@ -771,6 +771,13 @@ class SignalActionHandler(BaseActionHandler):
                 context_menu_pos=-1,
             )
 
+            self.new_action(
+                _("ENOBs") + "...",
+                triggered=self.panel.processor.compute_enob,
+                icon=get_icon("stats.svg"),
+                context_menu_pos=-1,
+            )
+
         with self.new_category(ActionCategory.VIEW):
             antialiasing_action = self.new_action(
                 _("Curve anti-aliasing"),

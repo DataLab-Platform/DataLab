@@ -25,6 +25,7 @@ from cdl.algorithms import fit
 from cdl.algorithms.signal import (
     bandwidth,
     derivative,
+    enob,
     interpolate,
     moving_average,
     normalize,
@@ -617,6 +618,17 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
 def compute_bandwidth_3db(src: SignalObj) -> float:
     """Compute bandwith"""
     return bandwidth(src.x, src.y, 3.0)
+
+
+class EnobParam(gds.DataSet):
+    """Effective number of bits parameters (ENOB)"""
+
+    scale = gds.FloatItem(_("Full scale (V)"), default=0.16, min=0.0)
+
+
+def compute_enob(src: SignalObj, p: EnobParam) -> float:
+    """Compute ENOB"""
+    return enob(src.x, src.y, p.scale)  # type: ignore
 
 
 class PolynomialFitParam(gds.DataSet):

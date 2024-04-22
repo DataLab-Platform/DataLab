@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import numpy as np
 import scipy.interpolate
+from scipy.optimize import leastsq
 
 
 # ----- Filtering functions ----------------------------------------------------
@@ -312,3 +313,126 @@ def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
     bw = -ori / p  # where the curve cut the absissa
 
     return bw[0]
+
+
+def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 0.16) -> float:
+    """Compute Effective Number of Bits (ENOB).
+
+    Args:
+        x (numpy.ndarray): x signal data
+        y (numpy.ndarray): y signal data
+        full_scale (float): Full scale(V). Defaults to 0.16.
+    """
+    offset = np.mean(y)
+    amplitude = (np.max(y) - np.min(y)) / 2
+    phase_origin = 0
+    freq = initial_freq(x, y)
+    initial_params = [amplitude, freq, phase_origin, offset]
+
+    # Détermination par modélisation (fit) de sinus
+    mod_ampl, mod_freq, mod_phase, mod_offset = leastsq(
+        _compute_residuals, initial_params, args=(x, y)
+    )[0]
+    y_th = peval(x, mod_ampl, mod_freq, mod_phase, mod_offset)
+    residuals = np.std(y - y_th)
+    # residus = np.std(y - peval(x, parametres_initiaux))
+    enob = -np.log2(residuals * np.sqrt(12) / full_scale)
+
+    return enob
+
+
+def initial_freq(x: np.ndarray, y: np.ndarray) -> float:
+    """
+    Compute the initial frequency of the signal
+
+    Args:
+        x (numpy.ndarray): x-axis data
+        y (numpy.ndarray): y-axis data
+
+    Returns:
+        float: Fréquence du signal
+    """
+    # soustraction de l'offset pour supprimer la composante continue
+    y = y - np.mean(y)
+    # Recherche de l'indice du max de la FFT
+    i = np.argmax(np.abs(np.fft.fft(y)))
+    if i > len(x) / 2:
+        i = len(x) - i
+    # Si l'indice est supérieure à NbrePts/2 => on est dans le 1/2 spectre miroir
+    # transposé
+    # (fréquences négatives)
+    # Détermination de la fréquence d'échantillonnage
+    f_ech = 1 / (x[-1] - x[0])
+    # Conversion de l'indice en fréquence
+    frequence = i * f_ech
+    return frequence
+
+
+def _compute_residuals(
+    opt_params: np.ndarray, x: np.ndarray, y: np.ndarray
+) -> np.ndarray:
+    """Caller for the compute_residuals function that unpacks the parameters used in
+    scipy.optimize.leastsq.
+
+    Args:
+        opt_params: The parameters to optimize (amplitude, frequency, phase, offset).
+        x: The x-axis data
+        y: The y-axis data
+
+    Returns:
+        resutl of compute_residuals
+    """
+
+    return compute_residuals(x, y, *opt_params)
+
+
+def compute_residuals(
+    x: np.ndarray,
+    y: np.ndarray,
+    ampl: float,
+    freq: float,
+    phase: float,
+    offset: float,
+) -> np.ndarray:
+    """
+    Measure of the error between the recorded signal y and the signal modeled via the
+    peval function
+
+    Args:
+        x (numpy.ndarray): x-axis data
+        y (numpy.ndarray): y-axis data
+        ampl (float): Amplitude
+        freq (float): frequency
+        phase (float): Phase
+        offset (float): Offset
+
+
+    Returns:
+        np.ndarray: Error between the recorded signal y and the modeled signal
+
+    """
+    err = y - peval(x, ampl, freq, phase, offset)
+    return err
+
+
+def peval(
+    x: np.ndarray,
+    ampl: float,
+    freq: float,
+    phase: float,
+    offset: float,
+) -> np.ndarray:
+    """
+    Modelisation of the sinus from the input parameters
+
+    Args:
+        x (numpy.ndarray): X data
+        ampl (float): Amplitude
+        freq (float): Frequency
+        phase (float): Phase
+        offset (float): Offset
+
+    Returns:
+        np.ndarray: Modeled sinus
+    """
+    return ampl * np.sin(2 * np.pi * freq * x + phase) + offset
