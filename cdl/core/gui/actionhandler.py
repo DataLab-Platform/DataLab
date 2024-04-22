@@ -765,7 +765,7 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute Full Width at Maximum") + "/e²",
             )
             self.new_action(
-                _("Bandwith -3dB") + "...",
+                _("Bandwidth -3dB") + "...",
                 triggered=self.panel.processor.compute_bandwidth_3db,
                 icon=get_icon("stats.svg"),
                 context_menu_pos=-1,
