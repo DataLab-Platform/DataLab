@@ -413,7 +413,7 @@ class SignalProcessor(BaseProcessor):
         for sig in signals:
             bw = cps.compute_bandwidth_3db(sig)
             bandwidths.append(bw)
-            ylabels.append(sig.get_title())
+            ylabels.append(sig.short_id)
         size_offset = len(bandwidths) - 1
         arr = np.array(bandwidths).reshape(-1, 1)
         with warnings.catch_warnings():
@@ -424,9 +424,10 @@ class SignalProcessor(BaseProcessor):
                 arr,
                 title,
                 readonly=True,
-                ylabels=ylabels,
                 xlabels=["Bandwidth"],
+                ylabels=ylabels,
             )
+            dlg.arraywidget.model.set_format("%.2E")
             dlg.setWindowIcon(get_icon("stats.svg"))
             dlg.resize(300, 400 + size_offset * 50)
             exec_dialog(dlg)

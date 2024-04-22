@@ -287,8 +287,8 @@ def interpolate(
     return ynew
 
 
-def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0):
-    half_max = np.max(y) - level
+def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
+    half_max: float = np.max(y) - level
 
     y_hm = y - half_max
 
@@ -305,8 +305,10 @@ def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0):
 
     # Linear interpolation
     # line slope
-    ia: int = xa[0]
-    ib: int = xb[0]
-    p: float = (y_hm[ib] - y_hm[ia]) / (x[ib] - x[ia])
-    ori: float = y_hm[ib] - p * x[ib]
-    return -ori / p  # where the curve cut the absissa
+    ia: np.ndarray = xa[0]
+    ib: np.ndarray = xb[0]
+    p = (y_hm[ib] - y_hm[ia]) / (x[ib] - x[ia])
+    ori = y_hm[ib] - p * x[ib]
+    bw = -ori / p  # where the curve cut the absissa
+
+    return bw[0]
