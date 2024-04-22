@@ -141,12 +141,13 @@ class MatSignalFormat(SignalFormatBase):
         }
 
         signals: list[SignalObj] = []
-        for k, data in datas.items():
+        for data in datas.values():
             data = data.squeeze()
             signals.extend(self.create_signals_from(data, filename))
         for signal, dname in zip(signals, datas.keys()):
             signal.title += f" ({dname})"  # type: ignore
             signal.metadata.update(metadata)
+            signal.ylabel = dname
         return signals
 
     def write(self, filename: str, obj: SignalObj) -> None:
@@ -158,4 +159,4 @@ class MatSignalFormat(SignalFormatBase):
         """
         # metadata cannot be saved as such as their type will be lost and
         # cause problems when reading the file back
-        sio.savemat(filename, {obj.get_title(): obj.xydata.T})
+        sio.savemat(filename, {obj.ylabel: obj.xydata.T})
