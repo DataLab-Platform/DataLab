@@ -148,6 +148,11 @@ class SignalProcessor(BaseProcessor):
                 return
         self.compute_11(cps.compute_peak_detection, param)
 
+    @qt_try_except()
+    def compute_flipx(self) -> None:
+        """Flip X axis"""
+        self.compute_11(cps.compute_flipx, title=_("Flip X axis"))
+
     # ------Signal Processing
     @qt_try_except()
     def compute_normalize(self, param: cdl.param.NormalizeYParam | None = None) -> None:

@@ -719,6 +719,12 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_peak_detection,
                 icon=get_icon("peak_detect.svg"),
             )
+            self.new_action(
+                _("Flix x-axis"),
+                triggered=self.panel.processor.compute_flipx,
+                icon=get_icon("flip_horizontal.svg"),
+                separator=True,
+            )
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
@@ -801,6 +807,7 @@ class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+    panel: ImagePanel
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""

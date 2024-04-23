@@ -851,3 +851,17 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
     return dst
+
+
+def compute_flipx(src: SignalObj) -> SignalObj:
+    """Flip x-axis
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "flip_x_axis")
+    dst.y = dst.y[::-1]
+    return dst
