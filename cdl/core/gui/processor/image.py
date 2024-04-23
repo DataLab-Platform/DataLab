@@ -46,6 +46,19 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
 
     @qt_try_except()
+    def compute_sum_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """COmpure sum with a constant"""
+        self.compute_11(
+            cpi.compute_add_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Add constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_average(self) -> None:
         """Compute average"""
 
@@ -59,6 +72,19 @@ class ImageProcessor(BaseProcessor):
     def compute_product(self) -> None:
         """Compute product"""
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
+
+    @qt_try_except()
+    def compute_product_by_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute product with a constant"""
+        self.compute_11(
+            cpi.compute_product_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Product with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_logp1(self, param: cdl.param.LogP1Param | None = None) -> None:
@@ -325,6 +351,19 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_difference_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute difference with a constant"""
+        self.compute_11(
+            cpi.compute_difference_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Difference with constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_quadratic_difference(self, obj2: ImageObj | None = None) -> None:
         """Compute quadratic difference between two images"""
         self.compute_n1n(
@@ -342,6 +381,19 @@ class ImageProcessor(BaseProcessor):
             _("divider"),
             cpi.compute_division,
             title=_("Division"),
+        )
+
+    @qt_try_except()
+    def compute_division_by_contant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute division by a constant"""
+        self.compute_11(
+            cpi.compute_divide_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Division by constant"),
+            edit=True,
         )
 
     @qt_try_except()

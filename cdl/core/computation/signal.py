@@ -35,6 +35,7 @@ from cdl.algorithms.signal import (
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    ConstantOperationParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -149,6 +150,68 @@ def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = np.sqrt(dst.dy**2 + src.dy**2)
+    return dst
+
+
+def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Add **dst** and a constant value and return **dst** signal modified in place
+
+    Args:
+        dst: output signal object
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Output signal object
+    """
+    dst = dst_11(src, "add_constant", f"value={p.value}")
+    dst.y += p.value
+    return dst
+
+
+def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Subtract a constant value from an signal
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** - **p.value**
+    """
+    dst = dst_11(src, "difference_constant", f"value={p.value}")
+    dst.y -= p.value
+    return dst
+
+
+def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Multiply **dst** by a constant value and return **dst** signal modified in place
+
+    Args:
+        dst: output signal object
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Output signal object
+    """
+    dst = dst_11(src, "product_by_constant", f"value={p.value}")
+    dst.y = dst.y + p.value
+    return dst
+
+
+def compute_divide_by_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Divide an signal by a constant value
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** / **p.value**
+    """
+    dst = dst_11(src, "divide_by_constant", f"value={p.value}")
+    dst.y = dst.y / p.value
     return dst
 
 

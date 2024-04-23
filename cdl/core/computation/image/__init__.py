@@ -33,6 +33,7 @@ from cdl.algorithms.image import (
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    ConstantOperationParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -166,6 +167,37 @@ def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
+def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Add **dst** and a constant value and return **dst** image modified in place
+
+    Args:
+        dst: output image object
+        src: input image object
+        p: constant value
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "add_constant", f"value={p.value}")
+    dst.data = dst.data + p.value
+    return dst
+
+
+def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Subtract a constant value from an image
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** - **p.value**
+    """
+    dst = dst_11(src, "difference_constant", f"value={p.value}")
+    dst.data = dst.data - p.value
+    return dst
+
+
 def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Multiply **dst** and **src** images and return **dst** image modified in place
 
@@ -177,6 +209,37 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
         Output image object
     """
     dst.data *= np.array(src.data, dtype=dst.data.dtype)
+    return dst
+
+
+def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Multiply **dst** by a constant value and return **dst** image modified in place
+
+    Args:
+        dst: output image object
+        src: input image object
+        p: constant value
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "product_by_constant", f"value={p.value}")
+    dst.data = dst.data * p.value
+    return dst
+
+
+def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Divide an image by a constant value
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** / **p.value**
+    """
+    dst = dst_11(src, "divide_by_constant", f"value={p.value}")
+    dst.data = dst.data / p.value
     return dst
 
 

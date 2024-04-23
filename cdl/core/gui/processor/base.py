@@ -41,6 +41,7 @@ if TYPE_CHECKING:
 
     from cdl.core.computation.base import (
         ClipParam,
+        ConstantOperationParam,
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
@@ -223,7 +224,7 @@ class BaseProcessor(QC.QObject):
     def init_param(
         self,
         param: gds.DataSet,
-        paramclass: gds.DataSet,
+        paramclass: type[gds.DataSet],
         title: str,
         comment: str | None = None,
     ) -> tuple[bool, gds.DataSet]:
@@ -249,7 +250,7 @@ class BaseProcessor(QC.QObject):
         self,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: gds.DataSet | None = None,
+        paramclass: type[gds.DataSet] | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
@@ -772,6 +773,26 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_ifft(self) -> None:
         """Compute FFT"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_sum_constant(self, param: ConstantOperationParam) -> None:
+        """Compute sum with constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_difference_constant(self, param: ConstantOperationParam) -> None:
+        """Compute difference with constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_product_by_constant(self, param: ConstantOperationParam) -> None:
+        """Compute product with constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_division_by_contant(self, param: ConstantOperationParam) -> None:
+        """Compute division by constant"""
 
     # ------Computing-------------------------------------------------------------------
 

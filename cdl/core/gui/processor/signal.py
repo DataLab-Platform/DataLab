@@ -36,6 +36,19 @@ class SignalProcessor(BaseProcessor):
         self.compute_n1("Σ", cps.compute_add, title=_("Sum"))
 
     @qt_try_except()
+    def compute_sum_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """COmpure sum with a constant"""
+        self.compute_11(
+            cps.compute_add_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Sum with constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_average(self) -> None:
         """Compute average"""
 
@@ -51,6 +64,19 @@ class SignalProcessor(BaseProcessor):
     def compute_product(self) -> None:
         """Compute product"""
         self.compute_n1("Π", cps.compute_product, title=_("Product"))
+
+    @qt_try_except()
+    def compute_product_by_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute product with a constant"""
+        self.compute_11(
+            cps.compute_product_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Product with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_roi_extraction(
@@ -110,6 +136,19 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_difference_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute difference with a constant"""
+        self.compute_11(
+            cps.compute_difference_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Difference with constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_quadratic_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute quadratic difference between two signals"""
         self.compute_n1n(
@@ -127,6 +166,20 @@ class SignalProcessor(BaseProcessor):
             _("divider"),
             cps.compute_division,
             title=_("Division"),
+        )
+
+    qt_try_except()
+
+    def compute_division_by_contant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute division by a constant"""
+        self.compute_11(
+            cps.compute_divide_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Division by constant"),
+            edit=True,
         )
 
     @qt_try_except()

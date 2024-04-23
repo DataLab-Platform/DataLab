@@ -107,6 +107,13 @@ class FFTParam(gds.DataSet):
     shift = gds.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))
 
 
+class ConstantOperationParam(gds.DataSet):
+    """Parameter used to set a constant value to used in operations (sum,
+    multiplication, ...)"""
+
+    value = gds.FloatItem(_("Constant value"))
+
+
 def new_signal_result(
     src: SignalObj | ImageObj,
     name: str,

@@ -572,6 +572,27 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.processor.compute_division,
                 select_condition=SelectCond.at_least_one,
             )
+            with self.new_menu(_("Constant Operations")):
+                self.new_action(
+                    _("Add constant"),
+                    triggered=self.panel.processor.compute_sum_constant,
+                    select_condition=SelectCond.at_least_one,
+                )
+                self.new_action(
+                    _("Substract constant"),
+                    triggered=self.panel.processor.compute_difference_constant,
+                    select_condition=SelectCond.at_least_one,
+                )
+                self.new_action(
+                    _("Multiply by constant"),
+                    triggered=self.panel.processor.compute_product_by_constant,
+                    select_condition=SelectCond.at_least_one,
+                )
+                self.new_action(
+                    _("Divide by constant"),
+                    triggered=self.panel.processor.compute_division_by_contant,
+                    select_condition=SelectCond.at_least_one,
+                )
             self.new_action(
                 _("Absolute value"),
                 triggered=self.panel.processor.compute_abs,

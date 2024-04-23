@@ -61,6 +61,8 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ThresholdParam
     :no-index:
+.. autodataset:: cdl.param.ConstantOperationParam
+    :no-index:
 
 Signal parameters
 ^^^^^^^^^^^^^^^^^
@@ -184,6 +186,7 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     ROIDataParam,
     ThresholdParam,
+    ConstantOperationParam,
 )
 from cdl.core.computation.image import (
     AverageProfileParam,
