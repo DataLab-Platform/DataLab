@@ -752,6 +752,10 @@ class SignalActionHandler(BaseActionHandler):
                     _("Multi-Gaussian fit"),
                     triggered=self.panel.processor.compute_multigaussianfit,
                 )
+                self.new_action(
+                    _("Exponential fit"),
+                    triggered=self.panel.processor.compute_expfit,
+                )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(

@@ -9,6 +9,7 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
+from scipy.optimize import curve_fit
 
 from cdl.algorithms import fit
 from cdl.algorithms.signal import xpeak
@@ -229,6 +230,56 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
         parent=parent,
         name=name,
         wintitle=_("Multi-Gaussian fit"),
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Exponential fitting curve ------------------------------------------------
+
+
+def exponentialfit(x, y, parent=None, name=None):
+    """Compute exponential fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+
+    a = FitParam(_("A coefficient"), 1.0, -10.0, 10.0)
+    b = FitParam(_("B coefficient"), 1.0, -10.0, 10.0)
+    c = FitParam(_("C constant"), 0.0, -10.0, 10.0)
+
+    params = [a, b, c]
+
+    def fitfunc(x, params):
+        return params[0] * np.exp(params[1] * x) + params[2]
+
+    values = guifit(
+        x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Sinusoidal fitting curve ------------------------------------------------
+
+
+def exponentialfit(x, y, parent=None, name=None):
+    """Compute exponential fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+
+    a = FitParam(_("A coefficient"), 1.0, -10.0, 10.0)
+    b = FitParam(_("B coefficient"), 1.0, -10.0, 10.0)
+    c = FitParam(_("C constant"), 0.0, -10.0, 10.0)
+
+    params = [a, b, c]
+
+    def fitfunc(x, params):
+        return params[0] * np.exp(params[1] * x) + params[2]
+
+    values = guifit(
+        x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
     )
     if values:
         return fitfunc(x, values), params

@@ -345,6 +345,17 @@ class SignalProcessor(BaseProcessor):
             self.panel.add_object(signal)
 
     @qt_try_except()
+    def compute_expfit(self) -> None:
+        """Compute exponential fitting curve"""
+        dlgfunc = fitdialog.exponentialfit
+
+        def expfit(x, y, parent=None):
+            """Exponential fit dialog function"""
+            return dlgfunc(x, y, parent=parent)
+
+        self.compute_fit(_("Exponential fit"), expfit)
+
+    @qt_try_except()
     def compute_multigaussianfit(self) -> None:
         """Compute multi-Gaussian fitting curve"""
         fitdlgfunc = fitdialog.multigaussianfit

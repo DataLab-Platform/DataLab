@@ -33,9 +33,15 @@ from qtpy import QtWidgets as QW
 
 from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
 from cdl.core.io.base import FormatInfo  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.image.base import ImageFormatBase  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.image.formats import ClassicsImageFormat  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.signal.base import SignalFormatBase  # pylint: disable=W0611  # noqa: F401
+from cdl.core.io.image.base import (
+    ImageFormatBase,  # pylint: disable=W0611  # noqa: F401
+)
+from cdl.core.io.image.formats import (
+    ClassicsImageFormat,  # pylint: disable=W0611  # noqa: F401
+)
+from cdl.core.io.signal.base import (
+    SignalFormatBase,  # pylint: disable=W0611  # noqa: F401
+)
 from cdl.env import execenv
 from cdl.proxy import LocalProxy
 
