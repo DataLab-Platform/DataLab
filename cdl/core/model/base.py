@@ -814,21 +814,6 @@ class BaseObj(metaclass=BaseObjMeta):
             self.metadata[ROI_KEY] = np.array(roidata, int)
         self.__roi_changed = True
 
-    def add_resultshape(
-        self,
-        resultshape: ResultShape,
-        param: gds.DataSet | None = None,
-    ) -> None:
-        """Add geometric shape as metadata entry, and return ResultShape instance.
-
-        Args:
-            resultshape: result shape
-            param: parameters
-        """
-        resultshape.add_to(self)
-        if param is not None:
-            self.metadata[f"{resultshape.label}Param"] = str(param)
-
     def iterate_resultshapes(self):
         """Iterate over object result shapes.
 

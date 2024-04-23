@@ -301,7 +301,7 @@ class BaseProcessor(QC.QObject):
 
     def handle_output(
         self, compout: CompOut, context: str
-    ) -> SignalObj | ImageObj | np.ndarray | None:
+    ) -> SignalObj | ImageObj | ResultShape | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
 
@@ -310,7 +310,8 @@ class BaseProcessor(QC.QObject):
             context: context (e.g. "Computing: Gaussian filter")
 
         Returns:
-            Output object: a signal or image object, or a numpy array, or None if error
+            Output object: a signal or image object, or a result shape object,
+             or None if error
         """
         if compout.error_msg:
             show_warning_error(
@@ -449,13 +450,20 @@ class BaseProcessor(QC.QObject):
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
+
+                # Execute function
                 compout = self.__exec_func(func, args, progress)
                 if compout is None:
                     break
                 resultshape = self.handle_output(compout, _("Computing: %s") % title)
                 if resultshape is None:
                     continue
-                obj.add_resultshape(resultshape, param)
+
+                # Add result shape to object's metadata
+                resultshape.add_to(obj)
+                if param is not None:
+                    obj.metadata[f"{resultshape.label}Param"] = str(param)
+
                 results[obj.uuid] = resultshape
                 xlabels = resultshape.shown_xlabels
                 if obj is current_obj:
