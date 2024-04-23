@@ -412,7 +412,6 @@ class BaseProcessor(QC.QObject):
     def compute_10(
         self,
         func: Callable,
-        shapetype: ShapeTypes | None,
         param: gds.DataSet | None = None,
         paramclass: gds.DataSet | None = None,
         title: str | None = None,
@@ -424,8 +423,6 @@ class BaseProcessor(QC.QObject):
 
         Args:
             func: function to execute
-            shapetype: shape type (if None, use `param.shape`
-             which must be a string and a valid `ShapeTypes` member name, modulo case)
             param: parameters. Defaults to None.
             paramclass: parameters class. Defaults to None.
             title: title of progress bar. Defaults to None.
@@ -440,15 +437,9 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
-        if shapetype is None:
-            try:
-                shapetype = getattr(ShapeTypes, param.shape.upper())
-            except AttributeError as exc:
-                raise ValueError("shapetype must be specified") from exc
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
-        name = func.__name__.replace("compute_", "")
-        title = name if title is None else title
+        title = func.__name__.replace("compute_", "") if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
             results: dict[str, ResultShape] = {}
             xlabels = None
@@ -458,13 +449,13 @@ class BaseProcessor(QC.QObject):
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
-                result = self.__exec_func(func, args, progress)
-                if result is None:
+                compout = self.__exec_func(func, args, progress)
+                if compout is None:
                     break
-                result_array = self.handle_output(result, _("Computing: %s") % title)
-                if result_array is None:
+                resultshape = self.handle_output(compout, _("Computing: %s") % title)
+                if resultshape is None:
                     continue
-                resultshape = obj.add_resultshape(name, shapetype, result_array, param)
+                obj.add_resultshape(resultshape, param)
                 results[obj.uuid] = resultshape
                 xlabels = resultshape.shown_xlabels
                 if obj is current_obj:
@@ -472,7 +463,7 @@ class BaseProcessor(QC.QObject):
                 else:
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
                 for _i_row_res in range(resultshape.array.shape[0]):
-                    ylabel = f"{name}({obj.short_id})"
+                    ylabel = f"{resultshape.label}({obj.short_id})"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():

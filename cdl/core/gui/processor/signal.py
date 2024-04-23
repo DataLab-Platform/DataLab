@@ -368,16 +368,12 @@ class SignalProcessor(BaseProcessor):
         self, param: cdl.param.FWHMParam | None = None
     ) -> dict[str, ResultShape]:
         """Compute FWHM"""
-        return self.compute_10(
-            cps.compute_fwhm, ShapeTypes.SEGMENT, param, cps.FWHMParam, title=_("FWHM")
-        )
+        return self.compute_10(cps.compute_fwhm, param, cps.FWHMParam, title=_("FWHM"))
 
     @qt_try_except()
     def compute_fw1e2(self) -> dict[str, ResultShape]:
         """Compute FW at 1/e²"""
-        return self.compute_10(
-            cps.compute_fw1e2, ShapeTypes.SEGMENT, title=_("FW") + "1/e²"
-        )
+        return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
     def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
         """Return statistics functions list"""

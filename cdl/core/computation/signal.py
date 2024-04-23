@@ -43,6 +43,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     new_signal_result,
 )
+from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -631,8 +632,16 @@ class FWHMParam(gds.DataSet):
     fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
 
 
-def compute_fwhm(signal: SignalObj, param: FWHMParam):
-    """Compute FWHM"""
+def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape:
+    """Compute FWHM
+
+    Args:
+        signal: source signal
+        param: parameters
+
+    Returns:
+        Segment coordinates
+    """
     res = []
     for i_roi in signal.iterate_roi_indexes():
         x, y = signal.get_data(i_roi)
@@ -653,11 +662,18 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam):
         )
         x0, y0, x1, y1 = FitModelClass.half_max_segment(amp, sigma, mu, base)
         res.append([i_roi, x0, y0, x1, y1])
-    return np.array(res)
+    return ResultShape(ShapeTypes.SEGMENT, np.array(res), "fwhm")
 
 
-def compute_fw1e2(signal: SignalObj):
-    """Compute FW at 1/e²"""
+def compute_fw1e2(signal: SignalObj) -> ResultShape:
+    """Compute FW at 1/e²
+
+    Args:
+        signal: source signal
+
+    Returns:
+        Segment coordinates
+    """
     res = []
     for i_roi in signal.iterate_roi_indexes():
         x, y = signal.get_data(i_roi)
@@ -679,7 +695,7 @@ def compute_fw1e2(signal: SignalObj):
         amplitude = fit.GaussianModel.amplitude(amp, sigma)
         yhm = amplitude / np.e**2 + base
         res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
-    return np.array(res)
+    return ResultShape(ShapeTypes.SEGMENT, np.array(res), "fw1e2")
 
 
 def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:

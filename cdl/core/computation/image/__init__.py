@@ -41,7 +41,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam
+from cdl.core.model.base import BaseProcParam, ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
@@ -1096,16 +1096,20 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
     return dst
 
 
-def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
+def calc_with_osr(
+    image: ImageObj, func: Callable, shapetype: ShapeTypes, label: str, *args: Any
+) -> ResultShape | None:
     """Exec computation taking into account image x0, y0, dx, dy and ROIs
 
     Args:
         image: input image object
         func: computation function
+        shapetype: (result) shape type
+        label: (result) shape label
         *args: computation function arguments
 
     Returns:
-        Computation result
+        Computation result shape (or None if no result)
 
     .. warning::
 
@@ -1177,7 +1181,7 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
                 out[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
             return out
-        return np.vstack(res)
+        return ResultShape(shapetype, np.vstack(res), label)
     return None
 
 
@@ -1194,7 +1198,7 @@ def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     return np.array([(x, y)])
 
 
-def compute_centroid(image: ImageObj) -> np.ndarray:
+def compute_centroid(image: ImageObj) -> ResultShape:
     """Compute centroid
 
     Args:
@@ -1203,7 +1207,7 @@ def compute_centroid(image: ImageObj) -> np.ndarray:
     Returns:
         Centroid coordinates
     """
-    return calc_with_osr(image, get_centroid_coords)
+    return calc_with_osr(image, get_centroid_coords, ShapeTypes.MARKER, "centroid")
 
 
 def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
@@ -1220,7 +1224,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
     return np.array([[x, y, r]])
 
 
-def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
+def compute_enclosing_circle(image: ImageObj) -> ResultShape:
     """Compute minimum enclosing circle
 
     Args:
@@ -1229,7 +1233,9 @@ def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
     Returns:
         Diameter coords
     """
-    return calc_with_osr(image, get_enclosing_circle_coords)
+    return calc_with_osr(
+        image, get_enclosing_circle_coords, ShapeTypes.CIRCLE, "enclosing_circle"
+    )
 
 
 class HoughCircleParam(gds.DataSet):
@@ -1244,7 +1250,7 @@ class HoughCircleParam(gds.DataSet):
     min_distance = gds.IntItem(_("Minimal distance"), min=0)
 
 
-def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarray:
+def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> ResultShape:
     """Compute Hough circles
 
     Args:
@@ -1257,6 +1263,8 @@ def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarr
     return calc_with_osr(
         image,
         get_hough_circle_peaks,
+        ShapeTypes.CIRCLE,
+        "hough_circle_peaks",
         p.min_radius,
         p.max_radius,
         None,

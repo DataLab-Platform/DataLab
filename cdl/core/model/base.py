@@ -816,27 +816,18 @@ class BaseObj(metaclass=BaseObjMeta):
 
     def add_resultshape(
         self,
-        label: str,
-        shapetype: ShapeTypes,
-        array: np.ndarray,
+        resultshape: ResultShape,
         param: gds.DataSet | None = None,
-    ) -> ResultShape:
+    ) -> None:
         """Add geometric shape as metadata entry, and return ResultShape instance.
 
         Args:
-            label: label
-            shapetype: shape type
-            array: array
+            resultshape: result shape
             param: parameters
-
-        Returns:
-            Result shape
         """
-        mshape = ResultShape(shapetype, array, label)
-        mshape.add_to(self)
+        resultshape.add_to(self)
         if param is not None:
-            self.metadata[f"{label}Param"] = str(param)
-        return mshape
+            self.metadata[f"{resultshape.label}Param"] = str(param)
 
     def iterate_resultshapes(self):
         """Iterate over object result shapes.

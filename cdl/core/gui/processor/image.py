@@ -816,9 +816,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
-        return self.compute_10(
-            cpi.compute_centroid, ShapeTypes.MARKER, title=_("Centroid")
-        )
+        return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
 
     @qt_try_except()
     def compute_enclosing_circle(self) -> dict[str, ResultShape]:
@@ -826,7 +824,7 @@ class ImageProcessor(BaseProcessor):
         # TODO: [P2] Find a way to add the circle to the computing results
         #  as in "enclosingcircle_test.py"
         return self.compute_10(
-            cpi.compute_enclosing_circle, ShapeTypes.CIRCLE, title=_("Enclosing circle")
+            cpi.compute_enclosing_circle, title=_("Enclosing circle")
         )
 
     @qt_try_except()
@@ -843,7 +841,6 @@ class ImageProcessor(BaseProcessor):
 
         results = self.compute_10(
             cpi_det.compute_peak_detection,
-            ShapeTypes.POINT,
             param,
             edit=edit,
             title=_("Peak detection"),
@@ -886,7 +883,6 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
         return self.compute_10(
             cpi_det.compute_contour_shape,
-            shapetype=None,  # Shape is defined by the dataset ContourShapeParam
             param=param,
             title=_("Contour"),
             edit=edit,
@@ -899,7 +895,6 @@ class ImageProcessor(BaseProcessor):
         """Compute peak detection based on a circle Hough transform"""
         return self.compute_10(
             cpi.compute_hough_circle_peaks,
-            ShapeTypes.CIRCLE,
             param,
             cpi.HoughCircleParam,
             title=_("Hough circles"),
@@ -912,7 +907,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Difference of Gaussian method"""
         return self.compute_10(
             cpi_det.compute_blob_dog,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobDOGParam,
             title=_("Blob detection (DOG)"),
@@ -925,7 +919,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Determinant of Hessian method"""
         return self.compute_10(
             cpi_det.compute_blob_doh,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobDOHParam,
             title=_("Blob detection (DOH)"),
@@ -938,7 +931,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Laplacian of Gaussian method"""
         return self.compute_10(
             cpi_det.compute_blob_log,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobLOGParam,
             title=_("Blob detection (LOG)"),
@@ -952,7 +944,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using OpenCV"""
         return self.compute_10(
             cpi_det.compute_blob_opencv,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
