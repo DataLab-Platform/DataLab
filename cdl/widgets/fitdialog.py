@@ -238,7 +238,7 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
 # --- Exponential fitting curve ------------------------------------------------
 
 
-def exponentialfit(x, y, parent=None, name=None):
+def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     """Compute exponential fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
@@ -263,23 +263,24 @@ def exponentialfit(x, y, parent=None, name=None):
 # --- Sinusoidal fitting curve ------------------------------------------------
 
 
-def exponentialfit(x, y, parent=None, name=None):
-    """Compute exponential fit
+def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute sinusoidal fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
 
-    a = FitParam(_("A coefficient"), 1.0, -10.0, 10.0)
-    b = FitParam(_("B coefficient"), 1.0, -10.0, 10.0)
-    c = FitParam(_("C constant"), 0.0, -10.0, 10.0)
+    a = FitParam(_("Amplitude"), 1.0, -10.0, 10.0)
+    f = FitParam(_("Frequency"), 1.0, -10.0, 10.0)
+    p = FitParam(_("Phase"), 0.0, -10.0, 10.0)
+    c = FitParam(_("Continuous component"), 0.0, -10.0, 10.0)
 
-    params = [a, b, c]
+    params = [a, f, p, c]
 
     def fitfunc(x, params):
-        return params[0] * np.exp(params[1] * x) + params[2]
+        return params[0] * np.sin(2 * np.pi * params[1] * x + params[2]) + params[3]
 
     values = guifit(
-        x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
+        x, y, fitfunc, params, parent=parent, wintitle=_("Sinusoidal fit"), name=name
     )
     if values:
         return fitfunc(x, values), params
