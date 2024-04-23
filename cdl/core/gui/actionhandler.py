@@ -719,12 +719,6 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_peak_detection,
                 icon=get_icon("peak_detect.svg"),
             )
-            self.new_action(
-                _("Flix x-axis"),
-                triggered=self.panel.processor.compute_flipx,
-                icon=get_icon("flip_horizontal.svg"),
-                separator=True,
-            )
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
@@ -801,6 +795,12 @@ class SignalActionHandler(BaseActionHandler):
                 separator=True,
             )
         super().create_last_actions()
+        with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Flix X axis"),
+                triggered=self.panel.processor.compute_flipx,
+                icon=get_icon("flip_horizontally.svg"),
+            )
 
 
 class ImageActionHandler(BaseActionHandler):
