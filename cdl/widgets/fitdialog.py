@@ -284,7 +284,9 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     the fitting parameters"""
 
     guess_a = (np.max(y) - np.min(y)) / 2
-    guess_f = sort_frequencies(x, y)[0]
+    freqs = sort_frequencies(x, y)
+    guess_f = freqs[freqs >= 0][0]
+    print(guess_f)
     guess_p = 0
     guess_c = np.mean(y)
 

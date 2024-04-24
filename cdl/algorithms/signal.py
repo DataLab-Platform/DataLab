@@ -131,7 +131,7 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
         np.ndarray: Sorted frequencies in ascending order
     """
     freqs, fourier = xy_fft(x, y, shift=False)
-    return freqs[np.argsort(np.abs(fourier))]
+    return freqs[np.argsort(fourier)]
 
 
 # ----- Peak detection functions -----------------------------------------------
