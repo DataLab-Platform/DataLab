@@ -756,6 +756,10 @@ class SignalActionHandler(BaseActionHandler):
                     _("Exponential fit"),
                     triggered=self.panel.processor.compute_expfit,
                 )
+                self.new_action(
+                    _("Sinusoidal fit"),
+                    triggered=self.panel.processor.compute_sinfit,
+                )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(

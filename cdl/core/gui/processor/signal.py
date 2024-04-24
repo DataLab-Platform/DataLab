@@ -347,13 +347,13 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_expfit(self) -> None:
         """Compute exponential fitting curve"""
-        dlgfunc = fitdialog.exponentialfit
 
-        def expfit(x, y, parent=None):
-            """Exponential fit dialog function"""
-            return dlgfunc(x, y, parent=parent)
+        self.compute_fit(_("Exponential fit"), fitdialog.exponentialfit)
 
-        self.compute_fit(_("Exponential fit"), expfit)
+    @qt_try_except()
+    def compute_sinfit(self) -> None:
+        """Compute sinusoidal fitting curve"""
+        self.compute_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:

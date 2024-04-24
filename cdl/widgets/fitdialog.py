@@ -12,8 +12,9 @@ from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
 
 from cdl.algorithms import fit
-from cdl.algorithms.signal import xpeak
+from cdl.algorithms.signal import xpeak, xy_fft
 from cdl.config import _
+from cdl.core.model.signal import FreqUnits
 from cdl.utils.tests import get_default_test_name
 
 
@@ -244,9 +245,13 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
 
-    a = FitParam(_("A coefficient"), 1.0, -10.0, 10.0)
-    b = FitParam(_("B coefficient"), 1.0, -10.0, 10.0)
-    c = FitParam(_("C constant"), 0.0, -10.0, 10.0)
+    opt_params: np.ndarray
+    opt_params, __ = curve_fit(lambda x, a, b, c: a * np.exp(b * x) + c, x, y)
+    oa, ob, oc = opt_params
+    moa, mob, moc = np.maximum(1, opt_params)
+    a = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
+    b = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
+    c = FitParam(_("C constant"), oc, -2 * moc, 2 * moc)
 
     params = [a, b, c]
 
@@ -268,11 +273,30 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
+    opt_params: np.ndarray
 
-    a = FitParam(_("Amplitude"), 1.0, -10.0, 10.0)
-    f = FitParam(_("Frequency"), 1.0, -10.0, 10.0)
-    p = FitParam(_("Phase"), 0.0, -10.0, 10.0)
-    c = FitParam(_("Continuous component"), 0.0, -10.0, 10.0)
+    freqs, fourier = xy_fft(x, y, shift=False)
+    magnitudes = abs(fourier)
+    peak_frequency = np.argmax(magnitudes)
+    guess_f = freqs[peak_frequency]
+
+    guess_a = (np.max(y) - np.min(y)) / 2
+    guess_p = 0
+    guess_c = np.mean(y)
+
+    opt_params, __ = curve_fit(
+        lambda x, a, f, p, c: a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c,
+        x,
+        y,
+        [guess_a, guess_f, guess_p, guess_c],
+    )
+    oa, of, op, oc = opt_params
+
+    moa, mof, mop, moc = np.maximum(1, opt_params)
+    a = FitParam(_("Amplitude"), oa, -2 * moa, 2 * moa)
+    f = FitParam(_("Frequency"), of, 0, 2 * mof)
+    p = FitParam(_("Phase"), op, -360, 360)
+    c = FitParam(_("Continuous component"), oc, -2 * moc, 2 * moc)
 
     params = [a, f, p, c]
 
