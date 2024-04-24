@@ -322,6 +322,11 @@ class SignalProcessor(BaseProcessor):
 
             self.compute_fit(txt, polynomialfit)
 
+    @qt_try_except()
+    def compute_linearfit(self) -> None:
+        """Compute linear fitting curve"""
+        self.compute_fit(_("Linear fit"), fitdialog.linearfit)
+
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
     ) -> None:

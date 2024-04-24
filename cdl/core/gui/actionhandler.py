@@ -745,6 +745,10 @@ class SignalActionHandler(BaseActionHandler):
                 cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
                 cra_fit(_("Voigt fit"), fitdialog.voigtfit)
                 self.new_action(
+                    _("Linear fit"),
+                    triggered=self.panel.processor.compute_linearfit,
+                )
+                self.new_action(
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
                 )

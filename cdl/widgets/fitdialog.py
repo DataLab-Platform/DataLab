@@ -89,6 +89,15 @@ def polynomialfit(x, y, degree, parent=None, name=None):
         return fitfunc(x, values), params
 
 
+def linearfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute linear fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters
+    """
+    return polynomialfit(x, y, 1, parent=parent, name=name)
+
+
 # --- Gaussian fitting curve ---------------------------------------------------
 def gaussianfit(x, y, parent=None, name=None):
     """Compute Gaussian fit
