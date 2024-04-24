@@ -90,7 +90,7 @@ def polynomialfit(x, y, degree, parent=None, name=None):
 
 
 def linearfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
-    """Compute linear fit
+    """Compute linear fit using polynomialfit.
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters
