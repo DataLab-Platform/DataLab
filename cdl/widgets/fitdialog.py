@@ -10,11 +10,11 @@ from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
+from scipy.special import erf
 
 from cdl.algorithms import fit
-from cdl.algorithms.signal import xpeak, xy_fft
+from cdl.algorithms.signal import sort_frequencies, xpeak
 from cdl.config import _
-from cdl.core.model.signal import FreqUnits
 from cdl.utils.tests import get_default_test_name
 
 
@@ -249,11 +249,11 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     opt_params, __ = curve_fit(lambda x, a, b, c: a * np.exp(b * x) + c, x, y)
     oa, ob, oc = opt_params
     moa, mob, moc = np.maximum(1, opt_params)
-    a = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
-    b = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
-    c = FitParam(_("C constant"), oc, -2 * moc, 2 * moc)
+    a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
+    b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
+    c_p = FitParam(_("C constant"), oc, -2 * moc, 2 * moc)
 
-    params = [a, b, c]
+    params = [a_p, b_p, c_p]
 
     def fitfunc(x, params):
         return params[0] * np.exp(params[1] * x) + params[2]
@@ -273,18 +273,14 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
-    opt_params: np.ndarray
-
-    freqs, fourier = xy_fft(x, y, shift=False)
-    magnitudes = abs(fourier)
-    peak_frequency = np.argmax(magnitudes)
-    guess_f = freqs[peak_frequency]
 
     guess_a = (np.max(y) - np.min(y)) / 2
+    guess_f = sort_frequencies(x, y)[0]
     guess_p = 0
     guess_c = np.mean(y)
 
-    opt_params, __ = curve_fit(
+    opt_params: np.ndarray
+    opt_params, _covar = curve_fit(
         lambda x, a, f, p, c: a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c,
         x,
         y,
@@ -293,12 +289,12 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     oa, of, op, oc = opt_params
 
     moa, mof, mop, moc = np.maximum(1, opt_params)
-    a = FitParam(_("Amplitude"), oa, -2 * moa, 2 * moa)
-    f = FitParam(_("Frequency"), of, 0, 2 * mof)
-    p = FitParam(_("Phase"), op, -360, 360)
-    c = FitParam(_("Continuous component"), oc, -2 * moc, 2 * moc)
+    a_p = FitParam(_("Amplitude"), oa, -2 * moa, 2 * moa)
+    f_p = FitParam(_("Frequency"), of, 0, 2 * mof)
+    p_p = FitParam(_("Phase"), op, -360, 360)
+    c_p = FitParam(_("Continuous component"), oc, -2 * moc, 2 * moc)
 
-    params = [a, f, p, c]
+    params = [a_p, f_p, p_p, c_p]
 
     def fitfunc(x, params):
         return params[0] * np.sin(2 * np.pi * params[1] * x + params[2]) + params[3]
@@ -308,3 +304,48 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     )
     if values:
         return fitfunc(x, values), params
+
+
+# --- Error function (ERF) fitting curve ------------------------------------------------
+
+
+def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute ERF (Error Function) fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    dy = np.max(y) - np.min(y)
+    x0_guess = (max(x) - abs(min(x))) / 2
+    off_guess = dy / 2
+    slope_guess = (max(x) - min(x)) / 10
+    amp_guess = dy
+
+    def fitfunc(x: np.ndarray, amp: float, x0: float, slope: float, offset: float):
+        return amp * erf((x - x0) / (slope * np.sqrt(2))) + offset
+
+    params, _extras = curve_fit(
+        fitfunc, x, y, p0=[amp_guess, x0_guess, slope_guess, off_guess]
+    )
+    amp_guess, x0_guess, slope_guess, off_guess = params
+
+    amp_p = FitParam(_("Amplitude"), amp_guess, 0, amp_guess * 1.2)
+    x0_p = FitParam(_("Center"), x0_guess, x0_guess * 0.2, x0_guess * 2)
+    slope_p = FitParam(_("Slope"), slope_guess, slope_guess * 0.1, slope_guess * 2)
+    off_p = FitParam(_("Offset"), off_guess, np.min(y) - 0.1 * dy, np.max(y))
+
+    params = [amp_p, x0_p, slope_p, off_p]
+
+    def wrapped_fitfunc(x: np.ndarray, p: list[float]):
+        return fitfunc(x, *p)
+
+    values = guifit(
+        x,
+        y,
+        wrapped_fitfunc,
+        params,
+        parent=parent,
+        wintitle=_("ERF fit"),
+        name=name,
+    )
+    if values:
+        return wrapped_fitfunc(x, values), params

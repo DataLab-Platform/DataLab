@@ -120,6 +120,20 @@ def xy_ifft(
     return x1, y1.real
 
 
+def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    """Sort from X,Y data by computing FFT(y).
+
+    Args:
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+
+    Returns:
+        np.ndarray: Sorted frequencies in ascending order
+    """
+    freqs, fourier = xy_fft(x, y, shift=False)
+    return freqs[np.argsort(np.abs(fourier))]
+
+
 # ----- Peak detection functions -----------------------------------------------
 def peak_indexes(
     y, thres: float = 0.3, min_dist: int = 1, thres_abs: bool = False
