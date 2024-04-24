@@ -224,7 +224,7 @@ class BaseProcessor(QC.QObject):
     def init_param(
         self,
         param: gds.DataSet,
-        paramclass: type[gds.DataSet],
+        paramclass: gds.DataSet,
         title: str,
         comment: str | None = None,
     ) -> tuple[bool, gds.DataSet]:
@@ -250,7 +250,7 @@ class BaseProcessor(QC.QObject):
         self,
         func: Callable,
         param: gds.DataSet | None = None,
-        paramclass: type[gds.DataSet] | None = None,
+        paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
