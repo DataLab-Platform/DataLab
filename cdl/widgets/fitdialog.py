@@ -4,6 +4,8 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from typing import Callable, Iterable
+
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
@@ -16,6 +18,13 @@ from cdl.algorithms import fit
 from cdl.algorithms.signal import sort_frequencies, xpeak
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
+
+
+def _wrap_fitfunc(fitfunc) -> Callable[[np.ndarray, Iterable[float]], np.ndarray]:
+    def wrapper(x, params: Iterable[float]):
+        return fitfunc(x, *params)
+
+    return wrapper
 
 
 def guifit(
@@ -264,8 +273,9 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     params = [a_p, b_p, c_p]
 
-    def fitfunc(x, params):
-        return params[0] * np.exp(params[1] * x) + params[2]
+    @_wrap_fitfunc
+    def fitfunc(x, a, b, c):
+        return a * np.exp(b * x) + c
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
@@ -286,29 +296,20 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     guess_a = (np.max(y) - np.min(y)) / 2
     freqs = sort_frequencies(x, y)
     guess_f = freqs[0]
-    print(guess_f)
-    guess_p = 0
-    guess_c = np.mean(y)
+    guess_ph = 0
+    guess_c = np.mean(y, dtype=float)
 
-    opt_params: np.ndarray
-    opt_params, _covar = curve_fit(
-        lambda x, a, f, p, c: a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c,
-        x,
-        y,
-        [guess_a, guess_f, guess_p, guess_c],
-    )
-    oa, of, op, oc = opt_params
-
-    moa, mof, mop, moc = np.maximum(1, opt_params)
-    a_p = FitParam(_("Amplitude"), oa, -2 * moa, 2 * moa)
-    f_p = FitParam(_("Frequency"), of, 0, 2 * mof)
-    p_p = FitParam(_("Phase"), op, -360, 360)
-    c_p = FitParam(_("Continuous component"), oc, -2 * moc, 2 * moc)
+    moa, mof, mop, moc = np.maximum(1, [guess_a, guess_f, guess_ph, guess_c])
+    a_p = FitParam(_("Amplitude"), guess_a, -2 * moa, 2 * moa)
+    f_p = FitParam(_("Frequency"), guess_f, 0, 2 * mof)
+    p_p = FitParam(_("Phase"), guess_ph, -360, 360)
+    c_p = FitParam(_("Continuous component"), guess_c, -2 * moc, 2 * moc)
 
     params = [a_p, f_p, p_p, c_p]
 
-    def fitfunc(x, params):
-        return params[0] * np.sin(2 * np.pi * params[1] * x + params[2]) + params[3]
+    @_wrap_fitfunc
+    def fitfunc(x, a, f, p, c):
+        return a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Sinusoidal fit"), name=name
@@ -331,32 +332,28 @@ def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     slope_guess = (max(x) - min(x)) / 10
     amp_guess = dy
 
-    def fitfunc(x: np.ndarray, amp: float, x0: float, slope: float, offset: float):
-        return amp * erf((x - x0) / (slope * np.sqrt(2))) + offset
-
-    params, _extras = curve_fit(
-        fitfunc, x, y, p0=[amp_guess, x0_guess, slope_guess, off_guess]
+    iamp, ix0, islope, ioff = np.maximum(
+        1, [amp_guess, x0_guess, slope_guess, off_guess]
     )
-    amp_guess, x0_guess, slope_guess, off_guess = params
-
-    amp_p = FitParam(_("Amplitude"), amp_guess, 0, amp_guess * 1.2)
-    x0_p = FitParam(_("Center"), x0_guess, x0_guess * 0.2, x0_guess * 2)
-    slope_p = FitParam(_("Slope"), slope_guess, slope_guess * 0.1, slope_guess * 2)
+    amp_p = FitParam(_("Amplitude"), amp_guess, 0, iamp * 1.2)
+    x0_p = FitParam(_("Center"), x0_guess, ix0 * 0.2, ix0 * 2)
+    slope_p = FitParam(_("Slope"), slope_guess, islope * 0.1, islope * 2)
     off_p = FitParam(_("Offset"), off_guess, np.min(y) - 0.1 * dy, np.max(y))
 
     params = [amp_p, x0_p, slope_p, off_p]
 
-    def wrapped_fitfunc(x: np.ndarray, p: list[float]):
-        return fitfunc(x, *p)
+    @_wrap_fitfunc
+    def fitfunc(x: np.ndarray, amp: float, x0: float, slope: float, offset: float):
+        return amp * erf((x - x0) / (slope * np.sqrt(2))) + offset
 
     values = guifit(
         x,
         y,
-        wrapped_fitfunc,
+        fitfunc,
         params,
         parent=parent,
         wintitle=_("ERF fit"),
         name=name,
     )
     if values:
-        return wrapped_fitfunc(x, values), params
+        return fitfunc(x, values), params

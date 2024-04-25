@@ -150,6 +150,10 @@ def run_signal_computations(
 
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
+    panel.processor.compute_linearfit()
+    panel.processor.compute_expfit()
+    panel.processor.compute_erffit()
+    panel.processor.compute_sinfit()
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
     panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
