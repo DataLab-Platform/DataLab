@@ -19,7 +19,7 @@ import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultShape
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
@@ -227,6 +227,19 @@ class SignalProcessor(BaseProcessor):
     def compute_wiener(self) -> None:
         """Compute Wiener filter"""
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
+
+    @qt_try_except()
+    def compute_lowpass(
+        self, param: cdl.param.LowPassFilterParam | None = None
+    ) -> None:
+        """Compute Wiener filter"""
+        self.compute_11(
+            cps.compute_lowpass,
+            param=param,
+            paramclass=cdl.param.LowPassFilterParam,
+            title=_("Low-pass filter"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:

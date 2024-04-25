@@ -38,6 +38,7 @@ from cdl.core.computation.base import (
     FFTParam,
     GaussianParam,
     HistogramParam,
+    LowPassFilterParam,
     MovingAverageParam,
     MovingMedianParam,
     ThresholdParam,
@@ -580,6 +581,27 @@ def compute_wiener(src: SignalObj) -> SignalObj:
         Result signal object
     """
     return Wrap11Func(sps.wiener)(src)
+
+
+def compute_lowpass(src: SignalObj, p: LowPassFilterParam) -> SignalObj:
+    """Compute low-pass filter
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "lowpass", f"order={p.order:d}, cutoff={p.f_cut:.3f}")  # type: ignore
+
+    p.set_fe_from_xdata(dst.x)
+
+    b, a = p.get_filter_params()
+    print(a, b)
+    dst.y = sps.filtfilt(b, a, dst.y)
+
+    return dst
 
 
 def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:

@@ -709,7 +709,9 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Integral"), triggered=self.panel.processor.compute_integral
             )
-
+            self.new_action(
+                _("Low-pass filter"), triggered=self.panel.processor.compute_lowpass
+            )
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):

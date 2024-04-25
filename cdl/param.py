@@ -177,6 +177,7 @@ Detection parameters
 
 from cdl.core.computation.base import (
     ClipParam,
+    LowPassFilterParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
