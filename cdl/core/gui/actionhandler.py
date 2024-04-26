@@ -794,6 +794,10 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_convolution,
                 separator=True,
             )
+            self.new_action(
+                _("Windowing"),
+                triggered=self.panel.processor.compute_windowing,
+            )
         super().create_last_actions()
 
 

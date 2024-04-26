@@ -285,3 +285,31 @@ def interpolate(
             ynew[xnew < x[0]] = fill_value
             ynew[xnew > x[-1]] = fill_value
     return ynew
+
+
+def windowing(y: np.ndarray, win_type="hamming", alpha=0.05) -> np.ndarray:
+    """Apply windowing to the input data.
+
+    Args:
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        win_type (str): Windowing function type. Defaults to "hamming".
+            Supported values: 'hamming', 'hanning', 'blackman', 'bartlett',
+            'tukey', 'rectangular'
+        alpha (float): Tukey window parameter. Defaults to 0.05.
+    """
+    if win_type == "hamming":
+        window = np.hamming(len(y))
+    elif win_type == "hanning":
+        window = np.hanning(len(y))
+    elif win_type == "blackman":
+        window = np.blackman(len(y))
+    elif win_type == "bartlett":
+        window = np.bartlett(len(y))
+    elif win_type == "tukey":
+        window = scipy.signal.windows.tukey(len(y), alpha)
+    elif win_type == "rectangular":
+        window = np.ones(len(y))
+    else:
+        raise ValueError(f"Invalid window type {win_type}")
+    return y * window

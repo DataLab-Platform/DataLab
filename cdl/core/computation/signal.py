@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from enum import Enum
 
 import guidata.dataset as gds
 import numpy as np
@@ -28,6 +29,7 @@ from cdl.algorithms.signal import (
     moving_average,
     normalize,
     peak_indexes,
+    windowing,
     xpeak,
     xy_fft,
     xy_ifft,
@@ -866,4 +868,51 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
+    return dst
+
+
+class WindowingEnum(Enum):
+    """Windowing functions"""
+
+    HAMMING = "hamming"
+    HANNING = "hanning"
+    BARLETT = "bartlett"
+    BLACKMAN = "blackman"
+    TUKEY = "tukey"
+    RECTANGULAR = "rectangular"
+
+    @classmethod
+    def to_choices(cls) -> list[tuple[WindowingEnum, str]]:
+        """Convert to choices"""
+        return [(e, _(e.name.capitalize())) for e in cls]
+
+
+class WindowingParam(gds.DataSet):
+    """Windowing parameters"""
+
+    _method_prop = gds.GetAttrProp("method")
+    method = gds.ChoiceItem(
+        _("Method"), WindowingEnum.to_choices(), default=WindowingEnum.HAMMING
+    )
+    alpha = gds.FloatItem(
+        _("Alpha"), help=_("Only if Tukey windowing is selected"), default=0.05
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_method_prop, lambda x: x is WindowingEnum.HAMMING),
+    )
+
+
+def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
+    """Compute windowing (available methods: hamming, hanning, bartlett, blackman,
+    tukey, rectangular)
+
+    Args:
+        dst: destination signal
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "windowing", f"method={p.method.name}")  # type: ignore
+    dst.y = windowing(dst.y, p.method.value, p.alpha)  # type: ignore
     return dst

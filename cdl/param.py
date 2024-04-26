@@ -233,4 +233,5 @@ from cdl.core.computation.signal import (
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
+    WindowingParam,
 )
