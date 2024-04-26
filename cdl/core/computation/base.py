@@ -12,7 +12,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, TypeVar
+from enum import Enum
+from typing import TYPE_CHECKING, Any, Callable, Self, TypeVar
 
 import guidata.dataset as gds
 import numpy as np
@@ -100,69 +101,6 @@ class ROIDataParam(gds.DataSet):
     def is_empty(self) -> bool:
         """Return True if there is no ROI"""
         return self.roidata is None or np.array(self.roidata).size == 0
-
-
-class BaseFilterParam(gds.DataSet):
-    # Dict of filter methods name that point to a tuple og their corresponding functions
-    # to be used in the filter as well as a function to get the parameters of the filter
-    FILTER_METHODS: dict[str, tuple[Callable, Callable]] = {}
-
-    def method_choices(self, *args) -> list[tuple[str, str, Callable]]:
-        """Return the filter function and the parameter function for the method"""
-        choices = []
-        for method in self.FILTER_METHODS:
-            choices.append((method, method, None))
-        return choices
-
-    # Must be overwriten by the child class
-    method = gds.ChoiceItem(
-        _("Filter method"),
-        choices=method_choices,
-    )
-    order = gds.IntItem(_("Filter order"), default=4, min=1)
-
-    def get_filter(self) -> Callable:
-        """Return the filter function corresponding to the method"""
-        return self.FILTER_METHODS[self.method][0]  # type: ignore
-
-    def get_param(self) -> tuple[float | str, ...]:
-        return self.FILTER_METHODS[self.method][1](self)  # type: ignore
-
-    type_: str = ""
-
-
-class LowPassFilterParam(BaseFilterParam):
-    f_cut = gds.FloatItem(_("Low cutoff frequency"), default=10)
-    fe = gds.FloatItem(_("Sampling frequency"), default=100).set_prop(
-        "display", hide=True
-    )
-    type_ = "low"
-
-    def get_bessel_params(self) -> tuple[float | str, ...]:
-        args: list[int | str] = [self.order]  # type: ignore
-        args.extend((2 * self.f_cut / self.fe, self.type_))  # type: ignore
-        print(args)
-        return tuple(args)
-
-    def get_butter_params(self) -> tuple[float | str, ...]:
-        return self.get_bessel_params()
-
-    def get_filter_params(self) -> tuple[float | str, float | str]:
-        return self.get_filter()(*self.get_param())
-
-    FILTER_METHODS = {
-        "bessel": (sps.bessel, get_bessel_params),
-        "butter": (sps.butter, get_butter_params),
-        #     "cheby1": (sps.cheby1, sps.cheby1),
-        #     "cheby2": (sps.cheby2, sps.cheby2),
-    }
-
-    def set_fe_from_xdata(self, x: np.ndarray) -> None:
-        self.fe = (x.size - 1) / (x[-1] - x[0])
-
-
-class HighPassFilterParam(LowPassFilterParam):
-    type_ = "high"
 
 
 class FFTParam(gds.DataSet):

@@ -83,6 +83,14 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
     :no-index:
+.. autodataset :: cdl.param.LowPassFilterParam
+    :no-index:
+.. autodataset :: cdl.param.HighPassFilterParam
+    :no-index:
+.. autodataset :: cdl.param.BandPassFilterParam
+    :no-index:
+.. autodataset :: cdl.param.BandStopFilterParam
+    :no-index:
 
 Image parameters
 ^^^^^^^^^^^^^^^^
@@ -177,7 +185,6 @@ Detection parameters
 
 from cdl.core.computation.base import (
     ClipParam,
-    LowPassFilterParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
@@ -234,4 +241,9 @@ from cdl.core.computation.signal import (
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
+    BaseHighLowBandParam,
+    LowPassFilterParam,
+    HighPassFilterParam,
+    BandPassFilterParam,
+    BandStopFilterParam,
 )

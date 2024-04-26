@@ -709,9 +709,22 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Integral"), triggered=self.panel.processor.compute_integral
             )
-            self.new_action(
-                _("Low-pass filter"), triggered=self.panel.processor.compute_lowpass
-            )
+            with self.new_menu(_("Fitlers")):
+                self.new_action(
+                    _("Low-pass filter"), triggered=self.panel.processor.compute_lowpass
+                )
+                self.new_action(
+                    _("High-pass filter"),
+                    triggered=self.panel.processor.compute_highpass,
+                )
+                self.new_action(
+                    _("Band-pass filter"),
+                    triggered=self.panel.processor.compute_bandpass,
+                )
+                self.new_action(
+                    _("Band-stop filter"),
+                    triggered=self.panel.processor.compute_bandstop,
+                )
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):
