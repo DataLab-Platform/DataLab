@@ -45,7 +45,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     new_signal_result,
 )
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import Choices, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -871,7 +871,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-class WindowingEnum(Enum):
+class WindowingEnum(Choices):
     """Windowing functions"""
 
     HAMMING = "hamming"
@@ -881,18 +881,13 @@ class WindowingEnum(Enum):
     TUKEY = "tukey"
     RECTANGULAR = "rectangular"
 
-    @classmethod
-    def to_choices(cls) -> list[tuple[WindowingEnum, str]]:
-        """Convert to choices"""
-        return [(e, _(e.name.capitalize())) for e in cls]
-
 
 class WindowingParam(gds.DataSet):
     """Windowing parameters"""
 
     _method_prop = gds.GetAttrProp("method")
     method = gds.ChoiceItem(
-        _("Method"), WindowingEnum.to_choices(), default=WindowingEnum.HAMMING
+        _("Method"), WindowingEnum.get_choices(), default=WindowingEnum.HAMMING
     )
     alpha = gds.FloatItem(
         _("Alpha"), help=_("Only if Tukey windowing is selected"), default=0.05
