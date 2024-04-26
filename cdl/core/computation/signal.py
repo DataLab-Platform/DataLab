@@ -624,16 +624,16 @@ class BaseHighLowBandParam(gds.DataSet):
     ).set_prop("display", store=_method_prop)
 
     order = gds.IntItem(_("Filter order"), default=3, min=1)
-    f_cut0 = gds.FloatItem(_("Low cutoff frequency"), default=10).set_prop(
-        "display", active=gds.FuncProp(_type_prop, lambda x: x is not FilterEnum.HIGH)
-    )
-    f_cut1 = gds.FloatItem(_("High cutoff frequency"), default=100).set_prop(
-        "display", active=gds.FuncProp(_type_prop, lambda x: x is not FilterEnum.LOW)
-    )
-    fe = gds.FloatItem(_("Sampling frequency"), default=100).set_prop(
+    f_cut0 = gds.FloatItem(
+        _("Low cutoff frequency"), default=10, min=0, nonzero=True
+    ).set_prop("display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.LOW))
+    f_cut1 = gds.FloatItem(
+        _("High cutoff frequency"), default=100, nonzero=True
+    ).set_prop("display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.HIGH))
+    fe = gds.FloatItem(_("Sampling frequency"), default=100, nonzero=True).set_prop(
         "display", hide=True
     )
-    rp = gds.FloatItem(_("Passband ripple"), min=0).set_prop(
+    rp = gds.FloatItem(_("Passband ripple"), min=0, default=1, nonzero=True).set_prop(
         "display",
         active=gds.FuncProp(
             _method_prop,
@@ -644,7 +644,9 @@ class BaseHighLowBandParam(gds.DataSet):
             ),
         ),
     )
-    rs = gds.FloatItem(_("Stopband attenuation"), min=0).set_prop(
+    rs = gds.FloatItem(
+        _("Stopband attenuation"), min=0, default=1, nonzero=True
+    ).set_prop(
         "display",
         active=gds.FuncProp(
             _method_prop,
@@ -777,12 +779,16 @@ def compute_higlowband(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
         Result signal object
     """
     name = f"{p.TYPE.value}"
-    dst = dst_11(src, name, f"order={p.order:d}, cutoff={p.f_cut0:.3f}")  # type: ignore
+    suffix = f"order={p.order:d}"
+    if p.TYPE in (FilterEnum.LOW, FilterEnum.HIGH):
+        suffix += f", cutoff={p.f_cut0:.2f}"
+    else:
+        suffix += f", cutoff={p.f_cut0:.2f}:{p.f_cut1:.2f}"
+    dst = dst_11(src, name, suffix)
 
     p.set_fe_from_xdata(dst.x)
 
     b, a = p.get_filter_params()
-    print(a, b)
     dst.y = sps.filtfilt(b, a, dst.y)
 
     return dst
