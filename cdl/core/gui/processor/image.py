@@ -814,6 +814,11 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultShape]:
+        """Compute data statistics"""
+        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+
+    @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
         return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
@@ -948,18 +953,3 @@ class ImageProcessor(BaseProcessor):
             cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
         )
-
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        # Be careful to use systematically functions adapted to masked arrays
-        # (e.g. numpy.ma median, and *not* numpy.median)
-        return [
-            ("min(z)", ma.min),
-            ("max(z)", ma.max),
-            ("<z>", ma.mean),
-            ("median(z)", ma.median),
-            ("σ(z)", ma.std),
-            ("<z>/σ(z)", lambda z: ma.mean(z) / ma.std(z)),
-            ("peak-to-peak(z)", ma.ptp),
-            ("Σ(z)", ma.sum),
-        ]

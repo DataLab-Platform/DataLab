@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from typing import Any
 
 import guidata.dataset as gds
 import numpy as np
@@ -41,9 +42,10 @@ from cdl.core.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     ThresholdParam,
+    calc_resultproperties,
     new_signal_result,
 )
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -125,7 +127,7 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
     return dst
 
 
-# -------- compute_n1 functions --------------------------------------------------------
+# MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -169,7 +171,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
-# -------- compute_n1n functions -------------------------------------------------------
+# MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -237,8 +239,8 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# -------- compute_11 functions --------------------------------------------------------
-# Functions with 1 input image and 1 output image
+# MARK: compute_11 functions -----------------------------------------------------------
+# Functions with 1 input signal and 1 output signal
 # --------------------------------------------------------------------------------------
 
 
@@ -620,84 +622,6 @@ class PolynomialFitParam(gds.DataSet):
     degree = gds.IntItem(_("Degree"), 3, min=1, max=10, slider=True)
 
 
-class FWHMParam(gds.DataSet):
-    """FWHM parameters"""
-
-    fittypes = (
-        ("GaussianModel", _("Gaussian")),
-        ("LorentzianModel", _("Lorentzian")),
-        ("VoigtModel", "Voigt"),
-    )
-
-    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
-
-
-def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape:
-    """Compute FWHM
-
-    Args:
-        signal: source signal
-        param: parameters
-
-    Returns:
-        Segment coordinates
-    """
-    res = []
-    for i_roi in signal.iterate_roi_indexes():
-        x, y = signal.get_data(i_roi)
-        dx = np.max(x) - np.min(x)
-        dy = np.max(y) - np.min(y)
-        base = np.min(y)
-        sigma, mu = dx * 0.1, xpeak(x, y)
-        FitModelClass: fit.FitModel = getattr(fit, param.fittype)
-        amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
-
-        def func(params):
-            """Fitting model function"""
-            # pylint: disable=cell-var-from-loop
-            return y - FitModelClass.func(x, *params)
-
-        (amp, sigma, mu, base), _ier = spo.leastsq(
-            func, np.array([amp, sigma, mu, base])
-        )
-        x0, y0, x1, y1 = FitModelClass.half_max_segment(amp, sigma, mu, base)
-        res.append([i_roi, x0, y0, x1, y1])
-    return ResultShape(ShapeTypes.SEGMENT, np.array(res), "fwhm")
-
-
-def compute_fw1e2(signal: SignalObj) -> ResultShape:
-    """Compute FW at 1/e²
-
-    Args:
-        signal: source signal
-
-    Returns:
-        Segment coordinates
-    """
-    res = []
-    for i_roi in signal.iterate_roi_indexes():
-        x, y = signal.get_data(i_roi)
-        dx = np.max(x) - np.min(x)
-        dy = np.max(y) - np.min(y)
-        base = np.min(y)
-        sigma, mu = dx * 0.1, xpeak(x, y)
-        amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
-        p_in = np.array([amp, sigma, mu, base])
-
-        def func(params):
-            """Fitting model function"""
-            # pylint: disable=cell-var-from-loop
-            return y - fit.GaussianModel.func(x, *params)
-
-        p_out, _ier = spo.leastsq(func, p_in)
-        amp, sigma, mu, base = p_out
-        hw = 2 * sigma
-        amplitude = fit.GaussianModel.amplitude(amp, sigma)
-        yhm = amplitude / np.e**2 + base
-        res.append([i_roi, mu - hw, yhm, mu + hw, yhm])
-    return ResultShape(ShapeTypes.SEGMENT, np.array(res), "fw1e2")
-
-
 def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
     """Compute histogram
 
@@ -867,3 +791,150 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
     return dst
+
+
+# MARK: compute_10 functions -----------------------------------------------------------
+# Functions with 1 input signal and 0 output signals (ResultShape or ResultProperties)
+# --------------------------------------------------------------------------------------
+
+
+def calc_resultshape(
+    label: str, shapetype: ShapeTypes, obj: SignalObj, func: Callable, *args: Any
+) -> ResultShape | None:
+    """Calculate result shape by executing a computation function on a signal object,
+    taking into account the signal ROIs.
+
+    Args:
+        label: result shape label
+        shapetype: result shape type
+        obj: input image object
+        func: computation function
+        *args: computation function arguments
+
+    Returns:
+        Result shape object or None if no result is found
+
+    .. warning::
+
+        The computation function must take either a single argument (the data) or
+        multiple arguments (the data followed by the computation parameters).
+
+        Moreover, the computation function must return a 1D NumPy array (or a list,
+        or a tuple) containing the result of the computation.
+    """
+    res = []
+    for i_roi in obj.iterate_roi_indexes():
+        data_roi = obj.get_data(i_roi)
+        if args is None:
+            results: np.ndarray = func(data_roi)
+        else:
+            results: np.ndarray = func(data_roi, *args)
+        if not isinstance(results, (np.ndarray, list, tuple)):
+            raise ValueError(
+                "The computation function must return a NumPy array, a list or a tuple"
+            )
+        results = np.array(results)
+        if results.size:
+            if results.ndim != 1:
+                raise ValueError(
+                    "The computation function must return a 1D NumPy array"
+                )
+            results = np.array([i_roi] + results.tolist())
+            res.append(results)
+    if res:
+        return ResultShape(label, np.vstack(res), shapetype)
+    return None
+
+
+class FWHMParam(gds.DataSet):
+    """FWHM parameters"""
+
+    fittypes = (
+        ("GaussianModel", _("Gaussian")),
+        ("LorentzianModel", _("Lorentzian")),
+        ("VoigtModel", "Voigt"),
+    )
+
+    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+
+
+def __func_fwhm(data: np.ndarray, fittype: str) -> tuple[float, float, float, float]:
+    """Compute FWHM"""
+    x, y = data
+    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
+    sigma, mu = dx * 0.1, xpeak(x, y)
+    FitModelClass: fit.FitModel = getattr(fit, fittype)
+    amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
+
+    def func(params):
+        """Fitting model function"""
+        # pylint: disable=cell-var-from-loop
+        return y - FitModelClass.func(x, *params)
+
+    (amp, sigma, mu, base), _ier = spo.leastsq(func, np.array([amp, sigma, mu, base]))
+    return FitModelClass.half_max_segment(amp, sigma, mu, base)
+
+
+def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape:
+    """Compute FWHM
+
+    Args:
+        signal: source signal
+        param: parameters
+
+    Returns:
+        Segment coordinates
+    """
+
+    return calc_resultshape(
+        "fwhm", ShapeTypes.SEGMENT, signal, __func_fwhm, param.fittype
+    )
+
+
+def __func_fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
+    """Compute FW at 1/e²"""
+    x, y = data
+    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
+    sigma, mu = dx * 0.1, xpeak(x, y)
+    amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
+    p_in = np.array([amp, sigma, mu, base])
+
+    def func(params):
+        """Fitting model function"""
+        # pylint: disable=cell-var-from-loop
+        return y - fit.GaussianModel.func(x, *params)
+
+    p_out, _ier = spo.leastsq(func, p_in)
+    amp, sigma, mu, base = p_out
+    hw = 2 * sigma
+    yhm = fit.GaussianModel.amplitude(amp, sigma) / np.e**2 + base
+    return mu - hw, yhm, mu + hw, yhm
+
+
+def compute_fw1e2(signal: SignalObj) -> ResultShape:
+    """Compute FW at 1/e²
+
+    Args:
+        signal: source signal
+
+    Returns:
+        Segment coordinates
+    """
+
+    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, __func_fw1e2)
+
+
+def compute_stats_func(obj: SignalObj) -> ResultProperties:
+    """Compute statistics functions"""
+    statfuncs = {
+        "min(y)": lambda xy: xy[1].min(),
+        "max(y)": lambda xy: xy[1].max(),
+        "<y>": lambda xy: xy[1].mean(),
+        "median(y)": lambda xy: np.median(xy[1]),
+        "σ(y)": lambda xy: xy[1].std(),
+        "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
+        "peak-to-peak": lambda xy: xy[1].ptp(),
+        "Σ(y)": lambda xy: xy[1].sum(),
+        "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
+    }
+    return calc_resultproperties("stats", obj, statfuncs)

@@ -19,7 +19,7 @@ import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultShape
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
@@ -375,19 +375,10 @@ class SignalProcessor(BaseProcessor):
         """Compute FW at 1/e²"""
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        return [
-            ("min(y)", lambda xy: xy[1].min()),
-            ("max(y)", lambda xy: xy[1].max()),
-            ("<y>", lambda xy: xy[1].mean()),
-            ("median(y)", lambda xy: np.median(xy[1])),
-            ("σ(y)", lambda xy: xy[1].std()),
-            ("<y>/σ(y)", lambda xy: xy[1].mean() / xy[1].std()),
-            ("peak-to-peak", lambda xy: xy[1].ptp()),
-            ("Σ(y)", lambda xy: xy[1].sum()),
-            ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
-        ]
+    @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultShape]:
+        """Compute data statistics"""
+        return self.compute_10(cps.compute_stats_func, title=_("Statistics"))
 
     @qt_try_except()
     def compute_histogram(

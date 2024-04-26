@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 import numpy as np
+from guidata.configtools import get_font
 from guidata.dataset import update_dataset
 from guidata.io import JSONHandler, JSONReader, JSONWriter
 from plotpy.builder import make
@@ -25,10 +26,13 @@ from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
 
 from cdl.algorithms import coordinates
 from cdl.algorithms.datatypes import is_integer_dtype
-from cdl.config import Conf, _
+from cdl.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem, MaskedImageItem
+
+    from cdl.core.model.image import ImageObj
+    from cdl.core.model.signal import SignalObj
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -180,7 +184,176 @@ def set_plot_item_editable(item, state):
     item.set_readonly(not state)
 
 
-class ResultShape:
+class BaseResult:
+    """Base class for results, i.e. objects returned by computation functions
+    used by :py:class`cdl.core.gui.processor.base.BaseProcessor.compute_10` method.
+
+    Args:
+        prefix: result prefix (used for metadata key)
+        label: result label
+    """
+
+    def __init__(self, prefix: str, label: str) -> None:
+        assert isinstance(label, str)
+        self.prefix = prefix
+        self.label = label
+        self.xunit: str = ""
+        self.yunit: str = ""
+        self.array: np.ndarray = np.array([])
+
+    @property
+    def shown_array(self) -> np.ndarray:
+        """Return array of shown results, i.e. including complementary array (if any)
+
+        Returns:
+            Array of shown results
+        """
+        raise NotImplementedError
+
+    @property
+    def data(self):
+        """Return raw data (array without ROI informations)"""
+        raise NotImplementedError
+
+    @property
+    def key(self) -> str:
+        """Return metadata key associated to result"""
+        return self.prefix + self.label
+
+    def update_units_from(self, obj: ImageObj | SignalObj) -> None:
+        """Update units from object metadata
+
+        Args:
+            obj: object
+        """
+        self.xunit = obj.xunit
+        self.yunit = obj.yunit
+
+    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
+        """Return labels for result array columns
+
+        Args:
+            obj: object
+
+        Returns:
+            Labels for result array columns
+        """
+        raise NotImplementedError
+
+    def add_to(self, obj: BaseObj) -> None:
+        """Add metadata shape to object
+
+        Args:
+            obj: object (signal/image)
+        """
+        raise NotImplementedError
+
+
+class ResultProperties(BaseResult):
+    """Object representing properties serializable in signal/image metadata.
+
+    Result `array` is a NumPy 2-D array: each row is a list of properties, optionnally
+    associated to a ROI (first column value).
+
+    ROI index is starting at 0 (or is simply 0 if there is no ROI).
+
+    Args:
+        label: properties label
+        array: properties array
+        xlabels: labels for result array columns
+    """
+
+    PREFIX = "_properties_"
+
+    def __init__(self, label: str, array: np.ndarray, xlabels: list[str]) -> None:
+        super().__init__(self.PREFIX, label)
+        self.xlabels = xlabels
+        self.array = array
+        assert len(xlabels) == self.data.shape[1]
+
+    @classmethod
+    def from_metadata_entry(cls, key, value) -> ResultProperties | None:
+        """Create metadata shape object from (key, value) metadata entry"""
+        if (
+            isinstance(key, str)
+            and key.startswith(cls.PREFIX)
+            and isinstance(value, tuple)
+            and len(value) == 2
+            and isinstance(value[0], list)
+            and isinstance(value[1], np.ndarray)
+        ):
+            try:
+                label = key[len(cls.PREFIX) :]
+                return cls(label, value[1], value[0])
+            except ValueError:
+                pass
+        return None
+
+    @classmethod
+    def match(cls, key, value) -> bool:
+        """Return True if metadata dict entry (key, value) is a metadata result"""
+        return cls.from_metadata_entry(key, value) is not None
+
+    @property
+    def data(self):
+        """Return raw data (array without ROI informations)"""
+        return self.array[:, 1:]
+
+    @property
+    def shown_array(self) -> np.ndarray:
+        """Return array of shown results, i.e. including complementary array (if any)
+
+        Returns:
+            Array of shown results
+        """
+        return self.data
+
+    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
+        """Return labels for result array columns
+
+        Args:
+            obj: object
+
+        Returns:
+            Labels for result array columns
+        """
+        self.update_units_from(obj)
+        return [lbl.format(xunit=self.xunit, yunit=self.yunit) for lbl in self.xlabels]
+
+    def add_to(self, obj: BaseObj) -> None:
+        """Add metadata shape to object
+
+        Args:
+            obj: object (signal/image)
+        """
+        obj.metadata[self.key] = (self.xlabels, self.array)
+
+    def create_label(self) -> LabelItem:
+        """Create label item
+
+        Returns:
+            Label item
+        """
+        text = ""
+        for i_row in range(self.array.shape[0]):
+            suffix = f"|ROI{i_row}" if i_row > 0 else ""
+            text += f"<u>{self.label}{suffix}</u>:"
+            for i_col, label in enumerate(self.xlabels):
+                # "label" may contains "<" and ">" characters which are interpreted
+                # as HTML tags by the LabelItem. We must escape them.
+                label = label.replace("<", "&lt;").replace(">", "&gt;")
+                text += f"<br>{label} = {self.data[i_row, i_col]}"
+            if i_row < self.data.shape[0] - 1:
+                text += "<br><br>"
+        item = make.label(text, "TL", (0, 0), "TL")
+        font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
+        item.set_style("plot", "label/properties")
+        item.labelparam.font.update_param(font)
+        item.labelparam.update_label(item)
+        return item
+
+
+class ResultShape(BaseResult):
     """Object representing a geometrical shape serializable in signal/image metadata.
 
     Result `array` is a NumPy 2-D array: each row is a result, optionnally associated
@@ -189,17 +362,17 @@ class ResultShape:
     ROI index is starting at 0 (or is simply 0 if there is no ROI).
 
     Args:
-        shapetype: shape type
+        label: shape label
         array: shape coordinates (multiple shapes: one shape per row),
          first column is ROI index (0 if there is no ROI)
-        label: shape label
+        shapetype: shape type
 
     Raises:
         AssertionError: invalid argument
     """
 
-    def __init__(self, shapetype: ShapeTypes, array: np.ndarray, label: str = ""):
-        assert isinstance(label, str)
+    def __init__(self, label: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
+        super().__init__(shapetype.value, label)
         assert isinstance(shapetype, ShapeTypes)
         self.label = self.show_label = label
         self.shapetype = shapetype
@@ -229,7 +402,7 @@ class ResultShape:
         if isinstance(key, str) and isinstance(value, np.ndarray):
             try:
                 label, shapetype = cls.label_shapetype_from_key(key)
-                return cls(shapetype, value, label)
+                return cls(label, value, shapetype)
             except ValueError:
                 pass
         return None
@@ -239,29 +412,30 @@ class ResultShape:
         """Return True if metadata dict entry (key, value) is a metadata result"""
         return cls.from_metadata_entry(key, value) is not None
 
-    @property
-    def key(self) -> str:
-        """Return metadata key associated to result"""
-        return self.shapetype.value + self.label
+    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
+        """Return labels for result array columns
 
-    @property
-    def shown_xlabels(self) -> tuple[str]:
-        """Return labels for result array columns"""
+        Args:
+            obj: object
+
+        Returns:
+            Labels for result array columns
+        """
         if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
-            labels = "ROI", "x", "y"
+            labels = "x", "y"
         elif self.shapetype in (
             ShapeTypes.RECTANGLE,
             ShapeTypes.SEGMENT,
             ShapeTypes.POLYGON,
         ):
-            labels = ["ROI"]
+            labels = []
             for index in range(0, self.array.shape[1] - 1, 2):
                 labels += [f"x{index//2}", f"y{index//2}"]
             labels = tuple(labels)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            labels = "ROI", "x", "y", "r"
+            labels = "x", "y", "r"
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            labels = "ROI", "x", "y", "a", "b", "θ"
+            labels = "x", "y", "a", "b", "θ"
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
         labels += self.__get_complementary_xlabels() or ()
@@ -269,16 +443,15 @@ class ResultShape:
 
     @property
     def shown_array(self) -> np.ndarray:
-        """Return array of shown results, i.e. including the complementary array
+        """Return array of shown results, i.e. including complementary array (if any)
 
         Returns:
             Array of shown results
         """
-        arr = self.array
         comp_arr = self.__get_complementary_array()
         if comp_arr is None:
-            return arr
-        return np.hstack([arr, comp_arr])
+            return self.data
+        return np.hstack([self.data, comp_arr])
 
     def __get_complementary_xlabels(self) -> tuple[str] | None:
         """Return complementary labels for result array columns
@@ -814,7 +987,7 @@ class BaseObj(metaclass=BaseObjMeta):
             self.metadata[ROI_KEY] = np.array(roidata, int)
         self.__roi_changed = True
 
-    def iterate_resultshapes(self):
+    def iterate_resultshapes(self) -> Iterable[ResultShape]:
         """Iterate over object result shapes.
 
         Yields:
@@ -948,7 +1121,7 @@ class BaseObj(metaclass=BaseObjMeta):
             title: title (if None, use object title)
         """
 
-    def iterate_shape_items(self, editable: bool = False):
+    def iterate_computing_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).
 
         Args:
@@ -967,6 +1140,9 @@ class BaseObj(metaclass=BaseObjMeta):
                 yield from mshape.iterate_plot_items(
                     fmt, lbl, f"shape/result/{self.PREFIX}"
                 )
+            elif ResultProperties.match(key, value):
+                mshape = ResultProperties.from_metadata_entry(key, value)
+                yield mshape.create_label()
         if self.annotations:
             try:
                 for item in load_items(JSONReader(self.annotations)):

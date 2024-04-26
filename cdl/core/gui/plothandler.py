@@ -155,7 +155,7 @@ class BasePlotHandler:
             # Performance optimization: block `plotpy.plot.BasePlot` signals,
             # add all items except the last one, unblock signals, then add the last one
             # (this avoids some unnecessary refresh process by PlotPy)
-            items = list(obj.iterate_shape_items(editable=False))
+            items = list(obj.iterate_computing_items(editable=False))
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()

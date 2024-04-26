@@ -828,7 +828,7 @@ class BaseDataPanel(AbstractPanel):
         plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
-        for item in obj.iterate_shape_items(editable=True):
+        for item in obj.iterate_computing_items(editable=True):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
         dlg.show()
@@ -1028,9 +1028,12 @@ class BaseDataPanel(AbstractPanel):
             for result in obj.iterate_resultshapes():
                 rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
                 rdata.results.append(result)
-                rdata.xlabels = result.shown_xlabels
-                for _i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{obj.short_id}: {result.label}"
+                rdata.xlabels = result.get_xlabels(obj)
+                for i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{result.label}({obj.short_id})"
+                    i_roi = result.array[i_row_res, 0]
+                    if i_roi >= 0:
+                        ylabel += f"|ROI{i_roi}"
                     rdata.ylabels.append(ylabel)
         return rdatadict
 

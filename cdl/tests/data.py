@@ -552,16 +552,16 @@ def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
     RShape, SType = cdl.obj.ResultShape, cdl.obj.ShapeTypes
     return (
         RShape(
-            SType.CIRCLE,
-            [[0, 250, 250, 200], [0, 250, 250, 140]],
             "circle",
+            [[0, 250, 250, 200], [0, 250, 250, 140]],
+            SType.CIRCLE,
         ),
-        RShape(SType.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
-        RShape(SType.SEGMENT, [0, 50, 250, 400, 400], "segment"),
-        RShape(SType.POINT, [[0, 500, 500], [0, 15, 400]], "point"),
+        RShape("rectangle", [0, 300, 200, 700, 700], SType.RECTANGLE),
+        RShape("segment", [0, 50, 250, 400, 400], SType.SEGMENT),
+        RShape("point", [[0, 500, 500], [0, 15, 400]], SType.POINT),
         RShape(
-            SType.POLYGON,
-            [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
             "polygon",
+            [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
+            SType.POLYGON,
         ),
     )
