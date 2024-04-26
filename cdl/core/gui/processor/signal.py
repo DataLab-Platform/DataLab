@@ -232,12 +232,51 @@ class SignalProcessor(BaseProcessor):
     def compute_lowpass(
         self, param: cdl.param.LowPassFilterParam | None = None
     ) -> None:
-        """Compute Wiener filter"""
+        """Compute high-pass filter"""
         self.compute_11(
-            cps.compute_lowpass,
+            cps.compute_higlowband,
             param=param,
             paramclass=cdl.param.LowPassFilterParam,
             title=_("Low-pass filter"),
+            edit=True,
+        )
+
+    @qt_try_except()
+    def compute_highpass(
+        self, param: cdl.param.HighPassFilterParam | None = None
+    ) -> None:
+        """Compute high-pass filter"""
+        self.compute_11(
+            cps.compute_higlowband,
+            param=param,
+            paramclass=cdl.param.HighPassFilterParam,
+            title=_("High-pass filter"),
+            edit=True,
+        )
+
+    @qt_try_except()
+    def compute_bandpass(
+        self, param: cdl.param.BandPassFilterParam | None = None
+    ) -> None:
+        """Compute band-pass filter"""
+        self.compute_11(
+            cps.compute_higlowband,
+            param=param,
+            paramclass=cdl.param.BandPassFilterParam,
+            title=_("Band-pass filter"),
+            edit=True,
+        )
+
+    @qt_try_except()
+    def compute_bandstop(
+        self, param: cdl.param.BandStopFilterParam | None = None
+    ) -> None:
+        """Compute band-stop filter"""
+        self.compute_11(
+            cps.compute_higlowband,
+            param=param,
+            paramclass=cdl.param.BandStopFilterParam,
+            title=_("Band-stop filter"),
             edit=True,
         )
 
