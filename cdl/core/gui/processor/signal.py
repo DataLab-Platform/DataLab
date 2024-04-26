@@ -301,6 +301,17 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_windowing(self, param: cdl.param.WindowingParam | None = None) -> None:
+        """Compute windowing"""
+        self.compute_11(
+            cps.compute_windowing,
+            param,
+            cdl.param.WindowingParam,
+            title=_("Windowing"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_fit(self, name, fitdlgfunc):
         """Compute fitting curve"""
         for obj in self.panel.objview.get_sel_objects():
