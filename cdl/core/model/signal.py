@@ -569,6 +569,16 @@ class SignalTypes(base.Choices):
     SINC = _("cardinal sine")
     #: Step function
     STEP = _("step")
+    #: Exponential function
+    EXPONENTIAL = _("exponential")
+    #: Pulse function
+    PULSE = _("pulse")
+    #: Polynomial function
+    POLYNOMIAL = _("polynomial")
+    #: Edge function
+    EDGE = _("edge")
+    #: Experimental function
+    EXPERIMENTAL = _("experimental")
 
 
 class GaussLorentzVoigtParam(gds.DataSet):
@@ -619,6 +629,61 @@ class StepParam(gds.DataSet):
     a1 = gds.FloatItem("A1", default=0.0)
     a2 = gds.FloatItem("A2", default=1.0).set_pos(col=1)
     x0 = gds.FloatItem("X0", default=0.0)
+
+
+class ExponentialParam(gds.DataSet):
+    """Parameters for exponential function"""
+
+    a = gds.FloatItem("A", default=1.0)
+    offset = gds.FloatItem(_("Offset"), default=0.0)
+    expo = gds.FloatItem(_("Exponent"), default=1.0)
+
+
+class PulseParam(gds.DataSet):
+    """Parameters for pulse function"""
+
+    amp = gds.FloatItem("Amplitude", default=1.0)
+    start = gds.FloatItem(_("Start"), default=0.0)
+    stop = gds.FloatItem(_("Stop"), default=0.0)
+    offset = gds.FloatItem(_("Offset"), default=0.0)
+
+
+class PolyParam(gds.DataSet):
+    """Parameters for polynomial function"""
+
+    a0 = gds.FloatItem("a0", default=1.0).set_pos(col=0)
+    a1 = gds.FloatItem("a1", default=1.0).set_pos(col=1)
+    a2 = gds.FloatItem("a2", default=0.0).set_pos(col=2)
+    a3 = gds.FloatItem("a3", default=0.0).set_pos(col=3)
+    a4 = gds.FloatItem("a4", default=0.0).set_pos(col=4)
+    a5 = gds.FloatItem("a5", default=0.0).set_pos(col=5)
+
+
+class EdgeParam(gds.DataSet):
+    """Parameters for edge function"""
+
+    a = gds.FloatItem("A", default=1.0)
+    start = gds.FloatItem(_("Start"), default=0.0)
+    offset = gds.FloatItem(_("Offset"), default=0.0)
+
+
+class ExperParam(gds.DataSet):
+    """Paramers for experimental function"""
+
+    n_pts = gds.IntItem("Npts", default=5)
+
+
+class ExperPtsParam(gds.DataSet):
+    size = gds.IntItem("Size", default=5)
+    arr = gds.FloatArrayItem(
+        "XY Values",
+        format="%g",
+    )
+
+    def setup_default(self):
+        """Set arrays"""
+        ls = np.linspace(0, self.size - 1, self.size)
+        self.arr = np.vstack((ls, ls)).T
 
 
 class NewSignalParam(gds.DataSet):
@@ -797,5 +862,66 @@ def create_signal_from_param(
             signal.set_xydata(xarr, yarr)
             if signal.title == DEFAULT_TITLE:
                 signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
+        elif newparam.stype is SignalTypes.EXPONENTIAL:
+            if p is None:
+                p = ExponentialParam(_("Exponential function"))
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = p.a * np.exp(p.expo * xarr) + p.offset
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(a={p.a:.3g},expo={p.expo:.3g},offset={p.offset:.3g})"
+                )
+        elif newparam.stype is SignalTypes.PULSE:
+            if p is None:
+                p = PulseParam(_("Pulse function"))
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = np.full_like(xarr, p.offset)
+            yarr[(xarr >= p.start) & (xarr <= p.stop)] += p.amp
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(start={p.start:.3g},stop={p.stop:.3g}"
+                    f",off={p.offset:.3g})"
+                )
+        elif newparam.stype is SignalTypes.POLYNOMIAL:
+            if p is None:
+                p = PolyParam(_("Polynomial function"))
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = np.polyval([p.a5, p.a4, p.a3, p.a2, p.a1, p.a0], xarr)
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(a0={p.a0:2g},a1={p.a1:2g},a2={p.a2:2g},"
+                    f"a3={p.a3:2g},a4={p.a4:2g},a5={p.a5:2g})"
+                )
+        elif newparam.stype is SignalTypes.EDGE:
+            if p is None:
+                p = EdgeParam(_("Edge function"))
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = np.full_like(xarr, p.offset)
+            yarr[xarr >= p.start] += p.a
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(start={p.start:.3g},a={p.a:.3g},off={p.offset:.3g})"
+                )
+        elif newparam.stype is SignalTypes.EXPERIMENTAL:
+            if p is None:
+                p = ExperParam(_("Experimental function"))
+            if edit and not p.edit(parent=parent):
+                return None
+            p2 = ExperPtsParam(_("Experimental points"))
+            p2.size = p.n_pts
+            p2.setup_default()
+            if edit and not p2.edit(parent=parent):
+                return None
+            signal.xydata = p2.arr.T
+            if signal.title == DEFAULT_TITLE:
+                signal.title = f"{prefix}(npts={p.n_pts})"
         return signal
     return None
