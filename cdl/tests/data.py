@@ -502,7 +502,7 @@ def create_noisygauss_image(
         size, dtype
     )
     if add_annotations:
-        obj.set_annotations_from_file(get_test_fnames("annotations.json")[0])
+        obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return obj
 
 
@@ -539,7 +539,7 @@ def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     data = create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
     title = "Test image (with metadata)" if title is None else title
     image = cdl.obj.create_image(title, data)
-    image.set_annotations_from_file(get_test_fnames("annotations.json")[0])
+    image.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return image
 
 

@@ -98,7 +98,6 @@ msgstr ""
 #: cdl.core.model.base.BaseObj.import_metadata_from_file
 #: cdl.core.model.base.BaseObj.iterate_shape_items
 #: cdl.core.model.base.BaseObj.roidata_to_params
-#: cdl.core.model.base.BaseObj.set_annotations_from_file
 #: cdl.core.model.base.BaseObj.set_metadata_option
 #: cdl.core.model.base.BaseObj.transform_shapes
 #: cdl.core.model.base.BaseObj.update_resultshapes_from
@@ -666,7 +665,6 @@ msgstr "Ajouter des annotations d'objet à partir d'un fichier (JSON)."
 #: cdl.core.model.base.BaseObj.add_annotations_from_file:3
 #: cdl.core.model.base.BaseObj.export_metadata_to_file:3
 #: cdl.core.model.base.BaseObj.import_metadata_from_file:3
-#: cdl.core.model.base.BaseObj.set_annotations_from_file:3 of
 msgid "filename"
 msgstr "nom du fichier"
 
@@ -957,10 +955,6 @@ msgstr "Sérialiser le jeu de données"
 #: guidata.dataset.datatypes.DataSet.serialize:3 of
 msgid "writer object"
 msgstr "objet écrivain"
-
-#: cdl.core.model.base.BaseObj.set_annotations_from_file:1 of
-msgid "Set object annotations from file (JSON)."
-msgstr "Définir les annotations de l'objet à partir du fichier (JSON)."
 
 #: guidata.dataset.datatypes.DataSet.set_defaults:1 of
 msgid "Set default values"

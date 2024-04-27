@@ -1097,15 +1097,6 @@ class BaseObj(metaclass=BaseObjMeta):
 
     annotations = property(__get_annotations, __set_annotations)
 
-    def set_annotations_from_file(self, filename: str) -> None:
-        """Set object annotations from file (JSON).
-
-        Args:
-            filename: filename
-        """
-        with open(filename, mode="rb") as fdesc:
-            self.annotations = fdesc.read().decode()
-
     def add_annotations_from_items(self, items: list) -> None:
         """Add object annotations (annotation plot items).
 
