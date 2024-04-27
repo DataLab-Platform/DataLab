@@ -13,6 +13,7 @@ import enum
 import json
 import sys
 from collections.abc import Callable, Iterable
+from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
@@ -36,6 +37,16 @@ if TYPE_CHECKING:
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
+
+
+def deepcopy_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
+    """Deepcopy metadata, except keys starting with "_" (private keys)
+    with the exception of "_roi_" and "_ann_" keys."""
+    mdcopy = deepcopy(metadata)
+    for key in metadata:
+        if key.startswith("_") and key not in (ROI_KEY, ANN_KEY):
+            mdcopy.pop(key)
+    return mdcopy
 
 
 @enum.unique
