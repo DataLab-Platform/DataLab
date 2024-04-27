@@ -280,27 +280,32 @@ class ResultProperties(BaseResult):
 
     PREFIX = "_properties_"
 
-    def __init__(self, label: str, array: np.ndarray, xlabels: list[str]) -> None:
+    def __init__(
+        self, label: str, array: np.ndarray, xlabels: list[str], item_json: str = ""
+    ) -> None:
         super().__init__(self.PREFIX, label)
         self.shown_category = _("Properties")
         self.xlabels = xlabels
         self.array = array
         assert len(xlabels) == self.data.shape[1]
+        self.item_json = item_json  # JSON string of label item associated to this obj
 
     @classmethod
-    def from_metadata_entry(cls, key, value) -> ResultProperties | None:
+    def from_metadata_entry(
+        cls, key: str, value: dict[str, Any]
+    ) -> ResultProperties | None:
         """Create metadata shape object from (key, value) metadata entry"""
         if (
             isinstance(key, str)
             and key.startswith(cls.PREFIX)
-            and isinstance(value, tuple)
-            and len(value) == 2
-            and isinstance(value[0], list)
-            and isinstance(value[1], np.ndarray)
+            and isinstance(value, dict)
+            and "array" in value
+            and "xlabels" in value
         ):
             try:
                 label = key[len(cls.PREFIX) :]
-                return cls(label, value[1], value[0])
+                instance = cls(label, **value)
+                return instance
             except ValueError:
                 pass
         return None
@@ -342,9 +347,24 @@ class ResultProperties(BaseResult):
         Args:
             obj: object (signal/image)
         """
-        obj.metadata[self.key] = (self.xlabels, self.array)
+        item = self.create_label_item()
+        self.update_obj_metadata(obj, item)
 
-    def create_label(self) -> LabelItem:
+    def update_obj_metadata(self, obj: BaseObj, item: LabelItem) -> None:
+        """Update object metadata with label item
+
+        Args:
+            obj: object
+            item: label item
+        """
+        self.item_json = items_to_json([item])
+        obj.metadata[self.key] = {
+            "xlabels": self.xlabels,
+            "array": self.array,
+            "item_json": self.item_json,
+        }
+
+    def create_label_item(self) -> LabelItem:
         """Create label item
 
         Returns:
@@ -366,6 +386,16 @@ class ResultProperties(BaseResult):
         item.set_style("plot", "label/properties")
         item.labelparam.font.update_param(font)
         item.labelparam.update_label(item)
+        return item
+
+    def get_label_item(self) -> LabelItem:
+        """Return label item associated to this result
+
+        Returns:
+            Label item
+        """
+        item = json_to_items(self.item_json)[0]
+        assert isinstance(item, LabelItem)
         return item
 
 
@@ -1136,11 +1166,11 @@ class BaseObj(metaclass=BaseObjMeta):
             title: title (if None, use object title)
         """
 
-    def iterate_computing_items(self, editable: bool = False):
+    def iterate_shape_items(self, editable: bool = False):
         """Iterate over computing items encoded in metadata (if any).
 
         Args:
-            editable: if True, ROI is editable
+            editable: if True, annotations are editable
 
         Yields:
             Plot item
@@ -1155,9 +1185,6 @@ class BaseObj(metaclass=BaseObjMeta):
                 yield from mshape.iterate_plot_items(
                     fmt, lbl, f"shape/result/{self.PREFIX}"
                 )
-            elif ResultProperties.match(key, value):
-                mshape = ResultProperties.from_metadata_entry(key, value)
-                yield mshape.create_label()
         if self.annotations:
             try:
                 for item in load_items(JSONReader(self.annotations)):

@@ -44,7 +44,7 @@ from cdl.utils.qthelpers import (
 from cdl.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.items import CurveItem, LabelItem, MaskedImageItem
     from plotpy.plot import PlotWidget
     from plotpy.tools.base import GuiTool
 
@@ -250,7 +250,9 @@ class BaseDataPanel(AbstractPanel):
         super().closeEvent(event)
 
     # ------AbstractPanel interface-----------------------------------------------------
-    def plot_item_parameters_changed(self, item: CurveItem | MaskedImageItem) -> None:
+    def plot_item_parameters_changed(
+        self, item: CurveItem | MaskedImageItem | LabelItem
+    ) -> None:
         """Plot items changed: update metadata of all objects from plot items"""
         # Find the object corresponding to the plot item
         obj = self.plothandler.get_obj_from_item(item)
@@ -258,6 +260,26 @@ class BaseDataPanel(AbstractPanel):
             obj.update_metadata_from_plot_item(item)
             if obj is self.objview.get_current_object():
                 self.objprop.update_properties_from(obj)
+        self.plothandler.update_resultproperty_from_plot_item(item)
+
+    def plot_item_moved(
+        self,
+        item: LabelItem,
+        x0: float,
+        y0: float,
+        x1: float,
+        y1: float,
+    ) -> None:
+        """Plot item moved: update metadata of all objects from plot items
+
+        Args:
+            item: Plot item
+            x0: new x0 coordinate
+            y0: new y0 coordinate
+            x1: new x1 coordinate
+            y1: new y1 coordinate
+        """
+        self.plothandler.update_resultproperty_from_plot_item(item)
 
     def serialize_object_to_hdf5(
         self, obj: SignalObj | ImageObj, writer: NativeH5Writer
@@ -828,7 +850,7 @@ class BaseDataPanel(AbstractPanel):
         plot.unselect_all()
         for item in plot.items:
             item.set_selectable(False)
-        for item in obj.iterate_computing_items(editable=True):
+        for item in obj.iterate_shape_items(editable=True):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
         dlg.show()
