@@ -100,7 +100,7 @@ def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape 
     """Compute contour shape fit"""
     shapetype = getattr(ShapeTypes, p.shape.upper())
     return calc_resultshape(
-        "contour", shapetype, image, get_contour_shapes, p.threshold
+        "contour", shapetype, image, get_contour_shapes, p.shape, p.threshold
     )
 
 
