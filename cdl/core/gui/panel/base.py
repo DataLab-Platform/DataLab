@@ -30,7 +30,7 @@ from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
-from cdl.core.model.base import ResultShape, items_to_json
+from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
@@ -207,7 +207,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
 class ResultData:
     """Result data associated to a shapetype"""
 
-    results: list[ResultShape] = None
+    results: list[ResultShape | ResultProperties] = None
     xlabels: list[str] = None
     ylabels: list[str] = None
 
@@ -1021,12 +1021,16 @@ class BaseDataPanel(AbstractPanel):
 
     def __get_resultdata_dict(
         self, objs: list[SignalObj | ImageObj]
-    ) -> dict[ShapeTypes, ResultData]:
+    ) -> dict[str, ResultData]:
         """Return result data dictionary"""
-        rdatadict: dict[ShapeTypes, ResultData] = {}
+        rdatadict: dict[str, ResultData] = {}
         for obj in objs:
-            for result in obj.iterate_resultshapes():
-                rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
+            for result in list(obj.iterate_resultshapes()) + list(
+                obj.iterate_resultproperties()
+            ):
+                rdata = rdatadict.setdefault(
+                    result.shown_category, ResultData([], None, [])
+                )
                 rdata.results.append(result)
                 rdata.xlabels = result.get_xlabels(obj)
                 for i_row_res in range(result.array.shape[0]):
@@ -1060,11 +1064,11 @@ class BaseDataPanel(AbstractPanel):
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                for rdata in rdatadict.values():
+                for prefix, rdata in rdatadict.items():
                     dlg = ArrayEditor(self.parent())
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
-                        _("Results"),
+                        _("Results") + f" ({prefix})",
                         readonly=True,
                         xlabels=rdata.xlabels,
                         ylabels=rdata.ylabels,
@@ -1080,9 +1084,9 @@ class BaseDataPanel(AbstractPanel):
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = self.__get_resultdata_dict(objs)
         if rdatadict:
-            for shapetype, rdata in rdatadict.items():
+            for prefix, rdata in rdatadict.items():
                 xchoices = (("indexes", _("Indexes")),)
-                for xlabel in rdata.xlabels[1:]:
+                for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
                 ychoices = xchoices[1:]
 
@@ -1097,9 +1101,9 @@ class BaseDataPanel(AbstractPanel):
                 comment = (
                     _(
                         "Plot results obtained from previous computations.<br><br>"
-                        "This plot is based on the results under the form of '%s'."
+                        "This plot is based on results associated with '%s' prefix."
                     )
-                    % shapetype.name.lower()
+                    % prefix
                 )
                 param = PlotResultParam(_("Plot results"), comment=comment)
                 if not param.edit(parent=self):
