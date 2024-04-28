@@ -1169,6 +1169,28 @@ class BaseDataPanel(AbstractPanel):
         else:
             self.__show_no_result_warning()
 
+    def delete_results(self) -> None:
+        """Delete results"""
+        objs = self.objview.get_sel_objects(include_groups=True)
+        rdatadict = self.__get_resultdata_dict(objs)
+        if rdatadict:
+            answer = QW.QMessageBox.warning(
+                self,
+                _("Delete results"),
+                _(
+                    "Are you sure you want to delete all results "
+                    "of the selected object(s)?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+            )
+            if answer == QW.QMessageBox.Yes:
+                objs = self.objview.get_sel_objects(include_groups=True)
+                for obj in objs:
+                    obj.delete_results()
+                self.SIG_REFRESH_PLOT.emit("selected", True)
+        else:
+            self.__show_no_result_warning()
+
     def add_label_with_title(self, title: str | None = None) -> None:
         """Add a label with object title on the associated plot
 

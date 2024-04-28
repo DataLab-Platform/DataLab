@@ -1050,6 +1050,14 @@ class BaseObj(metaclass=BaseObjMeta):
             if ResultProperties.match(key, value):
                 yield ResultProperties.from_metadata_entry(key, value)
 
+    def delete_results(self) -> None:
+        """Delete all object results (shapes and properties)"""
+        for key in list(self.metadata.keys()):
+            if ResultShape.match(key, self.metadata[key]) or ResultProperties.match(
+                key, self.metadata[key]
+            ):
+                self.metadata.pop(key)
+
     def update_resultshapes_from(self, other: BaseObj) -> None:
         """Update geometric shape from another object (merge metadata).
 

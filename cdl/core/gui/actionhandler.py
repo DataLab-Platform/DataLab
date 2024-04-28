@@ -690,6 +690,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon=get_icon("plot_results.svg"),
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
+            self.new_action(
+                _("Delete results") + "...",
+                triggered=self.panel.delete_results,
+                icon=get_icon("delete_results.svg"),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
 
 
 class SignalActionHandler(BaseActionHandler):
