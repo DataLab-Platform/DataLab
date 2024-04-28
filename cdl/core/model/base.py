@@ -20,7 +20,7 @@ import guidata.dataset as gds
 import numpy as np
 from guidata.configtools import get_font
 from guidata.dataset import update_dataset
-from guidata.io import JSONHandler, JSONReader, JSONWriter
+from guidata.io import JSONReader, JSONWriter
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
 from plotpy.items import AbstractLabelItem, AnnotatedPoint, AnnotatedShape, LabelItem
@@ -1302,48 +1302,3 @@ class BaseObj(metaclass=BaseObjMeta):
         # Subclasses may override this method to update metadata from plot item,
         # then call this implementation of the method to update metadata standard
         # entries.
-
-    def export_metadata_to_file(self, filename: str) -> None:
-        """Export object metadata to file (JSON).
-
-        Args:
-            filename: filename
-        """
-        handler = JSONHandler(filename)
-        handler.set_json_dict(self.metadata)
-        handler.save()
-
-    def import_metadata_from_file(self, filename: str) -> None:
-        """Import object metadata from file (JSON).
-
-        Args:
-            filename: filename
-        """
-        handler = JSONHandler(filename)
-        handler.load()
-        self.metadata = handler.get_json_dict()
-
-    def metadata_to_html(self) -> str:
-        """Convert metadata to human-readable string.
-
-        Returns:
-            HTML string
-        """
-        textlines = []
-        for key, value in self.metadata.items():
-            if len(textlines) > 5:
-                textlines.append("[...]")
-                break
-            if not key.startswith("_"):
-                vlines = str(value).splitlines()
-                if vlines:
-                    text = f"<b>{key}:</b> {vlines[0]}"
-                    if len(vlines) > 1:
-                        text += " [...]"
-                    textlines.append(text)
-        if textlines:
-            ptit = _("Object metadata")
-            psub = _("(click on Metadata button for more details)")
-            prefix = f"<i><u>{ptit}:</u> {psub}</i><br>"
-            return f"<p style='white-space:pre'>{prefix}{'<br>'.join(textlines)}</p>"
-        return ""

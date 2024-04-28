@@ -20,6 +20,7 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
+from guidata.io import JSONHandler
 from guidata.qthelpers import add_actions, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
@@ -773,7 +774,10 @@ class BaseDataPanel(AbstractPanel):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
-                obj.import_metadata_from_file(filename)
+                # Import object's metadata from file as JSON:
+                handler = JSONHandler(filename)
+                handler.load()
+                obj.metadata = handler.get_json_dict()
             self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
@@ -792,7 +796,10 @@ class BaseDataPanel(AbstractPanel):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                obj.export_metadata_to_file(filename)
+                # Export object's metadata to file as JSON:
+                handler = JSONHandler(filename)
+                handler.set_json_dict(obj.metadata)
+                handler.save()
 
     # ------Refreshing GUI--------------------------------------------------------------
     def selection_changed(self, update_items: bool = False) -> None:

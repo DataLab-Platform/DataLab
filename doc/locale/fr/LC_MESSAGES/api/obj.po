@@ -93,9 +93,7 @@ msgstr ""
 #: cdl.core.model.base.BaseObj.add_annotations_from_file
 #: cdl.core.model.base.BaseObj.add_annotations_from_items
 #: cdl.core.model.base.BaseObj.add_resultshape
-#: cdl.core.model.base.BaseObj.export_metadata_to_file
 #: cdl.core.model.base.BaseObj.get_metadata_option
-#: cdl.core.model.base.BaseObj.import_metadata_from_file
 #: cdl.core.model.base.BaseObj.iterate_shape_items
 #: cdl.core.model.base.BaseObj.roidata_to_params
 #: cdl.core.model.base.BaseObj.set_metadata_option
@@ -663,8 +661,6 @@ msgid "Add object annotations from file (JSON)."
 msgstr "Ajouter des annotations d'objet à partir d'un fichier (JSON)."
 
 #: cdl.core.model.base.BaseObj.add_annotations_from_file:3
-#: cdl.core.model.base.BaseObj.export_metadata_to_file:3
-#: cdl.core.model.base.BaseObj.import_metadata_from_file:3
 msgid "filename"
 msgstr "nom du fichier"
 
@@ -776,10 +772,6 @@ msgid "dialog size (QSize object or integer tuple (width, height))"
 msgstr ""
 "taille de la boîte de dialogue (objet QSize ou tuple d'entiers (largeur, "
 "hauteur))"
-
-#: cdl.core.model.base.BaseObj.export_metadata_to_file:1 of
-msgid "Export object metadata to file (JSON)."
-msgstr "Exporter les métadonnées de l'objet vers un fichier (JSON)."
 
 #: guidata.dataset.datatypes.DataSet.get_comment:1 of
 msgid "Return data set comment"
