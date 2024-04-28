@@ -162,7 +162,7 @@ class BasePlotHandler:
             resultproperties = list(obj.iterate_resultproperties())
             if resultproperties:
                 for resultprop in resultproperties:
-                    item = resultprop.get_label_item()
+                    item = resultprop.get_plot_item()
                     items.append(item)
                     self.__result_items_mapping[item] = (
                         lambda item: resultprop.update_obj_metadata(obj, item)

@@ -302,14 +302,12 @@ class ResultProperties(BaseResult):
             isinstance(key, str)
             and key.startswith(cls.PREFIX)
             and isinstance(value, dict)
-            and "array" in value
-            and "xlabels" in value
         ):
             try:
                 label = key[len(cls.PREFIX) :]
                 instance = cls(label, **value)
                 return instance
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
         return None
 
@@ -350,7 +348,7 @@ class ResultProperties(BaseResult):
         Args:
             obj: object (signal/image)
         """
-        item = self.create_label_item()
+        item = self.create_plot_item()
         self.update_obj_metadata(obj, item)
 
     def update_obj_metadata(self, obj: BaseObj, item: LabelItem) -> None:
@@ -362,12 +360,10 @@ class ResultProperties(BaseResult):
         """
         self.item_json = items_to_json([item])
         obj.metadata[self.key] = {
-            "xlabels": self.xlabels,
-            "array": self.array,
-            "item_json": self.item_json,
+            key: getattr(self, key) for key in ("xlabels", "array", "item_json")
         }
 
-    def create_label_item(self) -> LabelItem:
+    def create_plot_item(self) -> LabelItem:
         """Create label item
 
         Returns:
@@ -391,7 +387,7 @@ class ResultProperties(BaseResult):
         item.labelparam.update_label(item)
         return item
 
-    def get_label_item(self) -> LabelItem:
+    def get_plot_item(self) -> LabelItem:
         """Return label item associated to this result
 
         Returns:
