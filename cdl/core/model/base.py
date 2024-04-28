@@ -23,14 +23,14 @@ from guidata.dataset import update_dataset
 from guidata.io import JSONHandler, JSONReader, JSONWriter
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
-from plotpy.items import AnnotatedPoint, AnnotatedShape, LabelItem
+from plotpy.items import AbstractLabelItem, AnnotatedPoint, AnnotatedShape, LabelItem
 
 from cdl.algorithms import coordinates
 from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.items import AbstractShape, CurveItem, MaskedImageItem
 
     from cdl.core.model.image import ImageObj
     from cdl.core.model.signal import SignalObj
@@ -182,7 +182,10 @@ def config_annotated_shape(
     item.set_style("plot", option)
 
 
-def set_plot_item_editable(item, state):
+# TODO: Move this function as a method of plot items in PlotPy
+def set_plot_item_editable(
+    item: AbstractShape | AbstractLabelItem | AnnotatedShape, state
+):
     """Set plot item editable state.
 
     Args:
@@ -190,8 +193,8 @@ def set_plot_item_editable(item, state):
         state: State
     """
     item.set_movable(state)
-    item.set_resizable(state)
-    item.set_rotatable(state)
+    item.set_resizable(state and not isinstance(item, AbstractLabelItem))
+    item.set_rotatable(state and not isinstance(item, AbstractLabelItem))
     item.set_readonly(not state)
 
 
