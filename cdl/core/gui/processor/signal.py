@@ -19,7 +19,7 @@ import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ResultShape
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
@@ -376,7 +376,7 @@ class SignalProcessor(BaseProcessor):
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
     @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultShape]:
+    def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics"""
         return self.compute_10(cps.compute_stats_func, title=_("Statistics"))
 

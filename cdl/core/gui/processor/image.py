@@ -28,7 +28,7 @@ from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
@@ -814,7 +814,7 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
-    def compute_stats(self) -> dict[str, ResultShape]:
+    def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics"""
         return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
 
