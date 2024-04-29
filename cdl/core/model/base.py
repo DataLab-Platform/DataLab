@@ -287,7 +287,7 @@ class ResultProperties(BaseResult):
         self, label: str, array: np.ndarray, xlabels: list[str], item_json: str = ""
     ) -> None:
         super().__init__(self.PREFIX, label)
-        self.shown_category = _("Properties")
+        self.shown_category = _("Properties") + f" | {self.shown_label}"
         self.xlabels = xlabels
         self.array = array
         assert len(xlabels) == self.data.shape[1]
