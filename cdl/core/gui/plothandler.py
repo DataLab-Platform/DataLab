@@ -165,7 +165,8 @@ class BasePlotHandler:
                     item = resultprop.get_plot_item()
                     items.append(item)
                     self.__result_items_mapping[item] = (
-                        lambda item: resultprop.update_obj_metadata(obj, item)
+                        lambda item,
+                        resultprop=resultprop: resultprop.update_obj_metadata(obj, item)
                     )
             if items:
                 if do_autoscale:
