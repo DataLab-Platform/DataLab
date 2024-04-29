@@ -260,6 +260,21 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # --------------------------------------------------------------------------------------
 
 
+def compute_normalize(src: ImageObj) -> ImageObj:
+    """
+    Normalize image data depending on its maximum.
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "normalize")
+    dst.data = dst.data / np.max(np.abs(dst.data))
+    return dst
+
+
 class LogP1Param(gds.DataSet):
     """Log10 parameters"""
 
