@@ -45,7 +45,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     new_signal_result,
 )
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import Choices, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -587,13 +587,13 @@ def compute_wiener(src: SignalObj) -> SignalObj:
 class FilterEnum(Enum):
     """Filter types"""
 
-    LOW = "lowpass"
-    HIGH = "highpass"
+    LOWPASS = "lowpass"
+    HIGHPASS = "highpass"
     BANDPASS = "bandpass"
     BANDSTOP = "bandstop"
 
 
-class FilterMethodEnum(Enum):
+class FilterMethodEnum(Choices):
     """Filter methods"""
 
     BESSEL = "bessel"
@@ -606,30 +606,27 @@ class FilterMethodEnum(Enum):
 class BaseHighLowBandParam(gds.DataSet):
     """Base class for high-pass, low-pass, band-pass and band-stop filters"""
 
-    TYPE: FilterEnum = FilterEnum.LOW
+    TYPE: FilterEnum = FilterEnum.LOWPASS
     _type_prop = gds.GetAttrProp("TYPE")
-
-    def method_choices(self, *args) -> list[tuple[str, str, Callable]]:
-        """Return the filter function and the parameter function for the method"""
-        choices = []
-        for method in self.FILTER_METHODS:
-            choices.append((method, method.value, None))
-        return choices
 
     # Must be overwriten by the child class
     _method_prop = gds.GetAttrProp("method")
     method = gds.ChoiceItem(
         _("Filter method"),
-        choices=method_choices,
+        choices=FilterMethodEnum.get_choices(),
     ).set_prop("display", store=_method_prop)
 
     order = gds.IntItem(_("Filter order"), default=3, min=1)
     f_cut0 = gds.FloatItem(
         _("Low cutoff frequency"), default=10, min=0, nonzero=True
-    ).set_prop("display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.LOW))
+    ).set_prop(
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.LOWPASS)
+    )
     f_cut1 = gds.FloatItem(
         _("High cutoff frequency"), default=100, nonzero=True
-    ).set_prop("display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.HIGH))
+    ).set_prop(
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.HIGHPASS)
+    )
     fe = gds.FloatItem(_("Sampling frequency"), default=100, nonzero=True).set_prop(
         "display", hide=True
     )
@@ -680,9 +677,9 @@ class BaseHighLowBandParam(gds.DataSet):
         Returns:
             tuple: frequency parameters
         """
-        if self.TYPE == FilterEnum.LOW:
+        if self.TYPE == FilterEnum.LOWPASS:
             return (2 * self.f_cut0 / self.fe,)  # type: ignore
-        if self.TYPE == FilterEnum.HIGH:
+        if self.TYPE == FilterEnum.HIGHPASS:
             return (2 * self.f_cut1 / self.fe,)  # type: ignore
         return ((2 * self.f_cut0 / self.fe, 2 * self.f_cut1 / self.fe),)  # type: ignore
 
@@ -753,11 +750,11 @@ class BaseHighLowBandParam(gds.DataSet):
 
 
 class LowPassFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.LOW
+    TYPE = FilterEnum.LOWPASS
 
 
 class HighPassFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.HIGH
+    TYPE = FilterEnum.HIGHPASS
 
 
 class BandPassFilterParam(BaseHighLowBandParam):
@@ -780,7 +777,7 @@ def compute_higlowband(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     """
     name = f"{p.TYPE.value}"
     suffix = f"order={p.order:d}"
-    if p.TYPE in (FilterEnum.LOW, FilterEnum.HIGH):
+    if p.TYPE in (FilterEnum.LOWPASS, FilterEnum.HIGHPASS):
         suffix += f", cutoff={p.f_cut0:.2f}"
     else:
         suffix += f", cutoff={p.f_cut0:.2f}:{p.f_cut1:.2f}"
