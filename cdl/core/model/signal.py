@@ -21,7 +21,10 @@ import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
+from guidata.qthelpers import exec_dialog
 from plotpy.builder import make
+from plotpy.tools import EditPointTool
+from qtpy import QtWidgets as QW
 
 from cdl.algorithms import fit
 from cdl.config import Conf, _
@@ -29,8 +32,8 @@ from cdl.core.model import base
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem
+    from plotpy.plot import PlotDialog
     from plotpy.styles import CurveParam
-    from qtpy import QtWidgets as QW
 
 
 class CurveStyles:
@@ -667,23 +670,64 @@ class EdgeParam(gds.DataSet):
     offset = gds.FloatItem(_("Offset"), default=0.0)
 
 
-class ExperParam(gds.DataSet):
-    """Paramers for experimental function"""
-
-    n_pts = gds.IntItem("Npts", default=5)
-
-
-class ExperPtsParam(gds.DataSet):
-    size = gds.IntItem("Size", default=5)
-    arr = gds.FloatArrayItem(
+class ExperSignalParam(gds.DataSet):
+    size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
+    xyarray = gds.FloatArrayItem(
         "XY Values",
         format="%g",
     )
+    xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
+    xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
 
-    def setup_default(self):
-        """Set arrays"""
-        ls = np.linspace(0, self.size - 1, self.size)
-        self.arr = np.vstack((ls, ls)).T
+    def edit_curve(self, *args) -> None:
+        win: PlotDialog = make.dialog(
+            wintitle=_("Select one point then press OK to accept"),
+            edit=True,
+            type="curve",
+        )
+        edit_tool = win.manager.add_tool(
+            EditPointTool, title=_("Edit experimental curve")
+        )
+        edit_tool.activate()
+        plot = win.manager.get_plot()
+        x, y = self.xyarray[:, 0], self.xyarray[:, 1]
+        curve = make.mcurve(x, y, "-+")
+        plot.add_item(curve)
+        plot.set_active_item(curve)
+
+        insert_btn = QW.QPushButton(_("Insert point"), win)
+        insert_btn.clicked.connect(edit_tool.trigger_insert_point_at_selection)
+        win.button_layout.insertWidget(0, insert_btn)
+
+        exec_dialog(win)
+
+        new_x, new_y = curve.get_data()
+        self.xmax = new_x.max()
+        self.xmin = new_x.min()
+        self.size = new_x.size
+        self.xyarray = np.vstack((new_x, new_y)).T
+
+    btn_curve_edit = gds.ButtonItem("Edit curve", callback=edit_curve)
+
+    def setup_array(
+        self,
+        size: int | None = None,
+        xmin: float | None = None,
+        xmax: float | None = None,
+    ) -> None:
+        """Setup the xyarray from size, xmin and xmax (use the current values is not
+        provided)
+
+        Args:
+            size: xyarray size (default: None)
+            xmin: X min (default: None)
+            xmax: X max (default: None)
+        """
+        self.size = size or self.size
+        self.xmin = xmin or self.xmin
+        self.xmax = xmax or self.xmax
+        x_arr = np.linspace(self.xmin, self.xmax, self.size)  # type: ignore
+        self.xyarray = np.vstack((x_arr, x_arr)).T
 
 
 class NewSignalParam(gds.DataSet):
@@ -911,17 +955,12 @@ def create_signal_from_param(
                     f"{prefix}(start={p.start:.3g},a={p.a:.3g},off={p.offset:.3g})"
                 )
         elif newparam.stype is SignalTypes.EXPERIMENTAL:
-            if p is None:
-                p = ExperParam(_("Experimental function"))
-            if edit and not p.edit(parent=parent):
-                return None
-            p2 = ExperPtsParam(_("Experimental points"))
-            p2.size = p.n_pts
-            p2.setup_default()
+            p2 = ExperSignalParam(_("Experimental points"))
+            p2.setup_array(size=newparam.size, xmin=newparam.xmin, xmax=newparam.xmax)
             if edit and not p2.edit(parent=parent):
                 return None
-            signal.xydata = p2.arr.T
+            signal.xydata = p2.xyarray.T
             if signal.title == DEFAULT_TITLE:
-                signal.title = f"{prefix}(npts={p.n_pts})"
+                signal.title = f"{prefix}(npts={p2.size})"
         return signal
     return None
