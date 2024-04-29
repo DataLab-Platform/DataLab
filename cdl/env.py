@@ -12,6 +12,7 @@ import os
 import platform
 import pprint
 import sys
+import traceback
 from contextlib import contextmanager
 from typing import Any, Generator
 
@@ -139,11 +140,7 @@ class CDLExecEnv:
     XMLRPCPORT_ARG = "xmlrpcport"
     DO_NOT_QUIT_ENV = "CDL_DO_NOT_QUIT"
     UNATTENDED_ENV = GuiDataExecEnv.UNATTENDED_ENV
-
-    # TODO: When guidata V3.4.0 is released, replace the following with
-    #       GuiDataExecEnv.ACCEPT_DIALOGS_ENV
-    ACCEPT_DIALOGS_ENV = "GUIDATA_ACCEPT_DIALOGS"
-
+    ACCEPT_DIALOGS_ENV = GuiDataExecEnv.ACCEPT_DIALOGS_ENV
     VERBOSE_ENV = GuiDataExecEnv.VERBOSE_ENV
     SCREENSHOT_ENV = GuiDataExecEnv.SCREENSHOT_ENV
     DELAY_ENV = GuiDataExecEnv.DELAY_ENV
@@ -354,6 +351,9 @@ class CDLExecEnv:
             "-v", "--version", action="store_true", help="show DataLab version"
         )
         parser.add_argument(
+            "--reset", action="store_true", help="reset DataLab configuration"
+        )
+        parser.add_argument(
             "--" + self.UNATTENDED_ARG,
             action="store_true",
             help="non-interactive mode",
@@ -398,6 +398,19 @@ class CDLExecEnv:
         if args.version:
             version = os.environ["CDL_VERSION"]
             print(f"DataLab {version} on {platform.system()}")
+            sys.exit()
+        if args.reset:  # Remove ".DataLab" configuration directory
+            # pylint: disable=import-outside-toplevel
+            from cdl.config import Conf
+
+            print("Resetting DataLab configuration...", end=" ")
+            try:
+                Conf.reset()
+            except Exception:  # pylint: disable=broad-except
+                print("Failed.")
+                traceback.print_exc()
+            finally:
+                print("Done.")
             sys.exit()
         self.set_env_from_args(args)
 

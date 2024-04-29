@@ -146,7 +146,7 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create([[i1, i2]]))
+    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
 
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
@@ -326,7 +326,7 @@ def run_image_computations(
 
     n = data_size // 10
     panel.processor.compute_roi_extraction(
-        dlp.ROIDataParam.create([[n, n, data_size - n, data_size - n]])
+        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
     )
 
     panel.processor.compute_centroid()

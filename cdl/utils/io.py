@@ -18,7 +18,7 @@ def count_lines(filename: str) -> int:
     Returns:
         The number of lines in the file
     """
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         line_count = sum(1 for line in file)
     return line_count
 

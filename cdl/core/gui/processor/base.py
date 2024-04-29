@@ -18,7 +18,6 @@ from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset as gds
 import numpy as np
-from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
@@ -30,7 +29,7 @@ from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 
@@ -301,7 +300,7 @@ class BaseProcessor(QC.QObject):
 
     def handle_output(
         self, compout: CompOut, context: str
-    ) -> SignalObj | ImageObj | np.ndarray | None:
+    ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
 
@@ -310,7 +309,8 @@ class BaseProcessor(QC.QObject):
             context: context (e.g. "Computing: Gaussian filter")
 
         Returns:
-            Output object: a signal or image object, or a numpy array, or None if error
+            Output object: a signal or image object, or a result shape object,
+             or None if error
         """
         if compout.error_msg:
             show_warning_error(
@@ -412,20 +412,17 @@ class BaseProcessor(QC.QObject):
     def compute_10(
         self,
         func: Callable,
-        shapetype: ShapeTypes | None,
         param: gds.DataSet | None = None,
         paramclass: gds.DataSet | None = None,
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
-    ) -> dict[str, ResultShape]:
+    ) -> dict[str, ResultShape | ResultProperties]:
         """Compute 10 function: 1 object in → 0 object out
         (the result of this method is stored in original object's metadata).
 
         Args:
             func: function to execute
-            shapetype: shape type (if None, use `param.shape`
-             which must be a string and a valid `ShapeTypes` member name, modulo case)
             param: parameters. Defaults to None.
             paramclass: parameters class. Defaults to None.
             title: title of progress bar. Defaults to None.
@@ -433,24 +430,19 @@ class BaseProcessor(QC.QObject):
             edit: if True, edit parameters. Defaults to None.
 
         Returns:
-            Dictionary of results (keys: object uuid, values: ResultShape objects)
+            Dictionary of results (keys: object uuid, values: ResultShape or
+             ResultProperties objects)
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return None
-        if shapetype is None:
-            try:
-                shapetype = getattr(ShapeTypes, param.shape.upper())
-            except AttributeError as exc:
-                raise ValueError("shapetype must be specified") from exc
         objs = self.panel.objview.get_sel_objects(include_groups=True)
         current_obj = self.panel.objview.get_current_object()
-        name = func.__name__.replace("compute_", "")
-        title = name if title is None else title
+        title = func.__name__.replace("compute_", "") if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, ResultShape] = {}
+            results: dict[str, ResultShape | ResultProperties] = {}
             xlabels = None
             ylabels = []
             for idx, obj in enumerate(objs):
@@ -458,28 +450,38 @@ class BaseProcessor(QC.QObject):
                 pvalue = 0 if pvalue == 1 else pvalue
                 progress.setValue(pvalue)
                 args = (obj,) if param is None else (obj, param)
-                result = self.__exec_func(func, args, progress)
-                if result is None:
+
+                # Execute function
+                compout = self.__exec_func(func, args, progress)
+                if compout is None:
                     break
-                result_array = self.handle_output(result, _("Computing: %s") % title)
-                if result_array is None:
+                result = self.handle_output(compout, _("Computing: %s") % title)
+                if result is None:
                     continue
-                resultshape = obj.add_resultshape(name, shapetype, result_array, param)
-                results[obj.uuid] = resultshape
-                xlabels = resultshape.shown_xlabels
+
+                # Add result shape to object's metadata
+                result.add_to(obj)
+                if param is not None:
+                    obj.metadata[f"{result.label}Param"] = str(param)
+
+                results[obj.uuid] = result
+                xlabels = result.get_xlabels(obj)
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
-                for _i_row_res in range(resultshape.array.shape[0]):
-                    ylabel = f"{name}({obj.short_id})"
+                for i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{result.label}({obj.short_id})"
+                    i_roi = result.array[i_row_res, 0]
+                    if i_roi >= 0:
+                        ylabel += f"|ROI{i_roi}"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([rshape.shown_array for rshape in results.values()])
+                res = np.vstack([result.shown_array for result in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )
@@ -826,39 +828,6 @@ class BaseProcessor(QC.QObject):
                 self.panel.selection_changed(update_items=True)
 
     @abc.abstractmethod
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-
     @qt_try_except()
-    def compute_stats(self) -> None:
+    def compute_stats(self) -> dict[str, ResultShape]:
         """Compute data statistics"""
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
-        stfuncs = self._get_stat_funcs()
-        xlabels = [label for label, _func in stfuncs]
-        ylabels: list[str] = []
-        stats: list[list[float]] = []
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", UserWarning)
-            with np.errstate(all="ignore"):
-                for obj in objs:
-                    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
-                    for roi_index in [None] + list(range(roi_nb)):
-                        stats_i = []
-                        for _label, func in stfuncs:
-                            stats_i.append(func(obj.get_data(roi_index=roi_index)))
-                        stats.append(stats_i)
-                        if roi_index is None:
-                            ylabels.append(obj.short_id)
-                        else:
-                            ylabels.append(f"{obj.short_id}|ROI{roi_index:02d}")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            dlg = ArrayEditor(self.panel.parent())
-            title = _("Statistics")
-            dlg.setup_and_check(
-                np.array(stats), title, readonly=True, xlabels=xlabels, ylabels=ylabels
-            )
-            dlg.setObjectName(f"{objs[0].PREFIX}_stats")
-            dlg.setWindowIcon(get_icon("stats.svg"))
-            dlg.resize(750, 300)
-            exec_dialog(dlg)

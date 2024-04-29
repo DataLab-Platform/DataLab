@@ -20,7 +20,6 @@ __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 os.environ["CDL_VERSION"] = __version__
 
 try:
-    import cdl.core.io  # analysis:ignore
     import cdl.patch  # analysis:ignore  # noqa: F401
 except ImportError:
     if not os.environ.get("CDL_DOC"):

@@ -20,6 +20,7 @@ import numpy as np
 import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
+from guidata.io import JSONHandler
 from guidata.qthelpers import add_actions, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
@@ -30,8 +31,7 @@ from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 import cdl.core.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
-from cdl.core.io.base import IOAction
-from cdl.core.model.base import ResultShape, items_to_json
+from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
 from cdl.core.model.signal import create_signal
 from cdl.env import execenv
 from cdl.utils.qthelpers import (
@@ -45,7 +45,7 @@ from cdl.utils.qthelpers import (
 from cdl.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.items import CurveItem, LabelItem, MaskedImageItem
     from plotpy.plot import PlotWidget
     from plotpy.tools.base import GuiTool
 
@@ -208,7 +208,7 @@ class AbstractPanel(QW.QSplitter, metaclass=AbstractPanelMeta):
 class ResultData:
     """Result data associated to a shapetype"""
 
-    results: list[ResultShape] = None
+    results: list[ResultShape | ResultProperties] = None
     xlabels: list[str] = None
     ylabels: list[str] = None
 
@@ -251,7 +251,9 @@ class BaseDataPanel(AbstractPanel):
         super().closeEvent(event)
 
     # ------AbstractPanel interface-----------------------------------------------------
-    def plot_item_parameters_changed(self, item: CurveItem | MaskedImageItem) -> None:
+    def plot_item_parameters_changed(
+        self, item: CurveItem | MaskedImageItem | LabelItem
+    ) -> None:
         """Plot items changed: update metadata of all objects from plot items"""
         # Find the object corresponding to the plot item
         obj = self.plothandler.get_obj_from_item(item)
@@ -259,6 +261,26 @@ class BaseDataPanel(AbstractPanel):
             obj.update_metadata_from_plot_item(item)
             if obj is self.objview.get_current_object():
                 self.objprop.update_properties_from(obj)
+        self.plothandler.update_resultproperty_from_plot_item(item)
+
+    def plot_item_moved(
+        self,
+        item: LabelItem,
+        x0: float,
+        y0: float,
+        x1: float,
+        y1: float,
+    ) -> None:
+        """Plot item moved: update metadata of all objects from plot items
+
+        Args:
+            item: Plot item
+            x0: new x0 coordinate
+            y0: new y0 coordinate
+            x1: new x1 coordinate
+            y1: new y1 coordinate
+        """
+        self.plothandler.update_resultproperty_from_plot_item(item)
 
     def serialize_object_to_hdf5(
         self, obj: SignalObj | ImageObj, writer: NativeH5Writer
@@ -637,12 +659,7 @@ class BaseDataPanel(AbstractPanel):
         Returns:
             New object or list of new objects
         """
-
-        def callback(worker: CallbackWorker) -> list[SignalObj] | list[ImageObj]:
-            """Callback function"""
-            return self.IO_REGISTRY.read(filename, worker)
-
-        worker = CallbackWorker(callback)
+        worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
         for obj in objs:
             obj.metadata["source"] = filename
@@ -674,7 +691,7 @@ class BaseDataPanel(AbstractPanel):
             return []
         if filenames is None:  # pragma: no cover
             basedir = Conf.main.base_dir.get()
-            filters = self.IO_REGISTRY.get_filters(IOAction.LOAD)
+            filters = self.IO_REGISTRY.get_read_filters()
             with save_restore_stds():
                 filenames, _filt = getopenfilenames(self, _("Open"), basedir, filters)
         objs = []
@@ -700,7 +717,7 @@ class BaseDataPanel(AbstractPanel):
             filename = filenames[index]
             if filename is None:
                 basedir = Conf.main.base_dir.get()
-                filters = self.IO_REGISTRY.get_filters(IOAction.SAVE)
+                filters = self.IO_REGISTRY.get_write_filters()
                 with save_restore_stds():
                     filename, _filt = getsavefilename(
                         self, _("Save as"), basedir, filters
@@ -757,7 +774,10 @@ class BaseDataPanel(AbstractPanel):
             with qt_try_loadsave_file(self.parent(), filename, "load"):
                 Conf.main.base_dir.set(filename)
                 obj = self.objview.get_sel_objects(include_groups=True)[0]
-                obj.import_metadata_from_file(filename)
+                # Import object's metadata from file as JSON:
+                handler = JSONHandler(filename)
+                handler.load()
+                obj.metadata = handler.get_json_dict()
             self.SIG_REFRESH_PLOT.emit("selected", True)
 
     def export_metadata_from_file(self, filename: str | None = None) -> None:
@@ -776,7 +796,10 @@ class BaseDataPanel(AbstractPanel):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
-                obj.export_metadata_to_file(filename)
+                # Export object's metadata to file as JSON:
+                handler = JSONHandler(filename)
+                handler.set_json_dict(obj.metadata)
+                handler.save()
 
     # ------Refreshing GUI--------------------------------------------------------------
     def selection_changed(self, update_items: bool = False) -> None:
@@ -1027,16 +1050,23 @@ class BaseDataPanel(AbstractPanel):
 
     def __get_resultdata_dict(
         self, objs: list[SignalObj | ImageObj]
-    ) -> dict[ShapeTypes, ResultData]:
+    ) -> dict[str, ResultData]:
         """Return result data dictionary"""
-        rdatadict: dict[ShapeTypes, ResultData] = {}
+        rdatadict: dict[str, ResultData] = {}
         for obj in objs:
-            for result in obj.iterate_resultshapes():
-                rdata = rdatadict.setdefault(result.shapetype, ResultData([], None, []))
+            for result in list(obj.iterate_resultshapes()) + list(
+                obj.iterate_resultproperties()
+            ):
+                rdata = rdatadict.setdefault(
+                    result.shown_category, ResultData([], None, [])
+                )
                 rdata.results.append(result)
-                rdata.xlabels = result.shown_xlabels
-                for _i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{obj.short_id}: {result.label}"
+                rdata.xlabels = result.get_xlabels(obj)
+                for i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{result.label}({obj.short_id})"
+                    i_roi = result.array[i_row_res, 0]
+                    if i_roi >= 0:
+                        ylabel += f"|ROI{i_roi}"
                     rdata.ylabels.append(ylabel)
         return rdatadict
 
@@ -1063,11 +1093,11 @@ class BaseDataPanel(AbstractPanel):
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                for rdata in rdatadict.values():
+                for prefix, rdata in rdatadict.items():
                     dlg = ArrayEditor(self.parent())
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
-                        _("Results"),
+                        _("Results") + f" ({prefix})",
                         readonly=True,
                         xlabels=rdata.xlabels,
                         ylabels=rdata.ylabels,
@@ -1083,9 +1113,9 @@ class BaseDataPanel(AbstractPanel):
         objs = self.objview.get_sel_objects(include_groups=True)
         rdatadict = self.__get_resultdata_dict(objs)
         if rdatadict:
-            for shapetype, rdata in rdatadict.items():
+            for prefix, rdata in rdatadict.items():
                 xchoices = (("indexes", _("Indexes")),)
-                for xlabel in rdata.xlabels[1:]:
+                for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
                 ychoices = xchoices[1:]
 
@@ -1100,9 +1130,9 @@ class BaseDataPanel(AbstractPanel):
                 comment = (
                     _(
                         "Plot results obtained from previous computations.<br><br>"
-                        "This plot is based on the results under the form of '%s'."
+                        "This plot is based on results associated with '%s' prefix."
                     )
-                    % shapetype.name.lower()
+                    % prefix
                 )
                 param = PlotResultParam(_("Plot results"), comment=comment)
                 if not param.edit(parent=self):
@@ -1136,6 +1166,28 @@ class BaseDataPanel(AbstractPanel):
                         labels=[param.xaxis, param.yaxis],
                     )
                     self.mainwindow.signalpanel.add_object(obj)
+        else:
+            self.__show_no_result_warning()
+
+    def delete_results(self) -> None:
+        """Delete results"""
+        objs = self.objview.get_sel_objects(include_groups=True)
+        rdatadict = self.__get_resultdata_dict(objs)
+        if rdatadict:
+            answer = QW.QMessageBox.warning(
+                self,
+                _("Delete results"),
+                _(
+                    "Are you sure you want to delete all results "
+                    "of the selected object(s)?"
+                ),
+                QW.QMessageBox.Yes | QW.QMessageBox.No,
+            )
+            if answer == QW.QMessageBox.Yes:
+                objs = self.objview.get_sel_objects(include_groups=True)
+                for obj in objs:
+                    obj.delete_results()
+                self.SIG_REFRESH_PLOT.emit("selected", True)
         else:
             self.__show_no_result_warning()
 

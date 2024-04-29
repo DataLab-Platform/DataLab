@@ -23,11 +23,8 @@ copy DataLab-Overview.png ..\doc\images
 move windows_installer.png ..\doc\images\shots
 
 @REM Generating icon
-for %%s in (16 24 32 48 128 256) do (
-  %INKSCAPE_PATH% "DataLab.svg" -o "tmp-%%s.png" -w %%s -h %%s
-)
-magick convert "tmp-*.png" "DataLab.ico"
-del "tmp-*.png"
+call :generate_icon "DataLab"
+call :generate_icon "DataLab-Reset"
 
 @REM Generating images for WiX installer
 %INKSCAPE_PATH% "WixUIBanner.svg" -o "temp.png" -w 493 -h 58
@@ -36,3 +33,14 @@ magick convert "temp.png" bmp3:"banner.bmp"
 magick convert "temp.png" bmp3:"dialog.bmp"
 del "temp.png"
 move /y *.bmp ..\wix
+
+goto:eof
+
+:generate_icon
+set ICON_NAME=%1
+for %%s in (16 24 32 48 128 256) do (
+  %INKSCAPE_PATH% "%ICON_NAME%.svg" -o "tmp-%%s.png" -w %%s -h %%s
+)
+magick convert "tmp-*.png" "%ICON_NAME%.ico"
+del "tmp-*.png"
+goto:eof

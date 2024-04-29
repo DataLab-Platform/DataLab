@@ -18,6 +18,7 @@ from collections.abc import Callable
 
 from guidata.configtools import get_module_data_path
 
+from cdl.config import MOD_NAME
 from cdl.env import execenv
 
 TST_PATH = []
@@ -25,6 +26,7 @@ TST_PATH = []
 
 def add_test_path_from_env(envvar: str) -> None:
     """Appends test data path from environment variable (fails silently)"""
+    # Note: this function is used in third-party plugins
     path = os.environ.get(envvar)
     if path:
         TST_PATH.append(path)
@@ -40,6 +42,9 @@ def add_test_module_path(modname: str, relpath: str) -> None:
     sys.modules
     """
     TST_PATH.append(get_module_data_path(modname, relpath=relpath))
+
+
+add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 def get_test_fnames(pattern: str, in_folder: str | None = None) -> list[str]:

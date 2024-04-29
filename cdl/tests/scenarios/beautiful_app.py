@@ -61,7 +61,7 @@ def run_beautiful_scenario(screenshots: bool = False):
         panel.processor.compute_denoise_tv(dlp.DenoiseTVParam())
         n = data_size // 3
         panel.processor.compute_roi_extraction(
-            dlp.ROIDataParam.create([[n, n, data_size - n, data_size - n]])
+            dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
         )
         if screenshots:
             win.take_screenshot("i_beautiful")
