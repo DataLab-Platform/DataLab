@@ -42,6 +42,18 @@ def test_fit_dialog():
         # Polynomial curve fitting test
         execenv.print(fdlg.polynomialfit(x, y, 4))
 
+        # Linear curve fitting test
+        execenv.print(fdlg.linearfit(x, y))
+
+        # Exponential curve fitting test
+        execenv.print(fdlg.exponentialfit(x, y))
+
+        # Sinusoidal curve fitting test
+        execenv.print(fdlg.sinusoidalfit(x, y))
+
+        # ERF curve fitting test
+        execenv.print(fdlg.erffit(x, y))
+
 
 if __name__ == "__main__":
     test_fit_dialog()
