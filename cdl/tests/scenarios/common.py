@@ -14,6 +14,7 @@ import numpy as np
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.config import _
+from cdl.core.computation.signal import WindowingEnum
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
@@ -91,6 +92,12 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_division()
     panel.objview.select_objects((1, 2, 3))
     panel.processor.compute_average()
+
+    param = dlp.WindowingParam()
+    for method in WindowingEnum:
+        panel.objview.select_objects((2,))
+        param.method = method
+        panel.processor.compute_windowing(param)
 
     panel.add_label_with_title()
 
