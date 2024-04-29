@@ -773,14 +773,12 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Bandwidth -3dB") + "...",
                 triggered=self.panel.processor.compute_bandwidth_3db,
-                icon=get_icon("stats.svg"),
                 context_menu_pos=-1,
             )
 
             self.new_action(
                 _("ENOBs") + "...",
                 triggered=self.panel.processor.compute_enob,
-                icon=get_icon("stats.svg"),
                 context_menu_pos=-1,
             )
 

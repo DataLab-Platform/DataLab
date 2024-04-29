@@ -394,62 +394,12 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_bandwidth_3db(self) -> None:
         """Compute bandwidth"""
-        signals: list[SignalObj] = self.panel.objview.get_sel_objects()  # type: ignore
-        bandwidths: list[float] = []
-        ylabels: list[str] = []
-        for sig in signals:
-            bw = cps.compute_bandwidth_3db(sig)
-            bandwidths.append(bw)
-            ylabels.append(sig.short_id)
-        size_offset = len(bandwidths) - 1
-        arr = np.array(bandwidths).reshape(-1, 1)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            dlg = ArrayEditor(self.panel.parent())  # type: ignore
-            title = _("Bandwidth -3dB")
-            dlg.setup_and_check(
-                arr,
-                title,
-                readonly=True,
-                xlabels=["Bandwidth"],
-                ylabels=ylabels,
-            )
-            dlg.arraywidget.model.set_format("%.2E")
-            dlg.setWindowIcon(get_icon("stats.svg"))
-            dlg.resize(300, 400 + size_offset * 50)
-            exec_dialog(dlg)
+        self.compute_10(cps.compute_bandwidth_3db, title=_("Bandwidth"))
 
     @qt_try_except()
-    def compute_enob(self, param: cps.EnobParam | None = None) -> None:
+    def compute_enob(
+        self, param: cps.EnobParam | None = None
+    ) -> dict[str, ResultProperties]:
         """Compute Effective Number Of Bits"""
         param = cps.EnobParam() if param is None else param
-
-        signals: list[SignalObj] = self.panel.objview.get_sel_objects()  # type: ignore
-        enobs: list[float] = []
-        ylabels: list[str] = []
-
-        param = cps.EnobParam() if param is None else param
-        if not param.edit():
-            return
-
-        for sig in signals:
-            enob = cps.compute_enob(sig, param)
-            enobs.append(enob)
-            ylabels.append(sig.short_id)
-        size_offset = len(enobs) - 1
-        arr = np.array(enobs).reshape(-1, 1)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            dlg = ArrayEditor(self.panel.parent())  # type: ignore
-            title = _("ENOBs at scale %s") % param.scale
-            dlg.setup_and_check(
-                arr,
-                title,
-                readonly=True,
-                xlabels=["ENOB"],
-                ylabels=ylabels,
-            )
-            dlg.arraywidget.model.set_format("%.2E")
-            dlg.setWindowIcon(get_icon("stats.svg"))
-            dlg.resize(300, 400 + size_offset * 50)
-            exec_dialog(dlg)
+        return self.compute_10(cps.compute_enob, param, title=_("ENOB"))

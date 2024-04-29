@@ -618,9 +618,10 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     return dst
 
 
-def compute_bandwidth_3db(src: SignalObj) -> float:
+def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
     """Compute bandwith"""
-    return bandwidth(src.x, src.y, 3.0)
+    bw_funcs = {"bandwidth (-3dB)": lambda xy: bandwidth(xy[0], xy[1], 3.0)}
+    return calc_resultproperties("Bandwidth", src, bw_funcs)
 
 
 class EnobParam(gds.DataSet):
@@ -629,9 +630,10 @@ class EnobParam(gds.DataSet):
     scale = gds.FloatItem(_("Full scale (V)"), default=0.16, min=0.0)
 
 
-def compute_enob(src: SignalObj, p: EnobParam) -> float:
+def compute_enob(src: SignalObj, p: EnobParam) -> ResultProperties:
     """Compute ENOB"""
-    return enob(src.x, src.y, p.scale)  # type: ignore
+    enob_func = {"enob": lambda xy: enob(xy[0], xy[1], p.scale)}  # type: ignore
+    return calc_resultproperties("Enob", src, enob_func)
 
 
 class PolynomialFitParam(gds.DataSet):
