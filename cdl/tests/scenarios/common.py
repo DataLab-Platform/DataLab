@@ -69,6 +69,17 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((2,))
     panel.processor.compute_quadratic_difference(panel[2])
     panel.delete_metadata()
+
+    const_oper_param = dlp.ConstantOperationParam.create(value=2.0)
+    for const_oper in (
+        panel.processor.compute_sum_constant,
+        panel.processor.compute_difference_constant,
+        panel.processor.compute_product_by_constant,
+        panel.processor.compute_division_by_contant,
+    ):
+        panel.objview.select_objects((3,))
+        const_oper(param=const_oper_param)
+
     panel.objview.select_objects((3,))
     panel.remove_object()
 
