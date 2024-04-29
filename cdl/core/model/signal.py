@@ -707,7 +707,9 @@ class ExperSignalParam(gds.DataSet):
         self.size = new_x.size
         self.xyarray = np.vstack((new_x, new_y)).T
 
-    btn_curve_edit = gds.ButtonItem("Edit curve", callback=edit_curve)
+    btn_curve_edit = gds.ButtonItem(
+        "Edit curve", callback=edit_curve, icon="signal.svg"
+    )
 
     def setup_array(
         self,
