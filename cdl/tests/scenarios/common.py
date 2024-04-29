@@ -87,6 +87,11 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
+    param = dlp.NormalizeParam()
+    for _name, method in param.methods:
+        param.method = method
+        panel.processor.compute_normalize(param)
+
     panel.objview.select_objects((3, 7))
     panel.processor.compute_division()
     panel.objview.select_objects((1, 2, 3))
@@ -125,11 +130,6 @@ def run_signal_computations(
     compute_common_operations(panel)
 
     win.add_object(create_paracetamol_signal(data_size))
-
-    param = dlp.NormalizeYParam()
-    for _name, method in param.methods:
-        param.method = method
-        panel.processor.compute_normalize(param)
 
     param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)

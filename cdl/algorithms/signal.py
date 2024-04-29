@@ -73,6 +73,8 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
         return yin / yin.sum()
     if parameter == "energy":
         return yin / (yin * yin.conjugate()).sum()
+    if parameter == "rms":
+        return yin / np.sqrt(np.mean(yin**2))
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 

@@ -41,9 +41,14 @@ class ImageProcessor(BaseProcessor):
     EDIT_ROI_PARAMS = True
 
     @qt_try_except()
-    def compute_normalize(self) -> None:
+    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
         """Normalize data"""
-        self.compute_11(cpi.compute_normalize, title=_("Normalize"))
+        self.compute_11(
+            cpi.compute_normalize,
+            param=param,
+            paramclass=cpb.NormalizeParam,
+            title=_("Normalize"),
+        )
 
     @qt_try_except()
     def compute_sum(self) -> None:

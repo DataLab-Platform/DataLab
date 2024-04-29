@@ -150,10 +150,10 @@ class SignalProcessor(BaseProcessor):
 
     # ------Signal Processing
     @qt_try_except()
-    def compute_normalize(self, param: cdl.param.NormalizeYParam | None = None) -> None:
+    def compute_normalize(self, param: cdl.param.NormalizeParam | None = None) -> None:
         """Normalize data"""
         self.compute_11(
-            cps.compute_normalize, param, cps.NormalizeYParam, title=_("Normalize")
+            cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
         )
 
     @qt_try_except()

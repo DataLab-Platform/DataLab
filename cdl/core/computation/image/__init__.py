@@ -27,6 +27,7 @@ from cdl.algorithms.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
     get_radial_profile,
+    normalize,
     z_fft,
     z_ifft,
 )
@@ -38,6 +39,7 @@ from cdl.core.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
     new_signal_result,
@@ -260,7 +262,7 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # --------------------------------------------------------------------------------------
 
 
-def compute_normalize(src: ImageObj) -> ImageObj:
+def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
     """
     Normalize image data depending on its maximum.
 
@@ -270,8 +272,8 @@ def compute_normalize(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "normalize")
-    dst.data = dst.data / np.max(np.abs(dst.data))
+    dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = normalize(src.data, p.method)  # type: ignore
     return dst
 
 

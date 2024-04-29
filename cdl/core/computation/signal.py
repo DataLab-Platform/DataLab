@@ -41,6 +41,7 @@ from cdl.core.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
     new_signal_result,
@@ -406,19 +407,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-class NormalizeYParam(gds.DataSet):
-    """Normalize parameters"""
-
-    methods = (
-        (_("maximum"), "maximum"),
-        (_("amplitude"), "amplitude"),
-        (_("sum"), "sum"),
-        (_("energy"), "energy"),
-    )
-    method = gds.ChoiceItem(_("Normalize with respect to"), methods)
-
-
-def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
+def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """Normalize data
 
     Args:

@@ -58,6 +58,19 @@ class ClipParam(gds.DataSet):
     value = gds.FloatItem(_("Clipping value"))
 
 
+class NormalizeParam(gds.DataSet):
+    """Normalize parameters"""
+
+    methods = (
+        ("maximum", _("maximum")),
+        ("amplitude", _("amplitude")),
+        ("sum", _("sum")),
+        ("energy", _("energy")),
+        ("rms", _("RMS")),
+    )
+    method = gds.ChoiceItem(_("Normalize with respect to"), methods)
+
+
 class HistogramParam(gds.DataSet):
     """Histogram parameters"""
 

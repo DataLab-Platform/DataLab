@@ -69,7 +69,7 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.FWHMParam
     :no-index:
-.. autodataset:: cdl.param.NormalizeYParam
+.. autodataset:: cdl.param.NormalizeParam
     :no-index:
 .. autodataset:: cdl.param.PeakDetectionParam
     :no-index:
@@ -184,6 +184,7 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     ROIDataParam,
     ThresholdParam,
+    NormalizeParam
 )
 from cdl.core.computation.image import (
     AverageProfileParam,
@@ -228,7 +229,6 @@ from cdl.core.computation.signal import (
     DetrendingParam,
     FWHMParam,
     InterpolationParam,
-    NormalizeYParam,
     PeakDetectionParam,
     PolynomialFitParam,
     ResamplingParam,

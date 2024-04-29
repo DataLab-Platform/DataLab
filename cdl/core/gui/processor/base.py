@@ -43,6 +43,7 @@ if TYPE_CHECKING:
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
+        NormalizeParam,
         ThresholdParam,
     )
     from cdl.core.gui.panel.image import ImagePanel
@@ -640,6 +641,11 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
+        """Normalize data"""
 
     @abc.abstractmethod
     @qt_try_except()
