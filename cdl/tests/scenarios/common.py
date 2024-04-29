@@ -208,6 +208,10 @@ def run_signal_computations(
     param = dlp.HistogramParam.create(bins=100)
     panel.processor.compute_histogram(param)
 
+    # Test enob and bandwidth
+    panel.processor.compute_bandwidth_3db()
+    panel.processor.compute_enob()
+
 
 def run_image_computations(
     win: CDLMainWindow, data_size: int = 150, all_types: bool = True
