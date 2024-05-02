@@ -288,30 +288,64 @@ def interpolate(
     return ynew
 
 
+def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
+    """Find the x indexes where the corresponding y is the closest to zero (point index
+    right before or at zero crossing)
+
+    Args:
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        value (float): Value to find
+
+    Returns:
+        np.ndarray: x indexes where the corresponding y is the closest to the given
+         value
+    """
+    xi = np.where((y[:-1] >= 0) & (y[1:] <= 0) | (y[:-1] <= 0) & (y[1:] >= 0))[0]
+
+    return xi
+
+
+def compute_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
+    """Find the x value where the y value is the closest to the given value using
+    linear interpolation to deduce the precise x value.
+
+    Args:
+        x (numpy.ndarray): X data
+        y (numpy.ndarray): Y data
+        value (float): Value to find
+
+    Returns:
+        float: x value where the y value is the closest to the given value
+    """
+    leveled_y = y - value
+    xi_before = find_nearest_zero_point_idx(leveled_y)
+    xi_after = xi_before + 1
+
+    if len(xi_before) == 0:
+        return np.array([0.0])
+    else:
+        # linear interpolation
+        p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
+        ori = leveled_y[xi_after] - p * x[xi_after]
+        x0 = -ori / p  # where the curve cut the absissa
+        return x0
+
+
 def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
+    """Compute the bandwidth of the signal at a given level.
+
+    Args:
+        x (numpy.ndarray): x signal data
+        y (numpy.ndarray): y signal data
+        level: Level in dB at which the bandwidth is computed. Defaults to 3.0.
+
+    Returns:
+        float: Bandwidth of the signal at the given level
+    """
     half_max: float = np.max(y) - level
 
-    y_hm = y - half_max
-
-    # Find where the sign is changing
-    xa = np.array(
-        np.where(
-            (y_hm[:-1] >= 0) & (y_hm[1:] <= 0) | (y_hm[:-1] <= 0) & (y_hm[1:] >= 0)
-        )
-    )  # before the change
-    xb = xa + 1  # after the change
-
-    if len(xa[0]) == 0:
-        return 0.0
-
-    # Linear interpolation
-    # line slope
-    ia: np.ndarray = xa[0]
-    ib: np.ndarray = xb[0]
-    p = (y_hm[ib] - y_hm[ia]) / (x[ib] - x[ia])
-    ori = y_hm[ib] - p * x[ib]
-    bw = -ori / p  # where the curve cut the absissa
-
+    bw = compute_x_at_value(x, y, half_max)
     return bw[0]
 
 
