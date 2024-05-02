@@ -25,6 +25,7 @@ import scipy.signal as sps
 from cdl.algorithms import fit
 from cdl.algorithms.signal import (
     bandwidth,
+    compute_x_at_value,
     derivative,
     enob,
     interpolate,
@@ -869,21 +870,61 @@ def calc_resultshape(
 class FWHMParam(gds.DataSet):
     """FWHM parameters"""
 
+    _prop_fittype = gds.GetAttrProp("fittype")
     fittypes = (
         ("GaussianModel", _("Gaussian")),
         ("LorentzianModel", _("Lorentzian")),
         ("VoigtModel", "Voigt"),
+        ("NoModel", _("No model")),
     )
 
-    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel")
+    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel").set_prop(
+        "display", store=_prop_fittype
+    )
+    low_bound = gds.FloatItem(
+        _("Lower x-axis bound"), default=None, check=False
+    ).set_prop("display", active=gds.FuncProp(_prop_fittype, lambda x: x == "NoModel"))
+    high_bound = gds.FloatItem(
+        _("Higher x-axis bound"), default=None, check=False
+    ).set_prop("display", active=gds.FuncProp(_prop_fittype, lambda x: x == "NoModel"))
 
 
-def __func_fwhm(data: np.ndarray, fittype: str) -> tuple[float, float, float, float]:
+def __fwhm_no_model(
+    x: np.ndarray,
+    y: np.ndarray,
+    amp: float,
+    low_bound: float | None = None,
+    high_bound: float | None = None,
+):
+    if isinstance(low_bound, float):
+        indexes = np.where(x >= low_bound)[0]
+        x = x[indexes]
+        y = y[indexes]
+    if isinstance(high_bound, float):
+        indexes = np.where(x >= high_bound)[0]
+        x = x[indexes]
+        y = y[indexes]
+    hmax = amp * 0.5
+    fx = compute_x_at_value(x, y, hmax)
+    assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}."
+    return fx[0], hmax, fx[-1], hmax
+
+
+def __func_fwhm(
+    data: np.ndarray,
+    fittype: str,
+    low_bound: float | None = None,
+    high_bound: float | None = None,
+) -> tuple[float, float, float, float]:
     """Compute FWHM"""
     x, y = data
     dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
     sigma, mu = dx * 0.1, xpeak(x, y)
     FitModelClass: fit.FitModel = getattr(fit, fittype)
+
+    if FitModelClass is fit.NoModel:
+        return __fwhm_no_model(x, y, dy, low_bound, high_bound)
+
     amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
 
     def func(params):
@@ -905,9 +946,14 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape:
     Returns:
         Segment coordinates
     """
-
     return calc_resultshape(
-        "fwhm", ShapeTypes.SEGMENT, signal, __func_fwhm, param.fittype
+        "fwhm",
+        ShapeTypes.SEGMENT,
+        signal,
+        __func_fwhm,
+        param.fittype,
+        param.low_bound,
+        param.high_bound,
     )
 
 
