@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import Callable
+
 import numpy as np
 import scipy.interpolate
 
@@ -285,3 +287,68 @@ def interpolate(
             ynew[xnew < x[0]] = fill_value
             ynew[xnew > x[-1]] = fill_value
     return ynew
+
+
+def contrast(y: np.ndarray) -> float:
+    """Compute contrast.
+
+    Args:
+        y (numpy.ndarray): Input array
+
+    Returns:
+        np.ndarray: Contrast
+    """
+    max_, min_ = np.max(y), np.min(y)
+    # 1e-6 is a normalization term to avoid division by zero (eg: max_ = min_ = 0)
+    return (max_ - min_) / (max_ + min_ + 1e-6)
+
+
+def on_sliding_window(
+    arr: np.ndarray, window_size: int, func: Callable[[np.ndarray], float]
+) -> np.ndarray:
+    """Apply a function on a sliding window.
+
+    Args:
+        arr (numpy.ndarray): Input array
+        window_size (int): Window size
+        func (Callable): Function to apply on the sliding window
+
+    Returns:
+        np.ndarray: Result of the function applied on the sliding window (same shape
+         as input array)
+    """
+    new_arr = np.zeros(arr.shape)
+    for idx, window in enumerate(
+        np.lib.stride_tricks.sliding_window_view(arr, window_size, subok=True),
+        start=window_size // 2,
+    ):
+        new_arr[idx] = func(window)
+    new_arr[: window_size // 2] = new_arr[window_size // 2]
+    new_arr[-window_size // 2 :] = new_arr[-window_size // 2]
+    return new_arr
+
+
+def local_contrast(y: np.ndarray, n: int = 3) -> np.ndarray:
+    """Compute local contrast.
+
+    Args:
+        y (numpy.ndarray): Input array
+        n (int): Window size
+
+    Returns:
+        np.ndarray: Local contrast
+    """
+    return on_sliding_window(y, n, contrast)
+
+
+def mean_local_constrast(y: np.ndarray, n: int = 3) -> tuple[float, float]:
+    """Compute average local contrast.
+
+    Args:
+        y (numpy.ndarray): Input array
+        n (int): Window size. Defaults to 3.
+    """
+    local_contrast_arr = local_contrast(y, n)
+    return np.mean(local_contrast_arr, dtype=float), np.std(
+        local_contrast_arr, dtype=float
+    )

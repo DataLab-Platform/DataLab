@@ -24,8 +24,11 @@ import scipy.signal as sps
 
 from cdl.algorithms import fit
 from cdl.algorithms.signal import (
+    contrast,
     derivative,
     interpolate,
+    local_contrast,
+    mean_local_constrast,
     moving_average,
     normalize,
     peak_indexes,
@@ -938,3 +941,43 @@ def compute_stats_func(obj: SignalObj) -> ResultProperties:
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
+
+
+class WindowParam(gds.DataSet):
+    """Window parameters"""
+
+    n = gds.IntItem(_("Window size"), default=3, min=1, max=100)
+
+
+def compute_contrast(obj: SignalObj) -> ResultProperties:
+    """Compute contrast"""
+    return calc_resultproperties(
+        "contrast",
+        obj,
+        {
+            "contrast": lambda xy: contrast(xy[1]),
+        },
+    )
+
+
+def compute_local_contrast(obj: SignalObj, param: WindowParam) -> SignalObj:
+    """Compute local contrast"""
+    dst = dst_11(obj, "local_contrast", f"window={param.n}")
+    x, y = obj.get_data()
+    dst.set_xydata(x, local_contrast(y, param.n))  # type: ignore
+    return dst
+
+
+def compute_mean_local_contrast(obj: SignalObj, param: WindowParam) -> ResultProperties:
+    """Compute local contrast"""
+    # we precompute the mean and std to avoid recomputing them in the result properties
+    # (duplication in lambda functions)
+    mean, std = mean_local_constrast(obj.y, param.n)  # type: ignore
+    return calc_resultproperties(
+        "local_contrast",
+        obj,  # type: ignore
+        {
+            "<local_contrast>": lambda _: mean,
+            "σ(local_contrast)": lambda _: std,
+        },
+    )
