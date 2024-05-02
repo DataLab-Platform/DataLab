@@ -417,3 +417,10 @@ class SignalProcessor(BaseProcessor):
             paramclass=cdl.param.WindowParam,
             title=_("Average local contrast"),
         )
+
+    @qt_try_except()
+    def compute_abscissa_at_minmax(self) -> dict[str, ResultProperties]:
+        """Compute abscissa at min/max"""
+        return self.compute_10(
+            cps.compute_abscissa_at_minmax, title=_("Abscissa at min/max")
+        )

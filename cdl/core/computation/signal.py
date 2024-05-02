@@ -981,3 +981,15 @@ def compute_mean_local_contrast(obj: SignalObj, param: WindowParam) -> ResultPro
             "σ(local_contrast)": lambda _: std,
         },
     )
+
+
+def compute_abscissa_at_minmax(obj: SignalObj) -> ResultProperties:
+    """Compute absciss min and max"""
+    return calc_resultproperties(
+        "absciss_minmax",
+        obj,
+        {
+            "x_min": lambda xy: xy[0][np.argmin(xy[1])],
+            "x_max": lambda xy: xy[0][np.argmax(xy[1])],
+        },
+    )

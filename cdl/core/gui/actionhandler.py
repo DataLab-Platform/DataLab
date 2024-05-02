@@ -800,7 +800,11 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_convolution,
                 separator=True,
             )
-        with self.new_category(ActionCategory.OPERATION):
+        with self.new_category(ActionCategory.COMPUTING):
+            self.new_action(
+                _("Abscissa at min/max"),
+                triggered=self.panel.processor.compute_abscissa_at_minmax,
+            )
             with self.new_menu(_("Contrast")):
                 # with self.new_category(ActionCategory.PROCESSING):
                 self.new_action(
@@ -817,6 +821,7 @@ class SignalActionHandler(BaseActionHandler):
                     _("Mean local contrast"),
                     triggered=self.panel.processor.compute_mean_local_contrast,
                 )
+
         super().create_last_actions()
 
 
