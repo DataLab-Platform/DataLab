@@ -352,3 +352,30 @@ def mean_local_constrast(y: np.ndarray, n: int = 3) -> tuple[float, float]:
     return np.mean(local_contrast_arr, dtype=float), np.std(
         local_contrast_arr, dtype=float
     )
+
+
+def sampling_period(x: np.ndarray) -> tuple[float, float]:
+    """Compute mean and std sampling period.
+
+    Args:
+        x (numpy.ndarray): X data
+
+    Returns:
+        tuple[float, float]: Mean and std sampling period
+    """
+    x_diff = np.diff(x)
+    return np.mean(x_diff, dtype=float), np.std(x_diff, dtype=float)
+
+
+def sampling_rate(x: np.ndarray) -> tuple[float, float]:
+    """Compute mean sampling rate.
+
+    Args:
+        x (numpy.ndarray): X data
+
+    Returns:
+        tuple[float, float]: Mean and std sampling rate
+    """
+    x_diff = np.diff(x)
+    freqs = 1 / x_diff
+    return np.mean(freqs, dtype=float), np.std(freqs, dtype=float)

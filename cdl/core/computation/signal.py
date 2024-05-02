@@ -32,6 +32,8 @@ from cdl.algorithms.signal import (
     moving_average,
     normalize,
     peak_indexes,
+    sampling_period,
+    sampling_rate,
     xpeak,
     xy_fft,
     xy_ifft,
@@ -984,12 +986,28 @@ def compute_mean_local_contrast(obj: SignalObj, param: WindowParam) -> ResultPro
 
 
 def compute_abscissa_at_minmax(obj: SignalObj) -> ResultProperties:
-    """Compute absciss min and max"""
+    """Compute abscissa at min/max"""
     return calc_resultproperties(
-        "absciss_minmax",
+        "abscissa_min/max",
         obj,
         {
-            "x_min": lambda xy: xy[0][np.argmin(xy[1])],
-            "x_max": lambda xy: xy[0][np.argmax(xy[1])],
+            "x at y_min": lambda xy: xy[0][np.argmin(xy[1])],
+            "x at y_max": lambda xy: xy[0][np.argmax(xy[1])],
+        },
+    )
+
+
+def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
+    """Compute sampling rate and period (mean and std)"""
+    mean_t, std_t = sampling_period(obj.x)
+    mean_f, std_f = sampling_rate(obj.x)
+    return calc_resultproperties(
+        "mean_sampling_rate",
+        obj,
+        {
+            "<f>": lambda _: mean_f,
+            "σ(f)": lambda _: std_f,
+            "<T>": lambda _: mean_t,
+            "σ(T)": lambda _: std_t,
         },
     )
