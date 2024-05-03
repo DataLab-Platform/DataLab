@@ -915,6 +915,17 @@ def compute_log10(src: ImageObj) -> ImageObj:
     """
     return Wrap11Func(np.log10)(src)
 
+def compute_exp(src: ImageObj) -> ImageObj:
+    """Compute exponential
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    return Wrap11Func(np.exp)(src)
+
 
 class ZCalibrateParam(gds.DataSet):
     """Image linear calibration parameters"""

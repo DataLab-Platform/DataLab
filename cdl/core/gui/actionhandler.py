@@ -587,9 +587,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
             self.new_action(
-                "Log10(y)",
-                triggered=self.panel.processor.compute_log10,
+                _("Exponential"),
+                triggered=self.panel.processor.compute_exp,
                 separator=True,
+            )
+            self.new_action(
+                _("Logarithm (base 10)"),
+                triggered=self.panel.processor.compute_log10,
+                separator=False,
             )
 
         with self.new_category(ActionCategory.PROCESSING):

@@ -377,6 +377,18 @@ def compute_log10(src: SignalObj) -> SignalObj:
     return Wrap11Func(np.log10)(src)
 
 
+def compute_exp(src: SignalObj) -> SignalObj:
+    """Compute exponential
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.exp)(src)
+
+
 class PeakDetectionParam(gds.DataSet):
     """Peak detection parameters"""
 
