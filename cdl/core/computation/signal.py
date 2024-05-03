@@ -901,10 +901,10 @@ def __fwhm_no_model(
         x = x[indexes]
         y = y[indexes]
     if isinstance(high_bound, float):
-        indexes = np.where(x >= high_bound)[0]
+        indexes = np.where(x <= high_bound)[0]
         x = x[indexes]
         y = y[indexes]
-    hmax = amp * 0.5
+    hmax = amp * 0.5 + np.min(y)
     fx = compute_x_at_value(x, y, hmax)
     assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}."
     return fx[0], hmax, fx[-1], hmax
