@@ -994,9 +994,9 @@ class BaseObj(metaclass=BaseObjMeta):
         if self.annotations:
             try:
                 for item in load_items(JSONReader(self.annotations)):
-                    set_plot_item_editable(item, editable)
                     if isinstance(item, AnnotatedShape):
                         config_annotated_shape(item, fmt, lbl, "shape/annotation")
+                    set_plot_item_editable(item, editable)
                     yield item
             except json.decoder.JSONDecodeError:
                 pass

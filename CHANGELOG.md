@@ -16,6 +16,17 @@ for future and past milestones.
     is when it is really needed (i.e. for long operations)
   * Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the
     very thorough feedback and the help in testing the fix
+* Fixed [Issue #69](https://github.com/DataLab-Platform/DataLab/issues/69) - Annotations should be read-only in Signal/Image View
+  * Regarding the annotations, DataLab's current behavior is the following:
+    * Annotations are created only when showing the signal/image in a separate window
+      (double-click on the object, or "View" > "View in a new window")
+    * When displaying the objects in either the "Signal View" or the "Image View", the
+      annotations should be read-only (i.e. not movable, nor resizable or deletable)
+  * However, some annotations were still deletable in the "Signal View" and the
+    "Image View": this is now fixed
+  * Note that the fact that annotations can't be created in the "Signal View" or the
+    "Image View" is a limitation of the current implementation, and may be improved in
+    future versions
 
 ## DataLab Version 0.15.0 ##
 
