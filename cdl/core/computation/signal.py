@@ -936,7 +936,7 @@ def __func_fwhm(
     return FitModelClass.half_max_segment(amp, sigma, mu, base)
 
 
-def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape:
+def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
     """Compute FWHM
 
     Args:
@@ -977,7 +977,7 @@ def __func_fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
     return mu - hw, yhm, mu + hw, yhm
 
 
-def compute_fw1e2(signal: SignalObj) -> ResultShape:
+def compute_fw1e2(signal: SignalObj) -> ResultShape | None:
     """Compute FW at 1/e²
 
     Args:
