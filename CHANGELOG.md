@@ -3,6 +3,20 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.15.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #68](https://github.com/DataLab-Platform/DataLab/issues/68) - Slow loading of even simple plots:
+  * On macOS, the user experience was degraded when handling even simple plots
+  * This was due to the way macOS handles the pop-up windows, e.g. when refreshing the
+    plot view ("Creating plot items" progress bar), hence causing a very annoying
+    flickering effect and a global slowdown of the application
+  * This is now fixed by showing the progress bar only after a short delay (1s), that
+    is when it is really needed (i.e. for long operations)
+  * Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the
+    very thorough feedback and the help in testing the fix
+
 ## DataLab Version 0.15.0 ##
 
 🎁 New installer for the stand-alone version on Windows:
