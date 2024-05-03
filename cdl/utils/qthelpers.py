@@ -182,12 +182,19 @@ def try_or_log_error(context: str) -> Generator[None, None, None]:
 
 @contextmanager
 def create_progress_bar(
-    parent: QW.QWidget, label: str, max_: int
+    parent: QW.QWidget, label: str, max_: int, show_after: int = 1000
 ) -> Generator[QW.QProgressDialog, None, None]:
-    """Create modal progress bar"""
+    """Create modal progress bar
+
+    Args:
+        parent: Parent widget
+        label: Progress dialog title
+        max_: Maximum progress value
+        show_after: Delay before showing the progress dialog (ms, default: 1000)
+    """
     prog = QW.QProgressDialog(label, _("Cancel"), 0, max_, parent, QC.Qt.SplashScreen)
     prog.setWindowModality(QC.Qt.WindowModal)
-    prog.show()
+    prog.setMinimumDuration(show_after)
     try:
         yield prog
     finally:
