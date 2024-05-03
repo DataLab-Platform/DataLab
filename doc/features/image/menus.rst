@@ -290,8 +290,16 @@ selected image.
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Log10(z)
-^^^^^^^^
+Exponential
+^^^^^^^^^^^
+
+Create a new image which is the exponential of each selected image:
+
+.. math::
+    z_{k} = \exp(z_{k-1})
+
+Logarithm (base 10)
+^^^^^^^^^^^^^^^^^^^
 
 Create a new image which is the base 10 logarithm of each selected image:
 
