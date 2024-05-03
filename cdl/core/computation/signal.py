@@ -948,7 +948,7 @@ def compute_stats_func(obj: SignalObj) -> ResultProperties:
 class WindowParam(gds.DataSet):
     """Window parameters"""
 
-    n = gds.IntItem(_("Window size"), default=3, min=1, max=100)
+    n = gds.IntItem(_("Window size"), default=3, min=1)
 
 
 def compute_contrast(obj: SignalObj) -> ResultProperties:
