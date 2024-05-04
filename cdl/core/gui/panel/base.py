@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Base panel objects (see parent package :mod:`cdl.core.gui.processor`)
+.. Base panel objects (see parent package :mod:`cdl.core.gui.panel`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -230,9 +230,9 @@ class BaseDataPanel(AbstractPanel):
     ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
 
     @abc.abstractmethod
-    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
+    def __init__(self, parent: CDLMainWindow, plotwidget: PlotWidget, toolbar) -> None:
         super().__init__(parent)
-        self.mainwindow: CDLMainWindow = parent
+        self.mainwindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objmodel = objectmodel.ObjectModel()
         self.objview = objectview.ObjectView(self, self.objmodel)

@@ -1,0 +1,608 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""
+.. History panel (see parent package :mod:`cdl.core.gui.panel`)
+"""
+
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+
+from __future__ import annotations
+
+import functools
+import importlib
+from typing import TYPE_CHECKING, Callable, Generator
+from uuid import uuid4
+
+from guidata.configtools import get_icon
+from guidata.io import BaseIOHandler
+from guidata.qthelpers import create_action
+from guidata.widgets.dockable import DockableWidgetMixin
+from qtpy import QtCore as QC
+from qtpy import QtWidgets as QW
+
+from cdl.config import _
+from cdl.core.gui import ObjItf
+from cdl.core.gui.panel.base import AbstractPanel
+
+if TYPE_CHECKING:
+    from cdl.core.gui.main import CDLMainWindow
+    from cdl.core.gui.panel.base import BaseDataPanel
+    from cdl.core.gui.processor.base import BaseProcessor
+    from cdl.core.io.native import NativeH5Reader, NativeH5Writer
+
+
+def get_datetime_str() -> str:
+    """Return current date and time as a string"""
+    return QC.QDateTime.currentDateTime().toString("yyyy-MM-dd hh:mm:ss")
+
+
+def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
+    """Method decorator to add the method call to the history panel
+
+    Args:
+        kwargs_names: List of keyword arguments to add to the history action.
+         Defaults to [].
+        title: Title of the history action. Defaults to None.
+    """
+
+    def add_to_history_decorator(func):
+        """Decorator function"""
+
+        @functools.wraps(func)
+        def method_wrapper(*args, **kwargs):
+            """Decorator wrapper function"""
+            if "title" in kwargs:
+                title = kwargs["title"]
+            self: BaseDataPanel | BaseProcessor = args[0]
+            history: HistoryPanel = self.mainwindow.historypanel
+            histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
+            history.add_entry(title, func, args, histkwargs)
+            return func(*args, **kwargs)
+
+        return method_wrapper
+
+    return add_to_history_decorator
+
+
+class HistoryAction(ObjItf):
+    """Object representing an action in the history panel.
+
+    An action is basically a function that can be called in the same conditions as
+    when it was added to the history panel. Replay an action is done by calling the
+    function with the same parameters.
+
+    Args:
+        title: Title of the history action
+        func: Function to call
+        args: Function arguments
+        kwargs: Function keyword arguments
+        state: State of the workspace before the action
+    """
+
+    def __init__(
+        self,
+        title: str,
+        func: Callable,
+        args: tuple,
+        kwargs: dict,
+        state: WorkspaceState,
+    ) -> None:
+        """Create a new action"""
+        super().__init__()
+        self.__title = title
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+        self.state = state
+        self.dtstr: str = get_datetime_str()
+        self.uuid: str = str(uuid4())
+
+    def regenerate_uuid(self):
+        """Regenerate UUID
+
+        This method is used to regenerate UUID after loading the object from a file.
+        This is required to avoid UUID conflicts when loading objects from file
+        without clearing the workspace first.
+        """
+        # No UUID to regenerate for history action
+
+    @property
+    def title(self) -> str:
+        """Return object title"""
+        return self.__title
+
+    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+        """Check if the current workspace state is compatible with the saved state
+
+        Args:
+            mainwindow: DataLab's main window
+
+        Returns:
+            bool: True if the current workspace state is compatible with the saved state
+        """
+        return self.state.is_current_state_compatible(mainwindow)
+
+    def replay(self, mainwindow: CDLMainWindow, restore_state: bool) -> None:
+        """Replay the action
+
+        Args:
+            mainwindow: DataLab's main window
+            restore_state: True to restore the workspace state before replaying
+             the action
+        """
+        if restore_state:
+            self.state.restore(mainwindow)
+        self.func(*self.args, **self.kwargs)
+
+    @staticmethod
+    def serialize_func_or_class(obj: Callable | type) -> str:
+        """Serialize a function or a class object
+
+        Args:
+            obj: Object to serialize
+
+        Returns:
+            str: Serialized object
+        """
+        if not obj.__module__.startswith("cdl"):
+            raise ValueError("Only cdl functions and classes can be serialized")
+        if isinstance(obj, type):
+            return f"{obj.__module__}.{obj.__name__}"
+        return f"{obj.__module__}.{obj.__qualname__}"
+
+    @staticmethod
+    def deserialize_func_or_class(obj: str) -> Callable | type:
+        """Deserialize a function or a class object
+
+        Args:
+            obj: Serialized object
+
+        Returns:
+            Callable | type: Deserialized object
+        """
+        module_name, obj_name = obj.rsplit(".", 1)
+        if not module_name.startswith("cdl"):
+            raise ValueError("Only cdl functions and classes can be deserialized")
+        module = importlib.import_module(module_name)
+        return getattr(module, obj_name)
+
+    def serialize(self, writer: BaseIOHandler) -> None:
+        """Serialize this action
+
+        Args:
+            writer (BaseIOHandler): Writer
+        """
+        with writer.group("func"):
+            writer.write(self.serialize_func_or_class(self.func))
+        with writer.group("args"):
+            writer.write(self.args)
+        with writer.group("kwargs"):
+            writer.write(self.kwargs)
+        self.state.serialize(writer)
+        with writer.group("dtstr"):
+            writer.write(self.dtstr)
+
+    def deserialize(self, reader: BaseIOHandler) -> None:
+        """Deserialize this action
+
+        Args:
+            reader (BaseIOHandler): Reader
+        """
+        with reader.group("func"):
+            self.func = self.deserialize_func_or_class(reader.read_any())
+        with reader.group("args"):
+            self.args = reader.read_any()
+        with reader.group("kwargs"):
+            self.kwargs = reader.read_any()
+        self.state.deserialize(reader)
+        with reader.group("dtstr"):
+            self.dtstr = reader.read_any()
+
+
+class WorkspaceState:
+    """Object representing the workspace state at a given time.
+
+    The workspace state is the state of the workspace at a given time. It contains
+    the list of objects in the workspace and the selection of objects. Instead of
+    storing the objects themselves, the workspace state only stores what is relevant
+    to the history panel, i.e. the object data shape and the object title (even
+    if the latter is purely informative).
+    """
+
+    def __init__(self) -> None:
+        """Create a new workspace state"""
+        # The selection is stored as a dictionary where the key is the panel name
+        # and the value is the list of selected object numbers (1 to N).
+        self.selection: dict[str, list[int]] = {}
+        # The states are stored as a dictionary where the key is the panel name
+        # and the value is the list of states (str) of the objects in the panel. The
+        # state is a string containing the object data shape (for now, only the shape,
+        # but we could add more information if needed). The idea is that two objects
+        # have the same state, we can apply the same action (processing, operation, ...)
+        # to both objects.
+        self.states: dict[str, list[str]] = {}
+        # The titles are stored as a dictionary where the key is the panel name and the
+        # value is the list of titles of the objects in the panel. The title is only
+        # informative and is not used to determine if two objects have the same state.
+        self.titles: dict[str, list[str]] = {}
+
+    def serialize(self, writer: BaseIOHandler) -> None:
+        """Serialize this workspace state
+
+        Args:
+            writer (BaseIOHandler): Writer
+        """
+        with writer.group("selection"):
+            writer.write(self.selection)
+        with writer.group("states"):
+            writer.write(self.states)
+        with writer.group("titles"):
+            writer.write(self.titles)
+
+    def deserialize(self, reader: BaseIOHandler) -> None:
+        """Deserialize this workspace state
+
+        Args:
+            reader (BaseIOHandler): Reader
+        """
+        with reader.group("selection"):
+            self.selection = reader.read_any()
+        with reader.group("states"):
+            self.states = reader.read_any()
+        with reader.group("titles"):
+            self.titles = reader.read_any()
+
+    def save(self, mainwindow: CDLMainWindow) -> None:
+        """Save the current workspace state
+
+        Args:
+            mainwindow: DataLab's main window
+        """
+        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
+            selection = [
+                obj.number for obj in panel.objview.get_sel_objects(include_groups=True)
+            ]
+            self.selection[panel.PANEL_STR] = selection
+            self.states[panel.PANEL_STR] = [
+                str(obj.data.shape) for obj in panel.objmodel if obj.number in selection
+            ]
+            self.titles[panel.PANEL_STR] = [
+                obj.title for obj in panel.objmodel if obj.number in selection
+            ]
+
+    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+        """Check if the current workspace state is compatible with the saved state
+
+        Args:
+            mainwindow: DataLab's main window
+
+        Returns:
+            bool: True if the current workspace state is compatible with the saved state
+        """
+        # A compatible state is a state where the selected objects are the same as the
+        # saved selected objects in terms of position in the list of objects and of
+        # data shape (title is not relevant).
+        # To check this, we have to try to restore the selection (without restoring it)
+        # and compare the current selection with the saved selection in terms of
+        # position in the list of objects and of data shape.
+        current_states: dict[str, list[str]] = {}
+        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
+            numbers = self.selection[panel.PANEL_STR]
+            current_states[panel.PANEL_STR] = [
+                str(obj.data.shape) for obj in panel.objmodel if obj.number in numbers
+            ]
+        return current_states == self.states
+
+    def restore(self, mainwindow: CDLMainWindow) -> None:
+        """Restore the workspace state
+
+        Only the selection is restored, not the objects themselves because they are
+        not stored in the workspace state. Before restoring the selection, we may
+        check if the current workspace objects are compatible with the saved
+        workspace state. If not, we raise a `ValueError`.
+
+        Args:
+            mainwindow: DataLab's main window
+
+        Raises:
+            ValueError: If the current workspace state is not compatible with the
+             saved state
+        """
+        if not self.is_current_state_compatible(mainwindow):
+            raise ValueError(
+                "Current workspace state is not compatible with saved state"
+            )
+        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
+            numbers = self.selection[panel.PANEL_STR]
+            panel.objview.select_objects(numbers)
+
+
+class HistorySession:
+    """Object representing a history session, i.e. a list of actions.
+
+    A history session is a list of actions that can be replayed in the same order
+    as they were added to the history session. The history session can be saved to
+    a file and loaded from a file.
+
+    Args:
+        title: Title of the history session
+        number: Number of the history session
+    """
+
+    def __init__(self, title: str = "", number: int = 0) -> None:
+        """Create a new history session"""
+        prefix = _("Session")
+        self.title = title if title else f"{prefix} {number:03d}"
+        self.number = number
+        self.dtstr: str = get_datetime_str()
+        self.actions: list[HistoryAction] = []
+
+    def add_action(self, action: HistoryAction) -> None:
+        """Add an action to the history session
+
+        Args:
+            action: Action to add
+        """
+        self.actions.append(action)
+
+    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+        """Check if the current workspace state is compatible with the saved state
+
+        Args:
+            mainwindow: DataLab's main window
+
+        Returns:
+            bool: True if the current workspace state is compatible with the saved state
+        """
+        if self.actions:
+            return self.actions[0].is_current_state_compatible(mainwindow)
+        return True
+
+    def replay(self, mainwindow: CDLMainWindow, restore_state: bool) -> None:
+        """Replay the history session
+
+        Args:
+            mainwindow: DataLab's main window
+            restore_state: True to restore the workspace state before replaying
+             the action
+        """
+        for action in self.actions:
+            action.replay(mainwindow, restore_state=restore_state)
+
+    def serialize(self, writer: BaseIOHandler) -> None:
+        """Serialize this history session
+
+        Args:
+            writer (BaseIOHandler): Writer
+        """
+        writer.write(self.title)
+        writer.write(self.number)
+        writer.write(self.dtstr)
+        writer.write(self.actions)
+
+    def deserialize(self, reader: BaseIOHandler) -> None:
+        """Deserialize this history session
+
+        Args:
+            reader (BaseIOHandler): Reader
+        """
+        self.title = reader.read_any()
+        self.number = reader.read_any()
+        self.dtstr = reader.read_any()
+        self.actions = reader.read_any()
+
+    def remove_action(self, action: HistoryAction) -> None:
+        """Remove an action from the history session
+
+        This implies removing all subsequent actions. If action is not found, this
+        fails silently.
+
+        Args:
+            action: Action to remove
+        """
+        if action in self.actions:
+            index = self.actions.index(action)
+            self.actions = self.actions[:index]
+
+
+class HistoryPanel(AbstractPanel, DockableWidgetMixin):
+    """History panel"""
+
+    LOCATION = QC.Qt.RightDockWidgetArea
+    PANEL_STR = _("History panel")
+
+    H5_PREFIX = "DataLab_His"
+
+    SIG_OBJECT_MODIFIED = QC.Signal()
+
+    FILE_FILTERS = f"{_('History files')} (*.cdlhist)"
+
+    def __init__(self, parent: CDLMainWindow) -> None:
+        super().__init__(parent)
+        self.setWindowTitle(self.PANEL_STR)
+        self.setWindowIcon(get_icon("history.svg"))
+        self.setOrientation(QC.Qt.Vertical)
+
+        self.mainwindow = parent
+        self.treewidget = QW.QTreeWidget()
+        self.treewidget.setHeaderLabels([_("Title"), _("Date and time"), _("Function")])
+        self.treewidget.setContextMenuPolicy(QC.Qt.CustomContextMenu)
+        self.treewidget.customContextMenuRequested.connect(self.show_context_menu)
+        self.addWidget(self.treewidget)
+
+        self.__history_sessions: list[HistorySession] = []
+        self.__session_increment = 0
+
+    def add_action_to_tree(self, action: HistoryAction) -> None:
+        """Add an action to the history panel
+
+        Args:
+            action: Action to add
+        """
+        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.func.__name__])
+        item.setData(0, QC.Qt.UserRole, action.uuid)
+        ritem = self.treewidget.topLevelItem(self.treewidget.topLevelItemCount() - 1)
+        ritem.addChild(item)
+
+    def populate_tree(self) -> None:
+        """Populate the history panel"""
+        self.treewidget.clear()
+        for session in self.__history_sessions:
+            ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
+            self.treewidget.addTopLevelItem(ritem)
+            for action in session.actions:
+                self.add_action_to_tree(action)
+        self.treewidget.expandAll()
+
+    def show_context_menu(self, pos: QC.QPoint) -> None:
+        """Show the context menu
+
+        Args:
+            pos: Position of the context menu
+        """
+        menu = QW.QMenu()
+        menu.addAction(
+            create_action(
+                self,
+                _("Replay"),
+                self.replay_actions,
+                icon=get_icon("replay.svg"),
+            )
+        )
+        menu.addAction(
+            create_action(
+                self,
+                _("Delete"),
+                self.delete_actions,
+                icon=get_icon("delete.svg"),
+            )
+        )
+        menu.exec_(self.treewidget.mapToGlobal(pos))
+
+    def get_action_from_uuid(self, uuid: str) -> HistoryAction:
+        """Get the action from its UUID
+
+        Args:
+            uuid: Action UUID
+
+        Returns:
+            HistoryAction: Action
+        """
+        for session in self.__history_sessions:
+            for action in session.actions:
+                if action.uuid == uuid:
+                    return action
+        raise ValueError("Action not found")
+
+    def replay_actions(self) -> None:
+        """Replay the selected actions"""
+        for item in self.treewidget.selectedItems():
+            if item.parent() is None:
+                index = self.treewidget.indexOfTopLevelItem(item)
+                session_or_action = self.__history_sessions[index]
+            else:
+                uuid = item.data(0, QC.Qt.UserRole)
+                session_or_action = self.get_action_from_uuid(uuid)
+            if not session_or_action.is_current_state_compatible(self.mainwindow):
+                QW.QMessageBox.critical(
+                    self,
+                    _("Error"),
+                    _("The current workspace state is not compatible with the action."),
+                )
+                return
+            session_or_action.replay(self.mainwindow, restore_state=True)
+
+    def delete_actions(self) -> None:
+        """Delete the selected actions"""
+        # Ask for confirmation as this will delete the action and all subsequent actions
+        reply = QW.QMessageBox.question(
+            self,
+            _("Delete actions"),
+            _("Do you really want to delete the selected actions?"),
+            QW.QMessageBox.Yes | QW.QMessageBox.No,
+            QW.QMessageBox.No,
+        )
+        if reply == QW.QMessageBox.Yes:
+            for item in self.treewidget.selectedItems():
+                uuid = item.data(0, QC.Qt.UserRole)
+                action = self.get_action_from_uuid(uuid)
+                for session in self.__history_sessions:
+                    if action in session.actions:
+                        session.remove_action(action)
+            self.populate_tree()
+
+    def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
+        """Serialize whole panel to a HDF5 file
+
+        Args:
+            writer: HDF5 writer
+        """
+        writer.write_object_list(self.__history_sessions, self.H5_PREFIX)
+
+    def deserialize_from_hdf5(self, reader: NativeH5Reader) -> None:
+        """Deserialize whole panel from a HDF5 file
+
+        Args:
+            reader: HDF5 reader
+        """
+        self.__history_sessions: list[HistorySession] = reader.read_object_list(
+            self.H5_PREFIX, HistorySession
+        )
+        if self.__history_sessions:
+            self.__session_increment = self.__history_sessions[-1].number
+        self.populate_tree()
+
+    def __len__(self) -> int:
+        """Return number of objects"""
+        return sum(len(session.actions) for session in self.__history_sessions)
+
+    def __getitem__(self, nb: int) -> HistoryAction:
+        """Return object from its number (1 to N)"""
+        for session in self.__history_sessions:
+            if nb <= len(session.actions):
+                return session.actions[nb - 1]
+            nb -= len(session.actions)
+        raise IndexError("Index out of range")
+
+    def __iter__(self) -> Generator[HistoryAction, None, None]:
+        """Iterate over objects"""
+        for session in self.__history_sessions:
+            for action in session.actions:
+                yield action
+
+    def create_new_session(self) -> None:
+        """Create a new history list"""
+        self.__session_increment += 1
+        session = HistorySession(number=self.__session_increment)
+        self.__history_sessions.append(session)
+        self.populate_tree()
+
+    def add_entry(self, title: str, func: Callable, args: tuple, kwargs: dict) -> None:
+        """Add an entry to the current history list
+
+        Args:
+            title: Title of the history action
+            func: Function to call
+            args: Function arguments
+            kwargs: Function keyword arguments
+        """
+        state = WorkspaceState()
+        state.save(self.mainwindow)
+        obj = HistoryAction(title, func, args, kwargs, state)
+        self.add_object(obj)
+
+    # ------ AbstractPanel interface ---------------------------------------------------
+    def create_object(self) -> HistoryAction:
+        """Create and return object"""
+        return HistoryAction("", lambda: None, (), {}, WorkspaceState())
+
+    def add_object(self, obj: HistoryAction) -> None:
+        """Add object to panel"""
+        if not self.__history_sessions:
+            self.create_new_session()
+        self.__history_sessions[-1].add_action(obj)
+        self.add_action_to_tree(obj)
+
+    def remove_all_objects(self):
+        """Remove all objects"""
+        super().remove_all_objects()

@@ -53,7 +53,7 @@ from cdl.core.baseproxy import AbstractCDLControl
 from cdl.core.gui.actionhandler import ActionCategory
 from cdl.core.gui.docks import DockablePlotWidget
 from cdl.core.gui.h5io import H5InputOutput
-from cdl.core.gui.panel import base, image, macro, signal
+from cdl.core.gui.panel import base, history, image, macro, signal
 from cdl.core.gui.settings import edit_settings
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
@@ -150,6 +150,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.main_toolbar: QW.QToolBar | None = None
         self.signal_toolbar: QW.QToolBar | None = None
         self.image_toolbar: QW.QToolBar | None = None
+
+        self.historypanel: history.HistoryPanel | None = None
         self.signalpanel: SignalPanel | None = None
         self.imagepanel: ImagePanel | None = None
         self.tabwidget: QW.QTabWidget | None = None
@@ -697,6 +699,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.__setup_console()
         self.__update_actions()
         self.__add_macro_panel()
+        self.__add_history_panel()
         self.__configure_panels()
         # Now that everything is set up, we can restore the window state:
         self.__restore_state()
@@ -1046,6 +1049,13 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         mdock = self.__add_dockwidget(self.macropanel, _("Macro Panel"))
         self.docks[self.macropanel] = mdock
         self.tabifyDockWidget(self.docks[self.imagepanel], mdock)
+
+    def __add_history_panel(self) -> None:
+        """Add history panel"""
+        self.historypanel = history.HistoryPanel(self)
+        hdock = self.__add_dockwidget(self.historypanel, _("History Panel"))
+        self.docks[self.historypanel] = hdock
+        self.tabifyDockWidget(self.docks[self.macropanel], hdock)
         self.docks[self.signalpanel].raise_()
 
     def __configure_panels(self) -> None:

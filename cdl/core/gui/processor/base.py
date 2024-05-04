@@ -28,6 +28,7 @@ from cdl import env
 from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
+from cdl.core.gui.panel.history import add_to_history
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
@@ -171,6 +172,7 @@ class BaseProcessor(QC.QObject):
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
         super().__init__()
         self.panel = panel
+        self.mainwindow = panel.mainwindow
         self.plotwidget = plotwidget
         self.worker: Worker | None = None
         self.set_process_isolation_enabled(Conf.main.process_isolation_enabled.get())
@@ -244,6 +246,7 @@ class BaseProcessor(QC.QObject):
             self.update_param_defaults(param)
         return edit, param
 
+    @add_to_history(["param"])
     def compute_11(
         self,
         func: Callable,
