@@ -51,12 +51,10 @@ def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
         @functools.wraps(func)
         def method_wrapper(*args, **kwargs):
             """Decorator wrapper function"""
-            if "title" in kwargs:
-                title = kwargs["title"]
             self: BaseDataPanel | BaseProcessor = args[0]
             history: HistoryPanel = self.mainwindow.historypanel
             histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
-            history.add_entry(title, func, args, histkwargs)
+            history.add_entry(kwargs.get("title", title), func, args, histkwargs)
             return func(*args, **kwargs)
 
         return method_wrapper
@@ -110,6 +108,14 @@ class HistoryAction(ObjItf):
     def title(self) -> str:
         """Return object title"""
         return self.__title
+
+    @property
+    def description(self) -> str:
+        """Return object description"""
+        if len(self.args) >= 2 and isinstance(self.args[1], Callable):
+            doc: str = self.args[1].__doc__
+            return doc.splitlines()[0] if doc else ""
+        return self.func.__doc__ or ""
 
     def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
         """Check if the current workspace state is compatible with the saved state
@@ -425,9 +431,12 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
 
         self.mainwindow = parent
         self.treewidget = QW.QTreeWidget()
-        self.treewidget.setHeaderLabels([_("Title"), _("Date and time"), _("Function")])
+        self.treewidget.setHeaderLabels(
+            [_("Title"), _("Date and time"), _("Description")]
+        )
         self.treewidget.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.treewidget.customContextMenuRequested.connect(self.show_context_menu)
+        self.treewidget.itemDoubleClicked.connect(self.replay_actions)
         self.addWidget(self.treewidget)
 
         self.__history_sessions: list[HistorySession] = []
@@ -439,7 +448,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         Args:
             action: Action to add
         """
-        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.func.__name__])
+        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
         item.setData(0, QC.Qt.UserRole, action.uuid)
         ritem = self.treewidget.topLevelItem(self.treewidget.topLevelItemCount() - 1)
         ritem.addChild(item)
