@@ -28,7 +28,6 @@ from cdl import env
 from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
-from cdl.core.gui.panel.history import add_to_history
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
@@ -246,7 +245,6 @@ class BaseProcessor(QC.QObject):
             self.update_param_defaults(param)
         return edit, param
 
-    @add_to_history(["param"])
     def compute_11(
         self,
         func: Callable,
@@ -271,6 +269,14 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
+        self.mainwindow.historypanel.add_entry(
+            title,
+            self.compute_11,
+            func,
+            param=param,
+            title=title,
+            comment=comment,
+        )
         self._compute_11_subroutine([func], [param], title)
 
     def compute_1n(

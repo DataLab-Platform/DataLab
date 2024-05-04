@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import functools
 import importlib
+import os
 from typing import TYPE_CHECKING, Callable, Generator
 from uuid import uuid4
 
@@ -54,7 +55,7 @@ def add_to_history(kwargs_names: list[str] = [], title: str | None = None):
             self: BaseDataPanel | BaseProcessor = args[0]
             history: HistoryPanel = self.mainwindow.historypanel
             histkwargs = {k: kwargs[k] for k in kwargs_names if k in kwargs}
-            history.add_entry(kwargs.get("title", title), func, args, histkwargs)
+            history.add_entry(kwargs.get("title", title), func, *args, **histkwargs)
             return func(*args, **kwargs)
 
         return method_wrapper
@@ -111,32 +112,44 @@ class HistoryAction(ObjItf):
 
     @property
     def description(self) -> str:
-        """Return object description"""
+        """Return object description (string representing function parameters)"""
+        desc = ""
+        for kwname in self.kwargs:
+            if kwname.endswith("param"):
+                if not desc:
+                    desc += os.linesep
+                desc += str(self.kwargs[kwname])
+        if desc:
+            return desc
+        if "param" in self.kwargs:
+            return str(self.kwargs["param"])
         if len(self.args) >= 2 and isinstance(self.args[1], Callable):
             doc: str = self.args[1].__doc__
             return doc.splitlines()[0] if doc else ""
         return self.func.__doc__ or ""
 
-    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+    def is_current_state_compatible(
+        self, mainwindow: CDLMainWindow, restore_selection: bool
+    ) -> bool:
         """Check if the current workspace state is compatible with the saved state
 
         Args:
             mainwindow: DataLab's main window
+            restore_selection: True to restore the selection before checking the state
 
         Returns:
             bool: True if the current workspace state is compatible with the saved state
         """
-        return self.state.is_current_state_compatible(mainwindow)
+        return self.state.is_current_state_compatible(mainwindow, restore_selection)
 
-    def replay(self, mainwindow: CDLMainWindow, restore_state: bool) -> None:
+    def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
         """Replay the action
 
         Args:
             mainwindow: DataLab's main window
-            restore_state: True to restore the workspace state before replaying
-             the action
+            restore_selection: True to restore the workspace selection before replaying
         """
-        if restore_state:
+        if restore_selection:
             self.state.restore(mainwindow)
         self.func(*self.args, **self.kwargs)
 
@@ -258,17 +271,31 @@ class WorkspaceState:
         with reader.group("titles"):
             self.titles = reader.read_any()
 
+    def get_current_selection(self, mainwindow: CDLMainWindow) -> dict[str, list[int]]:
+        """Get the current selection in the workspace
+
+        Args:
+            mainwindow: DataLab's main window
+
+        Returns:
+            dict[str, list[int]]: Current selection in the workspace
+        """
+        selection: dict[str, list[int]] = {}
+        for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
+            selection[panel.PANEL_STR] = [
+                obj.number for obj in panel.objview.get_sel_objects(include_groups=True)
+            ]
+        return selection
+
     def save(self, mainwindow: CDLMainWindow) -> None:
         """Save the current workspace state
 
         Args:
             mainwindow: DataLab's main window
         """
+        self.selection = self.get_current_selection(mainwindow)
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            selection = [
-                obj.number for obj in panel.objview.get_sel_objects(include_groups=True)
-            ]
-            self.selection[panel.PANEL_STR] = selection
+            selection = self.selection[panel.PANEL_STR]
             self.states[panel.PANEL_STR] = [
                 str(obj.data.shape) for obj in panel.objmodel if obj.number in selection
             ]
@@ -276,11 +303,14 @@ class WorkspaceState:
                 obj.title for obj in panel.objmodel if obj.number in selection
             ]
 
-    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+    def is_current_state_compatible(
+        self, mainwindow: CDLMainWindow, restore_selection: bool
+    ) -> bool:
         """Check if the current workspace state is compatible with the saved state
 
         Args:
             mainwindow: DataLab's main window
+            restore_selection: True to restore the selection before checking the state
 
         Returns:
             bool: True if the current workspace state is compatible with the saved state
@@ -292,8 +322,11 @@ class WorkspaceState:
         # and compare the current selection with the saved selection in terms of
         # position in the list of objects and of data shape.
         current_states: dict[str, list[str]] = {}
+        selection = self.selection
+        if not restore_selection:
+            selection = self.get_current_selection(mainwindow)
         for panel in (mainwindow.signalpanel, mainwindow.imagepanel):
-            numbers = self.selection[panel.PANEL_STR]
+            numbers = selection[panel.PANEL_STR]
             current_states[panel.PANEL_STR] = [
                 str(obj.data.shape) for obj in panel.objmodel if obj.number in numbers
             ]
@@ -314,7 +347,7 @@ class WorkspaceState:
             ValueError: If the current workspace state is not compatible with the
              saved state
         """
-        if not self.is_current_state_compatible(mainwindow):
+        if not self.is_current_state_compatible(mainwindow, False):
             raise ValueError(
                 "Current workspace state is not compatible with saved state"
             )
@@ -351,29 +384,33 @@ class HistorySession:
         """
         self.actions.append(action)
 
-    def is_current_state_compatible(self, mainwindow: CDLMainWindow) -> bool:
+    def is_current_state_compatible(
+        self, mainwindow: CDLMainWindow, restore_selection: bool
+    ) -> bool:
         """Check if the current workspace state is compatible with the saved state
 
         Args:
             mainwindow: DataLab's main window
+            restore_selection: True to restore the selection before checking the state
 
         Returns:
             bool: True if the current workspace state is compatible with the saved state
         """
         if self.actions:
-            return self.actions[0].is_current_state_compatible(mainwindow)
+            return self.actions[0].is_current_state_compatible(
+                mainwindow, restore_selection
+            )
         return True
 
-    def replay(self, mainwindow: CDLMainWindow, restore_state: bool) -> None:
+    def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
         """Replay the history session
 
         Args:
             mainwindow: DataLab's main window
-            restore_state: True to restore the workspace state before replaying
-             the action
+            restore_selection: True to restore the workspace selection before replaying
         """
         for action in self.actions:
-            action.replay(mainwindow, restore_state=restore_state)
+            action.replay(mainwindow, restore_selection=restore_selection)
 
     def serialize(self, writer: BaseIOHandler) -> None:
         """Serialize this history session
@@ -436,7 +473,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         )
         self.treewidget.setContextMenuPolicy(QC.Qt.CustomContextMenu)
         self.treewidget.customContextMenuRequested.connect(self.show_context_menu)
-        self.treewidget.itemDoubleClicked.connect(self.replay_actions)
+        self.treewidget.itemDoubleClicked.connect(self.replay_restore_actions)
         self.addWidget(self.treewidget)
 
         self.__history_sessions: list[HistorySession] = []
@@ -473,8 +510,25 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         menu.addAction(
             create_action(
                 self,
+                _("Restore selection"),
+                lambda: self.replay_restore_actions(
+                    restore_selection=True, replay=False
+                ),
+            )
+        )
+        menu.addAction(
+            create_action(
+                self,
                 _("Replay"),
-                self.replay_actions,
+                lambda: self.replay_restore_actions(restore_selection=False),
+                icon=get_icon("replay.svg"),
+            )
+        )
+        menu.addAction(
+            create_action(
+                self,
+                _("Restore selection and replay"),
+                self.replay_restore_actions,
                 icon=get_icon("replay.svg"),
             )
         )
@@ -503,8 +557,10 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                     return action
         raise ValueError("Action not found")
 
-    def replay_actions(self) -> None:
-        """Replay the selected actions"""
+    def replay_restore_actions(
+        self, replay: bool = True, restore_selection: bool = True
+    ) -> None:
+        """Replay and/or restore selection for the selected actions"""
         for item in self.treewidget.selectedItems():
             if item.parent() is None:
                 index = self.treewidget.indexOfTopLevelItem(item)
@@ -512,14 +568,21 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             else:
                 uuid = item.data(0, QC.Qt.UserRole)
                 session_or_action = self.get_action_from_uuid(uuid)
-            if not session_or_action.is_current_state_compatible(self.mainwindow):
+            if not session_or_action.is_current_state_compatible(
+                self.mainwindow, restore_selection=restore_selection
+            ):
                 QW.QMessageBox.critical(
                     self,
                     _("Error"),
                     _("The current workspace state is not compatible with the action."),
                 )
                 return
-            session_or_action.replay(self.mainwindow, restore_state=True)
+            if replay:
+                session_or_action.replay(
+                    self.mainwindow, restore_selection=restore_selection
+                )
+            elif restore_selection:
+                session_or_action.state.restore(self.mainwindow)
 
     def delete_actions(self) -> None:
         """Delete the selected actions"""
@@ -586,18 +649,18 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.__history_sessions.append(session)
         self.populate_tree()
 
-    def add_entry(self, title: str, func: Callable, args: tuple, kwargs: dict) -> None:
+    def add_entry(self, action_title: str, func: Callable, *args, **kwargs) -> None:
         """Add an entry to the current history list
 
         Args:
-            title: Title of the history action
+            action_title: Title of the history action
             func: Function to call
             args: Function arguments
             kwargs: Function keyword arguments
         """
         state = WorkspaceState()
         state.save(self.mainwindow)
-        obj = HistoryAction(title, func, args, kwargs, state)
+        obj = HistoryAction(action_title, func, args, kwargs, state)
         self.add_object(obj)
 
     # ------ AbstractPanel interface ---------------------------------------------------

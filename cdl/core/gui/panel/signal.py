@@ -24,7 +24,6 @@ from cdl.config import _
 from cdl.core.gui import roieditor
 from cdl.core.gui.actionhandler import SignalActionHandler
 from cdl.core.gui.panel.base import BaseDataPanel
-from cdl.core.gui.panel.history import add_to_history
 from cdl.core.gui.plothandler import SignalPlotHandler
 from cdl.core.gui.processor.signal import SignalProcessor
 from cdl.core.io.signal import SignalIORegistry
@@ -95,7 +94,6 @@ class SignalPanel(BaseDataPanel):
             newparam.xmax = curobj.x.max()
         return newparam
 
-    @add_to_history("newparam", "addparam")
     def new_object(
         self,
         newparam: NewSignalParam | None = None,
@@ -123,6 +121,9 @@ class SignalPanel(BaseDataPanel):
         if signal is None:
             return None
         if add_to_panel:
+            self.mainwindow.historypanel.add_entry(
+                _("New signal"), self.new_object, newparam=newparam, addparam=addparam
+            )
             self.add_object(signal)
         return signal
 
