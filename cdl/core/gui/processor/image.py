@@ -8,11 +8,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 

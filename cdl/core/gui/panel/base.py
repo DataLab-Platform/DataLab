@@ -266,10 +266,10 @@ class BaseDataPanel(AbstractPanel):
     def plot_item_moved(
         self,
         item: LabelItem,
-        x0: float,
-        y0: float,
-        x1: float,
-        y1: float,
+        x0: float,  # pylint: disable=unused-argument
+        y0: float,  # pylint: disable=unused-argument
+        x1: float,  # pylint: disable=unused-argument
+        y1: float,  # pylint: disable=unused-argument
     ) -> None:
         """Plot item moved: update metadata of all objects from plot items
 

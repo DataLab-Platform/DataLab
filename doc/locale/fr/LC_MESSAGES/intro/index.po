@@ -86,8 +86,8 @@ msgstr ""
 #: ../../intro/index.rst:20
 msgid ""
 "`scikit-image <https://scikit-image.org/>`_ and `OpenCV "
-"<https://opencv.org/>` for image processing"
-msgstr "`scikit-image <https://scikit-image.org/>`_ et `OpenCV <https://opencv.org/>` pour le traitement d'images"
+"<https://opencv.org/>`_ for image processing"
+msgstr "`scikit-image <https://scikit-image.org/>`_ et `OpenCV <https://opencv.org/>`_ pour le traitement d'images"
 
 #: ../../intro/index.rst:21
 msgid ""
