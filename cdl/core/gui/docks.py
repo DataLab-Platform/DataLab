@@ -67,9 +67,15 @@ class DataLabPlotWidget(PlotWidget):
     def __register_standard_tools(self) -> None:
         """Register standard tools
 
-        The only difference with the `manager.register_standard_tools` method
-        is the fact that we don't register the `BasePlotMenuTool, "axes"` tool,
-        because it is not compatible with DataLab's approach to axes management.
+        The only differences with the `manager.register_standard_tools` method are
+        the following:
+
+        1. We don't register the `BasePlotMenuTool, "axes"` tool, because it is not
+        compatible with DataLab's approach to axes management.
+        2. We don't register the `ItemListPanelTool` tool (this intends to prevent
+        the user from accessing the item list panel, and thus, the parameters of all
+        the items - some of them are read-only and should not be modified, like the
+        annotations for example).
         """
         mgr = self.manager
         select_tool = mgr.add_tool(SelectTool)
@@ -85,8 +91,6 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         mgr.add_tool(BasePlotMenuTool, "grid")
         mgr.add_tool(DisplayCoordsTool)
-        if mgr.get_itemlist_panel():
-            mgr.add_tool(ItemListPanelTool)
 
     def __register_other_tools(self) -> None:
         """Register other tools"""
