@@ -35,7 +35,6 @@ from plotpy.tools import (
     EditItemDataTool,
     ExportItemDataTool,
     ItemCenterTool,
-    ItemListPanelTool,
     RectangularSelectionTool,
     RectZoomTool,
     SelectTool,
