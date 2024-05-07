@@ -12,6 +12,7 @@ import abc
 
 import numpy as np
 
+from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import CallbackWorker
@@ -20,6 +21,8 @@ from cdl.utils.strings import reduce_path
 
 class SignalIORegistry(BaseIORegistry):
     """Metaclass for registering signal I/O handler classes"""
+
+    REGISTRY_INFO: str = _("Signal I/O formats")
 
     _io_format_instances: list[SignalFormatBase] = []
 
@@ -49,6 +52,23 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
             name += f" {index:02d}"
         return create_signal(name)
 
+    def create_signal(
+        self, xydata: np.ndarray, filename: str, index: int | None = None
+    ) -> SignalObj:
+        """Create signal object from xydata and filename.
+
+        Args:
+            xydata: XY data
+            filename: File name
+            index: Index of object in file
+
+        Returns:
+            Signal object
+        """
+        obj = self.create_object(filename, index=index)
+        obj.set_xydata(xydata[:, 0], xydata[:, index or 1])
+        return obj
+
     def create_signals_from(self, xydata: np.ndarray, filename: str) -> list[SignalObj]:
         """Create signal objects from xydata and filename
 
@@ -70,15 +90,20 @@ class SignalFormatBase(abc.ABC, FormatBase, metaclass=SignalFormatBaseMeta):
         # Eventually transpose data:
         if xydata.shape[1] > xydata.shape[0]:
             xydata = xydata.T
+        # If only data contains one x and y columns, return single object without index
+        # in title
+        if xydata.shape[1] == 2:
+            return [self.create_signal(xydata, filename)]
+
         objs = []
         # Create objects for each y column
         for i in range(1, xydata.shape[1]):
-            obj = self.create_object(filename, i)
-            obj.set_xydata(xydata[:, 0], xydata[:, i])
-            objs.append(obj)
+            objs.append(self.create_signal(xydata, filename, i))
         return objs
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[SignalObj]:
         """Read list of signal objects from file
 
         Args:

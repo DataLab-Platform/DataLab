@@ -24,19 +24,21 @@ To show help on command line usage, simply run::
     Run DataLab
 
     positional arguments:
-      h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
+    h5                    HDF5 file names (separated by ';'), optionally with dataset name (separated by ',')
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      -b path, --h5browser path
+    options:
+    -h, --help            show this help message and exit
+    -b path, --h5browser path
                             path to open with HDF5 browser
-      -v, --version         show DataLab version
-      --unattended          non-interactive mode
-      --screenshot          automatic screenshots
-      --delay DELAY         delay (seconds) before quitting application in unattended mode
-      --xmlrpcport XMLRPCPORT
+    -v, --version         show DataLab version
+    --reset               reset DataLab configuration
+    --unattended          non-interactive mode
+    --accept_dialogs      accept dialogs in unattended mode
+    --screenshot          automatic screenshots
+    --delay DELAY         delay (seconds) before quitting application in unattended mode
+    --xmlrpcport XMLRPCPORT
                             XML-RPC port number
-      --verbose {quiet,minimal,normal}
+    --verbose {quiet,normal,debug}
                             verbosity level: for debugging/testing purpose
 
 Open HDF5 file at startup

@@ -18,6 +18,9 @@ from qtpy import QtWidgets as QW
 
 from cdl import __version__
 from cdl.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
+from cdl.core.io.image import ImageIORegistry
+from cdl.core.io.signal import SignalIORegistry
+from cdl.plugins import PluginRegistry
 from cdl.utils import dephash
 from cdl.widgets.fileviewer import FileViewerWidget, get_title_contents
 
@@ -85,6 +88,10 @@ class InstallConfigViewerWindow(QW.QDialog):
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.tabs = QW.QTabWidget(self)
         uc_title, uc_contents = get_title_contents(Conf.get_filename())
+        plugins_io_contents = PluginRegistry.get_plugin_infos(html=False)
+        for registry in (SignalIORegistry, ImageIORegistry):
+            plugins_io_contents += os.linesep + ("_" * 80) + os.linesep * 2
+            plugins_io_contents += registry.get_format_infos()
         for title, contents, tab_icon, tab_title in (
             (
                 _("Installation configuration"),
@@ -97,6 +104,12 @@ class InstallConfigViewerWindow(QW.QDialog):
                 uc_contents,
                 get_icon("libre-gui-settings.svg"),
                 _("User configuration"),
+            ),
+            (
+                _("Plugins and I/O features"),
+                plugins_io_contents,
+                get_icon("libre-gui-plugin.svg"),
+                _("Plugins and I/O features"),
             ),
         ):
             viewer = FileViewerWidget()
