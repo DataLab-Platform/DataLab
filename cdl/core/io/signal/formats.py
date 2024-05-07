@@ -31,7 +31,9 @@ class CSVSignalFormat(SignalFormatBase):
         writeable=True,
     )
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[SignalObj]:
         """Read list of signal objects from file
 
         Args:

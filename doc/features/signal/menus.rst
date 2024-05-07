@@ -274,13 +274,21 @@ Create a new signal which is the result of converting data type of each selected
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Log10(y)
-^^^^^^^^
+Exponential
+^^^^^^^^^^^
+
+Create a new signal which is the exponential of each selected signal:
+
+.. math::
+    y_{k} = \exp(y_{k-1})
+
+Logarithm (base 10)
+^^^^^^^^^^^^^^^^^^^
 
 Create a new signal which is the base 10 logarithm of each selected signal:
 
 .. math::
-    z_{k} = \log_{10}(z_{k-1})
+    y_{k} = \log_{10}(y_{k-1})
 
 Power
 ^^^^^

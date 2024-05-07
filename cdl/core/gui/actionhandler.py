@@ -587,9 +587,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
             self.new_action(
-                "Log10(y)",
-                triggered=self.panel.processor.compute_log10,
+                _("Exponential"),
+                triggered=self.panel.processor.compute_exp,
                 separator=True,
+            )
+            self.new_action(
+                _("Logarithm (base 10)"),
+                triggered=self.panel.processor.compute_log10,
+                separator=False,
             )
 
         with self.new_category(ActionCategory.PROCESSING):
@@ -688,6 +693,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,
                 icon=get_icon("plot_results.svg"),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
+            self.new_action(
+                _("Delete results") + "...",
+                triggered=self.panel.delete_results,
+                icon=get_icon("delete_results.svg"),
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
 

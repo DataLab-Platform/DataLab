@@ -14,6 +14,7 @@
             "python": "${config:python.defaultInterpreterPath}",
             "justMyCode": false,
             "args": [
+                // "--reset"
                 // "--h5browser",
                 // "${workspaceFolder}/cdl/data/tests/empty.h5"
                 // "${workspaceFolder}/cdl/data/tests/reordering_test.h5",
