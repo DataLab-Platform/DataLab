@@ -114,10 +114,10 @@ class NumPySignalFormat(SignalFormatBase):
 
 
 class MatSignalFormat(SignalFormatBase):
-    """Object representing a Matlab .mat signal file type"""
+    """Object representing a MAT-File .mat signal file type"""
 
     FORMAT_INFO = FormatInfo(
-        name=_("Matlab .mat files"),
+        name=_("MAT-Files"),
         extensions="*.mat",
         readable=True,
         writeable=True,
@@ -133,22 +133,15 @@ class MatSignalFormat(SignalFormatBase):
             NumPy array xydata
         """
         mat = sio.loadmat(filename)
-        metadata = {k: v for k, v in mat.items() if k.startswith("__")}
-        datas = {
-            k: v
-            for k, v in mat.items()
-            if not k.startswith("__") and isinstance(v, np.ndarray)
-        }
-
-        signals: list[SignalObj] = []
-        for data in datas.values():
-            data = data.squeeze()
-            signals.extend(self.create_signals_from(data, filename))
-        for signal, dname in zip(signals, datas.keys()):
-            signal.title += f" ({dname})"  # type: ignore
-            signal.metadata.update(metadata)
-            signal.ylabel = dname
-        return signals
+        allsig: list[SignalObj] = []
+        for dname, data in mat.items():
+            if dname.startswith("__") or not isinstance(data, np.ndarray):
+                continue
+            for sig in self.create_signals_from(data.squeeze(), filename):
+                if dname != "sig":
+                    sig.title += f" ({dname})"
+                allsig.append(sig)
+        return allsig
 
     def write(self, filename: str, obj: SignalObj) -> None:
         """Write data to file
@@ -159,4 +152,4 @@ class MatSignalFormat(SignalFormatBase):
         """
         # metadata cannot be saved as such as their type will be lost and
         # cause problems when reading the file back
-        sio.savemat(filename, {obj.ylabel: obj.xydata.T})
+        sio.savemat(filename, {"sig": obj.xydata.T})
