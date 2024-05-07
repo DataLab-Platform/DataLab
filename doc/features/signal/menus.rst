@@ -53,6 +53,8 @@ Create a new signal from the following supported filetypes:
       - .txt, .csv
     * - NumPy arrays
       - .npy
+    * - MAT-Files
+      - .mat
 
 Save signal
 ^^^^^^^^^^^
