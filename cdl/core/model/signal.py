@@ -578,8 +578,6 @@ class SignalTypes(base.Choices):
     PULSE = _("pulse")
     #: Polynomial function
     POLYNOMIAL = _("polynomial")
-    #: Edge function
-    EDGE = _("edge")
     #: Experimental function
     EXPERIMENTAL = _("experimental")
 
@@ -660,14 +658,6 @@ class PolyParam(gds.DataSet):
     a3 = gds.FloatItem("a3", default=0.0).set_pos(col=3)
     a4 = gds.FloatItem("a4", default=0.0).set_pos(col=4)
     a5 = gds.FloatItem("a5", default=0.0).set_pos(col=5)
-
-
-class EdgeParam(gds.DataSet):
-    """Parameters for edge function"""
-
-    a = gds.FloatItem("A", default=1.0)
-    start = gds.FloatItem(_("Start"), default=0.0)
-    offset = gds.FloatItem(_("Offset"), default=0.0)
 
 
 class ExperSignalParam(gds.DataSet):
@@ -930,7 +920,7 @@ def create_signal_from_param(
             if signal.title == DEFAULT_TITLE:
                 signal.title = (
                     f"{prefix}(start={p.start:.3g},stop={p.stop:.3g}"
-                    f",off={p.offset:.3g})"
+                    f",offset={p.offset:.3g})"
                 )
         elif newparam.stype is SignalTypes.POLYNOMIAL:
             if p is None:
@@ -943,18 +933,6 @@ def create_signal_from_param(
                 signal.title = (
                     f"{prefix}(a0={p.a0:2g},a1={p.a1:2g},a2={p.a2:2g},"
                     f"a3={p.a3:2g},a4={p.a4:2g},a5={p.a5:2g})"
-                )
-        elif newparam.stype is SignalTypes.EDGE:
-            if p is None:
-                p = EdgeParam(_("Edge function"))
-            if edit and not p.edit(parent=parent):
-                return None
-            yarr = np.full_like(xarr, p.offset)
-            yarr[xarr >= p.start] += p.a
-            signal.set_xydata(xarr, yarr)
-            if signal.title == DEFAULT_TITLE:
-                signal.title = (
-                    f"{prefix}(start={p.start:.3g},a={p.a:.3g},off={p.offset:.3g})"
                 )
         elif newparam.stype is SignalTypes.EXPERIMENTAL:
             p2 = ExperSignalParam(_("Experimental points"))
