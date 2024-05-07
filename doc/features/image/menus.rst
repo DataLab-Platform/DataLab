@@ -56,6 +56,8 @@ Create a new image from the following supported filetypes:
       - .jpg, .gif
     * - NumPy arrays
       - .npy
+    * - MAT-Files
+      - .mat
     * - Text files
       - .txt, .csv, .asc
     * - Andor SIF files

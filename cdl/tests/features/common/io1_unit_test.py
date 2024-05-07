@@ -59,7 +59,7 @@ def open_mat(fname: str | None = None) -> None:
     if isinstance(objs[0], SignalObj):
         view_curve_items([obj.make_item() for obj in objs])
     else:
-        view_images(objs)
+        view_images([obj.data for obj in objs])
 
 
 @try_open_test_data("Testing SIF file handler", "*.sif")
