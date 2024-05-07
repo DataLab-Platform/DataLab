@@ -637,30 +637,32 @@ class ExponentialParam(gds.DataSet):
 
     a = gds.FloatItem("A", default=1.0)
     offset = gds.FloatItem(_("Offset"), default=0.0)
-    expo = gds.FloatItem(_("Exponent"), default=1.0)
+    exponent = gds.FloatItem(_("Exponent"), default=1.0)
 
 
 class PulseParam(gds.DataSet):
     """Parameters for pulse function"""
 
     amp = gds.FloatItem("Amplitude", default=1.0)
-    start = gds.FloatItem(_("Start"), default=0.0)
-    stop = gds.FloatItem(_("Stop"), default=0.0)
+    start = gds.FloatItem(_("Start"), default=0.0).set_pos(col=1)
     offset = gds.FloatItem(_("Offset"), default=0.0)
+    stop = gds.FloatItem(_("Stop"), default=0.0).set_pos(col=1)
 
 
 class PolyParam(gds.DataSet):
     """Parameters for polynomial function"""
 
-    a0 = gds.FloatItem("a0", default=1.0).set_pos(col=0)
-    a1 = gds.FloatItem("a1", default=1.0).set_pos(col=1)
-    a2 = gds.FloatItem("a2", default=0.0).set_pos(col=2)
-    a3 = gds.FloatItem("a3", default=0.0).set_pos(col=3)
-    a4 = gds.FloatItem("a4", default=0.0).set_pos(col=4)
-    a5 = gds.FloatItem("a5", default=0.0).set_pos(col=5)
+    a0 = gds.FloatItem("a0", default=1.0)
+    a3 = gds.FloatItem("a3", default=0.0).set_pos(col=1)
+    a1 = gds.FloatItem("a1", default=1.0)
+    a4 = gds.FloatItem("a4", default=0.0).set_pos(col=1)
+    a2 = gds.FloatItem("a2", default=0.0)
+    a5 = gds.FloatItem("a5", default=0.0).set_pos(col=1)
 
 
 class ExperSignalParam(gds.DataSet):
+    """Parameters for experimental signal"""
+
     size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
     xyarray = gds.FloatArrayItem(
         "XY Values",
@@ -670,6 +672,7 @@ class ExperSignalParam(gds.DataSet):
     xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
 
     def edit_curve(self, *args) -> None:
+        """Edit experimental curve"""
         win: PlotDialog = make.dialog(
             wintitle=_("Select one point then press OK to accept"),
             edit=True,
@@ -890,7 +893,9 @@ def create_signal_from_param(
                 )
         elif newparam.stype == SignalTypes.STEP:
             if p is None:
-                p = StepParam(_("Step function"))
+                p = StepParam(
+                    _("Step function"), comment="y(x) = a1 if x <= x0 else a2"
+                )
             if edit and not p.edit(parent=parent):
                 return None
             yarr = np.ones_like(xarr) * p.a1
@@ -900,18 +905,25 @@ def create_signal_from_param(
                 signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
         elif newparam.stype is SignalTypes.EXPONENTIAL:
             if p is None:
-                p = ExponentialParam(_("Exponential function"))
+                p = ExponentialParam(
+                    _("Exponential function"),
+                    comment="y(x) = a.e<sup>exponent.x</sup> + offset",
+                )
             if edit and not p.edit(parent=parent):
                 return None
-            yarr = p.a * np.exp(p.expo * xarr) + p.offset
+            yarr = p.a * np.exp(p.exponent * xarr) + p.offset
             signal.set_xydata(xarr, yarr)
             if signal.title == DEFAULT_TITLE:
                 signal.title = (
-                    f"{prefix}(a={p.a:.3g},expo={p.expo:.3g},offset={p.offset:.3g})"
+                    f"{prefix}(a={p.a:.3g},exponent={p.exponent:.3g},"
+                    f"offset={p.offset:.3g})"
                 )
         elif newparam.stype is SignalTypes.PULSE:
             if p is None:
-                p = PulseParam(_("Pulse function"))
+                p = PulseParam(
+                    _("Pulse function"),
+                    comment="y(x) = offset + amp if start <= x <= stop else offset",
+                )
             if edit and not p.edit(parent=parent):
                 return None
             yarr = np.full_like(xarr, p.offset)
@@ -924,7 +936,14 @@ def create_signal_from_param(
                 )
         elif newparam.stype is SignalTypes.POLYNOMIAL:
             if p is None:
-                p = PolyParam(_("Polynomial function"))
+                p = PolyParam(
+                    _("Polynomial function"),
+                    comment=(
+                        "y(x) = a<sub>0</sub> + a<sub>1</sub>.x + "
+                        "a<sub>2</sub>.x<sup>2</sup> + a<sub>3</sub>.x<sup>3</sup>"
+                        " + a<sub>4</sub>.x<sup>4</sup> + a<sub>5</sub>.x<sup>5</sup>"
+                    ),
+                )
             if edit and not p.edit(parent=parent):
                 return None
             yarr = np.polyval([p.a5, p.a4, p.a3, p.a2, p.a1, p.a0], xarr)
