@@ -388,6 +388,7 @@ def compute_exp(src: SignalObj) -> SignalObj:
     """
     return Wrap11Func(np.exp)(src)
 
+
 def compute_sqrt(src: SignalObj) -> SignalObj:
     """Compute square root
 
@@ -850,7 +851,7 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
     dst = dst_11(src, "reverse_x")
     dst.y = dst.y[::-1]
     return dst
-    
+
 
 # MARK: compute_10 functions -----------------------------------------------------------
 # Functions with 1 input signal and 0 output signals (ResultShape or ResultProperties)

@@ -125,7 +125,9 @@ def run_signal_computations(
 
     compute_common_operations(panel)
 
+    # Signal specific operations
     panel.processor.compute_sqrt()
+    panel.processor.compute_pow(dlp.PowParam.create(exponent=2))
     panel.processor.compute_reverse_x()
     panel.processor.compute_reverse_x()
 
