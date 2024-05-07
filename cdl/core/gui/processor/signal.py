@@ -100,6 +100,23 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_log10, title="Log10")
 
     @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cps.compute_exp, title=_("Exponential"))
+
+    @qt_try_except()
+    def compute_sqrt(self) -> None:
+        """Compute square root"""
+        self.compute_11(cps.compute_sqrt, title=_("Square root"))
+
+    @qt_try_except()
+    def compute_pow(self, param: cps.PowParam | None = None) -> None:
+        """Compute power"""
+        if param is None:
+            param = cps.PowParam()
+        self.compute_11(cps.compute_pow, param, cps.PowParam, title="Power", edit=True)
+
+    @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals"""
         self.compute_n1n(
@@ -147,6 +164,11 @@ class SignalProcessor(BaseProcessor):
             else:
                 return
         self.compute_11(cps.compute_peak_detection, param)
+
+    @qt_try_except()
+    def compute_reverse_x(self) -> None:
+        """Reverse X axis"""
+        self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
 
     # ------Signal Processing
     @qt_try_except()

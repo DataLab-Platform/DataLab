@@ -293,7 +293,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
     dx = property(__get_dx, __set_dx)
     dy = property(__get_dy, __set_dy)
 
-    def get_data(self, roi_index: int | None = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> tuple[np.ndarray, np.ndarray]:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).

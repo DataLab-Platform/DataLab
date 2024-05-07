@@ -83,6 +83,8 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
     :no-index:
+..autodataset:: cdl.param.PowParam
+    :no-index:
 
 Image parameters
 ^^^^^^^^^^^^^^^^
@@ -233,4 +235,5 @@ from cdl.core.computation.signal import (
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
+    PowParam,
 )

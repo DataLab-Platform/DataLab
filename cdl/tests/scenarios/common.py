@@ -49,6 +49,7 @@ def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> Non
     panel.remove_object()
     panel.processor.compute_astype(dlp.DataTypeIParam.create(dtype="float64"))
     panel.processor.compute_log10()
+    panel.processor.compute_exp()
     panel.processor.compute_swap_axes()
     panel.processor.compute_swap_axes()
 
@@ -128,6 +129,12 @@ def run_signal_computations(
     panel.new_object(newparam, addparam=addparam, edit=False)
 
     compute_common_operations(panel)
+
+    # Signal specific operations
+    panel.processor.compute_sqrt()
+    panel.processor.compute_pow(dlp.PowParam.create(exponent=2))
+    panel.processor.compute_reverse_x()
+    panel.processor.compute_reverse_x()
 
     win.add_object(create_paracetamol_signal(data_size))
 

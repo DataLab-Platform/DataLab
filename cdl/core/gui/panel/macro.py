@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Macro panel (see parent package :mod:`cdl.core.gui.processor`)
+.. Macro panel (see parent package :mod:`cdl.core.gui.panel`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -165,7 +165,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
 
     def __init__(self, parent: QW.QWidget | None = None) -> None:
         super().__init__(parent)
-        self.setWindowTitle(_("Macro Panel"))
+        self.setWindowTitle(self.PANEL_STR)
         self.setWindowIcon(get_icon("libre-gui-cogs.svg"))
         self.setOrientation(QC.Qt.Vertical)
 

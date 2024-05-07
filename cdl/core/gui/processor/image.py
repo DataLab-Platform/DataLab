@@ -8,11 +8,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
@@ -323,6 +320,11 @@ class ImageProcessor(BaseProcessor):
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")
+
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:

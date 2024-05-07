@@ -196,6 +196,7 @@ def set_plot_item_editable(
     item.set_resizable(state and not isinstance(item, AbstractLabelItem))
     item.set_rotatable(state and not isinstance(item, AbstractLabelItem))
     item.set_readonly(not state)
+    item.set_selectable(state)
 
 
 class BaseResult:
@@ -1189,15 +1190,14 @@ class BaseObj(metaclass=BaseObjMeta):
                 yield from self.iterate_roi_items(fmt=fmt, lbl=lbl, editable=False)
             elif ResultShape.match(key, value):
                 mshape = ResultShape.from_metadata_entry(key, value)
-                yield from mshape.iterate_plot_items(
-                    fmt, lbl, f"shape/result/{self.PREFIX}"
-                )
+                option = f"shape/result/{self.PREFIX}"
+                yield from mshape.iterate_plot_items(fmt, lbl, option)
         if self.annotations:
             try:
-                for item in load_items(JSONReader(self.annotations)):
-                    set_plot_item_editable(item, editable)
+                for item in json_to_items(self.annotations):
                     if isinstance(item, AnnotatedShape):
                         config_annotated_shape(item, fmt, lbl, "shape/annotation")
+                    set_plot_item_editable(item, editable)
                     yield item
             except json.decoder.JSONDecodeError:
                 pass
