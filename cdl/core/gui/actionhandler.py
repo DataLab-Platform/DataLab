@@ -517,7 +517,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
-                _("View in a new window"),
+                _("View in a new window") + "...",
                 icon=get_icon("new_window.svg"),
                 tip=_("View selected %s in a new window") % self.OBJECT_STR,
                 triggered=self.panel.open_separate_view,
@@ -525,6 +525,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_sep=True,
                 toolbar_pos=-1,
                 toolbar_sep=True,
+            )
+            self.new_action(
+                _("Edit annotations") + "...",
+                icon=get_icon("annotations.svg"),
+                tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
+                triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
+                context_menu_pos=1,
+                toolbar_pos=-1,
             )
             main = self.panel.mainwindow
             for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):

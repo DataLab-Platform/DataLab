@@ -21,9 +21,10 @@ import plotpy.io
 from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.io import JSONHandler
-from guidata.qthelpers import add_actions, exec_dialog
+from guidata.qthelpers import add_actions, create_action, exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
 from plotpy.plot import PlotDialog
+from plotpy.tools import ActionTool
 from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
@@ -45,6 +46,8 @@ from cdl.utils.qthelpers import (
 from cdl.widgets.textimport import TextImportWizard
 
 if TYPE_CHECKING:
+    from typing import Callable
+
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
     from plotpy.plot import PlotWidget
     from plotpy.tools.base import GuiTool
@@ -403,7 +406,7 @@ class BaseDataPanel(AbstractPanel):
         )
         self.addWidget(self.objview)
         self.addWidget(self.objprop)
-        self.add_results_button()
+        self.add_objprop_buttons()
 
     def get_category_actions(
         self, category: actionhandler.ActionCategory
@@ -824,35 +827,59 @@ class BaseDataPanel(AbstractPanel):
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
     # ------Plotting data in modal dialogs----------------------------------------------
-    def open_separate_view(self, oids: list[str] | None = None) -> PlotDialog | None:
+    def open_separate_view(
+        self, oids: list[str] | None = None, edit_annotations: bool = False
+    ) -> PlotDialog | None:
         """
         Open separate view for visualizing selected objects
 
         Args:
-            oids: Object IDs
+            oids: Object IDs (default: None)
+            edit_annotations: Edit annotations (default: False)
 
         Returns:
-            QDialog instance
+            Instance of PlotDialog
         """
         title = _("Annotations")
         if oids is None:
             oids = self.objview.get_sel_object_uuids(include_groups=True)
         obj = self.objmodel[oids[0]]
-        dlg = self.create_new_dialog(oids, edit=True, name="new_window")
+        dlg = self.create_new_dialog(
+            oids,
+            edit=True,
+            name="new_window",
+            options={"show_itemlist": edit_annotations},
+        )
         if dlg is None:
             return None
         width, height = self.DIALOGSIZE
         dlg.resize(width, height)
         mgr = dlg.get_manager()
-        mgr.get_itemlist_panel().show()
         toolbar = QW.QToolBar(title, self)
         dlg.button_layout.insertWidget(0, toolbar)
-        # dlg.layout().insertWidget(1, toolbar)  # other possible location
-        # dlg.plot_layout.addWidget(toolbar, 1, 0, 1, 1)  # other possible location
         mgr.add_toolbar(toolbar, id(toolbar))
         toolbar.setToolButtonStyle(QC.Qt.ToolButtonTextUnderIcon)
         for tool in self.ANNOTATION_TOOLS:
             mgr.add_tool(tool, toolbar_id=id(toolbar))
+
+        def toggle_annotations(enabled: bool):
+            """Toggle annotation tools / edit buttons visibility"""
+            for widget in (dlg.button_box, toolbar):
+                if enabled:
+                    widget.show()
+                else:
+                    widget.hide()
+
+        edit_ann_action = create_action(
+            dlg,
+            _("Annotations"),
+            toggled=toggle_annotations,
+            icon=get_icon("annotations.svg"),
+        )
+        mgr.add_tool(ActionTool, edit_ann_action)
+        default_toolbar = mgr.get_default_toolbar()
+        action_btn = default_toolbar.widgetForAction(edit_ann_action)
+        action_btn.setToolButtonStyle(QC.Qt.ToolButtonTextBesideIcon)
         plot = dlg.get_plot()
         plot.unselect_all()
         for item in plot.items:
@@ -860,6 +887,9 @@ class BaseDataPanel(AbstractPanel):
         for item in obj.iterate_shape_items(editable=True):
             plot.add_item(item)
         self.__separate_views[dlg] = obj
+        toggle_annotations(edit_annotations)
+        if edit_annotations:
+            edit_ann_action.setChecked(True)
         dlg.show()
         dlg.finished.connect(self.__separate_view_finished)
         return dlg
@@ -1037,15 +1067,33 @@ class BaseDataPanel(AbstractPanel):
             return self.objmodel[obj_uuid]
         return None
 
-    def add_results_button(self) -> None:
-        """Add 'Show results' button"""
-        btn = QW.QPushButton(get_icon("show_results.svg"), _("Show results"), self)
-        btn.setToolTip(_("Show results obtained from previous computations"))
+    def __new_objprop_button(
+        self, title: str, icon: str, tooltip: str, callback: Callable
+    ) -> QW.QPushButton:
+        """Create new object property button"""
+        btn = QW.QPushButton(get_icon(icon), title, self)
+        btn.setToolTip(tooltip)
         self.objprop.add_button(btn)
-        btn.clicked.connect(self.show_results)
+        btn.clicked.connect(callback)
         self.acthandler.add_action(
             btn,
             select_condition=actionhandler.SelectCond.at_least_one,
+        )
+        return btn
+
+    def add_objprop_buttons(self) -> None:
+        """Insert additional buttons in object properties panel"""
+        self.__new_objprop_button(
+            _("Results"),
+            "show_results.svg",
+            _("Show results obtained from previous computations"),
+            self.show_results,
+        )
+        self.__new_objprop_button(
+            _("Annotations"),
+            "annotations.svg",
+            _("Open a dialog to edit annotations"),
+            lambda: self.open_separate_view(edit_annotations=True),
         )
 
     def __get_resultdata_dict(
