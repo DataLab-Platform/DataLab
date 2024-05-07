@@ -12,7 +12,6 @@ Signal object and related classes
 from __future__ import annotations
 
 from contextlib import contextmanager
-from copy import deepcopy
 from typing import TYPE_CHECKING, Generator
 from uuid import uuid4
 
@@ -202,7 +201,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         obj.title = title
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
-        obj.metadata = deepcopy(self.metadata)
+        obj.metadata = base.deepcopy_metadata(self.metadata)
         obj.xydata = np.array(self.xydata, copy=True, dtype=dtype)
         return obj
 
@@ -297,7 +296,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
     dx = property(__get_dx, __set_dx)
     dy = property(__get_dy, __set_dy)
 
-    def get_data(self, roi_index: int | None = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> tuple[np.ndarray, np.ndarray]:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).

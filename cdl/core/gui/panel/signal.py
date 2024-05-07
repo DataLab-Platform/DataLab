@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Signal panel (see parent package :mod:`cdl.core.gui.processor`)
+.. Signal panel (see parent package :mod:`cdl.core.gui.panel`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

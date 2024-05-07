@@ -3,6 +3,31 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.15.1 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #68](https://github.com/DataLab-Platform/DataLab/issues/68) - Slow loading of even simple plots:
+  * On macOS, the user experience was degraded when handling even simple plots
+  * This was due to the way macOS handles the pop-up windows, e.g. when refreshing the
+    plot view ("Creating plot items" progress bar), hence causing a very annoying
+    flickering effect and a global slowdown of the application
+  * This is now fixed by showing the progress bar only after a short delay (1s), that
+    is when it is really needed (i.e. for long operations)
+  * Thanks to [@marcel-goldschen-ohm](https://github.com/marcel-goldschen-ohm) for the
+    very thorough feedback and the help in testing the fix
+* Fixed [Issue #69](https://github.com/DataLab-Platform/DataLab/issues/69) - Annotations should be read-only in Signal/Image View
+  * Regarding the annotations, DataLab's current behavior is the following:
+    * Annotations are created only when showing the signal/image in a separate window
+      (double-click on the object, or "View" > "View in a new window")
+    * When displaying the objects in either the "Signal View" or the "Image View", the
+      annotations should be read-only (i.e. not movable, nor resizable or deletable)
+  * However, some annotations were still deletable in the "Signal View" and the
+    "Image View": this is now fixed
+  * Note that the fact that annotations can't be created in the "Signal View" or the
+    "Image View" is a limitation of the current implementation, and may be improved in
+    future versions
+
 ## DataLab Version 0.15.0 ##
 
 🎁 New installer for the stand-alone version on Windows:

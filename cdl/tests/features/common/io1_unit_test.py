@@ -50,6 +50,18 @@ def open_csv(fname: str | None = None) -> None:
     view_curve_items([obj.make_item() for obj in objs])
 
 
+@try_open_test_data("Testing MAT-File reader", "*.mat")
+def open_mat(fname: str | None = None) -> None:
+    """Testing MAT files"""
+    objs = __read_objs(fname)
+    for obj in objs:
+        execenv.print(obj)
+    if isinstance(objs[0], SignalObj):
+        view_curve_items([obj.make_item() for obj in objs])
+    else:
+        view_images([obj.data for obj in objs])
+
+
 @try_open_test_data("Testing SIF file handler", "*.sif")
 def open_sif(fname: str | None = None) -> None:
     """Testing SIF files"""
@@ -71,6 +83,7 @@ def test_io1() -> None:
     with qt_app_context():
         open_txt()
         open_csv()
+        open_mat()
         open_sif()
         open_scordata()
 

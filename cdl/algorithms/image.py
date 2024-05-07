@@ -38,6 +38,31 @@ def scale_data_to_min_max(
     return np.array(fdata, data.dtype)
 
 
+def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
+    """Normalize input array to a given parameter.
+
+    Args:
+        data: Input data
+        parameter: Normalization parameter (default: "maximum")
+         Supported values: 'maximum', 'amplitude', 'sum', 'energy', 'rms'
+
+    Returns:
+        Normalized array
+    """
+    if parameter == "maximum":
+        return scale_data_to_min_max(data, data.min(), 1.0)
+    if parameter == "amplitude":
+        return scale_data_to_min_max(data, 0.0, 1.0)
+    fdata = np.array(data, dtype=float)
+    if parameter == "sum":
+        return fdata / fdata.sum()
+    if parameter == "energy":
+        return fdata / np.sqrt(np.sum(fdata * fdata.conjugate()))
+    if parameter == "rms":
+        return fdata / np.sqrt(np.mean(fdata * fdata.conjugate()))
+    raise ValueError(f"Unsupported parameter {parameter}")
+
+
 def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute FFT of complex array `z`
 

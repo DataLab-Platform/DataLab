@@ -835,6 +835,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
             self.signalpanel.plot_item_parameters_changed
         )
+        plot.SIG_ITEM_MOVED.connect(self.signalpanel.plot_item_moved)
         return dpw
 
     def __add_image_panel(self) -> None:
@@ -858,6 +859,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
             self.imagepanel.plot_item_parameters_changed
         )
+        plot.SIG_ITEM_MOVED.connect(self.imagepanel.plot_item_moved)
         return dpw
 
     def __update_tab_menu(self) -> None:

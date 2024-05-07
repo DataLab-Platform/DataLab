@@ -517,7 +517,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
-                _("View in a new window"),
+                _("View in a new window") + "...",
                 icon=get_icon("new_window.svg"),
                 tip=_("View selected %s in a new window") % self.OBJECT_STR,
                 triggered=self.panel.open_separate_view,
@@ -525,6 +525,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 context_menu_sep=True,
                 toolbar_pos=-1,
                 toolbar_sep=True,
+            )
+            self.new_action(
+                _("Edit annotations") + "...",
+                icon=get_icon("annotations.svg"),
+                tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
+                triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
+                context_menu_pos=1,
+                toolbar_pos=-1,
             )
             main = self.panel.mainwindow
             for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):
@@ -587,12 +595,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
             self.new_action(
-                "Log10(y)",
-                triggered=self.panel.processor.compute_log10,
+                _("Exponential"),
+                triggered=self.panel.processor.compute_exp,
                 separator=True,
+            )
+            self.new_action(
+                _("Logarithm (base 10)"),
+                triggered=self.panel.processor.compute_log10,
+                separator=False,
             )
 
         with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Normalize"), triggered=self.panel.processor.compute_normalize
+            )
             self.new_action(
                 _("Thresholding"),
                 triggered=self.panel.processor.compute_threshold,
@@ -690,6 +706,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon=get_icon("plot_results.svg"),
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
+            self.new_action(
+                _("Delete results") + "...",
+                triggered=self.panel.delete_results,
+                icon=get_icon("delete_results.svg"),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
 
 
 class SignalActionHandler(BaseActionHandler):
@@ -701,9 +723,6 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
-                _("Normalize"), triggered=self.panel.processor.compute_normalize
-            )
-            self.new_action(
                 _("Derivative"), triggered=self.panel.processor.compute_derivative
             )
             self.new_action(
@@ -713,6 +732,16 @@ class SignalActionHandler(BaseActionHandler):
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Power"),
+                triggered=self.panel.processor.compute_pow,
+                separator=True,
+            )
+            self.new_action(
+                _("Square root"),
+                triggered=self.panel.processor.compute_sqrt,
+                separator=False,
+            )
             self.new_action(
                 _("Peak detection"),
                 separator=True,
@@ -795,12 +824,19 @@ class SignalActionHandler(BaseActionHandler):
                 separator=True,
             )
         super().create_last_actions()
+        with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Reverse X-axis"),
+                triggered=self.panel.processor.compute_reverse_x,
+                icon=get_icon("reverse_signal_x.svg"),
+            )
 
 
 class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+    panel: ImagePanel
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""

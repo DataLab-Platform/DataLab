@@ -53,7 +53,8 @@ Signal Image  Feature
 ..     ✓      Rotation (flip, rotate), resize, ...
 ..     ✓      Intensity profiles (line, average, radial)
 ..     ✓      Pixel binning
-✓      ..     Normalize, derivative, integral
+✓      ✓      Normalize, square root, power, log, ...
+✓      ..     Derivative, integral
 ✓      ✓      Linear calibration
 ..     ✓      Thresholding, clipping
 ✓      ✓      Gaussian filter, Wiener filter

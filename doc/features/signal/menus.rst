@@ -53,6 +53,8 @@ Create a new signal from the following supported filetypes:
       - .txt, .csv
     * - NumPy arrays
       - .npy
+    * - MAT-Files
+      - .mat
 
 Save signal
 ^^^^^^^^^^^
@@ -274,13 +276,37 @@ Create a new signal which is the result of converting data type of each selected
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Log10(y)
-^^^^^^^^
+Exponential
+^^^^^^^^^^^
+
+Create a new signal which is the exponential of each selected signal:
+
+.. math::
+    y_{k} = \exp(y_{k-1})
+
+Logarithm (base 10)
+^^^^^^^^^^^^^^^^^^^
 
 Create a new signal which is the base 10 logarithm of each selected signal:
 
 .. math::
-    z_{k} = \log_{10}(z_{k-1})
+    y_{k} = \log_{10}(y_{k-1})
+
+Power
+^^^^^
+
+Create a new signal which is the power of each selected signal:
+
+.. math::
+    y_{k} = y_{k-1}^{n}
+
+Square root
+^^^^^^^^^^^
+
+Create a new signal which is the square root of each selected signal:
+
+.. math::
+    y_{k} = \sqrt{y_{k-1}}
 
 Peak detection
 ^^^^^^^^^^^^^^
@@ -326,11 +352,21 @@ Create a new signal which is the result of swapping X/Y data.
 The "Processing" menu allows you to perform various processing on the
 selected signals, such as smoothing, normalization, or interpolation.
 
+Derivative
+^^^^^^^^^^
+
+Create a new signal which is the derivative of each selected signal.
+
+Integral
+^^^^^^^^
+
+Create a new signal which is the integral of each selected signal.
+
 Normalize
 ^^^^^^^^^
 
 Create a new signal which is the normalization of each selected signal
-by maximum, amplitude, sum or energy:
+by maximum, amplitude, sum, energy or RMS:
 
 .. list-table::
     :header-rows: 1
@@ -345,17 +381,9 @@ by maximum, amplitude, sum or energy:
     * - Sum
       - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}|y_{0}[n]|^2}`
-
-Derivative
-^^^^^^^^^^
-
-Create a new signal which is the derivative of each selected signal.
-
-Integral
-^^^^^^^^
-
-Create a new signal which is the integral of each selected signal.
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
+    * - RMS
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
 
 Linear calibration
 ^^^^^^^^^^^^^^^^^^
