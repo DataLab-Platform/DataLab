@@ -89,7 +89,7 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_clip(param)
 
     param = dlp.NormalizeParam()
-    for _name, method in param.methods:
+    for method, _name in param.methods:
         param.method = method
         panel.processor.compute_normalize(param)
 
