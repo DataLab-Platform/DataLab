@@ -57,9 +57,9 @@ def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     if parameter == "sum":
         return fdata / fdata.sum()
     if parameter == "energy":
-        return fdata / (fdata * fdata.conjugate()).sum()
+        return fdata / np.sqrt(np.sum(fdata * fdata.conjugate()))
     if parameter == "rms":
-        return fdata / np.sqrt(np.mean(fdata**2))
+        return fdata / np.sqrt(np.mean(fdata * fdata.conjugate()))
     raise ValueError(f"Unsupported parameter {parameter}")
 
 
