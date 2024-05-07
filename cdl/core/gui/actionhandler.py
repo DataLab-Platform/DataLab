@@ -714,21 +714,20 @@ class SignalActionHandler(BaseActionHandler):
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
-                _("Peak detection"),
-                separator=True,
-                triggered=self.panel.processor.compute_peak_detection,
-                icon=get_icon("peak_detect.svg"),
-            )
-
-            self.new_action(
-                _("Pow(y)"),
+                _("Power"),
                 triggered=self.panel.processor.compute_pow,
                 separator=True,
             )
             self.new_action(
-                _("Sqrt(y)"),
+                _("Square root"),
                 triggered=self.panel.processor.compute_sqrt,
                 separator=False,
+            )
+            self.new_action(
+                _("Peak detection"),
+                separator=True,
+                triggered=self.panel.processor.compute_peak_detection,
+                icon=get_icon("peak_detect.svg"),
             )
 
         with self.new_category(ActionCategory.PROCESSING):
