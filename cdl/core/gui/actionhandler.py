@@ -543,9 +543,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
-                _("Normalize"), triggered=self.panel.processor.compute_normalize
-            )
-            self.new_action(
                 _("Sum"),
                 triggered=self.panel.processor.compute_sum,
                 select_condition=SelectCond.at_least_two,
@@ -596,6 +593,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
 
         with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Normalize"), triggered=self.panel.processor.compute_normalize
+            )
             self.new_action(
                 _("Thresholding"),
                 triggered=self.panel.processor.compute_threshold,

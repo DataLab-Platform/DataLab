@@ -428,6 +428,29 @@ The "Processing" menu allows you to perform various processing on the current
 image or group of images: it allows you to apply filters, to perform exposure
 correction, to perform denoising, to perform morphological operations, and so on.
 
+Normalize
+^^^^^^^^^
+
+Create a new image which is the normalized version of each selected image
+by maximum, amplitude, sum, energy or RMS:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Normalization
+      - Equation
+    * - Maximum
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
+    * - Amplitude
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
+    * - Sum
+      - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
+    * - Energy
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+    * - RMS
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+
 Linear calibration
 ^^^^^^^^^^^^^^^^^^
 

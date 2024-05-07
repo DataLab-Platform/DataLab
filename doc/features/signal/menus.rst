@@ -326,6 +326,16 @@ Create a new signal which is the result of swapping X/Y data.
 The "Processing" menu allows you to perform various processing on the
 selected signals, such as smoothing, normalization, or interpolation.
 
+Derivative
+^^^^^^^^^^
+
+Create a new signal which is the derivative of each selected signal.
+
+Integral
+^^^^^^^^
+
+Create a new signal which is the integral of each selected signal.
+
 Normalize
 ^^^^^^^^^
 
@@ -348,16 +358,6 @@ by maximum, amplitude, sum, energy or RMS:
       - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
     * - RMS
       - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
-
-Derivative
-^^^^^^^^^^
-
-Create a new signal which is the derivative of each selected signal.
-
-Integral
-^^^^^^^^
-
-Create a new signal which is the integral of each selected signal.
 
 Linear calibration
 ^^^^^^^^^^^^^^^^^^
