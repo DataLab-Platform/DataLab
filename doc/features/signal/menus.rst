@@ -330,7 +330,7 @@ Normalize
 ^^^^^^^^^
 
 Create a new signal which is the normalization of each selected signal
-by maximum, amplitude, sum or energy:
+by maximum, amplitude, sum, energy or RMS:
 
 .. list-table::
     :header-rows: 1
@@ -345,7 +345,9 @@ by maximum, amplitude, sum or energy:
     * - Sum
       - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}|y_{0}[n]|^2}`
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
+    * - RMS
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
 
 Derivative
 ^^^^^^^^^^
