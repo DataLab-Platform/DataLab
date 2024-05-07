@@ -10,6 +10,7 @@ import os.path as osp
 
 import numpy as np
 import plotpy.io
+import scipy.io as sio
 import skimage.io
 
 from cdl.config import _
@@ -127,6 +128,56 @@ class TextImageFormat(ImageFormatBase):
             np.savetxt(filename, data, fmt=fmt, delimiter=",")
         else:
             raise ValueError(f"Unknown text file extension {ext}")
+
+
+class MatImageFormat(ImageFormatBase):
+    """Object representing MAT-File image file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name=_("MAT-Files"),
+        extensions="*.mat",
+        readable=True,
+        writeable=True,
+    )  # pylint: disable=duplicate-code
+
+    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
+        """Read list of image objects from file
+
+        Args:
+            filename: File name
+            worker: Callback worker object
+
+        Returns:
+            List of image objects
+        """
+        mat = sio.loadmat(filename)
+        allimg: list[ImageObj] = []
+        for dname, data in mat.items():
+            if dname.startswith("__") or not isinstance(data, np.ndarray):
+                continue
+            if len(data.shape) != 2:
+                continue
+            obj = self.create_object(filename)
+            obj.data = data
+            if dname != "img":
+                obj.title += f" ({dname})"
+            allimg.append(obj)
+        return allimg
+
+    @staticmethod
+    def read_data(filename: str) -> np.ndarray:
+        """Read data and return it"""
+        # This method is not used, as read() is overridden
+
+    @staticmethod
+    def write_data(filename: str, data: np.ndarray) -> None:
+        """Write data to file
+
+        Args:
+            filename: File name
+            data: Image array data
+        """
+        sio.savemat(filename, {"img": data})
 
 
 class DICOMImageFormat(ImageFormatBase):

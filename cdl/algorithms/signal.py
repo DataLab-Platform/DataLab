@@ -17,11 +17,11 @@ def moving_average(y: np.ndarray, n: int) -> np.ndarray:
     """Compute moving average.
 
     Args:
-        y (numpy.ndarray): Input array
-        n (int): Window size
+        y: Input array
+        n: Window size
 
     Returns:
-        np.ndarray: Moving average
+        Moving average
     """
     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
@@ -32,11 +32,11 @@ def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Compute numerical derivative.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
+        x: X data
+        y: Y data
 
     Returns:
-        np.ndarray: Numerical derivative
+        Numerical derivative
     """
     dy = np.zeros_like(y)
     dy[0:-1] = np.diff(y) / np.diff(x)
@@ -48,12 +48,12 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     """Normalize input array to a given parameter.
 
     Args:
-        yin (numpy.ndarray): Input array
-        parameter (str | None): Normalization parameter. Defaults to "maximum".
-            Supported values: 'maximum', 'amplitude', 'sum', 'energy'
+        yin: Input array
+        parameter: Normalization parameter. Defaults to "maximum".
+         Supported values: 'maximum', 'amplitude', 'sum', 'energy'
 
     Returns:
-        np.ndarray: Normalized array
+        Normalized array
     """
     axis = len(yin.shape) - 1
     if parameter == "maximum":
@@ -72,7 +72,9 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     if parameter == "sum":
         return yin / yin.sum()
     if parameter == "energy":
-        return yin / (yin * yin.conjugate()).sum()
+        return yin / np.sqrt(np.sum(yin * yin.conjugate()))
+    if parameter == "rms":
+        return yin / np.sqrt(np.mean(yin * yin.conjugate()))
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 
@@ -82,13 +84,12 @@ def xy_fft(
     """Compute FFT on X,Y data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        shift (bool | None): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
+        x: X data
+        y: Y data
+        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        X data, Y data (tuple)
     """
     y1 = np.fft.fft(y)
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
@@ -104,13 +105,12 @@ def xy_ifft(
     """Compute iFFT on X,Y data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        shift (bool | None): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
+        x: X data
+        y: Y data
+        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        X data, Y data (tuple)
     """
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
     if shift:
@@ -222,11 +222,11 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     """Return default peak X-position (assuming a single peak).
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
+        x: X data
+        y: Y data
 
     Returns:
-        float: Peak X-position
+        Peak X-position
     """
     peaks = peak_indexes(y)
     if peaks.size == 1:
@@ -244,15 +244,18 @@ def interpolate(
     """Interpolate data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        xnew (numpy.ndarray): New X data
-        method (str): Interpolation method. Valid values are 'linear', 'spline',
+        x: X data
+        y: Y data
+        xnew: New X data
+        method: Interpolation method. Valid values are 'linear', 'spline',
          'quadratic', 'cubic', 'barycentric', 'pchip'
-        fill_value (float | None): Fill value. Defaults to None.
+        fill_value: Fill value. Defaults to None.
          This value is used to fill in for requested points outside of the
          X data range. It is only used if the method argument is 'linear',
          'cubic' or 'pchip'.
+
+    Returns:
+        Interpolated Y data
     """
     interpolator_extrap = None
     if method == "linear":

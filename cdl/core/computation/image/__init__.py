@@ -27,6 +27,7 @@ from cdl.algorithms.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
     get_radial_profile,
+    normalize,
     z_fft,
     z_ifft,
 )
@@ -38,6 +39,7 @@ from cdl.core.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
     new_signal_result,
@@ -258,6 +260,21 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
+
+
+def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
+    """
+    Normalize image data depending on its maximum.
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = normalize(src.data, p.method)  # type: ignore
+    return dst
 
 
 class LogP1Param(gds.DataSet):
@@ -914,6 +931,17 @@ def compute_log10(src: ImageObj) -> ImageObj:
         Output image object
     """
     return Wrap11Func(np.log10)(src)
+
+def compute_exp(src: ImageObj) -> ImageObj:
+    """Compute exponential
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    return Wrap11Func(np.exp)(src)
 
 
 class ZCalibrateParam(gds.DataSet):

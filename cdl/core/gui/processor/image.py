@@ -38,6 +38,16 @@ class ImageProcessor(BaseProcessor):
     EDIT_ROI_PARAMS = True
 
     @qt_try_except()
+    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
+        """Normalize data"""
+        self.compute_11(
+            cpi.compute_normalize,
+            param=param,
+            paramclass=cpb.NormalizeParam,
+            title=_("Normalize"),
+        )
+
+    @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
         self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
@@ -310,6 +320,11 @@ class ImageProcessor(BaseProcessor):
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")
+
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:

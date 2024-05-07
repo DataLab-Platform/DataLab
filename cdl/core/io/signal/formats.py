@@ -9,12 +9,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import numpy as np
+import scipy.io as sio
 
 from cdl.config import _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.signal import funcs
 from cdl.core.io.signal.base import SignalFormatBase
+from cdl.core.model.signal import SignalObj
 
 if TYPE_CHECKING:
     from cdl.core.model.signal import SignalObj
@@ -110,3 +112,45 @@ class NumPySignalFormat(SignalFormatBase):
             obj: Signal object to read data from
         """
         np.save(filename, obj.xydata.T)
+
+
+class MatSignalFormat(SignalFormatBase):
+    """Object representing a MAT-File .mat signal file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name=_("MAT-Files"),
+        extensions="*.mat",
+        readable=True,
+        writeable=True,
+    )  # pylint: disable=duplicate-code
+
+    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
+        """Read data and metadata from file, write metadata to object, return xydata
+
+        Args:
+            filename: Name of file to read
+
+        Returns:
+            NumPy array xydata
+        """
+        mat = sio.loadmat(filename)
+        allsig: list[SignalObj] = []
+        for dname, data in mat.items():
+            if dname.startswith("__") or not isinstance(data, np.ndarray):
+                continue
+            for sig in self.create_signals_from(data.squeeze(), filename):
+                if dname != "sig":
+                    sig.title += f" ({dname})"
+                allsig.append(sig)
+        return allsig
+
+    def write(self, filename: str, obj: SignalObj) -> None:
+        """Write data to file
+
+        Args:
+            filename: Name of file to write
+            obj: Signal object to read data from
+        """
+        # metadata cannot be saved as such as their type will be lost and
+        # cause problems when reading the file back
+        sio.savemat(filename, {"sig": obj.xydata.T})

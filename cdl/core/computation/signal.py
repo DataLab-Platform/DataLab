@@ -41,6 +41,7 @@ from cdl.core.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
     new_signal_result,
@@ -127,7 +128,7 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
     return dst
 
 
-# MARK: compute_n1 functions -----------------------------------------------------------
+# -------- compute_n1 functions --------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -171,7 +172,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
-# MARK: compute_n1n functions ----------------------------------------------------------
+# -------- compute_n1n functions -------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -239,8 +240,8 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# MARK: compute_11 functions -----------------------------------------------------------
-# Functions with 1 input signal and 1 output signal
+# -------- compute_11 functions --------------------------------------------------------
+# Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 
 
@@ -377,6 +378,52 @@ def compute_log10(src: SignalObj) -> SignalObj:
     return Wrap11Func(np.log10)(src)
 
 
+def compute_exp(src: SignalObj) -> SignalObj:
+    """Compute exponential
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.exp)(src)
+
+
+def compute_sqrt(src: SignalObj) -> SignalObj:
+    """Compute square root
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.sqrt)(src)
+
+
+class PowParam(gds.DataSet):
+    """Power parameters"""
+
+    power = gds.FloatItem(_("Power"), default=2.0)
+
+
+def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
+    """Compute power
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "pow", f"n={p.power}")
+    x, y = src.get_data()
+    dst.set_xydata(x, y**p.power)
+    return dst
+
+
 class PeakDetectionParam(gds.DataSet):
     """Peak detection parameters"""
 
@@ -406,19 +453,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-class NormalizeYParam(gds.DataSet):
-    """Normalize parameters"""
-
-    methods = (
-        (_("maximum"), "maximum"),
-        (_("amplitude"), "amplitude"),
-        (_("sum"), "sum"),
-        (_("energy"), "energy"),
-    )
-    method = gds.ChoiceItem(_("Normalize with respect to"), methods)
-
-
-def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
+def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """Normalize data
 
     Args:
@@ -790,6 +825,20 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
+    return dst
+
+
+def compute_reverse_x(src: SignalObj) -> SignalObj:
+    """Reverse x-axis
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "reverse_x")
+    dst.y = dst.y[::-1]
     return dst
 
 
