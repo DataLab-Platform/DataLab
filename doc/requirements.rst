@@ -35,7 +35,7 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 5.5
       - Cross-platform lib for process and system monitoring in Python.
     * - guidata
-      -  >= 3.4
+      -  >= 3.5
       - Automatic GUI generation for easy dataset editing and display
     * - PlotPy
       -  >= 2.3

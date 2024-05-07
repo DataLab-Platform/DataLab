@@ -10,6 +10,7 @@ import abc
 
 import numpy as np
 
+from cdl.config import _
 from cdl.core.io.base import BaseIORegistry, FormatBase
 from cdl.core.model.image import ImageObj, create_image
 from cdl.utils.qthelpers import CallbackWorker
@@ -18,6 +19,8 @@ from cdl.utils.strings import reduce_path
 
 class ImageIORegistry(BaseIORegistry):
     """Metaclass for registering image I/O handler classes"""
+
+    REGISTRY_INFO: str = _("Image I/O formats")
 
     _io_format_instances: list[ImageFormatBase] = []
 
@@ -45,7 +48,9 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
             name += f" {index:02d}"
         return create_image(name)
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:

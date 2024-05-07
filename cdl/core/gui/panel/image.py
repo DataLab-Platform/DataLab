@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Image panel (see parent package :mod:`cdl.core.gui.processor`)
+.. Image panel (see parent package :mod:`cdl.core.gui.panel`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...

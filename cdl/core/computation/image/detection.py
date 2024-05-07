@@ -15,7 +15,6 @@ Blob detection computation module
 from __future__ import annotations
 
 import guidata.dataset as gds
-import numpy as np
 
 from cdl.algorithms.image import (
     find_blobs_dog,
@@ -26,8 +25,8 @@ from cdl.algorithms.image import (
     get_contour_shapes,
 )
 from cdl.config import _
-from cdl.core.computation.image import calc_with_osr
-from cdl.core.model.base import ShapeTypes
+from cdl.core.computation.image import calc_resultshape
+from cdl.core.model.base import ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj
 
 
@@ -61,7 +60,9 @@ class Peak2DDetectionParam(GenericDetectionParam):
     create_rois = gds.BoolItem(_("Create regions of interest"), default=True)
 
 
-def compute_peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> np.ndarray:
+def compute_peak_detection(
+    image: ImageObj, p: Peak2DDetectionParam
+) -> ResultShape | None:
     """Compute 2D peak detection
 
     Args:
@@ -71,7 +72,9 @@ def compute_peak_detection(image: ImageObj, p: Peak2DDetectionParam) -> np.ndarr
     Returns:
         Peak coordinates
     """
-    return calc_with_osr(image, get_2d_peaks_coords, p.size, p.threshold)
+    return calc_resultshape(
+        "peak", ShapeTypes.POINT, image, get_2d_peaks_coords, p.size, p.threshold
+    )
 
 
 class ContourShapeParam(GenericDetectionParam):
@@ -93,9 +96,12 @@ class ContourShapeParam(GenericDetectionParam):
     shape = gds.ChoiceItem(_("Shape"), shapes, default="ellipse")
 
 
-def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> np.ndarray:
+def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit"""
-    return calc_with_osr(image, get_contour_shapes, p.shape, p.threshold)
+    shapetype = getattr(ShapeTypes, p.shape.upper())
+    return calc_resultshape(
+        "contour", shapetype, image, get_contour_shapes, p.shape, p.threshold
+    )
 
 
 class BaseBlobParam(gds.DataSet):
@@ -152,7 +158,7 @@ class BlobDOGParam(BaseBlobParam):
     )
 
 
-def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
+def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """Compute blobs using Difference of Gaussian method
 
     Args:
@@ -162,7 +168,9 @@ def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> np.ndarray:
     Returns:
         Blobs coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "blob_dog",
+        ShapeTypes.CIRCLE,
         image,
         find_blobs_dog,
         p.min_sigma,
@@ -187,7 +195,7 @@ class BlobDOHParam(BaseBlobParam):
     )
 
 
-def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
+def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """Compute blobs using Determinant of Hessian method
 
     Args:
@@ -197,7 +205,9 @@ def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> np.ndarray:
     Returns:
         Blobs coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "blob_doh",
+        ShapeTypes.CIRCLE,
         image,
         find_blobs_doh,
         p.min_sigma,
@@ -218,7 +228,7 @@ class BlobLOGParam(BlobDOHParam):
     )
 
 
-def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
+def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """Compute blobs using Laplacian of Gaussian method
 
     Args:
@@ -228,7 +238,9 @@ def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> np.ndarray:
     Returns:
         Blobs coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "blob_log",
+        ShapeTypes.CIRCLE,
         image,
         find_blobs_log,
         p.min_sigma,
@@ -377,7 +389,7 @@ class BlobOpenCVParam(gds.DataSet):
     ).set_prop("display", active=_prop_conv)
 
 
-def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
+def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | None:
     """Compute blobs using OpenCV
 
     Args:
@@ -387,7 +399,9 @@ def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> np.ndarray:
     Returns:
         Blobs coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "blob_opencv",
+        ShapeTypes.CIRCLE,
         image,
         find_blobs_opencv,
         p.min_threshold,

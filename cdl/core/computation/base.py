@@ -18,9 +18,12 @@ import guidata.dataset as gds
 import numpy as np
 
 from cdl.config import _
+from cdl.core.model.base import ResultProperties
 from cdl.core.model.signal import create_signal
 
 if TYPE_CHECKING:
+    from typing import Callable
+
     from cdl.core.model.image import ImageObj
     from cdl.core.model.signal import SignalObj
 
@@ -98,7 +101,7 @@ class ROIDataParam(gds.DataSet):
     @property
     def is_empty(self) -> bool:
         """Return True if there is no ROI"""
-        return self.roidata is None or self.roidata.size == 0
+        return self.roidata is None or np.array(self.roidata).size == 0
 
 
 class FFTParam(gds.DataSet):
@@ -136,3 +139,34 @@ def new_signal_result(
     if "source" in src.metadata:
         dst.metadata["source"] = src.metadata["source"]  # Keep track of the source
     return dst
+
+
+def calc_resultproperties(
+    label: str, obj: SignalObj | ImageObj, labeledfuncs: dict[str, Callable]
+) -> ResultProperties:
+    """Calculate result properties by executing a computation function
+    on a signal/image object.
+
+    Args:
+        label: result properties label
+        obj: signal or image object
+        labeledfuncs: dictionary of labeled computation functions. The keys are
+         the labels of the computation functions and the values are the functions
+         themselves (each function must take a single argument - which is the data
+         of the ROI or the whole signal/image - and return a float)
+
+    Returns:
+        Result properties object
+    """
+    if not all(isinstance(k, str) for k in labeledfuncs.keys()):
+        raise ValueError("Keys of labeledfuncs must be strings")
+    if not all(callable(v) for v in labeledfuncs.values()):
+        raise ValueError("Values of labeledfuncs must be functions")
+
+    res = []
+    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
+    for i_roi in [None] + list(range(roi_nb)):
+        data_roi = obj.get_data(i_roi)
+        val_roi = -1 if i_roi is None else i_roi
+        res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])
+    return ResultProperties(label, np.array(res), list(labeledfuncs.keys()))
