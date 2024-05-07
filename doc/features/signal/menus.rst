@@ -282,6 +282,22 @@ Create a new signal which is the base 10 logarithm of each selected signal:
 .. math::
     z_{k} = \log_{10}(z_{k-1})
 
+Power
+^^^^^
+
+Create a new signal which is the power of each selected signal:
+
+.. math::
+    y_{k} = y_{k-1}^{n}
+
+Square root
+^^^^^^^^^^^
+
+Create a new signal which is the square root of each selected signal:
+
+.. math::
+    y_{k} = \sqrt{y_{k-1}}
+
 Peak detection
 ^^^^^^^^^^^^^^
 
