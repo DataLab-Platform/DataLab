@@ -1,0 +1,32 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""
+History application test
+"""
+
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# guitest: show
+
+import cdl.obj
+import cdl.param
+from cdl.env import execenv
+from cdl.tests import cdltest_app_context
+from cdl.tests.data import create_paracetamol_signal
+
+
+def test_history_app():
+    """Run history application test scenario"""
+    with cdltest_app_context() as win:
+        execenv.print("History application test:")
+        panel = win.signalpanel
+        sig = create_paracetamol_signal()
+        panel.add_object(sig)
+        panel.processor.compute_derivative()
+        panel.processor.compute_log10()
+        param = cdl.param.NormalizeParam.create(method="energy")
+        panel.processor.compute_normalize(param)
+        execenv.print("==> OK")
+
+
+if __name__ == "__main__":
+    test_history_app()
