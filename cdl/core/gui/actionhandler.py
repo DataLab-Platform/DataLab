@@ -799,7 +799,7 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Flix X axis"),
                 triggered=self.panel.processor.compute_flipx,
-                icon=get_icon("flip_horizontally.svg"),
+                icon=get_icon("flip_signal_xaxis.svg"),
             )
 
 
