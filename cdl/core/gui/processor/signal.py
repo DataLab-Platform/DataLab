@@ -149,9 +149,9 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_peak_detection, param)
 
     @qt_try_except()
-    def compute_flipx(self) -> None:
-        """Flip X axis"""
-        self.compute_11(cps.compute_flipx, title=_("Flip X axis"))
+    def compute_reverse_x(self) -> None:
+        """Reverse X axis"""
+        self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
 
     # ------Signal Processing
     @qt_try_except()

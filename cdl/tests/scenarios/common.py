@@ -124,8 +124,8 @@ def run_signal_computations(
 
     compute_common_operations(panel)
 
-    panel.processor.compute_flipx()
-    panel.processor.compute_flipx()
+    panel.processor.compute_reverse_x()
+    panel.processor.compute_reverse_x()
 
     win.add_object(create_paracetamol_signal(data_size))
 

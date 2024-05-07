@@ -797,9 +797,9 @@ class SignalActionHandler(BaseActionHandler):
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
-                _("Flip X axis"),
-                triggered=self.panel.processor.compute_flipx,
-                icon=get_icon("flip_signal_xaxis.svg"),
+                _("Reverse X-axis"),
+                triggered=self.panel.processor.compute_reverse_x,
+                icon=get_icon("reverse_signal_x.svg"),
             )
 
 

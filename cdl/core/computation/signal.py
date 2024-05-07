@@ -853,8 +853,8 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_flipx(src: SignalObj) -> SignalObj:
-    """Flip x-axis
+def compute_reverse_x(src: SignalObj) -> SignalObj:
+    """Reverse x-axis
 
     Args:
         src: source signal
@@ -862,6 +862,6 @@ def compute_flipx(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "flip_x_axis")
+    dst = dst_11(src, "reverse_x")
     dst.y = dst.y[::-1]
     return dst
