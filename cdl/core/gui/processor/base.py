@@ -300,7 +300,7 @@ class BaseProcessor(QC.QObject):
         self._compute_11_subroutine(funcs, params, title)
 
     def handle_output(
-        self, compout: CompOut, context: str
+        self, compout: CompOut, context: str, progress: QW.QProgressDialog
     ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
@@ -308,18 +308,24 @@ class BaseProcessor(QC.QObject):
         Args:
             compout: computation output
             context: context (e.g. "Computing: Gaussian filter")
+            progress: progress dialog
 
         Returns:
             Output object: a signal or image object, or a result shape object,
              or None if error
         """
-        if compout.error_msg:
-            show_warning_error(
-                self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
-            )
-            return None
-        if compout.warning_msg:
-            show_warning_error(self.panel, "warning", context, compout.warning_msg)
+        if compout.error_msg or compout.warning_msg:
+            mindur = progress.minimumDuration()
+            progress.setMinimumDuration(1000000)
+            if compout.error_msg:
+                show_warning_error(
+                    self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
+                )
+            if compout.warning_msg:
+                show_warning_error(self.panel, "warning", context, compout.warning_msg)
+            progress.setMinimumDuration(mindur)
+            if compout.error_msg:
+                return None
         return compout.result
 
     def __exec_func(
@@ -382,7 +388,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    new_obj = self.handle_output(result, _("Computing: %s") % i_title)
+                    new_obj = self.handle_output(
+                        result, _("Computing: %s") % i_title, progress
+                    )
                     if new_obj is None:
                         continue
 
@@ -456,7 +464,9 @@ class BaseProcessor(QC.QObject):
                 compout = self.__exec_func(func, args, progress)
                 if compout is None:
                     break
-                result = self.handle_output(compout, _("Computing: %s") % title)
+                result = self.handle_output(
+                    compout, _("Computing: %s") % title, progress
+                )
                 if result is None:
                     continue
 
@@ -549,7 +559,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    dst_obj = self.handle_output(result, _("Calculating: %s") % title)
+                    dst_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
                     if dst_obj is None:
                         break
                     dst_objs[src_gid] = dst_obj
@@ -629,7 +641,9 @@ class BaseProcessor(QC.QObject):
                 result = self.__exec_func(func, args, progress)
                 if result is None:
                     break
-                new_obj = self.handle_output(result, _("Calculating: %s") % title)
+                new_obj = self.handle_output(
+                    result, _("Calculating: %s") % title, progress
+                )
                 if new_obj is None:
                     continue
                 group_id = self.panel.objmodel.get_object_group_id(obj)
