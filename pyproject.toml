@@ -101,6 +101,7 @@ include = ["cdl*"]
     "*.jpg",
     "*.sif",
     "*.csv",
+    "*.mat",
     "*.js",
     "*.css",
     "*.html",
