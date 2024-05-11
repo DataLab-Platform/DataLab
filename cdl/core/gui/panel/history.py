@@ -114,15 +114,17 @@ class HistoryAction(ObjItf):
     def description(self) -> str:
         """Return object description (string representing function parameters)"""
         desc = ""
+        no_parameters = True
         for kwname in self.kwargs:
             if kwname.endswith("param"):
-                if not desc:
-                    desc += os.linesep
-                desc += str(self.kwargs[kwname])
-        if desc:
+                param = self.kwargs[kwname]
+                if param is not None:
+                    if desc:
+                        desc += os.linesep
+                    desc += str(param)
+                    no_parameters = False
+        if desc or no_parameters:
             return desc
-        if "param" in self.kwargs:
-            return str(self.kwargs["param"])
         if len(self.args) >= 2 and isinstance(self.args[1], Callable):
             doc: str = self.args[1].__doc__
             return doc.splitlines()[0] if doc else ""
@@ -141,6 +143,14 @@ class HistoryAction(ObjItf):
             bool: True if the current workspace state is compatible with the saved state
         """
         return self.state.is_current_state_compatible(mainwindow, restore_selection)
+
+    def restore(self, mainwindow: CDLMainWindow) -> None:
+        """Restore the associated workspace state
+
+        Args:
+            mainwindow: DataLab's main window
+        """
+        self.state.restore(mainwindow)
 
     def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
         """Replay the action
@@ -402,6 +412,15 @@ class HistorySession:
             )
         return True
 
+    def restore(self, mainwindow: CDLMainWindow) -> None:
+        """Restore the state of the workspace associated to the first action of session
+
+        Args:
+            mainwindow: DataLab's main window
+        """
+        if self.actions:
+            self.actions[0].restore(mainwindow)
+
     def replay(self, mainwindow: CDLMainWindow, restore_selection: bool) -> None:
         """Replay the history session
 
@@ -409,7 +428,7 @@ class HistorySession:
             mainwindow: DataLab's main window
             restore_selection: True to restore the workspace selection before replaying
         """
-        for action in self.actions:
+        for action in self.actions[:]:
             action.replay(mainwindow, restore_selection=restore_selection)
 
     def serialize(self, writer: BaseIOHandler) -> None:
@@ -448,6 +467,109 @@ class HistorySession:
             self.actions = self.actions[:index]
 
 
+class HistoryTree(QW.QTreeWidget):
+    """Tree widget for the history panel"""
+
+    def __init__(self, parent: QW.QWidget) -> None:
+        """Create a new history tree widget"""
+        super().__init__(parent)
+        self.setHeaderLabels([_("Title"), _("Date and time"), _("Description")])
+        self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
+
+    def populate_tree(self, history_sessions: list[HistorySession]) -> None:
+        """Populate the history tree widget
+
+        Args:
+            history_sessions: List of history sessions
+        """
+        self.clear()
+        for session in history_sessions:
+            ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
+            self.addTopLevelItem(ritem)
+            for action in session.actions:
+                item = QW.QTreeWidgetItem(
+                    [action.title, action.dtstr, action.description]
+                )
+                ritem.addChild(item)
+        self.expandAll()
+        for col in (0, 1):
+            self.resizeColumnToContents(col)
+
+    def rearrange_tree(self) -> None:
+        """Rearrange the history tree widget"""
+        self.expandAll()
+        for col in (0, 1):
+            self.resizeColumnToContents(col)
+
+    def add_action_to_tree(self, action: HistoryAction) -> None:
+        """Add an action to the history tree widget
+
+        Args:
+            action: Action to add
+        """
+        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
+        item.setData(0, QC.Qt.UserRole, action.uuid)
+        ritem = self.topLevelItem(self.topLevelItemCount() - 1)
+        ritem.addChild(item)
+
+    def get_action_from_uuid(
+        self, uuid: str, history_sessions: list[HistorySession]
+    ) -> HistoryAction:
+        """Get the action from its UUID
+
+        Args:
+            uuid: Action UUID
+            history_sessions: List of history sessions
+
+        Returns:
+            HistoryAction: Action
+        """
+        for session in history_sessions:
+            for action in session.actions:
+                if action.uuid == uuid:
+                    return action
+        raise ValueError("Action not found")
+
+    def get_selected_actions_or_sessions(
+        self, history_sessions: list[HistorySession]
+    ) -> list[HistoryAction | HistorySession]:
+        """Get the selected actions or sessions
+
+        Args:
+            history_sessions: List of history sessions
+
+        Returns:
+            list[HistoryAction | HistorySession]: List of selected actions or sessions
+        """
+        selected: list[HistoryAction | HistorySession] = []
+        for item in self.selectedItems():
+            if item.parent() is None:
+                index = self.indexOfTopLevelItem(item)
+                selected.append(history_sessions[index])
+            else:
+                uuid = item.data(0, QC.Qt.UserRole)
+                selected.append(self.get_action_from_uuid(uuid, history_sessions))
+        return selected
+
+    def get_selected_actions(
+        self, history_sessions: list[HistorySession]
+    ) -> list[HistoryAction]:
+        """Get the selected actions
+
+        Args:
+            history_sessions: List of history sessions
+
+        Returns:
+            list[HistoryAction]: List of selected actions
+        """
+        selected: list[HistoryAction] = []
+        for item in self.selectedItems():
+            if item.parent() is not None:
+                uuid = item.data(0, QC.Qt.UserRole)
+                selected.append(self.get_action_from_uuid(uuid, history_sessions))
+        return selected
+
+
 class HistoryPanel(AbstractPanel, DockableWidgetMixin):
     """History panel"""
 
@@ -466,39 +588,62 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.setWindowIcon(get_icon("history.svg"))
         self.setOrientation(QC.Qt.Vertical)
 
+        self.__menu_actions: list[QW.QAction] = self.__create_menu_actions()
+
         self.mainwindow = parent
-        self.treewidget = QW.QTreeWidget()
-        self.treewidget.setHeaderLabels(
-            [_("Title"), _("Date and time"), _("Description")]
-        )
-        self.treewidget.setContextMenuPolicy(QC.Qt.CustomContextMenu)
-        self.treewidget.customContextMenuRequested.connect(self.show_context_menu)
-        self.treewidget.itemDoubleClicked.connect(self.replay_restore_actions)
-        self.addWidget(self.treewidget)
+        self.tree = HistoryTree(self)
+        self.tree.customContextMenuRequested.connect(self.show_context_menu)
+        self.tree.itemDoubleClicked.connect(self.replay_restore_actions)
+
+        toolbar = QW.QToolBar(self)
+        for action in self.__menu_actions:
+            toolbar.addAction(action)
+        widget = QW.QWidget(self)
+        layout = QW.QVBoxLayout()
+        layout.addWidget(toolbar)
+        layout.addWidget(self.tree)
+        layout.setContentsMargins(0, 0, 0, 0)
+        widget.setLayout(layout)
+
+        self.addWidget(widget)
 
         self.__history_sessions: list[HistorySession] = []
         self.__session_increment = 0
 
-    def add_action_to_tree(self, action: HistoryAction) -> None:
-        """Add an action to the history panel
+    def __create_menu_actions(self) -> list[QW.QAction]:
+        """Create menu actions for the history panel
 
-        Args:
-            action: Action to add
+        Returns:
+            list[QW.QAction]: List of menu actions
         """
-        item = QW.QTreeWidgetItem([action.title, action.dtstr, action.description])
-        item.setData(0, QC.Qt.UserRole, action.uuid)
-        ritem = self.treewidget.topLevelItem(self.treewidget.topLevelItemCount() - 1)
-        ritem.addChild(item)
-
-    def populate_tree(self) -> None:
-        """Populate the history panel"""
-        self.treewidget.clear()
-        for session in self.__history_sessions:
-            ritem = QW.QTreeWidgetItem([session.title, session.dtstr])
-            self.treewidget.addTopLevelItem(ritem)
-            for action in session.actions:
-                self.add_action_to_tree(action)
-        self.treewidget.expandAll()
+        return [
+            create_action(
+                self,
+                _("Replay"),
+                lambda: self.replay_restore_actions(restore_selection=False),
+                icon=get_icon("replay.svg"),
+            ),
+            create_action(
+                self,
+                _("Restore selection"),
+                lambda: self.replay_restore_actions(
+                    restore_selection=True, replay=False
+                ),
+                icon=get_icon("restore_selection.svg"),
+            ),
+            create_action(
+                self,
+                _("Restore selection and replay"),
+                self.replay_restore_actions,
+                icon=get_icon("restore_and_replay.svg"),
+            ),
+            create_action(
+                self,
+                _("Delete"),
+                self.delete_actions,
+                icon=get_icon("delete.svg"),
+            ),
+        ]
 
     def show_context_menu(self, pos: QC.QPoint) -> None:
         """Show the context menu
@@ -507,40 +652,9 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
             pos: Position of the context menu
         """
         menu = QW.QMenu()
-        menu.addAction(
-            create_action(
-                self,
-                _("Restore selection"),
-                lambda: self.replay_restore_actions(
-                    restore_selection=True, replay=False
-                ),
-            )
-        )
-        menu.addAction(
-            create_action(
-                self,
-                _("Replay"),
-                lambda: self.replay_restore_actions(restore_selection=False),
-                icon=get_icon("replay.svg"),
-            )
-        )
-        menu.addAction(
-            create_action(
-                self,
-                _("Restore selection and replay"),
-                self.replay_restore_actions,
-                icon=get_icon("replay.svg"),
-            )
-        )
-        menu.addAction(
-            create_action(
-                self,
-                _("Delete"),
-                self.delete_actions,
-                icon=get_icon("delete.svg"),
-            )
-        )
-        menu.exec_(self.treewidget.mapToGlobal(pos))
+        for action in self.__menu_actions:
+            menu.addAction(action)
+        menu.exec_(self.tree.mapToGlobal(pos))
 
     def get_action_from_uuid(self, uuid: str) -> HistoryAction:
         """Get the action from its UUID
@@ -561,18 +675,14 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self, replay: bool = True, restore_selection: bool = True
     ) -> None:
         """Replay and/or restore selection for the selected actions"""
-        for item in self.treewidget.selectedItems():
-            if item.parent() is None:
-                index = self.treewidget.indexOfTopLevelItem(item)
-                session_or_action = self.__history_sessions[index]
-            else:
-                uuid = item.data(0, QC.Qt.UserRole)
-                session_or_action = self.get_action_from_uuid(uuid)
+        for session_or_action in self.tree.get_selected_actions_or_sessions(
+            self.__history_sessions
+        ):
             if not session_or_action.is_current_state_compatible(
                 self.mainwindow, restore_selection=restore_selection
             ):
                 QW.QMessageBox.critical(
-                    self,
+                    self.mainwindow,
                     _("Error"),
                     _("The current workspace state is not compatible with the action."),
                 )
@@ -582,26 +692,27 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
                     self.mainwindow, restore_selection=restore_selection
                 )
             elif restore_selection:
-                session_or_action.state.restore(self.mainwindow)
+                session_or_action.restore(self.mainwindow)
 
     def delete_actions(self) -> None:
         """Delete the selected actions"""
         # Ask for confirmation as this will delete the action and all subsequent actions
         reply = QW.QMessageBox.question(
-            self,
+            self.mainwindow,
             _("Delete actions"),
-            _("Do you really want to delete the selected actions?"),
+            _(
+                "Do you really want to delete the selected action "
+                "and all the next ones?"
+            ),
             QW.QMessageBox.Yes | QW.QMessageBox.No,
             QW.QMessageBox.No,
         )
         if reply == QW.QMessageBox.Yes:
-            for item in self.treewidget.selectedItems():
-                uuid = item.data(0, QC.Qt.UserRole)
-                action = self.get_action_from_uuid(uuid)
+            for action in self.tree.get_selected_actions(self.__history_sessions):
                 for session in self.__history_sessions:
                     if action in session.actions:
                         session.remove_action(action)
-            self.populate_tree()
+            self.tree.populate_tree(self.__history_sessions)
 
     def serialize_to_hdf5(self, writer: NativeH5Writer) -> None:
         """Serialize whole panel to a HDF5 file
@@ -622,7 +733,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         )
         if self.__history_sessions:
             self.__session_increment = self.__history_sessions[-1].number
-        self.populate_tree()
+        self.tree.populate_tree(self.__history_sessions)
 
     def __len__(self) -> int:
         """Return number of objects"""
@@ -647,7 +758,7 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         self.__session_increment += 1
         session = HistorySession(number=self.__session_increment)
         self.__history_sessions.append(session)
-        self.populate_tree()
+        self.tree.populate_tree(self.__history_sessions)
 
     def add_entry(self, action_title: str, func: Callable, *args, **kwargs) -> None:
         """Add an entry to the current history list
@@ -673,7 +784,8 @@ class HistoryPanel(AbstractPanel, DockableWidgetMixin):
         if not self.__history_sessions:
             self.create_new_session()
         self.__history_sessions[-1].add_action(obj)
-        self.add_action_to_tree(obj)
+        self.tree.add_action_to_tree(obj)
+        self.tree.rearrange_tree()
 
     def remove_all_objects(self):
         """Remove all objects"""
