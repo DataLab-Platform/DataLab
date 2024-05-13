@@ -384,8 +384,8 @@ class SignalProcessor(BaseProcessor):
 
     @qt_try_except()
     def compute_erffit(self) -> None:
-        """Compute Error Function (ERF) fitting curve"""
-        self.compute_fit(_("ERF fit"), fitdialog.erffit)
+        """Compute Error Function (Erf) fitting curve"""
+        self.compute_fit(_("Error function fit"), fitdialog.erffit)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:

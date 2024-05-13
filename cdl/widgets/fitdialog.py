@@ -321,11 +321,11 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         return fitfunc(x, values), params
 
 
-# --- Error function (ERF) fitting curve -----------------------------------------------
+# --- Error function (Erf) fitting curve -----------------------------------------------
 
 
 def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
-    """Compute ERF (Error Function) fit
+    """Compute Error function (Erf) fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
@@ -355,7 +355,7 @@ def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         fitfunc,
         params,
         parent=parent,
-        wintitle=_("ERF fit"),
+        wintitle=_("Error function fit"),
         name=name,
     )
     if values:

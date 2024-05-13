@@ -51,7 +51,7 @@ def test_fit_dialog():
         # Sinusoidal curve fitting test
         execenv.print(fdlg.sinusoidalfit(x, y))
 
-        # ERF curve fitting test
+        # Error function curve fitting test
         execenv.print(fdlg.erffit(x, y))
 
 

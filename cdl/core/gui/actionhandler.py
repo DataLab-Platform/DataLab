@@ -794,7 +794,7 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_sinfit,
                 )
                 self.new_action(
-                    _("ERF fit"),
+                    _("Error function fit"),
                     triggered=self.panel.processor.compute_erffit,
                 )
 
