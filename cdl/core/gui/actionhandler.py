@@ -802,8 +802,8 @@ class SignalActionHandler(BaseActionHandler):
             )
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
-                _("Abscissa at min/max"),
-                triggered=self.panel.processor.compute_abscissa_at_minmax,
+                _("X value at min/max"),
+                triggered=self.panel.processor.compute_x_at_minmax,
             )
             self.new_action(
                 _("Compute sampling rate and period"),
