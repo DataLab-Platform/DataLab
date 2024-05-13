@@ -770,9 +770,6 @@ class SignalActionHandler(BaseActionHandler):
 
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Fitting")):
-                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit)
-                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
-                cra_fit(_("Voigt fit"), fitdialog.voigtfit)
                 self.new_action(
                     _("Linear fit"),
                     triggered=self.panel.processor.compute_linearfit,
@@ -781,6 +778,9 @@ class SignalActionHandler(BaseActionHandler):
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
                 )
+                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit)
+                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
+                cra_fit(_("Voigt fit"), fitdialog.voigtfit)
                 self.new_action(
                     _("Multi-Gaussian fit"),
                     triggered=self.panel.processor.compute_multigaussianfit,
@@ -794,8 +794,12 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_sinfit,
                 )
                 self.new_action(
-                    _("Error function fit"),
-                    triggered=self.panel.processor.compute_erffit,
+                    _("CDF fit"),
+                    triggered=self.panel.processor.compute_cdffit,
+                    tip=_(
+                        "Cumulative distribution function fit, "
+                        "related to Error function (erf)"
+                    ),
                 )
 
         with self.new_category(ActionCategory.COMPUTING):

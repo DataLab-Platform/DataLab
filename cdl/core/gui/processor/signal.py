@@ -383,9 +383,9 @@ class SignalProcessor(BaseProcessor):
         self.compute_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit)
 
     @qt_try_except()
-    def compute_erffit(self) -> None:
-        """Compute Error Function (Erf) fitting curve"""
-        self.compute_fit(_("Error function fit"), fitdialog.erffit)
+    def compute_cdffit(self) -> None:
+        """Compute Cumulative Distribution Function (CDF) fitting curve"""
+        self.compute_fit(_("CDF fit"), fitdialog.cdffit)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:

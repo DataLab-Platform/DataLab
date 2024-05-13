@@ -159,7 +159,7 @@ def run_signal_computations(
     panel.processor.compute_polyfit(param)
     panel.processor.compute_linearfit()
     panel.processor.compute_expfit()
-    panel.processor.compute_erffit()
+    panel.processor.compute_cdffit()
     panel.processor.compute_sinfit()
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)

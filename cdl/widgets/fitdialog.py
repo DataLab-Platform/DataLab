@@ -272,7 +272,7 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     moa, mob, moc = np.maximum(1, opt_params)
     a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
     b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
-    c_p = FitParam(_("C constant"), oc, -2 * moc, 2 * moc)
+    c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc)
 
     params = [a_p, b_p, c_p]
 
@@ -321,33 +321,31 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         return fitfunc(x, values), params
 
 
-# --- Error function (Erf) fitting curve -----------------------------------------------
+# --- Cumulative distribution function fitting curve -----------------------------------
 
 
-def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
-    """Compute Error function (Erf) fit
+def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute Cumulative Distribution Function (CDF) fit
 
     Returns (yfit, params), where yfit is the fitted curve and params are
     the fitting parameters"""
     dy = np.max(y) - np.min(y)
-    x0_guess = (max(x) - abs(min(x))) / 2
-    off_guess = dy / 2
-    slope_guess = (max(x) - min(x)) / 10
-    amp_guess = dy
+    a_guess = dy
+    b_guess = dy / 2
+    sigma_guess = (max(x) - min(x)) / 10
+    mu_guess = (max(x) - abs(min(x))) / 2
 
-    iamp, ix0, islope, ioff = np.maximum(
-        1, [amp_guess, x0_guess, slope_guess, off_guess]
-    )
-    amp_p = FitParam(_("Amplitude"), amp_guess, 0, iamp * 1.2)
-    x0_p = FitParam(_("Center"), x0_guess, ix0 * 0.2, ix0 * 2)
-    slope_p = FitParam(_("Slope"), slope_guess, islope * 0.1, islope * 2)
-    off_p = FitParam(_("Offset"), off_guess, np.min(y) - 0.1 * dy, np.max(y))
+    iamp, ix0, islope, ioff = np.maximum(1, [a_guess, mu_guess, sigma_guess, b_guess])
+    a = FitParam(_("Amplitude"), a_guess, 0, iamp * 1.2)
+    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
+    sigma = FitParam(_("Std-dev") + " (σ)", sigma_guess, islope * 0.1, islope * 2)
+    mu = FitParam(_("Mean") + " (μ)", mu_guess, ix0 * 0.2, ix0 * 2)
 
-    params = [amp_p, x0_p, slope_p, off_p]
+    params = [a, mu, sigma, b]
 
     @_wrap_fitfunc
-    def fitfunc(x: np.ndarray, amp: float, x0: float, slope: float, offset: float):
-        return amp * erf((x - x0) / (slope * np.sqrt(2))) + offset
+    def fitfunc(x: np.ndarray, a: float, mu: float, sigma: float, b: float):
+        return a * erf((x - mu) / (sigma * np.sqrt(2))) + b
 
     values = guifit(
         x,
@@ -355,7 +353,7 @@ def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         fitfunc,
         params,
         parent=parent,
-        wintitle=_("Error function fit"),
+        wintitle=_("CDF fit"),
         name=name,
     )
     if values:

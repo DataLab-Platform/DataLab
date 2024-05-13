@@ -51,8 +51,8 @@ def test_fit_dialog():
         # Sinusoidal curve fitting test
         execenv.print(fdlg.sinusoidalfit(x, y))
 
-        # Error function curve fitting test
-        execenv.print(fdlg.erffit(x, y))
+        # CDF curve fitting test
+        execenv.print(fdlg.cdffit(x, y))
 
 
 if __name__ == "__main__":
