@@ -512,8 +512,8 @@ The following parameters are available:
     * - Method
       - Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
 
-Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fitting
+^^^^^^^
 
 Open an interactive curve fitting tool in a modal dialog box.
 
@@ -523,6 +523,10 @@ Open an interactive curve fitting tool in a modal dialog box.
 
     * - Model
       - Equation
+    * - Linear
+      - :math:`y = c_{0}+c_{1}.x`
+    * - Polynomial
+      - :math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`
     * - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
     * - Lorentzian
@@ -531,6 +535,12 @@ Open an interactive curve fitting tool in a modal dialog box.
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
     * - Multi-Gaussian
       - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi}.\sigma_{i}}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0,i}}{\sigma_{i}})^2)`
+    * - Exponential
+      - :math:`y = y_{0}+A.exp(B.x)`
+    * - Sinusoidal
+      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+    * - Cumulative Distribution Function (CDF)
+      - :math:`y = y_{0}+A.erf(\dfrac{x-x_{0}}{\sigma.\sqrt{2}})`
 
 "Computing" menu
 ----------------
