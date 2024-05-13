@@ -8,11 +8,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
@@ -28,7 +25,7 @@ from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
@@ -39,6 +36,16 @@ class ImageProcessor(BaseProcessor):
     # pylint: disable=duplicate-code
 
     EDIT_ROI_PARAMS = True
+
+    @qt_try_except()
+    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
+        """Normalize data"""
+        self.compute_11(
+            cpi.compute_normalize,
+            param=param,
+            paramclass=cpb.NormalizeParam,
+            title=_("Normalize"),
+        )
 
     @qt_try_except()
     def compute_sum(self) -> None:
@@ -313,6 +320,11 @@ class ImageProcessor(BaseProcessor):
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")
+
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:
@@ -814,11 +826,14 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultProperties]:
+        """Compute data statistics"""
+        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+
+    @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
-        return self.compute_10(
-            cpi.compute_centroid, ShapeTypes.MARKER, title=_("Centroid")
-        )
+        return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
 
     @qt_try_except()
     def compute_enclosing_circle(self) -> dict[str, ResultShape]:
@@ -826,7 +841,7 @@ class ImageProcessor(BaseProcessor):
         # TODO: [P2] Find a way to add the circle to the computing results
         #  as in "enclosingcircle_test.py"
         return self.compute_10(
-            cpi.compute_enclosing_circle, ShapeTypes.CIRCLE, title=_("Enclosing circle")
+            cpi.compute_enclosing_circle, title=_("Enclosing circle")
         )
 
     @qt_try_except()
@@ -843,7 +858,6 @@ class ImageProcessor(BaseProcessor):
 
         results = self.compute_10(
             cpi_det.compute_peak_detection,
-            ShapeTypes.POINT,
             param,
             edit=edit,
             title=_("Peak detection"),
@@ -886,7 +900,6 @@ class ImageProcessor(BaseProcessor):
         edit, param = self.init_param(param, cpi_det.ContourShapeParam, _("Contour"))
         return self.compute_10(
             cpi_det.compute_contour_shape,
-            shapetype=None,  # Shape is defined by the dataset ContourShapeParam
             param=param,
             title=_("Contour"),
             edit=edit,
@@ -899,7 +912,6 @@ class ImageProcessor(BaseProcessor):
         """Compute peak detection based on a circle Hough transform"""
         return self.compute_10(
             cpi.compute_hough_circle_peaks,
-            ShapeTypes.CIRCLE,
             param,
             cpi.HoughCircleParam,
             title=_("Hough circles"),
@@ -912,7 +924,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Difference of Gaussian method"""
         return self.compute_10(
             cpi_det.compute_blob_dog,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobDOGParam,
             title=_("Blob detection (DOG)"),
@@ -925,7 +936,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Determinant of Hessian method"""
         return self.compute_10(
             cpi_det.compute_blob_doh,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobDOHParam,
             title=_("Blob detection (DOH)"),
@@ -938,7 +948,6 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using Laplacian of Gaussian method"""
         return self.compute_10(
             cpi_det.compute_blob_log,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobLOGParam,
             title=_("Blob detection (LOG)"),
@@ -952,23 +961,7 @@ class ImageProcessor(BaseProcessor):
         """Compute blob detection using OpenCV"""
         return self.compute_10(
             cpi_det.compute_blob_opencv,
-            ShapeTypes.CIRCLE,
             param,
             cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
         )
-
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        # Be careful to use systematically functions adapted to masked arrays
-        # (e.g. numpy.ma median, and *not* numpy.median)
-        return [
-            ("min(z)", ma.min),
-            ("max(z)", ma.max),
-            ("<z>", ma.mean),
-            ("median(z)", ma.median),
-            ("σ(z)", ma.std),
-            ("<z>/σ(z)", lambda z: ma.mean(z) / ma.std(z)),
-            ("peak-to-peak(z)", ma.ptp),
-            ("Σ(z)", ma.sum),
-        ]

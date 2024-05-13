@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-09 09:13+0200\n"
+"POT-Creation-Date: 2024-04-11 11:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -153,7 +153,7 @@ msgid "guidata"
 msgstr ""
 
 #: ../../doc/requirements.rst:38
-msgid ">= 3.4"
+msgid ">= 3.5"
 msgstr ""
 
 #: ../../doc/requirements.rst:39
@@ -212,7 +212,9 @@ msgstr ""
 
 #: ../../doc/requirements.rst:61
 msgid "An extremely fast Python linter and code formatter, written in Rust."
-msgstr "Analyseur de code et formateur de code Python extrêmement rapide, écrit en Rust."
+msgstr ""
+"Analyseur de code et formateur de code Python extrêmement rapide, écrit "
+"en Rust."
 
 #: ../../doc/requirements.rst:62
 msgid "pylint"
@@ -331,3 +333,7 @@ msgstr ""
 #: ../../doc/requirements.rst:120
 msgid "A pytest plugin to run Xvfb (or Xephyr/Xvnc) for tests."
 msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
+
+#~ msgid ">= 3.4"
+#~ msgstr ""
+

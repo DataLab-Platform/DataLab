@@ -17,8 +17,7 @@ from typing import TYPE_CHECKING, Any
 from cdl.env import execenv
 
 if TYPE_CHECKING:
-    import numpy as np
-
+    from cdl.core.model.base import ResultProperties, ResultShape
     from cdl.core.model.image import ImageObj
     from cdl.core.model.signal import SignalObj
 
@@ -26,13 +25,14 @@ if TYPE_CHECKING:
 @dataclasses.dataclass
 class CompOut:
     """Class for representing computation output
+
     Attributes:
-        result (SignalObj | ImageObj | np.ndarray | None): computation result
-        error_msg (str | None): error message
-        warning_msg (str | None): warning message
+        result: computation result
+        error_msg: error message
+        warning_msg: warning message
     """
 
-    result: SignalObj | ImageObj | np.ndarray | None = None
+    result: SignalObj | ImageObj | ResultShape | ResultProperties | None = None
     error_msg: str | None = None
     warning_msg: str | None = None
 

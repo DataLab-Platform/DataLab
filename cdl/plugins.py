@@ -32,16 +32,12 @@ from typing import TYPE_CHECKING
 from qtpy import QtWidgets as QW
 
 from cdl.config import MOD_NAME, OTHER_PLUGINS_PATHLIST, Conf, _
-from cdl.core.io.base import FormatInfo  # pylint: disable=W0611  # noqa: F401
-from cdl.core.io.image.base import (
-    ImageFormatBase,  # pylint: disable=W0611  # noqa: F401
-)
-from cdl.core.io.image.formats import (
-    ClassicsImageFormat,  # pylint: disable=W0611  # noqa: F401
-)
-from cdl.core.io.signal.base import (
-    SignalFormatBase,  # pylint: disable=W0611  # noqa: F401
-)
+
+# pylint: disable=unused-import
+from cdl.core.io.base import FormatInfo  # noqa: F401
+from cdl.core.io.image.base import ImageFormatBase  # noqa: F401
+from cdl.core.io.image.formats import ClassicsImageFormat  # noqa: F401
+from cdl.core.io.signal.base import SignalFormatBase  # noqa: F401
 from cdl.env import execenv
 from cdl.proxy import LocalProxy
 
@@ -105,22 +101,34 @@ class PluginRegistry(type):
         execenv.log(cls, f"{len(cls._plugin_instances)} plugins left")
 
     @classmethod
-    def get_plugin_infos(cls) -> str:
-        """Return plugin infos (names, versions, descriptions) in html format"""
+    def get_plugin_infos(cls, html: bool = True) -> str:
+        """Return plugin infos (names, versions, descriptions) in html format
+
+        Args:
+            html: return html formatted text (default: True)
+        """
+        linesep = "<br>" if html else os.linesep
+        bullet = "• " if html else " " * 4
+
+        def italic(text: str) -> str:
+            """Return italic text"""
+            return f"<i>{text}</i>" if html else text
+
         if Conf.main.plugins_enabled.get():
             plugins = cls.get_plugins()
             if plugins:
-                html = "<i>" + _("Registered plugins:") + "</i><br>"
+                text = italic(_("Registered plugins:"))
+                text += linesep
                 for plugin in plugins:
-                    html += f"• {plugin.info.name} ({plugin.info.version})"
+                    text += f"{bullet}{plugin.info.name} ({plugin.info.version})"
                     if plugin.info.description:
-                        html += f": {plugin.info.description}"
-                    html += "<br>"
+                        text += f": {plugin.info.description}"
+                    text += linesep
             else:
-                html = "<i>" + _("No plugins available") + "</i>"
+                text = italic(_("No plugins available"))
         else:
-            html = "<i>" + _("Plugins are disabled (see DataLab settings)") + "</i>"
-        return html
+            text = italic(_("Plugins are disabled (see DataLab settings)"))
+        return text
 
 
 @dataclasses.dataclass

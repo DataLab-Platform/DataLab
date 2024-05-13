@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-09 09:13+0200\n"
+"POT-Creation-Date: 2024-04-11 11:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -514,7 +514,7 @@ msgid "guidata"
 msgstr ""
 
 #: ../../doc/requirements.rst:38
-msgid ">= 3.4"
+msgid ">= 3.5"
 msgstr ""
 
 #: ../../doc/requirements.rst:39
@@ -694,3 +694,7 @@ msgstr "Plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 #: ../../doc/intro/installation.rst:228
 msgid "Python 3.11 and PyQt5 are the reference for production release"
 msgstr "Python 3.11 et PyQt5 sont les références pour la version de production"
+
+#~ msgid ">= 3.4"
+#~ msgstr ""
+

@@ -19,7 +19,7 @@ from plotpy.config import CONF as PLOTPY_CONF
 from plotpy.config import MAIN_BG_COLOR, MAIN_FG_COLOR
 from plotpy.constants import LUTAlpha
 
-from cdl.utils import conf, tests
+from cdl.utils import conf
 
 CONF_VERSION = "0.2.0"
 
@@ -321,7 +321,6 @@ def reset():
 
 
 initialize()
-tests.add_test_module_path(MOD_NAME, osp.join("data", "tests"))
 
 
 PLOTPY_DEFAULTS = {
@@ -429,6 +428,30 @@ PLOTPY_DEFAULTS = {
         "shape/result/i/sel_symbol/facecolor": "#00ff00",
         "shape/result/i/sel_symbol/alpha": 0.7,
         # -----------------------------------------------------------------------------
+        # Style for result properties labels:
+        "label/properties/symbol/marker": "NoSymbol",
+        "label/properties/symbol/size": 0,
+        "label/properties/symbol/edgecolor": MAIN_BG_COLOR,
+        "label/properties/symbol/facecolor": MAIN_BG_COLOR,
+        "label/properties/border/style": "SolidLine",
+        "label/properties/border/color": "#cbcbcb",
+        "label/properties/border/width": 1,
+        "label/properties/font/size": 8,
+        "label/properties/font/family/nt": ["Cascadia Code", "Consolas", "Courier New"],
+        "label/properties/font/family/posix": "Bitstream Vera Sans Mono",
+        "label/properties/font/family/mac": "Monaco",
+        "label/properties/font/bold": False,
+        "label/properties/font/italic": False,
+        "label/properties/color": MAIN_FG_COLOR,
+        "label/properties/bgcolor": MAIN_BG_COLOR,
+        "label/properties/bgalpha": 0.8,
+        "label/properties/anchor": "L",
+        "label/properties/xc": 0,
+        "label/properties/yc": 0,
+        "label/properties/abspos": True,
+        "label/properties/absg": "L",
+        "label/properties/xg": 0.0,
+        "label/properties/yg": 0.0,
     },
 }
 

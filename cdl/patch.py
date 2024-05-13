@@ -24,13 +24,11 @@ from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
 from qtpy.QtWidgets import QApplication, QMainWindow
-from qwt import QwtLinearScaleEngine
+from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
-from qwt import QwtScaleDraw
 
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
-from cdl.utils.qthelpers import block_signals
 
 
 def monkeypatch_method(cls, patch_name):
@@ -82,10 +80,13 @@ def select(self):
     """Select item"""
     self.selected = True
     plot = self.plot()
-    with block_signals(widget=plot, enable=plot is not None):
-        pen = self.param.line.build_pen()
-        pen.setWidth(2)
-        self.setPen(pen)
+    if plot is not None:
+        plot.blockSignals(True)
+    pen = self.param.line.build_pen()
+    pen.setWidth(2)
+    self.setPen(pen)
+    if plot is not None:
+        plot.blockSignals(False)
     self.invalidate_plot()
 
 
