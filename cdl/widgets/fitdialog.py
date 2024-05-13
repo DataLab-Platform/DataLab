@@ -60,7 +60,10 @@ def guifit(
         name = get_default_test_name()
     win.setObjectName(name)
     win.set_data(x, y, fitfunc, fitparams, fitargs, fitkwargs)
-    win.autofit()  # TODO: [P3] make this optional
+    try:
+        win.autofit()  # TODO: [P3] make this optional
+    except ValueError:
+        pass
     if parent is None:
         win.setWindowIcon(get_icon("DataLab.svg"))
     if winsize is not None:
@@ -318,7 +321,7 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
         return fitfunc(x, values), params
 
 
-# --- Error function (ERF) fitting curve ------------------------------------------------
+# --- Error function (ERF) fitting curve -----------------------------------------------
 
 
 def erffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
