@@ -299,7 +299,6 @@ def contrast(y: np.ndarray) -> float:
         np.ndarray: Contrast
     """
     max_, min_ = np.max(y), np.min(y)
-    # 1e-6 is a normalization term to avoid division by zero (eg: max_ = min_ = 0)
     return (max_ - min_) / (max_ + min_)
 
 
