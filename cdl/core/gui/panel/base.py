@@ -233,7 +233,7 @@ class BaseDataPanel(AbstractPanel):
     ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
 
     @abc.abstractmethod
-    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
+    def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
         self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
