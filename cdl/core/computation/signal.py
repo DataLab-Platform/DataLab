@@ -13,7 +13,6 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from enum import Enum
 from typing import Any
 
 import guidata.dataset as gds
@@ -48,7 +47,7 @@ from cdl.core.computation.base import (
     calc_resultproperties,
     new_signal_result,
 )
-from cdl.core.model.base import Choices, ResultProperties, ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -830,30 +829,49 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-class WindowingEnum(Choices):
-    """Windowing functions"""
-
-    HAMMING = "hamming"
-    HANNING = "hanning"
-    BARLETT = "bartlett"
-    BLACKMAN = "blackman"
-    TUKEY = "tukey"
-    RECTANGULAR = "rectangular"
-
-
 class WindowingParam(gds.DataSet):
     """Windowing parameters"""
 
-    _method_prop = gds.GetAttrProp("method")
-    method = gds.ChoiceItem(
-        _("Method"), WindowingEnum.get_choices(), default=WindowingEnum.HAMMING
+    methods = (
+        ("barthann", "Barthann"),
+        ("bartlett", "Bartlett"),
+        ("blackman", "Blackman"),
+        ("blackman-harris", "Blackman-Harris"),
+        ("bohman", "Bohman"),
+        ("boxcar", "Boxcar"),
+        ("cosine", _("Cosine")),
+        ("exponential", _("Exponential")),
+        ("flat-top", _("Flat top")),
+        ("gaussian", _("Gaussian")),
+        ("hamming", "Hamming"),
+        ("hanning", "Hanning"),
+        ("kaiser", "Kaiser"),
+        ("lanczos", "Lanczos"),
+        ("nuttall", "Nuttall"),
+        ("parzen", "Parzen"),
+        ("rectangular", _("Rectangular")),
+        ("taylor", "Taylor"),
+        ("tukey", "Tukey"),
+    )
+    _meth_prop = gds.GetAttrProp("method")
+    method = gds.ChoiceItem(_("Method"), methods, default="hamming").set_prop(
+        "display", store=_meth_prop
     )
     alpha = gds.FloatItem(
-        _("Alpha"), help=_("Only if Tukey windowing is selected"), default=0.05
-    ).set_prop(
-        "display",
-        active=gds.FuncProp(_method_prop, lambda x: x is WindowingEnum.HAMMING),
-    )
+        "Alpha",
+        default=0.5,
+        help=_("Shape parameter of the Tukey windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "tukey"))
+    beta = gds.FloatItem(
+        "Beta",
+        default=14.0,
+        help=_("Shape parameter of the Kaiser windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "kaiser"))
+    sigma = gds.FloatItem(
+        "Sigma",
+        default=0.5,
+        help=_("Shape parameter of the Gaussian windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "gaussian"))
 
 
 def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
@@ -867,8 +885,15 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "windowing", f"method={p.method.name}")  # type: ignore
-    dst.y = windowing(dst.y, p.method.value, p.alpha)  # type: ignore
+    suffix = f"method={p.method}"
+    if p.method == "tukey":
+        suffix += f", alpha={p.alpha:.3f}"
+    elif p.method == "kaiser":
+        suffix += f", beta={p.beta:.3f}"
+    elif p.method == "gaussian":
+        suffix += f", sigma={p.sigma:.3f}"
+    dst = dst_11(src, "windowing", suffix)  # type: ignore
+    dst.y = windowing(dst.y, p.method, p.alpha)  # type: ignore
     return dst
 
 

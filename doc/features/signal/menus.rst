@@ -327,6 +327,78 @@ with respect to another signal.
 
 This feature is based on SciPy's `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_ function.
 
+Windowing
+^^^^^^^^^
+
+Create a new signal which is the result of applying a window function to each selected signal.
+
+The following window functions are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Window function
+      - Equation
+      - Function reference
+    * - Barthann
+      - :math:`w_{k} = (1-\dfrac{|k-\dfrac{M}{2}|}{\dfrac{M}{2}}).cos(\dfrac{\pi.k}{M})`
+      - :py:func:`scipy.signal.barthann`
+    * - Bartlett
+      - :math:`w_{k} = 1-\dfrac{|k-\dfrac{M}{2}|}{\dfrac{M}{2}}`
+      - :py:func:`numpy.bartlett`
+    * - Blackman
+      - :math:`w_{k} = 0.42-0.5.cos(\dfrac{2\pi.k}{M})+0.08.cos(\dfrac{4\pi.k}{M})`
+      - :py:func:`numpy.blackman`
+    * - Blackman-Harris
+      - :math:`w_{k} = 0.35875-0.48829.cos(\dfrac{2\pi.k}{M})+0.14128.cos(\dfrac{4\pi.k}{M})-0.01168.cos(\dfrac{6\pi.k}{M})`
+      - :py:func:`scipy.signal.blackmanharris`
+    * - Bohman
+      - :math:`w_{k} = (1-|k-\dfrac{M}{2}|).\cos(\pi.k/M)+\sin(\pi.k/M)/(\pi.k/M)`
+      - :py:func:`scipy.signal.bohman`
+    * - Boxcar
+      - :math:`w_{k} = 1`
+      - :py:func:`scipy.signal.boxcar`
+    * - Cosine
+      - :math:`w_{k} = \cos(\dfrac{\pi.k}{M})`
+      - :py:func:`scipy.signal.cosine`
+    * - Exponential
+      - :math:`w_{k} = \exp(-\dfrac{k}{\tau})`
+      - :py:func:`scipy.signal.exponential`
+    * - Flattop
+      - :math:`w_{k} = 1-1.93.cos(\dfrac{2\pi.k}{M})+1.29.cos(\dfrac{4\pi.k}{M})-0.388.cos(\dfrac{6\pi.k}{M})+0.028.cos(\dfrac{8\pi.k}{M})`
+      - :py:func:`scipy.signal.flattop`
+    * - Gaussian
+      - :math:`w_{k} = \exp(-\dfrac{(k-\dfrac{M}{2})^2}{2\sigma^2})`
+      - :py:func:`scipy.signal.gaussian`
+    * - Hamming
+      - :math:`w_{k} = 0.54-0.46.cos(\dfrac{2\pi.k}{M})`
+      - :py:func:`numpy.hamming`
+    * - Hanning
+      - :math:`w_{k} = 0.5-0.5.cos(\dfrac{2\pi.k}{M})`
+      - :py:func:`numpy.hanning`
+    * - Kaiser
+      - :math:`w_{k} = I_0(\beta.\sqrt{1-(\dfrac{k-\dfrac{M}{2}}{\dfrac{M}{2}})^2})/I_0(\beta)`
+      - :py:func:`scipy.signal.kaiser`
+    * - Lanczos
+      - :math:`w_{k} = \dfrac{\sin(\pi.k/a)}{\pi.k/a}`
+      - :py:func:`scipy.signal.lanczos`
+    * - Nuttall
+      - :math:`w_{k} = 0.355768-0.487396.cos(\dfrac{2\pi.k}{M})+0.144232.cos(\dfrac{4\pi.k}{M})-0.012604.cos(\dfrac{6\pi.k}{M})`
+      - :py:func:`scipy.signal.nuttall`
+    * - Parzen
+      - :math:`w_{k} = 1-|k-\dfrac{M}{2}|/\dfrac{M}{2}`
+      - :py:func:`scipy.signal.parzen`
+    * - Rectangular
+      - :math:`w_{k} = 1`
+      - :py:func:`numpy.ones`
+    * - Taylor
+      - :math:`w_{k} = 1-\dfrac{2\pi.k}{M}^2`
+      - :py:func:`scipy.signal.taylor`
+    * - Tukey
+      - :math:`w_{k} = \begin{cases} 0.5(1+\cos(\pi(\dfrac{k}{\alpha}-1))), & \text{if } 0 \leq k \leq \alpha.\dfrac{M}{2} \\ 1, & \text{if } \alpha.\dfrac{M}{2} \leq k \leq (1-\alpha).\dfrac{M}{2} \\ 0.5(1+\cos(\pi(\dfrac{k}{\alpha}-\dfrac{2}{\alpha}+1))), & \text{if } (1-\alpha).\dfrac{M}{2} \leq k \leq M \end{cases}`
+      - :py:func:`scipy.signal.tukey`
+
 ROI extraction
 ^^^^^^^^^^^^^^
 

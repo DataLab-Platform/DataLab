@@ -124,11 +124,11 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Sort from X,Y data by computing FFT(y).
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
+        x: X data
+        y: Y data
 
     Returns:
-        np.ndarray: Sorted frequencies in ascending order
+        Sorted frequencies in ascending order
     """
     freqs, fourier = xy_fft(x, y, shift=False)
     return freqs[np.argsort(fourier)]
@@ -304,29 +304,54 @@ def interpolate(
     return ynew
 
 
-def windowing(y: np.ndarray, win_type="hamming", alpha=0.05) -> np.ndarray:
+def windowing(
+    y: np.ndarray,
+    win_type: str = "hamming",
+    alpha: float = 0.5,
+    beta: float = 14.0,
+    sigma: float = 7.0,
+) -> np.ndarray:
     """Apply windowing to the input data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        win_type (str): Windowing function type. Defaults to "hamming".
-            Supported values: 'hamming', 'hanning', 'blackman', 'bartlett',
-            'tukey', 'rectangular'
-        alpha (float): Tukey window parameter. Defaults to 0.05.
+        x: X data
+        y: Y data
+        win_type: Windowing function type. Defaults to "hamming".
+         Supported values: 'hamming', 'hanning', 'blackman', 'bartlett',
+         'tukey', 'rectangular'
+        alpha: Tukey window parameter. Defaults to 0.5.
+        beta: Kaiser window parameter. Defaults to 14.0.
+        sigma: Gaussian window parameter. Defaults to 7.0.
+
+    Returns:
+        Windowed Y data
     """
-    if win_type == "hamming":
-        window = np.hamming(len(y))
-    elif win_type == "hanning":
-        window = np.hanning(len(y))
-    elif win_type == "blackman":
-        window = np.blackman(len(y))
-    elif win_type == "bartlett":
-        window = np.bartlett(len(y))
-    elif win_type == "tukey":
-        window = scipy.signal.windows.tukey(len(y), alpha)
-    elif win_type == "rectangular":
-        window = np.ones(len(y))
-    else:
-        raise ValueError(f"Invalid window type {win_type}")
-    return y * window
+    # Cases without parameters:
+    win_func = {
+        "barthann": scipy.signal.windows.barthann,
+        "bartlett": np.bartlett,
+        "blackman": np.blackman,
+        "blackman-harris": scipy.signal.windows.blackmanharris,
+        "bohman": scipy.signal.windows.bohman,
+        "boxcar": scipy.signal.windows.boxcar,
+        "cosine": scipy.signal.windows.cosine,
+        "exponential": scipy.signal.windows.exponential,
+        "flat-top": scipy.signal.windows.flattop,
+        "hamming": np.hamming,
+        "hanning": np.hanning,
+        "lanczos": scipy.signal.windows.lanczos,
+        "nuttall": scipy.signal.windows.nuttall,
+        "parzen": scipy.signal.windows.parzen,
+        "rectangular": np.ones,
+        "taylor": scipy.signal.windows.taylor,
+    }.get(win_type)
+    if win_func is not None:
+        return y * win_func(len(y))
+    # Cases with parameters:
+    if win_type == "tukey":
+        return y * scipy.signal.windows.tukey(len(y), alpha)
+    if win_type == "kaiser":
+        return y * np.kaiser(len(y), beta)
+    if win_type == "gaussian":
+        return y * scipy.signal.windows.gaussian(len(y), sigma)
+    raise ValueError(f"Invalid window type {win_type}")

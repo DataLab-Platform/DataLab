@@ -861,6 +861,9 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Windowing"),
                 triggered=self.panel.processor.compute_windowing,
+                tip=_(
+                    "Apply a window function (or apodization): Hanning, Hamming, ..."
+                ),
             )
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):

@@ -14,7 +14,6 @@ import numpy as np
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.config import _
-from cdl.core.computation.signal import WindowingEnum
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
@@ -90,20 +89,14 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_clip(param)
 
     param = dlp.NormalizeParam()
-    for method, _name in param.methods:
-        param.method = method
+    for method_value, _method_name in param.methods:
+        param.method = method_value
         panel.processor.compute_normalize(param)
 
     panel.objview.select_objects((3, 7))
     panel.processor.compute_division()
     panel.objview.select_objects((1, 2, 3))
     panel.processor.compute_average()
-
-    param = dlp.WindowingParam()
-    for method in WindowingEnum:
-        panel.objview.select_objects((2,))
-        param.method = method
-        panel.processor.compute_windowing(param)
 
     panel.add_label_with_title()
 
@@ -133,7 +126,7 @@ def run_signal_computations(
         _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
     )
     addparam = dlo.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    panel.new_object(newparam, addparam=addparam, edit=False)
+    noiseobj1 = panel.new_object(newparam, addparam=addparam, edit=False)
 
     compute_common_operations(panel)
 
@@ -142,6 +135,14 @@ def run_signal_computations(
     panel.processor.compute_pow(dlp.PowParam.create(exponent=2))
     panel.processor.compute_reverse_x()
     panel.processor.compute_reverse_x()
+
+    noiseobj2 = noiseobj1.copy()
+    win.add_object(noiseobj2)
+    param = dlp.WindowingParam()
+    for method_value, _method_name in param.methods:
+        panel.objview.set_current_object(noiseobj2)
+        param.method = method_value
+        panel.processor.compute_windowing(param)
 
     win.add_object(create_paracetamol_signal(data_size))
 
