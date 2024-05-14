@@ -864,7 +864,7 @@ class BaseDataPanel(AbstractPanel):
 
         def toggle_annotations(enabled: bool):
             """Toggle annotation tools / edit buttons visibility"""
-            for widget in (dlg.button_box, toolbar):
+            for widget in (dlg.button_box, toolbar, mgr.get_itemlist_panel()):
                 if enabled:
                     widget.show()
                 else:
