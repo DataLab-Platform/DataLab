@@ -62,10 +62,10 @@ class NormalizeParam(gds.DataSet):
     """Normalize parameters"""
 
     methods = (
-        ("maximum", _("maximum")),
-        ("amplitude", _("amplitude")),
-        ("sum", _("sum")),
-        ("energy", _("energy")),
+        ("maximum", _("Maximum")),
+        ("amplitude", _("Amplitude")),
+        ("area", _("Area")),
+        ("energy", _("Energy")),
         ("rms", _("RMS")),
     )
     method = gds.ChoiceItem(_("Normalize with respect to"), methods)

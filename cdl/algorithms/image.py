@@ -44,7 +44,7 @@ def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     Args:
         data: Input data
         parameter: Normalization parameter (default: "maximum")
-         Supported values: 'maximum', 'amplitude', 'sum', 'energy', 'rms'
+         Supported values: 'maximum', 'amplitude', 'area', 'energy', 'rms'
 
     Returns:
         Normalized array
@@ -54,7 +54,7 @@ def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     if parameter == "amplitude":
         return scale_data_to_min_max(data, 0.0, 1.0)
     fdata = np.array(data, dtype=float)
-    if parameter == "sum":
+    if parameter == "area":
         return fdata / fdata.sum()
     if parameter == "energy":
         return fdata / np.sqrt(np.sum(fdata * fdata.conjugate()))

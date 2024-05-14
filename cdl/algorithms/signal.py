@@ -50,7 +50,7 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     Args:
         yin: Input array
         parameter: Normalization parameter. Defaults to "maximum".
-         Supported values: 'maximum', 'amplitude', 'sum', 'energy'
+         Supported values: 'maximum', 'amplitude', 'area', 'energy'
 
     Returns:
         Normalized array
@@ -69,7 +69,7 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
             minimum = minimum.reshape((len(minimum), 1))
         ytemp -= minimum
         return normalize(ytemp, parameter="maximum")
-    if parameter == "sum":
+    if parameter == "area":
         return yin / yin.sum()
     if parameter == "energy":
         return yin / np.sqrt(np.sum(yin * yin.conjugate()))

@@ -454,7 +454,7 @@ by maximum, amplitude, sum, energy or RMS:
       - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
     * - Amplitude
       - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
-    * - Sum
+    * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
       - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`

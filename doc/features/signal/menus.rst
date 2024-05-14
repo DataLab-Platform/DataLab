@@ -378,7 +378,7 @@ by maximum, amplitude, sum, energy or RMS:
       - :math:`y_{1}= \dfrac{y_{0}}{max(y_{0})}`
     * - Amplitude
       - :math:`y_{1}= \dfrac{y_{0}'}{max(y_{0}')}` with :math:`y_{0}'=y_{0}-min(y_{0})`
-    * - Sum
+    * - Area
       - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
     * - Energy
       - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
