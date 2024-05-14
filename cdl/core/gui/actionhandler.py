@@ -249,8 +249,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             toolbar_sep: add separator before action in toolbar
              (or after if toolbar_pos is positive). Defaults to False.
             toolbar_category: toolbar category. Defaults to None.
-             If toolbar_pos is not None, this must be specified (unless the
-             category in progress is `ActionCategory.VIEW`).
+             If toolbar_pos is not None, this specifies the category of the toolbar.
+             If None, defaults to ActionCategory.VIEW_TOOLBAR if the current category
+             is ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR.
 
         Returns:
             New action
@@ -285,7 +286,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 if self.__category_in_progress is ActionCategory.VIEW:
                     toolbar_category = ActionCategory.VIEW_TOOLBAR
                 else:
-                    raise ValueError("No toolbar category specified")
+                    toolbar_category = ActionCategory.PANEL_TOOLBAR
             self.add_to_action_list(action, toolbar_category, toolbar_pos, toolbar_sep)
         return action
 
