@@ -8,11 +8,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
@@ -28,7 +25,7 @@ from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
@@ -39,6 +36,16 @@ class ImageProcessor(BaseProcessor):
     # pylint: disable=duplicate-code
 
     EDIT_ROI_PARAMS = True
+
+    @qt_try_except()
+    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
+        """Normalize data"""
+        self.compute_11(
+            cpi.compute_normalize,
+            param=param,
+            paramclass=cpb.NormalizeParam,
+            title=_("Normalize"),
+        )
 
     @qt_try_except()
     def compute_sum(self) -> None:
@@ -313,6 +320,11 @@ class ImageProcessor(BaseProcessor):
     def compute_log10(self) -> None:
         """Compute Log10"""
         self.compute_11(cpi.compute_log10, title="Log10")
+
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:
@@ -814,6 +826,11 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultProperties]:
+        """Compute data statistics"""
+        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+
+    @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
         return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
@@ -948,18 +965,3 @@ class ImageProcessor(BaseProcessor):
             cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
         )
-
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        # Be careful to use systematically functions adapted to masked arrays
-        # (e.g. numpy.ma median, and *not* numpy.median)
-        return [
-            ("min(z)", ma.min),
-            ("max(z)", ma.max),
-            ("<z>", ma.mean),
-            ("median(z)", ma.median),
-            ("σ(z)", ma.std),
-            ("<z>/σ(z)", lambda z: ma.mean(z) / ma.std(z)),
-            ("peak-to-peak(z)", ma.ptp),
-            ("Σ(z)", ma.sum),
-        ]

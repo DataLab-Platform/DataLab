@@ -17,7 +17,7 @@ the following libraries:
 
 - `NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear algebra, etc.)
 - `SciPy <https://www.scipy.org/>`_ for scientific computing (interpolation, special functions, etc.)
-- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>` for image processing
+- `scikit-image <https://scikit-image.org/>`_ and `OpenCV <https://opencv.org/>`_ for image processing
 - `PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ for wavelet transform
 - `PlotPyStack <https://github.com/PlotPyStack/>`_ for Qt-based interactive data visualization
 

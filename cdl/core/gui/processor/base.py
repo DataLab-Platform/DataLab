@@ -18,7 +18,6 @@ from typing import TYPE_CHECKING, Any, Union
 
 import guidata.dataset as gds
 import numpy as np
-from guidata.configtools import get_icon
 from guidata.dataset import update_dataset
 from guidata.qthelpers import exec_dialog
 from guidata.widgets.arrayeditor import ArrayEditor
@@ -30,7 +29,7 @@ from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
 from cdl.config import Conf, _
 from cdl.core.computation.base import ROIDataParam
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets.warningerror import show_warning_error
 
@@ -44,6 +43,7 @@ if TYPE_CHECKING:
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
+        NormalizeParam,
         ThresholdParam,
     )
     from cdl.core.gui.panel.image import ImagePanel
@@ -300,26 +300,32 @@ class BaseProcessor(QC.QObject):
         self._compute_11_subroutine(funcs, params, title)
 
     def handle_output(
-        self, compout: CompOut, context: str
-    ) -> SignalObj | ImageObj | ResultShape | None:
+        self, compout: CompOut, context: str, progress: QW.QProgressDialog
+    ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
 
         Args:
             compout: computation output
             context: context (e.g. "Computing: Gaussian filter")
+            progress: progress dialog
 
         Returns:
             Output object: a signal or image object, or a result shape object,
              or None if error
         """
-        if compout.error_msg:
-            show_warning_error(
-                self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
-            )
-            return None
-        if compout.warning_msg:
-            show_warning_error(self.panel, "warning", context, compout.warning_msg)
+        if compout.error_msg or compout.warning_msg:
+            mindur = progress.minimumDuration()
+            progress.setMinimumDuration(1000000)
+            if compout.error_msg:
+                show_warning_error(
+                    self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
+                )
+            if compout.warning_msg:
+                show_warning_error(self.panel, "warning", context, compout.warning_msg)
+            progress.setMinimumDuration(mindur)
+            if compout.error_msg:
+                return None
         return compout.result
 
     def __exec_func(
@@ -382,7 +388,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    new_obj = self.handle_output(result, _("Computing: %s") % i_title)
+                    new_obj = self.handle_output(
+                        result, _("Computing: %s") % i_title, progress
+                    )
                     if new_obj is None:
                         continue
 
@@ -418,7 +426,7 @@ class BaseProcessor(QC.QObject):
         title: str | None = None,
         comment: str | None = None,
         edit: bool | None = None,
-    ) -> dict[str, ResultShape]:
+    ) -> dict[str, ResultShape | ResultProperties]:
         """Compute 10 function: 1 object in → 0 object out
         (the result of this method is stored in original object's metadata).
 
@@ -431,7 +439,8 @@ class BaseProcessor(QC.QObject):
             edit: if True, edit parameters. Defaults to None.
 
         Returns:
-            Dictionary of results (keys: object uuid, values: ResultShape objects)
+            Dictionary of results (keys: object uuid, values: ResultShape or
+             ResultProperties objects)
         """
         if (edit is None or param is None) and paramclass is not None:
             edit, param = self.init_param(param, paramclass, title, comment)
@@ -442,7 +451,7 @@ class BaseProcessor(QC.QObject):
         current_obj = self.panel.objview.get_current_object()
         title = func.__name__.replace("compute_", "") if title is None else title
         with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            results: dict[str, ResultShape] = {}
+            results: dict[str, ResultShape | ResultProperties] = {}
             xlabels = None
             ylabels = []
             for idx, obj in enumerate(objs):
@@ -455,30 +464,35 @@ class BaseProcessor(QC.QObject):
                 compout = self.__exec_func(func, args, progress)
                 if compout is None:
                     break
-                resultshape = self.handle_output(compout, _("Computing: %s") % title)
-                if resultshape is None:
+                result = self.handle_output(
+                    compout, _("Computing: %s") % title, progress
+                )
+                if result is None:
                     continue
 
                 # Add result shape to object's metadata
-                resultshape.add_to(obj)
+                result.add_to(obj)
                 if param is not None:
-                    obj.metadata[f"{resultshape.label}Param"] = str(param)
+                    obj.metadata[f"{result.label}Param"] = str(param)
 
-                results[obj.uuid] = resultshape
-                xlabels = resultshape.shown_xlabels
+                results[obj.uuid] = result
+                xlabels = result.get_xlabels(obj)
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
-                for _i_row_res in range(resultshape.array.shape[0]):
-                    ylabel = f"{resultshape.label}({obj.short_id})"
+                for i_row_res in range(result.array.shape[0]):
+                    ylabel = f"{result.label}({obj.short_id})"
+                    i_roi = result.array[i_row_res, 0]
+                    if i_roi >= 0:
+                        ylabel += f"|ROI{i_roi}"
                     ylabels.append(ylabel)
         if results:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
                 dlg = ArrayEditor(self.panel.parent())
                 title = _("Results")
-                res = np.vstack([rshape.shown_array for rshape in results.values()])
+                res = np.vstack([result.shown_array for result in results.values()])
                 dlg.setup_and_check(
                     res, title, readonly=True, xlabels=xlabels, ylabels=ylabels
                 )
@@ -545,7 +559,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    dst_obj = self.handle_output(result, _("Calculating: %s") % title)
+                    dst_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
                     if dst_obj is None:
                         break
                     dst_objs[src_gid] = dst_obj
@@ -625,7 +641,9 @@ class BaseProcessor(QC.QObject):
                 result = self.__exec_func(func, args, progress)
                 if result is None:
                     break
-                new_obj = self.handle_output(result, _("Calculating: %s") % title)
+                new_obj = self.handle_output(
+                    result, _("Calculating: %s") % title, progress
+                )
                 if new_obj is None:
                     continue
                 group_id = self.panel.objmodel.get_object_group_id(obj)
@@ -637,6 +655,11 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
+        """Normalize data"""
 
     @abc.abstractmethod
     @qt_try_except()
@@ -724,6 +747,11 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_log10(self) -> None:
         """Compute Log10"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute exponential"""
 
     # ------Data Processing-------------------------------------------------------------
 
@@ -825,39 +853,6 @@ class BaseProcessor(QC.QObject):
                 self.panel.selection_changed(update_items=True)
 
     @abc.abstractmethod
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-
     @qt_try_except()
-    def compute_stats(self) -> None:
+    def compute_stats(self) -> dict[str, ResultShape]:
         """Compute data statistics"""
-        objs = self.panel.objview.get_sel_objects(include_groups=True)
-        stfuncs = self._get_stat_funcs()
-        xlabels = [label for label, _func in stfuncs]
-        ylabels: list[str] = []
-        stats: list[list[float]] = []
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", UserWarning)
-            with np.errstate(all="ignore"):
-                for obj in objs:
-                    roi_nb = 0 if obj.roi is None else obj.roi.shape[0]
-                    for roi_index in [None] + list(range(roi_nb)):
-                        stats_i = []
-                        for _label, func in stfuncs:
-                            stats_i.append(func(obj.get_data(roi_index=roi_index)))
-                        stats.append(stats_i)
-                        if roi_index is None:
-                            ylabels.append(obj.short_id)
-                        else:
-                            ylabels.append(f"{obj.short_id}|ROI{roi_index:02d}")
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore", RuntimeWarning)
-            dlg = ArrayEditor(self.panel.parent())
-            title = _("Statistics")
-            dlg.setup_and_check(
-                np.array(stats), title, readonly=True, xlabels=xlabels, ylabels=ylabels
-            )
-            dlg.setObjectName(f"{objs[0].PREFIX}_stats")
-            dlg.setWindowIcon(get_icon("stats.svg"))
-            dlg.resize(750, 300)
-            exec_dialog(dlg)

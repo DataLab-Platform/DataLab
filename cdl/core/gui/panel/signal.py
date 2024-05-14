@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Signal panel (see parent package :mod:`cdl.core.gui.processor`)
+.. Signal panel (see parent package :mod:`cdl.core.gui.panel`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -36,9 +36,9 @@ from cdl.core.model.signal import (
 
 if TYPE_CHECKING:
     import guidata.dataset as gds
-    from plotpy.plot import PlotWidget
     from qtpy import QtWidgets as QW
 
+    from cdl.core.gui.docks import DockablePlotWidget
     from cdl.core.model.signal import NewSignalParam
 
 
@@ -64,11 +64,17 @@ class SignalPanel(BaseDataPanel):
 
     # pylint: disable=duplicate-code
 
-    def __init__(self, parent: QW.QWidget, plotwidget: PlotWidget, toolbar) -> None:
-        super().__init__(parent, plotwidget, toolbar)
-        self.plothandler = SignalPlotHandler(self, plotwidget)
-        self.processor = SignalProcessor(self, plotwidget)
-        self.acthandler = SignalActionHandler(self, toolbar)
+    def __init__(
+        self,
+        parent: QW.QWidget,
+        dockableplotwidget: DockablePlotWidget,
+        panel_toolbar: QW.QToolBar,
+    ) -> None:
+        super().__init__(parent)
+        self.plothandler = SignalPlotHandler(self, dockableplotwidget.plotwidget)
+        self.processor = SignalProcessor(self, dockableplotwidget.plotwidget)
+        view_toolbar = dockableplotwidget.toolbar
+        self.acthandler = SignalActionHandler(self, panel_toolbar, view_toolbar)
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(

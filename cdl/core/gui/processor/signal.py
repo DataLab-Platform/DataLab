@@ -19,7 +19,7 @@ import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
 from cdl.widgets import fitdialog, signalpeakdialog
@@ -100,6 +100,23 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_log10, title="Log10")
 
     @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cps.compute_exp, title=_("Exponential"))
+
+    @qt_try_except()
+    def compute_sqrt(self) -> None:
+        """Compute square root"""
+        self.compute_11(cps.compute_sqrt, title=_("Square root"))
+
+    @qt_try_except()
+    def compute_pow(self, param: cps.PowParam | None = None) -> None:
+        """Compute power"""
+        if param is None:
+            param = cps.PowParam()
+        self.compute_11(cps.compute_pow, param, cps.PowParam, title="Power", edit=True)
+
+    @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute difference between two signals"""
         self.compute_n1n(
@@ -148,12 +165,17 @@ class SignalProcessor(BaseProcessor):
                 return
         self.compute_11(cps.compute_peak_detection, param)
 
+    @qt_try_except()
+    def compute_reverse_x(self) -> None:
+        """Reverse X axis"""
+        self.compute_11(cps.compute_reverse_x, title=_("Reverse X axis"))
+
     # ------Signal Processing
     @qt_try_except()
-    def compute_normalize(self, param: cdl.param.NormalizeYParam | None = None) -> None:
+    def compute_normalize(self, param: cdl.param.NormalizeParam | None = None) -> None:
         """Normalize data"""
         self.compute_11(
-            cps.compute_normalize, param, cps.NormalizeYParam, title=_("Normalize")
+            cps.compute_normalize, param, cps.NormalizeParam, title=_("Normalize")
         )
 
     @qt_try_except()
@@ -333,6 +355,11 @@ class SignalProcessor(BaseProcessor):
 
             self.compute_fit(txt, polynomialfit)
 
+    @qt_try_except()
+    def compute_linearfit(self) -> None:
+        """Compute linear fitting curve"""
+        self.compute_fit(_("Linear fit"), fitdialog.linearfit)
+
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
     ) -> None:
@@ -354,6 +381,22 @@ class SignalProcessor(BaseProcessor):
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
             # Creating new plot item
             self.panel.add_object(signal)
+
+    @qt_try_except()
+    def compute_expfit(self) -> None:
+        """Compute exponential fitting curve"""
+
+        self.compute_fit(_("Exponential fit"), fitdialog.exponentialfit)
+
+    @qt_try_except()
+    def compute_sinfit(self) -> None:
+        """Compute sinusoidal fitting curve"""
+        self.compute_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit)
+
+    @qt_try_except()
+    def compute_cdffit(self) -> None:
+        """Compute Cumulative Distribution Function (CDF) fitting curve"""
+        self.compute_fit(_("CDF fit"), fitdialog.cdffit)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
@@ -386,19 +429,10 @@ class SignalProcessor(BaseProcessor):
         """Compute FW at 1/e²"""
         return self.compute_10(cps.compute_fw1e2, title=_("FW") + "1/e²")
 
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        return [
-            ("min(y)", lambda xy: xy[1].min()),
-            ("max(y)", lambda xy: xy[1].max()),
-            ("<y>", lambda xy: xy[1].mean()),
-            ("median(y)", lambda xy: np.median(xy[1])),
-            ("σ(y)", lambda xy: xy[1].std()),
-            ("<y>/σ(y)", lambda xy: xy[1].mean() / xy[1].std()),
-            ("peak-to-peak", lambda xy: xy[1].ptp()),
-            ("Σ(y)", lambda xy: xy[1].sum()),
-            ("∫ydx", lambda xy: np.trapz(xy[1], xy[0])),
-        ]
+    @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultProperties]:
+        """Compute data statistics"""
+        return self.compute_10(cps.compute_stats_func, title=_("Statistics"))
 
     @qt_try_except()
     def compute_histogram(

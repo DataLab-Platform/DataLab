@@ -254,7 +254,6 @@ msgstr ""
 #: cdl.core.gui.panel.base.BaseDataPanel.get_object_with_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.get_roi_dialog
 #: cdl.core.gui.panel.base.BaseDataPanel.handle_dropped_files
-#: cdl.core.gui.panel.base.BaseDataPanel.import_metadata_from_file
 #: cdl.core.gui.panel.base.BaseDataPanel.load_from_files
 #: cdl.core.gui.panel.base.BaseDataPanel.new_object
 #: cdl.core.gui.panel.base.BaseDataPanel.open_separate_view

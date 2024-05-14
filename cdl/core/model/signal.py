@@ -12,7 +12,6 @@ Signal object and related classes
 from __future__ import annotations
 
 from contextlib import contextmanager
-from copy import deepcopy
 from typing import TYPE_CHECKING, Generator
 from uuid import uuid4
 
@@ -21,7 +20,10 @@ import numpy as np
 import scipy.signal as sps
 from guidata.configtools import get_icon
 from guidata.dataset import restore_dataset, update_dataset
+from guidata.qthelpers import exec_dialog
 from plotpy.builder import make
+from plotpy.tools import EditPointTool
+from qtpy import QtWidgets as QW
 
 from cdl.algorithms import fit
 from cdl.config import Conf, _
@@ -29,8 +31,8 @@ from cdl.core.model import base
 
 if TYPE_CHECKING:
     from plotpy.items import CurveItem
+    from plotpy.plot import PlotDialog
     from plotpy.styles import CurveParam
-    from qtpy import QtWidgets as QW
 
 
 class CurveStyles:
@@ -199,7 +201,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         obj.title = title
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
-        obj.metadata = deepcopy(self.metadata)
+        obj.metadata = base.deepcopy_metadata(self.metadata)
         obj.xydata = np.array(self.xydata, copy=True, dtype=dtype)
         return obj
 
@@ -294,7 +296,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
     dx = property(__get_dx, __set_dx)
     dy = property(__get_dy, __set_dy)
 
-    def get_data(self, roi_index: int | None = None) -> np.ndarray:
+    def get_data(self, roi_index: int | None = None) -> tuple[np.ndarray, np.ndarray]:
         """
         Return original data (if ROI is not defined or `roi_index` is None),
         or ROI data (if both ROI and `roi_index` are defined).
@@ -569,6 +571,14 @@ class SignalTypes(base.Choices):
     SINC = _("cardinal sine")
     #: Step function
     STEP = _("step")
+    #: Exponential function
+    EXPONENTIAL = _("exponential")
+    #: Pulse function
+    PULSE = _("pulse")
+    #: Polynomial function
+    POLYNOMIAL = _("polynomial")
+    #: Experimental function
+    EXPERIMENTAL = _("experimental")
 
 
 class GaussLorentzVoigtParam(gds.DataSet):
@@ -619,6 +629,99 @@ class StepParam(gds.DataSet):
     a1 = gds.FloatItem("A1", default=0.0)
     a2 = gds.FloatItem("A2", default=1.0).set_pos(col=1)
     x0 = gds.FloatItem("X0", default=0.0)
+
+
+class ExponentialParam(gds.DataSet):
+    """Parameters for exponential function"""
+
+    a = gds.FloatItem("A", default=1.0)
+    offset = gds.FloatItem(_("Offset"), default=0.0)
+    exponent = gds.FloatItem(_("Exponent"), default=1.0)
+
+
+class PulseParam(gds.DataSet):
+    """Parameters for pulse function"""
+
+    amp = gds.FloatItem("Amplitude", default=1.0)
+    start = gds.FloatItem(_("Start"), default=0.0).set_pos(col=1)
+    offset = gds.FloatItem(_("Offset"), default=0.0)
+    stop = gds.FloatItem(_("Stop"), default=0.0).set_pos(col=1)
+
+
+class PolyParam(gds.DataSet):
+    """Parameters for polynomial function"""
+
+    a0 = gds.FloatItem("a0", default=1.0)
+    a3 = gds.FloatItem("a3", default=0.0).set_pos(col=1)
+    a1 = gds.FloatItem("a1", default=1.0)
+    a4 = gds.FloatItem("a4", default=0.0).set_pos(col=1)
+    a2 = gds.FloatItem("a2", default=0.0)
+    a5 = gds.FloatItem("a5", default=0.0).set_pos(col=1)
+
+
+class ExperSignalParam(gds.DataSet):
+    """Parameters for experimental signal"""
+
+    size = gds.IntItem("Size", default=5).set_prop("display", hide=True)
+    xyarray = gds.FloatArrayItem(
+        "XY Values",
+        format="%g",
+    )
+    xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
+    xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
+
+    def edit_curve(self, *args) -> None:
+        """Edit experimental curve"""
+        win: PlotDialog = make.dialog(
+            wintitle=_("Select one point then press OK to accept"),
+            edit=True,
+            type="curve",
+        )
+        edit_tool = win.manager.add_tool(
+            EditPointTool, title=_("Edit experimental curve")
+        )
+        edit_tool.activate()
+        plot = win.manager.get_plot()
+        x, y = self.xyarray[:, 0], self.xyarray[:, 1]
+        curve = make.mcurve(x, y, "-+")
+        plot.add_item(curve)
+        plot.set_active_item(curve)
+
+        insert_btn = QW.QPushButton(_("Insert point"), win)
+        insert_btn.clicked.connect(edit_tool.trigger_insert_point_at_selection)
+        win.button_layout.insertWidget(0, insert_btn)
+
+        exec_dialog(win)
+
+        new_x, new_y = curve.get_data()
+        self.xmax = new_x.max()
+        self.xmin = new_x.min()
+        self.size = new_x.size
+        self.xyarray = np.vstack((new_x, new_y)).T
+
+    btn_curve_edit = gds.ButtonItem(
+        "Edit curve", callback=edit_curve, icon="signal.svg"
+    )
+
+    def setup_array(
+        self,
+        size: int | None = None,
+        xmin: float | None = None,
+        xmax: float | None = None,
+    ) -> None:
+        """Setup the xyarray from size, xmin and xmax (use the current values is not
+        provided)
+
+        Args:
+            size: xyarray size (default: None)
+            xmin: X min (default: None)
+            xmax: X max (default: None)
+        """
+        self.size = size or self.size
+        self.xmin = xmin or self.xmin
+        self.xmax = xmax or self.xmax
+        x_arr = np.linspace(self.xmin, self.xmax, self.size)  # type: ignore
+        self.xyarray = np.vstack((x_arr, x_arr)).T
 
 
 class NewSignalParam(gds.DataSet):
@@ -789,7 +892,9 @@ def create_signal_from_param(
                 )
         elif newparam.stype == SignalTypes.STEP:
             if p is None:
-                p = StepParam(_("Step function"))
+                p = StepParam(
+                    _("Step function"), comment="y(x) = a1 if x <= x0 else a2"
+                )
             if edit and not p.edit(parent=parent):
                 return None
             yarr = np.ones_like(xarr) * p.a1
@@ -797,5 +902,63 @@ def create_signal_from_param(
             signal.set_xydata(xarr, yarr)
             if signal.title == DEFAULT_TITLE:
                 signal.title = f"{prefix}(x0={p.x0:.3g},a1={p.a1:.3g},a2={p.a2:.3g})"
+        elif newparam.stype is SignalTypes.EXPONENTIAL:
+            if p is None:
+                p = ExponentialParam(
+                    _("Exponential function"),
+                    comment="y(x) = a.e<sup>exponent.x</sup> + offset",
+                )
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = p.a * np.exp(p.exponent * xarr) + p.offset
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(a={p.a:.3g},exponent={p.exponent:.3g},"
+                    f"offset={p.offset:.3g})"
+                )
+        elif newparam.stype is SignalTypes.PULSE:
+            if p is None:
+                p = PulseParam(
+                    _("Pulse function"),
+                    comment="y(x) = offset + amp if start <= x <= stop else offset",
+                )
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = np.full_like(xarr, p.offset)
+            yarr[(xarr >= p.start) & (xarr <= p.stop)] += p.amp
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(start={p.start:.3g},stop={p.stop:.3g}"
+                    f",offset={p.offset:.3g})"
+                )
+        elif newparam.stype is SignalTypes.POLYNOMIAL:
+            if p is None:
+                p = PolyParam(
+                    _("Polynomial function"),
+                    comment=(
+                        "y(x) = a<sub>0</sub> + a<sub>1</sub>.x + "
+                        "a<sub>2</sub>.x<sup>2</sup> + a<sub>3</sub>.x<sup>3</sup>"
+                        " + a<sub>4</sub>.x<sup>4</sup> + a<sub>5</sub>.x<sup>5</sup>"
+                    ),
+                )
+            if edit and not p.edit(parent=parent):
+                return None
+            yarr = np.polyval([p.a5, p.a4, p.a3, p.a2, p.a1, p.a0], xarr)
+            signal.set_xydata(xarr, yarr)
+            if signal.title == DEFAULT_TITLE:
+                signal.title = (
+                    f"{prefix}(a0={p.a0:2g},a1={p.a1:2g},a2={p.a2:2g},"
+                    f"a3={p.a3:2g},a4={p.a4:2g},a5={p.a5:2g})"
+                )
+        elif newparam.stype is SignalTypes.EXPERIMENTAL:
+            p2 = ExperSignalParam(_("Experimental points"))
+            p2.setup_array(size=newparam.size, xmin=newparam.xmin, xmax=newparam.xmax)
+            if edit and not p2.edit(parent=parent):
+                return None
+            signal.xydata = p2.xyarray.T
+            if signal.title == DEFAULT_TITLE:
+                signal.title = f"{prefix}(npts={p2.size})"
         return signal
     return None

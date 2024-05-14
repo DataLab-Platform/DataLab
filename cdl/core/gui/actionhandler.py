@@ -140,7 +140,8 @@ class ActionCategory(enum.Enum):
     PROCESSING = enum.auto()
     COMPUTING = enum.auto()
     CONTEXT_MENU = enum.auto()
-    TOOLBAR = enum.auto()
+    PANEL_TOOLBAR = enum.auto()
+    VIEW_TOOLBAR = enum.auto()
     SUBMENU = enum.auto()  # temporary
     PLUGINS = enum.auto()  # for plugins actions
 
@@ -150,7 +151,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
     Args:
         panel: Panel to handle
-        toolbar: Toolbar to add actions to
+        panel_toolbar: Panel toolbar (actions related to the panel objects management)
+        view_toolbar: View toolbar (actions related to the panel view, i.e. plot)
     """
 
     OBJECT_STR = ""  # e.g. "signal"
@@ -158,10 +160,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
     def __init__(
         self,
         panel: SignalPanel | ImagePanel,
-        toolbar: QW.QToolBar,
+        panel_toolbar: QW.QToolBar,
+        view_toolbar: QW.QToolBar,
     ):
         self.panel = panel
-        self.toolbar = toolbar
+        self.panel_toolbar = panel_toolbar
+        self.view_toolbar = view_toolbar
         self.feature_actions = {}
         self.operation_end_actions = None
         self.__category_in_progress: ActionCategory = None
@@ -218,38 +222,39 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         context_menu_sep: bool = False,
         toolbar_pos: int | None = None,
         toolbar_sep: bool = False,
+        toolbar_category: ActionCategory | None = None,
     ) -> QW.QAction:
         """Create new action and add it to list of actions.
 
         Args:
-            title (str): action title
-            position (int | None): add action to menu at this position.
-                Defaults to None.
-            separator (bool | None): add separator before action in menu
-                (or after if pos is positive). Defaults to False.
-            triggered (Callable | None): triggered callback. Defaults to None.
-            toggled (Callable | None): toggled callback. Defaults to None.
-            shortcut (QW.QShortcut | None): shortcut. Defaults to None.
-            icon (QG.QIcon | None): icon. Defaults to None.
-            tip (str | None): tooltip. Defaults to None.
-            select_condition (Callable, str | None): selection condition.
-                Defaults to None.
-                If str, must be the name of a method of SelectCond, i.e. one of
-                "always", "exactly_one", "exactly_one_group",
-                "at_least_one_group_or_one_object", "at_least_one",
-                "at_least_two", "with_roi".
-            context_menu_pos (int | None): add action to context menu at this
-                position. Defaults to None.
-            context_menu_sep (bool | None): add separator before action in
-                context menu (or after if context_menu_pos is positive).
-                Defaults to False.
-            toolbar_pos (int | None): add action to toolbar at this position.
-                Defaults to None.
-            toolbar_sep (bool | None): add separator before action in toolbar
-                (or after if toolbar_pos is positive). Defaults to False.
+            title: action title
+            position: add action to menu at this position. Defaults to None.
+            separator: add separator before action in menu
+             (or after if pos is positive). Defaults to False.
+            triggered: triggered callback. Defaults to None.
+            toggled: toggled callback. Defaults to None.
+            shortcut: shortcut. Defaults to None.
+            icon: icon. Defaults to None.
+            tip: tooltip. Defaults to None.
+            select_condition: selection condition. Defaults to None.
+             If str, must be the name of a method of SelectCond, i.e. one of
+             "always", "exactly_one", "exactly_one_group",
+             "at_least_one_group_or_one_object", "at_least_one",
+             "at_least_two", "with_roi".
+            context_menu_pos: add action to context menu at this position.
+             Defaults to None.
+            context_menu_sep: add separator before action in context menu
+             (or after if context_menu_pos is positive). Defaults to False.
+            toolbar_pos: add action to toolbar at this position. Defaults to None.
+            toolbar_sep: add separator before action in toolbar
+             (or after if toolbar_pos is positive). Defaults to False.
+            toolbar_category: toolbar category. Defaults to None.
+             If toolbar_pos is not None, this specifies the category of the toolbar.
+             If None, defaults to ActionCategory.VIEW_TOOLBAR if the current category
+             is ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR.
 
         Returns:
-            QW.QAction: new action
+            New action
         """
         if isinstance(select_condition, str):
             assert select_condition in SelectCond.__dict__
@@ -277,9 +282,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 action, ActionCategory.CONTEXT_MENU, context_menu_pos, context_menu_sep
             )
         if toolbar_pos is not None:
-            self.add_to_action_list(
-                action, ActionCategory.TOOLBAR, toolbar_pos, toolbar_sep
-            )
+            if toolbar_category is None:
+                if self.__category_in_progress is ActionCategory.VIEW:
+                    toolbar_category = ActionCategory.VIEW_TOOLBAR
+                else:
+                    toolbar_category = ActionCategory.PANEL_TOOLBAR
+            self.add_to_action_list(action, toolbar_category, toolbar_pos, toolbar_sep)
         return action
 
     def add_to_action_list(
@@ -292,14 +300,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Add action to list of actions.
 
         Args:
-            action (QW.QAction): action to add
-            category (ActionCategory | None): action category. Defaults to None.
-                If None, action is added to the current category.
-            pos (int | None): add action to menu at this position.
-                Defaults to None.
-                If None, action is added at the end of the list.
-            sep (bool | None): add separator before action in menu
-                (or after if pos is positive). Defaults to False.
+            action: action to add
+            category: action category. Defaults to None.
+             If None, action is added to the current category.
+            pos: add action to menu at this position. Defaults to None.
+             If None, action is added at the end of the list.
+            sep: add separator before action in menu
+             (or after if pos is positive). Defaults to False.
         """
         if category is None:
             if self.__submenu_in_progress:
@@ -326,10 +333,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Add action to list of actions.
 
         Args:
-            action (QW.QAction): action to add
-            select_condition (Callable | None): condition to enable action.
-                Defaults to None. If None, action is enabled if at least one
-                object is selected.
+            action: action to add
+            select_condition: condition to enable action. Defaults to None.
+             If None, action is enabled if at least one object is selected.
         """
         if select_condition is None:
             select_condition = SelectCond.at_least_one
@@ -343,8 +349,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Update actions based on selected objects.
 
         Args:
-            selected_groups (list[ObjectGroup]): selected groups
-            selected_objects (list[SignalObj | ImageObj]): selected objects
+            selected_groups: selected groups
+            selected_objects: selected objects
         """
         for cond, actlist in self.__actions.items():
             if cond is not None:
@@ -355,7 +361,17 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         """Create all actions"""
         self.create_first_actions()
         self.create_last_actions()
-        add_actions(self.toolbar, self.feature_actions.pop(ActionCategory.TOOLBAR))
+        add_actions(
+            self.panel_toolbar, self.feature_actions.pop(ActionCategory.PANEL_TOOLBAR)
+        )
+        # For the view toolbar, we add the actions to the beginning of the toolbar:
+        before = self.view_toolbar.actions()[0]
+        for action in self.feature_actions.pop(ActionCategory.VIEW_TOOLBAR):
+            if action is None:
+                self.view_toolbar.insertSeparator(before)
+            else:
+                self.view_toolbar.insertAction(before, action)
+        self.view_toolbar.insertSeparator(before)
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
@@ -517,17 +533,24 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
-                _("View in a new window"),
+                _("View in a new window") + "...",
                 icon=get_icon("new_window.svg"),
                 tip=_("View selected %s in a new window") % self.OBJECT_STR,
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
                 context_menu_sep=True,
                 toolbar_pos=-1,
-                toolbar_sep=True,
+            )
+            self.new_action(
+                _("Edit annotations") + "...",
+                icon=get_icon("annotations.svg"),
+                tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
+                triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
+                context_menu_pos=1,
+                toolbar_pos=-1,
             )
             main = self.panel.mainwindow
-            for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):
+            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
                 self.add_to_action_list(main.auto_refresh_action, cat, -1)
             self.new_action(
                 _("Refresh manually"),
@@ -538,7 +561,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.always,
                 toolbar_pos=-1,
             )
-            for cat in (ActionCategory.VIEW, ActionCategory.TOOLBAR):
+            for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
                 self.add_to_action_list(main.showlabel_action, cat, -1)
 
         with self.new_category(ActionCategory.OPERATION):
@@ -587,12 +610,20 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
             self.new_action(
-                "Log10(y)",
-                triggered=self.panel.processor.compute_log10,
+                _("Exponential"),
+                triggered=self.panel.processor.compute_exp,
                 separator=True,
+            )
+            self.new_action(
+                _("Logarithm (base 10)"),
+                triggered=self.panel.processor.compute_log10,
+                separator=False,
             )
 
         with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Normalize"), triggered=self.panel.processor.compute_normalize
+            )
             self.new_action(
                 _("Thresholding"),
                 triggered=self.panel.processor.compute_threshold,
@@ -690,6 +721,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 icon=get_icon("plot_results.svg"),
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
+            self.new_action(
+                _("Delete results") + "...",
+                triggered=self.panel.delete_results,
+                icon=get_icon("delete_results.svg"),
+                select_condition=SelectCond.at_least_one_group_or_one_object,
+            )
 
 
 class SignalActionHandler(BaseActionHandler):
@@ -701,9 +738,6 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
-                _("Normalize"), triggered=self.panel.processor.compute_normalize
-            )
-            self.new_action(
                 _("Derivative"), triggered=self.panel.processor.compute_derivative
             )
             self.new_action(
@@ -713,6 +747,16 @@ class SignalActionHandler(BaseActionHandler):
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Power"),
+                triggered=self.panel.processor.compute_pow,
+                separator=True,
+            )
+            self.new_action(
+                _("Square root"),
+                triggered=self.panel.processor.compute_sqrt,
+                separator=False,
+            )
             self.new_action(
                 _("Peak detection"),
                 separator=True,
@@ -741,16 +785,36 @@ class SignalActionHandler(BaseActionHandler):
 
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Fitting")):
-                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit)
-                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
-                cra_fit(_("Voigt fit"), fitdialog.voigtfit)
+                self.new_action(
+                    _("Linear fit"),
+                    triggered=self.panel.processor.compute_linearfit,
+                )
                 self.new_action(
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
                 )
+                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit)
+                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
+                cra_fit(_("Voigt fit"), fitdialog.voigtfit)
                 self.new_action(
                     _("Multi-Gaussian fit"),
                     triggered=self.panel.processor.compute_multigaussianfit,
+                )
+                self.new_action(
+                    _("Exponential fit"),
+                    triggered=self.panel.processor.compute_expfit,
+                )
+                self.new_action(
+                    _("Sinusoidal fit"),
+                    triggered=self.panel.processor.compute_sinfit,
+                )
+                self.new_action(
+                    _("CDF fit"),
+                    triggered=self.panel.processor.compute_cdffit,
+                    tip=_(
+                        "Cumulative distribution function fit, "
+                        "related to Error function (erf)"
+                    ),
                 )
 
         with self.new_category(ActionCategory.COMPUTING):
@@ -799,12 +863,19 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_windowing,
             )
         super().create_last_actions()
+        with self.new_category(ActionCategory.OPERATION):
+            self.new_action(
+                _("Reverse X-axis"),
+                triggered=self.panel.processor.compute_reverse_x,
+                icon=get_icon("reverse_signal_x.svg"),
+            )
 
 
 class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
+    panel: ImagePanel
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
