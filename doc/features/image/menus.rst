@@ -257,6 +257,29 @@ Create a new image which is the division of the **two** selected images:
 .. math::
     z_{2} = \dfrac{z_{1}}{z_{0}}
 
+Constant operations
+^^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the result of a constant operation on each selected image:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Equation
+    * - Addition
+      - :math:`z_{k} = z_{k-1} + conv(c)`
+    * - Subtraction
+      - :math:`z_{k} = z_{k-1} - conv(c)`
+    * - Multiplication
+      - :math:`z_{k} = conv(z_{k-1} \times c)`
+    * - Division
+      - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
+
+where :math:`c` is the constant value and :math:`conv` is the conversion function
+which handles data type conversion (keeping the same data type as the input image).
+
 Absolute value
 ^^^^^^^^^^^^^^
 

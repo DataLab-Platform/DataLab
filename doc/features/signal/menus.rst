@@ -234,6 +234,26 @@ Create a new signal which is the product of all selected signals:
 .. math::
     y_{M} = \prod_{k=0}^{M-1}{y_{k}}
 
+Constant operations
+^^^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of a constant operation on each selected signal:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Description
+    * - Addition
+      - :math:`y_{k} = y_{k-1} + c`
+    * - Subtraction
+      - :math:`y_{k} = y_{k-1} - c`
+    * - Multiplication
+      - :math:`y_{k} = y_{k-1} \times c`
+    * - Division
+      - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
+
 Division
 ^^^^^^^^
 
