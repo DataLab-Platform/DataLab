@@ -339,45 +339,45 @@ The following window functions are available:
     :widths: 20, 80
 
     * - Window function
-      - Equation
-    * - Barthann (:py:func:`scipy.signal.windows.barthann`)
-      - :math:`w_{k} = (1-\dfrac{|k-\dfrac{M}{2}|}{\dfrac{M}{2}}).cos(\dfrac{\pi.k}{M})`
-    * - Bartlett (:py:func:`numpy.bartlett`)
-      - :math:`w_{k} = 1-\dfrac{|k-\dfrac{M}{2}|}{\dfrac{M}{2}}`
-    * - Blackman (:py:func:`scipy.signal.windows.blackman`)
-      - :math:`w_{k} = 0.42-0.5.cos(\dfrac{2\pi.k}{M})+0.08.cos(\dfrac{4\pi.k}{M})`
-    * - Blackman-Harris (:py:func:`scipy.signal.windows.blackmanharris`)
-      - :math:`w_{k} = 0.35875-0.48829.cos(\dfrac{2\pi.k}{M})+0.14128.cos(\dfrac{4\pi.k}{M})-0.01168.cos(\dfrac{6\pi.k}{M})`
-    * - Bohman (:py:func:`scipy.signal.windows.bohman`)
-      - :math:`w_{k} = (1-|k-\dfrac{M}{2}|).\cos(\pi.k/M)+\sin(\pi.k/M)/(\pi.k/M)`
-    * - Boxcar (:py:func:`scipy.signal.windows.boxcar`)
-      - :math:`w_{k} = 1`
-    * - Cosine (:py:func:`scipy.signal.windows.cosine`)
-      - :math:`w_{k} = \cos(\dfrac{\pi.k}{M})`
-    * - Exponential (:py:func:`scipy.signal.windows.exponential`)
-      - :math:`w_{k} = \exp(-\dfrac{k}{\tau})`
-    * - Flat top (:py:func:`scipy.signal.windows.flattop`)
-      - :math:`w_{k} = 1-1.93.cos(\dfrac{2\pi.k}{M})+1.29.cos(\dfrac{4\pi.k}{M})-0.388.cos(\dfrac{6\pi.k}{M})+0.028.cos(\dfrac{8\pi.k}{M})`
-    * - Gaussian (:py:func:`scipy.signal.windows.gaussian`)
-      - :math:`w_{k} = \exp(-\dfrac{(k-\dfrac{M}{2})^2}{2\sigma^2})`
-    * - Hamming (:py:func:`numpy.hamming`)
-      - :math:`w_{k} = 0.54-0.46.cos(\dfrac{2\pi.k}{M})`
-    * - Hanning (:py:func:`numpy.hanning`)
-      - :math:`w_{k} = 0.5-0.5.cos(\dfrac{2\pi.k}{M})`
-    * - Kaiser (:py:func:`scipy.signal.windows.kaiser`)
-      - :math:`w_{k} = I_0(\beta.\sqrt{1-(\dfrac{k-\dfrac{M}{2}}{\dfrac{M}{2}})^2})/I_0(\beta)`
-    * - Lanczos (:py:func:`scipy.signal.windows.lanczos`)
-      - :math:`w_{k} = \dfrac{\sin(\pi.k/a)}{\pi.k/a}`
-    * - Nuttall (:py:func:`scipy.signal.windows.nuttall`)
-      - :math:`w_{k} = 0.355768-0.487396.cos(\dfrac{2\pi.k}{M})+0.144232.cos(\dfrac{4\pi.k}{M})-0.012604.cos(\dfrac{6\pi.k}{M})`
-    * - Parzen (:py:func:`scipy.signal.windows.parzen`)
-      - :math:`w_{k} = 1-|k-\dfrac{M}{2}|/\dfrac{M}{2}`
-    * - Rectangular (:py:func:`numpy.ones`)
-      - :math:`w_{k} = 1`
-    * - Taylor (:py:func:`scipy.signal.windows.taylor`)
-      - :math:`w_{k} = 1-\dfrac{2\pi.k}{M}^2`
-    * - Tukey (:py:func:`scipy.signal.windows.tukey`)
-      - :math:`w_{k} = \begin{cases} 0.5(1+\cos(\pi(\dfrac{k}{\alpha}-1))), & \text{if } 0 \leq k \leq \alpha.\dfrac{M}{2} \\ 1, & \text{if } \alpha.\dfrac{M}{2} \leq k \leq (1-\alpha).\dfrac{M}{2} \\ 0.5(1+\cos(\pi(\dfrac{k}{\alpha}-\dfrac{2}{\alpha}+1))), & \text{if } (1-\alpha).\dfrac{M}{2} \leq k \leq M \end{cases}`
+      - Reference
+    * - Barthann
+      - :py:func:`scipy.signal.windows.barthann`
+    * - Bartlett
+      - :py:func:`numpy.bartlett`
+    * - Blackman
+      - :py:func:`scipy.signal.windows.blackman`
+    * - Blackman-Harris
+      - :py:func:`scipy.signal.windows.blackmanharris`
+    * - Bohman
+      - :py:func:`scipy.signal.windows.bohman`
+    * - Boxcar
+      - :py:func:`scipy.signal.windows.boxcar`
+    * - Cosine
+      - :py:func:`scipy.signal.windows.cosine`
+    * - Exponential
+      - :py:func:`scipy.signal.windows.exponential`
+    * - Flat top
+      - :py:func:`scipy.signal.windows.flattop`
+    * - Gaussian
+      - :py:func:`scipy.signal.windows.gaussian`
+    * - Hamming
+      - :py:func:`numpy.hamming`
+    * - Hanning
+      - :py:func:`numpy.hanning`
+    * - Kaiser
+      - :py:func:`scipy.signal.windows.kaiser`
+    * - Lanczos
+      - :py:func:`scipy.signal.windows.lanczos`
+    * - Nuttall
+      - :py:func:`scipy.signal.windows.nuttall`
+    * - Parzen
+      - :py:func:`scipy.signal.windows.parzen`
+    * - Rectangular
+      - :py:func:`numpy.ones`
+    * - Taylor
+      - :py:func:`scipy.signal.windows.taylor`
+    * - Tukey
+      - :py:func:`scipy.signal.windows.tukey`
 
 ROI extraction
 ^^^^^^^^^^^^^^
