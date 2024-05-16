@@ -164,7 +164,7 @@ def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     Returns:
         Result image object **src** + **p.value**
     """
-    dst = dst_11(src, "", f"+{p.value}")
+    dst = dst_11(src, "+", str(p.value))
     dst.data += p.value
     return dst
 
@@ -179,7 +179,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Result image object **src** - **p.value**
     """
-    dst = dst_11(src, "", f"-{p.value}")
+    dst = dst_11(src, "-", str(p.value))
     dst.data -= p.value
     return dst
 
@@ -195,7 +195,7 @@ def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Result image object **src** * **p.value**
     """
-    dst = dst_11(src, "", f"*{p.value}")
+    dst = dst_11(src, "×", str(p.value))
     dst.data *= p.value
     return dst
 
@@ -210,7 +210,7 @@ def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> Imag
     Returns:
         Result image object **src** / **p.value**
     """
-    dst = dst_11(src, "", f"/{p.value}")
+    dst = dst_11(src, "/", str(p.value))
     dst.data /= p.value
     return dst
 
@@ -230,7 +230,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "difference")
+    dst = dst_n1n(src1, src2, "-")
     dst.data = src1.data - src2.data
     return dst
 
@@ -262,7 +262,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "division")
+    dst = dst_n1n(src1, src2, "/")
     dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
     return dst
 

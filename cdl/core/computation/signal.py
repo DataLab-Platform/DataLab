@@ -152,7 +152,7 @@ def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj
     Returns:
         Result signal object **src** + **p.value**
     """
-    dst = dst_11(src, "", f"+{p.value}")
+    dst = dst_11(src, "+", str(p.value))
     dst.y += p.value
     return dst
 
@@ -167,7 +167,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     Returns:
         Result signal object **src** - **p.value**
     """
-    dst = dst_11(src, "", f"-{p.value}")
+    dst = dst_11(src, "-", str(p.value))
     dst.y -= p.value
     return dst
 
@@ -183,7 +183,7 @@ def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     Returns:
         Result signal object **src** * **p.value**
     """
-    dst = dst_11(src, "", f"*{p.value}")
+    dst = dst_11(src, "×", str(p.value))
     dst.y *= p.value
     return dst
 
@@ -198,7 +198,7 @@ def compute_divide_by_constant(src: SignalObj, p: ConstantOperationParam) -> Sig
     Returns:
         Result signal object **src** / **p.value**
     """
-    dst = dst_11(src, "", f"/{p.value}")
+    dst = dst_11(src, "/", str(p.value))
     dst.y /= p.value
     return dst
 
@@ -222,7 +222,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "difference")
+    dst = dst_n1n(src1, src2, "-")
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
@@ -264,7 +264,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "division")
+    dst = dst_n1n(src1, src2, "/")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
@@ -851,7 +851,7 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_n1n(src1, src2, "convolution")
+    dst = dst_n1n(src1, src2, "⊛")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))

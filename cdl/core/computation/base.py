@@ -142,19 +142,22 @@ def dst_11(
     Args:
         src: source signal or image object
         name: name of the function. If provided, the title of the result object
-         will be `{name}({src.short_id})|{suffix})`.
-         If not provided, the title will be `{src.short_id}{suffix}`.
+         will be `{name}({src.short_id})|{suffix})`, unless the name is a single
+         character, in which case the title will be `{src.short_id}{name}{suffix}`
+         where `name` is an operator and `suffix` is the other term of the operation.
         suffix: suffix to add to the title. Optional.
 
     Returns:
         Result signal or image object
     """
-    if name == "":
-        title = f"{src.short_id}{suffix or ''}"
+    if len(name) == 1:  # This is an operator
+        title = f"{src.short_id}{name}"
     else:
         title = f"{name}({src.short_id})"
         if suffix is not None:
-            title += "|" + suffix
+            title += "|"
+    if suffix is not None:
+        title += suffix
     return src.copy(title=title)
 
 
@@ -175,10 +178,13 @@ def dst_n1n(
     Returns:
         Output signal or image object
     """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
+    if len(name) == 1:  # This is an operator
+        title = f"{src1.short_id}{name}{src2.short_id}"
+    else:
+        title = f"{name}({src1.short_id}, {src2.short_id})"
     if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
+        title += "|" + suffix
+    return src1.copy(title=title)
 
 
 def new_signal_result(
