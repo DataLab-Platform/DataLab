@@ -28,8 +28,8 @@ def test_example_app():
         data_size = data.shape[0]
         n = data_size // 5
         m = int(n * 1.25)
-        param = cdl.param.ROIDataParam.create([[n, m, data_size - n, data_size - m]])
-        proxy.compute_roi_extraction(param)
+        roidata = [[n, m, data_size - n, data_size - m]]
+        proxy.compute_roi_extraction(cdl.param.ROIDataParam.create(roidata=roidata))
         param = cdl.param.BlobOpenCVParam.create(
             min_dist_between_blobs=0.1,
             filter_by_color=False,

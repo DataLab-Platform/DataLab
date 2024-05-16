@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import hashlib
 from collections.abc import Iterator
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 from weakref import WeakKeyDictionary
 
 import numpy as np
@@ -42,7 +42,7 @@ from cdl.config import Conf, _
 from cdl.utils.qthelpers import block_signals, create_progress_bar
 
 if TYPE_CHECKING:
-    from plotpy.items import CurveItem, MaskedImageItem
+    from plotpy.items import CurveItem, LabelItem, MaskedImageItem
     from plotpy.plot import BasePlot, PlotWidget
 
     from cdl.core.gui.panel.base import BaseDataPanel
@@ -77,6 +77,9 @@ class BasePlotHandler:
             WeakKeyDictionary()
         )
         self.__auto_refresh = False
+        self.__result_items_mapping: WeakKeyDictionary[LabelItem, Callable] = (
+            WeakKeyDictionary()
+        )
 
     def __len__(self) -> int:
         """Return number of items"""
@@ -156,6 +159,15 @@ class BasePlotHandler:
             # add all items except the last one, unblock signals, then add the last one
             # (this avoids some unnecessary refresh process by PlotPy)
             items = list(obj.iterate_shape_items(editable=False))
+            resultproperties = list(obj.iterate_resultproperties())
+            if resultproperties:
+                for resultprop in resultproperties:
+                    item = resultprop.get_plot_item()
+                    items.append(item)
+                    self.__result_items_mapping[item] = (
+                        lambda item,
+                        resultprop=resultprop: resultprop.update_obj_metadata(obj, item)
+                    )
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()
@@ -172,6 +184,12 @@ class BasePlotHandler:
                             QW.QApplication.processEvents()
                 self.plot.add_item(items[-1])
                 self.__shapeitems.append(items[-1])
+
+    def update_resultproperty_from_plot_item(self, item: LabelItem) -> None:
+        """Update result property from plot item"""
+        callback = self.__result_items_mapping.get(item)
+        if callback is not None:
+            callback(item)
 
     def remove_all_shape_items(self) -> None:
         """Remove all geometric shapes associated to result items"""

@@ -49,6 +49,7 @@ def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> Non
     panel.remove_object()
     panel.processor.compute_astype(dlp.DataTypeIParam.create(dtype="float64"))
     panel.processor.compute_log10()
+    panel.processor.compute_exp()
     panel.processor.compute_swap_axes()
     panel.processor.compute_swap_axes()
 
@@ -105,6 +106,11 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
+    param = dlp.NormalizeParam()
+    for method_value, _method_name in param.methods:
+        param.method = method_value
+        panel.processor.compute_normalize(param)
+
     panel.objview.select_objects((3, 7))
     panel.processor.compute_division()
     panel.objview.select_objects((1, 2, 3))
@@ -138,16 +144,25 @@ def run_signal_computations(
         _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
     )
     addparam = dlo.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    panel.new_object(newparam, addparam=addparam, edit=False)
+    noiseobj1 = panel.new_object(newparam, addparam=addparam, edit=False)
 
     compute_common_operations(panel)
 
-    win.add_object(create_paracetamol_signal(data_size))
+    # Signal specific operations
+    panel.processor.compute_sqrt()
+    panel.processor.compute_pow(dlp.PowParam.create(exponent=2))
+    panel.processor.compute_reverse_x()
+    panel.processor.compute_reverse_x()
 
-    param = dlp.NormalizeYParam()
-    for _name, method in param.methods:
-        param.method = method
-        panel.processor.compute_normalize(param)
+    noiseobj2 = noiseobj1.copy()
+    win.add_object(noiseobj2)
+    param = dlp.WindowingParam()
+    for method_value, _method_name in param.methods:
+        panel.objview.set_current_object(noiseobj2)
+        param.method = method_value
+        panel.processor.compute_windowing(param)
+
+    win.add_object(create_paracetamol_signal(data_size))
 
     param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
@@ -164,10 +179,14 @@ def run_signal_computations(
     sig = panel.objview.get_sel_objects()[0]
     i1 = data_size // 10
     i2 = len(sig.y) - i1
-    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create([[i1, i2]]))
+    panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
 
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
+    panel.processor.compute_linearfit()
+    panel.processor.compute_expfit()
+    panel.processor.compute_cdffit()
+    panel.processor.compute_sinfit()
 
     panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
     panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
@@ -344,7 +363,7 @@ def run_image_computations(
 
     n = data_size // 10
     panel.processor.compute_roi_extraction(
-        dlp.ROIDataParam.create([[n, n, data_size - n, data_size - n]])
+        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
     )
 
     panel.processor.compute_centroid()

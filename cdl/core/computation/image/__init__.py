@@ -27,6 +27,7 @@ from cdl.algorithms.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
     get_radial_profile,
+    normalize,
     z_fft,
     z_ifft,
 )
@@ -39,10 +40,12 @@ from cdl.core.computation.base import (
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
+    calc_resultproperties,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam
+from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
@@ -320,6 +323,21 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # -------- compute_11 functions --------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
+
+
+def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
+    """
+    Normalize image data depending on its maximum.
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = normalize(src.data, p.method)  # type: ignore
+    return dst
 
 
 class LogP1Param(gds.DataSet):
@@ -977,6 +995,17 @@ def compute_log10(src: ImageObj) -> ImageObj:
     """
     return Wrap11Func(np.log10)(src)
 
+def compute_exp(src: ImageObj) -> ImageObj:
+    """Compute exponential
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    return Wrap11Func(np.exp)(src)
+
 
 class ZCalibrateParam(gds.DataSet):
     """Image linear calibration parameters"""
@@ -1159,16 +1188,26 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
     return dst
 
 
-def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
-    """Exec computation taking into account image x0, y0, dx, dy and ROIs
+# MARK: compute_10 functions -----------------------------------------------------------
+# Functions with 1 input image and 0 output image
+# --------------------------------------------------------------------------------------
+
+
+def calc_resultshape(
+    label: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
+) -> ResultShape | None:
+    """Calculate result shape by executing a computation function on an image object,
+    taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
 
     Args:
-        image: input image object
+        label: result shape label
+        shapetype: result shape type
+        obj: input image object
         func: computation function
         *args: computation function arguments
 
     Returns:
-        Computation result
+        Result shape object or None if no result is found
 
     .. warning::
 
@@ -1183,8 +1222,8 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
     """
     res = []
     num_cols = []
-    for i_roi in image.iterate_roi_indexes():
-        data_roi = image.get_data(i_roi)
+    for i_roi in obj.iterate_roi_indexes():
+        data_roi = obj.get_data(i_roi)
         if args is None:
             coords: np.ndarray = func(data_roi)
         else:
@@ -1217,12 +1256,12 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
             else:
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
-            if image.roi is not None:
-                x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
+            if obj.roi is not None:
+                x0, y0, _x1, _y1 = RoiDataItem(obj.roi[i_roi]).get_rect()
                 coords[:, colx] += x0
                 coords[:, coly] += y0
-            coords[:, colx] = image.dx * coords[:, colx] + image.x0
-            coords[:, coly] = image.dy * coords[:, coly] + image.y0
+            coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
+            coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
             idx = np.ones((coords.shape[0], 1)) * i_roi
             coords = np.hstack([idx, coords])
             res.append(coords)
@@ -1240,7 +1279,7 @@ def calc_with_osr(image: ImageObj, func: Callable, *args: Any) -> np.ndarray:
                 out[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
             return out
-        return np.vstack(res)
+        return ResultShape(label, np.vstack(res), shapetype)
     return None
 
 
@@ -1257,7 +1296,7 @@ def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     return np.array([(x, y)])
 
 
-def compute_centroid(image: ImageObj) -> np.ndarray:
+def compute_centroid(image: ImageObj) -> ResultShape | None:
     """Compute centroid
 
     Args:
@@ -1266,7 +1305,7 @@ def compute_centroid(image: ImageObj) -> np.ndarray:
     Returns:
         Centroid coordinates
     """
-    return calc_with_osr(image, get_centroid_coords)
+    return calc_resultshape("centroid", ShapeTypes.MARKER, image, get_centroid_coords)
 
 
 def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
@@ -1283,7 +1322,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
     return np.array([[x, y, r]])
 
 
-def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
+def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
     """Compute minimum enclosing circle
 
     Args:
@@ -1292,7 +1331,9 @@ def compute_enclosing_circle(image: ImageObj) -> np.ndarray:
     Returns:
         Diameter coords
     """
-    return calc_with_osr(image, get_enclosing_circle_coords)
+    return calc_resultshape(
+        "enclosing_circle", ShapeTypes.CIRCLE, image, get_enclosing_circle_coords
+    )
 
 
 class HoughCircleParam(gds.DataSet):
@@ -1307,7 +1348,9 @@ class HoughCircleParam(gds.DataSet):
     min_distance = gds.IntItem(_("Minimal distance"), min=0)
 
 
-def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarray:
+def compute_hough_circle_peaks(
+    image: ImageObj, p: HoughCircleParam
+) -> ResultShape | None:
     """Compute Hough circles
 
     Args:
@@ -1317,7 +1360,9 @@ def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarr
     Returns:
         Circle coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "hough_circle_peaks",
+        ShapeTypes.CIRCLE,
         image,
         get_hough_circle_peaks,
         p.min_radius,
@@ -1325,3 +1370,18 @@ def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> np.ndarr
         None,
         p.min_distance,
     )
+
+
+def compute_stats_func(obj: ImageObj) -> ResultProperties:
+    """Compute statistics functions"""
+    statfuncs = {
+        "min(z)": ma.min,
+        "max(z)": ma.max,
+        "<z>": ma.mean,
+        "median(z)": ma.median,
+        "σ(z)": ma.std,
+        "<z>/σ(z)": lambda z: ma.mean(z) / ma.std(z),
+        "peak-to-peak(z)": ma.ptp,
+        "Σ(z)": ma.sum,
+    }
+    return calc_resultproperties("stats", obj, statfuncs)

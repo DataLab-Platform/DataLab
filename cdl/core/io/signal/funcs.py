@@ -107,7 +107,7 @@ def read_csv_by_chunks(
 
 def read_csv(
     filename: str,
-    worker: CallbackWorker,
+    worker: CallbackWorker | None = None,
 ) -> tuple[
     np.ndarray, str | None, str | None, list[str] | None, list[str] | None, str | None
 ]:
@@ -188,7 +188,7 @@ def read_csv(
             # 2. We keep only the lines beginning with a comment character
             # 3. We join the lines to create a single string
             header = ""
-            with open(filename, "r") as file:
+            with open(filename, "r", encoding="utf-8") as file:
                 for _ in range(1000):
                     line = file.readline()
                     if line.startswith("#"):
@@ -261,7 +261,7 @@ def write_csv(
     df.to_csv(filename, index=False, header=labels, sep=delimiter)
     # Add header if present
     if header:
-        with open(filename, "r+") as file:
+        with open(filename, "r+", encoding="utf-8") as file:
             content = file.read()
             file.seek(0, 0)
             file.write(header + "\n" + content)

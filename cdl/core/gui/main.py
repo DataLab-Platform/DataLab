@@ -71,6 +71,8 @@ from cdl.utils.qthelpers import (
 from cdl.widgets import instconfviewer, logviewer, status
 
 if TYPE_CHECKING:
+    from typing import Literal
+
     from cdl.core.gui.panel.base import AbstractPanel, BaseDataPanel
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.macro import MacroPanel
@@ -148,8 +150,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.macropanel: MacroPanel | None = None
 
         self.main_toolbar: QW.QToolBar | None = None
-        self.signal_toolbar: QW.QToolBar | None = None
-        self.image_toolbar: QW.QToolBar | None = None
+        self.signalpanel_toolbar: QW.QToolBar | None = None
+        self.imagepanel_toolbar: QW.QToolBar | None = None
         self.signalpanel: SignalPanel | None = None
         self.imagepanel: ImagePanel | None = None
         self.tabwidget: QW.QTabWidget | None = None
@@ -748,6 +750,22 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.memorystatus.SIG_MEMORY_ALARM.connect(self.__set_low_memory_state)
         self.statusBar().addPermanentWidget(self.memorystatus)
 
+    def __add_toolbar(
+        self, title: str, position: Literal["top", "bottom", "left", "right"], name: str
+    ) -> QW.QToolBar:
+        """Add toolbar to main window
+
+        Args:
+            title: toolbar title
+            position: toolbar position
+            name: toolbar name (Qt object name)
+        """
+        toolbar = QW.QToolBar(title, self)
+        toolbar.setObjectName(name)
+        area = getattr(QC.Qt, f"{position.capitalize()}ToolBarArea")
+        self.addToolBar(area, toolbar)
+        return toolbar
+
     def __setup_global_actions(self) -> None:
         """Setup global actions"""
         self.openh5_action = create_action(
@@ -778,8 +796,9 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             tip=_("Open settings dialog"),
             triggered=self.__edit_settings,
         )
-        self.main_toolbar = self.addToolBar(_("Main Toolbar"))
-        self.main_toolbar.setObjectName("main_toolbar")
+        self.main_toolbar = self.__add_toolbar(
+            _("Main Toolbar"), "left", "main_toolbar"
+        )
         add_actions(
             self.main_toolbar,
             [
@@ -825,25 +844,27 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def __add_signal_panel(self) -> None:
         """Setup signal toolbar, widgets and panel"""
-        self.signal_toolbar = self.addToolBar(_("Signal Toolbar"))
-        self.signal_toolbar.setObjectName("signal_toolbar")
+        self.signalpanel_toolbar = self.__add_toolbar(
+            _("Signal Panel Toolbar"), "left", "signalpanel_toolbar"
+        )
         dpw = DockablePlotWidget(self, PlotType.CURVE)
+        self.signalpanel = signal.SignalPanel(self, dpw, self.signalpanel_toolbar)
+        self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         plot = dpw.get_plot()
         plot.add_item(make.legend("TR"))
-        self.signalpanel = signal.SignalPanel(self, dpw.plotwidget, self.signal_toolbar)
-        self.signalpanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
         plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
             self.signalpanel.plot_item_parameters_changed
         )
+        plot.SIG_ITEM_MOVED.connect(self.signalpanel.plot_item_moved)
         return dpw
 
     def __add_image_panel(self) -> None:
         """Setup image toolbar, widgets and panel"""
-        self.image_toolbar = self.addToolBar(_("Image Toolbar"))
-        self.image_toolbar.setObjectName("image_toolbar")
+        self.imagepanel_toolbar = self.__add_toolbar(
+            _("Image Panel Toolbar"), "left", "imagepanel_toolbar"
+        )
         dpw = DockablePlotWidget(self, PlotType.IMAGE)
-        plot = dpw.get_plot()
-        self.imagepanel = image.ImagePanel(self, dpw.plotwidget, self.image_toolbar)
+        self.imagepanel = image.ImagePanel(self, dpw, self.imagepanel_toolbar)
         # -----------------------------------------------------------------------------
         # # Before eventually disabling the "peritem" mode by default, wait for the
         # # plotpy bug to be fixed (peritem mode is not compatible with multiple image
@@ -855,9 +876,11 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         #     cspanel.peritem_ac.setChecked(False)
         # -----------------------------------------------------------------------------
         self.imagepanel.SIG_STATUS_MESSAGE.connect(self.statusBar().showMessage)
+        plot = dpw.get_plot()
         plot.SIG_ITEM_PARAMETERS_CHANGED.connect(
             self.imagepanel.plot_item_parameters_changed
         )
+        plot.SIG_ITEM_MOVED.connect(self.imagepanel.plot_item_moved)
         return dpw
 
     def __update_tab_menu(self) -> None:
@@ -1167,8 +1190,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         is_signal = self.tabwidget.currentWidget() is self.signalpanel
         panel = self.signalpanel if is_signal else self.imagepanel
         panel.selection_changed()
-        self.signal_toolbar.setVisible(is_signal)
-        self.image_toolbar.setVisible(not is_signal)
+        self.signalpanel_toolbar.setVisible(is_signal)
+        self.imagepanel_toolbar.setVisible(not is_signal)
         if self.plugins_menu is not None:
             plugin_actions = panel.get_category_actions(ActionCategory.PLUGINS)
             self.plugins_menu.setEnabled(len(plugin_actions) > 0)
@@ -1518,7 +1541,6 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 "• " + _("Process isolation:") + " " + pistate,
             ]
         )
-        pinfos = PluginRegistry.get_plugin_infos()
         created_by = _("Created by")
         dev_by = _("Developed and maintained by %s open-source project team") % APP_NAME
         cprght = "2023 DataLab Platform Developers"
@@ -1527,7 +1549,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             _("About") + " " + APP_NAME,
             f"""<b>{APP_NAME}</b> v{__version__}<br>{APP_DESC}
               <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {cprght}
-              <p>{adv_conf}<br><br>{pinfos}""",
+              <p>{adv_conf}""",
         )
 
     def __edit_settings(self) -> None:
@@ -1561,13 +1583,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def play_demo(self) -> None:
         """Play demo"""
-        from cdl.tests.scenarios import demo  # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.tests.scenarios import demo
 
         demo.play_demo(self)
 
     def show_tour(self) -> None:
         """Show tour"""
-        from cdl.core.gui import tour  # pylint: disable=import-outside-toplevel
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.core.gui import tour
 
         tour.start(self)
 
