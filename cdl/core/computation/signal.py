@@ -47,6 +47,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     calc_resultproperties,
     dst_11,
+    dst_n1n,
     new_signal_result,
 )
 from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
@@ -94,24 +95,6 @@ class Wrap11Func:
         x, y = src.get_data()
         dst.set_xydata(x, self.func(y))
         return dst
-
-
-def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = None):
-    """Create a result signal object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
-
-    Args:
-        src1: source signal 1
-        src2: source signal 2
-        name: name of the function
-
-    Returns:
-        Result signal object
-    """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 # MARK: compute_n1 functions -----------------------------------------------------------

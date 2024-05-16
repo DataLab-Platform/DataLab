@@ -48,6 +48,7 @@ from cdl.core.computation.base import (
     ThresholdParam,
     calc_resultproperties,
     dst_11,
+    dst_n1n,
     new_signal_result,
 )
 from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
@@ -110,26 +111,6 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
     return new_signal_result(
         src, name, suffix, (src.xunit, src.zunit), (src.xlabel, src.zlabel)
     )
-
-
-def dst_n1n(
-    src1: ImageObj, src2: ImageObj, name: str, suffix: str | None = None
-) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
-
-    Args:
-        src1: input image object
-        src2: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 # MARK: compute_n1 functions -----------------------------------------------------------
