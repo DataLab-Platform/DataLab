@@ -185,7 +185,7 @@ def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> Si
         Output signal object
     """
     dst = dst_11(src, "", f"*{p.value}")
-    dst.y = dst.y + p.value
+    dst.y *= p.value
     return dst
 
 
