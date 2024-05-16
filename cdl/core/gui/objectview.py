@@ -51,8 +51,36 @@ from cdl.core.model.signal import SignalObj
 from cdl.utils.qthelpers import block_signals
 
 if TYPE_CHECKING:
+    from typing import Any
+
     from cdl.core.gui.objectmodel import ObjectModel
     from cdl.core.gui.panel.base import BaseDataPanel
+
+
+def metadata_to_html(metadata: dict[str, Any]) -> str:
+    """Convert metadata to human-readable string.
+
+    Returns:
+        HTML string
+    """
+    textlines = []
+    for key, value in metadata.items():
+        if len(textlines) > 5:
+            textlines.append("[...]")
+            break
+        if not key.startswith("_"):
+            vlines = str(value).splitlines()
+            if vlines:
+                text = f"<b>{key}:</b> {vlines[0]}"
+                if len(vlines) > 1:
+                    text += " [...]"
+                textlines.append(text)
+    if textlines:
+        ptit = _("Object metadata")
+        psub = _("(click on Metadata button for more details)")
+        prefix = f"<i><u>{ptit}:</u> {psub}</i><br>"
+        return f"<p style='white-space:pre'>{prefix}{'<br>'.join(textlines)}</p>"
+    return ""
 
 
 class SimpleObjectTree(QW.QTreeWidget):
@@ -135,7 +163,7 @@ class SimpleObjectTree(QW.QTreeWidget):
         """Update item"""
         item.setText(0, f"{obj.short_id}: {obj.title}")
         if isinstance(obj, (SignalObj, ImageObj)):
-            item.setToolTip(0, obj.metadata_to_html())
+            item.setToolTip(0, metadata_to_html(obj.metadata))
         item.setData(0, QC.Qt.UserRole, obj.uuid)
 
     def populate_tree(self) -> None:

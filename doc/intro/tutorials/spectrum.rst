@@ -21,7 +21,7 @@ First, we open DataLab and read the spectrum from a file.
    the toolbar, or by dragging and dropping the file into DataLab (on the panel on
    the right).
 
-.. |fileopen_sig| image:: ../../../cdl/data/icons/fileopen_sig.svg
+.. |fileopen_sig| image:: ../../../cdl/data/icons/io/fileopen_sig.svg
     :width: 24px
     :height: 24px
 
@@ -158,7 +158,7 @@ visualization settings (curve colors, etc.).
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/filesave_h5.svg
+.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
 
@@ -167,10 +167,10 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5browser.svg
+.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px

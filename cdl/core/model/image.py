@@ -14,7 +14,6 @@ from __future__ import annotations
 import enum
 import re
 from collections.abc import ByteString, Iterator, Mapping, Sequence
-from copy import deepcopy
 from typing import TYPE_CHECKING, Any
 from uuid import uuid4
 
@@ -442,7 +441,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
 
         # Copying metadata, but not the LUT range (which is specific to the data:
         # when processing the image, the LUT range may not be appropriate anymore):
-        obj.metadata = deepcopy(self.metadata)
+        obj.metadata = base.deepcopy_metadata(self.metadata)
         obj.metadata.pop("lut_range", None)
 
         obj.data = np.array(self.data, copy=True, dtype=dtype)

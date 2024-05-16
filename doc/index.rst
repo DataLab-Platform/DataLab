@@ -7,10 +7,11 @@ DataLab
 
 DataLab is an **open-source platform for scientific and technical data processing
 and visualization** with unique features designed to meet industrial requirements.
-Leveraging the richness of the scientific Python ecosystem [#f1]_ and the Qt
-graphical user interfaces, DataLab is a versatile tool, extendable with
-:bdg-ref-success-line:`Plugins <about_plugins>` and working seamlessly with
-:ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
+Leveraging the richness of the scientific Python ecosystem [#f1]_, DataLab serves as a
+complementary tool for your signal and image processing workflows. It can be extended
+with your Python code through :bdg-ref-success-line:`Plugins <about_plugins>` or
+directly from :ref:`your IDE <use_cases>` or :ref:`your Jupyter notebooks <use_cases>`.
+Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
 .. only:: html and not latex
 

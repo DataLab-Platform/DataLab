@@ -8,11 +8,8 @@
 
 from __future__ import annotations
 
-from collections.abc import Callable
-
 import numpy as np
 from guidata.qthelpers import exec_dialog
-from numpy import ma
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
@@ -28,7 +25,7 @@ from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
-from cdl.core.model.base import ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 
@@ -41,9 +38,32 @@ class ImageProcessor(BaseProcessor):
     EDIT_ROI_PARAMS = True
 
     @qt_try_except()
+    def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
+        """Normalize data"""
+        self.compute_11(
+            cpi.compute_normalize,
+            param=param,
+            paramclass=cpb.NormalizeParam,
+            title=_("Normalize"),
+        )
+
+    @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
         self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
+
+    @qt_try_except()
+    def compute_sum_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """COmpure sum with a constant"""
+        self.compute_11(
+            cpi.compute_add_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Add constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_average(self) -> None:
@@ -59,6 +79,19 @@ class ImageProcessor(BaseProcessor):
     def compute_product(self) -> None:
         """Compute product"""
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
+
+    @qt_try_except()
+    def compute_product_by_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute product with a constant"""
+        self.compute_11(
+            cpi.compute_product_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Product with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_logp1(self, param: cdl.param.LogP1Param | None = None) -> None:
@@ -315,6 +348,11 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_log10, title="Log10")
 
     @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute Log10"""
+        self.compute_11(cpi.compute_exp, title=_("Exponential"))
+
+    @qt_try_except()
     def compute_difference(self, obj2: ImageObj | None = None) -> None:
         """Compute difference between two images"""
         self.compute_n1n(
@@ -322,6 +360,19 @@ class ImageProcessor(BaseProcessor):
             _("image to subtract"),
             cpi.compute_difference,
             title=_("Difference"),
+        )
+
+    @qt_try_except()
+    def compute_difference_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute difference with a constant"""
+        self.compute_11(
+            cpi.compute_difference_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Difference with constant"),
+            edit=True,
         )
 
     @qt_try_except()
@@ -342,6 +393,19 @@ class ImageProcessor(BaseProcessor):
             _("divider"),
             cpi.compute_division,
             title=_("Division"),
+        )
+
+    @qt_try_except()
+    def compute_division_by_contant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute division by a constant"""
+        self.compute_11(
+            cpi.compute_divide_by_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Division by constant"),
+            edit=True,
         )
 
     @qt_try_except()
@@ -814,6 +878,11 @@ class ImageProcessor(BaseProcessor):
 
     # ------Image Computing
     @qt_try_except()
+    def compute_stats(self) -> dict[str, ResultProperties]:
+        """Compute data statistics"""
+        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+
+    @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:
         """Compute image centroid"""
         return self.compute_10(cpi.compute_centroid, title=_("Centroid"))
@@ -948,18 +1017,3 @@ class ImageProcessor(BaseProcessor):
             cpi_det.BlobOpenCVParam,
             title=_("Blob detection (OpenCV)"),
         )
-
-    def _get_stat_funcs(self) -> list[tuple[str, Callable[[np.ndarray], float]]]:
-        """Return statistics functions list"""
-        # Be careful to use systematically functions adapted to masked arrays
-        # (e.g. numpy.ma median, and *not* numpy.median)
-        return [
-            ("min(z)", ma.min),
-            ("max(z)", ma.max),
-            ("<z>", ma.mean),
-            ("median(z)", ma.median),
-            ("σ(z)", ma.std),
-            ("<z>/σ(z)", lambda z: ma.mean(z) / ma.std(z)),
-            ("peak-to-peak(z)", ma.ptp),
-            ("Σ(z)", ma.sum),
-        ]

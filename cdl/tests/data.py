@@ -502,7 +502,7 @@ def create_noisygauss_image(
         size, dtype
     )
     if add_annotations:
-        obj.set_annotations_from_file(get_test_fnames("annotations.json")[0])
+        obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return obj
 
 
@@ -539,7 +539,7 @@ def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     data = create_2d_gaussian(600, np.uint16, x0=2.0, y0=3.0)
     title = "Test image (with metadata)" if title is None else title
     image = cdl.obj.create_image(title, data)
-    image.set_annotations_from_file(get_test_fnames("annotations.json")[0])
+    image.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return image
 
 
@@ -552,16 +552,16 @@ def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
     RShape, SType = cdl.obj.ResultShape, cdl.obj.ShapeTypes
     return (
         RShape(
-            SType.CIRCLE,
-            [[0, 250, 250, 200], [0, 250, 250, 140]],
             "circle",
+            [[0, 250, 250, 200], [0, 250, 250, 140]],
+            SType.CIRCLE,
         ),
-        RShape(SType.RECTANGLE, [0, 300, 200, 700, 700], "rectangle"),
-        RShape(SType.SEGMENT, [0, 50, 250, 400, 400], "segment"),
-        RShape(SType.POINT, [[0, 500, 500], [0, 15, 400]], "point"),
+        RShape("rectangle", [0, 300, 200, 700, 700], SType.RECTANGLE),
+        RShape("segment", [0, 50, 250, 400, 400], SType.SEGMENT),
+        RShape("point", [[0, 500, 500], [0, 15, 400]], SType.POINT),
         RShape(
-            SType.POLYGON,
-            [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
             "polygon",
+            [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
+            SType.POLYGON,
         ),
     )

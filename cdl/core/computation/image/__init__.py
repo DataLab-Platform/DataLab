@@ -6,6 +6,10 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+# MARK: Important note
+# --------------------
+# All `guidata.dataset.DataSet` classes must also be imported in the `cdl.param` module.
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -27,42 +31,31 @@ from cdl.algorithms.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
     get_radial_profile,
+    normalize,
     z_fft,
     z_ifft,
 )
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    ConstantOperationParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
+    calc_resultproperties,
+    dst_11,
+    dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam, ResultShape, ShapeTypes
+from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
-
-
-def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
-
-    Args:
-        src: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src.copy(title=f"{name}({src.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 class Wrap11Func:
@@ -120,27 +113,7 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
     )
 
 
-def dst_n1n(
-    src1: ImageObj, src2: ImageObj, name: str, suffix: str | None = None
-) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
-
-    Args:
-        src1: input image object
-        src2: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
-
-
-# -------- compute_n1 functions --------------------------------------------------------
+# MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input images and 1 output image
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input images and return a single
@@ -180,7 +153,84 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
-# -------- compute_n1n functions -------------------------------------------------------
+def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Add **dst** and a constant value and return **dst** image modified in place
+
+    Args:
+        dst: output image object
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** + **p.value**
+    """
+    # For the addition of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "+", str(value))
+    dst.data += value
+    return dst
+
+
+def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Subtract a constant value from an image
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** - **p.value**
+    """
+    # For the subtraction of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "-", str(value))
+    dst.data -= value
+    return dst
+
+
+def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Multiply **dst** by a constant value and return **dst** image modified in place
+
+    Args:
+        dst: output image object
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** * **p.value**
+    """
+    # For the multiplication by a constant value, we do not convert the constant value
+    # to the same data type as the input image, because we want to allow the user to
+    # multiply an image by a constant value of a different data type. The final data
+    # type conversion ensures that the output image has the same data type as the input
+    # image.
+    dst = dst_11(src, "×", str(p.value))
+    dst.data = np.array(src.data * p.value, dtype=src.data.dtype)
+    return dst
+
+
+def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Divide an image by a constant value
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** / **p.value**
+    """
+    # For the division by a constant value, we do not convert the constant value to the
+    # same data type as the input image, because we want to allow the user to divide an
+    # image by a constant value of a different data type. The final data type conversion
+    # ensures that the output image has the same data type as the input image.
+    dst = dst_11(src, "/", str(p.value))
+    dst.data = np.array(src.data / p.value, dtype=src.data.dtype)
+    return dst
+
+
+# MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -195,7 +245,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "difference")
+    dst = dst_n1n(src1, src2, "-")
     dst.data = src1.data - src2.data
     return dst
 
@@ -227,7 +277,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
     Returns:
         Result image object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "division")
+    dst = dst_n1n(src1, src2, "/")
     dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
     return dst
 
@@ -254,9 +304,24 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     return dst
 
 
-# -------- compute_11 functions --------------------------------------------------------
+# MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
+
+
+def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
+    """
+    Normalize image data depending on its maximum.
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = normalize(src.data, p.method)  # type: ignore
+    return dst
 
 
 class LogP1Param(gds.DataSet):
@@ -915,6 +980,18 @@ def compute_log10(src: ImageObj) -> ImageObj:
     return Wrap11Func(np.log10)(src)
 
 
+def compute_exp(src: ImageObj) -> ImageObj:
+    """Compute exponential
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    return Wrap11Func(np.exp)(src)
+
+
 class ZCalibrateParam(gds.DataSet):
     """Image linear calibration parameters"""
 
@@ -1096,20 +1173,26 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
     return dst
 
 
-def calc_with_osr(
-    image: ImageObj, func: Callable, shapetype: ShapeTypes, label: str, *args: Any
+# MARK: compute_10 functions -----------------------------------------------------------
+# Functions with 1 input image and 0 output image
+# --------------------------------------------------------------------------------------
+
+
+def calc_resultshape(
+    label: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
 ) -> ResultShape | None:
-    """Exec computation taking into account image x0, y0, dx, dy and ROIs
+    """Calculate result shape by executing a computation function on an image object,
+    taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
 
     Args:
-        image: input image object
+        label: result shape label
+        shapetype: result shape type
+        obj: input image object
         func: computation function
-        shapetype: (result) shape type
-        label: (result) shape label
         *args: computation function arguments
 
     Returns:
-        Computation result shape (or None if no result)
+        Result shape object or None if no result is found
 
     .. warning::
 
@@ -1124,8 +1207,8 @@ def calc_with_osr(
     """
     res = []
     num_cols = []
-    for i_roi in image.iterate_roi_indexes():
-        data_roi = image.get_data(i_roi)
+    for i_roi in obj.iterate_roi_indexes():
+        data_roi = obj.get_data(i_roi)
         if args is None:
             coords: np.ndarray = func(data_roi)
         else:
@@ -1158,12 +1241,12 @@ def calc_with_osr(
             else:
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
-            if image.roi is not None:
-                x0, y0, _x1, _y1 = RoiDataItem(image.roi[i_roi]).get_rect()
+            if obj.roi is not None:
+                x0, y0, _x1, _y1 = RoiDataItem(obj.roi[i_roi]).get_rect()
                 coords[:, colx] += x0
                 coords[:, coly] += y0
-            coords[:, colx] = image.dx * coords[:, colx] + image.x0
-            coords[:, coly] = image.dy * coords[:, coly] + image.y0
+            coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
+            coords[:, coly] = obj.dy * coords[:, coly] + obj.y0
             idx = np.ones((coords.shape[0], 1)) * i_roi
             coords = np.hstack([idx, coords])
             res.append(coords)
@@ -1181,7 +1264,7 @@ def calc_with_osr(
                 out[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
             return out
-        return ResultShape(shapetype, np.vstack(res), label)
+        return ResultShape(label, np.vstack(res), shapetype)
     return None
 
 
@@ -1198,7 +1281,7 @@ def get_centroid_coords(data: np.ndarray) -> np.ndarray:
     return np.array([(x, y)])
 
 
-def compute_centroid(image: ImageObj) -> ResultShape:
+def compute_centroid(image: ImageObj) -> ResultShape | None:
     """Compute centroid
 
     Args:
@@ -1207,7 +1290,7 @@ def compute_centroid(image: ImageObj) -> ResultShape:
     Returns:
         Centroid coordinates
     """
-    return calc_with_osr(image, get_centroid_coords, ShapeTypes.MARKER, "centroid")
+    return calc_resultshape("centroid", ShapeTypes.MARKER, image, get_centroid_coords)
 
 
 def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
@@ -1224,7 +1307,7 @@ def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
     return np.array([[x, y, r]])
 
 
-def compute_enclosing_circle(image: ImageObj) -> ResultShape:
+def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
     """Compute minimum enclosing circle
 
     Args:
@@ -1233,8 +1316,8 @@ def compute_enclosing_circle(image: ImageObj) -> ResultShape:
     Returns:
         Diameter coords
     """
-    return calc_with_osr(
-        image, get_enclosing_circle_coords, ShapeTypes.CIRCLE, "enclosing_circle"
+    return calc_resultshape(
+        "enclosing_circle", ShapeTypes.CIRCLE, image, get_enclosing_circle_coords
     )
 
 
@@ -1250,7 +1333,9 @@ class HoughCircleParam(gds.DataSet):
     min_distance = gds.IntItem(_("Minimal distance"), min=0)
 
 
-def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> ResultShape:
+def compute_hough_circle_peaks(
+    image: ImageObj, p: HoughCircleParam
+) -> ResultShape | None:
     """Compute Hough circles
 
     Args:
@@ -1260,13 +1345,28 @@ def compute_hough_circle_peaks(image: ImageObj, p: HoughCircleParam) -> ResultSh
     Returns:
         Circle coordinates
     """
-    return calc_with_osr(
+    return calc_resultshape(
+        "hough_circle_peaks",
+        ShapeTypes.CIRCLE,
         image,
         get_hough_circle_peaks,
-        ShapeTypes.CIRCLE,
-        "hough_circle_peaks",
         p.min_radius,
         p.max_radius,
         None,
         p.min_distance,
     )
+
+
+def compute_stats_func(obj: ImageObj) -> ResultProperties:
+    """Compute statistics functions"""
+    statfuncs = {
+        "min(z)": ma.min,
+        "max(z)": ma.max,
+        "<z>": ma.mean,
+        "median(z)": ma.median,
+        "σ(z)": ma.std,
+        "<z>/σ(z)": lambda z: ma.mean(z) / ma.std(z),
+        "peak-to-peak(z)": ma.ptp,
+        "Σ(z)": ma.sum,
+    }
+    return calc_resultproperties("stats", obj, statfuncs)

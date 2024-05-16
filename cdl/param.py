@@ -61,6 +61,8 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ThresholdParam
     :no-index:
+.. autodataset:: cdl.param.ConstantOperationParam
+    :no-index:
 
 Signal parameters
 ^^^^^^^^^^^^^^^^^
@@ -69,7 +71,7 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.FWHMParam
     :no-index:
-.. autodataset:: cdl.param.NormalizeYParam
+.. autodataset:: cdl.param.NormalizeParam
     :no-index:
 .. autodataset:: cdl.param.PeakDetectionParam
     :no-index:
@@ -82,6 +84,8 @@ Signal parameters
 .. autodataset:: cdl.param.ResamplingParam
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
+    :no-index:
+..autodataset:: cdl.param.PowParam
     :no-index:
 .. autodataset :: cdl.param.LowPassFilterParam
     :no-index:
@@ -192,6 +196,8 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     ROIDataParam,
     ThresholdParam,
+    ConstantOperationParam,
+    NormalizeParam
 )
 from cdl.core.computation.image import (
     AverageProfileParam,
@@ -236,11 +242,12 @@ from cdl.core.computation.signal import (
     DetrendingParam,
     FWHMParam,
     InterpolationParam,
-    NormalizeYParam,
     PeakDetectionParam,
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
+    PowParam,
+    WindowingParam,
     BaseHighLowBandParam,
     LowPassFilterParam,
     HighPassFilterParam,
