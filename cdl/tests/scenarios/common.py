@@ -14,7 +14,6 @@ import numpy as np
 import cdl.obj as dlo
 import cdl.param as dlp
 from cdl.config import _
-from cdl.core.computation.signal import FilterMethodEnum
 from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
@@ -155,6 +154,20 @@ def run_signal_computations(
     panel.processor.compute_reverse_x()
     panel.processor.compute_reverse_x()
 
+    # Test filter methods
+    for filter_func, paramclass in (
+        (panel.processor.compute_lowpass, dlp.LowPassFilterParam),
+        (panel.processor.compute_highpass, dlp.HighPassFilterParam),
+        (panel.processor.compute_bandpass, dlp.BandPassFilterParam),
+        (panel.processor.compute_bandstop, dlp.BandStopFilterParam),
+    ):
+        for method_value, _method_name in paramclass.methods:
+            panel.objview.set_current_object(sig1)
+            param = paramclass.create(method=method_value)
+            param.update_from_signal(sig1)  # Use default cut-off frequencies
+            filter_func(param)
+
+    # Test windowing methods
     noiseobj2 = noiseobj1.copy()
     win.add_object(noiseobj2)
     param = dlp.WindowingParam()
@@ -210,18 +223,6 @@ def run_signal_computations(
     y = x * 0.0
     sig2 = dlo.create_signal("X values for interpolation", x, y)
     panel.add_object(sig2)
-
-    # Test filter methods
-    for method in FilterMethodEnum:
-        for filter_func, paramclass in (
-            (panel.processor.compute_lowpass, dlp.LowPassFilterParam),
-            (panel.processor.compute_highpass, dlp.HighPassFilterParam),
-            (panel.processor.compute_bandpass, dlp.BandPassFilterParam),
-            (panel.processor.compute_bandstop, dlp.BandStopFilterParam),
-        ):
-            panel.objview.set_current_object(sig2)
-            param = paramclass.create(method=method)
-            filter_func(param)
 
     # Test interpolation
     # pylint: disable=protected-access

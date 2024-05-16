@@ -651,7 +651,7 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     return Wrap11Func(sps.wiener)(src)
 
 
-class FilterEnum(Enum):
+class FilterType(Enum):
     """Filter types"""
 
     LOWPASS = "lowpass"
@@ -660,176 +660,123 @@ class FilterEnum(Enum):
     BANDSTOP = "bandstop"
 
 
-class FilterMethodEnum(Choices):
-    """Filter methods"""
-
-    BESSEL = "bessel"
-    BUTTER = "butter"
-    CHEBY1 = "cheby1"
-    CHEBY2 = "cheby2"
-    ELLIP = "ellip"
-
-
 class BaseHighLowBandParam(gds.DataSet):
     """Base class for high-pass, low-pass, band-pass and band-stop filters"""
 
-    TYPE: FilterEnum = FilterEnum.LOWPASS
+    methods = (
+        ("bessel", _("Bessel")),
+        ("butter", _("Butterworth")),
+        ("cheby1", _("Chebyshev type 1")),
+        ("cheby2", _("Chebyshev type 2")),
+        ("ellip", _("Elliptic")),
+    )
+
+    TYPE: FilterType = FilterType.LOWPASS
     _type_prop = gds.GetAttrProp("TYPE")
 
     # Must be overwriten by the child class
     _method_prop = gds.GetAttrProp("method")
-    method = gds.ChoiceItem(
-        _("Filter method"),
-        choices=FilterMethodEnum.get_choices(),
-    ).set_prop("display", store=_method_prop)
+    method = gds.ChoiceItem(_("Filter method"), methods).set_prop(
+        "display", store=_method_prop
+    )
 
     order = gds.IntItem(_("Filter order"), default=3, min=1)
     f_cut0 = gds.FloatItem(
-        _("Low cutoff frequency"), default=10, min=0, nonzero=True
+        _("Low cutoff frequency"), min=0, nonzero=True, unit="Hz"
     ).set_prop(
-        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.LOWPASS)
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterType.HIGHPASS)
     )
     f_cut1 = gds.FloatItem(
-        _("High cutoff frequency"), default=100, nonzero=True
+        _("High cutoff frequency"), min=0, nonzero=True, unit="Hz"
     ).set_prop(
-        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterEnum.HIGHPASS)
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterType.LOWPASS)
     )
-    fe = gds.FloatItem(_("Sampling frequency"), default=100, nonzero=True).set_prop(
-        "display", hide=True
-    )
-    rp = gds.FloatItem(_("Passband ripple"), min=0, default=1, nonzero=True).set_prop(
+    rp = gds.FloatItem(
+        _("Passband ripple"), min=0, default=1, nonzero=True, unit="dB"
+    ).set_prop(
         "display",
-        active=gds.FuncProp(
-            _method_prop,
-            lambda x: x
-            in (
-                FilterMethodEnum.CHEBY1,
-                FilterMethodEnum.ELLIP,
-            ),
-        ),
+        active=gds.FuncProp(_method_prop, lambda x: x in ("cheby1", "ellip")),
     )
     rs = gds.FloatItem(
-        _("Stopband attenuation"), min=0, default=1, nonzero=True
+        _("Stopband attenuation"), min=0, default=1, nonzero=True, unit="dB"
     ).set_prop(
         "display",
-        active=gds.FuncProp(
-            _method_prop,
-            lambda x: x
-            in (
-                FilterMethodEnum.CHEBY2,
-                FilterMethodEnum.ELLIP,
-            ),
-        ),
+        active=gds.FuncProp(_method_prop, lambda x: x in ("cheby2", "ellip")),
     )
 
-    def get_filter(self) -> Callable:
-        """Return the filter function corresponding to the method"""
-        return self.FILTER_METHODS[self.method][0]  # type: ignore
+    @staticmethod
+    def get_nyquist_frequency(obj: SignalObj) -> float:
+        """Return the Nyquist frequency of a signal object
 
-    def get_params(self) -> tuple[float | str, ...]:
-        """Return the filter parameters
-
-        Returns:
-            tuple: filter parameters
+        Args:
+            obj: signal object
         """
-        params: list[float | str | tuple[float, ...]] = [self.order]  # type: ignore
-        params.extend(self._method_params())
-        params.extend(self._freq_params())
-        params.append(self.TYPE.value)
-        return params  # type: ignore
+        fs = float(obj.x.size - 1) / (obj.x[-1] - obj.x[0])
+        return fs / 2.0
 
-    def _freq_params(self) -> tuple[float | tuple[float, ...], ...]:
-        """Return the frequency parameters depending on the filter type
+    def update_from_signal(self, obj: SignalObj) -> None:
+        """Update the filter parameters from a signal object
 
-        Returns:
-            tuple: frequency parameters
+        Args:
+            obj: signal object
         """
-        if self.TYPE == FilterEnum.LOWPASS:
-            return (2 * self.f_cut0 / self.fe,)  # type: ignore
-        if self.TYPE == FilterEnum.HIGHPASS:
-            return (2 * self.f_cut1 / self.fe,)  # type: ignore
-        return ((2 * self.f_cut0 / self.fe, 2 * self.f_cut1 / self.fe),)  # type: ignore
+        f_nyquist = self.get_nyquist_frequency(obj)
+        if self.f_cut0 is None:
+            self.f_cut0 = 0.1 * f_nyquist
+        if self.f_cut1 is None:
+            self.f_cut1 = 0.9 * f_nyquist
 
-    def _method_params(self) -> tuple[float, ...]:
-        """Return the method parameters depending on the method"""
-        return self.FILTER_METHODS[self.method][1](self)  # type: ignore
-
-    def _no_param(self) -> tuple[float, ...]:
-        """Used when the method has no parameter
-
-        Returns:
-            tuple: empty tuple
-        """
-        return ()
-
-    def _cheby1_param(self) -> tuple[float, ...]:
-        """Return the Chebyshev type 1 parameters
-
-        Returns:
-            tuple: passband ripple
-        """
-        return (self.rp,)  # type: ignore
-
-    def _cheby2_param(self) -> tuple[float, ...]:
-        """Return the Chebyshev type 2 parameters
-
-        Returns:
-            tuple: stopband attenuation
-        """
-        return (self.rs,)  # type: ignore
-
-    def _ellip_param(self) -> tuple[float, ...]:
-        """Return the elliptic parameters
-
-        Returns:
-            tuple: passband ripple and stopband attenuation
-        """
-        return (self.rp, self.rs)  # type: ignore
-
-    FILTER_METHODS: dict[
-        FilterMethodEnum,
-        tuple[Callable, Callable[[Any], tuple[float, ...]]],
-    ] = {
-        FilterMethodEnum.BESSEL: (sps.bessel, _no_param),
-        FilterMethodEnum.BUTTER: (sps.butter, _no_param),
-        FilterMethodEnum.CHEBY1: (sps.cheby1, _cheby1_param),
-        FilterMethodEnum.CHEBY2: (sps.cheby2, _cheby2_param),
-        FilterMethodEnum.ELLIP: (sps.ellip, _ellip_param),
-    }
-
-    def get_filter_params(self) -> tuple[float | str, float | str]:
+    def get_filter_params(self, obj: SignalObj) -> tuple[float | str, float | str]:
         """Return the filter parameters (a and b) as a tuple. These parameters are used
         in the scipy.signal filter functions (eg. `scipy.signal.filtfilt`).
 
+        Args:
+            obj: signal object
+
         Returns:
             tuple: filter parameters
         """
-        return self.get_filter()(*self.get_params())
-
-    def set_fe_from_xdata(self, x: np.ndarray) -> None:
-        """Set the sampling frequency from the x data which is required to compute the
-        filter parameters.
-
-        Args:
-            x: x data
-        """
-        self.fe = (x.size - 1) / (x[-1] - x[0])
+        f_nyquist = self.get_nyquist_frequency(obj)
+        func = getattr(sps, self.method)
+        args: list[float | str | tuple[float, ...]] = [self.order]  # type: ignore
+        if self.method == "cheby1":
+            args += [self.rp]
+        elif self.method == "cheby2":
+            args += [self.rs]
+        elif self.method == "ellip":
+            args += [self.rp, self.rs]
+        if self.TYPE is FilterType.HIGHPASS:
+            args += [self.f_cut1 / f_nyquist]
+        elif self.TYPE is FilterType.LOWPASS:
+            args += [self.f_cut0 / f_nyquist]
+        else:
+            args += [[self.f_cut0 / f_nyquist, self.f_cut1 / f_nyquist]]
+        args += [self.TYPE.value]
+        return func(*args)
 
 
 class LowPassFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.LOWPASS
+    """Low-pass filter parameters"""
+
+    TYPE = FilterType.LOWPASS
 
 
 class HighPassFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.HIGHPASS
+    """High-pass filter parameters"""
+
+    TYPE = FilterType.HIGHPASS
 
 
 class BandPassFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.BANDPASS
+    """Band-pass filter parameters"""
+
+    TYPE = FilterType.BANDPASS
 
 
 class BandStopFilterParam(BaseHighLowBandParam):
-    TYPE = FilterEnum.BANDSTOP
+    """Band-stop filter parameters"""
+
+    TYPE = FilterType.BANDSTOP
 
 
 def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
@@ -844,17 +791,15 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     """
     name = f"{p.TYPE.value}"
     suffix = f"order={p.order:d}"
-    if p.TYPE in (FilterEnum.LOWPASS, FilterEnum.HIGHPASS):
+    if p.TYPE is FilterType.LOWPASS:
         suffix += f", cutoff={p.f_cut0:.2f}"
+    elif p.TYPE is FilterType.HIGHPASS:
+        suffix += f", cutoff={p.f_cut1:.2f}"
     else:
         suffix += f", cutoff={p.f_cut0:.2f}:{p.f_cut1:.2f}"
     dst = dst_11(src, name, suffix)
-
-    p.set_fe_from_xdata(dst.x)
-
-    b, a = p.get_filter_params()
+    b, a = p.get_filter_params(dst)
     dst.y = sps.filtfilt(b, a, dst.y)
-
     return dst
 
 

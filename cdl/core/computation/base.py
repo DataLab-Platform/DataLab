@@ -12,12 +12,10 @@
 
 from __future__ import annotations
 
-from enum import Enum
-from typing import TYPE_CHECKING, Any, Callable, Self, TypeVar
+from typing import TYPE_CHECKING, Callable
 
 import guidata.dataset as gds
 import numpy as np
-import scipy.signal as sps
 
 from cdl.config import _
 from cdl.core.model.base import ResultProperties

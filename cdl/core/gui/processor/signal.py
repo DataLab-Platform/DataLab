@@ -303,57 +303,54 @@ class SignalProcessor(BaseProcessor):
         """Compute Wiener filter"""
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
+    def __freq_filter(
+        self,
+        param: cdl.param.LowPassFilterParam
+        | cdl.param.HighPassFilterParam
+        | cdl.param.BandPassFilterParam
+        | cdl.param.BandStopFilterParam,
+        paramclass: type[
+            cdl.param.LowPassFilterParam
+            | cdl.param.HighPassFilterParam
+            | cdl.param.BandPassFilterParam
+            | cdl.param.BandStopFilterParam
+        ],
+        title: str,
+    ) -> None:
+        """Compute frequency filter"""
+        edit, param = self.init_param(param, paramclass, title)
+        if edit:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            param.update_from_signal(obj)
+        self.compute_11(cps.compute_filter, param, title=title, edit=edit)
+
     @qt_try_except()
     def compute_lowpass(
         self, param: cdl.param.LowPassFilterParam | None = None
     ) -> None:
         """Compute high-pass filter"""
-        self.compute_11(
-            cps.compute_filter,
-            param=param,
-            paramclass=cdl.param.LowPassFilterParam,
-            title=_("Low-pass filter"),
-            edit=True,
-        )
+        self.__freq_filter(param, cdl.param.LowPassFilterParam, _("Low-pass filter"))
 
     @qt_try_except()
     def compute_highpass(
         self, param: cdl.param.HighPassFilterParam | None = None
     ) -> None:
         """Compute high-pass filter"""
-        self.compute_11(
-            cps.compute_filter,
-            param=param,
-            paramclass=cdl.param.HighPassFilterParam,
-            title=_("High-pass filter"),
-            edit=True,
-        )
+        self.__freq_filter(param, cdl.param.HighPassFilterParam, _("High-pass filter"))
 
     @qt_try_except()
     def compute_bandpass(
         self, param: cdl.param.BandPassFilterParam | None = None
     ) -> None:
         """Compute band-pass filter"""
-        self.compute_11(
-            cps.compute_filter,
-            param=param,
-            paramclass=cdl.param.BandPassFilterParam,
-            title=_("Band-pass filter"),
-            edit=True,
-        )
+        self.__freq_filter(param, cdl.param.BandPassFilterParam, _("Band-pass filter"))
 
     @qt_try_except()
     def compute_bandstop(
         self, param: cdl.param.BandStopFilterParam | None = None
     ) -> None:
         """Compute band-stop filter"""
-        self.compute_11(
-            cps.compute_filter,
-            param=param,
-            paramclass=cdl.param.BandStopFilterParam,
-            title=_("Band-stop filter"),
-            edit=True,
-        )
+        self.__freq_filter(param, cdl.param.BandStopFilterParam, _("Band-stop filter"))
 
     @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
@@ -490,7 +487,6 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_expfit(self) -> None:
         """Compute exponential fitting curve"""
-
         self.compute_fit(_("Exponential fit"), fitdialog.exponentialfit)
 
     @qt_try_except()

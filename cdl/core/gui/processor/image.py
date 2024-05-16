@@ -305,7 +305,6 @@ class ImageProcessor(BaseProcessor):
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.update_from_image(obj)
-
         self.compute_11(cpi.compute_radial_profile, param, title=title, edit=edit)
 
     @qt_try_except()
