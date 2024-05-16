@@ -622,15 +622,19 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
 
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
-                _("Normalize"), triggered=self.panel.processor.compute_normalize
+                _("Normalize"),
+                triggered=self.panel.processor.compute_normalize,
+                icon=get_icon("normalize.svg"),
             )
             self.new_action(
                 _("Thresholding"),
                 triggered=self.panel.processor.compute_threshold,
+                icon=get_icon("threshold.svg"),
             )
             self.new_action(
                 _("Clipping"),
                 triggered=self.panel.processor.compute_clip,
+                icon=get_icon("clip.svg"),
             )
             self.new_action(
                 _("Linear calibration"),
@@ -704,7 +708,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 separator=True,
             )
             self.new_action(
-                _("Swap X/Y axes"), triggered=self.panel.processor.compute_swap_axes
+                _("Swap X/Y axes"),
+                triggered=self.panel.processor.compute_swap_axes,
+                icon=get_icon("swap_x_y.svg"),
             )
 
         with self.new_category(ActionCategory.COMPUTING):
@@ -738,10 +744,14 @@ class SignalActionHandler(BaseActionHandler):
         """Create actions that are added to the menus in the first place"""
         with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
-                _("Derivative"), triggered=self.panel.processor.compute_derivative
+                _("Derivative"),
+                triggered=self.panel.processor.compute_derivative,
+                icon=get_icon("derivative.svg"),
             )
             self.new_action(
-                _("Integral"), triggered=self.panel.processor.compute_integral
+                _("Integral"),
+                triggered=self.panel.processor.compute_integral,
+                icon=get_icon("integral.svg"),
             )
 
         super().create_first_actions()
@@ -751,11 +761,13 @@ class SignalActionHandler(BaseActionHandler):
                 _("Power"),
                 triggered=self.panel.processor.compute_pow,
                 separator=True,
+                icon=get_icon("power.svg"),
             )
             self.new_action(
                 _("Square root"),
                 triggered=self.panel.processor.compute_sqrt,
                 separator=False,
+                icon=get_icon("sqrt.svg"),
             )
             self.new_action(
                 _("Peak detection"),
@@ -776,11 +788,12 @@ class SignalActionHandler(BaseActionHandler):
                 _("Detrending"), triggered=self.panel.processor.compute_detrending
             )
 
-        def cra_fit(title, fitdlgfunc):
+        def cra_fit(title, fitdlgfunc, iconname):
             """Create curve fitting action"""
             return self.new_action(
                 title,
                 triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
+                icon=get_icon(iconname),
             )
 
         with self.new_category(ActionCategory.PROCESSING):
@@ -788,25 +801,30 @@ class SignalActionHandler(BaseActionHandler):
                 self.new_action(
                     _("Linear fit"),
                     triggered=self.panel.processor.compute_linearfit,
+                    icon=get_icon("linearfit.svg"),
                 )
                 self.new_action(
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
+                    icon=get_icon("polyfit.svg"),
                 )
-                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit)
-                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
-                cra_fit(_("Voigt fit"), fitdialog.voigtfit)
+                cra_fit(_("Gaussian fit"), fitdialog.gaussianfit, "gaussfit.svg")
+                cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit, "lorentzfit.svg")
+                cra_fit(_("Voigt fit"), fitdialog.voigtfit, "voigtfit.svg")
                 self.new_action(
                     _("Multi-Gaussian fit"),
                     triggered=self.panel.processor.compute_multigaussianfit,
+                    icon=get_icon("multigaussfit.svg"),
                 )
                 self.new_action(
                     _("Exponential fit"),
                     triggered=self.panel.processor.compute_expfit,
+                    icon=get_icon("expfit.svg"),
                 )
                 self.new_action(
                     _("Sinusoidal fit"),
                     triggered=self.panel.processor.compute_sinfit,
+                    icon=get_icon("sinfit.svg"),
                 )
                 self.new_action(
                     _("CDF fit"),
@@ -815,6 +833,7 @@ class SignalActionHandler(BaseActionHandler):
                         "Cumulative distribution function fit, "
                         "related to Error function (erf)"
                     ),
+                    icon=get_icon("cdffit.svg"),
                 )
 
         with self.new_category(ActionCategory.COMPUTING):
@@ -822,11 +841,13 @@ class SignalActionHandler(BaseActionHandler):
                 _("Full width at half-maximum"),
                 triggered=self.panel.processor.compute_fwhm,
                 tip=_("Compute Full Width at Half-Maximum (FWHM)"),
+                icon=get_icon("fwhm.svg"),
             )
             self.new_action(
                 _("Full width at") + " 1/e²",
                 triggered=self.panel.processor.compute_fw1e2,
                 tip=_("Compute Full Width at Maximum") + "/e²",
+                icon=get_icon("fw1e2.svg"),
             )
 
         with self.new_category(ActionCategory.VIEW):
