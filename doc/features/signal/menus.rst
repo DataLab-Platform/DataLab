@@ -511,6 +511,63 @@ Inverse FFT
 
 Create a new signal which is the inverse FFT of each selected signal.
 
+Frequency filters
+^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of applying a frequency filter to each selected signal.
+
+The following filters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Filter
+      - Description
+    * - |lowpass| Low-pass
+      - Filter out high frequencies, above a cutoff frequency
+    * - |highpass| High-pass
+      - Filter out low frequencies, below a cutoff frequency
+    * - |bandpass| Band-pass
+      - Filter out frequencies outside a range
+    * - |bandstop| Band-stop
+      - Filter out frequencies inside a range
+
+.. |lowpass| image:: ../../../cdl/data/icons/processing/lowpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |highpass| image:: ../../../cdl/data/icons/processing/highpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |bandpass| image:: ../../../cdl/data/icons/processing/bandpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |bandstop| image:: ../../../cdl/data/icons/processing/bandstop.svg
+    :width: 24px
+    :height: 24px
+
+For each filter, the following methods are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Method
+      - Description
+    * - Bessel
+      - Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function
+    * - Butterworth
+      - Butterworth filter, using SciPy's `scipy.signal.butter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_ function
+    * - Chebyshev I
+      - Chebyshev type I filter, using SciPy's `scipy.signal.cheby1 <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_ function
+    * - Chebyshev II
+      - Chebyshev type II filter, using SciPy's `scipy.signal.cheby2 <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_ function
+    * - Elliptic
+      - Elliptic filter, using SciPy's `scipy.signal.ellip <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_ function
+
 Interpolation
 ^^^^^^^^^^^^^
 
