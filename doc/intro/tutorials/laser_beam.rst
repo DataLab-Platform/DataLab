@@ -26,7 +26,7 @@ First, we open DataLab and load the images:
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
-.. |fileopen_ima| image:: ../../../cdl/data/icons/fileopen_ima.svg
+.. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
 
@@ -56,7 +56,7 @@ pressing the middle mouse button and dragging the mouse.
     But, let's go back to the initial display by selecting the "Reset image positions"
     entry in the "Operations" menu.
 
-.. |distribute_on_grid| image:: ../../../cdl/data/icons/distribute_on_grid.svg
+.. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
     :width: 24px
     :height: 24px
 
@@ -115,7 +115,7 @@ might be useful to apply a threshold to the images.
     title of this measurement has been displayed with
     "View > Show graphical object titles" or the |show_titles| button in the toolbar).
 
-.. |show_titles| image:: ../../../cdl/data/icons/show_titles.svg
+.. |show_titles| image:: ../../../cdl/data/icons/view/show_titles.svg
     :width: 24px
     :height: 24px
 
@@ -178,7 +178,7 @@ the whole group "g001").
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
 
@@ -190,7 +190,7 @@ the whole group "g001").
     choosing the x and y axes among the result columns. Here, we choose the
     to plot the FWHM values (`L`) as a function of the image index (`Indexes`).
 
-.. |plot_results| image:: ../../../cdl/data/icons/plot_results.svg
+.. |plot_results| image:: ../../../cdl/data/icons/computing/plot_results.svg
     :width: 24px
     :height: 24px
 
@@ -211,7 +211,7 @@ all the images and signals that were loaded or processed in DataLab. It also con
 the computing results, the visualization settings (colormaps, contrast, etc.), the
 metadata, and the annotations.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/filesave_h5.svg
+.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
 
@@ -220,10 +220,10 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5browser.svg
+.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
