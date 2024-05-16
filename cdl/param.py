@@ -85,15 +85,15 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
     :no-index:
-..autodataset:: cdl.param.PowParam
+.. autodataset:: cdl.param.PowParam
     :no-index:
-.. autodataset :: cdl.param.LowPassFilterParam
+.. autodataset:: cdl.param.LowPassFilterParam
     :no-index:
-.. autodataset :: cdl.param.HighPassFilterParam
+.. autodataset:: cdl.param.HighPassFilterParam
     :no-index:
-.. autodataset :: cdl.param.BandPassFilterParam
+.. autodataset:: cdl.param.BandPassFilterParam
     :no-index:
-.. autodataset :: cdl.param.BandStopFilterParam
+.. autodataset:: cdl.param.BandStopFilterParam
     :no-index:
 
 Image parameters
@@ -197,7 +197,7 @@ from cdl.core.computation.base import (
     ROIDataParam,
     ThresholdParam,
     ConstantOperationParam,
-    NormalizeParam
+    NormalizeParam,
 )
 from cdl.core.computation.image import (
     AverageProfileParam,
