@@ -793,7 +793,7 @@ class SignalActionHandler(BaseActionHandler):
                 triggered=self.panel.processor.compute_integral,
                 icon=get_icon("integral.svg"),
             )
-            with self.new_menu(_("Fitlers")):
+            with self.new_menu(_("Frequency filters")):
                 self.new_action(
                     _("Low-pass filter"), triggered=self.panel.processor.compute_lowpass
                 )
