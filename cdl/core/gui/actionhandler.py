@@ -795,19 +795,24 @@ class SignalActionHandler(BaseActionHandler):
             )
             with self.new_menu(_("Frequency filters")):
                 self.new_action(
-                    _("Low-pass filter"), triggered=self.panel.processor.compute_lowpass
+                    _("Low-pass filter"),
+                    triggered=self.panel.processor.compute_lowpass,
+                    icon=get_icon("lowpass.svg"),
                 )
                 self.new_action(
                     _("High-pass filter"),
                     triggered=self.panel.processor.compute_highpass,
+                    icon=get_icon("highpass.svg"),
                 )
                 self.new_action(
                     _("Band-pass filter"),
                     triggered=self.panel.processor.compute_bandpass,
+                    icon=get_icon("bandpass.svg"),
                 )
                 self.new_action(
                     _("Band-stop filter"),
                     triggered=self.panel.processor.compute_bandstop,
+                    icon=get_icon("bandstop.svg"),
                 )
         super().create_first_actions()
 
