@@ -6,9 +6,9 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-# Note:
-# ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# MARK: Important note
+# --------------------
+# All `guidata.dataset.DataSet` classes must also be imported in the `cdl.param` module.
 
 from __future__ import annotations
 
@@ -130,7 +130,7 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
     return dst
 
 
-# -------- compute_n1 functions --------------------------------------------------------
+# MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input signals and return a single
@@ -236,7 +236,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
-# -------- compute_n1n functions -------------------------------------------------------
+# MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -304,7 +304,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     return dst
 
 
-# -------- compute_11 functions --------------------------------------------------------
+# MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 

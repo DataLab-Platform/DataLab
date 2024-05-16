@@ -6,6 +6,10 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+# MARK: Important note
+# --------------------
+# All `guidata.dataset.DataSet` classes must also be imported in the `cdl.param` module.
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -144,7 +148,7 @@ def dst_n1n(
     return dst
 
 
-# -------- compute_n1 functions --------------------------------------------------------
+# MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input images and 1 output image
 # --------------------------------------------------------------------------------------
 # Those functions are perfoming a computation on N input images and return a single
@@ -246,7 +250,7 @@ def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> Imag
     return dst
 
 
-# -------- compute_n1n functions -------------------------------------------------------
+# MARK: compute_n1n functions ----------------------------------------------------------
 # Functions with N input images + 1 input image and N output images
 # --------------------------------------------------------------------------------------
 
@@ -320,7 +324,7 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
     return dst
 
 
-# -------- compute_11 functions --------------------------------------------------------
+# MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 
@@ -994,6 +998,7 @@ def compute_log10(src: ImageObj) -> ImageObj:
         Output image object
     """
     return Wrap11Func(np.log10)(src)
+
 
 def compute_exp(src: ImageObj) -> ImageObj:
     """Compute exponential
