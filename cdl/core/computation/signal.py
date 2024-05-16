@@ -832,8 +832,8 @@ class BandStopFilterParam(BaseHighLowBandParam):
     TYPE = FilterEnum.BANDSTOP
 
 
-def compute_higlowband(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
-    """Compute high/low-pass filter
+def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
+    """Compute frequency filter (low-pass, high-pass, band-pass, band-stop)
 
     Args:
         src: source signal

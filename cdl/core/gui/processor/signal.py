@@ -309,7 +309,7 @@ class SignalProcessor(BaseProcessor):
     ) -> None:
         """Compute high-pass filter"""
         self.compute_11(
-            cps.compute_higlowband,
+            cps.compute_filter,
             param=param,
             paramclass=cdl.param.LowPassFilterParam,
             title=_("Low-pass filter"),
@@ -322,7 +322,7 @@ class SignalProcessor(BaseProcessor):
     ) -> None:
         """Compute high-pass filter"""
         self.compute_11(
-            cps.compute_higlowband,
+            cps.compute_filter,
             param=param,
             paramclass=cdl.param.HighPassFilterParam,
             title=_("High-pass filter"),
@@ -335,7 +335,7 @@ class SignalProcessor(BaseProcessor):
     ) -> None:
         """Compute band-pass filter"""
         self.compute_11(
-            cps.compute_higlowband,
+            cps.compute_filter,
             param=param,
             paramclass=cdl.param.BandPassFilterParam,
             title=_("Band-pass filter"),
@@ -348,7 +348,7 @@ class SignalProcessor(BaseProcessor):
     ) -> None:
         """Compute band-stop filter"""
         self.compute_11(
-            cps.compute_higlowband,
+            cps.compute_filter,
             param=param,
             paramclass=cdl.param.BandStopFilterParam,
             title=_("Band-stop filter"),
