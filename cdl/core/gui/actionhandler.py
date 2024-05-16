@@ -569,61 +569,78 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Sum"),
                 triggered=self.panel.processor.compute_sum,
                 select_condition=SelectCond.at_least_two,
+                icon=get_icon("sum.svg"),
             )
             self.new_action(
                 _("Average"),
                 triggered=self.panel.processor.compute_average,
                 select_condition=SelectCond.at_least_two,
+                icon=get_icon("average.svg"),
             )
             self.new_action(
                 _("Difference"),
                 triggered=self.panel.processor.compute_difference,
                 select_condition=SelectCond.at_least_one,
+                icon=get_icon("difference.svg"),
             )
             self.new_action(
                 _("Quadratic difference"),
                 triggered=self.panel.processor.compute_quadratic_difference,
                 select_condition=SelectCond.at_least_one,
+                icon=get_icon("quadratic_difference.svg"),
             )
             self.new_action(
                 _("Product"),
                 triggered=self.panel.processor.compute_product,
                 select_condition=SelectCond.at_least_two,
+                icon=get_icon("product.svg"),
             )
             self.new_action(
                 _("Division"),
                 triggered=self.panel.processor.compute_division,
                 select_condition=SelectCond.at_least_one,
+                icon=get_icon("division.svg"),
             )
             with self.new_menu(_("Constant Operations")):
                 self.new_action(
                     _("Add constant"),
                     triggered=self.panel.processor.compute_sum_constant,
                     select_condition=SelectCond.at_least_one,
+                    icon=get_icon("constant_add.svg"),
                 )
                 self.new_action(
                     _("Substract constant"),
                     triggered=self.panel.processor.compute_difference_constant,
                     select_condition=SelectCond.at_least_one,
+                    icon=get_icon("constant_substract.svg"),
                 )
                 self.new_action(
                     _("Multiply by constant"),
                     triggered=self.panel.processor.compute_product_by_constant,
                     select_condition=SelectCond.at_least_one,
+                    icon=get_icon("constant_multiply.svg"),
                 )
                 self.new_action(
                     _("Divide by constant"),
                     triggered=self.panel.processor.compute_division_by_contant,
                     select_condition=SelectCond.at_least_one,
+                    icon=get_icon("constant_divide.svg"),
                 )
             self.new_action(
                 _("Absolute value"),
                 triggered=self.panel.processor.compute_abs,
                 separator=True,
+                icon=get_icon("abs.svg"),
             )
-            self.new_action(_("Real part"), triggered=self.panel.processor.compute_re)
             self.new_action(
-                _("Imaginary part"), triggered=self.panel.processor.compute_im
+                _("Real part"),
+                triggered=self.panel.processor.compute_re,
+                icon=get_icon("re.svg"),
+            )
+            self.new_action(
+                _("Imaginary part"),
+                triggered=self.panel.processor.compute_im,
+                icon=get_icon("im.svg"),
             )
             self.new_action(
                 _("Convert data type"),
@@ -634,11 +651,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Exponential"),
                 triggered=self.panel.processor.compute_exp,
                 separator=True,
+                icon=get_icon("exp.svg"),
             )
             self.new_action(
                 _("Logarithm (base 10)"),
                 triggered=self.panel.processor.compute_log10,
                 separator=False,
+                icon=get_icon("log10.svg"),
             )
 
         with self.new_category(ActionCategory.PROCESSING):
