@@ -47,6 +47,7 @@ from cdl.core.computation.base import (
     NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
+    dst_11,
     new_signal_result,
 )
 from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
@@ -54,23 +55,6 @@ from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
-
-
-def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
-
-    Args:
-        src: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src.copy(title=f"{name}({src.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 class Wrap11Func:
@@ -185,7 +169,7 @@ def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "add_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"+{p.value}")
     dst.data = dst.data + p.value
     return dst
 
@@ -200,7 +184,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Result image object **src** - **p.value**
     """
-    dst = dst_11(src, "difference_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"-{p.value}")
     dst.data = dst.data - p.value
     return dst
 
@@ -230,7 +214,7 @@ def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Output image object
     """
-    dst = dst_11(src, "product_by_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"*{p.value}")
     dst.data = dst.data * p.value
     return dst
 
@@ -245,7 +229,7 @@ def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> Imag
     Returns:
         Result image object **src** / **p.value**
     """
-    dst = dst_11(src, "divide_by_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"/{p.value}")
     dst.data = dst.data / p.value
     return dst
 

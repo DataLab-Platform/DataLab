@@ -46,29 +46,13 @@ from cdl.core.computation.base import (
     NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
+    dst_11,
     new_signal_result,
 )
 from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
-
-
-def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
-    """Create a result signal object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
-
-    Args:
-        src: source signal
-        name: name of the function
-
-    Returns:
-        Result signal object
-    """
-    dst = src.copy(title=f"{name}({src.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 class Wrap11Func:
@@ -169,7 +153,7 @@ def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj
     Returns:
         Output signal object
     """
-    dst = dst_11(src, "add_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"+{p.value}")
     dst.y += p.value
     return dst
 
@@ -184,7 +168,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     Returns:
         Result signal object **src** - **p.value**
     """
-    dst = dst_11(src, "difference_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"-{p.value}")
     dst.y -= p.value
     return dst
 
@@ -200,7 +184,7 @@ def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     Returns:
         Output signal object
     """
-    dst = dst_11(src, "product_by_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"*{p.value}")
     dst.y = dst.y + p.value
     return dst
 
@@ -215,7 +199,7 @@ def compute_divide_by_constant(src: SignalObj, p: ConstantOperationParam) -> Sig
     Returns:
         Result signal object **src** / **p.value**
     """
-    dst = dst_11(src, "divide_by_constant", f"value={p.value}")
+    dst = dst_11(src, "", f"/{p.value}")
     dst.y = dst.y / p.value
     return dst
 

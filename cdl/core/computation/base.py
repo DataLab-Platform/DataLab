@@ -190,3 +190,28 @@ def calc_resultproperties(
         val_roi = -1 if i_roi is None else i_roi
         res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])
     return ResultProperties(label, np.array(res), list(labeledfuncs.keys()))
+
+
+def dst_11(
+    src: SignalObj | ImageObj, name: str, suffix: str | None = None
+) -> SignalObj | ImageObj:
+    """Create a result object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
+
+    Args:
+        src: source signal or image object
+        name: name of the function. If provided, the title of the result object
+         will be `{name}({src.short_id})|{suffix})`.
+         If not provided, the title will be `{src.short_id}{suffix}`.
+        suffix: suffix to add to the title. Optional.
+
+    Returns:
+        Result signal or image object
+    """
+    if name == "":
+        title = f"{src.short_id}{suffix or ''}"
+    else:
+        title = f"{name}({src.short_id})"
+        if suffix is not None:
+            title += "|" + suffix
+    return src.copy(title=title)
