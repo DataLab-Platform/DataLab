@@ -195,16 +195,20 @@ def run_signal_computations(
     i2 = len(sig.y) - i1
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
 
+    sig = panel.objview.get_sel_objects()[0]
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
-    panel.processor.compute_linearfit()
-    panel.processor.compute_expfit()
-    panel.processor.compute_cdffit()
-    panel.processor.compute_sinfit()
-
-    panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
-    panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
-    panel.processor.compute_fit(_("Voigt fit"), fitdialog.voigtfit)
+    for fittitle, fitfunc in (
+        (_("Gaussian fit"), fitdialog.gaussianfit),
+        (_("Lorentzian fit"), fitdialog.lorentzianfit),
+        (_("Voigt fit"), fitdialog.voigtfit),
+        (_("Linear fit"), fitdialog.linearfit),
+        (_("Exponential fit"), fitdialog.exponentialfit),
+        (_("CDF fit"), fitdialog.cdffit),
+        (_("Sinusoidal fit"), fitdialog.sinusoidalfit),
+    ):
+        panel.objview.set_current_object(sig)
+        panel.processor.compute_fit(fittitle, fitfunc)
 
     newparam = dlo.new_signal_param(_("Gaussian"), stype=dlo.SignalTypes.GAUSS)
     sig = dlo.create_signal_from_param(

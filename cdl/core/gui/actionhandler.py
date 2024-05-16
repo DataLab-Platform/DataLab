@@ -848,21 +848,18 @@ class SignalActionHandler(BaseActionHandler):
                 _("Detrending"), triggered=self.panel.processor.compute_detrending
             )
 
-        def cra_fit(title, fitdlgfunc, iconname):
+        def cra_fit(title, fitdlgfunc, iconname, tip: str | None = None):
             """Create curve fitting action"""
             return self.new_action(
                 title,
                 triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
                 icon=get_icon(iconname),
+                tip=tip,
             )
 
         with self.new_category(ActionCategory.PROCESSING):
             with self.new_menu(_("Fitting")):
-                self.new_action(
-                    _("Linear fit"),
-                    triggered=self.panel.processor.compute_linearfit,
-                    icon=get_icon("linearfit.svg"),
-                )
+                cra_fit(_("Linear fit"), fitdialog.linearfit, "linearfit.svg")
                 self.new_action(
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
@@ -876,24 +873,16 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_multigaussianfit,
                     icon=get_icon("multigaussfit.svg"),
                 )
-                self.new_action(
-                    _("Exponential fit"),
-                    triggered=self.panel.processor.compute_expfit,
-                    icon=get_icon("expfit.svg"),
-                )
-                self.new_action(
-                    _("Sinusoidal fit"),
-                    triggered=self.panel.processor.compute_sinfit,
-                    icon=get_icon("sinfit.svg"),
-                )
-                self.new_action(
+                cra_fit(_("Exponential fit"), fitdialog.exponentialfit, "expfit.svg")
+                cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit, "sinfit.svg")
+                cra_fit(
                     _("CDF fit"),
-                    triggered=self.panel.processor.compute_cdffit,
+                    fitdialog.cdffit,
+                    "cdffit.svg",
                     tip=_(
                         "Cumulative distribution function fit, "
                         "related to Error function (erf)"
                     ),
-                    icon=get_icon("cdffit.svg"),
                 )
 
         with self.new_category(ActionCategory.COMPUTING):

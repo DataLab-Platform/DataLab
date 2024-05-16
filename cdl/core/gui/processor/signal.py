@@ -457,11 +457,6 @@ class SignalProcessor(BaseProcessor):
 
             self.compute_fit(txt, polynomialfit)
 
-    @qt_try_except()
-    def compute_linearfit(self) -> None:
-        """Compute linear fitting curve"""
-        self.compute_fit(_("Linear fit"), fitdialog.linearfit)
-
     def __row_compute_fit(
         self, obj: SignalObj, name: str, fitdlgfunc: Callable
     ) -> None:
@@ -483,21 +478,6 @@ class SignalProcessor(BaseProcessor):
             signal = create_signal(f"{name}({obj.title})", obj.x, y, metadata=metadata)
             # Creating new plot item
             self.panel.add_object(signal)
-
-    @qt_try_except()
-    def compute_expfit(self) -> None:
-        """Compute exponential fitting curve"""
-        self.compute_fit(_("Exponential fit"), fitdialog.exponentialfit)
-
-    @qt_try_except()
-    def compute_sinfit(self) -> None:
-        """Compute sinusoidal fitting curve"""
-        self.compute_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit)
-
-    @qt_try_except()
-    def compute_cdffit(self) -> None:
-        """Compute Cumulative Distribution Function (CDF) fitting curve"""
-        self.compute_fit(_("CDF fit"), fitdialog.cdffit)
 
     @qt_try_except()
     def compute_multigaussianfit(self) -> None:
