@@ -164,8 +164,11 @@ def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     Returns:
         Result image object **src** + **p.value**
     """
-    dst = dst_11(src, "+", str(p.value))
-    dst.data += p.value
+    # For the addition of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "+", str(value))
+    dst.data += value
     return dst
 
 
@@ -179,8 +182,11 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Result image object **src** - **p.value**
     """
-    dst = dst_11(src, "-", str(p.value))
-    dst.data -= p.value
+    # For the subtraction of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "-", str(value))
+    dst.data -= value
     return dst
 
 
@@ -195,8 +201,13 @@ def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     Returns:
         Result image object **src** * **p.value**
     """
+    # For the multiplication by a constant value, we do not convert the constant value
+    # to the same data type as the input image, because we want to allow the user to
+    # multiply an image by a constant value of a different data type. The final data
+    # type conversion ensures that the output image has the same data type as the input
+    # image.
     dst = dst_11(src, "×", str(p.value))
-    dst.data *= p.value
+    dst.data = np.array(src.data * p.value, dtype=src.data.dtype)
     return dst
 
 
@@ -210,8 +221,12 @@ def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> Imag
     Returns:
         Result image object **src** / **p.value**
     """
+    # For the division by a constant value, we do not convert the constant value to the
+    # same data type as the input image, because we want to allow the user to divide an
+    # image by a constant value of a different data type. The final data type conversion
+    # ensures that the output image has the same data type as the input image.
     dst = dst_11(src, "/", str(p.value))
-    dst.data /= p.value
+    dst.data = np.array(src.data / p.value, dtype=src.data.dtype)
     return dst
 
 
