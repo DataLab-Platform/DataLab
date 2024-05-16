@@ -142,6 +142,22 @@ def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
+def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
+    """Multiply **dst** and **src** signals and return **dst** signal modified in place
+
+    Args:
+        dst: destination signal
+        src: source signal
+
+    Returns:
+        Modified **dst** signal
+    """
+    dst.y *= np.array(src.y, dtype=dst.y.dtype)
+    if dst.dy is not None:
+        dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    return dst
+
+
 def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
     """Add **dst** and a constant value and return **dst** signal modified in place
 
@@ -151,7 +167,7 @@ def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj
         p: constant value
 
     Returns:
-        Output signal object
+        Result signal object **src** + **p.value**
     """
     dst = dst_11(src, "", f"+{p.value}")
     dst.y += p.value
@@ -182,7 +198,7 @@ def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> Si
         p: constant value
 
     Returns:
-        Output signal object
+        Result signal object **src** * **p.value**
     """
     dst = dst_11(src, "", f"*{p.value}")
     dst.y *= p.value
@@ -200,23 +216,7 @@ def compute_divide_by_constant(src: SignalObj, p: ConstantOperationParam) -> Sig
         Result signal object **src** / **p.value**
     """
     dst = dst_11(src, "", f"/{p.value}")
-    dst.y = dst.y / p.value
-    return dst
-
-
-def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
-    """Multiply **dst** and **src** signals and return **dst** signal modified in place
-
-    Args:
-        dst: destination signal
-        src: source signal
-
-    Returns:
-        Modified **dst** signal
-    """
-    dst.y *= np.array(src.y, dtype=dst.y.dtype)
-    if dst.dy is not None:
-        dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    dst.y /= p.value
     return dst
 
 

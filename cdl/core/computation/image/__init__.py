@@ -158,37 +158,6 @@ def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
-def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Add **dst** and a constant value and return **dst** image modified in place
-
-    Args:
-        dst: output image object
-        src: input image object
-        p: constant value
-
-    Returns:
-        Output image object
-    """
-    dst = dst_11(src, "", f"+{p.value}")
-    dst.data = dst.data + p.value
-    return dst
-
-
-def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Subtract a constant value from an image
-
-    Args:
-        src: input image object
-        p: constant value
-
-    Returns:
-        Result image object **src** - **p.value**
-    """
-    dst = dst_11(src, "", f"-{p.value}")
-    dst.data = dst.data - p.value
-    return dst
-
-
 def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Multiply **dst** and **src** images and return **dst** image modified in place
 
@@ -203,6 +172,37 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
+def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Add **dst** and a constant value and return **dst** image modified in place
+
+    Args:
+        dst: output image object
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** + **p.value**
+    """
+    dst = dst_11(src, "", f"+{p.value}")
+    dst.data += p.value
+    return dst
+
+
+def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Subtract a constant value from an image
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** - **p.value**
+    """
+    dst = dst_11(src, "", f"-{p.value}")
+    dst.data -= p.value
+    return dst
+
+
 def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     """Multiply **dst** by a constant value and return **dst** image modified in place
 
@@ -212,10 +212,10 @@ def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
         p: constant value
 
     Returns:
-        Output image object
+        Result image object **src** * **p.value**
     """
     dst = dst_11(src, "", f"*{p.value}")
-    dst.data = dst.data * p.value
+    dst.data *= p.value
     return dst
 
 
@@ -230,7 +230,7 @@ def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> Imag
         Result image object **src** / **p.value**
     """
     dst = dst_11(src, "", f"/{p.value}")
-    dst.data = dst.data / p.value
+    dst.data /= p.value
     return dst
 
 
