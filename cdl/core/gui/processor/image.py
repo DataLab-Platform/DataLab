@@ -879,7 +879,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics"""
-        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+        return self.compute_10(cpi.compute_stats, title=_("Statistics"))
 
     @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:

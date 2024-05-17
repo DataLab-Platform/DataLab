@@ -1357,8 +1357,15 @@ def compute_hough_circle_peaks(
     )
 
 
-def compute_stats_func(obj: ImageObj) -> ResultProperties:
-    """Compute statistics functions"""
+def compute_stats(obj: ImageObj) -> ResultProperties:
+    """Compute statistics on an image
+
+    Args:
+        obj: input image object
+
+    Returns:
+        Result properties
+    """
     statfuncs = {
         "min(z)": ma.min,
         "max(z)": ma.max,

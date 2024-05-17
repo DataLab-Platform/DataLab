@@ -1225,8 +1225,15 @@ def compute_fw1e2(signal: SignalObj) -> ResultShape:
     return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, __func_fw1e2)
 
 
-def compute_stats_func(obj: SignalObj) -> ResultProperties:
-    """Compute statistics functions"""
+def compute_stats(obj: SignalObj) -> ResultProperties:
+    """Compute statistics on a signal
+
+    Args:
+        obj: source signal
+
+    Returns:
+        Result properties object
+    """
     statfuncs = {
         "min(y)": lambda xy: xy[1].min(),
         "max(y)": lambda xy: xy[1].max(),
@@ -1234,7 +1241,7 @@ def compute_stats_func(obj: SignalObj) -> ResultProperties:
         "median(y)": lambda xy: np.median(xy[1]),
         "σ(y)": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak": lambda xy: xy[1].ptp(),
+        "peak-to-peak(y)": lambda xy: xy[1].ptp(),
         "Σ(y)": lambda xy: xy[1].sum(),
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
