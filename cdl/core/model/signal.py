@@ -645,7 +645,7 @@ class PulseParam(gds.DataSet):
     amp = gds.FloatItem("Amplitude", default=1.0)
     start = gds.FloatItem(_("Start"), default=0.0).set_pos(col=1)
     offset = gds.FloatItem(_("Offset"), default=0.0)
-    stop = gds.FloatItem(_("Stop"), default=0.0).set_pos(col=1)
+    stop = gds.FloatItem(_("End"), default=0.0).set_pos(col=1)
 
 
 class PolyParam(gds.DataSet):

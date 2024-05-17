@@ -30,7 +30,7 @@ from cdl.tests import cdltest_app_context, take_plotwidget_screenshot
 
 
 def test_stat_app():
-    """Run statistics unit test scenario"""
+    """Run statistics application test scenario"""
     with cdltest_app_context() as win:
         # === Signal statistics test ===
         panel = win.signalpanel

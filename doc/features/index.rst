@@ -32,6 +32,7 @@ signal and image processing panels.
    :maxdepth: 2
    :caption: General features:
 
+   general/validation
    general/workspace
    general/h5browser
    general/macros

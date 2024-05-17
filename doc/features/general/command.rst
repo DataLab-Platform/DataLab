@@ -59,21 +59,29 @@ To open the HDF5 browser at startup, use one of the following commands::
     $ cdl --h5browser /path/to/file1.h5
 
 Run DataLab demo
----------------------
+----------------
 
 To execute DataLab demo, run the following::
 
     $ cdl-demo
 
-Run unit tests
---------------
+.. _run_validation_tests:
 
-.. note::
+Run validation tests
+--------------------
 
-    This test suite is based on `guidata.guitest` discovery mechanism.
-    It is not compatible with `pytest` because most of the high level tests
-    have to be executed in a separate process (e.g. scenario tests will fail
-    if executed in the same process as other tests).
+.. note:: Validation tests are directly included in individual unit tests and are
+    disseminated throughout the code. The test functions including validation tests
+    are marked with the `@pytest.mark.validation` decorator.
+
+To execute DataLab validation tests, run the following::
+
+    $ pytest -m validation
+
+.. seealso:: See section :ref:`validation` for more information on DataLab's validation strategy.
+
+Run complete test suite
+------------------------
 
 To execute all DataLab unit tests, simply run::
 

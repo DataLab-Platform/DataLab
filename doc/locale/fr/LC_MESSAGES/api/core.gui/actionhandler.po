@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:32+0100\n"
+"POT-Creation-Date: 2024-05-17 09:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -28,7 +28,11 @@ msgid ""
 "The :mod:`cdl.core.gui.actionhandler` module handles all application "
 "actions (menus, toolbars, context menu). These actions point to DataLab "
 "panels, processors, objecthandler, ..."
-msgstr "Le module :mod:`cdl.core.gui.actionhandler` gère toutes les actions de l'application (menus, barres d'outils, menu contextuel). Ces actions pointent vers les panneaux, les processeurs, les gestionnaires d'objets, ..."
+msgstr ""
+"Le module :mod:`cdl.core.gui.actionhandler` gère toutes les actions de "
+"l'application (menus, barres d'outils, menu contextuel). Ces actions "
+"pointent vers les panneaux, les processeurs, les gestionnaires d'objets, "
+"..."
 
 #: cdl.core.gui.actionhandler:9 of
 msgid "Utility classes"
@@ -109,7 +113,7 @@ msgstr "Paramètres"
 msgid "action to add"
 msgstr "action à ajouter"
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_action:5 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_action:4 of
 msgid ""
 "condition to enable action. Defaults to None. If None, action is enabled "
 "if at least one object is selected."
@@ -117,7 +121,7 @@ msgstr ""
 "condition pour activer l'action. Par défaut à None. Si None, l'action est"
 " activée si au moins un objet est sélectionné."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:5 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:4 of
 msgid ""
 "action category. Defaults to None. If None, action is added to the "
 "current category."
@@ -125,7 +129,7 @@ msgstr ""
 "catégorie d'action. Par défaut à None. Si None, l'action est ajoutée à la"
 " catégorie actuelle."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:8 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:6 of
 msgid ""
 "add action to menu at this position. Defaults to None. If None, action is"
 " added at the end of the list."
@@ -133,8 +137,8 @@ msgstr ""
 "ajouter l'action au menu à cette position. Par défaut à None. Si None, "
 "l'action est ajoutée à la fin de la liste."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:12
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:8 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.add_to_action_list:8
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:5 of
 msgid ""
 "add separator before action in menu (or after if pos is positive). "
 "Defaults to False."
@@ -154,31 +158,31 @@ msgstr "Créer une nouvelle action et l'ajouter à la liste des actions."
 msgid "action title"
 msgstr "titre de l'action"
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:5 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:4 of
 msgid "add action to menu at this position. Defaults to None."
 msgstr "ajouter l'action au menu à cette position. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:11 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:7 of
 msgid "triggered callback. Defaults to None."
 msgstr "callback déclenché. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:13 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:8 of
 msgid "toggled callback. Defaults to None."
 msgstr "callback de type toggle. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:15 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:9 of
 msgid "shortcut. Defaults to None."
 msgstr "raccourci. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:17 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:10 of
 msgid "icon. Defaults to None."
 msgstr "icône. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:19 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:11 of
 msgid "tooltip. Defaults to None."
 msgstr "info-bulle. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:21 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:12 of
 msgid ""
 "selection condition. Defaults to None. If str, must be the name of a "
 "method of SelectCond, i.e. one of \"always\", \"exactly_one\", "
@@ -191,11 +195,11 @@ msgstr ""
 "\"at_least_one_group_or_one_object\", \"at_least_one\", \"at_least_two\","
 " \"with_roi\"."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:28 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:17 of
 msgid "add action to context menu at this position. Defaults to None."
 msgstr "ajouter l'action au menu contextuel à cette position. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:31 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:19 of
 msgid ""
 "add separator before action in context menu (or after if context_menu_pos"
 " is positive). Defaults to False."
@@ -203,11 +207,11 @@ msgstr ""
 "ajouter un séparateur avant l'action dans le menu contextuel (ou après si"
 " context_menu_pos est positif). Par défaut à False."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:35 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:21 of
 msgid "add action to toolbar at this position. Defaults to None."
 msgstr "ajouter l'action à la barre d'outils à cette position. Par défaut à None."
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:38 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:22 of
 msgid ""
 "add separator before action in toolbar (or after if toolbar_pos is "
 "positive). Defaults to False."
@@ -215,17 +219,24 @@ msgstr ""
 "ajouter un séparateur avant l'action dans la barre d'outils (ou après si "
 "toolbar_pos est positif). Par défaut à False."
 
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:24 of
+msgid ""
+"toolbar category. Defaults to None. If toolbar_pos is not None, this "
+"specifies the category of the toolbar. If None, defaults to "
+"ActionCategory.VIEW_TOOLBAR if the current category is "
+"ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR."
+msgstr "catégorie de la barre d'outils. Par défaut à None. "
+"S'il n'est pas None, cela spécifie la catégorie de la barre d'outils. "
+"Si None, par défaut à ActionCategory.VIEW_TOOLBAR si la catégorie actuelle "
+"est ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
+
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
 msgid "Returns"
 msgstr "Renvoie"
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:42 of
-msgid "new action"
-msgstr "nouvelle action"
-
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
-msgid "Return type"
-msgstr "Type de retour"
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_action:29 of
+msgid "New action"
+msgstr "Nouvelle action"
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_category:1
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:1 of
@@ -258,7 +269,7 @@ msgstr "Mettre à jour les actions en fonction des objets sélectionnés."
 msgid "selected groups"
 msgstr "groupes sélectionnés"
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:5 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:4 of
 msgid "selected objects"
 msgstr "objets sélectionnés"
 
@@ -270,3 +281,6 @@ msgstr ""
 
 #~ msgid "Action handler (:mod:`cdl.core.gui.actionhandler`)"
 #~ msgstr "Gestionnaire d'actions (:mod:`cdl.core.gui.actionhandler`)"
+
+#~ msgid "Return type"
+#~ msgstr "Type de retour"

@@ -39,7 +39,7 @@ class SignalProcessor(BaseProcessor):
     def compute_sum_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
-        """COmpure sum with a constant"""
+        """Compute sum with a constant"""
         self.compute_11(
             cps.compute_add_constant,
             param,
