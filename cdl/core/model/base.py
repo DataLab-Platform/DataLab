@@ -345,6 +345,9 @@ class ResultProperties(BaseResult):
         Returns:
             Labels for result array columns
         """
+        # TODO [P0]: Check if this is really useful (see Issue #72)
+        # If not, remove this method or find a way to refactor with
+        # ResultShape.get_xlabels, and then also refactor `to_dataframe` method
         self.update_units_from(obj)
         return [lbl.format(xunit=self.xunit, yunit=self.yunit) for lbl in self.xlabels]
 
