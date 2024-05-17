@@ -18,6 +18,7 @@ from typing import TYPE_CHECKING, Any
 
 import guidata.dataset as gds
 import numpy as np
+import pandas as pd
 from guidata.configtools import get_font
 from guidata.dataset import update_dataset
 from guidata.io import JSONReader, JSONWriter
@@ -330,6 +331,10 @@ class ResultProperties(BaseResult):
             Array of shown results
         """
         return self.data
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Return DataFrame from properties array"""
+        return pd.DataFrame(self.array, columns=["ROI"] + self.xlabels)
 
     def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
         """Return labels for result array columns
