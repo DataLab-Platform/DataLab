@@ -475,6 +475,7 @@ class HistoryTree(QW.QTreeWidget):
         super().__init__(parent)
         self.setHeaderLabels([_("Title"), _("Date and time"), _("Description")])
         self.setContextMenuPolicy(QC.Qt.CustomContextMenu)
+        self.setSelectionMode(QW.QAbstractItemView.ContiguousSelection)
 
     def populate_tree(self, history_sessions: list[HistorySession]) -> None:
         """Populate the history tree widget
