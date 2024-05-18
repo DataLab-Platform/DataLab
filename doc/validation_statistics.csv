@@ -1,4 +1,3 @@
-Category,Base,Signal,Image,Total
-Number of compute functions,0,42,81,123
-Number of validated compute functions,0,1,1,2
-Percentage of validated compute functions,0.00%,2.38%,1.23%,1.63%
+Number of compute functions,42,81,123
+Number of validated compute functions,1,1,2
+Percentage of validated compute functions,2%,1%,1%

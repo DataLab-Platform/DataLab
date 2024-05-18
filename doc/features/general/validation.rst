@@ -64,9 +64,23 @@ This paragraph provides the validation status of compute functions in the DataLa
 
 .. csv-table:: Validation Statistics
    :file: ../../validation_statistics.csv
+   :header: Category, Signal, Image, Total
    :header-rows: 1
 
-.. csv-table:: Validation status of compute functions
-   :file: ../../validation_status.csv
+Signal Compute Functions
+************************
+
+.. csv-table:: Validation status of signal compute functions
+   :file: ../../validation_status_signal.csv
    :header-rows: 1
+   :header: Function, Description, Test script
    :widths: 20, 40, 40
+
+Image Compute Functions
+***********************
+
+.. csv-table:: Validation status of image compute functions
+    :file: ../../validation_status_image.csv
+    :header-rows: 1
+    :header: Function, Description, Test script
+    :widths: 20, 40, 40

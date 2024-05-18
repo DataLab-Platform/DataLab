@@ -1,0 +1,42 @@
+:py:func:`abs <cdl.core.computation.signal.compute_abs>`,Compute absolute value,N/A
+:py:func:`add <cdl.core.computation.signal.compute_add>`,Add **dst** and **src** signals and return **dst** signal modified in place,N/A
+:py:func:`add_constant <cdl.core.computation.signal.compute_add_constant>`,Add **dst** and a constant value and return **dst** signal modified in place,N/A
+:py:func:`astype <cdl.core.computation.signal.compute_astype>`,Convert data type,N/A
+:py:func:`calibration <cdl.core.computation.signal.compute_calibration>`,Compute linear calibration,N/A
+:py:func:`clip <cdl.core.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
+:py:func:`convolution <cdl.core.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
+:py:func:`derivative <cdl.core.computation.signal.compute_derivative>`,Compute derivative,N/A
+:py:func:`detrending <cdl.core.computation.signal.compute_detrending>`,Detrend data,N/A
+:py:func:`difference <cdl.core.computation.signal.compute_difference>`,Compute difference between two signals,N/A
+:py:func:`difference_constant <cdl.core.computation.signal.compute_difference_constant>`,Subtract a constant value from an signal,N/A
+:py:func:`divide_by_constant <cdl.core.computation.signal.compute_divide_by_constant>`,Divide an signal by a constant value,N/A
+:py:func:`division <cdl.core.computation.signal.compute_division>`,Compute division between two signals,N/A
+:py:func:`exp <cdl.core.computation.signal.compute_exp>`,Compute exponential,N/A
+:py:func:`fft <cdl.core.computation.signal.compute_fft>`,Compute FFT,N/A
+:py:func:`filter <cdl.core.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
+:py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,N/A
+:py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`,Compute FWHM,N/A
+:py:func:`gaussian_filter <cdl.core.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`histogram <cdl.core.computation.signal.compute_histogram>`,Compute histogram,N/A
+:py:func:`ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,N/A
+:py:func:`im <cdl.core.computation.signal.compute_im>`,Compute imaginary part,N/A
+:py:func:`integral <cdl.core.computation.signal.compute_integral>`,Compute integral,N/A
+:py:func:`interpolation <cdl.core.computation.signal.compute_interpolation>`,Interpolate data,N/A
+:py:func:`log10 <cdl.core.computation.signal.compute_log10>`,Compute Log10,N/A
+:py:func:`moving_average <cdl.core.computation.signal.compute_moving_average>`,Compute moving average,N/A
+:py:func:`moving_median <cdl.core.computation.signal.compute_moving_median>`,Compute moving median,N/A
+:py:func:`normalize <cdl.core.computation.signal.compute_normalize>`,Normalize data,N/A
+:py:func:`peak_detection <cdl.core.computation.signal.compute_peak_detection>`,Peak detection,N/A
+:py:func:`pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A
+:py:func:`product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,N/A
+:py:func:`product_by_constant <cdl.core.computation.signal.compute_product_by_constant>`,Multiply **dst** by a constant value and return **dst** signal modified in place,N/A
+:py:func:`quadratic_difference <cdl.core.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,N/A
+:py:func:`re <cdl.core.computation.signal.compute_re>`,Compute real part,N/A
+:py:func:`resampling <cdl.core.computation.signal.compute_resampling>`,Resample data,N/A
+:py:func:`reverse_x <cdl.core.computation.signal.compute_reverse_x>`,Reverse x-axis,N/A
+:py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`,Compute square root,N/A
+:py:func:`stats <cdl.core.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
+:py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`,Swap axes,N/A
+:py:func:`threshold <cdl.core.computation.signal.compute_threshold>`,Compute threshold clipping,N/A
+:py:func:`wiener <cdl.core.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`windowing <cdl.core.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
