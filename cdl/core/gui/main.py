@@ -455,12 +455,12 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
     # ------Misc.
     @property
     def panels(self) -> tuple[AbstractPanel, ...]:
-        """Return the tuple of implemented panels (signal, image)
+        """Return the tuple of implemented panels (signal, image, macro, history)
 
         Returns:
-            tuple[SignalPanel, ImagePanel, MacroPanel]: tuple of panels
+            Tuple of panels
         """
-        return (self.signalpanel, self.imagepanel, self.macropanel)
+        return (self.signalpanel, self.imagepanel, self.macropanel, self.historypanel)
 
     def __set_low_memory_state(self, state: bool) -> None:
         """Set memory warning state"""
