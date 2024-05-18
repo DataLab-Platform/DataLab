@@ -1,0 +1,124 @@
+Function,Description,Test Script
+:py:func:`image.compute_abs <cdl.core.computation.image.compute_abs>`,Compute absolute value,N/A
+:py:func:`image.compute_add <cdl.core.computation.image.compute_add>`,Add **dst** and **src** images and return **dst** image modified in place,N/A
+:py:func:`image.compute_add_constant <cdl.core.computation.image.compute_add_constant>`,Add **dst** and a constant value and return **dst** image modified in place,N/A
+:py:func:`image.compute_astype <cdl.core.computation.image.compute_astype>`,Convert image data type,N/A
+:py:func:`image.compute_average_profile <cdl.core.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
+:py:func:`image.compute_binning <cdl.core.computation.image.compute_binning>`,Binning function on data,N/A
+:py:func:`image.compute_butterworth <cdl.core.computation.image.compute_butterworth>`,Compute Butterworth filter,N/A
+:py:func:`image.compute_calibration <cdl.core.computation.image.compute_calibration>`,Compute linear calibration,N/A
+:py:func:`image.compute_centroid <cdl.core.computation.image.compute_centroid>`,Compute centroid,N/A
+:py:func:`image.compute_clip <cdl.core.computation.image.compute_clip>`,Apply clipping,N/A
+:py:func:`image.compute_difference <cdl.core.computation.image.compute_difference>`,Compute difference between two images,N/A
+:py:func:`image.compute_difference_constant <cdl.core.computation.image.compute_difference_constant>`,Subtract a constant value from an image,N/A
+:py:func:`image.compute_divide_by_constant <cdl.core.computation.image.compute_divide_by_constant>`,Divide an image by a constant value,N/A
+:py:func:`image.compute_division <cdl.core.computation.image.compute_division>`,Compute division between two images,N/A
+:py:func:`image.compute_enclosing_circle <cdl.core.computation.image.compute_enclosing_circle>`,Compute minimum enclosing circle,N/A
+:py:func:`image.compute_exp <cdl.core.computation.image.compute_exp>`,Compute exponential,N/A
+:py:func:`image.compute_fft <cdl.core.computation.image.compute_fft>`,Compute FFT,N/A
+:py:func:`image.compute_flatfield <cdl.core.computation.image.compute_flatfield>`,Compute flat field correction,N/A
+:py:func:`image.compute_fliph <cdl.core.computation.image.compute_fliph>`,Flip data horizontally,N/A
+:py:func:`image.compute_flipv <cdl.core.computation.image.compute_flipv>`,Flip data vertically,N/A
+:py:func:`image.compute_gaussian_filter <cdl.core.computation.image.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`image.compute_histogram <cdl.core.computation.image.compute_histogram>`,Compute histogram of the image data,N/A
+:py:func:`image.compute_hough_circle_peaks <cdl.core.computation.image.compute_hough_circle_peaks>`,Compute Hough circles,N/A
+:py:func:`image.compute_ifft <cdl.core.computation.image.compute_ifft>`,Compute inverse FFT,N/A
+:py:func:`image.compute_im <cdl.core.computation.image.compute_im>`,Compute imaginary part,N/A
+:py:func:`image.compute_log10 <cdl.core.computation.image.compute_log10>`,Compute log10,N/A
+:py:func:`image.compute_logp1 <cdl.core.computation.image.compute_logp1>`,Compute log10(z+n),N/A
+:py:func:`image.compute_moving_average <cdl.core.computation.image.compute_moving_average>`,Compute moving average,N/A
+:py:func:`image.compute_moving_median <cdl.core.computation.image.compute_moving_median>`,Compute moving median,N/A
+:py:func:`image.compute_normalize <cdl.core.computation.image.compute_normalize>`,,N/A
+:py:func:`image.compute_product <cdl.core.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,N/A
+:py:func:`image.compute_product_by_constant <cdl.core.computation.image.compute_product_by_constant>`,Multiply **dst** by a constant value and return **dst** image modified in place,N/A
+:py:func:`image.compute_profile <cdl.core.computation.image.compute_profile>`,Compute horizontal or vertical profile,N/A
+:py:func:`image.compute_quadratic_difference <cdl.core.computation.image.compute_quadratic_difference>`,Compute quadratic difference between two images,N/A
+:py:func:`image.compute_radial_profile <cdl.core.computation.image.compute_radial_profile>`,Compute radial profile around the centroid,N/A
+:py:func:`image.compute_re <cdl.core.computation.image.compute_re>`,Compute real part,N/A
+:py:func:`image.compute_resize <cdl.core.computation.image.compute_resize>`,Zooming function,N/A
+:py:func:`image.compute_rotate <cdl.core.computation.image.compute_rotate>`,Rotate data,N/A
+:py:func:`image.compute_rotate270 <cdl.core.computation.image.compute_rotate270>`,Rotate data 270°,N/A
+:py:func:`image.compute_rotate90 <cdl.core.computation.image.compute_rotate90>`,Rotate data 90°,N/A
+:py:func:`image.compute_stats <cdl.core.computation.image.compute_stats>`,Compute statistics on an image,tests\features\common\stat_unit_test.py
+:py:func:`image.compute_swap_axes <cdl.core.computation.image.compute_swap_axes>`,Swap image axes,N/A
+:py:func:`image.compute_threshold <cdl.core.computation.image.compute_threshold>`,Apply thresholding,N/A
+:py:func:`image.compute_wiener <cdl.core.computation.image.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`detection.compute_blob_dog <cdl.core.computation.image.detection.compute_blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
+:py:func:`detection.compute_blob_doh <cdl.core.computation.image.detection.compute_blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
+:py:func:`detection.compute_blob_log <cdl.core.computation.image.detection.compute_blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
+:py:func:`detection.compute_blob_opencv <cdl.core.computation.image.detection.compute_blob_opencv>`,Compute blobs using OpenCV,N/A
+:py:func:`detection.compute_contour_shape <cdl.core.computation.image.detection.compute_contour_shape>`,Compute contour shape fit,N/A
+:py:func:`detection.compute_peak_detection <cdl.core.computation.image.detection.compute_peak_detection>`,Compute 2D peak detection,N/A
+:py:func:`edges.compute_canny <cdl.core.computation.image.edges.compute_canny>`,Compute Canny filter,N/A
+:py:func:`edges.compute_farid <cdl.core.computation.image.edges.compute_farid>`,Compute Farid filter,N/A
+:py:func:`edges.compute_farid_h <cdl.core.computation.image.edges.compute_farid_h>`,Compute horizontal Farid filter,N/A
+:py:func:`edges.compute_farid_v <cdl.core.computation.image.edges.compute_farid_v>`,Compute vertical Farid filter,N/A
+:py:func:`edges.compute_laplace <cdl.core.computation.image.edges.compute_laplace>`,Compute Laplace filter,N/A
+:py:func:`edges.compute_prewitt <cdl.core.computation.image.edges.compute_prewitt>`,Compute Prewitt filter,N/A
+:py:func:`edges.compute_prewitt_h <cdl.core.computation.image.edges.compute_prewitt_h>`,Compute horizontal Prewitt filter,N/A
+:py:func:`edges.compute_prewitt_v <cdl.core.computation.image.edges.compute_prewitt_v>`,Compute vertical Prewitt filter,N/A
+:py:func:`edges.compute_roberts <cdl.core.computation.image.edges.compute_roberts>`,Compute Roberts filter,N/A
+:py:func:`edges.compute_scharr <cdl.core.computation.image.edges.compute_scharr>`,Compute Scharr filter,N/A
+:py:func:`edges.compute_scharr_h <cdl.core.computation.image.edges.compute_scharr_h>`,Compute horizontal Scharr filter,N/A
+:py:func:`edges.compute_scharr_v <cdl.core.computation.image.edges.compute_scharr_v>`,Compute vertical Scharr filter,N/A
+:py:func:`edges.compute_sobel <cdl.core.computation.image.edges.compute_sobel>`,Compute Sobel filter,N/A
+:py:func:`edges.compute_sobel_h <cdl.core.computation.image.edges.compute_sobel_h>`,Compute horizontal Sobel filter,N/A
+:py:func:`edges.compute_sobel_v <cdl.core.computation.image.edges.compute_sobel_v>`,Compute vertical Sobel filter,N/A
+:py:func:`exposure.compute_adjust_gamma <cdl.core.computation.image.exposure.compute_adjust_gamma>`,Gamma correction,N/A
+:py:func:`exposure.compute_adjust_log <cdl.core.computation.image.exposure.compute_adjust_log>`,Compute log correction,N/A
+:py:func:`exposure.compute_adjust_sigmoid <cdl.core.computation.image.exposure.compute_adjust_sigmoid>`,Compute sigmoid correction,N/A
+:py:func:`exposure.compute_equalize_adapthist <cdl.core.computation.image.exposure.compute_equalize_adapthist>`,Adaptive histogram equalization,N/A
+:py:func:`exposure.compute_equalize_hist <cdl.core.computation.image.exposure.compute_equalize_hist>`,Histogram equalization,N/A
+:py:func:`exposure.compute_rescale_intensity <cdl.core.computation.image.exposure.compute_rescale_intensity>`,Rescale image intensity levels,N/A
+:py:func:`morphology.compute_black_tophat <cdl.core.computation.image.morphology.compute_black_tophat>`,Compute Black Top-Hat,N/A
+:py:func:`morphology.compute_closing <cdl.core.computation.image.morphology.compute_closing>`,Compute morphological closing,N/A
+:py:func:`morphology.compute_dilation <cdl.core.computation.image.morphology.compute_dilation>`,Compute Dilation,N/A
+:py:func:`morphology.compute_erosion <cdl.core.computation.image.morphology.compute_erosion>`,Compute Erosion,N/A
+:py:func:`morphology.compute_opening <cdl.core.computation.image.morphology.compute_opening>`,Compute morphological opening,N/A
+:py:func:`morphology.compute_white_tophat <cdl.core.computation.image.morphology.compute_white_tophat>`,Compute White Top-Hat,N/A
+:py:func:`restoration.compute_denoise_bilateral <cdl.core.computation.image.restoration.compute_denoise_bilateral>`,Compute bilateral filter denoising,N/A
+:py:func:`restoration.compute_denoise_tophat <cdl.core.computation.image.restoration.compute_denoise_tophat>`,Denoise using White Top-Hat,N/A
+:py:func:`restoration.compute_denoise_tv <cdl.core.computation.image.restoration.compute_denoise_tv>`,Compute Total Variation denoising,N/A
+:py:func:`restoration.compute_denoise_wavelet <cdl.core.computation.image.restoration.compute_denoise_wavelet>`,Compute Wavelet denoising,N/A
+:py:func:`signal.compute_abs <cdl.core.computation.signal.compute_abs>`,Compute absolute value,N/A
+:py:func:`signal.compute_add <cdl.core.computation.signal.compute_add>`,Add **dst** and **src** signals and return **dst** signal modified in place,N/A
+:py:func:`signal.compute_add_constant <cdl.core.computation.signal.compute_add_constant>`,Add **dst** and a constant value and return **dst** signal modified in place,N/A
+:py:func:`signal.compute_astype <cdl.core.computation.signal.compute_astype>`,Convert data type,N/A
+:py:func:`signal.compute_calibration <cdl.core.computation.signal.compute_calibration>`,Compute linear calibration,N/A
+:py:func:`signal.compute_clip <cdl.core.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
+:py:func:`signal.compute_convolution <cdl.core.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
+:py:func:`signal.compute_derivative <cdl.core.computation.signal.compute_derivative>`,Compute derivative,N/A
+:py:func:`signal.compute_detrending <cdl.core.computation.signal.compute_detrending>`,Detrend data,N/A
+:py:func:`signal.compute_difference <cdl.core.computation.signal.compute_difference>`,Compute difference between two signals,N/A
+:py:func:`signal.compute_difference_constant <cdl.core.computation.signal.compute_difference_constant>`,Subtract a constant value from an signal,N/A
+:py:func:`signal.compute_divide_by_constant <cdl.core.computation.signal.compute_divide_by_constant>`,Divide an signal by a constant value,N/A
+:py:func:`signal.compute_division <cdl.core.computation.signal.compute_division>`,Compute division between two signals,N/A
+:py:func:`signal.compute_exp <cdl.core.computation.signal.compute_exp>`,Compute exponential,N/A
+:py:func:`signal.compute_fft <cdl.core.computation.signal.compute_fft>`,Compute FFT,N/A
+:py:func:`signal.compute_filter <cdl.core.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
+:py:func:`signal.compute_fw1e2 <cdl.core.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,N/A
+:py:func:`signal.compute_fwhm <cdl.core.computation.signal.compute_fwhm>`,Compute FWHM,N/A
+:py:func:`signal.compute_gaussian_filter <cdl.core.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`signal.compute_histogram <cdl.core.computation.signal.compute_histogram>`,Compute histogram,N/A
+:py:func:`signal.compute_ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,N/A
+:py:func:`signal.compute_im <cdl.core.computation.signal.compute_im>`,Compute imaginary part,N/A
+:py:func:`signal.compute_integral <cdl.core.computation.signal.compute_integral>`,Compute integral,N/A
+:py:func:`signal.compute_interpolation <cdl.core.computation.signal.compute_interpolation>`,Interpolate data,N/A
+:py:func:`signal.compute_log10 <cdl.core.computation.signal.compute_log10>`,Compute Log10,N/A
+:py:func:`signal.compute_moving_average <cdl.core.computation.signal.compute_moving_average>`,Compute moving average,N/A
+:py:func:`signal.compute_moving_median <cdl.core.computation.signal.compute_moving_median>`,Compute moving median,N/A
+:py:func:`signal.compute_normalize <cdl.core.computation.signal.compute_normalize>`,Normalize data,N/A
+:py:func:`signal.compute_peak_detection <cdl.core.computation.signal.compute_peak_detection>`,Peak detection,N/A
+:py:func:`signal.compute_pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A
+:py:func:`signal.compute_product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,N/A
+:py:func:`signal.compute_product_by_constant <cdl.core.computation.signal.compute_product_by_constant>`,Multiply **dst** by a constant value and return **dst** signal modified in place,N/A
+:py:func:`signal.compute_quadratic_difference <cdl.core.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,N/A
+:py:func:`signal.compute_re <cdl.core.computation.signal.compute_re>`,Compute real part,N/A
+:py:func:`signal.compute_resampling <cdl.core.computation.signal.compute_resampling>`,Resample data,N/A
+:py:func:`signal.compute_reverse_x <cdl.core.computation.signal.compute_reverse_x>`,Reverse x-axis,N/A
+:py:func:`signal.compute_sqrt <cdl.core.computation.signal.compute_sqrt>`,Compute square root,N/A
+:py:func:`signal.compute_stats <cdl.core.computation.signal.compute_stats>`,Compute statistics on a signal,tests\features\common\stat_unit_test.py
+:py:func:`signal.compute_swap_axes <cdl.core.computation.signal.compute_swap_axes>`,Swap axes,N/A
+:py:func:`signal.compute_threshold <cdl.core.computation.signal.compute_threshold>`,Compute threshold clipping,N/A
+:py:func:`signal.compute_wiener <cdl.core.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`signal.compute_windowing <cdl.core.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A

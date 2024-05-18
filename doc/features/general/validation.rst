@@ -45,7 +45,28 @@ In DataLab, analytical validation is implemented using a variety of techniques, 
 Validation tests
 ----------------
 
+How to execute tests
+~~~~~~~~~~~~~~~~~~~~
+
 In DataLab, validation tests are disseminated in the test suite of the project, but
 they can also be executed separately using the command line interface.
 
 .. seealso:: See paragraph :ref:`run_validation_tests` for more information on how to run validation tests.
+
+Validation Status of DataLab
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This paragraph provides the validation status of compute functions in the DataLab project.
+
+.. note:: This is a work in progress: the validation status of compute functions is
+    being updated continuously. Some functions are already validated but do not appear
+    in the list below yet, while others are still in the validation process.
+
+.. csv-table:: Validation Statistics
+   :file: ../../validation_statistics.csv
+   :header-rows: 1
+
+.. csv-table:: Validation status of compute functions
+   :file: ../../validation_status.csv
+   :header-rows: 1
+   :widths: 20, 40, 40
