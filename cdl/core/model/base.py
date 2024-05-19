@@ -1171,8 +1171,11 @@ class BaseObj(metaclass=BaseObjMeta):
         Args:
             filename: filename
         """
-        items = load_items(JSONReader(filename))
-        self.add_annotations_from_items(items)
+        with open(filename, "r", encoding="utf-8") as file:
+            json_str = file.read()
+        if self.annotations:
+            json_str = self.annotations[:-1] + "," + json_str[1:]
+        self.annotations = json_str
 
     @abc.abstractmethod
     def add_label_with_title(self, title: str | None = None) -> None:
