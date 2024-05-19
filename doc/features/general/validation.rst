@@ -37,7 +37,7 @@ to ground-truth data. This is done to ensure that the results are accurate and r
 
 In DataLab, analytical validation is implemented using a variety of techniques, including:
 
-- Cross-validation with an analytical model (from a trusted source, e.g. `SciPy <https://www.scipy.org/>`_ or `NumPy <https://numpy.org/>`)
+- Cross-validation with an analytical model (from a trusted source, e.g. `SciPy <https://www.scipy.org/>`_ or `NumPy <https://numpy.org/>`_)
 - Statistical analysis
 - Visual inspection
 - Expert review
@@ -56,23 +56,22 @@ they can also be executed separately using the command line interface.
 Validation Status of DataLab
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This paragraph provides the validation status of compute functions in the DataLab project.
+This paragraph provides the validation status of compute functions in DataLab.
 
-.. note:: This is a work in progress: the validation status of compute functions is
-    being updated continuously. Some functions are already validated but do not appear
-    in the list below yet, while others are still in the validation process.
+.. note:: This is a work in progress: the tables below are updated continuously as new
+    functions are validated or test code is adapted (the tables are generated from the
+    test code). Some functions are already validated but do not appear in the list
+    below yet, while others are still in the validation process.
 
 .. csv-table:: Validation Statistics
    :file: ../../validation_statistics.csv
    :header: Category, Signal, Image, Total
-   :header-rows: 1
 
 Signal Compute Functions
 ************************
 
 .. csv-table:: Validation status of signal compute functions
    :file: ../../validation_status_signal.csv
-   :header-rows: 1
    :header: Function, Description, Test script
    :widths: 20, 40, 40
 
@@ -81,6 +80,5 @@ Image Compute Functions
 
 .. csv-table:: Validation status of image compute functions
     :file: ../../validation_status_image.csv
-    :header-rows: 1
     :header: Function, Description, Test script
     :widths: 20, 40, 40
