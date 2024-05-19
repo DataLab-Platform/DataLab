@@ -37,19 +37,27 @@ def get_compute_functions(package: str) -> list:
     return compute_functions
 
 
-def check_for_validation_test(function_name: str, validation_tests: list) -> str:
+def check_for_validation_test(
+    full_function_name: str, validation_tests: list[tuple[str, str]]
+) -> str:
     """Check if a validation test exists for a compute function
 
     Args:
-        function_name: Compute function name
+        full_function_name: Compute function name
         validation_tests: List of validation tests
 
     Returns:
         Path to the validation test file or None if it doesn't exist
     """
-    test_name = "test_" + function_name.replace(".", "_")
+    basefuncname = full_function_name.replace(".", "_").replace("compute_", "")
+    possible_test_name_endings = [
+        "_" + "_".join(basefuncname.split("_")[-2:]),
+        "_" + basefuncname.split("_")[-1],
+    ]
+    for ending in possible_test_name_endings[:]:
+        possible_test_name_endings.append(ending + "_unit")
     for test, path in validation_tests:
-        if test_name in test or test_name.replace("compute_", "") in test:
+        if test.endswith(tuple(possible_test_name_endings)):
             # Path relative to the `cdl` package:
             path = osp.relpath(path, start=osp.dirname(osp.join(tests_pkg.__file__)))
             return "/".join(path.split(osp.sep))
@@ -102,8 +110,7 @@ def generate_csv_files() -> None:
         function_rows = []
         for module_name, function_name, docstring in functions:
             full_function_name = f"{module_name}.{function_name}"
-            short_function_name = ".".join(full_function_name.split(".")[-2:])
-            test_path = check_for_validation_test(short_function_name, validation_tests)
+            test_path = check_for_validation_test(full_function_name, validation_tests)
             if test_path:
                 validated_counts[submodule] += 1
                 validated_counts["total"] += 1
