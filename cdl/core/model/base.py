@@ -207,9 +207,12 @@ class BaseResult:
     Args:
         prefix: result prefix (used for metadata key)
         label: result label
+        headers: result headers (one header per column of result array). Optional.
     """
 
-    def __init__(self, prefix: str, label: str) -> None:
+    def __init__(
+        self, prefix: str, label: str, headers: list[str] | None = None
+    ) -> None:
         assert isinstance(label, str)
         self.prefix = prefix
         self.label = label
@@ -220,6 +223,16 @@ class BaseResult:
         self.xunit: str = ""
         self.yunit: str = ""
         self.array: np.ndarray = np.array([])
+        self.__headers = headers
+
+    @property
+    def headers(self) -> list[str] | None:
+        """Return result headers (one header per column of result array)"""
+        return self.__headers
+
+    def to_dataframe(self) -> pd.DataFrame:
+        """Return DataFrame from properties array"""
+        return pd.DataFrame(self.array, columns=["ROI"] + list(self.headers))
 
     @property
     def shown_array(self) -> np.ndarray:
@@ -249,17 +262,6 @@ class BaseResult:
         self.xunit = obj.xunit
         self.yunit = obj.yunit
 
-    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
-        """Return labels for result array columns
-
-        Args:
-            obj: object
-
-        Returns:
-            Labels for result array columns
-        """
-        raise NotImplementedError
-
     def add_to(self, obj: BaseObj) -> None:
         """Add metadata shape to object
 
@@ -280,19 +282,18 @@ class ResultProperties(BaseResult):
     Args:
         label: properties label
         array: properties array
-        xlabels: labels for result array columns
+        headers: properties headers (one header per column of properties array)
     """
 
     PREFIX = "_properties_"
 
     def __init__(
-        self, label: str, array: np.ndarray, xlabels: list[str], item_json: str = ""
+        self, label: str, array: np.ndarray, headers: list[str], item_json: str = ""
     ) -> None:
-        super().__init__(self.PREFIX, label)
+        super().__init__(self.PREFIX, label, headers)
         self.shown_category = _("Properties") + f" | {self.shown_label}"
-        self.xlabels = xlabels
         self.array = array
-        assert len(xlabels) == self.data.shape[1]
+        assert len(headers) == self.data.shape[1]
         self.item_json = item_json  # JSON string of label item associated to this obj
 
     @classmethod
@@ -332,25 +333,6 @@ class ResultProperties(BaseResult):
         """
         return self.data
 
-    def to_dataframe(self) -> pd.DataFrame:
-        """Return DataFrame from properties array"""
-        return pd.DataFrame(self.array, columns=["ROI"] + self.xlabels)
-
-    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
-        """Return labels for result array columns
-
-        Args:
-            obj: object
-
-        Returns:
-            Labels for result array columns
-        """
-        # TODO [P0]: Check if this is really useful (see Issue #72)
-        # If not, remove this method or find a way to refactor with
-        # ResultShape.get_xlabels, and then also refactor `to_dataframe` method
-        self.update_units_from(obj)
-        return [lbl.format(xunit=self.xunit, yunit=self.yunit) for lbl in self.xlabels]
-
     def add_to(self, obj: BaseObj) -> None:
         """Add metadata shape to object
 
@@ -369,7 +351,7 @@ class ResultProperties(BaseResult):
         """
         self.item_json = items_to_json([item])
         obj.metadata[self.key] = {
-            key: getattr(self, key) for key in ("xlabels", "array", "item_json")
+            key: getattr(self, key) for key in ("headers", "array", "item_json")
         }
 
     def create_plot_item(self) -> LabelItem:
@@ -382,7 +364,7 @@ class ResultProperties(BaseResult):
         for i_row in range(self.array.shape[0]):
             suffix = f"|ROI{i_row}" if i_row > 0 else ""
             text += f"<u>{self.label}{suffix}</u>:"
-            for i_col, label in enumerate(self.xlabels):
+            for i_col, label in enumerate(self.headers):
                 # "label" may contains "<" and ">" characters which are interpreted
                 # as HTML tags by the LabelItem. We must escape them.
                 label = label.replace("<", "&lt;").replace(">", "&gt;")
@@ -464,15 +446,9 @@ class ResultShape(BaseResult):
         """Return True if metadata dict entry (key, value) is a metadata result"""
         return cls.from_metadata_entry(key, value) is not None
 
-    def get_xlabels(self, obj: ImageObj | SignalObj) -> tuple[str]:
-        """Return labels for result array columns
-
-        Args:
-            obj: object
-
-        Returns:
-            Labels for result array columns
-        """
+    @property
+    def headers(self) -> list[str] | None:
+        """Return result headers (one header per column of result array)"""
         if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
             labels = "x", "y"
         elif self.shapetype in (

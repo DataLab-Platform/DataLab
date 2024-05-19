@@ -477,7 +477,7 @@ class BaseProcessor(QC.QObject):
                     obj.metadata[f"{result.label}Param"] = str(param)
 
                 results[obj.uuid] = result
-                xlabels = result.get_xlabels(obj)
+                xlabels = result.headers
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:

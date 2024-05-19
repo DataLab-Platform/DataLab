@@ -1109,7 +1109,7 @@ class BaseDataPanel(AbstractPanel):
                     result.shown_category, ResultData([], None, [])
                 )
                 rdata.results.append(result)
-                rdata.xlabels = result.get_xlabels(obj)
+                rdata.xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.label}({obj.short_id})"
                     i_roi = result.array[i_row_res, 0]
