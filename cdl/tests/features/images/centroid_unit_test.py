@@ -94,7 +94,7 @@ def test_centroid_graphically():
 
 
 @pytest.mark.validation
-def test_compute_centroid():
+def test_image_centroid():
     """Test centroid computation"""
     param = cdl.obj.NewImageParam.create(height=500, width=500)
     data = create_noisygauss_image(param, center=(-2.0, 3.0))
@@ -106,4 +106,4 @@ def test_compute_centroid():
 
 if __name__ == "__main__":
     test_centroid_graphically()
-    test_compute_centroid()
+    test_image_centroid()

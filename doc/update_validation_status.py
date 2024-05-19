@@ -50,12 +50,8 @@ def check_for_validation_test(
         Path to the validation test file or None if it doesn't exist
     """
     basefuncname = full_function_name.replace(".", "_").replace("compute_", "")
-    possible_test_name_endings = [
-        "_" + "_".join(basefuncname.split("_")[-2:]),
-        "_" + basefuncname.split("_")[-1],
-    ]
-    for ending in possible_test_name_endings[:]:
-        possible_test_name_endings.append(ending + "_unit")
+    ending = "_" + "_".join(basefuncname.split("_")[-2:])
+    possible_test_name_endings = [ending, ending + "_unit", ending + "_validation"]
     for test, path in validation_tests:
         if test.endswith(tuple(possible_test_name_endings)):
             # Path relative to the `cdl` package:
