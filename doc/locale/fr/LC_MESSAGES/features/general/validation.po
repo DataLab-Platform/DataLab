@@ -155,7 +155,7 @@ msgid ""
 "project, but they can also be executed separately using the command line "
 "interface."
 msgstr ""
-"Dans DataLab, les tests de validation sont diffusés dans la suite de "
+"Dans DataLab, les tests de validation sont éparpillés dans la suite de "
 "tests du projet, mais ils peuvent également être exécutés séparément à "
 "l'aide de l'interface en ligne de commande."
 
