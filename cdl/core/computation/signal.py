@@ -803,7 +803,7 @@ def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
     return dst
 
 
-def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
+def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute FFT
 
     Args:
@@ -815,11 +815,11 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_fft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_fft(x, y, shift=True if p is None else p.shift))
     return dst
 
 
-def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
+def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute iFFT
 
     Args:
@@ -831,7 +831,7 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_ifft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_ifft(x, y, shift=True if p is None else p.shift))
     return dst
 
 

@@ -1101,7 +1101,7 @@ def compute_wiener(src: ImageObj) -> ImageObj:
     return Wrap11Func(sps.wiener)(src)
 
 
-def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:
+def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """Compute FFT
 
     Args:
@@ -1112,11 +1112,11 @@ def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "fft")
-    dst.data = z_fft(src.data, shift=p.shift)
+    dst.data = z_fft(src.data, shift=True if p is None else p.shift)
     return dst
 
 
-def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
+def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """Compute inverse FFT
 
     Args:
@@ -1127,7 +1127,7 @@ def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "ifft")
-    dst.data = z_ifft(src.data, shift=p.shift)
+    dst.data = z_ifft(src.data, shift=True if p is None else p.shift)
     return dst
 
 
