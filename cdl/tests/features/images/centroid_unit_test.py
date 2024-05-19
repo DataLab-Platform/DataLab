@@ -18,15 +18,18 @@ Comparing different algorithms for centroid calculation:
 import time
 
 import numpy as np
+import pytest
 import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
+import cdl.core.computation.image as cpi
+import cdl.obj
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _
 from cdl.env import execenv
-from cdl.tests.data import get_laser_spot_data
+from cdl.tests.data import create_noisygauss_image, get_laser_spot_data
 from cdl.utils.vistools import view_image_items
 
 
@@ -81,8 +84,8 @@ def compare_centroid_funcs(data):
     view_image_items(items)
 
 
-def test_centroid():
-    """Centroid test"""
+def test_centroid_graphically():
+    """Centroid test comparing different methods and showing results"""
     with qt_app_context():
         for data in get_laser_spot_data():
             execenv.print(f"Data[dtype={data.dtype},shape={data.shape}]")
@@ -90,5 +93,17 @@ def test_centroid():
             compare_centroid_funcs(data.view(ma.MaskedArray))
 
 
+@pytest.mark.validation
+def test_compute_centroid():
+    """Test centroid computation"""
+    param = cdl.obj.NewImageParam.create(height=500, width=500)
+    data = create_noisygauss_image(param, center=(-2.0, 3.0))
+    res = cpi.compute_centroid(data)
+    cmp, exp = res.array[0][1:], [199, 324]
+    execenv.print(f"Computed centroid: {cmp} - Expected: {exp}")
+    np.allclose(cmp, exp)
+
+
 if __name__ == "__main__":
-    test_centroid()
+    test_centroid_graphically()
+    test_compute_centroid()
