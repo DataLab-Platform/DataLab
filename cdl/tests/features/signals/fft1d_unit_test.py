@@ -38,19 +38,56 @@ def test_signal_fft_interactive() -> None:
         view_curves([(t, y), (t2, y2)])
 
 
-def create_cosinus_signal(size: int = 10000) -> cdl.obj.SignalObj:
+def create_cosinus_signal(freq: float = 50.0, size: int = 10000) -> cdl.obj.SignalObj:
     """Create a cosinus signal."""
     newparam = new_signal_param(stype=SignalTypes.COSINUS, size=size)
-    return create_signal_from_param(newparam)
+    addparam = cdl.obj.PeriodicParam.create(freq=freq)
+    return create_signal_from_param(newparam, addparam)
 
 
 @pytest.mark.validation
 def test_signal_fft() -> None:
     """1D FFT validation test."""
-    s1 = create_cosinus_signal()
+    freq = 50.0
+    size = 10000
+    s1 = create_cosinus_signal(freq=freq, size=size)
     fft = cps.compute_fft(s1)
     ifft = cps.compute_ifft(fft)
-    assert np.allclose(s1.y, np.real(ifft.y))
+
+    # Check that the inverse FFT reconstructs the original signal
+    assert np.allclose(
+        s1.y, np.real(ifft.y)
+    ), "Cosine signal FFT/IFFT reconstruction failed"
+
+    # Check FFT properties
+    fft_magnitude = np.abs(fft.y)
+    fft_phase = np.angle(fft.y)
+    freqs = fft.x
+
+    # Find the peak in the FFT
+    peak_index = np.argmax(fft_magnitude)
+    peak_freq = freqs[peak_index]
+
+    # Verify the peak frequency is correct
+    assert np.isclose(
+        peak_freq, freq, rtol=1e-3
+    ), f"Expected peak at {freq} Hz, found at {peak_freq} Hz"
+
+    # Verify the magnitude at the peak
+    expected_magnitude = size / 2
+    assert np.isclose(
+        fft_magnitude[peak_index], expected_magnitude, rtol=0.05
+    ), f"Expected magnitude {expected_magnitude}, found {fft_magnitude[peak_index]}"
+
+    # Verify the symmetry of the FFT
+    assert np.allclose(
+        fft_magnitude[1 : size // 2], fft_magnitude[1 + size // 2 :][::-1]
+    ), "FFT is not symmetric"
+
+    # Verify the phase at the peak (should be 0 or π for a cosine)
+    assert np.isclose(fft_phase[peak_index], 0, atol=0.5) or np.isclose(
+        fft_phase[peak_index], np.pi, atol=0.5
+    ), f"Expected phase at peak: 0 or π, found {fft_phase[peak_index]}"
 
 
 @pytest.mark.validation
