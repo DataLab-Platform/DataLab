@@ -51,7 +51,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import Choices, ResultProperties, ResultShape, ShapeTypes
+from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()

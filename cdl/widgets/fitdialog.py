@@ -4,27 +4,18 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-from typing import Callable, Iterable
-
 import numpy as np
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
 from scipy.optimize import curve_fit
-from scipy.special import erf
+from scipy.special import erf  # pylint: disable=no-name-in-module
 
 from cdl.algorithms import fit
 from cdl.algorithms.signal import sort_frequencies, xpeak
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
-
-
-def _wrap_fitfunc(fitfunc) -> Callable[[np.ndarray, Iterable[float]], np.ndarray]:
-    def wrapper(x, params: Iterable[float]):
-        return fitfunc(x, *params)
-
-    return wrapper
 
 
 def guifit(
@@ -267,7 +258,11 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     the fitting parameters"""
 
     opt_params: np.ndarray
-    opt_params, __ = curve_fit(lambda x, a, b, c: a * np.exp(b * x) + c, x, y)
+
+    def modelfunc(x, a, b, c):
+        return a * np.exp(b * x) + c
+
+    opt_params, __ = curve_fit(modelfunc, x, y)
     oa, ob, oc = opt_params
     moa, mob, moc = np.maximum(1, opt_params)
     a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
@@ -276,9 +271,8 @@ def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     params = [a_p, b_p, c_p]
 
-    @_wrap_fitfunc
-    def fitfunc(x, a, b, c):
-        return a * np.exp(b * x) + c
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
@@ -302,7 +296,7 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     guess_ph = 0
     guess_c = np.mean(y, dtype=float)
 
-    moa, mof, mop, moc = np.maximum(1, [guess_a, guess_f, guess_ph, guess_c])
+    moa, mof, _mop, moc = np.maximum(1, [guess_a, guess_f, guess_ph, guess_c])
     a_p = FitParam(_("Amplitude"), guess_a, -2 * moa, 2 * moa)
     f_p = FitParam(_("Frequency"), guess_f, 0, 2 * mof)
     p_p = FitParam(_("Phase"), guess_ph, -360, 360)
@@ -310,9 +304,11 @@ def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     params = [a_p, f_p, p_p, c_p]
 
-    @_wrap_fitfunc
-    def fitfunc(x, a, f, p, c):
+    def modelfunc(x, a, f, p, c):
         return a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c
+
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
 
     values = guifit(
         x, y, fitfunc, params, parent=parent, wintitle=_("Sinusoidal fit"), name=name
@@ -335,7 +331,7 @@ def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
     sigma_guess = (max(x) - min(x)) / 10
     mu_guess = (max(x) - abs(min(x))) / 2
 
-    iamp, ix0, islope, ioff = np.maximum(1, [a_guess, mu_guess, sigma_guess, b_guess])
+    iamp, ix0, islope, _ioff = np.maximum(1, [a_guess, mu_guess, sigma_guess, b_guess])
     a = FitParam(_("Amplitude"), a_guess, 0, iamp * 1.2)
     b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
     sigma = FitParam(_("Std-dev") + " (σ)", sigma_guess, islope * 0.1, islope * 2)
@@ -343,9 +339,11 @@ def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
 
     params = [a, mu, sigma, b]
 
-    @_wrap_fitfunc
-    def fitfunc(x: np.ndarray, a: float, mu: float, sigma: float, b: float):
+    def modelfunc(x, a, mu, sigma, b):
         return a * erf((x - mu) / (sigma * np.sqrt(2))) + b
+
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
 
     values = guifit(
         x,
