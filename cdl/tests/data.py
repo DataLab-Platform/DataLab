@@ -149,6 +149,24 @@ def create_noisy_signal(
     return sig
 
 
+def create_periodic_signal(
+    shape: cdl.obj.SignalTypes, freq: float = 50.0, size: int = 10000
+) -> cdl.obj.SignalObj:
+    """Create a periodic signal
+
+    Args:
+        shape: Shape of the signal
+        freq: Frequency of the signal. Defaults to 50.0.
+        size: Size of the signal. Defaults to 10000.
+
+    Returns:
+        Signal object
+    """
+    newparam = cdl.obj.new_signal_param(stype=shape, size=size)
+    addparam = cdl.obj.PeriodicParam.create(freq=freq)
+    return cdl.obj.create_signal_from_param(newparam, addparam)
+
+
 def create_2d_steps_data(size: int, width: int, dtype: np.dtype) -> np.ndarray:
     """Creating 2D steps data for testing purpose
 

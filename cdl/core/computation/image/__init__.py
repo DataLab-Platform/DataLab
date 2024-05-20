@@ -133,7 +133,7 @@ def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
         src: input image object
 
     Returns:
-        Output image object
+        Output image object (modified in place)
     """
     dst.data += np.array(src.data, dtype=dst.data.dtype)
     return dst
@@ -147,22 +147,21 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
         src: input image object
 
     Returns:
-        Output image object
+        Output image object (modified in place)
     """
     dst.data *= np.array(src.data, dtype=dst.data.dtype)
     return dst
 
 
 def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Add **dst** and a constant value and return **dst** image modified in place
+    """Add **dst** and a constant value and return the new result image object
 
     Args:
-        dst: output image object
         src: input image object
         p: constant value
 
     Returns:
-        Result image object **src** + **p.value**
+        Result image object **src** + **p.value** (new object)
     """
     # For the addition of a constant value, we convert the constant value to the same
     # data type as the input image, to avoid any data type conversion issues.
@@ -173,14 +172,14 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
 
 
 def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Subtract a constant value from an image
+    """Subtract a constant value from an image and return the new result image object
 
     Args:
         src: input image object
         p: constant value
 
     Returns:
-        Result image object **src** - **p.value**
+        Result image object **src** - **p.value** (new object)
     """
     # For the subtraction of a constant value, we convert the constant value to the same
     # data type as the input image, to avoid any data type conversion issues.
@@ -191,15 +190,14 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
 
 
 def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Multiply **dst** by a constant value and return **dst** image modified in place
+    """Multiply **dst** by a constant value and return the new result image object
 
     Args:
-        dst: output image object
         src: input image object
         p: constant value
 
     Returns:
-        Result image object **src** * **p.value**
+        Result image object **src** * **p.value** (new object)
     """
     # For the multiplication by a constant value, we do not convert the constant value
     # to the same data type as the input image, because we want to allow the user to
@@ -212,14 +210,14 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
 
 
 def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
-    """Divide an image by a constant value
+    """Divide an image by a constant value and return the new result image object
 
     Args:
         src: input image object
         p: constant value
 
     Returns:
-        Result image object **src** / **p.value**
+        Result image object **src** / **p.value** (new object)
     """
     # For the division by a constant value, we do not convert the constant value to the
     # same data type as the input image, because we want to allow the user to divide an

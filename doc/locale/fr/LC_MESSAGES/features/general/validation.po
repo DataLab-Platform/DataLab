@@ -365,17 +365,17 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "Subtract a constant value from an signal"
+msgid "Subtract a constant value from a signal"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`divide_by_constant "
-"<cdl.core.computation.signal.compute_divide_by_constant>`"
+"<cdl.core.computation.signal.compute_division_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "Divide an signal by a constant value"
+msgid "Divide a signal by a constant value"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -552,7 +552,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`product_by_constant "
-"<cdl.core.computation.signal.compute_product_by_constant>`"
+"<cdl.core.computation.signal.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -758,7 +758,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`divide_by_constant "
-"<cdl.core.computation.image.compute_divide_by_constant>`"
+"<cdl.core.computation.image.compute_division_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -896,7 +896,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`product_by_constant "
-"<cdl.core.computation.image.compute_product_by_constant>`"
+"<cdl.core.computation.image.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1

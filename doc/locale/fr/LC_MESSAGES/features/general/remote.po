@@ -858,8 +858,8 @@ msgstr "Objet de traitement de signal : opérations, traitement, calcul"
 msgid "Compute sum"
 msgstr "Calculer la somme"
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_sum_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_sum_constant:1 of
+#: cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant:1 of
 msgid "Compute sum with a constant"
 msgstr "Calculer la somme avec une constante"
 
@@ -873,8 +873,8 @@ msgstr "Calculer la moyenne"
 msgid "Compute product"
 msgstr "Calculer le produit"
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_product_by_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_by_constant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_product_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1
 #: of
 msgid "Compute product with a constant"
 msgstr "Calculer le produit avec une constante"
@@ -943,8 +943,8 @@ msgstr "Calculer la différence quadratique entre deux signaux"
 msgid "Compute division between two signals"
 msgstr "Calculer la division entre deux signaux"
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_division_by_contant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_by_contant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_division_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1
 #: of
 msgid "Compute division by a constant"
 msgstr "Calculer la division par une constante"

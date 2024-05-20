@@ -118,7 +118,7 @@ def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
         src: source signal
 
     Returns:
-        Modified **dst** signal
+        Modified **dst** signal (modified in place)
     """
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
@@ -134,7 +134,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
         src: source signal
 
     Returns:
-        Modified **dst** signal
+        Modified **dst** signal (modified in place)
     """
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
@@ -143,15 +143,14 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
 
 
 def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
-    """Add **dst** and a constant value and return **dst** signal modified in place
+    """Add **dst** and a constant value and return a the new result signal object
 
     Args:
-        dst: output signal object
         src: input signal object
         p: constant value
 
     Returns:
-        Result signal object **src** + **p.value**
+        Result signal object **src** + **p.value** (new object)
     """
     dst = dst_11(src, "+", str(p.value))
     dst.y += p.value
@@ -166,7 +165,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
         p: constant value
 
     Returns:
-        Result signal object **src** - **p.value**
+        Result signal object **src** - **p.value** (new object)
     """
     dst = dst_11(src, "-", str(p.value))
     dst.y -= p.value
@@ -174,15 +173,14 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
 
 
 def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
-    """Multiply **dst** by a constant value and return **dst** signal modified in place
+    """Multiply **dst** by a constant value and return the new result signal object
 
     Args:
-        dst: output signal object
         src: input signal object
         p: constant value
 
     Returns:
-        Result signal object **src** * **p.value**
+        Result signal object **src** * **p.value** (new object)
     """
     dst = dst_11(src, "×", str(p.value))
     dst.y *= p.value
@@ -197,7 +195,7 @@ def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> Sign
         p: constant value
 
     Returns:
-        Result signal object **src** / **p.value**
+        Result signal object **src** / **p.value** (new object)
     """
     dst = dst_11(src, "/", str(p.value))
     dst.y /= p.value
