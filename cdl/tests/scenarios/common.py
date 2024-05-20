@@ -73,10 +73,10 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     const_oper_param = dlp.ConstantOperationParam.create(value=2.0)
     for const_oper in (
-        panel.processor.compute_sum_constant,
+        panel.processor.compute_addition_constant,
         panel.processor.compute_difference_constant,
-        panel.processor.compute_product_by_constant,
-        panel.processor.compute_division_by_contant,
+        panel.processor.compute_product_constant,
+        panel.processor.compute_division_constant,
     ):
         panel.objview.select_objects((3,))
         const_oper(param=const_oper_param)
@@ -93,10 +93,10 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
 
     param = dlp.ConstantOperationParam()
     param.value = 2.0
-    panel.processor.compute_sum_constant(param)
+    panel.processor.compute_addition_constant(param)
     panel.processor.compute_difference_constant(param)
-    panel.processor.compute_product_by_constant(param)
-    panel.processor.compute_division_by_contant(param)
+    panel.processor.compute_product_constant(param)
+    panel.processor.compute_division_constant(param)
 
     obj = panel.objmodel.get_groups()[0][-1]
     param = dlp.ThresholdParam()

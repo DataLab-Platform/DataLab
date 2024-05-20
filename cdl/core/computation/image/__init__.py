@@ -125,7 +125,7 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
 # the modified object from the worker processes.
 
 
-def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
+def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Add **dst** and **src** images and return **dst** image modified in place
 
     Args:
@@ -153,7 +153,7 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
     return dst
 
 
-def compute_add_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     """Add **dst** and a constant value and return **dst** image modified in place
 
     Args:
@@ -190,7 +190,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     return dst
 
 
-def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     """Multiply **dst** by a constant value and return **dst** image modified in place
 
     Args:
@@ -211,7 +211,7 @@ def compute_product_by_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     return dst
 
 
-def compute_divide_by_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
     """Divide an image by a constant value
 
     Args:

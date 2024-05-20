@@ -803,7 +803,7 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_sum_constant(self, param: ConstantOperationParam) -> None:
+    def compute_addition_constant(self, param: ConstantOperationParam) -> None:
         """Compute sum with a constant"""
 
     @abc.abstractmethod
@@ -813,12 +813,12 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_product_by_constant(self, param: ConstantOperationParam) -> None:
+    def compute_product_constant(self, param: ConstantOperationParam) -> None:
         """Compute product with a constant"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_division_by_contant(self, param: ConstantOperationParam) -> None:
+    def compute_division_constant(self, param: ConstantOperationParam) -> None:
         """Compute division by a constant"""
 
     # ------Computing-------------------------------------------------------------------

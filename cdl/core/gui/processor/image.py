@@ -50,15 +50,15 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
+        self.compute_n1("Σ", cpi.compute_addition, title=_("Sum"))
 
     @qt_try_except()
-    def compute_sum_constant(
+    def compute_addition_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute sum with a constant"""
         self.compute_11(
-            cpi.compute_add_constant,
+            cpi.compute_addition_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Add constant"),
@@ -73,7 +73,9 @@ class ImageProcessor(BaseProcessor):
             """Finalize average computation"""
             new_obj.data = new_obj.data / float(len(old_objs))
 
-        self.compute_n1("μ", cpi.compute_add, func_objs=func_objs, title=_("Average"))
+        self.compute_n1(
+            "μ", cpi.compute_addition, func_objs=func_objs, title=_("Average")
+        )
 
     @qt_try_except()
     def compute_product(self) -> None:
@@ -81,12 +83,12 @@ class ImageProcessor(BaseProcessor):
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def compute_product_by_constant(
+    def compute_product_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute product with a constant"""
         self.compute_11(
-            cpi.compute_product_by_constant,
+            cpi.compute_product_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Product with constant"),
@@ -395,12 +397,12 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division_by_contant(
+    def compute_division_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute division by a constant"""
         self.compute_11(
-            cpi.compute_divide_by_constant,
+            cpi.compute_division_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Division by constant"),

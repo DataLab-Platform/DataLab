@@ -110,7 +110,7 @@ class Wrap11Func:
 # the modified object from the worker processes.
 
 
-def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
+def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Add **dst** and **src** signals and return **dst** signal modified in place
 
     Args:
@@ -142,7 +142,7 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
     return dst
 
 
-def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
     """Add **dst** and a constant value and return **dst** signal modified in place
 
     Args:
@@ -159,7 +159,7 @@ def compute_add_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj
 
 
 def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
-    """Subtract a constant value from an signal
+    """Subtract a constant value from a signal
 
     Args:
         src: input signal object
@@ -173,7 +173,7 @@ def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     return dst
 
 
-def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
     """Multiply **dst** by a constant value and return **dst** signal modified in place
 
     Args:
@@ -189,8 +189,8 @@ def compute_product_by_constant(src: SignalObj, p: ConstantOperationParam) -> Si
     return dst
 
 
-def compute_divide_by_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
-    """Divide an signal by a constant value
+def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Divide a signal by a constant value
 
     Args:
         src: input signal object

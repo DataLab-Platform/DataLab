@@ -33,15 +33,15 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1("Σ", cps.compute_add, title=_("Sum"))
+        self.compute_n1("Σ", cps.compute_addition, title=_("Sum"))
 
     @qt_try_except()
-    def compute_sum_constant(
+    def compute_addition_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute sum with a constant"""
         self.compute_11(
-            cps.compute_add_constant,
+            cps.compute_addition_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Sum with constant"),
@@ -58,7 +58,9 @@ class SignalProcessor(BaseProcessor):
             if new_obj.dy is not None:
                 new_obj.dy = new_obj.dy / float(len(old_objs))
 
-        self.compute_n1("μ", cps.compute_add, func_objs=func_objs, title=_("Average"))
+        self.compute_n1(
+            "μ", cps.compute_addition, func_objs=func_objs, title=_("Average")
+        )
 
     @qt_try_except()
     def compute_product(self) -> None:
@@ -66,12 +68,12 @@ class SignalProcessor(BaseProcessor):
         self.compute_n1("Π", cps.compute_product, title=_("Product"))
 
     @qt_try_except()
-    def compute_product_by_constant(
+    def compute_product_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute product with a constant"""
         self.compute_11(
-            cps.compute_product_by_constant,
+            cps.compute_product_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Product with constant"),
@@ -187,12 +189,12 @@ class SignalProcessor(BaseProcessor):
 
     qt_try_except()
 
-    def compute_division_by_contant(
+    def compute_division_constant(
         self, param: cpb.ConstantOperationParam | None = None
     ) -> None:
         """Compute division by a constant"""
         self.compute_11(
-            cps.compute_divide_by_constant,
+            cps.compute_division_constant,
             param,
             paramclass=cpb.ConstantOperationParam,
             title=_("Division by constant"),

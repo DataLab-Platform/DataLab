@@ -604,7 +604,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             with self.new_menu(_("Constant Operations")):
                 self.new_action(
                     _("Add constant"),
-                    triggered=self.panel.processor.compute_sum_constant,
+                    triggered=self.panel.processor.compute_addition_constant,
                     select_condition=SelectCond.at_least_one,
                     icon=get_icon("constant_add.svg"),
                 )
@@ -616,13 +616,13 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 )
                 self.new_action(
                     _("Multiply by constant"),
-                    triggered=self.panel.processor.compute_product_by_constant,
+                    triggered=self.panel.processor.compute_product_constant,
                     select_condition=SelectCond.at_least_one,
                     icon=get_icon("constant_multiply.svg"),
                 )
                 self.new_action(
                     _("Divide by constant"),
-                    triggered=self.panel.processor.compute_division_by_contant,
+                    triggered=self.panel.processor.compute_division_constant,
                     select_condition=SelectCond.at_least_one,
                     icon=get_icon("constant_divide.svg"),
                 )
