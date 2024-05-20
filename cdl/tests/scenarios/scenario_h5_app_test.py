@@ -44,7 +44,7 @@ def test_scenario_h5():
             panel.processor.compute_derivative()
             # === Creating two test images
             panel = win.imagepanel
-            ima1 = create_noisygauss_image()
+            ima1 = create_noisygauss_image(add_annotations=True)
             panel.add_object(ima1)
             param = ClipParam.create(value=ima1.data.mean())
             panel.processor.compute_clip(param)

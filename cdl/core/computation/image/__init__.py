@@ -241,7 +241,7 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object **src1** - **src2**
+        Result image object **src1** - **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "-")
     dst.data = src1.data - src2.data
@@ -256,7 +256,7 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object (**src1** - **src2**) / sqrt(2.0)
+        Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
     dst.data = (src1.data - src2.data) / np.sqrt(2.0)
@@ -273,7 +273,7 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object **src1** / **src2**
+        Result image object **src1** / **src2** (new object)
     """
     dst = dst_n1n(src1, src2, "/")
     dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)

@@ -1,6 +1,6 @@
 :py:func:`abs <cdl.core.computation.image.compute_abs>`,Compute absolute value,N/A
-:py:func:`addition <cdl.core.computation.image.compute_addition>`,Add **dst** and **src** images and return **dst** image modified in place,N/A
-:py:func:`addition_constant <cdl.core.computation.image.compute_addition_constant>`,Add **dst** and a constant value and return **dst** image modified in place,``features/signal/misc_unit_test.py``
+:py:func:`addition <cdl.core.computation.image.compute_addition>`,Add **dst** and **src** images and return **dst** image modified in place,``features/image/misc_unit_test.py``
+:py:func:`addition_constant <cdl.core.computation.image.compute_addition_constant>`,Add **dst** and a constant value and return the new result image object,``features/image/misc_unit_test.py``
 :py:func:`astype <cdl.core.computation.image.compute_astype>`,Convert image data type,N/A
 :py:func:`average_profile <cdl.core.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
 :py:func:`binning <cdl.core.computation.image.compute_binning>`,Binning function on data,N/A
@@ -8,10 +8,10 @@
 :py:func:`calibration <cdl.core.computation.image.compute_calibration>`,Compute linear calibration,N/A
 :py:func:`centroid <cdl.core.computation.image.compute_centroid>`,Compute centroid,``features/image/centroid_unit_test.py``
 :py:func:`clip <cdl.core.computation.image.compute_clip>`,Apply clipping,N/A
-:py:func:`difference <cdl.core.computation.image.compute_difference>`,Compute difference between two images,N/A
-:py:func:`difference_constant <cdl.core.computation.image.compute_difference_constant>`,Subtract a constant value from an image,``features/signal/misc_unit_test.py``
-:py:func:`division <cdl.core.computation.image.compute_division>`,Compute division between two images,N/A
-:py:func:`division_constant <cdl.core.computation.image.compute_division_constant>`,Divide an image by a constant value,``features/signal/misc_unit_test.py``
+:py:func:`difference <cdl.core.computation.image.compute_difference>`,Compute difference between two images,``features/image/misc_unit_test.py``
+:py:func:`difference_constant <cdl.core.computation.image.compute_difference_constant>`,Subtract a constant value from an image and return the new result image object,``features/image/misc_unit_test.py``
+:py:func:`division <cdl.core.computation.image.compute_division>`,Compute division between two images,``features/image/misc_unit_test.py``
+:py:func:`division_constant <cdl.core.computation.image.compute_division_constant>`,Divide an image by a constant value and return the new result image object,``features/image/misc_unit_test.py``
 :py:func:`enclosing_circle <cdl.core.computation.image.compute_enclosing_circle>`,Compute minimum enclosing circle,N/A
 :py:func:`exp <cdl.core.computation.image.compute_exp>`,Compute exponential,N/A
 :py:func:`fft <cdl.core.computation.image.compute_fft>`,Compute FFT,N/A
@@ -28,8 +28,8 @@
 :py:func:`moving_average <cdl.core.computation.image.compute_moving_average>`,Compute moving average,N/A
 :py:func:`moving_median <cdl.core.computation.image.compute_moving_median>`,Compute moving median,N/A
 :py:func:`normalize <cdl.core.computation.image.compute_normalize>`,,N/A
-:py:func:`product <cdl.core.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,N/A
-:py:func:`product_constant <cdl.core.computation.image.compute_product_constant>`,Multiply **dst** by a constant value and return **dst** image modified in place,``features/signal/misc_unit_test.py``
+:py:func:`product <cdl.core.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,``features/image/misc_unit_test.py``
+:py:func:`product_constant <cdl.core.computation.image.compute_product_constant>`,Multiply **dst** by a constant value and return the new result image object,``features/image/misc_unit_test.py``
 :py:func:`profile <cdl.core.computation.image.compute_profile>`,Compute horizontal or vertical profile,N/A
 :py:func:`quadratic_difference <cdl.core.computation.image.compute_quadratic_difference>`,Compute quadratic difference between two images,N/A
 :py:func:`radial_profile <cdl.core.computation.image.compute_radial_profile>`,Compute radial profile around the centroid,N/A

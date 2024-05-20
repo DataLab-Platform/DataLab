@@ -494,14 +494,16 @@ def create_sincos_image(
 def create_noisygauss_image(
     p: cdl.obj.NewImageParam | None = None,
     center: tuple[float, float] | None = None,
-    add_annotations: bool = True,
+    level: float = 0.1,
+    add_annotations: bool = False,
 ) -> cdl.obj.ImageObj:
     """Create test image (2D noisy gaussian)
 
     Args:
         p: Image parameters. Defaults to None.
         center: Center of the gaussian. Defaults to None.
-        add_annotations: If True, add annotations. Defaults to True.
+        level: Level of the random noise. Defaults to 0.1.
+        add_annotations: If True, add annotations. Defaults to False.
 
     Returns:
         Image object
@@ -516,9 +518,9 @@ def create_noisygauss_image(
         x0, y0 = 2.0, 3.0
     else:
         x0, y0 = center
-    obj.data = create_2d_gaussian(size, dtype=dtype, x0=x0, y0=y0) + create_2d_random(
-        size, dtype
-    )
+    obj.data = create_2d_gaussian(size, dtype=dtype, x0=x0, y0=y0)
+    if level:
+        obj.data += create_2d_random(size, dtype, level)
     if add_annotations:
         obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return obj

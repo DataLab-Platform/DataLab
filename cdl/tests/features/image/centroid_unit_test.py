@@ -97,8 +97,8 @@ def test_centroid_graphically():
 def test_image_centroid():
     """Test centroid computation"""
     param = cdl.obj.NewImageParam.create(height=500, width=500)
-    data = create_noisygauss_image(param, center=(-2.0, 3.0))
-    df = cpi.compute_centroid(data).to_dataframe()
+    image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
+    df = cpi.compute_centroid(image).to_dataframe()
     cmp, exp = [df.x[0], df.y[0]], [199, 324]
     execenv.print(f"Computed centroid: {cmp} - Expected: {exp}")
     np.allclose(cmp, exp)

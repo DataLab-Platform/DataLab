@@ -21,7 +21,7 @@ def test_launcher2():
     sig2 = test_data.create_noisy_signal()
     param = cdl.obj.new_image_param(height=2000, width=2000)
     ima1 = test_data.create_sincos_image(param)
-    ima2 = test_data.create_noisygauss_image(param)
+    ima2 = test_data.create_noisygauss_image(param, add_annotations=True)
     run(objects=(sig1, sig2, ima1, ima2), size=(1200, 550))
 
 
