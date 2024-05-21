@@ -18,6 +18,8 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.tests.data import (
+    GaussianNoiseParam,
+    create_noisy_signal,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
@@ -176,7 +178,7 @@ def run_signal_computations(
         param.method = method_value
         panel.processor.compute_windowing(param)
 
-    win.add_object(create_paracetamol_signal(data_size))
+    win.add_object(sig1.copy())
 
     param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
@@ -195,7 +197,8 @@ def run_signal_computations(
     i2 = len(sig.y) - i1
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
 
-    sig = panel.objview.get_sel_objects()[0]
+    sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
+    panel.add_object(sig)
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
     for fittitle, fitfunc in (
