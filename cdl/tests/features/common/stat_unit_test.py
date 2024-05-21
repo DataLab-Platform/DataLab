@@ -12,6 +12,8 @@ Testing the following:
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import numpy as np
 import pytest
 

@@ -6,6 +6,8 @@ Miscellaneous image tests
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+from __future__ import annotations
+
 import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
