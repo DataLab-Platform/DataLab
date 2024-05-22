@@ -408,6 +408,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Import text file..."),
+                icon=get_icon("import.svg"),
                 triggered=self.panel.exec_import_wizard,
                 select_condition=SelectCond.always,
             )
