@@ -359,20 +359,15 @@ def windowing(
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
-    """Find the x indexes where the corresponding y is the closest to zero (point index
-    right before or at zero crossing)
+    """Find the x indexes where the corresponding y is the closest to zero
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        value (float): Value to find
+        y: Y data
 
     Returns:
-        np.ndarray: x indexes where the corresponding y is the closest to the given
-         value
+        Indexes of the points right before or at zero crossing
     """
     xi = np.where((y[:-1] >= 0) & (y[1:] <= 0) | (y[:-1] <= 0) & (y[1:] >= 0))[0]
-
     return xi
 
 
@@ -381,12 +376,12 @@ def compute_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray
     linear interpolation to deduce the precise x value.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        value (float): Value to find
+        x: X data
+        y: Y data
+        value: Value to find
 
     Returns:
-        float: x value where the y value is the closest to the given value
+        X value where the Y value is the closest to the given value
     """
     leveled_y = y - value
     xi_before = find_nearest_zero_point_idx(leveled_y)
@@ -406,12 +401,12 @@ def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
     """Compute the bandwidth of the signal at a given level.
 
     Args:
-        x (numpy.ndarray): x signal data
-        y (numpy.ndarray): y signal data
+        x: x signal data
+        y: y signal data
         level: Level in dB at which the bandwidth is computed. Defaults to 3.0.
 
     Returns:
-        float: Bandwidth of the signal at the given level
+        Bandwidth of the signal at the given level
     """
     half_max: float = np.max(y) - level
 
@@ -423,9 +418,12 @@ def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 0.16) -> float:
     """Compute Effective Number of Bits (ENOB).
 
     Args:
-        x (numpy.ndarray): x signal data
-        y (numpy.ndarray): y signal data
-        full_scale (float): Full scale(V). Defaults to 0.16.
+        x: x signal data
+        y: y signal data
+        full_scale: Full scale(V). Defaults to 0.16
+
+    Returns:
+        Effective Number of Bits (ENOB)
     """
     offset = np.mean(y)
     amplitude = (np.max(y) - np.min(y)) / 2
@@ -450,11 +448,11 @@ def initial_freq(x: np.ndarray, y: np.ndarray) -> float:
     Compute the initial frequency of the signal
 
     Args:
-        x (numpy.ndarray): x-axis data
-        y (numpy.ndarray): y-axis data
+        x: x-axis data
+        y: y-axis data
 
     Returns:
-        float: Fréquence du signal
+        Initial frequency of the signal
     """
     # soustraction de l'offset pour supprimer la composante continue
     y = y - np.mean(y)
@@ -484,7 +482,7 @@ def _compute_residuals(
         y: The y-axis data
 
     Returns:
-        resutl of compute_residuals
+        The residuals between the recorded signal y and the modeled signal
     """
 
     return compute_residuals(x, y, *opt_params)
@@ -503,16 +501,16 @@ def compute_residuals(
     peval function
 
     Args:
-        x (numpy.ndarray): x-axis data
-        y (numpy.ndarray): y-axis data
-        ampl (float): Amplitude
-        freq (float): frequency
-        phase (float): Phase
-        offset (float): Offset
+        x: x-axis data
+        y: y-axis data
+        ampl: Amplitude
+        freq: frequency
+        phase: Phase
+        offset: Offset
 
 
     Returns:
-        np.ndarray: Error between the recorded signal y and the modeled signal
+        Error between the recorded signal y and the modeled signal
 
     """
     err = y - peval(x, ampl, freq, phase, offset)
@@ -530,13 +528,13 @@ def peval(
     Modelisation of the sinus from the input parameters
 
     Args:
-        x (numpy.ndarray): X data
-        ampl (float): Amplitude
-        freq (float): Frequency
-        phase (float): Phase
-        offset (float): Offset
+        x: X data
+        ampl: Amplitude
+        freq: Frequency
+        phase: Phase
+        offset: Offset
 
     Returns:
-        np.ndarray: Modeled sinus
+        Modeled sinus
     """
     return ampl * np.sin(2 * np.pi * freq * x + phase) + offset

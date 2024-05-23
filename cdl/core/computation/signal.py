@@ -837,7 +837,14 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
 
 
 def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
-    """Compute bandwith"""
+    """Compute bandwith
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result properties with bandwidth
+    """
     bw_funcs = {"bandwidth (-3dB)": lambda xy: bandwidth(xy[0], xy[1], 3.0)}
     return calc_resultproperties("Bandwidth", src, bw_funcs)
 
@@ -849,7 +856,15 @@ class EnobParam(gds.DataSet):
 
 
 def compute_enob(src: SignalObj, p: EnobParam) -> ResultProperties:
-    """Compute ENOB"""
+    """Compute ENOB
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result properties with ENOB
+    """
     enob_func = {"enob": lambda xy: enob(xy[0], xy[1], p.scale)}  # type: ignore
     return calc_resultproperties("Enob", src, enob_func)
 
