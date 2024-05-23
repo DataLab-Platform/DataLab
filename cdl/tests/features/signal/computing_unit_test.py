@@ -22,9 +22,9 @@ import pytest
 
 import cdl.algorithms.signal as alg
 import cdl.core.computation.signal as cps
+import cdl.obj
 import cdl.param
 from cdl.env import execenv
-from cdl.obj import SignalTypes, create_signal_from_param, new_signal_param
 from cdl.tests.data import check_scalar_result, get_test_fnames
 
 
@@ -44,13 +44,29 @@ def test_func_for_errors(func: Callable[[np.ndarray, np.ndarray], float]) -> Non
     """Generic test for functions returning a float result.
     This test only checks if the function runs without errors.
     The result is not checked."""
-    newparam = new_signal_param(stype=SignalTypes.COSINUS, size=200)
-    s1 = create_signal_from_param(newparam)
+    newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.COSINUS, size=200)
+    s1 = cdl.obj.create_signal_from_param(newparam)
     x, y = s1.xydata
     res = func(x, y)
     assert isinstance(res, float)
     execenv.print(f"{func.__name__}={res}", end=" ")
     execenv.print("OK")
+
+
+@pytest.mark.validation
+def test_signal_fwhm() -> None:
+    """Validation test for the full width at half maximum computation."""
+    obj = cdl.obj.read_signal(get_test_fnames("curve.txt")[0])
+    real_fwhm = 2.675  # Manual validation
+    for fittype, exp in (
+        ("GaussianModel", 2.40323),
+        ("LorentzianModel", 2.78072),
+        ("VoigtModel", 2.56591),
+        ("NoModel", real_fwhm),
+    ):
+        param = cdl.param.FWHMParam.create(fittype=fittype)
+        df = cps.compute_fwhm(obj, param).to_dataframe()
+        check_scalar_result("FWHM", df.L[0], exp, rtol=0.05)
 
 
 @pytest.mark.validation

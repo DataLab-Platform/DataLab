@@ -232,7 +232,7 @@ class BaseResult:
 
     def to_dataframe(self) -> pd.DataFrame:
         """Return DataFrame from properties array"""
-        return pd.DataFrame(self.array, columns=["ROI"] + list(self.headers))
+        return pd.DataFrame(self.shown_array, columns=list(self.headers))
 
     @property
     def shown_array(self) -> np.ndarray:
