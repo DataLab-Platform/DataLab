@@ -373,7 +373,7 @@ def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
     return xi
 
 
-def compute_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
+def find_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray:
     """Find the x value where the y value is the closest to the given value using
     linear interpolation to deduce the precise x value.
 
@@ -391,12 +391,12 @@ def compute_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray
 
     if len(xi_before) == 0:
         return np.array([0.0])
-    else:
-        # linear interpolation
-        p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
-        ori = leveled_y[xi_after] - p * x[xi_after]
-        x0 = -ori / p  # where the curve cut the absissa
-        return x0
+
+    # linear interpolation
+    p = (leveled_y[xi_after] - leveled_y[xi_before]) / (x[xi_after] - x[xi_before])
+    ori = leveled_y[xi_after] - p * x[xi_after]
+    x0 = -ori / p  # where the curve cut the absissa
+    return x0
 
 
 def bandwidth(x: np.ndarray, y: np.ndarray, level: float = 3.0) -> float:
@@ -411,7 +411,7 @@ def bandwidth(x: np.ndarray, y: np.ndarray, level: float = 3.0) -> float:
         Bandwidth of the signal at the given level
     """
     half_max: float = np.max(y) - level
-    bw = compute_x_at_value(x, y, half_max)
+    bw = find_x_at_value(x, y, half_max)
     return bw[0]
 
 

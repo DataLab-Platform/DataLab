@@ -26,9 +26,9 @@ import scipy.signal as sps
 from cdl.algorithms import fit
 from cdl.algorithms.signal import (
     bandwidth,
-    compute_x_at_value,
     derivative,
     enob,
+    find_x_at_value,
     interpolate,
     moving_average,
     normalize,
@@ -1191,7 +1191,7 @@ def __fwhm_no_model(
         x = x[indexes]
         y = y[indexes]
     hmax = amp * 0.5 + np.min(y)
-    fx = compute_x_at_value(x, y, hmax)
+    fx = find_x_at_value(x, y, hmax)
     assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}."
     return fx[0], hmax, fx[-1], hmax
 
