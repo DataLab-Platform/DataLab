@@ -8,13 +8,12 @@ Miscellaneous signal tests
 
 from __future__ import annotations
 
-import numpy as np
 import pytest
 
 import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.obj import SignalTypes
-from cdl.tests.data import create_periodic_signal
+from cdl.tests.data import check_array_result, create_periodic_signal
 
 
 @pytest.mark.validation
@@ -25,7 +24,7 @@ def test_signal_addition() -> None:
     exp = s1.y + s2.y
     cps.compute_addition(s1, s2)
     res = s1.y
-    assert np.allclose(res, exp), f"Signal addition failed: expected {exp}, got {res}"
+    check_array_result("Signal addition", res, exp)
 
 
 @pytest.mark.validation
@@ -34,7 +33,7 @@ def test_signal_addition_constant() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     param = cdl.param.ConstantOperationParam.create(value=1.0)
     s2 = cps.compute_addition_constant(s1, param)
-    assert np.allclose(s2.y, s1.y + param.value), "Signal addition with constant failed"
+    check_array_result("Signal addition with constant", s2.y, s1.y + param.value)
 
 
 @pytest.mark.validation
@@ -45,9 +44,7 @@ def test_signal_product() -> None:
     exp = s1.y * s2.y
     cps.compute_product(s1, s2)
     res = s1.y
-    assert np.allclose(
-        res, exp
-    ), f"Signal multiplication failed: expected {exp}, got {res}"
+    check_array_result("Signal multiplication", res, exp)
 
 
 @pytest.mark.validation
@@ -56,9 +53,7 @@ def test_signal_product_constant() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     param = cdl.param.ConstantOperationParam.create(value=1.0)
     s2 = cps.compute_product_constant(s1, param)
-    assert np.allclose(
-        s2.y, s1.y * param.value
-    ), "Signal multiplication by constant failed"
+    check_array_result("Signal multiplication by constant", s2.y, s1.y * param.value)
 
 
 @pytest.mark.validation
@@ -67,7 +62,7 @@ def test_signal_difference() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     s2 = create_periodic_signal(SignalTypes.SINUS)
     s3 = cps.compute_difference(s1, s2)
-    assert np.allclose(s3.y, s1.y - s2.y), "Signal difference failed"
+    check_array_result("Signal difference", s3.y, s1.y - s2.y)
 
 
 @pytest.mark.validation
@@ -76,9 +71,7 @@ def test_signal_difference_constant() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     param = cdl.param.ConstantOperationParam.create(value=1.0)
     s2 = cps.compute_difference_constant(s1, param)
-    assert np.allclose(
-        s2.y, s1.y - param.value
-    ), "Signal difference with constant failed"
+    check_array_result("Signal difference with constant", s2.y, s1.y - param.value)
 
 
 @pytest.mark.validation
@@ -87,7 +80,7 @@ def test_signal_divide() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     s2 = create_periodic_signal(SignalTypes.SINUS)
     s3 = cps.compute_division(s1, s2)
-    assert np.allclose(s3.y, s1.y / s2.y), "Signal division failed"
+    check_array_result("Signal division", s3.y, s1.y / s2.y)
 
 
 @pytest.mark.validation
@@ -96,7 +89,7 @@ def test_signal_division_constant() -> None:
     s1 = create_periodic_signal(SignalTypes.COSINUS)
     param = cdl.param.ConstantOperationParam.create(value=1.0)
     s2 = cps.compute_division_constant(s1, param)
-    assert np.allclose(s2.y, s1.y / param.value), "Signal division by constant failed"
+    check_array_result("Signal division by constant", s2.y, s1.y / param.value)
 
 
 if __name__ == "__main__":

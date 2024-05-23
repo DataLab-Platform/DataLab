@@ -29,7 +29,11 @@ import cdl.obj
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _
 from cdl.env import execenv
-from cdl.tests.data import create_noisygauss_image, get_laser_spot_data
+from cdl.tests.data import (
+    check_scalar_result,
+    create_noisygauss_image,
+    get_laser_spot_data,
+)
 from cdl.utils.vistools import view_image_items
 
 
@@ -99,9 +103,8 @@ def test_image_centroid():
     param = cdl.obj.NewImageParam.create(height=500, width=500)
     image = create_noisygauss_image(param, center=(-2.0, 3.0), add_annotations=True)
     df = cpi.compute_centroid(image).to_dataframe()
-    cmp, exp = [df.x[0], df.y[0]], [199, 324]
-    execenv.print(f"Computed centroid: {cmp} - Expected: {exp}")
-    np.allclose(cmp, exp)
+    check_scalar_result("Centroid X", df.x[0], 199)
+    check_scalar_result("Centroid Y", df.y[0], 324)
 
 
 if __name__ == "__main__":
