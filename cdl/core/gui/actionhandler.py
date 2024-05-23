@@ -647,6 +647,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Convert data type"),
                 triggered=self.panel.processor.compute_astype,
                 separator=True,
+                icon=get_icon("convert_dtype.svg"),
             )
             self.new_action(
                 _("Exponential"),
@@ -928,10 +929,12 @@ class SignalActionHandler(BaseActionHandler):
                 _("Convolution"),
                 triggered=self.panel.processor.compute_convolution,
                 separator=True,
+                icon=get_icon("convolution.svg"),
             )
             self.new_action(
                 _("Windowing"),
                 triggered=self.panel.processor.compute_windowing,
+                icon=get_icon("windowing.svg"),
                 tip=_(
                     "Apply a window function (or apodization): Hanning, Hamming, ..."
                 ),
