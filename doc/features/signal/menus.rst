@@ -787,6 +787,36 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
+Bandwidth at -3 dB
+^^^^^^^^^^^^^^^^^^
+
+Assuming the signal is a filter response, compute the bandwidth at -3 dB by finding the
+frequency range where the signal is above -3 dB.
+
+Dynamic parameters
+^^^^^^^^^^^^^^^^^^
+
+Compute the following dynamic parameters on selected signal:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - f
+      - Frequency (sinusoidal fit)
+    * - ENOB
+      - Effective Number Of Bits
+    * - SNR
+      - Signal-to-Noise Ratio
+    * - SINAD
+      - Signal-to-Noise And Distortion Ratio
+    * - THD
+      - Total Harmonic Distortion
+    * - SFDR
+      - Spurious-Free Dynamic Range
+
 Show results
 ^^^^^^^^^^^^
 
