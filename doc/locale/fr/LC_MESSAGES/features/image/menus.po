@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 11:28+0100\n"
+"POT-Creation-Date: 2024-05-17 09:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/image/menus.rst:2
+#: ../../doc/features/image/menus.rst:2
 msgid "Menus"
 msgstr "Menus"
 
-#: ../../features/image/menus.rst:4
+#: ../../doc/features/image/menus.rst:4
 msgid ""
 "This section describes the image related features of DataLab, by "
 "presenting the different menus and their associated functions."
@@ -29,15 +29,15 @@ msgstr ""
 "Cette section décrit les fonctionnalités liées aux images de DataLab, en "
 "présentant les différents menus et leurs fonctions associées."
 
-#: ../../features/image/menus.rst:8
+#: ../../doc/features/image/menus.rst:8
 msgid "\"File\" menu"
 msgstr "Menu \"Fichier\""
 
-#: ../../features/image/menus.rst:12
+#: ../../doc/features/image/menus.rst:12
 msgid "Screenshot of the \"File\" menu."
 msgstr "Capture d'écran du menu \"Fichier\"."
 
-#: ../../features/image/menus.rst:14
+#: ../../doc/features/image/menus.rst:14
 msgid ""
 "The \"File\" menu allows you to create, open, save and close images. It "
 "also allows you to import and export data from/to HDF5 files, and to edit"
@@ -48,11 +48,11 @@ msgstr ""
 "depuis/vers des fichiers HDF5, et d'éditer les paramètres de la session "
 "courante."
 
-#: ../../features/image/menus.rst:19
+#: ../../doc/features/image/menus.rst:19
 msgid "New image"
 msgstr "Nouvelle image"
 
-#: ../../features/image/menus.rst:21
+#: ../../doc/features/image/menus.rst:21
 msgid ""
 "Create a new image from various models (supported datatypes: uint8, "
 "uint16, int16, float32, float64):"
@@ -60,35 +60,36 @@ msgstr ""
 "Crée une image à partir de différents modèles (types de données pris en "
 "charge : uint8, uint16, int16, float32, float64) :"
 
-#: ../../features/image/menus.rst:28
+#: ../../doc/features/image/menus.rst:28
 msgid "Model"
 msgstr "Modèle"
 
-#: ../../features/image/menus.rst:29
+#: ../../doc/features/image/menus.rst:29 ../../doc/features/image/menus.rst:270
+#: ../../doc/features/image/menus.rst:475
 msgid "Equation"
 msgstr "Equation"
 
-#: ../../features/image/menus.rst:30
+#: ../../doc/features/image/menus.rst:30
 msgid "Zeros"
 msgstr "Zéros"
 
-#: ../../features/image/menus.rst:31
+#: ../../doc/features/image/menus.rst:31
 msgid ":math:`z[i] = 0`"
 msgstr ""
 
-#: ../../features/image/menus.rst:32
+#: ../../doc/features/image/menus.rst:32
 msgid "Empty"
 msgstr "Vide"
 
-#: ../../features/image/menus.rst:33
+#: ../../doc/features/image/menus.rst:33
 msgid "Data is directly taken from memory as it is"
 msgstr "Données mémoire en l'état"
 
-#: ../../features/image/menus.rst:34
+#: ../../doc/features/image/menus.rst:34
 msgid "Random"
 msgstr "Aléatoire"
 
-#: ../../features/image/menus.rst:35
+#: ../../doc/features/image/menus.rst:35
 msgid ""
 ":math:`z[i] \\in [0, z_{max})` where :math:`z_{max}` is the datatype "
 "maximum value"
@@ -96,123 +97,131 @@ msgstr ""
 ":math:`z[i] \\in [0, z_{max})` où :math:`z_{max}` est la valeur maximale "
 "correpondant au type de données"
 
-#: ../../features/image/menus.rst:36
+#: ../../doc/features/image/menus.rst:36
 msgid "2D Gaussian"
 msgstr "Gaussienne 2D"
 
-#: ../../features/image/menus.rst:37
+#: ../../doc/features/image/menus.rst:37
 msgid ""
 ":math:`z = "
 "A.exp(-\\dfrac{(\\sqrt{(x-x0)^2+(y-y0)^2}-\\mu)^2}{2\\sigma^2})`"
 msgstr ""
 
-#: ../../features/image/menus.rst:42
+#: ../../doc/features/image/menus.rst:42
 msgid "Open image"
 msgstr "Ouvrir une image"
 
-#: ../../features/image/menus.rst:44
+#: ../../doc/features/image/menus.rst:44
 msgid "Create a new image from the following supported filetypes:"
 msgstr "Crée une image depuis l'un des types de fichiers pris en charge :"
 
-#: ../../features/image/menus.rst:49
+#: ../../doc/features/image/menus.rst:49
 msgid "File type"
 msgstr "Type de fichier"
 
-#: ../../features/image/menus.rst:50
+#: ../../doc/features/image/menus.rst:50
 msgid "Extensions"
 msgstr "Extensions"
 
-#: ../../features/image/menus.rst:51
+#: ../../doc/features/image/menus.rst:51
 msgid "PNG files"
 msgstr "Fichiers PNG"
 
-#: ../../features/image/menus.rst:52
+#: ../../doc/features/image/menus.rst:52
 msgid ".png"
 msgstr ""
 
-#: ../../features/image/menus.rst:53
+#: ../../doc/features/image/menus.rst:53
 msgid "TIFF files"
 msgstr "Fichiers TIFF"
 
-#: ../../features/image/menus.rst:54
+#: ../../doc/features/image/menus.rst:54
 msgid ".tif, .tiff"
 msgstr ""
 
-#: ../../features/image/menus.rst:55
+#: ../../doc/features/image/menus.rst:55
 msgid "8-bit images"
 msgstr "Images 8bits"
 
-#: ../../features/image/menus.rst:56
+#: ../../doc/features/image/menus.rst:56
 msgid ".jpg, .gif"
 msgstr ""
 
-#: ../../features/image/menus.rst:57
+#: ../../doc/features/image/menus.rst:57
 msgid "NumPy arrays"
 msgstr "Tableaux NumPy"
 
-#: ../../features/image/menus.rst:58
+#: ../../doc/features/image/menus.rst:58
 msgid ".npy"
 msgstr ""
 
-#: ../../features/image/menus.rst:59
+#: ../../doc/features/image/menus.rst:59
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+#: ../../doc/features/image/menus.rst:60
+msgid ".mat"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:61
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: ../../features/image/menus.rst:60
+#: ../../doc/features/image/menus.rst:62
 msgid ".txt, .csv, .asc"
 msgstr ""
 
-#: ../../features/image/menus.rst:61
+#: ../../doc/features/image/menus.rst:63
 msgid "Andor SIF files"
 msgstr "Fichiers Andor SIF"
 
-#: ../../features/image/menus.rst:62
+#: ../../doc/features/image/menus.rst:64
 msgid ".sif"
 msgstr ""
 
-#: ../../features/image/menus.rst:63
+#: ../../doc/features/image/menus.rst:65
 msgid "SPIRICON files"
 msgstr "Fichiers SPIRICON"
 
-#: ../../features/image/menus.rst:64
+#: ../../doc/features/image/menus.rst:66
 msgid ".scor-data"
 msgstr ""
 
-#: ../../features/image/menus.rst:65
+#: ../../doc/features/image/menus.rst:67
 msgid "FXD files"
 msgstr "Fichiers FXD"
 
-#: ../../features/image/menus.rst:66
+#: ../../doc/features/image/menus.rst:68
 msgid ".fxd"
 msgstr ""
 
-#: ../../features/image/menus.rst:67
+#: ../../doc/features/image/menus.rst:69
 msgid "Bitmap images"
 msgstr "Images Bitmap"
 
-#: ../../features/image/menus.rst:68
+#: ../../doc/features/image/menus.rst:70
 msgid ".bmp"
 msgstr ""
 
-#: ../../features/image/menus.rst:71
+#: ../../doc/features/image/menus.rst:73
 msgid "Save image"
 msgstr "Enregister l'image"
 
-#: ../../features/image/menus.rst:73
+#: ../../doc/features/image/menus.rst:75
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr ""
 "Enregistre l'image sélectionnée dans l'un des types de fichier pris en "
 "charge :"
 
-#: ../../features/image/menus.rst:76
+#: ../../doc/features/image/menus.rst:78
 msgid "Import text file"
 msgstr "Importer un fichier texte"
 
-#: ../../features/image/menus.rst:78
+#: ../../doc/features/image/menus.rst:80
 msgid "Import data from a text file."
 msgstr "Importer les données depuis un fichier texte."
 
-#: ../../features/image/menus.rst:82
+#: ../../doc/features/image/menus.rst:84
 msgid ""
 "See :ref:`ref-to-image-text-file-import` page for more details on "
 "importing text files."
@@ -220,19 +229,19 @@ msgstr ""
 "Voir la page :ref:`ref-to-image-text-file-import` pour plus de détails "
 "sur l'importation de fichiers texte."
 
-#: ../../features/image/menus.rst:85
+#: ../../doc/features/image/menus.rst:87
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
 
-#: ../../features/image/menus.rst:87
+#: ../../doc/features/image/menus.rst:89
 msgid "Import data from a HDF5 file."
 msgstr "Importer les données d'un fichier HDF5."
 
-#: ../../features/image/menus.rst:90
+#: ../../doc/features/image/menus.rst:92
 msgid "Save to HDF5 file"
 msgstr "Enregistrer un fichier HDF5"
 
-#: ../../features/image/menus.rst:92
+#: ../../doc/features/image/menus.rst:94
 msgid ""
 "Export the whole DataLab session (all signals and images) into a HDF5 "
 "file."
@@ -240,11 +249,11 @@ msgstr ""
 "Exporter l'ensemble de la session DataLab (tous les signaux et images) "
 "vers un fichier HDF5."
 
-#: ../../features/image/menus.rst:95
+#: ../../doc/features/image/menus.rst:97
 msgid "Browse HDF5 file"
 msgstr "Explorer un fichier HDF5"
 
-#: ../../features/image/menus.rst:97
+#: ../../doc/features/image/menus.rst:99
 msgid ""
 "Open the :ref:`h5browser` in a new window to browse and import data from "
 "HDF5 file."
@@ -252,23 +261,23 @@ msgstr ""
 "Ouvrir l':ref:`h5browser` dans un nouvelle fenêtre pour explorer et "
 "éventuellement importer des données depuis un fichier HDF5."
 
-#: ../../features/image/menus.rst:100
+#: ../../doc/features/image/menus.rst:102
 msgid "Settings"
 msgstr "Préférences"
 
-#: ../../features/image/menus.rst:102
+#: ../../doc/features/image/menus.rst:104
 msgid "Open the the \"Settings\" dialog box."
 msgstr "Ouvrir la boîte de dialogue \"Préférences\"."
 
-#: ../../features/image/menus.rst:107
+#: ../../doc/features/image/menus.rst:109
 msgid "\"Edit\" menu"
 msgstr "Menu \"Edition\""
 
-#: ../../features/image/menus.rst:111
+#: ../../doc/features/image/menus.rst:113
 msgid "Screenshot of the \"Edit\" menu."
 msgstr "Capture d'écran du menu \"Edition\"."
 
-#: ../../features/image/menus.rst:113
+#: ../../doc/features/image/menus.rst:115
 msgid ""
 "The \"Edit\" menu allows you to edit the current image or group of "
 "images, by adding, removing, renaming, moving up or down, or duplicating "
@@ -279,11 +288,11 @@ msgstr ""
 " bas, ou dupliquant des images. Il permet également de manipuler les "
 "métadonnées, ou de gérer les titres des images."
 
-#: ../../features/image/menus.rst:118
+#: ../../doc/features/image/menus.rst:120
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: ../../features/image/menus.rst:120
+#: ../../doc/features/image/menus.rst:122
 msgid ""
 "Create a new group of images. Images may be moved from one group to "
 "another by drag and drop."
@@ -291,19 +300,19 @@ msgstr ""
 "Crée un nouveau groupe d'images. Les images peuvent être déplacées d'un "
 "groupe à un autre par glisser-déposer."
 
-#: ../../features/image/menus.rst:124
+#: ../../doc/features/image/menus.rst:126
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: ../../features/image/menus.rst:126
+#: ../../doc/features/image/menus.rst:128
 msgid "Rename currently selected group."
 msgstr "Renomme le groupe sélectionné."
 
-#: ../../features/image/menus.rst:129
+#: ../../doc/features/image/menus.rst:131
 msgid "Move up"
 msgstr "Déplacer vers le haut"
 
-#: ../../features/image/menus.rst:131
+#: ../../doc/features/image/menus.rst:133
 msgid ""
 "Move current selection up in the list (groups or images may be selected)."
 " If multiple objects are selected, they are moved together. If a selected"
@@ -315,11 +324,11 @@ msgstr ""
 "sont déplacés ensemble. Si une image sélectionnée est déjà en haut de son"
 " groupe, elle est déplacée en bas du groupe précédent."
 
-#: ../../features/image/menus.rst:137
+#: ../../doc/features/image/menus.rst:139
 msgid "Move down"
 msgstr "Déplacer vers le bas"
 
-#: ../../features/image/menus.rst:139
+#: ../../doc/features/image/menus.rst:141
 msgid ""
 "Move current selection down in the list (groups or images may be "
 "selected). If multiple objects are selected, they are moved together. If "
@@ -331,67 +340,67 @@ msgstr ""
 "déplacés ensemble. Si une image sélectionnée est déjà en bas de son "
 "groupe, elle est déplacée en haut du groupe suivant."
 
-#: ../../features/image/menus.rst:145
+#: ../../doc/features/image/menus.rst:147
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: ../../features/image/menus.rst:147
+#: ../../doc/features/image/menus.rst:149
 msgid "Create a new image which is identical to the currently selected object."
 msgstr "Crée une nouvelle image identique à l'objet sélectionné."
 
-#: ../../features/image/menus.rst:150
+#: ../../doc/features/image/menus.rst:152
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../../features/image/menus.rst:152
+#: ../../doc/features/image/menus.rst:154
 msgid "Remove currently selected image."
 msgstr "Supprimer l'image sélectionnée."
 
-#: ../../features/image/menus.rst:155
+#: ../../doc/features/image/menus.rst:157
 msgid "Delete all"
 msgstr "Supprimer tout"
 
-#: ../../features/image/menus.rst:157
+#: ../../doc/features/image/menus.rst:159
 msgid "Delete all images."
 msgstr "Supprimer toutes les images."
 
-#: ../../features/image/menus.rst:160
+#: ../../doc/features/image/menus.rst:162
 msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
-#: ../../features/image/menus.rst:162
+#: ../../doc/features/image/menus.rst:164
 msgid "Copy metadata from currently selected image into clipboard."
 msgstr "Copier les métadonnées de l'image sélectionnée vers le presse-papier."
 
-#: ../../features/image/menus.rst:165
+#: ../../doc/features/image/menus.rst:167
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: ../../features/image/menus.rst:167
+#: ../../doc/features/image/menus.rst:169
 msgid "Paste metadata from clipboard into selected image."
 msgstr "Coller les métadonnées depuis le presse-papier vers l'image sélectionnée."
 
-#: ../../features/image/menus.rst:170
+#: ../../doc/features/image/menus.rst:172
 msgid "Import metadata into image"
 msgstr "Importer les métadonnées dans l'image"
 
-#: ../../features/image/menus.rst:172
+#: ../../doc/features/image/menus.rst:174
 msgid "Import metadata from a JSON text file."
 msgstr "Importer les métadonnées depuis un fichier texte au format JSON."
 
-#: ../../features/image/menus.rst:175
+#: ../../doc/features/image/menus.rst:177
 msgid "Export metadata from image"
 msgstr "Exporter les métadonnées de l'image"
 
-#: ../../features/image/menus.rst:177
+#: ../../doc/features/image/menus.rst:179
 msgid "Export metadata to a JSON text file."
 msgstr "Exporter les métadonnées vers un fichier texte au format JSON."
 
-#: ../../features/image/menus.rst:180
+#: ../../doc/features/image/menus.rst:182
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: ../../features/image/menus.rst:182
+#: ../../doc/features/image/menus.rst:184
 msgid ""
 "Delete metadata from currently selected image. Metadata contains "
 "additionnal information such as Region of Interest or results of "
@@ -401,19 +410,19 @@ msgstr ""
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
 
-#: ../../features/image/menus.rst:187
+#: ../../doc/features/image/menus.rst:189
 msgid "Add object title to plot"
 msgstr "Ajouter le titre de l'objet au graphique"
 
-#: ../../features/image/menus.rst:189
+#: ../../doc/features/image/menus.rst:191
 msgid "Add currently selected image title to the associated plot."
 msgstr "Ajoute le titre de l'image sélectionnée au graphique associé."
 
-#: ../../features/image/menus.rst:192
+#: ../../doc/features/image/menus.rst:194
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/image/menus.rst:194
+#: ../../doc/features/image/menus.rst:196
 msgid ""
 "Copy all image titles to clipboard as a multiline text. This text may be "
 "used for reproducing a processing chain, for example."
@@ -422,15 +431,15 @@ msgstr ""
 "forme d'un texte multiligne. Ce texte peut être ensuite utilisé pour "
 "reproduire une chaîne de traitement, par exemple."
 
-#: ../../features/image/menus.rst:199
+#: ../../doc/features/image/menus.rst:201
 msgid "\"Operation\" menu"
 msgstr "Menu \"Opérations\""
 
-#: ../../features/image/menus.rst:203
+#: ../../doc/features/image/menus.rst:205
 msgid "Screenshot of the \"Operation\" menu."
 msgstr "Capture d'écran du menu \"Opérations\"."
 
-#: ../../features/image/menus.rst:205
+#: ../../doc/features/image/menus.rst:207
 msgid ""
 "The \"Operation\" menu allows you to perform various operations on the "
 "current image or group of images. It also allows you to extract profiles,"
@@ -441,55 +450,55 @@ msgstr ""
 "profils, de distribuer des images sur une grille, ou de redimensionner "
 "des images."
 
-#: ../../features/image/menus.rst:210
+#: ../../doc/features/image/menus.rst:212
 msgid "Sum"
 msgstr "Addition"
 
-#: ../../features/image/menus.rst:212
+#: ../../doc/features/image/menus.rst:214
 msgid "Create a new image which is the sum of all selected images:"
 msgstr "Crée une image à partir de la somme des images sélectionnées :"
 
-#: ../../features/image/menus.rst:214
+#: ../../doc/features/image/menus.rst:216
 msgid ""
 "z_{M} = \\sum_{k=0}^{M-1}{z_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:218
+#: ../../doc/features/image/menus.rst:220
 msgid "Average"
 msgstr "Moyenne"
 
-#: ../../features/image/menus.rst:220
+#: ../../doc/features/image/menus.rst:222
 msgid "Create a new image which is the average of all selected images:"
 msgstr "Crée une image à partir de la moyenne des images sélectionnées :"
 
-#: ../../features/image/menus.rst:222
+#: ../../doc/features/image/menus.rst:224
 msgid ""
 "z_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{z_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:226
+#: ../../doc/features/image/menus.rst:228
 msgid "Difference"
 msgstr "Soustraction"
 
-#: ../../features/image/menus.rst:228
+#: ../../doc/features/image/menus.rst:230
 msgid "Create a new image which is the difference of the **two** selected images:"
 msgstr ""
 "Crée une image à partir de la différence des **deux** images "
 "sélectionnées :"
 
-#: ../../features/image/menus.rst:230
+#: ../../doc/features/image/menus.rst:232
 msgid ""
 "z_{2} = z_{1} - z_{0}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:234
+#: ../../doc/features/image/menus.rst:236
 msgid "Quadratic difference"
 msgstr "Soustraction quadratique"
 
-#: ../../features/image/menus.rst:236
+#: ../../doc/features/image/menus.rst:238
 msgid ""
 "Create a new image which is the quadratic difference of the **two** "
 "selected images:"
@@ -497,91 +506,141 @@ msgstr ""
 "Crée une image à partir de la différence quadratique des **deux** images "
 "sélectionnées :"
 
-#: ../../features/image/menus.rst:239
+#: ../../doc/features/image/menus.rst:241
 msgid ""
 "z_{2} = \\dfrac{z_{1} - z_{0}}{\\sqrt{2}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:243
+#: ../../doc/features/image/menus.rst:245
 msgid "Product"
 msgstr "Produit"
 
-#: ../../features/image/menus.rst:245
+#: ../../doc/features/image/menus.rst:247
 msgid "Create a new image which is the product of all selected images:"
 msgstr "Crée une image à partir du produit de toutes les images sélectionnées :"
 
-#: ../../features/image/menus.rst:247
+#: ../../doc/features/image/menus.rst:249
 msgid ""
 "z_{M} = \\prod_{k=0}^{M-1}{z_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:251
+#: ../../doc/features/image/menus.rst:253
+#: ../../doc/features/image/menus.rst:277
 msgid "Division"
 msgstr "Division"
 
-#: ../../features/image/menus.rst:253
+#: ../../doc/features/image/menus.rst:255
 msgid "Create a new image which is the division of the **two** selected images:"
 msgstr "Crée une image à partir de la division des **deux** images sélectionnées :"
 
-#: ../../features/image/menus.rst:255
+#: ../../doc/features/image/menus.rst:257
 msgid ""
 "z_{2} = \\dfrac{z_{1}}{z_{0}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:259
+#: ../../doc/features/image/menus.rst:261
+msgid "Constant operations"
+msgstr "Opérations avec une constante"
+
+#: ../../doc/features/image/menus.rst:263
+msgid ""
+"Create a new image which is the result of a constant operation on each "
+"selected image:"
+msgstr "Crée une image à partir d'une opération avec une constante sur chaque image sélectionnée :"
+
+#: ../../doc/features/image/menus.rst:269
+msgid "Operation"
+msgstr "Opération"
+
+#: ../../doc/features/image/menus.rst:271
+msgid "Addition"
+msgstr "Addition"
+
+#: ../../doc/features/image/menus.rst:272
+msgid ":math:`z_{k} = z_{k-1} + conv(c)`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:273
+msgid "Subtraction"
+msgstr "Soustraction"
+
+#: ../../doc/features/image/menus.rst:274
+msgid ":math:`z_{k} = z_{k-1} - conv(c)`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:275
+msgid "Multiplication"
+msgstr "Multiplication"
+
+#: ../../doc/features/image/menus.rst:276
+msgid ":math:`z_{k} = conv(z_{k-1} \\times c)`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:278
+msgid ":math:`z_{k} = conv(\\dfrac{z_{k-1}}{c})`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:280
+msgid ""
+"where :math:`c` is the constant value and :math:`conv` is the conversion "
+"function which handles data type conversion (keeping the same data type "
+"as the input image)."
+msgstr "où :math:`c` est la valeur constante et :math:`conv` est la fonction de conversion qui gère la conversion du type de données (en conservant le même type de données que l'image d'entrée)."
+
+#: ../../doc/features/image/menus.rst:284
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: ../../features/image/menus.rst:261
+#: ../../doc/features/image/menus.rst:286
 msgid "Create a new image which is the absolute value of each selected image:"
 msgstr ""
 "Créee une image à partir de la valeur absolue de chaque image "
 "sélectionnée :"
 
-#: ../../features/image/menus.rst:263
+#: ../../doc/features/image/menus.rst:288
 msgid ""
 "z_{k} = |z_{k-1}|\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:267
+#: ../../doc/features/image/menus.rst:292
 msgid "Real part"
 msgstr "Partie réelle"
 
-#: ../../features/image/menus.rst:269
+#: ../../doc/features/image/menus.rst:294
 msgid "Create a new image which is the real part of each selected image:"
 msgstr "Crée une image à partir de la partie réelle de chaque image sélectionnée :"
 
-#: ../../features/image/menus.rst:271
+#: ../../doc/features/image/menus.rst:296
 msgid ""
 "z_{k} = \\Re(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:275
+#: ../../doc/features/image/menus.rst:300
 msgid "Imaginary part"
 msgstr "Partie imaginaire"
 
-#: ../../features/image/menus.rst:277
+#: ../../doc/features/image/menus.rst:302
 msgid "Create a new image which is the imaginary part of each selected image:"
 msgstr ""
 "Crée une image à partir de la partie imaginaire de chaque image "
 "sélectionnée :"
 
-#: ../../features/image/menus.rst:279
+#: ../../doc/features/image/menus.rst:304
 msgid ""
 "z_{k} = \\Im(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:283
+#: ../../doc/features/image/menus.rst:308
 msgid "Convert data type"
 msgstr "Convertir le type de données"
 
-#: ../../features/image/menus.rst:285
+#: ../../doc/features/image/menus.rst:310
 msgid ""
 "Create a new image which is the result of converting data type of each "
 "selected image."
@@ -589,7 +648,7 @@ msgstr ""
 "Crée une image à partir de la conversion du type de données de l'image "
 "sélectionnée."
 
-#: ../../features/image/menus.rst:290
+#: ../../doc/features/image/menus.rst:315
 msgid ""
 "Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
 "with the default parameters (`casting='unsafe'`)."
@@ -598,27 +657,41 @@ msgstr ""
 ":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
 "(`casting='unsafe'`)."
 
-#: ../../features/image/menus.rst:294
-msgid "Log10(z)"
+#: ../../doc/features/image/menus.rst:319
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#: ../../doc/features/image/menus.rst:321
+msgid "Create a new image which is the exponential of each selected image:"
+msgstr "Crée une image à partir de l'exponentielle de chaque image sélectionnée :"
+
+#: ../../doc/features/image/menus.rst:323
+msgid ""
+"z_{k} = \\exp(z_{k-1})\n"
+"\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:296
+#: ../../doc/features/image/menus.rst:327
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+#: ../../doc/features/image/menus.rst:329
 msgid "Create a new image which is the base 10 logarithm of each selected image:"
 msgstr ""
 "Crée une image à partir du logarithme base 10 de chaque image "
 "sélectionnée :"
 
-#: ../../features/image/menus.rst:298
+#: ../../doc/features/image/menus.rst:331
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:302
+#: ../../doc/features/image/menus.rst:335
 msgid "Log10(z+n)"
 msgstr ""
 
-#: ../../features/image/menus.rst:304
+#: ../../doc/features/image/menus.rst:337
 msgid ""
 "Create a new image which is the Log10(z+n) of each selected image (avoid "
 "Log10(0) on image background):"
@@ -627,17 +700,17 @@ msgstr ""
 " d'augmentation de la dynamique d'un logarithme en évitant de calculer "
 "Log10(0) sur l'arrière-plan de l'image) :"
 
-#: ../../features/image/menus.rst:307
+#: ../../doc/features/image/menus.rst:340
 msgid ""
 "z_{k} = \\log_{10}(z_{k-1}+n)\n"
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:311
+#: ../../doc/features/image/menus.rst:344
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: ../../features/image/menus.rst:313
+#: ../../doc/features/image/menus.rst:346
 msgid ""
 "Create a new image which is flat-field correction of the **two** selected"
 " images:"
@@ -645,7 +718,7 @@ msgstr ""
 "Calcule la correction de champ plat à partir des **deux** images "
 "sélectionnées :"
 
-#: ../../features/image/menus.rst:316
+#: ../../doc/features/image/menus.rst:349
 msgid ""
 "z_{1} =\n"
 "\\begin{cases}\n"
@@ -656,7 +729,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:323
+#: ../../doc/features/image/menus.rst:356
 msgid ""
 "where :math:`z_{0}` is the raw image, :math:`z_{f}` is the flat field "
 "image, :math:`z_{threshold}` is an adjustable threshold and "
@@ -667,7 +740,7 @@ msgstr ""
 ":math:`\\overline{z_{f}}` est la valeur moyenne de l'image d'homogénéité "
 ":"
 
-#: ../../features/image/menus.rst:328
+#: ../../doc/features/image/menus.rst:361
 msgid ""
 "\\overline{z_{f}}=\n"
 "\\dfrac{1}{N_{row}.N_{col}}.\\sum_{i=0}^{N_{row}}\\sum_{j=0}^{N_{col}}{z_{f}(i,j)}"
@@ -675,7 +748,7 @@ msgid ""
 "\n"
 msgstr ""
 
-#: ../../features/image/menus.rst:334
+#: ../../doc/features/image/menus.rst:367
 msgid ""
 "Raw image and flat field image are supposedly already corrected by "
 "performing a dark frame subtraction."
@@ -683,11 +756,11 @@ msgstr ""
 "L'image brute et l'image d'homogénéité sont supposées avoir déjà été "
 "corrigées par soustraction d'image de noir."
 
-#: ../../features/image/menus.rst:338
+#: ../../doc/features/image/menus.rst:371
 msgid "Rotation"
 msgstr "Rotation"
 
-#: ../../features/image/menus.rst:340
+#: ../../doc/features/image/menus.rst:373
 msgid ""
 "Create a new image which is the result of rotating (90°, 270° or "
 "arbitrary angle) or flipping (horizontally or vertically) data."
@@ -696,15 +769,15 @@ msgstr ""
 "arbitraire) ou de l'inversion (horizontale ou verticale) des données de "
 "l'image sélectionnée."
 
-#: ../../features/image/menus.rst:344
+#: ../../doc/features/image/menus.rst:377
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
-#: ../../features/image/menus.rst:353
+#: ../../doc/features/image/menus.rst:386
 msgid "Line profile"
 msgstr "Profil rectiligne"
 
-#: ../../features/image/menus.rst:347
+#: ../../doc/features/image/menus.rst:380
 msgid ""
 "Extract an horizontal or vertical profile from each selected image, and "
 "create new signals from these profiles."
@@ -712,7 +785,7 @@ msgstr ""
 "Extraire un profil horizontal ou vertical de chaque image sélectionnée et"
 " créer un nouveau signal à partir de ces profils."
 
-#: ../../features/image/menus.rst:352
+#: ../../doc/features/image/menus.rst:385
 msgid ""
 "Line profile dialog. Parameters may also be set manually (\"Edit profile "
 "parameters\" button)."
@@ -721,11 +794,11 @@ msgstr ""
 "également définis manuellement (bouton \"Editer les paramètres du "
 "profil\")."
 
-#: ../../features/image/menus.rst:362
+#: ../../doc/features/image/menus.rst:395
 msgid "Average profile"
 msgstr "Profil moyen"
 
-#: ../../features/image/menus.rst:356
+#: ../../doc/features/image/menus.rst:389
 msgid ""
 "Extract an horizontal or vertical profile averaged over a rectangular "
 "area, from each selected image, and create new signals from these "
@@ -735,7 +808,7 @@ msgstr ""
 "rectangulaire de chaque image sélectionnée et créer un nouveau signal à "
 "partir de ces profils."
 
-#: ../../features/image/menus.rst:361
+#: ../../doc/features/image/menus.rst:394
 msgid ""
 "Average profile dialog: the area is defined by a rectangle shape. "
 "Parameters may also be set manually (\"Edit profile parameters\" button)."
@@ -744,11 +817,11 @@ msgstr ""
 "un rectangle. Les paramètres peuvent être également définis manuellement "
 "(bouton \"Editer les paramètres du profil\")."
 
-#: ../../features/image/menus.rst:381
+#: ../../doc/features/image/menus.rst:414
 msgid "Radial profile extraction"
 msgstr "Extraire un profil radial"
 
-#: ../../features/image/menus.rst:365
+#: ../../doc/features/image/menus.rst:398
 msgid ""
 "Extract a radial profile from each selected image, and create new signals"
 " from these profiles."
@@ -756,24 +829,26 @@ msgstr ""
 "Extraire un profil radial de chaque image sélectionnée et créer un "
 "nouveau signal à partir de ces profils."
 
-#: ../../features/image/menus.rst:368
+#: ../../doc/features/image/menus.rst:401
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
 
-#: ../../features/image/menus.rst:374 ../../features/image/menus.rst:441
-#: ../../features/image/menus.rst:698
+#: ../../doc/features/image/menus.rst:407
+#: ../../doc/features/image/menus.rst:497
+#: ../../doc/features/image/menus.rst:754
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: ../../features/image/menus.rst:375 ../../features/image/menus.rst:699
+#: ../../doc/features/image/menus.rst:408
+#: ../../doc/features/image/menus.rst:755
 msgid "Description"
 msgstr "Description"
 
-#: ../../features/image/menus.rst:376
+#: ../../doc/features/image/menus.rst:409
 msgid "Center"
 msgstr "Centre"
 
-#: ../../features/image/menus.rst:377
+#: ../../doc/features/image/menus.rst:410
 msgid ""
 "Center around which the radial profile is computed: centroid, image "
 "center, or user-defined"
@@ -781,55 +856,55 @@ msgstr ""
 "Centre autour duquel le profil radial est calculé : centre de masse, "
 "centre de l'image, ou défini par l'utilisateur"
 
-#: ../../features/image/menus.rst:378
+#: ../../doc/features/image/menus.rst:411
 msgid "X"
 msgstr "X"
 
-#: ../../features/image/menus.rst:379
+#: ../../doc/features/image/menus.rst:412
 msgid "X coordinate of the center (if user-defined), in pixels"
 msgstr "Coordonnée X du centre (si défini par l'utilisateur), en pixels"
 
-#: ../../features/image/menus.rst:380
+#: ../../doc/features/image/menus.rst:413
 msgid "Y"
 msgstr "Y"
 
-#: ../../features/image/menus.rst:381
+#: ../../doc/features/image/menus.rst:414
 msgid "Y coordinate of the center (if user-defined), in pixels"
 msgstr "Coordonnée Y du centre (si défini par l'utilisateur), en pixels"
 
-#: ../../features/image/menus.rst:384
+#: ../../doc/features/image/menus.rst:417
 msgid "Distribute on a grid"
 msgstr "Distribuer sur une grille"
 
-#: ../../features/image/menus.rst:386
+#: ../../doc/features/image/menus.rst:419
 msgid "Distribute selected images on a regular grid."
 msgstr "Distribuer les images sélectionnées sur une grille régulière."
 
-#: ../../features/image/menus.rst:389
+#: ../../doc/features/image/menus.rst:422
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions"
 
-#: ../../features/image/menus.rst:391
+#: ../../doc/features/image/menus.rst:424
 msgid "Reset selected image positions to first image (x0, y0) coordinates."
 msgstr ""
 "Réinitialiser les positions des images sélectionnées sur les coordonnées "
 "(x0, y0) de la première image."
 
-#: ../../features/image/menus.rst:394
+#: ../../doc/features/image/menus.rst:427
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: ../../features/image/menus.rst:396
+#: ../../doc/features/image/menus.rst:429
 msgid "Create a new image which is a resized version of each selected image."
 msgstr ""
 "Crée une image qui est le résultat du redimensionnement de chaque image "
 "sélectionnée."
 
-#: ../../features/image/menus.rst:399
+#: ../../doc/features/image/menus.rst:432
 msgid "Pixel binning"
 msgstr "Binning"
 
-#: ../../features/image/menus.rst:401
+#: ../../doc/features/image/menus.rst:434
 msgid ""
 "Combine clusters of adjacent pixels, throughout the image, into single "
 "pixels. The result can be the sum, average, median, minimum, or maximum "
@@ -838,17 +913,17 @@ msgstr ""
 "Regroupe des pixels adjacents de l'image en un seul pixel (somme, "
 "moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
 
-#: ../../features/image/menus.rst:406
+#: ../../doc/features/image/menus.rst:439
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/image/menus.rst:408
+#: ../../doc/features/image/menus.rst:441
 msgid "Create a new image from a user-defined Region of Interest."
 msgstr ""
 "Crée une image à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/image/menus.rst:412
+#: ../../doc/features/image/menus.rst:445
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the size of a rectangle shape."
@@ -856,25 +931,25 @@ msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
 
-#: ../../features/image/menus.rst:416
+#: ../../doc/features/image/menus.rst:449
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/image/menus.rst:418
+#: ../../doc/features/image/menus.rst:451
 msgid "Create a new image which is the result of swapping X/Y data."
 msgstr ""
 "Créee une image à partir des données inversées X/Y de l'image "
 "sélectionnée."
 
-#: ../../features/image/menus.rst:421
+#: ../../doc/features/image/menus.rst:454
 msgid "\"Processing\" menu"
 msgstr "Menu \"Traitement\""
 
-#: ../../features/image/menus.rst:425
+#: ../../doc/features/image/menus.rst:458
 msgid "Screenshot of the \"Processing\" menu."
 msgstr "Capture d'écran du menu \"Traitement\"."
 
-#: ../../features/image/menus.rst:427
+#: ../../doc/features/image/menus.rst:460
 msgid ""
 "The \"Processing\" menu allows you to perform various processing on the "
 "current image or group of images: it allows you to apply filters, to "
@@ -886,11 +961,68 @@ msgstr ""
 "corriger l'exposition, de réduire le bruit, d'effectuer des opérations "
 "morphologiques, etc."
 
-#: ../../features/image/menus.rst:432 ../../features/image/menus.rst:442
+#: ../../doc/features/image/menus.rst:465
+msgid "Normalize"
+msgstr "Normalisation"
+
+#: ../../doc/features/image/menus.rst:467
+msgid ""
+"Create a new image which is the normalized version of each selected image"
+" by maximum, amplitude, sum, energy or RMS:"
+msgstr "Crée une image à partir de la normalisation de chaque image sélectionnée par maximum, amplitude, somme, énergie ou RMS :"
+
+#: ../../doc/features/image/menus.rst:474
+msgid "Normalization"
+msgstr "Normalisation"
+
+#: ../../doc/features/image/menus.rst:476
+msgid "Maximum"
+msgstr "Maximum"
+
+#: ../../doc/features/image/menus.rst:477
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}}`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:478
+msgid "Amplitude"
+msgstr "Amplitude"
+
+#: ../../doc/features/image/menus.rst:479
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}-z_{min}}`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:480
+msgid "Area"
+msgstr "Aire"
+
+#: ../../doc/features/image/menus.rst:481
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{\\sum_{i=0}^{N-1}{z_{i}}}`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:482
+msgid "Energy"
+msgstr "Energie"
+
+#: ../../doc/features/image/menus.rst:483
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:484
+msgid "RMS"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:485
+msgid ""
+":math:`z_{1}= "
+"\\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+#: ../../doc/features/image/menus.rst:488
+#: ../../doc/features/image/menus.rst:498
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
-#: ../../features/image/menus.rst:434
+#: ../../doc/features/image/menus.rst:490
 msgid ""
 "Create a new image which is a linear calibration of each selected image "
 "with respect to Z axis:"
@@ -898,35 +1030,35 @@ msgstr ""
 "Crée une image à partir de l'étalonnage linéaire (par rapport à l'axe des"
 " Z) de chaque image sélectionnée."
 
-#: ../../features/image/menus.rst:443
+#: ../../doc/features/image/menus.rst:499
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: ../../features/image/menus.rst:444
+#: ../../doc/features/image/menus.rst:500
 msgid ":math:`z_{1} = a.z_{0} + b`"
 msgstr ""
 
-#: ../../features/image/menus.rst:447
+#: ../../doc/features/image/menus.rst:503
 msgid "Thresholding"
 msgstr "Seuillage"
 
-#: ../../features/image/menus.rst:449
+#: ../../doc/features/image/menus.rst:505
 msgid "Apply the thresholding to each selected image."
 msgstr "Applique un seuillage sur chaque image sélectionnée."
 
-#: ../../features/image/menus.rst:452
+#: ../../doc/features/image/menus.rst:508
 msgid "Clipping"
 msgstr "Ecrêtage"
 
-#: ../../features/image/menus.rst:454
+#: ../../doc/features/image/menus.rst:510
 msgid "Apply the clipping to each selected image."
 msgstr "Applique un écrêtage sur chaque image sélectionnée."
 
-#: ../../features/image/menus.rst:457
+#: ../../doc/features/image/menus.rst:513
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
-#: ../../features/image/menus.rst:459
+#: ../../doc/features/image/menus.rst:515
 msgid ""
 "Compute moving average of each selected image (implementation based on "
 "`scipy.ndimage.uniform_filter "
@@ -936,11 +1068,11 @@ msgstr ""
 "(implémentation basée sur `scipy.ndimage.uniform_filter "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_)."
 
-#: ../../features/image/menus.rst:463
+#: ../../doc/features/image/menus.rst:519
 msgid "Moving median"
 msgstr "Médiane mobile"
 
-#: ../../features/image/menus.rst:465
+#: ../../doc/features/image/menus.rst:521
 msgid ""
 "Compute moving median of each selected image (implementation based on "
 "`scipy.signal.medfilt "
@@ -950,11 +1082,11 @@ msgstr ""
 "(implémentation basée sur `scipy.signal.medfilt "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
 
-#: ../../features/image/menus.rst:469
+#: ../../doc/features/image/menus.rst:525
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-#: ../../features/image/menus.rst:471
+#: ../../doc/features/image/menus.rst:527
 msgid ""
 "Compute Wiener filter of each selected image (implementation based on "
 "`scipy.signal.wiener "
@@ -964,11 +1096,11 @@ msgstr ""
 "(implémentation basée sur `scipy.signal.wiener "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
 
-#: ../../features/image/menus.rst:475
+#: ../../doc/features/image/menus.rst:531
 msgid "FFT"
 msgstr "FFT"
 
-#: ../../features/image/menus.rst:477
+#: ../../doc/features/image/menus.rst:533
 msgid ""
 "Create a new image which is the Fast Fourier Transform (FFT) of each "
 "selected image."
@@ -976,21 +1108,21 @@ msgstr ""
 "Crée une image à partir de la transformée de Fourier rapide (FFT) de "
 "chaque image sélectionnée."
 
-#: ../../features/image/menus.rst:481
+#: ../../doc/features/image/menus.rst:537
 msgid "Inverse FFT"
 msgstr "FFT inverse"
 
-#: ../../features/image/menus.rst:483
+#: ../../doc/features/image/menus.rst:539
 msgid "Create a new image which is the inverse FFT of each selected image."
 msgstr ""
 "Crée une image à partir de la transformée de Fourier rapide inverse (FFT "
 "inverse) de chaque image sélectionnée."
 
-#: ../../features/image/menus.rst:486
+#: ../../doc/features/image/menus.rst:542
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
 
-#: ../../features/image/menus.rst:488
+#: ../../doc/features/image/menus.rst:544
 msgid ""
 "Perform Butterworth filter on an image (implementation based on "
 "`skimage.filters.butterworth <https://scikit-"
@@ -1000,15 +1132,15 @@ msgstr ""
 "(implémentation basée sur `skimage.filters.butterworth <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
 
-#: ../../features/image/menus.rst:492
+#: ../../doc/features/image/menus.rst:548
 msgid "Exposure"
 msgstr "Exposition"
 
-#: ../../features/image/menus.rst:496
+#: ../../doc/features/image/menus.rst:552
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
-#: ../../features/image/menus.rst:495
+#: ../../doc/features/image/menus.rst:551
 msgid ""
 "Apply gamma correction to each selected image (implementation based on "
 "`skimage.exposure.adjust_gamma <https://scikit-"
@@ -1018,11 +1150,11 @@ msgstr ""
 "(implémentation basée sur `skimage.exposure.adjust_gamma <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
 
-#: ../../features/image/menus.rst:500
+#: ../../doc/features/image/menus.rst:556
 msgid "Logarithmic correction"
 msgstr "Correction logarithmique"
 
-#: ../../features/image/menus.rst:499
+#: ../../doc/features/image/menus.rst:555
 msgid ""
 "Apply logarithmic correction to each selected image (implementation based"
 " on `skimage.exposure.adjust_log <https://scikit-"
@@ -1032,11 +1164,11 @@ msgstr ""
 "(implémentation basée sur `skimage.exposure.adjust_log <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
 
-#: ../../features/image/menus.rst:504
+#: ../../doc/features/image/menus.rst:560
 msgid "Sigmoid correction"
 msgstr "Correction sigmoïde"
 
-#: ../../features/image/menus.rst:503
+#: ../../doc/features/image/menus.rst:559
 msgid ""
 "Apply sigmoid correction to each selected image (implementation based on "
 "`skimage.exposure.adjust_sigmoid <https://scikit-"
@@ -1047,11 +1179,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
 
-#: ../../features/image/menus.rst:508
+#: ../../doc/features/image/menus.rst:564
 msgid "Histogram equalization"
 msgstr "Egalisation d'histogramme"
 
-#: ../../features/image/menus.rst:507
+#: ../../doc/features/image/menus.rst:563
 msgid ""
 "Equalize image histogram levels (implementation based on "
 "`skimage.exposure.equalize_hist <https://scikit-"
@@ -1061,11 +1193,11 @@ msgstr ""
 " `skimage.exposure.equalize_hist <https://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
 
-#: ../../features/image/menus.rst:512
+#: ../../doc/features/image/menus.rst:568
 msgid "Adaptive histogram equalization"
 msgstr "Egalisation d'histogramme adaptative"
 
-#: ../../features/image/menus.rst:511
+#: ../../doc/features/image/menus.rst:567
 msgid ""
 "Equalize image histogram levels using Contrast Limited Adaptive Histogram"
 " Equalization (CLAHE) algorithm (implementation based on "
@@ -1078,11 +1210,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
 
-#: ../../features/image/menus.rst:516
+#: ../../doc/features/image/menus.rst:572
 msgid "Intensity rescaling"
 msgstr "Ajustement des niveaux"
 
-#: ../../features/image/menus.rst:515
+#: ../../doc/features/image/menus.rst:571
 msgid ""
 "Stretch or shrink image intensity levels (implementation based on "
 "`skimage.exposure.rescale_intensity <https://scikit-"
@@ -1093,15 +1225,15 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
 
-#: ../../features/image/menus.rst:519
+#: ../../doc/features/image/menus.rst:575
 msgid "Restoration"
 msgstr "Restauration"
 
-#: ../../features/image/menus.rst:523
+#: ../../doc/features/image/menus.rst:579
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
-#: ../../features/image/menus.rst:522
+#: ../../doc/features/image/menus.rst:578
 msgid ""
 "Denoise image using Total Variation algorithm (implementation based on "
 "`skimage.restoration.denoise_tv_chambolle <https://scikit-"
@@ -1114,11 +1246,11 @@ msgstr ""
 "image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
 "chambolle>`_)"
 
-#: ../../features/image/menus.rst:527
+#: ../../doc/features/image/menus.rst:583
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
-#: ../../features/image/menus.rst:526
+#: ../../doc/features/image/menus.rst:582
 msgid ""
 "Denoise image using bilateral filter (implementation based on "
 "`skimage.restoration.denoise_bilateral <https://scikit-"
@@ -1129,11 +1261,11 @@ msgstr ""
 "://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-"
 "bilateral>`_)"
 
-#: ../../features/image/menus.rst:531
+#: ../../doc/features/image/menus.rst:587
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
-#: ../../features/image/menus.rst:530
+#: ../../doc/features/image/menus.rst:586
 msgid ""
 "Perform wavelet denoising on image (implementation based on "
 "`skimage.restoration.denoise_wavelet <https://scikit-"
@@ -1143,11 +1275,11 @@ msgstr ""
 "sur `skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
 
-#: ../../features/image/menus.rst:535
+#: ../../doc/features/image/menus.rst:591
 msgid "White Top-Hat denoising"
 msgstr "Débruitage par Top-Hat"
 
-#: ../../features/image/menus.rst:534
+#: ../../doc/features/image/menus.rst:590
 msgid ""
 "Denoise image by subtracting its white top hat transform (using a disk "
 "footprint)"
@@ -1155,11 +1287,11 @@ msgstr ""
 "Débruitage de l'image par soustraction de la transformée Top-Hat avec "
 "ouverture circulaire de rayon paramétrabl"
 
-#: ../../features/image/menus.rst:540
+#: ../../doc/features/image/menus.rst:596
 msgid "All denoising methods"
 msgstr "Tous les débruitages"
 
-#: ../../features/image/menus.rst:538
+#: ../../doc/features/image/menus.rst:594
 msgid ""
 "Perform all denoising methods on image. Combined with the \"distribute on"
 " a grid\" option, this allows to compare the different denoising methods "
@@ -1169,15 +1301,15 @@ msgstr ""
 "\"distribuer sur une grille\", cela permet de comparer les différents "
 "débruitages sur la même image."
 
-#: ../../features/image/menus.rst:543
+#: ../../doc/features/image/menus.rst:599
 msgid "Morphology"
 msgstr "Morphologie"
 
-#: ../../features/image/menus.rst:547
+#: ../../doc/features/image/menus.rst:603
 msgid "White Top-Hat (disk)"
 msgstr "Top-Hat (disque)"
 
-#: ../../features/image/menus.rst:546
+#: ../../doc/features/image/menus.rst:602
 msgid ""
 "Perform white top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.white_tophat <https"
@@ -1189,11 +1321,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
 
-#: ../../features/image/menus.rst:551
+#: ../../doc/features/image/menus.rst:607
 msgid "Black Top-Hat (disk)"
 msgstr "Top-Hat dual (disque)"
 
-#: ../../features/image/menus.rst:550
+#: ../../doc/features/image/menus.rst:606
 msgid ""
 "Perform black top hat transform of an image, using a disk footprint "
 "(implementation based on `skimage.morphology.black_tophat <https"
@@ -1205,11 +1337,11 @@ msgstr ""
 "`skimage.restoration.denoise_wavelet <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
 
-#: ../../features/image/menus.rst:555
+#: ../../doc/features/image/menus.rst:611
 msgid "Erosion (disk)"
 msgstr "Erosion (disque)"
 
-#: ../../features/image/menus.rst:554
+#: ../../doc/features/image/menus.rst:610
 msgid ""
 "Perform morphological erosion on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.erosion <https://scikit-"
@@ -1220,11 +1352,11 @@ msgstr ""
 "`skimage.morphology.erosion <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
 
-#: ../../features/image/menus.rst:559
+#: ../../doc/features/image/menus.rst:615
 msgid "Dilation (disk)"
 msgstr "Dilatation (disque)"
 
-#: ../../features/image/menus.rst:558
+#: ../../doc/features/image/menus.rst:614
 msgid ""
 "Perform morphological dilation on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.dilation <https://scikit-"
@@ -1235,11 +1367,11 @@ msgstr ""
 "`skimage.morphology.dilation <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
 
-#: ../../features/image/menus.rst:563
+#: ../../doc/features/image/menus.rst:619
 msgid "Opening (disk)"
 msgstr "Ouverture (disque)"
 
-#: ../../features/image/menus.rst:562
+#: ../../doc/features/image/menus.rst:618
 msgid ""
 "Perform morphological opening on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.opening <https://scikit-"
@@ -1250,11 +1382,11 @@ msgstr ""
 " `skimage.morphology.opening <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
 
-#: ../../features/image/menus.rst:567
+#: ../../doc/features/image/menus.rst:623
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-#: ../../features/image/menus.rst:566
+#: ../../doc/features/image/menus.rst:622
 msgid ""
 "Perform morphological closing on an image, using a disk footprint "
 "(implementation based on `skimage.morphology.closing <https://scikit-"
@@ -1265,11 +1397,11 @@ msgstr ""
 " `skimage.morphology.closing <https://scikit-"
 "image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
 
-#: ../../features/image/menus.rst:572
+#: ../../doc/features/image/menus.rst:628
 msgid "All morphological operations"
 msgstr "Toutes les opérations morphologiques"
 
-#: ../../features/image/menus.rst:570
+#: ../../doc/features/image/menus.rst:626
 msgid ""
 "Perform all morphological operations on an image, using a disk footprint."
 " Combined with the \"distribute on a grid\" option, this allows to "
@@ -1279,15 +1411,15 @@ msgstr ""
 "l'option \"distribuer sur une grille\", cela permet de comparer les "
 "différentes opérations morphologiques sur la même image."
 
-#: ../../features/image/menus.rst:575
+#: ../../doc/features/image/menus.rst:631
 msgid "Edges"
 msgstr "Contours"
 
-#: ../../features/image/menus.rst:579
+#: ../../doc/features/image/menus.rst:635
 msgid "Roberts filter"
 msgstr "Filtre de Roberts"
 
-#: ../../features/image/menus.rst:578
+#: ../../doc/features/image/menus.rst:634
 msgid ""
 "Perform edge filtering on an image, using the Roberts algorithm "
 "(implementation based on `skimage.filters.roberts <https://scikit-"
@@ -1298,11 +1430,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
 
-#: ../../features/image/menus.rst:583
+#: ../../doc/features/image/menus.rst:639
 msgid "Prewitt filter"
 msgstr "Filtre de Prewitt"
 
-#: ../../features/image/menus.rst:582
+#: ../../doc/features/image/menus.rst:638
 msgid ""
 "Perform edge filtering on an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt <https://scikit-"
@@ -1313,11 +1445,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
 
-#: ../../features/image/menus.rst:587
+#: ../../doc/features/image/menus.rst:643
 msgid "Prewitt filter (horizontal)"
 msgstr "Filtre de Prewitt (horizontal)"
 
-#: ../../features/image/menus.rst:586
+#: ../../doc/features/image/menus.rst:642
 msgid ""
 "Find the horizontal edges of an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt_h <https://scikit-"
@@ -1328,11 +1460,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
 
-#: ../../features/image/menus.rst:591
+#: ../../doc/features/image/menus.rst:647
 msgid "Prewitt filter (vertical)"
 msgstr "Filtre de Prewitt (vertical)"
 
-#: ../../features/image/menus.rst:590
+#: ../../doc/features/image/menus.rst:646
 msgid ""
 "Find the vertical edges of an image, using the Prewitt algorithm "
 "(implementation based on `skimage.filters.prewitt_v <https://scikit-"
@@ -1343,11 +1475,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
 
-#: ../../features/image/menus.rst:595
+#: ../../doc/features/image/menus.rst:651
 msgid "Sobel filter"
 msgstr "Filtre de Sobel"
 
-#: ../../features/image/menus.rst:594
+#: ../../doc/features/image/menus.rst:650
 msgid ""
 "Perform edge filtering on an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel <https://scikit-"
@@ -1357,11 +1489,11 @@ msgstr ""
 "Sobel (implémentation basée sur `skimage.filters.sobel <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
 
-#: ../../features/image/menus.rst:599
+#: ../../doc/features/image/menus.rst:655
 msgid "Sobel filter (horizontal)"
 msgstr "Filtre de Sobel (horizontal)"
 
-#: ../../features/image/menus.rst:598
+#: ../../doc/features/image/menus.rst:654
 msgid ""
 "Find the horizontal edges of an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel_h <https://scikit-"
@@ -1372,11 +1504,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
 
-#: ../../features/image/menus.rst:603
+#: ../../doc/features/image/menus.rst:659
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
-#: ../../features/image/menus.rst:602
+#: ../../doc/features/image/menus.rst:658
 msgid ""
 "Find the vertical edges of an image, using the Sobel algorithm "
 "(implementation based on `skimage.filters.sobel_v <https://scikit-"
@@ -1387,11 +1519,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
 
-#: ../../features/image/menus.rst:607
+#: ../../doc/features/image/menus.rst:663
 msgid "Scharr filter"
 msgstr "Filtre de Scharr"
 
-#: ../../features/image/menus.rst:606
+#: ../../doc/features/image/menus.rst:662
 msgid ""
 "Perform edge filtering on an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr <https://scikit-"
@@ -1401,11 +1533,11 @@ msgstr ""
 "Scharr (implémentation basée sur `skimage.filters.scharr <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
 
-#: ../../features/image/menus.rst:611
+#: ../../doc/features/image/menus.rst:667
 msgid "Scharr filter (horizontal)"
 msgstr "Filtre de Scharr (horizontal)"
 
-#: ../../features/image/menus.rst:610
+#: ../../doc/features/image/menus.rst:666
 msgid ""
 "Find the horizontal edges of an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr_h <https://scikit-"
@@ -1416,11 +1548,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
 
-#: ../../features/image/menus.rst:615
+#: ../../doc/features/image/menus.rst:671
 msgid "Scharr filter (vertical)"
 msgstr "Filtre de Scharr (vertical)"
 
-#: ../../features/image/menus.rst:614
+#: ../../doc/features/image/menus.rst:670
 msgid ""
 "Find the vertical edges of an image, using the Scharr algorithm "
 "(implementation based on `skimage.filters.scharr_v <https://scikit-"
@@ -1431,11 +1563,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
 
-#: ../../features/image/menus.rst:619
+#: ../../doc/features/image/menus.rst:675
 msgid "Farid filter"
 msgstr "Filtre de Farid"
 
-#: ../../features/image/menus.rst:618
+#: ../../doc/features/image/menus.rst:674
 msgid ""
 "Perform edge filtering on an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid <https://scikit-"
@@ -1445,11 +1577,11 @@ msgstr ""
 "Farid (implémentation basée sur `skimage.filters.farid <https://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
 
-#: ../../features/image/menus.rst:623
+#: ../../doc/features/image/menus.rst:679
 msgid "Farid filter (horizontal)"
 msgstr "Filtre de Farid (horizontal)"
 
-#: ../../features/image/menus.rst:622
+#: ../../doc/features/image/menus.rst:678
 msgid ""
 "Find the horizontal edges of an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid_h <https://scikit-"
@@ -1460,11 +1592,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
 
-#: ../../features/image/menus.rst:627
+#: ../../doc/features/image/menus.rst:683
 msgid "Farid filter (vertical)"
 msgstr "Filtre de Farid (vertical)"
 
-#: ../../features/image/menus.rst:626
+#: ../../doc/features/image/menus.rst:682
 msgid ""
 "Find the vertical edges of an image, using the Farid algorithm "
 "(implementation based on `skimage.filters.farid_v <https://scikit-"
@@ -1475,11 +1607,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
 
-#: ../../features/image/menus.rst:631
+#: ../../doc/features/image/menus.rst:687
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-#: ../../features/image/menus.rst:630
+#: ../../doc/features/image/menus.rst:686
 msgid ""
 "Perform edge filtering on an image, using the Laplace algorithm "
 "(implementation based on `skimage.filters.laplace <https://scikit-"
@@ -1490,11 +1622,11 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
 
-#: ../../features/image/menus.rst:636
+#: ../../doc/features/image/menus.rst:692
 msgid "All edges filters"
 msgstr "Tous les filtres de contours"
 
-#: ../../features/image/menus.rst:634
+#: ../../doc/features/image/menus.rst:690
 msgid ""
 "Perform all edge filtering algorithms (see above) on an image. Combined "
 "with the \"distribute on a grid\" option, this allows to compare the "
@@ -1504,11 +1636,11 @@ msgstr ""
 " une image. Combiné avec l'option \"distribuer sur une grille\", cela "
 "permet de comparer les différents filtres de contours sur la même image."
 
-#: ../../features/image/menus.rst:640
+#: ../../doc/features/image/menus.rst:696
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: ../../features/image/menus.rst:639
+#: ../../doc/features/image/menus.rst:695
 msgid ""
 "Perform edge filtering on an image, using the Canny algorithm "
 "(implementation based on `skimage.feature.canny <https://scikit-"
@@ -1518,15 +1650,15 @@ msgstr ""
 "Canny (implémentation basée sur `skimage.feature.canny <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
 
-#: ../../features/image/menus.rst:643
+#: ../../doc/features/image/menus.rst:699
 msgid "\"Computing\" menu"
 msgstr "Menu \"Calculs\""
 
-#: ../../features/image/menus.rst:647
+#: ../../doc/features/image/menus.rst:703
 msgid "Screenshot of the \"Computing\" menu."
 msgstr "Capture d'écran du menu \"Calculs\"."
 
-#: ../../features/image/menus.rst:649
+#: ../../doc/features/image/menus.rst:705
 msgid ""
 "The \"Computing\" menu allows you to perform various computations on the "
 "current image or group of images. It also allows you to compute "
@@ -1537,7 +1669,7 @@ msgstr ""
 "courante ou sur un groupe d'images. Il permet également de calculer des "
 "statistiques, le barycentre, de détecter des pics, des contours, etc."
 
-#: ../../features/image/menus.rst:655
+#: ../../doc/features/image/menus.rst:711
 msgid ""
 "In DataLab vocabulary, a \"computing\" is a feature that computes a "
 "scalar result from an image. This result is stored as metadata, and thus "
@@ -1550,11 +1682,11 @@ msgstr ""
 " d'un \"traitement\" qui crée une nouvelle image à partir d'une image "
 "existante."
 
-#: ../../features/image/menus.rst:661
+#: ../../doc/features/image/menus.rst:717
 msgid "Edit regions of interest"
 msgstr "Modifier les régions d'intérêt"
 
-#: ../../features/image/menus.rst:663
+#: ../../doc/features/image/menus.rst:719
 msgid ""
 "Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
 "stored as metadata, and thus attached to image."
@@ -1563,37 +1695,37 @@ msgstr ""
 "multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
 "sont donc attachées à l'image."
 
-#: ../../features/image/menus.rst:666
+#: ../../doc/features/image/menus.rst:722
 msgid "ROI definition dialog is exactly the same as ROI extraction (see above)."
 msgstr ""
 "La boîte de dialogue de définition de ROI est identique à celle utilisée "
 "pour l'extraction de ROI (voir plus haut)."
 
-#: ../../features/image/menus.rst:670
+#: ../../doc/features/image/menus.rst:726
 msgid "An image with ROI."
 msgstr "Une image avec une ROI."
 
-#: ../../features/image/menus.rst:673
+#: ../../doc/features/image/menus.rst:729
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: ../../features/image/menus.rst:675
+#: ../../doc/features/image/menus.rst:731
 msgid "Remove all defined ROI for selected object(s)."
 msgstr ""
 "Supprimer toutes les ROI définies pour l'objet ou les objets "
 "sélectionné(s)."
 
-#: ../../features/image/menus.rst:678
+#: ../../doc/features/image/menus.rst:734
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ../../features/image/menus.rst:680
+#: ../../doc/features/image/menus.rst:736
 msgid "Compute statistics on selected image and show a summary table."
 msgstr ""
 "Calcule des statistiques sur les images sélectionnées et affiche un "
 "tableau récapitulatif."
 
-#: ../../features/image/menus.rst:684
+#: ../../doc/features/image/menus.rst:740
 msgid ""
 "Example of statistical summary table: each row is associated to an ROI "
 "(the first row gives the statistics for the whole data)."
@@ -1602,51 +1734,53 @@ msgstr ""
 "associée à une ROI (à l'exception de la première qui correspond aux "
 "statistiques calculées sur la totalité des données)."
 
-#: ../../features/image/menus.rst:688
+#: ../../doc/features/image/menus.rst:744
 msgid "Histogram"
 msgstr "Histogramme"
 
-#: ../../features/image/menus.rst:690
+#: ../../doc/features/image/menus.rst:746
 msgid "Compute histogram of selected image and show it in the Signal Panel."
-msgstr "Calcule l'histogramme de l'image sélectionnée et l'affiche dans le panneau Signal."
+msgstr ""
+"Calcule l'histogramme de l'image sélectionnée et l'affiche dans le "
+"panneau Signal."
 
-#: ../../features/image/menus.rst:692
+#: ../../doc/features/image/menus.rst:748
 msgid "Parameters are:"
 msgstr "Paramètres :"
 
-#: ../../features/image/menus.rst:700
+#: ../../doc/features/image/menus.rst:756
 msgid "Bins"
 msgstr "Classes"
 
-#: ../../features/image/menus.rst:701
+#: ../../doc/features/image/menus.rst:757
 msgid "Number of bins"
 msgstr "Nombre de classes"
 
-#: ../../features/image/menus.rst:702
+#: ../../doc/features/image/menus.rst:758
 msgid "Lower limit"
 msgstr "Limite inférieure"
 
-#: ../../features/image/menus.rst:703
+#: ../../doc/features/image/menus.rst:759
 msgid "Lower limit of the histogram"
 msgstr "Limite inférieure de l'histogramme"
 
-#: ../../features/image/menus.rst:704
+#: ../../doc/features/image/menus.rst:760
 msgid "Upper limit"
 msgstr "Limite supérieure"
 
-#: ../../features/image/menus.rst:705
+#: ../../doc/features/image/menus.rst:761
 msgid "Upper limit of the histogram"
 msgstr "Limite supérieure de l'histogramme"
 
-#: ../../features/image/menus.rst:709
+#: ../../doc/features/image/menus.rst:765
 msgid "Example of histogram."
 msgstr "Exemple d'histogramme."
 
-#: ../../features/image/menus.rst:712
+#: ../../doc/features/image/menus.rst:768
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: ../../features/image/menus.rst:714
+#: ../../doc/features/image/menus.rst:770
 msgid ""
 "Compute image centroid using a Fourier transform method (as discussed by "
 "`Weisshaar et al. <http://www.mnd-umwelttechnik.fh-"
@@ -1658,11 +1792,11 @@ msgstr ""
 "umwelttechnik.fh-wiesbaden.de/pig/weisshaar_u5.pdf>`_). Cette méthode "
 "présente l'avantage d'être peu sensible au bruit de fond."
 
-#: ../../features/image/menus.rst:719
+#: ../../doc/features/image/menus.rst:775
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: ../../features/image/menus.rst:721
+#: ../../doc/features/image/menus.rst:777
 msgid ""
 "Compute the circle contour enclosing image values above a threshold level"
 " defined as the half-maximum value."
@@ -1670,11 +1804,11 @@ msgstr ""
 "Calcule le contour circulaire entourant les valeurs de l'image au-delà "
 "d'un seuil (moitié du maximum de l'image)."
 
-#: ../../features/image/menus.rst:725
+#: ../../doc/features/image/menus.rst:781
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: ../../features/image/menus.rst:727
+#: ../../doc/features/image/menus.rst:783
 msgid ""
 "Automatically find peaks on image using a minimum-maximum filter "
 "algorithm."
@@ -1682,11 +1816,11 @@ msgstr ""
 "Détecte automatiquement des pics sur une image en utilisant un algorithme"
 " basé sur des filtres minimum-maximum."
 
-#: ../../features/image/menus.rst:731
+#: ../../doc/features/image/menus.rst:787
 msgid "Example of 2D peak detection."
 msgstr "Exemple de détection de pics 2D."
 
-#: ../../features/image/menus.rst:734
+#: ../../doc/features/image/menus.rst:790
 msgid ""
 "See :ref:`ref-to-2d-peak-detection` for more details on algorithm and "
 "associated parameters."
@@ -1694,11 +1828,11 @@ msgstr ""
 "Voir :ref:`ref-to-2d-peak-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../features/image/menus.rst:737
+#: ../../doc/features/image/menus.rst:793
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: ../../features/image/menus.rst:739
+#: ../../doc/features/image/menus.rst:795
 msgid ""
 "Automatically extract contours and fit them using a circle or an ellipse,"
 " or directly represent them as a polygon."
@@ -1706,11 +1840,11 @@ msgstr ""
 "Détecte automatiquement les contours et ajuste ces derniers par des "
 "cercles ou des ellipses, ou les représente directement par des polygones."
 
-#: ../../features/image/menus.rst:744
+#: ../../doc/features/image/menus.rst:800
 msgid "Example of contour detection."
 msgstr "Exemple de détection de contours."
 
-#: ../../features/image/menus.rst:747
+#: ../../doc/features/image/menus.rst:803
 msgid ""
 "See :ref:`ref-to-contour-detection` for more details on algorithm and "
 "associated parameters."
@@ -1718,7 +1852,7 @@ msgstr ""
 "Voir :ref:`ref-to-contour-detection` pour plus de détails sur "
 "l'algorithme et les paramètres associés."
 
-#: ../../features/image/menus.rst:749
+#: ../../doc/features/image/menus.rst:805
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to image and serialized with it when exporting current "
@@ -1729,11 +1863,11 @@ msgstr ""
 " cette dernière par exemple lors de l'export d'une session de DataLab "
 "vers un fichier HDF5."
 
-#: ../../features/image/menus.rst:754
+#: ../../doc/features/image/menus.rst:810
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
-#: ../../features/image/menus.rst:756
+#: ../../doc/features/image/menus.rst:812
 msgid ""
 "Detect circular shapes using circle Hough transform (implementation based"
 " on `skimage.transform.hough_circle_peaks <https://scikit-"
@@ -1744,15 +1878,15 @@ msgstr ""
 "://scikit-"
 "image.org/docs/stable/api/skimage.transform.html?highlight=hough#skimage.transform.hough_circle_peaks>`_)"
 
-#: ../../features/image/menus.rst:760
+#: ../../doc/features/image/menus.rst:816
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: ../../features/image/menus.rst:764
+#: ../../doc/features/image/menus.rst:820
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (DOG)"
 
-#: ../../features/image/menus.rst:763
+#: ../../doc/features/image/menus.rst:819
 msgid ""
 "Detect blobs using Difference of Gaussian (DOG) method (implementation "
 "based on `skimage.feature.blob_dog <https://scikit-"
@@ -1762,11 +1896,11 @@ msgstr ""
 "(DOG) (implementation basée sur `skimage.feature.blob_dog <https"
 "://scikit-image.org/docs/stable/api/skimage.feature.html#blob-dog>`_)."
 
-#: ../../features/image/menus.rst:768
+#: ../../doc/features/image/menus.rst:824
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: ../../features/image/menus.rst:767
+#: ../../doc/features/image/menus.rst:823
 msgid ""
 "Detect blobs using Determinant of Hessian (DOH) method (implementation "
 "based on `skimage.feature.blob_doh <https://scikit-"
@@ -1776,11 +1910,11 @@ msgstr ""
 "(implementation basée sur `skimage.feature.blob_doh <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-doh>`_)."
 
-#: ../../features/image/menus.rst:772
+#: ../../doc/features/image/menus.rst:828
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
-#: ../../features/image/menus.rst:771
+#: ../../doc/features/image/menus.rst:827
 msgid ""
 "Detect blobs using Laplacian of Gaussian (LOG) method (implementation "
 "based on `skimage.feature.blob_log <https://scikit-"
@@ -1790,11 +1924,11 @@ msgstr ""
 " (implementation basée sur `skimage.feature.blob_log <https://scikit-"
 "image.org/docs/stable/api/skimage.feature.html#blob-log>`_)."
 
-#: ../../features/image/menus.rst:775
+#: ../../doc/features/image/menus.rst:831
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: ../../features/image/menus.rst:775
+#: ../../doc/features/image/menus.rst:831
 msgid ""
 "Detect blobs using OpenCV implementation of `SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
@@ -1803,11 +1937,11 @@ msgstr ""
 "`SimpleBlobDetector "
 "<https://docs.opencv.org/3.4/d0/d7a/classcv_1_1SimpleBlobDetector.html>`_."
 
-#: ../../features/image/menus.rst:778
+#: ../../doc/features/image/menus.rst:834
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: ../../features/image/menus.rst:780
+#: ../../doc/features/image/menus.rst:836
 msgid ""
 "Show the results of all computations performed on the selected images. "
 "This shows the same table as the one shown after having performed a "
@@ -1817,11 +1951,11 @@ msgstr ""
 " Cela affiche le même tableau que celui affiché après avoir effectué un "
 "calcul."
 
-#: ../../features/image/menus.rst:784
+#: ../../doc/features/image/menus.rst:840
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: ../../features/image/menus.rst:786
+#: ../../doc/features/image/menus.rst:842
 msgid ""
 "Plot the results of computations performed on the selected images, with "
 "user-defined X and Y axes (e.g. plot the contour circle radius as a "
@@ -1831,15 +1965,15 @@ msgstr ""
 "avec des axes X et Y définis par l'utilisateur (p.ex. trace le rayon du "
 "cercle de contour en fonction du numéro de l'image)."
 
-#: ../../features/image/menus.rst:790
+#: ../../doc/features/image/menus.rst:846
 msgid "\"View\" menu"
 msgstr "Menu \"Affichage\""
 
-#: ../../features/image/menus.rst:794
+#: ../../doc/features/image/menus.rst:850
 msgid "Screenshot of the \"View\" menu."
 msgstr "Capture d'écran du menu \"Affichage\"."
 
-#: ../../features/image/menus.rst:796
+#: ../../doc/features/image/menus.rst:852
 msgid ""
 "The \"View\" menu allows you to visualize the current image or group of "
 "images. It also allows you to show/hide titles, to show/hide the contrast"
@@ -1850,15 +1984,15 @@ msgstr ""
 "d'afficher/cacher le panneau de contraste, de rafraîchir la "
 "visualisation, etc."
 
-#: ../../features/image/menus.rst:801
+#: ../../doc/features/image/menus.rst:857
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
-#: ../../features/image/menus.rst:803
+#: ../../doc/features/image/menus.rst:859
 msgid "Open a new window to visualize and the selected images."
 msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionées."
 
-#: ../../features/image/menus.rst:805
+#: ../../doc/features/image/menus.rst:861
 msgid ""
 "In the separate window, you may visualize your data more comfortably "
 "(e.g., by maximizing the window) and you may also annotate the data."
@@ -1867,27 +2001,27 @@ msgstr ""
 "(p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées"
 " aux données."
 
-#: ../../features/image/menus.rst:809
+#: ../../doc/features/image/menus.rst:865
 msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
 msgstr ""
 "Voir :ref:`ref-to-image-annotations` pour plus de détails sur les "
 "annotations."
 
-#: ../../features/image/menus.rst:812
+#: ../../doc/features/image/menus.rst:868
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: ../../features/image/menus.rst:814
+#: ../../doc/features/image/menus.rst:870
 msgid "Show/hide titles of computing results or annotations."
 msgstr ""
 "Affiche/cache les titres des objets graphiques liés aux résultats de "
 "calculs et aux annotations."
 
-#: ../../features/image/menus.rst:817
+#: ../../doc/features/image/menus.rst:873
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: ../../features/image/menus.rst:819
+#: ../../doc/features/image/menus.rst:875
 msgid ""
 "Automatically refresh the visualization when the data changes. When "
 "enabled (default), the plot view is automatically refreshed when the data"
@@ -1911,11 +2045,11 @@ msgstr ""
 " données volumineuses, et l'activer à nouveau quand vous avez terminé. "
 "Cela évitera des rafraîchissements inutiles."
 
-#: ../../features/image/menus.rst:831
+#: ../../doc/features/image/menus.rst:887
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
 
-#: ../../features/image/menus.rst:833
+#: ../../doc/features/image/menus.rst:889
 msgid ""
 "Refresh the visualization manually. This triggers a refresh of the plot "
 "view, even if the auto-refresh feature is disabled."
@@ -1924,31 +2058,31 @@ msgstr ""
 "rafraîchissement de la visualisation, même si le rafraîchissement "
 "automatique est désactivé."
 
-#: ../../features/image/menus.rst:837
+#: ../../doc/features/image/menus.rst:893
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
 
-#: ../../features/image/menus.rst:839
+#: ../../doc/features/image/menus.rst:895
 msgid "Show/hide contrast adjustment panel."
 msgstr "Affiche/cache le panneau de réglage du contraste."
 
-#: ../../features/image/menus.rst:842
+#: ../../doc/features/image/menus.rst:898
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/image/menus.rst:844
+#: ../../doc/features/image/menus.rst:900
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#: ../../features/image/menus.rst:847
+#: ../../doc/features/image/menus.rst:903
 msgid "\"?\" menu"
 msgstr "Menu \"?\""
 
-#: ../../features/image/menus.rst:851
+#: ../../doc/features/image/menus.rst:907
 msgid "Screenshot of the \"?\" menu."
 msgstr "Capture d'écran du menu \"?\"."
 
-#: ../../features/image/menus.rst:853
+#: ../../doc/features/image/menus.rst:909
 msgid ""
 "The \"?\" menu allows you to access the online documentation, to show log"
 " files, to show information regarding your DataLab installation, and to "
@@ -1959,33 +2093,33 @@ msgstr ""
 "configuration d'installation de DataLab, et d'afficher la boîte de "
 "dialogue \"A propos de DataLab\"."
 
-#: ../../features/image/menus.rst:858
+#: ../../doc/features/image/menus.rst:914
 msgid "Online or Local documentation"
 msgstr "Documentation en ligne ou locale"
 
-#: ../../features/image/menus.rst:860
+#: ../../doc/features/image/menus.rst:916
 msgid "Open the online or local documentation:"
 msgstr "Affiche la documentation en ligne ou locale :"
 
-#: ../../features/image/menus.rst:865
+#: ../../doc/features/image/menus.rst:921
 msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
-#: ../../features/image/menus.rst:867
+#: ../../doc/features/image/menus.rst:923
 msgid "Open DataLab log viewer"
 msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
-#: ../../features/image/menus.rst:870
+#: ../../doc/features/image/menus.rst:926
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
 msgstr ""
 "Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
 "journaux de bord."
 
-#: ../../features/image/menus.rst:873
+#: ../../doc/features/image/menus.rst:929
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: ../../features/image/menus.rst:875
+#: ../../doc/features/image/menus.rst:931
 msgid ""
 "Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
@@ -1994,17 +2128,17 @@ msgstr ""
 "DataLab (particulièrement utile pour signaler des anomalies de manière "
 "efficace)."
 
-#: ../../features/image/menus.rst:879
+#: ../../doc/features/image/menus.rst:935
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
 msgstr ""
 "Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
 "boîte de dialogue."
 
-#: ../../features/image/menus.rst:882
+#: ../../doc/features/image/menus.rst:938
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/image/menus.rst:884
+#: ../../doc/features/image/menus.rst:940
 msgid "Open the \"About DataLab\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 
@@ -2046,4 +2180,7 @@ msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 #~ msgid ""
 #~ "See :ref:`image_text_file_import` page for "
 #~ "more details on importing text files."
+#~ msgstr ""
+
+#~ msgid "Log10(z)"
 #~ msgstr ""

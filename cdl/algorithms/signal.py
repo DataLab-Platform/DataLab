@@ -18,11 +18,11 @@ def moving_average(y: np.ndarray, n: int) -> np.ndarray:
     """Compute moving average.
 
     Args:
-        y (numpy.ndarray): Input array
-        n (int): Window size
+        y: Input array
+        n: Window size
 
     Returns:
-        np.ndarray: Moving average
+        Moving average
     """
     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
@@ -33,11 +33,11 @@ def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Compute numerical derivative.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
+        x: X data
+        y: Y data
 
     Returns:
-        np.ndarray: Numerical derivative
+        Numerical derivative
     """
     dy = np.zeros_like(y)
     dy[0:-1] = np.diff(y) / np.diff(x)
@@ -49,12 +49,12 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     """Normalize input array to a given parameter.
 
     Args:
-        yin (numpy.ndarray): Input array
-        parameter (str | None): Normalization parameter. Defaults to "maximum".
-            Supported values: 'maximum', 'amplitude', 'sum', 'energy'
+        yin: Input array
+        parameter: Normalization parameter. Defaults to "maximum".
+         Supported values: 'maximum', 'amplitude', 'area', 'energy'
 
     Returns:
-        np.ndarray: Normalized array
+        Normalized array
     """
     axis = len(yin.shape) - 1
     if parameter == "maximum":
@@ -70,10 +70,12 @@ def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
             minimum = minimum.reshape((len(minimum), 1))
         ytemp -= minimum
         return normalize(ytemp, parameter="maximum")
-    if parameter == "sum":
+    if parameter == "area":
         return yin / yin.sum()
     if parameter == "energy":
-        return yin / (yin * yin.conjugate()).sum()
+        return yin / np.sqrt(np.sum(yin * yin.conjugate()))
+    if parameter == "rms":
+        return yin / np.sqrt(np.mean(yin * yin.conjugate()))
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 
@@ -83,13 +85,12 @@ def xy_fft(
     """Compute FFT on X,Y data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        shift (bool | None): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
+        x: X data
+        y: Y data
+        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        X data, Y data (tuple)
     """
     y1 = np.fft.fft(y)
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
@@ -105,13 +106,12 @@ def xy_ifft(
     """Compute iFFT on X,Y data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        shift (bool | None): Shift the zero frequency to the center of the spectrum.
-            Defaults to True.
+        x: X data
+        y: Y data
+        shift: Shift the zero frequency to the center of the spectrum. Defaults to True.
 
     Returns:
-        tuple[np.ndarray, np.ndarray]: X,Y data
+        X data, Y data (tuple)
     """
     x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
     if shift:
@@ -119,6 +119,20 @@ def xy_ifft(
         y = np.fft.ifftshift(y)
     y1 = np.fft.ifft(y)
     return x1, y1.real
+
+
+def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    """Sort from X,Y data by computing FFT(y).
+
+    Args:
+        x: X data
+        y: Y data
+
+    Returns:
+        Sorted frequencies in ascending order
+    """
+    freqs, fourier = xy_fft(x, y, shift=False)
+    return freqs[np.argsort(fourier)]
 
 
 # ----- Peak detection functions -----------------------------------------------
@@ -223,11 +237,11 @@ def xpeak(x: np.ndarray, y: np.ndarray) -> float:
     """Return default peak X-position (assuming a single peak).
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
+        x: X data
+        y: Y data
 
     Returns:
-        float: Peak X-position
+        Peak X-position
     """
     peaks = peak_indexes(y)
     if peaks.size == 1:
@@ -245,15 +259,18 @@ def interpolate(
     """Interpolate data.
 
     Args:
-        x (numpy.ndarray): X data
-        y (numpy.ndarray): Y data
-        xnew (numpy.ndarray): New X data
-        method (str): Interpolation method. Valid values are 'linear', 'spline',
+        x: X data
+        y: Y data
+        xnew: New X data
+        method: Interpolation method. Valid values are 'linear', 'spline',
          'quadratic', 'cubic', 'barycentric', 'pchip'
-        fill_value (float | None): Fill value. Defaults to None.
+        fill_value: Fill value. Defaults to None.
          This value is used to fill in for requested points outside of the
          X data range. It is only used if the method argument is 'linear',
          'cubic' or 'pchip'.
+
+    Returns:
+        Interpolated Y data
     """
     interpolator_extrap = None
     if method == "linear":
@@ -286,6 +303,59 @@ def interpolate(
             ynew[xnew < x[0]] = fill_value
             ynew[xnew > x[-1]] = fill_value
     return ynew
+
+
+def windowing(
+    y: np.ndarray,
+    win_type: str = "hamming",
+    alpha: float = 0.5,
+    beta: float = 14.0,
+    sigma: float = 7.0,
+) -> np.ndarray:
+    """Apply windowing to the input data.
+
+    Args:
+        x: X data
+        y: Y data
+        win_type: Windowing function type. Defaults to "hamming".
+         Supported values: 'hamming', 'hanning', 'blackman', 'bartlett',
+         'tukey', 'rectangular'
+        alpha: Tukey window parameter. Defaults to 0.5.
+        beta: Kaiser window parameter. Defaults to 14.0.
+        sigma: Gaussian window parameter. Defaults to 7.0.
+
+    Returns:
+        Windowed Y data
+    """
+    # Cases without parameters:
+    win_func = {
+        "barthann": scipy.signal.windows.barthann,
+        "bartlett": np.bartlett,
+        "blackman": np.blackman,
+        "blackman-harris": scipy.signal.windows.blackmanharris,
+        "bohman": scipy.signal.windows.bohman,
+        "boxcar": scipy.signal.windows.boxcar,
+        "cosine": scipy.signal.windows.cosine,
+        "exponential": scipy.signal.windows.exponential,
+        "flat-top": scipy.signal.windows.flattop,
+        "hamming": np.hamming,
+        "hanning": np.hanning,
+        "lanczos": scipy.signal.windows.lanczos,
+        "nuttall": scipy.signal.windows.nuttall,
+        "parzen": scipy.signal.windows.parzen,
+        "rectangular": np.ones,
+        "taylor": scipy.signal.windows.taylor,
+    }.get(win_type)
+    if win_func is not None:
+        return y * win_func(len(y))
+    # Cases with parameters:
+    if win_type == "tukey":
+        return y * scipy.signal.windows.tukey(len(y), alpha)
+    if win_type == "kaiser":
+        return y * np.kaiser(len(y), beta)
+    if win_type == "gaussian":
+        return y * scipy.signal.windows.gaussian(len(y), sigma)
+    raise ValueError(f"Invalid window type {win_type}")
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
@@ -363,7 +433,7 @@ def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 0.16) -> float:
     freq = initial_freq(x, y)
     initial_params = [amplitude, freq, phase_origin, offset]
 
-    # Détermination par modélisation (fit) de sinus
+    # D�termination par mod�lisation (fit) de sinus
     mod_ampl, mod_freq, mod_phase, mod_offset = leastsq(
         _compute_residuals, initial_params, args=(x, y)
     )[0]
@@ -392,12 +462,12 @@ def initial_freq(x: np.ndarray, y: np.ndarray) -> float:
     i = np.argmax(np.abs(np.fft.fft(y)))
     if i > len(x) / 2:
         i = len(x) - i
-    # Si l'indice est supérieure à NbrePts/2 => on est dans le 1/2 spectre miroir
-    # transposé
-    # (fréquences négatives)
-    # Détermination de la fréquence d'échantillonnage
+    # Si l'indice est sup�rieure � NbrePts/2 => on est dans le 1/2 spectre miroir
+    # transpos�
+    # (fr�quences n�gatives)
+    # D�termination de la fr�quence d'�chantillonnage
     f_ech = 1 / (x[-1] - x[0])
-    # Conversion de l'indice en fréquence
+    # Conversion de l'indice en fr�quence
     frequence = i * f_ech
     return frequence
 

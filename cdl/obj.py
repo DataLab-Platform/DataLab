@@ -28,6 +28,8 @@ As a matter of fact, the following import statement is equivalent to the previou
 Common objects
 ^^^^^^^^^^^^^^
 
+.. autoclass:: cdl.obj.ResultProperties
+    :members:
 .. autoclass:: cdl.obj.ResultShape
     :members:
 .. autoclass:: cdl.obj.ShapeTypes
@@ -77,6 +79,7 @@ from cdl.core.io import read_image, read_images, read_signal, read_signals
 from cdl.core.model.base import (
     NormalRandomParam,
     ResultShape,
+    ResultProperties,
     ShapeTypes,
     UniformRandomParam,
 )

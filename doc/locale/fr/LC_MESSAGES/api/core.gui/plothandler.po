@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-09 18:56+0200\n"
+"POT-Creation-Date: 2024-05-13 14:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -118,7 +118,11 @@ msgid ""
 "string describing the objects to refresh. Valid values are \"selected\" "
 "(refresh the selected objects), \"all\" (refresh all objects), "
 "\"existing\" (refresh existing plot items), or an object uuid."
-msgstr "chaîne décrivant les objets à actualiser. Les valeurs valides sont \"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser tous les objets), \"existing\" (actualiser les items de visualisation existants), ou un uuid d'objet."
+msgstr ""
+"chaîne décrivant les objets à actualiser. Les valeurs valides sont "
+"\"selected\" (actualiser les objets sélectionnés), \"all\" (actualiser "
+"tous les objets), \"existing\" (actualiser les items de visualisation "
+"existants), ou un uuid d'objet."
 
 #: cdl.core.gui.plothandler.BasePlotHandler.refresh_plot:7
 #: cdl.core.gui.plothandler.ImagePlotHandler.refresh_plot:7 of
@@ -170,6 +174,11 @@ msgstr "si True, actualiser les items de visualisation automatiquement"
 #: of
 msgid "Update plot item according to reference item"
 msgstr "Mettre à jour l'item de visualisation selon l'item de référence"
+
+#: cdl.core.gui.plothandler.BasePlotHandler.update_resultproperty_from_plot_item:1
+#: of
+msgid "Update result property from plot item"
+msgstr "Mettre à jour la propriété de résultat à partir de l'item de visualisation"
 
 #: cdl.core.gui.plothandler:16 of
 msgid "Image plot handler"

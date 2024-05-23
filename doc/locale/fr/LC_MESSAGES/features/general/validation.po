@@ -1,0 +1,1333 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-19 09:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/general/validation.rst:-1
+msgid ""
+"Validation in DataLab, the open-source scientific data analysis and "
+"visualization platform"
+msgstr ""
+"Validation dans DataLab, la plateforme open-source d'analyse et de "
+"visualisation de données scientifiques"
+
+#: ../../doc/features/general/validation.rst:-1
+msgid "DataLab, scientific, data, analysis, validation, ground-truth, analytical"
+msgstr "DataLab, scientifique, données, analyse, validation, analytique"
+
+#: ../../doc/features/general/validation.rst:4
+msgid "Validation"
+msgstr "Validation"
+
+#: ../../doc/features/general/validation.rst:10
+msgid ""
+"DataLab is a platform for scientific data analysis and visualization. It "
+"may be used in a variety of scientific disciplines, including biology, "
+"physics, and astronomy. The common ground for all these disciplines is "
+"the need to validate the results of computational analysis against "
+"ground-truth data. This is a critical step in the scientific method, and "
+"it is essential for reproducibility and trust in the results."
+msgstr ""
+"DataLab est une plateforme d'analyse et de visualisation de données "
+"scientifiques qui peut être utilisée dans diverses disciplines "
+"scientifiques, y compris la biologie, la physique et l'astronomie. Le "
+"point commun de toutes ces disciplines est la nécessité de valider les "
+"résultats de l'analyse informatique par rapport à des données de "
+"référence. Il s'agit d'une étape critique dans la méthode scientifique et"
+" elle est essentielle pour la reproductibilité et la confiance dans les "
+"résultats."
+
+#: ../../doc/features/general/validation.rst:16
+msgid ""
+"DataLab validation is based on two key concepts: **ground-truth data** "
+"and **analytical validation**."
+msgstr ""
+"La validation de DataLab repose sur deux concepts clés : les **données de"
+" référence** et la **validation analytique**."
+
+#: ../../doc/features/general/validation.rst:20
+msgid "Ground-truth data"
+msgstr "Données de référence"
+
+#: ../../doc/features/general/validation.rst:22
+msgid ""
+"Ground-truth data is data that is known to be correct. It is used to "
+"validate the results of computational analysis."
+msgstr ""
+"Les données de référence sont des données connues pour être correctes. "
+"Elles sont utilisées pour valider les résultats de l'analyse "
+"informatique."
+
+#: ../../doc/features/general/validation.rst:25
+msgid ""
+"In DataLab, ground-truth data may be obtained from a variety of sources, "
+"including:"
+msgstr ""
+"Dans DataLab, les données de référence peuvent être obtenues à partir de "
+"diverses sources, y compris :"
+
+#: ../../doc/features/general/validation.rst:27
+msgid "Experimental data"
+msgstr "Données expérimentales"
+
+#: ../../doc/features/general/validation.rst:28
+msgid "Simulated data"
+msgstr "Données simulées"
+
+#: ../../doc/features/general/validation.rst:29
+msgid "Synthetic data"
+msgstr "Données synthétiques"
+
+#: ../../doc/features/general/validation.rst:30
+msgid "Data from a trusted source"
+msgstr "Données provenant d'une source de confiance"
+
+#: ../../doc/features/general/validation.rst:33
+msgid "Analytical validation"
+msgstr "Validation analytique"
+
+#: ../../doc/features/general/validation.rst:35
+msgid ""
+"Analytical validation is the process of comparing the results of "
+"computational analysis to ground-truth data. This is done to ensure that "
+"the results are accurate and reliable."
+msgstr ""
+"La validation analytique est le processus de comparaison des résultats de"
+" l'analyse informatique avec les données de référence. Cela est fait pour"
+" s'assurer que les résultats sont précis et fiables."
+
+#: ../../doc/features/general/validation.rst:38
+msgid ""
+"In DataLab, analytical validation is implemented using a variety of "
+"techniques, including:"
+msgstr ""
+"Dans DataLab, la validation analytique est mise en œuvre à l'aide de "
+"diverses techniques, y compris :"
+
+#: ../../doc/features/general/validation.rst:40
+msgid ""
+"Cross-validation with an analytical model (from a trusted source, e.g. "
+"`SciPy <https://www.scipy.org/>`_ or `NumPy <https://numpy.org/>`_)"
+msgstr ""
+"Validation croisée avec un modèle analytique (provenant d'une source de "
+"confiance, par exemple `SciPy <https://www.scipy.org/>`_ ou `NumPy "
+"<https://numpy.org/>`_)"
+
+#: ../../doc/features/general/validation.rst:41
+msgid "Statistical analysis"
+msgstr "Analyse statistique"
+
+#: ../../doc/features/general/validation.rst:42
+msgid "Visual inspection"
+msgstr "Inspection visuelle"
+
+#: ../../doc/features/general/validation.rst:43
+msgid "Expert review"
+msgstr "Examen par un expert"
+
+#: ../../doc/features/general/validation.rst:46
+msgid "Validation tests"
+msgstr "Tests de validation"
+
+#: ../../doc/features/general/validation.rst:49
+msgid "How to execute tests"
+msgstr "Comment exécuter les tests"
+
+#: ../../doc/features/general/validation.rst:51
+msgid ""
+"In DataLab, validation tests are disseminated in the test suite of the "
+"project, but they can also be executed separately using the command line "
+"interface."
+msgstr ""
+"Dans DataLab, les tests de validation sont éparpillés dans la suite de "
+"tests du projet, mais ils peuvent également être exécutés séparément à "
+"l'aide de l'interface en ligne de commande."
+
+#: ../../doc/features/general/validation.rst:54
+msgid ""
+"See paragraph :ref:`run_validation_tests` for more information on how to "
+"run validation tests."
+msgstr ""
+"Voir le paragraphe :ref:`run_validation_tests` pour plus d'informations "
+"sur la façon d'exécuter les tests de validation."
+
+#: ../../doc/features/general/validation.rst:57
+msgid "Validation Status of DataLab"
+msgstr "Etat de validation de DataLab"
+
+#: ../../doc/features/general/validation.rst:59
+msgid ""
+"This paragraph provides the validation status of compute functions in "
+"DataLab."
+msgstr "Ce paragraphe décrit l'état de validation des fonctions de calcul dans DataLab."
+
+#: ../../doc/features/general/validation.rst:61
+msgid ""
+"This is a work in progress: the tables below are updated continuously as "
+"new functions are validated or test code is adapted (the tables are "
+"generated from the test code). Some functions are already validated but "
+"do not appear in the list below yet, while others are still in the "
+"validation process."
+msgstr "Il s'agit d'un travail en cours : les tableaux ci-dessous sont mis à jour en continu à mesure que de nouvelles fonctions sont validées ou que le code de test est adapté (les tableaux sont générés à partir du code de test). Certaines fonctions sont déjà validées mais n'apparaissent pas encore dans la liste ci-dessous, tandis que d'autres sont encore en cours de validation."
+
+#: ../../doc/features/general/validation.rst:66
+msgid "Validation Statistics"
+msgstr "Statistiques de validation"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Category"
+msgstr "Catégorie"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Signal"
+msgstr "Signal"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Image"
+msgstr "Image"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Total"
+msgstr "Total"
+
+#: ../../doc/validation_statistics.csv:1
+msgid "Number of compute functions"
+msgstr "Nombre de fonctions de calcul"
+
+#: ../../doc/validation_statistics.csv:1
+msgid "42"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "81"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "123"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "Number of validated compute functions"
+msgstr "Nombre de fonctions de calcul validées"
+
+#: ../../doc/validation_statistics.csv:1
+msgid "1"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "2"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "Percentage of validated compute functions"
+msgstr "Pourcentage de fonctions de calcul validées"
+
+#: ../../doc/validation_statistics.csv:1
+msgid "2%"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "1%"
+msgstr ""
+
+#: ../../doc/features/general/validation.rst:72
+msgid "Signal Compute Functions"
+msgstr "Fonctions de calcul Signal"
+
+#: ../../doc/features/general/validation.rst:74
+msgid "Validation status of signal compute functions"
+msgstr "Etat de validation des fonctions de calcul de signal"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Function"
+msgstr "Fonction"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/general/validation.rst:1
+msgid "Test script"
+msgstr "Script de test"
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`abs <cdl.core.computation.signal.compute_abs>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute absolute value"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "N/A"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`add <cdl.core.computation.signal.compute_add>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Add **dst** and **src** signals and return **dst** signal modified in "
+"place"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`add_constant <cdl.core.computation.signal.compute_add_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Add **dst** and a constant value and return **dst** signal modified in "
+"place"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`astype <cdl.core.computation.signal.compute_astype>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Convert data type"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`calibration <cdl.core.computation.signal.compute_calibration>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute linear calibration"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`clip <cdl.core.computation.signal.compute_clip>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute maximum data clipping"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`convolution <cdl.core.computation.signal.compute_convolution>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute convolution of two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`derivative <cdl.core.computation.signal.compute_derivative>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute derivative"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`detrending <cdl.core.computation.signal.compute_detrending>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+#, fuzzy
+msgid "Detrend data"
+msgstr "Données expérimentales"
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`difference <cdl.core.computation.signal.compute_difference>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute difference between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`difference_constant "
+"<cdl.core.computation.signal.compute_difference_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Subtract a constant value from a signal"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`divide_by_constant "
+"<cdl.core.computation.signal.compute_division_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Divide a signal by a constant value"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`division <cdl.core.computation.signal.compute_division>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute division between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`exp <cdl.core.computation.signal.compute_exp>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute exponential"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`fft <cdl.core.computation.signal.compute_fft>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute FFT"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`filter <cdl.core.computation.signal.compute_filter>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute frequency filter (low-pass, high-pass, band-pass, band-stop)"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute FW at 1/e²"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute FWHM"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`gaussian_filter "
+"<cdl.core.computation.signal.compute_gaussian_filter>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute gaussian filter"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`histogram <cdl.core.computation.signal.compute_histogram>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute histogram"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`ifft <cdl.core.computation.signal.compute_ifft>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute iFFT"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`im <cdl.core.computation.signal.compute_im>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute imaginary part"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`integral <cdl.core.computation.signal.compute_integral>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute integral"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`interpolation "
+"<cdl.core.computation.signal.compute_interpolation>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+#, fuzzy
+msgid "Interpolate data"
+msgstr "Données simulées"
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`log10 <cdl.core.computation.signal.compute_log10>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute Log10"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`moving_average "
+"<cdl.core.computation.signal.compute_moving_average>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute moving average"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`moving_median "
+"<cdl.core.computation.signal.compute_moving_median>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute moving median"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`normalize <cdl.core.computation.signal.compute_normalize>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Normalize data"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`peak_detection "
+"<cdl.core.computation.signal.compute_peak_detection>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Peak detection"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`pow <cdl.core.computation.signal.compute_pow>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute power"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`product <cdl.core.computation.signal.compute_product>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Multiply **dst** and **src** signals and return **dst** signal modified "
+"in place"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`product_by_constant "
+"<cdl.core.computation.signal.compute_product_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Multiply **dst** by a constant value and return **dst** signal modified "
+"in place"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`quadratic_difference "
+"<cdl.core.computation.signal.compute_quadratic_difference>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute quadratic difference between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`re <cdl.core.computation.signal.compute_re>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute real part"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`resampling <cdl.core.computation.signal.compute_resampling>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+#, fuzzy
+msgid "Resample data"
+msgstr "Données simulées"
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`reverse_x <cdl.core.computation.signal.compute_reverse_x>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Reverse x-axis"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute square root"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`stats <cdl.core.computation.signal.compute_stats>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute statistics on a signal"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/common/stat_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Swap axes"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`threshold <cdl.core.computation.signal.compute_threshold>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute threshold clipping"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`wiener <cdl.core.computation.signal.compute_wiener>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute Wiener filter"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`windowing <cdl.core.computation.signal.compute_windowing>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Compute windowing (available methods: hamming, hanning, bartlett, "
+"blackman,"
+msgstr ""
+
+#: ../../doc/features/general/validation.rst:81
+msgid "Image Compute Functions"
+msgstr ""
+
+#: ../../doc/features/general/validation.rst:83
+msgid "Validation status of image compute functions"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`abs <cdl.core.computation.image.compute_abs>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`add <cdl.core.computation.image.compute_add>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Add **dst** and **src** images and return **dst** image modified in place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`add_constant <cdl.core.computation.image.compute_add_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"Add **dst** and a constant value and return **dst** image modified in "
+"place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`astype <cdl.core.computation.image.compute_astype>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Convert image data type"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`average_profile "
+"<cdl.core.computation.image.compute_average_profile>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal or vertical average profile"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`binning <cdl.core.computation.image.compute_binning>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Binning function on data"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`butterworth <cdl.core.computation.image.compute_butterworth>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Butterworth filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`calibration <cdl.core.computation.image.compute_calibration>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`centroid <cdl.core.computation.image.compute_centroid>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute centroid"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`clip <cdl.core.computation.image.compute_clip>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Apply clipping"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`difference <cdl.core.computation.image.compute_difference>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute difference between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`difference_constant "
+"<cdl.core.computation.image.compute_difference_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Subtract a constant value from an image"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`divide_by_constant "
+"<cdl.core.computation.image.compute_division_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Divide an image by a constant value"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`division <cdl.core.computation.image.compute_division>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute division between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`enclosing_circle "
+"<cdl.core.computation.image.compute_enclosing_circle>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute minimum enclosing circle"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`exp <cdl.core.computation.image.compute_exp>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`fft <cdl.core.computation.image.compute_fft>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`flatfield <cdl.core.computation.image.compute_flatfield>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute flat field correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`fliph <cdl.core.computation.image.compute_fliph>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Flip data horizontally"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`flipv <cdl.core.computation.image.compute_flipv>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Flip data vertically"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`gaussian_filter "
+"<cdl.core.computation.image.compute_gaussian_filter>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`histogram <cdl.core.computation.image.compute_histogram>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute histogram of the image data"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`hough_circle_peaks "
+"<cdl.core.computation.image.compute_hough_circle_peaks>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Hough circles"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`ifft <cdl.core.computation.image.compute_ifft>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute inverse FFT"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`im <cdl.core.computation.image.compute_im>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`log10 <cdl.core.computation.image.compute_log10>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute log10"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`logp1 <cdl.core.computation.image.compute_logp1>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute log10(z+n)"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`moving_average "
+"<cdl.core.computation.image.compute_moving_average>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`moving_median "
+"<cdl.core.computation.image.compute_moving_median>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`normalize <cdl.core.computation.image.compute_normalize>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`product <cdl.core.computation.image.compute_product>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"Multiply **dst** and **src** images and return **dst** image modified in "
+"place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`product_by_constant "
+"<cdl.core.computation.image.compute_product_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"Multiply **dst** by a constant value and return **dst** image modified in"
+" place"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`profile <cdl.core.computation.image.compute_profile>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal or vertical profile"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`quadratic_difference "
+"<cdl.core.computation.image.compute_quadratic_difference>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute quadratic difference between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`radial_profile "
+"<cdl.core.computation.image.compute_radial_profile>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute radial profile around the centroid"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`re <cdl.core.computation.image.compute_re>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`resize <cdl.core.computation.image.compute_resize>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Zooming function"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`rotate <cdl.core.computation.image.compute_rotate>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#, fuzzy
+msgid "Rotate data"
+msgstr "Données de référence"
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`rotate270 <cdl.core.computation.image.compute_rotate270>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Rotate data 270°"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`rotate90 <cdl.core.computation.image.compute_rotate90>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Rotate data 90°"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`stats <cdl.core.computation.image.compute_stats>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute statistics on an image"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`swap_axes <cdl.core.computation.image.compute_swap_axes>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Swap image axes"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`threshold <cdl.core.computation.image.compute_threshold>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Apply thresholding"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`wiener <cdl.core.computation.image.compute_wiener>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`blob_dog "
+"<cdl.core.computation.image.detection.compute_blob_dog>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute blobs using Difference of Gaussian method"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`blob_doh "
+"<cdl.core.computation.image.detection.compute_blob_doh>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute blobs using Determinant of Hessian method"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`blob_log "
+"<cdl.core.computation.image.detection.compute_blob_log>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute blobs using Laplacian of Gaussian method"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`blob_opencv "
+"<cdl.core.computation.image.detection.compute_blob_opencv>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute blobs using OpenCV"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`contour_shape "
+"<cdl.core.computation.image.detection.compute_contour_shape>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute contour shape fit"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`peak_detection "
+"<cdl.core.computation.image.detection.compute_peak_detection>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute 2D peak detection"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`canny <cdl.core.computation.image.edges.compute_canny>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Canny filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`farid <cdl.core.computation.image.edges.compute_farid>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Farid filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`farid_h <cdl.core.computation.image.edges.compute_farid_h>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal Farid filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`farid_v <cdl.core.computation.image.edges.compute_farid_v>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute vertical Farid filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`laplace <cdl.core.computation.image.edges.compute_laplace>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Laplace filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`prewitt <cdl.core.computation.image.edges.compute_prewitt>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Prewitt filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`prewitt_h <cdl.core.computation.image.edges.compute_prewitt_h>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal Prewitt filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`prewitt_v <cdl.core.computation.image.edges.compute_prewitt_v>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute vertical Prewitt filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`roberts <cdl.core.computation.image.edges.compute_roberts>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Roberts filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`scharr <cdl.core.computation.image.edges.compute_scharr>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Scharr filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`scharr_h <cdl.core.computation.image.edges.compute_scharr_h>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal Scharr filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`scharr_v <cdl.core.computation.image.edges.compute_scharr_v>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute vertical Scharr filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`sobel <cdl.core.computation.image.edges.compute_sobel>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Sobel filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`sobel_h <cdl.core.computation.image.edges.compute_sobel_h>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal Sobel filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`sobel_v <cdl.core.computation.image.edges.compute_sobel_v>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute vertical Sobel filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`adjust_gamma "
+"<cdl.core.computation.image.exposure.compute_adjust_gamma>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Gamma correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`adjust_log "
+"<cdl.core.computation.image.exposure.compute_adjust_log>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute log correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`adjust_sigmoid "
+"<cdl.core.computation.image.exposure.compute_adjust_sigmoid>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute sigmoid correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`equalize_adapthist "
+"<cdl.core.computation.image.exposure.compute_equalize_adapthist>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Adaptive histogram equalization"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`equalize_hist "
+"<cdl.core.computation.image.exposure.compute_equalize_hist>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Histogram equalization"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`rescale_intensity "
+"<cdl.core.computation.image.exposure.compute_rescale_intensity>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Rescale image intensity levels"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`black_tophat "
+"<cdl.core.computation.image.morphology.compute_black_tophat>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Black Top-Hat"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`closing <cdl.core.computation.image.morphology.compute_closing>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute morphological closing"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`dilation "
+"<cdl.core.computation.image.morphology.compute_dilation>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Dilation"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`erosion <cdl.core.computation.image.morphology.compute_erosion>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Erosion"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`opening <cdl.core.computation.image.morphology.compute_opening>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute morphological opening"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`white_tophat "
+"<cdl.core.computation.image.morphology.compute_white_tophat>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute White Top-Hat"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`denoise_bilateral "
+"<cdl.core.computation.image.restoration.compute_denoise_bilateral>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute bilateral filter denoising"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`denoise_tophat "
+"<cdl.core.computation.image.restoration.compute_denoise_tophat>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Denoise using White Top-Hat"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`denoise_tv "
+"<cdl.core.computation.image.restoration.compute_denoise_tv>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Total Variation denoising"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`denoise_wavelet "
+"<cdl.core.computation.image.restoration.compute_denoise_wavelet>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute Wavelet denoising"
+msgstr ""

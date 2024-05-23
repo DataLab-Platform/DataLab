@@ -28,14 +28,38 @@ Create a new signal from various models:
       - Equation
     * - Zeros
       - :math:`y[i] = 0`
-    * - Random
-      - :math:`y[i] \in [-0.5, 0.5]`
     * - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
     * - Lorentzian
       - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
     * - Voigt
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+    * - Random (uniform law)
+      - :math:`y[i] \in [-0.5, 0.5]`
+    * - Random (normal law)
+      - :math:`y[i] \sim \mathcal{N}(-0.5, 0.5)`
+    * - Sine
+      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+    * - Cosine
+      - :math:`y = y_{0}+A.cos(2\pi.f.x+\phi)`
+    * - Sawtooth
+      - :math:`y = y_{0}+A \cdot \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
+    * - Triangle
+      - :math:`y = y_{0}+A \cdot \text{sawtooth}(2 \pi f x + \phi, \text{width} = 0.5)`
+    * - Square
+      - :math:`y = y_0 + A \cdot \text{sgn}\left( \sin\left( 2\pi f x + \phi \right) \right)`
+    * - Cardinal sine
+      - :math:`y = y_0 + A \cdot \text{sinc}\left(2\pi f x + \phi\right)`
+    * - Step
+      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
+    * - Exponential
+      - :math:`y = y_{0}+A.exp(B.x)`
+    * - Pulse
+      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
+    * - Polynomial
+      - :math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`
+    * - Experimental
+      - Manual input of X and Y values
 
 .. _open_signal:
 
@@ -53,6 +77,8 @@ Create a new signal from the following supported filetypes:
       - .txt, .csv
     * - NumPy arrays
       - .npy
+    * - MAT-Files
+      - .mat
 
 Save signal
 ^^^^^^^^^^^
@@ -232,6 +258,26 @@ Create a new signal which is the product of all selected signals:
 .. math::
     y_{M} = \prod_{k=0}^{M-1}{y_{k}}
 
+Constant operations
+^^^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of a constant operation on each selected signal:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Description
+    * - Addition
+      - :math:`y_{k} = y_{k-1} + c`
+    * - Subtraction
+      - :math:`y_{k} = y_{k-1} - c`
+    * - Multiplication
+      - :math:`y_{k} = y_{k-1} \times c`
+    * - Division
+      - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
+
 Division
 ^^^^^^^^
 
@@ -274,13 +320,37 @@ Create a new signal which is the result of converting data type of each selected
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Log10(y)
-^^^^^^^^
+Exponential
+^^^^^^^^^^^
+
+Create a new signal which is the exponential of each selected signal:
+
+.. math::
+    y_{k} = \exp(y_{k-1})
+
+Logarithm (base 10)
+^^^^^^^^^^^^^^^^^^^
 
 Create a new signal which is the base 10 logarithm of each selected signal:
 
 .. math::
-    z_{k} = \log_{10}(z_{k-1})
+    y_{k} = \log_{10}(y_{k-1})
+
+Power
+^^^^^
+
+Create a new signal which is the power of each selected signal:
+
+.. math::
+    y_{k} = y_{k-1}^{n}
+
+Square root
+^^^^^^^^^^^
+
+Create a new signal which is the square root of each selected signal:
+
+.. math::
+    y_{k} = \sqrt{y_{k-1}}
 
 Peak detection
 ^^^^^^^^^^^^^^
@@ -300,6 +370,58 @@ Create a new signal which is the convolution of each selected signal
 with respect to another signal.
 
 This feature is based on SciPy's `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_ function.
+
+Windowing
+^^^^^^^^^
+
+Create a new signal which is the result of applying a window function to each selected signal.
+
+The following window functions are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 80
+
+    * - Window function
+      - Reference
+    * - Barthann
+      - :py:func:`scipy.signal.windows.barthann`
+    * - Bartlett
+      - :py:func:`numpy.bartlett`
+    * - Blackman
+      - :py:func:`scipy.signal.windows.blackman`
+    * - Blackman-Harris
+      - :py:func:`scipy.signal.windows.blackmanharris`
+    * - Bohman
+      - :py:func:`scipy.signal.windows.bohman`
+    * - Boxcar
+      - :py:func:`scipy.signal.windows.boxcar`
+    * - Cosine
+      - :py:func:`scipy.signal.windows.cosine`
+    * - Exponential
+      - :py:func:`scipy.signal.windows.exponential`
+    * - Flat top
+      - :py:func:`scipy.signal.windows.flattop`
+    * - Gaussian
+      - :py:func:`scipy.signal.windows.gaussian`
+    * - Hamming
+      - :py:func:`numpy.hamming`
+    * - Hanning
+      - :py:func:`numpy.hanning`
+    * - Kaiser
+      - :py:func:`scipy.signal.windows.kaiser`
+    * - Lanczos
+      - :py:func:`scipy.signal.windows.lanczos`
+    * - Nuttall
+      - :py:func:`scipy.signal.windows.nuttall`
+    * - Parzen
+      - :py:func:`scipy.signal.windows.parzen`
+    * - Rectangular
+      - :py:func:`numpy.ones`
+    * - Taylor
+      - :py:func:`scipy.signal.windows.taylor`
+    * - Tukey
+      - :py:func:`scipy.signal.windows.tukey`
 
 ROI extraction
 ^^^^^^^^^^^^^^
@@ -326,11 +448,21 @@ Create a new signal which is the result of swapping X/Y data.
 The "Processing" menu allows you to perform various processing on the
 selected signals, such as smoothing, normalization, or interpolation.
 
+Derivative
+^^^^^^^^^^
+
+Create a new signal which is the derivative of each selected signal.
+
+Integral
+^^^^^^^^
+
+Create a new signal which is the integral of each selected signal.
+
 Normalize
 ^^^^^^^^^
 
 Create a new signal which is the normalization of each selected signal
-by maximum, amplitude, sum or energy:
+by maximum, amplitude, sum, energy or RMS:
 
 .. list-table::
     :header-rows: 1
@@ -342,20 +474,12 @@ by maximum, amplitude, sum or energy:
       - :math:`y_{1}= \dfrac{y_{0}}{max(y_{0})}`
     * - Amplitude
       - :math:`y_{1}= \dfrac{y_{0}'}{max(y_{0}')}` with :math:`y_{0}'=y_{0}-min(y_{0})`
-    * - Sum
+    * - Area
       - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}y_{0}[n]}`
     * - Energy
-      - :math:`y_{1}= \dfrac{y_{0}}{\sum_{n=0}^{N}|y_{0}[n]|^2}`
-
-Derivative
-^^^^^^^^^^
-
-Create a new signal which is the derivative of each selected signal.
-
-Integral
-^^^^^^^^
-
-Create a new signal which is the integral of each selected signal.
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\sum_{n=0}^{N}|y_{0}[n]|^2}}`
+    * - RMS
+      - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
 
 Linear calibration
 ^^^^^^^^^^^^^^^^^^
@@ -410,6 +534,63 @@ Inverse FFT
 ^^^^^^^^^^^
 
 Create a new signal which is the inverse FFT of each selected signal.
+
+Frequency filters
+^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of applying a frequency filter to each selected signal.
+
+The following filters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Filter
+      - Description
+    * - |lowpass| Low-pass
+      - Filter out high frequencies, above a cutoff frequency
+    * - |highpass| High-pass
+      - Filter out low frequencies, below a cutoff frequency
+    * - |bandpass| Band-pass
+      - Filter out frequencies outside a range
+    * - |bandstop| Band-stop
+      - Filter out frequencies inside a range
+
+.. |lowpass| image:: ../../../cdl/data/icons/processing/lowpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |highpass| image:: ../../../cdl/data/icons/processing/highpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |bandpass| image:: ../../../cdl/data/icons/processing/bandpass.svg
+    :width: 24px
+    :height: 24px
+
+.. |bandstop| image:: ../../../cdl/data/icons/processing/bandstop.svg
+    :width: 24px
+    :height: 24px
+
+For each filter, the following methods are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Method
+      - Description
+    * - Bessel
+      - Bessel filter, using SciPy's `scipy.signal.bessel <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_ function
+    * - Butterworth
+      - Butterworth filter, using SciPy's `scipy.signal.butter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_ function
+    * - Chebyshev I
+      - Chebyshev type I filter, using SciPy's `scipy.signal.cheby1 <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_ function
+    * - Chebyshev II
+      - Chebyshev type II filter, using SciPy's `scipy.signal.cheby2 <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_ function
+    * - Elliptic
+      - Elliptic filter, using SciPy's `scipy.signal.ellip <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_ function
 
 Interpolation
 ^^^^^^^^^^^^^
@@ -484,8 +665,8 @@ The following parameters are available:
     * - Method
       - Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
 
-Lorentzian, Voigt, Polynomial and Multi-Gaussian fit
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Fitting
+^^^^^^^
 
 Open an interactive curve fitting tool in a modal dialog box.
 
@@ -495,6 +676,10 @@ Open an interactive curve fitting tool in a modal dialog box.
 
     * - Model
       - Equation
+    * - Linear
+      - :math:`y = c_{0}+c_{1}.x`
+    * - Polynomial
+      - :math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`
     * - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
     * - Lorentzian
@@ -503,6 +688,12 @@ Open an interactive curve fitting tool in a modal dialog box.
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
     * - Multi-Gaussian
       - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi}.\sigma_{i}}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0,i}}{\sigma_{i}})^2)`
+    * - Exponential
+      - :math:`y = y_{0}+A.exp(B.x)`
+    * - Sinusoidal
+      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+    * - Cumulative Distribution Function (CDF)
+      - :math:`y = y_{0}+A.erf(\dfrac{x-x_{0}}{\sigma.\sqrt{2}})`
 
 "Computing" menu
 ----------------

@@ -6,6 +6,10 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
+# MARK: Important note
+# --------------------
+# All `guidata.dataset.DataSet` classes must also be imported in the `cdl.param` module.
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -27,19 +31,24 @@ from cdl.algorithms.image import (
     get_enclosing_circle,
     get_hough_circle_peaks,
     get_radial_profile,
+    normalize,
     z_fft,
     z_ifft,
 )
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    ConstantOperationParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
+    dst_11,
+    dst_n1n,
     new_signal_result,
 )
 from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
@@ -47,23 +56,6 @@ from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
-
-
-def dst_11(src: ImageObj, name: str, suffix: str | None = None) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
-
-    Args:
-        src: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src.copy(title=f"{name}({src.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 class Wrap11Func:
@@ -121,26 +113,6 @@ def dst_11_signal(src: ImageObj, name: str, suffix: str | None = None) -> Signal
     )
 
 
-def dst_n1n(
-    src1: ImageObj, src2: ImageObj, name: str, suffix: str | None = None
-) -> ImageObj:
-    """Create a result image object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
-
-    Args:
-        src1: input image object
-        src2: input image object
-        name: name of the processing function
-
-    Returns:
-        Output image object
-    """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
-
-
 # MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input images and 1 output image
 # --------------------------------------------------------------------------------------
@@ -153,7 +125,7 @@ def dst_n1n(
 # the modified object from the worker processes.
 
 
-def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
+def compute_addition(dst: ImageObj, src: ImageObj) -> ImageObj:
     """Add **dst** and **src** images and return **dst** image modified in place
 
     Args:
@@ -161,7 +133,7 @@ def compute_add(dst: ImageObj, src: ImageObj) -> ImageObj:
         src: input image object
 
     Returns:
-        Output image object
+        Output image object (modified in place)
     """
     dst.data += np.array(src.data, dtype=dst.data.dtype)
     return dst
@@ -175,9 +147,84 @@ def compute_product(dst: ImageObj, src: ImageObj) -> ImageObj:
         src: input image object
 
     Returns:
-        Output image object
+        Output image object (modified in place)
     """
     dst.data *= np.array(src.data, dtype=dst.data.dtype)
+    return dst
+
+
+def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Add **dst** and a constant value and return the new result image object
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** + **p.value** (new object)
+    """
+    # For the addition of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "+", str(value))
+    dst.data += value
+    return dst
+
+
+def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Subtract a constant value from an image and return the new result image object
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** - **p.value** (new object)
+    """
+    # For the subtraction of a constant value, we convert the constant value to the same
+    # data type as the input image, to avoid any data type conversion issues.
+    value = np.array(p.value, dtype=src.data.dtype)
+    dst = dst_11(src, "-", str(value))
+    dst.data -= value
+    return dst
+
+
+def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Multiply **dst** by a constant value and return the new result image object
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** * **p.value** (new object)
+    """
+    # For the multiplication by a constant value, we do not convert the constant value
+    # to the same data type as the input image, because we want to allow the user to
+    # multiply an image by a constant value of a different data type. The final data
+    # type conversion ensures that the output image has the same data type as the input
+    # image.
+    dst = dst_11(src, "×", str(p.value))
+    dst.data = np.array(src.data * p.value, dtype=src.data.dtype)
+    return dst
+
+
+def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> ImageObj:
+    """Divide an image by a constant value and return the new result image object
+
+    Args:
+        src: input image object
+        p: constant value
+
+    Returns:
+        Result image object **src** / **p.value** (new object)
+    """
+    # For the division by a constant value, we do not convert the constant value to the
+    # same data type as the input image, because we want to allow the user to divide an
+    # image by a constant value of a different data type. The final data type conversion
+    # ensures that the output image has the same data type as the input image.
+    dst = dst_11(src, "/", str(p.value))
+    dst.data = np.array(src.data / p.value, dtype=src.data.dtype)
     return dst
 
 
@@ -194,9 +241,9 @@ def compute_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object **src1** - **src2**
+        Result image object **src1** - **src2** (new object)
     """
-    dst = dst_n1n(src1, src2, "difference")
+    dst = dst_n1n(src1, src2, "-")
     dst.data = src1.data - src2.data
     return dst
 
@@ -209,7 +256,7 @@ def compute_quadratic_difference(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object (**src1** - **src2**) / sqrt(2.0)
+        Result image object (**src1** - **src2**) / sqrt(2.0) (new object)
     """
     dst = dst_n1n(src1, src2, "quadratic_difference")
     dst.data = (src1.data - src2.data) / np.sqrt(2.0)
@@ -226,9 +273,9 @@ def compute_division(src1: ImageObj, src2: ImageObj) -> ImageObj:
         src2: input image object
 
     Returns:
-        Result image object **src1** / **src2**
+        Result image object **src1** / **src2** (new object)
     """
-    dst = dst_n1n(src1, src2, "division")
+    dst = dst_n1n(src1, src2, "/")
     dst.data = src1.data / np.array(src2.data, dtype=src1.data.dtype)
     return dst
 
@@ -258,6 +305,21 @@ def compute_flatfield(src1: ImageObj, src2: ImageObj, p: FlatFieldParam) -> Imag
 # MARK: compute_11 functions -----------------------------------------------------------
 # Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
+
+
+def compute_normalize(src: ImageObj, p: NormalizeParam) -> ImageObj:
+    """
+    Normalize image data depending on its maximum.
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "normalize", suffix=f"ref={p.method}")
+    dst.data = normalize(src.data, p.method)  # type: ignore
+    return dst
 
 
 class LogP1Param(gds.DataSet):
@@ -916,6 +978,18 @@ def compute_log10(src: ImageObj) -> ImageObj:
     return Wrap11Func(np.log10)(src)
 
 
+def compute_exp(src: ImageObj) -> ImageObj:
+    """Compute exponential
+
+    Args:
+        src: input image object
+
+    Returns:
+        Output image object
+    """
+    return Wrap11Func(np.exp)(src)
+
+
 class ZCalibrateParam(gds.DataSet):
     """Image linear calibration parameters"""
 
@@ -1025,7 +1099,7 @@ def compute_wiener(src: ImageObj) -> ImageObj:
     return Wrap11Func(sps.wiener)(src)
 
 
-def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:
+def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """Compute FFT
 
     Args:
@@ -1036,11 +1110,11 @@ def compute_fft(src: ImageObj, p: FFTParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "fft")
-    dst.data = z_fft(src.data, shift=p.shift)
+    dst.data = z_fft(src.data, shift=True if p is None else p.shift)
     return dst
 
 
-def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
+def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """Compute inverse FFT
 
     Args:
@@ -1051,7 +1125,7 @@ def compute_ifft(src: ImageObj, p: FFTParam) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "ifft")
-    dst.data = z_ifft(src.data, shift=p.shift)
+    dst.data = z_ifft(src.data, shift=True if p is None else p.shift)
     return dst
 
 
@@ -1281,8 +1355,15 @@ def compute_hough_circle_peaks(
     )
 
 
-def compute_stats_func(obj: ImageObj) -> ResultProperties:
-    """Compute statistics functions"""
+def compute_stats(obj: ImageObj) -> ResultProperties:
+    """Compute statistics on an image
+
+    Args:
+        obj: input image object
+
+    Returns:
+        Result properties
+    """
     statfuncs = {
         "min(z)": ma.min,
         "max(z)": ma.max,

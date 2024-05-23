@@ -6,13 +6,14 @@
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
-# Note:
-# ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# MARK: Important note
+# --------------------
+# All `guidata.dataset.DataSet` classes must also be imported in the `cdl.param` module.
 
 from __future__ import annotations
 
 from collections.abc import Callable
+from enum import Enum
 from typing import Any
 
 import guidata.dataset as gds
@@ -32,6 +33,7 @@ from cdl.algorithms.signal import (
     moving_average,
     normalize,
     peak_indexes,
+    windowing,
     xpeak,
     xy_fft,
     xy_ifft,
@@ -39,36 +41,23 @@ from cdl.algorithms.signal import (
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
+    ConstantOperationParam,
     FFTParam,
     GaussianParam,
     HistogramParam,
     MovingAverageParam,
     MovingMedianParam,
+    NormalizeParam,
     ThresholdParam,
     calc_resultproperties,
+    dst_11,
+    dst_n1n,
     new_signal_result,
 )
 from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
-
-
-def dst_11(src: SignalObj, name: str, suffix: str | None = None) -> SignalObj:
-    """Create a result signal object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
-
-    Args:
-        src: source signal
-        name: name of the function
-
-    Returns:
-        Result signal object
-    """
-    dst = src.copy(title=f"{name}({src.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
 
 
 class Wrap11Func:
@@ -112,24 +101,6 @@ class Wrap11Func:
         return dst
 
 
-def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = None):
-    """Create a result signal object, as returned by the callback function of the
-    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
-
-    Args:
-        src1: source signal 1
-        src2: source signal 2
-        name: name of the function
-
-    Returns:
-        Result signal object
-    """
-    dst = src1.copy(title=f"{name}({src1.short_id}, {src2.short_id})")
-    if suffix is not None:
-        dst.title += "|" + suffix
-    return dst
-
-
 # MARK: compute_n1 functions -----------------------------------------------------------
 # Functions with N input signals and 1 output signal
 # --------------------------------------------------------------------------------------
@@ -142,7 +113,7 @@ def dst_n1n(src1: SignalObj, src2: SignalObj, name: str, suffix: str | None = No
 # the modified object from the worker processes.
 
 
-def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
+def compute_addition(dst: SignalObj, src: SignalObj) -> SignalObj:
     """Add **dst** and **src** signals and return **dst** signal modified in place
 
     Args:
@@ -150,7 +121,7 @@ def compute_add(dst: SignalObj, src: SignalObj) -> SignalObj:
         src: source signal
 
     Returns:
-        Modified **dst** signal
+        Modified **dst** signal (modified in place)
     """
     dst.y += np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
@@ -166,11 +137,71 @@ def compute_product(dst: SignalObj, src: SignalObj) -> SignalObj:
         src: source signal
 
     Returns:
-        Modified **dst** signal
+        Modified **dst** signal (modified in place)
     """
     dst.y *= np.array(src.y, dtype=dst.y.dtype)
     if dst.dy is not None:
         dst.dy = dst.y * np.sqrt((dst.dy / dst.y) ** 2 + (src.dy / src.y) ** 2)
+    return dst
+
+
+def compute_addition_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Add **dst** and a constant value and return a the new result signal object
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** + **p.value** (new object)
+    """
+    dst = dst_11(src, "+", str(p.value))
+    dst.y += p.value
+    return dst
+
+
+def compute_difference_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Subtract a constant value from a signal
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** - **p.value** (new object)
+    """
+    dst = dst_11(src, "-", str(p.value))
+    dst.y -= p.value
+    return dst
+
+
+def compute_product_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Multiply **dst** by a constant value and return the new result signal object
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** * **p.value** (new object)
+    """
+    dst = dst_11(src, "×", str(p.value))
+    dst.y *= p.value
+    return dst
+
+
+def compute_division_constant(src: SignalObj, p: ConstantOperationParam) -> SignalObj:
+    """Divide a signal by a constant value
+
+    Args:
+        src: input signal object
+        p: constant value
+
+    Returns:
+        Result signal object **src** / **p.value** (new object)
+    """
+    dst = dst_11(src, "/", str(p.value))
+    dst.y /= p.value
     return dst
 
 
@@ -193,7 +224,7 @@ def compute_difference(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** - **src2**
     """
-    dst = dst_n1n(src1, src2, "difference")
+    dst = dst_n1n(src1, src2, "-")
     dst.y = src1.y - src2.y
     if dst.dy is not None:
         dst.dy = np.sqrt(src1.dy**2 + src2.dy**2)
@@ -235,7 +266,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object **src1** / **src2**
     """
-    dst = dst_n1n(src1, src2, "division")
+    dst = dst_n1n(src1, src2, "/")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     dst.set_xydata(x1, y1 / np.array(y2, dtype=y1.dtype))
@@ -243,7 +274,7 @@ def compute_division(src1: SignalObj, src2: SignalObj) -> SignalObj:
 
 
 # MARK: compute_11 functions -----------------------------------------------------------
-# Functions with 1 input signal and 1 output signal
+# Functions with 1 input image and 1 output image
 # --------------------------------------------------------------------------------------
 
 
@@ -380,6 +411,52 @@ def compute_log10(src: SignalObj) -> SignalObj:
     return Wrap11Func(np.log10)(src)
 
 
+def compute_exp(src: SignalObj) -> SignalObj:
+    """Compute exponential
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.exp)(src)
+
+
+def compute_sqrt(src: SignalObj) -> SignalObj:
+    """Compute square root
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(np.sqrt)(src)
+
+
+class PowParam(gds.DataSet):
+    """Power parameters"""
+
+    power = gds.FloatItem(_("Power"), default=2.0)
+
+
+def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
+    """Compute power
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "pow", f"n={p.power}")
+    x, y = src.get_data()
+    dst.set_xydata(x, y**p.power)
+    return dst
+
+
 class PeakDetectionParam(gds.DataSet):
     """Peak detection parameters"""
 
@@ -409,19 +486,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
     return dst
 
 
-class NormalizeYParam(gds.DataSet):
-    """Normalize parameters"""
-
-    methods = (
-        (_("maximum"), "maximum"),
-        (_("amplitude"), "amplitude"),
-        (_("sum"), "sum"),
-        (_("energy"), "energy"),
-    )
-    method = gds.ChoiceItem(_("Normalize with respect to"), methods)
-
-
-def compute_normalize(src: SignalObj, p: NormalizeYParam) -> SignalObj:
+def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """Normalize data
 
     Args:
@@ -587,7 +652,159 @@ def compute_wiener(src: SignalObj) -> SignalObj:
     return Wrap11Func(sps.wiener)(src)
 
 
-def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
+class FilterType(Enum):
+    """Filter types"""
+
+    LOWPASS = "lowpass"
+    HIGHPASS = "highpass"
+    BANDPASS = "bandpass"
+    BANDSTOP = "bandstop"
+
+
+class BaseHighLowBandParam(gds.DataSet):
+    """Base class for high-pass, low-pass, band-pass and band-stop filters"""
+
+    methods = (
+        ("bessel", _("Bessel")),
+        ("butter", _("Butterworth")),
+        ("cheby1", _("Chebyshev type 1")),
+        ("cheby2", _("Chebyshev type 2")),
+        ("ellip", _("Elliptic")),
+    )
+
+    TYPE: FilterType = FilterType.LOWPASS
+    _type_prop = gds.GetAttrProp("TYPE")
+
+    # Must be overwriten by the child class
+    _method_prop = gds.GetAttrProp("method")
+    method = gds.ChoiceItem(_("Filter method"), methods).set_prop(
+        "display", store=_method_prop
+    )
+
+    order = gds.IntItem(_("Filter order"), default=3, min=1)
+    f_cut0 = gds.FloatItem(
+        _("Low cutoff frequency"), min=0, nonzero=True, unit="Hz"
+    ).set_prop(
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterType.HIGHPASS)
+    )
+    f_cut1 = gds.FloatItem(
+        _("High cutoff frequency"), min=0, nonzero=True, unit="Hz"
+    ).set_prop(
+        "display", hide=gds.FuncProp(_type_prop, lambda x: x is FilterType.LOWPASS)
+    )
+    rp = gds.FloatItem(
+        _("Passband ripple"), min=0, default=1, nonzero=True, unit="dB"
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_method_prop, lambda x: x in ("cheby1", "ellip")),
+    )
+    rs = gds.FloatItem(
+        _("Stopband attenuation"), min=0, default=1, nonzero=True, unit="dB"
+    ).set_prop(
+        "display",
+        active=gds.FuncProp(_method_prop, lambda x: x in ("cheby2", "ellip")),
+    )
+
+    @staticmethod
+    def get_nyquist_frequency(obj: SignalObj) -> float:
+        """Return the Nyquist frequency of a signal object
+
+        Args:
+            obj: signal object
+        """
+        fs = float(obj.x.size - 1) / (obj.x[-1] - obj.x[0])
+        return fs / 2.0
+
+    def update_from_signal(self, obj: SignalObj) -> None:
+        """Update the filter parameters from a signal object
+
+        Args:
+            obj: signal object
+        """
+        f_nyquist = self.get_nyquist_frequency(obj)
+        if self.f_cut0 is None:
+            self.f_cut0 = 0.1 * f_nyquist
+        if self.f_cut1 is None:
+            self.f_cut1 = 0.9 * f_nyquist
+
+    def get_filter_params(self, obj: SignalObj) -> tuple[float | str, float | str]:
+        """Return the filter parameters (a and b) as a tuple. These parameters are used
+        in the scipy.signal filter functions (eg. `scipy.signal.filtfilt`).
+
+        Args:
+            obj: signal object
+
+        Returns:
+            tuple: filter parameters
+        """
+        f_nyquist = self.get_nyquist_frequency(obj)
+        func = getattr(sps, self.method)
+        args: list[float | str | tuple[float, ...]] = [self.order]  # type: ignore
+        if self.method == "cheby1":
+            args += [self.rp]
+        elif self.method == "cheby2":
+            args += [self.rs]
+        elif self.method == "ellip":
+            args += [self.rp, self.rs]
+        if self.TYPE is FilterType.HIGHPASS:
+            args += [self.f_cut1 / f_nyquist]
+        elif self.TYPE is FilterType.LOWPASS:
+            args += [self.f_cut0 / f_nyquist]
+        else:
+            args += [[self.f_cut0 / f_nyquist, self.f_cut1 / f_nyquist]]
+        args += [self.TYPE.value]
+        return func(*args)
+
+
+class LowPassFilterParam(BaseHighLowBandParam):
+    """Low-pass filter parameters"""
+
+    TYPE = FilterType.LOWPASS
+
+
+class HighPassFilterParam(BaseHighLowBandParam):
+    """High-pass filter parameters"""
+
+    TYPE = FilterType.HIGHPASS
+
+
+class BandPassFilterParam(BaseHighLowBandParam):
+    """Band-pass filter parameters"""
+
+    TYPE = FilterType.BANDPASS
+
+
+class BandStopFilterParam(BaseHighLowBandParam):
+    """Band-stop filter parameters"""
+
+    TYPE = FilterType.BANDSTOP
+
+
+def compute_filter(src: SignalObj, p: BaseHighLowBandParam) -> SignalObj:
+    """Compute frequency filter (low-pass, high-pass, band-pass, band-stop)
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    name = f"{p.TYPE.value}"
+    suffix = f"order={p.order:d}"
+    if p.TYPE is FilterType.LOWPASS:
+        suffix += f", cutoff={p.f_cut0:.2f}"
+    elif p.TYPE is FilterType.HIGHPASS:
+        suffix += f", cutoff={p.f_cut1:.2f}"
+    else:
+        suffix += f", cutoff={p.f_cut0:.2f}:{p.f_cut1:.2f}"
+    dst = dst_11(src, name, suffix)
+    b, a = p.get_filter_params(dst)
+    dst.y = sps.filtfilt(b, a, dst.y)
+    return dst
+
+
+def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute FFT
 
     Args:
@@ -599,11 +816,11 @@ def compute_fft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_fft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_fft(x, y, shift=True if p is None else p.shift))
     return dst
 
 
-def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
+def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """Compute iFFT
 
     Args:
@@ -615,7 +832,7 @@ def compute_ifft(src: SignalObj, p: FFTParam) -> SignalObj:
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_ifft(x, y, shift=p.shift))
+    dst.set_xydata(*xy_ifft(x, y, shift=True if p is None else p.shift))
     return dst
 
 
@@ -806,11 +1023,93 @@ def compute_convolution(src1: SignalObj, src2: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_n1n(src1, src2, "convolution")
+    dst = dst_n1n(src1, src2, "⊛")
     x1, y1 = src1.get_data()
     _x2, y2 = src2.get_data()
     ynew = np.real(sps.convolve(y1, y2, mode="same"))
     dst.set_xydata(x1, ynew)
+    return dst
+
+
+class WindowingParam(gds.DataSet):
+    """Windowing parameters"""
+
+    methods = (
+        ("barthann", "Barthann"),
+        ("bartlett", "Bartlett"),
+        ("blackman", "Blackman"),
+        ("blackman-harris", "Blackman-Harris"),
+        ("bohman", "Bohman"),
+        ("boxcar", "Boxcar"),
+        ("cosine", _("Cosine")),
+        ("exponential", _("Exponential")),
+        ("flat-top", _("Flat top")),
+        ("gaussian", _("Gaussian")),
+        ("hamming", "Hamming"),
+        ("hanning", "Hanning"),
+        ("kaiser", "Kaiser"),
+        ("lanczos", "Lanczos"),
+        ("nuttall", "Nuttall"),
+        ("parzen", "Parzen"),
+        ("rectangular", _("Rectangular")),
+        ("taylor", "Taylor"),
+        ("tukey", "Tukey"),
+    )
+    _meth_prop = gds.GetAttrProp("method")
+    method = gds.ChoiceItem(_("Method"), methods, default="hamming").set_prop(
+        "display", store=_meth_prop
+    )
+    alpha = gds.FloatItem(
+        "Alpha",
+        default=0.5,
+        help=_("Shape parameter of the Tukey windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "tukey"))
+    beta = gds.FloatItem(
+        "Beta",
+        default=14.0,
+        help=_("Shape parameter of the Kaiser windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "kaiser"))
+    sigma = gds.FloatItem(
+        "Sigma",
+        default=0.5,
+        help=_("Shape parameter of the Gaussian windowing function"),
+    ).set_prop("display", active=gds.FuncProp(_meth_prop, lambda x: x == "gaussian"))
+
+
+def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
+    """Compute windowing (available methods: hamming, hanning, bartlett, blackman,
+    tukey, rectangular)
+
+    Args:
+        dst: destination signal
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    suffix = f"method={p.method}"
+    if p.method == "tukey":
+        suffix += f", alpha={p.alpha:.3f}"
+    elif p.method == "kaiser":
+        suffix += f", beta={p.beta:.3f}"
+    elif p.method == "gaussian":
+        suffix += f", sigma={p.sigma:.3f}"
+    dst = dst_11(src, "windowing", suffix)  # type: ignore
+    dst.y = windowing(dst.y, p.method, p.alpha)  # type: ignore
+    return dst
+
+
+def compute_reverse_x(src: SignalObj) -> SignalObj:
+    """Reverse x-axis
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "reverse_x")
+    dst.y = dst.y[::-1]
     return dst
 
 
@@ -990,8 +1289,15 @@ def compute_fw1e2(signal: SignalObj) -> ResultShape | None:
     return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, __func_fw1e2)
 
 
-def compute_stats_func(obj: SignalObj) -> ResultProperties:
-    """Compute statistics functions"""
+def compute_stats(obj: SignalObj) -> ResultProperties:
+    """Compute statistics on a signal
+
+    Args:
+        obj: source signal
+
+    Returns:
+        Result properties object
+    """
     statfuncs = {
         "min(y)": lambda xy: xy[1].min(),
         "max(y)": lambda xy: xy[1].max(),
@@ -999,7 +1305,7 @@ def compute_stats_func(obj: SignalObj) -> ResultProperties:
         "median(y)": lambda xy: np.median(xy[1]),
         "σ(y)": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak": lambda xy: xy[1].ptp(),
+        "peak-to-peak(y)": lambda xy: xy[1].ptp(),
         "Σ(y)": lambda xy: xy[1].sum(),
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }

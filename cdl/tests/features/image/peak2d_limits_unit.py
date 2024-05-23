@@ -12,7 +12,7 @@ from guidata.qthelpers import qt_app_context
 from cdl.algorithms.image import get_2d_peaks_coords
 from cdl.env import execenv
 from cdl.tests.data import get_peak2d_data
-from cdl.tests.features.images.peak2d_unit_test import exec_image_peak_detection_func
+from cdl.tests.features.image.peak2d_unit_test import exec_image_peak_detection_func
 
 
 def peak2d_limit_test():

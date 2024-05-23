@@ -21,7 +21,7 @@ from plotpy.constants import LUTAlpha
 
 from cdl.utils import conf
 
-CONF_VERSION = "0.2.0"
+CONF_VERSION = "0.3.0"
 
 APP_NAME = "DataLab"
 MOD_NAME = "cdl"

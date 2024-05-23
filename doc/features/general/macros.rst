@@ -58,11 +58,11 @@ The Macro Panel is a simple interface to:
     :width: 24px
     :height: 24px
 
-.. |fileopen_py| image:: ../../../cdl/data/icons/fileopen_py.svg
+.. |fileopen_py| image:: ../../../cdl/data/icons/io/fileopen_py.svg
     :width: 24px
     :height: 24px
 
-.. |filesave_py| image:: ../../../cdl/data/icons/filesave_py.svg
+.. |filesave_py| image:: ../../../cdl/data/icons/io/filesave_py.svg
     :width: 24px
     :height: 24px
 
