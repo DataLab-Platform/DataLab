@@ -489,7 +489,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         if __version__.replace(".", "").isdigit():
             # This is a stable release
             return
-        if "b" in __version__:
+        if "beta" in __version__:
             # This is a beta release
             rel = _(
                 "This software is in the <b>beta stage</b> of its release cycle. "
