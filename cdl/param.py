@@ -87,6 +87,8 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.PowParam
     :no-index:
+.. autodataset:: cdl.param.WindowingParam
+    :no-index:
 .. autodataset:: cdl.param.LowPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.HighPassFilterParam
@@ -94,6 +96,8 @@ Signal parameters
 .. autodataset:: cdl.param.BandPassFilterParam
     :no-index:
 .. autodataset:: cdl.param.BandStopFilterParam
+    :no-index:
+.. autodataset:: cdl.param.DynamicParam
     :no-index:
 
 Image parameters
@@ -248,9 +252,9 @@ from cdl.core.computation.signal import (
     XYCalibrateParam,
     PowParam,
     WindowingParam,
-    BaseHighLowBandParam,
     LowPassFilterParam,
     HighPassFilterParam,
     BandPassFilterParam,
     BandStopFilterParam,
+    DynamicParam,
 )

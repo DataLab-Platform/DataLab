@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 import numpy as np
 import scipy.interpolate
 from scipy.optimize import leastsq
@@ -397,7 +399,7 @@ def compute_x_at_value(x: np.ndarray, y: np.ndarray, value: float) -> np.ndarray
         return x0
 
 
-def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
+def bandwidth(x: np.ndarray, y: np.ndarray, level: float = 3.0) -> float:
     """Compute the bandwidth of the signal at a given level.
 
     Args:
@@ -409,132 +411,215 @@ def bandwidth(x: np.ndarray, y: np.ndarray, level=3.0) -> float:
         Bandwidth of the signal at the given level
     """
     half_max: float = np.max(y) - level
-
     bw = compute_x_at_value(x, y, half_max)
     return bw[0]
 
 
-def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 0.16) -> float:
+# MARK: ENOB, SINAD, THD, SFDR, SNR
+# ======================================================================================
+
+
+def sinusoidal_model(
+    x: np.ndarray, a: float, f: float, phi: float, offset: float
+) -> np.ndarray:
+    """Sinusoidal model function."""
+    return a * np.sin(2 * np.pi * f * x + phi) + offset
+
+
+def sinusoidal_fit(
+    x: np.ndarray, y: np.ndarray
+) -> tuple[tuple[float, float, float, float], float]:
+    """Fit a sinusoidal model to the input data.
+
+    Args:
+        x: X data
+        y: Y data
+
+    Returns:
+        A tuple containing the fit parameters (amplitude, frequency, phase, offset)
+        and the residuals
+    """
+    # Initial guess for the parameters
+    # ==================================================================================
+    offset = np.mean(y)
+    amp = (np.max(y) - np.min(y)) / 2
+    phase_origin = 0
+    # Search for the maximum of the FFT
+    i_maxfft = np.argmax(np.abs(np.fft.fft(y - offset)))
+    if i_maxfft > len(x) / 2:
+        # If the index is greater than N/2, we are in the mirrored half spectrum
+        # (negative frequencies)
+        i_maxfft = len(x) - i_maxfft
+    freq = i_maxfft / (x[-1] - x[0])
+    # ==================================================================================
+
+    def optim_func(fitparams: np.ndarray, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+        """Optimization function."""
+        return y - sinusoidal_model(x, *fitparams)
+
+    # Fit the model to the data
+    fitparams = leastsq(optim_func, [amp, freq, phase_origin, offset], args=(x, y))[0]
+    y_th = sinusoidal_model(x, *fitparams)
+    residuals = np.std(y - y_th)
+    return fitparams, residuals
+
+
+def sinus_frequency(x: np.ndarray, y: np.ndarray) -> float:
+    """Compute the frequency of a sinusoidal signal.
+
+    Args:
+        x: x signal data
+        y: y signal data
+
+    Returns:
+        Frequency of the sinusoidal signal
+    """
+    fitparams, residuals = sinusoidal_fit(x, y)
+    return fitparams[1]
+
+
+def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 1.0) -> float:
     """Compute Effective Number of Bits (ENOB).
 
     Args:
         x: x signal data
         y: y signal data
-        full_scale: Full scale(V). Defaults to 0.16
+        full_scale: Full scale(V). Defaults to 1.0.
 
     Returns:
         Effective Number of Bits (ENOB)
     """
-    offset = np.mean(y)
-    amplitude = (np.max(y) - np.min(y)) / 2
-    phase_origin = 0
-    freq = initial_freq(x, y)
-    initial_params = [amplitude, freq, phase_origin, offset]
-
-    # D�termination par mod�lisation (fit) de sinus
-    mod_ampl, mod_freq, mod_phase, mod_offset = leastsq(
-        _compute_residuals, initial_params, args=(x, y)
-    )[0]
-    y_th = peval(x, mod_ampl, mod_freq, mod_phase, mod_offset)
-    residuals = np.std(y - y_th)
-    # residus = np.std(y - peval(x, parametres_initiaux))
+    _fitparams, residuals = sinusoidal_fit(x, y)
     enob = -np.log2(residuals * np.sqrt(12) / full_scale)
-
     return enob
 
 
-def initial_freq(x: np.ndarray, y: np.ndarray) -> float:
-    """
-    Compute the initial frequency of the signal
-
-    Args:
-        x: x-axis data
-        y: y-axis data
-
-    Returns:
-        Initial frequency of the signal
-    """
-    # soustraction de l'offset pour supprimer la composante continue
-    y = y - np.mean(y)
-    # Recherche de l'indice du max de la FFT
-    i = np.argmax(np.abs(np.fft.fft(y)))
-    if i > len(x) / 2:
-        i = len(x) - i
-    # Si l'indice est sup�rieure � NbrePts/2 => on est dans le 1/2 spectre miroir
-    # transpos�
-    # (fr�quences n�gatives)
-    # D�termination de la fr�quence d'�chantillonnage
-    f_ech = 1 / (x[-1] - x[0])
-    # Conversion de l'indice en fr�quence
-    frequence = i * f_ech
-    return frequence
-
-
-def _compute_residuals(
-    opt_params: np.ndarray, x: np.ndarray, y: np.ndarray
-) -> np.ndarray:
-    """Caller for the compute_residuals function that unpacks the parameters used in
-    scipy.optimize.leastsq.
-
-    Args:
-        opt_params: The parameters to optimize (amplitude, frequency, phase, offset).
-        x: The x-axis data
-        y: The y-axis data
-
-    Returns:
-        The residuals between the recorded signal y and the modeled signal
-    """
-
-    return compute_residuals(x, y, *opt_params)
-
-
-def compute_residuals(
+def sinad(
     x: np.ndarray,
     y: np.ndarray,
-    ampl: float,
-    freq: float,
-    phase: float,
-    offset: float,
-) -> np.ndarray:
-    """
-    Measure of the error between the recorded signal y and the signal modeled via the
-    peval function
+    full_scale: float = 1.0,
+    unit: Literal["dBc", "dBFS"] = "dBc",
+) -> float:
+    """Compute Signal-to-Noise and Distortion Ratio (SINAD).
 
     Args:
-        x: x-axis data
-        y: y-axis data
-        ampl: Amplitude
-        freq: frequency
-        phase: Phase
-        offset: Offset
-
+        x: x signal data
+        y: y signal data
+        full_scale: Full scale(V). Defaults to 1.0.
+        unit: Unit of the input data. Valid values are 'dBc' and 'dBFS'.
+         Defaults to 'dBc'.
 
     Returns:
-        Error between the recorded signal y and the modeled signal
-
+        Signal-to-Noise and Distortion Ratio (SINAD)
     """
-    err = y - peval(x, ampl, freq, phase, offset)
-    return err
+    fitparams, residuals = sinusoidal_fit(x, y)
+    amp = fitparams[0]
+
+    # Compute the power of the fundamental
+    powf = np.abs(amp / np.sqrt(2)) if unit == "dBc" else full_scale / (2 * np.sqrt(2))
+
+    sinad = 20 * np.log10(powf / residuals)
+    return sinad
 
 
-def peval(
+def thd(
     x: np.ndarray,
-    ampl: float,
-    freq: float,
-    phase: float,
-    offset: float,
-) -> np.ndarray:
-    """
-    Modelisation of the sinus from the input parameters
+    y: np.ndarray,
+    full_scale: float = 1.0,
+    unit: Literal["dBc", "dBFS"] = "dBc",
+    nb_harm: int = 5,
+) -> float:
+    """Compute Total Harmonic Distortion (THD).
 
     Args:
-        x: X data
-        ampl: Amplitude
-        freq: Frequency
-        phase: Phase
-        offset: Offset
+        x: x signal data
+        y: y signal data
+        full_scale: Full scale(V). Defaults to 1.0.
+        unit: Unit of the input data. Valid values are 'dBc' and 'dBFS'.
+         Defaults to 'dBc'.
+        nb_harm: Number of harmonics to consider. Defaults to 5.
 
     Returns:
-        Modeled sinus
+        Total Harmonic Distortion (THD)
     """
-    return ampl * np.sin(2 * np.pi * freq * x + phase) + offset
+    fitparams, residuals = sinusoidal_fit(x, y)
+    offset = np.mean(y)
+    amp, freq = fitparams[:2]
+    ampfft = np.abs(np.fft.fft(y - offset))
+
+    # Compute the power of the fundamental
+    if unit == "dBc":
+        powfund = np.max(ampfft[: len(ampfft) // 2])
+    else:
+        powfund = (full_scale / (2 * np.sqrt(2))) * (len(x) / np.sqrt(2))
+
+    sumharm = 0
+    for i in np.arange(nb_harm + 2)[2:]:
+        a = i * np.ceil(freq * (x[-1] - x[0]))
+        amp = ampfft[int(a - 5) : int(a + 5)]
+        if len(amp) > 0:
+            sumharm += np.max(amp)
+    thd = 20 * np.log10(sumharm / powfund)
+    return thd
+
+
+def sfdr(
+    x: np.ndarray,
+    y: np.ndarray,
+    full_scale: float = 1.0,
+    unit: Literal["dBc", "dBFS"] = "dBc",
+) -> float:
+    """Compute Spurious-Free Dynamic Range (SFDR).
+
+    Args:
+        x: x signal data
+        y: y signal data
+        full_scale: Full scale(V). Defaults to 1.0.
+        unit: Unit of the input data. Valid values are 'dBc' and 'dBFS'.
+         Defaults to 'dBc'.
+
+    Returns:
+        Spurious-Free Dynamic Range (SFDR)
+    """
+    fitparams, _residuals = sinusoidal_fit(x, y)
+
+    # Compute the power of the fundamental
+    if unit == "dBc":
+        powfund = np.max(np.abs(np.fft.fft(y)))
+    else:
+        powfund = (full_scale / (2 * np.sqrt(2))) * (len(x) / np.sqrt(2))
+
+    maxspike = np.max(np.abs(np.fft.fft(y - sinusoidal_model(x, *fitparams))))
+    sfdr = 20 * np.log10(powfund / maxspike)
+    return sfdr
+
+
+def snr(
+    x: np.ndarray,
+    y: np.ndarray,
+    full_scale: float = 1.0,
+    unit: Literal["dBc", "dBFS"] = "dBc",
+) -> float:
+    """Compute Signal-to-Noise Ratio (SNR).
+
+    Args:
+        x: x signal data
+        y: y signal data
+        full_scale: Full scale(V). Defaults to 1.0.
+        unit: Unit of the input data. Valid values are 'dBc' and 'dBFS'.
+         Defaults to 'dBc'.
+
+    Returns:
+        Signal-to-Noise Ratio (SNR)
+    """
+    fitparams, _residuals = sinusoidal_fit(x, y)
+
+    # Compute the power of the fundamental
+    if unit == "dBc":
+        powfund = np.max(np.abs(np.fft.fft(y)))
+    else:
+        powfund = (full_scale / (2 * np.sqrt(2))) * (len(x) / np.sqrt(2))
+
+    noise = np.sqrt(np.mean((y - sinusoidal_model(x, *fitparams)) ** 2))
+    snr = 20 * np.log10(powfund / noise)
+    return snr

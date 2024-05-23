@@ -534,9 +534,13 @@ class SignalProcessor(BaseProcessor):
         self.compute_10(cps.compute_bandwidth_3db, title=_("Bandwidth"))
 
     @qt_try_except()
-    def compute_enob(
-        self, param: cps.EnobParam | None = None
+    def compute_dynamic_parameters(
+        self, param: cps.DynamicParam | None = None
     ) -> dict[str, ResultProperties]:
-        """Compute Effective Number Of Bits"""
-        param = cps.EnobParam() if param is None else param
-        return self.compute_10(cps.compute_enob, param, title=_("ENOB"))
+        """Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"""
+        return self.compute_10(
+            cps.compute_dynamic_parameters,
+            param,
+            cps.DynamicParam,
+            title=_("Dynamic parameters"),
+        )

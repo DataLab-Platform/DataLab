@@ -266,9 +266,9 @@ def run_signal_computations(
     param = dlp.HistogramParam.create(bins=100)
     panel.processor.compute_histogram(param)
 
-    # Test enob and bandwidth
+    # Test bandwidth and dynamic parameters
     panel.processor.compute_bandwidth_3db()
-    panel.processor.compute_enob()
+    panel.processor.compute_dynamic_parameters()
 
 
 def run_image_computations(

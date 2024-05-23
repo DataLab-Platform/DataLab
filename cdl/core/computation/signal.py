@@ -33,6 +33,11 @@ from cdl.algorithms.signal import (
     moving_average,
     normalize,
     peak_indexes,
+    sfdr,
+    sinad,
+    sinus_frequency,
+    snr,
+    thd,
     windowing,
     xpeak,
     xy_fft,
@@ -836,39 +841,6 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     return dst
 
 
-def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
-    """Compute bandwith
-
-    Args:
-        src: source signal
-
-    Returns:
-        Result properties with bandwidth
-    """
-    bw_funcs = {"bandwidth (-3dB)": lambda xy: bandwidth(xy[0], xy[1], 3.0)}
-    return calc_resultproperties("Bandwidth", src, bw_funcs)
-
-
-class EnobParam(gds.DataSet):
-    """Effective number of bits parameters (ENOB)"""
-
-    scale = gds.FloatItem(_("Full scale (V)"), default=0.16, min=0.0)
-
-
-def compute_enob(src: SignalObj, p: EnobParam) -> ResultProperties:
-    """Compute ENOB
-
-    Args:
-        src: source signal
-        p: parameters
-
-    Returns:
-        Result properties with ENOB
-    """
-    enob_func = {"enob": lambda xy: enob(xy[0], xy[1], p.scale)}  # type: ignore
-    return calc_resultproperties("Enob", src, enob_func)
-
-
 class PolynomialFitParam(gds.DataSet):
     """Polynomial fitting parameters"""
 
@@ -1325,3 +1297,53 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
+
+
+def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
+    """Compute bandwith
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result properties with bandwidth
+    """
+    bw_funcs = {"bandwidth (-3dB)": lambda xy: bandwidth(xy[0], xy[1], 3.0)}
+    return calc_resultproperties("Bandwidth", src, bw_funcs)
+
+
+class DynamicParam(gds.DataSet):
+    """Parameters for dynamic range computation (ENOB, SNR, SINAD, THD, SFDR)"""
+
+    full_scale = gds.FloatItem(_("Full scale (V)"), default=0.16, min=0.0)
+    _units = ("dBc", "dBFS")
+    unit = gds.ChoiceItem(
+        _("Unit"), zip(_units, _units), default="dBc", help=_("Unit for SINAD")
+    )
+    nb_harm = gds.IntItem(
+        _("Number of harmonics"),
+        default=5,
+        min=1,
+        help=_("Number of harmonics to consider for THD"),
+    )
+
+
+def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultProperties:
+    """Compute Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR)
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result properties with ENOB, SNR, SINAD, THD, SFDR
+    """
+    funcs = {
+        "f": lambda xy: sinus_frequency(xy[0], xy[1]),
+        "ENOB": lambda xy: enob(xy[0], xy[1], p.full_scale),
+        "SNR": lambda xy: snr(xy[0], xy[1], p.unit),
+        "SINAD": lambda xy: sinad(xy[0], xy[1], p.unit),
+        "THD": lambda xy: thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
+        "SFDR": lambda xy: sfdr(xy[0], xy[1], p.full_scale, p.unit),
+    }
+    return calc_resultproperties("ADC", src, funcs)

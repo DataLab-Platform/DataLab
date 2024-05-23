@@ -907,9 +907,10 @@ class SignalActionHandler(BaseActionHandler):
             )
 
             self.new_action(
-                _("ENOBs") + "...",
-                triggered=self.panel.processor.compute_enob,
+                _("Dynamic parameters") + "...",
+                triggered=self.panel.processor.compute_dynamic_parameters,
                 context_menu_pos=-1,
+                tip=_("Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."),
             )
 
         with self.new_category(ActionCategory.VIEW):
