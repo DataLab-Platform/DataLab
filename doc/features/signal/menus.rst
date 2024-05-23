@@ -28,14 +28,38 @@ Create a new signal from various models:
       - Equation
     * - Zeros
       - :math:`y[i] = 0`
-    * - Random
-      - :math:`y[i] \in [-0.5, 0.5]`
     * - Gaussian
       - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
     * - Lorentzian
       - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
     * - Voigt
       - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+    * - Random (uniform law)
+      - :math:`y[i] \in [-0.5, 0.5]`
+    * - Random (normal law)
+      - :math:`y[i] \sim \mathcal{N}(-0.5, 0.5)`
+    * - Sine
+      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+    * - Cosine
+      - :math:`y = y_{0}+A.cos(2\pi.f.x+\phi)`
+    * - Sawtooth
+      - :math:`y = y_{0}+A \cdot \left( 2 \left( f x + \frac{\phi}{2\pi} - \left\lfloor f x + \frac{\phi}{2\pi} + \frac{1}{2} \right\rfloor \right) \right)`
+    * - Triangle
+      - :math:`y = y_{0}+A \cdot \text{sawtooth}(2 \pi f x + \phi, \text{width} = 0.5)`
+    * - Square
+      - :math:`y = y_0 + A \cdot \text{sgn}\left( \sin\left( 2\pi f x + \phi \right) \right)`
+    * - Cardinal sine
+      - :math:`y = y_0 + A \cdot \text{sinc}\left(2\pi f x + \phi\right)`
+    * - Step
+      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x > x_{0} \\ 0 & \text{otherwise}\end{array}\right.`
+    * - Exponential
+      - :math:`y = y_{0}+A.exp(B.x)`
+    * - Pulse
+      - :math:`y = y_{0}+A.\left\{\begin{array}{ll}1 & \text{if } x_{0} < x < x_{1} \\ 0 & \text{otherwise}\end{array}\right.`
+    * - Polynomial
+      - :math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`
+    * - Experimental
+      - Manual input of X and Y values
 
 .. _open_signal:
 
