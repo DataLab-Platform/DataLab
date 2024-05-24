@@ -220,8 +220,8 @@ def run_signal_computations(
     panel.add_object(sig)
 
     param = dlp.FWHMParam()
-    for fittype, _name in param.fittypes:
-        param.fittype = fittype
+    for method_value, _method_name in param.methods:
+        param.method = method_value
         panel.processor.compute_fwhm(param)
     panel.processor.compute_fw1e2()
 
@@ -233,7 +233,7 @@ def run_signal_computations(
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.InterpolationParam._methods:
+    for method_choice_tuple in dlp.InterpolationParam.methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
@@ -257,7 +257,7 @@ def run_signal_computations(
     # Test detrending
     panel.objview.set_current_object(sig1)
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.DetrendingParam._methods:
+    for method_choice_tuple in dlp.DetrendingParam.methods:
         param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.compute_detrending(param)
 

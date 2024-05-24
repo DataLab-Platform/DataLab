@@ -111,7 +111,3 @@ class VoigtModel(FitModel):
         wg = GaussianModel.fwhm(amp, sigma)
         wl = LorentzianModel.fwhm(amp, sigma)
         return 0.5346 * wl + np.sqrt(0.2166 * wl**2 + wg**2)
-
-
-class NoModel(FitModel):
-    """No fitting model, only used for coherent typing"""

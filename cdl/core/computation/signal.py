@@ -20,29 +20,9 @@ import guidata.dataset as gds
 import numpy as np
 import scipy.integrate as spt
 import scipy.ndimage as spi
-import scipy.optimize as spo
 import scipy.signal as sps
 
-from cdl.algorithms import fit
-from cdl.algorithms.signal import (
-    bandwidth,
-    derivative,
-    enob,
-    find_x_at_value,
-    interpolate,
-    moving_average,
-    normalize,
-    peak_indexes,
-    sfdr,
-    sinad,
-    sinus_frequency,
-    snr,
-    thd,
-    windowing,
-    xpeak,
-    xy_fft,
-    xy_ifft,
-)
+import cdl.algorithms.signal as alg
 from cdl.config import _
 from cdl.core.computation.base import (
     ClipParam,
@@ -59,8 +39,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import ResultProperties, ResultShape, ShapeTypes
-from cdl.core.model.signal import SignalObj
+from cdl.obj import ResultProperties, ResultShape, ShapeTypes, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
@@ -485,7 +464,7 @@ def compute_peak_detection(src: SignalObj, p: PeakDetectionParam) -> SignalObj:
         src, "peak_detection", f"threshold={p.threshold}%, min_dist={p.min_dist}pts"
     )
     x, y = src.get_data()
-    indexes = peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
+    indexes = alg.peak_indexes(y, thres=p.threshold * 0.01, min_dist=p.min_dist)
     dst.set_xydata(x[indexes], y[indexes])
     dst.metadata["curvestyle"] = "Sticks"
     return dst
@@ -503,7 +482,7 @@ def compute_normalize(src: SignalObj, p: NormalizeParam) -> SignalObj:
     """
     dst = dst_11(src, "normalize", f"ref={p.method}")
     x, y = src.get_data()
-    dst.set_xydata(x, normalize(y, p.method))
+    dst.set_xydata(x, alg.normalize(y, p.method))
     return dst
 
 
@@ -518,7 +497,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
-    dst.set_xydata(x, derivative(x, y))
+    dst.set_xydata(x, alg.derivative(x, y))
     return dst
 
 
@@ -625,7 +604,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     """
     dst = dst_11(src, "moving_average", f"n={p.n:d}")
     x, y = src.get_data()
-    dst.set_xydata(x, moving_average(y, p.n))
+    dst.set_xydata(x, alg.moving_average(y, p.n))
     return dst
 
 
@@ -821,7 +800,7 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_fft(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg.xy_fft(x, y, shift=True if p is None else p.shift))
     return dst
 
 
@@ -837,7 +816,7 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*xy_ifft(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg.xy_ifft(x, y, shift=True if p is None else p.shift))
     return dst
 
 
@@ -887,7 +866,7 @@ def compute_histogram(src: SignalObj, p: HistogramParam) -> SignalObj:
 class InterpolationParam(gds.DataSet):
     """Interpolation parameters"""
 
-    _methods = (
+    methods = (
         ("linear", _("Linear")),
         ("spline", _("Spline")),
         ("quadratic", _("Quadratic")),
@@ -895,7 +874,7 @@ class InterpolationParam(gds.DataSet):
         ("barycentric", _("Barycentric")),
         ("pchip", _("PCHIP")),
     )
-    method = gds.ChoiceItem(_("Interpolation method"), _methods, default="linear")
+    method = gds.ChoiceItem(_("Interpolation method"), methods, default="linear")
     fill_value = gds.FloatItem(
         _("Fill value"),
         default=None,
@@ -926,7 +905,7 @@ def compute_interpolation(
     dst = dst_n1n(src1, src2, "interpolation", suffix)
     x1, y1 = src1.get_data()
     xnew, _y2 = src2.get_data()
-    ynew = interpolate(x1, y1, xnew, p.method, p.fill_value)
+    ynew = alg.interpolate(x1, y1, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -972,7 +951,7 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
         xnew = np.arange(p.xmin, p.xmax, p.dx)
     else:
         xnew = np.linspace(p.xmin, p.xmax, p.nbpts)
-    ynew = interpolate(x, y, xnew, p.method, p.fill_value)
+    ynew = alg.interpolate(x, y, xnew, p.method, p.fill_value)
     dst.set_xydata(xnew, ynew)
     return dst
 
@@ -980,8 +959,8 @@ def compute_resampling(src: SignalObj, p: ResamplingParam) -> SignalObj:
 class DetrendingParam(gds.DataSet):
     """Detrending parameters"""
 
-    _methods = (("linear", _("Linear")), ("constant", _("Constant")))
-    method = gds.ChoiceItem(_("Detrending method"), _methods, default="linear")
+    methods = (("linear", _("Linear")), ("constant", _("Constant")))
+    method = gds.ChoiceItem(_("Detrending method"), methods, default="linear")
 
 
 def compute_detrending(src: SignalObj, p: DetrendingParam) -> SignalObj:
@@ -1082,7 +1061,7 @@ def compute_windowing(src: SignalObj, p: WindowingParam) -> SignalObj:
     elif p.method == "gaussian":
         suffix += f", sigma={p.sigma:.3f}"
     dst = dst_11(src, "windowing", suffix)  # type: ignore
-    dst.y = windowing(dst.y, p.method, p.alpha)  # type: ignore
+    dst.y = alg.windowing(dst.y, p.method, p.alpha)  # type: ignore
     return dst
 
 
@@ -1156,70 +1135,25 @@ def calc_resultshape(
 class FWHMParam(gds.DataSet):
     """FWHM parameters"""
 
-    _prop_fittype = gds.GetAttrProp("fittype")
-    fittypes = (
-        ("GaussianModel", _("Gaussian")),
-        ("LorentzianModel", _("Lorentzian")),
-        ("VoigtModel", "Voigt"),
-        ("NoModel", _("No model")),
+    methods = (
+        ("zero-crossing", _("Zero-crossing")),
+        ("gauss", _("Gaussian fit")),
+        ("lorentz", _("Lorentzian fit")),
+        ("voigt", _("Voigt fit")),
     )
-
-    fittype = gds.ChoiceItem(_("Fit type"), fittypes, default="GaussianModel").set_prop(
-        "display", store=_prop_fittype
+    method = gds.ChoiceItem(_("Method"), methods, default="zero-crossing")
+    xmin = gds.FloatItem(
+        "X<sub>MIN</sub>",
+        default=None,
+        check=False,
+        help=_("Lower X boundary (empty for no limit, i.e. start of the signal)"),
     )
-    low_bound = gds.FloatItem(
-        _("Lower x-axis bound"), default=None, check=False
-    ).set_prop("display", active=gds.FuncProp(_prop_fittype, lambda x: x == "NoModel"))
-    high_bound = gds.FloatItem(
-        _("Higher x-axis bound"), default=None, check=False
-    ).set_prop("display", active=gds.FuncProp(_prop_fittype, lambda x: x == "NoModel"))
-
-
-def __fwhm_no_model(
-    x: np.ndarray,
-    y: np.ndarray,
-    amp: float,
-    low_bound: float | None = None,
-    high_bound: float | None = None,
-):
-    if isinstance(low_bound, float):
-        indexes = np.where(x >= low_bound)[0]
-        x = x[indexes]
-        y = y[indexes]
-    if isinstance(high_bound, float):
-        indexes = np.where(x <= high_bound)[0]
-        x = x[indexes]
-        y = y[indexes]
-    hmax = amp * 0.5 + np.min(y)
-    fx = find_x_at_value(x, y, hmax)
-    assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}."
-    return fx[0], hmax, fx[-1], hmax
-
-
-def __func_fwhm(
-    data: np.ndarray,
-    fittype: str,
-    low_bound: float | None = None,
-    high_bound: float | None = None,
-) -> tuple[float, float, float, float]:
-    """Compute FWHM"""
-    x, y = data
-    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
-    sigma, mu = dx * 0.1, xpeak(x, y)
-    FitModelClass: fit.FitModel = getattr(fit, fittype)
-
-    if FitModelClass is fit.NoModel:
-        return __fwhm_no_model(x, y, dy, low_bound, high_bound)
-
-    amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
-
-    def func(params):
-        """Fitting model function"""
-        # pylint: disable=cell-var-from-loop
-        return y - FitModelClass.func(x, *params)
-
-    (amp, sigma, mu, base), _ier = spo.leastsq(func, np.array([amp, sigma, mu, base]))
-    return FitModelClass.half_max_segment(amp, sigma, mu, base)
+    xmax = gds.FloatItem(
+        "X<sub>MAX</sub>",
+        default=None,
+        check=False,
+        help=_("Upper X boundary (empty for no limit, i.e. end of the signal)"),
+    )
 
 
 def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
@@ -1236,31 +1170,11 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
         "fwhm",
         ShapeTypes.SEGMENT,
         signal,
-        __func_fwhm,
-        param.fittype,
-        param.low_bound,
-        param.high_bound,
+        alg.fwhm,
+        param.method,
+        param.xmin,
+        param.xmax,
     )
-
-
-def __func_fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
-    """Compute FW at 1/e²"""
-    x, y = data
-    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
-    sigma, mu = dx * 0.1, xpeak(x, y)
-    amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
-    p_in = np.array([amp, sigma, mu, base])
-
-    def func(params):
-        """Fitting model function"""
-        # pylint: disable=cell-var-from-loop
-        return y - fit.GaussianModel.func(x, *params)
-
-    p_out, _ier = spo.leastsq(func, p_in)
-    amp, sigma, mu, base = p_out
-    hw = 2 * sigma
-    yhm = fit.GaussianModel.amplitude(amp, sigma) / np.e**2 + base
-    return mu - hw, yhm, mu + hw, yhm
 
 
 def compute_fw1e2(signal: SignalObj) -> ResultShape | None:
@@ -1273,7 +1187,7 @@ def compute_fw1e2(signal: SignalObj) -> ResultShape | None:
         Segment coordinates
     """
 
-    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, __func_fw1e2)
+    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, alg.fw1e2)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1308,7 +1222,7 @@ def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
     Returns:
         Result properties with bandwidth
     """
-    bw_funcs = {"bandwidth (-3dB)": lambda xy: bandwidth(xy[0], xy[1], 3.0)}
+    bw_funcs = {"bandwidth (-3dB)": lambda xy: alg.bandwidth(xy[0], xy[1], 3.0)}
     return calc_resultproperties("Bandwidth", src, bw_funcs)
 
 
@@ -1339,11 +1253,11 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
         Result properties with ENOB, SNR, SINAD, THD, SFDR
     """
     funcs = {
-        "f": lambda xy: sinus_frequency(xy[0], xy[1]),
-        "ENOB": lambda xy: enob(xy[0], xy[1], p.full_scale),
-        "SNR": lambda xy: snr(xy[0], xy[1], p.unit),
-        "SINAD": lambda xy: sinad(xy[0], xy[1], p.unit),
-        "THD": lambda xy: thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
-        "SFDR": lambda xy: sfdr(xy[0], xy[1], p.full_scale, p.unit),
+        "f": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
+        "ENOB": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
+        "SNR": lambda xy: alg.snr(xy[0], xy[1], p.unit),
+        "SINAD": lambda xy: alg.sinad(xy[0], xy[1], p.unit),
+        "THD": lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
+        "SFDR": lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
     }
     return calc_resultproperties("ADC", src, funcs)

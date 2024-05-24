@@ -56,17 +56,26 @@ def test_func_for_errors(func: Callable[[np.ndarray, np.ndarray], float]) -> Non
 @pytest.mark.validation
 def test_signal_fwhm() -> None:
     """Validation test for the full width at half maximum computation."""
-    obj = cdl.obj.read_signal(get_test_fnames("curve.txt")[0])
+    obj = cdl.obj.read_signal(get_test_fnames("fwhm.txt")[0])
     real_fwhm = 2.675  # Manual validation
-    for fittype, exp in (
-        ("GaussianModel", 2.40323),
-        ("LorentzianModel", 2.78072),
-        ("VoigtModel", 2.56591),
-        ("NoModel", real_fwhm),
+    for method, exp in (
+        ("gauss", 2.40323),
+        ("lorentz", 2.78072),
+        ("voigt", 2.56591),
+        ("zero-crossing", real_fwhm),
     ):
-        param = cdl.param.FWHMParam.create(fittype=fittype)
+        param = cdl.param.FWHMParam.create(method=method)
         df = cps.compute_fwhm(obj, param).to_dataframe()
-        check_scalar_result("FWHM", df.L[0], exp, rtol=0.05)
+        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.005)
+
+
+@pytest.mark.validation
+def test_signal_fw1e2() -> None:
+    """Validation test for the full width at 1/e^2 maximum computation."""
+    obj = cdl.obj.read_signal(get_test_fnames("fw1e2.txt")[0])
+    exp = 4.06  # Manual validation
+    df = cps.compute_fw1e2(obj).to_dataframe()
+    check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
 @pytest.mark.validation
@@ -84,6 +93,7 @@ def test_dynamic_parameters() -> None:
 
 
 if __name__ == "__main__":
+    test_signal_fwhm()
     test_dynamic_parameters()
     test_func_for_errors(alg.bandwidth)
     test_func_for_errors(alg.enob)

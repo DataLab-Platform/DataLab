@@ -14,6 +14,8 @@ import numpy as np
 import scipy.interpolate
 from scipy.optimize import leastsq
 
+from cdl.algorithms import fit
+
 
 # ----- Filtering functions ----------------------------------------------------
 def moving_average(y: np.ndarray, n: int) -> np.ndarray:
@@ -642,3 +644,88 @@ def snr(
     noise = np.sqrt(np.mean((y - sinusoidal_model(x, *fitparams)) ** 2))
     snr = 20 * np.log10(powfund / noise)
     return snr
+
+
+def fwhm(
+    data: np.ndarray,
+    method: Literal["zero-crossing", "gauss", "lorentz", "voigt"] = "zero-crossing",
+    xmin: float | None = None,
+    xmax: float | None = None,
+) -> tuple[float, float, float, float]:
+    """Compute Full Width at Half Maximum (FWHM) of the input data
+
+    Args:
+        data: X,Y data
+        method: Calculation method. Two types of methods are supported: a zero-crossing
+         method and fitting methods (based on various models: Gauss, Lorentz, Voigt).
+         Defaults to "zero-crossing".
+        xmin: Lower X bound for the fitting. Defaults to None (no lower bound,
+         i.e. the fitting starts from the first point).
+        xmax: Upper X bound for the fitting. Defaults to None (no upper bound,
+         i.e. the fitting ends at the last point)
+
+    Returns:
+        FWHM segment coordinates
+    """
+    x, y = data
+    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
+    sigma, mu = dx * 0.1, xpeak(x, y)
+    if isinstance(xmin, float):
+        indexes = np.where(x >= xmin)[0]
+        x = x[indexes]
+        y = y[indexes]
+    if isinstance(xmax, float):
+        indexes = np.where(x <= xmax)[0]
+        x = x[indexes]
+        y = y[indexes]
+
+    if method == "zero-crossing":
+        hmax = dy * 0.5 + np.min(y)
+        fx = find_x_at_value(x, y, hmax)
+        assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}"
+        return fx[0], hmax, fx[-1], hmax
+
+    try:
+        FitModelClass: type[fit.FitModel] = {
+            "gauss": fit.GaussianModel,
+            "lorentz": fit.LorentzianModel,
+            "voigt": fit.VoigtModel,
+        }[method]
+    except KeyError as exc:
+        raise ValueError(f"Invalid method {method}") from exc
+
+    def func(params):
+        """Fitting model function"""
+        # pylint: disable=cell-var-from-loop
+        return y - FitModelClass.func(x, *params)
+
+    amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
+    (amp, sigma, mu, base), _ier = leastsq(func, np.array([amp, sigma, mu, base]))
+    return FitModelClass.half_max_segment(amp, sigma, mu, base)
+
+
+def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
+    """Compute Full Width at 1/e² of the input data (using a Gaussian model fitting).
+
+    Args:
+        data: X,Y data
+
+    Returns:
+        FW at 1/e² segment coordinates
+    """
+    x, y = data
+    dx, dy, base = np.max(x) - np.min(x), np.max(y) - np.min(y), np.min(y)
+    sigma, mu = dx * 0.1, xpeak(x, y)
+    amp = fit.GaussianModel.get_amp_from_amplitude(dy, sigma)
+    p_in = np.array([amp, sigma, mu, base])
+
+    def func(params):
+        """Fitting model function"""
+        # pylint: disable=cell-var-from-loop
+        return y - fit.GaussianModel.func(x, *params)
+
+    p_out, _ier = leastsq(func, p_in)
+    amp, sigma, mu, base = p_out
+    hw = 2 * sigma
+    yhm = fit.GaussianModel.amplitude(amp, sigma) / np.e**2 + base
+    return mu - hw, yhm, mu + hw, yhm
