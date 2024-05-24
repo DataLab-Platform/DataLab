@@ -2,7 +2,7 @@
 :py:func:`addition <cdl.core.computation.signal.compute_addition>`,Add **dst** and **src** signals and return **dst** signal modified in place,``features/signal/misc_unit_test.py``
 :py:func:`addition_constant <cdl.core.computation.signal.compute_addition_constant>`,Add **dst** and a constant value and return a the new result signal object,``features/image/misc_unit_test.py``
 :py:func:`astype <cdl.core.computation.signal.compute_astype>`,Convert data type,N/A
-:py:func:`bandwidth_3db <cdl.core.computation.signal.compute_bandwidth_3db>`,Compute bandwith,N/A
+:py:func:`bandwidth_3db <cdl.core.computation.signal.compute_bandwidth_3db>`,Compute bandwidth,``features/signal/computing_unit_test.py``
 :py:func:`calibration <cdl.core.computation.signal.compute_calibration>`,Compute linear calibration,N/A
 :py:func:`clip <cdl.core.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
 :py:func:`convolution <cdl.core.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
@@ -16,7 +16,7 @@
 :py:func:`exp <cdl.core.computation.signal.compute_exp>`,Compute exponential,N/A
 :py:func:`fft <cdl.core.computation.signal.compute_fft>`,Compute FFT,``features/signal/fft1d_unit_test.py``
 :py:func:`filter <cdl.core.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
-:py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,N/A
+:py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,``features/signal/computing_unit_test.py``
 :py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`,Compute FWHM,``features/signal/computing_unit_test.py``
 :py:func:`gaussian_filter <cdl.core.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
 :py:func:`histogram <cdl.core.computation.signal.compute_histogram>`,Compute histogram,N/A

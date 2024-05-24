@@ -1156,11 +1156,11 @@ class FWHMParam(gds.DataSet):
     )
 
 
-def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
+def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
     """Compute FWHM
 
     Args:
-        signal: source signal
+        obj: source signal
         param: parameters
 
     Returns:
@@ -1169,7 +1169,7 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
     return calc_resultshape(
         "fwhm",
         ShapeTypes.SEGMENT,
-        signal,
+        obj,
         alg.fwhm,
         param.method,
         param.xmin,
@@ -1177,17 +1177,16 @@ def compute_fwhm(signal: SignalObj, param: FWHMParam) -> ResultShape | None:
     )
 
 
-def compute_fw1e2(signal: SignalObj) -> ResultShape | None:
+def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     """Compute FW at 1/e²
 
     Args:
-        signal: source signal
+        obj: source signal
 
     Returns:
         Segment coordinates
     """
-
-    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, signal, alg.fw1e2)
+    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, obj, alg.fw1e2)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1213,17 +1212,16 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
     return calc_resultproperties("stats", obj, statfuncs)
 
 
-def compute_bandwidth_3db(src: SignalObj) -> ResultProperties:
-    """Compute bandwith
+def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
+    """Compute bandwidth
 
     Args:
-        src: source signal
+        obj: source signal
 
     Returns:
         Result properties with bandwidth
     """
-    bw_funcs = {"bandwidth (-3dB)": lambda xy: alg.bandwidth(xy[0], xy[1], 3.0)}
-    return calc_resultproperties("Bandwidth", src, bw_funcs)
+    return calc_resultshape("bandwidth", ShapeTypes.SEGMENT, obj, alg.bandwidth, 3.0)
 
 
 class DynamicParam(gds.DataSet):

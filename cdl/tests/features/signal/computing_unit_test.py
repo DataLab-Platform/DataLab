@@ -79,6 +79,14 @@ def test_signal_fw1e2() -> None:
 
 
 @pytest.mark.validation
+def test_signal_bandwidth_3db() -> None:
+    """Validation test for the bandwidth computation."""
+    obj = get_test_signal("bandwidth.txt")
+    df = cps.compute_bandwidth_3db(obj).to_dataframe()
+    check_scalar_result("Bandwitdh@-3dB", df.L[0], 39.0, rtol=0.001)
+
+
+@pytest.mark.validation
 def test_dynamic_parameters() -> None:
     """Validation test for dynamic parameters computation."""
     obj = get_test_signal("dynamic_parameters.txt")
