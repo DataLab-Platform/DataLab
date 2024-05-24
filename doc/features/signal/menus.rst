@@ -769,9 +769,22 @@ Parameters are:
 Full width at half-maximum
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Fit data to a Gaussian, Lorentzian or Voigt model using
-least-square method.
-Then, compute the full width at half-maximum value.
+Compute the Full Width at Half-Maximum (FWHM) of selected signal, using one of the following methods:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Method
+      - Description
+    * - Zero-crossing
+      - Find the zero-crossings of the signal after having centered its amplitude around zero
+    * - Gauss
+      - Fit data to a Gaussian model using least-square method
+    * - Lorentz
+      - Fit data to a Lorentzian model using least-square method
+    * - Voigt
+      - Fit data to a Voigt model using least-square method
 
 .. figure:: /images/shots/s_fwhm.png
 
