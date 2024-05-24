@@ -79,9 +79,28 @@ def test_signal_sampling_rate_period() -> None:
     check_scalar_result("Period", df["T"][0], 1.0e-10, rtol=0.001)
 
 
+@pytest.mark.validation
+def test_signal_contrast() -> None:
+    """Validation test for the contrast computation."""
+    obj = get_test_signal("fw1e2.txt")
+    df = cps.compute_contrast(obj).to_dataframe()
+    check_scalar_result("Contrast", df.contrast[0], 0.825, rtol=0.001)
+
+
+@pytest.mark.validation
+def test_signal_x_at_minmax() -> None:
+    """Validation test for the x value at min/max computation."""
+    obj = get_test_signal("fw1e2.txt")
+    df = cps.compute_x_at_minmax(obj).to_dataframe()
+    check_scalar_result("X@Ymin", df["X@Ymin"][0], 0.803, rtol=0.001)
+    check_scalar_result("X@Ymax", df["X@Ymax"][0], 5.184, rtol=0.001)
+
+
 if __name__ == "__main__":
     test_signal_fwhm()
     test_signal_fw1e2()
     test_signal_bandwidth_3db()
     test_dynamic_parameters()
     test_signal_sampling_rate_period()
+    test_signal_contrast()
+    test_signal_x_at_minmax()

@@ -1261,29 +1261,6 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     return calc_resultproperties("ADC", src, funcs)
 
 
-def compute_contrast(obj: SignalObj) -> ResultProperties:
-    """Compute contrast"""
-    return calc_resultproperties(
-        "contrast",
-        obj,
-        {
-            "contrast": lambda xy: alg.contrast(xy[1]),
-        },
-    )
-
-
-def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
-    """Compute x at min/max"""
-    return calc_resultproperties(
-        "x_min/max",
-        obj,
-        {
-            "x @ y_min": lambda xy: xy[0][np.argmin(xy[1])],
-            "x @ y_max": lambda xy: xy[0][np.argmax(xy[1])],
-        },
-    )
-
-
 def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
     """Compute sampling rate and period
 
@@ -1299,5 +1276,28 @@ def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
         {
             "fs": lambda xy: alg.sampling_rate(xy[0]),
             "T": lambda xy: alg.sampling_period(xy[0]),
+        },
+    )
+
+
+def compute_contrast(obj: SignalObj) -> ResultProperties:
+    """Compute contrast"""
+    return calc_resultproperties(
+        "contrast",
+        obj,
+        {
+            "contrast": lambda xy: alg.contrast(xy[1]),
+        },
+    )
+
+
+def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
+    """Compute x at min/max"""
+    return calc_resultproperties(
+        "x@min,max",
+        obj,
+        {
+            "X@Ymin": lambda xy: xy[0][np.argmin(xy[1])],
+            "X@Ymax": lambda xy: xy[0][np.argmax(xy[1])],
         },
     )

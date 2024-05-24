@@ -5,6 +5,7 @@
 :py:func:`bandwidth_3db <cdl.core.computation.signal.compute_bandwidth_3db>`,Compute bandwidth,``features/signal/computing_unit_test.py``
 :py:func:`calibration <cdl.core.computation.signal.compute_calibration>`,Compute linear calibration,N/A
 :py:func:`clip <cdl.core.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
+:py:func:`contrast <cdl.core.computation.signal.compute_contrast>`,Compute contrast,``features/signal/computing_unit_test.py``
 :py:func:`convolution <cdl.core.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
 :py:func:`derivative <cdl.core.computation.signal.compute_derivative>`,Compute derivative,N/A
 :py:func:`detrending <cdl.core.computation.signal.compute_detrending>`,Detrend data,N/A
@@ -36,9 +37,11 @@
 :py:func:`re <cdl.core.computation.signal.compute_re>`,Compute real part,N/A
 :py:func:`resampling <cdl.core.computation.signal.compute_resampling>`,Resample data,N/A
 :py:func:`reverse_x <cdl.core.computation.signal.compute_reverse_x>`,Reverse x-axis,N/A
+:py:func:`sampling_rate_period <cdl.core.computation.signal.compute_sampling_rate_period>`,Compute sampling rate and period,``features/signal/computing_unit_test.py``
 :py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`,Compute square root,N/A
 :py:func:`stats <cdl.core.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`,Swap axes,N/A
 :py:func:`threshold <cdl.core.computation.signal.compute_threshold>`,Compute threshold clipping,N/A
 :py:func:`wiener <cdl.core.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
 :py:func:`windowing <cdl.core.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
+:py:func:`x_at_minmax <cdl.core.computation.signal.compute_x_at_minmax>`,Compute x at min/max,``features/signal/computing_unit_test.py``
