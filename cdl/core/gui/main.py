@@ -1171,7 +1171,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.__is_modified = state
         title = APP_NAME + ("*" if state else "")
         if not __version__.replace(".", "").isdigit():
-            title += f" Unstable[{__version__}]"
+            title += f" [{__version__}]"
         self.setWindowTitle(title)
 
     def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
