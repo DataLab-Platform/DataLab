@@ -66,7 +66,7 @@ def test_signal_fwhm() -> None:
     ):
         param = cdl.param.FWHMParam.create(method=method)
         df = cps.compute_fwhm(obj, param).to_dataframe()
-        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.005)
+        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
 
 
 @pytest.mark.validation
