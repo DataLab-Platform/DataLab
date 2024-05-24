@@ -25,7 +25,7 @@ First, we open DataLab and load the images:
    the toolbar, or by dragging and dropping the files into DataLab (on the panel on
    the right).
 
-.. |fileopen_ima| image:: ../../../cdl/data/icons/fileopen_ima.svg
+.. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
 
@@ -112,7 +112,7 @@ Now, let's detect the contours in the ROI and fit them to circles.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
 
@@ -120,7 +120,7 @@ The images (or signals) can also be displayed in a separate window, by clicking 
 the "View in a new window" entry in the "View" menu (or the |new_window| button in
 the toolbar). This is useful to compare side by side images or signals.
 
-.. |new_window| image:: ../../../cdl/data/icons/new_window.svg
+.. |new_window| image:: ../../../cdl/data/icons/view/new_window.svg
     :width: 24px
     :height: 24px
 
@@ -207,7 +207,7 @@ To extract the intensity profile along the X axis, we have two options:
 - Or activate the "Cross section" tool |cross_section| in the vertical toolbar
   on the left of the visualization panel.
 
-.. |profile| image:: ../../../cdl/data/icons/profile.svg
+.. |profile| image:: ../../../cdl/data/icons/operations/profile.svg
     :width: 24px
     :height: 24px
 
@@ -281,7 +281,7 @@ the annotations.
     Save the workspace to a file with "File > Save to HDF5 file...",
     or the |filesave_h5| button in the toolbar.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/filesave_h5.svg
+.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
 
@@ -290,10 +290,10 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5browser.svg
+.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px

@@ -148,6 +148,34 @@
             }
         },
         {
+            "label": "Update validation status",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "update_validation_status.bat"
+            ],
+            "options": {
+                "cwd": "scripts",
+                "env": {
+                    "PYTHON": "${env:CDL_PYTHONEXE}",
+                    "UNATTENDED": "1"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
             "label": "Run pytest",
             "type": "shell",
             "command": "cmd",

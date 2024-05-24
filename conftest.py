@@ -37,6 +37,14 @@ def pytest_report_header(config):
     ]
 
 
+def pytest_configure(config):
+    """Add custom markers to pytest."""
+    config.addinivalue_line(
+        "markers",
+        "validation: mark a test as a validation test (ground truth or analytical)",
+    )
+
+
 @pytest.fixture(autouse=True)
 def reset_cwd(request):
     """Reset the current working directory to the initial one after each test."""

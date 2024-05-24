@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-22 11:28+0100\n"
+"POT-Creation-Date: 2024-05-24 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/signal/menus.rst:2
+#: ../../doc/features/signal/menus.rst:2
 msgid "Menus"
 msgstr "Menus"
 
-#: ../../features/signal/menus.rst:4
+#: ../../doc/features/signal/menus.rst:4
 msgid ""
 "This section describes the signal related feature of DataLab, by "
 "presenting the different menus and their entries."
@@ -29,15 +29,15 @@ msgstr ""
 "Cette section décrit les fonctionnalités liées aux signaux de DataLab, en"
 " présentant les différents menus et leurs entrées."
 
-#: ../../features/signal/menus.rst:8
+#: ../../doc/features/signal/menus.rst:8
 msgid "\"File\" menu"
 msgstr "Menu \"Fichier\""
 
-#: ../../features/signal/menus.rst:12
+#: ../../doc/features/signal/menus.rst:12
 msgid "Screenshot of the \"File\" menu."
 msgstr "Capture d'écran du menu \"Fichier\"."
 
-#: ../../features/signal/menus.rst:14
+#: ../../doc/features/signal/menus.rst:14
 msgid ""
 "The \"File\" menu allows you to create, open, save and close signals. It "
 "also allows you to import and export data from/to HDF5 files, and to edit"
@@ -48,63 +48,65 @@ msgstr ""
 "depuis/vers des fichiers HDF5, et d'éditer les paramètres de la session "
 "courante."
 
-#: ../../features/signal/menus.rst:19
+#: ../../doc/features/signal/menus.rst:19
 msgid "New signal"
 msgstr "Nouveau signal"
 
-#: ../../features/signal/menus.rst:21
+#: ../../doc/features/signal/menus.rst:21
 msgid "Create a new signal from various models:"
 msgstr "Crée un nouveau signal depuis différents modèles :"
 
-#: ../../features/signal/menus.rst:27 ../../features/signal/menus.rst:496
+#: ../../doc/features/signal/menus.rst:27
+#: ../../doc/features/signal/menus.rst:677
 msgid "Model"
 msgstr "Modèle"
 
-#: ../../features/signal/menus.rst:28 ../../features/signal/menus.rst:497
+#: ../../doc/features/signal/menus.rst:28
+#: ../../doc/features/signal/menus.rst:678
 msgid "Equation"
 msgstr "Equation"
 
-#: ../../features/signal/menus.rst:29
+#: ../../doc/features/signal/menus.rst:29
 msgid "Zeros"
 msgstr "Zéros"
 
-#: ../../features/signal/menus.rst:30
+#: ../../doc/features/signal/menus.rst:30
 msgid ":math:`y[i] = 0`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:31
-msgid "Random"
-msgstr "Aléatoire"
-
-#: ../../features/signal/menus.rst:32
-msgid ":math:`y[i] \\in [-0.5, 0.5]`"
-msgstr ""
-
-#: ../../features/signal/menus.rst:33 ../../features/signal/menus.rst:498
+#: ../../doc/features/signal/menus.rst:31
+#: ../../doc/features/signal/menus.rst:405
+#: ../../doc/features/signal/menus.rst:683
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: ../../features/signal/menus.rst:34 ../../features/signal/menus.rst:499
+#: ../../doc/features/signal/menus.rst:32
+#: ../../doc/features/signal/menus.rst:684
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:35 ../../features/signal/menus.rst:500
+#: ../../doc/features/signal/menus.rst:33
+#: ../../doc/features/signal/menus.rst:685
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
-#: ../../features/signal/menus.rst:36 ../../features/signal/menus.rst:501
+#: ../../doc/features/signal/menus.rst:34
+#: ../../doc/features/signal/menus.rst:686
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:37 ../../features/signal/menus.rst:502
+#: ../../doc/features/signal/menus.rst:35
+#: ../../doc/features/signal/menus.rst:687
+#: ../../doc/features/signal/menus.rst:786
 msgid "Voigt"
 msgstr "Voigt"
 
-#: ../../features/signal/menus.rst:38 ../../features/signal/menus.rst:503
+#: ../../doc/features/signal/menus.rst:36
+#: ../../doc/features/signal/menus.rst:688
 msgid ""
 ":math:`y = "
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
@@ -114,61 +116,194 @@ msgstr ""
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
 ":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 
-#: ../../features/signal/menus.rst:43
+#: ../../doc/features/signal/menus.rst:37
+msgid "Random (uniform law)"
+msgstr "Aléatoire (loi uniforme)"
+
+#: ../../doc/features/signal/menus.rst:38
+msgid ":math:`y[i] \\in [-0.5, 0.5]`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:39
+msgid "Random (normal law)"
+msgstr "Aléatoire (loi normale)"
+
+#: ../../doc/features/signal/menus.rst:40
+msgid ":math:`y[i] \\sim \\mathcal{N}(-0.5, 0.5)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:41
+msgid "Sine"
+msgstr "Sinus"
+
+#: ../../doc/features/signal/menus.rst:42
+#: ../../doc/features/signal/menus.rst:694
+msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:43
+#: ../../doc/features/signal/menus.rst:399
+msgid "Cosine"
+msgstr "Cosinus"
+
+#: ../../doc/features/signal/menus.rst:44
+msgid ":math:`y = y_{0}+A.cos(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:45
+msgid "Sawtooth"
+msgstr "Dents de scie"
+
+#: ../../doc/features/signal/menus.rst:46
+msgid ""
+":math:`y = y_{0}+A \\cdot \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - "
+"\\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor "
+"\\right) \\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:47
+msgid "Triangle"
+msgstr "Triangle"
+
+#: ../../doc/features/signal/menus.rst:48
+msgid ""
+":math:`y = y_{0}+A \\cdot \\text{sawtooth}(2 \\pi f x + \\phi, "
+"\\text{width} = 0.5)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:49
+msgid "Square"
+msgstr "Carré"
+
+#: ../../doc/features/signal/menus.rst:50
+msgid ""
+":math:`y = y_0 + A \\cdot \\text{sgn}\\left( \\sin\\left( 2\\pi f x + "
+"\\phi \\right) \\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:51
+msgid "Cardinal sine"
+msgstr "Sinus cardinal"
+
+#: ../../doc/features/signal/menus.rst:52
+msgid ":math:`y = y_0 + A \\cdot \\text{sinc}\\left(2\\pi f x + \\phi\\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:53
+msgid "Step"
+msgstr "Echelon"
+
+#: ../../doc/features/signal/menus.rst:54
+msgid ""
+":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} "
+"\\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:55
+#: ../../doc/features/signal/menus.rst:324
+#: ../../doc/features/signal/menus.rst:401
+#: ../../doc/features/signal/menus.rst:691
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#: ../../doc/features/signal/menus.rst:56
+#: ../../doc/features/signal/menus.rst:692
+msgid ":math:`y = y_{0}+A.exp(B.x)`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:57
+msgid "Pulse"
+msgstr "Impulsion"
+
+#: ../../doc/features/signal/menus.rst:58
+msgid ""
+":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x <"
+" x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:59
+#: ../../doc/features/signal/menus.rst:681
+msgid "Polynomial"
+msgstr "Polynomial"
+
+#: ../../doc/features/signal/menus.rst:60
+msgid ":math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:61
+msgid "Experimental"
+msgstr "Expérimental"
+
+#: ../../doc/features/signal/menus.rst:62
+msgid "Manual input of X and Y values"
+msgstr "Saisie manuelle des valeurs X et Y"
+
+#: ../../doc/features/signal/menus.rst:67
 msgid "Open signal"
 msgstr "Ouvrir un signal"
 
-#: ../../features/signal/menus.rst:45
+#: ../../doc/features/signal/menus.rst:69
 msgid "Create a new signal from the following supported filetypes:"
 msgstr "Crée un signal depuis l'un des types de fichiers pris en charge :"
 
-#: ../../features/signal/menus.rst:50 ../../features/signal/menus.rst:65
+#: ../../doc/features/signal/menus.rst:74
+#: ../../doc/features/signal/menus.rst:91
 msgid "File type"
 msgstr "Type de fichier"
 
-#: ../../features/signal/menus.rst:51 ../../features/signal/menus.rst:66
+#: ../../doc/features/signal/menus.rst:75
+#: ../../doc/features/signal/menus.rst:92
 msgid "Extensions"
 msgstr "Extensions"
 
-#: ../../features/signal/menus.rst:52 ../../features/signal/menus.rst:67
+#: ../../doc/features/signal/menus.rst:76
+#: ../../doc/features/signal/menus.rst:93
 msgid "Text files"
 msgstr "Fichiers texte"
 
-#: ../../features/signal/menus.rst:53
+#: ../../doc/features/signal/menus.rst:77
 msgid ".txt, .csv"
 msgstr ""
 
-#: ../../features/signal/menus.rst:54
+#: ../../doc/features/signal/menus.rst:78
 msgid "NumPy arrays"
 msgstr "Tableaux NumPy"
 
-#: ../../features/signal/menus.rst:55
+#: ../../doc/features/signal/menus.rst:79
 msgid ".npy"
 msgstr ""
 
-#: ../../features/signal/menus.rst:58
+#: ../../doc/features/signal/menus.rst:80
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+#: ../../doc/features/signal/menus.rst:81
+msgid ".mat"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:84
 msgid "Save signal"
 msgstr "Enregistrer un signal"
 
-#: ../../features/signal/menus.rst:60
+#: ../../doc/features/signal/menus.rst:86
 msgid "Save current signal to the following supported filetypes:"
 msgstr ""
 "Enregistre le signal sélectionné dans l'un des types de fichier pris en "
 "charge :"
 
-#: ../../features/signal/menus.rst:68
+#: ../../doc/features/signal/menus.rst:94
 msgid ".csv"
 msgstr ""
 
-#: ../../features/signal/menus.rst:71
+#: ../../doc/features/signal/menus.rst:97
 msgid "Import text file"
 msgstr "Importer un fichier texte"
 
-#: ../../features/signal/menus.rst:73
+#: ../../doc/features/signal/menus.rst:99
 msgid "Import data from a text file."
 msgstr "Importer les données depuis un fichier texte."
 
-#: ../../features/signal/menus.rst:77
+#: ../../doc/features/signal/menus.rst:103
 msgid ""
 "See :ref:`ref-to-signal-text-file-import` page for more details on "
 "importing text files."
@@ -176,19 +311,19 @@ msgstr ""
 "Voir la page :ref:`ref-to-signal-text-file-import` pour plus de détails "
 "sur l'importation de fichiers texte."
 
-#: ../../features/signal/menus.rst:80
+#: ../../doc/features/signal/menus.rst:106
 msgid "Open HDF5 file"
 msgstr "Ouvrir un fichier HDF5"
 
-#: ../../features/signal/menus.rst:82
+#: ../../doc/features/signal/menus.rst:108
 msgid "Import data from a HDF5 file."
 msgstr "Importer les données d'un fichier HDF5."
 
-#: ../../features/signal/menus.rst:85
+#: ../../doc/features/signal/menus.rst:111
 msgid "Save to HDF5 file"
 msgstr "Enregistrer un fichier HDF5"
 
-#: ../../features/signal/menus.rst:87
+#: ../../doc/features/signal/menus.rst:113
 msgid ""
 "Export the whole DataLab session (all signals and images) into a HDF5 "
 "file."
@@ -196,11 +331,11 @@ msgstr ""
 "Exporter l'ensemble de la session DataLab (tous les signaux et images) "
 "vers un fichier HDF5."
 
-#: ../../features/signal/menus.rst:90
+#: ../../doc/features/signal/menus.rst:116
 msgid "Browse HDF5 file"
 msgstr "Explorer un fichier HDF5"
 
-#: ../../features/signal/menus.rst:92
+#: ../../doc/features/signal/menus.rst:118
 msgid ""
 "Open the :ref:`h5browser` in a new window to browse and import data from "
 "HDF5 file."
@@ -208,23 +343,23 @@ msgstr ""
 "Ouvrir l':ref:`h5browser` dans un nouvelle fenêtre pour explorer et "
 "éventuellement importer des données depuis un fichier HDF5."
 
-#: ../../features/signal/menus.rst:95
+#: ../../doc/features/signal/menus.rst:121
 msgid "Settings"
 msgstr "Préférences"
 
-#: ../../features/signal/menus.rst:97
+#: ../../doc/features/signal/menus.rst:123
 msgid "Open the the \"Settings\" dialog box."
 msgstr "Ouvrir la boîte de dialogue \"Préférences\"."
 
-#: ../../features/signal/menus.rst:102
+#: ../../doc/features/signal/menus.rst:128
 msgid "\"Edit\" menu"
 msgstr "Menu \"Edition\""
 
-#: ../../features/signal/menus.rst:106
+#: ../../doc/features/signal/menus.rst:132
 msgid "Screenshot of the \"Edit\" menu."
 msgstr "Capture d'écran du menu \"Edition\"."
 
-#: ../../features/signal/menus.rst:108
+#: ../../doc/features/signal/menus.rst:134
 msgid ""
 "The \"Edit\" menu allows you to edit the current signal or group of "
 "signals, by adding, removing, renaming, moving up or down, or duplicating"
@@ -235,11 +370,11 @@ msgstr ""
 "vers le bas, ou dupliquant des signaux. Il permet également de manipuler "
 "les métadonnées, ou de gérer les titres des signaux."
 
-#: ../../features/signal/menus.rst:113
+#: ../../doc/features/signal/menus.rst:139
 msgid "New group"
 msgstr "Nouveau groupe"
 
-#: ../../features/signal/menus.rst:115
+#: ../../doc/features/signal/menus.rst:141
 msgid ""
 "Create a new group of signals. Images may be moved from one group to "
 "another by drag and drop."
@@ -247,19 +382,19 @@ msgstr ""
 "Crée un nouveau groupe de signaux. Les images peuvent être déplacées d'un"
 " groupe à un autre par glisser-déposer."
 
-#: ../../features/signal/menus.rst:119
+#: ../../doc/features/signal/menus.rst:145
 msgid "Rename group"
 msgstr "Renommer le groupe"
 
-#: ../../features/signal/menus.rst:121
+#: ../../doc/features/signal/menus.rst:147
 msgid "Rename currently selected group."
 msgstr "Renomme le groupe sélectionné."
 
-#: ../../features/signal/menus.rst:124
+#: ../../doc/features/signal/menus.rst:150
 msgid "Move up"
 msgstr "Déplacer vers le haut"
 
-#: ../../features/signal/menus.rst:126
+#: ../../doc/features/signal/menus.rst:152
 msgid ""
 "Move current selection up in the list (groups or signals may be "
 "selected). If multiple objects are selected, they are moved together. If "
@@ -271,11 +406,11 @@ msgstr ""
 "sont déplacés ensemble. Si un signal sélectionné est déjà en haut de son "
 "groupe, il est déplacé en bas du groupe précédent."
 
-#: ../../features/signal/menus.rst:132
+#: ../../doc/features/signal/menus.rst:158
 msgid "Move down"
 msgstr "Déplacer vers le bas"
 
-#: ../../features/signal/menus.rst:134
+#: ../../doc/features/signal/menus.rst:160
 msgid ""
 "Move current selection down in the list (groups or signals may be "
 "selected). If multiple objects are selected, they are moved together. If "
@@ -287,67 +422,67 @@ msgstr ""
 "sont déplacés ensemble. Si un signal sélectionné est déjà en bas de son "
 "groupe, il est déplacé en haut du groupe suivant."
 
-#: ../../features/signal/menus.rst:140
+#: ../../doc/features/signal/menus.rst:166
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: ../../features/signal/menus.rst:142
+#: ../../doc/features/signal/menus.rst:168
 msgid "Create a new signal which is identical to the currently selected object."
 msgstr "Crée un nouveau signal identique à l'objet sélectionné."
 
-#: ../../features/signal/menus.rst:145
+#: ../../doc/features/signal/menus.rst:171
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ../../features/signal/menus.rst:147
+#: ../../doc/features/signal/menus.rst:173
 msgid "Remove currently selected signal."
 msgstr "Supprimer le signal sélectionné."
 
-#: ../../features/signal/menus.rst:150
+#: ../../doc/features/signal/menus.rst:176
 msgid "Delete all"
 msgstr "Supprimer tout"
 
-#: ../../features/signal/menus.rst:152
+#: ../../doc/features/signal/menus.rst:178
 msgid "Delete all signals."
 msgstr "Supprimer tous les signaux."
 
-#: ../../features/signal/menus.rst:155
+#: ../../doc/features/signal/menus.rst:181
 msgid "Copy metadata"
 msgstr "Copier les métadonnées"
 
-#: ../../features/signal/menus.rst:157
+#: ../../doc/features/signal/menus.rst:183
 msgid "Copy metadata from currently selected signal into clipboard."
 msgstr "Copier les métadonnées du signal sélectionné dans le presse-papier."
 
-#: ../../features/signal/menus.rst:160
+#: ../../doc/features/signal/menus.rst:186
 msgid "Paste metadata"
 msgstr "Coller les métadonnées"
 
-#: ../../features/signal/menus.rst:162
+#: ../../doc/features/signal/menus.rst:188
 msgid "Paste metadata from clipboard into selected signal."
 msgstr "Coller les métadonnées depuis le presse-papier vers le signal sélectionné."
 
-#: ../../features/signal/menus.rst:165
+#: ../../doc/features/signal/menus.rst:191
 msgid "Import metadata into signal"
 msgstr "Importer les métadonnées dans le signal"
 
-#: ../../features/signal/menus.rst:167
+#: ../../doc/features/signal/menus.rst:193
 msgid "Import metadata from a JSON text file."
 msgstr "Importer les métadonnées depuis un fichier texte JSON."
 
-#: ../../features/signal/menus.rst:170
+#: ../../doc/features/signal/menus.rst:196
 msgid "Export metadata from signal"
 msgstr "Exporter les métadonnées du signal"
 
-#: ../../features/signal/menus.rst:172
+#: ../../doc/features/signal/menus.rst:198
 msgid "Export metadata to a JSON text file."
 msgstr "Exporter les métadonnées vers un fichier texte JSON."
 
-#: ../../features/signal/menus.rst:175
+#: ../../doc/features/signal/menus.rst:201
 msgid "Delete object metadata"
 msgstr "Supprimer les métadonnées"
 
-#: ../../features/signal/menus.rst:177
+#: ../../doc/features/signal/menus.rst:203
 msgid ""
 "Delete metadata from currently selected signal. Metadata contains "
 "additionnal information such as Region of Interest or results of "
@@ -357,19 +492,19 @@ msgstr ""
 "contiennent des informations additionnelles telles que les régions "
 "d'intérêt ou encore des résultats de calcul."
 
-#: ../../features/signal/menus.rst:182
+#: ../../doc/features/signal/menus.rst:208
 msgid "Add object title to plot"
 msgstr "Ajouter le titre de l'objet au graphique"
 
-#: ../../features/signal/menus.rst:184
+#: ../../doc/features/signal/menus.rst:210
 msgid "Add currently selected signal title to the associated plot."
 msgstr "Ajoute le titre du signal sélectionné au graphique associé."
 
-#: ../../features/signal/menus.rst:187
+#: ../../doc/features/signal/menus.rst:213
 msgid "Copy titles to clipboard"
 msgstr "Copier les titres dans le presse-papier"
 
-#: ../../features/signal/menus.rst:189
+#: ../../doc/features/signal/menus.rst:215
 msgid ""
 "Copy all signal titles to clipboard as a multiline text. This text may be"
 " used for reproducing a processing chain, for example."
@@ -378,15 +513,15 @@ msgstr ""
 " d'un texte multiligne. Ce texte peut être ensuite utilisé pour "
 "reproduire une chaîne de traitement, par exemple."
 
-#: ../../features/signal/menus.rst:193
+#: ../../doc/features/signal/menus.rst:219
 msgid "\"Operation\" menu"
 msgstr "Menu \"Opérations\""
 
-#: ../../features/signal/menus.rst:197
+#: ../../doc/features/signal/menus.rst:223
 msgid "Screenshot of the \"Operation\" menu."
 msgstr "Capture d'écran du menu \"Opérations\"."
 
-#: ../../features/signal/menus.rst:199
+#: ../../doc/features/signal/menus.rst:225
 msgid ""
 "The \"Operation\" menu allows you to perform various operations on the "
 "selected signals, such as arithmetic operations, peak detection, or "
@@ -396,39 +531,39 @@ msgstr ""
 "signaux sélectionnés, telles que des opérations arithmétiques, la "
 "détection de pics, ou encore la convolution."
 
-#: ../../features/signal/menus.rst:204 ../../features/signal/menus.rst:345
+#: ../../doc/features/signal/menus.rst:230
 msgid "Sum"
 msgstr "Addition"
 
-#: ../../features/signal/menus.rst:206
+#: ../../doc/features/signal/menus.rst:232
 msgid "Create a new signal which is the sum of all selected signals:"
 msgstr "Crée un signal à partir de la somme des signaux sélectionnés :"
 
-#: ../../features/signal/menus.rst:208
+#: ../../doc/features/signal/menus.rst:234
 msgid ""
 "y_{M} = \\sum_{k=0}^{M-1}{y_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:212
+#: ../../doc/features/signal/menus.rst:238
 msgid "Average"
 msgstr "Moyenne"
 
-#: ../../features/signal/menus.rst:214
+#: ../../doc/features/signal/menus.rst:240
 msgid "Create a new signal which is the average of all selected signals:"
 msgstr "Crée un signal à partir de la moyenne des signaux sélectionnés :"
 
-#: ../../features/signal/menus.rst:216
+#: ../../doc/features/signal/menus.rst:242
 msgid ""
 "y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:220
+#: ../../doc/features/signal/menus.rst:246
 msgid "Difference"
 msgstr "Soustraction"
 
-#: ../../features/signal/menus.rst:222
+#: ../../doc/features/signal/menus.rst:248
 msgid ""
 "Create a new signal which is the difference of the **two** selected "
 "signals:"
@@ -436,91 +571,148 @@ msgstr ""
 "Crée un signal à partir de la différence des **deux** signaux "
 "sélectionnés :"
 
-#: ../../features/signal/menus.rst:224
+#: ../../doc/features/signal/menus.rst:250
 msgid ""
 "y_{2} = y_{1} - y_{0}\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:228
+#: ../../doc/features/signal/menus.rst:254
 msgid "Product"
 msgstr "Produit"
 
-#: ../../features/signal/menus.rst:230
+#: ../../doc/features/signal/menus.rst:256
 msgid "Create a new signal which is the product of all selected signals:"
 msgstr "Crée un signal à partir du produit de tous les signaux sélectionnés :"
 
-#: ../../features/signal/menus.rst:232
+#: ../../doc/features/signal/menus.rst:258
 msgid ""
 "y_{M} = \\prod_{k=0}^{M-1}{y_{k}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:236
+#: ../../doc/features/signal/menus.rst:262
+msgid "Constant operations"
+msgstr "Opérations avec une constante"
+
+#: ../../doc/features/signal/menus.rst:264
+msgid ""
+"Create a new signal which is the result of a constant operation on each "
+"selected signal:"
+msgstr ""
+"Crée un signal à partir d'une opération avec une constante sur chaque "
+"signal sélectionné :"
+
+#: ../../doc/features/signal/menus.rst:270
+msgid "Operation"
+msgstr "Opération"
+
+#: ../../doc/features/signal/menus.rst:271
+#: ../../doc/features/signal/menus.rst:550
+#: ../../doc/features/signal/menus.rst:583
+#: ../../doc/features/signal/menus.rst:609
+#: ../../doc/features/signal/menus.rst:635
+#: ../../doc/features/signal/menus.rst:664
+#: ../../doc/features/signal/menus.rst:757
+#: ../../doc/features/signal/menus.rst:779
+#: ../../doc/features/signal/menus.rst:819
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/signal/menus.rst:272
+msgid "Addition"
+msgstr "Addition"
+
+#: ../../doc/features/signal/menus.rst:273
+msgid ":math:`y_{k} = y_{k-1} + c`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:274
+msgid "Subtraction"
+msgstr "Soustraction"
+
+#: ../../doc/features/signal/menus.rst:275
+msgid ":math:`y_{k} = y_{k-1} - c`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:276
+msgid "Multiplication"
+msgstr "Multiplication"
+
+#: ../../doc/features/signal/menus.rst:277
+msgid ":math:`y_{k} = y_{k-1} \\times c`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:278
+#: ../../doc/features/signal/menus.rst:282
 msgid "Division"
 msgstr "Division"
 
-#: ../../features/signal/menus.rst:238
+#: ../../doc/features/signal/menus.rst:279
+msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:284
 msgid "Create a new signal which is the division of the **two** selected signals:"
 msgstr "Crée un signal à partir de la division des **deux** signaux sélectionnés :"
 
-#: ../../features/signal/menus.rst:240
+#: ../../doc/features/signal/menus.rst:286
 msgid ""
 "y_{2} = \\dfrac{y_{1}}{y_{0}}\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:244
+#: ../../doc/features/signal/menus.rst:290
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: ../../features/signal/menus.rst:246
+#: ../../doc/features/signal/menus.rst:292
 msgid "Create a new signal which is the absolute value of each selected signal:"
 msgstr ""
 "Crée un signal à partir de la valeur absolue de chaque signal sélectionné"
 " :"
 
-#: ../../features/signal/menus.rst:248
+#: ../../doc/features/signal/menus.rst:294
 msgid ""
 "y_{k} = |y_{k-1}|\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:252
+#: ../../doc/features/signal/menus.rst:298
 msgid "Real part"
 msgstr "Partie réelle"
 
-#: ../../features/signal/menus.rst:254
+#: ../../doc/features/signal/menus.rst:300
 msgid "Create a new signal which is the real part of each selected signal:"
 msgstr "Crée un signal à partir de la partie réelle de chaque signal sélectionné :"
 
-#: ../../features/signal/menus.rst:256
+#: ../../doc/features/signal/menus.rst:302
 msgid ""
 "y_{k} = \\Re(y_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:260
+#: ../../doc/features/signal/menus.rst:306
 msgid "Imaginary part"
 msgstr "Partie imaginaire"
 
-#: ../../features/signal/menus.rst:262
+#: ../../doc/features/signal/menus.rst:308
 msgid "Create a new signal which is the imaginary part of each selected signal:"
 msgstr ""
 "Crée un signal à partir de la partie imaginaire de chaque signal "
 "sélectionné :"
 
-#: ../../features/signal/menus.rst:264
+#: ../../doc/features/signal/menus.rst:310
 msgid ""
 "y_{k} = \\Im(y_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:268
+#: ../../doc/features/signal/menus.rst:314
 msgid "Convert data type"
 msgstr "Convertir le type de données"
 
-#: ../../features/signal/menus.rst:270
+#: ../../doc/features/signal/menus.rst:316
 msgid ""
 "Create a new signal which is the result of converting data type of each "
 "selected signal."
@@ -528,7 +720,7 @@ msgstr ""
 "Crée un signal à partir de la conversion du type de données du signal "
 "sélectionné."
 
-#: ../../features/signal/menus.rst:274
+#: ../../doc/features/signal/menus.rst:320
 msgid ""
 "Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
 "with the default parameters (`casting='unsafe'`)."
@@ -537,11 +729,21 @@ msgstr ""
 ":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
 "(`casting='unsafe'`)."
 
-#: ../../features/signal/menus.rst:278
-msgid "Log10(y)"
+#: ../../doc/features/signal/menus.rst:326
+msgid "Create a new signal which is the exponential of each selected signal:"
+msgstr "Crée un signal à partir de l'exponentielle de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menus.rst:328
+msgid ""
+"y_{k} = \\exp(y_{k-1})\n"
+"\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:280
+#: ../../doc/features/signal/menus.rst:332
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+#: ../../doc/features/signal/menus.rst:334
 msgid ""
 "Create a new signal which is the base 10 logarithm of each selected "
 "signal:"
@@ -549,17 +751,45 @@ msgstr ""
 "Crée un signal à partir du logarithme base 10 de chaque signal "
 "sélectionné :"
 
-#: ../../features/signal/menus.rst:282
+#: ../../doc/features/signal/menus.rst:336
 msgid ""
-"z_{k} = \\log_{10}(z_{k-1})\n"
+"y_{k} = \\log_{10}(y_{k-1})\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:286
+#: ../../doc/features/signal/menus.rst:340
+msgid "Power"
+msgstr "Puissance"
+
+#: ../../doc/features/signal/menus.rst:342
+msgid "Create a new signal which is the power of each selected signal:"
+msgstr "Crée un signal à partir de la puissance de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menus.rst:344
+msgid ""
+"y_{k} = y_{k-1}^{n}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:348
+msgid "Square root"
+msgstr "Racine carrée"
+
+#: ../../doc/features/signal/menus.rst:350
+msgid "Create a new signal which is the square root of each selected signal:"
+msgstr "Crée un signal à partir de la racine carrée de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menus.rst:352
+msgid ""
+"y_{k} = \\sqrt{y_{k-1}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:356
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: ../../features/signal/menus.rst:288
+#: ../../doc/features/signal/menus.rst:358
 msgid ""
 "Create a new signal from semi-automatic peak detection of each selected "
 "signal."
@@ -567,7 +797,7 @@ msgstr ""
 "Crée un signal à partir de la détection automatique des pics de chaque "
 "signal sélectionné :"
 
-#: ../../features/signal/menus.rst:292
+#: ../../doc/features/signal/menus.rst:362
 msgid ""
 "Peak detection dialog: threshold is adjustable by moving the horizontal "
 "marker, peaks are detected automatically (see vertical markers with "
@@ -578,11 +808,11 @@ msgstr ""
 "automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
 " leur position)"
 
-#: ../../features/signal/menus.rst:297
+#: ../../doc/features/signal/menus.rst:367
 msgid "Convolution"
 msgstr "Convolution"
 
-#: ../../features/signal/menus.rst:299
+#: ../../doc/features/signal/menus.rst:369
 msgid ""
 "Create a new signal which is the convolution of each selected signal with"
 " respect to another signal."
@@ -590,7 +820,7 @@ msgstr ""
 "Crée un signal à partir de la convolution de chaque signal sélectionné "
 "par rapport à un autre signal."
 
-#: ../../features/signal/menus.rst:302
+#: ../../doc/features/signal/menus.rst:372
 msgid ""
 "This feature is based on SciPy's `scipy.signal.convolve "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
@@ -600,17 +830,181 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:305
+#: ../../doc/features/signal/menus.rst:375
+msgid "Windowing"
+msgstr "Fenêtrage"
+
+#: ../../doc/features/signal/menus.rst:377
+msgid ""
+"Create a new signal which is the result of applying a window function to "
+"each selected signal."
+msgstr ""
+"Crée un signal à partir de l'application d'une fonction de fenêtrage à "
+"chaque signal sélectionné."
+
+#: ../../doc/features/signal/menus.rst:379
+msgid "The following window functions are available:"
+msgstr "Les fonctions de fenêtrage suivantes sont disponibles :"
+
+#: ../../doc/features/signal/menus.rst:385
+msgid "Window function"
+msgstr "Fonction de fenêtrage"
+
+#: ../../doc/features/signal/menus.rst:386
+msgid "Reference"
+msgstr "Référence"
+
+#: ../../doc/features/signal/menus.rst:387
+msgid "Barthann"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:388
+msgid ":py:func:`scipy.signal.windows.barthann`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:389
+msgid "Bartlett"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:390
+msgid ":py:func:`numpy.bartlett`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:391
+msgid "Blackman"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:392
+msgid ":py:func:`scipy.signal.windows.blackman`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:393
+msgid "Blackman-Harris"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:394
+msgid ":py:func:`scipy.signal.windows.blackmanharris`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:395
+msgid "Bohman"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:396
+msgid ":py:func:`scipy.signal.windows.bohman`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:397
+msgid "Boxcar"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:398
+msgid ":py:func:`scipy.signal.windows.boxcar`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:400
+msgid ":py:func:`scipy.signal.windows.cosine`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:402
+msgid ":py:func:`scipy.signal.windows.exponential`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:403
+msgid "Flat top"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:404
+msgid ":py:func:`scipy.signal.windows.flattop`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:406
+msgid ":py:func:`scipy.signal.windows.gaussian`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:407
+msgid "Hamming"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:408
+msgid ":py:func:`numpy.hamming`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:409
+msgid "Hanning"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:410
+msgid ":py:func:`numpy.hanning`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:411
+msgid "Kaiser"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:412
+msgid ":py:func:`scipy.signal.windows.kaiser`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:413
+msgid "Lanczos"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:414
+msgid ":py:func:`scipy.signal.windows.lanczos`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:415
+msgid "Nuttall"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:416
+msgid ":py:func:`scipy.signal.windows.nuttall`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:417
+msgid "Parzen"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:418
+msgid ":py:func:`scipy.signal.windows.parzen`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:419
+msgid "Rectangular"
+msgstr "Rectangulaire"
+
+#: ../../doc/features/signal/menus.rst:420
+msgid ":py:func:`numpy.ones`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:421
+msgid "Taylor"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:422
+msgid ":py:func:`scipy.signal.windows.taylor`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:423
+msgid "Tukey"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:424
+msgid ":py:func:`scipy.signal.windows.tukey`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:427
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../features/signal/menus.rst:307
+#: ../../doc/features/signal/menus.rst:429
 msgid "Create a new signal from a user-defined Region of Interest (ROI)."
 msgstr ""
 "Crée un signal à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../features/signal/menus.rst:311
+#: ../../doc/features/signal/menus.rst:433
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the width of an horizontal range."
@@ -619,23 +1013,23 @@ msgstr ""
 "définie en ajustant la position et la largeur de l'échelle horizontale de"
 " sélection."
 
-#: ../../features/signal/menus.rst:315
+#: ../../doc/features/signal/menus.rst:437
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: ../../features/signal/menus.rst:317
+#: ../../doc/features/signal/menus.rst:439
 msgid "Create a new signal which is the result of swapping X/Y data."
 msgstr "Crée un signal à partir des données inversées X/Y du signal sélectionné."
 
-#: ../../features/signal/menus.rst:320
+#: ../../doc/features/signal/menus.rst:442
 msgid "\"Processing\" menu"
 msgstr "Menu \"Traitement\""
 
-#: ../../features/signal/menus.rst:324
+#: ../../doc/features/signal/menus.rst:446
 msgid "Screenshot of the \"Processing\" menu."
 msgstr "Capture d'écran du menu \"Traitement\"."
 
-#: ../../features/signal/menus.rst:326
+#: ../../doc/features/signal/menus.rst:448
 msgid ""
 "The \"Processing\" menu allows you to perform various processing on the "
 "selected signals, such as smoothing, normalization, or interpolation."
@@ -644,41 +1038,60 @@ msgstr ""
 "signaux sélectionnés, tels que le lissage, la normalisation, ou encore "
 "l'interpolation."
 
-#: ../../features/signal/menus.rst:330
+#: ../../doc/features/signal/menus.rst:452
+msgid "Derivative"
+msgstr "Dérivée"
+
+#: ../../doc/features/signal/menus.rst:454
+msgid "Create a new signal which is the derivative of each selected signal."
+msgstr "Crée un signal à partir de la dérivée de chaque signal sélectionné."
+
+#: ../../doc/features/signal/menus.rst:457
+msgid "Integral"
+msgstr "Intégrale"
+
+#: ../../doc/features/signal/menus.rst:459
+msgid "Create a new signal which is the integral of each selected signal."
+msgstr "Crée un signal à partir de l'intégrale de chaque signal sélectionné."
+
+#: ../../doc/features/signal/menus.rst:462
 msgid "Normalize"
 msgstr "Normaliser"
 
-#: ../../features/signal/menus.rst:332
+#: ../../doc/features/signal/menus.rst:464
 msgid ""
 "Create a new signal which is the normalization of each selected signal by"
-" maximum, amplitude, sum or energy:"
+" maximum, amplitude, sum, energy or RMS:"
 msgstr ""
 "Crée un signal à partir de la normalisation de chaque signal sélectionné "
-"(normalisation par le maximum, en amplitude, en somme ou en énergie) :"
+"par maximum, amplitude, somme, énergie ou RMS :"
 
-#: ../../features/signal/menus.rst:339 ../../features/signal/menus.rst:370
-#: ../../features/signal/menus.rst:453 ../../features/signal/menus.rst:482
-#: ../../features/signal/menus.rst:565
+#: ../../doc/features/signal/menus.rst:471
+#: ../../doc/features/signal/menus.rst:494
+#: ../../doc/features/signal/menus.rst:634
+#: ../../doc/features/signal/menus.rst:663
+#: ../../doc/features/signal/menus.rst:756
+#: ../../doc/features/signal/menus.rst:818
 msgid "Parameter"
 msgstr "Paramètre"
 
-#: ../../features/signal/menus.rst:340
+#: ../../doc/features/signal/menus.rst:472
 msgid "Normalization"
 msgstr "Normalisation"
 
-#: ../../features/signal/menus.rst:341
+#: ../../doc/features/signal/menus.rst:473
 msgid "Maximum"
 msgstr "Maximum"
 
-#: ../../features/signal/menus.rst:342
+#: ../../doc/features/signal/menus.rst:474
 msgid ":math:`y_{1}= \\dfrac{y_{0}}{max(y_{0})}`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:343
+#: ../../doc/features/signal/menus.rst:475
 msgid "Amplitude"
 msgstr "Amplitude"
 
-#: ../../features/signal/menus.rst:344
+#: ../../doc/features/signal/menus.rst:476
 msgid ""
 ":math:`y_{1}= \\dfrac{y_{0}'}{max(y_{0}')}` with "
 ":math:`y_{0}'=y_{0}-min(y_{0})`"
@@ -686,39 +1099,38 @@ msgstr ""
 ":math:`y_{1}= \\dfrac{y_{0}'}{max(y_{0}')}` avec "
 ":math:`y_{0}'=y_{0}-min(y_{0})`"
 
-#: ../../features/signal/menus.rst:346
+#: ../../doc/features/signal/menus.rst:477
+msgid "Area"
+msgstr "Aire"
+
+#: ../../doc/features/signal/menus.rst:478
 msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}y_{0}[n]}`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:347
+#: ../../doc/features/signal/menus.rst:479
 msgid "Energy"
 msgstr "Energie"
 
-#: ../../features/signal/menus.rst:348
-msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}|y_{0}[n]|^2}`"
+#: ../../doc/features/signal/menus.rst:480
+msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sqrt{\\sum_{n=0}^{N}|y_{0}[n]|^2}}`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:351
-msgid "Derivative"
-msgstr "Dérivée"
+#: ../../doc/features/signal/menus.rst:481
+msgid "RMS"
+msgstr ""
 
-#: ../../features/signal/menus.rst:353
-msgid "Create a new signal which is the derivative of each selected signal."
-msgstr "Crée un signal à partir de la dérivée de chaque signal sélectionné."
+#: ../../doc/features/signal/menus.rst:482
+msgid ""
+":math:`y_{1}= "
+"\\dfrac{y_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|y_{0}[n]|^2}}`"
+msgstr ""
 
-#: ../../features/signal/menus.rst:356
-msgid "Integral"
-msgstr "Intégrale"
-
-#: ../../features/signal/menus.rst:358
-msgid "Create a new signal which is the integral of each selected signal."
-msgstr "Crée un signal à partir de l'intégrale de chaque signal sélectionné."
-
-#: ../../features/signal/menus.rst:361 ../../features/signal/menus.rst:371
+#: ../../doc/features/signal/menus.rst:485
+#: ../../doc/features/signal/menus.rst:495
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
-#: ../../features/signal/menus.rst:363
+#: ../../doc/features/signal/menus.rst:487
 msgid ""
 "Create a new signal which is a linear calibration of each selected signal"
 " with respect to X or Y axis:"
@@ -726,27 +1138,27 @@ msgstr ""
 "Crée un signal à partir de l'étalonnage linéaire (par rapport aux axes X "
 "et Y) de chaque signal sélectionné."
 
-#: ../../features/signal/menus.rst:372
+#: ../../doc/features/signal/menus.rst:496
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: ../../features/signal/menus.rst:373
+#: ../../doc/features/signal/menus.rst:497
 msgid ":math:`x_{1} = a.x_{0} + b`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:374
+#: ../../doc/features/signal/menus.rst:498
 msgid "Y-axis"
 msgstr "Axe des Y"
 
-#: ../../features/signal/menus.rst:375
+#: ../../doc/features/signal/menus.rst:499
 msgid ":math:`y_{1} = a.y_{0} + b`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:378
+#: ../../doc/features/signal/menus.rst:502
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
-#: ../../features/signal/menus.rst:380
+#: ../../doc/features/signal/menus.rst:504
 msgid ""
 "Compute 1D-Gaussian filter of each selected signal (implementation based "
 "on `scipy.ndimage.gaussian_filter1d "
@@ -756,11 +1168,11 @@ msgstr ""
 "(implémentation basée sur `scipy.ndimage.gaussian_filter1d "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter1d.html>`_)."
 
-#: ../../features/signal/menus.rst:384
+#: ../../doc/features/signal/menus.rst:508
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
-#: ../../features/signal/menus.rst:386
+#: ../../doc/features/signal/menus.rst:510
 msgid ""
 "Compute moving average on :math:`M` points of each selected signal, "
 "without border effect:"
@@ -768,17 +1180,17 @@ msgstr ""
 "Calcule le résultat de la moyenne mobile sur :math:`M` points de chaque "
 "signal sélectionné, sans effet de bord :"
 
-#: ../../features/signal/menus.rst:389
+#: ../../doc/features/signal/menus.rst:513
 msgid ""
 "y_{1}[i]=\\dfrac{1}{M}\\sum_{j=0}^{M-1}y_{0}[i+j]\n"
 "\n"
 msgstr ""
 
-#: ../../features/signal/menus.rst:393
+#: ../../doc/features/signal/menus.rst:517
 msgid "Moving median"
 msgstr "Médiane mobile"
 
-#: ../../features/signal/menus.rst:395
+#: ../../doc/features/signal/menus.rst:519
 msgid ""
 "Compute moving median of each selected signal (implementation based on "
 "`scipy.signal.medfilt "
@@ -788,11 +1200,11 @@ msgstr ""
 "(implémentation basée sur `scipy.signal.medfilt "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_)."
 
-#: ../../features/signal/menus.rst:399
+#: ../../doc/features/signal/menus.rst:523
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-#: ../../features/signal/menus.rst:401
+#: ../../doc/features/signal/menus.rst:525
 msgid ""
 "Compute Wiener filter of each selected signal (implementation based on "
 "`scipy.signal.wiener "
@@ -802,11 +1214,11 @@ msgstr ""
 "(implémentation basée sur `scipy.signal.wiener "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_)."
 
-#: ../../features/signal/menus.rst:405
+#: ../../doc/features/signal/menus.rst:529
 msgid "FFT"
 msgstr "FFT"
 
-#: ../../features/signal/menus.rst:407
+#: ../../doc/features/signal/menus.rst:531
 msgid ""
 "Create a new signal which is the Fast Fourier Transform (FFT) of each "
 "selected signal."
@@ -814,21 +1226,168 @@ msgstr ""
 "Crée un signal à partir de la transformée de Fourier rapide (FFT) de "
 "chaque signal sélectionné."
 
-#: ../../features/signal/menus.rst:410
+#: ../../doc/features/signal/menus.rst:534
 msgid "Inverse FFT"
 msgstr "FFT inverse"
 
-#: ../../features/signal/menus.rst:412
+#: ../../doc/features/signal/menus.rst:536
 msgid "Create a new signal which is the inverse FFT of each selected signal."
 msgstr ""
 "Crée un signal à partir de la transformée de Fourier rapide inverse (FFT "
 "inverse) de chaque signal sélectionné."
 
-#: ../../features/signal/menus.rst:415
+#: ../../doc/features/signal/menus.rst:539
+msgid "Frequency filters"
+msgstr "Filtres fréquentiels"
+
+#: ../../doc/features/signal/menus.rst:541
+msgid ""
+"Create a new signal which is the result of applying a frequency filter to"
+" each selected signal."
+msgstr ""
+"Crée un signal à partir de l'application d'un filtre fréquentiel à chaque"
+" signal sélectionné."
+
+#: ../../doc/features/signal/menus.rst:543
+msgid "The following filters are available:"
+msgstr "Les filtres suivants sont disponibles :"
+
+#: ../../doc/features/signal/menus.rst:549
+msgid "Filter"
+msgstr "Filtre"
+
+#: ../../doc/features/signal/menus.rst:551
+msgid "|lowpass| Low-pass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:560
+msgid "lowpass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:552
+msgid "Filter out high frequencies, above a cutoff frequency"
+msgstr "Filtre les hautes fréquences, au-dessus d'une fréquence de coupure"
+
+#: ../../doc/features/signal/menus.rst:553
+msgid "|highpass| High-pass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:564
+msgid "highpass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:554
+msgid "Filter out low frequencies, below a cutoff frequency"
+msgstr "Filtre les basses fréquences, en-dessous d'une fréquence de coupure"
+
+#: ../../doc/features/signal/menus.rst:555
+msgid "|bandpass| Band-pass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:568
+msgid "bandpass"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:556
+msgid "Filter out frequencies outside a range"
+msgstr "Filtre les fréquences en dehors d'une plage"
+
+#: ../../doc/features/signal/menus.rst:557
+msgid "|bandstop| Band-stop"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:572
+msgid "bandstop"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:558
+msgid "Filter out frequencies inside a range"
+msgstr "Filtre les fréquences à l'intérieur d'une plage"
+
+#: ../../doc/features/signal/menus.rst:576
+msgid "For each filter, the following methods are available:"
+msgstr "Pour chaque filtre, les méthodes suivantes sont disponibles :"
+
+#: ../../doc/features/signal/menus.rst:582
+#: ../../doc/features/signal/menus.rst:608
+#: ../../doc/features/signal/menus.rst:636
+#: ../../doc/features/signal/menus.rst:665
+#: ../../doc/features/signal/menus.rst:778
+msgid "Method"
+msgstr "Méthode"
+
+#: ../../doc/features/signal/menus.rst:584
+msgid "Bessel"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:585
+msgid ""
+"Bessel filter, using SciPy's `scipy.signal.bessel "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
+" function"
+msgstr ""
+"Filtre de Bessel, utilisant la fonction `scipy.signal.bessel "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
+
+#: ../../doc/features/signal/menus.rst:586
+msgid "Butterworth"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:587
+msgid ""
+"Butterworth filter, using SciPy's `scipy.signal.butter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
+" function"
+msgstr ""
+"Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
+
+#: ../../doc/features/signal/menus.rst:588
+msgid "Chebyshev I"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:589
+msgid ""
+"Chebyshev type I filter, using SciPy's `scipy.signal.cheby1 "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_"
+" function"
+msgstr ""
+"Filtre de Chebyshev de type I, utilisant la fonction `scipy.signal.cheby1"
+" "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_"
+
+#: ../../doc/features/signal/menus.rst:590
+msgid "Chebyshev II"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:591
+msgid ""
+"Chebyshev type II filter, using SciPy's `scipy.signal.cheby2 "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_"
+" function"
+msgstr ""
+"Filtre de Chebyshev de type II, utilisant la fonction "
+"`scipy.signal.cheby2 "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_"
+
+#: ../../doc/features/signal/menus.rst:592
+msgid "Elliptic"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:593
+msgid ""
+"Elliptic filter, using SciPy's `scipy.signal.ellip "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_"
+" function"
+msgstr ""
+"Filtre elliptique, utilisant la fonction `scipy.signal.ellip "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_"
+
+#: ../../doc/features/signal/menus.rst:596
 msgid "Interpolation"
 msgstr "Interpolation"
 
-#: ../../features/signal/menus.rst:417
+#: ../../doc/features/signal/menus.rst:598
 msgid ""
 "Create a new signal which is the interpolation of each selected signal "
 "with respect to a second signal X-axis (which might be the same as one of"
@@ -838,25 +1397,16 @@ msgstr ""
 "par rapport à l'axe X d'un second signal (qui peut être l'un des signaux "
 "sélectionnés)."
 
-#: ../../features/signal/menus.rst:421
+#: ../../doc/features/signal/menus.rst:602
 msgid "The following interpolation methods are available:"
 msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
 
-#: ../../features/signal/menus.rst:427 ../../features/signal/menus.rst:455
-#: ../../features/signal/menus.rst:484
-msgid "Method"
-msgstr "Méthode"
-
-#: ../../features/signal/menus.rst:428 ../../features/signal/menus.rst:454
-#: ../../features/signal/menus.rst:483 ../../features/signal/menus.rst:566
-msgid "Description"
-msgstr "Description"
-
-#: ../../features/signal/menus.rst:429
+#: ../../doc/features/signal/menus.rst:610
+#: ../../doc/features/signal/menus.rst:679
 msgid "Linear"
 msgstr "Linéaire"
 
-#: ../../features/signal/menus.rst:430
+#: ../../doc/features/signal/menus.rst:611
 msgid ""
 "Linear interpolation, using using NumPy's `interp "
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
@@ -866,11 +1416,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
 " de NumPy."
 
-#: ../../features/signal/menus.rst:431
+#: ../../doc/features/signal/menus.rst:612
 msgid "Spline"
 msgstr "Spline"
 
-#: ../../features/signal/menus.rst:432
+#: ../../doc/features/signal/menus.rst:613
 msgid ""
 "Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
@@ -881,11 +1431,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:433
+#: ../../doc/features/signal/menus.rst:614
 msgid "Quadratic"
 msgstr "Quadratique"
 
-#: ../../features/signal/menus.rst:434
+#: ../../doc/features/signal/menus.rst:615
 msgid ""
 "Quadratic interpolation, using using NumPy's `polyval "
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
@@ -895,11 +1445,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
 " de NumPy."
 
-#: ../../features/signal/menus.rst:435
+#: ../../doc/features/signal/menus.rst:616
 msgid "Cubic"
 msgstr "Cubique"
 
-#: ../../features/signal/menus.rst:436
+#: ../../doc/features/signal/menus.rst:617
 msgid ""
 "Cubic interpolation, using using SciPy's `Akima1DInterpolator "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
@@ -909,11 +1459,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:437
+#: ../../doc/features/signal/menus.rst:618
 msgid "Barycentric"
 msgstr "Barycentrique"
 
-#: ../../features/signal/menus.rst:438
+#: ../../doc/features/signal/menus.rst:619
 msgid ""
 "Barycentric interpolation, using using SciPy's `BarycentricInterpolator "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
@@ -924,11 +1474,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:439
+#: ../../doc/features/signal/menus.rst:620
 msgid "PCHIP"
 msgstr "PCHIP"
 
-#: ../../features/signal/menus.rst:440
+#: ../../doc/features/signal/menus.rst:621
 msgid ""
 "Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, "
 "using using SciPy's `PchipInterpolator "
@@ -940,75 +1490,76 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:443
+#: ../../doc/features/signal/menus.rst:624
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
-#: ../../features/signal/menus.rst:445
+#: ../../doc/features/signal/menus.rst:626
 msgid "Create a new signal which is the resampling of each selected signal."
 msgstr "Crée un signal à partir du rééchantillonnage de chaque signal."
 
-#: ../../features/signal/menus.rst:447 ../../features/signal/menus.rst:476
+#: ../../doc/features/signal/menus.rst:628
+#: ../../doc/features/signal/menus.rst:657
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
 
-#: ../../features/signal/menus.rst:456
+#: ../../doc/features/signal/menus.rst:637
 msgid "Interpolation method (see previous section)"
 msgstr "Méthode d'interpolation (voir section précédente)"
 
-#: ../../features/signal/menus.rst:457
+#: ../../doc/features/signal/menus.rst:638
 msgid "Fill value"
 msgstr "Valeur de remplissage"
 
-#: ../../features/signal/menus.rst:458
+#: ../../doc/features/signal/menus.rst:639
 msgid "Interpolation fill value (see previous section)"
 msgstr "Valeur de remplissage pour l'interpolation (voir section précédente)"
 
-#: ../../features/signal/menus.rst:459
+#: ../../doc/features/signal/menus.rst:640
 msgid "Xmin"
 msgstr "Xmin"
 
-#: ../../features/signal/menus.rst:460
+#: ../../doc/features/signal/menus.rst:641
 msgid "Minimum X value"
 msgstr "Borne inférieure"
 
-#: ../../features/signal/menus.rst:461
+#: ../../doc/features/signal/menus.rst:642
 msgid "Xmax"
 msgstr "Xmax"
 
-#: ../../features/signal/menus.rst:462
+#: ../../doc/features/signal/menus.rst:643
 msgid "Maximum X value"
 msgstr "Borne supérieure"
 
-#: ../../features/signal/menus.rst:463
+#: ../../doc/features/signal/menus.rst:644
 msgid "Mode"
 msgstr "Mode"
 
-#: ../../features/signal/menus.rst:464
+#: ../../doc/features/signal/menus.rst:645
 msgid "Resampling mode: step size or number of points"
 msgstr "Mode de rééchantillonnage : pas ou nombre de points"
 
-#: ../../features/signal/menus.rst:465
+#: ../../doc/features/signal/menus.rst:646
 msgid "Step size"
 msgstr "Pas"
 
-#: ../../features/signal/menus.rst:466
+#: ../../doc/features/signal/menus.rst:647
 msgid "Resampling step size"
 msgstr "Pas de rééchantillonnage"
 
-#: ../../features/signal/menus.rst:467
+#: ../../doc/features/signal/menus.rst:648
 msgid "Number of points"
 msgstr "Nombre de points"
 
-#: ../../features/signal/menus.rst:468
+#: ../../doc/features/signal/menus.rst:649
 msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
 
-#: ../../features/signal/menus.rst:471
+#: ../../doc/features/signal/menus.rst:652
 msgid "Detrending"
 msgstr "Elimination de tendance"
 
-#: ../../features/signal/menus.rst:473
+#: ../../doc/features/signal/menus.rst:654
 msgid ""
 "Create a new signal which is the detrending of each selected signal. This"
 " features is based on SciPy's `scipy.signal.detrend "
@@ -1020,7 +1571,7 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:485
+#: ../../doc/features/signal/menus.rst:666
 msgid ""
 "Detrending method: 'linear' or 'constant'. See SciPy's "
 "`scipy.signal.detrend "
@@ -1032,35 +1583,55 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
 " de SciPy."
 
-#: ../../features/signal/menus.rst:488
-msgid "Lorentzian, Voigt, Polynomial and Multi-Gaussian fit"
-msgstr "Ajustements lorentzien, Voigt, polynomial et multi-gaussien"
+#: ../../doc/features/signal/menus.rst:669
+msgid "Fitting"
+msgstr "Ajustement"
 
-#: ../../features/signal/menus.rst:490
+#: ../../doc/features/signal/menus.rst:671
 msgid "Open an interactive curve fitting tool in a modal dialog box."
 msgstr ""
 "Ouvre une boîte de dialogue permettant de réaliser des ajustements de "
 "courbe de manière interactive."
 
-#: ../../features/signal/menus.rst:504
+#: ../../doc/features/signal/menus.rst:680
+msgid ":math:`y = c_{0}+c_{1}.x`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:682
+msgid ":math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:689
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-#: ../../features/signal/menus.rst:505
+#: ../../doc/features/signal/menus.rst:690
 msgid ""
 ":math:`y = "
 "y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"
 msgstr ""
 
-#: ../../features/signal/menus.rst:508
+#: ../../doc/features/signal/menus.rst:693
+msgid "Sinusoidal"
+msgstr "Sinusoïdal"
+
+#: ../../doc/features/signal/menus.rst:695
+msgid "Cumulative Distribution Function (CDF)"
+msgstr "Fonction de distribution cumulative (CDF)"
+
+#: ../../doc/features/signal/menus.rst:696
+msgid ":math:`y = y_{0}+A.erf(\\dfrac{x-x_{0}}{\\sigma.\\sqrt{2}})`"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:699
 msgid "\"Computing\" menu"
 msgstr "Menu \"Calculs\""
 
-#: ../../features/signal/menus.rst:512
+#: ../../doc/features/signal/menus.rst:703
 msgid "Screenshot of the \"Computing\" menu."
 msgstr "Capture d'écran du menu \"Calculs\"."
 
-#: ../../features/signal/menus.rst:514
+#: ../../doc/features/signal/menus.rst:705
 msgid ""
 "The \"Computing\" menu allows you to perform various computations on the "
 "selected signals, such as statistics, full width at half-maximum, or full"
@@ -1070,7 +1641,7 @@ msgstr ""
 "sélectionnés, tels que des statistiques, la largeur à mi-hauteur, ou "
 "encore la largeur à 1/e²."
 
-#: ../../features/signal/menus.rst:520
+#: ../../doc/features/signal/menus.rst:711
 msgid ""
 "In DataLab vocabulary, a \"computing\" is a feature that computes a "
 "scalar result from a signal. This result is stored as metadata, and thus "
@@ -1083,11 +1654,11 @@ msgstr ""
 "diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
 "signal existant."
 
-#: ../../features/signal/menus.rst:526
+#: ../../doc/features/signal/menus.rst:717
 msgid "Edit regions of interest"
 msgstr "Modifier les régions d'intérêt"
 
-#: ../../features/signal/menus.rst:528
+#: ../../doc/features/signal/menus.rst:719
 msgid ""
 "Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
 "stored as metadata, and thus attached to signal."
@@ -1096,7 +1667,7 @@ msgstr ""
 "multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
 "sont donc attachées au signal."
 
-#: ../../features/signal/menus.rst:531
+#: ../../doc/features/signal/menus.rst:722
 msgid ""
 "ROI definition dialog is exactly the same as ROI extraction (see above): "
 "the ROI is defined by moving the position and adjusting the width of an "
@@ -1107,31 +1678,31 @@ msgstr ""
 "définie est ajustant la position et la largeur de l'échelle horizontale "
 "de sélection."
 
-#: ../../features/signal/menus.rst:537
+#: ../../doc/features/signal/menus.rst:728
 msgid "A signal with an ROI."
 msgstr "Un signal avec une ROI."
 
-#: ../../features/signal/menus.rst:540
+#: ../../doc/features/signal/menus.rst:731
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: ../../features/signal/menus.rst:542
+#: ../../doc/features/signal/menus.rst:733
 msgid "Remove all defined ROI for selected object(s)."
 msgstr ""
 "Supprimer toutes les ROI définies pour l'objet ou les objets "
 "sélectionné(s)."
 
-#: ../../features/signal/menus.rst:545
+#: ../../doc/features/signal/menus.rst:736
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ../../features/signal/menus.rst:547
+#: ../../doc/features/signal/menus.rst:738
 msgid "Compute statistics on selected signal and show a summary table."
 msgstr ""
 "Calcule des statistiques sur les signaux sélectionnés et affiche un "
 "tableau récapitulatif."
 
-#: ../../features/signal/menus.rst:551
+#: ../../doc/features/signal/menus.rst:742
 msgid ""
 "Example of statistical summary table: each row is associated to an ROI "
 "(the first row gives the statistics for the whole data)."
@@ -1140,68 +1711,95 @@ msgstr ""
 "associée à une ROI (à l'exception de la première qui correspond aux "
 "statistiques calculées sur la totalité des données)."
 
-#: ../../features/signal/menus.rst:555
+#: ../../doc/features/signal/menus.rst:746
 msgid "Histogram"
 msgstr "Histogramme"
 
-#: ../../features/signal/menus.rst:557
+#: ../../doc/features/signal/menus.rst:748
 msgid "Compute histogram of selected signal and show it."
 msgstr "Calcule l'histogramme du signal sélectionné et l'affiche."
 
-#: ../../features/signal/menus.rst:559
+#: ../../doc/features/signal/menus.rst:750
 msgid "Parameters are:"
 msgstr "Paramètres :"
 
-#: ../../features/signal/menus.rst:567
+#: ../../doc/features/signal/menus.rst:758
 msgid "Bins"
 msgstr "Classes"
 
-#: ../../features/signal/menus.rst:568
+#: ../../doc/features/signal/menus.rst:759
 msgid "Number of bins"
 msgstr "Nombre de classes"
 
-#: ../../features/signal/menus.rst:569
+#: ../../doc/features/signal/menus.rst:760
 msgid "Lower limit"
 msgstr "Limite inférieure"
 
-#: ../../features/signal/menus.rst:570
+#: ../../doc/features/signal/menus.rst:761
 msgid "Lower limit of the histogram"
 msgstr "Limite inférieure de l'histogramme"
 
-#: ../../features/signal/menus.rst:571
+#: ../../doc/features/signal/menus.rst:762
 msgid "Upper limit"
 msgstr "Limite supérieure"
 
-#: ../../features/signal/menus.rst:572
+#: ../../doc/features/signal/menus.rst:763
 msgid "Upper limit of the histogram"
 msgstr "Limite supérieure de l'histogramme"
 
-#: ../../features/signal/menus.rst:576
+#: ../../doc/features/signal/menus.rst:767
 msgid "Example of histogram."
 msgstr "Exemple d'histogramme."
 
-#: ../../features/signal/menus.rst:579
+#: ../../doc/features/signal/menus.rst:770
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
-#: ../../features/signal/menus.rst:581
+#: ../../doc/features/signal/menus.rst:772
 msgid ""
-"Fit data to a Gaussian, Lorentzian or Voigt model using least-square "
-"method. Then, compute the full width at half-maximum value."
-msgstr ""
-"Réalise l'ajustement des données à une gaussienne, une lorenztienne ou "
-"une courbe de Voigt en utilisant un algorithme de moindres carrés. "
-"Calcule ensuite la largeur à mi-hauteur du modèle d'ajustement."
+"Compute the Full Width at Half-Maximum (FWHM) of selected signal, using "
+"one of the following methods:"
+msgstr "Calcule la largeur à mi-hauteur (LMH) du signal sélectionné, en utilisant l'une des méthodes suivantes :"
 
-#: ../../features/signal/menus.rst:587
+#: ../../doc/features/signal/menus.rst:780
+msgid "Zero-crossing"
+msgstr "Passage par zéro"
+
+#: ../../doc/features/signal/menus.rst:781
+msgid ""
+"Find the zero-crossings of the signal after having centered its amplitude"
+" around zero"
+msgstr "Recherche les passages par zéro du signal après avoir centré son amplitude autour de zéro"
+
+#: ../../doc/features/signal/menus.rst:782
+msgid "Gauss"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:783
+msgid "Fit data to a Gaussian model using least-square method"
+msgstr "Ajuste les données à un modèle gaussien en utilisant un algorithme de moindres carrés"
+
+#: ../../doc/features/signal/menus.rst:784
+msgid "Lorentz"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:785
+msgid "Fit data to a Lorentzian model using least-square method"
+msgstr "Ajuste les données à un modèle lorentzien en utilisant un algorithme de moindres carrés"
+
+#: ../../doc/features/signal/menus.rst:787
+msgid "Fit data to a Voigt model using least-square method"
+msgstr "Ajuste les données à un modèle de Voigt en utilisant un algorithme de moindres carrés"
+
+#: ../../doc/features/signal/menus.rst:791
 msgid "The computed result is displayed as an annotated segment."
 msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
 
-#: ../../features/signal/menus.rst:590
+#: ../../doc/features/signal/menus.rst:794
 msgid "Full width at 1/e²"
 msgstr "Largeur à 1/e²"
 
-#: ../../features/signal/menus.rst:592
+#: ../../doc/features/signal/menus.rst:796
 msgid ""
 "Fit data to a Gaussian model using least-square method. Then, compute the"
 " full width at 1/e²."
@@ -1210,7 +1808,7 @@ msgstr ""
 "algorithme de moindres carrés. Calcule ensuite la largeur à 1/e² du "
 "modèle d'ajustement."
 
-#: ../../features/signal/menus.rst:595
+#: ../../doc/features/signal/menus.rst:799
 msgid ""
 "Computed scalar results are systematically stored as metadata. Metadata "
 "is attached to signal and serialized with it when exporting current "
@@ -1221,11 +1819,80 @@ msgstr ""
 " ce dernier par exemple lors de l'export d'une session de DataLab vers un"
 " fichier HDF5."
 
-#: ../../features/signal/menus.rst:600
+#: ../../doc/features/signal/menus.rst:804
+msgid "Bandwidth at -3 dB"
+msgstr "Bande passante à -3 dB"
+
+#: ../../doc/features/signal/menus.rst:806
+msgid ""
+"Assuming the signal is a filter response, compute the bandwidth at -3 dB "
+"by finding the frequency range where the signal is above -3 dB."
+msgstr ""
+"En prenant l'hypothèse que le signal est une réponse de filtre, calcule "
+"la bande passante à -3 dB en trouvant la plage de fréquences où le signal"
+" est supérieur à -3 dB."
+
+#: ../../doc/features/signal/menus.rst:810
+msgid "Dynamic parameters"
+msgstr "Paramètres dynamiques"
+
+#: ../../doc/features/signal/menus.rst:812
+msgid "Compute the following dynamic parameters on selected signal:"
+msgstr "Calcule les paramètres dynamiques suivants sur le signal sélectionné :"
+
+#: ../../doc/features/signal/menus.rst:820
+msgid "f"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:821
+msgid "Frequency (sinusoidal fit)"
+msgstr "Fréquence (ajustement sinusoïdal)"
+
+#: ../../doc/features/signal/menus.rst:822
+msgid "ENOB"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:823
+msgid "Effective Number Of Bits"
+msgstr "Bits effectifs"
+
+#: ../../doc/features/signal/menus.rst:824
+msgid "SNR"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:825
+msgid "Signal-to-Noise Ratio"
+msgstr "Rapport signal/bruit"
+
+#: ../../doc/features/signal/menus.rst:826
+msgid "SINAD"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:827
+msgid "Signal-to-Noise And Distortion Ratio"
+msgstr "Rapport signal/bruit et distorsion"
+
+#: ../../doc/features/signal/menus.rst:828
+msgid "THD"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:829
+msgid "Total Harmonic Distortion"
+msgstr "Distorsion harmonique totale"
+
+#: ../../doc/features/signal/menus.rst:830
+msgid "SFDR"
+msgstr ""
+
+#: ../../doc/features/signal/menus.rst:831
+msgid "Spurious-Free Dynamic Range"
+msgstr "Dynamique sans distorsion"
+
+#: ../../doc/features/signal/menus.rst:834
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: ../../features/signal/menus.rst:602
+#: ../../doc/features/signal/menus.rst:836
 msgid ""
 "Show the results of all computations performed on the selected signals. "
 "This shows the same table as the one shown after having performed a "
@@ -1235,11 +1902,11 @@ msgstr ""
 "sélectionnés. Cela affiche le même tableau que celui affiché après avoir "
 "effectué un calcul."
 
-#: ../../features/signal/menus.rst:606
+#: ../../doc/features/signal/menus.rst:840
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: ../../features/signal/menus.rst:608
+#: ../../doc/features/signal/menus.rst:842
 msgid ""
 "Plot the results of computations performed on the selected signals, with "
 "user-defined X and Y axes (e.g. plot the FWHM as a function of the signal"
@@ -1249,15 +1916,15 @@ msgstr ""
 "avec des axes X et Y définis par l'utilisateur (p.ex. trace la largeur à "
 "mi-hauteur en fonction de l'indice du signal)."
 
-#: ../../features/signal/menus.rst:612
+#: ../../doc/features/signal/menus.rst:846
 msgid "\"View\" menu"
 msgstr "Menu \"Affichage\""
 
-#: ../../features/signal/menus.rst:616
+#: ../../doc/features/signal/menus.rst:850
 msgid "Screenshot of the \"View\" menu."
 msgstr "Capture d'écran du menu \"Affichage\"."
 
-#: ../../features/signal/menus.rst:618
+#: ../../doc/features/signal/menus.rst:852
 msgid ""
 "The \"View\" menu allows you to visualize the current signal or group of "
 "signals. It also allows you to show/hide titles, to enable/disable anti-"
@@ -1268,15 +1935,15 @@ msgstr ""
 "d'activer/désactiver l'anticrénelage, ou encore de rafraîchir la "
 "visualisation."
 
-#: ../../features/signal/menus.rst:623
+#: ../../doc/features/signal/menus.rst:857
 msgid "View in a new window"
 msgstr "Voir dans une nouvelle fenêtre"
 
-#: ../../features/signal/menus.rst:625
+#: ../../doc/features/signal/menus.rst:859
 msgid "Open a new window to visualize and the selected signals."
 msgstr "Ouvre une nouvelle fenêtre pour visualiser les signaux sélectionées."
 
-#: ../../features/signal/menus.rst:627
+#: ../../doc/features/signal/menus.rst:861
 msgid ""
 "In the separate window, you may visualize your data more comfortably "
 "(e.g., by maximizing the window) and you may also annotate the data."
@@ -1285,27 +1952,27 @@ msgstr ""
 "(p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées"
 " aux données."
 
-#: ../../features/signal/menus.rst:631
+#: ../../doc/features/signal/menus.rst:865
 msgid "See :ref:`ref-to-signal-annotations` for more details on annotations."
 msgstr ""
 "Voir :ref:`ref-to-signal-annotations` pour plus de détails sur les "
 "annotations."
 
-#: ../../features/signal/menus.rst:634
+#: ../../doc/features/signal/menus.rst:868
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: ../../features/signal/menus.rst:636
+#: ../../doc/features/signal/menus.rst:870
 msgid "Show/hide titles of computing results or annotations."
 msgstr ""
 "Affiche/cache les titres des objets graphiques liés aux résultats de "
 "calculs et aux annotations."
 
-#: ../../features/signal/menus.rst:639
+#: ../../doc/features/signal/menus.rst:873
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: ../../features/signal/menus.rst:641
+#: ../../doc/features/signal/menus.rst:875
 msgid ""
 "Automatically refresh the visualization when the data changes. When "
 "enabled (default), the plot view is automatically refreshed when the data"
@@ -1329,11 +1996,11 @@ msgstr ""
 " données volumineuses, et l'activer à nouveau quand vous avez terminé. "
 "Cela évitera des rafraîchissements inutiles."
 
-#: ../../features/signal/menus.rst:653
+#: ../../doc/features/signal/menus.rst:887
 msgid "Refresh manually"
 msgstr "Rafraîchir manuellement"
 
-#: ../../features/signal/menus.rst:655
+#: ../../doc/features/signal/menus.rst:889
 msgid ""
 "Refresh the visualization manually. This triggers a refresh of the plot "
 "view, even if the auto-refresh feature is disabled."
@@ -1342,11 +2009,11 @@ msgstr ""
 "rafraîchissement de la visualisation, même si le rafraîchissement "
 "automatique est désactivé."
 
-#: ../../features/signal/menus.rst:659
+#: ../../doc/features/signal/menus.rst:893
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
 
-#: ../../features/signal/menus.rst:661
+#: ../../doc/features/signal/menus.rst:895
 msgid ""
 "Enable/disable anti-aliasing of curves. Anti-aliasing makes the curves "
 "look smoother, but it may also make them look less sharp."
@@ -1354,11 +2021,11 @@ msgstr ""
 "Active/désactive l'anticrénelage sur les courbes. L'anticrénelage rend "
 "les courbes plus lisses, mais peut aussi les rendre moins nettes."
 
-#: ../../features/signal/menus.rst:665
+#: ../../doc/features/signal/menus.rst:899
 msgid "Anti-aliasing is enabled by default."
 msgstr "L'anticrénelage est activé par défaut."
 
-#: ../../features/signal/menus.rst:668
+#: ../../doc/features/signal/menus.rst:902
 msgid ""
 "Anti-aliasing may slow down the visualization, especially when working "
 "with large data sets."
@@ -1366,11 +2033,11 @@ msgstr ""
 "L'anticrénelage peut ralentir significativement l'affichage, surtout "
 "quand on travaille avec des données volumineuses."
 
-#: ../../features/signal/menus.rst:672
+#: ../../doc/features/signal/menus.rst:906
 msgid "Reset curve styles"
 msgstr "Réinitialiser les styles de courbes"
 
-#: ../../features/signal/menus.rst:674
+#: ../../doc/features/signal/menus.rst:908
 msgid ""
 "When plotting curves, DataLab automatically assigns a color and a line "
 "style to each curve. Both parameters are chosen from a predefined list of"
@@ -1381,7 +2048,7 @@ msgstr ""
 "choisis dans une liste prédéfinie de couleurs et de styles de ligne, et "
 "sont attribués de manière cyclique."
 
-#: ../../features/signal/menus.rst:678
+#: ../../doc/features/signal/menus.rst:912
 msgid ""
 "This menu entry allows you to reset the curve styles, so that the next "
 "time you plot curves, the first curve will be assigned the first color "
@@ -1393,23 +2060,23 @@ msgstr ""
 "courbe sera attribuée la première couleur et le premier style de ligne de"
 " la liste prédéfinie, et la boucle recommencera à partir de là."
 
-#: ../../features/signal/menus.rst:683
+#: ../../doc/features/signal/menus.rst:917
 msgid "Other menu entries"
 msgstr "Autres entrées du menu"
 
-#: ../../features/signal/menus.rst:685
+#: ../../doc/features/signal/menus.rst:919
 msgid "Show/hide panels or toolbars."
 msgstr "Affiche/cache les panneaux et barres d'outils."
 
-#: ../../features/signal/menus.rst:688
+#: ../../doc/features/signal/menus.rst:922
 msgid "\"?\" menu"
 msgstr "Menu \"?\""
 
-#: ../../features/signal/menus.rst:692
+#: ../../doc/features/signal/menus.rst:926
 msgid "Screenshot of the \"?\" menu."
 msgstr "Capture d'écran du menu \"?\"."
 
-#: ../../features/signal/menus.rst:694
+#: ../../doc/features/signal/menus.rst:928
 msgid ""
 "The \"?\" menu allows you to access the online documentation, to show log"
 " files, to show information regarding your DataLab installation, and to "
@@ -1420,33 +2087,33 @@ msgstr ""
 "configuration d'installation de DataLab, et d'afficher la boîte de "
 "dialogue \"A propos de DataLab\"."
 
-#: ../../features/signal/menus.rst:699
+#: ../../doc/features/signal/menus.rst:933
 msgid "Online or Local documentation"
 msgstr "Documentation en ligne ou locale"
 
-#: ../../features/signal/menus.rst:701
+#: ../../doc/features/signal/menus.rst:935
 msgid "Open the online or local documentation:"
 msgstr "Affiche la documentation en ligne ou locale :"
 
-#: ../../features/signal/menus.rst:706
+#: ../../doc/features/signal/menus.rst:940
 msgid "Show log files"
 msgstr "Afficher les journaux de bords"
 
-#: ../../features/signal/menus.rst:708
+#: ../../doc/features/signal/menus.rst:942
 msgid "Open DataLab log viewer"
 msgstr "Affiche l'explorateur de journaux de bord de DataLab"
 
-#: ../../features/signal/menus.rst:711
+#: ../../doc/features/signal/menus.rst:945
 msgid "See :ref:`ref-to-logviewer` for more details on log viewer."
 msgstr ""
 "Voir la page :ref:`ref-to-logviewer` pour plus de détails sur les "
 "journaux de bord."
 
-#: ../../features/signal/menus.rst:714
+#: ../../doc/features/signal/menus.rst:948
 msgid "About DataLab installation"
 msgstr "Configuration d'installation de DataLab"
 
-#: ../../features/signal/menus.rst:716
+#: ../../doc/features/signal/menus.rst:950
 msgid ""
 "Show information regarding your DataLab installation (this is typically "
 "needed for submitting a bug report)."
@@ -1455,17 +2122,17 @@ msgstr ""
 "DataLab (particulièrement utile pour signaler des anomalies de manière "
 "efficace)."
 
-#: ../../features/signal/menus.rst:720
+#: ../../doc/features/signal/menus.rst:954
 msgid "See :ref:`ref-to-instviewer` for more details on this dialog box."
 msgstr ""
 "Voir la page :ref:`ref-to-instviewer` pour plus de détails sur cette "
 "boîte de dialogue."
 
-#: ../../features/signal/menus.rst:723
+#: ../../doc/features/signal/menus.rst:957
 msgid "About"
 msgstr "À propos"
 
-#: ../../features/signal/menus.rst:725
+#: ../../doc/features/signal/menus.rst:959
 msgid "Open the \"About DataLab\" dialog box:"
 msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 
@@ -1517,3 +2184,33 @@ msgstr "Affiche la boîte de dialogue \"A propos de DataLab\""
 #~ "See :ref:`signal_text_file_import` page for "
 #~ "more details on importing text files."
 #~ msgstr ""
+
+#~ msgid "Log10(y)"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "z_{k} = \\log_{10}(z_{k-1})\n"
+#~ "\n"
+#~ msgstr ""
+
+#~ msgid ":math:`y_{1}= \\dfrac{y_{0}}{\\sum_{n=0}^{N}|y_{0}[n]|^2}`"
+#~ msgstr ""
+
+#~ msgid "Lorentzian, Voigt, Polynomial and Multi-Gaussian fit"
+#~ msgstr "Ajustements lorentzien, Voigt, polynomial et multi-gaussien"
+
+#~ msgid "Random"
+#~ msgstr "Aléatoire"
+
+#~ msgid ""
+#~ "Fit data to a Gaussian, Lorentzian "
+#~ "or Voigt model using least-square "
+#~ "method. Then, compute the full width "
+#~ "at half-maximum value."
+#~ msgstr ""
+#~ "Réalise l'ajustement des données à une"
+#~ " gaussienne, une lorenztienne ou une "
+#~ "courbe de Voigt en utilisant un "
+#~ "algorithme de moindres carrés. Calcule "
+#~ "ensuite la largeur à mi-hauteur du"
+#~ " modèle d'ajustement."

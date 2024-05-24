@@ -40,9 +40,11 @@ if TYPE_CHECKING:
 
     from cdl.core.computation.base import (
         ClipParam,
+        ConstantOperationParam,
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
+        NormalizeParam,
         ThresholdParam,
     )
     from cdl.core.gui.panel.image import ImagePanel
@@ -222,7 +224,7 @@ class BaseProcessor(QC.QObject):
     def init_param(
         self,
         param: gds.DataSet,
-        paramclass: gds.DataSet,
+        paramclass: type[gds.DataSet],
         title: str,
         comment: str | None = None,
     ) -> tuple[bool, gds.DataSet]:
@@ -299,7 +301,7 @@ class BaseProcessor(QC.QObject):
         self._compute_11_subroutine(funcs, params, title)
 
     def handle_output(
-        self, compout: CompOut, context: str
+        self, compout: CompOut, context: str, progress: QW.QProgressDialog
     ) -> SignalObj | ImageObj | ResultShape | ResultProperties | None:
         """Handle computation output: if error, display error message,
         if warning, display warning message.
@@ -307,18 +309,24 @@ class BaseProcessor(QC.QObject):
         Args:
             compout: computation output
             context: context (e.g. "Computing: Gaussian filter")
+            progress: progress dialog
 
         Returns:
             Output object: a signal or image object, or a result shape object,
              or None if error
         """
-        if compout.error_msg:
-            show_warning_error(
-                self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
-            )
-            return None
-        if compout.warning_msg:
-            show_warning_error(self.panel, "warning", context, compout.warning_msg)
+        if compout.error_msg or compout.warning_msg:
+            mindur = progress.minimumDuration()
+            progress.setMinimumDuration(1000000)
+            if compout.error_msg:
+                show_warning_error(
+                    self.panel, "error", context, compout.error_msg, COMPUTATION_TIP
+                )
+            if compout.warning_msg:
+                show_warning_error(self.panel, "warning", context, compout.warning_msg)
+            progress.setMinimumDuration(mindur)
+            if compout.error_msg:
+                return None
         return compout.result
 
     def __exec_func(
@@ -381,7 +389,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    new_obj = self.handle_output(result, _("Computing: %s") % i_title)
+                    new_obj = self.handle_output(
+                        result, _("Computing: %s") % i_title, progress
+                    )
                     if new_obj is None:
                         continue
 
@@ -455,7 +465,9 @@ class BaseProcessor(QC.QObject):
                 compout = self.__exec_func(func, args, progress)
                 if compout is None:
                     break
-                result = self.handle_output(compout, _("Computing: %s") % title)
+                result = self.handle_output(
+                    compout, _("Computing: %s") % title, progress
+                )
                 if result is None:
                     continue
 
@@ -465,7 +477,7 @@ class BaseProcessor(QC.QObject):
                     obj.metadata[f"{result.label}Param"] = str(param)
 
                 results[obj.uuid] = result
-                xlabels = result.get_xlabels(obj)
+                xlabels = result.headers
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
@@ -548,7 +560,9 @@ class BaseProcessor(QC.QObject):
                     result = self.__exec_func(func, args, progress)
                     if result is None:
                         break
-                    dst_obj = self.handle_output(result, _("Calculating: %s") % title)
+                    dst_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
                     if dst_obj is None:
                         break
                     dst_objs[src_gid] = dst_obj
@@ -628,7 +642,9 @@ class BaseProcessor(QC.QObject):
                 result = self.__exec_func(func, args, progress)
                 if result is None:
                     break
-                new_obj = self.handle_output(result, _("Calculating: %s") % title)
+                new_obj = self.handle_output(
+                    result, _("Calculating: %s") % title, progress
+                )
                 if new_obj is None:
                     continue
                 group_id = self.panel.objmodel.get_object_group_id(obj)
@@ -640,6 +656,11 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_normalize(self, param: NormalizeParam | None = None) -> None:
+        """Normalize data"""
 
     @abc.abstractmethod
     @qt_try_except()
@@ -728,6 +749,11 @@ class BaseProcessor(QC.QObject):
     def compute_log10(self) -> None:
         """Compute Log10"""
 
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_exp(self) -> None:
+        """Compute exponential"""
+
     # ------Data Processing-------------------------------------------------------------
 
     @abc.abstractmethod
@@ -774,6 +800,26 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_ifft(self) -> None:
         """Compute FFT"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_addition_constant(self, param: ConstantOperationParam) -> None:
+        """Compute sum with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_difference_constant(self, param: ConstantOperationParam) -> None:
+        """Compute difference with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_product_constant(self, param: ConstantOperationParam) -> None:
+        """Compute product with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_division_constant(self, param: ConstantOperationParam) -> None:
+        """Compute division by a constant"""
 
     # ------Computing-------------------------------------------------------------------
 

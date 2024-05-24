@@ -95,7 +95,7 @@ def test_multiprocessing1(iterations: int = 4) -> None:
         param = cdl.obj.new_image_param(
             height=1000, width=1000, dtype=cdl.obj.ImageDatatypes.UINT16
         )
-        image = create_noisygauss_image(param)
+        image = create_noisygauss_image(param, add_annotations=True)
         win.get_plot().add_item(image.make_item())
         worker = Worker()
         with create_progress_bar(win, "Computing", max_=iterations) as progress:

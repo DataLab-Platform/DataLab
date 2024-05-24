@@ -18,6 +18,8 @@ from cdl.core.gui.main import CDLMainWindow
 from cdl.core.gui.panel.image import ImagePanel
 from cdl.core.gui.panel.signal import SignalPanel
 from cdl.tests.data import (
+    GaussianNoiseParam,
+    create_noisy_signal,
     create_paracetamol_signal,
     create_peak2d_image,
     create_sincos_image,
@@ -49,6 +51,7 @@ def __compute_11_operations(panel: SignalPanel | ImagePanel, number: int) -> Non
     panel.remove_object()
     panel.processor.compute_astype(dlp.DataTypeIParam.create(dtype="float64"))
     panel.processor.compute_log10()
+    panel.processor.compute_exp()
     panel.processor.compute_swap_axes()
     panel.processor.compute_swap_axes()
 
@@ -69,6 +72,17 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((2,))
     panel.processor.compute_quadratic_difference(panel[2])
     panel.delete_metadata()
+
+    const_oper_param = dlp.ConstantOperationParam.create(value=2.0)
+    for const_oper in (
+        panel.processor.compute_addition_constant,
+        panel.processor.compute_difference_constant,
+        panel.processor.compute_product_constant,
+        panel.processor.compute_division_constant,
+    ):
+        panel.objview.select_objects((3,))
+        const_oper(param=const_oper_param)
+
     panel.objview.select_objects((3,))
     panel.remove_object()
 
@@ -79,6 +93,13 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.objview.select_objects((1, 2))
     panel.processor.compute_product()
 
+    param = dlp.ConstantOperationParam()
+    param.value = 2.0
+    panel.processor.compute_addition_constant(param)
+    panel.processor.compute_difference_constant(param)
+    panel.processor.compute_product_constant(param)
+    panel.processor.compute_division_constant(param)
+
     obj = panel.objmodel.get_groups()[0][-1]
     param = dlp.ThresholdParam()
     param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
@@ -86,6 +107,11 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     param = dlp.ClipParam()  # Clipping before division...
     param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
+
+    param = dlp.NormalizeParam()
+    for method_value, _method_name in param.methods:
+        param.method = method_value
+        panel.processor.compute_normalize(param)
 
     panel.objview.select_objects((3, 7))
     panel.processor.compute_division()
@@ -120,16 +146,39 @@ def run_signal_computations(
         _("Random function"), stype=dlo.SignalTypes.UNIFORMRANDOM
     )
     addparam = dlo.UniformRandomParam.create(vmin=0, vmax=sig1.y.max() * 0.2)
-    panel.new_object(newparam, addparam=addparam, edit=False)
+    noiseobj1 = panel.new_object(newparam, addparam=addparam, edit=False)
 
     compute_common_operations(panel)
 
-    win.add_object(create_paracetamol_signal(data_size))
+    # Signal specific operations
+    panel.processor.compute_sqrt()
+    panel.processor.compute_pow(dlp.PowParam.create(exponent=2))
+    panel.processor.compute_reverse_x()
+    panel.processor.compute_reverse_x()
 
-    param = dlp.NormalizeYParam()
-    for _name, method in param.methods:
-        param.method = method
-        panel.processor.compute_normalize(param)
+    # Test filter methods
+    for filter_func, paramclass in (
+        (panel.processor.compute_lowpass, dlp.LowPassFilterParam),
+        (panel.processor.compute_highpass, dlp.HighPassFilterParam),
+        (panel.processor.compute_bandpass, dlp.BandPassFilterParam),
+        (panel.processor.compute_bandstop, dlp.BandStopFilterParam),
+    ):
+        for method_value, _method_name in paramclass.methods:
+            panel.objview.set_current_object(sig1)
+            param = paramclass.create(method=method_value)
+            param.update_from_signal(sig1)  # Use default cut-off frequencies
+            filter_func(param)
+
+    # Test windowing methods
+    noiseobj2 = noiseobj1.copy()
+    win.add_object(noiseobj2)
+    param = dlp.WindowingParam()
+    for method_value, _method_name in param.methods:
+        panel.objview.set_current_object(noiseobj2)
+        param.method = method_value
+        panel.processor.compute_windowing(param)
+
+    win.add_object(sig1.copy())
 
     param = dlp.XYCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
@@ -148,12 +197,21 @@ def run_signal_computations(
     i2 = len(sig.y) - i1
     panel.processor.compute_roi_extraction(dlp.ROIDataParam.create(roidata=[[i1, i2]]))
 
+    sig = create_noisy_signal(GaussianNoiseParam.create(sigma=5.0))
+    panel.add_object(sig)
     param = dlp.PolynomialFitParam()
     panel.processor.compute_polyfit(param)
-
-    panel.processor.compute_fit(_("Gaussian fit"), fitdialog.gaussianfit)
-    panel.processor.compute_fit(_("Lorentzian fit"), fitdialog.lorentzianfit)
-    panel.processor.compute_fit(_("Voigt fit"), fitdialog.voigtfit)
+    for fittitle, fitfunc in (
+        (_("Gaussian fit"), fitdialog.gaussianfit),
+        (_("Lorentzian fit"), fitdialog.lorentzianfit),
+        (_("Voigt fit"), fitdialog.voigtfit),
+        (_("Linear fit"), fitdialog.linearfit),
+        (_("Exponential fit"), fitdialog.exponentialfit),
+        (_("CDF fit"), fitdialog.cdffit),
+        (_("Sinusoidal fit"), fitdialog.sinusoidalfit),
+    ):
+        panel.objview.set_current_object(sig)
+        panel.processor.compute_fit(fittitle, fitfunc)
 
     newparam = dlo.new_signal_param(_("Gaussian"), stype=dlo.SignalTypes.GAUSS)
     sig = dlo.create_signal_from_param(
@@ -162,8 +220,8 @@ def run_signal_computations(
     panel.add_object(sig)
 
     param = dlp.FWHMParam()
-    for fittype, _name in param.fittypes:
-        param.fittype = fittype
+    for method_value, _method_name in param.methods:
+        param.method = method_value
         panel.processor.compute_fwhm(param)
     panel.processor.compute_fw1e2()
 
@@ -175,7 +233,7 @@ def run_signal_computations(
 
     # Test interpolation
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.InterpolationParam._methods:
+    for method_choice_tuple in dlp.InterpolationParam.methods:
         method = method_choice_tuple[0]
         for fill_value in (None, 0.0):
             panel.objview.set_current_object(sig1)
@@ -199,7 +257,7 @@ def run_signal_computations(
     # Test detrending
     panel.objview.set_current_object(sig1)
     # pylint: disable=protected-access
-    for method_choice_tuple in dlp.DetrendingParam._methods:
+    for method_choice_tuple in dlp.DetrendingParam.methods:
         param = dlp.DetrendingParam.create(method=method_choice_tuple[0])
         panel.processor.compute_detrending(param)
 
@@ -207,6 +265,10 @@ def run_signal_computations(
     panel.objview.set_current_object(sig1)
     param = dlp.HistogramParam.create(bins=100)
     panel.processor.compute_histogram(param)
+
+    # Test bandwidth and dynamic parameters
+    panel.processor.compute_bandwidth_3db()
+    panel.processor.compute_dynamic_parameters()
 
 
 def run_image_computations(

@@ -83,7 +83,7 @@ def apply_conf(conf, name):
     CONF.save()
 
 
-def assert_almost_equal(val1, val2, interval):
+def assert_in_interval(val1, val2, interval, context):
     """Raise an AssertionError if val1 is in [val2-interval/2,val2+interval/2]"""
     itv1, itv2 = val2 - 0.5 * interval, val2 + 0.5 * interval
     try:
@@ -107,19 +107,15 @@ def check_conf(conf, name, win: QW.QMainWindow, h5files):
     execenv.print(f"    Checking [{sec_main_name}][{OPT_POS.option}]: ", end="")
     if not sec_main[OPT_MAX.option]:  # Check position/size only when not maximized
         #  Check position, taking into account screen offset (e.g. Linux/Gnome)
+        conf_x, conf_y = sec_main[OPT_POS.option]
+        conf_w, conf_h = sec_main[OPT_SIZ.option]
         available_go = QW.QDesktopWidget().availableGeometry()
         x_offset, y_offset = available_go.x(), available_go.y()
-        assert sec_main[OPT_POS.option][0] == win.x() + x_offset
-        exp_y1 = sec_main[OPT_POS.option][1]
-        exp_y2 = exp_y1 - y_offset
-        if win.y() not in (exp_y1, exp_y2):
-            try:
-                assert_almost_equal(win.y(), exp_y1, 15)
-            except AssertionError:
-                assert_almost_equal(win.y(), exp_y2, 15)
+        assert_in_interval(win.x(), conf_x - x_offset, 0, "X position")
+        assert_in_interval(win.y(), conf_y - y_offset / 2, 15 + y_offset, "Y position")
         #  Check size
-        assert_almost_equal(win.width(), sec_main[OPT_SIZ.option][0], 5)
-        assert_almost_equal(win.height(), sec_main[OPT_SIZ.option][1], 5)
+        assert_in_interval(win.width(), conf_w, 5, "Width")
+        assert_in_interval(win.height(), conf_h, 5, "Height")
         execenv.print(f"OK {win.x(), win.y(), win.width(), win.height()}")
     else:
         execenv.print("Passed (maximized)")

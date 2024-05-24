@@ -56,6 +56,8 @@ Create a new image from the following supported filetypes:
       - .jpg, .gif
     * - NumPy arrays
       - .npy
+    * - MAT-Files
+      - .mat
     * - Text files
       - .txt, .csv, .asc
     * - Andor SIF files
@@ -255,6 +257,29 @@ Create a new image which is the division of the **two** selected images:
 .. math::
     z_{2} = \dfrac{z_{1}}{z_{0}}
 
+Constant operations
+^^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the result of a constant operation on each selected image:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Equation
+    * - Addition
+      - :math:`z_{k} = z_{k-1} + conv(c)`
+    * - Subtraction
+      - :math:`z_{k} = z_{k-1} - conv(c)`
+    * - Multiplication
+      - :math:`z_{k} = conv(z_{k-1} \times c)`
+    * - Division
+      - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
+
+where :math:`c` is the constant value and :math:`conv` is the conversion function
+which handles data type conversion (keeping the same data type as the input image).
+
 Absolute value
 ^^^^^^^^^^^^^^
 
@@ -290,8 +315,16 @@ selected image.
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Log10(z)
-^^^^^^^^
+Exponential
+^^^^^^^^^^^
+
+Create a new image which is the exponential of each selected image:
+
+.. math::
+    z_{k} = \exp(z_{k-1})
+
+Logarithm (base 10)
+^^^^^^^^^^^^^^^^^^^
 
 Create a new image which is the base 10 logarithm of each selected image:
 
@@ -427,6 +460,29 @@ Create a new image which is the result of swapping X/Y data.
 The "Processing" menu allows you to perform various processing on the current
 image or group of images: it allows you to apply filters, to perform exposure
 correction, to perform denoising, to perform morphological operations, and so on.
+
+Normalize
+^^^^^^^^^
+
+Create a new image which is the normalized version of each selected image
+by maximum, amplitude, sum, energy or RMS:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Normalization
+      - Equation
+    * - Maximum
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
+    * - Amplitude
+      - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
+    * - Area
+      - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
+    * - Energy
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`
+    * - RMS
+      - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
 
 Linear calibration
 ^^^^^^^^^^^^^^^^^^

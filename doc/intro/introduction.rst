@@ -158,4 +158,7 @@ Maintainability and testability
   DataLab is an industrial-grade scientific and technical processing software.
   The built-in automated tests in DataLab cover 90% of its features, which is
   significant for software with graphical interfaces and helps mitigate
-  regression risks.
+  regression risks. Moreover, the test suite includes validation tests based either
+  on ground truth data or analytical solutions.
+
+.. seealso:: See section :ref:`validation` for more information on DataLab's validation strategy.

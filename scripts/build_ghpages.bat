@@ -30,6 +30,7 @@ call %FUNC% UsePython
 call %FUNC% GetVersion CDL_VERSION
 cd %SCRIPTPATH%\..
 %PYTHON% doc\update_requirements.py
+%PYTHON% doc\update_validation_status.py
 
 set QT_COLOR_MODE=light
 

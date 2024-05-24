@@ -99,9 +99,13 @@ def create_image_dialog(name=None, title=None, xlabel=None, ylabel=None):
     return win
 
 
-def view_image_items(items, name=None, title=None, xlabel=None, ylabel=None):
+def view_image_items(
+    items, name=None, title=None, xlabel=None, ylabel=None, show_itemlist=False
+):
     """Create an image dialog and show items"""
     win = create_image_dialog(name=name, title=title, xlabel=xlabel, ylabel=ylabel)
+    if show_itemlist:
+        win.manager.get_itemlist_panel().show()
     plot = win.get_plot()
     for item in items:
         plot.add_item(item)

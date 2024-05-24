@@ -1,0 +1,107 @@
+# Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
+
+"""
+Unit tests for signal computing functions
+-----------------------------------------
+
+Features from the "Computing" menu are covered by this test.
+The "Computing" menu contains functions to compute signal properties like
+bandwidth, ENOB, etc.
+"""
+
+# pylint: disable=invalid-name  # Allows short reference names like x, y, ...
+# pylint: disable=duplicate-code
+# guitest: show
+
+from __future__ import annotations
+
+from typing import Callable
+
+import numpy as np
+import pytest
+
+import cdl.algorithms.signal as alg
+import cdl.core.computation.signal as cps
+import cdl.obj
+import cdl.param
+from cdl.env import execenv
+from cdl.tests.data import check_scalar_result, get_test_signal
+
+
+@pytest.mark.parametrize(
+    "func",
+    (
+        alg.bandwidth,
+        alg.enob,
+        alg.sinad,
+        alg.thd,
+        alg.sfdr,
+        alg.snr,
+        alg.sinus_frequency,
+    ),
+)
+def test_func_for_errors(func: Callable[[np.ndarray, np.ndarray], float]) -> None:
+    """Generic test for functions returning a float result.
+    This test only checks if the function runs without errors.
+    The result is not checked."""
+    newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.COSINUS, size=200)
+    s1 = cdl.obj.create_signal_from_param(newparam)
+    x, y = s1.xydata
+    res = func(x, y)
+    assert isinstance(res, float)
+    execenv.print(f"{func.__name__}={res}", end=" ")
+    execenv.print("OK")
+
+
+@pytest.mark.validation
+def test_signal_fwhm() -> None:
+    """Validation test for the full width at half maximum computation."""
+    obj = get_test_signal("fwhm.txt")
+    real_fwhm = 2.675  # Manual validation
+    for method, exp in (
+        ("gauss", 2.40323),
+        ("lorentz", 2.78072),
+        ("voigt", 2.56591),
+        ("zero-crossing", real_fwhm),
+    ):
+        param = cdl.param.FWHMParam.create(method=method)
+        df = cps.compute_fwhm(obj, param).to_dataframe()
+        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
+
+
+@pytest.mark.validation
+def test_signal_fw1e2() -> None:
+    """Validation test for the full width at 1/e^2 maximum computation."""
+    obj = get_test_signal("fw1e2.txt")
+    exp = 4.06  # Manual validation
+    df = cps.compute_fw1e2(obj).to_dataframe()
+    check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
+
+
+@pytest.mark.validation
+def test_signal_bandwidth_3db() -> None:
+    """Validation test for the bandwidth computation."""
+    obj = get_test_signal("bandwidth.txt")
+    df = cps.compute_bandwidth_3db(obj).to_dataframe()
+    check_scalar_result("Bandwitdh@-3dB", df.L[0], 39.0, rtol=0.001)
+
+
+@pytest.mark.validation
+def test_dynamic_parameters() -> None:
+    """Validation test for dynamic parameters computation."""
+    obj = get_test_signal("dynamic_parameters.txt")
+    param = cdl.param.DynamicParam.create(full_scale=1.0)
+    df = cps.compute_dynamic_parameters(obj, param).to_dataframe()
+    check_scalar_result("ENOB", df.ENOB[0], 5.1, rtol=0.001)
+    check_scalar_result("SINAD", df.SINAD[0], 32.49, rtol=0.001)
+    check_scalar_result("THD", df.THD[0], -30.18, rtol=0.001)
+    check_scalar_result("SFDR", df.SFDR[0], 34.03, rtol=0.001)
+    check_scalar_result("f", df.f[0], 49998377.464, rtol=0.001)
+    check_scalar_result("SNR", df.SNR[0], 101.52, rtol=0.001)
+
+
+if __name__ == "__main__":
+    test_signal_fwhm()
+    test_dynamic_parameters()
+    test_func_for_errors(alg.bandwidth)
+    test_func_for_errors(alg.enob)

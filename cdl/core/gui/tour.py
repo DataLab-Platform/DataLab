@@ -663,7 +663,12 @@ class Tour(BaseTour):
                 "in DataLab. Their content is adapted to the current panel, as we "
                 "will see in the following steps."
             ),
-            [win.menuBar(), win.main_toolbar, win.signal_toolbar, win.image_toolbar],
+            [
+                win.menuBar(),
+                win.main_toolbar,
+                win.signalpanel_toolbar,
+                win.imagepanel_toolbar,
+            ],
         )
         self.add_step(
             _("DataLab main window"),
