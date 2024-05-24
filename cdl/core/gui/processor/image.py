@@ -50,7 +50,20 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1("Σ", cpi.compute_add, title=_("Sum"))
+        self.compute_n1("Σ", cpi.compute_addition, title=_("Sum"))
+
+    @qt_try_except()
+    def compute_addition_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute sum with a constant"""
+        self.compute_11(
+            cpi.compute_addition_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Add constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_average(self) -> None:
@@ -60,12 +73,27 @@ class ImageProcessor(BaseProcessor):
             """Finalize average computation"""
             new_obj.data = new_obj.data / float(len(old_objs))
 
-        self.compute_n1("μ", cpi.compute_add, func_objs=func_objs, title=_("Average"))
+        self.compute_n1(
+            "μ", cpi.compute_addition, func_objs=func_objs, title=_("Average")
+        )
 
     @qt_try_except()
     def compute_product(self) -> None:
         """Compute product"""
         self.compute_n1("Π", cpi.compute_product, title=_("Product"))
+
+    @qt_try_except()
+    def compute_product_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute product with a constant"""
+        self.compute_11(
+            cpi.compute_product_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Product with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_logp1(self, param: cdl.param.LogP1Param | None = None) -> None:
@@ -279,7 +307,6 @@ class ImageProcessor(BaseProcessor):
         if edit:
             obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
             param.update_from_image(obj)
-
         self.compute_11(cpi.compute_radial_profile, param, title=title, edit=edit)
 
     @qt_try_except()
@@ -337,6 +364,19 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_difference_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute difference with a constant"""
+        self.compute_11(
+            cpi.compute_difference_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Difference with constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_quadratic_difference(self, obj2: ImageObj | None = None) -> None:
         """Compute quadratic difference between two images"""
         self.compute_n1n(
@@ -354,6 +394,19 @@ class ImageProcessor(BaseProcessor):
             _("divider"),
             cpi.compute_division,
             title=_("Division"),
+        )
+
+    @qt_try_except()
+    def compute_division_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute division by a constant"""
+        self.compute_11(
+            cpi.compute_division_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Division by constant"),
+            edit=True,
         )
 
     @qt_try_except()
@@ -457,6 +510,28 @@ class ImageProcessor(BaseProcessor):
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cpi.compute_ifft, param, title="iFFT", edit=False)
+
+    @qt_try_except()
+    def compute_magnitude_spectrum(
+        self, param: cdl.param.SpectrumParam | None = None
+    ) -> None:
+        """Compute magnitude spectrum"""
+        self.compute_11(
+            cpi.compute_magnitude_spectrum,
+            param,
+            cpi.SpectrumParam,
+            _("Magnitude spectrum"),
+        )
+
+    @qt_try_except()
+    def compute_phase_spectrum(self) -> None:
+        """Compute phase spectrum"""
+        self.compute_11(cpi.compute_phase_spectrum, title="Phase spectrum")
+
+    @qt_try_except()
+    def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
+        """Compute Power Spectral Density (PSD)"""
+        self.compute_11(cpi.compute_psd, param, cpi.SpectrumParam, _("PSD"))
 
     @qt_try_except()
     def compute_butterworth(
@@ -828,7 +903,7 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_stats(self) -> dict[str, ResultProperties]:
         """Compute data statistics"""
-        return self.compute_10(cpi.compute_stats_func, title=_("Statistics"))
+        return self.compute_10(cpi.compute_stats, title=_("Statistics"))
 
     @qt_try_except()
     def compute_centroid(self) -> dict[str, ResultShape]:

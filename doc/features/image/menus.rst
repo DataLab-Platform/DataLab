@@ -257,6 +257,29 @@ Create a new image which is the division of the **two** selected images:
 .. math::
     z_{2} = \dfrac{z_{1}}{z_{0}}
 
+Constant operations
+^^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the result of a constant operation on each selected image:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Operation
+      - Equation
+    * - Addition
+      - :math:`z_{k} = z_{k-1} + conv(c)`
+    * - Subtraction
+      - :math:`z_{k} = z_{k-1} - conv(c)`
+    * - Multiplication
+      - :math:`z_{k} = conv(z_{k-1} \times c)`
+    * - Division
+      - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
+
+where :math:`c` is the constant value and :math:`conv` is the conversion function
+which handles data type conversion (keeping the same data type as the input image).
+
 Absolute value
 ^^^^^^^^^^^^^^
 
@@ -454,7 +477,7 @@ by maximum, amplitude, sum, energy or RMS:
       - :math:`z_{1} = \dfrac{z_{0}}{z_{max}}`
     * - Amplitude
       - :math:`z_{1} = \dfrac{z_{0}}{z_{max}-z_{min}}`
-    * - Sum
+    * - Area
       - :math:`z_{1} = \dfrac{z_{0}}{\sum_{i=0}^{N-1}{z_{i}}}`
     * - Energy
       - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\sum_{n=0}^{N}|z_{0}[n]|^2}}`
@@ -514,6 +537,36 @@ Inverse FFT
 ^^^^^^^^^^^
 
 Create a new image which is the inverse FFT of each selected image.
+
+Magnitude spectrum
+^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the magnitude spectrum of each selected image:
+
+.. math::
+    z_{1} = |FFT(z_{0})|
+
+where :math:`FFT` is the Fast Fourier Transform.
+
+Phase spectrum
+^^^^^^^^^^^^^^
+
+Create a new image which is the phase spectrum of each selected image:
+
+.. math::
+    z_{1} = \angle(FFT(z_{0}))
+
+where :math:`FFT` is the Fast Fourier Transform.
+
+Power spectral density
+^^^^^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the power spectral density of each selected image:
+
+.. math::
+    z_{1} = |FFT(z_{0})|^2
+
+where :math:`FFT` is the Fast Fourier Transform.
 
 Butterworth filter
 ^^^^^^^^^^^^^^^^^^

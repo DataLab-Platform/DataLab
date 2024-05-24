@@ -645,7 +645,7 @@ class PulseParam(gds.DataSet):
     amp = gds.FloatItem("Amplitude", default=1.0)
     start = gds.FloatItem(_("Start"), default=0.0).set_pos(col=1)
     offset = gds.FloatItem(_("Offset"), default=0.0)
-    stop = gds.FloatItem(_("Stop"), default=0.0).set_pos(col=1)
+    stop = gds.FloatItem(_("End"), default=0.0).set_pos(col=1)
 
 
 class PolyParam(gds.DataSet):
@@ -670,7 +670,7 @@ class ExperSignalParam(gds.DataSet):
     xmin = gds.FloatItem("Min", default=0).set_prop("display", hide=True)
     xmax = gds.FloatItem("Max", default=1).set_prop("display", hide=True)
 
-    def edit_curve(self, *args) -> None:
+    def edit_curve(self, *args) -> None:  # pylint: disable=unused-argument
         """Edit experimental curve"""
         win: PlotDialog = make.dialog(
             wintitle=_("Select one point then press OK to accept"),

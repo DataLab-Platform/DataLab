@@ -16,6 +16,7 @@ import numpy as np
 
 import cdl.obj
 from cdl.config import _
+from cdl.env import execenv
 from cdl.utils.tests import get_test_fnames
 
 
@@ -41,6 +42,34 @@ def get_test_image(filename: str) -> cdl.obj.ImageObj:
         Image object
     """
     return cdl.obj.read_image(get_test_fnames(filename)[0])
+
+
+def __array_to_str(data: np.ndarray) -> str:
+    """Return a compact description of the array properties"""
+    dims = "×".join(str(dim) for dim in data.shape)
+    return f"{dims},{data.dtype},{data.min():.2g}→{data.max():.2g},µ={data.mean():.2g}"
+
+
+def check_array_result(
+    title: str,
+    res: np.ndarray,
+    exp: np.ndarray,
+    rtol: float = 1.0e-5,
+    atol: float = 1.0e-8,
+) -> None:
+    """Assert that two arrays are almost equal."""
+    restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
+    execenv.print(restxt)
+    assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
+
+
+def check_scalar_result(
+    title: str, res: float, exp: float, rtol: float = 1.0e-5, atol: float = 1.0e-8
+) -> None:
+    """Assert that two scalars are almost equal."""
+    restxt = f"{title}: {res} (expected: {exp})"
+    execenv.print(restxt)
+    assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt
 
 
 def create_paracetamol_signal(
@@ -147,6 +176,24 @@ def create_noisy_signal(
     if noiseparam is not None:
         add_gaussian_noise_to_signal(sig, noiseparam)
     return sig
+
+
+def create_periodic_signal(
+    shape: cdl.obj.SignalTypes, freq: float = 50.0, size: int = 10000
+) -> cdl.obj.SignalObj:
+    """Create a periodic signal
+
+    Args:
+        shape: Shape of the signal
+        freq: Frequency of the signal. Defaults to 50.0.
+        size: Size of the signal. Defaults to 10000.
+
+    Returns:
+        Signal object
+    """
+    newparam = cdl.obj.new_signal_param(stype=shape, size=size)
+    addparam = cdl.obj.PeriodicParam.create(freq=freq)
+    return cdl.obj.create_signal_from_param(newparam, addparam)
 
 
 def create_2d_steps_data(size: int, width: int, dtype: np.dtype) -> np.ndarray:
@@ -476,14 +523,16 @@ def create_sincos_image(
 def create_noisygauss_image(
     p: cdl.obj.NewImageParam | None = None,
     center: tuple[float, float] | None = None,
-    add_annotations: bool = True,
+    level: float = 0.1,
+    add_annotations: bool = False,
 ) -> cdl.obj.ImageObj:
     """Create test image (2D noisy gaussian)
 
     Args:
         p: Image parameters. Defaults to None.
         center: Center of the gaussian. Defaults to None.
-        add_annotations: If True, add annotations. Defaults to True.
+        level: Level of the random noise. Defaults to 0.1.
+        add_annotations: If True, add annotations. Defaults to False.
 
     Returns:
         Image object
@@ -498,9 +547,9 @@ def create_noisygauss_image(
         x0, y0 = 2.0, 3.0
     else:
         x0, y0 = center
-    obj.data = create_2d_gaussian(size, dtype=dtype, x0=x0, y0=y0) + create_2d_random(
-        size, dtype
-    )
+    obj.data = create_2d_gaussian(size, dtype=dtype, x0=x0, y0=y0)
+    if level:
+        obj.data += create_2d_random(size, dtype, level)
     if add_annotations:
         obj.add_annotations_from_file(get_test_fnames("annotations.json")[0])
     return obj

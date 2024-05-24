@@ -99,7 +99,6 @@ def cdl_app_context(
     from cdl import __version__
 
     QAPP_INSTANCE.setApplicationName(APP_NAME)
-    QAPP_INSTANCE.setApplicationDisplayName(APP_NAME)
     QAPP_INSTANCE.setApplicationVersion(__version__)
     QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
 

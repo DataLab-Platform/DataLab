@@ -33,7 +33,20 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_sum(self) -> None:
         """Compute sum"""
-        self.compute_n1("Σ", cps.compute_add, title=_("Sum"))
+        self.compute_n1("Σ", cps.compute_addition, title=_("Sum"))
+
+    @qt_try_except()
+    def compute_addition_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute sum with a constant"""
+        self.compute_11(
+            cps.compute_addition_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Sum with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_average(self) -> None:
@@ -45,12 +58,27 @@ class SignalProcessor(BaseProcessor):
             if new_obj.dy is not None:
                 new_obj.dy = new_obj.dy / float(len(old_objs))
 
-        self.compute_n1("μ", cps.compute_add, func_objs=func_objs, title=_("Average"))
+        self.compute_n1(
+            "μ", cps.compute_addition, func_objs=func_objs, title=_("Average")
+        )
 
     @qt_try_except()
     def compute_product(self) -> None:
         """Compute product"""
         self.compute_n1("Π", cps.compute_product, title=_("Product"))
+
+    @qt_try_except()
+    def compute_product_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute product with a constant"""
+        self.compute_11(
+            cps.compute_product_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Product with constant"),
+            edit=True,
+        )
 
     @qt_try_except()
     def compute_roi_extraction(
@@ -127,6 +155,19 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
+    def compute_difference_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute difference with a constant"""
+        self.compute_11(
+            cps.compute_difference_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Difference with constant"),
+            edit=True,
+        )
+
+    @qt_try_except()
     def compute_quadratic_difference(self, obj2: SignalObj | None = None) -> None:
         """Compute quadratic difference between two signals"""
         self.compute_n1n(
@@ -144,6 +185,20 @@ class SignalProcessor(BaseProcessor):
             _("divider"),
             cps.compute_division,
             title=_("Division"),
+        )
+
+    qt_try_except()
+
+    def compute_division_constant(
+        self, param: cpb.ConstantOperationParam | None = None
+    ) -> None:
+        """Compute division by a constant"""
+        self.compute_11(
+            cps.compute_division_constant,
+            param,
+            paramclass=cpb.ConstantOperationParam,
+            title=_("Division by constant"),
+            edit=True,
         )
 
     @qt_try_except()
@@ -250,6 +305,55 @@ class SignalProcessor(BaseProcessor):
         """Compute Wiener filter"""
         self.compute_11(cps.compute_wiener, title=_("Wiener filter"))
 
+    def __freq_filter(
+        self,
+        param: cdl.param.LowPassFilterParam
+        | cdl.param.HighPassFilterParam
+        | cdl.param.BandPassFilterParam
+        | cdl.param.BandStopFilterParam,
+        paramclass: type[
+            cdl.param.LowPassFilterParam
+            | cdl.param.HighPassFilterParam
+            | cdl.param.BandPassFilterParam
+            | cdl.param.BandStopFilterParam
+        ],
+        title: str,
+    ) -> None:
+        """Compute frequency filter"""
+        edit, param = self.init_param(param, paramclass, title)
+        if edit:
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            param.update_from_signal(obj)
+        self.compute_11(cps.compute_filter, param, title=title, edit=edit)
+
+    @qt_try_except()
+    def compute_lowpass(
+        self, param: cdl.param.LowPassFilterParam | None = None
+    ) -> None:
+        """Compute high-pass filter"""
+        self.__freq_filter(param, cdl.param.LowPassFilterParam, _("Low-pass filter"))
+
+    @qt_try_except()
+    def compute_highpass(
+        self, param: cdl.param.HighPassFilterParam | None = None
+    ) -> None:
+        """Compute high-pass filter"""
+        self.__freq_filter(param, cdl.param.HighPassFilterParam, _("High-pass filter"))
+
+    @qt_try_except()
+    def compute_bandpass(
+        self, param: cdl.param.BandPassFilterParam | None = None
+    ) -> None:
+        """Compute band-pass filter"""
+        self.__freq_filter(param, cdl.param.BandPassFilterParam, _("Band-pass filter"))
+
+    @qt_try_except()
+    def compute_bandstop(
+        self, param: cdl.param.BandStopFilterParam | None = None
+    ) -> None:
+        """Compute band-stop filter"""
+        self.__freq_filter(param, cdl.param.BandStopFilterParam, _("Band-stop filter"))
+
     @qt_try_except()
     def compute_fft(self, param: cdl.param.FFTParam | None = None) -> None:
         """Compute iFFT"""
@@ -263,6 +367,28 @@ class SignalProcessor(BaseProcessor):
         if param is None:
             param = cpb.FFTParam.create(shift=Conf.proc.fft_shift_enabled.get())
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
+
+    @qt_try_except()
+    def compute_magnitude_spectrum(
+        self, param: cdl.param.SpectrumParam | None = None
+    ) -> None:
+        """Compute magnitude spectrum"""
+        self.compute_11(
+            cps.compute_magnitude_spectrum,
+            param,
+            cdl.param.SpectrumParam,
+            title=_("Magnitude spectrum"),
+        )
+
+    @qt_try_except()
+    def compute_phase_spectrum(self) -> None:
+        """Compute phase spectrum"""
+        self.compute_11(cps.compute_phase_spectrum, title=_("Phase spectrum"))
+
+    @qt_try_except()
+    def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
+        """Compute power spectral density"""
+        self.compute_11(cps.compute_psd, param, cdl.param.SpectrumParam, title=_("PSD"))
 
     @qt_try_except()
     def compute_interpolation(
@@ -320,6 +446,17 @@ class SignalProcessor(BaseProcessor):
             _("signal to convolve with"),
             cps.compute_convolution,
             title=_("Convolution"),
+        )
+
+    @qt_try_except()
+    def compute_windowing(self, param: cdl.param.WindowingParam | None = None) -> None:
+        """Compute windowing"""
+        self.compute_11(
+            cps.compute_windowing,
+            param,
+            cdl.param.WindowingParam,
+            title=_("Windowing"),
+            edit=True,
         )
 
     @qt_try_except()
@@ -409,4 +546,38 @@ class SignalProcessor(BaseProcessor):
         """Compute histogram"""
         return self.compute_11(
             cps.compute_histogram, param, cps.HistogramParam, title=_("Histogram")
+        )
+
+    @qt_try_except()
+    def compute_contrast(self) -> dict[str, ResultProperties]:
+        """Compute contrast"""
+        return self.compute_10(cps.compute_contrast, title=_("Contrast"))
+
+    @qt_try_except()
+    def compute_x_at_minmax(self) -> dict[str, ResultProperties]:
+        """Compute x at min/max"""
+        return self.compute_10(cps.compute_x_at_minmax, title="X @ min,max")
+
+    @qt_try_except()
+    def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
+        """Compute sampling rate and period (mean and std)"""
+        return self.compute_10(
+            cps.compute_sampling_rate_period, title=_("Sampling rate and period")
+        )
+
+    @qt_try_except()
+    def compute_bandwidth_3db(self) -> None:
+        """Compute bandwidth"""
+        self.compute_10(cps.compute_bandwidth_3db, title=_("Bandwidth"))
+
+    @qt_try_except()
+    def compute_dynamic_parameters(
+        self, param: cps.DynamicParam | None = None
+    ) -> dict[str, ResultProperties]:
+        """Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"""
+        return self.compute_10(
+            cps.compute_dynamic_parameters,
+            param,
+            cps.DynamicParam,
+            title=_("Dynamic parameters"),
         )

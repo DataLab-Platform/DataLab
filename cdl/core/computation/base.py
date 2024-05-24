@@ -62,10 +62,10 @@ class NormalizeParam(gds.DataSet):
     """Normalize parameters"""
 
     methods = (
-        ("maximum", _("maximum")),
-        ("amplitude", _("amplitude")),
-        ("sum", _("sum")),
-        ("energy", _("energy")),
+        ("maximum", _("Maximum")),
+        ("amplitude", _("Amplitude")),
+        ("area", _("Area")),
+        ("energy", _("Energy")),
         ("rms", _("RMS")),
     )
     method = gds.ChoiceItem(_("Normalize with respect to"), methods)
@@ -121,6 +121,76 @@ class FFTParam(gds.DataSet):
     """FFT parameters"""
 
     shift = gds.BoolItem(_("Shift"), help=_("Shift zero frequency to center"))
+
+
+class SpectrumParam(gds.DataSet):
+    """Spectrum parameters"""
+
+    log = gds.BoolItem(_("Logarithmic scale"), default=False)
+
+
+class ConstantOperationParam(gds.DataSet):
+    """Parameter used to set a constant value to used in operations (sum,
+    multiplication, ...)"""
+
+    value = gds.FloatItem(_("Constant value"))
+
+
+# MARK: Helper functions for creating result objects -----------------------------------
+
+
+def dst_11(
+    src: SignalObj | ImageObj, name: str, suffix: str | None = None
+) -> SignalObj | ImageObj:
+    """Create a result object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method
+
+    Args:
+        src: source signal or image object
+        name: name of the function. If provided, the title of the result object
+         will be `{name}({src.short_id})|{suffix})`, unless the name is a single
+         character, in which case the title will be `{src.short_id}{name}{suffix}`
+         where `name` is an operator and `suffix` is the other term of the operation.
+        suffix: suffix to add to the title. Optional.
+
+    Returns:
+        Result signal or image object
+    """
+    if len(name) == 1:  # This is an operator
+        title = f"{src.short_id}{name}"
+    else:
+        title = f"{name}({src.short_id})"
+        if suffix is not None:
+            title += "|"
+    if suffix is not None:
+        title += suffix
+    return src.copy(title=title)
+
+
+def dst_n1n(
+    src1: SignalObj | ImageObj,
+    src2: SignalObj | ImageObj,
+    name: str,
+    suffix: str | None = None,
+) -> SignalObj | ImageObj:
+    """Create a result  object, as returned by the callback function of the
+    :func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method
+
+    Args:
+        src1: input signal or image object
+        src2: input signal or image object
+        name: name of the processing function
+
+    Returns:
+        Output signal or image object
+    """
+    if len(name) == 1:  # This is an operator
+        title = f"{src1.short_id}{name}{src2.short_id}"
+    else:
+        title = f"{name}({src1.short_id}, {src2.short_id})"
+    if suffix is not None:
+        title += "|" + suffix
+    return src1.copy(title=title)
 
 
 def new_signal_result(

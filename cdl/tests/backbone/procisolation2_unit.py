@@ -50,7 +50,7 @@ class MainWindow(QW.QMainWindow):
 
         # Create a test image and add it to the plot
         param = cdl.obj.new_image_param(height=1000, width=1000)
-        image = create_noisygauss_image(param)
+        image = create_noisygauss_image(param, add_annotations=True)
         self.imageitem = image.make_item()
         self.imagewidget.plot.add_item(self.imageitem)
 

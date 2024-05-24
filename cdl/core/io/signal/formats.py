@@ -16,7 +16,6 @@ from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.signal import funcs
 from cdl.core.io.signal.base import SignalFormatBase
-from cdl.core.model.signal import SignalObj
 
 if TYPE_CHECKING:
     from cdl.core.model.signal import SignalObj
@@ -124,7 +123,9 @@ class MatSignalFormat(SignalFormatBase):
         writeable=True,
     )  # pylint: disable=duplicate-code
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[SignalObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[SignalObj]:
         """Read data and metadata from file, write metadata to object, return xydata
 
         Args:

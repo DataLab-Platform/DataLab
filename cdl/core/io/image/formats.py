@@ -140,7 +140,9 @@ class MatImageFormat(ImageFormatBase):
         writeable=True,
     )  # pylint: disable=duplicate-code
 
-    def read(self, filename: str, worker: CallbackWorker) -> list[ImageObj]:
+    def read(
+        self, filename: str, worker: CallbackWorker | None = None
+    ) -> list[ImageObj]:
         """Read list of image objects from file
 
         Args:

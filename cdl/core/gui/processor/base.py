@@ -40,6 +40,7 @@ if TYPE_CHECKING:
 
     from cdl.core.computation.base import (
         ClipParam,
+        ConstantOperationParam,
         GaussianParam,
         MovingAverageParam,
         MovingMedianParam,
@@ -224,7 +225,7 @@ class BaseProcessor(QC.QObject):
     def init_param(
         self,
         param: gds.DataSet,
-        paramclass: gds.DataSet,
+        paramclass: type[gds.DataSet],
         title: str,
         comment: str | None = None,
     ) -> tuple[bool, gds.DataSet]:
@@ -485,7 +486,7 @@ class BaseProcessor(QC.QObject):
                     obj.metadata[f"{result.label}Param"] = str(param)
 
                 results[obj.uuid] = result
-                xlabels = result.get_xlabels(obj)
+                xlabels = result.headers
                 if obj is current_obj:
                     self.panel.selection_changed(update_items=True)
                 else:
@@ -808,6 +809,26 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_ifft(self) -> None:
         """Compute FFT"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_addition_constant(self, param: ConstantOperationParam) -> None:
+        """Compute sum with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_difference_constant(self, param: ConstantOperationParam) -> None:
+        """Compute difference with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_product_constant(self, param: ConstantOperationParam) -> None:
+        """Compute product with a constant"""
+
+    @abc.abstractmethod
+    @qt_try_except()
+    def compute_division_constant(self, param: ConstantOperationParam) -> None:
+        """Compute division by a constant"""
 
     # ------Computing-------------------------------------------------------------------
 

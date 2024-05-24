@@ -9,9 +9,11 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from plotpy.plot import PlotOptions
 from plotpy.widgets.fit import FitDialog, FitParam
+from scipy.optimize import curve_fit
+from scipy.special import erf  # pylint: disable=no-name-in-module
 
 from cdl.algorithms import fit
-from cdl.algorithms.signal import xpeak
+from cdl.algorithms.signal import sort_frequencies, xpeak
 from cdl.config import _
 from cdl.utils.tests import get_default_test_name
 
@@ -49,7 +51,10 @@ def guifit(
         name = get_default_test_name()
     win.setObjectName(name)
     win.set_data(x, y, fitfunc, fitparams, fitargs, fitkwargs)
-    win.autofit()  # TODO: [P3] make this optional
+    try:
+        win.autofit()  # TODO: [P3] make this optional
+    except ValueError:
+        pass
     if parent is None:
         win.setWindowIcon(get_icon("DataLab.svg"))
     if winsize is not None:
@@ -85,6 +90,15 @@ def polynomialfit(x, y, degree, parent=None, name=None):
     )
     if values:
         return fitfunc(x, values), params
+
+
+def linearfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute linear fit using polynomialfit.
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters
+    """
+    return polynomialfit(x, y, 1, parent=parent, name=name)
 
 
 # --- Gaussian fitting curve ---------------------------------------------------
@@ -229,6 +243,116 @@ def multigaussianfit(x, y, peak_indexes, parent=None, name=None):
         parent=parent,
         name=name,
         wintitle=_("Multi-Gaussian fit"),
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Exponential fitting curve ------------------------------------------------
+
+
+def exponentialfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute exponential fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+
+    opt_params: np.ndarray
+
+    def modelfunc(x, a, b, c):
+        return a * np.exp(b * x) + c
+
+    opt_params, __ = curve_fit(modelfunc, x, y)
+    oa, ob, oc = opt_params
+    moa, mob, moc = np.maximum(1, opt_params)
+    a_p = FitParam(_("A coefficient"), oa, -2 * moa, 2 * moa, logscale=True)
+    b_p = FitParam(_("B coefficient"), ob, 0.5 * mob, 1.5 * mob)
+    c_p = FitParam(_("y0 constant"), oc, -2 * moc, 2 * moc)
+
+    params = [a_p, b_p, c_p]
+
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
+
+    values = guifit(
+        x, y, fitfunc, params, parent=parent, wintitle=_("Exponential fit"), name=name
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Sinusoidal fitting curve ------------------------------------------------
+
+
+def sinusoidalfit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute sinusoidal fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+
+    guess_a = (np.max(y) - np.min(y)) / 2
+    freqs = sort_frequencies(x, y)
+    guess_f = freqs[0]
+    guess_ph = 0
+    guess_c = np.mean(y, dtype=float)
+
+    moa, mof, _mop, moc = np.maximum(1, [guess_a, guess_f, guess_ph, guess_c])
+    a_p = FitParam(_("Amplitude"), guess_a, -2 * moa, 2 * moa)
+    f_p = FitParam(_("Frequency"), guess_f, 0, 2 * mof)
+    p_p = FitParam(_("Phase"), guess_ph, -360, 360)
+    c_p = FitParam(_("Continuous component"), guess_c, -2 * moc, 2 * moc)
+
+    params = [a_p, f_p, p_p, c_p]
+
+    def modelfunc(x, a, f, p, c):
+        return a * np.sin(2 * np.pi * f * x + np.deg2rad(p)) + c
+
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
+
+    values = guifit(
+        x, y, fitfunc, params, parent=parent, wintitle=_("Sinusoidal fit"), name=name
+    )
+    if values:
+        return fitfunc(x, values), params
+
+
+# --- Cumulative distribution function fitting curve -----------------------------------
+
+
+def cdffit(x: np.ndarray, y: np.ndarray, parent=None, name=None):
+    """Compute Cumulative Distribution Function (CDF) fit
+
+    Returns (yfit, params), where yfit is the fitted curve and params are
+    the fitting parameters"""
+    dy = np.max(y) - np.min(y)
+    a_guess = dy
+    b_guess = dy / 2
+    sigma_guess = (max(x) - min(x)) / 10
+    mu_guess = (max(x) - abs(min(x))) / 2
+
+    iamp, ix0, islope, _ioff = np.maximum(1, [a_guess, mu_guess, sigma_guess, b_guess])
+    a = FitParam(_("Amplitude"), a_guess, 0, iamp * 1.2)
+    b = FitParam(_("Base line"), b_guess, np.min(y) - 0.1 * dy, np.max(y))
+    sigma = FitParam(_("Std-dev") + " (σ)", sigma_guess, islope * 0.1, islope * 2)
+    mu = FitParam(_("Mean") + " (μ)", mu_guess, ix0 * 0.2, ix0 * 2)
+
+    params = [a, mu, sigma, b]
+
+    def modelfunc(x, a, mu, sigma, b):
+        return a * erf((x - mu) / (sigma * np.sqrt(2))) + b
+
+    def fitfunc(x, params):
+        return modelfunc(x, *params)
+
+    values = guifit(
+        x,
+        y,
+        fitfunc,
+        params,
+        parent=parent,
+        wintitle=_("CDF fit"),
+        name=name,
     )
     if values:
         return fitfunc(x, values), params

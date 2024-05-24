@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 18:50+0100\n"
+"POT-Creation-Date: 2024-05-17 10:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../features/general/remote.rst:-1
+#: ../../doc/features/general/remote.rst:-1
 msgid ""
 "How to remote control DataLab, the open-source scientific data analysis "
 "and visualization platform"
@@ -25,7 +25,7 @@ msgstr ""
 "Comment contrôler à distance DataLab, la plateforme open-source d'analyse"
 " et de visualisation de données scientifiques"
 
-#: ../../features/general/remote.rst:-1
+#: ../../doc/features/general/remote.rst:-1
 msgid ""
 "DataLab, remote control, XML-RPC, Python, IDE, Spyder, Jupyter, third-"
 "party application, signal, image, HDF5, calculation, processor"
@@ -33,11 +33,11 @@ msgstr ""
 "DataLab, contrôle à distance, XML-RPC, Python, IDE, Spyder, Jupyter, "
 "application tierce, signal, image, HDF5, calcul, processeur"
 
-#: ../../features/general/remote.rst:4
+#: ../../doc/features/general/remote.rst:4
 msgid "Remote controlling"
 msgstr "Contrôle à distance"
 
-#: ../../features/general/remote.rst:10
+#: ../../doc/features/general/remote.rst:10
 msgid ""
 "DataLab may be controlled remotely using the `XML-RPC`_ protocol which is"
 " natively supported by Python (and many other languages). Remote "
@@ -49,7 +49,7 @@ msgstr ""
 "langages). Le contrôle à distance permet d'accéder aux principales "
 "fonctionnalités de DataLab à partir d'un processus séparé."
 
-#: ../../features/general/remote.rst:16
+#: ../../doc/features/general/remote.rst:16
 msgid ""
 "If you are looking for a lighweight alternative solution to remote "
 "control DataLab (i.e. without having to install the whole DataLab package"
@@ -61,11 +61,11 @@ msgstr ""
 "DataLab et ses dépendances sur votre environnement), veuillez consulter "
 "le package `DataLab Simple Client`_ (`pip install cdlclient`)."
 
-#: ../../features/general/remote.rst:24
+#: ../../doc/features/general/remote.rst:24
 msgid "From an IDE"
 msgstr "Depuis un IDE"
 
-#: ../../features/general/remote.rst:26
+#: ../../doc/features/general/remote.rst:26
 msgid ""
 "DataLab may be controlled remotely from an IDE (e.g. `Spyder`_ or any "
 "other IDE, or even a Jupyter Notebook) that runs a Python script. It "
@@ -80,11 +80,11 @@ msgstr ""
 "calculs. Cette fonctionnalité est exposée par la classe RemoteProxy "
 "fournie dans le module cdl.proxy."
 
-#: ../../features/general/remote.rst:33
+#: ../../doc/features/general/remote.rst:33
 msgid "From a third-party application"
 msgstr "Depuis une application tierce"
 
-#: ../../features/general/remote.rst:35
+#: ../../doc/features/general/remote.rst:35
 msgid ""
 "DataLab may also be controlled remotely from a third-party application, "
 "for the same purpose."
@@ -92,7 +92,7 @@ msgstr ""
 "DataLab peut également être contrôlé à distance depuis une application "
 "tierce, dans le même but."
 
-#: ../../features/general/remote.rst:38
+#: ../../doc/features/general/remote.rst:38
 msgid ""
 "If the third-party application is written in Python 3, it may directly "
 "use the `RemoteProxy` class as mentioned above. From another language, it"
@@ -106,7 +106,7 @@ msgstr ""
 "un client XML-RPC dans ce langage en utilisant les mêmes méthodes de "
 "serveur proxy que dans la classe RemoteProxy."
 
-#: ../../features/general/remote.rst:43
+#: ../../doc/features/general/remote.rst:43
 msgid ""
 "Data (signals and images) may also be exchanged between DataLab and the "
 "remote client application, in both directions."
@@ -114,7 +114,7 @@ msgstr ""
 "Les données (signaux et images) peuvent également être échangées entre "
 "DataLab et l'application cliente distante, dans les deux sens."
 
-#: ../../features/general/remote.rst:46
+#: ../../doc/features/general/remote.rst:46
 msgid ""
 "The remote client application may be written in any language that "
 "supports XML-RPC. For example, it is possible to write a remote client "
@@ -127,7 +127,7 @@ msgstr ""
 "L'application cliente distante peut être une application graphique ou une"
 " application en ligne de commande."
 
-#: ../../features/general/remote.rst:51
+#: ../../doc/features/general/remote.rst:51
 msgid ""
 "The remote client application may be run on the same computer as DataLab "
 "or on a different computer. In the latter case, the remote client "
@@ -138,7 +138,7 @@ msgstr ""
 "l'application cliente distante doit connaître l'adresse IP de "
 "l'ordinateur exécutant DataLab."
 
-#: ../../features/general/remote.rst:55
+#: ../../doc/features/general/remote.rst:55
 msgid ""
 "The remote client application may be run before or after DataLab. In the "
 "latter case, the remote client application must try to connect to DataLab"
@@ -148,55 +148,55 @@ msgstr ""
 " Dans ce dernier cas, l'application cliente distante doit essayer de se "
 "connecter à DataLab jusqu'à ce qu'elle réussisse."
 
-#: ../../features/general/remote.rst:60
+#: ../../doc/features/general/remote.rst:60
 msgid "Supported features"
 msgstr "Fonctionnalités prises en charge"
 
-#: ../../features/general/remote.rst:62
+#: ../../doc/features/general/remote.rst:62
 msgid "Supported features are the following:"
 msgstr "Les fonctionnalités prises en charge sont les suivantes :"
 
-#: ../../features/general/remote.rst:64
+#: ../../doc/features/general/remote.rst:64
 msgid "Switch to signal or image panel"
 msgstr "Basculer vers le panneau de signal ou d'image"
 
-#: ../../features/general/remote.rst:65
+#: ../../doc/features/general/remote.rst:65
 msgid "Remove all signals and images"
 msgstr "Supprimer tous les signaux et images"
 
-#: ../../features/general/remote.rst:66
+#: ../../doc/features/general/remote.rst:66
 msgid "Save current session to a HDF5 file"
 msgstr "Enregistrer la session en cours dans un fichier HDF5"
 
-#: ../../features/general/remote.rst:67
+#: ../../doc/features/general/remote.rst:67
 msgid "Open HDF5 files into current session"
 msgstr "Ouvrir des fichiers HDF5 dans la session en cours"
 
-#: ../../features/general/remote.rst:68
+#: ../../doc/features/general/remote.rst:68
 msgid "Browse HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: ../../features/general/remote.rst:69
+#: ../../doc/features/general/remote.rst:69
 msgid "Open a signal or an image from file"
 msgstr "Ouvrir un signal ou une image à partir d'un fichier"
 
-#: ../../features/general/remote.rst:70
+#: ../../doc/features/general/remote.rst:70
 msgid "Add a signal"
 msgstr "Ajouter un signal"
 
-#: ../../features/general/remote.rst:71
+#: ../../doc/features/general/remote.rst:71
 msgid "Add an image"
 msgstr "Ajouter une image"
 
-#: ../../features/general/remote.rst:72
+#: ../../doc/features/general/remote.rst:72
 msgid "Get object list"
 msgstr "Obtenir la liste des objets"
 
-#: ../../features/general/remote.rst:73
+#: ../../doc/features/general/remote.rst:73
 msgid "Run calculation with parameters"
 msgstr "Exécuter un calcul avec des paramètres"
 
-#: ../../features/general/remote.rst:77
+#: ../../doc/features/general/remote.rst:77
 msgid ""
 "The signal and image objects are described on this section: :ref:`ref-to-"
 "model`."
@@ -204,7 +204,7 @@ msgstr ""
 "Les objets signal et image sont décrits dans cette section : :ref:`ref-"
 "to-model`."
 
-#: ../../features/general/remote.rst:79
+#: ../../doc/features/general/remote.rst:79
 msgid ""
 "Some examples are provided to help implementing such a communication "
 "between your application and DataLab:"
@@ -212,15 +212,15 @@ msgstr ""
 "Quelques exemples sont fournis pour aider à implémenter une telle "
 "communication entre votre application et DataLab :"
 
-#: ../../features/general/remote.rst:82
+#: ../../doc/features/general/remote.rst:82
 msgid "See module: ``cdl.tests.remoteclient_app``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_app``"
 
-#: ../../features/general/remote.rst:83
+#: ../../doc/features/general/remote.rst:83
 msgid "See module: ``cdl.tests.remoteclient_unit``"
 msgstr "Voir le module : ``cdl.tests.remoteclient_unit``"
 
-#: ../../features/general/remote.rst:87
+#: ../../doc/features/general/remote.rst:87
 msgid ""
 "Screenshot of remote client application test "
 "(``cdl.tests.remoteclient_app``)"
@@ -228,11 +228,11 @@ msgstr ""
 "Capture d'écran du test de l'application cliente distante "
 "(``cdl.tests.remoteclient_app``)"
 
-#: ../../features/general/remote.rst:90 cdl.core.remote.RemoteClient:5 of
+#: ../../doc/features/general/remote.rst:90 cdl.core.remote.RemoteClient:5 of
 msgid "Examples"
 msgstr "Exemples"
 
-#: ../../features/general/remote.rst:92
+#: ../../doc/features/general/remote.rst:92
 msgid ""
 "When using Python 3, you may directly use the `RemoteProxy` class as in "
 "examples cited above or below."
@@ -241,7 +241,7 @@ msgstr ""
 "classe `RemoteProxy` comme dans les exemples cités ci-dessus ou ci-"
 "dessous."
 
-#: ../../features/general/remote.rst:95
+#: ../../doc/features/general/remote.rst:95
 msgid ""
 "Here is an example in Python 3 of a script that connects to a running "
 "DataLab instance, adds a signal and an image, and then runs calculations "
@@ -253,15 +253,15 @@ msgstr ""
 "exécute des calculs (la structure de cellule du script le rend pratique à"
 " utiliser dans l'IDE `Spyder`_):"
 
-#: ../../features/general/remote.rst:101
+#: ../../doc/features/general/remote.rst:101
 msgid "Here is a Python 2.7 reimplementation of this class:"
 msgstr "Voici une réimplémentation de cette classe en Python 2.7 :"
 
-#: ../../features/general/remote.rst:106
+#: ../../doc/features/general/remote.rst:106
 msgid "Connection dialog"
 msgstr "Boîte de dialogue de connexion"
 
-#: ../../features/general/remote.rst:108
+#: ../../doc/features/general/remote.rst:108
 msgid ""
 "The DataLab package also provides a connection dialog that may be used to"
 " connect to a running DataLab instance. It is exposed by the "
@@ -272,7 +272,7 @@ msgstr ""
 "cours d'exécution. Elle est exposée par la classe "
 ":py:class:`cdl.widgets.connection.ConnectionDialog`."
 
-#: ../../features/general/remote.rst:114
+#: ../../doc/features/general/remote.rst:114
 msgid ""
 "Screenshot of connection dialog "
 "(``cdl.widgets.connection.ConnectionDialog``)"
@@ -280,11 +280,11 @@ msgstr ""
 "Capture d'écran de la boîte de dialogue de connexion "
 "(``cdl.widgets.connection.ConnectionDialog``)"
 
-#: ../../features/general/remote.rst:116
+#: ../../doc/features/general/remote.rst:116
 msgid "Example of use:"
 msgstr "Exemple d'utilisation :"
 
-#: ../../features/general/remote.rst:121
+#: ../../doc/features/general/remote.rst:121
 msgid "Public API: remote client"
 msgstr "API publique : client distant"
 
@@ -819,11 +819,11 @@ msgstr "Basculer l'état d'affichage des titres."
 msgid "Show titles state"
 msgstr "État d'affichage des titres"
 
-#: ../../features/general/remote.rst:127
+#: ../../doc/features/general/remote.rst:127
 msgid "Public API: additional methods"
 msgstr "API publique : méthodes supplémentaires"
 
-#: ../../features/general/remote.rst:129
+#: ../../doc/features/general/remote.rst:129
 msgid ""
 "The remote control class methods (either using the proxy or the remote "
 "client) may be completed with additional methods which are dynamically "
@@ -836,11 +836,11 @@ msgstr ""
 "mécanisme permet d'accéder aux méthodes des processeurs de DataLab (voir "
 ":mod:`cdl.core.gui.processor`)."
 
-#: ../../features/general/remote.rst:135
+#: ../../doc/features/general/remote.rst:135
 msgid "Signal processor"
 msgstr "Processeur de signal"
 
-#: ../../features/general/remote.rst:137
+#: ../../doc/features/general/remote.rst:137
 msgid ""
 "When working with signals, the methods of "
 ":class:`cdl.core.gui.processor.signal.SignalProcessor` may be accessed."
@@ -858,6 +858,11 @@ msgstr "Objet de traitement de signal : opérations, traitement, calcul"
 msgid "Compute sum"
 msgstr "Calculer la somme"
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant:1 of
+msgid "Compute sum with a constant"
+msgstr "Calculer la somme avec une constante"
+
 #: cdl.core.gui.processor.image.ImageProcessor.compute_average:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_average:1 of
 msgid "Compute average"
@@ -867,6 +872,12 @@ msgstr "Calculer la moyenne"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_product:1 of
 msgid "Compute product"
 msgstr "Calculer le produit"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_product_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1
+#: of
+msgid "Compute product with a constant"
+msgstr "Calculer le produit avec une constante"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_roi_extraction:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_roi_extraction:1 of
@@ -898,14 +909,30 @@ msgstr "Calculer la partie imaginaire"
 msgid "Convert data type"
 msgstr "Convertir le type de données"
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_exp:1
 #: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_exp:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
 msgid "Compute Log10"
 msgstr "Calculer Log10"
 
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt:1 of
+msgid "Compute square root"
+msgstr "Calculer la racine carrée"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_pow:1 of
+msgid "Compute power"
+msgstr "Calculer la puissance"
+
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
 msgid "Compute difference between two signals"
 msgstr "Calculer la différence entre deux signaux"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant:1
+#: of
+msgid "Compute difference with a constant"
+msgstr "Calculer la différence avec une constante"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_quadratic_difference:1
 #: of
@@ -916,10 +943,21 @@ msgstr "Calculer la différence quadratique entre deux signaux"
 msgid "Compute division between two signals"
 msgstr "Calculer la division entre deux signaux"
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_division_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1
+#: of
+msgid "Compute division by a constant"
+msgstr "Calculer la division par une constante"
+
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_peak_detection:1 of
 msgid "Detect peaks from data"
 msgstr "Détecter les pics à partir des données"
 
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x:1 of
+msgid "Reverse X axis"
+msgstr "Inverser l'axe X"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_normalize:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
 msgid "Normalize data"
 msgstr "Normaliser les données"
@@ -967,6 +1005,19 @@ msgstr "Calculer la médiane mobile"
 msgid "Compute Wiener filter"
 msgstr "Calculer le filtre de Wiener"
 
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_highpass:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass:1 of
+msgid "Compute high-pass filter"
+msgstr "Calculer le filtre passe-haut"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass:1 of
+msgid "Compute band-pass filter"
+msgstr "Calculer le filtre passe-bande"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop:1 of
+msgid "Compute band-stop filter"
+msgstr "Calculer le filtre coupe-bande"
+
 #: cdl.core.gui.processor.image.ImageProcessor.compute_ifft:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fft:1 of
 msgid "Compute iFFT"
@@ -993,6 +1044,10 @@ msgstr "Calculer l'élimination de la tendance"
 msgid "Compute convolution"
 msgstr "Calculer la convolution"
 
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_windowing:1 of
+msgid "Compute windowing"
+msgstr "Calculer le fenêtrage"
+
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
 msgid "Compute fitting curve"
 msgstr "Calculer la courbe de régression"
@@ -1013,16 +1068,21 @@ msgstr "Calculer la LMH"
 msgid "Compute FW at 1/e²"
 msgstr "Calculer la largeur à 1/e²"
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_stats:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_stats:1 of
+msgid "Compute data statistics"
+msgstr "Calculer les statistiques des données"
+
 #: cdl.core.gui.processor.image.ImageProcessor.compute_histogram:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
 msgid "Compute histogram"
 msgstr "Calcule l'intégrale"
 
-#: ../../features/general/remote.rst:145
+#: ../../doc/features/general/remote.rst:145
 msgid "Image processor"
 msgstr "Processeur d'image"
 
-#: ../../features/general/remote.rst:147
+#: ../../doc/features/general/remote.rst:147
 msgid ""
 "When working with images, the methods of "
 ":class:`cdl.core.gui.processor.image.ImageProcessor` may be accessed."
@@ -1290,3 +1350,6 @@ msgstr "Calculer la détection de taches en utilisant OpenCV"
 
 #~ msgid "File name"
 #~ msgstr "Nom du fichier"
+
+#~ msgid "COmpure sum with a constant"
+#~ msgstr ""

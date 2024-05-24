@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 import cv2
 import numpy as np
 import scipy.ndimage as spi
@@ -38,13 +40,15 @@ def scale_data_to_min_max(
     return np.array(fdata, data.dtype)
 
 
-def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
+def normalize(
+    data: np.ndarray,
+    parameter: Literal["maximum", "amplitude", "area", "energy", "rms"] = "maximum",
+) -> np.ndarray:
     """Normalize input array to a given parameter.
 
     Args:
         data: Input data
         parameter: Normalization parameter (default: "maximum")
-         Supported values: 'maximum', 'amplitude', 'sum', 'energy', 'rms'
 
     Returns:
         Normalized array
@@ -54,7 +58,7 @@ def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     if parameter == "amplitude":
         return scale_data_to_min_max(data, 0.0, 1.0)
     fdata = np.array(data, dtype=float)
-    if parameter == "sum":
+    if parameter == "area":
         return fdata / fdata.sum()
     if parameter == "energy":
         return fdata / np.sqrt(np.sum(fdata * fdata.conjugate()))
@@ -63,7 +67,7 @@ def normalize(data: np.ndarray, parameter: str = "maximum") -> np.ndarray:
     raise ValueError(f"Unsupported parameter {parameter}")
 
 
-def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+def fft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute FFT of complex array `z`
 
     Args:
@@ -79,7 +83,7 @@ def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     return z1
 
 
-def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+def ifft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute inverse FFT of complex array `z`
 
     Args:
@@ -95,11 +99,59 @@ def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     return z1
 
 
+def magnitude_spectrum(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
+    """Compute magnitude spectrum of complex array `z`
+
+    Args:
+        z: Input data
+        log_scale: Use log scale (default: False)
+
+    Returns:
+        Magnitude spectrum of input data
+    """
+    z1 = np.abs(fft2d(z))
+    if log_scale:
+        z1 = np.log1p(z1)
+    return z1
+
+
+def phase_spectrum(z: np.ndarray) -> np.ndarray:
+    """Compute phase spectrum of complex array `z`
+
+    Args:
+        z: Input data
+
+    Returns:
+        Phase spectrum of input data (in degrees)
+    """
+    return np.rad2deg(np.angle(fft2d(z)))
+
+
+def psd(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
+    """Compute power spectral density of complex array `z`
+
+    Args:
+        z: Input data
+        log_scale: Use log scale (default: False)
+
+    Returns:
+        Power spectral density of input data
+    """
+    z1 = np.abs(fft2d(z)) ** 2
+    if log_scale:
+        z1 = np.log1p(z1)
+    return z1
+
+
 BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
 
 
 def binning(
-    data: np.ndarray, binning_x: int, binning_y: int, operation: str, dtype=None
+    data: np.ndarray,
+    binning_x: int,
+    binning_y: int,
+    operation: Literal["sum", "average", "median", "min", "max"],
+    dtype=None,
 ) -> np.ndarray:
     """Perform image pixel binning
 
@@ -107,7 +159,7 @@ def binning(
         data: Input data
         binning_x: Binning factor along x-axis
         binning_y: Binning factor along y-axis
-        operation: Binning operation (sum, average, median, min, max)
+        operation: Binning operation
         dtype: Output data type (default: None, i.e. same as input)
 
     Returns:
@@ -338,15 +390,16 @@ def get_2d_peaks_coords(
 
 
 def get_contour_shapes(
-    data: np.ndarray | ma.MaskedArray, shape: str = "ellipse", level: float = 0.5
+    data: np.ndarray | ma.MaskedArray,
+    shape: Literal["circle", "ellipse", "polygon"] = "ellipse",
+    level: float = 0.5,
 ) -> np.ndarray:
     """Find iso-valued contours in a 2D array, above relative level (.5 means FWHM),
     then fit contours with shape ('ellipse' or 'circle')
 
     Args:
         data: Input data
-        shape: Shape to fit. Valid values: 'circle', 'ellipse', 'polygon'.
-         (default: 'ellipse')
+        shape: Shape to fit. Default is 'ellipse'
         level: Relative level (default: 0.5)
 
     Returns:

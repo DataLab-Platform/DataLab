@@ -1,0 +1,84 @@
+:py:func:`abs <cdl.core.computation.image.compute_abs>`,Compute absolute value,N/A
+:py:func:`addition <cdl.core.computation.image.compute_addition>`,Add **dst** and **src** images and return **dst** image modified in place,``features/image/misc_unit_test.py``
+:py:func:`addition_constant <cdl.core.computation.image.compute_addition_constant>`,Add **dst** and a constant value and return the new result image object,``features/image/misc_unit_test.py``
+:py:func:`astype <cdl.core.computation.image.compute_astype>`,Convert image data type,N/A
+:py:func:`average_profile <cdl.core.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
+:py:func:`binning <cdl.core.computation.image.compute_binning>`,Binning function on data,N/A
+:py:func:`butterworth <cdl.core.computation.image.compute_butterworth>`,Compute Butterworth filter,N/A
+:py:func:`calibration <cdl.core.computation.image.compute_calibration>`,Compute linear calibration,N/A
+:py:func:`centroid <cdl.core.computation.image.compute_centroid>`,Compute centroid,``features/image/centroid_unit_test.py``
+:py:func:`clip <cdl.core.computation.image.compute_clip>`,Apply clipping,N/A
+:py:func:`difference <cdl.core.computation.image.compute_difference>`,Compute difference between two images,``features/image/misc_unit_test.py``
+:py:func:`difference_constant <cdl.core.computation.image.compute_difference_constant>`,Subtract a constant value from an image and return the new result image object,``features/image/misc_unit_test.py``
+:py:func:`division <cdl.core.computation.image.compute_division>`,Compute division between two images,``features/image/misc_unit_test.py``
+:py:func:`division_constant <cdl.core.computation.image.compute_division_constant>`,Divide an image by a constant value and return the new result image object,``features/image/misc_unit_test.py``
+:py:func:`enclosing_circle <cdl.core.computation.image.compute_enclosing_circle>`,Compute minimum enclosing circle,N/A
+:py:func:`exp <cdl.core.computation.image.compute_exp>`,Compute exponential,N/A
+:py:func:`fft <cdl.core.computation.image.compute_fft>`,Compute FFT,N/A
+:py:func:`flatfield <cdl.core.computation.image.compute_flatfield>`,Compute flat field correction,N/A
+:py:func:`fliph <cdl.core.computation.image.compute_fliph>`,Flip data horizontally,N/A
+:py:func:`flipv <cdl.core.computation.image.compute_flipv>`,Flip data vertically,N/A
+:py:func:`gaussian_filter <cdl.core.computation.image.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`histogram <cdl.core.computation.image.compute_histogram>`,Compute histogram of the image data,N/A
+:py:func:`hough_circle_peaks <cdl.core.computation.image.compute_hough_circle_peaks>`,Compute Hough circles,N/A
+:py:func:`ifft <cdl.core.computation.image.compute_ifft>`,Compute inverse FFT,N/A
+:py:func:`im <cdl.core.computation.image.compute_im>`,Compute imaginary part,N/A
+:py:func:`log10 <cdl.core.computation.image.compute_log10>`,Compute log10,N/A
+:py:func:`logp1 <cdl.core.computation.image.compute_logp1>`,Compute log10(z+n),N/A
+:py:func:`magnitude_spectrum <cdl.core.computation.image.compute_magnitude_spectrum>`,Compute magnitude spectrum,N/A
+:py:func:`moving_average <cdl.core.computation.image.compute_moving_average>`,Compute moving average,N/A
+:py:func:`moving_median <cdl.core.computation.image.compute_moving_median>`,Compute moving median,N/A
+:py:func:`normalize <cdl.core.computation.image.compute_normalize>`,,N/A
+:py:func:`phase_spectrum <cdl.core.computation.image.compute_phase_spectrum>`,Compute phase spectrum,N/A
+:py:func:`product <cdl.core.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,``features/image/misc_unit_test.py``
+:py:func:`product_constant <cdl.core.computation.image.compute_product_constant>`,Multiply **dst** by a constant value and return the new result image object,``features/image/misc_unit_test.py``
+:py:func:`profile <cdl.core.computation.image.compute_profile>`,Compute horizontal or vertical profile,N/A
+:py:func:`psd <cdl.core.computation.image.compute_psd>`,Compute power spectral density,N/A
+:py:func:`quadratic_difference <cdl.core.computation.image.compute_quadratic_difference>`,Compute quadratic difference between two images,N/A
+:py:func:`radial_profile <cdl.core.computation.image.compute_radial_profile>`,Compute radial profile around the centroid,N/A
+:py:func:`re <cdl.core.computation.image.compute_re>`,Compute real part,N/A
+:py:func:`resize <cdl.core.computation.image.compute_resize>`,Zooming function,N/A
+:py:func:`rotate <cdl.core.computation.image.compute_rotate>`,Rotate data,N/A
+:py:func:`rotate270 <cdl.core.computation.image.compute_rotate270>`,Rotate data 270°,N/A
+:py:func:`rotate90 <cdl.core.computation.image.compute_rotate90>`,Rotate data 90°,N/A
+:py:func:`stats <cdl.core.computation.image.compute_stats>`,Compute statistics on an image,``features/common/stat_unit_test.py``
+:py:func:`swap_axes <cdl.core.computation.image.compute_swap_axes>`,Swap image axes,N/A
+:py:func:`threshold <cdl.core.computation.image.compute_threshold>`,Apply thresholding,N/A
+:py:func:`wiener <cdl.core.computation.image.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`blob_dog <cdl.core.computation.image.detection.compute_blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
+:py:func:`blob_doh <cdl.core.computation.image.detection.compute_blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
+:py:func:`blob_log <cdl.core.computation.image.detection.compute_blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A
+:py:func:`blob_opencv <cdl.core.computation.image.detection.compute_blob_opencv>`,Compute blobs using OpenCV,N/A
+:py:func:`contour_shape <cdl.core.computation.image.detection.compute_contour_shape>`,Compute contour shape fit,N/A
+:py:func:`peak_detection <cdl.core.computation.image.detection.compute_peak_detection>`,Compute 2D peak detection,N/A
+:py:func:`canny <cdl.core.computation.image.edges.compute_canny>`,Compute Canny filter,N/A
+:py:func:`farid <cdl.core.computation.image.edges.compute_farid>`,Compute Farid filter,N/A
+:py:func:`farid_h <cdl.core.computation.image.edges.compute_farid_h>`,Compute horizontal Farid filter,N/A
+:py:func:`farid_v <cdl.core.computation.image.edges.compute_farid_v>`,Compute vertical Farid filter,N/A
+:py:func:`laplace <cdl.core.computation.image.edges.compute_laplace>`,Compute Laplace filter,N/A
+:py:func:`prewitt <cdl.core.computation.image.edges.compute_prewitt>`,Compute Prewitt filter,N/A
+:py:func:`prewitt_h <cdl.core.computation.image.edges.compute_prewitt_h>`,Compute horizontal Prewitt filter,N/A
+:py:func:`prewitt_v <cdl.core.computation.image.edges.compute_prewitt_v>`,Compute vertical Prewitt filter,N/A
+:py:func:`roberts <cdl.core.computation.image.edges.compute_roberts>`,Compute Roberts filter,N/A
+:py:func:`scharr <cdl.core.computation.image.edges.compute_scharr>`,Compute Scharr filter,N/A
+:py:func:`scharr_h <cdl.core.computation.image.edges.compute_scharr_h>`,Compute horizontal Scharr filter,N/A
+:py:func:`scharr_v <cdl.core.computation.image.edges.compute_scharr_v>`,Compute vertical Scharr filter,N/A
+:py:func:`sobel <cdl.core.computation.image.edges.compute_sobel>`,Compute Sobel filter,N/A
+:py:func:`sobel_h <cdl.core.computation.image.edges.compute_sobel_h>`,Compute horizontal Sobel filter,N/A
+:py:func:`sobel_v <cdl.core.computation.image.edges.compute_sobel_v>`,Compute vertical Sobel filter,N/A
+:py:func:`adjust_gamma <cdl.core.computation.image.exposure.compute_adjust_gamma>`,Gamma correction,N/A
+:py:func:`adjust_log <cdl.core.computation.image.exposure.compute_adjust_log>`,Compute log correction,N/A
+:py:func:`adjust_sigmoid <cdl.core.computation.image.exposure.compute_adjust_sigmoid>`,Compute sigmoid correction,N/A
+:py:func:`equalize_adapthist <cdl.core.computation.image.exposure.compute_equalize_adapthist>`,Adaptive histogram equalization,N/A
+:py:func:`equalize_hist <cdl.core.computation.image.exposure.compute_equalize_hist>`,Histogram equalization,N/A
+:py:func:`rescale_intensity <cdl.core.computation.image.exposure.compute_rescale_intensity>`,Rescale image intensity levels,N/A
+:py:func:`black_tophat <cdl.core.computation.image.morphology.compute_black_tophat>`,Compute Black Top-Hat,N/A
+:py:func:`closing <cdl.core.computation.image.morphology.compute_closing>`,Compute morphological closing,N/A
+:py:func:`dilation <cdl.core.computation.image.morphology.compute_dilation>`,Compute Dilation,N/A
+:py:func:`erosion <cdl.core.computation.image.morphology.compute_erosion>`,Compute Erosion,N/A
+:py:func:`opening <cdl.core.computation.image.morphology.compute_opening>`,Compute morphological opening,N/A
+:py:func:`white_tophat <cdl.core.computation.image.morphology.compute_white_tophat>`,Compute White Top-Hat,N/A
+:py:func:`denoise_bilateral <cdl.core.computation.image.restoration.compute_denoise_bilateral>`,Compute bilateral filter denoising,N/A
+:py:func:`denoise_tophat <cdl.core.computation.image.restoration.compute_denoise_tophat>`,Denoise using White Top-Hat,N/A
+:py:func:`denoise_tv <cdl.core.computation.image.restoration.compute_denoise_tv>`,Compute Total Variation denoising,N/A
+:py:func:`denoise_wavelet <cdl.core.computation.image.restoration.compute_denoise_wavelet>`,Compute Wavelet denoising,N/A

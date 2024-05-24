@@ -49,7 +49,6 @@ if TYPE_CHECKING:
     from typing import Callable
 
     from plotpy.items import CurveItem, LabelItem, MaskedImageItem
-    from plotpy.plot import PlotWidget
     from plotpy.tools.base import GuiTool
 
     from cdl.core.gui import ObjItf
@@ -233,9 +232,9 @@ class BaseDataPanel(AbstractPanel):
     ROIDIALOGCLASS: roieditor.SignalROIEditor | roieditor.ImageROIEditor | None = None
 
     @abc.abstractmethod
-    def __init__(self, parent: CDLMainWindow, plotwidget: PlotWidget, toolbar) -> None:
+    def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
-        self.mainwindow = parent
+        self.mainwindow: CDLMainWindow = parent
         self.objprop = ObjectProp(self, self.PARAMCLASS)
         self.objmodel = objectmodel.ObjectModel()
         self.objview = objectview.ObjectView(self, self.objmodel)
@@ -864,7 +863,7 @@ class BaseDataPanel(AbstractPanel):
 
         def toggle_annotations(enabled: bool):
             """Toggle annotation tools / edit buttons visibility"""
-            for widget in (dlg.button_box, toolbar):
+            for widget in (dlg.button_box, toolbar, mgr.get_itemlist_panel()):
                 if enabled:
                     widget.show()
                 else:
@@ -1109,7 +1108,7 @@ class BaseDataPanel(AbstractPanel):
                     result.shown_category, ResultData([], None, [])
                 )
                 rdata.results.append(result)
-                rdata.xlabels = result.get_xlabels(obj)
+                rdata.xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.label}({obj.short_id})"
                     i_roi = result.array[i_row_res, 0]

@@ -123,7 +123,7 @@ Now, let's detect the blobs on the image.
 
     .. image:: ../../images/tutorials/fabry_perot/12.png
 
-.. |show_results| image:: ../../../cdl/data/icons/show_results.svg
+.. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
 
@@ -138,7 +138,7 @@ visualization settings (colormaps, contrast, etc.), the metadata, and the annota
 To save the workspace, click on "File > Save to HDF5 file...", or the |filesave_h5|
 button in the toolbar.
 
-.. |filesave_h5| image:: ../../../cdl/data/icons/filesave_h5.svg
+.. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
 
@@ -147,10 +147,10 @@ If you want to load the workspace again, you can use the "File > Open HDF5 file.
 "File > Browse HDF5 file..." (or the |h5browser| button in the toolbar) to load
 only a selection of data sets from the workspace.
 
-.. |fileopen_h5| image:: ../../../cdl/data/icons/fileopen_h5.svg
+.. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
 
-.. |h5browser| image:: ../../../cdl/data/icons/h5browser.svg
+.. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
