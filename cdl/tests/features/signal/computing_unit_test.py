@@ -25,7 +25,7 @@ import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
 from cdl.env import execenv
-from cdl.tests.data import check_scalar_result, get_test_fnames
+from cdl.tests.data import check_scalar_result, get_test_signal
 
 
 @pytest.mark.parametrize(
@@ -56,7 +56,7 @@ def test_func_for_errors(func: Callable[[np.ndarray, np.ndarray], float]) -> Non
 @pytest.mark.validation
 def test_signal_fwhm() -> None:
     """Validation test for the full width at half maximum computation."""
-    obj = cdl.obj.read_signal(get_test_fnames("fwhm.txt")[0])
+    obj = get_test_signal("fwhm.txt")
     real_fwhm = 2.675  # Manual validation
     for method, exp in (
         ("gauss", 2.40323),
@@ -72,7 +72,7 @@ def test_signal_fwhm() -> None:
 @pytest.mark.validation
 def test_signal_fw1e2() -> None:
     """Validation test for the full width at 1/e^2 maximum computation."""
-    obj = cdl.obj.read_signal(get_test_fnames("fw1e2.txt")[0])
+    obj = get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
     df = cps.compute_fw1e2(obj).to_dataframe()
     check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
@@ -81,7 +81,7 @@ def test_signal_fw1e2() -> None:
 @pytest.mark.validation
 def test_dynamic_parameters() -> None:
     """Validation test for dynamic parameters computation."""
-    obj = cdl.obj.read_signal(get_test_fnames("dynamic_parameters.txt")[0])
+    obj = get_test_signal("dynamic_parameters.txt")
     param = cdl.param.DynamicParam.create(full_scale=1.0)
     df = cps.compute_dynamic_parameters(obj, param).to_dataframe()
     check_scalar_result("ENOB", df.ENOB[0], 5.1, rtol=0.001)
