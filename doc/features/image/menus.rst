@@ -538,6 +538,36 @@ Inverse FFT
 
 Create a new image which is the inverse FFT of each selected image.
 
+Magnitude spectrum
+^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the magnitude spectrum of each selected image:
+
+.. math::
+    z_{1} = |FFT(z_{0})|
+
+where :math:`FFT` is the Fast Fourier Transform.
+
+Phase spectrum
+^^^^^^^^^^^^^^
+
+Create a new image which is the phase spectrum of each selected image:
+
+.. math::
+    z_{1} = \angle(FFT(z_{0}))
+
+where :math:`FFT` is the Fast Fourier Transform.
+
+Power spectral density
+^^^^^^^^^^^^^^^^^^^^^^
+
+Create a new image which is the power spectral density of each selected image:
+
+.. math::
+    z_{1} = |FFT(z_{0})|^2
+
+where :math:`FFT` is the Fast Fourier Transform.
+
 Butterworth filter
 ^^^^^^^^^^^^^^^^^^
 

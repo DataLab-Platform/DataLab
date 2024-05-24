@@ -51,6 +51,8 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.FFTParam
     :no-index:
+.. autodataset:: cdl.param.SpectrumParam
+    :no-index:
 .. autodataset:: cdl.param.GaussianParam
     :no-index:
 .. autodataset:: cdl.param.MovingAverageParam
@@ -194,6 +196,7 @@ Detection parameters
 from cdl.core.computation.base import (
     ClipParam,
     FFTParam,
+    SpectrumParam,
     GaussianParam,
     HistogramParam,
     MovingAverageParam,

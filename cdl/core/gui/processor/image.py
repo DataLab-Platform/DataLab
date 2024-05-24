@@ -512,6 +512,28 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_ifft, param, title="iFFT", edit=False)
 
     @qt_try_except()
+    def compute_magnitude_spectrum(
+        self, param: cdl.param.SpectrumParam | None = None
+    ) -> None:
+        """Compute magnitude spectrum"""
+        self.compute_11(
+            cpi.compute_magnitude_spectrum,
+            param,
+            cpi.SpectrumParam,
+            _("Magnitude spectrum"),
+        )
+
+    @qt_try_except()
+    def compute_phase_spectrum(self) -> None:
+        """Compute phase spectrum"""
+        self.compute_11(cpi.compute_phase_spectrum, title="Phase spectrum")
+
+    @qt_try_except()
+    def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
+        """Compute Power Spectral Density (PSD)"""
+        self.compute_11(cpi.compute_psd, param, cpi.SpectrumParam, _("PSD"))
+
+    @qt_try_except()
     def compute_butterworth(
         self, param: cdl.param.ButterworthParam | None = None
     ) -> None:

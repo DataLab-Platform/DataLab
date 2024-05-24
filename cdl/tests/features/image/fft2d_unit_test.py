@@ -11,7 +11,7 @@ Image FFT unit test.
 import numpy as np
 from guidata.qthelpers import qt_app_context
 
-from cdl.algorithms.image import z_fft, z_ifft
+from cdl.algorithms.image import fft2d, ifft2d
 from cdl.env import execenv
 from cdl.tests.data import RingParam, create_ring_image
 from cdl.utils.vistools import view_images_side_by_side
@@ -28,8 +28,8 @@ def test_fft2d_unit():
 
         # FFT
         execenv.print("Computing FFT of image...", end=" ")
-        f = z_fft(data)
-        data2 = z_ifft(f)
+        f = fft2d(data)
+        data2 = ifft2d(f)
         execenv.print("OK")
         execenv.print("Comparing original and FFT/iFFT images...", end=" ")
         np.testing.assert_almost_equal(data, data2, decimal=10)

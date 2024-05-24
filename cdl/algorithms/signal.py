@@ -9,11 +9,12 @@
 from __future__ import annotations
 
 import warnings
-from typing import Callable, Literal
+from typing import Literal
 
 import numpy as np
-import scipy.interpolate
-from scipy.optimize import leastsq
+import scipy.interpolate as spi
+import scipy.optimize as spo
+import scipy.signal as sps
 
 from cdl.algorithms import fit
 
@@ -86,7 +87,7 @@ def normalize(
     raise RuntimeError(f"Unsupported parameter {parameter}")
 
 
-def xy_fft(
+def fft1d(
     x: np.ndarray, y: np.ndarray, shift: bool = True
 ) -> tuple[np.ndarray, np.ndarray]:
     """Compute FFT on X,Y data.
@@ -107,7 +108,7 @@ def xy_fft(
     return x1, y1
 
 
-def xy_ifft(
+def ifft1d(
     x: np.ndarray, y: np.ndarray, shift: bool = True
 ) -> tuple[np.ndarray, np.ndarray]:
     """Compute iFFT on X,Y data.
@@ -128,6 +129,56 @@ def xy_ifft(
     return x1, y1.real
 
 
+def magnitude_spectrum(
+    x: np.ndarray, y: np.ndarray, log_scale: bool = False
+) -> np.ndarray:
+    """Compute magnitude spectrum.
+
+    Args:
+        x: X data
+        y: Y data
+        log_scale: Use log scale. Defaults to False.
+
+    Returns:
+        Magnitude spectrum
+    """
+    _, y1 = fft1d(x, y)
+    if log_scale:
+        return 20 * np.log10(np.abs(y1))
+    return np.abs(y1)
+
+
+def phase_spectrum(y: np.ndarray) -> np.ndarray:
+    """Compute phase spectrum.
+
+    Args:
+        y: Y data
+
+    Returns:
+        Phase spectrum (in degrees)
+    """
+    return np.rad2deg(np.angle(np.fft.fftshift(np.fft.fft(y))))
+
+
+def psd(
+    x: np.ndarray, y: np.ndarray, log_scale: bool = False
+) -> tuple[np.ndarray, np.ndarray]:
+    """Compute Power Spectral Density (PSD), using the Welch method.
+
+    Args:
+        x: X data
+        y: Y data
+        log_scale: Use log scale. Defaults to False.
+
+    Returns:
+        Power Spectral Density (PSD): X data, Y data (tuple)
+    """
+    f, pxx = sps.welch(y, fs=sampling_rate(x))
+    if log_scale:
+        return 10 * np.log10(pxx)
+    return f, pxx
+
+
 def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Sort from X,Y data by computing FFT(y).
 
@@ -138,7 +189,7 @@ def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     Returns:
         Sorted frequencies in ascending order
     """
-    freqs, fourier = xy_fft(x, y, shift=False)
+    freqs, fourier = fft1d(x, y, shift=False)
     return freqs[np.argsort(fourier)]
 
 
@@ -285,22 +336,22 @@ def interpolate(
     elif method == "spline":
         # Spline using 1-D interpolation with SciPy's interpolate package:
         # pylint: disable=unbalanced-tuple-unpacking
-        knots, coeffs, degree = scipy.interpolate.splrep(x, y, s=0)
-        ynew = scipy.interpolate.splev(xnew, (knots, coeffs, degree), der=0)
+        knots, coeffs, degree = spi.splrep(x, y, s=0)
+        ynew = spi.splev(xnew, (knots, coeffs, degree), der=0)
     elif method == "quadratic":
         # Quadratic interpolation using NumPy's polyval function:
         coeffs = np.polyfit(x, y, 2)
         ynew = np.polyval(coeffs, xnew)
     elif method == "cubic":
         # Cubic interpolation using SciPy's Akima1DInterpolator class:
-        interpolator_extrap = scipy.interpolate.Akima1DInterpolator(x, y)
+        interpolator_extrap = spi.Akima1DInterpolator(x, y)
     elif method == "barycentric":
         # Barycentric interpolation using SciPy's BarycentricInterpolator class:
-        interpolator = scipy.interpolate.BarycentricInterpolator(x, y)
+        interpolator = spi.BarycentricInterpolator(x, y)
         ynew = interpolator(xnew)
     elif method == "pchip":
         # PCHIP interpolation using SciPy's PchipInterpolator class:
-        interpolator_extrap = scipy.interpolate.PchipInterpolator(x, y)
+        interpolator_extrap = spi.PchipInterpolator(x, y)
     else:
         raise ValueError(f"Invalid interpolation method {method}")
     if interpolator_extrap is not None:
@@ -353,32 +404,32 @@ def windowing(
     """
     # Cases without parameters:
     win_func = {
-        "barthann": scipy.signal.windows.barthann,
+        "barthann": sps.windows.barthann,
         "bartlett": np.bartlett,
         "blackman": np.blackman,
-        "blackman-harris": scipy.signal.windows.blackmanharris,
-        "bohman": scipy.signal.windows.bohman,
-        "boxcar": scipy.signal.windows.boxcar,
-        "cosine": scipy.signal.windows.cosine,
-        "exponential": scipy.signal.windows.exponential,
-        "flat-top": scipy.signal.windows.flattop,
+        "blackman-harris": sps.windows.blackmanharris,
+        "bohman": sps.windows.bohman,
+        "boxcar": sps.windows.boxcar,
+        "cosine": sps.windows.cosine,
+        "exponential": sps.windows.exponential,
+        "flat-top": sps.windows.flattop,
         "hamming": np.hamming,
         "hanning": np.hanning,
-        "lanczos": scipy.signal.windows.lanczos,
-        "nuttall": scipy.signal.windows.nuttall,
-        "parzen": scipy.signal.windows.parzen,
+        "lanczos": sps.windows.lanczos,
+        "nuttall": sps.windows.nuttall,
+        "parzen": sps.windows.parzen,
         "rectangular": np.ones,
-        "taylor": scipy.signal.windows.taylor,
+        "taylor": sps.windows.taylor,
     }.get(method)
     if win_func is not None:
         return y * win_func(len(y))
     # Cases with parameters:
     if method == "tukey":
-        return y * scipy.signal.windows.tukey(len(y), alpha)
+        return y * sps.windows.tukey(len(y), alpha)
     if method == "kaiser":
         return y * np.kaiser(len(y), beta)
     if method == "gaussian":
-        return y * scipy.signal.windows.gaussian(len(y), sigma)
+        return y * sps.windows.gaussian(len(y), sigma)
     raise ValueError(f"Invalid window type {method}")
 
 
@@ -476,12 +527,12 @@ def sinusoidal_fit(
     freq = i_maxfft / (x[-1] - x[0])
     # ==================================================================================
 
-    def optim_func(fitparams: np.ndarray, x: np.ndarray, y: np.ndarray) -> np.ndarray:
+    def optfunc(fitparams: np.ndarray, x: np.ndarray, y: np.ndarray) -> np.ndarray:
         """Optimization function."""
         return y - sinusoidal_model(x, *fitparams)
 
     # Fit the model to the data
-    fitparams = leastsq(optim_func, [amp, freq, phase_origin, offset], args=(x, y))[0]
+    fitparams = spo.leastsq(optfunc, [amp, freq, phase_origin, offset], args=(x, y))[0]
     y_th = sinusoidal_model(x, *fitparams)
     residuals = np.std(y - y_th)
     return fitparams, residuals
@@ -702,7 +753,7 @@ def fwhm(
         return y - FitModelClass.func(x, *params)
 
     amp = FitModelClass.get_amp_from_amplitude(dy, sigma)
-    (amp, sigma, mu, base), _ier = leastsq(func, np.array([amp, sigma, mu, base]))
+    (amp, sigma, mu, base), _ier = spo.leastsq(func, np.array([amp, sigma, mu, base]))
     return FitModelClass.half_max_segment(amp, sigma, mu, base)
 
 
@@ -726,7 +777,7 @@ def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
         # pylint: disable=cell-var-from-loop
         return y - fit.GaussianModel.func(x, *params)
 
-    p_out, _ier = leastsq(func, p_in)
+    p_out, _ier = spo.leastsq(func, p_in)
     amp, sigma, mu, base = p_out
     hw = 2 * sigma
     yhm = fit.GaussianModel.amplitude(amp, sigma) / np.e**2 + base

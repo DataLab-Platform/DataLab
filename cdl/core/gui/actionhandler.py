@@ -708,6 +708,18 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 triggered=self.panel.processor.compute_ifft,
                 tip=_("Warning: only real part is plotted"),
             )
+            self.new_action(
+                _("Magnitude spectrum"),
+                triggered=self.panel.processor.compute_magnitude_spectrum,
+            )
+            self.new_action(
+                _("Phase spectrum"),
+                triggered=self.panel.processor.compute_phase_spectrum,
+            )
+            self.new_action(
+                _("Power spectral density"),
+                triggered=self.panel.processor.compute_psd,
+            )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(

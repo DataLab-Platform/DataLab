@@ -369,6 +369,28 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_ifft, param, title=_("iFFT"), edit=False)
 
     @qt_try_except()
+    def compute_magnitude_spectrum(
+        self, param: cdl.param.SpectrumParam | None = None
+    ) -> None:
+        """Compute magnitude spectrum"""
+        self.compute_11(
+            cps.compute_magnitude_spectrum,
+            param,
+            cdl.param.SpectrumParam,
+            title=_("Magnitude spectrum"),
+        )
+
+    @qt_try_except()
+    def compute_phase_spectrum(self) -> None:
+        """Compute phase spectrum"""
+        self.compute_11(cps.compute_phase_spectrum, title=_("Phase spectrum"))
+
+    @qt_try_except()
+    def compute_psd(self, param: cdl.param.SpectrumParam | None = None) -> None:
+        """Compute power spectral density"""
+        self.compute_11(cps.compute_psd, param, cdl.param.SpectrumParam, title=_("PSD"))
+
+    @qt_try_except()
     def compute_interpolation(
         self,
         obj2: SignalObj | None = None,

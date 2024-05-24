@@ -535,6 +535,28 @@ Inverse FFT
 
 Create a new signal which is the inverse FFT of each selected signal.
 
+Magnitude spectrum
+^^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the magnitude spectrum of each selected signal:
+
+.. math::
+    y_{1} = |FFT(y_{0})|
+
+Phase spectrum
+^^^^^^^^^^^^^^
+
+Create a new signal which is the phase spectrum of each selected signal:
+
+.. math::
+    y_{1} = \angle FFT(y_{0})
+
+Power spectral density
+^^^^^^^^^^^^^^^^^^^^^^
+
+Create a new signal which is the Power Spectral Density (PSD) of each selected signal.
+PSD is estimated using Welch's method (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_).
+
 Frequency filters
 ^^^^^^^^^^^^^^^^^
 

@@ -67,7 +67,7 @@ def normalize(
     raise ValueError(f"Unsupported parameter {parameter}")
 
 
-def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+def fft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute FFT of complex array `z`
 
     Args:
@@ -83,7 +83,7 @@ def z_fft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     return z1
 
 
-def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
+def ifft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
     """Compute inverse FFT of complex array `z`
 
     Args:
@@ -96,6 +96,50 @@ def z_ifft(z: np.ndarray, shift: bool = True) -> np.ndarray:
     if shift:
         z = np.fft.ifftshift(z)
     z1 = np.fft.ifft2(z)
+    return z1
+
+
+def magnitude_spectrum(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
+    """Compute magnitude spectrum of complex array `z`
+
+    Args:
+        z: Input data
+        log_scale: Use log scale (default: False)
+
+    Returns:
+        Magnitude spectrum of input data
+    """
+    z1 = np.abs(fft2d(z))
+    if log_scale:
+        z1 = np.log1p(z1)
+    return z1
+
+
+def phase_spectrum(z: np.ndarray) -> np.ndarray:
+    """Compute phase spectrum of complex array `z`
+
+    Args:
+        z: Input data
+
+    Returns:
+        Phase spectrum of input data (in degrees)
+    """
+    return np.rad2deg(np.angle(fft2d(z)))
+
+
+def psd(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
+    """Compute power spectral density of complex array `z`
+
+    Args:
+        z: Input data
+        log_scale: Use log scale (default: False)
+
+    Returns:
+        Power spectral density of input data
+    """
+    z1 = np.abs(fft2d(z)) ** 2
+    if log_scale:
+        z1 = np.log1p(z1)
     return z1
 
 

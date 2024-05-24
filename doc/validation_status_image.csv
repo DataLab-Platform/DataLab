@@ -25,12 +25,15 @@
 :py:func:`im <cdl.core.computation.image.compute_im>`,Compute imaginary part,N/A
 :py:func:`log10 <cdl.core.computation.image.compute_log10>`,Compute log10,N/A
 :py:func:`logp1 <cdl.core.computation.image.compute_logp1>`,Compute log10(z+n),N/A
+:py:func:`magnitude_spectrum <cdl.core.computation.image.compute_magnitude_spectrum>`,Compute magnitude spectrum,N/A
 :py:func:`moving_average <cdl.core.computation.image.compute_moving_average>`,Compute moving average,N/A
 :py:func:`moving_median <cdl.core.computation.image.compute_moving_median>`,Compute moving median,N/A
 :py:func:`normalize <cdl.core.computation.image.compute_normalize>`,,N/A
+:py:func:`phase_spectrum <cdl.core.computation.image.compute_phase_spectrum>`,Compute phase spectrum,N/A
 :py:func:`product <cdl.core.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,``features/image/misc_unit_test.py``
 :py:func:`product_constant <cdl.core.computation.image.compute_product_constant>`,Multiply **dst** by a constant value and return the new result image object,``features/image/misc_unit_test.py``
 :py:func:`profile <cdl.core.computation.image.compute_profile>`,Compute horizontal or vertical profile,N/A
+:py:func:`psd <cdl.core.computation.image.compute_psd>`,Compute power spectral density,N/A
 :py:func:`quadratic_difference <cdl.core.computation.image.compute_quadratic_difference>`,Compute quadratic difference between two images,N/A
 :py:func:`radial_profile <cdl.core.computation.image.compute_radial_profile>`,Compute radial profile around the centroid,N/A
 :py:func:`re <cdl.core.computation.image.compute_re>`,Compute real part,N/A

@@ -33,6 +33,7 @@ from cdl.core.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     NormalizeParam,
+    SpectrumParam,
     ThresholdParam,
     calc_resultproperties,
     dst_11,
@@ -800,7 +801,7 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "fft")
     x, y = src.get_data()
-    dst.set_xydata(*alg.xy_fft(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg.fft1d(x, y, shift=True if p is None else p.shift))
     return dst
 
 
@@ -816,7 +817,56 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
-    dst.set_xydata(*alg.xy_ifft(x, y, shift=True if p is None else p.shift))
+    dst.set_xydata(*alg.ifft1d(x, y, shift=True if p is None else p.shift))
+    return dst
+
+
+def compute_magnitude_spectrum(
+    src: SignalObj, p: SpectrumParam | None = None
+) -> SignalObj:
+    """Compute magnitude spectrum
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "magnitude_spectrum")
+    x, y = src.get_data()
+    log_scale = True if p is not None and p.log else False
+    dst.y = alg.magnitude_spectrum(x, y, log_scale=log_scale)
+    return dst
+
+
+def compute_phase_spectrum(src: SignalObj) -> SignalObj:
+    """Compute phase spectrum
+
+    Args:
+        src: source signal
+
+    Returns:
+        Result signal object
+    """
+    return Wrap11Func(alg.phase_spectrum)(src)
+
+
+def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
+    """Compute power spectral density
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "psd")
+    x, y = src.get_data()
+    log_scale = True if p is not None and p.log else False
+    psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
+    dst.xydata = np.vstack((psd_x, psd_y))
     return dst
 
 
