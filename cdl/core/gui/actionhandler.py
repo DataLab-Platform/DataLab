@@ -901,16 +901,39 @@ class SignalActionHandler(BaseActionHandler):
                 icon=get_icon("fw1e2.svg"),
             )
             self.new_action(
-                _("Bandwidth -3dB") + "...",
-                triggered=self.panel.processor.compute_bandwidth_3db,
-                context_menu_pos=-1,
+                _("X values at min/max") + "...",
+                triggered=self.panel.processor.compute_x_at_minmax,
+                tip=_("Compute X values at signal minimum and maximum"),
             )
-
+            self.new_action(
+                _("Sampling rate and period") + "...",
+                triggered=self.panel.processor.compute_sampling_rate_period,
+                tip=_(
+                    "Compute sampling rate and period for a constant sampling signal"
+                ),
+            )
             self.new_action(
                 _("Dynamic parameters") + "...",
                 triggered=self.panel.processor.compute_dynamic_parameters,
                 context_menu_pos=-1,
                 tip=_("Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."),
+            )
+            self.new_action(
+                _("Bandwidth at -3dB") + "...",
+                triggered=self.panel.processor.compute_bandwidth_3db,
+                context_menu_pos=-1,
+                tip=_(
+                    "Compute bandwidth at -3dB assuming a low-pass filter "
+                    "already expressed in dB"
+                ),
+            )
+            self.new_action(
+                _("Contrast"),
+                triggered=self.panel.processor.compute_contrast,
+                tip=_(
+                    "Compute contrast of a signal, i.e. (max-min)/(max+min), "
+                    "e.g. for an image profile"
+                ),
             )
 
         with self.new_category(ActionCategory.VIEW):
@@ -950,19 +973,6 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_(
                     "Apply a window function (or apodization): Hanning, Hamming, ..."
                 ),
-            )
-        with self.new_category(ActionCategory.COMPUTING):
-            self.new_action(
-                _("X value at min/max") + "...",
-                triggered=self.panel.processor.compute_x_at_minmax,
-            )
-            self.new_action(
-                _("Compute sampling rate and period") + "...",
-                triggered=self.panel.processor.compute_sampling_rate_period,
-            )
-            self.new_action(
-                _("Contrast"),
-                triggered=self.panel.processor.compute_contrast,
             )
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):

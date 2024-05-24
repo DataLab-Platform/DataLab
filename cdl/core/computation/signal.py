@@ -1227,7 +1227,7 @@ def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
 class DynamicParam(gds.DataSet):
     """Parameters for dynamic range computation (ENOB, SNR, SINAD, THD, SFDR)"""
 
-    full_scale = gds.FloatItem(_("Full scale (V)"), default=0.16, min=0.0)
+    full_scale = gds.FloatItem(_("Full scale"), default=0.16, min=0.0, unit="V")
     _units = ("dBc", "dBFS")
     unit = gds.ChoiceItem(
         _("Unit"), zip(_units, _units), default="dBc", help=_("Unit for SINAD")

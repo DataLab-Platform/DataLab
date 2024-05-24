@@ -800,11 +800,17 @@ Then, compute the full width at 1/e².
     Metadata is attached to signal and serialized with it when exporting
     current session in a HDF5 file.
 
-Bandwidth at -3 dB
-^^^^^^^^^^^^^^^^^^
+X values at min/max
+^^^^^^^^^^^^^^^^^^^
 
-Assuming the signal is a filter response, compute the bandwidth at -3 dB by finding the
-frequency range where the signal is above -3 dB.
+Compute the X values at minimum and maximum of selected signal.
+
+Sampling rate and period
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Compute the sampling rate and period of selected signal.
+
+.. warning:: This feature assumes that the X values are regularly spaced.
 
 Dynamic parameters
 ^^^^^^^^^^^^^^^^^^
@@ -829,6 +835,32 @@ Compute the following dynamic parameters on selected signal:
       - Total Harmonic Distortion
     * - SFDR
       - Spurious-Free Dynamic Range
+
+Bandwidth at -3 dB
+^^^^^^^^^^^^^^^^^^
+
+Assuming the signal is a filter response, compute the bandwidth at -3 dB by finding the
+frequency range where the signal is above -3 dB.
+
+.. warning::
+
+  This feature assumes that the signal is a filter response, already expressed in dB.
+
+Contrast
+^^^^^^^^
+
+Compute the contrast of selected signal.
+
+The contrast is defined as the ratio of the difference and the sum of the maximum
+and minimum values:
+
+.. math::
+    \text{Contrast} = \dfrac{\text{max}(y) - \text{min}(y)}{\text{max}(y) + \text{min}(y)}
+
+.. note::
+
+  This feature assumes that the signal is a profile from an image, where the contrast
+  is meaningful. This justifies the optical definition of contrast.
 
 Show results
 ^^^^^^^^^^^^

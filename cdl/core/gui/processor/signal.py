@@ -534,7 +534,7 @@ class SignalProcessor(BaseProcessor):
     @qt_try_except()
     def compute_x_at_minmax(self) -> dict[str, ResultProperties]:
         """Compute x at min/max"""
-        return self.compute_10(cps.compute_x_at_minmax, title=_("Abscissa at min/max"))
+        return self.compute_10(cps.compute_x_at_minmax, title="X @ min,max")
 
     @qt_try_except()
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
