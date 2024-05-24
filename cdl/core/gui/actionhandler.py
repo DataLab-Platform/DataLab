@@ -960,22 +960,10 @@ class SignalActionHandler(BaseActionHandler):
                 _("Compute sampling rate and period") + "...",
                 triggered=self.panel.processor.compute_sampling_rate_period,
             )
-            with self.new_menu(_("Contrast")):
-                # with self.new_category(ActionCategory.PROCESSING):
-                self.new_action(
-                    _("Local contrast"),
-                    triggered=self.panel.processor.compute_local_contrast,
-                    separator=True,
-                )
-                # with self.new_category(ActionCategory.OPERATION):
-                self.new_action(
-                    _("Contrast"),
-                    triggered=self.panel.processor.compute_contrast,
-                )
-                self.new_action(
-                    _("Mean local contrast"),
-                    triggered=self.panel.processor.compute_mean_local_contrast,
-                )
+            self.new_action(
+                _("Contrast"),
+                triggered=self.panel.processor.compute_contrast,
+            )
         super().create_last_actions()
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(

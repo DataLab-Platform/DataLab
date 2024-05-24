@@ -1261,12 +1261,6 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     return calc_resultproperties("ADC", src, funcs)
 
 
-class WindowParam(gds.DataSet):
-    """Window parameters for sliding window computations"""
-
-    n = gds.IntItem(_("Window size"), default=100, min=1)
-
-
 def compute_contrast(obj: SignalObj) -> ResultProperties:
     """Compute contrast"""
     return calc_resultproperties(
@@ -1274,29 +1268,6 @@ def compute_contrast(obj: SignalObj) -> ResultProperties:
         obj,
         {
             "contrast": lambda xy: alg.contrast(xy[1]),
-        },
-    )
-
-
-def compute_local_contrast(obj: SignalObj, param: WindowParam) -> SignalObj:
-    """Compute local contrast"""
-    dst = dst_11(obj, "local_contrast", f"window={param.n}")
-    x, y = obj.get_data()
-    dst.set_xydata(x, alg.local_contrast(y, param.n))  # type: ignore
-    return dst
-
-
-def compute_mean_local_contrast(obj: SignalObj, param: WindowParam) -> ResultProperties:
-    """Compute local contrast"""
-    # we precompute the mean and std to avoid recomputing them in the result properties
-    # (duplication in lambda functions)
-    mean, std = alg.mean_local_constrast(obj.y, param.n)  # type: ignore
-    return calc_resultproperties(
-        "local_contrast",
-        obj,  # type: ignore
-        {
-            "<local_contrast>": lambda _: mean,
-            "σ(local_contrast)": lambda _: std,
         },
     )
 

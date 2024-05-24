@@ -532,30 +532,6 @@ class SignalProcessor(BaseProcessor):
         return self.compute_10(cps.compute_contrast, title=_("Contrast"))
 
     @qt_try_except()
-    def compute_local_contrast(
-        self, param: cdl.param.WindowParam | None = None
-    ) -> None:
-        """Compute contrast"""
-        return self.compute_11(
-            cps.compute_local_contrast,
-            param=param,
-            paramclass=cdl.param.WindowParam,
-            title=_("Local contrast window"),
-        )
-
-    @qt_try_except()
-    def compute_mean_local_contrast(
-        self, param: cdl.param.WindowParam | None = None
-    ) -> None:
-        """Compute average local contrast"""
-        return self.compute_10(
-            cps.compute_mean_local_contrast,
-            param=param,
-            paramclass=cdl.param.WindowParam,
-            title=_("Average local contrast"),
-        )
-
-    @qt_try_except()
     def compute_x_at_minmax(self) -> dict[str, ResultProperties]:
         """Compute x at min/max"""
         return self.compute_10(cps.compute_x_at_minmax, title=_("Abscissa at min/max"))

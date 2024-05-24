@@ -734,7 +734,7 @@ def fw1e2(data: np.ndarray) -> tuple[float, float, float, float]:
 
 
 def contrast(y: np.ndarray) -> float:
-    """Compute contrast.
+    """Compute contrast
 
     Args:
         y: Input array
@@ -744,57 +744,6 @@ def contrast(y: np.ndarray) -> float:
     """
     max_, min_ = np.max(y), np.min(y)
     return (max_ - min_) / (max_ + min_)
-
-
-def on_sliding_window(
-    arr: np.ndarray, window_size: int, func: Callable[[np.ndarray], float]
-) -> np.ndarray:
-    """Apply a function on a sliding window.
-
-    Args:
-        arr: Input array
-        window_size: Window size
-        func (Callable): Function to apply on the sliding window
-
-    Returns:
-        Result of the function applied on the sliding window (same shape
-         as input array)
-    """
-    new_arr = np.zeros(arr.shape)
-    for idx, window in enumerate(
-        np.lib.stride_tricks.sliding_window_view(arr, window_size, subok=True),
-        start=window_size // 2,
-    ):
-        new_arr[idx] = func(window)
-    new_arr[: window_size // 2] = new_arr[window_size // 2]
-    new_arr[-window_size // 2 :] = new_arr[-window_size // 2]
-    return new_arr
-
-
-def local_contrast(y: np.ndarray, n: int = 3) -> np.ndarray:
-    """Compute local contrast.
-
-    Args:
-        y: Input array
-        n: Window size
-
-    Returns:
-        Local contrast
-    """
-    return on_sliding_window(y, n, contrast)
-
-
-def mean_local_constrast(y: np.ndarray, n: int = 3) -> tuple[float, float]:
-    """Compute average local contrast.
-
-    Args:
-        y: Input array
-        n: Window size. Defaults to 3.
-    """
-    local_contrast_arr = local_contrast(y, n)
-    return np.mean(local_contrast_arr, dtype=float), np.std(
-        local_contrast_arr, dtype=float
-    )
 
 
 def sampling_period(x: np.ndarray) -> float:
