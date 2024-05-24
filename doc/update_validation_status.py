@@ -119,7 +119,7 @@ def generate_csv_files() -> None:
             function_rows.append([pyfunc_link, description, test_script])
 
         fname = osp.join(osp.dirname(__file__), f"validation_status_{submodule}.csv")
-        with open(fname, "w", newline="") as csvfile:
+        with open(fname, "w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(function_rows)
 
@@ -164,9 +164,8 @@ def generate_csv_files() -> None:
         ]
     )
 
-    with open(
-        osp.join(osp.dirname(__file__), "validation_statistics.csv"), "w", newline=""
-    ) as csvfile:
+    fname = osp.join(osp.dirname(__file__), "validation_statistics.csv")
+    with open(fname, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(statistics_rows)
 
