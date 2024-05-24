@@ -99,8 +99,8 @@ def generate_csv_files() -> None:
 
     statistics_rows = []
 
-    total_functions = {"signal": 0, "image": 0, "total": 0}
-    validated_counts = {"signal": 0, "image": 0, "total": 0}
+    t_count = {"signal": 0, "image": 0, "total": 0}
+    v_count = {"signal": 0, "image": 0, "total": 0}
 
     for submodule, functions in submodules.items():
         function_rows = []
@@ -108,10 +108,10 @@ def generate_csv_files() -> None:
             full_function_name = f"{module_name}.{function_name}"
             test_path = check_for_validation_test(full_function_name, validation_tests)
             if test_path:
-                validated_counts[submodule] += 1
-                validated_counts["total"] += 1
-            total_functions[submodule] += 1
-            total_functions["total"] += 1
+                v_count[submodule] += 1
+                v_count["total"] += 1
+            t_count[submodule] += 1
+            t_count["total"] += 1
             description = docstring.split("\n")[0] if docstring else "-"
             test_script = f"``{test_path}``" if test_path else "N/A"
             short_name = function_name.replace("compute_", "")
@@ -123,44 +123,44 @@ def generate_csv_files() -> None:
             writer = csv.writer(csvfile)
             writer.writerows(function_rows)
 
-        signal_percentage = (
-            int((validated_counts["signal"] / total_functions["signal"]) * 100)
-            if total_functions["signal"] > 0
+        signal_pct = (
+            int((v_count["signal"] / t_count["signal"]) * 100)
+            if t_count["signal"] > 0
             else 0
         )
-        image_percentage = (
-            int((validated_counts["image"] / total_functions["image"]) * 100)
-            if total_functions["image"] > 0
+        image_pct = (
+            int((v_count["image"] / t_count["image"]) * 100)
+            if t_count["image"] > 0
             else 0
         )
-        total_percentage = (
-            int((validated_counts["total"] / total_functions["total"]) * 100)
-            if total_functions["total"] > 0
+        total_pct = (
+            int((v_count["total"] / t_count["total"]) * 100)
+            if t_count["total"] > 0
             else 0
         )
 
     statistics_rows.append(
         [
             "Number of compute functions",
-            total_functions["signal"],
-            total_functions["image"],
-            total_functions["total"],
+            t_count["signal"],
+            t_count["image"],
+            t_count["total"],
         ]
     )
     statistics_rows.append(
         [
             "Number of validated compute functions",
-            validated_counts["signal"],
-            validated_counts["image"],
-            validated_counts["total"],
+            v_count["signal"],
+            v_count["image"],
+            v_count["total"],
         ]
     )
     statistics_rows.append(
         [
             "Percentage of validated compute functions",
-            f"{signal_percentage}%",
-            f"{image_percentage}%",
-            f"{total_percentage}%",
+            f"{signal_pct}%",
+            f"{image_pct}%",
+            f"{total_pct}%",
         ]
     )
 
@@ -168,6 +168,13 @@ def generate_csv_files() -> None:
     with open(fname, "w", newline="", encoding="utf-8") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerows(statistics_rows)
+
+    # Print statistics:
+    print("Validation statistics:")
+    print(f"  Signal: {v_count['signal']}/{t_count['signal']} ({signal_pct}%)")
+    print(f"  Image: {v_count['image']}/{t_count['image']} ({image_pct}%)")
+    print(f"  Total: {v_count['total']}/{t_count['total']} ({total_pct}%)")
+    print()
 
 
 if __name__ == "__main__":
