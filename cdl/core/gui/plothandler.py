@@ -375,6 +375,12 @@ class SignalPlotHandler(BasePlotHandler):
         self.plot.set_antialiasing(state)
         self.plot.replot()
 
+    def get_current_plot_options(self) -> PlotOptions:
+        """Return standard signal/image plot options"""
+        options = super().get_current_plot_options()
+        options.curve_antialiasing = self.plot.antialiased
+        return options
+
 
 class ImagePlotHandler(BasePlotHandler):
     """Object handling image plot items, plot dialogs, plot options"""
