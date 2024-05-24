@@ -15,42 +15,12 @@ bandwidth, ENOB, etc.
 
 from __future__ import annotations
 
-from typing import Callable
-
-import numpy as np
 import pytest
 
-import cdl.algorithms.signal as alg
 import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
-from cdl.env import execenv
 from cdl.tests.data import check_scalar_result, get_test_signal
-
-
-@pytest.mark.parametrize(
-    "func",
-    (
-        alg.bandwidth,
-        alg.enob,
-        alg.sinad,
-        alg.thd,
-        alg.sfdr,
-        alg.snr,
-        alg.sinus_frequency,
-    ),
-)
-def test_func_for_errors(func: Callable[[np.ndarray, np.ndarray], float]) -> None:
-    """Generic test for functions returning a float result.
-    This test only checks if the function runs without errors.
-    The result is not checked."""
-    newparam = cdl.obj.new_signal_param(stype=cdl.obj.SignalTypes.COSINUS, size=200)
-    s1 = cdl.obj.create_signal_from_param(newparam)
-    x, y = s1.xydata
-    res = func(x, y)
-    assert isinstance(res, float)
-    execenv.print(f"{func.__name__}={res}", end=" ")
-    execenv.print("OK")
 
 
 @pytest.mark.validation
@@ -100,8 +70,18 @@ def test_dynamic_parameters() -> None:
     check_scalar_result("SNR", df.SNR[0], 101.52, rtol=0.001)
 
 
+@pytest.mark.validation
+def test_signal_sampling_rate_period() -> None:
+    """Validation test for the sampling rate and period computation."""
+    obj = get_test_signal("dynamic_parameters.txt")
+    df = cps.compute_sampling_rate_period(obj).to_dataframe()
+    check_scalar_result("Sampling rate", df["fs"][0], 1.0e10, rtol=0.001)
+    check_scalar_result("Period", df["T"][0], 1.0e-10, rtol=0.001)
+
+
 if __name__ == "__main__":
     test_signal_fwhm()
+    test_signal_fw1e2()
+    test_signal_bandwidth_3db()
     test_dynamic_parameters()
-    test_func_for_errors(alg.bandwidth)
-    test_func_for_errors(alg.enob)
+    test_signal_sampling_rate_period()

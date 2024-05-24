@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import warnings
 from typing import Callable, Literal
 
 import numpy as np
@@ -736,10 +737,10 @@ def contrast(y: np.ndarray) -> float:
     """Compute contrast.
 
     Args:
-        y (numpy.ndarray): Input array
+        y: Input array
 
     Returns:
-        np.ndarray: Contrast
+        Contrast
     """
     max_, min_ = np.max(y), np.min(y)
     return (max_ - min_) / (max_ + min_)
@@ -751,12 +752,12 @@ def on_sliding_window(
     """Apply a function on a sliding window.
 
     Args:
-        arr (numpy.ndarray): Input array
-        window_size (int): Window size
+        arr: Input array
+        window_size: Window size
         func (Callable): Function to apply on the sliding window
 
     Returns:
-        np.ndarray: Result of the function applied on the sliding window (same shape
+        Result of the function applied on the sliding window (same shape
          as input array)
     """
     new_arr = np.zeros(arr.shape)
@@ -774,11 +775,11 @@ def local_contrast(y: np.ndarray, n: int = 3) -> np.ndarray:
     """Compute local contrast.
 
     Args:
-        y (numpy.ndarray): Input array
-        n (int): Window size
+        y: Input array
+        n: Window size
 
     Returns:
-        np.ndarray: Local contrast
+        Local contrast
     """
     return on_sliding_window(y, n, contrast)
 
@@ -787,8 +788,8 @@ def mean_local_constrast(y: np.ndarray, n: int = 3) -> tuple[float, float]:
     """Compute average local contrast.
 
     Args:
-        y (numpy.ndarray): Input array
-        n (int): Window size. Defaults to 3.
+        y: Input array
+        n: Window size. Defaults to 3.
     """
     local_contrast_arr = local_contrast(y, n)
     return np.mean(local_contrast_arr, dtype=float), np.std(
@@ -796,28 +797,29 @@ def mean_local_constrast(y: np.ndarray, n: int = 3) -> tuple[float, float]:
     )
 
 
-def sampling_period(x: np.ndarray) -> tuple[float, float]:
-    """Compute mean and std sampling period.
+def sampling_period(x: np.ndarray) -> float:
+    """Compute sampling period
 
     Args:
-        x (numpy.ndarray): X data
+        x: X data
 
     Returns:
-        tuple[float, float]: Mean and std sampling period
+        Sampling period
     """
-    x_diff = np.diff(x)
-    return np.mean(x_diff, dtype=float), np.std(x_diff, dtype=float)
+    steps = np.diff(x)
+    if not np.isclose(np.diff(steps).max(), 0, atol=1e-10):
+        warnings.warn("Non-constant sampling signal")
+    return steps[0]
 
 
-def sampling_rate(x: np.ndarray) -> tuple[float, float]:
-    """Compute mean sampling rate.
+def sampling_rate(x: np.ndarray) -> float:
+    """Compute mean sampling rate
 
     Args:
-        x (numpy.ndarray): X data
+        x: X data
 
     Returns:
-        tuple[float, float]: Mean and std sampling rate
+        Sampling rate
     """
-    x_diff = np.diff(x)
-    freqs = 1 / x_diff
-    return np.mean(freqs, dtype=float), np.std(freqs, dtype=float)
+    fs = 1.0 / sampling_period(x)
+    return fs

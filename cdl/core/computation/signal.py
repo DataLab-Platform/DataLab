@@ -1314,16 +1314,19 @@ def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
 
 
 def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
-    """Compute sampling rate and period (mean and std)"""
-    mean_t, std_t = alg.sampling_period(obj.x)
-    mean_f, std_f = alg.sampling_rate(obj.x)
+    """Compute sampling rate and period
+
+    Args:
+        obj: source signal
+
+    Returns:
+        Result properties with sampling rate and period
+    """
     return calc_resultproperties(
-        "mean_sampling_rate",
+        "sampling_rate_period",
         obj,
         {
-            "<f>": lambda _: mean_f,
-            "σ(f)": lambda _: std_f,
-            "<T>": lambda _: mean_t,
-            "σ(T)": lambda _: std_t,
+            "fs": lambda xy: alg.sampling_rate(xy[0]),
+            "T": lambda xy: alg.sampling_period(xy[0]),
         },
     )

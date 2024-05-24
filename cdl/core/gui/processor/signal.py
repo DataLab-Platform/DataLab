@@ -564,7 +564,7 @@ class SignalProcessor(BaseProcessor):
     def compute_sampling_rate_period(self) -> dict[str, ResultProperties]:
         """Compute sampling rate and period (mean and std)"""
         return self.compute_10(
-            cps.compute_sampling_rate_period, title=_("Sampling rate")
+            cps.compute_sampling_rate_period, title=_("Sampling rate and period")
         )
 
     @qt_try_except()
