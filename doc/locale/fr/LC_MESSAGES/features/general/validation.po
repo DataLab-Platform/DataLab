@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-19 09:43+0200\n"
+"POT-Creation-Date: 2024-05-24 13:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../doc/features/general/validation.rst:-1
 msgid ""
@@ -175,7 +175,9 @@ msgstr "Etat de validation de DataLab"
 msgid ""
 "This paragraph provides the validation status of compute functions in "
 "DataLab."
-msgstr "Ce paragraphe décrit l'état de validation des fonctions de calcul dans DataLab."
+msgstr ""
+"Ce paragraphe décrit l'état de validation des fonctions de calcul dans "
+"DataLab."
 
 #: ../../doc/features/general/validation.rst:61
 msgid ""
@@ -184,9 +186,25 @@ msgid ""
 "generated from the test code). Some functions are already validated but "
 "do not appear in the list below yet, while others are still in the "
 "validation process."
-msgstr "Il s'agit d'un travail en cours : les tableaux ci-dessous sont mis à jour en continu à mesure que de nouvelles fonctions sont validées ou que le code de test est adapté (les tableaux sont générés à partir du code de test). Certaines fonctions sont déjà validées mais n'apparaissent pas encore dans la liste ci-dessous, tandis que d'autres sont encore en cours de validation."
+msgstr ""
+"Il s'agit d'un travail en cours : les tableaux ci-dessous sont mis à jour"
+" en continu à mesure que de nouvelles fonctions sont validées ou que le "
+"code de test est adapté (les tableaux sont générés à partir du code de "
+"test). Certaines fonctions sont déjà validées mais n'apparaissent pas "
+"encore dans la liste ci-dessous, tandis que d'autres sont encore en cours"
+" de validation."
 
 #: ../../doc/features/general/validation.rst:66
+msgid ""
+"The validation status must not be confused with the test coverage. The "
+"validation status indicates whether the function has been validated "
+"against ground-truth data or analytical models. The test coverage "
+"indicates the percentage of the code that is executed by the test suite, "
+"but it does not necessarily take into account the correctness of the "
+"results."
+msgstr "L'état de validation ne doit pas être confondu avec la couverture de test. L'état de validation indique si la fonction a été validée par rapport à des données de référence ou des modèles analytiques. La couverture de test indique le pourcentage du code qui est exécuté par la suite de tests, mais elle ne prend pas nécessairement en compte la justesse des résultats."
+
+#: ../../doc/features/general/validation.rst:72
 msgid "Validation Statistics"
 msgstr "Statistiques de validation"
 
@@ -211,7 +229,7 @@ msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "42"
+msgid "44"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -219,7 +237,7 @@ msgid "81"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "123"
+msgid "125"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -227,11 +245,15 @@ msgid "Number of validated compute functions"
 msgstr "Nombre de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "1"
+msgid "14"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "2"
+msgid "10"
+msgstr ""
+
+#: ../../doc/validation_statistics.csv:1
+msgid "24"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -239,18 +261,22 @@ msgid "Percentage of validated compute functions"
 msgstr "Pourcentage de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "2%"
+msgid "31%"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "1%"
+msgid "12%"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:72
+#: ../../doc/validation_statistics.csv:1
+msgid "19%"
+msgstr ""
+
+#: ../../doc/features/general/validation.rst:77
 msgid "Signal Compute Functions"
 msgstr "Fonctions de calcul Signal"
 
-#: ../../doc/features/general/validation.rst:74
+#: ../../doc/features/general/validation.rst:79
 msgid "Validation status of signal compute functions"
 msgstr "Etat de validation des fonctions de calcul de signal"
 
@@ -275,13 +301,12 @@ msgstr ""
 msgid "Compute absolute value"
 msgstr ""
 
-#: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "N/A"
+msgid "``features/signal/fft1d_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`add <cdl.core.computation.signal.compute_add>`"
+msgid ":py:func:`addition <cdl.core.computation.signal.compute_addition>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -291,13 +316,22 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`add_constant <cdl.core.computation.signal.compute_add_constant>`"
+msgid "``features/signal/misc_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
-"Add **dst** and a constant value and return **dst** signal modified in "
-"place"
+":py:func:`addition_constant "
+"<cdl.core.computation.signal.compute_addition_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Add **dst** and a constant value and return a the new result signal object"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/image/misc_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -306,6 +340,25 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Convert data type"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "N/A"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`bandwidth_3db "
+"<cdl.core.computation.signal.compute_bandwidth_3db>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute bandwidth"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/signal/computing_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -369,8 +422,16 @@ msgid "Subtract a constant value from a signal"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`division <cdl.core.computation.signal.compute_division>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute division between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ""
-":py:func:`divide_by_constant "
+":py:func:`division_constant "
 "<cdl.core.computation.signal.compute_division_constant>`"
 msgstr ""
 
@@ -379,11 +440,13 @@ msgid "Divide a signal by a constant value"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`division <cdl.core.computation.signal.compute_division>`"
+msgid ""
+":py:func:`dynamic_parameters "
+"<cdl.core.computation.signal.compute_dynamic_parameters>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "Compute division between two signals"
+msgid "Compute Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR)"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -551,14 +614,14 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
-":py:func:`product_by_constant "
+":py:func:`product_constant "
 "<cdl.core.computation.signal.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
-"Multiply **dst** by a constant value and return **dst** signal modified "
-"in place"
+"Multiply **dst** by a constant value and return the new result signal "
+"object"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -653,11 +716,11 @@ msgid ""
 "blackman,"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:81
+#: ../../doc/features/general/validation.rst:85
 msgid "Image Compute Functions"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:83
+#: ../../doc/features/general/validation.rst:87
 msgid "Validation status of image compute functions"
 msgstr ""
 
@@ -666,7 +729,7 @@ msgid ":py:func:`abs <cdl.core.computation.image.compute_abs>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`add <cdl.core.computation.image.compute_add>`"
+msgid ":py:func:`addition <cdl.core.computation.image.compute_addition>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -674,13 +737,13 @@ msgid "Add **dst** and **src** images and return **dst** image modified in place
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`add_constant <cdl.core.computation.image.compute_add_constant>`"
+msgid ""
+":py:func:`addition_constant "
+"<cdl.core.computation.image.compute_addition_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-"Add **dst** and a constant value and return **dst** image modified in "
-"place"
+msgid "Add **dst** and a constant value and return the new result image object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -730,6 +793,10 @@ msgid "Compute centroid"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid "``features/image/centroid_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`clip <cdl.core.computation.image.compute_clip>`"
 msgstr ""
 
@@ -752,17 +819,9 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid "Subtract a constant value from an image"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
 msgid ""
-":py:func:`divide_by_constant "
-"<cdl.core.computation.image.compute_division_constant>`"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
-msgid "Divide an image by a constant value"
+"Subtract a constant value from an image and return the new result image "
+"object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -771,6 +830,16 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute division between two images"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`division_constant "
+"<cdl.core.computation.image.compute_division_constant>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Divide an image by a constant value and return the new result image object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -895,14 +964,14 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
-":py:func:`product_by_constant "
+":py:func:`product_constant "
 "<cdl.core.computation.image.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
-"Multiply **dst** by a constant value and return **dst** image modified in"
-" place"
+"Multiply **dst** by a constant value and return the new result image "
+"object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1331,3 +1400,87 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Wavelet denoising"
 msgstr ""
+
+#~ msgid "42"
+#~ msgstr ""
+
+#~ msgid "123"
+#~ msgstr ""
+
+#~ msgid "1"
+#~ msgstr ""
+
+#~ msgid "2"
+#~ msgstr ""
+
+#~ msgid "2%"
+#~ msgstr ""
+
+#~ msgid "1%"
+#~ msgstr ""
+
+#~ msgid ":py:func:`add <cdl.core.computation.signal.compute_add>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`add_constant "
+#~ "<cdl.core.computation.signal.compute_add_constant>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Add **dst** and a constant value "
+#~ "and return **dst** signal modified in"
+#~ " place"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`divide_by_constant "
+#~ "<cdl.core.computation.signal.compute_division_constant>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`product_by_constant "
+#~ "<cdl.core.computation.signal.compute_product_constant>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Multiply **dst** by a constant value "
+#~ "and return **dst** signal modified in"
+#~ " place"
+#~ msgstr ""
+
+#~ msgid ":py:func:`add <cdl.core.computation.image.compute_add>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`add_constant "
+#~ "<cdl.core.computation.image.compute_add_constant>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Add **dst** and a constant value "
+#~ "and return **dst** image modified in "
+#~ "place"
+#~ msgstr ""
+
+#~ msgid "Subtract a constant value from an image"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`divide_by_constant "
+#~ "<cdl.core.computation.image.compute_division_constant>`"
+#~ msgstr ""
+
+#~ msgid "Divide an image by a constant value"
+#~ msgstr ""
+
+#~ msgid ""
+#~ ":py:func:`product_by_constant "
+#~ "<cdl.core.computation.image.compute_product_constant>`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Multiply **dst** by a constant value "
+#~ "and return **dst** image modified in "
+#~ "place"
+#~ msgstr ""

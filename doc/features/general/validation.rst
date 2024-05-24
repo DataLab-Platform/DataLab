@@ -63,6 +63,12 @@ This paragraph provides the validation status of compute functions in DataLab.
     test code). Some functions are already validated but do not appear in the list
     below yet, while others are still in the validation process.
 
+.. warning:: The validation status must not be confused with the test coverage. The
+    validation status indicates whether the function has been validated against
+    ground-truth data or analytical models. The test coverage indicates the percentage
+    of the code that is executed by the test suite, but it does not necessarily take
+    into account the correctness of the results.
+
 .. csv-table:: Validation Statistics
    :file: ../../validation_statistics.csv
    :header: Category, Signal, Image, Total
