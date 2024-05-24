@@ -47,13 +47,15 @@ def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     return dy
 
 
-def normalize(yin: np.ndarray, parameter: str = "maximum") -> np.ndarray:
+def normalize(
+    yin: np.ndarray,
+    parameter: Literal["maximum", "amplitude", "area", "energy", "rms"] = "maximum",
+) -> np.ndarray:
     """Normalize input array to a given parameter.
 
     Args:
         yin: Input array
-        parameter: Normalization parameter. Defaults to "maximum".
-         Supported values: 'maximum', 'amplitude', 'area', 'energy'
+        parameter: Normalization parameter. Defaults to "maximum"
 
     Returns:
         Normalized array
@@ -255,7 +257,7 @@ def interpolate(
     x: np.ndarray,
     y: np.ndarray,
     xnew: np.ndarray,
-    method: str,
+    method: Literal["linear", "spline", "quadratic", "cubic", "barycentric", "pchip"],
     fill_value: float | None = None,
 ) -> np.ndarray:
     """Interpolate data.
@@ -264,8 +266,7 @@ def interpolate(
         x: X data
         y: Y data
         xnew: New X data
-        method: Interpolation method. Valid values are 'linear', 'spline',
-         'quadratic', 'cubic', 'barycentric', 'pchip'
+        method: Interpolation method
         fill_value: Fill value. Defaults to None.
          This value is used to fill in for requested points outside of the
          X data range. It is only used if the method argument is 'linear',
@@ -309,7 +310,27 @@ def interpolate(
 
 def windowing(
     y: np.ndarray,
-    win_type: str = "hamming",
+    method: Literal[
+        "barthann",
+        "bartlett",
+        "blackman",
+        "blackman-harris",
+        "bohman",
+        "boxcar",
+        "cosine",
+        "exponential",
+        "flat-top",
+        "hamming",
+        "hanning",
+        "lanczos",
+        "nuttall",
+        "parzen",
+        "rectangular",
+        "taylor",
+        "tukey",
+        "kaiser",
+        "gaussian",
+    ] = "hamming",
     alpha: float = 0.5,
     beta: float = 14.0,
     sigma: float = 7.0,
@@ -319,9 +340,7 @@ def windowing(
     Args:
         x: X data
         y: Y data
-        win_type: Windowing function type. Defaults to "hamming".
-         Supported values: 'hamming', 'hanning', 'blackman', 'bartlett',
-         'tukey', 'rectangular'
+        method: Windowing function. Defaults to "hamming".
         alpha: Tukey window parameter. Defaults to 0.5.
         beta: Kaiser window parameter. Defaults to 14.0.
         sigma: Gaussian window parameter. Defaults to 7.0.
@@ -347,17 +366,17 @@ def windowing(
         "parzen": scipy.signal.windows.parzen,
         "rectangular": np.ones,
         "taylor": scipy.signal.windows.taylor,
-    }.get(win_type)
+    }.get(method)
     if win_func is not None:
         return y * win_func(len(y))
     # Cases with parameters:
-    if win_type == "tukey":
+    if method == "tukey":
         return y * scipy.signal.windows.tukey(len(y), alpha)
-    if win_type == "kaiser":
+    if method == "kaiser":
         return y * np.kaiser(len(y), beta)
-    if win_type == "gaussian":
+    if method == "gaussian":
         return y * scipy.signal.windows.gaussian(len(y), sigma)
-    raise ValueError(f"Invalid window type {win_type}")
+    raise ValueError(f"Invalid window type {method}")
 
 
 def find_nearest_zero_point_idx(y: np.ndarray) -> np.ndarray:
