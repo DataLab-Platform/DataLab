@@ -9,12 +9,10 @@
 from __future__ import annotations
 
 import re
-import warnings
 from collections.abc import Callable
 
 import numpy as np
-from guidata.qthelpers import exec_dialog, get_icon
-from guidata.widgets.arrayeditor import ArrayEditor
+from guidata.qthelpers import exec_dialog
 
 import cdl.core.computation.base as cpb
 import cdl.core.computation.signal as cps
