@@ -22,12 +22,8 @@ from plotpy.builder import make
 import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
+import cdl.tests.data as cdltd
 from cdl.env import execenv
-from cdl.tests.data import (
-    check_scalar_result,
-    create_paracetamol_signal,
-    get_test_signal,
-)
 from cdl.utils.vistools import view_curve_items
 
 
@@ -47,16 +43,19 @@ def __test_fwhm_interactive(obj: cdl.obj.SignalObj, method: str) -> None:
 def test_signal_fwhm_interactive() -> None:
     """FWHM interactive test."""
     with qt_app_context():
-        execenv.print("Computing FWHM of a multi-peak signal...", end=" ")
-        obj = create_paracetamol_signal()
-        __test_fwhm_interactive(obj, "zero-crossing")
+        execenv.print("Computing FWHM of a multi-peak signal...", end="")
+        obj1 = cdltd.create_paracetamol_signal()
+        obj2 = cdltd.create_noisy_signal(cdltd.GaussianNoiseParam.create(sigma=0.05))
+        for obj in (obj1, obj2):
+            for method, _mname in cdl.param.FWHMParam.methods:
+                __test_fwhm_interactive(obj, method)
         execenv.print("OK")
 
 
 @pytest.mark.validation
 def test_signal_fwhm() -> None:
     """Validation test for the full width at half maximum computation."""
-    obj = get_test_signal("fwhm.txt")
+    obj = cdltd.get_test_signal("fwhm.txt")
     real_fwhm = 2.675  # Manual validation
     for method, exp in (
         ("gauss", 2.40323),
@@ -66,16 +65,16 @@ def test_signal_fwhm() -> None:
     ):
         param = cdl.param.FWHMParam.create(method=method)
         df = cps.compute_fwhm(obj, param).to_dataframe()
-        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
+        cdltd.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
 
 
 @pytest.mark.validation
 def test_signal_fw1e2() -> None:
     """Validation test for the full width at 1/e^2 maximum computation."""
-    obj = get_test_signal("fw1e2.txt")
+    obj = cdltd.get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
     df = cps.compute_fw1e2(obj).to_dataframe()
-    check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
+    cdltd.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
 if __name__ == "__main__":
