@@ -44,7 +44,7 @@ def go_to_error(text: str) -> None:
 def is_version_at_least(version1: str, version2: str) -> bool:
     """
     Compare two version strings to check if the first version is at least
-    equal to the second.
+    equal to the second. Limit the comparison to the minor version (e.g. 1.2.3 -> 1.2).
 
     Args:
         version1 (str): The first version string.
@@ -53,9 +53,12 @@ def is_version_at_least(version1: str, version2: str) -> bool:
     Returns:
         bool: True if version1 is greater than or equal to version2, False otherwise.
     """
+    minor_v1 = ".".join(version1.split(".")[:2])
+    minor_v2 = ".".join(version2.split(".")[:2])
+
     # Split the version strings into parts
-    parts1 = [int(part) for part in version1.split(".")]
-    parts2 = [int(part) for part in version2.split(".")]
+    parts1 = [int(part) for part in minor_v1.split(".")]
+    parts2 = [int(part) for part in minor_v2.split(".")]
 
     # Compare each part
     for part1, part2 in zip(parts1, parts2):
