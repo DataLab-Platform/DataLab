@@ -49,7 +49,7 @@ def get_version() -> str:
     return RELEASE
 
 
-__version__ = get_version()
+__version__ = RELEASE
 __docurl__ = __homeurl__ = "https://datalab-platform.com/"
 __supporturl__ = "https://github.com/DataLab-Platform/DataLab/issues/new/choose"
 
