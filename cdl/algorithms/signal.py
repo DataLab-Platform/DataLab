@@ -735,7 +735,8 @@ def fwhm(
     if method == "zero-crossing":
         hmax = dy * 0.5 + np.min(y)
         fx = find_x_at_value(x, y, hmax)
-        assert fx.size == 2, f"Number of half-max points must be 2, not {fx.size}"
+        if fx.size != 2:
+            warnings.warn(f"Ambiguous zero-crossing points (found {fx.size} points)")
         return fx[0], hmax, fx[-1], hmax
 
     try:
