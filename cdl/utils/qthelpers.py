@@ -96,10 +96,10 @@ def cdl_app_context(
 
     # === Set application name and version ---------------------------------------------
     # pylint: disable=import-outside-toplevel
-    from cdl import __version__
+    from cdl.info import get_version
 
     QAPP_INSTANCE.setApplicationName(APP_NAME)
-    QAPP_INSTANCE.setApplicationVersion(__version__)
+    QAPP_INSTANCE.setApplicationVersion(get_version())
     QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
 
     if enable_logs:

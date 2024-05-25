@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import cdl  # noqa: E402
+from cdl.info import get_version
 
 os.environ["CDL_DOC"] = "1"
 
@@ -16,7 +16,7 @@ os.environ["CDL_DOC"] = "1"
 project = "DataLab"
 author = ""
 copyright = "2023, DataLab Platform Developers"
-release = cdl.__version__
+release = get_version()
 
 # -- General configuration ---------------------------------------------------
 
@@ -61,7 +61,7 @@ html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
-        "text": f"v{cdl.__version__}",
+        "text": f"v{get_version()}",
     },
     "icon_links": [
         {
