@@ -1237,6 +1237,28 @@ class BaseObj(metaclass=BaseObjMeta):
             raise ValueError(f"Invalid metadata option name `{name}`")
         self.metadata[f"__{name}"] = value
 
+    def save_attr_to_metadata(self, attrname: str, new_value: Any) -> None:
+        """Save attribute to metadata
+
+        Args:
+            attrname: attribute name
+            new_value: new value
+        """
+        value = getattr(self, attrname)
+        if value:
+            self.metadata[f"orig_{attrname}"] = value
+        setattr(self, attrname, new_value)
+
+    def restore_attr_from_metadata(self, attrname: str, default: Any) -> None:
+        """Restore attribute from metadata
+
+        Args:
+            attrname: attribute name
+            default: default value
+        """
+        value = self.metadata.pop(f"orig_{attrname}", default)
+        setattr(self, attrname, value)
+
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""
         self.__metadata_options = {

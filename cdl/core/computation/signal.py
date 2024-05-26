@@ -802,6 +802,9 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     dst = dst_11(src, "fft")
     x, y = src.get_data()
     dst.set_xydata(*alg.fft1d(x, y, shift=True if p is None else p.shift))
+    dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
+    dst.save_attr_to_metadata("yunit", "")
+    dst.save_attr_to_metadata("xlabel", _("Frequency"))
     return dst
 
 
@@ -818,6 +821,9 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
     dst.set_xydata(*alg.ifft1d(x, y, shift=True if p is None else p.shift))
+    dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
+    dst.restore_attr_from_metadata("yunit", "")
+    dst.restore_attr_from_metadata("xlabel", "")
     return dst
 
 
@@ -837,6 +843,9 @@ def compute_magnitude_spectrum(
     x, y = src.get_data()
     log_scale = True if p is not None and p.log else False
     dst.y = alg.magnitude_spectrum(x, y, log_scale=log_scale)
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = "dB" if log_scale else ""
     return dst
 
 
@@ -849,7 +858,11 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap11Func(alg.phase_spectrum)(src)
+    dst = Wrap11Func(alg.phase_spectrum)(src)
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = ""
+    return dst
 
 
 def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
@@ -867,6 +880,9 @@ def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     log_scale = True if p is not None and p.log else False
     psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = "dB/Hz" if log_scale else ""
     return dst
 
 

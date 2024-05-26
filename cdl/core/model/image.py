@@ -434,6 +434,11 @@ class ImageObj(gds.DataSet, base.BaseObj):
         title = self.title if title is None else title
         obj = ImageObj(title=title)
         obj.title = title
+        obj.xlabel = self.xlabel
+        obj.ylabel = self.ylabel
+        obj.xunit = self.xunit
+        obj.yunit = self.yunit
+        obj.zunit = self.zunit
         obj.x0 = self.x0
         obj.y0 = self.y0
         obj.dx = self.dx

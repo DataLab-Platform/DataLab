@@ -199,6 +199,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         title = self.title if title is None else title
         obj = SignalObj(title=title)
         obj.title = title
+        obj.xlabel = self.xlabel
+        obj.xunit = self.xunit
+        obj.yunit = self.yunit
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
         obj.metadata = base.deepcopy_metadata(self.metadata)

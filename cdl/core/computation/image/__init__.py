@@ -1101,6 +1101,11 @@ def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """
     dst = dst_11(src, "fft")
     dst.data = alg.fft2d(src.data, shift=True if p is None else p.shift)
+    dst.save_attr_to_metadata("xunit", "")
+    dst.save_attr_to_metadata("yunit", "")
+    dst.save_attr_to_metadata("zunit", "")
+    dst.save_attr_to_metadata("xlabel", _("Frequency"))
+    dst.save_attr_to_metadata("ylabel", _("Frequency"))
     return dst
 
 
@@ -1116,6 +1121,11 @@ def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """
     dst = dst_11(src, "ifft")
     dst.data = alg.ifft2d(src.data, shift=True if p is None else p.shift)
+    dst.restore_attr_from_metadata("xunit", "")
+    dst.restore_attr_from_metadata("yunit", "")
+    dst.restore_attr_from_metadata("zunit", "")
+    dst.restore_attr_from_metadata("xlabel", "")
+    dst.restore_attr_from_metadata("ylabel", "")
     return dst
 
 
@@ -1134,6 +1144,8 @@ def compute_magnitude_spectrum(
     dst = dst_11(src, "magnitude_spectrum")
     log_scale = True if p is not None and p.log else False
     dst.data = alg.magnitude_spectrum(src.data, log_scale=log_scale)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
     return dst
 
 
@@ -1146,7 +1158,10 @@ def compute_phase_spectrum(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(alg.phase_spectrum)(src)
+    dst = Wrap11Func(alg.phase_spectrum)(src)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
+    return dst
 
 
 def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
@@ -1162,6 +1177,8 @@ def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
     dst = dst_11(src, "psd")
     log_scale = True if p is not None and p.log else False
     dst.data = alg.psd(src.data, log_scale=log_scale)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
     return dst
 
 
