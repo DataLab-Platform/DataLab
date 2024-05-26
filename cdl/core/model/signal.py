@@ -105,8 +105,8 @@ CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles cl
 class ROIParam(gds.DataSet):
     """Signal ROI parameters"""
 
-    col1 = gds.IntItem(_("First point index"))
-    col2 = gds.IntItem(_("Last point index"))
+    xmin = gds.FloatItem(_("First point coordinate"))
+    xmax = gds.FloatItem(_("Last point coordinate"))
 
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
@@ -415,22 +415,23 @@ class SignalObj(gds.DataSet, base.BaseObj):
         return indexes
 
     def get_roi_param(self, title: str, *defaults: int) -> ROIParam:
-        """Return ROI parameters dataset.
+        """Return ROI parameters dataset (converting ROI point indexes to coordinates)
 
         Args:
             title: title
-            *defaults: default values
+            *defaults: default values (first, last point indexes)
+
+        Returns:
+            ROI parameters dataset (containing the ROI coordinates: first and last X)
         """
-        imax = len(self.x) - 1
         i0, i1 = defaults
         param = ROIParam(title)
-        param.col1 = i0
-        param.col2 = i1
-        param.set_global_prop("data", min=-1, max=imax)
+        param.xmin = self.x[i0]
+        param.xmax = self.x[i1]
+        param.set_global_prop("data", unit=self.xunit)
         return param
 
-    @staticmethod
-    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -442,7 +443,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         roilist = []
         for roiparam in params.datasets:
             roiparam: ROIParam
-            roilist.append([roiparam.col1, roiparam.col2])
+            idx1 = np.searchsorted(self.x, roiparam.xmin)
+            idx2 = np.searchsorted(self.x, roiparam.xmax)
+            roilist.append([idx1, idx2])
         if len(roilist) == 0:
             return None
         return np.array(roilist, int)

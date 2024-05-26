@@ -167,7 +167,6 @@ class BaseProcessor(QC.QObject):
     """
 
     SIG_ADD_SHAPE = QC.Signal(str)
-    EDIT_ROI_PARAMS = False
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
 
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
@@ -854,7 +853,6 @@ class BaseProcessor(QC.QObject):
         if (
             env.execenv.unattended
             or roieditordata.roidata.size == 0
-            or not self.EDIT_ROI_PARAMS
             or roigroup.edit(parent=self.panel)
         ):
             roidata = obj.params_to_roidata(roigroup)

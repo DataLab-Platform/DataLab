@@ -961,9 +961,8 @@ class BaseObj(metaclass=BaseObjMeta):
         group = gds.DataSetGroup(roi_params, title=_("Regions of interest"))
         return group
 
-    @staticmethod
     @abc.abstractmethod
-    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:

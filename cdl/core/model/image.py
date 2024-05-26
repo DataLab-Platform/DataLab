@@ -591,8 +591,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             param.r = int(0.5 * (xd1 - xd0))
         return param
 
-    @staticmethod
-    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray | None:
+    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray | None:
         """Convert ROI dataset group to ROI array data.
 
         Args:

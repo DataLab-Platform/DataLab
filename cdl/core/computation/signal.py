@@ -40,6 +40,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
+from cdl.core.model.signal import ROIParam
 from cdl.obj import ResultProperties, ResultShape, ShapeTypes, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -275,13 +276,14 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """
     suffix = None
     if len(group.datasets) == 1:
-        p = group.datasets[0]
-        suffix = f"indexes={p.col1:d}:{p.col2:d}"
+        p: ROIParam = group.datasets[0]
+        suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
     dst = dst_11(src, "extract_multiple_roi", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
-        slice0 = slice(p.col1, p.col2 + 1)
+        idx1, idx2 = np.searchsorted(x, p.xmin), np.searchsorted(x, p.xmax)
+        slice0 = slice(idx1, idx2)
         xout[slice0], yout[slice0] = x[slice0], y[slice0]
     nans = np.isnan(xout) | np.isnan(yout)
     dst.set_xydata(xout[~nans], yout[~nans])
@@ -290,19 +292,20 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
+def extract_single_roi(src: SignalObj, p: ROIParam) -> SignalObj:
     """Extract single region of interest from data
 
     Args:
         src: source signal
-        p: parameters
+        p: ROI parameters
 
     Returns:
         Signal with single region of interest
     """
-    dst = dst_11(src, "extract_single_roi", f"indexes={p.col1:d}:{p.col2:d}")
+    dst = dst_11(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
     x, y = src.get_data()
-    dst.set_xydata(x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1])
+    idx1, idx2 = np.searchsorted(x, p.xmin), np.searchsorted(x, p.xmax)
+    dst.set_xydata(x[idx1:idx2], y[idx1:idx2])
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract
     dst.remove_all_shapes()
     return dst

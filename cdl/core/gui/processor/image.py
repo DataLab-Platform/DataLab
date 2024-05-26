@@ -35,8 +35,6 @@ class ImageProcessor(BaseProcessor):
 
     # pylint: disable=duplicate-code
 
-    EDIT_ROI_PARAMS = True
-
     @qt_try_except()
     def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
         """Normalize data"""
