@@ -385,6 +385,10 @@ Line profile
         Line profile dialog. Parameters may also be set manually
         ("Edit profile parameters" button).
 
+Segment profile
+    Extract a segment profile from each selected image, and create new signals
+    from these profiles.
+
 Average profile
     Extract an horizontal or vertical profile averaged over a rectangular area, from
     each selected image, and create new signals from these profiles.

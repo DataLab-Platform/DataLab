@@ -31,10 +31,10 @@ def test_profile():
             ("horizontal", 102, 131),
             ("vertical", 102, 131),
         ):
-            profparam = cdl.param.ProfileParam.create(
+            profparam = cdl.param.LineProfileParam.create(
                 direction=direction, row=row, col=col
             )
-            proc.compute_profile(profparam)
+            proc.compute_line_profile(profparam)
         for direction, row1, col1, row2, col2 in (
             ("horizontal", 10, 10, 102, 131),
             ("vertical", 10, 10, 102, 131),
@@ -47,6 +47,10 @@ def test_profile():
                 col2=col2,
             )
             proc.compute_average_profile(avgprofparam)
+        segprofparam = cdl.param.SegmentProfileParam.create(
+            row1=10, col1=10, row2=102, col2=131
+        )
+        proc.compute_segment_profile(segprofparam)
         image2 = create_noisygauss_image(center=(0.0, 0.0), add_annotations=False)
         panel.add_object(image2)
         for center, x0, y0 in (

@@ -108,10 +108,6 @@ Image parameters
 Base image parameters
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. autodataset:: cdl.param.AverageProfileParam
-    :no-index:
-.. autodataset:: cdl.param.RadialProfileParam
-    :no-index:
 .. autodataset:: cdl.param.BinningParam
     :no-index:
 .. autodataset:: cdl.param.ButterworthParam
@@ -126,7 +122,13 @@ Base image parameters
     :no-index:
 .. autodataset:: cdl.param.LogP1Param
     :no-index:
-.. autodataset:: cdl.param.ProfileParam
+.. autodataset:: cdl.param.LineProfileParam
+    :no-index:
+.. autodataset:: cdl.param.SegmentProfileParam
+    :no-index:
+.. autodataset:: cdl.param.AverageProfileParam
+    :no-index:
+.. autodataset:: cdl.param.RadialProfileParam
     :no-index:
 .. autodataset:: cdl.param.ResizeParam
     :no-index:
@@ -215,7 +217,8 @@ from cdl.core.computation.image import (
     GridParam,
     HoughCircleParam,
     LogP1Param,
-    ProfileParam,
+    LineProfileParam,
+    SegmentProfileParam,
     RadialProfileParam,
     ResizeParam,
     RotateParam,

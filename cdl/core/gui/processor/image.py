@@ -260,11 +260,13 @@ class ImageProcessor(BaseProcessor):
             self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
-    def compute_profile(self, param: cdl.param.ProfileParam | None = None) -> None:
-        """Compute profile"""
+    def compute_line_profile(
+        self, param: cdl.param.LineProfileParam | None = None
+    ) -> None:
+        """Compute profile along a vertical or horizontal line"""
         title = _("Profile")
-        add_initial_shape = self.has_param_defaults(cdl.param.ProfileParam)
-        edit, param = self.init_param(param, cpi.ProfileParam, title)
+        add_initial_shape = self.has_param_defaults(cdl.param.LineProfileParam)
+        edit, param = self.init_param(param, cpi.LineProfileParam, title)
         if edit:
             options = self.panel.plothandler.get_current_plot_options()
             dlg = ProfileExtractionDialog(
@@ -274,7 +276,26 @@ class ImageProcessor(BaseProcessor):
             dlg.set_obj(obj)
             if not exec_dialog(dlg):
                 return
-        self.compute_11(cpi.compute_profile, param, title=title, edit=False)
+        self.compute_11(cpi.compute_line_profile, param, title=title, edit=False)
+
+    @qt_try_except()
+    def compute_segment_profile(
+        self, param: cdl.param.SegmentProfileParam | None = None
+    ):
+        """Compute profile along a segment"""
+        title = _("Profile")
+        add_initial_shape = self.has_param_defaults(cdl.param.SegmentProfileParam)
+        edit, param = self.init_param(param, cpi.SegmentProfileParam, title)
+        if edit:
+            options = self.panel.plothandler.get_current_plot_options()
+            dlg = ProfileExtractionDialog(
+                "segment", param, options, self.panel.parent(), add_initial_shape
+            )
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg.set_obj(obj)
+            if not exec_dialog(dlg):
+                return
+        self.compute_11(cpi.compute_segment_profile, param, title=title, edit=False)
 
     @qt_try_except()
     def compute_average_profile(

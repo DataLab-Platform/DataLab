@@ -999,7 +999,6 @@ class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
-    panel: ImagePanel
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
@@ -1061,11 +1060,18 @@ class ImageActionHandler(BaseActionHandler):
             with self.new_menu(_("Intensity profiles")):
                 self.new_action(
                     _("Line profile..."),
-                    triggered=self.panel.processor.compute_profile,
+                    triggered=self.panel.processor.compute_line_profile,
                     icon=get_icon("profile.svg"),
                     tip=_("Extract horizontal or vertical profile"),
                     context_menu_pos=-1,
                     context_menu_sep=True,
+                )
+                self.new_action(
+                    _("Segment profile..."),
+                    triggered=self.panel.processor.compute_segment_profile,
+                    icon=get_icon("profile_segment.svg"),
+                    tip=_("Extract profile along a segment"),
+                    context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Average profile..."),
