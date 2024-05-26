@@ -252,5 +252,7 @@ class ProfileExtractionDialog(PlotDialog):
                 p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
                 p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
             self.cstool.add_shape_to_plot(plot, p0, p1)
+            self.param_btn.setEnabled(True)
+            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(True)
         else:
             self.cstool.activate()
