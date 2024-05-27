@@ -8,6 +8,8 @@ This module provides information about the DataLab package, such as the complete
 version number including the Git revision, if available.
 """
 
+from __future__ import annotations
+
 import subprocess
 
 from cdl import __version__ as RELEASE
