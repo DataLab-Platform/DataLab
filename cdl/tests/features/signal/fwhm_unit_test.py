@@ -43,13 +43,18 @@ def __test_fwhm_interactive(obj: cdl.obj.SignalObj, method: str) -> None:
 def test_signal_fwhm_interactive() -> None:
     """FWHM interactive test."""
     with qt_app_context():
-        execenv.print("Computing FWHM of a multi-peak signal...", end="")
+        execenv.print("Computing FWHM of a multi-peak signal:")
         obj1 = cdltd.create_paracetamol_signal()
         obj2 = cdltd.create_noisy_signal(cdltd.GaussianNoiseParam.create(sigma=0.05))
-        for obj in (obj1, obj2):
-            for method, _mname in cdl.param.FWHMParam.methods:
-                __test_fwhm_interactive(obj, method)
-        execenv.print("OK")
+        for method, _mname in cdl.param.FWHMParam.methods:
+            execenv.print(f"  Method: {method}")
+            for obj in (obj1, obj2):
+                if method == "zero-crossing":
+                    # Check that a warning is raised when using the zero-crossing method
+                    with pytest.warns(UserWarning):
+                        __test_fwhm_interactive(obj, method)
+                else:
+                    __test_fwhm_interactive(obj, method)
 
 
 @pytest.mark.validation
@@ -66,6 +71,9 @@ def test_signal_fwhm() -> None:
         param = cdl.param.FWHMParam.create(method=method)
         df = cps.compute_fwhm(obj, param).to_dataframe()
         cdltd.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
+    obj = cdltd.create_paracetamol_signal()
+    with pytest.warns(UserWarning):
+        cps.compute_fwhm(obj, cdl.param.FWHMParam.create(method="zero-crossing"))
 
 
 @pytest.mark.validation
