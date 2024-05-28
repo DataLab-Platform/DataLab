@@ -258,6 +258,14 @@ Create a new signal which is the product of all selected signals:
 .. math::
     y_{M} = \prod_{k=0}^{M-1}{y_{k}}
 
+Division
+^^^^^^^^
+
+Create a new signal which is the division of the **two** selected signals:
+
+.. math::
+    y_{2} = \dfrac{y_{1}}{y_{0}}
+
 Constant operations
 ^^^^^^^^^^^^^^^^^^^
 
@@ -277,14 +285,6 @@ Create a new signal which is the result of a constant operation on each selected
       - :math:`y_{k} = y_{k-1} \times c`
     * - Division
       - :math:`y_{k} = \dfrac{y_{k-1}}{c}`
-
-Division
-^^^^^^^^
-
-Create a new signal which is the division of the **two** selected signals:
-
-.. math::
-    y_{2} = \dfrac{y_{1}}{y_{0}}
 
 Absolute value
 ^^^^^^^^^^^^^^
@@ -352,16 +352,15 @@ Create a new signal which is the square root of each selected signal:
 .. math::
     y_{k} = \sqrt{y_{k-1}}
 
-Peak detection
-^^^^^^^^^^^^^^
+Derivative
+^^^^^^^^^^
 
-Create a new signal from semi-automatic peak detection of each selected signal.
+Create a new signal which is the derivative of each selected signal.
 
-.. figure:: /images/shots/s_peak_detection.png
+Integral
+^^^^^^^^
 
-    Peak detection dialog: threshold is adjustable by moving the
-    horizontal marker, peaks are detected automatically (see vertical
-    markers with labels indicating peak position)
+Create a new signal which is the integral of each selected signal.
 
 Convolution
 ^^^^^^^^^^^
@@ -370,73 +369,6 @@ Create a new signal which is the convolution of each selected signal
 with respect to another signal.
 
 This feature is based on SciPy's `scipy.signal.convolve <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_ function.
-
-Windowing
-^^^^^^^^^
-
-Create a new signal which is the result of applying a window function to each selected signal.
-
-The following window functions are available:
-
-.. list-table::
-    :header-rows: 1
-    :widths: 20, 80
-
-    * - Window function
-      - Reference
-    * - Barthann
-      - :py:func:`scipy.signal.windows.barthann`
-    * - Bartlett
-      - :py:func:`numpy.bartlett`
-    * - Blackman
-      - :py:func:`scipy.signal.windows.blackman`
-    * - Blackman-Harris
-      - :py:func:`scipy.signal.windows.blackmanharris`
-    * - Bohman
-      - :py:func:`scipy.signal.windows.bohman`
-    * - Boxcar
-      - :py:func:`scipy.signal.windows.boxcar`
-    * - Cosine
-      - :py:func:`scipy.signal.windows.cosine`
-    * - Exponential
-      - :py:func:`scipy.signal.windows.exponential`
-    * - Flat top
-      - :py:func:`scipy.signal.windows.flattop`
-    * - Gaussian
-      - :py:func:`scipy.signal.windows.gaussian`
-    * - Hamming
-      - :py:func:`numpy.hamming`
-    * - Hanning
-      - :py:func:`numpy.hanning`
-    * - Kaiser
-      - :py:func:`scipy.signal.windows.kaiser`
-    * - Lanczos
-      - :py:func:`scipy.signal.windows.lanczos`
-    * - Nuttall
-      - :py:func:`scipy.signal.windows.nuttall`
-    * - Parzen
-      - :py:func:`scipy.signal.windows.parzen`
-    * - Rectangular
-      - :py:func:`numpy.ones`
-    * - Taylor
-      - :py:func:`scipy.signal.windows.taylor`
-    * - Tukey
-      - :py:func:`scipy.signal.windows.tukey`
-
-ROI extraction
-^^^^^^^^^^^^^^
-
-Create a new signal from a user-defined Region of Interest (ROI).
-
-.. figure:: /images/shots/s_roi_dialog.png
-
-    ROI extraction dialog: the ROI is defined by moving the position
-    and adjusting the width of an horizontal range.
-
-Swap X/Y axes
-^^^^^^^^^^^^^
-
-Create a new signal which is the result of swapping X/Y data.
 
 "Processing" menu
 -----------------
@@ -448,18 +380,41 @@ Create a new signal which is the result of swapping X/Y data.
 The "Processing" menu allows you to perform various processing on the
 selected signals, such as smoothing, normalization, or interpolation.
 
-Derivative
-^^^^^^^^^^
+Axis transformation
+^^^^^^^^^^^^^^^^^^^
 
-Create a new signal which is the derivative of each selected signal.
+Linear calibration
+~~~~~~~~~~~~~~~~~~
 
-Integral
-^^^^^^^^
+Create a new signal which is a linear calibration of each selected signal
+with respect to X or Y axis:
 
-Create a new signal which is the integral of each selected signal.
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Parameter
+      - Linear calibration
+    * - X-axis
+      - :math:`x_{1} = a.x_{0} + b`
+    * - Y-axis
+      - :math:`y_{1} = a.y_{0} + b`
+
+Swap X/Y axes
+~~~~~~~~~~~~~
+
+Create a new signal which is the result of swapping X/Y data.
+
+Reverse X-axis
+~~~~~~~~~~~~~~
+
+Create a new signal which is the result of reversing X data.
+
+Level adjustment
+^^^^^^^^^^^^^^^^
 
 Normalize
-^^^^^^^^^
+~~~~~~~~~
 
 Create a new signal which is the normalization of each selected signal
 by maximum, amplitude, sum, energy or RMS:
@@ -481,81 +436,73 @@ by maximum, amplitude, sum, energy or RMS:
     * - RMS
       - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
 
-Linear calibration
-^^^^^^^^^^^^^^^^^^
+Thresholding
+~~~~~~~~~~~~
 
-Create a new signal which is a linear calibration of each selected signal
-with respect to X or Y axis:
+Create a new signal which is the result of thresholding each selected signal.
+
+Clipping
+~~~~~~~~
+
+Create a new signal which is the result of clipping each selected signal.
+
+Noise reduction
+^^^^^^^^^^^^^^^
+
+Create a new signal which is the result of noise reduction of each selected signal.
+
+The following filters are available:
 
 .. list-table::
     :header-rows: 1
-    :widths: 40, 60
+    :widths: 25, 75
 
-    * - Parameter
-      - Linear calibration
-    * - X-axis
-      - :math:`x_{1} = a.x_{0} + b`
-    * - Y-axis
-      - :math:`y_{1} = a.y_{0} + b`
+    * - Filter
+      - Formula/implementation
+    * - Gaussian filter
+      - `scipy.ndimage.gaussian_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html>`_
+    * - Moving average
+      - :math:`y_{1}[i]=\dfrac{1}{M}\sum_{j=0}^{M-1}y_{0}[i+j]`
+    * - Moving median
+      - `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_
+    * - Wiener filter
+      - `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_
 
-Gaussian filter
-^^^^^^^^^^^^^^^
+Fourier analysis
+^^^^^^^^^^^^^^^^
 
-Compute 1D-Gaussian filter of each selected signal
-(implementation based on `scipy.ndimage.gaussian_filter1d <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter1d.html>`_).
+Create a new signal which is the result of a Fourier analysis of each selected signal.
 
-Moving average
-^^^^^^^^^^^^^^
+The following functions are available:
 
-Compute moving average on :math:`M`
-points of each selected signal, without border effect:
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 30, 50
 
-.. math::
-    y_{1}[i]=\dfrac{1}{M}\sum_{j=0}^{M-1}y_{0}[i+j]
+    * - Function
+      - Description
+      - Formula/implementation
+    * - FFT
+      - Fast Fourier Transform
+      - `numpy.fft.fft <https://docs.scipy.org/doc/numpy/reference/generated/numpy.fft.fft.html>`_
+    * - Inverse FFT
+      - Inverse Fast Fourier Transform
+      - `numpy.fft.ifft <https://docs.scipy.org/doc/numpy/reference/generated/numpy.fft.ifft.html>`_
+    * - Magnitude spectrum
+      - Optionnal: use logarithmic scale
+      - :math:`y_{1} = |FFT(y_{0})|`
+    * - Phase spectrum
+      -
+      - :math:`y_{1} = \angle FFT(y_{0})`
+    * - Power spectral density (PSD)
+      - Optionnal: use logarithmic scale. PSD is estimated using Welch's method
+        (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
+      - :math:`Y_{k} = PSD(y_{k})`
 
-Moving median
-^^^^^^^^^^^^^
+.. note::
 
-Compute moving median of each selected signal
-(implementation based on `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_).
-
-Wiener filter
-^^^^^^^^^^^^^
-
-Compute Wiener filter of each selected signal
-(implementation based on `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_).
-
-FFT
-^^^
-
-Create a new signal which is the Fast Fourier Transform (FFT) of each selected signal.
-
-Inverse FFT
-^^^^^^^^^^^
-
-Create a new signal which is the inverse FFT of each selected signal.
-
-Magnitude spectrum
-^^^^^^^^^^^^^^^^^^
-
-Create a new signal which is the magnitude spectrum of each selected signal:
-
-.. math::
-    y_{1} = |FFT(y_{0})|
-
-Phase spectrum
-^^^^^^^^^^^^^^
-
-Create a new signal which is the phase spectrum of each selected signal:
-
-.. math::
-    y_{1} = \angle FFT(y_{0})
-
-Power spectral density
-^^^^^^^^^^^^^^^^^^^^^^
-
-Create a new signal which is the Power Spectral Density (PSD) of each selected signal.
-PSD is estimated using Welch's method (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_).
+    FFT and inverse FFT are performed using frequency shifting if the option is enabled
+    in DataLab settings.
 
 Frequency filters
 ^^^^^^^^^^^^^^^^^
@@ -614,6 +561,105 @@ For each filter, the following methods are available:
     * - Elliptic
       - Elliptic filter, using SciPy's `scipy.signal.ellip <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_ function
 
+Fitting
+^^^^^^^
+
+Open an interactive curve fitting tool in a modal dialog box.
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 80
+
+    * - Model
+      - Equation
+    * - Linear
+      - :math:`y = c_{0}+c_{1}.x`
+    * - Polynomial
+      - :math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`
+    * - Gaussian
+      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
+    * - Lorentzian
+      - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
+    * - Voigt
+      - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
+    * - Multi-Gaussian
+      - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi}.\sigma_{i}}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0,i}}{\sigma_{i}})^2)`
+    * - Exponential
+      - :math:`y = y_{0}+A.exp(B.x)`
+    * - Sinusoidal
+      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
+    * - Cumulative Distribution Function (CDF)
+      - :math:`y = y_{0}+A.erf(\dfrac{x-x_{0}}{\sigma.\sqrt{2}})`
+
+Windowing
+^^^^^^^^^
+
+Create a new signal which is the result of applying a window function to each selected signal.
+
+The following window functions are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 80
+
+    * - Window function
+      - Reference
+    * - Barthann
+      - :py:func:`scipy.signal.windows.barthann`
+    * - Bartlett
+      - :py:func:`numpy.bartlett`
+    * - Blackman
+      - :py:func:`scipy.signal.windows.blackman`
+    * - Blackman-Harris
+      - :py:func:`scipy.signal.windows.blackmanharris`
+    * - Bohman
+      - :py:func:`scipy.signal.windows.bohman`
+    * - Boxcar
+      - :py:func:`scipy.signal.windows.boxcar`
+    * - Cosine
+      - :py:func:`scipy.signal.windows.cosine`
+    * - Exponential
+      - :py:func:`scipy.signal.windows.exponential`
+    * - Flat top
+      - :py:func:`scipy.signal.windows.flattop`
+    * - Gaussian
+      - :py:func:`scipy.signal.windows.gaussian`
+    * - Hamming
+      - :py:func:`numpy.hamming`
+    * - Hanning
+      - :py:func:`numpy.hanning`
+    * - Kaiser
+      - :py:func:`scipy.signal.windows.kaiser`
+    * - Lanczos
+      - :py:func:`scipy.signal.windows.lanczos`
+    * - Nuttall
+      - :py:func:`scipy.signal.windows.nuttall`
+    * - Parzen
+      - :py:func:`scipy.signal.windows.parzen`
+    * - Rectangular
+      - :py:func:`numpy.ones`
+    * - Taylor
+      - :py:func:`scipy.signal.windows.taylor`
+    * - Tukey
+      - :py:func:`scipy.signal.windows.tukey`
+
+Detrending
+^^^^^^^^^^
+
+Create a new signal which is the detrending of each selected signal.
+This features is based on SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
+
+The following parameters are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Method
+      - Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
+
 Interpolation
 ^^^^^^^^^^^^^
 
@@ -670,52 +716,15 @@ The following parameters are available:
     * - Number of points
       - Resampling number of points
 
-Detrending
-^^^^^^^^^^
+ROI extraction
+^^^^^^^^^^^^^^
 
-Create a new signal which is the detrending of each selected signal.
-This features is based on SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
+Create a new signal from a user-defined Region of Interest (ROI).
 
-The following parameters are available:
+.. figure:: /images/shots/s_roi_dialog.png
 
-.. list-table::
-    :header-rows: 1
-    :widths: 25, 75
-
-    * - Parameter
-      - Description
-    * - Method
-      - Detrending method: 'linear' or 'constant'. See SciPy's `scipy.signal.detrend <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_ function.
-
-Fitting
-^^^^^^^
-
-Open an interactive curve fitting tool in a modal dialog box.
-
-.. list-table::
-    :header-rows: 1
-    :widths: 20, 80
-
-    * - Model
-      - Equation
-    * - Linear
-      - :math:`y = c_{0}+c_{1}.x`
-    * - Polynomial
-      - :math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`
-    * - Gaussian
-      - :math:`y = y_{0}+\dfrac{A}{\sqrt{2\pi}.\sigma}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0}}{\sigma})^2)`
-    * - Lorentzian
-      - :math:`y = y_{0}+\dfrac{A}{\sigma.\pi}.\dfrac{1}{1+(\dfrac{x-x_{0}}{\sigma})^2}`
-    * - Voigt
-      - :math:`y = y_{0}+A.\dfrac{Re(exp(-z^2).erfc(-j.z))}{\sqrt{2\pi}.\sigma}` with :math:`z = \dfrac{x-x_{0}-j.\sigma}{\sqrt{2}.\sigma}`
-    * - Multi-Gaussian
-      - :math:`y = y_{0}+\sum_{i=0}^{K}\dfrac{A_{i}}{\sqrt{2\pi}.\sigma_{i}}.exp(-\dfrac{1}{2}.(\dfrac{x-x_{0,i}}{\sigma_{i}})^2)`
-    * - Exponential
-      - :math:`y = y_{0}+A.exp(B.x)`
-    * - Sinusoidal
-      - :math:`y = y_{0}+A.sin(2\pi.f.x+\phi)`
-    * - Cumulative Distribution Function (CDF)
-      - :math:`y = y_{0}+A.erf(\dfrac{x-x_{0}}{\sigma.\sqrt{2}})`
+    ROI extraction dialog: the ROI is defined by moving the position
+    and adjusting the width of an horizontal range.
 
 "Computing" menu
 ----------------
@@ -826,6 +835,17 @@ X values at min/max
 ^^^^^^^^^^^^^^^^^^^
 
 Compute the X values at minimum and maximum of selected signal.
+
+Peak detection
+^^^^^^^^^^^^^^
+
+Create a new signal from semi-automatic peak detection of each selected signal.
+
+.. figure:: /images/shots/s_peak_detection.png
+
+    Peak detection dialog: threshold is adjustable by moving the
+    horizontal marker, peaks are detected automatically (see vertical
+    markers with labels indicating peak position)
 
 Sampling rate and period
 ^^^^^^^^^^^^^^^^^^^^^^^^
