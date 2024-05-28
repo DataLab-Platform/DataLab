@@ -20,13 +20,17 @@ import plotpy.tools
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from plotpy._scaler import INTERP_NEAREST, _scale_rect
+from plotpy.events import StatefulEventFilter
 from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
+from plotpy.tools.cursor import BaseCursorTool
 from qtpy import QtCore as QC
+from qtpy import QtGui as QG
 from qtpy.QtWidgets import QApplication, QMainWindow
 from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
 
+from cdl.algorithms.signal import fwhm
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
 
@@ -88,6 +92,58 @@ def select(self):
     if plot is not None:
         plot.blockSignals(False)
     self.invalidate_plot()
+
+
+#  Patching curve stats to show additional information
+@monkeypatch_method(plotpy.tools.CurveStatsTool, "CurveStatsTool")
+def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
+    """Move tool action
+
+    Args:
+        filter: StatefulEventFilter instance
+        event: Qt mouse event
+    """
+    BaseCursorTool.move(self, filter, event)
+
+    # The following import is here to avoid circular imports
+    # pylint: disable=import-outside-toplevel
+    from plotpy.builder import make
+
+    if self.label is None:
+        plot = filter.plot
+        curve = self.get_associated_item(plot)
+
+        def fwhm_info(x, y):
+            """Return FWHM information string"""
+            with warnings.catch_warnings(record=True) as w:
+                x0, y0, x1, y1 = fwhm((x, y), "zero-crossing")
+                wstr = " ⚠️" if w else ""
+            return f"{x1 - x0:g}{wstr}"
+
+        self.label = make.computations(
+            self.shape,
+            "TL",
+            [
+                (
+                    curve,
+                    "%g &lt; x &lt; %g",
+                    lambda *args: (args[0].min(), args[0].max()),
+                ),
+                (
+                    curve,
+                    "%g &lt; y &lt; %g",
+                    lambda *args: (args[1].min(), args[1].max()),
+                ),
+                (curve, "&lt;y&gt;=%g", lambda *args: args[1].mean()),
+                (curve, "σ(y)=%g", lambda *args: args[1].std()),
+                (curve, "∑(y)=%g", lambda *args: np.trapz(args[1])),
+                (curve, "∫ydx=%g<br>", lambda *args: np.trapz(args[1], args[0])),
+                (curve, "FWHM = %s", lambda *args: fwhm_info(*args)),
+            ],
+        )
+        self.label.attach(plot)
+        self.label.setZ(plot.get_max_z() + 1)
+        self.label.setVisible(True)
 
 
 #  Adding centroid parameter to the image stats tool
