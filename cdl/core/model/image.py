@@ -197,7 +197,7 @@ def roi_label(name: str, index: int):
     return f"{name}<sub>{index}</sub>"
 
 
-class RectangleROIParam(gds.DataSet):
+class ROIRectParam(gds.DataSet):
     """ROI parameters"""
 
     geometry = RoiDataGeometries.RECTANGLE
@@ -220,7 +220,7 @@ class RectangleROIParam(gds.DataSet):
     _e_brcorner = gds.EndGroup(_("Bottom right corner"))
 
 
-class CircularROIParam(gds.DataSet):
+class ROICircParam(gds.DataSet):
     """ROI parameters"""
 
     geometry = RoiDataGeometries.CIRCLE
@@ -579,13 +579,13 @@ class ImageObj(gds.DataSet, base.BaseObj):
         roidataitem = RoiDataItem(defaults)
         xd0, yd0, xd1, yd1 = defaults
         if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
-            param = RectangleROIParam(title)
+            param = ROIRectParam(title)
             param.x0 = xd0
             param.y0 = yd0
             param.x1 = xd1
             param.y1 = yd1
         else:
-            param = CircularROIParam(title)
+            param = ROICircParam(title)
             param.xc = int(0.5 * (xd0 + xd1))
             param.yc = yd0
             param.r = int(0.5 * (xd1 - xd0))
@@ -602,7 +602,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         roilist = []
         for roiparam in params.datasets:
-            roiparam: RectangleROIParam | CircularROIParam
+            roiparam: ROIRectParam | ROICircParam
             roilist.append(roiparam.get_coords())
         if len(roilist) == 0:
             return None
