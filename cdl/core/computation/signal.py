@@ -40,8 +40,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.signal import ROIParam
-from cdl.obj import ResultProperties, ResultShape, ShapeTypes, SignalObj
+from cdl.obj import ResultProperties, ResultShape, ROI1DParam, ShapeTypes, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
@@ -276,7 +275,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """
     suffix = None
     if len(group.datasets) == 1:
-        p: ROIParam = group.datasets[0]
+        p: ROI1DParam = group.datasets[0]
         suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
     dst = dst_11(src, "extract_multiple_roi", suffix)
     x, y = src.get_data()
@@ -292,7 +291,7 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: ROIParam) -> SignalObj:
+def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     """Extract single region of interest from data
 
     Args:

@@ -10,16 +10,18 @@ ROI image parameters unit test.
 import guidata.dataset as gds
 from guidata.qthelpers import qt_app_context
 
-from cdl.core.model.image import ROICircParam, ROIRectParam
+from cdl.core.model.image import ROI2DParam, RoiDataGeometries
 from cdl.env import execenv
 
 
 def test_roi_param_interactive():
     """ROI parameters interactive test."""
     with qt_app_context():
-        p_circ = ROICircParam("Circular")
+        p_circ = ROI2DParam("Circular")
+        p_circ.geometry = RoiDataGeometries.CIRCLE
         p_circ.xc, p_circ.yc, p_circ.r = 100, 200, 50
-        p_rect = ROIRectParam("Rectangular")
+        p_rect = ROI2DParam("Rectangular")
+        p_rect.geometry = RoiDataGeometries.RECTANGLE
         p_rect.x0, p_rect.y0, p_rect.x1, p_rect.y1 = 50, 150, 150, 250
         params = [p_circ, p_rect]
         group = gds.DataSetGroup(params, title="ROI Parameters")

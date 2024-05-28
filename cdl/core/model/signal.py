@@ -102,7 +102,7 @@ class CurveStyles:
 CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
 
 
-class ROIParam(gds.DataSet):
+class ROI1DParam(gds.DataSet):
     """Signal ROI parameters"""
 
     xmin = gds.FloatItem(_("First point coordinate"))
@@ -414,7 +414,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 indexes[row, col] = np.abs(self.x - x0).argmin()
         return indexes
 
-    def get_roi_param(self, title: str, *defaults: int) -> ROIParam:
+    def get_roi_param(self, title: str, *defaults: int) -> ROI1DParam:
         """Return ROI parameters dataset (converting ROI point indexes to coordinates)
 
         Args:
@@ -425,7 +425,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
             ROI parameters dataset (containing the ROI coordinates: first and last X)
         """
         i0, i1 = defaults
-        param = ROIParam(title)
+        param = ROI1DParam(title)
         param.xmin = self.x[i0]
         param.xmax = self.x[i1]
         param.set_global_prop("data", unit=self.xunit)
@@ -442,7 +442,7 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         roilist = []
         for roiparam in params.datasets:
-            roiparam: ROIParam
+            roiparam: ROI1DParam
             idx1 = np.searchsorted(self.x, roiparam.xmin)
             idx2 = np.searchsorted(self.x, roiparam.xmax)
             roilist.append([idx1, idx2])

@@ -53,6 +53,7 @@ Signal model
 .. autodataset:: cdl.obj.GaussLorentzVoigtParam
 .. autodataset:: cdl.obj.StepParam
 .. autodataset:: cdl.obj.PeriodicParam
+.. autodataset:: cdl.obj.ROI1DParam
 
 Image model
 ^^^^^^^^^^^
@@ -69,6 +70,7 @@ Image model
 .. autodataset:: cdl.obj.NewImageParam
 .. autodataset:: cdl.obj.Gauss2DParam
 .. autoclass:: cdl.obj.RoiDataGeometries
+.. autodataset:: cdl.obj.ROI2DParam
 .. autoclass:: cdl.obj.ImageDatatypes
 """
 
@@ -90,6 +92,7 @@ from cdl.core.model.image import (
     ImageTypes,
     NewImageParam,
     RoiDataGeometries,
+    ROI2DParam,
     create_image,
     create_image_from_param,
     new_image_param,
@@ -100,6 +103,7 @@ from cdl.core.model.signal import (
     PeriodicParam,
     SignalObj,
     SignalTypes,
+    ROI1DParam,
     StepParam,
     create_signal,
     create_signal_from_param,
