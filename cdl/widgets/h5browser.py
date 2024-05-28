@@ -453,7 +453,9 @@ class PlotPreview(QW.QStackedWidget):
 
     def __init__(self, parent: QW.QWidget) -> None:
         super().__init__(parent)
-        self.curvewidget = PlotWidget(self, options=PlotOptions(type="curve"))
+        self.curvewidget = PlotWidget(
+            self, options=PlotOptions(type="curve", curve_antialiasing=True)
+        )
         self.addWidget(self.curvewidget)
         self.imagewidget = PlotWidget(
             self, options=PlotOptions(type="image", show_contrast=True)
