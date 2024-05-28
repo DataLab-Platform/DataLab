@@ -42,7 +42,9 @@ def guifit(
         title=wintitle,
         icon=None,
         toolbar=True,
-        options=PlotOptions(title=title, xlabel=xlabel, ylabel=ylabel),
+        options=PlotOptions(
+            title=title, xlabel=xlabel, ylabel=ylabel, curve_antialiasing=True
+        ),
         parent=parent,
         param_cols=param_cols,
         auto_fit=auto_fit,
