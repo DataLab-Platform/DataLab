@@ -22,7 +22,7 @@ from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
-from cdl.widgets import fitdialog, signalpeakdialog
+from cdl.widgets import fitdialog, signalpeak
 
 
 class SignalProcessor(BaseProcessor):
@@ -211,8 +211,7 @@ class SignalProcessor(BaseProcessor):
             param, cps.PeakDetectionParam, _("Peak detection")
         )
         if edit:
-            dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
-            dlg.setup_data(obj.x, obj.y)
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
@@ -508,8 +507,7 @@ class SignalProcessor(BaseProcessor):
         """Compute multi-Gaussian fitting curve"""
         fitdlgfunc = fitdialog.multigaussianfit
         for obj in self.panel.objview.get_sel_objects():
-            dlg = signalpeakdialog.SignalPeakDetectionDialog(self.panel)
-            dlg.setup_data(obj.x, obj.y)
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
             if exec_dialog(dlg):
                 # Computing x, y
                 peaks = dlg.get_peak_indexes()

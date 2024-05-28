@@ -13,16 +13,15 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 
 from cdl.env import execenv
 from cdl.tests.data import get_test_signal
-from cdl.widgets.signalpeakdialog import SignalPeakDetectionDialog
+from cdl.widgets.signalpeak import SignalPeakDetectionDialog
 
 
 def test_peak1d():
     """Signal peak dialog test"""
     with qt_app_context():
         s = get_test_signal("paracetamol.txt")
-        dlg = SignalPeakDetectionDialog()
+        dlg = SignalPeakDetectionDialog(s)
         dlg.resize(640, 300)
-        dlg.setup_data(s.x, s.y)
         plot = dlg.get_plot()
         plot.set_axis_limits(plot.xBottom, 16, 30)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
