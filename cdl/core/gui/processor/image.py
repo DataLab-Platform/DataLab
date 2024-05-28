@@ -26,8 +26,9 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj
+from cdl.core.model.image import ImageObj, ROI2DParam
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
+from cdl.widgets import imagebackground
 
 
 class ImageProcessor(BaseProcessor):
@@ -481,6 +482,19 @@ class ImageProcessor(BaseProcessor):
             cpb.ClipParam,
             _("Clipping"),
         )
+
+    @qt_try_except()
+    def compute_offset_correction(self, param: ROI2DParam | None = None) -> None:
+        """Compute offset correction"""
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        if param is None:
+            dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
+            if exec_dialog(dlg):
+                param = ROI2DParam()
+                param.x0, param.y0, param.x1, param.y1 = dlg.get_index_range()
+            else:
+                return
+        self.compute_11(cpi.compute_offset_correction, param)
 
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:

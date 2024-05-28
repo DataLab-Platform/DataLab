@@ -446,6 +446,13 @@ Clipping
 
 Create a new signal which is the result of clipping each selected signal.
 
+Offset correction
+~~~~~~~~~~~~~~~~~
+
+Create a new signal which is the result of offset correction of each selected signal.
+This operation is performed by subtracting the signal baseline which is estimated by
+the mean value of a user-defined range.
+
 Noise reduction
 ^^^^^^^^^^^^^^^
 

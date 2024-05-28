@@ -85,3 +85,8 @@ class SignalBaselineDialog(PlotDialog):
     def get_index_range(self) -> tuple[int, int]:
         """Get index range"""
         return self.__indexrange
+
+    def get_x_range(self) -> tuple[float, float]:
+        """Get x range"""
+        x = self.__signal.x
+        return x[self.__indexrange[0]], x[self.__indexrange[1]]

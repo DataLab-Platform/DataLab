@@ -43,7 +43,7 @@ from cdl.core.computation.base import (
     new_signal_result,
 )
 from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
-from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
+from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
@@ -1061,6 +1061,21 @@ def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     """
     dst = dst_11(src, "clip", f"max={p.value} lsb")
     dst.data = np.clip(src.data, src.data.min(), p.value)
+    return dst
+
+
+def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
+    """Apply offset correction
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "offset_correction", p.get_suffix())
+    dst.data = src.data - p.get_data(src).mean()
     return dst
 
 

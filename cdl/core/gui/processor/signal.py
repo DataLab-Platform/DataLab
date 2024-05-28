@@ -20,9 +20,9 @@ import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.signal import SignalObj, create_signal
+from cdl.core.model.signal import ROI1DParam, SignalObj, create_signal
 from cdl.utils.qthelpers import qt_try_except
-from cdl.widgets import fitdialog, signalpeak
+from cdl.widgets import fitdialog, signalbaseline, signalpeak
 
 
 class SignalProcessor(BaseProcessor):
@@ -211,7 +211,7 @@ class SignalProcessor(BaseProcessor):
             param, cps.PeakDetectionParam, _("Peak detection")
         )
         if edit:
-            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel)
+            dlg = signalpeak.SignalPeakDetectionDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
                 param.threshold = int(dlg.get_threshold() * 100)
                 param.min_dist = dlg.get_min_dist()
@@ -266,6 +266,19 @@ class SignalProcessor(BaseProcessor):
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
         self.compute_11(cps.compute_clip, param, cpb.ClipParam, title=_("Clipping"))
+
+    @qt_try_except()
+    def compute_offset_correction(self, param: ROI1DParam | None = None) -> None:
+        """Compute offset correction"""
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        if param is None:
+            dlg = signalbaseline.SignalBaselineDialog(obj, parent=self.panel.parent())
+            if exec_dialog(dlg):
+                param = ROI1DParam()
+                param.xmin, param.xmax = dlg.get_x_range()
+            else:
+                return
+        self.compute_11(cps.compute_offset_correction, param)
 
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:

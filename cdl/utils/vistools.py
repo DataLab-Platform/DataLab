@@ -9,6 +9,7 @@ import plotpy.tools
 from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.builder import make
+from plotpy.items import ImageItem
 from plotpy.plot import (
     BasePlot,
     BasePlotOptions,
@@ -47,12 +48,16 @@ def create_curve_dialog(name=None, title=None, xlabel=None, ylabel=None):
     return win
 
 
-def view_curve_items(items, name=None, title=None, xlabel=None, ylabel=None):
+def view_curve_items(
+    items, name=None, title=None, xlabel=None, ylabel=None, add_legend=True
+):
     """Create a curve dialog and plot items"""
     win = create_curve_dialog(name=name, title=title, xlabel=xlabel, ylabel=ylabel)
     plot = win.get_plot()
     for item in items:
         plot.add_item(item)
+    if add_legend:
+        plot.add_item(make.legend())
     exec_dialog(win)
 
 
@@ -148,11 +153,14 @@ def view_images_side_by_side(
     rows, cols = __compute_grid(len(images), fixed_num_rows=rows, max_cols=4)
     with qt_app_context(exec_loop=True):
         win = SyncPlotWindow(title=title, icon="datalab.svg")
-        for idx, (data, imtitle) in enumerate(zip(images, titles)):
+        for idx, (img, imtitle) in enumerate(zip(images, titles)):
             row = idx // cols
             col = idx % cols
             plot = BasePlot(options=BasePlotOptions(title=imtitle))
-            item = make.image(data, interpolation="nearest", eliminate_outliers=0.1)
+            if isinstance(img, ImageItem):
+                item = img
+            else:
+                item = make.image(img, interpolation="nearest", eliminate_outliers=0.1)
             plot.add_item(item)
             win.add_plot(row, col, plot, sync=share_axes)
         win.finalize_configuration()

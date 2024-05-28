@@ -30,6 +30,7 @@
 :py:func:`moving_average <cdl.core.computation.signal.compute_moving_average>`,Compute moving average,N/A
 :py:func:`moving_median <cdl.core.computation.signal.compute_moving_median>`,Compute moving median,N/A
 :py:func:`normalize <cdl.core.computation.signal.compute_normalize>`,Normalize data,N/A
+:py:func:`offset_correction <cdl.core.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/image/offset_correction_unit_test.py``
 :py:func:`peak_detection <cdl.core.computation.signal.compute_peak_detection>`,Peak detection,N/A
 :py:func:`phase_spectrum <cdl.core.computation.signal.compute_phase_spectrum>`,Compute phase spectrum,N/A
 :py:func:`pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A

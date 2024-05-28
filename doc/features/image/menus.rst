@@ -497,6 +497,13 @@ Clipping
 
 Apply the clipping to each selected image.
 
+Offset correction
+~~~~~~~~~~~~~~~~~
+
+Create a new image which is the result of offset correction on each selected image.
+This operation is performed by subtracting the image background value which is estimated
+by the mean value of a user-defined rectangular area.
+
 Noise reduction
 ^^^^^^^^^^^^^^^
 

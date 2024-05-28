@@ -254,6 +254,18 @@ class ROI2DParam(gds.DataSet):
             return np.array([(0, self.r, self.xc, self.yc)], int)
         return None
 
+    def get_data(self, obj: ImageObj) -> np.ndarray:
+        """Get data in ROI
+
+        Args:
+            obj: image object
+
+        Returns:
+            Data in ROI
+        """
+        x0, y0, x1, y1 = self.get_coords()
+        return obj.data[y0:y1, x0:x1]
+
 
 class ImageObj(gds.DataSet, base.BaseObj):
     """Image object"""

@@ -579,6 +579,23 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     return dst
 
 
+def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
+    """Correct offset: subtract the mean value of the signal in the specified range
+    (baseline correction)
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    _roi_x, roi_y = p.get_data(src)
+    dst.y -= np.mean(roi_y)
+    return dst
+
+
 def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     """Compute gaussian filter
 

@@ -108,6 +108,18 @@ class ROI1DParam(gds.DataSet):
     xmin = gds.FloatItem(_("First point coordinate"))
     xmax = gds.FloatItem(_("Last point coordinate"))
 
+    def get_data(self, obj: SignalObj) -> np.ndarray:
+        """Get signal data in ROI
+
+        Args:
+            obj: signal object
+
+        Returns:
+            Data in ROI
+        """
+        imin, imax = np.searchsorted(obj.x, [self.xmin, self.xmax])
+        return obj.x[imin:imax], obj.y[imin:imax]
+
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
     """Apply downsampling to curve item

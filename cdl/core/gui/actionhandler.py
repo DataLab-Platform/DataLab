@@ -701,6 +701,12 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     triggered=self.panel.processor.compute_clip,
                     icon_name="clip.svg",
                 )
+                self.new_action(
+                    _("Offset correction"),
+                    triggered=self.panel.processor.compute_offset_correction,
+                    icon_name="offset_correction.svg",
+                    tip=_("Evaluate and subtract the offset value from the data"),
+                )
             with self.new_menu(_("Noise reduction")):
                 self.new_action(
                     _("Gaussian filter"),
