@@ -544,6 +544,7 @@ class GraphicalRepresentationPage(WizardPage):
                 type=plot_type,
                 show_itemlist=True,
                 show_contrast=True,
+                curve_antialiasing=True,
             ),
         )
         plot = self.plot_widget.get_plot()
