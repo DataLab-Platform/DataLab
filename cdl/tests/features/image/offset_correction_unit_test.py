@@ -16,6 +16,7 @@ from guidata.qthelpers import exec_dialog, qt_app_context
 
 import cdl.core.computation.image as cpi
 import cdl.param
+from cdl.env import execenv
 from cdl.obj import ROI2DParam
 from cdl.tests.data import create_noisygauss_image
 from cdl.utils.vistools import view_images_side_by_side
@@ -27,7 +28,17 @@ def test_image_offset_correction_interactive() -> None:
     with qt_app_context():
         i1 = create_noisygauss_image()
         dlg = ImageBackgroundDialog(i1)
-        if exec_dialog(dlg):
+        with execenv.context(delay=1):
+            # On Windows, the `QApplication.processEvents()` introduced with
+            # guidata V3.5.1 in `exec_dialog` is sufficient to force an update
+            # of the dialog. The delay is not required.
+            # On Linux, the delay is required to ensure that the dialog is displayed
+            # because the `QApplication.processEvents()` do not trigger the drawing
+            # event on the dialog as expected. So, the `RangeComputation2d` is not
+            # drawn, the background value is not computed, and `get_index_range()`
+            # returns `None` which causes the test to fail.
+            ok = exec_dialog(dlg)
+        if ok:
             param = ROI2DParam()
             param.x0, param.y0, param.x1, param.y1 = dlg.get_index_range()
             i2 = cpi.compute_offset_correction(i1, param)
