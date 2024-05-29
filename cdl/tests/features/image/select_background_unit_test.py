@@ -22,7 +22,10 @@ def test_image_background_selection():
         dlg = ImageBackgroundDialog(img)
         dlg.resize(640, 480)
         dlg.setObjectName(dlg.objectName() + "_00")  # to avoid timestamp suffix
-        exec_dialog(dlg)
+        with execenv.context(delay=200):
+            # For more details about the why of the delay, see the comment in
+            # cdl\tests\features\image\offset_correction_unit_test.py
+            exec_dialog(dlg)
     execenv.print(f"background: {dlg.get_background()}")
     execenv.print(f"index range: {dlg.get_index_range()}")
     # Check background value:
