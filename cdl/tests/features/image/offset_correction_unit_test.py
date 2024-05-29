@@ -28,7 +28,7 @@ def test_image_offset_correction_interactive() -> None:
     with qt_app_context():
         i1 = create_noisygauss_image()
         dlg = ImageBackgroundDialog(i1)
-        with execenv.context(delay=1):
+        with execenv.context(delay=200):
             # On Windows, the `QApplication.processEvents()` introduced with
             # guidata V3.5.1 in `exec_dialog` is sufficient to force an update
             # of the dialog. The delay is not required.
