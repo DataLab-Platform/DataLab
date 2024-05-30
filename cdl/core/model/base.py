@@ -251,7 +251,7 @@ class BaseResult:
         raise NotImplementedError
 
     @property
-    def data(self):
+    def raw_data(self):
         """Return raw data (array without ROI informations)"""
         raise NotImplementedError
 
@@ -301,7 +301,7 @@ class ResultProperties(BaseResult):
         super().__init__(self.PREFIX, title, labels)
         self.shown_category = _("Properties") + f" | {self.shown_title}"
         self.array = array
-        assert len(labels) == self.data.shape[1]
+        assert len(labels) == self.raw_data.shape[1]
         self.item_json = item_json  # JSON string of label item associated to this obj
 
     @classmethod
@@ -334,7 +334,7 @@ class ResultProperties(BaseResult):
         return [label.split("=")[0].strip() for label in self.labels]
 
     @property
-    def data(self):
+    def raw_data(self):
         """Return raw data (array without ROI informations)"""
         return self.array[:, 1:]
 
@@ -345,7 +345,7 @@ class ResultProperties(BaseResult):
         Returns:
             Array of shown results
         """
-        return self.data
+        return self.raw_data
 
     def add_to(self, obj: BaseObj) -> None:
         """Add metadata shape to object
@@ -384,8 +384,8 @@ class ResultProperties(BaseResult):
                 label = label.replace("<", "&lt;").replace(">", "&gt;")
                 if "%" not in label:
                     label += " = %g"
-                text += "<br>" + label.strip().format(obj) % self.data[i_row, i_col]
-            if i_row < self.data.shape[0] - 1:
+                text += "<br>" + label.strip().format(obj) % self.raw_data[i_row, i_col]
+            if i_row < self.raw_data.shape[0] - 1:
                 text += "<br><br>"
         item = make.label(text, "TL", (0, 0), "TL", title=self.shown_title)
         font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
@@ -494,8 +494,8 @@ class ResultShape(BaseResult):
         """
         comp_arr = self.__get_complementary_array()
         if comp_arr is None:
-            return self.data
-        return np.hstack([self.data, comp_arr])
+            return self.raw_data
+        return np.hstack([self.raw_data, comp_arr])
 
     def __get_complementary_xlabels(self) -> tuple[str] | None:
         """Return complementary labels for result array columns
@@ -603,7 +603,7 @@ class ResultShape(BaseResult):
         return self.array.shape[1] == self.data_colnb + 1
 
     @property
-    def data(self):
+    def raw_data(self):
         """Return raw data (array without ROI informations)"""
         if self.is_first_column_roi_index():
             # Column 0 is the ROI index
@@ -624,15 +624,15 @@ class ResultShape(BaseResult):
             ShapeTypes.RECTANGLE,
             ShapeTypes.SEGMENT,
         ):
-            func(self.data)
+            func(self.raw_data)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            coords = coordinates.array_circle_to_diameter(self.data)
+            coords = coordinates.array_circle_to_diameter(self.raw_data)
             func(coords)
-            self.data[:] = coordinates.array_circle_to_center_radius(coords)
+            self.raw_data[:] = coordinates.array_circle_to_center_radius(coords)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            coords = coordinates.array_ellipse_to_diameters(self.data)
+            coords = coordinates.array_ellipse_to_diameters(self.raw_data)
             func(coords)
-            self.data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
+            self.raw_data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
 
@@ -652,7 +652,7 @@ class ResultShape(BaseResult):
         Yields:
             Plot item
         """
-        for args in self.data:
+        for args in self.raw_data:
             yield self.create_plot_item(args, fmt, lbl, option)
 
     def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool, option: str):

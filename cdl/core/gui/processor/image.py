@@ -980,14 +980,14 @@ class ImageProcessor(BaseProcessor):
                     if progress.wasCanceled():
                         break
                     obj = self.panel.objmodel[oid]
-                    dist = distance_matrix(result.data)
+                    dist = distance_matrix(result.raw_data)
                     dist_min = dist[dist != 0].min()
                     assert dist_min > 0
                     radius = int(0.5 * dist_min / np.sqrt(2) - 1)
                     assert radius >= 1
                     roicoords = []
                     ymax, xmax = obj.data.shape
-                    for x, y in result.data:
+                    for x, y in result.raw_data:
                         coords = [
                             max(x - radius, 0),
                             max(y - radius, 0),
