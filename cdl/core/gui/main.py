@@ -517,7 +517,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             "",
             rel,
         ]
-        QW.QMessageBox.warning(self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok)
+        if not env.execenv.unattended:
+            QW.QMessageBox.warning(
+                self, APP_NAME, "<br>".join(txtlist), QW.QMessageBox.Ok
+            )
 
     def __check_dependencies(self) -> None:  # pragma: no cover
         """Check dependencies"""
@@ -606,6 +609,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def execute_post_show_actions(self) -> None:
         """Execute post-show actions"""
+        self.check_stable_release()
         self.check_for_previous_crash()
         tour = Conf.main.tour_enabled.get()
         if tour:
