@@ -1336,7 +1336,7 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     """
     dsfx = f" = %g {p.unit}"
     funcs = {
-        "freq": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
+        "Freq": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
         "ENOB = %.1f bits": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
         "SNR" + dsfx: lambda xy: alg.snr(xy[0], xy[1], p.unit),
         "SINAD" + dsfx: lambda xy: alg.sinad(xy[0], xy[1], p.unit),

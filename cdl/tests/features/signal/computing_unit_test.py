@@ -41,7 +41,7 @@ def test_dynamic_parameters() -> None:
     check_scalar_result("SINAD", df.SINAD[0], 32.49, rtol=0.001)
     check_scalar_result("THD", df.THD[0], -30.18, rtol=0.001)
     check_scalar_result("SFDR", df.SFDR[0], 34.03, rtol=0.001)
-    check_scalar_result("f", df.f[0], 49998377.464, rtol=0.001)
+    check_scalar_result("Freq", df.Freq[0], 49998377.464, rtol=0.001)
     check_scalar_result("SNR", df.SNR[0], 101.52, rtol=0.001)
 
 
