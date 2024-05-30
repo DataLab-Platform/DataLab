@@ -54,7 +54,7 @@ def test_image_offset_correction_interactive() -> None:
 def test_image_offset_correction() -> None:
     """Image offset correction validation test."""
     i1 = create_noisygauss_image()
-    param = ROI2DParam.create(x0=0, y0=0, x1=10, y1=10)
+    param = ROI2DParam.create(xr0=0, yr0=0, xr1=10, yr1=10)
     i2 = cpi.compute_offset_correction(i1, param)
 
     # Check that the offset correction has been applied
