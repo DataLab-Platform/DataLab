@@ -118,7 +118,7 @@ class ROI1DParam(gds.DataSet):
             Data in ROI
         """
         imin, imax = np.searchsorted(obj.x, [self.xmin, self.xmax])
-        return obj.x[imin:imax], obj.y[imin:imax]
+        return np.array([obj.x[imin:imax], obj.y[imin:imax]])
 
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:

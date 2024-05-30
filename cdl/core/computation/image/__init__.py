@@ -661,10 +661,13 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     Returns:
         Output image object
     """
-    x0 = max(min(p.x0 for p in group.datasets), 0)
-    y0 = max(min(p.y0 for p in group.datasets), 0)
-    x1 = max(p.x1 for p in group.datasets)
-    y1 = max(p.y1 for p in group.datasets)
+    x0, y0, x1, y1 = 0, 0, src.data.shape[1], src.data.shape[0]
+    for p in group.datasets:
+        p: ROI2DParam
+        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
+    x0, y0 = max(x0, 0), max(y0, 0)
+    x1, y1 = min(x1, src.data.shape[1]), min(y1, src.data.shape[0])
     suffix = None
     if len(group.datasets) == 1:
         p = group.datasets[0]
@@ -678,13 +681,14 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
         return dst
     out = np.zeros_like(src.data)
     for p in group.datasets:
-        slice1, slice2 = slice(max(p.y0, 0), p.y1 + 1), slice(max(p.x0, 0), p.x1 + 1)
+        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        slice1, slice2 = slice(y0i, y1i + 1), slice(x0i, x1i + 1)
         out[slice1, slice2] = src.data[slice1, slice2]
     dst.data = out[y0:y1, x0:x1]
     return dst
 
 
-def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
+def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """Extract single ROI
 
     Args:
@@ -695,8 +699,8 @@ def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "extract_single_roi", p.get_suffix())
-    x0, y0, x1, y1 = max(p.x0, 0), max(p.y0, 0), p.x1, p.y1
-    dst.data = src.data.copy()[y0:y1, x0:x1]
+    dst.data = p.get_data(src).copy()
+    x0, y0, _x1, _y1 = p.get_rect_indexes()
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
     dst.roi = None

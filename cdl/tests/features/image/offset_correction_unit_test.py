@@ -40,7 +40,7 @@ def test_image_offset_correction_interactive() -> None:
             ok = exec_dialog(dlg)
         if ok:
             param = ROI2DParam()
-            param.x0, param.y0, param.x1, param.y1 = dlg.get_index_range()
+            param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
             i2 = cpi.compute_offset_correction(i1, param)
             i3 = cpi.compute_threshold(i2, cdl.param.ClipParam.create(value=0))
             view_images_side_by_side(
@@ -58,7 +58,7 @@ def test_image_offset_correction() -> None:
     i2 = cpi.compute_offset_correction(i1, param)
 
     # Check that the offset correction has been applied
-    x0, y0, x1, y1 = param.x0, param.y0, param.x1, param.y1
+    x0, y0, x1, y1 = param.xr0, param.yr0, param.xr1, param.yr1
     offset = np.mean(i1.data[y0:y1, x0:x1])
     assert np.allclose(i2.data, i1.data - offset), "Offset correction failed"
 

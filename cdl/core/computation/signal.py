@@ -302,9 +302,8 @@ def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
         Signal with single region of interest
     """
     dst = dst_11(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
-    x, y = src.get_data()
-    idx1, idx2 = np.searchsorted(x, p.xmin), np.searchsorted(x, p.xmax)
-    dst.set_xydata(x[idx1:idx2], y[idx1:idx2])
+    x, y = p.get_data(src).copy()
+    dst.set_xydata(x, y)
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract
     dst.remove_all_shapes()
     return dst

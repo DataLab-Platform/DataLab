@@ -209,16 +209,16 @@ class ROI2DParam(gds.DataSet):
 
     # Parameters for rectangular ROI geometry:
     _tlcorner = gds.BeginGroup(_("Top left corner")).set_prop("display", hide=_cfp)
-    x0 = gds.IntItem(_lbl("X", 0), unit="pixel").set_prop("display", hide=_cfp)
-    y0 = (
+    xr0 = gds.IntItem(_lbl("X", 0), unit="pixel").set_prop("display", hide=_cfp)
+    yr0 = (
         gds.IntItem(_lbl("Y", 0), unit="pixel")
         .set_pos(1)
         .set_prop("display", hide=_cfp)
     )
     _e_tlcorner = gds.EndGroup(_("Top left corner"))
     _brcorner = gds.BeginGroup(_("Bottom right corner")).set_prop("display", hide=_cfp)
-    x1 = gds.IntItem(_lbl("X", 1), unit="pixel").set_prop("display", hide=_cfp)
-    y1 = (
+    xr1 = gds.IntItem(_lbl("X", 1), unit="pixel").set_prop("display", hide=_cfp)
+    yr1 = (
         gds.IntItem(_lbl("Y", 1), unit="pixel")
         .set_pos(1)
         .set_prop("display", hide=_cfp)
@@ -240,19 +240,28 @@ class ROI2DParam(gds.DataSet):
         """Get suffix text representation for ROI extraction"""
         if self.geometry is RoiDataGeometries.CIRCLE:
             return f"xc={self.xc},yc={self.yc},r={self.r}"
-        return f"x={self.x0}:{self.x1},y={self.y0}:{self.y1}"
+        return f"x={self.xr0}:{self.xr1},y={self.yr0}:{self.yr1}"
 
     def get_coords(self) -> tuple[int, int, int, int]:
         """Get ROI coordinates"""
         if self.geometry is RoiDataGeometries.CIRCLE:
-            return self.xc - self.r, self.yc, self.x1, self.yc
-        return self.x0, self.y0, self.x1, self.y1
+            return self.xc - self.r, self.yc, self.xc + self.r, self.yc
+        return self.xr0, self.yr0, self.xr1, self.yr1
 
     def get_single_roi(self) -> np.ndarray | None:
         """Get single ROI, i.e. after extracting ROI from image"""
         if self.geometry is RoiDataGeometries.CIRCLE:
             return np.array([(0, self.r, self.xc, self.yc)], int)
         return None
+
+    def get_rect_indexes(self) -> tuple[int, int, int, int]:
+        """Get rectangle indexes"""
+        if self.geometry is RoiDataGeometries.CIRCLE:
+            x0, y0 = self.xc - self.r, self.yc - self.r
+            x1, y1 = self.xc + self.r, self.yc + self.r
+        else:
+            x0, y0, x1, y1 = self.xr0, self.yr0, self.xr1, self.yr1
+        return max(0, x0), max(0, y0), x1, y1
 
     def get_data(self, obj: ImageObj) -> np.ndarray:
         """Get data in ROI
@@ -263,7 +272,8 @@ class ROI2DParam(gds.DataSet):
         Returns:
             Data in ROI
         """
-        x0, y0, x1, y1 = self.get_coords()
+        x0, y0, x1, y1 = self.get_rect_indexes()
+        x1, y1 = min(obj.data.shape[1], x1), min(obj.data.shape[0], y1)
         return obj.data[y0:y1, x0:x1]
 
 
@@ -584,7 +594,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         param = ROI2DParam(title)
         param.geometry = roidataitem.geometry
         if roidataitem.geometry is RoiDataGeometries.RECTANGLE:
-            param.x0, param.y0, param.x1, param.y1 = xd0, yd0, xd1, yd1
+            param.xr0, param.yr0, param.xr1, param.yr1 = xd0, yd0, xd1, yd1
         else:
             param.xc = int(0.5 * (xd0 + xd1))
             param.yc = yd0

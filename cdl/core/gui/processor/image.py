@@ -26,7 +26,7 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj, ROI2DParam
+from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
 from cdl.widgets import imagebackground
 
@@ -490,8 +490,8 @@ class ImageProcessor(BaseProcessor):
         if param is None:
             dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
             if exec_dialog(dlg):
-                param = ROI2DParam()
-                param.x0, param.y0, param.x1, param.y1 = dlg.get_index_range()
+                param = ROI2DParam.create(geometry=RoiDataGeometries.RECTANGLE)
+                param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
             else:
                 return
         self.compute_11(cpi.compute_offset_correction, param)
