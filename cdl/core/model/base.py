@@ -44,8 +44,9 @@ def deepcopy_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
     """Deepcopy metadata, except keys starting with "_" (private keys)
     with the exception of "_roi_" and "_ann_" keys."""
     mdcopy = deepcopy(metadata)
-    for key in metadata:
-        if key.startswith("_") and key not in (ROI_KEY, ANN_KEY):
+    for key, value in metadata.items():
+        rshape = ResultShape.from_metadata_entry(key, value)
+        if rshape is None and key.startswith("_") and key not in (ROI_KEY, ANN_KEY):
             mdcopy.pop(key)
     return mdcopy
 
