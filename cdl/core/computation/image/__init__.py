@@ -1360,13 +1360,14 @@ def calc_resultshape(
             # We need to pad the arrays with NaNs.
             max_cols = max(num_cols)
             num_rows = sum(coords.shape[0] for coords in res)
-            out = np.full((num_rows, max_cols), np.nan)
+            array = np.full((num_rows, max_cols), np.nan)
             row = 0
             for coords in res:
-                out[row : row + coords.shape[0], : coords.shape[1]] = coords
+                array[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
-            return out
-        return ResultShape(title, np.vstack(res), shapetype)
+        else:
+            array = np.vstack(res)
+        return ResultShape(title, array, shapetype)
     return None
 
 
