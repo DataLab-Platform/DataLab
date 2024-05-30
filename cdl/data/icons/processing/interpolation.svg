@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   role="img"
+   focusable="false"
+   aria-hidden="true"
+   viewBox="0 0 14 14"
+   version="1.1"
+   id="svg12"
+   sodipodi:docname="interpolation.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs16" />
+  <sodipodi:namedview
+     id="namedview14"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="45.254834"
+     inkscape:cx="6.7064659"
+     inkscape:cy="6.9053397"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg12" />
+  <path
+     style="fill:none;fill-opacity:0.817241;stroke:#0000ff;stroke-width:0.491568;stroke-opacity:1"
+     d="M 1.5357954,12.746841 C 4.8297261,12.703705 6.368815,12.138784 7.0563137,11.270878 7.9782076,10.10707 7.7861718,9.9142696 8.2539104,8.4975778 8.7771934,6.591291 9.1289541,5.3569567 9.1289541,5.3569567 c 0,0 0.5793513,-1.7719112 1.1464439,-2.4525451 0.567092,-0.6806339 1.781134,-1.6705802 1.781134,-1.6705802"
+     id="path32265-5"
+     sodipodi:nodetypes="cszczc" />
+  <circle
+     cx="11.845522"
+     cy="1.1938716"
+     r="0.50227541"
+     id="circle20-2-2-2"
+     style="fill:#acacff;fill-opacity:1;stroke:#0000ff;stroke-width:0.167425" />
+  <circle
+     cx="8.4499893"
+     cy="7.9330654"
+     r="0.50227541"
+     id="circle24-6-1"
+     style="fill:#acacff;fill-opacity:1;stroke:#0000ff;stroke-width:0.167425" />
+  <circle
+     cx="6.4217043"
+     cy="11.779975"
+     r="0.61591756"
+     id="circle26-0-3"
+     style="fill:#ff8080;fill-opacity:1;stroke:#d40000;stroke-width:0.205306" />
+  <circle
+     cx="9.5695219"
+     cy="4.0612893"
+     r="0.61591756"
+     id="circle26-0-3-5"
+     style="fill:#ff8080;fill-opacity:1;stroke:#d40000;stroke-width:0.205306" />
+  <circle
+     cx="1.8394529"
+     cy="12.732261"
+     r="0.50227541"
+     id="circle28-1-1-0"
+     style="fill:#acacff;fill-opacity:1;stroke:#0000ff;stroke-width:0.167425" />
+</svg>

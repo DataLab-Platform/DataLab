@@ -675,7 +675,9 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
 
         with self.new_category(ActionCategory.PROCESSING):
-            with self.new_menu(_("Axis transformation")):
+            with self.new_menu(
+                _("Axis transformation"), icon_name="axis_transform.svg"
+            ):
                 self.new_action(
                     _("Linear calibration"),
                     triggered=self.panel.processor.compute_calibration,
@@ -685,7 +687,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     triggered=self.panel.processor.compute_swap_axes,
                     icon_name="swap_x_y.svg",
                 )
-            with self.new_menu(_("Level adjustment")):
+            with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
                 self.new_action(
                     _("Normalize"),
                     triggered=self.panel.processor.compute_normalize,
@@ -707,7 +709,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="offset_correction.svg",
                     tip=_("Evaluate and subtract the offset value from the data"),
                 )
-            with self.new_menu(_("Noise reduction")):
+            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
                 self.new_action(
                     _("Gaussian filter"),
                     triggered=self.panel.processor.compute_gaussian_filter,
@@ -724,7 +726,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     _("Wiener filter"),
                     triggered=self.panel.processor.compute_wiener,
                 )
-            with self.new_menu(_("Fourier analysis")):
+            with self.new_menu(_("Fourier analysis"), icon_name="fourier.svg"):
                 self.new_action(
                     _("FFT"),
                     triggered=self.panel.processor.compute_fft,
@@ -861,7 +863,7 @@ class SignalActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_reverse_x,
                     icon_name="reverse_signal_x.svg",
                 )
-            with self.new_menu(_("Frequency filters")):
+            with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
                 self.new_action(
                     _("Low-pass filter"),
                     triggered=self.panel.processor.compute_lowpass,
@@ -917,14 +919,19 @@ class SignalActionHandler(BaseActionHandler):
                 ),
             )
             self.new_action(
-                _("Detrending"), triggered=self.panel.processor.compute_detrending
+                _("Detrending"),
+                triggered=self.panel.processor.compute_detrending,
+                icon_name="detrending.svg",
             )
             self.new_action(
                 _("Interpolation"),
                 triggered=self.panel.processor.compute_interpolation,
+                icon_name="interpolation.svg",
             )
             self.new_action(
-                _("Resampling"), triggered=self.panel.processor.compute_resampling
+                _("Resampling"),
+                triggered=self.panel.processor.compute_resampling,
+                icon_name="resampling.svg",
             )
 
         with self.new_category(ActionCategory.COMPUTING):
@@ -1122,7 +1129,7 @@ class ImageActionHandler(BaseActionHandler):
             )
 
         with self.new_category(ActionCategory.PROCESSING):
-            with self.new_menu(_("Exposure")):
+            with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
                 self.new_action(
                     _("Gamma correction"),
                     triggered=self.panel.processor.compute_adjust_gamma,
@@ -1147,7 +1154,7 @@ class ImageActionHandler(BaseActionHandler):
                     _("Intensity rescaling"),
                     triggered=self.panel.processor.compute_rescale_intensity,
                 )
-            with self.new_menu(_("Restoration")):
+            with self.new_menu(_("Restoration"), icon_name="noise_reduction.svg"):
                 self.new_action(
                     _("Total variation denoising"),
                     triggered=self.panel.processor.compute_denoise_tv,
@@ -1170,7 +1177,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all denoising methods"),
                 )
-            with self.new_menu(_("Morphology")):
+            with self.new_menu(_("Morphology"), icon_name="morphology.svg"):
                 self.new_action(
                     _("White Top-Hat (disk)"),
                     triggered=self.panel.processor.compute_white_tophat,
@@ -1201,7 +1208,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all morphological operations"),
                 )
-            with self.new_menu(_("Edges")):
+            with self.new_menu(_("Edges"), icon_name="edges.svg"):
                 self.new_action(
                     _("Roberts filter"), triggered=self.panel.processor.compute_roberts
                 )
