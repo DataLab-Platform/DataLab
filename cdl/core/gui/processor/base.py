@@ -549,6 +549,7 @@ class BaseProcessor(QC.QObject):
                     src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
                     dst_dtype = complex if is_complex_dtype(src_dtype) else float
                     dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
+                    dst_obj.roi = None
                     src_objs[src_gid] = [src_obj]
                 else:
                     src_objs[src_gid].append(src_obj)
