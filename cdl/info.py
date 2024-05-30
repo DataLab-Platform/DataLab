@@ -15,9 +15,26 @@ import subprocess
 from cdl import __version__ as RELEASE
 
 
-def get_git_revision() -> str | None:
-    """Get the current Git revision (short hash) of the repository"""
+def get_git_revision() -> tuple[str, str] | None:
+    """Get the current Git branch and revision (short hash) of the repository.
+
+    Returns:
+        A tuple containing the branch name and the short revision hash.
+        If the current branch is 'main' or the Git command fails, return None.
+    """
     try:
+        # Run the git command to get the current branch name
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=True,
+        )
+        branch = result.stdout.strip()
+        if branch == "main":
+            # If the branch is "main", return None (assume the main branch is stable)
+            return None
         # Run the git command to get the current commit hash
         result = subprocess.run(
             ["git", "rev-parse", "--short", "HEAD"],
@@ -27,7 +44,7 @@ def get_git_revision() -> str | None:
             check=True,
         )
         sha = result.stdout.strip()
-        return sha
+        return branch, sha
     except subprocess.CalledProcessError:
         # If the git command fails (e.g., not a git repository), return None
         return None
@@ -38,8 +55,8 @@ def get_git_revision() -> str | None:
 
 def get_version() -> str:
     """Get the version number of the package, including the Git revision if available"""
-    git_revision = get_git_revision()
-    if git_revision is not None:
+    git_branch_revision = get_git_revision()
+    if git_branch_revision is not None:
         # Append the Git revision to the version number
-        return RELEASE + f"-dev.{git_revision}"
+        return RELEASE + f"-{git_branch_revision[0]}.{git_branch_revision[1]}"
     return RELEASE
