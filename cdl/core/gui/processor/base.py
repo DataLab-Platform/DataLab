@@ -473,7 +473,7 @@ class BaseProcessor(QC.QObject):
                 # Add result shape to object's metadata
                 result.add_to(obj)
                 if param is not None:
-                    obj.metadata[f"{result.label}Param"] = str(param)
+                    obj.metadata[f"{result.title}Param"] = str(param)
 
                 results[obj.uuid] = result
                 xlabels = result.headers
@@ -482,7 +482,7 @@ class BaseProcessor(QC.QObject):
                 else:
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
                 for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.label}({obj.short_id})"
+                    ylabel = f"{result.title}({obj.short_id})"
                     i_roi = result.array[i_row_res, 0]
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"

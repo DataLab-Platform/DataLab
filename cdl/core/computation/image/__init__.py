@@ -1277,13 +1277,13 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
 
 
 def calc_resultshape(
-    label: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
+    title: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on an image object,
     taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
 
     Args:
-        label: result shape label
+        title: result title
         shapetype: result shape type
         obj: input image object
         func: computation function
@@ -1362,7 +1362,7 @@ def calc_resultshape(
                 out[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
             return out
-        return ResultShape(label, np.vstack(res), shapetype)
+        return ResultShape(title, np.vstack(res), shapetype)
     return None
 
 
@@ -1465,13 +1465,13 @@ def compute_stats(obj: ImageObj) -> ResultProperties:
         Result properties
     """
     statfuncs = {
-        "min(z)": ma.min,
-        "max(z)": ma.max,
-        "<z>": ma.mean,
-        "median(z)": ma.median,
-        "σ(z)": ma.std,
+        "min(z) = %g {.zunit}": ma.min,
+        "max(z) = %g {.zunit}": ma.max,
+        "<z> = %g {.zunit}": ma.mean,
+        "median(z) = %g {.zunit}": ma.median,
+        "σ(z) = %g {.zunit}": ma.std,
         "<z>/σ(z)": lambda z: ma.mean(z) / ma.std(z),
-        "peak-to-peak(z)": ma.ptp,
-        "Σ(z)": ma.sum,
+        "peak-to-peak(z) = %g {.zunit}": ma.ptp,
+        "Σ(z) = %g {.zunit}": ma.sum,
     }
     return calc_resultproperties("stats", obj, statfuncs)

@@ -1170,13 +1170,13 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
 
 
 def calc_resultshape(
-    label: str, shapetype: ShapeTypes, obj: SignalObj, func: Callable, *args: Any
+    title: str, shapetype: ShapeTypes, obj: SignalObj, func: Callable, *args: Any
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on a signal object,
     taking into account the signal ROIs.
 
     Args:
-        label: result shape label
+        title: result title
         shapetype: result shape type
         obj: input image object
         func: computation function
@@ -1213,7 +1213,7 @@ def calc_resultshape(
             results = np.array([i_roi] + results.tolist())
             res.append(results)
     if res:
-        return ResultShape(label, np.vstack(res), shapetype)
+        return ResultShape(title, np.vstack(res), shapetype)
     return None
 
 
@@ -1284,14 +1284,14 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         Result properties object
     """
     statfuncs = {
-        "min(y)": lambda xy: xy[1].min(),
-        "max(y)": lambda xy: xy[1].max(),
-        "<y>": lambda xy: xy[1].mean(),
-        "median(y)": lambda xy: np.median(xy[1]),
-        "σ(y)": lambda xy: xy[1].std(),
+        "min(y) = %g {.yunit}": lambda xy: xy[1].min(),
+        "max(y) = %g {.yunit}": lambda xy: xy[1].max(),
+        "<y> = %g {.yunit}": lambda xy: xy[1].mean(),
+        "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
+        "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y)": lambda xy: xy[1].ptp(),
-        "Σ(y)": lambda xy: xy[1].sum(),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: xy[1].ptp(),
+        "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
@@ -1335,13 +1335,14 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     Returns:
         Result properties with ENOB, SNR, SINAD, THD, SFDR
     """
+    dsfx = f" = %g {p.unit}"
     funcs = {
-        "f": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
-        "ENOB": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
-        "SNR": lambda xy: alg.snr(xy[0], xy[1], p.unit),
-        "SINAD": lambda xy: alg.sinad(xy[0], xy[1], p.unit),
-        "THD": lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
-        "SFDR": lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
+        "freq": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
+        "ENOB = %.1f bits": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
+        "SNR" + dsfx: lambda xy: alg.snr(xy[0], xy[1], p.unit),
+        "SINAD" + dsfx: lambda xy: alg.sinad(xy[0], xy[1], p.unit),
+        "THD" + dsfx: lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
+        "SFDR" + dsfx: lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
     }
     return calc_resultproperties("ADC", src, funcs)
 
@@ -1359,8 +1360,8 @@ def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
         "sampling_rate_period",
         obj,
         {
-            "fs": lambda xy: alg.sampling_rate(xy[0]),
-            "T": lambda xy: alg.sampling_period(xy[0]),
+            "fs = %g": lambda xy: alg.sampling_rate(xy[0]),
+            "T = %g {.xunit}": lambda xy: alg.sampling_period(xy[0]),
         },
     )
 
@@ -1382,7 +1383,7 @@ def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
         "x@min,max",
         obj,
         {
-            "X@Ymin": lambda xy: xy[0][np.argmin(xy[1])],
-            "X@Ymax": lambda xy: xy[0][np.argmax(xy[1])],
+            "X@Ymin = %g {.xunit}": lambda xy: xy[0][np.argmin(xy[1])],
+            "X@Ymax = %g {.xunit}": lambda xy: xy[0][np.argmax(xy[1])],
         },
     )
