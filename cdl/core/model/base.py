@@ -31,10 +31,17 @@ from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
-    from plotpy.items import AbstractShape, CurveItem, MaskedImageItem
-
-    from cdl.core.model.image import ImageObj
-    from cdl.core.model.signal import SignalObj
+    from plotpy.items import (
+        AbstractShape,
+        AnnotatedCircle,
+        AnnotatedEllipse,
+        AnnotatedRectangle,
+        AnnotatedSegment,
+        CurveItem,
+        Marker,
+        MaskedImageItem,
+        PolygonShape,
+    )
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -343,7 +350,7 @@ class ResultProperties(BaseResult):
         super().__init__(
             self.PREFIX, title, _("Properties") + f" | {self.title}", array, labels
         )
-        assert len(labels) == self.raw_data.shape[1]
+        assert len(labels) == self.array.shape[1] - 1
         self.item_json = item_json  # JSON string of label item associated to this obj
 
     @property
@@ -678,7 +685,18 @@ class ResultShape(BaseResult):
         for coords in self.raw_data:
             yield self.create_plot_item(coords, fmt, lbl, option)
 
-    def create_plot_item(self, coords: np.ndarray, fmt: str, lbl: bool, option: str):
+    def create_plot_item(
+        self, coords: np.ndarray, fmt: str, lbl: bool, option: str
+    ) -> (
+        AnnotatedPoint
+        | Marker
+        | AnnotatedRectangle
+        | AnnotatedCircle
+        | AnnotatedSegment
+        | AnnotatedEllipse
+        | PolygonShape
+        | None
+    ):
         """Make plot item.
 
         Args:
@@ -691,9 +709,11 @@ class ResultShape(BaseResult):
             Plot item
         """
         if self.shapetype is ShapeTypes.MARKER:
-            item = self.make_marker_item(coords, fmt)
+            x0, y0 = coords
+            item = self.__make_marker_item(x0, y0, fmt)
         elif self.shapetype is ShapeTypes.POINT:
-            item = AnnotatedPoint(*coords)
+            x0, y0 = coords
+            item = AnnotatedPoint(x0, y0)
             sparam = item.shape.shapeparam
             sparam.symbol.marker = "Ellipse"
             sparam.symbol.size = 6
@@ -731,9 +751,14 @@ class ResultShape(BaseResult):
         set_plot_item_editable(item, False)
         return item
 
-    def make_marker_item(self, args, fmt):
-        """Make marker item"""
-        x0, y0 = args
+    def __make_marker_item(self, x0: float, y0: float, fmt: str) -> Marker:
+        """Make marker item
+
+        Args:
+            x0: x coordinate
+            y0: y coordinate
+            fmt: numeric format (e.g. '%.3f')
+        """
         if np.isnan(x0):
             mstyle = "-"
 
