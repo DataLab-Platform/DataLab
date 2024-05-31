@@ -348,7 +348,7 @@ class ResultProperties(BaseResult):
         self, title: str, array: np.ndarray, labels: list[str], item_json: str = ""
     ) -> None:
         super().__init__(
-            self.PREFIX, title, _("Properties") + f" | {self.title}", array, labels
+            self.PREFIX, title, _("Properties") + f" | {title}", array, labels
         )
         assert len(labels) == self.array.shape[1] - 1
         self.item_json = item_json  # JSON string of label item associated to this obj
