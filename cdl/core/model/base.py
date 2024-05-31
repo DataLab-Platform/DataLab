@@ -225,6 +225,22 @@ class BaseResult:
         self.prefix = prefix
         self.title = title
         self.category = category
+
+        # Allow to pass a list of lists or a NumPy array.
+        # For instance, the following are equivalent:
+        #   array = [[1, 2], [3, 4]]
+        #   array = np.array([[1, 2], [3, 4]])
+        # Or, for only one line (one single result), the following are equivalent:
+        #   array = [1, 2]
+        #   array = [[1, 2]]
+        #   array = np.array([[1, 2]])
+        if isinstance(array, (list, tuple)):
+            if isinstance(array[0], (list, tuple)):
+                array = np.array(array)
+            else:
+                array = np.array([array])
+        assert isinstance(array, np.ndarray)
+
         self.array = array
         self.xunit: str = ""
         self.yunit: str = ""
@@ -295,6 +311,20 @@ class ResultProperties(BaseResult):
         array: properties array
         labels: properties labels (one label per column of result array)
         item_json: JSON string of label item associated to this obj
+
+    .. note::
+
+        The `array` argument can be a list of lists or a NumPy array. For instance,
+        the following are equivalent:
+
+        - ``array = [[1, 2], [3, 4]]``
+        - ``array = np.array([[1, 2], [3, 4]])``
+
+        Or for only one line (one single result), the following are equivalent:
+
+        - ``array = [1, 2]``
+        - ``array = [[1, 2]]``
+        - ``array = np.array([[1, 2]])``
     """
 
     PREFIX = "_properties_"
@@ -420,15 +450,23 @@ class ResultShape(BaseResult):
 
     Raises:
         AssertionError: invalid argument
+
+    .. note::
+
+        The `array` argument can be a list of lists or a NumPy array. For instance,
+        the following are equivalent:
+
+        - ``array = [[1, 2], [3, 4]]``
+        - ``array = np.array([[1, 2], [3, 4]])``
+
+        Or for only one line (one single result), the following are equivalent:
+
+        - ``array = [1, 2]``
+        - ``array = [[1, 2]]``
+        - ``array = np.array([[1, 2]])``
     """
 
     def __init__(self, title: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        if isinstance(array, (list, tuple)):
-            if isinstance(array[0], (list, tuple)):
-                array = np.array(array)
-            else:
-                array = np.array([array])
-        assert isinstance(array, np.ndarray)
         super().__init__(shapetype.value, title, shapetype.name.capitalize(), array)
         assert isinstance(shapetype, ShapeTypes)
         self.shapetype = shapetype
