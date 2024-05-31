@@ -495,38 +495,38 @@ class ResultShape(BaseResult):
             # by an even number of data columns (flattened x, y coordinates).
             assert self.array.shape[1] % 2 == 1
         else:
-            data_colnb = {
-                ShapeTypes.MARKER: 2,
-                ShapeTypes.POINT: 2,
-                ShapeTypes.RECTANGLE: 4,
-                ShapeTypes.CIRCLE: 3,
-                ShapeTypes.SEGMENT: 4,
-                ShapeTypes.ELLIPSE: 5,
-            }[self.shapetype]
+            data_colnb = len(self.get_coords_labels())
             # `data_colnb` is the number of data columns depends on the shape type,
             # not counting the ROI index, hence the +1 in the following assertion
             assert self.array.shape[1] == data_colnb + 1
 
+    def get_coords_labels(self) -> tuple[str]:
+        """Return shape coordinates labels
+
+        Returns:
+            Shape coordinates labels
+        """
+        if self.shapetype is ShapeTypes.POLYGON:
+            labels = []
+            for i in range(0, self.array.shape[1] - 1, 2):
+                labels += [f"x{i//2}", f"y{i//2}"]
+            return tuple(labels)
+        try:
+            return {
+                ShapeTypes.MARKER: ("x", "y"),
+                ShapeTypes.POINT: ("x", "y"),
+                ShapeTypes.RECTANGLE: ("x0", "y0", "x1", "y1"),
+                ShapeTypes.CIRCLE: ("x", "y", "r"),
+                ShapeTypes.SEGMENT: ("x0", "y0", "x1", "y1"),
+                ShapeTypes.ELLIPSE: ("x", "y", "a", "b", "θ"),
+            }[self.shapetype]
+        except KeyError:
+            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
+
     @property
     def headers(self) -> list[str] | None:
         """Return result headers (one header per column of result array)"""
-        if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
-            labels = "x", "y"
-        elif self.shapetype in (
-            ShapeTypes.RECTANGLE,
-            ShapeTypes.SEGMENT,
-            ShapeTypes.POLYGON,
-        ):
-            labels = []
-            for index in range(0, self.array.shape[1] - 1, 2):
-                labels += [f"x{index//2}", f"y{index//2}"]
-            labels = tuple(labels)
-        elif self.shapetype is ShapeTypes.CIRCLE:
-            labels = "x", "y", "r"
-        elif self.shapetype is ShapeTypes.ELLIPSE:
-            labels = "x", "y", "a", "b", "θ"
-        else:
-            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
+        labels = self.get_coords_labels()
         labels += self.__get_complementary_xlabels() or ()
         return labels[-self.shown_array.shape[1] :]
 
@@ -604,16 +604,12 @@ class ResultShape(BaseResult):
             obj: object (signal/image)
         """
         obj.metadata[self.key] = self.array
-        if self.shapetype in (
-            ShapeTypes.SEGMENT,
-            ShapeTypes.CIRCLE,
-            ShapeTypes.ELLIPSE,
-        ):
+        comp_arr = self.__get_complementary_array()
+        if comp_arr is not None:
             #  Automatically adds segment norm / circle area to object metadata
             arr = self.array
-            comp_arr = self.__get_complementary_array()
             comp_lbl = self.__get_complementary_xlabels()
-            assert comp_lbl is not None and comp_arr is not None
+            assert comp_lbl is not None
             for index, label in enumerate(comp_lbl):
                 results = np.zeros((arr.shape[0], 2), dtype=arr.dtype)
                 results[:, 0] = arr[:, 0]  # ROI indexes
