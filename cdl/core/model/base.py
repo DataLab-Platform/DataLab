@@ -225,7 +225,18 @@ class BaseResult:
         self.prefix = prefix
         self.title = title
         self.category = category
+        self.array = array
+        self.check_array()
+        self.xunit: str = ""
+        self.yunit: str = ""
+        self.__labels = labels
 
+    def check_array(self) -> None:
+        """Check if array attribute is valid
+
+        Raises:
+            AssertionError: invalid array
+        """
         # Allow to pass a list of lists or a NumPy array.
         # For instance, the following are equivalent:
         #   array = [[1, 2], [3, 4]]
@@ -234,17 +245,13 @@ class BaseResult:
         #   array = [1, 2]
         #   array = [[1, 2]]
         #   array = np.array([[1, 2]])
-        if isinstance(array, (list, tuple)):
-            if isinstance(array[0], (list, tuple)):
-                array = np.array(array)
+        if isinstance(self.array, (list, tuple)):
+            if isinstance(self.array[0], (list, tuple)):
+                self.array = np.array(self.array)
             else:
-                array = np.array([array])
-        assert isinstance(array, np.ndarray)
-
-        self.array = array
-        self.xunit: str = ""
-        self.yunit: str = ""
-        self.__labels = labels
+                self.array = np.array([self.array])
+        assert isinstance(self.array, np.ndarray)
+        assert len(self.array.shape) == 2
 
     @property
     def labels(self) -> list[str] | None:
@@ -467,18 +474,17 @@ class ResultShape(BaseResult):
     """
 
     def __init__(self, title: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        super().__init__(shapetype.value, title, shapetype.name.capitalize(), array)
         assert isinstance(shapetype, ShapeTypes)
         self.shapetype = shapetype
-        self.__check_array()
+        super().__init__(shapetype.value, title, shapetype.name.capitalize(), array)
 
-    def __check_array(self):
-        """Check if array is valid
+    def check_array(self) -> None:
+        """Check if array attribute is valid
 
         Raises:
             AssertionError: invalid array
         """
-        assert len(self.array.shape) == 2
+        super().check_array()
         if self.shapetype is ShapeTypes.POLYGON:
             # Polygon is a special case: the number of data columns is variable
             # (2 columns per point). So we only check if the number of columns
