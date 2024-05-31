@@ -287,17 +287,18 @@ class BaseResult:
         """Return metadata key associated to result"""
         return self.prefix + self.title
 
-    def update_units_from(self, obj: ImageObj | SignalObj) -> None:
-        """Update units from object metadata
+    @classmethod
+    def from_metadata_entry(cls, key: str, value: dict[str, Any]) -> BaseResult | None:
+        """Create metadata shape object from (key, value) metadata entry"""
+        raise NotImplementedError
 
-        Args:
-            obj: object
-        """
-        self.xunit = obj.xunit
-        self.yunit = obj.yunit
+    @classmethod
+    def match(cls, key, value) -> bool:
+        """Return True if metadata dict entry (key, value) is a metadata result"""
+        return cls.from_metadata_entry(key, value) is not None
 
     def add_to(self, obj: BaseObj) -> None:
-        """Add metadata shape to object
+        """Add result to object metadata
 
         Args:
             obj: object (signal/image)
@@ -345,6 +346,21 @@ class ResultProperties(BaseResult):
         assert len(labels) == self.raw_data.shape[1]
         self.item_json = item_json  # JSON string of label item associated to this obj
 
+    @property
+    def headers(self) -> list[str] | None:
+        """Return result headers (one header per column of result array)"""
+        # ResultProperties implementation: return labels without units or "=" sign
+        return [label.split("=")[0].strip() for label in self.labels]
+
+    @property
+    def shown_array(self) -> np.ndarray:
+        """Return array of shown results, i.e. including complementary array (if any)
+
+        Returns:
+            Array of shown results
+        """
+        return self.raw_data
+
     @classmethod
     def from_metadata_entry(
         cls, key: str, value: dict[str, Any]
@@ -363,28 +379,8 @@ class ResultProperties(BaseResult):
                 pass
         return None
 
-    @classmethod
-    def match(cls, key, value) -> bool:
-        """Return True if metadata dict entry (key, value) is a metadata result"""
-        return cls.from_metadata_entry(key, value) is not None
-
-    @property
-    def headers(self) -> list[str] | None:
-        """Return result headers (one header per column of result array)"""
-        # ResultProperties implementation: return labels without units or "=" sign
-        return [label.split("=")[0].strip() for label in self.labels]
-
-    @property
-    def shown_array(self) -> np.ndarray:
-        """Return array of shown results, i.e. including complementary array (if any)
-
-        Returns:
-            Array of shown results
-        """
-        return self.raw_data
-
     def add_to(self, obj: BaseObj) -> None:
-        """Add metadata shape to object
+        """Add result to object metadata
 
         Args:
             obj: object (signal/image)
@@ -504,31 +500,6 @@ class ResultShape(BaseResult):
             # not counting the ROI index, hence the +1 in the following assertion
             assert self.array.shape[1] == data_colnb + 1
 
-    @classmethod
-    def label_shapetype_from_key(cls, key: str):
-        """Return metadata shape label and shapetype from metadata key"""
-        for member in ShapeTypes:
-            if key.startswith(member.value):
-                label = key[len(member.value) :]
-                return label, member
-        raise ValueError(f"Invalid metadata key `{key}`")
-
-    @classmethod
-    def from_metadata_entry(cls, key, value) -> ResultShape | None:
-        """Create metadata shape object from (key, value) metadata entry"""
-        if isinstance(key, str) and isinstance(value, np.ndarray):
-            try:
-                label, shapetype = cls.label_shapetype_from_key(key)
-                return cls(label, value, shapetype)
-            except ValueError:
-                pass
-        return None
-
-    @classmethod
-    def match(cls, key, value) -> bool:
-        """Return True if metadata dict entry (key, value) is a metadata result"""
-        return cls.from_metadata_entry(key, value) is not None
-
     @property
     def headers(self) -> list[str] | None:
         """Return result headers (one header per column of result array)"""
@@ -599,8 +570,32 @@ class ResultShape(BaseResult):
             return area.reshape(-1, 1)
         return None
 
+    @classmethod
+    def label_shapetype_from_key(cls, key: str):
+        """Return metadata shape label and shapetype from metadata key"""
+        for member in ShapeTypes:
+            if key.startswith(member.value):
+                label = key[len(member.value) :]
+                return label, member
+        raise ValueError(f"Invalid metadata key `{key}`")
+
+    @classmethod
+    def from_metadata_entry(cls, key, value) -> ResultShape | None:
+        """Create metadata shape object from (key, value) metadata entry"""
+        if isinstance(key, str) and isinstance(value, np.ndarray):
+            try:
+                label, shapetype = cls.label_shapetype_from_key(key)
+                return cls(label, value, shapetype)
+            except ValueError:
+                pass
+        return None
+
     def add_to(self, obj: BaseObj):
-        """Add metadata shape to object (signal/image)"""
+        """Add result to object metadata
+
+        Args:
+            obj: object (signal/image)
+        """
         obj.metadata[self.key] = self.array
         if self.shapetype in (
             ShapeTypes.SEGMENT,
@@ -680,14 +675,14 @@ class ResultShape(BaseResult):
         Yields:
             Plot item
         """
-        for args in self.raw_data:
-            yield self.create_plot_item(args, fmt, lbl, option)
+        for coords in self.raw_data:
+            yield self.create_plot_item(coords, fmt, lbl, option)
 
-    def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool, option: str):
+    def create_plot_item(self, coords: np.ndarray, fmt: str, lbl: bool, option: str):
         """Make plot item.
 
         Args:
-            args: shape data
+            coords: shape data
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
             option: shape style option (e.g. "shape/drag")
@@ -696,9 +691,9 @@ class ResultShape(BaseResult):
             Plot item
         """
         if self.shapetype is ShapeTypes.MARKER:
-            item = self.make_marker_item(args, fmt)
+            item = self.make_marker_item(coords, fmt)
         elif self.shapetype is ShapeTypes.POINT:
-            item = AnnotatedPoint(*args)
+            item = AnnotatedPoint(*coords)
             sparam = item.shape.shapeparam
             sparam.symbol.marker = "Ellipse"
             sparam.symbol.size = 6
@@ -709,24 +704,24 @@ class ResultShape(BaseResult):
             param.title = self.title
             param.update_annotation(item)
         elif self.shapetype is ShapeTypes.RECTANGLE:
-            x0, y0, x1, y1 = args
+            x0, y0, x1, y1 = coords
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            xc, yc, r = args
+            xc, yc, r = coords
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
             item = make.annotated_circle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.SEGMENT:
-            x0, y0, x1, y1 = args
+            x0, y0, x1, y1 = coords
             item = make.annotated_segment(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            xc, yc, a, b, t = args
+            xc, yc, a, b, t = coords
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
                 x0, y0, x1, y1, x2, y2, x3, y3, title=self.title
             )
         elif self.shapetype is ShapeTypes.POLYGON:
-            x, y = args[::2], args[1::2]
+            x, y = coords[::2], coords[1::2]
             item = make.polygon(x, y, title=self.title, closed=False)
         else:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
