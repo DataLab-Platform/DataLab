@@ -1109,7 +1109,7 @@ class BaseDataPanel(AbstractPanel):
                 rdata.xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.title}({obj.short_id})"
-                    i_roi = result.array[i_row_res, 0]
+                    i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"
                     rdata.ylabels.append(ylabel)

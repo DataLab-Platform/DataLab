@@ -483,7 +483,7 @@ class BaseProcessor(QC.QObject):
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
                 for i_row_res in range(result.array.shape[0]):
                     ylabel = f"{result.title}({obj.short_id})"
-                    i_roi = result.array[i_row_res, 0]
+                    i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"
                     ylabels.append(ylabel)
