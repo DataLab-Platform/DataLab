@@ -171,7 +171,7 @@ def create_noisy_signal(
     newparam.title = "Test signal (noisy)" if newparam.title is None else newparam.title
     if addparam is None:
         addparam = cdl.obj.GaussLorentzVoigtParam()
-    if noised is not None and noiseparam is None:
+    if noised is not None and noised and noiseparam is None:
         noiseparam = GaussianNoiseParam()
         noiseparam.sigma = 5.0
     sig = cdl.obj.create_signal_from_param(newparam, addparam)
@@ -611,3 +611,20 @@ def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
         ),
     ):
         yield cdl.obj.ResultShape(shape, data, shape)
+
+
+def create_resultproperties() -> Generator[cdl.obj.ResultProperties, None, None]:
+    """Create test result properties (core.model.base.ResultProperties test object)
+
+    Returns:
+        ResultProperties object
+    """
+    for title, data, labels in (
+        ("TestProperties1", [0, 2.5, -30909, 1.0, 0.0], ["A", "B", "C", "D"]),
+        (
+            "TestProperties2",
+            [[0, 1.232325, -9, 0, 10], [0, 250, -3, 12.0, 530.0]],
+            ["P1", "P2", "P3", "P4"],
+        ),
+    ):
+        yield cdl.obj.ResultProperties(title, data, labels)
