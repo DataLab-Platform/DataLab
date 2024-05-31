@@ -208,19 +208,17 @@ class BaseResult:
     Args:
         prefix: result prefix (used for metadata key)
         title: result title
+        category: result category
         labels: result labels (one label per column of result array)
     """
 
     def __init__(
-        self, prefix: str, title: str, labels: list[str] | None = None
+        self, prefix: str, title: str, category: str, labels: list[str] | None = None
     ) -> None:
         assert isinstance(title, str)
         self.prefix = prefix
         self.title = title
-        self.shown_title = title
-        if title.endswith("s"):
-            self.shown_title = title[:-1]
-        self.shown_category = ""
+        self.category = category
         self.xunit: str = ""
         self.yunit: str = ""
         self.array: np.ndarray = np.array([])
@@ -298,8 +296,9 @@ class ResultProperties(BaseResult):
     def __init__(
         self, title: str, array: np.ndarray, labels: list[str], item_json: str = ""
     ) -> None:
-        super().__init__(self.PREFIX, title, labels)
-        self.shown_category = _("Properties") + f" | {self.shown_title}"
+        super().__init__(
+            self.PREFIX, title, _("Properties") + f" | {self.title}", labels
+        )
         self.array = array
         assert len(labels) == self.raw_data.shape[1]
         self.item_json = item_json  # JSON string of label item associated to this obj
@@ -387,7 +386,7 @@ class ResultProperties(BaseResult):
                 text += "<br>" + label.strip().format(obj) % self.raw_data[i_row, i_col]
             if i_row < self.raw_data.shape[0] - 1:
                 text += "<br><br>"
-        item = make.label(text, "TL", (0, 0), "TL", title=self.shown_title)
+        item = make.label(text, "TL", (0, 0), "TL", title=self.title)
         font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
         item.set_style("plot", "label/properties")
         item.labelparam.font.update_param(font)
@@ -424,10 +423,9 @@ class ResultShape(BaseResult):
     """
 
     def __init__(self, title: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        super().__init__(shapetype.value, title)
+        super().__init__(shapetype.value, title, shapetype.name.capitalize())
         assert isinstance(shapetype, ShapeTypes)
         self.shapetype = shapetype
-        self.shown_category = shapetype.name.capitalize()
         if isinstance(array, (list, tuple)):
             if isinstance(array[0], (list, tuple)):
                 array = np.array(array)
@@ -678,28 +676,28 @@ class ResultShape(BaseResult):
             sparam.sel_symbol.size = 6
             sparam.update_shape(item.shape)
             param = item.annotationparam
-            param.title = self.shown_title
+            param.title = self.title
             param.update_annotation(item)
         elif self.shapetype is ShapeTypes.RECTANGLE:
             x0, y0, x1, y1 = args
-            item = make.annotated_rectangle(x0, y0, x1, y1, title=self.shown_title)
+            item = make.annotated_rectangle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.CIRCLE:
             xc, yc, r = args
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
-            item = make.annotated_circle(x0, y0, x1, y1, title=self.shown_title)
+            item = make.annotated_circle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.SEGMENT:
             x0, y0, x1, y1 = args
-            item = make.annotated_segment(x0, y0, x1, y1, title=self.shown_title)
+            item = make.annotated_segment(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.ELLIPSE:
             xc, yc, a, b, t = args
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
-                x0, y0, x1, y1, x2, y2, x3, y3, title=self.shown_title
+                x0, y0, x1, y1, x2, y2, x3, y3, title=self.title
             )
         elif self.shapetype is ShapeTypes.POLYGON:
             x, y = args[::2], args[1::2]
-            item = make.polygon(x, y, title=self.shown_title, closed=False)
+            item = make.polygon(x, y, title=self.title, closed=False)
         else:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
@@ -715,17 +713,17 @@ class ResultShape(BaseResult):
             mstyle = "-"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.shown_title + ": " + fmt) % y
+                return (self.title + ": " + fmt) % y
 
         elif np.isnan(y0):
             mstyle = "|"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.shown_title + ": " + fmt) % x
+                return (self.title + ": " + fmt) % x
 
         else:
             mstyle = "+"
-            txt = self.shown_title + ": (" + fmt + ", " + fmt + ")"
+            txt = self.title + ": (" + fmt + ", " + fmt + ")"
 
             def label(x, y):
                 return txt % (x, y)

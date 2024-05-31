@@ -1104,9 +1104,7 @@ class BaseDataPanel(AbstractPanel):
             for result in list(obj.iterate_resultshapes()) + list(
                 obj.iterate_resultproperties()
             ):
-                rdata = rdatadict.setdefault(
-                    result.shown_category, ResultData([], None, [])
-                )
+                rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
                 rdata.results.append(result)
                 rdata.xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):

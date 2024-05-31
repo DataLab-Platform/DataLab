@@ -1449,7 +1449,7 @@ def compute_hough_circle_peaks(
         Circle coordinates
     """
     return calc_resultshape(
-        "hough_circle_peaks",
+        "hough_circle_peak",
         ShapeTypes.CIRCLE,
         image,
         alg.get_hough_circle_peaks,
