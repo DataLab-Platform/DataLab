@@ -20,7 +20,8 @@ import pytest
 import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
-from cdl.tests.data import check_scalar_result, get_test_signal
+from cdl.tests.data import get_test_signal
+from cdl.utils.tests import check_scalar_result
 
 
 @pytest.mark.validation

@@ -15,7 +15,9 @@ import subprocess
 import sys
 import tempfile
 from collections.abc import Callable
+from typing import Any
 
+import numpy as np
 from guidata.configtools import get_module_data_path
 
 from cdl.config import MOD_NAME
@@ -169,3 +171,72 @@ def get_script_output(
         " ".join(command), capture_output=True, text=True, env=env, check=False
     )
     return result.stdout.strip()
+
+
+def compare_metadata(
+    dict1: dict[str, Any], dict2: dict[str, Any], level: int = 1
+) -> bool:
+    """Compare metadata dictionaries without private elements
+
+    Args:
+        dict1: first dictionary
+        dict2: second dictionary
+        level: recursion level
+
+    Returns:
+        True if metadata is the same, False otherwise
+    """
+    dict_a, dict_b = dict1.copy(), dict2.copy()
+    for dict_ in (dict_a, dict_b):
+        for key in list(dict_.keys()):
+            if key.startswith("__"):
+                dict_.pop(key)
+    same = True
+    prefix = "  " * level
+    for key in dict_a:
+        if key not in dict_b:
+            same = False
+            break
+        execenv.print(f"{prefix}Checking key {key}...", end=" ")
+        if isinstance(dict_a[key], dict):
+            execenv.print("")
+            same = same and compare_metadata(dict_a[key], dict_b[key], level + 1)
+            status_prefix = "  " * level
+        else:
+            same_value = str(dict_a[key]) == str(dict_b[key])
+            if not same_value:
+                execenv.print(
+                    f"Different values for key {key}: {dict_a[key]} != {dict_b[key]}"
+                )
+            same = same and same_value
+            status_prefix = ""
+        execenv.print(status_prefix + ("OK" if same else "KO"))
+    return same
+
+
+def __array_to_str(data: np.ndarray) -> str:
+    """Return a compact description of the array properties"""
+    dims = "×".join(str(dim) for dim in data.shape)
+    return f"{dims},{data.dtype},{data.min():.2g}→{data.max():.2g},µ={data.mean():.2g}"
+
+
+def check_array_result(
+    title: str,
+    res: np.ndarray,
+    exp: np.ndarray,
+    rtol: float = 1.0e-5,
+    atol: float = 1.0e-8,
+) -> None:
+    """Assert that two arrays are almost equal."""
+    restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
+    execenv.print(restxt)
+    assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
+
+
+def check_scalar_result(
+    title: str, res: float, exp: float, rtol: float = 1.0e-5, atol: float = 1.0e-8
+) -> None:
+    """Assert that two scalars are almost equal."""
+    restxt = f"{title}: {res} (expected: {exp})"
+    execenv.print(restxt)
+    assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt

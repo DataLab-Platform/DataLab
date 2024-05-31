@@ -18,7 +18,6 @@ import numpy as np
 
 import cdl.obj
 from cdl.config import _
-from cdl.env import execenv
 from cdl.utils.tests import get_test_fnames
 
 
@@ -44,34 +43,6 @@ def get_test_image(filename: str) -> cdl.obj.ImageObj:
         Image object
     """
     return cdl.obj.read_image(get_test_fnames(filename)[0])
-
-
-def __array_to_str(data: np.ndarray) -> str:
-    """Return a compact description of the array properties"""
-    dims = "×".join(str(dim) for dim in data.shape)
-    return f"{dims},{data.dtype},{data.min():.2g}→{data.max():.2g},µ={data.mean():.2g}"
-
-
-def check_array_result(
-    title: str,
-    res: np.ndarray,
-    exp: np.ndarray,
-    rtol: float = 1.0e-5,
-    atol: float = 1.0e-8,
-) -> None:
-    """Assert that two arrays are almost equal."""
-    restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
-    execenv.print(restxt)
-    assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
-
-
-def check_scalar_result(
-    title: str, res: float, exp: float, rtol: float = 1.0e-5, atol: float = 1.0e-8
-) -> None:
-    """Assert that two scalars are almost equal."""
-    restxt = f"{title}: {res} (expected: {exp})"
-    execenv.print(restxt)
-    assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt
 
 
 def create_paracetamol_signal(

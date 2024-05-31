@@ -30,10 +30,10 @@ from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _
 from cdl.env import execenv
 from cdl.tests.data import (
-    check_scalar_result,
     create_noisygauss_image,
     get_laser_spot_data,
 )
+from cdl.utils.tests import check_scalar_result
 from cdl.utils.vistools import view_image_items
 
 

@@ -14,29 +14,7 @@ from cdl.env import execenv
 from cdl.obj import create_image
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import get_test_image
-from cdl.utils.tests import CDLTemporaryDirectory
-
-
-def __compare_metadata(dict1, dict2):
-    """Compare metadata dictionaries without private elements"""
-    dict_a, dict_b = dict1.copy(), dict2.copy()
-    for dict_ in (dict_a, dict_b):
-        for key in list(dict_.keys()):
-            if key.startswith("__"):
-                dict_.pop(key)
-    same = True
-    for key in dict_a:
-        if key not in dict_b:
-            same = False
-            break
-        if isinstance(dict_a[key], dict):
-            same = same and __compare_metadata(dict_a[key], dict_b[key])
-        else:
-            same_value = str(dict_a[key]) == str(dict_b[key])
-            if not same_value:
-                print(f"Different values for key {key}: {dict_a[key]} != {dict_b[key]}")
-            same = same and same_value
-    return same
+from cdl.utils.tests import CDLTemporaryDirectory, compare_metadata
 
 
 def test_dict_serialization():
@@ -83,11 +61,10 @@ def test_dict_serialization():
                 win.save_to_h5_file(fname)
                 win.reset_all()
                 win.open_h5_files([fname], import_all=True)
-                execenv.print("Dictionary/List (de)serialization: ", end="")
+                execenv.print("Dictionary/List (de)serialization:")
                 oids = panel.objmodel.get_object_ids()
                 first_image = panel.objmodel[oids[0]]
-                assert __compare_metadata(image.metadata, first_image.metadata.copy())
-                execenv.print("OK")
+                assert compare_metadata(image.metadata, first_image.metadata.copy())
 
 
 if __name__ == "__main__":

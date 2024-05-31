@@ -23,6 +23,7 @@ import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
 import cdl.tests.data as cdltd
+import cdl.utils.tests
 from cdl.env import execenv
 from cdl.utils.vistools import view_curve_items
 
@@ -70,7 +71,7 @@ def test_signal_fwhm() -> None:
     ):
         param = cdl.param.FWHMParam.create(method=method)
         df = cps.compute_fwhm(obj, param).to_dataframe()
-        cdltd.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
+        cdl.utils.tests.check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
     obj = cdltd.create_paracetamol_signal()
     with pytest.warns(UserWarning):
         cps.compute_fwhm(obj, cdl.param.FWHMParam.create(method="zero-crossing"))
@@ -82,7 +83,7 @@ def test_signal_fw1e2() -> None:
     obj = cdltd.get_test_signal("fw1e2.txt")
     exp = 4.06  # Manual validation
     df = cps.compute_fw1e2(obj).to_dataframe()
-    cdltd.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
+    cdl.utils.tests.check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
 
 
 if __name__ == "__main__":
