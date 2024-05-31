@@ -209,19 +209,25 @@ class BaseResult:
         prefix: result prefix (used for metadata key)
         title: result title
         category: result category
+        array: result array (one row per ROI, first column is ROI index)
         labels: result labels (one label per column of result array)
     """
 
     def __init__(
-        self, prefix: str, title: str, category: str, labels: list[str] | None = None
+        self,
+        prefix: str,
+        title: str,
+        category: str,
+        array: np.ndarray,
+        labels: list[str] | None = None,
     ) -> None:
         assert isinstance(title, str)
         self.prefix = prefix
         self.title = title
         self.category = category
+        self.array = array
         self.xunit: str = ""
         self.yunit: str = ""
-        self.array: np.ndarray = np.array([])
         self.__labels = labels
 
     @property
@@ -251,7 +257,7 @@ class BaseResult:
     @property
     def raw_data(self):
         """Return raw data (array without ROI informations)"""
-        raise NotImplementedError
+        return self.array[:, 1:]
 
     @property
     def key(self) -> str:
@@ -297,9 +303,8 @@ class ResultProperties(BaseResult):
         self, title: str, array: np.ndarray, labels: list[str], item_json: str = ""
     ) -> None:
         super().__init__(
-            self.PREFIX, title, _("Properties") + f" | {self.title}", labels
+            self.PREFIX, title, _("Properties") + f" | {self.title}", array, labels
         )
-        self.array = array
         assert len(labels) == self.raw_data.shape[1]
         self.item_json = item_json  # JSON string of label item associated to this obj
 
@@ -331,11 +336,6 @@ class ResultProperties(BaseResult):
         """Return result headers (one header per column of result array)"""
         # ResultProperties implementation: return labels without units or "=" sign
         return [label.split("=")[0].strip() for label in self.labels]
-
-    @property
-    def raw_data(self):
-        """Return raw data (array without ROI informations)"""
-        return self.array[:, 1:]
 
     @property
     def shown_array(self) -> np.ndarray:
@@ -423,17 +423,42 @@ class ResultShape(BaseResult):
     """
 
     def __init__(self, title: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        super().__init__(shapetype.value, title, shapetype.name.capitalize())
-        assert isinstance(shapetype, ShapeTypes)
-        self.shapetype = shapetype
         if isinstance(array, (list, tuple)):
             if isinstance(array[0], (list, tuple)):
                 array = np.array(array)
             else:
                 array = np.array([array])
         assert isinstance(array, np.ndarray)
-        self.array = array
-        self.check_array()
+        super().__init__(shapetype.value, title, shapetype.name.capitalize(), array)
+        assert isinstance(shapetype, ShapeTypes)
+        self.shapetype = shapetype
+        self.__check_array()
+
+    def __check_array(self):
+        """Check if array is valid
+
+        Raises:
+            AssertionError: invalid array
+        """
+        assert len(self.array.shape) == 2
+        if self.shapetype is ShapeTypes.POLYGON:
+            # Polygon is a special case: the number of data columns is variable
+            # (2 columns per point). So we only check if the number of columns
+            # is odd, which means that the first column is the ROI index, followed
+            # by an even number of data columns (flattened x, y coordinates).
+            assert self.array.shape[1] % 2 == 1
+        else:
+            data_colnb = {
+                ShapeTypes.MARKER: 2,
+                ShapeTypes.POINT: 2,
+                ShapeTypes.RECTANGLE: 4,
+                ShapeTypes.CIRCLE: 3,
+                ShapeTypes.SEGMENT: 4,
+                ShapeTypes.ELLIPSE: 5,
+            }[self.shapetype]
+            # `data_colnb` is the number of data columns depends on the shape type,
+            # not counting the ROI index, hence the +1 in the following assertion
+            assert self.array.shape[1] == data_colnb + 1
 
     @classmethod
     def label_shapetype_from_key(cls, key: str):
@@ -559,8 +584,7 @@ class ResultShape(BaseResult):
             other = ResultShape.from_metadata_entry(self.key, other_value)
             assert other is not None
             other_array = np.array(other.array, copy=True)
-            if other.is_first_column_roi_index():  # Column 0 is the ROI index
-                other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
+            other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
             if other_array.shape[1] != self.array.shape[1]:
                 # This can only happen if the shape is a polygon
                 assert self.shapetype is ShapeTypes.POLYGON
@@ -575,39 +599,6 @@ class ResultShape(BaseResult):
             else:
                 self.array = np.vstack([self.array, other_array])
         self.add_to(obj)
-
-    @property
-    def data_colnb(self):
-        """Return raw data results column number"""
-        if self.shapetype == ShapeTypes.POLYGON:
-            raise ValueError("Polygon has an undefined number of data columns")
-        return {
-            ShapeTypes.MARKER: 2,
-            ShapeTypes.POINT: 2,
-            ShapeTypes.RECTANGLE: 4,
-            ShapeTypes.CIRCLE: 3,
-            ShapeTypes.SEGMENT: 4,
-            ShapeTypes.ELLIPSE: 5,
-        }[self.shapetype]
-
-    def is_first_column_roi_index(self) -> bool:
-        """Return True if first column is ROI index"""
-        if self.shapetype is ShapeTypes.POLYGON:
-            # Polygon is a special case: the number of data columns is variable
-            # (2 columns per point). So we only check if the number of columns
-            # is odd, which means that the first column is the ROI index, followed
-            # by an even number of data columns (flattened x, y coordinates).
-            return self.array.shape[1] % 2 == 1
-        return self.array.shape[1] == self.data_colnb + 1
-
-    @property
-    def raw_data(self):
-        """Return raw data (array without ROI informations)"""
-        if self.is_first_column_roi_index():
-            # Column 0 is the ROI index
-            return self.array[:, 1:]
-        # No ROI index
-        return self.array
 
     def transform_coordinates(self, func: Callable[[np.ndarray], None]) -> None:
         """Transform shape coordinates.
@@ -633,11 +624,6 @@ class ResultShape(BaseResult):
             self.raw_data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
-
-    def check_array(self):
-        """Check if array is valid"""
-        assert len(self.array.shape) == 2
-        assert self.is_first_column_roi_index()
 
     def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
         """Iterate over metadata shape plot items.
