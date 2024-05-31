@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -40,7 +40,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.obj import ResultProperties, ResultShape, ROI1DParam, ShapeTypes, SignalObj
+from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
@@ -1169,14 +1169,20 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
 
 
 def calc_resultshape(
-    title: str, shapetype: ShapeTypes, obj: SignalObj, func: Callable, *args: Any
+    title: str,
+    shape: Literal[
+        "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+    ],
+    obj: SignalObj,
+    func: Callable,
+    *args: Any,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on a signal object,
     taking into account the signal ROIs.
 
     Args:
         title: result title
-        shapetype: result shape type
+        shape: result shape kind
         obj: input image object
         func: computation function
         *args: computation function arguments
@@ -1212,7 +1218,7 @@ def calc_resultshape(
             results = np.array([i_roi] + results.tolist())
             res.append(results)
     if res:
-        return ResultShape(title, np.vstack(res), shapetype)
+        return ResultShape(title, np.vstack(res), shape)
     return None
 
 
@@ -1252,7 +1258,7 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
     """
     return calc_resultshape(
         "fwhm",
-        ShapeTypes.SEGMENT,
+        "segment",
         obj,
         alg.fwhm,
         param.method,
@@ -1270,7 +1276,7 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, obj, alg.fw1e2)
+    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1305,7 +1311,7 @@ def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
     Returns:
         Result properties with bandwidth
     """
-    return calc_resultshape("bandwidth", ShapeTypes.SEGMENT, obj, alg.bandwidth, 3.0)
+    return calc_resultshape("bandwidth", "segment", obj, alg.bandwidth, 3.0)
 
 
 class DynamicParam(gds.DataSet):

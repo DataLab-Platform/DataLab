@@ -11,6 +11,8 @@ Functions creating test data: curves, images, ...
 
 from __future__ import annotations
 
+from typing import Generator
+
 import guidata.dataset as gds
 import numpy as np
 
@@ -592,25 +594,20 @@ def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     return image
 
 
-def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
+def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
     """Create test result shapes (core.model.base.ResultShape test objects)
 
-    Returns:
-        Tuple of ResultShape objects
+    Yields:
+        ResultShape object
     """
-    RShape, SType = cdl.obj.ResultShape, cdl.obj.ShapeTypes
-    return (
-        RShape(
-            "circle",
-            [[0, 250, 250, 200], [0, 250, 250, 140]],
-            SType.CIRCLE,
-        ),
-        RShape("rectangle", [0, 300, 200, 700, 700], SType.RECTANGLE),
-        RShape("segment", [0, 50, 250, 400, 400], SType.SEGMENT),
-        RShape("point", [[0, 500, 500], [0, 15, 400]], SType.POINT),
-        RShape(
+    for shape, data in (
+        ("circle", [[0, 250, 250, 200], [0, 250, 250, 140]]),
+        ("rectangle", [0, 300, 200, 700, 700]),
+        ("segment", [0, 50, 250, 400, 400]),
+        ("point", [[0, 500, 500], [0, 15, 400]]),
+        (
             "polygon",
             [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
-            SType.POLYGON,
         ),
-    )
+    ):
+        yield cdl.obj.ResultShape(shape, data, shape)

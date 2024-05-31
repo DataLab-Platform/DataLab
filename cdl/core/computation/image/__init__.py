@@ -13,7 +13,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -42,7 +42,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
+from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape
 from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
@@ -1281,14 +1281,20 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
 
 
 def calc_resultshape(
-    title: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
+    title: str,
+    shape: Literal[
+        "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+    ],
+    obj: ImageObj,
+    func: Callable,
+    *args: Any,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on an image object,
     taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
 
     Args:
         title: result title
-        shapetype: result shape type
+        shape: result shape kind
         obj: input image object
         func: computation function
         *args: computation function arguments
@@ -1367,7 +1373,7 @@ def calc_resultshape(
                 row += coords.shape[0]
         else:
             array = np.vstack(res)
-        return ResultShape(title, array, shapetype)
+        return ResultShape(title, array, shape)
     return None
 
 
@@ -1393,7 +1399,7 @@ def compute_centroid(image: ImageObj) -> ResultShape | None:
     Returns:
         Centroid coordinates
     """
-    return calc_resultshape("centroid", ShapeTypes.MARKER, image, get_centroid_coords)
+    return calc_resultshape("centroid", "marker", image, get_centroid_coords)
 
 
 def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
@@ -1420,7 +1426,7 @@ def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
         Diameter coords
     """
     return calc_resultshape(
-        "enclosing_circle", ShapeTypes.CIRCLE, image, get_enclosing_circle_coords
+        "enclosing_circle", "circle", image, get_enclosing_circle_coords
     )
 
 
@@ -1450,7 +1456,7 @@ def compute_hough_circle_peaks(
     """
     return calc_resultshape(
         "hough_circle_peak",
-        ShapeTypes.CIRCLE,
+        "circle",
         image,
         alg.get_hough_circle_peaks,
         p.min_radius,

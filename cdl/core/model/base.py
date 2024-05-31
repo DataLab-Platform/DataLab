@@ -14,7 +14,7 @@ import json
 import sys
 from collections.abc import Callable, Iterable
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -149,7 +149,6 @@ class ShapeTypes(enum.Enum):
 
     # Reimplement enum.Enum method as suggested by Python documentation:
     # https://docs.python.org/3/library/enum.html#enum.Enum._generate_next_value_
-    # Here, it is only needed for ImageDatatypes (see core/model/image.py).
     # pylint: disable=unused-argument,no-self-argument,no-member
     def _generate_next_value_(name, start, count, last_values):
         return f"_{name.lower()[:3]}_"
@@ -213,23 +212,23 @@ class BaseResult:
     used by :py:class`cdl.core.gui.processor.base.BaseProcessor.compute_10` method.
 
     Args:
-        prefix: result prefix (used for metadata key)
         title: result title
         category: result category
         array: result array (one row per ROI, first column is ROI index)
         labels: result labels (one label per column of result array)
     """
 
+    PREFIX = ""  # To be overriden in children classes
+    METADATA_ATTRS = ()  # To be overriden in children classes
+
     def __init__(
         self,
-        prefix: str,
         title: str,
         category: str,
         array: np.ndarray,
         labels: list[str] | None = None,
     ) -> None:
         assert isinstance(title, str)
-        self.prefix = prefix
         self.title = title
         self.category = category
         self.array = array
@@ -292,12 +291,23 @@ class BaseResult:
     @property
     def key(self) -> str:
         """Return metadata key associated to result"""
-        return self.prefix + self.title
+        return self.PREFIX + self.title
 
     @classmethod
     def from_metadata_entry(cls, key: str, value: dict[str, Any]) -> BaseResult | None:
         """Create metadata shape object from (key, value) metadata entry"""
-        raise NotImplementedError
+        if (
+            isinstance(key, str)
+            and key.startswith(cls.PREFIX)
+            and isinstance(value, dict)
+        ):
+            try:
+                title = key[len(cls.PREFIX) :]
+                instance = cls(title, **value)
+                return instance
+            except (ValueError, TypeError):
+                pass
+        return None
 
     @classmethod
     def match(cls, key, value) -> bool:
@@ -310,7 +320,17 @@ class BaseResult:
         Args:
             obj: object (signal/image)
         """
-        raise NotImplementedError
+        self.set_obj_metadata(obj)
+
+    def set_obj_metadata(self, obj: BaseObj) -> None:
+        """Set object metadata with properties
+
+        Args:
+            obj: object
+        """
+        obj.metadata[self.key] = {
+            key: getattr(self, key) for key in self.METADATA_ATTRS
+        }
 
 
 class ResultProperties(BaseResult):
@@ -343,13 +363,12 @@ class ResultProperties(BaseResult):
     """
 
     PREFIX = "_properties_"
+    METADATA_ATTRS = ("array", "labels", "item_json")
 
     def __init__(
         self, title: str, array: np.ndarray, labels: list[str], item_json: str = ""
     ) -> None:
-        super().__init__(
-            self.PREFIX, title, _("Properties") + f" | {title}", array, labels
-        )
+        super().__init__(title, _("Properties") + f" | {title}", array, labels)
         assert len(labels) == self.array.shape[1] - 1
         self.item_json = item_json  # JSON string of label item associated to this obj
 
@@ -368,24 +387,6 @@ class ResultProperties(BaseResult):
         """
         return self.raw_data
 
-    @classmethod
-    def from_metadata_entry(
-        cls, key: str, value: dict[str, Any]
-    ) -> ResultProperties | None:
-        """Create metadata shape object from (key, value) metadata entry"""
-        if (
-            isinstance(key, str)
-            and key.startswith(cls.PREFIX)
-            and isinstance(value, dict)
-        ):
-            try:
-                title = key[len(cls.PREFIX) :]
-                instance = cls(title, **value)
-                return instance
-            except (ValueError, TypeError):
-                pass
-        return None
-
     def add_to(self, obj: BaseObj) -> None:
         """Add result to object metadata
 
@@ -393,9 +394,9 @@ class ResultProperties(BaseResult):
             obj: object (signal/image)
         """
         item = self.create_plot_item(obj)
-        self.update_obj_metadata(obj, item)
+        self.update_obj_metadata_from_item(obj, item)
 
-    def update_obj_metadata(self, obj: BaseObj, item: LabelItem) -> None:
+    def update_obj_metadata_from_item(self, obj: BaseObj, item: LabelItem) -> None:
         """Update object metadata with label item
 
         Args:
@@ -403,9 +404,7 @@ class ResultProperties(BaseResult):
             item: label item
         """
         self.item_json = items_to_json([item])
-        obj.metadata[self.key] = {
-            key: getattr(self, key) for key in ("labels", "array", "item_json")
-        }
+        self.set_obj_metadata(obj)
 
     def create_plot_item(self, obj: BaseObj) -> LabelItem:
         """Create label item
@@ -456,7 +455,7 @@ class ResultShape(BaseResult):
         title: result shape title
         array: shape coordinates (multiple shapes: one shape per row),
          first column is ROI index (0 if there is no ROI)
-        shapetype: shape type
+        shape: shape kind
 
     Raises:
         AssertionError: invalid argument
@@ -476,10 +475,23 @@ class ResultShape(BaseResult):
         - ``array = np.array([[1, 2]])``
     """
 
-    def __init__(self, title: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        assert isinstance(shapetype, ShapeTypes)
-        self.shapetype = shapetype
-        super().__init__(shapetype.value, title, shapetype.name.capitalize(), array)
+    PREFIX = "_shapes_"
+    METADATA_ATTRS = ("array", "shape")
+
+    def __init__(
+        self,
+        title: str,
+        array: np.ndarray,
+        shape: Literal[
+            "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+        ],
+    ) -> None:
+        self.shape = shape
+        try:
+            self.shapetype = ShapeTypes[shape.upper()]
+        except KeyError:
+            raise ValueError(f"Invalid shapetype {shape}")
+        super().__init__(title, shape.upper(), array)
 
     def check_array(self) -> None:
         """Check if array attribute is valid
@@ -576,45 +588,6 @@ class ResultShape(BaseResult):
             area = np.pi * arr[:, 3] * arr[:, 4]
             return area.reshape(-1, 1)
         return None
-
-    @classmethod
-    def label_shapetype_from_key(cls, key: str):
-        """Return metadata shape label and shapetype from metadata key"""
-        for member in ShapeTypes:
-            if key.startswith(member.value):
-                label = key[len(member.value) :]
-                return label, member
-        raise ValueError(f"Invalid metadata key `{key}`")
-
-    @classmethod
-    def from_metadata_entry(cls, key, value) -> ResultShape | None:
-        """Create metadata shape object from (key, value) metadata entry"""
-        if isinstance(key, str) and isinstance(value, np.ndarray):
-            try:
-                label, shapetype = cls.label_shapetype_from_key(key)
-                return cls(label, value, shapetype)
-            except ValueError:
-                pass
-        return None
-
-    def add_to(self, obj: BaseObj):
-        """Add result to object metadata
-
-        Args:
-            obj: object (signal/image)
-        """
-        obj.metadata[self.key] = self.array
-        comp_arr = self.__get_complementary_array()
-        if comp_arr is not None:
-            #  Automatically adds segment norm / circle area to object metadata
-            arr = self.array
-            comp_lbl = self.__get_complementary_xlabels()
-            assert comp_lbl is not None
-            for index, label in enumerate(comp_lbl):
-                results = np.zeros((arr.shape[0], 2), dtype=arr.dtype)
-                results[:, 0] = arr[:, 0]  # ROI indexes
-                results[:, 1] = comp_arr[:, index]
-                obj.metadata[self.title + label] = results
 
     def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
         """Merge object resultshape with another's: obj <-- other_obj

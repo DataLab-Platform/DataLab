@@ -73,7 +73,7 @@ def compute_peak_detection(
         Peak coordinates
     """
     return calc_resultshape(
-        "peak", ShapeTypes.POINT, image, get_2d_peaks_coords, p.size, p.threshold
+        "peak", "point", image, get_2d_peaks_coords, p.size, p.threshold
     )
 
 
@@ -98,9 +98,8 @@ class ContourShapeParam(GenericDetectionParam):
 
 def compute_contour_shape(image: ImageObj, p: ContourShapeParam) -> ResultShape | None:
     """Compute contour shape fit"""
-    shapetype = getattr(ShapeTypes, p.shape.upper())
     return calc_resultshape(
-        "contour", shapetype, image, get_contour_shapes, p.shape, p.threshold
+        "contour", p.shape, image, get_contour_shapes, p.shape, p.threshold
     )
 
 
@@ -170,7 +169,7 @@ def compute_blob_dog(image: ImageObj, p: BlobDOGParam) -> ResultShape | None:
     """
     return calc_resultshape(
         "blob_dog",
-        ShapeTypes.CIRCLE,
+        "circle",
         image,
         find_blobs_dog,
         p.min_sigma,
@@ -207,7 +206,7 @@ def compute_blob_doh(image: ImageObj, p: BlobDOHParam) -> ResultShape | None:
     """
     return calc_resultshape(
         "blob_doh",
-        ShapeTypes.CIRCLE,
+        "circle",
         image,
         find_blobs_doh,
         p.min_sigma,
@@ -240,7 +239,7 @@ def compute_blob_log(image: ImageObj, p: BlobLOGParam) -> ResultShape | None:
     """
     return calc_resultshape(
         "blob_log",
-        ShapeTypes.CIRCLE,
+        "circle",
         image,
         find_blobs_log,
         p.min_sigma,
@@ -401,7 +400,7 @@ def compute_blob_opencv(image: ImageObj, p: BlobOpenCVParam) -> ResultShape | No
     """
     return calc_resultshape(
         "blob_opencv",
-        ShapeTypes.CIRCLE,
+        "circle",
         image,
         find_blobs_opencv,
         p.min_threshold,
