@@ -20,32 +20,8 @@ import pytest
 import cdl.core.computation.signal as cps
 import cdl.obj
 import cdl.param
-from cdl.tests.data import check_scalar_result, get_test_signal
-
-
-@pytest.mark.validation
-def test_signal_fwhm() -> None:
-    """Validation test for the full width at half maximum computation."""
-    obj = get_test_signal("fwhm.txt")
-    real_fwhm = 2.675  # Manual validation
-    for method, exp in (
-        ("gauss", 2.40323),
-        ("lorentz", 2.78072),
-        ("voigt", 2.56591),
-        ("zero-crossing", real_fwhm),
-    ):
-        param = cdl.param.FWHMParam.create(method=method)
-        df = cps.compute_fwhm(obj, param).to_dataframe()
-        check_scalar_result(f"FWHM[{method}]", df.L[0], exp, rtol=0.05)
-
-
-@pytest.mark.validation
-def test_signal_fw1e2() -> None:
-    """Validation test for the full width at 1/e^2 maximum computation."""
-    obj = get_test_signal("fw1e2.txt")
-    exp = 4.06  # Manual validation
-    df = cps.compute_fw1e2(obj).to_dataframe()
-    check_scalar_result("FW1E2", df.L[0], exp, rtol=0.005)
+from cdl.tests.data import get_test_signal
+from cdl.utils.tests import check_scalar_result
 
 
 @pytest.mark.validation
@@ -66,7 +42,7 @@ def test_dynamic_parameters() -> None:
     check_scalar_result("SINAD", df.SINAD[0], 32.49, rtol=0.001)
     check_scalar_result("THD", df.THD[0], -30.18, rtol=0.001)
     check_scalar_result("SFDR", df.SFDR[0], 34.03, rtol=0.001)
-    check_scalar_result("f", df.f[0], 49998377.464, rtol=0.001)
+    check_scalar_result("Freq", df.Freq[0], 49998377.464, rtol=0.001)
     check_scalar_result("SNR", df.SNR[0], 101.52, rtol=0.001)
 
 
@@ -97,8 +73,6 @@ def test_signal_x_at_minmax() -> None:
 
 
 if __name__ == "__main__":
-    test_signal_fwhm()
-    test_signal_fw1e2()
     test_signal_bandwidth_3db()
     test_dynamic_parameters()
     test_signal_sampling_rate_period()

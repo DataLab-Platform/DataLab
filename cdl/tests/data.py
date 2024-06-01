@@ -11,12 +11,13 @@ Functions creating test data: curves, images, ...
 
 from __future__ import annotations
 
+from typing import Generator
+
 import guidata.dataset as gds
 import numpy as np
 
 import cdl.obj
 from cdl.config import _
-from cdl.env import execenv
 from cdl.utils.tests import get_test_fnames
 
 
@@ -42,34 +43,6 @@ def get_test_image(filename: str) -> cdl.obj.ImageObj:
         Image object
     """
     return cdl.obj.read_image(get_test_fnames(filename)[0])
-
-
-def __array_to_str(data: np.ndarray) -> str:
-    """Return a compact description of the array properties"""
-    dims = "×".join(str(dim) for dim in data.shape)
-    return f"{dims},{data.dtype},{data.min():.2g}→{data.max():.2g},µ={data.mean():.2g}"
-
-
-def check_array_result(
-    title: str,
-    res: np.ndarray,
-    exp: np.ndarray,
-    rtol: float = 1.0e-5,
-    atol: float = 1.0e-8,
-) -> None:
-    """Assert that two arrays are almost equal."""
-    restxt = f"{title}: {__array_to_str(res)} (expected: {__array_to_str(exp)})"
-    execenv.print(restxt)
-    assert np.allclose(res, exp, rtol=rtol, atol=atol), restxt
-
-
-def check_scalar_result(
-    title: str, res: float, exp: float, rtol: float = 1.0e-5, atol: float = 1.0e-8
-) -> None:
-    """Assert that two scalars are almost equal."""
-    restxt = f"{title}: {res} (expected: {exp})"
-    execenv.print(restxt)
-    assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt
 
 
 def create_paracetamol_signal(
@@ -169,7 +142,7 @@ def create_noisy_signal(
     newparam.title = "Test signal (noisy)" if newparam.title is None else newparam.title
     if addparam is None:
         addparam = cdl.obj.GaussLorentzVoigtParam()
-    if noised is not None and noiseparam is None:
+    if noised is not None and noised and noiseparam is None:
         noiseparam = GaussianNoiseParam()
         noiseparam.sigma = 5.0
     sig = cdl.obj.create_signal_from_param(newparam, addparam)
@@ -592,25 +565,37 @@ def create_annotated_image(title: str | None = None) -> cdl.obj.ImageObj:
     return image
 
 
-def create_resultshapes() -> tuple[cdl.obj.ResultShape, ...]:
+def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
     """Create test result shapes (core.model.base.ResultShape test objects)
 
-    Returns:
-        Tuple of ResultShape objects
+    Yields:
+        ResultShape object
     """
-    RShape, SType = cdl.obj.ResultShape, cdl.obj.ShapeTypes
-    return (
-        RShape(
-            "circle",
-            [[0, 250, 250, 200], [0, 250, 250, 140]],
-            SType.CIRCLE,
-        ),
-        RShape("rectangle", [0, 300, 200, 700, 700], SType.RECTANGLE),
-        RShape("segment", [0, 50, 250, 400, 400], SType.SEGMENT),
-        RShape("point", [[0, 500, 500], [0, 15, 400]], SType.POINT),
-        RShape(
+    for shape, data in (
+        ("circle", [[0, 250, 250, 200], [0, 250, 250, 140]]),
+        ("rectangle", [0, 300, 200, 700, 700]),
+        ("segment", [0, 50, 250, 400, 400]),
+        ("point", [[0, 500, 500], [0, 15, 400]]),
+        (
             "polygon",
             [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
-            SType.POLYGON,
         ),
-    )
+    ):
+        yield cdl.obj.ResultShape(shape, data, shape)
+
+
+def create_resultproperties() -> Generator[cdl.obj.ResultProperties, None, None]:
+    """Create test result properties (core.model.base.ResultProperties test object)
+
+    Returns:
+        ResultProperties object
+    """
+    for title, data, labels in (
+        ("TestProperties1", [0, 2.5, -30909, 1.0, 0.0], ["A", "B", "C", "D"]),
+        (
+            "TestProperties2",
+            [[0, 1.232325, -9, 0, 10], [0, 250, -3, 12.0, 530.0]],
+            ["P1", "P2", "P3", "P4"],
+        ),
+    ):
+        yield cdl.obj.ResultProperties(title, data, labels)

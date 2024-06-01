@@ -203,7 +203,11 @@ class CDLExecEnv:
         return pprint.pformat(self.to_dict())
 
     def enable_demo_mode(self, delay: int):
-        """Enable demo mode"""
+        """Enable demo mode
+
+        Args:
+            delay: Delay (ms) before quitting application in unattended mode
+        """
         self.demo_mode = True
         self.unattended = True
         self.delay = delay
@@ -300,7 +304,7 @@ class CDLExecEnv:
 
     @property
     def delay(self):
-        """Delay (seconds) before quitting application in unattended mode"""
+        """Delay (ms) before quitting application in unattended mode"""
         try:
             return int(os.environ.get(self.DELAY_ENV))
         except (TypeError, ValueError):
@@ -308,7 +312,7 @@ class CDLExecEnv:
 
     @delay.setter
     def delay(self, value: int):
-        """Set delay (seconds) before quitting application in unattended mode"""
+        """Set delay (ms) before quitting application in unattended mode"""
         os.environ[self.DELAY_ENV] = str(value)
 
     @property
@@ -375,7 +379,7 @@ class CDLExecEnv:
             "--" + self.DELAY_ARG,
             type=int,
             default=None,
-            help="delay (seconds) before quitting application in unattended mode",
+            help="delay (ms) before quitting application in unattended mode",
         )
         parser.add_argument(
             "--" + self.XMLRPCPORT_ARG,
@@ -486,7 +490,7 @@ class CDLExecEnv:
             unattended: whether to run in unattended mode
             accept_dialogs: whether to accept dialogs in unattended mode
             screenshot: whether to take screenshots
-            delay: delay (seconds) before quitting application in unattended mode
+            delay: delay (ms) before quitting application in unattended mode
             verbose: verbosity level
             xmlrpcport: XML-RPC port number
             catcher_test: whether to run catcher test

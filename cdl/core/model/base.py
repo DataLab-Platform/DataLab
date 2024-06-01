@@ -14,7 +14,7 @@ import json
 import sys
 from collections.abc import Callable, Iterable
 from copy import deepcopy
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -31,10 +31,17 @@ from cdl.algorithms.datatypes import is_integer_dtype
 from cdl.config import PLOTPY_CONF, Conf, _
 
 if TYPE_CHECKING:
-    from plotpy.items import AbstractShape, CurveItem, MaskedImageItem
-
-    from cdl.core.model.image import ImageObj
-    from cdl.core.model.signal import SignalObj
+    from plotpy.items import (
+        AbstractShape,
+        AnnotatedCircle,
+        AnnotatedEllipse,
+        AnnotatedRectangle,
+        AnnotatedSegment,
+        CurveItem,
+        Marker,
+        MaskedImageItem,
+        PolygonShape,
+    )
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -44,8 +51,9 @@ def deepcopy_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
     """Deepcopy metadata, except keys starting with "_" (private keys)
     with the exception of "_roi_" and "_ann_" keys."""
     mdcopy = deepcopy(metadata)
-    for key in metadata:
-        if key.startswith("_") and key not in (ROI_KEY, ANN_KEY):
+    for key, value in metadata.items():
+        rshape = ResultShape.from_metadata_entry(key, value)
+        if rshape is None and key.startswith("_") and key not in (ROI_KEY, ANN_KEY):
             mdcopy.pop(key)
     return mdcopy
 
@@ -141,7 +149,6 @@ class ShapeTypes(enum.Enum):
 
     # Reimplement enum.Enum method as suggested by Python documentation:
     # https://docs.python.org/3/library/enum.html#enum.Enum._generate_next_value_
-    # Here, it is only needed for ImageDatatypes (see core/model/image.py).
     # pylint: disable=unused-argument,no-self-argument,no-member
     def _generate_next_value_(name, start, count, last_values):
         return f"_{name.lower()[:3]}_"
@@ -205,30 +212,63 @@ class BaseResult:
     used by :py:class`cdl.core.gui.processor.base.BaseProcessor.compute_10` method.
 
     Args:
-        prefix: result prefix (used for metadata key)
-        label: result label
-        headers: result headers (one header per column of result array). Optional.
+        title: result title
+        category: result category
+        array: result array (one row per ROI, first column is ROI index)
+        labels: result labels (one label per column of result array)
     """
 
+    PREFIX = ""  # To be overriden in children classes
+    METADATA_ATTRS = ()  # To be overriden in children classes
+
     def __init__(
-        self, prefix: str, label: str, headers: list[str] | None = None
+        self,
+        title: str,
+        category: str,
+        array: np.ndarray,
+        labels: list[str] | None = None,
     ) -> None:
-        assert isinstance(label, str)
-        self.prefix = prefix
-        self.label = label
-        self.shown_label = label
-        if label.endswith("s"):
-            self.shown_label = label[:-1]
-        self.shown_category = ""
+        assert isinstance(title, str)
+        self.title = title
+        self.category = category
+        self.array = array
+        self.check_array()
         self.xunit: str = ""
         self.yunit: str = ""
-        self.array: np.ndarray = np.array([])
-        self.__headers = headers
+        self.__labels = labels
+
+    def check_array(self) -> None:
+        """Check if array attribute is valid
+
+        Raises:
+            AssertionError: invalid array
+        """
+        # Allow to pass a list of lists or a NumPy array.
+        # For instance, the following are equivalent:
+        #   array = [[1, 2], [3, 4]]
+        #   array = np.array([[1, 2], [3, 4]])
+        # Or, for only one line (one single result), the following are equivalent:
+        #   array = [1, 2]
+        #   array = [[1, 2]]
+        #   array = np.array([[1, 2]])
+        if isinstance(self.array, (list, tuple)):
+            if isinstance(self.array[0], (list, tuple)):
+                self.array = np.array(self.array)
+            else:
+                self.array = np.array([self.array])
+        assert isinstance(self.array, np.ndarray)
+        assert len(self.array.shape) == 2
+
+    @property
+    def labels(self) -> list[str] | None:
+        """Return result labels (one label per column of result array)"""
+        return self.__labels
 
     @property
     def headers(self) -> list[str] | None:
         """Return result headers (one header per column of result array)"""
-        return self.__headers
+        # Default implementation: return labels
+        return self.__labels
 
     def to_dataframe(self) -> pd.DataFrame:
         """Return DataFrame from properties array"""
@@ -244,31 +284,53 @@ class BaseResult:
         raise NotImplementedError
 
     @property
-    def data(self):
+    def raw_data(self):
         """Return raw data (array without ROI informations)"""
-        raise NotImplementedError
+        return self.array[:, 1:]
 
     @property
     def key(self) -> str:
         """Return metadata key associated to result"""
-        return self.prefix + self.label
+        return self.PREFIX + self.title
 
-    def update_units_from(self, obj: ImageObj | SignalObj) -> None:
-        """Update units from object metadata
+    @classmethod
+    def from_metadata_entry(cls, key: str, value: dict[str, Any]) -> BaseResult | None:
+        """Create metadata shape object from (key, value) metadata entry"""
+        if (
+            isinstance(key, str)
+            and key.startswith(cls.PREFIX)
+            and isinstance(value, dict)
+        ):
+            try:
+                title = key[len(cls.PREFIX) :]
+                instance = cls(title, **value)
+                return instance
+            except (ValueError, TypeError):
+                pass
+        return None
 
-        Args:
-            obj: object
-        """
-        self.xunit = obj.xunit
-        self.yunit = obj.yunit
+    @classmethod
+    def match(cls, key, value) -> bool:
+        """Return True if metadata dict entry (key, value) is a metadata result"""
+        return cls.from_metadata_entry(key, value) is not None
 
     def add_to(self, obj: BaseObj) -> None:
-        """Add metadata shape to object
+        """Add result to object metadata
 
         Args:
             obj: object (signal/image)
         """
-        raise NotImplementedError
+        self.set_obj_metadata(obj)
+
+    def set_obj_metadata(self, obj: BaseObj) -> None:
+        """Set object metadata with properties
+
+        Args:
+            obj: object
+        """
+        obj.metadata[self.key] = {
+            key: getattr(self, key) for key in self.METADATA_ATTRS
+        }
 
 
 class ResultProperties(BaseResult):
@@ -280,49 +342,41 @@ class ResultProperties(BaseResult):
     ROI index is starting at 0 (or is simply 0 if there is no ROI).
 
     Args:
-        label: properties label
+        title: properties title
         array: properties array
-        headers: properties headers (one header per column of properties array)
+        labels: properties labels (one label per column of result array)
+        item_json: JSON string of label item associated to this obj
+
+    .. note::
+
+        The `array` argument can be a list of lists or a NumPy array. For instance,
+        the following are equivalent:
+
+        - ``array = [[1, 2], [3, 4]]``
+        - ``array = np.array([[1, 2], [3, 4]])``
+
+        Or for only one line (one single result), the following are equivalent:
+
+        - ``array = [1, 2]``
+        - ``array = [[1, 2]]``
+        - ``array = np.array([[1, 2]])``
     """
 
     PREFIX = "_properties_"
+    METADATA_ATTRS = ("array", "labels", "item_json")
 
     def __init__(
-        self, label: str, array: np.ndarray, headers: list[str], item_json: str = ""
+        self, title: str, array: np.ndarray, labels: list[str], item_json: str = ""
     ) -> None:
-        super().__init__(self.PREFIX, label, headers)
-        self.shown_category = _("Properties") + f" | {self.shown_label}"
-        self.array = array
-        assert len(headers) == self.data.shape[1]
+        super().__init__(title, _("Properties") + f" | {title}", array, labels)
+        assert len(labels) == self.array.shape[1] - 1
         self.item_json = item_json  # JSON string of label item associated to this obj
 
-    @classmethod
-    def from_metadata_entry(
-        cls, key: str, value: dict[str, Any]
-    ) -> ResultProperties | None:
-        """Create metadata shape object from (key, value) metadata entry"""
-        if (
-            isinstance(key, str)
-            and key.startswith(cls.PREFIX)
-            and isinstance(value, dict)
-        ):
-            try:
-                label = key[len(cls.PREFIX) :]
-                instance = cls(label, **value)
-                return instance
-            except (ValueError, TypeError):
-                pass
-        return None
-
-    @classmethod
-    def match(cls, key, value) -> bool:
-        """Return True if metadata dict entry (key, value) is a metadata result"""
-        return cls.from_metadata_entry(key, value) is not None
-
     @property
-    def data(self):
-        """Return raw data (array without ROI informations)"""
-        return self.array[:, 1:]
+    def headers(self) -> list[str] | None:
+        """Return result headers (one header per column of result array)"""
+        # ResultProperties implementation: return labels without units or "=" sign
+        return [label.split("=")[0].strip() for label in self.labels]
 
     @property
     def shown_array(self) -> np.ndarray:
@@ -331,18 +385,18 @@ class ResultProperties(BaseResult):
         Returns:
             Array of shown results
         """
-        return self.data
+        return self.raw_data
 
     def add_to(self, obj: BaseObj) -> None:
-        """Add metadata shape to object
+        """Add result to object metadata
 
         Args:
             obj: object (signal/image)
         """
-        item = self.create_plot_item()
-        self.update_obj_metadata(obj, item)
+        item = self.create_plot_item(obj)
+        self.update_obj_metadata_from_item(obj, item)
 
-    def update_obj_metadata(self, obj: BaseObj, item: LabelItem) -> None:
+    def update_obj_metadata_from_item(self, obj: BaseObj, item: LabelItem) -> None:
         """Update object metadata with label item
 
         Args:
@@ -350,11 +404,9 @@ class ResultProperties(BaseResult):
             item: label item
         """
         self.item_json = items_to_json([item])
-        obj.metadata[self.key] = {
-            key: getattr(self, key) for key in ("headers", "array", "item_json")
-        }
+        self.set_obj_metadata(obj)
 
-    def create_plot_item(self) -> LabelItem:
+    def create_plot_item(self, obj: BaseObj) -> LabelItem:
         """Create label item
 
         Returns:
@@ -363,15 +415,17 @@ class ResultProperties(BaseResult):
         text = ""
         for i_row in range(self.array.shape[0]):
             suffix = f"|ROI{i_row}" if i_row > 0 else ""
-            text += f"<u>{self.label}{suffix}</u>:"
-            for i_col, label in enumerate(self.headers):
+            text += f"<u>{self.title}{suffix}</u>:"
+            for i_col, label in enumerate(self.labels):
                 # "label" may contains "<" and ">" characters which are interpreted
                 # as HTML tags by the LabelItem. We must escape them.
                 label = label.replace("<", "&lt;").replace(">", "&gt;")
-                text += f"<br>{label} = {self.data[i_row, i_col]}"
-            if i_row < self.data.shape[0] - 1:
+                if "%" not in label:
+                    label += " = %g"
+                text += "<br>" + label.strip().format(obj) % self.raw_data[i_row, i_col]
+            if i_row < self.raw_data.shape[0] - 1:
                 text += "<br><br>"
-        item = make.label(text, "TL", (0, 0), "TL", title=self.shown_label)
+        item = make.label(text, "TL", (0, 0), "TL", title=self.title)
         font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
         item.set_style("plot", "label/properties")
         item.labelparam.font.update_param(font)
@@ -398,74 +452,93 @@ class ResultShape(BaseResult):
     ROI index is starting at 0 (or is simply 0 if there is no ROI).
 
     Args:
-        label: shape label
+        title: result shape title
         array: shape coordinates (multiple shapes: one shape per row),
          first column is ROI index (0 if there is no ROI)
-        shapetype: shape type
+        shape: shape kind
 
     Raises:
         AssertionError: invalid argument
+
+    .. note::
+
+        The `array` argument can be a list of lists or a NumPy array. For instance,
+        the following are equivalent:
+
+        - ``array = [[1, 2], [3, 4]]``
+        - ``array = np.array([[1, 2], [3, 4]])``
+
+        Or for only one line (one single result), the following are equivalent:
+
+        - ``array = [1, 2]``
+        - ``array = [[1, 2]]``
+        - ``array = np.array([[1, 2]])``
     """
 
-    def __init__(self, label: str, array: np.ndarray, shapetype: ShapeTypes) -> None:
-        super().__init__(shapetype.value, label)
-        assert isinstance(shapetype, ShapeTypes)
-        self.shapetype = shapetype
-        self.shown_category = shapetype.name.capitalize()
-        if isinstance(array, (list, tuple)):
-            if isinstance(array[0], (list, tuple)):
-                array = np.array(array)
-            else:
-                array = np.array([array])
-        assert isinstance(array, np.ndarray)
-        self.array = array
-        self.check_array()
+    PREFIX = "_shapes_"
+    METADATA_ATTRS = ("array", "shape")
 
-    @classmethod
-    def label_shapetype_from_key(cls, key: str):
-        """Return metadata shape label and shapetype from metadata key"""
-        for member in ShapeTypes:
-            if key.startswith(member.value):
-                label = key[len(member.value) :]
-                return label, member
-        raise ValueError(f"Invalid metadata key `{key}`")
+    def __init__(
+        self,
+        title: str,
+        array: np.ndarray,
+        shape: Literal[
+            "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+        ],
+    ) -> None:
+        self.shape = shape
+        try:
+            self.shapetype = ShapeTypes[shape.upper()]
+        except KeyError:
+            raise ValueError(f"Invalid shapetype {shape}")
+        super().__init__(title, shape.upper(), array)
 
-    @classmethod
-    def from_metadata_entry(cls, key, value) -> ResultShape | None:
-        """Create metadata shape object from (key, value) metadata entry"""
-        if isinstance(key, str) and isinstance(value, np.ndarray):
-            try:
-                label, shapetype = cls.label_shapetype_from_key(key)
-                return cls(label, value, shapetype)
-            except ValueError:
-                pass
-        return None
+    def check_array(self) -> None:
+        """Check if array attribute is valid
 
-    @classmethod
-    def match(cls, key, value) -> bool:
-        """Return True if metadata dict entry (key, value) is a metadata result"""
-        return cls.from_metadata_entry(key, value) is not None
+        Raises:
+            AssertionError: invalid array
+        """
+        super().check_array()
+        if self.shapetype is ShapeTypes.POLYGON:
+            # Polygon is a special case: the number of data columns is variable
+            # (2 columns per point). So we only check if the number of columns
+            # is odd, which means that the first column is the ROI index, followed
+            # by an even number of data columns (flattened x, y coordinates).
+            assert self.array.shape[1] % 2 == 1
+        else:
+            data_colnb = len(self.get_coords_labels())
+            # `data_colnb` is the number of data columns depends on the shape type,
+            # not counting the ROI index, hence the +1 in the following assertion
+            assert self.array.shape[1] == data_colnb + 1
+
+    def get_coords_labels(self) -> tuple[str]:
+        """Return shape coordinates labels
+
+        Returns:
+            Shape coordinates labels
+        """
+        if self.shapetype is ShapeTypes.POLYGON:
+            labels = []
+            for i in range(0, self.array.shape[1] - 1, 2):
+                labels += [f"x{i//2}", f"y{i//2}"]
+            return tuple(labels)
+        try:
+            return {
+                ShapeTypes.MARKER: ("x", "y"),
+                ShapeTypes.POINT: ("x", "y"),
+                ShapeTypes.RECTANGLE: ("x0", "y0", "x1", "y1"),
+                ShapeTypes.CIRCLE: ("x", "y", "r"),
+                ShapeTypes.SEGMENT: ("x0", "y0", "x1", "y1"),
+                ShapeTypes.ELLIPSE: ("x", "y", "a", "b", "θ"),
+            }[self.shapetype]
+        except KeyError:
+            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
 
     @property
     def headers(self) -> list[str] | None:
         """Return result headers (one header per column of result array)"""
-        if self.shapetype in (ShapeTypes.MARKER, ShapeTypes.POINT):
-            labels = "x", "y"
-        elif self.shapetype in (
-            ShapeTypes.RECTANGLE,
-            ShapeTypes.SEGMENT,
-            ShapeTypes.POLYGON,
-        ):
-            labels = []
-            for index in range(0, self.array.shape[1] - 1, 2):
-                labels += [f"x{index//2}", f"y{index//2}"]
-            labels = tuple(labels)
-        elif self.shapetype is ShapeTypes.CIRCLE:
-            labels = "x", "y", "r"
-        elif self.shapetype is ShapeTypes.ELLIPSE:
-            labels = "x", "y", "a", "b", "θ"
-        else:
-            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
+        labels = self.get_coords_labels()
         labels += self.__get_complementary_xlabels() or ()
         return labels[-self.shown_array.shape[1] :]
 
@@ -478,8 +551,8 @@ class ResultShape(BaseResult):
         """
         comp_arr = self.__get_complementary_array()
         if comp_arr is None:
-            return self.data
-        return np.hstack([self.data, comp_arr])
+            return self.raw_data
+        return np.hstack([self.raw_data, comp_arr])
 
     def __get_complementary_xlabels(self) -> tuple[str] | None:
         """Return complementary labels for result array columns
@@ -516,25 +589,6 @@ class ResultShape(BaseResult):
             return area.reshape(-1, 1)
         return None
 
-    def add_to(self, obj: BaseObj):
-        """Add metadata shape to object (signal/image)"""
-        obj.metadata[self.key] = self.array
-        if self.shapetype in (
-            ShapeTypes.SEGMENT,
-            ShapeTypes.CIRCLE,
-            ShapeTypes.ELLIPSE,
-        ):
-            #  Automatically adds segment norm / circle area to object metadata
-            arr = self.array
-            comp_arr = self.__get_complementary_array()
-            comp_lbl = self.__get_complementary_xlabels()
-            assert comp_lbl is not None and comp_arr is not None
-            for index, label in enumerate(comp_lbl):
-                results = np.zeros((arr.shape[0], 2), dtype=arr.dtype)
-                results[:, 0] = arr[:, 0]  # ROI indexes
-                results[:, 1] = comp_arr[:, index]
-                obj.metadata[self.label + label] = results
-
     def merge_with(self, obj: BaseObj, other_obj: BaseObj | None = None):
         """Merge object resultshape with another's: obj <-- other_obj
         or simply merge this resultshape with obj if other_obj is None"""
@@ -545,8 +599,7 @@ class ResultShape(BaseResult):
             other = ResultShape.from_metadata_entry(self.key, other_value)
             assert other is not None
             other_array = np.array(other.array, copy=True)
-            if other.is_first_column_roi_index():  # Column 0 is the ROI index
-                other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
+            other_array[:, 0] += self.array[-1, 0] + 1  # Adding ROI index offset
             if other_array.shape[1] != self.array.shape[1]:
                 # This can only happen if the shape is a polygon
                 assert self.shapetype is ShapeTypes.POLYGON
@@ -562,39 +615,6 @@ class ResultShape(BaseResult):
                 self.array = np.vstack([self.array, other_array])
         self.add_to(obj)
 
-    @property
-    def data_colnb(self):
-        """Return raw data results column number"""
-        if self.shapetype == ShapeTypes.POLYGON:
-            raise ValueError("Polygon has an undefined number of data columns")
-        return {
-            ShapeTypes.MARKER: 2,
-            ShapeTypes.POINT: 2,
-            ShapeTypes.RECTANGLE: 4,
-            ShapeTypes.CIRCLE: 3,
-            ShapeTypes.SEGMENT: 4,
-            ShapeTypes.ELLIPSE: 5,
-        }[self.shapetype]
-
-    def is_first_column_roi_index(self) -> bool:
-        """Return True if first column is ROI index"""
-        if self.shapetype is ShapeTypes.POLYGON:
-            # Polygon is a special case: the number of data columns is variable
-            # (2 columns per point). So we only check if the number of columns
-            # is odd, which means that the first column is the ROI index, followed
-            # by an even number of data columns (flattened x, y coordinates).
-            return self.array.shape[1] % 2 == 1
-        return self.array.shape[1] == self.data_colnb + 1
-
-    @property
-    def data(self):
-        """Return raw data (array without ROI informations)"""
-        if self.is_first_column_roi_index():
-            # Column 0 is the ROI index
-            return self.array[:, 1:]
-        # No ROI index
-        return self.array
-
     def transform_coordinates(self, func: Callable[[np.ndarray], None]) -> None:
         """Transform shape coordinates.
 
@@ -608,22 +628,17 @@ class ResultShape(BaseResult):
             ShapeTypes.RECTANGLE,
             ShapeTypes.SEGMENT,
         ):
-            func(self.data)
+            func(self.raw_data)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            coords = coordinates.array_circle_to_diameter(self.data)
+            coords = coordinates.array_circle_to_diameter(self.raw_data)
             func(coords)
-            self.data[:] = coordinates.array_circle_to_center_radius(coords)
+            self.raw_data[:] = coordinates.array_circle_to_center_radius(coords)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            coords = coordinates.array_ellipse_to_diameters(self.data)
+            coords = coordinates.array_ellipse_to_diameters(self.raw_data)
             func(coords)
-            self.data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
+            self.raw_data[:] = coordinates.array_ellipse_to_center_axes_angle(coords)
         else:
             raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
-
-    def check_array(self):
-        """Check if array is valid"""
-        assert len(self.array.shape) == 2
-        assert self.is_first_column_roi_index()
 
     def iterate_plot_items(self, fmt: str, lbl: bool, option: str) -> Iterable:
         """Iterate over metadata shape plot items.
@@ -636,14 +651,25 @@ class ResultShape(BaseResult):
         Yields:
             Plot item
         """
-        for args in self.data:
-            yield self.create_plot_item(args, fmt, lbl, option)
+        for coords in self.raw_data:
+            yield self.create_plot_item(coords, fmt, lbl, option)
 
-    def create_plot_item(self, args: np.ndarray, fmt: str, lbl: bool, option: str):
+    def create_plot_item(
+        self, coords: np.ndarray, fmt: str, lbl: bool, option: str
+    ) -> (
+        AnnotatedPoint
+        | Marker
+        | AnnotatedRectangle
+        | AnnotatedCircle
+        | AnnotatedSegment
+        | AnnotatedEllipse
+        | PolygonShape
+        | None
+    ):
         """Make plot item.
 
         Args:
-            args: shape data
+            coords: shape data
             fmt: numeric format (e.g. "%.3f")
             lbl: if True, show shape labels
             option: shape style option (e.g. "shape/drag")
@@ -652,9 +678,11 @@ class ResultShape(BaseResult):
             Plot item
         """
         if self.shapetype is ShapeTypes.MARKER:
-            item = self.make_marker_item(args, fmt)
+            x0, y0 = coords
+            item = self.__make_marker_item(x0, y0, fmt)
         elif self.shapetype is ShapeTypes.POINT:
-            item = AnnotatedPoint(*args)
+            x0, y0 = coords
+            item = AnnotatedPoint(x0, y0)
             sparam = item.shape.shapeparam
             sparam.symbol.marker = "Ellipse"
             sparam.symbol.size = 6
@@ -662,28 +690,28 @@ class ResultShape(BaseResult):
             sparam.sel_symbol.size = 6
             sparam.update_shape(item.shape)
             param = item.annotationparam
-            param.title = self.shown_label
+            param.title = self.title
             param.update_annotation(item)
         elif self.shapetype is ShapeTypes.RECTANGLE:
-            x0, y0, x1, y1 = args
-            item = make.annotated_rectangle(x0, y0, x1, y1, title=self.shown_label)
+            x0, y0, x1, y1 = coords
+            item = make.annotated_rectangle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.CIRCLE:
-            xc, yc, r = args
+            xc, yc, r = coords
             x0, y0, x1, y1 = coordinates.circle_to_diameter(xc, yc, r)
-            item = make.annotated_circle(x0, y0, x1, y1, title=self.shown_label)
+            item = make.annotated_circle(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.SEGMENT:
-            x0, y0, x1, y1 = args
-            item = make.annotated_segment(x0, y0, x1, y1, title=self.shown_label)
+            x0, y0, x1, y1 = coords
+            item = make.annotated_segment(x0, y0, x1, y1, title=self.title)
         elif self.shapetype is ShapeTypes.ELLIPSE:
-            xc, yc, a, b, t = args
+            xc, yc, a, b, t = coords
             coords = coordinates.ellipse_to_diameters(xc, yc, a, b, t)
             x0, y0, x1, y1, x2, y2, x3, y3 = coords
             item = make.annotated_ellipse(
-                x0, y0, x1, y1, x2, y2, x3, y3, title=self.shown_label
+                x0, y0, x1, y1, x2, y2, x3, y3, title=self.title
             )
         elif self.shapetype is ShapeTypes.POLYGON:
-            x, y = args[::2], args[1::2]
-            item = make.polygon(x, y, title=self.shown_label, closed=False)
+            x, y = coords[::2], coords[1::2]
+            item = make.polygon(x, y, title=self.title, closed=False)
         else:
             print(f"Warning: unsupported item {self.shapetype}", file=sys.stderr)
             return None
@@ -692,24 +720,29 @@ class ResultShape(BaseResult):
         set_plot_item_editable(item, False)
         return item
 
-    def make_marker_item(self, args, fmt):
-        """Make marker item"""
-        x0, y0 = args
+    def __make_marker_item(self, x0: float, y0: float, fmt: str) -> Marker:
+        """Make marker item
+
+        Args:
+            x0: x coordinate
+            y0: y coordinate
+            fmt: numeric format (e.g. '%.3f')
+        """
         if np.isnan(x0):
             mstyle = "-"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.shown_label + ": " + fmt) % y
+                return (self.title + ": " + fmt) % y
 
         elif np.isnan(y0):
             mstyle = "|"
 
             def label(x, y):  # pylint: disable=unused-argument
-                return (self.shown_label + ": " + fmt) % x
+                return (self.title + ": " + fmt) % x
 
         else:
             mstyle = "+"
-            txt = self.shown_label + ": (" + fmt + ", " + fmt + ")"
+            txt = self.title + ": (" + fmt + ", " + fmt + ")"
 
             def label(x, y):
                 return txt % (x, y)
@@ -961,9 +994,8 @@ class BaseObj(metaclass=BaseObjMeta):
         group = gds.DataSetGroup(roi_params, title=_("Regions of interest"))
         return group
 
-    @staticmethod
     @abc.abstractmethod
-    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -1236,6 +1268,28 @@ class BaseObj(metaclass=BaseObjMeta):
         if name not in self.__metadata_options:
             raise ValueError(f"Invalid metadata option name `{name}`")
         self.metadata[f"__{name}"] = value
+
+    def save_attr_to_metadata(self, attrname: str, new_value: Any) -> None:
+        """Save attribute to metadata
+
+        Args:
+            attrname: attribute name
+            new_value: new value
+        """
+        value = getattr(self, attrname)
+        if value:
+            self.metadata[f"orig_{attrname}"] = value
+        setattr(self, attrname, new_value)
+
+    def restore_attr_from_metadata(self, attrname: str, default: Any) -> None:
+        """Restore attribute from metadata
+
+        Args:
+            attrname: attribute name
+            default: default value
+        """
+        value = self.metadata.pop(f"orig_{attrname}", default)
+        setattr(self, attrname, value)
 
     def reset_metadata_to_defaults(self) -> None:
         """Reset metadata to default values"""

@@ -188,7 +188,7 @@ def play_demo(win: CDLMainWindow) -> None:
         QW.QMessageBox.Ok | QW.QMessageBox.Cancel,
     )
     if ret == QW.QMessageBox.Ok:
-        execenv.enable_demo_mode(DELAY1)
+        execenv.enable_demo_mode(int(DELAY1 * 1000))
         test_signal_features(win)
         test_image_features(win)
         qt_wait(DELAY3)

@@ -96,10 +96,10 @@ def cdl_app_context(
 
     # === Set application name and version ---------------------------------------------
     # pylint: disable=import-outside-toplevel
-    from cdl import __version__
+    from cdl.info import get_version
 
     QAPP_INSTANCE.setApplicationName(APP_NAME)
-    QAPP_INSTANCE.setApplicationVersion(__version__)
+    QAPP_INSTANCE.setApplicationVersion(get_version())
     QAPP_INSTANCE.setOrganizationName(APP_NAME + " project")
 
     if enable_logs:
@@ -143,13 +143,13 @@ def cdl_app_context(
             ) and not execenv.do_not_quit:  # pragma: no cover
                 if execenv.delay > 0:
                     mode = "Screenshot" if execenv.screenshot else "Unattended"
-                    message = f"{mode} mode (delay: {execenv.delay}s)"
-                    msec = execenv.delay * 1000 - 200
+                    message = f"{mode} mode (delay: {execenv.delay}ms)"
+                    msec = execenv.delay - 200
                     for widget in QW.QApplication.instance().topLevelWidgets():
                         if isinstance(widget, QW.QMainWindow):
                             widget.statusBar().showMessage(message, msec)
                 QC.QTimer.singleShot(
-                    execenv.delay * 1000,
+                    execenv.delay,
                     lambda: close_widgets_and_quit(screenshot=execenv.screenshot),
                 )
             if exec_loop and not exception_occured:

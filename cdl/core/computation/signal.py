@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -40,7 +40,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.obj import ResultProperties, ResultShape, ShapeTypes, SignalObj
+from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
 
@@ -275,13 +275,14 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     """
     suffix = None
     if len(group.datasets) == 1:
-        p = group.datasets[0]
-        suffix = f"indexes={p.col1:d}:{p.col2:d}"
+        p: ROI1DParam = group.datasets[0]
+        suffix = f"{p.xmin:.3g}≤x≤{p.xmax:.3g}"
     dst = dst_11(src, "extract_multiple_roi", suffix)
     x, y = src.get_data()
     xout, yout = np.ones_like(x) * np.nan, np.ones_like(y) * np.nan
     for p in group.datasets:
-        slice0 = slice(p.col1, p.col2 + 1)
+        idx1, idx2 = np.searchsorted(x, p.xmin), np.searchsorted(x, p.xmax)
+        slice0 = slice(idx1, idx2)
         xout[slice0], yout[slice0] = x[slice0], y[slice0]
     nans = np.isnan(xout) | np.isnan(yout)
     dst.set_xydata(xout[~nans], yout[~nans])
@@ -290,19 +291,19 @@ def extract_multiple_roi(src: SignalObj, group: gds.DataSetGroup) -> SignalObj:
     return dst
 
 
-def extract_single_roi(src: SignalObj, p: gds.DataSet) -> SignalObj:
+def extract_single_roi(src: SignalObj, p: ROI1DParam) -> SignalObj:
     """Extract single region of interest from data
 
     Args:
         src: source signal
-        p: parameters
+        p: ROI parameters
 
     Returns:
         Signal with single region of interest
     """
-    dst = dst_11(src, "extract_single_roi", f"indexes={p.col1:d}:{p.col2:d}")
-    x, y = src.get_data()
-    dst.set_xydata(x[p.col1 : p.col2 + 1], y[p.col1 : p.col2 + 1])
+    dst = dst_11(src, "extract_single_roi", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    x, y = p.get_data(src).copy()
+    dst.set_xydata(x, y)
     # TODO: [P2] Instead of removing geometric shapes, apply roi extract
     dst.remove_all_shapes()
     return dst
@@ -577,6 +578,23 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     return dst
 
 
+def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:
+    """Correct offset: subtract the mean value of the signal in the specified range
+    (baseline correction)
+
+    Args:
+        src: source signal
+        p: parameters
+
+    Returns:
+        Result signal object
+    """
+    dst = dst_11(src, "offset_correction", f"{p.xmin:.3g}≤x≤{p.xmax:.3g}")
+    _roi_x, roi_y = p.get_data(src)
+    dst.y -= np.mean(roi_y)
+    return dst
+
+
 def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     """Compute gaussian filter
 
@@ -802,6 +820,9 @@ def compute_fft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     dst = dst_11(src, "fft")
     x, y = src.get_data()
     dst.set_xydata(*alg.fft1d(x, y, shift=True if p is None else p.shift))
+    dst.save_attr_to_metadata("xunit", "Hz" if dst.xunit == "s" else "")
+    dst.save_attr_to_metadata("yunit", "")
+    dst.save_attr_to_metadata("xlabel", _("Frequency"))
     return dst
 
 
@@ -818,6 +839,9 @@ def compute_ifft(src: SignalObj, p: FFTParam | None = None) -> SignalObj:
     dst = dst_11(src, "ifft")
     x, y = src.get_data()
     dst.set_xydata(*alg.ifft1d(x, y, shift=True if p is None else p.shift))
+    dst.restore_attr_from_metadata("xunit", "s" if src.xunit == "Hz" else "")
+    dst.restore_attr_from_metadata("yunit", "")
+    dst.restore_attr_from_metadata("xlabel", "")
     return dst
 
 
@@ -837,6 +861,9 @@ def compute_magnitude_spectrum(
     x, y = src.get_data()
     log_scale = True if p is not None and p.log else False
     dst.y = alg.magnitude_spectrum(x, y, log_scale=log_scale)
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = "dB" if log_scale else ""
     return dst
 
 
@@ -849,7 +876,11 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap11Func(alg.phase_spectrum)(src)
+    dst = Wrap11Func(alg.phase_spectrum)(src)
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = ""
+    return dst
 
 
 def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
@@ -867,6 +898,9 @@ def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     log_scale = True if p is not None and p.log else False
     psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
+    dst.xlabel = _("Frequency")
+    dst.xunit = "Hz" if dst.xunit == "s" else ""
+    dst.yunit = "dB/Hz" if log_scale else ""
     return dst
 
 
@@ -1135,14 +1169,20 @@ def compute_reverse_x(src: SignalObj) -> SignalObj:
 
 
 def calc_resultshape(
-    label: str, shapetype: ShapeTypes, obj: SignalObj, func: Callable, *args: Any
+    title: str,
+    shape: Literal[
+        "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+    ],
+    obj: SignalObj,
+    func: Callable,
+    *args: Any,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on a signal object,
     taking into account the signal ROIs.
 
     Args:
-        label: result shape label
-        shapetype: result shape type
+        title: result title
+        shape: result shape kind
         obj: input image object
         func: computation function
         *args: computation function arguments
@@ -1178,7 +1218,7 @@ def calc_resultshape(
             results = np.array([i_roi] + results.tolist())
             res.append(results)
     if res:
-        return ResultShape(label, np.vstack(res), shapetype)
+        return ResultShape(title, np.vstack(res), shape)
     return None
 
 
@@ -1218,7 +1258,7 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
     """
     return calc_resultshape(
         "fwhm",
-        ShapeTypes.SEGMENT,
+        "segment",
         obj,
         alg.fwhm,
         param.method,
@@ -1236,7 +1276,7 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", ShapeTypes.SEGMENT, obj, alg.fw1e2)
+    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1249,14 +1289,14 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         Result properties object
     """
     statfuncs = {
-        "min(y)": lambda xy: xy[1].min(),
-        "max(y)": lambda xy: xy[1].max(),
-        "<y>": lambda xy: xy[1].mean(),
-        "median(y)": lambda xy: np.median(xy[1]),
-        "σ(y)": lambda xy: xy[1].std(),
+        "min(y) = %g {.yunit}": lambda xy: xy[1].min(),
+        "max(y) = %g {.yunit}": lambda xy: xy[1].max(),
+        "<y> = %g {.yunit}": lambda xy: xy[1].mean(),
+        "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
+        "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y)": lambda xy: xy[1].ptp(),
-        "Σ(y)": lambda xy: xy[1].sum(),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: xy[1].ptp(),
+        "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
@@ -1271,7 +1311,7 @@ def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
     Returns:
         Result properties with bandwidth
     """
-    return calc_resultshape("bandwidth", ShapeTypes.SEGMENT, obj, alg.bandwidth, 3.0)
+    return calc_resultshape("bandwidth", "segment", obj, alg.bandwidth, 3.0)
 
 
 class DynamicParam(gds.DataSet):
@@ -1300,13 +1340,14 @@ def compute_dynamic_parameters(src: SignalObj, p: DynamicParam) -> ResultPropert
     Returns:
         Result properties with ENOB, SNR, SINAD, THD, SFDR
     """
+    dsfx = f" = %g {p.unit}"
     funcs = {
-        "f": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
-        "ENOB": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
-        "SNR": lambda xy: alg.snr(xy[0], xy[1], p.unit),
-        "SINAD": lambda xy: alg.sinad(xy[0], xy[1], p.unit),
-        "THD": lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
-        "SFDR": lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
+        "Freq": lambda xy: alg.sinus_frequency(xy[0], xy[1]),
+        "ENOB = %.1f bits": lambda xy: alg.enob(xy[0], xy[1], p.full_scale),
+        "SNR" + dsfx: lambda xy: alg.snr(xy[0], xy[1], p.unit),
+        "SINAD" + dsfx: lambda xy: alg.sinad(xy[0], xy[1], p.unit),
+        "THD" + dsfx: lambda xy: alg.thd(xy[0], xy[1], p.full_scale, p.unit, p.nb_harm),
+        "SFDR" + dsfx: lambda xy: alg.sfdr(xy[0], xy[1], p.full_scale, p.unit),
     }
     return calc_resultproperties("ADC", src, funcs)
 
@@ -1324,8 +1365,8 @@ def compute_sampling_rate_period(obj: SignalObj) -> ResultProperties:
         "sampling_rate_period",
         obj,
         {
-            "fs": lambda xy: alg.sampling_rate(xy[0]),
-            "T": lambda xy: alg.sampling_period(xy[0]),
+            "fs = %g": lambda xy: alg.sampling_rate(xy[0]),
+            "T = %g {.xunit}": lambda xy: alg.sampling_period(xy[0]),
         },
     )
 
@@ -1347,7 +1388,7 @@ def compute_x_at_minmax(obj: SignalObj) -> ResultProperties:
         "x@min,max",
         obj,
         {
-            "X@Ymin": lambda xy: xy[0][np.argmin(xy[1])],
-            "X@Ymax": lambda xy: xy[0][np.argmax(xy[1])],
+            "X@Ymin = %g {.xunit}": lambda xy: xy[0][np.argmin(xy[1])],
+            "X@Ymax = %g {.xunit}": lambda xy: xy[0][np.argmax(xy[1])],
         },
     )

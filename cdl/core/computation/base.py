@@ -225,13 +225,13 @@ def new_signal_result(
 
 
 def calc_resultproperties(
-    label: str, obj: SignalObj | ImageObj, labeledfuncs: dict[str, Callable]
+    title: str, obj: SignalObj | ImageObj, labeledfuncs: dict[str, Callable]
 ) -> ResultProperties:
     """Calculate result properties by executing a computation function
     on a signal/image object.
 
     Args:
-        label: result properties label
+        title: title of the result properties
         obj: signal or image object
         labeledfuncs: dictionary of labeled computation functions. The keys are
          the labels of the computation functions and the values are the functions
@@ -252,4 +252,4 @@ def calc_resultproperties(
         data_roi = obj.get_data(i_roi)
         val_roi = -1 if i_roi is None else i_roi
         res.append([val_roi] + [fn(data_roi) for fn in labeledfuncs.values()])
-    return ResultProperties(label, np.array(res), list(labeledfuncs.keys()))
+    return ResultProperties(title, np.array(res), list(labeledfuncs.keys()))

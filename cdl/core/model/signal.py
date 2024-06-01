@@ -102,11 +102,23 @@ class CurveStyles:
 CURVESTYLES = CurveStyles()  # This is the unique instance of the CurveStyles class
 
 
-class ROIParam(gds.DataSet):
+class ROI1DParam(gds.DataSet):
     """Signal ROI parameters"""
 
-    col1 = gds.IntItem(_("First point index"))
-    col2 = gds.IntItem(_("Last point index"))
+    xmin = gds.FloatItem(_("First point coordinate"))
+    xmax = gds.FloatItem(_("Last point coordinate"))
+
+    def get_data(self, obj: SignalObj) -> np.ndarray:
+        """Get signal data in ROI
+
+        Args:
+            obj: signal object
+
+        Returns:
+            Data in ROI
+        """
+        imin, imax = np.searchsorted(obj.x, [self.xmin, self.xmax])
+        return np.array([obj.x[imin:imax], obj.y[imin:imax]])
 
 
 def apply_downsampling(item: CurveItem, do_not_update: bool = False) -> None:
@@ -199,6 +211,9 @@ class SignalObj(gds.DataSet, base.BaseObj):
         title = self.title if title is None else title
         obj = SignalObj(title=title)
         obj.title = title
+        obj.xlabel = self.xlabel
+        obj.xunit = self.xunit
+        obj.yunit = self.yunit
         if dtype not in (None, float, complex, np.complex128):
             raise RuntimeError("Signal data only supports float64/complex128 dtype")
         obj.metadata = base.deepcopy_metadata(self.metadata)
@@ -411,23 +426,24 @@ class SignalObj(gds.DataSet, base.BaseObj):
                 indexes[row, col] = np.abs(self.x - x0).argmin()
         return indexes
 
-    def get_roi_param(self, title: str, *defaults: int) -> ROIParam:
-        """Return ROI parameters dataset.
+    def get_roi_param(self, title: str, *defaults: int) -> ROI1DParam:
+        """Return ROI parameters dataset (converting ROI point indexes to coordinates)
 
         Args:
             title: title
-            *defaults: default values
+            *defaults: default values (first, last point indexes)
+
+        Returns:
+            ROI parameters dataset (containing the ROI coordinates: first and last X)
         """
-        imax = len(self.x) - 1
         i0, i1 = defaults
-        param = ROIParam(title)
-        param.col1 = i0
-        param.col2 = i1
-        param.set_global_prop("data", min=-1, max=imax)
+        param = ROI1DParam(title)
+        param.xmin = self.x[i0]
+        param.xmax = self.x[i1]
+        param.set_global_prop("data", unit=self.xunit)
         return param
 
-    @staticmethod
-    def params_to_roidata(params: gds.DataSetGroup) -> np.ndarray:
+    def params_to_roidata(self, params: gds.DataSetGroup) -> np.ndarray:
         """Convert ROI dataset group to ROI array data.
 
         Args:
@@ -438,8 +454,10 @@ class SignalObj(gds.DataSet, base.BaseObj):
         """
         roilist = []
         for roiparam in params.datasets:
-            roiparam: ROIParam
-            roilist.append([roiparam.col1, roiparam.col2])
+            roiparam: ROI1DParam
+            idx1 = np.searchsorted(self.x, roiparam.xmin)
+            idx2 = np.searchsorted(self.x, roiparam.xmax)
+            roilist.append([idx1, idx2])
         if len(roilist) == 0:
             return None
         return np.array(roilist, int)

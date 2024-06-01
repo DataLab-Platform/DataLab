@@ -26,16 +26,15 @@ from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui.processor.base import BaseProcessor
 from cdl.core.gui.profiledialog import ProfileExtractionDialog
 from cdl.core.model.base import ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj
+from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
+from cdl.widgets import imagebackground
 
 
 class ImageProcessor(BaseProcessor):
     """Object handling image processing: operations, processing, computing"""
 
     # pylint: disable=duplicate-code
-
-    EDIT_ROI_PARAMS = True
 
     @qt_try_except()
     def compute_normalize(self, param: cpb.NormalizeParam | None = None) -> None:
@@ -262,11 +261,13 @@ class ImageProcessor(BaseProcessor):
             self.compute_1n(cpi.extract_single_roi, group.datasets, "ROI", edit=False)
 
     @qt_try_except()
-    def compute_profile(self, param: cdl.param.ProfileParam | None = None) -> None:
-        """Compute profile"""
+    def compute_line_profile(
+        self, param: cdl.param.LineProfileParam | None = None
+    ) -> None:
+        """Compute profile along a vertical or horizontal line"""
         title = _("Profile")
-        add_initial_shape = self.has_param_defaults(cdl.param.ProfileParam)
-        edit, param = self.init_param(param, cpi.ProfileParam, title)
+        add_initial_shape = self.has_param_defaults(cdl.param.LineProfileParam)
+        edit, param = self.init_param(param, cpi.LineProfileParam, title)
         if edit:
             options = self.panel.plothandler.get_current_plot_options()
             dlg = ProfileExtractionDialog(
@@ -276,7 +277,26 @@ class ImageProcessor(BaseProcessor):
             dlg.set_obj(obj)
             if not exec_dialog(dlg):
                 return
-        self.compute_11(cpi.compute_profile, param, title=title, edit=False)
+        self.compute_11(cpi.compute_line_profile, param, title=title, edit=False)
+
+    @qt_try_except()
+    def compute_segment_profile(
+        self, param: cdl.param.SegmentProfileParam | None = None
+    ):
+        """Compute profile along a segment"""
+        title = _("Profile")
+        add_initial_shape = self.has_param_defaults(cdl.param.SegmentProfileParam)
+        edit, param = self.init_param(param, cpi.SegmentProfileParam, title)
+        if edit:
+            options = self.panel.plothandler.get_current_plot_options()
+            dlg = ProfileExtractionDialog(
+                "segment", param, options, self.panel.parent(), add_initial_shape
+            )
+            obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+            dlg.set_obj(obj)
+            if not exec_dialog(dlg):
+                return
+        self.compute_11(cpi.compute_segment_profile, param, title=title, edit=False)
 
     @qt_try_except()
     def compute_average_profile(
@@ -462,6 +482,19 @@ class ImageProcessor(BaseProcessor):
             cpb.ClipParam,
             _("Clipping"),
         )
+
+    @qt_try_except()
+    def compute_offset_correction(self, param: ROI2DParam | None = None) -> None:
+        """Compute offset correction"""
+        obj = self.panel.objview.get_sel_objects(include_groups=True)[0]
+        if param is None:
+            dlg = imagebackground.ImageBackgroundDialog(obj, parent=self.panel.parent())
+            if exec_dialog(dlg):
+                param = ROI2DParam.create(geometry=RoiDataGeometries.RECTANGLE)
+                param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
+            else:
+                return
+        self.compute_11(cpi.compute_offset_correction, param)
 
     @qt_try_except()
     def compute_gaussian_filter(self, param: cpb.GaussianParam | None = None) -> None:
@@ -947,14 +980,14 @@ class ImageProcessor(BaseProcessor):
                     if progress.wasCanceled():
                         break
                     obj = self.panel.objmodel[oid]
-                    dist = distance_matrix(result.data)
+                    dist = distance_matrix(result.raw_data)
                     dist_min = dist[dist != 0].min()
                     assert dist_min > 0
                     radius = int(0.5 * dist_min / np.sqrt(2) - 1)
                     assert radius >= 1
                     roicoords = []
                     ymax, xmax = obj.data.shape
-                    for x, y in result.data:
+                    for x, y in result.raw_data:
                         coords = [
                             max(x - radius, 0),
                             max(y - radius, 0),

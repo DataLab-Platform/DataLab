@@ -13,7 +13,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Literal
 
 import guidata.dataset as gds
 import numpy as np
@@ -21,6 +21,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from numpy import ma
 from plotpy.mathutils.geometry import vector_rotation
+from plotpy.panels.csection.csitem import compute_line_section
 from skimage import filters
 
 import cdl.algorithms.image as alg
@@ -41,8 +42,8 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape, ShapeTypes
-from cdl.core.model.image import ImageObj, RoiDataGeometries, RoiDataItem
+from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape
+from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries, RoiDataItem
 from cdl.core.model.signal import SignalObj
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
@@ -660,10 +661,13 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
     Returns:
         Output image object
     """
-    x0 = max(min(p.x0 for p in group.datasets), 0)
-    y0 = max(min(p.y0 for p in group.datasets), 0)
-    x1 = max(p.x1 for p in group.datasets)
-    y1 = max(p.y1 for p in group.datasets)
+    x0, y0, x1, y1 = 0, 0, src.data.shape[1], src.data.shape[0]
+    for p in group.datasets:
+        p: ROI2DParam
+        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        x0, y0, x1, y1 = min(x0, x0i), min(y0, y0i), max(x1, x1i), max(y1, y1i)
+    x0, y0 = max(x0, 0), max(y0, 0)
+    x1, y1 = min(x1, src.data.shape[1]), min(y1, src.data.shape[0])
     suffix = None
     if len(group.datasets) == 1:
         p = group.datasets[0]
@@ -677,13 +681,14 @@ def extract_multiple_roi(src: ImageObj, group: gds.DataSetGroup) -> ImageObj:
         return dst
     out = np.zeros_like(src.data)
     for p in group.datasets:
-        slice1, slice2 = slice(max(p.y0, 0), p.y1 + 1), slice(max(p.x0, 0), p.x1 + 1)
+        x0i, y0i, x1i, y1i = p.get_rect_indexes()
+        slice1, slice2 = slice(y0i, y1i + 1), slice(x0i, x1i + 1)
         out[slice1, slice2] = src.data[slice1, slice2]
     dst.data = out[y0:y1, x0:x1]
     return dst
 
 
-def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
+def extract_single_roi(src: ImageObj, p: ROI2DParam) -> ImageObj:
     """Extract single ROI
 
     Args:
@@ -694,8 +699,8 @@ def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "extract_single_roi", p.get_suffix())
-    x0, y0, x1, y1 = max(p.x0, 0), max(p.y0, 0), p.x1, p.y1
-    dst.data = src.data.copy()[y0:y1, x0:x1]
+    dst.data = p.get_data(src).copy()
+    x0, y0, _x1, _y1 = p.get_rect_indexes()
     dst.x0 += x0 * src.dx
     dst.y0 += y0 * src.dy
     dst.roi = None
@@ -705,7 +710,7 @@ def extract_single_roi(src: ImageObj, p: gds.DataSet) -> ImageObj:
     return dst
 
 
-class ProfileParam(gds.DataSet):
+class LineProfileParam(gds.DataSet):
     """Horizontal or vertical profile parameters"""
 
     _prop = gds.GetAttrProp("direction")
@@ -721,7 +726,7 @@ class ProfileParam(gds.DataSet):
     )
 
 
-def compute_profile(src: ImageObj, p: ProfileParam) -> ImageObj:
+def compute_line_profile(src: ImageObj, p: LineProfileParam) -> ImageObj:
     """Compute horizontal or vertical profile
 
     Args:
@@ -743,6 +748,37 @@ def compute_profile(src: ImageObj, p: ProfileParam) -> ImageObj:
     y = np.array(pdata, dtype=float)[~pdata.mask]
     dst = dst_11_signal(src, "profile", suffix)
     dst.set_xydata(x, y)
+    return dst
+
+
+class SegmentProfileParam(gds.DataSet):
+    """Segment profile parameters"""
+
+    row1 = gds.IntItem(_("Start row"), default=0, min=0)
+    col1 = gds.IntItem(_("Start column"), default=0, min=0)
+    row2 = gds.IntItem(_("End row"), default=0, min=0)
+    col2 = gds.IntItem(_("End column"), default=0, min=0)
+
+
+def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
+    """Compute segment profile
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Output image object
+    """
+    data = src.get_masked_view()
+    p.row1 = min(p.row1, data.shape[0] - 1)
+    p.col1 = min(p.col1, data.shape[1] - 1)
+    p.row2 = min(p.row2, data.shape[0] - 1)
+    p.col2 = min(p.col2, data.shape[1] - 1)
+    suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
+    x, y = compute_line_section(data, p.row1, p.col1, p.row2, p.col2)
+    dst = dst_11_signal(src, "segment_profile", suffix)
+    dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
     return dst
 
 
@@ -1032,6 +1068,21 @@ def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     return dst
 
 
+def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:
+    """Apply offset correction
+
+    Args:
+        src: input image object
+        p: parameters
+
+    Returns:
+        Output image object
+    """
+    dst = dst_11(src, "offset_correction", p.get_suffix())
+    dst.data = src.data - p.get_data(src).mean()
+    return dst
+
+
 def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
     """Compute gaussian filter
 
@@ -1101,6 +1152,11 @@ def compute_fft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """
     dst = dst_11(src, "fft")
     dst.data = alg.fft2d(src.data, shift=True if p is None else p.shift)
+    dst.save_attr_to_metadata("xunit", "")
+    dst.save_attr_to_metadata("yunit", "")
+    dst.save_attr_to_metadata("zunit", "")
+    dst.save_attr_to_metadata("xlabel", _("Frequency"))
+    dst.save_attr_to_metadata("ylabel", _("Frequency"))
     return dst
 
 
@@ -1116,6 +1172,11 @@ def compute_ifft(src: ImageObj, p: FFTParam | None = None) -> ImageObj:
     """
     dst = dst_11(src, "ifft")
     dst.data = alg.ifft2d(src.data, shift=True if p is None else p.shift)
+    dst.restore_attr_from_metadata("xunit", "")
+    dst.restore_attr_from_metadata("yunit", "")
+    dst.restore_attr_from_metadata("zunit", "")
+    dst.restore_attr_from_metadata("xlabel", "")
+    dst.restore_attr_from_metadata("ylabel", "")
     return dst
 
 
@@ -1134,6 +1195,8 @@ def compute_magnitude_spectrum(
     dst = dst_11(src, "magnitude_spectrum")
     log_scale = True if p is not None and p.log else False
     dst.data = alg.magnitude_spectrum(src.data, log_scale=log_scale)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
     return dst
 
 
@@ -1146,7 +1209,10 @@ def compute_phase_spectrum(src: ImageObj) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(alg.phase_spectrum)(src)
+    dst = Wrap11Func(alg.phase_spectrum)(src)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
+    return dst
 
 
 def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
@@ -1162,6 +1228,8 @@ def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
     dst = dst_11(src, "psd")
     log_scale = True if p is not None and p.log else False
     dst.data = alg.psd(src.data, log_scale=log_scale)
+    dst.xunit = dst.yunit = dst.zunit = ""
+    dst.xlabel = dst.ylabel = _("Frequency")
     return dst
 
 
@@ -1213,14 +1281,20 @@ def compute_butterworth(src: ImageObj, p: ButterworthParam) -> ImageObj:
 
 
 def calc_resultshape(
-    label: str, shapetype: ShapeTypes, obj: ImageObj, func: Callable, *args: Any
+    title: str,
+    shape: Literal[
+        "rectangle", "circle", "ellipse", "segment", "marker", "point", "polygon"
+    ],
+    obj: ImageObj,
+    func: Callable,
+    *args: Any,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on an image object,
     taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
 
     Args:
-        label: result shape label
-        shapetype: result shape type
+        title: result title
+        shape: result shape kind
         obj: input image object
         func: computation function
         *args: computation function arguments
@@ -1292,13 +1366,14 @@ def calc_resultshape(
             # We need to pad the arrays with NaNs.
             max_cols = max(num_cols)
             num_rows = sum(coords.shape[0] for coords in res)
-            out = np.full((num_rows, max_cols), np.nan)
+            array = np.full((num_rows, max_cols), np.nan)
             row = 0
             for coords in res:
-                out[row : row + coords.shape[0], : coords.shape[1]] = coords
+                array[row : row + coords.shape[0], : coords.shape[1]] = coords
                 row += coords.shape[0]
-            return out
-        return ResultShape(label, np.vstack(res), shapetype)
+        else:
+            array = np.vstack(res)
+        return ResultShape(title, array, shape)
     return None
 
 
@@ -1324,7 +1399,7 @@ def compute_centroid(image: ImageObj) -> ResultShape | None:
     Returns:
         Centroid coordinates
     """
-    return calc_resultshape("centroid", ShapeTypes.MARKER, image, get_centroid_coords)
+    return calc_resultshape("centroid", "marker", image, get_centroid_coords)
 
 
 def get_enclosing_circle_coords(data: np.ndarray) -> np.ndarray:
@@ -1351,7 +1426,7 @@ def compute_enclosing_circle(image: ImageObj) -> ResultShape | None:
         Diameter coords
     """
     return calc_resultshape(
-        "enclosing_circle", ShapeTypes.CIRCLE, image, get_enclosing_circle_coords
+        "enclosing_circle", "circle", image, get_enclosing_circle_coords
     )
 
 
@@ -1380,8 +1455,8 @@ def compute_hough_circle_peaks(
         Circle coordinates
     """
     return calc_resultshape(
-        "hough_circle_peaks",
-        ShapeTypes.CIRCLE,
+        "hough_circle_peak",
+        "circle",
         image,
         alg.get_hough_circle_peaks,
         p.min_radius,
@@ -1401,13 +1476,13 @@ def compute_stats(obj: ImageObj) -> ResultProperties:
         Result properties
     """
     statfuncs = {
-        "min(z)": ma.min,
-        "max(z)": ma.max,
-        "<z>": ma.mean,
-        "median(z)": ma.median,
-        "σ(z)": ma.std,
+        "min(z) = %g {.zunit}": ma.min,
+        "max(z) = %g {.zunit}": ma.max,
+        "<z> = %g {.zunit}": ma.mean,
+        "median(z) = %g {.zunit}": ma.median,
+        "σ(z) = %g {.zunit}": ma.std,
         "<z>/σ(z)": lambda z: ma.mean(z) / ma.std(z),
-        "peak-to-peak(z)": ma.ptp,
-        "Σ(z)": ma.sum,
+        "peak-to-peak(z) = %g {.zunit}": ma.ptp,
+        "Σ(z) = %g {.zunit}": ma.sum,
     }
     return calc_resultproperties("stats", obj, statfuncs)

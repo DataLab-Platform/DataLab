@@ -18,10 +18,9 @@ from cdl.tests.features.common.roi_app_test import create_test_image_with_roi
 def test_contour_app():
     """Run contour finding application test scenario"""
     newparam = cdl.obj.new_image_param(height=200, width=200)
-    shapes = ("polygon", "circle", "ellipse")
     with cdltest_app_context() as win:
         panel = win.imagepanel
-        for shape in shapes:
+        for shape in ("polygon", "circle", "ellipse"):
             ima1 = create_multigauss_image(newparam)
             ima1.metadata["colormap"] = "gray"
             panel.add_object(ima1)

@@ -16,7 +16,8 @@ import cdl.core.computation.image as cpi
 import cdl.obj
 import cdl.param
 from cdl.env import execenv
-from cdl.tests.data import check_array_result, create_noisygauss_image
+from cdl.tests.data import create_noisygauss_image
+from cdl.utils.tests import check_array_result
 from cdl.utils.vistools import view_images_side_by_side
 
 

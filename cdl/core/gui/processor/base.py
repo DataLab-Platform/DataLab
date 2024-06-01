@@ -167,7 +167,6 @@ class BaseProcessor(QC.QObject):
     """
 
     SIG_ADD_SHAPE = QC.Signal(str)
-    EDIT_ROI_PARAMS = False
     PARAM_DEFAULTS: dict[str, gds.DataSet] = {}
 
     def __init__(self, panel: SignalPanel | ImagePanel, plotwidget: PlotWidget):
@@ -483,7 +482,7 @@ class BaseProcessor(QC.QObject):
                 # Add result shape to object's metadata
                 result.add_to(obj)
                 if param is not None:
-                    obj.metadata[f"{result.label}Param"] = str(param)
+                    obj.metadata[f"{result.title}Param"] = str(param)
 
                 results[obj.uuid] = result
                 xlabels = result.headers
@@ -492,8 +491,8 @@ class BaseProcessor(QC.QObject):
                 else:
                     self.panel.SIG_REFRESH_PLOT.emit(obj.uuid, True)
                 for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.label}({obj.short_id})"
-                    i_roi = result.array[i_row_res, 0]
+                    ylabel = f"{result.title}({obj.short_id})"
+                    i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"
                     ylabels.append(ylabel)
@@ -559,6 +558,7 @@ class BaseProcessor(QC.QObject):
                     src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
                     dst_dtype = complex if is_complex_dtype(src_dtype) else float
                     dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
+                    dst_obj.roi = None
                     src_objs[src_gid] = [src_obj]
                 else:
                     src_objs[src_gid].append(src_obj)
@@ -863,7 +863,6 @@ class BaseProcessor(QC.QObject):
         if (
             env.execenv.unattended
             or roieditordata.roidata.size == 0
-            or not self.EDIT_ROI_PARAMS
             or roigroup.edit(parent=self.panel)
         ):
             roidata = obj.params_to_roidata(roigroup)

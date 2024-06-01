@@ -52,6 +52,25 @@ def __check_resultshapes_merge(
         assert np.all(np.vstack([rs1.array, rs1.array])[:, 1:] == rs2.array[:, 1:])
 
 
+def __check_roi_merge(
+    obj1: cdl.obj.SignalObj | cdl.obj.ImageObj,
+    obj2: cdl.obj.SignalObj | cdl.obj.ImageObj,
+) -> None:
+    """Check if ROI merge properly: the scenario is to duplicate an object,
+    then compute average. We thus have to check if the second object (average) has the
+    expected ROI (i.e. the union of the original object's ROI).
+
+    Args:
+        obj1: Original object
+        obj2: Merged object
+    """
+    roi1 = obj1.roi
+    roi2 = obj2.roi
+    assert np.all(roi1 == roi2[: len(roi1)])
+    assert np.all(roi1 == roi2[len(roi1) : len(roi1) * 2])
+    assert roi1.shape[0] * 2 == roi2.shape[0]
+
+
 def test_resultshapes():
     """Result shapes test"""
     obj1 = test_data.create_sincos_image()
@@ -80,6 +99,8 @@ def test_resultshapes():
             panel.objview.select_objects((2, len(panel)))
             panel.processor.compute_average()
             __check_resultshapes_merge(panel[2], panel[len(panel)])
+            if panel is win.imagepanel:
+                __check_roi_merge(panel[2], panel[len(panel)])
 
 
 if __name__ == "__main__":

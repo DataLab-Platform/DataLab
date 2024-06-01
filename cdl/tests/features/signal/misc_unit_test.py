@@ -13,7 +13,8 @@ import pytest
 import cdl.core.computation.signal as cps
 import cdl.param
 from cdl.obj import SignalTypes
-from cdl.tests.data import check_array_result, create_periodic_signal
+from cdl.tests.data import create_periodic_signal
+from cdl.utils.tests import check_array_result
 
 
 @pytest.mark.validation

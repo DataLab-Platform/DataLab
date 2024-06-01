@@ -171,6 +171,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         self.__category_in_progress: ActionCategory = None
         self.__submenu_in_progress = False
         self.__actions: dict[Callable, list[QW.QAction]] = {}
+        self.__submenus: dict[str, QW.QMenu] = {}
 
     @contextmanager
     def new_category(self, category: ActionCategory) -> Generator[None, None, None]:
@@ -189,23 +190,34 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.__category_in_progress = None
 
     @contextmanager
-    def new_menu(self, title: str) -> Generator[None, None, None]:
+    def new_menu(
+        self, title: str, icon_name: str | None = None
+    ) -> Generator[None, None, None]:
         """Context manager for creating a new menu.
 
         Args:
             title: Menu title
+            icon_name: Menu icon name. Defaults to None.
 
         Yields:
             None
         """
-        menu = QW.QMenu(title)
+        key = self.__category_in_progress.name + "/" + title
+        is_new = key not in self.__submenus
+        if is_new:
+            self.__submenus[key] = menu = QW.QMenu(title)
+            if icon_name:
+                menu.setIcon(get_icon(icon_name))
+        else:
+            menu = self.__submenus[key]
         self.__submenu_in_progress = True
         try:
             yield
         finally:
             self.__submenu_in_progress = False
             add_actions(menu, self.feature_actions.pop(ActionCategory.SUBMENU))
-            self.add_to_action_list(menu)
+            if is_new:
+                self.add_to_action_list(menu)
 
     def new_action(
         self,
@@ -215,7 +227,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         triggered: Callable | None = None,
         toggled: Callable | None = None,
         shortcut: QW.QShortcut | None = None,
-        icon: QG.QIcon | None = None,
+        icon_name: str | None = None,
         tip: str | None = None,
         select_condition: Callable | str | None = None,
         context_menu_pos: int | None = None,
@@ -234,7 +246,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered: triggered callback. Defaults to None.
             toggled: toggled callback. Defaults to None.
             shortcut: shortcut. Defaults to None.
-            icon: icon. Defaults to None.
+            icon_name: icon name. Defaults to None.
             tip: tooltip. Defaults to None.
             select_condition: selection condition. Defaults to None.
              If str, must be the name of a method of SelectCond, i.e. one of
@@ -266,7 +278,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             triggered=triggered,
             toggled=toggled,
             shortcut=shortcut,
-            icon=icon,
+            icon=get_icon(icon_name) if icon_name else None,
             tip=tip,
             context=QC.Qt.WidgetWithChildrenShortcut,  # [1]
         )
@@ -378,7 +390,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.FILE):
             self.new_action(
                 _("New %s...") % self.OBJECT_STR,
-                icon=get_icon(f"new_{self.OBJECT_STR}.svg"),
+                icon_name=f"new_{self.OBJECT_STR}.svg",
                 tip=_("Create new %s") % self.OBJECT_STR,
                 triggered=self.panel.new_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.New),
@@ -388,7 +400,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Open %s...") % self.OBJECT_STR,
                 # icon: fileopen_signal.svg or fileopen_image.svg
-                icon=get_icon(f"fileopen_{self.__class__.__name__[:3].lower()}.svg"),
+                icon_name=f"fileopen_{self.__class__.__name__[:3].lower()}.svg",
                 tip=_("Open %s") % self.OBJECT_STR,
                 triggered=self.panel.load_from_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Open),
@@ -398,7 +410,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Save %s...") % self.OBJECT_STR,
                 # icon: filesave_signal.svg or filesave_image.svg
-                icon=get_icon(f"filesave_{self.__class__.__name__[:3].lower()}.svg"),
+                icon_name=f"filesave_{self.__class__.__name__[:3].lower()}.svg",
                 tip=_("Save selected %s") % self.OBJECT_STR,
                 triggered=self.panel.save_to_files,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Save),
@@ -408,7 +420,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Import text file..."),
-                icon=get_icon("import_text.svg"),
+                icon_name="import_text.svg",
                 triggered=self.panel.exec_import_wizard,
                 select_condition=SelectCond.always,
             )
@@ -416,7 +428,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.EDIT):
             self.new_action(
                 _("New group..."),
-                icon=get_icon("new_group.svg"),
+                icon_name="new_group.svg",
                 tip=_("Create a new group"),
                 triggered=self.panel.new_group,
                 select_condition=SelectCond.always,
@@ -425,7 +437,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Rename group..."),
-                icon=get_icon("rename_group.svg"),
+                icon_name="rename_group.svg",
                 tip=_("Rename selected group"),
                 triggered=self.panel.rename_group,
                 select_condition=SelectCond.exactly_one_group,
@@ -434,7 +446,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Move up"),
-                icon=get_icon("move_up.svg"),
+                icon_name="move_up.svg",
                 tip=_("Move up selection (groups or objects)"),
                 triggered=self.panel.objview.move_up,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
@@ -443,7 +455,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Move down"),
-                icon=get_icon("move_down.svg"),
+                icon_name="move_down.svg",
                 tip=_("Move down selection (groups or objects)"),
                 triggered=self.panel.objview.move_down,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
@@ -452,7 +464,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Duplicate"),
-                icon=get_icon("duplicate.svg"),
+                icon_name="duplicate.svg",
                 tip=_("Duplicate selected %s") % self.OBJECT_STR,
                 separator=True,
                 triggered=self.panel.duplicate_object,
@@ -463,7 +475,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Remove"),
-                icon=get_icon("delete.svg"),
+                icon_name="delete.svg",
                 tip=_("Remove selected %s") % self.OBJECT_STR,
                 triggered=self.panel.remove_object,
                 shortcut=QG.QKeySequence(QG.QKeySequence.Delete),
@@ -476,14 +488,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 select_condition=SelectCond.always,
                 shortcut="Shift+Ctrl+Suppr",
                 tip=_("Delete all groups and objects"),
-                icon=get_icon("delete_all.svg"),
+                icon_name="delete_all.svg",
                 triggered=self.panel.delete_all_objects,
                 toolbar_pos=-1,
             )
             self.new_action(
                 _("Copy metadata"),
                 separator=True,
-                icon=get_icon("metadata_copy.svg"),
+                icon_name="metadata_copy.svg",
                 tip=_("Copy metadata from selected %s") % self.OBJECT_STR,
                 triggered=self.panel.copy_metadata,
                 select_condition=SelectCond.exactly_one,
@@ -491,14 +503,14 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Paste metadata"),
-                icon=get_icon("metadata_paste.svg"),
+                icon_name="metadata_paste.svg",
                 tip=_("Paste metadata into selected %s") % self.OBJECT_STR,
                 triggered=self.panel.paste_metadata,
                 toolbar_pos=-1,
             )
             self.new_action(
                 _("Import metadata") + "...",
-                icon=get_icon("metadata_import.svg"),
+                icon_name="metadata_import.svg",
                 tip=_("Import metadata into %s") % self.OBJECT_STR,
                 triggered=self.panel.import_metadata_from_file,
                 select_condition=SelectCond.exactly_one,
@@ -506,7 +518,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Export metadata") + "...",
-                icon=get_icon("metadata_export.svg"),
+                icon_name="metadata_export.svg",
                 tip=_("Export selected %s metadata") % self.OBJECT_STR,
                 triggered=self.panel.export_metadata_from_file,
                 select_condition=SelectCond.exactly_one,
@@ -514,7 +526,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Delete object metadata"),
-                icon=get_icon("metadata_delete.svg"),
+                icon_name="metadata_delete.svg",
                 tip=_("Delete all that is contained in object metadata"),
                 triggered=self.panel.delete_metadata,
                 toolbar_pos=-1,
@@ -527,7 +539,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Copy titles to clipboard"),
-                icon=get_icon("copy_titles.svg"),
+                icon_name="copy_titles.svg",
                 tip=_("Copy titles of selected objects to clipboard"),
                 triggered=self.panel.copy_titles_to_clipboard,
             )
@@ -535,7 +547,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
         with self.new_category(ActionCategory.VIEW):
             self.new_action(
                 _("View in a new window") + "...",
-                icon=get_icon("new_window.svg"),
+                icon_name="new_window.svg",
                 tip=_("View selected %s in a new window") % self.OBJECT_STR,
                 triggered=self.panel.open_separate_view,
                 context_menu_pos=0,
@@ -544,7 +556,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             self.new_action(
                 _("Edit annotations") + "...",
-                icon=get_icon("annotations.svg"),
+                icon_name="annotations.svg",
                 tip=_("Edit annotations of selected %s") % self.OBJECT_STR,
                 triggered=lambda: self.panel.open_separate_view(edit_annotations=True),
                 context_menu_pos=1,
@@ -555,7 +567,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 self.add_to_action_list(main.auto_refresh_action, cat, -1)
             self.new_action(
                 _("Refresh manually"),
-                icon=get_icon("refresh-manual.svg"),
+                icon_name="refresh-manual.svg",
                 tip=_("Refresh plot, even if auto-refresh is enabled"),
                 shortcut=QG.QKeySequence(QG.QKeySequence.Refresh),
                 triggered=self.panel.manual_refresh,
@@ -570,162 +582,179 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Sum"),
                 triggered=self.panel.processor.compute_sum,
                 select_condition=SelectCond.at_least_two,
-                icon=get_icon("sum.svg"),
+                icon_name="sum.svg",
             )
             self.new_action(
                 _("Average"),
                 triggered=self.panel.processor.compute_average,
                 select_condition=SelectCond.at_least_two,
-                icon=get_icon("average.svg"),
+                icon_name="average.svg",
             )
             self.new_action(
                 _("Difference"),
                 triggered=self.panel.processor.compute_difference,
                 select_condition=SelectCond.at_least_one,
-                icon=get_icon("difference.svg"),
+                icon_name="difference.svg",
             )
             self.new_action(
                 _("Quadratic difference"),
                 triggered=self.panel.processor.compute_quadratic_difference,
                 select_condition=SelectCond.at_least_one,
-                icon=get_icon("quadratic_difference.svg"),
+                icon_name="quadratic_difference.svg",
             )
             self.new_action(
                 _("Product"),
                 triggered=self.panel.processor.compute_product,
                 select_condition=SelectCond.at_least_two,
-                icon=get_icon("product.svg"),
+                icon_name="product.svg",
             )
             self.new_action(
                 _("Division"),
                 triggered=self.panel.processor.compute_division,
                 select_condition=SelectCond.at_least_one,
-                icon=get_icon("division.svg"),
+                icon_name="division.svg",
             )
-            with self.new_menu(_("Constant Operations")):
+            with self.new_menu(_("Constant Operations"), icon_name="constant.svg"):
                 self.new_action(
                     _("Add constant"),
                     triggered=self.panel.processor.compute_addition_constant,
                     select_condition=SelectCond.at_least_one,
-                    icon=get_icon("constant_add.svg"),
+                    icon_name="constant_add.svg",
                 )
                 self.new_action(
                     _("Substract constant"),
                     triggered=self.panel.processor.compute_difference_constant,
                     select_condition=SelectCond.at_least_one,
-                    icon=get_icon("constant_substract.svg"),
+                    icon_name="constant_substract.svg",
                 )
                 self.new_action(
                     _("Multiply by constant"),
                     triggered=self.panel.processor.compute_product_constant,
                     select_condition=SelectCond.at_least_one,
-                    icon=get_icon("constant_multiply.svg"),
+                    icon_name="constant_multiply.svg",
                 )
                 self.new_action(
                     _("Divide by constant"),
                     triggered=self.panel.processor.compute_division_constant,
                     select_condition=SelectCond.at_least_one,
-                    icon=get_icon("constant_divide.svg"),
+                    icon_name="constant_divide.svg",
                 )
             self.new_action(
                 _("Absolute value"),
                 triggered=self.panel.processor.compute_abs,
                 separator=True,
-                icon=get_icon("abs.svg"),
+                icon_name="abs.svg",
             )
             self.new_action(
                 _("Real part"),
                 triggered=self.panel.processor.compute_re,
-                icon=get_icon("re.svg"),
+                icon_name="re.svg",
             )
             self.new_action(
                 _("Imaginary part"),
                 triggered=self.panel.processor.compute_im,
-                icon=get_icon("im.svg"),
+                icon_name="im.svg",
             )
             self.new_action(
                 _("Convert data type"),
                 triggered=self.panel.processor.compute_astype,
                 separator=True,
-                icon=get_icon("convert_dtype.svg"),
+                icon_name="convert_dtype.svg",
             )
             self.new_action(
                 _("Exponential"),
                 triggered=self.panel.processor.compute_exp,
                 separator=True,
-                icon=get_icon("exp.svg"),
+                icon_name="exp.svg",
             )
             self.new_action(
                 _("Logarithm (base 10)"),
                 triggered=self.panel.processor.compute_log10,
                 separator=False,
-                icon=get_icon("log10.svg"),
+                icon_name="log10.svg",
             )
 
         with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(
-                _("Normalize"),
-                triggered=self.panel.processor.compute_normalize,
-                icon=get_icon("normalize.svg"),
-            )
-            self.new_action(
-                _("Thresholding"),
-                triggered=self.panel.processor.compute_threshold,
-                icon=get_icon("threshold.svg"),
-            )
-            self.new_action(
-                _("Clipping"),
-                triggered=self.panel.processor.compute_clip,
-                icon=get_icon("clip.svg"),
-            )
-            self.new_action(
-                _("Linear calibration"),
-                triggered=self.panel.processor.compute_calibration,
-            )
-            self.new_action(
-                _("Gaussian filter"),
-                triggered=self.panel.processor.compute_gaussian_filter,
-            )
-            self.new_action(
-                _("Moving average"),
-                triggered=self.panel.processor.compute_moving_average,
-            )
-            self.new_action(
-                _("Moving median"),
-                triggered=self.panel.processor.compute_moving_median,
-            )
-            self.new_action(
-                _("Wiener filter"),
-                triggered=self.panel.processor.compute_wiener,
-            )
-            self.new_action(
-                _("FFT"),
-                triggered=self.panel.processor.compute_fft,
-                tip=_("Warning: only real part is plotted"),
-            )
-            self.new_action(
-                _("Inverse FFT"),
-                triggered=self.panel.processor.compute_ifft,
-                tip=_("Warning: only real part is plotted"),
-            )
-            self.new_action(
-                _("Magnitude spectrum"),
-                triggered=self.panel.processor.compute_magnitude_spectrum,
-            )
-            self.new_action(
-                _("Phase spectrum"),
-                triggered=self.panel.processor.compute_phase_spectrum,
-            )
-            self.new_action(
-                _("Power spectral density"),
-                triggered=self.panel.processor.compute_psd,
-            )
+            with self.new_menu(
+                _("Axis transformation"), icon_name="axis_transform.svg"
+            ):
+                self.new_action(
+                    _("Linear calibration"),
+                    triggered=self.panel.processor.compute_calibration,
+                )
+                self.new_action(
+                    _("Swap X/Y axes"),
+                    triggered=self.panel.processor.compute_swap_axes,
+                    icon_name="swap_x_y.svg",
+                )
+            with self.new_menu(_("Level adjustment"), icon_name="level_adjustment.svg"):
+                self.new_action(
+                    _("Normalize"),
+                    triggered=self.panel.processor.compute_normalize,
+                    icon_name="normalize.svg",
+                )
+                self.new_action(
+                    _("Thresholding"),
+                    triggered=self.panel.processor.compute_threshold,
+                    icon_name="threshold.svg",
+                )
+                self.new_action(
+                    _("Clipping"),
+                    triggered=self.panel.processor.compute_clip,
+                    icon_name="clip.svg",
+                )
+                self.new_action(
+                    _("Offset correction"),
+                    triggered=self.panel.processor.compute_offset_correction,
+                    icon_name="offset_correction.svg",
+                    tip=_("Evaluate and subtract the offset value from the data"),
+                )
+            with self.new_menu(_("Noise reduction"), icon_name="noise_reduction.svg"):
+                self.new_action(
+                    _("Gaussian filter"),
+                    triggered=self.panel.processor.compute_gaussian_filter,
+                )
+                self.new_action(
+                    _("Moving average"),
+                    triggered=self.panel.processor.compute_moving_average,
+                )
+                self.new_action(
+                    _("Moving median"),
+                    triggered=self.panel.processor.compute_moving_median,
+                )
+                self.new_action(
+                    _("Wiener filter"),
+                    triggered=self.panel.processor.compute_wiener,
+                )
+            with self.new_menu(_("Fourier analysis"), icon_name="fourier.svg"):
+                self.new_action(
+                    _("FFT"),
+                    triggered=self.panel.processor.compute_fft,
+                    tip=_("Warning: only real part is plotted"),
+                )
+                self.new_action(
+                    _("Inverse FFT"),
+                    triggered=self.panel.processor.compute_ifft,
+                    tip=_("Warning: only real part is plotted"),
+                )
+                self.new_action(
+                    _("Magnitude spectrum"),
+                    triggered=self.panel.processor.compute_magnitude_spectrum,
+                )
+                self.new_action(
+                    _("Phase spectrum"),
+                    triggered=self.panel.processor.compute_phase_spectrum,
+                )
+                self.new_action(
+                    _("Power spectral density"),
+                    triggered=self.panel.processor.compute_psd,
+                )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
                 _("Edit regions of interest..."),
                 triggered=self.panel.processor.edit_regions_of_interest,
-                icon=get_icon("roi.svg"),
+                icon_name="roi.svg",
                 select_condition=SelectCond.exactly_one,
                 context_menu_pos=-1,
                 context_menu_sep=True,
@@ -733,7 +762,7 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             self.new_action(
                 _("Remove regions of interest"),
                 triggered=self.panel.processor.delete_regions_of_interest,
-                icon=get_icon("roi_delete.svg"),
+                icon_name="roi_delete.svg",
                 select_condition=SelectCond.with_roi,
                 context_menu_pos=-1,
             )
@@ -741,50 +770,45 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                 _("Statistics") + "...",
                 separator=True,
                 triggered=self.panel.processor.compute_stats,
-                icon=get_icon("stats.svg"),
+                icon_name="stats.svg",
                 context_menu_pos=-1,
                 context_menu_sep=True,
             )
             self.new_action(
                 _("Histogram") + "...",
                 triggered=self.panel.processor.compute_histogram,
-                icon=get_icon("histogram.svg"),
+                icon_name="histogram.svg",
                 context_menu_pos=-1,
             )
 
     def create_last_actions(self):
         """Create actions that are added to the menus in the end"""
-        with self.new_category(ActionCategory.OPERATION):
+        with self.new_category(ActionCategory.PROCESSING):
             self.new_action(
                 _("ROI extraction"),
                 triggered=self.panel.processor.compute_roi_extraction,
-                icon=get_icon(f"{self.OBJECT_STR}_roi.svg"),
+                icon_name=f"{self.OBJECT_STR}_roi.svg",
                 separator=True,
-            )
-            self.new_action(
-                _("Swap X/Y axes"),
-                triggered=self.panel.processor.compute_swap_axes,
-                icon=get_icon("swap_x_y.svg"),
             )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
                 _("Show results") + "...",
                 triggered=self.panel.show_results,
-                icon=get_icon("show_results.svg"),
+                icon_name="show_results.svg",
                 separator=True,
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
             self.new_action(
                 _("Plot results") + "...",
                 triggered=self.panel.plot_results,
-                icon=get_icon("plot_results.svg"),
+                icon_name="plot_results.svg",
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
             self.new_action(
                 _("Delete results") + "...",
                 triggered=self.panel.delete_results,
-                icon=get_icon("delete_results.svg"),
+                icon_name="delete_results.svg",
                 select_condition=SelectCond.at_least_one_group_or_one_object,
             )
 
@@ -796,17 +820,6 @@ class SignalActionHandler(BaseActionHandler):
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
-        with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(
-                _("Derivative"),
-                triggered=self.panel.processor.compute_derivative,
-                icon=get_icon("derivative.svg"),
-            )
-            self.new_action(
-                _("Integral"),
-                triggered=self.panel.processor.compute_integral,
-                icon=get_icon("integral.svg"),
-            )
         super().create_first_actions()
 
         with self.new_category(ActionCategory.OPERATION):
@@ -814,52 +827,24 @@ class SignalActionHandler(BaseActionHandler):
                 _("Power"),
                 triggered=self.panel.processor.compute_pow,
                 separator=True,
-                icon=get_icon("power.svg"),
+                icon_name="power.svg",
             )
             self.new_action(
                 _("Square root"),
                 triggered=self.panel.processor.compute_sqrt,
                 separator=False,
-                icon=get_icon("sqrt.svg"),
+                icon_name="sqrt.svg",
             )
             self.new_action(
-                _("Peak detection"),
+                _("Derivative"),
+                triggered=self.panel.processor.compute_derivative,
                 separator=True,
-                triggered=self.panel.processor.compute_peak_detection,
-                icon=get_icon("peak_detect.svg"),
-            )
-
-        with self.new_category(ActionCategory.PROCESSING):
-            with self.new_menu(_("Frequency filters")):
-                self.new_action(
-                    _("Low-pass filter"),
-                    triggered=self.panel.processor.compute_lowpass,
-                    icon=get_icon("lowpass.svg"),
-                )
-                self.new_action(
-                    _("High-pass filter"),
-                    triggered=self.panel.processor.compute_highpass,
-                    icon=get_icon("highpass.svg"),
-                )
-                self.new_action(
-                    _("Band-pass filter"),
-                    triggered=self.panel.processor.compute_bandpass,
-                    icon=get_icon("bandpass.svg"),
-                )
-                self.new_action(
-                    _("Band-stop filter"),
-                    triggered=self.panel.processor.compute_bandstop,
-                    icon=get_icon("bandstop.svg"),
-                )
-            self.new_action(
-                _("Interpolation"),
-                triggered=self.panel.processor.compute_interpolation,
+                icon_name="derivative.svg",
             )
             self.new_action(
-                _("Resampling"), triggered=self.panel.processor.compute_resampling
-            )
-            self.new_action(
-                _("Detrending"), triggered=self.panel.processor.compute_detrending
+                _("Integral"),
+                triggered=self.panel.processor.compute_integral,
+                icon_name="integral.svg",
             )
 
         def cra_fit(title, fitdlgfunc, iconname, tip: str | None = None):
@@ -867,17 +852,44 @@ class SignalActionHandler(BaseActionHandler):
             return self.new_action(
                 title,
                 triggered=lambda: self.panel.processor.compute_fit(title, fitdlgfunc),
-                icon=get_icon(iconname),
+                icon_name=iconname,
                 tip=tip,
             )
 
         with self.new_category(ActionCategory.PROCESSING):
-            with self.new_menu(_("Fitting")):
+            with self.new_menu(_("Axis transformation")):
+                self.new_action(
+                    _("Reverse X-axis"),
+                    triggered=self.panel.processor.compute_reverse_x,
+                    icon_name="reverse_signal_x.svg",
+                )
+            with self.new_menu(_("Frequency filters"), icon_name="highpass.svg"):
+                self.new_action(
+                    _("Low-pass filter"),
+                    triggered=self.panel.processor.compute_lowpass,
+                    icon_name="lowpass.svg",
+                )
+                self.new_action(
+                    _("High-pass filter"),
+                    triggered=self.panel.processor.compute_highpass,
+                    icon_name="highpass.svg",
+                )
+                self.new_action(
+                    _("Band-pass filter"),
+                    triggered=self.panel.processor.compute_bandpass,
+                    icon_name="bandpass.svg",
+                )
+                self.new_action(
+                    _("Band-stop filter"),
+                    triggered=self.panel.processor.compute_bandstop,
+                    icon_name="bandstop.svg",
+                )
+            with self.new_menu(_("Fitting"), icon_name="expfit.svg"):
                 cra_fit(_("Linear fit"), fitdialog.linearfit, "linearfit.svg")
                 self.new_action(
                     _("Polynomial fit"),
                     triggered=self.panel.processor.compute_polyfit,
-                    icon=get_icon("polyfit.svg"),
+                    icon_name="polyfit.svg",
                 )
                 cra_fit(_("Gaussian fit"), fitdialog.gaussianfit, "gaussfit.svg")
                 cra_fit(_("Lorentzian fit"), fitdialog.lorentzianfit, "lorentzfit.svg")
@@ -885,7 +897,7 @@ class SignalActionHandler(BaseActionHandler):
                 self.new_action(
                     _("Multi-Gaussian fit"),
                     triggered=self.panel.processor.compute_multigaussianfit,
-                    icon=get_icon("multigaussfit.svg"),
+                    icon_name="multigaussfit.svg",
                 )
                 cra_fit(_("Exponential fit"), fitdialog.exponentialfit, "expfit.svg")
                 cra_fit(_("Sinusoidal fit"), fitdialog.sinusoidalfit, "sinfit.svg")
@@ -898,19 +910,43 @@ class SignalActionHandler(BaseActionHandler):
                         "related to Error function (erf)"
                     ),
                 )
+            self.new_action(
+                _("Windowing"),
+                triggered=self.panel.processor.compute_windowing,
+                icon_name="windowing.svg",
+                tip=_(
+                    "Apply a window function (or apodization): Hanning, Hamming, ..."
+                ),
+            )
+            self.new_action(
+                _("Detrending"),
+                triggered=self.panel.processor.compute_detrending,
+                icon_name="detrending.svg",
+            )
+            self.new_action(
+                _("Interpolation"),
+                triggered=self.panel.processor.compute_interpolation,
+                icon_name="interpolation.svg",
+            )
+            self.new_action(
+                _("Resampling"),
+                triggered=self.panel.processor.compute_resampling,
+                icon_name="resampling.svg",
+            )
 
         with self.new_category(ActionCategory.COMPUTING):
             self.new_action(
                 _("Full width at half-maximum"),
                 triggered=self.panel.processor.compute_fwhm,
+                separator=True,
                 tip=_("Compute Full Width at Half-Maximum (FWHM)"),
-                icon=get_icon("fwhm.svg"),
+                icon_name="fwhm.svg",
             )
             self.new_action(
                 _("Full width at") + " 1/e²",
                 triggered=self.panel.processor.compute_fw1e2,
                 tip=_("Compute Full Width at Maximum") + "/e²",
-                icon=get_icon("fw1e2.svg"),
+                icon_name="fw1e2.svg",
             )
             self.new_action(
                 _("X values at min/max") + "...",
@@ -918,7 +954,14 @@ class SignalActionHandler(BaseActionHandler):
                 tip=_("Compute X values at signal minimum and maximum"),
             )
             self.new_action(
+                _("Peak detection"),
+                separator=True,
+                triggered=self.panel.processor.compute_peak_detection,
+                icon_name="peak_detect.svg",
+            )
+            self.new_action(
                 _("Sampling rate and period") + "...",
+                separator=True,
                 triggered=self.panel.processor.compute_sampling_rate_period,
                 tip=_(
                     "Compute sampling rate and period for a constant sampling signal"
@@ -951,7 +994,7 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.VIEW):
             antialiasing_action = self.new_action(
                 _("Curve anti-aliasing"),
-                icon=get_icon("curve_antialiasing.svg"),
+                icon_name="curve_antialiasing.svg",
                 toggled=self.panel.toggle_anti_aliasing,
                 tip=_("Toggle curve anti-aliasing on/off (may slow down plotting)"),
                 toolbar_pos=-1,
@@ -960,7 +1003,7 @@ class SignalActionHandler(BaseActionHandler):
             self.new_action(
                 _("Reset curve styles"),
                 select_condition=SelectCond.always,
-                icon=get_icon("reset_curve_styles.svg"),
+                icon_name="reset_curve_styles.svg",
                 triggered=self.panel.reset_curve_styles,
                 tip=_(
                     "Curve styles are looped over a list of predefined styles.\n"
@@ -976,30 +1019,15 @@ class SignalActionHandler(BaseActionHandler):
                 _("Convolution"),
                 triggered=self.panel.processor.compute_convolution,
                 separator=True,
-                icon=get_icon("convolution.svg"),
-            )
-            self.new_action(
-                _("Windowing"),
-                triggered=self.panel.processor.compute_windowing,
-                icon=get_icon("windowing.svg"),
-                tip=_(
-                    "Apply a window function (or apodization): Hanning, Hamming, ..."
-                ),
+                icon_name="convolution.svg",
             )
         super().create_last_actions()
-        with self.new_category(ActionCategory.OPERATION):
-            self.new_action(
-                _("Reverse X-axis"),
-                triggered=self.panel.processor.compute_reverse_x,
-                icon=get_icon("reverse_signal_x.svg"),
-            )
 
 
 class ImageActionHandler(BaseActionHandler):
     """Object handling image panel GUI interactions: actions, menus, ..."""
 
     OBJECT_STR = _("image")
-    panel: ImagePanel
 
     def create_first_actions(self):
         """Create actions that are added to the menus in the first place"""
@@ -1008,7 +1036,7 @@ class ImageActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.VIEW):
             showcontrast_action = self.new_action(
                 _("Show contrast panel"),
-                icon=get_icon("contrast.png"),
+                icon_name="contrast.png",
                 tip=_("Show or hide contrast adjustment panel"),
                 toggled=self.panel.toggle_show_contrast,
                 toolbar_pos=-1,
@@ -1027,30 +1055,30 @@ class ImageActionHandler(BaseActionHandler):
                 select_condition=SelectCond.at_least_one,
             )
 
-            with self.new_menu(_("Rotation")):
+            with self.new_menu(_("Rotation"), icon_name="rotate_right.svg"):
                 self.new_action(
                     _("Flip horizontally"),
                     triggered=self.panel.processor.compute_fliph,
-                    icon=get_icon("flip_horizontally.svg"),
+                    icon_name="flip_horizontally.svg",
                     context_menu_pos=-1,
                     context_menu_sep=True,
                 )
                 self.new_action(
                     _("Flip vertically"),
                     triggered=self.panel.processor.compute_flipv,
-                    icon=get_icon("flip_vertically.svg"),
+                    icon_name="flip_vertically.svg",
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s right") % "90°",  # pylint: disable=consider-using-f-string
                     triggered=self.panel.processor.compute_rotate270,
-                    icon=get_icon("rotate_right.svg"),
+                    icon_name="rotate_right.svg",
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Rotate %s left") % "90°",  # pylint: disable=consider-using-f-string
                     triggered=self.panel.processor.compute_rotate90,
-                    icon=get_icon("rotate_left.svg"),
+                    icon_name="rotate_left.svg",
                     context_menu_pos=-1,
                 )
                 self.new_action(
@@ -1058,33 +1086,40 @@ class ImageActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_rotate,
                 )
 
-            with self.new_menu(_("Intensity profiles")):
+            with self.new_menu(_("Intensity profiles"), icon_name="profile.svg"):
                 self.new_action(
                     _("Line profile..."),
-                    triggered=self.panel.processor.compute_profile,
-                    icon=get_icon("profile.svg"),
+                    triggered=self.panel.processor.compute_line_profile,
+                    icon_name="profile.svg",
                     tip=_("Extract horizontal or vertical profile"),
                     context_menu_pos=-1,
                     context_menu_sep=True,
                 )
                 self.new_action(
+                    _("Segment profile..."),
+                    triggered=self.panel.processor.compute_segment_profile,
+                    icon_name="profile_segment.svg",
+                    tip=_("Extract profile along a segment"),
+                    context_menu_pos=-1,
+                )
+                self.new_action(
                     _("Average profile..."),
                     triggered=self.panel.processor.compute_average_profile,
-                    icon=get_icon("profile_average.svg"),
+                    icon_name="profile_average.svg",
                     tip=_("Extract average horizontal or vertical profile"),
                     context_menu_pos=-1,
                 )
                 self.new_action(
                     _("Radial profile extraction..."),
                     triggered=self.panel.processor.compute_radial_profile,
-                    icon=get_icon("profile_radial.svg"),
+                    icon_name="profile_radial.svg",
                     tip=_("Radial profile extraction around image centroid"),
                 )
 
             self.new_action(
                 _("Distribute on a grid..."),
                 triggered=self.panel.processor.distribute_on_grid,
-                icon=get_icon("distribute_on_grid.svg"),
+                icon_name="distribute_on_grid.svg",
                 select_condition=SelectCond.at_least_two,
             )
             self.new_action(
@@ -1093,24 +1128,8 @@ class ImageActionHandler(BaseActionHandler):
                 select_condition=SelectCond.at_least_two,
             )
 
-            self.new_action(
-                _("Resize"),
-                triggered=self.panel.processor.compute_resize,
-                icon=get_icon("resize.svg"),
-                separator=True,
-            )
-            self.new_action(
-                _("Pixel binning"),
-                triggered=self.panel.processor.compute_binning,
-                icon=get_icon("binning.svg"),
-            )
-
         with self.new_category(ActionCategory.PROCESSING):
-            self.new_action(
-                _("Butterworth filter"),
-                triggered=self.panel.processor.compute_butterworth,
-            )
-            with self.new_menu(_("Exposure")):
+            with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
                 self.new_action(
                     _("Gamma correction"),
                     triggered=self.panel.processor.compute_adjust_gamma,
@@ -1135,7 +1154,7 @@ class ImageActionHandler(BaseActionHandler):
                     _("Intensity rescaling"),
                     triggered=self.panel.processor.compute_rescale_intensity,
                 )
-            with self.new_menu(_("Restoration")):
+            with self.new_menu(_("Restoration"), icon_name="noise_reduction.svg"):
                 self.new_action(
                     _("Total variation denoising"),
                     triggered=self.panel.processor.compute_denoise_tv,
@@ -1158,7 +1177,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all denoising methods"),
                 )
-            with self.new_menu(_("Morphology")):
+            with self.new_menu(_("Morphology"), icon_name="morphology.svg"):
                 self.new_action(
                     _("White Top-Hat (disk)"),
                     triggered=self.panel.processor.compute_white_tophat,
@@ -1189,7 +1208,7 @@ class ImageActionHandler(BaseActionHandler):
                     separator=True,
                     tip=_("Apply all morphological operations"),
                 )
-            with self.new_menu(_("Edges")):
+            with self.new_menu(_("Edges"), icon_name="edges.svg"):
                 self.new_action(
                     _("Roberts filter"), triggered=self.panel.processor.compute_roberts
                 )
@@ -1259,12 +1278,17 @@ class ImageActionHandler(BaseActionHandler):
                 self.new_action(
                     _("Canny filter"), triggered=self.panel.processor.compute_canny
                 )
+            self.new_action(
+                _("Butterworth filter"),
+                triggered=self.panel.processor.compute_butterworth,
+            )
 
         with self.new_category(ActionCategory.COMPUTING):
             # TODO: [P3] Add "Create ROI grid..." action to create a regular grid
             # or ROIs (maybe reuse/derive from `core.gui.processor.image.GridParam`)
             self.new_action(
                 _("Centroid"),
+                separator=True,
                 triggered=self.panel.processor.compute_centroid,
                 tip=_("Compute image centroid"),
             )
@@ -1311,3 +1335,19 @@ class ImageActionHandler(BaseActionHandler):
                     triggered=self.panel.processor.compute_blob_opencv,
                     tip=_("Detect blobs using OpenCV SimpleBlobDetector"),
                 )
+
+    def create_last_actions(self):
+        """Create actions that are added to the menus in the end"""
+        with self.new_category(ActionCategory.PROCESSING):
+            self.new_action(
+                _("Resize"),
+                triggered=self.panel.processor.compute_resize,
+                icon_name="resize.svg",
+                separator=True,
+            )
+            self.new_action(
+                _("Pixel binning"),
+                triggered=self.panel.processor.compute_binning,
+                icon_name="binning.svg",
+            )
+        super().create_last_actions()

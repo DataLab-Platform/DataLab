@@ -468,13 +468,13 @@ class BaseDataPanel(AbstractPanel):
         for key, value in obj.metadata.items():
             if ResultShape.match(key, value):
                 mshape = ResultShape.from_metadata_entry(key, value)
-                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", mshape.label):
+                if not re.match(obj.PREFIX + r"[0-9]{3}[\s]*", mshape.title):
                     # Handling additional result (e.g. diameter)
                     for a_key, a_value in obj.metadata.items():
-                        if isinstance(a_key, str) and a_key.startswith(mshape.label):
+                        if isinstance(a_key, str) and a_key.startswith(mshape.title):
                             self.__metadata_clipboard.pop(a_key)
                             self.__metadata_clipboard[new_pref + a_key] = a_value
-                    mshape.label = new_pref + mshape.label
+                    mshape.title = new_pref + mshape.title
                     # Handling result shape
                     self.__metadata_clipboard.pop(key)
                     self.__metadata_clipboard[mshape.key] = value
@@ -1104,14 +1104,12 @@ class BaseDataPanel(AbstractPanel):
             for result in list(obj.iterate_resultshapes()) + list(
                 obj.iterate_resultproperties()
             ):
-                rdata = rdatadict.setdefault(
-                    result.shown_category, ResultData([], None, [])
-                )
+                rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
                 rdata.results.append(result)
                 rdata.xlabels = result.headers
                 for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.label}({obj.short_id})"
-                    i_roi = result.array[i_row_res, 0]
+                    ylabel = f"{result.title}({obj.short_id})"
+                    i_roi = int(result.array[i_row_res, 0])
                     if i_roi >= 0:
                         ylabel += f"|ROI{i_roi}"
                     rdata.ylabels.append(ylabel)
@@ -1188,7 +1186,7 @@ class BaseDataPanel(AbstractPanel):
                 # Regrouping ResultShape results by their `label` attribute:
                 grouped_results: dict[str, list[ResultShape]] = {}
                 for result in rdata.results:
-                    grouped_results.setdefault(result.label, []).append(result)
+                    grouped_results.setdefault(result.title, []).append(result)
 
                 # Plotting each group of results:
                 for label, results in grouped_results.items():

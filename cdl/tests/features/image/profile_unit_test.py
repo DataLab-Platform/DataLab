@@ -19,18 +19,20 @@ def test_profile_unit():
     """Run profile extraction test"""
     with qt_app_context():
         obj = create_noisygauss_image(center=(0.0, 0.0), add_annotations=False)
-        for mode in ("line", "rectangle"):
+        for mode in ("line", "segment", "rectangle"):
             for initial_param in (True, False):
                 if initial_param:
                     if mode == "line":
-                        param = cdl.param.ProfileParam.create(row=100, col=200)
+                        param = cdl.param.LineProfileParam.create(row=100, col=200)
                     else:
                         param = cdl.param.AverageProfileParam.create(
                             row1=10, col1=20, row2=200, col2=300
                         )
                 else:
                     if mode == "line":
-                        param = cdl.param.ProfileParam()
+                        param = cdl.param.LineProfileParam()
+                    elif mode == "segment":
+                        param = cdl.param.SegmentProfileParam()
                     else:
                         param = cdl.param.AverageProfileParam()
                 execenv.print(f"Testing mode: {mode} - initial_param: {initial_param}")

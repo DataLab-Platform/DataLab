@@ -35,7 +35,7 @@ To show help on command line usage, simply run::
     --unattended          non-interactive mode
     --accept_dialogs      accept dialogs in unattended mode
     --screenshot          automatic screenshots
-    --delay DELAY         delay (seconds) before quitting application in unattended mode
+    --delay DELAY         delay (ms) before quitting application in unattended mode
     --xmlrpcport XMLRPCPORT
                             XML-RPC port number
     --verbose {quiet,normal,debug}

@@ -385,6 +385,10 @@ Line profile
         Line profile dialog. Parameters may also be set manually
         ("Edit profile parameters" button).
 
+Segment profile
+    Extract a segment profile from each selected image, and create new signals
+    from these profiles.
+
 Average profile
     Extract an horizontal or vertical profile averaged over a rectangular area, from
     each selected image, and create new signals from these profiles.
@@ -423,33 +427,6 @@ Reset image positions
 
 Reset selected image positions to first image (x0, y0) coordinates.
 
-Resize
-^^^^^^
-
-Create a new image which is a resized version of each selected image.
-
-Pixel binning
-^^^^^^^^^^^^^
-
-Combine clusters of adjacent pixels, throughout the image,
-into single pixels. The result can be the sum, average, median, minimum,
-or maximum value of the cluster.
-
-ROI extraction
-^^^^^^^^^^^^^^
-
-Create a new image from a user-defined Region of Interest.
-
-.. figure:: /images/shots/i_roi_dialog.png
-
-    ROI extraction dialog: the ROI is defined by moving the position
-    and adjusting the size of a rectangle shape.
-
-Swap X/Y axes
-^^^^^^^^^^^^^
-
-Create a new image which is the result of swapping X/Y data.
-
 "Processing" menu
 -----------------
 
@@ -461,8 +438,34 @@ The "Processing" menu allows you to perform various processing on the current
 image or group of images: it allows you to apply filters, to perform exposure
 correction, to perform denoising, to perform morphological operations, and so on.
 
+Axis transformation
+^^^^^^^^^^^^^^^^^^^
+
+Linear calibration
+~~~~~~~~~~~~~~~~~~
+
+Create a new image which is a linear calibration
+of each selected image with respect to Z axis:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
+
+    * - Parameter
+      - Linear calibration
+    * - Z-axis
+      - :math:`z_{1} = a.z_{0} + b`
+
+Swap X/Y axes
+~~~~~~~~~~~~~
+
+Create a new image which is the result of swapping X/Y data.
+
+Level adjustment
+^^^^^^^^^^^^^^^^
+
 Normalize
-^^^^^^^^^
+~~~~~~~~~
 
 Create a new image which is the normalized version of each selected image
 by maximum, amplitude, sum, energy or RMS:
@@ -484,95 +487,79 @@ by maximum, amplitude, sum, energy or RMS:
     * - RMS
       - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
 
-Linear calibration
-^^^^^^^^^^^^^^^^^^
-
-Create a new image which is a linear calibration
-of each selected image with respect to Z axis:
-
-.. list-table::
-    :header-rows: 1
-    :widths: 40, 60
-
-    * - Parameter
-      - Linear calibration
-    * - Z-axis
-      - :math:`z_{1} = a.z_{0} + b`
-
 Thresholding
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 Apply the thresholding to each selected image.
 
 Clipping
-^^^^^^^^
+~~~~~~~~
 
 Apply the clipping to each selected image.
 
-Moving average
-^^^^^^^^^^^^^^
+Offset correction
+~~~~~~~~~~~~~~~~~
 
-Compute moving average of each selected image
-(implementation based on `scipy.ndimage.uniform_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_).
+Create a new image which is the result of offset correction on each selected image.
+This operation is performed by subtracting the image background value which is estimated
+by the mean value of a user-defined rectangular area.
 
-Moving median
-^^^^^^^^^^^^^
+Noise reduction
+^^^^^^^^^^^^^^^
 
-Compute moving median of each selected image
-(implementation based on `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_).
+Create a new image which is the result of noise reduction on each selected image.
 
-Wiener filter
-^^^^^^^^^^^^^
+The following filters are available:
 
-Compute Wiener filter of each selected image
-(implementation based on `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_).
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
 
-FFT
-^^^
+    * - Filter
+      - Formula/implementation
+    * - Gaussian filter
+      - `scipy.ndimage.gaussian_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html>`_
+    * - Moving average
+      - `scipy.ndimage.uniform_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_
+    * - Moving median
+      - `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_
+    * - Wiener filter
+      - `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_
 
-Create a new image which is the Fast Fourier Transform (FFT)
-of each selected image.
+Fourier analysis
+^^^^^^^^^^^^^^^^
 
-Inverse FFT
-^^^^^^^^^^^
+Create a new image which is the result of a Fourier analysis on each selected image.
 
-Create a new image which is the inverse FFT of each selected image.
+The following functions are available:
 
-Magnitude spectrum
-^^^^^^^^^^^^^^^^^^
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 30, 50
 
-Create a new image which is the magnitude spectrum of each selected image:
+    * - Function
+      - Description
+      - Formula/implementation
+    * - FFT
+      - Fast Fourier Transform
+      - `numpy.fft.fft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.fft2.html>`_
+    * - Inverse FFT
+      - Inverse Fast Fourier Transform
+      - `numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_
+    * - Magnitude spectrum
+      - Optionnal: use logarithmic scale
+      - :math:`z_{1} = |FFT(z_{0})|`
+    * - Phase spectrum
+      -
+      - :math:`z_{1} = \angle(FFT(z_{0}))`
+    * - Power spectral density
+      - Optionnal: use logarithmic scale
+      - :math:`z_{1} = |FFT(z_{0})|^2`
 
-.. math::
-    z_{1} = |FFT(z_{0})|
+.. note::
 
-where :math:`FFT` is the Fast Fourier Transform.
-
-Phase spectrum
-^^^^^^^^^^^^^^
-
-Create a new image which is the phase spectrum of each selected image:
-
-.. math::
-    z_{1} = \angle(FFT(z_{0}))
-
-where :math:`FFT` is the Fast Fourier Transform.
-
-Power spectral density
-^^^^^^^^^^^^^^^^^^^^^^
-
-Create a new image which is the power spectral density of each selected image:
-
-.. math::
-    z_{1} = |FFT(z_{0})|^2
-
-where :math:`FFT` is the Fast Fourier Transform.
-
-Butterworth filter
-^^^^^^^^^^^^^^^^^^
-
-Perform Butterworth filter on an image
-(implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
+    FFT and inverse FFT are performed using frequency shifting if the option is enabled
+    in DataLab settings.
 
 Exposure
 ^^^^^^^^
@@ -724,6 +711,34 @@ All edges filters
 Canny filter
     Perform edge filtering on an image, using the Canny algorithm
     (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)
+
+Butterworth filter
+^^^^^^^^^^^^^^^^^^
+
+Perform Butterworth filter on an image
+(implementation based on `skimage.filters.butterworth <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)
+
+Resize
+^^^^^^
+
+Create a new image which is a resized version of each selected image.
+
+Pixel binning
+^^^^^^^^^^^^^
+
+Combine clusters of adjacent pixels, throughout the image,
+into single pixels. The result can be the sum, average, median, minimum,
+or maximum value of the cluster.
+
+ROI extraction
+^^^^^^^^^^^^^^
+
+Create a new image from a user-defined Region of Interest.
+
+.. figure:: /images/shots/i_roi_dialog.png
+
+    ROI extraction dialog: the ROI is defined by moving the position
+    and adjusting the size of a rectangle shape.
 
 "Computing" menu
 ----------------

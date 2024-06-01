@@ -29,13 +29,13 @@ import numpy as np
 from guidata.io import JSONReader, JSONWriter
 from qtpy import QtCore as QC
 
-from cdl import __version__
 from cdl.config import Conf, initialize
 from cdl.core.baseproxy import AbstractCDLControl, BaseProxy
 from cdl.core.model.base import items_to_json, json_to_items
 from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.env import execenv
+from cdl.info import get_version
 from cdl.utils.misc import is_version_at_least
 
 if TYPE_CHECKING:
@@ -248,7 +248,7 @@ class RemoteServer(QC.QThread):
     @staticmethod
     def get_version() -> str:
         """Return DataLab version"""
-        return __version__
+        return get_version()
 
     def close_application(self) -> None:
         """Close DataLab application"""
@@ -726,11 +726,12 @@ class RemoteClient(BaseProxy):
             raise ConnectionRefusedError("DataLab is currently not running") from exc
         # If DataLab version is not compatible with this client, show a warning using
         # standard `warnings` module:
-        minor_version = ".".join(__version__.split(".")[:2])
+        ver = get_version()
+        minor_version = ".".join(ver.split(".")[:2])
         if not is_version_at_least(version, minor_version):
             warnings.warn(
                 f"DataLab server version ({version}) may not be fully compatible with "
-                f"this DataLab client version ({__version__}).\n"
+                f"this DataLab client version ({ver}).\n"
                 f"Please upgrade the server to {minor_version} or higher."
             )
 

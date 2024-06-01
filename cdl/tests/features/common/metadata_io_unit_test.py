@@ -15,13 +15,12 @@ Metadata import/export unit test:
 
 import os.path as osp
 
-import numpy as np
-
 from cdl.config import Conf
 from cdl.env import execenv
 from cdl.tests import cdltest_app_context
 from cdl.tests import data as test_data
 from cdl.utils import tests
+from cdl.utils.tests import compare_metadata
 
 
 def get_metadata_param_number_after_reset():
@@ -47,13 +46,7 @@ def test_metadata_io_unit():
                 assert len(ima.metadata) == get_metadata_param_number_after_reset()
                 panel.import_metadata_from_file(fname)
                 execenv.print("Check metadata export <--> import features:")
-                for key, value in orig_metadata.items():
-                    execenv.print(f"  Checking {key} key value...", end="")
-                    if isinstance(value, np.ndarray):
-                        assert (value == ima.metadata[key]).all()
-                    else:
-                        assert value == ima.metadata[key]
-                    execenv.print("OK")
+                compare_metadata(orig_metadata, ima.metadata)
 
 
 if __name__ == "__main__":

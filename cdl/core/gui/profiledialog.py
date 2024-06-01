@@ -13,16 +13,17 @@ The :mod:`cdl.core.gui.profiledialog` module provides the profile extraction dia
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 
 import numpy as np
 import qtpy.QtCore as QC
 from guidata.configtools import get_icon
 from plotpy.coords import axes_to_canvas
 from plotpy.interfaces import ICurveItemType
-from plotpy.items import AnnotatedPoint, AnnotatedRectangle
+from plotpy.items import AnnotatedPoint, AnnotatedRectangle, AnnotatedSegment
+from plotpy.panels.csection.cswidget import LineCrossSection
 from plotpy.plot import PlotDialog, PlotOptions
-from plotpy.tools import AverageCrossSectionTool, CrossSectionTool
+from plotpy.tools import AverageCrossSectionTool, CrossSectionTool, LineCrossSectionTool
 from qtpy import QtWidgets as QW
 from qtpy.QtWidgets import QWidget
 
@@ -41,21 +42,23 @@ class ProfileExtractionDialog(PlotDialog):
     """Profile extraction dialog
 
     Args:
-        mode: "line" or "rectangle"
+        mode: "line", "segment" or "rectangle"
         options: Plot options
         parent: Parent widget
     """
 
     def __init__(
         self,
-        mode: str,
-        param: cdl.param.ProfileParam | cdl.param.AverageProfileParam,
+        mode: Literal["line", "segment", "rectangle"],
+        param: cdl.param.LineProfileParam
+        | cdl.param.SegmentProfileParam
+        | cdl.param.AverageProfileParam,
         options: PlotOptions | None = None,
         parent: QWidget | None = None,
         add_initial_shape: bool = False,
     ) -> None:
         self.__default_curve_color: str | None = None
-        assert mode in ("line", "rectangle")
+        assert mode in ("line", "segment", "rectangle")
         self.mode = mode
         self.param = param
         title = param.get_title()
@@ -63,16 +66,23 @@ class ProfileExtractionDialog(PlotDialog):
         if options is None:
             options = PlotOptions(show_contrast=True)
         options.show_xsection = options.show_ysection = True
-        toolklass = CrossSectionTool if mode == "line" else AverageCrossSectionTool
+        toolklass = {
+            "line": CrossSectionTool,
+            "segment": LineCrossSectionTool,
+            "rectangle": AverageCrossSectionTool,
+        }[mode]
         super().__init__(title=title, edit=True, options=options, parent=parent)
         self.setObjectName("profileextraction")
         self.setWindowIcon(get_icon("DataLab.svg"))
         self.resize(800, 800)
-        tool: CrossSectionTool | AverageCrossSectionTool = self.get_manager().get_tool(
-            toolklass
-        )
+        mgr = self.get_manager()
+        tool: (
+            CrossSectionTool | LineCrossSectionTool | AverageCrossSectionTool | None
+        ) = mgr.get_tool(toolklass)
+        if tool is None:
+            tool = mgr.add_tool(toolklass)
         self.cstool = tool
-        self.shape: AnnotatedPoint | AnnotatedRectangle | None = None
+        self.shape: AnnotatedPoint | AnnotatedSegment | AnnotatedRectangle | None = None
         self.param_btn = pbtn = QW.QPushButton(_("Edit profile parameters"))
         pbtn.setIcon(get_icon("edit.svg"))
         pbtn.clicked.connect(self.edit_values)
@@ -86,6 +96,15 @@ class ProfileExtractionDialog(PlotDialog):
         self.button_layout.insertWidget(1, rbtn)
         self.update_cs_panels_state()
         self.get_plot().SIG_ITEMS_CHANGED.connect(self.update_cs_panels_state)
+
+    def populate_plot_layout(self):
+        """Populate the plot layout"""
+        super().populate_plot_layout()
+        lcs_panel = LineCrossSection(self)
+        splitter = self.plot_widget.xcsw_splitter
+        splitter.addWidget(lcs_panel)
+        splitter.setSizes([0, 1, 0])
+        self.manager.add_panel(lcs_panel)
 
     def __set_curve_enable_state(self, curve: CurveItem, state: bool) -> None:
         """Set curve enable state
@@ -111,7 +130,7 @@ class ProfileExtractionDialog(PlotDialog):
             return curves[0]
         return None
 
-    def __update_cs_panel_state(
+    def __update_xycs_panel_state(
         self, cs_panel: XCrossSection | YCrossSection, state: bool
     ) -> None:
         """Update cross-section panel state
@@ -129,10 +148,17 @@ class ProfileExtractionDialog(PlotDialog):
     def update_cs_panels_state(self):
         """Enable or disable X or Y cross-section panels depending on the direction
         of the desired profile extraction."""
-        xcs_panel = self.get_manager().get_xcs_panel()
-        self.__update_cs_panel_state(xcs_panel, self.param.direction == "horizontal")
-        ycs_panel = self.get_manager().get_ycs_panel()
-        self.__update_cs_panel_state(ycs_panel, self.param.direction == "vertical")
+        mgr = self.get_manager()
+        lcs_panel = mgr.get_panel(LineCrossSection.PANEL_ID)
+        xcs_panel, ycs_panel = mgr.get_xcs_panel(), mgr.get_ycs_panel()
+        xymode = self.mode in ("line", "rectangle")
+        lcs_panel.setVisible(not xymode)
+        xcs_panel.setVisible(xymode)
+        ycs_panel.setVisible(xymode)
+        if xymode:
+            p = self.param
+            self.__update_xycs_panel_state(xcs_panel, p.direction == "horizontal")
+            self.__update_xycs_panel_state(ycs_panel, p.direction == "vertical")
 
     def accept(self) -> None:
         """Accept"""
@@ -145,7 +171,9 @@ class ProfileExtractionDialog(PlotDialog):
         self.param_btn.setEnabled(False)
         self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(False)
         if self.mode == "line":
-            self.param = cdl.param.ProfileParam()
+            self.param = cdl.param.LineProfileParam()
+        elif self.mode == "segment":
+            self.param = cdl.param.SegmentProfileParam()
         else:
             self.param = cdl.param.AverageProfileParam()
         plot = self.get_plot()
@@ -168,7 +196,7 @@ class ProfileExtractionDialog(PlotDialog):
     @staticmethod
     def shape_to_param(
         shape: AnnotatedPoint | AnnotatedRectangle,
-        param: cdl.param.ProfileParam | cdl.param.AverageProfileParam,
+        param: cdl.param.LineProfileParam | cdl.param.AverageProfileParam,
     ) -> None:
         """Shape to param
 
@@ -177,9 +205,14 @@ class ProfileExtractionDialog(PlotDialog):
             param: Profile parameters
         """
         if isinstance(shape, AnnotatedPoint):
-            assert isinstance(param, cdl.param.ProfileParam)
+            assert isinstance(param, cdl.param.LineProfileParam)
             x, y = shape.get_pos()
             param.row, param.col = int(np.round(y)), int(np.round(x))
+        elif isinstance(shape, AnnotatedSegment):
+            assert isinstance(param, cdl.param.SegmentProfileParam)
+            x1, y1, x2, y2 = shape.get_rect()
+            param.row1, param.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
+            param.col1, param.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
         else:
             assert isinstance(param, cdl.param.AverageProfileParam)
             x1, y1, x2, y2 = shape.get_rect()
@@ -188,8 +221,10 @@ class ProfileExtractionDialog(PlotDialog):
 
     @staticmethod
     def param_to_shape(
-        param: cdl.param.ProfileParam | cdl.param.AverageProfileParam,
-        shape: AnnotatedPoint | AnnotatedRectangle,
+        param: cdl.param.LineProfileParam
+        | cdl.param.AverageProfileParam
+        | cdl.param.SegmentProfileParam,
+        shape: AnnotatedPoint | AnnotatedRectangle | AnnotatedSegment,
     ) -> None:
         """Param to shape
 
@@ -198,8 +233,11 @@ class ProfileExtractionDialog(PlotDialog):
             shape: Annotated shape
         """
         if isinstance(shape, AnnotatedPoint):
-            assert isinstance(param, cdl.param.ProfileParam)
+            assert isinstance(param, cdl.param.LineProfileParam)
             shape.set_pos(param.col, param.row)
+        elif isinstance(shape, AnnotatedSegment):
+            assert isinstance(param, cdl.param.SegmentProfileParam)
+            shape.set_rect(param.col1, param.row1, param.col2, param.row2)
         else:
             assert isinstance(param, cdl.param.AverageProfileParam)
             shape.set_rect(param.col1, param.row1, param.col2, param.row2)
@@ -214,7 +252,10 @@ class ProfileExtractionDialog(PlotDialog):
             self.get_plot().replot()
 
     def apply_callback(
-        self, param: cdl.param.ProfileParam | cdl.param.AverageProfileParam
+        self,
+        param: cdl.param.LineProfileParam
+        | cdl.param.AverageProfileParam
+        | cdl.param.SegmentProfileParam,
     ) -> None:
         """Apply callback
 
@@ -246,11 +287,18 @@ class ProfileExtractionDialog(PlotDialog):
             if self.mode == "line":
                 p0 = QC.QPointF(*axes_to_canvas(item, self.param.col, self.param.row))
                 p1 = p0
+            elif self.mode == "segment":
+                x1, y1 = self.param.col1, self.param.row1
+                x2, y2 = self.param.col2, self.param.row2
+                p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
+                p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
             else:
                 x1, x2 = sorted([self.param.col1, self.param.col2])
                 y1, y2 = sorted([self.param.row1, self.param.row2])
                 p0 = QC.QPointF(*axes_to_canvas(item, x1, y1))
                 p1 = QC.QPointF(*axes_to_canvas(item, x2, y2))
             self.cstool.add_shape_to_plot(plot, p0, p1)
+            self.param_btn.setEnabled(True)
+            self.button_box.button(QW.QDialogButtonBox.Ok).setEnabled(True)
         else:
             self.cstool.activate()
