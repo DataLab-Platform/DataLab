@@ -21,7 +21,7 @@
 :py:func:`gaussian_filter <cdl.core.computation.image.compute_gaussian_filter>`,Compute gaussian filter,N/A
 :py:func:`histogram <cdl.core.computation.image.compute_histogram>`,Compute histogram of the image data,N/A
 :py:func:`hough_circle_peaks <cdl.core.computation.image.compute_hough_circle_peaks>`,Compute Hough circles,N/A
-:py:func:`ifft <cdl.core.computation.image.compute_ifft>`,Compute inverse FFT,N/A
+:py:func:`ifft <cdl.core.computation.image.compute_ifft>`,Compute inverse FFT,``features/image/fft2d_unit_test.py``
 :py:func:`im <cdl.core.computation.image.compute_im>`,Compute imaginary part,N/A
 :py:func:`line_profile <cdl.core.computation.image.compute_line_profile>`,Compute horizontal or vertical profile,N/A
 :py:func:`line_section <cdl.core.computation.image.compute_line_section>`,Return intensity profile of data along a line,N/A

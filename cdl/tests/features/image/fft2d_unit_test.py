@@ -59,6 +59,14 @@ def test_image_fft() -> None:
     assert np.isclose(original_energy, transformed_energy)
 
 
+@pytest.mark.skip(reason="Already covered by the `test_image_fft` test.")
+@pytest.mark.validation
+def test_image_ifft() -> None:
+    """2D iFFT validation test."""
+    # This is just a way of marking the iFFT test as a validation test because it is
+    # already covered by the FFT test above (there is no need to repeat the same test).
+
+
 if __name__ == "__main__":
     test_image_fft_interactive()
     test_image_fft()

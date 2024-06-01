@@ -21,7 +21,7 @@
 :py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`,Compute FWHM,``features/signal/fwhm_unit_test.py``
 :py:func:`gaussian_filter <cdl.core.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
 :py:func:`histogram <cdl.core.computation.signal.compute_histogram>`,Compute histogram,N/A
-:py:func:`ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,N/A
+:py:func:`ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,``features/signal/fft1d_unit_test.py``
 :py:func:`im <cdl.core.computation.signal.compute_im>`,Compute imaginary part,N/A
 :py:func:`integral <cdl.core.computation.signal.compute_integral>`,Compute integral,N/A
 :py:func:`interpolation <cdl.core.computation.signal.compute_interpolation>`,Interpolate data,N/A

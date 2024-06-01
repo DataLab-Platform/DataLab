@@ -82,6 +82,14 @@ def test_signal_fft() -> None:
     ), f"Expected phase at peak: 0 or π, found {fft_phase[peak_index]}"
 
 
+@pytest.mark.skip(reason="Already covered by the `test_signal_fft` test.")
+@pytest.mark.validation
+def test_signal_ifft() -> None:
+    """1D iFFT validation test."""
+    # This is just a way of marking the iFFT test as a validation test because it is
+    # already covered by the FFT test above (there is no need to repeat the same test).
+
+
 @pytest.mark.validation
 def test_signal_abs() -> None:
     """Absolute value validation test."""
