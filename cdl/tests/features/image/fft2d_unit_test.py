@@ -9,27 +9,28 @@ Image FFT unit test.
 # guitest: show
 
 import numpy as np
+import pytest
 from guidata.qthelpers import qt_app_context
 
-from cdl.algorithms.image import fft2d, ifft2d
+import cdl.algorithms.image as alg
+import cdl.core.computation.image as cpi
+import cdl.tests.data as ctd
 from cdl.env import execenv
-from cdl.tests.data import RingParam, create_ring_image
 from cdl.utils.vistools import view_images_side_by_side
 
 
-def test_fft2d_unit():
-    """2D FFT unit test."""
+def test_image_fft_interactive():
+    """2D FFT interactive test."""
     with qt_app_context():
         # Create a 2D ring image
         execenv.print("Generating 2D ring image...", end=" ")
-        image = create_ring_image(RingParam())
+        data = ctd.create_ring_image(ctd.RingParam()).data
         execenv.print("OK")
-        data = image.data
 
         # FFT
         execenv.print("Computing FFT of image...", end=" ")
-        f = fft2d(data)
-        data2 = ifft2d(f)
+        f = alg.fft2d(data)
+        data2 = alg.ifft2d(f)
         execenv.print("OK")
         execenv.print("Comparing original and FFT/iFFT images...", end=" ")
         np.testing.assert_almost_equal(data, data2, decimal=10)
@@ -40,5 +41,24 @@ def test_fft2d_unit():
         view_images_side_by_side(images, titles, rows=2, title="2D FFT/iFFT")
 
 
+@pytest.mark.validation
+def test_image_fft() -> None:
+    """2D FFT validation test."""
+    ima1 = ctd.create_checkerboard()
+    fft = cpi.compute_fft(ima1)
+    ifft = cpi.compute_ifft(fft)
+
+    # Check that the inverse FFT reconstructs the original image
+    assert np.allclose(
+        ima1.data, ifft.data.real
+    ), "Checkerboard image FFT/iFFT reconstruction failed"
+
+    # Parseval's Theorem Validation
+    original_energy = np.sum(np.abs(ima1.data) ** 2)
+    transformed_energy = np.sum(np.abs(fft.data) ** 2) / (ima1.data.size)
+    assert np.isclose(original_energy, transformed_energy)
+
+
 if __name__ == "__main__":
-    test_fft2d_unit()
+    test_image_fft_interactive()
+    test_image_fft()

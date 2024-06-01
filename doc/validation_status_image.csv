@@ -14,7 +14,7 @@
 :py:func:`division_constant <cdl.core.computation.image.compute_division_constant>`,Divide an image by a constant value and return the new result image object,``features/image/misc_unit_test.py``
 :py:func:`enclosing_circle <cdl.core.computation.image.compute_enclosing_circle>`,Compute minimum enclosing circle,N/A
 :py:func:`exp <cdl.core.computation.image.compute_exp>`,Compute exponential,N/A
-:py:func:`fft <cdl.core.computation.image.compute_fft>`,Compute FFT,N/A
+:py:func:`fft <cdl.core.computation.image.compute_fft>`,Compute FFT,``features/image/fft2d_unit_test.py``
 :py:func:`flatfield <cdl.core.computation.image.compute_flatfield>`,Compute flat field correction,N/A
 :py:func:`fliph <cdl.core.computation.image.compute_fliph>`,Flip data horizontally,N/A
 :py:func:`flipv <cdl.core.computation.image.compute_flipv>`,Flip data vertically,N/A

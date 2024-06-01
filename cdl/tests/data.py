@@ -368,6 +368,25 @@ def add_gaussian_noise_to_image(
     image.data = image.data + noise.data
 
 
+def create_checkerboard(p: cdl.obj.NewImageParam | None = None, num_checkers=8):
+    """Generate a checkerboard pattern
+
+    Args:
+        p: Image parameters. Defaults to None.
+        num_checkers: Number of checkers. Defaults to 8.
+    """
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (checkerboard)" if p.title is None else p.title
+    obj = cdl.obj.create_image_from_param(p)
+    re = np.r_[num_checkers * [0, 1]]  # one row of the checkerboard
+    board = np.row_stack(num_checkers * (re, re ^ 1))  # build the checkerboard
+    board = np.kron(
+        board, np.ones((p.height // num_checkers, p.height // num_checkers))
+    )  # scale up the board
+    obj.data = board
+    return obj
+
+
 def create_2dstep_image(
     p: cdl.obj.NewImageParam | None = None,
 ) -> cdl.obj.ImageObj:
