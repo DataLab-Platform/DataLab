@@ -486,9 +486,12 @@ def create_sincos_image(
     dtype = p.dtype.value
     x, y = np.meshgrid(np.linspace(0, 10, p.width), np.linspace(0, 10, p.height))
     raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
+    obj = cdl.obj.create_image_from_param(p)
+    if np.issubdtype(dtype, np.floating):
+        obj.data = raw_data
+        return obj
     dmin = np.iinfo(dtype).min * 0.95
     dmax = np.iinfo(dtype).max * 0.95
-    obj = cdl.obj.create_image_from_param(p)
     obj.data = np.array(raw_data * (dmax - dmin) + dmin, dtype=dtype)
     return obj
 
