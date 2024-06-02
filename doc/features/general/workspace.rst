@@ -7,6 +7,9 @@ Workspace
     :description: Workspace in DataLab, the open-source scientific data analysis and visualization platform
     :keywords: DataLab, workspace, scientific, data, analysis, visualization, platform
 
+Basic concepts
+--------------
+
 Working with DataLab is very easy. The user interface is intuitive and
 self-explanatory. The main window is divided into two main areas:
 
@@ -25,6 +28,9 @@ self-explanatory. The main window is divided into two main areas:
 
     DataLab main window, at startup.
 
+Internal data model and workspace
+---------------------------------
+
 DataLab has its own internal data model, in which data sets are organized around
 a tree structure. Each panel in the main window corresponds to a branch of the
 tree. Each data set shown in the panels corresponds to a leaf of the tree. Inside
@@ -40,9 +46,18 @@ the ``metadata`` attribute of the data set (and may also be browsed in the
 
 The DataLab **Workspace** is defined as the collection of all data sets which
 are currently loaded in DataLab, in both the **Signals** and **Images** panels.
-The workspace may be saved to an HDF5 file, and reloaded later. It is also
-possible to import data sets from an HDF5 file into the workspace, using the
-:ref:`h5browser`.
+
+Loading and saving the workspace
+--------------------------------
+
+The following actions are available to manage the workspace from the **File** menu:
+
+- **Open HDF5 file**: load a workspace from an HDF5 file.
+
+- **Save to HDF5 file**: save the current workspace to an HDF5 file.
+
+- **Browse HDF5 file**: open the :ref:`h5browser` to explore the content of an
+  HDF5 file and import data sets into the workspace.
 
 .. note::
 

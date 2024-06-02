@@ -8,28 +8,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-16 14:01+0100\n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
-#: ../../features/general/logviewer.rst:-1
+#: ../../doc/features/general/logviewer.rst:-1
 msgid "DataLab's log viewer"
 msgstr "Visualiseur de journaux de bord de DataLab"
 
-#: ../../features/general/logviewer.rst:-1
+#: ../../doc/features/general/logviewer.rst:-1
 msgid "DataLab, log, viewer, crash, bug, report"
 msgstr "DataLab, journal, visualiseur, crash, anomalie, rapport"
 
-#: ../../features/general/logviewer.rst:4
+#: ../../doc/features/general/logviewer.rst:4
 msgid "Log viewer"
 msgstr "Journaux de bord"
 
-#: ../../features/general/logviewer.rst:10
+#: ../../doc/features/general/logviewer.rst:10
 msgid ""
 "Despite countless efforts (unit testing, test coverage, ...), DataLab "
 "might crash or behave unexpectedly."
@@ -38,7 +38,7 @@ msgstr ""
 "couverture de tests, etc.), DataLab peut s'arrêter inopinément ou se "
 "comporter de façon inattendue."
 
-#: ../../features/general/logviewer.rst:15
+#: ../../doc/features/general/logviewer.rst:15
 msgid ""
 "For those situations, DataLab provides two logs (located in your home "
 "directory):"
@@ -46,19 +46,23 @@ msgstr ""
 "Pour traiter ce type de situation, DataLab fournit deux types de journaux"
 " de bord (localisés dans votre répertoire utilisateur) :"
 
-#: ../../features/general/logviewer.rst:14
+#: ../../doc/features/general/logviewer.rst:14
 msgid "\"Traceback log\", for Python exceptions"
 msgstr "\"Traceback log\", pour les exceptions Python"
 
-#: ../../features/general/logviewer.rst:15
+#: ../../doc/features/general/logviewer.rst:15
 msgid "\"Faulthandler log\", for system failures (e.g. Qt-related crash)"
 msgstr "\"Faulthandler log\", pour les erreurs système (p.ex. crash lié à Qt)"
 
-#: ../../features/general/logviewer.rst:19
+#: ../../doc/features/general/logviewer.rst:19
+msgid "The log viewer is accessible from the \"?\" menu in the main window."
+msgstr ""
+
+#: ../../doc/features/general/logviewer.rst:23
 msgid "DataLab log viewer (see \"?\" menu)"
 msgstr "Journaux de bord DataLab (voir le menu \"?\")"
 
-#: ../../features/general/logviewer.rst:21
+#: ../../doc/features/general/logviewer.rst:25
 msgid ""
 "If DataLab crashed or if any Python exception is raised during its "
 "execution, those log files will be updated accordingly. DataLab will even"
@@ -72,7 +76,7 @@ msgstr ""
 "lors du prochain démarrage de l'application. Ceci est une invitation à "
 "soumettre un rapport d'anomalie."
 
-#: ../../features/general/logviewer.rst:26
+#: ../../doc/features/general/logviewer.rst:30
 msgid ""
 "Reporting unexpected behavior or any other bug on `GitHub Issues`_ will "
 "be greatly appreciated, especially if those log file contents are "
@@ -83,3 +87,4 @@ msgstr ""
 "page `GitHub Issues`_ sera grandement apprécié, d'autant plus si vous "
 "prenez soin de joindre le contenu des journaux de bord (ainsi que des "
 "informations sur votre configuration, cf. :ref:`ref-to-instviewer`)."
+

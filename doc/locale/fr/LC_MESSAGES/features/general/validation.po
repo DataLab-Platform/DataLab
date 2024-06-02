@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-24 13:09+0200\n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../doc/features/general/validation.rst:-1
 msgid ""
@@ -202,7 +202,13 @@ msgid ""
 "indicates the percentage of the code that is executed by the test suite, "
 "but it does not necessarily take into account the correctness of the "
 "results."
-msgstr "L'état de validation ne doit pas être confondu avec la couverture de test. L'état de validation indique si la fonction a été validée par rapport à des données de référence ou des modèles analytiques. La couverture de test indique le pourcentage du code qui est exécuté par la suite de tests, mais elle ne prend pas nécessairement en compte la justesse des résultats."
+msgstr ""
+"L'état de validation ne doit pas être confondu avec la couverture de "
+"test. L'état de validation indique si la fonction a été validée par "
+"rapport à des données de référence ou des modèles analytiques. La "
+"couverture de test indique le pourcentage du code qui est exécuté par la "
+"suite de tests, mais elle ne prend pas nécessairement en compte la "
+"justesse des résultats."
 
 #: ../../doc/features/general/validation.rst:72
 msgid "Validation Statistics"
@@ -229,15 +235,15 @@ msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "44"
+msgid "51"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "81"
+msgid "87"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "125"
+msgid "138"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -245,15 +251,15 @@ msgid "Number of validated compute functions"
 msgstr "Nombre de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "14"
+msgid "26"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "10"
+msgid "21"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "24"
+msgid "47"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -261,15 +267,15 @@ msgid "Percentage of validated compute functions"
 msgstr "Pourcentage de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "31%"
+msgid "50%"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "12%"
+msgid "24%"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "19%"
+msgid "34%"
 msgstr ""
 
 #: ../../doc/features/general/validation.rst:77
@@ -302,7 +308,7 @@ msgid "Compute absolute value"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/signal/fft1d_unit_test.py``"
+msgid "``features/signal/operation_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -313,10 +319,6 @@ msgstr ""
 msgid ""
 "Add **dst** and **src** signals and return **dst** signal modified in "
 "place"
-msgstr ""
-
-#: ../../doc/validation_status_signal.csv:1
-msgid "``features/signal/misc_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -331,7 +333,7 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/image/misc_unit_test.py``"
+msgid "``features/image/operation_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -340,11 +342,6 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Convert data type"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
-#: ../../doc/validation_status_signal.csv:1
-msgid "N/A"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -370,6 +367,11 @@ msgstr ""
 msgid "Compute linear calibration"
 msgstr ""
 
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "N/A"
+msgstr ""
+
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`clip <cdl.core.computation.signal.compute_clip>`"
 msgstr ""
@@ -377,6 +379,15 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute maximum data clipping"
 msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`contrast <cdl.core.computation.signal.compute_contrast>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+#, fuzzy
+msgid "Compute contrast"
+msgstr "Fonctions de calcul Signal"
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`convolution <cdl.core.computation.signal.compute_convolution>`"
@@ -468,6 +479,10 @@ msgid "Compute FFT"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
+msgid "``features/signal/fft1d_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`filter <cdl.core.computation.signal.compute_filter>`"
 msgstr ""
 
@@ -481,6 +496,10 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute FW at 1/e²"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/signal/fwhm_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -556,6 +575,17 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+":py:func:`magnitude_spectrum "
+"<cdl.core.computation.signal.compute_magnitude_spectrum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute magnitude spectrum"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`moving_average "
 "<cdl.core.computation.signal.compute_moving_average>`"
 msgstr ""
@@ -586,12 +616,40 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
+":py:func:`offset_correction "
+"<cdl.core.computation.signal.compute_offset_correction>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+"Correct offset: subtract the mean value of the signal in the specified "
+"range"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/image/offset_correction_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
 ":py:func:`peak_detection "
 "<cdl.core.computation.signal.compute_peak_detection>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Peak detection"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`phase_spectrum "
+"<cdl.core.computation.signal.compute_phase_spectrum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -622,6 +680,15 @@ msgstr ""
 msgid ""
 "Multiply **dst** by a constant value and return the new result signal "
 "object"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`psd <cdl.core.computation.signal.compute_psd>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute power spectral density"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -658,6 +725,16 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Reverse x-axis"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ""
+":py:func:`sampling_rate_period "
+"<cdl.core.computation.signal.compute_sampling_rate_period>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute sampling rate and period"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -714,6 +791,14 @@ msgstr ""
 msgid ""
 "Compute windowing (available methods: hamming, hanning, bartlett, "
 "blackman,"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid ":py:func:`x_at_minmax <cdl.core.computation.signal.compute_x_at_minmax>`"
+msgstr ""
+
+#: ../../doc/validation_status_signal.csv:1
+msgid "Compute x at min/max"
 msgstr ""
 
 #: ../../doc/features/general/validation.rst:85
@@ -861,6 +946,10 @@ msgid ":py:func:`fft <cdl.core.computation.image.compute_fft>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid "``features/image/fft2d_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`flatfield <cdl.core.computation.image.compute_flatfield>`"
 msgstr ""
 
@@ -921,6 +1010,22 @@ msgid ":py:func:`im <cdl.core.computation.image.compute_im>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`line_profile <cdl.core.computation.image.compute_line_profile>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute horizontal or vertical profile"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`line_section <cdl.core.computation.image.compute_line_section>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Return intensity profile of data along a line"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`log10 <cdl.core.computation.image.compute_log10>`"
 msgstr ""
 
@@ -938,6 +1043,12 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
+":py:func:`magnitude_spectrum "
+"<cdl.core.computation.image.compute_magnitude_spectrum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
 ":py:func:`moving_average "
 "<cdl.core.computation.image.compute_moving_average>`"
 msgstr ""
@@ -950,6 +1061,22 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`normalize <cdl.core.computation.image.compute_normalize>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`offset_correction "
+"<cdl.core.computation.image.compute_offset_correction>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Apply offset correction"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`phase_spectrum "
+"<cdl.core.computation.image.compute_phase_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -975,11 +1102,7 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`profile <cdl.core.computation.image.compute_profile>`"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
-msgid "Compute horizontal or vertical profile"
+msgid ":py:func:`psd <cdl.core.computation.image.compute_psd>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1037,6 +1160,16 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Rotate data 90°"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`segment_profile "
+"<cdl.core.computation.image.compute_segment_profile>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute segment profile"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1484,3 +1617,40 @@ msgstr ""
 #~ "and return **dst** image modified in "
 #~ "place"
 #~ msgstr ""
+
+#~ msgid "44"
+#~ msgstr ""
+
+#~ msgid "81"
+#~ msgstr ""
+
+#~ msgid "125"
+#~ msgstr ""
+
+#~ msgid "14"
+#~ msgstr ""
+
+#~ msgid "10"
+#~ msgstr ""
+
+#~ msgid "24"
+#~ msgstr ""
+
+#~ msgid "31%"
+#~ msgstr ""
+
+#~ msgid "12%"
+#~ msgstr ""
+
+#~ msgid "19%"
+#~ msgstr ""
+
+#~ msgid "``features/signal/misc_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid "``features/image/misc_unit_test.py``"
+#~ msgstr ""
+
+#~ msgid ":py:func:`profile <cdl.core.computation.image.compute_profile>`"
+#~ msgstr ""
+

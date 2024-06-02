@@ -14,6 +14,10 @@ information on your configuration could be very challenging.
 That is why DataLab provides the dialog box "Installation and configuration"
 which gathers all the information about your installation and configuration.
 
+.. note::
+
+  The installation and configuration viewer is accessible from the "?" menu in the main window.
+
 .. figure:: /images/shots/instviewer.png
 
     Installation and configuration (see "?" menu)

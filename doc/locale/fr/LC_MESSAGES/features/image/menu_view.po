@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/image/menu_view.rst:4
+msgid "View options for Images"
+msgstr "Options d'affichage pour les images"
+
+#: ../../doc/features/image/menu_view.rst:8
+msgid "Screenshot of the \"View\" menu."
+msgstr "Capture d'écran du menu \"Affichage\"."
+
+#: ../../doc/features/image/menu_view.rst:10
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir des actions liées à l'image."
+
+#: ../../doc/features/image/menu_view.rst:13
+msgid ""
+"The \"View\" menu allows you to visualize the current image or group of "
+"images. It also allows you to show/hide titles, to show/hide the contrast"
+" panel, to refresh the visualization, and so on."
+msgstr ""
+"Le menu \"Affichage\" permet de visualiser l'image courante ou un groupe "
+"d'images. Il permet également d'afficher/cacher les titres, "
+"d'afficher/cacher le panneau de contraste, de rafraîchir la "
+"visualisation, etc."
+
+#: ../../doc/features/image/menu_view.rst:18
+msgid "View in a new window"
+msgstr "Voir dans une nouvelle fenêtre"
+
+#: ../../doc/features/image/menu_view.rst:20
+msgid "Open a new window to visualize and the selected images."
+msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionées."
+
+#: ../../doc/features/image/menu_view.rst:22
+msgid ""
+"In the separate window, you may visualize your data more comfortably "
+"(e.g., by maximizing the window) and you may also annotate the data."
+msgstr ""
+"Dans cette nouvelle fenêtre, la visualisation des données est plus aisée "
+"(p.ex. en maximisant la fenêtre) et des annotations peuvent être ajoutées"
+" aux données."
+
+#: ../../doc/features/image/menu_view.rst:26
+msgid "Edit annotations"
+msgstr "Modifier les annotations"
+
+#: ../../doc/features/image/menu_view.rst:28
+msgid "Open a new window to edit annotations."
+msgstr "Ouvre une nouvelle fenêtre pour modifier les annotations."
+
+#: ../../doc/features/image/menu_view.rst:31
+msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
+msgstr ""
+"Voir :ref:`ref-to-image-annotations` pour plus de détails sur les "
+"annotations."
+
+#: ../../doc/features/image/menu_view.rst:34
+msgid "Auto-refresh"
+msgstr "Rafraîchissement automatique"
+
+#: ../../doc/features/image/menu_view.rst:36
+msgid ""
+"Automatically refresh the visualization when the data changes. When "
+"enabled (default), the plot view is automatically refreshed when the data"
+" changes. When disabled, the plot view is not refreshed until you "
+"manually refresh it by clicking the \"Refresh manually\" button in the "
+"toolbar. Even though the refresh algorithm is optimized, it may still "
+"take some time to refresh the plot view when the data changes, especially"
+" when the data set is large. Therefore, you may want to disable the auto-"
+"refresh feature when you are working with large data sets, and enable it "
+"again when you are done. This will avoid unnecessary refreshes."
+msgstr ""
+"Rafraîchit automatiquement la visualisation quand les données changent. "
+"Quand ce réglage est activé (par défaut), la visualisation est "
+"automatiquement rafraîchie quand les données changent. Quand il est "
+"désactivé, la visualisation n'est pas rafraîchie tant que vous ne cliquez"
+" pas sur le bouton \"Rafraîchir manuellement\" dans la barre d'outils. "
+"Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du"
+" temps pour rafraîchir la visualisation quand les données changent, "
+"surtout quand le jeu de données est grand. Par conséquent, vous pouvez "
+"désactiver le rafraîchissement automatique quand vous travaillez avec des"
+" données volumineuses, et l'activer à nouveau quand vous avez terminé. "
+"Cela évitera des rafraîchissements inutiles."
+
+#: ../../doc/features/image/menu_view.rst:48
+msgid "Refresh manually"
+msgstr "Rafraîchir manuellement"
+
+#: ../../doc/features/image/menu_view.rst:50
+msgid ""
+"Refresh the visualization manually. This triggers a refresh of the plot "
+"view, even if the auto-refresh feature is disabled."
+msgstr ""
+"Rafraîchit la visualisation manuellement. Cela déclenche un "
+"rafraîchissement de la visualisation, même si le rafraîchissement "
+"automatique est désactivé."
+
+#: ../../doc/features/image/menu_view.rst:54
+msgid "Show contrast panel"
+msgstr "Afficher le panneau de contraste"
+
+#: ../../doc/features/image/menu_view.rst:56
+msgid "Show/hide contrast adjustment panel."
+msgstr "Affiche/cache le panneau de réglage du contraste."
+
+#: ../../doc/features/image/menu_view.rst:59
+msgid "Show graphical object titles"
+msgstr "Afficher les titres des objets graphiques"
+
+#: ../../doc/features/image/menu_view.rst:61
+msgid "Show/hide titles of computing results or annotations."
+msgstr ""
+"Affiche/cache les titres des objets graphiques liés aux résultats de "
+"calculs et aux annotations."
+
+#: ../../doc/features/image/menu_view.rst:64
+msgid "Other menu entries"
+msgstr "Autres entrées du menu"
+
+#: ../../doc/features/image/menu_view.rst:66
+msgid "Show/hide panels or toolbars."
+msgstr "Affiche/cache les panneaux et barres d'outils."

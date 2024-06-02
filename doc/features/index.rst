@@ -41,6 +41,7 @@ signal and image processing panels.
    general/plugins
    general/logviewer
    general/instviewer
+   general/settings
    general/command
 
 .. raw:: latex
@@ -61,8 +62,11 @@ signal processing panel is the default panel when DataLab is started.
    :maxdepth: 2
    :caption: Signal processing:
 
-   signal/menus
-   signal/text_import
+   signal/menu_file
+   signal/menu_operations
+   signal/menu_processing
+   signal/menu_computing
+   signal/menu_view
    signal/annotations
 
 .. raw:: latex
@@ -84,8 +88,11 @@ bottom-right of the DataLab main window.
    :maxdepth: 2
    :caption: Image processing:
 
-   image/menus
-   image/text_import
+   image/menu_file
+   image/menu_operations
+   image/menu_processing
+   image/menu_computing
+   image/menu_view
    image/2d_peak_detection
    image/contour_detection
    image/annotations

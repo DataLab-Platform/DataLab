@@ -1,0 +1,926 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 12:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/image/menu_processing.rst:4
+msgid "Processing Images"
+msgstr "Traitement des images"
+
+#: ../../doc/features/image/menu_processing.rst:6
+msgid "This section describes the image processing features available in DataLab."
+msgstr ""
+"Cette section décrit les fonctionnalités de traitement d'image "
+"disponibles dans DataLab."
+
+#: ../../doc/features/image/menu_processing.rst:10
+msgid ""
+":ref:`ima-menu-operations` for more information on operations that can be"
+" performed on images, or :ref:`ima-menu-computing` for information on "
+"computing features on images."
+msgstr ""
+":ref:`ima-menu-operations` pour plus d'informations sur les opérations "
+"qui peuvent être effectuées sur les images, ou :ref:`ima-menu-computing` "
+"pour des informations sur les fonctionnalités de calcul sur les images."
+
+#: ../../doc/features/image/menu_processing.rst:16
+msgid "Screenshot of the \"Processing\" menu."
+msgstr "Capture d'écran du menu \"Traitement\"."
+
+#: ../../doc/features/image/menu_processing.rst:18
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr ""
+"Lorsque le \"Panneau Image\" est sélectionné, les menus et barres "
+"d'outils sont mis à jour pour fournir des actions liées à l'image."
+
+#: ../../doc/features/image/menu_processing.rst:21
+msgid ""
+"The \"Processing\" menu allows you to perform various processing on the "
+"current image or group of images: it allows you to apply filters, to "
+"perform exposure correction, to perform denoising, to perform "
+"morphological operations, and so on."
+msgstr ""
+"Le menu \"Traitement\" permet d'effectuer divers traitements sur l'image "
+"ou le groupe d'images courant : il permet d'appliquer des filtres, de "
+"corriger l'exposition, de réduire le bruit, d'effectuer des opérations "
+"morphologiques, etc."
+
+#: ../../doc/features/image/menu_processing.rst:26
+msgid "Axis transformation"
+msgstr "Transformation des axes"
+
+#: ../../doc/features/image/menu_processing.rst:29
+#: ../../doc/features/image/menu_processing.rst:39
+msgid "Linear calibration"
+msgstr "Étalonnage linéaire"
+
+#: ../../doc/features/image/menu_processing.rst:31
+msgid ""
+"Create a new image which is a linear calibration of each selected image "
+"with respect to Z axis:"
+msgstr ""
+"Crée une image à partir de l'étalonnage linéaire (par rapport à l'axe des"
+" Z) de chaque image sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:38
+msgid "Parameter"
+msgstr "Paramètre"
+
+#: ../../doc/features/image/menu_processing.rst:40
+msgid "Z-axis"
+msgstr "Axe des Z"
+
+#: ../../doc/features/image/menu_processing.rst:41
+msgid ":math:`z_{1} = a.z_{0} + b`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:44
+msgid "Swap X/Y axes"
+msgstr "Permuter les axes X/Y"
+
+#: ../../doc/features/image/menu_processing.rst:46
+msgid "Create a new image which is the result of swapping X/Y data."
+msgstr ""
+"Créee une image à partir des données inversées X/Y de l'image "
+"sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:49
+msgid "Level adjustment"
+msgstr "Ajustement des niveaux"
+
+#: ../../doc/features/image/menu_processing.rst:52
+msgid "Normalize"
+msgstr "Normalisation"
+
+#: ../../doc/features/image/menu_processing.rst:54
+msgid ""
+"Create a new image which is the normalized version of each selected image"
+" by maximum, amplitude, sum, energy or RMS:"
+msgstr ""
+"Crée une image à partir de la normalisation de chaque image sélectionnée "
+"par maximum, amplitude, somme, énergie ou RMS :"
+
+#: ../../doc/features/image/menu_processing.rst:61
+msgid "Normalization"
+msgstr "Normalisation"
+
+#: ../../doc/features/image/menu_processing.rst:62
+msgid "Equation"
+msgstr "Equation"
+
+#: ../../doc/features/image/menu_processing.rst:63
+msgid "Maximum"
+msgstr "Maximum"
+
+#: ../../doc/features/image/menu_processing.rst:64
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}}`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:65
+msgid "Amplitude"
+msgstr "Amplitude"
+
+#: ../../doc/features/image/menu_processing.rst:66
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{z_{max}-z_{min}}`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:67
+msgid "Area"
+msgstr "Aire"
+
+#: ../../doc/features/image/menu_processing.rst:68
+msgid ":math:`z_{1} = \\dfrac{z_{0}}{\\sum_{i=0}^{N-1}{z_{i}}}`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:69
+msgid "Energy"
+msgstr "Energie"
+
+#: ../../doc/features/image/menu_processing.rst:70
+msgid ":math:`z_{1}= \\dfrac{z_{0}}{\\sqrt{\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:71
+msgid "RMS"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:72
+msgid ""
+":math:`z_{1}= "
+"\\dfrac{z_{0}}{\\sqrt{\\dfrac{1}{N}\\sum_{n=0}^{N}|z_{0}[n]|^2}}`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:75
+msgid "Thresholding"
+msgstr "Seuillage"
+
+#: ../../doc/features/image/menu_processing.rst:77
+msgid "Apply the thresholding to each selected image."
+msgstr "Applique un seuillage sur chaque image sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:80
+msgid "Clipping"
+msgstr "Ecrêtage"
+
+#: ../../doc/features/image/menu_processing.rst:82
+msgid "Apply the clipping to each selected image."
+msgstr "Applique un écrêtage sur chaque image sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:85
+msgid "Offset correction"
+msgstr "Soustraction d'offset"
+
+#: ../../doc/features/image/menu_processing.rst:87
+msgid ""
+"Create a new image which is the result of offset correction on each "
+"selected image. This operation is performed by subtracting the image "
+"background value which is estimated by the mean value of a user-defined "
+"rectangular area."
+msgstr ""
+"Crée une image à partir du résultat d'une correction d'offset sur chaque "
+"image sélectionnée. Cette opération est réalisée en soustrayant la valeur"
+" de fond de l'image, qui est estimée par la valeur moyenne d'une zone "
+"rectangulaire définie par l'utilisateur."
+
+#: ../../doc/features/image/menu_processing.rst:92
+msgid "Noise reduction"
+msgstr "Réduction de bruit"
+
+#: ../../doc/features/image/menu_processing.rst:94
+msgid ""
+"Create a new image which is the result of noise reduction on each "
+"selected image."
+msgstr ""
+"Crée une image à partir du résultat d'un débruitage sur chaque image "
+"sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:96
+msgid "The following filters are available:"
+msgstr "Les filtres suivants sont disponibles :"
+
+#: ../../doc/features/image/menu_processing.rst:102
+msgid "Filter"
+msgstr "Filtre"
+
+#: ../../doc/features/image/menu_processing.rst:103
+#: ../../doc/features/image/menu_processing.rst:126
+msgid "Formula/implementation"
+msgstr "Formule/implémentation"
+
+#: ../../doc/features/image/menu_processing.rst:104
+msgid "Gaussian filter"
+msgstr "Filtre gaussien"
+
+#: ../../doc/features/image/menu_processing.rst:105
+msgid ""
+"`scipy.ndimage.gaussian_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:106
+msgid "Moving average"
+msgstr "Moyenne mobile"
+
+#: ../../doc/features/image/menu_processing.rst:107
+msgid ""
+"`scipy.ndimage.uniform_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:108
+msgid "Moving median"
+msgstr "Médiane mobile"
+
+#: ../../doc/features/image/menu_processing.rst:109
+msgid ""
+"`scipy.signal.medfilt "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:110
+msgid "Wiener filter"
+msgstr "Filtre de Wiener"
+
+#: ../../doc/features/image/menu_processing.rst:111
+msgid ""
+"`scipy.signal.wiener "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:114
+msgid "Fourier analysis"
+msgstr "Analyse de Fourier"
+
+#: ../../doc/features/image/menu_processing.rst:116
+msgid ""
+"Create a new image which is the result of a Fourier analysis on each "
+"selected image."
+msgstr ""
+"Crée une image à partir du résultat d'une analyse de Fourier sur chaque "
+"image sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:118
+msgid "The following functions are available:"
+msgstr "Les fonctions suivantes sont disponibles :"
+
+#: ../../doc/features/image/menu_processing.rst:124
+msgid "Function"
+msgstr "Fonction"
+
+#: ../../doc/features/image/menu_processing.rst:125
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/image/menu_processing.rst:127
+msgid "FFT"
+msgstr "FFT"
+
+#: ../../doc/features/image/menu_processing.rst:128
+msgid "Fast Fourier Transform"
+msgstr "Transformée de Fourier rapide"
+
+#: ../../doc/features/image/menu_processing.rst:129
+msgid ""
+"`numpy.fft.fft2 "
+"<https://numpy.org/doc/stable/reference/generated/numpy.fft.fft2.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:130
+msgid "Inverse FFT"
+msgstr "FFT inverse"
+
+#: ../../doc/features/image/menu_processing.rst:131
+msgid "Inverse Fast Fourier Transform"
+msgstr "Transformée de Fourier rapide inverse"
+
+#: ../../doc/features/image/menu_processing.rst:132
+msgid ""
+"`numpy.fft.ifft2 "
+"<https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:133
+msgid "Magnitude spectrum"
+msgstr "Spectre d'amplitude"
+
+#: ../../doc/features/image/menu_processing.rst:134
+#: ../../doc/features/image/menu_processing.rst:140
+msgid "Optionnal: use logarithmic scale"
+msgstr "Optionnel : utiliser une échelle logarithmique"
+
+#: ../../doc/features/image/menu_processing.rst:135
+msgid ":math:`z_{1} = |FFT(z_{0})|`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:136
+msgid "Phase spectrum"
+msgstr "Spectre de phase"
+
+#: ../../doc/features/image/menu_processing.rst:138
+msgid ":math:`z_{1} = \\angle(FFT(z_{0}))`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:139
+msgid "Power spectral density"
+msgstr "Densité spectrale de puissance"
+
+#: ../../doc/features/image/menu_processing.rst:141
+msgid ":math:`z_{1} = |FFT(z_{0})|^2`"
+msgstr ""
+
+#: ../../doc/features/image/menu_processing.rst:145
+msgid ""
+"FFT and inverse FFT are performed using frequency shifting if the option "
+"is enabled in DataLab settings (see :ref:`settings`)."
+msgstr "La FFT et la FFT inverse sont effectuées avec décalage de fréquence si l'option est activée dans les paramètres de DataLab (voir :ref:`settings`)."
+
+#: ../../doc/features/image/menu_processing.rst:149
+msgid "Exposure"
+msgstr "Exposition"
+
+#: ../../doc/features/image/menu_processing.rst:153
+msgid "Gamma correction"
+msgstr "Correction gamma"
+
+#: ../../doc/features/image/menu_processing.rst:152
+msgid ""
+"Apply gamma correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_gamma <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
+msgstr ""
+"Applique une correction gamma sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_gamma <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:157
+msgid "Logarithmic correction"
+msgstr "Correction logarithmique"
+
+#: ../../doc/features/image/menu_processing.rst:156
+msgid ""
+"Apply logarithmic correction to each selected image (implementation based"
+" on `skimage.exposure.adjust_log <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+msgstr ""
+"Applique une correction logarithmique sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_log <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:161
+msgid "Sigmoid correction"
+msgstr "Correction sigmoïde"
+
+#: ../../doc/features/image/menu_processing.rst:160
+msgid ""
+"Apply sigmoid correction to each selected image (implementation based on "
+"`skimage.exposure.adjust_sigmoid <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+msgstr ""
+"Applique une correction sigmoïde sur chaque image sélectionnée "
+"(implémentation basée sur `skimage.exposure.adjust_sigmoid <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:165
+msgid "Histogram equalization"
+msgstr "Egalisation d'histogramme"
+
+#: ../../doc/features/image/menu_processing.rst:164
+msgid ""
+"Equalize image histogram levels (implementation based on "
+"`skimage.exposure.equalize_hist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
+msgstr ""
+"Egalise les niveaux de l'histogramme de l'image (implémentation basée sur"
+" `skimage.exposure.equalize_hist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:169
+msgid "Adaptive histogram equalization"
+msgstr "Egalisation d'histogramme adaptative"
+
+#: ../../doc/features/image/menu_processing.rst:168
+msgid ""
+"Equalize image histogram levels using Contrast Limited Adaptive Histogram"
+" Equalization (CLAHE) algorithm (implementation based on "
+"`skimage.exposure.equalize_adapthist <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
+msgstr ""
+"Egalise les niveaux de l'histogramme de l'image, en utilisant "
+"l'algorithme Contrast Limited Adaptive Histogram Equalization (CLAHE) "
+"(implémentation basée sur `skimage.exposure.equalize_adapthist <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:173
+msgid "Intensity rescaling"
+msgstr "Ajustement des niveaux"
+
+#: ../../doc/features/image/menu_processing.rst:172
+msgid ""
+"Stretch or shrink image intensity levels (implementation based on "
+"`skimage.exposure.rescale_intensity <https://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+msgstr ""
+"Réduit ou étend la plage de répartition des niveaux de l'image "
+"(implémentation basée sur `skimage.exposure.rescale_intensity <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:176
+msgid "Restoration"
+msgstr "Restauration"
+
+#: ../../doc/features/image/menu_processing.rst:180
+msgid "Total variation denoising"
+msgstr "Filtrage variationnel (débruitage)"
+
+#: ../../doc/features/image/menu_processing.rst:179
+msgid ""
+"Denoise image using Total Variation algorithm (implementation based on "
+"`skimage.restoration.denoise_tv_chambolle <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
+"chambolle>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par filtrage variationnel selon "
+"l'algorithme de Chambolle (implémentation basée sur "
+"`skimage.restoration.denoise_tv_chambolle <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-tv-"
+"chambolle>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:184
+msgid "Bilateral filter denoising"
+msgstr "Filtrage bilatéral (débruitage)"
+
+#: ../../doc/features/image/menu_processing.rst:183
+msgid ""
+"Denoise image using bilateral filter (implementation based on "
+"`skimage.restoration.denoise_bilateral <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par filtrage bilatéral "
+"(implémentation basée sur `skimage.restoration.denoise_bilateral <https"
+"://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-"
+"bilateral>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:188
+msgid "Wavelet denoising"
+msgstr "Débruitage par ondelettes"
+
+#: ../../doc/features/image/menu_processing.rst:187
+msgid ""
+"Perform wavelet denoising on image (implementation based on "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+msgstr ""
+"Calcule le résultat d'un débruitage par ondelettes (implémentation basée "
+"sur `skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:192
+msgid "White Top-Hat denoising"
+msgstr "Débruitage par Top-Hat"
+
+#: ../../doc/features/image/menu_processing.rst:191
+msgid ""
+"Denoise image by subtracting its white top hat transform (using a disk "
+"footprint)"
+msgstr ""
+"Débruitage de l'image par soustraction de la transformée Top-Hat avec "
+"ouverture circulaire de rayon paramétrabl"
+
+#: ../../doc/features/image/menu_processing.rst:197
+msgid "All denoising methods"
+msgstr "Tous les débruitages"
+
+#: ../../doc/features/image/menu_processing.rst:195
+msgid ""
+"Perform all denoising methods on image. Combined with the \"distribute on"
+" a grid\" option, this allows to compare the different denoising methods "
+"on the same image."
+msgstr ""
+"Applique tous les débruitages à l'image. Combiné avec l'option "
+"\"distribuer sur une grille\", cela permet de comparer les différents "
+"débruitages sur la même image."
+
+#: ../../doc/features/image/menu_processing.rst:200
+msgid "Morphology"
+msgstr "Morphologie"
+
+#: ../../doc/features/image/menu_processing.rst:204
+msgid "White Top-Hat (disk)"
+msgstr "Top-Hat (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:203
+msgid ""
+"Perform white top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.white_tophat <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+msgstr ""
+"Calcule le résultat d'un Top-Hat de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:208
+msgid "Black Top-Hat (disk)"
+msgstr "Top-Hat dual (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:207
+msgid ""
+"Perform black top hat transform of an image, using a disk footprint "
+"(implementation based on `skimage.morphology.black_tophat <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
+msgstr ""
+"Calcule le résultat d'un Top-Hat dual de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.restoration.denoise_wavelet <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:212
+msgid "Erosion (disk)"
+msgstr "Erosion (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:211
+msgid ""
+"Perform morphological erosion on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.erosion <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+msgstr ""
+"Calcule le résultat d'une érosion de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.morphology.erosion <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:216
+msgid "Dilation (disk)"
+msgstr "Dilatation (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:215
+msgid ""
+"Perform morphological dilation on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.dilation <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+msgstr ""
+"Calcule le résultat d'une dilatation de l'image, avec une ouverture "
+"circulaire (disque) de rayon paramétrable (implémentation basée sur "
+"`skimage.morphology.dilation <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:220
+msgid "Opening (disk)"
+msgstr "Ouverture (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:219
+msgid ""
+"Perform morphological opening on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.opening <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
+msgstr ""
+"Calcule le résultat d'une ouverture morphologique de l'image, avec une "
+"forme circulaire (disque) de rayon paramétrable (implémentation basée sur"
+" `skimage.morphology.opening <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:224
+msgid "Closing (disk)"
+msgstr "Fermeture (disque)"
+
+#: ../../doc/features/image/menu_processing.rst:223
+msgid ""
+"Perform morphological closing on an image, using a disk footprint "
+"(implementation based on `skimage.morphology.closing <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
+msgstr ""
+"Calcule le résultat d'une fermeture morphologique de l'image, avec une "
+"forme circulaire (disque) de rayon paramétrable (implémentation basée sur"
+" `skimage.morphology.closing <https://scikit-"
+"image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:229
+msgid "All morphological operations"
+msgstr "Toutes les opérations morphologiques"
+
+#: ../../doc/features/image/menu_processing.rst:227
+msgid ""
+"Perform all morphological operations on an image, using a disk footprint."
+" Combined with the \"distribute on a grid\" option, this allows to "
+"compare the different morphological operations on the same image."
+msgstr ""
+"Applique toutes les opérations morphologiques à une image. Combiné avec "
+"l'option \"distribuer sur une grille\", cela permet de comparer les "
+"différentes opérations morphologiques sur la même image."
+
+#: ../../doc/features/image/menu_processing.rst:232
+msgid "Edges"
+msgstr "Contours"
+
+#: ../../doc/features/image/menu_processing.rst:236
+msgid "Roberts filter"
+msgstr "Filtre de Roberts"
+
+#: ../../doc/features/image/menu_processing.rst:235
+msgid ""
+"Perform edge filtering on an image, using the Roberts algorithm "
+"(implementation based on `skimage.filters.roberts <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Roberts (implémentation basée sur `skimage.filters.roberts <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:240
+msgid "Prewitt filter"
+msgstr "Filtre de Prewitt"
+
+#: ../../doc/features/image/menu_processing.rst:239
+msgid ""
+"Perform edge filtering on an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Prewitt (implémentation basée sur `skimage.filters.prewitt <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:244
+msgid "Prewitt filter (horizontal)"
+msgstr "Filtre de Prewitt (horizontal)"
+
+#: ../../doc/features/image/menu_processing.rst:243
+msgid ""
+"Find the horizontal edges of an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Prewitt (implémentation basée sur `skimage.filters.prewitt_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:248
+msgid "Prewitt filter (vertical)"
+msgstr "Filtre de Prewitt (vertical)"
+
+#: ../../doc/features/image/menu_processing.rst:247
+msgid ""
+"Find the vertical edges of an image, using the Prewitt algorithm "
+"(implementation based on `skimage.filters.prewitt_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Prewitt (implémentation basée sur `skimage.filters.prewitt_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:252
+msgid "Sobel filter"
+msgstr "Filtre de Sobel"
+
+#: ../../doc/features/image/menu_processing.rst:251
+msgid ""
+"Perform edge filtering on an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Sobel (implémentation basée sur `skimage.filters.sobel <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:256
+msgid "Sobel filter (horizontal)"
+msgstr "Filtre de Sobel (horizontal)"
+
+#: ../../doc/features/image/menu_processing.rst:255
+msgid ""
+"Find the horizontal edges of an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Sobel (implémentation basée sur `skimage.filters.sobel_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:260
+msgid "Sobel filter (vertical)"
+msgstr "Filtre de Sobel (vertical)"
+
+#: ../../doc/features/image/menu_processing.rst:259
+msgid ""
+"Find the vertical edges of an image, using the Sobel algorithm "
+"(implementation based on `skimage.filters.sobel_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Sobel (implémentation basée sur `skimage.filters.sobel_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:264
+msgid "Scharr filter"
+msgstr "Filtre de Scharr"
+
+#: ../../doc/features/image/menu_processing.rst:263
+msgid ""
+"Perform edge filtering on an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Scharr (implémentation basée sur `skimage.filters.scharr <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:268
+msgid "Scharr filter (horizontal)"
+msgstr "Filtre de Scharr (horizontal)"
+
+#: ../../doc/features/image/menu_processing.rst:267
+msgid ""
+"Find the horizontal edges of an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Scharr (implémentation basée sur `skimage.filters.scharr_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:272
+msgid "Scharr filter (vertical)"
+msgstr "Filtre de Scharr (vertical)"
+
+#: ../../doc/features/image/menu_processing.rst:271
+msgid ""
+"Find the vertical edges of an image, using the Scharr algorithm "
+"(implementation based on `skimage.filters.scharr_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Scharr (implémentation basée sur `skimage.filters.scharr_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:276
+msgid "Farid filter"
+msgstr "Filtre de Farid"
+
+#: ../../doc/features/image/menu_processing.rst:275
+msgid ""
+"Perform edge filtering on an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Farid (implémentation basée sur `skimage.filters.farid <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:280
+msgid "Farid filter (horizontal)"
+msgstr "Filtre de Farid (horizontal)"
+
+#: ../../doc/features/image/menu_processing.rst:279
+msgid ""
+"Find the horizontal edges of an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid_h <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
+msgstr ""
+"Recherche les contours horizontaux d'une image, à l'aide de l'algorithme "
+"de Farid (implémentation basée sur `skimage.filters.farid_h <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:284
+msgid "Farid filter (vertical)"
+msgstr "Filtre de Farid (vertical)"
+
+#: ../../doc/features/image/menu_processing.rst:283
+msgid ""
+"Find the vertical edges of an image, using the Farid algorithm "
+"(implementation based on `skimage.filters.farid_v <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
+msgstr ""
+"Recherche les contours verticaux d'une image, à l'aide de l'algorithme de"
+" Farid (implémentation basée sur `skimage.filters.farid_v <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:288
+msgid "Laplace filter"
+msgstr "Filtre de Laplace"
+
+#: ../../doc/features/image/menu_processing.rst:287
+msgid ""
+"Perform edge filtering on an image, using the Laplace algorithm "
+"(implementation based on `skimage.filters.laplace <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Laplace (implémentation basée sur `skimage.filters.laplace <https"
+"://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:293
+msgid "All edges filters"
+msgstr "Tous les filtres de contours"
+
+#: ../../doc/features/image/menu_processing.rst:291
+msgid ""
+"Perform all edge filtering algorithms (see above) on an image. Combined "
+"with the \"distribute on a grid\" option, this allows to compare the "
+"different edge filters on the same image."
+msgstr ""
+"Applique tous les algorithmes de détection de contours (voir ci-dessus) à"
+" une image. Combiné avec l'option \"distribuer sur une grille\", cela "
+"permet de comparer les différents filtres de contours sur la même image."
+
+#: ../../doc/features/image/menu_processing.rst:297
+msgid "Canny filter"
+msgstr "Filtre de Canny"
+
+#: ../../doc/features/image/menu_processing.rst:296
+msgid ""
+"Perform edge filtering on an image, using the Canny algorithm "
+"(implementation based on `skimage.feature.canny <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
+msgstr ""
+"Calcule le résultat d'une détection de contours à l'aide l'algorithme de "
+"Canny (implémentation basée sur `skimage.feature.canny <https://scikit-"
+"image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:300
+msgid "Butterworth filter"
+msgstr "Filtre de Butterworth"
+
+#: ../../doc/features/image/menu_processing.rst:302
+msgid ""
+"Perform Butterworth filter on an image (implementation based on "
+"`skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+msgstr ""
+"Calcule le résultat d'un filtre de Butterworth sur l'image "
+"(implémentation basée sur `skimage.filters.butterworth <https://scikit-"
+"image.org/docs/stable/api/skimage.filters.html#skimage.filters.butterworth>`_)"
+
+#: ../../doc/features/image/menu_processing.rst:306
+msgid "Resize"
+msgstr "Redimensionner"
+
+#: ../../doc/features/image/menu_processing.rst:308
+msgid "Create a new image which is a resized version of each selected image."
+msgstr ""
+"Crée une image qui est le résultat du redimensionnement de chaque image "
+"sélectionnée."
+
+#: ../../doc/features/image/menu_processing.rst:311
+msgid "Pixel binning"
+msgstr "Binning"
+
+#: ../../doc/features/image/menu_processing.rst:313
+msgid ""
+"Combine clusters of adjacent pixels, throughout the image, into single "
+"pixels. The result can be the sum, average, median, minimum, or maximum "
+"value of the cluster."
+msgstr ""
+"Regroupe des pixels adjacents de l'image en un seul pixel (somme, "
+"moyenne, médiane, minimum ou maximum de la valeur des pixels adjacents)."
+
+#: ../../doc/features/image/menu_processing.rst:318
+msgid "ROI extraction"
+msgstr "Extraction de ROI"
+
+#: ../../doc/features/image/menu_processing.rst:320
+msgid "Create a new image from a user-defined Region of Interest."
+msgstr ""
+"Crée une image à partir d'une région d'intérêt (ROI) définie par "
+"l'utilisateur."
+
+#: ../../doc/features/image/menu_processing.rst:324
+msgid ""
+"ROI extraction dialog: the ROI is defined by moving the position and "
+"adjusting the size of a rectangle shape."
+msgstr ""
+"Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
+"définie en ajustant la position et la taille du rectangle de sélection."
