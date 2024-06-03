@@ -860,7 +860,7 @@ def compute_magnitude_spectrum(
     dst = dst_11(src, "magnitude_spectrum")
     x, y = src.get_data()
     log_scale = True if p is not None and p.log else False
-    dst.y = alg.magnitude_spectrum(x, y, log_scale=log_scale)
+    dst.set_xydata(*alg.magnitude_spectrum(x, y, log_scale=log_scale))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = "dB" if log_scale else ""
@@ -876,7 +876,9 @@ def compute_phase_spectrum(src: SignalObj) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = Wrap11Func(alg.phase_spectrum)(src)
+    dst = dst_11(src, "phase_spectrum")
+    x, y = src.get_data()
+    dst.set_xydata(*alg.phase_spectrum(x, y))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
     dst.yunit = ""

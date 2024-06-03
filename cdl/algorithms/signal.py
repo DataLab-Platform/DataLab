@@ -132,7 +132,7 @@ def ifft1d(
 
 def magnitude_spectrum(
     x: np.ndarray, y: np.ndarray, log_scale: bool = False
-) -> np.ndarray:
+) -> tuple[np.ndarray, np.ndarray]:
     """Compute magnitude spectrum.
 
     Args:
@@ -141,24 +141,28 @@ def magnitude_spectrum(
         log_scale: Use log scale. Defaults to False.
 
     Returns:
-        Magnitude spectrum
+        Magnitude spectrum (X data, Y data)
     """
-    _, y1 = fft1d(x, y)
+    x1, y1 = fft1d(x, y)
     if log_scale:
-        return 20 * np.log10(np.abs(y1))
-    return np.abs(y1)
+        y_mag = 20 * np.log10(np.abs(y1))
+    y_mag = np.abs(y1)
+    return x1, y_mag
 
 
-def phase_spectrum(y: np.ndarray) -> np.ndarray:
+def phase_spectrum(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Compute phase spectrum.
 
     Args:
+        x: X data
         y: Y data
 
     Returns:
-        Phase spectrum (in degrees)
+        Phase spectrum in degrees (X data, Y data)
     """
-    return np.rad2deg(np.angle(np.fft.fftshift(np.fft.fft(y))))
+    x1, y1 = fft1d(x, y)
+    y_phase = np.rad2deg(np.angle(y1))
+    return x1, y_phase
 
 
 def psd(
