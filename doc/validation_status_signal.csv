@@ -36,7 +36,7 @@
 :py:func:`pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A
 :py:func:`product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,``features/signal/operation_unit_test.py``
 :py:func:`product_constant <cdl.core.computation.signal.compute_product_constant>`,Multiply **dst** by a constant value and return the new result signal object,``features/signal/operation_unit_test.py``
-:py:func:`psd <cdl.core.computation.signal.compute_psd>`,Compute power spectral density,N/A
+:py:func:`psd <cdl.core.computation.signal.compute_psd>`,Compute power spectral density,``features/signal/fft1d_unit_test.py``
 :py:func:`quadratic_difference <cdl.core.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,``features/image/operation_unit_test.py``
 :py:func:`re <cdl.core.computation.signal.compute_re>`,Compute real part,``features/signal/operation_unit_test.py``
 :py:func:`resampling <cdl.core.computation.signal.compute_resampling>`,Resample data,N/A

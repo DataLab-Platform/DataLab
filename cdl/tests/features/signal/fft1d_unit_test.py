@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
 import cdl.algorithms.signal as alg
@@ -132,8 +133,25 @@ def test_signal_phase_spectrum() -> None:
     check_array_result("Cosine signal phase spectrum Y", phase.y, exp_phase)
 
 
+@pytest.mark.validation
+def test_signal_psd() -> None:
+    """1D Power Spectral Density validation test."""
+    freq = 50.0
+    size = 10000
+
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
+    psd = cps.compute_psd(s1)
+
+    # Check that the PSD is correct (Welch's method is used by default)
+    exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))
+
+    check_array_result("Cosine signal PSD X", psd.x, exp_x)
+    check_array_result("Cosine signal PSD Y", psd.y, exp_y)
+
+
 if __name__ == "__main__":
     test_signal_fft_interactive()
     test_signal_fft()
     test_signal_magnitude_spectrum()
     test_signal_phase_spectrum()
+    test_signal_psd()
