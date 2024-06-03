@@ -87,7 +87,7 @@ def is_supported_num_dtype(data):
 def is_single_str_array(data):
     """Return True if data is a single-item string array"""
     return (
-        issubclass(data, np.generic) and data.shape == (1,) and isinstance(data[0], str)
+        isinstance(data, np.generic) and data.shape == (1,) and isinstance(data[0], str)
     )
 
 
