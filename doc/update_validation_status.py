@@ -49,11 +49,13 @@ def check_for_validation_test(
     Returns:
         Path to the validation test file or None if it doesn't exist
     """
-    basefuncname = full_function_name.replace(".", "_").replace("compute_", "")
-    ending = "_" + "_".join(basefuncname.split("_")[-2:])
-    possible_test_name_endings = [ending, ending + "_unit", ending + "_validation"]
+    family, funcname = full_function_name.split(".")[-2:]  # "signal" or "image"
+    shortname = funcname.replace("compute_", "")
+    endings = [shortname, shortname + "_unit", shortname + "_validation"]
+    beginnings = ["test", f"test_{family}", f"test_{family[:3]}", f"test_{family[0]}"]
+    names = [f"{beginning}_{ending}" for beginning in beginnings for ending in endings]
     for test, path in validation_tests:
-        if test.endswith(tuple(possible_test_name_endings)):
+        if test in names:
             # Path relative to the `cdl` package:
             path = osp.relpath(path, start=osp.dirname(osp.join(tests_pkg.__file__)))
             return "/".join(path.split(osp.sep))

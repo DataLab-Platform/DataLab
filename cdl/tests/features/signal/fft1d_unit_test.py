@@ -97,6 +97,43 @@ def test_signal_ifft() -> None:
     # already covered by the FFT test above (there is no need to repeat the same test).
 
 
+@pytest.mark.validation
+def test_signal_magnitude_spectrum() -> None:
+    """1D magnitude spectrum validation test."""
+    freq = 50.0
+    size = 10000
+
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
+    fft = cps.compute_fft(s1)
+    mag = cps.compute_magnitude_spectrum(s1)
+    fpk1 = fft.x[np.argmax(mag.y[: size // 2])]
+    check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
+
+    # Check that the magnitude spectrum is correct
+    check_array_result("Cosine signal magnitude spectrum X", mag.x, fft.x)
+    check_array_result("Cosine signal magnitude spectrum Y", mag.y, np.abs(fft.y))
+
+
+@pytest.mark.validation
+def test_signal_phase_spectrum() -> None:
+    """1D phase spectrum validation test."""
+    freq = 50.0
+    size = 10000
+
+    s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
+    fft = cps.compute_fft(s1)
+    phase = cps.compute_phase_spectrum(s1)
+    fpk1 = fft.x[np.argmax(phase.y[: size // 2])]
+    check_scalar_result("Cosine negative frequency", fpk1, -freq, rtol=0.001)
+
+    # Check that the phase spectrum is correct
+    check_array_result("Cosine signal phase spectrum X", phase.x, fft.x)
+    exp_phase = np.rad2deg(np.angle(fft.y))
+    check_array_result("Cosine signal phase spectrum Y", phase.y, exp_phase)
+
+
 if __name__ == "__main__":
     test_signal_fft_interactive()
     test_signal_fft()
+    test_signal_magnitude_spectrum()
+    test_signal_phase_spectrum()
