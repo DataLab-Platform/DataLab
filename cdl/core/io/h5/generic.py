@@ -53,7 +53,7 @@ class GenericScalarNode(BaseGenericNode):
         if not super().match(dset):
             return False
         data = dset[()]
-        return np.issctype(data) and utils.is_supported_num_dtype(data)
+        return issubclass(data, np.generic) and utils.is_supported_num_dtype(data)
 
 
 common.NODE_FACTORY.register(GenericScalarNode, is_generic=True)
