@@ -98,7 +98,7 @@ class AbstractCDLControl(abc.ABC):
 
     @abc.abstractmethod
     def get_version(self) -> str:
-        """Return DataLab version.
+        """Return DataLab public version.
 
         Returns:
             str: DataLab version
@@ -509,7 +509,7 @@ class BaseProxy(AbstractCDLControl, metaclass=abc.ABCMeta):
         self._cdl = cdl
 
     def get_version(self) -> str:
-        """Return DataLab version.
+        """Return DataLab public version.
 
         Returns:
             str: DataLab version

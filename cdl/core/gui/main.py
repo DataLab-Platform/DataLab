@@ -1437,7 +1437,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     # ------Other methods related to AbstractCDLControl interface
     def get_version(self) -> str:
-        """Return DataLab version.
+        """Return DataLab public version.
 
         Returns:
             str: DataLab version

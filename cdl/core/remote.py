@@ -247,7 +247,7 @@ class RemoteServer(QC.QThread):
 
     @staticmethod
     def get_version() -> str:
-        """Return DataLab version"""
+        """Return DataLab public version"""
         return cdl.__version__
 
     def close_application(self) -> None:
