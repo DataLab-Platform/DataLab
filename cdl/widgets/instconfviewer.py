@@ -16,10 +16,10 @@ from guidata.configtools import get_icon
 from guidata.qthelpers import exec_dialog
 from qtpy import QtWidgets as QW
 
+import cdl
 from cdl.config import APP_NAME, DATAPATH, IS_FROZEN, Conf, _
 from cdl.core.io.image import ImageIORegistry
 from cdl.core.io.signal import SignalIORegistry
-from cdl.info import VERSION
 from cdl.plugins import PluginRegistry
 from cdl.utils import dephash
 from cdl.widgets.fileviewer import FileViewerWidget, get_title_contents
@@ -66,7 +66,7 @@ def get_install_infos() -> str:
         more_infos += get_pip_list()
     infos = os.linesep.join(
         [
-            f"DataLab v{VERSION}",
+            f"DataLab v{cdl.__version__}",
             "",
             f"Machine type: {platform.machine()}",
             f"Platform: {platform.platform()}",

@@ -15,7 +15,6 @@ from guidata.guitest import get_tests
 import cdl
 from cdl import config
 from cdl.config import Conf
-from cdl.info import VERSION
 from cdl.utils.conf import Option
 from cdl.utils.tests import TST_PATH
 
@@ -53,7 +52,7 @@ def run_all_tests(args="", contains="", timeout=None, other_package=None):
         testnb += othernb
     tnb = len(testmodules)
     print("")
-    print(f"            🚀 DataLab v{VERSION} automatic unit tests 🌌")
+    print(f"            🚀 DataLab v{cdl.__version__} automatic unit tests 🌌")
     print("")
     print("🔥 DataLab characteristics/environment:")
     print(f"  Configuration version: {config.CONF_VERSION}")

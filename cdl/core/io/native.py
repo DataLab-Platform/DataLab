@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from guidata.io import HDF5Reader, HDF5Writer
 
-from cdl.info import VERSION
+import cdl
 
 DATALAB_VERSION_NAME = "DataLab_Version"
 
@@ -24,7 +24,7 @@ class NativeH5Writer(HDF5Writer):
 
     def __init__(self, filename: str) -> None:
         super().__init__(filename)
-        self.h5[DATALAB_VERSION_NAME] = VERSION
+        self.h5[DATALAB_VERSION_NAME] = cdl.__version__
 
 
 class NativeH5Reader(HDF5Reader):
