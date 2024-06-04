@@ -10,6 +10,7 @@ version number including the Git revision, if available.
 
 from __future__ import annotations
 
+import os
 import subprocess
 
 from cdl import __version__ as RELEASE
@@ -22,6 +23,11 @@ def get_git_revision() -> tuple[str, str] | None:
         A tuple containing the branch name and the short revision hash.
         If the current branch is 'main' or the Git command fails, return None.
     """
+    startupinfo = None
+    if os.name == "nt":  # Check if the OS is Windows
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
     try:
         # Run the git command to get the current branch name
         result = subprocess.run(
@@ -30,6 +36,7 @@ def get_git_revision() -> tuple[str, str] | None:
             stderr=subprocess.PIPE,
             text=True,
             check=True,
+            startupinfo=startupinfo,
         )
         branch = result.stdout.strip()
         if branch == "main":
@@ -42,6 +49,7 @@ def get_git_revision() -> tuple[str, str] | None:
             stderr=subprocess.PIPE,
             text=True,
             check=True,
+            startupinfo=startupinfo,
         )
         sha = result.stdout.strip()
         return branch, sha
