@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import sys
 
 from cdl import __version__ as RELEASE
 
@@ -23,6 +24,12 @@ def get_git_revision() -> tuple[str, str] | None:
         A tuple containing the branch name and the short revision hash.
         If the current branch is 'main' or the Git command fails, return None.
     """
+    if __file__.startswith(sys.prefix):
+        # If the package is installed in the current Python environment, return None
+        # because we won't have access to the Git repository anyway, so we must
+        # assume that this is a stable release.
+        return None
+
     startupinfo = None
     if os.name == "nt":  # Check if the OS is Windows
         startupinfo = subprocess.STARTUPINFO()
