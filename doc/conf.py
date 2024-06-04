@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 from cdl import __homeurl__
-from cdl.info import get_version
+from cdl.info import VERSION
 
 os.environ["CDL_DOC"] = "1"
 
@@ -17,7 +17,7 @@ os.environ["CDL_DOC"] = "1"
 project = "DataLab"
 author = ""
 copyright = "2023, DataLab Platform Developers"
-release = get_version()
+release = VERSION
 
 # -- General configuration ---------------------------------------------------
 
@@ -62,7 +62,7 @@ html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
-        "text": f"v{get_version()}",
+        "text": f"v{VERSION}",
     },
     "icon_links": [
         {

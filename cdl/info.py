@@ -14,7 +14,7 @@ import os
 import subprocess
 import sys
 
-from cdl import __version__ as RELEASE
+from cdl import __version__ as RELEASE_VERSION
 
 
 def get_git_revision() -> tuple[str, str] | None:
@@ -73,5 +73,8 @@ def get_version() -> str:
     git_branch_revision = get_git_revision()
     if git_branch_revision is not None:
         # Append the Git revision to the version number
-        return RELEASE + f"-{git_branch_revision[0]}.{git_branch_revision[1]}"
-    return RELEASE
+        return RELEASE_VERSION + f"-{git_branch_revision[0]}.{git_branch_revision[1]}"
+    return RELEASE_VERSION
+
+
+VERSION = get_version()

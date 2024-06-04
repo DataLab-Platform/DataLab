@@ -15,7 +15,7 @@ import plotpy
 import pytest
 
 from cdl.env import execenv
-from cdl.info import get_version
+from cdl.info import VERSION
 from cdl.plugins import get_available_plugins
 
 # Turn on unattended mode for executing tests without user interaction
@@ -32,7 +32,7 @@ def pytest_report_header(config):
         for plugin in get_available_plugins()
     )
     return [
-        f"DataLab {get_version()} [Plugins: {nfstr if nfstr else 'None'}]",
+        f"DataLab {VERSION} [Plugins: {nfstr if nfstr else 'None'}]",
         f"guidata {guidata.__version__}, PlotPy {plotpy.__version__}",
     ]
 

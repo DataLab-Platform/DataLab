@@ -59,7 +59,7 @@ from cdl.core.model.image import ImageObj, create_image
 from cdl.core.model.signal import SignalObj, create_signal
 from cdl.core.remote import RemoteServer
 from cdl.env import execenv
-from cdl.info import get_version
+from cdl.info import VERSION
 from cdl.plugins import PluginRegistry, discover_plugins
 from cdl.utils import dephash
 from cdl.utils import qthelpers as qth
@@ -487,11 +487,10 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     def check_stable_release(self) -> None:  # pragma: no cover
         """Check if this is a stable release"""
-        ver = get_version()
-        if ver.replace(".", "").isdigit():
+        if VERSION.replace(".", "").isdigit():
             # This is a stable release
             return
-        if "beta" in ver:
+        if "beta" in VERSION:
             # This is a beta release
             rel = _(
                 "This software is in the <b>beta stage</b> of its release cycle. "
@@ -511,7 +510,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 "by the developer before it is released."
             )
         txtlist = [
-            f"<b>{APP_NAME}</b> v{ver}:",
+            f"<b>{APP_NAME}</b> v{VERSION}:",
             "",
             _("<i>This is not a stable release.</i>"),
             "",
@@ -1176,9 +1175,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         state = state and self.has_objects()
         self.__is_modified = state
         title = APP_NAME + ("*" if state else "")
-        ver = get_version()
-        if not ver.replace(".", "").isdigit():
-            title += f" [{ver}]"
+        if not VERSION.replace(".", "").isdigit():
+            title += f" [{VERSION}]"
         self.setWindowTitle(title)
 
     def __add_dockwidget(self, child, title: str) -> QW.QDockWidget:
@@ -1444,7 +1442,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Returns:
             str: DataLab version
         """
-        return get_version()
+        return VERSION
 
     def close_application(self) -> None:  # Implementing AbstractCDLControl interface
         """Close DataLab application"""
@@ -1556,7 +1554,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         QW.QMessageBox.about(
             self,
             _("About") + " " + APP_NAME,
-            f"""<b>{APP_NAME}</b> v{get_version()}<br>{APP_DESC}
+            f"""<b>{APP_NAME}</b> v{VERSION}<br>{APP_DESC}
               <p>{created_by} Pierre Raybaut<br>{dev_by}<br>Copyright &copy; {cprght}
               <p>{adv_conf}""",
         )

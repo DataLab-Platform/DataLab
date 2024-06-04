@@ -15,7 +15,7 @@ import os
 import sys
 
 from cdl.env import VerbosityLevels, execenv
-from cdl.info import get_version
+from cdl.info import VERSION
 from cdl.utils.tests import get_script_output
 
 ARGV_TEST = "--execenvtest"
@@ -134,7 +134,7 @@ def test_cli():
     args = ["--version"]
     output = get_script_output(__file__, args=args + [ARGV_TEST])
     execenv.print(output)
-    assert get_version() in output
+    assert VERSION in output
     execenv.print("    h5 positionnal argument: ", end="")
     for h5files in (None, ["test.h5"], ["toto.h5", "tata.h5"]):
         if h5files is None:
