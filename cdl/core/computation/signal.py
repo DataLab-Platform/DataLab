@@ -34,7 +34,6 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     NormalizeParam,
     SpectrumParam,
-    ThresholdParam,
     calc_resultproperties,
     dst_11,
     dst_n1n,
@@ -561,22 +560,6 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     return dst
 
 
-def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
-    """Compute threshold clipping
-
-    Args:
-        src: source signal
-        p: parameters
-
-    Returns:
-        Result signal object
-    """
-    dst = dst_11(src, "threshold", f"min={p.value}")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.clip(y, p.value, y.max()))
-    return dst
-
-
 def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     """Compute maximum data clipping
 
@@ -587,10 +570,7 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "clip", f"max={p.value}")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.clip(y, y.min(), p.value))
-    return dst
+    return Wrap11Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
 def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:

@@ -36,7 +36,6 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     NormalizeParam,
     SpectrumParam,
-    ThresholdParam,
     calc_resultproperties,
     dst_11,
     dst_n1n,
@@ -1051,21 +1050,6 @@ def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
     return dst
 
 
-def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
-    """Apply thresholding
-
-    Args:
-        src: input image object
-        p: parameters
-
-    Returns:
-        Output image object
-    """
-    dst = dst_11(src, "threshold", f"min={p.value} lsb")
-    dst.data = np.clip(src.data, p.value, src.data.max())
-    return dst
-
-
 def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     """Apply clipping
 
@@ -1076,9 +1060,7 @@ def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "clip", f"max={p.value} lsb")
-    dst.data = np.clip(src.data, src.data.min(), p.value)
-    return dst
+    return Wrap11Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
 def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:

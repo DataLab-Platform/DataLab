@@ -71,11 +71,6 @@ by maximum, amplitude, sum, energy or RMS:
     * - RMS
       - :math:`z_{1}= \dfrac{z_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|z_{0}[n]|^2}}`
 
-Thresholding
-~~~~~~~~~~~~
-
-Apply the thresholding to each selected image.
-
 Clipping
 ~~~~~~~~
 

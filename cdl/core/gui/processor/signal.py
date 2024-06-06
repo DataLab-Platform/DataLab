@@ -258,13 +258,6 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_threshold(self, param: cpb.ThresholdParam | None = None) -> None:
-        """Compute threshold clipping"""
-        self.compute_11(
-            cps.compute_threshold, param, cpb.ThresholdParam, title=_("Thresholding")
-        )
-
-    @qt_try_except()
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
         self.compute_11(cps.compute_clip, param, cpb.ClipParam, title=_("Clipping"))

@@ -694,11 +694,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="normalize.svg",
                 )
                 self.new_action(
-                    _("Thresholding"),
-                    triggered=self.panel.processor.compute_threshold,
-                    icon_name="threshold.svg",
-                )
-                self.new_action(
                     _("Clipping"),
                     triggered=self.panel.processor.compute_clip,
                     icon_name="clip.svg",

@@ -46,7 +46,6 @@
 :py:func:`segment_profile <cdl.core.computation.image.compute_segment_profile>`,Compute segment profile,N/A
 :py:func:`stats <cdl.core.computation.image.compute_stats>`,Compute statistics on an image,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.core.computation.image.compute_swap_axes>`,Swap image axes,N/A
-:py:func:`threshold <cdl.core.computation.image.compute_threshold>`,Apply thresholding,N/A
 :py:func:`wiener <cdl.core.computation.image.compute_wiener>`,Compute Wiener filter,N/A
 :py:func:`blob_dog <cdl.core.computation.image.detection.compute_blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
 :py:func:`blob_doh <cdl.core.computation.image.detection.compute_blob_doh>`,Compute blobs using Determinant of Hessian method,N/A

@@ -464,16 +464,6 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_threshold(self, param: cpb.ThresholdParam | None = None) -> None:
-        """Compute threshold clipping"""
-        self.compute_11(
-            cpi.compute_threshold,
-            param,
-            cpb.ThresholdParam,
-            _("Thresholding"),
-        )
-
-    @qt_try_except()
     def compute_clip(self, param: cpb.ClipParam | None = None) -> None:
         """Compute maximum data clipping"""
         self.compute_11(

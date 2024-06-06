@@ -45,7 +45,6 @@
 :py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`,Compute square root,N/A
 :py:func:`stats <cdl.core.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`,Swap axes,N/A
-:py:func:`threshold <cdl.core.computation.signal.compute_threshold>`,Compute threshold clipping,N/A
 :py:func:`wiener <cdl.core.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
 :py:func:`windowing <cdl.core.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
 :py:func:`x_at_minmax <cdl.core.computation.signal.compute_x_at_minmax>`,Compute x at min/max,``features/signal/computing_unit_test.py``

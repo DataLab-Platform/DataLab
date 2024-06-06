@@ -61,8 +61,6 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ROIDataParam
     :no-index:
-.. autodataset:: cdl.param.ThresholdParam
-    :no-index:
 .. autodataset:: cdl.param.ConstantOperationParam
     :no-index:
 
@@ -204,7 +202,6 @@ from cdl.core.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     ROIDataParam,
-    ThresholdParam,
     ConstantOperationParam,
     NormalizeParam,
 )

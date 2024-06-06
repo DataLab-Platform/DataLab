@@ -177,7 +177,7 @@ msgstr ""
 #: cdl.core.computation.signal.LowPassFilterParam
 #: cdl.core.computation.signal.PeakDetectionParam
 #: cdl.core.computation.signal.PolynomialFitParam
-#: cdl.core.computation.signal.PowParam
+#: cdl.core.computation.signal.PowerParam
 #: cdl.core.computation.signal.ResamplingParam
 #: cdl.core.computation.signal.WindowingParam
 #: cdl.core.computation.signal.XYCalibrateParam of
@@ -271,7 +271,7 @@ msgstr ""
 #: cdl.core.computation.signal.LowPassFilterParam:25
 #: cdl.core.computation.signal.LowPassFilterParam:31
 #: cdl.core.computation.signal.LowPassFilterParam:37
-#: cdl.core.computation.signal.PowParam:7
+#: cdl.core.computation.signal.PowerParam:7
 #: cdl.core.computation.signal.ResamplingParam:13
 #: cdl.core.computation.signal.ResamplingParam:19
 #: cdl.core.computation.signal.ResamplingParam:25
@@ -1476,24 +1476,24 @@ msgstr "Calcule l'intégrale"
 msgid "Compute square root"
 msgstr "Calcule la partie réelle"
 
-#: cdl.core.computation.signal.PowParam:1 of
+#: cdl.core.computation.signal.PowerParam:1 of
 #, fuzzy
 msgid "Power parameters"
 msgstr "Paramètres de ROI"
 
-#: cdl.core.computation.signal.PowParam:5
+#: cdl.core.computation.signal.PowerParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Default: 2.0."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Returns a new instance of :py:class:`PowParam` with the fields set to the"
+"Returns a new instance of :py:class:`PowerParam` with the fields set to the"
 " given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`PowParam`."
+msgid "New instance of :py:class:`PowerParam`."
 msgstr ""
 
 #: cdl.core.computation.signal.compute_power:1 of
