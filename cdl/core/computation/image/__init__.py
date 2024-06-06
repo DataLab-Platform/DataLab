@@ -74,17 +74,30 @@ class Wrap11Func:
 
     Args:
         func: 1 array → 1 array function
+        **kwargs: Additional keyword arguments to pass to the function
     """
 
-    def __init__(self, func: Callable) -> None:
+    def __init__(self, func: Callable, **kwargs: Any) -> None:
         self.func = func
+        self.kwargs = kwargs
         self.__name__ = func.__name__
         self.__doc__ = func.__doc__
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: ImageObj) -> ImageObj:
-        dst = dst_11(src, self.func.__name__)
-        dst.data = self.func(src.data)
+        """Compute the function on the input signal and return the result signal
+
+        Args:
+            src: input image object
+
+        Returns:
+            Output image object
+        """
+        suffix = None
+        if self.kwargs:
+            suffix = ", ".join(f"{k}={v}" for k, v in self.kwargs.items())
+        dst = dst_11(src, self.func.__name__, suffix)
+        dst.data = self.func(src.data, **self.kwargs)
         return dst
 
 

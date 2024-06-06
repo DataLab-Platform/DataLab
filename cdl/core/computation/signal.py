@@ -71,18 +71,34 @@ class Wrap11Func:
 
     Args:
         func: 1 array → 1 array function
+        *args: Additional positional arguments to pass to the function
+        **kwargs: Additional keyword arguments to pass to the function
     """
 
-    def __init__(self, func: Callable) -> None:
+    def __init__(self, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.func = func
+        self.args = args
+        self.kwargs = kwargs
         self.__name__ = func.__name__
         self.__doc__ = func.__doc__
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: SignalObj) -> SignalObj:
-        dst = dst_11(src, self.func.__name__)
+        """Compute the function on the input signal and return the result signal
+
+        Args:
+            src: input signal object
+
+        Returns:
+            Result signal object
+        """
+        suffix = ", ".join(
+            [str(arg) for arg in self.args]
+            + [f"{k}={v}" for k, v in self.kwargs.items()]
+        )
+        dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
-        dst.set_xydata(x, self.func(y))
+        dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
         return dst
 
 
