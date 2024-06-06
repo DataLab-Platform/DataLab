@@ -37,7 +37,7 @@ msgstr "Capture d'écran du menu \"Fichier\"."
 msgid ""
 "When the \"Image Panel\" is selected, the menus and toolbars are updated "
 "to provide image-related actions."
-msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir des actions liées à l'image."
+msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux images."
 
 #: ../../doc/features/image/menu_file.rst:15
 msgid "The \"File\" menu allows you to:"

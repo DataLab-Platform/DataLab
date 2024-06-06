@@ -42,7 +42,7 @@ msgstr "Capture d'écran du menu \"Opérations\"."
 msgid ""
 "When the \"Signal Panel\" is selected, the menus and toolbars are updated"
 " to provide signal-related actions."
-msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir des actions liées aux signaux."
+msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
 
 #: ../../doc/features/signal/menu_operations.rst:20
 msgid ""
