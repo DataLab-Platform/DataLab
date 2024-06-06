@@ -155,7 +155,7 @@ def run_signal_computations(
 
     # Signal specific operations
     panel.processor.compute_sqrt()
-    panel.processor.compute_pow(dlp.PowParam.create(power=2))
+    panel.processor.compute_power(dlp.PowerParam.create(power=2))
     panel.processor.compute_reverse_x()
     panel.processor.compute_reverse_x()
 

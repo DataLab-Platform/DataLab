@@ -825,7 +825,7 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Power"),
-                triggered=self.panel.processor.compute_pow,
+                triggered=self.panel.processor.compute_power,
                 separator=True,
                 icon_name="power.svg",
             )

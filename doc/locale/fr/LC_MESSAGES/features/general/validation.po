@@ -653,7 +653,7 @@ msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`pow <cdl.core.computation.signal.compute_pow>`"
+msgid ":py:func:`pow <cdl.core.computation.signal.compute_power>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -1653,4 +1653,3 @@ msgstr ""
 
 #~ msgid ":py:func:`profile <cdl.core.computation.image.compute_profile>`"
 #~ msgstr ""
-

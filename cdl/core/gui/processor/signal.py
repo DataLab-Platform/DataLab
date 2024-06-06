@@ -138,11 +138,13 @@ class SignalProcessor(BaseProcessor):
         self.compute_11(cps.compute_sqrt, title=_("Square root"))
 
     @qt_try_except()
-    def compute_pow(self, param: cps.PowParam | None = None) -> None:
+    def compute_power(self, param: cps.PowerParam | None = None) -> None:
         """Compute power"""
         if param is None:
-            param = cps.PowParam()
-        self.compute_11(cps.compute_pow, param, cps.PowParam, title="Power", edit=True)
+            param = cps.PowerParam()
+        self.compute_11(
+            cps.compute_power, param, cps.PowerParam, title="Power", edit=True
+        )
 
     @qt_try_except()
     def compute_difference(self, obj2: SignalObj | None = None) -> None:

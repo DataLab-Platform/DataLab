@@ -426,7 +426,7 @@ msgstr ""
 #: cdl.core.computation.signal.compute_offset_correction
 #: cdl.core.computation.signal.compute_peak_detection
 #: cdl.core.computation.signal.compute_phase_spectrum
-#: cdl.core.computation.signal.compute_pow
+#: cdl.core.computation.signal.compute_power
 #: cdl.core.computation.signal.compute_product
 #: cdl.core.computation.signal.compute_product_constant
 #: cdl.core.computation.signal.compute_psd
@@ -578,7 +578,7 @@ msgstr "Paramètres"
 #: cdl.core.computation.signal.compute_offset_correction
 #: cdl.core.computation.signal.compute_peak_detection
 #: cdl.core.computation.signal.compute_phase_spectrum
-#: cdl.core.computation.signal.compute_pow
+#: cdl.core.computation.signal.compute_power
 #: cdl.core.computation.signal.compute_product
 #: cdl.core.computation.signal.compute_product_constant
 #: cdl.core.computation.signal.compute_psd
@@ -1144,7 +1144,7 @@ msgstr "signal de destination"
 #: cdl.core.computation.signal.compute_offset_correction:4
 #: cdl.core.computation.signal.compute_peak_detection:3
 #: cdl.core.computation.signal.compute_phase_spectrum:3
-#: cdl.core.computation.signal.compute_pow:3
+#: cdl.core.computation.signal.compute_power:3
 #: cdl.core.computation.signal.compute_product:4
 #: cdl.core.computation.signal.compute_psd:3
 #: cdl.core.computation.signal.compute_re:3
@@ -1339,7 +1339,7 @@ msgstr "Permute les axes"
 #: cdl.core.computation.signal.compute_offset_correction:7
 #: cdl.core.computation.signal.compute_peak_detection:6
 #: cdl.core.computation.signal.compute_phase_spectrum:5
-#: cdl.core.computation.signal.compute_pow:6
+#: cdl.core.computation.signal.compute_power:6
 #: cdl.core.computation.signal.compute_psd:6
 #: cdl.core.computation.signal.compute_re:5
 #: cdl.core.computation.signal.compute_resampling:6
@@ -1454,7 +1454,7 @@ msgstr "Convertit le type de données"
 #: cdl.core.computation.signal.compute_normalize:4
 #: cdl.core.computation.signal.compute_offset_correction:5
 #: cdl.core.computation.signal.compute_peak_detection:4
-#: cdl.core.computation.signal.compute_pow:4
+#: cdl.core.computation.signal.compute_power:4
 #: cdl.core.computation.signal.compute_psd:4
 #: cdl.core.computation.signal.compute_resampling:4
 #: cdl.core.computation.signal.compute_threshold:4 of
@@ -1496,7 +1496,7 @@ msgstr ""
 msgid "New instance of :py:class:`PowParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.compute_pow:1 of
+#: cdl.core.computation.signal.compute_power:1 of
 #, fuzzy
 msgid "Compute power"
 msgstr "Calcule la LMH"
@@ -3999,4 +3999,3 @@ msgstr "Détection de taches à l'aide d'OpenCV"
 
 #~ msgid "Computation result"
 #~ msgstr "Résultat du calcul"
-

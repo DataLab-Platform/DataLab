@@ -33,7 +33,7 @@
 :py:func:`offset_correction <cdl.core.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/signal/offset_correction_unit_test.py``
 :py:func:`peak_detection <cdl.core.computation.signal.compute_peak_detection>`,Peak detection,N/A
 :py:func:`phase_spectrum <cdl.core.computation.signal.compute_phase_spectrum>`,Compute phase spectrum,``features/signal/fft1d_unit_test.py``
-:py:func:`pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A
+:py:func:`pow <cdl.core.computation.signal.compute_power>`,Compute power,N/A
 :py:func:`product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,``features/signal/operation_unit_test.py``
 :py:func:`product_constant <cdl.core.computation.signal.compute_product_constant>`,Multiply **dst** by a constant value and return the new result signal object,``features/signal/operation_unit_test.py``
 :py:func:`psd <cdl.core.computation.signal.compute_psd>`,Compute power spectral density,``features/signal/fft1d_unit_test.py``

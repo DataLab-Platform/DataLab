@@ -421,13 +421,13 @@ def compute_sqrt(src: SignalObj) -> SignalObj:
     return Wrap11Func(np.sqrt)(src)
 
 
-class PowParam(gds.DataSet):
+class PowerParam(gds.DataSet):
     """Power parameters"""
 
     power = gds.FloatItem(_("Power"), default=2.0)
 
 
-def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
+def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
     """Compute power
 
     Args:
@@ -437,9 +437,8 @@ def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "pow", f"n={p.power}")
-    x, y = src.get_data()
-    dst.set_xydata(x, y**p.power)
+    dst = dst_11(src, "^", str(p.power))
+    dst.y = np.power(src.y, p.power)
     return dst
 
 

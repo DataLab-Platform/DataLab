@@ -87,7 +87,7 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
     :no-index:
-.. autodataset:: cdl.param.PowParam
+.. autodataset:: cdl.param.PowerParam
     :no-index:
 .. autodataset:: cdl.param.WindowingParam
     :no-index:
@@ -256,7 +256,7 @@ from cdl.core.computation.signal import (
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
-    PowParam,
+    PowerParam,
     WindowingParam,
     LowPassFilterParam,
     HighPassFilterParam,
