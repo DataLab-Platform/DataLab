@@ -135,6 +135,12 @@ Base image parameters
 .. autodataset:: cdl.param.ZCalibrateParam
     :no-index:
 
+Threshold parameters
+~~~~~~~~~~~~~~~~~~~~
+
+.. autodataset:: cdl.param.ThresholdParam
+    :no-index:
+
 Exposure correction parameters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -230,6 +236,7 @@ from cdl.core.computation.image.detection import (
     Peak2DDetectionParam,
 )
 from cdl.core.computation.image.edges import CannyParam
+from cdl.core.computation.image.threshold import ThresholdParam
 from cdl.core.computation.image.exposure import (
     AdjustGammaParam,
     AdjustLogParam,

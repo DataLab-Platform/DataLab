@@ -1124,6 +1124,45 @@ class ImageActionHandler(BaseActionHandler):
             )
 
         with self.new_category(ActionCategory.PROCESSING):
+            with self.new_menu(_("Thresholding"), icon_name="thresholding.svg"):
+                self.new_action(
+                    _("Parametric thresholding"),
+                    triggered=self.panel.processor.compute_threshold,
+                )
+                self.new_action(
+                    _("ISODATA thresholding"),
+                    triggered=self.panel.processor.compute_threshold_isodata,
+                )
+                self.new_action(
+                    _("Li thresholding"),
+                    triggered=self.panel.processor.compute_threshold_li,
+                )
+                self.new_action(
+                    _("Mean thresholding"),
+                    triggered=self.panel.processor.compute_threshold_mean,
+                )
+                self.new_action(
+                    _("Minimum thresholding"),
+                    triggered=self.panel.processor.compute_threshold_minimum,
+                )
+                self.new_action(
+                    _("Otsu thresholding"),
+                    triggered=self.panel.processor.compute_threshold_otsu,
+                )
+                self.new_action(
+                    _("Triangle thresholding"),
+                    triggered=self.panel.processor.compute_threshold_triangle,
+                )
+                self.new_action(
+                    _("Yen thresholding"),
+                    triggered=self.panel.processor.compute_threshold_yen,
+                )
+                self.new_action(
+                    _("All thresholding methods") + "...",
+                    triggered=self.panel.processor.compute_all_threshold,
+                    separator=True,
+                    tip=_("Apply all thresholding methods"),
+                )
             with self.new_menu(_("Exposure"), icon_name="exposure.svg"):
                 self.new_action(
                     _("Gamma correction"),

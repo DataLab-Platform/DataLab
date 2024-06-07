@@ -140,156 +140,208 @@ The following functions are available:
     FFT and inverse FFT are performed using frequency shifting if the option is enabled
     in DataLab settings (see :ref:`settings`).
 
+Thresholding
+^^^^^^^^^^^^
+
+Create a new image which is the result of thresholding on each selected image,
+eventually based on user-defined parameters ("Parametric thresholding").
+
+The following parameters are available when selecting "Parametric thresholding":
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Parameter
+      - Description
+    * - Threshold method
+      - The thresholding method to use (see table below)
+    * - Bins
+      - Number of bins for histogram calculation
+    * - Value
+      - Threshold value
+    * - Operation
+      - Operation to apply (> or <)
+
+The following thresholding methods are available:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
+
+    * - Method
+      - Implementation
+    * - Manual
+      - Manual thresholding (user-defined parameters)
+    * - ISODATA
+      - `skimage.filters.threshold_isodata <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_isodata>`_
+    * - Li
+      - `skimage.filters.threshold_li <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_li>`_
+    * - Mean
+      - `skimage.filters.threshold_mean <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_mean>`_
+    * - Minimum
+      - `skimage.filters.threshold_minimum <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_minimum>`_
+    * - Otsu
+      - `skimage.filters.threshold_otsu <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_otsu>`_
+    * - Triangle
+      - `skimage.filters.threshold_triangle <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_triangle>`_
+    * - Yen
+      - `skimage.filters.threshold_yen <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.threshold_yen>`_
+
+.. note::
+
+    The "All thresholding methods" option allows to perform all thresholding methods
+    on the same image. Combined with the "distribute on a grid" option, this allows
+    to compare the different thresholding methods on the same image.
+
 Exposure
 ^^^^^^^^
 
-Gamma correction
-    Apply gamma correction to each selected image
-    (implementation based on `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_)
+Create a new image which is the result of exposure correction on each selected image.
 
-Logarithmic correction
-    Apply logarithmic correction to each selected image
-    (implementation based on `skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_)
+The following functions are available:
 
-Sigmoid correction
-    Apply sigmoid correction to each selected image
-    (implementation based on `skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_)
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 25, 50
 
-Histogram equalization
-    Equalize image histogram levels
-    (implementation based on `skimage.exposure.equalize_hist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_)
-
-Adaptive histogram equalization
-    Equalize image histogram levels using Contrast Limited Adaptive Histogram Equalization (CLAHE) algorithm
-    (implementation based on `skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_)
-
-Intensity rescaling
-    Stretch or shrink image intensity levels
-    (implementation based on `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_)
+    * - Function
+      - Implementation
+      - Comments
+    * - Gamma correction
+      - `skimage.exposure.adjust_gamma <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_gamma>`_
+      -
+    * - Logarithmic correction
+      - `skimage.exposure.adjust_log <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_log>`_
+      -
+    * - Sigmoid correction
+      - `skimage.exposure.adjust_sigmoid <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.adjust_sigmoid>`_
+      -
+    * - Histogram equalization
+      - `skimage.exposure.equalize_hist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_hist>`_
+      -
+    * - Adaptive histogram equalization
+      - `skimage.exposure.equalize_adapthist <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.equalize_adapthist>`_
+      - Contrast Limited Adaptive Histogram Equalization (CLAHE) algorithm
+    * - Intensity rescaling
+      - `skimage.exposure.rescale_intensity <https://scikit-image.org/docs/stable/api/skimage.exposure.html#skimage.exposure.rescale_intensity>`_
+      - Stretch or shrink image intensity levels
 
 Restoration
 ^^^^^^^^^^^
 
-Total variation denoising
-    Denoise image using Total Variation algorithm
-    (implementation based on `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_)
+Create a new image which is the result of restoration on each selected image.
 
-Bilateral filter denoising
-    Denoise image using bilateral filter
-    (implementation based on `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_)
+The following functions are available:
 
-Wavelet denoising
-    Perform wavelet denoising on image
-    (implementation based on `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_)
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 25, 50
 
-White Top-Hat denoising
-    Denoise image by subtracting its white top hat transform
-    (using a disk footprint)
+    * - Function
+      - Implementation
+      - Comments
+    * - Total variation denoising
+      - `skimage.restoration.denoise_tv_chambolle <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-tv-chambolle>`_
+      -
+    * - Bilateral filter denoising
+      - `skimage.restoration.denoise_bilateral <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-bilateral>`_
+      -
+    * - Wavelet denoising
+      - `skimage.restoration.denoise_wavelet <https://scikit-image.org/docs/stable/api/skimage.restoration.html#denoise-wavelet>`_
+      -
+    * - White Top-Hat denoising
+      - `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_
+      - Denoise image by subtracting its white top hat transform
 
-All denoising methods
-    Perform all denoising methods on image. Combined with the
-    "distribute on a grid" option, this allows to compare the
-    different denoising methods on the same image.
+.. note::
+
+    The "All denoising methods" option allows to perform all denoising methods
+    on the same image. Combined with the "distribute on a grid" option, this allows
+    to compare the different denoising methods on the same image.
 
 Morphology
 ^^^^^^^^^^
 
-White Top-Hat (disk)
-    Perform white top hat transform of an image, using a disk footprint
-    (implementation based on `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_)
+Create a new image which is the result of morphological operations on each selected image,
+using a disk footprint.
 
-Black Top-Hat (disk)
-    Perform black top hat transform of an image, using a disk footprint
-    (implementation based on `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_)
+The following functions are available:
 
-Erosion (disk)
-    Perform morphological erosion on an image, using a disk footprint
-    (implementation based on `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_)
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
 
-Dilation (disk)
-    Perform morphological dilation on an image, using a disk footprint
-    (implementation based on `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_)
+    * - Function
+      - Implementation
+    * - White Top-Hat (disk)
+      - `skimage.morphology.white_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.white_tophat>`_
+    * - Black Top-Hat (disk)
+      - `skimage.morphology.black_tophat <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.black_tophat>`_
+    * - Erosion (disk)
+      - `skimage.morphology.erosion <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.erosion>`_
+    * - Dilation (disk)
+      - `skimage.morphology.dilation <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.dilation>`_
+    * - Opening (disk)
+      - `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_
+    * - Closing (disk)
+      - `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_
 
-Opening (disk)
-    Perform morphological opening on an image, using a disk footprint
-    (implementation based on `skimage.morphology.opening <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.opening>`_)
+.. note::
 
-Closing (disk)
-    Perform morphological closing on an image, using a disk footprint
-    (implementation based on `skimage.morphology.closing <https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.closing>`_)
-
-All morphological operations
-    Perform all morphological operations on an image, using a disk footprint.
-    Combined with the "distribute on a grid" option, this allows to compare
+    The "All morphological operations" option allows to perform all morphological operations
+    on the same image. Combined with the "distribute on a grid" option, this allows to compare
     the different morphological operations on the same image.
 
 Edges
 ^^^^^
 
-Roberts filter
-    Perform edge filtering on an image, using the Roberts algorithm
-    (implementation based on `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_)
+Create a new image which is the result of edge filtering on each selected image.
 
-Prewitt filter
-    Perform edge filtering on an image, using the Prewitt algorithm
-    (implementation based on `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_)
+The following functions are available:
 
-Prewitt filter (horizontal)
-    Find the horizontal edges of an image, using the Prewitt algorithm
-    (implementation based on `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_)
+.. list-table::
+    :header-rows: 1
+    :widths: 25, 75
 
-Prewitt filter (vertical)
-    Find the vertical edges of an image, using the Prewitt algorithm
-    (implementation based on `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_)
+    * - Function
+      - Implementation
+    * - Roberts filter
+      - `skimage.filters.roberts <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.roberts>`_
+    * - Prewitt filter
+      - `skimage.filters.prewitt <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt>`_
+    * - Prewitt filter (horizontal)
+      - `skimage.filters.prewitt_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_h>`_
+    * - Prewitt filter (vertical)
+      - `skimage.filters.prewitt_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.prewitt_v>`_
+    * - Sobel filter
+      - `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_
+    * - Sobel filter (horizontal)
+      - `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_
+    * - Sobel filter (vertical)
+      - `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_
+    * - Scharr filter
+      - `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_
+    * - Scharr filter (horizontal)
+      - `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_
+    * - Scharr filter (vertical)
+      - `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_
+    * - Farid filter
+      - `skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters>`_
+    * - Farid filter (horizontal)
+      - `skimage.filters.farid_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_
+    * - Farid filter (vertical)
+      - `skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_
+    * - Laplace filter
+      - `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_
+    * - Canny filter
+      - `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_
 
-Sobel filter
-    Perform edge filtering on an image, using the Sobel algorithm
-    (implementation based on `skimage.filters.sobel <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel>`_)
+.. note::
 
-Sobel filter (horizontal)
-    Find the horizontal edges of an image, using the Sobel algorithm
-    (implementation based on `skimage.filters.sobel_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_h>`_)
-
-Sobel filter (vertical)
-    Find the vertical edges of an image, using the Sobel algorithm
-    (implementation based on `skimage.filters.sobel_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sobel_v>`_)
-
-Scharr filter
-    Perform edge filtering on an image, using the Scharr algorithm
-    (implementation based on `skimage.filters.scharr <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr>`_)
-
-Scharr filter (horizontal)
-    Find the horizontal edges of an image, using the Scharr algorithm
-    (implementation based on `skimage.filters.scharr_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_h>`_)
-
-Scharr filter (vertical)
-    Find the vertical edges of an image, using the Scharr algorithm
-    (implementation based on `skimage.filters.scharr_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.scharr_v>`_)
-
-Farid filter
-    Perform edge filtering on an image, using the Farid algorithm
-    (implementation based on `skimage.filters.farid <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid>`_)
-
-Farid filter (horizontal)
-    Find the horizontal edges of an image, using the Farid algorithm
-    (implementation based on `skimage.filters.farid_h <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_h>`_)
-
-Farid filter (vertical)
-    Find the vertical edges of an image, using the Farid algorithm
-    (implementation based on `skimage.filters.farid_v <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.farid_v>`_)
-
-Laplace filter
-    Perform edge filtering on an image, using the Laplace algorithm
-    (implementation based on `skimage.filters.laplace <https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.laplace>`_)
-
-All edges filters
-    Perform all edge filtering algorithms (see above) on an image.
-    Combined with the "distribute on a grid" option, this allows to compare
-    the different edge filters on the same image.
-
-Canny filter
-    Perform edge filtering on an image, using the Canny algorithm
-    (implementation based on `skimage.feature.canny <https://scikit-image.org/docs/stable/api/skimage.feature.html#skimage.feature.canny>`_)
+    The "All edges filters" option allows to perform all edge filtering algorithms
+    on the same image. Combined with the "distribute on a grid" option, this allows
+    to compare the different edge filters on the same image.
 
 Butterworth filter
 ^^^^^^^^^^^^^^^^^^

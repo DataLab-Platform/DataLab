@@ -20,6 +20,7 @@ import cdl.core.computation.image.edges as cpi_edg
 import cdl.core.computation.image.exposure as cpi_exp
 import cdl.core.computation.image.morphology as cpi_mor
 import cdl.core.computation.image.restoration as cpi_res
+import cdl.core.computation.image.threshold as cpi_thr
 import cdl.param
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _
@@ -566,6 +567,69 @@ class ImageProcessor(BaseProcessor):
             param,
             cpi.ButterworthParam,
             _("Butterworth filter"),
+        )
+
+    @qt_try_except()
+    def compute_threshold(self, param: cdl.param.ThresholdParam | None = None) -> None:
+        """Compute parametric threshold"""
+        self.compute_11(
+            cpi_thr.compute_threshold,
+            param,
+            cpi_thr.ThresholdParam,
+            _("Parametric threshold"),
+        )
+
+    @qt_try_except()
+    def compute_threshold_isodata(self) -> None:
+        """Compute threshold using Isodata algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_isodata, title="ISODATA")
+
+    @qt_try_except()
+    def compute_threshold_li(self) -> None:
+        """Compute threshold using Li algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_li, title="Li")
+
+    @qt_try_except()
+    def compute_threshold_mean(self) -> None:
+        """Compute threshold using Mean algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_mean, title=_("Mean"))
+
+    @qt_try_except()
+    def compute_threshold_minimum(self) -> None:
+        """Compute threshold using Minimum algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_minimum, title=_("Minimum"))
+
+    @qt_try_except()
+    def compute_threshold_otsu(self) -> None:
+        """Compute threshold using Otsu algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_otsu, title="Otsu")
+
+    @qt_try_except()
+    def compute_threshold_triangle(self) -> None:
+        """Compute threshold using Triangle algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_triangle, title=_("Triangle"))
+
+    @qt_try_except()
+    def compute_threshold_yen(self) -> None:
+        """Compute threshold using Yen algorithm"""
+        self.compute_11(cpi_thr.compute_threshold_yen, title="Yen")
+
+    @qt_try_except()
+    def compute_all_threshold(self) -> None:
+        """Compute all threshold algorithms"""
+        self.compute_1n(
+            [
+                cpi_thr.compute_threshold_isodata,
+                cpi_thr.compute_threshold_li,
+                cpi_thr.compute_threshold_mean,
+                cpi_thr.compute_threshold_minimum,
+                cpi_thr.compute_threshold_otsu,
+                cpi_thr.compute_threshold_triangle,
+                cpi_thr.compute_threshold_yen,
+            ],
+            None,
+            "Threshold",
+            edit=False,
         )
 
     @qt_try_except()

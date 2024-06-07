@@ -300,38 +300,34 @@ def run_image_computations(
 
     compute_common_operations(panel)
 
+    # Test denoising methods
     param = dlp.ZCalibrateParam.create(a=1.2, b=0.1)
     panel.processor.compute_calibration(param)
-
     param = dlp.DenoiseTVParam()
     panel.processor.compute_denoise_tv(param)
-
     param = dlp.DenoiseBilateralParam()
     panel.processor.compute_denoise_bilateral(param)
-
     param = dlp.DenoiseWaveletParam()
     panel.processor.compute_denoise_wavelet(param)
 
+    # Test exposure methods
+    ima2 = create_sincos_image(newparam)
+    panel.add_object(ima2)
     panel.processor.compute_abs()  # Avoid neg. values for skimage correction methods
-
     param = dlp.AdjustGammaParam.create(gamma=0.5)
     panel.processor.compute_adjust_gamma(param)
-
     param = dlp.AdjustLogParam.create(gain=0.5)
     panel.processor.compute_adjust_log(param)
-
     param = dlp.AdjustSigmoidParam.create(gain=0.5)
     panel.processor.compute_adjust_sigmoid(param)
-
     param = dlp.EqualizeHistParam()
     panel.processor.compute_equalize_hist(param)
-
     param = dlp.EqualizeAdaptHistParam()
     panel.processor.compute_equalize_adapthist(param)
-
     param = dlp.RescaleIntensityParam()
     panel.processor.compute_rescale_intensity(param)
 
+    # Test morphology methods
     param = dlp.MorphologyParam.create(radius=10)
     panel.processor.compute_denoise_tophat(param)
     panel.processor.compute_white_tophat(param)
@@ -345,29 +341,47 @@ def run_image_computations(
     param = dlp.ButterworthParam.create(order=2, cut_off=0.5)
     panel.processor.compute_butterworth(param)
 
-    ima2 = create_sincos_image(newparam)
     param = dlp.CannyParam()
     panel.processor.compute_canny(param)
+
+    # Test threshold methods
+    ima2 = create_sincos_image(newparam)
     panel.add_object(ima2)
+    param = dlp.ThresholdParam()
+    for method_value, _method_name in param.methods:
+        panel.objview.set_current_object(ima2)
+        param = dlp.ThresholdParam.create(method=method_value)
+        if method_value == "manual":
+            param.value = (ima2.data.max() - ima2.data.min()) * 0.5 + ima2.data.min()
+        panel.processor.compute_threshold(param)
+    for func in (
+        panel.processor.compute_threshold_isodata,
+        panel.processor.compute_threshold_li,
+        panel.processor.compute_threshold_mean,
+        panel.processor.compute_threshold_minimum,
+        panel.processor.compute_threshold_otsu,
+        panel.processor.compute_threshold_triangle,
+        panel.processor.compute_threshold_yen,
+    ):
+        panel.objview.set_current_object(ima2)
+        func()
 
+    # Test edge detection methods
+    ima2 = create_sincos_image(newparam)
+    panel.add_object(ima2)
     panel.processor.compute_roberts()
-
     panel.processor.compute_prewitt()
     panel.processor.compute_prewitt_h()
     panel.processor.compute_prewitt_v()
-
     panel.processor.compute_sobel()
     panel.processor.compute_sobel_h()
     panel.processor.compute_sobel_v()
-
     panel.processor.compute_scharr()
     panel.processor.compute_scharr_h()
     panel.processor.compute_scharr_v()
-
     panel.processor.compute_farid()
     panel.processor.compute_farid_h()
     panel.processor.compute_farid_v()
-
     panel.processor.compute_laplace()
 
     param = dlp.LogP1Param.create(n=1)
