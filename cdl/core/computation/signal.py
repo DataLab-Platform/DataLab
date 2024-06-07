@@ -34,7 +34,6 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     NormalizeParam,
     SpectrumParam,
-    ThresholdParam,
     calc_resultproperties,
     dst_11,
     dst_n1n,
@@ -71,18 +70,34 @@ class Wrap11Func:
 
     Args:
         func: 1 array → 1 array function
+        *args: Additional positional arguments to pass to the function
+        **kwargs: Additional keyword arguments to pass to the function
     """
 
-    def __init__(self, func: Callable) -> None:
+    def __init__(self, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.func = func
+        self.args = args
+        self.kwargs = kwargs
         self.__name__ = func.__name__
         self.__doc__ = func.__doc__
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: SignalObj) -> SignalObj:
-        dst = dst_11(src, self.func.__name__)
+        """Compute the function on the input signal and return the result signal
+
+        Args:
+            src: input signal object
+
+        Returns:
+            Result signal object
+        """
+        suffix = ", ".join(
+            [str(arg) for arg in self.args]
+            + [f"{k}={v}" for k, v in self.kwargs.items()]
+        )
+        dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
-        dst.set_xydata(x, self.func(y))
+        dst.set_xydata(x, self.func(y, *self.args, **self.kwargs))
         return dst
 
 
@@ -421,13 +436,13 @@ def compute_sqrt(src: SignalObj) -> SignalObj:
     return Wrap11Func(np.sqrt)(src)
 
 
-class PowParam(gds.DataSet):
+class PowerParam(gds.DataSet):
     """Power parameters"""
 
     power = gds.FloatItem(_("Power"), default=2.0)
 
 
-def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
+def compute_power(src: SignalObj, p: PowerParam) -> SignalObj:
     """Compute power
 
     Args:
@@ -437,9 +452,8 @@ def compute_pow(src: SignalObj, p: PowParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "pow", f"n={p.power}")
-    x, y = src.get_data()
-    dst.set_xydata(x, y**p.power)
+    dst = dst_11(src, "^", str(p.power))
+    dst.y = np.power(src.y, p.power)
     return dst
 
 
@@ -546,22 +560,6 @@ def compute_calibration(src: SignalObj, p: XYCalibrateParam) -> SignalObj:
     return dst
 
 
-def compute_threshold(src: SignalObj, p: ThresholdParam) -> SignalObj:
-    """Compute threshold clipping
-
-    Args:
-        src: source signal
-        p: parameters
-
-    Returns:
-        Result signal object
-    """
-    dst = dst_11(src, "threshold", f"min={p.value}")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.clip(y, p.value, y.max()))
-    return dst
-
-
 def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     """Compute maximum data clipping
 
@@ -572,10 +570,7 @@ def compute_clip(src: SignalObj, p: ClipParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "clip", f"max={p.value}")
-    x, y = src.get_data()
-    dst.set_xydata(x, np.clip(y, y.min(), p.value))
-    return dst
+    return Wrap11Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
 def compute_offset_correction(src: SignalObj, p: ROI1DParam) -> SignalObj:

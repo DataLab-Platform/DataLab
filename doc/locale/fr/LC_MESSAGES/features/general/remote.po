@@ -919,7 +919,7 @@ msgstr "Calculer Log10"
 msgid "Compute square root"
 msgstr "Calculer la racine carrée"
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_pow:1 of
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_power:1 of
 msgid "Compute power"
 msgstr "Calculer la puissance"
 
@@ -1410,4 +1410,3 @@ msgstr "Calculer la détection de taches en utilisant OpenCV"
 
 #~ msgid "COmpure sum with a constant"
 #~ msgstr ""
-

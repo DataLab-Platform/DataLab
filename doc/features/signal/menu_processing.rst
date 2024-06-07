@@ -77,11 +77,6 @@ by maximum, amplitude, sum, energy or RMS:
     * - RMS
       - :math:`y_{1}= \dfrac{y_{0}}{\sqrt{\dfrac{1}{N}\sum_{n=0}^{N}|y_{0}[n]|^2}}`
 
-Thresholding
-~~~~~~~~~~~~
-
-Create a new signal which is the result of thresholding each selected signal.
-
 Clipping
 ~~~~~~~~
 

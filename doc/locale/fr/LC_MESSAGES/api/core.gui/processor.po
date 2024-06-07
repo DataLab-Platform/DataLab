@@ -618,7 +618,7 @@ msgstr ""
 msgid "Compute square root"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_pow:1 of
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_power:1 of
 msgid "Compute power"
 msgstr ""
 
@@ -1033,4 +1033,3 @@ msgstr ""
 
 #~ msgid "Compute profile"
 #~ msgstr ""
-

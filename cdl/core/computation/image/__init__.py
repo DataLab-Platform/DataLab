@@ -36,7 +36,6 @@ from cdl.core.computation.base import (
     MovingMedianParam,
     NormalizeParam,
     SpectrumParam,
-    ThresholdParam,
     calc_resultproperties,
     dst_11,
     dst_n1n,
@@ -74,17 +73,30 @@ class Wrap11Func:
 
     Args:
         func: 1 array → 1 array function
+        **kwargs: Additional keyword arguments to pass to the function
     """
 
-    def __init__(self, func: Callable) -> None:
+    def __init__(self, func: Callable, **kwargs: Any) -> None:
         self.func = func
+        self.kwargs = kwargs
         self.__name__ = func.__name__
         self.__doc__ = func.__doc__
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: ImageObj) -> ImageObj:
-        dst = dst_11(src, self.func.__name__)
-        dst.data = self.func(src.data)
+        """Compute the function on the input signal and return the result signal
+
+        Args:
+            src: input image object
+
+        Returns:
+            Output image object
+        """
+        suffix = None
+        if self.kwargs:
+            suffix = ", ".join(f"{k}={v}" for k, v in self.kwargs.items())
+        dst = dst_11(src, self.func.__name__, suffix)
+        dst.data = self.func(src.data, **self.kwargs)
         return dst
 
 
@@ -1038,21 +1050,6 @@ def compute_calibration(src: ImageObj, p: ZCalibrateParam) -> ImageObj:
     return dst
 
 
-def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
-    """Apply thresholding
-
-    Args:
-        src: input image object
-        p: parameters
-
-    Returns:
-        Output image object
-    """
-    dst = dst_11(src, "threshold", f"min={p.value} lsb")
-    dst.data = np.clip(src.data, p.value, src.data.max())
-    return dst
-
-
 def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     """Apply clipping
 
@@ -1063,9 +1060,7 @@ def compute_clip(src: ImageObj, p: ClipParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "clip", f"max={p.value} lsb")
-    dst.data = np.clip(src.data, src.data.min(), p.value)
-    return dst
+    return Wrap11Func(np.clip, a_min=p.lower, a_max=p.upper)(src)
 
 
 def compute_offset_correction(src: ImageObj, p: ROI2DParam) -> ImageObj:

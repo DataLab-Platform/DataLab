@@ -104,11 +104,8 @@ def compute_common_operations(panel: SignalPanel | ImagePanel) -> None:
     panel.processor.compute_division_constant(param)
 
     obj = panel.objmodel.get_groups()[0][-1]
-    param = dlp.ThresholdParam()
-    param.value = (obj.data.max() - obj.data.min()) * 0.2 + obj.data.min()
-    panel.processor.compute_threshold(param)
     param = dlp.ClipParam()  # Clipping before division...
-    param.value = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
+    param.upper = (obj.data.max() - obj.data.min()) * 0.8 + obj.data.min()
     panel.processor.compute_clip(param)
 
     param = dlp.NormalizeParam()
@@ -155,7 +152,7 @@ def run_signal_computations(
 
     # Signal specific operations
     panel.processor.compute_sqrt()
-    panel.processor.compute_pow(dlp.PowParam.create(power=2))
+    panel.processor.compute_power(dlp.PowerParam.create(power=2))
     panel.processor.compute_reverse_x()
     panel.processor.compute_reverse_x()
 

@@ -694,11 +694,6 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
                     icon_name="normalize.svg",
                 )
                 self.new_action(
-                    _("Thresholding"),
-                    triggered=self.panel.processor.compute_threshold,
-                    icon_name="threshold.svg",
-                )
-                self.new_action(
                     _("Clipping"),
                     triggered=self.panel.processor.compute_clip,
                     icon_name="clip.svg",
@@ -825,7 +820,7 @@ class SignalActionHandler(BaseActionHandler):
         with self.new_category(ActionCategory.OPERATION):
             self.new_action(
                 _("Power"),
-                triggered=self.panel.processor.compute_pow,
+                triggered=self.panel.processor.compute_power,
                 separator=True,
                 icon_name="power.svg",
             )

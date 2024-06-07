@@ -156,7 +156,7 @@ msgstr ""
 #: cdl.core.computation.signal.LowPassFilterParam
 #: cdl.core.computation.signal.PeakDetectionParam
 #: cdl.core.computation.signal.PolynomialFitParam
-#: cdl.core.computation.signal.PowParam
+#: cdl.core.computation.signal.PowerParam
 #: cdl.core.computation.signal.ResamplingParam
 #: cdl.core.computation.signal.WindowingParam
 #: cdl.core.computation.signal.XYCalibrateParam of
@@ -411,7 +411,7 @@ msgstr ""
 #: cdl.core.computation.signal.LowPassFilterParam:29
 #: cdl.core.computation.signal.LowPassFilterParam:36
 #: cdl.core.computation.signal.LowPassFilterParam:43
-#: cdl.core.computation.signal.PowParam:8
+#: cdl.core.computation.signal.PowerParam:8
 #: cdl.core.computation.signal.ResamplingParam:15
 #: cdl.core.computation.signal.ResamplingParam:22
 #: cdl.core.computation.signal.ResamplingParam:29
@@ -857,24 +857,24 @@ msgstr ""
 msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.PowParam:1 of
+#: cdl.core.computation.signal.PowerParam:1 of
 #, fuzzy
 msgid "Power parameters"
 msgstr "Paramètres de grille"
 
-#: cdl.core.computation.signal.PowParam:6
+#: cdl.core.computation.signal.PowerParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Default: 2.0."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
-"Returns a new instance of :py:class:`PowParam` with the fields set to the"
+"Returns a new instance of :py:class:`PowerParam` with the fields set to the"
 " given values."
 msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
-msgid "New instance of :py:class:`PowParam`."
+msgid "New instance of :py:class:`PowerParam`."
 msgstr ""
 
 #: cdl.core.computation.signal.WindowingParam:1 of
@@ -2098,4 +2098,3 @@ msgstr ""
 
 #~ msgid "Create ROIDataParam instance"
 #~ msgstr "Créer une instance de ROIDataParam"
-
