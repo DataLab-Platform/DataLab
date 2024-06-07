@@ -73,11 +73,13 @@ class Wrap11Func:
 
     Args:
         func: 1 array → 1 array function
+        *args: Additional positional arguments to pass to the function
         **kwargs: Additional keyword arguments to pass to the function
     """
 
-    def __init__(self, func: Callable, **kwargs: Any) -> None:
+    def __init__(self, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.func = func
+        self.args = args
         self.kwargs = kwargs
         self.__name__ = func.__name__
         self.__doc__ = func.__doc__
@@ -92,11 +94,12 @@ class Wrap11Func:
         Returns:
             Output image object
         """
-        suffix = None
-        if self.kwargs:
-            suffix = ", ".join(f"{k}={v}" for k, v in self.kwargs.items())
+        suffix = ", ".join(
+            [str(arg) for arg in self.args]
+            + [f"{k}={v}" for k, v in self.kwargs.items() if v is not None]
+        )
         dst = dst_11(src, self.func.__name__, suffix)
-        dst.data = self.func(src.data, **self.kwargs)
+        dst.data = self.func(src.data, *self.args, **self.kwargs)
         return dst
 
 

@@ -93,7 +93,7 @@ class Wrap11Func:
         """
         suffix = ", ".join(
             [str(arg) for arg in self.args]
-            + [f"{k}={v}" for k, v in self.kwargs.items()]
+            + [f"{k}={v}" for k, v in self.kwargs.items() if v is not None]
         )
         dst = dst_11(src, self.func.__name__, suffix)
         x, y = src.get_data()
