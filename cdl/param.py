@@ -61,8 +61,6 @@ Common parameters
     :no-index:
 .. autodataset:: cdl.param.ROIDataParam
     :no-index:
-.. autodataset:: cdl.param.ThresholdParam
-    :no-index:
 .. autodataset:: cdl.param.ConstantOperationParam
     :no-index:
 
@@ -87,7 +85,7 @@ Signal parameters
     :no-index:
 .. autodataset:: cdl.param.DetrendingParam
     :no-index:
-.. autodataset:: cdl.param.PowParam
+.. autodataset:: cdl.param.PowerParam
     :no-index:
 .. autodataset:: cdl.param.WindowingParam
     :no-index:
@@ -135,6 +133,12 @@ Base image parameters
 .. autodataset:: cdl.param.RotateParam
     :no-index:
 .. autodataset:: cdl.param.ZCalibrateParam
+    :no-index:
+
+Threshold parameters
+~~~~~~~~~~~~~~~~~~~~
+
+.. autodataset:: cdl.param.ThresholdParam
     :no-index:
 
 Exposure correction parameters
@@ -204,7 +208,6 @@ from cdl.core.computation.base import (
     MovingAverageParam,
     MovingMedianParam,
     ROIDataParam,
-    ThresholdParam,
     ConstantOperationParam,
     NormalizeParam,
 )
@@ -233,6 +236,7 @@ from cdl.core.computation.image.detection import (
     Peak2DDetectionParam,
 )
 from cdl.core.computation.image.edges import CannyParam
+from cdl.core.computation.image.threshold import ThresholdParam
 from cdl.core.computation.image.exposure import (
     AdjustGammaParam,
     AdjustLogParam,
@@ -256,7 +260,7 @@ from cdl.core.computation.signal import (
     PolynomialFitParam,
     ResamplingParam,
     XYCalibrateParam,
-    PowParam,
+    PowerParam,
     WindowingParam,
     LowPassFilterParam,
     HighPassFilterParam,

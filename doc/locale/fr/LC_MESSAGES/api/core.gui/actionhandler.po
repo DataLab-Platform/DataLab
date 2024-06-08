@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 09:50+0200\n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: cdl.core.gui.actionhandler:2 of
 msgid "Action handler"
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Create actions that are added to the menus in the first place"
 msgstr "Créer des actions qui sont ajoutées aux menus en premier lieu"
 
-#: cdl.core.gui.actionhandler.BaseActionHandler.create_last_actions:1
+#: cdl.core.gui.actionhandler.ImageActionHandler.create_last_actions:1
 #: cdl.core.gui.actionhandler.SignalActionHandler.create_last_actions:1 of
 msgid "Create actions that are added to the menus in the end"
 msgstr "Créer des actions qui sont ajoutées aux menus à la fin"
@@ -175,7 +175,8 @@ msgid "shortcut. Defaults to None."
 msgstr "raccourci. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action:10 of
-msgid "icon. Defaults to None."
+#, fuzzy
+msgid "icon name. Defaults to None."
 msgstr "icône. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action:11 of
@@ -225,10 +226,11 @@ msgid ""
 "specifies the category of the toolbar. If None, defaults to "
 "ActionCategory.VIEW_TOOLBAR if the current category is "
 "ActionCategory.VIEW, else to ActionCategory.PANEL_TOOLBAR."
-msgstr "catégorie de la barre d'outils. Par défaut à None. "
-"S'il n'est pas None, cela spécifie la catégorie de la barre d'outils. "
-"Si None, par défaut à ActionCategory.VIEW_TOOLBAR si la catégorie actuelle "
-"est ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
+msgstr ""
+"catégorie de la barre d'outils. Par défaut à None. S'il n'est pas None, "
+"cela spécifie la catégorie de la barre d'outils. Si None, par défaut à "
+"ActionCategory.VIEW_TOOLBAR si la catégorie actuelle est "
+"ActionCategory.VIEW, sinon à ActionCategory.PANEL_TOOLBAR."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_action of
 msgid "Returns"
@@ -253,13 +255,18 @@ msgid "Yields"
 msgstr "Renvoie (Yields)"
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_category:5
-#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:5 of
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:6 of
 msgid "None"
 msgstr "None"
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:3 of
 msgid "Menu title"
 msgstr "Titre du menu"
+
+#: cdl.core.gui.actionhandler.BaseActionHandler.new_menu:4 of
+#, fuzzy
+msgid "Menu icon name. Defaults to None."
+msgstr "icône. Par défaut à None."
 
 #: cdl.core.gui.actionhandler.BaseActionHandler.selected_objects_changed:1 of
 msgid "Update actions based on selected objects."
@@ -284,3 +291,4 @@ msgstr ""
 
 #~ msgid "Return type"
 #~ msgstr "Type de retour"
+

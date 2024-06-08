@@ -52,20 +52,25 @@ def is_version_at_least(version1: str, version2: str) -> bool:
 
     Returns:
         bool: True if version1 is greater than or equal to version2, False otherwise.
+
+    .. note::
+
+        Development, alpha, beta, and rc versions are considered to be equal
+        to the corresponding release version.
     """
-    minor_v1 = ".".join(version1.split(".")[:2])
-    minor_v2 = ".".join(version2.split(".")[:2])
-
     # Split the version strings into parts
-    parts1 = [int(part) for part in minor_v1.split(".")]
-    parts2 = [int(part) for part in minor_v2.split(".")]
+    parts1 = [part.strip() for part in version1.split(".")]
+    parts2 = [part.strip() for part in version2.split(".")]
 
-    # Compare each part
     for part1, part2 in zip(parts1, parts2):
-        if part1 > part2:
+        if part1.isdigit() and part2.isdigit():
+            if int(part1) > int(part2):
+                return True
+            elif int(part1) < int(part2):
+                return False
+        elif part1 > part2:
             return True
-        if part1 < part2:
+        elif part1 < part2:
             return False
 
-    # Check if version1 is shorter and thus less than version2
     return len(parts1) >= len(parts2)

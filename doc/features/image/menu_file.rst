@@ -1,7 +1,86 @@
-.. _ref-to-image-text-file-import:
+.. _ima-menu-file:
 
-Image Text File Import
-======================
+Create, open and save Images
+============================
+
+This section describes how to create, open and save images (and workspaces).
+
+.. figure:: /images/shots/i_file.png
+
+    Screenshot of the "File" menu.
+
+When the "Image Panel" is selected, the menus and toolbars are updated to
+provide image-related actions.
+
+The "File" menu allows you to:
+
+- Create, open, save and close images (see below).
+
+- Save and restore the current workspace or browse HDF5 files (see :ref:`workspace`).
+
+- Edit DataLab preferences (see :ref:`settings`).
+
+New image
+^^^^^^^^^
+
+Create a new image from various models
+(supported datatypes: uint8, uint16, int16, float32, float64):
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20, 80
+
+    * - Model
+      - Equation
+    * - Zeros
+      - :math:`z[i] = 0`
+    * - Empty
+      - Data is directly taken from memory as it is
+    * - Random
+      - :math:`z[i] \in [0, z_{max})` where :math:`z_{max}` is the datatype maximum value
+    * - 2D Gaussian
+      - :math:`z = A.exp(-\dfrac{(\sqrt{(x-x0)^2+(y-y0)^2}-\mu)^2}{2\sigma^2})`
+
+.. _open_image:
+
+Open image
+^^^^^^^^^^
+
+Create a new image from the following supported filetypes:
+
+.. list-table::
+    :header-rows: 1
+
+    * - File type
+      - Extensions
+    * - PNG files
+      - .png
+    * - TIFF files
+      - .tif, .tiff
+    * - 8-bit images
+      - .jpg, .gif
+    * - NumPy arrays
+      - .npy
+    * - MAT-Files
+      - .mat
+    * - Text files
+      - .txt, .csv, .asc
+    * - Andor SIF files
+      - .sif
+    * - SPIRICON files
+      - .scor-data
+    * - FXD files
+      - .fxd
+    * - Bitmap images
+      - .bmp
+
+Save image
+^^^^^^^^^^
+
+Save current image (see "Open image" supported filetypes).
+
+Import text file
+^^^^^^^^^^^^^^^^
 
 DataLab can natively import many types of image files (e.g. TIFF, JPEG, PNG, etc.).
 However some specific text file formats may not be supported. In this case, you can

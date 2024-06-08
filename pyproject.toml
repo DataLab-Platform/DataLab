@@ -41,7 +41,7 @@ classifiers = [
 requires-python = ">=3.8, <4"
 dependencies = [
     "h5py >= 3.0",
-    "NumPy >= 1.21",
+    "NumPy >= 1.21, < 2",
     "SciPy >= 1.7",
     "scikit-image >= 0.18",
     "opencv-python-headless >= 4.5",
@@ -119,7 +119,7 @@ target-version = "py38"                        # Assume Python 3.8
 
 [tool.ruff.lint]
 # all rules can be found here: https://beta.ruff.rs/docs/rules/
-select = ["E", "F", "W", "I"]
+select = ["E", "F", "W", "I", "NPY201"]
 ignore = [
     "E203", # space before : (needed for how black formats slicing)
 ]

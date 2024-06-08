@@ -45,7 +45,6 @@ if TYPE_CHECKING:
         MovingAverageParam,
         MovingMedianParam,
         NormalizeParam,
-        ThresholdParam,
     )
     from cdl.core.gui.panel.image import ImagePanel
     from cdl.core.gui.panel.signal import SignalPanel
@@ -769,11 +768,6 @@ class BaseProcessor(QC.QObject):
     @qt_try_except()
     def compute_calibration(self, param=None) -> None:
         """Compute data linear calibration"""
-
-    @abc.abstractmethod
-    @qt_try_except()
-    def compute_threshold(self, param: ThresholdParam | None = None) -> None:
-        """Compute threshold clipping"""
 
     @abc.abstractmethod
     @qt_try_except()

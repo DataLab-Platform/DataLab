@@ -1,0 +1,447 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/signal/menu_computing.rst:4
+msgid "Computing features on Signals"
+msgstr "Calculs sur les signaux"
+
+#: ../../doc/features/signal/menu_computing.rst:6
+msgid "This section describes the signal computing features available in DataLab."
+msgstr "Cette section décrit les fonctionnalités de calcul de signaux disponibles dans DataLab."
+
+#: ../../doc/features/signal/menu_computing.rst:10
+msgid ""
+":ref:`sig-menu-operations` for more information on operations that can be"
+" performed on signals, or :ref:`sig-menu-processing` for information on "
+"processing features on signals."
+msgstr ":ref:`sig-menu-operations` pour plus d'informations sur les opérations qui peuvent être effectuées sur les signaux, ou :ref:`sig-menu-processing` pour des informations sur les fonctionnalités de traitement des signaux."
+
+#: ../../doc/features/signal/menu_computing.rst:16
+msgid "Screenshot of the \"Computing\" menu."
+msgstr "Capture d'écran du menu \"Calculs\"."
+
+#: ../../doc/features/signal/menu_computing.rst:18
+msgid ""
+"When the \"Signal Panel\" is selected, the menus and toolbars are updated"
+" to provide signal-related actions."
+msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
+
+#: ../../doc/features/signal/menu_computing.rst:21
+msgid ""
+"The \"Computing\" menu allows you to perform various computations on the "
+"selected signals, such as statistics, full width at half-maximum, or full"
+" width at 1/e²."
+msgstr ""
+"Le menu \"Calculs\" permet d'effectuer divers calculs sur les signaux "
+"sélectionnés, tels que des statistiques, la largeur à mi-hauteur, ou "
+"encore la largeur à 1/e²."
+
+#: ../../doc/features/signal/menu_computing.rst:27
+msgid ""
+"In DataLab vocabulary, a \"computing\" is a feature that computes a "
+"scalar result from a signal. This result is stored as metadata, and thus "
+"attached to signal. This is different from a \"processing\" which creates"
+" a new signal from an existing one."
+msgstr ""
+"Dans le vocabulaire de DataLab, un \"calcul\" est une fonctionnalité qui "
+"calcule un résultat scalaire à partir d'un signal. Ce résultat est stocké"
+" sous la forme de métadonnées ; il est donc attaché au signal. Cela "
+"diffère d'un \"traitement\" qui crée un nouveau signal à partir d'un "
+"signal existant."
+
+#: ../../doc/features/signal/menu_computing.rst:33
+msgid "Edit regions of interest"
+msgstr "Modifier les régions d'intérêt"
+
+#: ../../doc/features/signal/menu_computing.rst:35
+msgid ""
+"Open a dialog box to setup multiple Region Of Interests (ROI). ROI are "
+"stored as metadata, and thus attached to signal."
+msgstr ""
+"Ouvre une boîte de dialogue pour définir des régions d'intérêt (ROI) "
+"multiples. Les ROI sont stockées sous la forme de métadonnées ; elles "
+"sont donc attachées au signal."
+
+#: ../../doc/features/signal/menu_computing.rst:38
+msgid ""
+"ROI definition dialog is exactly the same as ROI extraction (see above): "
+"the ROI is defined by moving the position and adjusting the width of an "
+"horizontal range."
+msgstr ""
+"La boîte de dialogue de définition de ROI est exactement la même que "
+"celle utilisée pour l'extraction de ROI (voir plus haut) : la ROI est "
+"définie est ajustant la position et la largeur de l'échelle horizontale "
+"de sélection."
+
+#: ../../doc/features/signal/menu_computing.rst:44
+msgid "A signal with an ROI."
+msgstr "Un signal avec une ROI."
+
+#: ../../doc/features/signal/menu_computing.rst:47
+msgid "Remove regions of interest"
+msgstr "Supprimer les régions d'intérêt"
+
+#: ../../doc/features/signal/menu_computing.rst:49
+msgid "Remove all defined ROI for selected object(s)."
+msgstr ""
+"Supprimer toutes les ROI définies pour l'objet ou les objets "
+"sélectionné(s)."
+
+#: ../../doc/features/signal/menu_computing.rst:52
+msgid "Statistics"
+msgstr "Statistiques"
+
+#: ../../doc/features/signal/menu_computing.rst:54
+msgid "Compute statistics on selected signal and show a summary table."
+msgstr ""
+"Calcule des statistiques sur les signaux sélectionnés et affiche un "
+"tableau récapitulatif."
+
+#: ../../doc/features/signal/menu_computing.rst:58
+msgid ""
+"Example of statistical summary table: each row is associated to an ROI "
+"(the first row gives the statistics for the whole data)."
+msgstr ""
+"Exemple de tableau récapitulatif de statistiques : chaque ligne est "
+"associée à une ROI (à l'exception de la première qui correspond aux "
+"statistiques calculées sur la totalité des données)."
+
+#: ../../doc/features/signal/menu_computing.rst:62
+msgid "Histogram"
+msgstr "Histogramme"
+
+#: ../../doc/features/signal/menu_computing.rst:64
+msgid "Compute histogram of selected signal and show it."
+msgstr "Calcule l'histogramme du signal sélectionné et l'affiche."
+
+#: ../../doc/features/signal/menu_computing.rst:66
+msgid "Parameters are:"
+msgstr "Paramètres :"
+
+#: ../../doc/features/signal/menu_computing.rst:72
+#: ../../doc/features/signal/menu_computing.rst:151
+msgid "Parameter"
+msgstr "Paramètre"
+
+#: ../../doc/features/signal/menu_computing.rst:73
+#: ../../doc/features/signal/menu_computing.rst:95
+#: ../../doc/features/signal/menu_computing.rst:152
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/signal/menu_computing.rst:74
+msgid "Bins"
+msgstr "Classes"
+
+#: ../../doc/features/signal/menu_computing.rst:75
+msgid "Number of bins"
+msgstr "Nombre de classes"
+
+#: ../../doc/features/signal/menu_computing.rst:76
+msgid "Lower limit"
+msgstr "Limite inférieure"
+
+#: ../../doc/features/signal/menu_computing.rst:77
+msgid "Lower limit of the histogram"
+msgstr "Limite inférieure de l'histogramme"
+
+#: ../../doc/features/signal/menu_computing.rst:78
+msgid "Upper limit"
+msgstr "Limite supérieure"
+
+#: ../../doc/features/signal/menu_computing.rst:79
+msgid "Upper limit of the histogram"
+msgstr "Limite supérieure de l'histogramme"
+
+#: ../../doc/features/signal/menu_computing.rst:83
+msgid "Example of histogram."
+msgstr "Exemple d'histogramme."
+
+#: ../../doc/features/signal/menu_computing.rst:86
+msgid "Full width at half-maximum"
+msgstr "Largeur à mi-hauteur"
+
+#: ../../doc/features/signal/menu_computing.rst:88
+msgid ""
+"Compute the Full Width at Half-Maximum (FWHM) of selected signal, using "
+"one of the following methods:"
+msgstr ""
+"Calcule la largeur à mi-hauteur (LMH) du signal sélectionné, en utilisant"
+" l'une des méthodes suivantes :"
+
+#: ../../doc/features/signal/menu_computing.rst:94
+msgid "Method"
+msgstr "Méthode"
+
+#: ../../doc/features/signal/menu_computing.rst:96
+msgid "Zero-crossing"
+msgstr "Passage par zéro"
+
+#: ../../doc/features/signal/menu_computing.rst:97
+msgid ""
+"Find the zero-crossings of the signal after having centered its amplitude"
+" around zero"
+msgstr ""
+"Recherche les passages par zéro du signal après avoir centré son "
+"amplitude autour de zéro"
+
+#: ../../doc/features/signal/menu_computing.rst:98
+msgid "Gauss"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:99
+msgid "Fit data to a Gaussian model using least-square method"
+msgstr ""
+"Ajuste les données à un modèle gaussien en utilisant un algorithme de "
+"moindres carrés"
+
+#: ../../doc/features/signal/menu_computing.rst:100
+msgid "Lorentz"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:101
+msgid "Fit data to a Lorentzian model using least-square method"
+msgstr ""
+"Ajuste les données à un modèle lorentzien en utilisant un algorithme de "
+"moindres carrés"
+
+#: ../../doc/features/signal/menu_computing.rst:102
+msgid "Voigt"
+msgstr "Voigt"
+
+#: ../../doc/features/signal/menu_computing.rst:103
+msgid "Fit data to a Voigt model using least-square method"
+msgstr ""
+"Ajuste les données à un modèle de Voigt en utilisant un algorithme de "
+"moindres carrés"
+
+#: ../../doc/features/signal/menu_computing.rst:107
+msgid "The computed result is displayed as an annotated segment."
+msgstr "Le résultat du calcul est affiché sous la forme d'un segment annoté."
+
+#: ../../doc/features/signal/menu_computing.rst:110
+msgid "Full width at 1/e²"
+msgstr "Largeur à 1/e²"
+
+#: ../../doc/features/signal/menu_computing.rst:112
+msgid ""
+"Fit data to a Gaussian model using least-square method. Then, compute the"
+" full width at 1/e²."
+msgstr ""
+"Réalise l'ajustement des données à une gaussienne en utilisant un "
+"algorithme de moindres carrés. Calcule ensuite la largeur à 1/e² du "
+"modèle d'ajustement."
+
+#: ../../doc/features/signal/menu_computing.rst:115
+msgid ""
+"Computed scalar results are systematically stored as metadata. Metadata "
+"is attached to signal and serialized with it when exporting current "
+"session in a HDF5 file."
+msgstr ""
+"Les résultats de calcul scalaires sont systématiquement stockés dans les "
+"métadonnées. Les métadonnées sont attachées au signal et sérialisées avec"
+" ce dernier par exemple lors de l'export d'une session de DataLab vers un"
+" fichier HDF5."
+
+#: ../../doc/features/signal/menu_computing.rst:120
+msgid "X values at min/max"
+msgstr "Valeurs de X aux min/max"
+
+#: ../../doc/features/signal/menu_computing.rst:122
+msgid "Compute the X values at minimum and maximum of selected signal."
+msgstr "Calcule les valeurs de X aux minima et maxima du signal sélectionné."
+
+#: ../../doc/features/signal/menu_computing.rst:125
+msgid "Peak detection"
+msgstr "Détection de pics"
+
+#: ../../doc/features/signal/menu_computing.rst:127
+msgid ""
+"Create a new signal from semi-automatic peak detection of each selected "
+"signal."
+msgstr ""
+"Crée un signal à partir de la détection automatique des pics de chaque "
+"signal sélectionné :"
+
+#: ../../doc/features/signal/menu_computing.rst:131
+msgid ""
+"Peak detection dialog: threshold is adjustable by moving the horizontal "
+"marker, peaks are detected automatically (see vertical markers with "
+"labels indicating peak position)"
+msgstr ""
+"Boîte de dialogue de détection de pics : le seuil de détection est "
+"ajustable en déplaçant le curseur horizontal, les pics sont détectés "
+"automatiquement (des marqueurs verticaux indiquent les pics détectés avec"
+" leur position)"
+
+#: ../../doc/features/signal/menu_computing.rst:136
+msgid "Sampling rate and period"
+msgstr "Fréquence et période d'échantillonnage"
+
+#: ../../doc/features/signal/menu_computing.rst:138
+msgid "Compute the sampling rate and period of selected signal."
+msgstr ""
+"Calcule la fréquence et la période d'échantillonnage du signal "
+"sélectionné."
+
+#: ../../doc/features/signal/menu_computing.rst:140
+msgid "This feature assumes that the X values are regularly spaced."
+msgstr ""
+"Cette fonctionnalité suppose que les valeurs de X sont régulièrement "
+"espacées."
+
+#: ../../doc/features/signal/menu_computing.rst:143
+msgid "Dynamic parameters"
+msgstr "Paramètres dynamiques"
+
+#: ../../doc/features/signal/menu_computing.rst:145
+msgid "Compute the following dynamic parameters on selected signal:"
+msgstr "Calcule les paramètres dynamiques suivants sur le signal sélectionné :"
+
+#: ../../doc/features/signal/menu_computing.rst:153
+msgid "f"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:154
+msgid "Frequency (sinusoidal fit)"
+msgstr "Fréquence (ajustement sinusoïdal)"
+
+#: ../../doc/features/signal/menu_computing.rst:155
+msgid "ENOB"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:156
+msgid "Effective Number Of Bits"
+msgstr "Bits effectifs"
+
+#: ../../doc/features/signal/menu_computing.rst:157
+msgid "SNR"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:158
+msgid "Signal-to-Noise Ratio"
+msgstr "Rapport signal/bruit"
+
+#: ../../doc/features/signal/menu_computing.rst:159
+msgid "SINAD"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:160
+msgid "Signal-to-Noise And Distortion Ratio"
+msgstr "Rapport signal/bruit et distorsion"
+
+#: ../../doc/features/signal/menu_computing.rst:161
+msgid "THD"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:162
+msgid "Total Harmonic Distortion"
+msgstr "Distorsion harmonique totale"
+
+#: ../../doc/features/signal/menu_computing.rst:163
+msgid "SFDR"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:164
+msgid "Spurious-Free Dynamic Range"
+msgstr "Dynamique sans distorsion"
+
+#: ../../doc/features/signal/menu_computing.rst:167
+msgid "Bandwidth at -3 dB"
+msgstr "Bande passante à -3 dB"
+
+#: ../../doc/features/signal/menu_computing.rst:169
+msgid ""
+"Assuming the signal is a filter response, compute the bandwidth at -3 dB "
+"by finding the frequency range where the signal is above -3 dB."
+msgstr ""
+"En prenant l'hypothèse que le signal est une réponse de filtre, calcule "
+"la bande passante à -3 dB en trouvant la plage de fréquences où le signal"
+" est supérieur à -3 dB."
+
+#: ../../doc/features/signal/menu_computing.rst:174
+msgid ""
+"This feature assumes that the signal is a filter response, already "
+"expressed in dB."
+msgstr ""
+"Cette fonctionnalité suppose que le signal est une réponse de filtre, "
+"déjà exprimée en dB."
+
+#: ../../doc/features/signal/menu_computing.rst:177
+msgid "Contrast"
+msgstr "Contraste"
+
+#: ../../doc/features/signal/menu_computing.rst:179
+msgid "Compute the contrast of selected signal."
+msgstr "Calcule le contraste du signal sélectionné."
+
+#: ../../doc/features/signal/menu_computing.rst:181
+msgid ""
+"The contrast is defined as the ratio of the difference and the sum of the"
+" maximum and minimum values:"
+msgstr ""
+"Le contraste est défini comme le rapport de la différence et de la somme "
+"des valeurs maximale et minimale :"
+
+#: ../../doc/features/signal/menu_computing.rst:184
+msgid ""
+"\\text{Contrast} = \\dfrac{\\text{max}(y) - "
+"\\text{min}(y)}{\\text{max}(y) + \\text{min}(y)}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_computing.rst:189
+msgid ""
+"This feature assumes that the signal is a profile from an image, where "
+"the contrast is meaningful. This justifies the optical definition of "
+"contrast."
+msgstr ""
+"Cette fonctionnalité suppose que le signal est un profil extrait d'une "
+"image, pour laquelle le contraste a un sens. Cela justifie la définition "
+"optique du contraste."
+
+#: ../../doc/features/signal/menu_computing.rst:193
+msgid "Show results"
+msgstr "Afficher les résultats"
+
+#: ../../doc/features/signal/menu_computing.rst:195
+msgid ""
+"Show the results of all computations performed on the selected signals. "
+"This shows the same table as the one shown after having performed a "
+"computation."
+msgstr ""
+"Affiche les résultats de tous les calculs effectués sur les signaux "
+"sélectionnés. Cela affiche le même tableau que celui affiché après avoir "
+"effectué un calcul."
+
+#: ../../doc/features/signal/menu_computing.rst:199
+msgid "Plot results"
+msgstr "Tracer les résultats"
+
+#: ../../doc/features/signal/menu_computing.rst:201
+msgid ""
+"Plot the results of computations performed on the selected signals, with "
+"user-defined X and Y axes (e.g. plot the FWHM as a function of the signal"
+" index)."
+msgstr ""
+"Trace les résultats des calculs effectués sur les signaux sélectionnés, "
+"avec des axes X et Y définis par l'utilisateur (p.ex. trace la largeur à "
+"mi-hauteur en fonction de l'indice du signal)."

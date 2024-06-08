@@ -14,6 +14,10 @@ For those situations, DataLab provides two logs (located in your home directory)
   - "Traceback log", for Python exceptions
   - "Faulthandler log", for system failures (e.g. Qt-related crash)
 
+.. note::
+
+  The log viewer is accessible from the "?" menu in the main window.
+
 .. figure:: /images/shots/logviewer.png
 
     DataLab log viewer (see "?" menu)

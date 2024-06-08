@@ -56,7 +56,7 @@ class RemoteClient(object):
             raise ConnectionRefusedError("DataLab is currently not running")
 
     def get_version(self):
-        """Return DataLab version"""
+        """Return DataLab public version"""
         return self.serverproxy.get_version()
 
     def close_application(self):

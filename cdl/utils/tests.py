@@ -234,9 +234,18 @@ def check_array_result(
 
 
 def check_scalar_result(
-    title: str, res: float, exp: float, rtol: float = 1.0e-5, atol: float = 1.0e-8
+    title: str,
+    res: float,
+    exp: float | tuple[float, ...],
+    rtol: float = 1.0e-5,
+    atol: float = 1.0e-8,
 ) -> None:
     """Assert that two scalars are almost equal."""
     restxt = f"{title}: {res} (expected: {exp})"
     execenv.print(restxt)
-    assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt
+    if isinstance(exp, tuple):
+        assert any(
+            np.isclose(res, exp_val, rtol=rtol, atol=atol) for exp_val in exp
+        ), restxt
+    else:
+        assert np.isclose(res, exp, rtol=rtol, atol=atol), restxt

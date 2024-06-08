@@ -1,0 +1,514 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/image/menu_operations.rst:4
+msgid "Operations on Images"
+msgstr "Opérations sur les images"
+
+#: ../../doc/features/image/menu_operations.rst:6
+msgid "This section describes the operations that can be performed on images."
+msgstr "Cette section décrit les opérations qui peuvent être effectuées sur les images."
+
+#: ../../doc/features/image/menu_operations.rst:10
+msgid ""
+":ref:`ima-menu-processing` for more information on image processing "
+"features, or :ref:`ima-menu-computing` for information on computing "
+"features on images."
+msgstr ":ref:`ima-menu-processing` pour plus d'informations sur les fonctionnalités de traitement d'image, ou :ref:`ima-menu-computing` pour des informations sur les fonctionnalités de calcul sur les images."
+
+#: ../../doc/features/image/menu_operations.rst:15
+msgid "Screenshot of the \"Operations\" menu."
+msgstr "Capture d'écran du menu \"Opérations\"."
+
+#: ../../doc/features/image/menu_operations.rst:17
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux images."
+
+#: ../../doc/features/image/menu_operations.rst:20
+msgid ""
+"The \"Operations\" menu allows you to perform various operations on the "
+"current image or group of images. It also allows you to extract profiles,"
+" distribute images on a grid, or resize images."
+msgstr ""
+"Le menu \"Opérations\" permet d'effectuer diverses opérations sur l'image"
+" ou le groupe d'images courant. Il permet également d'extraire des "
+"profils, de distribuer des images sur une grille, ou de redimensionner "
+"des images."
+
+#: ../../doc/features/image/menu_operations.rst:25
+msgid "Sum"
+msgstr "Addition"
+
+#: ../../doc/features/image/menu_operations.rst:27
+msgid "Create a new image which is the sum of all selected images:"
+msgstr "Crée une image à partir de la somme des images sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:29
+msgid ""
+"z_{M} = \\sum_{k=0}^{M-1}{z_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:33
+msgid "Average"
+msgstr "Moyenne"
+
+#: ../../doc/features/image/menu_operations.rst:35
+msgid "Create a new image which is the average of all selected images:"
+msgstr "Crée une image à partir de la moyenne des images sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:37
+msgid ""
+"z_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{z_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:41
+msgid "Difference"
+msgstr "Soustraction"
+
+#: ../../doc/features/image/menu_operations.rst:43
+msgid "Create a new image which is the difference of the **two** selected images:"
+msgstr ""
+"Crée une image à partir de la différence des **deux** images "
+"sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:45
+msgid ""
+"z_{2} = z_{1} - z_{0}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:49
+msgid "Quadratic difference"
+msgstr "Soustraction quadratique"
+
+#: ../../doc/features/image/menu_operations.rst:51
+msgid ""
+"Create a new image which is the quadratic difference of the **two** "
+"selected images:"
+msgstr ""
+"Crée une image à partir de la différence quadratique des **deux** images "
+"sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:54
+msgid ""
+"z_{2} = \\dfrac{z_{1} - z_{0}}{\\sqrt{2}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:58
+msgid "Product"
+msgstr "Produit"
+
+#: ../../doc/features/image/menu_operations.rst:60
+msgid "Create a new image which is the product of all selected images:"
+msgstr "Crée une image à partir du produit de toutes les images sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:62
+msgid ""
+"z_{M} = \\prod_{k=0}^{M-1}{z_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:66
+#: ../../doc/features/image/menu_operations.rst:90
+msgid "Division"
+msgstr "Division"
+
+#: ../../doc/features/image/menu_operations.rst:68
+msgid "Create a new image which is the division of the **two** selected images:"
+msgstr "Crée une image à partir de la division des **deux** images sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:70
+msgid ""
+"z_{2} = \\dfrac{z_{1}}{z_{0}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:74
+msgid "Constant operations"
+msgstr "Opérations avec une constante"
+
+#: ../../doc/features/image/menu_operations.rst:76
+msgid ""
+"Create a new image which is the result of a constant operation on each "
+"selected image:"
+msgstr ""
+"Crée une image à partir d'une opération avec une constante sur chaque "
+"image sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:82
+msgid "Operation"
+msgstr "Opération"
+
+#: ../../doc/features/image/menu_operations.rst:83
+msgid "Equation"
+msgstr "Equation"
+
+#: ../../doc/features/image/menu_operations.rst:84
+msgid "Addition"
+msgstr "Addition"
+
+#: ../../doc/features/image/menu_operations.rst:85
+msgid ":math:`z_{k} = z_{k-1} + conv(c)`"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:86
+msgid "Subtraction"
+msgstr "Soustraction"
+
+#: ../../doc/features/image/menu_operations.rst:87
+msgid ":math:`z_{k} = z_{k-1} - conv(c)`"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:88
+msgid "Multiplication"
+msgstr "Multiplication"
+
+#: ../../doc/features/image/menu_operations.rst:89
+msgid ":math:`z_{k} = conv(z_{k-1} \\times c)`"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:91
+msgid ":math:`z_{k} = conv(\\dfrac{z_{k-1}}{c})`"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:93
+msgid ""
+"where :math:`c` is the constant value and :math:`conv` is the conversion "
+"function which handles data type conversion (keeping the same data type "
+"as the input image)."
+msgstr ""
+"où :math:`c` est la valeur constante et :math:`conv` est la fonction de "
+"conversion qui gère la conversion du type de données (en conservant le "
+"même type de données que l'image d'entrée)."
+
+#: ../../doc/features/image/menu_operations.rst:97
+msgid "Absolute value"
+msgstr "Valeur absolue"
+
+#: ../../doc/features/image/menu_operations.rst:99
+msgid "Create a new image which is the absolute value of each selected image:"
+msgstr ""
+"Créee une image à partir de la valeur absolue de chaque image "
+"sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:101
+msgid ""
+"z_{k} = |z_{k-1}|\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:105
+msgid "Real part"
+msgstr "Partie réelle"
+
+#: ../../doc/features/image/menu_operations.rst:107
+msgid "Create a new image which is the real part of each selected image:"
+msgstr "Crée une image à partir de la partie réelle de chaque image sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:109
+msgid ""
+"z_{k} = \\Re(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:113
+msgid "Imaginary part"
+msgstr "Partie imaginaire"
+
+#: ../../doc/features/image/menu_operations.rst:115
+msgid "Create a new image which is the imaginary part of each selected image:"
+msgstr ""
+"Crée une image à partir de la partie imaginaire de chaque image "
+"sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:117
+msgid ""
+"z_{k} = \\Im(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:121
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+#: ../../doc/features/image/menu_operations.rst:123
+msgid ""
+"Create a new image which is the result of converting data type of each "
+"selected image."
+msgstr ""
+"Crée une image à partir de la conversion du type de données de l'image "
+"sélectionnée."
+
+#: ../../doc/features/image/menu_operations.rst:128
+msgid ""
+"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
+"with the default parameters (`casting='unsafe'`)."
+msgstr ""
+"La conversion du type de données utilise la fonction "
+":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
+"(`casting='unsafe'`)."
+
+#: ../../doc/features/image/menu_operations.rst:132
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#: ../../doc/features/image/menu_operations.rst:134
+msgid "Create a new image which is the exponential of each selected image:"
+msgstr "Crée une image à partir de l'exponentielle de chaque image sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:136
+msgid ""
+"z_{k} = \\exp(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:140
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+#: ../../doc/features/image/menu_operations.rst:142
+msgid "Create a new image which is the base 10 logarithm of each selected image:"
+msgstr ""
+"Crée une image à partir du logarithme base 10 de chaque image "
+"sélectionnée :"
+
+#: ../../doc/features/image/menu_operations.rst:144
+msgid ""
+"z_{k} = \\log_{10}(z_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:148
+msgid "Log10(z+n)"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:150
+msgid ""
+"Create a new image which is the Log10(z+n) of each selected image (avoid "
+"Log10(0) on image background):"
+msgstr ""
+"Crée une image à partir du Log10(z+n) de chaque image sélectionnée (effet"
+" d'augmentation de la dynamique d'un logarithme en évitant de calculer "
+"Log10(0) sur l'arrière-plan de l'image) :"
+
+#: ../../doc/features/image/menu_operations.rst:153
+msgid ""
+"z_{k} = \\log_{10}(z_{k-1}+n)\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:157
+msgid "Flat-field correction"
+msgstr "Correction de champ plat"
+
+#: ../../doc/features/image/menu_operations.rst:159
+msgid ""
+"Create a new image which is flat-field correction of the **two** selected"
+" images:"
+msgstr ""
+"Calcule la correction de champ plat à partir des **deux** images "
+"sélectionnées :"
+
+#: ../../doc/features/image/menu_operations.rst:162
+msgid ""
+"z_{1} =\n"
+"\\begin{cases}\n"
+"    \\dfrac{z_{0}}{z_{f}}.\\overline{z_{f}} & \\text{if } z_{0} > "
+"z_{threshold} \\\\\n"
+"    z_{0} & \\text{otherwise}\n"
+"\\end{cases}`\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:169
+msgid ""
+"where :math:`z_{0}` is the raw image, :math:`z_{f}` is the flat field "
+"image, :math:`z_{threshold}` is an adjustable threshold and "
+":math:`\\overline{z_{f}}` is the flat field image average value:"
+msgstr ""
+"où :math:`z_{0}` est l'image brute, :math:`z_{f}` est l'image "
+"d'homogénéité, :math:`z_{threshold}` est un seuil ajustable et "
+":math:`\\overline{z_{f}}` est la valeur moyenne de l'image d'homogénéité "
+":"
+
+#: ../../doc/features/image/menu_operations.rst:174
+msgid ""
+"\\overline{z_{f}}=\n"
+"\\dfrac{1}{N_{row}.N_{col}}.\\sum_{i=0}^{N_{row}}\\sum_{j=0}^{N_{col}}{z_{f}(i,j)}"
+"\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/image/menu_operations.rst:180
+msgid ""
+"Raw image and flat field image are supposedly already corrected by "
+"performing a dark frame subtraction."
+msgstr ""
+"L'image brute et l'image d'homogénéité sont supposées avoir déjà été "
+"corrigées par soustraction d'image de noir."
+
+#: ../../doc/features/image/menu_operations.rst:184
+msgid "Rotation"
+msgstr "Rotation"
+
+#: ../../doc/features/image/menu_operations.rst:186
+msgid ""
+"Create a new image which is the result of rotating (90°, 270° or "
+"arbitrary angle) or flipping (horizontally or vertically) data."
+msgstr ""
+"Crée une image qui est le résultat de la rotation (90°, 270° ou angle "
+"arbitraire) ou de l'inversion (horizontale ou verticale) des données de "
+"l'image sélectionnée."
+
+#: ../../doc/features/image/menu_operations.rst:190
+msgid "Intensity profiles"
+msgstr "Profils d'intensité"
+
+#: ../../doc/features/image/menu_operations.rst:199
+msgid "Line profile"
+msgstr "Profil rectiligne"
+
+#: ../../doc/features/image/menu_operations.rst:193
+msgid ""
+"Extract an horizontal or vertical profile from each selected image, and "
+"create new signals from these profiles."
+msgstr ""
+"Extraire un profil horizontal ou vertical de chaque image sélectionnée et"
+" créer un nouveau signal à partir de chacun de ces profils."
+
+#: ../../doc/features/image/menu_operations.rst:198
+msgid ""
+"Line profile dialog. Parameters may also be set manually (\"Edit profile "
+"parameters\" button)."
+msgstr ""
+"Boîte de dialogue d'extraction de profil. Les paramètres peuvent être "
+"également définis manuellement (bouton \"Editer les paramètres du "
+"profil\")."
+
+#: ../../doc/features/image/menu_operations.rst:203
+msgid "Segment profile"
+msgstr "Profil le long d'un segment"
+
+#: ../../doc/features/image/menu_operations.rst:202
+msgid ""
+"Extract a segment profile from each selected image, and create new "
+"signals from these profiles."
+msgstr ""
+"Extraire un profil le long d'un segment de chaque image sélectionnée et "
+"créer un nouveau signal à partir de chacun de ces profils."
+
+#: ../../doc/features/image/menu_operations.rst:212
+msgid "Average profile"
+msgstr "Profil moyen"
+
+#: ../../doc/features/image/menu_operations.rst:206
+msgid ""
+"Extract an horizontal or vertical profile averaged over a rectangular "
+"area, from each selected image, and create new signals from these "
+"profiles."
+msgstr ""
+"Extraire un profil horizontal ou vertical moyenné sur une zone "
+"rectangulaire de chaque image sélectionnée et créer un nouveau signal à "
+"partir de chacun de ces profils."
+
+#: ../../doc/features/image/menu_operations.rst:211
+msgid ""
+"Average profile dialog: the area is defined by a rectangle shape. "
+"Parameters may also be set manually (\"Edit profile parameters\" button)."
+msgstr ""
+"Boîte de dialogue d'extraction de profil moyen : la zone est définie par "
+"un rectangle. Les paramètres peuvent être également définis manuellement "
+"(bouton \"Editer les paramètres du profil\")."
+
+#: ../../doc/features/image/menu_operations.rst:231
+msgid "Radial profile extraction"
+msgstr "Extraire un profil radial"
+
+#: ../../doc/features/image/menu_operations.rst:215
+msgid ""
+"Extract a radial profile from each selected image, and create new signals"
+" from these profiles."
+msgstr ""
+"Extraire un profil radial de chaque image sélectionnée et créer un "
+"nouveau signal à partir de ces profils."
+
+#: ../../doc/features/image/menu_operations.rst:218
+msgid "The following parameters are available:"
+msgstr "Les paramètres suivants sont disponibles :"
+
+#: ../../doc/features/image/menu_operations.rst:224
+msgid "Parameter"
+msgstr "Paramètre"
+
+#: ../../doc/features/image/menu_operations.rst:225
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/image/menu_operations.rst:226
+msgid "Center"
+msgstr "Centre"
+
+#: ../../doc/features/image/menu_operations.rst:227
+msgid ""
+"Center around which the radial profile is computed: centroid, image "
+"center, or user-defined"
+msgstr ""
+"Centre autour duquel le profil radial est calculé : centre de masse, "
+"centre de l'image, ou défini par l'utilisateur"
+
+#: ../../doc/features/image/menu_operations.rst:228
+msgid "X"
+msgstr "X"
+
+#: ../../doc/features/image/menu_operations.rst:229
+msgid "X coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée X du centre (si défini par l'utilisateur), en pixels"
+
+#: ../../doc/features/image/menu_operations.rst:230
+msgid "Y"
+msgstr "Y"
+
+#: ../../doc/features/image/menu_operations.rst:231
+msgid "Y coordinate of the center (if user-defined), in pixels"
+msgstr "Coordonnée Y du centre (si défini par l'utilisateur), en pixels"
+
+#: ../../doc/features/image/menu_operations.rst:234
+msgid "Distribute on a grid"
+msgstr "Distribuer sur une grille"
+
+#: ../../doc/features/image/menu_operations.rst:236
+msgid "Distribute selected images on a regular grid."
+msgstr "Distribuer les images sélectionnées sur une grille régulière."
+
+#: ../../doc/features/image/menu_operations.rst:239
+msgid "Reset image positions"
+msgstr "Réinitialiser les positions"
+
+#: ../../doc/features/image/menu_operations.rst:241
+msgid "Reset selected image positions to first image (x0, y0) coordinates."
+msgstr ""
+"Réinitialiser les positions des images sélectionnées sur les coordonnées "
+"(x0, y0) de la première image."

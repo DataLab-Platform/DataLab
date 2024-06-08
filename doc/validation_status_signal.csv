@@ -1,7 +1,7 @@
-:py:func:`abs <cdl.core.computation.signal.compute_abs>`,Compute absolute value,``features/signal/fft1d_unit_test.py``
-:py:func:`addition <cdl.core.computation.signal.compute_addition>`,Add **dst** and **src** signals and return **dst** signal modified in place,``features/signal/misc_unit_test.py``
-:py:func:`addition_constant <cdl.core.computation.signal.compute_addition_constant>`,Add **dst** and a constant value and return a the new result signal object,``features/image/misc_unit_test.py``
-:py:func:`astype <cdl.core.computation.signal.compute_astype>`,Convert data type,N/A
+:py:func:`abs <cdl.core.computation.signal.compute_abs>`,Compute absolute value,``features/signal/operation_unit_test.py``
+:py:func:`addition <cdl.core.computation.signal.compute_addition>`,Add **dst** and **src** signals and return **dst** signal modified in place,``features/signal/operation_unit_test.py``
+:py:func:`addition_constant <cdl.core.computation.signal.compute_addition_constant>`,Add **dst** and a constant value and return a the new result signal object,``features/signal/operation_unit_test.py``
+:py:func:`astype <cdl.core.computation.signal.compute_astype>`,Convert data type,``features/signal/operation_unit_test.py``
 :py:func:`bandwidth_3db <cdl.core.computation.signal.compute_bandwidth_3db>`,Compute bandwidth,``features/signal/computing_unit_test.py``
 :py:func:`calibration <cdl.core.computation.signal.compute_calibration>`,Compute linear calibration,N/A
 :py:func:`clip <cdl.core.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
@@ -9,43 +9,42 @@
 :py:func:`convolution <cdl.core.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
 :py:func:`derivative <cdl.core.computation.signal.compute_derivative>`,Compute derivative,N/A
 :py:func:`detrending <cdl.core.computation.signal.compute_detrending>`,Detrend data,N/A
-:py:func:`difference <cdl.core.computation.signal.compute_difference>`,Compute difference between two signals,``features/signal/misc_unit_test.py``
-:py:func:`difference_constant <cdl.core.computation.signal.compute_difference_constant>`,Subtract a constant value from a signal,``features/image/misc_unit_test.py``
-:py:func:`division <cdl.core.computation.signal.compute_division>`,Compute division between two signals,N/A
-:py:func:`division_constant <cdl.core.computation.signal.compute_division_constant>`,Divide a signal by a constant value,``features/image/misc_unit_test.py``
+:py:func:`difference <cdl.core.computation.signal.compute_difference>`,Compute difference between two signals,``features/signal/operation_unit_test.py``
+:py:func:`difference_constant <cdl.core.computation.signal.compute_difference_constant>`,Subtract a constant value from a signal,``features/signal/operation_unit_test.py``
+:py:func:`division <cdl.core.computation.signal.compute_division>`,Compute division between two signals,``features/signal/operation_unit_test.py``
+:py:func:`division_constant <cdl.core.computation.signal.compute_division_constant>`,Divide a signal by a constant value,``features/signal/operation_unit_test.py``
 :py:func:`dynamic_parameters <cdl.core.computation.signal.compute_dynamic_parameters>`,"Compute Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR)",``features/signal/computing_unit_test.py``
-:py:func:`exp <cdl.core.computation.signal.compute_exp>`,Compute exponential,N/A
+:py:func:`exp <cdl.core.computation.signal.compute_exp>`,Compute exponential,``features/signal/operation_unit_test.py``
 :py:func:`fft <cdl.core.computation.signal.compute_fft>`,Compute FFT,``features/signal/fft1d_unit_test.py``
 :py:func:`filter <cdl.core.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
 :py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,``features/signal/fwhm_unit_test.py``
 :py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`,Compute FWHM,``features/signal/fwhm_unit_test.py``
 :py:func:`gaussian_filter <cdl.core.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
 :py:func:`histogram <cdl.core.computation.signal.compute_histogram>`,Compute histogram,N/A
-:py:func:`ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,N/A
-:py:func:`im <cdl.core.computation.signal.compute_im>`,Compute imaginary part,N/A
+:py:func:`ifft <cdl.core.computation.signal.compute_ifft>`,Compute iFFT,``features/signal/fft1d_unit_test.py``
+:py:func:`im <cdl.core.computation.signal.compute_im>`,Compute imaginary part,``features/signal/operation_unit_test.py``
 :py:func:`integral <cdl.core.computation.signal.compute_integral>`,Compute integral,N/A
 :py:func:`interpolation <cdl.core.computation.signal.compute_interpolation>`,Interpolate data,N/A
-:py:func:`log10 <cdl.core.computation.signal.compute_log10>`,Compute Log10,N/A
-:py:func:`magnitude_spectrum <cdl.core.computation.signal.compute_magnitude_spectrum>`,Compute magnitude spectrum,N/A
+:py:func:`log10 <cdl.core.computation.signal.compute_log10>`,Compute Log10,``features/signal/operation_unit_test.py``
+:py:func:`magnitude_spectrum <cdl.core.computation.signal.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/signal/fft1d_unit_test.py``
 :py:func:`moving_average <cdl.core.computation.signal.compute_moving_average>`,Compute moving average,N/A
 :py:func:`moving_median <cdl.core.computation.signal.compute_moving_median>`,Compute moving median,N/A
 :py:func:`normalize <cdl.core.computation.signal.compute_normalize>`,Normalize data,N/A
-:py:func:`offset_correction <cdl.core.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/image/offset_correction_unit_test.py``
+:py:func:`offset_correction <cdl.core.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/signal/offset_correction_unit_test.py``
 :py:func:`peak_detection <cdl.core.computation.signal.compute_peak_detection>`,Peak detection,N/A
-:py:func:`phase_spectrum <cdl.core.computation.signal.compute_phase_spectrum>`,Compute phase spectrum,N/A
-:py:func:`pow <cdl.core.computation.signal.compute_pow>`,Compute power,N/A
-:py:func:`product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,``features/signal/misc_unit_test.py``
-:py:func:`product_constant <cdl.core.computation.signal.compute_product_constant>`,Multiply **dst** by a constant value and return the new result signal object,``features/image/misc_unit_test.py``
-:py:func:`psd <cdl.core.computation.signal.compute_psd>`,Compute power spectral density,N/A
-:py:func:`quadratic_difference <cdl.core.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,N/A
-:py:func:`re <cdl.core.computation.signal.compute_re>`,Compute real part,N/A
+:py:func:`phase_spectrum <cdl.core.computation.signal.compute_phase_spectrum>`,Compute phase spectrum,``features/signal/fft1d_unit_test.py``
+:py:func:`pow <cdl.core.computation.signal.compute_power>`,Compute power,N/A
+:py:func:`product <cdl.core.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,``features/signal/operation_unit_test.py``
+:py:func:`product_constant <cdl.core.computation.signal.compute_product_constant>`,Multiply **dst** by a constant value and return the new result signal object,``features/signal/operation_unit_test.py``
+:py:func:`psd <cdl.core.computation.signal.compute_psd>`,Compute power spectral density,``features/signal/fft1d_unit_test.py``
+:py:func:`quadratic_difference <cdl.core.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,``features/image/operation_unit_test.py``
+:py:func:`re <cdl.core.computation.signal.compute_re>`,Compute real part,``features/signal/operation_unit_test.py``
 :py:func:`resampling <cdl.core.computation.signal.compute_resampling>`,Resample data,N/A
 :py:func:`reverse_x <cdl.core.computation.signal.compute_reverse_x>`,Reverse x-axis,N/A
 :py:func:`sampling_rate_period <cdl.core.computation.signal.compute_sampling_rate_period>`,Compute sampling rate and period,``features/signal/computing_unit_test.py``
 :py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`,Compute square root,N/A
 :py:func:`stats <cdl.core.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`,Swap axes,N/A
-:py:func:`threshold <cdl.core.computation.signal.compute_threshold>`,Compute threshold clipping,N/A
 :py:func:`wiener <cdl.core.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
 :py:func:`windowing <cdl.core.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
 :py:func:`x_at_minmax <cdl.core.computation.signal.compute_x_at_minmax>`,Compute x at min/max,``features/signal/computing_unit_test.py``

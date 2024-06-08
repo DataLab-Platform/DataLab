@@ -42,7 +42,7 @@ def test_image_offset_correction_interactive() -> None:
             param = ROI2DParam()
             param.xr0, param.yr0, param.xr1, param.yr1 = dlg.get_index_range()
             i2 = cpi.compute_offset_correction(i1, param)
-            i3 = cpi.compute_threshold(i2, cdl.param.ClipParam.create(value=0))
+            i3 = cpi.compute_clip(i2, cdl.param.ClipParam.create(lower=0))
             view_images_side_by_side(
                 [i1.make_item(), i3.make_item()],
                 titles=["Original image", "Corrected image"],

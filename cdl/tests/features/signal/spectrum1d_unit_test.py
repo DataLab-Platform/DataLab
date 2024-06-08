@@ -22,9 +22,9 @@ def test_signal_magnitude_spectrum_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        yms = alg.magnitude_spectrum(x, y, log_scale=True)
+        xms, yms = alg.magnitude_spectrum(x, y, log_scale=True)
         view_curves(
-            [(x, yms)],
+            [(xms, yms)],
             title="Magnitude spectrum",
             xlabel="Frequency",
             ylabel="Magnitude",
@@ -36,9 +36,9 @@ def test_signal_phase_spectrum_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        yps = alg.phase_spectrum(y)
+        xps, yps = alg.phase_spectrum(x, y)
         view_curves(
-            [(x, yps)],
+            [(xps, yps)],
             title="Phase spectrum",
             xlabel="Frequency",
             ylabel="Phase",

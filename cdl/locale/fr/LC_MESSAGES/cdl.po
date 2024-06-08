@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-05-28 16:42+0200\n"
+"POT-Creation-Date: 2024-06-07 10:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,58 +23,58 @@ msgstr ""
 msgid "Size of the moving window"
 msgstr "Taille de la fenêtre glissante"
 
-#: cdl\core\computation\base.py:52 cdl\core\computation\image\__init__.py:277
-#: cdl\core\computation\signal.py:451
-msgid "Threshold"
-msgstr "Seuil"
+#: cdl\core\computation\base.py:52
+msgid "Lower clipping value"
+msgstr "Borne inférieure d'écrêtage"
 
-#: cdl\core\computation\base.py:58
-msgid "Clipping value"
-msgstr "Valeur d'écrêtage"
+#: cdl\core\computation\base.py:53
+msgid "Upper clipping value"
+msgstr "Borne supérieure d'écrêtage"
 
-#: cdl\core\computation\base.py:65
+#: cdl\core\computation\base.py:60
 msgid "Maximum"
 msgstr "Maximum"
 
-#: cdl\core\computation\base.py:66 cdl\widgets\fitdialog.py:117
+#: cdl\core\computation\base.py:61 cdl\widgets\fitdialog.py:117
 #: cdl\widgets\fitdialog.py:145 cdl\widgets\fitdialog.py:173
 #: cdl\widgets\fitdialog.py:302 cdl\widgets\fitdialog.py:337
 msgid "Amplitude"
 msgstr "Amplitude"
 
-#: cdl\core\computation\base.py:67
+#: cdl\core\computation\base.py:62
 msgid "Area"
 msgstr "Aire"
 
-#: cdl\core\computation\base.py:68
+#: cdl\core\computation\base.py:63
 msgid "Energy"
 msgstr "Energie"
 
-#: cdl\core\computation\base.py:69
+#: cdl\core\computation\base.py:64
 msgid "RMS"
 msgstr ""
 
-#: cdl\core\computation\base.py:71
+#: cdl\core\computation\base.py:66
 msgid "Normalize with respect to"
 msgstr "Normaliser par rapport à"
 
-#: cdl\core\computation\base.py:93 cdl\core\computation\image\exposure.py:179
+#: cdl\core\computation\base.py:88 cdl\core\computation\image\exposure.py:179
+#: cdl\core\computation\image\threshold.py:44
 msgid "Number of bins"
 msgstr "Nombre de classes"
 
-#: cdl\core\computation\base.py:94
+#: cdl\core\computation\base.py:89
 msgid "Lower limit"
 msgstr "Limite inférieure"
 
-#: cdl\core\computation\base.py:95
+#: cdl\core\computation\base.py:90
 msgid "Upper limit"
 msgstr "Limite supérieure"
 
-#: cdl\core\computation\base.py:102
+#: cdl\core\computation\base.py:97
 msgid "ROI data"
 msgstr "Données de la ROI"
 
-#: cdl\core\computation\base.py:103
+#: cdl\core\computation\base.py:98
 msgid ""
 "For convenience, this item accepts a 2D NumPy array, a list of list of "
 "numbers, or None. In the end, the data is converted to a 2D NumPy array of "
@@ -84,50 +84,55 @@ msgstr ""
 "de listes de nombres, ou None. En fin de compte, les données sont converties "
 "en un tableau NumPy 2D d'entiers (si non nul)."
 
-#: cdl\core\computation\base.py:110
+#: cdl\core\computation\base.py:105
 msgid "Single object"
 msgstr "Objet unique"
 
-#: cdl\core\computation\base.py:111
+#: cdl\core\computation\base.py:106
 msgid "Whether to extract the ROI as a single object or not."
 msgstr "Extrait la ROI comme un objet unique ou non."
 
-#: cdl\core\computation\base.py:123
+#: cdl\core\computation\base.py:118
 msgid "Shift"
 msgstr "Décalage"
 
-#: cdl\core\computation\base.py:123
+#: cdl\core\computation\base.py:118
 msgid "Shift zero frequency to center"
 msgstr "Décaler la fréquence nulle au centre"
 
-#: cdl\core\computation\base.py:129
+#: cdl\core\computation\base.py:124
 msgid "Logarithmic scale"
 msgstr "Echelle logarithmique"
 
-#: cdl\core\computation\base.py:136
+#: cdl\core\computation\base.py:131
 msgid "Constant value"
 msgstr "Constante"
 
-#: cdl\core\computation\image\__init__.py:343
+#: cdl\core\computation\image\__init__.py:292
+#: cdl\core\computation\signal.py:464
+msgid "Threshold"
+msgstr "Seuil"
+
+#: cdl\core\computation\image\__init__.py:358
 msgid "Angle"
 msgstr "Angle"
 
-#: cdl\core\computation\image\__init__.py:345
-#: cdl\core\computation\image\__init__.py:540
+#: cdl\core\computation\image\__init__.py:360
+#: cdl\core\computation\image\__init__.py:555
 #: cdl\core\computation\image\edges.py:60
 #: cdl\core\computation\image\restoration.py:99
 #: cdl\core\computation\image\restoration.py:143
-#: cdl\core\computation\signal.py:1005
+#: cdl\core\computation\signal.py:1001
 msgid "Mode"
 msgstr "Mode"
 
-#: cdl\core\computation\image\__init__.py:348
-#: cdl\core\computation\image\__init__.py:543
+#: cdl\core\computation\image\__init__.py:363
+#: cdl\core\computation\image\__init__.py:558
 msgid "cval"
 msgstr "cval"
 
-#: cdl\core\computation\image\__init__.py:350
-#: cdl\core\computation\image\__init__.py:545
+#: cdl\core\computation\image\__init__.py:365
+#: cdl\core\computation\image\__init__.py:560
 msgid ""
 "Value used for points outside the boundaries of the input if mode is "
 "'constant'"
@@ -135,11 +140,11 @@ msgstr ""
 "Valeur utilisée pour les points situés en dehors des frontières de l'image "
 "d'origine (si le mode est 'constant')"
 
-#: cdl\core\computation\image\__init__.py:357
+#: cdl\core\computation\image\__init__.py:372
 msgid "Reshape the output array"
 msgstr "Redimensionner l'image de destination"
 
-#: cdl\core\computation\image\__init__.py:359
+#: cdl\core\computation\image\__init__.py:374
 msgid ""
 "Reshape the output array so that the input array is contained completely in "
 "the output"
@@ -147,231 +152,232 @@ msgstr ""
 "Redimensionner l'image de destination de sorte qu'elle puisse contenir la "
 "totalité de l'image source"
 
-#: cdl\core\computation\image\__init__.py:365
-#: cdl\core\computation\image\__init__.py:551
+#: cdl\core\computation\image\__init__.py:380
+#: cdl\core\computation\image\__init__.py:566
 msgid "Prefilter the input image"
 msgstr "Prétraitement de l'image d'origine (spline)"
 
-#: cdl\core\computation\image\__init__.py:369
-#: cdl\core\computation\image\__init__.py:555
-#: cdl\core\computation\image\__init__.py:1248
+#: cdl\core\computation\image\__init__.py:384
+#: cdl\core\computation\image\__init__.py:570
+#: cdl\core\computation\image\__init__.py:1250
 msgid "Order"
 msgstr "Ordre"
 
-#: cdl\core\computation\image\__init__.py:373
-#: cdl\core\computation\image\__init__.py:559
+#: cdl\core\computation\image\__init__.py:388
+#: cdl\core\computation\image\__init__.py:574
 msgid "Spline interpolation order"
 msgstr "Ordre de l'interpolation de type spline"
 
-#: cdl\core\computation\image\__init__.py:518
+#: cdl\core\computation\image\__init__.py:533
 msgid "columns"
 msgstr "colonnes"
 
-#: cdl\core\computation\image\__init__.py:518
+#: cdl\core\computation\image\__init__.py:533
 msgid "rows"
 msgstr "lignes"
 
-#: cdl\core\computation\image\__init__.py:519
+#: cdl\core\computation\image\__init__.py:534
 msgid "Distribute over"
 msgstr "Distribuer selon les"
 
-#: cdl\core\computation\image\__init__.py:522
+#: cdl\core\computation\image\__init__.py:537
 msgid "Columns"
 msgstr "Colonnes"
 
-#: cdl\core\computation\image\__init__.py:525
+#: cdl\core\computation\image\__init__.py:540
 msgid "Rows"
 msgstr "Lignes"
 
-#: cdl\core\computation\image\__init__.py:528
+#: cdl\core\computation\image\__init__.py:543
 msgid "Column spacing"
 msgstr "Espace entre chaque colonne"
 
-#: cdl\core\computation\image\__init__.py:529
+#: cdl\core\computation\image\__init__.py:544
 msgid "Row spacing"
 msgstr "Espace entre chaque ligne"
 
-#: cdl\core\computation\image\__init__.py:538
+#: cdl\core\computation\image\__init__.py:553
 msgid "Zoom"
 msgstr "Zoom"
 
-#: cdl\core\computation\image\__init__.py:591
+#: cdl\core\computation\image\__init__.py:606
 msgid "Cluster size (X)"
 msgstr "Nombre de pixels (X)"
 
-#: cdl\core\computation\image\__init__.py:594
+#: cdl\core\computation\image\__init__.py:609
 msgid "Number of adjacent pixels to be combined together along X-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des X."
 
-#: cdl\core\computation\image\__init__.py:597
+#: cdl\core\computation\image\__init__.py:612
 msgid "Cluster size (Y)"
 msgstr "Nombre de pixels (Y)"
 
-#: cdl\core\computation\image\__init__.py:600
+#: cdl\core\computation\image\__init__.py:615
 msgid "Number of adjacent pixels to be combined together along Y-axis."
 msgstr "Nombre de pixels adjacents à regrouper le long de l'axe des Y."
 
-#: cdl\core\computation\image\__init__.py:604
+#: cdl\core\computation\image\__init__.py:619
+#: cdl\core\computation\image\threshold.py:52
 msgid "Operation"
 msgstr "Opération"
 
-#: cdl\core\computation\image\__init__.py:610 cdl\core\model\image.py:800
+#: cdl\core\computation\image\__init__.py:625 cdl\core\model\image.py:810
 #: cdl\widgets\textimport.py:209 cdl\widgets\textimport.py:232
 msgid "Data type"
 msgstr "Type de données"
 
-#: cdl\core\computation\image\__init__.py:612
-#: cdl\core\computation\image\__init__.py:972
-#: cdl\core\computation\signal.py:370 cdl\widgets\textimport.py:234
+#: cdl\core\computation\image\__init__.py:627
+#: cdl\core\computation\image\__init__.py:991
+#: cdl\core\computation\signal.py:384 cdl\widgets\textimport.py:234
 msgid "Output image data type."
 msgstr "Type de données de l'image générée."
 
-#: cdl\core\computation\image\__init__.py:615
+#: cdl\core\computation\image\__init__.py:630
 msgid "Change pixel size"
 msgstr "Modifier la taille des pixels"
 
-#: cdl\core\computation\image\__init__.py:617
+#: cdl\core\computation\image\__init__.py:632
 msgid "Change pixel size so that overall image size remains the same."
 msgstr ""
 "Modification de la taille des pixels de sorte que les dimensions de l'images "
 "restent les mêmes après l'opération."
 
-#: cdl\core\computation\image\__init__.py:713
-#: cdl\core\computation\image\__init__.py:784
+#: cdl\core\computation\image\__init__.py:732
+#: cdl\core\computation\image\__init__.py:803
 msgid "horizontal"
 msgstr "horizontal"
 
-#: cdl\core\computation\image\__init__.py:713
-#: cdl\core\computation\image\__init__.py:784
+#: cdl\core\computation\image\__init__.py:732
+#: cdl\core\computation\image\__init__.py:803
 msgid "vertical"
 msgstr "vertical"
 
-#: cdl\core\computation\image\__init__.py:714
-#: cdl\core\computation\image\__init__.py:785
+#: cdl\core\computation\image\__init__.py:733
+#: cdl\core\computation\image\__init__.py:804
 msgid "Direction"
 msgstr "Direction"
 
-#: cdl\core\computation\image\__init__.py:717
+#: cdl\core\computation\image\__init__.py:736
 msgid "Row"
 msgstr "Ligne"
 
-#: cdl\core\computation\image\__init__.py:720
+#: cdl\core\computation\image\__init__.py:739
 msgid "Column"
 msgstr "Colonne"
 
-#: cdl\core\computation\image\__init__.py:753
+#: cdl\core\computation\image\__init__.py:772
 msgid "Start row"
 msgstr "Ligne (début)"
 
-#: cdl\core\computation\image\__init__.py:754
+#: cdl\core\computation\image\__init__.py:773
 msgid "Start column"
 msgstr "Colonne (début)"
 
-#: cdl\core\computation\image\__init__.py:755
+#: cdl\core\computation\image\__init__.py:774
 msgid "End row"
 msgstr "Ligne (fin)"
 
-#: cdl\core\computation\image\__init__.py:756
+#: cdl\core\computation\image\__init__.py:775
 msgid "End column"
 msgstr "Colonne (fin)"
 
-#: cdl\core\computation\image\__init__.py:786
-#: cdl\core\computation\image\__init__.py:791
+#: cdl\core\computation\image\__init__.py:805
+#: cdl\core\computation\image\__init__.py:810
 msgid "Profile rectangular area"
 msgstr "Zone rectangulaire du profil"
 
-#: cdl\core\computation\image\__init__.py:787
+#: cdl\core\computation\image\__init__.py:806
 msgid "Row 1"
 msgstr "Ligne 1"
 
-#: cdl\core\computation\image\__init__.py:788
+#: cdl\core\computation\image\__init__.py:807
 msgid "Row 2"
 msgstr "Ligne 2"
 
-#: cdl\core\computation\image\__init__.py:789
+#: cdl\core\computation\image\__init__.py:808
 msgid "Column 1"
 msgstr "Colonne 1"
 
-#: cdl\core\computation\image\__init__.py:790
+#: cdl\core\computation\image\__init__.py:809
 msgid "Column 2"
 msgstr "Colonne 2"
 
-#: cdl\core\computation\image\__init__.py:850
+#: cdl\core\computation\image\__init__.py:869
 msgid "Center position"
 msgstr "Position du centre"
 
-#: cdl\core\computation\image\__init__.py:852
+#: cdl\core\computation\image\__init__.py:871
 msgid "Image centroid"
 msgstr "Barycentre de l'image"
 
-#: cdl\core\computation\image\__init__.py:853
+#: cdl\core\computation\image\__init__.py:872
 msgid "Image center"
 msgstr "Centre de l'image"
 
-#: cdl\core\computation\image\__init__.py:854
+#: cdl\core\computation\image\__init__.py:873
 msgid "User-defined"
 msgstr "Défini par l'utilisateur"
 
-#: cdl\core\computation\image\__init__.py:860
+#: cdl\core\computation\image\__init__.py:879
 msgid "Center"
 msgstr "Centre"
 
-#: cdl\core\computation\image\__init__.py:908
-#: cdl\core\computation\signal.py:944
+#: cdl\core\computation\image\__init__.py:927
+#: cdl\core\computation\signal.py:940
 msgid "Counts"
 msgstr "Coups"
 
-#: cdl\core\computation\image\__init__.py:970
-#: cdl\core\computation\signal.py:368
+#: cdl\core\computation\image\__init__.py:989
+#: cdl\core\computation\signal.py:382
 msgid "Destination data type"
 msgstr "Type de données de destination"
 
-#: cdl\core\computation\image\__init__.py:1154
-#: cdl\core\computation\image\__init__.py:1155
-#: cdl\core\computation\image\__init__.py:1195
-#: cdl\core\computation\image\__init__.py:1210
-#: cdl\core\computation\image\__init__.py:1228
-#: cdl\core\computation\signal.py:826 cdl\core\computation\signal.py:865
-#: cdl\core\computation\signal.py:881 cdl\core\computation\signal.py:902
+#: cdl\core\computation\image\__init__.py:1156
+#: cdl\core\computation\image\__init__.py:1157
+#: cdl\core\computation\image\__init__.py:1197
+#: cdl\core\computation\image\__init__.py:1212
+#: cdl\core\computation\image\__init__.py:1230
+#: cdl\core\computation\signal.py:820 cdl\core\computation\signal.py:859
+#: cdl\core\computation\signal.py:877 cdl\core\computation\signal.py:898
 #: cdl\core\model\signal.py:637 cdl\widgets\fitdialog.py:303
 msgid "Frequency"
 msgstr "Fréquence"
 
-#: cdl\core\computation\image\__init__.py:1236
+#: cdl\core\computation\image\__init__.py:1238
 msgid "Cut-off frequency ratio"
 msgstr "Fréquence de coupure relative"
 
-#: cdl\core\computation\image\__init__.py:1240
+#: cdl\core\computation\image\__init__.py:1242
 msgid "Cut-off frequency ratio (0.0 - 1.0)."
 msgstr "Fréquence de coupure relative (0.0 - 1.0)."
 
-#: cdl\core\computation\image\__init__.py:1243
-#: cdl\core\gui\actionhandler.py:871 cdl\core\gui\processor\signal.py:353
+#: cdl\core\computation\image\__init__.py:1245
+#: cdl\core\gui\actionhandler.py:868 cdl\core\gui\processor\signal.py:348
 msgid "High-pass filter"
 msgstr "Filtre passe-haut"
 
-#: cdl\core\computation\image\__init__.py:1245
+#: cdl\core\computation\image\__init__.py:1247
 msgid "If True, apply high-pass filter instead of low-pass."
 msgstr "Si vrai, appliquer un filtre passe-haut au lieu d'un filtre passe-bas."
 
-#: cdl\core\computation\image\__init__.py:1251
+#: cdl\core\computation\image\__init__.py:1253
 msgid "Order of the Butterworth filter."
 msgstr "Ordre du filtre de Butterworth."
 
-#: cdl\core\computation\image\__init__.py:1426
+#: cdl\core\computation\image\__init__.py:1435
 msgid "Radius<sub>min</sub>"
 msgstr "Rayon<sub>min</sub>"
 
-#: cdl\core\computation\image\__init__.py:1429
+#: cdl\core\computation\image\__init__.py:1438
 msgid "Radius<sub>max</sub>"
 msgstr "Rayon<sub>max</sub>"
 
-#: cdl\core\computation\image\__init__.py:1431
+#: cdl\core\computation\image\__init__.py:1440
 msgid "Minimal distance"
 msgstr "Distance minimale"
 
 #: cdl\core\computation\image\detection.py:37
-#: cdl\core\computation\image\detection.py:133
+#: cdl\core\computation\image\detection.py:132
 msgid "Relative threshold"
 msgstr "Seuil relatif"
 
@@ -393,7 +399,7 @@ msgstr ""
 "maximum/minimum"
 
 #: cdl\core\computation\image\detection.py:60
-#: cdl\core\gui\processor\image.py:971
+#: cdl\core\gui\processor\image.py:1031
 msgid "Create regions of interest"
 msgstr "Créer des régions d'intérêt"
 
@@ -413,7 +419,7 @@ msgstr "Polygone"
 msgid "Shape"
 msgstr "Forme"
 
-#: cdl\core\computation\image\detection.py:116
+#: cdl\core\computation\image\detection.py:115
 msgid ""
 "The minimum standard deviation for Gaussian Kernel. Keep this low to detect "
 "smaller blobs."
@@ -421,7 +427,7 @@ msgstr ""
 "L'écart-type minimal pour le noyau gaussien. Cette valeur doit être faible "
 "pour détecter de petites taches."
 
-#: cdl\core\computation\image\detection.py:127
+#: cdl\core\computation\image\detection.py:126
 msgid ""
 "The maximum standard deviation for Gaussian Kernel. Keep this high to detect "
 "larger blobs."
@@ -429,15 +435,15 @@ msgstr ""
 "L'écart-type maximal pour le noyau gaussien. Cette valeur doit être élevée "
 "pour détecter de grandes taches."
 
-#: cdl\core\computation\image\detection.py:137
+#: cdl\core\computation\image\detection.py:136
 msgid "Minimum intensity of blobs."
 msgstr "Intensité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:140
+#: cdl\core\computation\image\detection.py:139
 msgid "Overlap"
 msgstr "Recouvrement"
 
-#: cdl\core\computation\image\detection.py:144
+#: cdl\core\computation\image\detection.py:143
 msgid ""
 "If two blobs overlap by a fraction greater than this value, the smaller blob "
 "is eliminated."
@@ -445,21 +451,21 @@ msgstr ""
 "Si deux taches ont un taux de recouvrement supérieur à ce seuil, alors la "
 "plus petite tache est éliminée."
 
-#: cdl\core\computation\image\detection.py:155
-#: cdl\core\computation\image\detection.py:225
+#: cdl\core\computation\image\detection.py:154
+#: cdl\core\computation\image\detection.py:224
 msgid "Exclude border"
 msgstr "Exclure la bordure"
 
-#: cdl\core\computation\image\detection.py:157
-#: cdl\core\computation\image\detection.py:227
+#: cdl\core\computation\image\detection.py:156
+#: cdl\core\computation\image\detection.py:226
 msgid "If True, exclude blobs from the border of the image."
 msgstr "Si le réglage est actif, exclure les taches de la bordure de l'image."
 
-#: cdl\core\computation\image\detection.py:188
+#: cdl\core\computation\image\detection.py:187
 msgid "Log scale"
 msgstr "Echelle logarithmique"
 
-#: cdl\core\computation\image\detection.py:190
+#: cdl\core\computation\image\detection.py:189
 msgid ""
 "If set intermediate values of standard deviations are interpolated using a "
 "logarithmic scale to the base 10. If not, linear interpolation is used."
@@ -467,11 +473,11 @@ msgstr ""
 "Les valeurs intermédiaires d'écart-type peuvent être interpolées selon une "
 "échelle linéaire ou logarithmique."
 
-#: cdl\core\computation\image\detection.py:259
+#: cdl\core\computation\image\detection.py:258
 msgid "Min. threshold"
 msgstr "Seuil min."
 
-#: cdl\core\computation\image\detection.py:262
+#: cdl\core\computation\image\detection.py:261
 msgid ""
 "The minimum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -481,11 +487,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\computation\image\detection.py:270
+#: cdl\core\computation\image\detection.py:269
 msgid "Max. threshold"
 msgstr "Seuil max."
 
-#: cdl\core\computation\image\detection.py:273
+#: cdl\core\computation\image\detection.py:272
 msgid ""
 "The maximum threshold between local maxima and minima. This parameter does "
 "not affect the quality of the blobs, only the quantity. Lower thresholds "
@@ -495,11 +501,11 @@ msgstr ""
 "pas la qualité des taches, mais seulement leur nombre. Un seuil bas donne un "
 "nombre plus important de taches."
 
-#: cdl\core\computation\image\detection.py:281
+#: cdl\core\computation\image\detection.py:280
 msgid "Min. repeatability"
 msgstr "Répétabilité min."
 
-#: cdl\core\computation\image\detection.py:284
+#: cdl\core\computation\image\detection.py:283
 msgid ""
 "The minimum number of times a blob needs to be detected in a sequence of "
 "images to be considered valid."
@@ -507,11 +513,11 @@ msgstr ""
 "Le nombre minimum de fois qu'une tache doit être détectée dans une séquence "
 "d'images pour être considérée valide."
 
-#: cdl\core\computation\image\detection.py:290
+#: cdl\core\computation\image\detection.py:289
 msgid "Min. distance between blobs"
 msgstr "Distance min. entre taches"
 
-#: cdl\core\computation\image\detection.py:294
+#: cdl\core\computation\image\detection.py:293
 msgid ""
 "The minimum distance between two blobs. If blobs are found closer together "
 "than this distance, the smaller blob is removed."
@@ -519,118 +525,118 @@ msgstr ""
 "La distance minimale entre deux taches. Si deux taches sont détectées à une "
 "distance inférieure à celle-ci, alors la plus petite tache est éliminée."
 
-#: cdl\core\computation\image\detection.py:301
+#: cdl\core\computation\image\detection.py:300
 msgid "Filter by color"
 msgstr "Filtrer par couleur"
 
-#: cdl\core\computation\image\detection.py:303
+#: cdl\core\computation\image\detection.py:302
 msgid "If true, the image is filtered by color instead of intensity."
 msgstr "Si vrai, l'image est filtrée par couleur au lieu d'intensité."
 
-#: cdl\core\computation\image\detection.py:306
+#: cdl\core\computation\image\detection.py:305
 msgid "Blob color"
 msgstr "Couleur de la tache"
 
-#: cdl\core\computation\image\detection.py:308
+#: cdl\core\computation\image\detection.py:307
 msgid ""
 "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
 msgstr ""
 "La couleur des taches à détecter (0 pour les taches foncées, 255 pour les "
 "taches claires)."
 
-#: cdl\core\computation\image\detection.py:314
+#: cdl\core\computation\image\detection.py:313
 msgid "Filter by area"
 msgstr "Filtrer par aire"
 
-#: cdl\core\computation\image\detection.py:316
+#: cdl\core\computation\image\detection.py:315
 msgid "If true, the image is filtered by blob area."
 msgstr "Si vrai, l'image est filtrée par l'aire des taches."
 
-#: cdl\core\computation\image\detection.py:319
+#: cdl\core\computation\image\detection.py:318
 msgid "Min. area"
 msgstr "Aire min."
 
-#: cdl\core\computation\image\detection.py:322
+#: cdl\core\computation\image\detection.py:321
 msgid "The minimum blob area."
 msgstr "L'aire minimale des taches."
 
-#: cdl\core\computation\image\detection.py:325
+#: cdl\core\computation\image\detection.py:324
 msgid "Max. area"
 msgstr "Aire max."
 
-#: cdl\core\computation\image\detection.py:328
+#: cdl\core\computation\image\detection.py:327
 msgid "The maximum blob area."
 msgstr "L'aire maximale des taches."
 
-#: cdl\core\computation\image\detection.py:332
+#: cdl\core\computation\image\detection.py:331
 msgid "Filter by circularity"
 msgstr "Filtrer par circularité"
 
-#: cdl\core\computation\image\detection.py:334
+#: cdl\core\computation\image\detection.py:333
 msgid "If true, the image is filtered by blob circularity."
 msgstr "Si vrai, l'image est filtrée par la circularité des taches."
 
-#: cdl\core\computation\image\detection.py:337
+#: cdl\core\computation\image\detection.py:336
 msgid "Min. circularity"
 msgstr "Circularité min."
 
-#: cdl\core\computation\image\detection.py:341
+#: cdl\core\computation\image\detection.py:340
 msgid "The minimum circularity of the blobs."
 msgstr "La circularité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:344
+#: cdl\core\computation\image\detection.py:343
 msgid "Max. circularity"
 msgstr "Circularité max."
 
-#: cdl\core\computation\image\detection.py:348
+#: cdl\core\computation\image\detection.py:347
 msgid "The maximum circularity of the blobs."
 msgstr "La circularité maximale des taches."
 
-#: cdl\core\computation\image\detection.py:352
+#: cdl\core\computation\image\detection.py:351
 msgid "Filter by inertia"
 msgstr "Filtrer par inertie"
 
-#: cdl\core\computation\image\detection.py:354
+#: cdl\core\computation\image\detection.py:353
 msgid "If true, the image is filtered by blob inertia."
 msgstr "Si vrai, l'image est filtrée par l'inertie des taches."
 
-#: cdl\core\computation\image\detection.py:357
+#: cdl\core\computation\image\detection.py:356
 msgid "Min. inertia ratio"
 msgstr "Ratio d'inertie min."
 
-#: cdl\core\computation\image\detection.py:361
+#: cdl\core\computation\image\detection.py:360
 msgid "The minimum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie minimal des taches."
 
-#: cdl\core\computation\image\detection.py:364
+#: cdl\core\computation\image\detection.py:363
 msgid "Max. inertia ratio"
 msgstr "Ratio d'inertie max."
 
-#: cdl\core\computation\image\detection.py:368
+#: cdl\core\computation\image\detection.py:367
 msgid "The maximum inertia ratio of the blobs."
 msgstr "Le ratio d'inertie maximal des taches."
 
-#: cdl\core\computation\image\detection.py:372
+#: cdl\core\computation\image\detection.py:371
 msgid "Filter by convexity"
 msgstr "Filtrer par convexité"
 
-#: cdl\core\computation\image\detection.py:374
+#: cdl\core\computation\image\detection.py:373
 msgid "If true, the image is filtered by blob convexity."
 msgstr "Si vrai, l'image est filtrée par la convexité des taches."
 
-#: cdl\core\computation\image\detection.py:377
+#: cdl\core\computation\image\detection.py:376
 msgid "Min. convexity"
 msgstr "Convexité min."
 
-#: cdl\core\computation\image\detection.py:381
+#: cdl\core\computation\image\detection.py:380
 msgid "The minimum convexity of the blobs."
 msgstr "La convexité minimale des taches."
 
-#: cdl\core\computation\image\detection.py:384
+#: cdl\core\computation\image\detection.py:383
 msgid "Max. convexity"
 msgstr "Convexité max."
 
-#: cdl\core\computation\image\detection.py:388
+#: cdl\core\computation\image\detection.py:387
 msgid "The maximum convexity of the blobs."
 msgstr "La convexité maximale des taches."
 
@@ -765,7 +771,7 @@ msgid "Footprint (disk) radius."
 msgstr "Rayon de l'ouverture circulaire (disque)."
 
 #: cdl\core\computation\image\morphology.py:29 cdl\core\model\image.py:237
-#: cdl\tests\data.py:423
+#: cdl\tests\data.py:421
 msgid "Radius"
 msgstr "Rayon"
 
@@ -817,115 +823,152 @@ msgid "Wavelet"
 msgstr "Ondelette"
 
 #: cdl\core\computation\image\restoration.py:146
-#: cdl\core\computation\signal.py:1110 cdl\core\computation\signal.py:1229
+#: cdl\core\computation\signal.py:1106 cdl\core\computation\signal.py:1231
 msgid "Method"
 msgstr "Méthode"
 
-#: cdl\core\computation\signal.py:428 cdl\core\gui\actionhandler.py:825
+#: cdl\core\computation\image\threshold.py:30
+msgid "Manual"
+msgstr "Manuel"
+
+#: cdl\core\computation\image\threshold.py:33
+#: cdl\core\gui\processor\image.py:597 cdl\tests\data.py:75
+#: cdl\widgets\fitdialog.py:120 cdl\widgets\fitdialog.py:148
+#: cdl\widgets\fitdialog.py:176 cdl\widgets\fitdialog.py:340
+msgid "Mean"
+msgstr "Moyenne"
+
+#: cdl\core\computation\image\threshold.py:34
+#: cdl\core\gui\processor\image.py:602
+msgid "Minimum"
+msgstr "Minimum"
+
+#: cdl\core\computation\image\threshold.py:36
+#: cdl\core\gui\processor\image.py:612
+msgid "Triangle"
+msgstr "Triangle"
+
+#: cdl\core\computation\image\threshold.py:41
+msgid "Threshold method"
+msgstr "Méthode de seuillage"
+
+#: cdl\core\computation\image\threshold.py:48
+msgid "Threshold value"
+msgstr "Valeur de seuil"
+
+#: cdl\core\computation\image\threshold.py:53
+msgid "Greater than"
+msgstr "Supérieur à"
+
+#: cdl\core\computation\image\threshold.py:53
+msgid "Less than"
+msgstr "Inférieur à"
+
+#: cdl\core\computation\signal.py:442 cdl\core\gui\actionhandler.py:822
 msgid "Power"
 msgstr "Puissance"
 
-#: cdl\core\computation\signal.py:453
+#: cdl\core\computation\signal.py:466
 msgid "Minimum distance"
 msgstr "Distance minimale"
 
-#: cdl\core\computation\signal.py:525 cdl\core\model\image.py:384
-#: cdl\core\model\image.py:387 cdl\core\model\signal.py:165
+#: cdl\core\computation\signal.py:538 cdl\core\model\image.py:394
+#: cdl\core\model\image.py:397 cdl\core\model\signal.py:165
 #: cdl\core\model\signal.py:168
 msgid "X-axis"
 msgstr "Axe des X"
 
-#: cdl\core\computation\signal.py:525 cdl\core\model\image.py:388
-#: cdl\core\model\image.py:391 cdl\core\model\signal.py:169
+#: cdl\core\computation\signal.py:538 cdl\core\model\image.py:398
+#: cdl\core\model\image.py:401 cdl\core\model\signal.py:169
 #: cdl\core\model\signal.py:172
 msgid "Y-axis"
 msgstr "Axe des Y"
 
-#: cdl\core\computation\signal.py:526
+#: cdl\core\computation\signal.py:539
 msgid "Calibrate"
 msgstr "Étalonner"
 
-#: cdl\core\computation\signal.py:672
+#: cdl\core\computation\signal.py:666
 msgid "Bessel"
 msgstr "Bessel"
 
-#: cdl\core\computation\signal.py:673
+#: cdl\core\computation\signal.py:667
 msgid "Butterworth"
 msgstr "Butterworth"
 
-#: cdl\core\computation\signal.py:674
+#: cdl\core\computation\signal.py:668
 msgid "Chebyshev type 1"
 msgstr "Chebyshev de type 1"
 
-#: cdl\core\computation\signal.py:675
+#: cdl\core\computation\signal.py:669
 msgid "Chebyshev type 2"
 msgstr "Chebyshev de type 2"
 
-#: cdl\core\computation\signal.py:676
+#: cdl\core\computation\signal.py:670
 msgid "Elliptic"
 msgstr "Elliptique"
 
-#: cdl\core\computation\signal.py:684
+#: cdl\core\computation\signal.py:678
 msgid "Filter method"
 msgstr "Méthode de filtrage"
 
-#: cdl\core\computation\signal.py:688
+#: cdl\core\computation\signal.py:682
 msgid "Filter order"
 msgstr "Ordre du filtre"
 
-#: cdl\core\computation\signal.py:690
+#: cdl\core\computation\signal.py:684
 msgid "Low cutoff frequency"
 msgstr "Fréquence de coupure basse"
 
-#: cdl\core\computation\signal.py:695
+#: cdl\core\computation\signal.py:689
 msgid "High cutoff frequency"
 msgstr "Fréquence de coupure haute"
 
-#: cdl\core\computation\signal.py:700
+#: cdl\core\computation\signal.py:694
 msgid "Passband ripple"
 msgstr "Ondulation de la bande passante"
 
-#: cdl\core\computation\signal.py:706
+#: cdl\core\computation\signal.py:700
 msgid "Stopband attenuation"
 msgstr "Atténuation de la bande d'arrêt"
 
-#: cdl\core\computation\signal.py:911
+#: cdl\core\computation\signal.py:907
 msgid "Degree"
 msgstr "Degré"
 
-#: cdl\core\computation\signal.py:955 cdl\core\computation\signal.py:1047
+#: cdl\core\computation\signal.py:951 cdl\core\computation\signal.py:1043
 msgid "Linear"
 msgstr "Linéaire"
 
-#: cdl\core\computation\signal.py:956
+#: cdl\core\computation\signal.py:952
 msgid "Spline"
 msgstr "Spline"
 
-#: cdl\core\computation\signal.py:957
+#: cdl\core\computation\signal.py:953
 msgid "Quadratic"
 msgstr "Quadratique"
 
-#: cdl\core\computation\signal.py:958
+#: cdl\core\computation\signal.py:954
 msgid "Cubic"
 msgstr "Cubique"
 
-#: cdl\core\computation\signal.py:959
+#: cdl\core\computation\signal.py:955
 msgid "Barycentric"
 msgstr "Barycentrique"
 
-#: cdl\core\computation\signal.py:960
+#: cdl\core\computation\signal.py:956
 msgid "PCHIP"
 msgstr "PCHIP"
 
-#: cdl\core\computation\signal.py:962
+#: cdl\core\computation\signal.py:958
 msgid "Interpolation method"
 msgstr "Méthode d'interpolation"
 
-#: cdl\core\computation\signal.py:964
+#: cdl\core\computation\signal.py:960
 msgid "Fill value"
 msgstr "Valeur de remplissage"
 
-#: cdl\core\computation\signal.py:966
+#: cdl\core\computation\signal.py:962
 msgid ""
 "Value to use for points outside the interpolation domain (used only with "
 "linear, cubic and pchip methods)."
@@ -933,110 +976,110 @@ msgstr ""
 "Valeur à utiliser pour les points en dehors du domaine d'interpolation "
 "(utilisé uniquement avec les méthodes linéaire, cubique et pchip)."
 
-#: cdl\core\computation\signal.py:1001
+#: cdl\core\computation\signal.py:997
 msgid "X<sub>min</sub>"
 msgstr "X<sub>min</sub>"
 
-#: cdl\core\computation\signal.py:1002
+#: cdl\core\computation\signal.py:998
 msgid "X<sub>max</sub>"
 msgstr "X<sub>max</sub>"
 
-#: cdl\core\computation\signal.py:1004 cdl\core\computation\signal.py:1011
-#: cdl\tests\data.py:301
+#: cdl\core\computation\signal.py:1000 cdl\core\computation\signal.py:1007
+#: cdl\tests\data.py:280
 msgid "Number of points"
 msgstr "Nombre de points"
 
-#: cdl\core\computation\signal.py:1047
+#: cdl\core\computation\signal.py:1043
 msgid "Constant"
 msgstr "Constante"
 
-#: cdl\core\computation\signal.py:1048
+#: cdl\core\computation\signal.py:1044
 msgid "Detrending method"
 msgstr "Méthode d'élimation de la tendance"
 
-#: cdl\core\computation\signal.py:1095
+#: cdl\core\computation\signal.py:1091
 msgid "Cosine"
 msgstr "Cosinus"
 
-#: cdl\core\computation\signal.py:1096 cdl\core\gui\actionhandler.py:665
-#: cdl\core\gui\processor\image.py:373 cdl\core\gui\processor\signal.py:133
+#: cdl\core\computation\signal.py:1092 cdl\core\gui\actionhandler.py:665
+#: cdl\core\gui\processor\image.py:375 cdl\core\gui\processor\signal.py:133
 msgid "Exponential"
 msgstr "Exponentielle"
 
-#: cdl\core\computation\signal.py:1097
+#: cdl\core\computation\signal.py:1093
 msgid "Flat top"
 msgstr ""
 
-#: cdl\core\computation\signal.py:1098 cdl\core\model\signal.py:868
-#: cdl\tests\scenarios\common.py:219 cdl\tests\scenarios\demo.py:83
+#: cdl\core\computation\signal.py:1094 cdl\core\model\signal.py:868
+#: cdl\tests\scenarios\common.py:216 cdl\tests\scenarios\demo.py:83
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: cdl\core\computation\signal.py:1105
+#: cdl\core\computation\signal.py:1101
 msgid "Rectangular"
 msgstr "Rectangulaire"
 
-#: cdl\core\computation\signal.py:1116
+#: cdl\core\computation\signal.py:1112
 msgid "Shape parameter of the Tukey windowing function"
 msgstr "Paramètre de forme de la fonction de fenêtrage de Tukey"
 
-#: cdl\core\computation\signal.py:1121
+#: cdl\core\computation\signal.py:1117
 msgid "Shape parameter of the Kaiser windowing function"
 msgstr "Paramètre de forme de la fonction de fenêtrage de Kaiser"
 
-#: cdl\core\computation\signal.py:1126
+#: cdl\core\computation\signal.py:1122
 msgid "Shape parameter of the Gaussian windowing function"
 msgstr "Paramètre de forme de la fonction de fenêtrage gaussienne"
 
-#: cdl\core\computation\signal.py:1224
+#: cdl\core\computation\signal.py:1226
 msgid "Zero-crossing"
 msgstr "Passage par zéro"
 
-#: cdl\core\computation\signal.py:1225 cdl\core\gui\actionhandler.py:892
-#: cdl\tests\scenarios\common.py:208 cdl\widgets\fitdialog.py:128
+#: cdl\core\computation\signal.py:1227 cdl\core\gui\actionhandler.py:889
+#: cdl\tests\scenarios\common.py:205 cdl\widgets\fitdialog.py:128
 msgid "Gaussian fit"
 msgstr "Ajustement gaussien"
 
-#: cdl\core\computation\signal.py:1226 cdl\core\gui\actionhandler.py:893
-#: cdl\tests\scenarios\common.py:209 cdl\widgets\fitdialog.py:156
+#: cdl\core\computation\signal.py:1228 cdl\core\gui\actionhandler.py:890
+#: cdl\tests\scenarios\common.py:206 cdl\widgets\fitdialog.py:156
 msgid "Lorentzian fit"
 msgstr "Ajustement lorentzien"
 
-#: cdl\core\computation\signal.py:1227 cdl\core\gui\actionhandler.py:894
-#: cdl\tests\scenarios\common.py:210 cdl\widgets\fitdialog.py:184
+#: cdl\core\computation\signal.py:1229 cdl\core\gui\actionhandler.py:891
+#: cdl\tests\scenarios\common.py:207 cdl\widgets\fitdialog.py:184
 msgid "Voigt fit"
 msgstr "Ajustement Voigt"
 
-#: cdl\core\computation\signal.py:1234
+#: cdl\core\computation\signal.py:1236
 msgid "Lower X boundary (empty for no limit, i.e. start of the signal)"
 msgstr ""
 "Borne X inférieure (vide pour aucune limite, c'est-à-dire le début du signal)"
 
-#: cdl\core\computation\signal.py:1240
+#: cdl\core\computation\signal.py:1242
 msgid "Upper X boundary (empty for no limit, i.e. end of the signal)"
 msgstr ""
 "Borne X supérieure (vide pour aucune limite, c'est-à-dire la fin du signal)"
 
-#: cdl\core\computation\signal.py:1315
+#: cdl\core\computation\signal.py:1317
 msgid "Full scale"
 msgstr "Pleine échelle"
 
-#: cdl\core\computation\signal.py:1318
+#: cdl\core\computation\signal.py:1320
 msgid "Unit for SINAD"
 msgstr "Unité pour SINAD"
 
-#: cdl\core\computation\signal.py:1318 cdl\core\model\image.py:386
-#: cdl\core\model\image.py:390 cdl\core\model\image.py:394
+#: cdl\core\computation\signal.py:1320 cdl\core\model\image.py:396
+#: cdl\core\model\image.py:400 cdl\core\model\image.py:404
 #: cdl\core\model\signal.py:167 cdl\core\model\signal.py:171
 #: cdl\core\model\signal.py:639
 msgid "Unit"
 msgstr "Unité"
 
-#: cdl\core\computation\signal.py:1321
+#: cdl\core\computation\signal.py:1323
 msgid "Number of harmonics"
 msgstr "Nombre d'harmoniques"
 
-#: cdl\core\computation\signal.py:1324
+#: cdl\core\computation\signal.py:1326
 msgid "Number of harmonics to consider for THD"
 msgstr "Nombre d'harmoniques à considérer pour le THD"
 
@@ -1205,33 +1248,33 @@ msgid "Refresh plot, even if auto-refresh is enabled"
 msgstr ""
 "Rafraîchit le graphique, même si le rafraîchissement automatique est activé"
 
-#: cdl\core\gui\actionhandler.py:582 cdl\core\gui\processor\image.py:51
+#: cdl\core\gui\actionhandler.py:582 cdl\core\gui\processor\image.py:53
 #: cdl\core\gui\processor\signal.py:36
 msgid "Sum"
 msgstr "Addition"
 
-#: cdl\core\gui\actionhandler.py:588 cdl\core\gui\processor\image.py:75
+#: cdl\core\gui\actionhandler.py:588 cdl\core\gui\processor\image.py:77
 #: cdl\core\gui\processor\signal.py:62
 msgid "Average"
 msgstr "Moyenne"
 
-#: cdl\core\gui\actionhandler.py:594 cdl\core\gui\processor\image.py:382
-#: cdl\core\gui\processor\signal.py:154
+#: cdl\core\gui\actionhandler.py:594 cdl\core\gui\processor\image.py:384
+#: cdl\core\gui\processor\signal.py:156
 msgid "Difference"
 msgstr "Soustraction"
 
-#: cdl\core\gui\actionhandler.py:600 cdl\core\gui\processor\image.py:405
-#: cdl\core\gui\processor\signal.py:177
+#: cdl\core\gui\actionhandler.py:600 cdl\core\gui\processor\image.py:407
+#: cdl\core\gui\processor\signal.py:179
 msgid "Quadratic difference"
 msgstr "Soustraction quadratique"
 
-#: cdl\core\gui\actionhandler.py:606 cdl\core\gui\processor\image.py:81
+#: cdl\core\gui\actionhandler.py:606 cdl\core\gui\processor\image.py:83
 #: cdl\core\gui\processor\signal.py:68
 msgid "Product"
 msgstr "Produit"
 
-#: cdl\core\gui\actionhandler.py:612 cdl\core\gui\processor\image.py:415
-#: cdl\core\gui\processor\signal.py:187
+#: cdl\core\gui\actionhandler.py:612 cdl\core\gui\processor\image.py:417
+#: cdl\core\gui\processor\signal.py:189
 msgid "Division"
 msgstr "Division"
 
@@ -1239,7 +1282,7 @@ msgstr "Division"
 msgid "Constant Operations"
 msgstr "Opérations avec une constante"
 
-#: cdl\core\gui\actionhandler.py:619 cdl\core\gui\processor\image.py:62
+#: cdl\core\gui\actionhandler.py:619 cdl\core\gui\processor\image.py:64
 msgid "Add constant"
 msgstr "Additionner une constante"
 
@@ -1255,22 +1298,22 @@ msgstr "Multiplier par une constante"
 msgid "Divide by constant"
 msgstr "Diviser par une constante"
 
-#: cdl\core\gui\actionhandler.py:643 cdl\core\gui\processor\image.py:346
+#: cdl\core\gui\actionhandler.py:643 cdl\core\gui\processor\image.py:348
 #: cdl\core\gui\processor\signal.py:106
 msgid "Absolute value"
 msgstr "Valeur absolue"
 
-#: cdl\core\gui\actionhandler.py:649 cdl\core\gui\processor\image.py:351
+#: cdl\core\gui\actionhandler.py:649 cdl\core\gui\processor\image.py:353
 #: cdl\core\gui\processor\signal.py:111
 msgid "Real part"
 msgstr "Partie réelle"
 
-#: cdl\core\gui\actionhandler.py:654 cdl\core\gui\processor\image.py:356
+#: cdl\core\gui\actionhandler.py:654 cdl\core\gui\processor\image.py:358
 #: cdl\core\gui\processor\signal.py:116
 msgid "Imaginary part"
 msgstr "Partie imaginaire"
 
-#: cdl\core\gui\actionhandler.py:659 cdl\core\gui\processor\image.py:362
+#: cdl\core\gui\actionhandler.py:659 cdl\core\gui\processor\image.py:364
 #: cdl\core\gui\processor\signal.py:122
 msgid "Convert data type"
 msgstr "Convertir le type de données"
@@ -1279,292 +1322,287 @@ msgstr "Convertir le type de données"
 msgid "Logarithm (base 10)"
 msgstr "Logarithme (base 10)"
 
-#: cdl\core\gui\actionhandler.py:678 cdl\core\gui\actionhandler.py:858
+#: cdl\core\gui\actionhandler.py:679 cdl\core\gui\actionhandler.py:855
 msgid "Axis transformation"
 msgstr "Transformation des axes"
 
-#: cdl\core\gui\actionhandler.py:680 cdl\core\gui\processor\image.py:461
-#: cdl\core\gui\processor\signal.py:254
+#: cdl\core\gui\actionhandler.py:682 cdl\core\gui\processor\image.py:463
+#: cdl\core\gui\processor\signal.py:256
 msgid "Linear calibration"
 msgstr "Étalonnage linéaire"
 
-#: cdl\core\gui\actionhandler.py:684
+#: cdl\core\gui\actionhandler.py:686
 msgid "Swap X/Y axes"
 msgstr "Permuter les axes X/Y"
 
-#: cdl\core\gui\actionhandler.py:688
+#: cdl\core\gui\actionhandler.py:690
 msgid "Level adjustment"
 msgstr "Ajustement de niveau"
 
-#: cdl\core\gui\actionhandler.py:690 cdl\core\gui\processor\image.py:45
-#: cdl\core\gui\processor\signal.py:232
+#: cdl\core\gui\actionhandler.py:692 cdl\core\gui\processor\image.py:47
+#: cdl\core\gui\processor\signal.py:234
 msgid "Normalize"
 msgstr "Normaliser"
 
-#: cdl\core\gui\actionhandler.py:695 cdl\core\gui\processor\image.py:472
-#: cdl\core\gui\processor\signal.py:262
-msgid "Thresholding"
-msgstr "Seuillage"
-
-#: cdl\core\gui\actionhandler.py:700 cdl\core\gui\processor\image.py:482
-#: cdl\core\gui\processor\signal.py:268
+#: cdl\core\gui\actionhandler.py:697 cdl\core\gui\processor\image.py:474
+#: cdl\core\gui\processor\signal.py:263
 msgid "Clipping"
 msgstr "Écrêtage"
 
-#: cdl\core\gui\actionhandler.py:705 cdl\core\gui\processor\image.py:492
+#: cdl\core\gui\actionhandler.py:702
 msgid "Offset correction"
 msgstr "Soustraction d'offset"
 
-#: cdl\core\gui\actionhandler.py:708
+#: cdl\core\gui\actionhandler.py:705
 msgid "Evaluate and subtract the offset value from the data"
 msgstr "Évaluer et soustraire la valeur d'offset des données"
 
-#: cdl\core\gui\actionhandler.py:710
+#: cdl\core\gui\actionhandler.py:707
 msgid "Noise reduction"
 msgstr "Réduction de bruit"
 
-#: cdl\core\gui\actionhandler.py:712 cdl\core\gui\processor\image.py:499
-#: cdl\core\gui\processor\signal.py:290
+#: cdl\core\gui\actionhandler.py:709 cdl\core\gui\processor\image.py:494
+#: cdl\core\gui\processor\signal.py:285
 msgid "Gaussian filter"
 msgstr "Filtre gaussien"
 
-#: cdl\core\gui\actionhandler.py:716 cdl\core\gui\processor\image.py:511
-#: cdl\core\gui\processor\signal.py:302
+#: cdl\core\gui\actionhandler.py:713 cdl\core\gui\processor\image.py:506
+#: cdl\core\gui\processor\signal.py:297
 msgid "Moving average"
 msgstr "Moyenne mobile"
 
-#: cdl\core\gui\actionhandler.py:720 cdl\core\gui\processor\image.py:521
-#: cdl\core\gui\processor\signal.py:312
+#: cdl\core\gui\actionhandler.py:717 cdl\core\gui\processor\image.py:516
+#: cdl\core\gui\processor\signal.py:307
 msgid "Moving median"
 msgstr "Médiane mobile"
 
-#: cdl\core\gui\actionhandler.py:724 cdl\core\gui\processor\image.py:527
-#: cdl\core\gui\processor\signal.py:318
+#: cdl\core\gui\actionhandler.py:721 cdl\core\gui\processor\image.py:522
+#: cdl\core\gui\processor\signal.py:313
 msgid "Wiener filter"
 msgstr "Filtre de Wiener"
 
-#: cdl\core\gui\actionhandler.py:727
+#: cdl\core\gui\actionhandler.py:724
 msgid "Fourier analysis"
 msgstr "Analyse de Fourier"
 
-#: cdl\core\gui\actionhandler.py:729 cdl\core\gui\processor\signal.py:374
+#: cdl\core\gui\actionhandler.py:726 cdl\core\gui\processor\signal.py:369
 msgid "FFT"
 msgstr "FFT"
 
-#: cdl\core\gui\actionhandler.py:731 cdl\core\gui\actionhandler.py:736
+#: cdl\core\gui\actionhandler.py:728 cdl\core\gui\actionhandler.py:733
 msgid "Warning: only real part is plotted"
 msgstr "Attention : seulement la partie réelles sera tracée"
 
-#: cdl\core\gui\actionhandler.py:734
+#: cdl\core\gui\actionhandler.py:731
 msgid "Inverse FFT"
 msgstr "FFT inverse"
 
-#: cdl\core\gui\actionhandler.py:739 cdl\core\gui\processor\image.py:552
-#: cdl\core\gui\processor\signal.py:392
+#: cdl\core\gui\actionhandler.py:736 cdl\core\gui\processor\image.py:547
+#: cdl\core\gui\processor\signal.py:387
 msgid "Magnitude spectrum"
 msgstr "Spectre d'amplitude"
 
-#: cdl\core\gui\actionhandler.py:743 cdl\core\gui\processor\signal.py:398
+#: cdl\core\gui\actionhandler.py:740 cdl\core\gui\processor\signal.py:393
 msgid "Phase spectrum"
 msgstr "Spectre de phase"
 
-#: cdl\core\gui\actionhandler.py:747
+#: cdl\core\gui\actionhandler.py:744
 msgid "Power spectral density"
 msgstr "Densité spectrale de puissance"
 
-#: cdl\core\gui\actionhandler.py:753
+#: cdl\core\gui\actionhandler.py:750
 msgid "Edit regions of interest..."
 msgstr "Modifier les régions d'intérêt..."
 
-#: cdl\core\gui\actionhandler.py:761
+#: cdl\core\gui\actionhandler.py:758
 msgid "Remove regions of interest"
 msgstr "Supprimer les régions d'intérêt"
 
-#: cdl\core\gui\actionhandler.py:768 cdl\core\gui\processor\image.py:935
-#: cdl\core\gui\processor\signal.py:551
+#: cdl\core\gui\actionhandler.py:765 cdl\core\gui\processor\image.py:995
+#: cdl\core\gui\processor\signal.py:546
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: cdl\core\gui\actionhandler.py:776 cdl\core\gui\processor\image.py:335
-#: cdl\core\gui\processor\signal.py:559
+#: cdl\core\gui\actionhandler.py:773 cdl\core\gui\processor\image.py:337
+#: cdl\core\gui\processor\signal.py:554
 msgid "Histogram"
 msgstr "Histogramme"
 
-#: cdl\core\gui\actionhandler.py:786
+#: cdl\core\gui\actionhandler.py:783
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: cdl\core\gui\actionhandler.py:794
+#: cdl\core\gui\actionhandler.py:791
 msgid "Show results"
 msgstr "Afficher les résultats"
 
-#: cdl\core\gui\actionhandler.py:801 cdl\core\gui\panel\base.py:1184
+#: cdl\core\gui\actionhandler.py:798 cdl\core\gui\panel\base.py:1182
 msgid "Plot results"
 msgstr "Tracer les résultats"
 
-#: cdl\core\gui\actionhandler.py:807 cdl\core\gui\panel\base.py:1226
+#: cdl\core\gui\actionhandler.py:804 cdl\core\gui\panel\base.py:1224
 msgid "Delete results"
 msgstr "Supprimer les résultats"
 
-#: cdl\core\gui\actionhandler.py:817 cdl\core\gui\roieditor.py:204
+#: cdl\core\gui\actionhandler.py:814 cdl\core\gui\roieditor.py:204
 msgid "signal"
 msgstr "signal"
 
-#: cdl\core\gui\actionhandler.py:831 cdl\core\gui\processor\signal.py:138
+#: cdl\core\gui\actionhandler.py:828 cdl\core\gui\processor\signal.py:138
 msgid "Square root"
 msgstr "Racine carrée"
 
-#: cdl\core\gui\actionhandler.py:837 cdl\core\gui\processor\signal.py:238
+#: cdl\core\gui\actionhandler.py:834 cdl\core\gui\processor\signal.py:240
 msgid "Derivative"
 msgstr "Dérivée"
 
-#: cdl\core\gui\actionhandler.py:843 cdl\core\gui\processor\signal.py:243
+#: cdl\core\gui\actionhandler.py:840 cdl\core\gui\processor\signal.py:245
 msgid "Integral"
 msgstr "Intégrale"
 
-#: cdl\core\gui\actionhandler.py:860
+#: cdl\core\gui\actionhandler.py:857
 msgid "Reverse X-axis"
 msgstr "Inverser l'axe des X"
 
-#: cdl\core\gui\actionhandler.py:864
+#: cdl\core\gui\actionhandler.py:861
 msgid "Frequency filters"
 msgstr "Filtres fréquentiels"
 
-#: cdl\core\gui\actionhandler.py:866 cdl\core\gui\processor\signal.py:346
+#: cdl\core\gui\actionhandler.py:863 cdl\core\gui\processor\signal.py:341
 msgid "Low-pass filter"
 msgstr "Filtre passe-bas"
 
-#: cdl\core\gui\actionhandler.py:876 cdl\core\gui\processor\signal.py:360
+#: cdl\core\gui\actionhandler.py:873 cdl\core\gui\processor\signal.py:355
 msgid "Band-pass filter"
 msgstr "Filtre passe-bande"
 
-#: cdl\core\gui\actionhandler.py:881 cdl\core\gui\processor\signal.py:367
+#: cdl\core\gui\actionhandler.py:878 cdl\core\gui\processor\signal.py:362
 msgid "Band-stop filter"
 msgstr "Filtre coupe-bande"
 
-#: cdl\core\gui\actionhandler.py:885
+#: cdl\core\gui\actionhandler.py:882
 msgid "Fitting"
 msgstr "Ajustement"
 
-#: cdl\core\gui\actionhandler.py:886 cdl\tests\scenarios\common.py:211
+#: cdl\core\gui\actionhandler.py:883 cdl\tests\scenarios\common.py:208
 msgid "Linear fit"
 msgstr "Ajustement linéaire"
 
-#: cdl\core\gui\actionhandler.py:888 cdl\core\gui\processor\signal.py:485
+#: cdl\core\gui\actionhandler.py:885 cdl\core\gui\processor\signal.py:480
 msgid "Polynomial fit"
 msgstr "Ajustement polynomial"
 
-#: cdl\core\gui\actionhandler.py:896 cdl\core\gui\processor\signal.py:533
+#: cdl\core\gui\actionhandler.py:893 cdl\core\gui\processor\signal.py:528
 #: cdl\widgets\fitdialog.py:247
 msgid "Multi-Gaussian fit"
 msgstr "Ajustement multi-gaussien"
 
-#: cdl\core\gui\actionhandler.py:900 cdl\tests\scenarios\common.py:212
+#: cdl\core\gui\actionhandler.py:897 cdl\tests\scenarios\common.py:209
 #: cdl\widgets\fitdialog.py:280
 msgid "Exponential fit"
 msgstr "Ajustement exponentiel"
 
-#: cdl\core\gui\actionhandler.py:901 cdl\tests\scenarios\common.py:214
+#: cdl\core\gui\actionhandler.py:898 cdl\tests\scenarios\common.py:211
 #: cdl\widgets\fitdialog.py:316
 msgid "Sinusoidal fit"
 msgstr "Ajustement sinusoïdal"
 
-#: cdl\core\gui\actionhandler.py:903 cdl\tests\scenarios\common.py:213
+#: cdl\core\gui\actionhandler.py:900 cdl\tests\scenarios\common.py:210
 #: cdl\widgets\fitdialog.py:356
 msgid "CDF fit"
 msgstr "Ajustement CDF"
 
-#: cdl\core\gui\actionhandler.py:906
+#: cdl\core\gui\actionhandler.py:903
 msgid "Cumulative distribution function fit, related to Error function (erf)"
 msgstr ""
 "Fonction de distribution cumulative (CDF), liée à la fonction d'erreur (erf)"
 
-#: cdl\core\gui\actionhandler.py:912 cdl\core\gui\processor\signal.py:470
+#: cdl\core\gui\actionhandler.py:909 cdl\core\gui\processor\signal.py:465
 msgid "Windowing"
 msgstr "Fenêtrage"
 
-#: cdl\core\gui\actionhandler.py:915
+#: cdl\core\gui\actionhandler.py:912
 msgid "Apply a window function (or apodization): Hanning, Hamming, ..."
 msgstr ""
 "Appliquer une fonction de fenêtrage (ou d'apodisation) : Hanning, "
 "Hamming, ..."
 
-#: cdl\core\gui\actionhandler.py:920 cdl\core\gui\processor\signal.py:450
+#: cdl\core\gui\actionhandler.py:917 cdl\core\gui\processor\signal.py:445
 msgid "Detrending"
 msgstr "Elimination de tendance"
 
-#: cdl\core\gui\actionhandler.py:923 cdl\core\gui\processor\signal.py:418
+#: cdl\core\gui\actionhandler.py:922 cdl\core\gui\processor\signal.py:413
 msgid "Interpolation"
 msgstr "Interpolation"
 
-#: cdl\core\gui\actionhandler.py:927 cdl\core\gui\processor\signal.py:424
-#: cdl\core\gui\processor\signal.py:439
+#: cdl\core\gui\actionhandler.py:927 cdl\core\gui\processor\signal.py:419
+#: cdl\core\gui\processor\signal.py:434
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
-#: cdl\core\gui\actionhandler.py:932
+#: cdl\core\gui\actionhandler.py:934
 msgid "Full width at half-maximum"
 msgstr "Largeur à mi-hauteur"
 
-#: cdl\core\gui\actionhandler.py:935
+#: cdl\core\gui\actionhandler.py:937
 msgid "Compute Full Width at Half-Maximum (FWHM)"
 msgstr "Calcule la largeur à mi-hauteur (LMH)"
 
-#: cdl\core\gui\actionhandler.py:939
+#: cdl\core\gui\actionhandler.py:941
 msgid "Full width at"
 msgstr "Largeur à "
 
-#: cdl\core\gui\actionhandler.py:941
+#: cdl\core\gui\actionhandler.py:943
 msgid "Compute Full Width at Maximum"
 msgstr "Calcule la largeur à maximum"
 
-#: cdl\core\gui\actionhandler.py:945
+#: cdl\core\gui\actionhandler.py:947
 msgid "X values at min/max"
 msgstr "Valeurs de X aux min/max"
 
-#: cdl\core\gui\actionhandler.py:947
+#: cdl\core\gui\actionhandler.py:949
 msgid "Compute X values at signal minimum and maximum"
 msgstr "Calcule les valeurs de X aux minima et maxima du signal"
 
-#: cdl\core\gui\actionhandler.py:950 cdl\core\gui\processor\image.py:957
-#: cdl\core\gui\processor\image.py:967 cdl\core\gui\processor\signal.py:211
+#: cdl\core\gui\actionhandler.py:952 cdl\core\gui\processor\image.py:1017
+#: cdl\core\gui\processor\image.py:1027 cdl\core\gui\processor\signal.py:213
 msgid "Peak detection"
 msgstr "Détection de pics"
 
-#: cdl\core\gui\actionhandler.py:956 cdl\core\gui\processor\signal.py:576
+#: cdl\core\gui\actionhandler.py:958 cdl\core\gui\processor\signal.py:571
 msgid "Sampling rate and period"
 msgstr "Fréquence et période d'échantillonnage"
 
-#: cdl\core\gui\actionhandler.py:959
+#: cdl\core\gui\actionhandler.py:961
 msgid "Compute sampling rate and period for a constant sampling signal"
 msgstr ""
 "Calcule la fréquence et la période d'échantillonnage pour un signal à pas "
 "constant"
 
-#: cdl\core\gui\actionhandler.py:964 cdl\core\gui\processor\signal.py:593
+#: cdl\core\gui\actionhandler.py:966 cdl\core\gui\processor\signal.py:588
 msgid "Dynamic parameters"
 msgstr "Paramètres dynamiques"
 
-#: cdl\core\gui\actionhandler.py:967
+#: cdl\core\gui\actionhandler.py:969
 msgid "Compute dynamic parameters: ENOB, SNR, SINAD, THD, ..."
 msgstr "Calcule les paramètres dynamiques : ENOB, SNR, SINAD, THD, ..."
 
-#: cdl\core\gui\actionhandler.py:970
+#: cdl\core\gui\actionhandler.py:972
 msgid "Bandwidth at -3dB"
 msgstr "Bande passante à -3dB"
 
-#: cdl\core\gui\actionhandler.py:973
+#: cdl\core\gui\actionhandler.py:975
 msgid ""
 "Compute bandwidth at -3dB assuming a low-pass filter already expressed in dB"
 msgstr ""
 "Calcule la bande passante à -3dB en supposant un filtre passe-bas déjà "
 "exprimé en dB"
 
-#: cdl\core\gui\actionhandler.py:979 cdl\core\gui\processor\signal.py:565
+#: cdl\core\gui\actionhandler.py:981 cdl\core\gui\processor\signal.py:560
 msgid "Contrast"
 msgstr "Contraste"
 
-#: cdl\core\gui\actionhandler.py:981
+#: cdl\core\gui\actionhandler.py:983
 msgid ""
 "Compute contrast of a signal, i.e. (max-min)/(max+min), e.g. for an image "
 "profile"
@@ -1572,19 +1610,19 @@ msgstr ""
 "Calcule le contraste d'un signal, c'est-à-dire (max-min)/(max+min), p.ex. "
 "pour un profil d'image"
 
-#: cdl\core\gui\actionhandler.py:989
+#: cdl\core\gui\actionhandler.py:991
 msgid "Curve anti-aliasing"
 msgstr "Anticrénelage des courbes"
 
-#: cdl\core\gui\actionhandler.py:992
+#: cdl\core\gui\actionhandler.py:994
 msgid "Toggle curve anti-aliasing on/off (may slow down plotting)"
 msgstr "Active/désactive l'anticrénelage des courbes (peut ralentir le tracé)"
 
-#: cdl\core\gui\actionhandler.py:997
+#: cdl\core\gui\actionhandler.py:999
 msgid "Reset curve styles"
 msgstr "Réinitialiser les styles de courbes"
 
-#: cdl\core\gui\actionhandler.py:1001
+#: cdl\core\gui\actionhandler.py:1003
 msgid ""
 "Curve styles are looped over a list of predefined styles.\n"
 "This action resets the list to its initial state."
@@ -1592,351 +1630,395 @@ msgstr ""
 "Les styles de courbes sont parcourus dans une liste de styles prédéfinis.\n"
 "Cette action réinitialise la liste à son état initial."
 
-#: cdl\core\gui\actionhandler.py:1012 cdl\core\gui\processor\signal.py:460
+#: cdl\core\gui\actionhandler.py:1014 cdl\core\gui\processor\signal.py:455
 msgid "Convolution"
 msgstr "Convolution"
 
-#: cdl\core\gui\actionhandler.py:1023 cdl\core\gui\main.py:1579
+#: cdl\core\gui\actionhandler.py:1025 cdl\core\gui\main.py:1581
 #: cdl\core\gui\roieditor.py:235
 msgid "image"
 msgstr "image"
 
-#: cdl\core\gui\actionhandler.py:1031
+#: cdl\core\gui\actionhandler.py:1033
 msgid "Show contrast panel"
 msgstr "Afficher le panneau de contraste"
 
-#: cdl\core\gui\actionhandler.py:1033
+#: cdl\core\gui\actionhandler.py:1035
 msgid "Show or hide contrast adjustment panel"
 msgstr "Afficher ou cacher le panneau de réglage du contraste"
 
-#: cdl\core\gui\actionhandler.py:1045
+#: cdl\core\gui\actionhandler.py:1047
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: cdl\core\gui\actionhandler.py:1051
+#: cdl\core\gui\actionhandler.py:1053
 msgid "Rotation"
 msgstr "Rotation"
 
-#: cdl\core\gui\actionhandler.py:1053
+#: cdl\core\gui\actionhandler.py:1055
 msgid "Flip horizontally"
 msgstr "Symétrie horizontale"
 
-#: cdl\core\gui\actionhandler.py:1060
+#: cdl\core\gui\actionhandler.py:1062
 msgid "Flip vertically"
 msgstr "Symétrie verticale"
 
-#: cdl\core\gui\actionhandler.py:1066
+#: cdl\core\gui\actionhandler.py:1068
 msgid "Rotate %s right"
 msgstr "Rotation directe de %s"
 
-#: cdl\core\gui\actionhandler.py:1072
+#: cdl\core\gui\actionhandler.py:1074
 msgid "Rotate %s left"
 msgstr "Rotation inverse de %s"
 
-#: cdl\core\gui\actionhandler.py:1078
+#: cdl\core\gui\actionhandler.py:1080
 msgid "Rotate arbitrarily..."
 msgstr "Rotation arbitraire..."
 
-#: cdl\core\gui\actionhandler.py:1082
+#: cdl\core\gui\actionhandler.py:1084
 msgid "Intensity profiles"
 msgstr "Profils d'intensité"
 
-#: cdl\core\gui\actionhandler.py:1084
+#: cdl\core\gui\actionhandler.py:1086
 msgid "Line profile..."
 msgstr "Profil rectiligne..."
 
-#: cdl\core\gui\actionhandler.py:1087
+#: cdl\core\gui\actionhandler.py:1089
 msgid "Extract horizontal or vertical profile"
 msgstr "Extraire un profil horizontal ou vertical"
 
-#: cdl\core\gui\actionhandler.py:1092
+#: cdl\core\gui\actionhandler.py:1094
 msgid "Segment profile..."
 msgstr "Profil le long d'un segment..."
 
-#: cdl\core\gui\actionhandler.py:1095
+#: cdl\core\gui\actionhandler.py:1097
 msgid "Extract profile along a segment"
 msgstr "Extraire un profil le long d'un segment"
 
-#: cdl\core\gui\actionhandler.py:1099
+#: cdl\core\gui\actionhandler.py:1101
 msgid "Average profile..."
 msgstr "Profil moyen..."
 
-#: cdl\core\gui\actionhandler.py:1102
+#: cdl\core\gui\actionhandler.py:1104
 msgid "Extract average horizontal or vertical profile"
 msgstr "Extraire un profil moyen horizontal ou vertical"
 
-#: cdl\core\gui\actionhandler.py:1106
+#: cdl\core\gui\actionhandler.py:1108
 msgid "Radial profile extraction..."
 msgstr "Extraire le profil radial..."
 
-#: cdl\core\gui\actionhandler.py:1109
+#: cdl\core\gui\actionhandler.py:1111
 msgid "Radial profile extraction around image centroid"
 msgstr "Extraire le profil radial autour du barycentre de l'image"
 
-#: cdl\core\gui\actionhandler.py:1113
+#: cdl\core\gui\actionhandler.py:1115
 msgid "Distribute on a grid..."
 msgstr "Distribuer sur une grille..."
 
-#: cdl\core\gui\actionhandler.py:1119
+#: cdl\core\gui\actionhandler.py:1121
 msgid "Reset image positions"
 msgstr "Réinitialiser les positions des images"
 
-#: cdl\core\gui\actionhandler.py:1125
+#: cdl\core\gui\actionhandler.py:1127
+msgid "Thresholding"
+msgstr "Seuillage"
+
+#: cdl\core\gui\actionhandler.py:1129
+msgid "Parametric thresholding"
+msgstr "Seuillage paramétrique"
+
+#: cdl\core\gui\actionhandler.py:1133
+msgid "ISODATA thresholding"
+msgstr "Seuillage ISODATA"
+
+#: cdl\core\gui\actionhandler.py:1137
+msgid "Li thresholding"
+msgstr "Seuillage Li"
+
+#: cdl\core\gui\actionhandler.py:1141
+msgid "Mean thresholding"
+msgstr "Seuillage moyen"
+
+#: cdl\core\gui\actionhandler.py:1145
+msgid "Minimum thresholding"
+msgstr "Seuillage minimum"
+
+#: cdl\core\gui\actionhandler.py:1149
+msgid "Otsu thresholding"
+msgstr "Seuillage Otsu"
+
+#: cdl\core\gui\actionhandler.py:1153
+msgid "Triangle thresholding"
+msgstr "Seuillage Triangle"
+
+#: cdl\core\gui\actionhandler.py:1157
+msgid "Yen thresholding"
+msgstr "Seuillage Yen"
+
+#: cdl\core\gui\actionhandler.py:1161
+msgid "All thresholding methods"
+msgstr "Toutes les méthodes de seuillage"
+
+#: cdl\core\gui\actionhandler.py:1164
+msgid "Apply all thresholding methods"
+msgstr "Appliquer toutes les méthodes de seuillage"
+
+#: cdl\core\gui\actionhandler.py:1166
 msgid "Exposure"
 msgstr "Exposition"
 
-#: cdl\core\gui\actionhandler.py:1127 cdl\core\gui\processor\image.py:586
+#: cdl\core\gui\actionhandler.py:1168 cdl\core\gui\processor\image.py:646
 msgid "Gamma correction"
 msgstr "Correction gamma"
 
-#: cdl\core\gui\actionhandler.py:1131
+#: cdl\core\gui\actionhandler.py:1172
 msgid "Logarithmic correction"
 msgstr "Correction logarithmique"
 
-#: cdl\core\gui\actionhandler.py:1135 cdl\core\gui\processor\image.py:609
+#: cdl\core\gui\actionhandler.py:1176 cdl\core\gui\processor\image.py:669
 msgid "Sigmoid correction"
 msgstr "Correction sigmoïde"
 
-#: cdl\core\gui\actionhandler.py:1139 cdl\core\gui\processor\image.py:634
+#: cdl\core\gui\actionhandler.py:1180 cdl\core\gui\processor\image.py:694
 msgid "Histogram equalization"
 msgstr "Egalisation d'histogramme"
 
-#: cdl\core\gui\actionhandler.py:1143 cdl\core\gui\processor\image.py:647
+#: cdl\core\gui\actionhandler.py:1184 cdl\core\gui\processor\image.py:707
 msgid "Adaptive histogram equalization"
 msgstr "Egalisation d'histogramme adaptative"
 
-#: cdl\core\gui\actionhandler.py:1147
+#: cdl\core\gui\actionhandler.py:1188
 msgid "Intensity rescaling"
 msgstr "Ajustement des niveaux"
 
-#: cdl\core\gui\actionhandler.py:1150
+#: cdl\core\gui\actionhandler.py:1191
 msgid "Restoration"
 msgstr "Restauration"
 
-#: cdl\core\gui\actionhandler.py:1152 cdl\core\gui\processor\image.py:657
-#: cdl\core\gui\processor\image.py:713
+#: cdl\core\gui\actionhandler.py:1193 cdl\core\gui\processor\image.py:717
+#: cdl\core\gui\processor\image.py:773
 msgid "Total variation denoising"
 msgstr "Filtrage variationnel (débruitage)"
 
-#: cdl\core\gui\actionhandler.py:1156 cdl\core\gui\processor\image.py:670
-#: cdl\core\gui\processor\image.py:714
+#: cdl\core\gui\actionhandler.py:1197 cdl\core\gui\processor\image.py:730
+#: cdl\core\gui\processor\image.py:774
 msgid "Bilateral filter denoising"
 msgstr "Filtrage bilatéral (débruitage)"
 
-#: cdl\core\gui\actionhandler.py:1160 cdl\core\gui\processor\image.py:683
-#: cdl\core\gui\processor\image.py:715
+#: cdl\core\gui\actionhandler.py:1201 cdl\core\gui\processor\image.py:743
+#: cdl\core\gui\processor\image.py:775
 msgid "Wavelet denoising"
 msgstr "Débruitage par ondelettes"
 
-#: cdl\core\gui\actionhandler.py:1164
+#: cdl\core\gui\actionhandler.py:1205
 msgid "White Top-Hat denoising"
 msgstr "Débruitage Top-Hat"
 
-#: cdl\core\gui\actionhandler.py:1168
+#: cdl\core\gui\actionhandler.py:1209
 msgid "All denoising methods"
 msgstr "Tous les débruitages"
 
-#: cdl\core\gui\actionhandler.py:1171
+#: cdl\core\gui\actionhandler.py:1212
 msgid "Apply all denoising methods"
 msgstr "Appliquer tous les débruitages"
 
-#: cdl\core\gui\actionhandler.py:1173
+#: cdl\core\gui\actionhandler.py:1214
 msgid "Morphology"
 msgstr "Morphologie"
 
-#: cdl\core\gui\actionhandler.py:1175
+#: cdl\core\gui\actionhandler.py:1216
 msgid "White Top-Hat (disk)"
 msgstr "Top-Hat (disque)"
 
-#: cdl\core\gui\actionhandler.py:1179
+#: cdl\core\gui\actionhandler.py:1220
 msgid "Black Top-Hat (disk)"
 msgstr "Top-Hat dual (disque)"
 
-#: cdl\core\gui\actionhandler.py:1183
+#: cdl\core\gui\actionhandler.py:1224
 msgid "Erosion (disk)"
 msgstr "Erosion (disque)"
 
-#: cdl\core\gui\actionhandler.py:1187
+#: cdl\core\gui\actionhandler.py:1228
 msgid "Dilation (disk)"
 msgstr "Dilatation (disque)"
 
-#: cdl\core\gui\actionhandler.py:1191
+#: cdl\core\gui\actionhandler.py:1232
 msgid "Opening (disk)"
 msgstr "Ouverture (disque)"
 
-#: cdl\core\gui\actionhandler.py:1195
+#: cdl\core\gui\actionhandler.py:1236
 msgid "Closing (disk)"
 msgstr "Fermeture (disque)"
 
-#: cdl\core\gui\actionhandler.py:1199
+#: cdl\core\gui\actionhandler.py:1240
 msgid "All morphological operations"
 msgstr "Toutes les opérations morphologiques"
 
-#: cdl\core\gui\actionhandler.py:1202
+#: cdl\core\gui\actionhandler.py:1243
 msgid "Apply all morphological operations"
 msgstr "Appliquer toutes les opérations morphologiques"
 
-#: cdl\core\gui\actionhandler.py:1204
+#: cdl\core\gui\actionhandler.py:1245
 msgid "Edges"
 msgstr "Contours"
 
-#: cdl\core\gui\actionhandler.py:1206 cdl\core\gui\processor\image.py:819
+#: cdl\core\gui\actionhandler.py:1247 cdl\core\gui\processor\image.py:879
 msgid "Roberts filter"
 msgstr "Filtre de Roberts"
 
-#: cdl\core\gui\actionhandler.py:1209 cdl\core\gui\processor\image.py:824
+#: cdl\core\gui\actionhandler.py:1250 cdl\core\gui\processor\image.py:884
 msgid "Prewitt filter"
 msgstr "Filtre de Prewitt"
 
-#: cdl\core\gui\actionhandler.py:1214 cdl\core\gui\processor\image.py:831
+#: cdl\core\gui\actionhandler.py:1255 cdl\core\gui\processor\image.py:891
 msgid "Prewitt filter (horizontal)"
 msgstr "Filtre de Prewitt (horizontal)"
 
-#: cdl\core\gui\actionhandler.py:1218 cdl\core\gui\processor\image.py:839
+#: cdl\core\gui\actionhandler.py:1259 cdl\core\gui\processor\image.py:899
 msgid "Prewitt filter (vertical)"
 msgstr "Filtre de Prewitt (vertical)"
 
-#: cdl\core\gui\actionhandler.py:1222 cdl\core\gui\processor\image.py:845
+#: cdl\core\gui\actionhandler.py:1263 cdl\core\gui\processor\image.py:905
 msgid "Sobel filter"
 msgstr "Filtre de Sobel"
 
-#: cdl\core\gui\actionhandler.py:1227 cdl\core\gui\processor\image.py:852
+#: cdl\core\gui\actionhandler.py:1268 cdl\core\gui\processor\image.py:912
 msgid "Sobel filter (horizontal)"
 msgstr "Filtre de Sobel (horizontal)"
 
-#: cdl\core\gui\actionhandler.py:1231 cdl\core\gui\processor\image.py:860
+#: cdl\core\gui\actionhandler.py:1272 cdl\core\gui\processor\image.py:920
 msgid "Sobel filter (vertical)"
 msgstr "Filtre de Sobel (vertical)"
 
-#: cdl\core\gui\actionhandler.py:1235 cdl\core\gui\processor\image.py:866
+#: cdl\core\gui\actionhandler.py:1276 cdl\core\gui\processor\image.py:926
 msgid "Scharr filter"
 msgstr "Filtre de Scharr"
 
-#: cdl\core\gui\actionhandler.py:1240 cdl\core\gui\processor\image.py:873
+#: cdl\core\gui\actionhandler.py:1281 cdl\core\gui\processor\image.py:933
 msgid "Scharr filter (horizontal)"
 msgstr "Filtre de Scharr (horizontal)"
 
-#: cdl\core\gui\actionhandler.py:1244 cdl\core\gui\processor\image.py:881
+#: cdl\core\gui\actionhandler.py:1285 cdl\core\gui\processor\image.py:941
 msgid "Scharr filter (vertical)"
 msgstr "Filtre de Scharr (vertical)"
 
-#: cdl\core\gui\actionhandler.py:1248 cdl\core\gui\processor\image.py:887
+#: cdl\core\gui\actionhandler.py:1289 cdl\core\gui\processor\image.py:947
 msgid "Farid filter"
 msgstr "Filtre de Farid"
 
-#: cdl\core\gui\actionhandler.py:1253 cdl\core\gui\processor\image.py:894
+#: cdl\core\gui\actionhandler.py:1294 cdl\core\gui\processor\image.py:954
 msgid "Farid filter (horizontal)"
 msgstr "Filtre de Farid (horizontal)"
 
-#: cdl\core\gui\actionhandler.py:1257 cdl\core\gui\processor\image.py:902
+#: cdl\core\gui\actionhandler.py:1298 cdl\core\gui\processor\image.py:962
 msgid "Farid filter (vertical)"
 msgstr "Filtre de Farid (vertical)"
 
-#: cdl\core\gui\actionhandler.py:1261 cdl\core\gui\processor\image.py:908
+#: cdl\core\gui\actionhandler.py:1302 cdl\core\gui\processor\image.py:968
 msgid "Laplace filter"
 msgstr "Filtre de Laplace"
 
-#: cdl\core\gui\actionhandler.py:1266
+#: cdl\core\gui\actionhandler.py:1307
 msgid "All edges filters"
 msgstr "Tous les filtres de contours"
 
-#: cdl\core\gui\actionhandler.py:1269
+#: cdl\core\gui\actionhandler.py:1310
 msgid "Compute all edges filters"
 msgstr "Calcule tous les filtres de contours"
 
-#: cdl\core\gui\actionhandler.py:1272 cdl\core\gui\processor\image.py:813
+#: cdl\core\gui\actionhandler.py:1313 cdl\core\gui\processor\image.py:873
 msgid "Canny filter"
 msgstr "Filtre de Canny"
 
-#: cdl\core\gui\actionhandler.py:1275 cdl\core\gui\processor\image.py:574
+#: cdl\core\gui\actionhandler.py:1316 cdl\core\gui\processor\image.py:569
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
 
-#: cdl\core\gui\actionhandler.py:1283 cdl\core\gui\processor\image.py:940
+#: cdl\core\gui\actionhandler.py:1324 cdl\core\gui\processor\image.py:1000
 #: cdl\tests\features\image\centroid_unit_test.py:62
 #: cdl\tests\features\image\enclosingcircle_unit_test.py:30
 msgid "Centroid"
 msgstr "Barycentre"
 
-#: cdl\core\gui\actionhandler.py:1286
+#: cdl\core\gui\actionhandler.py:1327
 msgid "Compute image centroid"
 msgstr "Calcule le barycentre de l'image"
 
-#: cdl\core\gui\actionhandler.py:1289
+#: cdl\core\gui\actionhandler.py:1330
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle minimum"
 
-#: cdl\core\gui\actionhandler.py:1291
+#: cdl\core\gui\actionhandler.py:1332
 msgid "Compute smallest enclosing circle center"
 msgstr "Calcule le centre du cercle minimum"
 
-#: cdl\core\gui\actionhandler.py:1294
+#: cdl\core\gui\actionhandler.py:1335
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: cdl\core\gui\actionhandler.py:1297
+#: cdl\core\gui\actionhandler.py:1338
 msgid "Compute automatic 2D peak detection"
 msgstr "Détection automatique de pics 2D"
 
-#: cdl\core\gui\actionhandler.py:1300
+#: cdl\core\gui\actionhandler.py:1341
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: cdl\core\gui\actionhandler.py:1302
+#: cdl\core\gui\actionhandler.py:1343
 msgid "Compute contour shape fit"
 msgstr "Ajustement d'une forme géométrique à un contour"
 
-#: cdl\core\gui\actionhandler.py:1305
+#: cdl\core\gui\actionhandler.py:1346
 msgid "Circle Hough transform"
 msgstr "Transformée de Hough circulaire"
 
-#: cdl\core\gui\actionhandler.py:1307
+#: cdl\core\gui\actionhandler.py:1348
 msgid "Detect circular shapes using circle Hough transform"
 msgstr "Détection de formes circulaires à partir d'une tranformée de Hough"
 
-#: cdl\core\gui\actionhandler.py:1310
+#: cdl\core\gui\actionhandler.py:1351
 msgid "Blob detection"
 msgstr "Détection de taches"
 
-#: cdl\core\gui\actionhandler.py:1312 cdl\core\gui\processor\image.py:1033
+#: cdl\core\gui\actionhandler.py:1353 cdl\core\gui\processor\image.py:1093
 msgid "Blob detection (DOG)"
 msgstr "Détection de taches (gaussien)"
 
-#: cdl\core\gui\actionhandler.py:1314
+#: cdl\core\gui\actionhandler.py:1355
 msgid "Detect blobs using Difference of Gaussian (DOG) method"
 msgstr "Détection de taches basée sur la méthode du discriminant gaussien"
 
-#: cdl\core\gui\actionhandler.py:1317 cdl\core\gui\processor\image.py:1045
+#: cdl\core\gui\actionhandler.py:1358 cdl\core\gui\processor\image.py:1105
 msgid "Blob detection (DOH)"
 msgstr "Détection de taches (hessien)"
 
-#: cdl\core\gui\actionhandler.py:1319
+#: cdl\core\gui\actionhandler.py:1360
 msgid "Detect blobs using Determinant of Hessian (DOH) method"
 msgstr "Détection de taches basée sur la méthode du discriminant hessien"
 
-#: cdl\core\gui\actionhandler.py:1322 cdl\core\gui\processor\image.py:1057
+#: cdl\core\gui\actionhandler.py:1363 cdl\core\gui\processor\image.py:1117
 msgid "Blob detection (LOG)"
 msgstr "Détection de taches (LOG)"
 
-#: cdl\core\gui\actionhandler.py:1324
+#: cdl\core\gui\actionhandler.py:1365
 msgid "Detect blobs using Laplacian of Gaussian (LOG) method"
 msgstr ""
 "Détection de taches basée sur la méthode du laplacien de gaussien (LOG)"
 
-#: cdl\core\gui\actionhandler.py:1327 cdl\core\gui\processor\image.py:1070
+#: cdl\core\gui\actionhandler.py:1368 cdl\core\gui\processor\image.py:1130
 msgid "Blob detection (OpenCV)"
 msgstr "Détection de taches (OpenCV)"
 
-#: cdl\core\gui\actionhandler.py:1329
+#: cdl\core\gui\actionhandler.py:1370
 msgid "Detect blobs using OpenCV SimpleBlobDetector"
 msgstr "Détection de taches basée sur SimpleBlobDetector d'OpenCV"
 
-#: cdl\core\gui\actionhandler.py:1336 cdl\core\gui\processor\image.py:212
-#: cdl\core\gui\processor\image.py:224
+#: cdl\core\gui\actionhandler.py:1377 cdl\core\gui\processor\image.py:214
+#: cdl\core\gui\processor\image.py:226
 msgid "Resize"
 msgstr "Redimensionner"
 
-#: cdl\core\gui\actionhandler.py:1342
+#: cdl\core\gui\actionhandler.py:1383
 msgid "Pixel binning"
 msgstr "Binning"
 
@@ -1949,7 +2031,7 @@ msgid "Clipping uint32 data to int32."
 msgstr "Troncature de données uint32 en int32."
 
 #: cdl\core\gui\h5io.py:98 cdl\core\gui\h5io.py:114 cdl\core\gui\main.py:480
-#: cdl\core\gui\main.py:1338 cdl\plugins.py:173 cdl\widgets\textimport.py:501
+#: cdl\core\gui\main.py:1340 cdl\plugins.py:173 cdl\widgets\textimport.py:501
 msgid "Warning"
 msgstr "Attention"
 
@@ -1961,7 +2043,7 @@ msgstr "Aucune donnée prise en charge dans le(s) fichier(s) HDF5."
 msgid "Macro simple example"
 msgstr "Exemple simple de macro"
 
-#: cdl\core\gui\macroeditor.py:197 cdl\core\model\image.py:382
+#: cdl\core\gui\macroeditor.py:197 cdl\core\model\image.py:392
 #: cdl\core\model\signal.py:157 cdl\core\model\signal.py:163
 msgid "Untitled"
 msgstr "Sans titre"
@@ -1996,7 +2078,7 @@ msgstr ""
 "La mémoire disponible est inférieure à %d Mo.<br><br>Souhaitez-vous "
 "néanmoins continuer ?"
 
-#: cdl\core\gui\main.py:496
+#: cdl\core\gui\main.py:495
 msgid ""
 "This software is in the <b>beta stage</b> of its release cycle. The focus of "
 "beta testing is providing a feature complete software for users interested "
@@ -2012,7 +2094,7 @@ msgstr ""
 "fonctionner correctement et présente plus d'anomalies résiduelles et de "
 "problèmes de performance que la version finale</u>."
 
-#: cdl\core\gui\main.py:506
+#: cdl\core\gui\main.py:505
 msgid ""
 "This software is in the <b>alpha stage</b> of its release cycle. The focus "
 "of alpha testing is providing an incomplete software for early testing of "
@@ -2026,15 +2108,15 @@ msgstr ""
 "Notez que <u>la version alpha d'un logiciel ne fait pas l'objet de tests "
 "poussés avant sa diffusion</u>."
 
-#: cdl\core\gui\main.py:516
+#: cdl\core\gui\main.py:515
 msgid "<i>This is not a stable release.</i>"
 msgstr "<i>Ceci n'est pas une version stable.</i>"
 
-#: cdl\core\gui\main.py:532 cdl\core\gui\main.py:547 cdl\plugins.py:181
+#: cdl\core\gui\main.py:534 cdl\core\gui\main.py:549 cdl\plugins.py:181
 msgid "Information"
 msgstr "Information"
 
-#: cdl\core\gui\main.py:533
+#: cdl\core\gui\main.py:535
 msgid ""
 "The dependency check feature is not relevant for the standalone version of "
 "DataLab."
@@ -2042,7 +2124,7 @@ msgstr ""
 "La vérification des dépendances n'est pas pertinente pour la version "
 "autonome de DataLab."
 
-#: cdl\core\gui\main.py:548
+#: cdl\core\gui\main.py:550
 msgid ""
 "All critical dependencies of DataLab have been qualified on this operating "
 "system."
@@ -2050,19 +2132,19 @@ msgstr ""
 "Toutes les dépendances critiques de DataLab ont été qualifiées sur ce "
 "système d'exploitation."
 
-#: cdl\core\gui\main.py:557
+#: cdl\core\gui\main.py:559
 msgid "Non-compliant dependency:"
 msgstr "Dépendance non-conforme :"
 
-#: cdl\core\gui\main.py:559
+#: cdl\core\gui\main.py:561
 msgid "Non-compliant dependencies:"
 msgstr "Dépendances non-conformes :"
 
-#: cdl\core\gui\main.py:562
+#: cdl\core\gui\main.py:564
 msgid "DataLab has not yet been qualified on your operating system."
 msgstr "DataLab n'a pas encore été qualifié sur votre système d'exploitation."
 
-#: cdl\core\gui\main.py:568
+#: cdl\core\gui\main.py:570
 msgid ""
 "At least one dependency does not comply with DataLab qualification standard "
 "reference (wrong dependency version has been installed, or dependency source "
@@ -2074,7 +2156,7 @@ msgstr ""
 "le code source de la dépendance a été modifié, ou encore l'application n'a "
 "pas encore été qualifiée dans le cadre de votre système d'exploitation)."
 
-#: cdl\core\gui\main.py:578
+#: cdl\core\gui\main.py:580
 msgid ""
 "This means that the application has not been officially qualified in this "
 "context and may not behave as expected."
@@ -2082,204 +2164,204 @@ msgstr ""
 "Cela signifie que l'application n'a pas été officiellement qualifiée dans ce "
 "contexte et peut donc se comporter de façon inattendue."
 
-#: cdl\core\gui\main.py:599
+#: cdl\core\gui\main.py:601
 msgid "Do you want to see available log files?"
 msgstr "Souhaitez-vous consulter les journaux de bord disponibles ?"
 
-#: cdl\core\gui\main.py:740
+#: cdl\core\gui\main.py:743
 msgid "Welcome to %s!"
 msgstr "Bienvenue dans %s !"
 
-#: cdl\core\gui\main.py:774
+#: cdl\core\gui\main.py:777
 msgid "Open HDF5 files..."
 msgstr "Ouvrir des fichiers HDF5..."
 
-#: cdl\core\gui\main.py:776
+#: cdl\core\gui\main.py:779
 msgid "Open one or several HDF5 files"
 msgstr "Ouvrir un ou plusieurs fichier(s) HDF5"
 
-#: cdl\core\gui\main.py:781
+#: cdl\core\gui\main.py:784
 msgid "Save to HDF5 file..."
 msgstr "Enregistrer dans un fichier HDF5..."
 
-#: cdl\core\gui\main.py:783
+#: cdl\core\gui\main.py:786
 msgid "Save to HDF5 file"
 msgstr "Enregistrer dans un fichier HDF5"
 
-#: cdl\core\gui\main.py:788
+#: cdl\core\gui\main.py:791
 msgid "Browse HDF5 file..."
 msgstr "Parcourir un fichier HDF5..."
 
-#: cdl\core\gui\main.py:790
+#: cdl\core\gui\main.py:793
 msgid "Browse an HDF5 file"
 msgstr "Parcourir un fichier HDF5"
 
-#: cdl\core\gui\main.py:795
+#: cdl\core\gui\main.py:798
 msgid "Settings..."
 msgstr "Préférences..."
 
-#: cdl\core\gui\main.py:797
+#: cdl\core\gui\main.py:800
 msgid "Open settings dialog"
 msgstr "Ouvrir la boîte de dialogue des préférences"
 
-#: cdl\core\gui\main.py:801
+#: cdl\core\gui\main.py:804
 msgid "Main Toolbar"
 msgstr "Barre d'outils principale"
 
-#: cdl\core\gui\main.py:815
+#: cdl\core\gui\main.py:818
 msgid "Hide window"
 msgstr "Cacher la fenêtre"
 
-#: cdl\core\gui\main.py:816
+#: cdl\core\gui\main.py:819
 msgid "Hide DataLab window"
 msgstr "Cacher la fenêtre de DataLab"
 
-#: cdl\core\gui\main.py:818 cdl\core\gui\main.py:1629
+#: cdl\core\gui\main.py:821 cdl\core\gui\main.py:1631
 msgid "Quit"
 msgstr "Quitter"
 
-#: cdl\core\gui\main.py:819
+#: cdl\core\gui\main.py:822
 msgid "Quit application"
 msgstr "Quitter l'application"
 
-#: cdl\core\gui\main.py:833
+#: cdl\core\gui\main.py:836
 msgid "Auto-refresh"
 msgstr "Rafraîchissement automatique"
 
-#: cdl\core\gui\main.py:835
+#: cdl\core\gui\main.py:838
 msgid "Auto-refresh plot when object is modified, added or removed"
 msgstr ""
 "Rafraîchir le graphique automatiquement lors de la modification, de l'ajout "
 "ou de la suppression d'un objet"
 
-#: cdl\core\gui\main.py:840
+#: cdl\core\gui\main.py:843
 msgid "Show graphical object titles"
 msgstr "Afficher les titres des objets graphiques"
 
-#: cdl\core\gui\main.py:842
+#: cdl\core\gui\main.py:845
 msgid "Show or hide ROI and other graphical object titles or subtitles"
 msgstr ""
 "Afficher ou cacher les titres (et sous-titres) des régions d'intérêt et "
 "autres objets graphiques"
 
-#: cdl\core\gui\main.py:849
+#: cdl\core\gui\main.py:852
 msgid "Signal Panel Toolbar"
 msgstr "Barre d'outils du panneau Signal"
 
-#: cdl\core\gui\main.py:865
+#: cdl\core\gui\main.py:868
 msgid "Image Panel Toolbar"
 msgstr "Barre d'outils du panneau Image"
 
-#: cdl\core\gui\main.py:897
+#: cdl\core\gui\main.py:900
 msgid "Signal View"
 msgstr "Vue Signal"
 
-#: cdl\core\gui\main.py:898
+#: cdl\core\gui\main.py:901
 msgid "Image View"
 msgstr "Vue Image"
 
-#: cdl\core\gui\main.py:915 cdl\core\gui\panel\signal.py:49
+#: cdl\core\gui\main.py:918 cdl\core\gui\panel\signal.py:49
 #: cdl\core\gui\tour.py:683 cdl\core\gui\tour.py:690 cdl\core\gui\tour.py:701
 #: cdl\core\gui\tour.py:711 cdl\core\gui\tour.py:722 cdl\core\gui\tour.py:732
 #: cdl\core\gui\tour.py:742 cdl\core\gui\tour.py:749
 msgid "Signal Panel"
 msgstr "Panneau Signal"
 
-#: cdl\core\gui\main.py:917 cdl\core\gui\panel\image.py:48
+#: cdl\core\gui\main.py:920 cdl\core\gui\panel\image.py:48
 #: cdl\core\gui\tour.py:760 cdl\core\gui\tour.py:769 cdl\core\gui\tour.py:780
 #: cdl\core\gui\tour.py:790 cdl\core\gui\tour.py:801 cdl\core\gui\tour.py:811
 #: cdl\core\gui\tour.py:821 cdl\core\gui\tour.py:831
 msgid "Image Panel"
 msgstr "Panneau Image"
 
-#: cdl\core\gui\main.py:932 cdl\widgets\textimport.py:72
+#: cdl\core\gui\main.py:935 cdl\widgets\textimport.py:72
 #: cdl\widgets\textimport.py:82 cdl\widgets\wizard.py:221
 msgid "File"
 msgstr "Fichier"
 
-#: cdl\core\gui\main.py:934
+#: cdl\core\gui\main.py:937
 msgid "&Edit"
 msgstr "&Édition"
 
-#: cdl\core\gui\main.py:935
+#: cdl\core\gui\main.py:938
 msgid "Operations"
 msgstr "Opérations"
 
-#: cdl\core\gui\main.py:936 cdl\core\gui\settings.py:258
+#: cdl\core\gui\main.py:939 cdl\core\gui\settings.py:258
 msgid "Processing"
 msgstr "Traitement"
 
-#: cdl\core\gui\main.py:937
+#: cdl\core\gui\main.py:940
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:938 cdl\core\gui\tour.py:859
+#: cdl\core\gui\main.py:941 cdl\core\gui\tour.py:859
 msgid "Plugins"
 msgstr "Plugins"
 
-#: cdl\core\gui\main.py:939
+#: cdl\core\gui\main.py:942
 msgid "&View"
 msgstr "&Affichage"
 
-#: cdl\core\gui\main.py:953
+#: cdl\core\gui\main.py:956
 msgid "Online documentation"
 msgstr "Documentation en ligne"
 
-#: cdl\core\gui\main.py:963
+#: cdl\core\gui\main.py:966
 msgid "PDF documentation"
 msgstr "Documentation PDF"
 
-#: cdl\core\gui\main.py:971
+#: cdl\core\gui\main.py:974
 msgid "Tour"
 msgstr "Visite guidée"
 
-#: cdl\core\gui\main.py:977 cdl\core\gui\tour.py:287
+#: cdl\core\gui\main.py:980 cdl\core\gui\tour.py:287
 #: cdl\tests\scenarios\demo.py:181 cdl\tests\scenarios\demo.py:196
 msgid "Demo"
 msgstr "Démo"
 
-#: cdl\core\gui\main.py:987
+#: cdl\core\gui\main.py:990
 msgid "Test segfault/Python error"
 msgstr "Tester un plantage/une erreur Python"
 
-#: cdl\core\gui\main.py:994 cdl\widgets\logviewer.py:26
+#: cdl\core\gui\main.py:997 cdl\widgets\logviewer.py:26
 msgid "Log files"
 msgstr "Journaux de bord"
 
-#: cdl\core\gui\main.py:1000 cdl\widgets\instconfviewer.py:87
+#: cdl\core\gui\main.py:1003 cdl\widgets\instconfviewer.py:87
 msgid "Installation and configuration"
 msgstr "Installation et configuration"
 
-#: cdl\core\gui\main.py:1007
+#: cdl\core\gui\main.py:1010
 msgid "Project home page"
 msgstr "Page d'accueil du projet"
 
-#: cdl\core\gui\main.py:1013
+#: cdl\core\gui\main.py:1016
 msgid "Bug report or feature request"
 msgstr "Rapport d'anomalie ou demande de nouvelle fonctionnalité"
 
-#: cdl\core\gui\main.py:1019
+#: cdl\core\gui\main.py:1022
 msgid "Check critical dependencies..."
 msgstr "Vérifier les dépendances critiques..."
 
-#: cdl\core\gui\main.py:1024
+#: cdl\core\gui\main.py:1027
 msgid "About..."
 msgstr "À propos..."
 
-#: cdl\core\gui\main.py:1059 cdl\core\gui\panel\macro.py:195
+#: cdl\core\gui\main.py:1062 cdl\core\gui\panel\macro.py:195
 #: cdl\core\gui\settings.py:261
 msgid "Console"
 msgstr "Console"
 
-#: cdl\core\gui\main.py:1068
+#: cdl\core\gui\main.py:1071
 msgid "Macro Panel"
 msgstr "Gestionnaire de Macros"
 
-#: cdl\core\gui\main.py:1306
+#: cdl\core\gui\main.py:1308
 msgid "Save"
 msgstr "Enregistrer"
 
-#: cdl\core\gui\main.py:1339
+#: cdl\core\gui\main.py:1341
 msgid ""
 "Do you want to remove all signals and images before importing data from HDF5 "
 "files?"
@@ -2287,60 +2369,60 @@ msgstr ""
 "Souhaitez-vous supprimer tous les signaux et images avant d'importer des "
 "données depuis un fichier HDF5 ?"
 
-#: cdl\core\gui\main.py:1351 cdl\core\gui\panel\base.py:698
+#: cdl\core\gui\main.py:1353 cdl\core\gui\panel\base.py:698
 #: cdl\core\gui\panel\macro.py:557 cdl\widgets\h5browser.py:618
 msgid "Open"
 msgstr "Ouvrir"
 
-#: cdl\core\gui\main.py:1351 cdl\widgets\h5browser.py:691
+#: cdl\core\gui\main.py:1353 cdl\widgets\h5browser.py:691
 msgid "HDF5 files (*.h5 *.hdf5)"
 msgstr "Fichiers HDF5 (*.h5 *.hdf5)"
 
-#: cdl\core\gui\main.py:1534
+#: cdl\core\gui\main.py:1536
 msgid "not started"
 msgstr "non démarré"
 
-#: cdl\core\gui\main.py:1536
+#: cdl\core\gui\main.py:1538
 msgid "started (port %s)"
 msgstr "démarré (port %s)"
 
-#: cdl\core\gui\main.py:1539
+#: cdl\core\gui\main.py:1541
 msgid "enabled"
 msgstr "activé"
 
-#: cdl\core\gui\main.py:1541
+#: cdl\core\gui\main.py:1543
 msgid "disabled"
 msgstr "désactivé"
 
-#: cdl\core\gui\main.py:1544
+#: cdl\core\gui\main.py:1546
 msgid "Advanced configuration:"
 msgstr "Configuration avancée :"
 
-#: cdl\core\gui\main.py:1545
+#: cdl\core\gui\main.py:1547
 msgid "XML-RPC server:"
 msgstr "Serveur XML-RPC :"
 
-#: cdl\core\gui\main.py:1546
+#: cdl\core\gui\main.py:1548
 msgid "Process isolation:"
 msgstr "Isolation de processus :"
 
-#: cdl\core\gui\main.py:1549
+#: cdl\core\gui\main.py:1551
 msgid "Created by"
 msgstr "Créé par"
 
-#: cdl\core\gui\main.py:1550
+#: cdl\core\gui\main.py:1552
 msgid "Developed and maintained by %s open-source project team"
 msgstr "Développé et maintenu par l'équipe du projet libre %s"
 
-#: cdl\core\gui\main.py:1554
+#: cdl\core\gui\main.py:1556
 msgid "About"
 msgstr "À propos de"
 
-#: cdl\core\gui\main.py:1574
+#: cdl\core\gui\main.py:1576
 msgid "Visualization settings"
 msgstr "Réglages d'affichage"
 
-#: cdl\core\gui\main.py:1575
+#: cdl\core\gui\main.py:1577
 msgid ""
 "Default visualization settings have changed.<br><br>Do you want to update "
 "all active %s objects?"
@@ -2348,7 +2430,7 @@ msgstr ""
 "Les réglages d'affichage par défaut ont changé.<br><br>Souhaitez-vous mettre "
 "à jour tous les objets %s actifs ?"
 
-#: cdl\core\gui\main.py:1630
+#: cdl\core\gui\main.py:1632
 msgid ""
 "Do you want to save all signals and images to an HDF5 file before quitting "
 "DataLab?"
@@ -2368,7 +2450,7 @@ msgstr "(cliquer sur le bouton Métadonnées pour plus de détails)"
 msgid "Drag files here to open"
 msgstr "Déposer des fichiers ici pour les ouvrir"
 
-#: cdl\core\gui\panel\base.py:82 cdl\core\model\base.py:294
+#: cdl\core\gui\panel\base.py:82 cdl\core\model\base.py:371
 msgid "Properties"
 msgstr "Propriétés"
 
@@ -2430,12 +2512,12 @@ msgid "Creating plot items"
 msgstr "Création des objets graphiques"
 
 #: cdl\core\gui\panel\base.py:1030 cdl\core\gui\roieditor.py:210
-#: cdl\core\model\base.py:961
+#: cdl\core\model\base.py:994
 msgid "Regions of interest"
 msgstr "Régions d'intérêt"
 
-#: cdl\core\gui\panel\base.py:1086 cdl\core\gui\panel\base.py:1147
-#: cdl\core\gui\processor\base.py:494
+#: cdl\core\gui\panel\base.py:1086 cdl\core\gui\panel\base.py:1145
+#: cdl\core\gui\processor\base.py:493
 msgid "Results"
 msgstr "Résultats"
 
@@ -2447,11 +2529,11 @@ msgstr "Afficher les résultats obtenus avec des calculs réalisés précédemme
 msgid "Open a dialog to edit annotations"
 msgstr "Ouvrir une boîte de dialogue pour éditer les annotations"
 
-#: cdl\core\gui\panel\base.py:1124
+#: cdl\core\gui\panel\base.py:1122
 msgid "No result currently available for this object."
 msgstr "Aucun résultat disponible pour le moment."
 
-#: cdl\core\gui\panel\base.py:1126
+#: cdl\core\gui\panel\base.py:1124
 msgid ""
 "This feature leverages the results of previous computations performed on the "
 "selected object(s).<br><br>To compute results, select one or more objects "
@@ -2461,19 +2543,19 @@ msgstr ""
 "<br><br>Pour calculer des résultats, sélectionnez un ou plusieurs objets et "
 "choisissez une fonctionnalité de calcul dans le menu <u>Calculer</u>."
 
-#: cdl\core\gui\panel\base.py:1164
+#: cdl\core\gui\panel\base.py:1162
 msgid "Indexes"
 msgstr "Indices"
 
-#: cdl\core\gui\panel\base.py:1172
+#: cdl\core\gui\panel\base.py:1170
 msgid "X axis"
 msgstr "Axe des X"
 
-#: cdl\core\gui\panel\base.py:1174
+#: cdl\core\gui\panel\base.py:1172
 msgid "Y axis"
 msgstr "Axe des Y"
 
-#: cdl\core\gui\panel\base.py:1178
+#: cdl\core\gui\panel\base.py:1176
 msgid ""
 "Plot results obtained from previous computations.<br><br>This plot is based "
 "on results associated with '%s' prefix."
@@ -2481,7 +2563,7 @@ msgstr ""
 "Tracer les résultats obtenus avec des calculs réalisés précédemment."
 "<br><br>Ce graphique est basé sur les résultats associés au préfixe '%s'."
 
-#: cdl\core\gui\panel\base.py:1227
+#: cdl\core\gui\panel\base.py:1225
 msgid "Are you sure you want to delete all results of the selected object(s)?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer tous les résultats des objets "
@@ -2557,7 +2639,7 @@ msgstr "Souhaitez-vous vraiment continuer ?"
 msgid "Creating geometric shapes"
 msgstr "Création des formes géométriques"
 
-#: cdl\core\gui\processor\base.py:72
+#: cdl\core\gui\processor\base.py:71
 msgid ""
 "DataLab relies on various libraries to perform the computation. During the "
 "computation, errors may occur because of the data (e.g. division by zero, "
@@ -2572,11 +2654,11 @@ msgstr ""
 "mémoire, etc.). Si vous rencontrez une erreur, avant de la signaler, assurez-"
 "vous que le calcul est correct, en vérifiant les données et les paramètres."
 
-#: cdl\core\gui\processor\base.py:293 cdl\widgets\textimport.py:706
+#: cdl\core\gui\processor\base.py:292 cdl\widgets\textimport.py:706
 msgid "Parameters"
 msgstr "Paramètres"
 
-#: cdl\core\gui\processor\base.py:392 cdl\core\gui\processor\base.py:468
+#: cdl\core\gui\processor\base.py:391 cdl\core\gui\processor\base.py:467
 msgid "Computing: %s"
 msgstr "Calcul en cours : %s"
 
@@ -2588,127 +2670,131 @@ msgstr "Calcul : %s"
 msgid "Select %s"
 msgstr "Sélectionner %s"
 
-#: cdl\core\gui\processor\image.py:92 cdl\core\gui\processor\signal.py:79
+#: cdl\core\gui\processor\image.py:94 cdl\core\gui\processor\signal.py:79
 msgid "Product with constant"
 msgstr "Produit par une constante"
 
-#: cdl\core\gui\processor\image.py:129
+#: cdl\core\gui\processor\image.py:131
 msgid "Distribute on grid"
 msgstr "Distribuer sur grille"
 
-#: cdl\core\gui\processor\image.py:208
+#: cdl\core\gui\processor\image.py:210
 msgid "Warning:"
 msgstr "Attention :"
 
-#: cdl\core\gui\processor\image.py:210
+#: cdl\core\gui\processor\image.py:212
 msgid "Selected images do not have the same size"
 msgstr "Les images sélectionnées n'ont pas la même taille"
 
-#: cdl\core\gui\processor\image.py:219
+#: cdl\core\gui\processor\image.py:221
 msgid "Destination size:"
 msgstr "Taille de destination :"
 
-#: cdl\core\gui\processor\image.py:232
+#: cdl\core\gui\processor\image.py:234
 msgid "Binning"
 msgstr "Binning"
 
-#: cdl\core\gui\processor\image.py:254 cdl\core\gui\processor\signal.py:94
+#: cdl\core\gui\processor\image.py:256 cdl\core\gui\processor\signal.py:94
 msgid "Extract ROI"
 msgstr "Extraire une ROI"
 
-#: cdl\core\gui\processor\image.py:267 cdl\core\gui\processor\image.py:286
+#: cdl\core\gui\processor\image.py:269 cdl\core\gui\processor\image.py:288
 msgid "Profile"
 msgstr "Profil"
 
-#: cdl\core\gui\processor\image.py:305
+#: cdl\core\gui\processor\image.py:307
 msgid "Average profile"
 msgstr "Profil moyen"
 
-#: cdl\core\gui\processor\image.py:324
+#: cdl\core\gui\processor\image.py:326
 msgid "Radial profile"
 msgstr "Profil radial"
 
-#: cdl\core\gui\processor\image.py:341 cdl\core\gui\processor\signal.py:101
+#: cdl\core\gui\processor\image.py:343 cdl\core\gui\processor\signal.py:101
 msgid "Swap axes"
 msgstr "Permuter les axes"
 
-#: cdl\core\gui\processor\image.py:380 cdl\core\gui\processor\image.py:403
+#: cdl\core\gui\processor\image.py:382 cdl\core\gui\processor\image.py:405
 msgid "image to subtract"
 msgstr "image à soustraire"
 
-#: cdl\core\gui\processor\image.py:394 cdl\core\gui\processor\signal.py:166
+#: cdl\core\gui\processor\image.py:396 cdl\core\gui\processor\signal.py:168
 msgid "Difference with constant"
 msgstr "Différence par une constante"
 
-#: cdl\core\gui\processor\image.py:413 cdl\core\gui\processor\signal.py:185
+#: cdl\core\gui\processor\image.py:415 cdl\core\gui\processor\signal.py:187
 msgid "divider"
 msgstr "le diviseur"
 
-#: cdl\core\gui\processor\image.py:427 cdl\core\gui\processor\signal.py:200
+#: cdl\core\gui\processor\image.py:429 cdl\core\gui\processor\signal.py:202
 msgid "Division by constant"
 msgstr "Division par une constante"
 
-#: cdl\core\gui\processor\image.py:438
+#: cdl\core\gui\processor\image.py:440
 msgid "Flat field"
 msgstr "Correction de champ plat"
 
-#: cdl\core\gui\processor\image.py:444
+#: cdl\core\gui\processor\image.py:446
 msgid "flat field image"
 msgstr "l'image de champ plat"
 
-#: cdl\core\gui\processor\image.py:447
+#: cdl\core\gui\processor\image.py:449
 msgid "Flat field correction"
 msgstr "Correction de champ plat"
 
-#: cdl\core\gui\processor\image.py:563 cdl\core\gui\processor\signal.py:403
+#: cdl\core\gui\processor\image.py:558 cdl\core\gui\processor\signal.py:398
 msgid "PSD"
 msgstr "DSP"
 
-#: cdl\core\gui\processor\image.py:596
+#: cdl\core\gui\processor\image.py:581
+msgid "Parametric threshold"
+msgstr "Seuillage paramétrique"
+
+#: cdl\core\gui\processor\image.py:656
 msgid "Log correction"
 msgstr "Correction logarithmique"
 
-#: cdl\core\gui\processor\image.py:622
+#: cdl\core\gui\processor\image.py:682
 msgid "Rescale intensity"
 msgstr "Ajuster les niveaux"
 
-#: cdl\core\gui\processor\image.py:695 cdl\core\gui\processor\image.py:716
+#: cdl\core\gui\processor\image.py:755 cdl\core\gui\processor\image.py:776
 msgid "Denoise / Top-Hat"
 msgstr "Débruitage Top-Hat"
 
-#: cdl\core\gui\processor\image.py:732
+#: cdl\core\gui\processor\image.py:792
 msgid "White Top-Hat"
 msgstr "Top-Hat"
 
-#: cdl\core\gui\processor\image.py:744
+#: cdl\core\gui\processor\image.py:804
 msgid "Black Top-Hat"
 msgstr "Top-Hat dual"
 
-#: cdl\core\gui\processor\image.py:754
+#: cdl\core\gui\processor\image.py:814
 msgid "Erosion"
 msgstr "Erosion"
 
-#: cdl\core\gui\processor\image.py:764
+#: cdl\core\gui\processor\image.py:824
 msgid "Dilation"
 msgstr "Dilatation"
 
-#: cdl\core\gui\processor\image.py:774
+#: cdl\core\gui\processor\image.py:834
 msgid "Opening"
 msgstr "Ouverture"
 
-#: cdl\core\gui\processor\image.py:784
+#: cdl\core\gui\processor\image.py:844
 msgid "Closing"
 msgstr "Fermeture"
 
-#: cdl\core\gui\processor\image.py:948
+#: cdl\core\gui\processor\image.py:1008
 msgid "Enclosing circle"
 msgstr "Cercle minimum"
 
-#: cdl\core\gui\processor\image.py:1004 cdl\core\gui\processor\image.py:1008
+#: cdl\core\gui\processor\image.py:1064 cdl\core\gui\processor\image.py:1068
 msgid "Contour"
 msgstr "Contour"
 
-#: cdl\core\gui\processor\image.py:1021
+#: cdl\core\gui\processor\image.py:1081
 msgid "Hough circles"
 msgstr "Cercles de Hough"
 
@@ -2716,35 +2802,35 @@ msgstr "Cercles de Hough"
 msgid "Sum with constant"
 msgstr "Addition avec une constante"
 
-#: cdl\core\gui\processor\signal.py:152 cdl\core\gui\processor\signal.py:175
+#: cdl\core\gui\processor\signal.py:154 cdl\core\gui\processor\signal.py:177
 msgid "signal to subtract"
 msgstr "signal à soustraire"
 
-#: cdl\core\gui\processor\signal.py:225
+#: cdl\core\gui\processor\signal.py:227
 msgid "Reverse X axis"
 msgstr "Inverser l'axe des X"
 
-#: cdl\core\gui\processor\signal.py:381
+#: cdl\core\gui\processor\signal.py:376
 msgid "iFFT"
 msgstr "iFFT"
 
-#: cdl\core\gui\processor\signal.py:414
+#: cdl\core\gui\processor\signal.py:409
 msgid "signal for X values"
 msgstr "signal pour les valeurs X"
 
-#: cdl\core\gui\processor\signal.py:458
+#: cdl\core\gui\processor\signal.py:453
 msgid "signal to convolve with"
 msgstr "signal à convoluer"
 
-#: cdl\core\gui\processor\signal.py:541
+#: cdl\core\gui\processor\signal.py:536
 msgid "FWHM"
 msgstr "LMH"
 
-#: cdl\core\gui\processor\signal.py:546
+#: cdl\core\gui\processor\signal.py:541
 msgid "FW"
 msgstr "LH"
 
-#: cdl\core\gui\processor\signal.py:582
+#: cdl\core\gui\processor\signal.py:577
 msgid "Bandwidth"
 msgstr "Bande passante"
 
@@ -2931,7 +3017,7 @@ msgstr "Nombre max. de points"
 msgid "Maximum number of points for downsampling"
 msgstr "Nombre maximum de points pour le sous-échantillonnage"
 
-#: cdl\core\gui\settings.py:159 cdl\core\model\image.py:932
+#: cdl\core\gui\settings.py:159 cdl\core\model\image.py:942
 msgid "Image"
 msgstr "Image"
 
@@ -3334,23 +3420,23 @@ msgstr "Fichiers CSV"
 msgid "NumPy binary files"
 msgstr "Fichiers binaires NumPy"
 
-#: cdl\core\model\base.py:98 cdl\tests\data.py:116
+#: cdl\core\model\base.py:106 cdl\tests\data.py:89
 msgid "Seed"
 msgstr "Graine"
 
-#: cdl\core\model\base.py:109
+#: cdl\core\model\base.py:117
 msgid "Uniform distribution lower bound"
 msgstr "Borne inférieure de la distribution uniforme"
 
-#: cdl\core\model\base.py:112
+#: cdl\core\model\base.py:120
 msgid "Uniform distribution higher bound"
 msgstr "Borne supérieure de la distribution uniforme"
 
-#: cdl\core\model\base.py:129
+#: cdl\core\model\base.py:137
 msgid "Normal distribution mean"
 msgstr "Moyenne de la distribution normale"
 
-#: cdl\core\model\base.py:134
+#: cdl\core\model\base.py:142
 msgid "Normal distribution standard deviation"
 msgstr "Ecart-type de la distribution normale"
 
@@ -3374,95 +3460,95 @@ msgstr "Coin inférieur droit"
 msgid "Center coordinates"
 msgstr "Coordonnées du centre"
 
-#: cdl\core\model\image.py:365 cdl\core\model\image.py:366
-#: cdl\core\model\image.py:368 cdl\core\model\signal.py:158
+#: cdl\core\model\image.py:375 cdl\core\model\image.py:376
+#: cdl\core\model\image.py:378 cdl\core\model\signal.py:158
 msgid "Data"
 msgstr "Données"
 
-#: cdl\core\model\image.py:367 cdl\core\model\signal.py:159
+#: cdl\core\model\image.py:377 cdl\core\model\signal.py:159
 msgid "Metadata"
 msgstr "Métadonnées"
 
-#: cdl\core\model\image.py:370 cdl\core\model\image.py:371
-#: cdl\core\model\image.py:374 cdl\core\model\image.py:379
+#: cdl\core\model\image.py:380 cdl\core\model\image.py:381
+#: cdl\core\model\image.py:384 cdl\core\model\image.py:389
 msgid "Origin"
 msgstr "Origine"
 
-#: cdl\core\model\image.py:370 cdl\core\model\image.py:375
-#: cdl\core\model\image.py:378 cdl\core\model\image.py:379
+#: cdl\core\model\image.py:380 cdl\core\model\image.py:385
+#: cdl\core\model\image.py:388 cdl\core\model\image.py:389
 msgid "Pixel spacing"
 msgstr "Taille des pixels"
 
-#: cdl\core\model\image.py:381 cdl\core\model\image.py:397
+#: cdl\core\model\image.py:391 cdl\core\model\image.py:407
 msgid "Titles"
 msgstr "Titres"
 
-#: cdl\core\model\image.py:381 cdl\core\model\image.py:397
+#: cdl\core\model\image.py:391 cdl\core\model\image.py:407
 msgid "Units"
 msgstr "Unités"
 
-#: cdl\core\model\image.py:382
+#: cdl\core\model\image.py:392
 msgid "Image title"
 msgstr "Titre de l'image"
 
-#: cdl\core\model\image.py:385 cdl\core\model\image.py:389
-#: cdl\core\model\image.py:393 cdl\core\model\image.py:793
+#: cdl\core\model\image.py:395 cdl\core\model\image.py:399
+#: cdl\core\model\image.py:403 cdl\core\model\image.py:803
 #: cdl\core\model\signal.py:166 cdl\core\model\signal.py:170
 #: cdl\core\model\signal.py:750 cdl\widgets\textimport.py:658
 #: cdl\widgets\textimport.py:668
 msgid "Title"
 msgstr "Titre"
 
-#: cdl\core\model\image.py:392 cdl\core\model\image.py:395
+#: cdl\core\model\image.py:402 cdl\core\model\image.py:405
 msgid "Z-axis"
 msgstr "Axe des Z"
 
-#: cdl\core\model\image.py:776 cdl\core\model\signal.py:567
+#: cdl\core\model\image.py:786 cdl\core\model\signal.py:567
 msgid "zeros"
 msgstr "zéros"
 
-#: cdl\core\model\image.py:778
+#: cdl\core\model\image.py:788
 msgid "empty"
 msgstr "vide"
 
-#: cdl\core\model\image.py:780 cdl\core\model\signal.py:569
+#: cdl\core\model\image.py:790 cdl\core\model\signal.py:569
 msgid "gaussian"
 msgstr "gaussienne"
 
-#: cdl\core\model\image.py:782 cdl\core\model\signal.py:575
+#: cdl\core\model\image.py:792 cdl\core\model\signal.py:575
 msgid "random (uniform law)"
 msgstr "aléatoire (loi uniforme)"
 
-#: cdl\core\model\image.py:784 cdl\core\model\signal.py:577
+#: cdl\core\model\image.py:794 cdl\core\model\signal.py:577
 msgid "random (normal law)"
 msgstr "aléatoire (loi normale)"
 
-#: cdl\core\model\image.py:795
+#: cdl\core\model\image.py:805
 msgid "Height"
 msgstr "Hauteur"
 
-#: cdl\core\model\image.py:795
+#: cdl\core\model\image.py:805
 msgid "Image height (total number of rows)"
 msgstr "Hauteur de l'image (nombre de lignes)"
 
-#: cdl\core\model\image.py:798
+#: cdl\core\model\image.py:808
 msgid "Image width (total number of columns)"
 msgstr "Largeur de l'image (nombre de colonnes)"
 
-#: cdl\core\model\image.py:798 cdl\tests\data.py:422
+#: cdl\core\model\image.py:808 cdl\tests\data.py:420
 msgid "Width"
 msgstr "Largeur"
 
-#: cdl\core\model\image.py:803 cdl\core\model\signal.py:756
+#: cdl\core\model\image.py:813 cdl\core\model\signal.py:756
 #: cdl\widgets\h5browser.py:208
 msgid "Type"
 msgstr "Type"
 
-#: cdl\core\model\image.py:808
+#: cdl\core\model\image.py:818
 msgid "Untitled image"
 msgstr "Image sans titre"
 
-#: cdl\core\model\image.py:904
+#: cdl\core\model\image.py:914
 msgid "2D-gaussian image"
 msgstr "Gaussienne 2D"
 
@@ -3566,7 +3652,7 @@ msgstr "Insérer un point"
 msgid "Signal size (total number of points)"
 msgstr "Nombre de points"
 
-#: cdl\core\model\signal.py:754 cdl\tests\data.py:300 cdl\tests\data.py:419
+#: cdl\core\model\signal.py:754 cdl\tests\data.py:279 cdl\tests\data.py:417
 #: cdl\widgets\h5browser.py:208
 msgid "Size"
 msgstr "Taille"
@@ -3619,11 +3705,11 @@ msgstr "Fonction polynomiale"
 msgid "Experimental points"
 msgstr "Points expérimentaux"
 
-#: cdl\patch.py:147
+#: cdl\patch.py:203
 msgid "Z-Axis logarithmic scale"
 msgstr "Axe Z en échelle logarithmique"
 
-#: cdl\patch.py:327
+#: cdl\patch.py:383
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -3708,53 +3794,47 @@ msgstr "Créer une image 2D échelon"
 msgid "Create ring image"
 msgstr "Créer une image avec un anneau"
 
-#: cdl\tests\data.py:102 cdl\widgets\fitdialog.py:120
-#: cdl\widgets\fitdialog.py:148 cdl\widgets\fitdialog.py:176
-#: cdl\widgets\fitdialog.py:340
-msgid "Mean"
-msgstr "Moyenne"
-
-#: cdl\tests\data.py:106 cdl\tests\data.py:309
+#: cdl\tests\data.py:79 cdl\tests\data.py:288
 msgid "Mean of the Gaussian distribution"
 msgstr "Moyenne de la distribution gaussienne"
 
-#: cdl\tests\data.py:109
+#: cdl\tests\data.py:82
 msgid "Standard deviation"
 msgstr "Ecart-type"
 
-#: cdl\tests\data.py:113 cdl\tests\data.py:314
+#: cdl\tests\data.py:86 cdl\tests\data.py:293
 msgid "Standard deviation of the Gaussian distribution"
 msgstr "Ecart-type de la distribution gaussienne"
 
-#: cdl\tests\data.py:120
+#: cdl\tests\data.py:93
 msgid "Seed for random number generator"
 msgstr "Graine du générateur de nombres aléatoires"
 
-#: cdl\tests\data.py:301
+#: cdl\tests\data.py:280
 msgid "Number"
 msgstr "Nombre"
 
-#: cdl\tests\data.py:303
+#: cdl\tests\data.py:282
 msgid "Sigma of the 2D Gaussian"
 msgstr "Sigma de la gaussienne 2D"
 
-#: cdl\tests\data.py:306
+#: cdl\tests\data.py:285
 msgid "Amplitude of the 2D Gaussian"
 msgstr "Amplitude de la gaussienne 2D"
 
-#: cdl\tests\data.py:318
+#: cdl\tests\data.py:297
 msgid "Attenuation"
 msgstr "Atténuation"
 
-#: cdl\tests\data.py:420
+#: cdl\tests\data.py:418
 msgid "X<sub>center</sub>"
 msgstr "X<sub>centre</sub>"
 
-#: cdl\tests\data.py:421
+#: cdl\tests\data.py:419
 msgid "Y<sub>center</sub>"
 msgstr "Y<sub>centre</sub>"
 
-#: cdl\tests\data.py:424
+#: cdl\tests\data.py:422
 msgid "Intensity"
 msgstr "Intensité"
 
@@ -3838,7 +3918,7 @@ msgstr "Image brute (gaussienne 2D)"
 msgid "Flat data (Uniform random)"
 msgstr "Image d'homogénéité (Distribution uniforme)"
 
-#: cdl\tests\scenarios\common.py:149 cdl\tests\scenarios\demo.py:52
+#: cdl\tests\scenarios\common.py:146 cdl\tests\scenarios\demo.py:52
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
@@ -4463,9 +4543,6 @@ msgstr "Assistant exemple"
 
 #~ msgid "Radial profile center"
 #~ msgstr "Centre du profil radial"
-
-#~ msgid "Manual"
-#~ msgstr "Manuel"
 
 #~ msgid "X"
 #~ msgstr "X"

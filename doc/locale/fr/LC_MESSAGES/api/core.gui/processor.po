@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-19 17:40+0100\n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: cdl.core.gui.processor:2 of
 msgid "Processor"
@@ -27,7 +27,9 @@ msgstr "Processeur"
 msgid ""
 "The :mod:`cdl.core.gui.processor` package provides the **processor "
 "objects** for signals and images."
-msgstr "Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur** pour les signaux et les images."
+msgstr ""
+"Le paquet :mod:`cdl.core.gui.processor` fournit les **objets processeur**"
+" pour les signaux et les images."
 
 #: cdl.core.gui.processor:7 of
 msgid ""
@@ -307,8 +309,20 @@ msgstr ""
 msgid "context (e.g. \"Computing: Gaussian filter\")"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.handle_output:7 of
-msgid "a signal or image object, or a numpy array, or None if error"
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:6 of
+msgid "progress dialog"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:8 of
+msgid "a signal or image object, or a result shape object,  or None if error"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:10 of
+msgid "a signal or image object, or a result shape object,"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.handle_output:11 of
+msgid "or None if error"
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.compute_10:1 of
@@ -323,44 +337,46 @@ msgstr ""
 msgid "function to execute"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:5 of
-msgid ""
-"shape type (if None, use `param.shape` which must be a string and a valid"
-" `ShapeTypes` member name, modulo case)"
-msgstr ""
-
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:7
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:5
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:5
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:8 of
 msgid "parameters. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:8
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:6
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:6
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:9 of
 msgid "parameters class. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:9
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:7
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:7
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:10 of
 msgid "title of progress bar. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:10
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:8
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:8
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:11 of
 msgid "comment. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_10:11
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:9
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:10
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1n:12 of
 msgid "if True, edit parameters. Defaults to None."
 msgstr ""
 
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:11 of
+msgid "object uuid, values: ResultShape or  ResultProperties objects)"
+msgstr ""
+
 #: cdl.core.gui.processor.base.BaseProcessor.compute_10:13 of
-msgid "object uuid, values: ResultShape objects)"
+msgid "object uuid, values: ResultShape or"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_10:14 of
+msgid "ResultProperties objects)"
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.compute_n1:1 of
@@ -395,6 +411,12 @@ msgstr ""
 #: cdl.core.gui.processor.image.ImageProcessor.compute_sum:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_sum:1 of
 msgid "Compute sum"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_normalize:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_normalize:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
+msgid "Normalize data"
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.compute_average:1
@@ -458,9 +480,15 @@ msgid "Convert data type"
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.compute_log10:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_exp:1
 #: cdl.core.gui.processor.image.ImageProcessor.compute_log10:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_exp:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_log10:1 of
 msgid "Compute Log10"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_exp:1 of
+msgid "Compute exponential"
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.compute_calibration:1
@@ -517,6 +545,31 @@ msgstr ""
 msgid "Compute FFT"
 msgstr ""
 
+#: cdl.core.gui.processor.base.BaseProcessor.compute_addition_constant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_addition_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_addition_constant:1 of
+msgid "Compute sum with a constant"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_difference_constant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_difference_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_difference_constant:1
+#: of
+msgid "Compute difference with a constant"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_product_constant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_product_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1 of
+msgid "Compute product with a constant"
+msgstr ""
+
+#: cdl.core.gui.processor.base.BaseProcessor.compute_division_constant:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_division_constant:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1 of
+msgid "Compute division by a constant"
+msgstr ""
+
 #: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:1 of
 msgid "Define Region Of Interest (ROI) for computing functions."
 msgstr ""
@@ -540,14 +593,16 @@ msgid ""
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.edit_regions_of_interest:11 of
-msgid "ROI data parameters."
+msgid "ROI data parameters or None if ROI dialog has been canceled."
 msgstr ""
 
 #: cdl.core.gui.processor.base.BaseProcessor.delete_regions_of_interest:1 of
 msgid "Delete Regions Of Interest"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_stats:1 of
+#: cdl.core.gui.processor.base.BaseProcessor.compute_stats:1
+#: cdl.core.gui.processor.image.ImageProcessor.compute_stats:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_stats:1 of
 msgid "Compute data statistics"
 msgstr ""
 
@@ -557,6 +612,14 @@ msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor:1 of
 msgid "Object handling signal processing: operations, processing, computing"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sqrt:1 of
+msgid "Compute square root"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_power:1 of
+msgid "Compute power"
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_difference:1 of
@@ -576,8 +639,8 @@ msgstr ""
 msgid "Detect peaks from data"
 msgstr ""
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_normalize:1 of
-msgid "Normalize data"
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_reverse_x:1 of
+msgid "Reverse X axis"
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_derivative:1 of
@@ -586,6 +649,39 @@ msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_integral:1 of
 msgid "Compute integral"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction:1 of
+msgid "Compute offset correction"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_highpass:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_lowpass:1 of
+msgid "Compute high-pass filter"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandpass:1 of
+msgid "Compute band-pass filter"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandstop:1 of
+msgid "Compute band-stop filter"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum:1
+#: of
+msgid "Compute magnitude spectrum"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum:1 of
+msgid "Compute phase spectrum"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_psd:1 of
+msgid "Compute power spectral density"
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation:1 of
@@ -602,6 +698,10 @@ msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_convolution:1 of
 msgid "Compute convolution"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_windowing:1 of
+msgid "Compute windowing"
 msgstr ""
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_fit:1 of
@@ -627,6 +727,28 @@ msgstr ""
 #: cdl.core.gui.processor.image.ImageProcessor.compute_histogram:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
 msgid "Compute histogram"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_contrast:1 of
+msgid "Compute contrast"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax:1 of
+msgid "Compute x at min/max"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period:1
+#: of
+msgid "Compute sampling rate and period (mean and std)"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db:1 of
+msgid "Compute bandwidth"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters:1
+#: of
+msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
 msgstr ""
 
 #: cdl.core.gui.processor:42 of
@@ -677,8 +799,12 @@ msgstr ""
 msgid "Binning image"
 msgstr ""
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_profile:1 of
-msgid "Compute profile"
+#: cdl.core.gui.processor.image.ImageProcessor.compute_line_profile:1 of
+msgid "Compute profile along a vertical or horizontal line"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile:1 of
+msgid "Compute profile along a segment"
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_average_profile:1 of
@@ -704,6 +830,10 @@ msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
 msgid "Compute flat field correction"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_psd:1 of
+msgid "Compute Power Spectral Density (PSD)"
 msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
@@ -884,3 +1014,22 @@ msgstr ""
 
 #~ msgid "Processor (:mod:`cdl.core.gui.processor`)"
 #~ msgstr "Processeur (:mod:`cdl.core.gui.processor`)"
+
+#~ msgid "a signal or image object, or a numpy array, or None if error"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "shape type (if None, use `param.shape`"
+#~ " which must be a string and a"
+#~ " valid `ShapeTypes` member name, modulo "
+#~ "case)"
+#~ msgstr ""
+
+#~ msgid "object uuid, values: ResultShape objects)"
+#~ msgstr ""
+
+#~ msgid "ROI data parameters."
+#~ msgstr ""
+
+#~ msgid "Compute profile"
+#~ msgstr ""

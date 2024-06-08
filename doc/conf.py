@@ -7,8 +7,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-from cdl import __homeurl__
-from cdl.info import get_version
+import cdl
 
 os.environ["CDL_DOC"] = "1"
 
@@ -17,7 +16,7 @@ os.environ["CDL_DOC"] = "1"
 project = "DataLab"
 author = ""
 copyright = "2023, DataLab Platform Developers"
-release = get_version()
+release = cdl.__version__
 
 # -- General configuration ---------------------------------------------------
 
@@ -36,7 +35,7 @@ templates_path = ["_templates"]
 exclude_patterns = []
 
 # -- Options for sitemap extension -------------------------------------------
-html_baseurl = __homeurl__  # for sitemap extension
+html_baseurl = cdl.__homeurl__  # for sitemap extension
 sitemap_locales = ["en", "fr"]
 sitemap_filename = "../sitemap.xml"
 
@@ -62,7 +61,7 @@ html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
     "logo": {
-        "text": f"v{get_version()}",
+        "text": f"v{cdl.__version__}",
     },
     "icon_links": [
         {

@@ -1,0 +1,343 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/signal/menu_operations.rst:4
+msgid "Operations on Signals"
+msgstr "Opérations sur les signaux"
+
+#: ../../doc/features/signal/menu_operations.rst:6
+msgid "This section describes the operations that can be performed on signals."
+msgstr "Cette section décrit les opérations qui peuvent être effectuées sur les signaux."
+
+#: ../../doc/features/signal/menu_operations.rst:10
+msgid ""
+":ref:`sig-menu-processing` for more information on signal processing "
+"features, or :ref:`sig-menu-computing` for information on computing "
+"features on signals."
+msgstr ":ref:`sig-menu-processing` pour plus d'informations sur les fonctionnalités de traitement des signaux, ou :ref:`sig-menu-computing` pour des informations sur les fonctionnalités de calcul sur les signaux."
+
+#: ../../doc/features/signal/menu_operations.rst:15
+msgid "Screenshot of the \"Operations\" menu."
+msgstr "Capture d'écran du menu \"Opérations\"."
+
+#: ../../doc/features/signal/menu_operations.rst:17
+msgid ""
+"When the \"Signal Panel\" is selected, the menus and toolbars are updated"
+" to provide signal-related actions."
+msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
+
+#: ../../doc/features/signal/menu_operations.rst:20
+msgid ""
+"The \"Operations\" menu allows you to perform various operations on the "
+"selected signals, such as arithmetic operations, peak detection, or "
+"convolution."
+msgstr ""
+"Le menu \"Opérations\" permet d'effectuer diverses opérations sur les "
+"signaux sélectionnés, telles que des opérations arithmétiques, la "
+"détection de pics, ou encore la convolution."
+
+#: ../../doc/features/signal/menu_operations.rst:25
+msgid "Sum"
+msgstr "Addition"
+
+#: ../../doc/features/signal/menu_operations.rst:27
+msgid "Create a new signal which is the sum of all selected signals:"
+msgstr "Crée un signal à partir de la somme des signaux sélectionnés :"
+
+#: ../../doc/features/signal/menu_operations.rst:29
+msgid ""
+"y_{M} = \\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:33
+msgid "Average"
+msgstr "Moyenne"
+
+#: ../../doc/features/signal/menu_operations.rst:35
+msgid "Create a new signal which is the average of all selected signals:"
+msgstr "Crée un signal à partir de la moyenne des signaux sélectionnés :"
+
+#: ../../doc/features/signal/menu_operations.rst:37
+msgid ""
+"y_{M} = \\dfrac{1}{M}\\sum_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:41
+msgid "Difference"
+msgstr "Soustraction"
+
+#: ../../doc/features/signal/menu_operations.rst:43
+msgid ""
+"Create a new signal which is the difference of the **two** selected "
+"signals:"
+msgstr ""
+"Crée un signal à partir de la différence des **deux** signaux "
+"sélectionnés :"
+
+#: ../../doc/features/signal/menu_operations.rst:45
+msgid ""
+"y_{2} = y_{1} - y_{0}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:49
+msgid "Product"
+msgstr "Produit"
+
+#: ../../doc/features/signal/menu_operations.rst:51
+msgid "Create a new signal which is the product of all selected signals:"
+msgstr "Crée un signal à partir du produit de tous les signaux sélectionnés :"
+
+#: ../../doc/features/signal/menu_operations.rst:53
+msgid ""
+"y_{M} = \\prod_{k=0}^{M-1}{y_{k}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:57
+#: ../../doc/features/signal/menu_operations.rst:81
+msgid "Division"
+msgstr "Division"
+
+#: ../../doc/features/signal/menu_operations.rst:59
+msgid "Create a new signal which is the division of the **two** selected signals:"
+msgstr "Crée un signal à partir de la division des **deux** signaux sélectionnés :"
+
+#: ../../doc/features/signal/menu_operations.rst:61
+msgid ""
+"y_{2} = \\dfrac{y_{1}}{y_{0}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:65
+msgid "Constant operations"
+msgstr "Opérations avec une constante"
+
+#: ../../doc/features/signal/menu_operations.rst:67
+msgid ""
+"Create a new signal which is the result of a constant operation on each "
+"selected signal:"
+msgstr ""
+"Crée un signal à partir d'une opération avec une constante sur chaque "
+"signal sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:73
+msgid "Operation"
+msgstr "Opération"
+
+#: ../../doc/features/signal/menu_operations.rst:74
+msgid "Description"
+msgstr "Description"
+
+#: ../../doc/features/signal/menu_operations.rst:75
+msgid "Addition"
+msgstr "Addition"
+
+#: ../../doc/features/signal/menu_operations.rst:76
+msgid ":math:`y_{k} = y_{k-1} + c`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:77
+msgid "Subtraction"
+msgstr "Soustraction"
+
+#: ../../doc/features/signal/menu_operations.rst:78
+msgid ":math:`y_{k} = y_{k-1} - c`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:79
+msgid "Multiplication"
+msgstr "Multiplication"
+
+#: ../../doc/features/signal/menu_operations.rst:80
+msgid ":math:`y_{k} = y_{k-1} \\times c`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:82
+msgid ":math:`y_{k} = \\dfrac{y_{k-1}}{c}`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:85
+msgid "Absolute value"
+msgstr "Valeur absolue"
+
+#: ../../doc/features/signal/menu_operations.rst:87
+msgid "Create a new signal which is the absolute value of each selected signal:"
+msgstr ""
+"Crée un signal à partir de la valeur absolue de chaque signal sélectionné"
+" :"
+
+#: ../../doc/features/signal/menu_operations.rst:89
+msgid ""
+"y_{k} = |y_{k-1}|\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:93
+msgid "Real part"
+msgstr "Partie réelle"
+
+#: ../../doc/features/signal/menu_operations.rst:95
+msgid "Create a new signal which is the real part of each selected signal:"
+msgstr "Crée un signal à partir de la partie réelle de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:97
+msgid ""
+"y_{k} = \\Re(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:101
+msgid "Imaginary part"
+msgstr "Partie imaginaire"
+
+#: ../../doc/features/signal/menu_operations.rst:103
+msgid "Create a new signal which is the imaginary part of each selected signal:"
+msgstr ""
+"Crée un signal à partir de la partie imaginaire de chaque signal "
+"sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:105
+msgid ""
+"y_{k} = \\Im(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:109
+msgid "Convert data type"
+msgstr "Convertir le type de données"
+
+#: ../../doc/features/signal/menu_operations.rst:111
+msgid ""
+"Create a new signal which is the result of converting data type of each "
+"selected signal."
+msgstr ""
+"Crée un signal à partir de la conversion du type de données du signal "
+"sélectionné."
+
+#: ../../doc/features/signal/menu_operations.rst:115
+msgid ""
+"Data type conversion relies on :py:func:`numpy.ndarray.astype` function "
+"with the default parameters (`casting='unsafe'`)."
+msgstr ""
+"La conversion du type de données utilise la fonction "
+":py:func:`numpy.ndarray.astype` avec les paramètres par défaut "
+"(`casting='unsafe'`)."
+
+#: ../../doc/features/signal/menu_operations.rst:119
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#: ../../doc/features/signal/menu_operations.rst:121
+msgid "Create a new signal which is the exponential of each selected signal:"
+msgstr "Crée un signal à partir de l'exponentielle de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:123
+msgid ""
+"y_{k} = \\exp(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:127
+msgid "Logarithm (base 10)"
+msgstr "Logarithme (base 10)"
+
+#: ../../doc/features/signal/menu_operations.rst:129
+msgid ""
+"Create a new signal which is the base 10 logarithm of each selected "
+"signal:"
+msgstr ""
+"Crée un signal à partir du logarithme base 10 de chaque signal "
+"sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:131
+msgid ""
+"y_{k} = \\log_{10}(y_{k-1})\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:135
+msgid "Power"
+msgstr "Puissance"
+
+#: ../../doc/features/signal/menu_operations.rst:137
+msgid "Create a new signal which is the power of each selected signal:"
+msgstr "Crée un signal à partir de la puissance de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:139
+msgid ""
+"y_{k} = y_{k-1}^{n}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:143
+msgid "Square root"
+msgstr "Racine carrée"
+
+#: ../../doc/features/signal/menu_operations.rst:145
+msgid "Create a new signal which is the square root of each selected signal:"
+msgstr "Crée un signal à partir de la racine carrée de chaque signal sélectionné :"
+
+#: ../../doc/features/signal/menu_operations.rst:147
+msgid ""
+"y_{k} = \\sqrt{y_{k-1}}\n"
+"\n"
+msgstr ""
+
+#: ../../doc/features/signal/menu_operations.rst:151
+msgid "Derivative"
+msgstr "Dérivée"
+
+#: ../../doc/features/signal/menu_operations.rst:153
+msgid "Create a new signal which is the derivative of each selected signal."
+msgstr "Crée un signal à partir de la dérivée de chaque signal sélectionné."
+
+#: ../../doc/features/signal/menu_operations.rst:156
+msgid "Integral"
+msgstr "Intégrale"
+
+#: ../../doc/features/signal/menu_operations.rst:158
+msgid "Create a new signal which is the integral of each selected signal."
+msgstr "Crée un signal à partir de l'intégrale de chaque signal sélectionné."
+
+#: ../../doc/features/signal/menu_operations.rst:161
+msgid "Convolution"
+msgstr "Convolution"
+
+#: ../../doc/features/signal/menu_operations.rst:163
+msgid ""
+"Create a new signal which is the convolution of each selected signal with"
+" respect to another signal."
+msgstr ""
+"Crée un signal à partir de la convolution de chaque signal sélectionné "
+"par rapport à un autre signal."
+
+#: ../../doc/features/signal/menu_operations.rst:166
+msgid ""
+"This feature is based on SciPy's `scipy.signal.convolve "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+" function."
+msgstr ""
+"Cette fonctionnalité est basée sur la fonction `scipy.signal.convolve "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"
+" de SciPy."

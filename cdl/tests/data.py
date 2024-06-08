@@ -152,7 +152,11 @@ def create_noisy_signal(
 
 
 def create_periodic_signal(
-    shape: cdl.obj.SignalTypes, freq: float = 50.0, size: int = 10000
+    shape: cdl.obj.SignalTypes,
+    freq: float = 50.0,
+    size: int = 10000,
+    xmin: float = -10.0,
+    xmax: float = 10.0,
 ) -> cdl.obj.SignalObj:
     """Create a periodic signal
 
@@ -160,11 +164,13 @@ def create_periodic_signal(
         shape: Shape of the signal
         freq: Frequency of the signal. Defaults to 50.0.
         size: Size of the signal. Defaults to 10000.
+        xmin: Minimum value of the signal. Defaults to None.
+        xmax: Maximum value of the signal. Defaults to None.
 
     Returns:
         Signal object
     """
-    newparam = cdl.obj.new_signal_param(stype=shape, size=size)
+    newparam = cdl.obj.new_signal_param(stype=shape, size=size, xmin=xmin, xmax=xmax)
     addparam = cdl.obj.PeriodicParam.create(freq=freq)
     return cdl.obj.create_signal_from_param(newparam, addparam)
 
@@ -368,6 +374,25 @@ def add_gaussian_noise_to_image(
     image.data = image.data + noise.data
 
 
+def create_checkerboard(p: cdl.obj.NewImageParam | None = None, num_checkers=8):
+    """Generate a checkerboard pattern
+
+    Args:
+        p: Image parameters. Defaults to None.
+        num_checkers: Number of checkers. Defaults to 8.
+    """
+    p = __set_default_size_dtype(p)
+    p.title = "Test image (checkerboard)" if p.title is None else p.title
+    obj = cdl.obj.create_image_from_param(p)
+    re = np.r_[num_checkers * [0, 1]]  # one row of the checkerboard
+    board = np.row_stack(num_checkers * (re, re ^ 1))  # build the checkerboard
+    board = np.kron(
+        board, np.ones((p.height // num_checkers, p.height // num_checkers))
+    )  # scale up the board
+    obj.data = board
+    return obj
+
+
 def create_2dstep_image(
     p: cdl.obj.NewImageParam | None = None,
 ) -> cdl.obj.ImageObj:
@@ -486,9 +511,12 @@ def create_sincos_image(
     dtype = p.dtype.value
     x, y = np.meshgrid(np.linspace(0, 10, p.width), np.linspace(0, 10, p.height))
     raw_data = 0.5 * (np.sin(x) + np.cos(y)) + 0.5
+    obj = cdl.obj.create_image_from_param(p)
+    if np.issubdtype(dtype, np.floating):
+        obj.data = raw_data
+        return obj
     dmin = np.iinfo(dtype).min * 0.95
     dmax = np.iinfo(dtype).max * 0.95
-    obj = cdl.obj.create_image_from_param(p)
     obj.data = np.array(raw_data * (dmax - dmin) + dmin, dtype=dtype)
     return obj
 

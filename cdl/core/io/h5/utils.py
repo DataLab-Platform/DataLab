@@ -17,7 +17,7 @@ def fix_ldata(fuzzy):
         if fuzzy and isinstance(fuzzy, np.void) and len(fuzzy) > 1:
             #  Shouldn't happen (invalid LMJ fmt)
             fuzzy = fuzzy[0]
-        if isinstance(fuzzy, (np.string_, bytes)):
+        if isinstance(fuzzy, (np.bytes_, bytes)):
             fuzzy = to_string(fuzzy)
         if isinstance(fuzzy, str):
             return fuzzy
@@ -86,7 +86,9 @@ def is_supported_num_dtype(data):
 
 def is_single_str_array(data):
     """Return True if data is a single-item string array"""
-    return np.issctype(data) and data.shape == (1,) and isinstance(data[0], str)
+    return (
+        isinstance(data, np.generic) and data.shape == (1,) and isinstance(data[0], str)
+    )
 
 
 def is_supported_str_dtype(data):

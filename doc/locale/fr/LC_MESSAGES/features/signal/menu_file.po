@@ -1,0 +1,423 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/signal/menu_file.rst:4
+msgid "Create, open and save Signals"
+msgstr "Créer, ouvrir et enregistrer des signaux"
+
+#: ../../doc/features/signal/menu_file.rst:6
+msgid ""
+"This section describes how to create, open and save signals (and "
+"workspaces)."
+msgstr "Cette section décrit comment créer, ouvrir et enregistrer des signaux (et des espaces de travail)."
+
+#: ../../doc/features/signal/menu_file.rst:10
+msgid "Screenshot of the \"File\" menu."
+msgstr "Capture d'écran du menu \"Fichier\"."
+
+#: ../../doc/features/signal/menu_file.rst:12
+msgid ""
+"When the \"Signal Panel\" is selected, the menus and toolbars are updated"
+" to provide signal-related actions."
+msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
+
+#: ../../doc/features/signal/menu_file.rst:15
+msgid "The \"File\" menu allows you to:"
+msgstr "Le menu \"Fichier\" vous permet de :"
+
+#: ../../doc/features/signal/menu_file.rst:17
+msgid "Create, open, save and close signals (see below)."
+msgstr "Créer, ouvrir, enregistrer et fermer des signaux (voir ci-dessous)."
+
+#: ../../doc/features/signal/menu_file.rst:19
+msgid ""
+"Save and restore the current workspace or browse HDF5 files (see "
+":ref:`workspace`)."
+msgstr "Sauvegarder et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`workspace`)."
+
+#: ../../doc/features/signal/menu_file.rst:21
+msgid "Edit DataLab preferences (see :ref:`settings`)."
+msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
+
+#: ../../doc/features/signal/menu_file.rst:24
+msgid "New signal"
+msgstr "Nouveau signal"
+
+#: ../../doc/features/signal/menu_file.rst:26
+msgid "Create a new signal from various models:"
+msgstr "Crée un nouveau signal depuis différents modèles :"
+
+#: ../../doc/features/signal/menu_file.rst:32
+msgid "Model"
+msgstr "Modèle"
+
+#: ../../doc/features/signal/menu_file.rst:33
+msgid "Equation"
+msgstr "Equation"
+
+#: ../../doc/features/signal/menu_file.rst:34
+msgid "Zeros"
+msgstr "Zéros"
+
+#: ../../doc/features/signal/menu_file.rst:35
+msgid ":math:`y[i] = 0`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:36
+msgid "Gaussian"
+msgstr "Gaussienne"
+
+#: ../../doc/features/signal/menu_file.rst:37
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:38
+msgid "Lorentzian"
+msgstr "Lorentzienne"
+
+#: ../../doc/features/signal/menu_file.rst:39
+msgid ""
+":math:`y = "
+"y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:40
+msgid "Voigt"
+msgstr "Voigt"
+
+#: ../../doc/features/signal/menu_file.rst:41
+msgid ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+msgstr ""
+":math:`y = "
+"y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
+":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
+
+#: ../../doc/features/signal/menu_file.rst:42
+msgid "Random (uniform law)"
+msgstr "Aléatoire (loi uniforme)"
+
+#: ../../doc/features/signal/menu_file.rst:43
+msgid ":math:`y[i] \\in [-0.5, 0.5]`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:44
+msgid "Random (normal law)"
+msgstr "Aléatoire (loi normale)"
+
+#: ../../doc/features/signal/menu_file.rst:45
+msgid ":math:`y[i] \\sim \\mathcal{N}(-0.5, 0.5)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:46
+msgid "Sine"
+msgstr "Sinus"
+
+#: ../../doc/features/signal/menu_file.rst:47
+msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:48
+msgid "Cosine"
+msgstr "Cosinus"
+
+#: ../../doc/features/signal/menu_file.rst:49
+msgid ":math:`y = y_{0}+A.cos(2\\pi.f.x+\\phi)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:50
+msgid "Sawtooth"
+msgstr "Dents de scie"
+
+#: ../../doc/features/signal/menu_file.rst:51
+msgid ""
+":math:`y = y_{0}+A \\cdot \\left( 2 \\left( f x + \\frac{\\phi}{2\\pi} - "
+"\\left\\lfloor f x + \\frac{\\phi}{2\\pi} + \\frac{1}{2} \\right\\rfloor "
+"\\right) \\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:52
+msgid "Triangle"
+msgstr "Triangle"
+
+#: ../../doc/features/signal/menu_file.rst:53
+msgid ""
+":math:`y = y_{0}+A \\cdot \\text{sawtooth}(2 \\pi f x + \\phi, "
+"\\text{width} = 0.5)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:54
+msgid "Square"
+msgstr "Carré"
+
+#: ../../doc/features/signal/menu_file.rst:55
+msgid ""
+":math:`y = y_0 + A \\cdot \\text{sgn}\\left( \\sin\\left( 2\\pi f x + "
+"\\phi \\right) \\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:56
+msgid "Cardinal sine"
+msgstr "Sinus cardinal"
+
+#: ../../doc/features/signal/menu_file.rst:57
+msgid ":math:`y = y_0 + A \\cdot \\text{sinc}\\left(2\\pi f x + \\phi\\right)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:58
+msgid "Step"
+msgstr "Echelon"
+
+#: ../../doc/features/signal/menu_file.rst:59
+msgid ""
+":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x > x_{0} "
+"\\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:60
+msgid "Exponential"
+msgstr "Exponentielle"
+
+#: ../../doc/features/signal/menu_file.rst:61
+msgid ":math:`y = y_{0}+A.exp(B.x)`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:62
+msgid "Pulse"
+msgstr "Impulsion"
+
+#: ../../doc/features/signal/menu_file.rst:63
+msgid ""
+":math:`y = y_{0}+A.\\left\\{\\begin{array}{ll}1 & \\text{if } x_{0} < x <"
+" x_{1} \\\\ 0 & \\text{otherwise}\\end{array}\\right.`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:64
+msgid "Polynomial"
+msgstr "Polynomial"
+
+#: ../../doc/features/signal/menu_file.rst:65
+msgid ":math:`y = y_{0}+A_{0}+A_{1}.x+A_{2}.x^2+...+A_{n}.x^n`"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:66
+msgid "Experimental"
+msgstr "Expérimental"
+
+#: ../../doc/features/signal/menu_file.rst:67
+msgid "Manual input of X and Y values"
+msgstr "Saisie manuelle des valeurs X et Y"
+
+#: ../../doc/features/signal/menu_file.rst:72
+msgid "Open signal"
+msgstr "Ouvrir un signal"
+
+#: ../../doc/features/signal/menu_file.rst:74
+msgid "Create a new signal from the following supported filetypes:"
+msgstr "Crée un signal depuis l'un des types de fichiers pris en charge :"
+
+#: ../../doc/features/signal/menu_file.rst:79
+#: ../../doc/features/signal/menu_file.rst:96
+msgid "File type"
+msgstr "Type de fichier"
+
+#: ../../doc/features/signal/menu_file.rst:80
+#: ../../doc/features/signal/menu_file.rst:97
+msgid "Extensions"
+msgstr "Extensions"
+
+#: ../../doc/features/signal/menu_file.rst:81
+#: ../../doc/features/signal/menu_file.rst:98
+msgid "Text files"
+msgstr "Fichiers texte"
+
+#: ../../doc/features/signal/menu_file.rst:82
+msgid ".txt, .csv"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:83
+msgid "NumPy arrays"
+msgstr "Tableaux NumPy"
+
+#: ../../doc/features/signal/menu_file.rst:84
+msgid ".npy"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:85
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+#: ../../doc/features/signal/menu_file.rst:86
+msgid ".mat"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:89
+msgid "Save signal"
+msgstr "Enregistrer un signal"
+
+#: ../../doc/features/signal/menu_file.rst:91
+msgid "Save current signal to the following supported filetypes:"
+msgstr ""
+"Enregistre le signal sélectionné dans l'un des types de fichier pris en "
+"charge :"
+
+#: ../../doc/features/signal/menu_file.rst:99
+msgid ".csv"
+msgstr ""
+
+#: ../../doc/features/signal/menu_file.rst:102
+msgid "Import text file"
+msgstr "Importer un fichier texte"
+
+#: ../../doc/features/signal/menu_file.rst:104
+msgid ""
+"DataLab can natively import signal files (e.g. CSV, NPY, etc.). However "
+"some specific text file formats may not be supported. In this case, you "
+"can use the `Import text file` feature, which allows you to import a text"
+" file and convert it to a signal."
+msgstr ""
+"DataLab peut importer nativement des fichiers de signaux (par exemple "
+"CSV, NPY, etc.). Cependant, certains formats de fichiers texte "
+"spécifiques peuvent ne pas être pris en charge. Dans ce cas, vous pouvez "
+"utiliser la fonctionnalité « Importer un fichier texte », qui vous permet"
+" d'importer un fichier texte et de le convertir en signal."
+
+#: ../../doc/features/signal/menu_file.rst:108
+msgid ""
+"This feature is accessible from the `File` menu, under the `Import text "
+"file` option."
+msgstr ""
+"Cette fonctionnalité est accessible depuis le menu « Fichier », sous "
+"l'option « Importer un fichier texte »."
+
+#: ../../doc/features/signal/menu_file.rst:110
+msgid ""
+"It opens an import wizard that guides you through the process of "
+"importing the text file."
+msgstr ""
+"Il ouvre un assistant d'importation qui vous guide tout au long du "
+"processus d'importation du fichier texte."
+
+#: ../../doc/features/signal/menu_file.rst:114
+#: ../../doc/features/signal/menu_file.rst:124
+msgid "Step 1: Select the source"
+msgstr "Etape 1 : Sélectionner la source"
+
+#: ../../doc/features/signal/menu_file.rst:116
+msgid ""
+"The first step is to select the source of the text file. You can either "
+"select a file from your computer or the clipboard if you have copied the "
+"text from another application."
+msgstr ""
+"La première étape consiste à sélectionner la source du fichier texte. "
+"Vous pouvez soit sélectionner un fichier de votre ordinateur, soit le "
+"presse-papiers si vous avez copié le texte à partir d'une autre "
+"application."
+
+#: ../../doc/features/signal/menu_file.rst:127
+msgid "Step 2: Preview and configure the import"
+msgstr "Etape 2 : Aperçu et configuration de l'importation"
+
+#: ../../doc/features/signal/menu_file.rst:129
+msgid ""
+"The second step consists of configuring the import and previewing the "
+"result. You can configure the following options:"
+msgstr ""
+"La deuxième étape consiste à configurer l'importation et à prévisualiser "
+"le résultat. Vous pouvez configurer les options suivantes :"
+
+#: ../../doc/features/signal/menu_file.rst:132
+msgid "**Delimiter**: The character used to separate the values in the text file."
+msgstr ""
+"**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le "
+"fichier texte."
+
+#: ../../doc/features/signal/menu_file.rst:133
+msgid ""
+"**Comments**: The character used to indicate that the line is a comment "
+"and should be ignored."
+msgstr ""
+"**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un"
+" commentaire et doit être ignorée."
+
+#: ../../doc/features/signal/menu_file.rst:135
+msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
+msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
+
+#: ../../doc/features/signal/menu_file.rst:136
+msgid ""
+"**Maximum Number of Rows**: The maximum number of rows to import. If the "
+"file contains more rows, they will be ignored."
+msgstr ""
+"**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si"
+" le fichier contient plus de lignes, elles seront ignorées."
+
+#: ../../doc/features/signal/menu_file.rst:138
+msgid "**Transpose**: If checked, the rows and columns will be transposed."
+msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."
+
+#: ../../doc/features/signal/menu_file.rst:139
+msgid "**Data type**: The destination data type of the imported data."
+msgstr ""
+"**Type de données** : Le type de données de destination des données "
+"importées."
+
+#: ../../doc/features/signal/menu_file.rst:140
+msgid ""
+"**First Column is X**: If checked, the first column will be used as the X"
+" axis."
+msgstr ""
+"**La première colonne est X** : Si coché, la première colonne sera "
+"utilisée comme axe X."
+
+#: ../../doc/features/signal/menu_file.rst:142
+msgid ""
+"When you are done configuring the import, click the `Apply` button to see"
+" the result."
+msgstr ""
+"Lorsque vous avez terminé de configurer l'importation, cliquez sur le "
+"bouton « Appliquer » pour voir le résultat."
+
+#: ../../doc/features/signal/menu_file.rst:148
+msgid "Step 2: Configure the import"
+msgstr "Etape 2 : Configurer l'importation"
+
+#: ../../doc/features/signal/menu_file.rst:154
+msgid "Step 2: Preview the result"
+msgstr "Etape 2 : Prévisualiser le résultat"
+
+#: ../../doc/features/signal/menu_file.rst:157
+#: ../../doc/features/signal/menu_file.rst:166
+msgid "Step 3: Show graphical representation"
+msgstr "Etape 3 : Afficher la représentation graphique"
+
+#: ../../doc/features/signal/menu_file.rst:159
+msgid ""
+"The third step shows a graphical representation of the imported data. You"
+" can use the `Finish` button to import the data into DataLab workspace."
+msgstr ""
+"La troisième étape montre une représentation graphique des données "
+"importées. Vous pouvez utiliser le bouton « Terminer » pour importer les "
+"données dans l'espace de travail de DataLab."

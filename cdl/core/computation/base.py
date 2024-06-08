@@ -46,16 +46,11 @@ class MovingMedianParam(gds.DataSet):
     n = gds.IntItem(_("Size of the moving window"), default=3, min=1, even=False)
 
 
-class ThresholdParam(gds.DataSet):
-    """Threshold parameters"""
-
-    value = gds.FloatItem(_("Threshold"))
-
-
 class ClipParam(gds.DataSet):
     """Data clipping parameters"""
 
-    value = gds.FloatItem(_("Clipping value"))
+    lower = gds.FloatItem(_("Lower clipping value"), check=False)
+    upper = gds.FloatItem(_("Upper clipping value"), check=False)
 
 
 class NormalizeParam(gds.DataSet):

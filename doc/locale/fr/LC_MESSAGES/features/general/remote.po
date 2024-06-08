@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-17 10:08+0200\n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.13.0\n"
+"Generated-By: Babel 2.14.0\n"
 
 #: ../../doc/features/general/remote.rst:-1
 msgid ""
@@ -874,8 +874,7 @@ msgid "Compute product"
 msgstr "Calculer le produit"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_product_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1
-#: of
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_product_constant:1 of
 msgid "Compute product with a constant"
 msgstr "Calculer le produit avec une constante"
 
@@ -920,7 +919,7 @@ msgstr "Calculer Log10"
 msgid "Compute square root"
 msgstr "Calculer la racine carrée"
 
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_pow:1 of
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_power:1 of
 msgid "Compute power"
 msgstr "Calculer la puissance"
 
@@ -944,8 +943,7 @@ msgid "Compute division between two signals"
 msgstr "Calculer la division entre deux signaux"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_division_constant:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1
-#: of
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_division_constant:1 of
 msgid "Compute division by a constant"
 msgstr "Calculer la division par une constante"
 
@@ -984,6 +982,12 @@ msgstr "Calculer le seuillage des données"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
 msgid "Compute maximum data clipping"
 msgstr "Calculer le seuillage maximum des données"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_offset_correction:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_offset_correction:1 of
+#, fuzzy
+msgid "Compute offset correction"
+msgstr "Calculer la correction logarithmique"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_gaussian_filter:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_gaussian_filter:1 of
@@ -1027,6 +1031,24 @@ msgstr "Calculer l'iFFT"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_ifft:1 of
 msgid "Compute FFT"
 msgstr "Calculer la FFT"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_magnitude_spectrum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_magnitude_spectrum:1
+#: of
+#, fuzzy
+msgid "Compute magnitude spectrum"
+msgstr "Calculer le centre de gravité de l'image"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_phase_spectrum:1
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_phase_spectrum:1 of
+#, fuzzy
+msgid "Compute phase spectrum"
+msgstr "Calculer la somme"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_psd:1 of
+#, fuzzy
+msgid "Compute power spectral density"
+msgstr "Calculer le débruitage par ondelettes"
 
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_interpolation:1 of
 msgid "Compute interpolation"
@@ -1077,6 +1099,31 @@ msgstr "Calculer les statistiques des données"
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_histogram:1 of
 msgid "Compute histogram"
 msgstr "Calcule l'intégrale"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_contrast:1 of
+#, fuzzy
+msgid "Compute contrast"
+msgstr "Calculer l'intégrale"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_x_at_minmax:1 of
+#, fuzzy
+msgid "Compute x at min/max"
+msgstr "Calculer la largeur à 1/e²"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_sampling_rate_period:1
+#: of
+msgid "Compute sampling rate and period (mean and std)"
+msgstr ""
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_bandwidth_3db:1 of
+#, fuzzy
+msgid "Compute bandwidth"
+msgstr "Calculer l'iFFT"
+
+#: cdl.core.gui.processor.signal.SignalProcessor.compute_dynamic_parameters:1
+#: of
+msgid "Compute Dynamic Parameters (ENOB, SINAD, THD, SFDR, SNR)"
+msgstr ""
 
 #: ../../doc/features/general/remote.rst:145
 msgid "Image processor"
@@ -1135,8 +1182,14 @@ msgstr "Redimensionner l'image"
 msgid "Binning image"
 msgstr "Binning de l'image"
 
-#: cdl.core.gui.processor.image.ImageProcessor.compute_profile:1 of
-msgid "Compute profile"
+#: cdl.core.gui.processor.image.ImageProcessor.compute_line_profile:1 of
+#, fuzzy
+msgid "Compute profile along a vertical or horizontal line"
+msgstr "Calculer le filtre de Prewitt (horizontal)"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_segment_profile:1 of
+#, fuzzy
+msgid "Compute profile along a segment"
 msgstr "Calculer le profil"
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_average_profile:1 of
@@ -1163,6 +1216,10 @@ msgstr "Calculer la division entre deux images"
 #: cdl.core.gui.processor.image.ImageProcessor.compute_flatfield:1 of
 msgid "Compute flat field correction"
 msgstr "Calculer la correction de champ plat"
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_psd:1 of
+msgid "Compute Power Spectral Density (PSD)"
+msgstr ""
 
 #: cdl.core.gui.processor.image.ImageProcessor.compute_butterworth:1 of
 msgid "Compute Butterworth filter"

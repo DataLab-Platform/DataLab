@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: ../../doc/features/image/menu_file.rst:4
+msgid "Create, open and save Images"
+msgstr "Créer, ouvrir et enregistrer des images"
+
+#: ../../doc/features/image/menu_file.rst:6
+msgid ""
+"This section describes how to create, open and save images (and "
+"workspaces)."
+msgstr "Cette section décrit comment créer, ouvrir et enregistrer des images (et des espaces de travail)."
+
+#: ../../doc/features/image/menu_file.rst:10
+msgid "Screenshot of the \"File\" menu."
+msgstr "Capture d'écran du menu \"Fichier\"."
+
+#: ../../doc/features/image/menu_file.rst:12
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr "Lorsque le \"Panneau Image\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux images."
+
+#: ../../doc/features/image/menu_file.rst:15
+msgid "The \"File\" menu allows you to:"
+msgstr "Le menu \"Fichier\" vous permet de :"
+
+#: ../../doc/features/image/menu_file.rst:17
+msgid "Create, open, save and close images (see below)."
+msgstr "Créer, ouvrir, enregistrer et fermer des images (voir ci-dessous)."
+
+#: ../../doc/features/image/menu_file.rst:19
+msgid ""
+"Save and restore the current workspace or browse HDF5 files (see "
+":ref:`workspace`)."
+msgstr "Enregistrer et restaurer l'espace de travail actuel ou parcourir les fichiers HDF5 (voir :ref:`workspace`)."
+
+#: ../../doc/features/image/menu_file.rst:21
+msgid "Edit DataLab preferences (see :ref:`settings`)."
+msgstr "Modifier les préférences de DataLab (voir :ref:`settings`)."
+
+#: ../../doc/features/image/menu_file.rst:24
+msgid "New image"
+msgstr "Nouvelle image"
+
+#: ../../doc/features/image/menu_file.rst:26
+msgid ""
+"Create a new image from various models (supported datatypes: uint8, "
+"uint16, int16, float32, float64):"
+msgstr ""
+"Crée une image à partir de différents modèles (types de données pris en "
+"charge : uint8, uint16, int16, float32, float64) :"
+
+#: ../../doc/features/image/menu_file.rst:33
+msgid "Model"
+msgstr "Modèle"
+
+#: ../../doc/features/image/menu_file.rst:34
+msgid "Equation"
+msgstr "Equation"
+
+#: ../../doc/features/image/menu_file.rst:35
+msgid "Zeros"
+msgstr "Zéros"
+
+#: ../../doc/features/image/menu_file.rst:36
+msgid ":math:`z[i] = 0`"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:37
+msgid "Empty"
+msgstr "Vide"
+
+#: ../../doc/features/image/menu_file.rst:38
+msgid "Data is directly taken from memory as it is"
+msgstr "Données mémoire en l'état"
+
+#: ../../doc/features/image/menu_file.rst:39
+msgid "Random"
+msgstr "Aléatoire"
+
+#: ../../doc/features/image/menu_file.rst:40
+msgid ""
+":math:`z[i] \\in [0, z_{max})` where :math:`z_{max}` is the datatype "
+"maximum value"
+msgstr ""
+":math:`z[i] \\in [0, z_{max})` où :math:`z_{max}` est la valeur maximale "
+"correpondant au type de données"
+
+#: ../../doc/features/image/menu_file.rst:41
+msgid "2D Gaussian"
+msgstr "Gaussienne 2D"
+
+#: ../../doc/features/image/menu_file.rst:42
+msgid ""
+":math:`z = "
+"A.exp(-\\dfrac{(\\sqrt{(x-x0)^2+(y-y0)^2}-\\mu)^2}{2\\sigma^2})`"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:47
+msgid "Open image"
+msgstr "Ouvrir une image"
+
+#: ../../doc/features/image/menu_file.rst:49
+msgid "Create a new image from the following supported filetypes:"
+msgstr "Crée une image depuis l'un des types de fichiers pris en charge :"
+
+#: ../../doc/features/image/menu_file.rst:54
+msgid "File type"
+msgstr "Type de fichier"
+
+#: ../../doc/features/image/menu_file.rst:55
+msgid "Extensions"
+msgstr "Extensions"
+
+#: ../../doc/features/image/menu_file.rst:56
+msgid "PNG files"
+msgstr "Fichiers PNG"
+
+#: ../../doc/features/image/menu_file.rst:57
+msgid ".png"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:58
+msgid "TIFF files"
+msgstr "Fichiers TIFF"
+
+#: ../../doc/features/image/menu_file.rst:59
+msgid ".tif, .tiff"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:60
+msgid "8-bit images"
+msgstr "Images 8bits"
+
+#: ../../doc/features/image/menu_file.rst:61
+msgid ".jpg, .gif"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:62
+msgid "NumPy arrays"
+msgstr "Tableaux NumPy"
+
+#: ../../doc/features/image/menu_file.rst:63
+msgid ".npy"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:64
+msgid "MAT-Files"
+msgstr "Fichiers MAT"
+
+#: ../../doc/features/image/menu_file.rst:65
+msgid ".mat"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:66
+msgid "Text files"
+msgstr "Fichiers texte"
+
+#: ../../doc/features/image/menu_file.rst:67
+msgid ".txt, .csv, .asc"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:68
+msgid "Andor SIF files"
+msgstr "Fichiers Andor SIF"
+
+#: ../../doc/features/image/menu_file.rst:69
+msgid ".sif"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:70
+msgid "SPIRICON files"
+msgstr "Fichiers SPIRICON"
+
+#: ../../doc/features/image/menu_file.rst:71
+msgid ".scor-data"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:72
+msgid "FXD files"
+msgstr "Fichiers FXD"
+
+#: ../../doc/features/image/menu_file.rst:73
+msgid ".fxd"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:74
+msgid "Bitmap images"
+msgstr "Images Bitmap"
+
+#: ../../doc/features/image/menu_file.rst:75
+msgid ".bmp"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:78
+msgid "Save image"
+msgstr "Enregister l'image"
+
+#: ../../doc/features/image/menu_file.rst:80
+msgid "Save current image (see \"Open image\" supported filetypes)."
+msgstr ""
+"Enregistre l'image sélectionnée dans l'un des types de fichier pris en "
+"charge :"
+
+#: ../../doc/features/image/menu_file.rst:83
+msgid "Import text file"
+msgstr "Importer un fichier texte"
+
+#: ../../doc/features/image/menu_file.rst:85
+msgid ""
+"DataLab can natively import many types of image files (e.g. TIFF, JPEG, "
+"PNG, etc.). However some specific text file formats may not be supported."
+" In this case, you can use the `Import text file` feature, which allows "
+"you to import a text file and convert it to an image."
+msgstr ""
+"DataLab peut importer nativement de nombreux types de fichiers image (par"
+" exemple TIFF, JPEG, PNG, etc.). Cependant, certains formats de fichiers "
+"texte spécifiques peuvent ne pas être pris en charge. Dans ce cas, vous "
+"pouvez utiliser la fonctionnalité « Importer un fichier texte », qui vous"
+" permet d'importer un fichier texte et de le convertir en image."
+
+#: ../../doc/features/image/menu_file.rst:90
+msgid ""
+"This feature is accessible from the `File` menu, under the `Import text "
+"file` option."
+msgstr ""
+"Cette fonctionnalité est accessible depuis le menu « Fichier », sous "
+"l'option « Importer un fichier texte »."
+
+#: ../../doc/features/image/menu_file.rst:92
+msgid ""
+"It opens an import wizard that guides you through the process of "
+"importing the text file."
+msgstr ""
+"Il ouvre un assistant d'importation qui vous guide tout au long du "
+"processus d'importation du fichier texte."
+
+#: ../../doc/features/image/menu_file.rst:96
+#: ../../doc/features/image/menu_file.rst:106
+msgid "Step 1: Select the source"
+msgstr "Etape 1 : Sélectionner la source"
+
+#: ../../doc/features/image/menu_file.rst:98
+msgid ""
+"The first step is to select the source of the text file. You can either "
+"select a file from your computer or the clipboard if you have copied the "
+"text from another application."
+msgstr ""
+"La première étape consiste à sélectionner la source du fichier texte. "
+"Vous pouvez soit sélectionner un fichier de votre ordinateur, soit le "
+"presse-papiers si vous avez copié le texte à partir d'une autre "
+"application."
+
+#: ../../doc/features/image/menu_file.rst:109
+msgid "Step 2: Preview and configure the import"
+msgstr "Etape 2 : Aperçu et configuration de l'importation"
+
+#: ../../doc/features/image/menu_file.rst:111
+msgid ""
+"The second step consists of configuring the import and previewing the "
+"result. You can configure the following options:"
+msgstr ""
+"La deuxième étape consiste à configurer l'importation et à prévisualiser "
+"le résultat. Vous pouvez configurer les options suivantes :"
+
+#: ../../doc/features/image/menu_file.rst:114
+msgid "**Delimiter**: The character used to separate the values in the text file."
+msgstr ""
+"**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le "
+"fichier texte."
+
+#: ../../doc/features/image/menu_file.rst:115
+msgid ""
+"**Comments**: The character used to indicate that the line is a comment "
+"and should be ignored."
+msgstr ""
+"**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un"
+" commentaire et doit être ignorée."
+
+#: ../../doc/features/image/menu_file.rst:117
+msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
+msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
+
+#: ../../doc/features/image/menu_file.rst:118
+msgid ""
+"**Maximum Number of Rows**: The maximum number of rows to import. If the "
+"file contains more rows, they will be ignored."
+msgstr ""
+"**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si"
+" le fichier contient plus de lignes, elles seront ignorées."
+
+#: ../../doc/features/image/menu_file.rst:120
+msgid "**Transpose**: If checked, the rows and columns will be transposed."
+msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."
+
+#: ../../doc/features/image/menu_file.rst:121
+msgid "**Data type**: The destination data type of the imported data."
+msgstr ""
+"**Type de données** : Le type de données de destination des données "
+"importées."
+
+#: ../../doc/features/image/menu_file.rst:123
+msgid ""
+"When you are done configuring the import, click the `Apply` button to see"
+" the result."
+msgstr ""
+"Lorsque vous avez terminé de configurer l'importation, cliquez sur le "
+"bouton « Appliquer » pour voir le résultat."
+
+#: ../../doc/features/image/menu_file.rst:129
+msgid "Step 2: Configure the import"
+msgstr "Etape 2 : Configurer l'importation"
+
+#: ../../doc/features/image/menu_file.rst:135
+msgid "Step 2: Preview the result"
+msgstr "Etape 2 : Prévisualiser le résultat"
+
+#: ../../doc/features/image/menu_file.rst:138
+#: ../../doc/features/image/menu_file.rst:147
+msgid "Step 3: Show graphical representation"
+msgstr "Etape 3 : Afficher la représentation graphique"
+
+#: ../../doc/features/image/menu_file.rst:140
+msgid ""
+"The third step shows a graphical representation of the imported data. You"
+" can use the `Finish` button to import the data into DataLab workspace."
+msgstr ""
+"La troisième étape montre une représentation graphique des données "
+"importées. Vous pouvez utiliser le bouton « Terminer » pour importer les "
+"données dans l'espace de travail de DataLab."

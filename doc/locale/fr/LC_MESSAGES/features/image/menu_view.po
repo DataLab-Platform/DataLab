@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2023, DataLab Platform Developers
+# This file is distributed under the same license as the DataLab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: DataLab \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-06 10:56+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.13.0\n"
+
+#: ../../doc/features/image/menu_view.rst:4
+msgid "View options for Images"
+msgstr "Options d'affichage pour les images"
+
+#: ../../doc/features/image/menu_view.rst:8
+msgid "Screenshot of the \"View\" menu."
+msgstr "Capture d'écran du menu \"Affichage\"."
+
+#: ../../doc/features/image/menu_view.rst:10
+msgid ""
+"When the \"Image Panel\" is selected, the menus and toolbars are updated "
+"to provide image-related actions."
+msgstr ""
+"Lorsque le \"Panneau Image\" est sélectionné, les menus et barres "
+"d'outils sont mis à jour pour fournir les actions liées aux images."
+
+#: ../../doc/features/image/menu_view.rst:13
+msgid ""
+"The \"View\" menu allows you to visualize the current image or group of "
+"images. It also allows you to show/hide titles, to show/hide the contrast"
+" panel, to refresh the visualization, and so on."
+msgstr ""
+"Le menu \"Affichage\" permet de visualiser l'image courante ou un groupe "
+"d'images. Il permet également d'afficher/cacher les titres, "
+"d'afficher/cacher le panneau de contraste, de rafraîchir la "
+"visualisation, etc."
+
+#: ../../doc/features/image/menu_view.rst:18
+msgid "View in a new window"
+msgstr "Voir dans une nouvelle fenêtre"
+
+#: ../../doc/features/image/menu_view.rst:20
+msgid "Open a new window to visualize the selected images."
+msgstr "Ouvre une nouvelle fenêtre pour visualiser les images sélectionnées."
+
+#: ../../doc/features/image/menu_view.rst:22
+msgid ""
+"This option allows you to show the selected images in a separate window, "
+"in which you can visualize the data more comfortably (e.g., by maximizing"
+" the window) as well as to add or edit annotations."
+msgstr "Cette option permet d'afficher les images sélectionnées dans une nouvelle fenêtre, dans laquelle vous pouvez visualiser les données plus confortablement (par exemple, en maximisant la fenêtre) et ajouter ou modifier des annotations."
+
+#: ../../doc/features/image/menu_view.rst:26
+msgid ""
+"When you click on the button \"Annotations\" in the toolbar of the new "
+"window, the annotation editing mode is activated (see the section \"Edit "
+"annotations\" below)."
+msgstr "Lorsque vous cliquez sur le bouton \"Annotations\" dans la barre d'outils de la nouvelle fenêtre, le mode d'édition des annotations est activé (voir la section \"Modifier les annotations\" ci-dessous)."
+
+#: ../../doc/features/image/menu_view.rst:30
+msgid "Edit annotations"
+msgstr "Modifier les annotations"
+
+#: ../../doc/features/image/menu_view.rst:32
+msgid "Open a new window to edit annotations."
+msgstr "Ouvre une nouvelle fenêtre pour modifier les annotations."
+
+#: ../../doc/features/image/menu_view.rst:34
+msgid ""
+"This option allows you to edit the annotations of the selected images in "
+"a separate window. This is equivalent to select the \"View in a new "
+"window\" option and then click on the \"Annotations\" button in the "
+"toolbar of the new window."
+msgstr "Cette option vous permet de modifier les annotations des images sélectionnées dans une fenêtre séparée. Cela équivaut à sélectionner l'option \"Voir dans une nouvelle fenêtre\" puis à cliquer sur le bouton \"Annotations\" dans la barre d'outils de la nouvelle fenêtre."
+
+#: ../../doc/features/image/menu_view.rst:38
+msgid ""
+"Annotations are used to add text, lines, rectangles, ellipses, and other "
+"geometrical shapes to the images. They are useful to highlight regions of"
+" interest, to add comments, to mark points, and so on."
+msgstr "Les annotations sont utilisées pour ajouter du texte, des lignes, des rectangles, des ellipses et d'autres formes géométriques aux images. Elles sont utiles pour mettre en évidence des régions d'intérêt, ajouter des commentaires, marquer des points, etc."
+
+#: ../../doc/features/image/menu_view.rst:43
+msgid ""
+"The annotations are saved in the metadata of the image, so they are "
+"persistent and will be displayed every time you visualize the image."
+msgstr "Les annotations sont enregistrées dans les métadonnées de l'image, elles sont donc persistantes et seront affichées chaque fois que vous visualiserez l'image."
+
+#: ../../doc/features/image/menu_view.rst:48
+msgid "Annotations may be added in the separate view."
+msgstr "Les annotations peuvent être ajoutées dans la vue séparée."
+
+#: ../../doc/features/image/menu_view.rst:50
+msgid "The typical workflow to edit annotations is as follows:"
+msgstr "Le mode opératoire typique pour modifier les annotations est le suivant :"
+
+#: ../../doc/features/image/menu_view.rst:52
+msgid "Select the \"Edit annotations\" option."
+msgstr "Sélectionnez l'option \"Modifier les annotations\"."
+
+#: ../../doc/features/image/menu_view.rst:53
+msgid ""
+"In the new window, add annotations by clicking on the corresponding "
+"buttons at the bottom of the window."
+msgstr "Dans la nouvelle fenêtre, ajoutez des annotations en cliquant sur les boutons correspondants en bas de la fenêtre."
+
+#: ../../doc/features/image/menu_view.rst:55
+msgid ""
+"Eventually, customize the annotations by changing their properties (e.g.,"
+" the text, the color, the position, etc.) using the \"Parameters\" option"
+" in the context menu of the annotations."
+msgstr "Personnalisez les annotations en modifiant leurs propriétés (par exemple, le texte, la couleur, la position, etc.) en utilisant l'option \"Paramètres\" dans le menu contextuel des annotations."
+
+#: ../../doc/features/image/menu_view.rst:58
+msgid ""
+"When you are done, click on the \"OK\" button to save the annotations. "
+"This will close the window and the annotations will be saved in the "
+"metadata of the image and will be displayed in the main window."
+msgstr "Quand vous avez terminé, cliquez sur le bouton \"OK\" pour enregistrer les annotations. Cela fermera la fenêtre et les annotations seront enregistrées dans les métadonnées de l'image et seront affichées dans la fenêtre principale."
+
+#: ../../doc/features/image/menu_view.rst:64
+msgid "Annotations are now part of the image metadata."
+msgstr "Les annotations font désormais partie des métadonnées de l'image."
+
+#: ../../doc/features/image/menu_view.rst:67
+msgid ""
+"Annotations may be copied from an image to another by using the "
+"\"copy/paste metadata\" features."
+msgstr "Les annotations peuvent être copiées d'une image à une autre en utilisant les fonctionnalités \"copier/coller les métadonnées\"."
+
+#: ../../doc/features/image/menu_view.rst:71
+msgid "Auto-refresh"
+msgstr "Rafraîchissement automatique"
+
+#: ../../doc/features/image/menu_view.rst:73
+msgid "Automatically refresh the visualization when the data changes:"
+msgstr "Rafraîchit automatiquement la visualisation quand les données changent :"
+
+#: ../../doc/features/image/menu_view.rst:75
+msgid ""
+"When enabled (default), the plot view is automatically refreshed when the"
+" data changes."
+msgstr "Si activé (par défaut), la visualisation est automatiquement rafraîchie quand les données changent."
+
+#: ../../doc/features/image/menu_view.rst:78
+msgid ""
+"When disabled, the plot view is not refreshed until you manually refresh "
+"it by using the \"Refresh manually\" menu entry."
+msgstr "Si désactivé, la visualisation n'est pas rafraîchie tant que vous ne l'avez pas rafraîchie manuellement en utilisant l'entrée de menu \"Rafraîchir manuellement\"."
+
+#: ../../doc/features/image/menu_view.rst:81
+msgid ""
+"Even though the refresh algorithm is optimized, it may still take some "
+"time to refresh the plot view when the data changes, especially when the "
+"data set is large. Therefore, you may want to disable the auto-refresh "
+"feature when you are working with large data sets, and enable it again "
+"when you are done. This will avoid unnecessary refreshes."
+msgstr "Même si l'algorithme de rafraîchissement est optimisé, il peut prendre du temps pour rafraîchir la visualisation quand les données changent, surtout quand le jeu de données est grand. Par conséquent, vous pouvez désactiver le rafraîchissement automatique quand vous travaillez avec des données volumineuses, et l'activer à nouveau quand vous avez terminé. Cela évitera des rafraîchissements inutiles."
+
+#: ../../doc/features/image/menu_view.rst:88
+msgid "Refresh manually"
+msgstr "Rafraîchir manuellement"
+
+#: ../../doc/features/image/menu_view.rst:90
+msgid "Refresh the visualization manually."
+msgstr "Rafraîchir la visualisation manuellement."
+
+#: ../../doc/features/image/menu_view.rst:92
+msgid ""
+"This triggers a refresh of the plot view. It is useful when the auto-"
+"refresh feature is disabled, or when you want to force a refresh of the "
+"plot view."
+msgstr "Cela déclenche un rafraîchissement de la visualisation. C'est utile quand le rafraîchissement automatique est désactivé, ou quand vous voulez forcer un rafraîchissement de la visualisation."
+
+#: ../../doc/features/image/menu_view.rst:96
+msgid "Show contrast panel"
+msgstr "Afficher le panneau de contraste"
+
+#: ../../doc/features/image/menu_view.rst:98
+msgid "Show/hide contrast adjustment panel."
+msgstr "Affiche/cache le panneau de réglage du contraste."
+
+#: ../../doc/features/image/menu_view.rst:101
+msgid "Show graphical object titles"
+msgstr "Afficher les titres des objets graphiques"
+
+#: ../../doc/features/image/menu_view.rst:103
+msgid "Show/hide titles of computing results or annotations."
+msgstr ""
+"Affiche/cache les titres des objets graphiques liés aux résultats de "
+"calculs et aux annotations."
+
+#: ../../doc/features/image/menu_view.rst:105
+msgid ""
+"This option allows you to show or hide the titles of the graphical "
+"objects (e.g., the titles of the computing results or annotations). "
+"Hiding the titles can be useful when you want to visualize the data "
+"without any distractions, or if there are too many titles and they are "
+"overlapping."
+msgstr "Cette option vous permet d'afficher ou de masquer les titres des objets graphiques (par exemple, les titres des résultats de calculs ou des annotations). Masquer les titres peut être utile lorsque vous voulez visualiser les données sans être perturbé, ou s'il y a trop de titres et qu'ils se chevauchent."
+
+#~ msgid "See :ref:`ref-to-image-annotations` for more details on annotations."
+#~ msgstr ""
+#~ "Voir :ref:`ref-to-image-annotations` "
+#~ "pour plus de détails sur les "
+#~ "annotations."
+
+#~ msgid ""
+#~ "Refresh the visualization manually. This "
+#~ "triggers a refresh of the plot "
+#~ "view, even if the auto-refresh "
+#~ "feature is disabled."
+#~ msgstr ""
+#~ "Rafraîchit la visualisation manuellement. Cela"
+#~ " déclenche un rafraîchissement de la "
+#~ "visualisation, même si le rafraîchissement "
+#~ "automatique est désactivé."
+
+#~ msgid "Other menu entries"
+#~ msgstr "Autres entrées du menu"
+
+#~ msgid "Show/hide panels or toolbars."
+#~ msgstr "Affiche/cache les panneaux et barres d'outils."

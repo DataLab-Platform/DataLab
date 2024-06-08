@@ -101,7 +101,7 @@ def fft1d(
         X data, Y data (tuple)
     """
     y1 = np.fft.fft(y)
-    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
+    x1 = np.fft.fftfreq(x.size, d=x[1] - x[0])
     if shift:
         x1 = np.fft.fftshift(x1)
         y1 = np.fft.fftshift(y1)
@@ -121,17 +121,18 @@ def ifft1d(
     Returns:
         X data, Y data (tuple)
     """
-    x1 = np.fft.fftfreq(x.shape[-1], d=x[1] - x[0])
     if shift:
-        x1 = np.fft.ifftshift(x1)
         y = np.fft.ifftshift(y)
     y1 = np.fft.ifft(y)
+    # Recalculate the original time domain array
+    dt = 1.0 / (x[-1] - x[0] + (x[1] - x[0]))
+    x1 = np.arange(y1.size) * dt
     return x1, y1.real
 
 
 def magnitude_spectrum(
     x: np.ndarray, y: np.ndarray, log_scale: bool = False
-) -> np.ndarray:
+) -> tuple[np.ndarray, np.ndarray]:
     """Compute magnitude spectrum.
 
     Args:
@@ -140,24 +141,28 @@ def magnitude_spectrum(
         log_scale: Use log scale. Defaults to False.
 
     Returns:
-        Magnitude spectrum
+        Magnitude spectrum (X data, Y data)
     """
-    _, y1 = fft1d(x, y)
+    x1, y1 = fft1d(x, y)
     if log_scale:
-        return 20 * np.log10(np.abs(y1))
-    return np.abs(y1)
+        y_mag = 20 * np.log10(np.abs(y1))
+    y_mag = np.abs(y1)
+    return x1, y_mag
 
 
-def phase_spectrum(y: np.ndarray) -> np.ndarray:
+def phase_spectrum(x: np.ndarray, y: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Compute phase spectrum.
 
     Args:
+        x: X data
         y: Y data
 
     Returns:
-        Phase spectrum (in degrees)
+        Phase spectrum in degrees (X data, Y data)
     """
-    return np.rad2deg(np.angle(np.fft.fftshift(np.fft.fft(y))))
+    x1, y1 = fft1d(x, y)
+    y_phase = np.rad2deg(np.angle(y1))
+    return x1, y_phase
 
 
 def psd(
