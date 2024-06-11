@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import os.path as osp
 import re
 import warnings
 from typing import TYPE_CHECKING
@@ -663,9 +664,12 @@ class BaseDataPanel(AbstractPanel):
         """
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
+        group_id = None
+        if len(objs) > 1:
+            group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
             obj.metadata["source"] = filename
-            self.add_object(obj, set_current=obj is objs[-1])
+            self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 
