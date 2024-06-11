@@ -63,6 +63,10 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         # Default implementation covers the case of a single image:
         obj = self.create_object(filename)
         obj.data = self.read_data(filename)
+        unique_values = np.unique(obj.data)
+        if len(unique_values) == 2:
+            # Binary image: set LUT range to unique values
+            obj.metadata["lut_range"] = unique_values.tolist()
         return [obj]
 
     @staticmethod
