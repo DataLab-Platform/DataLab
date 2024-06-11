@@ -24,7 +24,13 @@ from guidata.dataset import update_dataset
 from guidata.io import JSONReader, JSONWriter
 from plotpy.builder import make
 from plotpy.io import load_items, save_items
-from plotpy.items import AbstractLabelItem, AnnotatedPoint, AnnotatedShape, LabelItem
+from plotpy.items import (
+    AbstractLabelItem,
+    AnnotatedPoint,
+    AnnotatedSegment,
+    AnnotatedShape,
+    LabelItem,
+)
 
 from cdl.algorithms import coordinates
 from cdl.algorithms.datatypes import is_integer_dtype
@@ -36,12 +42,12 @@ if TYPE_CHECKING:
         AnnotatedCircle,
         AnnotatedEllipse,
         AnnotatedRectangle,
-        AnnotatedSegment,
         CurveItem,
         Marker,
         MaskedImageItem,
         PolygonShape,
     )
+    from plotpy.styles import AnnotationParam
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -181,11 +187,19 @@ def config_annotated_shape(
         option: Shape style option (e.g. "shape/drag")
         cmp: Show computations
     """
-    param = item.annotationparam
+    param: AnnotationParam = item.annotationparam
     param.format = fmt
     param.show_label = lbl
     if cmp is not None:
         param.show_computations = cmp
+
+    # TODO: This is temporary, in the future, we will use independent labels, similar to
+    # the way it is done for the properties labels but with plot coordinates (instead of
+    # canvas coordinates).
+    if isinstance(item, AnnotatedSegment):
+        item.label.labelparam.anchor = "T"
+        item.label.labelparam.update_label(item.label)
+
     param.update_annotation(item)
     item.set_style("plot", option)
 
