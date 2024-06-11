@@ -181,6 +181,7 @@ class ViewSection(conf.Section, metaclass=conf.SectionMeta):
 
     show_label = conf.Option()
     auto_refresh = conf.Option()
+    show_first_only = conf.Option()  # Show only first selected item
     show_contrast = conf.Option()
     sig_antialiasing = conf.Option()
     sig_autodownsampling = conf.Option()

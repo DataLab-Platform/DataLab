@@ -564,7 +564,8 @@ class BaseActionHandler(metaclass=abc.ABCMeta):
             )
             main = self.panel.mainwindow
             for cat in (ActionCategory.VIEW, ActionCategory.VIEW_TOOLBAR):
-                self.add_to_action_list(main.auto_refresh_action, cat, -1)
+                for act in (main.autorefresh_action, main.showfirstonly_action):
+                    self.add_to_action_list(act, cat, -1)
             self.new_action(
                 _("Refresh manually"),
                 icon_name="refresh-manual.svg",

@@ -77,6 +77,7 @@ class BasePlotHandler:
             WeakKeyDictionary()
         )
         self.__auto_refresh = False
+        self.__show_first_only = False
         self.__result_items_mapping: WeakKeyDictionary[LabelItem, Callable] = (
             WeakKeyDictionary()
         )
@@ -245,10 +246,20 @@ class BasePlotHandler:
         """Set auto refresh mode.
 
         Args:
-            auto_refresh (bool): if True, refresh plot items automatically
+            auto_refresh: if True, refresh plot items automatically
         """
         self.__auto_refresh = auto_refresh
         if auto_refresh:
+            self.refresh_plot("selected")
+
+    def set_show_first_only(self, show_first_only: bool) -> None:
+        """Set show first only mode.
+
+        Args:
+            show_first_only: if True, show only the first selected item
+        """
+        self.__show_first_only = show_first_only
+        if self.__auto_refresh:
             self.refresh_plot("selected")
 
     def refresh_plot(
@@ -311,6 +322,8 @@ class BasePlotHandler:
         scales_dict = {}
 
         if oids:
+            if self.__show_first_only:
+                oids = oids[:1]
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)

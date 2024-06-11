@@ -165,7 +165,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         self.browseh5_action: QW.QAction | None = None
         self.settings_action: QW.QAction | None = None
         self.quit_action: QW.QAction | None = None
-        self.auto_refresh_action: QW.QAction | None = None
+        self.autorefresh_action: QW.QAction | None = None
+        self.showfirstonly_action: QW.QAction | None = None
         self.showlabel_action: QW.QAction | None = None
 
         self.file_menu: QW.QMenu | None = None
@@ -831,12 +832,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                 triggered=self.close,
             )
         # View menu actions
-        self.auto_refresh_action = create_action(
+        self.autorefresh_action = create_action(
             self,
             _("Auto-refresh"),
             icon=get_icon("refresh-auto.svg"),
             tip=_("Auto-refresh plot when object is modified, added or removed"),
             toggled=self.toggle_auto_refresh,
+        )
+        self.showfirstonly_action = create_action(
+            self,
+            _("Show first only"),
+            icon=get_icon("show_first.svg"),
+            tip=_("Show only the first selected object"),
+            toggled=self.toggle_show_first_only,
         )
         self.showlabel_action = create_action(
             self,
@@ -1082,7 +1090,8 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             panel.SIG_OBJECT_REMOVED.connect(self.set_modified)
         self.macropanel.SIG_OBJECT_MODIFIED.connect(self.set_modified)
         # Initializing common panel actions
-        self.auto_refresh_action.setChecked(Conf.view.auto_refresh.get(True))
+        self.autorefresh_action.setChecked(Conf.view.auto_refresh.get(True))
+        self.showfirstonly_action.setChecked(Conf.view.show_first_only.get(False))
         self.showlabel_action.setChecked(Conf.view.show_label.get(False))
         # Restoring current tab from last session
         tab_idx = Conf.main.current_tab.get(None)
@@ -1274,6 +1283,17 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Conf.view.auto_refresh.set(state)
         for datapanel in (self.signalpanel, self.imagepanel):
             datapanel.plothandler.set_auto_refresh(state)
+
+    @remote_controlled
+    def toggle_show_first_only(self, state: bool) -> None:
+        """Toggle show first only option
+
+        Args:
+            state: state
+        """
+        Conf.view.show_first_only.set(state)
+        for datapanel in (self.signalpanel, self.imagepanel):
+            datapanel.plothandler.set_show_first_only(state)
 
     # ------Common features
     @remote_controlled
