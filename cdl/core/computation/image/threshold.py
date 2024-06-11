@@ -78,7 +78,7 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     dst = dst_11(src, "threshold", suffix)
     data = src.data > threshold if p.operation == ">" else src.data < threshold
     dst.data = skimage.util.img_as_ubyte(data)
-    dst.metadata["lut_range"] = [0, 255]
+    dst.zscalemin, dst.zscalemax = 0, 255  # LUT range
     dst.metadata["colormap"] = "gray"
     return dst
 

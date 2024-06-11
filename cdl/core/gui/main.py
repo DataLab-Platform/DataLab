@@ -885,6 +885,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
             self.imagepanel.plot_item_parameters_changed
         )
         plot.SIG_ITEM_MOVED.connect(self.imagepanel.plot_item_moved)
+        plot.SIG_LUT_CHANGED.connect(self.imagepanel.plot_lut_changed)
         return dpw
 
     def __update_tab_menu(self) -> None:

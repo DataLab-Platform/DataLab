@@ -173,6 +173,33 @@ class SignalObj(gds.DataSet, base.BaseObj):
     _e_tabs_u = gds.EndTabGroup("units")
     _e_unitsg = gds.EndGroup(_("Titles and units"))
 
+    _scalesg = gds.BeginGroup(_("Scales"))
+    _prop_autoscale = gds.GetAttrProp("autoscale")
+    autoscale = gds.BoolItem(_("Auto scale"), default=True).set_prop(
+        "display", store=_prop_autoscale
+    )
+    _tabs_b = gds.BeginTabGroup("bounds")
+    _boundsx = gds.BeginGroup(_("X-axis"))
+    xscalelog = gds.BoolItem(_("Logarithmic scale"), default=False)
+    xscalemin = gds.FloatItem(_("Lower bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    xscalemax = gds.FloatItem(_("Upper bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    _e_boundsx = gds.EndGroup(_("X-axis"))
+    _boundsy = gds.BeginGroup(_("Y-axis"))
+    yscalelog = gds.BoolItem(_("Logarithmic scale"), default=False)
+    yscalemin = gds.FloatItem(_("Lower bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    yscalemax = gds.FloatItem(_("Upper bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    _e_boundsy = gds.EndGroup(_("Y-axis"))
+    _e_tabs_b = gds.EndTabGroup("bounds")
+    _e_scalesg = gds.EndGroup(_("Scales"))
+
     _e_tabs = gds.EndTabGroup("all")
 
     def __init__(self, title=None, comment=None, icon=""):

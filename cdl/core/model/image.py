@@ -406,6 +406,37 @@ class ImageObj(gds.DataSet, base.BaseObj):
     _e_tabs_u = gds.EndTabGroup("units")
     _e_unitsg = gds.EndGroup(f'{_("Titles")} / {_("Units")}')
 
+    _scalesg = gds.BeginGroup(_("Scales"))
+    _prop_autoscale = gds.GetAttrProp("autoscale")
+    autoscale = gds.BoolItem(_("Auto scale"), default=True).set_prop(
+        "display", store=_prop_autoscale
+    )
+    _tabs_b = gds.BeginTabGroup("bounds")
+    _boundsx = gds.BeginGroup(_("X-axis"))
+    xscalelog = gds.BoolItem(_("Logarithmic scale"), default=False)
+    xscalemin = gds.FloatItem(_("Lower bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    xscalemax = gds.FloatItem(_("Upper bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    _e_boundsx = gds.EndGroup(_("X-axis"))
+    _boundsy = gds.BeginGroup(_("Y-axis"))
+    yscalelog = gds.BoolItem(_("Logarithmic scale"), default=False)
+    yscalemin = gds.FloatItem(_("Lower bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    yscalemax = gds.FloatItem(_("Upper bound"), check=False).set_prop(
+        "display", active=gds.NotProp(_prop_autoscale)
+    )
+    _e_boundsy = gds.EndGroup(_("Y-axis"))
+    _boundsz = gds.BeginGroup(_("LUT range"))
+    zscalemin = gds.FloatItem(_("Lower bound"), check=False)
+    zscalemax = gds.FloatItem(_("Upper bound"), check=False)
+    _e_boundsz = gds.EndGroup(_("LUT range"))
+    _e_tabs_b = gds.EndTabGroup("bounds")
+    _e_scalesg = gds.EndGroup(_("Scales"))
+
     _e_tabs = gds.EndTabGroup("all")
 
     @property
@@ -456,12 +487,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         obj.y0 = self.y0
         obj.dx = self.dx
         obj.dy = self.dy
-
-        # Copying metadata, but not the LUT range (which is specific to the data:
-        # when processing the image, the LUT range may not be appropriate anymore):
         obj.metadata = base.deepcopy_metadata(self.metadata)
-        obj.metadata.pop("lut_range", None)
-
         obj.data = np.array(self.data, copy=True, dtype=dtype)
         obj.dicom_template = self.dicom_template
         return obj
@@ -511,9 +537,11 @@ class ImageObj(gds.DataSet, base.BaseObj):
             shape = self.data.shape
             item.param.xmin, item.param.xmax = x0, x0 + dx * shape[1]
             item.param.ymin, item.param.ymax = y0, y0 + dy * shape[0]
-        lut_range = self.metadata.get("lut_range")
-        if lut_range is not None:
-            item.set_lut_range(lut_range)
+        zmin, zmax = item.get_lut_range()
+        if self.zscalemin is not None or self.zscalemax is not None:
+            zmin = zmin if self.zscalemin is None else self.zscalemin
+            zmax = zmax if self.zscalemax is None else self.zscalemax
+            item.set_lut_range([zmin, zmax])
         super().update_plot_item_parameters(item)
 
     def update_metadata_from_plot_item(self, item: MaskedImageItem) -> None:
@@ -529,9 +557,8 @@ class ImageObj(gds.DataSet, base.BaseObj):
             item: plot item
         """
         super().update_metadata_from_plot_item(item)
-        # Storing the LUT range in metadata:
-        lut_range = list(item.get_lut_range())
-        self.metadata["lut_range"] = lut_range
+        # Updating the LUT range:
+        self.zscalemin, self.zscalemax = item.get_lut_range()
         # Updating origin and pixel spacing:
         shape = self.data.shape
         param = item.param

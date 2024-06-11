@@ -66,7 +66,7 @@ class ImageFormatBase(abc.ABC, FormatBase, metaclass=ImageFormatBaseMeta):
         unique_values = np.unique(obj.data)
         if len(unique_values) == 2:
             # Binary image: set LUT range to unique values
-            obj.metadata["lut_range"] = unique_values.tolist()
+            obj.zscalemin, obj.zscalemax = unique_values.tolist()
         return [obj]
 
     @staticmethod

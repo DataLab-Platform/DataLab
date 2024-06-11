@@ -295,18 +295,34 @@ class BasePlotHandler:
                 self.panel.objmodel.get_objects(oids)
             except KeyError as exc:
                 raise ValueError(f"Invalid value for `what`: {what}") from exc
+
+        # Initialize titles and scales dictionaries
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
+        autoscale = False
+        scale_keys = (
+            "xscalelog",
+            "xscalemin",
+            "xscalemax",
+            "yscalelog",
+            "yscalemin",
+            "yscalemax",
+        )
+        scales_dict = {}
+
         if oids:
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
             ) as progress:
+                # Iterate over objects
                 for i_obj, oid in enumerate(oids):
                     progress.setValue(i_obj + 1)
                     if progress.wasCanceled():
                         break
                     obj = self.panel.objmodel[oid]
+
+                    # Collecting titles information
                     for key in title_keys:
                         title = getattr(obj, key, "")
                         value = titles_dict.get(key)
@@ -314,6 +330,16 @@ class BasePlotHandler:
                             titles_dict[key] = title
                         elif value != title:
                             titles_dict[key] = ""
+
+                    # Collecting scales information
+                    autoscale = autoscale or obj.autoscale
+                    for key in scale_keys:
+                        scale = getattr(obj, key, None)
+                        if scale is not None:
+                            cmp = min if "min" in key else max
+                            scales_dict[key] = cmp(scales_dict.get(key, scale), scale)
+
+                    # Update or add item to plot
                     item = self.get(oid)
                     if item is None:
                         item = self.__add_item_to_plot(oid)
@@ -327,16 +353,48 @@ class BasePlotHandler:
                         self.plot.set_item_visible(item, True, replot=False)
                         self.plot.set_active_item(item)
                         item.unselect()
-                    self.add_shapes(oid, do_autoscale=True)
+
+                    # Add geometric shapes
+                    self.add_shapes(oid, do_autoscale=autoscale)
+
             self.plot.replot()
+
         else:
+            # No object to refresh: clean up titles
             for key in title_keys:
                 titles_dict[key] = ""
+
+        # Set titles
         tdict = titles_dict
         tdict["ylabel"] = (tdict["ylabel"], tdict.pop("zlabel"))
         tdict["yunit"] = (tdict["yunit"], tdict.pop("zunit"))
         self.plot.set_titles(**titles_dict)
-        self.plot.do_autoscale()
+
+        # Set scales
+        replot = False
+        for axis_name, axis in (("bottom", "x"), ("left", "y")):
+            axis_id = self.plot.get_axis_id(axis_name)
+            scalelog = scales_dict.get(f"{axis}scalelog")
+            if scalelog is not None:
+                new_scale = "log" if scalelog else "lin"
+                self.plot.set_axis_scale(axis_id, new_scale, autoscale=False)
+                replot = True
+        if autoscale:
+            self.plot.do_autoscale()
+        else:
+            for axis_name, axis in (("bottom", "x"), ("left", "y")):
+                axis_id = self.plot.get_axis_id(axis_name)
+                new_vmin = scales_dict.get(f"{axis}scalemin")
+                new_vmax = scales_dict.get(f"{axis}scalemax")
+                if new_vmin is not None or new_vmax is not None:
+                    self.plot.do_autoscale(replot=False, axis_id=axis_id)
+                    vmin, vmax = self.plot.get_axis_limits(axis_id)
+                    new_vmin = new_vmin if new_vmin is not None else vmin
+                    new_vmax = new_vmax if new_vmax is not None else vmax
+                    self.plot.set_axis_limits(axis_id, new_vmin, new_vmax)
+                    replot = True
+            if replot:
+                self.plot.replot()
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""
