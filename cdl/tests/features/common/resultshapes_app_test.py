@@ -73,10 +73,10 @@ def __check_roi_merge(
 
 def test_resultshapes():
     """Result shapes test"""
-    obj1 = test_data.create_sincos_image()
-    obj2 = create_image_with_resultshapes()
-    obj2.roi = np.array([[10, 10, 60, 400]], int)
     with cdltest_app_context(console=False) as win:
+        obj1 = test_data.create_sincos_image()
+        obj2 = create_image_with_resultshapes()
+        obj2.roi = np.array([[10, 10, 60, 400]], int)
         panel = win.signalpanel
         for noised in (False, True):
             sig = test_data.create_noisy_signal(noised=noised)

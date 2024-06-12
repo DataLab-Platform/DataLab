@@ -538,9 +538,6 @@ class ResultShape(ResultProperties):
         except KeyError:
             raise ValueError(f"Invalid shapetype {shape}")
         self.add_label = add_label
-        self.__coords_labels = self.__get_coords_labels()
-        self.__complementary_array = self.__get_complementary_array(array)
-        self.__complementary_xlabels = self.__get_complementary_xlabels()
         super().__init__(title, array, labels=None, item_json=item_json)
 
     @property
@@ -562,7 +559,7 @@ class ResultShape(ResultProperties):
             # by an even number of data columns (flattened x, y coordinates).
             assert self.array.shape[1] % 2 == 1
         else:
-            data_colnb = len(self.__coords_labels)
+            data_colnb = len(self.__get_coords_labels())
             # `data_colnb` is the number of data columns depends on the shape type,
             # not counting the ROI index, hence the +1 in the following assertion
             assert self.array.shape[1] == data_colnb + 1
@@ -603,13 +600,14 @@ class ResultShape(ResultProperties):
             return ("A",)
         return None
 
-    def __get_complementary_array(self, array: np.ndarray) -> np.ndarray | None:
+    def __get_complementary_array(self) -> np.ndarray | None:
         """Return the complementary array of results, e.g. the array of lengths
         for a segment result shape, or the array of areas for a circle result shape
 
         Returns:
             Complementary array of results, or None if there is no complementary array
         """
+        array = self.array
         if self.shapetype is ShapeTypes.SEGMENT:
             dx1, dy1 = array[:, 3] - array[:, 1], array[:, 4] - array[:, 2]
             length = np.linalg.norm(np.vstack([dx1, dy1]).T, axis=1)
@@ -627,7 +625,7 @@ class ResultShape(ResultProperties):
     @property
     def headers(self) -> list[str] | None:
         """Return result headers (one header per column of result array)"""
-        labels = self.__coords_labels + (self.__complementary_xlabels or ())
+        labels = self.__get_coords_labels() + (self.__get_complementary_xlabels() or ())
         return labels[-self.shown_array.shape[1] :]
 
     @property
@@ -637,9 +635,10 @@ class ResultShape(ResultProperties):
         Returns:
             Array of shown results
         """
-        if self.__complementary_array is None:
+        comp_array = self.__get_complementary_array()
+        if comp_array is None:
             return self.raw_data
-        return np.hstack([self.raw_data, self.__complementary_array])
+        return np.hstack([self.raw_data, comp_array])
 
     @property
     def label_contents(self) -> tuple[tuple[int, str], ...]:
@@ -647,7 +646,7 @@ class ResultShape(ResultProperties):
         where index is the column of raw_data and text is the associated
         label format string"""
         contents = []
-        for idx, lbl in enumerate(self.__complementary_xlabels):
+        for idx, lbl in enumerate(self.__get_complementary_xlabels()):
             contents.append((idx + self.raw_data.shape[1], lbl))
         return tuple(contents)
 
