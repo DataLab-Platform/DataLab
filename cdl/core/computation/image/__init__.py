@@ -1286,6 +1286,7 @@ def calc_resultshape(
     obj: ImageObj,
     func: Callable,
     *args: Any,
+    add_label: bool = False,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on an image object,
     taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
@@ -1296,6 +1297,8 @@ def calc_resultshape(
         obj: input image object
         func: computation function
         *args: computation function arguments
+        add_label: if True, add a label item (and the geometrical shape) to plot
+         (default to False)
 
     Returns:
         Result shape object or None if no result is found
@@ -1371,7 +1374,7 @@ def calc_resultshape(
                 row += coords.shape[0]
         else:
             array = np.vstack(res)
-        return ResultShape(title, array, shape)
+        return ResultShape(title, array, shape, add_label=add_label)
     return None
 
 

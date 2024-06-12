@@ -609,7 +609,7 @@ def create_resultshapes() -> Generator[cdl.obj.ResultShape, None, None]:
             [0, 100, 100, 150, 100, 150, 150, 200, 100, 250, 50],
         ),
     ):
-        yield cdl.obj.ResultShape(shape, data, shape)
+        yield cdl.obj.ResultShape(shape, data, shape, add_label=shape == "segment")
 
 
 def create_resultproperties() -> Generator[cdl.obj.ResultProperties, None, None]:

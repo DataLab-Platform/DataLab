@@ -156,22 +156,25 @@ class BasePlotHandler:
         for the object with the given uuid"""
         obj = self.panel.objmodel[oid]
         if obj.metadata:
-            # Performance optimization: block `plotpy.plot.BasePlot` signals,
-            # add all items except the last one, unblock signals, then add the last one
-            # (this avoids some unnecessary refresh process by PlotPy)
             items = list(obj.iterate_shape_items(editable=False))
-            resultproperties = list(obj.iterate_resultproperties())
-            if resultproperties:
-                for resultprop in resultproperties:
-                    item = resultprop.get_plot_item()
+            results = list(obj.iterate_resultproperties()) + list(
+                obj.iterate_resultshapes()
+            )
+            for result in results:
+                item = result.get_label_item()
+                if item is not None:
                     items.append(item)
                     self.__result_items_mapping[item] = (
-                        lambda item,
-                        rprop=resultprop: rprop.update_obj_metadata_from_item(obj, item)
+                        lambda item, rprop=result: rprop.update_obj_metadata_from_item(
+                            obj, item
+                        )
                     )
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()
+                # Performance optimization: block `plotpy.plot.BasePlot` signals, add
+                # all items except the last one, unblock signals, then add the last one
+                # (this avoids some unnecessary refresh process by PlotPy)
                 with block_signals(self.plot, True):
                     with create_progress_bar(
                         self.panel, _("Creating geometric shapes"), max_=len(items) - 1

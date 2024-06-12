@@ -1173,6 +1173,7 @@ def calc_resultshape(
     obj: SignalObj,
     func: Callable,
     *args: Any,
+    add_label: bool = False,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on a signal object,
     taking into account the signal ROIs.
@@ -1183,6 +1184,8 @@ def calc_resultshape(
         obj: input image object
         func: computation function
         *args: computation function arguments
+        add_label: if True, add a label item (and the geometrical shape) to plot
+         (default to False)
 
     Returns:
         Result shape object or None if no result is found
@@ -1215,7 +1218,7 @@ def calc_resultshape(
             results = np.array([i_roi] + results.tolist())
             res.append(results)
     if res:
-        return ResultShape(title, np.vstack(res), shape)
+        return ResultShape(title, np.vstack(res), shape, add_label=add_label)
     return None
 
 
@@ -1261,6 +1264,7 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
         param.method,
         param.xmin,
         param.xmax,
+        add_label=True,
     )
 
 
@@ -1273,7 +1277,7 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2)
+    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1308,7 +1312,9 @@ def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
     Returns:
         Result properties with bandwidth
     """
-    return calc_resultshape("bandwidth", "segment", obj, alg.bandwidth, 3.0)
+    return calc_resultshape(
+        "bandwidth", "segment", obj, alg.bandwidth, 3.0, add_label=True
+    )
 
 
 class DynamicParam(gds.DataSet):
