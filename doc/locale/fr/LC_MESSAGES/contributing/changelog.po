@@ -1418,8 +1418,8 @@ msgstr ""
 "du plugin *cdl_testdata.py* en conséquence)"
 
 #: ../../CHANGELOG.md:340
-msgid "Signal and image computations API (`cdl.core.computations`):"
-msgstr "API de calculs sur les signaux et les images (`cdl.core.computations`) :"
+msgid "Signal and image computations API (`cdl.computations`):"
+msgstr "API de calculs sur les signaux et les images (`cdl.computations`) :"
 
 #: ../../CHANGELOG.md:341
 msgid "Added wrappers for signal and image 1 -> 1 computations"

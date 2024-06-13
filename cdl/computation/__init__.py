@@ -1,5 +1,5 @@
 """
-Computation (:mod:`cdl.core.computation`)
+Computation (:mod:`cdl.computation`)
 -----------------------------------------
 
 This package contains the computation functions used by the DataLab project.
@@ -9,7 +9,7 @@ but can be used independently as well.
 
 .. seealso::
 
-    The :mod:`cdl.core.computation` package is the main entry point for the DataLab
+    The :mod:`cdl.computation` package is the main entry point for the DataLab
     computation functions when manipulating DataLab objects.
     See the :mod:`cdl.algorithms` package for algorithms that operate directly on
     NumPy arrays.
@@ -31,20 +31,20 @@ data model defined in the :mod:`cdl.obj` (or :mod:`cdl.core.model`) module.
 The computation modules are organized in subpackages according to their purpose.
 The following subpackages are available:
 
-- :mod:`cdl.core.computation.base`: Common processing features
-- :mod:`cdl.core.computation.signal`: Signal processing features
-- :mod:`cdl.core.computation.image`: Image processing features
+- :mod:`cdl.computation.base`: Common processing features
+- :mod:`cdl.computation.signal`: Signal processing features
+- :mod:`cdl.computation.image`: Image processing features
 
 Common processing features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: cdl.core.computation.base
+.. automodule:: cdl.computation.base
    :members:
 
 Signal processing features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. automodule:: cdl.core.computation.signal
+.. automodule:: cdl.computation.signal
    :members:
 
 Image processing features
@@ -53,35 +53,35 @@ Image processing features
 Base image processing features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image
+.. automodule:: cdl.computation.image
    :members:
 
 Exposure correction features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image.exposure
+.. automodule:: cdl.computation.image.exposure
     :members:
 
 Restoration features
 ~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image.restoration
+.. automodule:: cdl.computation.image.restoration
     :members:
 
 Morphological features
 ~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image.morphology
+.. automodule:: cdl.computation.image.morphology
     :members:
 
 Edge detection features
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image.edges
+.. automodule:: cdl.computation.image.edges
 
 Detection features
 ~~~~~~~~~~~~~~~~~~
 
-.. automodule:: cdl.core.computation.image.detection
+.. automodule:: cdl.computation.image.detection
     :members:
 """

@@ -26,11 +26,11 @@ msgstr "Paramètres (:mod:`cdl.param`)"
 #: cdl.param:4 of
 msgid ""
 "The :mod:`cdl.param` module aims at providing all the dataset parameters "
-"that are used by the :mod:`cdl.core.computation` and "
+"that are used by the :mod:`cdl.computation` and "
 ":mod:`cdl.core.gui.processor` packages."
 msgstr ""
 "Le module :mod:`cdl.param` fournit tous les paramètres de jeu de données "
-"utilisés par les modules :mod:`cdl.core.computation` et "
+"utilisés par les modules :mod:`cdl.computation` et "
 ":mod:`cdl.core.gui.processor`."
 
 #: cdl.param:7 of
@@ -38,15 +38,15 @@ msgid "Those datasets are defined in other modules:"
 msgstr ""
 
 #: cdl.param:9 of
-msgid ":mod:`cdl.core.computation.base`"
+msgid ":mod:`cdl.computation.base`"
 msgstr ""
 
 #: cdl.param:10 of
-msgid ":mod:`cdl.core.computation.image`"
+msgid ":mod:`cdl.computation.image`"
 msgstr ""
 
 #: cdl.param:11 of
-msgid ":mod:`cdl.core.computation.signal`"
+msgid ":mod:`cdl.computation.signal`"
 msgstr ""
 
 #: cdl.param:13 of
@@ -94,165 +94,165 @@ msgid ""
 " parameters with the :py:class:`cdl.param.BinningParam` dataset:"
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:1 of
+#: cdl.computation.image.BinningParam:1 of
 msgid "Binning parameters"
 msgstr "Paramètres de binning"
 
-#: cdl.core.computation.image.BinningParam:6
+#: cdl.computation.image.BinningParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Cluster size (X)\\. Number of adjacent pixels to be combined together "
 "along x-axis. Integer higher than 2\\. Default: 2."
 msgstr ""
 
-#: cdl.core.computation.base.ClipParam
-#: cdl.core.computation.base.ConstantOperationParam
-#: cdl.core.computation.base.FFTParam cdl.core.computation.base.GaussianParam
-#: cdl.core.computation.base.MovingAverageParam
-#: cdl.core.computation.base.MovingMedianParam
-#: cdl.core.computation.base.NormalizeParam
-#: cdl.core.computation.base.ROIDataParam
-#: cdl.core.computation.base.SpectrumParam
-#: cdl.core.computation.base.ThresholdParam
-#: cdl.core.computation.image.AverageProfileParam
-#: cdl.core.computation.image.BinningParam
-#: cdl.core.computation.image.ButterworthParam
-#: cdl.core.computation.image.DataTypeIParam
-#: cdl.core.computation.image.FlatFieldParam
-#: cdl.core.computation.image.GridParam
-#: cdl.core.computation.image.HoughCircleParam
-#: cdl.core.computation.image.LineProfileParam
-#: cdl.core.computation.image.LogP1Param
-#: cdl.core.computation.image.RadialProfileParam
-#: cdl.core.computation.image.ResizeParam
-#: cdl.core.computation.image.RotateParam
-#: cdl.core.computation.image.SegmentProfileParam
-#: cdl.core.computation.image.ZCalibrateParam
-#: cdl.core.computation.image.detection.BlobDOGParam
-#: cdl.core.computation.image.detection.BlobDOHParam
-#: cdl.core.computation.image.detection.BlobLOGParam
-#: cdl.core.computation.image.detection.BlobOpenCVParam
-#: cdl.core.computation.image.detection.ContourShapeParam
-#: cdl.core.computation.image.detection.Peak2DDetectionParam
-#: cdl.core.computation.image.edges.CannyParam
-#: cdl.core.computation.image.exposure.AdjustGammaParam
-#: cdl.core.computation.image.exposure.AdjustLogParam
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam
-#: cdl.core.computation.image.exposure.EqualizeHistParam
-#: cdl.core.computation.image.exposure.RescaleIntensityParam
-#: cdl.core.computation.image.morphology.MorphologyParam
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam
-#: cdl.core.computation.image.restoration.DenoiseTVParam
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam
-#: cdl.core.computation.signal.BandPassFilterParam
-#: cdl.core.computation.signal.BandStopFilterParam
-#: cdl.core.computation.signal.DataTypeSParam
-#: cdl.core.computation.signal.DetrendingParam
-#: cdl.core.computation.signal.DynamicParam
-#: cdl.core.computation.signal.FWHMParam
-#: cdl.core.computation.signal.HighPassFilterParam
-#: cdl.core.computation.signal.InterpolationParam
-#: cdl.core.computation.signal.LowPassFilterParam
-#: cdl.core.computation.signal.PeakDetectionParam
-#: cdl.core.computation.signal.PolynomialFitParam
-#: cdl.core.computation.signal.PowerParam
-#: cdl.core.computation.signal.ResamplingParam
-#: cdl.core.computation.signal.WindowingParam
-#: cdl.core.computation.signal.XYCalibrateParam of
+#: cdl.computation.base.ClipParam
+#: cdl.computation.base.ConstantOperationParam
+#: cdl.computation.base.FFTParam cdl.computation.base.GaussianParam
+#: cdl.computation.base.MovingAverageParam
+#: cdl.computation.base.MovingMedianParam
+#: cdl.computation.base.NormalizeParam
+#: cdl.computation.base.ROIDataParam
+#: cdl.computation.base.SpectrumParam
+#: cdl.computation.base.ThresholdParam
+#: cdl.computation.image.AverageProfileParam
+#: cdl.computation.image.BinningParam
+#: cdl.computation.image.ButterworthParam
+#: cdl.computation.image.DataTypeIParam
+#: cdl.computation.image.FlatFieldParam
+#: cdl.computation.image.GridParam
+#: cdl.computation.image.HoughCircleParam
+#: cdl.computation.image.LineProfileParam
+#: cdl.computation.image.LogP1Param
+#: cdl.computation.image.RadialProfileParam
+#: cdl.computation.image.ResizeParam
+#: cdl.computation.image.RotateParam
+#: cdl.computation.image.SegmentProfileParam
+#: cdl.computation.image.ZCalibrateParam
+#: cdl.computation.image.detection.BlobDOGParam
+#: cdl.computation.image.detection.BlobDOHParam
+#: cdl.computation.image.detection.BlobLOGParam
+#: cdl.computation.image.detection.BlobOpenCVParam
+#: cdl.computation.image.detection.ContourShapeParam
+#: cdl.computation.image.detection.Peak2DDetectionParam
+#: cdl.computation.image.edges.CannyParam
+#: cdl.computation.image.exposure.AdjustGammaParam
+#: cdl.computation.image.exposure.AdjustLogParam
+#: cdl.computation.image.exposure.AdjustSigmoidParam
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam
+#: cdl.computation.image.exposure.EqualizeHistParam
+#: cdl.computation.image.exposure.RescaleIntensityParam
+#: cdl.computation.image.morphology.MorphologyParam
+#: cdl.computation.image.restoration.DenoiseBilateralParam
+#: cdl.computation.image.restoration.DenoiseTVParam
+#: cdl.computation.image.restoration.DenoiseWaveletParam
+#: cdl.computation.signal.BandPassFilterParam
+#: cdl.computation.signal.BandStopFilterParam
+#: cdl.computation.signal.DataTypeSParam
+#: cdl.computation.signal.DetrendingParam
+#: cdl.computation.signal.DynamicParam
+#: cdl.computation.signal.FWHMParam
+#: cdl.computation.signal.HighPassFilterParam
+#: cdl.computation.signal.InterpolationParam
+#: cdl.computation.signal.LowPassFilterParam
+#: cdl.computation.signal.PeakDetectionParam
+#: cdl.computation.signal.PolynomialFitParam
+#: cdl.computation.signal.PowerParam
+#: cdl.computation.signal.ResamplingParam
+#: cdl.computation.signal.WindowingParam
+#: cdl.computation.signal.XYCalibrateParam of
 msgid "type"
 msgstr ""
 
-#: cdl.core.computation.base.MovingAverageParam:8
-#: cdl.core.computation.base.MovingMedianParam:8
-#: cdl.core.computation.image.AverageProfileParam:15
-#: cdl.core.computation.image.AverageProfileParam:22
-#: cdl.core.computation.image.AverageProfileParam:29
-#: cdl.core.computation.image.AverageProfileParam:36
-#: cdl.core.computation.image.BinningParam:8
-#: cdl.core.computation.image.BinningParam:15
-#: cdl.core.computation.image.ButterworthParam:22
-#: cdl.core.computation.image.GridParam:15
-#: cdl.core.computation.image.GridParam:22
-#: cdl.core.computation.image.HoughCircleParam:8
-#: cdl.core.computation.image.HoughCircleParam:15
-#: cdl.core.computation.image.HoughCircleParam:22
-#: cdl.core.computation.image.LineProfileParam:15
-#: cdl.core.computation.image.LineProfileParam:22
-#: cdl.core.computation.image.ResizeParam:36
-#: cdl.core.computation.image.RotateParam:43
-#: cdl.core.computation.image.SegmentProfileParam:8
-#: cdl.core.computation.image.SegmentProfileParam:15
-#: cdl.core.computation.image.SegmentProfileParam:22
-#: cdl.core.computation.image.SegmentProfileParam:29
-#: cdl.core.computation.image.detection.BlobOpenCVParam:22
-#: cdl.core.computation.image.detection.BlobOpenCVParam:43
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:15
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:8
-#: cdl.core.computation.image.exposure.EqualizeHistParam:8
-#: cdl.core.computation.image.morphology.MorphologyParam:8
-#: cdl.core.computation.image.restoration.DenoiseTVParam:22
-#: cdl.core.computation.signal.BandPassFilterParam:15
-#: cdl.core.computation.signal.BandStopFilterParam:15
-#: cdl.core.computation.signal.DynamicParam:22
-#: cdl.core.computation.signal.HighPassFilterParam:15
-#: cdl.core.computation.signal.LowPassFilterParam:15
-#: cdl.core.computation.signal.PeakDetectionParam:8
-#: cdl.core.computation.signal.PeakDetectionParam:15
-#: cdl.core.computation.signal.PolynomialFitParam:8
-#: cdl.core.computation.signal.ResamplingParam:50 of
+#: cdl.computation.base.MovingAverageParam:8
+#: cdl.computation.base.MovingMedianParam:8
+#: cdl.computation.image.AverageProfileParam:15
+#: cdl.computation.image.AverageProfileParam:22
+#: cdl.computation.image.AverageProfileParam:29
+#: cdl.computation.image.AverageProfileParam:36
+#: cdl.computation.image.BinningParam:8
+#: cdl.computation.image.BinningParam:15
+#: cdl.computation.image.ButterworthParam:22
+#: cdl.computation.image.GridParam:15
+#: cdl.computation.image.GridParam:22
+#: cdl.computation.image.HoughCircleParam:8
+#: cdl.computation.image.HoughCircleParam:15
+#: cdl.computation.image.HoughCircleParam:22
+#: cdl.computation.image.LineProfileParam:15
+#: cdl.computation.image.LineProfileParam:22
+#: cdl.computation.image.ResizeParam:36
+#: cdl.computation.image.RotateParam:43
+#: cdl.computation.image.SegmentProfileParam:8
+#: cdl.computation.image.SegmentProfileParam:15
+#: cdl.computation.image.SegmentProfileParam:22
+#: cdl.computation.image.SegmentProfileParam:29
+#: cdl.computation.image.detection.BlobOpenCVParam:22
+#: cdl.computation.image.detection.BlobOpenCVParam:43
+#: cdl.computation.image.detection.Peak2DDetectionParam:15
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:8
+#: cdl.computation.image.exposure.EqualizeHistParam:8
+#: cdl.computation.image.morphology.MorphologyParam:8
+#: cdl.computation.image.restoration.DenoiseTVParam:22
+#: cdl.computation.signal.BandPassFilterParam:15
+#: cdl.computation.signal.BandStopFilterParam:15
+#: cdl.computation.signal.DynamicParam:22
+#: cdl.computation.signal.HighPassFilterParam:15
+#: cdl.computation.signal.LowPassFilterParam:15
+#: cdl.computation.signal.PeakDetectionParam:8
+#: cdl.computation.signal.PeakDetectionParam:15
+#: cdl.computation.signal.PolynomialFitParam:8
+#: cdl.computation.signal.ResamplingParam:50 of
 msgid "guidata.dataset.dataitems.IntItem"
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:13
+#: cdl.computation.image.BinningParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Cluster size (Y)\\. Number of adjacent pixels to be combined together "
 "along y-axis. Integer higher than 2\\. Default: 2."
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:20
+#: cdl.computation.image.BinningParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Single choice from: 'sum', 'average', 'median', 'min', 'max'. Default: "
 "'sum'."
 msgstr ""
 
-#: cdl.core.computation.base.NormalizeParam:8
-#: cdl.core.computation.image.AverageProfileParam:8
-#: cdl.core.computation.image.BinningParam:22
-#: cdl.core.computation.image.BinningParam:29
-#: cdl.core.computation.image.DataTypeIParam:8
-#: cdl.core.computation.image.GridParam:8
-#: cdl.core.computation.image.LineProfileParam:8
-#: cdl.core.computation.image.RadialProfileParam:8
-#: cdl.core.computation.image.ResizeParam:15
-#: cdl.core.computation.image.RotateParam:15
-#: cdl.core.computation.image.detection.ContourShapeParam:15
-#: cdl.core.computation.image.edges.CannyParam:36
-#: cdl.core.computation.image.exposure.RescaleIntensityParam:8
-#: cdl.core.computation.image.exposure.RescaleIntensityParam:15
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:15
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:8
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:15
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:22
-#: cdl.core.computation.signal.BandPassFilterParam:8
-#: cdl.core.computation.signal.BandStopFilterParam:8
-#: cdl.core.computation.signal.DataTypeSParam:8
-#: cdl.core.computation.signal.DetrendingParam:8
-#: cdl.core.computation.signal.DynamicParam:15
-#: cdl.core.computation.signal.FWHMParam:8
-#: cdl.core.computation.signal.HighPassFilterParam:8
-#: cdl.core.computation.signal.InterpolationParam:8
-#: cdl.core.computation.signal.LowPassFilterParam:8
-#: cdl.core.computation.signal.ResamplingParam:8
-#: cdl.core.computation.signal.ResamplingParam:36
-#: cdl.core.computation.signal.WindowingParam:8
-#: cdl.core.computation.signal.XYCalibrateParam:8 of
+#: cdl.computation.base.NormalizeParam:8
+#: cdl.computation.image.AverageProfileParam:8
+#: cdl.computation.image.BinningParam:22
+#: cdl.computation.image.BinningParam:29
+#: cdl.computation.image.DataTypeIParam:8
+#: cdl.computation.image.GridParam:8
+#: cdl.computation.image.LineProfileParam:8
+#: cdl.computation.image.RadialProfileParam:8
+#: cdl.computation.image.ResizeParam:15
+#: cdl.computation.image.RotateParam:15
+#: cdl.computation.image.detection.ContourShapeParam:15
+#: cdl.computation.image.edges.CannyParam:36
+#: cdl.computation.image.exposure.RescaleIntensityParam:8
+#: cdl.computation.image.exposure.RescaleIntensityParam:15
+#: cdl.computation.image.restoration.DenoiseBilateralParam:15
+#: cdl.computation.image.restoration.DenoiseWaveletParam:8
+#: cdl.computation.image.restoration.DenoiseWaveletParam:15
+#: cdl.computation.image.restoration.DenoiseWaveletParam:22
+#: cdl.computation.signal.BandPassFilterParam:8
+#: cdl.computation.signal.BandStopFilterParam:8
+#: cdl.computation.signal.DataTypeSParam:8
+#: cdl.computation.signal.DetrendingParam:8
+#: cdl.computation.signal.DynamicParam:15
+#: cdl.computation.signal.FWHMParam:8
+#: cdl.computation.signal.HighPassFilterParam:8
+#: cdl.computation.signal.InterpolationParam:8
+#: cdl.computation.signal.LowPassFilterParam:8
+#: cdl.computation.signal.ResamplingParam:8
+#: cdl.computation.signal.ResamplingParam:36
+#: cdl.computation.signal.WindowingParam:8
+#: cdl.computation.signal.XYCalibrateParam:8 of
 msgid "guidata.dataset.dataitems.ChoiceItem"
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:27
+#: cdl.computation.image.BinningParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "Data type\\. Output image data type. Single choice from: 'dtype', "
@@ -260,34 +260,34 @@ msgid ""
 "Default: 'dtype'."
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:34
+#: cdl.computation.image.BinningParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
 "Change pixel size so that overall image size remains the same. Default: "
 "False."
 msgstr ""
 
-#: cdl.core.computation.base.FFTParam:8
-#: cdl.core.computation.base.ROIDataParam:15
-#: cdl.core.computation.base.SpectrumParam:8
-#: cdl.core.computation.image.BinningParam:36
-#: cdl.core.computation.image.ButterworthParam:15
-#: cdl.core.computation.image.ResizeParam:29
-#: cdl.core.computation.image.RotateParam:29
-#: cdl.core.computation.image.RotateParam:36
-#: cdl.core.computation.image.detection.BlobDOGParam:36
-#: cdl.core.computation.image.detection.BlobDOHParam:36
-#: cdl.core.computation.image.detection.BlobLOGParam:36
-#: cdl.core.computation.image.detection.BlobLOGParam:43
-#: cdl.core.computation.image.detection.BlobOpenCVParam:36
-#: cdl.core.computation.image.detection.BlobOpenCVParam:50
-#: cdl.core.computation.image.detection.BlobOpenCVParam:71
-#: cdl.core.computation.image.detection.BlobOpenCVParam:92
-#: cdl.core.computation.image.detection.BlobOpenCVParam:113
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:22
-#: cdl.core.computation.image.edges.CannyParam:29
-#: cdl.core.computation.image.exposure.AdjustLogParam:15
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:22 of
+#: cdl.computation.base.FFTParam:8
+#: cdl.computation.base.ROIDataParam:15
+#: cdl.computation.base.SpectrumParam:8
+#: cdl.computation.image.BinningParam:36
+#: cdl.computation.image.ButterworthParam:15
+#: cdl.computation.image.ResizeParam:29
+#: cdl.computation.image.RotateParam:29
+#: cdl.computation.image.RotateParam:36
+#: cdl.computation.image.detection.BlobDOGParam:36
+#: cdl.computation.image.detection.BlobDOHParam:36
+#: cdl.computation.image.detection.BlobLOGParam:36
+#: cdl.computation.image.detection.BlobLOGParam:43
+#: cdl.computation.image.detection.BlobOpenCVParam:36
+#: cdl.computation.image.detection.BlobOpenCVParam:50
+#: cdl.computation.image.detection.BlobOpenCVParam:71
+#: cdl.computation.image.detection.BlobOpenCVParam:92
+#: cdl.computation.image.detection.BlobOpenCVParam:113
+#: cdl.computation.image.detection.Peak2DDetectionParam:22
+#: cdl.computation.image.edges.CannyParam:29
+#: cdl.computation.image.exposure.AdjustLogParam:15
+#: cdl.computation.image.exposure.AdjustSigmoidParam:22 of
 msgid "guidata.dataset.dataitems.BoolItem"
 msgstr ""
 
@@ -310,13 +310,13 @@ msgstr ""
 msgid "New instance of :py:class:`BinningParam`."
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:68 of
+#: cdl.computation.image.BinningParam:68 of
 msgid ""
 "To instanciate a new :py:class:`BinningParam` dataset, you can use the "
 "classmethod :py:meth:`BinningParam.create()` like this:"
 msgstr ""
 
-#: cdl.core.computation.image.BinningParam:276 of
+#: cdl.computation.image.BinningParam:276 of
 msgid ""
 "You can also first instanciate a default :py:class:`BinningParam` and "
 "then set the fields like this:"
@@ -326,101 +326,101 @@ msgstr ""
 msgid "Common parameters"
 msgstr "Paramètres communs"
 
-#: cdl.core.computation.base.ClipParam:1 of
+#: cdl.computation.base.ClipParam:1 of
 msgid "Data clipping parameters"
 msgstr "Paramètres d'écrêtage"
 
-#: cdl.core.computation.base.ClipParam:6
+#: cdl.computation.base.ClipParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Clipping value\\.  Default: None."
 msgstr ""
 
-#: cdl.core.computation.base.ClipParam:8
-#: cdl.core.computation.base.ConstantOperationParam:9
-#: cdl.core.computation.base.GaussianParam:8
-#: cdl.core.computation.base.ThresholdParam:8
-#: cdl.core.computation.image.ButterworthParam:8
-#: cdl.core.computation.image.FlatFieldParam:8
-#: cdl.core.computation.image.GridParam:29
-#: cdl.core.computation.image.GridParam:36
-#: cdl.core.computation.image.LogP1Param:8
-#: cdl.core.computation.image.RadialProfileParam:15
-#: cdl.core.computation.image.RadialProfileParam:22
-#: cdl.core.computation.image.ResizeParam:8
-#: cdl.core.computation.image.ResizeParam:22
-#: cdl.core.computation.image.RotateParam:8
-#: cdl.core.computation.image.RotateParam:22
-#: cdl.core.computation.image.ZCalibrateParam:8
-#: cdl.core.computation.image.ZCalibrateParam:15
-#: cdl.core.computation.image.detection.BlobDOGParam:8
-#: cdl.core.computation.image.detection.BlobDOGParam:15
-#: cdl.core.computation.image.detection.BlobDOGParam:22
-#: cdl.core.computation.image.detection.BlobDOGParam:29
-#: cdl.core.computation.image.detection.BlobDOHParam:8
-#: cdl.core.computation.image.detection.BlobDOHParam:15
-#: cdl.core.computation.image.detection.BlobDOHParam:22
-#: cdl.core.computation.image.detection.BlobDOHParam:29
-#: cdl.core.computation.image.detection.BlobLOGParam:8
-#: cdl.core.computation.image.detection.BlobLOGParam:15
-#: cdl.core.computation.image.detection.BlobLOGParam:22
-#: cdl.core.computation.image.detection.BlobLOGParam:29
-#: cdl.core.computation.image.detection.BlobOpenCVParam:8
-#: cdl.core.computation.image.detection.BlobOpenCVParam:15
-#: cdl.core.computation.image.detection.BlobOpenCVParam:29
-#: cdl.core.computation.image.detection.BlobOpenCVParam:57
-#: cdl.core.computation.image.detection.BlobOpenCVParam:64
-#: cdl.core.computation.image.detection.BlobOpenCVParam:78
-#: cdl.core.computation.image.detection.BlobOpenCVParam:85
-#: cdl.core.computation.image.detection.BlobOpenCVParam:99
-#: cdl.core.computation.image.detection.BlobOpenCVParam:106
-#: cdl.core.computation.image.detection.BlobOpenCVParam:120
-#: cdl.core.computation.image.detection.BlobOpenCVParam:127
-#: cdl.core.computation.image.detection.ContourShapeParam:8
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:8
-#: cdl.core.computation.image.edges.CannyParam:8
-#: cdl.core.computation.image.edges.CannyParam:15
-#: cdl.core.computation.image.edges.CannyParam:22
-#: cdl.core.computation.image.edges.CannyParam:43
-#: cdl.core.computation.image.exposure.AdjustGammaParam:8
-#: cdl.core.computation.image.exposure.AdjustGammaParam:15
-#: cdl.core.computation.image.exposure.AdjustLogParam:8
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:8
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:15
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:15
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:8
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:22
-#: cdl.core.computation.image.restoration.DenoiseTVParam:8
-#: cdl.core.computation.image.restoration.DenoiseTVParam:15
-#: cdl.core.computation.signal.BandPassFilterParam:22
-#: cdl.core.computation.signal.BandPassFilterParam:29
-#: cdl.core.computation.signal.BandPassFilterParam:36
-#: cdl.core.computation.signal.BandPassFilterParam:43
-#: cdl.core.computation.signal.BandStopFilterParam:22
-#: cdl.core.computation.signal.BandStopFilterParam:29
-#: cdl.core.computation.signal.BandStopFilterParam:36
-#: cdl.core.computation.signal.BandStopFilterParam:43
-#: cdl.core.computation.signal.DynamicParam:8
-#: cdl.core.computation.signal.FWHMParam:15
-#: cdl.core.computation.signal.FWHMParam:22
-#: cdl.core.computation.signal.HighPassFilterParam:22
-#: cdl.core.computation.signal.HighPassFilterParam:29
-#: cdl.core.computation.signal.HighPassFilterParam:36
-#: cdl.core.computation.signal.HighPassFilterParam:43
-#: cdl.core.computation.signal.InterpolationParam:15
-#: cdl.core.computation.signal.LowPassFilterParam:22
-#: cdl.core.computation.signal.LowPassFilterParam:29
-#: cdl.core.computation.signal.LowPassFilterParam:36
-#: cdl.core.computation.signal.LowPassFilterParam:43
-#: cdl.core.computation.signal.PowerParam:8
-#: cdl.core.computation.signal.ResamplingParam:15
-#: cdl.core.computation.signal.ResamplingParam:22
-#: cdl.core.computation.signal.ResamplingParam:29
-#: cdl.core.computation.signal.ResamplingParam:43
-#: cdl.core.computation.signal.WindowingParam:15
-#: cdl.core.computation.signal.WindowingParam:22
-#: cdl.core.computation.signal.WindowingParam:29
-#: cdl.core.computation.signal.XYCalibrateParam:15
-#: cdl.core.computation.signal.XYCalibrateParam:22 of
+#: cdl.computation.base.ClipParam:8
+#: cdl.computation.base.ConstantOperationParam:9
+#: cdl.computation.base.GaussianParam:8
+#: cdl.computation.base.ThresholdParam:8
+#: cdl.computation.image.ButterworthParam:8
+#: cdl.computation.image.FlatFieldParam:8
+#: cdl.computation.image.GridParam:29
+#: cdl.computation.image.GridParam:36
+#: cdl.computation.image.LogP1Param:8
+#: cdl.computation.image.RadialProfileParam:15
+#: cdl.computation.image.RadialProfileParam:22
+#: cdl.computation.image.ResizeParam:8
+#: cdl.computation.image.ResizeParam:22
+#: cdl.computation.image.RotateParam:8
+#: cdl.computation.image.RotateParam:22
+#: cdl.computation.image.ZCalibrateParam:8
+#: cdl.computation.image.ZCalibrateParam:15
+#: cdl.computation.image.detection.BlobDOGParam:8
+#: cdl.computation.image.detection.BlobDOGParam:15
+#: cdl.computation.image.detection.BlobDOGParam:22
+#: cdl.computation.image.detection.BlobDOGParam:29
+#: cdl.computation.image.detection.BlobDOHParam:8
+#: cdl.computation.image.detection.BlobDOHParam:15
+#: cdl.computation.image.detection.BlobDOHParam:22
+#: cdl.computation.image.detection.BlobDOHParam:29
+#: cdl.computation.image.detection.BlobLOGParam:8
+#: cdl.computation.image.detection.BlobLOGParam:15
+#: cdl.computation.image.detection.BlobLOGParam:22
+#: cdl.computation.image.detection.BlobLOGParam:29
+#: cdl.computation.image.detection.BlobOpenCVParam:8
+#: cdl.computation.image.detection.BlobOpenCVParam:15
+#: cdl.computation.image.detection.BlobOpenCVParam:29
+#: cdl.computation.image.detection.BlobOpenCVParam:57
+#: cdl.computation.image.detection.BlobOpenCVParam:64
+#: cdl.computation.image.detection.BlobOpenCVParam:78
+#: cdl.computation.image.detection.BlobOpenCVParam:85
+#: cdl.computation.image.detection.BlobOpenCVParam:99
+#: cdl.computation.image.detection.BlobOpenCVParam:106
+#: cdl.computation.image.detection.BlobOpenCVParam:120
+#: cdl.computation.image.detection.BlobOpenCVParam:127
+#: cdl.computation.image.detection.ContourShapeParam:8
+#: cdl.computation.image.detection.Peak2DDetectionParam:8
+#: cdl.computation.image.edges.CannyParam:8
+#: cdl.computation.image.edges.CannyParam:15
+#: cdl.computation.image.edges.CannyParam:22
+#: cdl.computation.image.edges.CannyParam:43
+#: cdl.computation.image.exposure.AdjustGammaParam:8
+#: cdl.computation.image.exposure.AdjustGammaParam:15
+#: cdl.computation.image.exposure.AdjustLogParam:8
+#: cdl.computation.image.exposure.AdjustSigmoidParam:8
+#: cdl.computation.image.exposure.AdjustSigmoidParam:15
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:15
+#: cdl.computation.image.restoration.DenoiseBilateralParam:8
+#: cdl.computation.image.restoration.DenoiseBilateralParam:22
+#: cdl.computation.image.restoration.DenoiseTVParam:8
+#: cdl.computation.image.restoration.DenoiseTVParam:15
+#: cdl.computation.signal.BandPassFilterParam:22
+#: cdl.computation.signal.BandPassFilterParam:29
+#: cdl.computation.signal.BandPassFilterParam:36
+#: cdl.computation.signal.BandPassFilterParam:43
+#: cdl.computation.signal.BandStopFilterParam:22
+#: cdl.computation.signal.BandStopFilterParam:29
+#: cdl.computation.signal.BandStopFilterParam:36
+#: cdl.computation.signal.BandStopFilterParam:43
+#: cdl.computation.signal.DynamicParam:8
+#: cdl.computation.signal.FWHMParam:15
+#: cdl.computation.signal.FWHMParam:22
+#: cdl.computation.signal.HighPassFilterParam:22
+#: cdl.computation.signal.HighPassFilterParam:29
+#: cdl.computation.signal.HighPassFilterParam:36
+#: cdl.computation.signal.HighPassFilterParam:43
+#: cdl.computation.signal.InterpolationParam:15
+#: cdl.computation.signal.LowPassFilterParam:22
+#: cdl.computation.signal.LowPassFilterParam:29
+#: cdl.computation.signal.LowPassFilterParam:36
+#: cdl.computation.signal.LowPassFilterParam:43
+#: cdl.computation.signal.PowerParam:8
+#: cdl.computation.signal.ResamplingParam:15
+#: cdl.computation.signal.ResamplingParam:22
+#: cdl.computation.signal.ResamplingParam:29
+#: cdl.computation.signal.ResamplingParam:43
+#: cdl.computation.signal.WindowingParam:15
+#: cdl.computation.signal.WindowingParam:22
+#: cdl.computation.signal.WindowingParam:29
+#: cdl.computation.signal.XYCalibrateParam:15
+#: cdl.computation.signal.XYCalibrateParam:22 of
 msgid "guidata.dataset.dataitems.FloatItem"
 msgstr ""
 
@@ -434,11 +434,11 @@ msgstr ""
 msgid "New instance of :py:class:`ClipParam`."
 msgstr ""
 
-#: cdl.core.computation.base.FFTParam:1 of
+#: cdl.computation.base.FFTParam:1 of
 msgid "FFT parameters"
 msgstr "Paramètres FFT"
 
-#: cdl.core.computation.base.FFTParam:6
+#: cdl.computation.base.FFTParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Shift zero frequency to center\\. Default: None."
 msgstr ""
@@ -453,12 +453,12 @@ msgstr ""
 msgid "New instance of :py:class:`FFTParam`."
 msgstr ""
 
-#: cdl.core.computation.base.SpectrumParam:1 of
+#: cdl.computation.base.SpectrumParam:1 of
 #, fuzzy
 msgid "Spectrum parameters"
 msgstr "Paramètres FFT"
 
-#: cdl.core.computation.base.SpectrumParam:6
+#: cdl.computation.base.SpectrumParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Default: False."
 msgstr ""
@@ -473,11 +473,11 @@ msgstr ""
 msgid "New instance of :py:class:`SpectrumParam`."
 msgstr ""
 
-#: cdl.core.computation.base.GaussianParam:1 of
+#: cdl.computation.base.GaussianParam:1 of
 msgid "Gaussian filter parameters"
 msgstr "Paramètres de filtre gaussien"
 
-#: cdl.core.computation.base.GaussianParam:6
+#: cdl.computation.base.GaussianParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "σ\\.  Default: 1.0."
 msgstr ""
@@ -492,11 +492,11 @@ msgstr ""
 msgid "New instance of :py:class:`GaussianParam`."
 msgstr ""
 
-#: cdl.core.computation.base.MovingAverageParam:1 of
+#: cdl.computation.base.MovingAverageParam:1 of
 msgid "Moving average parameters"
 msgstr "Paramètres de moyenne mobile"
 
-#: cdl.core.computation.base.MovingAverageParam:6
+#: cdl.computation.base.MovingAverageParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Size of the moving window\\.  Integer higher than 1\\. Default: 3."
 msgstr ""
@@ -511,11 +511,11 @@ msgstr ""
 msgid "New instance of :py:class:`MovingAverageParam`."
 msgstr ""
 
-#: cdl.core.computation.base.MovingMedianParam:1 of
+#: cdl.computation.base.MovingMedianParam:1 of
 msgid "Moving median parameters"
 msgstr "Paramètres de médiane mobile"
 
-#: cdl.core.computation.base.MovingMedianParam:6
+#: cdl.computation.base.MovingMedianParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Size of the moving window\\.  Integer higher than 1, odd\\. Default: 3."
 msgstr ""
@@ -530,11 +530,11 @@ msgstr ""
 msgid "New instance of :py:class:`MovingMedianParam`."
 msgstr ""
 
-#: cdl.core.computation.base.ROIDataParam:1 of
+#: cdl.computation.base.ROIDataParam:1 of
 msgid "ROI Editor data"
 msgstr "Données de l'éditeur de ROI"
 
-#: cdl.core.computation.base.ROIDataParam:6
+#: cdl.computation.base.ROIDataParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "For convenience, this item accepts a 2d numpy array, a list of list of "
@@ -542,11 +542,11 @@ msgid ""
 "of integers (if not none). Default: None."
 msgstr ""
 
-#: cdl.core.computation.base.ROIDataParam:8 of
+#: cdl.computation.base.ROIDataParam:8 of
 msgid "guidata.dataset.dataitems.FloatArrayItem"
 msgstr ""
 
-#: cdl.core.computation.base.ROIDataParam:13
+#: cdl.computation.base.ROIDataParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Whether to extract the roi as a single object or not. Default: None."
 msgstr ""
@@ -565,11 +565,11 @@ msgstr ""
 msgid "Return True if there is no ROI"
 msgstr "Retourne True s'il n'y a pas de ROI"
 
-#: cdl.core.computation.base.ThresholdParam:1 of
+#: cdl.computation.base.ThresholdParam:1 of
 msgid "Threshold parameters"
 msgstr "Paramètres de seuillage"
 
-#: cdl.core.computation.base.ThresholdParam:6
+#: cdl.computation.base.ThresholdParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Threshold\\.  Default: None."
 msgstr ""
@@ -584,15 +584,15 @@ msgstr ""
 msgid "New instance of :py:class:`ThresholdParam`."
 msgstr ""
 
-#: cdl.core.computation.base.ConstantOperationParam:2 of
+#: cdl.computation.base.ConstantOperationParam:2 of
 msgid "Parameter used to set a constant value to used in operations (sum,"
 msgstr ""
 
-#: cdl.core.computation.base.ConstantOperationParam:2 of
+#: cdl.computation.base.ConstantOperationParam:2 of
 msgid "multiplication, ...)"
 msgstr ""
 
-#: cdl.core.computation.base.ConstantOperationParam:7
+#: cdl.computation.base.ConstantOperationParam:7
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Constant value\\.  Default: None."
 msgstr ""
@@ -611,11 +611,11 @@ msgstr ""
 msgid "Signal parameters"
 msgstr "Paramètres des signaux"
 
-#: cdl.core.computation.signal.DataTypeSParam:1 of
+#: cdl.computation.signal.DataTypeSParam:1 of
 msgid "Convert signal data type parameters"
 msgstr "Convertir les paramètres de type de données du signal"
 
-#: cdl.core.computation.signal.DataTypeSParam:6
+#: cdl.computation.signal.DataTypeSParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Destination data type\\. Output image data type. Single choice from: "
@@ -632,25 +632,25 @@ msgstr ""
 msgid "New instance of :py:class:`DataTypeSParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.FWHMParam:1 of
+#: cdl.computation.signal.FWHMParam:1 of
 msgid "FWHM parameters"
 msgstr "Paramètres de LMH"
 
-#: cdl.core.computation.signal.FWHMParam:6
+#: cdl.computation.signal.FWHMParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Single choice from: 'zero-crossing', 'gauss', 'lorentz', 'voigt'. "
 "Default: 'zero-crossing'."
 msgstr ""
 
-#: cdl.core.computation.signal.FWHMParam:13
+#: cdl.computation.signal.FWHMParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "X\\ :subscript:`MIN`\\. Lower x boundary (empty for no limit, i.e. Start "
 "of the signal)\\. Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.FWHMParam:20
+#: cdl.computation.signal.FWHMParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "X\\ :subscript:`MAX`\\. Upper x boundary (empty for no limit, i.e. End of"
@@ -667,11 +667,11 @@ msgstr ""
 msgid "New instance of :py:class:`FWHMParam`."
 msgstr ""
 
-#: cdl.core.computation.base.NormalizeParam:1 of
+#: cdl.computation.base.NormalizeParam:1 of
 msgid "Normalize parameters"
 msgstr "Paramètres de normalisation"
 
-#: cdl.core.computation.base.NormalizeParam:6
+#: cdl.computation.base.NormalizeParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Normalize with respect to\\.  Single choice from: 'maximum', 'amplitude',"
@@ -688,17 +688,17 @@ msgstr ""
 msgid "New instance of :py:class:`NormalizeParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:1
-#: cdl.core.computation.signal.PeakDetectionParam:1 of
+#: cdl.computation.image.detection.Peak2DDetectionParam:1
+#: cdl.computation.signal.PeakDetectionParam:1 of
 msgid "Peak detection parameters"
 msgstr "Paramètres de détection de pics"
 
-#: cdl.core.computation.signal.PeakDetectionParam:6
+#: cdl.computation.signal.PeakDetectionParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Integer between 0 and 100, unit: %\\. Default: 30."
 msgstr ""
 
-#: cdl.core.computation.signal.PeakDetectionParam:13
+#: cdl.computation.signal.PeakDetectionParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Minimum distance\\.  Integer higher than 1, unit: points\\. Default: 1."
 msgstr ""
@@ -713,11 +713,11 @@ msgstr ""
 msgid "New instance of :py:class:`PeakDetectionParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.PolynomialFitParam:1 of
+#: cdl.computation.signal.PolynomialFitParam:1 of
 msgid "Polynomial fitting parameters"
 msgstr "Paramètres de régression polynomiale"
 
-#: cdl.core.computation.signal.PolynomialFitParam:6
+#: cdl.computation.signal.PolynomialFitParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Integer between 1 and 10\\. Default: 3."
 msgstr ""
@@ -732,25 +732,25 @@ msgstr ""
 msgid "New instance of :py:class:`PolynomialFitParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.XYCalibrateParam:1 of
+#: cdl.computation.signal.XYCalibrateParam:1 of
 msgid "Signal calibration parameters"
 msgstr "Paramètres de calibration du signal"
 
-#: cdl.core.computation.signal.XYCalibrateParam:6
+#: cdl.computation.signal.XYCalibrateParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Calibrate\\.  Single choice from: 'x', 'y'. Default: 'y'."
 msgstr ""
 
-#: cdl.core.computation.image.ZCalibrateParam:6
-#: cdl.core.computation.signal.XYCalibrateParam:13
+#: cdl.computation.image.ZCalibrateParam:6
+#: cdl.computation.signal.XYCalibrateParam:13
 #: guidata.dataset.datatypes.DataSet.create:3
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.FlatFieldParam:6
-#: cdl.core.computation.image.ZCalibrateParam:13
-#: cdl.core.computation.signal.XYCalibrateParam:20
+#: cdl.computation.image.FlatFieldParam:6
+#: cdl.computation.image.ZCalibrateParam:13
+#: cdl.computation.signal.XYCalibrateParam:20
 #: guidata.dataset.datatypes.DataSet.create:3
 #: guidata.dataset.datatypes.DataSet.create:5
 #: guidata.dataset.datatypes.DataSet.create:7 of
@@ -767,20 +767,20 @@ msgstr ""
 msgid "New instance of :py:class:`XYCalibrateParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.InterpolationParam:1 of
+#: cdl.computation.signal.InterpolationParam:1 of
 msgid "Interpolation parameters"
 msgstr "Paramètres d'interpolation"
 
-#: cdl.core.computation.signal.InterpolationParam:6
-#: cdl.core.computation.signal.ResamplingParam:6
+#: cdl.computation.signal.InterpolationParam:6
+#: cdl.computation.signal.ResamplingParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Interpolation method\\.  Single choice from: 'linear', 'spline', "
 "'quadratic', 'cubic', 'barycentric', 'pchip'. Default: 'linear'."
 msgstr ""
 
-#: cdl.core.computation.signal.InterpolationParam:13
-#: cdl.core.computation.signal.ResamplingParam:13
+#: cdl.computation.signal.InterpolationParam:13
+#: cdl.computation.signal.ResamplingParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Value to use for points outside the interpolation domain (used only with "
@@ -797,31 +797,31 @@ msgstr ""
 msgid "New instance of :py:class:`InterpolationParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.ResamplingParam:1 of
+#: cdl.computation.signal.ResamplingParam:1 of
 msgid "Resample parameters"
 msgstr "Paramètres de rééchantillonnage"
 
-#: cdl.core.computation.signal.ResamplingParam:20
+#: cdl.computation.signal.ResamplingParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "X\\ :subscript:`min`\\.  Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.ResamplingParam:27
+#: cdl.computation.signal.ResamplingParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid "X\\ :subscript:`max`\\.  Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.ResamplingParam:34
+#: cdl.computation.signal.ResamplingParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid "Single choice from: 'dx', 'nbpts'. Default: 'nbpts'."
 msgstr ""
 
-#: cdl.core.computation.signal.ResamplingParam:41
+#: cdl.computation.signal.ResamplingParam:41
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid "ΔX\\.  Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.ResamplingParam:48
+#: cdl.computation.signal.ResamplingParam:48
 #: guidata.dataset.datatypes.DataSet.create:15 of
 msgid "Number of points\\.  Default: None."
 msgstr ""
@@ -836,11 +836,11 @@ msgstr ""
 msgid "New instance of :py:class:`ResamplingParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.DetrendingParam:1 of
+#: cdl.computation.signal.DetrendingParam:1 of
 msgid "Detrending parameters"
 msgstr "Elimination de tendance"
 
-#: cdl.core.computation.signal.DetrendingParam:6
+#: cdl.computation.signal.DetrendingParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Detrending method\\.  Single choice from: 'linear', 'constant'. Default: "
@@ -857,12 +857,12 @@ msgstr ""
 msgid "New instance of :py:class:`DetrendingParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.PowerParam:1 of
+#: cdl.computation.signal.PowerParam:1 of
 #, fuzzy
 msgid "Power parameters"
 msgstr "Paramètres de grille"
 
-#: cdl.core.computation.signal.PowerParam:6
+#: cdl.computation.signal.PowerParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Default: 2.0."
 msgstr ""
@@ -877,12 +877,12 @@ msgstr ""
 msgid "New instance of :py:class:`PowerParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.WindowingParam:1 of
+#: cdl.computation.signal.WindowingParam:1 of
 #, fuzzy
 msgid "Windowing parameters"
 msgstr "Paramètres de binning"
 
-#: cdl.core.computation.signal.WindowingParam:6
+#: cdl.computation.signal.WindowingParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Single choice from: 'barthann', 'bartlett', 'blackman', 'blackman-"
@@ -891,17 +891,17 @@ msgid ""
 "'parzen', 'rectangular', 'taylor', 'tukey'. Default: 'hamming'."
 msgstr ""
 
-#: cdl.core.computation.signal.WindowingParam:13
+#: cdl.computation.signal.WindowingParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Shape parameter of the tukey windowing function\\. Default: 0.5."
 msgstr ""
 
-#: cdl.core.computation.signal.WindowingParam:20
+#: cdl.computation.signal.WindowingParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Shape parameter of the kaiser windowing function\\. Default: 14.0."
 msgstr ""
 
-#: cdl.core.computation.signal.WindowingParam:27
+#: cdl.computation.signal.WindowingParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid "Shape parameter of the gaussian windowing function\\. Default: 0.5."
 msgstr ""
@@ -916,61 +916,61 @@ msgstr ""
 msgid "New instance of :py:class:`WindowingParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.LowPassFilterParam:1 of
+#: cdl.computation.signal.LowPassFilterParam:1 of
 #, fuzzy
 msgid "Low-pass filter parameters"
 msgstr "Paramètres de filtre gaussien"
 
-#: cdl.core.computation.signal.BandPassFilterParam:6
-#: cdl.core.computation.signal.BandStopFilterParam:6
-#: cdl.core.computation.signal.HighPassFilterParam:6
-#: cdl.core.computation.signal.LowPassFilterParam:6
+#: cdl.computation.signal.BandPassFilterParam:6
+#: cdl.computation.signal.BandStopFilterParam:6
+#: cdl.computation.signal.HighPassFilterParam:6
+#: cdl.computation.signal.LowPassFilterParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Filter method\\.  Single choice from: 'bessel', 'butter', 'cheby1', "
 "'cheby2', 'ellip'. Default: 'bessel'."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:13
-#: cdl.core.computation.signal.BandStopFilterParam:13
-#: cdl.core.computation.signal.HighPassFilterParam:13
-#: cdl.core.computation.signal.LowPassFilterParam:13
+#: cdl.computation.signal.BandPassFilterParam:13
+#: cdl.computation.signal.BandStopFilterParam:13
+#: cdl.computation.signal.HighPassFilterParam:13
+#: cdl.computation.signal.LowPassFilterParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:20
-#: cdl.core.computation.signal.BandStopFilterParam:20
-#: cdl.core.computation.signal.HighPassFilterParam:20
-#: cdl.core.computation.signal.LowPassFilterParam:20
+#: cdl.computation.signal.BandPassFilterParam:20
+#: cdl.computation.signal.BandStopFilterParam:20
+#: cdl.computation.signal.HighPassFilterParam:20
+#: cdl.computation.signal.LowPassFilterParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Low cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. "
 "Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:27
-#: cdl.core.computation.signal.BandStopFilterParam:27
-#: cdl.core.computation.signal.HighPassFilterParam:27
-#: cdl.core.computation.signal.LowPassFilterParam:27
+#: cdl.computation.signal.BandPassFilterParam:27
+#: cdl.computation.signal.BandStopFilterParam:27
+#: cdl.computation.signal.HighPassFilterParam:27
+#: cdl.computation.signal.LowPassFilterParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "High cutoff frequency\\.  Float higher than 0, non zero, unit: hz\\. "
 "Default: None."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:34
-#: cdl.core.computation.signal.BandStopFilterParam:34
-#: cdl.core.computation.signal.HighPassFilterParam:34
-#: cdl.core.computation.signal.LowPassFilterParam:34
+#: cdl.computation.signal.BandPassFilterParam:34
+#: cdl.computation.signal.BandStopFilterParam:34
+#: cdl.computation.signal.HighPassFilterParam:34
+#: cdl.computation.signal.LowPassFilterParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid "Passband ripple\\.  Float higher than 0, non zero, unit: db\\. Default: 1."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:41
-#: cdl.core.computation.signal.BandStopFilterParam:41
-#: cdl.core.computation.signal.HighPassFilterParam:41
-#: cdl.core.computation.signal.LowPassFilterParam:41
+#: cdl.computation.signal.BandPassFilterParam:41
+#: cdl.computation.signal.BandStopFilterParam:41
+#: cdl.computation.signal.HighPassFilterParam:41
+#: cdl.computation.signal.LowPassFilterParam:41
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid ""
 "Stopband attenuation\\.  Float higher than 0, non zero, unit: db\\. "
@@ -987,7 +987,7 @@ msgstr ""
 msgid "New instance of :py:class:`LowPassFilterParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.HighPassFilterParam:1 of
+#: cdl.computation.signal.HighPassFilterParam:1 of
 #, fuzzy
 msgid "High-pass filter parameters"
 msgstr "Paramètres de filtre gaussien"
@@ -1002,7 +1002,7 @@ msgstr ""
 msgid "New instance of :py:class:`HighPassFilterParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.BandPassFilterParam:1 of
+#: cdl.computation.signal.BandPassFilterParam:1 of
 #, fuzzy
 msgid "Band-pass filter parameters"
 msgstr "Paramètres de filtre Canny"
@@ -1017,7 +1017,7 @@ msgstr ""
 msgid "New instance of :py:class:`BandPassFilterParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.BandStopFilterParam:1 of
+#: cdl.computation.signal.BandStopFilterParam:1 of
 #, fuzzy
 msgid "Band-stop filter parameters"
 msgstr "Paramètres de filtre Canny"
@@ -1032,21 +1032,21 @@ msgstr ""
 msgid "New instance of :py:class:`BandStopFilterParam`."
 msgstr ""
 
-#: cdl.core.computation.signal.DynamicParam:1 of
+#: cdl.computation.signal.DynamicParam:1 of
 msgid "Parameters for dynamic range computation (ENOB, SNR, SINAD, THD, SFDR)"
 msgstr ""
 
-#: cdl.core.computation.signal.DynamicParam:6
+#: cdl.computation.signal.DynamicParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Float higher than 0.0, unit: v\\. Default: 0.16."
 msgstr ""
 
-#: cdl.core.computation.signal.DynamicParam:13
+#: cdl.computation.signal.DynamicParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Unit for sinad\\. Single choice from: 'dBc', 'dBFS'. Default: 'dBc'."
 msgstr ""
 
-#: cdl.core.computation.signal.DynamicParam:20
+#: cdl.computation.signal.DynamicParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Number of harmonics\\. Number of harmonics to consider for thd\\. Integer"
@@ -1071,23 +1071,23 @@ msgstr "Paramètres des images"
 msgid "Base image parameters"
 msgstr "Paramètres de base des images"
 
-#: cdl.core.computation.image.ButterworthParam:1 of
+#: cdl.computation.image.ButterworthParam:1 of
 msgid "Butterworth filter parameters"
 msgstr "Paramètres de filtre Butterworth"
 
-#: cdl.core.computation.image.ButterworthParam:6
+#: cdl.computation.image.ButterworthParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Cut-off frequency ratio\\. Cut-off frequency ratio (0.0 - 1.0). Float "
 "between 0.0 and 1.0\\. Default: 0.5."
 msgstr ""
 
-#: cdl.core.computation.image.ButterworthParam:13
+#: cdl.computation.image.ButterworthParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "If true, apply high-pass filter instead of low-pass. Default: False."
 msgstr ""
 
-#: cdl.core.computation.image.ButterworthParam:20
+#: cdl.computation.image.ButterworthParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Order of the butterworth filter. Integer higher than 1\\. Default: 2."
 msgstr ""
@@ -1102,11 +1102,11 @@ msgstr ""
 msgid "New instance of :py:class:`ButterworthParam`."
 msgstr ""
 
-#: cdl.core.computation.image.DataTypeIParam:1 of
+#: cdl.computation.image.DataTypeIParam:1 of
 msgid "Convert image data type parameters"
 msgstr "Convertir les paramètres de type de données de l'image"
 
-#: cdl.core.computation.image.DataTypeIParam:6
+#: cdl.computation.image.DataTypeIParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Destination data type\\. Output image data type. Single choice from: "
@@ -1124,7 +1124,7 @@ msgstr ""
 msgid "New instance of :py:class:`DataTypeIParam`."
 msgstr ""
 
-#: cdl.core.computation.image.FlatFieldParam:1 of
+#: cdl.computation.image.FlatFieldParam:1 of
 msgid "Flat-field parameters"
 msgstr "Paramètres de correction de champ plat"
 
@@ -1138,31 +1138,31 @@ msgstr ""
 msgid "New instance of :py:class:`FlatFieldParam`."
 msgstr ""
 
-#: cdl.core.computation.image.GridParam:1 of
+#: cdl.computation.image.GridParam:1 of
 msgid "Grid parameters"
 msgstr "Paramètres de grille"
 
-#: cdl.core.computation.image.GridParam:6
+#: cdl.computation.image.GridParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Distribute over\\.  Single choice from: 'col', 'row'. Default: 'col'."
 msgstr ""
 
-#: cdl.core.computation.image.GridParam:13
+#: cdl.computation.image.GridParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Columns\\.  Integer, non zero\\. Default: 1."
 msgstr ""
 
-#: cdl.core.computation.image.GridParam:20
+#: cdl.computation.image.GridParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Integer, non zero\\. Default: 1."
 msgstr ""
 
-#: cdl.core.computation.image.GridParam:27
+#: cdl.computation.image.GridParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid "Column spacing\\.  Float higher than 0.0\\. Default: 0.0."
 msgstr ""
 
-#: cdl.core.computation.image.GridParam:34
+#: cdl.computation.image.GridParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid "Row spacing\\.  Float higher than 0.0\\. Default: 0.0."
 msgstr ""
@@ -1177,25 +1177,25 @@ msgstr ""
 msgid "New instance of :py:class:`GridParam`."
 msgstr ""
 
-#: cdl.core.computation.image.HoughCircleParam:1 of
+#: cdl.computation.image.HoughCircleParam:1 of
 msgid "Circle Hough transform parameters"
 msgstr "Paramètres de transformation de Hough circulaire"
 
-#: cdl.core.computation.image.HoughCircleParam:6
+#: cdl.computation.image.HoughCircleParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Radius\\ :subscript:`min`\\.  Integer higher than 0, non zero, unit: "
 "pixels\\. Default: None."
 msgstr ""
 
-#: cdl.core.computation.image.HoughCircleParam:13
+#: cdl.computation.image.HoughCircleParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Radius\\ :subscript:`max`\\.  Integer higher than 0, non zero, unit: "
 "pixels\\. Default: None."
 msgstr ""
 
-#: cdl.core.computation.image.HoughCircleParam:20
+#: cdl.computation.image.HoughCircleParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Minimal distance\\.  Integer higher than 0\\. Default: None."
 msgstr ""
@@ -1210,12 +1210,12 @@ msgstr ""
 msgid "New instance of :py:class:`HoughCircleParam`."
 msgstr ""
 
-#: cdl.core.computation.image.LogP1Param:1 of
+#: cdl.computation.image.LogP1Param:1 of
 msgid "Log10 parameters"
 msgstr "Paramètres de log10"
 
-#: cdl.core.computation.image.LogP1Param:6
-#: cdl.core.computation.image.ResizeParam:6
+#: cdl.computation.image.LogP1Param:6
+#: cdl.computation.image.ResizeParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Default: None."
 msgstr ""
@@ -1230,23 +1230,23 @@ msgstr ""
 msgid "New instance of :py:class:`LogP1Param`."
 msgstr ""
 
-#: cdl.core.computation.image.LineProfileParam:1 of
+#: cdl.computation.image.LineProfileParam:1 of
 msgid "Horizontal or vertical profile parameters"
 msgstr "Paramètres de profil horizontal ou vertical"
 
-#: cdl.core.computation.image.AverageProfileParam:6
-#: cdl.core.computation.image.LineProfileParam:6
+#: cdl.computation.image.AverageProfileParam:6
+#: cdl.computation.image.LineProfileParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
 msgstr ""
 
-#: cdl.core.computation.image.AverageProfileParam:13
-#: cdl.core.computation.image.LineProfileParam:13
+#: cdl.computation.image.AverageProfileParam:13
+#: cdl.computation.image.LineProfileParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Integer higher than 0\\. Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.LineProfileParam:20
+#: cdl.computation.image.LineProfileParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Column\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
@@ -1261,27 +1261,27 @@ msgstr ""
 msgid "New instance of :py:class:`LineProfileParam`."
 msgstr ""
 
-#: cdl.core.computation.image.SegmentProfileParam:1 of
+#: cdl.computation.image.SegmentProfileParam:1 of
 #, fuzzy
 msgid "Segment profile parameters"
 msgstr "Paramètres de profil radial"
 
-#: cdl.core.computation.image.SegmentProfileParam:6
+#: cdl.computation.image.SegmentProfileParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Start row\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.SegmentProfileParam:13
+#: cdl.computation.image.SegmentProfileParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Start column\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.SegmentProfileParam:20
+#: cdl.computation.image.SegmentProfileParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "End row\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.SegmentProfileParam:27
+#: cdl.computation.image.SegmentProfileParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid "End column\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
@@ -1296,21 +1296,21 @@ msgstr ""
 msgid "New instance of :py:class:`SegmentProfileParam`."
 msgstr ""
 
-#: cdl.core.computation.image.AverageProfileParam:1 of
+#: cdl.computation.image.AverageProfileParam:1 of
 msgid "Average horizontal or vertical profile parameters"
 msgstr "Paramètres de profil horizontal ou vertical moyen"
 
-#: cdl.core.computation.image.AverageProfileParam:20
+#: cdl.computation.image.AverageProfileParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Integer higher than -1\\. Default: -1."
 msgstr ""
 
-#: cdl.core.computation.image.AverageProfileParam:27
+#: cdl.computation.image.AverageProfileParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.AverageProfileParam:34
+#: cdl.computation.image.AverageProfileParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
 msgstr ""
@@ -1325,19 +1325,19 @@ msgstr ""
 msgid "New instance of :py:class:`AverageProfileParam`."
 msgstr ""
 
-#: cdl.core.computation.image.RadialProfileParam:1 of
+#: cdl.computation.image.RadialProfileParam:1 of
 msgid "Radial profile parameters"
 msgstr "Paramètres de profil radial"
 
-#: cdl.core.computation.image.RadialProfileParam:6
+#: cdl.computation.image.RadialProfileParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Center position\\.  Single choice from: 'centroid', 'center', 'user'. "
 "Default: 'centroid'."
 msgstr ""
 
-#: cdl.core.computation.image.RadialProfileParam:13
-#: cdl.core.computation.image.RadialProfileParam:20
+#: cdl.computation.image.RadialProfileParam:13
+#: cdl.computation.image.RadialProfileParam:20
 #: guidata.dataset.datatypes.DataSet.create:5
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "X\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: None."
@@ -1353,45 +1353,45 @@ msgstr ""
 msgid "New instance of :py:class:`RadialProfileParam`."
 msgstr ""
 
-#: cdl.core.computation.image.RadialProfileParam.update_from_image:1 of
+#: cdl.computation.image.RadialProfileParam.update_from_image:1 of
 msgid "Update parameters from image"
 msgstr "Mettre à jour les paramètres à partir de l'image"
 
-#: cdl.core.computation.image.RadialProfileParam.choice_callback:1 of
+#: cdl.computation.image.RadialProfileParam.choice_callback:1 of
 msgid "Callback for choice item"
 msgstr "Callback pour l'item de choix"
 
-#: cdl.core.computation.image.ResizeParam:1 of
+#: cdl.computation.image.ResizeParam:1 of
 msgid "Resize parameters"
 msgstr "Paramètres de redimensionnement"
 
-#: cdl.core.computation.image.ResizeParam:13
-#: cdl.core.computation.image.RotateParam:13
+#: cdl.computation.image.ResizeParam:13
+#: cdl.computation.image.RotateParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Single choice from: 'constant', 'nearest', 'reflect', 'wrap'. Default: "
 "'constant'."
 msgstr ""
 
-#: cdl.core.computation.image.ResizeParam:20
-#: cdl.core.computation.image.RotateParam:20
+#: cdl.computation.image.ResizeParam:20
+#: cdl.computation.image.RotateParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Value used for points outside the boundaries of the input if mode is "
 "'constant'\\. Default: 0.0."
 msgstr ""
 
-#: cdl.core.computation.image.ResizeParam:27
-#: cdl.core.computation.image.RotateParam:34
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:20
+#: cdl.computation.image.ResizeParam:27
+#: cdl.computation.image.RotateParam:34
+#: cdl.computation.image.detection.Peak2DDetectionParam:20
 #: guidata.dataset.datatypes.DataSet.create:7
 #: guidata.dataset.datatypes.DataSet.create:9
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid "Default: True."
 msgstr ""
 
-#: cdl.core.computation.image.ResizeParam:34
-#: cdl.core.computation.image.RotateParam:41
+#: cdl.computation.image.ResizeParam:34
+#: cdl.computation.image.RotateParam:41
 #: guidata.dataset.datatypes.DataSet.create:11
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
@@ -1407,16 +1407,16 @@ msgstr ""
 msgid "New instance of :py:class:`ResizeParam`."
 msgstr ""
 
-#: cdl.core.computation.image.RotateParam:1 of
+#: cdl.computation.image.RotateParam:1 of
 msgid "Rotate parameters"
 msgstr "Paramètres de rotation"
 
-#: cdl.core.computation.image.RotateParam:6
+#: cdl.computation.image.RotateParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Angle (°)\\.  Default: None."
 msgstr ""
 
-#: cdl.core.computation.image.RotateParam:27
+#: cdl.computation.image.RotateParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "Reshape the output array so that the input array is contained completely "
@@ -1433,7 +1433,7 @@ msgstr ""
 msgid "New instance of :py:class:`RotateParam`."
 msgstr ""
 
-#: cdl.core.computation.image.ZCalibrateParam:1 of
+#: cdl.computation.image.ZCalibrateParam:1 of
 msgid "Image linear calibration parameters"
 msgstr "Paramètres de calibration linéaire de l'image"
 
@@ -1451,19 +1451,19 @@ msgstr ""
 msgid "Exposure correction parameters"
 msgstr "Paramètres de correction d'exposition"
 
-#: cdl.core.computation.image.exposure.AdjustGammaParam:1 of
+#: cdl.computation.image.exposure.AdjustGammaParam:1 of
 msgid "Gamma adjustment parameters"
 msgstr "Paramètres d'ajustement gamma"
 
-#: cdl.core.computation.image.exposure.AdjustGammaParam:6
+#: cdl.computation.image.exposure.AdjustGammaParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Gamma correction factor (higher values give more contrast). Float higher "
 "than 0.0\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.AdjustGammaParam:13
-#: cdl.core.computation.image.exposure.AdjustLogParam:6
+#: cdl.computation.image.exposure.AdjustGammaParam:13
+#: cdl.computation.image.exposure.AdjustLogParam:6
 #: guidata.dataset.datatypes.DataSet.create:3
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
@@ -1481,11 +1481,11 @@ msgstr ""
 msgid "New instance of :py:class:`AdjustGammaParam`."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.AdjustLogParam:1 of
+#: cdl.computation.image.exposure.AdjustLogParam:1 of
 msgid "Logarithmic adjustment parameters"
 msgstr "Paramètres d'ajustement logarithmique"
 
-#: cdl.core.computation.image.exposure.AdjustLogParam:13
+#: cdl.computation.image.exposure.AdjustLogParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "If true, apply inverse logarithmic transformation. Default: False."
 msgstr ""
@@ -1500,25 +1500,25 @@ msgstr ""
 msgid "New instance of :py:class:`AdjustLogParam`."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:1 of
+#: cdl.computation.image.exposure.AdjustSigmoidParam:1 of
 msgid "Sigmoid adjustment parameters"
 msgstr "Paramètres d'ajustement sigmoïde"
 
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:6
+#: cdl.computation.image.exposure.AdjustSigmoidParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Cutoff value (higher values give more contrast). Float between 0.0 and "
 "1.0\\. Default: 0.5."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:13
+#: cdl.computation.image.exposure.AdjustSigmoidParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Gain factor (higher values give more contrast). Float higher than 0.0\\. "
 "Default: 10.0."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.AdjustSigmoidParam:20
+#: cdl.computation.image.exposure.AdjustSigmoidParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "If true, apply inverse sigmoid transformation. Default: False."
 msgstr ""
@@ -1533,19 +1533,19 @@ msgstr ""
 msgid "New instance of :py:class:`AdjustSigmoidParam`."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:1 of
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:1 of
 msgid "Adaptive histogram equalization parameters"
 msgstr "Paramètres d'égalisation d'histogramme adaptatif"
 
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:6
-#: cdl.core.computation.image.exposure.EqualizeHistParam:6
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:6
+#: cdl.computation.image.exposure.EqualizeHistParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Number of bins\\. Number of bins for image histogram. Integer higher than"
 " 1\\. Default: 256."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.EqualizeAdaptHistParam:13
+#: cdl.computation.image.exposure.EqualizeAdaptHistParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Clipping limit\\. Clipping limit (higher values give more contrast). "
@@ -1562,7 +1562,7 @@ msgstr ""
 msgid "New instance of :py:class:`EqualizeAdaptHistParam`."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.EqualizeHistParam:1 of
+#: cdl.computation.image.exposure.EqualizeHistParam:1 of
 msgid "Histogram equalization parameters"
 msgstr "Paramètres d'égalisation d'histogramme"
 
@@ -1576,11 +1576,11 @@ msgstr ""
 msgid "New instance of :py:class:`EqualizeHistParam`."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.RescaleIntensityParam:1 of
+#: cdl.computation.image.exposure.RescaleIntensityParam:1 of
 msgid "Intensity rescaling parameters"
 msgstr "Paramètres de rééchelonnement d'intensité"
 
-#: cdl.core.computation.image.exposure.RescaleIntensityParam:6
+#: cdl.computation.image.exposure.RescaleIntensityParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Input range\\. Min and max intensity values of input image ('image' "
@@ -1589,7 +1589,7 @@ msgid ""
 "'complex128', 'int32', 'int16', 'uint16', 'uint8'. Default: 'image'."
 msgstr ""
 
-#: cdl.core.computation.image.exposure.RescaleIntensityParam:13
+#: cdl.computation.image.exposure.RescaleIntensityParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Output range\\. Min and max intensity values of output image  ('image' "
@@ -1612,11 +1612,11 @@ msgstr ""
 msgid "Restoration parameters"
 msgstr "Paramètres de restauration"
 
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:1 of
+#: cdl.computation.image.restoration.DenoiseBilateralParam:1 of
 msgid "Bilateral filter denoising parameters"
 msgstr "Paramètres de débruitage par filtre bilatéral"
 
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:6
+#: cdl.computation.image.restoration.DenoiseBilateralParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "σ\\ :subscript:`spatial`\\. Standard deviation for range distance. A "
@@ -1624,14 +1624,14 @@ msgid ""
 "differences. Float higher than 0, non zero, unit: pixels\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:13
+#: cdl.computation.image.restoration.DenoiseBilateralParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Single choice from: 'constant', 'edge', 'symmetric', 'reflect', 'wrap'. "
 "Default: 'constant'."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseBilateralParam:20
+#: cdl.computation.image.restoration.DenoiseBilateralParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Used in conjunction with mode 'constant', the value outside the image "
@@ -1648,11 +1648,11 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseBilateralParam`."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseTVParam:1 of
+#: cdl.computation.image.restoration.DenoiseTVParam:1 of
 msgid "Total Variation denoising parameters"
 msgstr "Paramètres de débruitage par variation totale"
 
-#: cdl.core.computation.image.restoration.DenoiseTVParam:6
+#: cdl.computation.image.restoration.DenoiseTVParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Denoising weight\\. The greater weight, the more denoising (at the "
@@ -1660,7 +1660,7 @@ msgid ""
 "0.1."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseTVParam:13
+#: cdl.computation.image.restoration.DenoiseTVParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Epsilon\\. Relative difference of the value of the cost function that "
@@ -1668,7 +1668,7 @@ msgid ""
 "< eps \\* e_0\\. Float higher than 0, non zero\\. Default: 0.0002."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseTVParam:20
+#: cdl.computation.image.restoration.DenoiseTVParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Max. iterations\\. Maximal number of iterations used for the "
@@ -1685,11 +1685,11 @@ msgstr ""
 msgid "New instance of :py:class:`DenoiseTVParam`."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:1 of
+#: cdl.computation.image.restoration.DenoiseWaveletParam:1 of
 msgid "Wavelet denoising parameters"
 msgstr "Paramètres de débruitage par ondelettes"
 
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:6
+#: cdl.computation.image.restoration.DenoiseWaveletParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Single choice from: 'bior1.1', 'bior1.3', 'bior1.5', 'bior2.2', "
@@ -1711,12 +1711,12 @@ msgid ""
 "'sym15', 'sym16', 'sym17', 'sym18', 'sym19', 'sym20'. Default: 'sym9'."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:13
+#: cdl.computation.image.restoration.DenoiseWaveletParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Single choice from: 'soft', 'hard'. Default: 'soft'."
 msgstr ""
 
-#: cdl.core.computation.image.restoration.DenoiseWaveletParam:20
+#: cdl.computation.image.restoration.DenoiseWaveletParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid "Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
 msgstr ""
@@ -1735,11 +1735,11 @@ msgstr ""
 msgid "Morphological parameters"
 msgstr "Paramètres morphologiques"
 
-#: cdl.core.computation.image.morphology.MorphologyParam:1 of
+#: cdl.computation.image.morphology.MorphologyParam:1 of
 msgid "White Top-Hat parameters"
 msgstr "Paramètres de White Top-Hat"
 
-#: cdl.core.computation.image.morphology.MorphologyParam:6
+#: cdl.computation.image.morphology.MorphologyParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid "Footprint (disk) radius. Integer higher than 1\\. Default: 1."
 msgstr ""
@@ -1758,32 +1758,32 @@ msgstr ""
 msgid "Edge detection parameters"
 msgstr "Paramètres de détection de contours"
 
-#: cdl.core.computation.image.edges.CannyParam:1 of
+#: cdl.computation.image.edges.CannyParam:1 of
 msgid "Canny filter parameters"
 msgstr "Paramètres de filtre Canny"
 
-#: cdl.core.computation.image.edges.CannyParam:6
+#: cdl.computation.image.edges.CannyParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Standard deviation of the gaussian filter. Float higher than 0, non zero,"
 " unit: pixels\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.edges.CannyParam:13
+#: cdl.computation.image.edges.CannyParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Lower bound for hysteresis thresholding (linking edges). Float higher "
 "than 0\\. Default: 0.1."
 msgstr ""
 
-#: cdl.core.computation.image.edges.CannyParam:20
+#: cdl.computation.image.edges.CannyParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Upper bound for hysteresis thresholding (linking edges). Float higher "
 "than 0\\. Default: 0.9."
 msgstr ""
 
-#: cdl.core.computation.image.edges.CannyParam:27
+#: cdl.computation.image.edges.CannyParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "If true then treat low_threshold and high_threshold as quantiles of the "
@@ -1791,14 +1791,14 @@ msgid ""
 " then the thresholds must be in the range [0, 1]. Default: True."
 msgstr ""
 
-#: cdl.core.computation.image.edges.CannyParam:34
+#: cdl.computation.image.edges.CannyParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
 "Single choice from: 'reflect', 'constant', 'nearest', 'mirror', 'wrap'. "
 "Default: 'constant'."
 msgstr ""
 
-#: cdl.core.computation.image.edges.CannyParam:41
+#: cdl.computation.image.edges.CannyParam:41
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid "Value to fill past edges of input if mode is constant. Default: 0.0."
 msgstr ""
@@ -1817,13 +1817,13 @@ msgstr ""
 msgid "Detection parameters"
 msgstr "Paramètres de détection"
 
-#: cdl.core.computation.image.detection.BlobDOGParam:1 of
+#: cdl.computation.image.detection.BlobDOGParam:1 of
 msgid "Blob detection using Difference of Gaussian method"
 msgstr "Détection de taches par méthode de différence de gaussiennes"
 
-#: cdl.core.computation.image.detection.BlobDOGParam:6
-#: cdl.core.computation.image.detection.BlobDOHParam:6
-#: cdl.core.computation.image.detection.BlobLOGParam:6
+#: cdl.computation.image.detection.BlobDOGParam:6
+#: cdl.computation.image.detection.BlobDOHParam:6
+#: cdl.computation.image.detection.BlobLOGParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "σ\\ :subscript:`min`\\. The minimum standard deviation for gaussian "
@@ -1831,9 +1831,9 @@ msgid ""
 "zero, unit: pixels\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobDOGParam:13
-#: cdl.core.computation.image.detection.BlobDOHParam:13
-#: cdl.core.computation.image.detection.BlobLOGParam:13
+#: cdl.computation.image.detection.BlobDOGParam:13
+#: cdl.computation.image.detection.BlobDOHParam:13
+#: cdl.computation.image.detection.BlobLOGParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "σ\\ :subscript:`max`\\. The maximum standard deviation for gaussian "
@@ -1841,26 +1841,26 @@ msgid ""
 "zero, unit: pixels\\. Default: 30.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobDOGParam:20
-#: cdl.core.computation.image.detection.BlobDOHParam:20
-#: cdl.core.computation.image.detection.BlobLOGParam:20
+#: cdl.computation.image.detection.BlobDOGParam:20
+#: cdl.computation.image.detection.BlobDOHParam:20
+#: cdl.computation.image.detection.BlobLOGParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Relative threshold\\. Minimum intensity of blobs. Float between 0.0 and "
 "1.0\\. Default: 0.2."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobDOGParam:27
-#: cdl.core.computation.image.detection.BlobDOHParam:27
-#: cdl.core.computation.image.detection.BlobLOGParam:27
+#: cdl.computation.image.detection.BlobDOGParam:27
+#: cdl.computation.image.detection.BlobDOHParam:27
+#: cdl.computation.image.detection.BlobLOGParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "If two blobs overlap by a fraction greater than this value, the smaller "
 "blob is eliminated. Float between 0.0 and 1.0\\. Default: 0.5."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobDOGParam:34
-#: cdl.core.computation.image.detection.BlobLOGParam:41
+#: cdl.computation.image.detection.BlobDOGParam:34
+#: cdl.computation.image.detection.BlobLOGParam:41
 #: guidata.dataset.datatypes.DataSet.create:11
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid "If true, exclude blobs from the border of the image. Default: True."
@@ -1876,12 +1876,12 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOGParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobDOHParam:1 of
+#: cdl.computation.image.detection.BlobDOHParam:1 of
 msgid "Blob detection using Determinant of Hessian method"
 msgstr "Détection de taches par méthode du déterminant du Hessien"
 
-#: cdl.core.computation.image.detection.BlobDOHParam:34
-#: cdl.core.computation.image.detection.BlobLOGParam:34
+#: cdl.computation.image.detection.BlobDOHParam:34
+#: cdl.computation.image.detection.BlobLOGParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
 "If set intermediate values of standard deviations are interpolated using "
@@ -1899,7 +1899,7 @@ msgstr ""
 msgid "New instance of :py:class:`BlobDOHParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobLOGParam:1 of
+#: cdl.computation.image.detection.BlobLOGParam:1 of
 msgid "Blob detection using Laplacian of Gaussian method"
 msgstr "Détection de taches par méthode du Laplacien de gaussiennes"
 
@@ -1913,11 +1913,11 @@ msgstr ""
 msgid "New instance of :py:class:`BlobLOGParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:1 of
+#: cdl.computation.image.detection.BlobOpenCVParam:1 of
 msgid "Blob detection using OpenCV"
 msgstr "Détection de taches par OpenCV"
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:6
+#: cdl.computation.image.detection.BlobOpenCVParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Min. threshold\\. The minimum threshold between local maxima and minima. "
@@ -1926,7 +1926,7 @@ msgid ""
 "higher than 0.0\\. Default: 10.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:13
+#: cdl.computation.image.detection.BlobOpenCVParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Max. threshold\\. The maximum threshold between local maxima and minima. "
@@ -1935,7 +1935,7 @@ msgid ""
 "higher than 0.0\\. Default: 200.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:20
+#: cdl.computation.image.detection.BlobOpenCVParam:20
 #: guidata.dataset.datatypes.DataSet.create:7 of
 msgid ""
 "Min. repeatability\\. The minimum number of times a blob needs to be "
@@ -1943,7 +1943,7 @@ msgid ""
 "than 1\\. Default: 2."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:27
+#: cdl.computation.image.detection.BlobOpenCVParam:27
 #: guidata.dataset.datatypes.DataSet.create:9 of
 msgid ""
 "Min. distance between blobs\\. The minimum distance between two blobs. If"
@@ -1951,90 +1951,90 @@ msgid ""
 "removed. Float higher than 0.0, non zero\\. Default: 10.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:34
+#: cdl.computation.image.detection.BlobOpenCVParam:34
 #: guidata.dataset.datatypes.DataSet.create:11 of
 msgid ""
 "If true, the image is filtered by color instead of intensity. Default: "
 "True."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:41
+#: cdl.computation.image.detection.BlobOpenCVParam:41
 #: guidata.dataset.datatypes.DataSet.create:13 of
 msgid ""
 "The color of the blobs to detect (0 for dark blobs, 255 for light blobs)."
 " Default: 0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:48
+#: cdl.computation.image.detection.BlobOpenCVParam:48
 #: guidata.dataset.datatypes.DataSet.create:15 of
 msgid "If true, the image is filtered by blob area. Default: True."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:55
+#: cdl.computation.image.detection.BlobOpenCVParam:55
 #: guidata.dataset.datatypes.DataSet.create:17 of
 msgid ""
 "Min. area\\. The minimum blob area. Float higher than 0.0\\. Default: "
 "25.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:62
+#: cdl.computation.image.detection.BlobOpenCVParam:62
 #: guidata.dataset.datatypes.DataSet.create:19 of
 msgid ""
 "Max. area\\. The maximum blob area. Float higher than 0.0\\. Default: "
 "500.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:69
+#: cdl.computation.image.detection.BlobOpenCVParam:69
 #: guidata.dataset.datatypes.DataSet.create:21 of
 msgid "If true, the image is filtered by blob circularity. Default: False."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:76
+#: cdl.computation.image.detection.BlobOpenCVParam:76
 #: guidata.dataset.datatypes.DataSet.create:23 of
 msgid ""
 "Min. circularity\\. The minimum circularity of the blobs. Float between "
 "0.0 and 1.0\\. Default: 0.8."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:83
+#: cdl.computation.image.detection.BlobOpenCVParam:83
 #: guidata.dataset.datatypes.DataSet.create:25 of
 msgid ""
 "Max. circularity\\. The maximum circularity of the blobs. Float between "
 "0.0 and 1.0\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:90
+#: cdl.computation.image.detection.BlobOpenCVParam:90
 #: guidata.dataset.datatypes.DataSet.create:27 of
 msgid "If true, the image is filtered by blob inertia. Default: False."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:97
+#: cdl.computation.image.detection.BlobOpenCVParam:97
 #: guidata.dataset.datatypes.DataSet.create:29 of
 msgid ""
 "Min. inertia ratio\\. The minimum inertia ratio of the blobs. Float "
 "between 0.0 and 1.0\\. Default: 0.6."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:104
+#: cdl.computation.image.detection.BlobOpenCVParam:104
 #: guidata.dataset.datatypes.DataSet.create:31 of
 msgid ""
 "Max. inertia ratio\\. The maximum inertia ratio of the blobs. Float "
 "between 0.0 and 1.0\\. Default: 1.0."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:111
+#: cdl.computation.image.detection.BlobOpenCVParam:111
 #: guidata.dataset.datatypes.DataSet.create:33 of
 msgid "If true, the image is filtered by blob convexity. Default: False."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:118
+#: cdl.computation.image.detection.BlobOpenCVParam:118
 #: guidata.dataset.datatypes.DataSet.create:35 of
 msgid ""
 "Min. convexity\\. The minimum convexity of the blobs. Float between 0.0 "
 "and 1.0\\. Default: 0.8."
 msgstr ""
 
-#: cdl.core.computation.image.detection.BlobOpenCVParam:125
+#: cdl.computation.image.detection.BlobOpenCVParam:125
 #: guidata.dataset.datatypes.DataSet.create:37 of
 msgid ""
 "Max. convexity\\. The maximum convexity of the blobs. Float between 0.0 "
@@ -2051,19 +2051,19 @@ msgstr ""
 msgid "New instance of :py:class:`BlobOpenCVParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.ContourShapeParam:1 of
+#: cdl.computation.image.detection.ContourShapeParam:1 of
 msgid "Contour shape parameters"
 msgstr "Paramètres de forme de contour"
 
-#: cdl.core.computation.image.detection.ContourShapeParam:6
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:6
+#: cdl.computation.image.detection.ContourShapeParam:6
+#: cdl.computation.image.detection.Peak2DDetectionParam:6
 #: guidata.dataset.datatypes.DataSet.create:3 of
 msgid ""
 "Relative threshold\\. Detection threshold, relative to difference between"
 " data maximum and minimum\\. Float between 0.1 and 0.9\\. Default: 0.5."
 msgstr ""
 
-#: cdl.core.computation.image.detection.ContourShapeParam:13
+#: cdl.computation.image.detection.ContourShapeParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid "Single choice from: 'ellipse', 'circle', 'polygon'. Default: 'ellipse'."
 msgstr ""
@@ -2078,7 +2078,7 @@ msgstr ""
 msgid "New instance of :py:class:`ContourShapeParam`."
 msgstr ""
 
-#: cdl.core.computation.image.detection.Peak2DDetectionParam:13
+#: cdl.computation.image.detection.Peak2DDetectionParam:13
 #: guidata.dataset.datatypes.DataSet.create:5 of
 msgid ""
 "Neighborhoods size\\. Size of the sliding window used in maximum/minimum "

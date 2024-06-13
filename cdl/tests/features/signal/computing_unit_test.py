@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import pytest
 
-import cdl.core.computation.signal as cps
+import cdl.computation.signal as cps
 import cdl.obj
 import cdl.param
 from cdl.tests.data import get_test_signal

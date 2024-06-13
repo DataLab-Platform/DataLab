@@ -14,8 +14,8 @@ from collections.abc import Callable
 import numpy as np
 from guidata.qthelpers import exec_dialog
 
-import cdl.core.computation.base as cpb
-import cdl.core.computation.signal as cps
+import cdl.computation.base as cpb
+import cdl.computation.signal as cps
 import cdl.param
 from cdl.config import Conf, _
 from cdl.core.gui.processor.base import BaseProcessor

@@ -19,7 +19,7 @@ import pytest
 from guidata.qthelpers import qt_app_context
 from plotpy.builder import make
 
-import cdl.core.computation.signal as cps
+import cdl.computation.signal as cps
 import cdl.obj
 import cdl.param
 import cdl.tests.data as cdltd

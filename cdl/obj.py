@@ -36,6 +36,7 @@ Common objects
     :members:
 .. autoclass:: cdl.obj.UniformRandomParam
 .. autoclass:: cdl.obj.NormalRandomParam
+.. autoclass:: cdl.obj.BaseProcParam
 
 Signal model
 ^^^^^^^^^^^^
@@ -72,6 +73,7 @@ Image model
 .. autoclass:: cdl.obj.RoiDataGeometries
 .. autodataset:: cdl.obj.ROI2DParam
 .. autoclass:: cdl.obj.ImageDatatypes
+.. autoclass:: cdl.obj.ImageRoiDataItem
 """
 
 # pylint:disable=unused-import
@@ -79,6 +81,7 @@ Image model
 
 from cdl.core.io import read_image, read_images, read_signal, read_signals
 from cdl.core.model.base import (
+    BaseProcParam,
     NormalRandomParam,
     ResultShape,
     ResultProperties,
@@ -89,6 +92,7 @@ from cdl.core.model.image import (
     Gauss2DParam,
     ImageDatatypes,
     ImageObj,
+    ImageRoiDataItem,
     ImageTypes,
     NewImageParam,
     RoiDataGeometries,

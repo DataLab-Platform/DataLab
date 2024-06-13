@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 
-import cdl.core.computation.image as cpi
+import cdl.computation.image as cpi
 import cdl.param
 from cdl.env import execenv
 from cdl.obj import ROI2DParam

@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Image computation objects (see parent package :mod:`cdl.core.computation`)
+.. Image computation objects (see parent package :mod:`cdl.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -25,8 +25,7 @@ from plotpy.panels.csection.csitem import compute_line_section
 from skimage import filters
 
 import cdl.algorithms.image as alg
-from cdl.config import _
-from cdl.core.computation.base import (
+from cdl.computation.base import (
     ClipParam,
     ConstantOperationParam,
     FFTParam,
@@ -41,9 +40,17 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries, RoiDataItem
-from cdl.core.model.signal import SignalObj
+from cdl.config import _
+from cdl.obj import (
+    BaseProcParam,
+    ImageObj,
+    ImageRoiDataItem,
+    ResultProperties,
+    ResultShape,
+    ROI2DParam,
+    RoiDataGeometries,
+    SignalObj,
+)
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
@@ -62,7 +69,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> from cdl.computation.signal import Wrap11Func
         >>> import cdl.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
@@ -1191,7 +1198,7 @@ def compute_magnitude_spectrum(
         Output image object
     """
     dst = dst_11(src, "magnitude_spectrum")
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.data = alg.magnitude_spectrum(src.data, log_scale=log_scale)
     dst.xunit = dst.yunit = dst.zunit = ""
     dst.xlabel = dst.ylabel = _("Frequency")
@@ -1224,7 +1231,7 @@ def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "psd")
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.data = alg.psd(src.data, log_scale=log_scale)
     dst.xunit = dst.yunit = dst.zunit = ""
     dst.xlabel = dst.ylabel = _("Frequency")
@@ -1351,7 +1358,7 @@ def calc_resultshape(
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
             if obj.roi is not None:
-                x0, y0, _x1, _y1 = RoiDataItem(obj.roi[i_roi]).get_rect()
+                x0, y0, _x1, _y1 = ImageRoiDataItem(obj.roi[i_roi]).get_rect()
                 coords[:, colx] += x0
                 coords[:, coly] += y0
             coords[:, colx] = obj.dx * coords[:, colx] + obj.x0

@@ -98,7 +98,7 @@ class RoiDataGeometries(base.Choices):
     CIRCLE = _("Circle")
 
 
-class RoiDataItem:
+class ImageRoiDataItem:
     """Object representing an image ROI.
 
     Args:
@@ -109,7 +109,7 @@ class RoiDataItem:
         self._data = data
 
     @classmethod
-    def from_image(cls, obj: ImageObj, geometry: RoiDataGeometries) -> RoiDataItem:
+    def from_image(cls, obj: ImageObj, geometry: RoiDataGeometries) -> ImageRoiDataItem:
         """Construct roi data item from image object: called for making new ROI items
 
         Args:
@@ -463,7 +463,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         """
         if self.roi is None or roi_index is None:
             return self.data
-        roidataitem = RoiDataItem(self.roi[roi_index])
+        roidataitem = ImageRoiDataItem(self.roi[roi_index])
         return roidataitem.get_image_masked_view(self)
 
     def copy(self, title: str | None = None, dtype: np.dtype | None = None) -> ImageObj:
@@ -617,7 +617,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             title: title
             *defaults: default values
         """
-        roidataitem = RoiDataItem(defaults)
+        roidataitem = ImageRoiDataItem(defaults)
         xd0, yd0, xd1, yd1 = defaults
         param = ROI2DParam(title)
         param.geometry = roidataitem.geometry
@@ -657,7 +657,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             editable: if True, ROI is editable
             geometry: ROI geometry
         """
-        roidataitem = RoiDataItem.from_image(self, geometry)
+        roidataitem = ImageRoiDataItem.from_image(self, geometry)
         return roidataitem.make_roi_item(None, fmt, lbl, editable)
 
     def roi_coords_to_indexes(self, coords: list) -> np.ndarray:
@@ -695,7 +695,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
             roicoords[:, 1::2] *= self.dy
             roicoords[:, 1::2] += self.y0 - 0.5 * self.dy
             for index, coords in enumerate(roicoords):
-                roidataitem = RoiDataItem(coords)
+                roidataitem = ImageRoiDataItem(coords)
                 yield roidataitem.make_roi_item(index, fmt, lbl, editable)
 
     @property
@@ -712,7 +712,7 @@ class ImageObj(gds.DataSet, base.BaseObj):
         elif roi_changed or self._maskdata_cache is None:
             mask = np.ones_like(self.data, dtype=bool)
             for roirow in self.roi:
-                roidataitem = RoiDataItem(roirow)
+                roidataitem = ImageRoiDataItem(roirow)
                 roi_mask = roidataitem.apply_mask(self.data, yxratio=self.dy / self.dx)
                 mask &= roi_mask
             self._maskdata_cache = mask

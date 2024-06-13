@@ -10,9 +10,9 @@ and some actions to test DataLab functionalities.
 
 import cdl.obj as dlo
 import cdl.tests.data as test_data
+from cdl.computation import image as cpima
+from cdl.computation import signal as cpsig
 from cdl.config import _
-from cdl.core.computation import image as cpima
-from cdl.core.computation import signal as cpsig
 from cdl.plugins import PluginBase, PluginInfo
 
 # ------------------------------------------------------------------------------

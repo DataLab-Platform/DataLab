@@ -5,13 +5,13 @@ Parameters (:mod:`cdl.param`)
 -----------------------------
 
 The :mod:`cdl.param` module aims at providing all the dataset parameters that are used
-by the :mod:`cdl.core.computation` and :mod:`cdl.core.gui.processor` packages.
+by the :mod:`cdl.computation` and :mod:`cdl.core.gui.processor` packages.
 
 Those datasets are defined in other modules:
 
-    - :mod:`cdl.core.computation.base`
-    - :mod:`cdl.core.computation.image`
-    - :mod:`cdl.core.computation.signal`
+    - :mod:`cdl.computation.base`
+    - :mod:`cdl.computation.image`
+    - :mod:`cdl.computation.signal`
 
 The :mod:`cdl.param` module is thus a convenient way to import all the sets of
 parameters at once.
@@ -21,9 +21,9 @@ As a matter of fact, the following import statement is equivalent to the previou
 .. code-block:: python
 
     # Original import statement
-    from cdl.core.computation.base import MovingAverageParam
-    from cdl.core.computation.signal import PolynomialFitParam
-    from cdl.core.computation.image.exposure import EqualizeHistParam
+    from cdl.computation.base import MovingAverageParam
+    from cdl.computation.signal import PolynomialFitParam
+    from cdl.computation.image.exposure import EqualizeHistParam
 
     # Equivalent import statement
     from cdl.param import MovingAverageParam, PolynomialFitParam, EqualizeHistParam
@@ -199,7 +199,7 @@ Detection parameters
 # pylint:disable=unused-import
 # flake8: noqa
 
-from cdl.core.computation.base import (
+from cdl.computation.base import (
     ClipParam,
     FFTParam,
     SpectrumParam,
@@ -211,7 +211,7 @@ from cdl.core.computation.base import (
     ConstantOperationParam,
     NormalizeParam,
 )
-from cdl.core.computation.image import (
+from cdl.computation.image import (
     AverageProfileParam,
     BinningParam,
     ButterworthParam,
@@ -227,7 +227,7 @@ from cdl.core.computation.image import (
     RotateParam,
     ZCalibrateParam,
 )
-from cdl.core.computation.image.detection import (
+from cdl.computation.image.detection import (
     BlobDOGParam,
     BlobDOHParam,
     BlobLOGParam,
@@ -235,9 +235,9 @@ from cdl.core.computation.image.detection import (
     ContourShapeParam,
     Peak2DDetectionParam,
 )
-from cdl.core.computation.image.edges import CannyParam
-from cdl.core.computation.image.threshold import ThresholdParam
-from cdl.core.computation.image.exposure import (
+from cdl.computation.image.edges import CannyParam
+from cdl.computation.image.threshold import ThresholdParam
+from cdl.computation.image.exposure import (
     AdjustGammaParam,
     AdjustLogParam,
     AdjustSigmoidParam,
@@ -245,13 +245,13 @@ from cdl.core.computation.image.exposure import (
     EqualizeHistParam,
     RescaleIntensityParam,
 )
-from cdl.core.computation.image.morphology import MorphologyParam
-from cdl.core.computation.image.restoration import (
+from cdl.computation.image.morphology import MorphologyParam
+from cdl.computation.image.restoration import (
     DenoiseBilateralParam,
     DenoiseTVParam,
     DenoiseWaveletParam,
 )
-from cdl.core.computation.signal import (
+from cdl.computation.signal import (
     DataTypeSParam,
     DetrendingParam,
     FWHMParam,

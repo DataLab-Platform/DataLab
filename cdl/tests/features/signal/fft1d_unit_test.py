@@ -16,7 +16,7 @@ import scipy.signal as sps
 from guidata.qthelpers import qt_app_context
 
 import cdl.algorithms.signal as alg
-import cdl.core.computation.signal as cps
+import cdl.computation.signal as cps
 import cdl.obj
 import cdl.tests.data as ctd
 from cdl.env import execenv

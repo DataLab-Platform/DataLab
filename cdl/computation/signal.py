@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Signal computation objects (see parent package :mod:`cdl.core.computation`)
+.. Signal computation objects (see parent package :mod:`cdl.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -23,8 +23,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 
 import cdl.algorithms.signal as alg
-from cdl.config import _
-from cdl.core.computation.base import (
+from cdl.computation.base import (
     ClipParam,
     ConstantOperationParam,
     FFTParam,
@@ -39,6 +38,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
+from cdl.config import _
 from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -58,7 +58,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> from cdl.computation.signal import Wrap11Func
         >>> import cdl.obj
         >>> def square(y):
         ...     return y**2
@@ -854,7 +854,7 @@ def compute_magnitude_spectrum(
     """
     dst = dst_11(src, "magnitude_spectrum")
     x, y = src.get_data()
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.set_xydata(*alg.magnitude_spectrum(x, y, log_scale=log_scale))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
@@ -892,7 +892,7 @@ def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "psd")
     x, y = src.get_data()
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
     dst.xlabel = _("Frequency")

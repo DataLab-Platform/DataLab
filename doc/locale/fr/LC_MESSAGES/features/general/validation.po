@@ -299,7 +299,7 @@ msgid "Test script"
 msgstr "Script de test"
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`abs <cdl.core.computation.signal.compute_abs>`"
+msgid ":py:func:`abs <cdl.computation.signal.compute_abs>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -312,7 +312,7 @@ msgid "``features/signal/operation_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`addition <cdl.core.computation.signal.compute_addition>`"
+msgid ":py:func:`addition <cdl.computation.signal.compute_addition>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -324,7 +324,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`addition_constant "
-"<cdl.core.computation.signal.compute_addition_constant>`"
+"<cdl.computation.signal.compute_addition_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -337,7 +337,7 @@ msgid "``features/image/operation_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`astype <cdl.core.computation.signal.compute_astype>`"
+msgid ":py:func:`astype <cdl.computation.signal.compute_astype>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -347,7 +347,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`bandwidth_3db "
-"<cdl.core.computation.signal.compute_bandwidth_3db>`"
+"<cdl.computation.signal.compute_bandwidth_3db>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -359,7 +359,7 @@ msgid "``features/signal/computing_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`calibration <cdl.core.computation.signal.compute_calibration>`"
+msgid ":py:func:`calibration <cdl.computation.signal.compute_calibration>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -373,7 +373,7 @@ msgid "N/A"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`clip <cdl.core.computation.signal.compute_clip>`"
+msgid ":py:func:`clip <cdl.computation.signal.compute_clip>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -381,7 +381,7 @@ msgid "Compute maximum data clipping"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`contrast <cdl.core.computation.signal.compute_contrast>`"
+msgid ":py:func:`contrast <cdl.computation.signal.compute_contrast>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -390,7 +390,7 @@ msgid "Compute contrast"
 msgstr "Fonctions de calcul Signal"
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`convolution <cdl.core.computation.signal.compute_convolution>`"
+msgid ":py:func:`convolution <cdl.computation.signal.compute_convolution>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -398,7 +398,7 @@ msgid "Compute convolution of two signals"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`derivative <cdl.core.computation.signal.compute_derivative>`"
+msgid ":py:func:`derivative <cdl.computation.signal.compute_derivative>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -406,7 +406,7 @@ msgid "Compute derivative"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`detrending <cdl.core.computation.signal.compute_detrending>`"
+msgid ":py:func:`detrending <cdl.computation.signal.compute_detrending>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -415,7 +415,7 @@ msgid "Detrend data"
 msgstr "Données expérimentales"
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`difference <cdl.core.computation.signal.compute_difference>`"
+msgid ":py:func:`difference <cdl.computation.signal.compute_difference>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -425,7 +425,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`difference_constant "
-"<cdl.core.computation.signal.compute_difference_constant>`"
+"<cdl.computation.signal.compute_difference_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -433,7 +433,7 @@ msgid "Subtract a constant value from a signal"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`division <cdl.core.computation.signal.compute_division>`"
+msgid ":py:func:`division <cdl.computation.signal.compute_division>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -443,7 +443,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`division_constant "
-"<cdl.core.computation.signal.compute_division_constant>`"
+"<cdl.computation.signal.compute_division_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -453,7 +453,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`dynamic_parameters "
-"<cdl.core.computation.signal.compute_dynamic_parameters>`"
+"<cdl.computation.signal.compute_dynamic_parameters>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -461,7 +461,7 @@ msgid "Compute Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR)"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`exp <cdl.core.computation.signal.compute_exp>`"
+msgid ":py:func:`exp <cdl.computation.signal.compute_exp>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -470,7 +470,7 @@ msgid "Compute exponential"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`fft <cdl.core.computation.signal.compute_fft>`"
+msgid ":py:func:`fft <cdl.computation.signal.compute_fft>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -483,7 +483,7 @@ msgid "``features/signal/fft1d_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`filter <cdl.core.computation.signal.compute_filter>`"
+msgid ":py:func:`filter <cdl.computation.signal.compute_filter>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -491,7 +491,7 @@ msgid "Compute frequency filter (low-pass, high-pass, band-pass, band-stop)"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`fw1e2 <cdl.core.computation.signal.compute_fw1e2>`"
+msgid ":py:func:`fw1e2 <cdl.computation.signal.compute_fw1e2>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -503,7 +503,7 @@ msgid "``features/signal/fwhm_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`fwhm <cdl.core.computation.signal.compute_fwhm>`"
+msgid ":py:func:`fwhm <cdl.computation.signal.compute_fwhm>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -513,7 +513,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`gaussian_filter "
-"<cdl.core.computation.signal.compute_gaussian_filter>`"
+"<cdl.computation.signal.compute_gaussian_filter>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -522,7 +522,7 @@ msgid "Compute gaussian filter"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`histogram <cdl.core.computation.signal.compute_histogram>`"
+msgid ":py:func:`histogram <cdl.computation.signal.compute_histogram>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -530,7 +530,7 @@ msgid "Compute histogram"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`ifft <cdl.core.computation.signal.compute_ifft>`"
+msgid ":py:func:`ifft <cdl.computation.signal.compute_ifft>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -538,7 +538,7 @@ msgid "Compute iFFT"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`im <cdl.core.computation.signal.compute_im>`"
+msgid ":py:func:`im <cdl.computation.signal.compute_im>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -547,7 +547,7 @@ msgid "Compute imaginary part"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`integral <cdl.core.computation.signal.compute_integral>`"
+msgid ":py:func:`integral <cdl.computation.signal.compute_integral>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -557,7 +557,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`interpolation "
-"<cdl.core.computation.signal.compute_interpolation>`"
+"<cdl.computation.signal.compute_interpolation>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -566,7 +566,7 @@ msgid "Interpolate data"
 msgstr "Données simulées"
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`log10 <cdl.core.computation.signal.compute_log10>`"
+msgid ":py:func:`log10 <cdl.computation.signal.compute_log10>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -576,7 +576,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`magnitude_spectrum "
-"<cdl.core.computation.signal.compute_magnitude_spectrum>`"
+"<cdl.computation.signal.compute_magnitude_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -587,7 +587,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`moving_average "
-"<cdl.core.computation.signal.compute_moving_average>`"
+"<cdl.computation.signal.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -598,7 +598,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`moving_median "
-"<cdl.core.computation.signal.compute_moving_median>`"
+"<cdl.computation.signal.compute_moving_median>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -607,7 +607,7 @@ msgid "Compute moving median"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`normalize <cdl.core.computation.signal.compute_normalize>`"
+msgid ":py:func:`normalize <cdl.computation.signal.compute_normalize>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -617,7 +617,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`offset_correction "
-"<cdl.core.computation.signal.compute_offset_correction>`"
+"<cdl.computation.signal.compute_offset_correction>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -634,7 +634,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`peak_detection "
-"<cdl.core.computation.signal.compute_peak_detection>`"
+"<cdl.computation.signal.compute_peak_detection>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -644,7 +644,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`phase_spectrum "
-"<cdl.core.computation.signal.compute_phase_spectrum>`"
+"<cdl.computation.signal.compute_phase_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -653,7 +653,7 @@ msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`pow <cdl.core.computation.signal.compute_power>`"
+msgid ":py:func:`pow <cdl.computation.signal.compute_power>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -661,7 +661,7 @@ msgid "Compute power"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`product <cdl.core.computation.signal.compute_product>`"
+msgid ":py:func:`product <cdl.computation.signal.compute_product>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -673,7 +673,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`product_constant "
-"<cdl.core.computation.signal.compute_product_constant>`"
+"<cdl.computation.signal.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -683,7 +683,7 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`psd <cdl.core.computation.signal.compute_psd>`"
+msgid ":py:func:`psd <cdl.computation.signal.compute_psd>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -694,7 +694,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`quadratic_difference "
-"<cdl.core.computation.signal.compute_quadratic_difference>`"
+"<cdl.computation.signal.compute_quadratic_difference>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -702,7 +702,7 @@ msgid "Compute quadratic difference between two signals"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`re <cdl.core.computation.signal.compute_re>`"
+msgid ":py:func:`re <cdl.computation.signal.compute_re>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -711,7 +711,7 @@ msgid "Compute real part"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`resampling <cdl.core.computation.signal.compute_resampling>`"
+msgid ":py:func:`resampling <cdl.computation.signal.compute_resampling>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -720,7 +720,7 @@ msgid "Resample data"
 msgstr "Données simulées"
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`reverse_x <cdl.core.computation.signal.compute_reverse_x>`"
+msgid ":py:func:`reverse_x <cdl.computation.signal.compute_reverse_x>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -730,7 +730,7 @@ msgstr ""
 #: ../../doc/validation_status_signal.csv:1
 msgid ""
 ":py:func:`sampling_rate_period "
-"<cdl.core.computation.signal.compute_sampling_rate_period>`"
+"<cdl.computation.signal.compute_sampling_rate_period>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -738,7 +738,7 @@ msgid "Compute sampling rate and period"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`sqrt <cdl.core.computation.signal.compute_sqrt>`"
+msgid ":py:func:`sqrt <cdl.computation.signal.compute_sqrt>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -746,7 +746,7 @@ msgid "Compute square root"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`stats <cdl.core.computation.signal.compute_stats>`"
+msgid ":py:func:`stats <cdl.computation.signal.compute_stats>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -759,7 +759,7 @@ msgid "``features/common/stat_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`swap_axes <cdl.core.computation.signal.compute_swap_axes>`"
+msgid ":py:func:`swap_axes <cdl.computation.signal.compute_swap_axes>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -767,7 +767,7 @@ msgid "Swap axes"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`threshold <cdl.core.computation.signal.compute_threshold>`"
+msgid ":py:func:`threshold <cdl.computation.signal.compute_threshold>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -775,7 +775,7 @@ msgid "Compute threshold clipping"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`wiener <cdl.core.computation.signal.compute_wiener>`"
+msgid ":py:func:`wiener <cdl.computation.signal.compute_wiener>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -784,7 +784,7 @@ msgid "Compute Wiener filter"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`windowing <cdl.core.computation.signal.compute_windowing>`"
+msgid ":py:func:`windowing <cdl.computation.signal.compute_windowing>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -794,7 +794,7 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`x_at_minmax <cdl.core.computation.signal.compute_x_at_minmax>`"
+msgid ":py:func:`x_at_minmax <cdl.computation.signal.compute_x_at_minmax>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -810,11 +810,11 @@ msgid "Validation status of image compute functions"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`abs <cdl.core.computation.image.compute_abs>`"
+msgid ":py:func:`abs <cdl.computation.image.compute_abs>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`addition <cdl.core.computation.image.compute_addition>`"
+msgid ":py:func:`addition <cdl.computation.image.compute_addition>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -824,7 +824,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`addition_constant "
-"<cdl.core.computation.image.compute_addition_constant>`"
+"<cdl.computation.image.compute_addition_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -832,7 +832,7 @@ msgid "Add **dst** and a constant value and return the new result image object"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`astype <cdl.core.computation.image.compute_astype>`"
+msgid ":py:func:`astype <cdl.computation.image.compute_astype>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -842,7 +842,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`average_profile "
-"<cdl.core.computation.image.compute_average_profile>`"
+"<cdl.computation.image.compute_average_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -850,7 +850,7 @@ msgid "Compute horizontal or vertical average profile"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`binning <cdl.core.computation.image.compute_binning>`"
+msgid ":py:func:`binning <cdl.computation.image.compute_binning>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -858,7 +858,7 @@ msgid "Binning function on data"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`butterworth <cdl.core.computation.image.compute_butterworth>`"
+msgid ":py:func:`butterworth <cdl.computation.image.compute_butterworth>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -866,11 +866,11 @@ msgid "Compute Butterworth filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`calibration <cdl.core.computation.image.compute_calibration>`"
+msgid ":py:func:`calibration <cdl.computation.image.compute_calibration>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`centroid <cdl.core.computation.image.compute_centroid>`"
+msgid ":py:func:`centroid <cdl.computation.image.compute_centroid>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -882,7 +882,7 @@ msgid "``features/image/centroid_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`clip <cdl.core.computation.image.compute_clip>`"
+msgid ":py:func:`clip <cdl.computation.image.compute_clip>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -890,7 +890,7 @@ msgid "Apply clipping"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`difference <cdl.core.computation.image.compute_difference>`"
+msgid ":py:func:`difference <cdl.computation.image.compute_difference>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -900,7 +900,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`difference_constant "
-"<cdl.core.computation.image.compute_difference_constant>`"
+"<cdl.computation.image.compute_difference_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -910,7 +910,7 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`division <cdl.core.computation.image.compute_division>`"
+msgid ":py:func:`division <cdl.computation.image.compute_division>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -920,7 +920,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`division_constant "
-"<cdl.core.computation.image.compute_division_constant>`"
+"<cdl.computation.image.compute_division_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -930,7 +930,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`enclosing_circle "
-"<cdl.core.computation.image.compute_enclosing_circle>`"
+"<cdl.computation.image.compute_enclosing_circle>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -938,11 +938,11 @@ msgid "Compute minimum enclosing circle"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`exp <cdl.core.computation.image.compute_exp>`"
+msgid ":py:func:`exp <cdl.computation.image.compute_exp>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`fft <cdl.core.computation.image.compute_fft>`"
+msgid ":py:func:`fft <cdl.computation.image.compute_fft>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -950,7 +950,7 @@ msgid "``features/image/fft2d_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`flatfield <cdl.core.computation.image.compute_flatfield>`"
+msgid ":py:func:`flatfield <cdl.computation.image.compute_flatfield>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -958,7 +958,7 @@ msgid "Compute flat field correction"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`fliph <cdl.core.computation.image.compute_fliph>`"
+msgid ":py:func:`fliph <cdl.computation.image.compute_fliph>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -966,7 +966,7 @@ msgid "Flip data horizontally"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`flipv <cdl.core.computation.image.compute_flipv>`"
+msgid ":py:func:`flipv <cdl.computation.image.compute_flipv>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -976,11 +976,11 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`gaussian_filter "
-"<cdl.core.computation.image.compute_gaussian_filter>`"
+"<cdl.computation.image.compute_gaussian_filter>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`histogram <cdl.core.computation.image.compute_histogram>`"
+msgid ":py:func:`histogram <cdl.computation.image.compute_histogram>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -990,7 +990,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`hough_circle_peaks "
-"<cdl.core.computation.image.compute_hough_circle_peaks>`"
+"<cdl.computation.image.compute_hough_circle_peaks>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -998,7 +998,7 @@ msgid "Compute Hough circles"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`ifft <cdl.core.computation.image.compute_ifft>`"
+msgid ":py:func:`ifft <cdl.computation.image.compute_ifft>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1006,11 +1006,11 @@ msgid "Compute inverse FFT"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`im <cdl.core.computation.image.compute_im>`"
+msgid ":py:func:`im <cdl.computation.image.compute_im>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`line_profile <cdl.core.computation.image.compute_line_profile>`"
+msgid ":py:func:`line_profile <cdl.computation.image.compute_line_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1018,7 +1018,7 @@ msgid "Compute horizontal or vertical profile"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`line_section <cdl.core.computation.image.compute_line_section>`"
+msgid ":py:func:`line_section <cdl.computation.image.compute_line_section>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1026,7 +1026,7 @@ msgid "Return intensity profile of data along a line"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`log10 <cdl.core.computation.image.compute_log10>`"
+msgid ":py:func:`log10 <cdl.computation.image.compute_log10>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1034,7 +1034,7 @@ msgid "Compute log10"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`logp1 <cdl.core.computation.image.compute_logp1>`"
+msgid ":py:func:`logp1 <cdl.computation.image.compute_logp1>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1044,29 +1044,29 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`magnitude_spectrum "
-"<cdl.core.computation.image.compute_magnitude_spectrum>`"
+"<cdl.computation.image.compute_magnitude_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`moving_average "
-"<cdl.core.computation.image.compute_moving_average>`"
+"<cdl.computation.image.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`moving_median "
-"<cdl.core.computation.image.compute_moving_median>`"
+"<cdl.computation.image.compute_moving_median>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`normalize <cdl.core.computation.image.compute_normalize>`"
+msgid ":py:func:`normalize <cdl.computation.image.compute_normalize>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`offset_correction "
-"<cdl.core.computation.image.compute_offset_correction>`"
+"<cdl.computation.image.compute_offset_correction>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1076,11 +1076,11 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`phase_spectrum "
-"<cdl.core.computation.image.compute_phase_spectrum>`"
+"<cdl.computation.image.compute_phase_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`product <cdl.core.computation.image.compute_product>`"
+msgid ":py:func:`product <cdl.computation.image.compute_product>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1092,7 +1092,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`product_constant "
-"<cdl.core.computation.image.compute_product_constant>`"
+"<cdl.computation.image.compute_product_constant>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1102,13 +1102,13 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`psd <cdl.core.computation.image.compute_psd>`"
+msgid ":py:func:`psd <cdl.computation.image.compute_psd>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`quadratic_difference "
-"<cdl.core.computation.image.compute_quadratic_difference>`"
+"<cdl.computation.image.compute_quadratic_difference>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1118,7 +1118,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`radial_profile "
-"<cdl.core.computation.image.compute_radial_profile>`"
+"<cdl.computation.image.compute_radial_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1126,11 +1126,11 @@ msgid "Compute radial profile around the centroid"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`re <cdl.core.computation.image.compute_re>`"
+msgid ":py:func:`re <cdl.computation.image.compute_re>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`resize <cdl.core.computation.image.compute_resize>`"
+msgid ":py:func:`resize <cdl.computation.image.compute_resize>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1138,7 +1138,7 @@ msgid "Zooming function"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`rotate <cdl.core.computation.image.compute_rotate>`"
+msgid ":py:func:`rotate <cdl.computation.image.compute_rotate>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1147,7 +1147,7 @@ msgid "Rotate data"
 msgstr "Données de référence"
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`rotate270 <cdl.core.computation.image.compute_rotate270>`"
+msgid ":py:func:`rotate270 <cdl.computation.image.compute_rotate270>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1155,7 +1155,7 @@ msgid "Rotate data 270°"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`rotate90 <cdl.core.computation.image.compute_rotate90>`"
+msgid ":py:func:`rotate90 <cdl.computation.image.compute_rotate90>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1165,7 +1165,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`segment_profile "
-"<cdl.core.computation.image.compute_segment_profile>`"
+"<cdl.computation.image.compute_segment_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1173,7 +1173,7 @@ msgid "Compute segment profile"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`stats <cdl.core.computation.image.compute_stats>`"
+msgid ":py:func:`stats <cdl.computation.image.compute_stats>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1181,7 +1181,7 @@ msgid "Compute statistics on an image"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`swap_axes <cdl.core.computation.image.compute_swap_axes>`"
+msgid ":py:func:`swap_axes <cdl.computation.image.compute_swap_axes>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1189,7 +1189,7 @@ msgid "Swap image axes"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`threshold <cdl.core.computation.image.compute_threshold>`"
+msgid ":py:func:`threshold <cdl.computation.image.compute_threshold>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1197,13 +1197,13 @@ msgid "Apply thresholding"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`wiener <cdl.core.computation.image.compute_wiener>`"
+msgid ":py:func:`wiener <cdl.computation.image.compute_wiener>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`blob_dog "
-"<cdl.core.computation.image.detection.compute_blob_dog>`"
+"<cdl.computation.image.detection.compute_blob_dog>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1213,7 +1213,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`blob_doh "
-"<cdl.core.computation.image.detection.compute_blob_doh>`"
+"<cdl.computation.image.detection.compute_blob_doh>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1223,7 +1223,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`blob_log "
-"<cdl.core.computation.image.detection.compute_blob_log>`"
+"<cdl.computation.image.detection.compute_blob_log>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1233,7 +1233,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`blob_opencv "
-"<cdl.core.computation.image.detection.compute_blob_opencv>`"
+"<cdl.computation.image.detection.compute_blob_opencv>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1243,7 +1243,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`contour_shape "
-"<cdl.core.computation.image.detection.compute_contour_shape>`"
+"<cdl.computation.image.detection.compute_contour_shape>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1253,7 +1253,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`peak_detection "
-"<cdl.core.computation.image.detection.compute_peak_detection>`"
+"<cdl.computation.image.detection.compute_peak_detection>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1261,7 +1261,7 @@ msgid "Compute 2D peak detection"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`canny <cdl.core.computation.image.edges.compute_canny>`"
+msgid ":py:func:`canny <cdl.computation.image.edges.compute_canny>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1269,7 +1269,7 @@ msgid "Compute Canny filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`farid <cdl.core.computation.image.edges.compute_farid>`"
+msgid ":py:func:`farid <cdl.computation.image.edges.compute_farid>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1277,7 +1277,7 @@ msgid "Compute Farid filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`farid_h <cdl.core.computation.image.edges.compute_farid_h>`"
+msgid ":py:func:`farid_h <cdl.computation.image.edges.compute_farid_h>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1285,7 +1285,7 @@ msgid "Compute horizontal Farid filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`farid_v <cdl.core.computation.image.edges.compute_farid_v>`"
+msgid ":py:func:`farid_v <cdl.computation.image.edges.compute_farid_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1293,7 +1293,7 @@ msgid "Compute vertical Farid filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`laplace <cdl.core.computation.image.edges.compute_laplace>`"
+msgid ":py:func:`laplace <cdl.computation.image.edges.compute_laplace>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1301,7 +1301,7 @@ msgid "Compute Laplace filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`prewitt <cdl.core.computation.image.edges.compute_prewitt>`"
+msgid ":py:func:`prewitt <cdl.computation.image.edges.compute_prewitt>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1309,7 +1309,7 @@ msgid "Compute Prewitt filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`prewitt_h <cdl.core.computation.image.edges.compute_prewitt_h>`"
+msgid ":py:func:`prewitt_h <cdl.computation.image.edges.compute_prewitt_h>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1317,7 +1317,7 @@ msgid "Compute horizontal Prewitt filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`prewitt_v <cdl.core.computation.image.edges.compute_prewitt_v>`"
+msgid ":py:func:`prewitt_v <cdl.computation.image.edges.compute_prewitt_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1325,7 +1325,7 @@ msgid "Compute vertical Prewitt filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`roberts <cdl.core.computation.image.edges.compute_roberts>`"
+msgid ":py:func:`roberts <cdl.computation.image.edges.compute_roberts>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1333,7 +1333,7 @@ msgid "Compute Roberts filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`scharr <cdl.core.computation.image.edges.compute_scharr>`"
+msgid ":py:func:`scharr <cdl.computation.image.edges.compute_scharr>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1341,7 +1341,7 @@ msgid "Compute Scharr filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`scharr_h <cdl.core.computation.image.edges.compute_scharr_h>`"
+msgid ":py:func:`scharr_h <cdl.computation.image.edges.compute_scharr_h>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1349,7 +1349,7 @@ msgid "Compute horizontal Scharr filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`scharr_v <cdl.core.computation.image.edges.compute_scharr_v>`"
+msgid ":py:func:`scharr_v <cdl.computation.image.edges.compute_scharr_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1357,7 +1357,7 @@ msgid "Compute vertical Scharr filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`sobel <cdl.core.computation.image.edges.compute_sobel>`"
+msgid ":py:func:`sobel <cdl.computation.image.edges.compute_sobel>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1365,7 +1365,7 @@ msgid "Compute Sobel filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`sobel_h <cdl.core.computation.image.edges.compute_sobel_h>`"
+msgid ":py:func:`sobel_h <cdl.computation.image.edges.compute_sobel_h>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1373,7 +1373,7 @@ msgid "Compute horizontal Sobel filter"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`sobel_v <cdl.core.computation.image.edges.compute_sobel_v>`"
+msgid ":py:func:`sobel_v <cdl.computation.image.edges.compute_sobel_v>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1383,7 +1383,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`adjust_gamma "
-"<cdl.core.computation.image.exposure.compute_adjust_gamma>`"
+"<cdl.computation.image.exposure.compute_adjust_gamma>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1393,7 +1393,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`adjust_log "
-"<cdl.core.computation.image.exposure.compute_adjust_log>`"
+"<cdl.computation.image.exposure.compute_adjust_log>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1403,7 +1403,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`adjust_sigmoid "
-"<cdl.core.computation.image.exposure.compute_adjust_sigmoid>`"
+"<cdl.computation.image.exposure.compute_adjust_sigmoid>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1413,7 +1413,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`equalize_adapthist "
-"<cdl.core.computation.image.exposure.compute_equalize_adapthist>`"
+"<cdl.computation.image.exposure.compute_equalize_adapthist>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1423,7 +1423,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`equalize_hist "
-"<cdl.core.computation.image.exposure.compute_equalize_hist>`"
+"<cdl.computation.image.exposure.compute_equalize_hist>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1433,7 +1433,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`rescale_intensity "
-"<cdl.core.computation.image.exposure.compute_rescale_intensity>`"
+"<cdl.computation.image.exposure.compute_rescale_intensity>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1443,7 +1443,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`black_tophat "
-"<cdl.core.computation.image.morphology.compute_black_tophat>`"
+"<cdl.computation.image.morphology.compute_black_tophat>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1451,7 +1451,7 @@ msgid "Compute Black Top-Hat"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`closing <cdl.core.computation.image.morphology.compute_closing>`"
+msgid ":py:func:`closing <cdl.computation.image.morphology.compute_closing>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1461,7 +1461,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`dilation "
-"<cdl.core.computation.image.morphology.compute_dilation>`"
+"<cdl.computation.image.morphology.compute_dilation>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1469,7 +1469,7 @@ msgid "Compute Dilation"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`erosion <cdl.core.computation.image.morphology.compute_erosion>`"
+msgid ":py:func:`erosion <cdl.computation.image.morphology.compute_erosion>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1477,7 +1477,7 @@ msgid "Compute Erosion"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`opening <cdl.core.computation.image.morphology.compute_opening>`"
+msgid ":py:func:`opening <cdl.computation.image.morphology.compute_opening>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1487,7 +1487,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`white_tophat "
-"<cdl.core.computation.image.morphology.compute_white_tophat>`"
+"<cdl.computation.image.morphology.compute_white_tophat>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1497,7 +1497,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`denoise_bilateral "
-"<cdl.core.computation.image.restoration.compute_denoise_bilateral>`"
+"<cdl.computation.image.restoration.compute_denoise_bilateral>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1507,7 +1507,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`denoise_tophat "
-"<cdl.core.computation.image.restoration.compute_denoise_tophat>`"
+"<cdl.computation.image.restoration.compute_denoise_tophat>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1517,7 +1517,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`denoise_tv "
-"<cdl.core.computation.image.restoration.compute_denoise_tv>`"
+"<cdl.computation.image.restoration.compute_denoise_tv>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1527,7 +1527,7 @@ msgstr ""
 #: ../../doc/validation_status_image.csv:1
 msgid ""
 ":py:func:`denoise_wavelet "
-"<cdl.core.computation.image.restoration.compute_denoise_wavelet>`"
+"<cdl.computation.image.restoration.compute_denoise_wavelet>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1552,12 +1552,12 @@ msgstr ""
 #~ msgid "1%"
 #~ msgstr ""
 
-#~ msgid ":py:func:`add <cdl.core.computation.signal.compute_add>`"
+#~ msgid ":py:func:`add <cdl.computation.signal.compute_add>`"
 #~ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`add_constant "
-#~ "<cdl.core.computation.signal.compute_add_constant>`"
+#~ "<cdl.computation.signal.compute_add_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1568,12 +1568,12 @@ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`divide_by_constant "
-#~ "<cdl.core.computation.signal.compute_division_constant>`"
+#~ "<cdl.computation.signal.compute_division_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`product_by_constant "
-#~ "<cdl.core.computation.signal.compute_product_constant>`"
+#~ "<cdl.computation.signal.compute_product_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1582,12 +1582,12 @@ msgstr ""
 #~ " place"
 #~ msgstr ""
 
-#~ msgid ":py:func:`add <cdl.core.computation.image.compute_add>`"
+#~ msgid ":py:func:`add <cdl.computation.image.compute_add>`"
 #~ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`add_constant "
-#~ "<cdl.core.computation.image.compute_add_constant>`"
+#~ "<cdl.computation.image.compute_add_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1601,7 +1601,7 @@ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`divide_by_constant "
-#~ "<cdl.core.computation.image.compute_division_constant>`"
+#~ "<cdl.computation.image.compute_division_constant>`"
 #~ msgstr ""
 
 #~ msgid "Divide an image by a constant value"
@@ -1609,7 +1609,7 @@ msgstr ""
 
 #~ msgid ""
 #~ ":py:func:`product_by_constant "
-#~ "<cdl.core.computation.image.compute_product_constant>`"
+#~ "<cdl.computation.image.compute_product_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1651,5 +1651,5 @@ msgstr ""
 #~ msgid "``features/image/misc_unit_test.py``"
 #~ msgstr ""
 
-#~ msgid ":py:func:`profile <cdl.core.computation.image.compute_profile>`"
+#~ msgid ":py:func:`profile <cdl.computation.image.compute_profile>`"
 #~ msgstr ""

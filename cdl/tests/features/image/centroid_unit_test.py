@@ -24,7 +24,7 @@ from guidata.qthelpers import qt_app_context
 from numpy import ma
 from plotpy.builder import make
 
-import cdl.core.computation.image as cpi
+import cdl.computation.image as cpi
 import cdl.obj
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.config import _

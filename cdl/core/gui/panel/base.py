@@ -30,7 +30,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
-import cdl.core.computation.base
+import cdl.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
@@ -1028,7 +1028,7 @@ class BaseDataPanel(AbstractPanel):
 
     def get_roi_dialog(
         self, extract: bool, singleobj: bool, add_roi: bool = False
-    ) -> tuple[cdl.core.computation.base.ROIDataParam, bool] | None:
+    ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:

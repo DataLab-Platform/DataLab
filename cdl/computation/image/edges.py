@@ -10,7 +10,7 @@ Edges computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# All dataset classes must also be imported in the cdl.computation.param module.
 
 from __future__ import annotations
 
@@ -18,9 +18,9 @@ import guidata.dataset as gds
 import numpy as np
 from skimage import feature, filters
 
+from cdl.computation.image import Wrap11Func, dst_11
 from cdl.config import _
-from cdl.core.computation.image import Wrap11Func, dst_11
-from cdl.core.model.image import ImageObj
+from cdl.obj import ImageObj
 
 
 class CannyParam(gds.DataSet):

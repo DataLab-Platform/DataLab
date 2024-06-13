@@ -14,7 +14,7 @@ import numpy as np
 import pytest
 from guidata.qthelpers import qt_app_context
 
-import cdl.core.computation.image as cpi
+import cdl.computation.image as cpi
 import cdl.obj
 import cdl.param
 from cdl.env import execenv

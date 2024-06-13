@@ -337,7 +337,7 @@ for future and past milestones.
     parameters for a new signal
   * Added `edit_new_image_parameters` method for showing a dialog box to edit
     parameters for a new image (updated the *cdl_testdata.py* plugin accordingly)
-* Signal and image computations API (`cdl.core.computations`):
+* Signal and image computations API (`cdl.computations`):
   * Added wrappers for signal and image 1 -> 1 computations
   * These wrappers aim at simplifying the creation of a basic computation function
     operating on DataLab's native objects (`SignalObj` and `ImageObj`) from a
