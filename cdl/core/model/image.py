@@ -199,8 +199,8 @@ class ROI2DParam(gds.DataSet):
     _rfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.RECTANGLE)
     _cfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.CIRCLE)
 
-    @staticmethod
-    def _lbl(name: str, index: int):
+    # Do not declare it as a static method: not supported on Python 3.8
+    def _lbl(name: str, index: int):  # pylint: disable=no-self-argument
         """Returns name<sub>index</sub>"""
         return f"{name}<sub>{index}</sub>"
 
