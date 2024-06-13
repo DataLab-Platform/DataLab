@@ -75,6 +75,9 @@ for future and past milestones.
 * Fixed a performance issue due to an unnecessary refresh of the plot view when adding a new signal or image
 * Fixed [Issue #77](https://github.com/DataLab-Platform/DataLab/issues/77) - Intensity profiles: unable to accept dialog the second time
 * Fixed [Issue #75](https://github.com/DataLab-Platform/DataLab/issues/75) - View in a new window: curve anti-aliasing is not enabled by default
+* Annotations visibility is now correctly saved and restored:
+  * Before this release, when modifying the annotations visibility in the separate plot view, the visibility was not saved and restored when reopening the plot view
+  * This has been [fixed upstream](https://github.com/PlotPyStack/PlotPy/commit/03faaa42e5d6d4016ea8c99334c29d46a5963467) in PlotPy (v2.3.3)
 
 ## DataLab Version 0.15.1 ##
 
