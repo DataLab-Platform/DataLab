@@ -374,8 +374,16 @@ class BaseDataPanel(AbstractPanel):
                     group_id = self.add_group("").uuid
         obj.check_data()
         self.objmodel.add_object(obj, group_id)
+
+        # Block signals to avoid updating the plot (unnecessary refresh)
+        self.objview.blockSignals(True)
         self.objview.add_object_item(obj, group_id, set_current=set_current)
+        self.objview.blockSignals(False)
+
+        # Emit signal to ensure that the data panel is shown in the main window and
+        # that the plot is updated (trigger a refresh of the plot)
         self.SIG_OBJECT_ADDED.emit()
+
         self.objview.update_tree()
 
     def remove_all_objects(self) -> None:
