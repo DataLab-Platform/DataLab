@@ -48,15 +48,9 @@ html_favicon = "_static/favicon.ico"
 html_show_sourcelink = False
 templates_path = ["_templates"]
 if "language=fr" in sys.argv:
-    ann = (
-        "ℹ️ La version 0.15 de DataLab vient de sortir! 🎉 ▫️ ▫️ ▫️ "
-        "Restez à l'écoute pour les mises à jour!"
-    )
+    ann = "DataLab sera présenté à <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> et <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
 else:
-    ann = (
-        "ℹ️ DataLab version 0.15 has just been released! 🎉 ▫️ ▫️ ▫️ "
-        "Stay tuned for updates!"
-    )
+    ann = "DataLab will be presented at <a href='https://cfp.scipy.org/2024/talk/G3MC9L/'>SciPy 2024</a> and <a href='https://pretalx.com/pydata-paris-2024/talk/WTDVCC/'>PyData Paris 2024</a>! 🚀"  # noqa: E501
 html_theme_options = {
     "show_toc_level": 2,
     "github_url": "https://github.com/DataLab-Platform/DataLab/",
