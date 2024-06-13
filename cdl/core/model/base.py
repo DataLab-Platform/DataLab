@@ -535,8 +535,8 @@ class ResultShape(ResultProperties):
         self.shape = shape
         try:
             self.shapetype = ShapeTypes[shape.upper()]
-        except KeyError:
-            raise ValueError(f"Invalid shapetype {shape}")
+        except KeyError as exc:
+            raise ValueError(f"Invalid shapetype {shape}") from exc
         self.add_label = add_label
         super().__init__(title, array, labels=None, item_json=item_json)
 
@@ -584,8 +584,10 @@ class ResultShape(ResultProperties):
                 ShapeTypes.SEGMENT: ("x0", "y0", "x1", "y1"),
                 ShapeTypes.ELLIPSE: ("x", "y", "a", "b", "θ"),
             }[self.shapetype]
-        except KeyError:
-            raise NotImplementedError(f"Unsupported shapetype {self.shapetype}")
+        except KeyError as exc:
+            raise NotImplementedError(
+                f"Unsupported shapetype {self.shapetype}"
+            ) from exc
 
     def __get_complementary_xlabels(self) -> tuple[str] | None:
         """Return complementary labels for result array columns

@@ -138,7 +138,7 @@ def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
                 (curve, "σ(y)=%g", lambda *args: args[1].std()),
                 (curve, "∑(y)=%g", lambda *args: np.trapz(args[1])),
                 (curve, "∫ydx=%g<br>", lambda *args: np.trapz(args[1], args[0])),
-                (curve, "FWHM = %s", lambda *args: fwhm_info(*args)),
+                (curve, "FWHM = %s", fwhm_info),
             ],
         )
         self.label.attach(plot)

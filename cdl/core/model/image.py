@@ -199,6 +199,7 @@ class ROI2DParam(gds.DataSet):
     _rfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.RECTANGLE)
     _cfp = gds.FuncProp(_geometry_prop, lambda x: x is RoiDataGeometries.CIRCLE)
 
+    @staticmethod
     def _lbl(name: str, index: int):
         """Returns name<sub>index</sub>"""
         return f"{name}<sub>{index}</sub>"

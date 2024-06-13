@@ -89,7 +89,7 @@ def assert_in_interval(val1, val2, interval, context):
     try:
         assert itv1 <= val1 <= itv2
     except AssertionError as exc:
-        raise AssertionError(f"Not true: {itv1} <= {val1} <= {itv2}") from exc
+        raise AssertionError(f"{context}: {itv1} <= {val1} <= {itv2}") from exc
 
 
 def check_conf(conf, name, win: QW.QMainWindow, h5files):

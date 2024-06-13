@@ -553,7 +553,7 @@ def sinus_frequency(x: np.ndarray, y: np.ndarray) -> float:
     Returns:
         Frequency of the sinusoidal signal
     """
-    fitparams, residuals = sinusoidal_fit(x, y)
+    fitparams, _residuals = sinusoidal_fit(x, y)
     return fitparams[1]
 
 
@@ -569,8 +569,7 @@ def enob(x: np.ndarray, y: np.ndarray, full_scale: float = 1.0) -> float:
         Effective Number of Bits (ENOB)
     """
     _fitparams, residuals = sinusoidal_fit(x, y)
-    enob = -np.log2(residuals * np.sqrt(12) / full_scale)
-    return enob
+    return -np.log2(residuals * np.sqrt(12) / full_scale)
 
 
 def sinad(
@@ -597,8 +596,7 @@ def sinad(
     # Compute the power of the fundamental
     powf = np.abs(amp / np.sqrt(2)) if unit == "dBc" else full_scale / (2 * np.sqrt(2))
 
-    sinad = 20 * np.log10(powf / residuals)
-    return sinad
+    return 20 * np.log10(powf / residuals)
 
 
 def thd(
@@ -621,7 +619,7 @@ def thd(
     Returns:
         Total Harmonic Distortion (THD)
     """
-    fitparams, residuals = sinusoidal_fit(x, y)
+    fitparams, _residuals = sinusoidal_fit(x, y)
     offset = np.mean(y)
     amp, freq = fitparams[:2]
     ampfft = np.abs(np.fft.fft(y - offset))
@@ -638,8 +636,7 @@ def thd(
         amp = ampfft[int(a - 5) : int(a + 5)]
         if len(amp) > 0:
             sumharm += np.max(amp)
-    thd = 20 * np.log10(sumharm / powfund)
-    return thd
+    return 20 * np.log10(sumharm / powfund)
 
 
 def sfdr(
@@ -669,8 +666,7 @@ def sfdr(
         powfund = (full_scale / (2 * np.sqrt(2))) * (len(x) / np.sqrt(2))
 
     maxspike = np.max(np.abs(np.fft.fft(y - sinusoidal_model(x, *fitparams))))
-    sfdr = 20 * np.log10(powfund / maxspike)
-    return sfdr
+    return 20 * np.log10(powfund / maxspike)
 
 
 def snr(
@@ -700,8 +696,7 @@ def snr(
         powfund = (full_scale / (2 * np.sqrt(2))) * (len(x) / np.sqrt(2))
 
     noise = np.sqrt(np.mean((y - sinusoidal_model(x, *fitparams)) ** 2))
-    snr = 20 * np.log10(powfund / noise)
-    return snr
+    return 20 * np.log10(powfund / noise)
 
 
 def fwhm(
@@ -827,5 +822,4 @@ def sampling_rate(x: np.ndarray) -> float:
     Returns:
         Sampling rate
     """
-    fs = 1.0 / sampling_period(x)
-    return fs
+    return 1.0 / sampling_period(x)
