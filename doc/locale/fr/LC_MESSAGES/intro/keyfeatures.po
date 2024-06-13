@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-13 14:00+0200\n"
+"POT-Creation-Date: 2024-06-13 17:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,15 +53,15 @@ msgstr ""
 msgid "Data visualization"
 msgstr "Visualisation de données"
 
-#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:43
+#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:44
 msgid "Signal"
 msgstr "Signal"
 
-#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:43
+#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:44
 msgid "Image"
 msgstr "Image"
 
-#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:43
+#: ../../doc/intro/keyfeatures.rst:24 ../../doc/intro/keyfeatures.rst:44
 msgid "Feature"
 msgstr "Fonctionnalité"
 
@@ -70,7 +70,7 @@ msgstr "Fonctionnalité"
 #: ../../doc/intro/keyfeatures.rst:30 ../../doc/intro/keyfeatures.rst:31
 #: ../../doc/intro/keyfeatures.rst:32 ../../doc/intro/keyfeatures.rst:33
 #: ../../doc/intro/keyfeatures.rst:34 ../../doc/intro/keyfeatures.rst:35
-#: ../../doc/intro/keyfeatures.rst:36 ../../doc/intro/keyfeatures.rst:45
+#: ../../doc/intro/keyfeatures.rst:36 ../../doc/intro/keyfeatures.rst:37
 #: ../../doc/intro/keyfeatures.rst:46 ../../doc/intro/keyfeatures.rst:47
 #: ../../doc/intro/keyfeatures.rst:48 ../../doc/intro/keyfeatures.rst:49
 #: ../../doc/intro/keyfeatures.rst:50 ../../doc/intro/keyfeatures.rst:51
@@ -88,6 +88,10 @@ msgstr "Fonctionnalité"
 #: ../../doc/intro/keyfeatures.rst:74 ../../doc/intro/keyfeatures.rst:75
 #: ../../doc/intro/keyfeatures.rst:76 ../../doc/intro/keyfeatures.rst:77
 #: ../../doc/intro/keyfeatures.rst:78 ../../doc/intro/keyfeatures.rst:79
+#: ../../doc/intro/keyfeatures.rst:80 ../../doc/intro/keyfeatures.rst:81
+#: ../../doc/intro/keyfeatures.rst:82 ../../doc/intro/keyfeatures.rst:83
+#: ../../doc/intro/keyfeatures.rst:84 ../../doc/intro/keyfeatures.rst:85
+#: ../../doc/intro/keyfeatures.rst:86
 msgid "✓"
 msgstr ""
 
@@ -120,12 +124,12 @@ msgid "Aspect ratio (1:1, custom)"
 msgstr "Ratio d'aspect (1:1, personnalisé)"
 
 #: ../../doc/intro/keyfeatures.rst:32
-msgid "50+ available colormaps"
-msgstr "Plus de 50 échelles de couleurs disponibles"
+msgid "50+ available colormaps (customizable)"
+msgstr "Plus de 50 échelles de couleurs disponibles (personnalisables)"
 
-#: ../../doc/intro/keyfeatures.rst:33
-msgid "X/Y raw/averaged profiles"
-msgstr "Profils X/Y bruts/moyennés"
+#: ../../doc/intro/keyfeatures.rst:33 ../../doc/intro/keyfeatures.rst:56
+msgid "Intensity profiles (line, average, radial)"
+msgstr "Profils d'intensité (ligne, moyen, radial)"
 
 #: ../../doc/intro/keyfeatures.rst:34
 msgid "Annotations"
@@ -139,146 +143,182 @@ msgstr "Persistance des paramètres dans l'espace de travail"
 msgid "Distribute images on a grid"
 msgstr "Distribuer les images sur une grille"
 
-#: ../../doc/intro/keyfeatures.rst:40
+#: ../../doc/intro/keyfeatures.rst:37
+msgid "Single or superimposed views"
+msgstr "Vues simples ou superposées"
+
+#: ../../doc/intro/keyfeatures.rst:41
 msgid "Data processing"
 msgstr "Traitement de données"
 
-#: ../../doc/intro/keyfeatures.rst:45
+#: ../../doc/intro/keyfeatures.rst:46
 msgid "Process isolation for running computations"
 msgstr "Processus isolé pour l'exécution des calculs"
 
-#: ../../doc/intro/keyfeatures.rst:46
+#: ../../doc/intro/keyfeatures.rst:47
 msgid "Remote control from Jupyter, Spyder or any IDE"
 msgstr "Contrôle à distance depuis Jupyter, Spyder ou tout autre IDE"
 
-#: ../../doc/intro/keyfeatures.rst:47
+#: ../../doc/intro/keyfeatures.rst:48
 msgid "Remote control from a third-party application"
 msgstr "Contrôle à distance depuis une application tierce"
 
-#: ../../doc/intro/keyfeatures.rst:48
+#: ../../doc/intro/keyfeatures.rst:49
 msgid "Sum, average, difference, product, ..."
 msgstr "Somme, moyenne, différence, produit, ..."
 
-#: ../../doc/intro/keyfeatures.rst:49
+#: ../../doc/intro/keyfeatures.rst:50
+msgid "Operations with a constant"
+msgstr "Opérations avec une constante"
+
+#: ../../doc/intro/keyfeatures.rst:51
 msgid "ROI extraction, Swap X/Y axes"
 msgstr "Extraction de ROI, permutation des axes X/Y"
 
-#: ../../doc/intro/keyfeatures.rst:50
+#: ../../doc/intro/keyfeatures.rst:52
 msgid "Semi-automatic multi-peak detection"
 msgstr "Détection de pics semi-automatique"
 
-#: ../../doc/intro/keyfeatures.rst:51
+#: ../../doc/intro/keyfeatures.rst:53
 msgid "Convolution"
 msgstr "Convolution"
 
-#: ../../doc/intro/keyfeatures.rst:52
+#: ../../doc/intro/keyfeatures.rst:54
 msgid "Flat-field correction"
 msgstr "Correction de champ plat"
 
-#: ../../doc/intro/keyfeatures.rst:53
+#: ../../doc/intro/keyfeatures.rst:55
 msgid "Rotation (flip, rotate), resize, ..."
 msgstr "Rotation (retournement, rotation), redimensionnement, ..."
 
-#: ../../doc/intro/keyfeatures.rst:54
-msgid "Intensity profiles (line, average, radial)"
-msgstr "Profils d'intensité (ligne, moyen, radial)"
-
-#: ../../doc/intro/keyfeatures.rst:55
+#: ../../doc/intro/keyfeatures.rst:57
 msgid "Pixel binning"
 msgstr "Binning de pixels"
 
-#: ../../doc/intro/keyfeatures.rst:56
-msgid "Normalize, square root, power, log, ..."
-msgstr "Normalisation, racine carrée, puissance, logarithme, ..."
+#: ../../doc/intro/keyfeatures.rst:58
+msgid "Square root, power, logarithm, exponential, ..."
+msgstr "Racine carrée, puissance, logarithme, exponentielle, ..."
 
-#: ../../doc/intro/keyfeatures.rst:57
+#: ../../doc/intro/keyfeatures.rst:59
 msgid "Derivative, integral"
 msgstr "Dérivée, intégrale"
 
-#: ../../doc/intro/keyfeatures.rst:58
+#: ../../doc/intro/keyfeatures.rst:60
 msgid "Linear calibration"
 msgstr "Calibration linéaire"
 
-#: ../../doc/intro/keyfeatures.rst:59
-msgid "Thresholding, clipping"
-msgstr "Seuillage, rognage"
+#: ../../doc/intro/keyfeatures.rst:61
+msgid "Normalization, Clipping, Offset correction"
+msgstr "Normalisation, rognage, correction de décalage"
 
-#: ../../doc/intro/keyfeatures.rst:60
+#: ../../doc/intro/keyfeatures.rst:62
+msgid "Reverse X-axis"
+msgstr "Inversion de l'axe X"
+
+#: ../../doc/intro/keyfeatures.rst:63
+msgid "Thresholding (manual, Otsu, ...)"
+msgstr "Seuillage (manuel, Otsu, ...)"
+
+#: ../../doc/intro/keyfeatures.rst:64
 msgid "Gaussian filter, Wiener filter"
 msgstr "Filtre gaussien, filtre de Wiener"
 
-#: ../../doc/intro/keyfeatures.rst:61
+#: ../../doc/intro/keyfeatures.rst:65
 msgid "Moving average, moving median"
 msgstr "Moyenne mobile, médiane mobile"
 
-#: ../../doc/intro/keyfeatures.rst:62
-msgid "FFT, inverse FFT"
-msgstr "FFT, FFT inverse"
+#: ../../doc/intro/keyfeatures.rst:66
+msgid "FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density"
+msgstr "FFT, FFT inverse, spectre de puissance/phase/magnitude, densité spectrale de puissance"
 
-#: ../../doc/intro/keyfeatures.rst:63
+#: ../../doc/intro/keyfeatures.rst:67
 msgid "Interpolation, resampling"
 msgstr "Interpolation, rééchantillonnage"
 
-#: ../../doc/intro/keyfeatures.rst:64
+#: ../../doc/intro/keyfeatures.rst:68
 msgid "Detrending"
 msgstr "Elimination de tendance"
 
-#: ../../doc/intro/keyfeatures.rst:65
-msgid "Interactive fit: Gauss, Lorenzt, Voigt, polynomial"
-msgstr "Ajustement interactif : Gauss, Lorenzt, Voigt, polynôme"
+#: ../../doc/intro/keyfeatures.rst:69
+msgid "Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF, ..."
+msgstr "Ajustement interactif : Gauss, Lorentz, Voigt, polynôme, CDF, ..."
 
-#: ../../doc/intro/keyfeatures.rst:66
+#: ../../doc/intro/keyfeatures.rst:70
 msgid "Interactive multigaussian fit"
 msgstr "Ajustement interactif multi-gaussien"
 
-#: ../../doc/intro/keyfeatures.rst:67
+#: ../../doc/intro/keyfeatures.rst:71
+msgid "Frequency filters (low-pass, high-pass, band-pass, band-stop)"
+msgstr "Filtres fréquentiels (passe-bas, passe-haut, passe-bande, coupe-bande)"
+
+#: ../../doc/intro/keyfeatures.rst:72
+msgid "Windowing (Hamming, Hanning, ...)"
+msgstr "Fenêtrage (Hamming, Hanning, ...)"
+
+#: ../../doc/intro/keyfeatures.rst:73
 msgid "Butterworth filter"
 msgstr "Filtre de Butterworth"
 
-#: ../../doc/intro/keyfeatures.rst:68
+#: ../../doc/intro/keyfeatures.rst:74
 msgid "Exposure correction (gamma, log, ...)"
 msgstr "Correction d'exposition (gamma, log, ...)"
 
-#: ../../doc/intro/keyfeatures.rst:69
+#: ../../doc/intro/keyfeatures.rst:75
 msgid "Restauration (Total Variation, Bilateral, ...)"
 msgstr "Restauration (variation totale, bilatérale, ...)"
 
-#: ../../doc/intro/keyfeatures.rst:70
+#: ../../doc/intro/keyfeatures.rst:76
 msgid "Morphology (erosion, dilation, ...)"
 msgstr "Morphologie (érosion, dilatation, ...)"
 
-#: ../../doc/intro/keyfeatures.rst:71
+#: ../../doc/intro/keyfeatures.rst:77
 msgid "Edges detection (Roberts, Sobel, ...)"
 msgstr "Détection de contours (Roberts, Sobel, ...)"
 
-#: ../../doc/intro/keyfeatures.rst:72
+#: ../../doc/intro/keyfeatures.rst:78
 msgid "Computing on custom ROI"
 msgstr "Calcul sur ROI personnalisé"
 
-#: ../../doc/intro/keyfeatures.rst:73
+#: ../../doc/intro/keyfeatures.rst:79
 msgid "FWHM, FW @ 1/e²"
 msgstr "FWHM, FW @ 1/e²"
 
-#: ../../doc/intro/keyfeatures.rst:74
+#: ../../doc/intro/keyfeatures.rst:80
+msgid "Dynamic parameters (ENOB, SNR, ...), Sampling period/Rate"
+msgstr "Paramètres dynamiques (ENOB, SNR, ...), Période/Taux d'échantillonnage"
+
+#: ../../doc/intro/keyfeatures.rst:81
 msgid "Centroid (robust method w/r noise)"
 msgstr "Barycentre (méthode robuste par rapport au bruit)"
 
-#: ../../doc/intro/keyfeatures.rst:75
+#: ../../doc/intro/keyfeatures.rst:82
 msgid "Minimum enclosing circle center"
 msgstr "Centre du cercle d'encadrement minimal"
 
-#: ../../doc/intro/keyfeatures.rst:76
+#: ../../doc/intro/keyfeatures.rst:83
 msgid "2D peak detection"
 msgstr "Détection de pics 2D"
 
-#: ../../doc/intro/keyfeatures.rst:77
+#: ../../doc/intro/keyfeatures.rst:84
 msgid "Contour detection"
 msgstr "Détection de contours"
 
-#: ../../doc/intro/keyfeatures.rst:78
+#: ../../doc/intro/keyfeatures.rst:85
 msgid "Circle Hough transform"
-msgstr ""
+msgstr "Transformée de Hough circulaire"
 
-#: ../../doc/intro/keyfeatures.rst:79
+#: ../../doc/intro/keyfeatures.rst:86
 msgid "Blob detection (OpenCV, Laplacian of Gaussian, ...)"
 msgstr "Détection de taches (OpenCV, Laplacien de Gauss, ...)"
+
+#~ msgid "X/Y raw/averaged profiles"
+#~ msgstr "Profils X/Y bruts/moyennés"
+
+#~ msgid "Thresholding, clipping"
+#~ msgstr "Seuillage, rognage"
+
+#~ msgid "FFT, inverse FFT"
+#~ msgstr "FFT, FFT inverse"
+
+#~ msgid "Operation with a constant"
+#~ msgstr ""
