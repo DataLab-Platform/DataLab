@@ -24,7 +24,6 @@
 :py:func:`ifft <cdl.computation.image.compute_ifft>`,Compute inverse FFT,``features/image/fft2d_unit_test.py``
 :py:func:`im <cdl.computation.image.compute_im>`,Compute imaginary part,``features/image/operation_unit_test.py``
 :py:func:`line_profile <cdl.computation.image.compute_line_profile>`,Compute horizontal or vertical profile,N/A
-:py:func:`line_section <cdl.computation.image.compute_line_section>`,Return intensity profile of data along a line,N/A
 :py:func:`log10 <cdl.computation.image.compute_log10>`,Compute log10,``features/image/operation_unit_test.py``
 :py:func:`logp1 <cdl.computation.image.compute_logp1>`,Compute log10(z+n),``features/image/operation_unit_test.py``
 :py:func:`magnitude_spectrum <cdl.computation.image.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/image/fft2d_unit_test.py``

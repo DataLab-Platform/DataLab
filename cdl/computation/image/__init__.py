@@ -21,7 +21,10 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from numpy import ma
 from plotpy.mathutils.geometry import vector_rotation
-from plotpy.panels.csection.csitem import compute_line_section
+
+# Import as "csline" to avoid the function to be interpreted as a validation function
+# in the context of DataLab's validation process:
+from plotpy.panels.csection.csitem import compute_line_section as csline
 from skimage import filters
 
 import cdl.algorithms.image as alg
@@ -798,7 +801,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
     p.row2 = min(p.row2, data.shape[0] - 1)
     p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
-    x, y = compute_line_section(data, p.row1, p.col1, p.row2, p.col2)
+    x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
     dst = dst_11_signal(src, "segment_profile", suffix)
     dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
     return dst
