@@ -1257,7 +1257,6 @@ class BaseDataPanel(AbstractPanel):
                 if not param.edit(parent=self.parent()):
                     return
 
-                i_xaxis = rdata.xlabels.index(param.xaxis)
                 i_yaxis = rdata.xlabels.index(param.yaxis)
                 if param.kind == "one_curve_per_title":
                     # One curve per result title:
@@ -1267,6 +1266,7 @@ class BaseDataPanel(AbstractPanel):
                             if param.xaxis == "indexes":
                                 x.append(index)
                             else:
+                                i_xaxis = rdata.xlabels.index(param.xaxis)
                                 x.append(result.shown_array[0][i_xaxis])
                             y.append(result.shown_array[0][i_yaxis])
                         self.__add_result_signal(x, y, title, param.xaxis, param.yaxis)
@@ -1280,6 +1280,7 @@ class BaseDataPanel(AbstractPanel):
                                 if param.xaxis == "indexes":
                                     x = np.arange(result.array.shape[0])[mask]
                                 else:
+                                    i_xaxis = rdata.xlabels.index(param.xaxis)
                                     x = result.shown_array[mask, i_xaxis]
                                 y = result.shown_array[mask, i_yaxis]
                                 stitle = f"{title} ({objs[index].short_id})"
