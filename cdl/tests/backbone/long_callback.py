@@ -41,13 +41,13 @@ def long_computation_progress_func(worker: CallbackWorker, delay: float) -> str:
     Returns:
         str: Result message
     """
-    step_delay = 0.1
+    step_delay = 2.0
     maxiter = int(delay / step_delay)
     for idx in range(maxiter):
         worker.set_progress(idx / maxiter)
-        time.sleep(step_delay)
         if worker.was_canceled():
             return f"Interrupted at iteration #{idx}"
+        time.sleep(step_delay)
     return "Done"
 
 
@@ -80,7 +80,7 @@ class TestWindow(QW.QMainWindow):
 
     def run_long_computation_with_progress(self) -> None:
         """Run long computation with progress"""
-        worker = CallbackWorker(long_computation_progress_func, delay=5.0)
+        worker = CallbackWorker(long_computation_progress_func, delay=10.0)
         self.__execute_worker(worker, progress=True)
 
 

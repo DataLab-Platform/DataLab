@@ -14,6 +14,7 @@ import os
 import os.path as osp
 import shutil
 import sys
+import time
 import traceback
 from collections.abc import Callable, Generator
 from contextlib import contextmanager
@@ -227,6 +228,14 @@ class CallbackWorker(QC.QThread):
 
     def run(self) -> None:
         """Start thread"""
+
+        # Initialize progress bar: setting progress to 0.0 has the effect of
+        # showing the progress dialog after the `minimumDuration` time has elapsed.
+        # If we don't set the progress to 0.0, the progress dialog will be shown only
+        # after the first call to `set_progress` method even if the `minimumDuration`
+        # time has elapsed.
+        self.set_progress(0.0)
+
         try:
             self.result = self.callback(**self.kwargs)
         except Exception as exc:  # pylint: disable=broad-except
@@ -256,7 +265,11 @@ class CallbackWorker(QC.QThread):
 
 
 def qt_long_callback(
-    parent: QW.QWidget, label: str, worker: CallbackWorker, progress: bool
+    parent: QW.QWidget,
+    label: str,
+    worker: CallbackWorker,
+    progress: bool,
+    show_after: int = 500,
 ) -> Any:
     """Handle long callbacks: run in a separate thread while showing a busy bar
 
@@ -271,6 +284,7 @@ def qt_long_callback(
          function to return (it means that the callback function must implement a
          mechanism to return an intermediate result or `None` if the
          `worker.was_canceled` method returns True).
+        show_after: Delay before showing the progress dialog (ms, default: 1000)
 
     Returns:
         Callback result
@@ -279,6 +293,7 @@ def qt_long_callback(
         prog = QW.QProgressDialog(
             label, _("Cancel"), 0, 100, parent, QC.Qt.SplashScreen
         )
+        prog.setMinimumDuration(show_after)
         worker.SIG_PROGRESS_UPDATE.connect(prog.setValue)
         prog.canceled.connect(worker.cancel)
     else:
@@ -286,20 +301,15 @@ def qt_long_callback(
         prog.setMinimumDuration(0)
         prog.setCancelButton(None)
         prog.setRange(0, 0)
+        prog.show()
     prog.setWindowModality(QC.Qt.WindowModal)
-    prog.show()
-
-    timer = QC.QTimer(parent)
-    timer.setInterval(100)
-    timer.timeout.connect(QW.QApplication.processEvents)
-    timer.start()
-
-    worker.finished.connect(prog.accept)
-    worker.finished.connect(timer.stop)
 
     worker.start()
-    prog.exec()
+    while worker.isRunning() and not worker.was_canceled():
+        QW.QApplication.processEvents()
+        time.sleep(0.005)
     if progress:
+        worker.SIG_PROGRESS_UPDATE.disconnect(prog.setValue)
         worker.wait()
     result = worker.get_result()
 
