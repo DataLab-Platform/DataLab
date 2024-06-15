@@ -13,6 +13,7 @@ History:
 import argparse
 import os
 import os.path as osp
+import re
 import uuid
 import xml.etree.ElementTree as ET
 
@@ -44,6 +45,24 @@ def insert_text_after(text: str, containing: str, content: str) -> str:
 
 def make_wxs(product_name: str, version: str) -> None:
     """Make a .wxs file for the DataLab Windows installer."""
+    # MSI Version does not support labels, at least not in a way compatible with
+    # Python packaging (e.g., "0.16.dev0" is not a valid MSI version).
+    #
+    # Here is the conversion we must do:
+    # - "0.16.post1" -> "0.16.1"
+    # - "0.16.post2" -> "0.16.1"
+    # - "0.16.dev0" -> "0.16.0"
+    # - "0.16.dev1" -> "0.16.0"
+    # - "0.16.alpha1" -> "0.16.0"
+    # - "0.16.alpha2" -> "0.16.0"
+    # - "0.16.beta1" -> "0.16.0"
+    # - "0.16.beta2" -> "0.16.0"
+    # - "0.16.rc1" -> "0.16.0"
+    # - "0.16.rc2" -> "0.16.0"
+    #
+    version_msi = re.sub(r"\.post\d+$", ".1", version)
+    version_msi = re.sub(r"\.(dev|alpha|beta|rc|a|b|c)\d+$", ".0", version_msi)
+
     wix_dir = osp.abspath(osp.dirname(__file__))
     proj_dir = osp.join(wix_dir, os.pardir)
     dist_dir = osp.join(proj_dir, "dist", product_name)
@@ -131,7 +150,7 @@ def make_wxs(product_name: str, version: str) -> None:
         wxs = fd.read()
     wxs = insert_text_after(dir_str, "<!-- Automatically inserted directories -->", wxs)
     wxs = insert_text_after(comp_str, "<!-- Automatically inserted components -->", wxs)
-    wxs = wxs.replace("{version}", version)
+    wxs = wxs.replace("{version}", version_msi)
     with open(output_path, "w", encoding="utf-8") as fd:
         fd.write(wxs)
     print("Successfully created:", output_path)
