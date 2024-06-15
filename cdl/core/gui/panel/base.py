@@ -216,6 +216,32 @@ class ResultData:
     ylabels: list[str] = None
 
 
+def create_resultdata_dict(objs: list[SignalObj | ImageObj]) -> dict[str, ResultData]:
+    """Return result data dictionary
+
+    Args:
+        objs: List of objects
+
+    Returns:
+        Result data dictionary: keys are result categories, values are ResultData
+    """
+    rdatadict: dict[str, ResultData] = {}
+    for obj in objs:
+        for result in list(obj.iterate_resultshapes()) + list(
+            obj.iterate_resultproperties()
+        ):
+            rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
+            rdata.results.append(result)
+            rdata.xlabels = result.headers
+            for i_row_res in range(result.array.shape[0]):
+                ylabel = f"{result.title}({obj.short_id})"
+                i_roi = int(result.array[i_row_res, 0])
+                if i_roi >= 0:
+                    ylabel += f"|ROI{i_roi}"
+                rdata.ylabels.append(ylabel)
+    return rdatadict
+
+
 class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
@@ -964,7 +990,7 @@ class BaseDataPanel(AbstractPanel):
 
         # pylint: disable=not-callable
         dlg = PlotDialog(
-            parent=self,
+            parent=self.parent(),
             title=title,
             edit=edit,
             options=plot_options,
@@ -1107,26 +1133,6 @@ class BaseDataPanel(AbstractPanel):
             lambda: self.open_separate_view(edit_annotations=True),
         )
 
-    def __get_resultdata_dict(
-        self, objs: list[SignalObj | ImageObj]
-    ) -> dict[str, ResultData]:
-        """Return result data dictionary"""
-        rdatadict: dict[str, ResultData] = {}
-        for obj in objs:
-            for result in list(obj.iterate_resultshapes()) + list(
-                obj.iterate_resultproperties()
-            ):
-                rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
-                rdata.results.append(result)
-                rdata.xlabels = result.headers
-                for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({obj.short_id})"
-                    i_roi = int(result.array[i_row_res, 0])
-                    if i_roi >= 0:
-                        ylabel += f"|ROI{i_roi}"
-                    rdata.ylabels.append(ylabel)
-        return rdatadict
-
     def __show_no_result_warning(self):
         """Show no result warning"""
         msg = "<br>".join(
@@ -1146,15 +1152,15 @@ class BaseDataPanel(AbstractPanel):
     def show_results(self) -> None:
         """Show results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                for prefix, rdata in rdatadict.items():
+                for category, rdata in rdatadict.items():
                     dlg = ArrayEditor(self.parent())
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
-                        _("Results") + f" ({prefix})",
+                        _("Results") + f" ({category})",
                         readonly=True,
                         xlabels=rdata.xlabels,
                         ylabels=rdata.ylabels,
@@ -1188,9 +1194,9 @@ class BaseDataPanel(AbstractPanel):
     def plot_results(self) -> None:
         """Plot results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
-            for prefix, rdata in rdatadict.items():
+            for category, rdata in rdatadict.items():
                 xchoices = (("indexes", _("Indexes")),)
                 for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
@@ -1245,12 +1251,14 @@ class BaseDataPanel(AbstractPanel):
                         "Plot results obtained from previous computations.<br><br>"
                         "This plot is based on results associated with '%s' prefix."
                     )
-                    % prefix
+                    % category
                 )
                 param = PlotResultParam(_("Plot results"), comment=comment)
-                if not param.edit(parent=self):
+                if not param.edit(parent=self.parent()):
                     return
 
+                i_xaxis = rdata.xlabels.index(param.xaxis)
+                i_yaxis = rdata.xlabels.index(param.yaxis)
                 if param.kind == "one_curve_per_title":
                     # One curve per result title:
                     for title, results in grouped_results.items():  # title
@@ -1259,14 +1267,8 @@ class BaseDataPanel(AbstractPanel):
                             if param.xaxis == "indexes":
                                 x.append(index)
                             else:
-                                x.append(
-                                    result.shown_array[0][
-                                        rdata.xlabels.index(param.xaxis)
-                                    ]
-                                )
-                            y.append(
-                                result.shown_array[0][rdata.xlabels.index(param.yaxis)]
-                            )
+                                x.append(result.shown_array[0][i_xaxis])
+                            y.append(result.shown_array[0][i_yaxis])
                         self.__add_result_signal(x, y, title, param.xaxis, param.yaxis)
                 else:
                     # One curve per result title, per object and per ROI:
@@ -1278,12 +1280,8 @@ class BaseDataPanel(AbstractPanel):
                                 if param.xaxis == "indexes":
                                     x = np.arange(result.array.shape[0])[mask]
                                 else:
-                                    x = result.shown_array[
-                                        mask, rdata.xlabels.index(param.xaxis)
-                                    ]
-                                y = result.shown_array[
-                                    mask, rdata.xlabels.index(param.yaxis)
-                                ]
+                                    x = result.shown_array[mask, i_xaxis]
+                                y = result.shown_array[mask, i_yaxis]
                                 stitle = f"{title} ({objs[index].short_id})"
                                 if len(roi_idx) > 1:
                                     stitle += f"|ROI{i_roi}"
@@ -1297,7 +1295,7 @@ class BaseDataPanel(AbstractPanel):
     def delete_results(self) -> None:
         """Delete results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             answer = QW.QMessageBox.warning(
                 self,
