@@ -528,7 +528,7 @@ def compute_integral(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "integral")
     x, y = src.get_data()
-    dst.set_xydata(x, spt.cumtrapz(y, x, initial=0.0))
+    dst.set_xydata(x, spt.cumulative_trapezoid(y, x, initial=0.0))
     return dst
 
 
