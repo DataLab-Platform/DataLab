@@ -162,10 +162,10 @@ def psd(
     Returns:
         Power Spectral Density (PSD): X data, Y data (tuple)
     """
-    f, pxx = sps.welch(y, fs=sampling_rate(x))
+    x1, y1 = sps.welch(y, fs=sampling_rate(x))
     if log_scale:
-        return 10 * np.log10(pxx)
-    return f, pxx
+        y1 = 10 * np.log10(y1)
+    return x1, y1
 
 
 def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:
