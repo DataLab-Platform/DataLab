@@ -3,11 +3,11 @@
 :py:func:`addition_constant <cdl.computation.signal.compute_addition_constant>`,Add **dst** and a constant value and return a the new result signal object,``features/signal/operation_unit_test.py``
 :py:func:`astype <cdl.computation.signal.compute_astype>`,Convert data type,``features/signal/operation_unit_test.py``
 :py:func:`bandwidth_3db <cdl.computation.signal.compute_bandwidth_3db>`,Compute bandwidth,``features/signal/computing_unit_test.py``
-:py:func:`calibration <cdl.computation.signal.compute_calibration>`,Compute linear calibration,N/A
-:py:func:`clip <cdl.computation.signal.compute_clip>`,Compute maximum data clipping,N/A
+:py:func:`calibration <cdl.computation.signal.compute_calibration>`,Compute linear calibration,``features/signal/processing_unit_test.py``
+:py:func:`clip <cdl.computation.signal.compute_clip>`,Compute maximum data clipping,``features/signal/processing_unit_test.py``
 :py:func:`contrast <cdl.computation.signal.compute_contrast>`,Compute contrast,``features/signal/computing_unit_test.py``
-:py:func:`convolution <cdl.computation.signal.compute_convolution>`,Compute convolution of two signals,N/A
-:py:func:`derivative <cdl.computation.signal.compute_derivative>`,Compute derivative,N/A
+:py:func:`convolution <cdl.computation.signal.compute_convolution>`,Compute convolution of two signals,``features/signal/processing_unit_test.py``
+:py:func:`derivative <cdl.computation.signal.compute_derivative>`,Compute derivative,``features/signal/processing_unit_test.py``
 :py:func:`detrending <cdl.computation.signal.compute_detrending>`,Detrend data,N/A
 :py:func:`difference <cdl.computation.signal.compute_difference>`,Compute difference between two signals,``features/signal/operation_unit_test.py``
 :py:func:`difference_constant <cdl.computation.signal.compute_difference_constant>`,Subtract a constant value from a signal,``features/signal/operation_unit_test.py``
@@ -23,7 +23,7 @@
 :py:func:`histogram <cdl.computation.signal.compute_histogram>`,Compute histogram,N/A
 :py:func:`ifft <cdl.computation.signal.compute_ifft>`,Compute iFFT,``features/signal/fft1d_unit_test.py``
 :py:func:`im <cdl.computation.signal.compute_im>`,Compute imaginary part,``features/signal/operation_unit_test.py``
-:py:func:`integral <cdl.computation.signal.compute_integral>`,Compute integral,N/A
+:py:func:`integral <cdl.computation.signal.compute_integral>`,Compute integral,``features/signal/processing_unit_test.py``
 :py:func:`interpolation <cdl.computation.signal.compute_interpolation>`,Interpolate data,N/A
 :py:func:`log10 <cdl.computation.signal.compute_log10>`,Compute Log10,``features/signal/operation_unit_test.py``
 :py:func:`magnitude_spectrum <cdl.computation.signal.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/signal/fft1d_unit_test.py``
