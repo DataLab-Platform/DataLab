@@ -66,7 +66,7 @@ def is_version_at_least(version1: str, version2: str) -> bool:
         if part1.isdigit() and part2.isdigit():
             if int(part1) > int(part2):
                 return True
-            elif int(part1) < int(part2):
+            if int(part1) < int(part2):
                 return False
         elif part1 > part2:
             return True

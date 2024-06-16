@@ -12,7 +12,7 @@ import pkgutil
 
 from _pytest.mark import Mark
 
-import cdl.core.computation as computation_pkg
+import cdl.computation as computation_pkg
 import cdl.tests as tests_pkg
 
 

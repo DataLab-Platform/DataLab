@@ -1,14 +1,14 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Common computation objects (see parent package :mod:`cdl.core.computation`)
+.. Common computation objects (see parent package :mod:`cdl.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# All dataset classes must also be imported in the cdl.computation.param module.
 
 from __future__ import annotations
 
@@ -18,14 +18,12 @@ import guidata.dataset as gds
 import numpy as np
 
 from cdl.config import _
-from cdl.core.model.base import ResultProperties
-from cdl.core.model.signal import create_signal
+from cdl.obj import ResultProperties, create_signal
 
 if TYPE_CHECKING:
     from typing import Callable
 
-    from cdl.core.model.image import ImageObj
-    from cdl.core.model.signal import SignalObj
+    from cdl.obj import ImageObj, SignalObj
 
 
 class GaussianParam(gds.DataSet):

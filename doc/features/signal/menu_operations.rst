@@ -152,10 +152,14 @@ Derivative
 
 Create a new signal which is the derivative of each selected signal.
 
+Derivative is calculated using `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_ function.
+
 Integral
 ^^^^^^^^
 
 Create a new signal which is the integral of each selected signal.
+
+Integral is calculated using `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_ function.
 
 Convolution
 ^^^^^^^^^^^

@@ -78,22 +78,6 @@ def get_infos(self):
     return "Δ = " + self.x_to_str(self.get_tr_length())
 
 
-#  Patching CurveItem's "select" method to avoid showing giant ugly squares
-@monkeypatch_method(plotpy.items.CurveItem, "CurveItem")
-def select(self):
-    """Select item"""
-    self.selected = True
-    plot = self.plot()
-    if plot is not None:
-        plot.blockSignals(True)
-    pen = self.param.line.build_pen()
-    pen.setWidth(2)
-    self.setPen(pen)
-    if plot is not None:
-        plot.blockSignals(False)
-    self.invalidate_plot()
-
-
 #  Patching curve stats to show additional information
 @monkeypatch_method(plotpy.tools.CurveStatsTool, "CurveStatsTool")
 def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
@@ -138,7 +122,7 @@ def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
                 (curve, "σ(y)=%g", lambda *args: args[1].std()),
                 (curve, "∑(y)=%g", lambda *args: np.trapz(args[1])),
                 (curve, "∫ydx=%g<br>", lambda *args: np.trapz(args[1], args[0])),
-                (curve, "FWHM = %s", lambda *args: fwhm_info(*args)),
+                (curve, "FWHM = %s", fwhm_info),
             ],
         )
         self.label.attach(plot)

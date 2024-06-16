@@ -1,1 +1,1 @@
-.. automodule:: cdl.core.computation
+.. automodule:: cdl.computation

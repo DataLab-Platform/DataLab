@@ -18,7 +18,7 @@ It is part of the DataLab custom function tutorial.
 import numpy as np
 import scipy.ndimage as spi
 
-import cdl.core.computation.image as cpi
+import cdl.computation.image as cpi
 import cdl.obj
 import cdl.param
 import cdl.plugins

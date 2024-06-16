@@ -87,7 +87,7 @@ msgstr ""
 "associées"
 
 #: ../../api/index.rst:27
-msgid ":mod:`cdl.core.computation`"
+msgid ":mod:`cdl.computation`"
 msgstr ""
 
 #: ../../api/index.rst:28

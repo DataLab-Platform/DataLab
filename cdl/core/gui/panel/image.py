@@ -35,6 +35,7 @@ from cdl.core.model.image import (
 
 if TYPE_CHECKING:
     import guidata.dataset as gds
+    from plotpy.plot import BasePlot
     from qtpy import QtWidgets as QW
 
     from cdl.core.gui.docks import DockablePlotWidget
@@ -83,6 +84,18 @@ class ImagePanel(BaseDataPanel):
         if obj is not None:
             obj.invalidate_maskdata_cache()
             super().properties_changed()
+
+    def plot_lut_changed(self, plot: BasePlot) -> None:
+        """The LUT of the plot has changed: updating image objects accordingly
+
+        Args:
+            plot: Plot object
+        """
+        zmin, zmax = plot.get_axis_limits(plot.colormap_axis)
+        for obj in self.objview.get_sel_objects():
+            obj.zscalemin, obj.zscalemax = zmin, zmax
+            if obj is self.objview.get_current_object():
+                self.objprop.update_properties_from(obj)
 
     # ------Creating, adding, removing objects------------------------------------------
     def get_newparam_from_current(

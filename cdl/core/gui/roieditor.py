@@ -34,8 +34,8 @@ from plotpy.interfaces import IImageItemType
 from plotpy.items import AnnotatedCircle, ObjectInfo
 from qtpy import QtWidgets as QW
 
+from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
-from cdl.core.computation.base import ROIDataParam
 from cdl.core.model.image import RoiDataGeometries
 
 if TYPE_CHECKING:

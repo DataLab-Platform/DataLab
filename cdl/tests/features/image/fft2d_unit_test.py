@@ -13,7 +13,7 @@ import pytest
 from guidata.qthelpers import qt_app_context
 
 import cdl.algorithms.image as alg
-import cdl.core.computation.image as cpi
+import cdl.computation.image as cpi
 import cdl.tests.data as ctd
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result

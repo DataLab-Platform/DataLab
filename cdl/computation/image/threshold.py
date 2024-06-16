@@ -10,7 +10,7 @@ Threshold computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# All dataset classes must also be imported in the cdl.computation.param module.
 
 from __future__ import annotations
 
@@ -18,9 +18,9 @@ import guidata.dataset as gds
 import skimage.util
 from skimage import filters
 
+from cdl.computation.image import dst_11
 from cdl.config import _
-from cdl.core.computation.image import dst_11
-from cdl.core.model.image import ImageObj
+from cdl.obj import ImageObj
 
 
 class ThresholdParam(gds.DataSet):
@@ -78,7 +78,7 @@ def compute_threshold(src: ImageObj, p: ThresholdParam) -> ImageObj:
     dst = dst_11(src, "threshold", suffix)
     data = src.data > threshold if p.operation == ">" else src.data < threshold
     dst.data = skimage.util.img_as_ubyte(data)
-    dst.metadata["lut_range"] = [0, 255]
+    dst.zscalemin, dst.zscalemax = 0, 255  # LUT range
     dst.metadata["colormap"] = "gray"
     return dst
 

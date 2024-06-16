@@ -3,6 +3,82 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.16.0 ##
+
+💥 New features and enhancements:
+
+* Major user interface overhaul:
+  * The menu bar and toolbars have been reorganized to make the application more
+    intuitive and easier to use
+  * Operations and processing features have been regrouped in submenus
+  * All visualization-related actions are now grouped in the plot view vertical toolbar
+  * Clarified the "Annotations" management (new buttons, toolbar action, ...)
+
+* New validation process for signal and image features:
+  * Before this release, DataLab's validation process was exclusively done from the
+    programmer's point of view, by writing unit tests and integration tests, thus
+    ensuring that the code was working as expected (i.e. that no exception was raised
+    and that the behavior was correct)
+  * With this release, a new validation process has been introduced, from the user's
+    point of view, by adding new validation functions (marked with the
+    `@pytest.mark.validation` decorator) in the test suite
+  * A new "Validation" section in the documentation explains how validation is done
+    and contains a list of all validation functions with the statistics of the
+    validation process (generated from the test suite)
+  * The validation process is a work in progress and will be improved in future versions
+
+* "Properties" group box:
+  * Added "Scales" tab, to show and set the plot scales:
+    * X, Y for signals
+    * X, Y, Z (LUT range) for images
+
+* View options:
+  * New "Show first only" option in the "View" menu, to show only the first curve
+    (or image) when multiple curves (or images) are displayed in the plot view
+  * New (movable) label for FWHM computations, additional to the existing segment annotation
+
+* I/O features:
+  * Added support for reading and writing .MAT files (MATLAB format)
+  * Create a new group when opening a file containing multiple signals or images (e.g. CSV file with multiple curves)
+
+* Add support for binary images
+* Signal ROI extraction: added new dialog box to manually edit the ROI lower and upper bounds after defining the ROI graphically
+
+ℹ️ New **Signal** operations, processing and computing features:
+
+| Menu        | Submenu      |Features                                                 |
+|-------------|--------------|---------------------------------------------------------|
+| New | New signal | Exponential, pulse, polynomial, experimental (manual input)            |
+| Operations  | | Exponential, Square root, Power |
+| Operations  | Operations with a constant | +, -, *, / |
+| Processing  | Axis Transformation | Reverse X-axis |
+| Processing  | Level Adjustment | Offset correction |
+| Processing  | Fourier analysis | Power spectrum, Phase spectrum, Magnitude spectrum, Power spectral density |
+| Processing  | Frequency filters | Low-pass, High-pass, Band-pass, Band-stop |
+| Processing  | | Windowing (Hanning, Hamming, Blackman, Blackman-Harris, Nuttall, Flat-top, ...) |
+| Processing  | Fit | Linear fit, Sinusoidal fit, Exponential fit, CDF fit |
+| Computing   | | FWHM (Zero-crossing method), X value @ min/max, Sampling period/frequency, Dynamic parameters (ENOB, SNR, SINAD, THD, SFDR), -3dB bandwidth, Contrast |
+
+ℹ️ New **Image** operations, processing and computing features:
+
+| Menu        | Submenu      |Features                                                 |
+|-------------|--------------|---------------------------------------------------------|
+| Operations  | | Exponential |
+| Operations  | Intensity profiles | Profile along a segment |
+| Operations  | Operations with a constant | +, -, *, / |
+| Processing  | Level Adjustment | Normalization, Clipping, Offset correction |
+| Processing  | Fourier analysis | Power spectrum, Phase spectrum, Magnitude spectrum, Power spectral density |
+| Processing  | Thresholding | Parametric, ISODATA, Li, Mean, Minimum, Otsu, Triangle, Yen |
+
+🛠️ Bug fixes:
+
+* Fixed a performance issue due to an unnecessary refresh of the plot view when adding a new signal or image
+* Fixed [Issue #77](https://github.com/DataLab-Platform/DataLab/issues/77) - Intensity profiles: unable to accept dialog the second time
+* Fixed [Issue #75](https://github.com/DataLab-Platform/DataLab/issues/75) - View in a new window: curve anti-aliasing is not enabled by default
+* Annotations visibility is now correctly saved and restored:
+  * Before this release, when modifying the annotations visibility in the separate plot view, the visibility was not saved and restored when reopening the plot view
+  * This has been [fixed upstream](https://github.com/PlotPyStack/PlotPy/commit/03faaa42e5d6d4016ea8c99334c29d46a5963467) in PlotPy (v2.3.3)
+
 ## DataLab Version 0.15.1 ##
 
 🛠️ Bug fixes:
@@ -337,7 +413,7 @@ for future and past milestones.
     parameters for a new signal
   * Added `edit_new_image_parameters` method for showing a dialog box to edit
     parameters for a new image (updated the *cdl_testdata.py* plugin accordingly)
-* Signal and image computations API (`cdl.core.computations`):
+* Signal and image computations API (`cdl.computations`):
   * Added wrappers for signal and image 1 -> 1 computations
   * These wrappers aim at simplifying the creation of a basic computation function
     operating on DataLab's native objects (`SignalObj` and `ImageObj`) from a

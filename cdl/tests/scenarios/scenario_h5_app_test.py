@@ -46,7 +46,7 @@ def test_scenario_h5():
             panel = win.imagepanel
             ima1 = create_noisygauss_image(add_annotations=True)
             panel.add_object(ima1)
-            param = ClipParam.create(value=ima1.data.mean())
+            param = ClipParam.create(upper=ima1.data.mean())
             panel.processor.compute_clip(param)
             # === Creating a macro
             scode = scenario_mac_app_test.add_macro_sample(win, 0).get_code()

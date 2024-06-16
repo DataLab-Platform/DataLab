@@ -13,14 +13,14 @@ from guidata.qthelpers import exec_dialog
 from plotpy.widgets.resizedialog import ResizeDialog
 from qtpy import QtWidgets as QW
 
-import cdl.core.computation.base as cpb
-import cdl.core.computation.image as cpi
-import cdl.core.computation.image.detection as cpi_det
-import cdl.core.computation.image.edges as cpi_edg
-import cdl.core.computation.image.exposure as cpi_exp
-import cdl.core.computation.image.morphology as cpi_mor
-import cdl.core.computation.image.restoration as cpi_res
-import cdl.core.computation.image.threshold as cpi_thr
+import cdl.computation.base as cpb
+import cdl.computation.image as cpi
+import cdl.computation.image.detection as cpi_det
+import cdl.computation.image.edges as cpi_edg
+import cdl.computation.image.exposure as cpi_exp
+import cdl.computation.image.morphology as cpi_mor
+import cdl.computation.image.restoration as cpi_res
+import cdl.computation.image.threshold as cpi_thr
 import cdl.param
 from cdl.algorithms.image import distance_matrix
 from cdl.config import APP_NAME, Conf, _

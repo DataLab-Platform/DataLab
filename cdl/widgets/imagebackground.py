@@ -46,7 +46,10 @@ class ImageBackgroundDialog(PlotDialog):
         self.__setup_dialog()
 
     def __compute_background(
-        self, x: np.ndarray, y: np.ndarray, z: np.ndarray
+        self,
+        x: np.ndarray,  # pylint: disable=unused-argument
+        y: np.ndarray,  # pylint: disable=unused-argument
+        z: np.ndarray,
     ) -> float:
         """Compute background value"""
         x0, y0, x1, y1 = self.rectarea.get_rect()

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import abc
 import dataclasses
+import os.path as osp
 import re
 import warnings
 from typing import TYPE_CHECKING
@@ -29,7 +30,7 @@ from qtpy import QtCore as QC
 from qtpy import QtWidgets as QW
 from qtpy.compat import getopenfilename, getopenfilenames, getsavefilename
 
-import cdl.core.computation.base
+import cdl.computation.base
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.gui import actionhandler, objectmodel, objectview, roieditor
 from cdl.core.model.base import ResultProperties, ResultShape, items_to_json
@@ -215,6 +216,32 @@ class ResultData:
     ylabels: list[str] = None
 
 
+def create_resultdata_dict(objs: list[SignalObj | ImageObj]) -> dict[str, ResultData]:
+    """Return result data dictionary
+
+    Args:
+        objs: List of objects
+
+    Returns:
+        Result data dictionary: keys are result categories, values are ResultData
+    """
+    rdatadict: dict[str, ResultData] = {}
+    for obj in objs:
+        for result in list(obj.iterate_resultshapes()) + list(
+            obj.iterate_resultproperties()
+        ):
+            rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
+            rdata.results.append(result)
+            rdata.xlabels = result.headers
+            for i_row_res in range(result.array.shape[0]):
+                ylabel = f"{result.title}({obj.short_id})"
+                i_roi = int(result.array[i_row_res, 0])
+                if i_roi >= 0:
+                    ylabel += f"|ROI{i_roi}"
+                rdata.ylabels.append(ylabel)
+    return rdatadict
+
+
 class BaseDataPanel(AbstractPanel):
     """Object handling the item list, the selected item properties and plot"""
 
@@ -373,8 +400,16 @@ class BaseDataPanel(AbstractPanel):
                     group_id = self.add_group("").uuid
         obj.check_data()
         self.objmodel.add_object(obj, group_id)
+
+        # Block signals to avoid updating the plot (unnecessary refresh)
+        self.objview.blockSignals(True)
         self.objview.add_object_item(obj, group_id, set_current=set_current)
+        self.objview.blockSignals(False)
+
+        # Emit signal to ensure that the data panel is shown in the main window and
+        # that the plot is updated (trigger a refresh of the plot)
         self.SIG_OBJECT_ADDED.emit()
+
         self.objview.update_tree()
 
     def remove_all_objects(self) -> None:
@@ -663,9 +698,12 @@ class BaseDataPanel(AbstractPanel):
         """
         worker = CallbackWorker(lambda worker: self.IO_REGISTRY.read(filename, worker))
         objs = qt_long_callback(self, _("Adding objects to workspace"), worker, True)
+        group_id = None
+        if len(objs) > 1:
+            group_id = self.add_group(osp.basename(filename)).uuid
         for obj in objs:
             obj.metadata["source"] = filename
-            self.add_object(obj, set_current=obj is objs[-1])
+            self.add_object(obj, group_id=group_id, set_current=obj is objs[-1])
         self.selection_changed()
         return objs
 
@@ -952,7 +990,7 @@ class BaseDataPanel(AbstractPanel):
 
         # pylint: disable=not-callable
         dlg = PlotDialog(
-            parent=self,
+            parent=self.parent(),
             title=title,
             edit=edit,
             options=plot_options,
@@ -1016,7 +1054,7 @@ class BaseDataPanel(AbstractPanel):
 
     def get_roi_dialog(
         self, extract: bool, singleobj: bool, add_roi: bool = False
-    ) -> tuple[cdl.core.computation.base.ROIDataParam, bool] | None:
+    ) -> tuple[cdl.computation.base.ROIDataParam, bool] | None:
         """Get ROI data (array) from specific dialog box.
 
         Args:
@@ -1095,26 +1133,6 @@ class BaseDataPanel(AbstractPanel):
             lambda: self.open_separate_view(edit_annotations=True),
         )
 
-    def __get_resultdata_dict(
-        self, objs: list[SignalObj | ImageObj]
-    ) -> dict[str, ResultData]:
-        """Return result data dictionary"""
-        rdatadict: dict[str, ResultData] = {}
-        for obj in objs:
-            for result in list(obj.iterate_resultshapes()) + list(
-                obj.iterate_resultproperties()
-            ):
-                rdata = rdatadict.setdefault(result.category, ResultData([], None, []))
-                rdata.results.append(result)
-                rdata.xlabels = result.headers
-                for i_row_res in range(result.array.shape[0]):
-                    ylabel = f"{result.title}({obj.short_id})"
-                    i_roi = int(result.array[i_row_res, 0])
-                    if i_roi >= 0:
-                        ylabel += f"|ROI{i_roi}"
-                    rdata.ylabels.append(ylabel)
-        return rdatadict
-
     def __show_no_result_warning(self):
         """Show no result warning"""
         msg = "<br>".join(
@@ -1134,15 +1152,15 @@ class BaseDataPanel(AbstractPanel):
     def show_results(self) -> None:
         """Show results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore", RuntimeWarning)
-                for prefix, rdata in rdatadict.items():
+                for category, rdata in rdatadict.items():
                     dlg = ArrayEditor(self.parent())
                     dlg.setup_and_check(
                         np.vstack([result.shown_array for result in rdata.results]),
-                        _("Results") + f" ({prefix})",
+                        _("Results") + f" ({category})",
                         readonly=True,
                         xlabels=rdata.xlabels,
                         ylabels=rdata.ylabels,
@@ -1153,20 +1171,76 @@ class BaseDataPanel(AbstractPanel):
         else:
             self.__show_no_result_warning()
 
+    def __add_result_signal(
+        self,
+        x: np.ndarray | list[float],
+        y: np.ndarray | list[float],
+        title: str,
+        xaxis: str,
+        yaxis: str,
+    ) -> None:
+        """Add result signal"""
+        xdata = np.array(x, dtype=float)
+        ydata = np.array(y, dtype=float)
+
+        obj = create_signal(
+            title=f"{title}: {yaxis} = f({xaxis})",
+            x=xdata,
+            y=ydata,
+            labels=[xaxis, yaxis],
+        )
+        self.mainwindow.signalpanel.add_object(obj)
+
     def plot_results(self) -> None:
         """Plot results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
-            for prefix, rdata in rdatadict.items():
+            for category, rdata in rdatadict.items():
                 xchoices = (("indexes", _("Indexes")),)
                 for xlabel in rdata.xlabels:
                     xchoices += ((xlabel, xlabel),)
                 ychoices = xchoices[1:]
 
+                # Regrouping ResultShape results by their `title` attribute:
+                grouped_results: dict[str, list[ResultShape]] = {}
+                for result in rdata.results:
+                    grouped_results.setdefault(result.title, []).append(result)
+
+                # From here, results are already grouped by their `category` attribute,
+                # and then by their `title` attribute. We can now plot them.
+                #
+                # Now, we have two common use cases:
+                # 1. Plotting one curve per object (signal/image) and per `title`
+                #    attribute, if each selected object contains a result object
+                #    with multiple values (e.g. from a blob detection feature).
+                # 2. Plotting one curve per `title` attribute, if each selected object
+                #    contains a result object with a single value (e.g. from a FHWM
+                #    feature) - in that case, we select only the first value of each
+                #    result object.
+
+                # The default kind of plot depends on the number of values in each
+                # result and the number of selected objects:
+                default_kind = (
+                    "one_curve_per_object"
+                    if any(result.array.shape[0] > 1 for result in rdata.results)
+                    else "one_curve_per_title"
+                )
+
                 class PlotResultParam(gds.DataSet):
                     """Plot results parameters"""
 
+                    kind = gds.ChoiceItem(
+                        _("Plot kind"),
+                        (
+                            (
+                                "one_curve_per_object",
+                                _("One curve per object (or ROI) and per result title"),
+                            ),
+                            ("one_curve_per_title", _("One curve per result title")),
+                        ),
+                        default=default_kind,
+                    )
                     xaxis = gds.ChoiceItem(_("X axis"), xchoices, default="indexes")
                     yaxis = gds.ChoiceItem(
                         _("Y axis"), ychoices, default=ychoices[0][0]
@@ -1177,47 +1251,52 @@ class BaseDataPanel(AbstractPanel):
                         "Plot results obtained from previous computations.<br><br>"
                         "This plot is based on results associated with '%s' prefix."
                     )
-                    % prefix
+                    % category
                 )
                 param = PlotResultParam(_("Plot results"), comment=comment)
-                if not param.edit(parent=self):
+                if not param.edit(parent=self.parent()):
                     return
 
-                # Regrouping ResultShape results by their `label` attribute:
-                grouped_results: dict[str, list[ResultShape]] = {}
-                for result in rdata.results:
-                    grouped_results.setdefault(result.title, []).append(result)
+                i_yaxis = rdata.xlabels.index(param.yaxis)
+                if param.kind == "one_curve_per_title":
+                    # One curve per result title:
+                    for title, results in grouped_results.items():  # title
+                        x, y = [], []
+                        for index, result in enumerate(results):  # object
+                            if param.xaxis == "indexes":
+                                x.append(index)
+                            else:
+                                i_xaxis = rdata.xlabels.index(param.xaxis)
+                                x.append(result.shown_array[0][i_xaxis])
+                            y.append(result.shown_array[0][i_yaxis])
+                        self.__add_result_signal(x, y, title, param.xaxis, param.yaxis)
+                else:
+                    # One curve per result title, per object and per ROI:
+                    for title, results in grouped_results.items():  # title
+                        for index, result in enumerate(results):  # object
+                            roi_idx = np.array(np.unique(result.array[:, 0]), dtype=int)
+                            for i_roi in roi_idx:  # ROI
+                                mask = result.array[:, 0] == i_roi
+                                if param.xaxis == "indexes":
+                                    x = np.arange(result.array.shape[0])[mask]
+                                else:
+                                    i_xaxis = rdata.xlabels.index(param.xaxis)
+                                    x = result.shown_array[mask, i_xaxis]
+                                y = result.shown_array[mask, i_yaxis]
+                                stitle = f"{title} ({objs[index].short_id})"
+                                if len(roi_idx) > 1:
+                                    stitle += f"|ROI{i_roi}"
+                                self.__add_result_signal(
+                                    x, y, stitle, param.xaxis, param.yaxis
+                                )
 
-                # Plotting each group of results:
-                for label, results in grouped_results.items():
-                    x, y = [], []
-                    for index, result in enumerate(results):
-                        if param.xaxis == "indexes":
-                            x.append(index)
-                        else:
-                            x.append(
-                                result.shown_array[0][rdata.xlabels.index(param.xaxis)]
-                            )
-                        y.append(
-                            result.shown_array[0][rdata.xlabels.index(param.yaxis)]
-                        )
-                    xdata = np.array(x, dtype=float)
-                    ydata = np.array(y, dtype=float)
-
-                    obj = create_signal(
-                        title=f"{label}: {param.yaxis} = f({param.xaxis})",
-                        x=xdata,
-                        y=ydata,
-                        labels=[param.xaxis, param.yaxis],
-                    )
-                    self.mainwindow.signalpanel.add_object(obj)
         else:
             self.__show_no_result_warning()
 
     def delete_results(self) -> None:
         """Delete results"""
         objs = self.objview.get_sel_objects(include_groups=True)
-        rdatadict = self.__get_resultdata_dict(objs)
+        rdatadict = create_resultdata_dict(objs)
         if rdatadict:
             answer = QW.QMessageBox.warning(
                 self,

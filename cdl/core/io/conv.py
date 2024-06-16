@@ -9,6 +9,7 @@ DataLab I/O conversion functions
 from __future__ import annotations
 
 import numpy as np
+import skimage.util
 
 
 def data_to_xy(data: np.ndarray) -> list[np.ndarray]:
@@ -63,11 +64,9 @@ def convert_array_to_standard_type(array: np.ndarray) -> np.ndarray:
     if kind in ["f", "c"]:  # 'f' for floating point, 'c' for complex
         return array
 
-    if kind == "b":
-        # Convert to uint8 if it is not already
-        if array.dtype != np.uint8:
-            return array.astype(np.uint8)
-        return array
+    if kind == "b":  # 'b' for boolean
+        # Convert to uint8
+        return skimage.util.img_as_ubyte(array)
 
     if kind in ["i", "u"]:  # 'i' for signed integers, 'u' for unsigned integers
         if itemsize == 1:  # 8-bit

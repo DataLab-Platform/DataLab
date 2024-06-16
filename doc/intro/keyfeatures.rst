@@ -29,11 +29,12 @@ Signal Image  Feature
 ✓      ✓      Statistics on user-defined ROI
 ✓      ✓      Markers
 ..     ✓      Aspect ratio (1:1, custom)
-..     ✓      50+ available colormaps
-..     ✓      X/Y raw/averaged profiles
+..     ✓      50+ available colormaps (customizable)
+..     ✓      Intensity profiles (line, average, radial)
 ✓      ✓      Annotations
 ✓      ✓      Persistance of settings in workspace
 ..     ✓      Distribute images on a grid
+✓      ✓      Single or superimposed views
 ====== ====== ====================================
 
 Data processing
@@ -46,6 +47,7 @@ Signal Image  Feature
 ✓      ✓      Remote control from Jupyter, Spyder or any IDE
 ✓      ✓      Remote control from a third-party application
 ✓      ✓      Sum, average, difference, product, ...
+✓      ✓      Operations with a constant
 ✓      ✓      ROI extraction, Swap X/Y axes
 ✓      ..     Semi-automatic multi-peak detection
 ✓      ..     Convolution
@@ -53,17 +55,21 @@ Signal Image  Feature
 ..     ✓      Rotation (flip, rotate), resize, ...
 ..     ✓      Intensity profiles (line, average, radial)
 ..     ✓      Pixel binning
-✓      ✓      Normalize, square root, power, log, ...
+✓      ✓      Square root, power, logarithm, exponential, ...
 ✓      ..     Derivative, integral
 ✓      ✓      Linear calibration
-..     ✓      Thresholding, clipping
+✓      ✓      Normalization, Clipping, Offset correction
+✓      ..     Reverse X-axis
+..     ✓      Thresholding (manual, Otsu, ...)
 ✓      ✓      Gaussian filter, Wiener filter
 ✓      ✓      Moving average, moving median
-✓      ✓      FFT, inverse FFT
+✓      ✓      FFT, inverse FFT, Power/Phase/Magnitude spectrum, Power Spectral Density
 ✓      ..     Interpolation, resampling
 ✓      ..     Detrending
-✓      ..     Interactive fit: Gauss, Lorenzt, Voigt, polynomial
+✓      ..     Interactive fit: Gauss, Lorentz, Voigt, polynomial, CDF, ...
 ✓      ..     Interactive multigaussian fit
+✓      ..     Frequency filters (low-pass, high-pass, band-pass, band-stop)
+✓      ..     Windowing (Hamming, Hanning, ...)
 ..     ✓      Butterworth filter
 ..     ✓      Exposure correction (gamma, log, ...)
 ..     ✓      Restauration (Total Variation, Bilateral, ...)
@@ -71,6 +77,7 @@ Signal Image  Feature
 ..     ✓      Edges detection (Roberts, Sobel, ...)
 ✓      ✓      Computing on custom ROI
 ✓      ..     FWHM, FW @ 1/e²
+✓      ..     Dynamic parameters (ENOB, SNR, ...), Sampling period/Rate
 ..     ✓      Centroid (robust method w/r noise)
 ..     ✓      Minimum enclosing circle center
 ..     ✓      2D peak detection

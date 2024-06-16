@@ -9,7 +9,7 @@ but can be used independently as well.
 .. seealso::
 
     The :mod:`cdl.algorithms` package is the main entry point for the DataLab
-    algorithms when manipulating NumPy arrays. See the :mod:`cdl.core.computation`
+    algorithms when manipulating NumPy arrays. See the :mod:`cdl.computation`
     package for algorithms that operate directly on DataLab objects (i.e.
     :class:`cdl.obj.SignalObj` and :class:`cdl.obj.ImageObj`).
 

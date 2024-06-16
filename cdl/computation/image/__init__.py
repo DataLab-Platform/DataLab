@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Image computation objects (see parent package :mod:`cdl.core.computation`)
+.. Image computation objects (see parent package :mod:`cdl.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -21,12 +21,14 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 from numpy import ma
 from plotpy.mathutils.geometry import vector_rotation
-from plotpy.panels.csection.csitem import compute_line_section
+
+# Import as "csline" to avoid the function to be interpreted as a validation function
+# in the context of DataLab's validation process:
+from plotpy.panels.csection.csitem import compute_line_section as csline
 from skimage import filters
 
 import cdl.algorithms.image as alg
-from cdl.config import _
-from cdl.core.computation.base import (
+from cdl.computation.base import (
     ClipParam,
     ConstantOperationParam,
     FFTParam,
@@ -41,9 +43,17 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
-from cdl.core.model.base import BaseProcParam, ResultProperties, ResultShape
-from cdl.core.model.image import ImageObj, ROI2DParam, RoiDataGeometries, RoiDataItem
-from cdl.core.model.signal import SignalObj
+from cdl.config import _
+from cdl.obj import (
+    BaseProcParam,
+    ImageObj,
+    ImageRoiDataItem,
+    ResultProperties,
+    ResultShape,
+    ROI2DParam,
+    RoiDataGeometries,
+    SignalObj,
+)
 
 VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 
@@ -62,7 +72,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> from cdl.computation.signal import Wrap11Func
         >>> import cdl.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
@@ -791,7 +801,7 @@ def compute_segment_profile(src: ImageObj, p: SegmentProfileParam) -> ImageObj:
     p.row2 = min(p.row2, data.shape[0] - 1)
     p.col2 = min(p.col2, data.shape[1] - 1)
     suffix = f"({p.row1}, {p.col1})-({p.row2}, {p.col2})"
-    x, y = compute_line_section(data, p.row1, p.col1, p.row2, p.col2)
+    x, y = csline(data, p.row1, p.col1, p.row2, p.col2)
     dst = dst_11_signal(src, "segment_profile", suffix)
     dst.set_xydata(np.array(x, dtype=float), np.array(y, dtype=float))
     return dst
@@ -1191,7 +1201,7 @@ def compute_magnitude_spectrum(
         Output image object
     """
     dst = dst_11(src, "magnitude_spectrum")
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.data = alg.magnitude_spectrum(src.data, log_scale=log_scale)
     dst.xunit = dst.yunit = dst.zunit = ""
     dst.xlabel = dst.ylabel = _("Frequency")
@@ -1224,7 +1234,7 @@ def compute_psd(src: ImageObj, p: SpectrumParam | None = None) -> ImageObj:
         Output image object
     """
     dst = dst_11(src, "psd")
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.data = alg.psd(src.data, log_scale=log_scale)
     dst.xunit = dst.yunit = dst.zunit = ""
     dst.xlabel = dst.ylabel = _("Frequency")
@@ -1286,6 +1296,7 @@ def calc_resultshape(
     obj: ImageObj,
     func: Callable,
     *args: Any,
+    add_label: bool = False,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on an image object,
     taking into account the image origin (x0, y0), scale (dx, dy) and ROIs.
@@ -1296,6 +1307,8 @@ def calc_resultshape(
         obj: input image object
         func: computation function
         *args: computation function arguments
+        add_label: if True, add a label item (and the geometrical shape) to plot
+         (default to False)
 
     Returns:
         Result shape object or None if no result is found
@@ -1348,7 +1361,7 @@ def calc_resultshape(
                 # Circle [x0, y0, r] or ellipse coordinates [x0, y0, a, b, theta]
                 colx, coly = 0, 1
             if obj.roi is not None:
-                x0, y0, _x1, _y1 = RoiDataItem(obj.roi[i_roi]).get_rect()
+                x0, y0, _x1, _y1 = ImageRoiDataItem(obj.roi[i_roi]).get_rect()
                 coords[:, colx] += x0
                 coords[:, coly] += y0
             coords[:, colx] = obj.dx * coords[:, colx] + obj.x0
@@ -1371,7 +1384,7 @@ def calc_resultshape(
                 row += coords.shape[0]
         else:
             array = np.vstack(res)
-        return ResultShape(title, array, shape)
+        return ResultShape(title, array, shape, add_label=add_label)
     return None
 
 

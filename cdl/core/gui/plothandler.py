@@ -77,6 +77,7 @@ class BasePlotHandler:
             WeakKeyDictionary()
         )
         self.__auto_refresh = False
+        self.__show_first_only = False
         self.__result_items_mapping: WeakKeyDictionary[LabelItem, Callable] = (
             WeakKeyDictionary()
         )
@@ -155,22 +156,25 @@ class BasePlotHandler:
         for the object with the given uuid"""
         obj = self.panel.objmodel[oid]
         if obj.metadata:
-            # Performance optimization: block `plotpy.plot.BasePlot` signals,
-            # add all items except the last one, unblock signals, then add the last one
-            # (this avoids some unnecessary refresh process by PlotPy)
             items = list(obj.iterate_shape_items(editable=False))
-            resultproperties = list(obj.iterate_resultproperties())
-            if resultproperties:
-                for resultprop in resultproperties:
-                    item = resultprop.get_plot_item()
+            results = list(obj.iterate_resultproperties()) + list(
+                obj.iterate_resultshapes()
+            )
+            for result in results:
+                item = result.get_label_item()
+                if item is not None:
                     items.append(item)
                     self.__result_items_mapping[item] = (
-                        lambda item,
-                        rprop=resultprop: rprop.update_obj_metadata_from_item(obj, item)
+                        lambda item, rprop=result: rprop.update_obj_metadata_from_item(
+                            obj, item
+                        )
                     )
             if items:
                 if do_autoscale:
                     self.plot.do_autoscale()
+                # Performance optimization: block `plotpy.plot.BasePlot` signals, add
+                # all items except the last one, unblock signals, then add the last one
+                # (this avoids some unnecessary refresh process by PlotPy)
                 with block_signals(self.plot, True):
                     with create_progress_bar(
                         self.panel, _("Creating geometric shapes"), max_=len(items) - 1
@@ -245,10 +249,20 @@ class BasePlotHandler:
         """Set auto refresh mode.
 
         Args:
-            auto_refresh (bool): if True, refresh plot items automatically
+            auto_refresh: if True, refresh plot items automatically
         """
         self.__auto_refresh = auto_refresh
         if auto_refresh:
+            self.refresh_plot("selected")
+
+    def set_show_first_only(self, show_first_only: bool) -> None:
+        """Set show first only mode.
+
+        Args:
+            show_first_only: if True, show only the first selected item
+        """
+        self.__show_first_only = show_first_only
+        if self.__auto_refresh:
             self.refresh_plot("selected")
 
     def refresh_plot(
@@ -295,18 +309,36 @@ class BasePlotHandler:
                 self.panel.objmodel.get_objects(oids)
             except KeyError as exc:
                 raise ValueError(f"Invalid value for `what`: {what}") from exc
+
+        # Initialize titles and scales dictionaries
         title_keys = ("title", "xlabel", "ylabel", "zlabel", "xunit", "yunit", "zunit")
         titles_dict = {}
+        autoscale = False
+        scale_keys = (
+            "xscalelog",
+            "xscalemin",
+            "xscalemax",
+            "yscalelog",
+            "yscalemin",
+            "yscalemax",
+        )
+        scales_dict = {}
+
         if oids:
+            if self.__show_first_only:
+                oids = oids[:1]
             ref_item = None
             with create_progress_bar(
                 self.panel, _("Creating plot items"), max_=len(oids)
             ) as progress:
+                # Iterate over objects
                 for i_obj, oid in enumerate(oids):
                     progress.setValue(i_obj + 1)
                     if progress.wasCanceled():
                         break
                     obj = self.panel.objmodel[oid]
+
+                    # Collecting titles information
                     for key in title_keys:
                         title = getattr(obj, key, "")
                         value = titles_dict.get(key)
@@ -314,6 +346,16 @@ class BasePlotHandler:
                             titles_dict[key] = title
                         elif value != title:
                             titles_dict[key] = ""
+
+                    # Collecting scales information
+                    autoscale = autoscale or obj.autoscale
+                    for key in scale_keys:
+                        scale = getattr(obj, key, None)
+                        if scale is not None:
+                            cmp = min if "min" in key else max
+                            scales_dict[key] = cmp(scales_dict.get(key, scale), scale)
+
+                    # Update or add item to plot
                     item = self.get(oid)
                     if item is None:
                         item = self.__add_item_to_plot(oid)
@@ -327,16 +369,48 @@ class BasePlotHandler:
                         self.plot.set_item_visible(item, True, replot=False)
                         self.plot.set_active_item(item)
                         item.unselect()
-                    self.add_shapes(oid, do_autoscale=True)
+
+                    # Add geometric shapes
+                    self.add_shapes(oid, do_autoscale=autoscale)
+
             self.plot.replot()
+
         else:
+            # No object to refresh: clean up titles
             for key in title_keys:
                 titles_dict[key] = ""
+
+        # Set titles
         tdict = titles_dict
         tdict["ylabel"] = (tdict["ylabel"], tdict.pop("zlabel"))
         tdict["yunit"] = (tdict["yunit"], tdict.pop("zunit"))
         self.plot.set_titles(**titles_dict)
-        self.plot.do_autoscale()
+
+        # Set scales
+        replot = False
+        for axis_name, axis in (("bottom", "x"), ("left", "y")):
+            axis_id = self.plot.get_axis_id(axis_name)
+            scalelog = scales_dict.get(f"{axis}scalelog")
+            if scalelog is not None:
+                new_scale = "log" if scalelog else "lin"
+                self.plot.set_axis_scale(axis_id, new_scale, autoscale=False)
+                replot = True
+        if autoscale:
+            self.plot.do_autoscale()
+        else:
+            for axis_name, axis in (("bottom", "x"), ("left", "y")):
+                axis_id = self.plot.get_axis_id(axis_name)
+                new_vmin = scales_dict.get(f"{axis}scalemin")
+                new_vmax = scales_dict.get(f"{axis}scalemax")
+                if new_vmin is not None or new_vmax is not None:
+                    self.plot.do_autoscale(replot=False, axis_id=axis_id)
+                    vmin, vmax = self.plot.get_axis_limits(axis_id)
+                    new_vmin = new_vmin if new_vmin is not None else vmin
+                    new_vmax = new_vmax if new_vmax is not None else vmax
+                    self.plot.set_axis_limits(axis_id, new_vmin, new_vmax)
+                    replot = True
+            if replot:
+                self.plot.replot()
 
     def cleanup_dataview(self) -> None:
         """Clean up data view"""

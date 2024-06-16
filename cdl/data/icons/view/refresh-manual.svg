@@ -21,8 +21,8 @@
    inkscape:pagecheckerboard="0"
    inkscape:deskcolor="#d1d1d1"
    inkscape:zoom="3.1757812"
-   inkscape:cx="128"
-   inkscape:cy="128"
+   inkscape:cx="127.68512"
+   inkscape:cy="127.68512"
    inkscape:window-width="1920"
    inkscape:window-height="1009"
    inkscape:window-x="-8"
@@ -36,7 +36,7 @@
 
 <g
    style="fill:none;fill-rule:nonzero;stroke:none;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none"
-   transform="matrix(0,2.4929954,-2.4929954,0,240.18479,15.815708)"
+   transform="matrix(0,2.2298985,-2.2298985,0,228.34543,27.655016)"
    id="g2-6">
 	<path
    d="m 56.375,60.616 c -0.75,-1.027 -2.151,-1.388 -3.266,-0.776 -2.472,1.356 -5.237,2.065 -8.109,2.065 -7.2,0 -13.346,-4.532 -15.778,-10.887 h 5.968 c 0.734,0 1.41,-0.402 1.759,-1.049 0.349,-0.646 0.316,-1.432 -0.085,-2.046 L 20.269,22.551 c -0.37,-0.565 -0.999,-0.905 -1.674,-0.905 -0.675,0 -1.304,0.34 -1.674,0.905 L 0.326,47.924 c -0.402,0.614 -0.435,1.4 -0.085,2.046 C 0.59,50.616 1.266,51.019 2,51.019 H 9.609 C 12.482,67.96 27.253,80.905 45,80.905 c 6.736,0 13.203,-1.841 18.864,-5.348 1.272,-0.788 1.586,-2.509 0.704,-3.718 z"

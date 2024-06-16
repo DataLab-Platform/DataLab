@@ -294,7 +294,7 @@ operating on DataLab's native image objects (:class:`cdl.obj.ImageObj`), instead
 operating on NumPy arrays. So we need to find a way to call our custom function
 ``weighted_average_denoise`` with a :class:`cdl.obj.ImageObj` as input and output.
 To avoid writing a lot of boilerplate code, we can use the function wrapper provided
-by DataLab: :class:`cdl.core.computation.image.Wrap11Func`.
+by DataLab: :class:`cdl.computation.image.Wrap11Func`.
 
 Besides we need to define a class that describes our plugin, which must inherit
 from :class:`cdl.plugins.PluginBase` and name the Python script that contains the

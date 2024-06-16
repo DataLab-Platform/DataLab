@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-06-16 12:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../doc/features/signal/menu_operations.rst:4
 msgid "Operations on Signals"
@@ -25,14 +25,19 @@ msgstr "Opérations sur les signaux"
 
 #: ../../doc/features/signal/menu_operations.rst:6
 msgid "This section describes the operations that can be performed on signals."
-msgstr "Cette section décrit les opérations qui peuvent être effectuées sur les signaux."
+msgstr ""
+"Cette section décrit les opérations qui peuvent être effectuées sur les "
+"signaux."
 
 #: ../../doc/features/signal/menu_operations.rst:10
 msgid ""
 ":ref:`sig-menu-processing` for more information on signal processing "
 "features, or :ref:`sig-menu-computing` for information on computing "
 "features on signals."
-msgstr ":ref:`sig-menu-processing` pour plus d'informations sur les fonctionnalités de traitement des signaux, ou :ref:`sig-menu-computing` pour des informations sur les fonctionnalités de calcul sur les signaux."
+msgstr ""
+":ref:`sig-menu-processing` pour plus d'informations sur les "
+"fonctionnalités de traitement des signaux, ou :ref:`sig-menu-computing` "
+"pour des informations sur les fonctionnalités de calcul sur les signaux."
 
 #: ../../doc/features/signal/menu_operations.rst:15
 msgid "Screenshot of the \"Operations\" menu."
@@ -42,7 +47,9 @@ msgstr "Capture d'écran du menu \"Opérations\"."
 msgid ""
 "When the \"Signal Panel\" is selected, the menus and toolbars are updated"
 " to provide signal-related actions."
-msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'outils sont mis à jour pour fournir les actions liées aux signaux."
+msgstr ""
+"Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres "
+"d'outils sont mis à jour pour fournir les actions liées aux signaux."
 
 #: ../../doc/features/signal/menu_operations.rst:20
 msgid ""
@@ -312,19 +319,33 @@ msgstr "Dérivée"
 msgid "Create a new signal which is the derivative of each selected signal."
 msgstr "Crée un signal à partir de la dérivée de chaque signal sélectionné."
 
-#: ../../doc/features/signal/menu_operations.rst:156
+#: ../../doc/features/signal/menu_operations.rst:155
+msgid ""
+"Derivative is calculated using `numpy.gradient "
+"<https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_ "
+"function."
+msgstr "La dérivée est calculée à l'aide de la fonction `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_."
+
+#: ../../doc/features/signal/menu_operations.rst:158
 msgid "Integral"
 msgstr "Intégrale"
 
-#: ../../doc/features/signal/menu_operations.rst:158
+#: ../../doc/features/signal/menu_operations.rst:160
 msgid "Create a new signal which is the integral of each selected signal."
 msgstr "Crée un signal à partir de l'intégrale de chaque signal sélectionné."
 
-#: ../../doc/features/signal/menu_operations.rst:161
+#: ../../doc/features/signal/menu_operations.rst:162
+msgid ""
+"Integral is calculated using `scipy.integrate.cumulative_trapezoid "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_"
+" function."
+msgstr "L'intégrale est calculée à l'aide de la fonction `scipy.integrate.cumulative_trapezoid <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.cumulative_trapezoid.html>`_."
+
+#: ../../doc/features/signal/menu_operations.rst:165
 msgid "Convolution"
 msgstr "Convolution"
 
-#: ../../doc/features/signal/menu_operations.rst:163
+#: ../../doc/features/signal/menu_operations.rst:167
 msgid ""
 "Create a new signal which is the convolution of each selected signal with"
 " respect to another signal."
@@ -332,7 +353,7 @@ msgstr ""
 "Crée un signal à partir de la convolution de chaque signal sélectionné "
 "par rapport à un autre signal."
 
-#: ../../doc/features/signal/menu_operations.rst:166
+#: ../../doc/features/signal/menu_operations.rst:170
 msgid ""
 "This feature is based on SciPy's `scipy.signal.convolve "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.convolve.html>`_"

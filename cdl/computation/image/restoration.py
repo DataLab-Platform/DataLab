@@ -10,7 +10,7 @@ Restoration computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# All dataset classes must also be imported in the cdl.computation.param module.
 
 from __future__ import annotations
 
@@ -19,10 +19,10 @@ import pywt
 from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
+from cdl.computation.image import dst_11
+from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
-from cdl.core.computation.image import dst_11
-from cdl.core.computation.image.morphology import MorphologyParam
-from cdl.core.model.image import ImageObj
+from cdl.obj import ImageObj
 
 
 class DenoiseTVParam(gds.DataSet):

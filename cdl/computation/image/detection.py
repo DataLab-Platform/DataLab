@@ -10,7 +10,7 @@ Blob detection computation module
 
 # Note:
 # ----
-# All dataset classes must also be imported in the cdl.core.computation.param module.
+# All dataset classes must also be imported in the cdl.computation.param module.
 
 from __future__ import annotations
 
@@ -24,10 +24,9 @@ from cdl.algorithms.image import (
     get_2d_peaks_coords,
     get_contour_shapes,
 )
+from cdl.computation.image import calc_resultshape
 from cdl.config import _
-from cdl.core.computation.image import calc_resultshape
-from cdl.core.model.base import ResultShape, ShapeTypes
-from cdl.core.model.image import ImageObj
+from cdl.obj import ImageObj, ResultShape, ShapeTypes
 
 
 class GenericDetectionParam(gds.DataSet):

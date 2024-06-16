@@ -24,7 +24,7 @@ and their purpose:
     * - :mod:`cdl.obj`
       - Convenience module to access the DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`) and related functions
 
-    * - :mod:`cdl.core.computation`
+    * - :mod:`cdl.computation`
       - Computation functions, which operate on DataLab objects (:class:`cdl.obj.SignalObj` or :class:`cdl.obj.ImageObj`)
 
     * - :mod:`cdl.proxy`

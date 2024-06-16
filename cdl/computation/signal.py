@@ -1,7 +1,7 @@
 # Copyright (c) DataLab Platform Developers, BSD 3-Clause license, see LICENSE file.
 
 """
-.. Signal computation objects (see parent package :mod:`cdl.core.computation`)
+.. Signal computation objects (see parent package :mod:`cdl.computation`)
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -23,8 +23,7 @@ import scipy.ndimage as spi
 import scipy.signal as sps
 
 import cdl.algorithms.signal as alg
-from cdl.config import _
-from cdl.core.computation.base import (
+from cdl.computation.base import (
     ClipParam,
     ConstantOperationParam,
     FFTParam,
@@ -39,6 +38,7 @@ from cdl.core.computation.base import (
     dst_n1n,
     new_signal_result,
 )
+from cdl.config import _
 from cdl.obj import ResultProperties, ResultShape, ROI1DParam, SignalObj
 
 VALID_DTYPES_STRLIST = SignalObj.get_valid_dtypenames()
@@ -58,7 +58,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.core.computation.signal import Wrap11Func
+        >>> from cdl.computation.signal import Wrap11Func
         >>> import cdl.obj
         >>> def square(y):
         ...     return y**2
@@ -513,7 +513,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
-    dst.set_xydata(x, alg.derivative(x, y))
+    dst.set_xydata(x, np.gradient(y, x))
     return dst
 
 
@@ -528,7 +528,7 @@ def compute_integral(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "integral")
     x, y = src.get_data()
-    dst.set_xydata(x, spt.cumtrapz(y, x, initial=0.0))
+    dst.set_xydata(x, spt.cumulative_trapezoid(y, x, initial=0.0))
     return dst
 
 
@@ -854,7 +854,7 @@ def compute_magnitude_spectrum(
     """
     dst = dst_11(src, "magnitude_spectrum")
     x, y = src.get_data()
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     dst.set_xydata(*alg.magnitude_spectrum(x, y, log_scale=log_scale))
     dst.xlabel = _("Frequency")
     dst.xunit = "Hz" if dst.xunit == "s" else ""
@@ -892,7 +892,7 @@ def compute_psd(src: SignalObj, p: SpectrumParam | None = None) -> SignalObj:
     """
     dst = dst_11(src, "psd")
     x, y = src.get_data()
-    log_scale = True if p is not None and p.log else False
+    log_scale = p is not None and p.log
     psd_x, psd_y = alg.psd(x, y, log_scale=log_scale)
     dst.xydata = np.vstack((psd_x, psd_y))
     dst.xlabel = _("Frequency")
@@ -1173,6 +1173,7 @@ def calc_resultshape(
     obj: SignalObj,
     func: Callable,
     *args: Any,
+    add_label: bool = False,
 ) -> ResultShape | None:
     """Calculate result shape by executing a computation function on a signal object,
     taking into account the signal ROIs.
@@ -1183,6 +1184,8 @@ def calc_resultshape(
         obj: input image object
         func: computation function
         *args: computation function arguments
+        add_label: if True, add a label item (and the geometrical shape) to plot
+         (default to False)
 
     Returns:
         Result shape object or None if no result is found
@@ -1215,7 +1218,7 @@ def calc_resultshape(
             results = np.array([i_roi] + results.tolist())
             res.append(results)
     if res:
-        return ResultShape(title, np.vstack(res), shape)
+        return ResultShape(title, np.vstack(res), shape, add_label=add_label)
     return None
 
 
@@ -1261,6 +1264,7 @@ def compute_fwhm(obj: SignalObj, param: FWHMParam) -> ResultShape | None:
         param.method,
         param.xmin,
         param.xmax,
+        add_label=True,
     )
 
 
@@ -1273,7 +1277,7 @@ def compute_fw1e2(obj: SignalObj) -> ResultShape | None:
     Returns:
         Segment coordinates
     """
-    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2)
+    return calc_resultshape("fw1e2", "segment", obj, alg.fw1e2, add_label=True)
 
 
 def compute_stats(obj: SignalObj) -> ResultProperties:
@@ -1308,7 +1312,9 @@ def compute_bandwidth_3db(obj: SignalObj) -> ResultProperties:
     Returns:
         Result properties with bandwidth
     """
-    return calc_resultshape("bandwidth", "segment", obj, alg.bandwidth, 3.0)
+    return calc_resultshape(
+        "bandwidth", "segment", obj, alg.bandwidth, 3.0, add_label=True
+    )
 
 
 class DynamicParam(gds.DataSet):

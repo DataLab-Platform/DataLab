@@ -26,8 +26,8 @@ from qtpy import QtWidgets as QW
 
 from cdl import env
 from cdl.algorithms.datatypes import is_complex_dtype, is_integer_dtype
+from cdl.computation.base import ROIDataParam
 from cdl.config import Conf, _
-from cdl.core.computation.base import ROIDataParam
 from cdl.core.gui.processor.catcher import CompOut, wng_err_func
 from cdl.core.model.base import ResultProperties, ResultShape
 from cdl.utils.qthelpers import create_progress_bar, qt_try_except
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 
     from plotpy.plot import PlotWidget
 
-    from cdl.core.computation.base import (
+    from cdl.computation.base import (
         ClipParam,
         ConstantOperationParam,
         GaussianParam,

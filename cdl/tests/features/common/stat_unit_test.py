@@ -17,8 +17,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-import cdl.core.computation.image as cpi
-import cdl.core.computation.signal as cps
+import cdl.computation.image as cpi
+import cdl.computation.signal as cps
 import cdl.obj
 
 

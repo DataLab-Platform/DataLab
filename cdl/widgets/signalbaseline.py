@@ -64,6 +64,7 @@ class SignalBaselineDialog(PlotDialog):
         plot.set_active_item(self.xrange)
         self.xrange_changed(self.xrange, *self.xrange.get_range())
 
+    # pylint: disable=unused-argument
     def xrange_changed(self, item: XRangeSelection, xmin: float, xmax: float) -> None:
         """X range changed"""
         imin, imax = np.searchsorted(self.__signal.x, sorted([xmin, xmax]))
