@@ -513,7 +513,7 @@ def compute_derivative(src: SignalObj) -> SignalObj:
     """
     dst = dst_11(src, "derivative")
     x, y = src.get_data()
-    dst.set_xydata(x, alg.derivative(x, y))
+    dst.set_xydata(x, np.gradient(y, x))
     return dst
 
 

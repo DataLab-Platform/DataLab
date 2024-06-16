@@ -35,22 +35,6 @@ def moving_average(y: np.ndarray, n: int) -> np.ndarray:
 
 
 # ----- Misc. functions --------------------------------------------------------
-def derivative(x: np.ndarray, y: np.ndarray) -> np.ndarray:
-    """Compute numerical derivative.
-
-    Args:
-        x: X data
-        y: Y data
-
-    Returns:
-        Numerical derivative
-    """
-    dy = np.zeros_like(y)
-    dy[0:-1] = np.diff(y) / np.diff(x)
-    dy[-1] = (y[-1] - y[-2]) / (x[-1] - x[-2])
-    return dy
-
-
 def normalize(
     yin: np.ndarray,
     parameter: Literal["maximum", "amplitude", "area", "energy", "rms"] = "maximum",

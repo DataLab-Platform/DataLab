@@ -152,6 +152,8 @@ Derivative
 
 Create a new signal which is the derivative of each selected signal.
 
+Derivative is calculated using `numpy.gradient <https://numpy.org/doc/stable/reference/generated/numpy.gradient.html>`_ function.
+
 Integral
 ^^^^^^^^
 
