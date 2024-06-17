@@ -96,7 +96,7 @@ application).
 
     DataLab Windows installer is available for Windows 8, 10 and 11 (main release,
     based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 based release, see
-    file ending with ``-Win7.exe``).
+    file ending with ``-Win7.msi``).
 
     :octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running DataLab
     (or any other Python 3 application), you must install Microsoft Update `KB2533623`
