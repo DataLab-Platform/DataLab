@@ -5,9 +5,9 @@
 :py:func:`average_profile <cdl.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
 :py:func:`binning <cdl.computation.image.compute_binning>`,Binning function on data,N/A
 :py:func:`butterworth <cdl.computation.image.compute_butterworth>`,Compute Butterworth filter,N/A
-:py:func:`calibration <cdl.computation.image.compute_calibration>`,Compute linear calibration,N/A
+:py:func:`calibration <cdl.computation.image.compute_calibration>`,Compute linear calibration,``features/image/processing_unit_test.py``
 :py:func:`centroid <cdl.computation.image.compute_centroid>`,Compute centroid,``features/image/centroid_unit_test.py``
-:py:func:`clip <cdl.computation.image.compute_clip>`,Apply clipping,N/A
+:py:func:`clip <cdl.computation.image.compute_clip>`,Apply clipping,``features/image/processing_unit_test.py``
 :py:func:`difference <cdl.computation.image.compute_difference>`,Compute difference between two images,``features/image/operation_unit_test.py``
 :py:func:`difference_constant <cdl.computation.image.compute_difference_constant>`,Subtract a constant value from an image and return the new result image object,``features/image/operation_unit_test.py``
 :py:func:`division <cdl.computation.image.compute_division>`,Compute division between two images,``features/image/operation_unit_test.py``
@@ -18,7 +18,7 @@
 :py:func:`flatfield <cdl.computation.image.compute_flatfield>`,Compute flat field correction,N/A
 :py:func:`fliph <cdl.computation.image.compute_fliph>`,Flip data horizontally,N/A
 :py:func:`flipv <cdl.computation.image.compute_flipv>`,Flip data vertically,N/A
-:py:func:`gaussian_filter <cdl.computation.image.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`gaussian_filter <cdl.computation.image.compute_gaussian_filter>`,Compute gaussian filter,``features/image/processing_unit_test.py``
 :py:func:`histogram <cdl.computation.image.compute_histogram>`,Compute histogram of the image data,N/A
 :py:func:`hough_circle_peaks <cdl.computation.image.compute_hough_circle_peaks>`,Compute Hough circles,N/A
 :py:func:`ifft <cdl.computation.image.compute_ifft>`,Compute inverse FFT,``features/image/fft2d_unit_test.py``
@@ -27,9 +27,9 @@
 :py:func:`log10 <cdl.computation.image.compute_log10>`,Compute log10,``features/image/operation_unit_test.py``
 :py:func:`logp1 <cdl.computation.image.compute_logp1>`,Compute log10(z+n),``features/image/operation_unit_test.py``
 :py:func:`magnitude_spectrum <cdl.computation.image.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/image/fft2d_unit_test.py``
-:py:func:`moving_average <cdl.computation.image.compute_moving_average>`,Compute moving average,N/A
-:py:func:`moving_median <cdl.computation.image.compute_moving_median>`,Compute moving median,N/A
-:py:func:`normalize <cdl.computation.image.compute_normalize>`,,N/A
+:py:func:`moving_average <cdl.computation.image.compute_moving_average>`,Compute moving average,``features/image/processing_unit_test.py``
+:py:func:`moving_median <cdl.computation.image.compute_moving_median>`,Compute moving median,``features/image/processing_unit_test.py``
+:py:func:`normalize <cdl.computation.image.compute_normalize>`,,``features/image/processing_unit_test.py``
 :py:func:`offset_correction <cdl.computation.image.compute_offset_correction>`,Apply offset correction,``features/image/offset_correction_unit_test.py``
 :py:func:`phase_spectrum <cdl.computation.image.compute_phase_spectrum>`,Compute phase spectrum,``features/image/fft2d_unit_test.py``
 :py:func:`product <cdl.computation.image.compute_product>`,Multiply **dst** and **src** images and return **dst** image modified in place,``features/image/operation_unit_test.py``
@@ -44,8 +44,8 @@
 :py:func:`rotate90 <cdl.computation.image.compute_rotate90>`,Rotate data 90°,N/A
 :py:func:`segment_profile <cdl.computation.image.compute_segment_profile>`,Compute segment profile,N/A
 :py:func:`stats <cdl.computation.image.compute_stats>`,Compute statistics on an image,``features/common/stat_unit_test.py``
-:py:func:`swap_axes <cdl.computation.image.compute_swap_axes>`,Swap image axes,N/A
-:py:func:`wiener <cdl.computation.image.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`swap_axes <cdl.computation.image.compute_swap_axes>`,Swap image axes,``features/image/processing_unit_test.py``
+:py:func:`wiener <cdl.computation.image.compute_wiener>`,Compute Wiener filter,``features/image/processing_unit_test.py``
 :py:func:`blob_dog <cdl.computation.image.detection.compute_blob_dog>`,Compute blobs using Difference of Gaussian method,N/A
 :py:func:`blob_doh <cdl.computation.image.detection.compute_blob_doh>`,Compute blobs using Determinant of Hessian method,N/A
 :py:func:`blob_log <cdl.computation.image.detection.compute_blob_log>`,Compute blobs using Laplacian of Gaussian method,N/A

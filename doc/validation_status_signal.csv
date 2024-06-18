@@ -19,7 +19,7 @@
 :py:func:`filter <cdl.computation.signal.compute_filter>`,"Compute frequency filter (low-pass, high-pass, band-pass, band-stop)",N/A
 :py:func:`fw1e2 <cdl.computation.signal.compute_fw1e2>`,Compute FW at 1/e²,``features/signal/fwhm_unit_test.py``
 :py:func:`fwhm <cdl.computation.signal.compute_fwhm>`,Compute FWHM,``features/signal/fwhm_unit_test.py``
-:py:func:`gaussian_filter <cdl.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,N/A
+:py:func:`gaussian_filter <cdl.computation.signal.compute_gaussian_filter>`,Compute gaussian filter,``features/signal/processing_unit_test.py``
 :py:func:`histogram <cdl.computation.signal.compute_histogram>`,Compute histogram,N/A
 :py:func:`ifft <cdl.computation.signal.compute_ifft>`,Compute iFFT,``features/signal/fft1d_unit_test.py``
 :py:func:`im <cdl.computation.signal.compute_im>`,Compute imaginary part,``features/signal/operation_unit_test.py``
@@ -27,8 +27,8 @@
 :py:func:`interpolation <cdl.computation.signal.compute_interpolation>`,Interpolate data,N/A
 :py:func:`log10 <cdl.computation.signal.compute_log10>`,Compute Log10,``features/signal/operation_unit_test.py``
 :py:func:`magnitude_spectrum <cdl.computation.signal.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/signal/fft1d_unit_test.py``
-:py:func:`moving_average <cdl.computation.signal.compute_moving_average>`,Compute moving average,N/A
-:py:func:`moving_median <cdl.computation.signal.compute_moving_median>`,Compute moving median,N/A
+:py:func:`moving_average <cdl.computation.signal.compute_moving_average>`,Compute moving average,``features/signal/processing_unit_test.py``
+:py:func:`moving_median <cdl.computation.signal.compute_moving_median>`,Compute moving median,``features/signal/processing_unit_test.py``
 :py:func:`normalize <cdl.computation.signal.compute_normalize>`,Normalize data,N/A
 :py:func:`offset_correction <cdl.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/signal/offset_correction_unit_test.py``
 :py:func:`peak_detection <cdl.computation.signal.compute_peak_detection>`,Peak detection,N/A
@@ -44,7 +44,7 @@
 :py:func:`sampling_rate_period <cdl.computation.signal.compute_sampling_rate_period>`,Compute sampling rate and period,``features/signal/computing_unit_test.py``
 :py:func:`sqrt <cdl.computation.signal.compute_sqrt>`,Compute square root,N/A
 :py:func:`stats <cdl.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
-:py:func:`swap_axes <cdl.computation.signal.compute_swap_axes>`,Swap axes,N/A
-:py:func:`wiener <cdl.computation.signal.compute_wiener>`,Compute Wiener filter,N/A
+:py:func:`swap_axes <cdl.computation.signal.compute_swap_axes>`,Swap axes,``features/signal/processing_unit_test.py``
+:py:func:`wiener <cdl.computation.signal.compute_wiener>`,Compute Wiener filter,``features/signal/processing_unit_test.py``
 :py:func:`windowing <cdl.computation.signal.compute_windowing>`,"Compute windowing (available methods: hamming, hanning, bartlett, blackman,",N/A
 :py:func:`x_at_minmax <cdl.computation.signal.compute_x_at_minmax>`,Compute x at min/max,``features/signal/computing_unit_test.py``

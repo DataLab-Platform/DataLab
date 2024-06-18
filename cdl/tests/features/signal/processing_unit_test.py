@@ -21,14 +21,14 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
-from guidata.qthelpers import qt_app_context
+import scipy.ndimage as spi
+import scipy.signal as sps
 
 import cdl.computation.signal as cps
 import cdl.obj
 import cdl.param
 from cdl.tests.data import get_test_signal
-from cdl.utils.tests import check_array_result
-from cdl.utils.vistools import view_curves
+from cdl.utils.tests import check_array_result, check_scalar_result
 
 
 @pytest.mark.validation
@@ -59,6 +59,46 @@ def test_signal_calibration() -> None:
         title = f"Calibration[{axis},a={param.a},b={param.b}]"
         check_array_result(f"{title}.x", res_x1, exp_x1)
         check_array_result(f"{title}.y", res_y1, exp_y1)
+
+
+@pytest.mark.validation
+def test_signal_swap_axes() -> None:
+    """Validation test for the signal axes swapping processing."""
+    src = get_test_signal("paracetamol.txt")
+    dst = cps.compute_swap_axes(src)
+    exp_y, exp_x = src.xydata
+    check_array_result("SwapAxes|x", dst.x, exp_x)
+    check_array_result("SwapAxes|y", dst.y, exp_y)
+
+
+@pytest.mark.validation
+def test_signal_swap_normalize() -> None:
+    """Validation test for the signal normalization processing."""
+    src = get_test_signal("paracetamol.txt")
+    param = cdl.param.NormalizeParam()
+
+    # Given the fact that the normalization methods implementations are
+    # straightforward, we do not need to compare arrays with each other,
+    # we simply need to check if some properties are satisfied.
+    for method_value, _method_name in param.methods:
+        param.method = method_value
+        dst = cps.compute_normalize(src, param)
+        title = f"Normalize[method='{param.method}']"
+        if param.method == "maximum":
+            exp_min, exp_max = src.data.min() / src.data.max(), 1.0
+        elif param.method == "amplitude":
+            exp_min, exp_max = 0.0, 1.0
+        elif param.method == "area":
+            area = src.data.sum()
+            exp_min, exp_max = src.data.min() / area, src.data.max() / area
+        elif param.method == "energy":
+            energy = np.sqrt(np.sum(np.abs(src.data) ** 2))
+            exp_min, exp_max = src.data.min() / energy, src.data.max() / energy
+        elif param.method == "rms":
+            rms = np.sqrt(np.mean(np.abs(src.data) ** 2))
+            exp_min, exp_max = src.data.min() / rms, src.data.max() / rms
+        check_scalar_result(f"{title}|min", dst.data.min(), exp_min)
+        check_scalar_result(f"{title}|max", dst.data.max(), exp_max)
 
 
 @pytest.mark.validation
@@ -133,9 +173,81 @@ def test_signal_integral() -> None:
     check_array_result("Integral", dst.y, exp, atol=0.05)
 
 
+@pytest.mark.validation
+def test_signal_offset_correction() -> None:
+    """Validation test for the signal offset correction processing."""
+    src = get_test_signal("paracetamol.txt")
+    # Defining the ROI that will be used to estimate the offset
+    imin, imax = 0, 20
+    param = cdl.obj.ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
+    dst = cps.compute_offset_correction(src, param)
+    exp = src.data - np.mean(src.data[imin:imax])
+    check_array_result("OffsetCorrection", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_signal_gaussian_filter() -> None:
+    """Validation test for the signal Gaussian filter processing."""
+    src = get_test_signal("paracetamol.txt")
+    for sigma in (10.0, 50.0):
+        param = cdl.param.GaussianParam.create(sigma=sigma)
+        dst = cps.compute_gaussian_filter(src, param)
+        exp = spi.gaussian_filter(src.data, sigma=sigma)
+        check_array_result(f"GaussianFilter[sigma={sigma}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_signal_moving_average() -> None:
+    """Validation test for the signal moving average processing."""
+    src = get_test_signal("paracetamol.txt")
+    param = cdl.param.MovingAverageParam.create(n=30)
+    dst = cps.compute_moving_average(src, param)
+    exp = spi.uniform_filter(src.data, size=param.n, mode="reflect")
+
+    # Implementation note:
+    # --------------------
+    #
+    # The SciPy's `uniform_filter` handles the edges more accurately than
+    # a method based on a simple convolution with a kernel of ones like this:
+    # (the following function was the original implementation of the moving average
+    # in DataLab before it was replaced by the SciPy's `uniform_filter` function)
+    #
+    # def moving_average(y: np.ndarray, n: int) -> np.ndarray:
+    #     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
+    #     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
+
+    check_array_result(f"MovingAverage[n={param.n}]", dst.data, exp, rtol=0.1)
+
+
+@pytest.mark.validation
+def test_signal_moving_median() -> None:
+    """Validation test for the signal moving median processing."""
+    src = get_test_signal("paracetamol.txt")
+    param = cdl.param.MovingMedianParam.create(n=15)
+    dst = cps.compute_moving_median(src, param)
+    exp = spi.median_filter(src.data, size=param.n, mode="reflect")
+    check_array_result(f"MovingMedian[n={param.n}]", dst.data, exp, rtol=0.1)
+
+
+@pytest.mark.validation
+def test_signal_wiener() -> None:
+    """Validation test for the signal Wiener filter processing."""
+    src = get_test_signal("paracetamol.txt")
+    dst = cps.compute_wiener(src)
+    exp = sps.wiener(src.data)
+    check_array_result("Wiener", dst.data, exp)
+
+
 if __name__ == "__main__":
     test_signal_calibration()
+    test_signal_swap_axes()
+    test_signal_swap_normalize()
     test_signal_clip()
     test_signal_convolution()
     test_signal_derivative()
     test_signal_integral()
+    test_signal_offset_correction()
+    test_signal_gaussian_filter()
+    test_signal_moving_average()
+    test_signal_moving_median()
+    test_signal_wiener()

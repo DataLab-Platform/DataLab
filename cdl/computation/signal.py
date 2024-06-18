@@ -600,10 +600,7 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f}")
-    x, y = src.get_data()
-    dst.set_xydata(x, spi.gaussian_filter1d(y, p.sigma))
-    return dst
+    return Wrap11Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
 def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
@@ -629,10 +626,7 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "moving_median", f"n={p.n:d}")
-    x, y = src.get_data()
-    dst.set_xydata(x, sps.medfilt(y, kernel_size=p.n))
-    return dst
+    return Wrap11Func(sps.medfilt, kernel_size=p.n)(src)
 
 
 def compute_wiener(src: SignalObj) -> SignalObj:

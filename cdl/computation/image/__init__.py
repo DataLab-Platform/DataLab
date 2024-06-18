@@ -1101,9 +1101,7 @@ def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f} pixels")
-    dst.data = spi.gaussian_filter(src.data, sigma=p.sigma)
-    return dst
+    return Wrap11Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
 def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
@@ -1116,9 +1114,7 @@ def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "moving_average", f"n={p.n}")
-    dst.data = spi.uniform_filter(src.data, size=p.n, mode="constant")
-    return dst
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode="reflect")(src)
 
 
 def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
