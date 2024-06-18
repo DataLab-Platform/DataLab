@@ -54,7 +54,7 @@ def normalize(
         Normalized array
     """
     if parameter == "maximum":
-        return scale_data_to_min_max(data, data.min(), 1.0)
+        return scale_data_to_min_max(data, data.min() / data.max(), 1.0)
     if parameter == "amplitude":
         return scale_data_to_min_max(data, 0.0, 1.0)
     fdata = np.array(data, dtype=float)
