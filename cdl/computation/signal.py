@@ -613,7 +613,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap11Func(spi.uniform_filter, size=p.n, mode="reflect")(src)
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
@@ -626,7 +626,7 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    return Wrap11Func(sps.medfilt, kernel_size=p.n)(src)
+    return Wrap11Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_wiener(src: SignalObj) -> SignalObj:

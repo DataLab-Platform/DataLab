@@ -94,10 +94,8 @@ class DenoiseBilateralParam(gds.DataSet):
             "with larger spatial differences."
         ),
     )
-    _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = gds.ChoiceItem(
-        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
-    )
+    modes = ("constant", "edge", "symmetric", "reflect", "wrap")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="constant")
     cval = gds.FloatItem(
         "cval",
         default=0,
@@ -139,8 +137,8 @@ class DenoiseWaveletParam(gds.DataSet):
     wavelet = gds.ChoiceItem(
         _("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9"
     )
-    _modelist = ("soft", "hard")
-    mode = gds.ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
+    modes = ("soft", "hard")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="soft")
     _methlist = ("BayesShrink", "VisuShrink")
     method = gds.ChoiceItem(
         _("Method"), list(zip(_methlist, _methlist)), default="VisuShrink"

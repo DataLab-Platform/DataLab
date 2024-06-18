@@ -35,28 +35,28 @@ from cdl.utils.tests import check_array_result, check_scalar_result
 def test_signal_calibration() -> None:
     """Validation test for the signal calibration processing."""
     src = get_test_signal("paracetamol.txt")
-    param = cdl.param.XYCalibrateParam()
+    p = cdl.param.XYCalibrateParam()
 
     # Test with a = 1 and b = 0: should do nothing
-    param.a, param.b = 1.0, 0.0
-    for axis, _taxis in param.axes:
-        param.axis = axis
-        dst = cps.compute_calibration(src, param)
+    p.a, p.b = 1.0, 0.0
+    for axis, _taxis in p.axes:
+        p.axis = axis
+        dst = cps.compute_calibration(src, p)
         exp = src.xydata
         check_array_result("Calibration[identity]", dst.xydata, exp)
 
     # Testing with random values of a and b
-    param.a, param.b = 0.5, 0.1
-    for axis, _taxis in param.axes:
-        param.axis = axis
+    p.a, p.b = 0.5, 0.1
+    for axis, _taxis in p.axes:
+        p.axis = axis
         exp_x1, exp_y1 = src.xydata.copy()
         if axis == "x":
-            exp_x1 = param.a * exp_x1 + param.b
+            exp_x1 = p.a * exp_x1 + p.b
         else:
-            exp_y1 = param.a * exp_y1 + param.b
-        dst = cps.compute_calibration(src, param)
+            exp_y1 = p.a * exp_y1 + p.b
+        dst = cps.compute_calibration(src, p)
         res_x1, res_y1 = dst.xydata
-        title = f"Calibration[{axis},a={param.a},b={param.b}]"
+        title = f"Calibration[{axis},a={p.a},b={p.b}]"
         check_array_result(f"{title}.x", res_x1, exp_x1)
         check_array_result(f"{title}.y", res_y1, exp_y1)
 
@@ -75,26 +75,26 @@ def test_signal_swap_axes() -> None:
 def test_signal_swap_normalize() -> None:
     """Validation test for the signal normalization processing."""
     src = get_test_signal("paracetamol.txt")
-    param = cdl.param.NormalizeParam()
+    p = cdl.param.NormalizeParam()
 
     # Given the fact that the normalization methods implementations are
     # straightforward, we do not need to compare arrays with each other,
     # we simply need to check if some properties are satisfied.
-    for method_value, _method_name in param.methods:
-        param.method = method_value
-        dst = cps.compute_normalize(src, param)
-        title = f"Normalize[method='{param.method}']"
-        if param.method == "maximum":
+    for method_value, _method_name in p.methods:
+        p.method = method_value
+        dst = cps.compute_normalize(src, p)
+        title = f"Normalize[method='{p.method}']"
+        if p.method == "maximum":
             exp_min, exp_max = src.data.min() / src.data.max(), 1.0
-        elif param.method == "amplitude":
+        elif p.method == "amplitude":
             exp_min, exp_max = 0.0, 1.0
-        elif param.method == "area":
+        elif p.method == "area":
             area = src.data.sum()
             exp_min, exp_max = src.data.min() / area, src.data.max() / area
-        elif param.method == "energy":
+        elif p.method == "energy":
             energy = np.sqrt(np.sum(np.abs(src.data) ** 2))
             exp_min, exp_max = src.data.min() / energy, src.data.max() / energy
-        elif param.method == "rms":
+        elif p.method == "rms":
             rms = np.sqrt(np.mean(np.abs(src.data) ** 2))
             exp_min, exp_max = src.data.min() / rms, src.data.max() / rms
         check_scalar_result(f"{title}|min", dst.data.min(), exp_min)
@@ -105,12 +105,12 @@ def test_signal_swap_normalize() -> None:
 def test_signal_clip() -> None:
     """Validation test for the signal clipping processing."""
     src = get_test_signal("paracetamol.txt")
-    param = cdl.param.ClipParam()
+    p = cdl.param.ClipParam()
 
     for lower, upper in ((float("-inf"), float("inf")), (250.0, 500.0)):
-        param.lower, param.upper = lower, upper
-        dst = cps.compute_clip(src, param)
-        exp = np.clip(src.data, param.lower, param.upper)
+        p.lower, p.upper = lower, upper
+        dst = cps.compute_clip(src, p)
+        exp = np.clip(src.data, p.lower, p.upper)
         check_array_result(f"Clip[{lower},{upper}]", dst.data, exp)
 
 
@@ -131,9 +131,7 @@ def test_signal_convolution() -> None:
 def test_signal_derivative() -> None:
     """Validation test for the signal derivative processing."""
     src = get_test_signal("paracetamol.txt")
-
     dst = cps.compute_derivative(src)
-
     x, y = src.xydata
 
     # Compute the derivative using a simple finite difference:
@@ -162,7 +160,6 @@ def test_signal_integral() -> None:
     check_array_result("Integral[Derivative]", dst.y, src.y, atol=0.05)
 
     dst = cps.compute_integral(src)
-
     x, y = src.xydata
 
     # Compute the integral using a simple trapezoidal rule:
@@ -179,8 +176,8 @@ def test_signal_offset_correction() -> None:
     src = get_test_signal("paracetamol.txt")
     # Defining the ROI that will be used to estimate the offset
     imin, imax = 0, 20
-    param = cdl.obj.ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
-    dst = cps.compute_offset_correction(src, param)
+    p = cdl.obj.ROI1DParam.create(xmin=src.x[imin], xmax=src.x[imax])
+    dst = cps.compute_offset_correction(src, p)
     exp = src.data - np.mean(src.data[imin:imax])
     check_array_result("OffsetCorrection", dst.data, exp)
 
@@ -190,8 +187,8 @@ def test_signal_gaussian_filter() -> None:
     """Validation test for the signal Gaussian filter processing."""
     src = get_test_signal("paracetamol.txt")
     for sigma in (10.0, 50.0):
-        param = cdl.param.GaussianParam.create(sigma=sigma)
-        dst = cps.compute_gaussian_filter(src, param)
+        p = cdl.param.GaussianParam.create(sigma=sigma)
+        dst = cps.compute_gaussian_filter(src, p)
         exp = spi.gaussian_filter(src.data, sigma=sigma)
         check_array_result(f"GaussianFilter[sigma={sigma}]", dst.data, exp)
 
@@ -200,33 +197,37 @@ def test_signal_gaussian_filter() -> None:
 def test_signal_moving_average() -> None:
     """Validation test for the signal moving average processing."""
     src = get_test_signal("paracetamol.txt")
-    param = cdl.param.MovingAverageParam.create(n=30)
-    dst = cps.compute_moving_average(src, param)
-    exp = spi.uniform_filter(src.data, size=param.n, mode="reflect")
+    p = cdl.param.MovingAverageParam.create(n=30)
+    for mode in p.modes:
+        p.mode = mode
+        dst = cps.compute_moving_average(src, p)
+        exp = spi.uniform_filter(src.data, size=p.n, mode=p.mode)
 
-    # Implementation note:
-    # --------------------
-    #
-    # The SciPy's `uniform_filter` handles the edges more accurately than
-    # a method based on a simple convolution with a kernel of ones like this:
-    # (the following function was the original implementation of the moving average
-    # in DataLab before it was replaced by the SciPy's `uniform_filter` function)
-    #
-    # def moving_average(y: np.ndarray, n: int) -> np.ndarray:
-    #     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
-    #     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
+        # Implementation note:
+        # --------------------
+        #
+        # The SciPy's `uniform_filter` handles the edges more accurately than
+        # a method based on a simple convolution with a kernel of ones like this:
+        # (the following function was the original implementation of the moving average
+        # in DataLab before it was replaced by the SciPy's `uniform_filter` function)
+        #
+        # def moving_average(y: np.ndarray, n: int) -> np.ndarray:
+        #     y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
+        #     return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
 
-    check_array_result(f"MovingAverage[n={param.n}]", dst.data, exp, rtol=0.1)
+        check_array_result(f"MovingAvg[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
 
 @pytest.mark.validation
 def test_signal_moving_median() -> None:
     """Validation test for the signal moving median processing."""
     src = get_test_signal("paracetamol.txt")
-    param = cdl.param.MovingMedianParam.create(n=15)
-    dst = cps.compute_moving_median(src, param)
-    exp = spi.median_filter(src.data, size=param.n, mode="reflect")
-    check_array_result(f"MovingMedian[n={param.n}]", dst.data, exp, rtol=0.1)
+    p = cdl.param.MovingMedianParam.create(n=15)
+    for mode in p.modes:
+        p.mode = mode
+        dst = cps.compute_moving_median(src, p)
+        exp = spi.median_filter(src.data, size=p.n, mode=p.mode)
+        check_array_result(f"MovingMed[n={p.n},mode={p.mode}]", dst.data, exp, rtol=0.1)
 
 
 @pytest.mark.validation

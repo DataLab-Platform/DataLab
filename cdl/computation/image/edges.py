@@ -55,10 +55,8 @@ class CannyParam(gds.DataSet):
             "values. If True then the thresholds must be in the range [0, 1]."
         ),
     )
-    _modelist = ("reflect", "constant", "nearest", "mirror", "wrap")
-    mode = gds.ChoiceItem(
-        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
-    )
+    modes = ("reflect", "constant", "nearest", "mirror", "wrap")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="constant")
     cval = gds.FloatItem(
         "cval",
         default=0.0,

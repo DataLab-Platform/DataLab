@@ -1114,7 +1114,7 @@ def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(spi.uniform_filter, size=p.n, mode="reflect")(src)
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
@@ -1127,7 +1127,7 @@ def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
     Returns:
         Output image object
     """
-    return Wrap11Func(spi.median_filter, size=p.n, mode="nearest")(src)
+    return Wrap11Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_wiener(src: ImageObj) -> ImageObj:
