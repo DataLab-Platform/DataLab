@@ -52,42 +52,42 @@
 :py:func:`blob_opencv <cdl.computation.image.detection.compute_blob_opencv>`,Compute blobs using OpenCV,N/A
 :py:func:`contour_shape <cdl.computation.image.detection.compute_contour_shape>`,Compute contour shape fit,N/A
 :py:func:`peak_detection <cdl.computation.image.detection.compute_peak_detection>`,Compute 2D peak detection,N/A
-:py:func:`canny <cdl.computation.image.edges.compute_canny>`,Compute Canny filter,N/A
-:py:func:`farid <cdl.computation.image.edges.compute_farid>`,Compute Farid filter,N/A
-:py:func:`farid_h <cdl.computation.image.edges.compute_farid_h>`,Compute horizontal Farid filter,N/A
-:py:func:`farid_v <cdl.computation.image.edges.compute_farid_v>`,Compute vertical Farid filter,N/A
-:py:func:`laplace <cdl.computation.image.edges.compute_laplace>`,Compute Laplace filter,N/A
-:py:func:`prewitt <cdl.computation.image.edges.compute_prewitt>`,Compute Prewitt filter,N/A
-:py:func:`prewitt_h <cdl.computation.image.edges.compute_prewitt_h>`,Compute horizontal Prewitt filter,N/A
-:py:func:`prewitt_v <cdl.computation.image.edges.compute_prewitt_v>`,Compute vertical Prewitt filter,N/A
-:py:func:`roberts <cdl.computation.image.edges.compute_roberts>`,Compute Roberts filter,N/A
-:py:func:`scharr <cdl.computation.image.edges.compute_scharr>`,Compute Scharr filter,N/A
-:py:func:`scharr_h <cdl.computation.image.edges.compute_scharr_h>`,Compute horizontal Scharr filter,N/A
-:py:func:`scharr_v <cdl.computation.image.edges.compute_scharr_v>`,Compute vertical Scharr filter,N/A
-:py:func:`sobel <cdl.computation.image.edges.compute_sobel>`,Compute Sobel filter,N/A
-:py:func:`sobel_h <cdl.computation.image.edges.compute_sobel_h>`,Compute horizontal Sobel filter,N/A
-:py:func:`sobel_v <cdl.computation.image.edges.compute_sobel_v>`,Compute vertical Sobel filter,N/A
-:py:func:`adjust_gamma <cdl.computation.image.exposure.compute_adjust_gamma>`,Gamma correction,N/A
-:py:func:`adjust_log <cdl.computation.image.exposure.compute_adjust_log>`,Compute log correction,N/A
-:py:func:`adjust_sigmoid <cdl.computation.image.exposure.compute_adjust_sigmoid>`,Compute sigmoid correction,N/A
-:py:func:`equalize_adapthist <cdl.computation.image.exposure.compute_equalize_adapthist>`,Adaptive histogram equalization,N/A
-:py:func:`equalize_hist <cdl.computation.image.exposure.compute_equalize_hist>`,Histogram equalization,N/A
-:py:func:`rescale_intensity <cdl.computation.image.exposure.compute_rescale_intensity>`,Rescale image intensity levels,N/A
-:py:func:`black_tophat <cdl.computation.image.morphology.compute_black_tophat>`,Compute Black Top-Hat,N/A
-:py:func:`closing <cdl.computation.image.morphology.compute_closing>`,Compute morphological closing,N/A
-:py:func:`dilation <cdl.computation.image.morphology.compute_dilation>`,Compute Dilation,N/A
-:py:func:`erosion <cdl.computation.image.morphology.compute_erosion>`,Compute Erosion,N/A
-:py:func:`opening <cdl.computation.image.morphology.compute_opening>`,Compute morphological opening,N/A
-:py:func:`white_tophat <cdl.computation.image.morphology.compute_white_tophat>`,Compute White Top-Hat,N/A
-:py:func:`denoise_bilateral <cdl.computation.image.restoration.compute_denoise_bilateral>`,Compute bilateral filter denoising,N/A
-:py:func:`denoise_tophat <cdl.computation.image.restoration.compute_denoise_tophat>`,Denoise using White Top-Hat,N/A
-:py:func:`denoise_tv <cdl.computation.image.restoration.compute_denoise_tv>`,Compute Total Variation denoising,N/A
-:py:func:`denoise_wavelet <cdl.computation.image.restoration.compute_denoise_wavelet>`,Compute Wavelet denoising,N/A
-:py:func:`threshold <cdl.computation.image.threshold.compute_threshold>`,Compute the threshold.,N/A
-:py:func:`threshold_isodata <cdl.computation.image.threshold.compute_threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters.,N/A
-:py:func:`threshold_li <cdl.computation.image.threshold.compute_threshold_li>`,Compute the threshold using the Li algorithm with default parameters.,N/A
-:py:func:`threshold_mean <cdl.computation.image.threshold.compute_threshold_mean>`,Compute the threshold using the Mean algorithm.,N/A
-:py:func:`threshold_minimum <cdl.computation.image.threshold.compute_threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters.,N/A
-:py:func:`threshold_otsu <cdl.computation.image.threshold.compute_threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters.,N/A
-:py:func:`threshold_triangle <cdl.computation.image.threshold.compute_threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters.,N/A
-:py:func:`threshold_yen <cdl.computation.image.threshold.compute_threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters.,N/A
+:py:func:`canny <cdl.computation.image.edges.compute_canny>`,Compute Canny filter,``features/image/processing_unit_test.py``
+:py:func:`farid <cdl.computation.image.edges.compute_farid>`,Compute Farid filter,``features/image/processing_unit_test.py``
+:py:func:`farid_h <cdl.computation.image.edges.compute_farid_h>`,Compute horizontal Farid filter,``features/image/processing_unit_test.py``
+:py:func:`farid_v <cdl.computation.image.edges.compute_farid_v>`,Compute vertical Farid filter,``features/image/processing_unit_test.py``
+:py:func:`laplace <cdl.computation.image.edges.compute_laplace>`,Compute Laplace filter,``features/image/processing_unit_test.py``
+:py:func:`prewitt <cdl.computation.image.edges.compute_prewitt>`,Compute Prewitt filter,``features/image/processing_unit_test.py``
+:py:func:`prewitt_h <cdl.computation.image.edges.compute_prewitt_h>`,Compute horizontal Prewitt filter,``features/image/processing_unit_test.py``
+:py:func:`prewitt_v <cdl.computation.image.edges.compute_prewitt_v>`,Compute vertical Prewitt filter,``features/image/processing_unit_test.py``
+:py:func:`roberts <cdl.computation.image.edges.compute_roberts>`,Compute Roberts filter,``features/image/processing_unit_test.py``
+:py:func:`scharr <cdl.computation.image.edges.compute_scharr>`,Compute Scharr filter,``features/image/processing_unit_test.py``
+:py:func:`scharr_h <cdl.computation.image.edges.compute_scharr_h>`,Compute horizontal Scharr filter,``features/image/processing_unit_test.py``
+:py:func:`scharr_v <cdl.computation.image.edges.compute_scharr_v>`,Compute vertical Scharr filter,``features/image/processing_unit_test.py``
+:py:func:`sobel <cdl.computation.image.edges.compute_sobel>`,Compute Sobel filter,``features/image/processing_unit_test.py``
+:py:func:`sobel_h <cdl.computation.image.edges.compute_sobel_h>`,Compute horizontal Sobel filter,``features/image/processing_unit_test.py``
+:py:func:`sobel_v <cdl.computation.image.edges.compute_sobel_v>`,Compute vertical Sobel filter,``features/image/processing_unit_test.py``
+:py:func:`adjust_gamma <cdl.computation.image.exposure.compute_adjust_gamma>`,Gamma correction,``features/image/processing_unit_test.py``
+:py:func:`adjust_log <cdl.computation.image.exposure.compute_adjust_log>`,Compute log correction,``features/image/processing_unit_test.py``
+:py:func:`adjust_sigmoid <cdl.computation.image.exposure.compute_adjust_sigmoid>`,Compute sigmoid correction,``features/image/processing_unit_test.py``
+:py:func:`equalize_adapthist <cdl.computation.image.exposure.compute_equalize_adapthist>`,Adaptive histogram equalization,``features/image/processing_unit_test.py``
+:py:func:`equalize_hist <cdl.computation.image.exposure.compute_equalize_hist>`,Histogram equalization,``features/image/processing_unit_test.py``
+:py:func:`rescale_intensity <cdl.computation.image.exposure.compute_rescale_intensity>`,Rescale image intensity levels,``features/image/processing_unit_test.py``
+:py:func:`black_tophat <cdl.computation.image.morphology.compute_black_tophat>`,Compute Black Top-Hat,``features/image/processing_unit_test.py``
+:py:func:`closing <cdl.computation.image.morphology.compute_closing>`,Compute morphological closing,``features/image/processing_unit_test.py``
+:py:func:`dilation <cdl.computation.image.morphology.compute_dilation>`,Compute Dilation,``features/image/processing_unit_test.py``
+:py:func:`erosion <cdl.computation.image.morphology.compute_erosion>`,Compute Erosion,``features/image/processing_unit_test.py``
+:py:func:`opening <cdl.computation.image.morphology.compute_opening>`,Compute morphological opening,``features/image/processing_unit_test.py``
+:py:func:`white_tophat <cdl.computation.image.morphology.compute_white_tophat>`,Compute White Top-Hat,``features/image/processing_unit_test.py``
+:py:func:`denoise_bilateral <cdl.computation.image.restoration.compute_denoise_bilateral>`,Compute bilateral filter denoising,``features/image/processing_unit_test.py``
+:py:func:`denoise_tophat <cdl.computation.image.restoration.compute_denoise_tophat>`,Denoise using White Top-Hat,``features/image/processing_unit_test.py``
+:py:func:`denoise_tv <cdl.computation.image.restoration.compute_denoise_tv>`,Compute Total Variation denoising,``features/image/processing_unit_test.py``
+:py:func:`denoise_wavelet <cdl.computation.image.restoration.compute_denoise_wavelet>`,Compute Wavelet denoising,``features/image/processing_unit_test.py``
+:py:func:`threshold <cdl.computation.image.threshold.compute_threshold>`,Compute the threshold.,``features/image/processing_unit_test.py``
+:py:func:`threshold_isodata <cdl.computation.image.threshold.compute_threshold_isodata>`,Compute the threshold using the Isodata algorithm with default parameters.,``features/image/processing_unit_test.py``
+:py:func:`threshold_li <cdl.computation.image.threshold.compute_threshold_li>`,Compute the threshold using the Li algorithm with default parameters.,``features/image/processing_unit_test.py``
+:py:func:`threshold_mean <cdl.computation.image.threshold.compute_threshold_mean>`,Compute the threshold using the Mean algorithm.,``features/image/processing_unit_test.py``
+:py:func:`threshold_minimum <cdl.computation.image.threshold.compute_threshold_minimum>`,Compute the threshold using the Minimum algorithm with default parameters.,``features/image/processing_unit_test.py``
+:py:func:`threshold_otsu <cdl.computation.image.threshold.compute_threshold_otsu>`,Compute the threshold using the Otsu algorithm with default parameters.,``features/image/processing_unit_test.py``
+:py:func:`threshold_triangle <cdl.computation.image.threshold.compute_threshold_triangle>`,Compute the threshold using the Triangle algorithm with default parameters.,``features/image/processing_unit_test.py``
+:py:func:`threshold_yen <cdl.computation.image.threshold.compute_threshold_yen>`,Compute the threshold using the Yen algorithm with default parameters.,``features/image/processing_unit_test.py``

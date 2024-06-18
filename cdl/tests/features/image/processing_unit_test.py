@@ -23,8 +23,14 @@ import numpy as np
 import pytest
 import scipy.ndimage as spi
 import scipy.signal as sps
+from skimage import exposure, feature, filters, morphology, restoration, util
 
 import cdl.computation.image as cpi
+import cdl.computation.image.edges as cpi_edg
+import cdl.computation.image.exposure as cpi_exp
+import cdl.computation.image.morphology as cpi_mor
+import cdl.computation.image.restoration as cpi_res
+import cdl.computation.image.threshold as cpi_thr
 import cdl.obj
 import cdl.param
 from cdl.tests.data import get_test_image
@@ -158,6 +164,363 @@ def test_image_wiener() -> None:
     check_array_result("Wiener", dst.data, exp)
 
 
+@pytest.mark.validation
+def test_threshold() -> None:
+    """Validation test for the image threshold processing."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.ThresholdParam.create(value=100)
+    dst = cpi_thr.compute_threshold(src, p)
+    exp = util.img_as_ubyte(src.data > p.value)
+    check_array_result(f"Threshold[{p.value}]", dst.data, exp)
+
+
+def __generic_threshold_check(method: str) -> None:
+    """Generic test for thresholding methods."""
+    src = get_test_image("flower.npy")
+    dst = cpi_thr.compute_threshold(src, cdl.param.ThresholdParam.create(method=method))
+    exp = util.img_as_ubyte(
+        src.data > getattr(filters, f"threshold_{method}")(src.data)
+    )
+    check_array_result(f"Threshold{method.capitalize()}", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_threshold_isodata() -> None:
+    """Validation test for the image threshold Isodata processing."""
+    __generic_threshold_check("isodata")
+
+
+@pytest.mark.validation
+def test_threshold_li() -> None:
+    """Validation test for the image threshold Li processing."""
+    __generic_threshold_check("li")
+
+
+@pytest.mark.validation
+def test_threshold_mean() -> None:
+    """Validation test for the image threshold Mean processing."""
+    __generic_threshold_check("mean")
+
+
+@pytest.mark.validation
+def test_threshold_minimum() -> None:
+    """Validation test for the image threshold Minimum processing."""
+    __generic_threshold_check("minimum")
+
+
+@pytest.mark.validation
+def test_threshold_otsu() -> None:
+    """Validation test for the image threshold Otsu processing."""
+    __generic_threshold_check("otsu")
+
+
+@pytest.mark.validation
+def test_threshold_triangle() -> None:
+    """Validation test for the image threshold Triangle processing."""
+    __generic_threshold_check("triangle")
+
+
+@pytest.mark.validation
+def test_threshold_yen() -> None:
+    """Validation test for the image threshold Yen processing."""
+    __generic_threshold_check("yen")
+
+
+@pytest.mark.validation
+def test_adjust_gamma() -> None:
+    """Validation test for the image gamma adjustment processing."""
+    src = get_test_image("flower.npy")
+    for gamma, gain in ((0.5, 1.0), (1.0, 2.0), (1.5, 0.5)):
+        p = cdl.param.AdjustGammaParam.create(gamma=gamma, gain=gain)
+        dst = cpi_exp.compute_adjust_gamma(src, p)
+        exp = exposure.adjust_gamma(src.data, gamma=gamma, gain=gain)
+        check_array_result(f"AdjustGamma[gamma={gamma},gain={gain}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_adjust_log() -> None:
+    """Validation test for the image logarithmic adjustment processing."""
+    src = get_test_image("flower.npy")
+    for gain, inv in ((1.0, False), (2.0, True)):
+        p = cdl.param.AdjustLogParam.create(gain=gain, inv=inv)
+        dst = cpi_exp.compute_adjust_log(src, p)
+        exp = exposure.adjust_log(src.data, gain=gain, inv=inv)
+        check_array_result(f"AdjustLog[gain={gain},inv={inv}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_adjust_sigmoid() -> None:
+    """Validation test for the image sigmoid adjustment processing."""
+    src = get_test_image("flower.npy")
+    for cutoff, gain, inv in ((0.5, 1.0, False), (0.25, 2.0, True)):
+        p = cdl.param.AdjustSigmoidParam.create(cutoff=cutoff, gain=gain, inv=inv)
+        dst = cpi_exp.compute_adjust_sigmoid(src, p)
+        exp = exposure.adjust_sigmoid(src.data, cutoff=cutoff, gain=gain, inv=inv)
+        check_array_result(
+            f"AdjustSigmoid[cutoff={cutoff},gain={gain},inv={inv}]", dst.data, exp
+        )
+
+
+@pytest.mark.validation
+def test_rescale_intensity() -> None:
+    """Validation test for the image intensity rescaling processing."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.RescaleIntensityParam.create(in_range=(0, 255), out_range=(0, 1))
+    dst = cpi_exp.compute_rescale_intensity(src, p)
+    exp = exposure.rescale_intensity(
+        src.data, in_range=p.in_range, out_range=p.out_range
+    )
+    check_array_result("RescaleIntensity", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_equalize_hist() -> None:
+    """Validation test for the image histogram equalization processing."""
+    src = get_test_image("flower.npy")
+    for nbins in (256, 512):
+        p = cdl.param.EqualizeHistParam.create(nbins=nbins)
+        dst = cpi_exp.compute_equalize_hist(src, p)
+        exp = exposure.equalize_hist(src.data, nbins=nbins)
+        check_array_result(f"EqualizeHist[nbins={nbins}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_equalize_adapthist() -> None:
+    """Validation test for the image adaptive histogram equalization processing."""
+    src = get_test_image("flower.npy")
+    for clip_limit in (0.01, 0.1):
+        p = cdl.param.EqualizeAdaptHistParam.create(clip_limit=clip_limit)
+        dst = cpi_exp.compute_equalize_adapthist(src, p)
+        exp = exposure.equalize_adapthist(src.data, clip_limit=clip_limit)
+        check_array_result(f"AdaptiveHist[clip_limit={clip_limit}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_denoise_tv() -> None:
+    """Validation test for the image Total Variation denoising processing."""
+    src = get_test_image("flower.npy")
+    src.data = src.data[::8, ::8]
+    for weight, eps, mni in ((0.1, 0.0002, 200), (0.5, 0.0001, 100)):
+        p = cdl.param.DenoiseTVParam.create(weight=weight, eps=eps, max_num_iter=mni)
+        dst = cpi_res.compute_denoise_tv(src, p)
+        exp = restoration.denoise_tv_chambolle(src.data, weight, eps, mni)
+        check_array_result(
+            f"DenoiseTV[weight={weight},eps={eps},max_num_iter={mni}]",
+            dst.data,
+            exp,
+        )
+
+
+@pytest.mark.validation
+def test_denoise_bilateral() -> None:
+    """Validation test for the image bilateral denoising processing."""
+    src = get_test_image("flower.npy")
+    src.data = src.data[::8, ::8]
+    for sigma, mode in ((1.0, "constant"), (2.0, "edge")):
+        p = cdl.param.DenoiseBilateralParam.create(sigma_spatial=sigma, mode=mode)
+        dst = cpi_res.compute_denoise_bilateral(src, p)
+        exp = restoration.denoise_bilateral(src.data, sigma_spatial=sigma, mode=mode)
+        check_array_result(
+            f"DenoiseBilateral[sigma_spatial={sigma},mode={mode}]",
+            dst.data,
+            exp,
+        )
+
+
+@pytest.mark.validation
+def test_denoise_wavelet() -> None:
+    """Validation test for the image wavelet denoising processing."""
+    src = get_test_image("flower.npy")
+    src.data = src.data[::8, ::8]
+    p = cdl.param.DenoiseWaveletParam()
+    for wavelets in ("db1", "db2", "db3"):
+        for mode in p.modes:
+            for method in ("BayesShrink",):
+                p.wavelets, p.mode, p.method = wavelets, mode, method
+                dst = cpi_res.compute_denoise_wavelet(src, p)
+                exp = restoration.denoise_wavelet(
+                    src.data, wavelet=wavelets, mode=mode, method=method
+                )
+                check_array_result(
+                    f"DenoiseWavelet[wavelets={wavelets},mode={mode},method={method}]",
+                    dst.data,
+                    exp,
+                    atol=0.1,
+                )
+
+
+@pytest.mark.validation
+def test_denoise_tophat() -> None:
+    """Validation test for the image top-hat denoising processing."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.MorphologyParam.create(radius=10)
+    dst = cpi_res.compute_denoise_tophat(src, p)
+    footprint = morphology.disk(p.radius)
+    exp = src.data - morphology.white_tophat(src.data, footprint=footprint)
+    check_array_result(f"DenoiseTophat[radius={p.radius}]", dst.data, exp)
+
+
+def __generic_check(method: str) -> None:
+    """Generic test for morphology methods."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.MorphologyParam.create(radius=10)
+    dst: cdl.obj.ImageObj = getattr(cpi_mor, f"compute_{method}")(src, p)
+    exp = getattr(morphology, method)(src.data, footprint=morphology.disk(p.radius))
+    check_array_result(f"{method.capitalize()}[radius={p.radius}]", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_white_tophat() -> None:
+    """Validation test for the image white top-hat processing."""
+    __generic_check("white_tophat")
+
+
+@pytest.mark.validation
+def test_black_tophat() -> None:
+    """Validation test for the image black top-hat processing."""
+    __generic_check("black_tophat")
+
+
+@pytest.mark.validation
+def test_erosion() -> None:
+    """Validation test for the image erosion processing."""
+    __generic_check("erosion")
+
+
+@pytest.mark.validation
+def test_dilation() -> None:
+    """Validation test for the image dilation processing."""
+    __generic_check("dilation")
+
+
+@pytest.mark.validation
+def test_opening() -> None:
+    """Validation test for the image opening processing."""
+    __generic_check("opening")
+
+
+@pytest.mark.validation
+def test_closing() -> None:
+    """Validation test for the image closing processing."""
+    __generic_check("closing")
+
+
+@pytest.mark.validation
+def test_canny() -> None:
+    """Validation test for the image Canny edge detection processing."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.CannyParam.create(sigma=1.0, low_threshold=0.1, high_threshold=0.2)
+    dst = cpi_edg.compute_canny(src, p)
+    exp = util.img_as_ubyte(
+        feature.canny(
+            src.data,
+            sigma=p.sigma,
+            low_threshold=p.low_threshold,
+            high_threshold=p.high_threshold,
+            use_quantiles=p.use_quantiles,
+            mode=p.mode,
+            cval=p.cval,
+        )
+    )
+    check_array_result(
+        f"Canny[sigma={p.sigma},low_threshold={p.low_threshold},high_threshold={p.high_threshold}]",
+        dst.data,
+        exp,
+    )
+
+
+def __generic_edge_check(method: str) -> None:
+    """Generic test for edge detection methods."""
+    src = get_test_image("flower.npy")
+    dst: cdl.obj.ImageObj = getattr(cpi_edg, f"compute_{method}")(src)
+    exp = getattr(filters, method)(src.data)
+    check_array_result(f"{method.capitalize()}", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_roberts() -> None:
+    """Validation test for the image Roberts edge detection processing."""
+    __generic_edge_check("roberts")
+
+
+@pytest.mark.validation
+def test_prewitt() -> None:
+    """Validation test for the image Prewitt edge detection processing."""
+    __generic_edge_check("prewitt")
+
+
+@pytest.mark.validation
+def test_prewitt_h() -> None:
+    """Validation test for the image horizontal Prewitt edge detection processing."""
+    __generic_edge_check("prewitt_h")
+
+
+@pytest.mark.validation
+def test_prewitt_v() -> None:
+    """Validation test for the image vertical Prewitt edge detection processing."""
+    __generic_edge_check("prewitt_v")
+
+
+@pytest.mark.validation
+def test_sobel() -> None:
+    """Validation test for the image Sobel edge detection processing."""
+    __generic_edge_check("sobel")
+
+
+@pytest.mark.validation
+def test_sobel_h() -> None:
+    """Validation test for the image horizontal Sobel edge detection processing."""
+    __generic_edge_check("sobel_h")
+
+
+@pytest.mark.validation
+def test_sobel_v() -> None:
+    """Validation test for the image vertical Sobel edge detection processing."""
+    __generic_edge_check("sobel_v")
+
+
+@pytest.mark.validation
+def test_scharr() -> None:
+    """Validation test for the image Scharr edge detection processing."""
+    __generic_edge_check("scharr")
+
+
+@pytest.mark.validation
+def test_scharr_h() -> None:
+    """Validation test for the image horizontal Scharr edge detection processing."""
+    __generic_edge_check("scharr_h")
+
+
+@pytest.mark.validation
+def test_scharr_v() -> None:
+    """Validation test for the image vertical Scharr edge detection processing."""
+    __generic_edge_check("scharr_v")
+
+
+@pytest.mark.validation
+def test_farid() -> None:
+    """Validation test for the image Farid edge detection processing."""
+    __generic_edge_check("farid")
+
+
+@pytest.mark.validation
+def test_farid_h() -> None:
+    """Validation test for the image horizontal Farid edge detection processing."""
+    __generic_edge_check("farid_h")
+
+
+@pytest.mark.validation
+def test_farid_v() -> None:
+    """Validation test for the image vertical Farid edge detection processing."""
+    __generic_edge_check("farid_v")
+
+
+@pytest.mark.validation
+def test_laplace() -> None:
+    """Validation test for the image Laplace edge detection processing."""
+    __generic_edge_check("laplace")
+
+
 if __name__ == "__main__":
     test_image_calibration()
     test_image_swap_axes()
@@ -168,3 +531,42 @@ if __name__ == "__main__":
     test_image_moving_average()
     test_image_moving_median()
     test_image_wiener()
+    test_threshold()
+    test_threshold_isodata()
+    test_threshold_li()
+    test_threshold_mean()
+    test_threshold_minimum()
+    test_threshold_otsu()
+    test_threshold_triangle()
+    test_threshold_yen()
+    test_adjust_gamma()
+    test_adjust_log()
+    test_adjust_sigmoid()
+    test_rescale_intensity()
+    test_equalize_hist()
+    test_equalize_adapthist()
+    test_denoise_tv()
+    test_denoise_bilateral()
+    test_denoise_wavelet()
+    test_denoise_tophat()
+    test_white_tophat()
+    test_black_tophat()
+    test_erosion()
+    test_dilation()
+    test_opening()
+    test_closing()
+    test_canny()
+    test_roberts()
+    test_prewitt()
+    test_prewitt_h()
+    test_prewitt_v()
+    test_sobel()
+    test_sobel_h()
+    test_sobel_v()
+    test_scharr()
+    test_scharr_h()
+    test_scharr_v()
+    test_farid()
+    test_farid_h()
+    test_farid_v()
+    test_laplace()
