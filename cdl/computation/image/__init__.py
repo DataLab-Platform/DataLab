@@ -1131,9 +1131,7 @@ def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "moving_median", f"n={p.n}")
-    dst.data = sps.medfilt(src.data, kernel_size=p.n)
-    return dst
+    return Wrap11Func(spi.median_filter, size=p.n, mode="nearest")(src)
 
 
 def compute_wiener(src: ImageObj) -> ImageObj:
