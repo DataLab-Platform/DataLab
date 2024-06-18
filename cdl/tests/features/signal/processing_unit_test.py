@@ -72,7 +72,16 @@ def test_signal_swap_axes() -> None:
 
 
 @pytest.mark.validation
-def test_signal_swap_normalize() -> None:
+def test_signal_reverse_x() -> None:
+    """Validation test for the signal reverse x processing."""
+    src = get_test_signal("paracetamol.txt")
+    dst = cps.compute_reverse_x(src)
+    exp = src.data[::-1]
+    check_array_result("ReverseX", dst.data, exp)
+
+
+@pytest.mark.validation
+def test_signal_normalize() -> None:
     """Validation test for the signal normalization processing."""
     src = get_test_signal("paracetamol.txt")
     p = cdl.param.NormalizeParam()
@@ -242,7 +251,8 @@ def test_signal_wiener() -> None:
 if __name__ == "__main__":
     test_signal_calibration()
     test_signal_swap_axes()
-    test_signal_swap_normalize()
+    test_signal_reverse_x()
+    test_signal_normalize()
     test_signal_clip()
     test_signal_convolution()
     test_signal_derivative()

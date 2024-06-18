@@ -29,20 +29,20 @@
 :py:func:`magnitude_spectrum <cdl.computation.signal.compute_magnitude_spectrum>`,Compute magnitude spectrum,``features/signal/fft1d_unit_test.py``
 :py:func:`moving_average <cdl.computation.signal.compute_moving_average>`,Compute moving average,``features/signal/processing_unit_test.py``
 :py:func:`moving_median <cdl.computation.signal.compute_moving_median>`,Compute moving median,``features/signal/processing_unit_test.py``
-:py:func:`normalize <cdl.computation.signal.compute_normalize>`,Normalize data,N/A
+:py:func:`normalize <cdl.computation.signal.compute_normalize>`,Normalize data,``features/signal/processing_unit_test.py``
 :py:func:`offset_correction <cdl.computation.signal.compute_offset_correction>`,Correct offset: subtract the mean value of the signal in the specified range,``features/signal/offset_correction_unit_test.py``
 :py:func:`peak_detection <cdl.computation.signal.compute_peak_detection>`,Peak detection,N/A
 :py:func:`phase_spectrum <cdl.computation.signal.compute_phase_spectrum>`,Compute phase spectrum,``features/signal/fft1d_unit_test.py``
-:py:func:`power <cdl.computation.signal.compute_power>`,Compute power,N/A
+:py:func:`power <cdl.computation.signal.compute_power>`,Compute power,``features/signal/operation_unit_test.py``
 :py:func:`product <cdl.computation.signal.compute_product>`,Multiply **dst** and **src** signals and return **dst** signal modified in place,``features/signal/operation_unit_test.py``
 :py:func:`product_constant <cdl.computation.signal.compute_product_constant>`,Multiply **dst** by a constant value and return the new result signal object,``features/signal/operation_unit_test.py``
 :py:func:`psd <cdl.computation.signal.compute_psd>`,Compute power spectral density,``features/signal/fft1d_unit_test.py``
 :py:func:`quadratic_difference <cdl.computation.signal.compute_quadratic_difference>`,Compute quadratic difference between two signals,``features/image/operation_unit_test.py``
 :py:func:`re <cdl.computation.signal.compute_re>`,Compute real part,``features/signal/operation_unit_test.py``
 :py:func:`resampling <cdl.computation.signal.compute_resampling>`,Resample data,N/A
-:py:func:`reverse_x <cdl.computation.signal.compute_reverse_x>`,Reverse x-axis,N/A
+:py:func:`reverse_x <cdl.computation.signal.compute_reverse_x>`,Reverse x-axis,``features/signal/processing_unit_test.py``
 :py:func:`sampling_rate_period <cdl.computation.signal.compute_sampling_rate_period>`,Compute sampling rate and period,``features/signal/computing_unit_test.py``
-:py:func:`sqrt <cdl.computation.signal.compute_sqrt>`,Compute square root,N/A
+:py:func:`sqrt <cdl.computation.signal.compute_sqrt>`,Compute square root,``features/signal/operation_unit_test.py``
 :py:func:`stats <cdl.computation.signal.compute_stats>`,Compute statistics on a signal,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.computation.signal.compute_swap_axes>`,Swap axes,``features/signal/processing_unit_test.py``
 :py:func:`wiener <cdl.computation.signal.compute_wiener>`,Compute Wiener filter,``features/signal/processing_unit_test.py``

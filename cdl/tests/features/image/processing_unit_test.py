@@ -521,6 +521,20 @@ def test_laplace() -> None:
     __generic_edge_check("laplace")
 
 
+@pytest.mark.validation
+def test_butterworth() -> None:
+    """Validation test for the image Butterworth filter processing."""
+    src = get_test_image("flower.npy")
+    p = cdl.param.ButterworthParam.create(order=2, cut_off=0.5, high_pass=False)
+    dst = cpi.compute_butterworth(src, p)
+    exp = filters.butterworth(src.data, p.cut_off, p.high_pass, p.order)
+    check_array_result(
+        f"Butterworth[order={p.order},cut_off={p.cut_off},high_pass={p.high_pass}]",
+        dst.data,
+        exp,
+    )
+
+
 if __name__ == "__main__":
     test_image_calibration()
     test_image_swap_axes()
@@ -570,3 +584,4 @@ if __name__ == "__main__":
     test_farid_h()
     test_farid_v()
     test_laplace()
+    test_butterworth()

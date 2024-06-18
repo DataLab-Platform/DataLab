@@ -12,6 +12,7 @@ from typing import Generator
 
 import numpy as np
 import pytest
+import scipy.ndimage as spi
 from guidata.qthelpers import qt_app_context
 
 import cdl.computation.image as cpi
@@ -255,6 +256,62 @@ def test_image_logp1() -> None:
             check_array_result("Image log1p", ima2.data, exp)
 
 
+def __generic_flip_check(compfunc: callable, expfunc: callable) -> None:
+    """Generic flip check function."""
+    execenv.print(f"*** Testing image flip: {compfunc.__name__}")
+    for ima1 in __iterate_image():
+        execenv.print(f"  {compfunc.__name__}({ima1.data.dtype}): ", end="")
+        ima2: cdl.obj.ImageObj = compfunc(ima1)
+        check_array_result("Image flip", ima2.data, expfunc(ima1.data))
+
+
+@pytest.mark.validation
+def test_image_fliph() -> None:
+    """Image horizontal flip test."""
+    __generic_flip_check(cpi.compute_fliph, np.fliplr)
+
+
+@pytest.mark.validation
+def test_image_flipv() -> None:
+    """Image vertical flip test."""
+    __generic_flip_check(cpi.compute_flipv, np.flipud)
+
+
+def __generic_rotate_check(angle: int) -> None:
+    """Generic rotate check function."""
+    execenv.print(f"*** Testing image {angle}° rotation:")
+    for ima1 in __iterate_image():
+        execenv.print(f"  rotate{angle}({ima1.data.dtype}): ", end="")
+        ima2 = getattr(cpi, f"compute_rotate{angle}")(ima1)
+        check_array_result(
+            f"Image rotate{angle}", ima2.data, np.rot90(ima1.data, k=angle // 90)
+        )
+
+
+@pytest.mark.validation
+def test_image_rotate90() -> None:
+    """Image 90° rotation test."""
+    __generic_rotate_check(90)
+
+
+@pytest.mark.validation
+def test_image_rotate270() -> None:
+    """Image 270° rotation test."""
+    __generic_rotate_check(270)
+
+
+@pytest.mark.validation
+def test_image_rotate() -> None:
+    """Image rotation test."""
+    execenv.print("*** Testing image rotation:")
+    for ima1 in __iterate_image():
+        for angle in (30, 45, 60, 120):
+            execenv.print(f"  rotate{angle}({ima1.data.dtype}): ", end="")
+            ima2 = cpi.compute_rotate(ima1, cdl.param.RotateParam.create(angle=angle))
+            exp = spi.rotate(ima1.data, angle, reshape=False)
+            check_array_result(f"Image rotate{angle}", ima2.data, exp)
+
+
 if __name__ == "__main__":
     test_image_addition()
     test_image_product()
@@ -272,3 +329,8 @@ if __name__ == "__main__":
     test_image_exp()
     test_image_log10()
     test_image_logp1()
+    test_image_fliph()
+    test_image_flipv()
+    test_image_rotate90()
+    test_image_rotate270()
+    test_image_rotate()

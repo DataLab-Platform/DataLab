@@ -4,7 +4,7 @@
 :py:func:`astype <cdl.computation.image.compute_astype>`,Convert image data type,``features/image/operation_unit_test.py``
 :py:func:`average_profile <cdl.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
 :py:func:`binning <cdl.computation.image.compute_binning>`,Binning function on data,N/A
-:py:func:`butterworth <cdl.computation.image.compute_butterworth>`,Compute Butterworth filter,N/A
+:py:func:`butterworth <cdl.computation.image.compute_butterworth>`,Compute Butterworth filter,``features/image/processing_unit_test.py``
 :py:func:`calibration <cdl.computation.image.compute_calibration>`,Compute linear calibration,``features/image/processing_unit_test.py``
 :py:func:`centroid <cdl.computation.image.compute_centroid>`,Compute centroid,``features/image/centroid_unit_test.py``
 :py:func:`clip <cdl.computation.image.compute_clip>`,Apply clipping,``features/image/processing_unit_test.py``
@@ -16,8 +16,8 @@
 :py:func:`exp <cdl.computation.image.compute_exp>`,Compute exponential,``features/image/operation_unit_test.py``
 :py:func:`fft <cdl.computation.image.compute_fft>`,Compute FFT,``features/image/fft2d_unit_test.py``
 :py:func:`flatfield <cdl.computation.image.compute_flatfield>`,Compute flat field correction,N/A
-:py:func:`fliph <cdl.computation.image.compute_fliph>`,Flip data horizontally,N/A
-:py:func:`flipv <cdl.computation.image.compute_flipv>`,Flip data vertically,N/A
+:py:func:`fliph <cdl.computation.image.compute_fliph>`,Flip data horizontally,``features/image/operation_unit_test.py``
+:py:func:`flipv <cdl.computation.image.compute_flipv>`,Flip data vertically,``features/image/operation_unit_test.py``
 :py:func:`gaussian_filter <cdl.computation.image.compute_gaussian_filter>`,Compute gaussian filter,``features/image/processing_unit_test.py``
 :py:func:`histogram <cdl.computation.image.compute_histogram>`,Compute histogram of the image data,N/A
 :py:func:`hough_circle_peaks <cdl.computation.image.compute_hough_circle_peaks>`,Compute Hough circles,N/A
@@ -39,9 +39,9 @@
 :py:func:`radial_profile <cdl.computation.image.compute_radial_profile>`,Compute radial profile around the centroid,N/A
 :py:func:`re <cdl.computation.image.compute_re>`,Compute real part,``features/image/operation_unit_test.py``
 :py:func:`resize <cdl.computation.image.compute_resize>`,Zooming function,N/A
-:py:func:`rotate <cdl.computation.image.compute_rotate>`,Rotate data,N/A
-:py:func:`rotate270 <cdl.computation.image.compute_rotate270>`,Rotate data 270°,N/A
-:py:func:`rotate90 <cdl.computation.image.compute_rotate90>`,Rotate data 90°,N/A
+:py:func:`rotate <cdl.computation.image.compute_rotate>`,Rotate data,``features/image/operation_unit_test.py``
+:py:func:`rotate270 <cdl.computation.image.compute_rotate270>`,Rotate data 270°,``features/image/operation_unit_test.py``
+:py:func:`rotate90 <cdl.computation.image.compute_rotate90>`,Rotate data 90°,``features/image/operation_unit_test.py``
 :py:func:`segment_profile <cdl.computation.image.compute_segment_profile>`,Compute segment profile,N/A
 :py:func:`stats <cdl.computation.image.compute_stats>`,Compute statistics on an image,``features/common/stat_unit_test.py``
 :py:func:`swap_axes <cdl.computation.image.compute_swap_axes>`,Swap image axes,``features/image/processing_unit_test.py``
