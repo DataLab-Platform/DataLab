@@ -15,7 +15,7 @@ Edges computation module
 from __future__ import annotations
 
 import guidata.dataset as gds
-import numpy as np
+import skimage
 from skimage import feature, filters
 
 from cdl.computation.image import Wrap11Func, dst_11
@@ -81,7 +81,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
         f"high_threshold={p.high_threshold}, use_quantiles={p.use_quantiles}, "
         f"mode={p.mode}, cval={p.cval}",
     )
-    dst.data = np.array(
+    dst.data = skimage.util.img_as_ubyte(
         feature.canny(
             src.data,
             sigma=p.sigma,
@@ -90,8 +90,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
             use_quantiles=p.use_quantiles,
             mode=p.mode,
             cval=p.cval,
-        ),
-        dtype=np.uint8,
+        )
     )
     return dst
 
