@@ -616,10 +616,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "moving_average", f"n={p.n:d}")
-    x, y = src.get_data()
-    dst.set_xydata(x, alg.moving_average(y, p.n))
-    return dst
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode="reflect")(src)
 
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:

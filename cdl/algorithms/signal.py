@@ -19,21 +19,6 @@ import scipy.signal as sps
 from cdl.algorithms import fit
 
 
-# ----- Filtering functions ----------------------------------------------------
-def moving_average(y: np.ndarray, n: int) -> np.ndarray:
-    """Compute moving average.
-
-    Args:
-        y: Input array
-        n: Window size
-
-    Returns:
-        Moving average
-    """
-    y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
-    return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
-
-
 # ----- Misc. functions --------------------------------------------------------
 def normalize(
     yin: np.ndarray,
