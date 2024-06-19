@@ -11,6 +11,28 @@ denoising, FFT, thresholding, etc.
 Some of the functions are tested here, such as the image clipping.
 Other functions may be tested in different files, depending on the
 complexity of the function.
+
+[1] Implementation note regarding scikit-image methods
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following note applies to:
+- thresholding methods (isodata, li, mean, minimum, otsu, triangle, yen)
+- exposure methods (adjust_gamma, adjust_log, adjust_sigmoid, rescale_intensity,
+  equalize_hist, equalize_adapthist)
+- restoration methods (denoise_tv, denoise_bilateral, denoise_wavelet)
+- morphology methods (white_tophat, black_tophat, erosion, dilation, opening, closing)
+- edge detection methods (canny, roberts, prewitt, sobel, scharr, farid, laplace)
+
+The thresholding, morphological, and edge detection methods are implemented
+in the scikit-image library: those algorithms are considered to be validated,
+so we can use them as reference.
+As a consequence, the only purpose of the associated validation tests is to check
+if the methods are correctly called and if the results are consistent with
+the reference implementation.
+
+In other words, we are not testing the correctness of the algorithms, but
+the correctness of the interface between the DataLab and the scikit-image
+libraries.
 """
 
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
@@ -174,8 +196,9 @@ def test_threshold() -> None:
     check_array_result(f"Threshold[{p.value}]", dst.data, exp)
 
 
-def __generic_threshold_check(method: str) -> None:
+def __generic_threshold_validation(method: str) -> None:
     """Generic test for thresholding methods."""
+    # See [1] for more information about the validation of thresholding methods.
     src = get_test_image("flower.npy")
     dst = cpi_thr.compute_threshold(src, cdl.param.ThresholdParam.create(method=method))
     exp = util.img_as_ubyte(
@@ -187,48 +210,49 @@ def __generic_threshold_check(method: str) -> None:
 @pytest.mark.validation
 def test_threshold_isodata() -> None:
     """Validation test for the image threshold Isodata processing."""
-    __generic_threshold_check("isodata")
+    __generic_threshold_validation("isodata")
 
 
 @pytest.mark.validation
 def test_threshold_li() -> None:
     """Validation test for the image threshold Li processing."""
-    __generic_threshold_check("li")
+    __generic_threshold_validation("li")
 
 
 @pytest.mark.validation
 def test_threshold_mean() -> None:
     """Validation test for the image threshold Mean processing."""
-    __generic_threshold_check("mean")
+    __generic_threshold_validation("mean")
 
 
 @pytest.mark.validation
 def test_threshold_minimum() -> None:
     """Validation test for the image threshold Minimum processing."""
-    __generic_threshold_check("minimum")
+    __generic_threshold_validation("minimum")
 
 
 @pytest.mark.validation
 def test_threshold_otsu() -> None:
     """Validation test for the image threshold Otsu processing."""
-    __generic_threshold_check("otsu")
+    __generic_threshold_validation("otsu")
 
 
 @pytest.mark.validation
 def test_threshold_triangle() -> None:
     """Validation test for the image threshold Triangle processing."""
-    __generic_threshold_check("triangle")
+    __generic_threshold_validation("triangle")
 
 
 @pytest.mark.validation
 def test_threshold_yen() -> None:
     """Validation test for the image threshold Yen processing."""
-    __generic_threshold_check("yen")
+    __generic_threshold_validation("yen")
 
 
 @pytest.mark.validation
 def test_adjust_gamma() -> None:
     """Validation test for the image gamma adjustment processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for gamma, gain in ((0.5, 1.0), (1.0, 2.0), (1.5, 0.5)):
         p = cdl.param.AdjustGammaParam.create(gamma=gamma, gain=gain)
@@ -240,6 +264,7 @@ def test_adjust_gamma() -> None:
 @pytest.mark.validation
 def test_adjust_log() -> None:
     """Validation test for the image logarithmic adjustment processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for gain, inv in ((1.0, False), (2.0, True)):
         p = cdl.param.AdjustLogParam.create(gain=gain, inv=inv)
@@ -251,6 +276,7 @@ def test_adjust_log() -> None:
 @pytest.mark.validation
 def test_adjust_sigmoid() -> None:
     """Validation test for the image sigmoid adjustment processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for cutoff, gain, inv in ((0.5, 1.0, False), (0.25, 2.0, True)):
         p = cdl.param.AdjustSigmoidParam.create(cutoff=cutoff, gain=gain, inv=inv)
@@ -264,6 +290,7 @@ def test_adjust_sigmoid() -> None:
 @pytest.mark.validation
 def test_rescale_intensity() -> None:
     """Validation test for the image intensity rescaling processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     p = cdl.param.RescaleIntensityParam.create(in_range=(0, 255), out_range=(0, 1))
     dst = cpi_exp.compute_rescale_intensity(src, p)
@@ -276,6 +303,7 @@ def test_rescale_intensity() -> None:
 @pytest.mark.validation
 def test_equalize_hist() -> None:
     """Validation test for the image histogram equalization processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for nbins in (256, 512):
         p = cdl.param.EqualizeHistParam.create(nbins=nbins)
@@ -287,6 +315,7 @@ def test_equalize_hist() -> None:
 @pytest.mark.validation
 def test_equalize_adapthist() -> None:
     """Validation test for the image adaptive histogram equalization processing."""
+    # See [1] for more information about the validation of exposure methods.
     src = get_test_image("flower.npy")
     for clip_limit in (0.01, 0.1):
         p = cdl.param.EqualizeAdaptHistParam.create(clip_limit=clip_limit)
@@ -298,6 +327,7 @@ def test_equalize_adapthist() -> None:
 @pytest.mark.validation
 def test_denoise_tv() -> None:
     """Validation test for the image Total Variation denoising processing."""
+    # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
     for weight, eps, mni in ((0.1, 0.0002, 200), (0.5, 0.0001, 100)):
@@ -314,6 +344,7 @@ def test_denoise_tv() -> None:
 @pytest.mark.validation
 def test_denoise_bilateral() -> None:
     """Validation test for the image bilateral denoising processing."""
+    # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
     for sigma, mode in ((1.0, "constant"), (2.0, "edge")):
@@ -330,6 +361,7 @@ def test_denoise_bilateral() -> None:
 @pytest.mark.validation
 def test_denoise_wavelet() -> None:
     """Validation test for the image wavelet denoising processing."""
+    # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
     src.data = src.data[::8, ::8]
     p = cdl.param.DenoiseWaveletParam()
@@ -352,6 +384,7 @@ def test_denoise_wavelet() -> None:
 @pytest.mark.validation
 def test_denoise_tophat() -> None:
     """Validation test for the image top-hat denoising processing."""
+    # See [1] for more information about the validation of restoration methods.
     src = get_test_image("flower.npy")
     p = cdl.param.MorphologyParam.create(radius=10)
     dst = cpi_res.compute_denoise_tophat(src, p)
@@ -360,8 +393,9 @@ def test_denoise_tophat() -> None:
     check_array_result(f"DenoiseTophat[radius={p.radius}]", dst.data, exp)
 
 
-def __generic_check(method: str) -> None:
+def __generic_morphology_validation(method: str) -> None:
     """Generic test for morphology methods."""
+    # See [1] for more information about the validation of morphology methods.
     src = get_test_image("flower.npy")
     p = cdl.param.MorphologyParam.create(radius=10)
     dst: cdl.obj.ImageObj = getattr(cpi_mor, f"compute_{method}")(src, p)
@@ -372,42 +406,43 @@ def __generic_check(method: str) -> None:
 @pytest.mark.validation
 def test_white_tophat() -> None:
     """Validation test for the image white top-hat processing."""
-    __generic_check("white_tophat")
+    __generic_morphology_validation("white_tophat")
 
 
 @pytest.mark.validation
 def test_black_tophat() -> None:
     """Validation test for the image black top-hat processing."""
-    __generic_check("black_tophat")
+    __generic_morphology_validation("black_tophat")
 
 
 @pytest.mark.validation
 def test_erosion() -> None:
     """Validation test for the image erosion processing."""
-    __generic_check("erosion")
+    __generic_morphology_validation("erosion")
 
 
 @pytest.mark.validation
 def test_dilation() -> None:
     """Validation test for the image dilation processing."""
-    __generic_check("dilation")
+    __generic_morphology_validation("dilation")
 
 
 @pytest.mark.validation
 def test_opening() -> None:
     """Validation test for the image opening processing."""
-    __generic_check("opening")
+    __generic_morphology_validation("opening")
 
 
 @pytest.mark.validation
 def test_closing() -> None:
     """Validation test for the image closing processing."""
-    __generic_check("closing")
+    __generic_morphology_validation("closing")
 
 
 @pytest.mark.validation
 def test_canny() -> None:
     """Validation test for the image Canny edge detection processing."""
+    # See [1] for more information about the validation of edge detection methods.
     src = get_test_image("flower.npy")
     p = cdl.param.CannyParam.create(sigma=1.0, low_threshold=0.1, high_threshold=0.2)
     dst = cpi_edg.compute_canny(src, p)
@@ -423,14 +458,16 @@ def test_canny() -> None:
         )
     )
     check_array_result(
-        f"Canny[sigma={p.sigma},low_threshold={p.low_threshold},high_threshold={p.high_threshold}]",
+        f"Canny[sigma={p.sigma},low_threshold={p.low_threshold},"
+        f"high_threshold={p.high_threshold}]",
         dst.data,
         exp,
     )
 
 
-def __generic_edge_check(method: str) -> None:
+def __generic_edge_validation(method: str) -> None:
     """Generic test for edge detection methods."""
+    # See [1] for more information about the validation of edge detection methods.
     src = get_test_image("flower.npy")
     dst: cdl.obj.ImageObj = getattr(cpi_edg, f"compute_{method}")(src)
     exp = getattr(filters, method)(src.data)
@@ -440,85 +477,85 @@ def __generic_edge_check(method: str) -> None:
 @pytest.mark.validation
 def test_roberts() -> None:
     """Validation test for the image Roberts edge detection processing."""
-    __generic_edge_check("roberts")
+    __generic_edge_validation("roberts")
 
 
 @pytest.mark.validation
 def test_prewitt() -> None:
     """Validation test for the image Prewitt edge detection processing."""
-    __generic_edge_check("prewitt")
+    __generic_edge_validation("prewitt")
 
 
 @pytest.mark.validation
 def test_prewitt_h() -> None:
     """Validation test for the image horizontal Prewitt edge detection processing."""
-    __generic_edge_check("prewitt_h")
+    __generic_edge_validation("prewitt_h")
 
 
 @pytest.mark.validation
 def test_prewitt_v() -> None:
     """Validation test for the image vertical Prewitt edge detection processing."""
-    __generic_edge_check("prewitt_v")
+    __generic_edge_validation("prewitt_v")
 
 
 @pytest.mark.validation
 def test_sobel() -> None:
     """Validation test for the image Sobel edge detection processing."""
-    __generic_edge_check("sobel")
+    __generic_edge_validation("sobel")
 
 
 @pytest.mark.validation
 def test_sobel_h() -> None:
     """Validation test for the image horizontal Sobel edge detection processing."""
-    __generic_edge_check("sobel_h")
+    __generic_edge_validation("sobel_h")
 
 
 @pytest.mark.validation
 def test_sobel_v() -> None:
     """Validation test for the image vertical Sobel edge detection processing."""
-    __generic_edge_check("sobel_v")
+    __generic_edge_validation("sobel_v")
 
 
 @pytest.mark.validation
 def test_scharr() -> None:
     """Validation test for the image Scharr edge detection processing."""
-    __generic_edge_check("scharr")
+    __generic_edge_validation("scharr")
 
 
 @pytest.mark.validation
 def test_scharr_h() -> None:
     """Validation test for the image horizontal Scharr edge detection processing."""
-    __generic_edge_check("scharr_h")
+    __generic_edge_validation("scharr_h")
 
 
 @pytest.mark.validation
 def test_scharr_v() -> None:
     """Validation test for the image vertical Scharr edge detection processing."""
-    __generic_edge_check("scharr_v")
+    __generic_edge_validation("scharr_v")
 
 
 @pytest.mark.validation
 def test_farid() -> None:
     """Validation test for the image Farid edge detection processing."""
-    __generic_edge_check("farid")
+    __generic_edge_validation("farid")
 
 
 @pytest.mark.validation
 def test_farid_h() -> None:
     """Validation test for the image horizontal Farid edge detection processing."""
-    __generic_edge_check("farid_h")
+    __generic_edge_validation("farid_h")
 
 
 @pytest.mark.validation
 def test_farid_v() -> None:
     """Validation test for the image vertical Farid edge detection processing."""
-    __generic_edge_check("farid_v")
+    __generic_edge_validation("farid_v")
 
 
 @pytest.mark.validation
 def test_laplace() -> None:
     """Validation test for the image Laplace edge detection processing."""
-    __generic_edge_check("laplace")
+    __generic_edge_validation("laplace")
 
 
 @pytest.mark.validation
