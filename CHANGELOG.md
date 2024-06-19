@@ -3,6 +3,46 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.16.1 ##
+
+Since version 0.16.0, many validation functions have been added to the test suite.
+The percentage of validated compute functions has increased from 37% to 83% in this
+release.
+
+ℹ️ Minor new features and enhancements:
+
+* Signal and image moving average and median filters:
+  * Added "Mode" parameter to choose the mode of the filter (e.g. "reflect", "constant", "nearest", "mirror", "wrap")
+  * The default mode is "reflect" for moving average and "nearest" for moving median
+  * This allows to handle edge effects when filtering signals and images
+
+🛠️ Bug fixes:
+
+* Fixed Canny edge detection to return binary image as `uint8` instead of `bool` (for consistency with other image processing features)
+
+* Fixed Image normalization: lower bound was wrongly set for `maximum` method
+
+* Fixed `ValueError` when computing PSD with logarithmic scale
+
+* Fixed Signal derivative algorithm: now using `numpy.gradient` instead of a custom implementation
+
+* Fixed SciPy's `cumtrapz` deprecation: use `cumulative_trapezoid` instead
+
+* Curve selection now shows the individual points of the curve (before, only the curve line width was broadened)
+
+* Windows installer: add support for unstable releases (e.g., 0.16.1.dev0), thus allowing to easily install the latest development version of DataLab on Windows
+
+* Fixed [Issue #81](https://github.com/DataLab-Platform/DataLab/issues/81) - When opening files, show progress dialog only if necessary
+
+* Fixed [Issue #80](https://github.com/DataLab-Platform/DataLab/issues/80) - Plotting results: support for two use cases
+  * The features of the "Computing" menu produce *results* (scalars): blob detection (circle coordinates), 2D peak detection (point coordinates), etc. Depending on the feature, result tables are displayed in the "Results" dialog box, and the results are also stored in the signal or image metadata: each line of the result table is an individual result, and each column is a property of the result - some results may consist only of a single individual result (e.g., image centroid or curve FHWM), while others may consist of multiple individual results (e.g., blob detection, contour detection, etc.).
+  * Before this change, the "Plot results" feature only supported plotting the first individual result of a result table, as a function of the index (of the signal or image objects) or any of the columns of the result table. This was not sufficient for some use cases, where the user wanted to plot multiple individual results of a result table.
+  * Now, the "Plot results" feature supports two use cases:
+    * "One curve per result title": Plotting the first individual result of a result table, as before
+    * "One curve per object (or ROI) and per result title": Plotting all individual results of a result table, as a function of the index (of the signal or image objects) or any of the columns of the result table
+  * The selection of the use case is done in the "Plot results" dialog box
+  * The default use case is "One curve per result title" if the result table has only one line, and "One curve per object (or ROI) and per result title" otherwise
+
 ## DataLab Version 0.16.0 ##
 
 💥 New features and enhancements:
