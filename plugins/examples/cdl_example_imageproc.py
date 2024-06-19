@@ -59,7 +59,7 @@ class ExtractBlobs(cdl.plugins.PluginBase):
     def preprocess(self) -> None:
         """Preprocess image"""
         panel = self.imagepanel
-        param = cdl.param.BinningParam.create(binning_x=2, binning_y=2)
+        param = cdl.param.BinningParam.create(sx=2, sy=2)
         panel.processor.compute_binning(param)
         panel.processor.compute_moving_median(cdl.param.MovingMedianParam.create(n=5))
 
