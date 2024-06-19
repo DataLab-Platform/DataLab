@@ -612,28 +612,28 @@ def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
 class BinningParam(gds.DataSet):
     """Binning parameters"""
 
-    binning_x = gds.IntItem(
+    sx = gds.IntItem(
         _("Cluster size (X)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along X-axis."),
     )
-    binning_y = gds.IntItem(
+    sy = gds.IntItem(
         _("Cluster size (Y)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along Y-axis."),
     )
-    _operations = alg.BINNING_OPERATIONS
+    operations = alg.BINNING_OPERATIONS
     operation = gds.ChoiceItem(
         _("Operation"),
-        list(zip(_operations, _operations)),
-        default=_operations[0],
+        list(zip(operations, operations)),
+        default=operations[0],
     )
-    _dtype_list = ["dtype"] + VALID_DTYPES_STRLIST
+    dtypes = ["dtype"] + VALID_DTYPES_STRLIST
     dtype_str = gds.ChoiceItem(
         _("Data type"),
-        list(zip(_dtype_list, _dtype_list)),
+        list(zip(dtypes, dtypes)),
         help=_("Output image data type."),
     )
     change_pixel_size = gds.BoolItem(
@@ -656,20 +656,20 @@ def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
     dst = dst_11(
         src,
         "binning",
-        f"{param.binning_x}x{param.binning_y},{param.operation},"
+        f"{param.sx}x{param.sy},{param.operation},"
         f"change_pixel_size={param.change_pixel_size}",
     )
     dst.data = alg.binning(
         src.data,
-        binning_x=param.binning_x,
-        binning_y=param.binning_y,
+        sx=param.sx,
+        sy=param.sy,
         operation=param.operation,
         dtype=None if param.dtype_str == "dtype" else param.dtype_str,
     )
     if param.change_pixel_size:
         if src.dx is not None and src.dy is not None:
-            dst.dx = src.dx * param.binning_x
-            dst.dy = src.dy * param.binning_y
+            dst.dx = src.dx * param.sx
+            dst.dy = src.dy * param.sy
     else:
         # TODO: [P2] Instead of removing geometric shapes, apply zoom
         dst.remove_all_shapes()

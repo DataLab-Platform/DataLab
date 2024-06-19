@@ -148,8 +148,8 @@ BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
 
 def binning(
     data: np.ndarray,
-    binning_x: int,
-    binning_y: int,
+    sx: int,
+    sy: int,
     operation: Literal["sum", "average", "median", "min", "max"],
     dtype=None,
 ) -> np.ndarray:
@@ -157,8 +157,8 @@ def binning(
 
     Args:
         data: Input data
-        binning_x: Binning factor along x-axis
-        binning_y: Binning factor along y-axis
+        sx: Binning size along x (number of pixels to bin together)
+        sy: Binning size along y (number of pixels to bin together)
         operation: Binning operation
         dtype: Output data type (default: None, i.e. same as input)
 
@@ -166,9 +166,9 @@ def binning(
         Binned data
     """
     ny, nx = data.shape
-    shape = (ny // binning_y, binning_y, nx // binning_x, binning_x)
+    shape = (ny // sy, sy, nx // sx, sx)
     try:
-        bdata = data[: ny - ny % binning_y, : nx - nx % binning_x].reshape(shape)
+        bdata = data[: ny - ny % sy, : nx - nx % sx].reshape(shape)
     except ValueError as err:
         raise ValueError("Binning is not a multiple of image dimensions") from err
     if operation == "sum":

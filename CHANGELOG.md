@@ -6,7 +6,7 @@ for future and past milestones.
 ## DataLab Version 0.16.1 ##
 
 Since version 0.16.0, many validation functions have been added to the test suite.
-The percentage of validated compute functions has increased from 37% to 83% in this
+The percentage of validated compute functions has increased from 37% to 84% in this
 release.
 
 ℹ️ Minor new features and enhancements:

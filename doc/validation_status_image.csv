@@ -3,7 +3,7 @@
 :py:func:`addition_constant <cdl.computation.image.compute_addition_constant>`,Add **dst** and a constant value and return the new result image object,``features/image/operation_unit_test.py``
 :py:func:`astype <cdl.computation.image.compute_astype>`,Convert image data type,``features/image/operation_unit_test.py``
 :py:func:`average_profile <cdl.computation.image.compute_average_profile>`,Compute horizontal or vertical average profile,N/A
-:py:func:`binning <cdl.computation.image.compute_binning>`,Binning function on data,N/A
+:py:func:`binning <cdl.computation.image.compute_binning>`,Binning function on data,``features/image/binning_unit_test.py``
 :py:func:`butterworth <cdl.computation.image.compute_butterworth>`,Compute Butterworth filter,``features/image/processing_unit_test.py``
 :py:func:`calibration <cdl.computation.image.compute_calibration>`,Compute linear calibration,``features/image/processing_unit_test.py``
 :py:func:`centroid <cdl.computation.image.compute_centroid>`,Compute centroid,``features/image/centroid_unit_test.py``
