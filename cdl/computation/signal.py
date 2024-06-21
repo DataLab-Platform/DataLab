@@ -1287,7 +1287,7 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
         "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y) = %g {.yunit}": lambda xy: xy[1].ptp(),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.ptp(xy[1]),
         "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
         "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
     }
