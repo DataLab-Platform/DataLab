@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-06-18 16:04+0200\n"
+"POT-Creation-Date: 2024-06-21 15:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,14 @@ msgid ""
 "- 'nearest': Pad with the nearest value\n"
 "- 'mirror': Reflect the data at the boundary with the data itself\n"
 "- 'wrap': Circular boundary"
-msgstr "Mode du filtre :\n- 'reflect' : Réfléchir les données à la frontière\n- 'constant' : Remplir avec une valeur constante\n- 'nearest' : Remplir avec la valeur la plus proche\n- 'mirror' : Réfléchir les données à la frontière avec les données elles-mêmes\n- 'wrap' : Frontière circulaire"
+msgstr ""
+"Mode du filtre :\n"
+"- 'reflect' : Réfléchir les données à la frontière\n"
+"- 'constant' : Remplir avec une valeur constante\n"
+"- 'nearest' : Remplir avec la valeur la plus proche\n"
+"- 'mirror' : Réfléchir les données à la frontière avec les données elles-"
+"mêmes\n"
+"- 'wrap' : Frontière circulaire"
 
 #: cdl\computation\base.py:46 cdl\computation\base.py:56
 msgid "Size of the moving window"
@@ -30,8 +37,8 @@ msgstr "Taille de la fenêtre glissante"
 
 #: cdl\computation\base.py:49 cdl\computation\base.py:59
 #: cdl\computation\image\__init__.py:370 cdl\computation\image\__init__.py:565
-#: cdl\computation\image\edges.py:59 cdl\computation\image\restoration.py:98
-#: cdl\computation\image\restoration.py:141 cdl\computation\signal.py:992
+#: cdl\computation\image\edges.py:59 cdl\computation\image\restoration.py:92
+#: cdl\computation\image\restoration.py:126 cdl\computation\signal.py:992
 msgid "Mode"
 msgstr "Mode"
 
@@ -789,7 +796,7 @@ msgstr "Nb. max. d'itérations"
 msgid "Maximal number of iterations used for the optimization"
 msgstr "Nombre maximal d'itérations utilisé pour l'optimisation"
 
-#: cdl\computation\image\restoration.py:91
+#: cdl\computation\image\restoration.py:85
 msgid ""
 "Standard deviation for range distance. A larger value results in averaging "
 "of pixels with larger spatial differences."
@@ -797,18 +804,18 @@ msgstr ""
 "Ecart-type dans le domaine spatial. Une valeur élevée a pour effet de "
 "moyenner des pixels séparés par de grandes distances."
 
-#: cdl\computation\image\restoration.py:102
+#: cdl\computation\image\restoration.py:96
 msgid ""
 "Used in conjunction with mode 'constant', the value outside the image "
 "boundaries."
 msgstr ""
 "Valeur de remplissage en dehors des bornes de l'image (en mode constant)."
 
-#: cdl\computation\image\restoration.py:138
+#: cdl\computation\image\restoration.py:123
 msgid "Wavelet"
 msgstr "Ondelette"
 
-#: cdl\computation\image\restoration.py:144 cdl\computation\signal.py:1097
+#: cdl\computation\image\restoration.py:129 cdl\computation\signal.py:1097
 #: cdl\computation\signal.py:1225
 msgid "Method"
 msgstr "Méthode"
@@ -2262,16 +2269,16 @@ msgid "Image View"
 msgstr "Vue Image"
 
 #: cdl\core\gui\main.py:927 cdl\core\gui\panel\signal.py:49
-#: cdl\core\gui\tour.py:683 cdl\core\gui\tour.py:690 cdl\core\gui\tour.py:701
-#: cdl\core\gui\tour.py:711 cdl\core\gui\tour.py:722 cdl\core\gui\tour.py:732
-#: cdl\core\gui\tour.py:742 cdl\core\gui\tour.py:749
+#: cdl\core\gui\tour.py:685 cdl\core\gui\tour.py:692 cdl\core\gui\tour.py:703
+#: cdl\core\gui\tour.py:713 cdl\core\gui\tour.py:724 cdl\core\gui\tour.py:734
+#: cdl\core\gui\tour.py:744 cdl\core\gui\tour.py:751
 msgid "Signal Panel"
 msgstr "Panneau Signal"
 
 #: cdl\core\gui\main.py:929 cdl\core\gui\panel\image.py:49
-#: cdl\core\gui\tour.py:760 cdl\core\gui\tour.py:769 cdl\core\gui\tour.py:780
-#: cdl\core\gui\tour.py:790 cdl\core\gui\tour.py:801 cdl\core\gui\tour.py:811
-#: cdl\core\gui\tour.py:821 cdl\core\gui\tour.py:831
+#: cdl\core\gui\tour.py:762 cdl\core\gui\tour.py:771 cdl\core\gui\tour.py:782
+#: cdl\core\gui\tour.py:792 cdl\core\gui\tour.py:803 cdl\core\gui\tour.py:813
+#: cdl\core\gui\tour.py:823 cdl\core\gui\tour.py:833
 msgid "Image Panel"
 msgstr "Panneau Image"
 
@@ -2296,7 +2303,7 @@ msgstr "Traitement"
 msgid "Computing"
 msgstr "Calculs"
 
-#: cdl\core\gui\main.py:950 cdl\core\gui\tour.py:859
+#: cdl\core\gui\main.py:950 cdl\core\gui\tour.py:863
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -2317,7 +2324,7 @@ msgid "Tour"
 msgstr "Visite guidée"
 
 #: cdl\core\gui\main.py:989 cdl\core\gui\tour.py:287
-#: cdl\tests\scenarios\demo.py:181 cdl\tests\scenarios\demo.py:196
+#: cdl\tests\scenarios\demo.py:186 cdl\tests\scenarios\demo.py:201
 msgid "Demo"
 msgstr "Démo"
 
@@ -3151,7 +3158,7 @@ msgstr ""
 "Cette visite guidée vous présentera les principales fonctionnalités de "
 "DataLab."
 
-#: cdl\core\gui\tour.py:653 cdl\core\gui\tour.py:660 cdl\core\gui\tour.py:674
+#: cdl\core\gui\tour.py:653 cdl\core\gui\tour.py:660 cdl\core\gui\tour.py:676
 msgid "DataLab main window"
 msgstr "Fenêtre principale de DataLab"
 
@@ -3173,7 +3180,7 @@ msgstr ""
 "être réalisées dans DataLab. Leur contenu est adapté au panneau courant, "
 "comme nous le verrons dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:675
+#: cdl\core\gui\tour.py:677
 msgid ""
 "The main window is composed of two main panels: the Signal Panel, and the "
 "Image Panel.<br>Switching between panels is done using the highlighted tabs."
@@ -3182,7 +3189,7 @@ msgstr ""
 "Signal, et le panneau Image.<br>Le passage d'un panneau à l'autre se fait en "
 "utilisant les onglets surlignés."
 
-#: cdl\core\gui\tour.py:684
+#: cdl\core\gui\tour.py:686
 msgid ""
 "The <b>Signal Panel</b> is used to manage 1D signals.It is composed of the "
 "elements shown in the following steps."
@@ -3190,11 +3197,11 @@ msgstr ""
 "Le <b>Panneau Signal</b> est utilisé pour gérer les signaux 1D. Il est "
 "composé des éléments décrits dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:690 cdl\core\gui\tour.py:769
+#: cdl\core\gui\tour.py:692 cdl\core\gui\tour.py:771
 msgid "List and properties"
 msgstr "Liste et propriétés"
 
-#: cdl\core\gui\tour.py:691
+#: cdl\core\gui\tour.py:693
 msgid ""
 "In the highlighted area, signals are listed at the top, and their properties "
 "may be displayed and edited at the bottom.<br><br>Signals are numbered (but "
@@ -3205,11 +3212,11 @@ msgstr ""
 "(mais peuvent être réorganisés) et peuvent être regroupés dans des groupes "
 "numérotés."
 
-#: cdl\core\gui\tour.py:701 cdl\core\gui\tour.py:780
+#: cdl\core\gui\tour.py:703 cdl\core\gui\tour.py:782
 msgid "View"
 msgstr "Vue"
 
-#: cdl\core\gui\tour.py:702
+#: cdl\core\gui\tour.py:704
 msgid ""
 "Signals are plotted in the <b>Signal View</b>.<br><br>Curves may be "
 "customized using context menus or the vertical toolbar on the left "
@@ -3220,25 +3227,22 @@ msgstr ""
 "d'outils verticale à gauche (ces réglages d'apparence sont enregistrés dans "
 "les métadonnées du signal)."
 
-#: cdl\core\gui\tour.py:711 cdl\core\gui\tour.py:790
+#: cdl\core\gui\tour.py:713 cdl\core\gui\tour.py:792
 msgid "File menu"
 msgstr "Menu Fichier"
 
-#: cdl\core\gui\tour.py:712
+#: cdl\core\gui\tour.py:714
 msgid ""
-"The <b>File</b> menu contains actions to import and export signals "
-"individually (various formats) or to save or restore the whole workspace "
-"(HDF5 files)."
-msgstr ""
-"Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
-"signaux individuellement (divers formats) ou pour enregistrer ou restaurer "
-"l'ensemble de l'espace de travail (fichiers HDF5)."
+"The <b>File</b> menu contains actions to create new signals, import and "
+"export signals individually (various formats) or to save or restore the "
+"whole workspace (HDF5 files)."
+msgstr "Le menu <b>Fichier</b> contient les actions pour créer de nouveaux signaux, importer et exporter des signaux individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
 
-#: cdl\core\gui\tour.py:722 cdl\core\gui\tour.py:801
+#: cdl\core\gui\tour.py:724 cdl\core\gui\tour.py:803
 msgid "Edit menu"
 msgstr "Menu Edition"
 
-#: cdl\core\gui\tour.py:723
+#: cdl\core\gui\tour.py:725
 msgid ""
 "The <b>Edit</b> menu contains actions to edit signals individually or in "
 "groups."
@@ -3246,33 +3250,30 @@ msgstr ""
 "Le menu <b>Edition</b> contient les actions pour éditer des signaux "
 "individuellement ou en groupes."
 
-#: cdl\core\gui\tour.py:732 cdl\core\gui\tour.py:811
+#: cdl\core\gui\tour.py:734 cdl\core\gui\tour.py:813
 msgid "Operations menu"
 msgstr "Menu Opérations"
 
-#: cdl\core\gui\tour.py:733
+#: cdl\core\gui\tour.py:735
 msgid ""
-"The <b>Operations</b> menu is focused on arithmetic operations, data type "
-"conversions, peak detection, ROI extraction, ..."
-msgstr ""
-"Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
-"conversions de type de données, la détection de pics, l'extraction de "
-"ROI, ..."
+"The <b>Operations</b> menu is focused on arithmetic operations, basic "
+"mathematical functions or data type conversions."
+msgstr "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les fonctions mathématiques de base ou les conversions de type de données."
 
-#: cdl\core\gui\tour.py:742 cdl\core\gui\tour.py:821
+#: cdl\core\gui\tour.py:744 cdl\core\gui\tour.py:823
 msgid "Processing menu"
 msgstr "Menu Traitement"
 
-#: cdl\core\gui\tour.py:743
+#: cdl\core\gui\tour.py:745
 msgid "The <b>Processing</b> menu regroups 1->1 signal processing actions."
 msgstr ""
 "Le menu <b>Traitement</b> regroupe les actions de traitement de signaux 1->1."
 
-#: cdl\core\gui\tour.py:749 cdl\core\gui\tour.py:831
+#: cdl\core\gui\tour.py:751 cdl\core\gui\tour.py:833
 msgid "Computing menu"
 msgstr "Menu Calculs"
 
-#: cdl\core\gui\tour.py:750
+#: cdl\core\gui\tour.py:752
 msgid ""
 "The <b>Computing</b> menu regroups 1->0 signal computing actions (that is, "
 "actions that do not modify the signals, but compute a result, e.g. scalar "
@@ -3283,7 +3284,7 @@ msgstr ""
 "calculent un résultat, par exemple des valeurs scalaires), avec une "
 "sélection optionnelle de ROI."
 
-#: cdl\core\gui\tour.py:761
+#: cdl\core\gui\tour.py:763
 msgid ""
 "The <b>Image Panel</b> is used to manage 2D images. It is composed of the "
 "elements shown in the following steps."
@@ -3291,7 +3292,7 @@ msgstr ""
 "Le <b>Panneau Image</b> est utilisé pour gérer les images 2D. Il est composé "
 "des éléments décrits dans les étapes suivantes."
 
-#: cdl\core\gui\tour.py:770
+#: cdl\core\gui\tour.py:772
 msgid ""
 "In the highlighted area, images are listed at the top, and their properties "
 "may be displayed and edited at the bottom.<br><br>Images are numbered (but "
@@ -3302,7 +3303,7 @@ msgstr ""
 "(mais peuvent être réorganisées) et peuvent être regroupées dans des groupes "
 "numérotés."
 
-#: cdl\core\gui\tour.py:781
+#: cdl\core\gui\tour.py:783
 msgid ""
 "Images are shown in the <b>Image View</b>.<br><br>The displayed images may "
 "be customized using context menus or the vertical toolbar on the left "
@@ -3313,17 +3314,14 @@ msgstr ""
 "la barre d'outils verticale à gauche (ces réglages d'apparence sont "
 "enregistrés dans les métadonnées de l'image)."
 
-#: cdl\core\gui\tour.py:791
+#: cdl\core\gui\tour.py:793
 msgid ""
-"The <b>File</b> menu contains actions to import and export images "
-"individually (various formats) or to save or restore the whole workspace "
-"(HDF5 files)."
-msgstr ""
-"Le menu <b>Fichier</b> contient les actions pour importer et exporter des "
-"images individuellement (divers formats) ou pour enregistrer ou restaurer "
-"l'ensemble de l'espace de travail (fichiers HDF5)."
+"The <b>File</b> menu contains actions to create new images, import and "
+"export images individually (various formats) or to save or restore the whole "
+"workspace (HDF5 files)."
+msgstr "Le menu <b>Fichier</b> contient les actions pour créer de nouvelles images, importer et exporter des images individuellement (divers formats) ou pour enregistrer ou restaurer l'ensemble de l'espace de travail (fichiers HDF5)."
 
-#: cdl\core\gui\tour.py:802
+#: cdl\core\gui\tour.py:804
 msgid ""
 "The <b>Edit</b> menu contains actions to edit images individually or in "
 "groups."
@@ -3331,16 +3329,13 @@ msgstr ""
 "Le menu <b>Edition</b> contient les actions pour éditer des images "
 "individuellement ou en groupes."
 
-#: cdl\core\gui\tour.py:812
+#: cdl\core\gui\tour.py:814
 msgid ""
 "The <b>Operations</b> menu is focused on arithmetic operations, data type "
-"conversions, pixel binning, resize, ROI extraction ..."
-msgstr ""
-"Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les "
-"conversions de type de données, le binning de pixels, le redimensionnement, "
-"l'extraction de ROI ..."
+"conversions, pixel binning resize, intensity profiles, ..."
+msgstr "Le menu <b>Opérations</b> est centré sur les opérations arithmétiques, les conversions de type de données, le redimensionnement par binning de pixels, les profils d'intensité, ..."
 
-#: cdl\core\gui\tour.py:822
+#: cdl\core\gui\tour.py:824
 msgid ""
 "The <b>Processing</b> menu regroups 1->1 image processing actions (that is, "
 "actions that modify the images)."
@@ -3348,7 +3343,7 @@ msgstr ""
 "Le menu <b>Traitement</b> regroupe les actions de traitement d'images 1->1 "
 "(c'est-à-dire les actions qui modifient les images)."
 
-#: cdl\core\gui\tour.py:832
+#: cdl\core\gui\tour.py:834
 msgid ""
 "The <b>Computing</b> menu regroups 1->0 image computing actions (that is, "
 "actions that do not modify the images, but compute a result, e.g. circle "
@@ -3359,24 +3354,23 @@ msgstr ""
 "résultat, par exemple les coordonnées d'un cercle), avec une sélection "
 "optionnelle de ROI."
 
-#: cdl\core\gui\tour.py:842 cdl\core\gui\tour.py:849 cdl\core\gui\tour.py:859
+#: cdl\core\gui\tour.py:844 cdl\core\gui\tour.py:853 cdl\core\gui\tour.py:863
 msgid "Extensions"
 msgstr "Extensions"
 
-#: cdl\core\gui\tour.py:843
+#: cdl\core\gui\tour.py:845
 msgid ""
 "DataLab is designed to be easily extended with new features, by using "
-"<b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>."
-msgstr ""
-"DataLab est conçu pour être facilement étendu avec de nouvelles "
-"fonctionnalités, en utilisant des <b>Macros</b>, des <b>Plugins</b> ou le "
-"<b>Contrôle à distance</b>."
+"<b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>.<br><br>The common "
+"point between these mechanisms is that they are all relying on Python "
+"scripts and the <i>DataLab API</i>."
+msgstr "DataLab est conçu pour être facilement personnalisable avec de nouvelles fonctionnalités, en utilisant des <b>Macros</b>, des <b>Plugins</b> ou un <b>Contrôle à distance</b>.<br><br>Le point commun entre ces mécanismes est qu'ils reposent tous sur des scripts Python et l'<i>API DataLab</i>."
 
-#: cdl\core\gui\tour.py:849
+#: cdl\core\gui\tour.py:853
 msgid "Macros"
 msgstr "Macros"
 
-#: cdl\core\gui\tour.py:850
+#: cdl\core\gui\tour.py:854
 msgid ""
 "The <b>Macro Panel</b> allows to create, edit and run macros.<br>Macros are "
 "saved together with the DataLab workspace (HDF5 file)."
@@ -3385,7 +3379,7 @@ msgstr ""
 "macros.<br>Les macros sont sauvegardées avec l'espace de travail DataLab "
 "(fichier HDF5)."
 
-#: cdl\core\gui\tour.py:860
+#: cdl\core\gui\tour.py:864
 msgid ""
 "The <b>Plugins</b> menu regroups features that are not part of the core of "
 "DataLab, but that are provided as plugins.<br>(See the documentation for "
@@ -3395,11 +3389,11 @@ msgstr ""
 "du coeur de DataLab, mais qui sont fournies sous forme de plugins.<br>(Voir "
 "la documentation pour plus d'informations sur les plugins.)"
 
-#: cdl\core\gui\tour.py:870
+#: cdl\core\gui\tour.py:874
 msgid "This is the end of the tour!"
 msgstr "C'est la fin de la visite guidée !"
 
-#: cdl\core\gui\tour.py:871
+#: cdl\core\gui\tour.py:875
 msgid "You can show the tour again, or close this dialog box."
 msgstr ""
 "Vous pouvez afficher la visite guidée à nouveau, ou fermer cette boîte de "
@@ -3743,11 +3737,11 @@ msgstr "Fonction polynomiale"
 msgid "Experimental points"
 msgstr "Points expérimentaux"
 
-#: cdl\patch.py:187
+#: cdl\patch.py:188
 msgid "Z-Axis logarithmic scale"
 msgstr "Axe Z en échelle logarithmique"
 
-#: cdl\patch.py:367
+#: cdl\patch.py:368
 msgid "Process signal"
 msgstr "Traiter le signal"
 
@@ -3960,7 +3954,7 @@ msgstr "Image d'homogénéité (Distribution uniforme)"
 msgid "Random function"
 msgstr "Fonction gaussienne aléatoire"
 
-#: cdl\tests\scenarios\demo.py:182
+#: cdl\tests\scenarios\demo.py:187
 msgid ""
 "Click OK to start the demo.<br><br><u>Note:</u><br>- Demo will cover a "
 "<i>selection</i> of DataLab features (for a complete list of features, "
@@ -3972,7 +3966,7 @@ msgstr ""
 "complète des fonctionnalités, veuillez vous référer à la documentation)."
 "<br>- Elle ne nécessite aucune interaction de l'utilisateur."
 
-#: cdl\tests\scenarios\demo.py:196
+#: cdl\tests\scenarios\demo.py:201
 msgid "Click OK to end demo."
 msgstr "Cliquer sur OK pour terminer la démo."
 
