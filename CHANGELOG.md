@@ -9,6 +9,8 @@ Since version 0.16.0, many validation functions have been added to the test suit
 The percentage of validated compute functions has increased from 37% to 84% in this
 release.
 
+NumPy 2.0 support has been added with this release.
+
 ℹ️ Minor new features and enhancements:
 
 * Signal and image moving average and median filters:
