@@ -46,19 +46,6 @@ def __iterate_image_couples() -> (
             yield ima1, ima2
 
 
-def __iterate_image_with_constant() -> (
-    Generator[tuple[cdl.obj.ImageObj, cdl.param.ConstantOperationParam], None, None]
-):
-    """Iterate over all possible image and constant couples for testing."""
-    size = 128
-    for dtype in cdl.obj.ImageDatatypes:
-        param = cdl.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
-        ima = create_noisygauss_image(param, level=0.0)
-        for value in (-1.0, 3.14, 5):
-            p = cdl.param.ConstantOperationParam.create(value=value)
-            yield ima, p
-
-
 @pytest.mark.validation
 def test_image_addition() -> None:
     """Image addition test."""
@@ -127,6 +114,19 @@ def test_image_division() -> None:
         check_array_result("Image division", ima3.data, exp)
 
 
+def __iterate_image_with_constant() -> (
+    Generator[tuple[cdl.obj.ImageObj, cdl.param.ConstantOperationParam], None, None]
+):
+    """Iterate over all possible image and constant couples for testing."""
+    size = 128
+    for dtype in cdl.obj.ImageDatatypes:
+        param = cdl.obj.NewImageParam.create(dtype=dtype, height=size, width=size)
+        ima = create_noisygauss_image(param, level=0.0)
+        for value in (-1.0, 3.14, 5):
+            p = cdl.param.ConstantOperationParam.create(value=value)
+            yield ima, p
+
+
 @pytest.mark.validation
 def test_image_addition_constant() -> None:
     """Image addition with constant test."""
@@ -134,7 +134,7 @@ def test_image_addition_constant() -> None:
     for ima1, p in __iterate_image_with_constant():
         execenv.print(f"  {ima1.data.dtype} += constant ({p.value}): ", end="")
         exp = ima1.data.copy()
-        exp += np.array(p.value, dtype=ima1.data.dtype)
+        exp += np.array(p.value).astype(dtype=ima1.data.dtype)
         ima2 = cpi.compute_addition_constant(ima1, p)
         check_array_result(f"Image + constant ({p.value})", ima2.data, exp)
 
@@ -146,7 +146,7 @@ def test_image_difference_constant() -> None:
     for ima1, p in __iterate_image_with_constant():
         execenv.print(f"  {ima1.data.dtype} -= constant ({p.value}): ", end="")
         exp = ima1.data.copy()
-        exp -= np.array(p.value, dtype=ima1.data.dtype)
+        exp -= np.array(p.value).astype(dtype=ima1.data.dtype)
         ima2 = cpi.compute_difference_constant(ima1, p)
         check_array_result(f"Image - constant ({p.value})", ima2.data, exp)
 
