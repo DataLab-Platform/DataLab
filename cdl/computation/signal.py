@@ -1289,7 +1289,7 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
         "peak-to-peak(y) = %g {.yunit}": lambda xy: np.ptp(xy[1]),
         "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
-        "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
+        "∫ydx": lambda xy: spt.trapezoid(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
 
