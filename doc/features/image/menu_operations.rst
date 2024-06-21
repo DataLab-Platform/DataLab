@@ -21,57 +21,54 @@ The "Operations" menu allows you to perform various operations on the current
 image or group of images. It also allows you to extract profiles, distribute
 images on a grid, or resize images.
 
-Sum
-^^^
+Basic arithmetic operations
+---------------------------
 
-Create a new image which is the sum of all selected images:
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
 
-.. math::
-    z_{M} = \sum_{k=0}^{M-1}{z_{k}}
+    * - Operation
+      - Description
+    * - |sum| Sum
+      - :math:`z_{M} = \sum_{k=0}^{M-1}{z_{k}}`
+    * - |average| Average
+      - :math:`z_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{z_{k}}`
+    * - |difference| Difference
+      - :math:`z_{2} = z_{1} - z_{0}`
+    * - |quadratic_difference| Quadratic difference
+      - :math:`z_{2} = \dfrac{z_{1} - z_{0}}{\sqrt{2}}`
+    * - |product| Product
+      - :math:`z_{M} = \prod_{k=0}^{M-1}{z_{k}}`
+    * - |division| Division
+      - :math:`z_{2} = \dfrac{z_{1}}{z_{0}}`
 
-Average
-^^^^^^^
+.. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
+    :width: 24px
+    :height: 24px
 
-Create a new image which is the average of all selected images:
+.. |average| image:: ../../../cdl/data/icons/operations/average.svg
+    :width: 24px
+    :height: 24px
 
-.. math::
-    z_{M} = \dfrac{1}{M}\sum_{k=0}^{M-1}{z_{k}}
+.. |difference| image:: ../../../cdl/data/icons/operations/difference.svg
+    :width: 24px
+    :height: 24px
 
-Difference
-^^^^^^^^^^
+.. |quadratic_difference| image:: ../../../cdl/data/icons/operations/quadratic_difference.svg
+    :width: 24px
+    :height: 24px
 
-Create a new image which is the difference of the **two** selected images:
+.. |product| image:: ../../../cdl/data/icons/operations/product.svg
+    :width: 24px
+    :height: 24px
 
-.. math::
-    z_{2} = z_{1} - z_{0}
+.. |division| image:: ../../../cdl/data/icons/operations/division.svg
+    :width: 24px
+    :height: 24px
 
-Quadratic difference
-^^^^^^^^^^^^^^^^^^^^
-
-Create a new image which is the quadratic difference of the **two**
-selected images:
-
-.. math::
-    z_{2} = \dfrac{z_{1} - z_{0}}{\sqrt{2}}
-
-Product
-^^^^^^^
-
-Create a new image which is the product of all selected images:
-
-.. math::
-    z_{M} = \prod_{k=0}^{M-1}{z_{k}}
-
-Division
-^^^^^^^^
-
-Create a new image which is the division of the **two** selected images:
-
-.. math::
-    z_{2} = \dfrac{z_{1}}{z_{0}}
-
-Constant operations
-^^^^^^^^^^^^^^^^^^^
+Operations with a constant
+--------------------------
 
 Create a new image which is the result of a constant operation on each selected image:
 
@@ -81,77 +78,104 @@ Create a new image which is the result of a constant operation on each selected 
 
     * - Operation
       - Equation
-    * - Addition
+    * - |constant_add| Addition
       - :math:`z_{k} = z_{k-1} + conv(c)`
-    * - Subtraction
+    * - |constant_substract| Subtraction
       - :math:`z_{k} = z_{k-1} - conv(c)`
-    * - Multiplication
+    * - |constant_multiply| Multiplication
       - :math:`z_{k} = conv(z_{k-1} \times c)`
-    * - Division
+    * - |constant_divide| Division
       - :math:`z_{k} = conv(\dfrac{z_{k-1}}{c})`
+
+.. |constant_add| image:: ../../../cdl/data/icons/operations/constant_add.svg
+    :width: 24px
+    :height: 24px
+
+.. |constant_substract| image:: ../../../cdl/data/icons/operations/constant_substract.svg
+    :width: 24px
+    :height: 24px
+
+.. |constant_multiply| image:: ../../../cdl/data/icons/operations/constant_multiply.svg
+    :width: 24px
+    :height: 24px
+
+.. |constant_divide| image:: ../../../cdl/data/icons/operations/constant_divide.svg
+    :width: 24px
+    :height: 24px
 
 where :math:`c` is the constant value and :math:`conv` is the conversion function
 which handles data type conversion (keeping the same data type as the input image).
 
-Absolute value
-^^^^^^^^^^^^^^
+Real and imaginary parts
+------------------------
 
-Create a new image which is the absolute value of each selected image:
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
 
-.. math::
-    z_{k} = |z_{k-1}|
+    * - Operation
+      - Description
+    * - |abs| Absolute value
+      - :math:`z_{k} = |z_{k-1}|`
+    * - |re| Real part
+      - :math:`z_{k} = \Re(z_{k-1})`
+    * - |im| Imaginary part
+      - :math:`z_{k} = \Im(z_{k-1})`
 
-Real part
-^^^^^^^^^
 
-Create a new image which is the real part of each selected image:
+.. |abs| image:: ../../../cdl/data/icons/operations/abs.svg
+    :width: 24px
+    :height: 24px
 
-.. math::
-    z_{k} = \Re(z_{k-1})
+.. |re| image:: ../../../cdl/data/icons/operations/re.svg
+    :width: 24px
+    :height: 24px
 
-Imaginary part
-^^^^^^^^^^^^^^
+.. |im| image:: ../../../cdl/data/icons/operations/im.svg
+    :width: 24px
+    :height: 24px
 
-Create a new image which is the imaginary part of each selected image:
+Data type conversion
+--------------------
 
-.. math::
-    z_{k} = \Im(z_{k-1})
+The "Convert data type" |convert_dtype| action allows you to convert the data type
+of the selected images.
 
-Convert data type
-^^^^^^^^^^^^^^^^^
-
-Create a new image which is the result of converting data type of each
-selected image.
+.. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
+    :width: 24px
+    :height: 24px
 
 .. note::
 
     Data type conversion relies on :py:func:`numpy.ndarray.astype` function with
     the default parameters (`casting='unsafe'`).
 
-Exponential
-^^^^^^^^^^^
+Basic mathematical functions
+----------------------------
 
-Create a new image which is the exponential of each selected image:
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
 
-.. math::
-    z_{k} = \exp(z_{k-1})
+    * - Function
+      - Description
+    * - |exp| Exponential
+      - :math:`z_{k} = \exp(z_{k-1})`
+    * - |log10| Logarithm (base 10)
+      - :math:`z_{k} = \log_{10}(z_{k-1})`
+    * - Log10(z+n)
+      - :math:`z_{k} = \log_{10}(z_{k-1}+n)` (avoid Log10(0) on image background)
 
-Logarithm (base 10)
-^^^^^^^^^^^^^^^^^^^
+.. |exp| image:: ../../../cdl/data/icons/operations/exp.svg
+    :width: 24px
+    :height: 24px
 
-Create a new image which is the base 10 logarithm of each selected image:
+.. |log10| image:: ../../../cdl/data/icons/operations/log10.svg
+    :width: 24px
+    :height: 24px
 
-.. math::
-    z_{k} = \log_{10}(z_{k-1})
-
-Log10(z+n)
-^^^^^^^^^^
-
-Create a new image which is the Log10(z+n) of each selected image
-(avoid Log10(0) on image background):
-
-.. math::
-    z_{k} = \log_{10}(z_{k-1}+n)
+Other operations
+----------------
 
 Flat-field correction
 ^^^^^^^^^^^^^^^^^^^^^
@@ -230,12 +254,24 @@ Radial profile extraction
         * - Y
           - Y coordinate of the center (if user-defined), in pixels
 
-Distribute on a grid
-^^^^^^^^^^^^^^^^^^^^
+Distribute images along a grid
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Distribute selected images on a regular grid.
+.. list-table::
+    :header-rows: 1
+    :widths: 40, 60
 
-Reset image positions
-^^^^^^^^^^^^^^^^^^^^^
+    * - Feature
+      - Description
+    * - |distribute_on_grid| Distribute on a grid
+      - Distribute selected images on a regular grid
+    * - |reset_positions| Reset image positions
+      - Reset the positions of the selected images to first image (x0, y0) coordinates
 
-Reset selected image positions to first image (x0, y0) coordinates.
+.. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
+    :width: 24px
+    :height: 24px
+
+.. |reset_positions| image:: ../../../cdl/data/icons/operations/reset_positions.svg
+    :width: 24px
+    :height: 24px

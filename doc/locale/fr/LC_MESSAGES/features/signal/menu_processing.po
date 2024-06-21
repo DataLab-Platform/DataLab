@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-07 10:35+0200\n"
+"POT-Creation-Date: 2024-06-19 15:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -248,18 +248,26 @@ msgid "Moving average"
 msgstr "Moyenne mobile"
 
 #: ../../doc/features/signal/menu_processing.rst:108
-msgid ":math:`y_{1}[i]=\\dfrac{1}{M}\\sum_{j=0}^{M-1}y_{0}[i+j]`"
+#, fuzzy
+msgid ""
+"`scipy.ndimage.uniform_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_"
 msgstr ""
+"Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
 #: ../../doc/features/signal/menu_processing.rst:109
 msgid "Moving median"
 msgstr "Médiane mobile"
 
 #: ../../doc/features/signal/menu_processing.rst:110
+#, fuzzy
 msgid ""
-"`scipy.signal.medfilt "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
+"`scipy.ndimage.median_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_"
 msgstr ""
+"Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
 #: ../../doc/features/signal/menu_processing.rst:111
 msgid "Wiener filter"
@@ -1014,4 +1022,12 @@ msgstr ""
 #~ " result of thresholding each selected "
 #~ "signal."
 #~ msgstr "Crée un signal à partir du seuillage de chaque signal sélectionné."
+
+#~ msgid ":math:`y_{1}[i]=\\dfrac{1}{M}\\sum_{j=0}^{M-1}y_{0}[i+j]`"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "`scipy.signal.medfilt "
+#~ "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
+#~ msgstr ""
 

@@ -47,7 +47,7 @@ msgid ""
 "DataLab supports dark and light mode depending on your platform settings "
 "(this is handled by the `guidata`_ package, and may be overridden by "
 "setting the `QT_COLOR_MODE` environment variable to `dark` or `light`)."
-msgstr ""
+msgstr "DataLab prend en charge le mode sombre et le mode clair en fonction des paramètres de votre plateforme (cela est géré par le paquet `guidata`_ et peut être remplacé en définissant la variable d'environnement `QT_COLOR_MODE` sur `dark` ou `light`)."
 
 #: ../../doc/intro/keyfeatures.rst:21
 msgid "Data visualization"

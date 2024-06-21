@@ -37,7 +37,7 @@ msgstr "Espace de travail"
 
 #: ../../doc/features/general/workspace.rst:11
 msgid "Basic concepts"
-msgstr ""
+msgstr "Concepts de base"
 
 #: ../../doc/features/general/workspace.rst:13
 msgid ""
@@ -82,7 +82,7 @@ msgstr "Fenêtre principale de DataLab, au démarrage."
 
 #: ../../doc/features/general/workspace.rst:32
 msgid "Internal data model and workspace"
-msgstr ""
+msgstr "Modèle de données interne et espace de travail"
 
 #: ../../doc/features/general/workspace.rst:34
 msgid ""
@@ -119,42 +119,35 @@ msgstr ""
 "parcourues dans la vue **Propriétés**, avec le bouton **Métadonnées**)."
 
 #: ../../doc/features/general/workspace.rst:47
-#, fuzzy
 msgid ""
 "The DataLab **Workspace** is defined as the collection of all data sets "
 "which are currently loaded in DataLab, in both the **Signals** and "
 "**Images** panels."
-msgstr ""
-"L'**Espace de travail** de DataLab est défini comme l'ensemble de tous "
-"les jeux de données qui sont actuellement chargés dans DataLab, dans les "
-"panneaux **Signaux** et **Images**. L'espace de travail peut être "
-"enregistré dans un fichier HDF5, puis rechargé ultérieurement. Il est "
-"également possible d'importer des jeux de données à partir d'un fichier "
-"HDF5 dans l'espace de travail, en utilisant l':ref:`h5browser`."
+msgstr "L'**Espace de travail** de DataLab est défini comme l'ensemble de tous les jeux de données actuellement chargés dans DataLab, dans les panneaux **Signaux** et **Images**."
 
 #: ../../doc/features/general/workspace.rst:51
 msgid "Loading and saving the workspace"
-msgstr ""
+msgstr "Chargement et enregistrement de l'espace de travail"
 
 #: ../../doc/features/general/workspace.rst:53
 msgid ""
 "The following actions are available to manage the workspace from the "
 "**File** menu:"
-msgstr ""
+msgstr "Les actions suivantes sont disponibles pour gérer l'espace de travail depuis le menu **Fichier** :"
 
 #: ../../doc/features/general/workspace.rst:55
 msgid "**Open HDF5 file**: load a workspace from an HDF5 file."
-msgstr ""
+msgstr "**Ouvrir un fichier HDF5** : charger un espace de travail à partir d'un fichier HDF5."
 
 #: ../../doc/features/general/workspace.rst:57
 msgid "**Save to HDF5 file**: save the current workspace to an HDF5 file."
-msgstr ""
+msgstr "**Enregistrer dans un fichier HDF5** : enregistrer l'espace de travail actuel dans un fichier HDF5."
 
 #: ../../doc/features/general/workspace.rst:59
 msgid ""
 "**Browse HDF5 file**: open the :ref:`h5browser` to explore the content of"
 " an HDF5 file and import data sets into the workspace."
-msgstr ""
+msgstr "**Parcourir un fichier HDF5** : ouvrir le :ref:`h5browser` pour explorer le contenu d'un fichier HDF5 et importer des jeux de données dans l'espace de travail."
 
 #: ../../doc/features/general/workspace.rst:64
 msgid ""
@@ -168,4 +161,3 @@ msgstr ""
 "`.npy` pour les signaux 1D (voir :ref:`open_signal` pour la liste des "
 "formats pris en charge), ou `.tiff` ou `.dcm` pour les images 2D (voir "
 ":ref:`open_image` pour la liste des formats pris en charge)."
-

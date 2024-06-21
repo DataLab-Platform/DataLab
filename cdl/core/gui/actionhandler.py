@@ -1121,6 +1121,7 @@ class ImageActionHandler(BaseActionHandler):
             self.new_action(
                 _("Reset image positions"),
                 triggered=self.panel.processor.reset_positions,
+                icon_name="reset_positions.svg",
                 select_condition=SelectCond.at_least_two,
             )
 
