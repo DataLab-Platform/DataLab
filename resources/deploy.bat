@@ -8,7 +8,7 @@ copy DataLab.svg ..\cdl\data\logo
 copy DataLab-Title.png ..\doc\_static
 %INKSCAPE_PATH% "DataLab-Frontpage.svg" -o "DataLab-Frontpage.png" -w 1300
 copy DataLab-Frontpage.png ..\doc\_static
-%INKSCAPE_PATH% "DataLab-Splash.svg" -o "DataLab-Splash.png" -w 300
+%INKSCAPE_PATH% "DataLab-Sticker.svg" -o "DataLab-Splash.png" -w 350
 copy DataLab-Splash.png ..\cdl\data\logo
 %INKSCAPE_PATH% "DataLab-Watermark.svg" -o "..\cdl\data\logo\DataLab-Watermark.png" -w 300
 %INKSCAPE_PATH% "DataLab-Banner.svg" -o "DataLab-Banner.png" -w 364
