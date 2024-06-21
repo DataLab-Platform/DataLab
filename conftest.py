@@ -10,9 +10,16 @@ executed before running any tests.
 
 import os
 
+import cv2
 import guidata
+import h5py
+import numpy
 import plotpy
 import pytest
+import qtpy
+import qwt
+import scipy
+import skimage
 
 import cdl
 from cdl.env import execenv
@@ -31,9 +38,17 @@ def pytest_report_header(config):
         f"{plugin.info.name} {plugin.info.version}"
         for plugin in get_available_plugins()
     )
+    qtbindings_version = qtpy.PYSIDE_VERSION
+    if qtbindings_version is None:
+        qtbindings_version = qtpy.PYQT_VERSION
     return [
         f"DataLab {cdl.__version__} [Plugins: {nfstr if nfstr else 'None'}]",
         f"guidata {guidata.__version__}, PlotPy {plotpy.__version__}",
+        f"PythonQwt {qwt.__version__}, "
+        f"{qtpy.API_NAME} {qtbindings_version} [Qt version: {qtpy.QT_VERSION}]",
+        f"NumPy {numpy.__version__}, SciPy {scipy.__version__}, "
+        f"h5py {h5py.__version__}, "
+        f"scikit-image {skimage.__version__}, OpenCV {cv2.__version__}",
     ]
 
 
