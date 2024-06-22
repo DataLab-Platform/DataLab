@@ -58,7 +58,7 @@ msgid ""
 "<https://pymodaq.cnrs.fr/>`_, a Python package for data acquisition, "
 "which is already compatible with various hardware devices - *how about a "
 "collaboration with the PyMoDAQ developers?*"
-msgstr "Une des solutions techniques possibles pourrait être de s'appuyer sur `PyMoDAQ <https://pymodaq.cnrs.fr/>`, un paquet Python pour l'acquisition de données, qui est déjà compatible avec divers dispositifs matériels - *et si on collaborait avec les développeurs de PyMoDAQ ?*"
+msgstr "Une des solutions techniques possibles pourrait être de s'appuyer sur `PyMoDAQ <https://pymodaq.cnrs.fr/>`_, un paquet Python pour l'acquisition de données, qui est déjà compatible avec divers dispositifs matériels - *et si on collaborait avec les développeurs de PyMoDAQ ?*"
 
 #: ../../doc/contributing/roadmap.rst:24
 msgid "Create a DataLab math library:"
