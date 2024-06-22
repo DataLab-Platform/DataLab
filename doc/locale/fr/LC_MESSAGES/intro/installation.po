@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-17 16:23+0200\n"
+"POT-Creation-Date: 2024-06-22 16:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -444,7 +444,7 @@ msgid "NumPy"
 msgstr ""
 
 #: ../../doc/requirements.rst:17
-msgid ">= 1.21, < 2"
+msgid ">= 1.21"
 msgstr ""
 
 #: ../../doc/requirements.rst:18
@@ -716,3 +716,7 @@ msgstr "Python 3.11 et PyQt5 sont les références pour la version de production
 
 #~ msgid ">= 1.21"
 #~ msgstr ""
+
+#~ msgid ">= 1.21, < 2"
+#~ msgstr ""
+

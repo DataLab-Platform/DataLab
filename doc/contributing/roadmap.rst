@@ -4,16 +4,40 @@ Roadmap
 Future milestones
 -----------------
 
-Features
-^^^^^^^^
+Features or enhancements
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add a Jupyter kernel interface to DataLab:
+* Add support for data acquisition:
 
-  - This would allow to use DataLab from other software, such as Jupyter
-    notebooks, Spyder or Visual Studio Code
-  - This would also allow to share data between DataLab and other software
-    (e.g. display DataLab numerical results in Jupyter notebooks or the other
-    way around, display Jupyter results in DataLab, etc.)
+  - It would be nice to be able to acquire data from various sources
+    (e.g. a camera, a digitizer, a spectrometer, etc.) directly from DataLab
+  - This would allow to use DataLab as a data acquisition software, and to
+    process the acquired data immediately after
+  - Although there is currently no design for this feature, it could be
+    implemented by creating a new plugin family, and by defining a common
+    API for data acquisition plugins
+  - One of the possible technical solutions could be to rely on `PyMoDAQ <https://pymodaq.cnrs.fr/>`_,
+    a Python package for data acquisition, which is already compatible with
+    various hardware devices - *how about a collaboration with the PyMoDAQ
+    developers?*
+
+* Create a DataLab math library:
+
+  - This library would be a Python package, and would contain all the
+    mathematical functions and algorithms used in DataLab:
+    - A low-level algorithms API operating on NumPy arrays
+    - The base non-GUI data model of DataLab (e.g. signals, images)
+    - A high-level computing API operating on DataLab objects (e.g. signals, images)
+  - It would be used by DataLab itself, but could also be used by third-party software
+    (e.g. Jupyter notebooks, Spyder, Visual Studio Code, etc.)
+  - Finally, this library would be a good way to share DataLab's mathematical features
+    with the scientific community: a collection of algorithms and functions
+    that are well-tested, well-documented, and easy to use
+  - *Note*: it is already possible to use DataLab's processing features from outside
+    DataLab by importing the `cdl` Python package, but this package also contains
+    the GUI code, which is not always needed (e.g. when using DataLab from a Jupyter
+    notebook). The idea here is to create a new package that would contain only the
+    mathematical features of DataLab, without the GUI code.
 
 * Create a Jupyter plugin for interactive data analysis with DataLab:
 
@@ -41,6 +65,18 @@ Features
 * Add support for time series (see
   `Issue #27 <https://github.com/DataLab-Platform/DataLab/issues/27>`_)
 
+* Add a Jupyter kernel interface to DataLab:
+
+  - This would allow to use DataLab from other software, such as Jupyter
+    notebooks, Spyder or Visual Studio Code
+  - This would also allow to share data between DataLab and other software
+    (e.g. display DataLab numerical results in Jupyter notebooks or the other
+    way around, display Jupyter results in DataLab, etc.)
+  - After a first and quick look, it seems that the Jupyter kernel interface
+    is not straightforward to implement, so that it may not be worth the effort
+    (the communication between DataLab and Jupyter is currently already possible
+    thanks to the remote control features)
+
 Maintenance
 ^^^^^^^^^^^
 
@@ -57,9 +93,6 @@ Other tasks
 
 * Create a DataLab plugin template (see
   `Issue #26 <https://github.com/DataLab-Platform/DataLab/issues/26>`_)
-
-* Make tutorial videos: plugin system, remote control features, etc. (see
-  `Issue #25 <https://github.com/DataLab-Platform/DataLab/issues/25>`_)
 
 Past milestones
 ---------------
