@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-05 09:04+0100\n"
+"POT-Creation-Date: 2024-06-24 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../intro/index.rst:53
+#: ../../doc/intro/index.rst:81
 msgid "Contents:"
 msgstr "Sommaire :"
 
-#: ../../intro/index.rst:-1
+#: ../../doc/intro/index.rst:-1
 msgid ""
 "Getting started with DataLab, the open platform for signal and image "
 "processing"
@@ -29,7 +29,7 @@ msgstr ""
 "Premiers pas avec DataLab, la plateforme open-source de traitement de "
 "signaux et d'images"
 
-#: ../../intro/index.rst:-1
+#: ../../doc/intro/index.rst:-1
 msgid ""
 "DataLab, signal processing, image processing, open platform, scientific "
 "data, industrial data, industrial-grade software"
@@ -37,37 +37,79 @@ msgstr ""
 "DataLab, traitement de signaux, traitement d'images, plateforme ouverte, "
 "données scientifiques, données industrielles, logiciel industriel"
 
-#: ../../intro/index.rst:2
+#: ../../doc/intro/index.rst:2
 msgid "Getting started"
 msgstr "Premiers pas"
 
-#: ../../intro/index.rst:8
+#: ../../doc/intro/index.rst:8
 msgid ""
-"DataLab is an open platform for signal and image processing. Its "
-"functional scope is intentionally broad. With its many functions, some of"
-" them technically advanced, DataLab enables the processing and "
-"visualization of all types of scientific data. As a result, scientific, "
-"industrial, and innovation stakeholders can have access to an easy-to-use"
-" tool that seemlessly integrates into their workflow and offers the "
-"reliability of industrial-grade software."
-msgstr ""
-"DataLab est une plateforme ouverte de traitement de signaux et d'images. "
-"Son périmètre fonctionnel est volontairement large. Avec ses nombreuses "
-"fonctions, certaines techniquement avancées, DataLab permet le traitement"
-" et la visualisation de tous types de données scientifiques. Ainsi, les "
-"acteurs scientifiques, industriels et de l'innovation peuvent disposer "
-"d'un outil facile à utiliser, simple à adapter et offrant la fiabilité "
-"d'un logiciel industriel."
+"DataLab is an open platform for signal and image processing, designed to "
+"be used by scientists, engineers, and researchers in academia and "
+"industry, while offering the reliability of industrial-grade software. It"
+" is a versatile software that can be used for a wide range of "
+"applications, from simple data analysis to complex signal processing and "
+"image analysis tasks."
+msgstr "DataLab est une plateforme ouverte de traitement de signaux et d'images, conçue pour être utilisée par les scientifiques, ingénieurs et chercheurs du monde académique et industriel, tout en offrant la fiabilité d'un logiciel industriel. C'est un logiciel polyvalent qui peut être utilisé pour un large éventail d'applications, de l'analyse de données simple aux tâches complexes de traitement de signaux et d'analyse d'images."
 
-#: ../../intro/index.rst:15
+#: ../../doc/intro/index.rst:14
+msgid ""
+"DataLab integrates seemlessly into your workflow thanks to three main "
+"operating modes:"
+msgstr "DataLab s'intègre parfaitement dans votre flux de travail grâce à trois modes de fonctionnement principaux :"
+
+#: ../../doc/intro/index.rst:19
+msgid "|appmode|"
+msgstr ""
+
+#: ../../doc/intro/index.rst:28
+msgid "appmode"
+msgstr ""
+
+#: ../../doc/intro/index.rst:20
+msgid ""
+"**Stand-alone application**, with a graphical user interface that allows "
+"you to interact with your data and visualize the results of your analysis"
+" in real time."
+msgstr "**Application autonome**, avec une interface graphique qui vous permet d'interagir avec vos données et de visualiser les résultats de votre analyse en temps réel."
+
+#: ../../doc/intro/index.rst:22
+msgid "|libmode|"
+msgstr ""
+
+#: ../../doc/intro/index.rst:33
+msgid "libmode"
+msgstr ""
+
+#: ../../doc/intro/index.rst:23
+msgid ""
+"**Python library**, allowing you to integrate DataLab functions (or "
+"graphical user interfaces) into your own Python scripts and programs or "
+"Jupyter notebooks."
+msgstr "**Bibliothèque Python**, vous permettant d'intégrer les fonctions de DataLab (ou les interfaces graphiques) dans vos propres scripts et programmes Python ou des notebooks Jupyter."
+
+#: ../../doc/intro/index.rst:25
+msgid "|remotemode|"
+msgstr ""
+
+#: ../../doc/intro/index.rst:38
+msgid "remotemode"
+msgstr ""
+
+#: ../../doc/intro/index.rst:26
+msgid ""
+"**Remotely controlled** from your own software, or from an IDE (e.g., "
+"Spyder) or a Jupyter notebook, using the DataLab API."
+msgstr "**Piloté à distance** depuis votre propre logiciel, ou depuis un IDE (par exemple Spyder) ou un notebook Jupyter, en utilisant l'API de DataLab."
+
+#: ../../doc/intro/index.rst:43
 msgid ""
 "DataLab leverages the power of Python and its scientific ecosystem, "
 "through the use of the following libraries:"
 msgstr ""
 "DataLab s'appuie sur la puissance de Python et de son écosystème "
-"scientifique, grâce à l'utilisation des bibliothèques suivantes :"
+"scientifique, grâce à l'utilisation des bibliothèques suivantes :"
 
-#: ../../intro/index.rst:18
+#: ../../doc/intro/index.rst:46
 msgid ""
 "`NumPy <https://numpy.org/>`_ for numerical computing (arrays, linear "
 "algebra, etc.)"
@@ -75,7 +117,7 @@ msgstr ""
 "`NumPy <https://numpy.org/>`_ pour le calcul numérique (tableaux, algèbre"
 " linéaire, etc.)"
 
-#: ../../intro/index.rst:19
+#: ../../doc/intro/index.rst:47
 msgid ""
 "`SciPy <https://www.scipy.org/>`_ for scientific computing "
 "(interpolation, special functions, etc.)"
@@ -83,25 +125,31 @@ msgstr ""
 "`SciPy <https://www.scipy.org/>`_ pour le calcul scientifique "
 "(interpolation, fonctions spéciales, etc.)"
 
-#: ../../intro/index.rst:20
+#: ../../doc/intro/index.rst:48
 msgid ""
 "`scikit-image <https://scikit-image.org/>`_ and `OpenCV "
 "<https://opencv.org/>`_ for image processing"
-msgstr "`scikit-image <https://scikit-image.org/>`_ et `OpenCV <https://opencv.org/>`_ pour le traitement d'images"
+msgstr ""
+"`scikit-image <https://scikit-image.org/>`_ et `OpenCV "
+"<https://opencv.org/>`_ pour le traitement d'images"
 
-#: ../../intro/index.rst:21
+#: ../../doc/intro/index.rst:49
 msgid ""
 "`PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ for wavelet "
 "transform"
-msgstr "`PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ pour la transformée en ondelettes"
+msgstr ""
+"`PyWavelets <https://pywavelets.readthedocs.io/en/latest/>`_ pour la "
+"transformée en ondelettes"
 
-#: ../../intro/index.rst:22
+#: ../../doc/intro/index.rst:50
 msgid ""
 "`PlotPyStack <https://github.com/PlotPyStack/>`_ for Qt-based interactive"
 " data visualization"
-msgstr "`PlotPyStack <https://github.com/PlotPyStack/>`_ pour la visualisation interactive de données basée sur Qt"
+msgstr ""
+"`PlotPyStack <https://github.com/PlotPyStack/>`_ pour la visualisation "
+"interactive de données basée sur Qt"
 
-#: ../../intro/index.rst:29
+#: ../../doc/intro/index.rst:57
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-package sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -115,11 +163,11 @@ msgid ""
 "8.432v5.516z\"></path></svg>  Installation"
 msgstr "Installation"
 
-#: ../../intro/index.rst:33
+#: ../../doc/intro/index.rst:61
 msgid "How to install DataLab on your computer"
 msgstr "Comment installer DataLab sur votre ordinateur"
 
-#: ../../intro/index.rst:35
+#: ../../doc/intro/index.rst:63
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-gift sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -139,11 +187,11 @@ msgid ""
 "01-.25-.25V9.5h4.75z\"></path></svg>  Introduction"
 msgstr "Introduction"
 
-#: ../../intro/index.rst:39
+#: ../../doc/intro/index.rst:67
 msgid "Use cases and key strengths of DataLab"
 msgstr "Cas d'utilisation et points forts de DataLab"
 
-#: ../../intro/index.rst:41
+#: ../../doc/intro/index.rst:69
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-star sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -158,11 +206,11 @@ msgid ""
 "2.694v.001z\"></path></svg>  Key features"
 msgstr "Fonctionnalités clés"
 
-#: ../../intro/index.rst:45
+#: ../../doc/intro/index.rst:73
 msgid "Feature matrix of DataLab"
 msgstr "Matrice des fonctionnalités de DataLab"
 
-#: ../../intro/index.rst:47
+#: ../../doc/intro/index.rst:75
 msgid ""
 "<svg version=\"1.1\" width=\"1.0em\" height=\"1.0em\" class=\"sd-octicon "
 "sd-octicon-mortar-board sd-text-info\" viewBox=\"0 0 16 16\" aria-"
@@ -180,7 +228,7 @@ msgid ""
 "Tutorials"
 msgstr "Tutoriels"
 
-#: ../../intro/index.rst:51
+#: ../../doc/intro/index.rst:79
 msgid "Tutorials to learn how to use DataLab"
 msgstr "Tutoriels pour apprendre à utiliser DataLab"
 
@@ -456,3 +504,32 @@ msgstr "Tutoriels pour apprendre à utiliser DataLab"
 
 #~ msgid "`OpenCV <https://opencv.org/>`_ for computer vision"
 #~ msgstr ""
+
+#~ msgid ""
+#~ "DataLab is an open platform for "
+#~ "signal and image processing. Its "
+#~ "functional scope is intentionally broad. "
+#~ "With its many functions, some of "
+#~ "them technically advanced, DataLab enables "
+#~ "the processing and visualization of all"
+#~ " types of scientific data. As a "
+#~ "result, scientific, industrial, and innovation"
+#~ " stakeholders can have access to an"
+#~ " easy-to-use tool that seemlessly "
+#~ "integrates into their workflow and "
+#~ "offers the reliability of industrial-"
+#~ "grade software."
+#~ msgstr ""
+#~ "DataLab est une plateforme ouverte de"
+#~ " traitement de signaux et d'images. "
+#~ "Son périmètre fonctionnel est volontairement"
+#~ " large. Avec ses nombreuses fonctions, "
+#~ "certaines techniquement avancées, DataLab "
+#~ "permet le traitement et la visualisation"
+#~ " de tous types de données "
+#~ "scientifiques. Ainsi, les acteurs "
+#~ "scientifiques, industriels et de l'innovation"
+#~ " peuvent disposer d'un outil facile à"
+#~ " utiliser, simple à adapter et "
+#~ "offrant la fiabilité d'un logiciel "
+#~ "industriel."

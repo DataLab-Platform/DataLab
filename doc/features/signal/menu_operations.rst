@@ -44,22 +44,27 @@ Basic arithmetic operations
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |average| image:: ../../../cdl/data/icons/operations/average.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |difference| image:: ../../../cdl/data/icons/operations/difference.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |product| image:: ../../../cdl/data/icons/operations/product.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Operations with a constant
 --------------------------
@@ -84,18 +89,22 @@ Create a new signal which is the result of a constant operation on each selected
 .. |constant_add| image:: ../../../cdl/data/icons/operations/constant_add.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_substract| image:: ../../../cdl/data/icons/operations/constant_substract.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_multiply| image:: ../../../cdl/data/icons/operations/constant_multiply.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_divide| image:: ../../../cdl/data/icons/operations/constant_divide.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Real and imaginary parts
 ------------------------
@@ -116,14 +125,17 @@ Real and imaginary parts
 .. |abs| image:: ../../../cdl/data/icons/operations/abs.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |re| image:: ../../../cdl/data/icons/operations/re.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |im| image:: ../../../cdl/data/icons/operations/im.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Data type conversion
 --------------------
@@ -134,6 +146,7 @@ of the selected signals.
 .. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. note::
 
@@ -161,18 +174,22 @@ Basic mathematical functions
 .. |exp| image:: ../../../cdl/data/icons/operations/exp.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |log10| image:: ../../../cdl/data/icons/operations/log10.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |power| image:: ../../../cdl/data/icons/operations/power.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |sqrt| image:: ../../../cdl/data/icons/operations/sqrt.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Other mathematical operations
 -----------------------------
@@ -193,11 +210,14 @@ Other mathematical operations
 .. |derivative| image:: ../../../cdl/data/icons/operations/derivative.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |integral| image:: ../../../cdl/data/icons/operations/integral.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |convolution| image:: ../../../cdl/data/icons/operations/convolution.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

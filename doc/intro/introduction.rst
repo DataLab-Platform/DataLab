@@ -36,14 +36,29 @@ Usage modes
 
 Depending on the application, DataLab can be used in three different modes:
 
-- **Stand-alone mode**: DataLab is a full-fledged processing application that
+- |appmode| **Stand-alone mode**: DataLab is a full-fledged processing application that
   can be adapted to the client's needs through the addition of
   industry-specific plugins.
-- **Embedded mode**: DataLab is integrated into your application to provide
+- |libmode| **Embedded mode**: DataLab is integrated into your application to provide
   the necessary processing and visualization features.
-- **Remote-controlled mode**: DataLab communicates with your application,
+- |remotemode| **Remote-controlled mode**: DataLab communicates with your application,
   allowing it to benefit from its functionality without disrupting
   the user experience.
+
+.. |appmode| image:: ../../resources/DataLab-app.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |libmode| image:: ../../resources/DataLab-lib.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |remotemode| image:: ../../resources/DataLab-remote.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
 
 .. _use_cases:
 

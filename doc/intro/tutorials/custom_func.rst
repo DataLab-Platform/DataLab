@@ -79,6 +79,7 @@ click on the "New macro" |libre-gui-add| button.
 .. |libre-gui-add| image:: ../../../cdl/data/icons/libre-gui-add.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 DataLab creates a new macro-command which is not empty: it contains a sample code
 that shows how to create a new image and add it to the "Image Panel". We can remove
@@ -176,10 +177,12 @@ Now, let's execute the macro-command by clicking on the "Run macro"
 .. |libre-camera-flash-on| image:: ../../../cdl/data/icons/libre-camera-flash-on.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |libre-camera-flash-off| image:: ../../../cdl/data/icons/libre-camera-flash-off.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/custom_func/05.png
 

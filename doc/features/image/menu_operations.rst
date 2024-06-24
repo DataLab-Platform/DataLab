@@ -46,26 +46,32 @@ Basic arithmetic operations
 .. |sum| image:: ../../../cdl/data/icons/operations/sum.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |average| image:: ../../../cdl/data/icons/operations/average.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |difference| image:: ../../../cdl/data/icons/operations/difference.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |quadratic_difference| image:: ../../../cdl/data/icons/operations/quadratic_difference.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |product| image:: ../../../cdl/data/icons/operations/product.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |division| image:: ../../../cdl/data/icons/operations/division.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Operations with a constant
 --------------------------
@@ -90,18 +96,22 @@ Create a new image which is the result of a constant operation on each selected 
 .. |constant_add| image:: ../../../cdl/data/icons/operations/constant_add.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_substract| image:: ../../../cdl/data/icons/operations/constant_substract.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_multiply| image:: ../../../cdl/data/icons/operations/constant_multiply.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |constant_divide| image:: ../../../cdl/data/icons/operations/constant_divide.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 where :math:`c` is the constant value and :math:`conv` is the conversion function
 which handles data type conversion (keeping the same data type as the input image).
@@ -126,14 +136,17 @@ Real and imaginary parts
 .. |abs| image:: ../../../cdl/data/icons/operations/abs.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |re| image:: ../../../cdl/data/icons/operations/re.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |im| image:: ../../../cdl/data/icons/operations/im.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Data type conversion
 --------------------
@@ -144,6 +157,7 @@ of the selected images.
 .. |convert_dtype| image:: ../../../cdl/data/icons/operations/convert_dtype.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. note::
 
@@ -169,10 +183,12 @@ Basic mathematical functions
 .. |exp| image:: ../../../cdl/data/icons/operations/exp.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |log10| image:: ../../../cdl/data/icons/operations/log10.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Other operations
 ----------------
@@ -271,7 +287,9 @@ Distribute images along a grid
 .. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |reset_positions| image:: ../../../cdl/data/icons/operations/reset_positions.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

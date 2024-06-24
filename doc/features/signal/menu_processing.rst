@@ -172,18 +172,22 @@ The following filters are available:
 .. |lowpass| image:: ../../../cdl/data/icons/processing/lowpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |highpass| image:: ../../../cdl/data/icons/processing/highpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |bandpass| image:: ../../../cdl/data/icons/processing/bandpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |bandstop| image:: ../../../cdl/data/icons/processing/bandstop.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 For each filter, the following methods are available:
 
