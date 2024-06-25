@@ -18,7 +18,8 @@ from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
 import cdl.obj
-from cdl.patch import ZAxisLogTool, profile_to_signal
+from cdl.core.gui.docks import profile_to_signal
+from cdl.patch import ZAxisLogTool
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
 
@@ -32,26 +33,27 @@ def test_image_tools_app():
         panel.add_object(ima)
         panel.set_current_object_title(f"Test image for {osp.basename(__file__)}")
         plotwidget = panel.plothandler.plotwidget
-        plotmanager = plotwidget.get_manager()
+        mgr = plotwidget.get_manager()
         plot = plotwidget.get_plot()
 
         # === Testing "ZAxisLogTool" ---------------------------------------------------
-        lstool = plotmanager.get_tool(ZAxisLogTool)
+        lstool = mgr.get_tool(ZAxisLogTool)
         qt_wait(1, except_unattended=True)
         for _index in range(2):
             lstool.activate()
             qt_wait(1, except_unattended=True)
 
         # === Testing "profile_to_signal" ----------------------------------------------
-        cstool: CrossSectionTool = plotmanager.get_tool(CrossSectionTool)
-        for panel in (plotmanager.get_xcs_panel(), plotmanager.get_ycs_panel()):
-            panel.setVisible(True)
+        cstool: CrossSectionTool = mgr.get_tool(CrossSectionTool)
+        xcs_panel, ycs_panel = mgr.get_xcs_panel(), mgr.get_ycs_panel()
+        xcs_panel.setVisible(True)
+        ycs_panel.setVisible(True)
         x, y = newparam.width // 2, newparam.height // 2
         active_item = plot.get_active_item()
         pos = QC.QPointF(*axes_to_canvas(active_item, x, y))
         cstool.add_shape_to_plot(plot, pos, pos)
-        for csw in (plotwidget.xcsw, plotwidget.ycsw):
-            profile_to_signal(csw.cs_plot)
+        for panel in (xcs_panel, ycs_panel):
+            profile_to_signal(plot, panel)
 
 
 if __name__ == "__main__":

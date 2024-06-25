@@ -25,11 +25,13 @@ from typing import TYPE_CHECKING
 
 import plotpy
 import scipy.integrate as spt
-from guidata.configtools import get_image_file_path
-from guidata.qthelpers import is_dark_mode
+from guidata.configtools import get_icon, get_image_file_path
+from guidata.qthelpers import create_action, is_dark_mode
 from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
-from plotpy.plot import PlotOptions, PlotWidget
+from plotpy.items import CurveItem
+from plotpy.panels import XCrossSection, YCrossSection
+from plotpy.plot import BasePlot, PlotOptions, PlotWidget
 from plotpy.tools import (
     BasePlotMenuTool,
     CurveStatsTool,
@@ -48,10 +50,12 @@ from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.QtWidgets import QApplication, QMainWindow
 
 from cdl.algorithms.image import get_centroid_fourier
 from cdl.algorithms.signal import fwhm
-from cdl.config import Conf
+from cdl.config import APP_NAME, Conf, _
+from cdl.core.model.signal import create_signal
 from cdl.utils.misc import compare_versions
 
 if TYPE_CHECKING:
@@ -135,6 +139,61 @@ def get_more_image_stats(
     return infos
 
 
+def profile_to_signal(plot: BasePlot, panel: XCrossSection | YCrossSection) -> None:
+    """Send cross section curve to DataLab's signal list
+
+    Args:
+        panel: Cross section panel
+    """
+    win = None
+    for win in QApplication.topLevelWidgets():
+        if isinstance(win, QMainWindow):
+            break
+    if win is None or win.objectName() != APP_NAME:
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.core.gui import main
+
+        # Note : this is the only way to retrieve the DataLab main window instance
+        # when the CrossSectionItem object is embedded into an image widget
+        # parented to another main window.
+        win = main.CDLMainWindow.get_instance()
+        assert win is not None  # Should never happen
+
+    for item in panel.cs_plot.get_items():
+        if not isinstance(item, CurveItem):
+            continue
+        x, y, _dx, _dy = item.get_data()
+        if x is None or y is None or x.size == 0 or y.size == 0:
+            continue
+
+        signal = create_signal(item.param.label)
+
+        if isinstance(panel, YCrossSection):
+            signal.set_xydata(y, x)
+            xaxis_name = "left"
+            xunit = plot.get_axis_unit("bottom")
+            if xunit:
+                signal.title += " " + xunit
+        else:
+            signal.set_xydata(x, y)
+            xaxis_name = "bottom"
+            yunit = plot.get_axis_unit("left")
+            if yunit:
+                signal.title += " " + yunit
+
+        signal.ylabel = plot.get_axis_title("right")
+        signal.yunit = plot.get_axis_unit("right")
+        signal.xlabel = plot.get_axis_title(xaxis_name)
+        signal.xunit = plot.get_axis_unit(xaxis_name)
+
+        win.signalpanel.add_object(signal)
+
+    # Show DataLab main window on top, if not already visible
+    win.show()
+    win.raise_()
+
+
 class DataLabPlotWidget(PlotWidget):
     """DataLab PlotWidget
 
@@ -184,13 +243,28 @@ class DataLabPlotWidget(PlotWidget):
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
             if compare_versions(plotpy.__version__, ">=", "2.4"):
+                # Customizing the CurveStatsTool
                 statstool = mgr.get_tool(CurveStatsTool)
                 statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
         else:
             mgr.register_image_tools()
             if compare_versions(plotpy.__version__, ">=", "2.4"):
+                # Customizing the ImageStatsTool
                 statstool = mgr.get_tool(ImageStatsTool)
                 statstool.set_stats_func(get_more_image_stats, replace=True)
+                # Customizing the X and Y cross section panels
+                plot = mgr.get_plot()
+                for panel in (mgr.get_xcs_panel(), mgr.get_ycs_panel()):
+                    to_signal_action = create_action(
+                        panel,
+                        _("Process signal"),
+                        icon=get_icon("to_signal.svg"),
+                        triggered=lambda panel=panel: profile_to_signal(plot, panel),
+                    )
+                    tb = panel.toolbar
+                    tb.insertSeparator(tb.actions()[0])
+                    tb.insertAction(tb.actions()[0], to_signal_action)
+
         mgr.add_separator_tool()
         mgr.register_other_tools()
         mgr.add_separator_tool()

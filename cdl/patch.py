@@ -16,18 +16,13 @@ import numpy as np
 import plotpy.items
 import plotpy.plot
 import plotpy.tools
-from guidata.configtools import get_icon
-from guidata.qthelpers import add_actions, create_action
 from plotpy._scaler import INTERP_NEAREST, _scale_rect
 from plotpy.mathutils.arrayfuncs import get_nan_range
-from plotpy.panels.csection import csplot, cswidget
 from qtpy import QtCore as QC
-from qtpy.QtWidgets import QApplication, QMainWindow
 from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
 
-from cdl.config import APP_NAME, _
-from cdl.core.model.signal import create_signal
+from cdl.config import _
 
 
 def monkeypatch_method(cls, patch_name):
@@ -184,78 +179,3 @@ def draw_image(self, painter, canvasRect, src_rect, dst_rect, xMap, yMap):
     )
     qrect = QC.QRectF(QC.QPointF(dest[0], dest[1]), QC.QPointF(dest[2], dest[3]))
     painter.drawImage(qrect, self._image, qrect)
-
-
-# ==============================================================================
-#  Cross section : add a button to send curve to DataLab's signal panel
-# ==============================================================================
-def profile_to_signal(
-    cs_plot: csplot.HorizontalCrossSectionPlot | csplot.VerticalCrossSectionPlot,
-) -> None:
-    """Send cross section curve to DataLab's signal list"""
-    win = None
-    for win in QApplication.topLevelWidgets():
-        if isinstance(win, QMainWindow):
-            break
-    if win is None or win.objectName() != APP_NAME:
-        # pylint: disable=import-outside-toplevel
-        # pylint: disable=cyclic-import
-        from cdl.core.gui import main
-
-        # Note : this is the only way to retrieve the DataLab main window instance
-        # when the CrossSectionItem object is embedded into an image widget
-        # parented to another main window.
-        win = main.CDLMainWindow.get_instance()
-        assert win is not None  # Should never happen
-
-    for item in cs_plot.get_items():
-        if not isinstance(item, plotpy.items.CurveItem):
-            continue
-        x, y, _dx, _dy = item.get_data()
-        if x is None or y is None or x.size == 0 or y.size == 0:
-            continue
-
-        signal = create_signal(item.param.label)
-
-        image_item = None
-        for image_item, curve_item in cs_plot.known_items.items():
-            if curve_item is item:
-                break
-        image_plot = image_item.plot()
-
-        if isinstance(cs_plot, csplot.VerticalCrossSectionPlot):
-            signal.set_xydata(y, x)
-            xaxis_name = "left"
-            xunit = image_plot.get_axis_unit("bottom")
-            if xunit:
-                signal.title += " " + xunit
-        else:
-            signal.set_xydata(x, y)
-            xaxis_name = "bottom"
-            yunit = image_plot.get_axis_unit("left")
-            if yunit:
-                signal.title += " " + yunit
-
-        signal.ylabel = image_plot.get_axis_title("right")
-        signal.yunit = image_plot.get_axis_unit("right")
-        signal.xlabel = image_plot.get_axis_title(xaxis_name)
-        signal.xunit = image_plot.get_axis_unit(xaxis_name)
-
-        win.signalpanel.add_object(signal)
-
-    # Show DataLab main window on top, if not already visible
-    win.show()
-    win.raise_()
-
-
-@monkeypatch_method(cswidget.XCrossSection, "XCrossSection")
-def add_actions_to_toolbar(self):
-    """Add actions to toolbar"""
-    to_signal_ac = create_action(
-        self,
-        _("Process signal"),
-        icon=get_icon("to_signal.svg"),
-        triggered=lambda: profile_to_signal(self.cs_plot),
-    )
-    add_actions(self.toolbar, (to_signal_ac, None))
-    self._old_XCrossSection_add_actions_to_toolbar()
