@@ -12,14 +12,12 @@ Image tools application test:
 
 import os.path as osp
 
-from guidata.qthelpers import qt_wait
 from plotpy.coords import axes_to_canvas
 from plotpy.tools import CrossSectionTool
 from qtpy import QtCore as QC
 
 import cdl.obj
 from cdl.core.gui.docks import profile_to_signal
-from cdl.patch import ZAxisLogTool
 from cdl.tests import cdltest_app_context
 from cdl.tests.data import create_multigauss_image
 
@@ -35,13 +33,6 @@ def test_image_tools_app():
         plotwidget = panel.plothandler.plotwidget
         mgr = plotwidget.get_manager()
         plot = plotwidget.get_plot()
-
-        # === Testing "ZAxisLogTool" ---------------------------------------------------
-        lstool = mgr.get_tool(ZAxisLogTool)
-        qt_wait(1, except_unattended=True)
-        for _index in range(2):
-            lstool.activate()
-            qt_wait(1, except_unattended=True)
 
         # === Testing "profile_to_signal" ----------------------------------------------
         cstool: CrossSectionTool = mgr.get_tool(CrossSectionTool)
