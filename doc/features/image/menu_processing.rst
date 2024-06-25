@@ -126,14 +126,14 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale
-      - :math:`z_{1} = |FFT(z_{0})|`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 \log_{10}(|FFT(z_{0})|)` (dB)
     * - Phase spectrum
       -
       - :math:`z_{1} = \angle(FFT(z_{0}))`
     * - Power spectral density
-      - Optionnal: use logarithmic scale
-      - :math:`z_{1} = |FFT(z_{0})|^2`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 \log_{10}(|FFT(z_{0})|^2)` (dB)
 
 .. note::
 

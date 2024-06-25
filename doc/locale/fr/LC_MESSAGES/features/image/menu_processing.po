@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-19 15:09+0200\n"
+"POT-Creation-Date: 2024-06-25 18:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -325,12 +325,14 @@ msgstr "Spectre d'amplitude"
 
 #: ../../doc/features/image/menu_processing.rst:129
 #: ../../doc/features/image/menu_processing.rst:135
-msgid "Optionnal: use logarithmic scale"
-msgstr "Optionnel : utiliser une échelle logarithmique"
+msgid "Optionnal: use logarithmic scale (dB)"
+msgstr "Optionnel : utiliser une échelle logarithmique (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:130
-msgid ":math:`z_{1} = |FFT(z_{0})|`"
-msgstr ""
+msgid ""
+":math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 "
+"\\log_{10}(|FFT(z_{0})|)` (dB)"
+msgstr ":math:`z_{1} = |FFT(z_{0})|` ou :math:`z_{1} = 20 \\log_{10}(|FFT(z_{0})|)` (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:131
 msgid "Phase spectrum"
@@ -345,8 +347,10 @@ msgid "Power spectral density"
 msgstr "Densité spectrale de puissance"
 
 #: ../../doc/features/image/menu_processing.rst:136
-msgid ":math:`z_{1} = |FFT(z_{0})|^2`"
-msgstr ""
+msgid ""
+":math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 "
+"\\log_{10}(|FFT(z_{0})|^2)` (dB)"
+msgstr ":math:`z_{1} = |FFT(z_{0})|^2` ou :math:`z_{1} = 10 \\log_{10}(|FFT(z_{0})|^2)` (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:140
 msgid ""
@@ -978,9 +982,3 @@ msgid ""
 msgstr ""
 "Boîte de dialogue d'extraction de ROI : la région d'intérêt (ROI) est "
 "définie en ajustant la position et la taille du rectangle de sélection."
-
-#~ msgid ""
-#~ "`scipy.signal.medfilt "
-#~ "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
-#~ msgstr ""
-

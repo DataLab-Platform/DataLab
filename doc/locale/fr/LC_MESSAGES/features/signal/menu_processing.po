@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-19 15:09+0200\n"
+"POT-Creation-Date: 2024-06-25 18:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -81,8 +81,8 @@ msgstr ""
 
 #: ../../doc/features/signal/menu_processing.rst:37
 #: ../../doc/features/signal/menu_processing.rst:67
-#: ../../doc/features/signal/menu_processing.rst:301
-#: ../../doc/features/signal/menu_processing.rst:345
+#: ../../doc/features/signal/menu_processing.rst:305
+#: ../../doc/features/signal/menu_processing.rst:349
 msgid "Parameter"
 msgstr "Paramètre"
 
@@ -248,26 +248,20 @@ msgid "Moving average"
 msgstr "Moyenne mobile"
 
 #: ../../doc/features/signal/menu_processing.rst:108
-#, fuzzy
 msgid ""
 "`scipy.ndimage.uniform_filter "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_"
 msgstr ""
-"Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
 #: ../../doc/features/signal/menu_processing.rst:109
 msgid "Moving median"
 msgstr "Médiane mobile"
 
 #: ../../doc/features/signal/menu_processing.rst:110
-#, fuzzy
 msgid ""
 "`scipy.ndimage.median_filter "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_"
 msgstr ""
-"Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
 #: ../../doc/features/signal/menu_processing.rst:111
 msgid "Wiener filter"
@@ -301,10 +295,10 @@ msgstr "Fonction"
 
 #: ../../doc/features/signal/menu_processing.rst:126
 #: ../../doc/features/signal/menu_processing.rst:162
-#: ../../doc/features/signal/menu_processing.rst:195
-#: ../../doc/features/signal/menu_processing.rst:302
-#: ../../doc/features/signal/menu_processing.rst:320
-#: ../../doc/features/signal/menu_processing.rst:346
+#: ../../doc/features/signal/menu_processing.rst:199
+#: ../../doc/features/signal/menu_processing.rst:306
+#: ../../doc/features/signal/menu_processing.rst:324
+#: ../../doc/features/signal/menu_processing.rst:350
 msgid "Description"
 msgstr "Description"
 
@@ -341,12 +335,12 @@ msgid "Magnitude spectrum"
 msgstr "Spectre d'amplitude"
 
 #: ../../doc/features/signal/menu_processing.rst:135
-msgid "Optionnal: use logarithmic scale"
-msgstr "Optionnel : utiliser une échelle logarithmique"
+msgid "Optionnal: use logarithmic scale (dB)"
+msgstr "Optionnel : utiliser une échelle logarithmique (dB)"
 
 #: ../../doc/features/signal/menu_processing.rst:136
-msgid ":math:`y_{1} = |FFT(y_{0})|`"
-msgstr ""
+msgid ":math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)"
+msgstr ":math:`y_{1} = |FFT(y_{0})|` ou :math:`20.log_{10}(|FFT(y_{0})|)` (dB)"
 
 #: ../../doc/features/signal/menu_processing.rst:137
 msgid "Phase spectrum"
@@ -362,17 +356,14 @@ msgstr "Densité spectrale de puissance (PSD)"
 
 #: ../../doc/features/signal/menu_processing.rst:141
 msgid ""
-"Optionnal: use logarithmic scale. PSD is estimated using Welch's method "
-"(see `scipy.signal.welch "
+"Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's "
+"method (see `scipy.signal.welch "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
-msgstr ""
-"Optionnel : utiliser une échelle logarithmique. La PSD est estimée en "
-"utilisant la méthode de Welch (voir `scipy.signal.welch "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
+msgstr "Optionnel : utiliser une échelle logarithmique (dB). La PSD est estimée en utilisant la méthode de Welch (voir `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)"
 
 #: ../../doc/features/signal/menu_processing.rst:143
-msgid ":math:`Y_{k} = PSD(y_{k})`"
-msgstr ""
+msgid ":math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)"
+msgstr ":math:`Y_{k} = PSD(y_{k})` ou :math:`10.log_{10}(PSD(y_{k}))` (dB)"
 
 #: ../../doc/features/signal/menu_processing.rst:147
 msgid ""
@@ -411,7 +402,7 @@ msgstr "Filtre les hautes fréquences, au-dessus d'une fréquence de coupure"
 msgid "|highpass| High-pass"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:176
+#: ../../doc/features/signal/menu_processing.rst:177
 msgid "highpass"
 msgstr ""
 
@@ -423,7 +414,7 @@ msgstr "Filtre les basses fréquences, en-dessous d'une fréquence de coupure"
 msgid "|bandpass| Band-pass"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:180
+#: ../../doc/features/signal/menu_processing.rst:182
 msgid "bandpass"
 msgstr ""
 
@@ -435,7 +426,7 @@ msgstr "Filtre les fréquences en dehors d'une plage"
 msgid "|bandstop| Band-stop"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:184
+#: ../../doc/features/signal/menu_processing.rst:187
 msgid "bandstop"
 msgstr ""
 
@@ -443,22 +434,22 @@ msgstr ""
 msgid "Filter out frequencies inside a range"
 msgstr "Filtre les fréquences à l'intérieur d'une plage"
 
-#: ../../doc/features/signal/menu_processing.rst:188
+#: ../../doc/features/signal/menu_processing.rst:192
 msgid "For each filter, the following methods are available:"
 msgstr "Pour chaque filtre, les méthodes suivantes sont disponibles :"
 
-#: ../../doc/features/signal/menu_processing.rst:194
-#: ../../doc/features/signal/menu_processing.rst:303
-#: ../../doc/features/signal/menu_processing.rst:319
-#: ../../doc/features/signal/menu_processing.rst:347
+#: ../../doc/features/signal/menu_processing.rst:198
+#: ../../doc/features/signal/menu_processing.rst:307
+#: ../../doc/features/signal/menu_processing.rst:323
+#: ../../doc/features/signal/menu_processing.rst:351
 msgid "Method"
 msgstr "Méthode"
 
-#: ../../doc/features/signal/menu_processing.rst:196
+#: ../../doc/features/signal/menu_processing.rst:200
 msgid "Bessel"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:197
+#: ../../doc/features/signal/menu_processing.rst:201
 msgid ""
 "Bessel filter, using SciPy's `scipy.signal.bessel "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
@@ -467,11 +458,11 @@ msgstr ""
 "Filtre de Bessel, utilisant la fonction `scipy.signal.bessel "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.bessel.html>`_"
 
-#: ../../doc/features/signal/menu_processing.rst:198
+#: ../../doc/features/signal/menu_processing.rst:202
 msgid "Butterworth"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:199
+#: ../../doc/features/signal/menu_processing.rst:203
 msgid ""
 "Butterworth filter, using SciPy's `scipy.signal.butter "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
@@ -480,11 +471,11 @@ msgstr ""
 "Filtre de Butterworth, utilisant la fonction `scipy.signal.butter "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.butter.html>`_"
 
-#: ../../doc/features/signal/menu_processing.rst:200
+#: ../../doc/features/signal/menu_processing.rst:204
 msgid "Chebyshev I"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:201
+#: ../../doc/features/signal/menu_processing.rst:205
 msgid ""
 "Chebyshev type I filter, using SciPy's `scipy.signal.cheby1 "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_"
@@ -494,11 +485,11 @@ msgstr ""
 " "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby1.html>`_"
 
-#: ../../doc/features/signal/menu_processing.rst:202
+#: ../../doc/features/signal/menu_processing.rst:206
 msgid "Chebyshev II"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:203
+#: ../../doc/features/signal/menu_processing.rst:207
 msgid ""
 "Chebyshev type II filter, using SciPy's `scipy.signal.cheby2 "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_"
@@ -508,11 +499,11 @@ msgstr ""
 "`scipy.signal.cheby2 "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.cheby2.html>`_"
 
-#: ../../doc/features/signal/menu_processing.rst:204
+#: ../../doc/features/signal/menu_processing.rst:208
 msgid "Elliptic"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:205
+#: ../../doc/features/signal/menu_processing.rst:209
 msgid ""
 "Elliptic filter, using SciPy's `scipy.signal.ellip "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_"
@@ -521,67 +512,67 @@ msgstr ""
 "Filtre elliptique, utilisant la fonction `scipy.signal.ellip "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.ellip.html>`_"
 
-#: ../../doc/features/signal/menu_processing.rst:208
+#: ../../doc/features/signal/menu_processing.rst:212
 msgid "Fitting"
 msgstr "Ajustement"
 
-#: ../../doc/features/signal/menu_processing.rst:210
+#: ../../doc/features/signal/menu_processing.rst:214
 msgid "Open an interactive curve fitting tool in a modal dialog box."
 msgstr ""
 "Ouvre une boîte de dialogue permettant de réaliser des ajustements de "
 "courbe de manière interactive."
 
-#: ../../doc/features/signal/menu_processing.rst:216
+#: ../../doc/features/signal/menu_processing.rst:220
 msgid "Model"
 msgstr "Modèle"
 
-#: ../../doc/features/signal/menu_processing.rst:217
+#: ../../doc/features/signal/menu_processing.rst:221
 msgid "Equation"
 msgstr "Equation"
 
-#: ../../doc/features/signal/menu_processing.rst:218
-#: ../../doc/features/signal/menu_processing.rst:321
+#: ../../doc/features/signal/menu_processing.rst:222
+#: ../../doc/features/signal/menu_processing.rst:325
 msgid "Linear"
 msgstr "Linéaire"
 
-#: ../../doc/features/signal/menu_processing.rst:219
+#: ../../doc/features/signal/menu_processing.rst:223
 msgid ":math:`y = c_{0}+c_{1}.x`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:220
+#: ../../doc/features/signal/menu_processing.rst:224
 msgid "Polynomial"
 msgstr "Polynomial"
 
-#: ../../doc/features/signal/menu_processing.rst:221
+#: ../../doc/features/signal/menu_processing.rst:225
 msgid ":math:`y = c_{0}+c_{1}.x+c_{2}.x^2+...+c_{n}.x^n`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:222
-#: ../../doc/features/signal/menu_processing.rst:268
+#: ../../doc/features/signal/menu_processing.rst:226
+#: ../../doc/features/signal/menu_processing.rst:272
 msgid "Gaussian"
 msgstr "Gaussienne"
 
-#: ../../doc/features/signal/menu_processing.rst:223
+#: ../../doc/features/signal/menu_processing.rst:227
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sqrt{2\\pi}.\\sigma}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0}}{\\sigma})^2)`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:224
+#: ../../doc/features/signal/menu_processing.rst:228
 msgid "Lorentzian"
 msgstr "Lorentzienne"
 
-#: ../../doc/features/signal/menu_processing.rst:225
+#: ../../doc/features/signal/menu_processing.rst:229
 msgid ""
 ":math:`y = "
 "y_{0}+\\dfrac{A}{\\sigma.\\pi}.\\dfrac{1}{1+(\\dfrac{x-x_{0}}{\\sigma})^2}`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:226
+#: ../../doc/features/signal/menu_processing.rst:230
 msgid "Voigt"
 msgstr "Voigt"
 
-#: ../../doc/features/signal/menu_processing.rst:227
+#: ../../doc/features/signal/menu_processing.rst:231
 msgid ""
 ":math:`y = "
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` with "
@@ -591,46 +582,46 @@ msgstr ""
 "y_{0}+A.\\dfrac{Re(exp(-z^2).erfc(-j.z))}{\\sqrt{2\\pi}.\\sigma}` avec "
 ":math:`z = \\dfrac{x-x_{0}-j.\\sigma}{\\sqrt{2}.\\sigma}`"
 
-#: ../../doc/features/signal/menu_processing.rst:228
+#: ../../doc/features/signal/menu_processing.rst:232
 msgid "Multi-Gaussian"
 msgstr "Multi-gaussien"
 
-#: ../../doc/features/signal/menu_processing.rst:229
+#: ../../doc/features/signal/menu_processing.rst:233
 msgid ""
 ":math:`y = "
 "y_{0}+\\sum_{i=0}^{K}\\dfrac{A_{i}}{\\sqrt{2\\pi}.\\sigma_{i}}.exp(-\\dfrac{1}{2}.(\\dfrac{x-x_{0,i}}{\\sigma_{i}})^2)`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:230
-#: ../../doc/features/signal/menu_processing.rst:264
+#: ../../doc/features/signal/menu_processing.rst:234
+#: ../../doc/features/signal/menu_processing.rst:268
 msgid "Exponential"
 msgstr "Exponentielle"
 
-#: ../../doc/features/signal/menu_processing.rst:231
+#: ../../doc/features/signal/menu_processing.rst:235
 msgid ":math:`y = y_{0}+A.exp(B.x)`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:232
+#: ../../doc/features/signal/menu_processing.rst:236
 msgid "Sinusoidal"
 msgstr "Sinusoïdal"
 
-#: ../../doc/features/signal/menu_processing.rst:233
+#: ../../doc/features/signal/menu_processing.rst:237
 msgid ":math:`y = y_{0}+A.sin(2\\pi.f.x+\\phi)`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:234
+#: ../../doc/features/signal/menu_processing.rst:238
 msgid "Cumulative Distribution Function (CDF)"
 msgstr "Fonction de distribution cumulative (CDF)"
 
-#: ../../doc/features/signal/menu_processing.rst:235
+#: ../../doc/features/signal/menu_processing.rst:239
 msgid ":math:`y = y_{0}+A.erf(\\dfrac{x-x_{0}}{\\sigma.\\sqrt{2}})`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:238
+#: ../../doc/features/signal/menu_processing.rst:242
 msgid "Windowing"
 msgstr "Fenêtrage"
 
-#: ../../doc/features/signal/menu_processing.rst:240
+#: ../../doc/features/signal/menu_processing.rst:244
 msgid ""
 "Create a new signal which is the result of applying a window function to "
 "each selected signal."
@@ -638,167 +629,167 @@ msgstr ""
 "Crée un signal à partir de l'application d'une fonction de fenêtrage à "
 "chaque signal sélectionné."
 
-#: ../../doc/features/signal/menu_processing.rst:242
+#: ../../doc/features/signal/menu_processing.rst:246
 msgid "The following window functions are available:"
 msgstr "Les fonctions de fenêtrage suivantes sont disponibles :"
 
-#: ../../doc/features/signal/menu_processing.rst:248
+#: ../../doc/features/signal/menu_processing.rst:252
 msgid "Window function"
 msgstr "Fonction de fenêtrage"
 
-#: ../../doc/features/signal/menu_processing.rst:249
+#: ../../doc/features/signal/menu_processing.rst:253
 msgid "Reference"
 msgstr "Référence"
 
-#: ../../doc/features/signal/menu_processing.rst:250
+#: ../../doc/features/signal/menu_processing.rst:254
 msgid "Barthann"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:251
+#: ../../doc/features/signal/menu_processing.rst:255
 msgid ":py:func:`scipy.signal.windows.barthann`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:252
+#: ../../doc/features/signal/menu_processing.rst:256
 msgid "Bartlett"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:253
+#: ../../doc/features/signal/menu_processing.rst:257
 msgid ":py:func:`numpy.bartlett`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:254
+#: ../../doc/features/signal/menu_processing.rst:258
 msgid "Blackman"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:255
+#: ../../doc/features/signal/menu_processing.rst:259
 msgid ":py:func:`scipy.signal.windows.blackman`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:256
+#: ../../doc/features/signal/menu_processing.rst:260
 msgid "Blackman-Harris"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:257
+#: ../../doc/features/signal/menu_processing.rst:261
 msgid ":py:func:`scipy.signal.windows.blackmanharris`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:258
+#: ../../doc/features/signal/menu_processing.rst:262
 msgid "Bohman"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:259
+#: ../../doc/features/signal/menu_processing.rst:263
 msgid ":py:func:`scipy.signal.windows.bohman`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:260
+#: ../../doc/features/signal/menu_processing.rst:264
 msgid "Boxcar"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:261
+#: ../../doc/features/signal/menu_processing.rst:265
 msgid ":py:func:`scipy.signal.windows.boxcar`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:262
+#: ../../doc/features/signal/menu_processing.rst:266
 msgid "Cosine"
 msgstr "Cosinus"
 
-#: ../../doc/features/signal/menu_processing.rst:263
+#: ../../doc/features/signal/menu_processing.rst:267
 msgid ":py:func:`scipy.signal.windows.cosine`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:265
+#: ../../doc/features/signal/menu_processing.rst:269
 msgid ":py:func:`scipy.signal.windows.exponential`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:266
+#: ../../doc/features/signal/menu_processing.rst:270
 msgid "Flat top"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:267
+#: ../../doc/features/signal/menu_processing.rst:271
 msgid ":py:func:`scipy.signal.windows.flattop`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:269
+#: ../../doc/features/signal/menu_processing.rst:273
 msgid ":py:func:`scipy.signal.windows.gaussian`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:270
+#: ../../doc/features/signal/menu_processing.rst:274
 msgid "Hamming"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:271
+#: ../../doc/features/signal/menu_processing.rst:275
 msgid ":py:func:`numpy.hamming`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:272
+#: ../../doc/features/signal/menu_processing.rst:276
 msgid "Hanning"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:273
+#: ../../doc/features/signal/menu_processing.rst:277
 msgid ":py:func:`numpy.hanning`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:274
+#: ../../doc/features/signal/menu_processing.rst:278
 msgid "Kaiser"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:275
+#: ../../doc/features/signal/menu_processing.rst:279
 msgid ":py:func:`scipy.signal.windows.kaiser`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:276
+#: ../../doc/features/signal/menu_processing.rst:280
 msgid "Lanczos"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:277
+#: ../../doc/features/signal/menu_processing.rst:281
 msgid ":py:func:`scipy.signal.windows.lanczos`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:278
+#: ../../doc/features/signal/menu_processing.rst:282
 msgid "Nuttall"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:279
+#: ../../doc/features/signal/menu_processing.rst:283
 msgid ":py:func:`scipy.signal.windows.nuttall`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:280
+#: ../../doc/features/signal/menu_processing.rst:284
 msgid "Parzen"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:281
+#: ../../doc/features/signal/menu_processing.rst:285
 msgid ":py:func:`scipy.signal.windows.parzen`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:282
+#: ../../doc/features/signal/menu_processing.rst:286
 msgid "Rectangular"
 msgstr "Rectangulaire"
 
-#: ../../doc/features/signal/menu_processing.rst:283
+#: ../../doc/features/signal/menu_processing.rst:287
 msgid ":py:func:`numpy.ones`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:284
+#: ../../doc/features/signal/menu_processing.rst:288
 msgid "Taylor"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:285
+#: ../../doc/features/signal/menu_processing.rst:289
 msgid ":py:func:`scipy.signal.windows.taylor`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:286
+#: ../../doc/features/signal/menu_processing.rst:290
 msgid "Tukey"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:287
+#: ../../doc/features/signal/menu_processing.rst:291
 msgid ":py:func:`scipy.signal.windows.tukey`"
 msgstr ""
 
-#: ../../doc/features/signal/menu_processing.rst:290
+#: ../../doc/features/signal/menu_processing.rst:294
 msgid "Detrending"
 msgstr "Elimination de tendance"
 
-#: ../../doc/features/signal/menu_processing.rst:292
+#: ../../doc/features/signal/menu_processing.rst:296
 msgid ""
 "Create a new signal which is the detrending of each selected signal. This"
 " features is based on SciPy's `scipy.signal.detrend "
@@ -810,12 +801,12 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:295
-#: ../../doc/features/signal/menu_processing.rst:339
+#: ../../doc/features/signal/menu_processing.rst:299
+#: ../../doc/features/signal/menu_processing.rst:343
 msgid "The following parameters are available:"
 msgstr "Les paramètres suivants sont disponibles :"
 
-#: ../../doc/features/signal/menu_processing.rst:304
+#: ../../doc/features/signal/menu_processing.rst:308
 msgid ""
 "Detrending method: 'linear' or 'constant'. See SciPy's "
 "`scipy.signal.detrend "
@@ -827,11 +818,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.detrend.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:307
+#: ../../doc/features/signal/menu_processing.rst:311
 msgid "Interpolation"
 msgstr "Interpolation"
 
-#: ../../doc/features/signal/menu_processing.rst:309
+#: ../../doc/features/signal/menu_processing.rst:313
 msgid ""
 "Create a new signal which is the interpolation of each selected signal "
 "with respect to a second signal X-axis (which might be the same as one of"
@@ -841,11 +832,11 @@ msgstr ""
 "par rapport à l'axe X d'un second signal (qui peut être l'un des signaux "
 "sélectionnés)."
 
-#: ../../doc/features/signal/menu_processing.rst:313
+#: ../../doc/features/signal/menu_processing.rst:317
 msgid "The following interpolation methods are available:"
 msgstr "Les méthodes d'interpolation suivantes sont disponibles :"
 
-#: ../../doc/features/signal/menu_processing.rst:322
+#: ../../doc/features/signal/menu_processing.rst:326
 msgid ""
 "Linear interpolation, using using NumPy's `interp "
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
@@ -855,11 +846,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.interp.html>`_"
 " de NumPy."
 
-#: ../../doc/features/signal/menu_processing.rst:323
+#: ../../doc/features/signal/menu_processing.rst:327
 msgid "Spline"
 msgstr "Spline"
 
-#: ../../doc/features/signal/menu_processing.rst:324
+#: ../../doc/features/signal/menu_processing.rst:328
 msgid ""
 "Cubic spline interpolation, using using SciPy's `scipy.interpolate.splev "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
@@ -870,11 +861,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.splev.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:325
+#: ../../doc/features/signal/menu_processing.rst:329
 msgid "Quadratic"
 msgstr "Quadratique"
 
-#: ../../doc/features/signal/menu_processing.rst:326
+#: ../../doc/features/signal/menu_processing.rst:330
 msgid ""
 "Quadratic interpolation, using using NumPy's `polyval "
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
@@ -884,11 +875,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html>`_"
 " de NumPy."
 
-#: ../../doc/features/signal/menu_processing.rst:327
+#: ../../doc/features/signal/menu_processing.rst:331
 msgid "Cubic"
 msgstr "Cubique"
 
-#: ../../doc/features/signal/menu_processing.rst:328
+#: ../../doc/features/signal/menu_processing.rst:332
 msgid ""
 "Cubic interpolation, using using SciPy's `Akima1DInterpolator "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
@@ -898,11 +889,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:329
+#: ../../doc/features/signal/menu_processing.rst:333
 msgid "Barycentric"
 msgstr "Barycentrique"
 
-#: ../../doc/features/signal/menu_processing.rst:330
+#: ../../doc/features/signal/menu_processing.rst:334
 msgid ""
 "Barycentric interpolation, using using SciPy's `BarycentricInterpolator "
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
@@ -913,11 +904,11 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.BarycentricInterpolator.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:331
+#: ../../doc/features/signal/menu_processing.rst:335
 msgid "PCHIP"
 msgstr "PCHIP"
 
-#: ../../doc/features/signal/menu_processing.rst:332
+#: ../../doc/features/signal/menu_processing.rst:336
 msgid ""
 "Piecewise Cubic Hermite Interpolating Polynomial (PCHIP) interpolation, "
 "using using SciPy's `PchipInterpolator "
@@ -929,77 +920,77 @@ msgstr ""
 "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_"
 " de SciPy."
 
-#: ../../doc/features/signal/menu_processing.rst:335
+#: ../../doc/features/signal/menu_processing.rst:339
 msgid "Resampling"
 msgstr "Rééchantillonnage"
 
-#: ../../doc/features/signal/menu_processing.rst:337
+#: ../../doc/features/signal/menu_processing.rst:341
 msgid "Create a new signal which is the resampling of each selected signal."
 msgstr "Crée un signal à partir du rééchantillonnage de chaque signal."
 
-#: ../../doc/features/signal/menu_processing.rst:348
+#: ../../doc/features/signal/menu_processing.rst:352
 msgid "Interpolation method (see previous section)"
 msgstr "Méthode d'interpolation (voir section précédente)"
 
-#: ../../doc/features/signal/menu_processing.rst:349
+#: ../../doc/features/signal/menu_processing.rst:353
 msgid "Fill value"
 msgstr "Valeur de remplissage"
 
-#: ../../doc/features/signal/menu_processing.rst:350
+#: ../../doc/features/signal/menu_processing.rst:354
 msgid "Interpolation fill value (see previous section)"
 msgstr "Valeur de remplissage pour l'interpolation (voir section précédente)"
 
-#: ../../doc/features/signal/menu_processing.rst:351
+#: ../../doc/features/signal/menu_processing.rst:355
 msgid "Xmin"
 msgstr "Xmin"
 
-#: ../../doc/features/signal/menu_processing.rst:352
+#: ../../doc/features/signal/menu_processing.rst:356
 msgid "Minimum X value"
 msgstr "Borne inférieure"
 
-#: ../../doc/features/signal/menu_processing.rst:353
+#: ../../doc/features/signal/menu_processing.rst:357
 msgid "Xmax"
 msgstr "Xmax"
 
-#: ../../doc/features/signal/menu_processing.rst:354
+#: ../../doc/features/signal/menu_processing.rst:358
 msgid "Maximum X value"
 msgstr "Borne supérieure"
 
-#: ../../doc/features/signal/menu_processing.rst:355
+#: ../../doc/features/signal/menu_processing.rst:359
 msgid "Mode"
 msgstr "Mode"
 
-#: ../../doc/features/signal/menu_processing.rst:356
+#: ../../doc/features/signal/menu_processing.rst:360
 msgid "Resampling mode: step size or number of points"
 msgstr "Mode de rééchantillonnage : pas ou nombre de points"
 
-#: ../../doc/features/signal/menu_processing.rst:357
+#: ../../doc/features/signal/menu_processing.rst:361
 msgid "Step size"
 msgstr "Pas"
 
-#: ../../doc/features/signal/menu_processing.rst:358
+#: ../../doc/features/signal/menu_processing.rst:362
 msgid "Resampling step size"
 msgstr "Pas de rééchantillonnage"
 
-#: ../../doc/features/signal/menu_processing.rst:359
+#: ../../doc/features/signal/menu_processing.rst:363
 msgid "Number of points"
 msgstr "Nombre de points"
 
-#: ../../doc/features/signal/menu_processing.rst:360
+#: ../../doc/features/signal/menu_processing.rst:364
 msgid "Resampling number of points"
 msgstr "Nombre de points de rééchantillonnage"
 
-#: ../../doc/features/signal/menu_processing.rst:363
+#: ../../doc/features/signal/menu_processing.rst:367
 msgid "ROI extraction"
 msgstr "Extraction de ROI"
 
-#: ../../doc/features/signal/menu_processing.rst:365
+#: ../../doc/features/signal/menu_processing.rst:369
 msgid "Create a new signal from a user-defined Region of Interest (ROI)."
 msgstr ""
 "Crée un signal à partir d'une région d'intérêt (ROI) définie par "
 "l'utilisateur."
 
-#: ../../doc/features/signal/menu_processing.rst:369
+#: ../../doc/features/signal/menu_processing.rst:373
 msgid ""
 "ROI extraction dialog: the ROI is defined by moving the position and "
 "adjusting the width of an horizontal range."
@@ -1031,3 +1022,11 @@ msgstr ""
 #~ "<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
 #~ msgstr ""
 
+#~ msgid ":math:`y_{1} = |FFT(y_{0})|`"
+#~ msgstr ""
+
+#~ msgid ":math:`Y_{k} = PSD(y_{k})`"
+#~ msgstr ""
+
+#~ msgid ":math:`Y_{k} = PSD(y_{k})` (in dB: :math:`10.log_{10}(Y_{k})`)"
+#~ msgstr ""

@@ -3,6 +3,15 @@
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
 for future and past milestones.
 
+## DataLab Version 0.16.2 ##
+
+🛠️ Bug fixes:
+
+* Image Fourier analysis:
+  * Fixed logarithmic scale for the magnitude spectrum (computing dB instead of natural logarithm)
+  * Fixed PSD computation with logarithmic scale (computing dB instead of natural logarithm)
+  * Updated the documentation to explicitly mention that the logarithmic scale is in dB
+
 ## DataLab Version 0.16.1 ##
 
 Since version 0.16.0, many validation functions have been added to the test suite.

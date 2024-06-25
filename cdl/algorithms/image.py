@@ -111,7 +111,7 @@ def magnitude_spectrum(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
     """
     z1 = np.abs(fft2d(z))
     if log_scale:
-        z1 = np.log1p(z1)
+        z1 = 20 * np.log10(z1.clip(1e-10))
     return z1
 
 
@@ -139,7 +139,7 @@ def psd(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
     """
     z1 = np.abs(fft2d(z)) ** 2
     if log_scale:
-        z1 = np.log1p(z1)
+        z1 = 10 * np.log10(z1.clip(1e-10))
     return z1
 
 

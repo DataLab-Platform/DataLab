@@ -132,15 +132,15 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft <https://docs.scipy.org/doc/numpy/reference/generated/numpy.fft.ifft.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale
-      - :math:`y_{1} = |FFT(y_{0})|`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)
     * - Phase spectrum
       -
       - :math:`y_{1} = \angle FFT(y_{0})`
     * - Power spectral density (PSD)
-      - Optionnal: use logarithmic scale. PSD is estimated using Welch's method
+      - Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's method
         (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
-      - :math:`Y_{k} = PSD(y_{k})`
+      - :math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)
 
 .. note::
 
