@@ -66,13 +66,6 @@ def monkeypatch_method(cls, patch_name):
     return decorator
 
 
-# Patching AnnotatedSegment "get_infos" method for a more compact text
-@monkeypatch_method(plotpy.items.AnnotatedSegment, "AnnotatedSegment")
-def get_infos(self):
-    """Return formatted string with informations on current shape"""
-    return "Δ = " + self.x_to_str(self.get_tr_length())
-
-
 # ==============================================================================
 #  Adding support for z-axis logarithmic scale
 # ==============================================================================
