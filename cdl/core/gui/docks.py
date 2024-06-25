@@ -20,8 +20,11 @@ Dockable plot widget
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING
 
+import plotpy
+import scipy.integrate as spt
 from guidata.configtools import get_image_file_path
 from guidata.qthelpers import is_dark_mode
 from guidata.widgets.dockable import DockableWidget
@@ -29,24 +32,107 @@ from plotpy.constants import PlotType
 from plotpy.plot import PlotOptions, PlotWidget
 from plotpy.tools import (
     BasePlotMenuTool,
+    CurveStatsTool,
     DeleteItemTool,
     DisplayCoordsTool,
     DoAutoscaleTool,
     EditItemDataTool,
     ExportItemDataTool,
+    ImageStatsTool,
     ItemCenterTool,
     RectangularSelectionTool,
     RectZoomTool,
     SelectTool,
 )
+from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
 
+from cdl.algorithms.image import get_centroid_fourier
+from cdl.algorithms.signal import fwhm
 from cdl.config import Conf
+from cdl.utils.misc import compare_versions
 
 if TYPE_CHECKING:
+    from plotpy.items.image.base import BaseImageItem
     from plotpy.plot import BasePlot
+    from plotpy.styles import BaseImageParam
+
+
+def fwhm_info(x, y):
+    """Return FWHM information string"""
+    with warnings.catch_warnings(record=True) as w:
+        x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+        wstr = " ⚠️" if w else ""
+    return f"{x1 - x0:g}{wstr}"
+
+
+CURVESTATSTOOL_LABELFUNCS = (
+    ("%g &lt; x &lt; %g", lambda *args: (args[0].min(), args[0].max())),
+    ("%g &lt; y &lt; %g", lambda *args: (args[1].min(), args[1].max())),
+    ("&lt;y&gt;=%g", lambda *args: args[1].mean()),
+    ("σ(y)=%g", lambda *args: args[1].std()),
+    ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
+    ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
+    ("FWHM = %s", fwhm_info),
+)
+
+
+def get_more_image_stats(
+    item: BaseImageItem,
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+) -> str:
+    """Return formatted string with stats on image rectangular area
+    (output should be compatible with AnnotatedShape.get_infos)
+
+    Args:
+        item: image item
+        x0: X0
+        y0: Y0
+        x1: X1
+        y1: Y1
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        infos = get_image_stats(item, x0, y0, x1, y1)
+
+    ix0, iy0, ix1, iy1 = item.get_closest_index_rect(x0, y0, x1, y1)
+    data = item.data[iy0:iy1, ix0:ix1]
+    p: BaseImageParam = item.param
+    xunit, yunit, zunit = p.get_units()
+
+    integral = data.sum()
+    integral_fmt = r"%.3e " + zunit
+    infos += "<br>∑ = %s" % (integral_fmt % integral)
+
+    if xunit == yunit:
+        surfacefmt = p.xformat.split()[0] + " " + xunit
+        if xunit != "":
+            surfacefmt = surfacefmt + "²"
+        surface = abs((x1 - x0) * (y1 - y0))
+        infos += "<br>A = %s" % (surfacefmt % surface)
+        if xunit is not None and zunit is not None:
+            if surface != 0:
+                density = integral / surface
+                densityfmt = r"%.3e"
+                if xunit and zunit:
+                    densityfmt += " " + zunit + "/" + xunit + "²"
+                infos = infos + "<br>ρ = %s" % (densityfmt % density)
+
+    c_i, c_j = get_centroid_fourier(data)
+    c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
+    infos += "<br>" + "<br>".join(
+        [
+            "C|x = " + p.xformat % c_x,
+            "C|y = " + p.yformat % c_y,
+        ]
+    )
+
+    return infos
 
 
 class DataLabPlotWidget(PlotWidget):
@@ -97,8 +183,14 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
+            if compare_versions(plotpy.__version__, ">=", "2.4"):
+                statstool = mgr.get_tool(CurveStatsTool)
+                statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
         else:
             mgr.register_image_tools()
+            if compare_versions(plotpy.__version__, ">=", "2.4"):
+                statstool = mgr.get_tool(ImageStatsTool)
+                statstool.set_stats_func(get_more_image_stats, replace=True)
         mgr.add_separator_tool()
         mgr.register_other_tools()
         mgr.add_separator_tool()

@@ -11,27 +11,21 @@ Module patching *guidata* and *plotpy* to adapt it to DataLab
 from __future__ import annotations
 
 import sys
-import warnings
 
 import numpy as np
 import plotpy.items
 import plotpy.plot
 import plotpy.tools
-import scipy.integrate as spt
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from plotpy._scaler import INTERP_NEAREST, _scale_rect
-from plotpy.events import StatefulEventFilter
 from plotpy.mathutils.arrayfuncs import get_nan_range
 from plotpy.panels.csection import csplot, cswidget
-from plotpy.tools.cursor import BaseCursorTool
 from qtpy import QtCore as QC
-from qtpy import QtGui as QG
 from qtpy.QtWidgets import QApplication, QMainWindow
 from qwt import QwtLinearScaleEngine, QwtScaleDraw
 from qwt import QwtLogScaleEngine as QwtLog10ScaleEngine
 
-from cdl.algorithms.signal import fwhm
 from cdl.config import APP_NAME, _
 from cdl.core.model.signal import create_signal
 
@@ -77,105 +71,6 @@ def monkeypatch_method(cls, patch_name):
 def get_infos(self):
     """Return formatted string with informations on current shape"""
     return "Δ = " + self.x_to_str(self.get_tr_length())
-
-
-#  Patching curve stats to show additional information
-@monkeypatch_method(plotpy.tools.CurveStatsTool, "CurveStatsTool")
-def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
-    """Move tool action
-
-    Args:
-        filter: StatefulEventFilter instance
-        event: Qt mouse event
-    """
-    BaseCursorTool.move(self, filter, event)
-
-    # The following import is here to avoid circular imports
-    # pylint: disable=import-outside-toplevel
-    from plotpy.builder import make
-
-    if self.label is None:
-        plot = filter.plot
-        curve = self.get_associated_item(plot)
-
-        def fwhm_info(x, y):
-            """Return FWHM information string"""
-            with warnings.catch_warnings(record=True) as w:
-                x0, y0, x1, y1 = fwhm((x, y), "zero-crossing")
-                wstr = " ⚠️" if w else ""
-            return f"{x1 - x0:g}{wstr}"
-
-        self.label = make.computations(
-            self.shape,
-            "TL",
-            [
-                (
-                    curve,
-                    "%g &lt; x &lt; %g",
-                    lambda *args: (args[0].min(), args[0].max()),
-                ),
-                (
-                    curve,
-                    "%g &lt; y &lt; %g",
-                    lambda *args: (args[1].min(), args[1].max()),
-                ),
-                (curve, "&lt;y&gt;=%g", lambda *args: args[1].mean()),
-                (curve, "σ(y)=%g", lambda *args: args[1].std()),
-                (curve, "∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
-                (curve, "∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
-                (curve, "FWHM = %s", fwhm_info),
-            ],
-        )
-        self.label.attach(plot)
-        self.label.setZ(plot.get_max_z() + 1)
-        self.label.setVisible(True)
-
-
-#  Adding centroid parameter to the image stats tool
-@monkeypatch_method(plotpy.items.BaseImageItem, "ImageItem")
-def get_stats(
-    self,
-    x0: float,
-    y0: float,
-    x1: float,
-    y1: float,
-    show_surface: bool = False,
-    show_integral: bool = False,
-) -> str:
-    """Return formatted string with stats on image rectangular area
-    (output should be compatible with AnnotatedShape.get_infos)
-
-    Args:
-        x0: X0
-        y0: Y0
-        x1: X1
-        y1: Y1
-        show_surface: Show surface (Default value = False)
-        show_integral: Show integral (Default value = False)
-    """
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", UserWarning)
-        txt = self._old_ImageItem_get_stats(x0, y0, x1, y1, show_surface, show_integral)
-    ix0, iy0, ix1, iy1 = self.get_closest_index_rect(x0, y0, x1, y1)
-    data = self.data[iy0:iy1, ix0:ix1]
-
-    # pylint: disable=C0415
-    from cdl.algorithms.image import get_centroid_fourier
-
-    c_i, c_j = get_centroid_fourier(data)
-    c_x, c_y = self.get_plot_coordinates(c_j + ix0, c_i + iy0)
-    xfmt = self.param.xformat
-    yfmt = self.param.yformat
-    return (
-        txt
-        + "<br>"
-        + "<br>".join(
-            [
-                "C|x = " + xfmt % c_x,
-                "C|y = " + yfmt % c_y,
-            ]
-        )
-    )
 
 
 # ==============================================================================

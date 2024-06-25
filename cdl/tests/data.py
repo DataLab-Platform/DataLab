@@ -374,7 +374,9 @@ def add_gaussian_noise_to_image(
     image.data = image.data + noise.data
 
 
-def create_checkerboard(p: cdl.obj.NewImageParam | None = None, num_checkers=8):
+def create_checkerboard(
+    p: cdl.obj.NewImageParam | None = None, num_checkers=8
+) -> cdl.obj.ImageObj:
     """Generate a checkerboard pattern
 
     Args:
