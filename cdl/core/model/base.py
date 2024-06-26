@@ -198,7 +198,13 @@ def config_annotated_shape(
     # canvas coordinates).
     if isinstance(item, AnnotatedSegment):
         item.label.labelparam.anchor = "T"
-        item.label.labelparam.update_label(item.label)
+        # TODO: PlotPy 2.4 - Remove this try-except block
+        try:
+            # PlotPy 2.4 and later
+            item.label.labelparam.update_item(item.label)
+        except AttributeError:
+            # PlotPy 2.3 and earlier
+            item.label.labelparam.update_label(item.label)
 
     param.update_annotation(item)
     item.set_style("plot", option)
@@ -468,7 +474,13 @@ class ResultProperties(BaseResult):
         font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
         item.set_style("plot", "label/properties")
         item.labelparam.font.update_param(font)
-        item.labelparam.update_label(item)
+        # TODO: PlotPy 2.4 - Remove this try-except block
+        try:
+            # PlotPy 2.4 and later
+            item.labelparam.update_item(item)
+        except AttributeError:
+            # PlotPy 2.3 and earlier
+            item.labelparam.update_label(item)
         return item
 
     def get_label_item(self) -> LabelItem | None:

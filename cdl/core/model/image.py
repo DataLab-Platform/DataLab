@@ -50,7 +50,13 @@ def make_roi_rectangle(
     param = roi_item.label.labelparam
     param.anchor = "BL"
     param.xc, param.yc = 5, -5
-    param.update_label(roi_item.label)
+    # TODO: PlotPy 2.4 - Remove this try-except block
+    try:
+        # PlotPy 2.4 and later
+        param.update_item(roi_item.label)
+    except AttributeError:
+        # PlotPy 2.3 and earlier
+        param.update_label(roi_item.label)
     return roi_item
 
 
