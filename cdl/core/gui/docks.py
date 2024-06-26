@@ -46,7 +46,15 @@ from plotpy.tools import (
     RectZoomTool,
     SelectTool,
 )
-from plotpy.tools.image import get_stats as get_image_stats
+
+# TODO: PlotPy 2.4 - Remove this try/except block
+try:
+    # PlotPy 2.4 and later
+    from plotpy.tools.image import get_stats as get_image_stats
+except ImportError:
+    # PlotPy 2.3 and earlier
+    pass
+
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
