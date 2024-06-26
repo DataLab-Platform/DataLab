@@ -265,7 +265,13 @@ class ImageROIEditor(BaseROIEditor):
         super().update_roi_titles()
         for index, roi_item in enumerate(self.roi_items):
             roi_item.annotationparam.title = f"ROI{index:02d}"
-            roi_item.annotationparam.update_annotation(roi_item)
+            # TODO: PlotPy 2.4 - Remove this try-except block
+            try:
+                # PlotPy 2.4 and later
+                roi_item.annotationparam.update_item(roi_item)
+            except AttributeError:
+                # PlotPy 2.3 and earlier
+                roi_item.annotationparam.update_annotation(roi_item)
 
     @staticmethod
     def get_roi_item_coords(roi_item):

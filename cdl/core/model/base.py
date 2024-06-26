@@ -47,7 +47,7 @@ if TYPE_CHECKING:
         MaskedImageItem,
         PolygonShape,
     )
-    from plotpy.styles import AnnotationParam
+    from plotpy.styles import AnnotationParam, ShapeParam
 
 ROI_KEY = "_roi_"
 ANN_KEY = "_ann_"
@@ -193,9 +193,6 @@ def config_annotated_shape(
     if cmp is not None:
         param.show_computations = cmp
 
-    # TODO: This is temporary, in the future, we will use independent labels, similar to
-    # the way it is done for the properties labels but with plot coordinates (instead of
-    # canvas coordinates).
     if isinstance(item, AnnotatedSegment):
         item.label.labelparam.anchor = "T"
         # TODO: PlotPy 2.4 - Remove this try-except block
@@ -206,7 +203,13 @@ def config_annotated_shape(
             # PlotPy 2.3 and earlier
             item.label.labelparam.update_label(item.label)
 
-    param.update_annotation(item)
+    # TODO: PlotPy 2.4 - Remove this try-except block
+    try:
+        # PlotPy 2.4 and later
+        param.update_item(item)
+    except AttributeError:
+        # PlotPy 2.3 and earlier
+        param.update_annotation(item)
     item.set_style("plot", option)
 
 
@@ -768,15 +771,22 @@ class ResultShape(ResultProperties):
         elif self.shapetype is ShapeTypes.POINT:
             x0, y0 = coords
             item = AnnotatedPoint(x0, y0)
-            sparam = item.shape.shapeparam
+            sparam: ShapeParam = item.shape.shapeparam
             sparam.symbol.marker = "Ellipse"
             sparam.symbol.size = 6
             sparam.sel_symbol.marker = "Ellipse"
             sparam.sel_symbol.size = 6
-            sparam.update_shape(item.shape)
-            param = item.annotationparam
-            param.title = self.title
-            param.update_annotation(item)
+            aparam = item.annotationparam
+            aparam.title = self.title
+            # TODO: PlotPy 2.4 - Remove this try-except block
+            try:
+                # PlotPy 2.4 and later
+                sparam.update_item(item.shape)
+                aparam.update_item(item)
+            except AttributeError:
+                # PlotPy 2.3 and earlier
+                sparam.update_shape(item.shape)
+                aparam.update_annotation(item)
         elif self.shapetype is ShapeTypes.RECTANGLE:
             x0, y0, x1, y1 = coords
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.title)

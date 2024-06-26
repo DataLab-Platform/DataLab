@@ -72,7 +72,13 @@ def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> Annotated
     """
     item = AnnotatedCircle(x0, y0, x1, y1)
     item.annotationparam.title = title
-    item.annotationparam.update_annotation(item)
+    # TODO: PlotPy 2.4 - Remove this try-except block
+    try:
+        # PlotPy 2.4 and later
+        item.annotationparam.update_item(item)
+    except AttributeError:
+        # PlotPy 2.3 and earlier
+        item.annotationparam.update_annotation(item)
     item.set_style("plot", "shape/drag")
     return item
 
