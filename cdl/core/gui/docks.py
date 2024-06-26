@@ -242,12 +242,14 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
+            # TODO: PlotPy 2.4 - Remove this condition
             if compare_versions(plotpy.__version__, ">=", "2.4"):
                 # Customizing the CurveStatsTool
                 statstool = mgr.get_tool(CurveStatsTool)
                 statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
         else:
             mgr.register_image_tools()
+            # TODO: PlotPy 2.4 - Remove this condition
             if compare_versions(plotpy.__version__, ">=", "2.4"):
                 # Customizing the ImageStatsTool
                 statstool = mgr.get_tool(ImageStatsTool)

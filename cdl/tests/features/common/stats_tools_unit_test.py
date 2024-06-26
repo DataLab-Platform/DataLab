@@ -45,6 +45,7 @@ def simulate_stats_tool(
     return widget
 
 
+# TODO: PlotPy 2.4 - Remove skipif decorator
 @pytest.mark.skipif(
     compare_versions(plotpy.__version__, "<", "2.4"),
     reason="PlotPy version < 2.4",
