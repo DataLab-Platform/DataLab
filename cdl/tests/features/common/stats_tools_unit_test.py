@@ -41,7 +41,11 @@ def simulate_stats_tool(
     klass = CurveStatsTool if plot_type == PlotType.CURVE else ImageStatsTool
     stattool = widget.get_manager().get_tool(klass)
     stattool.activate()
-    drag_mouse(widget, x_path, y_path)
+    if compare_versions(plotpy.__version__, "<", "2.4"):
+        qapp = QW.QApplication.instance()
+        drag_mouse(widget, qapp, x_path, y_path)
+    else:
+        drag_mouse(widget, x_path, y_path)
     return widget
 
 
