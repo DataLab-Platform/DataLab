@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import os.path as osp
 import re
 from typing import TYPE_CHECKING
 
@@ -539,6 +540,7 @@ class MacroPanel(AbstractPanel, DockableWidgetMixin):
         if filename:
             with qt_try_loadsave_file(self.parent(), filename, "save"):
                 Conf.main.base_dir.set(filename)
+                macro.title = osp.basename(filename)
                 macro.to_file(filename)
 
     def import_macro_from_file(self, filename: str | None = None) -> int:
