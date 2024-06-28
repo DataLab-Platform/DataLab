@@ -49,7 +49,7 @@ dependencies = [
     "PyWavelets >= 1.1",
     "psutil >= 5.5",
     "guidata >= 3.5",
-    "PlotPy >= 2.3",
+    "PlotPy >= 2.4",
     "QtPy >= 1.9",
 ]
 dynamic = ["version"]

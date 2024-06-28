@@ -12,7 +12,6 @@ PlotPy's statistics tools (`plotpy.tools.CurveStatsTool` and
 
 import numpy as np
 import plotpy
-import pytest
 from guidata.qthelpers import exec_dialog, qt_app_context
 from plotpy.constants import PlotType
 from plotpy.tests.unit.utils import drag_mouse
@@ -49,11 +48,6 @@ def simulate_stats_tool(
     return widget
 
 
-# TODO: PlotPy 2.4 - Remove skipif decorator
-@pytest.mark.skipif(
-    compare_versions(plotpy.__version__, "<", "2.4"),
-    reason="PlotPy version < 2.4",
-)
 def test_stats_tool() -> None:
     """Test CurveStatsTool with a custom signal."""
     sig = create_paracetamol_signal()

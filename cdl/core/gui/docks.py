@@ -46,15 +46,7 @@ from plotpy.tools import (
     RectZoomTool,
     SelectTool,
 )
-
-# TODO: PlotPy 2.4 - Remove this try/except block
-try:
-    # PlotPy 2.4 and later
-    from plotpy.tools.image import get_stats as get_image_stats
-except ImportError:
-    # PlotPy 2.3 and earlier
-    pass
-
+from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
@@ -250,30 +242,25 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
-            # TODO: PlotPy 2.4 - Remove this condition
-            if compare_versions(plotpy.__version__, ">=", "2.4"):
-                # Customizing the CurveStatsTool
-                statstool = mgr.get_tool(CurveStatsTool)
-                statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
+            statstool = mgr.get_tool(CurveStatsTool)
+            statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
         else:
             mgr.register_image_tools()
-            # TODO: PlotPy 2.4 - Remove this condition
-            if compare_versions(plotpy.__version__, ">=", "2.4"):
-                # Customizing the ImageStatsTool
-                statstool = mgr.get_tool(ImageStatsTool)
-                statstool.set_stats_func(get_more_image_stats, replace=True)
-                # Customizing the X and Y cross section panels
-                plot = mgr.get_plot()
-                for panel in (mgr.get_xcs_panel(), mgr.get_ycs_panel()):
-                    to_signal_action = create_action(
-                        panel,
-                        _("Process signal"),
-                        icon=get_icon("to_signal.svg"),
-                        triggered=lambda panel=panel: profile_to_signal(plot, panel),
-                    )
-                    tb = panel.toolbar
-                    tb.insertSeparator(tb.actions()[0])
-                    tb.insertAction(tb.actions()[0], to_signal_action)
+            # Customizing the ImageStatsTool
+            statstool = mgr.get_tool(ImageStatsTool)
+            statstool.set_stats_func(get_more_image_stats, replace=True)
+            # Customizing the X and Y cross section panels
+            plot = mgr.get_plot()
+            for panel in (mgr.get_xcs_panel(), mgr.get_ycs_panel()):
+                to_signal_action = create_action(
+                    panel,
+                    _("Process signal"),
+                    icon=get_icon("to_signal.svg"),
+                    triggered=lambda panel=panel: profile_to_signal(plot, panel),
+                )
+                tb = panel.toolbar
+                tb.insertSeparator(tb.actions()[0])
+                tb.insertAction(tb.actions()[0], to_signal_action)
 
         mgr.add_separator_tool()
         mgr.register_other_tools()

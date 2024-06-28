@@ -195,21 +195,9 @@ def config_annotated_shape(
 
     if isinstance(item, AnnotatedSegment):
         item.label.labelparam.anchor = "T"
-        # TODO: PlotPy 2.4 - Remove this try-except block
-        try:
-            # PlotPy 2.4 and later
-            item.label.labelparam.update_item(item.label)
-        except AttributeError:
-            # PlotPy 2.3 and earlier
-            item.label.labelparam.update_label(item.label)
+        item.label.labelparam.update_item(item.label)
 
-    # TODO: PlotPy 2.4 - Remove this try-except block
-    try:
-        # PlotPy 2.4 and later
-        param.update_item(item)
-    except AttributeError:
-        # PlotPy 2.3 and earlier
-        param.update_annotation(item)
+    param.update_item(item)
     item.set_style("plot", option)
 
 
@@ -477,13 +465,7 @@ class ResultProperties(BaseResult):
         font = get_font(PLOTPY_CONF, "plot", "label/properties/font")
         item.set_style("plot", "label/properties")
         item.labelparam.font.update_param(font)
-        # TODO: PlotPy 2.4 - Remove this try-except block
-        try:
-            # PlotPy 2.4 and later
-            item.labelparam.update_item(item)
-        except AttributeError:
-            # PlotPy 2.3 and earlier
-            item.labelparam.update_label(item)
+        item.labelparam.update_item(item)
         return item
 
     def get_label_item(self) -> LabelItem | None:
@@ -778,15 +760,8 @@ class ResultShape(ResultProperties):
             sparam.sel_symbol.size = 6
             aparam = item.annotationparam
             aparam.title = self.title
-            # TODO: PlotPy 2.4 - Remove this try-except block
-            try:
-                # PlotPy 2.4 and later
-                sparam.update_item(item.shape)
-                aparam.update_item(item)
-            except AttributeError:
-                # PlotPy 2.3 and earlier
-                sparam.update_shape(item.shape)
-                aparam.update_annotation(item)
+            sparam.update_item(item.shape)
+            aparam.update_item(item)
         elif self.shapetype is ShapeTypes.RECTANGLE:
             x0, y0, x1, y1 = coords
             item = make.annotated_rectangle(x0, y0, x1, y1, title=self.title)
