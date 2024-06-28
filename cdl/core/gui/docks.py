@@ -20,33 +20,178 @@ Dockable plot widget
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING
 
-from guidata.configtools import get_image_file_path
-from guidata.qthelpers import is_dark_mode
+import plotpy
+import scipy.integrate as spt
+from guidata.configtools import get_icon, get_image_file_path
+from guidata.qthelpers import create_action, is_dark_mode
 from guidata.widgets.dockable import DockableWidget
 from plotpy.constants import PlotType
-from plotpy.plot import PlotOptions, PlotWidget
+from plotpy.items import CurveItem
+from plotpy.panels import XCrossSection, YCrossSection
+from plotpy.plot import BasePlot, PlotOptions, PlotWidget
 from plotpy.tools import (
     BasePlotMenuTool,
+    CurveStatsTool,
     DeleteItemTool,
     DisplayCoordsTool,
     DoAutoscaleTool,
     EditItemDataTool,
     ExportItemDataTool,
+    ImageStatsTool,
     ItemCenterTool,
     RectangularSelectionTool,
     RectZoomTool,
     SelectTool,
 )
+from plotpy.tools.image import get_stats as get_image_stats
 from qtpy import QtCore as QC
 from qtpy import QtGui as QG
 from qtpy import QtWidgets as QW
+from qtpy.QtWidgets import QApplication, QMainWindow
 
-from cdl.config import Conf
+from cdl.algorithms.image import get_centroid_fourier
+from cdl.algorithms.signal import fwhm
+from cdl.config import APP_NAME, Conf, _
+from cdl.core.model.signal import create_signal
+from cdl.utils.misc import compare_versions
 
 if TYPE_CHECKING:
+    from plotpy.items.image.base import BaseImageItem
     from plotpy.plot import BasePlot
+    from plotpy.styles import BaseImageParam
+
+
+def fwhm_info(x, y):
+    """Return FWHM information string"""
+    with warnings.catch_warnings(record=True) as w:
+        x0, _y0, x1, _y1 = fwhm((x, y), "zero-crossing")
+        wstr = " ⚠️" if w else ""
+    return f"{x1 - x0:g}{wstr}"
+
+
+CURVESTATSTOOL_LABELFUNCS = (
+    ("%g &lt; x &lt; %g", lambda *args: (args[0].min(), args[0].max())),
+    ("%g &lt; y &lt; %g", lambda *args: (args[1].min(), args[1].max())),
+    ("&lt;y&gt;=%g", lambda *args: args[1].mean()),
+    ("σ(y)=%g", lambda *args: args[1].std()),
+    ("∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
+    ("∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
+    ("FWHM = %s", fwhm_info),
+)
+
+
+def get_more_image_stats(
+    item: BaseImageItem,
+    x0: float,
+    y0: float,
+    x1: float,
+    y1: float,
+) -> str:
+    """Return formatted string with stats on image rectangular area
+    (output should be compatible with AnnotatedShape.get_infos)
+
+    Args:
+        item: image item
+        x0: X0
+        y0: Y0
+        x1: X1
+        y1: Y1
+    """
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        infos = get_image_stats(item, x0, y0, x1, y1)
+
+    ix0, iy0, ix1, iy1 = item.get_closest_index_rect(x0, y0, x1, y1)
+    data = item.data[iy0:iy1, ix0:ix1]
+    p: BaseImageParam = item.param
+    xunit, yunit, zunit = p.get_units()
+
+    integral = data.sum()
+    integral_fmt = r"%.3e " + zunit
+    infos += "<br>∑ = %s" % (integral_fmt % integral)
+
+    if xunit == yunit:
+        surfacefmt = p.xformat.split()[0] + " " + xunit
+        if xunit != "":
+            surfacefmt = surfacefmt + "²"
+        surface = abs((x1 - x0) * (y1 - y0))
+        infos += "<br>A = %s" % (surfacefmt % surface)
+        if xunit is not None and zunit is not None:
+            if surface != 0:
+                density = integral / surface
+                densityfmt = r"%.3e"
+                if xunit and zunit:
+                    densityfmt += " " + zunit + "/" + xunit + "²"
+                infos = infos + "<br>ρ = %s" % (densityfmt % density)
+
+    c_i, c_j = get_centroid_fourier(data)
+    c_x, c_y = item.get_plot_coordinates(c_j + ix0, c_i + iy0)
+    infos += "<br>" + "<br>".join(
+        [
+            "C|x = " + p.xformat % c_x,
+            "C|y = " + p.yformat % c_y,
+        ]
+    )
+
+    return infos
+
+
+def profile_to_signal(plot: BasePlot, panel: XCrossSection | YCrossSection) -> None:
+    """Send cross section curve to DataLab's signal list
+
+    Args:
+        panel: Cross section panel
+    """
+    win = None
+    for win in QApplication.topLevelWidgets():
+        if isinstance(win, QMainWindow):
+            break
+    if win is None or win.objectName() != APP_NAME:
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
+        from cdl.core.gui import main
+
+        # Note : this is the only way to retrieve the DataLab main window instance
+        # when the CrossSectionItem object is embedded into an image widget
+        # parented to another main window.
+        win = main.CDLMainWindow.get_instance()
+        assert win is not None  # Should never happen
+
+    for item in panel.cs_plot.get_items():
+        if not isinstance(item, CurveItem):
+            continue
+        x, y, _dx, _dy = item.get_data()
+        if x is None or y is None or x.size == 0 or y.size == 0:
+            continue
+
+        signal = create_signal(item.param.label)
+
+        if isinstance(panel, YCrossSection):
+            signal.set_xydata(y, x)
+            xaxis_name = "left"
+            xunit = plot.get_axis_unit("bottom")
+            if xunit:
+                signal.title += " " + xunit
+        else:
+            signal.set_xydata(x, y)
+            xaxis_name = "bottom"
+            yunit = plot.get_axis_unit("left")
+            if yunit:
+                signal.title += " " + yunit
+
+        signal.ylabel = plot.get_axis_title("right")
+        signal.yunit = plot.get_axis_unit("right")
+        signal.xlabel = plot.get_axis_title(xaxis_name)
+        signal.xunit = plot.get_axis_unit(xaxis_name)
+
+        win.signalpanel.add_object(signal)
+
+    # Show DataLab main window on top, if not already visible
+    win.show()
+    win.raise_()
 
 
 class DataLabPlotWidget(PlotWidget):
@@ -97,8 +242,26 @@ class DataLabPlotWidget(PlotWidget):
         mgr.add_separator_tool()
         if self.options.type == PlotType.CURVE:
             mgr.register_curve_tools()
+            statstool = mgr.get_tool(CurveStatsTool)
+            statstool.set_labelfuncs(CURVESTATSTOOL_LABELFUNCS)
         else:
             mgr.register_image_tools()
+            # Customizing the ImageStatsTool
+            statstool = mgr.get_tool(ImageStatsTool)
+            statstool.set_stats_func(get_more_image_stats, replace=True)
+            # Customizing the X and Y cross section panels
+            plot = mgr.get_plot()
+            for panel in (mgr.get_xcs_panel(), mgr.get_ycs_panel()):
+                to_signal_action = create_action(
+                    panel,
+                    _("Process signal"),
+                    icon=get_icon("to_signal.svg"),
+                    triggered=lambda panel=panel: profile_to_signal(plot, panel),
+                )
+                tb = panel.toolbar
+                tb.insertSeparator(tb.actions()[0])
+                tb.insertAction(tb.actions()[0], to_signal_action)
+
         mgr.add_separator_tool()
         mgr.register_other_tools()
         mgr.add_separator_tool()

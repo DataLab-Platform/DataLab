@@ -50,7 +50,7 @@ def make_roi_rectangle(
     param = roi_item.label.labelparam
     param.anchor = "BL"
     param.xc, param.yc = 5, -5
-    param.update_label(roi_item.label)
+    param.update_item(roi_item.label)
     return roi_item
 
 
@@ -66,7 +66,7 @@ def make_roi_circle(x0: int, y0: int, x1: int, y1: int, title: str) -> Annotated
     """
     item = AnnotatedCircle(x0, y0, x1, y1)
     item.annotationparam.title = title
-    item.annotationparam.update_annotation(item)
+    item.annotationparam.update_item(item)
     item.set_style("plot", "shape/drag")
     return item
 

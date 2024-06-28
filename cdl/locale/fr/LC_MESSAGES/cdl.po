@@ -3752,14 +3752,6 @@ msgstr "Fonction polynomiale"
 msgid "Experimental points"
 msgstr "Points expérimentaux"
 
-#: cdl\patch.py:188
-msgid "Z-Axis logarithmic scale"
-msgstr "Axe Z en échelle logarithmique"
-
-#: cdl\patch.py:368
-msgid "Process signal"
-msgstr "Traiter le signal"
-
 #: cdl\plugins.py:120
 msgid "Registered plugins:"
 msgstr "Plugins enregistrés :"
