@@ -10,6 +10,8 @@ PlotPy's statistics tools (`plotpy.tools.CurveStatsTool` and
 # pylint: disable=invalid-name  # Allows short reference names like x, y, ...
 # guitest: show
 
+from __future__ import annotations
+
 import numpy as np
 import plotpy
 from guidata.qthelpers import exec_dialog, qt_app_context
