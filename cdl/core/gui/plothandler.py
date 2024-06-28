@@ -161,7 +161,7 @@ class BasePlotHandler:
                 obj.iterate_resultshapes()
             )
             for result in results:
-                item = result.get_label_item()
+                item = result.get_label_item(obj)
                 if item is not None:
                     items.append(item)
                     self.__result_items_mapping[item] = (

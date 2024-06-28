@@ -411,22 +411,13 @@ class ResultProperties(BaseResult):
         """
         return self.raw_data
 
-    def add_to(self, obj: BaseObj) -> None:
-        """Add result to object metadata
-
-        Args:
-            obj: object (signal/image)
-        """
-        item = self.create_label_item(obj)
-        self.update_obj_metadata_from_item(obj, item)
-
     def update_obj_metadata_from_item(
         self, obj: BaseObj, item: LabelItem | None
     ) -> None:
         """Update object metadata with label item
 
         Args:
-            obj: object
+            obj: object (signal/image)
             item: label item
         """
         if item is not None:
@@ -443,8 +434,18 @@ class ResultProperties(BaseResult):
     def create_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Create label item
 
+        Args:
+            obj: object (signal/image)
+
         Returns:
             Label item
+
+        .. note::
+
+            The signal or image object is required as argument to create the label
+            item because the label text may contain format strings that need to be
+            filled with the object properties. For instance, the label text may contain
+            the signal or image units.
         """
         text = ""
         for i_row in range(self.array.shape[0]):
@@ -468,12 +469,26 @@ class ResultProperties(BaseResult):
         item.labelparam.update_item(item)
         return item
 
-    def get_label_item(self) -> LabelItem | None:
+    def get_label_item(self, obj: BaseObj) -> LabelItem | None:
         """Return label item associated to this result
+
+        Args:
+            obj: object (signal/image)
 
         Returns:
             Label item
+
+        .. note::
+
+            The signal or image object is required as argument to eventually create
+            the label item if it has not been created yet.
+            See :py:meth:`create_label_item`.
         """
+        if not self.item_json:
+            # Label item has not been created yet
+            item = self.create_label_item(obj)
+            if item is not None:
+                self.update_obj_metadata_from_item(obj, item)
         if self.item_json:
             item = json_to_items(self.item_json)[0]
             assert isinstance(item, LabelItem)
