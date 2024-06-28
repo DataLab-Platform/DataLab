@@ -41,7 +41,7 @@ classifiers = [
 requires-python = ">=3.8, <4"
 dependencies = [
     "h5py >= 3.0",
-    "NumPy >= 1.21, < 2",
+    "NumPy >= 1.21",
     "SciPy >= 1.7",
     "scikit-image >= 0.18",
     "opencv-python-headless >= 4.5",
@@ -110,6 +110,9 @@ include = ["cdl*"]
 
 [tool.setuptools.dynamic]
 version = { attr = "cdl.__version__" }
+
+[tool.pytest.ini_options]
+addopts = "cdl"
 
 [tool.ruff]
 exclude = [".git", ".vscode", "build", "dist"]

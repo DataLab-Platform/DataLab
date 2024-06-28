@@ -19,7 +19,7 @@ import pywt
 from skimage import morphology
 from skimage.restoration import denoise_bilateral, denoise_tv_chambolle, denoise_wavelet
 
-from cdl.computation.image import dst_11
+from cdl.computation.image import Wrap11Func, dst_11
 from cdl.computation.image.morphology import MorphologyParam
 from cdl.config import _
 from cdl.obj import ImageObj
@@ -68,15 +68,9 @@ def compute_denoise_tv(src: ImageObj, p: DenoiseTVParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(
-        src,
-        "denoise_tv",
-        f"weight={p.weight}, eps={p.eps}, max_num_iter={p.max_num_iter}",
-    )
-    dst.data = denoise_tv_chambolle(
-        src.data, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
-    )
-    return dst
+    return Wrap11Func(
+        denoise_tv_chambolle, weight=p.weight, eps=p.eps, max_num_iter=p.max_num_iter
+    )(src)
 
 
 class DenoiseBilateralParam(gds.DataSet):
@@ -94,10 +88,8 @@ class DenoiseBilateralParam(gds.DataSet):
             "with larger spatial differences."
         ),
     )
-    _modelist = ("constant", "edge", "symmetric", "reflect", "wrap")
-    mode = gds.ChoiceItem(
-        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
-    )
+    modes = ("constant", "edge", "symmetric", "reflect", "wrap")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="constant")
     cval = gds.FloatItem(
         "cval",
         default=0,
@@ -118,32 +110,23 @@ def compute_denoise_bilateral(src: ImageObj, p: DenoiseBilateralParam) -> ImageO
     Returns:
         Output image object
     """
-    dst = dst_11(
-        src,
-        "denoise_bilateral",
-        f"σspatial={p.sigma_spatial}, mode={p.mode}, cval={p.cval}",
-    )
-    dst.data = denoise_bilateral(
-        src.data,
-        sigma_spatial=p.sigma_spatial,
-        mode=p.mode,
-        cval=p.cval,
-    )
-    return dst
+    return Wrap11Func(
+        denoise_bilateral, sigma_spatial=p.sigma_spatial, mode=p.mode, cval=p.cval
+    )(src)
 
 
 class DenoiseWaveletParam(gds.DataSet):
     """Wavelet denoising parameters"""
 
-    _wavelist = pywt.wavelist()
+    wavelets = pywt.wavelist()
     wavelet = gds.ChoiceItem(
-        _("Wavelet"), list(zip(_wavelist, _wavelist)), default="sym9"
+        _("Wavelet"), list(zip(wavelets, wavelets)), default="sym9"
     )
-    _modelist = ("soft", "hard")
-    mode = gds.ChoiceItem(_("Mode"), list(zip(_modelist, _modelist)), default="soft")
-    _methlist = ("BayesShrink", "VisuShrink")
+    modes = ("soft", "hard")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="soft")
+    methods = ("BayesShrink", "VisuShrink")
     method = gds.ChoiceItem(
-        _("Method"), list(zip(_methlist, _methlist)), default="VisuShrink"
+        _("Method"), list(zip(methods, methods)), default="VisuShrink"
     )
 
 
@@ -157,18 +140,9 @@ def compute_denoise_wavelet(src: ImageObj, p: DenoiseWaveletParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(
-        src,
-        "denoise_wavelet",
-        f"wavelet={p.wavelet}, mode={p.mode}, method={p.method}",
+    return Wrap11Func(denoise_wavelet, wavelet=p.wavelet, mode=p.mode, method=p.method)(
+        src
     )
-    dst.data = denoise_wavelet(
-        src.data,
-        wavelet=p.wavelet,
-        mode=p.mode,
-        method=p.method,
-    )
-    return dst
 
 
 def compute_denoise_tophat(src: ImageObj, p: MorphologyParam) -> ImageObj:

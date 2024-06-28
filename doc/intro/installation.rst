@@ -7,6 +7,17 @@ Installation
     :description: How to install DataLab, the open-source data analysis and visualization platform
     :keywords: DataLab, installation, install, pip, wheel, source, Windows, Linux, macOS
 
+.. only:: html and not latex
+
+    .. dropdown:: Quick install on Windows
+        :animate: fade-in
+        :icon: zap
+
+        Direct download links for the latest version of DataLab:
+
+        - |download_link1|
+        - |download_link2|
+
 This section provides information on how to install DataLab on your system.
 Once installed, you can start DataLab by running the ``cdl`` command in a terminal,
 or by clicking on the DataLab shortcut in the Start menu (on Windows).
@@ -96,7 +107,7 @@ application).
 
     DataLab Windows installer is available for Windows 8, 10 and 11 (main release,
     based on Python 3.11) and also for Windows 7 SP1 (Python 3.8 based release, see
-    file ending with ``-Win7.exe``).
+    file ending with ``-Win7.msi``).
 
     :octicon:`alert;1em;sd-text-warning` On Windows 7 SP1, before running DataLab
     (or any other Python 3 application), you must install Microsoft Update `KB2533623`

@@ -668,6 +668,8 @@ class Tour(BaseTour):
                 win.main_toolbar,
                 win.signalpanel_toolbar,
                 win.imagepanel_toolbar,
+                win.signalpanel.acthandler.view_toolbar,
+                win.imagepanel.acthandler.view_toolbar,
             ],
         )
         self.add_step(
@@ -710,9 +712,9 @@ class Tour(BaseTour):
         self.add_step(
             _("Signal Panel") + " – " + _("File menu"),
             _(
-                "The <b>File</b> menu contains actions to import and export signals "
-                "individually (various formats) or to save or restore the whole "
-                "workspace (HDF5 files)."
+                "The <b>File</b> menu contains actions to create new signals, "
+                "import and export signals individually (various formats) or "
+                "to save or restore the whole workspace (HDF5 files)."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.file_menu),
@@ -732,7 +734,7 @@ class Tour(BaseTour):
             _("Signal Panel") + " – " + _("Operations menu"),
             _(
                 "The <b>Operations</b> menu is focused on arithmetic operations, "
-                "data type conversions, peak detection, ROI extraction, ..."
+                "basic mathematical functions or data type conversions."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.operation_menu),
@@ -789,9 +791,9 @@ class Tour(BaseTour):
         self.add_step(
             _("Image Panel") + " – " + _("File menu"),
             _(
-                "The <b>File</b> menu contains actions to import and export images "
-                "individually (various formats) or to save or restore the whole "
-                "workspace (HDF5 files)."
+                "The <b>File</b> menu contains actions to create new images, "
+                "import and export images individually (various formats) or "
+                "to save or restore the whole workspace (HDF5 files)."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.file_menu),
@@ -811,7 +813,7 @@ class Tour(BaseTour):
             _("Image Panel") + " – " + _("Operations menu"),
             _(
                 "The <b>Operations</b> menu is focused on arithmetic operations, "
-                "data type conversions, pixel binning, resize, ROI extraction ..."
+                "data type conversions, pixel binning resize, intensity profiles, ..."
             ),
             [win.menuBar()],
             lambda win: self.popup_menu(win, win.operation_menu),
@@ -843,6 +845,8 @@ class Tour(BaseTour):
             _(
                 "DataLab is designed to be easily extended with new features, "
                 "by using <b>Macros</b>, <b>Plugins</b> or <b>Remote Control</b>."
+                "<br><br>The common point between these mechanisms is that "
+                "they are all relying on Python scripts and the <i>DataLab API</i>."
             ),
         )
         self.add_step(

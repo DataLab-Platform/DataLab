@@ -53,26 +53,32 @@ The Macro Panel is a simple interface to:
 .. |libre-gui-add| image:: ../../../cdl/data/icons/libre-gui-add.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |libre-gui-pencil| image:: ../../../cdl/data/icons/libre-gui-pencil.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |fileopen_py| image:: ../../../cdl/data/icons/io/fileopen_py.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |filesave_py| image:: ../../../cdl/data/icons/io/filesave_py.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |libre-camera-flash-on| image:: ../../../cdl/data/icons/libre-camera-flash-on.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |libre-camera-flash-off| image:: ../../../cdl/data/icons/libre-camera-flash-off.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Macros are embedded in the DataLab workspace, so they are saved together with the rest
 of the data (i.e. with signals and images) when exporting the workspace to a HDF5 file.

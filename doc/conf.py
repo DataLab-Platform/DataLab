@@ -17,6 +17,15 @@ project = "DataLab"
 author = ""
 copyright = "2023, DataLab Platform Developers"
 release = cdl.__version__
+rst_prolog = f"""
+.. |download_link1| raw:: html
+
+    <a href="https://github.com/DataLab-Platform/DataLab/releases/download/v{release}/DataLab-{release}.msi">DataLab {release} | Windows 8, 10, 11</a>
+
+.. |download_link2| raw:: html
+
+    <a href="https://github.com/DataLab-Platform/DataLab/releases/download/v{release}/DataLab-{release}-Win7.msi">DataLab {release} | Windows 7 SP1</a>
+"""  # noqa: E501
 
 # -- General configuration ---------------------------------------------------
 

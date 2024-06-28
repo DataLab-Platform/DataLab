@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import numpy as np
 import pytest
+import scipy.integrate as spt
 
 import cdl.computation.image as cpi
 import cdl.computation.signal as cps
@@ -34,7 +35,7 @@ def get_analytical_stats(data: np.ndarray) -> dict[str, float]:
     results = {}
     if data.shape[0] == 2:
         # This is a signal data (row 0: x, row 1: y)
-        results["trapz"] = np.trapz(data[1], data[0])
+        results["trapz"] = spt.trapezoid(data[1], data[0])
         data = data[1]
     results.update(
         {

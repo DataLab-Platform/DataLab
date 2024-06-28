@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-03 14:07+0200\n"
+"POT-Creation-Date: 2024-06-24 16:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../doc/index.rst:81
+#: ../../doc/index.rst:97
 msgid "Contents"
 msgstr "Table des matières"
 
@@ -62,11 +62,10 @@ msgstr ""
 "industriels. Exploitant la richesse de l'écosystème scientifique Python "
 "[#f1]_, DataLab est un outil complémentaire pour vos flux de travail de "
 "traitement de signaux et d'images, extensible avec votre code Python "
-"grâce aux :bdg-ref-success-line:`Extensions <about_plugins>` ou directement"
-" depuis :ref:`votre IDE <use_cases>` ou :ref:`vos notebooks Jupyter "
-"<use_cases>`. Rendez-vous sur :bdg-ref-success-line:`Installation "
-"<installation>` pour démarrer !"
-
+"grâce aux :bdg-ref-success-line:`Extensions <about_plugins>` ou "
+"directement depuis :ref:`votre IDE <use_cases>` ou :ref:`vos notebooks "
+"Jupyter <use_cases>`. Rendez-vous sur :bdg-ref-success-line:`Installation"
+" <installation>` pour démarrer !"
 
 #: ../../doc/index.rst:18
 msgid ""
@@ -231,17 +230,27 @@ msgstr "S'impliquer dans le projet DataLab"
 
 #: ../../doc/index.rst:68
 msgid ""
-"With its user-friendly experience and versatile :ref:`usage_modes`, "
-"DataLab enables efficient development of your data processing and "
-"visualization applications while benefiting from an industrial-grade "
-"technological platform."
+"With its user-friendly experience and versatile :ref:`usage_modes` "
+"(|appmode| Stand-alone, |libmode| Library, |remotemode| Remote), DataLab "
+"enables efficient development of your data processing and visualization "
+"applications while benefiting from an industrial-grade technological "
+"platform."
 msgstr ""
-"Avec son expérience utilisateur conviviale et ses :ref:`usage_modes` "
-"polyvalents, DataLab permet le développement efficace de vos applications"
-" de traitement et de visualisation de données tout en bénéficiant d'une "
-"plateforme technologique de qualité industrielle."
+"Avec son expérience utilisateur conviviale et ses :ref:`usage_modes` polyvalents (|appmode| Autonome, |libmode| Bibliothèque, |remotemode| Piloté à distance), DataLab permet le développement efficace de vos applications de traitement et de visualisation de données tout en bénéficiant d'une plateforme technologique de qualité industrielle."
 
-#: ../../doc/index.rst:76
+#: ../../doc/index.rst:73
+msgid "appmode"
+msgstr ""
+
+#: ../../doc/index.rst:78
+msgid "libmode"
+msgstr ""
+
+#: ../../doc/index.rst:83
+msgid "remotemode"
+msgstr ""
+
+#: ../../doc/index.rst:92
 msgid ""
 "DataLab is powered by `PlotPyStack <https://github.com/PlotPyStack>`_, "
 "the scientific Python-Qt visualization and graphical user interface "
@@ -251,7 +260,7 @@ msgstr ""
 " les outils de visualisation et d'interface graphique scientifiques "
 "Python-Qt."
 
-#: ../../doc/index.rst:90
+#: ../../doc/index.rst:106
 msgid ""
 "DataLab was created by `Codra`_/`Pierre Raybaut`_ in 2023. It is "
 "developed and maintained by DataLab Platform Developers."
@@ -260,11 +269,11 @@ msgstr ""
 "développé et maintenu par l'équipe de développement de la plateforme "
 "DataLab."
 
-#: ../../doc/index.rst:94
+#: ../../doc/index.rst:110
 msgid "Footnotes"
 msgstr "Notes de bas de page"
 
-#: ../../doc/index.rst:95
+#: ../../doc/index.rst:111
 msgid ""
 "DataLab processing features are mainly based on `NumPy`_, `SciPy`_, "
 "`scikit-image`_, `OpenCV`_ and `PyWavelets`_ libraries. DataLab "

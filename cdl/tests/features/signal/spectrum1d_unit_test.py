@@ -50,9 +50,9 @@ def test_signal_psd_interactive() -> None:
     with qt_app_context():
         obj = get_test_signal("dynamic_parameters.txt")
         x, y = obj.xydata
-        ypsd = alg.psd(x, y, log_scale=True)
+        xpsd, ypsd = alg.psd(x, y, log_scale=True)
         view_curves(
-            [(x, ypsd)],
+            [(xpsd, ypsd)],
             title="Power spectral density",
             xlabel="Frequency",
             ylabel="Power",

@@ -24,6 +24,7 @@ First, we open DataLab and read the spectrum from a file.
 .. |fileopen_sig| image:: ../../../cdl/data/icons/io/fileopen_sig.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Here, we are actually generating the signal from a test data file
 (using "Plugins > Test data > Load spectrum of paracetamol"), but the
@@ -161,6 +162,7 @@ visualization settings (curve colors, etc.).
 .. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 If you want to load the workspace again, you can use the "File > Open HDF5 file..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
@@ -170,7 +172,9 @@ only a selection of data sets from the workspace.
 .. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

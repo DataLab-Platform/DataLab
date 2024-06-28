@@ -67,7 +67,7 @@ This paragraph provides the validation status of compute functions in DataLab.
     validation status indicates whether the function has been validated against
     ground-truth data or analytical models. The test coverage indicates the percentage
     of the code that is executed by the test suite, but it does not necessarily take
-    into account the correctness of the results.
+    into account the correctness of the results (DataLab's test coverage is around 90%).
 
 .. csv-table:: Validation Statistics
    :file: ../../validation_statistics.csv

@@ -101,7 +101,7 @@ The following filters are available:
     * - Moving average
       - `scipy.ndimage.uniform_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_
     * - Moving median
-      - `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_
+      - `scipy.ndimage.median_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_
     * - Wiener filter
       - `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_
 
@@ -126,14 +126,14 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft2 <https://numpy.org/doc/stable/reference/generated/numpy.fft.ifft2.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale
-      - :math:`z_{1} = |FFT(z_{0})|`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 \log_{10}(|FFT(z_{0})|)` (dB)
     * - Phase spectrum
       -
       - :math:`z_{1} = \angle(FFT(z_{0}))`
     * - Power spectral density
-      - Optionnal: use logarithmic scale
-      - :math:`z_{1} = |FFT(z_{0})|^2`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 \log_{10}(|FFT(z_{0})|^2)` (dB)
 
 .. note::
 

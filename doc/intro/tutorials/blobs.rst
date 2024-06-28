@@ -17,6 +17,7 @@ or the |libre-gui-settings| icon in the toolbar).
 .. |libre-gui-settings| image:: ../../../cdl/data/icons/libre-gui-settings.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/blobs/01.png
 
@@ -126,6 +127,7 @@ Now, let's detect the blobs on the image.
 .. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/blobs/13.png
 
@@ -141,6 +143,7 @@ button in the toolbar.
 .. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 If you want to load the workspace again, you can use the "File > Open HDF5 file..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
@@ -150,7 +153,9 @@ only a selection of data sets from the workspace.
 .. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

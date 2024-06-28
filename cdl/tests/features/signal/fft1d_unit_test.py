@@ -18,6 +18,7 @@ from guidata.qthelpers import qt_app_context
 import cdl.algorithms.signal as alg
 import cdl.computation.signal as cps
 import cdl.obj
+import cdl.param
 import cdl.tests.data as ctd
 from cdl.env import execenv
 from cdl.utils.tests import check_array_result, check_scalar_result
@@ -140,13 +141,19 @@ def test_signal_psd() -> None:
     size = 10000
 
     s1 = ctd.create_periodic_signal(cdl.obj.SignalTypes.COSINUS, freq=freq, size=size)
-    psd = cps.compute_psd(s1)
+    param = cdl.param.SpectrumParam()
+    for log_scale in (False, True):
+        param.log = log_scale
+        psd = cps.compute_psd(s1, param)
 
-    # Check that the PSD is correct (Welch's method is used by default)
-    exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))
+        # Check that the PSD is correct (Welch's method is used by default)
+        exp_x, exp_y = sps.welch(s1.y, fs=1.0 / (s1.x[1] - s1.x[0]))
 
-    check_array_result("Cosine signal PSD X", psd.x, exp_x)
-    check_array_result("Cosine signal PSD Y", psd.y, exp_y)
+        if log_scale:
+            exp_y = 10 * np.log10(exp_y)
+
+        check_array_result(f"Cosine signal PSD X (log={log_scale})", psd.x, exp_x)
+        check_array_result(f"Cosine signal PSD Y (log={log_scale})", psd.y, exp_y)
 
 
 if __name__ == "__main__":

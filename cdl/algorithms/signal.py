@@ -19,21 +19,6 @@ import scipy.signal as sps
 from cdl.algorithms import fit
 
 
-# ----- Filtering functions ----------------------------------------------------
-def moving_average(y: np.ndarray, n: int) -> np.ndarray:
-    """Compute moving average.
-
-    Args:
-        y: Input array
-        n: Window size
-
-    Returns:
-        Moving average
-    """
-    y_padded = np.pad(y, (n // 2, n - 1 - n // 2), mode="edge")
-    return np.convolve(y_padded, np.ones((n,)) / n, mode="valid")
-
-
 # ----- Misc. functions --------------------------------------------------------
 def normalize(
     yin: np.ndarray,
@@ -162,10 +147,10 @@ def psd(
     Returns:
         Power Spectral Density (PSD): X data, Y data (tuple)
     """
-    f, pxx = sps.welch(y, fs=sampling_rate(x))
+    x1, y1 = sps.welch(y, fs=sampling_rate(x))
     if log_scale:
-        return 10 * np.log10(pxx)
-    return f, pxx
+        y1 = 10 * np.log10(y1)
+    return x1, y1
 
 
 def sort_frequencies(x: np.ndarray, y: np.ndarray) -> np.ndarray:

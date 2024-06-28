@@ -173,14 +173,44 @@ def get_script_output(
     return result.stdout.strip()
 
 
+def compare_lists(list1: list, list2: list, level: int = 1) -> bool:
+    """Compare two lists
+
+    Args:
+        list1: first list
+        list2: second list
+        level: recursion level
+
+    Returns:
+        True if lists are the same, False otherwise
+    """
+    same = True
+    prefix = "  " * level
+    for idx, (elem1, elem2) in enumerate(zip(list1, list2)):
+        execenv.print(f"{prefix}Checking element {idx}...", end=" ")
+        if isinstance(elem1, (list, tuple)):
+            execenv.print("")
+            same = same and compare_lists(elem1, elem2, level + 1)
+        elif isinstance(elem1, dict):
+            execenv.print("")
+            same = same and compare_metadata(elem1, elem2, level + 1)
+        else:
+            same_value = str(elem1) == str(elem2)
+            if not same_value:
+                execenv.print(f"Different values: {elem1} != {elem2}")
+            same = same and same_value
+            execenv.print("OK" if same else "KO")
+    return same
+
+
 def compare_metadata(
     dict1: dict[str, Any], dict2: dict[str, Any], level: int = 1
 ) -> bool:
     """Compare metadata dictionaries without private elements
 
     Args:
-        dict1: first dictionary
-        dict2: second dictionary
+        dict1: first dictionary, exclusively with string keys
+        dict2: second dictionary, exclusively with string keys
         level: recursion level
 
     Returns:
@@ -197,20 +227,20 @@ def compare_metadata(
         if key not in dict_b:
             same = False
             break
+        val_a, val_b = dict_a[key], dict_b[key]
         execenv.print(f"{prefix}Checking key {key}...", end=" ")
-        if isinstance(dict_a[key], dict):
+        if isinstance(val_a, dict):
             execenv.print("")
-            same = same and compare_metadata(dict_a[key], dict_b[key], level + 1)
-            status_prefix = "  " * level
+            same = same and compare_metadata(val_a, val_b, level + 1)
+        elif isinstance(val_a, (list, tuple)):
+            execenv.print("")
+            same = same and compare_lists(val_a, val_b, level + 1)
         else:
-            same_value = str(dict_a[key]) == str(dict_b[key])
+            same_value = str(val_a) == str(val_b)
             if not same_value:
-                execenv.print(
-                    f"Different values for key {key}: {dict_a[key]} != {dict_b[key]}"
-                )
+                execenv.print(f"Different values for key {key}: {val_a} != {val_b}")
             same = same and same_value
-            status_prefix = ""
-        execenv.print(status_prefix + ("OK" if same else "KO"))
+            execenv.print("OK" if same else "KO")
     return same
 
 

@@ -5,12 +5,40 @@ Getting started
     :description: Getting started with DataLab, the open platform for signal and image processing
     :keywords: DataLab, signal processing, image processing, open platform, scientific data, industrial data, industrial-grade software
 
-DataLab is an open platform for signal and image processing. Its functional scope is
-intentionally broad. With its many functions, some of them technically advanced, DataLab
-enables the processing and visualization of all types of scientific data. As a result,
-scientific, industrial, and innovation stakeholders can have access to an easy-to-use
-tool that seemlessly integrates into their workflow and offers the reliability of
-industrial-grade software.
+DataLab is an open platform for signal and image processing, designed to be used by
+scientists, engineers, and researchers in academia and industry, while offering the
+reliability of industrial-grade software. It is a versatile software that can be used
+for a wide range of applications, from simple data analysis to complex signal processing
+and image analysis tasks.
+
+DataLab integrates seemlessly into your workflow thanks to three main operating modes:
+
+.. list-table::
+    :header-rows: 0
+
+    * - |appmode|
+      - **Stand-alone application**, with a graphical user interface that allows you to interact with your data and visualize the results of your analysis in real time.
+
+    * - |libmode|
+      - **Python library**, allowing you to integrate DataLab functions (or graphical user interfaces) into your own Python scripts and programs or Jupyter notebooks.
+
+    * - |remotemode|
+      - **Remotely controlled** from your own software, or from an IDE (e.g., Spyder) or a Jupyter notebook, using the DataLab API.
+
+.. |appmode| image:: ../../resources/DataLab-app.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
+
+.. |libmode| image:: ../../resources/DataLab-lib.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
+
+.. |remotemode| image:: ../../resources/DataLab-remote.svg
+    :width: 64px
+    :height: 64px
+    :class: dark-light no-scaled-link
 
 DataLab leverages the power of Python and its scientific ecosystem, through the use of
 the following libraries:

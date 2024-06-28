@@ -181,7 +181,7 @@ def compute_addition_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     """
     # For the addition of a constant value, we convert the constant value to the same
     # data type as the input image, to avoid any data type conversion issues.
-    value = np.array(p.value, dtype=src.data.dtype)
+    value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "+", str(value))
     dst.data += value
     return dst
@@ -199,7 +199,7 @@ def compute_difference_constant(src: ImageObj, p: ConstantOperationParam) -> Ima
     """
     # For the subtraction of a constant value, we convert the constant value to the same
     # data type as the input image, to avoid any data type conversion issues.
-    value = np.array(p.value, dtype=src.data.dtype)
+    value = np.array(p.value).astype(dtype=src.data.dtype)
     dst = dst_11(src, "-", str(value))
     dst.data -= value
     return dst
@@ -221,7 +221,7 @@ def compute_product_constant(src: ImageObj, p: ConstantOperationParam) -> ImageO
     # type conversion ensures that the output image has the same data type as the input
     # image.
     dst = dst_11(src, "×", str(p.value))
-    dst.data = np.array(src.data * p.value, dtype=src.data.dtype)
+    dst.data = np.array(src.data * p.value).astype(dtype=src.data.dtype)
     return dst
 
 
@@ -240,7 +240,7 @@ def compute_division_constant(src: ImageObj, p: ConstantOperationParam) -> Image
     # image by a constant value of a different data type. The final data type conversion
     # ensures that the output image has the same data type as the input image.
     dst = dst_11(src, "/", str(p.value))
-    dst.data = np.array(src.data / p.value, dtype=src.data.dtype)
+    dst.data = np.array(src.data / p.value).astype(dtype=src.data.dtype)
     return dst
 
 
@@ -612,28 +612,28 @@ def compute_resize(src: ImageObj, p: ResizeParam) -> ImageObj:
 class BinningParam(gds.DataSet):
     """Binning parameters"""
 
-    binning_x = gds.IntItem(
+    sx = gds.IntItem(
         _("Cluster size (X)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along X-axis."),
     )
-    binning_y = gds.IntItem(
+    sy = gds.IntItem(
         _("Cluster size (Y)"),
         default=2,
         min=2,
         help=_("Number of adjacent pixels to be combined together along Y-axis."),
     )
-    _operations = alg.BINNING_OPERATIONS
+    operations = alg.BINNING_OPERATIONS
     operation = gds.ChoiceItem(
         _("Operation"),
-        list(zip(_operations, _operations)),
-        default=_operations[0],
+        list(zip(operations, operations)),
+        default=operations[0],
     )
-    _dtype_list = ["dtype"] + VALID_DTYPES_STRLIST
+    dtypes = ["dtype"] + VALID_DTYPES_STRLIST
     dtype_str = gds.ChoiceItem(
         _("Data type"),
-        list(zip(_dtype_list, _dtype_list)),
+        list(zip(dtypes, dtypes)),
         help=_("Output image data type."),
     )
     change_pixel_size = gds.BoolItem(
@@ -656,20 +656,20 @@ def compute_binning(src: ImageObj, param: BinningParam) -> ImageObj:
     dst = dst_11(
         src,
         "binning",
-        f"{param.binning_x}x{param.binning_y},{param.operation},"
+        f"{param.sx}x{param.sy},{param.operation},"
         f"change_pixel_size={param.change_pixel_size}",
     )
     dst.data = alg.binning(
         src.data,
-        binning_x=param.binning_x,
-        binning_y=param.binning_y,
+        sx=param.sx,
+        sy=param.sy,
         operation=param.operation,
         dtype=None if param.dtype_str == "dtype" else param.dtype_str,
     )
     if param.change_pixel_size:
         if src.dx is not None and src.dy is not None:
-            dst.dx = src.dx * param.binning_x
-            dst.dy = src.dy * param.binning_y
+            dst.dx = src.dx * param.sx
+            dst.dy = src.dy * param.sy
     else:
         # TODO: [P2] Instead of removing geometric shapes, apply zoom
         dst.remove_all_shapes()
@@ -1101,9 +1101,7 @@ def compute_gaussian_filter(src: ImageObj, p: GaussianParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f} pixels")
-    dst.data = spi.gaussian_filter(src.data, sigma=p.sigma)
-    return dst
+    return Wrap11Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
 def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
@@ -1116,9 +1114,7 @@ def compute_moving_average(src: ImageObj, p: MovingAverageParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "moving_average", f"n={p.n}")
-    dst.data = spi.uniform_filter(src.data, size=p.n, mode="constant")
-    return dst
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
@@ -1131,9 +1127,7 @@ def compute_moving_median(src: ImageObj, p: MovingMedianParam) -> ImageObj:
     Returns:
         Output image object
     """
-    dst = dst_11(src, "moving_median", f"n={p.n}")
-    dst.data = sps.medfilt(src.data, kernel_size=p.n)
-    return dst
+    return Wrap11Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_wiener(src: ImageObj) -> ImageObj:

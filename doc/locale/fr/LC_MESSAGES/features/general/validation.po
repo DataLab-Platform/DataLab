@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-06-19 15:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: ../../doc/features/general/validation.rst:-1
 msgid ""
@@ -201,14 +201,15 @@ msgid ""
 "against ground-truth data or analytical models. The test coverage "
 "indicates the percentage of the code that is executed by the test suite, "
 "but it does not necessarily take into account the correctness of the "
-"results."
+"results (DataLab's test coverage is around 90%)."
 msgstr ""
 "L'état de validation ne doit pas être confondu avec la couverture de "
 "test. L'état de validation indique si la fonction a été validée par "
 "rapport à des données de référence ou des modèles analytiques. La "
 "couverture de test indique le pourcentage du code qui est exécuté par la "
 "suite de tests, mais elle ne prend pas nécessairement en compte la "
-"justesse des résultats."
+"justesse des résultats (la couverture de test de DataLab est d'environ "
+"90%)."
 
 #: ../../doc/features/general/validation.rst:72
 msgid "Validation Statistics"
@@ -235,15 +236,15 @@ msgid "Number of compute functions"
 msgstr "Nombre de fonctions de calcul"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "51"
+msgid "50"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "87"
+msgid "93"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "138"
+msgid "143"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -251,15 +252,15 @@ msgid "Number of validated compute functions"
 msgstr "Nombre de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "26"
+msgid "43"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "21"
+msgid "77"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "47"
+msgid "120"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
@@ -267,15 +268,15 @@ msgid "Percentage of validated compute functions"
 msgstr "Pourcentage de fonctions de calcul validées"
 
 #: ../../doc/validation_statistics.csv:1
-msgid "50%"
+msgid "86%"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "24%"
+msgid "82%"
 msgstr ""
 
 #: ../../doc/validation_statistics.csv:1
-msgid "34%"
+msgid "83%"
 msgstr ""
 
 #: ../../doc/features/general/validation.rst:77
@@ -331,11 +332,6 @@ msgstr ""
 msgid "Add **dst** and a constant value and return a the new result signal object"
 msgstr ""
 
-#: ../../doc/validation_status_image.csv:1
-#: ../../doc/validation_status_signal.csv:1
-msgid "``features/image/operation_unit_test.py``"
-msgstr ""
-
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`astype <cdl.computation.signal.compute_astype>`"
 msgstr ""
@@ -345,9 +341,7 @@ msgid "Convert data type"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`bandwidth_3db "
-"<cdl.computation.signal.compute_bandwidth_3db>`"
+msgid ":py:func:`bandwidth_3db <cdl.computation.signal.compute_bandwidth_3db>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -367,9 +361,8 @@ msgstr ""
 msgid "Compute linear calibration"
 msgstr ""
 
-#: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "N/A"
+msgid "``features/signal/processing_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -413,6 +406,11 @@ msgstr ""
 #, fuzzy
 msgid "Detrend data"
 msgstr "Données expérimentales"
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "N/A"
+msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`difference <cdl.computation.signal.compute_difference>`"
@@ -555,9 +553,7 @@ msgid "Compute integral"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`interpolation "
-"<cdl.computation.signal.compute_interpolation>`"
+msgid ":py:func:`interpolation <cdl.computation.signal.compute_interpolation>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -585,9 +581,7 @@ msgid "Compute magnitude spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`moving_average "
-"<cdl.computation.signal.compute_moving_average>`"
+msgid ":py:func:`moving_average <cdl.computation.signal.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -596,9 +590,7 @@ msgid "Compute moving average"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`moving_median "
-"<cdl.computation.signal.compute_moving_median>`"
+msgid ":py:func:`moving_median <cdl.computation.signal.compute_moving_median>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -626,15 +618,12 @@ msgid ""
 "range"
 msgstr ""
 
-#: ../../doc/validation_status_image.csv:1
 #: ../../doc/validation_status_signal.csv:1
-msgid "``features/image/offset_correction_unit_test.py``"
+msgid "``features/signal/offset_correction_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`peak_detection "
-"<cdl.computation.signal.compute_peak_detection>`"
+msgid ":py:func:`peak_detection <cdl.computation.signal.compute_peak_detection>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -642,9 +631,7 @@ msgid "Peak detection"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ""
-":py:func:`phase_spectrum "
-"<cdl.computation.signal.compute_phase_spectrum>`"
+msgid ":py:func:`phase_spectrum <cdl.computation.signal.compute_phase_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -653,7 +640,7 @@ msgid "Compute phase spectrum"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`pow <cdl.computation.signal.compute_power>`"
+msgid ":py:func:`power <cdl.computation.signal.compute_power>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -699,6 +686,11 @@ msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid "Compute quadratic difference between two signals"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+#: ../../doc/validation_status_signal.csv:1
+msgid "``features/image/operation_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
@@ -767,14 +759,6 @@ msgid "Swap axes"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-msgid ":py:func:`threshold <cdl.computation.signal.compute_threshold>`"
-msgstr ""
-
-#: ../../doc/validation_status_signal.csv:1
-msgid "Compute threshold clipping"
-msgstr ""
-
-#: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`wiener <cdl.computation.signal.compute_wiener>`"
 msgstr ""
 
@@ -840,9 +824,7 @@ msgid "Convert image data type"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`average_profile "
-"<cdl.computation.image.compute_average_profile>`"
+msgid ":py:func:`average_profile <cdl.computation.image.compute_average_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -863,6 +845,10 @@ msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
 msgid "Compute Butterworth filter"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "``features/image/processing_unit_test.py``"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -974,9 +960,7 @@ msgid "Flip data vertically"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`gaussian_filter "
-"<cdl.computation.image.compute_gaussian_filter>`"
+msgid ":py:func:`gaussian_filter <cdl.computation.image.compute_gaussian_filter>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1018,14 +1002,6 @@ msgid "Compute horizontal or vertical profile"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`line_section <cdl.computation.image.compute_line_section>`"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
-msgid "Return intensity profile of data along a line"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`log10 <cdl.computation.image.compute_log10>`"
 msgstr ""
 
@@ -1048,15 +1024,11 @@ msgid ""
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`moving_average "
-"<cdl.computation.image.compute_moving_average>`"
+msgid ":py:func:`moving_average <cdl.computation.image.compute_moving_average>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`moving_median "
-"<cdl.computation.image.compute_moving_median>`"
+msgid ":py:func:`moving_median <cdl.computation.image.compute_moving_median>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1074,9 +1046,11 @@ msgid "Apply offset correction"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`phase_spectrum "
-"<cdl.computation.image.compute_phase_spectrum>`"
+msgid "``features/image/offset_correction_unit_test.py``"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`phase_spectrum <cdl.computation.image.compute_phase_spectrum>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1116,9 +1090,7 @@ msgid "Compute quadratic difference between two images"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`radial_profile "
-"<cdl.computation.image.compute_radial_profile>`"
+msgid ":py:func:`radial_profile <cdl.computation.image.compute_radial_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1163,9 +1135,7 @@ msgid "Rotate data 90°"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`segment_profile "
-"<cdl.computation.image.compute_segment_profile>`"
+msgid ":py:func:`segment_profile <cdl.computation.image.compute_segment_profile>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1189,21 +1159,11 @@ msgid "Swap image axes"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ":py:func:`threshold <cdl.computation.image.compute_threshold>`"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
-msgid "Apply thresholding"
-msgstr ""
-
-#: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`wiener <cdl.computation.image.compute_wiener>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`blob_dog "
-"<cdl.computation.image.detection.compute_blob_dog>`"
+msgid ":py:func:`blob_dog <cdl.computation.image.detection.compute_blob_dog>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1211,9 +1171,7 @@ msgid "Compute blobs using Difference of Gaussian method"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`blob_doh "
-"<cdl.computation.image.detection.compute_blob_doh>`"
+msgid ":py:func:`blob_doh <cdl.computation.image.detection.compute_blob_doh>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1221,9 +1179,7 @@ msgid "Compute blobs using Determinant of Hessian method"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`blob_log "
-"<cdl.computation.image.detection.compute_blob_log>`"
+msgid ":py:func:`blob_log <cdl.computation.image.detection.compute_blob_log>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1391,9 +1347,7 @@ msgid "Gamma correction"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`adjust_log "
-"<cdl.computation.image.exposure.compute_adjust_log>`"
+msgid ":py:func:`adjust_log <cdl.computation.image.exposure.compute_adjust_log>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1459,9 +1413,7 @@ msgid "Compute morphological closing"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
-msgid ""
-":py:func:`dilation "
-"<cdl.computation.image.morphology.compute_dilation>`"
+msgid ":py:func:`dilation <cdl.computation.image.morphology.compute_dilation>`"
 msgstr ""
 
 #: ../../doc/validation_status_image.csv:1
@@ -1534,6 +1486,86 @@ msgstr ""
 msgid "Compute Wavelet denoising"
 msgstr ""
 
+#: ../../doc/validation_status_image.csv:1
+msgid ":py:func:`threshold <cdl.computation.image.threshold.compute_threshold>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_isodata "
+"<cdl.computation.image.threshold.compute_threshold_isodata>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Isodata algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_li "
+"<cdl.computation.image.threshold.compute_threshold_li>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Li algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_mean "
+"<cdl.computation.image.threshold.compute_threshold_mean>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Mean algorithm."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_minimum "
+"<cdl.computation.image.threshold.compute_threshold_minimum>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Minimum algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_otsu "
+"<cdl.computation.image.threshold.compute_threshold_otsu>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Otsu algorithm with default parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_triangle "
+"<cdl.computation.image.threshold.compute_threshold_triangle>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+"Compute the threshold using the Triangle algorithm with default "
+"parameters."
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid ""
+":py:func:`threshold_yen "
+"<cdl.computation.image.threshold.compute_threshold_yen>`"
+msgstr ""
+
+#: ../../doc/validation_status_image.csv:1
+msgid "Compute the threshold using the Yen algorithm with default parameters."
+msgstr ""
+
 #~ msgid "42"
 #~ msgstr ""
 
@@ -1555,9 +1587,7 @@ msgstr ""
 #~ msgid ":py:func:`add <cdl.computation.signal.compute_add>`"
 #~ msgstr ""
 
-#~ msgid ""
-#~ ":py:func:`add_constant "
-#~ "<cdl.computation.signal.compute_add_constant>`"
+#~ msgid ":py:func:`add_constant <cdl.computation.signal.compute_add_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1585,9 +1615,7 @@ msgstr ""
 #~ msgid ":py:func:`add <cdl.computation.image.compute_add>`"
 #~ msgstr ""
 
-#~ msgid ""
-#~ ":py:func:`add_constant "
-#~ "<cdl.computation.image.compute_add_constant>`"
+#~ msgid ":py:func:`add_constant <cdl.computation.image.compute_add_constant>`"
 #~ msgstr ""
 
 #~ msgid ""
@@ -1652,4 +1680,52 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ":py:func:`profile <cdl.computation.image.compute_profile>`"
+#~ msgstr ""
+
+#~ msgid "51"
+#~ msgstr ""
+
+#~ msgid "87"
+#~ msgstr ""
+
+#~ msgid "138"
+#~ msgstr ""
+
+#~ msgid "26"
+#~ msgstr ""
+
+#~ msgid "21"
+#~ msgstr ""
+
+#~ msgid "47"
+#~ msgstr ""
+
+#~ msgid "50%"
+#~ msgstr ""
+
+#~ msgid "24%"
+#~ msgstr ""
+
+#~ msgid "34%"
+#~ msgstr ""
+
+#~ msgid ":py:func:`pow <cdl.computation.signal.compute_power>`"
+#~ msgstr ""
+
+#~ msgid ":py:func:`threshold <cdl.computation.signal.compute_threshold>`"
+#~ msgstr ""
+
+#~ msgid "Compute threshold clipping"
+#~ msgstr ""
+
+#~ msgid ":py:func:`line_section <cdl.computation.image.compute_line_section>`"
+#~ msgstr ""
+
+#~ msgid "Return intensity profile of data along a line"
+#~ msgstr ""
+
+#~ msgid ":py:func:`threshold <cdl.computation.image.compute_threshold>`"
+#~ msgstr ""
+
+#~ msgid "Apply thresholding"
 #~ msgstr ""

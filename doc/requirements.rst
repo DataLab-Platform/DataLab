@@ -14,7 +14,7 @@ The :mod:`cdl` package requires the following Python modules:
       -  >= 3.0
       - Read and write HDF5 files from Python
     * - NumPy
-      -  >= 1.21, < 2
+      -  >= 1.21
       - Fundamental package for array computing in Python
     * - SciPy
       -  >= 1.7

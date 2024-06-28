@@ -416,7 +416,7 @@ def run_image_computations(
     param = dlp.ContourShapeParam()
     panel.processor.compute_contour_shape(param)
 
-    param = dlp.BinningParam.create(binning_x=2, binning_y=2, operation="average")
+    param = dlp.BinningParam.create(sx=2, sy=2, operation="average")
     panel.processor.compute_binning(param)
 
     # Test histogram

@@ -105,9 +105,9 @@ The following filters are available:
     * - Gaussian filter
       - `scipy.ndimage.gaussian_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html>`_
     * - Moving average
-      - :math:`y_{1}[i]=\dfrac{1}{M}\sum_{j=0}^{M-1}y_{0}[i+j]`
+      - `scipy.ndimage.uniform_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.uniform_filter.html>`_
     * - Moving median
-      - `scipy.signal.medfilt <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_
+      - `scipy.ndimage.median_filter <https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_
     * - Wiener filter
       - `scipy.signal.wiener <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.wiener.html>`_
 
@@ -132,15 +132,15 @@ The following functions are available:
       - Inverse Fast Fourier Transform
       - `numpy.fft.ifft <https://docs.scipy.org/doc/numpy/reference/generated/numpy.fft.ifft.html>`_
     * - Magnitude spectrum
-      - Optionnal: use logarithmic scale
-      - :math:`y_{1} = |FFT(y_{0})|`
+      - Optionnal: use logarithmic scale (dB)
+      - :math:`y_{1} = |FFT(y_{0})|` or :math:`20.log_{10}(|FFT(y_{0})|)` (dB)
     * - Phase spectrum
       -
       - :math:`y_{1} = \angle FFT(y_{0})`
     * - Power spectral density (PSD)
-      - Optionnal: use logarithmic scale. PSD is estimated using Welch's method
+      - Optionnal: use logarithmic scale (dB). PSD is estimated using Welch's method
         (see `scipy.signal.welch <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.welch.html>`_)
-      - :math:`Y_{k} = PSD(y_{k})`
+      - :math:`Y_{k} = PSD(y_{k})` or :math:`10.log_{10}(PSD(y_{k}))` (dB)
 
 .. note::
 
@@ -172,18 +172,22 @@ The following filters are available:
 .. |lowpass| image:: ../../../cdl/data/icons/processing/lowpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |highpass| image:: ../../../cdl/data/icons/processing/highpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |bandpass| image:: ../../../cdl/data/icons/processing/bandpass.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |bandstop| image:: ../../../cdl/data/icons/processing/bandstop.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 For each filter, the following methods are available:
 

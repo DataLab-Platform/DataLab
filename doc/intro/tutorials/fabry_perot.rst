@@ -28,6 +28,7 @@ First, we open DataLab and load the images:
 .. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/02.png
 
@@ -62,6 +63,7 @@ by pressing the middle mouse button and dragging the mouse.
 .. |libre-gui-settings| image:: ../../../cdl/data/icons/libre-gui-settings.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Then, let's define a circular region of interest (ROI) around the central fringe.
 
@@ -115,6 +117,7 @@ Now, let's detect the contours in the ROI and fit them to circles.
 .. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 The images (or signals) can also be displayed in a separate window, by clicking on
 the "View in a new window" entry in the "View" menu (or the |new_window| button in
@@ -123,6 +126,7 @@ the toolbar). This is useful to compare side by side images or signals.
 .. |new_window| image:: ../../../cdl/data/icons/view/new_window.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/13.png
 
@@ -157,6 +161,7 @@ Now, let's delete the image metadata (including the annotations) to clean up the
 .. |metadata_delete| image:: ../../../cdl/data/icons/metadata_delete.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/18.png
 
@@ -174,6 +179,7 @@ ROI from the first image to the second image, using the metadata.
 .. |metadata_copy| image:: ../../../cdl/data/icons/metadata_copy.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/20.png
 
@@ -183,6 +189,7 @@ ROI from the first image to the second image, using the metadata.
 .. |metadata_paste| image:: ../../../cdl/data/icons/metadata_paste.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/21.png
 
@@ -210,6 +217,7 @@ To extract the intensity profile along the X axis, we have two options:
 .. |profile| image:: ../../../cdl/data/icons/operations/profile.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |cross_section| image:: ../../images/tutorials/csection.png
 
@@ -265,6 +273,7 @@ profile to transfer the profile to the "Signals" panel.
 .. |to_signal| image:: ../../../cdl/data/icons/to_signal.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/fabry_perot/29.png
 
@@ -284,6 +293,7 @@ the annotations.
 .. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 If you want to load the workspace again, you can use the "File > Open HDF5 file..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
@@ -293,7 +303,9 @@ only a selection of data sets from the workspace.
 .. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

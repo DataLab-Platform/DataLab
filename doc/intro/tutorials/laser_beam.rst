@@ -29,6 +29,7 @@ First, we open DataLab and load the images:
 .. |fileopen_ima| image:: ../../../cdl/data/icons/io/fileopen_ima.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/laser_beam/01.png
 
@@ -59,6 +60,7 @@ pressing the middle mouse button and dragging the mouse.
 .. |distribute_on_grid| image:: ../../../cdl/data/icons/operations/distribute_on_grid.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 If we select on of the images, we can see that there is background noise, so it
 might be useful to apply a threshold to the images.
@@ -118,6 +120,7 @@ might be useful to apply a threshold to the images.
 .. |show_titles| image:: ../../../cdl/data/icons/view/show_titles.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Now, let's try another method to measure the beam size.
 
@@ -147,10 +150,12 @@ and deleting them individually (with "Edit > Remove" or the |delete| button).
 .. |delete_all| image:: ../../../cdl/data/icons/delete_all.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |delete| image:: ../../../cdl/data/icons/delete.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 Then, we select all the images in the "Images" panel (individually, or by selecting
 the whole group "g001").
@@ -181,6 +186,7 @@ the whole group "g001").
 .. |show_results| image:: ../../../cdl/data/icons/computing/show_results.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/laser_beam/16.png
 
@@ -193,6 +199,7 @@ the whole group "g001").
 .. |plot_results| image:: ../../../cdl/data/icons/computing/plot_results.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: ../../images/tutorials/laser_beam/17.png
 
@@ -214,6 +221,7 @@ metadata, and the annotations.
 .. |filesave_h5| image:: ../../../cdl/data/icons/io/filesave_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 If you want to load the workspace again, you can use the "File > Open HDF5 file..."
 (or the |fileopen_h5| button in the toolbar) to load the whole workspace, or the
@@ -223,7 +231,9 @@ only a selection of data sets from the workspace.
 .. |fileopen_h5| image:: ../../../cdl/data/icons/io/fileopen_h5.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link
 
 .. |h5browser| image:: ../../../cdl/data/icons/h5/h5browser.svg
     :width: 24px
     :height: 24px
+    :class: dark-light no-scaled-link

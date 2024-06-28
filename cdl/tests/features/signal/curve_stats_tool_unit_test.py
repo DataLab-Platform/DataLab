@@ -31,7 +31,13 @@ def test_curve_stats_tool():
         item.unselect()
         curvestattool = mgr.get_tool(CurveStatsTool)
         curvestattool.activate()
-        drag_mouse(dlg, qapp, np.array([0.1, 0.5]), np.array([0.1, 0.1]))
+        x_path, y_path = np.array([0.1, 0.5]), np.array([0.1, 0.1])
+        try:
+            # PlotPy 2.3 and earlier
+            drag_mouse(dlg, qapp, x_path, y_path)
+        except TypeError:
+            # PlotPy 2.4 and later
+            drag_mouse(dlg, x_path, y_path)
         exec_dialog(dlg)
 
 

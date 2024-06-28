@@ -165,6 +165,23 @@ def test_signal_log10() -> None:
     check_array_result("Logarithm base 10", log10_signal.y, np.log10(np.exp(s1.y)))
 
 
+@pytest.mark.validation
+def test_signal_sqrt() -> None:
+    """Square root validation test."""
+    s1 = ctd.get_test_signal("paracetamol.txt")
+    sqrt_signal = cps.compute_sqrt(s1)
+    check_array_result("Square root", sqrt_signal.y, np.sqrt(s1.y))
+
+
+@pytest.mark.validation
+def test_signal_power() -> None:
+    """Power validation test."""
+    s1 = ctd.get_test_signal("paracetamol.txt")
+    p = cdl.param.PowerParam.create(power=2.0)
+    power_signal = cps.compute_power(s1, p)
+    check_array_result("Power", power_signal.y, s1.y**p.power)
+
+
 if __name__ == "__main__":
     test_signal_addition()
     test_signal_product()
@@ -181,3 +198,5 @@ if __name__ == "__main__":
     test_signal_astype()
     test_signal_exp()
     test_signal_log10()
+    test_signal_sqrt()
+    test_signal_power()

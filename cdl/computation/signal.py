@@ -600,10 +600,7 @@ def compute_gaussian_filter(src: SignalObj, p: GaussianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "gaussian_filter", f"σ={p.sigma:.3f}")
-    x, y = src.get_data()
-    dst.set_xydata(x, spi.gaussian_filter1d(y, p.sigma))
-    return dst
+    return Wrap11Func(spi.gaussian_filter, sigma=p.sigma)(src)
 
 
 def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
@@ -616,10 +613,7 @@ def compute_moving_average(src: SignalObj, p: MovingAverageParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "moving_average", f"n={p.n:d}")
-    x, y = src.get_data()
-    dst.set_xydata(x, alg.moving_average(y, p.n))
-    return dst
+    return Wrap11Func(spi.uniform_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
@@ -632,10 +626,7 @@ def compute_moving_median(src: SignalObj, p: MovingMedianParam) -> SignalObj:
     Returns:
         Result signal object
     """
-    dst = dst_11(src, "moving_median", f"n={p.n:d}")
-    x, y = src.get_data()
-    dst.set_xydata(x, sps.medfilt(y, kernel_size=p.n))
-    return dst
+    return Wrap11Func(spi.median_filter, size=p.n, mode=p.mode)(src)
 
 
 def compute_wiener(src: SignalObj) -> SignalObj:
@@ -1296,9 +1287,9 @@ def compute_stats(obj: SignalObj) -> ResultProperties:
         "median(y) = %g {.yunit}": lambda xy: np.median(xy[1]),
         "σ(y) = %g {.yunit}": lambda xy: xy[1].std(),
         "<y>/σ(y)": lambda xy: xy[1].mean() / xy[1].std(),
-        "peak-to-peak(y) = %g {.yunit}": lambda xy: xy[1].ptp(),
+        "peak-to-peak(y) = %g {.yunit}": lambda xy: np.ptp(xy[1]),
         "Σ(y) = %g {.yunit}": lambda xy: xy[1].sum(),
-        "∫ydx": lambda xy: np.trapz(xy[1], xy[0]),
+        "∫ydx": lambda xy: spt.trapezoid(xy[1], xy[0]),
     }
     return calc_resultproperties("stats", obj, statfuncs)
 

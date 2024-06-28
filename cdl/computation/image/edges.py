@@ -15,7 +15,7 @@ Edges computation module
 from __future__ import annotations
 
 import guidata.dataset as gds
-import numpy as np
+import skimage
 from skimage import feature, filters
 
 from cdl.computation.image import Wrap11Func, dst_11
@@ -55,10 +55,8 @@ class CannyParam(gds.DataSet):
             "values. If True then the thresholds must be in the range [0, 1]."
         ),
     )
-    _modelist = ("reflect", "constant", "nearest", "mirror", "wrap")
-    mode = gds.ChoiceItem(
-        _("Mode"), list(zip(_modelist, _modelist)), default="constant"
-    )
+    modes = ("reflect", "constant", "nearest", "mirror", "wrap")
+    mode = gds.ChoiceItem(_("Mode"), list(zip(modes, modes)), default="constant")
     cval = gds.FloatItem(
         "cval",
         default=0.0,
@@ -83,7 +81,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
         f"high_threshold={p.high_threshold}, use_quantiles={p.use_quantiles}, "
         f"mode={p.mode}, cval={p.cval}",
     )
-    dst.data = np.array(
+    dst.data = skimage.util.img_as_ubyte(
         feature.canny(
             src.data,
             sigma=p.sigma,
@@ -92,8 +90,7 @@ def compute_canny(src: ImageObj, p: CannyParam) -> ImageObj:
             use_quantiles=p.use_quantiles,
             mode=p.mode,
             cval=p.cval,
-        ),
-        dtype=np.uint8,
+        )
     )
     return dst
 

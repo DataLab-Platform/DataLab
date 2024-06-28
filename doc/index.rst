@@ -65,9 +65,25 @@ Go to :bdg-ref-success-line:`Installation <installation>` to get started!
 
             Getting involved in DataLab project
 
-With its user-friendly experience and versatile :ref:`usage_modes`, DataLab enables
+With its user-friendly experience and versatile :ref:`usage_modes`
+(|appmode| Stand-alone, |libmode| Library, |remotemode| Remote), DataLab enables
 efficient development of your data processing and visualization applications while
 benefiting from an industrial-grade technological platform.
+
+.. |appmode| image:: ../resources/DataLab-app.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |libmode| image:: ../resources/DataLab-lib.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
+
+.. |remotemode| image:: ../resources/DataLab-remote.svg
+    :width: 24px
+    :height: 24px
+    :class: dark-light no-scaled-link
 
 .. figure:: _static/plotpy-stack-powered.png
     :align: center

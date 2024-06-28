@@ -17,6 +17,7 @@ import numpy as np
 import plotpy.items
 import plotpy.plot
 import plotpy.tools
+import scipy.integrate as spt
 from guidata.configtools import get_icon
 from guidata.qthelpers import add_actions, create_action
 from plotpy._scaler import INTERP_NEAREST, _scale_rect
@@ -120,8 +121,8 @@ def move(self, filter: StatefulEventFilter, event: QG.QMouseEvent) -> None:
                 ),
                 (curve, "&lt;y&gt;=%g", lambda *args: args[1].mean()),
                 (curve, "σ(y)=%g", lambda *args: args[1].std()),
-                (curve, "∑(y)=%g", lambda *args: np.trapz(args[1])),
-                (curve, "∫ydx=%g<br>", lambda *args: np.trapz(args[1], args[0])),
+                (curve, "∑(y)=%g", lambda *args: spt.trapezoid(args[1])),
+                (curve, "∫ydx=%g<br>", lambda *args: spt.trapezoid(args[1], args[0])),
                 (curve, "FWHM = %s", fwhm_info),
             ],
         )

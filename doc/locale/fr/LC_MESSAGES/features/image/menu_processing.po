@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-07 10:36+0200\n"
+"POT-Creation-Date: 2024-06-25 18:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -244,8 +244,8 @@ msgstr "Médiane mobile"
 
 #: ../../doc/features/image/menu_processing.rst:104
 msgid ""
-"`scipy.signal.medfilt "
-"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.medfilt.html>`_"
+"`scipy.ndimage.median_filter "
+"<https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.median_filter.html>`_"
 msgstr ""
 
 #: ../../doc/features/image/menu_processing.rst:105
@@ -325,12 +325,14 @@ msgstr "Spectre d'amplitude"
 
 #: ../../doc/features/image/menu_processing.rst:129
 #: ../../doc/features/image/menu_processing.rst:135
-msgid "Optionnal: use logarithmic scale"
-msgstr "Optionnel : utiliser une échelle logarithmique"
+msgid "Optionnal: use logarithmic scale (dB)"
+msgstr "Optionnel : utiliser une échelle logarithmique (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:130
-msgid ":math:`z_{1} = |FFT(z_{0})|`"
-msgstr ""
+msgid ""
+":math:`z_{1} = |FFT(z_{0})|` or :math:`z_{1} = 20 "
+"\\log_{10}(|FFT(z_{0})|)` (dB)"
+msgstr ":math:`z_{1} = |FFT(z_{0})|` ou :math:`z_{1} = 20 \\log_{10}(|FFT(z_{0})|)` (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:131
 msgid "Phase spectrum"
@@ -345,8 +347,10 @@ msgid "Power spectral density"
 msgstr "Densité spectrale de puissance"
 
 #: ../../doc/features/image/menu_processing.rst:136
-msgid ":math:`z_{1} = |FFT(z_{0})|^2`"
-msgstr ""
+msgid ""
+":math:`z_{1} = |FFT(z_{0})|^2` or :math:`z_{1} = 10 "
+"\\log_{10}(|FFT(z_{0})|^2)` (dB)"
+msgstr ":math:`z_{1} = |FFT(z_{0})|^2` ou :math:`z_{1} = 10 \\log_{10}(|FFT(z_{0})|^2)` (dB)"
 
 #: ../../doc/features/image/menu_processing.rst:140
 msgid ""
@@ -366,13 +370,18 @@ msgid ""
 "Create a new image which is the result of thresholding on each selected "
 "image, eventually based on user-defined parameters (\"Parametric "
 "thresholding\")."
-msgstr "Crée une image à partir du résultat d'un seuillage sur chaque image, éventuellement basé sur des paramètres définis par l'utilisateur (\"Seuillage paramétrique\")."
+msgstr ""
+"Crée une image à partir du résultat d'un seuillage sur chaque image, "
+"éventuellement basé sur des paramètres définis par l'utilisateur "
+"(\"Seuillage paramétrique\")."
 
 #: ../../doc/features/image/menu_processing.rst:149
 msgid ""
 "The following parameters are available when selecting \"Parametric "
 "thresholding\":"
-msgstr "Les paramètres suivants sont disponibles lors de la sélection de \"Seuillage paramétrique\" :"
+msgstr ""
+"Les paramètres suivants sont disponibles lors de la sélection de "
+"\"Seuillage paramétrique\" :"
 
 #: ../../doc/features/image/menu_processing.rst:157
 msgid "Threshold method"
@@ -506,7 +515,11 @@ msgid ""
 "thresholding methods on the same image. Combined with the \"distribute on"
 " a grid\" option, this allows to compare the different thresholding "
 "methods on the same image."
-msgstr "L'option \"Toutes les méthodes de seuillage\" permet d'appliquer toutes les méthodes de seuillage à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différentes méthodes de seuillage sur la même image."
+msgstr ""
+"L'option \"Toutes les méthodes de seuillage\" permet d'appliquer toutes "
+"les méthodes de seuillage à la même image. Combinée avec l'option "
+"\"distribuer sur une grille\", cela permet de comparer les différentes "
+"méthodes de seuillage sur la même image."
 
 #: ../../doc/features/image/menu_processing.rst:198
 msgid "Exposure"
@@ -516,7 +529,9 @@ msgstr "Exposition"
 msgid ""
 "Create a new image which is the result of exposure correction on each "
 "selected image."
-msgstr "Crée une image à partir du résultat d'une correction d'exposition sur chaque image sélectionnée."
+msgstr ""
+"Crée une image à partir du résultat d'une correction d'exposition sur "
+"chaque image sélectionnée."
 
 #: ../../doc/features/image/menu_processing.rst:210
 #: ../../doc/features/image/menu_processing.rst:243
@@ -599,7 +614,9 @@ msgstr "Restauration"
 msgid ""
 "Create a new image which is the result of restoration on each selected "
 "image."
-msgstr "Crée une image à partir du résultat d'une restauration sur chaque image sélectionnée."
+msgstr ""
+"Crée une image à partir du résultat d'une restauration sur chaque image "
+"sélectionnée."
 
 #: ../../doc/features/image/menu_processing.rst:244
 msgid "Total variation denoising"
@@ -653,7 +670,11 @@ msgid ""
 "methods on the same image. Combined with the \"distribute on a grid\" "
 "option, this allows to compare the different denoising methods on the "
 "same image."
-msgstr "L'option \"Toutes les méthodes de débruitage\" permet d'appliquer toutes les méthodes de débruitage à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différentes méthodes de débruitage sur la même image."
+msgstr ""
+"L'option \"Toutes les méthodes de débruitage\" permet d'appliquer toutes "
+"les méthodes de débruitage à la même image. Combinée avec l'option "
+"\"distribuer sur une grille\", cela permet de comparer les différentes "
+"méthodes de débruitage sur la même image."
 
 #: ../../doc/features/image/menu_processing.rst:264
 msgid "Morphology"
@@ -663,7 +684,9 @@ msgstr "Morphologie"
 msgid ""
 "Create a new image which is the result of morphological operations on "
 "each selected image, using a disk footprint."
-msgstr "Crée une image à partir du résultat d'opérations morphologiques sur chaque image sélectionnée, en utilisant un disque comme empreinte."
+msgstr ""
+"Crée une image à partir du résultat d'opérations morphologiques sur "
+"chaque image sélectionnée, en utilisant un disque comme empreinte."
 
 #: ../../doc/features/image/menu_processing.rst:277
 msgid "White Top-Hat (disk)"
@@ -725,7 +748,11 @@ msgid ""
 "morphological operations on the same image. Combined with the "
 "\"distribute on a grid\" option, this allows to compare the different "
 "morphological operations on the same image."
-msgstr "L'option \"Toutes les opérations morphologiques\" permet d'appliquer toutes les opérations morphologiques à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différentes opérations morphologiques sur la même image."
+msgstr ""
+"L'option \"Toutes les opérations morphologiques\" permet d'appliquer "
+"toutes les opérations morphologiques à la même image. Combinée avec "
+"l'option \"distribuer sur une grille\", cela permet de comparer les "
+"différentes opérations morphologiques sur la même image."
 
 #: ../../doc/features/image/menu_processing.rst:297
 msgid "Edges"
@@ -735,7 +762,9 @@ msgstr "Contours"
 msgid ""
 "Create a new image which is the result of edge filtering on each selected"
 " image."
-msgstr "Crée une image à partir du résultat d'un filtrage de contours sur chaque image sélectionnée."
+msgstr ""
+"Crée une image à partir du résultat d'un filtrage de contours sur chaque "
+"image sélectionnée."
 
 #: ../../doc/features/image/menu_processing.rst:309
 msgid "Roberts filter"
@@ -893,7 +922,11 @@ msgid ""
 "algorithms on the same image. Combined with the \"distribute on a grid\" "
 "option, this allows to compare the different edge filters on the same "
 "image."
-msgstr "L'option \"Tous les filtres de contours\" permet d'appliquer tous les algorithmes de filtrage de contours à la même image. Combinée avec l'option \"distribuer sur une grille\", cela permet de comparer les différents filtres de contours sur la même image."
+msgstr ""
+"L'option \"Tous les filtres de contours\" permet d'appliquer tous les "
+"algorithmes de filtrage de contours à la même image. Combinée avec "
+"l'option \"distribuer sur une grille\", cela permet de comparer les "
+"différents filtres de contours sur la même image."
 
 #: ../../doc/features/image/menu_processing.rst:347
 msgid "Butterworth filter"

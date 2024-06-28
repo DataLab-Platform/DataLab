@@ -32,16 +32,32 @@ class GaussianParam(gds.DataSet):
     sigma = gds.FloatItem("σ", default=1.0)
 
 
+HELP_MODE = _("""Mode of the filter:
+- 'reflect': Reflect the data at the boundary
+- 'constant': Pad with a constant value
+- 'nearest': Pad with the nearest value
+- 'mirror': Reflect the data at the boundary with the data itself
+- 'wrap': Circular boundary""")
+
+
 class MovingAverageParam(gds.DataSet):
     """Moving average parameters"""
 
     n = gds.IntItem(_("Size of the moving window"), default=3, min=1)
+    modes = ("reflect", "constant", "nearest", "mirror", "wrap")
+    mode = gds.ChoiceItem(
+        _("Mode"), list(zip(modes, modes)), default="reflect", help=HELP_MODE
+    )
 
 
 class MovingMedianParam(gds.DataSet):
     """Moving median parameters"""
 
     n = gds.IntItem(_("Size of the moving window"), default=3, min=1, even=False)
+    modes = ("reflect", "constant", "nearest", "mirror", "wrap")
+    mode = gds.ChoiceItem(
+        _("Mode"), list(zip(modes, modes)), default="nearest", help=HELP_MODE
+    )
 
 
 class ClipParam(gds.DataSet):

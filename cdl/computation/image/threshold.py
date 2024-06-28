@@ -38,7 +38,7 @@ class ThresholdParam(gds.DataSet):
     )
 
     _method_prop = gds.GetAttrProp("method")
-    method = gds.ChoiceItem(_("Threshold method"), methods, default="otsu").set_prop(
+    method = gds.ChoiceItem(_("Threshold method"), methods, default="manual").set_prop(
         "display", store=_method_prop
     )
     bins = gds.IntItem(_("Number of bins"), default=256, min=1).set_prop(

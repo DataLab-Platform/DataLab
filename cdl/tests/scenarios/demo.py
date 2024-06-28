@@ -142,6 +142,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
         param.mode = boundary
         panel.processor.compute_rotate(param)
 
+    newparam.title = None
     ima1 = create_test_image_with_roi(newparam)
     panel.add_object(ima1)
 
@@ -155,6 +156,7 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
+    newparam.title = None
     ima = create_peak2d_image(newparam)
     panel.add_object(ima)
     param = dlp.Peak2DDetectionParam.create(create_rois=True)
@@ -167,7 +169,10 @@ def test_image_features(win: CDLMainWindow, data_size: int = 512) -> None:
 
     qt_wait(DELAY2)
 
-    panel.processor.compute_roi_extraction()
+    n = data_size // 10
+    panel.processor.compute_roi_extraction(
+        dlp.ROIDataParam.create(roidata=[[n, n, data_size - n, data_size - n]])
+    )
 
 
 def play_demo(win: CDLMainWindow) -> None:
