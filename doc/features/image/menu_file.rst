@@ -67,6 +67,8 @@ Create a new image from the following supported filetypes:
       - .txt, .csv, .asc
     * - Andor SIF files
       - .sif
+    * - Princeton Instruments SPE files
+      - .spe
     * - SPIRICON files
       - .scor-data
     * - FXD files

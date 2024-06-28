@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os.path as osp
 
+import imageio.v3 as iio
 import numpy as np
 import plotpy.io
 import scipy.io as sio
@@ -17,7 +18,7 @@ from cdl.config import _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.image import funcs
-from cdl.core.io.image.base import ImageFormatBase
+from cdl.core.io.image.base import ImageFormatBase, MultipleImagesFormatBase
 from cdl.core.model.image import ImageObj
 from cdl.utils.qthelpers import CallbackWorker
 
@@ -199,7 +200,7 @@ class DICOMImageFormat(ImageFormatBase):
         return plotpy.io.imread(filename)
 
 
-class AndorSIFImageFormat(ImageFormatBase):
+class AndorSIFImageFormat(MultipleImagesFormatBase):
     """Object representing an Andor SIF image file type"""
 
     FORMAT_INFO = FormatInfo(
@@ -209,38 +210,26 @@ class AndorSIFImageFormat(ImageFormatBase):
         writeable=False,
     )
 
-    def read(
-        self, filename: str, worker: CallbackWorker | None = None
-    ) -> list[ImageObj]:
-        """Read list of image objects from file
-
-        Args:
-            filename: File name
-            worker: Callback worker object
-
-        Returns:
-            List of image objects
-        """
-        data = self.read_data(filename)
-        if len(data.shape) == 3:
-            objlist = []
-            for idx in range(data.shape[0]):
-                obj = self.create_object(filename, index=idx)
-                obj.data = data[idx, ::]
-                objlist.append(obj)
-                if worker is not None:
-                    worker.set_progress((idx + 1) / data.shape[0])
-                    if worker.was_canceled():
-                        break
-            return objlist
-        obj = self.create_object(filename)
-        obj.data = data
-        return [obj]
-
     @staticmethod
     def read_data(filename: str) -> np.ndarray:
         """Read data and return it"""
         return funcs.imread_sif(filename)
+
+
+class SPEImageFormat(MultipleImagesFormatBase):
+    """Object representing Princeton Instruments SPE image file type"""
+
+    FORMAT_INFO = FormatInfo(
+        name="Princeton Instruments SPE",
+        extensions="*.spe",
+        readable=True,
+        writeable=False,
+    )
+
+    @staticmethod
+    def read_data(filename: str) -> np.ndarray:
+        """Read data and return it"""
+        return iio.imread(filename, index=None)
 
 
 class SpiriconImageFormat(ImageFormatBase):
