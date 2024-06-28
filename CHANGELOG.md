@@ -5,12 +5,26 @@ for future and past milestones.
 
 ## DataLab Version 0.16.2 ##
 
+This release requires PlotPy v2.4.0 or later, which brings the following new features:
+
+* New constrast adjustment features:
+  * New layout: the vertical toolbar (which was constrained in a small area on the
+    right side of the panel) is now a horizontal toolbar at the top of the panel,
+    beside the title
+  * New "Set range" button: allows the user to set manually the minimum and maximum
+    values of the histogram range
+* New "Reverse X axis" feature (plot view context menu)
+
 🛠️ Bug fixes:
 
 * Image Fourier analysis:
   * Fixed logarithmic scale for the magnitude spectrum (computing dB instead of natural logarithm)
   * Fixed PSD computation with logarithmic scale (computing dB instead of natural logarithm)
   * Updated the documentation to explicitly mention that the logarithmic scale is in dB
+
+* Fixed [Issue #82](https://github.com/DataLab-Platform/DataLab/issues/82) - Macros are not renamed in DataLab after exporting them to Python scripts
+
+* `ResultProperties` object could not be added to `SignalObj` or `ImageObj` metadata outside a Qt event loop (because the label item was created right away). This is now fixed.
 
 ## DataLab Version 0.16.1 ##
 
@@ -158,15 +172,16 @@ NumPy 2.0 support has been added with this release.
 ## DataLab Version 0.15.0 ##
 
 🎁 New installer for the stand-alone version on Windows:
-  * The stand-alone version on Windows is now distributed as an MSI installer (instead
+
+* The stand-alone version on Windows is now distributed as an MSI installer (instead
     of an EXE installer)
-  * This avoids the false positive detection of the stand-alone version as a
+* This avoids the false positive detection of the stand-alone version as a
     potential threat by some antivirus software
-  * The program will install files and shortcuts:
-    * For current user, if the user has no administrator privileges
-    * For all users, if the user has administrator privileges
-    * Installation directory may be customized
-  * MSI installer allows to integrate DataLab's installation seemlessly in an
+* The program will install files and shortcuts:
+  * For current user, if the user has no administrator privileges
+  * For all users, if the user has administrator privileges
+  * Installation directory may be customized
+* MSI installer allows to integrate DataLab's installation seemlessly in an
     organization's deployment system
 
 💥 New features and enhancements:
@@ -211,12 +226,13 @@ NumPy 2.0 support has been added with this release.
 ## DataLab Version 0.14.2 ##
 
 ⚠️ API changes required for fixing support for multiple signals loading feature:
-  * Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
+
+* Merged `open_object` and `open_objects` methods to `load_from_files` in proxy
     classes, main window and data panels
-  * For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
-  * To sum up, those changes lead to the following situation:
-    * `load_from_files`: load a sequence of objects from multiple files
-    * `save_to_files`: save a sequence of objects to multiple files (at the moment,
+* For consistency's sake: merged `save_object` and `save_objects` into `save_to_files`
+* To sum up, those changes lead to the following situation:
+  * `load_from_files`: load a sequence of objects from multiple files
+  * `save_to_files`: save a sequence of objects to multiple files (at the moment,
       it only supports saving a single object to a single file, but it may be extended
       in the future to support saving multiple objects to a single file)
 
