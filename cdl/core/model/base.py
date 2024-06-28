@@ -201,7 +201,7 @@ def config_annotated_shape(
     item.set_style("plot", option)
 
 
-# TODO: Move this function as a method of plot items in PlotPy
+# TODO: [P3] Move this function as a method of plot items in PlotPy
 def set_plot_item_editable(
     item: AbstractShape | AbstractLabelItem | AnnotatedShape, state
 ):

@@ -26,7 +26,7 @@ def test_resultproperties():
     """Result properties application test"""
     obj1 = test_data.create_sincos_image()
     with cdltest_app_context(console=False) as win:
-        # TODO: Move the following line outside the with statement and solve
+        # TODO: [P1] Move the following line outside the with statement and solve
         # the "QPixmap: Must construct a QGuiApplication before a QPixmap" error
         obj2 = create_image_with_resultproperties()
         panel = win.signalpanel

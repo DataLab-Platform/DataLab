@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from cdl.core.model.signal import SignalObj
 
 
-# TODO: [P1] Remove this function and use the same mechanism as in reordering methods
+# TODO: [P3] Remove this function and use the same mechanism as in reordering methods
 #
 # This mechanism is as follows (see `reorder_groups` and `reorder_objects` in
 # `ObjectModel` class):
