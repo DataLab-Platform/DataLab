@@ -17,6 +17,8 @@ import scipy.spatial as spt
 from numpy import ma
 from skimage import exposure, feature, measure, transform
 
+# MARK: Level adjustment ---------------------------------------------------------------
+
 
 def scale_data_to_min_max(
     data: np.ndarray, zmin: float | int, zmax: float | int
@@ -65,6 +67,9 @@ def normalize(
     if parameter == "rms":
         return fdata / np.sqrt(np.mean(fdata * fdata.conjugate()))
     raise ValueError(f"Unsupported parameter {parameter}")
+
+
+# MARK: Fourier analysis ---------------------------------------------------------------
 
 
 def fft2d(z: np.ndarray, shift: bool = True) -> np.ndarray:
@@ -143,6 +148,9 @@ def psd(z: np.ndarray, log_scale: bool = False) -> np.ndarray:
     return z1
 
 
+# MARK: Binning ------------------------------------------------------------------------
+
+
 BINNING_OPERATIONS = ("sum", "average", "median", "min", "max")
 
 
@@ -187,6 +195,9 @@ def binning(
     return np.array(bdata, dtype=data.dtype if dtype is None else np.dtype(dtype))
 
 
+# MARK: Background subtraction ---------------------------------------------------------
+
+
 def flatfield(
     rawdata: np.ndarray, flatdata: np.ndarray, threshold: float | None = None
 ) -> np.ndarray:
@@ -207,6 +218,9 @@ def flatfield(
     dcorr = np.array(rawdata, copy=True)
     dcorr[rawdata > threshold] = dcorr_all[rawdata > threshold]
     return dcorr
+
+
+# MARK: Misc. computations -------------------------------------------------------------
 
 
 def get_centroid_fourier(data: np.ndarray) -> tuple[float, float]:
@@ -478,6 +492,9 @@ def get_hough_circle_peaks(
         hough_res, hough_radii, min_xdistance=min_distance, min_ydistance=min_distance
     )
     return np.vstack([cx, cy, radii]).T
+
+
+# MARK: Blob detection -----------------------------------------------------------------
 
 
 def __blobs_to_coords(blobs: np.ndarray) -> np.ndarray:

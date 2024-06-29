@@ -77,8 +77,8 @@ msgstr ""
 "coordonnées"
 
 #: cdl.algorithms:22 of
-msgid ":mod:`cdl.algorithms.fit`: Fitting algorithms"
-msgstr ":mod:`cdl.algorithms.fit` : Algorithmes de régression"
+msgid ":mod:`cdl.algorithms.signal`: Fitting algorithms"
+msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de régression"
 
 #: cdl.algorithms:25 of
 msgid "Signal Processing Algorithms"
@@ -1243,46 +1243,46 @@ msgstr ""
 msgid "Curve Fitting Algorithms"
 msgstr "Algorithmes de régression"
 
-#: cdl.algorithms.fit.FitModel:1 of
+#: cdl.algorithms.signal.FitModel:1 of
 msgid "Curve fitting model base class"
 msgstr "Classe de base du modèle de régression"
 
-#: cdl.algorithms.fit.FitModel.func:1 cdl.algorithms.fit.GaussianModel.func:1
-#: cdl.algorithms.fit.LorentzianModel.func:1
-#: cdl.algorithms.fit.VoigtModel.func:1 of
+#: cdl.algorithms.signal.FitModel.func:1 cdl.algorithms.signal.GaussianModel.func:1
+#: cdl.algorithms.signal.LorentzianModel.func:1
+#: cdl.algorithms.signal.VoigtModel.func:1 of
 msgid "Return fitting function"
 msgstr "Retourne la fonction de régression"
 
-#: cdl.algorithms.fit.FitModel.get_amp_from_amplitude:1
-#: cdl.algorithms.fit.GaussianModel.get_amp_from_amplitude:1
-#: cdl.algorithms.fit.LorentzianModel.get_amp_from_amplitude:1 of
+#: cdl.algorithms.signal.FitModel.get_amp_from_amplitude:1
+#: cdl.algorithms.signal.GaussianModel.get_amp_from_amplitude:1
+#: cdl.algorithms.signal.LorentzianModel.get_amp_from_amplitude:1 of
 msgid "Return amp from function amplitude and sigma"
 msgstr "Retourne amp à partir de l'amplitude de la fonction et de sigma"
 
-#: cdl.algorithms.fit.FitModel.amplitude:1
-#: cdl.algorithms.fit.GaussianModel.amplitude:1
-#: cdl.algorithms.fit.LorentzianModel.amplitude:1 of
+#: cdl.algorithms.signal.FitModel.amplitude:1
+#: cdl.algorithms.signal.GaussianModel.amplitude:1
+#: cdl.algorithms.signal.LorentzianModel.amplitude:1 of
 msgid "Return function amplitude"
 msgstr "Retourne l'amplitude de la fonction"
 
-#: cdl.algorithms.fit.FitModel.fwhm:1 cdl.algorithms.fit.GaussianModel.fwhm:1
-#: cdl.algorithms.fit.LorentzianModel.fwhm:1
-#: cdl.algorithms.fit.VoigtModel.fwhm:1 of
+#: cdl.algorithms.signal.FitModel.fwhm:1 cdl.algorithms.signal.GaussianModel.fwhm:1
+#: cdl.algorithms.signal.LorentzianModel.fwhm:1
+#: cdl.algorithms.signal.VoigtModel.fwhm:1 of
 msgid "Return function FWHM"
 msgstr "Retourne la LMH de la fonction"
 
-#: cdl.algorithms.fit.FitModel.half_max_segment:1 of
+#: cdl.algorithms.signal.FitModel.half_max_segment:1 of
 msgid "Return segment coordinates for y=half-maximum intersection"
 msgstr "Retourne les coordonnées du segment pour l'intersection y=half-maximum"
 
-#: cdl.algorithms.fit.GaussianModel:1 of
+#: cdl.algorithms.signal.GaussianModel:1 of
 msgid "1-dimensional Gaussian fit model"
 msgstr "Modèle de régression gaussien à 1 dimension"
 
-#: cdl.algorithms.fit.LorentzianModel:1 of
+#: cdl.algorithms.signal.LorentzianModel:1 of
 msgid "1-dimensional Lorentzian fit model"
 msgstr "Modèle de régression lorentzien à 1 dimension"
 
-#: cdl.algorithms.fit.VoigtModel:1 of
+#: cdl.algorithms.signal.VoigtModel:1 of
 msgid "1-dimensional Voigt fit model"
 msgstr "Modèle de régression Voigt à 1 dimension"
