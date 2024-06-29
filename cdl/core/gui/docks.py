@@ -23,7 +23,6 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING
 
-import plotpy
 import scipy.integrate as spt
 from guidata.configtools import get_icon, get_image_file_path
 from guidata.qthelpers import create_action, is_dark_mode
@@ -56,7 +55,6 @@ from cdl.algorithms.image import get_centroid_fourier
 from cdl.algorithms.signal import fwhm
 from cdl.config import APP_NAME, Conf, _
 from cdl.core.model.signal import create_signal
-from cdl.utils.misc import compare_versions
 
 if TYPE_CHECKING:
     from plotpy.items.image.base import BaseImageItem

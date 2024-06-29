@@ -311,8 +311,12 @@ def qt_long_callback(
     if progress:
         worker.SIG_PROGRESS_UPDATE.disconnect(prog.setValue)
         worker.wait()
-    result = worker.get_result()
-
+    try:
+        result = worker.get_result()
+    except Exception as exc:  # pylint: disable=broad-except
+        prog.close()
+        prog.deleteLater()
+        raise exc
     prog.close()
     prog.deleteLater()
     return result
