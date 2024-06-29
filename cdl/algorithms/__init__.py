@@ -45,9 +45,4 @@ Coordinate Conversion Algorithms
 .. automodule:: cdl.algorithms.coordinates
    :members:
 
-Curve Fitting Algorithms
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. automodule:: cdl.algorithms.signal
-   :members:
 """
