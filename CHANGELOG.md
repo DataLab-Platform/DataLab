@@ -24,6 +24,12 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Image view context menu: new "Reverse X axis" feature
 
+ℹ️ Minor new features and enhancements:
+
+* Image file types:
+  * Added native support for reading .SPE, .GEL, .NTPI and .REC image files
+  * Added support for any `imageio`-supported file format through configuration file (entry `imageio_formats` may be customized to complement the default list of supported formats: see `cdl.core.io.image.formats.IMAGEIO_FORMATS_INFO`)
+
 🛠️ Bug fixes:
 
 * Image Fourier analysis:
