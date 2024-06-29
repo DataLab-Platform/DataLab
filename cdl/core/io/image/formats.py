@@ -216,20 +216,34 @@ class AndorSIFImageFormat(MultipleImagesFormatBase):
         return funcs.imread_sif(filename)
 
 
-class SPEImageFormat(MultipleImagesFormatBase):
-    """Object representing Princeton Instruments SPE image file type"""
+IMAGEIO_FORMATS_INFO = (
+    ("*.gel", "Opticks GEL"),
+    ("*.spe", "Princeton Instruments SPE"),
+    ("*.ndpi", "Hamamatsu Slide Scanner NDPI"),
+    ("*.rec", "PCO Camera REC"),
+)
 
-    FORMAT_INFO = FormatInfo(
-        name="Princeton Instruments SPE",
-        extensions="*.spe",
-        readable=True,
-        writeable=False,
-    )
 
-    @staticmethod
-    def read_data(filename: str) -> np.ndarray:
-        """Read data and return it"""
-        return iio.imread(filename, index=None)
+# Generate classes based on the information above:
+def generate_imageio_format_classes():
+    """Generate classes based on the information above"""
+    imageio_formats = IMAGEIO_FORMATS_INFO
+    for extensions, name in imageio_formats:
+        class_dict = {
+            "FORMAT_INFO": FormatInfo(
+                name=name, extensions=extensions, readable=True, writeable=False
+            ),
+            "read_data": staticmethod(
+                lambda filename: iio.imread(filename, index=None)
+            ),
+        }
+        class_name = extensions.split()[0].upper() + "ImageIOFormat"
+        globals()[class_name] = type(
+            class_name, (MultipleImagesFormatBase,), class_dict
+        )
+
+
+generate_imageio_format_classes()
 
 
 class SpiriconImageFormat(ImageFormatBase):
