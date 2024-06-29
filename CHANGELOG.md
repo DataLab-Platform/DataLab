@@ -33,7 +33,9 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Fixed [Issue #82](https://github.com/DataLab-Platform/DataLab/issues/82) - Macros are not renamed in DataLab after exporting them to Python scripts
 
-* `ResultProperties` object could not be added to `SignalObj` or `ImageObj` metadata outside a Qt event loop (because the label item was created right away). This is now fixed.
+* `ResultProperties` object can now be added to `SignalObj` or `ImageObj` metadata even outside a Qt event loop (because the label item is no longer created right away)
+
+* Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)
 
 ## DataLab Version 0.16.1 ##
 
