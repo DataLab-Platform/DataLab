@@ -14,7 +14,7 @@ import plotpy.io
 import scipy.io as sio
 import skimage.io
 
-from cdl.config import _
+from cdl.config import Conf, _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.image import funcs
@@ -228,6 +228,9 @@ IMAGEIO_FORMATS_INFO = (
 def generate_imageio_format_classes():
     """Generate classes based on the information above"""
     imageio_formats = IMAGEIO_FORMATS_INFO
+    conf_formats = Conf.io.imageio_formats.get()
+    if conf_formats:
+        imageio_formats += conf_formats
     for extensions, name in imageio_formats:
         class_dict = {
             "FORMAT_INFO": FormatInfo(

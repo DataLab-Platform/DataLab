@@ -141,6 +141,9 @@ class IOSection(conf.Section, metaclass=conf.SectionMeta):
     # - False: do not add HDF5 file name in signal or image title
     h5_fname_in_title = conf.Option()
 
+    # ImageIO supported file formats:
+    imageio_formats = conf.Option()
+
 
 class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     """Class defining the Processing configuration section structure.
@@ -294,6 +297,7 @@ def initialize():
     # IO section
     Conf.io.h5_fullpath_in_title.get(False)
     Conf.io.h5_fname_in_title.get(True)
+    Conf.io.imageio_formats.get(())
     # Proc section
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
