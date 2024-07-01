@@ -462,3 +462,17 @@ PLOTPY_DEFAULTS = {
 
 PLOTPY_CONF.update_defaults(PLOTPY_DEFAULTS)
 PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=False)
+
+
+# Default image file formats supported by the ImageIO library
+#
+# This object represents the natively supported image file formats from the ImageIO
+# library. This list is used in the core I/O module to load data from files with the
+# supported formats. It may be extended using the `imageio_formats` option in the
+# configuration file (see section `io`).
+IMAGEIO_FORMATS = (
+    ("*.gel", "Opticks GEL"),
+    ("*.spe", "Princeton Instruments SPE"),
+    ("*.ndpi", "Hamamatsu Slide Scanner NDPI"),
+    ("*.rec", "PCO Camera REC"),
+)

@@ -14,7 +14,7 @@ import plotpy.io
 import scipy.io as sio
 import skimage.io
 
-from cdl.config import Conf, _
+from cdl.config import IMAGEIO_FORMATS, Conf, _
 from cdl.core.io.base import FormatInfo
 from cdl.core.io.conv import convert_array_to_standard_type
 from cdl.core.io.image import funcs
@@ -216,18 +216,10 @@ class AndorSIFImageFormat(MultipleImagesFormatBase):
         return funcs.imread_sif(filename)
 
 
-IMAGEIO_FORMATS_INFO = (
-    ("*.gel", "Opticks GEL"),
-    ("*.spe", "Princeton Instruments SPE"),
-    ("*.ndpi", "Hamamatsu Slide Scanner NDPI"),
-    ("*.rec", "PCO Camera REC"),
-)
-
-
 # Generate classes based on the information above:
 def generate_imageio_format_classes():
     """Generate classes based on the information above"""
-    imageio_formats = IMAGEIO_FORMATS_INFO
+    imageio_formats = IMAGEIO_FORMATS
     conf_formats = Conf.io.imageio_formats.get()
     if conf_formats:
         imageio_formats += conf_formats

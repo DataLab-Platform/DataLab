@@ -1,7 +1,6 @@
 # Changelog #
 
-See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html)
-for future and past milestones.
+See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
 ## DataLab Version 0.16.2 ##
 
@@ -27,8 +26,8 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 ℹ️ Minor new features and enhancements:
 
 * Image file types:
-  * Added native support for reading .SPE, .GEL, .NTPI and .REC image files
-  * Added support for any `imageio`-supported file format through configuration file (entry `imageio_formats` may be customized to complement the default list of supported formats: see `cdl.core.io.image.formats.IMAGEIO_FORMATS_INFO`)
+  * Added native support for reading .SPE, .GEL, .NDPI and .REC image files
+  * Added support for any `imageio`-supported file format through configuration file (entry `imageio_formats` may be customized to complement the default list of supported formats: see [documentation](https://datalab-platform.com/en/features/image/menu_file.html#open-image) for more details)
 
 🛠️ Bug fixes:
 

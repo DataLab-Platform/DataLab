@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-28 16:01+0200\n"
+"POT-Creation-Date: 2024-07-01 10:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -202,44 +202,108 @@ msgid ".spe"
 msgstr ""
 
 #: ../../doc/features/image/menu_file.rst:72
-msgid "SPIRICON files"
-msgstr "Fichiers SPIRICON"
+msgid "Opticks GEL files"
+msgstr "Fichiers Opticks GEL"
 
 #: ../../doc/features/image/menu_file.rst:73
-msgid ".scor-data"
+msgid ".gel"
 msgstr ""
 
 #: ../../doc/features/image/menu_file.rst:74
-msgid "FXD files"
-msgstr "Fichiers FXD"
+msgid "Hammamatsu NDPI files"
+msgstr "Fichiers Hammamatsu NDPI"
 
 #: ../../doc/features/image/menu_file.rst:75
-msgid ".fxd"
+msgid ".ndpi"
 msgstr ""
 
 #: ../../doc/features/image/menu_file.rst:76
-msgid "Bitmap images"
-msgstr "Images Bitmap"
+msgid "PCO Camera REC files"
+msgstr "Fichiers PCO Camera REC"
 
 #: ../../doc/features/image/menu_file.rst:77
-msgid ".bmp"
+msgid ".rec"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:78
+msgid "SPIRICON files"
+msgstr "Fichiers SPIRICON"
+
+#: ../../doc/features/image/menu_file.rst:79
+msgid ".scor-data"
 msgstr ""
 
 #: ../../doc/features/image/menu_file.rst:80
+msgid "FXD files"
+msgstr "Fichiers FXD"
+
+#: ../../doc/features/image/menu_file.rst:81
+msgid ".fxd"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:82
+msgid "Bitmap images"
+msgstr "Images Bitmap"
+
+#: ../../doc/features/image/menu_file.rst:83
+msgid ".bmp"
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:87
+msgid ""
+"DataLab also supports any image format that can be read by the `imageio` "
+"library, provided that the associated plugin(s) are installed (see "
+"`imageio documentation "
+"<https://imageio.readthedocs.io/en/stable/formats/index.html>`_) and that"
+" the output NumPy array data type and shape are supported by DataLab."
+msgstr ""
+"DataLab prend également en charge tout format d'image pouvant être lu par"
+" la bibliothèque `imageio`, à condition que le(s) plugin(s) associé(s) "
+"soient installé(s) (voir `documentation imageio "
+"<https://imageio.readthedocs.io/en/stable/formats/index.html>`_) et que "
+"le type de données et la forme du tableau NumPy de sortie soient pris en "
+"charge par DataLab."
+
+#: ../../doc/features/image/menu_file.rst:91
+msgid ""
+"To add a new file format, you may use the `imageio_formats` entry of "
+"DataLab configuration file. This entry is a formatted like the "
+"`IMAGEIO_FORMATS` object which represents the natively supported formats:"
+msgstr ""
+"Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée "
+"`imageio_formats` du fichier de configuration de DataLab. Cette entrée "
+"est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats "
+"pris en charge nativement :"
+
+#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:1 of
+msgid "Built-in immutable sequence."
+msgstr ""
+
+#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:3 of
+msgid ""
+"If no argument is given, the constructor returns an empty tuple. If "
+"iterable is specified the tuple is initialized from iterable's items."
+msgstr ""
+
+#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:6 of
+msgid "If the argument is a tuple, the return value is the same object."
+msgstr ""
+
+#: ../../doc/features/image/menu_file.rst:100
 msgid "Save image"
 msgstr "Enregister l'image"
 
-#: ../../doc/features/image/menu_file.rst:82
+#: ../../doc/features/image/menu_file.rst:102
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr ""
 "Enregistre l'image sélectionnée dans l'un des types de fichier pris en "
 "charge :"
 
-#: ../../doc/features/image/menu_file.rst:85
+#: ../../doc/features/image/menu_file.rst:105
 msgid "Import text file"
 msgstr "Importer un fichier texte"
 
-#: ../../doc/features/image/menu_file.rst:87
+#: ../../doc/features/image/menu_file.rst:107
 msgid ""
 "DataLab can natively import many types of image files (e.g. TIFF, JPEG, "
 "PNG, etc.). However some specific text file formats may not be supported."
@@ -252,7 +316,7 @@ msgstr ""
 "pouvez utiliser la fonctionnalité « Importer un fichier texte », qui vous"
 " permet d'importer un fichier texte et de le convertir en image."
 
-#: ../../doc/features/image/menu_file.rst:92
+#: ../../doc/features/image/menu_file.rst:112
 msgid ""
 "This feature is accessible from the `File` menu, under the `Import text "
 "file` option."
@@ -260,7 +324,7 @@ msgstr ""
 "Cette fonctionnalité est accessible depuis le menu « Fichier », sous "
 "l'option « Importer un fichier texte »."
 
-#: ../../doc/features/image/menu_file.rst:94
+#: ../../doc/features/image/menu_file.rst:114
 msgid ""
 "It opens an import wizard that guides you through the process of "
 "importing the text file."
@@ -268,12 +332,12 @@ msgstr ""
 "Il ouvre un assistant d'importation qui vous guide tout au long du "
 "processus d'importation du fichier texte."
 
-#: ../../doc/features/image/menu_file.rst:98
-#: ../../doc/features/image/menu_file.rst:108
+#: ../../doc/features/image/menu_file.rst:118
+#: ../../doc/features/image/menu_file.rst:128
 msgid "Step 1: Select the source"
 msgstr "Etape 1 : Sélectionner la source"
 
-#: ../../doc/features/image/menu_file.rst:100
+#: ../../doc/features/image/menu_file.rst:120
 msgid ""
 "The first step is to select the source of the text file. You can either "
 "select a file from your computer or the clipboard if you have copied the "
@@ -284,11 +348,11 @@ msgstr ""
 "presse-papiers si vous avez copié le texte à partir d'une autre "
 "application."
 
-#: ../../doc/features/image/menu_file.rst:111
+#: ../../doc/features/image/menu_file.rst:131
 msgid "Step 2: Preview and configure the import"
 msgstr "Etape 2 : Aperçu et configuration de l'importation"
 
-#: ../../doc/features/image/menu_file.rst:113
+#: ../../doc/features/image/menu_file.rst:133
 msgid ""
 "The second step consists of configuring the import and previewing the "
 "result. You can configure the following options:"
@@ -296,13 +360,13 @@ msgstr ""
 "La deuxième étape consiste à configurer l'importation et à prévisualiser "
 "le résultat. Vous pouvez configurer les options suivantes :"
 
-#: ../../doc/features/image/menu_file.rst:116
+#: ../../doc/features/image/menu_file.rst:136
 msgid "**Delimiter**: The character used to separate the values in the text file."
 msgstr ""
 "**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le "
 "fichier texte."
 
-#: ../../doc/features/image/menu_file.rst:117
+#: ../../doc/features/image/menu_file.rst:137
 msgid ""
 "**Comments**: The character used to indicate that the line is a comment "
 "and should be ignored."
@@ -310,11 +374,11 @@ msgstr ""
 "**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un"
 " commentaire et doit être ignorée."
 
-#: ../../doc/features/image/menu_file.rst:119
+#: ../../doc/features/image/menu_file.rst:139
 msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
 msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
 
-#: ../../doc/features/image/menu_file.rst:120
+#: ../../doc/features/image/menu_file.rst:140
 msgid ""
 "**Maximum Number of Rows**: The maximum number of rows to import. If the "
 "file contains more rows, they will be ignored."
@@ -322,17 +386,17 @@ msgstr ""
 "**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si"
 " le fichier contient plus de lignes, elles seront ignorées."
 
-#: ../../doc/features/image/menu_file.rst:122
+#: ../../doc/features/image/menu_file.rst:142
 msgid "**Transpose**: If checked, the rows and columns will be transposed."
 msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."
 
-#: ../../doc/features/image/menu_file.rst:123
+#: ../../doc/features/image/menu_file.rst:143
 msgid "**Data type**: The destination data type of the imported data."
 msgstr ""
 "**Type de données** : Le type de données de destination des données "
 "importées."
 
-#: ../../doc/features/image/menu_file.rst:125
+#: ../../doc/features/image/menu_file.rst:145
 msgid ""
 "When you are done configuring the import, click the `Apply` button to see"
 " the result."
@@ -340,20 +404,20 @@ msgstr ""
 "Lorsque vous avez terminé de configurer l'importation, cliquez sur le "
 "bouton « Appliquer » pour voir le résultat."
 
-#: ../../doc/features/image/menu_file.rst:131
+#: ../../doc/features/image/menu_file.rst:151
 msgid "Step 2: Configure the import"
 msgstr "Etape 2 : Configurer l'importation"
 
-#: ../../doc/features/image/menu_file.rst:137
+#: ../../doc/features/image/menu_file.rst:157
 msgid "Step 2: Preview the result"
 msgstr "Etape 2 : Prévisualiser le résultat"
 
-#: ../../doc/features/image/menu_file.rst:140
-#: ../../doc/features/image/menu_file.rst:149
+#: ../../doc/features/image/menu_file.rst:160
+#: ../../doc/features/image/menu_file.rst:169
 msgid "Step 3: Show graphical representation"
 msgstr "Etape 3 : Afficher la représentation graphique"
 
-#: ../../doc/features/image/menu_file.rst:142
+#: ../../doc/features/image/menu_file.rst:162
 msgid ""
 "The third step shows a graphical representation of the imported data. You"
 " can use the `Finish` button to import the data into DataLab workspace."
