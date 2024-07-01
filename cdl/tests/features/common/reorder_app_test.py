@@ -65,8 +65,9 @@ def test_reorder():
             group = model.get_object_or_group(group.uuid)
             assert group.number == 2
             # Remove group
+            n_groups = len(model.get_groups())
             model.remove_group(group)
-            assert len(model.get_groups()) == 2
+            assert len(model.get_groups()) == n_groups - 1
 
 
 if __name__ == "__main__":
