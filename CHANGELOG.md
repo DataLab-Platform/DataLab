@@ -44,6 +44,8 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Difference, division, ...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
 
+* When doing an operation which involves an object (signal or image) with higher order number than the current object (e.g. when subtracting an image with an image from a group below the current image), the resulting object's title now correctly refers to the order numbers of the objects involved in the operation (e.g., to continue with the subtraction example mentioned above, the resulting object's title was previously referring to the order number before the insertion of the resulting image)
+
 ## DataLab Version 0.16.1 ##
 
 Since version 0.16.0, many validation functions have been added to the test suite.

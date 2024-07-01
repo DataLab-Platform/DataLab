@@ -310,6 +310,7 @@ class ObjectModel:
 
     def add_object(self, obj: SignalObj | ImageObj, group_id: str) -> None:
         """Add object to model"""
+        self.__replace_short_ids_by_uuids_in_titles([obj])
         self._objects[obj.uuid] = obj
         onb = 0
         for group in self._groups:
@@ -321,6 +322,7 @@ class ObjectModel:
         else:
             raise KeyError(f"Group with uuid '{group_id}' not found")
         self.reset_short_ids()
+        self.__replace_uuids_by_short_ids_in_titles()
 
     def remove_object(self, obj: SignalObj | ImageObj) -> None:
         """Remove object from model"""
@@ -402,19 +404,29 @@ class ObjectModel:
                 mapping[obj.uuid] = obj.short_id
         return mapping
 
-    def __replace_short_ids_by_uuids_in_titles(self) -> None:
+    def __replace_short_ids_by_uuids_in_titles(
+        self, other_objects: tuple[SignalObj | ImageObj] | None = None
+    ) -> None:
         """Replace short IDs by uuids in titles
 
-        This method is called before reorganizing groups or objects. It replaces
-        the short IDs in titles by the uuids. This is needed because the short IDs
-        are used to reflect in the title the operation performed on the object/group,
-        e.g. "fft(s001)" or "g001 + g002". But when reorganizing groups or objects,
-        the short IDs may change, so we need to replace them by the uuids, which
-        are stable. Once the reorganization is done, we will replace the uuids by the
-        new short IDs thanks to the `__replace_uuids_by_short_ids_in_titles` method.
+        Args:
+            other_objects: tuple of other objects to consider for short ID replacement
+
+        .. note::
+
+            This method is called before reorganizing groups or objects. It replaces the
+            short IDs in titles by the uuids. This is needed because the short IDs are
+            used to reflect in the title the operation performed on the object/group,
+            e.g. "fft(s001)" or "g001 + g002". But when reorganizing groups or objects,
+            the short IDs may change, so we need to replace them by the uuids, which are
+            stable. Once the reorganization is done, we will replace the uuids by the
+            new short IDs thanks to the `__replace_uuids_by_short_ids_in_titles` method.
         """
         mapping = self.__get_group_object_mapping_to_shortid()
-        for obj in self._objects.values():
+        objs = self._objects.values()
+        if other_objects is not None:
+            objs = list(objs) + list(other_objects)
+        for obj in objs:
             for obj_uuid, short_id in mapping.items():
                 obj.title = obj.title.replace(short_id, obj_uuid)
         for group in self._groups:
@@ -424,8 +436,10 @@ class ObjectModel:
     def __replace_uuids_by_short_ids_in_titles(self) -> None:
         """Replace uuids by short IDs in titles
 
-        This method is called after reorganizing groups or objects. It replaces
-        the uuids in titles by the short IDs.
+        .. note::
+
+            This method is called after reorganizing groups or objects. It replaces
+            the uuids in titles by the short IDs.
         """
         mapping = self.__get_group_object_mapping_to_shortid()
         for obj in self._objects.values():
