@@ -42,6 +42,8 @@ This release requires PlotPy v2.4.0 or later, which brings the following bug fix
 
 * Progress bar is now automatically closed as expected when an error occurrs during a long operation (e.g. when opening a file)
 
+* Difference, division, ...: dialog box for the second operand selection was allowing to select a group (only a signal or an image should be selected)
+
 ## DataLab Version 0.16.1 ##
 
 Since version 0.16.0, many validation functions have been added to the test suite.
