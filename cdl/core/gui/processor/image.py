@@ -375,7 +375,7 @@ class ImageProcessor(BaseProcessor):
         self.compute_11(cpi.compute_exp, title=_("Exponential"))
 
     @qt_try_except()
-    def compute_difference(self, obj2: ImageObj | None = None) -> None:
+    def compute_difference(self, obj2: ImageObj | list[ImageObj] | None = None) -> None:
         """Compute difference between two images"""
         self.compute_n1n(
             obj2,
@@ -398,7 +398,9 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_quadratic_difference(self, obj2: ImageObj | None = None) -> None:
+    def compute_quadratic_difference(
+        self, obj2: ImageObj | list[ImageObj] | None = None
+    ) -> None:
         """Compute quadratic difference between two images"""
         self.compute_n1n(
             obj2,
@@ -408,7 +410,7 @@ class ImageProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division(self, obj2: ImageObj | None = None) -> None:
+    def compute_division(self, obj2: ImageObj | list[ImageObj] | None = None) -> None:
         """Compute division between two images"""
         self.compute_n1n(
             obj2,

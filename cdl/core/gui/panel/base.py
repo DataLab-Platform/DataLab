@@ -1089,23 +1089,23 @@ class BaseDataPanel(AbstractPanel):
             return roi_editor.get_roieditor_results()
         return None
 
-    def get_object_with_dialog(
-        self, title: str, parent: QW.QWidget | None = None
+    def get_objects_with_dialog(
+        self, title: str, nb_objects: int, parent: QW.QWidget | None = None
     ) -> SignalObj | ImageObj | None:
         """Get object with dialog box.
 
         Args:
             title: Dialog title
+            nb_objects: Number of objects to select
             parent: Parent widget
 
         Returns:
-            Object (signal or image, or None if dialog was canceled)
+            Object(s) (signal(s) or image(s), or None if dialog was canceled)
         """
         parent = self if parent is None else parent
-        dlg = objectview.GetObjectDialog(parent, self, title)
+        dlg = objectview.GetObjectsDialog(parent, self, title, nb_objects)
         if exec_dialog(dlg):
-            obj_uuid = dlg.get_current_object_uuid()
-            return self.objmodel[obj_uuid]
+            return dlg.get_selected_objects()
         return None
 
     def __new_objprop_button(

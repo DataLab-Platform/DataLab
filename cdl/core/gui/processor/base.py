@@ -157,6 +157,15 @@ class Worker:
         return self.result
 
 
+def is_pairwise_mode() -> bool:
+    """Return True if operation mode is pairwise.
+
+    Returns:
+        bool: True if operation mode is pairwise
+    """
+    return Conf.proc.operation_mode.get() == "pairwise"
+
+
 class BaseProcessor(QC.QObject):
     """Object handling data processing: operations, processing, computing.
 
@@ -531,67 +540,135 @@ class BaseProcessor(QC.QObject):
 
         objs = self.panel.objview.get_sel_objects(include_groups=True)
 
-        # [new_objs dictionary] keys: old group id, values: new object
-        dst_objs: dict[str, Obj] = {}
-        # [src_dtypes dictionary] keys: old group id, values: old data type
-        src_dtypes: dict[str, np.dtype] = {}
-        # [src_objs dictionary] keys: old group id, values: list of old objects
-        src_objs: dict[str, list[Obj]] = {}
+        pairwise = is_pairwise_mode()
 
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            for index, src_obj in enumerate(objs):
-                progress.setValue(index + 1)
-                progress.setLabelText(title)
-                src_gid = self.panel.objmodel.get_object_group_id(src_obj)
-                dst_obj = dst_objs.get(src_gid)
-                if dst_obj is None:
-                    src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
-                    dst_dtype = complex if is_complex_dtype(src_dtype) else float
-                    dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
-                    dst_obj.roi = None
-                    src_objs[src_gid] = [src_obj]
-                else:
-                    src_objs[src_gid].append(src_obj)
-                    if param is None:
-                        args = (dst_obj, src_obj)
-                    else:
-                        args = (dst_obj, src_obj, param)
-                    result = self.__exec_func(func, args, progress)
-                    if result is None:
-                        break
-                    dst_obj = self.handle_output(
-                        result, _("Calculating: %s") % title, progress
-                    )
-                    if dst_obj is None:
-                        break
-                    dst_objs[src_gid] = dst_obj
-                    dst_obj.update_resultshapes_from(src_obj)
-                if src_obj.roi is not None:
-                    if dst_obj.roi is None:
-                        dst_obj.roi = src_obj.roi.copy()
-                    else:
-                        dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
-
-        grps = self.panel.objview.get_sel_groups()
-        if grps:
-            # (Group exclusive selection)
-            # At least one group is selected: create a new group
-            dst_gname = f"{name}({','.join([grp.short_id for grp in grps])})"
+        if pairwise:
+            # In pairwise mode, we need to create a new object for each pair of objects
+            src_gids = list(
+                set([self.panel.objmodel.get_object_group_id(obj) for obj in objs])
+            )
+            if len(src_gids) == 1:
+                # In pairwise mode, we need at least two objects from different groups
+                return
+            # [src_objs dictionary] keys: old group id, values: list of old objects
+            src_objs: dict[str, list[Obj]] = {}
+            for src_gid in src_gids:
+                src_objs[src_gid] = [
+                    obj
+                    for obj in objs
+                    if self.panel.objmodel.get_object_group_id(obj) == src_gid
+                ]
+            grps = [self.panel.objmodel.get_group(gid) for gid in src_gids]
+            dst_gname = f"{name}({','.join([grp.short_id for grp in grps])})|pairwise"
+            group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
+            if not group_exclusive:
+                # This is not a group exclusive selection
+                dst_gname += "[...]"
             dst_gid = self.panel.add_group(dst_gname).uuid
-        else:
-            # (Object exclusive selection)
-            # No group is selected: use each object's group
-            dst_gid = None
+            n_pairs = len(src_objs[src_gids[0]])
+            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in grps))
+            with create_progress_bar(self.panel, title, max_=n_pairs) as progress:
+                for i_pair, src_obj1 in enumerate(src_objs[src_gids[0]][:max_i_pair]):
+                    src_obj1: SignalObj | ImageObj
+                    progress.setValue(i_pair + 1)
+                    progress.setLabelText(title)
+                    src_dtype = src_obj1.data.dtype
+                    dst_dtype = complex if is_complex_dtype(src_dtype) else float
+                    dst_obj = src_obj1.copy(dtype=dst_dtype)
+                    src_objs_pair = [src_obj1]
+                    for src_gid in src_gids[1:]:
+                        src_obj = src_objs[src_gid][i_pair]
+                        src_objs_pair.append(src_obj)
+                        if param is None:
+                            args = (dst_obj, src_obj)
+                        else:
+                            args = (dst_obj, src_obj, param)
+                        result = self.__exec_func(func, args, progress)
+                        if result is None:
+                            break
+                        dst_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
+                        )
+                        if dst_obj is None:
+                            break
+                        dst_obj.update_resultshapes_from(src_obj)
+                        if src_obj.roi is not None:
+                            if dst_obj.roi is None:
+                                dst_obj.roi = src_obj.roi.copy()
+                            else:
+                                dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
+                    if is_integer_dtype(src_dtype):
+                        dst_obj.set_data_type(dtype=src_dtype)
+                    if func_objs is not None:
+                        func_objs(dst_obj, src_objs_pair)
+                    short_ids = [obj.short_id for obj in src_objs_pair]
+                    dst_obj.title = f'{name}({", ".join(short_ids)})'
+                    self.panel.add_object(dst_obj, group_id=dst_gid)
 
-        for src_gid, dst_obj in dst_objs.items():
-            if is_integer_dtype(src_dtypes[src_gid]):
-                dst_obj.set_data_type(dtype=src_dtypes[src_gid])
-            if func_objs is not None:
-                func_objs(dst_obj, src_objs[src_gid])
-            short_ids = [obj.short_id for obj in src_objs[src_gid]]
-            dst_obj.title = f'{name}({", ".join(short_ids)})'
-            group_id = dst_gid if dst_gid is not None else src_gid
-            self.panel.add_object(dst_obj, group_id=group_id)
+        else:
+            # In single operand mode, we create a single object for all selected objects
+
+            # [new_objs dictionary] keys: old group id, values: new object
+            dst_objs: dict[str, Obj] = {}
+            # [src_dtypes dictionary] keys: old group id, values: old data type
+            src_dtypes: dict[str, np.dtype] = {}
+            # [src_objs dictionary] keys: old group id, values: list of old objects
+            src_objs: dict[str, list[Obj]] = {}
+
+            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                for index, src_obj in enumerate(objs):
+                    progress.setValue(index + 1)
+                    progress.setLabelText(title)
+                    src_gid = self.panel.objmodel.get_object_group_id(src_obj)
+                    dst_obj = dst_objs.get(src_gid)
+                    if dst_obj is None:
+                        src_dtypes[src_gid] = src_dtype = src_obj.data.dtype
+                        dst_dtype = complex if is_complex_dtype(src_dtype) else float
+                        dst_objs[src_gid] = dst_obj = src_obj.copy(dtype=dst_dtype)
+                        dst_obj.roi = None
+                        src_objs[src_gid] = [src_obj]
+                    else:
+                        src_objs[src_gid].append(src_obj)
+                        if param is None:
+                            args = (dst_obj, src_obj)
+                        else:
+                            args = (dst_obj, src_obj, param)
+                        result = self.__exec_func(func, args, progress)
+                        if result is None:
+                            break
+                        dst_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
+                        )
+                        if dst_obj is None:
+                            break
+                        dst_objs[src_gid] = dst_obj
+                        dst_obj.update_resultshapes_from(src_obj)
+                    if src_obj.roi is not None:
+                        if dst_obj.roi is None:
+                            dst_obj.roi = src_obj.roi.copy()
+                        else:
+                            dst_obj.roi = np.vstack((dst_obj.roi, src_obj.roi))
+
+            grps = self.panel.objview.get_sel_groups()
+            if grps:
+                # (Group exclusive selection)
+                # At least one group is selected: create a new group
+                dst_gname = f"{name}({','.join([grp.short_id for grp in grps])})"
+                dst_gid = self.panel.add_group(dst_gname).uuid
+            else:
+                # (Object exclusive selection)
+                # No group is selected: use each object's group
+                dst_gid = None
+
+            for src_gid, dst_obj in dst_objs.items():
+                if is_integer_dtype(src_dtypes[src_gid]):
+                    dst_obj.set_data_type(dtype=src_dtypes[src_gid])
+                if func_objs is not None:
+                    func_objs(dst_obj, src_objs[src_gid])
+                short_ids = [obj.short_id for obj in src_objs[src_gid]]
+                dst_obj.title = f'{name}({", ".join(short_ids)})'
+                group_id = dst_gid if dst_gid is not None else src_gid
+                self.panel.add_object(dst_obj, group_id=group_id)
 
         # Select newly created group, if any
         if dst_gid is not None:
@@ -599,7 +676,7 @@ class BaseProcessor(QC.QObject):
 
     def compute_n1n(
         self,
-        obj2: Obj | None,
+        obj2: Obj | list[Obj] | None,
         obj2_name: str,
         func: Callable,
         param: gds.DataSet | None = None,
@@ -613,7 +690,7 @@ class BaseProcessor(QC.QObject):
         Examples: subtract, divide
 
         Args:
-            obj2: second object
+            obj2: second object (or list of objects in case of pairwise operation mode)
             obj2_name: name of second object
             func: function to execute
             param: parameters. Defaults to None.
@@ -627,27 +704,87 @@ class BaseProcessor(QC.QObject):
         if param is not None:
             if edit and not param.edit(parent=self.panel.parent()):
                 return
-        if obj2 is None:
-            obj2 = self.panel.get_object_with_dialog(_("Select %s") % obj2_name)
-            if obj2 is None:
-                return
+
         objs = self.panel.objview.get_sel_objects(include_groups=True)
-        # name = func.__name__.replace("compute_", "")
-        with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
-            for index, obj in enumerate(objs):
-                progress.setValue(index + 1)
-                progress.setLabelText(title)
-                args = (obj, obj2) if param is None else (obj, obj2, param)
-                result = self.__exec_func(func, args, progress)
-                if result is None:
-                    break
-                new_obj = self.handle_output(
-                    result, _("Calculating: %s") % title, progress
-                )
-                if new_obj is None:
-                    continue
-                group_id = self.panel.objmodel.get_object_group_id(obj)
-                self.panel.add_object(new_obj, group_id=group_id)
+
+        pairwise = is_pairwise_mode()
+
+        if obj2 is None:
+            objs2 = []
+        elif isinstance(obj2, list):
+            objs2 = obj2
+            assert pairwise
+        else:
+            objs2 = [obj2]
+
+        if not objs2:
+            nb_objects = len(objs) if pairwise else 1
+            dlg_title = _("Select %s") % obj2_name
+            objs2 = self.panel.get_objects_with_dialog(dlg_title, nb_objects)
+            if objs2 is None:
+                return
+
+        if pairwise:
+            group_exclusive = len(self.panel.objview.get_sel_groups()) != 0
+            src_gids = list(
+                set([self.panel.objmodel.get_object_group_id(obj) for obj in objs])
+            )
+            src_objs: dict[str, list[Obj]] = {}
+            for src_gid in src_gids:
+                src_objs[src_gid] = [
+                    obj
+                    for obj in objs
+                    if self.panel.objmodel.get_object_group_id(obj) == src_gid
+                ]
+            grps = [self.panel.objmodel.get_group(gid) for gid in src_gids]
+            name = func.__name__.replace("compute_", "")
+            n_pairs = len(src_objs[src_gids[0]])
+            max_i_pair = min(n_pairs, max(len(src_objs[grp.uuid]) for grp in grps))
+            grp2_id = self.panel.objmodel.get_object_group_id(objs2[0])
+            grp2 = self.panel.objmodel.get_group(grp2_id)
+            with create_progress_bar(self.panel, title, max_=len(src_gids)) as progress:
+                for i_group, src_gid in enumerate(src_gids):
+                    progress.setValue(i_group + 1)
+                    progress.setLabelText(title)
+                    if group_exclusive:
+                        # This is a group exclusive selection
+                        src_grp = self.panel.objmodel.get_group(src_gid)
+                        grp_short_ids = [grp.short_id for grp in (src_grp, grp2)]
+                        dst_gname = f"{name}({','.join(grp_short_ids)})|pairwise"
+                    else:
+                        dst_gname = f"{name}[...]"
+                    dst_gid = self.panel.add_group(dst_gname).uuid
+                    for i_pair in range(max_i_pair):
+                        args = [src_objs[src_gids[i_group]][i_pair], objs2[i_pair]]
+                        if param is not None:
+                            args.append(param)
+                        result = self.__exec_func(func, tuple(args), progress)
+                        if result is None:
+                            break
+                        new_obj = self.handle_output(
+                            result, _("Calculating: %s") % title, progress
+                        )
+                        if new_obj is None:
+                            continue
+                        self.panel.add_object(new_obj, group_id=dst_gid)
+
+        else:
+            obj2 = objs2[0]
+            with create_progress_bar(self.panel, title, max_=len(objs)) as progress:
+                for index, obj in enumerate(objs):
+                    progress.setValue(index + 1)
+                    progress.setLabelText(title)
+                    args = (obj, obj2) if param is None else (obj, obj2, param)
+                    result = self.__exec_func(func, args, progress)
+                    if result is None:
+                        break
+                    new_obj = self.handle_output(
+                        result, _("Calculating: %s") % title, progress
+                    )
+                    if new_obj is None:
+                        continue
+                    group_id = self.panel.objmodel.get_object_group_id(obj)
+                    self.panel.add_object(new_obj, group_id=group_id)
 
     # ------Data Operations-------------------------------------------------------------
 
@@ -673,17 +810,17 @@ class BaseProcessor(QC.QObject):
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_difference(self, obj2: Obj | None = None) -> None:
+    def compute_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
         """Compute difference"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_quadratic_difference(self, obj2: Obj | None = None) -> None:
+    def compute_quadratic_difference(self, obj2: Obj | list[Obj] | None = None) -> None:
         """Compute quadratic difference"""
 
     @abc.abstractmethod
     @qt_try_except()
-    def compute_division(self, obj2: Obj | None = None) -> None:
+    def compute_division(self, obj2: Obj | list[Obj] | None = None) -> None:
         """Compute division"""
 
     def _get_roidataparam(self, param: ROIDataParam | None = None) -> ROIDataParam:

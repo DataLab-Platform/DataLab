@@ -4,6 +4,15 @@
 Operation modes test
 --------------------
 
+DataLab has two operation modes:
+
+- **Single operand mode**: the operation is applied to the selected objects (this
+  is the default mode)
+
+- **Pairwise mode**: the operation is applied to the selected pairs of objects
+
+This test scenario covers the pairwise mode and the operations that can be
+performed in this mode: sum, difference, product, division, ...
 """
 
 # guitest: show
@@ -11,12 +20,18 @@ Operation modes test
 from __future__ import annotations
 
 from cdl import app
+from cdl.config import Conf
+from cdl.env import execenv
 from cdl.utils.qthelpers import cdl_app_context
 from cdl.utils.tests import get_test_fnames
 
 
-def test_single_operand_mode():
-    """Run single operand mode test scenario"""
+def test_single_operand_mode_compute_n1():
+    """Run single operand mode test scenario
+    with compute_n1 operation (e.g. sum)"""
+    original_mode = Conf.proc.operation_mode.get()
+    Conf.proc.operation_mode.set("single")
+
     with cdl_app_context(exec_loop=True):
         win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
         panel = win.signalpanel
@@ -39,8 +54,8 @@ def test_single_operand_mode():
         # - signal 2: group 2 signal 1 + group 2 signal 2
         assert len(model.get_groups()) == n_groups + 1
         new_group = model.get_group_from_number(n_groups + 1)
-        assert len(new_group.get_objects()) == 2
-        for idx, obj in enumerate(new_group.get_objects()):
+        assert len(new_group) == 2
+        for idx, obj in enumerate(new_group):
             pfx_orig = ", ".join(obj.short_id for obj in groups[idx].get_objects())
             assert obj.title == f"Σ({pfx_orig})"
 
@@ -69,10 +84,247 @@ def test_single_operand_mode():
             pfx_orig = ", ".join(obj.short_id for obj in groups[idx][:2])
             assert groups[idx][-1].title == f"Σ({pfx_orig})"
 
-        # Removing resulting signals
-        view.select_objects([groups[0][-1], groups[1][-1]])
-        panel.remove_object()
+    Conf.proc.operation_mode.set(original_mode)
+
+
+def test_pairwise_operations_mode_compute_n1():
+    """Run pairwise operations mode test scenario
+    with compute_n1 operation (e.g. sum)"""
+    original_mode = Conf.proc.operation_mode.get()
+    Conf.proc.operation_mode.set("pairwise")
+
+    with cdl_app_context(exec_loop=True):
+        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        panel = win.signalpanel
+        view, model = panel.objview, panel.objmodel
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select the two first groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        view.select_groups(groups)
+
+        # Checking that each group contains the same number of signals (this is
+        # required for pairwise operations - this part of the test is checking
+        # if the data file is the one we expect)
+        n_objects = len(groups[0])
+        assert all(len(group) == n_objects for group in groups)
+
+        # Perform a sum operation
+        panel.processor.compute_sum()
+
+        # Operation mode is now pairwise, so the sum operation is applied to the
+        # selected groups, and we should have a new group with as many signals as
+        # the original groups, each signal being the sum of the corresponding signals:
+        # - signal 1: group 1 signal 1 + group 2 signal 1
+        # - signal 2: group 1 signal 1 + group 2 signal 2
+        # ...
+        assert len(model.get_groups()) == n_groups + 1
+        new_group = model.get_group_from_number(n_groups + 1)
+        assert len(new_group.get_objects()) == n_objects
+        for idx in range(len(groups[0])):
+            obj = new_group[idx]
+            pfx_orig = ", ".join(obj.short_id for obj in (grp[idx] for grp in groups))
+            execenv.print(f"Σ({pfx_orig})")
+            assert obj.title == f"Σ({pfx_orig})"
+
+        # Remove new group
+        view.select_groups([new_group])
+        panel.remove_object(force=True)
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select two signals of the first two groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        objs = [groups[0][0]] + [groups[0][-1]] + groups[1][-2:]
+        view.select_objects(objs)
+
+        # Perform a sum operation
+        panel.processor.compute_sum()
+
+        # Operation mode is now pairwise, so the sum operation is applied to the
+        # selected signals, and we should have a new group with as many signals as
+        # the selected signals, each signal being the sum of the corresponding signals:
+        # - signal 1: group 1 signal 1 + group 2 signal 1
+        # - signal 2: group 1 signal 1 + group 2 signal 2
+        # ...
+        assert len(model.get_groups()) == n_groups + 1
+        new_group = model.get_group_from_number(n_groups + 1)
+        assert len(new_group) == 2  # 2 signals were selected
+        for idx, obj in enumerate(new_group):
+            pfx_orig = ", ".join(obj.short_id for obj in objs[idx::2])
+            execenv.print(f"Σ({pfx_orig})")
+            assert obj.title == f"Σ({pfx_orig})"
+
+    Conf.proc.operation_mode.set(original_mode)
+
+
+def test_single_operand_mode_compute_n1n():
+    """Run single operand mode test scenario
+    with compute_n1n operation (e.g. difference)"""
+    original_mode = Conf.proc.operation_mode.get()
+    Conf.proc.operation_mode.set("single")
+
+    with cdl_app_context(exec_loop=True):
+        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        panel = win.signalpanel
+        view, model = panel.objview, panel.objmodel
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select the two first groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        view.select_groups(groups)
+        n_objects = [len(grp) for grp in groups]
+
+        # Perform a difference operation with the first signal of the third group
+        group3 = model.get_group_from_number(3)
+        panel.processor.compute_difference(group3[0])
+
+        # Default operation mode is single operand mode, so we should have new signals
+        # in each selected group being the difference between the original signals and
+        # the selected signal:
+        # - in group 1:
+        #   - signal 1: group 1 signal 1 - group 3 signal 1
+        #   - signal 2: group 1 signal 2 - group 3 signal 1
+        # - in group 2:
+        #   - signal 1: group 2 signal 1 - group 3 signal 1
+        #   - signal 2: group 2 signal 2 - group 3 signal 1
+        assert len(model.get_groups()) == n_groups
+        new_objs = []
+        for i_group, group in enumerate(groups):
+            for i_obj in range(n_objects[i_group]):
+                obj = group[i_obj + n_objects[i_group]]
+                assert obj.title == f"{group[i_obj].short_id}-{group3[0].short_id}"
+                new_objs.append(obj)
+
+        # Remove new signals
+        view.select_objects(new_objs)
+        panel.remove_object(force=True)
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select the two first signals of the first two groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        objs = groups[0][:2] + groups[1][:2]
+        view.select_objects(objs)
+        n_objects = [2, 2]
+
+        # Perform a difference operation with the first signal of the third group
+        panel.processor.compute_difference(group3[0])
+
+        # Default operation mode is single operand mode, so we should have new signals
+        # being the difference between the original signals and the selected signal:
+        # - in group 1:
+        #   - signal 1: group 1 signal 1 - group 3 signal 1
+        #   - signal 2: group 1 signal 2 - group 3 signal 1
+        # - in group 2:
+        #   - signal 1: group 2 signal 1 - group 3 signal 1
+        #   - signal 2: group 2 signal 2 - group 3 signal 1
+        assert len(model.get_groups()) == n_groups  # no new group
+        for i_group, group in enumerate(groups):
+            for i_obj in range(n_objects[i_group]):
+                obj = group[len(group) - n_objects[i_group] + i_obj]
+                assert obj.title == f"{group[i_obj].short_id}-{group3[0].short_id}"
+
+    Conf.proc.operation_mode.set(original_mode)
+
+
+def test_pairwise_operations_mode_compute_n1n():
+    """Run pairwise operations mode test scenario
+    with compute_n1n operation (e.g. difference)"""
+    original_mode = Conf.proc.operation_mode.get()
+    Conf.proc.operation_mode.set("pairwise")
+
+    with cdl_app_context(exec_loop=True):
+        win = app.create(h5files=[get_test_fnames("reorder*")[0]], console=False)
+        panel = win.signalpanel
+        view, model = panel.objview, panel.objmodel
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select the two first groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        view.select_groups(groups)
+
+        # Checking that each group contains the same number of signals (this is
+        # required for pairwise operations - this part of the test is checking
+        # if the data file is the one we expect)
+        n_objects = len(groups[0])
+        assert all(len(group) == n_objects for group in groups)
+
+        # Perform a difference operation with the third group
+        group3 = model.get_group_from_number(3)
+        assert len(group3) == n_objects
+        panel.processor.compute_difference(group3.get_objects())
+
+        # Operation mode is now pairwise, so the difference operation is applied to the
+        # selected groups, and we should have a new group with as many signals as the
+        # original groups, each signal being the difference of the corresponding
+        # signals:
+        # - signal 1: group 1 signal 1 - group 2 signal 1
+        # - signal 2: group 1 signal 1 - group 2 signal 2
+        # ...
+        assert len(model.get_groups()) == n_groups + 2
+        new_groups = [
+            model.get_group_from_number(idx) for idx in (n_groups + 1, n_groups + 2)
+        ]
+        for i_new_grp, new_grp in enumerate(new_groups):
+            assert len(new_grp.get_objects()) == n_objects
+            for idx in range(n_objects):
+                obj = new_grp[idx]
+                obj1, obj2 = groups[i_new_grp][idx], group3[idx]
+                execenv.print(f"{obj1.short_id}-{obj2.short_id}")
+                assert obj.title == f"{obj1.short_id}-{obj2.short_id}"
+
+        # Remove new groups
+        view.select_groups(new_groups)
+        panel.remove_object(force=True)
+
+        # Store the number of groups before the operations
+        n_groups = len(model.get_groups())
+
+        # Select two signals of the first two groups
+        groups = [model.get_group_from_number(idx) for idx in (1, 2)]
+        objs = [groups[0][0]] + [groups[0][-1]] + groups[1][-2:]
+        view.select_objects(objs)
+        n_objects = 2
+
+        # Perform a difference operation with two signals from the third group
+        objs2 = group3[:2]
+        panel.processor.compute_difference(objs2)
+
+        # Operation mode is now pairwise, so the difference operation is applied to the
+        # selected signals, and we should have a new group with as many signals as the
+        # selected signals, each signal being the difference of the corresponding
+        # signals:
+        # - signal 1: group 1 signal 1 - group 3 signal 1
+        # - signal 2: group 1 signal 1 - group 3 signal 2
+        # ...
+        assert len(model.get_groups()) == n_groups + 2
+        new_groups = [
+            model.get_group_from_number(idx) for idx in (n_groups + 1, n_groups + 2)
+        ]
+        i_obj1 = 0
+        for i_new_grp, new_grp in enumerate(new_groups):
+            assert len(new_grp.get_objects()) == n_objects
+            for idx in range(n_objects):
+                obj = new_grp[idx]
+                obj1, obj2 = objs[i_obj1], objs2[idx]
+                i_obj1 += 1
+                execenv.print(f"{obj1.short_id}-{obj2.short_id}")
+                assert obj.title == f"{obj1.short_id}-{obj2.short_id}"
+
+    Conf.proc.operation_mode.set(original_mode)
 
 
 if __name__ == "__main__":
-    test_single_operand_mode()
+    test_single_operand_mode_compute_n1()
+    test_pairwise_operations_mode_compute_n1()
+    test_single_operand_mode_compute_n1n()
+    test_pairwise_operations_mode_compute_n1n()

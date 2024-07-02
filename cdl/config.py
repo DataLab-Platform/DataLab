@@ -150,6 +150,11 @@ class ProcSection(conf.Section, metaclass=conf.SectionMeta):
     Each class attribute is an option (metaclass is automatically affecting
     option names in .INI file based on class attribute names)."""
 
+    # Operation mode:
+    # - "single": single operand mode
+    # - "pairwise": pairwise operation mode
+    operation_mode = conf.EnumOption(["single", "pairwise"], default="single")
+
     # ROI extraction strategy:
     # - True: extract all ROIs in a single signal or image
     # - False: extract each ROI in a separate signal or image
@@ -299,6 +304,7 @@ def initialize():
     Conf.io.h5_fname_in_title.get(True)
     Conf.io.imageio_formats.get(())
     # Proc section
+    Conf.proc.operation_mode.get("single")
     Conf.proc.fft_shift_enabled.get(True)
     Conf.proc.extract_roi_singleobj.get(False)
     Conf.proc.ignore_warnings.get(False)

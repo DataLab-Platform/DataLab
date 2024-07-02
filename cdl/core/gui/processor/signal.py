@@ -147,7 +147,9 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_difference(self, obj2: SignalObj | None = None) -> None:
+    def compute_difference(
+        self, obj2: SignalObj | list[SignalObj] | None = None
+    ) -> None:
         """Compute difference between two signals"""
         self.compute_n1n(
             obj2,
@@ -170,7 +172,9 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_quadratic_difference(self, obj2: SignalObj | None = None) -> None:
+    def compute_quadratic_difference(
+        self, obj2: SignalObj | list[SignalObj] | None = None
+    ) -> None:
         """Compute quadratic difference between two signals"""
         self.compute_n1n(
             obj2,
@@ -180,7 +184,7 @@ class SignalProcessor(BaseProcessor):
         )
 
     @qt_try_except()
-    def compute_division(self, obj2: SignalObj | None = None) -> None:
+    def compute_division(self, obj2: SignalObj | list[SignalObj] | None = None) -> None:
         """Compute division between two signals"""
         self.compute_n1n(
             obj2,
