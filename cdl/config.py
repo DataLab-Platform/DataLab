@@ -470,6 +470,7 @@ PLOTPY_CONF.set_application(osp.join(APP_NAME, "plotpy"), CONF_VERSION, load=Fal
 # library. This list is used in the core I/O module to load data from files with the
 # supported formats. It may be extended using the `imageio_formats` option in the
 # configuration file (see section `io`).
+#:
 IMAGEIO_FORMATS = (
     ("*.gel", "Opticks GEL"),
     ("*.spe", "Princeton Instruments SPE"),
