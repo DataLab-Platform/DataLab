@@ -28,12 +28,6 @@ from cdl.env import execenv
 from cdl.utils import qthelpers as qth
 from cdl.utils import tests
 
-# Add test data files and folders pointed by `CDL_DATA` environment variable:
-tests.add_test_path_from_env("CDL_DATA")
-
-
-# TODO: [P2] Documentation: add more screenshots from tests
-
 
 @contextmanager
 def cdltest_app_context(

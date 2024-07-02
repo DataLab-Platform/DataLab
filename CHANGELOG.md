@@ -2,6 +2,18 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.16.3 ##
+
+🛠️ Bug fixes:
+
+* Fixed [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84) - Build issues with V0.16.1: `signal` name conflict, ...
+  * This issue was intended to be fixed in version 0.16.2, but the fix was not complete
+  * Thanks to [@rolandmas](https://github.com/rolandmas) for reporting the issue and for the help in investigating the problem and testing the fix
+* Fixed [Issue #85](https://github.com/DataLab-Platform/DataLab/issues/85) - Test data paths may be added multiple times to `cdl.utils.tests.TST_PATH`
+  * This issue is related to [Issue #84](https://github.com/DataLab-Platform/DataLab/issues/84)
+  * Adding the test data paths multiple times to `cdl.utils.tests.TST_PATH` was causing the test data to be loaded multiple times, which lead to some tests failing (a simple workaround was added to V0.16.2: this issue is now fixed)
+  * Thanks again to [@rolandmas](https://github.com/rolandmas) for reporting the issue in the context of the Debian packaging
+
 ## DataLab Version 0.16.2 ##
 
 This release requires PlotPy v2.4.0 or later, which brings the following bug fixes and new features:
