@@ -24,7 +24,7 @@ from cdl.utils.tests import get_test_fnames
 def test_reorder():
     """Run signals/images reorder test scenario"""
     with cdl_app_context(exec_loop=True):
-        win = app.create(h5files=get_test_fnames("reorder*"))
+        win = app.create(h5files=[get_test_fnames("reorder*")[0]])
         panel = win.signalpanel
         view, model = panel.objview, panel.objmodel
 

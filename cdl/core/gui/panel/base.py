@@ -521,10 +521,14 @@ class BaseDataPanel(AbstractPanel):
             obj.metadata.update(self.__metadata_clipboard)
         self.SIG_REFRESH_PLOT.emit("selected", True)
 
-    def remove_object(self) -> None:
-        """Remove signal/image object"""
+    def remove_object(self, force: bool = False) -> None:
+        """Remove signal/image object
+
+        Args:
+            force: if True, remove object without confirmation. Defaults to False.
+        """
         sel_groups = self.objview.get_sel_groups()
-        if sel_groups and not execenv.unattended:
+        if sel_groups and not force and not execenv.unattended:
             answer = QW.QMessageBox.warning(
                 self,
                 _("Delete group(s)"),

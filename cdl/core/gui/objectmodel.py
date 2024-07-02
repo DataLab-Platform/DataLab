@@ -135,8 +135,16 @@ class ObjectGroup:
         """Return number of objects in group"""
         return len(self.__objects)
 
-    def __getitem__(self, index: int) -> SignalObj | ImageObj:
+    def __getitem__(
+        self, index: int | slice
+    ) -> SignalObj | ImageObj | list[SignalObj | ImageObj]:
         """Return object at index"""
+        if isinstance(index, slice):
+            return [
+                self.model[self.__objects[i]]
+                for i in range(*index.indices(len(self)))
+                if i < len(self)
+            ]
         return self.model[self.__objects[index]]
 
     def __contains__(self, obj: SignalObj | ImageObj) -> bool:
