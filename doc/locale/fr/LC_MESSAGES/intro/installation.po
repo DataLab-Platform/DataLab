@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 16:14+0200\n"
+"POT-Creation-Date: 2024-07-01 12:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -544,7 +544,7 @@ msgid "PlotPy"
 msgstr ""
 
 #: ../../doc/requirements.rst:41
-msgid ">= 2.3"
+msgid ">= 2.4"
 msgstr ""
 
 #: ../../doc/requirements.rst:42
@@ -718,5 +718,8 @@ msgstr "Python 3.11 et PyQt5 sont les références pour la version de production
 #~ msgstr ""
 
 #~ msgid ">= 1.21, < 2"
+#~ msgstr ""
+
+#~ msgid ">= 2.3"
 #~ msgstr ""
 

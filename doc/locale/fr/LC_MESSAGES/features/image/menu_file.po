@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 10:08+0200\n"
+"POT-Creation-Date: 2024-07-03 21:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -275,35 +275,21 @@ msgstr ""
 "est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats "
 "pris en charge nativement :"
 
-#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:1 of
-msgid "Built-in immutable sequence."
-msgstr ""
-
-#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:3 of
-msgid ""
-"If no argument is given, the constructor returns an empty tuple. If "
-"iterable is specified the tuple is initialized from iterable's items."
-msgstr ""
-
-#: ../../doc/docstring cdl.config.IMAGEIO_FORMATS:6 of
-msgid "If the argument is a tuple, the return value is the same object."
-msgstr ""
-
-#: ../../doc/features/image/menu_file.rst:100
+#: ../../doc/features/image/menu_file.rst:97
 msgid "Save image"
 msgstr "Enregister l'image"
 
-#: ../../doc/features/image/menu_file.rst:102
+#: ../../doc/features/image/menu_file.rst:99
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr ""
 "Enregistre l'image sélectionnée dans l'un des types de fichier pris en "
 "charge :"
 
-#: ../../doc/features/image/menu_file.rst:105
+#: ../../doc/features/image/menu_file.rst:102
 msgid "Import text file"
 msgstr "Importer un fichier texte"
 
-#: ../../doc/features/image/menu_file.rst:107
+#: ../../doc/features/image/menu_file.rst:104
 msgid ""
 "DataLab can natively import many types of image files (e.g. TIFF, JPEG, "
 "PNG, etc.). However some specific text file formats may not be supported."
@@ -316,7 +302,7 @@ msgstr ""
 "pouvez utiliser la fonctionnalité « Importer un fichier texte », qui vous"
 " permet d'importer un fichier texte et de le convertir en image."
 
-#: ../../doc/features/image/menu_file.rst:112
+#: ../../doc/features/image/menu_file.rst:109
 msgid ""
 "This feature is accessible from the `File` menu, under the `Import text "
 "file` option."
@@ -324,7 +310,7 @@ msgstr ""
 "Cette fonctionnalité est accessible depuis le menu « Fichier », sous "
 "l'option « Importer un fichier texte »."
 
-#: ../../doc/features/image/menu_file.rst:114
+#: ../../doc/features/image/menu_file.rst:111
 msgid ""
 "It opens an import wizard that guides you through the process of "
 "importing the text file."
@@ -332,12 +318,12 @@ msgstr ""
 "Il ouvre un assistant d'importation qui vous guide tout au long du "
 "processus d'importation du fichier texte."
 
-#: ../../doc/features/image/menu_file.rst:118
-#: ../../doc/features/image/menu_file.rst:128
+#: ../../doc/features/image/menu_file.rst:115
+#: ../../doc/features/image/menu_file.rst:125
 msgid "Step 1: Select the source"
 msgstr "Etape 1 : Sélectionner la source"
 
-#: ../../doc/features/image/menu_file.rst:120
+#: ../../doc/features/image/menu_file.rst:117
 msgid ""
 "The first step is to select the source of the text file. You can either "
 "select a file from your computer or the clipboard if you have copied the "
@@ -348,11 +334,11 @@ msgstr ""
 "presse-papiers si vous avez copié le texte à partir d'une autre "
 "application."
 
-#: ../../doc/features/image/menu_file.rst:131
+#: ../../doc/features/image/menu_file.rst:128
 msgid "Step 2: Preview and configure the import"
 msgstr "Etape 2 : Aperçu et configuration de l'importation"
 
-#: ../../doc/features/image/menu_file.rst:133
+#: ../../doc/features/image/menu_file.rst:130
 msgid ""
 "The second step consists of configuring the import and previewing the "
 "result. You can configure the following options:"
@@ -360,13 +346,13 @@ msgstr ""
 "La deuxième étape consiste à configurer l'importation et à prévisualiser "
 "le résultat. Vous pouvez configurer les options suivantes :"
 
-#: ../../doc/features/image/menu_file.rst:136
+#: ../../doc/features/image/menu_file.rst:133
 msgid "**Delimiter**: The character used to separate the values in the text file."
 msgstr ""
 "**Délimiteur** : Le caractère utilisé pour séparer les valeurs dans le "
 "fichier texte."
 
-#: ../../doc/features/image/menu_file.rst:137
+#: ../../doc/features/image/menu_file.rst:134
 msgid ""
 "**Comments**: The character used to indicate that the line is a comment "
 "and should be ignored."
@@ -374,11 +360,11 @@ msgstr ""
 "**Commentaires** : Le caractère utilisé pour indiquer que la ligne est un"
 " commentaire et doit être ignorée."
 
-#: ../../doc/features/image/menu_file.rst:139
+#: ../../doc/features/image/menu_file.rst:136
 msgid "**Rows to Skip**: The number of rows to skip at the beginning of the file."
 msgstr "**Lignes à sauter** : Le nombre de lignes à sauter au début du fichier."
 
-#: ../../doc/features/image/menu_file.rst:140
+#: ../../doc/features/image/menu_file.rst:137
 msgid ""
 "**Maximum Number of Rows**: The maximum number of rows to import. If the "
 "file contains more rows, they will be ignored."
@@ -386,17 +372,17 @@ msgstr ""
 "**Nombre maximum de lignes** : Le nombre maximum de lignes à importer. Si"
 " le fichier contient plus de lignes, elles seront ignorées."
 
-#: ../../doc/features/image/menu_file.rst:142
+#: ../../doc/features/image/menu_file.rst:139
 msgid "**Transpose**: If checked, the rows and columns will be transposed."
 msgstr "**Transposer** : Si coché, les lignes et les colonnes seront transposées."
 
-#: ../../doc/features/image/menu_file.rst:143
+#: ../../doc/features/image/menu_file.rst:140
 msgid "**Data type**: The destination data type of the imported data."
 msgstr ""
 "**Type de données** : Le type de données de destination des données "
 "importées."
 
-#: ../../doc/features/image/menu_file.rst:145
+#: ../../doc/features/image/menu_file.rst:142
 msgid ""
 "When you are done configuring the import, click the `Apply` button to see"
 " the result."
@@ -404,20 +390,20 @@ msgstr ""
 "Lorsque vous avez terminé de configurer l'importation, cliquez sur le "
 "bouton « Appliquer » pour voir le résultat."
 
-#: ../../doc/features/image/menu_file.rst:151
+#: ../../doc/features/image/menu_file.rst:148
 msgid "Step 2: Configure the import"
 msgstr "Etape 2 : Configurer l'importation"
 
-#: ../../doc/features/image/menu_file.rst:157
+#: ../../doc/features/image/menu_file.rst:154
 msgid "Step 2: Preview the result"
 msgstr "Etape 2 : Prévisualiser le résultat"
 
-#: ../../doc/features/image/menu_file.rst:160
-#: ../../doc/features/image/menu_file.rst:169
+#: ../../doc/features/image/menu_file.rst:157
+#: ../../doc/features/image/menu_file.rst:166
 msgid "Step 3: Show graphical representation"
 msgstr "Etape 3 : Afficher la représentation graphique"
 
-#: ../../doc/features/image/menu_file.rst:162
+#: ../../doc/features/image/menu_file.rst:159
 msgid ""
 "The third step shows a graphical representation of the imported data. You"
 " can use the `Finish` button to import the data into DataLab workspace."
@@ -425,3 +411,17 @@ msgstr ""
 "La troisième étape montre une représentation graphique des données "
 "importées. Vous pouvez utiliser le bouton « Terminer » pour importer les "
 "données dans l'espace de travail de DataLab."
+
+#~ msgid "Built-in immutable sequence."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "If no argument is given, the "
+#~ "constructor returns an empty tuple. If"
+#~ " iterable is specified the tuple is"
+#~ " initialized from iterable's items."
+#~ msgstr ""
+
+#~ msgid "If the argument is a tuple, the return value is the same object."
+#~ msgstr ""
+
