@@ -203,13 +203,19 @@ class ProfileExtractionDialog(PlotDialog):
         elif isinstance(self.shape, AnnotatedSegment):
             assert isinstance(p, cdl.param.SegmentProfileParam)
             x1, y1, x2, y2 = self.shape.get_rect()
-            p.row1, p.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
-            p.col1, p.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
+            p.row1, p.row2 = int(np.round(y1)), int(np.round(y2))
+            p.col1, p.col2 = int(np.round(x1)), int(np.round(x2))
+            if p.col1 > p.col2:
+                p.col1, p.col2 = p.col2, p.col1
+                p.row1, p.row2 = p.row2, p.row1
         else:
             assert isinstance(p, cdl.param.AverageProfileParam)
             x1, y1, x2, y2 = self.shape.get_rect()
-            p.row1, p.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
-            p.col1, p.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
+            p.row1, p.row2 = int(np.round(y1)), int(np.round(y2))
+            p.col1, p.col2 = int(np.round(x1)), int(np.round(x2))
+            if p.col1 > p.col2:
+                p.col1, p.col2 = p.col2, p.col1
+                p.row1, p.row2 = p.row2, p.row1
 
     def param_to_shape(self) -> None:
         """Param to shape"""
