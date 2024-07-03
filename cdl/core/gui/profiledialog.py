@@ -163,7 +163,7 @@ class ProfileExtractionDialog(PlotDialog):
     def accept(self) -> None:
         """Accept"""
         if self.shape is not None:
-            self.shape_to_param(self.shape, self.param)
+            self.shape_to_param()
         super().accept()
 
     def reset_to_initial(self) -> None:
@@ -190,79 +190,51 @@ class ProfileExtractionDialog(PlotDialog):
         self.shape = self.cstool.get_last_final_shape()
         assert self.shape is not None
         self.shape.set_readonly(True)
-        self.shape_to_param(self.shape, self.param)
+        self.shape_to_param()
         self.update_cs_panels_state()
 
-    @staticmethod
-    def shape_to_param(
-        shape: AnnotatedPoint | AnnotatedRectangle,
-        param: cdl.param.LineProfileParam | cdl.param.AverageProfileParam,
-    ) -> None:
-        """Shape to param
-
-        Args:
-            shape: Annotated shape
-            param: Profile parameters
-        """
-        if isinstance(shape, AnnotatedPoint):
-            assert isinstance(param, cdl.param.LineProfileParam)
-            x, y = shape.get_pos()
-            param.row, param.col = int(np.round(y)), int(np.round(x))
-        elif isinstance(shape, AnnotatedSegment):
-            assert isinstance(param, cdl.param.SegmentProfileParam)
-            x1, y1, x2, y2 = shape.get_rect()
-            param.row1, param.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
-            param.col1, param.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
+    def shape_to_param(self) -> None:
+        """Shape to param"""
+        p = self.param
+        if isinstance(self.shape, AnnotatedPoint):
+            assert isinstance(p, cdl.param.LineProfileParam)
+            x, y = self.shape.get_pos()
+            p.row, p.col = int(np.round(y)), int(np.round(x))
+        elif isinstance(self.shape, AnnotatedSegment):
+            assert isinstance(p, cdl.param.SegmentProfileParam)
+            x1, y1, x2, y2 = self.shape.get_rect()
+            p.row1, p.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
+            p.col1, p.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
         else:
-            assert isinstance(param, cdl.param.AverageProfileParam)
-            x1, y1, x2, y2 = shape.get_rect()
-            param.row1, param.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
-            param.col1, param.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
+            assert isinstance(p, cdl.param.AverageProfileParam)
+            x1, y1, x2, y2 = self.shape.get_rect()
+            p.row1, p.row2 = sorted([int(np.round(y1)), int(np.round(y2))])
+            p.col1, p.col2 = sorted([int(np.round(x1)), int(np.round(x2))])
 
-    @staticmethod
-    def param_to_shape(
-        param: cdl.param.LineProfileParam
-        | cdl.param.AverageProfileParam
-        | cdl.param.SegmentProfileParam,
-        shape: AnnotatedPoint | AnnotatedRectangle | AnnotatedSegment,
-    ) -> None:
-        """Param to shape
-
-        Args:
-            param: Profile parameters
-            shape: Annotated shape
-        """
-        if isinstance(shape, AnnotatedPoint):
-            assert isinstance(param, cdl.param.LineProfileParam)
-            shape.set_pos(param.col, param.row)
-        elif isinstance(shape, AnnotatedSegment):
-            assert isinstance(param, cdl.param.SegmentProfileParam)
-            shape.set_rect(param.col1, param.row1, param.col2, param.row2)
+    def param_to_shape(self) -> None:
+        """Param to shape"""
+        p = self.param
+        if isinstance(self.shape, AnnotatedPoint):
+            assert isinstance(p, cdl.param.LineProfileParam)
+            self.shape.set_pos(p.col, p.row)
+        elif isinstance(self.shape, AnnotatedSegment):
+            assert isinstance(p, cdl.param.SegmentProfileParam)
+            self.shape.set_rect(p.col1, p.row1, p.col2, p.row2)
         else:
-            assert isinstance(param, cdl.param.AverageProfileParam)
-            shape.set_rect(param.col1, param.row1, param.col2, param.row2)
+            assert isinstance(p, cdl.param.AverageProfileParam)
+            self.shape.set_rect(p.col1, p.row1, p.col2, p.row2)
 
     def edit_values(self) -> None:
         """Edit values"""
-        p = self.param
-        self.shape_to_param(self.shape, p)
-        if p.edit(parent=self, apply=self.apply_callback):
-            self.param_to_shape(p, self.shape)
+        self.shape_to_param()
+        if self.param.edit(parent=self, apply=lambda _param: self.apply_callback()):
+            self.param_to_shape()
             self.update_cs_panels_state()
             self.get_plot().replot()
 
-    def apply_callback(
-        self,
-        param: cdl.param.LineProfileParam
-        | cdl.param.AverageProfileParam
-        | cdl.param.SegmentProfileParam,
-    ) -> None:
-        """Apply callback
-
-        Args:
-            param: Profile parameters
-        """
-        self.param_to_shape(param, self.shape)
+    def apply_callback(self) -> None:
+        """Apply callback"""
+        self.param_to_shape()
         self.update_cs_panels_state()
         self.get_plot().replot()
 
