@@ -61,7 +61,7 @@ VALID_DTYPES_STRLIST = ImageObj.get_valid_dtypenames()
 class Wrap11Func:
     """Wrap a 1 array → 1 array function to produce a 1 image → 1 image function,
     which can be used inside DataLab's infrastructure to perform computations with
-    :class:`cdl.core.gui.processor.signal.ImageProcessor`.
+    :class:`cdl.core.gui.processor.image.ImageProcessor`.
 
     This wrapping mechanism using a class is necessary for the resulted function to be
     pickable by the ``multiprocessing`` module.
@@ -72,7 +72,7 @@ class Wrap11Func:
     Example:
 
         >>> import numpy as np
-        >>> from cdl.computation.signal import Wrap11Func
+        >>> from cdl.computation.image import Wrap11Func
         >>> import cdl.obj
         >>> def add_noise(data):
         ...     return data + np.random.random(data.shape)
@@ -96,7 +96,7 @@ class Wrap11Func:
         self.__call__.__func__.__doc__ = self.func.__doc__
 
     def __call__(self, src: ImageObj) -> ImageObj:
-        """Compute the function on the input signal and return the result signal
+        """Compute the function on the input image and return the result image
 
         Args:
             src: input image object
