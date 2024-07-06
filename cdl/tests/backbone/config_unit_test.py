@@ -89,7 +89,12 @@ def assert_in_interval(val1, val2, interval, context):
     try:
         assert itv1 <= val1 <= itv2
     except AssertionError as exc:
-        raise AssertionError(f"{context}: {itv1} <= {val1} <= {itv2}") from exc
+        if os.name == "posix" and "WSL" in os.uname().release:
+            # Ignore if executing the test on WSL: position of windows is not reliable
+            # on WSL (e.g. Gnome) and the test will fail
+            pass
+        else:
+            raise AssertionError(f"{context}: {itv1} <= {val1} <= {itv2}") from exc
 
 
 def check_conf(conf, name, win: QW.QMainWindow, h5files):
