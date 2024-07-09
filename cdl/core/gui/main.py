@@ -1662,6 +1662,7 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
                     return False
             elif answer == QW.QMessageBox.Cancel:
                 return False
+        self.hide()  # Avoid showing individual widgets closing one after the other
         for panel in self.panels:
             if panel is not None:
                 panel.close()
