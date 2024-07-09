@@ -470,8 +470,6 @@ class BaseDataPanel(AbstractPanel):
         self.objview.add_group_item(group)
         return group
 
-    # TODO: [P2] New feature: move objects up/down
-    # TODO: [P2] New feature: move objects to another group
     def __duplicate_individual_obj(
         self, oid: str, new_group_id: str | None = None, set_current: bool = True
     ) -> None:

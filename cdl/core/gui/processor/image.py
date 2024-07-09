@@ -1000,8 +1000,6 @@ class ImageProcessor(BaseProcessor):
     @qt_try_except()
     def compute_enclosing_circle(self) -> dict[str, ResultShape]:
         """Compute minimum enclosing circle"""
-        # TODO: [P2] Find a way to add the circle to the computing results
-        #  as in "enclosingcircle_test.py"
         return self.compute_10(
             cpi.compute_enclosing_circle, title=_("Enclosing circle")
         )
