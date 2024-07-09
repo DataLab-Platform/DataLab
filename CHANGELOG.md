@@ -2,6 +2,23 @@
 
 See DataLab [roadmap page](https://datalab-platform.com/en/contributing/roadmap.html) for future and past milestones.
 
+## DataLab Version 0.16.4 ##
+
+This is a minor maintenance release.
+
+🛠️ Bug fixes:
+
+* Requires PlotPy v2.4.1 or later to fix the following issues related to the contrast adjustment feature:
+  * A regression was introduced in an earlier version of PlotPy: levels histogram was no longer removed from
+    contrast adjustment panel when the associated image was removed from the plot
+  * This is now fixed: when an image is removed, the histogram is removed as well and
+    the contrast panel is refreshed (which was not the case even before the regression)
+* Ignore `AssertionError` in *config_unit_test.py* when executing test suite on WSL
+
+📚 Documentation:
+
+* Fix class reference in `Wrap11Func` documentation
+
 ## DataLab Version 0.16.3 ##
 
 🛠️ Bug fixes:
