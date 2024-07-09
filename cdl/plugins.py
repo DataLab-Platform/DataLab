@@ -216,7 +216,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
         if size is not None:
             newparam.size = size
         newparam.hide_signal_type = hide_signal_type
-        if newparam.edit(self.signalpanel):
+        if newparam.edit(self.main):
             return newparam
         return None
 
@@ -243,7 +243,7 @@ class PluginBase(abc.ABC, metaclass=PluginBaseMeta):
             newparam.width, newparam.height = shape
         newparam.hide_image_type = hide_image_type
         newparam.hide_image_dtype = hide_image_dtype
-        if newparam.edit(self.imagepanel):
+        if newparam.edit(self.main):
             return newparam
         return None
 

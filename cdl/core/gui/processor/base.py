@@ -848,7 +848,7 @@ class BaseProcessor(QC.QObject):
         if (
             env.execenv.unattended
             or roieditordata.roidata.size == 0
-            or roigroup.edit(parent=self.panel)
+            or roigroup.edit(parent=self.panel.parent())
         ):
             roidata = obj.params_to_roidata(roigroup)
             if modified:
