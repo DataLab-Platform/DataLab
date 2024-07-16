@@ -478,12 +478,11 @@ class RemoteServer(QC.QThread):
         """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): Compute function name
-            param_data (list[str] | None): Compute function parameters.
-                Defaults to None.
+            name: Compute function name
+            param_data: Compute function parameters. Defaults to None.
 
         Returns:
-            bool: True if successful
+            True if successful, False otherwise
         """
         if param_data is None:
             param = None
@@ -867,16 +866,15 @@ class RemoteClient(BaseProxy):
             title, zbinary, xunit, yunit, zunit, xlabel, ylabel, zlabel
         )
 
-    def calc(self, name: str, param: gds.DataSet | None = None) -> gds.DataSet:
+    def calc(self, name: str, param: gds.DataSet | None = None) -> None:
         """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): Compute function name
-            param (guidata.dataset.DataSet | None): Compute function
-             parameter. Defaults to None.
+            name: Compute function name
+            param: Compute function parameter. Defaults to None.
 
-        Returns:
-            guidata.dataset.DataSet: Compute function result
+        Raises:
+            ValueError: unknown function
         """
         if param is None:
             return self._cdl.calc(name)

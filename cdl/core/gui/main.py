@@ -1152,12 +1152,11 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
 
     @remote_controlled
     def calc(self, name: str, param: gds.DataSet | None = None) -> None:
-        """Call compute function `name` in current panel's processor
+        """Call compute function ``name`` in current panel's processor.
 
         Args:
-            name (str): function name
-            param (guidata.dataset.DataSet): optional parameters
-             (default: None)
+            name: Compute function name
+            param: Compute function parameter. Defaults to None.
 
         Raises:
             ValueError: unknown function
