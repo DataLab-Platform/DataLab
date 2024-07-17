@@ -39,6 +39,9 @@ what we call scientific validation, see :ref:`scientific_validation`).
 Signal Compute Functions
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+The table below shows the validation status of signal compute functions in DataLab.
+It is automatically generated from the source code.
+
 .. csv-table:: Validation status of signal compute functions
    :file: ../../validation_status_signal.csv
    :header: Compute function, Description, Test function
@@ -46,6 +49,9 @@ Signal Compute Functions
 
 Image Compute Functions
 ^^^^^^^^^^^^^^^^^^^^^^^
+
+The table below shows the validation status of image compute functions in DataLab.
+It is automatically generated from the source code.
 
 .. csv-table:: Validation status of image compute functions
     :file: ../../validation_status_image.csv

@@ -7,6 +7,9 @@ Proxy objects (:mod:`cdl.proxy`)
 The :mod:`cdl.proxy` module provides a way to access DataLab features from a proxy
 class.
 
+The list of compute methods accessible from the proxy objects is available in the
+:ref:`processor_methods` section.
+
 Remote proxy
 ^^^^^^^^^^^^
 
@@ -47,6 +50,46 @@ specified as "remote:port".
     between local and remote proxy, keeping the same code inside the context.
 
 .. autofunction:: proxy_context
+
+.. _processor_methods:
+
+List of compute methods
+^^^^^^^^^^^^^^^^^^^^^^^
+
+All the proxy objects provide access to the DataLab computing methods exposed by
+the processor classes:
+
+- :class:`cdl.core.gui.processor.signal.SignalProcessor`
+- :class:`cdl.core.gui.processor.image.ImageProcessor`
+
+Number of compute methods
+*************************
+
+.. csv-table:: Number of compute methods
+   :file: ../doc/processor_methods_nb.csv
+   :header: Signal, Image, Total
+
+Signal processing
+*****************
+
+The following table lists the signal processor methods - it is automatically
+generated from the source code:
+
+.. csv-table:: Signal processor methods
+   :file: ../doc/processor_methods_signal.csv
+   :header: Compute method, Description
+   :widths: 40, 60
+
+Image processing
+****************
+
+The following table lists the image processor methods - it is automatically
+generated from the source code:
+
+.. csv-table:: Image processor methods
+    :file: ../doc/processor_methods_image.csv
+    :header: Compute method, Description
+    :widths: 40, 60
 """
 
 from __future__ import annotations
@@ -77,6 +120,11 @@ class RemoteProxy(RemoteClient):
         ConnectionRefusedError: Unable to connect to DataLab
         ValueError: Invalid timeout (must be >= 0.0)
         ValueError: Invalid number of retries (must be >= 1)
+
+    .. note::
+
+        The proxy object also allows to access DataLab computing methods exposed by
+        the processor classes (see :ref:`processor_methods`).
 
     Examples:
         Here is a simple example of how to use RemoteProxy in a Python script
@@ -115,6 +163,11 @@ class LocalProxy(BaseProxy):
 
     Args:
         cdl (CDLMainWindow): CDLMainWindow instance.
+
+    .. note::
+
+        The proxy object also allows to access DataLab computing methods exposed by
+        the processor classes (see :ref:`processor_methods`).
     """
 
     def add_signal(

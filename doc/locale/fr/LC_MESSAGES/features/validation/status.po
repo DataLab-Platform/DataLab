@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 14:13+0200\n"
+"POT-Creation-Date: 2024-07-17 14:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -170,6 +170,12 @@ msgid "Signal Compute Functions"
 msgstr "Fonctions de calcul signal"
 
 #: ../../doc/features/validation/status.rst:42
+msgid ""
+"The table below shows the validation status of signal compute functions "
+"in DataLab. It is automatically generated from the source code."
+msgstr "Le tableau ci-dessous montre l'état de validation des fonctions de calcul signal dans DataLab. Il est généré automatiquement à partir du code source."
+
+#: ../../doc/features/validation/status.rst:45
 msgid "Validation status of signal compute functions"
 msgstr "Etat de validation de DataLab"
 
@@ -910,11 +916,17 @@ msgid ""
 "Platform/DataLab/blob/v0.16.4/cdl/tests/features/signals/computing_unit_test.py#L66>`_"
 msgstr ""
 
-#: ../../doc/features/validation/status.rst:48
+#: ../../doc/features/validation/status.rst:51
 msgid "Image Compute Functions"
-msgstr ""
+msgstr "Fonctions de calcul image"
 
-#: ../../doc/features/validation/status.rst:50
+#: ../../doc/features/validation/status.rst:53
+msgid ""
+"The table below shows the validation status of image compute functions in"
+" DataLab. It is automatically generated from the source code."
+msgstr "Le tableau ci-dessous montre l'état de validation des fonctions de calcul image dans DataLab. Il est généré automatiquement à partir du code source."
+
+#: ../../doc/features/validation/status.rst:56
 msgid "Validation status of image compute functions"
 msgstr "Etat de validation des fonctions de calcul image"
 
