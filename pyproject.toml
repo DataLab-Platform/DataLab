@@ -58,9 +58,6 @@ dynamic = ["version"]
 Homepage = "https://datalab-platform.com/"
 Documentation = "https://datalab-platform.com/"
 
-[project.scripts]
-cdl-alltests = "cdl.tests.all_tests:run"
-
 [project.gui-scripts]
 cdl = "cdl.app:run"
 cdl-demo = "cdl.tests.scenarios.demo:run"
