@@ -41,13 +41,13 @@ Signal Compute Functions
 
 .. csv-table:: Validation status of signal compute functions
    :file: ../../validation_status_signal.csv
-   :header: Function, Description, Test function
-   :widths: 20, 40, 40
+   :header: Compute function, Description, Test function
+   :widths: 30, 40, 30
 
 Image Compute Functions
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 .. csv-table:: Validation status of image compute functions
     :file: ../../validation_status_image.csv
-    :header: Function, Description, Test function
-    :widths: 20, 40, 40
+    :header: Compute function, Description, Test function
+    :widths: 30, 40, 30

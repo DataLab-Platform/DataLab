@@ -120,8 +120,7 @@ def generate_csv_files() -> None:
             t_count["total"] += 1
             description = docstring.split("\n")[0] if docstring else "-"
             test_script = test_link if test_link else "N/A"
-            short_name = funcname.replace("compute_", "")
-            pyfunc_link = f":py:func:`{short_name} <{full_funcname}>`"
+            pyfunc_link = f":py:func:`{funcname} <{full_funcname}>`"
             function_rows.append([pyfunc_link, description, test_script])
 
         fname = osp.join(osp.dirname(__file__), f"validation_status_{submodule}.csv")
