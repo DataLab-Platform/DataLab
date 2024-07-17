@@ -1161,18 +1161,19 @@ class CDLMainWindow(QW.QMainWindow, AbstractCDLControl, metaclass=CDLMainWindowM
         Raises:
             ValueError: unknown function
         """
-        panel = self.tabwidget.currentWidget()
-        if isinstance(panel, base.BaseDataPanel):
-            for funcname in (name, f"compute_{name}"):
-                func = getattr(panel.processor, funcname, None)
-                if func is not None:
-                    break
-            else:
-                raise ValueError(f"Unknown function {funcname}")
-            if param is None:
-                func()
-            else:
-                func(param)
+        panels = [self.tabwidget.currentWidget()]
+        panels.extend(self.panels)
+        for panel in panels:
+            if isinstance(panel, base.BaseDataPanel):
+                for funcname in (name, f"compute_{name}"):
+                    func = getattr(panel.processor, funcname, None)
+                    if func is not None:
+                        if param is None:
+                            func()
+                        else:
+                            func(param)
+                        return
+        raise ValueError(f"Unknown function {name}")
 
     # ------GUI refresh
     def has_objects(self) -> bool:
