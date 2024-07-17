@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 18:50+0100\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -100,9 +100,10 @@ msgstr "Connexion automatique au serveur XML-RPC de DataLab."
 #: cdl.core.baseproxy.BaseProxy.run_macro
 #: cdl.core.baseproxy.BaseProxy.stop_macro
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.connect
-#: cdl.core.remote.RemoteClient.get_object cdl.proxy.LocalProxy.add_image
-#: cdl.proxy.LocalProxy.add_signal cdl.proxy.LocalProxy.get_object
+#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.connect cdl.core.remote.RemoteClient.get_object
+#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
+#: cdl.proxy.LocalProxy.calc cdl.proxy.LocalProxy.get_object
 #: cdl.proxy.RemoteProxy of
 msgid "Raises"
 msgstr "Lève"
@@ -119,17 +120,27 @@ msgstr "Délai d'attente invalide (doit être >= 0.0)"
 msgid "Invalid number of retries (must be >= 1)"
 msgstr "Nombre de tentatives invalide (doit être >= 1)"
 
-#: cdl.proxy.RemoteProxy:15 of
+#: cdl.proxy.RemoteProxy:16 of
+msgid ""
+"The proxy object also allows to access DataLab computing functions "
+"operating on signals and images ("
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:18 of
+msgid ":mod:`cdl.computation`)."
+msgstr ""
+
+#: cdl.proxy.RemoteProxy:21 of
 msgid "Examples"
 msgstr "Exemples"
 
-#: cdl.proxy.RemoteProxy:16 of
+#: cdl.proxy.RemoteProxy:22 of
 msgid ""
 "Here is a simple example of how to use RemoteProxy in a Python script or "
 "in a Jupyter notebook:"
 msgstr ""
 "Voici un exemple simple de l'utilisation de RemoteProxy dans un script "
-"Python ou dans un notebook Jupyter :"
+"Python ou dans un notebook Jupyter :"
 
 #: cdl.core.remote.RemoteClient.add_annotations_from_items:1
 #: cdl.proxy.LocalProxy.add_annotations_from_items:1 of
@@ -212,12 +223,11 @@ msgstr "Libellé Z. Par défaut, None."
 #: cdl.core.baseproxy.BaseProxy.get_sel_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_version
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
+#: cdl.core.remote.RemoteClient.add_signal
 #: cdl.core.remote.RemoteClient.get_object
 #: cdl.core.remote.RemoteClient.get_object_shapes
 #: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
-#: cdl.proxy.LocalProxy.calc cdl.proxy.LocalProxy.get_object
-#: cdl.proxy.LocalProxy.get_object_shapes of
+#: cdl.proxy.LocalProxy.get_object cdl.proxy.LocalProxy.get_object_shapes of
 msgid "Returns"
 msgstr "Renvoie"
 
@@ -232,9 +242,8 @@ msgstr "Vrai si l'image a été ajoutée avec succès, Faux sinon"
 #: cdl.core.baseproxy.BaseProxy.get_object_uuids
 #: cdl.core.baseproxy.BaseProxy.get_version
 #: cdl.core.remote.RemoteClient.add_image
-#: cdl.core.remote.RemoteClient.add_signal cdl.core.remote.RemoteClient.calc
-#: cdl.proxy.LocalProxy.add_image cdl.proxy.LocalProxy.add_signal
-#: cdl.proxy.LocalProxy.calc of
+#: cdl.core.remote.RemoteClient.add_signal cdl.proxy.LocalProxy.add_image
+#: cdl.proxy.LocalProxy.add_signal of
 msgid "Return type"
 msgstr "Type de retour"
 
@@ -308,13 +317,14 @@ msgstr ""
 msgid "Compute function name"
 msgstr "Nom de la fonction de calcul"
 
-#: cdl.core.remote.RemoteClient.calc:5 of
+#: cdl.core.remote.RemoteClient.calc:4 cdl.proxy.LocalProxy.calc:4 of
 msgid "Compute function parameter. Defaults to None."
 msgstr "Paramètre de la fonction de calcul. Par défaut, None."
 
-#: cdl.core.remote.RemoteClient.calc:9 cdl.proxy.LocalProxy.calc:9 of
-msgid "Compute function result"
-msgstr "Résultat de la fonction de calcul"
+#: cdl.core.remote.RemoteClient.calc:6 cdl.proxy.LocalProxy.calc:6 of
+#, fuzzy
+msgid "unknown function"
+msgstr "Fonction de calcul"
 
 #: cdl.core.baseproxy.BaseProxy.close_application:1 of
 msgid "Close DataLab application"
@@ -501,7 +511,8 @@ msgid "List of selected objects uuids."
 msgstr "Liste des UUID des objets sélectionnés."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:1 of
-msgid "Return DataLab version."
+#, fuzzy
+msgid "Return DataLab public version."
 msgstr "Renvoie la version de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.get_version:3 of
@@ -536,7 +547,9 @@ msgstr "Renvoie True si connecté au serveur XML-RPC de DataLab."
 
 #: cdl.core.baseproxy.BaseProxy.load_from_files:1 of
 msgid "Open objects from files in current panel (signals/images)."
-msgstr "Ouvrir des objets à partir de fichiers dans le panneau actuel (signaux/images)."
+msgstr ""
+"Ouvrir des objets à partir de fichiers dans le panneau actuel "
+"(signaux/images)."
 
 #: cdl.core.baseproxy.BaseProxy.load_from_files:3 of
 msgid "list of file names"
@@ -668,10 +681,6 @@ msgstr ""
 msgid "CDLMainWindow instance."
 msgstr "Instance de CDLMainWindow."
 
-#: cdl.proxy.LocalProxy.calc:5 of
-msgid "Compute function"
-msgstr "Fonction de calcul"
-
 #: cdl.proxy:29 of
 msgid "Proxy context manager"
 msgstr "Gestionnaire de contexte proxy"
@@ -682,7 +691,7 @@ msgid ""
 "and destruction. It is used as follows:"
 msgstr ""
 "Le gestionnaire de contexte proxy est un moyen pratique de gérer la "
-"création et la destruction du proxy. Il est utilisé comme suit :"
+"création et la destruction du proxy. Il est utilisé comme suit :"
 
 #: cdl.proxy:39 of
 msgid ""
@@ -740,7 +749,7 @@ msgstr ""
 
 #: cdl.proxy.proxy_context:15 of
 msgid "with proxy_context(\"local\") as proxy:"
-msgstr "avec proxy_context(\"local\") en tant que proxy :"
+msgstr "avec proxy_context(\"local\") en tant que proxy :"
 
 #: cdl.proxy.proxy_context:16 of
 msgid "proxy.add_signal(...)"
@@ -748,3 +757,6 @@ msgstr "proxy.add_signal(...)"
 
 #~ msgid "File name"
 #~ msgstr "Nom du fichier"
+
+#~ msgid "Compute function result"
+#~ msgstr "Résultat de la fonction de calcul"

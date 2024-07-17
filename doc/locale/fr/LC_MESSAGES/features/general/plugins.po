@@ -54,7 +54,7 @@ msgstr ""
 msgid "The plugin system currently supports the following features:"
 msgstr ""
 "Le système de plugins prend actuellement en charge les fonctionnalités "
-"suivantes :"
+"suivantes :"
 
 #: ../../doc/features/general/plugins.rst:16
 msgid ""
@@ -136,7 +136,7 @@ msgstr ""
 msgid "Special additional locations are available for plugins:"
 msgstr ""
 "Des emplacements supplémentaires spéciaux sont disponibles pour les "
-"plugins :"
+"plugins :"
 
 #: ../../doc/features/general/plugins.rst:47
 msgid ""
@@ -185,7 +185,7 @@ msgstr "Si vous souhaitez coder un plugin dans votre environnement de développe
 
 #: ../../doc/features/general/plugins.rst:67
 msgid "This can be done:"
-msgstr "Cela peut être fait :"
+msgstr "Cela peut être fait :"
 
 #: ../../doc/features/general/plugins.rst:69
 msgid ""
@@ -196,7 +196,7 @@ msgstr "En installant DataLab dans votre environnement Python (en utilisant l'un
 
 #: ../../doc/features/general/plugins.rst:72
 msgid "Or by adding the `cdl` package to your Python path manually:"
-msgstr "Ou en ajoutant le package `cdl` à votre chemin Python manuellement :"
+msgstr "Ou en ajoutant le package `cdl` à votre chemin Python manuellement :"
 
 #: ../../doc/features/general/plugins.rst:74
 msgid ""
@@ -279,7 +279,7 @@ msgstr ""
 
 #: cdl.plugins:7 of
 msgid "Plugins are Python modules that relies on two classes:"
-msgstr "Les plugins sont des modules Python qui reposent sur deux classes :"
+msgstr "Les plugins sont des modules Python qui reposent sur deux classes :"
 
 #: cdl.plugins:9 of
 msgid ":class:`PluginInfo`, which stores information about the plugin"

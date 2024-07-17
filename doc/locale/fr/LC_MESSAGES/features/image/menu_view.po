@@ -103,7 +103,7 @@ msgstr "Les annotations peuvent être ajoutées dans la vue séparée."
 
 #: ../../doc/features/image/menu_view.rst:50
 msgid "The typical workflow to edit annotations is as follows:"
-msgstr "Le mode opératoire typique pour modifier les annotations est le suivant :"
+msgstr "Le mode opératoire typique pour modifier les annotations est le suivant :"
 
 #: ../../doc/features/image/menu_view.rst:52
 msgid "Select the \"Edit annotations\" option."
@@ -145,7 +145,7 @@ msgstr "Rafraîchissement automatique"
 
 #: ../../doc/features/image/menu_view.rst:73
 msgid "Automatically refresh the visualization when the data changes:"
-msgstr "Rafraîchit automatiquement la visualisation quand les données changent :"
+msgstr "Rafraîchit automatiquement la visualisation quand les données changent :"
 
 #: ../../doc/features/image/menu_view.rst:75
 msgid ""

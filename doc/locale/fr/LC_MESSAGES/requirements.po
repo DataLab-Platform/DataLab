@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 12:03+0200\n"
+"POT-Creation-Date: 2024-07-01 12:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: ../../doc/requirements.rst:1
 msgid "The :mod:`cdl` package requires the following Python modules:"
-msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
+msgstr "Le paquet :mod:`cdl` nécessite les modules Python suivants :"
 
 #: ../../doc/requirements.rst:7 ../../doc/requirements.rst:56
 #: ../../doc/requirements.rst:78 ../../doc/requirements.rst:112
@@ -67,7 +67,7 @@ msgid "NumPy"
 msgstr ""
 
 #: ../../doc/requirements.rst:17
-msgid ">= 1.21, < 2"
+msgid ">= 1.21"
 msgstr ""
 
 #: ../../doc/requirements.rst:18
@@ -167,7 +167,7 @@ msgid "PlotPy"
 msgstr ""
 
 #: ../../doc/requirements.rst:41
-msgid ">= 2.3"
+msgid ">= 2.4"
 msgstr ""
 
 #: ../../doc/requirements.rst:42
@@ -204,7 +204,7 @@ msgstr "Paquet Python pour la bibliothèque d'interfaces graphiques Qt"
 
 #: ../../doc/requirements.rst:50
 msgid "Optional modules for development:"
-msgstr "Modules optionnels pour le développement :"
+msgstr "Modules optionnels pour le développement :"
 
 #: ../../doc/requirements.rst:59
 msgid "ruff"
@@ -250,7 +250,7 @@ msgstr ""
 
 #: ../../doc/requirements.rst:72
 msgid "Optional modules for building the documentation:"
-msgstr "Modules optionnels pour construire la documentation :"
+msgstr "Modules optionnels pour construire la documentation :"
 
 #: ../../doc/requirements.rst:84
 msgid "sphinx"
@@ -316,7 +316,7 @@ msgstr "Thème Sphinx basé sur Bootstrap de la communauté PyData"
 
 #: ../../doc/requirements.rst:106
 msgid "Optional modules for running test suite:"
-msgstr "Modules optionnels pour exécuter la suite de tests :"
+msgstr "Modules optionnels pour exécuter la suite de tests :"
 
 #: ../../doc/requirements.rst:115
 msgid "pytest"
@@ -340,3 +340,8 @@ msgstr "Un plugin pytest pour exécuter Xvfb (ou Xephyr/Xvnc) pour les tests."
 #~ msgid ">= 1.21"
 #~ msgstr ""
 
+#~ msgid ">= 1.21, < 2"
+#~ msgstr ""
+
+#~ msgid ">= 2.3"
+#~ msgstr ""

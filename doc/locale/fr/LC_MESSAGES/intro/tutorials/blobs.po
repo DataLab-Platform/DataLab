@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Cet exemple montre comment détecter des taches sur une image avec "
 "DataLab, et couvre également d'autres fonctionnalités telles que le "
-"système de plugins :"
+"système de plugins :"
 
 #: ../../intro/tutorials/blobs.rst:9
 msgid "Add a new plugin to DataLab"
@@ -224,7 +224,7 @@ msgstr ""
 "Si vous souhaitez afficher à nouveau les résultats de calcul, vous pouvez"
 " sélectionner l'entrée \"Afficher les résultats\" |show_results| dans le "
 "menu \"Calcul\", ou le bouton \"Afficher les résultats\" |show_results|, "
-"en dessous de la liste des images :"
+"en dessous de la liste des images :"
 
 #: ../../intro/tutorials/blobs.rst:126
 msgid "show_results"

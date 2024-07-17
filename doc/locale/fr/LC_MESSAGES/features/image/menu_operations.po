@@ -162,7 +162,7 @@ msgid ""
 "selected image:"
 msgstr ""
 "Crée une image à partir d'une opération avec une constante sur chaque "
-"image sélectionnée :"
+"image sélectionnée :"
 
 #: ../../doc/features/image/menu_operations.rst:80
 msgid "Equation"
@@ -343,7 +343,7 @@ msgid ""
 " images:"
 msgstr ""
 "Calcule la correction de champ plat à partir des **deux** images "
-"sélectionnées :"
+"sélectionnées :"
 
 #: ../../doc/features/image/menu_operations.rst:186
 msgid ""
@@ -470,7 +470,7 @@ msgstr ""
 
 #: ../../doc/features/image/menu_operations.rst:242
 msgid "The following parameters are available:"
-msgstr "Les paramètres suivants sont disponibles :"
+msgstr "Les paramètres suivants sont disponibles :"
 
 #: ../../doc/features/image/menu_operations.rst:248
 msgid "Parameter"

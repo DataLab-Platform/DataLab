@@ -41,7 +41,7 @@ msgstr "Lorsque le \"Panneau Signal\" est sélectionné, les menus et barres d'o
 
 #: ../../doc/features/signal/menu_file.rst:15
 msgid "The \"File\" menu allows you to:"
-msgstr "Le menu \"Fichier\" vous permet de :"
+msgstr "Le menu \"Fichier\" vous permet de :"
 
 #: ../../doc/features/signal/menu_file.rst:17
 msgid "Create, open, save and close signals (see below)."
@@ -63,7 +63,7 @@ msgstr "Nouveau signal"
 
 #: ../../doc/features/signal/menu_file.rst:26
 msgid "Create a new signal from various models:"
-msgstr "Crée un nouveau signal depuis différents modèles :"
+msgstr "Crée un nouveau signal depuis différents modèles :"
 
 #: ../../doc/features/signal/menu_file.rst:32
 msgid "Model"
@@ -236,7 +236,7 @@ msgstr "Ouvrir un signal"
 
 #: ../../doc/features/signal/menu_file.rst:74
 msgid "Create a new signal from the following supported filetypes:"
-msgstr "Crée un signal depuis l'un des types de fichiers pris en charge :"
+msgstr "Crée un signal depuis l'un des types de fichiers pris en charge :"
 
 #: ../../doc/features/signal/menu_file.rst:79
 #: ../../doc/features/signal/menu_file.rst:96
@@ -281,7 +281,7 @@ msgstr "Enregistrer un signal"
 msgid "Save current signal to the following supported filetypes:"
 msgstr ""
 "Enregistre le signal sélectionné dans l'un des types de fichier pris en "
-"charge :"
+"charge :"
 
 #: ../../doc/features/signal/menu_file.rst:99
 msgid ".csv"
@@ -346,7 +346,7 @@ msgid ""
 "result. You can configure the following options:"
 msgstr ""
 "La deuxième étape consiste à configurer l'importation et à prévisualiser "
-"le résultat. Vous pouvez configurer les options suivantes :"
+"le résultat. Vous pouvez configurer les options suivantes :"
 
 #: ../../doc/features/signal/menu_file.rst:132
 msgid "**Delimiter**: The character used to separate the values in the text file."

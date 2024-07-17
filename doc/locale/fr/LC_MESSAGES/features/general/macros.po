@@ -104,7 +104,7 @@ msgstr "Fonctionnalités principales"
 
 #: ../../features/general/macros.rst:44
 msgid "The Macro Panel is a simple interface to:"
-msgstr "Le Gestionnaire de Macros est une interface simple pour :"
+msgstr "Le Gestionnaire de Macros est une interface simple pour :"
 
 #: ../../features/general/macros.rst:46
 msgid "Create new macros, using the \"New macro\" |libre-gui-add| button."

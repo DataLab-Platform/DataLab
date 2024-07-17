@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-19 18:40+0200\n"
+"POT-Creation-Date: 2024-07-01 09:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -54,7 +54,7 @@ msgid ""
 "The following subpackages are available:"
 msgstr ""
 "Les algorithmes sont organisés en sous-paquets en fonction de leur "
-"objectif. Les sous-paquets suivants sont disponibles :"
+"objectif. Les sous-paquets suivants sont disponibles :"
 
 #: cdl.algorithms:18 of
 msgid ":mod:`cdl.algorithms.signal`: Signal processing algorithms"
@@ -76,11 +76,7 @@ msgstr ""
 ":mod:`cdl.algorithms.coordinates` : Algorithmes de conversion de "
 "coordonnées"
 
-#: cdl.algorithms:22 of
-msgid ":mod:`cdl.algorithms.signal`: Fitting algorithms"
-msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de régression"
-
-#: cdl.algorithms:25 of
+#: cdl.algorithms:24 of
 msgid "Signal Processing Algorithms"
 msgstr "Algorithmes de traitement du signal"
 
@@ -244,7 +240,9 @@ msgstr "Spectre de phase en degrés (données X, Y)"
 
 #: cdl.algorithms.signal.psd:1 of
 msgid "Compute Power Spectral Density (PSD), using the Welch method."
-msgstr "Calculer la densité spectrale de puissance (PSD), en utilisant la méthode de Welch."
+msgstr ""
+"Calculer la densité spectrale de puissance (PSD), en utilisant la méthode"
+" de Welch."
 
 #: cdl.algorithms.coordinates.circle_to_center_radius
 #: cdl.algorithms.coordinates.circle_to_diameter
@@ -366,6 +364,52 @@ msgstr "Paramètre de la fenêtre gaussienne. Par défaut : 7.0."
 msgid "Windowed Y data"
 msgstr "Données Y fenêtrées"
 
+#: cdl.algorithms.signal.FitModel:1 of
+msgid "Curve fitting model base class"
+msgstr "Classe de base du modèle de régression"
+
+#: cdl.algorithms.signal.FitModel.func:1
+#: cdl.algorithms.signal.GaussianModel.func:1
+#: cdl.algorithms.signal.LorentzianModel.func:1
+#: cdl.algorithms.signal.VoigtModel.func:1 of
+msgid "Return fitting function"
+msgstr "Retourne la fonction de régression"
+
+#: cdl.algorithms.signal.FitModel.get_amp_from_amplitude:1
+#: cdl.algorithms.signal.GaussianModel.get_amp_from_amplitude:1
+#: cdl.algorithms.signal.LorentzianModel.get_amp_from_amplitude:1 of
+msgid "Return amp from function amplitude and sigma"
+msgstr "Retourne amp à partir de l'amplitude de la fonction et de sigma"
+
+#: cdl.algorithms.signal.FitModel.amplitude:1
+#: cdl.algorithms.signal.GaussianModel.amplitude:1
+#: cdl.algorithms.signal.LorentzianModel.amplitude:1 of
+msgid "Return function amplitude"
+msgstr "Retourne l'amplitude de la fonction"
+
+#: cdl.algorithms.signal.FitModel.fwhm:1
+#: cdl.algorithms.signal.GaussianModel.fwhm:1
+#: cdl.algorithms.signal.LorentzianModel.fwhm:1
+#: cdl.algorithms.signal.VoigtModel.fwhm:1 of
+msgid "Return function FWHM"
+msgstr "Retourne la LMH de la fonction"
+
+#: cdl.algorithms.signal.FitModel.half_max_segment:1 of
+msgid "Return segment coordinates for y=half-maximum intersection"
+msgstr "Retourne les coordonnées du segment pour l'intersection y=half-maximum"
+
+#: cdl.algorithms.signal.GaussianModel:1 of
+msgid "1-dimensional Gaussian fit model"
+msgstr "Modèle de régression gaussien à 1 dimension"
+
+#: cdl.algorithms.signal.LorentzianModel:1 of
+msgid "1-dimensional Lorentzian fit model"
+msgstr "Modèle de régression lorentzien à 1 dimension"
+
+#: cdl.algorithms.signal.VoigtModel:1 of
+msgid "1-dimensional Voigt fit model"
+msgstr "Modèle de régression Voigt à 1 dimension"
+
 #: cdl.algorithms.signal.find_nearest_zero_point_idx:1 of
 msgid "Find the x indexes where the corresponding y is the closest to zero"
 msgstr "Rechercher les indices x où le y correspondant est le plus proche de zéro"
@@ -378,7 +422,10 @@ msgstr "Indices des points juste avant ou au croisement à zéro"
 msgid ""
 "Find the x value where the y value is the closest to the given value "
 "using linear interpolation to deduce the precise x value."
-msgstr "Rechercher la valeur x où la valeur y est la plus proche de la valeur donnée en utilisant une interpolation linéaire pour déduire la valeur x précise."
+msgstr ""
+"Rechercher la valeur x où la valeur y est la plus proche de la valeur "
+"donnée en utilisant une interpolation linéaire pour déduire la valeur x "
+"précise."
 
 #: cdl.algorithms.signal.find_x_at_value:6 of
 msgid "Value to find"
@@ -405,6 +452,14 @@ msgstr "Niveau en dB auquel la largeur de bande est calculée. Par défaut : 3.0
 msgid "segment coordinates"
 msgstr "coordonnées du segment"
 
+#: cdl.algorithms.signal.contrast:1 of
+msgid "Compute contrast"
+msgstr "Calculer le contraste"
+
+#: cdl.algorithms.signal.contrast:5 of
+msgid "Contrast"
+msgstr "Contraste"
+
 #: cdl.algorithms.signal.sinusoidal_model:1 of
 msgid "Sinusoidal model function."
 msgstr "Fonction de modèle sinusoïdal."
@@ -417,7 +472,9 @@ msgstr "Adapter un modèle sinusoïdal aux données d'entrée."
 msgid ""
 "A tuple containing the fit parameters (amplitude, frequency, phase, "
 "offset) and the residuals"
-msgstr "Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, phase, décalage) et les résidus"
+msgstr ""
+"Un tuple contenant les paramètres d'ajustement (amplitude, fréquence, "
+"phase, décalage) et les résidus"
 
 #: cdl.algorithms.signal.sinus_frequency:1 of
 msgid "Compute the frequency of a sinusoidal signal."
@@ -462,7 +519,9 @@ msgstr "Calculer le rapport signal/bruit et distorsion (SINAD)."
 msgid ""
 "Unit of the input data. Valid values are 'dBc' and 'dBFS'. Defaults to "
 "'dBc'."
-msgstr "Unité des données d'entrée. Les valeurs valides sont 'dBc' et 'dBFS'. Par défaut : 'dBc'."
+msgstr ""
+"Unité des données d'entrée. Les valeurs valides sont 'dBc' et 'dBFS'. Par"
+" défaut : 'dBc'."
 
 #: cdl.algorithms.signal.sinad:9 of
 msgid "Signal-to-Noise and Distortion Ratio (SINAD)"
@@ -496,51 +555,6 @@ msgstr "Calculer le rapport signal/bruit (SNR)."
 msgid "Signal-to-Noise Ratio (SNR)"
 msgstr "Rapport signal/bruit (SNR)"
 
-#: cdl.algorithms.signal.fwhm:1 of
-msgid "Compute Full Width at Half Maximum (FWHM) of the input data"
-msgstr "Calculer la largeur totale à mi-hauteur (FWHM) des données d'entrée"
-
-#: cdl.algorithms.signal.fwhm:4 of
-msgid ""
-"Calculation method. Two types of methods are supported: a zero-crossing "
-"method and fitting methods (based on various models: Gauss, Lorentz, "
-"Voigt). Defaults to \"zero-crossing\"."
-msgstr "Méthode de calcul. Deux types de méthodes sont pris en charge : une méthode de croisement à zéro et des méthodes d'ajustement (basées sur divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
-
-#: cdl.algorithms.signal.fwhm:7 of
-msgid ""
-"Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the"
-" fitting starts from the first point)."
-msgstr "Borne X inférieure pour l'ajustement. Par défaut : None (pas de borne inférieure, c'est-à-dire que l'ajustement commence à partir du premier point)."
-
-#: cdl.algorithms.signal.fwhm:9 of
-msgid ""
-"Upper X bound for the fitting. Defaults to None (no upper bound, i.e. the"
-" fitting ends at the last point)"
-msgstr "Borne X supérieure pour l'ajustement. Par défaut : None (pas de borne supérieure, c'est-à-dire que l'ajustement se termine au dernier point)"
-
-#: cdl.algorithms.signal.fwhm:12 of
-msgid "FWHM segment coordinates"
-msgstr "Coordonnées du segment LMH"
-
-#: cdl.algorithms.signal.fw1e2:1 of
-msgid ""
-"Compute Full Width at 1/e� of the input data (using a Gaussian model "
-"fitting)."
-msgstr "Calculer la largeur totale à 1/e² des données d'entrée (en utilisant un ajustement de modèle gaussien)."
-
-#: cdl.algorithms.signal.fw1e2:5 of
-msgid "FW at 1/e² segment coordinates"
-msgstr "Coordonnées du segment LMH à 1/e²"
-
-#: cdl.algorithms.signal.contrast:1 of
-msgid "Compute contrast"
-msgstr "Calculer le contraste"
-
-#: cdl.algorithms.signal.contrast:5 of
-msgid "Contrast"
-msgstr "Contraste"
-
 #: cdl.algorithms.signal.sampling_period:1 of
 msgid "Compute sampling period"
 msgstr "Calculer la période d'échantillonnage"
@@ -557,7 +571,54 @@ msgstr "Calculer le taux d'échantillonnage moyen"
 msgid "Sampling rate"
 msgstr "Taux d'échantillonnage"
 
-#: cdl.algorithms:31 of
+#: cdl.algorithms.signal.fwhm:1 of
+msgid "Compute Full Width at Half Maximum (FWHM) of the input data"
+msgstr "Calculer la largeur totale à mi-hauteur (FWHM) des données d'entrée"
+
+#: cdl.algorithms.signal.fwhm:4 of
+msgid ""
+"Calculation method. Two types of methods are supported: a zero-crossing "
+"method and fitting methods (based on various models: Gauss, Lorentz, "
+"Voigt). Defaults to \"zero-crossing\"."
+msgstr ""
+"Méthode de calcul. Deux types de méthodes sont pris en charge : une "
+"méthode de croisement à zéro et des méthodes d'ajustement (basées sur "
+"divers modèles : Gauss, Lorentz, Voigt). Par défaut : \"zero-crossing\"."
+
+#: cdl.algorithms.signal.fwhm:7 of
+msgid ""
+"Lower X bound for the fitting. Defaults to None (no lower bound, i.e. the"
+" fitting starts from the first point)."
+msgstr ""
+"Borne X inférieure pour l'ajustement. Par défaut : None (pas de borne "
+"inférieure, c'est-à-dire que l'ajustement commence à partir du premier "
+"point)."
+
+#: cdl.algorithms.signal.fwhm:9 of
+msgid ""
+"Upper X bound for the fitting. Defaults to None (no upper bound, i.e. the"
+" fitting ends at the last point)"
+msgstr ""
+"Borne X supérieure pour l'ajustement. Par défaut : None (pas de borne "
+"supérieure, c'est-à-dire que l'ajustement se termine au dernier point)"
+
+#: cdl.algorithms.signal.fwhm:12 of
+msgid "FWHM segment coordinates"
+msgstr "Coordonnées du segment LMH"
+
+#: cdl.algorithms.signal.fw1e2:1 of
+msgid ""
+"Compute Full Width at 1/e� of the input data (using a Gaussian model "
+"fitting)."
+msgstr ""
+"Calculer la largeur totale à 1/e² des données d'entrée (en utilisant un "
+"ajustement de modèle gaussien)."
+
+#: cdl.algorithms.signal.fw1e2:5 of
+msgid "FW at 1/e² segment coordinates"
+msgstr "Coordonnées du segment LMH à 1/e²"
+
+#: cdl.algorithms:30 of
 msgid "Image Processing Algorithms"
 msgstr "Algorithmes de traitement d'image"
 
@@ -1029,7 +1090,7 @@ msgstr "La convexité minimale de la tache."
 msgid "The maximum blob convexity."
 msgstr "La convexité maximale de la tache."
 
-#: cdl.algorithms:37 of
+#: cdl.algorithms:36 of
 msgid "Data Type Conversion Algorithms"
 msgstr "Algorithmes de conversion de type de données"
 
@@ -1054,7 +1115,7 @@ msgstr "Retourne True si le type de données est un type complexe"
 msgid "True if data type is a complex type"
 msgstr "True si le type de données est un type complexe"
 
-#: cdl.algorithms:43 of
+#: cdl.algorithms:42 of
 msgid "Coordinate Conversion Algorithms"
 msgstr "Algorithmes de conversion de coordonnées"
 
@@ -1239,50 +1300,8 @@ msgstr ""
 "Coordonnées de diamètres X/Y de l'ellipse, sous la forme d'un tableau 2D "
 "(N, 8)"
 
-#: cdl.algorithms:49 of
-msgid "Curve Fitting Algorithms"
-msgstr "Algorithmes de régression"
+#~ msgid ":mod:`cdl.algorithms.signal`: Fitting algorithms"
+#~ msgstr ":mod:`cdl.algorithms.signal` : Algorithmes de régression"
 
-#: cdl.algorithms.signal.FitModel:1 of
-msgid "Curve fitting model base class"
-msgstr "Classe de base du modèle de régression"
-
-#: cdl.algorithms.signal.FitModel.func:1 cdl.algorithms.signal.GaussianModel.func:1
-#: cdl.algorithms.signal.LorentzianModel.func:1
-#: cdl.algorithms.signal.VoigtModel.func:1 of
-msgid "Return fitting function"
-msgstr "Retourne la fonction de régression"
-
-#: cdl.algorithms.signal.FitModel.get_amp_from_amplitude:1
-#: cdl.algorithms.signal.GaussianModel.get_amp_from_amplitude:1
-#: cdl.algorithms.signal.LorentzianModel.get_amp_from_amplitude:1 of
-msgid "Return amp from function amplitude and sigma"
-msgstr "Retourne amp à partir de l'amplitude de la fonction et de sigma"
-
-#: cdl.algorithms.signal.FitModel.amplitude:1
-#: cdl.algorithms.signal.GaussianModel.amplitude:1
-#: cdl.algorithms.signal.LorentzianModel.amplitude:1 of
-msgid "Return function amplitude"
-msgstr "Retourne l'amplitude de la fonction"
-
-#: cdl.algorithms.signal.FitModel.fwhm:1 cdl.algorithms.signal.GaussianModel.fwhm:1
-#: cdl.algorithms.signal.LorentzianModel.fwhm:1
-#: cdl.algorithms.signal.VoigtModel.fwhm:1 of
-msgid "Return function FWHM"
-msgstr "Retourne la LMH de la fonction"
-
-#: cdl.algorithms.signal.FitModel.half_max_segment:1 of
-msgid "Return segment coordinates for y=half-maximum intersection"
-msgstr "Retourne les coordonnées du segment pour l'intersection y=half-maximum"
-
-#: cdl.algorithms.signal.GaussianModel:1 of
-msgid "1-dimensional Gaussian fit model"
-msgstr "Modèle de régression gaussien à 1 dimension"
-
-#: cdl.algorithms.signal.LorentzianModel:1 of
-msgid "1-dimensional Lorentzian fit model"
-msgstr "Modèle de régression lorentzien à 1 dimension"
-
-#: cdl.algorithms.signal.VoigtModel:1 of
-msgid "1-dimensional Voigt fit model"
-msgstr "Modèle de régression Voigt à 1 dimension"
+#~ msgid "Curve Fitting Algorithms"
+#~ msgstr "Algorithmes de régression"

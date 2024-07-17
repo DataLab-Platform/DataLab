@@ -29,7 +29,7 @@ msgstr "Démarrer le développement dans le cadre du projet DataLab est facile."
 
 #: ../../contributing/environment.md:6
 msgid "Here is what you will need:"
-msgstr "Voici ce dont vous aurez besoin :"
+msgstr "Voici ce dont vous aurez besoin :"
 
 #: ../../contributing/environment.md:8
 msgid ""
@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Si vous utilisez Visual Studio Code, c'est aussi un excellent choix (pour"
 " d'autres raisons). Nous recommandons d'installer les extensions "
-"suivantes :"
+"suivantes :"
 
 #: ../../contributing/environment.md
 msgid "Extension"
@@ -195,8 +195,8 @@ msgid "Python Environment"
 msgstr "Environnement Python"
 
 #: ../../contributing/environment.md:47
-msgid "DataLab requires the following :"
-msgstr "DataLab nécessite les éléments suivants :"
+msgid "DataLab requires the following :"
+msgstr "DataLab nécessite les éléments suivants :"
 
 #: ../../contributing/environment.md:49
 msgid "Python (e.g. WinPython)"
@@ -207,8 +207,8 @@ msgid "Additional Python packages"
 msgstr "Paquets Python supplémentaires"
 
 #: ../../contributing/environment.md:53
-msgid "Installing all required packages :"
-msgstr "Installation de tous les paquets requis :"
+msgid "Installing all required packages :"
+msgstr "Installation de tous les paquets requis :"
 
 #: ../../contributing/environment.md:57
 msgid ""
@@ -234,7 +234,7 @@ msgid ""
 "distributions:"
 msgstr ""
 "Le tableau suivant liste les distributions Python actuellement utilisées "
-"officiellement :"
+"officiellement :"
 
 #: ../../contributing/environment.md
 msgid "Python version"
@@ -347,7 +347,7 @@ msgid ""
 "console):"
 msgstr ""
 "Activer le mode \"debug\" (pas de redirection stdin/stdout vers la "
-"console interne) :"
+"console interne) :"
 
 #: ../../contributing/environment.md:96
 msgid ""
@@ -355,19 +355,19 @@ msgid ""
 "environment:"
 msgstr ""
 "Générer la documentation PDF nécessite LaTeX. Sur Windows, "
-"l'environnement suivant :"
+"l'environnement suivant :"
 
 #: ../../contributing/environment.md:102
 msgid ""
 "Visual Studio Code configuration used in `launch.json` and `tasks.json` "
-"(examples) :"
+"(examples) :"
 msgstr ""
 "La configuration de Visual Studio Code utilisée dans `launch.json` et "
-"`tasks.json` (exemples) :"
+"`tasks.json` (exemples) :"
 
 #: ../../contributing/environment.md:110
 msgid "Visual Studio Code `.env` file:"
-msgstr "Fichier `.env` de Visual Studio Code :"
+msgstr "Fichier `.env` de Visual Studio Code :"
 
 #: ../../contributing/environment.md:112
 msgid "This file is used to set environment variables for the application."
@@ -434,7 +434,7 @@ msgstr "Logiciels tiers"
 
 #: ../../contributing/environment.md:145
 msgid "The following software may be required for maintaining the project:"
-msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
+msgstr "Les logiciels suivants peuvent être nécessaires pour maintenir le projet :"
 
 #: ../../contributing/environment.md
 msgid "Software"

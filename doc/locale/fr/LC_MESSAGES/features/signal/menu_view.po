@@ -101,7 +101,7 @@ msgstr "Les annotations peuvent être ajoutées dans la vue séparée."
 
 #: ../../doc/features/signal/menu_view.rst:49
 msgid "The typical workflow to edit annotations is as follows:"
-msgstr "Le mode opératoire typique pour modifier les annotations est le suivant :"
+msgstr "Le mode opératoire typique pour modifier les annotations est le suivant :"
 
 #: ../../doc/features/signal/menu_view.rst:51
 msgid "Select the \"Edit annotations\" option."

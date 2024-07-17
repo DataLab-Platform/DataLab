@@ -65,20 +65,22 @@ To execute DataLab demo, run the following::
 
     $ cdl-demo
 
-.. _run_validation_tests:
+.. _run_scientific_validation_tests:
 
-Run validation tests
---------------------
+Run scientific validation tests
+-------------------------------
 
-.. note:: Validation tests are directly included in individual unit tests and are
-    disseminated throughout the code. The test functions including validation tests
-    are marked with the `@pytest.mark.validation` decorator.
+.. note:: Scientific validation tests are directly included in individual unit tests
+    and are disseminated throughout the code. The test functions including validation
+    tests are marked with the ``@pytest.mark.validation`` decorator.
 
-To execute DataLab validation tests, run the following::
+To execute DataLab scientific validation tests, run the following::
 
     $ pytest -m validation
 
 .. seealso:: See section :ref:`validation` for more information on DataLab's validation strategy.
+
+.. _run_functional_validation_tests:
 
 Run complete test suite
 ------------------------

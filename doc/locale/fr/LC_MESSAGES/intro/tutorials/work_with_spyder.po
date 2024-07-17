@@ -101,7 +101,7 @@ msgstr ""
 "une bibliothèque que vous utiliserez dans d'autres applications, ou même "
 "un simple script que vous exécuterez à partir de la ligne de commande. "
 "Dans tous les cas, vous devrez suivre un processus de développement qui "
-"comprendra les étapes suivantes :"
+"comprendra les étapes suivantes :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:42
 msgid "Prototype the algorithm in a development environment, such as `Spyder`_."
@@ -218,7 +218,7 @@ msgid ""
 "``my_work`` module:"
 msgstr ""
 "Pour tester ces algorithmes, vous avez écrit deux fonctions dans le "
-"module ``my_work`` :"
+"module ``my_work`` :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:87
 msgid ""
@@ -244,7 +244,7 @@ msgid ""
 " directly from `Spyder`_:"
 msgstr ""
 "Vous pouvez maintenant utiliser DataLab pour visualiser les données "
-"renvoyées par ces fonctions directement depuis `Spyder`_ :"
+"renvoyées par ces fonctions directement depuis `Spyder`_ :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:96
 msgid "First, you need to start both DataLab and `Spyder`_."
@@ -265,7 +265,7 @@ msgstr ""
 
 #: ../../intro/tutorials/work_with_spyder.rst:102
 msgid "Here is how to do it:"
-msgstr "Voici comment faire :"
+msgstr "Voici comment faire :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:108
 msgid ""
@@ -273,7 +273,7 @@ msgid ""
 "the `Spyder`_ console:"
 msgstr ""
 "Si nous exécutons les deux premières cellules, nous verrons la sortie "
-"suivante dans la console `Spyder`_ :"
+"suivante dans la console `Spyder`_ :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:126
 msgid ""
@@ -320,7 +320,7 @@ msgstr ""
 "Voici le code de l'algorithme fictif que nous voulons déboguer, dans "
 "lequel nous avons introduit un paramètre optionnel ``debug_with_datalab``"
 " qui - s'il est défini sur ``True`` - créera un objet proxy permettant de"
-" visualiser les données étape par étape dans DataLab :"
+" visualiser les données étape par étape dans DataLab :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:153
 msgid ""
@@ -336,7 +336,7 @@ msgstr ""
 msgid "Now, we can use `Spyder`_ to debug the ``test_my_2d_algorithm`` function:"
 msgstr ""
 "Maintenant, nous pouvons utiliser `Spyder`_ pour déboguer la fonction "
-"``test_my_2d_algorithm`` :"
+"``test_my_2d_algorithm`` :"
 
 #: ../../intro/tutorials/work_with_spyder.rst:163
 msgid ""

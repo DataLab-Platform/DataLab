@@ -33,7 +33,7 @@ msgid ""
 "itself)*:"
 msgstr ""
 "Les paquets prérequis de DataLab sont les suivants *(note : l'installeur "
-"Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
+"Windows intègre déjà l'ensemble de ces dépendances, ainsi que Python)* :"
 
 #: ../../extras_require-dev.txt:4 ../../extras_require-doc.txt:4
 #: ../../install_requires.txt:4
@@ -135,7 +135,7 @@ msgstr "Python 3.8 est la référence de la version de production"
 
 #: ../../installation.rst:17
 msgid "Optional modules for development and testing:"
-msgstr "Modules optionnels pour le développement et les tests :"
+msgstr "Modules optionnels pour le développement et les tests :"
 
 #: ../../extras_require-dev.txt:6
 msgid "black"
@@ -155,7 +155,7 @@ msgstr ""
 
 #: ../../installation.rst:21
 msgid "Optional modules for building the documentation:"
-msgstr "Modules optionnels pour la génération de la documentation :"
+msgstr "Modules optionnels pour la génération de la documentation :"
 
 #: ../../extras_require-doc.txt:6
 msgid "sphinx"
@@ -179,7 +179,7 @@ msgstr "Procédure d'installation"
 
 #: ../../installation.rst:30
 msgid "Windows installer:"
-msgstr "Installeur Windows :"
+msgstr "Installeur Windows :"
 
 #: ../../installation.rst:32
 msgid ""
@@ -206,7 +206,7 @@ msgstr ""
 
 #: ../../installation.rst:47
 msgid "Wheel package:"
-msgstr "Paquet wheel :"
+msgstr "Paquet wheel :"
 
 #: ../../installation.rst:49
 msgid ""
@@ -215,17 +215,17 @@ msgid ""
 msgstr ""
 "Depuis n'importe quel système d'exploitation, utiliser pip et le paquet "
 "Wheel est la méthode la plus simple pour installer DataLab sur une "
-"distribution Python préexistante :"
+"distribution Python préexistante :"
 
 #: ../../installation.rst:58
 msgid "Source package:"
-msgstr "Paquet source :"
+msgstr "Paquet source :"
 
 #: ../../installation.rst:60
 msgid "Installing DataLab directly from the source package is straigthforward:"
 msgstr ""
 "Installer DataLab directement depuis le paquet source n'est guère plus "
-"compliqué :"
+"compliqué :"
 
 #~ msgid "4.1"
 #~ msgstr ""

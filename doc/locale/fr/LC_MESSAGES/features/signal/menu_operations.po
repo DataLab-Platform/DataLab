@@ -149,7 +149,7 @@ msgid ""
 "selected signal:"
 msgstr ""
 "Crée un signal à partir d'une opération avec une constante sur chaque "
-"signal sélectionné :"
+"signal sélectionné :"
 
 #: ../../doc/features/signal/menu_operations.rst:75
 msgid "|constant_add| Addition"

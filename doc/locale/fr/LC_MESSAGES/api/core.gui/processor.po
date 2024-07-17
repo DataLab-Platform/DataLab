@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-02 10:39+0200\n"
+"POT-Creation-Date: 2024-06-16 12:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.14.0\n"
+"Generated-By: Babel 2.13.0\n"
 
 #: cdl.core.gui.processor:2 of
 msgid "Processor"
@@ -34,15 +34,15 @@ msgstr ""
 #: cdl.core.gui.processor:7 of
 msgid ""
 "Processor objects are the bridge between the computation modules (in "
-":mod:`cdl.computation`) and the GUI modules (in "
-":mod:`cdl.core.gui`). They are used to call the computation functions and"
-" to update the GUI from inside the data panel objects."
+":mod:`cdl.computation`) and the GUI modules (in :mod:`cdl.core.gui`). "
+"They are used to call the computation functions and to update the GUI "
+"from inside the data panel objects."
 msgstr ""
 "Les objets processeur sont le pont entre les modules de calcul (dans "
-":mod:`cdl.computation`) et les modules GUI (dans "
-":mod:`cdl.core.gui`). Ils sont utilisés pour appeler les fonctions de "
-"calcul et pour mettre à jour l'interface utilisateur depuis l'intérieur "
-"des objets de panneau de données."
+":mod:`cdl.computation`) et les modules GUI (dans :mod:`cdl.core.gui`). "
+"Ils sont utilisés pour appeler les fonctions de calcul et pour mettre à "
+"jour l'interface utilisateur depuis l'intérieur des objets de panneau de "
+"données."
 
 #: cdl.core.gui.processor:12 of
 msgid ""
@@ -50,7 +50,7 @@ msgid ""
 "the following:"
 msgstr ""
 "Lors de la mise en œuvre d'une fonction de traitement dans DataLab, les "
-"étapes sont généralement les suivantes :"
+"étapes sont généralement les suivantes :"
 
 #: cdl.core.gui.processor:14 of
 msgid ""
@@ -64,13 +64,13 @@ msgstr ""
 
 #: cdl.core.gui.processor:17 of
 msgid ""
-"Implement the computation function in the :mod:`cdl.computation` "
-"module (that would eventually call the algorithm from the "
-":mod:`cdl.algorithms` module)."
+"Implement the computation function in the :mod:`cdl.computation` module "
+"(that would eventually call the algorithm from the :mod:`cdl.algorithms` "
+"module)."
 msgstr ""
 "Implémentation de la fonction de calcul dans le module "
-":mod:`cdl.computation` (qui appellerait éventuellement l'algorithme "
-"du module :mod:`cdl.algorithms`)."
+":mod:`cdl.computation` (qui appellerait éventuellement l'algorithme du "
+"module :mod:`cdl.algorithms`)."
 
 #: cdl.core.gui.processor:20 of
 msgid ""
@@ -91,7 +91,7 @@ msgstr ""
 
 #: cdl.core.gui.processor:25 of
 msgid "The following submodules are available:"
-msgstr "Les sous-modules suivants sont disponibles :"
+msgstr "Les sous-modules suivants sont disponibles :"
 
 #: cdl.core.gui.processor:27 of
 msgid ":mod:`cdl.core.gui.processor.base`: Common processing features"
@@ -497,12 +497,6 @@ msgstr ""
 msgid "Compute data linear calibration"
 msgstr ""
 
-#: cdl.core.gui.processor.base.BaseProcessor.compute_threshold:1
-#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1
-#: cdl.core.gui.processor.signal.SignalProcessor.compute_threshold:1 of
-msgid "Compute threshold clipping"
-msgstr ""
-
 #: cdl.core.gui.processor.base.BaseProcessor.compute_clip:1
 #: cdl.core.gui.processor.image.ImageProcessor.compute_clip:1
 #: cdl.core.gui.processor.signal.SignalProcessor.compute_clip:1 of
@@ -840,6 +834,42 @@ msgstr ""
 msgid "Compute Butterworth filter"
 msgstr ""
 
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold:1 of
+msgid "Compute parametric threshold"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_isodata:1 of
+msgid "Compute threshold using Isodata algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_li:1 of
+msgid "Compute threshold using Li algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_mean:1 of
+msgid "Compute threshold using Mean algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_minimum:1 of
+msgid "Compute threshold using Minimum algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_otsu:1 of
+msgid "Compute threshold using Otsu algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_triangle:1 of
+msgid "Compute threshold using Triangle algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_threshold_yen:1 of
+msgid "Compute threshold using Yen algorithm"
+msgstr ""
+
+#: cdl.core.gui.processor.image.ImageProcessor.compute_all_threshold:1 of
+msgid "Compute all threshold algorithms"
+msgstr ""
+
 #: cdl.core.gui.processor.image.ImageProcessor.compute_adjust_gamma:1 of
 msgid "Compute gamma correction"
 msgstr ""
@@ -1032,4 +1062,7 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Compute profile"
+#~ msgstr ""
+
+#~ msgid "Compute threshold clipping"
 #~ msgstr ""

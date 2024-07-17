@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) 2023, DataLab Platform Developers
 # This file is distributed under the same license as the DataLab package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-09 09:07+0200\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: cdl.computation:2 of
 msgid "Computation (:mod:`cdl.computation`)"
-msgstr "Calcul (:mod:`cdl.computation`)"
+msgstr ""
 
 #: cdl.computation:4 of
 msgid ""
@@ -31,11 +31,6 @@ msgid ""
 "designed to be used in the DataLab pipeline, but can be used "
 "independently as well."
 msgstr ""
-"Ce paquet contient les fonctions de calcul utilisées par le projet "
-"DataLab. Ces fonctions opèrent directement sur les objets DataLab "
-"(c'est-à-dire :class:`cdl.obj.SignalObj` et :class:`cdl.obj.ImageObj`) et"
-" sont conçues pour être utilisées dans le pipeline DataLab, mais peuvent "
-"également être utilisées indépendamment."
 
 #: cdl.computation:11 of
 msgid ""
@@ -44,10 +39,6 @@ msgid ""
 ":mod:`cdl.algorithms` package for algorithms that operate directly on "
 "NumPy arrays."
 msgstr ""
-"Le module :mod:`cdl.computation` est le point d'entrée principal pour les"
-" fonctions de calcul DataLab lors de la manipulation d'objets DataLab. "
-"Voir le module :mod:`cdl.algorithms` pour les algorithmes qui opèrent "
-"directement sur les tableaux NumPy."
 
 #: cdl.computation:16 of
 msgid ""
@@ -62,16 +53,6 @@ msgid ""
 " used to configure the computation function (e.g. the size of the moving "
 "average window)."
 msgstr ""
-"Chaque module de calcul définit un ensemble d'objets de calcul, "
-"c'est-à-dire des fonctions qui implémentent des fonctionnalités de "
-"traitement et des classes qui implémentent les paramètres correspondants "
-"(sous la forme de sous-classes "
-":py:class:`guidata.dataset.datatypes.Dataset`). Les fonctions de calcul "
-"prennent un objet DataLab (par exemple :class:`cdl.obj.SignalObj`) et un "
-"objet de paramètre (par exemple :py:class:`cdl.param.MovingAverageParam`)"
-" en entrée et renvoient un objet DataLab en sortie (le résultat du "
-"calcul). L'objet de paramètre est utilisé pour configurer la fonction de "
-"calcul (par exemple, la taille de la fenêtre de moyenne mobile)."
 
 #: cdl.computation:25 of
 msgid ""
@@ -81,39 +62,32 @@ msgid ""
 "the :mod:`cdl.algorithms` module and on the data model defined in the "
 ":mod:`cdl.obj` (or :mod:`cdl.core.model`) module."
 msgstr ""
-"Dans l'architecture globale de DataLab, le but de ce paquet est de "
-"fournir les fonctions de calcul qui sont utilisées par le module "
-":mod:`cdl.core.gui.processor`, basé sur les algorithmes définis dans le "
-"module :mod:`cdl.algorithms` et sur le modèle de données défini dans le "
-"module :mod:`cdl.obj` (ou :mod:`cdl.core.model`)."
 
 #: cdl.computation:30 of
 msgid ""
 "The computation modules are organized in subpackages according to their "
 "purpose. The following subpackages are available:"
 msgstr ""
-"Les modules de calcul sont organisés en sous-paquets en fonction de leur "
-"objectif. Les sous-paquets suivants sont disponibles :"
 
 #: cdl.computation:33 of
 msgid ":mod:`cdl.computation.base`: Common processing features"
-msgstr ":mod:`cdl.computation.base` : fonctionnalités de traitement communes"
+msgstr ""
 
 #: cdl.computation:34 of
 msgid ":mod:`cdl.computation.signal`: Signal processing features"
-msgstr ":mod:`cdl.computation.signal` : fonctionnalités de traitement du signal"
+msgstr ""
 
 #: cdl.computation:35 of
 msgid ":mod:`cdl.computation.image`: Image processing features"
-msgstr ":mod:`cdl.computation.image` : fonctionnalités de traitement d'image"
+msgstr ""
 
 #: cdl.computation:38 of
 msgid "Common processing features"
-msgstr "Fonctionnalités de traitement communes"
+msgstr ""
 
 #: cdl.computation.base.GaussianParam:1 of
 msgid "Gaussian filter parameters"
-msgstr "Paramètres du filtre gaussien"
+msgstr ""
 
 #: cdl.computation.base.GaussianParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -399,7 +373,7 @@ msgstr ""
 #: cdl.computation.signal.extract_single_roi
 #: guidata.dataset.datatypes.DataSet.create of
 msgid "Parameters"
-msgstr "Paramètres"
+msgstr ""
 
 #: cdl.computation.base.calc_resultproperties cdl.computation.base.dst_11
 #: cdl.computation.base.dst_n1n cdl.computation.base.new_signal_result
@@ -531,7 +505,7 @@ msgstr "Paramètres"
 #: cdl.computation.signal.extract_single_roi
 #: guidata.dataset.datatypes.DataSet.create of
 msgid "Returns"
-msgstr "Renvoie"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:6 of
 msgid "Nouvelle instance de :py:class:`GaussianParam`."
@@ -539,7 +513,7 @@ msgstr ""
 
 #: cdl.computation.base.MovingAverageParam:1 of
 msgid "Moving average parameters"
-msgstr "Paramètres de la moyenne mobile"
+msgstr ""
 
 #: cdl.computation.base.MovingAverageParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -641,7 +615,7 @@ msgstr ""
 
 #: cdl.computation.base.MovingMedianParam:1 of
 msgid "Moving median parameters"
-msgstr "Paramètres de la médiane mobile"
+msgstr ""
 
 #: cdl.computation.base.MovingMedianParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -673,7 +647,7 @@ msgstr ""
 
 #: cdl.computation.base.ClipParam:1 of
 msgid "Data clipping parameters"
-msgstr "Paramètres du rognage des données"
+msgstr ""
 
 #: cdl.computation.base.ClipParam:5 guidata.dataset.datatypes.DataSet.create:3
 #: of
@@ -697,7 +671,7 @@ msgstr ""
 
 #: cdl.computation.base.NormalizeParam:1 of
 msgid "Normalize parameters"
-msgstr "Paramètres de normalisation"
+msgstr ""
 
 #: cdl.computation.base.NormalizeParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -718,7 +692,7 @@ msgstr ""
 
 #: cdl.computation.base.HistogramParam:1 of
 msgid "Histogram parameters"
-msgstr "Paramètres de l'histogramme"
+msgstr ""
 
 #: cdl.computation.base.HistogramParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -747,15 +721,15 @@ msgstr ""
 
 #: cdl.computation.base.HistogramParam.get_suffix:1 of
 msgid "Return suffix for the histogram computation"
-msgstr "Renvoie le suffixe pour le calcul de l'histogramme"
+msgstr ""
 
 #: cdl.computation.base.HistogramParam.get_suffix:3 of
 msgid "data array"
-msgstr "tableau de données"
+msgstr ""
 
 #: cdl.computation.base.ROIDataParam:1 of
 msgid "ROI Editor data"
-msgstr "Données de l'éditeur de ROI"
+msgstr ""
 
 #: cdl.computation.base.ROIDataParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -808,11 +782,11 @@ msgstr ""
 
 #: cdl.computation.base.ROIDataParam.is_empty:1 of
 msgid "Return True if there is no ROI"
-msgstr "Renvoie True s'il n'y a pas de ROI"
+msgstr ""
 
 #: cdl.computation.base.FFTParam:1 of
 msgid "FFT parameters"
-msgstr "Paramètres FFT"
+msgstr ""
 
 #: cdl.computation.base.FFTParam:5 guidata.dataset.datatypes.DataSet.create:3
 #: of
@@ -830,9 +804,8 @@ msgid "Nouvelle instance de :py:class:`FFTParam`."
 msgstr ""
 
 #: cdl.computation.base.SpectrumParam:1 of
-#, fuzzy
 msgid "Spectrum parameters"
-msgstr "Paramètres de l'histogramme"
+msgstr ""
 
 #: cdl.computation.base.SpectrumParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -873,19 +846,14 @@ msgid "Nouvelle instance de :py:class:`ConstantOperationParam`."
 msgstr ""
 
 #: cdl.computation.base.dst_11:1 of
-#, fuzzy
 msgid ""
 "Create a result object, as returned by the callback function of the "
 ":func:`cdl.core.gui.processor.base.BaseProcessor.compute_11` method"
 msgstr ""
-"Crée un objet image résultat, tel que renvoyé par la fonction de rappel "
-"de la méthode "
-":func:`cdl.core.gui.processor.base.BaseProcessor.compute_11`"
 
 #: cdl.computation.base.dst_11:4 of
-#, fuzzy
 msgid "source signal or image object"
-msgstr "objet de signal ou d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.base.dst_11:5 of
 msgid ""
@@ -897,45 +865,36 @@ msgid ""
 msgstr ""
 
 #: cdl.computation.base.dst_11:9 of
-#, fuzzy
 msgid "suffix to add to the title. Optional."
-msgstr "suffixe à ajouter au titre"
+msgstr ""
 
 #: cdl.computation.base.dst_11:11 of
-#, fuzzy
 msgid "Result signal or image object"
-msgstr "objet de signal ou d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.base.dst_n1n:1 of
-#, fuzzy
 msgid ""
 "Create a result  object, as returned by the callback function of the "
 ":func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` method"
 msgstr ""
-"Crée un objet image résultat, tel que renvoyé par la fonction de rappel "
-"de la méthode "
-":func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n`"
 
 #: cdl.computation.base.dst_n1n:4 cdl.computation.base.dst_n1n:5
 #: cdl.computation.base.new_signal_result:6 of
 msgid "input signal or image object"
-msgstr "objet de signal ou d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.base.dst_n1n:6 cdl.computation.base.new_signal_result:7
 #: cdl.computation.image.dst_11_signal:5 of
 msgid "name of the processing function"
-msgstr "nom de la fonction de traitement"
+msgstr ""
 
 #: cdl.computation.base.dst_n1n:8 of
-#, fuzzy
 msgid "Output signal or image object"
-msgstr "objet de signal ou d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.base.new_signal_result:1 of
 msgid "Create new signal object as a result of a compute_11 function"
 msgstr ""
-"Créer un nouvel objet de signal en tant que résultat d'une fonction "
-"compute_11"
 
 #: cdl.computation.base.new_signal_result:3 of
 msgid ""
@@ -943,27 +902,24 @@ msgid ""
 "object without copying the original object metadata, except for the "
 "\"source\" entry."
 msgstr ""
-"Contrairement aux fonctions `dst_11`, cette fonction crée un nouvel objet"
-" de signal sans copier les métadonnées de l'objet d'origine, sauf pour "
-"l'entrée \"source\"."
 
 #: cdl.computation.base.new_signal_result:8 of
 msgid "suffix to add to the title"
-msgstr "suffixe à ajouter au titre"
+msgstr ""
 
 #: cdl.computation.base.new_signal_result:9 of
 msgid "units of the output signal"
-msgstr "unités du signal de sortie"
+msgstr ""
 
 #: cdl.computation.base.new_signal_result:10 of
 msgid "labels of the output signal"
-msgstr "étiquettes du signal de sortie"
+msgstr ""
 
 #: cdl.computation.base.new_signal_result:12
 #: cdl.computation.image.compute_histogram:6
 #: cdl.computation.image.dst_11_signal:7 of
 msgid "Output signal object"
-msgstr "Objet de signal de sortie"
+msgstr ""
 
 #: cdl.computation.base.calc_resultproperties:1 of
 msgid ""
@@ -976,9 +932,8 @@ msgid "title of the result properties"
 msgstr ""
 
 #: cdl.computation.base.calc_resultproperties:5 of
-#, fuzzy
 msgid "signal or image object"
-msgstr "objet de signal ou d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.base.calc_resultproperties:6 of
 msgid ""
@@ -990,13 +945,12 @@ msgstr ""
 
 #: cdl.computation.base.calc_resultproperties:11
 #: cdl.computation.signal.compute_stats:5 of
-#, fuzzy
 msgid "Result properties object"
-msgstr "Objet signal résultat"
+msgstr ""
 
 #: cdl.computation:44 of
 msgid "Signal processing features"
-msgstr "Fonctionnalités de traitement du signal"
+msgstr ""
 
 #: cdl.computation.signal.Wrap11Func:1 of
 msgid ""
@@ -1005,35 +959,26 @@ msgid ""
 "DataLab's infrastructure to perform computations with "
 ":class:`cdl.core.gui.processor.signal.SignalProcessor`."
 msgstr ""
-"Encapsule une fonction 1 tableau → 1 tableau (le cas simple de y1 = "
-"f(y0)) pour produire une fonction 1 signal → 1 signal, qui peut être "
-"utilisée à l'intérieur de l'infrastructure de DataLab pour effectuer des "
-"calculs avec :class:`cdl.core.gui.processor.signal.SignalProcessor`."
 
 #: cdl.computation.image.Wrap11Func:5 cdl.computation.signal.Wrap11Func:5 of
 msgid ""
 "This wrapping mechanism using a class is necessary for the resulted "
 "function to be pickable by the ``multiprocessing`` module."
 msgstr ""
-"Ce mécanisme d'encapsulation à l'aide d'une classe est nécessaire pour "
-"que la fonction résultante puisse être sélectionnée par le module "
-"``multiprocessing``."
 
 #: cdl.computation.signal.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a "
 ":class:`cdl.obj.SignalObj` object."
 msgstr ""
-"L'instance de cet encapsuleur est appelable et renvoie un objet "
-":class:`cdl.obj.SignalObj`."
 
 #: cdl.computation.image.Wrap11Func:12 cdl.computation.signal.Wrap11Func:12 of
 msgid "Example"
-msgstr "Exemple"
+msgstr ""
 
 #: cdl.computation.image.Wrap11Func:23 cdl.computation.signal.Wrap11Func:24 of
 msgid "1 array → 1 array function"
-msgstr "Fonction 1 tableau → 1 tableau"
+msgstr ""
 
 #: cdl.computation.image.Wrap11Func:24 cdl.computation.signal.Wrap11Func:25 of
 msgid "Additional positional arguments to pass to the function"
@@ -1048,14 +993,12 @@ msgid ""
 "Add **dst** and **src** signals and return **dst** signal modified in "
 "place"
 msgstr ""
-"Ajoute les signaux **dst** et **src** et renvoie le signal **dst** "
-"modifié sur place"
 
 #: cdl.computation.signal.compute_addition:3
 #: cdl.computation.signal.compute_product:3
 #: cdl.computation.signal.compute_windowing:4 of
 msgid "destination signal"
-msgstr "signal de destination"
+msgstr ""
 
 #: cdl.computation.signal.compute_abs:3
 #: cdl.computation.signal.compute_addition:4
@@ -1094,36 +1037,29 @@ msgstr "signal de destination"
 #: cdl.computation.signal.extract_multiple_roi:3
 #: cdl.computation.signal.extract_single_roi:3 of
 msgid "source signal"
-msgstr "signal source"
+msgstr ""
 
 #: cdl.computation.signal.compute_addition:6
 #: cdl.computation.signal.compute_product:6 of
-#, fuzzy
 msgid "Modified **dst** signal (modified in place)"
-msgstr "Signal **dst** modifié"
+msgstr ""
 
 #: cdl.computation.signal.compute_product:1 of
 msgid ""
 "Multiply **dst** and **src** signals and return **dst** signal modified "
 "in place"
 msgstr ""
-"Multiplie les signaux **dst** et **src** et renvoie le signal **dst** "
-"modifié sur place"
 
 #: cdl.computation.signal.compute_addition_constant:1 of
-#, fuzzy
 msgid "Add **dst** and a constant value and return a the new result signal object"
 msgstr ""
-"Ajoute les signaux **dst** et **src** et renvoie le signal **dst** "
-"modifié sur place"
 
 #: cdl.computation.signal.compute_addition_constant:3
 #: cdl.computation.signal.compute_difference_constant:3
 #: cdl.computation.signal.compute_division_constant:3
 #: cdl.computation.signal.compute_product_constant:3 of
-#, fuzzy
 msgid "input signal object"
-msgstr "Objet de signal de sortie"
+msgstr ""
 
 #: cdl.computation.image.compute_addition_constant:4
 #: cdl.computation.image.compute_difference_constant:4
@@ -1133,55 +1069,47 @@ msgstr "Objet de signal de sortie"
 #: cdl.computation.signal.compute_difference_constant:4
 #: cdl.computation.signal.compute_division_constant:4
 #: cdl.computation.signal.compute_product_constant:4 of
-#, fuzzy
 msgid "constant value"
-msgstr "Calcule la valeur absolue"
+msgstr ""
 
 #: cdl.computation.signal.compute_addition_constant:6 of
-#, fuzzy
 msgid "Result signal object **src** + **p.value** (new object)"
-msgstr "Objet signal résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.signal.compute_difference_constant:1 of
 msgid "Subtract a constant value from a signal"
 msgstr ""
 
 #: cdl.computation.signal.compute_difference_constant:6 of
-#, fuzzy
 msgid "Result signal object **src** - **p.value** (new object)"
-msgstr "Objet signal résultat **src1** - **src2**"
+msgstr ""
 
 #: cdl.computation.signal.compute_product_constant:1 of
-#, fuzzy
 msgid ""
 "Multiply **dst** by a constant value and return the new result signal "
 "object"
 msgstr ""
-"Multiplie les signaux **dst** et **src** et renvoie le signal **dst** "
-"modifié sur place"
 
 #: cdl.computation.signal.compute_product_constant:6 of
-#, fuzzy
 msgid "Result signal object **src** * **p.value** (new object)"
-msgstr "Objet signal résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.signal.compute_division_constant:1 of
 msgid "Divide a signal by a constant value"
 msgstr ""
 
 #: cdl.computation.signal.compute_division_constant:6 of
-#, fuzzy
 msgid "Result signal object **src** / **p.value** (new object)"
-msgstr "Objet signal résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.signal.compute_difference:1 of
 msgid "Compute difference between two signals"
-msgstr "Calculer la différence entre deux signaux"
+msgstr ""
 
 #: cdl.computation.signal.compute_difference:5
 #: cdl.computation.signal.compute_quadratic_difference:5 of
 msgid "If uncertainty is available, it is propagated."
-msgstr "Si une incertitude est disponible, elle est propagée."
+msgstr ""
 
 #: cdl.computation.signal.compute_convolution:3
 #: cdl.computation.signal.compute_difference:7
@@ -1189,7 +1117,7 @@ msgstr "Si une incertitude est disponible, elle est propagée."
 #: cdl.computation.signal.compute_interpolation:3
 #: cdl.computation.signal.compute_quadratic_difference:7 of
 msgid "source signal 1"
-msgstr "signal source 1"
+msgstr ""
 
 #: cdl.computation.signal.compute_convolution:4
 #: cdl.computation.signal.compute_difference:8
@@ -1197,57 +1125,57 @@ msgstr "signal source 1"
 #: cdl.computation.signal.compute_interpolation:4
 #: cdl.computation.signal.compute_quadratic_difference:8 of
 msgid "source signal 2"
-msgstr "signal source 2"
+msgstr ""
 
 #: cdl.computation.signal.compute_difference:10 of
 msgid "Result signal object **src1** - **src2**"
-msgstr "Objet signal résultat **src1** - **src2**"
+msgstr ""
 
 #: cdl.computation.signal.compute_quadratic_difference:1 of
 msgid "Compute quadratic difference between two signals"
-msgstr "Calculer la différence quadratique entre deux signaux"
+msgstr ""
 
 #: cdl.computation.signal.compute_quadratic_difference:10 of
 msgid "Result signal object (**src1** - **src2**) / sqrt(2.0)"
-msgstr "Objet signal résultat (**src1** - **src2**) / sqrt(2.0)"
+msgstr ""
 
 #: cdl.computation.signal.compute_division:1 of
 msgid "Compute division between two signals"
-msgstr "Calculer la division entre deux signaux"
+msgstr ""
 
 #: cdl.computation.signal.compute_division:6 of
 msgid "Result signal object **src1** / **src2**"
-msgstr "Objet signal résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.image.extract_multiple_roi:1
 #: cdl.computation.signal.extract_multiple_roi:1 of
 msgid "Extract multiple regions of interest from data"
-msgstr "Extrait plusieurs régions d'intérêt des données"
+msgstr ""
 
 #: cdl.computation.signal.extract_multiple_roi:4 of
 msgid "group of parameters"
-msgstr "groupe de paramètres"
+msgstr ""
 
 #: cdl.computation.signal.extract_multiple_roi:6 of
 msgid "Signal with multiple regions of interest"
-msgstr "Signal avec plusieurs régions d'intérêt"
+msgstr ""
 
 #: cdl.computation.signal.extract_single_roi:1 of
 msgid "Extract single region of interest from data"
-msgstr "Extrait une seule région d'intérêt des données"
+msgstr ""
 
 #: cdl.computation.image.extract_single_roi:4
 #: cdl.computation.signal.extract_single_roi:4 of
 msgid "ROI parameters"
-msgstr "Paramètres de ROI"
+msgstr ""
 
 #: cdl.computation.signal.extract_single_roi:6 of
 msgid "Signal with single region of interest"
-msgstr "Signal avec une seule région d'intérêt"
+msgstr ""
 
 #: cdl.computation.signal.compute_swap_axes:1 of
 msgid "Swap axes"
-msgstr "Permute les axes"
+msgstr ""
 
 #: cdl.computation.signal.compute_abs:5 cdl.computation.signal.compute_astype:6
 #: cdl.computation.signal.compute_calibration:6
@@ -1279,23 +1207,23 @@ msgstr "Permute les axes"
 #: cdl.computation.signal.compute_wiener:5
 #: cdl.computation.signal.compute_windowing:7 of
 msgid "Result signal object"
-msgstr "Objet signal résultat"
+msgstr ""
 
 #: cdl.computation.image.compute_abs:1 cdl.computation.signal.compute_abs:1 of
 msgid "Compute absolute value"
-msgstr "Calcule la valeur absolue"
+msgstr ""
 
 #: cdl.computation.image.compute_re:1 cdl.computation.signal.compute_re:1 of
 msgid "Compute real part"
-msgstr "Calcule la partie réelle"
+msgstr ""
 
 #: cdl.computation.image.compute_im:1 cdl.computation.signal.compute_im:1 of
 msgid "Compute imaginary part"
-msgstr "Calcule la partie imaginaire"
+msgstr ""
 
 #: cdl.computation.signal.DataTypeSParam:1 of
 msgid "Convert signal data type parameters"
-msgstr "Convertir les paramètres du type de données du signal"
+msgstr ""
 
 #: cdl.computation.signal.DataTypeSParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1317,7 +1245,7 @@ msgstr ""
 
 #: cdl.computation.signal.compute_astype:1 of
 msgid "Convert data type"
-msgstr "Convertit le type de données"
+msgstr ""
 
 #: cdl.computation.image.compute_astype:4
 #: cdl.computation.image.compute_average_profile:4
@@ -1381,26 +1309,23 @@ msgstr "Convertit le type de données"
 #: cdl.computation.signal.compute_power:4 cdl.computation.signal.compute_psd:4
 #: cdl.computation.signal.compute_resampling:4 of
 msgid "parameters"
-msgstr "paramètres"
+msgstr ""
 
 #: cdl.computation.signal.compute_log10:1 of
 msgid "Compute Log10"
-msgstr "Calcule Log10"
+msgstr ""
 
 #: cdl.computation.image.compute_exp:1 cdl.computation.signal.compute_exp:1 of
-#, fuzzy
 msgid "Compute exponential"
-msgstr "Calcule l'intégrale"
+msgstr ""
 
 #: cdl.computation.signal.compute_sqrt:1 of
-#, fuzzy
 msgid "Compute square root"
-msgstr "Calcule la partie réelle"
+msgstr ""
 
 #: cdl.computation.signal.PowerParam:1 of
-#, fuzzy
 msgid "Power parameters"
-msgstr "Paramètres de ROI"
+msgstr ""
 
 #: cdl.computation.signal.PowerParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1418,14 +1343,13 @@ msgid "Nouvelle instance de :py:class:`PowerParam`."
 msgstr ""
 
 #: cdl.computation.signal.compute_power:1 of
-#, fuzzy
 msgid "Compute power"
-msgstr "Calcule la LMH"
+msgstr ""
 
 #: cdl.computation.image.detection.Peak2DDetectionParam:1
 #: cdl.computation.signal.PeakDetectionParam:1 of
 msgid "Peak detection parameters"
-msgstr "Paramètres de détection de pics"
+msgstr ""
 
 #: cdl.computation.signal.PeakDetectionParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1451,23 +1375,23 @@ msgstr ""
 
 #: cdl.computation.signal.compute_peak_detection:1 of
 msgid "Peak detection"
-msgstr "Détection de pics"
+msgstr ""
 
 #: cdl.computation.signal.compute_normalize:1 of
 msgid "Normalize data"
-msgstr "Normalise les données"
+msgstr ""
 
 #: cdl.computation.signal.compute_derivative:1 of
 msgid "Compute derivative"
-msgstr "Calcule la dérivée"
+msgstr ""
 
 #: cdl.computation.signal.compute_integral:1 of
 msgid "Compute integral"
-msgstr "Calcule l'intégrale"
+msgstr ""
 
 #: cdl.computation.signal.XYCalibrateParam:1 of
 msgid "Signal calibration parameters"
-msgstr "Paramètres d'étalonnage du signal"
+msgstr ""
 
 #: cdl.computation.signal.XYCalibrateParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1501,11 +1425,11 @@ msgstr ""
 #: cdl.computation.image.compute_calibration:1
 #: cdl.computation.signal.compute_calibration:1 of
 msgid "Compute linear calibration"
-msgstr "Calcule l'étalonnage linéaire"
+msgstr ""
 
 #: cdl.computation.signal.compute_clip:1 of
 msgid "Compute maximum data clipping"
-msgstr "Calcule l'écrêtage des données"
+msgstr ""
 
 #: cdl.computation.signal.compute_offset_correction:1 of
 msgid ""
@@ -1516,22 +1440,22 @@ msgstr ""
 #: cdl.computation.image.compute_gaussian_filter:1
 #: cdl.computation.signal.compute_gaussian_filter:1 of
 msgid "Compute gaussian filter"
-msgstr "Calcule le filtre gaussien"
+msgstr ""
 
 #: cdl.computation.image.compute_moving_average:1
 #: cdl.computation.signal.compute_moving_average:1 of
 msgid "Compute moving average"
-msgstr "Calcule la moyenne mobile"
+msgstr ""
 
 #: cdl.computation.image.compute_moving_median:1
 #: cdl.computation.signal.compute_moving_median:1 of
 msgid "Compute moving median"
-msgstr "Calcule la médiane mobile"
+msgstr ""
 
 #: cdl.computation.image.compute_wiener:1
 #: cdl.computation.signal.compute_wiener:1 of
 msgid "Compute Wiener filter"
-msgstr "Calcule le filtre de Wiener"
+msgstr ""
 
 #: cdl.computation.signal.FilterType:1 of
 msgid "Filter types"
@@ -1622,14 +1546,12 @@ msgstr ""
 #: cdl.computation.signal.BaseHighLowBandParam.get_filter_params:4
 #: cdl.computation.signal.BaseHighLowBandParam.get_nyquist_frequency:3
 #: cdl.computation.signal.BaseHighLowBandParam.update_from_signal:3 of
-#, fuzzy
 msgid "signal object"
-msgstr "Objet signal résultat"
+msgstr ""
 
 #: cdl.computation.signal.BaseHighLowBandParam.update_from_signal:1 of
-#, fuzzy
 msgid "Update the filter parameters from a signal object"
-msgstr "Mettre à jour les paramètres à partir de l'image"
+msgstr ""
 
 #: cdl.computation.signal.BaseHighLowBandParam.get_filter_params:1 of
 msgid ""
@@ -1638,19 +1560,16 @@ msgid ""
 msgstr ""
 
 #: cdl.computation.signal.BaseHighLowBandParam.get_filter_params:6 of
-#, fuzzy
 msgid "filter parameters"
-msgstr "Paramètres du filtre de Canny"
+msgstr ""
 
 #: cdl.computation.signal.BaseHighLowBandParam.get_filter_params of
-#, fuzzy
 msgid "Return type"
-msgstr "Renvoie"
+msgstr ""
 
 #: cdl.computation.signal.LowPassFilterParam:1 of
-#, fuzzy
 msgid "Low-pass filter parameters"
-msgstr "Paramètres du filtre gaussien"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1663,9 +1582,8 @@ msgid "Nouvelle instance de :py:class:`LowPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.HighPassFilterParam:1 of
-#, fuzzy
 msgid "High-pass filter parameters"
-msgstr "Paramètres du filtre gaussien"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1678,9 +1596,8 @@ msgid "Nouvelle instance de :py:class:`HighPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.BandPassFilterParam:1 of
-#, fuzzy
 msgid "Band-pass filter parameters"
-msgstr "Paramètres du filtre de Canny"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1693,9 +1610,8 @@ msgid "Nouvelle instance de :py:class:`BandPassFilterParam`."
 msgstr ""
 
 #: cdl.computation.signal.BandStopFilterParam:1 of
-#, fuzzy
 msgid "Band-stop filter parameters"
-msgstr "Paramètres du filtre de Canny"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -1713,32 +1629,29 @@ msgstr ""
 
 #: cdl.computation.image.compute_fft:1 cdl.computation.signal.compute_fft:1 of
 msgid "Compute FFT"
-msgstr "Calcule la FFT"
+msgstr ""
 
 #: cdl.computation.signal.compute_ifft:1 of
 msgid "Compute iFFT"
-msgstr "Calcule la iFFT"
+msgstr ""
 
 #: cdl.computation.image.compute_magnitude_spectrum:1
 #: cdl.computation.signal.compute_magnitude_spectrum:1 of
-#, fuzzy
 msgid "Compute magnitude spectrum"
-msgstr "Calculer l'ajustement de la forme du contour"
+msgstr ""
 
 #: cdl.computation.image.compute_phase_spectrum:1
 #: cdl.computation.signal.compute_phase_spectrum:1 of
-#, fuzzy
 msgid "Compute phase spectrum"
-msgstr "Calcule l'histogramme"
+msgstr ""
 
 #: cdl.computation.image.compute_psd:1 cdl.computation.signal.compute_psd:1 of
-#, fuzzy
 msgid "Compute power spectral density"
-msgstr "Calcule le débruitage d'ondelettes"
+msgstr ""
 
 #: cdl.computation.signal.PolynomialFitParam:1 of
 msgid "Polynomial fitting parameters"
-msgstr "Paramètres de l'ajustement polynomial"
+msgstr ""
 
 #: cdl.computation.signal.PolynomialFitParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1757,11 +1670,11 @@ msgstr ""
 
 #: cdl.computation.signal.compute_histogram:1 of
 msgid "Compute histogram"
-msgstr "Calcule l'histogramme"
+msgstr ""
 
 #: cdl.computation.signal.InterpolationParam:1 of
 msgid "Interpolation parameters"
-msgstr "Paramètres d'interpolation"
+msgstr ""
 
 #: cdl.computation.signal.InterpolationParam:5
 #: cdl.computation.signal.ResamplingParam:5
@@ -1792,11 +1705,11 @@ msgstr ""
 
 #: cdl.computation.signal.compute_interpolation:1 of
 msgid "Interpolate data"
-msgstr "Interpole les données"
+msgstr ""
 
 #: cdl.computation.signal.ResamplingParam:1 of
 msgid "Resample parameters"
-msgstr "Paramètres de rééchantillonnage"
+msgstr ""
 
 #: cdl.computation.signal.ResamplingParam:17
 #: guidata.dataset.datatypes.DataSet.create:7 of
@@ -1835,11 +1748,11 @@ msgstr ""
 
 #: cdl.computation.signal.compute_resampling:1 of
 msgid "Resample data"
-msgstr "Rééchantillonne les données"
+msgstr ""
 
 #: cdl.computation.signal.DetrendingParam:1 of
 msgid "Detrending parameters"
-msgstr "Paramètres d'élimination de tendance"
+msgstr ""
 
 #: cdl.computation.signal.DetrendingParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1860,16 +1773,15 @@ msgstr ""
 
 #: cdl.computation.signal.compute_detrending:1 of
 msgid "Detrend data"
-msgstr "Élimine la tendance des données"
+msgstr ""
 
 #: cdl.computation.signal.compute_convolution:1 of
 msgid "Compute convolution of two signals"
-msgstr "Calcule la convolution de deux signaux"
+msgstr ""
 
 #: cdl.computation.signal.WindowingParam:1 of
-#, fuzzy
 msgid "Windowing parameters"
-msgstr "Paramètres de binning"
+msgstr ""
 
 #: cdl.computation.signal.WindowingParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -1929,9 +1841,8 @@ msgstr ""
 
 #: cdl.computation.image.calc_resultshape:4
 #: cdl.computation.signal.calc_resultshape:4 of
-#, fuzzy
 msgid "result title"
-msgstr "Objet signal résultat"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:5
 #: cdl.computation.signal.calc_resultshape:5 of
@@ -2015,17 +1926,17 @@ msgstr ""
 #: cdl.computation.image.restoration.compute_denoise_wavelet:3
 #: cdl.computation.signal.calc_resultshape:6 of
 msgid "input image object"
-msgstr "objet d'image d'entrée"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:7
 #: cdl.computation.signal.calc_resultshape:7 of
 msgid "computation function"
-msgstr "fonction de calcul"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:8
 #: cdl.computation.signal.calc_resultshape:8 of
 msgid "computation function arguments"
-msgstr "arguments de la fonction de calcul"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:9
 #: cdl.computation.signal.calc_resultshape:9 of
@@ -2045,8 +1956,6 @@ msgid ""
 "The computation function must take either a single argument (the data) or"
 " multiple arguments (the data followed by the computation parameters)."
 msgstr ""
-"La fonction de calcul doit prendre un seul argument (les données) ou de "
-"multiples arguments (les données suivies des paramètres de calcul)."
 
 #: cdl.computation.signal.calc_resultshape:19 of
 msgid ""
@@ -2056,7 +1965,7 @@ msgstr ""
 
 #: cdl.computation.signal.FWHMParam:1 of
 msgid "FWHM parameters"
-msgstr "Paramètres LMH"
+msgstr ""
 
 #: cdl.computation.signal.FWHMParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2091,27 +2000,24 @@ msgstr ""
 
 #: cdl.computation.signal.compute_fwhm:1 of
 msgid "Compute FWHM"
-msgstr "Calcule la LMH"
+msgstr ""
 
 #: cdl.computation.signal.compute_fw1e2:5 cdl.computation.signal.compute_fwhm:6
 #: of
-#, fuzzy
 msgid "Segment coordinates"
-msgstr "Coordonnées du barycentre"
+msgstr ""
 
 #: cdl.computation.signal.compute_fw1e2:1 of
 msgid "Compute FW at 1/e²"
-msgstr "Calcule la largeur à 1/e²"
+msgstr ""
 
 #: cdl.computation.signal.compute_stats:1 of
-#, fuzzy
 msgid "Compute statistics on a signal"
-msgstr "Calculer la division entre deux signaux"
+msgstr ""
 
 #: cdl.computation.signal.compute_bandwidth_3db:1 of
-#, fuzzy
 msgid "Compute bandwidth"
-msgstr "Calcule la iFFT"
+msgstr ""
 
 #: cdl.computation.signal.compute_bandwidth_3db:5 of
 msgid "Result properties with bandwidth"
@@ -2161,51 +2067,41 @@ msgid "Result properties with ENOB, SNR, SINAD, THD, SFDR"
 msgstr ""
 
 #: cdl.computation.signal.compute_sampling_rate_period:1 of
-#, fuzzy
 msgid "Compute sampling rate and period"
-msgstr "Calcule la médiane mobile"
+msgstr ""
 
 #: cdl.computation.signal.compute_sampling_rate_period:5 of
 msgid "Result properties with sampling rate and period"
 msgstr ""
 
 #: cdl.computation.signal.compute_contrast:1 of
-#, fuzzy
 msgid "Compute contrast"
-msgstr "Calcule l'intégrale"
+msgstr ""
 
 #: cdl.computation.signal.compute_x_at_minmax:1 of
-#, fuzzy
 msgid "Compute x at min/max"
-msgstr "Calcule la largeur à 1/e²"
+msgstr ""
 
 #: cdl.computation:50 of
 msgid "Image processing features"
-msgstr "Fonctionnalités de traitement d'image"
+msgstr ""
 
 #: cdl.computation:53 of
 msgid "Base image processing features"
-msgstr "Fonctionnalités de traitement d'image de base"
+msgstr ""
 
 #: cdl.computation.image.Wrap11Func:1 of
-#, fuzzy
 msgid ""
 "Wrap a 1 array → 1 array function to produce a 1 image → 1 image "
 "function, which can be used inside DataLab's infrastructure to perform "
 "computations with :class:`cdl.core.gui.processor.image.ImageProcessor`."
 msgstr ""
-"Encapsule une fonction 1 tableau → 1 tableau pour produire une fonction 1"
-" image → 1 image, qui peut être utilisée à l'intérieur de "
-"l'infrastructure de DataLab pour effectuer des calculs avec "
-":class:`cdl.core.gui.processor.signal.ImageProcessor`."
 
 #: cdl.computation.image.Wrap11Func:8 of
 msgid ""
 "The instance of this wrapper is callable and returns a "
 ":class:`cdl.obj.ImageObj` object."
 msgstr ""
-"L'instance de cet encapsuleur est appelable et renvoie un objet "
-":class:`cdl.obj.ImageObj`."
 
 #: cdl.computation.image.dst_11_signal:1 of
 msgid ""
@@ -2216,39 +2112,30 @@ msgstr ""
 #: cdl.computation.image.compute_addition:1 of
 msgid "Add **dst** and **src** images and return **dst** image modified in place"
 msgstr ""
-"Ajoute les images **dst** et **src** et renvoie l'image **dst** modifiée "
-"sur place"
 
 #: cdl.computation.image.compute_addition:3
 #: cdl.computation.image.compute_product:3 of
 msgid "output image object"
-msgstr "objet d'image résultant"
+msgstr ""
 
 #: cdl.computation.image.compute_addition:6
 #: cdl.computation.image.compute_product:6 of
-#, fuzzy
 msgid "Output image object (modified in place)"
-msgstr "objet d'image résultant"
+msgstr ""
 
 #: cdl.computation.image.compute_product:1 of
 msgid ""
 "Multiply **dst** and **src** images and return **dst** image modified in "
 "place"
 msgstr ""
-"Multiplie les images **dst** et **src** et renvoie l'image **dst** "
-"modifiée sur place"
 
 #: cdl.computation.image.compute_addition_constant:1 of
-#, fuzzy
 msgid "Add **dst** and a constant value and return the new result image object"
 msgstr ""
-"Ajoute les images **dst** et **src** et renvoie l'image **dst** modifiée "
-"sur place"
 
 #: cdl.computation.image.compute_addition_constant:6 of
-#, fuzzy
 msgid "Result image object **src** + **p.value** (new object)"
-msgstr "Objet image résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.image.compute_difference_constant:1 of
 msgid ""
@@ -2257,63 +2144,54 @@ msgid ""
 msgstr ""
 
 #: cdl.computation.image.compute_difference_constant:6 of
-#, fuzzy
 msgid "Result image object **src** - **p.value** (new object)"
-msgstr "Objet image résultat **src1** - **src2**"
+msgstr ""
 
 #: cdl.computation.image.compute_product_constant:1 of
-#, fuzzy
 msgid ""
 "Multiply **dst** by a constant value and return the new result image "
 "object"
 msgstr ""
-"Multiplie les images **dst** et **src** et renvoie l'image **dst** "
-"modifiée sur place"
 
 #: cdl.computation.image.compute_product_constant:6 of
-#, fuzzy
 msgid "Result image object **src** * **p.value** (new object)"
-msgstr "Objet image résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.image.compute_division_constant:1 of
 msgid "Divide an image by a constant value and return the new result image object"
 msgstr ""
 
 #: cdl.computation.image.compute_division_constant:6 of
-#, fuzzy
 msgid "Result image object **src** / **p.value** (new object)"
-msgstr "Objet image résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.image.compute_difference:1 of
 msgid "Compute difference between two images"
-msgstr "Calcule la différence entre deux images"
+msgstr ""
 
 #: cdl.computation.image.compute_difference:6 of
-#, fuzzy
 msgid "Result image object **src1** - **src2** (new object)"
-msgstr "Objet image résultat **src1** - **src2**"
+msgstr ""
 
 #: cdl.computation.image.compute_quadratic_difference:1 of
 msgid "Compute quadratic difference between two images"
-msgstr "Calcule la différence quadratique entre deux images"
+msgstr ""
 
 #: cdl.computation.image.compute_quadratic_difference:6 of
-#, fuzzy
 msgid "Result image object (**src1** - **src2**) / sqrt(2.0) (new object)"
-msgstr "Objet image résultat (**src1** - **src2**) / sqrt(2.0)"
+msgstr ""
 
 #: cdl.computation.image.compute_division:1 of
 msgid "Compute division between two images"
-msgstr "Calcule la division entre deux images"
+msgstr ""
 
 #: cdl.computation.image.compute_division:6 of
-#, fuzzy
 msgid "Result image object **src1** / **src2** (new object)"
-msgstr "Objet image résultat **src1** / **src2**"
+msgstr ""
 
 #: cdl.computation.image.FlatFieldParam:1 of
 msgid "Flat-field parameters"
-msgstr "Paramètres de correction de champ plat"
+msgstr ""
 
 #: cdl.computation.image.FlatFieldParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2332,19 +2210,19 @@ msgstr ""
 
 #: cdl.computation.image.compute_flatfield:1 of
 msgid "Compute flat field correction"
-msgstr "Calcule la correction de champ plat"
+msgstr ""
 
 #: cdl.computation.image.compute_flatfield:3 of
 msgid "raw data image object"
-msgstr "objet image brute"
+msgstr ""
 
 #: cdl.computation.image.compute_flatfield:4 of
 msgid "flat field image object"
-msgstr "objet image de champ plat"
+msgstr ""
 
 #: cdl.computation.image.compute_flatfield:5 of
 msgid "flat field parameters"
-msgstr "paramètres de champ plat"
+msgstr ""
 
 #: cdl.computation.image.compute_abs:5 cdl.computation.image.compute_astype:6
 #: cdl.computation.image.compute_average_profile:6
@@ -2408,7 +2286,7 @@ msgstr "paramètres de champ plat"
 #: cdl.computation.image.restoration.compute_denoise_tv:6
 #: cdl.computation.image.restoration.compute_denoise_wavelet:6 of
 msgid "Output image object"
-msgstr "Objet d'image de sortie"
+msgstr ""
 
 #: cdl.computation.image.compute_normalize:1 of
 msgid "Normalize image data depending on its maximum."
@@ -2416,7 +2294,7 @@ msgstr ""
 
 #: cdl.computation.image.LogP1Param:1 of
 msgid "Log10 parameters"
-msgstr "Paramètres Log10"
+msgstr ""
 
 #: cdl.computation.image.LogP1Param:5 cdl.computation.image.ResizeParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2435,11 +2313,11 @@ msgstr ""
 
 #: cdl.computation.image.compute_logp1:1 of
 msgid "Compute log10(z+n)"
-msgstr "Calcule log10(z+n)"
+msgstr ""
 
 #: cdl.computation.image.RotateParam:1 of
 msgid "Rotate parameters"
-msgstr "Paramètres de rotation"
+msgstr ""
 
 #: cdl.computation.image.RotateParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2497,59 +2375,59 @@ msgstr ""
 #: cdl.computation.image.rotate_obj_alpha:1
 #: cdl.computation.image.rotate_obj_coords:1 of
 msgid "Apply rotation to coords associated to image obj"
-msgstr "Appliquer la rotation aux coordonnées associées à l'objet d'image"
+msgstr ""
 
 #: cdl.computation.image.rotate_obj_coords:3 of
 msgid "rotation angle (in degrees)"
-msgstr "angle de rotation (en degrés)"
+msgstr ""
 
 #: cdl.computation.image.rotate_obj_coords:4 of
 msgid "image object"
-msgstr "objet image"
+msgstr ""
 
 #: cdl.computation.image.rotate_obj_coords:5 of
 msgid "original image object"
-msgstr "objet image original"
+msgstr ""
 
 #: cdl.computation.image.rotate_obj_coords:6 of
 msgid "coordinates to rotate"
-msgstr "coordonnées à faire tourner"
+msgstr ""
 
 #: cdl.computation.image.rotate_obj_coords:8 of
 msgid "Output data"
-msgstr "Données de sortie"
+msgstr ""
 
 #: cdl.computation.image.compute_rotate:1 of
 msgid "Rotate data"
-msgstr "Rotation des données"
+msgstr ""
 
 #: cdl.computation.image.compute_rotate90:1 of
 msgid "Rotate data 90°"
-msgstr "Rotation des données de 90°"
+msgstr ""
 
 #: cdl.computation.image.compute_rotate270:1 of
 msgid "Rotate data 270°"
-msgstr "Rotation des données de 270°"
+msgstr ""
 
 #: cdl.computation.image.hflip_coords:1 of
 msgid "Apply HFlip to coords"
-msgstr "Appliquer HFlip aux coordonnées"
+msgstr ""
 
 #: cdl.computation.image.compute_fliph:1 of
 msgid "Flip data horizontally"
-msgstr "Inversion horizontale des données"
+msgstr ""
 
 #: cdl.computation.image.vflip_coords:1 of
 msgid "Apply VFlip to coords"
-msgstr "Appliquer VFlip aux coordonnées"
+msgstr ""
 
 #: cdl.computation.image.compute_flipv:1 of
 msgid "Flip data vertically"
-msgstr "Inversion verticale des données"
+msgstr ""
 
 #: cdl.computation.image.GridParam:1 of
 msgid "Grid parameters"
-msgstr "Paramètres de grille"
+msgstr ""
 
 #: cdl.computation.image.GridParam:5 guidata.dataset.datatypes.DataSet.create:3
 #: of
@@ -2594,7 +2472,7 @@ msgstr ""
 
 #: cdl.computation.image.ResizeParam:1 of
 msgid "Resize parameters"
-msgstr "Paramètres de redimensionnement"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -2608,11 +2486,11 @@ msgstr ""
 
 #: cdl.computation.image.compute_resize:1 of
 msgid "Zooming function"
-msgstr "Fonction de zoom"
+msgstr ""
 
 #: cdl.computation.image.BinningParam:1 of
 msgid "Binning parameters"
-msgstr "Paramètres de binning"
+msgstr ""
 
 #: cdl.computation.image.BinningParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2662,19 +2540,19 @@ msgstr ""
 
 #: cdl.computation.image.compute_binning:1 of
 msgid "Binning function on data"
-msgstr "Fonction de binning sur les données"
+msgstr ""
 
 #: cdl.computation.image.extract_multiple_roi:4 of
 msgid "parameters defining the regions of interest"
-msgstr "paramètres définissant les régions d'intérêt"
+msgstr ""
 
 #: cdl.computation.image.extract_single_roi:1 of
 msgid "Extract single ROI"
-msgstr "Extrait une seule ROI"
+msgstr ""
 
 #: cdl.computation.image.LineProfileParam:1 of
 msgid "Horizontal or vertical profile parameters"
-msgstr "Paramètres de profil horizontal ou vertical"
+msgstr ""
 
 #: cdl.computation.image.AverageProfileParam:5
 #: cdl.computation.image.LineProfileParam:5
@@ -2706,12 +2584,11 @@ msgstr ""
 
 #: cdl.computation.image.compute_line_profile:1 of
 msgid "Compute horizontal or vertical profile"
-msgstr "Calcule le profil horizontal ou vertical"
+msgstr ""
 
 #: cdl.computation.image.SegmentProfileParam:1 of
-#, fuzzy
 msgid "Segment profile parameters"
-msgstr "Paramètres de profil radial"
+msgstr ""
 
 #: cdl.computation.image.SegmentProfileParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2744,13 +2621,12 @@ msgid "Nouvelle instance de :py:class:`SegmentProfileParam`."
 msgstr ""
 
 #: cdl.computation.image.compute_segment_profile:1 of
-#, fuzzy
 msgid "Compute segment profile"
-msgstr "Calcule le barycentre"
+msgstr ""
 
 #: cdl.computation.image.AverageProfileParam:1 of
 msgid "Average horizontal or vertical profile parameters"
-msgstr "Paramètres de profil horizontal ou vertical moyen"
+msgstr ""
 
 #: cdl.computation.image.AverageProfileParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
@@ -2784,11 +2660,11 @@ msgstr ""
 
 #: cdl.computation.image.compute_average_profile:1 of
 msgid "Compute horizontal or vertical average profile"
-msgstr "Calcule le profil horizontal ou vertical moyen"
+msgstr ""
 
 #: cdl.computation.image.RadialProfileParam:1 of
 msgid "Radial profile parameters"
-msgstr "Paramètres de profil radial"
+msgstr ""
 
 #: cdl.computation.image.RadialProfileParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2816,27 +2692,27 @@ msgstr ""
 
 #: cdl.computation.image.RadialProfileParam.update_from_image:1 of
 msgid "Update parameters from image"
-msgstr "Mettre à jour les paramètres à partir de l'image"
+msgstr ""
 
 #: cdl.computation.image.RadialProfileParam.choice_callback:1 of
 msgid "Callback for choice item"
-msgstr "Callback pour l'item de choix"
+msgstr ""
 
 #: cdl.computation.image.compute_radial_profile:1 of
 msgid "Compute radial profile around the centroid"
-msgstr "Calculer le profil radial autour du centre de gravité"
+msgstr ""
 
 #: cdl.computation.image.compute_histogram:1 of
 msgid "Compute histogram of the image data"
-msgstr "Calcule l'histogramme des données de l'image"
+msgstr ""
 
 #: cdl.computation.image.compute_swap_axes:1 of
 msgid "Swap image axes"
-msgstr "Permute les axes de l'image"
+msgstr ""
 
 #: cdl.computation.image.DataTypeIParam:1 of
 msgid "Convert image data type parameters"
-msgstr "Convertir les paramètres du type de données de l'image"
+msgstr ""
 
 #: cdl.computation.image.DataTypeIParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2858,15 +2734,15 @@ msgstr ""
 
 #: cdl.computation.image.compute_astype:1 of
 msgid "Convert image data type"
-msgstr "Convertit le type de données de l'image"
+msgstr ""
 
 #: cdl.computation.image.compute_log10:1 of
 msgid "Compute log10"
-msgstr "Calcule Log10"
+msgstr ""
 
 #: cdl.computation.image.ZCalibrateParam:1 of
 msgid "Image linear calibration parameters"
-msgstr "Paramètres d'étalonnage linéaire de l'image"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -2880,24 +2756,23 @@ msgstr ""
 
 #: cdl.computation.image.compute_calibration:4 of
 msgid "calibration parameters"
-msgstr "paramètres d'étalonnage"
+msgstr ""
 
 #: cdl.computation.image.compute_clip:1 of
 msgid "Apply clipping"
-msgstr "Applique l'écrêtage"
+msgstr ""
 
 #: cdl.computation.image.compute_offset_correction:1 of
-#, fuzzy
 msgid "Apply offset correction"
-msgstr "Correction gamma"
+msgstr ""
 
 #: cdl.computation.image.compute_ifft:1 of
 msgid "Compute inverse FFT"
-msgstr "Calcule la FFT inverse"
+msgstr ""
 
 #: cdl.computation.image.ButterworthParam:1 of
 msgid "Butterworth filter parameters"
-msgstr "Paramètres du filtre de Butterworth"
+msgstr ""
 
 #: cdl.computation.image.ButterworthParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -2932,15 +2807,14 @@ msgstr ""
 
 #: cdl.computation.image.compute_butterworth:1 of
 msgid "Compute Butterworth filter"
-msgstr "Calcule le filtre de Butterworth"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:1 of
-#, fuzzy
 msgid ""
 "Calculate result shape by executing a computation function on an image "
 "object, taking into account the image origin (x0, y0), scale (dx, dy) and"
 " ROIs."
-msgstr "Exécuter le calcul en tenant compte de l'image x0, y0, dx, dy et ROIs"
+msgstr ""
 
 #: cdl.computation.image.calc_resultshape:19 of
 msgid ""
@@ -2950,29 +2824,24 @@ msgid ""
 " ...], or [[x0, y0, x1, y1, ...], ...], or [[x0, y0, r], ...], or [[x0, "
 "y0, a, b, theta], ...]."
 msgstr ""
-"De plus, la fonction de calcul doit renvoyer une seule valeur ou un "
-"tableau NumPy contenant le résultat du calcul. Ce tableau contient les "
-"coordonnées des points, des polygones, des cercles ou des ellipses sous "
-"la forme [[x, y], ...], ou [[x0, y0, x1, y1, ...], ...], ou [[x0, y0, r],"
-" ...], ou [[x0, y0, a, b, theta], ...]."
 
 #: cdl.computation.image.get_centroid_coords:1 of
 msgid "Return centroid coordinates"
-msgstr "Retourne les coordonnées du centre de gravité"
+msgstr ""
 
 #: cdl.computation.image.get_centroid_coords:3
 #: cdl.computation.image.get_enclosing_circle_coords:4 of
 msgid "input data"
-msgstr "données d'entrée"
+msgstr ""
 
 #: cdl.computation.image.compute_centroid:5
 #: cdl.computation.image.get_centroid_coords:5 of
 msgid "Centroid coordinates"
-msgstr "Coordonnées du barycentre"
+msgstr ""
 
 #: cdl.computation.image.compute_centroid:1 of
 msgid "Compute centroid"
-msgstr "Calcule le barycentre"
+msgstr ""
 
 #: cdl.computation.image.compute_centroid:3
 #: cdl.computation.image.compute_enclosing_circle:3
@@ -2983,28 +2852,26 @@ msgstr "Calcule le barycentre"
 #: cdl.computation.image.detection.compute_blob_opencv:3
 #: cdl.computation.image.detection.compute_peak_detection:3 of
 msgid "input image"
-msgstr "image d'entrée"
+msgstr ""
 
 #: cdl.computation.image.get_enclosing_circle_coords:1 of
 msgid ""
 "Return diameter coords for the circle contour enclosing image values "
 "above threshold (FWHM)"
 msgstr ""
-"Retourne les coordonnées du diamètre pour le contour de cercle contenant "
-"les valeurs d'image au-dessus du seuil (LMH)"
 
 #: cdl.computation.image.compute_enclosing_circle:5
 #: cdl.computation.image.get_enclosing_circle_coords:6 of
 msgid "Diameter coords"
-msgstr "Coordonnées du diamètre"
+msgstr ""
 
 #: cdl.computation.image.compute_enclosing_circle:1 of
 msgid "Compute minimum enclosing circle"
-msgstr "Calcule le cercle minimum englobant"
+msgstr ""
 
 #: cdl.computation.image.HoughCircleParam:1 of
 msgid "Circle Hough transform parameters"
-msgstr "Paramètres de transformation de Hough circulaire"
+msgstr ""
 
 #: cdl.computation.image.HoughCircleParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3037,16 +2904,15 @@ msgstr ""
 
 #: cdl.computation.image.compute_hough_circle_peaks:1 of
 msgid "Compute Hough circles"
-msgstr "Calcule les cercles de Hough"
+msgstr ""
 
 #: cdl.computation.image.compute_hough_circle_peaks:6 of
 msgid "Circle coordinates"
-msgstr "Coordonnées du cercle"
+msgstr ""
 
 #: cdl.computation.image.compute_stats:1 of
-#, fuzzy
 msgid "Compute statistics on an image"
-msgstr "Calcule la division entre deux images"
+msgstr ""
 
 #: cdl.computation.image.compute_stats:5 of
 msgid "Result properties"
@@ -3054,15 +2920,15 @@ msgstr ""
 
 #: cdl.computation:59 of
 msgid "Exposure correction features"
-msgstr "Fonctionnalités de correction d'exposition"
+msgstr ""
 
 #: cdl.computation.image.exposure:2 of
 msgid "Exposure computation module"
-msgstr "Module de calcul d'exposition"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustGammaParam:1 of
 msgid "Gamma adjustment parameters"
-msgstr "Paramètres d'ajustement gamma"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustGammaParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3092,11 +2958,11 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_adjust_gamma:1 of
 msgid "Gamma correction"
-msgstr "Correction gamma"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustLogParam:1 of
 msgid "Logarithmic adjustment parameters"
-msgstr "Paramètres d'ajustement logarithmique"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustLogParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
@@ -3117,11 +2983,11 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_adjust_log:1 of
 msgid "Compute log correction"
-msgstr "Calcule la correction logarithmique"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustSigmoidParam:1 of
 msgid "Sigmoid adjustment parameters"
-msgstr "Paramètres d'ajustement sigmoïde"
+msgstr ""
 
 #: cdl.computation.image.exposure.AdjustSigmoidParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3156,11 +3022,11 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_adjust_sigmoid:1 of
 msgid "Compute sigmoid correction"
-msgstr "Calcule la correction sigmoïde"
+msgstr ""
 
 #: cdl.computation.image.exposure.RescaleIntensityParam:1 of
 msgid "Intensity rescaling parameters"
-msgstr "Paramètres de rééchelonnement d'intensité"
+msgstr ""
 
 #: cdl.computation.image.exposure.RescaleIntensityParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3194,11 +3060,11 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_rescale_intensity:1 of
 msgid "Rescale image intensity levels"
-msgstr "Rééchelonne les niveaux d'intensité de l'image"
+msgstr ""
 
 #: cdl.computation.image.exposure.EqualizeHistParam:1 of
 msgid "Histogram equalization parameters"
-msgstr "Paramètres d'égalisation d'histogramme"
+msgstr ""
 
 #: cdl.computation.image.exposure.EqualizeAdaptHistParam:5
 #: cdl.computation.image.exposure.EqualizeHistParam:5
@@ -3220,11 +3086,11 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_equalize_hist:1 of
 msgid "Histogram equalization"
-msgstr "Égalisation d'histogramme"
+msgstr ""
 
 #: cdl.computation.image.exposure.EqualizeAdaptHistParam:1 of
 msgid "Adaptive histogram equalization parameters"
-msgstr "Paramètres d'égalisation d'histogramme adaptatif"
+msgstr ""
 
 #: cdl.computation.image.exposure.EqualizeAdaptHistParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
@@ -3246,19 +3112,19 @@ msgstr ""
 
 #: cdl.computation.image.exposure.compute_equalize_adapthist:1 of
 msgid "Adaptive histogram equalization"
-msgstr "Égalisation d'histogramme adaptative"
+msgstr ""
 
 #: cdl.computation:65 of
 msgid "Restoration features"
-msgstr "Fonctionnalités de restauration"
+msgstr ""
 
 #: cdl.computation.image.restoration:2 of
 msgid "Restoration computation module"
-msgstr "Module de calcul de restauration"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseTVParam:1 of
 msgid "Total Variation denoising parameters"
-msgstr "Paramètres de débruitage de variation totale"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseTVParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3296,11 +3162,11 @@ msgstr ""
 
 #: cdl.computation.image.restoration.compute_denoise_tv:1 of
 msgid "Compute Total Variation denoising"
-msgstr "Calcule le débruitage de variation totale"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseBilateralParam:1 of
 msgid "Bilateral filter denoising parameters"
-msgstr "Paramètres de débruitage du filtre bilatéral"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseBilateralParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3337,11 +3203,11 @@ msgstr ""
 
 #: cdl.computation.image.restoration.compute_denoise_bilateral:1 of
 msgid "Compute bilateral filter denoising"
-msgstr "Calcule le débruitage du filtre bilatéral"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseWaveletParam:1 of
 msgid "Wavelet denoising parameters"
-msgstr "Paramètres de débruitage d'ondelettes"
+msgstr ""
 
 #: cdl.computation.image.restoration.DenoiseWaveletParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3390,23 +3256,23 @@ msgstr ""
 
 #: cdl.computation.image.restoration.compute_denoise_wavelet:1 of
 msgid "Compute Wavelet denoising"
-msgstr "Calcule le débruitage d'ondelettes"
+msgstr ""
 
 #: cdl.computation.image.restoration.compute_denoise_tophat:1 of
 msgid "Denoise using White Top-Hat"
-msgstr "Débruitage en utilisant White Top-Hat"
+msgstr ""
 
 #: cdl.computation:71 of
 msgid "Morphological features"
-msgstr "Fonctionnalités morphologiques"
+msgstr ""
 
 #: cdl.computation.image.morphology:2 of
 msgid "Morphology computation module"
-msgstr "Module de calcul de morphologie"
+msgstr ""
 
 #: cdl.computation.image.morphology.MorphologyParam:1 of
 msgid "White Top-Hat parameters"
-msgstr "Paramètres de White Top-Hat"
+msgstr ""
 
 #: cdl.computation.image.morphology.MorphologyParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3427,39 +3293,39 @@ msgstr ""
 
 #: cdl.computation.image.morphology.compute_white_tophat:1 of
 msgid "Compute White Top-Hat"
-msgstr "Calcule le filtre White Top-Hat"
+msgstr ""
 
 #: cdl.computation.image.morphology.compute_black_tophat:1 of
 msgid "Compute Black Top-Hat"
-msgstr "Calcule le filtre Black Top-Hat"
+msgstr ""
 
 #: cdl.computation.image.morphology.compute_erosion:1 of
 msgid "Compute Erosion"
-msgstr "Calcule l'érosion"
+msgstr ""
 
 #: cdl.computation.image.morphology.compute_dilation:1 of
 msgid "Compute Dilation"
-msgstr "Calcule la dilatation"
+msgstr ""
 
 #: cdl.computation.image.morphology.compute_opening:1 of
 msgid "Compute morphological opening"
-msgstr "Calcule l'ouverture morphologique"
+msgstr ""
 
 #: cdl.computation.image.morphology.compute_closing:1 of
 msgid "Compute morphological closing"
-msgstr "Calcule la fermeture morphologique"
+msgstr ""
 
 #: cdl.computation:77 of
 msgid "Edge detection features"
-msgstr "Fonctionnalités de détection de contours"
+msgstr ""
 
 #: cdl.computation.image.edges:2 of
 msgid "Edges computation module"
-msgstr "Module de calcul de contours"
+msgstr ""
 
 #: cdl.computation.image.edges.CannyParam:1 of
 msgid "Canny filter parameters"
-msgstr "Paramètres du filtre de Canny"
+msgstr ""
 
 #: cdl.computation.image.edges.CannyParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3515,75 +3381,75 @@ msgstr ""
 
 #: cdl.computation.image.edges.compute_canny:1 of
 msgid "Compute Canny filter"
-msgstr "Calcule le filtre de Canny"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_roberts:1 of
 msgid "Compute Roberts filter"
-msgstr "Calcule le filtre de Roberts"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_prewitt:1 of
 msgid "Compute Prewitt filter"
-msgstr "Calcule le filtre de Prewitt"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_prewitt_h:1 of
 msgid "Compute horizontal Prewitt filter"
-msgstr "Calcule le filtre de Prewitt horizontal"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_prewitt_v:1 of
 msgid "Compute vertical Prewitt filter"
-msgstr "Calcule le filtre de Prewitt vertical"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_sobel:1 of
 msgid "Compute Sobel filter"
-msgstr "Calcule le filtre de Sobel"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_sobel_h:1 of
 msgid "Compute horizontal Sobel filter"
-msgstr "Calcule le filtre de Sobel horizontal"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_sobel_v:1 of
 msgid "Compute vertical Sobel filter"
-msgstr "Calcule le filtre de Sobel vertical"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_scharr:1 of
 msgid "Compute Scharr filter"
-msgstr "Calcule le filtre de Scharr"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_scharr_h:1 of
 msgid "Compute horizontal Scharr filter"
-msgstr "Calcule le filtre de Scharr horizontal"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_scharr_v:1 of
 msgid "Compute vertical Scharr filter"
-msgstr "Calcule le filtre de Scharr vertical"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_farid:1 of
 msgid "Compute Farid filter"
-msgstr "Calcule le filtre de Farid"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_farid_h:1 of
 msgid "Compute horizontal Farid filter"
-msgstr "Calcule le filtre de Farid horizontal"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_farid_v:1 of
 msgid "Compute vertical Farid filter"
-msgstr "Calcule le filtre de Farid vertical"
+msgstr ""
 
 #: cdl.computation.image.edges.compute_laplace:1 of
 msgid "Compute Laplace filter"
-msgstr "Calcule le filtre de Laplace"
+msgstr ""
 
 #: cdl.computation:82 of
 msgid "Detection features"
-msgstr "Fonctionnalités de détection"
+msgstr ""
 
 #: cdl.computation.image.detection:2 of
 msgid "Blob detection computation module"
-msgstr "Module de calcul de détection de taches"
+msgstr ""
 
 #: cdl.computation.image.detection.GenericDetectionParam:1 of
 msgid "Generic detection parameters"
-msgstr "Paramètres de détection génériques"
+msgstr ""
 
 #: cdl.computation.image.detection.ContourShapeParam:5
 #: cdl.computation.image.detection.GenericDetectionParam:5
@@ -3625,15 +3491,15 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_peak_detection:1 of
 msgid "Compute 2D peak detection"
-msgstr "Calcule la détection de pics 2D"
+msgstr ""
 
 #: cdl.computation.image.detection.compute_peak_detection:6 of
 msgid "Peak coordinates"
-msgstr "Coordonnées des pics"
+msgstr ""
 
 #: cdl.computation.image.detection.ContourShapeParam:1 of
 msgid "Contour shape parameters"
-msgstr "Paramètres de forme de contour"
+msgstr ""
 
 #: cdl.computation.image.detection.ContourShapeParam:11
 #: guidata.dataset.datatypes.DataSet.create:5 of
@@ -3654,11 +3520,11 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_contour_shape:1 of
 msgid "Compute contour shape fit"
-msgstr "Calculer l'ajustement de la forme du contour"
+msgstr ""
 
 #: cdl.computation.image.detection.BaseBlobParam:1 of
 msgid "Base class for blob detection parameters"
-msgstr "Classe de base pour les paramètres de détection de taches"
+msgstr ""
 
 #: cdl.computation.image.detection.BaseBlobParam:5
 #: cdl.computation.image.detection.BlobDOGParam:5
@@ -3715,7 +3581,7 @@ msgstr ""
 
 #: cdl.computation.image.detection.BlobDOGParam:1 of
 msgid "Blob detection using Difference of Gaussian method"
-msgstr "Détection de taches à l'aide de la méthode de différence de Gauss"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobDOGParam:29
 #: cdl.computation.image.detection.BlobLOGParam:35
@@ -3738,18 +3604,18 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_blob_dog:1 of
 msgid "Compute blobs using Difference of Gaussian method"
-msgstr "Détection d taches à l'aide de la méthode de différence de Gauss"
+msgstr ""
 
 #: cdl.computation.image.detection.compute_blob_dog:6
 #: cdl.computation.image.detection.compute_blob_doh:6
 #: cdl.computation.image.detection.compute_blob_log:6
 #: cdl.computation.image.detection.compute_blob_opencv:6 of
 msgid "Blobs coordinates"
-msgstr "Coordonnées des taches"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobDOHParam:1 of
 msgid "Blob detection using Determinant of Hessian method"
-msgstr "Détection de taches à l'aide de la méthode du déterminant de Hessian"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobDOHParam:29
 #: cdl.computation.image.detection.BlobLOGParam:29
@@ -3771,11 +3637,11 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_blob_doh:1 of
 msgid "Compute blobs using Determinant of Hessian method"
-msgstr "Détection de taches à l'aide de la méthode du déterminant de Hessian"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobLOGParam:1 of
 msgid "Blob detection using Laplacian of Gaussian method"
-msgstr "Détection de taches à l'aide de la méthode du Laplacien de Gauss"
+msgstr ""
 
 #: guidata.dataset.datatypes.DataSet.create:1 of
 msgid ""
@@ -3789,11 +3655,11 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_blob_log:1 of
 msgid "Compute blobs using Laplacian of Gaussian method"
-msgstr "Détection de taches à l'aide de la méthode du Laplacien de Gauss"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobOpenCVParam:1 of
 msgid "Blob detection using OpenCV"
-msgstr "Détection de taches à l'aide d'OpenCV"
+msgstr ""
 
 #: cdl.computation.image.detection.BlobOpenCVParam:5
 #: guidata.dataset.datatypes.DataSet.create:3 of
@@ -3936,1265 +3802,4 @@ msgstr ""
 
 #: cdl.computation.image.detection.compute_blob_opencv:1 of
 msgid "Compute blobs using OpenCV"
-msgstr "Détection de taches à l'aide d'OpenCV"
-
-#~ msgid "Create ROIDataParam instance"
-#~ msgstr "Créer une instance de ROIDataParam"
-
-#~ msgid "name of the function"
-#~ msgstr "nom de la fonction"
-
-#~ msgid ""
-#~ "Create a result signal object, as "
-#~ "returned by the callback function of "
-#~ "the "
-#~ ":func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n` "
-#~ "method"
-#~ msgstr ""
-#~ "Crée un objet signal résultat, tel "
-#~ "que renvoyé par la fonction de "
-#~ "rappel de la méthode "
-#~ ":func:`cdl.core.gui.processor.base.BaseProcessor.compute_n1n`"
-
-#~ msgid "Computation result"
-#~ msgstr "Résultat du calcul"
-
-#~ msgid "σ\\.  Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`GaussianParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`GaussianParam`."
-#~ msgstr ""
-
-#~ msgid "Size of the moving window\\.  Integer higher than 1\\. Default: 3."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`MovingAverageParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`MovingAverageParam`."
-#~ msgstr ""
-
-#~ msgid "Size of the moving window\\.  Integer higher than 1, odd\\. Default: 3."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`MovingMedianParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`MovingMedianParam`."
-#~ msgstr ""
-
-#~ msgid "Threshold parameters"
-#~ msgstr "Paramètres du seuillage"
-
-#~ msgid "Threshold\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ThresholdParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ThresholdParam`."
-#~ msgstr ""
-
-#~ msgid "Clipping value\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ClipParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ClipParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Normalize with respect to\\.  Single "
-#~ "choice from: 'maximum', 'amplitude', 'area',"
-#~ " 'energy', 'rms'. Default: 'maximum'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`NormalizeParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`NormalizeParam`."
-#~ msgstr ""
-
-#~ msgid "Number of bins\\.  Integer higher than 1\\. Default: 256."
-#~ msgstr ""
-
-#~ msgid "Lower limit\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid "Upper limit\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`HistogramParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`HistogramParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "For convenience, this item accepts a "
-#~ "2d numpy array, a list of list "
-#~ "of numbers, or none. In the end,"
-#~ " the data is converted to a 2d"
-#~ " numpy array of integers (if not "
-#~ "none). Default: None."
-#~ msgstr ""
-
-#~ msgid "Whether to extract the roi as a single object or not. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ROIDataParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ROIDataParam`."
-#~ msgstr ""
-
-#~ msgid "Shift zero frequency to center\\. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`FFTParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`FFTParam`."
-#~ msgstr ""
-
-#~ msgid "Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`SpectrumParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`SpectrumParam`."
-#~ msgstr ""
-
-#~ msgid "Constant value\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ConstantOperationParam` with the fields"
-#~ " set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ConstantOperationParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Destination data type\\. Output image "
-#~ "data type. Single choice from: "
-#~ "'float32', 'float64', 'complex128'. Default: "
-#~ "'float32'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DataTypeSParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DataTypeSParam`."
-#~ msgstr ""
-
-#~ msgid "Default: 2.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`PowerParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`PowerParam`."
-#~ msgstr ""
-
-#~ msgid "Integer between 0 and 100, unit: %\\. Default: 30."
-#~ msgstr ""
-
-#~ msgid "Minimum distance\\.  Integer higher than 1, unit: points\\. Default: 1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`PeakDetectionParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`PeakDetectionParam`."
-#~ msgstr ""
-
-#~ msgid "Calibrate\\.  Single choice from: 'x', 'y'. Default: 'y'."
-#~ msgstr ""
-
-#~ msgid "Default: 1.0."
-#~ msgstr ""
-
-#~ msgid "Default: 0.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`XYCalibrateParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`XYCalibrateParam`."
-#~ msgstr ""
-
-#~ msgid "Compute threshold clipping"
-#~ msgstr "Calcule le seuillage des données"
-
-#~ msgid ""
-#~ "Filter method\\.  Single choice from: "
-#~ "'bessel', 'butter', 'cheby1', 'cheby2', "
-#~ "'ellip'. Default: 'bessel'."
-#~ msgstr ""
-
-#~ msgid "Filter order\\.  Integer higher than 1\\. Default: 3."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Low cutoff frequency\\.  Float higher "
-#~ "than 0, non zero, unit: hz\\. "
-#~ "Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "High cutoff frequency\\.  Float higher "
-#~ "than 0, non zero, unit: hz\\. "
-#~ "Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Passband ripple\\.  Float higher than 0,"
-#~ " non zero, unit: db\\. Default: 1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Stopband attenuation\\.  Float higher than "
-#~ "0, non zero, unit: db\\. Default: "
-#~ "1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BaseHighLowBandParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BaseHighLowBandParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`LowPassFilterParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`LowPassFilterParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`HighPassFilterParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`HighPassFilterParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BandPassFilterParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BandPassFilterParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BandStopFilterParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BandStopFilterParam`."
-#~ msgstr ""
-
-#~ msgid "Integer between 1 and 10\\. Default: 3."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`PolynomialFitParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`PolynomialFitParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Interpolation method\\.  Single choice from:"
-#~ " 'linear', 'spline', 'quadratic', 'cubic', "
-#~ "'barycentric', 'pchip'. Default: 'linear'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Value to use for points outside "
-#~ "the interpolation domain (used only with"
-#~ " linear, cubic and pchip methods). "
-#~ "Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`InterpolationParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`InterpolationParam`."
-#~ msgstr ""
-
-#~ msgid "X\\ :subscript:`min`\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid "X\\ :subscript:`max`\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid "Single choice from: 'dx', 'nbpts'. Default: 'nbpts'."
-#~ msgstr ""
-
-#~ msgid "ΔX\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid "Number of points\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ResamplingParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ResamplingParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Detrending method\\.  Single choice from: "
-#~ "'linear', 'constant'. Default: 'linear'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DetrendingParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DetrendingParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'barthann', 'bartlett',"
-#~ " 'blackman', 'blackman-harris', 'bohman', "
-#~ "'boxcar', 'cosine', 'exponential', 'flat-top',"
-#~ " 'gaussian', 'hamming', 'hanning', 'kaiser', "
-#~ "'lanczos', 'nuttall', 'parzen', 'rectangular', "
-#~ "'taylor', 'tukey'. Default: 'hamming'."
-#~ msgstr ""
-
-#~ msgid "Shape parameter of the tukey windowing function\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid "Shape parameter of the kaiser windowing function\\. Default: 14.0."
-#~ msgstr ""
-
-#~ msgid "Shape parameter of the gaussian windowing function\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`WindowingParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`WindowingParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'zero-crossing', "
-#~ "'gauss', 'lorentz', 'voigt'. Default: "
-#~ "'zero-crossing'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "X\\ :subscript:`MIN`\\. Lower x boundary "
-#~ "(empty for no limit, i.e. Start of"
-#~ " the signal)\\. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "X\\ :subscript:`MAX`\\. Upper x boundary "
-#~ "(empty for no limit, i.e. End of"
-#~ " the signal)\\. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`FWHMParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`FWHMParam`."
-#~ msgstr ""
-
-#~ msgid "Float higher than 0.0, unit: v\\. Default: 0.16."
-#~ msgstr ""
-
-#~ msgid "Unit for sinad\\. Single choice from: 'dBc', 'dBFS'. Default: 'dBc'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Number of harmonics\\. Number of "
-#~ "harmonics to consider for thd\\. Integer"
-#~ " higher than 1\\. Default: 5."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DynamicParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DynamicParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`FlatFieldParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`FlatFieldParam`."
-#~ msgstr ""
-
-#~ msgid "Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`LogP1Param` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`LogP1Param`."
-#~ msgstr ""
-
-#~ msgid "Angle (°)\\.  Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'constant', 'nearest', "
-#~ "'reflect', 'wrap'. Default: 'constant'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Value used for points outside the "
-#~ "boundaries of the input if mode is"
-#~ " 'constant'\\. Default: 0.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Reshape the output array so that "
-#~ "the input array is contained completely"
-#~ " in the output\\. Default: False."
-#~ msgstr ""
-
-#~ msgid "Default: True."
-#~ msgstr ""
-
-#~ msgid "Spline interpolation order\\. Integer between 0 and 5\\. Default: 3."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`RotateParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`RotateParam`."
-#~ msgstr ""
-
-#~ msgid "Distribute over\\.  Single choice from: 'col', 'row'. Default: 'col'."
-#~ msgstr ""
-
-#~ msgid "Columns\\.  Integer, non zero\\. Default: 1."
-#~ msgstr ""
-
-#~ msgid "Integer, non zero\\. Default: 1."
-#~ msgstr ""
-
-#~ msgid "Column spacing\\.  Float higher than 0.0\\. Default: 0.0."
-#~ msgstr ""
-
-#~ msgid "Row spacing\\.  Float higher than 0.0\\. Default: 0.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`GridParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`GridParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ResizeParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ResizeParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Cluster size (X)\\. Number of adjacent"
-#~ " pixels to be combined together along"
-#~ " x-axis. Integer higher than 2\\. "
-#~ "Default: 2."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Cluster size (Y)\\. Number of adjacent"
-#~ " pixels to be combined together along"
-#~ " y-axis. Integer higher than 2\\. "
-#~ "Default: 2."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'sum', 'average', "
-#~ "'median', 'min', 'max'. Default: 'sum'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Data type\\. Output image data type. "
-#~ "Single choice from: 'dtype', 'float32', "
-#~ "'float64', 'complex128', 'int32', 'int16', "
-#~ "'uint16', 'uint8'. Default: 'dtype'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Change pixel size so that overall "
-#~ "image size remains the same. Default:"
-#~ " False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BinningParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BinningParam`."
-#~ msgstr ""
-
-#~ msgid "Single choice from: 'horizontal', 'vertical'. Default: 'horizontal'."
-#~ msgstr ""
-
-#~ msgid "Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid "Column\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`LineProfileParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`LineProfileParam`."
-#~ msgstr ""
-
-#~ msgid "Start row\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid "Start column\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid "End row\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid "End column\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`SegmentProfileParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`SegmentProfileParam`."
-#~ msgstr ""
-
-#~ msgid "Integer higher than -1\\. Default: -1."
-#~ msgstr ""
-
-#~ msgid "Column 1\\.  Integer higher than 0\\. Default: 0."
-#~ msgstr ""
-
-#~ msgid "Column 2\\.  Integer higher than -1\\. Default: -1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`AverageProfileParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`AverageProfileParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Center position\\.  Single choice from: "
-#~ "'centroid', 'center', 'user'. Default: "
-#~ "'centroid'."
-#~ msgstr ""
-
-#~ msgid "X\\ :subscript:`Center`\\.  Float, unit: pixel\\. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`RadialProfileParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`RadialProfileParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Destination data type\\. Output image "
-#~ "data type. Single choice from: "
-#~ "'float32', 'float64', 'complex128', 'int32', "
-#~ "'int16', 'uint16', 'uint8'. Default: "
-#~ "'float32'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DataTypeIParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DataTypeIParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ZCalibrateParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ZCalibrateParam`."
-#~ msgstr ""
-
-#~ msgid "Apply thresholding"
-#~ msgstr "Applique le seuillage"
-
-#~ msgid ""
-#~ "Cut-off frequency ratio\\. Cut-off "
-#~ "frequency ratio (0.0 - 1.0). Float "
-#~ "between 0.0 and 1.0\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid "If true, apply high-pass filter instead of low-pass. Default: False."
-#~ msgstr ""
-
-#~ msgid "Order of the butterworth filter. Integer higher than 1\\. Default: 2."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ButterworthParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ButterworthParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Radius\\ :subscript:`min`\\.  Integer higher "
-#~ "than 0, non zero, unit: pixels\\. "
-#~ "Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Radius\\ :subscript:`max`\\.  Integer higher "
-#~ "than 0, non zero, unit: pixels\\. "
-#~ "Default: None."
-#~ msgstr ""
-
-#~ msgid "Minimal distance\\.  Integer higher than 0\\. Default: None."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`HoughCircleParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`HoughCircleParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Gamma correction factor (higher values "
-#~ "give more contrast). Float higher than"
-#~ " 0.0\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Gain factor (higher values give more "
-#~ "contrast). Float higher than 0.0\\. "
-#~ "Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`AdjustGammaParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`AdjustGammaParam`."
-#~ msgstr ""
-
-#~ msgid "If true, apply inverse logarithmic transformation. Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`AdjustLogParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`AdjustLogParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Cutoff value (higher values give more"
-#~ " contrast). Float between 0.0 and "
-#~ "1.0\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Gain factor (higher values give more "
-#~ "contrast). Float higher than 0.0\\. "
-#~ "Default: 10.0."
-#~ msgstr ""
-
-#~ msgid "If true, apply inverse sigmoid transformation. Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`AdjustSigmoidParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`AdjustSigmoidParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Input range\\. Min and max intensity "
-#~ "values of input image ('image' refers"
-#~ " to input image min/max levels, "
-#~ "'dtype' refers to input image data "
-#~ "type range). Single choice from: "
-#~ "'image', 'dtype', 'float32', 'float64', "
-#~ "'complex128', 'int32', 'int16', 'uint16', "
-#~ "'uint8'. Default: 'image'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Output range\\. Min and max intensity"
-#~ " values of output image  ('image' "
-#~ "refers to input image min/max levels,"
-#~ " 'dtype' refers to input image data"
-#~ " type range).. Single choice from: "
-#~ "'image', 'dtype', 'float32', 'float64', "
-#~ "'complex128', 'int32', 'int16', 'uint16', "
-#~ "'uint8'. Default: 'dtype'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`RescaleIntensityParam` with the fields"
-#~ " set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`RescaleIntensityParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Number of bins\\. Number of bins "
-#~ "for image histogram. Integer higher than"
-#~ " 1\\. Default: 256."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`EqualizeHistParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`EqualizeHistParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Clipping limit\\. Clipping limit (higher "
-#~ "values give more contrast). Float "
-#~ "between 0.0 and 1.0\\. Default: 0.01."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`EqualizeAdaptHistParam` with the fields"
-#~ " set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`EqualizeAdaptHistParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Denoising weight\\. The greater weight, "
-#~ "the more denoising (at the expense "
-#~ "of fidelity to input). Float higher "
-#~ "than 0, non zero\\. Default: 0.1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Epsilon\\. Relative difference of the "
-#~ "value of the cost function that "
-#~ "determines the stop criterion. The "
-#~ "algorithm stops when: (e_(n-1) - e_n)"
-#~ " < eps \\* e_0\\. Float higher "
-#~ "than 0, non zero\\. Default: 0.0002."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. iterations\\. Maximal number of "
-#~ "iterations used for the optimization\\. "
-#~ "Integer higher than 0, non zero\\. "
-#~ "Default: 200."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DenoiseTVParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DenoiseTVParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "σ\\ :subscript:`spatial`\\. Standard deviation "
-#~ "for range distance. A larger value "
-#~ "results in averaging of pixels with "
-#~ "larger spatial differences. Float higher "
-#~ "than 0, non zero, unit: pixels\\. "
-#~ "Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'constant', 'edge', "
-#~ "'symmetric', 'reflect', 'wrap'. Default: "
-#~ "'constant'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Used in conjunction with mode "
-#~ "'constant', the value outside the image"
-#~ " boundaries. Default: 0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DenoiseBilateralParam` with the fields"
-#~ " set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DenoiseBilateralParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'bior1.1', 'bior1.3', "
-#~ "'bior1.5', 'bior2.2', 'bior2.4', 'bior2.6', "
-#~ "'bior2.8', 'bior3.1', 'bior3.3', 'bior3.5', "
-#~ "'bior3.7', 'bior3.9', 'bior4.4', 'bior5.5', "
-#~ "'bior6.8', 'cgau1', 'cgau2', 'cgau3', 'cgau4',"
-#~ " 'cgau5', 'cgau6', 'cgau7', 'cgau8', "
-#~ "'cmor', 'coif1', 'coif2', 'coif3', 'coif4',"
-#~ " 'coif5', 'coif6', 'coif7', 'coif8', "
-#~ "'coif9', 'coif10', 'coif11', 'coif12', "
-#~ "'coif13', 'coif14', 'coif15', 'coif16', "
-#~ "'coif17', 'db1', 'db2', 'db3', 'db4', "
-#~ "'db5', 'db6', 'db7', 'db8', 'db9', "
-#~ "'db10', 'db11', 'db12', 'db13', 'db14', "
-#~ "'db15', 'db16', 'db17', 'db18', 'db19', "
-#~ "'db20', 'db21', 'db22', 'db23', 'db24', "
-#~ "'db25', 'db26', 'db27', 'db28', 'db29', "
-#~ "'db30', 'db31', 'db32', 'db33', 'db34', "
-#~ "'db35', 'db36', 'db37', 'db38', 'dmey', "
-#~ "'fbsp', 'gaus1', 'gaus2', 'gaus3', 'gaus4',"
-#~ " 'gaus5', 'gaus6', 'gaus7', 'gaus8', "
-#~ "'haar', 'mexh', 'morl', 'rbio1.1', 'rbio1.3',"
-#~ " 'rbio1.5', 'rbio2.2', 'rbio2.4', 'rbio2.6', "
-#~ "'rbio2.8', 'rbio3.1', 'rbio3.3', 'rbio3.5', "
-#~ "'rbio3.7', 'rbio3.9', 'rbio4.4', 'rbio5.5', "
-#~ "'rbio6.8', 'shan', 'sym2', 'sym3', 'sym4', "
-#~ "'sym5', 'sym6', 'sym7', 'sym8', 'sym9', "
-#~ "'sym10', 'sym11', 'sym12', 'sym13', 'sym14',"
-#~ " 'sym15', 'sym16', 'sym17', 'sym18', "
-#~ "'sym19', 'sym20'. Default: 'sym9'."
-#~ msgstr ""
-
-#~ msgid "Single choice from: 'soft', 'hard'. Default: 'soft'."
-#~ msgstr ""
-
-#~ msgid "Single choice from: 'BayesShrink', 'VisuShrink'. Default: 'VisuShrink'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`DenoiseWaveletParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`DenoiseWaveletParam`."
-#~ msgstr ""
-
-#~ msgid "Footprint (disk) radius. Integer higher than 1\\. Default: 1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`MorphologyParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`MorphologyParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Standard deviation of the gaussian "
-#~ "filter. Float higher than 0, non "
-#~ "zero, unit: pixels\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Lower bound for hysteresis thresholding "
-#~ "(linking edges). Float higher than 0\\."
-#~ " Default: 0.1."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Upper bound for hysteresis thresholding "
-#~ "(linking edges). Float higher than 0\\."
-#~ " Default: 0.9."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If true then treat low_threshold and "
-#~ "high_threshold as quantiles of the edge"
-#~ " magnitude image, rather than absolute "
-#~ "edge magnitude values. If true then "
-#~ "the thresholds must be in the "
-#~ "range [0, 1]. Default: True."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Single choice from: 'reflect', 'constant', "
-#~ "'nearest', 'mirror', 'wrap'. Default: "
-#~ "'constant'."
-#~ msgstr ""
-
-#~ msgid "Value to fill past edges of input if mode is constant. Default: 0.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`CannyParam` with the fields set "
-#~ "to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`CannyParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Relative threshold\\. Detection threshold, "
-#~ "relative to difference between data "
-#~ "maximum and minimum\\. Float between 0.1"
-#~ " and 0.9\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`GenericDetectionParam` with the fields"
-#~ " set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`GenericDetectionParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Neighborhoods size\\. Size of the "
-#~ "sliding window used in maximum/minimum "
-#~ "filtering algorithm\\. Integer higher than "
-#~ "1, unit: pixels\\. Default: 10."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`Peak2DDetectionParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`Peak2DDetectionParam`."
-#~ msgstr ""
-
-#~ msgid "Single choice from: 'ellipse', 'circle', 'polygon'. Default: 'ellipse'."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`ContourShapeParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`ContourShapeParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "σ\\ :subscript:`min`\\. The minimum standard"
-#~ " deviation for gaussian kernel. Keep "
-#~ "this low to detect smaller blobs. "
-#~ "Float higher than 0, non zero, "
-#~ "unit: pixels\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "σ\\ :subscript:`max`\\. The maximum standard"
-#~ " deviation for gaussian kernel. Keep "
-#~ "this high to detect larger blobs. "
-#~ "Float higher than 0, non zero, "
-#~ "unit: pixels\\. Default: 30.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Relative threshold\\. Minimum intensity of "
-#~ "blobs. Float between 0.0 and 1.0\\. "
-#~ "Default: 0.2."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If two blobs overlap by a fraction"
-#~ " greater than this value, the smaller"
-#~ " blob is eliminated. Float between "
-#~ "0.0 and 1.0\\. Default: 0.5."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BaseBlobParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BaseBlobParam`."
-#~ msgstr ""
-
-#~ msgid "If true, exclude blobs from the border of the image. Default: True."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BlobDOGParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BlobDOGParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If set intermediate values of standard"
-#~ " deviations are interpolated using a "
-#~ "logarithmic scale to the base 10. "
-#~ "If not, linear interpolation is used."
-#~ " Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BlobDOHParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BlobDOHParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BlobLOGParam` with the fields set"
-#~ " to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BlobLOGParam`."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. threshold\\. The minimum threshold "
-#~ "between local maxima and minima. This"
-#~ " parameter does not affect the "
-#~ "quality of the blobs, only the "
-#~ "quantity. Lower thresholds result in "
-#~ "larger numbers of blobs. Float higher"
-#~ " than 0.0\\. Default: 10.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. threshold\\. The maximum threshold "
-#~ "between local maxima and minima. This"
-#~ " parameter does not affect the "
-#~ "quality of the blobs, only the "
-#~ "quantity. Lower thresholds result in "
-#~ "larger numbers of blobs. Float higher"
-#~ " than 0.0\\. Default: 200.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. repeatability\\. The minimum number "
-#~ "of times a blob needs to be "
-#~ "detected in a sequence of images "
-#~ "to be considered valid. Integer higher"
-#~ " than 1\\. Default: 2."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. distance between blobs\\. The "
-#~ "minimum distance between two blobs. If"
-#~ " blobs are found closer together than"
-#~ " this distance, the smaller blob is"
-#~ " removed. Float higher than 0.0, non"
-#~ " zero\\. Default: 10.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "If true, the image is filtered by"
-#~ " color instead of intensity. Default: "
-#~ "True."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "The color of the blobs to detect"
-#~ " (0 for dark blobs, 255 for "
-#~ "light blobs). Default: 0."
-#~ msgstr ""
-
-#~ msgid "If true, the image is filtered by blob area. Default: True."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. area\\. The minimum blob area. "
-#~ "Float higher than 0.0\\. Default: 25.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. area\\. The maximum blob area. "
-#~ "Float higher than 0.0\\. Default: 500.0."
-#~ msgstr ""
-
-#~ msgid "If true, the image is filtered by blob circularity. Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. circularity\\. The minimum circularity"
-#~ " of the blobs. Float between 0.0 "
-#~ "and 1.0\\. Default: 0.8."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. circularity\\. The maximum circularity"
-#~ " of the blobs. Float between 0.0 "
-#~ "and 1.0\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid "If true, the image is filtered by blob inertia. Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. inertia ratio\\. The minimum "
-#~ "inertia ratio of the blobs. Float "
-#~ "between 0.0 and 1.0\\. Default: 0.6."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. inertia ratio\\. The maximum "
-#~ "inertia ratio of the blobs. Float "
-#~ "between 0.0 and 1.0\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid "If true, the image is filtered by blob convexity. Default: False."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Min. convexity\\. The minimum convexity "
-#~ "of the blobs. Float between 0.0 "
-#~ "and 1.0\\. Default: 0.8."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Max. convexity\\. The maximum convexity "
-#~ "of the blobs. Float between 0.0 "
-#~ "and 1.0\\. Default: 1.0."
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Returns a new instance of "
-#~ ":py:class:`BlobOpenCVParam` with the fields "
-#~ "set to the given values."
-#~ msgstr ""
-
-#~ msgid "New instance of :py:class:`BlobOpenCVParam`."
-#~ msgstr ""
+msgstr ""

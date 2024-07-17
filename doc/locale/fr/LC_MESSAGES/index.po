@@ -80,7 +80,7 @@ msgstr ""
 
 #: ../../doc/index.rst:27
 msgid "To immediately see DataLab in action, you have two options:"
-msgstr "Pour voir DataLab en action immédiatement, vous avez deux options :"
+msgstr "Pour voir DataLab en action immédiatement, vous avez deux options :"
 
 #: ../../doc/index.rst:29
 msgid "Read or view our :ref:`Tutorials <tutorials>`,"

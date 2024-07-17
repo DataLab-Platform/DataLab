@@ -45,7 +45,7 @@ msgstr ""
 
 #: ../../doc/features/image/menu_file.rst:15
 msgid "The \"File\" menu allows you to:"
-msgstr "Le menu \"Fichier\" vous permet de :"
+msgstr "Le menu \"Fichier\" vous permet de :"
 
 #: ../../doc/features/image/menu_file.rst:17
 msgid "Create, open, save and close images (see below)."
@@ -73,7 +73,7 @@ msgid ""
 "uint16, int16, float32, float64):"
 msgstr ""
 "Crée une image à partir de différents modèles (types de données pris en "
-"charge : uint8, uint16, int16, float32, float64) :"
+"charge : uint8, uint16, int16, float32, float64) :"
 
 #: ../../doc/features/image/menu_file.rst:33
 msgid "Model"
@@ -127,7 +127,7 @@ msgstr "Ouvrir une image"
 
 #: ../../doc/features/image/menu_file.rst:49
 msgid "Create a new image from the following supported filetypes:"
-msgstr "Crée une image depuis l'un des types de fichiers pris en charge :"
+msgstr "Crée une image depuis l'un des types de fichiers pris en charge :"
 
 #: ../../doc/features/image/menu_file.rst:54
 msgid "File type"
@@ -273,7 +273,7 @@ msgstr ""
 "Pour ajouter un nouveau format de fichier, vous pouvez utiliser l'entrée "
 "`imageio_formats` du fichier de configuration de DataLab. Cette entrée "
 "est formatée comme l'objet `IMAGEIO_FORMATS` qui représente les formats "
-"pris en charge nativement :"
+"pris en charge nativement :"
 
 #: ../../doc/features/image/menu_file.rst:97
 msgid "Save image"
@@ -283,7 +283,7 @@ msgstr "Enregister l'image"
 msgid "Save current image (see \"Open image\" supported filetypes)."
 msgstr ""
 "Enregistre l'image sélectionnée dans l'un des types de fichier pris en "
-"charge :"
+"charge :"
 
 #: ../../doc/features/image/menu_file.rst:102
 msgid "Import text file"
@@ -344,7 +344,7 @@ msgid ""
 "result. You can configure the following options:"
 msgstr ""
 "La deuxième étape consiste à configurer l'importation et à prévisualiser "
-"le résultat. Vous pouvez configurer les options suivantes :"
+"le résultat. Vous pouvez configurer les options suivantes :"
 
 #: ../../doc/features/image/menu_file.rst:133
 msgid "**Delimiter**: The character used to separate the values in the text file."
@@ -424,4 +424,3 @@ msgstr ""
 
 #~ msgid "If the argument is a tuple, the return value is the same object."
 #~ msgstr ""
-

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 18:50+0100\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -62,6 +62,7 @@ msgstr "Fenêtre principale de DataLab"
 #: cdl.core.gui.main.CDLMainWindow.setup
 #: cdl.core.gui.main.CDLMainWindow.stop_macro
 #: cdl.core.gui.main.CDLMainWindow.toggle_auto_refresh
+#: cdl.core.gui.main.CDLMainWindow.toggle_show_first_only
 #: cdl.core.gui.main.CDLMainWindow.toggle_show_titles of
 msgid "Parameters"
 msgstr "Paramètres"
@@ -80,11 +81,15 @@ msgstr "Retourne l'instance singleton"
 
 #: cdl.core.gui.main.CDLMainWindow.xmlrpc_server_started:1 of
 msgid "XML-RPC server has started, writing comm port in configuration file"
-msgstr "Le serveur XML-RPC a démarré, écriture du port de communication dans le fichier de configuration"
+msgstr ""
+"Le serveur XML-RPC a démarré, écriture du port de communication dans le "
+"fichier de configuration"
 
 #: cdl.core.gui.main.CDLMainWindow.get_group_titles_with_object_infos:1 of
 msgid "Return groups titles and lists of inner objects uuids and titles."
-msgstr "Retourne les titres des groupes et les listes des uuids et titres des objets internes."
+msgstr ""
+"Retourne les titres des groupes et les listes des uuids et titres des "
+"objets internes."
 
 #: cdl.core.gui.main.CDLMainWindow.add_image
 #: cdl.core.gui.main.CDLMainWindow.add_signal
@@ -374,18 +379,18 @@ msgid "unknown panel"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.calc:1 of
-msgid "Call compute function `name` in current panel's processor"
+msgid "Call compute function ``name`` in current panel's processor."
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.calc:3 of
-msgid "function name"
+msgid "Compute function name"
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.calc:5 of
-msgid "optional parameters (default: None)"
+#: cdl.core.gui.main.CDLMainWindow.calc:4 of
+msgid "Compute function parameter. Defaults to None."
 msgstr ""
 
-#: cdl.core.gui.main.CDLMainWindow.calc:9 of
+#: cdl.core.gui.main.CDLMainWindow.calc:6 of
 msgid "unknown function"
 msgstr ""
 
@@ -406,12 +411,17 @@ msgid "Toggle show annotations option"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.toggle_auto_refresh:3
+#: cdl.core.gui.main.CDLMainWindow.toggle_show_first_only:3
 #: cdl.core.gui.main.CDLMainWindow.toggle_show_titles:3 of
 msgid "state"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.toggle_auto_refresh:1 of
 msgid "Toggle auto refresh option"
+msgstr ""
+
+#: cdl.core.gui.main.CDLMainWindow.toggle_show_first_only:1 of
+msgid "Toggle show first only option"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.reset_all:1 of
@@ -494,7 +504,7 @@ msgid "list of filenames"
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_version:1 of
-msgid "Return DataLab version."
+msgid "Return DataLab public version."
 msgstr ""
 
 #: cdl.core.gui.main.CDLMainWindow.get_version:3 of
@@ -618,3 +628,16 @@ msgstr ""
 
 #~ msgid "HDF5 filename"
 #~ msgstr ""
+
+#~ msgid "Call compute function `name` in current panel's processor"
+#~ msgstr ""
+
+#~ msgid "function name"
+#~ msgstr ""
+
+#~ msgid "optional parameters (default: None)"
+#~ msgstr ""
+
+#~ msgid "Return DataLab version."
+#~ msgstr ""
+

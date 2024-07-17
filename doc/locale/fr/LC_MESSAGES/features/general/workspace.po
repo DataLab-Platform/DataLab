@@ -46,7 +46,7 @@ msgid ""
 msgstr ""
 "Travailler avec DataLab est très simple. L'interface est intuitive et "
 "appréhendable facilement. La fenêtre principale est divisée en deux zones"
-" principales :"
+" principales :"
 
 #: ../../doc/features/general/workspace.rst:16
 msgid ""
@@ -133,7 +133,7 @@ msgstr "Chargement et enregistrement de l'espace de travail"
 msgid ""
 "The following actions are available to manage the workspace from the "
 "**File** menu:"
-msgstr "Les actions suivantes sont disponibles pour gérer l'espace de travail depuis le menu **Fichier** :"
+msgstr "Les actions suivantes sont disponibles pour gérer l'espace de travail depuis le menu **Fichier** :"
 
 #: ../../doc/features/general/workspace.rst:55
 msgid "**Open HDF5 file**: load a workspace from an HDF5 file."

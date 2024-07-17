@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DataLab \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 12:05+0200\n"
+"POT-Creation-Date: 2024-07-17 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: fr\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.13.0\n"
 
-#: ../../doc/features/general/validation.rst:-1
+#: ../../doc/features/validation/status.rst:-1
 msgid ""
 "Validation in DataLab, the open-source scientific data analysis and "
 "visualization platform"
@@ -27,160 +27,40 @@ msgstr ""
 "Validation dans DataLab, la plateforme open-source d'analyse et de "
 "visualisation de données scientifiques"
 
-#: ../../doc/features/general/validation.rst:-1
+#: ../../doc/features/validation/status.rst:-1
 msgid "DataLab, scientific, data, analysis, validation, ground-truth, analytical"
 msgstr "DataLab, scientifique, données, analyse, validation, analytique"
 
-#: ../../doc/features/general/validation.rst:4
-msgid "Validation"
-msgstr "Validation"
-
-#: ../../doc/features/general/validation.rst:10
-msgid ""
-"DataLab is a platform for scientific data analysis and visualization. It "
-"may be used in a variety of scientific disciplines, including biology, "
-"physics, and astronomy. The common ground for all these disciplines is "
-"the need to validate the results of computational analysis against "
-"ground-truth data. This is a critical step in the scientific method, and "
-"it is essential for reproducibility and trust in the results."
-msgstr ""
-"DataLab est une plateforme d'analyse et de visualisation de données "
-"scientifiques qui peut être utilisée dans diverses disciplines "
-"scientifiques, y compris la biologie, la physique et l'astronomie. Le "
-"point commun de toutes ces disciplines est la nécessité de valider les "
-"résultats de l'analyse informatique par rapport à des données de "
-"référence. Il s'agit d'une étape critique dans la méthode scientifique et"
-" elle est essentielle pour la reproductibilité et la confiance dans les "
-"résultats."
-
-#: ../../doc/features/general/validation.rst:16
-msgid ""
-"DataLab validation is based on two key concepts: **ground-truth data** "
-"and **analytical validation**."
-msgstr ""
-"La validation de DataLab repose sur deux concepts clés : les **données de"
-" référence** et la **validation analytique**."
-
-#: ../../doc/features/general/validation.rst:20
-msgid "Ground-truth data"
-msgstr "Données de référence"
-
-#: ../../doc/features/general/validation.rst:22
-msgid ""
-"Ground-truth data is data that is known to be correct. It is used to "
-"validate the results of computational analysis."
-msgstr ""
-"Les données de référence sont des données connues pour être correctes. "
-"Elles sont utilisées pour valider les résultats de l'analyse "
-"informatique."
-
-#: ../../doc/features/general/validation.rst:25
-msgid ""
-"In DataLab, ground-truth data may be obtained from a variety of sources, "
-"including:"
-msgstr ""
-"Dans DataLab, les données de référence peuvent être obtenues à partir de "
-"diverses sources, y compris :"
-
-#: ../../doc/features/general/validation.rst:27
-msgid "Experimental data"
-msgstr "Données expérimentales"
-
-#: ../../doc/features/general/validation.rst:28
-msgid "Simulated data"
-msgstr "Données simulées"
-
-#: ../../doc/features/general/validation.rst:29
-msgid "Synthetic data"
-msgstr "Données synthétiques"
-
-#: ../../doc/features/general/validation.rst:30
-msgid "Data from a trusted source"
-msgstr "Données provenant d'une source de confiance"
-
-#: ../../doc/features/general/validation.rst:33
-msgid "Analytical validation"
-msgstr "Validation analytique"
-
-#: ../../doc/features/general/validation.rst:35
-msgid ""
-"Analytical validation is the process of comparing the results of "
-"computational analysis to ground-truth data. This is done to ensure that "
-"the results are accurate and reliable."
-msgstr ""
-"La validation analytique est le processus de comparaison des résultats de"
-" l'analyse informatique avec les données de référence. Cela est fait pour"
-" s'assurer que les résultats sont précis et fiables."
-
-#: ../../doc/features/general/validation.rst:38
-msgid ""
-"In DataLab, analytical validation is implemented using a variety of "
-"techniques, including:"
-msgstr ""
-"Dans DataLab, la validation analytique est mise en œuvre à l'aide de "
-"diverses techniques, y compris :"
-
-#: ../../doc/features/general/validation.rst:40
-msgid ""
-"Cross-validation with an analytical model (from a trusted source, e.g. "
-"`SciPy <https://www.scipy.org/>`_ or `NumPy <https://numpy.org/>`_)"
-msgstr ""
-"Validation croisée avec un modèle analytique (provenant d'une source de "
-"confiance, par exemple `SciPy <https://www.scipy.org/>`_ ou `NumPy "
-"<https://numpy.org/>`_)"
-
-#: ../../doc/features/general/validation.rst:41
-msgid "Statistical analysis"
-msgstr "Analyse statistique"
-
-#: ../../doc/features/general/validation.rst:42
-msgid "Visual inspection"
-msgstr "Inspection visuelle"
-
-#: ../../doc/features/general/validation.rst:43
-msgid "Expert review"
-msgstr "Examen par un expert"
-
-#: ../../doc/features/general/validation.rst:46
-msgid "Validation tests"
-msgstr "Tests de validation"
-
-#: ../../doc/features/general/validation.rst:49
-msgid "How to execute tests"
-msgstr "Comment exécuter les tests"
-
-#: ../../doc/features/general/validation.rst:51
-msgid ""
-"In DataLab, validation tests are disseminated in the test suite of the "
-"project, but they can also be executed separately using the command line "
-"interface."
-msgstr ""
-"Dans DataLab, les tests de validation sont éparpillés dans la suite de "
-"tests du projet, mais ils peuvent également être exécutés séparément à "
-"l'aide de l'interface en ligne de commande."
-
-#: ../../doc/features/general/validation.rst:54
-#, fuzzy
-msgid ""
-"See paragraph :ref:`run_validation_tests` for more information on how to "
-"run validation tests."
-msgstr ""
-"Voir le paragraphe :ref:`run_scientific_validation_tests` pour plus "
-"d'informations sur la façon d'exécuter les tests de validation."
-
-#: ../../doc/features/general/validation.rst:57
+#: ../../doc/features/validation/status.rst:4
 msgid "Validation Status of DataLab"
 msgstr "Etat de validation de DataLab"
 
-#: ../../doc/features/general/validation.rst:59
+#: ../../doc/features/validation/status.rst:11
+msgid "Functional validation"
+msgstr "Validation fonctionnelle"
+
+#: ../../doc/features/validation/status.rst:13
+msgid ""
+"In DataLab, functional validation is based on a classic test strategy "
+"(see :ref:`functional_validation`)."
+msgstr "Dans DataLab, la validation fonctionnelle est basée sur une stratégie de test classique (voir :ref:`functional_validation`)."
+
+#: ../../doc/features/validation/status.rst:16
+msgid "Test coverage is around 90%, with more than 200 tests."
+msgstr "La couverture de test est d'environ 90%, avec plus de 200 tests."
+
+#: ../../doc/features/validation/status.rst:19
+msgid "Scientific validation"
+msgstr "Validation scientifique"
+
+#: ../../doc/features/validation/status.rst:21
 msgid ""
 "This paragraph provides the validation status of compute functions in "
-"DataLab."
-msgstr ""
-"Ce paragraphe décrit l'état de validation des fonctions de calcul dans "
-"DataLab."
+"DataLab (this is what we call scientific validation, see "
+":ref:`scientific_validation`)."
+msgstr "Ce paragraphe fournit l'état de validation des fonctions de calcul dans DataLab (c'est ce que nous appelons validation scientifique, voir :ref:`scientific_validation`)."
 
-#: ../../doc/features/general/validation.rst:61
+#: ../../doc/features/validation/status.rst:24
 msgid ""
 "This is a work in progress: the tables below are updated continuously as "
 "new functions are validated or test code is adapted (the tables are "
@@ -195,7 +75,7 @@ msgstr ""
 "encore dans la liste ci-dessous, tandis que d'autres sont encore en cours"
 " de validation."
 
-#: ../../doc/features/general/validation.rst:66
+#: ../../doc/features/validation/status.rst:29
 msgid ""
 "The validation status must not be confused with the test coverage. The "
 "validation status indicates whether the function has been validated "
@@ -212,23 +92,23 @@ msgstr ""
 "justesse des résultats (la couverture de test de DataLab est d'environ "
 "90%)."
 
-#: ../../doc/features/general/validation.rst:72
+#: ../../doc/features/validation/status.rst:35
 msgid "Validation Statistics"
 msgstr "Statistiques de validation"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Category"
 msgstr "Catégorie"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Signal"
 msgstr "Signal"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Image"
 msgstr "Image"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Total"
 msgstr "Total"
 
@@ -280,23 +160,23 @@ msgstr ""
 msgid "84%"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:77
+#: ../../doc/features/validation/status.rst:40
 msgid "Signal Compute Functions"
-msgstr "Fonctions de calcul Signal"
+msgstr "Fonctions de calcul signal"
 
-#: ../../doc/features/general/validation.rst:79
+#: ../../doc/features/validation/status.rst:42
 msgid "Validation status of signal compute functions"
-msgstr "Etat de validation des fonctions de calcul de signal"
+msgstr "Etat de validation de DataLab"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Function"
 msgstr "Fonction"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Description"
 msgstr "Description"
 
-#: ../../doc/features/general/validation.rst:1
+#: ../../doc/features/validation/status.rst:1
 msgid "Test script"
 msgstr "Script de test"
 
@@ -379,9 +259,8 @@ msgid ":py:func:`contrast <cdl.computation.signal.compute_contrast>`"
 msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
-#, fuzzy
 msgid "Compute contrast"
-msgstr "Fonctions de calcul Signal"
+msgstr ""
 
 #: ../../doc/validation_status_signal.csv:1
 msgid ":py:func:`convolution <cdl.computation.signal.compute_convolution>`"
@@ -786,13 +665,14 @@ msgstr ""
 msgid "Compute x at min/max"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:85
+#: ../../doc/features/validation/status.rst:48
 msgid "Image Compute Functions"
 msgstr ""
 
-#: ../../doc/features/general/validation.rst:87
+#: ../../doc/features/validation/status.rst:50
+#, fuzzy
 msgid "Validation status of image compute functions"
-msgstr ""
+msgstr "Etat de validation de DataLab"
 
 #: ../../doc/validation_status_image.csv:1
 msgid ":py:func:`abs <cdl.computation.image.compute_abs>`"
@@ -1571,208 +1451,141 @@ msgstr ""
 msgid "Compute the threshold using the Yen algorithm with default parameters."
 msgstr ""
 
-#~ msgid "42"
-#~ msgstr ""
-
-#~ msgid "123"
-#~ msgstr ""
-
-#~ msgid "1"
-#~ msgstr ""
-
-#~ msgid "2"
-#~ msgstr ""
-
-#~ msgid "2%"
-#~ msgstr ""
-
-#~ msgid "1%"
-#~ msgstr ""
-
-#~ msgid ":py:func:`add <cdl.computation.signal.compute_add>`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`add_constant <cdl.computation.signal.compute_add_constant>`"
-#~ msgstr ""
+#~ msgid "Validation"
+#~ msgstr "Validation"
 
 #~ msgid ""
-#~ "Add **dst** and a constant value "
-#~ "and return **dst** signal modified in"
-#~ " place"
+#~ "DataLab is a platform for scientific "
+#~ "data analysis and visualization. It may"
+#~ " be used in a variety of "
+#~ "scientific disciplines, including biology, "
+#~ "physics, and astronomy. The common "
+#~ "ground for all these disciplines is "
+#~ "the need to validate the results "
+#~ "of computational analysis against ground-"
+#~ "truth data. This is a critical "
+#~ "step in the scientific method, and "
+#~ "it is essential for reproducibility and"
+#~ " trust in the results."
 #~ msgstr ""
+#~ "DataLab est une plateforme d'analyse et"
+#~ " de visualisation de données scientifiques"
+#~ " qui peut être utilisée dans diverses"
+#~ " disciplines scientifiques, y compris la"
+#~ " biologie, la physique et l'astronomie. "
+#~ "Le point commun de toutes ces "
+#~ "disciplines est la nécessité de valider"
+#~ " les résultats de l'analyse informatique"
+#~ " par rapport à des données de "
+#~ "référence. Il s'agit d'une étape "
+#~ "critique dans la méthode scientifique et"
+#~ " elle est essentielle pour la "
+#~ "reproductibilité et la confiance dans "
+#~ "les résultats."
 
 #~ msgid ""
-#~ ":py:func:`divide_by_constant "
-#~ "<cdl.computation.signal.compute_division_constant>`"
+#~ "DataLab validation is based on two "
+#~ "key concepts: **ground-truth data** and"
+#~ " **analytical validation**."
 #~ msgstr ""
+#~ "La validation de DataLab repose sur "
+#~ "deux concepts clés : les **données "
+#~ "de référence** et la **validation "
+#~ "analytique**."
 
 #~ msgid ""
-#~ ":py:func:`product_by_constant "
-#~ "<cdl.computation.signal.compute_product_constant>`"
+#~ "Ground-truth data is data that is"
+#~ " known to be correct. It is "
+#~ "used to validate the results of "
+#~ "computational analysis."
 #~ msgstr ""
+#~ "Les données de référence sont des "
+#~ "données connues pour être correctes. "
+#~ "Elles sont utilisées pour valider les"
+#~ " résultats de l'analyse informatique."
 
 #~ msgid ""
-#~ "Multiply **dst** by a constant value "
-#~ "and return **dst** signal modified in"
-#~ " place"
+#~ "In DataLab, ground-truth data may "
+#~ "be obtained from a variety of "
+#~ "sources, including:"
 #~ msgstr ""
+#~ "Dans DataLab, les données de référence"
+#~ " peuvent être obtenues à partir de"
+#~ " diverses sources, y compris :"
 
-#~ msgid ":py:func:`add <cdl.computation.image.compute_add>`"
-#~ msgstr ""
+#~ msgid "Synthetic data"
+#~ msgstr "Données synthétiques"
 
-#~ msgid ":py:func:`add_constant <cdl.computation.image.compute_add_constant>`"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Add **dst** and a constant value "
-#~ "and return **dst** image modified in "
-#~ "place"
-#~ msgstr ""
-
-#~ msgid "Subtract a constant value from an image"
-#~ msgstr ""
+#~ msgid "Data from a trusted source"
+#~ msgstr "Données provenant d'une source de confiance"
 
 #~ msgid ""
-#~ ":py:func:`divide_by_constant "
-#~ "<cdl.computation.image.compute_division_constant>`"
+#~ "Analytical validation is the process of"
+#~ " comparing the results of computational "
+#~ "analysis to ground-truth data. This "
+#~ "is done to ensure that the results"
+#~ " are accurate and reliable."
 #~ msgstr ""
-
-#~ msgid "Divide an image by a constant value"
-#~ msgstr ""
+#~ "La validation analytique est le "
+#~ "processus de comparaison des résultats "
+#~ "de l'analyse informatique avec les "
+#~ "données de référence. Cela est fait "
+#~ "pour s'assurer que les résultats sont"
+#~ " précis et fiables."
 
 #~ msgid ""
-#~ ":py:func:`product_by_constant "
-#~ "<cdl.computation.image.compute_product_constant>`"
+#~ "In DataLab, analytical validation is "
+#~ "implemented using a variety of "
+#~ "techniques, including:"
 #~ msgstr ""
+#~ "Dans DataLab, la validation analytique "
+#~ "est mise en œuvre à l'aide de "
+#~ "diverses techniques, y compris :"
 
 #~ msgid ""
-#~ "Multiply **dst** by a constant value "
-#~ "and return **dst** image modified in "
-#~ "place"
+#~ "Cross-validation with an analytical "
+#~ "model (from a trusted source, e.g. "
+#~ "`SciPy <https://www.scipy.org/>`_ or `NumPy "
+#~ "<https://numpy.org/>`_)"
 #~ msgstr ""
+#~ "Validation croisée avec un modèle "
+#~ "analytique (provenant d'une source de "
+#~ "confiance, par exemple `SciPy "
+#~ "<https://www.scipy.org/>`_ ou `NumPy "
+#~ "<https://numpy.org/>`_)"
 
-#~ msgid "44"
-#~ msgstr ""
+#~ msgid "Statistical analysis"
+#~ msgstr "Analyse statistique"
 
-#~ msgid "81"
-#~ msgstr ""
+#~ msgid "Visual inspection"
+#~ msgstr "Inspection visuelle"
 
-#~ msgid "125"
-#~ msgstr ""
+#~ msgid "Expert review"
+#~ msgstr "Examen par un expert"
 
-#~ msgid "14"
-#~ msgstr ""
+#~ msgid "How to execute tests"
+#~ msgstr "Comment exécuter les tests"
 
-#~ msgid "10"
+#~ msgid ""
+#~ "In DataLab, validation tests are "
+#~ "disseminated in the test suite of "
+#~ "the project, but they can also be"
+#~ " executed separately using the command "
+#~ "line interface."
 #~ msgstr ""
+#~ "Dans DataLab, les tests de validation"
+#~ " sont éparpillés dans la suite de "
+#~ "tests du projet, mais ils peuvent "
+#~ "également être exécutés séparément à "
+#~ "l'aide de l'interface en ligne de "
+#~ "commande."
 
-#~ msgid "24"
+#~ msgid ""
+#~ "See paragraph :ref:`run_validation_tests` for "
+#~ "more information on how to run "
+#~ "validation tests."
 #~ msgstr ""
-
-#~ msgid "31%"
-#~ msgstr ""
-
-#~ msgid "12%"
-#~ msgstr ""
-
-#~ msgid "19%"
-#~ msgstr ""
-
-#~ msgid "``features/signal/misc_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/misc_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid ":py:func:`profile <cdl.computation.image.compute_profile>`"
-#~ msgstr ""
-
-#~ msgid "51"
-#~ msgstr ""
-
-#~ msgid "87"
-#~ msgstr ""
-
-#~ msgid "138"
-#~ msgstr ""
-
-#~ msgid "26"
-#~ msgstr ""
-
-#~ msgid "21"
-#~ msgstr ""
-
-#~ msgid "47"
-#~ msgstr ""
-
-#~ msgid "50%"
-#~ msgstr ""
-
-#~ msgid "24%"
-#~ msgstr ""
-
-#~ msgid "34%"
-#~ msgstr ""
-
-#~ msgid ":py:func:`pow <cdl.computation.signal.compute_power>`"
-#~ msgstr ""
-
-#~ msgid ":py:func:`threshold <cdl.computation.signal.compute_threshold>`"
-#~ msgstr ""
-
-#~ msgid "Compute threshold clipping"
-#~ msgstr ""
-
-#~ msgid ":py:func:`line_section <cdl.computation.image.compute_line_section>`"
-#~ msgstr ""
-
-#~ msgid "Return intensity profile of data along a line"
-#~ msgstr ""
-
-#~ msgid ":py:func:`threshold <cdl.computation.image.compute_threshold>`"
-#~ msgstr ""
-
-#~ msgid "Apply thresholding"
-#~ msgstr ""
-
-#~ msgid "77"
-#~ msgstr ""
-
-#~ msgid "120"
-#~ msgstr ""
-
-#~ msgid "82%"
-#~ msgstr ""
-
-#~ msgid "``features/signal/operation_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/signal/computing_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/signal/processing_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/signal/fft1d_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/signal/fwhm_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/signal/offset_correction_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/operation_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/processing_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/centroid_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/fft2d_unit_test.py``"
-#~ msgstr ""
-
-#~ msgid "``features/image/offset_correction_unit_test.py``"
-#~ msgstr ""
+#~ "Voir le paragraphe "
+#~ ":ref:`run_scientific_validation_tests` pour plus "
+#~ "d'informations sur la façon d'exécuter "
+#~ "les tests de validation."
